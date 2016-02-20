@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<info>
+   <id>polls</id>
+   <name>Polls</name>
+   <description>event schedule polls</description>
+   <version>0.6.9</version>
+   <licence>AGPL</licence>
+   <author>Vinzenz Rosenkranz</author>
+   <requiremin>8.1</requiremin>
+   <category>tools</category>
+   <bugs>https://github.com/v1r0x/polls/issues</bugs>
+   <repository type="git">https://github.com/v1r0x/polls.git</repository>
+   <dependencies>
+      <owncloud min-version="8.1" max-version="9"/>
+   </dependencies>
+</info>

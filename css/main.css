@@ -1,0 +1,409 @@
+#content-wrapper {
+    position: relative;
+}
+
+body {
+    margin: 10px;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 10px 0 5px 0;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+}
+
+th, tr, td {
+    padding: 4px;
+    text-align: center;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr:nth-child(even), tr:nth-child(even) a {
+    background: #35537a;
+    color: #eee;
+}
+
+tr:nth-child(odd) {
+}
+
+table {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+}
+
+.goto_poll {
+    width: 100%;
+}
+
+input.input_field {
+    width: 20%;
+}
+
+.label_h1 {
+    display:block;
+}
+
+div.new_poll {
+    width: 100%;
+}
+
+div.goto_poll {
+    /*background-color: #82de82;*/
+}
+
+div.partic_all {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+
+div.partic_yes {
+    background-color: #6fff70; /*green*/
+}
+
+div.partic_no {
+    background-color: #ff6f6f; /*red*/
+}
+
+input.table_button {
+    background-color: transparent;
+    border: none;
+    height: 12px;
+    width: 12px;
+    vertical-align: middle;
+}
+
+div.scroll_div {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+div.scroll_div_dialog {
+    width: 100%;
+    height: 250px;
+    overflow-y: auto;
+}
+
+td.td_shown {
+    visibility: visible;
+}
+
+.td_hidden {
+    visibility: hidden;
+    visibility: collapse;
+}
+
+.td_selected {
+    background-color: #82de82;
+}
+
+.td_deselected {
+    background-color: white;
+}
+
+.cl_with_border td {
+    padding-right: 15px;
+    padding: 1px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: gray;
+    -moz-border-radius: initial;
+    text-align: center;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+.scrollable_table {
+    table-layout: fixed;
+}
+
+.desc {
+    color: #888;
+}
+
+.wordwrap {
+    width: 75%;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: normal;
+}
+
+.cl_title {
+    font-size: 2em;
+}
+
+.input_title{
+    font-size: 1.2em;
+}
+.padded td {
+    padding: 10px;
+}
+
+.cl_create_form, .vote_table {
+    min-width: 60%;
+    margin-bottom: 10px;
+}
+
+.vote_table {
+    margin-top: 10px;
+}
+
+.cl_create_form td {
+    padding: 3px;
+    text-align: left;
+    vertical-align: center;
+    text-align: center;
+}
+
+.cl_time_display {
+    background-color: aqua;
+    cursor: pointer;
+}
+.cl_date_time_header:hover {
+    background-color: red;
+}
+.cl_hour, .cl_min {
+    cursor: pointer;
+    background-color: white;
+}
+.cl_hour_selected, .cl_min_selected {
+    background-color: #82de82;
+}
+
+.cl_poll_access, .cl_poll_url, .cl_click, .cl_delete, .cl_date_time_header {
+    cursor: pointer;
+}
+
+.cl_delete {
+    background-color: white;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+.cl_pad_left {
+    padding-left: 30px;
+}
+
+.cl_del_item {
+    cursor: pointer;
+    padding: 0px 5px 0px 5px;
+
+}
+.cl_del_item:hover {
+    background-color: #ffccca;
+}
+.cl_maybe:before, .cl_maybe:after{
+    content: "?";
+}
+.cl_total_y {
+    background-color: #6fff70; /*green*/
+}
+.cl_total_n {
+    background-color: #ff6f6f; /*red*/
+}
+
+.win_row {
+    color: #5ef56c;
+    font-size: 2em;
+}
+
+.cl_user_comments {
+    table-layout: fixed;
+}
+
+.cl_user_comments td {
+    text-align: left;
+}
+
+.cl_user_comments th {
+    word-wrap: break-word;
+    vertical-align: top;
+    text-align: center;
+}
+
+.user_comment {
+    font-size: 0.9em;
+}
+
+.user_comment {
+    padding-bottom: 10px;
+}
+
+.user_comment_text {
+    margin-top: -5px;
+    margin-left: 5px;
+}
+
+.date {
+    font-size: 0.8em;
+    color: #555;
+}
+
+#id_tab_total {
+    height: 2em;
+    width: 100%;
+    text-align: center;
+}
+
+#id_tab_total tr:nth-child(even) {
+    color: #000;
+}
+
+#id_cal_table td {
+    padding: 10px;
+}
+#id_time_table td {
+    padding: 8px;
+}
+#id_poss_table td {
+    padding-left: 2px;
+}
+
+/*  users, groups...   */
+#dialog-overlay {
+    /* set it to fill the whil screen */
+    width:100%;
+    height:100%;
+
+    /* transparency for different browsers */
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    background:#000;
+    /* make sure it appear behind the dialog box but above everything else */
+    position:absolute;
+    top:0; left:0;
+    z-index:3000;
+    /* hide it by default */
+    display:none;
+}
+
+#text-title, #id_expire_date {
+    margin-left: 5px;
+}
+
+#dialog-box {
+    padding: 10px;
+    /* css3 drop shadow */
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    /* css3 border radius */
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+
+    background:#eee;
+    /* styling of the dialog box, i have a fixed dimension for this demo */
+    width:400px;
+    /* make sure it has the highest z-index */
+    position:absolute;
+    z-index:5000;
+    /* hide it by default */
+    display:none;
+}
+
+div#dialog-message {
+    padding: 0 0 20px 0;
+}
+
+#table_groups, #table_users {
+    width: 100%;
+    padding: 20px 5px 10px 5px;
+    table-layout: fixed;
+    overflow-y: auto;
+}
+
+#table_users {
+    padding-left: 10px;
+}
+
+.cl_group_item, .cl_user_item {
+    background-color: white;
+    color: #000000;
+}
+.cl_group_item_selected, .cl_user_item_selected {
+    background-color: #1d2d44;
+    color: #8e96a1;
+}
+
+/* STUFF FROM mypolls */
+ul {
+    padding: 5px;
+    padding-left: 12px;
+}
+
+#app-content {
+    padding: 5px;
+}
+
+#polls {
+    width: 100%;
+}
+
+#poll-table {
+    width: 100%;
+}
+
+#poll-desc, #comments-container, #poll-dates {
+    margin-bottom: 15px;
+}
+
+#comment-text {
+    display: block;
+}
+
+#datepicker {
+    float: left;
+    padding-right: 15px;
+}
+
+#new-poll-form-warn {
+    color: red;
+}
+
+#poll-dates table {
+    min-width: 50%;
+}
+
+#check_notif {
+    margin-bottom: 10px;
+}
+
+.poll-cell-not, .poll-cell-is, .poll-cell-maybe, .poll-cell-un {
+    height: 24px;
+}
+
+.poll-cell-un, .poll-cell-active-un {
+    background-color: #fff;
+}
+
+.poll-cell-is, .poll-cell-active-is {
+    background-color: #6fff70; /*green*/
+}
+
+.poll-cell-maybe, .poll-cell-active-maybe {
+    background-color: #fcff6f; /*yellow*/
+}
+
+.poll-cell-not, .poll-cell-active-not {
+    background-color: #ff6f6f; /*red*/
+}
+
+.date-row:hover {
+    background-color: red;
+    color: black;
+}
