@@ -13,4 +13,5 @@
    <dependencies>
       <owncloud min-version="8.1" max-version="9"/>
    </dependencies>
+   <ocsid>174671</ocsid>
 </info>
