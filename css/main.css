@@ -383,8 +383,15 @@ ul {
     margin-bottom: 10px;
 }
 
-.poll-cell-not, .poll-cell-is, .poll-cell-maybe, .poll-cell-un {
-    height: 24px;
+.date-text-selected {
+    background-color: #6fff70;
+}
+
+.date-text-not-selected {
+    background-color: #ff6f6f;
+}
+
+.poll-cell-not, .poll-cell-is, .poll-cell-maybe, .poll-cell-un, .poll-cell-active-not, .poll-cell-active-is, .poll-cell-active-maybe, .poll-cell-active-un {
 }
 
 .poll-cell-un, .poll-cell-active-un {
@@ -403,7 +410,7 @@ ul {
     background-color: #ff6f6f; /*red*/
 }
 
-.date-row:hover {
+.date-row:hover, .date-col:hover, .text-row:hover {
     background-color: red;
     color: black;
 }

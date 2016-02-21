@@ -156,7 +156,10 @@ else $line = $l->t('No description provided.');
                     }
                 }
                 print_unescaped('<tr>');
-                print_unescaped('<th>' . $userMgr->get($usr)->getDisplayName() . '</th>');
+                print_unescaped('<th>');
+                if($userMgr->get($usr) != null) p($userMgr->get($usr)->getDisplayName());
+                else p($usr);
+                print_unescaped('</th>');
                 $i_tot = -1;
 
                 // loop over dts
@@ -175,21 +178,21 @@ else $line = $l->t('No description provided.');
                     foreach ($others[$usr] as $vote) {
                         if ($date_id === strtotime($vote->getDt())) {
                             if ($vote->getType() === '1') {
-                                $cl = 'poll-cell-is icon-checkmark';
+                                $cl = 'poll-cell-is';
                                 $total_y[$i_tot]++;
                             }
                             else if ($vote->getType() === '0') {
-                                $cl = 'poll-cell-not icon-close';
+                                $cl = 'poll-cell-not';
                                 $total_n[$i_tot]++;
                             } else {
-                                $cl = 'poll-cell-maybe icon-more';
+                                $cl = 'poll-cell-maybe';
                             }
                             $found = true;
                             break;
                         }
                     }
                     if(!$found) {
-                        $cl = 'poll-cell-un icon-info';
+                        $cl = 'poll-cell-un';
                     }
                     print_unescaped('<td class="' . $cl . '"></td>');
                 }
@@ -216,7 +219,7 @@ else $line = $l->t('No description provided.');
                         $date_id = $dt->getText();
                     }
                     // see if user already has data for this event
-                    $cl = 'poll-cell-active-un icon-info';
+                    $cl = 'poll-cell-active-un';
                     if (isset($user_voted)) {
                         foreach ($user_voted as $obj) {
                             $voteVal = null;
@@ -224,14 +227,14 @@ else $line = $l->t('No description provided.');
                             else $voteVal = $obj->getText();
                             if ($voteVal === $date_id) {
                                 if ($obj->getType() === '1') {
-                                    $cl = 'poll-cell-active-is icon-checkmark';
+                                    $cl = 'poll-cell-active-is';
                                     $total_y[$i_tot]++;
                                 } else if ($obj->getType() === '0') {
-                                    $cl = 'poll-cell-active-not icon-close';
+                                    $cl = 'poll-cell-active-not';
                                     $total_n[$i_tot]++;
                                 } else if($obj->getType() === '2'){
                                     //$total_m[$i_tot]++;
-                                    $cl = 'poll-cell-active-maybe icon-more';
+                                    $cl = 'poll-cell-active-maybe';
                                 }
                                 break;
                             }

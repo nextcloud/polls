@@ -161,6 +161,8 @@ $(document).ready(function () {
     $(document).on('click', '.icon-close', function(e) {
         $(this).removeClass('icon-close');
         $(this).addClass('icon-checkmark');
+        $(this).removeClass('date-text-not-selected');
+        $(this).addClass('date-text-selected');
         if($(this).attr('class').indexOf('is-text') > -1) {
             var id = $(this).attr('id');
             g_chosen_texts.push(id.substring(id.indexOf('_') + 1));
@@ -174,6 +176,8 @@ $(document).ready(function () {
     $(document).on('click', '.icon-checkmark', function(e) {
         $(this).removeClass('icon-checkmark');
         $(this).addClass('icon-close');
+        $(this).removeClass('date-text-selected');
+        $(this).addClass('date-text-not-selected');
         if($(this).attr('class').indexOf('is-text') > -1) {
             var id = $(this).attr('id');
             var index = g_chosen_texts.indexOf(id.substring(id.indexOf('_') + 1));
@@ -297,8 +301,8 @@ function insertText(text, set=false) {
     td.innerHTML = text;
     td.className = 'text-row';
     td = tr.insertCell(-1);
-    if(set) td.className = 'icon-checkmark is-text';
-    else td.className = 'icon-close is-text';
+    if(set) td.className = 'icon-checkmark is-text date-text-selected';
+    else td.className = 'icon-close is-text date-text-not-selected';
     td.id = 'text_' + text;
 }
 
@@ -328,8 +332,8 @@ function addRowToList(ts, text, timeTs=-1) {
             for(var j=1; j<rows[0].cells.length; j++) {
                 var tdId = rows[0].cells[j].id;
                 var td = tr.insertCell(-1);
-                if(timeTs == tdId) td.className = 'icon-checkmark';
-                else td.className = 'icon-close';
+                if(timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
+                else td.className = 'icon-close date-text-not-selected';
                 td.id = tdId;
                 td.innerHTML = '';
             }
@@ -344,8 +348,8 @@ function addRowToList(ts, text, timeTs=-1) {
     for(var j=1; j<rows[0].cells.length; j++) {
         var tdId = rows[0].cells[j].id;
         var td = tr.insertCell(-1);
-        if(timeTs == tdId) td.className = 'icon-checkmark';
-        else td.className = 'icon-close';
+        if(timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
+        else td.className = 'icon-close date-text-not-selected';
         td.id = tdId;
         td.innerHTML = '';
     }
@@ -383,8 +387,8 @@ function addColToList(ts, text, dateTs=-1) {
             td.className = 'date-col';
         } else {
             td.innerHTML = '';
-            if(row.id == dateTs) td.className = 'icon-checkmark';
-            else td.className = 'icon-close';
+            if(row.id == dateTs) td.className = 'icon-checkmark date-text-selected';
+            else td.className = 'icon-close date-text-not-selected';
         }
         td.id = ts;
     }

@@ -66,7 +66,6 @@ $(document).on('click', '.poll-cell-active-un', function(e) {
     newUserDates.push(ts);
     newUserTypes.push(2);
     $(this).switchClass('poll-cell-active-un', 'poll-cell-active-maybe');
-    $(this).switchClass('icon-info', 'icon-more');
 });
 
 $(document).on('click', '.poll-cell-active-not', function(e) {
@@ -82,7 +81,6 @@ $(document).on('click', '.poll-cell-active-not', function(e) {
     var total_no = document.getElementById('id_n_' + ts);
     total_no.innerHTML = parseInt(total_no.innerHTML) - 1;
     $(this).switchClass('poll-cell-active-not', 'poll-cell-active-maybe');
-    $(this).switchClass('icon-close', 'icon-more');
     findNewMaxCount();
     updateStrongCounts();
 });
@@ -100,7 +98,6 @@ $(document).on('click', '.poll-cell-active-maybe', function(e) {
     var total_yes = document.getElementById('id_y_' + ts);
     total_yes.innerHTML = parseInt(total_yes.innerHTML) + 1;
     $(this).switchClass('poll-cell-active-maybe', 'poll-cell-active-is');
-    $(this).switchClass('icon-more', 'icon-checkmark');
     findNewMaxCount();
     updateStrongCounts();
 });
@@ -120,7 +117,6 @@ $(document).on('click', '.poll-cell-active-is', function(e) {
     total_yes.innerHTML = parseInt(total_yes.innerHTML) - 1;
     total_no.innerHTML = parseInt(total_no.innerHTML) + 1;
     $(this).switchClass('poll-cell-active-is', 'poll-cell-active-not');
-    $(this).switchClass('icon-checkmark', 'icon-close');
     findNewMaxCount();
     updateStrongCounts();
 });
