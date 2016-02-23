@@ -21,3 +21,9 @@ Put the files under `<owncloud_dir>/apps/polls` and enable it in the ownCloud ap
 Misc
 ====
 The app is also available at the [appstore](https://apps.owncloud.com/content/show.php/Polls?content=174671).
+
+Screenshots
+===========
+![](https://github.com/v1r0x/polls/blob/master/screenshots/new-poll.png)
+![](https://github.com/v1r0x/polls/blob/master/screenshots/overview.png)
+![](https://github.com/v1r0x/polls/blob/master/screenshots/vote.png)
