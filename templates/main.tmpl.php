@@ -28,7 +28,7 @@
         </tr>
         <?php foreach ($_['polls'] as $poll) : ?>
             <?php
-                if (!userHasAccess($poll)) continue;
+                if (!userHasAccess($poll, $userId)) continue;
                 // direct url to poll
                 $pollUrl = $url . 'goto/' . $poll->getHash();
             ?>
@@ -112,7 +112,7 @@
 
 <?php
 // ---- helper functions ----
-    function userHasAccess($poll) {
+    function userHasAccess($poll, $userId) {
         if($poll === null) return false;
         $access = $poll->getAccess();
         $owner = $poll->getOwner();
