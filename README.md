@@ -12,7 +12,12 @@ Features
 
 Requirements
 ============
-- ownCloud 8.1
+- ownCloud 8.1 or later
+- [This PR](https://github.com/owncloud/core/pull/22497) from core (Wrong status code in the `RedirectResponse`), otherwise you'll get a blank page after create/edit a poll or voting
+
+Bugs
+====
+- Blank page after create/edit a poll or voting (see Requirements for a temporary fix)
 
 Installation
 ============
