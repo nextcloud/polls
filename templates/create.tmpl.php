@@ -29,10 +29,10 @@
 ?>
 
 <?php if($isUpdate): ?>
-<form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll', null, true)); ?>" method="POST">
+<form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll')); ?>" method="POST">
     <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 <?php else: ?>
-<form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_poll', null, true)); ?>" method="POST">
+<form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_poll')); ?>" method="POST">
 <?php endif; ?>
     <input type="hidden" name="chosenDates" id="chosenDates" value="<?php if(isset($chosen)) p($chosen); ?>" />
     <input type="hidden" name="expireTs" id="expireTs" value="<?php if(isset($expireTs)) p($expireTs); ?>" />
@@ -98,7 +98,7 @@
         </div>
 
         <br/>
-        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index', null, true)); ?>"><input type="button" id="submit_cancel_poll" value="<?php p($l->t('Cancel')); ?>" /></a>
+        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><input type="button" id="submit_cancel_poll" value="<?php p($l->t('Cancel')); ?>" /></a>
         <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Next')); ?>" />
     </div>
 </form>

@@ -10,7 +10,7 @@
 <h1><?php p($l->t('Summary')); ?></h1>
 <div class="goto_poll">
     <?php
-        $url = $urlGenerator->linkToRoute('polls.page.index', []);
+        $url = $urlGenerator->linkToRoute('polls.page.index');
     ?>
     <?php if(count($_['polls']) === 0) : ?>
     <?php p($l->t('No existing polls.')); ?>
@@ -104,11 +104,11 @@
             </tr>
         <?php endforeach; ?>
     </table>
-    <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll', [])); ?>" method="POST">
+    <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST">
     </form>
     <?php endif; ?>
 </div>
-<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll', [])); ?>"><input type="button" id="submit_new_poll" class="icon-add" /></a>
+<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>"><input type="button" id="submit_new_poll" class="icon-add" /></a>
 
 <?php
 // ---- helper functions ----

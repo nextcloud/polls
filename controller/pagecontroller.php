@@ -343,6 +343,7 @@ class PageController extends Controller {
 
             $dates = json_decode($dates);
             $types = json_decode($types);
+            $this->participationMapper->deleteByPollAndUser($pollId, $userId);
             for($i=0; $i<count($dates); $i++) {
                 $part = new Participation();
                 $part->setPollId($pollId);

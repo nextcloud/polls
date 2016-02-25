@@ -11,6 +11,7 @@ $poll = $_['poll'];
 $dates = $_['dates'];
 $votes = $_['votes'];
 $comments = $_['comments'];
+$notification = $_['notification'];
 $poll_type = $poll->getType();
 if ($poll->getExpire() === null) $expired = false;
 else {
@@ -91,8 +92,7 @@ else $line = $l->t('No description provided.');
 <h2><?php p($l->t('Poll URL')); ?></h2>
 <p class="url">
     <?php
-        $url = $urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $poll->getHash()], true);
-        //$url = $urlGenerator->getAbsoluteURL($url);
+        $url = $urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
     ?>
     <a href="<?php p($url);?>"><?php p($url); ?></a>
 </p>
@@ -118,8 +118,8 @@ else $line = $l->t('No description provided.');
             print_unescaped('<tr><th></th>' .  $for_string_dates . '</tr>');
 
             print_unescaped('<tr><th></th>');
-            for ($i = 0; $i < count($chosen); $i++) {
-                $ch_obj = date('H:i', strtotime($chosen[$i]));
+            for ($i = 0; $i < count($dates); $i++) {
+                $ch_obj = date('H:i', strtotime($dates[$i]->getDt()));
                 print_unescaped('<th>' . $ch_obj . '</th>');
             }
             print_unescaped('</tr>');
@@ -317,8 +317,8 @@ else $line = $l->t('No description provided.');
                 print_unescaped('<th>' . $for_string_years . '</th>');
             }
             else {
-                foreach ($chosen as $el) {
-                    print_unescaped('<th title="' . $el->desc . '">' . $el->dt . '</th>');
+                foreach ($dates as $el) {
+                    print_unescaped('<th title="' . $el->getText() . '">' . $el->getText() . '</th>');
                 }
             }
             ?>
@@ -332,8 +332,8 @@ else $line = $l->t('No description provided.');
     <br/>
 <?php endif; ?>
 
-<a href="<?php p($urlGenerator->linkToRoute('polls.page.index', null, true)); ?>" style="float:left;padding-right: 5px;"><input type="button" class="icon-home" /></a>
-<form name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote', null, true)); ?>" method="POST">
+<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" style="float:left;padding-right: 5px;"><input type="button" class="icon-home" /></a>
+<form name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
     <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
     <input type="hidden" name="userId" value="<?php p($userId); ?>" />
     <input type="hidden" name="dates" value="<?php p($poll->getId()); ?>" />
@@ -372,7 +372,7 @@ else $line = $l->t('No description provided.');
         <?php p($l->t('No comments yet. Be the first.')); ?>
     <?php endif; ?>
     <div class="cl_comment">
-        <form name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment', null, true)); ?>" method="POST">
+        <form name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
             <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
             <input type="hidden" name="userId" value="<?php p($userId); ?>" />
             <?php // -------- leave comment ---------- ?>
