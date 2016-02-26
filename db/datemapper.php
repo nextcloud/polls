@@ -44,7 +44,7 @@ class DateMapper extends Mapper {
      */
     public function findAll($limit=null, $offset=null) {
         $sql = 'SELECT * FROM `*PREFIX*polls_dts`';
-        return $this->findEntities($sql, $limit, $offset);
+        return $this->findEntities($sql, [], $limit, $offset);
     }
 
     /**
