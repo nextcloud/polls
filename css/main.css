@@ -30,7 +30,7 @@ th {
     font-weight: bold;
 }
 
-tr:nth-child(even), tr:nth-child(even) a {
+tr:nth-child(even), tr:nth-child(even):hover,  tr:nth-child(even) a {
     background: #35537a;
     color: #eee;
 }
