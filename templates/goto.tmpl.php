@@ -5,6 +5,7 @@
 $userId = $_['userId'];
 $userMgr = $_['userMgr'];
 $urlGenerator = $_['urlGenerator'];
+$avaMgr = $_['avatarManager'];
 use \OCP\User;
 
 $poll = $_['poll'];
@@ -157,7 +158,16 @@ else $line = $l->t('No description provided.');
                 }
                 print_unescaped('<tr>');
                 print_unescaped('<th>');
-                if($userMgr->get($usr) != null) p($userMgr->get($usr)->getDisplayName());
+                if($userMgr->get($usr) != null) {
+                    $avatar = $avaMgr->getAvatar($usr)->get(32);
+                    if($avatar !== false) {
+                        $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';
+                    } else {
+                        $avatarImg = '<div class="userNameImg noAvatar" style="background-color:' . getHsl($usr) . ';">' . strtoupper($usr[0]) . '</div>';
+                    }
+                    print_unescaped($avatarImg);
+                    p($userMgr->get($usr)->getDisplayName());
+                }
                 else p($usr);
                 print_unescaped('</th>');
                 $i_tot = -1;
@@ -205,7 +215,16 @@ else $line = $l->t('No description provided.');
             <?php
             if (!$expired) {
                 if (User::isLoggedIn()) {
-                    print_unescaped('<th>' . $userMgr->get($userId)->getDisplayName() . '</th>');
+                    print_unescaped('<th>');
+                    $avatar = $avaMgr->getAvatar($userId)->get(32);
+                    if($avatar !== false) {
+                        $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';
+                    } else {
+                        $avatarImg = '<div class="userNameImg noAvatar" style="background-color:' . getHsl($userId) . ';">' . strtoupper($userId[0]) . '</div>';
+                    }
+                    print_unescaped($avatarImg);
+                    p($userMgr->get($userId)->getDisplayName());
+                    print_unescaped('</th>');
                 } else {
                     print_unescaped('<th id="id_ac_detected" ><input type="text" name="user_name" id="user_name" /></th>');
                 }
@@ -383,3 +402,20 @@ else $line = $l->t('No description provided.');
         </form>
     </div>
 </div>
+
+<?php
+    //adapted from jsxc.chat
+    function getHsl($str) {
+        $hash = 0;
+        for($i=0; $i<strlen($str); $i++) {
+            $utf16_char = mb_convert_encoding($str[i], "utf-16", "utf-8");
+            $char = hexdec(bin2hex($utf16_char));
+            $hash = (($hash << 5) - $hash) + $char;
+            $hash |= 0; // Convert to 32bit integer
+        }
+        $hue = abs($hash) % 360;
+        $saturation = 90;
+        $lightness = 65;
+        return 'hsl(' . $hue . ', ' . $saturation . '%, ' . $lightness . '%)';
+    }
+?>
