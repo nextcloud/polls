@@ -38,11 +38,11 @@ $(document).ready(function () {
             var val = accessValueArr[i];
             var index = val.indexOf('group_');
             if(index == 0) {
-                g_chosen_groups.push(val.substring(6));
+                g_chosen_groups.push(val);
             } else {
                 index = val.indexOf('user_');
                 if(index == 0) {
-                    g_chosen_users.push(val.substring(5));
+                    g_chosen_users.push(val);
                 }
             }
         }
@@ -216,23 +216,23 @@ $(document).ready(function () {
 
     $(document).on('click', '.cl_user_item', function(e) {
         $(this).switchClass('cl_user_item', 'cl_user_item_selected');
-        g_tmp_users.push(this.innerHTML);
+        g_tmp_users.push(this.id);
     });
 
     $(document).on('click', '.cl_user_item_selected', function(e) {
         $(this).switchClass('cl_user_item_selected', 'cl_user_item');
-        var index = g_tmp_users.indexOf(this.innerHTML);
+        var index = g_tmp_users.indexOf(this.id);
         if(index > -1) g_tmp_users.splice(index, 1);
     });
 
     $(document).on('click', '.cl_group_item', function(e) {
         $(this).switchClass('cl_group_item', 'cl_group_item_selected');
-        g_tmp_groups.push(this.innerHTML);
+        g_tmp_groups.push(this.id);
     });
 
     $(document).on('click', '.cl_group_item_selected', function(e) {
         $(this).switchClass('cl_group_item_selected', 'cl_group_item');
-        var index = g_tmp_groups.indexOf(this.innerHTML);
+        var index = g_tmp_groups.indexOf(this.id);
         if(index > -1) g_tmp_groups.splice(index, 1);
     });
 
@@ -427,7 +427,7 @@ function showAccessDialog() {
         var curr = cells_grp[i];
         curr.className = 'cl_group_item';
         for(var j=0; j<tmpGroups.length; j++) {
-            if(tmpGroups[j] == curr.innerHTML) {
+            if(tmpGroups[j] == curr.id) {
                 curr.className = 'cl_group_item_selected';
                 tmpGroups.splice(j, 1);
                 break;
@@ -439,7 +439,7 @@ function showAccessDialog() {
         var curr = cells_usr[i];
         curr.className = 'cl_user_item';
         for(var j=0; j<tmpUsers.length; j++) {
-            if(tmpUsers[j] == curr.innerHTML) {
+            if(tmpUsers[j] == curr.id) {
                 curr.className = 'cl_user_item_selected';
                 tmpUsers.splice(j, 1);
                 break;
