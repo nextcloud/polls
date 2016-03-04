@@ -167,6 +167,12 @@ td.td_shown {
     text-align: center;
 }
 
+.userNameImg {
+    vertical-align: middle;
+    margin-right: 5px;
+    border-radius: 16px;
+}
+
 .cl_time_display {
     background-color: aqua;
     cursor: pointer;

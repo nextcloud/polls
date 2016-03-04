@@ -27,6 +27,7 @@ use \OCA\Polls\Db\NotificationMapper;
 use \OCA\Polls\Db\ParticipationMapper;
 use \OCA\Polls\Db\TextMapper;
 use \OCP\IUserManager;
+use \OCP\IAvatarManager;
 use \OCP\ILogger;
 use \OCP\IRequest;
 use \OCP\IURLGenerator;
@@ -48,9 +49,11 @@ class PageController extends Controller {
     private $textMapper;
     private $urlGenerator;
     private $manager;
+    private $avatarManager;
     private $logger;
     public function __construct($appName, IRequest $request,
                 IUserManager $manager,
+                IAvatarManager $avatarManager,
                 ILogger $logger,
                 IURLGenerator $urlGenerator,
                 $userId,
@@ -63,6 +66,7 @@ class PageController extends Controller {
                 TextMapper $textMapper) {
         parent::__construct($appName, $request);
         $this->manager = $manager;
+        $this->avatarManager = $avatarManager;
         $this->logger = $logger;
         $this->urlGenerator = $urlGenerator;
         $this->userId = $userId;
@@ -147,7 +151,7 @@ class PageController extends Controller {
         } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
             $notification = null;
         }
-        if($this->hasUserAccess($poll)) return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        if($this->hasUserAccess($poll)) return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
         else return new TemplateResponse('polls', 'no.acc.tmpl', []);
     }
 

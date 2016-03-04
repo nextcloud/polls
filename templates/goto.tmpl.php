@@ -5,6 +5,7 @@
 $userId = $_['userId'];
 $userMgr = $_['userMgr'];
 $urlGenerator = $_['urlGenerator'];
+$avaMgr = $_['avatarManager'];
 use \OCP\User;
 
 $poll = $_['poll'];
@@ -157,7 +158,14 @@ else $line = $l->t('No description provided.');
                 }
                 print_unescaped('<tr>');
                 print_unescaped('<th>');
-                if($userMgr->get($usr) != null) p($userMgr->get($usr)->getDisplayName());
+                if($userMgr->get($usr) != null) {
+                    $avatar = $avaMgr->getAvatar($usr)->get(32);
+                    if($avatar !== false) {
+                        $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';
+                    }
+                    print_unescaped($avatarImg);
+                    p($userMgr->get($usr)->getDisplayName());
+                }
                 else p($usr);
                 print_unescaped('</th>');
                 $i_tot = -1;
@@ -205,7 +213,14 @@ else $line = $l->t('No description provided.');
             <?php
             if (!$expired) {
                 if (User::isLoggedIn()) {
-                    print_unescaped('<th>' . $userMgr->get($userId)->getDisplayName() . '</th>');
+                    print_unescaped('<th>');
+                    $avatar = $avaMgr->getAvatar($userId)->get(32);
+                    if($avatar !== false) {
+                        $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';
+                        print_unescaped($avatarImg);
+                    }
+                    p($userMgr->get($userId)->getDisplayName());
+                    print_unescaped('</th>');
                 } else {
                     print_unescaped('<th id="id_ac_detected" ><input type="text" name="user_name" id="user_name" /></th>');
                 }
