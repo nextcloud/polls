@@ -198,10 +198,10 @@ class PageController extends Controller {
                     if($accessValues->users !== null) $users = $accessValues->users;
                     $accessType = '';
                     foreach ($groups as $gid) {
-                        $accessType .= 'group_' . $gid . ';';
+                        $accessType .= $gid . ';';
                     }
                     foreach ($users as $uid) {
-                        $accessType .= 'user_' . $uid . ';';
+                        $accessType .= $uid . ';';
                     }
                 }
             }
@@ -268,10 +268,10 @@ class PageController extends Controller {
         if ($accessType === 'select') {
             $accessType = '';
             foreach ($groups as $gid) {
-                $accessType .= 'group_' . $gid . ';';
+                $accessType .= $gid . ';';
             }
             foreach ($users as $uid) {
-                $accessType .= 'user_' . $uid . ';';
+                $accessType .= $uid . ';';
             }
         }
         $event->setAccess($accessType);
@@ -392,7 +392,7 @@ class PageController extends Controller {
         if ($this->userId === null) return false;
         if ($access === 'registered') return true;
         if ($owner === $this->userId) return true;
-        $user_groups = OC_Group::getUserGroups($this->userId);
+        $user_groups = \OC_Group::getUserGroups($this->userId);
         $arr = explode(';', $access);
         foreach ($arr as $item) {
             if (strpos($item, 'group_') === 0) {
@@ -403,7 +403,7 @@ class PageController extends Controller {
             }
             else if (strpos($item, 'user_') === 0) {
                 $usr = substr($item, 5);
-                if ($usr === User::getUser()) return true;
+                if ($usr === \OCP\User::getUser()) return true;
             }
         }
         return false;

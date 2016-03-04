@@ -20,8 +20,10 @@
         $chosen .= ']';
         $title = $poll->getTitle();
         $desc = $poll->getDescription();
-        if($poll->getExpire() !== null) $expireTs = strtotime($poll->getExpire()) - 60*60*24; //remove one day, which has been added to expire at the end of a day
-        $expireStr = date('d.m.Y', $expireTs);
+        if($poll->getExpire() !== null) {
+            $expireTs = strtotime($poll->getExpire()) - 60*60*24; //remove one day, which has been added to expire at the end of a day
+            $expireStr = date('d.m.Y', $expireTs);
+        }
         $access = $poll->getAccess();
         $accessTypes = $access;
         if($access !== 'registered' && $access !== 'hidden' && $access !== 'public') $access = 'select';
@@ -131,7 +133,7 @@
                         <?php $groups = OC_Group::getUserGroups($userId); ?>
                         <?php foreach($groups as $gid) : ?>
                             <tr>
-                                <td class="cl_group_item"><?php p($gid); ?></td>
+                                <td class="cl_group_item" id="group_<?php p($gid); ?>"><?php p($gid); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </table>
