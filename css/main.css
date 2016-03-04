@@ -173,6 +173,17 @@ td.td_shown {
     border-radius: 16px;
 }
 
+.noAvatar {
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    line-height: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 19px;
+    display: inline-block;
+}
+
 .cl_time_display {
     background-color: aqua;
     cursor: pointer;

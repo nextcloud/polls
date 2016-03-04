@@ -162,6 +162,8 @@ else $line = $l->t('No description provided.');
                     $avatar = $avaMgr->getAvatar($usr)->get(32);
                     if($avatar !== false) {
                         $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';
+                    } else {
+                        $avatarImg = '<div class="userNameImg noAvatar" style="background-color:' . getHsl($usr) . ';">' . strtoupper($usr[0]) . '</div>';
                     }
                     print_unescaped($avatarImg);
                     p($userMgr->get($usr)->getDisplayName());
@@ -217,8 +219,10 @@ else $line = $l->t('No description provided.');
                     $avatar = $avaMgr->getAvatar($userId)->get(32);
                     if($avatar !== false) {
                         $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';
-                        print_unescaped($avatarImg);
+                    } else {
+                        $avatarImg = '<div class="userNameImg noAvatar" style="background-color:' . getHsl($userId) . ';">' . strtoupper($userId[0]) . '</div>';
                     }
+                    print_unescaped($avatarImg);
                     p($userMgr->get($userId)->getDisplayName());
                     print_unescaped('</th>');
                 } else {
@@ -398,3 +402,20 @@ else $line = $l->t('No description provided.');
         </form>
     </div>
 </div>
+
+<?php
+    //adapted from jsxc.chat
+    function getHsl($str) {
+        $hash = 0;
+        for($i=0; $i<strlen($str); $i++) {
+            $utf16_char = mb_convert_encoding($str[i], "utf-16", "utf-8");
+            $char = hexdec(bin2hex($utf16_char));
+            $hash = (($hash << 5) - $hash) + $char;
+            $hash |= 0; // Convert to 32bit integer
+        }
+        $hue = abs($hash) % 360;
+        $saturation = 90;
+        $lightness = 65;
+        return 'hsl(' . $hue . ', ' . $saturation . '%, ' . $lightness . '%)';
+    }
+?>
