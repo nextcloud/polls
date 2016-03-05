@@ -55,39 +55,66 @@ $(document).ready(function () {
     });
 });
 
-$(document).on('click', '.poll-cell-active-un', function(e) {
-    values_changed = true;
-    var ts = $(this).attr('id');
-    var index = newUserDates.indexOf(ts);
-    if(index > -1) {
-        newUserDates.splice(index, 1);
-        newUserTypes.splice(index, 1);
+$(document).on('click', '.toggle-all', function(e) {
+    if($(this).attr('class').indexOf('selected-all') > -1) {
+        var selected = $(this).parent().children('.poll-cell-active-is');
+        var maybes = $(this).parent().children('.poll-cell-active-maybe');
+        for(var i=0; i<selected.length; i++) {
+            deselectItem($(selected[i]));
+        }
+        for(var i=0; i<maybes.length; i++) {
+            deselectItem($(maybes[i]));
+        }
+        $(this).removeClass('selected-all');
+        $(this).addClass('selected-none');
+    } else if($(this).attr('class').indexOf('selected-none') > -1) {
+        var selected = $(this).parent().children('.poll-cell-active-is');
+        var unselected = $(this).parent().children('.poll-cell-active-not');
+        for(var i=0; i<selected.length; i++) {
+            maybeItem($(selected[i]));
+        }
+        for(var i=0; i<unselected.length; i++) {
+            maybeItem($(unselected[i]));
+        }
+        $(this).removeClass('selected-none');
+        $(this).addClass('selected-maybe');
+    } else {
+        var maybes = $(this).parent().children('.poll-cell-active-maybe');
+        var unselected = $(this).parent().children('.poll-cell-active-not');
+        var notselected = $(this).parent().children('.poll-cell-active-un');
+        for(var i=0; i<maybes.length; i++) {
+            selectItem($(maybes[i]));
+        }
+        for(var i=0; i<unselected.length; i++) {
+            selectItem($(unselected[i]));
+        }
+        for(var i=0; i<notselected.length; i++) {
+            selectItem($(notselected[i]));
+        }
+        $(this).removeClass('selected-maybe');
+        $(this).addClass('selected-all');
     }
-    newUserDates.push(ts);
-    newUserTypes.push(2);
-    $(this).switchClass('poll-cell-active-un', 'poll-cell-active-maybe');
+});
+
+$(document).on('click', '.poll-cell-active-un', function(e) {
+    maybeItem($(this));
 });
 
 $(document).on('click', '.poll-cell-active-not', function(e) {
-    values_changed = true;
-    var ts = $(this).attr('id');
-    var index = newUserDates.indexOf(ts);
-    if(index > -1) {
-        newUserDates.splice(index, 1);
-        newUserTypes.splice(index, 1);
-    }
-    newUserDates.push(ts);
-    newUserTypes.push(2);
-    var total_no = document.getElementById('id_n_' + ts);
-    total_no.innerHTML = parseInt(total_no.innerHTML) - 1;
-    $(this).switchClass('poll-cell-active-not', 'poll-cell-active-maybe');
-    findNewMaxCount();
-    updateStrongCounts();
+    maybeItem($(this));
 });
 
 $(document).on('click', '.poll-cell-active-maybe', function(e) {
+    selectItem($(this))
+});
+
+$(document).on('click', '.poll-cell-active-is', function(e) {
+    deselectItem($(this));
+});
+
+function selectItem(cell) {
     values_changed = true;
-    var ts = $(this).attr('id');
+    var ts = cell.attr('id');
     var index = newUserDates.indexOf(ts);
     if(index > -1) {
         newUserDates.splice(index, 1);
@@ -97,14 +124,14 @@ $(document).on('click', '.poll-cell-active-maybe', function(e) {
     newUserTypes.push(1);
     var total_yes = document.getElementById('id_y_' + ts);
     total_yes.innerHTML = parseInt(total_yes.innerHTML) + 1;
-    $(this).switchClass('poll-cell-active-maybe', 'poll-cell-active-is');
+    cell.switchClass('poll-cell-active-maybe', 'poll-cell-active-is');
     findNewMaxCount();
     updateStrongCounts();
-});
+}
 
-$(document).on('click', '.poll-cell-active-is', function(e) {
+function deselectItem(cell) {
     values_changed = true;
-    var ts = $(this).attr('id');
+    var ts = cell.attr('id');
     var index = newUserDates.indexOf(ts);
     if(index > -1) {
         newUserDates.splice(index, 1);
@@ -116,10 +143,28 @@ $(document).on('click', '.poll-cell-active-is', function(e) {
     var total_no = document.getElementById('id_n_' + ts);
     total_yes.innerHTML = parseInt(total_yes.innerHTML) - 1;
     total_no.innerHTML = parseInt(total_no.innerHTML) + 1;
-    $(this).switchClass('poll-cell-active-is', 'poll-cell-active-not');
+    cell.switchClass('poll-cell-active-is', 'poll-cell-active-not');
     findNewMaxCount();
     updateStrongCounts();
-});
+}
+
+function maybeItem(cell) {
+    values_changed = true;
+    var ts = cell.attr('id');
+    var index = newUserDates.indexOf(ts);
+    if(index > -1) {
+        newUserDates.splice(index, 1);
+        newUserTypes.splice(index, 1);
+    }
+    newUserDates.push(ts);
+    newUserTypes.push(2);
+    var total_no = document.getElementById('id_n_' + ts);
+    total_no.innerHTML = parseInt(total_no.innerHTML) - 1;
+    cell.switchClass('poll-cell-active-not', 'poll-cell-active-maybe');
+    cell.switchClass('poll-cell-active-un', 'poll-cell-active-maybe');
+    findNewMaxCount();
+    updateStrongCounts();
+}
 
 function findNewMaxCount(){
     var cell_tot_y = document.getElementsByClassName('cl_total_y');

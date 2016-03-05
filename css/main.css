@@ -400,22 +400,6 @@ ul {
     margin-bottom: 10px;
 }
 
-.selected-all {
-    background-color: #6fff70;
-}
-
-.selected-none {
-    background-color: #ff6f6f;
-}
-
-.date-text-selected {
-    background-color: #6fff70;
-}
-
-.date-text-not-selected {
-    background-color: #ff6f6f;
-}
-
 .poll-cell-not, .poll-cell-is, .poll-cell-maybe, .poll-cell-un, .poll-cell-active-not, .poll-cell-active-is, .poll-cell-active-maybe, .poll-cell-active-un {
 }
 
@@ -423,15 +407,15 @@ ul {
     background-color: #fff;
 }
 
-.poll-cell-is, .poll-cell-active-is {
+.poll-cell-is, .poll-cell-active-is, .date-text-selected, .selected-all {
     background-color: #6fff70; /*green*/
 }
 
-.poll-cell-maybe, .poll-cell-active-maybe {
+.poll-cell-maybe, .poll-cell-active-maybe, .selected-maybe {
     background-color: #fcff6f; /*yellow*/
 }
 
-.poll-cell-not, .poll-cell-active-not {
+.poll-cell-not, .poll-cell-active-not, .date-text-not-selected, .selected-none {
     background-color: #ff6f6f; /*red*/
 }
 
