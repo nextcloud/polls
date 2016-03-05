@@ -60,10 +60,14 @@ $(document).on('click', '.toggle-all', function(e) {
         var selected = $(this).parent().children('.poll-cell-active-is');
         var maybes = $(this).parent().children('.poll-cell-active-maybe');
         for(var i=0; i<selected.length; i++) {
-            deselectItem($(selected[i]));
+            var curr = $(selected[i]);
+            curr.switchClass('poll-cell-active-is', 'poll-cell-active-not');
+            deselectItem(curr);
         }
         for(var i=0; i<maybes.length; i++) {
-            deselectItem($(maybes[i]));
+            var curr = $(maybes[i]);
+            curr.switchClass('poll-cell-active-maybe', 'poll-cell-active-not');
+            deselectItem(curr);
         }
         $(this).removeClass('selected-all');
         $(this).addClass('selected-none');
@@ -71,10 +75,14 @@ $(document).on('click', '.toggle-all', function(e) {
         var selected = $(this).parent().children('.poll-cell-active-is');
         var unselected = $(this).parent().children('.poll-cell-active-not');
         for(var i=0; i<selected.length; i++) {
-            maybeItem($(selected[i]));
+            var curr = $(selected[i]);
+            curr.switchClass('poll-cell-active-is', 'poll-cell-active-maybe');
+            maybeItem(curr);
         }
         for(var i=0; i<unselected.length; i++) {
-            maybeItem($(unselected[i]));
+            var curr = $(unselected[i]);
+            curr.switchClass('poll-cell-active-not', 'poll-cell-active-maybe');
+            maybeItem(curr);
         }
         $(this).removeClass('selected-none');
         $(this).addClass('selected-maybe');
@@ -83,13 +91,19 @@ $(document).on('click', '.toggle-all', function(e) {
         var unselected = $(this).parent().children('.poll-cell-active-not');
         var notselected = $(this).parent().children('.poll-cell-active-un');
         for(var i=0; i<maybes.length; i++) {
-            selectItem($(maybes[i]));
+            var curr = $(maybes[i]);
+            curr.switchClass('poll-cell-active-maybe', 'poll-cell-active-is');
+            selectItem(curr);
         }
         for(var i=0; i<unselected.length; i++) {
-            selectItem($(unselected[i]));
+            var curr = $(unselected[i]);
+            curr.switchClass('poll-cell-active-not', 'poll-cell-active-is');
+            selectItem(curr, 'poll-cell-active-not');
         }
         for(var i=0; i<notselected.length; i++) {
-            selectItem($(notselected[i]));
+            var curr = $(unselected[i]);
+            curr.switchClass('poll-cell-active-un', 'poll-cell-active-is');
+            selectItem(curr);
         }
         $(this).removeClass('selected-maybe');
         $(this).addClass('selected-all');
@@ -105,14 +119,14 @@ $(document).on('click', '.poll-cell-active-not', function(e) {
 });
 
 $(document).on('click', '.poll-cell-active-maybe', function(e) {
-    selectItem($(this))
+    selectItem($(this));
 });
 
 $(document).on('click', '.poll-cell-active-is', function(e) {
     deselectItem($(this));
 });
 
-function selectItem(cell) {
+function selectItem(cell, cl='') {
     values_changed = true;
     var ts = cell.attr('id');
     var index = newUserDates.indexOf(ts);
@@ -122,6 +136,10 @@ function selectItem(cell) {
     }
     newUserDates.push(ts);
     newUserTypes.push(1);
+    if(cl.indexOf('poll-cell-active-not') > -1) {
+        var total_no = document.getElementById('id_n_' + ts);
+        total_no.innerHTML = parseInt(total_no.innerHTML) - 1;
+    }
     var total_yes = document.getElementById('id_y_' + ts);
     total_yes.innerHTML = parseInt(total_yes.innerHTML) + 1;
     cell.switchClass('poll-cell-active-maybe', 'poll-cell-active-is');
