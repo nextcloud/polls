@@ -400,6 +400,14 @@ ul {
     margin-bottom: 10px;
 }
 
+.selected-all {
+    background-color: #6fff70;
+}
+
+.selected-none {
+    background-color: #ff6f6f;
+}
+
 .date-text-selected {
     background-color: #6fff70;
 }
