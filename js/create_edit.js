@@ -159,35 +159,11 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.icon-close', function(e) {
-        $(this).removeClass('icon-close');
-        $(this).addClass('icon-checkmark');
-        $(this).removeClass('date-text-not-selected');
-        $(this).addClass('date-text-selected');
-        if($(this).attr('class').indexOf('is-text') > -1) {
-            var id = $(this).attr('id');
-            g_chosen_texts.push(id.substring(id.indexOf('_') + 1));
-        } else {
-            var dateId = $(this).parent().attr('id'); //timestamp of date
-            var timeId = $(this).attr('id');
-            g_chosen_datetimes.push(parseInt(dateId) + parseInt(timeId));
-        }
+        selectItem($(this));
     });
 
     $(document).on('click', '.icon-checkmark', function(e) {
-        $(this).removeClass('icon-checkmark');
-        $(this).addClass('icon-close');
-        $(this).removeClass('date-text-selected');
-        $(this).addClass('date-text-not-selected');
-        if($(this).attr('class').indexOf('is-text') > -1) {
-            var id = $(this).attr('id');
-            var index = g_chosen_texts.indexOf(id.substring(id.indexOf('_') + 1));
-            if(index > -1) g_chosen_texts.splice(index, 1);
-        } else {
-            var dateId = $(this).parent().attr('id'); //timestamp of date
-            var timeId = $(this).attr('id');
-            var index = g_chosen_datetimes.indexOf(parseInt(dateId) + parseInt(timeId));
-            if(index > -1) g_chosen_datetimes.splice(index, 1);
-        }
+        deselectItem($(this));
     });
 
     $(document).on('click', '#text-submit', function(e) {
@@ -234,6 +210,33 @@ $(document).ready(function () {
         $(this).switchClass('cl_group_item_selected', 'cl_group_item');
         var index = g_tmp_groups.indexOf(this.id);
         if(index > -1) g_tmp_groups.splice(index, 1);
+    });
+
+    $('.toggleable-row').hover(
+        function() {
+            var td = this.insertCell(-1);
+            td.className = 'toggle-all selected-all';
+        }, function() {
+            $(this).find('td:last-child').remove();
+        }
+    );
+
+    $(document).on('click', '.toggle-all', function(e) {
+        if($(this).attr('class').indexOf('selected-all') > -1) {
+            var children = $(this).parent().children('.icon-checkmark');
+            for(var i=0; i<children.length; i++) {
+                deselectItem($(children[i]));
+            }
+            $(this).removeClass('selected-all');
+            $(this).addClass('selected-none');
+        } else {
+            var children = $(this).parent().children('.icon-close');
+            for(var i=0; i<children.length; i++) {
+                selectItem($(children[i]));
+            }
+            $(this).removeClass('selected-none');
+            $(this).addClass('selected-all');
+        }
     });
 
     $('input[type=radio][name=pollType]').change(function() {
@@ -294,6 +297,38 @@ $(document).ready(function () {
     }
 });
 
+function selectItem(cell) {
+    cell.removeClass('icon-close');
+    cell.addClass('icon-checkmark');
+    cell.removeClass('date-text-not-selected');
+    cell.addClass('date-text-selected');
+    if(cell.attr('class').indexOf('is-text') > -1) {
+        var id = cell.attr('id');
+        g_chosen_texts.push(id.substring(id.indexOf('_') + 1));
+    } else {
+        var dateId = cell.parent().attr('id'); //timestamp of date
+        var timeId = cell.attr('id');
+        g_chosen_datetimes.push(parseInt(dateId) + parseInt(timeId));
+    }
+}
+
+function deselectItem(cell) {
+    cell.removeClass('icon-checkmark');
+    cell.addClass('icon-close');
+    cell.removeClass('date-text-selected');
+    cell.addClass('date-text-not-selected');
+    if(cell.attr('class').indexOf('is-text') > -1) {
+        var id = cell.attr('id');
+        var index = g_chosen_texts.indexOf(id.substring(id.indexOf('_') + 1));
+        if(index > -1) g_chosen_texts.splice(index, 1);
+    } else {
+        var dateId = cell.parent().attr('id'); //timestamp of date
+        var timeId = cell.attr('id');
+        var index = g_chosen_datetimes.indexOf(parseInt(dateId) + parseInt(timeId));
+        if(index > -1) g_chosen_datetimes.splice(index, 1);
+    }
+}
+
 function insertText(text, set=false) {
     var table = document.getElementById('selected-texts-table');
     var tr = table.insertRow(-1);
@@ -314,6 +349,7 @@ function addRowToList(ts, text, timeTs=-1) {
         tr.insertCell(-1);
         tr = table.insertRow(-1); //append new row
         tr.id = ts;
+        tr.className = 'toggleable-row';
         var td = tr.insertCell(-1);
         td.className = 'date-row';
         td.innerHTML = text;
@@ -326,6 +362,7 @@ function addRowToList(ts, text, timeTs=-1) {
         if(curr.id > ts) {
             var tr = table.insertRow(i); //insert row at current index
             tr.id = ts;
+            tr.className = 'toggleable-row';
             var td = tr.insertCell(-1);
             td.className = 'date-row';
             td.innerHTML = text;
@@ -342,6 +379,7 @@ function addRowToList(ts, text, timeTs=-1) {
     }
     var tr = table.insertRow(-1); //highest value, append new row
     tr.id = ts;
+    tr.className = 'toggleable-row';
     var td = tr.insertCell(-1);
     td.className = 'date-row';
     td.innerHTML = text;

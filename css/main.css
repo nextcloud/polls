@@ -151,7 +151,7 @@ td.td_shown {
     padding: 10px;
 }
 
-.cl_create_form, .vote_table {
+.cl_create_form {
     min-width: 60%;
     margin-bottom: 10px;
 }
@@ -165,6 +165,19 @@ td.td_shown {
     text-align: left;
     vertical-align: center;
     text-align: center;
+}
+
+.time-slot-cell {
+    min-width: 50px;
+}
+
+.toggle-all {
+    width: 20px;
+}
+
+.user-cell {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .userNameImg {
@@ -400,14 +413,6 @@ ul {
     margin-bottom: 10px;
 }
 
-.date-text-selected {
-    background-color: #6fff70;
-}
-
-.date-text-not-selected {
-    background-color: #ff6f6f;
-}
-
 .poll-cell-not, .poll-cell-is, .poll-cell-maybe, .poll-cell-un, .poll-cell-active-not, .poll-cell-active-is, .poll-cell-active-maybe, .poll-cell-active-un {
 }
 
@@ -415,15 +420,15 @@ ul {
     background-color: #fff;
 }
 
-.poll-cell-is, .poll-cell-active-is {
+.poll-cell-is, .poll-cell-active-is, .date-text-selected, .selected-all {
     background-color: #6fff70; /*green*/
 }
 
-.poll-cell-maybe, .poll-cell-active-maybe {
+.poll-cell-maybe, .poll-cell-active-maybe, .selected-maybe {
     background-color: #fcff6f; /*yellow*/
 }
 
-.poll-cell-not, .poll-cell-active-not {
+.poll-cell-not, .poll-cell-active-not, .date-text-not-selected, .selected-none {
     background-color: #ff6f6f; /*red*/
 }
 

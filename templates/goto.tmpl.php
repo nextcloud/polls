@@ -103,6 +103,7 @@ else $line = $l->t('No description provided.');
     <table class="vote_table" id="id_table_1"> <?php //from above title ?>
         <tr>
             <th></th>
+            <th></th>
             <?php
             if ($poll_type === '0') {
                 print_unescaped($for_string_years);
@@ -116,12 +117,12 @@ else $line = $l->t('No description provided.');
         </tr>
         <?php
         if ($poll_type === '0'){
-            print_unescaped('<tr><th></th>' .  $for_string_dates . '</tr>');
+            print_unescaped('<tr><th></th><td></td>' .  $for_string_dates . '</tr>');
 
-            print_unescaped('<tr><th></th>');
+            print_unescaped('<tr><th></th><td></td>');
             for ($i = 0; $i < count($dates); $i++) {
                 $ch_obj = date('H:i', strtotime($dates[$i]->getDt()));
-                print_unescaped('<th>' . $ch_obj . '</th>');
+                print_unescaped('<th class="time-slot-cell">' . $ch_obj . '</th>');
             }
             print_unescaped('</tr>');
         }
@@ -157,7 +158,7 @@ else $line = $l->t('No description provided.');
                     }
                 }
                 print_unescaped('<tr>');
-                print_unescaped('<th>');
+                print_unescaped('<th class="user-cell">>');
                 if($userMgr->get($usr) != null) {
                     $avatar = $avaMgr->getAvatar($usr)->get(32);
                     if($avatar !== false) {
@@ -170,6 +171,7 @@ else $line = $l->t('No description provided.');
                 }
                 else p($usr);
                 print_unescaped('</th>');
+                print_unescaped('<td></td>'); //empty cell for toggle vote (only current user)
                 $i_tot = -1;
 
                 // loop over dts
@@ -215,7 +217,7 @@ else $line = $l->t('No description provided.');
             <?php
             if (!$expired) {
                 if (User::isLoggedIn()) {
-                    print_unescaped('<th>');
+                    print_unescaped('<th class="user-cell">');
                     $avatar = $avaMgr->getAvatar($userId)->get(32);
                     if($avatar !== false) {
                         $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';
@@ -228,6 +230,7 @@ else $line = $l->t('No description provided.');
                 } else {
                     print_unescaped('<th id="id_ac_detected" ><input type="text" name="user_name" id="user_name" /></th>');
                 }
+                print_unescaped('<td class="toggle-all selected-maybe"></td>');
                 $i_tot = -1;
                 $date_id = '';
                 foreach ($dates as $dt) {
@@ -274,6 +277,7 @@ else $line = $l->t('No description provided.');
         ?>
         <tr>
             <th><?php p($l->t('Total')); ?>:</th>
+            <td></td>
             <?php for ($i = 0; $i < count($dates); $i++) : ?>
                 <td>
                     <?php if($poll_type === '0'): ?>
@@ -307,6 +311,7 @@ else $line = $l->t('No description provided.');
         <?php // ------------ winner ----------------------- ?>
         <tr>
             <th><?php p($l->t('Win:')); ?></th>
+            <td></td>
             <?php for ($i = 0; $i < count($dates); $i++) :
 
                 $check = '';
@@ -321,19 +326,21 @@ else $line = $l->t('No description provided.');
         </tr>
         <?php
         if ($poll_type === '0'){
-            print_unescaped('<tr><td></td>');
+            print_unescaped('<tr><td></td><td></td>');
             for ($i = 0; $i < count($dates); $i++) {
                 $ch_obj = date('H:i', strtotime($dates[$i]->getDt()));
                 print_unescaped('<th>' . $ch_obj . '</th>');
             }
             print_unescaped('</tr>');
-            print_unescaped('<tr><td></td>' .  $for_string_dates . '</tr>');
+            print_unescaped('<tr><td></td><td></td>' .  $for_string_dates . '</tr>');
         }
         ?>
         <tr>
+            <th></th>
+            <th></th>
             <?php
             if ($poll_type === '0') {
-                print_unescaped('<th>' . $for_string_years . '</th>');
+                print_unescaped($for_string_years);
             }
             else {
                 foreach ($dates as $el) {
