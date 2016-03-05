@@ -122,7 +122,7 @@ else $line = $l->t('No description provided.');
             print_unescaped('<tr><th></th><td></td>');
             for ($i = 0; $i < count($dates); $i++) {
                 $ch_obj = date('H:i', strtotime($dates[$i]->getDt()));
-                print_unescaped('<th>' . $ch_obj . '</th>');
+                print_unescaped('<th class="time-slot-cell">' . $ch_obj . '</th>');
             }
             print_unescaped('</tr>');
         }
@@ -158,7 +158,7 @@ else $line = $l->t('No description provided.');
                     }
                 }
                 print_unescaped('<tr>');
-                print_unescaped('<th>');
+                print_unescaped('<th class="user-cell">>');
                 if($userMgr->get($usr) != null) {
                     $avatar = $avaMgr->getAvatar($usr)->get(32);
                     if($avatar !== false) {
@@ -217,7 +217,7 @@ else $line = $l->t('No description provided.');
             <?php
             if (!$expired) {
                 if (User::isLoggedIn()) {
-                    print_unescaped('<th>');
+                    print_unescaped('<th class="user-cell">');
                     $avatar = $avaMgr->getAvatar($userId)->get(32);
                     if($avatar !== false) {
                         $avatarImg = '<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />';

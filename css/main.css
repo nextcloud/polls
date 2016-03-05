@@ -151,7 +151,7 @@ td.td_shown {
     padding: 10px;
 }
 
-.cl_create_form, .vote_table {
+.cl_create_form {
     min-width: 60%;
     margin-bottom: 10px;
 }
@@ -165,6 +165,19 @@ td.td_shown {
     text-align: left;
     vertical-align: center;
     text-align: center;
+}
+
+.time-slot-cell {
+    min-width: 50px;
+}
+
+.toggle-all {
+    width: 20px;
+}
+
+.user-cell {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .userNameImg {
