@@ -329,7 +329,8 @@ function deselectItem(cell) {
     }
 }
 
-function insertText(text, set=false) {
+function insertText(text, set) {
+    if(typeof set === 'undefined') set = false;
     var table = document.getElementById('selected-texts-table');
     var tr = table.insertRow(-1);
     var td = tr.insertCell(-1);
@@ -341,7 +342,8 @@ function insertText(text, set=false) {
     td.id = 'text_' + text;
 }
 
-function addRowToList(ts, text, timeTs=-1) {
+function addRowToList(ts, text, timeTs) {
+    if(typeof timeTs === 'undefined') timeTs = -1;
     var table = document.getElementById('selected-dates-table');
     var rows = table.rows;
     if(rows.length == 0) {
@@ -394,7 +396,8 @@ function addRowToList(ts, text, timeTs=-1) {
     return;
 }
 
-function addColToList(ts, text, dateTs=-1) {
+function addColToList(ts, text, dateTs) {
+    if(typeof dateTs === 'undefined') dateTs = -1;
     var table = document.getElementById('selected-dates-table');
     var rows = table.rows;
     if(rows.length == 0) {
