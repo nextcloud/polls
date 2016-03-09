@@ -101,7 +101,7 @@ $(document).on('click', '.toggle-all', function(e) {
             selectItem(curr, 'poll-cell-active-not');
         }
         for(var i=0; i<notselected.length; i++) {
-            var curr = $(unselected[i]);
+            var curr = $(notselected[i]);
             curr.switchClass('poll-cell-active-un', 'poll-cell-active-is');
             selectItem(curr);
         }
