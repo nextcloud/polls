@@ -302,10 +302,12 @@ class PageController extends Controller {
             }
         } else {
             $event->setType(1);
+            $ins = $this->eventMapper->insert($event);
+            $poll_id = $ins->getId();
             foreach($chosenDates as $el) {
                 $text = new Text();
                 $text->setText($el);
-                $text->setPollId($pollId);
+                $text->setPollId($poll_id);
                 $this->textMapper->insert($text);
             }
         }
