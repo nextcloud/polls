@@ -158,7 +158,7 @@ else $line = $l->t('No description provided.');
                     }
                 }
                 print_unescaped('<tr>');
-                print_unescaped('<th class="user-cell">>');
+                print_unescaped('<th class="user-cell">');
                 if($userMgr->get($usr) != null) {
                     $avatar = $avaMgr->getAvatar($usr)->get(32);
                     if($avatar !== false) {
