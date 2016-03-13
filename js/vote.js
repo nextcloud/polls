@@ -126,7 +126,8 @@ $(document).on('click', '.poll-cell-active-is', function(e) {
     deselectItem($(this));
 });
 
-function selectItem(cell, cl='') {
+function selectItem(cell, cl) {
+    if(typeof cl === 'undefined') cl = '';
     values_changed = true;
     var ts = cell.attr('id');
     var index = newUserDates.indexOf(ts);

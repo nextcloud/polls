@@ -31,6 +31,7 @@ use \OCP\IAvatarManager;
 use \OCP\ILogger;
 use \OCP\IRequest;
 use \OCP\IURLGenerator;
+use OCP\Security\ISecureRandom;
 use \OCP\AppFramework\Http\TemplateResponse;
 use \OCP\AppFramework\Http\RedirectResponse;
 use \OCP\AppFramework\Controller;
@@ -264,7 +265,10 @@ class PageController extends Controller {
         $event->setDescription(htmlspecialchars($pollDesc));
         $event->setOwner($userId);
         $event->setCreated(date('Y-m-d H:i:s'));
-        $event->setHash(\OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(16));
+        $event->setHash(\OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(16,
+			ISecureRandom::CHAR_DIGITS.
+			ISecureRandom::CHAR_LOWER.
+			ISecureRandom::CHAR_UPPER));
 
         $accessValues = json_decode($accessValues);
         $groups = $accessValues->groups;
@@ -302,10 +306,12 @@ class PageController extends Controller {
             }
         } else {
             $event->setType(1);
+            $ins = $this->eventMapper->insert($event);
+            $poll_id = $ins->getId();
             foreach($chosenDates as $el) {
                 $text = new Text();
                 $text->setText($el);
-                $text->setPollId($pollId);
+                $text->setPollId($poll_id);
                 $this->textMapper->insert($text);
             }
         }
