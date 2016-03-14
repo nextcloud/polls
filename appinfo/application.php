@@ -20,6 +20,7 @@ use \OCA\Polls\Db\DateMapper;
 use \OCA\Polls\Db\EventMapper;
 use \OCA\Polls\Db\NotificationMapper;
 use \OCA\Polls\Db\ParticipationMapper;
+use \OCA\Polls\Db\ParticipationTextMapper;
 use \OCA\Polls\Db\TextMapper;
 use \OCA\Polls\Controller\PageController;
 
@@ -51,6 +52,7 @@ class Application extends App {
 				$c->query('EventMapper'),
 				$c->query('NotificationMapper'),
 				$c->query('ParticipationMapper'),
+				$c->query('ParticipationTextMapper'),
 				$c->query('TextMapper')
 			);
 		});
@@ -101,6 +103,12 @@ class Application extends App {
 		$container->registerService('ParticipationMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new ParticipationMapper(
+				$server->getDb()
+			);
+		});
+		$container->registerService('ParticipationTextMapper', function($c) use ($server) {
+			/** @var SimpleContainer $c */
+			return new ParticipationTextMapper(
 				$server->getDb()
 			);
 		});
