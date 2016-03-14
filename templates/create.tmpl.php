@@ -49,7 +49,7 @@
         <label for="text_title" class="label_h1 input_title"><?php p($l->t('Title')); ?></label>
         <input type="text" class="input_field" id="pollTitle" name="pollTitle" value="<?php if(isset($title)) p($title); ?>" />
         <label for="pollDesc" class="label_h1 input_title"><?php p($l->t('Description')); ?></label>
-        <textarea cols="50" rows="5" style="width: auto;" class="input_field" id="pollDesc" name="pollDesc" value="<?php if(isset($desc)) p($desc); ?>"></textarea>
+        <textarea cols="50" rows="5" style="width: auto;" class="input_field" id="pollDesc" name="pollDesc"><?php if(isset($desc)) p($desc); ?></textarea>
 
         <div class="input_title"><?php p($l->t('Access')); ?></div>
 
