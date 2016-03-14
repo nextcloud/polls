@@ -17,6 +17,7 @@ use \OCA\Polls\Db\Date;
 use \OCA\Polls\Db\Event;
 use \OCA\Polls\Db\Notification;
 use \OCA\Polls\Db\Participation;
+use \OCA\Polls\Db\ParticipationText;
 use \OCA\Polls\Db\Text;
 
 use \OCA\Polls\Db\AccessMapper;
@@ -25,6 +26,7 @@ use \OCA\Polls\Db\DateMapper;
 use \OCA\Polls\Db\EventMapper;
 use \OCA\Polls\Db\NotificationMapper;
 use \OCA\Polls\Db\ParticipationMapper;
+use \OCA\Polls\Db\ParticipationTextMapper;
 use \OCA\Polls\Db\TextMapper;
 use \OCP\IUserManager;
 use \OCP\IAvatarManager;
@@ -47,6 +49,7 @@ class PageController extends Controller {
     private $eventMapper;
     private $notificationMapper;
     private $participationMapper;
+    private $participationTextMapper;
     private $textMapper;
     private $urlGenerator;
     private $manager;
@@ -64,6 +67,7 @@ class PageController extends Controller {
                 EventMapper $eventMapper,
                 NotificationMapper $notificationMapper,
                 ParticipationMapper $ParticipationMapper,
+                ParticipationTextMapper $ParticipationTextMapper,
                 TextMapper $textMapper) {
         parent::__construct($appName, $request);
         $this->manager = $manager;
@@ -77,6 +81,7 @@ class PageController extends Controller {
         $this->eventMapper = $eventMapper;
         $this->notificationMapper = $notificationMapper;
         $this->participationMapper = $ParticipationMapper;
+        $this->participationTextMapper = $ParticipationTextMapper;
         $this->textMapper = $textMapper;
     }
 
@@ -143,10 +148,15 @@ class PageController extends Controller {
      */
     public function gotoPoll($hash) {
         $poll = $this->eventMapper->findByHash($hash);
-        if($poll->getType() === '0') $dates = $this->dateMapper->findByPoll($poll->getId());
-        else $dates = $this->textMapper->findByPoll($poll->getId());
+        if($poll->getType() === '0') {
+            $dates = $this->dateMapper->findByPoll($poll->getId());
+            $votes = $this->participationMapper->findByPoll($poll->getId());
+        }
+        else {
+            $dates = $this->textMapper->findByPoll($poll->getId());
+            $votes = $this->participationTextMapper->findByPoll($poll->getId());
+        }
         $comments = $this->commentMapper->findByPoll($poll->getId());
-        $votes = $this->participationMapper->findByPoll($poll->getId());
         try {
             $notification = $this->notificationMapper->findByUserAndPoll($poll->getId(), $this->userId);
         } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
@@ -167,6 +177,7 @@ class PageController extends Controller {
         $this->textMapper->deleteByPoll($pollId);
         $this->dateMapper->deleteByPoll($pollId);
         $this->participationMapper->deleteByPoll($pollId);
+        $this->participationTextMapper->deleteByPoll($pollId);
         $this->commentMapper->deleteByPoll($pollId);
         $url = $this->urlGenerator->linkToRoute('polls.page.index');
         return new RedirectResponse($url);
@@ -350,21 +361,32 @@ class PageController extends Controller {
             } else {
                 $userId = $userId . ' (extern)';
             }
-
+            $poll = $this->eventMapper->find($pollId);
             $dates = json_decode($dates);
             $types = json_decode($types);
-            $this->participationMapper->deleteByPollAndUser($pollId, $userId);
+            if($poll->getType() === '0') $this->participationMapper->deleteByPollAndUser($pollId, $userId);
+            else $this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
             for($i=0; $i<count($dates); $i++) {
-                $part = new Participation();
-                $part->setPollId($pollId);
-                $part->setUserId($userId);
-                $part->setDt(date('Y-m-d H:i:s', $dates[$i]));
-                $part->setType($types[$i]);
-                $this->participationMapper->insert($part);
+                if($poll->getType() === '0') {
+                    $part = new Participation();
+                    $part->setPollId($pollId);
+                    $part->setUserId($userId);
+                    $part->setDt(date('Y-m-d H:i:s', $dates[$i]));
+                    $part->setType($types[$i]);
+                    $this->participationMapper->insert($part);
+                } else {
+                    $part = new ParticipationText();
+                    $part->setPollId($pollId);
+                    $part->setUserId($userId);
+                    $part->setText($dates[$i]);
+                    $part->setType($types[$i]);
+                    $this->participationTextMapper->insert($part);
+                }
+                
             }
             $this->sendNotifications($pollId, $userId);
         }
-        $hash = $this->eventMapper->find($pollId)->getHash();
+        $hash = $poll->getHash();
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
         return new RedirectResponse($url);
     }

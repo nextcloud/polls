@@ -280,10 +280,14 @@ else $line = $l->t('No description provided.');
             <td></td>
             <?php for ($i = 0; $i < count($dates); $i++) : ?>
                 <td>
-                    <?php if($poll_type === '0'): ?>
                     <table id="id_tab_total">
                         <tr>
-                            <td id="id_y_<?php p(strtotime($dates[$i]->getDt())); ?>"
+                            <?php if($poll_type === '0'): ?>
+                            <?php $classSuffix = strtotime($dates[$i]->getDt()); ?>
+                            <?php else : ?>
+                            <?php $classSuffix = str_replace(' ', '_', $dates[$i]->getText()); ?>
+                            <?php endif; ?>
+                            <td id="id_y_<?php p($classSuffix); ?>"
                                 <?php if(isset($total_y[$i])) : ?>
                                     <?php if( $total_y[$i] - $total_n[$i] === $max_votes) : ?>
                                         <?php
@@ -300,10 +304,9 @@ else $line = $l->t('No description provided.');
                             </td>
                         </tr>
                         <tr>
-                            <td id="id_n_<?php p(strtotime($dates[$i]->getDt())); ?>" class="cl_total_n"><?php p(isset($total_n[$i]) ? $total_n[$i] : '0'); ?></td>
+                            <td id="id_n_<?php p($classSuffix); ?>" class="cl_total_n"><?php p(isset($total_n[$i]) ? $total_n[$i] : '0'); ?></td>
                         </tr>
                     </table>
-                    <?php endif; ?>
                 </td>
             <?php endfor; ?>
         </tr>
@@ -313,7 +316,6 @@ else $line = $l->t('No description provided.');
             <th><?php p($l->t('Win:')); ?></th>
             <td></td>
             <?php for ($i = 0; $i < count($dates); $i++) :
-
                 $check = '';
                 if ($total_y[$i] - $total_n[$i] === $max_votes){
                     $check = 'icon-checkmark';
@@ -415,7 +417,7 @@ else $line = $l->t('No description provided.');
     function getHsl($str) {
         $hash = 0;
         for($i=0; $i<strlen($str); $i++) {
-            $utf16_char = mb_convert_encoding($str[i], "utf-16", "utf-8");
+            $utf16_char = mb_convert_encoding($str[$i], "utf-16", "utf-8");
             $char = hexdec(bin2hex($utf16_char));
             $hash = (($hash << 5) - $hash) + $char;
             $hash |= 0; // Convert to 32bit integer
