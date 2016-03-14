@@ -13,7 +13,7 @@
         $chosen = '[';
         foreach($dates as $d) {
             if($poll->getType() === '0') $chosen .= strtotime($d->getDt());
-            else $chosen .= $d->getText();
+            else $chosen .= '"' . $d->getText() . '"';
             $chosen .= ',';
         }
         $chosen = trim($chosen, ',');
@@ -82,7 +82,7 @@
         <label for="id_expire_set"><?php p($l->t('Expires')); ?>:</label>
         <input id="id_expire_date" type="text" required="" <?php (!$isUpdate || $poll->getExpire() === null) ? print_unescaped('disabled="true"') : print_unescaped('value="' . $expireStr . '"'); ?> name="expire_date_input" />
         <br/>
-        <div id="date-select-container">
+        <div id="date-select-container" <?php if($isUpdate && $poll->getType() === '1') print_unescaped('style="display:none;"'); ?> >
             <label for="datetimepicker"><?php p($l->t('Dates')); ?>:</label>
             <br/>
             <input id="datetimepicker" type="text" />
@@ -90,7 +90,7 @@
             <table id="selected-dates-table">
             </table>
         </div>
-        <div id="text-select-container" style="display:none;">
+        <div id="text-select-container" <?php if(!$isUpdate || $poll->getType() === '0') print_unescaped('style="display:none;"'); ?> >
             <label for="text-title"><?php p($l->t('Text item')); ?>:</label>
             <input type="text" id="text-title" placeholder="<?php print_unescaped('Insert text...'); ?>" />
             <br/>
