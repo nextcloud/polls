@@ -139,7 +139,9 @@ function selectItem(cell, cl) {
     newUserTypes.push(1);
     if(cl.indexOf('poll-cell-active-not') > -1) {
         var total_no = document.getElementById('id_n_' + ts);
-        total_no.innerHTML = parseInt(total_no.innerHTML) - 1;
+        var intNo = parseInt(total_no.innerHTML);
+        if(intNo >= 1) total_no.innerHTML = intNo - 1;
+        else total_no.innerHTML = '0';
     }
     var total_yes = document.getElementById('id_y_' + ts);
     total_yes.innerHTML = parseInt(total_yes.innerHTML) + 1;
@@ -160,7 +162,9 @@ function deselectItem(cell) {
     newUserTypes.push(0);
     var total_yes = document.getElementById('id_y_' + ts);
     var total_no = document.getElementById('id_n_' + ts);
-    total_yes.innerHTML = parseInt(total_yes.innerHTML) - 1;
+    var intYes = parseInt(total_yes.innerHTML);
+    if(intYes >= 1) total_yes.innerHTML = intYes - 1;
+    else total_yes.innerHTML = '0';
     total_no.innerHTML = parseInt(total_no.innerHTML) + 1;
     cell.switchClass('poll-cell-active-is', 'poll-cell-active-not');
     findNewMaxCount();
@@ -178,7 +182,9 @@ function maybeItem(cell) {
     newUserDates.push(ts);
     newUserTypes.push(2);
     var total_no = document.getElementById('id_n_' + ts);
-    total_no.innerHTML = parseInt(total_no.innerHTML) - 1;
+    var intNo = parseInt(total_no.innerHTML);
+    if(intNo >= 1) total_no.innerHTML = intNo - 1;
+    else total_no.innerHTML = '0';
     cell.switchClass('poll-cell-active-not', 'poll-cell-active-maybe');
     cell.switchClass('poll-cell-active-un', 'poll-cell-active-maybe');
     findNewMaxCount();
