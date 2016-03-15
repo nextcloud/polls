@@ -163,7 +163,10 @@ class PageController extends Controller {
             $notification = null;
         }
         if($this->hasUserAccess($poll)) return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
-        else return new TemplateResponse('polls', 'no.acc.tmpl', []);
+        else {
+            \OCP\User::checkLoggedIn();
+            return new TemplateResponse('polls', 'no.acc.tmpl', []);
+        }
     }
 
     /**
