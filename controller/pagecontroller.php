@@ -336,31 +336,31 @@ class PageController extends Controller {
      * @PublicPage
      */
     public function insertVote($pollId, $userId, $types, $dates, $notif, $changed) {
-        if($changed === 'true') {
-            if($this->userId !== null) {
-                if($notif === 'true') {
-                    try {
-                        //check if user already set notification for this poll
-                        $this->notificationMapper->findByUserAndPoll($pollId, $userId);
-                    } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
-                        //insert if not exist
-                        $not = new Notification();
-                        $not->setUserId($userId);
-                        $not->setPollId($pollId);
-                        $this->notificationMapper->insert($not);
-                    }
-                } else {
-                    try {
-                        //delete if entry is in db
-                        $not = $this->notificationMapper->findByUserAndPoll($pollId, $userId);
-                        $this->notificationMapper->delete($not);
-                    } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
-                        //doesn't exist in db, nothing to do
-                    }
+        if($this->userId !== null) {
+            if($notif === 'true') {
+                try {
+                    //check if user already set notification for this poll
+                    $this->notificationMapper->findByUserAndPoll($pollId, $userId);
+                } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
+                    //insert if not exist
+                    $not = new Notification();
+                    $not->setUserId($userId);
+                    $not->setPollId($pollId);
+                    $this->notificationMapper->insert($not);
                 }
             } else {
-                $userId = $userId . ' (extern)';
+                try {
+                    //delete if entry is in db
+                    $not = $this->notificationMapper->findByUserAndPoll($pollId, $userId);
+                    $this->notificationMapper->delete($not);
+                } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
+                    //doesn't exist in db, nothing to do
+                }
             }
+        } else {
+            $userId = $userId . ' (extern)';
+        }
+        if($changed === 'true') {
             $poll = $this->eventMapper->find($pollId);
             $dates = json_decode($dates);
             $types = json_decode($types);
