@@ -336,6 +336,7 @@ class PageController extends Controller {
      * @PublicPage
      */
     public function insertVote($pollId, $userId, $types, $dates, $notif, $changed) {
+        $poll = $this->eventMapper->find($pollId);
         if($changed === 'true') {
             if($this->userId !== null) {
                 if($notif === 'true') {
@@ -361,7 +362,6 @@ class PageController extends Controller {
             } else {
                 $userId = $userId . ' (extern)';
             }
-            $poll = $this->eventMapper->find($pollId);
             $dates = json_decode($dates);
             $types = json_decode($types);
             if($poll->getType() === '0') $this->participationMapper->deleteByPollAndUser($pollId, $userId);
