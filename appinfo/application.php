@@ -44,6 +44,7 @@ class Application extends App {
 				$c->query('UserManager'),
 				$c->query('AvatarManager'),
 				$c->query('Logger'),
+				$c->query('L10N'),
 				$c->query('ServerContainer')->getURLGenerator(),
 				$c->query('UserId'),
 				$c->query('AccessMapper'),
@@ -67,6 +68,10 @@ class Application extends App {
 
         $container->registerService('Logger', function($c) {
             return $c->query('ServerContainer')->getLogger();
+        });
+
+        $container->registerService('L10N', function($c) {
+            return $c->query('ServerContainer')->getL10N($c->query('AppName'));
         });
 
 		$server = $container->getServer();
