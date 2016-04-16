@@ -1,39 +1,9 @@
-var edit_access_id = null; // set if called from the summary page
-
 $(document).ready(function () {
-    edit_access_id = null;
-    // users, groups
-    var elem = document.getElementById('select');
-    if (elem) elem.onclick = showAccessDialog;
-    elem = document.getElementById('button_close_access');
-    if (elem) elem.onclick = closeAccessDialog;
+    $('.cl_delete').click(deletePoll);
 
-    cells = document.getElementsByClassName('cl_group_item');
-    for (var i = 0; i < cells.length; i++) {
-        cells[i].onclick = groupItemClicked;
-    }
-    cells = document.getElementsByClassName('cl_user_item');
-    for (var i = 0; i < cells.length; i++) {
-        cells[i].onclick = userItemClicked;
-    }
-
-    var cells = document.getElementsByClassName('cl_delete');
-    for (var i = 0; i < cells.length; i++) {
-        var cell = cells[i];
-        cells[i].onclick = deletePoll;
-    }
-
-    // set "show poll url" handler
-    cells = document.getElementsByClassName('cl_poll_url');
-    for (var i = 0; i < cells.length; i++) {
-        var cell = cells[i];
-        cells[i].onclick = function(e) {
-            // td has inner 'input'; value is poll url
-            var cell = e.target;
-            var url = cell.getElementsByTagName('input')[0].value;
-            window.prompt(t('polls','Copy to clipboard: Ctrl+C, Enter'), url);
-        }
-    }
+    $('.cl_link').click(function() {
+        window.prompt(t('polls','Copy to clipboard: Ctrl+C, Enter'), $(this).data('url'));
+    });
 });
 
 function deletePoll(e) {

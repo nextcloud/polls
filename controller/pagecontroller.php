@@ -36,6 +36,7 @@ use \OCP\IURLGenerator;
 use OCP\Security\ISecureRandom;
 use \OCP\AppFramework\Http\TemplateResponse;
 use \OCP\AppFramework\Http\RedirectResponse;
+use \OCP\AppFramework\Http\JSONResponse;
 use \OCP\AppFramework\Controller;
 
 $userMgr = \OC::$server->getUserManager();
@@ -162,8 +163,9 @@ class PageController extends Controller {
         } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
             $notification = null;
         }
-        if($this->hasUserAccess($poll)) return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
-        else {
+        if($this->hasUserAccess($poll)) {
+            return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
+        } else {
             \OCP\User::checkLoggedIn();
             return new TemplateResponse('polls', 'no.acc.tmpl', []);
         }
@@ -361,7 +363,7 @@ class PageController extends Controller {
                 }
             }
         } else {
-            $userId = $userId . ' (extern)';
+            $userId = $userId;
         }
         $poll = $this->eventMapper->find($pollId);
         if($changed === 'true') {
@@ -408,7 +410,7 @@ class PageController extends Controller {
         $this->sendNotifications($pollId, $userId);
         $hash = $this->eventMapper->find($pollId)->getHash();
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
-        return new RedirectResponse($url);
+        return new JSONResponse(array('comment' => $commentBox, 'date' => date('Y-m-d H:i:s'), 'userName' => $this->manager->get($userId)->getDisplayName()));
     }
 
     public function getPollsForUser() {
@@ -435,8 +437,7 @@ class PageController extends Controller {
                 foreach ($user_groups as $user_group) {
                     if ($user_group === $grp) return true;
                 }
-            }
-            else if (strpos($item, 'user_') === 0) {
+            } else if (strpos($item, 'user_') === 0) {
                 $usr = substr($item, 5);
                 if ($usr === \OCP\User::getUser()) return true;
             }

@@ -4,27 +4,13 @@ var newUserTypes = [];
 var max_votes = 0;
 var values_changed = false;
 
-$(document).ready(function () {
-    var cells = [];
-    cells = document.getElementsByClassName('cl_click');
-    // loop over 'user' cells
-    for (var i = 0; i < cells.length; i++){
-        // fill arrays (if this is edit)
-        if (cells[i].className.indexOf('poll-cell-active-not') >= 0){
-            newUserTypes.push(0);
-            newUserDates.push(cells[i].id);
-        } else if (cells[i].className.indexOf('poll-cell-active-is') >= 0){
-            newUserTypes.push(1);
-            newUserDates.push(cells[i].id);
-        } else if(cells[i].className.indexOf('poll-cell-active-maybe') >= 0){
-            newUserTypes.push(2);
-            newUserDates.push(cells[i].id);
-        } else {
-            newUserTypes.push(-1);
-            newUserDates.push(cells[i].id);
-        }
-    }
+$.fn.switchClass = function(a, b) {
+    this.removeClass(a);
+    this.addClass(b);
+    return this;
+}
 
+$(document).ready(function () {
     $('#submit_finish_vote').click(function() {
         var form = document.finish_vote;
         var ac = document.getElementById('user_name');
@@ -37,6 +23,19 @@ $(document).ready(function () {
             }
         }
         check_notif = document.getElementById('check_notif');
+        var newUserDates = [], newUserTypes = [];
+        $(".cl_click").each(function() {
+            if($(this).hasClass('poll-cell-active-not')) {
+                newUserTypes.push(0);
+            } else if ($(this).hasClass('poll-cell-active-is')){
+                newUserTypes.push(1);
+            } else if($(this).hasClass('poll-cell-active-maybe')){
+                newUserTypes.push(2);
+            } else {
+                newUserTypes.push(-1);
+            }
+            newUserDates.push(parseInt($(this).attr('id')));
+        });
         form.elements['dates'].value = JSON.stringify(newUserDates);
         form.elements['types'].value = JSON.stringify(newUserTypes);
         form.elements['notif'].value = (check_notif && check_notif.checked) ? 'true' : 'false';
@@ -44,179 +43,75 @@ $(document).ready(function () {
         form.submit();
     });
 
-    $('#submit_send_comment').click(function() {
+    $('#submit_send_comment').click(function(e) {
+        e.preventDefault();
         var form = document.send_comment;
         var comm = document.getElementById('commentBox');
-        if(comm.value.length <= 0) {
+        if(comm.value.trim().length <= 0) {
             alert(t('polls', 'Please add some text to your comment before submitting it.'));
             return;
         }
-        form.submit();
+        var data = {
+            pollId: form.elements['pollId'].value,
+            userId: form.elements['userId'].value,
+            commentBox: comm.value.trim()
+        };
+        $('.new-comment .icon-loading-small').show();
+        $.post(form.action, data, function(data) {
+            $('.comments .comment:first').after('<div class="comment"><div class="comment-header"><span class="comment-date">' + data.date + '</span>' + data.userName + '</div><div class="wordwrap comment-content">' + data.comment + '</div></div>');
+            $('.new-comment textarea').val('').focus();
+            $('.new-comment .icon-loading-small').hide();
+        }).error(function() {
+            alert(t('polls', 'An error occurred, your comment was not posted...'));
+            $('.new-comment .icon-loading-small').hide();  
+        });
+    });
+    
+    $(".share input").click(function() {
+        $(this).select();
     });
 });
 
-$(document).on('click', '.toggle-all', function(e) {
-    if($(this).attr('class').indexOf('selected-all') > -1) {
-        var selected = $(this).parent().children('.poll-cell-active-is');
-        var maybes = $(this).parent().children('.poll-cell-active-maybe');
-        for(var i=0; i<selected.length; i++) {
-            var curr = $(selected[i]);
-            curr.switchClass('poll-cell-active-is', 'poll-cell-active-not');
-            deselectItem(curr);
-        }
-        for(var i=0; i<maybes.length; i++) {
-            var curr = $(maybes[i]);
-            curr.switchClass('poll-cell-active-maybe', 'poll-cell-active-not');
-            deselectItem(curr);
-        }
-        $(this).removeClass('selected-all');
-        $(this).addClass('selected-none');
-    } else if($(this).attr('class').indexOf('selected-none') > -1) {
-        var selected = $(this).parent().children('.poll-cell-active-is');
-        var unselected = $(this).parent().children('.poll-cell-active-not');
-        for(var i=0; i<selected.length; i++) {
-            var curr = $(selected[i]);
-            curr.switchClass('poll-cell-active-is', 'poll-cell-active-maybe');
-            maybeItem(curr);
-        }
-        for(var i=0; i<unselected.length; i++) {
-            var curr = $(unselected[i]);
-            curr.switchClass('poll-cell-active-not', 'poll-cell-active-maybe');
-            maybeItem(curr);
-        }
-        $(this).removeClass('selected-none');
-        $(this).addClass('selected-maybe');
+$(document).on('click', '.toggle-all, .cl_click', function(e) {
+    values_changed = true;
+    var cl = "";
+    if($(this).hasClass('poll-cell-active-is')) {
+        cl = "not";
+    } else if($(this).hasClass('poll-cell-active-not')) {
+        cl = "maybe";
+    } else if($(this).hasClass('poll-cell-active-maybe')) {
+        cl = "is";
     } else {
-        var maybes = $(this).parent().children('.poll-cell-active-maybe');
-        var unselected = $(this).parent().children('.poll-cell-active-not');
-        var notselected = $(this).parent().children('.poll-cell-active-un');
-        for(var i=0; i<maybes.length; i++) {
-            var curr = $(maybes[i]);
-            curr.switchClass('poll-cell-active-maybe', 'poll-cell-active-is');
-            selectItem(curr);
-        }
-        for(var i=0; i<unselected.length; i++) {
-            var curr = $(unselected[i]);
-            curr.switchClass('poll-cell-active-not', 'poll-cell-active-is');
-            selectItem(curr, 'poll-cell-active-not');
-        }
-        for(var i=0; i<notselected.length; i++) {
-            var curr = $(notselected[i]);
-            curr.switchClass('poll-cell-active-un', 'poll-cell-active-is');
-            selectItem(curr);
-        }
-        $(this).removeClass('selected-maybe');
-        $(this).addClass('selected-all');
+        cl = "is";
     }
+    if($(this).hasClass('toggle-all')) {
+        $(".cl_click").attr('class', 'cl_click poll-cell-active-' + cl);
+        $(this).attr('class', 'toggle-all poll-cell-active-' + cl);
+    } else {
+        $(this).attr('class', 'cl_click poll-cell-active-' + cl);
+    }
+    $('.cl_click').each(function() {
+        var yes_c = $('#id_y_' + $(this).attr('id'));
+        var no_c = $('#id_n_' + $(this).attr('id'));
+        $(yes_c).text(parseInt($(yes_c).attr('data-value')) + ($(this).hasClass('poll-cell-active-is') ? 1 : 0));
+        $(no_c).text(parseInt($(no_c).attr('data-value')) + ($(this).hasClass('poll-cell-active-not') ? 1 : 0));
+    });
+    updateCounts();
 });
 
-$(document).on('click', '.poll-cell-active-un', function(e) {
-    maybeItem($(this));
-});
-
-$(document).on('click', '.poll-cell-active-not', function(e) {
-    maybeItem($(this));
-});
-
-$(document).on('click', '.poll-cell-active-maybe', function(e) {
-    selectItem($(this));
-});
-
-$(document).on('click', '.poll-cell-active-is', function(e) {
-    deselectItem($(this));
-});
-
-function selectItem(cell, cl) {
-    if(typeof cl === 'undefined') cl = '';
-    values_changed = true;
-    var ts = cell.attr('id');
-    var index = newUserDates.indexOf(ts);
-    if(index > -1) {
-        newUserDates.splice(index, 1);
-        newUserTypes.splice(index, 1);
-    }
-    newUserDates.push(ts);
-    newUserTypes.push(1);
-    if(cl.indexOf('poll-cell-active-not') > -1) {
-        var total_no = document.getElementById('id_n_' + ts);
-        var intNo = parseInt(total_no.innerHTML);
-        if(intNo >= 1) total_no.innerHTML = intNo - 1;
-        else total_no.innerHTML = '0';
-    }
-    var total_yes = document.getElementById('id_y_' + ts);
-    total_yes.innerHTML = parseInt(total_yes.innerHTML) + 1;
-    cell.switchClass('poll-cell-active-maybe', 'poll-cell-active-is');
-    findNewMaxCount();
-    updateStrongCounts();
-}
-
-function deselectItem(cell) {
-    values_changed = true;
-    var ts = cell.attr('id');
-    var index = newUserDates.indexOf(ts);
-    if(index > -1) {
-        newUserDates.splice(index, 1);
-        newUserTypes.splice(index, 1);
-    }
-    newUserDates.push(ts);
-    newUserTypes.push(0);
-    var total_yes = document.getElementById('id_y_' + ts);
-    var total_no = document.getElementById('id_n_' + ts);
-    var intYes = parseInt(total_yes.innerHTML);
-    if(intYes >= 1) total_yes.innerHTML = intYes - 1;
-    else total_yes.innerHTML = '0';
-    total_no.innerHTML = parseInt(total_no.innerHTML) + 1;
-    cell.switchClass('poll-cell-active-is', 'poll-cell-active-not');
-    findNewMaxCount();
-    updateStrongCounts();
-}
-
-function maybeItem(cell) {
-    values_changed = true;
-    var ts = cell.attr('id');
-    var index = newUserDates.indexOf(ts);
-    if(index > -1) {
-        newUserDates.splice(index, 1);
-        newUserTypes.splice(index, 1);
-    }
-    newUserDates.push(ts);
-    newUserTypes.push(2);
-    var total_no = document.getElementById('id_n_' + ts);
-    var intNo = parseInt(total_no.innerHTML);
-    if(intNo >= 1) total_no.innerHTML = intNo - 1;
-    else total_no.innerHTML = '0';
-    cell.switchClass('poll-cell-active-not', 'poll-cell-active-maybe');
-    cell.switchClass('poll-cell-active-un', 'poll-cell-active-maybe');
-    findNewMaxCount();
-    updateStrongCounts();
-}
-
-function findNewMaxCount(){
-    var cell_tot_y = document.getElementsByClassName('cl_total_y');
-    var cell_tot_n = document.getElementsByClassName('cl_total_n');
+function updateCounts(){
     max_votes = 0;
-    for(var i=0; i<cell_tot_y.length; i++) {
-        var currYes = parseInt(cell_tot_y[i].innerHTML);
-        var currNo = parseInt(cell_tot_n[i].innerHTML);
-        var curr = currYes - currNo;
-        if(curr > max_votes) max_votes = curr;
-    }
-}
-
-function updateStrongCounts(){
-    var cell_tot_y = document.getElementsByClassName('cl_total_y');
-    var cell_tot_n = document.getElementsByClassName('cl_total_n');
-
-    for(var i=0; i<cell_tot_y.length; i++) {
-        var cell_win = document.getElementById('id_total_' + i);
-        var curr = parseInt(cell_tot_y[i].innerHTML) - parseInt(cell_tot_n[i].innerHTML);
-        if(curr < max_votes) {
-            cell_win.className = 'win_row';
-                cell_tot_y[i].style.fontWeight = 'normal';
+    $('td.total').each(function() {
+        var yes = parseInt($(this).find('.color_yes').text());
+        var no = parseInt($(this).find('.color_no').text());
+        if(yes - no > max_votes) {
+            max_votes = yes - no;
         }
-        else {
-            cell_tot_y[i].style.fontWeight = 'bold';
-            cell_win.className = 'win_row icon-checkmark';
-        }
-    }
+    });
+    var i = 0;
+    $('td.total').each(function() {
+        var yes = parseInt($(this).find('.color_yes').text());
+        var no = parseInt($(this).find('.color_no').text());
+        $('#id_total_' + i++).toggleClass('icon-checkmark', yes - no == max_votes);
+    });
 }

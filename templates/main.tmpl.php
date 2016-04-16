@@ -1,21 +1,26 @@
 <?php
     \OCP\Util::addStyle('polls', 'main');
+    \OCP\Util::addStyle('polls', 'list');
     \OCP\Util::addScript('polls', 'start');
     use OCP\User;
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
 ?>
-
-<h1><?php p($l->t('Summary')); ?></h1>
-<div class="goto_poll">
-    <?php
-        $url = $urlGenerator->linkToRoute('polls.page.index');
-    ?>
+<div id="app">
+    <div id="app-content">
+        <div id="app-content-wrapper">
+        <header class="row">
+            <div class="col-100">
+                <h1><?php p($l->t('Summary')); ?></h1>
+            </div>
+        </header>
+        <div class="goto_poll col-100">
     <?php if(count($_['polls']) === 0) : ?>
     <?php p($l->t('No existing polls.')); ?>
     <?php else : ?>
     <table class="cl_create_form">
+        <thead>
         <tr>
             <th><?php p($l->t('Title')); ?></th>
             <th id="id_th_descr"><?php p($l->t('Description')); ?></th>
@@ -26,11 +31,13 @@
             <th id="id_th_descr"><?php p($l->t('Access')); ?></th>
             <th><?php p($l->t('Options')); ?></th>
         </tr>
+        </thead>
+        <tbody>
         <?php foreach ($_['polls'] as $poll) : ?>
             <?php
                 if (!userHasAccess($poll, $userId)) continue;
                 // direct url to poll
-                $pollUrl = $url . 'goto/' . $poll->getHash();
+                $pollUrl = $urlGenerator->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash()));
             ?>
             <tr>
                 <td title="<?php p($l->t('Go to')); ?>">
@@ -44,7 +51,7 @@
                     }
                 ?>
                 <td><?php p($desc_str); ?></td>
-                <td class="cl_poll_url" title="<?php p($l->t('Click to get link')); ?>"><input type="hidden" value="<?php p($pollUrl); ?>" /><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
+                <td><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
                 <td>
                     <?php
                         if($poll->getOwner() === $userId) p($l->t('Yourself'));
@@ -92,7 +99,7 @@
                     <div class="partic_all <?php p($partic_class); ?>">
                     </div>
                 </td>
-                <td <?php if ($poll->getOwner() === $userId) print_unescaped('class="cl_poll_access" id="cl_poll_access_' . $poll->getId() . '" title="'.$l->t('Edit access').'"'); ?> >
+                <td>
                     <?php p($l->t($poll->getAccess())); ?>
                 </td>
                 <td>
@@ -100,15 +107,20 @@
                     <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete"></input>
                     <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button cl_edit icon-rename"></input></a>
                     <?php endif; ?>
+                    <input type="button" class="table_button cl_link icon-public" data-url="<?php p(OCP\Util::linkToAbsolute('', $pollUrl)); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
                 </td>
             </tr>
         <?php endforeach; ?>
+        </tbody>
     </table>
     <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST">
     </form>
     <?php endif; ?>
+    <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>"><input type="button" id="submit_new_poll" class="icon-add" /></a>
 </div>
-<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>"><input type="button" id="submit_new_poll" class="icon-add" /></a>
+</div>
+</div>
+</div>
 
 <?php
 // ---- helper functions ----

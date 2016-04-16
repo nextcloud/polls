@@ -1,14 +1,6 @@
-#content-wrapper {
-    position: relative;
-}
-
-body {
-    margin: 10px;
-}
-
 h1 {
-    font-size: 2em;
-    margin-bottom: 15px;
+    font-size: 1.8em;
+    margin-bottom: 5px;
 }
 
 h2 {
@@ -16,43 +8,78 @@ h2 {
     margin: 10px 0 5px 0;
 }
 
-footer {
-    text-align: center;
-    color: #777;
+a {
+    color: #35537a;
 }
 
-th, tr, td {
-    padding: 4px;
-    text-align: center;
+a:not(.button):hover {
+    text-decoration: underline;
 }
 
-th {
-    font-weight: bold;
+#app header {
+    padding-top: 15px;
 }
 
-tr:nth-child(even), tr:nth-child(even):hover,  tr:nth-child(even) a {
-    background: #35537a;
-    color: #eee;
+.row:after {
+    content: ".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
 }
 
-tr:nth-child(odd) {
+.col-100 {
+    width: 100%;
+    padding: 0px 15px;
 }
+
+.col-70 {
+    width: 65%;
+    float: left;
+    padding: 0px 15px;
+}
+
+.col-50 {
+    width: 50%;
+    float: left;
+    padding: 0px 15px;
+}
+
+.col-30 {
+    width: 35%;
+    float: left;
+    padding: 0px 15px;
+}
+
+@media(max-width: 1000px) {
+    .col-70, .col-30, .col-50 {
+        float: none;
+        width: 100%;
+    }
+}
+
+input[type="text"] {
+    display: block;
+    width: 100%;
+}
+
+textarea {
+    min-width: 100%;
+    max-width: 100%;
+}
+
 
 table {
-    border: 1px solid #aaa;
+    border: 1px solid #DDD;
     border-radius: 3px;
+}
+
+.form-actions {
+    padding: 15px;
 }
 
 .goto_poll {
     width: 100%;
-}
-
-input.input_field {
-    width: 20%;
-}
-
-.label_h1 {
-    display:block;
 }
 
 div.new_poll {
@@ -70,11 +97,11 @@ div.partic_all {
 }
 
 div.partic_yes {
-    background-color: #6fff70; /*green*/
+    background-color: #5CB85C; /*green*/
 }
 
 div.partic_no {
-    background-color: #ff6f6f; /*red*/
+    background-color: #D9534F; /*red*/
 }
 
 input.table_button {
@@ -95,6 +122,14 @@ div.scroll_div_dialog {
     width: 100%;
     height: 250px;
     overflow-y: auto;
+}
+
+.bordered {
+    border-left: 1px solid #FFF;
+}
+
+tbody th {
+    text-align: left;
 }
 
 td.td_shown {
@@ -145,26 +180,16 @@ td.td_shown {
 }
 
 .input_title{
+    display: block;
     font-size: 1.2em;
+    margin-top: 5px;
 }
 .padded td {
     padding: 10px;
 }
 
-.cl_create_form {
-    min-width: 60%;
-    margin-bottom: 10px;
-}
-
-.vote_table {
-    margin-top: 10px;
-}
-
-.cl_create_form td {
-    padding: 3px;
-    text-align: left;
-    vertical-align: center;
-    text-align: center;
+.vote_table thead th {
+    min-width: 40px;
 }
 
 .time-slot-cell {
@@ -172,12 +197,14 @@ td.td_shown {
 }
 
 .toggle-all {
-    width: 20px;
+    min-width: 40px;
+    cursor: pointer;
 }
 
 .user-cell {
-    padding-left: 20px;
-    padding-right: 20px;
+    text-align: left;
+    min-width: 100px;
+    height: 40px;
 }
 
 .userNameImg {
@@ -212,7 +239,7 @@ td.td_shown {
     background-color: #82de82;
 }
 
-.cl_poll_access, .cl_poll_url, .cl_click, .cl_delete, .cl_date_time_header {
+.cl_poll_url, .cl_click, .cl_delete, .cl_date_time_header {
     cursor: pointer;
 }
 
@@ -236,12 +263,6 @@ td.td_shown {
 }
 .cl_maybe:before, .cl_maybe:after{
     content: "?";
-}
-.cl_total_y {
-    background-color: #6fff70; /*green*/
-}
-.cl_total_n {
-    background-color: #ff6f6f; /*red*/
 }
 
 .win_row {
@@ -276,11 +297,6 @@ td.td_shown {
     margin-left: 5px;
 }
 
-.date {
-    font-size: 0.8em;
-    color: #555;
-}
-
 #id_tab_total {
     height: 2em;
     width: 100%;
@@ -301,138 +317,79 @@ td.td_shown {
     padding-left: 2px;
 }
 
-/*  users, groups...   */
-#dialog-overlay {
-    /* set it to fill the whil screen */
-    width:100%;
-    height:100%;
-
-    /* transparency for different browsers */
-    filter:alpha(opacity=50);
-    -moz-opacity:0.5;
-    -khtml-opacity: 0.5;
-    opacity: 0.5;
-    background:#000;
-    /* make sure it appear behind the dialog box but above everything else */
-    position:absolute;
-    top:0; left:0;
-    z-index:3000;
-    /* hide it by default */
-    display:none;
-}
-
-#text-title, #id_expire_date {
-    margin-left: 5px;
-}
-
-#dialog-box {
-    padding: 10px;
-    /* css3 drop shadow */
-    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    /* css3 border radius */
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-
-    background:#eee;
-    /* styling of the dialog box, i have a fixed dimension for this demo */
-    width:400px;
-    /* make sure it has the highest z-index */
-    position:absolute;
-    z-index:5000;
-    /* hide it by default */
-    display:none;
-}
-
-div#dialog-message {
-    padding: 0 0 20px 0;
-}
-
-#table_groups, #table_users {
-    width: 100%;
-    padding: 20px 5px 10px 5px;
-    table-layout: fixed;
-    overflow-y: auto;
-}
-
-#table_users {
-    padding-left: 10px;
-}
-
-.cl_group_item, .cl_user_item {
-    background-color: white;
-    color: #000000;
-}
-.cl_group_item_selected, .cl_user_item_selected {
-    background-color: #1d2d44;
-    color: #8e96a1;
-}
-
-/* STUFF FROM mypolls */
-ul {
-    padding: 5px;
-    padding-left: 12px;
-}
-
-#app-content {
-    padding: 5px;
-}
-
-#polls {
+.input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
     width: 100%;
 }
 
-#poll-table {
-    width: 100%;
+.input-group>input, .input-group-addon, .input-group-btn {
+    display: table-cell;
 }
 
-#poll-desc, #comments-container, #poll-dates {
-    margin-bottom: 15px;
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    white-space: nowrap;
+    vertical-align: middle;
+    width: 1%;
+    }
+
+.input-group-addon input[type="checkbox"] {
+    margin: 0;
 }
 
-#comment-text {
+.input-group-btn {
+    vertical-align: top;
+}
+
+.input-group-btn .btn {
+    height: 31.25px;
+    border: 1px solid #DDD;
+    margin: 0;
+    border-radius: 3px;
+    vertical-align: middle;
     display: block;
+    width: 100%;
 }
 
-#datepicker {
+.input-group>input {
+    position: relative;
+    z-index: 2;
     float: left;
-    padding-right: 15px;
+    width: 100%;
+    margin: 0;
 }
 
-#new-poll-form-warn {
-    color: red;
+.input-group input:first-child, .input-group .input-group-btn:first-child .btn, .input-group-addon:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group input:last-child, .input-group .input-group-btn:last-child .btn, .input-group-addon:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.input-group .input-group-btn:first-child .btn, .input-group-addon:first-child {
+    border-right: none;
+}
+.input-group .input-group-btn:last-child .btn, .input-group-addon:last-child {
+    border-left: none;
 }
 
-#poll-dates table {
-    min-width: 50%;
-}
-
-#check_notif {
-    margin-bottom: 10px;
-}
-
-.poll-cell-not, .poll-cell-is, .poll-cell-maybe, .poll-cell-un, .poll-cell-active-not, .poll-cell-active-is, .poll-cell-active-maybe, .poll-cell-active-un {
-}
-
-.poll-cell-un, .poll-cell-active-un {
-    background-color: #fff;
-}
-
-.poll-cell-is, .poll-cell-active-is, .date-text-selected, .selected-all {
-    background-color: #6fff70; /*green*/
-}
-
-.poll-cell-maybe, .poll-cell-active-maybe, .selected-maybe {
-    background-color: #fcff6f; /*yellow*/
-}
-
-.poll-cell-not, .poll-cell-active-not, .date-text-not-selected, .selected-none {
-    background-color: #ff6f6f; /*red*/
-}
-
-.date-row:hover, .date-col:hover, .text-row:hover {
-    background-color: red;
-    color: black;
+.alert-info {
+    margin-left: 50%;
+    transform:translateX(-50%);
+    width: auto;
+    padding: 5px 15px;
+    text-align: center;
+    border: 1px solid #1D2D44;
+    border-top: 0;
+    border-radius: 0 0 3px 3px;
 }

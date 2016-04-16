@@ -2,8 +2,6 @@ var g_chosen_datetimes = [];
 var g_chosen_texts = [];
 var g_chosen_groups = [];
 var g_chosen_users = [];
-var g_tmp_groups = [];
-var g_tmp_users = [];
 var chosen_type = 'event';
 var access_type = '';
 
@@ -11,21 +9,15 @@ $(document).ready(function () {
     // enable / disable date picker
     $('#id_expire_set').click(function(){
         $('#id_expire_date').prop("disabled", !this.checked);
-
-        // TODO: this would be nice, for some reason it doesn't work
-        //if (this.checked) {
-        //    $("id_expire_date").focus();
-        //}
+        if (this.checked) {
+           $("#id_expire_date").focus();
+        }
     });
 
     var privateRadio = document.getElementById('private');
     var hiddenRadio = document.getElementById('hidden');
     var publicRadio = document.getElementById('public');
     var selectRadio = document.getElementById('select');
-    privateRadio.onclick = hideSelectTable;
-    hiddenRadio.onclick = hideSelectTable;
-    publicRadio.onclick = hideSelectTable;
-    selectRadio.onclick = showSelectTable;
     if(privateRadio.checked) access_type = 'registered';
     if(hiddenRadio.checked) access_type = 'hidden';
     if(publicRadio.checked) access_type = 'public';
@@ -176,40 +168,24 @@ $(document).ready(function () {
         text.value = '';
     });
 
-    $(document).on('click', '#button_cancel_access', function(e) {
-        g_tmp_groups = [];
-        g_tmp_users = [];
-        closeAccessDialog();
-    });
-
-    $(document).on('click', '#button_ok_access', function(e) {
-        g_chosen_groups = g_tmp_groups;
-        g_chosen_users = g_tmp_users;
-        g_tmp_groups = [];
-        g_tmp_users = [];
-        closeAccessDialog();
-    });
-
     $(document).on('click', '.cl_user_item', function(e) {
-        $(this).switchClass('cl_user_item', 'cl_user_item_selected');
-        g_tmp_users.push(this.id);
+        if($(this).hasClass('selected')) {
+            var index = g_chosen_users.indexOf(this.id);
+            if(index > -1) g_chosen_users.splice(index, 1);
+        } else {
+            g_chosen_users.push(this.id);
+        }
+        $(this).toggleClass('selected');
     });
-
-    $(document).on('click', '.cl_user_item_selected', function(e) {
-        $(this).switchClass('cl_user_item_selected', 'cl_user_item');
-        var index = g_tmp_users.indexOf(this.id);
-        if(index > -1) g_tmp_users.splice(index, 1);
-    });
-
+    
     $(document).on('click', '.cl_group_item', function(e) {
-        $(this).switchClass('cl_group_item', 'cl_group_item_selected');
-        g_tmp_groups.push(this.id);
-    });
-
-    $(document).on('click', '.cl_group_item_selected', function(e) {
-        $(this).switchClass('cl_group_item_selected', 'cl_group_item');
-        var index = g_tmp_groups.indexOf(this.id);
-        if(index > -1) g_tmp_groups.splice(index, 1);
+        if($(this).hasClass('selected')) {
+            var index = g_chosen_groups.indexOf(this.id);
+            if(index > -1) g_chosen_groups.splice(index, 1);
+        } else {
+            g_chosen_groups.push(this.id);
+        }
+        $(this).toggleClass('selected');
     });
 
     $('.toggleable-row').hover(
@@ -254,9 +230,9 @@ $(document).ready(function () {
     $('input[type=radio][name=accessType]').change(function() {
         access_type = this.value;
         if(access_type == 'select') {
-            showAccessDialog();
+            $("#access_rights").show();
         } else {
-            closeAccessDialog();
+            $("#access_rights").hide();
         }
     });
 
@@ -433,73 +409,4 @@ function addColToList(ts, text, dateTs) {
         }
         td.id = ts;
     }
-}
-
-//Popup dialog
-function showAccessDialog() {
-    var message = t('polls', 'Please choose the groups or users you want to add to your poll.');
-
-    // get the screen height and width
-    var maskHeight = $(document).height();
-    var maskWidth = $(window).width();
-
-    // calculate the values for center alignment
-    //var dialogTop = (maskHeight / 3) - ($('#dialog-box').height());
-    // todo: height doesn't work
-    var dialogTop = 100;
-    var dialogLeft = (maskWidth / 2) - ($('#dialog-box').width() / 2);
-
-    // assign values to the overlay and dialog box
-    $('#dialog-overlay').css({height: maskHeight, width: maskWidth}).show();
-    $('#dialog-box').css({top: dialogTop, left: dialogLeft}).show();
-
-    // display the message
-    $('#dialog-message').html(message);
-
-    var unselectedGrps = [].slice.call(document.getElementsByClassName('cl_group_item'));
-    var selectedGrps = [].slice.call(document.getElementsByClassName('cl_group_item_selected'));
-    var unselectedUsers = [].slice.call(document.getElementsByClassName('cl_user_item'));
-    var selectedUsers = [].slice.call(document.getElementsByClassName('cl_user_item_selected'));
-    cells_grp = unselectedGrps.concat(selectedGrps);
-    cells_usr = unselectedUsers.concat(selectedUsers);
-
-    var tmpGroups = g_chosen_groups.slice();
-    for(var i=0; i<cells_grp.length; i++) {
-        var curr = cells_grp[i];
-        curr.className = 'cl_group_item';
-        for(var j=0; j<tmpGroups.length; j++) {
-            if(tmpGroups[j] == curr.id) {
-                curr.className = 'cl_group_item_selected';
-                tmpGroups.splice(j, 1);
-                break;
-            }
-        }
-    }
-    var tmpUsers = g_chosen_users.slice();
-    for(var i=0; i<cells_usr.length; i++) {
-        var curr = cells_usr[i];
-        curr.className = 'cl_user_item';
-        for(var j=0; j<tmpUsers.length; j++) {
-            if(tmpUsers[j] == curr.id) {
-                curr.className = 'cl_user_item_selected';
-                tmpUsers.splice(j, 1);
-                break;
-            }
-        }
-    }
-    g_tmp_groups = g_chosen_groups.slice();
-    g_tmp_users = g_chosen_users.slice();
-}
-
-function closeAccessDialog() {
-    $('#dialog-box').hide();
-    return false;
-}
-
-function showSelectTable() {
-    document.getElementById("table_access").style.display = "table";
-}
-
-function hideSelectTable() {
-    document.getElementById("table_access").style.display = "none";
 }

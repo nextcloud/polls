@@ -1,0 +1,86 @@
+#access_rights {
+    display :none;
+    border: 1px solid #DDD;
+    margin: 15px;
+    padding: 5px;
+    border-radius: 3px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+#access_rights h3 {
+    margin: 0 0 5px;
+}
+.cl_access_item {
+    padding: 5px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+}
+
+.cl_access_item:hover {
+    background-color: #EEE;
+}
+
+.cl_access_item.selected {
+    background-color: #409AE7;
+    color: #FFF;
+}
+
+.cl_access_item.selected:hover {
+    background-color: #337AB7;
+    color: #FFF;
+}
+
+textarea {
+    min-height: 66px;
+}
+
+.choices {
+    margin-top: 10px;
+}
+
+.choices td {
+    min-width: 30px;
+}
+
+table td {
+    text-align: center;
+}
+
+.text-row, .date-row {
+    font-weight: bold;
+    padding: 2px 5px;
+    background-color: #337AB7;
+    color: #FFF;
+    text-align: left;
+}
+
+.text-row:hover, .date-row:hover {
+    background-color: #D9534F;
+    text-decoration: line-through;
+}
+    
+#selected-dates-table tr:first-child td {
+    font-weight: bold;
+    padding: 2px 5px;
+    background-color: #337AB7;
+    color: #FFF;
+    
+}
+
+table .icon-close {
+    cursor: pointer;
+    background-color: #D9534F;
+    padding: 0 5px;
+}
+
+table .icon-checkmark {
+    cursor: pointer;
+    background-color: #5CB85C;
+    padding: 0 5px;
+}
+
+#expiration {
+    max-width: 200px;
+}

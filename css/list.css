@@ -1,0 +1,24 @@
+table {
+    width: 100%;
+}
+
+table thead th {
+    font-weight: bold;
+    text-align: left;
+    padding: 3px 5px;
+    background-color: #337AB7;
+    color: #FFF;
+}
+
+table tbody td {
+    text-align: left;
+    padding: 3px 5px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #D4F7FF;
+}
+
+tbody tr:nth-child(even):hover {
+    background-color: #CDF5FF;
+}
