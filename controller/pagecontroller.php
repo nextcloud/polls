@@ -120,8 +120,17 @@ class PageController extends Controller {
             if(strlen($email) === 0 || !isset($email)) continue;
             $url = \OC::$server->getURLGenerator()->getAbsoluteURL(\OC::$server->getURLGenerator()->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash())));
 
+            $recUser = $this->userMgr->get($notif->getUserId());
+            $sendUser = $this->userMgr->get($from);
+            $rec = "";
+            if($recUser !== null) $rec = $recUser->getDisplayName();
+            if($sendUser !== null) {
+                $sender = $sendUser->getDisplayName();
+            } else {
+                $sender = $from;
+            }
             $msg = $this->trans->t('Hello %s,<br/><br/><strong>%s</strong> participated in the poll \'%s\'.<br/><br/>To go directly to the poll, you can use this <a href="%s">link</a>', array(
-                $this->userMgr->get($notif->getUserId())->getDisplayName(), $this->userMgr->get($from)->getDisplayName(), $poll->getTitle(), $url));
+                $rec, $sender, $poll->getTitle(), $url));
 
             $msg .= "<br/><br/>";
 
