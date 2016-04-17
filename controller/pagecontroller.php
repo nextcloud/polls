@@ -297,8 +297,6 @@ class PageController extends Controller {
 			ISecureRandom::CHAR_LOWER.
 			ISecureRandom::CHAR_UPPER));
 
-        $groups = $accessValues->groups;
-        $users = $accessValues->users;
         if ($accessType === 'select') {
             if (isset($accessValues)) {
                 $accessValues = json_decode($accessValues);
