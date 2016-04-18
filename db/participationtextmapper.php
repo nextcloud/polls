@@ -79,6 +79,6 @@ class ParticipationTextMapper extends Mapper {
      */
     public function deleteByPoll($pollId) {
         $sql = 'DELETE FROM `*PREFIX*polls_particip_text` WHERE poll_id=?';
-        $this->execute($sql, [$pollId], $limit, $offset);
+        $this->execute($sql, [$pollId]);
     }
 }
