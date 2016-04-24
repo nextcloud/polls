@@ -31,6 +31,7 @@ use \OCA\Polls\Db\TextMapper;
 use \OCP\IUserManager;
 use \OCP\IAvatarManager;
 use \OCP\ILogger;
+use \OCP\IL10N;
 use \OCP\IRequest;
 use \OCP\IURLGenerator;
 use OCP\Security\ISecureRandom;
@@ -38,8 +39,6 @@ use \OCP\AppFramework\Http\TemplateResponse;
 use \OCP\AppFramework\Http\RedirectResponse;
 use \OCP\AppFramework\Http\JSONResponse;
 use \OCP\AppFramework\Controller;
-
-$userMgr = \OC::$server->getUserManager();
 
 class PageController extends Controller {
 
@@ -56,10 +55,13 @@ class PageController extends Controller {
     private $manager;
     private $avatarManager;
     private $logger;
+    private $trans;
+    private $userMgr;
     public function __construct($appName, IRequest $request,
                 IUserManager $manager,
                 IAvatarManager $avatarManager,
                 ILogger $logger,
+                IL10N $trans,
                 IURLGenerator $urlGenerator,
                 $userId,
                 AccessMapper $accessMapper,
@@ -74,6 +76,7 @@ class PageController extends Controller {
         $this->manager = $manager;
         $this->avatarManager = $avatarManager;
         $this->logger = $logger;
+        $this->trans = $trans;
         $this->urlGenerator = $urlGenerator;
         $this->userId = $userId;
         $this->accessMapper = $accessMapper;
@@ -84,6 +87,7 @@ class PageController extends Controller {
         $this->participationMapper = $ParticipationMapper;
         $this->participationTextMapper = $ParticipationTextMapper;
         $this->textMapper = $textMapper;
+        $this->userMgr = \OC::$server->getUserManager();
     }
 
     /**
@@ -117,15 +121,24 @@ class PageController extends Controller {
             if(strlen($email) === 0 || !isset($email)) continue;
             $url = \OC::$server->getURLGenerator()->getAbsoluteURL(\OC::$server->getURLGenerator()->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash())));
 
-            $msg = $l->t('Hello %s,<br/><br/><strong>%s</strong> participated in the poll \'%s\'.<br/><br/>To go directly to the poll, you can use this <a href="%s">link</a>', array(
-                $userMgr->get($notif->getUserId())->getDisplayName(), $userMgr->get($from)->getDisplayName(), $poll->getTitle(), $url));
+            $recUser = $this->userMgr->get($notif->getUserId());
+            $sendUser = $this->userMgr->get($from);
+            $rec = "";
+            if($recUser !== null) $rec = $recUser->getDisplayName();
+            if($sendUser !== null) {
+                $sender = $sendUser->getDisplayName();
+            } else {
+                $sender = $from;
+            }
+            $msg = $this->trans->t('Hello %s,<br/><br/><strong>%s</strong> participated in the poll \'%s\'.<br/><br/>To go directly to the poll, you can use this <a href="%s">link</a>', array(
+                $rec, $sender, $poll->getTitle(), $url));
 
             $msg .= "<br/><br/>";
 
-            $toname = $userMgr->get($notif->getUserId())->getDisplayName();
-            $subject = $l->t('ownCloud Polls - New Comment');
+            $toname = $this->userMgr->get($notif->getUserId())->getDisplayName();
+            $subject = $this->trans->t('ownCloud Polls - New Comment');
             $fromaddress = \OCP\Util::getDefaultEmailAddress('no-reply');
-            $fromname = $l->t("ownCloud Polls") . ' (' . $from . ')';
+            $fromname = $this->trans->t("ownCloud Polls") . ' (' . $from . ')';
 
             try {
                 $mailer = \OC::$server->getMailer();
@@ -133,7 +146,7 @@ class PageController extends Controller {
                 $message->setSubject($subject);
                 $message->setFrom(array($fromaddress => $fromname));
                 $message->setTo(array($email => $toname));
-                $message->setBody($msg);
+                $message->setHtmlBody($msg);
                 $mailer->send($message);
             } catch (\Exception $e) {
                 $message = 'error sending mail to: ' . $toname . ' (' . $email . ')';
@@ -286,16 +299,22 @@ class PageController extends Controller {
 			ISecureRandom::CHAR_LOWER.
 			ISecureRandom::CHAR_UPPER));
 
-        $accessValues = json_decode($accessValues);
-        $groups = $accessValues->groups;
-        $users = $accessValues->users;
         if ($accessType === 'select') {
-            $accessType = '';
-            foreach ($groups as $gid) {
-                $accessType .= $gid . ';';
-            }
-            foreach ($users as $uid) {
-                $accessType .= $uid . ';';
+            if (isset($accessValues)) {
+                $accessValues = json_decode($accessValues);
+                if($accessValues !== null) {
+                    $groups = array();
+                    $users = array();
+                    if($accessValues->groups !== null) $groups = $accessValues->groups;
+                    if($accessValues->users !== null) $users = $accessValues->users;
+                    $accessType = '';
+                    foreach ($groups as $gid) {
+                        $accessType .= $gid . ';';
+                    }
+                    foreach ($users as $uid) {
+                        $accessType .= $uid . ';';
+                    }
+                }
             }
         }
         $event->setAccess($accessType);

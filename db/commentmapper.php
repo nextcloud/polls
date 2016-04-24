@@ -74,6 +74,6 @@ class CommentMapper extends Mapper {
      */
     public function deleteByPoll($pollId) {
         $sql = 'DELETE FROM `*PREFIX*polls_comments` WHERE poll_id=?';
-        $this->execute($sql, [$pollId], $limit, $offset);
+        $this->execute($sql, [$pollId]);
     }
 }
