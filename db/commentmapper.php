@@ -65,7 +65,7 @@ class CommentMapper extends Mapper {
      * @return Comment[]
      */
     public function findByPoll($pollId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_comments` WHERE poll_id=?';
+        $sql = 'SELECT * FROM `*PREFIX*polls_comments` WHERE poll_id=? ORDER BY Dt DESC';
         return $this->findEntities($sql, [$pollId], $limit, $offset);
     }
 

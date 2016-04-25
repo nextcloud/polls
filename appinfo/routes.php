@@ -21,7 +21,7 @@ $application = new Application();
 
 $application->registerRoutes($this, array('routes' => array(
 	array('name' => 'page#index', 'url' => '/', 'verb' => 'GET'),
-	array('name' => 'page#goto_poll', 'url' => '/goto/{hash}', 'verb' => 'GET'),
+	array('name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'),
 	array('name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'),
 	array('name' => 'page#create_poll', 'url' => '/create', 'verb' => 'GET'),
 	array('name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'),
