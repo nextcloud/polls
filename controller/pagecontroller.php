@@ -333,10 +333,15 @@ class PageController extends Controller {
             $ins = $this->eventMapper->insert($event);
             $poll_id = $ins->getId();
             sort($chosenDates);
+            $tz = \OC::$server->getConfig()->getUserValue($this->userId, 'core', 'timezone', 'UTC');
+            $timezone = new \DateTimeZone($tz);
             foreach ($chosenDates as $el) {
                 $date = new Date();
                 $date->setPollId($poll_id);
-                $date->setDt(date('Y-m-d H:i:s', $el));
+                $dateTime = new \DateTime(date(\DateTime::ATOM, $el), $timezone);
+                $offset = $timezone->getOffset($dateTime);
+                $dateTime->setTimestamp($dateTime->getTimestamp() + $timezone->getOffset($dateTime));
+                $date->setDt($dateTime->format('Y-m-d H:i:s'));
                 $this->dateMapper->insert($date);
             }
         } else {
@@ -406,7 +411,7 @@ class PageController extends Controller {
                     $part->setType($types[$i]);
                     $this->participationTextMapper->insert($part);
                 }
-                
+
             }
             $this->sendNotifications($pollId, $userId);
         }
