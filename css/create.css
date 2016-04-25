@@ -57,7 +57,7 @@ table td {
 }
 
 .text-row:hover, .date-row:hover {
-    background-color: #D9534F;
+    background-color: #ff6f6f;
     text-decoration: line-through;
 }
     
@@ -71,13 +71,13 @@ table td {
 
 table .icon-close {
     cursor: pointer;
-    background-color: #D9534F;
+    background-color: #ff6f6f;
     padding: 0 5px;
 }
 
 table .icon-checkmark {
     cursor: pointer;
-    background-color: #5CB85C;
+    background-color: #6fff70;
     padding: 0 5px;
 }
 

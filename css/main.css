@@ -97,11 +97,11 @@ div.partic_all {
 }
 
 div.partic_yes {
-    background-color: #5CB85C; /*green*/
+    background-color: #6fff70; /*green*/
 }
 
 div.partic_no {
-    background-color: #D9534F; /*red*/
+    background-color: #ff6f6f; /*red*/
 }
 
 input.table_button {

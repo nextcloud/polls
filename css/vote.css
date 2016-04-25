@@ -3,12 +3,11 @@
 }
 
 .vote_table thead tr:nth-child(even) th, .vote_table tfoot tr:nth-child(even) th, .vote_table tfoot tr:nth-child(even) td {
-    background-color: #337AB7;
     color: #FFF;
 }
 
 .vote_table thead tr:nth-child(odd) th, .vote_table tfoot tr:nth-child(odd) th, .vote_table tfoot tr:nth-child(odd) td {
-    background: #35537a;
+    background-color: #337AB7;
     color: #FFF;
 }
 
@@ -86,7 +85,7 @@ th.external input{
 }
 
 .poll-cell-is, .poll-cell-active-is, .date-text-selected, .selected-all {
-    background-color: #6AD56A; /*green*/
+    background-color: #6fff70; /*green*/
     background-image: url('../img/yes.svg');
     background-repeat: no-repeat;
     background-position: center;
@@ -154,13 +153,13 @@ td.total {
 }
 
 .color_yes, .poll-cell-is, .poll-cell-active-is {
-    background-color: #6AD56A; /*green*/
+    background-color: #6fff70; /*green*/
 }
 .color_no, .poll-cell-not, .poll-cell-active-not {
-    background-color: #D9534F; /*red*/
+    background-color: #ff6f6f; /*red*/
 }
 .color_maybe, .poll-cell-maybe, .poll-cell-active-maybe, .poll-cell-un, .poll-cell-active-un {
-    background-color: #FFF0C3; /*yellow*/
+    background-color: #fcff6f; /*yellow*/
 }
 
 .home-link {

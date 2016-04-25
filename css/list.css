@@ -16,9 +16,19 @@ table tbody td {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #D4F7FF;
+    background-color: #337AB7;
+    color: #fff;
 }
 
 tbody tr:nth-child(even):hover {
     background-color: #CDF5FF;
+    color: #000;
+}
+
+tbody tr:nth-child(even):hover a {
+    color: #000;
+}
+
+tbody tr:nth-child(even) a {
+    color: #fff;
 }
