@@ -332,7 +332,7 @@ $pollUrl = OCP\Util::linkToAbsolute('', $urlGenerator->linkToRoute('polls.page.g
                     </div>
                     <div class="input-group share">
                         <div class="input-group-addon">
-                            <span class="icon-share"></span> Link
+                            <span class="icon-share"></span><?php p($l->t('Link')); ?>
                         </div>
                         <input type="text" value="<?php p($pollUrl);?>" readonly="readonly">
                     </div>
