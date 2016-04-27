@@ -3,7 +3,7 @@
 }
 
 .vote_table thead tr:nth-child(even) th, .vote_table tfoot tr:nth-child(even) th, .vote_table tfoot tr:nth-child(even) td {
-    color: #FFF;
+    color: #333;
 }
 
 .vote_table thead tr:nth-child(odd) th, .vote_table tfoot tr:nth-child(odd) th, .vote_table tfoot tr:nth-child(odd) td {
