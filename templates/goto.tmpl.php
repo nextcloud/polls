@@ -55,9 +55,9 @@ if ($poll->getType() === '0') {
     }
 }
 if ($poll->getDescription() !== null && $poll->getDescription() !== '') {
-    $line = str_replace("\n", '<br/>', $poll->getDescription());
+    $description = nl2br($poll->getDescription());
 } else {
-    $line = $l->t('No description provided.');
+    $description = $l->t('No description provided.');
 }
 
 // init array for counting 'yes'-votes for each date
@@ -91,7 +91,7 @@ $pollUrl = OCP\Util::linkToAbsolute('', $urlGenerator->linkToRoute('polls.page.g
             <header class="row">
                 <div class="col-100">
                     <h1><?php p($poll->getTitle()); ?></h1>
-                    <div class="wordwrap desc"><?php p($line); ?></div>
+                    <div class="wordwrap desc"><?php print_unescaped($description); ?></div>
                 </div>
             </header>
             <div class="row">
