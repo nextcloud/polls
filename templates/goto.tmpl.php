@@ -69,7 +69,7 @@ for ($i = 0 ; $i < count($dates) ; $i++) {
 }
 $user_voted = array();
 
-$pollUrl = OCP\Util::getServerProtocol() . '://' . OCP\Util::getServerHostname()  . $urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
+$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
 ?>
 
 <div id="app">
