@@ -176,7 +176,13 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             // look what user voted for this dts
                                             $found = false;
                                             foreach ($others[$usr] as $vote) {
-                                                if ($date_id === strtotime($vote->getDt())) {
+                                                $voteVal = null;
+                                                if($poll->getType() === '0') {
+                                                    $voteVal = strtotime($vote->getDt());
+                                                } else {
+                                                    $voteVal = $vote->getText();
+                                                }
+                                                if ($date_id === $voteVal) {
                                                     if ($vote->getType() === '1') {
                                                         $cl = 'poll-cell-is';
                                                         $total_y[$i_tot]++;
