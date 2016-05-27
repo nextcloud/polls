@@ -92,10 +92,10 @@
                 <div class="col-50">
                     <h3><?php p($l->t('Users')); ?></h3>
                     <ul>
-                        <?php $users = $userMgr->search(''); ?>
+                        <?php $users = OC_Group::usersInGroups($groups); ?>
                         <?php foreach ($users as $user) : ?>
-                            <li class="cl_user_item cl_access_item" id="user_<?php p($user->getUID()); ?>" >
-                                <?php p($user->getDisplayName()); ?>
+                            <li class="cl_user_item cl_access_item" id="user_<?php p($user); ?>" >
+                                <?php p($user); ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
