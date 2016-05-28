@@ -79,10 +79,13 @@
             
             <div id="access_rights" class="row">
                 <div class="col-50">
-                    <h3><?php p($l->t('Groups')); ?></h3>
-                    <ul>
-                        <?php $groups = OC_Group::getUserGroups($userId); ?>
-                        <?php foreach($groups as $gid) : ?>
+                    <!--<h3><?php p($l->t('Groups')); ?></h3> -->
+                    <input type="text" class="live-search-box-group" placeholder="<?php p($l->t('Group search')); ?>" />
+		    <ul class="live-search-list-group">
+                        <?php 
+			$groups = OC_Group::getUserGroups($userId);
+			sort($groups, SORT_NATURAL | SORT_FLAG_CASE );
+                        foreach($groups as $gid) : ?>
                             <li class="cl_group_item cl_access_item" id="group_<?php p($gid); ?>">
                                 <?php p($gid); ?>
                             </li>
@@ -90,8 +93,9 @@
                     </ul>
                 </div>
                 <div class="col-50">
-                    <h3><?php p($l->t('Users')); ?></h3>
-                    <ul>
+	   	    <!--<h3><?php p($l->t('Users')); ?></h3> -->
+		    <input type="text" class="live-search-box-user" placeholder="<?php p($l->t('User search')); ?>" />
+                    <ul class="live-search-list-user">
                     	<?php 
 			$all_groups = OC_Group::getGroups();
 			$users = OC_User::getUsers(); 
