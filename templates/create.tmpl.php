@@ -92,14 +92,17 @@
                 <div class="col-50">
                     <h3><?php p($l->t('Users')); ?></h3>
                     <ul>
-                        <?php $all_groups = OC_Group::getGroups(); ?>
-			<?php $users = OC_User::getUsers(); ?>
-                        <?php $users_in_groups = OC_Group::usersInGroups($all_groups); ?>
-                        <?php $users_no_group = array_diff($users, $users_in_groups); ?>
-			<?php $users = OC_Group::usersInGroups($groups); ?>
-			<?php $users = array_merge($users , $users_no_group); ?>
-			<?php sort($users, SORT_NATURAL | SORT_FLAG_CASE ); ?>
-                        <?php foreach ($users as $user) : ?>
+                    	<?php 
+			$all_groups = OC_Group::getGroups();
+			$users = OC_User::getUsers(); 
+			if ( !(OC_User::isAdminUser($userId)) ) {
+			    $users_in_groups = OC_Group::usersInGroups($all_groups);
+                            $users_no_group = array_diff($users, $users_in_groups);
+			    $users = OC_Group::usersInGroups($groups);
+			    $users = array_merge($users , $users_no_group);
+ 			}
+			sort($users, SORT_NATURAL | SORT_FLAG_CASE );
+                        foreach ($users as $user) : ?>
                             <li class="cl_user_item cl_access_item" id="user_<?php p($user); ?>" >
                                 <?php p($user); ?>
                             </li>
