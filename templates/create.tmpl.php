@@ -79,7 +79,6 @@
             
             <div id="access_rights" class="row">
                 <div class="col-50">
-                    <!--<h3><?php p($l->t('Groups')); ?></h3> -->
                     <input type="text" class="live-search-box-group" placeholder="<?php p($l->t('Group search')); ?>" />
 		    <ul class="live-search-list-group">
                         <?php 
@@ -93,7 +92,6 @@
                     </ul>
                 </div>
                 <div class="col-50">
-	   	    <!--<h3><?php p($l->t('Users')); ?></h3> -->
 		    <input type="text" class="live-search-box-user" placeholder="<?php p($l->t('User search')); ?>" />
                     <ul class="live-search-list-user">
                     	<?php 
@@ -108,7 +106,10 @@
 			sort($users, SORT_NATURAL | SORT_FLAG_CASE );
                         foreach ($users as $user) : ?>
                             <li class="cl_user_item cl_access_item" id="user_<?php p($user); ?>" >
-                                <?php p($user); ?>
+				<?php p($userMgr->get($user)->getDisplayName()); ?>
+				<span id="sec_name">
+				<?php p($user); ?>
+				</span>
                             </li>
                         <?php endforeach; ?>
                     </ul>
