@@ -23,6 +23,8 @@ $TRANSLATIONS = array(
 	"delete" => "löschen",
 	"Next" => "Weiter",
 	"Cancel" => "Abbrechen",
+	"User search" : "Benutzer suchen",
+	"Group search" : "Gruppe suchen",
     "Options" => "Optionen",
 	"Edit poll" => "Umfrage bearbeiten",
 	"Click on days to add or remove" => "Klicke auf die Tage um sie hinzuzufügen oder zu löschen",

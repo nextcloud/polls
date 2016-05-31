@@ -79,10 +79,12 @@
             
             <div id="access_rights" class="row">
                 <div class="col-50">
-                    <h3><?php p($l->t('Groups')); ?></h3>
-                    <ul>
-                        <?php $groups = OC_Group::getUserGroups($userId); ?>
-                        <?php foreach($groups as $gid) : ?>
+                    <input type="text" class="live-search-box-group" placeholder="<?php p($l->t('Group search')); ?>" />
+		    <ul class="live-search-list-group">
+                        <?php 
+			$groups = OC_Group::getUserGroups($userId);
+			sort($groups, SORT_NATURAL | SORT_FLAG_CASE );
+                        foreach($groups as $gid) : ?>
                             <li class="cl_group_item cl_access_item" id="group_<?php p($gid); ?>">
                                 <?php p($gid); ?>
                             </li>
@@ -90,12 +92,24 @@
                     </ul>
                 </div>
                 <div class="col-50">
-                    <h3><?php p($l->t('Users')); ?></h3>
-                    <ul>
-                        <?php $users = $userMgr->search(''); ?>
-                        <?php foreach ($users as $user) : ?>
-                            <li class="cl_user_item cl_access_item" id="user_<?php p($user->getUID()); ?>" >
-                                <?php p($user->getDisplayName()); ?>
+		    <input type="text" class="live-search-box-user" placeholder="<?php p($l->t('User search')); ?>" />
+                    <ul class="live-search-list-user">
+                    	<?php 
+			$all_groups = OC_Group::getGroups();
+			$users = OC_User::getUsers(); 
+			if ( !(OC_User::isAdminUser($userId)) ) {
+			    $users_in_groups = OC_Group::usersInGroups($all_groups);
+                            $users_no_group = array_diff($users, $users_in_groups);
+			    $users = OC_Group::usersInGroups($groups);
+			    $users = array_merge($users , $users_no_group);
+ 			}
+			sort($users, SORT_NATURAL | SORT_FLAG_CASE );
+                        foreach ($users as $user) : ?>
+                            <li class="cl_user_item cl_access_item" id="user_<?php p($user); ?>" >
+				<?php p($userMgr->get($user)->getDisplayName()); ?>
+				<span id="sec_name">
+				<?php p($user); ?>
+				</span>
                             </li>
                         <?php endforeach; ?>
                     </ul>

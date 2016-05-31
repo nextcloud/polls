@@ -8,6 +8,10 @@
     overflow-y: auto;
 }
 
+#sec_name {
+    display: none;
+}
+
 #access_rights h3 {
     margin: 0 0 5px;
 }
