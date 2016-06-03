@@ -1,18 +1,40 @@
 .vote_table {
     width: 100%;
+    border : none;
+}
+
+
+.vote_table thead tr th {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.vote_table tfoot tr th {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .vote_table thead tr:nth-child(even) th, .vote_table tfoot tr:nth-child(even) th, .vote_table tfoot tr:nth-child(even) td {
+    background-color: #D4F7FF;
     color: #333;
+    border-left: 3px inset #1e647b;
+    border-right: 3px inset #1e647b;
 }
 
 .vote_table thead tr:nth-child(odd) th, .vote_table tfoot tr:nth-child(odd) th, .vote_table tfoot tr:nth-child(odd) td {
-    background-color: #337AB7;
+    background-color: #1e647b;
     color: #FFF;
+    border-left: 3px inset #1e647b;
+    border-right: 3px inset #1e647b;
 }
 
 tbody.votes tr:nth-child(even) {
     background-color: #D4F7FF;
+}
+
+
+tbody.votes tr:nth-child(odd) {
+    background-color: #addceb;
 }
 
 tbody.votes tr:nth-child(even):hover {
@@ -20,22 +42,32 @@ tbody.votes tr:nth-child(even):hover {
 }
 
 tbody.total th {
+    background-color: #CDF5FF;
     text-align: right;
+}
+
+tbody.total td {
+    background-color: #CDF5FF;
+    border-left: 3px inset #1e647b;
+    border-right: 3px inset #1e647b;
 }
 
 th, tr, td {
     padding: 4px;
     text-align: center;
+    border-top: 0.2px solid #FFFFFF;
+    border-bottom: 0.2px solid #FFFFFF;
+    border-left: 3px inset #1e647b;
+    border-right: 3px inset #1e647b;
+    
 }
 
 th {
     font-weight: bold;
 }
-
 #polls {
     width: 100%;
 }
-
 #poll-table {
     width: 100%;
 }
@@ -61,19 +93,23 @@ th {
     margin-bottom: 10px;
 }
 
-tr.current-user th {
-    background-color: #337AB7;
+tr.current-user th, tr.current-user td.toggle-all  {
+    background-color: #5cb6d8;
     color: #FFF
 }
 
-tr.current-user td, tr.current-user th {
-    border-top: 3px solid #337AB7;
-    border-bottom: 3px solid #337AB7;
+tr.current-user  th, tr.current-user  td{
+    border-top: 4px inset #1e647b;
+    border-left: 3px inset #1e647b;
+    border-right: 3px inset #1e647b;
+    border-bottom: 4px inset #1e647b;
 }
 
 th.external {
     padding-left: 40px;
     font-style: italic;
+     border-left: 3px inset #1e647b;
+    border-right: 3px inset #1e647b;
 }
 
 th.external input{
@@ -169,3 +205,4 @@ td.total {
     padding-left: 26px;
     float: right;
 }
+

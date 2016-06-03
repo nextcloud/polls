@@ -1,34 +1,55 @@
-table {
+
+.cl_create_form {
+    border : none;
     width: 100%;
 }
 
-table thead th {
+.cl_create_form  td, .cl_create_form  th  {
+    border-left: 2px inset #1e647b;
+    border-right: 2px inset #1e647b;
+    border-top: 0.2px solid #FFFFFF;
+    border-bottom: 0.2px solid #FFFFFF;
+}
+
+.cl_create_form thead tr th {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.cl_create_form tbody tr:nth-child(odd) td{
+    background-color: #addceb;
+}
+
+.cl_create_form tbody tr:nth-child(even) td{
+    background-color: #D4F7FF;
+}
+
+.cl_create_form tbody td, .cl_create_form tbody th{
+    color: #000;
+}
+
+.cl_create_form  tbody  tr:last-of-type td  {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.cl_create_form thead th {
     font-weight: bold;
     text-align: left;
     padding: 3px 5px;
-    background-color: #337AB7;
+    background-color: #1e647b;
     color: #FFF;
 }
 
-table tbody td {
+.cl_create_form tbody td {
     text-align: left;
     padding: 3px 5px;
+        
 }
 
-tbody tr:nth-child(even) {
-    background-color: #337AB7;
-    color: #fff;
+
+tbody tr:nth-child(even):hover td, tbody tr:nth-child(odd):hover td{
+    background-color: #5cb6d8;
 }
 
-tbody tr:nth-child(even):hover {
-    background-color: #CDF5FF;
-    color: #000;
-}
 
-tbody tr:nth-child(even):hover a {
-    color: #000;
-}
-
-tbody tr:nth-child(even) a {
-    color: #fff;
-}
