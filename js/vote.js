@@ -34,7 +34,11 @@ $(document).ready(function () {
             } else {
                 newUserTypes.push(-1);
             }
-            newUserDates.push(parseInt($(this).attr('id')));
+            var userDate = $(this).attr('id');
+            if(isNaN($(this).attr('id')) == true) {
+                newUserDates.push($(this).attr('id'));
+            } else { newUserDates.push(parseInt($(this).attr('id')));
+            }
         });
         form.elements['dates'].value = JSON.stringify(newUserDates);
         form.elements['types'].value = JSON.stringify(newUserTypes);
