@@ -11,7 +11,7 @@
    <bugs>https://github.com/v1r0x/polls/issues</bugs>
    <repository type="git">https://github.com/v1r0x/polls.git</repository>
    <dependencies>
-      <owncloud min-version="8.1" max-version="9"/>
+      <owncloud min-version="8.1" max-version="9.1"/>
    </dependencies>
    <ocsid>174671</ocsid>
 </info>
