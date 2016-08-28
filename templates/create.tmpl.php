@@ -8,8 +8,10 @@
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
     $isUpdate = isset($_['poll']) && $_['poll'] !== null;
+    $isAnonymous = false;
     if($isUpdate) {
         $poll = $_['poll'];
+        $isAnonymous = $poll->getIsAnonymous();
         $dates = $_['dates'];
         $chosen = '[';
         foreach($dates as $d) {
@@ -126,6 +128,9 @@
             <!-- TODO texts to db -->
             <input type="radio" name="pollType" id="text" value="text" <?php if($isUpdate && $poll->getType() === '1') print_unescaped('checked'); ?>>
             <label for="text"><?php p($l->t('Text based')); ?></label>
+
+            <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
+            <input id="isAnonymous" name="isAnonymous" type="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
 
             <label for="id_expire_set" class="input_title"><?php p($l->t('Expires')); ?></label>
             <div class="input-group" id="expiration">

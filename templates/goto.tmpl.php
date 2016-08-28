@@ -15,6 +15,7 @@ $poll = $_['poll'];
 $dates = $_['dates'];
 $votes = $_['votes'];
 $comments = $_['comments'];
+$isAnonymous = $poll->getIsAnonymous() && $userId != $poll->getOwner();
 $notification = $_['notification'];
 
 if ($poll->getExpire() === null) {
@@ -141,7 +142,9 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         }
                                         array_push($others[$vote->getUserId()], $vote);
                                     }
+                                    $userCnt = 0;
                                     foreach (array_keys($others) as $usr) {
+                                        $userCnt++;
                                         if ($usr === $userId) {
                                             // if poll expired, just put current user among the others;
                                             // otherwise skip here to add current user as last row (to vote)
@@ -151,7 +154,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                         }
                                         print_unescaped('<tr>');
-                                        if($userMgr->get($usr) != null) {
+                                        if($userMgr->get($usr) != null && !$isAnonymous) {
                                             print_unescaped('<th class="user-cell">');
                                             $avatar = $avaMgr->getAvatar($usr)->get(32);
                                             if($avatar !== false) {
@@ -161,7 +164,12 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                             p($userMgr->get($usr)->getDisplayName());
                                         } else {
-                                            print_unescaped('<th class="user-cell external"> '. $usr);
+                                            if($isAnonymous) {
+                                                print_unescaped('<th class="user-cell anonymous">');
+                                                p($l->t('Participent') . ' ' . $userCnt);
+                                            } else {
+                                                print_unescaped('<th class="user-cell external">'. $usr);
+                                            }
                                         }
                                         print_unescaped('</th>');
 
