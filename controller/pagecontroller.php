@@ -423,6 +423,7 @@ class PageController extends Controller {
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @PublicPage
      */
     public function insertComment($pollId, $userId, $commentBox) {
         $comment = new Comment();

@@ -376,26 +376,27 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                     <h2><?php p($l->t('Comments')); ?></h2>
                     <div class="comments">
                         <div class="comment new-comment">
-                            <?php if(!User::isLoggedIn()) : ?>
+                            <form name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
+                                <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
+                                <input type="hidden" name="userId" value="<?php p($userId); ?>" />
                                 <div class="comment-content">
-                                    <?php
+                                <?php if(!User::isLoggedIn()) : ?>
+                                    <!--<?php
                                     p($l->t('You must be logged in to post a comment.'));
-                                    ?>
+                                    ?>-->
                                     <a href="<?php p($loginUrl); ?>"><?php p($l->t('Login')); ?></a>
+                                    <?php p($l->t('or')); ?>
+                                    <?php print_unescaped('<th id="id_ac_detected" class="external current-user"><input type="text" name="user_name_comm" id="user_name_comm" placeholder="' . $l->t('Your name here') . '" /></th>'); ?>
+                                <?php else: ?>
+                                    <?php p($l->t('Logged in as') . ' ' . $userId); ?>
+                                <?php endif; ?>
+                                    <textarea id="commentBox" name="commentBox"></textarea>
+                                    <p>
+                                        <input type="button" id="submit_send_comment" value="<?php p($l->t('Send!')); ?>" />
+                                        <span class="icon-loading-small" style="float:right;"></span>
+                                    </p>
                                 </div>
-                            <?php else: ?>
-                                <form name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
-                                    <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
-                                    <input type="hidden" name="userId" value="<?php p($userId); ?>" />
-                                    <div class="comment-content">
-                                        <textarea id="commentBox" name="commentBox"></textarea>
-                                        <p>
-                                            <input type="button" id="submit_send_comment" value="<?php p($l->t('Send!')); ?>" />
-                                            <span class="icon-loading-small" style="float:right;"></span>
-                                        </p>
-                                    </div>
-                                </form>
-                            <?php endif; ?>
+                            </form>
                         </div>
                         <?php if($comments !== null) : ?>
                             <?php foreach ($comments as $comment) : ?>
@@ -403,7 +404,13 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <div class="comment-header">
                                         <?php
                                         print_unescaped('<span class="comment-date">' . date('d.m.Y H:i:s', strtotime($comment->getDt())) . '</span>');
-                                        p($userMgr->get($comment->getUserId())->getDisplayName());
+                                        if($userMgr->get($comment->getUserId()) != null) {
+                                            p($userMgr->get($comment->getUserId())->getDisplayName());
+                                        } else {
+                                            print_unescaped('<i>');
+                                            p($comment->getUserId());
+                                            print_unescaped('</i>');
+                                        }
                                         ?>
                                     </div>
                                     <div class="wordwrap comment-content">
