@@ -227,7 +227,7 @@ $(document).ready(function () {
         }
     });
 
-    $('input[type=radio][name=accessType]').change(function() {
+    $('input[type=radio][name=accessType]').click(function() {
         access_type = this.value;
         if(access_type == 'select') {
             $("#access_rights").show();
