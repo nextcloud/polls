@@ -288,7 +288,7 @@ class PageController extends Controller {
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function insertPoll($pollType, $pollTitle, $pollDesc, $userId, $chosenDates, $expireTs, $accessType, $accessValues) {
+    public function insertPoll($pollType, $pollTitle, $pollDesc, $userId, $chosenDates, $expireTs, $accessType, $accessValues, $isAnonymous) {
         $event = new Event();
         $event->setTitle(htmlspecialchars($pollTitle));
         $event->setDescription(htmlspecialchars($pollDesc));
@@ -298,6 +298,7 @@ class PageController extends Controller {
 			ISecureRandom::CHAR_DIGITS.
 			ISecureRandom::CHAR_LOWER.
 			ISecureRandom::CHAR_UPPER));
+		$event->setIsAnonymous($isAnonymous ? '1' : '0');
 
         if ($accessType === 'select') {
             if (isset($accessValues)) {

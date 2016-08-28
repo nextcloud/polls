@@ -20,6 +20,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setExpire(timestamp $value)
  * @method string getHash()
  * @method void setHash(string $value)
+ * @method integer getIsAnonymous()
+ * @method void setIsAnonymous(integer $value)
  */
 class Event extends Entity {
     public $type;
@@ -30,4 +32,5 @@ class Event extends Entity {
     public $access;
     public $expire;
     public $hash;
+    public $isAnonymous;
 }

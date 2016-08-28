@@ -4,6 +4,7 @@ var g_chosen_groups = [];
 var g_chosen_users = [];
 var chosen_type = 'event';
 var access_type = '';
+var isAnonymous;
 
 $(document).ready(function () {
     // enable / disable date picker
@@ -14,6 +15,10 @@ $(document).ready(function () {
         }
     });
 
+    $('#isAnonymous').click(function() {
+        isAnonymous = this.checked;
+    });
+
     var privateRadio = document.getElementById('private');
     var hiddenRadio = document.getElementById('hidden');
     var publicRadio = document.getElementById('public');
@@ -22,6 +27,8 @@ $(document).ready(function () {
     if(hiddenRadio.checked) access_type = 'hidden';
     if(publicRadio.checked) access_type = 'public';
     if(selectRadio.checked) access_type = 'select';
+
+    isAnonymous = document.getElementById('isAnonymous').checked;
 
     var accessValues = document.getElementById('accessValues');
     if(accessValues.value.length > 0) {
@@ -298,6 +305,7 @@ $(document).ready(function () {
                     users: g_chosen_users
                 });
             }
+            form.elements['isAnonymous'].value = isAnonymous;
             form.submit();
         }
     }
