@@ -29,6 +29,7 @@ use \OCA\Polls\Db\ParticipationMapper;
 use \OCA\Polls\Db\ParticipationTextMapper;
 use \OCA\Polls\Db\TextMapper;
 use \OCP\IUserManager;
+use \OCP\Share\IManager;
 use \OCP\IAvatarManager;
 use \OCP\ILogger;
 use \OCP\IL10N;
@@ -57,8 +58,10 @@ class PageController extends Controller {
     private $logger;
     private $trans;
     private $userMgr;
+    private $shareManager;
     public function __construct($appName, IRequest $request,
                 IUserManager $manager,
+                IManager $shareManager,
                 IAvatarManager $avatarManager,
                 ILogger $logger,
                 IL10N $trans,
@@ -74,6 +77,7 @@ class PageController extends Controller {
                 TextMapper $textMapper) {
         parent::__construct($appName, $request);
         $this->manager = $manager;
+        $this->shareManager = $shareManager;
         $this->avatarManager = $avatarManager;
         $this->logger = $logger;
         $this->trans = $trans;
@@ -210,7 +214,7 @@ class PageController extends Controller {
         if($this->userId !== $poll->getOwner()) return new TemplateResponse('polls', 'no.create.tmpl');
         if($poll->getType() === '0') $dates = $this->dateMapper->findByPoll($poll->getId());
         else $dates = $this->textMapper->findByPoll($poll->getId());
-        return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'shareManager' => $this->shareManager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**
@@ -281,7 +285,7 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function createPoll() {
-        return new TemplateResponse('polls', 'create.tmpl', ['userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        return new TemplateResponse('polls', 'create.tmpl', ['userId' => $this->userId, 'userMgr' => $this->manager, 'shareManager' => $this->shareManager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**
