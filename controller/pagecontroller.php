@@ -424,6 +424,7 @@ class PageController extends Controller {
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @PublicPage
      */
     public function insertComment($pollId, $userId, $commentBox) {
         $comment = new Comment();
@@ -435,7 +436,9 @@ class PageController extends Controller {
         $this->sendNotifications($pollId, $userId);
         $hash = $this->eventMapper->find($pollId)->getHash();
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
-        return new JSONResponse(array('comment' => $commentBox, 'date' => date('Y-m-d H:i:s'), 'userName' => $this->manager->get($userId)->getDisplayName()));
+        if($this->manager->get($userId) !== null) $newUserId = $this->manager->get($userId)->getDisplayName();
+        else $newUserId = $userId;
+        return new JSONResponse(array('comment' => $commentBox, 'date' => date('Y-m-d H:i:s'), 'userName' => $newUserId));
     }
 
     public function getPollsForUser() {

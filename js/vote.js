@@ -51,6 +51,15 @@ $(document).ready(function () {
     $('#submit_send_comment').click(function(e) {
         e.preventDefault();
         var form = document.send_comment;
+        var ac = document.getElementById('user_name_comm');
+        if (ac != null) {
+            if(ac.value.length >= 3){
+                form.elements['userId'].value = ac.value;
+            } else {
+                alert(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'));
+                return;
+            }
+        }
         var comm = document.getElementById('commentBox');
         if(comm.value.trim().length <= 0) {
             alert(t('polls', 'Please add some text to your comment before submitting it.'));
