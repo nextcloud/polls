@@ -29,6 +29,7 @@ use \OCA\Polls\Db\ParticipationMapper;
 use \OCA\Polls\Db\ParticipationTextMapper;
 use \OCA\Polls\Db\TextMapper;
 use \OCP\IUserManager;
+use \OCP\IGroupManager;
 use \OCP\Share\IManager;
 use \OCP\IAvatarManager;
 use \OCP\ILogger;
@@ -58,9 +59,13 @@ class PageController extends Controller {
     private $logger;
     private $trans;
     private $userMgr;
+    private $groupManager;
     private $shareManager;
+    private $allowedGroups;
+    private $allowedUsers;
     public function __construct($appName, IRequest $request,
                 IUserManager $manager,
+                IGroupManager $groupManager,
                 IManager $shareManager,
                 IAvatarManager $avatarManager,
                 ILogger $logger,
@@ -77,6 +82,7 @@ class PageController extends Controller {
                 TextMapper $textMapper) {
         parent::__construct($appName, $request);
         $this->manager = $manager;
+        $this->groupManager = $groupManager;
         $this->shareManager = $shareManager;
         $this->avatarManager = $avatarManager;
         $this->logger = $logger;
@@ -92,6 +98,30 @@ class PageController extends Controller {
         $this->participationTextMapper = $ParticipationTextMapper;
         $this->textMapper = $textMapper;
         $this->userMgr = \OC::$server->getUserManager();
+        
+        if(!$this->shareManager->sharingDisabledForUser($this->userId)) {
+            if($this->shareManager->shareWithGroupMembersOnly()) {
+               $groups = OCP\OC_Group::getUserGroups($this->userId);
+            } else if($this->shareManager->allowGroupSharing()) {
+               $groups = \OC_Group::getGroups();
+            }
+            sort($groups, SORT_NATURAL | SORT_FLAG_CASE );
+            $this->allowedGroups = $groups;
+        }
+        $allUsers = \OC_User::GetUsers();
+        if (!(\OC_User::isAdminUser($this->userId))) {
+            $usersSharedGroups = \OC_Group::usersInGroups($this->allowedGroups);
+            $usersNoGroup = array_diff($allUsers, \OC_Group::usersInGroups($allUsers));
+            if($this->shareManager->shareWithGroupMembersOnly()) {
+                $users = $usersSharedGroups;
+            } else {
+                $users = array_merge($usersSharedGroups , $usersNoGroup);
+            }
+        } else {
+            $users = $allUsers;
+        }
+        sort($users, SORT_NATURAL | SORT_FLAG_CASE );
+        $this->allowedUsers = $users;
     }
 
     /**
@@ -440,6 +470,32 @@ class PageController extends Controller {
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
         return new JSONResponse(array('comment' => $commentBox, 'date' => date('Y-m-d H:i:s'), 'userName' => $this->manager->get($userId)->getDisplayName()));
     }
+
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+     public function searchForGroups($searchTerm) {
+        $groups = $this->groupManager->search($searchTerm);
+        $gids = array();
+        foreach($groups as $g) {
+            $gids[] = $g->getGID();
+        }
+        return $gids;
+     }
+
+     /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+     public function searchForUsers($searchTerm) {
+        $userNames = $this->userMgr->searchDisplayName($searchTerm);
+        $users = array();
+        foreach($userNames as $u) {
+            $users[] = array('uid' => $u->getUID(), 'displayName' => $u->getDisplayName());
+        }
+        return $users;
+     }
 
     public function getPollsForUser() {
         return $this->eventMapper->findAllForUser($this->userId);

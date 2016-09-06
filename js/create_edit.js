@@ -242,6 +242,48 @@ $(document).ready(function () {
         }
     });
 
+    $('#group-search-box').on('input', function() {
+        var val = $(this).val();
+        if(val.length < 3) return;
+        var groupUl = document.getElementById('live-search-list-group-id');
+        while(groupUl.firstChild) {
+            groupUl.removeChild(groupUl.firstChild);
+        }
+        $.post(OC.generateUrl('/apps/polls/search/groups'), { searchTerm: val }, function(data) {
+            for(var i=0; i<data.length; i++) {
+                var gid = data[i];
+                var li = document.createElement('li');
+                li.setAttribute('id', 'group_' + gid);
+                li.setAttribute('class', 'cl_group_item cl_access_item');
+                li.appendChild(document.createTextNode(gid));
+                groupUl.appendChild(li);
+            }
+        });
+    });
+
+    $('#user-search-box').on('input', function() {
+        var val = $(this).val();
+        if(val.length < 3) return;
+        var userUl = document.getElementById('live-search-list-user-id');
+        while(userUl.firstChild) {
+            userUl.removeChild(userUl.firstChild);
+        }
+        $.post(OC.generateUrl('/apps/polls/search/users'), { searchTerm: val }, function(data) {
+            for(var i=0; i<data.length; i++) {
+                var user = data[i];
+                var li = document.createElement('li');
+                var span = document.createElement('span');
+                li.setAttribute('id', 'user_' + user.uid);
+                li.setAttribute('class', 'cl_user_item cl_access_item');
+                li.appendChild(document.createTextNode(user.displayName));
+                span.setAttribute('id', 'sec_name');
+                span.appendChild(document.createTextNode(user.uid));
+                li.appendChild(span);
+                userUl.appendChild(li);
+            }
+        });
+    });
+
     $('.live-search-list-user li').each(function(){
 	$(this).attr('data-search-term', $(this).text().toLowerCase());
     });

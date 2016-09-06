@@ -43,6 +43,7 @@ class Application extends App {
 				$c->query('AppName'),
 				$c->query('Request'),
 				$c->query('UserManager'),
+				$c->query('GroupManager'),
 				$server->getShareManager(),
 				$c->query('AvatarManager'),
 				$c->query('Logger'),
@@ -63,6 +64,10 @@ class Application extends App {
 		$container->registerService('UserManager', function($c) {
 			return $c->query('ServerContainer')->getUserManager();
 		});
+
+        $container->registerService('GroupManager', function($c) {
+            return $c->query('ServerContainer')->getGroupManager();
+        });
 
 		$container->registerService('AvatarManager', function($c) {
 			return $c->query('ServerContainer')->getAvatarManager();

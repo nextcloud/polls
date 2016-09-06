@@ -80,47 +80,13 @@
             
             <div id="access_rights" class="row">
                 <div class="col-50">
-                    <input type="text" class="live-search-box-group" placeholder="<?php p($l->t('Group search')); ?>" />
-            <ul class="live-search-list-group">
-            <?php
-                if(!$shareMgr->sharingDisabledForUser($userId)) : 
-                    if($shareMgr->shareWithGroupMembersOnly()) {
-                        $groups = OC_Group::getUserGroups($userId);
-                    } else if($shareMgr->allowGroupSharing()) {
-                        $groups = OC_Group::getGroups();
-                    }
-                    sort($groups, SORT_NATURAL | SORT_FLAG_CASE );
-                    foreach($groups as $gid) : ?>
-                <li class="cl_group_item cl_access_item" id="group_<?php p($gid); ?>">
-                    <?php p($gid); ?>
-                </li>
-                   <?php endforeach; ?>
-                <?php endif; ?>
+                    <input type="text" class="live-search-box-group" id="group-search-box" placeholder="<?php p($l->t('Group search')); ?>" />
+            <ul class="live-search-list-group" id="live-search-list-group-id">
             </ul>
         </div>
     <div class="col-50">
-        <input type="text" class="live-search-box-user" placeholder="<?php p($l->t('User search')); ?>" />
-            <ul class="live-search-list-user">
-            <?php 
-			$all_groups = OC_Group::getGroups();
-			$users = OC_User::getUsers(); 
-			if ( !(OC_User::isAdminUser($userId)) ) {
-			    $users_in_groups = OC_Group::usersInGroups($all_groups);
-                $users_no_group = array_diff($users, $users_in_groups);
-			    $users = OC_Group::usersInGroups($groups);
-			    if(!$shareMgr->shareWithGroupMembersOnly() && $shareMgr->allowGroupSharing()) {
-    			    $users = array_merge($users , $users_no_group);
-    			}
- 			}
-			sort($users, SORT_NATURAL | SORT_FLAG_CASE );
-            foreach ($users as $user) : ?>
-                <li class="cl_user_item cl_access_item" id="user_<?php p($user); ?>" >
-                    <?php p($userMgr->get($user)->getDisplayName()); ?>
-                    <span id="sec_name">
-                        <?php p($user); ?>
-                    </span>
-                </li>
-            <?php endforeach; ?>
+        <input type="text" class="live-search-box-user" id="user-search-box" placeholder="<?php p($l->t('User search')); ?>" />
+            <ul class="live-search-list-user" id="live-search-list-user-id">
             </ul>
         </div>
     </div>

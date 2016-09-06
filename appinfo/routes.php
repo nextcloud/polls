@@ -29,4 +29,6 @@ $application->registerRoutes($this, array('routes' => array(
 	array('name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'),
 	array('name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'),
 	array('name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'),
+	array('name' => 'page#search_for_groups', 'url' => '/search/groups', 'verb' => 'POST'),
+	array('name' => 'page#search_for_users', 'url' => '/search/users', 'verb' => 'POST'),
 )));
