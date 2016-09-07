@@ -99,7 +99,7 @@ class PageController extends Controller {
         $this->textMapper = $textMapper;
         $this->userMgr = \OC::$server->getUserManager();
         
-        if(!$this->shareManager->sharingDisabledForUser($this->userId)) {
+        /*if(!$this->shareManager->sharingDisabledForUser($this->userId)) {
             if($this->shareManager->shareWithGroupMembersOnly()) {
                $groups = OCP\OC_Group::getUserGroups($this->userId);
             } else if($this->shareManager->allowGroupSharing()) {
@@ -121,7 +121,7 @@ class PageController extends Controller {
             $users = $allUsers;
         }
         sort($users, SORT_NATURAL | SORT_FLAG_CASE );
-        $this->allowedUsers = $users;
+        $this->allowedUsers = $users;*/
     }
 
     /**
