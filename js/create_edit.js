@@ -242,13 +242,13 @@ $(document).ready(function () {
         }
     });
 
-    $('#group-search-box').on('input', function() {
-        var val = $(this).val();
-        if(val.length < 3) return;
+    $('#group-search-box').on('input', debounce(function() {
         var groupUl = document.getElementById('live-search-list-group-id');
         while(groupUl.firstChild) {
             groupUl.removeChild(groupUl.firstChild);
         }
+        var val = $(this).val();
+        if(val.length < 3) return;
         $.post(OC.generateUrl('/apps/polls/search/groups'), { searchTerm: val }, function(data) {
             for(var i=0; i<data.length; i++) {
                 var gid = data[i];
@@ -259,15 +259,15 @@ $(document).ready(function () {
                 groupUl.appendChild(li);
             }
         });
-    });
+    }, 250));
 
-    $('#user-search-box').on('input', function() {
-        var val = $(this).val();
-        if(val.length < 3) return;
+    $('#user-search-box').on('input', debounce(function() {
         var userUl = document.getElementById('live-search-list-user-id');
         while(userUl.firstChild) {
             userUl.removeChild(userUl.firstChild);
         }
+        var val = $(this).val();
+        if(val.length < 3) return;
         $.post(OC.generateUrl('/apps/polls/search/users'), { searchTerm: val }, function(data) {
             for(var i=0; i<data.length; i++) {
                 var user = data[i];
@@ -282,7 +282,7 @@ $(document).ready(function () {
                 userUl.appendChild(li);
             }
         });
-    });
+    }, 250));
 
     $('.live-search-list-user li').each(function(){
 	$(this).attr('data-search-term', $(this).text().toLowerCase());
@@ -481,4 +481,20 @@ function addColToList(ts, text, dateTs) {
         }
         td.id = ts;
     }
+}
+
+function debounce(f, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this;
+		var args = arguments;
+		var later = function() {
+			timeout = null;
+			if(!immediate) f.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if(callNow) f.apply(context, args);
+	}
 }
