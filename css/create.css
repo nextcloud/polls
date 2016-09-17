@@ -1,4 +1,4 @@
-#access_rights {
+.user-group-list {
     display :none;
     border: 1px solid #DDD;
     margin: 15px;
@@ -8,13 +8,14 @@
     overflow-y: auto;
 }
 
+.user-group-list h3 {
+    margin 0 0 5px;
+}
+
 #sec_name {
     display: none;
 }
 
-#access_rights h3 {
-    margin: 0 0 5px;
-}
 .cl_access_item {
     padding: 5px;
     background-color: white;

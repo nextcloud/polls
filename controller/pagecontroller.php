@@ -475,11 +475,29 @@ class PageController extends Controller {
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-     public function searchForGroups($searchTerm) {
+    public function search($searchTerm, $groups, $users) {
+        return array_merge($this->searchForGroups($searchTerm, $groups), $this->searchForUsers($searchTerm, $users));
+    }
+
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+     public function searchForGroups($searchTerm, $groups) {
+        $selectedGroups = json_decode($groups);
         $groups = $this->groupManager->search($searchTerm);
         $gids = array();
+        $sgids = array();
+        foreach($selectedGroups as $sg) {
+            $sgids[] = str_replace('group_', '', $sg);
+        }
         foreach($groups as $g) {
             $gids[] = $g->getGID();
+        }
+        $diffGids = array_diff($gids, $sgids);
+        $gids = array();
+        foreach($diffGids as $g) {
+            $gids[] = ['gid' => $g, 'isGroup' => true];
         }
         return $gids;
      }
@@ -488,13 +506,39 @@ class PageController extends Controller {
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-     public function searchForUsers($searchTerm) {
+     public function searchForUsers($searchTerm, $users) {
+        $selectedUsers = json_decode($users);
+        \OCP\Util::writeLog("polls", print_r($selectedUsers, true), \OCP\Util::ERROR);
         $userNames = $this->userMgr->searchDisplayName($searchTerm);
         $users = array();
+        $susers = array();
+        foreach($selectedUsers as $su) {
+            $susers[] = str_replace('user_', '', $su);
+        }
         foreach($userNames as $u) {
-            $users[] = array('uid' => $u->getUID(), 'displayName' => $u->getDisplayName());
+            $alreadyAdded = false;
+            foreach($susers as &$su) {
+                if($su === $u->getUID()) {
+                    unset($su);
+                    $alreadyAdded = true;
+                    break;
+                }
+            }
+            if(!$alreadyAdded) {
+                $users[] = array('uid' => $u->getUID(), 'displayName' => $u->getDisplayName(), 'isGroup' => false);
+            } else {
+                continue;
+            }
         }
         return $users;
+     }
+
+     /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+     public function getDisplayName($username) {
+         return $this->manager->get($username)->getDisplayName();
      }
 
     public function getPollsForUser() {

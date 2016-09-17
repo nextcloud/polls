@@ -77,19 +77,18 @@
             <input type="radio" name="accessType" id="select" value="select" <?php if($isUpdate && $access === 'select') print_unescaped('checked'); ?>>
             <label for="select"><?php p($l->t('Select')); ?></label>
             <span id="id_label_select">...</span>
-            
-            <div id="access_rights" class="row">
+
+            <div id="selected_access" class="row user-group-list">
+                <ul id="selected-search-list-id">
+                </ul>
+            </div>
+            <div id="access_rights" class="row user-group-list">
                 <div class="col-50">
-                    <input type="text" class="live-search-box-group" id="group-search-box" placeholder="<?php p($l->t('Group search')); ?>" />
-            <ul class="live-search-list-group" id="live-search-list-group-id">
-            </ul>
-        </div>
-    <div class="col-50">
-        <input type="text" class="live-search-box-user" id="user-search-box" placeholder="<?php p($l->t('User search')); ?>" />
-            <ul class="live-search-list-user" id="live-search-list-user-id">
-            </ul>
-        </div>
-    </div>
+                    <input type="text" class="live-search-box" id="user-group-search-box" placeholder="<?php p($l->t('User/Group search')); ?>" />
+                    <ul class="live-search-list" id="live-search-list-id">
+                    </ul>
+                </div>
+            </div>
 
             <input type="hidden" name="accessValues" id="accessValues" value="<?php if($isUpdate && $access === 'select') p($accessTypes) ?>" />
 
