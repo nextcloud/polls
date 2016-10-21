@@ -412,12 +412,16 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <div class="comment-header">
                                         <?php
                                         print_unescaped('<span class="comment-date">' . date('d.m.Y H:i:s', strtotime($comment->getDt())) . '</span>');
-                                        if($userMgr->get($comment->getUserId()) != null) {
-                                            p($userMgr->get($comment->getUserId())->getDisplayName());
+                                        if($isAnonymous) {
+                                            p('Anonymous');
                                         } else {
-                                            print_unescaped('<i>');
-                                            p($comment->getUserId());
-                                            print_unescaped('</i>');
+                                            if($userMgr->get($comment->getUserId()) != null) {
+                                                p($userMgr->get($comment->getUserId())->getDisplayName());
+                                            } else {
+                                                print_unescaped('<i>');
+                                                p($comment->getUserId());
+                                                print_unescaped('</i>');
+                                            }
                                         }
                                         ?>
                                     </div>
