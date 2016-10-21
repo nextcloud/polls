@@ -32,16 +32,30 @@ $(document).ready(function () {
 
     var accessValues = document.getElementById('accessValues');
     if(accessValues.value.length > 0) {
+        var list = document.getElementById('selected-search-list-id');
         var accessValueArr = accessValues.value.split(';');
         for(var i=0; i<accessValueArr.length; i++) {
             var val = accessValueArr[i];
+            if(val == '') continue;
+            var li = document.createElement('li');
+            li.id = val;
+            li.className = 'cl_item cl_access_item selected';
             var index = val.indexOf('group_');
             if(index == 0) {
                 g_chosen_groups.push(val);
+                li.className += ' is-group';
+                li.appendChild(document.createTextNode(val.substring(6) + " (group)"));
+                list.appendChild(li);
             } else {
                 index = val.indexOf('user_');
                 if(index == 0) {
                     g_chosen_users.push(val);
+                    li.className = 'cl_item cl_access_item selected';
+                    var username = val.substring(5);
+                    $.post(OC.generateUrl('/apps/polls/get/displayname'), {username: username}, function(data) {
+                        li.appendChild(document.createTextNode(username + " (" + data + ")"));
+                        list.appendChild(li);
+                    });
                 }
             }
         }
@@ -175,24 +189,40 @@ $(document).ready(function () {
         text.value = '';
     });
 
-    $(document).on('click', '.cl_user_item', function(e) {
+    $(document).on('click', '.cl_item', function(e) {
+        var list = document.getElementById('selected-search-list-id');
+        var isGroup = $(this).hasClass('is-group');
         if($(this).hasClass('selected')) {
-            var index = g_chosen_users.indexOf(this.id);
-            if(index > -1) g_chosen_users.splice(index, 1);
+            var index = -1;
+            if(isGroup) index = g_chosen_groups.indexOf(this.id);
+            else index = g_chosen_users.indexOf(this.id);
+            if(index > -1) {
+                if(isGroup) g_chosen_groups.splice(index, 1);
+                else g_chosen_users.splice(index, 1);
+                $(this).remove();
+            }
         } else {
-            g_chosen_users.push(this.id);
+            if(!isGroup) {
+                var text = this.id.replace('user_', '');
+                g_chosen_users.push(this.id);
+            } else {
+                g_chosen_groups.push(this.id);
+            }
+            document.getElementById('user-group-search-box').value = '';
+            var li = document.createElement('li');
+            li.id = this.id;
+            li.className = 'cl_item cl_access_item selected' + (isGroup ? ' is-group' : '');
+            if(!isGroup) {
+                $.post(OC.generateUrl('/apps/polls/get/displayname'), {username: text}, function(data) {
+                    li.appendChild(document.createTextNode(text + " (" + data + ")"));
+                    list.appendChild(li);
+                });
+            } else {
+                li.appendChild(document.createTextNode($(this).html()));
+                list.appendChild(li);
+            }
+            $(this).remove();
         }
-        $(this).toggleClass('selected');
-    });
-    
-    $(document).on('click', '.cl_group_item', function(e) {
-        if($(this).hasClass('selected')) {
-            var index = g_chosen_groups.indexOf(this.id);
-            if(index > -1) g_chosen_groups.splice(index, 1);
-        } else {
-            g_chosen_groups.push(this.id);
-        }
-        $(this).toggleClass('selected');
     });
 
     $('.toggleable-row').hover(
@@ -238,8 +268,10 @@ $(document).ready(function () {
         access_type = this.value;
         if(access_type == 'select') {
             $("#access_rights").show();
+            $("#selected_access").show();
         } else {
             $("#access_rights").hide();
+            $("#selected_access").hide();
         }
     });
 
@@ -248,6 +280,41 @@ $(document).ready(function () {
             document.getElementById('expireTs').value = '';
         }
     });
+
+    $('#user-group-search-box').on('input', debounce(function() {
+        var ul = document.getElementById('live-search-list-id');
+        while(ul.firstChild) {
+            ul.removeChild(ul.firstChild);
+        }
+        var val = $(this).val();
+        if(val.length < 3) return;
+        var formData = {
+            searchTerm: val,
+            groups: JSON.stringify(g_chosen_groups),
+            users: JSON.stringify(g_chosen_users)
+        }
+        $.post(OC.generateUrl('/apps/polls/search'), formData, function(data) {
+            for(var i=0; i<data.length; i++) {
+                var ug = data[i];
+                var li = document.createElement('li');
+                li.className = 'cl_item cl_access_item';
+                if(ug.isGroup) {
+                    li.id = 'group_' + ug.gid;
+                    li.className += ' is-group';
+                    li.appendChild(document.createTextNode(ug.gid + " (group)"));
+                    ul.appendChild(li);
+                } else {
+                    li.id = 'user_' + ug.uid;
+                    li.appendChild(document.createTextNode(ug.uid + " (" + ug.displayName + ")"));
+                    var span = document.createElement('span');
+                    span.id = 'sec_name';
+                    span.appendChild(document.createTextNode(ug.uid));
+                    li.appendChild(span);
+                    ul.appendChild(li);
+                }
+            }
+        });
+    }, 250));
 
     $('.live-search-list-user li').each(function(){
 	$(this).attr('data-search-term', $(this).text().toLowerCase());
@@ -447,4 +514,20 @@ function addColToList(ts, text, dateTs) {
         }
         td.id = ts;
     }
+}
+
+function debounce(f, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this;
+		var args = arguments;
+		var later = function() {
+			timeout = null;
+			if(!immediate) f.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if(callNow) f.apply(context, args);
+	}
 }

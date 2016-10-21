@@ -29,6 +29,8 @@ use \OCA\Polls\Db\ParticipationMapper;
 use \OCA\Polls\Db\ParticipationTextMapper;
 use \OCA\Polls\Db\TextMapper;
 use \OCP\IUserManager;
+use \OCP\IGroupManager;
+use \OCP\Share\IManager;
 use \OCP\IAvatarManager;
 use \OCP\ILogger;
 use \OCP\IL10N;
@@ -57,8 +59,14 @@ class PageController extends Controller {
     private $logger;
     private $trans;
     private $userMgr;
+    private $groupManager;
+    private $shareManager;
+    private $allowedGroups;
+    private $allowedUsers;
     public function __construct($appName, IRequest $request,
                 IUserManager $manager,
+                IGroupManager $groupManager,
+                IManager $shareManager,
                 IAvatarManager $avatarManager,
                 ILogger $logger,
                 IL10N $trans,
@@ -74,6 +82,8 @@ class PageController extends Controller {
                 TextMapper $textMapper) {
         parent::__construct($appName, $request);
         $this->manager = $manager;
+        $this->groupManager = $groupManager;
+        $this->shareManager = $shareManager;
         $this->avatarManager = $avatarManager;
         $this->logger = $logger;
         $this->trans = $trans;
@@ -88,6 +98,30 @@ class PageController extends Controller {
         $this->participationTextMapper = $ParticipationTextMapper;
         $this->textMapper = $textMapper;
         $this->userMgr = \OC::$server->getUserManager();
+        
+        /*if(!$this->shareManager->sharingDisabledForUser($this->userId)) {
+            if($this->shareManager->shareWithGroupMembersOnly()) {
+               $groups = OCP\OC_Group::getUserGroups($this->userId);
+            } else if($this->shareManager->allowGroupSharing()) {
+               $groups = \OC_Group::getGroups();
+            }
+            sort($groups, SORT_NATURAL | SORT_FLAG_CASE );
+            $this->allowedGroups = $groups;
+        }
+        $allUsers = \OC_User::GetUsers();
+        if (!(\OC_User::isAdminUser($this->userId))) {
+            $usersSharedGroups = \OC_Group::usersInGroups($this->allowedGroups);
+            $usersNoGroup = array_diff($allUsers, \OC_Group::usersInGroups($allUsers));
+            if($this->shareManager->shareWithGroupMembersOnly()) {
+                $users = $usersSharedGroups;
+            } else {
+                $users = array_merge($usersSharedGroups , $usersNoGroup);
+            }
+        } else {
+            $users = $allUsers;
+        }
+        sort($users, SORT_NATURAL | SORT_FLAG_CASE );
+        $this->allowedUsers = $users;*/
     }
 
     /**
@@ -210,7 +244,7 @@ class PageController extends Controller {
         if($this->userId !== $poll->getOwner()) return new TemplateResponse('polls', 'no.create.tmpl');
         if($poll->getType() === '0') $dates = $this->dateMapper->findByPoll($poll->getId());
         else $dates = $this->textMapper->findByPoll($poll->getId());
-        return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'shareManager' => $this->shareManager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**
@@ -281,7 +315,7 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function createPoll() {
-        return new TemplateResponse('polls', 'create.tmpl', ['userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        return new TemplateResponse('polls', 'create.tmpl', ['userId' => $this->userId, 'userMgr' => $this->manager, 'shareManager' => $this->shareManager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**
@@ -440,6 +474,76 @@ class PageController extends Controller {
         else $newUserId = $userId;
         return new JSONResponse(array('comment' => $commentBox, 'date' => date('Y-m-d H:i:s'), 'userName' => $newUserId));
     }
+
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function search($searchTerm, $groups, $users) {
+        return array_merge($this->searchForGroups($searchTerm, $groups), $this->searchForUsers($searchTerm, $users));
+    }
+
+    /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+     public function searchForGroups($searchTerm, $groups) {
+        $selectedGroups = json_decode($groups);
+        $groups = $this->groupManager->search($searchTerm);
+        $gids = array();
+        $sgids = array();
+        foreach($selectedGroups as $sg) {
+            $sgids[] = str_replace('group_', '', $sg);
+        }
+        foreach($groups as $g) {
+            $gids[] = $g->getGID();
+        }
+        $diffGids = array_diff($gids, $sgids);
+        $gids = array();
+        foreach($diffGids as $g) {
+            $gids[] = ['gid' => $g, 'isGroup' => true];
+        }
+        return $gids;
+     }
+
+     /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+     public function searchForUsers($searchTerm, $users) {
+        $selectedUsers = json_decode($users);
+        \OCP\Util::writeLog("polls", print_r($selectedUsers, true), \OCP\Util::ERROR);
+        $userNames = $this->userMgr->searchDisplayName($searchTerm);
+        $users = array();
+        $susers = array();
+        foreach($selectedUsers as $su) {
+            $susers[] = str_replace('user_', '', $su);
+        }
+        foreach($userNames as $u) {
+            $alreadyAdded = false;
+            foreach($susers as &$su) {
+                if($su === $u->getUID()) {
+                    unset($su);
+                    $alreadyAdded = true;
+                    break;
+                }
+            }
+            if(!$alreadyAdded) {
+                $users[] = array('uid' => $u->getUID(), 'displayName' => $u->getDisplayName(), 'isGroup' => false);
+            } else {
+                continue;
+            }
+        }
+        return $users;
+     }
+
+     /**
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+     public function getDisplayName($username) {
+         return $this->manager->get($username)->getDisplayName();
+     }
 
     public function getPollsForUser() {
         return $this->eventMapper->findAllForUser($this->userId);

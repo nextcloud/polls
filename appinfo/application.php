@@ -32,16 +32,19 @@ class Application extends App {
 		parent::__construct('polls', $urlParams);
 
 		$container = $this->getContainer();
+		$server = $container->getServer();
 
 		/**
 		 * Controllers
 		 */
-		$container->registerService('PageController', function($c) {
+		$container->registerService('PageController', function($c) use($server) {
 			/** @var SimpleContainer $c */
 			return new PageController(
 				$c->query('AppName'),
 				$c->query('Request'),
 				$c->query('UserManager'),
+				$c->query('GroupManager'),
+				$server->getShareManager(),
 				$c->query('AvatarManager'),
 				$c->query('Logger'),
 				$c->query('L10N'),
@@ -62,6 +65,10 @@ class Application extends App {
 			return $c->query('ServerContainer')->getUserManager();
 		});
 
+        $container->registerService('GroupManager', function($c) {
+            return $c->query('ServerContainer')->getGroupManager();
+        });
+
 		$container->registerService('AvatarManager', function($c) {
 			return $c->query('ServerContainer')->getAvatarManager();
 		});
@@ -74,7 +81,6 @@ class Application extends App {
             return $c->query('ServerContainer')->getL10N($c->query('AppName'));
         });
 
-		$server = $container->getServer();
 		$container->registerService('AccessMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new AccessMapper(

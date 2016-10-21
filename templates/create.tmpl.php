@@ -6,6 +6,7 @@
     \OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
+	$shareMgr = $_['shareManager'];
     $urlGenerator = $_['urlGenerator'];
     $isUpdate = isset($_['poll']) && $_['poll'] !== null;
     $isAnonymous = false;
@@ -78,42 +79,15 @@
             <input type="radio" name="accessType" id="select" value="select" <?php if($isUpdate && $access === 'select') print_unescaped('checked'); ?>>
             <label for="select"><?php p($l->t('Select')); ?></label>
             <span id="id_label_select">...</span>
-            
-            <div id="access_rights" class="row">
+
+            <div id="selected_access" class="row user-group-list">
+                <ul id="selected-search-list-id">
+                </ul>
+            </div>
+            <div id="access_rights" class="row user-group-list">
                 <div class="col-50">
-                    <input type="text" class="live-search-box-group" placeholder="<?php p($l->t('Group search')); ?>" />
-		    <ul class="live-search-list-group">
-                        <?php 
-			$groups = OC_Group::getUserGroups($userId);
-			sort($groups, SORT_NATURAL | SORT_FLAG_CASE );
-                        foreach($groups as $gid) : ?>
-                            <li class="cl_group_item cl_access_item" id="group_<?php p($gid); ?>">
-                                <?php p($gid); ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                <div class="col-50">
-		    <input type="text" class="live-search-box-user" placeholder="<?php p($l->t('User search')); ?>" />
-                    <ul class="live-search-list-user">
-                    	<?php 
-			$all_groups = OC_Group::getGroups();
-			$users = OC_User::getUsers(); 
-			if ( !(OC_User::isAdminUser($userId)) ) {
-			    $users_in_groups = OC_Group::usersInGroups($all_groups);
-                            $users_no_group = array_diff($users, $users_in_groups);
-			    $users = OC_Group::usersInGroups($groups);
-			    $users = array_merge($users , $users_no_group);
- 			}
-			sort($users, SORT_NATURAL | SORT_FLAG_CASE );
-                        foreach ($users as $user) : ?>
-                            <li class="cl_user_item cl_access_item" id="user_<?php p($user); ?>" >
-				<?php p($userMgr->get($user)->getDisplayName()); ?>
-				<span id="sec_name">
-				<?php p($user); ?>
-				</span>
-                            </li>
-                        <?php endforeach; ?>
+                    <input type="text" class="live-search-box" id="user-group-search-box" placeholder="<?php p($l->t('User/Group search')); ?>" />
+                    <ul class="live-search-list" id="live-search-list-id">
                     </ul>
                 </div>
             </div>
