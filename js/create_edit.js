@@ -441,8 +441,14 @@ function addRowToList(ts, text, timeTs) {
     var curr;
     for(var i=1; i<rows.length; i++) {
         curr = rows[i];
-        if(curr.id == ts) return; //already in table, cancel
-        if(curr.id > ts) {
+        if(curr.id == ts) {
+            for(var j=1; j<curr.cells.length; j++) {
+                var td = curr.cells[j];
+                var tdId = curr.cells[j].id;
+                if(timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
+            }
+            return; //already in table, cancel
+        } else if(curr.id > ts) {
             var tr = table.insertRow(i); //insert row at current index
             tr.id = ts;
             tr.className = 'toggleable-row';
