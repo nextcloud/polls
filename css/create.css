@@ -33,8 +33,9 @@
 }
 
 .cl_access_item.selected:hover {
-    background-color: #337AB7;
+    background-color: #FF6F6F;
     color: #FFF;
+    text-decoration: line-through;
 }
 
 textarea {
