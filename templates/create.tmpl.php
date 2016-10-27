@@ -6,7 +6,6 @@
     \OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
-	$shareMgr = $_['shareManager'];
     $urlGenerator = $_['urlGenerator'];
     $isUpdate = isset($_['poll']) && $_['poll'] !== null;
     $isAnonymous = false;
