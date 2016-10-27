@@ -44,7 +44,6 @@ class Application extends App {
 				$c->query('Request'),
 				$c->query('UserManager'),
 				$c->query('GroupManager'),
-				$server->getShareManager(),
 				$c->query('AvatarManager'),
 				$c->query('Logger'),
 				$c->query('L10N'),
