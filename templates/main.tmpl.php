@@ -8,13 +8,18 @@
     $urlGenerator = $_['urlGenerator'];
 ?>
 <div id="app">
+  <?php include ("navigation.tmpl.php"); ?>
+
     <div id="app-content">
         <div id="app-content-wrapper">
-        <header class="row">
-            <div class="col-100">
-                <h1><?php p($l->t('Summary')); ?></h1>
+          <div class="breadcrumb">
+            <div class="crumb svg" data-dir="/">
+              <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
             </div>
-        </header>
+            <div class="crumb svg last"><a href="#"><?php p($l->t('Summary')); ?></a></div>
+
+          </div>
+
         <div class="goto_poll col-100">
     <?php if(count($_['polls']) === 0) : ?>
     <?php p($l->t('No existing polls.')); ?>

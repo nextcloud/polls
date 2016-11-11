@@ -34,8 +34,26 @@
 ?>
 
 <div id="app">
+
+  <?php include ("navigation.tmpl.php"); ?>
+
     <div id="app-content">
         <div id="app-content-wrapper">
+
+          <div class="breadcrumb">
+            <div class="crumb svg" data-dir="/">
+              <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
+            </div>
+            <div class="crumb svg last"><a href="#">
+              <?php if($isUpdate): ?>
+                  <?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
+              <?php else: ?>
+                  <?php p($l->t('Create new poll')); ?>
+              <?php endif; ?></a></div>
+
+          </div>
+
+
 <?php if($isUpdate): ?>
 <form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll')); ?>" method="POST">
     <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -46,17 +64,8 @@
     <input type="hidden" name="expireTs" id="expireTs" value="<?php if(isset($expireTs)) p($expireTs); ?>" />
     <input type="hidden" name="userId" id="userId" value="<?php p($userId); ?>" />
 
-    <header class="row">
-        <div class="col-100">
-            <?php if($isUpdate): ?>
-                <h1><?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?></h1>
-            <?php else: ?>
-                <h1><?php p($l->t('Create new poll')); ?></h1>
-            <?php endif; ?>
-        </div>
-    </header>
-    
-    <div class="new_poll row">
+
+    <div class="new_poll">
         <div class="col-50">
             <h2><?php p($l->t('Basic information')); ?></h2>
             <label for="pollTitle" class="input_title"><?php p($l->t('Title')); ?></label>
@@ -138,9 +147,9 @@
         <?php if($isUpdate): ?>
             <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Update poll')); ?>" />
         <?php else: ?>
-            <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Create poll')); ?>" />
+            <input class="btn primary" type="submit" id="submit_finish_poll" value="<?php p($l->t('Create poll')); ?>" />
         <?php endif; ?>
-        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
+        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="events--button button btn" type="button"><?php p($l->t('Cancel')); ?></a>
     </div>
 </form>
 </div>

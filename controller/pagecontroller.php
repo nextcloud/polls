@@ -287,7 +287,8 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function createPoll() {
-        return new TemplateResponse('polls', 'create.tmpl', ['userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+      $polls = $this->eventMapper->findAll();
+        return new TemplateResponse('polls', 'create.tmpl', ['polls' => $polls, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**

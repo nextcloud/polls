@@ -84,6 +84,7 @@ table {
 
 div.new_poll {
     width: 100%;
+    float: left;
 }
 
 div.goto_poll {
@@ -392,4 +393,39 @@ td.td_shown {
     border: 1px solid #1D2D44;
     border-top: 0;
     border-radius: 0 0 3px 3px;
+}
+
+#new-poll-button {
+	margin: 14px auto; /* to have the same height than a contact*/
+	width: calc(100% - 20px) !important;
+	text-align: left;
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+}
+#app-navigation > ul {
+	height: calc(100% - 26px);
+}
+
+#app-navigation .app-navigation-list-item .utils .action span {
+	display: inline-block;
+	line-height: 20px;
+	height: 20px;
+	width: 16px;
+	padding: 12px 6px;
+	cursor: pointer;
+	vertical-align: top;
+}
+
+
+#app-navigation .app-navigation-list-item .utils .action span {
+	opacity: .3;
+}
+
+#app-navigation .app-navigation-list-item .utils .action.withitems span {
+	opacity: .7 !important;
+}
+
+#app-navigation .app-navigation-list-item .utils .action:hover span {
+	opacity: 1;
 }
