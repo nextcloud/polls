@@ -6,9 +6,12 @@
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
+
+    //Modal: http://vodkabears.github.io/remodal/
 ?>
 <div id="app">
-  <?php include ("navigation.tmpl.php"); ?>
+  <?php //include ("navigation.tmpl.php");
+  print_unescaped($this->inc('navigation.tmpl')); ?>
 
     <div id="app-content">
         <div id="app-content-wrapper">
@@ -20,20 +23,20 @@
 
           </div>
 
-        <div class="goto_poll col-100">
+      <!--  <div class="goto_poll col-100">-->
     <?php if(count($_['polls']) === 0) : ?>
     <?php p($l->t('No existing polls.')); ?>
     <?php else : ?>
-    <table class="cl_create_form">
+    <table >
         <thead>
         <tr>
             <th><?php p($l->t('Title')); ?></th>
-            <th id="id_th_descr"><?php p($l->t('Description')); ?></th>
+            <th><?php p($l->t('Description')); ?></th>
             <th><?php p($l->t('Created')); ?></th>
             <th><?php p($l->t('By')); ?></th>
             <th><?php p($l->t('Expires')); ?></th>
             <th><?php p($l->t('participated')); ?></th>
-            <th id="id_th_descr"><?php p($l->t('Access')); ?></th>
+            <th><?php p($l->t('Access')); ?></th>
             <th><?php p($l->t('Options')); ?></th>
         </tr>
         </thead>
@@ -122,11 +125,10 @@
     </form>
     <?php endif; ?>
     <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>"><input type="button" id="submit_new_poll" class="icon-add" /></a>
+<!--</div>-->
 </div>
 </div>
 </div>
-</div>
-
 <?php
 // ---- helper functions ----
     function userHasAccess($poll, $userId) {

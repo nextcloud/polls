@@ -167,6 +167,7 @@ class PageController extends Controller {
      * @PublicPage
      */
     public function gotoPoll($hash) {
+      $polls = $this->eventMapper->findAll();
         $poll = $this->eventMapper->findByHash($hash);
         if($poll->getType() === '0') {
             $dates = $this->dateMapper->findByPoll($poll->getId());
@@ -183,7 +184,7 @@ class PageController extends Controller {
             $notification = null;
         }
         if($this->hasUserAccess($poll)) {
-            return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
+            return new TemplateResponse('polls', 'goto.tmpl', ['polls' => $polls, 'poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
         } else {
             \OCP\User::checkLoggedIn();
             return new TemplateResponse('polls', 'no.acc.tmpl', []);
@@ -212,11 +213,12 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function editPoll($hash) {
+        $polls = $this->eventMapper->findAll();
         $poll = $this->eventMapper->findByHash($hash);
         if($this->userId !== $poll->getOwner()) return new TemplateResponse('polls', 'no.create.tmpl');
         if($poll->getType() === '0') $dates = $this->dateMapper->findByPoll($poll->getId());
         else $dates = $this->textMapper->findByPoll($poll->getId());
-        return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        return new TemplateResponse('polls', 'create.tmpl', ['polls' => $polls, 'poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**

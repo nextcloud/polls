@@ -4,6 +4,8 @@
     \OCP\Util::addStyle('polls', 'jquery.datetimepicker');
     \OCP\Util::addScript('polls', 'create_edit');
     \OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
+
+    use OCP\User;
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
@@ -35,7 +37,7 @@
 
 <div id="app">
 
-  <?php include ("navigation.tmpl.php"); ?>
+<?php print_unescaped($this->inc('navigation.tmpl')); ?>
 
     <div id="app-content">
         <div id="app-content-wrapper">
@@ -155,3 +157,33 @@
 </div>
 </div>
 </div>
+<?php
+// ---- helper functions ----
+    function userHasAccess($poll, $userId) {
+        if($poll === null) return false;
+        $access = $poll->getAccess();
+        $owner = $poll->getOwner();
+        if (!User::isLoggedIn()) return false;
+        if ($access === 'public') return true;
+        if ($access === 'hidden') return true;
+        if ($access === 'registered') return true;
+        if ($owner === $userId) return true;
+        $user_groups = OC_Group::getUserGroups($userId);
+
+        $arr = explode(';', $access);
+
+        foreach ($arr as $item) {
+            if (strpos($item, 'group_') === 0) {
+                $grp = substr($item, 6);
+                foreach ($user_groups as $user_group) {
+                    if ($user_group === $grp) return true;
+                }
+            }
+            else if (strpos($item, 'user_') === 0) {
+                $usr = substr($item, 5);
+                if ($usr === $userId) return true;
+            }
+        }
+        return false;
+    }
+?>
