@@ -82,7 +82,8 @@ class EventMapper extends Mapper {
                                 *PREFIX*polls_events.created,
                                 *PREFIX*polls_events.access,
                                 *PREFIX*polls_events.expire,
-                                *PREFIX*polls_events.is_anonymous
+                                *PREFIX*polls_events.is_anonymous,
+                                *PREFIX*polls_events.full_anonymous
                 FROM *PREFIX*polls_events
                 LEFT JOIN *PREFIX*polls_particip
                     ON *PREFIX*polls_events.id = *PREFIX*polls_particip.id

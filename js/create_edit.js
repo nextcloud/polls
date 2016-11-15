@@ -5,6 +5,7 @@ var g_chosen_users = [];
 var chosen_type = 'event';
 var access_type = '';
 var isAnonymous;
+var hideNames;
 
 $(document).ready(function () {
     // enable / disable date picker
@@ -15,8 +16,15 @@ $(document).ready(function () {
         }
     });
 
+    var anonOptions = document.getElementById('anonOptions');
+    $('#hideNames').click(function() {
+        hideNames = this.checked;
+    });
+
     $('#isAnonymous').click(function() {
         isAnonymous = this.checked;
+        if(isAnonymous) anonOptions.style.display = 'inline';
+        else anonOptions.style.display = 'none';
     });
 
     var privateRadio = document.getElementById('private');
@@ -29,6 +37,7 @@ $(document).ready(function () {
     if(selectRadio.checked) access_type = 'select';
 
     isAnonymous = document.getElementById('isAnonymous').checked;
+    hideNames = anonOptions.checked;
 
     var accessValues = document.getElementById('accessValues');
     if(accessValues.value.length > 0) {
@@ -373,6 +382,7 @@ $(document).ready(function () {
                 });
             }
             form.elements['isAnonymous'].value = isAnonymous;
+            form.elements['hideNames'].value = hideNames;
             form.submit();
         }
     }
