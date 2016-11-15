@@ -430,3 +430,7 @@ td.td_shown {
 #app-navigation .app-navigation-list-item .utils .action:hover span {
 	opacity: 1;
 }
+#app-navigation .popovermenu {
+  margin-right: 115px;
+  margin-top: 10px;
+}

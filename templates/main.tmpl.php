@@ -1,7 +1,10 @@
 <?php
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'list');
+    //\OCP\Util::addStyle('polls', 'bootstrap.min');
     \OCP\Util::addScript('polls', 'start');
+    \OCP\Util::addScript('polls', 'bootstrap.min');
+    \OCP\Util::addScript('polls', 'menu');
     use OCP\User;
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
@@ -10,39 +13,41 @@
     //Modal: http://vodkabears.github.io/remodal/
 ?>
 <div id="app">
-  <?php //include ("navigation.tmpl.php");
-  print_unescaped($this->inc('navigation.tmpl')); ?>
+  <?php print_unescaped($this->inc('navigation.tmpl')); ?>
 
-    <div id="app-content">
-        <div id="app-content-wrapper">
-          <div class="breadcrumb">
-            <div class="crumb svg" data-dir="/">
-              <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
-            </div>
-            <div class="crumb svg last"><a href="#"><?php p($l->t('Summary')); ?></a></div>
+  <div id="app-content">
+    <div id="app-content-wrapper">
 
-          </div>
+      <div class="breadcrumb">
+        <div class="crumb svg" data-dir="/">
+          <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
+        </div>
+        <div class="crumb svg last">
+          <a href="#"><?php p($l->t('Summary')); ?></a>
+        </div>
 
-      <!--  <div class="goto_poll col-100">-->
+      </div>
+
     <?php if(count($_['polls']) === 0) : ?>
     <?php p($l->t('No existing polls.')); ?>
     <?php else : ?>
     <table >
-        <thead>
+      <thead>
         <tr>
-            <th><?php p($l->t('Title')); ?></th>
-            <th><?php p($l->t('Description')); ?></th>
-            <th><?php p($l->t('Created')); ?></th>
-            <th><?php p($l->t('By')); ?></th>
-            <th><?php p($l->t('Expires')); ?></th>
-            <th><?php p($l->t('participated')); ?></th>
-            <th><?php p($l->t('Access')); ?></th>
-            <th><?php p($l->t('Options')); ?></th>
+          <th><?php p($l->t('Title')); ?></th>
+          <th><?php p($l->t('Created')); ?></th>
+          <th><?php p($l->t('Description')); ?></th>
+          <th><?php p($l->t('By')); ?></th>
+          <th><?php p($l->t('Expires')); ?></th>
+          <th><?php p($l->t('participated')); ?></th>
+          <th><?php p($l->t('Access')); ?></th>
+          <th><?php p($l->t('Options')); ?></th>
         </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($_['polls'] as $poll) : ?>
+      </thead>
+      <tbody>
+      <?php  /*print_r2($_['polls']);*/foreach ($_['polls'] as $poll) : ?>
             <?php
+
                 if (!userHasAccess($poll, $userId)) continue;
                 // direct url to poll
                 $pollUrl = $urlGenerator->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash()));
@@ -158,4 +163,12 @@
         }
         return false;
     }
+
+
+function print_r2($val){
+        echo '<pre>';
+        print_r($val);
+        echo  '</pre>';
+}
+
 ?>

@@ -108,6 +108,9 @@ class PageController extends Controller {
      */
     public function index() {
         $polls = $this->eventMapper->findAll();
+
+        //$this->userHasAccessForLink($this->polls, $this->userId);
+
         $comments = $this->commentMapper->findDistinctByUser($this->userId);
         $partic = $this->participationMapper->findDistinctByUser($this->userId);
         $response = new TemplateResponse('polls', 'main.tmpl', ['polls' => $polls, 'comments' => $comments, 'participations' => $partic, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
@@ -551,4 +554,44 @@ class PageController extends Controller {
         }
         return false;
     }
+
+    private function userHasAccessForLink($polls, $userId) {
+      $linkAccess = false;
+      $counter = 0;
+      foreach ($polls as $poll) {
+
+        if($poll === null) return $linkAccess =false;
+        $access = $poll->getAccess();
+        $owner = $poll->getOwner();
+        if (\OC_User::isLoggedIn()) return $linkAccess =false;
+        if ($access === 'public') return $linkAccess =true;
+        if ($access === 'hidden') return $linkAccess =true;
+        if ($access === 'registered') return $linkAccess =true;
+        if ($owner === $userId) return $linkAccess =true;
+        $user_groups = \OC_Group::getUserGroups($userId);
+
+        $arr = explode(';', $access);
+
+        foreach ($arr as $item) {
+            if (strpos($item, 'group_') === 0) {
+                $grp = substr($item, 6);
+                foreach ($user_groups as $user_group) {
+                    if ($user_group === $grp) return $linkAccess =true;
+                }
+            }
+            else if (strpos($item, 'user_') === 0) {
+                $usr = substr($item, 5);
+                if ($usr === $userId) return $linkAccess =true;
+            }
+        }
+        return $linkAccess =false;
+        if ($linkAccess) {
+          $pollUrl = $urlGenerator->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash()));
+        } else {
+          $pollUrl = "#";
+        }
+        $polls[$counter]['pollUrl'] = $pollUrl;
+        $counter=$counter +1;
+    }}
+
 }
