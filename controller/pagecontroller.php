@@ -107,10 +107,7 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function index() {
-        $polls = $this->eventMapper->findAll();
-
-        //$this->userHasAccessForLink($this->polls, $this->userId);
-
+        $polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
         $comments = $this->commentMapper->findDistinctByUser($this->userId);
         $partic = $this->participationMapper->findDistinctByUser($this->userId);
         $response = new TemplateResponse('polls', 'main.tmpl', ['polls' => $polls, 'comments' => $comments, 'participations' => $partic, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
