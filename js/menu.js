@@ -6,7 +6,7 @@ $(document).ready(function () {
         '</div>'].join('');
 
 var content = ['<ul>',
-               '<li><a tabindex="0" role="button" href="#" class="menuitem action action-details permanent"><span class="icon icon-details"></span><span>Details</span></a></li>',
+               '<li><a tabindex="0" data-trigger="focus" role="button" href="#" class="menuitem action action-details permanent"><span class="icon icon-details"></span><span>Details</span></a></li>',
                '<li><a tabindex="0" role="button" href="#" class="menuitem action action-rename permanent"><span class="icon icon-rename"></span><span>Umbenennen</span></a></li>',
                '<li><a tabindex="0" role="button" href="#" class="menuitem action action-download permanent"><span class="icon icon-download"></span><span>Herunterladen</span></a></li>',
                '<li><a tabindex="0" role="button" href="#" class="menuitem action action-delete permanent""><span class="icon icon-delete"></span><span>Löschen</span></a></li>',
@@ -24,7 +24,8 @@ $(function () {
   template: popoverTemplate,
   placement: "bottom",
   html: true,
-  container: '#app-navigation'
+  container: '#app-navigation',
+  
 });
 });
 });

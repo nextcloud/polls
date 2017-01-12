@@ -31,17 +31,28 @@
     <?php if(count($_['polls']) === 0) : ?>
     <?php p($l->t('No existing polls.')); ?>
     <?php else : ?>
-    <table >
+      <div class="polltable">
+    <table id="polltable" >
       <thead>
         <tr>
-          <th><?php p($l->t('Title')); ?></th>
+          <th id="headerName" class="column-name">
+            <div id="headerName-container">
+
+					<a class="name sort columntitle" data-sort="name"><span><?php p($l->t('Title')); ?></span><span class="sort-indicator icon-triangle-n"></span></a>
+					<span id="selectedActionsList" class="selectedActions hidden">
+						<a href="" class="download" data-original-title="" title="">
+							<span class="icon icon-download"></span>
+							<span>Herunterladen</span>
+						</a>
+					</span>
+				</div>
+
+            </th>
           <th><?php p($l->t('Created')); ?></th>
           <th><?php p($l->t('Description')); ?></th>
           <th><?php p($l->t('By')); ?></th>
           <th><?php p($l->t('Expires')); ?></th>
-          <th><?php p($l->t('participated')); ?></th>
-          <th><?php p($l->t('Access')); ?></th>
-          <th><?php p($l->t('Options')); ?></th>
+
         </tr>
       </thead>
       <tbody>
@@ -53,8 +64,11 @@
                 $pollUrl = $urlGenerator->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash()));
             ?>
             <tr>
-                <td title="<?php p($l->t('Go to')); ?>">
-                    <a class="table_link" href="<?php p($pollUrl); ?>"><?php p($poll->getTitle()); ?></a>
+                <td class="pollname">
+                  <a href="#" class="action action-favorite " data-original-title="" title="">
+                    <span class="icon icon-star"></span></a>
+                  <div class="thumbnail" style="background-image:url(/apps/polls/img/poll-icon.svg); background-size: 32px;"></div>
+                    <a class="name" href="<?php p($pollUrl); ?>"><span class="nametext"><span class="innernametext"><?php p($poll->getTitle()); ?></span></span></a>
                 </td>
                 <?php
                     $desc_str = $poll->getDescription();
@@ -83,45 +97,7 @@
                             print_unescaped('<td>' . $l->t('Never') . '</td>');
                         }
                     ?>
-                <td>
-                    <?php
-                        $partic_class = 'partic_no';
-                        $partic_polls = $_['participations'];
-                        for($i = 0; $i < count($partic_polls); $i++){
-                            if($poll->getId() == intval($partic_polls[$i]->getPollId())){
-                                $partic_class = 'partic_yes';
-                                array_splice($partic_polls, $i, 1);
-                                break;
-                            }
-                        }
-                    ?>
-                    <div class="partic_all <?php p($partic_class); ?>">
-                    </div>
-                    |
-                    <?php
-                        $partic_class = 'partic_no';
-                        $partic_comm = $_['comments'];
-                        for($i = 0; $i < count($partic_comm); $i++){
-                            if($poll->getId() === intval($partic_comm[$i]->getPollId())){
-                                $partic_class = 'partic_yes';
-                                array_splice($partic_comm, $i, 1);
-                                break;
-                            }
-                        }
-                    ?>
-                    <div class="partic_all <?php p($partic_class); ?>">
-                    </div>
-                </td>
-                <td>
-                    <?php p($l->t($poll->getAccess())); ?>
-                </td>
-                <td>
-                    <?php if ($poll->getOwner() === $userId) : ?>
-                    <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete"></input>
-                    <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button cl_edit icon-rename"></input></a>
-                    <?php endif; ?>
-                    <input type="button" class="table_button cl_link icon-public" data-url="<?php p(OCP\Util::linkToAbsolute('', $pollUrl)); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
-                </td>
+
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -130,7 +106,7 @@
     </form>
     <?php endif; ?>
     <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>"><input type="button" id="submit_new_poll" class="icon-add" /></a>
-<!--</div>-->
+</div>
 </div>
 </div>
 </div>
