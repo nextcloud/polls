@@ -1,6 +1,7 @@
 <?php
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'list');
+    \OCP\Util::addStyle('polls', 'sidebar');
     //\OCP\Util::addStyle('polls', 'bootstrap.min');
     \OCP\Util::addScript('polls', 'start');
     \OCP\Util::addScript('polls', 'bootstrap.min');
@@ -24,6 +25,7 @@
         </div>
         <div class="crumb svg last">
           <a href="#"><?php p($l->t('Summary')); ?></a>
+          
         </div>
 
       </div>
