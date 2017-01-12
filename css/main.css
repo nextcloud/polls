@@ -734,6 +734,14 @@ table td.filename .nametext, .uploadtext, .modified, .column-last>span:first-chi
 	display: none;
 }
 
+#polltable {
+	position: relative;
+	width: 100%;
+}
+
+#polltable.has-controls {
+	top: 44px;
+}
 #polltable tr.animate-opacity {
 	-webkit-transition:opacity 250ms;
 	-moz-transition:opacity 250ms;
@@ -772,3 +780,13 @@ table td.pollname .nametext .innernametext {
 	display: inline-block;
 	float: left;
 }
+
+.actions.creatable {
+	position: relative;
+	z-index: -30;
+}
+.actions {padding:5px;height:32px;display: inline-block;float: left;}
+.actions .button.new .icon {
+	margin-bottom: 2px;
+}
+.actions input, .actions button, .actions .button {margin:0;float:left;}

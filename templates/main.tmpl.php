@@ -18,47 +18,37 @@
 
   <div id="app-content">
     <div id="app-content-wrapper">
-
+<div id="controls">
       <div class="breadcrumb">
-        <div class="crumb svg" data-dir="/">
-          <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
-        </div>
         <div class="crumb svg last">
-          <a href="#"><?php p($l->t('Summary')); ?></a>
-          
+          <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
         </div>
 
       </div>
 
+      <div class="actions creatable">
+        <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new" data-original-title="" title=""><span class="icon icon-add"></span></a>
+      </div></div>
     <?php if(count($_['polls']) === 0) : ?>
     <?php p($l->t('No existing polls.')); ?>
     <?php else : ?>
       <div class="polltable">
-    <table id="polltable" >
+    <table id="polltable" class="has-controls">
       <thead>
         <tr>
           <th id="headerName" class="column-name">
             <div id="headerName-container">
-
-					<a class="name sort columntitle" data-sort="name"><span><?php p($l->t('Title')); ?></span><span class="sort-indicator icon-triangle-n"></span></a>
-					<span id="selectedActionsList" class="selectedActions hidden">
-						<a href="" class="download" data-original-title="" title="">
-							<span class="icon icon-download"></span>
-							<span>Herunterladen</span>
-						</a>
-					</span>
-				</div>
-
-            </th>
-          <th><?php p($l->t('Created')); ?></th>
+					    <a class="name sort columntitle" data-sort="name"><span><?php p($l->t('Title')); ?></span><span class="sort-indicator icon-triangle-n"></span></a>
+				    </div>
+          </th>
           <th><?php p($l->t('Description')); ?></th>
+          <th><?php p($l->t('Created')); ?></th>
           <th><?php p($l->t('By')); ?></th>
           <th><?php p($l->t('Expires')); ?></th>
-
         </tr>
       </thead>
       <tbody>
-      <?php  /*print_r2($_['polls']);*/foreach ($_['polls'] as $poll) : ?>
+      <?php foreach ($_['polls'] as $poll) : ?>
             <?php
 
                 if (!userHasAccess($poll, $userId)) continue;
@@ -67,8 +57,6 @@
             ?>
             <tr>
                 <td class="pollname">
-                  <a href="#" class="action action-favorite " data-original-title="" title="">
-                    <span class="icon icon-star"></span></a>
                   <div class="thumbnail" style="background-image:url(/apps/polls/img/poll-icon.svg); background-size: 32px;"></div>
                     <a class="name" href="<?php p($pollUrl); ?>"><span class="nametext"><span class="innernametext"><?php p($poll->getTitle()); ?></span></span></a>
                 </td>
@@ -79,7 +67,7 @@
                         $desc_str = substr($desc_str, 0, 80) . '...';
                     }
                 ?>
-                <td><?php p($desc_str); ?></td>
+                <td class="pollname"><span class="name"><?php p($desc_str); ?></span></td>
                 <td><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
                 <td>
                     <?php
