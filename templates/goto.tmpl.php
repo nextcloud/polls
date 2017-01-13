@@ -82,7 +82,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
             <div class="crumb svg" data-dir="/">
               <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
             </div>
-            <div class="crumb svg last"><a href="#"><?php p($poll->getTitle()); ?></a></div>
+            <div class="crumb svg last crumb-fix"><a href="#"><?php p($poll->getTitle()); ?></a></div>
 
           </div>
 
