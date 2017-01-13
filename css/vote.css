@@ -161,11 +161,3 @@ td.total {
 .color_maybe, .poll-cell-maybe, .poll-cell-active-maybe, .poll-cell-un, .poll-cell-active-un {
     background-color: #fcff6f; /*yellow*/
 }
-
-.home-link {
-    background-image: url('../img/home.svg');
-    background-repeat: no-repeat;
-    background-position: 5px center;
-    padding-left: 26px;
-    float: right;
-}

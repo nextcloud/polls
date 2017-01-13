@@ -4,6 +4,7 @@ use \OCP\User;
 
 \OCP\Util::addStyle('polls', 'main');
 \OCP\Util::addStyle('polls', 'vote');
+\OCP\Util::addStyle('polls', 'sidebar');
 \OCP\Util::addScript('polls', 'vote');
 
 $userId = $_['userId'];
@@ -83,7 +84,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
               <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
             </div>
             <div class="crumb svg last crumb-fix"><a href="#"><?php p($poll->getTitle()); ?></a></div>
-
           </div>
 
             <?php if(!User::isLoggedIn()) : ?>
@@ -362,7 +362,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                     </div>
                     <?php if(User::isLoggedIn()) : ?>
                         <p>
-                            <input type="checkbox" id="check_notif" <?php if($notification !== null) print_unescaped(' checked'); ?> />
+                            <input type="checkbox" class="checkbox" id="check_notif" <?php if($notification !== null) print_unescaped(' checked'); ?> />
                             <label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
                         </p>
                     <?php endif; ?>
@@ -374,10 +374,8 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                         <input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
                         <input type="hidden" name="notif" />
                         <input type="hidden" name="changed" />
-                        <input type="button" id="submit_finish_vote" value="<?php p($l->t('Vote!')); ?>" />
-                        <?php if(User::isLoggedIn()) : ?>
-                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button home-link"><?php p($l->t('Polls summary')); ?></a>
-                        <?php endif; ?>
+                        <input type="button" class="btn primary" id="submit_finish_vote" value="<?php p($l->t('Vote!')); ?>" />
+
                     </form>
 
 
