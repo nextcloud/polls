@@ -755,3 +755,6 @@ table td.fileaction {
   margin:0;
   float:left;
 }
+div.crumb.last.crumb-fix a {
+  padding-right: 17px;
+}

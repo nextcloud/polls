@@ -1,5 +1,6 @@
 <?php
     \OCP\Util::addStyle('polls', 'main');
+    \OCP\Util::addStyle('polls', 'sidebar');
     \OCP\Util::addStyle('polls', 'create');
     \OCP\Util::addStyle('polls', 'jquery.datetimepicker');
     \OCP\Util::addScript('polls', 'create_edit');
@@ -46,13 +47,12 @@
             <div class="crumb svg" data-dir="/">
               <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
             </div>
-            <div class="crumb svg last"><a href="#">
+            <div class="crumb svg last crumb-fix"><a href="#">
               <?php if($isUpdate): ?>
                   <?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
               <?php else: ?>
                   <?php p($l->t('Create new poll')); ?>
               <?php endif; ?></a></div>
-
           </div>
 
 
@@ -145,13 +145,15 @@
             </div>
         </div>
     </div>
-    <div class="form-actions">
-        <?php if($isUpdate): ?>
-            <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Update poll')); ?>" />
-        <?php else: ?>
-            <input class="btn primary" type="submit" id="submit_finish_poll" value="<?php p($l->t('Create poll')); ?>" />
-        <?php endif; ?>
+    <div class="new_poll">
+      <div class="col-50">
+      <?php if($isUpdate): ?>
+        <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Update poll')); ?>" />
+      <?php else: ?>
+        <input class="btn primary" type="submit" id="submit_finish_poll" value="<?php p($l->t('Create poll')); ?>" />
+      <?php endif; ?>
         <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="events--button button btn" type="button"><?php p($l->t('Cancel')); ?></a>
+      </div>
     </div>
 </form>
 </div>
