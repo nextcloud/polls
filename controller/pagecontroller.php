@@ -403,20 +403,18 @@ class PageController extends Controller {
             $types = json_decode($types);
             if($poll->getType() === '0') $this->participationMapper->deleteByPollAndUser($pollId, $userId);
             else $this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
-            if($poll->getFullAnonymous()) $tmpUserId = uniqid();
-            else $tmpUserId = $userId;
             for($i=0; $i<count($dates); $i++) {
                 if($poll->getType() === '0') {
                     $part = new Participation();
                     $part->setPollId($pollId);
-                    $part->setUserId($tmpUserId);
+                    $part->setUserId($userId);
                     $part->setDt(date('Y-m-d H:i:s', $dates[$i]));
                     $part->setType($types[$i]);
                     $this->participationMapper->insert($part);
                 } else {
                     $part = new ParticipationText();
                     $part->setPollId($pollId);
-                    $part->setUserId($tmpUserId);
+                    $part->setUserId($userId);
                     $part->setText($dates[$i]);
                     $part->setType($types[$i]);
                     $this->participationTextMapper->insert($part);
@@ -446,9 +444,7 @@ class PageController extends Controller {
         $this->sendNotifications($pollId, $userId);
         $hash = $this->eventMapper->find($pollId)->getHash();
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
-        if($poll->getFullAnonymous()) {
-            $newUserId = uniqid();
-        } else if($this->manager->get($userId) !== null) {
+        if($this->manager->get($userId) !== null) {
             $newUserId = $this->manager->get($userId)->getDisplayName();
         } else {
             $newUserId = $userId;
