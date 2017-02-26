@@ -165,13 +165,9 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                             p($userMgr->get($usr)->getDisplayName());
                                         } else {
-                                            if($isAnonymous) {
+                                            if($isAnonymous || $hideNames) {
                                                 print_unescaped('<th class="user-cell anonymous">');
-                                                if($hideNames) {
-                                                    p($usr);
-                                                } else {
-                                                    p($l->t('Participent') . ' ' . $userCnt);
-                                                }
+                                                p($l->t('Participent') . ' ' . $userCnt);
                                             } else {
                                                 print_unescaped('<th class="user-cell external">'. $usr);
                                             }
@@ -417,9 +413,8 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <div class="comment-header">
                                         <?php
                                         print_unescaped('<span class="comment-date">' . date('d.m.Y H:i:s', strtotime($comment->getDt())) . '</span>');
-                                        if($isAnonymous) {
-                                            if($hideNames) p($comment->getUserId());
-                                            else p('Anonymous');
+                                        if($isAnonymous || $hideNames) {
+                                            p('Anonymous');
                                         } else {
                                             if($userMgr->get($comment->getUserId()) != null) {
                                                 p($userMgr->get($comment->getUserId())->getDisplayName());
