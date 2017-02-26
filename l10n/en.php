@@ -6,7 +6,7 @@ $TRANSLATIONS = array(
 	"No existing polls." => "No existing polls.",
 	"Title" => "Title",
 	"Description" => "Description",
-	"Please select at least one user or group!" : "Please select at least one user or group!",
+	"Please select at least one user or group!" => "Please select at least one user or group!",
 	"Created" => "Created",
 	"Expires" => "Expires",
 	"Never" => "Never",
