@@ -354,15 +354,8 @@ $(document).ready(function () {
                 alert(t('polls', 'Nothing selected!\nClick on cells to turn them green.'));
                 return false;
             }
-            if(chosen_type == 'event') {
-                var tzOffset = new Date().getTimezoneOffset() * 60; //from min to ms
-                for(var i=0; i<g_chosen_datetimes.length; i++) {
-                    g_chosen_datetimes[i] -= tzOffset; // -, because offset is negative for > UTC
-                }
-                form.elements['chosenDates'].value = JSON.stringify(g_chosen_datetimes);
-            } else {
-                form.elements['chosenDates'].value = JSON.stringify(g_chosen_texts);
-            }
+            if(chosen_type == 'event') form.elements['chosenDates'].value = JSON.stringify(g_chosen_datetimes);
+            else form.elements['chosenDates'].value = JSON.stringify(g_chosen_texts);
             var title = document.getElementById('pollTitle');
             if (title == null || title.value.length == 0) {
                 alert(t('polls', 'You must enter at least a title for the new poll.'));
