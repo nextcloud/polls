@@ -24,37 +24,15 @@ if ($poll->getExpire() === null) {
     $expired = time() > strtotime($poll->getExpire());
 }
 
-if ($poll->getType() === '0') {
-    // count how many times in each date
-    $arr_dates = null;  // will be like: [21.02] => 3
-    $arr_years = null;  // [1992] => 6
-    foreach($dates as $d) {
-        $day_month = date('d.m', strtotime($d->getDt()));
-        $year = date('Y', strtotime($d->getDt()));
+?>
 
-        if (isset($arr_dates[$day_month])) {
-            $arr_dates[$day_month] += 1;
-        } else {
-            $arr_dates[$day_month] = 1;
-        }
+<?php if($poll->getType() === '0') : ?>
+    <?php foreach($dates as $d) : ?>
+        <input class="hidden-dates" type="hidden" value="<?php print_unescaped($d->getDt()); ?>" />
+    <?php endforeach ?>
+<?php endif ?>
 
-        if (isset($arr_years[$year])) {
-            $arr_years[$year] += 1;
-        } else {
-            $arr_years[$year] = 1;
-        }
-    }
-
-    $for_string_dates = '';
-    foreach (array_keys($arr_dates) as $dt) {
-        $for_string_dates .= '<th colspan="' . $arr_dates[$dt] . '" class="bordered">' . $dt . '</th>';
-    }
-
-    $for_string_years = '';
-    foreach (array_keys($arr_years) as $year) {
-        $for_string_years .= '<th colspan="' . $arr_years[$year] . '" class="bordered">' . $year . '</th>';
-    }
-}
+<?php
 if ($poll->getDescription() !== null && $poll->getDescription() !== '') {
     $description = nl2br($poll->getDescription());
 } else {
@@ -104,8 +82,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 <tr>
                                     <?php
                                     if ($poll->getType() === '0') {
-                                        print_unescaped('<th rowspan=3></th>');
-                                        print_unescaped($for_string_years);
+                                        print_unescaped('<th rowspan=3 class="year-row"></th>');
                                         print_unescaped('<th class="bordered" rowspan=3>' . $l->t('All') . '</th>');
                                     } else {
                                         print_unescaped('<th></th>');
@@ -118,16 +95,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 </tr>
                                 <?php
                                 if ($poll->getType() === '0'){
-                                    print_unescaped('<tr>' .  $for_string_dates . '</tr><tr>');
-                                    $prev = "";
-                                    for ($i = 0; $i < count($dates); $i++) {
-                                        $c = ($prev != date('Y-m-d', strtotime($dates[$i]->getDt())) ? ' bordered' : '');
-                                        $prev = date('Y-m-d', strtotime($dates[$i]->getDt()));
-                                        $ch_obj = date('H:i', strtotime($dates[$i]->getDt()));
-                                        print_unescaped('<th class="time-slot-cell' . $c . '">' . $ch_obj . '</th>');
-                                        
-                                    }
-                                    print_unescaped('</tr>');
+                                    print_unescaped('<tr class="date-row"></tr><tr id="time-row-header"></tr>');
                                 }
                                 ?>
                             </thead>
@@ -316,22 +284,15 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                             <tfoot>
                                 <?php
                                 if ($poll->getType() === '0') {
-                                    print_unescaped('<tr><th rowspan=3></th>');
-                                    $prev = "";
-                                    for ($i = 0; $i < count($dates); $i++) {
-                                        $c = ($prev != date('Y-m-d', strtotime($dates[$i]->getDt())) ? ' bordered' : '');
-                                        $prev = date('Y-m-d', strtotime($dates[$i]->getDt()));
-                                        $ch_obj = date('H:i', strtotime($dates[$i]->getDt()));
-                                        print_unescaped('<th class="time-slot-cell' . $c . '">' . $ch_obj . '</th>');
-                                    }
+                                    print_unescaped('<tr><th rowspan=3 id="time-row-footer"></th>');
                                     print_unescaped('<th rowspan=3 class="bordered">' . $l->t('All') . '</th></tr>');
-                                    print_unescaped('<tr>' .  $for_string_dates . '</tr>');
+                                    print_unescaped('<tr class="date-row"></tr>');
                                 }
                                 ?>
                                 <tr>
                                     <?php
                                     if ($poll->getType() === '0') {
-                                        print_unescaped($for_string_years);
+                                        print_unescaped('<th colspan=0 class="year-row" style="display: none;"></th>');
                                     } else {
                                         print_unescaped('<th></th>');
                                         foreach ($dates as $el) {
