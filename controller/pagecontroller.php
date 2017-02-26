@@ -340,15 +340,10 @@ class PageController extends Controller {
             $ins = $this->eventMapper->insert($event);
             $poll_id = $ins->getId();
             sort($chosenDates);
-            $tz = \OC::$server->getConfig()->getUserValue($this->userId, 'core', 'timezone', 'UTC');
-            $timezone = new \DateTimeZone($tz);
             foreach ($chosenDates as $el) {
                 $date = new Date();
                 $date->setPollId($poll_id);
-                $dateTime = new \DateTime(date(\DateTime::ATOM, $el), $timezone);
-                $offset = $timezone->getOffset($dateTime);
-                $dateTime->setTimestamp($dateTime->getTimestamp() + $timezone->getOffset($dateTime));
-                $date->setDt($dateTime->format('Y-m-d H:i:s'));
+                $date->setDt(date('Y-m-d H:i:s', $el));
                 $this->dateMapper->insert($date);
             }
         } else {
