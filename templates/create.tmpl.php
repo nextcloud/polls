@@ -9,9 +9,11 @@
     $urlGenerator = $_['urlGenerator'];
     $isUpdate = isset($_['poll']) && $_['poll'] !== null;
     $isAnonymous = false;
+    $hideNames = false;
     if($isUpdate) {
         $poll = $_['poll'];
         $isAnonymous = $poll->getIsAnonymous();
+        $hideNames = $isAnonymous && $poll->getFullAnonymous();
         $dates = $_['dates'];
         $chosen = '[';
         foreach($dates as $d) {
@@ -104,6 +106,11 @@
 
             <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
             <input id="isAnonymous" name="isAnonymous" type="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+
+            <div id="anonOptions" style="display:none;">
+                <label for="hideNames" class="input_title"><?php p($l->t('Hide user names for admin')) ?></label>
+                <input id="hideNames" name="hideNames" type="checkbox" <?php $hideNames ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+            </div>
 
             <label for="id_expire_set" class="input_title"><?php p($l->t('Expires')); ?></label>
             <div class="input-group" id="expiration">

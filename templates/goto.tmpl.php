@@ -16,6 +16,7 @@ $dates = $_['dates'];
 $votes = $_['votes'];
 $comments = $_['comments'];
 $isAnonymous = $poll->getIsAnonymous() && $userId != $poll->getOwner();
+$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
 $notification = $_['notification'];
 
 if ($poll->getExpire() === null) {
@@ -154,7 +155,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                         }
                                         print_unescaped('<tr>');
-                                        if($userMgr->get($usr) != null && !$isAnonymous) {
+                                        if($userMgr->get($usr) != null && !$isAnonymous && !$hideNames) {
                                             print_unescaped('<th class="user-cell">');
                                             $avatar = $avaMgr->getAvatar($usr)->get(32);
                                             if($avatar !== false) {
@@ -164,7 +165,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                             p($userMgr->get($usr)->getDisplayName());
                                         } else {
-                                            if($isAnonymous) {
+                                            if($isAnonymous || $hideNames) {
                                                 print_unescaped('<th class="user-cell anonymous">');
                                                 p($l->t('Participent') . ' ' . $userCnt);
                                             } else {
@@ -412,7 +413,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <div class="comment-header">
                                         <?php
                                         print_unescaped('<span class="comment-date">' . date('d.m.Y H:i:s', strtotime($comment->getDt())) . '</span>');
-                                        if($isAnonymous) {
+                                        if($isAnonymous || $hideNames) {
                                             p('Anonymous');
                                         } else {
                                             if($userMgr->get($comment->getUserId()) != null) {

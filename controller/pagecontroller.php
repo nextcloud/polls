@@ -294,7 +294,7 @@ class PageController extends Controller {
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function insertPoll($pollType, $pollTitle, $pollDesc, $userId, $chosenDates, $expireTs, $accessType, $accessValues, $isAnonymous) {
+    public function insertPoll($pollType, $pollTitle, $pollDesc, $userId, $chosenDates, $expireTs, $accessType, $accessValues, $isAnonymous, $hideNames) {
         $event = new Event();
         $event->setTitle(htmlspecialchars($pollTitle));
         $event->setDescription(htmlspecialchars($pollDesc));
@@ -305,6 +305,7 @@ class PageController extends Controller {
 			ISecureRandom::CHAR_LOWER.
 			ISecureRandom::CHAR_UPPER));
 		$event->setIsAnonymous($isAnonymous ? '1' : '0');
+		$event->setFullAnonymous($isAnonymous && $hideNames ? '1' : '0');
 
         if ($accessType === 'select') {
             if (isset($accessValues)) {
@@ -433,6 +434,7 @@ class PageController extends Controller {
      * @PublicPage
      */
     public function insertComment($pollId, $userId, $commentBox) {
+        $poll = $this->eventMapper->find($pollId);
         $comment = new Comment();
         $comment->setPollId($pollId);
         $comment->setUserId($userId);
@@ -442,8 +444,11 @@ class PageController extends Controller {
         $this->sendNotifications($pollId, $userId);
         $hash = $this->eventMapper->find($pollId)->getHash();
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
-        if($this->manager->get($userId) !== null) $newUserId = $this->manager->get($userId)->getDisplayName();
-        else $newUserId = $userId;
+        if($this->manager->get($userId) !== null) {
+            $newUserId = $this->manager->get($userId)->getDisplayName();
+        } else {
+            $newUserId = $userId;
+        }
         return new JSONResponse(array('comment' => $commentBox, 'date' => date('Y-m-d H:i:s'), 'userName' => $newUserId));
     }
 

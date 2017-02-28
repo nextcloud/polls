@@ -22,6 +22,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setHash(string $value)
  * @method integer getIsAnonymous()
  * @method void setIsAnonymous(integer $value)
+ * @method integer getFullAnonymous()
+ * @method void setFullAnonymous(integer $value)
  */
 class Event extends Entity {
     public $type;
@@ -33,4 +35,5 @@ class Event extends Entity {
     public $expire;
     public $hash;
     public $isAnonymous;
+    public $fullAnonymous;
 }
