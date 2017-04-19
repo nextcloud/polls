@@ -63,14 +63,14 @@ OC.L10N.register(
     "You must enter at least a title for the new poll." : "You must enter at least a title for the new poll.",
     "Copy to clipboard: Ctrl+C, Enter" : "Copy to clipboard: Ctrl+C, Enter",
     "Thanks that you've voted. You can close the page now." : "Thanks that you've voted. You can close the page now.",
-    "Nothing selected!
-Click on cells to turn them green." : "Nothing selected!
-Click on cells to turn them green.",
-    "You are not registered.
-Please enter your name to vote
-(at least 3 characters!)" : "You are not registered.
-Please enter your name to vote
-(at least 3 characters!)",
+    "Nothing selected!" : "Nothing selected!",
+    "Click on cells to turn them green." : "Click on cells to turn them green.",
+    "Click on cells to turn them green." : "Click on cells to turn them green.",
+    "You are not registered." : " You are not registered",
+    "Please enter your name to vote" : "Please enter your name to vote",
+    "(at least 3 characters!)" : "You are not registered.",
+    "Please enter your name to vote" : "Please enter your name to vote",
+    "(at least 3 characters!)" : "(at least 3 characters!)",
     "You already have an item with the same text" : "You already have an item with the same text",
     "Please choose the groups or users you want to add to your poll." : "Please choose the groups or users you want to add to your poll.",
     "Click to get link" : "Click to get link",
@@ -86,9 +86,9 @@ Please enter your name to vote
     "Access denied" : "Access denied",
     "You are not allowed to view this poll or the poll does not exist." : "You are not allowed to view this poll or the poll does not exist.",
     "Error" : "Error",
-    "Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href="%s">%s</a>" : "Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href="%s">%s</a>",
-    "Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href="%s">%s</a>" : "Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href="%s">%s</a>",
-    "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href="%s">%s</a>" : "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href="%s">%s</a>",
+    "Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>",
+    "Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>",
+    "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>",
     "ownCloud Polls -- New Comment" : "ownCloud Polls -- New Comment",
     "ownCloud Polls -- New Participant" : "ownCloud Polls -- New Participant",
     "ownCloud Polls -- New Poll" : "ownCloud Polls -- New Poll",
