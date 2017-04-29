@@ -25,7 +25,7 @@ if ($poll->getExpire() === null) {
     $expired = time() > strtotime($poll->getExpire());
 }
 
-if ($poll->getType() === '0') {
+if ($poll->getType() == '0') {
     // count how many times in each date
     $arr_dates = null;  // will be like: [21.02] => 3
     $arr_years = null;  // [1992] => 6
@@ -104,7 +104,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                             <thead>
                                 <tr>
                                     <?php
-                                    if ($poll->getType() === '0') {
+                                    if ($poll->getType() == '0') {
                                         print_unescaped('<th rowspan=3></th>');
                                         print_unescaped($for_string_years);
                                         print_unescaped('<th class="bordered" rowspan=3>' . $l->t('All') . '</th>');
@@ -118,7 +118,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     ?>
                                 </tr>
                                 <?php
-                                if ($poll->getType() === '0'){
+                                if ($poll->getType() == '0'){
                                     print_unescaped('<tr>' .  $for_string_dates . '</tr><tr>');
                                     $prev = "";
                                     for ($i = 0; $i < count($dates); $i++) {
@@ -177,7 +177,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         // loop over dts
                                         $i_tot = 0;
                                         foreach($dates as $dt) {
-                                            if ($poll->getType() === '0') {
+                                            if ($poll->getType() == '0') {
                                                 $date_id = strtotime($dt->getDt());
                                             } else {
                                                 $date_id = $dt->getText();
@@ -186,16 +186,16 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             $found = false;
                                             foreach ($others[$usr] as $vote) {
                                                 $voteVal = null;
-                                                if($poll->getType() === '0') {
+                                                if($poll->getType() == '0') {
                                                     $voteVal = strtotime($vote->getDt());
                                                 } else {
                                                     $voteVal = $vote->getText();
                                                 }
                                                 if ($date_id === $voteVal) {
-                                                    if ($vote->getType() === '1') {
+                                                    if ($vote->getType() == '1') {
                                                         $cl = 'poll-cell-is';
                                                         $total_y[$i_tot]++;
-                                                    } else if ($vote->getType() === '0') {
+                                                    } else if ($vote->getType() == '0') {
                                                         $cl = 'poll-cell-not';
                                                         $total_n[$i_tot]++;
                                                     } else {
@@ -234,7 +234,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     }
                                     $i_tot = 0;
                                     foreach ($dates as $dt) {
-                                        if ($poll->getType() === '0') {
+                                        if ($poll->getType() == '0') {
                                             $date_id = strtotime($dt->getDt());
                                         } else {
                                             $date_id = $dt->getText();
@@ -244,19 +244,19 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         if (isset($user_voted)) {
                                             foreach ($user_voted as $obj) {
                                                 $voteVal = null;
-                                                if($poll->getType() === '0') {
+                                                if($poll->getType() == '0') {
                                                     $voteVal = strtotime($obj->getDt());
                                                 } else {
                                                     $voteVal = $obj->getText();
                                                 }
                                                 if ($voteVal === $date_id) {
-                                                    if ($obj->getType() === '1') {
+                                                    if ($obj->getType() == '1') {
                                                         $cl = 'poll-cell-active-is';
                                                         $total_y[$i_tot]++;
-                                                    } else if ($obj->getType() === '0') {
+                                                    } else if ($obj->getType() == '0') {
                                                         $cl = 'poll-cell-active-not';
                                                         $total_n[$i_tot]++;
-                                                    } else if($obj->getType() === '2'){
+                                                    } else if($obj->getType() == '2'){
                                                         $cl = 'poll-cell-active-maybe';
                                                     }
                                                     break;
@@ -283,7 +283,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
                                         <td class="total">
                                             <?php
-                                            $classSuffix = $poll->getType() === '0' ? strtotime($dates[$i]->getDt()) : str_replace(' ', '_', $dates[$i]->getText());
+                                            $classSuffix = $poll->getType() == '0' ? strtotime($dates[$i]->getDt()) : str_replace(' ', '_', $dates[$i]->getText());
                                             if (isset($total_y[$i])) {
                                                 $val = $total_y[$i];
                                             } else {
@@ -316,7 +316,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                             </tbody>
                             <tfoot>
                                 <?php
-                                if ($poll->getType() === '0') {
+                                if ($poll->getType() == '0') {
                                     print_unescaped('<tr><th rowspan=3></th>');
                                     $prev = "";
                                     for ($i = 0; $i < count($dates); $i++) {
@@ -331,7 +331,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 ?>
                                 <tr>
                                     <?php
-                                    if ($poll->getType() === '0') {
+                                    if ($poll->getType() == '0') {
                                         print_unescaped($for_string_years);
                                     } else {
                                         print_unescaped('<th></th>');
