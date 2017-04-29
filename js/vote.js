@@ -4,6 +4,8 @@ var newUserTypes = [];
 var max_votes = 0;
 var values_changed = false;
 
+var tzOffset = new Date().getTimezoneOffset();
+
 $.fn.switchClass = function(a, b) {
     this.removeClass(a);
     this.addClass(b);
@@ -11,6 +13,49 @@ $.fn.switchClass = function(a, b) {
 }
 
 $(document).ready(function () {
+    // count how many times in each date
+    var arr_dates = [];  // will be like: [21.02] => 3
+    var arr_years = [];  // [1992] => 6
+    var prev = '';
+    var dateStr = '';
+    $('.hidden-dates').each(function(i, obj) {
+        var exDt = new Date(obj.value+'+0000'); // add +0000 = UTC
+        var day = ('0' + exDt.getDate()).substr(-2);
+        var month = ('0' + (exDt.getMonth()+1)).substr(-2);
+        var day_month = day + '.' + month;
+        var year = exDt.getFullYear();
+
+        if(typeof arr_dates[day_month] != 'undefined') {
+            arr_dates[day_month] += 1;
+        } else {
+            arr_dates[day_month] = 1;
+        }
+        if(typeof arr_years[year] != 'undefined') {
+            arr_years[year] += 1;
+        } else {
+            arr_years[year] = 1;
+        }
+        var c = (prev != (year + day_month) ? ' bordered' : '');
+        prev = (year + day_month);
+        var ch_obj = ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2)
+        dateStr += '<th class="time-slot-cell' + c + '">' + ch_obj + '</th>';
+    });
+
+    var for_string_dates = '';
+    for(var k in arr_dates) {
+        for_string_dates += '<th colspan="' + arr_dates[k] + '" class="bordered">' + k + '</th>';
+    }
+
+    var for_string_years = '';
+    for(var k in arr_years) {
+        for_string_years += '<th colspan="' + arr_years[k] + '" class="bordered">' + k + '</th>';
+    }
+
+    $(for_string_years).insertAfter('.year-row');
+    $('.date-row').append(for_string_dates);
+    $('#time-row-header').append(dateStr);
+    $(dateStr).insertAfter('#time-row-footer');
+
     $('#submit_finish_vote').click(function() {
         var form = document.finish_vote;
         var ac = document.getElementById('user_name');
