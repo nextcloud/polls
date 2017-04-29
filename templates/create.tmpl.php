@@ -1,9 +1,12 @@
 <?php
     \OCP\Util::addStyle('polls', 'main');
+    \OCP\Util::addStyle('polls', 'sidebar');
     \OCP\Util::addStyle('polls', 'create');
     \OCP\Util::addStyle('polls', 'jquery.datetimepicker');
     \OCP\Util::addScript('polls', 'create_edit');
     \OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
+
+    use OCP\User;
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
@@ -36,8 +39,25 @@
 ?>
 
 <div id="app">
+
+<?php print_unescaped($this->inc('navigation.tmpl')); ?>
+
     <div id="app-content">
         <div id="app-content-wrapper">
+
+          <div class="breadcrumb">
+            <div class="crumb svg" data-dir="/">
+              <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
+            </div>
+            <div class="crumb svg last crumb-fix"><a href="#">
+              <?php if($isUpdate): ?>
+                  <?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
+              <?php else: ?>
+                  <?php p($l->t('Create new poll')); ?>
+              <?php endif; ?></a></div>
+          </div>
+
+
 <?php if($isUpdate): ?>
 <form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll')); ?>" method="POST">
     <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -48,17 +68,8 @@
     <input type="hidden" name="expireTs" id="expireTs" value="<?php if(isset($expireTs)) p($expireTs); ?>" />
     <input type="hidden" name="userId" id="userId" value="<?php p($userId); ?>" />
 
-    <header class="row">
-        <div class="col-100">
-            <?php if($isUpdate): ?>
-                <h1><?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?></h1>
-            <?php else: ?>
-                <h1><?php p($l->t('Create new poll')); ?></h1>
-            <?php endif; ?>
-        </div>
-    </header>
-    
-    <div class="new_poll row">
+
+    <div class="new_poll">
         <div class="col-50">
             <h2><?php p($l->t('Basic information')); ?></h2>
             <label for="pollTitle" class="input_title"><?php p($l->t('Title')); ?></label>
@@ -104,8 +115,11 @@
             <input type="radio" name="pollType" id="text" value="text" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
             <label for="text"><?php p($l->t('Text based')); ?></label>
 
-            <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
-            <input id="isAnonymous" name="isAnonymous" type="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+            <div class="">
+              <input id="isAnonymous" name="isAnonymous" type="checkbox" class="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+
+              <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
+            </div>
 
             <div id="anonOptions" style="display:none;">
                 <label for="hideNames" class="input_title"><?php p($l->t('Hide user names for admin')) ?></label>
@@ -115,7 +129,7 @@
             <label for="id_expire_set" class="input_title"><?php p($l->t('Expires')); ?></label>
             <div class="input-group" id="expiration">
                 <div class="input-group-addon">
-                    <input id="id_expire_set" name="check_expire" type="checkbox" <?php ($isUpdate && $poll->getExpire() !== null) ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+                    <input id="id_expire_set" name="check_expire"  type="checkbox" <?php ($isUpdate && $poll->getExpire() !== null) ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
                 </div>
                 <input id="id_expire_date" type="text" required="" <?php (!$isUpdate || $poll->getExpire() === null) ? print_unescaped('disabled="true"') : print_unescaped('value="' . $expireStr . '"'); ?> name="expire_date_input" />
             </div>
@@ -141,15 +155,47 @@
             </div>
         </div>
     </div>
-    <div class="form-actions">
-        <?php if($isUpdate): ?>
-            <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Update poll')); ?>" />
-        <?php else: ?>
-            <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Create poll')); ?>" />
-        <?php endif; ?>
-        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
+    <div class="new_poll">
+      <div class="col-50">
+      <?php if($isUpdate): ?>
+        <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Update poll')); ?>" />
+      <?php else: ?>
+        <input class="btn primary" type="submit" id="submit_finish_poll" value="<?php p($l->t('Create poll')); ?>" />
+      <?php endif; ?>
+        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="events--button button btn" type="button"><?php p($l->t('Cancel')); ?></a>
+      </div>
     </div>
 </form>
 </div>
 </div>
 </div>
+<?php
+// ---- helper functions ----
+    function userHasAccess($poll, $userId) {
+        if($poll === null) return false;
+        $access = $poll->getAccess();
+        $owner = $poll->getOwner();
+        if (!User::isLoggedIn()) return false;
+        if ($access === 'public') return true;
+        if ($access === 'hidden') return true;
+        if ($access === 'registered') return true;
+        if ($owner === $userId) return true;
+        $user_groups = OC_Group::getUserGroups($userId);
+
+        $arr = explode(';', $access);
+
+        foreach ($arr as $item) {
+            if (strpos($item, 'group_') === 0) {
+                $grp = substr($item, 6);
+                foreach ($user_groups as $user_group) {
+                    if ($user_group === $grp) return true;
+                }
+            }
+            else if (strpos($item, 'user_') === 0) {
+                $usr = substr($item, 5);
+                if ($usr === $userId) return true;
+            }
+        }
+        return false;
+    }
+?>

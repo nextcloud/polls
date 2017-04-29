@@ -4,6 +4,7 @@ use \OCP\User;
 
 \OCP\Util::addStyle('polls', 'main');
 \OCP\Util::addStyle('polls', 'vote');
+\OCP\Util::addStyle('polls', 'sidebar');
 \OCP\Util::addScript('polls', 'vote');
 
 $userId = $_['userId'];
@@ -75,8 +76,17 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 ?>
 
 <div id="app">
+  <?php print_unescaped($this->inc('navigation.tmpl')); ?>
     <div id="app-content">
         <div id="app-content-wrapper">
+
+          <div class="breadcrumb">
+            <div class="crumb svg" data-dir="/">
+              <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
+            </div>
+            <div class="crumb svg last crumb-fix"><a href="#"><?php p($poll->getTitle()); ?></a></div>
+          </div>
+
             <?php if(!User::isLoggedIn()) : ?>
                 <div class="row">
                     <div class="col-100">
@@ -126,7 +136,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         $prev = date('Y-m-d', strtotime($dates[$i]->getDt()));
                                         $ch_obj = date('H:i', strtotime($dates[$i]->getDt()));
                                         print_unescaped('<th class="time-slot-cell' . $c . '">' . $ch_obj . '</th>');
-                                        
+
                                     }
                                     print_unescaped('</tr>');
                                 }
@@ -353,7 +363,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                     </div>
                     <?php if(User::isLoggedIn()) : ?>
                         <p>
-                            <input type="checkbox" id="check_notif" <?php if($notification !== null) print_unescaped(' checked'); ?> />
+                            <input type="checkbox" class="checkbox" id="check_notif" <?php if($notification !== null) print_unescaped(' checked'); ?> />
                             <label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
                         </p>
                     <?php endif; ?>
@@ -365,10 +375,8 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                         <input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
                         <input type="hidden" name="notif" />
                         <input type="hidden" name="changed" />
-                        <input type="button" id="submit_finish_vote" value="<?php p($l->t('Vote!')); ?>" />
-                        <?php if(User::isLoggedIn()) : ?>
-                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button home-link"><?php p($l->t('Polls summary')); ?></a>
-                        <?php endif; ?>
+                        <input type="button" class="btn primary" id="submit_finish_vote" value="<?php p($l->t('Vote!')); ?>" />
+
                     </form>
 
 
@@ -456,4 +464,33 @@ function getHsl($str) {
     $lightness = 65;
     return 'hsl(' . $hue . ', ' . $saturation . '%, ' . $lightness . '%)';
 }
+
+// ---- helper functions ----
+    function userHasAccess($poll, $userId) {
+        if($poll === null) return false;
+        $access = $poll->getAccess();
+        $owner = $poll->getOwner();
+        if (!User::isLoggedIn()) return false;
+        if ($access === 'public') return true;
+        if ($access === 'hidden') return true;
+        if ($access === 'registered') return true;
+        if ($owner === $userId) return true;
+        $user_groups = OC_Group::getUserGroups($userId);
+
+        $arr = explode(';', $access);
+
+        foreach ($arr as $item) {
+            if (strpos($item, 'group_') === 0) {
+                $grp = substr($item, 6);
+                foreach ($user_groups as $user_group) {
+                    if ($user_group === $grp) return true;
+                }
+            }
+            else if (strpos($item, 'user_') === 0) {
+                $usr = substr($item, 5);
+                if ($usr === $userId) return true;
+            }
+        }
+        return false;
+    }
 ?>

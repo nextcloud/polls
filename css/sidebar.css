@@ -1,0 +1,7 @@
+/* icons for sidebar */
+.nav-icon-allpolls {
+	background-image: url('../img/poll-icon.svg');
+}
+.nav-icon-sharing {
+	background-image: url('../img/share.svg');
+}

@@ -167,6 +167,7 @@ class PageController extends Controller {
      * @PublicPage
      */
     public function gotoPoll($hash) {
+      $polls = $this->eventMapper->findAll();
         $poll = $this->eventMapper->findByHash($hash);
         if($poll->getType() == '0') {
             $dates = $this->dateMapper->findByPoll($poll->getId());
@@ -183,7 +184,7 @@ class PageController extends Controller {
             $notification = null;
         }
         if($this->hasUserAccess($poll)) {
-            return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
+            return new TemplateResponse('polls', 'goto.tmpl', ['polls' => $polls, 'poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
         } else {
             \OCP\User::checkLoggedIn();
             return new TemplateResponse('polls', 'no.acc.tmpl', []);
@@ -212,11 +213,12 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function editPoll($hash) {
+        $polls = $this->eventMapper->findAll();
         $poll = $this->eventMapper->findByHash($hash);
         if($this->userId !== $poll->getOwner()) return new TemplateResponse('polls', 'no.create.tmpl');
         if($poll->getType() == '0') $dates = $this->dateMapper->findByPoll($poll->getId());
         else $dates = $this->textMapper->findByPoll($poll->getId());
-        return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        return new TemplateResponse('polls', 'create.tmpl', ['polls' => $polls, 'poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**
@@ -287,7 +289,8 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function createPoll() {
-        return new TemplateResponse('polls', 'create.tmpl', ['userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+      $polls = $this->eventMapper->findAll();
+        return new TemplateResponse('polls', 'create.tmpl', ['polls' => $polls, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
     }
 
     /**
@@ -553,4 +556,44 @@ class PageController extends Controller {
         }
         return false;
     }
+
+    private function userHasAccessForLink($polls, $userId) {
+      $linkAccess = false;
+      $counter = 0;
+      foreach ($polls as $poll) {
+
+        if($poll === null) return $linkAccess =false;
+        $access = $poll->getAccess();
+        $owner = $poll->getOwner();
+        if (\OC_User::isLoggedIn()) return $linkAccess =false;
+        if ($access === 'public') return $linkAccess =true;
+        if ($access === 'hidden') return $linkAccess =true;
+        if ($access === 'registered') return $linkAccess =true;
+        if ($owner === $userId) return $linkAccess =true;
+        $user_groups = \OC_Group::getUserGroups($userId);
+
+        $arr = explode(';', $access);
+
+        foreach ($arr as $item) {
+            if (strpos($item, 'group_') === 0) {
+                $grp = substr($item, 6);
+                foreach ($user_groups as $user_group) {
+                    if ($user_group === $grp) return $linkAccess =true;
+                }
+            }
+            else if (strpos($item, 'user_') === 0) {
+                $usr = substr($item, 5);
+                if ($usr === $userId) return $linkAccess =true;
+            }
+        }
+        return $linkAccess =false;
+        if ($linkAccess) {
+          $pollUrl = $urlGenerator->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash()));
+        } else {
+          $pollUrl = "#";
+        }
+        $polls[$counter]['pollUrl'] = $pollUrl;
+        $counter=$counter +1;
+    }}
+
 }

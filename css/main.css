@@ -8,13 +8,13 @@ h2 {
     margin: 10px 0 5px 0;
 }
 
-a {
+/*a {
     color: #35537a;
 }
 
 a:not(.button):hover {
     text-decoration: underline;
-}
+}*/
 
 #app header {
     padding-top: 15px;
@@ -31,6 +31,7 @@ a:not(.button):hover {
 .col-100 {
     width: 100%;
     padding: 0px 15px;
+    float: left;
 }
 
 .col-70 {
@@ -69,10 +70,10 @@ textarea {
 }
 
 
-table {
+/*table {
     border: 1px solid #DDD;
     border-radius: 3px;
-}
+}*/
 
 .form-actions {
     padding: 15px;
@@ -84,6 +85,7 @@ table {
 
 div.new_poll {
     width: 100%;
+    float: left;
 }
 
 div.goto_poll {
@@ -128,7 +130,7 @@ div.scroll_div_dialog {
     border-left: 1px solid #FFF;
 }
 
-tbody th {
+/*tbody th {
     text-align: left;
 }
 
@@ -148,7 +150,7 @@ td.td_shown {
 .td_deselected {
     background-color: white;
 }
-
+*/
 .cl_with_border td {
     padding-right: 15px;
     padding: 1px;
@@ -239,14 +241,8 @@ td.td_shown {
     background-color: #82de82;
 }
 
-.cl_poll_url, .cl_click, .cl_delete, .cl_date_time_header {
+.cl_poll_url, .cl_click, .cl_date_time_header {
     cursor: pointer;
-}
-
-.cl_delete {
-    background-color: white;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
 }
 
 .cl_pad_left {
@@ -392,4 +388,367 @@ td.td_shown {
     border: 1px solid #1D2D44;
     border-top: 0;
     border-radius: 0 0 3px 3px;
+}
+
+
+#new-poll-button {
+	margin: 14px auto; /* to have the same height than a contact*/
+	width: calc(100% - 20px) !important;
+	text-align: left;
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+}
+#app-navigation > ul {
+	height: calc(100% - 26px);
+}
+
+#app-navigation .app-navigation-list-item .utils .action span {
+	display: inline-block;
+	line-height: 20px;
+	height: 20px;
+	width: 16px;
+	padding: 12px 6px;
+	cursor: pointer;
+	vertical-align: top;
+}
+
+
+#app-navigation .app-navigation-list-item .utils .action span {
+	opacity: .3;
+}
+
+#app-navigation .app-navigation-list-item .utils .action.withitems span {
+	opacity: .7 !important;
+}
+
+#app-navigation .app-navigation-list-item .utils .action:hover span {
+	opacity: 1;
+}
+#app-navigation .popovermenu {
+  margin-right: 115px;
+  margin-top: 10px;
+}
+
+/******************/
+/*  Index Table   */
+/******************/
+.polltable {
+  float: left;
+}
+#polltable tr td.pollname .action-favorite {
+	display: block;
+	float: left;
+	width: 30px;
+	line-height: 100%;
+	text-align: center;
+}
+#polltable .pollname .action .icon,
+#pollstable .selectedActions a .icon,
+#controls .actions .button .icon {
+	display: inline-block;
+	vertical-align: middle;
+	background-size: 16px 16px;
+}
+
+#polltable a.action {
+	display: inline;
+	padding: 17px 8px;
+	line-height: 50px;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	opacity: 0;
+	display:none;
+}
+
+table td.pollname .thumbnail {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	margin-left: 8px;
+	margin-top: 9px;
+	cursor: pointer;
+	float: left;
+	position: absolute;
+	z-index: 4;
+}
+/*#polltable td.pollname a.name {
+	left: 50px;
+	margin-right: 50px;
+}*/
+table td.pollname a.name {
+	position:relative; /* Firefox needs to explicitly have this default set … */
+  margin-left: 55px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: block;
+	height: 50px;
+	line-height: 50px;
+	padding: 0;
+}
+
+/* TODO fix usability bug (accidental file/folder selection) */
+/*table td.pollname {
+	position: absolute;
+	left: 55px;
+	padding: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 800px;
+	height: 100%;
+}*/
+
+
+
+#polltable tbody tr {
+	background-color: #fff;
+	height: 51px;
+}
+
+table td.filename a, table td.login, table td.logout, table td.download, table td.upload, table td.create, table td.delete { padding:3px 8px 8px 3px; }
+table td.filename .nametext, .uploadtext, .modified, .column-last>span:first-child { float:left; padding:15px 0; }
+#polltable tbody tr {
+	/* transition: background-color 0.3s ease; */
+	background-color: #fff;
+	height: 40px;
+}
+#polltable tbody tr:hover,
+#polltable tbody tr:focus,
+#polltable tbody .name:focus,
+#polltable tbody tr:active,
+#polltable tbody tr.highlighted,
+#polltable tbody tr.highlighted .name:focus,
+#polltable tbody tr.selected,
+#polltable tbody tr.searchresult,
+table tr.mouseOver td {
+	transition: background-color 0.3s ease;
+	background-color: #f8f8f8;
+}
+
+tbody a { color:#000; }
+
+span.extension, span.uploading, td.date {
+	color: #999;
+}
+span.extension {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+	filter: alpha(opacity=70);
+	opacity: .7;
+	-webkit-transition: opacity 300ms;
+	-moz-transition: opacity 300ms;
+	-o-transition: opacity 300ms;
+	transition: opacity 300ms;
+	vertical-align: top;
+}
+tr:hover span.extension,
+tr:focus span.extension {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	opacity: 1;
+	color: #777;
+}
+
+table th, table th a {
+	color: #999;
+}
+table.multiselect th a {
+	color: #000;
+}
+
+table th .columntitle {
+  vertical-align: middle;
+  height: 50px;
+	padding-left: 40px;
+}
+
+table th .sort-indicator {
+	width: 10px;
+	height: 8px;
+	margin-left: 5px;
+	display: inline-block;
+	vertical-align: text-bottom;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: .3;
+}
+.sort-indicator.hidden,
+.multiselect .sort-indicator,
+table.multiselect th:hover .sort-indicator.hidden,
+table.multiselect th:focus .sort-indicator.hidden {
+	visibility: hidden;
+}
+.multiselect .sort, .multiselect .sort span {
+	cursor: default;
+}
+table th:hover .sort-indicator.hidden,
+table th:focus .sort-indicator.hidden {
+	visibility: visible;
+}
+
+
+table th,
+table td {
+	border-bottom: 1px solid #eee;
+}
+table td {
+	padding: 0 15px;
+	font-style: normal;
+	background-position: 8px center;
+	background-repeat: no-repeat;
+}
+/*table th#headerName {
+	position: relative;
+	width: 9999px;  not really sure why this works better than 100% â€¦ table styling
+	padding: 0;
+}*/
+
+#headerName-container {
+	position: relative;
+	height: 50px;
+}
+.has-favorites #headerName-container {
+	padding-left: 50px;
+}
+
+table th#headerSize, table td.filesize {
+	text-align: right;
+}
+table th#headerDate, table td.date,
+table th.column-last, table td.column-last {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	position: relative;
+	/* this can not be just width, both need to be set â€¦ table styling */
+	min-width: 130px;
+	max-width: 130px;
+}
+/* Multiselect bar */
+#filestable.multiselect {
+	top: 95px;
+}
+table.multiselect thead {
+	position: fixed;
+	top: 89px;
+	z-index: 10;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	left: 250px; /* sidebar */
+}
+
+/*table thead th {
+	background-color: #fff;
+}*/
+table.multiselect thead th {
+	background-color: rgba(255, 255, 255, 0.95); /* like controls bar */
+	color: #000;
+	font-weight: bold;
+	border-bottom: 0;
+}
+
+#app-content.with-app-sidebar table.multiselect thead{
+	margin-right: 27%;
+}
+
+table.multiselect #headerName {
+	position: relative;
+	width: 9999px; /* when we use 100%, the styling breaks on mobile â€¦ table styling */
+}
+table.multiselect #modified {
+	display: none;
+}
+
+table td.selection,
+table th.selection,
+table td.fileaction {
+	width: 32px;
+	text-align: center;
+}
+
+
+
+.modified, .column-last>span:first-child {
+	position: relative;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 110px;
+}
+
+
+
+.hide-hidden-files #polltable tr.hidden-file,
+.hide-hidden-files #polltable tr.hidden-file.dragging {
+	display: none;
+}
+
+#polltable {
+	position: relative;
+	width: 100%;
+}
+/*
+ * Header controls (Breadcrumb, Action button)
+ */
+#polltable.has-controls {
+	top: 44px;
+}
+
+#polltable tr.animate-opacity {
+	-webkit-transition:opacity 250ms;
+	-moz-transition:opacity 250ms;
+	-o-transition:opacity 250ms;
+	transition:opacity 250ms;
+}
+#polltable tr.dragging {
+	opacity: 0.2;
+}
+
+#polltable tr td.pollname {
+	position: relative;
+	width: 100%;
+  left: 0px;
+  padding: 0px;
+	-webkit-transition:background-image 500ms;
+	-moz-transition:background-image 500ms;
+	-o-transition:background-image 500ms;
+	transition:background-image 500ms;
+}
+
+#polltable tr td.pollname a.name label {
+	position: absolute;
+	width: 80%;
+	height: 50px;
+}
+
+#polltable tr td.pollname .favorite {
+	display: inline-block;
+	float: left;
+}
+#polltable th {
+  padding: 15px;
+
+}
+
+/*
+ * Action button create new poll
+ */
+.actions.creatable {
+	position: relative;
+	z-index: -30;
+}
+.actions {
+  padding:5px;
+  height:32px;
+  display: inline-block;
+  float: left;
+}
+.actions .button.new .icon {
+	margin-bottom: 2px;
+}
+.actions input,
+.actions button,
+.actions .button {
+  margin:0;
+  float:left;
+}
+div.crumb.last.crumb-fix a {
+  padding-right: 17px;
 }
