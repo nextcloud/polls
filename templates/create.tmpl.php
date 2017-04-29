@@ -9,13 +9,15 @@
     $urlGenerator = $_['urlGenerator'];
     $isUpdate = isset($_['poll']) && $_['poll'] !== null;
     $isAnonymous = false;
+    $hideNames = false;
     if($isUpdate) {
         $poll = $_['poll'];
         $isAnonymous = $poll->getIsAnonymous();
+        $hideNames = $isAnonymous && $poll->getFullAnonymous();
         $dates = $_['dates'];
         $chosen = '[';
         foreach($dates as $d) {
-            if($poll->getType() === '0') $chosen .= strtotime($d->getDt());
+            if($poll->getType() == '0') $chosen .= strtotime($d->getDt());
             else $chosen .= '"' . $d->getText() . '"';
             $chosen .= ',';
         }
@@ -95,15 +97,20 @@
 
             <label class="input_title"><?php p($l->t('Type')); ?></label>
 
-            <input type="radio" name="pollType" id="event" value="event" <?php if(!$isUpdate || $poll->getType() === '0') print_unescaped('checked'); ?> />
+            <input type="radio" name="pollType" id="event" value="event" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
             <label for="event"><?php p($l->t('Event schedule')); ?></label>
 
             <!-- TODO texts to db -->
-            <input type="radio" name="pollType" id="text" value="text" <?php if($isUpdate && $poll->getType() === '1') print_unescaped('checked'); ?>>
+            <input type="radio" name="pollType" id="text" value="text" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
             <label for="text"><?php p($l->t('Text based')); ?></label>
 
             <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
             <input id="isAnonymous" name="isAnonymous" type="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+
+            <div id="anonOptions" style="display:none;">
+                <label for="hideNames" class="input_title"><?php p($l->t('Hide user names for admin')) ?></label>
+                <input id="hideNames" name="hideNames" type="checkbox" <?php $hideNames ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+            </div>
 
             <label for="id_expire_set" class="input_title"><?php p($l->t('Expires')); ?></label>
             <div class="input-group" id="expiration">
@@ -115,13 +122,13 @@
         </div>
         <div class="col-50">
             <h2><?php p($l->t('Choices')); ?></h2>
-            <div id="date-select-container" <?php if($isUpdate && $poll->getType() === '1') print_unescaped('style="display:none;"'); ?> >
+            <div id="date-select-container" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('style="display:none;"'); ?> >
                 <label for="datetimepicker" class="input_title"><?php p($l->t('Dates')); ?></label>
                 <input id="datetimepicker" type="text" />
                 <table id="selected-dates-table" class="choices">
                 </table>
             </div>
-            <div id="text-select-container" <?php if(!$isUpdate || $poll->getType() === '0') print_unescaped('style="display:none;"'); ?> >
+            <div id="text-select-container" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('style="display:none;"'); ?> >
                 <label for="text-title" class="input_title"><?php p($l->t('Text item')); ?></label>
                 <div class="input-group">
                     <input type="text" id="text-title" placeholder="<?php print_unescaped('Insert text...'); ?>" />

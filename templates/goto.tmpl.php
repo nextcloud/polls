@@ -16,6 +16,7 @@ $dates = $_['dates'];
 $votes = $_['votes'];
 $comments = $_['comments'];
 $isAnonymous = $poll->getIsAnonymous() && $userId != $poll->getOwner();
+$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
 $notification = $_['notification'];
 
 if ($poll->getExpire() === null) {
@@ -26,7 +27,7 @@ if ($poll->getExpire() === null) {
 
 ?>
 
-<?php if($poll->getType() === '0') : ?>
+<?php if($poll->getType() == '0') : ?>
     <?php foreach($dates as $d) : ?>
         <input class="hidden-dates" type="hidden" value="<?php print_unescaped($d->getDt()); ?>" />
     <?php endforeach ?>
@@ -81,7 +82,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                             <thead>
                                 <tr>
                                     <?php
-                                    if ($poll->getType() === '0') {
+                                    if ($poll->getType() == '0') {
                                         print_unescaped('<th rowspan=3 class="year-row"></th>');
                                         print_unescaped('<th class="bordered" rowspan=3>' . $l->t('All') . '</th>');
                                     } else {
@@ -94,7 +95,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     ?>
                                 </tr>
                                 <?php
-                                if ($poll->getType() === '0'){
+                                if ($poll->getType() == '0'){
                                     print_unescaped('<tr class="date-row"></tr><tr id="time-row-header"></tr>');
                                 }
                                 ?>
@@ -122,7 +123,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                         }
                                         print_unescaped('<tr>');
-                                        if($userMgr->get($usr) != null && !$isAnonymous) {
+                                        if($userMgr->get($usr) != null && !$isAnonymous && !$hideNames) {
                                             print_unescaped('<th class="user-cell">');
                                             $avatar = $avaMgr->getAvatar($usr)->get(32);
                                             if($avatar !== false) {
@@ -132,7 +133,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                             p($userMgr->get($usr)->getDisplayName());
                                         } else {
-                                            if($isAnonymous) {
+                                            if($isAnonymous || $hideNames) {
                                                 print_unescaped('<th class="user-cell anonymous">');
                                                 p($l->t('Participent') . ' ' . $userCnt);
                                             } else {
@@ -144,7 +145,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         // loop over dts
                                         $i_tot = 0;
                                         foreach($dates as $dt) {
-                                            if ($poll->getType() === '0') {
+                                            if ($poll->getType() == '0') {
                                                 $date_id = strtotime($dt->getDt());
                                             } else {
                                                 $date_id = $dt->getText();
@@ -153,16 +154,16 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             $found = false;
                                             foreach ($others[$usr] as $vote) {
                                                 $voteVal = null;
-                                                if($poll->getType() === '0') {
+                                                if($poll->getType() == '0') {
                                                     $voteVal = strtotime($vote->getDt());
                                                 } else {
                                                     $voteVal = $vote->getText();
                                                 }
                                                 if ($date_id === $voteVal) {
-                                                    if ($vote->getType() === '1') {
+                                                    if ($vote->getType() == '1') {
                                                         $cl = 'poll-cell-is';
                                                         $total_y[$i_tot]++;
-                                                    } else if ($vote->getType() === '0') {
+                                                    } else if ($vote->getType() == '0') {
                                                         $cl = 'poll-cell-not';
                                                         $total_n[$i_tot]++;
                                                     } else {
@@ -201,7 +202,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     }
                                     $i_tot = 0;
                                     foreach ($dates as $dt) {
-                                        if ($poll->getType() === '0') {
+                                        if ($poll->getType() == '0') {
                                             $date_id = strtotime($dt->getDt());
                                         } else {
                                             $date_id = $dt->getText();
@@ -211,19 +212,19 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         if (isset($user_voted)) {
                                             foreach ($user_voted as $obj) {
                                                 $voteVal = null;
-                                                if($poll->getType() === '0') {
+                                                if($poll->getType() == '0') {
                                                     $voteVal = strtotime($obj->getDt());
                                                 } else {
                                                     $voteVal = $obj->getText();
                                                 }
                                                 if ($voteVal === $date_id) {
-                                                    if ($obj->getType() === '1') {
+                                                    if ($obj->getType() == '1') {
                                                         $cl = 'poll-cell-active-is';
                                                         $total_y[$i_tot]++;
-                                                    } else if ($obj->getType() === '0') {
+                                                    } else if ($obj->getType() == '0') {
                                                         $cl = 'poll-cell-active-not';
                                                         $total_n[$i_tot]++;
-                                                    } else if($obj->getType() === '2'){
+                                                    } else if($obj->getType() == '2'){
                                                         $cl = 'poll-cell-active-maybe';
                                                     }
                                                     break;
@@ -250,7 +251,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
                                         <td class="total">
                                             <?php
-                                            $classSuffix = $poll->getType() === '0' ? strtotime($dates[$i]->getDt()) : str_replace(' ', '_', $dates[$i]->getText());
+                                            $classSuffix = $poll->getType() == '0' ? strtotime($dates[$i]->getDt()) : str_replace(' ', '_', $dates[$i]->getText());
                                             if (isset($total_y[$i])) {
                                                 $val = $total_y[$i];
                                             } else {
@@ -283,7 +284,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                             </tbody>
                             <tfoot>
                                 <?php
-                                if ($poll->getType() === '0') {
+                                if ($poll->getType() == '0') {
                                     print_unescaped('<tr><th rowspan=3 id="time-row-footer"></th>');
                                     print_unescaped('<th rowspan=3 class="bordered">' . $l->t('All') . '</th></tr>');
                                     print_unescaped('<tr class="date-row"></tr>');
@@ -291,7 +292,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 ?>
                                 <tr>
                                     <?php
-                                    if ($poll->getType() === '0') {
+                                    if ($poll->getType() == '0') {
                                         print_unescaped('<th colspan=0 class="year-row" style="display: none;"></th>');
                                     } else {
                                         print_unescaped('<th></th>');
@@ -373,7 +374,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <div class="comment-header">
                                         <?php
                                         print_unescaped('<span class="comment-date">' . date('d.m.Y H:i:s', strtotime($comment->getDt())) . '</span>');
-                                        if($isAnonymous) {
+                                        if($isAnonymous || $hideNames) {
                                             p('Anonymous');
                                         } else {
                                             if($userMgr->get($comment->getUserId()) != null) {

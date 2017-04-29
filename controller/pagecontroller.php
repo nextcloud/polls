@@ -168,7 +168,7 @@ class PageController extends Controller {
      */
     public function gotoPoll($hash) {
         $poll = $this->eventMapper->findByHash($hash);
-        if($poll->getType() === '0') {
+        if($poll->getType() == '0') {
             $dates = $this->dateMapper->findByPoll($poll->getId());
             $votes = $this->participationMapper->findByPoll($poll->getId());
         }
@@ -214,7 +214,7 @@ class PageController extends Controller {
     public function editPoll($hash) {
         $poll = $this->eventMapper->findByHash($hash);
         if($this->userId !== $poll->getOwner()) return new TemplateResponse('polls', 'no.create.tmpl');
-        if($poll->getType() === '0') $dates = $this->dateMapper->findByPoll($poll->getId());
+        if($poll->getType() == '0') $dates = $this->dateMapper->findByPoll($poll->getId());
         else $dates = $this->textMapper->findByPoll($poll->getId());
         return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
     }
@@ -294,7 +294,7 @@ class PageController extends Controller {
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function insertPoll($pollType, $pollTitle, $pollDesc, $userId, $chosenDates, $expireTs, $accessType, $accessValues, $isAnonymous) {
+    public function insertPoll($pollType, $pollTitle, $pollDesc, $userId, $chosenDates, $expireTs, $accessType, $accessValues, $isAnonymous, $hideNames) {
         $event = new Event();
         $event->setTitle(htmlspecialchars($pollTitle));
         $event->setDescription(htmlspecialchars($pollDesc));
@@ -305,6 +305,7 @@ class PageController extends Controller {
 			ISecureRandom::CHAR_LOWER.
 			ISecureRandom::CHAR_UPPER));
 		$event->setIsAnonymous($isAnonymous ? '1' : '0');
+		$event->setFullAnonymous($isAnonymous && $hideNames ? '1' : '0');
 
         if ($accessType === 'select') {
             if (isset($accessValues)) {
@@ -395,10 +396,10 @@ class PageController extends Controller {
         if($changed === 'true') {
             $dates = json_decode($dates);
             $types = json_decode($types);
-            if($poll->getType() === '0') $this->participationMapper->deleteByPollAndUser($pollId, $userId);
+            if($poll->getType() == '0') $this->participationMapper->deleteByPollAndUser($pollId, $userId);
             else $this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
             for($i=0; $i<count($dates); $i++) {
-                if($poll->getType() === '0') {
+                if($poll->getType() == '0') {
                     $part = new Participation();
                     $part->setPollId($pollId);
                     $part->setUserId($userId);
@@ -428,6 +429,7 @@ class PageController extends Controller {
      * @PublicPage
      */
     public function insertComment($pollId, $userId, $commentBox) {
+        $poll = $this->eventMapper->find($pollId);
         $comment = new Comment();
         $comment->setPollId($pollId);
         $comment->setUserId($userId);
@@ -437,8 +439,11 @@ class PageController extends Controller {
         $this->sendNotifications($pollId, $userId);
         $hash = $this->eventMapper->find($pollId)->getHash();
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
-        if($this->manager->get($userId) !== null) $newUserId = $this->manager->get($userId)->getDisplayName();
-        else $newUserId = $userId;
+        if($this->manager->get($userId) !== null) {
+            $newUserId = $this->manager->get($userId)->getDisplayName();
+        } else {
+            $newUserId = $userId;
+        }
         return new JSONResponse(array('comment' => $commentBox, 'date' => date('Y-m-d H:i:s'), 'userName' => $newUserId));
     }
 
