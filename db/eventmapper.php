@@ -2,11 +2,11 @@
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Mapper;
-use OCP\IDb;
+use OCP\IDBConnection;
 
 class EventMapper extends Mapper {
 
-    public function __construct(IDB $db) {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
     }
 

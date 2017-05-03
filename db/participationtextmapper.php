@@ -2,11 +2,11 @@
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Mapper;
-use OCP\IDb;
+use OCP\IDBConnection;
 
 class ParticipationTextMapper extends Mapper {
 
-    public function __construct(IDB $db) {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'polls_particip_text', '\OCA\Polls\Db\ParticipationText');
     }
 

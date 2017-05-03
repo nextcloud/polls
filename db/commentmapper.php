@@ -2,11 +2,11 @@
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Mapper;
-use OCP\IDb;
+use OCP\IDBConnection;
 
 class CommentMapper extends Mapper {
 
-    public function __construct(IDB $db) {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'polls_comments', '\OCA\Polls\Db\Comment');
     }
 

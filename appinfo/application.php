@@ -83,49 +83,49 @@ class Application extends App {
 		$container->registerService('AccessMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new AccessMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 		$container->registerService('CommentMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new CommentMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 		$container->registerService('DateMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new DateMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 		$container->registerService('EventMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new EventMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 		$container->registerService('NotificationMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new NotificationMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 		$container->registerService('ParticipationMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new ParticipationMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 		$container->registerService('ParticipationTextMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new ParticipationTextMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 		$container->registerService('TextMapper', function($c) use ($server) {
 			/** @var SimpleContainer $c */
 			return new TextMapper(
-				$server->getDb()
+				$server->getDatabaseConnection()
 			);
 		});
 
