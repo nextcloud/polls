@@ -88,7 +88,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     } else {
                                         print_unescaped('<th></th>');
                                         foreach ($dates as $el) {
-                                            print_unescaped('<th title="' . $el->getText(). '" class="bordered">' . $el->getText() . '</th>');
+                                            print_unescaped('<th title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="bordered">' . preg_replace('/_\d+$/', '', $el->getText()) . '</th>');
                                         }
                                         print_unescaped('<th class="bordered">' . $l->t('All') . '</th>');
                                     }
@@ -297,7 +297,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     } else {
                                         print_unescaped('<th></th>');
                                         foreach ($dates as $el) {
-                                            print_unescaped('<th title="' . $el->getText() . '" class="bordered">' . $el->getText() . '</th>');
+                                            print_unescaped('<th title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="bordered">' . preg_replace('/_\d+$/', '', $el->getText()) . '</th>');
                                         }
                                         print_unescaped('<th class="bordered"></th>');
                                     }

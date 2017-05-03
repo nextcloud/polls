@@ -351,11 +351,13 @@ class PageController extends Controller {
             $event->setType(1);
             $ins = $this->eventMapper->insert($event);
             $poll_id = $ins->getId();
+            $cnt = 1;
             foreach($chosenDates as $el) {
                 $text = new Text();
-                $text->setText($el);
+                $text->setText($el . '_' . $cnt);
                 $text->setPollId($poll_id);
                 $this->textMapper->insert($text);
+                $cnt++;
             }
         }
         $url = $this->urlGenerator->linkToRoute('polls.page.index');
