@@ -528,6 +528,7 @@ class PageController extends Controller {
 
     private function hasUserAccess($poll) {
         $access = $poll->getAccess();
+        $owner = $poll->getOwner();
         if ($access === 'public') return true;
         if ($access === 'hidden') return true;
         if ($this->userId === null) return false;
