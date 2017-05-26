@@ -526,6 +526,20 @@ class PageController extends Controller {
         else return $this->eventMapper->findAllForUserWithInfo($user);
     }
 
+     function getGroups() {
+                // $this->requireLogin();
+                if (class_exists('\OC_Group', true)) {
+                        // Nextcloud <= 11, ownCloud
+                        return \OC_Group::getUserGroups($this->$userId);
+                }
+                // Nextcloud >= 12
+                $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+                return array_map(function ($group) {
+                        return $group->getGID();
+                }, $groups);
+        }
+
+
     private function hasUserAccess($poll) {
         $access = $poll->getAccess();
         $owner = $poll->getOwner();
@@ -534,7 +548,8 @@ class PageController extends Controller {
         if ($this->userId === null) return false;
         if ($access === 'registered') return true;
         if ($owner === $this->userId) return true;
-        $user_groups = \OC_Group::getUserGroups($this->userId);
+        \OCP\Util::writeLog("polls", $this->userId, \OCP\Util::ERROR);
+        $user_groups = $this->getGroups();
         $arr = explode(';', $access);
         foreach ($arr as $item) {
             if (strpos($item, 'group_') === 0) {
@@ -550,3 +565,5 @@ class PageController extends Controller {
         return false;
     }
 }
+
+
