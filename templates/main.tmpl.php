@@ -124,31 +124,49 @@
 
 <?php
 // ---- helper functions ----
-    function userHasAccess($poll, $userId) {
-        if($poll === null) return false;
-        $access = $poll->getAccess();
-        $owner = $poll->getOwner();
-        if (!User::isLoggedIn()) return false;
-        if ($access === 'public') return true;
-        if ($access === 'hidden') return true;
-        if ($access === 'registered') return true;
-        if ($owner === $userId) return true;
-        $user_groups = OC_Group::getUserGroups($userId);
-
-        $arr = explode(';', $access);
-
-        foreach ($arr as $item) {
-            if (strpos($item, 'group_') === 0) {
-                $grp = substr($item, 6);
-                foreach ($user_groups as $user_group) {
-                    if ($user_group === $grp) return true;
-                }
+// from spreed.me
+    function getGroups($userId) {
+            // $this->requireLogin();
+            if (class_exists('\OC_Group', true)) {
+                    // Nextcloud <= 11, ownCloud
+                    return \OC_Group::getUserGroups($userId);
             }
-            else if (strpos($item, 'user_') === 0) {
-                $usr = substr($item, 5);
-                if ($usr === $userId) return true;
+            // Nextcloud >= 12
+            $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+            return array_map(function ($group) {
+                    return $group->getGID();
+            }, $groups);
+    }
+
+function userHasAccess($poll, $userId) {
+    if($poll === null) return false;
+    $access = $poll->getAccess();
+    $owner = $poll->getOwner();
+    if (!User::isLoggedIn()) return false;
+    if ($access === 'public') return true;
+    if ($access === 'hidden') return true;
+    if ($access === 'registered') return true;
+    if ($owner === $userId) return true;
+    $user_groups = getGroups($userId);
+
+    $arr = explode(';', $access);
+
+    foreach ($arr as $item) {
+        if (strpos($item, 'group_') === 0) {
+            $grp = substr($item, 6);
+            foreach ($user_groups as $user_group) {
+                if ($user_group === $grp) return true;
             }
         }
-        return false;
+        else if (strpos($item, 'user_') === 0) {
+            $usr = substr($item, 5);
+            if ($usr === $userId) return true;
+        }
     }
+    return false;
+}
 ?>
+
+
+
+    
