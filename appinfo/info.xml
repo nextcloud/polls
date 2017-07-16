@@ -6,7 +6,6 @@
    <version>0.7.3</version>
    <licence>AGPL</licence>
    <author>Vinzenz Rosenkranz</author>
-   <requiremin>8.1</requiremin>
    <category>tools</category>
    <bugs>https://github.com/v1r0x/polls/issues</bugs>
    <repository type="git">https://github.com/v1r0x/polls.git</repository>
