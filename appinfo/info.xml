@@ -2,11 +2,15 @@
 <info>
    <id>polls</id>
    <name>Polls</name>
-   <description>event schedule polls</description>
+   <description>This is a poll app, similar to doodle or dudle with the possibility for restrict access (only members, certain groups/users, hidden and public).</description>
+   <documentation>
+      <admin>https://github.com/v1r0x/polls/blob/master/README.md</admin>
+   </documentation>
    <version>0.7.3</version>
    <licence>AGPL</licence>
    <author>Vinzenz Rosenkranz</author>
    <category>tools</category>
+   <website>https://github.com/v1r0x/polls</website>
    <bugs>https://github.com/v1r0x/polls/issues</bugs>
    <repository type="git">https://github.com/v1r0x/polls.git</repository>
    <dependencies>
