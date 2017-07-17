@@ -6,6 +6,7 @@
    <documentation>
       <admin>https://github.com/v1r0x/polls/blob/master/README.md</admin>
    </documentation>
+   <screenshot>https://raw.githubusercontent.com/v1r0x/polls/master/screenshots/nc_new_poll.png</screenshot>
    <version>0.7.3</version>
    <licence>AGPL</licence>
    <author>Vinzenz Rosenkranz</author>
