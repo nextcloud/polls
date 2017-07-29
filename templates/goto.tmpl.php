@@ -314,7 +314,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                     </div>
                     <?php if(User::isLoggedIn()) : ?>
                         <p>
-                            <input type="checkbox" id="check_notif" <?php if($notification !== null) print_unescaped(' checked'); ?> />
+                            <input type="checkbox" id="check_notif" class="checkbox" <?php if($notification !== null) print_unescaped(' checked'); ?> />
                             <label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
                         </p>
                     <?php endif; ?>
