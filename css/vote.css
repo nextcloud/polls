@@ -85,15 +85,21 @@ th.external input{
 }
 
 .poll-cell-is, .poll-cell-active-is, .date-text-selected, .selected-all {
-    background-color: #6fff70; /*green*/
-    background-image: url('../img/yes.svg');
+    background-image: url('../../../core/css/../img/actions/checkmark.svg?v=1');
     background-repeat: no-repeat;
     background-position: center;
     transition: background-color 0.2s;
 }
 
 .poll-cell-not, .poll-cell-active-not, .date-text-not-selected, .selected-none {
-    background-image: url('../img/no.svg');
+    background-image: url('../../../core/css/../img/actions/close.svg?v=1');
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-color 0.2s;
+}
+
+.poll-cell-maybe, .poll-cell-active-maybe, .selected-maybe {
+    background-image: url('../../../core/css/../img/actions/toggle.svg?v=1');
     background-repeat: no-repeat;
     background-position: center;
     transition: background-color 0.2s;
