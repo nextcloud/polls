@@ -104,19 +104,17 @@
             <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
             <label for="text"><?php p($l->t('Text based')); ?></label>
 
-            <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
             <input id="isAnonymous" name="isAnonymous" type="checkbox" class="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+            <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
 
             <div id="anonOptions" style="display:none;">
-                <label for="hideNames" class="input_title"><?php p($l->t('Hide user names for admin')) ?></label>
                 <input id="hideNames" name="hideNames" type="checkbox" class="checkbox" <?php $hideNames ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+                <label for="hideNames" class="input_title"><?php p($l->t('Hide user names for admin')) ?></label>
             </div>
 
+            <input id="id_expire_set" name="check_expire" type="checkbox" class="checkbox" <?php ($isUpdate && $poll->getExpire() !== null) ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
             <label for="id_expire_set" class="input_title"><?php p($l->t('Expires')); ?></label>
             <div class="input-group" id="expiration">
-                <div class="input-group-addon">
-                    <input id="id_expire_set" name="check_expire" type="checkbox" class="checkbox" <?php ($isUpdate && $poll->getExpire() !== null) ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
-                </div>
                 <input id="id_expire_date" type="text" required="" <?php (!$isUpdate || $poll->getExpire() === null) ? print_unescaped('disabled="true"') : print_unescaped('value="' . $expireStr . '"'); ?> name="expire_date_input" />
             </div>
         </div>
