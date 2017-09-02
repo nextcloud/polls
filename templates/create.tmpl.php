@@ -68,16 +68,16 @@
 
             <label class="input_title"><?php p($l->t('Access')); ?></label>
 
-            <input type="radio" name="accessType" id="private" value="registered" <?php if(!$isUpdate || $access === 'registered') print_unescaped('checked'); ?> />
+            <input type="radio" name="accessType" id="private" value="registered" class="radio" <?php if(!$isUpdate || $access === 'registered') print_unescaped('checked'); ?> />
             <label for="private"><?php p($l->t('Registered users only')); ?></label>
 
-            <input type="radio" name="accessType" id="hidden" value="hidden" <?php if($isUpdate && $access === 'hidden') print_unescaped('checked'); ?> />
+            <input type="radio" name="accessType" id="hidden" value="hidden" class="radio" <?php if($isUpdate && $access === 'hidden') print_unescaped('checked'); ?> />
             <label for="hidden"><?php p($l->t('hidden')); ?></label>
 
-            <input type="radio" name="accessType" id="public" value="public" <?php if($isUpdate && $access === 'public') print_unescaped('checked'); ?> />
+            <input type="radio" name="accessType" id="public" value="public" class="radio" <?php if($isUpdate && $access === 'public') print_unescaped('checked'); ?> />
             <label for="public"><?php p($l->t('Public access')); ?></label>
 
-            <input type="radio" name="accessType" id="select" value="select" <?php if($isUpdate && $access === 'select') print_unescaped('checked'); ?>>
+            <input type="radio" name="accessType" id="select" value="select" class="radio" <?php if($isUpdate && $access === 'select') print_unescaped('checked'); ?>>
             <label for="select"><?php p($l->t('Select')); ?></label>
             <span id="id_label_select">...</span>
 
@@ -97,25 +97,25 @@
 
             <label class="input_title"><?php p($l->t('Type')); ?></label>
 
-            <input type="radio" name="pollType" id="event" value="event" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
+            <input type="radio" name="pollType" id="event" value="event" class="radio" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
             <label for="event"><?php p($l->t('Event schedule')); ?></label>
 
             <!-- TODO texts to db -->
-            <input type="radio" name="pollType" id="text" value="text" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
+            <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
             <label for="text"><?php p($l->t('Text based')); ?></label>
 
             <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
-            <input id="isAnonymous" name="isAnonymous" type="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+            <input id="isAnonymous" name="isAnonymous" type="checkbox" class="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
 
             <div id="anonOptions" style="display:none;">
                 <label for="hideNames" class="input_title"><?php p($l->t('Hide user names for admin')) ?></label>
-                <input id="hideNames" name="hideNames" type="checkbox" <?php $hideNames ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+                <input id="hideNames" name="hideNames" type="checkbox" class="checkbox" <?php $hideNames ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
             </div>
 
             <label for="id_expire_set" class="input_title"><?php p($l->t('Expires')); ?></label>
             <div class="input-group" id="expiration">
                 <div class="input-group-addon">
-                    <input id="id_expire_set" name="check_expire" type="checkbox" <?php ($isUpdate && $poll->getExpire() !== null) ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
+                    <input id="id_expire_set" name="check_expire" type="checkbox" class="checkbox" <?php ($isUpdate && $poll->getExpire() !== null) ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
                 </div>
                 <input id="id_expire_date" type="text" required="" <?php (!$isUpdate || $poll->getExpire() === null) ? print_unescaped('disabled="true"') : print_unescaped('value="' . $expireStr . '"'); ?> name="expire_date_input" />
             </div>
@@ -133,7 +133,7 @@
                 <div class="input-group">
                     <input type="text" id="text-title" placeholder="<?php print_unescaped('Insert text...'); ?>" />
                     <div class="input-group-btn">
-                        <input type="button" id="text-submit" value="<?php p($l->t('Add')); ?>" class="btn"/>
+                        <input type="button" id="text-submit" class="button btn" value="<?php p($l->t('Add')); ?>" class="btn"/>
                     </div>
                 </div>
                 <table id="selected-texts-table" class="choices">
@@ -143,9 +143,9 @@
     </div>
     <div class="form-actions">
         <?php if($isUpdate): ?>
-            <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Update poll')); ?>" />
+            <input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
         <?php else: ?>
-            <input type="submit" id="submit_finish_poll" value="<?php p($l->t('Create poll')); ?>" />
+            <input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />
         <?php endif; ?>
         <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
     </div>
