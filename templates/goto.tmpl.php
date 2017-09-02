@@ -314,7 +314,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                     </div>
                     <?php if(User::isLoggedIn()) : ?>
                         <p>
-                            <input type="checkbox" id="check_notif" <?php if($notification !== null) print_unescaped(' checked'); ?> />
+                            <input type="checkbox" id="check_notif" class="checkbox" <?php if($notification !== null) print_unescaped(' checked'); ?> />
                             <label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
                         </p>
                     <?php endif; ?>
@@ -326,7 +326,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                         <input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
                         <input type="hidden" name="notif" />
                         <input type="hidden" name="changed" />
-                        <input type="button" id="submit_finish_vote" value="<?php p($l->t('Vote!')); ?>" />
+                        <input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
                         <?php if(User::isLoggedIn()) : ?>
                             <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button home-link"><?php p($l->t('Polls summary')); ?></a>
                         <?php endif; ?>
@@ -362,7 +362,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 <?php endif; ?>
                                     <textarea id="commentBox" name="commentBox"></textarea>
                                     <p>
-                                        <input type="button" id="submit_send_comment" value="<?php p($l->t('Send!')); ?>" />
+                                        <input type="button" id="submit_send_comment" class="button btn" value="<?php p($l->t('Send!')); ?>" />
                                         <span class="icon-loading-small" style="float:right;"></span>
                                     </p>
                                 </div>
