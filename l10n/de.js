@@ -63,14 +63,8 @@ OC.L10N.register(
     "You must enter at least a title for the new poll." : "Sie müssen zumindest einen Namen für die Umfrage angeben.",
     "Copy to clipboard: Ctrl+C, Enter" : "In die Zwischenablage kopieren: Strg+C, Enter",
     "Thanks that you've voted. You can close the page now." : "Danke, dass sie abgestimmt haben. Sie können die Seite jetzt schließen.",
-    "Nothing selected!
-Click on cells to turn them green." : "Nichts ausgewählt!
-Klicke auf die Elemente um sie auszuwählen (grün).",
-    "You are not registered.
-Please enter your name to vote
-(at least 3 characters!)" : "Sie sind nicht registriert.
-Bitte geben Sie ihren Namen ein um abzustimmen
-(mindestens 3 Zeichen!)",
+    "Nothing selected! Click on cells to turn them green." : "Nichts ausgewählt! Klicke auf die Elemente um sie auszuwählen (grün).",
+    "You are not registered. Please enter your name to vote (at least 3 characters!)" : "Sie sind nicht registriert. Bitte geben Sie ihren Namen ein um abzustimmen (mindestens 3 Zeichen!)",
     "You already have an item with the same text" : "Sie haben bereits ein Element mit dem gleichen Text.",
     "Please choose the groups or users you want to add to your poll." : "Bitte wählen Sie die Gruppen oder Benutzer aus, die Sie zu ihrer Umfrage hinzufügen möchten.",
     "Click to get link" : "Klicken Sie um den Link zu erhalten",
