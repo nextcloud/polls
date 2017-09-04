@@ -37,7 +37,7 @@
             <?php
                 if (!userHasAccess($poll, $userId)) continue;
                 // direct url to poll
-                $pollUrl = $urlGenerator->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash()));
+                $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
             ?>
             <tr>
                 <td title="<?php p($l->t('Go to')); ?>">
@@ -107,7 +107,7 @@
                     <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete"></input>
                     <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button cl_edit icon-rename"></input></a>
                     <?php endif; ?>
-                    <input type="button" class="table_button cl_link icon-public" data-url="<?php p(OCP\Util::linkToAbsolute('', $pollUrl)); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
+                    <input type="button" class="table_button cl_link icon-public" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
                 </td>
             </tr>
         <?php endforeach; ?>
