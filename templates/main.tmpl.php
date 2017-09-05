@@ -35,18 +35,12 @@
                                 <a class="name sort columntitle" data-sort="name"><span><?php p($l->t('Title')); ?></span><span class="sort-indicator"></span></a>
                             </div>
                         </th>
-                        <th id="headerDescription" class="column-description">
-                        <div id="headerDescription-container">
-                            <a class="name sort columntitle" data-sort="description"><span><?php p($l->t('Description')); ?></span><span class="sort-indicator"></span></a>
-                                </div>
-                        </th>
-<!-- try
+
                         <th id="headerCreated" class="column-Created">
                             <div id="headerCreated-container">
                                 <a class="name sort columntitle" data-sort="created"><span><?php p($l->t('Created')); ?></span><span class="sort-indicator"></span></a>
                             </div>
                         </th>
--->
                         <th id="headerPrincipal" class="column-Principal">
                             <div id="headerPrincipal-container">
                                 <a class="name sort columntitle" data-sort="principal"><span><?php p($l->t('By')); ?></span><span class="sort-indicator"></span></a>
