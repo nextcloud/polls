@@ -36,8 +36,26 @@
 ?>
 
 <div id="app">
-    <div id="app-content">
+	<?php include ("navigation.tmpl.php"); ?>
+	<div id="app-content">
         <div id="app-content-wrapper">
+			<div id="controls">
+				<div class="breadcrumb">
+					<div class="crumb svg" data-dir="/">
+						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
+					</div>
+					<div class="crumb svg last">
+						<a href="#">
+						<?php if($isUpdate): ?>
+							<?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
+						<?php else: ?>
+						  <?php p($l->t('Create new poll')); ?>
+						<?php endif; ?>
+						</a>
+					</div>
+				</div>
+			</div>
+		
 <?php if($isUpdate): ?>
 <form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll')); ?>" method="POST">
     <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -49,13 +67,6 @@
     <input type="hidden" name="userId" id="userId" value="<?php p($userId); ?>" />
 
     <header class="row">
-        <div class="col-100">
-            <?php if($isUpdate): ?>
-                <h1><?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?></h1>
-            <?php else: ?>
-                <h1><?php p($l->t('Create new poll')); ?></h1>
-            <?php endif; ?>
-        </div>
     </header>
     
     <div class="new_poll row">
