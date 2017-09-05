@@ -19,7 +19,7 @@ $(document).ready(function () {
     var prev = '';
     var dateStr = '';
     $('.hidden-dates').each(function(i, obj) {
-        var exDt = new Date(obj.value.replace(/ /g,"T")+"Z");
+        var exDt = new Date(obj.value+'+0000'); // add +0000 = UTC
         var day = ('0' + exDt.getDate()).substr(-2);
         var month = ('0' + (exDt.getMonth()+1)).substr(-2);
         var day_month = day + '.' + month;
@@ -38,7 +38,14 @@ $(document).ready(function () {
         var c = (prev != (year + day_month) ? ' bordered' : '');
         prev = (year + day_month);
         var ch_obj = ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2)
-        dateStr += '<th class="time-slot-cell' + c + '">' + ch_obj + '</th>';
+        dateStr += '<th class="time-slot-cell" value="' + obj.value + '"> ' + 
+        '<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) + 
+                            // ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) + 
+                            '</div>' + 
+        '<div class="day">'   + exDt.toLocaleString(window.navigator.language, {day: 'numeric'}) + '</div>' +
+        '<div class="dayow">' + exDt.toLocaleString(window.navigator.language, {weekday: 'short'}) + '</div>' + 
+        '<div class="time">'  + ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2) + '</div>' + 
+        '</th>';
     });
 
     var for_string_dates = '';
@@ -51,10 +58,7 @@ $(document).ready(function () {
         for_string_years += '<th colspan="' + arr_years[k] + '" class="bordered">' + k + '</th>';
     }
 
-    $(for_string_years).insertAfter('.year-row');
-    $('.date-row').append(for_string_dates);
     $('#time-row-header').append(dateStr);
-    $(dateStr).insertAfter('#time-row-footer');
 
     $('#submit_finish_vote').click(function() {
         var form = document.finish_vote;
@@ -134,18 +138,18 @@ $(document).ready(function () {
 $(document).on('click', '.toggle-all, .cl_click', function(e) {
     values_changed = true;
     var cl = "";
-    if($(this).hasClass('poll-cell-active-is')) {
+    if($(this).hasClass('poll-cell-active-is') || $(this).hasClass('toggle-is')) {
         cl = "not";
-    } else if($(this).hasClass('poll-cell-active-not')) {
+    } else if($(this).hasClass('poll-cell-active-not') || $(this).hasClass('toggle-not')) {
         cl = "maybe";
-    } else if($(this).hasClass('poll-cell-active-maybe')) {
+    } else if($(this).hasClass('poll-cell-active-maybe') || $(this).hasClass('toggle-maybe')) {
         cl = "is";
     } else {
         cl = "is";
     }
     if($(this).hasClass('toggle-all')) {
         $(".cl_click").attr('class', 'cl_click poll-cell-active-' + cl);
-        $(this).attr('class', 'toggle-all poll-cell-active-' + cl);
+        $(this).attr('class', 'toggle-all toggle-' + cl);
     } else {
         $(this).attr('class', 'cl_click poll-cell-active-' + cl);
     }
