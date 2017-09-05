@@ -3,21 +3,16 @@ h1 {
     margin-bottom: 5px;
 }
 
-h2 {
-    font-size: 1.5em;
-    margin: 10px 0 5px 0;
-}
-
-a {
+/* a {
     color: #35537a;
 }
-
-a:not(.button):hover {
+ */
+/* a:not(.button):hover {
     text-decoration: underline;
 }
 
-#app header {
-    padding-top: 15px;
+ */#app header {
+    padding-top: 44px;
 }
 
 .row:after {
@@ -49,6 +44,7 @@ a:not(.button):hover {
     width: 35%;
     float: left;
     padding: 0px 15px;
+    margin-top: 32px;
 }
 
 @media(max-width: 1000px) {
@@ -66,12 +62,6 @@ input[type="text"] {
 textarea {
     min-width: 100%;
     max-width: 100%;
-}
-
-
-table {
-    border: 1px solid #DDD;
-    border-radius: 3px;
 }
 
 .form-actions {
@@ -199,6 +189,8 @@ td.td_shown {
 .toggle-all {
     min-width: 40px;
     cursor: pointer;
+ 	background-image: url('../img/change.svg');
+ 	display: inline-block;
 }
 
 .user-cell {
