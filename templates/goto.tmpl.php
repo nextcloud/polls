@@ -53,8 +53,21 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 ?>
 
 <div id="app">
+	<?php include ("navigation.tmpl.php"); ?>
     <div id="app-content">
         <div id="app-content-wrapper">
+			<div id="controls">
+				<div class="breadcrumb">
+					<div class="crumb svg" data-dir="/">
+						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
+					</div>
+					<div class="crumb svg last"><a href="#">
+						<?php p($poll->getTitle()); ?>
+						</a>
+					</div>
+			  </div>
+		  </div>
+		
             <?php if(!User::isLoggedIn()) : ?>
                 <div class="row">
                     <div class="col-100">
@@ -69,22 +82,15 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                 </div>
             <?php endif; ?>
             <header class="row">
-                <div class="col-100">
-                    <h1><?php p($poll->getTitle()); ?></h1>
-                    <div class="wordwrap desc"><?php print_unescaped($description); ?></div>
-                </div>
             </header>
             <div class="row">
                 <div class="col-70">
-                    <h2><?php p($l->t('Poll')); ?></h2>
+                    <div class="wordwrap desc"><?php print_unescaped($description); ?></div>
                     <div class="scroll_div">
-                        <table class="vote_table" id="id_table_1">
+                        <table class="vote_table">
                             <thead>
-                                <tr>
                                     <?php
                                     if ($poll->getType() == '0') {
-                                        print_unescaped('<th rowspan=3 class="year-row"></th>');
-                                        print_unescaped('<th class="bordered" rowspan=3>' . $l->t('All') . '</th>');
                                     } else {
                                         print_unescaped('<th></th>');
                                         foreach ($dates as $el) {
@@ -93,10 +99,9 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         print_unescaped('<th class="bordered">' . $l->t('All') . '</th>');
                                     }
                                     ?>
-                                </tr>
                                 <?php
                                 if ($poll->getType() == '0'){
-                                    print_unescaped('<tr class="date-row"></tr><tr id="time-row-header"></tr>');
+                                    print_unescaped('<tr id="time-row-header"><td class="first_header_cell"></td></tr>');
                                 }
                                 ?>
                             </thead>
@@ -179,7 +184,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             print_unescaped('<td class="' . $cl . '"></td>');
                                             $i_tot++;
                                         }
-                                        print_unescaped('<td></td>');
                                         print_unescaped('</tr>');
                                     }
                                 }
@@ -196,10 +200,10 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             print_unescaped('<div class="userNameImg noAvatar" style="background-color:' . getHsl($userId) . ';">' . strtoupper($userId[0]) . '</div>');
                                         }
                                         p($userMgr->get($userId)->getDisplayName());
-                                        print_unescaped('</th>');
                                     } else {
-                                        print_unescaped('<th id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" /></th>');
+                                        print_unescaped('<th id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
                                     }
+                                    print_unescaped('<div id="toggle" class="toggle-all toggle-maybe"></div></th>');
                                     $i_tot = 0;
                                     foreach ($dates as $dt) {
                                         if ($poll->getType() == '0') {
@@ -234,7 +238,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         print_unescaped('<td class="cl_click ' . $cl . '" id="' . $date_id . '"></td>');
                                         $i_tot++;
                                     }
-                                    print_unescaped('<td class="toggle-all selected-maybe"></td></tr>');
                                 }
                                 ?>
                             </tbody>
@@ -266,7 +269,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             </div>
                                         </td>
                                     <?php endfor; ?>
-                                    <td></td>
                                 </tr>
                                 <tr>
                                     <th><?php p($l->t('Best option')); ?></th>
@@ -279,7 +281,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         print_unescaped('<td class="win_row ' . $check . '" id="id_total_' . $i . '"></td>');
                                     }
                                     ?>
-                                    <td class="bordered"></td>
                                 </tr>
                             </tbody>
                             <tfoot>
