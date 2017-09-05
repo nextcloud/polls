@@ -84,7 +84,7 @@
                         ?>
                     <tr>
                         <td class="pollname">
-                            <div class="thumbnail" style="background-image:url(/apps/polls/img/progress-vote.svg); background-size: 32px;"></div>  <!-- Image to display status or type of poll */ -->
+                            <div class="thumbnail"></div>  <!-- Image to display status or type of poll */ -->
                             <a class="name" href="<?php p($pollUrl); ?>">
                                 <span class="nametext">
                                     <span class="innernametext">
@@ -148,10 +148,10 @@
                         </td>
                         <td class="options">
                             <?php if ($poll->getOwner() === $userId) : ?>
-                            <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete"></input>
-                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button cl_edit icon-rename"></input></a>
+                            <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete action permanent"></input>
+                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button icon-rename action permanent"></input></a>
                             <?php endif; ?>
-                            <input type="button" class="table_button cl_link icon-public" data-url="<?php p(OCP\Util::linkToAbsolute('', $pollUrl)); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
+                            <input type="button" class="table_button cl_link icon-public action permanent" data-url="<?php p(OCP\Util::linkToAbsolute('', $pollUrl)); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
                         </td>
                     </tr>
                 <?php endforeach; ?>
