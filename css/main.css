@@ -189,7 +189,6 @@ td.td_shown {
 .toggle-all {
     min-width: 40px;
     cursor: pointer;
- 	background-image: url('../img/change.svg');
  	display: inline-block;
 }
 
@@ -231,14 +230,8 @@ td.td_shown {
     background-color: #82de82;
 }
 
-.cl_poll_url, .cl_click, .cl_delete, .cl_date_time_header {
+.cl_poll_url, .cl_click, .cl_date_time_header {
     cursor: pointer;
-}
-
-.cl_delete {
-    background-color: white;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
 }
 
 .cl_pad_left {
