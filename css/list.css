@@ -1,34 +1,135 @@
-table {
-    width: 100%;
+/* 
+    #app-navigation.without-app-settings {
+        display:none;
+    }
+
+    #app-navigation + #app-content #controls {
+        left: 15px;
+    }
+
+ */
+
+#controls h2 {
+	float: left;
+	padding: 15px 15px 0 15px;
+}
+
+/* .actions.creatable {
+	position: relative;
+	left: 15px;
+	padding-top: 5px;
+}
+ */
+.app-polls #app-content {
+	transition: background-color 0.3s ease;
+	overflow-x: hidden;
+}
+
+#pollstable {
+	position: relative;
+	width: 100%;
+}
+
+#pollstable.has-controls {
+	top: 44px;
+}
+
+#body-user #pollstable {
+	min-width: 688px;
+}
+
+#headerName-container {
+    padding-left: 70px;
+}
+
+#pollstable tbody tr {
+	transition: background-color 0.3s ease;
+	background-color: #fff;
+	height: 40px;
+}
+
+#polllist tr td.pollname {
+	padding-left: 15px;
+}
+
+#pollstable tbody tr:hover, #pollstable tbody tr:focus, #pollstable tbody .name:focus, #pollstable tbody tr:active, #pollstable tbody tr.highlighted, #pollstable tbody tr.highlighted .name:focus, #pollstable tbody tr.selected, #pollstable tbody tr.searchresult, table tr.mouseOver td {
+	transition: background-color 0.3s ease;
+	background-color: #f8f8f8;
+}
+
+table th, table th a {
+	color: #999;
+}
+
+table th, table td {
+	border-bottom: 1px solid #eee;
+	text-align: left;
+	font-weight: normal;
+   	height: 50px;
+	line-height: 50px;
 }
 
 table thead th {
-    font-weight: bold;
-    text-align: left;
-    padding: 3px 5px;
-    background-color: #337AB7;
-    color: #FFF;
+	background-color: #fff;
 }
 
-table tbody td {
-    text-align: left;
-    padding: 3px 5px;
+table th .sort-indicator {
+	width: 10px;
+	height: 8px;
+	margin-left: 5px;
+	display: inline-block;
+	vertical-align: text-bottom;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: 0.3;
 }
 
-tbody tr:nth-child(even) {
-    background-color: #337AB7;
-    color: #fff;
+table td.pollname .nametext {
+	position: relative;
+	left: 55px;
+	padding: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 70%;
+	max-width: 800px;
+	height: 100%;
 }
 
-tbody tr:nth-child(even):hover {
-    background-color: #CDF5FF;
-    color: #000;
+table td.pollname .thumbnail {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	margin-left: 8px;
+	margin-top: 9px;
+	cursor: pointer;
+	float: left;
+	position: absolute;
+	z-index: 4;
 }
 
-tbody tr:nth-child(even):hover a {
-    color: #000;
+.actions {
+	padding: 5px;
+	height: 32px;
+	display: inline-block;
+	float: left;
 }
 
-tbody tr:nth-child(even) a {
-    color: #fff;
+.actions.creatable {
+	position: relative;
+	z-index: -30;
+}
+
+.actions input, .actions button, .actions .button {
+	margin: 0;
+	float: left;
+}
+
+.app-files .actions .button.new {
+	position: relative;
+}
+
+.description {
+	line-height: initial;
+	margin-bottom: 5px;
+	color: #888;
 }
