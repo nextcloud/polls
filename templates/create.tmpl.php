@@ -71,7 +71,6 @@
     
     <div class="new_poll row">
         <div class="col-50">
-            <h2><?php p($l->t('Basic information')); ?></h2>
             <label for="pollTitle" class="input_title"><?php p($l->t('Title')); ?></label>
             <input type="text" class="input_field" id="pollTitle" name="pollTitle" value="<?php if(isset($title)) p($title); ?>" />
             <label for="pollDesc" class="input_title"><?php p($l->t('Description')); ?></label>
