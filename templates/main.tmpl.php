@@ -75,7 +75,7 @@
                     <?php
                         if (!userHasAccess($poll, $userId)) continue;
                         // direct url to poll
-                        $pollUrl = $urlGenerator->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash()));
+                        $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
                             $desc_str = $poll->getDescription();
 // try                            if($desc_str === null) $desc_str = $l->t('No description provided.');
                             if (strlen($desc_str) > 100){
@@ -151,7 +151,7 @@
                             <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete action permanent"></input>
                             <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button icon-rename action permanent"></input></a>
                             <?php endif; ?>
-                            <input type="button" class="table_button cl_link icon-public action permanent" data-url="<?php p(OCP\Util::linkToAbsolute('', $pollUrl)); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
+                            <input type="button" class="table_button cl_link icon-public action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
                         </td>
                     </tr>
                 <?php endforeach; ?>
