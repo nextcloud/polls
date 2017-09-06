@@ -106,15 +106,6 @@
 
             <input type="hidden" name="accessValues" id="accessValues" value="<?php if($isUpdate && $access === 'select') p($accessTypes) ?>" />
 
-            <label class="input_title"><?php p($l->t('Type')); ?></label>
-
-            <input type="radio" name="pollType" id="event" value="event" class="radio" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
-            <label for="event"><?php p($l->t('Event schedule')); ?></label>
-
-            <!-- TODO texts to db -->
-            <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
-            <label for="text"><?php p($l->t('Text based')); ?></label>
-
             <input id="isAnonymous" name="isAnonymous" type="checkbox" class="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
             <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
 
@@ -130,7 +121,14 @@
             </div>
         </div>
         <div class="col-50">
-            <h2><?php p($l->t('Choices')); ?></h2>
+
+            <input type="radio" name="pollType" id="event" value="event" class="radio" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
+            <label for="event"><?php p($l->t('Event schedule')); ?></label>
+
+            <!-- TODO texts to db -->
+            <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
+            <label for="text"><?php p($l->t('Text based')); ?></label>
+
             <div id="date-select-container" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('style="display:none;"'); ?> >
                 <label for="datetimepicker" class="input_title"><?php p($l->t('Dates')); ?></label>
                 <input id="datetimepicker" type="text" />
