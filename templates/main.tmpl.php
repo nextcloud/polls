@@ -14,7 +14,7 @@
                 <div id="controls">
 					<div class="breadcrumb">
 						<div class	="crumb svg last" data-dir="/">
-							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="/core/img/places/home.svg" alt="Home"></a>
+							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="../../../core/img/places/home.svg" alt="Home"></a>
 						</div>
 					</div>
                     <div class="actions creatable" style="">
