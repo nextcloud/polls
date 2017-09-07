@@ -98,7 +98,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     ?>
                                 <?php
                                 if ($poll->getType() == '0'){
-                                    print_unescaped('<tr id="time-row-header"><td class="first_header_cell"></td></tr>');
+                                    print_unescaped('<tr id="time-row-header"><th class="first_header_cell"></th></tr>');
                                 }
                                 ?>
                             </thead>
@@ -280,28 +280,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     ?>
                                 </tr>
                             </tbody>
-                            <tfoot>
-                                <?php
-                                if ($poll->getType() == '0') {
-                                    print_unescaped('<tr><th rowspan=3 id="time-row-footer"></th>');
-                                    print_unescaped('<th rowspan=3 class="bordered">' . $l->t('All') . '</th></tr>');
-                                    print_unescaped('<tr class="date-row"></tr>');
-                                }
-                                ?>
-                                <tr>
-                                    <?php
-                                    if ($poll->getType() == '0') {
-                                        print_unescaped('<th colspan=0 class="year-row" style="display: none;"></th>');
-                                    } else {
-                                        print_unescaped('<th></th>');
-                                        foreach ($dates as $el) {
-                                            print_unescaped('<th title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="bordered">' . preg_replace('/_\d+$/', '', $el->getText()) . '</th>');
-                                        }
-                                        print_unescaped('<th class="bordered"></th>');
-                                    }
-                                    ?>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                     <div class="input-group share">
