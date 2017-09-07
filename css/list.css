@@ -15,6 +15,11 @@
     background-image: url('../../../apps/polls/css/../img/progress-vote.svg'); 
 }    
 
+.icon-polls {
+	background-color: black;
+	mask: url('../../../apps/polls/css/../img/app-logo-polls.svg') no-repeat 50% 50%;
+}
+
 .nametext {
 	line-height: 2em;
 }

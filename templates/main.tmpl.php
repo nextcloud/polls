@@ -15,11 +15,9 @@
     <div id="app-content">
         <div id="app-content-wrapper">
                 <div id="controls">
-					<div class="breadcrumb">
-						<div class	="crumb svg last" data-dir="/">
-							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="../../../core/img/places/home.svg" alt="Home"></a>
-						</div>
-					</div>
+                    <div class	="crumb svg last" data-dir="/">
+                        <a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
+                    </div>
                     <div class="actions creatable" style="">
                         <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
                             <span class="icon icon-add"></span><span class="hidden-visually">Neu</span>
@@ -28,7 +26,10 @@
                     </div>
                 </div>
     <?php if(count($_['polls']) === 0) : ?>
-        <?php p($l->t('No existing polls.')); ?>
+        <div id="emptycontent" class="">
+            <div class="icon-polls"></div>
+            <h2><?php p($l->t('No existing polls.')); ?></h2>
+        </div>
     <?php else : ?>
             <table id="pollstable" class="has-controls">
                 <thead>
@@ -38,38 +39,23 @@
                                 <a class="name sort columntitle" data-sort="name"><span><?php p($l->t('Title')); ?></span><span class="sort-indicator"></span></a>
                             </div>
                         </th>
-
-                        <th id="headerCreated" class="column-Created">
-                            <div id="headerCreated-container">
-                                <a class="name sort columntitle" data-sort="created"><span><?php p($l->t('Created')); ?></span><span class="sort-indicator"></span></a>
-                            </div>
+                        <th id="headerCreated" class="column-created">
+                            <a class="name sort columntitle" data-sort="created"><span><?php p($l->t('Created')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerPrincipal" class="column-Principal">
-                            <div id="headerPrincipal-container">
-                                <a class="name sort columntitle" data-sort="principal"><span><?php p($l->t('By')); ?></span><span class="sort-indicator"></span></a>
-                            </div>
+                        <th id="headerPrincipal" class="column-principal">
+                            <a class="name sort columntitle" data-sort="principal"><span><?php p($l->t('By')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        
-                        <th id="headerExpiry" class="column-Expiry">
-                            <div id="headerExpiry-container">
-                                <a class="name sort columntitle" data-sort="expiry"><span><?php p($l->t('Expires')); ?></span><span class="sort-indicator"></span></a>
-                            </div>
+                        <th id="headerExpiry" class="column-expiry">
+                            <a class="name sort columntitle" data-sort="expiry"><span><?php p($l->t('Expires')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        
-                        <th id="headerVoted" class="column-Voted">
-                            <div id="headerVoted-container">
-                                <a class="name sort columntitle" data-sort="voted"><span><?php p($l->t('participated')); ?></span><span class="sort-indicator"></span></a>
-                            </div>
+                        <th id="headerVoted" class="column-voted">
+                            <a class="name sort columntitle" data-sort="voted"><span><?php p($l->t('participated')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerAccess" class="column-Access">
-                            <div id="headerAccess-container">
-                                <a class="name sort columntitle" data-sort="access"><span><?php p($l->t('Access')); ?></span><span class="sort-indicator"></span></a>
-                            </div>
+                        <th id="headerAccess" class="column-access">
+                            <a class="name sort columntitle" data-sort="access"><span><?php p($l->t('Access')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerOptions" class="column-Options">
-                            <div id="headerOptions-container">
-                                <a class="name columntitle" <span><?php p($l->t('Options')); ?></span><span class="sort-indicator"></span></a>
-                            </div>
+                        <th id="headerOptions" class="column-options">
+                            <a class="name columntitle" <span><?php p($l->t('Options')); ?></span><span class="sort-indicator"></span></a>
                         </th>
                     </tr>
                 </thead>
@@ -113,7 +99,7 @@
                                     print_unescaped('<td class="expiry">' . $l->t('Never') . '</td>');
                                 }
                             ?>
-                        <td class="expiry">
+                        <td class="partic">
                             <?php
                                 $partic_class = 'partic_no';
                                 $partic_polls = $_['participations'];

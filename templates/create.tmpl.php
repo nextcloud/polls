@@ -42,20 +42,18 @@
 	<div id="app-content">
         <div id="app-content-wrapper">
 			<div id="controls">
-				<div class="breadcrumb">
-					<div class="crumb svg" data-dir="/">
-						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="../../../../core/img/places/home.svg" alt="Home"></a>
-					</div>
-					<div class="crumb svg last">
-						<a href="#">
-						<?php if($isUpdate): ?>
-							<?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
-						<?php else: ?>
-						  <?php p($l->t('Create new poll')); ?>
-						<?php endif; ?>
-						</a>
-					</div>
-				</div>
+                <div class="crumb svg" data-dir="/">
+                    <a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"></a>
+                </div>
+                <div class="crumb svg last">
+                    <a href="#">
+                    <?php if($isUpdate): ?>
+                        <?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
+                    <?php else: ?>
+                      <?php p($l->t('Create new poll')); ?>
+                    <?php endif; ?>
+                    </a>
+                </div>
 			</div>
 		
 <?php if($isUpdate): ?>
