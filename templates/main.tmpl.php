@@ -1,8 +1,11 @@
 <?php
+
+    use OCP\User;
+
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'list');
     \OCP\Util::addScript('polls', 'start');
-    use OCP\User;
+
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
@@ -84,14 +87,12 @@
                         ?>
                     <tr>
                         <td class="pollname">
-                            <div class="thumbnail"></div>  <!-- Image to display status or type of poll */ -->
+                            <div class="thumbnail progress"></div>  <!-- Image to display status or type of poll */ -->
                             <a class="name" href="<?php p($pollUrl); ?>">
-                                <span class="nametext">
-                                    <span class="innernametext">
-                                        <?php p($poll->getTitle()); ?>
-                                        <div class="description"><?php p($desc_str); ?></div>
-                                    </span>
-                                </span>
+                                <div class="nametext">
+                                    <div class="innernametext"><?php p($poll->getTitle()); ?></div>
+                                    <div class="description"><?php p($desc_str); ?></div>
+                                </div>
                             </a>
                         </td>
 <!--   Try                     <td class="description"><?php p($desc_str); ?></td> -->
