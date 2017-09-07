@@ -1,29 +1,29 @@
 <?php
 
-use \OCP\User;
+    use \OCP\User;
 
-\OCP\Util::addStyle('polls', 'main');
-\OCP\Util::addStyle('polls', 'vote');
-\OCP\Util::addScript('polls', 'vote');
+    \OCP\Util::addStyle('polls', 'main');
+    \OCP\Util::addStyle('polls', 'vote');
+    \OCP\Util::addScript('polls', 'vote');
 
-$userId = $_['userId'];
-$userMgr = $_['userMgr'];
-$urlGenerator = $_['urlGenerator'];
-$avaMgr = $_['avatarManager'];
+    $userId = $_['userId'];
+    $userMgr = $_['userMgr'];
+    $urlGenerator = $_['urlGenerator'];
+    $avaMgr = $_['avatarManager'];
 
-$poll = $_['poll'];
-$dates = $_['dates'];
-$votes = $_['votes'];
-$comments = $_['comments'];
-$isAnonymous = $poll->getIsAnonymous() && $userId != $poll->getOwner();
-$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
-$notification = $_['notification'];
+    $poll = $_['poll'];
+    $dates = $_['dates'];
+    $votes = $_['votes'];
+    $comments = $_['comments'];
+    $isAnonymous = $poll->getIsAnonymous() && $userId != $poll->getOwner();
+    $hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
+    $notification = $_['notification'];
 
-if ($poll->getExpire() === null) {
-    $expired = false;
-} else {
-    $expired = time() > strtotime($poll->getExpire());
-}
+    if ($poll->getExpire() === null) {
+        $expired = false;
+    } else {
+        $expired = time() > strtotime($poll->getExpire());
+    }
 
 ?>
 
@@ -59,7 +59,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 			<div id="controls">
 				<div class="breadcrumb">
 					<div class="crumb svg" data-dir="/">
-						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="../../../core/img/places/home.svg" alt="Home"></a>
+						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="../../../../core/img/places/home.svg" alt="Home"></a>
 					</div>
 					<div class="crumb svg last"><a href="#">
 						<?php p($poll->getTitle()); ?>

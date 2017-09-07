@@ -1,4 +1,6 @@
 <?php
+    use \OCP\User;
+
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'create');
     \OCP\Util::addStyle('polls', 'jquery.datetimepicker');
@@ -42,7 +44,7 @@
 			<div id="controls">
 				<div class="breadcrumb">
 					<div class="crumb svg" data-dir="/">
-						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="../../../core/img/places/home.svg" alt="Home"></a>
+						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"><img class="svg" src="../../../../core/img/places/home.svg" alt="Home"></a>
 					</div>
 					<div class="crumb svg last">
 						<a href="#">

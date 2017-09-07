@@ -80,7 +80,6 @@
                         // direct url to poll
                         $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
                             $desc_str = $poll->getDescription();
-// try                            if($desc_str === null) $desc_str = $l->t('No description provided.');
                             if (strlen($desc_str) > 100){
                                 $desc_str = substr($desc_str, 0, 80) . '...';
                             }
@@ -95,7 +94,6 @@
                                 </div>
                             </a>
                         </td>
-<!--   Try                     <td class="description"><?php p($desc_str); ?></td> -->
                         <td class="created"><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
                         <td class="principal">
                             <?php
