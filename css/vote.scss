@@ -125,6 +125,12 @@ th.external {
     transition: background-color 0.2s;
 }
 
+.poll-cell-un, .poll-cell-active-un {
+	background-image: url('../../../apps/polls/css/../img/un-vote.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+    transition: background-color 0.2s;
+}
 
 .poll-cell-not, .poll-cell-active-not, .date-text-not-selected, .selected-none {
     background-image: url('../img/no-vote.svg');
@@ -216,8 +222,13 @@ td.total {
     background-color: #ffede9; /*red*/
 	color: #f45573;
 }
-.color_maybe, .poll-cell-maybe, .poll-cell-active-maybe, .poll-cell-un, .poll-cell-active-un {
+.color_maybe, .poll-cell-maybe, .poll-cell-active-maybe {
     background-color: #fff4c8; /*yellow*/
+	color: #ffc107;
+}
+
+.poll-cell-un, .poll-cell-active-un {
+    background-color: #fcf7e1; /*light yellow*/
 	color: #ffc107;
 }
 
