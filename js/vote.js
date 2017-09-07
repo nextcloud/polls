@@ -19,7 +19,7 @@ $(document).ready(function () {
     var prev = '';
     var dateStr = '';
     $('.hidden-dates').each(function(i, obj) {
-        var exDt = new Date(obj.value+'+0000'); // add +0000 = UTC
+        var exDt = new Date(obj.value.replace(/ /g,"T")+"Z"); //Fix display in Safari and IE, still NaN on Firefox on iPad
         var day = ('0' + exDt.getDate()).substr(-2);
         var month = ('0' + (exDt.getMonth()+1)).substr(-2);
         var day_month = day + '.' + month;
