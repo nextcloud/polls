@@ -115,19 +115,19 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                         }
                                         print_unescaped('<tr>');
-                                        print_unescaped('<td class="avatar">');
+                                        print_unescaped('<td id="avatar">');
                                         if($userMgr->get($usr) != null && !$isAnonymous && !$hideNames) {
-                                            print_unescaped('<div class="avatardiv" title="'.($usr).'"></div>');
+                                            print_unescaped('<div class="poll avatardiv" title="'.($usr).'"></div>');
                                             print_unescaped('</td>');
                                             print_unescaped('<td class="name">');
                                             p($userMgr->get($usr)->getDisplayName());
                                         } else {
                                             if($isAnonymous || $hideNames) {
-                                            print_unescaped('<div class="avatardiv" title="'.($userCnt).'"></div>');
+                                            print_unescaped('<div class="poll avatardiv" title="'.($userCnt).'"></div>');
                                             print_unescaped('</td>');
                                             print_unescaped('<td class="name">');
                                             } else {
-                                                print_unescaped('<div class="avatardiv" title="'.($usr).'"></div>');
+                                                print_unescaped('<div class="poll avatardiv" title="'.($usr).'"></div>');
                                                 print_unescaped('</td>');
                                                 print_unescaped('<td class="name">');
                                                 p($usr);
@@ -179,14 +179,16 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 $total_n_others = array_merge(array(), $total_n);
                                 if (!$expired) {
                                     print_unescaped('<tr class="current-user nc-theming-main-background nc-theming-contrast">');
-                                    print_unescaped('<td class="avatar">');
+                                    print_unescaped('<td id="avatar">');
                                     if (User::isLoggedIn()) {
-                                            print_unescaped('<div class="avatardiv" title="'.($userId).'"></div>');
-                                            print_unescaped('</td>');
-                                            print_unescaped('<td class="name">');
-                                            p($userMgr->get($userId)->getDisplayName());
+                                        print_unescaped('<div class="poll avatardiv" title="'.($userId).'"></div>');
+                                        print_unescaped('</td>');
+                                        print_unescaped('<td class="name">');
+                                        p($userMgr->get($userId)->getDisplayName());
                                     } else {
-                                        print_unescaped('<th id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
+                                        print_unescaped('<div class="poll avatardiv" title="?"></div>');
+                                        print_unescaped('</td>');
+                                        print_unescaped('<td id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
                                     }
                                     print_unescaped('<div id="toggle" class="toggle-all toggle-maybe"></div></td>');
                                     $i_tot = 0;

@@ -19,7 +19,7 @@ $(document).ready(function () {
     var prev = '';
     var dateStr = '';
 
-    $('.avatardiv').each(function(i, obj) {
+    $('.poll.avatardiv').each(function(i, obj) {
         $(obj).avatar(obj.title, 32);
     });
 
