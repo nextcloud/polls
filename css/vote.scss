@@ -1,11 +1,24 @@
 .vote_table {
     width: 100%;
-    
-    thead tr:nth-child(even) th, tfoot tr:nth-child(even) th, tfoot tr:nth-child(even) td {
-        color: #333;
+	border-spacing: 1px 1px;
+	white-space: normal;
+
+    thead {
+        white-space: normal;
+
+        thead tr:nth-child(even) th, tfoot tr:nth-child(even) th, tfoot tr:nth-child(even) td {
+            color: #333;
+    }
     }
 }
 
+td.avatar {
+    width:40px;
+}
+
+td.name {
+    max-width: 80px;
+}
 
 .time-slot-cell {
 	font-weight: bold;
@@ -19,12 +32,6 @@
         font-size: 1.8em;
         margin: 5px 0 5px 0;
     }
-}
-
-
-
-tbody.votes tr:nth-child(even):hover {
-    background-color: #CDF5FF;
 }
 
 tbody.total th {
@@ -85,16 +92,11 @@ th, tr, td {
 
 tr.current-user {
     th {
-        background-color: #337AB7;
-        color: #FFF;
         font-weight: bold;
         font-style: italic;
-        border-top: 3px solid #337AB7;
-        border-bottom: 3px solid #337AB7;
+        opacity: 0.85;    
     }
     td {
-        border-top: 3px solid #337AB7;
-        border-bottom: 3px solid #337AB7;
     }
 }
 
@@ -116,6 +118,7 @@ th.external {
     background-repeat: no-repeat;
     background-position: center;
     transition: background-color 0.2s;
+    background-size: 24px;
 }
 
 .poll-cell-maybe, .poll-cell-active-maybe {
@@ -123,6 +126,7 @@ th.external {
     background-repeat: no-repeat;
     background-position: center;
     transition: background-color 0.2s;
+    background-size: 24px;
 }
 
 .poll-cell-un, .poll-cell-active-un {
@@ -130,6 +134,7 @@ th.external {
 	background-repeat: no-repeat;
 	background-position: center;
     transition: background-color 0.2s;
+    background-size: 24px;
 }
 
 .poll-cell-not, .poll-cell-active-not, .date-text-not-selected, .selected-none {
@@ -137,6 +142,7 @@ th.external {
     background-repeat: no-repeat;
     background-position: center;
     transition: background-color 0.2s;
+    background-size: 24px;
 }
 
 .share {

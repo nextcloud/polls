@@ -57,27 +57,21 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
     <div id="app-content">
         <div id="app-content-wrapper">
 			<div id="controls">
-                <div class="crumb svg" data-dir="/">
-                    <a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"></a>
-                </div>
-                <div class="crumb svg last">
-                    <a href="#"><?php p($poll->getTitle()); ?></a>
-                </div>
-		  </div>
-		
-            <?php if(!User::isLoggedIn()) : ?>
-                <div class="row">
-                    <div class="col-100">
-                        <div class="alert-info">
-                            <?php
-                                p($l->t('Already have an account?'));
-                                $loginUrl = OCP\Util::linkToAbsolute('', 'index.php' ) . '?redirect_url=' . $urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
-                            ?>
-                            <a href="<?php p($loginUrl); ?>"><?php p($l->t('Login')); ?></a>
-                        </div>
+                <?php if(User::isLoggedIn()) : ?>
+                    <div class="crumb svg" data-dir="/">
+                        <a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"></a>
                     </div>
-                </div>
-            <?php endif; ?>
+                    <div class="crumb svg last">
+                        <a href="#"><?php p($poll->getTitle()); ?></a>
+                    </div>
+                <?php endif; ?>
+		
+                <?php if(!User::isLoggedIn()) : ?>
+                    <div class="col-100">
+                        <h2><?php p($poll->getTitle()); ?></h2>
+                    </div>
+                <?php endif; ?>
+		    </div>
             <header class="row">
             </header>
             <div class="row">
@@ -88,19 +82,15 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                             <thead>
                                     <?php
                                     if ($poll->getType() == '0') {
+                                        print_unescaped('<tr id="time-row-header"><th class="first_header_cell" colspan="2"></th>');
                                     } else {
-                                        print_unescaped('<th></th>');
+                                        print_unescaped('<tr id="vote-options-header"><th class="first_header_cell" colspan="2"></th>');
                                         foreach ($dates as $el) {
                                             print_unescaped('<th title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="bordered">' . preg_replace('/_\d+$/', '', $el->getText()) . '</th>');
                                         }
-                                        print_unescaped('<th class="bordered">' . $l->t('All') . '</th>');
                                     }
+                                    print_unescaped('</tr>');
                                     ?>
-                                <?php
-                                if ($poll->getType() == '0'){
-                                    print_unescaped('<tr id="time-row-header"><th class="first_header_cell"></th></tr>');
-                                }
-                                ?>
                             </thead>
                             <tbody class="votes">
                                 <?php
@@ -125,24 +115,25 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                         }
                                         print_unescaped('<tr>');
+                                        print_unescaped('<td class="avatar">');
                                         if($userMgr->get($usr) != null && !$isAnonymous && !$hideNames) {
-                                            print_unescaped('<th class="user-cell">');
-                                            $avatar = $avaMgr->getAvatar($usr)->get(32);
-                                            if($avatar !== false) {
-                                                print_unescaped('<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />');
-                                            } else {
-                                                print_unescaped('<div class="userNameImg noAvatar" style="background-color:' . getHsl($usr) . ';">' . strtoupper($usr[0]) . '</div>');
-                                            }
+                                            print_unescaped('<div class="avatardiv" title="'.($usr).'"></div>');
+                                            print_unescaped('</td>');
+                                            print_unescaped('<td class="name">');
                                             p($userMgr->get($usr)->getDisplayName());
                                         } else {
                                             if($isAnonymous || $hideNames) {
-                                                print_unescaped('<th class="user-cell anonymous">');
-                                                p($l->t('Participent') . ' ' . $userCnt);
+                                            print_unescaped('<div class="avatardiv" title="'.($userCnt).'"></div>');
+                                            print_unescaped('</td>');
+                                            print_unescaped('<td class="name">');
                                             } else {
-                                                print_unescaped('<th class="user-cell external">'. $usr);
+                                                print_unescaped('<div class="avatardiv" title="'.($usr).'"></div>');
+                                                print_unescaped('</td>');
+                                                print_unescaped('<td class="name">');
+                                                p($usr);
                                             }
                                         }
-                                        print_unescaped('</th>');
+                                        print_unescaped('</td>');
 
                                         // loop over dts
                                         $i_tot = 0;
@@ -187,20 +178,17 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 $total_y_others = array_merge(array(), $total_y);
                                 $total_n_others = array_merge(array(), $total_n);
                                 if (!$expired) {
-                                    print_unescaped('<tr class="current-user">');
+                                    print_unescaped('<tr class="current-user nc-theming-main-background nc-theming-contrast">');
+                                    print_unescaped('<td class="avatar">');
                                     if (User::isLoggedIn()) {
-                                        print_unescaped('<th class="user-cell">');
-                                        $avatar = $avaMgr->getAvatar($userId)->get(32);
-                                        if($avatar !== false) {
-                                            print_unescaped('<img class="userNameImg" src="data:' . $avatar->mimeType() . ';base64,' . $avatar . '" />');
-                                        } else {
-                                            print_unescaped('<div class="userNameImg noAvatar" style="background-color:' . getHsl($userId) . ';">' . strtoupper($userId[0]) . '</div>');
-                                        }
-                                        p($userMgr->get($userId)->getDisplayName());
+                                            print_unescaped('<div class="avatardiv" title="'.($userId).'"></div>');
+                                            print_unescaped('</td>');
+                                            print_unescaped('<td class="name">');
+                                            p($userMgr->get($userId)->getDisplayName());
                                     } else {
                                         print_unescaped('<th id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
                                     }
-                                    print_unescaped('<div id="toggle" class="toggle-all toggle-maybe"></div></th>');
+                                    print_unescaped('<div id="toggle" class="toggle-all toggle-maybe"></div></td>');
                                     $i_tot = 0;
                                     foreach ($dates as $dt) {
                                         if ($poll->getType() == '0') {
@@ -247,7 +235,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     $max_votes = max($diff_array);
                                 ?>
                                 <tr>
-                                    <th><?php p($l->t('Total')); ?></th>
+                                    <th colspan="2"><?php p($l->t('Total')); ?></th>
                                     <?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
                                         <td class="total">
                                             <?php
@@ -268,7 +256,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <?php endfor; ?>
                                 </tr>
                                 <tr>
-                                    <th><?php p($l->t('Best option')); ?></th>
+                                    <th colspan="2"><?php p($l->t('Best option')); ?></th>
                                     <?php
                                     for ($i = 0; $i < count($dates); $i++) {
                                         $check = '';
@@ -376,6 +364,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
             </div>
         </div>
     </div>
+
 </div>
 
 <?php

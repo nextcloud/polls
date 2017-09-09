@@ -18,6 +18,12 @@ $(document).ready(function () {
     var arr_years = [];  // [1992] => 6
     var prev = '';
     var dateStr = '';
+
+    $('.avatardiv').each(function(i, obj) {
+        $(obj).avatar(obj.title, 32);
+    });
+
+    
     $('.hidden-dates').each(function(i, obj) {
         var exDt = new Date(obj.value.replace(/ /g,"T")+"Z"); //Fix display in Safari and IE, still NaN on Firefox on iPad
         var day = ('0' + exDt.getDate()).substr(-2);
