@@ -1,151 +1,132 @@
 .vote_table {
-    width: 100%;
 	border-spacing: 1px 1px;
 	white-space: normal;
 
     thead {
         white-space: normal;
 
-        thead tr:nth-child(even) th, tfoot tr:nth-child(even) th, tfoot tr:nth-child(even) td {
-            color: #333;
+        .time-slot, .vote-option {
+            min-width: 50px;
+            text-align: center;
+            
+            .month, .dayow {
+                font-size: 1.2em;
+                color: #666;
+            }
+
+            .day {
+                font-size: 1.8em;
+                margin: 5px 0 5px 0;
+            }
+        }
     }
-    }
-    .avatar-cell {
+
+    td.avatar-cell {
         width: 40px;
     }
-}
-
-td.avatar {
-    width:40px;
-}
-
-td.name {
-    max-width: 80px;
-}
-
-.time-slot-cell {
-	font-weight: bold;
-
-    .month, .dayow {
-        font-size: 1.2em;
-        color: #666;
+    
+    td.name {
+        max-width: 170px;
+        min-width: 130px;
     }
 
-    .day {
-        font-size: 1.8em;
-        margin: 5px 0 5px 0;
+    .total th, .best th{
+        text-align: right;
     }
+    
+    .total td, .best td{
+        text-align: center;
+    }
+
+    .poll-cell {
+        background-repeat: no-repeat;
+        background-position: center;
+        transition: background-color 0.2s;
+        background-size: 24px;
+    
+        &.yes {
+            background-image: url('../img/yes-vote.svg');
+        }
+
+        &.maybe {
+            background-image: url('../img/maybe-vote.svg');
+        }
+
+        &.unvoted {
+            background-image: url('../../../apps/polls/css/../img/un-vote.svg');
+        }
+
+        &.no {
+            background-image: url('../img/no-vote.svg');
+        }
+    }
+
+    .unvoted {
+        background-color: #fcf7e1; /*light yellow*/
+        color: #fff3cd;
+    }
+
+    .color_yes, .yes {
+        background-color: #ebf5d6; /*green*/
+        color: #49bc49;
+    }
+    .color_no, .no {
+        background-color: #ffede9; /*red*/
+        color: #f45573;
+    }
+    .color_maybe, .maybe {
+        background-color: #fff4c8; /*yellow*/
+        color: #ffc107;
+    }
+
+    .current-user {
+        .name {
+            font-weight: bold;
+            font-style: italic;
+            opacity: 0.85;    
+        }
+    }
+
 }
 
-tbody.total th {
-    text-align: right;
+.toggle-all {
+    min-width: 40px;
+    cursor: pointer;
+ 	display: inline-block;
 }
 
 th, tr, td {
     padding: 4px;
-    text-align: center;
+    /* text-align: center; */
 }
 
-.votes th, .votes tr, .votes td {
-	padding: 4px;
-	text-align: left;
-	border-bottom: 1px solid #ddd;
+.votes {
+        th, tr, td {
+        /* text-align: left; */
+        border-bottom: 1px solid #ddd;
+    }
 }
 
-.user-cell {
-	text-align: left;
-	min-width: 100px;
-	height: 50px;
-	padding: 8px;
-}
 
 /* .current-user {
 	box-shadow: 0px 0px 5px 5px #999;
 }
  */
- 
-#polls {
-    width: 100%;
-}
 
-#poll-table {
-    width: 100%;
+.finish_vote {
+    display: contents;
 }
 
 #poll-desc, #comments-container, #poll-dates {
     margin-bottom: 15px;
 }
 
-#datepicker {
-    float: left;
-    padding-right: 15px;
-}
-
-#new-poll-form-warn {
-    color: red;
-}
-
-#poll-dates table {
-    min-width: 50%;
-}
-
-#check_notif {
-    margin-bottom: 10px;
-}
-
-tr.current-user {
-    th {
-        font-weight: bold;
-        font-style: italic;
-        opacity: 0.85;    
-    }
-    td {
-    }
-}
-
-th.external {
+.external th {
     padding-left: 40px;
     
     input {
         min-width: 100px;
     }
-}
-
-
-.poll-cell-un, .poll-cell-active-un {
-    background-color: #FFF3CD;
-}
-
-.poll-cell-is, .poll-cell-active-is, .date-text-selected, .selected-all {
-    background-image: url('../img/yes-vote.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: background-color 0.2s;
-    background-size: 24px;
-}
-
-.poll-cell-maybe, .poll-cell-active-maybe {
-    background-image: url('../img/maybe-vote.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: background-color 0.2s;
-    background-size: 24px;
-}
-
-.poll-cell-un, .poll-cell-active-un {
-	background-image: url('../../../apps/polls/css/../img/un-vote.svg');
-	background-repeat: no-repeat;
-	background-position: center;
-    transition: background-color 0.2s;
-    background-size: 24px;
-}
-
-.poll-cell-not, .poll-cell-active-not, .date-text-not-selected, .selected-none {
-    background-image: url('../img/no-vote.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: background-color 0.2s;
-    background-size: 24px;
 }
 
 .share {
@@ -203,15 +184,15 @@ td.total {
 }
 
 
-#toggle.toggle-maybe {
-    background-image: url('../img/toggle-is.svg');
+.toggle-maybe {
+    background-image: url('../img/toggle-yes.svg');
 }
 
-#toggle.toggle-is {
+.toggle-yes {
     background-image: url('../img/toggle-not.svg');
 }
 
-#toggle.toggle-not {
+.toggle-not {
     background-image: url('../img/toggle-maybe.svg');
 }
 
@@ -223,20 +204,3 @@ td.total {
     width: 50px;
 }
 
-.color_yes, .poll-cell-is, .poll-cell-active-is {
-    background-color: #ebf5d6; /*green*/
-	color: #49bc49;
-}
-.color_no, .poll-cell-not, .poll-cell-active-not {
-    background-color: #ffede9; /*red*/
-	color: #f45573;
-}
-.color_maybe, .poll-cell-maybe, .poll-cell-active-maybe {
-    background-color: #fff4c8; /*yellow*/
-	color: #ffc107;
-}
-
-.poll-cell-un, .poll-cell-active-un {
-    background-color: #fcf7e1; /*light yellow*/
-	color: #ffc107;
-}

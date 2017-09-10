@@ -47,7 +47,7 @@ h1 {
     margin-top: 32px;
 }
 
-@media(max-width: 1000px) {
+@media(max-width: 1199px) {
     .col-70, .col-30, .col-50 {
         float: none;
         width: 100%;
@@ -176,26 +176,6 @@ td.td_shown {
 }
 .padded td {
     padding: 10px;
-}
-
-.vote_table thead th {
-    min-width: 40px;
-}
-
-.time-slot-cell {
-    min-width: 50px;
-}
-
-.toggle-all {
-    min-width: 40px;
-    cursor: pointer;
- 	display: inline-block;
-}
-
-.user-cell {
-    text-align: left;
-    min-width: 100px;
-    height: 40px;
 }
 
 .userNameImg {

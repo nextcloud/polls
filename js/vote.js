@@ -44,7 +44,7 @@ $(document).ready(function () {
         var c = (prev != (year + day_month) ? ' bordered' : '');
         prev = (year + day_month);
         var ch_obj = ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2)
-        dateStr += '<th class="time-slot-cell" value="' + obj.value + '"> ' + 
+        dateStr += '<th class="time-slot" value="' + obj.value + '"> ' + 
         '<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) + 
                             // ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) + 
                             '</div>' + 
@@ -64,7 +64,7 @@ $(document).ready(function () {
         for_string_years += '<th colspan="' + arr_years[k] + '" class="bordered">' + k + '</th>';
     }
 
-    $('#time-row-header').append(dateStr);
+    $('#time-slots-header').append(dateStr);
 
     $('#submit_finish_vote').click(function() {
         var form = document.finish_vote;
@@ -80,11 +80,11 @@ $(document).ready(function () {
         check_notif = document.getElementById('check_notif');
         var newUserDates = [], newUserTypes = [];
         $(".cl_click").each(function() {
-            if($(this).hasClass('poll-cell-active-not')) {
+            if($(this).hasClass('no')) {
                 newUserTypes.push(0);
-            } else if ($(this).hasClass('poll-cell-active-is')){
+            } else if ($(this).hasClass('yes')){
                 newUserTypes.push(1);
-            } else if($(this).hasClass('poll-cell-active-maybe')){
+            } else if($(this).hasClass('maybe')){
                 newUserTypes.push(2);
             } else {
                 newUserTypes.push(-1);
@@ -144,26 +144,26 @@ $(document).ready(function () {
 $(document).on('click', '.toggle-all, .cl_click', function(e) {
     values_changed = true;
     var cl = "";
-    if($(this).hasClass('poll-cell-active-is') || $(this).hasClass('toggle-is')) {
-        cl = "not";
-    } else if($(this).hasClass('poll-cell-active-not') || $(this).hasClass('toggle-not')) {
+    if($(this).hasClass('yes') || $(this).hasClass('toggle-yes')) {
+        cl = "no";
+    } else if($(this).hasClass('no') || $(this).hasClass('toggle-no')) {
         cl = "maybe";
-    } else if($(this).hasClass('poll-cell-active-maybe') || $(this).hasClass('toggle-maybe')) {
-        cl = "is";
+    } else if($(this).hasClass('maybe') || $(this).hasClass('toggle-maybe')) {
+        cl = "yes";
     } else {
-        cl = "is";
+        cl = "yes";
     }
     if($(this).hasClass('toggle-all')) {
-        $(".cl_click").attr('class', 'cl_click poll-cell-active-' + cl);
+        $(".cl_click").attr('class', 'cl_click poll-cell active ' + cl);
         $(this).attr('class', 'toggle-all toggle-' + cl);
     } else {
-        $(this).attr('class', 'cl_click poll-cell-active-' + cl);
+        $(this).attr('class', 'cl_click poll-cell active ' + cl);
     }
     $('.cl_click').each(function() {
         var yes_c = $('#id_y_' + $(this).attr('id'));
         var no_c = $('#id_n_' + $(this).attr('id'));
-        $(yes_c).text(parseInt($(yes_c).attr('data-value')) + ($(this).hasClass('poll-cell-active-is') ? 1 : 0));
-        $(no_c).text(parseInt($(no_c).attr('data-value')) + ($(this).hasClass('poll-cell-active-not') ? 1 : 0));
+        $(yes_c).text(parseInt($(yes_c).attr('data-value')) + ($(this).hasClass('yes') ? 1 : 0));
+        $(no_c).text(parseInt($(no_c).attr('data-value')) + ($(this).hasClass('no') ? 1 : 0));
     });
     updateCounts();
 });
