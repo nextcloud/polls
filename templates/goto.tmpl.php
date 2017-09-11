@@ -57,20 +57,24 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
     <div id="app-content">
         <div id="app-content-wrapper">
 			<div id="controls">
-                <?php if(User::isLoggedIn()) : ?>
+                <div id="breadcrump">
+                    <?php if(User::isLoggedIn()) : ?>
                     <div class="crumb svg" data-dir="/">
-                        <a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"></a>
+                        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
+                            <img class="svg" src="../../../../core/img/places/home.svg"" alt="Home">
+                        </a>
                     </div>
                     <div class="crumb svg last">
-                        <a href="#"><?php p($poll->getTitle()); ?></a>
+                        <span><?php p($poll->getTitle()); ?></span>
                     </div>
-                <?php endif; ?>
+                    <?php endif; ?>
 		
-                <?php if(!User::isLoggedIn()) : ?>
+                    <?php if(!User::isLoggedIn()) : ?>
                     <div class="col-100">
                         <h2><?php p($poll->getTitle()); ?></h2>
                     </div>
-                <?php endif; ?>
+                    <?php endif; ?>
+		    </div>
 		    </div>
             <header class="row">
             </header>

@@ -15,14 +15,18 @@
     <div id="app-content">
         <div id="app-content-wrapper">
                 <div id="controls">
-                    <div class	="crumb svg last" data-dir="/">
-                        <a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-                    </div>
-                    <div class="actions creatable" style="">
-                        <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
-                            <span class="icon icon-add"></span><span class="hidden-visually">Neu</span>
-                        </a>
-                        <input class="stop icon-close" style="display:none" value="" type="button">
+                    <div id="breadcrump">
+                        <div class	="crumb svg last" data-dir="/">
+                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
+                                <img class="svg" src="../../../core/img/places/home.svg"" alt="Home">
+                            </a>
+                        </div>
+                        <div class="actions creatable" style="">
+                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
+                                <span class="icon icon-add"></span><span class="hidden-visually">Neu</span>
+                            </a>
+                            <input class="stop icon-close" style="display:none" value="" type="button">
+                        </div>
                     </div>
                 </div>
     <?php if(count($_['polls']) === 0) : ?>
