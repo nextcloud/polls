@@ -21,12 +21,12 @@
                                 <img class="svg" src="../../../core/img/places/home.svg"" alt="Home">
                             </a>
                         </div>
-                        <div class="actions creatable" style="">
-                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
-                                <span class="icon icon-add"></span><span class="hidden-visually">Neu</span>
-                            </a>
-                            <input class="stop icon-close" style="display:none" value="" type="button">
-                        </div>
+                    </div>
+                    <div class="actions creatable" style="">
+                        <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
+                            <span class="icon icon-add"></span><span class="hidden-visually">Neu</span>
+                        </a>
+                        <input class="stop icon-close" style="display:none" value="" type="button">
                     </div>
                 </div>
     <?php if(count($_['polls']) === 0) : ?>
