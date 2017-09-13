@@ -35,30 +35,30 @@
             <h2><?php p($l->t('No existing polls.')); ?></h2>
         </div>
     <?php else : ?>
-            <table id="pollstable" class="has-controls">
+            <table class="polltable has-controls">
                 <thead>
                     <tr>
-                        <th id="headerName" class="column-name">
+                        <th id="headerName" class="columnheader name">
                             <div id="headerName-container">
                                 <a class="name sort columntitle" data-sort="name"><span><?php p($l->t('Title')); ?></span><span class="sort-indicator"></span></a>
                             </div>
                         </th>
-                        <th id="headerCreated" class="column-created">
+                        <th id="headerCreated" class="columnheader created">
                             <a class="name sort columntitle" data-sort="created"><span><?php p($l->t('Created')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerPrincipal" class="column-principal">
+                        <th id="headerPrincipal" class="columnheader principal">
                             <a class="name sort columntitle" data-sort="principal"><span><?php p($l->t('By')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerExpiry" class="column-expiry">
+                        <th id="headerExpiry" class="columnheader expiry">
                             <a class="name sort columntitle" data-sort="expiry"><span><?php p($l->t('Expires')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerVoted" class="column-voted">
+                        <th id="headerParticipations" class="columnheader participations">
                             <a class="name sort columntitle" data-sort="voted"><span><?php p($l->t('participated')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerAccess" class="column-access">
+                        <th id="headerAccess" class="columnheader access">
                             <a class="name sort columntitle" data-sort="access"><span><?php p($l->t('Access')); ?></span><span class="sort-indicator"></span></a>
                         </th>
-                        <th id="headerOptions" class="column-options">
+                        <th id="headerOptions" class="columnheader options">
                             <a class="name columntitle" <span><?php p($l->t('Options')); ?></span><span class="sort-indicator"></span></a>
                         </th>
                     </tr>
@@ -75,7 +75,7 @@
                             }
                         ?>
                     <tr>
-                        <td class="pollname">
+                        <td class="pollitem name">
                             <div class="thumbnail progress"></div>  <!-- Image to display status or type of poll */ -->
                             <a class="name" href="<?php p($pollUrl); ?>">
                                 <div class="nametext">
@@ -84,8 +84,8 @@
                                 </div>
                             </a>
                         </td>
-                        <td class="created"><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
-                        <td class="principal">
+                        <td class="pollitem created"><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
+                        <td class="pollitem principal">
                             <?php
                                 if($poll->getOwner() === $userId) p($l->t('Yourself'));
                                 else p($userMgr->get($poll->getOwner()));
@@ -97,13 +97,13 @@
                                     if (date('U') > strtotime($poll->getExpire())) {
                                         $style = 'expired';
                                     }
-                                    print_unescaped('<td class="expiry ' . $style . '">' . date('d.m.Y', strtotime($poll->getExpire())) . '</td>');
+                                    print_unescaped('<td class="pollitem expiry ' . $style . '">' . date('d.m.Y', strtotime($poll->getExpire())) . '</td>');
                                 }
                                 else {
-                                    print_unescaped('<td class="expiry">' . $l->t('Never') . '</td>');
+                                    print_unescaped('<td class="pollitem expiry">' . $l->t('Never') . '</td>');
                                 }
                             ?>
-                        <td class="partic">
+                        <td class="pollitem participations">
                             <?php
                                 $partic_class = 'partic_no';
                                 $partic_polls = $_['participations'];
@@ -132,10 +132,10 @@
                             <div class="partic_all <?php p($partic_class); ?>">
                             </div>
                         </td>
-                        <td class="access">
+                        <td class="pollitem access">
                             <?php p($l->t($poll->getAccess())); ?>
                         </td>
-                        <td class="options">
+                        <td class="pollitem options">
                             <?php if ($poll->getOwner() === $userId) : ?>
                             <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete action permanent"></input>
                             <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button icon-rename action permanent"></input></a>
