@@ -66,6 +66,7 @@ table th, table td {
 	font-weight: normal;
    	height: 50px;
 	line-height: 50px;
+	padding: 0 4px;
 }
 
 table thead th {
@@ -132,3 +133,45 @@ table td.pollname .thumbnail {
 	margin-bottom: 5px;
 	color: #888;
 }
+
+@media (max-width: 992px) {
+	.column-principal, .principal, .column-created, .created {
+		display: none;
+	}
+	
+	
+	#polllist tr td.pollname {
+		padding-left: 4px;
+	}
+}
+
+@media (max-width: 910px) {
+	.column-access, .access  {
+		display: none;
+	}
+	#body-user #pollstable {
+		min-width: 0px; 
+	}
+}
+
+@media (max-width: 768px) {
+	.column-voted, .partic, .column-expiry, .expiry {
+		display: none;
+	}
+	#polllist tr td.pollname {
+		padding-left: 0px;
+	}
+}
+
+@media (max-width: 600px) {
+	.column-principal, .principal, .column-access, .access, .column-created, .created {
+		display: none;
+	}
+}
+
+@media (max-width: 480px) {
+  .column-principal, .principal, .column-access, .access, .column-created, .created {
+    display: none;
+  }
+}
+

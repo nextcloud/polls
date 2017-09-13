@@ -143,21 +143,26 @@ $(document).ready(function () {
 
 $(document).on('click', '.toggle-all, .cl_click', function(e) {
     values_changed = true;
-    var cl = "";
-    if($(this).hasClass('yes') || $(this).hasClass('toggle-yes')) {
-        cl = "no";
-    } else if($(this).hasClass('no') || $(this).hasClass('toggle-no')) {
-        cl = "maybe";
-    } else if($(this).hasClass('maybe') || $(this).hasClass('toggle-maybe')) {
-        cl = "yes";
+    var $cl = "";
+    var $toggle = "";
+    if($(this).hasClass('yes')) {
+        $cl = "no";
+        $toggle= "yes";
+    } else if($(this).hasClass('no')) {
+        $cl = "maybe";
+        $toggle= "no";
+    } else if($(this).hasClass('maybe')) {
+        $cl = "yes";
+        $toggle= "maybe";
     } else {
-        cl = "yes";
+        $cl = "yes";
+        $toggle= "maybe";
     }
     if($(this).hasClass('toggle-all')) {
-        $(".cl_click").attr('class', 'cl_click poll-cell active ' + cl);
-        $(this).attr('class', 'toggle-all toggle-' + cl);
+        $(".cl_click").attr('class', 'cl_click poll-cell active ' + $toggle);
+        $(this).attr('class', 'toggle-all toggle ' + $cl);
     } else {
-        $(this).attr('class', 'cl_click poll-cell active ' + cl);
+        $(this).attr('class', 'cl_click poll-cell active ' + $cl);
     }
     $('.cl_click').each(function() {
         var yes_c = $('#id_y_' + $(this).attr('id'));
@@ -171,16 +176,16 @@ $(document).on('click', '.toggle-all, .cl_click', function(e) {
 function updateCounts(){
     max_votes = 0;
     $('td.total').each(function() {
-        var yes = parseInt($(this).find('.color_yes').text());
-        var no = parseInt($(this).find('.color_no').text());
+        var yes = parseInt($(this).find('.yes').text());
+        var no = parseInt($(this).find('.no').text());
         if(yes - no > max_votes) {
             max_votes = yes - no;
         }
     });
     var i = 0;
     $('td.total').each(function() {
-        var yes = parseInt($(this).find('.color_yes').text());
-        var no = parseInt($(this).find('.color_no').text());
+        var yes = parseInt($(this).find('.yes').text());
+        var no = parseInt($(this).find('.no').text());
         $('#id_total_' + i++).toggleClass('icon-checkmark', yes - no == max_votes);
     });
 }

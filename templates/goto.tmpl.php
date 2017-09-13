@@ -5,7 +5,8 @@
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'vote');
     \OCP\Util::addScript('polls', 'vote');
-
+    
+    $layout = "classic";
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
@@ -55,7 +56,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 <div id="app">
 	<?php include ("navigation.tmpl.php"); ?>
     <div id="app-content">
-        <div id="app-content-wrapper">
+        <div id="app-content-wrapper" class="<?php p($layout); ?>">
 			<div id="controls">
                 <div id="breadcrump">
                     <?php if(User::isLoggedIn()) : ?>
@@ -80,15 +81,15 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
             </header>
             <div class="row">
                 <div class="col-70">
-                    <div class="wordwrap desc"><?php print_unescaped($description); ?></div>
+                    <div class="wordwrap desc"><?php p($description); ?></div>
                     <div class="scroll_div">
                         <table class="vote_table">
                             <thead>
                                     <?php
                                     if ($poll->getType() == '0') {
-                                        print_unescaped('<tr id="time-slots-header"><th class="first_header_cell" colspan="2"></th>');
+                                        print_unescaped('<tr id="time-slots-header"><th class="first_header_cell" colspan="3"></th>');
                                     } else {
-                                        print_unescaped('<tr id="vote-options-header"><th class="first_header_cell" colspan="2"></th>');
+                                        print_unescaped('<tr id="vote-options-header"><th class="first_header_cell" colspan="3"></th>');
                                         foreach ($dates as $el) {
                                             print_unescaped('<th title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="vote-option">' . preg_replace('/_\d+$/', '', $el->getText()) . '</th>');
                                         }
@@ -123,17 +124,17 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         if($userMgr->get($usr) != null && !$isAnonymous && !$hideNames) {
                                             print_unescaped('<div class="poll avatardiv" title="'.($usr).'"></div>');
                                             print_unescaped('</td>');
-                                            print_unescaped('<td class="name">');
+                                            print_unescaped('<td colspan="2" class="name">');
                                             p($userMgr->get($usr)->getDisplayName());
                                         } else {
                                             if($isAnonymous || $hideNames) {
                                             print_unescaped('<div class="poll avatardiv" title="'.($userCnt).'"></div>');
                                             print_unescaped('</td>');
-                                            print_unescaped('<td class="name">');
+                                            print_unescaped('<td colspan="2" class="name">');
                                             } else {
                                                 print_unescaped('<div class="poll avatardiv" title="'.($usr).'"></div>');
                                                 print_unescaped('</td>');
-                                                print_unescaped('<td class="name">');
+                                                print_unescaped('<td colspan="2" class="name">');
                                                 p($usr);
                                             }
                                         }
@@ -173,7 +174,10 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             if(!$found) {
                                                 $cl = 'poll-cell unvoted';
                                             }
-                                            print_unescaped('<td class="' . $cl . '"></td>');
+                                            // Make the td clickable
+                                            print_unescaped('<td class="' . $cl . '"><div></div></td>');
+                                            // Make the div clickable
+                                            // print_unescaped('<td><div class="' . $cl . '"></div></td>'); 
                                             $i_tot++;
                                         }
                                         print_unescaped('</tr>');
@@ -182,7 +186,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 $total_y_others = array_merge(array(), $total_y);
                                 $total_n_others = array_merge(array(), $total_n);
                                 if (!$expired) {
-                                    print_unescaped('<tr class="current-user nc-theming-main-background nc-theming-contrast">');
+                                    print_unescaped('<tr class="current-user">');
                                     print_unescaped('<td class="avatar-cell">');
                                     if (User::isLoggedIn()) {
                                         print_unescaped('<div class="poll avatardiv" title="'.($userId).'"></div>');
@@ -194,7 +198,8 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         print_unescaped('</td>');
                                         print_unescaped('<td id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
                                     }
-                                    print_unescaped('<div id="toggle" class="toggle-all toggle-maybe"></div></td>');
+                                    print_unescaped('</td><td class="toggle-all toggle maybe"><div id="toggle" class=""></div><img class="svg" src="../../../../core/img/actions/play-next.svg" "="" alt=""></td>');
+                                    // print_unescaped('</td><td class="toggle-cell"><div id="toggle" class="toggle-all toggle maybe"></div><img class="svg" src="../../../../core/img/actions/play-next.svg" "="" alt=""></td>');
                                     $i_tot = 0;
                                     foreach ($dates as $dt) {
                                         if ($poll->getType() == '0') {
@@ -226,7 +231,11 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                                 }
                                             }
                                         }
-                                        print_unescaped('<td class="cl_click ' . $cl . '" id="' . $date_id . '"></td>');
+                                        // Make the td clickable
+                                        print_unescaped('<td id="' . $date_id . '" class="cl_click ' . $cl . '"><div></div></td>');
+                                        // Make the div clickable
+                                        // print_unescaped('<td><div id="' . $date_id . '" class="cl_click ' . $cl . '"></div></td>');
+
                                         $i_tot++;
                                     }
                                 }
@@ -241,7 +250,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     $max_votes = max($diff_array);
                                 ?>
                                 <tr class="total">
-                                    <th colspan="2"><?php p($l->t('Total')); ?></th>
+                                    <th colspan="3"><?php p($l->t('Total')); ?></th>
                                     <?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
                                         <td class="total">
                                             <?php
@@ -252,17 +261,17 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                                 $val = 0;
                                             }
                                             ?>
-                                            <div id="id_y_<?php p($classSuffix); ?>" class="color_yes" data-value=<?php p(isset($total_y_others[$i]) ? $total_y_others[$i] : '0'); ?>>
+                                            <div id="id_y_<?php p($classSuffix); ?>" class="result-cell yes" data-value=<?php p(isset($total_y_others[$i]) ? $total_y_others[$i] : '0'); ?>>
                                                 <?php p($val); ?>
                                             </div>
-                                            <div id="id_n_<?php p($classSuffix); ?>" class="color_no" data-value=<?php p(isset($total_n_others[$i]) ? $total_n_others[$i] : '0'); ?>>
+                                            <div id="id_n_<?php p($classSuffix); ?>" class="result-cell no" data-value=<?php p(isset($total_n_others[$i]) ? $total_n_others[$i] : '0'); ?>>
                                                 <?php p(isset($total_n[$i]) ? $total_n[$i] : '0'); ?>
                                             </div>
                                         </td>
                                     <?php endfor; ?>
                                 </tr>
                                 <tr class="best">
-                                    <th colspan="2"><?php p($l->t('Best option')); ?></th>
+                                    <th colspan="3"><?php p($l->t('Best option')); ?></th>
                                     <?php
                                     for ($i = 0; $i < count($dates); $i++) {
                                         $check = '';

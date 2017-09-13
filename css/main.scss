@@ -28,30 +28,15 @@ h1 {
     padding: 0px 15px;
 }
 
-.col-70 {
-    width: 65%;
+.col-70, .col-30 {
     float: left;
     padding: 0px 15px;
+	min-width: 350px;
+	max-width: 900px;
 }
 
-.col-50 {
-    width: 50%;
-    float: left;
-    padding: 0px 15px;
-}
-
-.col-30 {
-    width: 35%;
-    float: left;
-    padding: 0px 15px;
-    margin-top: 32px;
-}
-
-@media(max-width: 1199px) {
-    .col-70, .col-30, .col-50 {
-        float: none;
-        width: 100%;
-    }
+#breadcrump {
+	min-width: 350px;
 }
 
 input[type="text"] {
@@ -159,7 +144,6 @@ td.td_shown {
 }
 
 .wordwrap {
-    width: 75%;
     white-space: normal;
     word-wrap: break-word;
     word-break: normal;
@@ -210,7 +194,7 @@ td.td_shown {
     background-color: #82de82;
 }
 
-.cl_poll_url, .cl_click, .cl_date_time_header {
+.cl_poll_url, .cl_date_time_header {
     cursor: pointer;
 }
 
@@ -358,3 +342,4 @@ td.td_shown {
     border-top: 0;
     border-radius: 0 0 3px 3px;
 }
+

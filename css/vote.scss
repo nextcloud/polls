@@ -1,5 +1,20 @@
+$bg_no: #ffede9;
+$bg_maybe: #fff4c8;
+$bg_unvoted: #fcf7e1;
+$bg_yes: #ebf5d6;
+
+$fg_no: #f45573;
+$fg_maybe: #fff3cd;
+$fg_unvoted: #fff3cd;
+$fg_yes: #49bc49;
+
+
+$bg_current_user: #f7f7f7;
+$fg_current_user: #0082c9;
+$border_current_user: 2px solid;
+
 .vote_table {
-	border-spacing: 1px 1px;
+	/* border-spacing: 1px 1px; */
 	white-space: normal;
 
     thead {
@@ -27,7 +42,7 @@
     
     td.name {
         max-width: 170px;
-        min-width: 130px;
+        min-width: 80px;
     }
 
     .total th, .best th{
@@ -37,64 +52,179 @@
     .total td, .best td{
         text-align: center;
     }
-
-    .poll-cell {
-        background-repeat: no-repeat;
-        background-position: center;
-        transition: background-color 0.2s;
-        background-size: 24px;
     
-        &.yes {
+    .cl_click div, td.cl_click {
+        cursor: pointer;
+    }
+
+
+    .poll-cell, .toggle {
+        div {
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: background-color 0.2s;
+            background-size: 24px;
+            height: 32px;
+            width: 32px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        &.yes div {
             background-image: url('../img/yes-vote.svg');
         }
 
-        &.maybe {
+        &.maybe div {
             background-image: url('../img/maybe-vote.svg');
         }
 
-        &.unvoted {
-            background-image: url('../../../apps/polls/css/../img/un-vote.svg');
-        }
-
-        &.no {
+        &.no div {
             background-image: url('../img/no-vote.svg');
         }
+        
     }
 
-    .unvoted {
-        background-color: #fcf7e1; /*light yellow*/
-        color: #fff3cd;
+    .toggle div {
+        width: 24px;
+        height: 24px;
+        background-size: 16px;
+       }
+
+    #toggle {
+        float: left;
+    }
+    .poll-cell, .toggle {
+        border-right: 2px solid white;
     }
 
-    .color_yes, .yes {
-        background-color: #ebf5d6; /*green*/
-        color: #49bc49;
+    .toggle-all.toggle img {
+        float: right;
     }
-    .color_no, .no {
-        background-color: #ffede9; /*red*/
-        color: #f45573;
-    }
-    .color_maybe, .maybe {
-        background-color: #fff4c8; /*yellow*/
-        color: #ffc107;
+
+    td.toggle-all.toggle {
+        min-width: 50px;
     }
 
     .current-user {
+			
+		td {
+			border-top: $border_current_user $fg_current_user;
+			border-bottom: $border_current_user $fg_current_user;
+			background-color: $bg_current_user;
+
+			&:first-child {
+				border-left: $border_current_user $fg_current_user;
+				border-top-left-radius: 4px;
+				border-bottom-left-radius: 4px;
+			}
+			&:last-child {
+				border-right: $border_current_user $fg_current_user;
+				border-top-right-radius: 4px;
+				border-bottom-right-radius: 4px;
+			}
+		}
+
+
         .name {
             font-weight: bold;
-            font-style: italic;
-            opacity: 0.85;    
         }
+		
     }
 
 }
 
-.toggle-all {
-    min-width: 40px;
-    cursor: pointer;
- 	display: inline-block;
+.classic .vote_table {
+    .poll-cell, .toggle, .result-cell {
+        
+        div {
+            background-color: transparent;
+        }
+        &.unvoted {
+            background-color: $bg_unvoted;
+            color: $fg_unvoted;
+            div {
+                color: $fg_unvoted;
+            }
+        }
+
+        &.yes {
+            background-color: $bg_yes;
+            color: $fg_yes;
+            div {
+                color: $fg_yes;
+            }
+        }
+        &.no {
+            background-color: $bg_no;
+            color: $fg_no;
+            div {
+                color: $fg_no;
+            }
+        }
+        &.maybe {
+            background-color: $bg_maybe;
+            color: $fg_maybe;
+            div {
+                color: $fg_maybe;
+            }
+        }
+    }
+    td.total {
+        padding: 2px 0 1px;
+    }
+
 }
 
+.modern_cubic .vote-table {
+
+    div.poll-cell, div.result-cell, div.toggle {
+        width: 32px;
+        height: 32px;
+        border: 2px solid;
+        border-radius: 20%;
+        margin-right: auto;
+        margin-left: auto;
+        vertical-align: middle;
+    }
+
+    div.active {
+        box-shadow: 4px 4px 4px #aaa;
+    }
+	.total .result-cell {
+		padding: 3px;
+		margin: 6px auto 6px auto;	
+	}
+
+    /* .current-user {
+        box-shadow: 0px 0px 5px 5px #999;
+    }
+     */
+}
+
+.modern_rounded .votetable {
+
+    div.poll-cell, div.result-cell, div.toggle {
+        width: 32px;
+        height: 32px;
+        border: 2px solid;
+        border-radius: 50%;
+        margin-right: auto;
+        margin-left: auto;
+        vertical-align: middle;
+    }
+
+    div.active {
+        box-shadow: 4px 4px 4px #aaa;
+    }
+	.total .result-cell {
+		padding: 3px;
+		margin: 6px auto 6px auto;	
+	}
+}
+
+
+
+	
 th, tr, td {
     padding: 4px;
     /* text-align: center; */
@@ -103,23 +233,11 @@ th, tr, td {
 .votes {
         th, tr, td {
         /* text-align: left; */
-        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #ddd;
     }
 }
 
 
-/* .current-user {
-	box-shadow: 0px 0px 5px 5px #999;
-}
- */
-
-.finish_vote {
-    display: contents;
-}
-
-#poll-desc, #comments-container, #poll-dates {
-    margin-bottom: 15px;
-}
 
 .external th {
     padding-left: 40px;
@@ -127,6 +245,10 @@ th, tr, td {
     input {
         min-width: 100px;
     }
+}
+
+.finish_vote {
+    display: contents;
 }
 
 .share {
@@ -140,6 +262,9 @@ th, tr, td {
     }
 }
 
+#poll-desc, #comments-container, #poll-dates {
+    margin-bottom: 15px;
+}
 
 .comment {
     border: 1px solid #DDD;
@@ -179,28 +304,5 @@ th, tr, td {
     }
 }
 
-td.total {
-    padding: 2px 0 1px;
-}
 
-
-.toggle-maybe {
-    background-image: url('../img/toggle-yes.svg');
-}
-
-.toggle-yes {
-    background-image: url('../img/toggle-not.svg');
-}
-
-.toggle-not {
-    background-image: url('../img/toggle-maybe.svg');
-}
-
-#toggle {
-    background-repeat: no-repeat;
-    background-position: 10px center;
-    padding-left: 35px;
-    height: 50px;
-    width: 50px;
-}
 
