@@ -1,31 +1,30 @@
 polls
 =====
-This is a poll app, similar to doodle or dudle, for owncloud written in PHP and JS/jQuery.
+This is a poll app, similar to doodle or dudle, for Nextcloud/ownCloud written in PHP and JS/jQuery.
 It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
 
 Features
 ========
 - Create/Edit polls (datetimes _and_ texts)
 - Set expiration date
-- Restrict access (only oc members, certain groups/users, hidden and public)
+- Restrict access (only logged in users, certain groups/users, hidden and public)
 - Comments
 
 Requirements
 ============
-- ownCloud 8.1 or later
-- [This PR](https://github.com/owncloud/core/pull/22497) from core (Wrong status code in the `RedirectResponse`), otherwise you'll get a blank page after create/edit a poll or voting
+- Just a currently maintained Nexcloud/ownCloud
 
 Bugs
 ====
-- Blank page after create/edit a poll or voting (see Requirements for a temporary fix)
+- https://github.com/nextcloud/polls/issues
 
 Installation
 ============
-Put the files under `<owncloud_dir>/apps/polls` and enable it in the ownCloud apps settings.
+Put the files under `<clouds_main_directory>/apps/polls` and enable it in the apps menu.
 
 Misc
 ====
-The app is also available at the [appstore](https://apps.owncloud.com/content/show.php/Polls?content=174671).
+The app is also available at the [App Store](https://apps.nextcloud.com/apps/polls).
 
 Screenshots
 ===========
