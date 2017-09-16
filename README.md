@@ -28,6 +28,6 @@ The app is also available at the [App Store](https://apps.nextcloud.com/apps/pol
 
 Screenshots
 ===========
-![](https://github.com/v1r0x/polls/blob/master/screenshots/new-poll.png)
-![](https://github.com/v1r0x/polls/blob/master/screenshots/overview.png)
-![](https://github.com/v1r0x/polls/blob/master/screenshots/vote.png)
+![](https://github.com/nextcloud/polls/blob/master/screenshots/new-poll.png)
+![](https://github.com/nextcloud/polls/blob/master/screenshots/overview.png)
+![](https://github.com/nextcloud/polls/blob/master/screenshots/vote.png)
