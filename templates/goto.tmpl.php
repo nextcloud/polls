@@ -205,7 +205,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         if ($poll->getType() == '0') {
                                             $date_id = strtotime($dt->getDt());
                                         } else {
-                                            $date_id = $dt->getText();
+                                            $date_id = "pollid_" . $dt->getId();
                                         }
                                         // see if user already has data for this event
                                         $cl = 'poll-cell active unvoted'; 
@@ -254,7 +254,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
                                         <td class="total">
                                             <?php
-                                            $classSuffix = $poll->getType() == '0' ? strtotime($dates[$i]->getDt()) : str_replace(' ', '_', $dates[$i]->getText());
+                                            $classSuffix = $poll->getType() == '0' ? strtotime($dates[$i]->getDt()) : "pollid_" . $dates[$i]->getId();
                                             if (isset($total_y[$i])) {
                                                 $val = $total_y[$i];
                                             } else {
