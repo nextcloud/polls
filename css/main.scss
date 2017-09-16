@@ -34,11 +34,15 @@ h1 {
     padding: 0px 15px;
 }
 
-.col-70, .col-30 {
-    float: left;
-    padding: 0px 15px;
-	min-width: 350px;
-	max-width: 900px;
+.col-70 { width: 65%; float: left; padding: 0px 15px; }
+
+.col-30 { width: 35%; float: left; padding: 0px 15px; }
+
+@media(max-width: 992px) {
+    .col-70, .col-30, .col-50 {
+        float: none;
+        width: 100%;
+    }
 }
 
 #breadcrump {
