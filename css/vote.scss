@@ -64,7 +64,7 @@ $border_current_user: 2px solid;
             background-repeat: no-repeat;
             background-position: center;
             transition: background-color 0.2s;
-            background-size: 24px;
+            background-size: 32px;
             height: 32px;
             width: 32px;
             margin-left: auto;
@@ -88,22 +88,24 @@ $border_current_user: 2px solid;
     .toggle div {
         width: 24px;
         height: 24px;
-        background-size: 16px;
+        background-size: 32px;
        }
 
     #toggle {
         float: left;
+        cursor: pointer;
     }
     .poll-cell, .toggle {
         border-right: 2px solid white;
     }
 
-    .toggle-all.toggle img {
-        float: right;
-    }
 
     td.toggle-all.toggle {
+        cursor: pointer;
         min-width: 50px;
+        img {
+        float: right;
+        }
     }
 
     .current-user {
@@ -134,7 +136,7 @@ $border_current_user: 2px solid;
 
 }
 
-.classic .vote_table {
+.vote_table {
     .poll-cell, .toggle, .result-cell {
         
         div {
@@ -176,56 +178,6 @@ $border_current_user: 2px solid;
 
 }
 
-.modern_cubic .vote-table {
-
-    div.poll-cell, div.result-cell, div.toggle {
-        width: 32px;
-        height: 32px;
-        border: 2px solid;
-        border-radius: 20%;
-        margin-right: auto;
-        margin-left: auto;
-        vertical-align: middle;
-    }
-
-    div.active {
-        box-shadow: 4px 4px 4px #aaa;
-    }
-	.total .result-cell {
-		padding: 3px;
-		margin: 6px auto 6px auto;	
-	}
-
-    /* .current-user {
-        box-shadow: 0px 0px 5px 5px #999;
-    }
-     */
-}
-
-.modern_rounded .votetable {
-
-    div.poll-cell, div.result-cell, div.toggle {
-        width: 32px;
-        height: 32px;
-        border: 2px solid;
-        border-radius: 50%;
-        margin-right: auto;
-        margin-left: auto;
-        vertical-align: middle;
-    }
-
-    div.active {
-        box-shadow: 4px 4px 4px #aaa;
-    }
-	.total .result-cell {
-		padding: 3px;
-		margin: 6px auto 6px auto;	
-	}
-}
-
-
-
-	
 th, tr, td {
     padding: 4px;
     /* text-align: center; */
