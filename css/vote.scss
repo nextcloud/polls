@@ -1,6 +1,6 @@
 $bg_no: #ffede9;
-$bg_maybe: #fff4c8;
-$bg_unvoted: #fcf7e1;
+$bg_maybe: #fcf7e1;
+$bg_unvoted: #fff4c8;
 $bg_yes: #ebf5d6;
 
 $fg_no: #f45573;
@@ -88,7 +88,7 @@ $border_current_user: 2px solid;
     .toggle div {
         width: 24px;
         height: 24px;
-        background-size: 32px;
+        background-size: 24px;
        }
 
     #toggle {
@@ -103,8 +103,23 @@ $border_current_user: 2px solid;
     td.toggle-all.toggle {
         cursor: pointer;
         min-width: 50px;
+        &.yes div {
+            background-image: url('../img/yes-toggle.svg');
+        }
+
+        &.maybe div {
+            background-image: url('../img/maybe-toggle.svg');
+        }
+
+        &.no div {
+            background-image: url('../img/no-toggle.svg');
+        }
+    
+
+        
         img {
         float: right;
+        padding-top: 4px;
         }
     }
 
