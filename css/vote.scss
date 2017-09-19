@@ -240,6 +240,10 @@ th, tr, td {
     border: 1px solid #DDD;
     border-radius: 3px;
     margin-bottom: 10px;
+
+    &.new-comment {
+        border: none;
+    }
     
     .comment-header {
         background-color: #EEE;
@@ -252,7 +256,7 @@ th, tr, td {
         float: right;
         color: #555;
     }
-    
+	    
     .comment-content {
         padding: 5px;
     }
@@ -272,6 +276,10 @@ th, tr, td {
         max-width: 100%;
         min-height: 66px;
     }
+}
+
+#controls h2 {
+    margin-top: 12px;
 }
 
 
