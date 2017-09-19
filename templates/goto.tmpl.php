@@ -145,8 +145,10 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                         foreach($dates as $dt) {
                                             if ($poll->getType() == '0') {
                                                 $date_id = strtotime($dt->getDt());
+                                                $poll_id = "pollid_" . $dt->getId();
                                             } else {
                                                 $date_id = $dt->getText();
+                                                $poll_id = "pollid_" . $dt->getId();
                                             }
                                             // look what user voted for this dts
                                             $found = false;
@@ -164,8 +166,10 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                                     } else if ($vote->getType() == '0') {
                                                         $cl = 'poll-cell no';
                                                         $total_n[$i_tot]++;
-                                                    } else {
+                                                    } else if ($vote->getType() == '2') {
                                                         $cl = 'poll-cell maybe';
+                                                    } else {
+                                                        $cl = 'poll-cell unvoted';
                                                     }
                                                     $found = true;
                                                     break;
@@ -204,11 +208,13 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     foreach ($dates as $dt) {
                                         if ($poll->getType() == '0') {
                                             $date_id = strtotime($dt->getDt());
+                                            $poll_id = "pollid_" . $dt->getId();
                                         } else {
-                                            $date_id = "pollid_" . $dt->getId();
+                                            $date_id = $dt->getText();
+                                            $poll_id = "pollid_" . $dt->getId();
                                         }
                                         // see if user already has data for this event
-                                        $cl = 'poll-cell active unvoted'; 
+                                        $cl = 'poll-cell active unvoted '; 
                                         if (isset($user_voted)) {
                                             foreach ($user_voted as $obj) {
                                                 $voteVal = null;
@@ -232,7 +238,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             }
                                         }
                                         // Make the td clickable
-                                        print_unescaped('<td id="' . $date_id . '" class="cl_click ' . $cl . '"><div></div></td>');
+                                        print_unescaped('<td id="' . $poll_id . '" class="cl_click ' . $cl . '" data-value="' . $date_id . '"><div></div></td>');
                                         // Make the div clickable
                                         // print_unescaped('<td><div id="' . $date_id . '" class="cl_click ' . $cl . '"></div></td>');
 

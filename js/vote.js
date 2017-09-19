@@ -89,11 +89,11 @@ $(document).ready(function () {
             } else {
                 newUserTypes.push(-1);
             }
-            var userDate = $(this).attr('id');
-            if(isNaN($(this).attr('id')) ) {
-                newUserDates.push($(this).attr('id'));
+            var userDate = $(this).attr('data-value');
+            if(isNaN($(this).attr('data-value')) ) {
+                newUserDates.push($(this).attr('data-value'));
             } else { 
-                newUserDates.push(parseInt($(this).attr('id')));
+                newUserDates.push(parseInt($(this).attr('data-value')));
             }
         });
         form.elements['dates'].value = JSON.stringify(newUserDates);
