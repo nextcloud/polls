@@ -18,8 +18,14 @@ $(document).ready(function () {
     var arr_years = [];  // [1992] => 6
     var prev = '';
     var dateStr = '';
+
+    $('.poll.avatardiv').each(function(i, obj) {
+        $(obj).avatar(obj.title, 32);
+    });
+
+    
     $('.hidden-dates').each(function(i, obj) {
-        var exDt = new Date(obj.value.replace(/ /g,"T")+"Z");
+        var exDt = new Date(obj.value.replace(/ /g,"T")+"Z"); //Fix display in Safari and IE, still NaN on Firefox on iPad
         var day = ('0' + exDt.getDate()).substr(-2);
         var month = ('0' + (exDt.getMonth()+1)).substr(-2);
         var day_month = day + '.' + month;
@@ -38,7 +44,14 @@ $(document).ready(function () {
         var c = (prev != (year + day_month) ? ' bordered' : '');
         prev = (year + day_month);
         var ch_obj = ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2)
-        dateStr += '<th class="time-slot-cell' + c + '">' + ch_obj + '</th>';
+        dateStr += '<th class="time-slot" value="' + obj.value + '"> ' + 
+        '<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) + 
+                            // ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) + 
+                            '</div>' + 
+        '<div class="day">'   + exDt.toLocaleString(window.navigator.language, {day: 'numeric'}) + '</div>' +
+        '<div class="dayow">' + exDt.toLocaleString(window.navigator.language, {weekday: 'short'}) + '</div>' + 
+        '<div class="time">'  + ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2) + '</div>' + 
+        '</th>';
     });
 
     var for_string_dates = '';
@@ -51,10 +64,7 @@ $(document).ready(function () {
         for_string_years += '<th colspan="' + arr_years[k] + '" class="bordered">' + k + '</th>';
     }
 
-    $(for_string_years).insertAfter('.year-row');
-    $('.date-row').append(for_string_dates);
-    $('#time-row-header').append(dateStr);
-    $(dateStr).insertAfter('#time-row-footer');
+    $('#time-slots-header').append(dateStr);
 
     $('#submit_finish_vote').click(function() {
         var form = document.finish_vote;
@@ -70,20 +80,20 @@ $(document).ready(function () {
         check_notif = document.getElementById('check_notif');
         var newUserDates = [], newUserTypes = [];
         $(".cl_click").each(function() {
-            if($(this).hasClass('poll-cell-active-not')) {
+            if($(this).hasClass('no')) {
                 newUserTypes.push(0);
-            } else if ($(this).hasClass('poll-cell-active-is')){
+            } else if ($(this).hasClass('yes')){
                 newUserTypes.push(1);
-            } else if($(this).hasClass('poll-cell-active-maybe')){
+            } else if($(this).hasClass('maybe')){
                 newUserTypes.push(2);
             } else {
                 newUserTypes.push(-1);
             }
-            var userDate = $(this).attr('id');
-            if(isNaN($(this).attr('id')) ) {
-                newUserDates.push($(this).attr('id'));
+            var userDate = $(this).attr('data-value');
+            if(isNaN($(this).attr('data-value')) ) {
+                newUserDates.push($(this).attr('data-value'));
             } else { 
-                newUserDates.push(parseInt($(this).attr('id')));
+                newUserDates.push(parseInt($(this).attr('data-value')));
             }
         });
         form.elements['dates'].value = JSON.stringify(newUserDates);
@@ -133,27 +143,32 @@ $(document).ready(function () {
 
 $(document).on('click', '.toggle-all, .cl_click', function(e) {
     values_changed = true;
-    var cl = "";
-    if($(this).hasClass('poll-cell-active-is')) {
-        cl = "not";
-    } else if($(this).hasClass('poll-cell-active-not')) {
-        cl = "maybe";
-    } else if($(this).hasClass('poll-cell-active-maybe')) {
-        cl = "is";
+    var $cl = "";
+    var $toggle = "";
+    if($(this).hasClass('yes')) {
+        $cl = "no";
+        $toggle= "yes";
+    } else if($(this).hasClass('no')) {
+        $cl = "maybe";
+        $toggle= "no";
+    } else if($(this).hasClass('maybe')) {
+        $cl = "yes";
+        $toggle= "maybe";
     } else {
-        cl = "is";
+        $cl = "yes";
+        $toggle= "maybe";
     }
     if($(this).hasClass('toggle-all')) {
-        $(".cl_click").attr('class', 'cl_click poll-cell-active-' + cl);
-        $(this).attr('class', 'toggle-all poll-cell-active-' + cl);
+        $(".cl_click").attr('class', 'cl_click poll-cell active ' + $toggle);
+        $(this).attr('class', 'toggle-all toggle ' + $cl);
     } else {
-        $(this).attr('class', 'cl_click poll-cell-active-' + cl);
+        $(this).attr('class', 'cl_click poll-cell active ' + $cl);
     }
     $('.cl_click').each(function() {
         var yes_c = $('#id_y_' + $(this).attr('id'));
         var no_c = $('#id_n_' + $(this).attr('id'));
-        $(yes_c).text(parseInt($(yes_c).attr('data-value')) + ($(this).hasClass('poll-cell-active-is') ? 1 : 0));
-        $(no_c).text(parseInt($(no_c).attr('data-value')) + ($(this).hasClass('poll-cell-active-not') ? 1 : 0));
+        $(yes_c).text(parseInt($(yes_c).attr('data-value')) + ($(this).hasClass('yes') ? 1 : 0));
+        $(no_c).text(parseInt($(no_c).attr('data-value')) + ($(this).hasClass('no') ? 1 : 0));
     });
     updateCounts();
 });
@@ -161,16 +176,16 @@ $(document).on('click', '.toggle-all, .cl_click', function(e) {
 function updateCounts(){
     max_votes = 0;
     $('td.total').each(function() {
-        var yes = parseInt($(this).find('.color_yes').text());
-        var no = parseInt($(this).find('.color_no').text());
+        var yes = parseInt($(this).find('.yes').text());
+        var no = parseInt($(this).find('.no').text());
         if(yes - no > max_votes) {
             max_votes = yes - no;
         }
     });
     var i = 0;
     $('td.total').each(function() {
-        var yes = parseInt($(this).find('.color_yes').text());
-        var no = parseInt($(this).find('.color_no').text());
+        var yes = parseInt($(this).find('.yes').text());
+        var no = parseInt($(this).find('.no').text());
         $('#id_total_' + i++).toggleClass('icon-checkmark', yes - no == max_votes);
     });
 }

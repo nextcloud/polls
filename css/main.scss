@@ -3,21 +3,16 @@ h1 {
     margin-bottom: 5px;
 }
 
-h2 {
-    font-size: 1.5em;
-    margin: 10px 0 5px 0;
-}
-
-a {
+/* a {
     color: #35537a;
 }
-
-a:not(.button):hover {
+ */
+/* a:not(.button):hover {
     text-decoration: underline;
 }
 
-#app header {
-    padding-top: 15px;
+ */#app header {
+    padding-top: 44px;
 }
 
 .row:after {
@@ -33,29 +28,25 @@ a:not(.button):hover {
     padding: 0px 15px;
 }
 
-.col-70 {
-    width: 65%;
-    float: left;
-    padding: 0px 15px;
-}
-
 .col-50 {
     width: 50%;
     float: left;
     padding: 0px 15px;
 }
 
-.col-30 {
-    width: 35%;
-    float: left;
-    padding: 0px 15px;
-}
+.col-70 { width: 65%; float: left; padding: 0px 15px; }
 
-@media(max-width: 1000px) {
+.col-30 { width: 35%; float: left; padding: 0px 15px; }
+
+@media(max-width: 992px) {
     .col-70, .col-30, .col-50 {
         float: none;
         width: 100%;
     }
+}
+
+#breadcrump {
+	min-width: 350px;
 }
 
 input[type="text"] {
@@ -66,12 +57,6 @@ input[type="text"] {
 textarea {
     min-width: 100%;
     max-width: 100%;
-}
-
-
-table {
-    border: 1px solid #DDD;
-    border-radius: 3px;
 }
 
 .form-actions {
@@ -169,7 +154,6 @@ td.td_shown {
 }
 
 .wordwrap {
-    width: 75%;
     white-space: normal;
     word-wrap: break-word;
     word-break: normal;
@@ -186,25 +170,6 @@ td.td_shown {
 }
 .padded td {
     padding: 10px;
-}
-
-.vote_table thead th {
-    min-width: 40px;
-}
-
-.time-slot-cell {
-    min-width: 50px;
-}
-
-.toggle-all {
-    min-width: 40px;
-    cursor: pointer;
-}
-
-.user-cell {
-    text-align: left;
-    min-width: 100px;
-    height: 40px;
 }
 
 .userNameImg {
@@ -239,14 +204,8 @@ td.td_shown {
     background-color: #82de82;
 }
 
-.cl_poll_url, .cl_click, .cl_delete, .cl_date_time_header {
+.cl_poll_url, .cl_date_time_header {
     cursor: pointer;
-}
-
-.cl_delete {
-    background-color: white;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
 }
 
 .cl_pad_left {
@@ -393,3 +352,4 @@ td.td_shown {
     border-top: 0;
     border-radius: 0 0 3px 3px;
 }
+

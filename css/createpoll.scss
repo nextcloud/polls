@@ -1,15 +1,11 @@
 .user-group-list {
-    display :none;
+    display: none;
     border: 1px solid #DDD;
     margin: 15px;
     padding: 5px;
     border-radius: 3px;
     max-height: 150px;
     overflow-y: auto;
-}
-
-.user-group-list h3 {
-    margin 0 0 5px;
 }
 
 #sec_name {
@@ -77,14 +73,16 @@ table td {
 
 table .icon-close {
     cursor: pointer;
-    background-color: #ff6f6f;
+    background-color: #ffede9; /*red*/
     padding: 0 5px;
+    background-image: url('../img/no-vote.svg');
 }
 
 table .icon-checkmark {
-    cursor: pointer;
-    background-color: #6fff70;
-    padding: 0 5px;
+	cursor: pointer;
+	background-color: #ebf5d6; /*green*/
+	padding: 0 5px;
+	background-image: url('../img/yes-vote.svg');
 }
 
 #expiration {

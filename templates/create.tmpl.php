@@ -1,6 +1,8 @@
 <?php
+    use \OCP\User;
+
     \OCP\Util::addStyle('polls', 'main');
-    \OCP\Util::addStyle('polls', 'create');
+    \OCP\Util::addStyle('polls', 'createpoll');
     \OCP\Util::addStyle('polls', 'jquery.datetimepicker');
     \OCP\Util::addScript('polls', 'create_edit');
     \OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
@@ -36,8 +38,27 @@
 ?>
 
 <div id="app">
-    <div id="app-content">
+	<div id="app-content">
         <div id="app-content-wrapper">
+			<div id="controls">
+                <div id="breadcrump">
+                    <div class="crumb svg" data-dir="/">
+                        <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
+                            <img class="svg" src="<?php print_unescaped(OCP\image_path("core", "places/home.svg")); ?>" alt="Home">
+                        </a>
+                    </div>
+                    <div class="crumb svg last">
+                        <span>
+                        <?php if($isUpdate): ?>
+                            <?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
+                        <?php else: ?>
+                          <?php p($l->t('Create new poll')); ?>
+                        <?php endif; ?>
+                        </span>
+                    </div>
+                </div>
+			</div>
+		
 <?php if($isUpdate): ?>
 <form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll')); ?>" method="POST">
     <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -49,18 +70,10 @@
     <input type="hidden" name="userId" id="userId" value="<?php p($userId); ?>" />
 
     <header class="row">
-        <div class="col-100">
-            <?php if($isUpdate): ?>
-                <h1><?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?></h1>
-            <?php else: ?>
-                <h1><?php p($l->t('Create new poll')); ?></h1>
-            <?php endif; ?>
-        </div>
     </header>
     
     <div class="new_poll row">
         <div class="col-50">
-            <h2><?php p($l->t('Basic information')); ?></h2>
             <label for="pollTitle" class="input_title"><?php p($l->t('Title')); ?></label>
             <input type="text" class="input_field" id="pollTitle" name="pollTitle" value="<?php if(isset($title)) p($title); ?>" />
             <label for="pollDesc" class="input_title"><?php p($l->t('Description')); ?></label>
@@ -95,15 +108,6 @@
 
             <input type="hidden" name="accessValues" id="accessValues" value="<?php if($isUpdate && $access === 'select') p($accessTypes) ?>" />
 
-            <label class="input_title"><?php p($l->t('Type')); ?></label>
-
-            <input type="radio" name="pollType" id="event" value="event" class="radio" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
-            <label for="event"><?php p($l->t('Event schedule')); ?></label>
-
-            <!-- TODO texts to db -->
-            <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
-            <label for="text"><?php p($l->t('Text based')); ?></label>
-
             <input id="isAnonymous" name="isAnonymous" type="checkbox" class="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
             <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
 
@@ -119,7 +123,14 @@
             </div>
         </div>
         <div class="col-50">
-            <h2><?php p($l->t('Choices')); ?></h2>
+
+            <input type="radio" name="pollType" id="event" value="event" class="radio" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
+            <label for="event"><?php p($l->t('Event schedule')); ?></label>
+
+            <!-- TODO texts to db -->
+            <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
+            <label for="text"><?php p($l->t('Text based')); ?></label>
+
             <div id="date-select-container" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('style="display:none;"'); ?> >
                 <label for="datetimepicker" class="input_title"><?php p($l->t('Dates')); ?></label>
                 <input id="datetimepicker" type="text" />

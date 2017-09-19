@@ -1,126 +1,157 @@
 <?php
+
+    use OCP\User;
+
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'list');
     \OCP\Util::addScript('polls', 'start');
-    use OCP\User;
+
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
 ?>
-<div id="app">
+
     <div id="app-content">
         <div id="app-content-wrapper">
-        <header class="row">
-            <div class="col-100">
-                <h1><?php p($l->t('Summary')); ?></h1>
-            </div>
-        </header>
-        <div class="goto_poll col-100">
+                <div id="controls">
+                    <div id="breadcrump">
+                        <div class	="crumb svg last" data-dir="/">
+                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
+                                <img class="svg" src="<?php print_unescaped(OCP\image_path("core", "places/home.svg")); ?>" alt="Home">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="actions creatable" style="">
+                        <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
+                            <span class="icon icon-add"></span><span class="hidden-visually">Neu</span>
+                        </a>
+                        <input class="stop icon-close" style="display:none" value="" type="button">
+                    </div>
+                </div>
     <?php if(count($_['polls']) === 0) : ?>
-    <?php p($l->t('No existing polls.')); ?>
+        <div id="emptycontent" class="">
+            <div class="icon-polls"></div>
+            <h2><?php p($l->t('No existing polls.')); ?></h2>
+        </div>
     <?php else : ?>
-    <table class="cl_create_form">
-        <thead>
-        <tr>
-            <th><?php p($l->t('Title')); ?></th>
-            <th id="id_th_descr"><?php p($l->t('Description')); ?></th>
-            <th><?php p($l->t('Created')); ?></th>
-            <th><?php p($l->t('By')); ?></th>
-            <th><?php p($l->t('Expires')); ?></th>
-            <th><?php p($l->t('participated')); ?></th>
-            <th id="id_th_descr"><?php p($l->t('Access')); ?></th>
-            <th><?php p($l->t('Options')); ?></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($_['polls'] as $poll) : ?>
-            <?php
-                if (!userHasAccess($poll, $userId)) continue;
-                // direct url to poll
-                $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
-            ?>
-            <tr>
-                <td title="<?php p($l->t('Go to')); ?>">
-                    <a class="table_link" href="<?php p($pollUrl); ?>"><?php p($poll->getTitle()); ?></a>
-                </td>
-                <?php
-                    $desc_str = $poll->getDescription();
-                    if($desc_str === null) $desc_str = $l->t('No description provided.');
-                    if (strlen($desc_str) > 100){
-                        $desc_str = substr($desc_str, 0, 80) . '...';
-                    }
-                ?>
-                <td><?php p($desc_str); ?></td>
-                <td><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
-                <td>
+            <table class="polltable has-controls">
+                <thead>
+                    <tr>
+                        <th id="headerName" class="columnheader name">
+                            <div id="headerName-container">
+                                <a class="name sort columntitle" data-sort="name"><span><?php p($l->t('Title')); ?></span><span class="sort-indicator"></span></a>
+                            </div>
+                        </th>
+                        <th id="headerCreated" class="columnheader created">
+                            <a class="name sort columntitle" data-sort="created"><span><?php p($l->t('Created')); ?></span><span class="sort-indicator"></span></a>
+                        </th>
+                        <th id="headerPrincipal" class="columnheader principal">
+                            <a class="name sort columntitle" data-sort="principal"><span><?php p($l->t('By')); ?></span><span class="sort-indicator"></span></a>
+                        </th>
+                        <th id="headerExpiry" class="columnheader expiry">
+                            <a class="name sort columntitle" data-sort="expiry"><span><?php p($l->t('Expires')); ?></span><span class="sort-indicator"></span></a>
+                        </th>
+                        <th id="headerParticipations" class="columnheader participations">
+                            <a class="name sort columntitle" data-sort="voted"><span><?php p($l->t('participated')); ?></span><span class="sort-indicator"></span></a>
+                        </th>
+                        <th id="headerAccess" class="columnheader access">
+                            <a class="name sort columntitle" data-sort="access"><span><?php p($l->t('Access')); ?></span><span class="sort-indicator"></span></a>
+                        </th>
+                        <th id="headerOptions" class="columnheader options">
+                            <a class="name columntitle" <span><?php p($l->t('Options')); ?></span><span class="sort-indicator"></span></a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="polllist">
+                <?php foreach ($_['polls'] as $poll) : ?>
                     <?php
-                        if($poll->getOwner() === $userId) p($l->t('Yourself'));
-                        else p($userMgr->get($poll->getOwner()));
-                    ?>
-                </td>
-                    <?php
-                        if ($poll->getExpire() !== null) {
-                            $style = '';
-                            if (date('U') > strtotime($poll->getExpire())) {
-                                $style = ' style="color: red"';
+                        if (!userHasAccess($poll, $userId)) continue;
+                        // direct url to poll
+                        $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
+                            $desc_str = $poll->getDescription();
+                            if (strlen($desc_str) > 100){
+                                $desc_str = substr($desc_str, 0, 80) . '...';
                             }
-                            print_unescaped('<td' . $style . '>' . date('d.m.Y', strtotime($poll->getExpire())) . '</td>');
-                        }
-                        else {
-                            print_unescaped('<td>' . $l->t('Never') . '</td>');
-                        }
-                    ?>
-                <td>
-                    <?php
-                        $partic_class = 'partic_no';
-                        $partic_polls = $_['participations'];
-                        for($i = 0; $i < count($partic_polls); $i++){
-                            if($poll->getId() == intval($partic_polls[$i]->getPollId())){
-                                $partic_class = 'partic_yes';
-                                array_splice($partic_polls, $i, 1);
-                                break;
-                            }
-                        }
-                    ?>
-                    <div class="partic_all <?php p($partic_class); ?>">
-                    </div>
-                    |
-                    <?php
-                        $partic_class = 'partic_no';
-                        $partic_comm = $_['comments'];
-                        for($i = 0; $i < count($partic_comm); $i++){
-                            if($poll->getId() === intval($partic_comm[$i]->getPollId())){
-                                $partic_class = 'partic_yes';
-                                array_splice($partic_comm, $i, 1);
-                                break;
-                            }
-                        }
-                    ?>
-                    <div class="partic_all <?php p($partic_class); ?>">
-                    </div>
-                </td>
-                <td>
-                    <?php p($l->t($poll->getAccess())); ?>
-                </td>
-                <td>
-                    <?php if ($poll->getOwner() === $userId) : ?>
-                    <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete"></input>
-                    <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button cl_edit icon-rename"></input></a>
-                    <?php endif; ?>
-                    <input type="button" class="table_button cl_link icon-public" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST">
-    </form>
+                        ?>
+                    <tr>
+                        <td class="pollitem name">
+                            <div class="thumbnail progress"></div>  <!-- Image to display status or type of poll */ -->
+                            <a class="name" href="<?php p($pollUrl); ?>">
+                                <div class="nametext">
+                                    <div class="innernametext"><?php p($poll->getTitle()); ?></div>
+                                    <div class="description"><?php p($desc_str); ?></div>
+                                </div>
+                            </a>
+                        </td>
+                        <td class="pollitem created"><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
+                        <td class="pollitem principal">
+                            <?php
+                                if($poll->getOwner() === $userId) p($l->t('Yourself'));
+                                else p($userMgr->get($poll->getOwner()));
+                            ?>
+                        </td>
+                            <?php
+                                if ($poll->getExpire() !== null) {
+                                    $style = '';
+                                    if (date('U') > strtotime($poll->getExpire())) {
+                                        $style = 'expired';
+                                    }
+                                    print_unescaped('<td class="pollitem expiry ' . $style . '">' . date('d.m.Y', strtotime($poll->getExpire())) . '</td>');
+                                }
+                                else {
+                                    print_unescaped('<td class="pollitem expiry">' . $l->t('Never') . '</td>');
+                                }
+                            ?>
+                        <td class="pollitem participations">
+                            <?php
+                                $partic_class = 'partic_no';
+                                $partic_polls = $_['participations'];
+                                for($i = 0; $i < count($partic_polls); $i++){
+                                    if($poll->getId() == intval($partic_polls[$i]->getPollId())){
+                                        $partic_class = 'partic_yes';
+                                        array_splice($partic_polls, $i, 1);
+                                        break;
+                                    }
+                                }
+                            ?>
+                            <div class="partic_all <?php p($partic_class); ?>">
+                            </div>
+                            |
+                            <?php
+                                $partic_class = 'partic_no';
+                                $partic_comm = $_['comments'];
+                                for($i = 0; $i < count($partic_comm); $i++){
+                                    if($poll->getId() === intval($partic_comm[$i]->getPollId())){
+                                        $partic_class = 'partic_yes';
+                                        array_splice($partic_comm, $i, 1);
+                                        break;
+                                    }
+                                }
+                            ?>
+                            <div class="partic_all <?php p($partic_class); ?>">
+                            </div>
+                        </td>
+                        <td class="pollitem access">
+                            <?php p($l->t($poll->getAccess())); ?>
+                        </td>
+                        <td class="pollitem options">
+                            <?php if ($poll->getOwner() === $userId) : ?>
+                            <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete action permanent"></input>
+                            <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button icon-rename action permanent"></input></a>
+                            <?php endif; ?>
+                            <input type="button" class="table_button cl_link icon-public action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST">
+            </form>
     <?php endif; ?>
-    <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>"><input type="button" id="submit_new_poll" class="icon-add" /></a>
-</div>
-</div>
-</div>
-</div>
+            
+        </div>
+    </div>
+
 
 <?php
 // ---- helper functions ----
@@ -166,7 +197,3 @@ function userHasAccess($poll, $userId) {
     return false;
 }
 ?>
-
-
-
-    
