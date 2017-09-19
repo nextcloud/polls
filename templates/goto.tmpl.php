@@ -260,7 +260,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
                                         <td class="total">
                                             <?php
-                                            $classSuffix = $poll->getType() == '0' ? strtotime($dates[$i]->getDt()) : "pollid_" . $dates[$i]->getId();
+                                            $classSuffix = "pollid_" . $dates[$i]->getId();
                                             if (isset($total_y[$i])) {
                                                 $val = $total_y[$i];
                                             } else {
