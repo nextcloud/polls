@@ -54,7 +54,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 ?>
 
 <div id="app">
-	<?php include ("navigation.tmpl.php"); ?>
     <div id="app-content">
         <div id="app-content-wrapper" class="<?php p($layout); ?>">
 			<div id="controls">
@@ -62,7 +61,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                     <?php if(User::isLoggedIn()) : ?>
                     <div class="crumb svg" data-dir="/">
                         <a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-                            <img class="svg" src="../../../../core/img/places/home.svg"" alt="Home">
+                            <img class="svg" src="<?php print_unescaped(OCP\image_path("core", "places/home.svg")); ?>"" alt="Home">
                         </a>
                     </div>
                     <div class="crumb svg last">
