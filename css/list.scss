@@ -1,190 +1,177 @@
+// define widths
+$name-width: 100px;
+$description-width: 240px;
+$principal-width: 180px;
+$access-width: 85px;
+$date-width: 140px;
+$participants-width: 140px;
+$options-width: 105px;
+$wrapper-1-1-width: max($name-width, $description-width);
+$wrapper-1-2-width: max($principal-width, $access-width);
+$wrapper-1-width: max($wrapper-1-1-width, $wrapper-1-2-width);
+$wrapper-2-width: max($date-width, $participants-width);
+$wrapper-3-width: max($options-width);
+
+// first media break
+$mediabreak-1: 1199px;
+$mediabreak-2: 694px;
+$mediabreak-3: 539px;
+
+
 #controls h2 {
 	float: left;
 	padding: 15px 15px 0 15px;
 }
 
-.app-polls #app-content {
-	transition: background-color 0.3s ease;
-	overflow-x: hidden;
-}
-
-.thumbnail {
-    background-size: 32px;
-    &.progress {
-        background-image: url('../../../apps/polls/css/../img/progress-vote.svg'); 
-    }    
-}
-
 .icon-polls {
 	background-color: black;
-	mask: url('../../../apps/polls/css/../img/app-logo-polls.svg') no-repeat 50% 50%;
+	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
 }
 
-.nametext {
-	line-height: 2em;
-}
-
-.polltable {
-	position: relative;
-	width: 100%;
-	min-width: 688px;
-    
-    &.has-controls {
+.table { 
+    position: relative;
+    &.has-controls { 
         top: 44px;
     }
+    
+}
 
-    tbody tr {
-        transition: background-color 0.3s ease;
-        background-color: #fff;
-        height: 40px;
-        &:hover, &:focus, &:active, &.highlighted, &.highlighted .name:focus, 
-        &.selected, 
-        &.searchresult, 
-        &.mouseOver td, 
-        .name:focus {
+.row {
+    display: flex; 
+    display: -webkit-flex;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-wrap: no-wrap;
+    -webkit-flex-wrap: no-wrap;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    
+    line-height: 2em;
+    transition: background-color 0.3s ease;
+    background-color: #fff;
+    min-height: 40px;
+    border-bottom: 1px solid #eee;
+
+    &.table-body {
+        &:hover, &:focus, &:active, &.mouseOver {
             transition: background-color 0.3s ease;
             background-color: #f8f8f8;
         }
-    }
-    
-    #polllist tr td.pollitem.name {
-        padding-left: 15px;
+        .participants {
+        }
     }
 
-    #headerName-container {
-        padding-left: 70px;
-    }
-
-    th, th a {
+    &.table-header {
         color: #999;
     }
+}    
 
-    th, td {
-        border-bottom: 1px solid #eee;
-        text-align: left;
-        font-weight: normal;
-        height: 50px;
-        line-height: 50px;
-        padding: 0 4px;
-    }
-
-    th .sort-indicator {
-        width: 10px;
-        height: 8px;
-        margin-left: 5px;
-        display: inline-block;
-        vertical-align: text-bottom;
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-        filter: alpha(opacity=30);
-        opacity: 0.3;
-    }
+.wrapper {
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: row;
+	-webkit-flex-direction: row;
 }
 
 
-.pollitem.name{
+.column {
+    flex-grow: 0;
+    -webkit-flex-grow: 0;
+    flex-shrink: 0;
+    -webkit-flex-shrink: 0;
+    vertical-align: top;
+    padding: 0 4px;
+
+}
+
+.name {width: $name-width;}
+.description {
+    width: $description-width;
+    color: #888;
+    }
+.principal {width: $principal-width;}
+.access {width: $access-width;}
+.created {width: $date-width;}
+.expiry {width: $date-width;}
+.participants{width: $participants-width;}
+.options {width: $options-width;}
+
+.name, .description {
+	flex-grow: 1;
+	-webkit-flex-grow: 1;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.wrapper-1, .wrapper-1-1 {
+    flex-grow: 1;
+    -webkit-flex-grow: 1;
+}
+
+
+@media all and (max-width: ($mediabreak-1) ) {
+
+    .wrapper-1-1 {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        width: $wrapper-1-1-width;
+        div {
+            flex-grow: 0;
+            -webkit-flex-grow: 0;
+        }
+  
+        > div {
+            width: 100%;
+        }
+    }
+  
+    .wrapper-1-2, .wrapper-2, .wrapper-3 {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        div {
+            flex-grow: 0;
+            -webkit-flex-grow: 0;
+        }
+  
+    }
+}
+
+@media all and (max-width: ($mediabreak-2) ) {
+
+    .wrapper-1 {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        width: $wrapper-1-width;
+    }
     
-    .nametext {
-        position: relative;
-        left: 55px;
-        padding: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 70%;
-        max-width: 800px;
-        height: 100%;
+    .wrapper-1-1 {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        width: 100%;
+        div {
+            flex-grow: 0;
+            -webkit-flex-grow: 0;
+        }
+  
+        > div {
+            width: 100%;
+        }
     }
+    .wrapper-1-2 {
+        flex-direction: row;
+        -webkit-flex-direction: row;
     
-    .thumbnail {
-        display: inline-block;
-        width: 32px;
-        height: 32px;
-        margin-left: 8px;
-        margin-top: 9px;
-        cursor: pointer;
-        float: left;
-        position: absolute;
-        z-index: 4;
     }
-    .description {
-        line-height: initial;
-        margin-bottom: 5px;
-        color: #888;
-    }
-}
-
-
-.actions {
-	padding: 5px;
-	height: 32px;
-	display: inline-block;
-	float: left;
-
-    &.creatable {
-        position: relative;
-        z-index: -30;
-    }
-    input, button, .button {
-        margin: 0;
-        float: left;
-    }
-}
-
-
-
-.app-files .actions .button.new {
-	position: relative;
-}
-
-
-@media (max-width: 992px) {
-	.columnheader, .pollitem {
-        &.principal, &.created {
-            display: none;
+    .wrapper-2, .wrapper-3 {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        div {
+            flex-grow: 0;
+            -webkit-flex-grow: 0;
         }
-	}	
-	
-    #polllist tr td.pollitem.name {
-		padding-left: 4px;
-	}
-}
-
-@media (max-width: 910px) {
-	.columnheader, .pollitem {
-        &.access  {
-            display: none;
-        }
-    }
-
-        #body-user .polltable {
-		min-width: 0px; 
-	}
-}
-
-@media (max-width: 768px) {
-	.columnheader, .pollitem {
-        &.participations, &.expiry {
-            display: none;
-        }
-	}
-
-	#polllist tr td.pollitem.name {
-		padding-left: 0px;
-	}
-}
-
-@media (max-width: 600px) {
-	.columnheader, .pollitem {
-        &.principal, &.access, &.created {
-            display: none;
-        }
-    }
-}
-
-@media (max-width: 480px) {
-	.columnheader, .pollitem {
-        &.principal, &.access, &.created {
-            display: none;
-        }
+  
     }
 }
 
