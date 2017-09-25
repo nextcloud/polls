@@ -61,10 +61,9 @@
                         if (!userHasAccess($poll, $userId)) continue;
                         // direct url to poll
                         $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
-                        if($poll->getOwner() === $userId) {
+                        $principal = $poll->getOwner();
+                        if($principal === $userId) {
                             $principal = $l->t('Yourself');
-                        }   else {
-                            $principal = $userMgr->get($poll->getOwner());
                         }
 
                         // 
@@ -82,10 +81,10 @@
 
                     <div class="row table-body">
                         <div class="wrapper wrapper-1">
-                            <div class="wrapper wrapper-1-1">
-                                <div class="column name">        <a href="<?php p($pollUrl); ?>"> <?php p($poll->getTitle()); ?></a>                            </div>
+                            <a href="<?php p($pollUrl); ?>" class="wrapper wrapper-1-1">
+                                <div class="column name">         <?php p($poll->getTitle()); ?>                           </div>
                                 <div class="column description">                                  <?php p($poll->getDescription()); ?>                          </div>
-                            </div>
+                            </a> 
                             <div class="wrapper wrapper-1-2">
                                 <div class="column principal">                                    <?php p($principal); ?>                                       </div>
                                 <div class="column access">                                       <?php p($l->t($poll->getAccess())); ?>                        </div>
