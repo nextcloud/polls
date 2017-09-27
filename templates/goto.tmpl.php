@@ -6,7 +6,6 @@
     \OCP\Util::addStyle('polls', 'vote');
     \OCP\Util::addScript('polls', 'vote');
     
-    $layout = "classic";
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
@@ -55,7 +54,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 
 <div id="app">
     <div id="app-content">
-        <div id="app-content-wrapper" class="<?php p($layout); ?>">
+        <div id="app-content-wrapper">
 			<div id="controls">
                 <div id="breadcrump">
                     <?php if(User::isLoggedIn()) : ?>

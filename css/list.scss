@@ -1,22 +1,40 @@
 // define widths
+
+$row-padding: 15px;
+
+$options-width: 85px;
+$group-3-width: $options-width;
+
+$date-width: 100px;
+$participants-width: 100px;
+$group-2-width: max($date-width, $participants-width);
+
+$principal-width: 140px;
+$access-width: 100px;
+$group-1-2-width: max($principal-width, $access-width);
+
 $name-width: 100px;
-$description-width: 240px;
-$principal-width: 180px;
-$access-width: 85px;
-$date-width: 140px;
-$participants-width: 140px;
-$options-width: 105px;
-$wrapper-1-1-width: max($name-width, $description-width);
-$wrapper-1-2-width: max($principal-width, $access-width);
-$wrapper-1-width: max($wrapper-1-1-width, $wrapper-1-2-width);
-$wrapper-2-width: max($date-width, $participants-width);
-$wrapper-3-width: max($options-width);
+$description-width: $principal-width + $access-width;
+$group-1-1-width: max($name-width, $description-width);
+
+$group-1-width: max($group-1-1-width, $group-1-2-width);
+
+$group-master-width: max($group-1-width, $group-2-width, $group-3-width);
 
 // first media break
-$mediabreak-1: 1199px;
-$mediabreak-2: 694px;
-$mediabreak-3: 539px;
+$mediabreak-1: ($name-width + $description-width + $principal-width + $access-width + $date-width + $date-width + $participants-width + $options-width + $row-padding * 2);
+// $mediabreak-1: 1199px;
+$mediabreak-2: $group-1-1-width + $group-1-2-width + $group-2-width + $group-3-width  + $row-padding * 2;
+// $mediabreak-2: 694px;
+$mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
+// $mediabreak-3: 539px;
 
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 
 #controls h2 {
 	float: left;
@@ -28,6 +46,10 @@ $mediabreak-3: 539px;
 	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
 }
 
+.icon {
+    padding: 4px;
+}
+
 .table { 
     position: relative;
     &.has-controls { 
@@ -37,15 +59,12 @@ $mediabreak-3: 539px;
 }
 
 .row {
-    display: flex; 
-    display: -webkit-flex;
-    flex-direction: row;
-    -webkit-flex-direction: row;
-    flex-wrap: no-wrap;
-    -webkit-flex-wrap: no-wrap;
+    display: flex;           display: -webkit-flex;
+    flex-direction: row;     -webkit-flex-direction: row;
+    flex-wrap: no-wrap;      -webkit-flex-wrap: no-wrap;
     width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left:  $row-padding;
+    padding-right: $row-padding;
     
     line-height: 2em;
     transition: background-color 0.3s ease;
@@ -68,110 +87,162 @@ $mediabreak-3: 539px;
 }    
 
 .wrapper {
-	display: flex;
-	display: -webkit-flex;
-	flex-direction: row;
-	-webkit-flex-direction: row;
+	display: flex; 	        display: -webkit-flex;
+	flex-direction: row; 	-webkit-flex-direction: row;
 }
 
 
 .column {
-    flex-grow: 0;
-    -webkit-flex-grow: 0;
-    flex-shrink: 0;
-    -webkit-flex-shrink: 0;
+    flex-grow: 0;       -webkit-flex-grow: 0;
+    flex-shrink: 0;     -webkit-flex-shrink: 0;
     vertical-align: top;
     padding: 0 4px;
-
+    overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
-.name {width: $name-width;}
+.name {
+    width: $name-width;
+}
+
 .description {
     width: $description-width;
     color: #888;
     }
-.principal {width: $principal-width;}
-.access {width: $access-width;}
-.created {width: $date-width;}
-.expiry {width: $date-width;}
-.participants{width: $participants-width;}
-.options {width: $options-width;}
+    
+.principal {
+    width: $principal-width;
+}
+
+.access {
+    width: $access-width;
+}
+
+.created {
+    width: $date-width;
+        align-items: right;
+
+}
+
+.expiry {
+    width: $date-width;
+        align-items: right;
+}
+
+.participants{
+    width: $participants-width;
+}
+
+.options {
+    width: $options-width;
+    align-items: center;
+}
 
 .name, .description {
-	flex-grow: 1;
-	-webkit-flex-grow: 1;
+	flex-grow: 1; 	-webkit-flex-grow: 1;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 
-.wrapper-1, .wrapper-1-1 {
-    flex-grow: 1;
-    -webkit-flex-grow: 1;
+.group-1, .group-1-1, .group-master {
+    flex-grow: 1;     -webkit-flex-grow: 1;
 }
 
-
+.expired {
+    color: red;
+    }
 @media all and (max-width: ($mediabreak-1) ) {
 
-    .wrapper-1-1 {
-        flex-direction: column;
-        -webkit-flex-direction: column;
-        width: $wrapper-1-1-width;
-        div {
+    .group-1-1 {
+        flex-direction: column;         -webkit-flex-direction: column;
+        width: $group-1-1-width;
+         div {
             flex-grow: 0;
             -webkit-flex-grow: 0;
         }
   
         > div {
             width: 100%;
-        }
+        } 
     }
   
-    .wrapper-1-2, .wrapper-2, .wrapper-3 {
+    .group-1-2, .group-2, .group-3 {
         flex-direction: column;
         -webkit-flex-direction: column;
-        div {
-            flex-grow: 0;
-            -webkit-flex-grow: 0;
+
+         div {
+            flex-grow: 1;  -webkit-flex-grow: 1;
         }
   
     }
+        .column.options {
+        flex-direction: column;
+    }
+
 }
 
 @media all and (max-width: ($mediabreak-2) ) {
 
-    .wrapper-1 {
+    .row {
+        padding: 0;
+    }
+        
+    .group-1 {
         flex-direction: column;
         -webkit-flex-direction: column;
-        width: $wrapper-1-width;
+        width: $group-1-width;
     }
     
-    .wrapper-1-1 {
+    .group-1-1 {
         flex-direction: column;
         -webkit-flex-direction: column;
         width: 100%;
-        div {
+         div {
             flex-grow: 0;
             -webkit-flex-grow: 0;
         }
-  
         > div {
             width: 100%;
         }
+   
     }
-    .wrapper-1-2 {
+    .group-1-2 {
         flex-direction: row;
         -webkit-flex-direction: row;
     
     }
-    .wrapper-2, .wrapper-3 {
+    .group-2, .group-3 {
         flex-direction: column;
         -webkit-flex-direction: column;
-        div {
+         div {
             flex-grow: 0;
             -webkit-flex-grow: 0;
         }
-  
+   
     }
 }
 
+@media all and (max-width: ($mediabreak-3) ) {
+
+
+
+    .group-master {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        width: $group-master-width;
+    }
+    
+    .group-2, .group-3 {
+        flex-direction: row;
+        -webkit-flex-direction: row;
+         div {
+            flex-grow: 1;
+            -webkit-flex-grow: 1;
+        }
+   
+    }
+   
+} 
+    

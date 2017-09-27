@@ -36,23 +36,26 @@
     <?php else : ?>
             <div class="table has-controls">
                 <div class ="row table-header">
-                    <div class="wrapper wrapper-1">
-                        <div class="wrapper wrapper-1-1">
-                            <div class="column name">           <?php p($l->t('Title')); ?></div>
-                            <div class="column description">    <?php p($l->t('Description')); ?></div>
+                
+                    <div class="wrapper group-master">
+                        <div class="wrapper group-1">
+                            <div class="wrapper group-1-1">
+                                <div class="column name">        <span><?php p($l->t('Title')); ?></span></div>
+                                <div class="column description"> <span><?php p($l->t('Description')); ?> </span></div>
+                            </div>
+                            <div class="wrapper group-1-2">
+                                <div class="column principal">   <span><?php p($l->t('By')); ?> </span>          </div>
+                                <div class="column access">      <span><?php p($l->t('Access')); ?> </span>      </div>
+                            </div>
                         </div>
-                        <div class="wrapper wrapper-1-2">
-                            <div class="column principal">      <?php p($l->t('By')); ?>          </div>
-                            <div class="column access">         <?php p($l->t('Access')); ?>      </div>
+                        <div class="wrapper group-2">
+                            <div class="column created">         <span><?php p($l->t('Created')); ?> </span>     </div>
+                            <div class="column expiry">          <span><?php p($l->t('Expires')); ?> </span>     </div>
+                            <div class="column participants">    <span><?php p($l->t('participated')); ?> </span></div>
                         </div>
-                    </div>
-                    <div class="wrapper wrapper-2">
-                        <div class="column created">        <?php p($l->t('Created')); ?>     </div>
-                        <div class="column expiry">         <?php p($l->t('Expires')); ?>     </div>
-                        <div class="column participants"> <?php p($l->t('participated')); ?></div>
-                    </div>
-                    <div class="wrapper wrapper-3">
-                        <div class="column options">        <?php p($l->t('Options')); ?>     </div>
+                     </div>
+                    <div class="wrapper group-3">
+                        <div class="wrapper column options">         <span><?php p($l->t('Options')); ?> </span>     </div>
                     </div>
                 </div>
                 
@@ -66,71 +69,78 @@
                             $principal = $l->t('Yourself');
                         }
 
-                        // 
+                        $expiry_style = '';
                         if ($poll->getExpire() !== null) {
-                            $expiry_style = '';
                             $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
                             if (date('U') > strtotime($poll->getExpire())) {
+                                $expiry_date = $l->t('expired');
                                 $expiry_style = 'expired';
                             }
                         } else {
-                            $expiry_style = '';
                             $expiry_date = $l->t('Never');
                         }
                     ?>
 
                     <div class="row table-body">
-                        <div class="wrapper wrapper-1">
-                            <a href="<?php p($pollUrl); ?>" class="wrapper wrapper-1-1">
-                                <div class="column name">         <?php p($poll->getTitle()); ?>                           </div>
-                                <div class="column description">                                  <?php p($poll->getDescription()); ?>                          </div>
-                            </a> 
-                            <div class="wrapper wrapper-1-2">
-                                <div class="column principal">                                    <?php p($principal); ?>                                       </div>
-                                <div class="column access">                                       <?php p($l->t($poll->getAccess())); ?>                        </div>
+                        <div class="wrapper group-master">
+                            <div class="wrapper group-1">
+                                <a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
+                                    <div class="column name">                          <span><?php p($poll->getTitle()); ?> </span>              </div>
+                                    <div class="column description">                   <span><?php p($poll->getDescription()); ?> </span>                         </div>
+                                </a> 
+                                <div class="wrapper group-1-2">
+                                    <div class="column principal">                     <span><?php p($principal); ?> </span>                                      </div>
+                                    <div class="column access">                        <span><?php p($l->t($poll->getAccess())); ?> </span>                        </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="wrapper wrapper-2">
-                            <div class="column created">                                          <?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></div>
-                            <div class="column expiry <?php p($expiry_style); ?>">                <?php p($expiry_date); ?>                                     </div>
-                            <div class="column participants">
-                                    <?php
-                                        $partic_class = 'partic_no';
-                                        $partic_polls = $_['participations'];
-                                        for($i = 0; $i < count($partic_polls); $i++){
-                                            if($poll->getId() == intval($partic_polls[$i]->getPollId())){
-                                                $partic_class = 'partic_yes';
-                                                array_splice($partic_polls, $i, 1);
-                                                break;
+                            <div class="wrapper group-2">
+                                <div class="column created">                           <span><?php p(date('d.m.Y', strtotime($poll->getCreated()))); ?> </span></div>
+                                <div class="column expiry <?php p($expiry_style); ?>"> <span><?php p($expiry_date); ?> </span></div>
+                                <div class="column participants">
+                                        <?php
+                                            $partic_class = 'partic_no';
+                                            $partic_polls = $_['participations'];
+                                            for($i = 0; $i < count($partic_polls); $i++){
+                                                if($poll->getId() == intval($partic_polls[$i]->getPollId())){
+                                                    $partic_class = 'partic_yes';
+                                                    array_splice($partic_polls, $i, 1);
+                                                    break;
+                                                }
                                             }
-                                        }
-                                    ?>
-                                    <div class="partic_all <?php p($partic_class); ?>">
-                                    </div>
-                                    |
-                                    <?php
-                                        $partic_class = 'partic_no';
-                                        $partic_comm = $_['comments'];
-                                        for($i = 0; $i < count($partic_comm); $i++){
-                                            if($poll->getId() === intval($partic_comm[$i]->getPollId())){
-                                                $partic_class = 'partic_yes';
-                                                array_splice($partic_comm, $i, 1);
-                                                break;
+                                        ?>
+                                        <div class="partic_all <?php p($partic_class); ?>">
+                                        </div>
+                                        |
+                                        <?php
+                                            $partic_class = 'partic_no';
+                                            $partic_comm = $_['comments'];
+                                            for($i = 0; $i < count($partic_comm); $i++){
+                                                if($poll->getId() === intval($partic_comm[$i]->getPollId())){
+                                                    $partic_class = 'partic_yes';
+                                                    array_splice($partic_comm, $i, 1);
+                                                    break;
+                                                }
                                             }
-                                        }
-                                    ?>
-                                    <div class="partic_all <?php p($partic_class); ?>">
-                                    </div>
-                            </div>
+                                        ?>
+                                        <div class="partic_all <?php p($partic_class); ?>">
+                                        </div>
+                                </div>
 
+                            </div>
                         </div>
-                        <div class="wrapper wrapper-3">
-                            <div class="column options">
+                        <div class="wrapper group-3">
+                            <div class="wrapper column options">
                                 <?php if ($poll->getOwner() === $userId) : ?>
-                                <input type="button" id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete action permanent"></input>
-                                <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input type="button" id="id_edit_<?php p($poll->getId()); ?>" class="table_button icon-rename action permanent"></input></a>
+                                <div class="wrapper icon">
+                                    <input id="id_del_<?php p($poll->getId()); ?>" class="table_button cl_delete icon-delete action permanent"></input>
+                                </div>
+                                <div class="wrapper icon">
+                                    <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>"><input id="id_edit_<?php p($poll->getId()); ?>" class="table_button icon-rename action permanent"></input></a>
+                                </div>
                                 <?php endif; ?>
-                                <input type="button" class="table_button cl_link icon-public action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
+                                <div class="wrapper icon">
+                                    <input class="table_button cl_link icon-clippy action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>"></input>
+                                </div>
                             </div>
                         </div>
                     </div>
