@@ -21,6 +21,7 @@ OC.L10N.register(
     "hidden" : "caché",
     "public" : "public",
     "registered" : "inscription",
+    "expired" : "expired",
     "delete" : "effacer",
     "Next" : "Suivant",
     "Cancel" : "Annuler",

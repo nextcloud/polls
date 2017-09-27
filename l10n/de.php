@@ -20,6 +20,7 @@ $TRANSLATIONS = array(
 	"hidden" => "versteckt",
 	"public" => "öffentlich",
 	"registered" => "für Registrierte",
+    "expired" => "beendet",
 	"delete" => "löschen",
 	"Next" => "Weiter",
 	"Cancel" => "Abbrechen",

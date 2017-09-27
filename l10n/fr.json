@@ -19,6 +19,7 @@
 	"hidden" : "caché",
 	"public" : "public",
 	"registered" : "inscrit",
+    "expired" : "expired",
 	"delete" : "effacer",
 	"Next" : "Suivant",
 	"Cancel" : "Annuler",
