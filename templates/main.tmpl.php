@@ -40,22 +40,22 @@
                     <div class="wrapper group-master">
                         <div class="wrapper group-1">
                             <div class="wrapper group-1-1">
-                                <div class="column name">        <span><?php p($l->t('Title')); ?></span></div>
-                                <div class="column description"> <span><?php p($l->t('Description')); ?> </span></div>
+                                <div class="column name">        <?php p($l->t('Title')); ?></div>
+                                <div class="column description"> <?php p($l->t('Description')); ?></div>
                             </div>
                             <div class="wrapper group-1-2">
-                                <div class="column principal">   <span><?php p($l->t('By')); ?> </span>          </div>
-                                <div class="column access">      <span><?php p($l->t('Access')); ?> </span>      </div>
+                                <div class="column principal">   <?php p($l->t('By')); ?></div>
+                                <div class="column access">      <?php p($l->t('Access')); ?></div>
                             </div>
                         </div>
                         <div class="wrapper group-2">
-                            <div class="column created">         <span><?php p($l->t('Created')); ?> </span>     </div>
-                            <div class="column expiry">          <span><?php p($l->t('Expires')); ?> </span>     </div>
-                            <div class="column participants">    <span><?php p($l->t('participated')); ?> </span></div>
+                            <div class="column created">         <?php p($l->t('Created')); ?></div>
+                            <div class="column expiry">          <?php p($l->t('Expires')); ?></div>
+                            <div class="column participants">    <?php p($l->t('participated')); ?></div>
                         </div>
                      </div>
                     <div class="wrapper group-3">
-                        <div class="wrapper column options">         <span><?php p($l->t('Options')); ?> </span>     </div>
+                        <div class="wrapper column options">     <?php p($l->t('Options')); ?></div>
                     </div>
                 </div>
                 
@@ -85,17 +85,17 @@
                         <div class="wrapper group-master">
                             <div class="wrapper group-1">
                                 <a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
-                                    <div class="column name">                          <span><?php p($poll->getTitle()); ?> </span>              </div>
-                                    <div class="column description">                   <span><?php p($poll->getDescription()); ?> </span>                         </div>
+                                    <div class="column name">                          <?php p($poll->getTitle()); ?></div>
+                                    <div class="column description">                   <?php p($poll->getDescription()); ?></div>
                                 </a> 
                                 <div class="wrapper group-1-2">
-                                    <div class="column principal">                     <span><?php p($principal); ?> </span>                                      </div>
-                                    <div class="column access">                        <span><?php p($l->t($poll->getAccess())); ?> </span>                        </div>
+                                    <div class="column principal">                     <?php p($principal); ?></div>
+                                    <div class="column access">                        <?php p($l->t($poll->getAccess())); ?></div>
                                 </div>
                             </div>
                             <div class="wrapper group-2">
-                                <div class="column created">                           <span><?php p(date('d.m.Y', strtotime($poll->getCreated()))); ?> </span></div>
-                                <div class="column expiry <?php p($expiry_style); ?>"> <span><?php p($expiry_date); ?> </span></div>
+                                <div class="column created" data-value="<?php p(date('d.m.Y', strtotime($poll->getCreated()))); ?>"><?php p(date('d.m.Y', strtotime($poll->getCreated()))); ?></div>
+                                <div class="column expiry <?php p($expiry_style); ?>" data-value="<?php p(date('d.m.Y', strtotime($poll->getCreated()))); ?>"> <?php p($expiry_date); ?></div>
                                 <div class="column participants">
                                         <?php
                                             $partic_class = 'partic_no';
@@ -108,9 +108,8 @@
                                                 }
                                             }
                                         ?>
-                                        <div class="partic_all <?php p($partic_class); ?>">
+                                        <div class="partic_voted <?php p($partic_class); ?>">
                                         </div>
-                                        |
                                         <?php
                                             $partic_class = 'partic_no';
                                             $partic_comm = $_['comments'];
@@ -122,7 +121,7 @@
                                                 }
                                             }
                                         ?>
-                                        <div class="partic_all <?php p($partic_class); ?>">
+                                        <div class="partic_commented <?php p($partic_class); ?>">
                                         </div>
                                 </div>
 
@@ -149,7 +148,9 @@
             <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST">
             </form>
     <?php endif; ?>
-            
+            <div class="textarea"> 
+				<?php var_dump($poll); ?> 
+			</div>
         </div>
     </div>
 

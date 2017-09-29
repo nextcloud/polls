@@ -1,19 +1,25 @@
+// colors
+    $bg_no: #ffede9;
+    $bg_yes: #ebf5d6;
+    $fg_no: #f45573;
+    $fg_yes: #49bc49;
+
 // define widths
 
 $row-padding: 15px;
 
-$options-width: 85px;
+$options-width: 100px;
 $group-3-width: $options-width;
 
-$date-width: 100px;
-$participants-width: 100px;
+$date-width: 140px;
+$participants-width: 140px;
 $group-2-width: max($date-width, $participants-width);
 
 $principal-width: 140px;
-$access-width: 100px;
+$access-width: 140px;
 $group-1-2-width: max($principal-width, $access-width);
 
-$name-width: 100px;
+$name-width: 140px;
 $description-width: $principal-width + $access-width;
 $group-1-1-width: max($name-width, $description-width);
 
@@ -69,7 +75,7 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
     line-height: 2em;
     transition: background-color 0.3s ease;
     background-color: #fff;
-    min-height: 40px;
+    min-height: 4em;
     border-bottom: 1px solid #eee;
 
     &.table-body {
@@ -89,17 +95,20 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 .wrapper {
 	display: flex; 	        display: -webkit-flex;
 	flex-direction: row; 	-webkit-flex-direction: row;
+    vertical-align: middle;
+    align-items: center;
 }
 
 
 .column {
     flex-grow: 0;       -webkit-flex-grow: 0;
     flex-shrink: 0;     -webkit-flex-shrink: 0;
-    vertical-align: top;
     padding: 0 4px;
     overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+    vertical-align: middle;
+    align-items: center;
 }
 
 .name {
@@ -121,17 +130,52 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 
 .created {
     width: $date-width;
-        align-items: right;
-
 }
 
 .expiry {
     width: $date-width;
-        align-items: right;
+    &.expired {
+        color: red;
+    }
 }
 
 .participants{
     width: $participants-width;
+    div {
+        background-repeat: no-repeat;
+        background-position: center;
+        transition: background-color 0.2s;
+        background-size: 16px;
+        height: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 16px;
+        height:16px;
+        display: inline-block;
+
+        &.partic_voted {
+            &.partic_yes {
+                // background-color: $fg_yes;
+                background-image: url('../img/yes-vote.svg');
+
+            }
+            &.partic_no {
+                // background-color: $fg_no;
+                background-image: url('../img/no-vote.svg');
+            }
+        }
+
+        &.partic_commented {
+            &.partic_yes {
+                // background-color: $fg_yes;
+                background-image: url('../img/yes-comment.svg');
+            }
+            &.partic_no {
+                // background-color: $fg_no;
+                background-image: url('../img/no-comment.svg');
+            }
+        }
+    }
 }
 
 .options {
@@ -150,37 +194,35 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
     flex-grow: 1;     -webkit-flex-grow: 1;
 }
 
-.expired {
-    color: red;
+.group-1-1 {
+    flex-direction: column;         -webkit-flex-direction: column;
+    width: $group-1-1-width;
+     div {
+        flex-grow: 0;              -webkit-flex-grow: 0;
     }
-@media all and (max-width: ($mediabreak-1) ) {
 
-    .group-1-1 {
-        flex-direction: column;         -webkit-flex-direction: column;
-        width: $group-1-1-width;
-         div {
-            flex-grow: 0;
-            -webkit-flex-grow: 0;
-        }
+    > div {
+        width: 100%;
+    } 
+}
   
-        > div {
-            width: 100%;
-        } 
-    }
-  
+
+
+@media all and (max-width: ($mediabreak-1) ) {
     .group-1-2, .group-2, .group-3 {
         flex-direction: column;
         -webkit-flex-direction: column;
 
          div {
-            flex-grow: 1;  -webkit-flex-grow: 1;
+            flex-grow: 0;  -webkit-flex-grow: 0;
         }
-  
     }
         .column.options {
         flex-direction: column;
     }
-
+    .icon {
+        padding: 0;
+    }
 }
 
 @media all and (max-width: ($mediabreak-2) ) {
