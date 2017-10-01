@@ -1,9 +1,32 @@
 $(document).ready(function () {
+    
+    $('.table-body div.column.created').each(function(i, obj) {
+            if (isDate(obj.dataset.value)) {
+                obj.dataset.value = obj.dataset.value.replace(/ /g,"T")+"Z";
+                obj.innerText = OC.Util.relativeModifiedDate(obj.dataset.value);
+            };
+    });
+
+    $('.table-body div.column.expiry').each(function(i, obj) {
+            if (isDate(obj.dataset.value)) {
+                obj.dataset.value = obj.dataset.value.replace(/ /g,"T")+"Z";
+                obj.innerText= OC.Util.relativeModifiedDate(obj.dataset.value);
+            };
+    });
+
+    $('.table-body .avatardiv').each(function(i, obj) {
+        $(obj).avatar(obj.title, 32);
+    });
+
+    
     $('.cl_delete').click(deletePoll);
 
     $('.cl_link').click(function() {
         window.prompt(t('polls','Copy to clipboard: Ctrl+C, Enter'), $(this).data('url'));
     });
+    
+    
+    
 });
 
 function deletePoll(e) {
@@ -24,4 +47,13 @@ function deletePoll(e) {
         form.elements['pollId'].value = this.id.split('_')[2];
         form.submit();
     }
+}
+
+/* 
+            obj.textContent = obj.data-value ;
+ */
+
+function isDate(val) {
+    var d = new Date(val);
+    return !isNaN(d.valueOf());
 }

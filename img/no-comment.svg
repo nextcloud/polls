@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -39,7 +39,7 @@
      id="namedview7"
      showgrid="false"
      inkscape:zoom="16"
-     inkscape:cx="14.602676"
+     inkscape:cx="0.758926"
      inkscape:cy="2.0299338"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
@@ -49,7 +49,7 @@
      id="defs4" />
   <path
      style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#f45573;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.39999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-     d="M 1.9776729,1.4161864 C 1.5916995,1.4165875 1.2789233,1.6840019 1.2784542,2.0139978 l 0,6.7829882 c 4.689e-4,0.329996 0.3132452,0.597411 0.6992187,0.597812 l 0.678094,0 -1.2816311,3.792712 3.8027559,-3.792712 9.0039053,0 c 0.385974,-4.01e-4 0.69875,-0.267815 0.699219,-0.597812 l 0,-6.7829882 C 14.879547,1.6840018 14.56677,1.4165873 14.180797,1.4161864 Z"
+     d="M 2.7395492,2.1143382 C 2.406783,2.1147393 2.1371235,2.3821537 2.1367191,2.7121496 l 0,6.7829882 c 4.043e-4,0.329996 0.2700638,0.5974112 0.6028301,0.5978122 l 0.5846175,0 -1.1049559,3.792712 3.2785391,-3.792712 7.7627011,0 c 0.332766,-4.01e-4 0.602426,-0.2678152 0.60283,-0.5978122 l 0,-6.7829882 c -4.04e-4,-0.329996 -0.270064,-0.5974105 -0.60283,-0.5978114 z"
      id="rect8069"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccccccccc" />
