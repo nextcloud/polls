@@ -16,11 +16,11 @@ $participants-width: 80px;
 $group-2-width: max($date-width, $participants-width);
 
 $principal-width: 140px;
-$access-width: 100px;
+$access-width: 140px;
 $group-1-2-width: max($principal-width, $access-width);
 
-$name-width: 140px;
-$description-width: $principal-width + $access-width;
+$name-width: 100px;
+$description-width: 100px;
 $group-1-1-width: max($name-width, $description-width);
 
 $group-1-width: max($group-1-1-width, $group-1-2-width);
@@ -38,6 +38,7 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 
 .table, .row, .column {
 	box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
+    
 }
 
 #controls h2 {
@@ -114,7 +115,7 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 	white-space: nowrap;
 	text-overflow: ellipsis;
     // vertical-align: middle;
-    // align-items: center;
+    align-items: center;
 }
 
 .name {
@@ -181,6 +182,23 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 
 [class^="icon-"], [class*=" icon-"] {
     padding: 2px;
+}
+
+.thumbnail {
+    background-size: 32px;
+    width: 36px;
+    height: 32px;
+    // padding-right: 4px;
+    background-repeat: no-repeat;
+    &.progress {
+        background-image: url('../img/progress-vote.svg'); 
+    }    
+    &.expired {
+        background-image: url('../img/finished-vote-red.svg'); 
+    }    
+    &.endless {
+        background-image: url('../img/finished-vote.svg'); 
+    }    
 }
 
 .name, .description {

@@ -1,23 +1,16 @@
 $(document).ready(function () {
-    
-    $('.table-body div.column.created').each(function(i, obj) {
-            if (isDate(obj.dataset.value)) {
-                obj.dataset.value = obj.dataset.value.replace(/ /g,"T")+"Z";
-                obj.innerText = OC.Util.relativeModifiedDate(obj.dataset.value);
-            };
-    });
-
-    $('.table-body div.column.expiry').each(function(i, obj) {
+/*     
+     $('.table-body div.column.expiry').each(function(i, obj) {
             if (isDate(obj.dataset.value)) {
                 obj.dataset.value = obj.dataset.value.replace(/ /g,"T")+"Z";
                 obj.innerText= OC.Util.relativeModifiedDate(obj.dataset.value);
             };
     });
-
+ */  
     $('.table-body .avatardiv').each(function(i, obj) {
         $(obj).avatar(obj.title, 32);
     });
-
+  
     
     $('.cl_delete').click(deletePoll);
 

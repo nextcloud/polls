@@ -71,12 +71,15 @@
 
                         $expiry_style = '';
                         if ($poll->getExpire() !== null) {
-                            $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
+                            // $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
+                            $expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
+                            $expiry_style = ' progress';
                             if (date('U') > strtotime($poll->getExpire())) {
-                                $expiry_date = $l->t('expired');
+                                $expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire()));
                                 $expiry_style = ' expired';
                             }
                         } else {
+                            $expiry_style = ' endless';
                             $expiry_date = $l->t('Never');
                         }
                     ?>
@@ -84,22 +87,21 @@
                     <div class="row table-body">
                         <div class="wrapper group-master">
                             <div class="wrapper group-1">
+                                <div class="thumbnail <?php p($expiry_style); ?>"></div>  <!-- Image to display status or type of poll */ -->
                                 <a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
                                     <div class="column name">                          <?php p($poll->getTitle()); ?></div>
                                     <div class="column description">                   <?php p($poll->getDescription()); ?></div>
                                 </a> 
                                 <div class="wrapper group-1-2">
                                     <div class="column principal">  
-                                        <div class="avatardiv" title="<?php p($poll->getOwner()); ?>"> 
-                                        </div>
-                                        <div class="name-cell"><?php p($principal); ?>
-                                        </div>
+                                        <div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
+                                        <div class="name-cell"><?php p($principal); ?></div>
                                     </div>
-                                    <div class="column access">                                            <?php p($l->t($poll->getAccess())); ?></div>
+                                    <div class="column access"><?php p($l->t($poll->getAccess())); ?></div>
                                 </div>
                             </div>
                             <div class="wrapper group-2">
-                                <div class="column created" data-timestamp="<?php p(strtotime($poll->getCreated())); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(date('d.m.Y', strtotime($poll->getCreated()))); ?></div>
+                                <div class="column created" data-timestamp="<?php p(strtotime($poll->getCreated())); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(OCP\relative_modified_date(strtotime($poll->getCreated()))); ?></div>
                                 <div class="column expiry<?php p($expiry_style); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
                                 <div class="column participants">
                                         <?php
