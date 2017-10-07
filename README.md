@@ -38,7 +38,9 @@ git clone https://github.com/nextcloud/polls.git
 
 ## Contribution Guidelines
 
-Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together we can strengthen and support each other.
+Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance 
+to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together 
+we can strengthen and support each other.
 
 For more information please review the [guidelines for contributing](https://github.com/nextcloud/server/blob/master/CONTRIBUTING.md) to this repository.
 
@@ -47,7 +49,7 @@ For more information please review the [guidelines for contributing](https://git
 All contributions to this repository are considered to be licensed under
 the GNU AGPLv3 or any later version.
 
-Contributors to the Deck app retain their copyright. Therefore we recommend
+Contributors to the Polls app retain their copyright. Therefore we recommend
 to add following line to the header of a file, if you changed it substantially:
 
 ```
