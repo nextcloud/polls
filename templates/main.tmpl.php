@@ -21,7 +21,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="actions creatable" style="">
+                    <div class="creatable" style="">
                         <a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
                             <span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
                         </a>
@@ -44,19 +44,21 @@
                                 <div class="column description"> <?php p($l->t('Description')); ?></div>
                             </div>
                             <div class="wrapper group-1-2">
-                                <div class="column principal">   <?php p($l->t('By')); ?></div>
-                                <div class="column access">      <?php p($l->t('Access')); ?></div>
+                                <div class="column actions"></div>
                             </div>
                         </div>
                         <div class="wrapper group-2">
-                            <div class="column created">         <?php p($l->t('Created')); ?></div>
-                            <div class="column expiry">          <?php p($l->t('Expires')); ?></div>
-                            <div class="column participants">    <?php p($l->t('participated')); ?></div>
+                            <div class="column principal">   <?php p($l->t('By')); ?></div>
+                            <div class="wrapper group-2-1">
+                                <div class="column access">      <?php p($l->t('Access')); ?></div>
+                                <div class="column created">         <?php p($l->t('Created')); ?></div>
+                            </div>
+                            <div class="wrapper group-2-2">
+                                <div class="column expiry">          <?php p($l->t('Expires')); ?></div>
+                                <div class="column participants">    <?php p($l->t('participated')); ?></div>
+                            </div>
                         </div>
                      </div>
-                    <div class="wrapper group-3">
-                        <div class="column options">     <?php p($l->t('Options')); ?></div>
-                    </div>
                 </div>
                 
                 <?php foreach ($_['polls'] as $poll) : ?>
@@ -65,11 +67,23 @@
                         // direct url to poll
                         $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
                         $principal = $poll->getOwner();
+
+                        $expiry_style = '';
+                        
+                        $participated = $_['participations'];
+                        $participated_class = 'partic_no';
+                        $participated_title = 'You did not vote';
+                        $participated_count = count($participated);
+                        
+                        $comments = $_['comments'];
+                        $commented_class = 'commented_no';
+                        $commented_title = 'You did not comment';
+                        $commented_count = count($comments);
+
                         if($principal === $userId) {
                             $principal = $l->t('Yourself');
                         }
 
-                        $expiry_style = '';
                         if ($poll->getExpire() !== null) {
                             // $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
                             $expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
@@ -82,69 +96,81 @@
                             $expiry_style = ' endless';
                             $expiry_date = $l->t('Never');
                         }
+
+                        for($i = 0; $i < count($participated); $i++){
+                            if($poll->getId() == intval($participated[$i]->getPollId())){
+                                $participated_class = 'partic_yes';
+                                $participated_title = 'You voted';
+                                array_splice($participated, $i, 1);
+                                break;
+                            }
+                        }
+
+                        for($i = 0; $i < count($comments); $i++){
+                            if($poll->getId() === intval($comments[$i]->getPollId())){
+                                $commented_class = 'partic_yes';
+                                $commented_title = 'You commented';
+                                array_splice($comments, $i, 1);
+                                break;
+                            }
+                        }
                     ?>
+
 
                     <div class="row table-body">
                         <div class="wrapper group-master">
                             <div class="wrapper group-1">
-                                <div class="thumbnail <?php p($expiry_style); ?>"></div>  <!-- Image to display status or type of poll */ -->
+                                <div class="thumbnail <?php p($expiry_style . " " . $commented_class. " " . $participated_class); ?>"></div>  <!-- Image to display status or type of poll */ -->
                                 <a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
                                     <div class="column name">                          <?php p($poll->getTitle()); ?></div>
                                     <div class="column description">                   <?php p($poll->getDescription()); ?></div>
                                 </a> 
-                                <div class="wrapper group-1-2">
-                                    <div class="column principal">  
-                                        <div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
-                                        <div class="name-cell"><?php p($principal); ?></div>
+                                <div class="column actions">
+                                    <div class="icon-more popupmenu" value="<?php p($poll->getId()); ?>" id="expand_<?php p($poll->getId()); ?>"></div>
+                                    <div class="popovermenu bubble menu" id="expanddiv_<?php p($poll->getId()); ?>">
+                                        <ul>
+                                            <li>
+                                                <button class="menuitem copy_link action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>">
+                                                    <span class="cl_link icon-clippy"></span>
+                                                    <span>Copy Link</span>
+                                                </button>
+                                            </li>
+                            <?php if ($poll->getOwner() === $userId) : ?>
+                                            <li>
+                                                <button class="menuitem delete_poll action permanent" id="id_del_<?php p($poll->getId()); ?>" data-value="<?php p($poll->getTitle()); ?>">
+                                                    <span class="cl_delete icon-delete"></span>
+                                                    <span>Delete poll</span>
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>" class="menuitem action permanent" id="id_edit_<?php p($poll->getId()); ?>">
+                                                    <span class="icon-rename"></span>
+                                                    <span>Edit Poll</span>
+                                                </a>
+                                            </li>
+                            <?php endif; ?>
+                                        </ul>
+                                    
                                     </div>
-                                    <div class="column access"><?php p($l->t($poll->getAccess())); ?></div>
+
                                 </div>
                             </div>
                             <div class="wrapper group-2">
-                                <div class="column created" data-timestamp="<?php p(strtotime($poll->getCreated())); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(OCP\relative_modified_date(strtotime($poll->getCreated()))); ?></div>
-                                <div class="column expiry<?php p($expiry_style); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
-                                <div class="column participants">
-                                        <?php
-                                            $partic_class = 'partic_no';
-                                            $partic_polls = $_['participations'];
-                                            $partic_title = 'You did not vote';
-                                            for($i = 0; $i < count($partic_polls); $i++){
-                                                if($poll->getId() == intval($partic_polls[$i]->getPollId())){
-                                                    $partic_class = 'partic_yes';
-                                                    $partic_title = 'You voted';
-                                                    array_splice($partic_polls, $i, 1);
-                                                    break;
-                                                }
-                                            }
-                                        ?>
-                                        <div class="symbol partic_voted icon-<?php p($partic_class); ?>" title="<?php p($partic_title); ?>">
-                                        </div>
-                                        <?php
-                                            $partic_class = 'partic_no';
-                                            $partic_comment = $_['comments'];
-                                            $partic_title = 'You did not comment';
-                                            for($i = 0; $i < count($partic_comment); $i++){
-                                                if($poll->getId() === intval($partic_comment[$i]->getPollId())){
-                                                    $partic_class = 'partic_yes';
-                                                    $partic_title = 'You commented';
-                                                    array_splice($partic_comment, $i, 1);
-                                                    break;
-                                                }
-                                            }
-                                        ?>
-                                        <div class="symbol partic_commented icon-<?php p($partic_class); ?>" title="<?php p($partic_title); ?>">
-                                        </div>
+                                <div class="column principal">  
+                                    <div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
+                                    <div class="name-cell"><?php p($principal); ?></div>
                                 </div>
-
-                            </div>
-                        </div>
-                        <div class="wrapper group-3">
-                            <div class="column options">
-                                <div class="symbol cl_link icon-clippy action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>"></div>
-                                <?php if ($poll->getOwner() === $userId) : ?>
-                                    <div class="symbol cl_delete icon-delete action permanent" id="id_del_<?php p($poll->getId()); ?>"></div>
-                                    <a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?> " class="symbol icon-rename action permanent" id="id_edit_<?php p($poll->getId()); ?>"></a>
-                                <?php endif; ?>
+                                <div class="wrapper group-2-1">
+                                    <div class="column access"><?php p($l->t($poll->getAccess())); ?></div>
+                                    <div class="column created" data-timestamp="<?php p(strtotime($poll->getCreated())); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(OCP\relative_modified_date(strtotime($poll->getCreated()))); ?></div>
+                                </div>
+                                <div class="wrapper group-2-2">
+                                    <div class="column expiry<?php p($expiry_style); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
+                                    <div class="column participants">
+                                        <div class="symbol partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
+                                        <div class="symbol partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

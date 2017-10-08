@@ -1,76 +1,73 @@
-// colors
-    $bg_no: #ffede9;
-    $bg_yes: #ebf5d6;
-    $fg_no: #f45573;
-    $fg_yes: #49bc49;
-
-// define widths
+$bg_no: #ffede9;
+$bg_yes: #ebf5d6;
+$fg_no: #f45573;
+$fg_yes: #49bc49;
 
 $row-padding: 15px;
-
-$options-width: 90px;
-$group-3-width: $options-width;
+$table-padding: 4px;
 
 $date-width: 120px;
 $participants-width: 80px;
-$group-2-width: max($date-width, $participants-width);
+$group-2-2-width: max($date-width, $participants-width);
 
 $principal-width: 140px;
 $access-width: 140px;
-$group-1-2-width: max($principal-width, $access-width);
+$group-2-1-width: max($access-width, $date-width);
+$group-2-width: $principal-width + $group-2-1-width + $group-2-2-width;
 
-$name-width: 100px;
-$description-width: 100px;
+$action-width: 44px;
+$thumbnail-width: 32px;
+$name-width: 150px;
+$description-width: 150px;
 $group-1-1-width: max($name-width, $description-width);
+$group-1-width: $thumbnail-width + $group-1-1-width + $action-width;
 
-$group-1-width: max($group-1-1-width, $group-1-2-width);
+$group-master-width: max($group-1-width, $group-2-width);
 
-$group-master-width: max($group-1-width, $group-2-width, $group-3-width);
-
-// first media break
-$mediabreak-1: ($name-width + $description-width + $principal-width + $access-width + $date-width + $date-width + $participants-width + $options-width + $row-padding * 2);
-// $mediabreak-1: 1199px;
-$mediabreak-2: $group-1-1-width + $group-1-2-width + $group-2-width + $group-3-width  + $row-padding * 2;
-// $mediabreak-2: 694px;
-$mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
-// $mediabreak-3: 539px;
+$mediabreak-1: ($group-1-width + $principal-width + $access-width + $date-width + $date-width + $participants-width + $row-padding * 2);
+$mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
+$mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
 
 .table, .row, .column {
 	box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
-    
 }
 
-#controls h2 {
+/* #controls h2 {
 	float: left;
 	padding: 15px 15px 0 15px;
 }
+ */
 
 .icon-polls {
 	background-color: black;
 	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
 }
 
-.table { 
+.table {
     position: relative;
-    &.has-controls { 
+    &.has-controls {
         top: 44px;
     }
 }
 
 .row {
     display: flex;           display: -webkit-flex;
-    // flex-direction: row;     -webkit-flex-direction: row;
-    // flex-wrap: no-wrap;      -webkit-flex-wrap: no-wrap;
     width: 100%;
     padding-left:  $row-padding;
     padding-right: $row-padding;
-    
+
     line-height: 2em;
     transition: background-color 0.3s ease;
     background-color: #fff;
     min-height: 4em;
     border-bottom: 1px solid #eee;
+
+    &.table-header {
+        .name, .description {
+            padding-left: ($thumbnail-width + $table-padding *2);
+        }
+    }
 
     &.table-body {
         &:hover, &:focus, &:active, &.mouseOver {
@@ -79,28 +76,33 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
         }
         .column.principal {
             display: flex;
-            // flex-direction: row;     -webkit-flex-direction: row;
             .avatardiv {
                 margin-right: 4px;
             }
         }
+        .icon-more {
+            right: 14px;
+            opacity: 0.3;
+            padding: 8px 0;
+            cursor: pointer;
+        }
 
-/*         .symbol {
+
+         .symbol {
             padding: 2px;
         }
- */
+
     }
 
     &.table-header {
         color: #999;
     }
-}    
+}
 
 .wrapper {
 	display: flex; 	        display: -webkit-flex;
-	// flex-direction: row; 	-webkit-flex-direction: row;
-    // vertical-align: middle;
     align-items: center;
+    position: relative;
     div {
         // vertical-align: middle;
     }
@@ -108,14 +110,12 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 
 
 .column {
-    // flex-grow: 0;       -webkit-flex-grow: 0;
-    // flex-shrink: 0;     -webkit-flex-shrink: 0;
-    padding: 0 4px;
+    padding: 0 $table-padding;
     overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-    // vertical-align: middle;
     align-items: center;
+    min-height: 16px;
 }
 
 .name {
@@ -126,7 +126,7 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
     width: $description-width;
     color: #888;
     }
-    
+
 .principal {
     width: $principal-width;
 }
@@ -151,22 +151,19 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
     div {
         &.partic_voted {
             &.icon-partic_yes {
-                // background-color: $bg_yes;
                 background-image: url('../img/yes-vote.svg');
-
             }
             &.icon-partic_no {
-                // background-color: $bg_no;
                 background-image: url('../img/no-vote.svg');
             }
         }
 
         &.partic_commented {
-            &.icon-partic_yes {
+            &.icon-commented_yes {
                 // background-color: $bg_yes;
                 background-image: url('../img/yes-comment.svg');
             }
-            &.icon-partic_no {
+            &.icon-commented_no {
                 // background-color: $bg_no;
                 background-image: url('../img/no-comment.svg');
             }
@@ -176,37 +173,38 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 }
 
 
-.options {
-    width: $options-width;
+.actions {
+    width: $action-width;
+	position: relative;
+	overflow: initial;
 }
 
-[class^="icon-"], [class*=" icon-"] {
-    padding: 2px;
-}
+
 
 .thumbnail {
-    background-size: 32px;
-    width: 36px;
-    height: 32px;
-    // padding-right: 4px;
+    background-size: $thumbnail-width;
+    width: $thumbnail-width;
+    height: $thumbnail-width;
+    padding-right: $table-padding;
     background-repeat: no-repeat;
-    &.progress {
-        background-image: url('../img/progress-vote.svg'); 
-    }    
+    &.progress, &.endless {
+        &.partic_yes {
+        background-image: url('../img/open-voted-vote.svg');
+        }
+        &.partic_no {
+        background-image: url('../img/open-unvoted-vote-variant.svg');
+        }
+    }
     &.expired {
-        background-image: url('../img/finished-vote-red.svg'); 
-    }    
-    &.endless {
-        background-image: url('../img/finished-vote.svg'); 
-    }    
+        &.partic_yes {
+        background-image: url('../img/expired-voted-vote.svg');
+        }
+        &.partic_no {
+        background-image: url('../img/expired-unvoted-vote.svg');
+        }
+    }
 }
 
-.name, .description {
-	// flex-grow: 1; 	-webkit-flex-grow: 1;
-	// overflow: hidden;
-	// white-space: nowrap;
-	// text-overflow: ellipsis;
-}
 
 .options, .participants {
     display: flex;
@@ -220,42 +218,27 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
 .group-1-1 {
     flex-direction: column;         -webkit-flex-direction: column;
     width: $group-1-1-width;
-     div {
-        // flex-grow: 0;              -webkit-flex-grow: 0;
-    }
-
     > div {
          width: 100%;
-    } 
+    }
 }
-  
+
 
 
 @media all and (max-width: ($mediabreak-1) ) {
-    .group-1-2, .group-2, .group-3 {
+    .group-1 {
+        width: $group-1-width;
+    }
+    .group-2-1, .group-2-2 {
         flex-direction: column; -webkit-flex-direction: column;
+    }
 
-         div {
-            // flex-grow: 0;  -webkit-flex-grow: 0;
-        }
+    .access, .created {
+        width: $group-2-1-width;;
     }
-        .column.options {
-            flex-direction: column;
-            display: flex;
+    .expiry, .participants {
+        width: $group-2-2-width;;
     }
-    .access, .principal {
-        width: $group-1-2-width;;
-    }
-    .created, .expiry, .participants {
-        width: $group-2-width;;
-    }
-    .options {
-        width: $group-3-width;;
-        
-    }
-    // .symbol {
-        // padding: 0;
-    // }
 }
 
 @media all and (max-width: ($mediabreak-2) ) {
@@ -263,16 +246,16 @@ $mediabreak-3: $group-1-width + $group-2-width + $group-3-width;
     .row {
         padding: 0;
     }
-        
-    .group-1-2 {
+
+    .group-2-1 {
         display: none;
     }
 }
 
 @media all and (max-width: ($mediabreak-3) ) {
-    
+
     .group-2 {
         display: none;
     }
-} 
+}
     

@@ -12,7 +12,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="finished-vote.svg">
+   sodipodi:docname="expired-unvoted-vote-variant-2.svg">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -39,24 +39,26 @@
      id="namedview8"
      showgrid="false"
      inkscape:zoom="32"
-     inkscape:cx="8.6178332"
-     inkscape:cy="6.580414"
+     inkscape:cx="5.21853"
+     inkscape:cy="5.0644435"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <defs
      id="defs4" />
-  <path
-     d="M 6.9766048,11.334813 3.39273,7.7509388 4.4157633,6.7271815 6.9766048,9.2858506 11.569757,4.6651865 12.60727,5.7034241 Z"
-     style="fill:#49bc49;fill-opacity:1"
-     id="path6"
-     inkscape:connector-curvature="0" />
   <ellipse
-     style="opacity:1;fill:none;fill-opacity:1;stroke:#49bc49;stroke-width:1.48916495;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="opacity:1;fill:none;fill-opacity:1;stroke:#f45573;stroke-width:1.49987304;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path4138"
      cx="8"
      cy="8"
-     rx="6.2554173"
-     ry="6.2554164" />
+     rx="6.2500634"
+     ry="6.2500639" />
+  <rect
+     style="fill:none;fill-opacity:1;stroke:#ffc107;stroke-width:0.86666656;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="rect823"
+     width="5.6333332"
+     height="5.6333332"
+     x="5.1833334"
+     y="5.1833334" />
 </svg>
