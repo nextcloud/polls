@@ -69,8 +69,11 @@
                         $principal = $poll->getOwner();
 
                         $expiry_style = '';
-                        
-                        $participated = $_['participations'];
+                        if ($poll->getType() == '0') {
+                            $participated = $_['participations'];
+                        } else {
+                            $participated = $_['participations_text'];
+                        }
                         $participated_class = 'partic_no';
                         $participated_title = 'You did not vote';
                         $participated_count = count($participated);
@@ -176,8 +179,7 @@
                     </div>
                 <?php endforeach; ?>
             </div>
-            <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST">
-            </form>
+            <form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>
     <?php endif; ?>
         </div>
     </div>
