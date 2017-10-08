@@ -130,7 +130,7 @@
                                 </a> 
                                 <div class="column actions">
                                     <div class="icon-more popupmenu" value="<?php p($poll->getId()); ?>" id="expand_<?php p($poll->getId()); ?>"></div>
-                                    <div class="popovermenu bubble menu" id="expanddiv_<?php p($poll->getId()); ?>">
+                                    <div class="popovermenu bubble menu hidden" id="expanddiv_<?php p($poll->getId()); ?>">
                                         <ul>
                                             <li>
                                                 <button class="menuitem copy_link action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>">
