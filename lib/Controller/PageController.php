@@ -1,17 +1,28 @@
 <?php
 /**
- * ownCloud - polls
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- * @copyright Vinzenz Rosenkranz 2016
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 namespace OCA\Polls\Controller;
 
-use \OCA\Polls\Db\Access;
 use \OCA\Polls\Db\Comment;
 use \OCA\Polls\Db\Date;
 use \OCA\Polls\Db\Event;
@@ -59,8 +70,7 @@ class PageController extends Controller {
     private $trans;
     private $userMgr;
     private $groupManager;
-    private $allowedGroups;
-    private $allowedUsers;
+
     public function __construct($appName, IRequest $request,
                 IUserManager $manager,
                 IGroupManager $groupManager,
@@ -97,12 +107,6 @@ class PageController extends Controller {
     }
 
     /**
-     * CAUTION: the @Stuff turn off security checks, for this page no admin is
-     *          required and no CSRF check. If you don't know what CSRF is, read
-     *          it up in the docs or you might create a security hole. This is
-     *          basically the only required method to add this exemption, don't
-     *          add it to any other method if you don't exactly know what it does
-     *
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -121,17 +125,23 @@ class PageController extends Controller {
     private function sendNotifications($pollId, $from) {
         $poll = $this->eventMapper->find($pollId);
         $notifs = $this->notificationMapper->findAllByPoll($pollId);
-        foreach($notifs as $notif) {
-            if($from === $notif->getUserId()) continue;
+        foreach ($notifs as $notif) {
+            if ($from === $notif->getUserId()) {
+            	continue;
+            }
             $email = \OC::$server->getConfig()->getUserValue($notif->getUserId(), 'settings', 'email');
-            if(strlen($email) === 0 || !isset($email)) continue;
+            if (strlen($email) === 0 || !isset($email)) {
+            	continue;
+            }
             $url = \OC::$server->getURLGenerator()->getAbsoluteURL(\OC::$server->getURLGenerator()->linkToRoute('polls.page.goto_poll', array('hash' => $poll->getHash())));
 
             $recUser = $this->userMgr->get($notif->getUserId());
             $sendUser = $this->userMgr->get($from);
             $rec = "";
-            if($recUser !== null) $rec = $recUser->getDisplayName();
-            if($sendUser !== null) {
+            if ($recUser !== null) {
+            	$rec = $recUser->getDisplayName();
+            }
+            if ($sendUser !== null) {
                 $sender = $sendUser->getDisplayName();
             } else {
                 $sender = $from;
@@ -168,11 +178,10 @@ class PageController extends Controller {
      */
     public function gotoPoll($hash) {
         $poll = $this->eventMapper->findByHash($hash);
-        if($poll->getType() == '0') {
+        if ($poll->getType() == '0') {
             $dates = $this->dateMapper->findByPoll($poll->getId());
             $votes = $this->participationMapper->findByPoll($poll->getId());
-        }
-        else {
+        } else {
             $dates = $this->textMapper->findByPoll($poll->getId());
             $votes = $this->participationTextMapper->findByPoll($poll->getId());
         }
@@ -182,7 +191,7 @@ class PageController extends Controller {
         } catch(\OCP\AppFramework\Db\DoesNotExistException $e) {
             $notification = null;
         }
-        if($this->hasUserAccess($poll)) {
+        if ($this->hasUserAccess($poll)) {
             return new TemplateResponse('polls', 'goto.tmpl', ['poll' => $poll, 'dates' => $dates, 'comments' => $comments, 'votes' => $votes, 'notification' => $notification, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator, 'avatarManager' => $this->avatarManager]);
         } else {
             \OCP\User::checkLoggedIn();
@@ -213,9 +222,14 @@ class PageController extends Controller {
      */
     public function editPoll($hash) {
         $poll = $this->eventMapper->findByHash($hash);
-        if($this->userId !== $poll->getOwner()) return new TemplateResponse('polls', 'no.create.tmpl');
-        if($poll->getType() == '0') $dates = $this->dateMapper->findByPoll($poll->getId());
-        else $dates = $this->textMapper->findByPoll($poll->getId());
+        if ($this->userId !== $poll->getOwner()) {
+        	return new TemplateResponse('polls', 'no.create.tmpl');
+        }
+        if ($poll->getType() == '0') {
+        	$dates = $this->dateMapper->findByPoll($poll->getId());
+        } else {
+        	$dates = $this->textMapper->findByPoll($poll->getId());
+        }
         return new TemplateResponse('polls', 'create.tmpl', ['poll' => $poll, 'dates' => $dates, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
     }
 
@@ -228,14 +242,18 @@ class PageController extends Controller {
         $event->setTitle(htmlspecialchars($pollTitle));
         $event->setDescription(htmlspecialchars($pollDesc));
 
-        if($accessType === 'select') {
+        if ($accessType === 'select') {
             if (isset($accessValues)) {
                 $accessValues = json_decode($accessValues);
-                if($accessValues !== null) {
+                if ($accessValues !== null) {
                     $groups = array();
                     $users = array();
-                    if($accessValues->groups !== null) $groups = $accessValues->groups;
-                    if($accessValues->users !== null) $users = $accessValues->users;
+                    if ($accessValues->groups !== null) {
+                    	$groups = $accessValues->groups;
+                    }
+                    if ($accessValues->users !== null) {
+                    	$users = $accessValues->users;
+                    }
                     $accessType = '';
                     foreach ($groups as $gid) {
                         $accessType .= $gid . ';';
@@ -251,14 +269,14 @@ class PageController extends Controller {
         $chosenDates = json_decode($chosenDates);
 
         $expire = null;
-        if($expireTs !== null && $expireTs !== '') {
+        if ($expireTs !== null && $expireTs !== '') {
             $expire = date('Y-m-d H:i:s', $expireTs + 60*60*24); //add one day, so it expires at the end of a day
         }
         $event->setExpire($expire);
 
         $this->dateMapper->deleteByPoll($pollId);
         $this->textMapper->deleteByPoll($pollId);
-        if($pollType === 'event') {
+        if ($pollType === 'event') {
             $event->setType(0);
             $this->eventMapper->update($event);
             sort($chosenDates);
@@ -271,7 +289,7 @@ class PageController extends Controller {
         } else {
             $event->setType(1);
             $this->eventMapper->update($event);
-            foreach($chosenDates as $el) {
+            foreach ($chosenDates as $el) {
                 $text = new Text();
                 $text->setText($el);
                 $text->setPollId($pollId);
@@ -310,11 +328,15 @@ class PageController extends Controller {
         if ($accessType === 'select') {
             if (isset($accessValues)) {
                 $accessValues = json_decode($accessValues);
-                if($accessValues !== null) {
+                if ($accessValues !== null) {
                     $groups = array();
                     $users = array();
-                    if($accessValues->groups !== null) $groups = $accessValues->groups;
-                    if($accessValues->users !== null) $users = $accessValues->users;
+                    if ($accessValues->groups !== null) {
+                    	$groups = $accessValues->groups;
+                    }
+                    if ($accessValues->users !== null) {
+                    	$users = $accessValues->users;
+                    }
                     $accessType = '';
                     foreach ($groups as $gid) {
                         $accessType .= $gid . ';';
@@ -330,13 +352,12 @@ class PageController extends Controller {
         $chosenDates = json_decode($chosenDates);
 
         $expire = null;
-        if($expireTs !== null && $expireTs !== '') {
+        if ($expireTs !== null && $expireTs !== '') {
             $expire = date('Y-m-d H:i:s', $expireTs + 60*60*24); //add one day, so it expires at the end of a day
         }
         $event->setExpire($expire);
 
-        $poll_id = -1;
-        if($pollType === 'event') {
+        if ($pollType === 'event') {
             $event->setType(0);
             $ins = $this->eventMapper->insert($event);
             $poll_id = $ins->getId();
@@ -352,7 +373,7 @@ class PageController extends Controller {
             $ins = $this->eventMapper->insert($event);
             $poll_id = $ins->getId();
             $cnt = 1;
-            foreach($chosenDates as $el) {
+            foreach ($chosenDates as $el) {
                 $text = new Text();
                 $text->setText($el . '_' . $cnt);
                 $text->setPollId($poll_id);
@@ -370,8 +391,8 @@ class PageController extends Controller {
      * @PublicPage
      */
     public function insertVote($pollId, $userId, $types, $dates, $notif, $changed) {
-        if($this->userId !== null) {
-            if($notif === 'true') {
+        if ($this->userId !== null) {
+            if ($notif === 'true') {
                 try {
                     //check if user already set notification for this poll
                     $this->notificationMapper->findByUserAndPoll($pollId, $userId);
@@ -392,16 +413,20 @@ class PageController extends Controller {
                 }
             }
         } else {
+            // TODO: Needs investigation!
             $userId = $userId;
         }
         $poll = $this->eventMapper->find($pollId);
-        if($changed === 'true') {
+        if ($changed === 'true') {
             $dates = json_decode($dates);
             $types = json_decode($types);
-            if($poll->getType() == '0') $this->participationMapper->deleteByPollAndUser($pollId, $userId);
-            else $this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
-            for($i=0; $i<count($dates); $i++) {
-                if($poll->getType() == '0') {
+            if ($poll->getType() == '0') {
+            	$this->participationMapper->deleteByPollAndUser($pollId, $userId);
+            } else {
+            	$this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
+            }
+            for ($i=0; $i<count($dates); $i++) {
+                if ($poll->getType() == '0') {
                     $part = new Participation();
                     $part->setPollId($pollId);
                     $part->setUserId($userId);
@@ -441,7 +466,7 @@ class PageController extends Controller {
         $this->sendNotifications($pollId, $userId);
         $hash = $this->eventMapper->find($pollId)->getHash();
         $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
-        if($this->manager->get($userId) !== null) {
+        if ($this->manager->get($userId) !== null) {
             $newUserId = $this->manager->get($userId)->getDisplayName();
         } else {
             $newUserId = $userId;
@@ -466,15 +491,15 @@ class PageController extends Controller {
         $groups = $this->groupManager->search($searchTerm);
         $gids = array();
         $sgids = array();
-        foreach($selectedGroups as $sg) {
+        foreach ($selectedGroups as $sg) {
             $sgids[] = str_replace('group_', '', $sg);
         }
-        foreach($groups as $g) {
+        foreach ($groups as $g) {
             $gids[] = $g->getGID();
         }
         $diffGids = array_diff($gids, $sgids);
         $gids = array();
-        foreach($diffGids as $g) {
+        foreach ($diffGids as $g) {
             $gids[] = ['gid' => $g, 'isGroup' => true];
         }
         return $gids;
@@ -490,19 +515,19 @@ class PageController extends Controller {
         $userNames = $this->userMgr->searchDisplayName($searchTerm);
         $users = array();
         $susers = array();
-        foreach($selectedUsers as $su) {
+        foreach ($selectedUsers as $su) {
             $susers[] = str_replace('user_', '', $su);
         }
-        foreach($userNames as $u) {
+        foreach ($userNames as $u) {
             $alreadyAdded = false;
-            foreach($susers as &$su) {
-                if($su === $u->getUID()) {
+            foreach ($susers as &$su) {
+                if ($su === $u->getUID()) {
                     unset($su);
                     $alreadyAdded = true;
                     break;
                 }
             }
-            if(!$alreadyAdded) {
+            if (!$alreadyAdded) {
                 $users[] = array('uid' => $u->getUID(), 'displayName' => $u->getDisplayName(), 'isGroup' => false);
             } else {
                 continue;
@@ -528,28 +553,37 @@ class PageController extends Controller {
         else return $this->eventMapper->findAllForUserWithInfo($user);
     }
 
-     function getGroups() {
-                // $this->requireLogin();
-                if (class_exists('\OC_Group', true)) {
-                        // Nextcloud <= 11, ownCloud
-                        return \OC_Group::getUserGroups($this->$userId);
-                }
-                // Nextcloud >= 12
-                $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
-                return array_map(function ($group) {
-                        return $group->getGID();
-                }, $groups);
+    public function getGroups() {
+        // $this->requireLogin();
+        if (class_exists('\OC_Group', true)) {
+            // Nextcloud <= 11, ownCloud
+            return \OC_Group::getUserGroups($this->$userId);
         }
-
+        // Nextcloud >= 12
+        $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+        return array_map(function ($group) {
+            return $group->getGID();
+        }, $groups);
+    }
 
     private function hasUserAccess($poll) {
         $access = $poll->getAccess();
         $owner = $poll->getOwner();
-        if ($access === 'public') return true;
-        if ($access === 'hidden') return true;
-        if ($this->userId === null) return false;
-        if ($access === 'registered') return true;
-        if ($owner === $this->userId) return true;
+        if ($access === 'public') {
+            return true;
+        }
+        if ($access === 'hidden') {
+            return true;
+        }
+        if ($this->userId === null) {
+            return false;
+        }
+        if ($access === 'registered') {
+            return true;
+        }
+        if ($owner === $this->userId) {
+            return true;
+        }
         \OCP\Util::writeLog("polls", $this->userId, \OCP\Util::ERROR);
         $user_groups = $this->getGroups();
         $arr = explode(';', $access);
@@ -557,15 +591,17 @@ class PageController extends Controller {
             if (strpos($item, 'group_') === 0) {
                 $grp = substr($item, 6);
                 foreach ($user_groups as $user_group) {
-                    if ($user_group === $grp) return true;
+                    if ($user_group === $grp) {
+                        return true;
+                    }
                 }
             } else if (strpos($item, 'user_') === 0) {
                 $usr = substr($item, 5);
-                if ($usr === \OCP\User::getUser()) return true;
+                if ($usr === \OCP\User::getUser()) {
+                    return true;
+                }
             }
         }
         return false;
     }
 }
-
-

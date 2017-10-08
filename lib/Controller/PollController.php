@@ -21,11 +21,10 @@
  *
  */
 
-\OC::$server->getNavigationManager()->setActiveEntry( 'polls' );
+namespace OCA\Polls\Controller;
 
-if (OCP\User::isLoggedIn()) {
-    $tmpl = new OCP\Template('polls', 'main', 'user');
-} else {
-    $tmpl = new OCP\Template('polls', 'main', 'base');
+use \OCP\AppFramework\Controller;
+
+class PollController extends Controller {
+
 }
-$tmpl->printPage();

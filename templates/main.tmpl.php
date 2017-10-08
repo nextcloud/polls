@@ -1,4 +1,25 @@
 <?php
+    /**
+     * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+     *
+     * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+     *
+     * @license GNU AGPL version 3 or any later version
+     *
+     *  This program is free software: you can redistribute it and/or modify
+     *  it under the terms of the GNU Affero General Public License as
+     *  published by the Free Software Foundation, either version 3 of the
+     *  License, or (at your option) any later version.
+     *
+     *  This program is distributed in the hope that it will be useful,
+     *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+     *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     *  GNU Affero General Public License for more details.
+     *
+     *  You should have received a copy of the GNU Affero General Public License
+     *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     *
+     */
 
     use OCP\User;
 
@@ -10,7 +31,6 @@
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
 ?>
-
     <div id="app-content">
         <div id="app-content-wrapper">
                 <div id="controls">
@@ -28,7 +48,7 @@
                         <input class="stop icon-close" style="display:none" value="" type="button">
                     </div>
                 </div>
-    <?php if(count($_['polls']) === 0) : ?>
+    <?php if (count($_['polls']) === 0) : ?>
         <div id="emptycontent" class="">
             <div class="icon-polls"></div>
             <h2><?php p($l->t('No existing polls.')); ?></h2>
@@ -69,7 +89,7 @@
                         // direct url to poll
                         $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
                             $desc_str = $poll->getDescription();
-                            if (strlen($desc_str) > 100){
+                            if (strlen($desc_str) > 100) {
                                 $desc_str = substr($desc_str, 0, 80) . '...';
                             }
                         ?>
@@ -86,8 +106,11 @@
                         <td class="pollitem created"><?php p(date('d.m.Y H:i', strtotime($poll->getCreated()))); ?></td>
                         <td class="pollitem principal">
                             <?php
-                                if($poll->getOwner() === $userId) p($l->t('Yourself'));
-                                else p($userMgr->get($poll->getOwner()));
+                                if ($poll->getOwner() === $userId) {
+                                    p($l->t('Yourself'));
+                                } else {
+                                    p($userMgr->get($poll->getOwner()));
+                                }
                             ?>
                         </td>
                             <?php
@@ -97,8 +120,7 @@
                                         $style = 'expired';
                                     }
                                     print_unescaped('<td class="pollitem expiry ' . $style . '">' . date('d.m.Y', strtotime($poll->getExpire())) . '</td>');
-                                }
-                                else {
+                                } else {
                                     print_unescaped('<td class="pollitem expiry">' . $l->t('Never') . '</td>');
                                 }
                             ?>
@@ -106,8 +128,8 @@
                             <?php
                                 $partic_class = 'partic_no';
                                 $partic_polls = $_['participations'];
-                                for($i = 0; $i < count($partic_polls); $i++){
-                                    if($poll->getId() == intval($partic_polls[$i]->getPollId())){
+                                for ($i = 0; $i < count($partic_polls); $i++){
+                                    if ($poll->getId() == intval($partic_polls[$i]->getPollId())){
                                         $partic_class = 'partic_yes';
                                         array_splice($partic_polls, $i, 1);
                                         break;
@@ -120,8 +142,8 @@
                             <?php
                                 $partic_class = 'partic_no';
                                 $partic_comm = $_['comments'];
-                                for($i = 0; $i < count($partic_comm); $i++){
-                                    if($poll->getId() === intval($partic_comm[$i]->getPollId())){
+                                for ($i = 0; $i < count($partic_comm); $i++){
+                                    if ($poll->getId() === intval($partic_comm[$i]->getPollId())){
                                         $partic_class = 'partic_yes';
                                         array_splice($partic_comm, $i, 1);
                                         break;
@@ -156,28 +178,40 @@
 <?php
 // ---- helper functions ----
 // from spreed.me
-    function getGroups($userId) {
-            // $this->requireLogin();
-            if (class_exists('\OC_Group', true)) {
-                    // Nextcloud <= 11, ownCloud
-                    return \OC_Group::getUserGroups($userId);
-            }
-            // Nextcloud >= 12
-            $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
-            return array_map(function ($group) {
-                    return $group->getGID();
-            }, $groups);
+function getGroups($userId) {
+    // $this->requireLogin();
+    if (class_exists('\OC_Group', true)) {
+        // Nextcloud <= 11, ownCloud
+        return \OC_Group::getUserGroups($userId);
     }
+    // Nextcloud >= 12
+    $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+    return array_map(function ($group) {
+        return $group->getGID();
+    }, $groups);
+}
 
 function userHasAccess($poll, $userId) {
-    if($poll === null) return false;
+    if($poll === null) {
+        return false;
+    }
     $access = $poll->getAccess();
     $owner = $poll->getOwner();
-    if (!User::isLoggedIn()) return false;
-    if ($access === 'public') return true;
-    if ($access === 'hidden') return true;
-    if ($access === 'registered') return true;
-    if ($owner === $userId) return true;
+    if (!User::isLoggedIn()) {
+        return false;
+    }
+    if ($access === 'public') {
+        return true;
+    }
+    if ($access === 'hidden') {
+        return true;
+    }
+    if ($access === 'registered') {
+        return true;
+    }
+    if ($owner === $userId) {
+        return true;
+    }
     $user_groups = getGroups($userId);
 
     $arr = explode(';', $access);

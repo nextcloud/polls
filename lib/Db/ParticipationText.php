@@ -21,11 +21,23 @@
  *
  */
 
-\OC::$server->getNavigationManager()->setActiveEntry( 'polls' );
+namespace OCA\Polls\Db;
 
-if (OCP\User::isLoggedIn()) {
-    $tmpl = new OCP\Template('polls', 'main', 'user');
-} else {
-    $tmpl = new OCP\Template('polls', 'main', 'base');
+use OCP\AppFramework\Db\Entity;
+
+/**
+ * @method text getText()
+ * @method void setText(text $value)
+ * @method string getUserId()
+ * @method void setUserId(string $value)
+ * @method integer getPollId()
+ * @method void setPollId(integer $value)
+ * @method integer getType()
+ * @method void setType(integer $value)
+ */
+class ParticipationText extends Entity {
+    public $text;
+    public $userId;
+    public $pollId;
+    public $type;
 }
-$tmpl->printPage();
