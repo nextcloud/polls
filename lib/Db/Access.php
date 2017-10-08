@@ -31,7 +31,8 @@ use OCP\AppFramework\Db\Entity;
  * @method string getAccessType()
  * @method void setAccessType(string $value)
  */
-class Access extends Entity {
+class Access extends Entity
+{
     public $pId;
     public $accessType;
 }

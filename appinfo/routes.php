@@ -22,16 +22,18 @@
  */
 
 $app = new \OCA\Polls\AppInfo\Application();
-$app->registerRoutes($this, array('routes' => array(
-	array('name' => 'page#index', 'url' => '/', 'verb' => 'GET'),
-	array('name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'),
-	array('name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'),
-	array('name' => 'page#create_poll', 'url' => '/create', 'verb' => 'GET'),
-	array('name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'),
-	array('name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'),
-	array('name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'),
-	array('name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'),
-	array('name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'),
-	array('name' => 'page#search', 'url' => '/search', 'verb' => 'POST'),
-	array('name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'),
-)));
+$app->registerRoutes($this, array(
+    'routes' => array(
+        array('name' => 'page#index', 'url' => '/', 'verb' => 'GET'),
+        array('name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'),
+        array('name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'),
+        array('name' => 'page#create_poll', 'url' => '/create', 'verb' => 'GET'),
+        array('name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'),
+        array('name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'),
+        array('name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'),
+        array('name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'),
+        array('name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'),
+        array('name' => 'page#search', 'url' => '/search', 'verb' => 'POST'),
+        array('name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'),
+    )
+));

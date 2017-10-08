@@ -250,7 +250,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                                     } else if ($obj->getType() == '0') {
                                                         $cl = 'poll-cell active no';
                                                         $total_n[$i_tot]++;
-                                                    } else if($obj->getType() == '2'){
+                                                    } else if($obj->getType() == '2') {
                                                         $cl = 'poll-cell active maybe';
                                                     }
                                                     break;
@@ -301,7 +301,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                     <?php
                                     for ($i = 0; $i < count($dates); $i++) {
                                         $check = '';
-                                        if ($total_y[$i] - $total_n[$i] === $max_votes){
+                                        if ($total_y[$i] - $total_n[$i] === $max_votes) {
                                             $check = 'icon-checkmark';
                                         }
                                         print_unescaped('<td class="win_row ' . $check . '" id="id_total_' . $i . '"></td>');

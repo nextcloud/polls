@@ -128,8 +128,8 @@
                             <?php
                                 $partic_class = 'partic_no';
                                 $partic_polls = $_['participations'];
-                                for ($i = 0; $i < count($partic_polls); $i++){
-                                    if ($poll->getId() == intval($partic_polls[$i]->getPollId())){
+                                for ($i = 0; $i < count($partic_polls); $i++) {
+                                    if ($poll->getId() == intval($partic_polls[$i]->getPollId())) {
                                         $partic_class = 'partic_yes';
                                         array_splice($partic_polls, $i, 1);
                                         break;
@@ -142,8 +142,8 @@
                             <?php
                                 $partic_class = 'partic_no';
                                 $partic_comm = $_['comments'];
-                                for ($i = 0; $i < count($partic_comm); $i++){
-                                    if ($poll->getId() === intval($partic_comm[$i]->getPollId())){
+                                for ($i = 0; $i < count($partic_comm); $i++) {
+                                    if ($poll->getId() === intval($partic_comm[$i]->getPollId())) {
                                         $partic_class = 'partic_yes';
                                         array_splice($partic_comm, $i, 1);
                                         break;

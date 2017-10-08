@@ -26,9 +26,11 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class AccessMapper extends Mapper {
+class AccessMapper extends Mapper
+{
 
-    public function __construct(IDBConnection $db) {
+    public function __construct(IDBConnection $db)
+    {
         parent::__construct($db, 'polls_access', '\OCA\Polls\Db\Access');
     }
 
@@ -38,9 +40,9 @@ class AccessMapper extends Mapper {
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
      * @return Favorite
      */
-    public function find($id) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_access` '.
-            'WHERE `id` = ?';
+    public function find($id)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
         return $this->findEntity($sql, [$id]);
     }
 
@@ -52,10 +54,9 @@ class AccessMapper extends Mapper {
      * @param int $offset
      * @return Favorite[]
      */
-    public function findBetween($userId, $from, $until, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_access` '.
-            'WHERE `userId` = ?'.
-            'AND `timestamp` BETWEEN ? and ?';
+    public function findBetween($userId, $from, $until, $limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE userId = ? AND timestamp BETWEEN ? AND ?';
         return $this->findEntities($sql, [$userId, $from, $until], $limit, $offset);
     }
 
@@ -64,8 +65,9 @@ class AccessMapper extends Mapper {
      * @param int $offset
      * @return Favorite[]
      */
-    public function findAll($limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_access`';
+    public function findAll($limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName();
         return $this->findEntities($sql, [], $limit, $offset);
     }
 }

@@ -26,9 +26,11 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class DateMapper extends Mapper {
+class DateMapper extends Mapper
+{
 
-    public function __construct(IDBConnection $db) {
+    public function __construct(IDBConnection $db)
+    {
         parent::__construct($db, 'polls_dts', '\OCA\Polls\Db\Date');
     }
 
@@ -38,9 +40,9 @@ class DateMapper extends Mapper {
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
      * @return Date
      */
-    public function find($id) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_dts` '.
-            'WHERE `id` = ?';
+    public function find($id)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
         return $this->findEntity($sql, [$id]);
     }
 
@@ -52,10 +54,9 @@ class DateMapper extends Mapper {
      * @param int $offset
      * @return Date[]
      */
-    public function findBetween($userId, $from, $until, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_dts` '.
-            'WHERE `userId` = ?'.
-            'AND `timestamp` BETWEEN ? and ?';
+    public function findBetween($userId, $from, $until, $limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE userId = ? AND timestamp BETWEEN ? AND ?';
         return $this->findEntities($sql, [$userId, $from, $until], $limit, $offset);
     }
 
@@ -64,8 +65,9 @@ class DateMapper extends Mapper {
      * @param int $offset
      * @return Date[]
      */
-    public function findAll($limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_dts`';
+    public function findAll($limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName();
         return $this->findEntities($sql, [], $limit, $offset);
     }
 
@@ -75,16 +77,18 @@ class DateMapper extends Mapper {
      * @param int $offset
      * @return Date[]
      */
-    public function findByPoll($pollId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_dts` WHERE poll_id=?';
+    public function findByPoll($pollId, $limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         return $this->findEntities($sql, [$pollId], $limit, $offset);
     }
 
     /**
      * @param string $pollId
      */
-    public function deleteByPoll($pollId) {
-        $sql = 'DELETE FROM `*PREFIX*polls_dts` WHERE poll_id=?';
+    public function deleteByPoll($pollId)
+    {
+        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         $this->execute($sql, [$pollId]);
     }
 }

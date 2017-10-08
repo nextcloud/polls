@@ -26,9 +26,11 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class TextMapper extends Mapper {
+class TextMapper extends Mapper
+{
 
-    public function __construct(IDBConnection $db) {
+    public function __construct(IDBConnection $db)
+    {
         parent::__construct($db, 'polls_txts', '\OCA\Polls\Db\Text');
     }
 
@@ -38,9 +40,9 @@ class TextMapper extends Mapper {
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
      * @return Text
      */
-    public function find($id) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_txts` '.
-            'WHERE `id` = ?';
+    public function find($id)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
         return $this->findEntity($sql, [$id]);
     }
 
@@ -49,8 +51,9 @@ class TextMapper extends Mapper {
      * @param int $offset
      * @return Text[]
      */
-    public function findAll($limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_txts`';
+    public function findAll($limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName();
         return $this->findEntities($sql, [], $limit, $offset);
     }
 
@@ -60,16 +63,18 @@ class TextMapper extends Mapper {
      * @param int $offset
      * @return Text[]
      */
-    public function findByPoll($pollId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_txts` WHERE poll_id=?';
+    public function findByPoll($pollId, $limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         return $this->findEntities($sql, [$pollId], $limit, $offset);
     }
 
     /**
      * @param string $pollId
      */
-    public function deleteByPoll($pollId) {
-        $sql = 'DELETE FROM `*PREFIX*polls_txts` WHERE poll_id=?';
+    public function deleteByPoll($pollId)
+    {
+        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         $this->execute($sql, [$pollId]);
     }
 }

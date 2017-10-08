@@ -26,9 +26,11 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class EventMapper extends Mapper {
+class EventMapper extends Mapper
+{
 
-    public function __construct(IDBConnection $db) {
+    public function __construct(IDBConnection $db)
+    {
         parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
     }
 
@@ -38,9 +40,9 @@ class EventMapper extends Mapper {
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
      * @return Event
      */
-    public function find($id) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_events` '.
-            'WHERE `id` = ?';
+    public function find($id)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
         return $this->findEntity($sql, [$id]);
     }
 
@@ -52,10 +54,9 @@ class EventMapper extends Mapper {
      * @param int $offset
      * @return Event[]
      */
-    public function findBetween($userId, $from, $until, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_events` '.
-            'WHERE `userId` = ?'.
-            'AND `timestamp` BETWEEN ? and ?';
+    public function findBetween($userId, $from, $until, $limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE userId = ? AND timestamp BETWEEN ? AND ?';
         return $this->findEntities($sql, [$userId, $from, $until], $limit, $offset);
     }
 
@@ -64,37 +65,44 @@ class EventMapper extends Mapper {
      * @param int $offset
      * @return Event[]
      */
-    public function findAll($limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_events`';
+    public function findAll($limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName();
         return $this->findEntities($sql, [], $limit, $offset);
     }
 
     /**
+     * @param $hash
      * @param int $limit
      * @param int $offset
      * @return Event
      */
-    public function findByHash($hash, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_events` WHERE `hash`=?';
+    public function findByHash($hash, $limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE hash = ?';
         return $this->findEntity($sql, [$hash], $limit, $offset);
     }
 
     /**
+     * @param $userId
      * @param int $limit
      * @param int $offset
      * @return Event[]
      */
-    public function findAllForUser($userId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*polls_events` WHERE `owner`=?';
+    public function findAllForUser($userId, $limit = null, $offset = null)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE owner = ?';
         return $this->findEntities($sql, [$userId], $limit, $offset);
     }
 
     /**
+     * @param string $userId
      * @param int $limit
      * @param int $offset
      * @return Event[]
      */
-    public function findAllForUserWithInfo($userId, $limit=null, $offset=null) {
+    public function findAllForUserWithInfo($userId, $limit = null, $offset = null)
+    {
         $sql = 'SELECT DISTINCT *PREFIX*polls_events.id,
                                 *PREFIX*polls_events.hash,
                                 *PREFIX*polls_events.type,
@@ -112,13 +120,13 @@ class EventMapper extends Mapper {
                 LEFT JOIN *PREFIX*polls_comments
                     ON *PREFIX*polls_events.id = *PREFIX*polls_comments.id
                 WHERE
-                    (*PREFIX*polls_events.access =? and *PREFIX*polls_events.owner =?)
+                    (*PREFIX*polls_events.access = ? AND *PREFIX*polls_events.owner = ?)
                     OR
-                    *PREFIX*polls_events.access !=?
+                    *PREFIX*polls_events.access != ?
                     OR
-                    *PREFIX*polls_particip.user_id =?
+                    *PREFIX*polls_particip.user_id = ?
                     OR
-                    *PREFIX*polls_comments.user_id =?
+                    *PREFIX*polls_comments.user_id = ?
                     ORDER BY created';
         return $this->findEntities($sql, ['hidden', $userId, 'hidden', $userId, $userId], $limit, $offset);
     }

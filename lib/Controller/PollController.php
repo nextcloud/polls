@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use \OCP\AppFramework\Controller;
 
-class PollController extends Controller {
+class PollController extends Controller
+{
 
 }
