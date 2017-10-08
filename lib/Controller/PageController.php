@@ -31,7 +31,6 @@ use \OCA\Polls\Db\Participation;
 use \OCA\Polls\Db\ParticipationText;
 use \OCA\Polls\Db\Text;
 
-use \OCA\Polls\Db\AccessMapper;
 use \OCA\Polls\Db\CommentMapper;
 use \OCA\Polls\Db\DateMapper;
 use \OCA\Polls\Db\EventMapper;
@@ -56,7 +55,6 @@ class PageController extends Controller
 {
 
     private $userId;
-    private $accessMapper;
     private $commentMapper;
     private $dateMapper;
     private $eventMapper;
@@ -72,6 +70,25 @@ class PageController extends Controller
     private $userMgr;
     private $groupManager;
 
+    /**
+     * PageController constructor.
+     * @param $appName
+     * @param IRequest $request
+     * @param IUserManager $manager
+     * @param IGroupManager $groupManager
+     * @param IAvatarManager $avatarManager
+     * @param ILogger $logger
+     * @param IL10N $trans
+     * @param IURLGenerator $urlGenerator
+     * @param $userId
+     * @param CommentMapper $commentMapper
+     * @param DateMapper $dateMapper
+     * @param EventMapper $eventMapper
+     * @param NotificationMapper $notificationMapper
+     * @param ParticipationMapper $ParticipationMapper
+     * @param ParticipationTextMapper $ParticipationTextMapper
+     * @param TextMapper $textMapper
+     */
     public function __construct(
         $appName,
         IRequest $request,
@@ -82,7 +99,6 @@ class PageController extends Controller
         IL10N $trans,
         IURLGenerator $urlGenerator,
         $userId,
-        AccessMapper $accessMapper,
         CommentMapper $commentMapper,
         DateMapper $dateMapper,
         EventMapper $eventMapper,
@@ -99,7 +115,6 @@ class PageController extends Controller
         $this->trans = $trans;
         $this->urlGenerator = $urlGenerator;
         $this->userId = $userId;
-        $this->accessMapper = $accessMapper;
         $this->commentMapper = $commentMapper;
         $this->dateMapper = $dateMapper;
         $this->eventMapper = $eventMapper;
@@ -134,6 +149,10 @@ class PageController extends Controller
         return $response;
     }
 
+    /**
+     * @param string $pollId
+     * @param string $from
+     */
     private function sendNotifications($pollId, $from)
     {
         $poll = $this->eventMapper->find($pollId);
@@ -194,6 +213,8 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      * @PublicPage
+     * @param string $hash
+     * @return TemplateResponse
      */
     public function gotoPoll($hash)
     {
@@ -232,6 +253,8 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param string $pollId
+     * @return RedirectResponse
      */
     public function deletePoll($pollId)
     {
@@ -250,6 +273,8 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param string $hash
+     * @return TemplateResponse
      */
     public function editPoll($hash)
     {
@@ -274,6 +299,16 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param $pollId
+     * @param $pollType
+     * @param $pollTitle
+     * @param $pollDesc
+     * @param $userId
+     * @param $chosenDates
+     * @param $expireTs
+     * @param $accessType
+     * @param $accessValues
+     * @return RedirectResponse
      */
     public function updatePoll(
         $pollId,
@@ -361,6 +396,17 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param $pollType
+     * @param $pollTitle
+     * @param $pollDesc
+     * @param $userId
+     * @param $chosenDates
+     * @param $expireTs
+     * @param $accessType
+     * @param $accessValues
+     * @param $isAnonymous
+     * @param $hideNames
+     * @return RedirectResponse
      */
     public function insertPoll(
         $pollType,
@@ -450,11 +496,18 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      * @PublicPage
+     * @param $pollId
+     * @param $userId
+     * @param $types
+     * @param $dates
+     * @param $notIf
+     * @param $changed
+     * @return RedirectResponse
      */
-    public function insertVote($pollId, $userId, $types, $dates, $notif, $changed)
+    public function insertVote($pollId, $userId, $types, $dates, $notIf, $changed)
     {
         if ($this->userId !== null) {
-            if ($notif === 'true') {
+            if ($notIf === 'true') {
                 try {
                     //check if user already set notification for this poll
                     $this->notificationMapper->findByUserAndPoll($pollId, $userId);
@@ -474,9 +527,6 @@ class PageController extends Controller
                     //doesn't exist in db, nothing to do
                 }
             }
-        } else {
-            // TODO: Needs investigation!
-            $userId = $userId;
         }
         $poll = $this->eventMapper->find($pollId);
         if ($changed === 'true') {
@@ -516,10 +566,13 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      * @PublicPage
+     * @param $pollId
+     * @param $userId
+     * @param $commentBox
+     * @return JSONResponse
      */
     public function insertComment($pollId, $userId, $commentBox)
     {
-        $poll = $this->eventMapper->find($pollId);
         $comment = new Comment();
         $comment->setPollId($pollId);
         $comment->setUserId($userId);
@@ -527,8 +580,6 @@ class PageController extends Controller
         $comment->setDt(date('Y-m-d H:i:s'));
         $this->commentMapper->insert($comment);
         $this->sendNotifications($pollId, $userId);
-        $hash = $this->eventMapper->find($pollId)->getHash();
-        $url = $this->urlGenerator->linkToRoute('polls.page.goto_poll', ['hash' => $hash]);
         if ($this->manager->get($userId) !== null) {
             $newUserId = $this->manager->get($userId)->getDisplayName();
         } else {
@@ -544,6 +595,10 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param $searchTerm
+     * @param $groups
+     * @param $users
+     * @return array
      */
     public function search($searchTerm, $groups, $users)
     {
@@ -553,6 +608,9 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param $searchTerm
+     * @param $groups
+     * @return array
      */
     public function searchForGroups($searchTerm, $groups)
     {
@@ -577,6 +635,9 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param $searchTerm
+     * @param $users
+     * @return array
      */
     public function searchForUsers($searchTerm, $users)
     {
@@ -584,13 +645,13 @@ class PageController extends Controller
         \OCP\Util::writeLog("polls", print_r($selectedUsers, true), \OCP\Util::ERROR);
         $userNames = $this->userMgr->searchDisplayName($searchTerm);
         $users = array();
-        $susers = array();
+        $sUsers = array();
         foreach ($selectedUsers as $su) {
-            $susers[] = str_replace('user_', '', $su);
+            $sUsers[] = str_replace('user_', '', $su);
         }
         foreach ($userNames as $u) {
             $alreadyAdded = false;
-            foreach ($susers as &$su) {
+            foreach ($sUsers as &$su) {
                 if ($su === $u->getUID()) {
                     unset($su);
                     $alreadyAdded = true;
@@ -609,17 +670,26 @@ class PageController extends Controller
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
+     * @param $username
+     * @return
      */
     public function getDisplayName($username)
     {
         return $this->manager->get($username)->getDisplayName();
     }
 
+    /**
+     * @return Event[]
+     */
     public function getPollsForUser()
     {
         return $this->eventMapper->findAllForUser($this->userId);
     }
 
+    /**
+     * @param null $user
+     * @return Event[]
+     */
     public function getPollsForUserWithInfo($user = null)
     {
         if ($user === null) {
@@ -629,12 +699,15 @@ class PageController extends Controller
         }
     }
 
+    /**
+     * @return array
+     */
     public function getGroups()
     {
         // $this->requireLogin();
         if (class_exists('\OC_Group', true)) {
             // Nextcloud <= 11, ownCloud
-            return \OC_Group::getUserGroups($this->$userId);
+            return \OC_Group::getUserGroups($this->userId);
         }
         // Nextcloud >= 12
         $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
@@ -643,6 +716,10 @@ class PageController extends Controller
         }, $groups);
     }
 
+    /**
+     * @param $poll
+     * @return bool
+     */
     private function hasUserAccess($poll)
     {
         $access = $poll->getAccess();

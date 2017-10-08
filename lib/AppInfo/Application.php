@@ -25,7 +25,6 @@ namespace OCA\Polls\AppInfo;
 
 use OC\AppFramework\Utility\SimpleContainer;
 use \OCP\AppFramework\App;
-use \OCA\Polls\Db\AccessMapper;
 use \OCA\Polls\Db\CommentMapper;
 use \OCA\Polls\Db\DateMapper;
 use \OCA\Polls\Db\EventMapper;
@@ -40,7 +39,6 @@ class Application extends App
 
     /**
      * Application constructor.
-     *
      * @param array $urlParams
      */
     public function __construct(array $urlParams = array())
@@ -65,7 +63,6 @@ class Application extends App
                 $c->query('L10N'),
                 $c->query('ServerContainer')->getURLGenerator(),
                 $c->query('UserId'),
-                $c->query('AccessMapper'),
                 $c->query('CommentMapper'),
                 $c->query('DateMapper'),
                 $c->query('EventMapper'),
@@ -98,13 +95,6 @@ class Application extends App
 
         $container->registerService('L10N', function ($c) {
             return $c->query('ServerContainer')->getL10N($c->query('AppName'));
-        });
-
-        $container->registerService('AccessMapper', function ($c) use ($server) {
-            /** @var SimpleContainer $c */
-            return new AccessMapper(
-                $server->getDatabaseConnection()
-            );
         });
 
         $container->registerService('CommentMapper', function ($c) use ($server) {

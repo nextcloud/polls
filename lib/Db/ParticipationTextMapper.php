@@ -29,68 +29,13 @@ use OCP\IDBConnection;
 class ParticipationTextMapper extends Mapper
 {
 
+    /**
+     * ParticipationTextMapper constructor.
+     * @param IDBConnection $db
+     */
     public function __construct(IDBConnection $db)
     {
         parent::__construct($db, 'polls_particip_text', '\OCA\Polls\Db\ParticipationText');
-    }
-
-    /**
-     * @param int $id
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-     * @return ParticipationText
-     */
-    public function find($id)
-    {
-        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
-        return $this->findEntity($sql, [$id]);
-    }
-
-    /**
-     * @param string $pollId
-     * @param string $userId
-     */
-    public function deleteByPollAndUser($pollId, $userId)
-    {
-        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
-        $this->execute($sql, [$pollId, $userId]);
-    }
-
-    /**
-     * @param string $userId
-     * @param string $from
-     * @param string $until
-     * @param int $limit
-     * @param int $offset
-     * @return ParticipationText[]
-     */
-    public function findBetween($userId, $from, $until, $limit = null, $offset = null)
-    {
-        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE userId = ? AND timestamp BETWEEN ? AND ?';
-        return $this->findEntities($sql, [$userId, $from, $until], $limit, $offset);
-    }
-
-    /**
-     * @param int $limit
-     * @param int $offset
-     * @return ParticipationText[]
-     */
-    public function findAll($limit = null, $offset = null)
-    {
-        $sql = 'SELECT * FROM ' . $this->getTableName();
-        return $this->findEntities($sql, [], $limit, $offset);
-    }
-
-    /**
-     * @param string $userId
-     * @param int $limit
-     * @param int $offset
-     * @return ParticipationText[]
-     */
-    public function findDistinctByUser($userId, $limit = null, $offset = null)
-    {
-        $sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
-        return $this->findEntities($sql, [$userId], $limit, $offset);
     }
 
     /**
@@ -112,5 +57,15 @@ class ParticipationTextMapper extends Mapper
     {
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         $this->execute($sql, [$pollId]);
+    }
+
+    /**
+     * @param string $pollId
+     * @param string $userId
+     */
+    public function deleteByPollAndUser($pollId, $userId)
+    {
+        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
+        $this->execute($sql, [$pollId, $userId]);
     }
 }

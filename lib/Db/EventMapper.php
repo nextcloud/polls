@@ -29,46 +29,13 @@ use OCP\IDBConnection;
 class EventMapper extends Mapper
 {
 
+    /**
+     * EventMapper constructor.
+     * @param IDBConnection $db
+     */
     public function __construct(IDBConnection $db)
     {
         parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
-    }
-
-    /**
-     * @param int $id
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-     * @return Event
-     */
-    public function find($id)
-    {
-        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
-        return $this->findEntity($sql, [$id]);
-    }
-
-    /**
-     * @param string $userId
-     * @param string $from
-     * @param string $until
-     * @param int $limit
-     * @param int $offset
-     * @return Event[]
-     */
-    public function findBetween($userId, $from, $until, $limit = null, $offset = null)
-    {
-        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE userId = ? AND timestamp BETWEEN ? AND ?';
-        return $this->findEntities($sql, [$userId, $from, $until], $limit, $offset);
-    }
-
-    /**
-     * @param int $limit
-     * @param int $offset
-     * @return Event[]
-     */
-    public function findAll($limit = null, $offset = null)
-    {
-        $sql = 'SELECT * FROM ' . $this->getTableName();
-        return $this->findEntities($sql, [], $limit, $offset);
     }
 
     /**
