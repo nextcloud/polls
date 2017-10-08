@@ -12,7 +12,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="expired-unvoted-vote-variant-2.svg">
+   sodipodi:docname="expired-unvoted-vote.svg">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -54,11 +54,9 @@
      cy="8"
      rx="6.2500634"
      ry="6.2500639" />
-  <rect
-     style="fill:none;fill-opacity:1;stroke:#ffc107;stroke-width:0.86666656;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     id="rect823"
-     width="5.6333332"
-     height="5.6333332"
-     x="5.1833334"
-     y="5.1833334" />
+  <path
+     inkscape:connector-curvature="0"
+     d="M 11.671204,10.629546 10.6225,11.67825 8,9.0557495 5.378241,11.67825 4.3287958,10.629546 6.9512964,8.0070457 4.3287958,5.3845452 5.378241,4.3358416 8,6.9583421 10.607667,4.32175 11.671204,5.3852867 9.0487036,8.0070457 Z"
+     id="path4"
+     style="fill:#f45573;fill-opacity:1;stroke:none;stroke-width:0.89710677;stroke-opacity:1" />
 </svg>

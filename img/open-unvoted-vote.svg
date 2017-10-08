@@ -12,7 +12,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="open-unvoted-vote.svg">
+   sodipodi:docname="open-unvoted-vote-variant.svg">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -39,8 +39,8 @@
      id="namedview8"
      showgrid="false"
      inkscape:zoom="45.254834"
-     inkscape:cx="1.4435496"
-     inkscape:cy="7.7861854"
+     inkscape:cx="6.0322232"
+     inkscape:cy="7.4148945"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -48,13 +48,13 @@
   <defs
      id="defs4" />
   <path
-     style="opacity:1;fill:none;fill-opacity:1;stroke:#ffc107;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="opacity:1;fill:none;fill-opacity:1;stroke:#49bc49;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 14.244065,8.0059972 c 0,3.4518138 -2.798249,6.2500608 -6.2500623,6.2500608 -3.4518138,0 -6.250062,-2.798247 -6.2500622,-6.2500608 0,-3.4518134 2.7982482,-6.2500612 6.2500622,-6.2500612"
      id="path4138"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cssc" />
   <path
-     style="fill:#ffc107;fill-opacity:1;stroke:none;stroke-width:0.11827402;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#49bc49;fill-opacity:1;stroke:none;stroke-width:0.11827402;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 7.9774453,0.41685427 11.667719,1.8149286 7.9774453,3.2780296 v 0 z"
      id="path817"
      inkscape:connector-curvature="0"
