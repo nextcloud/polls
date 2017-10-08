@@ -4,16 +4,16 @@
    <name>Polls</name>
    <description>This is a poll app, similar to doodle or dudle with the possibility for restrict access (only members, certain groups/users, hidden and public).</description>
    <documentation>
-      <admin>https://github.com/v1r0x/polls/blob/master/README.md</admin>
+      <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
    </documentation>
-   <screenshot>https://raw.githubusercontent.com/v1r0x/polls/master/screenshots/nc_new_poll.png</screenshot>
+   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/new-poll.png</screenshot>
    <version>0.7.3</version>
    <licence>AGPL</licence>
    <author>Vinzenz Rosenkranz</author>
    <category>tools</category>
-   <website>https://github.com/v1r0x/polls</website>
-   <bugs>https://github.com/v1r0x/polls/issues</bugs>
-   <repository type="git">https://github.com/v1r0x/polls.git</repository>
+   <website>https://github.com/nextcloud/polls</website>
+   <bugs>https://github.com/nextcloud/polls/issues</bugs>
+   <repository type="git">https://github.com/nextcloud/polls.git</repository>
    <dependencies>
       <owncloud min-version="8.1" max-version="10"/>
       <nextcloud min-version="9.1" max-version="13" />
