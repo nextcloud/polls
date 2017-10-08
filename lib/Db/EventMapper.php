@@ -39,6 +39,18 @@ class EventMapper extends Mapper
     }
 
     /**
+     * @param int $id
+     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
+     * @return Event
+     */
+    public function find($id)
+    {
+        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
+        return $this->findEntity($sql, [$id]);
+    }
+
+    /**
      * @param $hash
      * @param int $limit
      * @param int $offset

@@ -21,7 +21,7 @@
  *
  */
 
-\OC::$server->getNavigationManager()->setActiveEntry( 'polls' );
+\OC::$server->getNavigationManager()->setActiveEntry('polls');
 
 if (OCP\User::isLoggedIn()) {
     $tmpl = new OCP\Template('polls', 'main', 'user');
