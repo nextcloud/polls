@@ -1,4 +1,4 @@
-$bg_no: #ffede9;
+﻿$bg_no: #ffede9;
 $bg_yes: #ebf5d6;
 $fg_no: #f45573;
 $fg_yes: #49bc49;
@@ -16,7 +16,8 @@ $group-2-1-width: max($access-width, $date-width);
 $group-2-width: $principal-width + $group-2-1-width + $group-2-2-width;
 
 $action-width: 44px;
-$thumbnail-width: 32px;
+$thumbnail-width: 44px;
+$thumbnail-icon-width: 32px;
 $name-width: 150px;
 $description-width: 150px;
 $group-1-1-width: max($name-width, $description-width);
@@ -45,217 +46,216 @@ $mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-
 }
 
 .table {
-    position: relative;
-    &.has-controls {
-        top: 44px;
-    }
+	position: relative;
+	&.has-controls {
+		top: 44px;
+	}
 }
 
 .row {
-    display: flex;           display: -webkit-flex;
-    width: 100%;
-    padding-left:  $row-padding;
-    padding-right: $row-padding;
+	display: flex;		   display: -webkit-flex;
+	width: 100%;
+	padding-left:  $row-padding;
+	padding-right: $row-padding;
 
-    line-height: 2em;
-    transition: background-color 0.3s ease;
-    background-color: #fff;
-    min-height: 4em;
-    border-bottom: 1px solid #eee;
+	line-height: 2em;
+	transition: background-color 0.3s ease;
+	background-color: #fff;
+	min-height: 4em;
+	border-bottom: 1px solid #eee;
 
-    &.table-header {
-        .name, .description {
-            padding-left: ($thumbnail-width + $table-padding *2);
-        }
-    }
+	&.table-header {
+		.name, .description {
+			padding-left: ($thumbnail-width + $table-padding *2);
+		}
+	}
 
-    &.table-body {
-        &:hover, &:focus, &:active, &.mouseOver {
-            transition: background-color 0.3s ease;
-            background-color: #f8f8f8;
-        }
-        .column.principal {
-            display: flex;
-            .avatardiv {
-                margin-right: 4px;
-            }
-        }
-        .icon-more {
-            right: 14px;
-            opacity: 0.3;
-            padding: 8px 0;
-            cursor: pointer;
-        }
+	&.table-body {
+		&:hover, &:focus, &:active, &.mouseOver {
+			transition: background-color 0.3s ease;
+			background-color: #f8f8f8;
+		}
+		.column.principal {
+			display: flex;
+			.avatardiv {
+				margin-right: 4px;
+			}
+		}
+		.icon-more {
+			right: 14px;
+			opacity: 0.3;
+			cursor: pointer;
+			height: $thumbnail-width;
+			width: $thumbnail-width;
+		}
 
+		 .symbol {
+			padding: 2px;
+		}
 
-         .symbol {
-            padding: 2px;
-        }
+	}
 
-    }
-
-    &.table-header {
-        color: #999;
-    }
+	&.table-header {
+		color: #999;
+	}
 }
 
 .wrapper {
-	display: flex; 	        display: -webkit-flex;
-    align-items: center;
-    position: relative;
-    div {
-        // vertical-align: middle;
-    }
+	display: flex; 			display: -webkit-flex;
+	align-items: center;
+	position: relative;
+	div {
+		// vertical-align: middle;
+	}
 }
 
 
 .column {
-    padding: 0 $table-padding;
-    overflow: hidden;
+	padding: 0 $table-padding;
+	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-    align-items: center;
-    min-height: 16px;
+	align-items: center;
+	min-height: 16px;
 }
 
 .name {
-    width: $name-width;
+	width: $name-width;
 }
 
 .description {
-    width: $description-width;
-    color: #888;
-    }
+	width: $description-width;
+	color: #888;
+	}
 
 .principal {
-    width: $principal-width;
+	width: $principal-width;
 }
 
 .access {
-    width: $access-width;
+	width: $access-width;
 }
 
 .created {
-    width: $date-width;
+	width: $date-width;
 }
 
 .expiry {
-    width: $date-width;
-    &.expired {
-        color: red;
-    }
+	width: $date-width;
+	&.expired {
+		color: red;
+	}
 }
 
 .participants{
-    width: $participants-width;
-    div {
-        &.partic_voted {
-            &.icon-partic_yes {
-                background-image: url('../img/yes-vote.svg');
-            }
-            &.icon-partic_no {
-                background-image: url('../img/no-vote.svg');
-            }
-        }
+	width: $participants-width;
+	div {
+		&.partic_voted {
+			&.icon-partic_yes {
+				background-image: url('../img/yes-vote.svg');
+			}
+			&.icon-partic_no {
+				background-image: url('../img/no-vote.svg');
+			}
+		}
 
-        &.partic_commented {
-            &.icon-commented_yes {
-                // background-color: $bg_yes;
-                background-image: url('../img/yes-comment.svg');
-            }
-            &.icon-commented_no {
-                // background-color: $bg_no;
-                background-image: url('../img/no-comment.svg');
-            }
-        }
-    }
+		&.partic_commented {
+			&.icon-commented_yes {
+				// background-color: $bg_yes;
+				background-image: url('../img/yes-comment.svg');
+			}
+			&.icon-commented_no {
+				// background-color: $bg_no;
+				background-image: url('../img/no-comment.svg');
+			}
+		}
+	}
 
 }
 
 
 .actions {
-    width: $action-width;
+	width: $action-width;
 	position: relative;
 	overflow: initial;
 }
 
-
-
 .thumbnail {
-    background-size: $thumbnail-width;
-    width: $thumbnail-width;
-    height: $thumbnail-width;
-    padding-right: $table-padding;
-    background-repeat: no-repeat;
-    &.progress, &.endless {
-        &.partic_yes {
-        background-image: url('../img/open-voted-vote.svg');
-        }
-        &.partic_no {
-        background-image: url('../img/open-unvoted-vote.svg');
-        }
-    }
-    &.expired {
-        &.partic_yes {
-        background-image: url('../img/expired-voted-vote.svg');
-        }
-        &.partic_no {
-        background-image: url('../img/expired-unvoted-vote.svg');
-        }
-    }
+	background-size: $thumbnail-icon-width;
+	width: $thumbnail-width;
+	height: $thumbnail-width;
+	padding-right: $table-padding;
+	background-repeat: no-repeat;
+	background-position: center;
+	&.progress, &.endless {
+		&.partic_yes {
+		background-image: url('../img/open-voted-vote.svg');
+		}
+		&.partic_no {
+		background-image: url('../img/open-unvoted-vote.svg');
+		}
+	}
+	&.expired {
+		&.partic_yes {
+		background-image: url('../img/expired-voted-vote.svg');
+		}
+		&.partic_no {
+		background-image: url('../img/expired-unvoted-vote.svg');
+		}
+	}
 }
 
 
 .options, .participants {
-    display: flex;
-    flex-direction: row;     -webkit-flex-direction: row;
+	display: flex;
+	flex-direction: row;	 -webkit-flex-direction: row;
 }
 
 .group-1, .group-1-1, .group-master {
-    flex-grow: 1;     -webkit-flex-grow: 1;
+	flex-grow: 1;	 -webkit-flex-grow: 1;
 }
 
 .group-1-1 {
-    flex-direction: column;         -webkit-flex-direction: column;
-    width: $group-1-1-width;
-    > div {
-         width: 100%;
-    }
+	flex-direction: column;		 -webkit-flex-direction: column;
+	width: $group-1-1-width;
+	> div {
+		 width: 100%;
+	}
 }
 
 
 
 @media all and (max-width: ($mediabreak-1) ) {
-    .group-1 {
-        width: $group-1-width;
-    }
-    .group-2-1, .group-2-2 {
-        flex-direction: column; -webkit-flex-direction: column;
-    }
+	.group-1 {
+		width: $group-1-width;
+	}
+	.group-2-1, .group-2-2 {
+		flex-direction: column; -webkit-flex-direction: column;
+	}
 
-    .access, .created {
-        width: $group-2-1-width;;
-    }
-    .expiry, .participants {
-        width: $group-2-2-width;;
-    }
+	.access, .created {
+		width: $group-2-1-width;;
+	}
+	.expiry, .participants {
+		width: $group-2-2-width;;
+	}
 }
 
 @media all and (max-width: ($mediabreak-2) ) {
 
-    .row {
-        padding: 0;
-    }
+	.row {
+		padding: 0;
+	}
 
-    .group-2-1 {
-        display: none;
-    }
+	.group-2-1 {
+		display: none;
+	}
 }
 
 @media all and (max-width: ($mediabreak-3) ) {
 
-    .group-2 {
-        display: none;
-    }
+	.group-2 {
+		display: none;
+	}
 }
-    
+	
