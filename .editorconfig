@@ -14,3 +14,8 @@ charset = utf-8
 # 4 space tab indentation
 indent_style = tab
 indent_size = 4
+
+# 2 space indentation for .travis.yml
+[.travis.yml]
+indent_style = space
+indent_size = 2
