@@ -38,6 +38,7 @@ use \OCA\Polls\Db\NotificationMapper;
 use \OCA\Polls\Db\ParticipationMapper;
 use \OCA\Polls\Db\ParticipationTextMapper;
 use \OCA\Polls\Db\TextMapper;
+use \OCP\AppFramework\Db\DoesNotExistException;
 use \OCP\IUserManager;
 use \OCP\IGroupManager;
 use \OCP\IAvatarManager;
@@ -45,14 +46,15 @@ use \OCP\ILogger;
 use \OCP\IL10N;
 use \OCP\IRequest;
 use \OCP\IURLGenerator;
-use OCP\Security\ISecureRandom;
+use \OCP\Security\ISecureRandom;
 use \OCP\AppFramework\Http\TemplateResponse;
 use \OCP\AppFramework\Http\RedirectResponse;
 use \OCP\AppFramework\Http\JSONResponse;
 use \OCP\AppFramework\Controller;
+use \OCP\User;
+use \OCP\Util;
 
-class PageController extends Controller
-{
+class PageController extends Controller {
 
     private $userId;
     private $commentMapper;
@@ -129,8 +131,7 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function index()
-    {
+    public function index() {
         $polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
         $comments = $this->commentMapper->findDistinctByUser($this->userId);
         $partic = $this->participationMapper->findDistinctByUser($this->userId);
@@ -153,22 +154,21 @@ class PageController extends Controller
      * @param string $pollId
      * @param string $from
      */
-    private function sendNotifications($pollId, $from)
-    {
+    private function sendNotifications($pollId, $from) {
         $poll = $this->eventMapper->find($pollId);
-        $notifs = $this->notificationMapper->findAllByPoll($pollId);
-        foreach ($notifs as $notif) {
-            if ($from === $notif->getUserId()) {
+        $notifications = $this->notificationMapper->findAllByPoll($pollId);
+        foreach ($notifications as $notification) {
+            if ($from === $notification->getUserId()) {
                 continue;
             }
-            $email = \OC::$server->getConfig()->getUserValue($notif->getUserId(), 'settings', 'email');
+            $email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
             if (strlen($email) === 0 || !isset($email)) {
                 continue;
             }
             $url = \OC::$server->getURLGenerator()->getAbsoluteURL(\OC::$server->getURLGenerator()->linkToRoute('polls.page.goto_poll',
                 array('hash' => $poll->getHash())));
 
-            $recUser = $this->userMgr->get($notif->getUserId());
+            $recUser = $this->userMgr->get($notification->getUserId());
             $sendUser = $this->userMgr->get($from);
             $rec = "";
             if ($recUser !== null) {
@@ -189,9 +189,9 @@ class PageController extends Controller
 
             $msg .= "<br/><br/>";
 
-            $toname = $this->userMgr->get($notif->getUserId())->getDisplayName();
+            $toname = $this->userMgr->get($notification->getUserId())->getDisplayName();
             $subject = $this->trans->t('ownCloud Polls - New Comment');
-            $fromaddress = \OCP\Util::getDefaultEmailAddress('no-reply');
+            $fromaddress = Util::getDefaultEmailAddress('no-reply');
             $fromname = $this->trans->t("ownCloud Polls") . ' (' . $from . ')';
 
             try {
@@ -204,7 +204,7 @@ class PageController extends Controller
                 $mailer->send($message);
             } catch (\Exception $e) {
                 $message = 'error sending mail to: ' . $toname . ' (' . $email . ')';
-                \OCP\Util::writeLog("polls", $message, \OCP\Util::ERROR);
+                Util::writeLog("polls", $message, Util::ERROR);
             }
         }
     }
@@ -216,8 +216,7 @@ class PageController extends Controller
      * @param string $hash
      * @return TemplateResponse
      */
-    public function gotoPoll($hash)
-    {
+    public function gotoPoll($hash) {
         $poll = $this->eventMapper->findByHash($hash);
         if ($poll->getType() == '0') {
             $dates = $this->dateMapper->findByPoll($poll->getId());
@@ -229,7 +228,7 @@ class PageController extends Controller
         $comments = $this->commentMapper->findByPoll($poll->getId());
         try {
             $notification = $this->notificationMapper->findByUserAndPoll($poll->getId(), $this->userId);
-        } catch (\OCP\AppFramework\Db\DoesNotExistException $e) {
+        } catch (DoesNotExistException $e) {
             $notification = null;
         }
         if ($this->hasUserAccess($poll)) {
@@ -245,7 +244,7 @@ class PageController extends Controller
                 'avatarManager' => $this->avatarManager
             ]);
         } else {
-            \OCP\User::checkLoggedIn();
+            User::checkLoggedIn();
             return new TemplateResponse('polls', 'no.acc.tmpl', []);
         }
     }
@@ -256,8 +255,7 @@ class PageController extends Controller
      * @param string $pollId
      * @return RedirectResponse
      */
-    public function deletePoll($pollId)
-    {
+    public function deletePoll($pollId) {
         $poll = new Event();
         $poll->setId($pollId);
         $this->eventMapper->delete($poll);
@@ -276,8 +274,7 @@ class PageController extends Controller
      * @param string $hash
      * @return TemplateResponse
      */
-    public function editPoll($hash)
-    {
+    public function editPoll($hash) {
         $poll = $this->eventMapper->findByHash($hash);
         if ($this->userId !== $poll->getOwner()) {
             return new TemplateResponse('polls', 'no.create.tmpl');
@@ -387,8 +384,7 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function createPoll()
-    {
+    public function createPoll() {
         return new TemplateResponse('polls', 'create.tmpl',
             ['userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
     }
@@ -504,14 +500,13 @@ class PageController extends Controller
      * @param $changed
      * @return RedirectResponse
      */
-    public function insertVote($pollId, $userId, $types, $dates, $notIf, $changed)
-    {
+    public function insertVote($pollId, $userId, $types, $dates, $notIf, $changed) {
         if ($this->userId !== null) {
             if ($notIf === 'true') {
                 try {
                     //check if user already set notification for this poll
                     $this->notificationMapper->findByUserAndPoll($pollId, $userId);
-                } catch (\OCP\AppFramework\Db\DoesNotExistException $e) {
+                } catch (DoesNotExistException $e) {
                     //insert if not exist
                     $not = new Notification();
                     $not->setUserId($userId);
@@ -523,7 +518,7 @@ class PageController extends Controller
                     //delete if entry is in db
                     $not = $this->notificationMapper->findByUserAndPoll($pollId, $userId);
                     $this->notificationMapper->delete($not);
-                } catch (\OCP\AppFramework\Db\DoesNotExistException $e) {
+                } catch (DoesNotExistException $e) {
                     //doesn't exist in db, nothing to do
                 }
             }
@@ -571,8 +566,7 @@ class PageController extends Controller
      * @param $commentBox
      * @return JSONResponse
      */
-    public function insertComment($pollId, $userId, $commentBox)
-    {
+    public function insertComment($pollId, $userId, $commentBox) {
         $comment = new Comment();
         $comment->setPollId($pollId);
         $comment->setUserId($userId);
@@ -600,8 +594,7 @@ class PageController extends Controller
      * @param $users
      * @return array
      */
-    public function search($searchTerm, $groups, $users)
-    {
+    public function search($searchTerm, $groups, $users) {
         return array_merge($this->searchForGroups($searchTerm, $groups), $this->searchForUsers($searchTerm, $users));
     }
 
@@ -612,8 +605,7 @@ class PageController extends Controller
      * @param $groups
      * @return array
      */
-    public function searchForGroups($searchTerm, $groups)
-    {
+    public function searchForGroups($searchTerm, $groups) {
         $selectedGroups = json_decode($groups);
         $groups = $this->groupManager->search($searchTerm);
         $gids = array();
@@ -639,10 +631,9 @@ class PageController extends Controller
      * @param $users
      * @return array
      */
-    public function searchForUsers($searchTerm, $users)
-    {
+    public function searchForUsers($searchTerm, $users) {
         $selectedUsers = json_decode($users);
-        \OCP\Util::writeLog("polls", print_r($selectedUsers, true), \OCP\Util::ERROR);
+        Util::writeLog("polls", print_r($selectedUsers, true), Util::ERROR);
         $userNames = $this->userMgr->searchDisplayName($searchTerm);
         $users = array();
         $sUsers = array();
@@ -671,18 +662,16 @@ class PageController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      * @param $username
-     * @return
+     * @return string
      */
-    public function getDisplayName($username)
-    {
+    public function getDisplayName($username) {
         return $this->manager->get($username)->getDisplayName();
     }
 
     /**
      * @return Event[]
      */
-    public function getPollsForUser()
-    {
+    public function getPollsForUser() {
         return $this->eventMapper->findAllForUser($this->userId);
     }
 
@@ -690,8 +679,7 @@ class PageController extends Controller
      * @param null $user
      * @return Event[]
      */
-    public function getPollsForUserWithInfo($user = null)
-    {
+    public function getPollsForUserWithInfo($user = null) {
         if ($user === null) {
             return $this->eventMapper->findAllForUserWithInfo($this->userId);
         } else {
@@ -702,8 +690,7 @@ class PageController extends Controller
     /**
      * @return array
      */
-    public function getGroups()
-    {
+    public function getGroups() {
         // $this->requireLogin();
         if (class_exists('\OC_Group', true)) {
             // Nextcloud <= 11, ownCloud
@@ -720,8 +707,7 @@ class PageController extends Controller
      * @param $poll
      * @return bool
      */
-    private function hasUserAccess($poll)
-    {
+    private function hasUserAccess($poll) {
         $access = $poll->getAccess();
         $owner = $poll->getOwner();
         if ($access === 'public') {
@@ -739,7 +725,7 @@ class PageController extends Controller
         if ($owner === $this->userId) {
             return true;
         }
-        \OCP\Util::writeLog("polls", $this->userId, \OCP\Util::ERROR);
+        Util::writeLog("polls", $this->userId, Util::ERROR);
         $user_groups = $this->getGroups();
         $arr = explode(';', $access);
         foreach ($arr as $item) {
@@ -753,7 +739,7 @@ class PageController extends Controller
             } else {
                 if (strpos($item, 'user_') === 0) {
                     $usr = substr($item, 5);
-                    if ($usr === \OCP\User::getUser()) {
+                    if ($usr === User::getUser()) {
                         return true;
                     }
                 }

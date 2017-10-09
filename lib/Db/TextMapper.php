@@ -26,15 +26,13 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class TextMapper extends Mapper
-{
+class TextMapper extends Mapper {
 
     /**
      * TextMapper constructor.
      * @param IDBConnection $db
      */
-    public function __construct(IDBConnection $db)
-    {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'polls_txts', '\OCA\Polls\Db\Text');
     }
 
@@ -44,8 +42,7 @@ class TextMapper extends Mapper
      * @param int $offset
      * @return Text[]
      */
-    public function findByPoll($pollId, $limit = null, $offset = null)
-    {
+    public function findByPoll($pollId, $limit = null, $offset = null) {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         return $this->findEntities($sql, [$pollId], $limit, $offset);
     }
@@ -53,8 +50,7 @@ class TextMapper extends Mapper
     /**
      * @param string $pollId
      */
-    public function deleteByPoll($pollId)
-    {
+    public function deleteByPoll($pollId) {
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         $this->execute($sql, [$pollId]);
     }

@@ -31,8 +31,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getPollId()
  * @method void setPollId(string $value)
  */
-class Notification extends Entity
-{
+class Notification extends Entity {
     public $userId;
     public $pollId;
 }

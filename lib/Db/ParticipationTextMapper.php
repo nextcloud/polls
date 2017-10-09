@@ -26,15 +26,13 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class ParticipationTextMapper extends Mapper
-{
+class ParticipationTextMapper extends Mapper {
 
     /**
      * ParticipationTextMapper constructor.
      * @param IDBConnection $db
      */
-    public function __construct(IDBConnection $db)
-    {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'polls_particip_text', '\OCA\Polls\Db\ParticipationText');
     }
 
@@ -44,8 +42,7 @@ class ParticipationTextMapper extends Mapper
      * @param int $offset
      * @return ParticipationText[]
      */
-    public function findByPoll($pollId, $limit = null, $offset = null)
-    {
+    public function findByPoll($pollId, $limit = null, $offset = null) {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         return $this->findEntities($sql, [$pollId], $limit, $offset);
     }
@@ -53,8 +50,7 @@ class ParticipationTextMapper extends Mapper
     /**
      * @param string $pollId
      */
-    public function deleteByPoll($pollId)
-    {
+    public function deleteByPoll($pollId) {
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         $this->execute($sql, [$pollId]);
     }
@@ -63,8 +59,7 @@ class ParticipationTextMapper extends Mapper
      * @param string $pollId
      * @param string $userId
      */
-    public function deleteByPollAndUser($pollId, $userId)
-    {
+    public function deleteByPollAndUser($pollId, $userId) {
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
         $this->execute($sql, [$pollId, $userId]);
     }

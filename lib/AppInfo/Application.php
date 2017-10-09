@@ -34,15 +34,13 @@ use \OCA\Polls\Db\ParticipationTextMapper;
 use \OCA\Polls\Db\TextMapper;
 use \OCA\Polls\Controller\PageController;
 
-class Application extends App
-{
+class Application extends App {
 
     /**
      * Application constructor.
      * @param array $urlParams
      */
-    public function __construct(array $urlParams = array())
-    {
+    public function __construct(array $urlParams = array()) {
         parent::__construct('polls', $urlParams);
 
         $container = $this->getContainer();
@@ -150,8 +148,7 @@ class Application extends App
     /**
      * Register navigation entry for main navigation.
      */
-    public function registerNavigationEntry()
-    {
+    public function registerNavigationEntry() {
         $container = $this->getContainer();
         $container->query('OCP\INavigationManager')->add(function () use ($container) {
             $urlGenerator = $container->query('OCP\IURLGenerator');

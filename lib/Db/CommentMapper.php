@@ -26,15 +26,13 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class CommentMapper extends Mapper
-{
+class CommentMapper extends Mapper {
 
     /**
      * CommentMapper constructor.
      * @param IDBConnection $db
      */
-    public function __construct(IDBConnection $db)
-    {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'polls_comments', '\OCA\Polls\Db\Comment');
     }
 
@@ -44,8 +42,7 @@ class CommentMapper extends Mapper
      * @param int $offset
      * @return Comment[]
      */
-    public function findDistinctByUser($userId, $limit = null, $offset = null)
-    {
+    public function findDistinctByUser($userId, $limit = null, $offset = null) {
         $sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
         return $this->findEntities($sql, [$userId], $limit, $offset);
     }
@@ -56,8 +53,7 @@ class CommentMapper extends Mapper
      * @param int $offset
      * @return Comment[]
      */
-    public function findByPoll($pollId, $limit = null, $offset = null)
-    {
+    public function findByPoll($pollId, $limit = null, $offset = null) {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ? ORDER BY Dt DESC';
         return $this->findEntities($sql, [$pollId], $limit, $offset);
     }
@@ -65,8 +61,7 @@ class CommentMapper extends Mapper
     /**
      * @param string $pollId
      */
-    public function deleteByPoll($pollId)
-    {
+    public function deleteByPoll($pollId) {
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
         $this->execute($sql, [$pollId]);
     }

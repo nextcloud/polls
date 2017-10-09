@@ -26,15 +26,13 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class EventMapper extends Mapper
-{
+class EventMapper extends Mapper {
 
     /**
      * EventMapper constructor.
      * @param IDBConnection $db
      */
-    public function __construct(IDBConnection $db)
-    {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
     }
 
@@ -44,8 +42,7 @@ class EventMapper extends Mapper
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
      * @return Event
      */
-    public function find($id)
-    {
+    public function find($id) {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
         return $this->findEntity($sql, [$id]);
     }
@@ -56,8 +53,7 @@ class EventMapper extends Mapper
      * @param int $offset
      * @return Event
      */
-    public function findByHash($hash, $limit = null, $offset = null)
-    {
+    public function findByHash($hash, $limit = null, $offset = null) {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE hash = ?';
         return $this->findEntity($sql, [$hash], $limit, $offset);
     }
@@ -68,8 +64,7 @@ class EventMapper extends Mapper
      * @param int $offset
      * @return Event[]
      */
-    public function findAllForUser($userId, $limit = null, $offset = null)
-    {
+    public function findAllForUser($userId, $limit = null, $offset = null) {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE owner = ?';
         return $this->findEntities($sql, [$userId], $limit, $offset);
     }
@@ -80,8 +75,7 @@ class EventMapper extends Mapper
      * @param int $offset
      * @return Event[]
      */
-    public function findAllForUserWithInfo($userId, $limit = null, $offset = null)
-    {
+    public function findAllForUserWithInfo($userId, $limit = null, $offset = null) {
         $sql = 'SELECT DISTINCT *PREFIX*polls_events.id,
                                 *PREFIX*polls_events.hash,
                                 *PREFIX*polls_events.type,

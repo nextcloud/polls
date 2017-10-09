@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,17 +21,30 @@
  *
  */
 
-namespace OCA\Polls\Db;
+namespace OCA\Polls\Tests\Unit\Controller;
 
-use OCP\AppFramework\Db\Entity;
+use OCA\Polls\Controller\PageController;
+use PHPUnit_Framework_TestCase;
 
-/**
- * @method timestamp getDt()
- * @method void setDt(timestamp $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
- */
-class Date extends Entity {
-    public $dt;
-    public $pollId;
+use OCP\AppFramework\Http\TemplateResponse;
+
+class PageControllerTest extends PHPUnit_Framework_TestCase {
+
+	private $controller;
+	private $userId = 'john';
+
+	public function setUp() {
+		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
+
+		$this->controller = new PageController(
+			'polls', $request, $this->userId
+		);
+	}
+
+	public function testIndex() {
+		$result = $this->controller->index();
+
+		$this->assertEquals('main.tmpl', $result->getTemplateName());
+		$this->assertTrue($result instanceof TemplateResponse);
+	}
 }

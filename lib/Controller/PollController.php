@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -25,7 +25,6 @@ namespace OCA\Polls\Controller;
 
 use \OCP\AppFramework\Controller;
 
-class PollController extends Controller
-{
+class PollController extends Controller {
 
 }
