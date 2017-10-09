@@ -11,6 +11,6 @@ insert_final_newline = true
 # Set default charset
 charset = utf-8
 
-# 4 space indentation
-indent_style = space
+# 4 space tab indentation
+indent_style = tab
 indent_size = 4
