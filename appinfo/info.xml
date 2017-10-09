@@ -7,7 +7,7 @@
       <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
    </documentation>
    <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/new-poll.png</screenshot>
-   <version>0.7.4</version>
+   <version>0.8.0</version>
    <licence>AGPL</licence>
    <author>Vinzenz Rosenkranz</author>
    <category>tools</category>
