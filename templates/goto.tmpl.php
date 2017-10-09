@@ -21,7 +21,7 @@
      *
      */
 
-    use \OCP\User;
+    use OCP\User;
 
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'vote');
@@ -46,7 +46,6 @@
     } else {
         $expired = time() > strtotime($poll->getExpire());
     }
-
 ?>
 
 <?php if($poll->getType() == '0') : ?>

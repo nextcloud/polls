@@ -21,19 +21,19 @@
      *
      */
 
-    use \OCP\User;
-
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'createpoll');
     \OCP\Util::addStyle('polls', 'jquery.datetimepicker');
     \OCP\Util::addScript('polls', 'create_edit');
     \OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
+
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
     $isUpdate = isset($_['poll']) && $_['poll'] !== null;
     $isAnonymous = false;
     $hideNames = false;
+
     if ($isUpdate) {
         $poll = $_['poll'];
         $isAnonymous = $poll->getIsAnonymous();

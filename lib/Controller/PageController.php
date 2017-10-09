@@ -188,21 +188,21 @@ class PageController extends Controller {
 
             $msg .= "<br/><br/>";
 
-            $toname = $this->userMgr->get($notification->getUserId())->getDisplayName();
+            $toName = $this->userMgr->get($notification->getUserId())->getDisplayName();
             $subject = $this->trans->t('ownCloud Polls - New Comment');
-            $fromaddress = Util::getDefaultEmailAddress('no-reply');
-            $fromname = $this->trans->t("ownCloud Polls") . ' (' . $from . ')';
+            $fromAddress = Util::getDefaultEmailAddress('no-reply');
+            $fromName = $this->trans->t("ownCloud Polls") . ' (' . $from . ')';
 
             try {
                 $mailer = \OC::$server->getMailer();
                 $message = $mailer->createMessage();
                 $message->setSubject($subject);
-                $message->setFrom(array($fromaddress => $fromname));
-                $message->setTo(array($email => $toname));
+                $message->setFrom(array($fromAddress => $fromName));
+                $message->setTo(array($email => $toName));
                 $message->setHtmlBody($msg);
                 $mailer->send($message);
             } catch (\Exception $e) {
-                $message = 'error sending mail to: ' . $toname . ' (' . $email . ')';
+                $message = 'Error sending mail to: ' . $toName . ' (' . $email . ')';
                 Util::writeLog("polls", $message, Util::ERROR);
             }
         }
