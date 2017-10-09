@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="wrapper group-2">
-                            <div class="column principal">   <?php p($l->t('By')); ?></div>
+                            <div class="column owner">   <?php p($l->t('By')); ?></div>
                             <div class="wrapper group-2-1">
                                 <div class="column access">      <?php p($l->t('Access')); ?></div>
                                 <div class="column created">         <?php p($l->t('Created')); ?></div>
@@ -66,7 +66,7 @@
                         if (!userHasAccess($poll, $userId)) continue;
                         // direct url to poll
                         $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
-                        $principal = $poll->getOwner();
+                        $owner = $poll->getOwner();
 
                         $expiry_style = '';
                         if ($poll->getType() == '0') {
@@ -83,8 +83,8 @@
                         $commented_title = 'You did not comment';
                         $commented_count = count($comments);
 
-                        if($principal === $userId) {
-                            $principal = $l->t('Yourself');
+                        if($owner === $userId) {
+                            $owner = $l->t('Yourself');
                         }
 
                         if ($poll->getExpire() !== null) {
@@ -159,9 +159,9 @@
                                 </div>
                             </div>
                             <div class="wrapper group-2">
-                                <div class="column principal">  
+                                <div class="column owner">  
                                     <div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
-                                    <div class="name-cell"><?php p($principal); ?></div>
+                                    <div class="name-cell"><?php p($owner); ?></div>
                                 </div>
                                 <div class="wrapper group-2-1">
                                     <div class="column access"><?php p($l->t($poll->getAccess())); ?></div>

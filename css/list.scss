@@ -10,10 +10,10 @@ $date-width: 120px;
 $participants-width: 80px;
 $group-2-2-width: max($date-width, $participants-width);
 
-$principal-width: 140px;
+$owner-width: 140px;
 $access-width: 140px;
 $group-2-1-width: max($access-width, $date-width);
-$group-2-width: $principal-width + $group-2-1-width + $group-2-2-width;
+$group-2-width: $owner-width + $group-2-1-width + $group-2-2-width;
 
 $action-width: 44px;
 $thumbnail-width: 44px;
@@ -25,9 +25,9 @@ $group-1-width: $thumbnail-width + $group-1-1-width + $action-width;
 
 $group-master-width: max($group-1-width, $group-2-width);
 
-$mediabreak-1: ($group-1-width + $principal-width + $access-width + $date-width + $date-width + $participants-width + $row-padding * 2);
+$mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $date-width + $participants-width + $row-padding * 2);
 $mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
-$mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
+$mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
 
 .table, .row, .column {
@@ -68,6 +68,9 @@ $mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-
 		.name, .description {
 			padding-left: ($thumbnail-width + $table-padding *2);
 		}
+		.owner {
+			padding-left: 6px;
+		}
 	}
 
 	&.table-body {
@@ -75,7 +78,7 @@ $mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-
 			transition: background-color 0.3s ease;
 			background-color: #f8f8f8;
 		}
-		.column.principal {
+		.column.owner {
 			display: flex;
 			.avatardiv {
 				margin-right: 4px;
@@ -85,8 +88,8 @@ $mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-
 			right: 14px;
 			opacity: 0.3;
 			cursor: pointer;
-			height: $thumbnail-width;
-			width: $thumbnail-width;
+			height: 44px;
+			width: 44px;
 		}
 
 		 .symbol {
@@ -128,8 +131,8 @@ $mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-
 	color: #888;
 	}
 
-.principal {
-	width: $principal-width;
+.owner {
+	width: $owner-width;
 }
 
 .access {
@@ -179,6 +182,8 @@ $mediabreak-3: $group-1-width + $principal-width + max($group-2-1-width, $group-
 	position: relative;
 	overflow: initial;
 }
+
+
 
 .thumbnail {
 	background-size: $thumbnail-icon-width;
