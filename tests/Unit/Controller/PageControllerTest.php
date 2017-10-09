@@ -24,9 +24,8 @@
 namespace OCA\Polls\Tests\Unit\Controller;
 
 use OCA\Polls\Controller\PageController;
-use PHPUnit_Framework_TestCase;
-
 use OCP\AppFramework\Http\TemplateResponse;
+use PHPUnit_Framework_TestCase;
 
 class PageControllerTest extends PHPUnit_Framework_TestCase {
 
@@ -34,10 +33,66 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 	private $userId = 'john';
 
 	public function setUp() {
-		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
+		$request = $this->getMockBuilder('OCP\IRequest')
+			->disableOriginalConstructor()
+			->getMock();
+		$userManager = $this->getMockBuilder('OCP\IUserManager')
+			->disableOriginalConstructor()
+			->getMock();
+		$groupManager = $this->getMockBuilder('OCP\IGroupManager')
+			->disableOriginalConstructor()
+			->getMock();
+		$avatarManager = $this->getMockBuilder('OCP\IAvatarManager')
+			->disableOriginalConstructor()
+			->getMock();
+		$logger = $this->getMockBuilder('OCP\ILogger')
+			->disableOriginalConstructor()
+			->getMock();
+		$l10n = $this->getMockBuilder('OCP\IL10N')
+			->disableOriginalConstructor()
+			->getMock();
+		$urlGenerator = $this->getMockBuilder('OCP\IURLGenerator')
+			->disableOriginalConstructor()
+			->getMock();
+		$commentMapper = $this->getMockBuilder('OCA\Polls\Db\CommentMapper')
+			->disableOriginalConstructor()
+			->getMock();
+		$dateMapper = $this->getMockBuilder('OCA\Polls\Db\DateMapper')
+			->disableOriginalConstructor()
+			->getMock();
+		$eventMapper = $this->getMockBuilder('OCA\Polls\Db\EventMapper')
+			->disableOriginalConstructor()
+			->getMock();
+		$notificationMapper = $this->getMockBuilder('OCA\Polls\Db\NotificationMapper')
+			->disableOriginalConstructor()
+			->getMock();
+		$participationMapper = $this->getMockBuilder('OCA\Polls\Db\ParticipationMapper')
+			->disableOriginalConstructor()
+			->getMock();
+		$participationTextMapper = $this->getMockBuilder('OCA\Polls\Db\ParticipationTextMapper')
+			->disableOriginalConstructor()
+			->getMock();
+		$textMapper = $this->getMockBuilder('OCA\Polls\Db\TextMapper')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->controller = new PageController(
-			'polls', $request, $this->userId
+			'polls',
+			$request,
+			$userManager,
+			$groupManager,
+			$avatarManager,
+			$logger,
+			$l10n,
+			$urlGenerator,
+			$this->userId,
+			$commentMapper,
+			$dateMapper,
+			$eventMapper,
+			$notificationMapper,
+			$participationMapper,
+			$participationTextMapper,
+			$textMapper
 		);
 	}
 

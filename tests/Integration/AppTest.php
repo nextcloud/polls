@@ -23,9 +23,8 @@
 
 namespace OCA\Polls\Tests\Integration;
 
-use Test\TestCase;
-
-use \OCP\AppFramework\App;
+use OCP\AppFramework\App;
+use PHPUnit\Framework\TestCase;
 
 class AppTest extends TestCase {
 

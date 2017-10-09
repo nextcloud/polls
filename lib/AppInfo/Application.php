@@ -24,15 +24,15 @@
 namespace OCA\Polls\AppInfo;
 
 use OC\AppFramework\Utility\SimpleContainer;
-use \OCP\AppFramework\App;
-use \OCA\Polls\Db\CommentMapper;
-use \OCA\Polls\Db\DateMapper;
-use \OCA\Polls\Db\EventMapper;
-use \OCA\Polls\Db\NotificationMapper;
-use \OCA\Polls\Db\ParticipationMapper;
-use \OCA\Polls\Db\ParticipationTextMapper;
-use \OCA\Polls\Db\TextMapper;
-use \OCA\Polls\Controller\PageController;
+use OCP\AppFramework\App;
+use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\DateMapper;
+use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\NotificationMapper;
+use OCA\Polls\Db\ParticipationMapper;
+use OCA\Polls\Db\ParticipationTextMapper;
+use OCA\Polls\Db\TextMapper;
+use OCA\Polls\Controller\PageController;
 
 class Application extends App {
 

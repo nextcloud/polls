@@ -23,36 +23,35 @@
 
 namespace OCA\Polls\Controller;
 
-use \OCA\Polls\Db\Comment;
-use \OCA\Polls\Db\Date;
-use \OCA\Polls\Db\Event;
-use \OCA\Polls\Db\Notification;
-use \OCA\Polls\Db\Participation;
-use \OCA\Polls\Db\ParticipationText;
-use \OCA\Polls\Db\Text;
-
-use \OCA\Polls\Db\CommentMapper;
-use \OCA\Polls\Db\DateMapper;
-use \OCA\Polls\Db\EventMapper;
-use \OCA\Polls\Db\NotificationMapper;
-use \OCA\Polls\Db\ParticipationMapper;
-use \OCA\Polls\Db\ParticipationTextMapper;
-use \OCA\Polls\Db\TextMapper;
-use \OCP\AppFramework\Db\DoesNotExistException;
-use \OCP\IUserManager;
-use \OCP\IGroupManager;
-use \OCP\IAvatarManager;
-use \OCP\ILogger;
-use \OCP\IL10N;
-use \OCP\IRequest;
-use \OCP\IURLGenerator;
-use \OCP\Security\ISecureRandom;
-use \OCP\AppFramework\Http\TemplateResponse;
-use \OCP\AppFramework\Http\RedirectResponse;
-use \OCP\AppFramework\Http\JSONResponse;
-use \OCP\AppFramework\Controller;
-use \OCP\User;
-use \OCP\Util;
+use OCA\Polls\Db\Comment;
+use OCA\Polls\Db\Date;
+use OCA\Polls\Db\Event;
+use OCA\Polls\Db\Notification;
+use OCA\Polls\Db\Participation;
+use OCA\Polls\Db\ParticipationText;
+use OCA\Polls\Db\Text;
+use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\DateMapper;
+use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\NotificationMapper;
+use OCA\Polls\Db\ParticipationMapper;
+use OCA\Polls\Db\ParticipationTextMapper;
+use OCA\Polls\Db\TextMapper;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IUserManager;
+use OCP\IGroupManager;
+use OCP\IAvatarManager;
+use OCP\ILogger;
+use OCP\IL10N;
+use OCP\IRequest;
+use OCP\IURLGenerator;
+use OCP\Security\ISecureRandom;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Http\RedirectResponse;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Controller;
+use OCP\User;
+use OCP\Util;
 
 class PageController extends Controller {
 
