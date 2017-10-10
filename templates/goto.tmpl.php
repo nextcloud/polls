@@ -26,7 +26,7 @@
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'vote');
     \OCP\Util::addScript('polls', 'vote');
-    
+
     $layout = "classic";
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
@@ -88,7 +88,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                         <span><?php p($poll->getTitle()); ?></span>
                     </div>
                     <?php endif; ?>
-		
+
                     <?php if (!User::isLoggedIn()) : ?>
                     <div class="col-100">
                         <h2><?php p($poll->getTitle()); ?></h2>
@@ -200,7 +200,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             // Make the td clickable
                                             print_unescaped('<td class="' . $cl . '"><div></div></td>');
                                             // Make the div clickable
-                                            // print_unescaped('<td><div class="' . $cl . '"></div></td>'); 
+                                            // print_unescaped('<td><div class="' . $cl . '"></div></td>');
                                             $i_tot++;
                                         }
                                         print_unescaped('</tr>');
@@ -233,7 +233,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                             $poll_id = "pollid_" . $dt->getId();
                                         }
                                         // see if user already has data for this event
-                                        $cl = 'poll-cell active unvoted '; 
+                                        $cl = 'poll-cell active unvoted ';
                                         if (isset($user_voted)) {
                                             foreach ($user_voted as $obj) {
                                                 $voteVal = null;
@@ -314,7 +314,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                             <input type="hidden" name="userId" value="<?php p($userId); ?>" />
                             <input type="hidden" name="dates" value="<?php p($poll->getId()); ?>" />
                             <input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
-                            <input type="hidden" name="notif" />
+                            <input type="hidden" name="receiveNotifications" />
                             <input type="hidden" name="changed" />
                             <input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
                         </form>
@@ -333,9 +333,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                         </div>
                         <input type="text" value="<?php p($pollUrl);?>" readonly="readonly">
                     </div>
-
-
-
                     <?php if ($expired) : ?>
                         <div id="expired_info">
                             <h2><?php p($l->t('Poll expired')); ?></h2>
@@ -352,10 +349,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
                                 <input type="hidden" name="userId" value="<?php p($userId); ?>" />
                                 <div class="comment-content">
                                 <?php if (!User::isLoggedIn()) : ?>
-                                    <!--<?php
-                                    p($l->t('You must be logged in to post a comment.'));
-                                    ?>-->
-                                    <a href="<?php p($loginUrl); ?>"><?php p($l->t('Login')); ?></a>
+                                    <a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login')); ?></a>
                                     <?php p($l->t('or')); ?>
                                     <?php print_unescaped('<th id="id_ac_detected" class="external current-user"><input type="text" name="user_name_comm" id="user_name_comm" placeholder="' . $l->t('Your name here') . '" /></th>'); ?>
                                 <?php else: ?>
@@ -401,7 +395,6 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
             </div>
         </div>
     </div>
-
 </div>
 
 <?php

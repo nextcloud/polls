@@ -10,7 +10,7 @@ $.fn.switchClass = function(a, b) {
     this.removeClass(a);
     this.addClass(b);
     return this;
-}
+};
 
 $(document).ready(function () {
     // count how many times in each date
@@ -23,7 +23,6 @@ $(document).ready(function () {
         $(obj).avatar(obj.title, 32);
     });
 
-    
     $('.hidden-dates').each(function(i, obj) {
         var exDt = new Date(obj.value.replace(/ /g,"T")+"Z"); //Fix display in Safari and IE, still NaN on Firefox on iPad
         var day = ('0' + exDt.getDate()).substr(-2);
@@ -31,26 +30,26 @@ $(document).ready(function () {
         var day_month = day + '.' + month;
         var year = exDt.getFullYear();
 
-        if(typeof arr_dates[day_month] != 'undefined') {
+        if(typeof arr_dates[day_month] !== 'undefined') {
             arr_dates[day_month] += 1;
         } else {
             arr_dates[day_month] = 1;
         }
-        if(typeof arr_years[year] != 'undefined') {
+        if(typeof arr_years[year] !== 'undefined') {
             arr_years[year] += 1;
         } else {
             arr_years[year] = 1;
         }
-        var c = (prev != (year + day_month) ? ' bordered' : '');
+        var c = (prev !== (year + day_month) ? ' bordered' : '');
         prev = (year + day_month);
-        var ch_obj = ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2)
-        dateStr += '<th class="time-slot" value="' + obj.value + '"> ' + 
-        '<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) + 
-                            // ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) + 
-                            '</div>' + 
+        var ch_obj = ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2);
+        dateStr += '<th class="time-slot" value="' + obj.value + '">' +
+        '<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) +
+                            // ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) +
+                            '</div>' +
         '<div class="day">'   + exDt.toLocaleString(window.navigator.language, {day: 'numeric'}) + '</div>' +
-        '<div class="dayow">' + exDt.toLocaleString(window.navigator.language, {weekday: 'short'}) + '</div>' + 
-        '<div class="time">'  + ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2) + '</div>' + 
+        '<div class="dayow">' + exDt.toLocaleString(window.navigator.language, {weekday: 'short'}) + '</div>' +
+        '<div class="time">'  + ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2) + '</div>' +
         '</th>';
     });
 
@@ -69,7 +68,7 @@ $(document).ready(function () {
     $('#submit_finish_vote').click(function() {
         var form = document.finish_vote;
         var ac = document.getElementById('user_name');
-        if (ac != null) {
+        if (ac !== null) {
             if(ac.value.length >= 3){
                 form.elements['userId'].value = ac.value;
             } else {
@@ -77,7 +76,7 @@ $(document).ready(function () {
                 return;
             }
         }
-        check_notif = document.getElementById('check_notif');
+        var check_notif = document.getElementById('check_notif');
         var newUserDates = [], newUserTypes = [];
         $(".cl_click").each(function() {
             if($(this).hasClass('no')) {
@@ -90,15 +89,15 @@ $(document).ready(function () {
                 newUserTypes.push(-1);
             }
             var userDate = $(this).attr('data-value');
-            if(isNaN($(this).attr('data-value')) ) {
+            if (isNaN($(this).attr('data-value'))) {
                 newUserDates.push($(this).attr('data-value'));
-            } else { 
+            } else {
                 newUserDates.push(parseInt($(this).attr('data-value')));
             }
         });
         form.elements['dates'].value = JSON.stringify(newUserDates);
         form.elements['types'].value = JSON.stringify(newUserTypes);
-        form.elements['notif'].value = (check_notif && check_notif.checked) ? 'true' : 'false';
+        form.elements['receiveNotifications'].value = (check_notif && check_notif.checked) ? 'true' : 'false';
         form.elements['changed'].value = values_changed ? 'true' : 'false';
         form.submit();
     });
@@ -107,7 +106,7 @@ $(document).ready(function () {
         e.preventDefault();
         var form = document.send_comment;
         var ac = document.getElementById('user_name_comm');
-        if (ac != null) {
+        if (ac !== null) {
             if(ac.value.length >= 3){
                 form.elements['userId'].value = ac.value;
             } else {
@@ -132,10 +131,10 @@ $(document).ready(function () {
             $('.new-comment .icon-loading-small').hide();
         }).error(function() {
             alert(t('polls', 'An error occurred, your comment was not posted...'));
-            $('.new-comment .icon-loading-small').hide();  
+            $('.new-comment .icon-loading-small').hide();
         });
     });
-    
+
     $(".share input").click(function() {
         $(this).select();
     });

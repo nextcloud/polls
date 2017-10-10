@@ -189,9 +189,9 @@ class PageController extends Controller {
             $msg .= "<br/><br/>";
 
             $toName = $this->userMgr->get($notification->getUserId())->getDisplayName();
-            $subject = $this->trans->t('ownCloud Polls - New Comment');
+            $subject = $this->trans->t('Polls App - New Comment');
             $fromAddress = Util::getDefaultEmailAddress('no-reply');
-            $fromName = $this->trans->t("ownCloud Polls") . ' (' . $from . ')';
+            $fromName = $this->trans->t("Polls App") . ' (' . $from . ')';
 
             try {
                 $mailer = \OC::$server->getMailer();
@@ -495,13 +495,13 @@ class PageController extends Controller {
      * @param $userId
      * @param $types
      * @param $dates
-     * @param $notIf
+     * @param $receiveNotifications
      * @param $changed
      * @return RedirectResponse
      */
-    public function insertVote($pollId, $userId, $types, $dates, $notIf, $changed) {
+    public function insertVote($pollId, $userId, $types, $dates, $receiveNotifications, $changed) {
         if ($this->userId !== null) {
-            if ($notIf === 'true') {
+            if ($receiveNotifications === 'true') {
                 try {
                     //check if user already set notification for this poll
                     $this->notificationMapper->findByUserAndPoll($pollId, $userId);
