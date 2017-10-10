@@ -41,7 +41,7 @@
                         <div class="wrapper group-1">
                             <div class="wrapper group-1-1">
                                 <div class="column name">        <?php p($l->t('Title')); ?></div>
-                                <div class="column description"> <?php p($l->t('Description')); ?></div>
+                                <div class="column description"></div>
                             </div>
                             <div class="wrapper group-1-2">
                                 <div class="column actions"></div>
