@@ -134,10 +134,12 @@ class PageController extends Controller {
         $polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
         $comments = $this->commentMapper->findDistinctByUser($this->userId);
         $partic = $this->participationMapper->findDistinctByUser($this->userId);
+		$particText = $this->participationTextMapper->findDistinctByUser($this->userId);
         $response = new TemplateResponse('polls', 'main.tmpl', [
             'polls' => $polls,
             'comments' => $comments,
             'participations' => $partic,
+			'participations_text' => $particText,
             'userId' => $this->userId,
             'userMgr' => $this->manager,
             'urlGenerator' => $this->urlGenerator

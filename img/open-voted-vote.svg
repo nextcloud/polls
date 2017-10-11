@@ -11,8 +11,8 @@
    width="16"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="progress-vote.svg">
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="open-voted-vote.svg">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -38,9 +38,9 @@
      inkscape:window-height="1017"
      id="namedview8"
      showgrid="false"
-     inkscape:zoom="16"
-     inkscape:cx="-12.409799"
-     inkscape:cy="4.3246568"
+     inkscape:zoom="32"
+     inkscape:cx="1.371985"
+     inkscape:cy="14.042057"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -48,15 +48,20 @@
   <defs
      id="defs4" />
   <path
-     d="m 8.5660621,8.5530951 -3.920989,-0.00372 7.16e-4,-1.0779194 2.800538,0.00153 -0.01005,-4.8523663 1.135502,0.00147 z"
-     style="fill:#ffc107;fill-opacity:1"
+     d="M 6.9766048,11.334813 3.39273,7.750939 4.4157633,6.7271817 6.9766048,9.2858508 11.569757,4.6651867 12.60727,5.7034243 Z"
+     style="fill:#49bc49;fill-opacity:1"
      id="path6"
      inkscape:connector-curvature="0" />
-  <ellipse
-     style="opacity:1;fill:none;fill-opacity:1;stroke:#ffc107;stroke-width:0.96794814;stroke-opacity:1"
+  <path
+     style="opacity:1;fill:none;fill-opacity:1;stroke:#49bc49;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 14.250063,7.9999999 c 0,3.4518141 -2.798249,6.2500611 -6.2500635,6.2500611 -3.4518138,0 -6.250062,-2.798247 -6.2500622,-6.2500611 0,-3.4518134 2.7982482,-6.2500609 6.2500622,-6.2500609"
      id="path4138"
-     cx="8"
-     cy="8"
-     rx="7.0160255"
-     ry="7.016026" />
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cssc" />
+  <path
+     style="fill:#49bc49;fill-opacity:1;stroke:none;stroke-width:0.11827402;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 7.977,0.4168247 11.667274,1.8148987 7.977,3.278 v 0 z"
+     id="path817"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc" />
 </svg>

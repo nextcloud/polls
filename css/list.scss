@@ -1,190 +1,266 @@
-#controls h2 {
+﻿$bg_no: #ffede9;
+$bg_yes: #ebf5d6;
+$fg_no: #f45573;
+$fg_yes: #49bc49;
+
+$row-padding: 15px;
+$table-padding: 4px;
+
+$date-width: 120px;
+$participants-width: 80px;
+$group-2-2-width: max($date-width, $participants-width);
+
+$owner-width: 140px;
+$access-width: 140px;
+$group-2-1-width: max($access-width, $date-width);
+$group-2-width: $owner-width + $group-2-1-width + $group-2-2-width;
+
+$action-width: 44px;
+$thumbnail-width: 44px;
+$thumbnail-icon-width: 32px;
+$name-width: 150px;
+$description-width: 150px;
+$group-1-1-width: max($name-width, $description-width);
+$group-1-width: $thumbnail-width + $group-1-1-width + $action-width;
+
+$group-master-width: max($group-1-width, $group-2-width);
+
+$mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $date-width + $participants-width + $row-padding * 2);
+$mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
+$mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
+
+
+.table, .row, .column {
+	box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
+}
+
+/* #controls h2 {
 	float: left;
 	padding: 15px 15px 0 15px;
 }
-
-.app-polls #app-content {
-	transition: background-color 0.3s ease;
-	overflow-x: hidden;
-}
-
-.thumbnail {
-    background-size: 32px;
-    &.progress {
-        background-image: url('../../../apps/polls/css/../img/progress-vote.svg'); 
-    }    
-}
+ */
 
 .icon-polls {
 	background-color: black;
-	mask: url('../../../apps/polls/css/../img/app-logo-polls.svg') no-repeat 50% 50%;
+	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
 }
 
-.nametext {
-	line-height: 2em;
-}
-
-.polltable {
+.table {
 	position: relative;
+	&.has-controls {
+		top: 44px;
+	}
+}
+
+.row {
+	display: flex;		   display: -webkit-flex;
 	width: 100%;
-	min-width: 688px;
-    
-    &.has-controls {
-        top: 44px;
-    }
+	padding-left:  $row-padding;
+	padding-right: $row-padding;
 
-    tbody tr {
-        transition: background-color 0.3s ease;
-        background-color: #fff;
-        height: 40px;
-        &:hover, &:focus, &:active, &.highlighted, &.highlighted .name:focus, 
-        &.selected, 
-        &.searchresult, 
-        &.mouseOver td, 
-        .name:focus {
-            transition: background-color 0.3s ease;
-            background-color: #f8f8f8;
-        }
-    }
-    
-    #polllist tr td.pollitem.name {
-        padding-left: 15px;
-    }
+	line-height: 2em;
+	transition: background-color 0.3s ease;
+	background-color: #fff;
+	min-height: 4em;
+	border-bottom: 1px solid #eee;
 
-    #headerName-container {
-        padding-left: 70px;
-    }
+	&.table-header {
+		.name, .description {
+			padding-left: ($thumbnail-width + $table-padding *2);
+		}
+		.owner {
+			padding-left: 6px;
+		}
+	}
 
-    th, th a {
-        color: #999;
-    }
+	&.table-body {
+		&:hover, &:focus, &:active, &.mouseOver {
+			transition: background-color 0.3s ease;
+			background-color: #f8f8f8;
+		}
+		.column.owner {
+			display: flex;
+			.avatardiv {
+				margin-right: 4px;
+			}
+		}
+		.icon-more {
+			right: 14px;
+			opacity: 0.3;
+			cursor: pointer;
+			height: 44px;
+			width: 44px;
+		}
 
-    th, td {
-        border-bottom: 1px solid #eee;
-        text-align: left;
-        font-weight: normal;
-        height: 50px;
-        line-height: 50px;
-        padding: 0 4px;
-    }
+		 .symbol {
+			padding: 2px;
+		}
 
-    th .sort-indicator {
-        width: 10px;
-        height: 8px;
-        margin-left: 5px;
-        display: inline-block;
-        vertical-align: text-bottom;
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-        filter: alpha(opacity=30);
-        opacity: 0.3;
-    }
+	}
+
+	&.table-header {
+		color: #999;
+	}
+}
+
+.wrapper {
+	display: flex; 			display: -webkit-flex;
+	align-items: center;
+	position: relative;
+	div {
+		// vertical-align: middle;
+	}
 }
 
 
-.pollitem.name{
-    
-    .nametext {
-        position: relative;
-        left: 55px;
-        padding: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 70%;
-        max-width: 800px;
-        height: 100%;
-    }
-    
-    .thumbnail {
-        display: inline-block;
-        width: 32px;
-        height: 32px;
-        margin-left: 8px;
-        margin-top: 9px;
-        cursor: pointer;
-        float: left;
-        position: absolute;
-        z-index: 4;
-    }
-    .description {
-        line-height: initial;
-        margin-bottom: 5px;
-        color: #888;
-    }
+.column {
+	padding: 0 $table-padding;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	align-items: center;
+	min-height: 16px;
+}
+
+.name {
+	width: $name-width;
+}
+
+.description {
+	width: $description-width;
+	color: #888;
+	}
+
+.owner {
+	width: $owner-width;
+}
+
+.access {
+	width: $access-width;
+}
+
+.created {
+	width: $date-width;
+}
+
+.expiry {
+	width: $date-width;
+	&.expired {
+		color: red;
+	}
+}
+
+.participants{
+	width: $participants-width;
+	div {
+		&.partic_voted {
+			&.icon-partic_yes {
+				background-image: url('../img/yes-vote.svg');
+			}
+			&.icon-partic_no {
+				background-image: url('../img/no-vote.svg');
+			}
+		}
+
+		&.partic_commented {
+			&.icon-commented_yes {
+				// background-color: $bg_yes;
+				background-image: url('../img/yes-comment.svg');
+			}
+			&.icon-commented_no {
+				// background-color: $bg_no;
+				background-image: url('../img/no-comment.svg');
+			}
+		}
+	}
+
 }
 
 
 .actions {
-	padding: 5px;
-	height: 32px;
-	display: inline-block;
-	float: left;
-
-    &.creatable {
-        position: relative;
-        z-index: -30;
-    }
-    input, button, .button {
-        margin: 0;
-        float: left;
-    }
-}
-
-
-
-.app-files .actions .button.new {
+	width: $action-width;
 	position: relative;
+	overflow: initial;
 }
 
 
-@media (max-width: 992px) {
-	.columnheader, .pollitem {
-        &.principal, &.created {
-            display: none;
-        }
-	}	
+
+.thumbnail {
+	background-size: $thumbnail-icon-width;
+	width: $thumbnail-width;
+	height: $thumbnail-width;
+	padding-right: $table-padding;
+	background-repeat: no-repeat;
+	background-position: center;
+	&.progress, &.endless {
+		&.partic_yes {
+		background-image: url('../img/open-voted-vote.svg');
+		}
+		&.partic_no {
+		background-image: url('../img/open-unvoted-vote.svg');
+		}
+	}
+	&.expired {
+		&.partic_yes {
+		background-image: url('../img/expired-voted-vote.svg');
+		}
+		&.partic_no {
+		background-image: url('../img/expired-unvoted-vote.svg');
+		}
+	}
+}
+
+
+.options, .participants {
+	display: flex;
+	flex-direction: row;	 -webkit-flex-direction: row;
+}
+
+.group-1, .group-1-1, .group-master {
+	flex-grow: 1;	 -webkit-flex-grow: 1;
+}
+
+.group-1-1 {
+	flex-direction: column;		 -webkit-flex-direction: column;
+	width: $group-1-1-width;
+	> div {
+		 width: 100%;
+	}
+}
+
+
+
+@media all and (max-width: ($mediabreak-1) ) {
+	.group-1 {
+		width: $group-1-width;
+	}
+	.group-2-1, .group-2-2 {
+		flex-direction: column; -webkit-flex-direction: column;
+	}
+
+	.access, .created {
+		width: $group-2-1-width;;
+	}
+	.expiry, .participants {
+		width: $group-2-2-width;;
+	}
+}
+
+@media all and (max-width: ($mediabreak-2) ) {
+
+	.row {
+		padding: 0;
+	}
+
+	.group-2-1 {
+		display: none;
+	}
+}
+
+@media all and (max-width: ($mediabreak-3) ) {
+
+	.group-2 {
+		display: none;
+	}
+}
 	
-    #polllist tr td.pollitem.name {
-		padding-left: 4px;
-	}
-}
-
-@media (max-width: 910px) {
-	.columnheader, .pollitem {
-        &.access  {
-            display: none;
-        }
-    }
-
-        #body-user .polltable {
-		min-width: 0px; 
-	}
-}
-
-@media (max-width: 768px) {
-	.columnheader, .pollitem {
-        &.participations, &.expiry {
-            display: none;
-        }
-	}
-
-	#polllist tr td.pollitem.name {
-		padding-left: 0px;
-	}
-}
-
-@media (max-width: 600px) {
-	.columnheader, .pollitem {
-        &.principal, &.access, &.created {
-            display: none;
-        }
-    }
-}
-
-@media (max-width: 480px) {
-	.columnheader, .pollitem {
-        &.principal, &.access, &.created {
-            display: none;
-        }
-    }
-}
-

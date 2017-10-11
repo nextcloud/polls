@@ -47,6 +47,17 @@ class ParticipationTextMapper extends Mapper {
         return $this->findEntities($sql, [$pollId], $limit, $offset);
     }
 
+	/**
+	 * @param string $userId
+	 * @param int $limit
+	 * @param int $offset
+	 * @return ParticipationText[]
+	 */
+	public function findDistinctByUser($userId, $limit = null, $offset = null) {
+		$sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
+		return $this->findEntities($sql, [$userId], $limit, $offset);
+	}
+
     /**
      * @param string $pollId
      */
