@@ -1,5 +1,7 @@
 # Polls
 
+[![Build Status](https://travis-ci.org/nextcloud/polls.svg?branch=master)](https://travis-ci.org/nextcloud/polls)
+
 This is a poll app, similar to doodle or dudle, for Nextcloud / ownCloud written in PHP and JS / jQuery.
 It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
 

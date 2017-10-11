@@ -1,4 +1,25 @@
 <?php
+    /**
+     * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+     *
+     * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+     *
+     * @license GNU AGPL version 3 or any later version
+     *
+     *  This program is free software: you can redistribute it and/or modify
+     *  it under the terms of the GNU Affero General Public License as
+     *  published by the Free Software Foundation, either version 3 of the
+     *  License, or (at your option) any later version.
+     *
+     *  This program is distributed in the hope that it will be useful,
+     *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+     *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     *  GNU Affero General Public License for more details.
+     *
+     *  You should have received a copy of the GNU Affero General Public License
+     *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     *
+     */
 
     use OCP\User;
 
@@ -10,7 +31,6 @@
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
 ?>
-
     <div id="app-content">
         <div id="app-content-wrapper">
                 <div id="controls">
@@ -28,7 +48,7 @@
                         <input class="stop icon-close" style="display:none" value="" type="button">
                     </div>
                 </div>
-    <?php if(count($_['polls']) === 0) : ?>
+    <?php if (count($_['polls']) === 0) : ?>
         <div id="emptycontent" class="">
             <div class="icon-polls"></div>
             <h2><?php p($l->t('No existing polls.')); ?></h2>
@@ -36,7 +56,7 @@
     <?php else : ?>
             <div class="table has-controls">
                 <div class ="row table-header">
-                
+
                     <div class="wrapper group-master">
                         <div class="wrapper group-1">
                             <div class="wrapper group-1-1">
@@ -60,7 +80,7 @@
                         </div>
                      </div>
                 </div>
-                
+
                 <?php foreach ($_['polls'] as $poll) : ?>
                     <?php
                         if (!userHasAccess($poll, $userId)) continue;
@@ -77,13 +97,13 @@
                         $participated_class = 'partic_no';
                         $participated_title = 'You did not vote';
                         $participated_count = count($participated);
-                        
+
                         $comments = $_['comments'];
                         $commented_class = 'commented_no';
                         $commented_title = 'You did not comment';
                         $commented_count = count($comments);
 
-                        if($owner === $userId) {
+                        if ($owner === $userId) {
                             $owner = $l->t('Yourself');
                         }
 
@@ -100,8 +120,8 @@
                             $expiry_date = $l->t('Never');
                         }
 
-                        for($i = 0; $i < count($participated); $i++){
-                            if($poll->getId() == intval($participated[$i]->getPollId())){
+                        for ($i = 0; $i < count($participated); $i++) {
+                            if ($poll->getId() == intval($participated[$i]->getPollId())) {
                                 $participated_class = 'partic_yes';
                                 $participated_title = 'You voted';
                                 array_splice($participated, $i, 1);
@@ -109,8 +129,8 @@
                             }
                         }
 
-                        for($i = 0; $i < count($comments); $i++){
-                            if($poll->getId() === intval($comments[$i]->getPollId())){
+                        for ($i = 0; $i < count($comments); $i++) {
+                            if ($poll->getId() === intval($comments[$i]->getPollId())) {
                                 $commented_class = 'partic_yes';
                                 $commented_title = 'You commented';
                                 array_splice($comments, $i, 1);
@@ -127,7 +147,7 @@
                                 <a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
                                     <div class="column name">                          <?php p($poll->getTitle()); ?></div>
                                     <div class="column description">                   <?php p($poll->getDescription()); ?></div>
-                                </a> 
+                                </a>
                                 <div class="column actions">
                                     <div class="icon-more popupmenu" value="<?php p($poll->getId()); ?>" id="expand_<?php p($poll->getId()); ?>"></div>
                                     <div class="popovermenu bubble menu hidden" id="expanddiv_<?php p($poll->getId()); ?>">
@@ -153,13 +173,13 @@
                                             </li>
                             <?php endif; ?>
                                         </ul>
-                                    
+
                                     </div>
 
                                 </div>
                             </div>
                             <div class="wrapper group-2">
-                                <div class="column owner">  
+                                <div class="column owner">
                                     <div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
                                     <div class="name-cell"><?php p($owner); ?></div>
                                 </div>
@@ -188,28 +208,40 @@
 <?php
 // ---- helper functions ----
 // from spreed.me
-    function getGroups($userId) {
-            // $this->requireLogin();
-            if (class_exists('\OC_Group', true)) {
-                    // Nextcloud <= 11, ownCloud
-                    return \OC_Group::getUserGroups($userId);
-            }
-            // Nextcloud >= 12
-            $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
-            return array_map(function ($group) {
-                    return $group->getGID();
-            }, $groups);
+function getGroups($userId) {
+    // $this->requireLogin();
+    if (class_exists('\OC_Group', true)) {
+        // Nextcloud <= 11, ownCloud
+        return \OC_Group::getUserGroups($userId);
     }
+    // Nextcloud >= 12
+    $groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+    return array_map(function ($group) {
+        return $group->getGID();
+    }, $groups);
+}
 
 function userHasAccess($poll, $userId) {
-    if($poll === null) return false;
+    if ($poll === null) {
+        return false;
+    }
     $access = $poll->getAccess();
     $owner = $poll->getOwner();
-    if (!User::isLoggedIn()) return false;
-    if ($access === 'public') return true;
-    if ($access === 'hidden') return true;
-    if ($access === 'registered') return true;
-    if ($owner === $userId) return true;
+    if (!User::isLoggedIn()) {
+        return false;
+    }
+    if ($access === 'public') {
+        return true;
+    }
+    if ($access === 'hidden') {
+        return true;
+    }
+    if ($access === 'registered') {
+        return true;
+    }
+    if ($owner === $userId) {
+        return true;
+    }
     $user_groups = getGroups($userId);
 
     $arr = explode(';', $access);
