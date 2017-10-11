@@ -110,7 +110,8 @@ class PageController extends Controller {
         $polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
         $comments = $this->commentMapper->findDistinctByUser($this->userId);
         $partic = $this->participationMapper->findDistinctByUser($this->userId);
-        $response = new TemplateResponse('polls', 'main.tmpl', ['polls' => $polls, 'comments' => $comments, 'participations' => $partic, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+        $partic_text = $this->participationTextMapper->findDistinctByUser($this->userId);
+        $response = new TemplateResponse('polls', 'main.tmpl', ['polls' => $polls, 'comments' => $comments, 'participations' => $partic, 'participations_text' => $partic_text, 'userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
         if (class_exists('OCP\AppFramework\Http\ContentSecurityPolicy')) {
             $csp = new \OCP\AppFramework\Http\ContentSecurityPolicy();
             $response->setContentSecurityPolicy($csp);

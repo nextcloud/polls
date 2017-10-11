@@ -1,0 +1,201 @@
+.vote_table {
+ white-space:normal;
+ width:100%
+}
+.vote_table thead {
+ white-space:normal
+}
+.vote_table thead .time-slot,.vote_table thead .vote-option {
+ min-width:50px;
+ text-align:center
+}
+.vote_table thead .time-slot .month,.vote_table thead .vote-option .month,.vote_table thead .time-slot .dayow,.vote_table thead .vote-option .dayow {
+ font-size:1.2em;
+ color:#666
+}
+.vote_table thead .time-slot .day,.vote_table thead .vote-option .day {
+ font-size:1.8em;
+ margin:5px 0 5px 0
+}
+.vote_table td.avatar-cell {
+ width:40px
+}
+.vote_table td.name {
+ max-width:170px;
+ min-width:80px
+}
+.vote_table .total th,.vote_table .best th {
+ text-align:right
+}
+.vote_table .total td,.vote_table .best td {
+ text-align:center
+}
+.vote_table .cl_click div,.vote_table td.cl_click {
+ cursor:pointer
+}
+.vote_table .poll-cell div,.vote_table .toggle div {
+ background-repeat:no-repeat;
+ background-position:center;
+ transition:background-color 0.2s;
+ background-size:32px;
+ height:32px;
+ width:32px;
+ margin-left:auto;
+ margin-right:auto
+}
+.vote_table .poll-cell.yes div,.vote_table .toggle.yes div {
+ background-image:url('../../../apps/polls/css/../img/yes-vote.svg')
+}
+.vote_table .poll-cell.maybe div,.vote_table .toggle.maybe div {
+ background-image:url('../../../apps/polls/css/../img/maybe-vote.svg')
+}
+.vote_table .poll-cell.no div,.vote_table .toggle.no div {
+ background-image:url('../../../apps/polls/css/../img/no-vote.svg')
+}
+.vote_table .toggle div {
+ width:24px;
+ height:24px;
+ background-size:24px
+}
+.vote_table #toggle {
+ float:left;
+ cursor:pointer
+}
+.vote_table .poll-cell,.vote_table .toggle {
+ border-right:2px solid white
+}
+.vote_table td.toggle-all.toggle {
+ cursor:pointer;
+ min-width:50px
+}
+.vote_table td.toggle-all.toggle.yes div {
+ background-image:url('../../../apps/polls/css/../img/yes-toggle.svg')
+}
+.vote_table td.toggle-all.toggle.maybe div {
+ background-image:url('../../../apps/polls/css/../img/maybe-toggle.svg')
+}
+.vote_table td.toggle-all.toggle.no div {
+ background-image:url('../../../apps/polls/css/../img/no-toggle.svg')
+}
+.vote_table td.toggle-all.toggle img {
+ float:right;
+ padding-top:4px;
+ cursor:pointer;
+ display:none
+}
+.vote_table .current-user td {
+ border-top:2px solid #0082c9;
+ border-bottom:2px solid #0082c9;
+ background-color:#f7f7f7
+}
+.vote_table .current-user td:first-child {
+ border-left:2px solid #0082c9;
+ border-top-left-radius:4px;
+ border-bottom-left-radius:4px
+}
+.vote_table .current-user td:last-child {
+ border-right:2px solid #0082c9;
+ border-top-right-radius:4px;
+ border-bottom-right-radius:4px
+}
+.vote_table .current-user .name {
+ font-weight:bold
+}
+.vote_table .poll-cell div,.vote_table .toggle div,.vote_table .result-cell div {
+ background-color:transparent
+}
+.vote_table .poll-cell.unvoted,.vote_table .toggle.unvoted,.vote_table .result-cell.unvoted {
+ background-color:#fff4c8;
+ color:#fff3cd
+}
+.vote_table .poll-cell.unvoted div,.vote_table .toggle.unvoted div,.vote_table .result-cell.unvoted div {
+ color:#fff3cd
+}
+.vote_table .poll-cell.yes,.vote_table .toggle.yes,.vote_table .result-cell.yes {
+ background-color:#ebf5d6;
+ color:#49bc49
+}
+.vote_table .poll-cell.yes div,.vote_table .toggle.yes div,.vote_table .result-cell.yes div {
+ color:#49bc49
+}
+.vote_table .poll-cell.no,.vote_table .toggle.no,.vote_table .result-cell.no {
+ background-color:#ffede9;
+ color:#f45573
+}
+.vote_table .poll-cell.no div,.vote_table .toggle.no div,.vote_table .result-cell.no div {
+ color:#f45573
+}
+.vote_table .poll-cell.maybe,.vote_table .toggle.maybe,.vote_table .result-cell.maybe {
+ background-color:#fcf7e1;
+ color:#fff3cd
+}
+.vote_table .poll-cell.maybe div,.vote_table .toggle.maybe div,.vote_table .result-cell.maybe div {
+ color:#fff3cd
+}
+.vote_table td.total {
+ padding:2px 0 1px
+}
+th,tr,td {
+ padding:4px;
+}
+.votes {
+}
+.votes th,.votes tr,.votes td {
+ border-top:1px solid #ddd
+}
+.external th {
+ padding-left:40px
+}
+.external th input {
+ min-width:100px
+}
+.finish_vote {
+ display:contents
+}
+.share {
+ margin:10px 0
+}
+.share .input-group-addon {
+ background-image:url('../../../apps/polls/css/../img/share.svg');
+ background-repeat:no-repeat;
+ background-position:10px center;
+ padding-left:35px
+}
+#poll-desc,#comments-container,#poll-dates {
+ margin-bottom:15px
+}
+.comment {
+ border:1px solid #ddd;
+ border-radius:3px;
+ margin-bottom:10px
+}
+.comment.new-comment {
+ border:none
+}
+.comment .comment-header {
+ background-color:#eee;
+ border-bottom:1px solid #ddd;
+ border-radius:3px 3px 0 0;
+ padding:2px 5px
+}
+.comment .comment-date {
+ float:right;
+ color:#555
+}
+.comment .comment-content {
+ padding:5px
+}
+.new-comment .icon-loading-small {
+ float:left;
+ margin-top:10px;
+ display:none
+}
+.new-comment .comment-content textarea {
+ display:block;
+ min-width:100%;
+ max-width:100%;
+ min-height:66px
+}
+#controls h2 {
+ margin-top:12px
+}

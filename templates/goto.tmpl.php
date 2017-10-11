@@ -6,7 +6,6 @@
     \OCP\Util::addStyle('polls', 'vote');
     \OCP\Util::addScript('polls', 'vote');
     
-    $layout = "classic";
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
@@ -55,7 +54,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 
 <div id="app">
     <div id="app-content">
-        <div id="app-content-wrapper" class="<?php p($layout); ?>">
+        <div id="app-content-wrapper">
 			<div id="controls">
                 <div id="breadcrump">
                     <?php if(User::isLoggedIn()) : ?>
@@ -383,20 +382,3 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
     </div>
 
 </div>
-
-<?php
-//adapted from jsxc.chat
-function getHsl($str) {
-    $hash = 0;
-    for($i=0; $i<strlen($str); $i++) {
-        $utf16_char = mb_convert_encoding($str[$i], "utf-16", "utf-8");
-        $char = hexdec(bin2hex($utf16_char));
-        $hash = (($hash << 5) - $hash) + $char;
-        $hash |= 0; // Convert to 32bit integer
-    }
-    $hue = abs($hash) % 360;
-    $saturation = 90;
-    $lightness = 65;
-    return 'hsl(' . $hue . ', ' . $saturation . '%, ' . $lightness . '%)';
-}
-?>

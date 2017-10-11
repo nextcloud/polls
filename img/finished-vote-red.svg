@@ -12,7 +12,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="progress-vote.svg">
+   sodipodi:docname="finished-e-vote.svg">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -38,9 +38,9 @@
      inkscape:window-height="1017"
      id="namedview8"
      showgrid="false"
-     inkscape:zoom="16"
-     inkscape:cx="-12.409799"
-     inkscape:cy="4.3246568"
+     inkscape:zoom="32"
+     inkscape:cx="3.4110187"
+     inkscape:cy="7.1576914"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -48,12 +48,12 @@
   <defs
      id="defs4" />
   <path
-     d="m 8.5660621,8.5530951 -3.920989,-0.00372 7.16e-4,-1.0779194 2.800538,0.00153 -0.01005,-4.8523663 1.135502,0.00147 z"
-     style="fill:#ffc107;fill-opacity:1"
+     d="M 6.9766048,11.334813 3.39273,7.7509388 4.4157633,6.7271815 6.9766048,9.2858506 11.569757,4.6651865 12.60727,5.7034241 Z"
+     style="fill:#f45573;fill-opacity:1"
      id="path6"
      inkscape:connector-curvature="0" />
   <ellipse
-     style="opacity:1;fill:none;fill-opacity:1;stroke:#ffc107;stroke-width:0.96794814;stroke-opacity:1"
+     style="opacity:1;fill:none;fill-opacity:1;stroke:#f45573;stroke-width:0.96794814;stroke-opacity:1"
      id="path4138"
      cx="8"
      cy="8"
