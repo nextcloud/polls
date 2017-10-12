@@ -86,10 +86,10 @@
 	"Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Bonjour %s,<br/><br/><strong>%s</strong> a partagé le sondage '%s' avec vous. Pour aller directement au sondage, vous pouvez utiliser ce lien <a href=\"%s\">%s</a>",
 	"Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Bonjour %s,<br/><br/><strong>%s</strong> a commenté le sondage'%s'.<br/><br/><i>%s</i><br/><br/>Pour aller directement au sondage, vous pouvez utiliser ce lien: <a href=\"%s\">%s</a>",
 	"Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Bonjour %s,<br/><br/><strong>%s</strong> a participé au sondage'%s'.<br/><br/>Pour aller directement au sondage, vous pouvez utiliser ce lien:<a href=\"%s\">%s</a>",
-	"ownCloud Polls -- New Comment" : "NextCloud Sondage -- Nouveau commentaire",
-	"ownCloud Polls -- New Participant" : "NextCloud Sondage -- Nouveau participant",
-	"ownCloud Polls -- New Poll" : "NextCloud Sondage -- Nouveau sondage",
-	"ownCloud Polls" : "NextCloud Sondage ",
+	"Polls App - New Comment" : "Sondage App - Nouveau commentaire",
+	"Polls App - New Participant" : "Sondage App - Nouveau participant",
+	"Polls App - New Poll" : "Sondage App - Nouveau sondage",
+	"Polls App" : "Sondage App",
 	"Receive notification email on activity" : "Recevoir un e-mail de notification sur l'activité"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

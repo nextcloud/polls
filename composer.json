@@ -1,0 +1,14 @@
+{
+	"name": "polls",
+	"description": "This is a poll app, similar to doodle or dudle with the possibility for restrict access (only members, certain groups/users, hidden and public).",
+	"type": "project",
+	"license": "AGPL",
+	"authors": [
+		{
+			"name": "Vinzenz Rosenkranz"
+		}
+	],
+	"require-dev": {
+		"phpunit/phpunit": "^5.4"
+	}
+}

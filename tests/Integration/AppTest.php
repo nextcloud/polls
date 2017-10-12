@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,5 +21,23 @@
  *
  */
 
-$app = new \OCA\Polls\AppInfo\Application();
-$app->registerNavigationEntry();
+namespace OCA\Polls\Tests\Integration;
+
+use OCP\AppFramework\App;
+use PHPUnit\Framework\TestCase;
+
+class AppTest extends TestCase {
+
+	private $container;
+
+	public function setUp() {
+		parent::setUp();
+		$app = new App('polls');
+		$this->container = $app->getContainer();
+	}
+
+	public function testAppInstalled() {
+		$appManager = $this->container->query('OCP\App\IAppManager');
+		$this->assertTrue($appManager->isInstalled('polls'));
+	}
+}
