@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
  - A lot of code rework
 
 ### Fixed
- - Broken date fields
+ - Fix date display in IE and Safari (NaN)
  - Translations
 
 ## [0.7.3] - 2017-07-16
