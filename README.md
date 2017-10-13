@@ -18,9 +18,9 @@ It is a rework of the already existing [polls app](https://github.com/raduvatav/
 
 ### Screenshots
 
-![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/new-poll.png)
 ![Overview](https://github.com/nextcloud/polls/blob/master/screenshots/overview.png)
 ![Vote](https://github.com/nextcloud/polls/blob/master/screenshots/vote.png)
+![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/new-poll.png)
 
 ## Installation / Update
 
