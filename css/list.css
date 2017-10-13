@@ -26,23 +26,27 @@
  border-bottom:1px solid #eee
 }
 .row.table-header .name,.row.table-header .description {
- padding-left:40px
+ padding-left:52px
+}
+.row.table-header .owner {
+ padding-left:6px
 }
 .row.table-body:hover,.row.table-body:focus,.row.table-body:active,.row.table-body.mouseOver {
  transition:background-color 0.3s ease;
  background-color:#f8f8f8
 }
-.row.table-body .column.principal {
+.row.table-body .column.owner {
  display:flex
 }
-.row.table-body .column.principal .avatardiv {
+.row.table-body .column.owner .avatardiv {
  margin-right:4px
 }
 .row.table-body .icon-more {
  right:14px;
  opacity:0.3;
- padding:8px 0;
- cursor:pointer
+ cursor:pointer;
+ height:44px;
+ width:44px
 }
 .row.table-body .symbol {
  padding:2px
@@ -71,7 +75,7 @@
  width:150px;
  color:#888
 }
-.principal {
+.owner {
  width:140px
 }
 .access {
@@ -108,10 +112,11 @@
 }
 .thumbnail {
  background-size:32px;
- width:32px;
- height:32px;
+ width:44px;
+ height:44px;
  padding-right:4px;
- background-repeat:no-repeat
+ background-repeat:no-repeat;
+ background-position:center
 }
 .thumbnail.progress.partic_yes,.thumbnail.endless.partic_yes {
  background-image:url('../../../apps/polls/css/../img/open-voted-vote.svg')
@@ -142,9 +147,9 @@
 .group-1-1 > div {
  width:100%
 }
-@media all and (max-width:856px) {
+@media all and (max-width:868px) {
  .group-1 {
-  width:226px
+  width:238px
  }
  .group-2-1,.group-2-2 {
   flex-direction:column;
@@ -157,7 +162,7 @@
   width:120px
  }
 }
-@media all and (max-width:656px) {
+@media all and (max-width:668px) {
  .row {
   padding:0
  }
@@ -165,7 +170,7 @@
   display:none
  }
 }
-@media all and (max-width:536px) {
+@media all and (max-width:548px) {
  .group-2 {
   display:none
  }
