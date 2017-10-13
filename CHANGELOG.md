@@ -58,6 +58,7 @@ All notable changes to this project will be documented in this file.
 - Show login screen before error
 
 ### Fixed
+
 - Not set expire would lead to 2.1.1970 as expire date
 - Invalid characters in url hash
 - Empty description in edit
@@ -77,9 +78,11 @@ All notable changes to this project will be documented in this file.
 - Edit polls
 
 ### Changed
+
 - New minimal version set to 8.1
 
 ### Fixed
+
 - Replaced deprecated methods
 - Switched from raw php to controller
 - Fixed several bugs
