@@ -1,26 +1,33 @@
-sudo: required
+sudo: false
 dist: trusty
 language: php
+
 php:
   - 5.6
   - 7.0
   - 7.1
+
 env:
   global:
     - CORE_BRANCH=stable12
+    - APP_NAME=polls
   matrix:
     - DB=mysql
     - DB=sqlite
     - DB=pgsql
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 before_install:
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-  - bash ./before_install.sh polls $CORE_BRANCH $DB
+  - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
   - cd ../server
-  - ./occ app:enable polls
+  - ./occ app:enable $APP_NAME
 
 before_script:
-  - cd apps/polls
+  - cd apps/$APP_NAME
 
 script:
   - make test
