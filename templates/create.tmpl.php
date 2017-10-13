@@ -1,39 +1,66 @@
 <?php
-    use \OCP\User;
+    /**
+     * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+     *
+     * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+     *
+     * @license GNU AGPL version 3 or any later version
+     *
+     *  This program is free software: you can redistribute it and/or modify
+     *  it under the terms of the GNU Affero General Public License as
+     *  published by the Free Software Foundation, either version 3 of the
+     *  License, or (at your option) any later version.
+     *
+     *  This program is distributed in the hope that it will be useful,
+     *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+     *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     *  GNU Affero General Public License for more details.
+     *
+     *  You should have received a copy of the GNU Affero General Public License
+     *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     *
+     */
 
     \OCP\Util::addStyle('polls', 'main');
     \OCP\Util::addStyle('polls', 'createpoll');
     \OCP\Util::addStyle('polls', 'jquery.datetimepicker');
     \OCP\Util::addScript('polls', 'create_edit');
     \OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
+
     $userId = $_['userId'];
     $userMgr = $_['userMgr'];
     $urlGenerator = $_['urlGenerator'];
     $isUpdate = isset($_['poll']) && $_['poll'] !== null;
     $isAnonymous = false;
     $hideNames = false;
-    if($isUpdate) {
+
+    if ($isUpdate) {
         $poll = $_['poll'];
         $isAnonymous = $poll->getIsAnonymous();
         $hideNames = $isAnonymous && $poll->getFullAnonymous();
         $dates = $_['dates'];
         $chosen = '[';
-        foreach($dates as $d) {
-            if($poll->getType() == '0') $chosen .= strtotime($d->getDt());
-            else $chosen .= '"' . $d->getText() . '"';
+        foreach ($dates as $d) {
+            if ($poll->getType() == '0') {
+                $chosen .= strtotime($d->getDt());
+            } else {
+                $chosen .= '"' . $d->getText() . '"';
+            }
             $chosen .= ',';
         }
         $chosen = trim($chosen, ',');
         $chosen .= ']';
         $title = $poll->getTitle();
         $desc = $poll->getDescription();
-        if($poll->getExpire() !== null) {
+        if ($poll->getExpire() !== null) {
             $expireTs = strtotime($poll->getExpire()) - 60*60*24; //remove one day, which has been added to expire at the end of a day
             $expireStr = date('d.m.Y', $expireTs);
         }
         $access = $poll->getAccess();
         $accessTypes = $access;
-        if($access !== 'registered' && $access !== 'hidden' && $access !== 'public') $access = 'select';
+        if ($access !== 'registered' && $access !== 'hidden' && $access !== 'public') {
+            $access = 'select';
+        }
     }
 ?>
 
@@ -49,7 +76,7 @@
                     </div>
                     <div class="crumb svg last">
                         <span>
-                        <?php if($isUpdate): ?>
+                        <?php if ($isUpdate): ?>
                             <?php p($l->t('Edit poll') . ' ' . $poll->getTitle()); ?>
                         <?php else: ?>
                           <?php p($l->t('Create new poll')); ?>
@@ -59,14 +86,14 @@
                 </div>
 			</div>
 		
-<?php if($isUpdate): ?>
+<?php if ($isUpdate): ?>
 <form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll')); ?>" method="POST">
     <input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 <?php else: ?>
 <form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_poll')); ?>" method="POST">
 <?php endif; ?>
-    <input type="hidden" name="chosenDates" id="chosenDates" value="<?php if(isset($chosen)) p($chosen); ?>" />
-    <input type="hidden" name="expireTs" id="expireTs" value="<?php if(isset($expireTs)) p($expireTs); ?>" />
+    <input type="hidden" name="chosenDates" id="chosenDates" value="<?php if (isset($chosen)) p($chosen); ?>" />
+    <input type="hidden" name="expireTs" id="expireTs" value="<?php if (isset($expireTs)) p($expireTs); ?>" />
     <input type="hidden" name="userId" id="userId" value="<?php p($userId); ?>" />
 
     <header class="row">
@@ -75,22 +102,22 @@
     <div class="new_poll row">
         <div class="col-50">
             <label for="pollTitle" class="input_title"><?php p($l->t('Title')); ?></label>
-            <input type="text" class="input_field" id="pollTitle" name="pollTitle" value="<?php if(isset($title)) p($title); ?>" />
+            <input type="text" class="input_field" id="pollTitle" name="pollTitle" value="<?php if (isset($title)) p($title); ?>" />
             <label for="pollDesc" class="input_title"><?php p($l->t('Description')); ?></label>
-            <textarea class="input_field" id="pollDesc" name="pollDesc"><?php if(isset($desc)) p($desc); ?></textarea>
+            <textarea class="input_field" id="pollDesc" name="pollDesc"><?php if (isset($desc)) p($desc); ?></textarea>
 
             <label class="input_title"><?php p($l->t('Access')); ?></label>
 
-            <input type="radio" name="accessType" id="private" value="registered" class="radio" <?php if(!$isUpdate || $access === 'registered') print_unescaped('checked'); ?> />
+            <input type="radio" name="accessType" id="private" value="registered" class="radio" <?php if (!$isUpdate || $access === 'registered') print_unescaped('checked'); ?> />
             <label for="private"><?php p($l->t('Registered users only')); ?></label>
 
-            <input type="radio" name="accessType" id="hidden" value="hidden" class="radio" <?php if($isUpdate && $access === 'hidden') print_unescaped('checked'); ?> />
+            <input type="radio" name="accessType" id="hidden" value="hidden" class="radio" <?php if ($isUpdate && $access === 'hidden') print_unescaped('checked'); ?> />
             <label for="hidden"><?php p($l->t('hidden')); ?></label>
 
-            <input type="radio" name="accessType" id="public" value="public" class="radio" <?php if($isUpdate && $access === 'public') print_unescaped('checked'); ?> />
+            <input type="radio" name="accessType" id="public" value="public" class="radio" <?php if ($isUpdate && $access === 'public') print_unescaped('checked'); ?> />
             <label for="public"><?php p($l->t('Public access')); ?></label>
 
-            <input type="radio" name="accessType" id="select" value="select" class="radio" <?php if($isUpdate && $access === 'select') print_unescaped('checked'); ?>>
+            <input type="radio" name="accessType" id="select" value="select" class="radio" <?php if ($isUpdate && $access === 'select') print_unescaped('checked'); ?>>
             <label for="select"><?php p($l->t('Select')); ?></label>
             <span id="id_label_select">...</span>
 
@@ -106,7 +133,7 @@
                 </div>
             </div>
 
-            <input type="hidden" name="accessValues" id="accessValues" value="<?php if($isUpdate && $access === 'select') p($accessTypes) ?>" />
+            <input type="hidden" name="accessValues" id="accessValues" value="<?php if ($isUpdate && $access === 'select') p($accessTypes) ?>" />
 
             <input id="isAnonymous" name="isAnonymous" type="checkbox" class="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
             <label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
@@ -124,14 +151,14 @@
         </div>
         <div class="col-50">
 
-            <input type="radio" name="pollType" id="event" value="event" class="radio" <?php if(!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
+            <input type="radio" name="pollType" id="event" value="event" class="radio" <?php if (!$isUpdate || $poll->getType() == '0') print_unescaped('checked'); ?> />
             <label for="event"><?php p($l->t('Event schedule')); ?></label>
 
             <!-- TODO texts to db -->
-            <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
+            <input type="radio" name="pollType" id="text" value="text" class="radio" <?php if ($isUpdate && $poll->getType() == '1') print_unescaped('checked'); ?>>
             <label for="text"><?php p($l->t('Text based')); ?></label>
 
-            <div id="date-select-container" <?php if($isUpdate && $poll->getType() == '1') print_unescaped('style="display:none;"'); ?> >
+            <div id="date-select-container" <?php if ($isUpdate && $poll->getType() == '1') print_unescaped('style="display:none;"'); ?> >
                 <label for="datetimepicker" class="input_title"><?php p($l->t('Dates')); ?></label>
                 <input id="datetimepicker" type="text" />
                 <table id="selected-dates-table" class="choices">
@@ -151,7 +178,7 @@
         </div>
     </div>
     <div class="form-actions">
-        <?php if($isUpdate): ?>
+        <?php if ($isUpdate): ?>
             <input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
         <?php else: ?>
             <input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />

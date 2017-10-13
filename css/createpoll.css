@@ -1,0 +1,74 @@
+.user-group-list {
+ display:none;
+ border:1px solid #ddd;
+ margin:15px;
+ padding:5px;
+ border-radius:3px;
+ max-height:150px;
+ overflow-y:auto
+}
+#sec_name {
+ display:none
+}
+.cl_access_item {
+ padding:5px;
+ background-color:white;
+ color:#333;
+ cursor:pointer
+}
+.cl_access_item:hover {
+ background-color:#eee
+}
+.cl_access_item.selected {
+ background-color:#409ae7;
+ color:#fff
+}
+.cl_access_item.selected:hover {
+ background-color:#ff6f6f;
+ color:#fff;
+ text-decoration:line-through
+}
+textarea {
+ min-height:66px
+}
+.choices {
+ margin-top:10px
+}
+.choices td {
+ min-width:30px
+}
+table td {
+ text-align:center
+}
+.text-row,.date-row {
+ font-weight:bold;
+ padding:2px 5px;
+ background-color:#337ab7;
+ color:#fff;
+ text-align:left
+}
+.text-row:hover,.date-row:hover {
+ background-color:#ff6f6f;
+ text-decoration:line-through
+}
+#selected-dates-table tr:first-child td {
+ font-weight:bold;
+ padding:2px 5px;
+ background-color:#337ab7;
+ color:#fff
+}
+table .icon-close {
+ cursor:pointer;
+ background-color:#ffede9;
+ padding:0 5px;
+ background-image:url('../../../apps/polls/css/../img/no-vote.svg')
+}
+table .icon-checkmark {
+ cursor:pointer;
+ background-color:#ebf5d6;
+ padding:0 5px;
+ background-image:url('../../../apps/polls/css/../img/yes-vote.svg')
+}
+#expiration {
+ max-width:200px
+}

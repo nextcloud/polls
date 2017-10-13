@@ -53,6 +53,10 @@
 	"Create poll" : "Umfrage erstellen",
 	"participated" : "abgestimmt",
 	"Yourself" : "Ihnen",
+    "You did not vote" : "Sie haben nicht abgestimmt",
+    "You voted" : "Sie haben abgestimmt",
+    "You did not comment" : "Sie haben nicht kommentiert",
+    "You commented" : "Sie haben kommentiert",
 	"Select" : "Wählen",
 	"Close" : "Schließen",
 	"Users" : "Benutzer",
@@ -83,10 +87,10 @@
 	"Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Hallo %s,<br/><br/><strong>%s</strong> hat die Umfrage '%s' mit Ihnen geteilt. Um direkt zur Umfrage zu gelangen, können Sie diesen Link verwenden: <a href=\"%s\">%s</a>",
 	"Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Hallo %s,<br/><br/><strong>%s</strong> hat die Umfrage '%s' kommentiert.<br/><br/><i>%s</i><br/><br/>Um direkt zur Umfrage zu gelangen, können Sie diesen Link verwenden: <a href=\"%s\">%s</a>",
 	"Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" : "Hallo %s,<br/><br/><strong>%s</strong> hat an der Umfrage '%s' teilgenommen.<br/><br/>Um direkt zur Umfrage zu gelangen, können Sie diesen Link verwenden: <a href=\"%s\">%s</a>",
-	"ownCloud Polls -- New Comment" : "ownCloud Umfragen -- Neuer Kommentar",
-	"ownCloud Polls -- New Participant" : "ownCloud Umfragen -- Neuer Teilnehmer",
-	"ownCloud Polls -- New Poll" : "ownCloud Umfragen -- Neue Umfrage",
-	"ownCloud Polls" : "ownCloud Umfragen",
+	"Polls App - New Comment" : "Umfragen App - Neuer Kommentar",
+	"Polls App - New Participant" : "Umfragen App - Neuer Teilnehmer",
+	"Polls App - New Poll" : "Umfragen App - Neue Umfrage",
+	"Polls App" : "Umfragen App",
 	"Receive notification email on activity" : "Erhalten Sie Emails bei Änderungen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

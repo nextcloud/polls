@@ -1,20 +1,39 @@
 $(document).ready(function () {
-    $('.cl_delete').click(deletePoll);
+/*     
+     $('.table-body div.column.expiry').each(function(i, obj) {
+            if (isDate(obj.dataset.value)) {
+                obj.dataset.value = obj.dataset.value.replace(/ /g,"T")+"Z";
+                obj.innerText= OC.Util.relativeModifiedDate(obj.dataset.value);
+            };
+    });
+ */  
+    $('.table-body .avatardiv').each(function(i, obj) {
+        $(obj).avatar(obj.title, 32);
+    });
+    
+    $('.popupmenu').each(function() {
+        OC.registerMenu($('#expand_' + $(this).attr('value')), $('#expanddiv_' + $(this).attr('value')) ); 
+    });
+    
+    // $('.cl_delete').click(deletePoll);
+    $('.delete_poll').click(deletePoll);
 
-    $('.cl_link').click(function() {
+    $('.copy_link').click(function() {
         window.prompt(t('polls','Copy to clipboard: Ctrl+C, Enter'), $(this).data('url'));
     });
+    
+    // $('.cl_link').click(function() {
+        // window.prompt(t('polls','Copy to clipboard: Ctrl+C, Enter'), $(this).data('url'));
+    // });
+    
+    
+    
 });
 
 function deletePoll(e) {
     var tr = this.parentNode.parentNode;
-    var titleTd = tr.firstChild;
-    //check if first child is whitespace text element
-    if(titleTd.nodeName == '#text') titleTd = titleTd.nextSibling;
-    var tdElem = titleTd.firstChild;
-    //again, whitespace check
-    if(tdElem.nodeName == '#text') tdElem = tdElem.nextSibling;
-    var str = t('polls', 'Do you really want to delete that poll?') + '\n\n' + tdElem.innerHTML;
+    var titleTd = $(this).attr('data-value');
+    var str = t('polls', 'Do you really want to delete that poll?') + '\n\n' + $(this).attr('data-value');
     if (confirm(str)) {
         var form = document.form_delete_poll;
         var hiddenId = document.createElement("input");
@@ -25,3 +44,13 @@ function deletePoll(e) {
         form.submit();
     }
 }
+
+/* 
+            obj.textContent = obj.data-value ;
+ */
+
+function isDate(val) {
+    var d = new Date(val);
+    return !isNaN(d.valueOf());
+}
+

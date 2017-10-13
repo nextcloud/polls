@@ -20,6 +20,7 @@ $TRANSLATIONS = array(
 	"hidden" => "hidden",
 	"public" => "public",
 	"registered" => "registered",
+    "expired" => "expired",
 	"delete" => "delete",
 	"Next" => "Next",
 	"Cancel" => "Cancel",
@@ -54,6 +55,10 @@ $TRANSLATIONS = array(
 	"Create poll" => "Create poll",
 	"participated" => "participated",
 	"Yourself" => "Yourself",
+    "You did not vote" => "You did not vote",
+    "You voted" => "You voted",
+    "You did not comment" => "You did not comment",
+    "You commented" => "You commented",
 	"Select" => "Select",
 	"Close" => "Close",
 	"Users" => "Users",
@@ -82,10 +87,10 @@ $TRANSLATIONS = array(
 	"Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" => "Hello %s,<br/><br/><strong>%s</strong> shared the poll '%s' with you. To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>",
 	"Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" => "Hello %s,<br/><br/><strong>%s</strong> commented on the poll '%s'.<br/><br/><i>%s</i><br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>",
 	"Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>" => "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this link: <a href=\"%s\">%s</a>",
-	"ownCloud Polls -- New Comment" => "ownCloud Polls -- New Comment",
-	"ownCloud Polls -- New Participant" => "ownCloud Polls -- New Participant",
-	"ownCloud Polls -- New Poll" => "ownCloud Polls -- New Poll",
-	"ownCloud Polls" => "ownCloud Polls",
+	"Polls App - New Comment" => "Polls App - New Comment",
+	"Polls App - New Participant" => "Polls App - New Participant",
+	"Polls App - New Poll" => "Polls App - New Poll",
+	"Polls App" => "Polls App",
 	"Receive notification email on activity" => "Receive notification email on activity"
 );
 $PLURAL_FORMS = "nplurals=2; plural=(n != 1);";
