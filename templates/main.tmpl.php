@@ -131,7 +131,7 @@
 
                         for ($i = 0; $i < count($comments); $i++) {
                             if ($poll->getId() === intval($comments[$i]->getPollId())) {
-                                $commented_class = 'partic_yes';
+                                $commented_class = 'commented_yes';
                                 $commented_title = 'You commented';
                                 array_splice($comments, $i, 1);
                                 break;
