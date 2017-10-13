@@ -2,9 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-
-## [0.8.0] - 2017-10-XX
+## [0.8.0] - 2017-10-13
 
 ### Changed
  - Big UI overhaul
