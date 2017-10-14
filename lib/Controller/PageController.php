@@ -427,7 +427,7 @@ class PageController extends Controller {
             ISecureRandom::CHAR_LOWER .
             ISecureRandom::CHAR_UPPER));
         $event->setIsAnonymous($isAnonymous ? 1 : 0);
-        $event->setFullAnonymous($isAnonymous && $hideNames ? '1' : '0');
+        $event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
 
         if ($accessType === 'select') {
             if (isset($accessValues)) {
