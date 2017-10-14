@@ -16,7 +16,6 @@ $(document).ready(function () {
     // count how many times in each date
     var arr_dates = [];  // will be like: [21.02] => 3
     var arr_years = [];  // [1992] => 6
-    var prev = '';
     var dateStr = '';
 
     $('.poll.avatardiv').each(function(i, obj) {
@@ -40,7 +39,6 @@ $(document).ready(function () {
         } else {
             arr_years[year] = 1;
         }
-        prev = (year + day_month);
         dateStr += '<th class="time-slot" value="' + obj.value + '">' +
         '<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) +
                             // ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) +

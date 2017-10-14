@@ -197,7 +197,7 @@ $(document).ready(function () {
         var name = $(this).html();
         var delIndex = g_chosen_texts.indexOf(name);
         if (delIndex > -1) {
-			g_chosen_texts.splice(index, 1);
+			g_chosen_texts.splice(delIndex, 1);
 		}
         var table = document.getElementById('selected-texts-table');
         table.deleteRow(rowIndex);
@@ -229,12 +229,16 @@ $(document).ready(function () {
             if (isGroup) {
 				index = g_chosen_groups.indexOf(this.id);
 			}
-            else index = g_chosen_users.indexOf(this.id);
+            else { 
+				index = g_chosen_users.indexOf(this.id);
+			}
             if (index > -1) {
                 if (isGroup) {
 					g_chosen_groups.splice(index, 1);
 				}
-                else g_chosen_users.splice(index, 1);
+                else {
+					g_chosen_users.splice(index, 1);
+				}
                 $(this).remove();
             }
         } else {
