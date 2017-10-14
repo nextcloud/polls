@@ -25,7 +25,7 @@
 ?>
 <div id="app">
     <div id="app-content">
-        <div id="app-content-wrapper view">
+        <div id="app-content-wrapper">
             <header>
                 <div class="row">
                     <div class="col-100">
