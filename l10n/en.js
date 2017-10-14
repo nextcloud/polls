@@ -1,3 +1,4 @@
+/** global: OC */
 OC.L10N.register(
     "polls",
     {

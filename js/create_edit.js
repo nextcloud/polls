@@ -1,3 +1,4 @@
+/** global: OC */
 var g_chosen_datetimes = [];
 var g_chosen_texts = [];
 var g_chosen_groups = [];
@@ -23,41 +24,51 @@ $(document).ready(function () {
 
     $('#isAnonymous').click(function() {
         isAnonymous = this.checked;
-        if(isAnonymous) anonOptions.style.display = 'inline';
-        else anonOptions.style.display = 'none';
+        if (isAnonymous) {
+			anonOptions.style.display = 'inline';
+		} else {
+			anonOptions.style.display = 'none';
+		}
     });
 
     var privateRadio = document.getElementById('private');
     var hiddenRadio = document.getElementById('hidden');
     var publicRadio = document.getElementById('public');
     var selectRadio = document.getElementById('select');
-    if(privateRadio.checked) access_type = 'registered';
-    if(hiddenRadio.checked) access_type = 'hidden';
-    if(publicRadio.checked) access_type = 'public';
-    if(selectRadio.checked) access_type = 'select';
+    if (privateRadio.checked) {
+		access_type = 'registered';
+	} else if (hiddenRadio.checked) {
+		access_type = 'hidden';
+	} else if (publicRadio.checked) {
+		access_type = 'public';
+	} else if (selectRadio.checked) {
+		access_type = 'select';
+	}
 
     isAnonymous = document.getElementById('isAnonymous').checked;
     hideNames = anonOptions.checked;
 
     var accessValues = document.getElementById('accessValues');
-    if(accessValues.value.length > 0) {
+    if (accessValues.value.length > 0) {
         var list = document.getElementById('selected-search-list-id');
         var accessValueArr = accessValues.value.split(';');
         for(var i=0; i<accessValueArr.length; i++) {
             var val = accessValueArr[i];
-            if(val == '') continue;
+            if (val == '') {
+				continue;
+			}
             var li = document.createElement('li');
             li.id = val;
             li.className = 'cl_item cl_access_item selected';
             var index = val.indexOf('group_');
-            if(index == 0) {
+            if (index == 0) {
                 g_chosen_groups.push(val);
                 li.className += ' is-group';
                 li.appendChild(document.createTextNode(val.substring(6) + " (group)"));
                 list.appendChild(li);
             } else {
                 index = val.indexOf('user_');
-                if(index == 0) {
+                if (index == 0) {
                     g_chosen_users.push(val);
                     li.className = 'cl_item cl_access_item selected';
                     var username = val.substring(5);
@@ -72,12 +83,16 @@ $(document).ready(function () {
 
     var chosenDates = document.getElementById('chosenDates').value;
     var chosen = '';
-    if(chosenDates.length > 0) chosen = JSON.parse(chosenDates);
+    if (chosenDates.length > 0) {
+		chosen = JSON.parse(chosenDates);
+	}
     var text = document.getElementById('text');
     var event = document.getElementById('event');
-    if(event.checked) {
+    if (event.checked) {
         chosen_type = event.value;
-        if(chosenDates.length > 0) g_chosen_datetimes = chosen;
+        if (chosenDates.length > 0) {
+			g_chosen_datetimes = chosen;
+		}
         for(var i=0; i<chosen.length; i++) {
             var date = new Date(chosen[i]*1000);
             var year = date.getFullYear();
@@ -98,7 +113,9 @@ $(document).ready(function () {
         }
     } else {
         chosen_type = text.value;
-        if(chosenDates.length > 0) g_chosen_texts = chosen;
+        if (chosenDates.length > 0) {
+			g_chosen_texts = chosen;
+		}
         for(var i=0; i<chosen.length; i++) {
             insertText(chosen[i], true);
         }
@@ -106,7 +123,7 @@ $(document).ready(function () {
 
     var expirepicker = jQuery('#id_expire_date').datetimepicker({
         inline: false,
-        onSelectDate: function(date, $i) {
+        onSelectDate: function(date) {
             var year = date.getFullYear();
             var month = date.getMonth();
             var day = date.getDate();
@@ -121,7 +138,7 @@ $(document).ready(function () {
         inline:true,
         step: 15,
         todayButton: true,
-        onSelectDate: function(date, $i) {
+        onSelectDate: function(date) {
             var year = date.getFullYear();
             var month = date.getMonth();
             var day = date.getDate();
@@ -131,7 +148,7 @@ $(document).ready(function () {
             var dateStr = day.substr(-2) + '.' + month.substr(-2) + '.' + year;
             addRowToList(newDate/1000, dateStr);
         },
-        onSelectTime: function(date, $i) {
+        onSelectTime: function(date) {
             var hours = date.getHours();
             var minutes = date.getMinutes();
             var ms = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000); //time of day in milliseconds
@@ -142,7 +159,7 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on('click', '.date-row', function(e) {
+    $(document).on('click', '.date-row', function() {
         var tr = $(this).parent();
         var dateId = parseInt(tr.attr('id'));
         var index = tr.index();
@@ -150,13 +167,15 @@ $(document).ready(function () {
         for(var i=1; i<cells.length; i++) {
             var cell = cells[i];
             var delIndex = g_chosen_datetimes.indexOf(dateId + parseInt(cell.id));
-            if(delIndex > -1) g_chosen_datetimes.splice(delIndex, 1);
+            if (delIndex > -1) {
+				g_chosen_datetimes.splice(delIndex, 1);
+			}
         }
         var table = document.getElementById('selected-dates-table');
         table.deleteRow(index);
     });
 
-    $(document).on('click', '.date-col', function(e) {
+    $(document).on('click', '.date-col', function() {
         var cellIndex = $(this).index();
         var timeId = parseInt($(this).attr('id'));
         var table = document.getElementById('selected-dates-table');
@@ -165,32 +184,36 @@ $(document).ready(function () {
         for(var i=1; i<rows.length; i++) {
             var row = rows[i];
             var delIndex = g_chosen_datetimes.indexOf(parseInt(row.id) + timeId);
-            if(delIndex > -1) g_chosen_datetimes.splice(delIndex, 1);
+            if (delIndex > -1) {
+				g_chosen_datetimes.splice(delIndex, 1);
+			}
             row.deleteCell(cellIndex);
         }
     });
 
-    $(document).on('click', '.text-row', function(e) {
+    $(document).on('click', '.text-row', function() {
         var tr = $(this).parent();
         var rowIndex = tr.index();
         var name = $(this).html();
         var delIndex = g_chosen_texts.indexOf(name);
-        if(delIndex > -1) g_chosen_texts.splice(index, 1);
+        if (delIndex > -1) {
+			g_chosen_texts.splice(index, 1);
+		}
         var table = document.getElementById('selected-texts-table');
         table.deleteRow(rowIndex);
     });
 
-    $(document).on('click', '.icon-close', function(e) {
+    $(document).on('click', '.icon-close', function() {
         selectItem($(this));
     });
 
-    $(document).on('click', '.icon-checkmark', function(e) {
+    $(document).on('click', '.icon-checkmark', function() {
         deselectItem($(this));
     });
 
-    $(document).on('click', '#text-submit', function(e) {
+    $(document).on('click', '#text-submit', function() {
         var text = document.getElementById('text-title');
-        if(text.value.length == 0) {
+        if (text.value.length == 0) {
             alert('Please enter a text!');
             return false;
         }
@@ -198,20 +221,24 @@ $(document).ready(function () {
         text.value = '';
     });
 
-    $(document).on('click', '.cl_item', function(e) {
+    $(document).on('click', '.cl_item', function() {
         var list = document.getElementById('selected-search-list-id');
         var isGroup = $(this).hasClass('is-group');
-        if($(this).hasClass('selected')) {
+        if ($(this).hasClass('selected')) {
             var index = -1;
-            if(isGroup) index = g_chosen_groups.indexOf(this.id);
+            if (isGroup) {
+				index = g_chosen_groups.indexOf(this.id);
+			}
             else index = g_chosen_users.indexOf(this.id);
-            if(index > -1) {
-                if(isGroup) g_chosen_groups.splice(index, 1);
+            if (index > -1) {
+                if (isGroup) {
+					g_chosen_groups.splice(index, 1);
+				}
                 else g_chosen_users.splice(index, 1);
                 $(this).remove();
             }
         } else {
-            if(!isGroup) {
+            if (!isGroup) {
                 var text = this.id.replace('user_', '');
                 g_chosen_users.push(this.id);
             } else {
@@ -221,7 +248,7 @@ $(document).ready(function () {
             var li = document.createElement('li');
             li.id = this.id;
             li.className = 'cl_item cl_access_item selected' + (isGroup ? ' is-group' : '');
-            if(!isGroup) {
+            if (!isGroup) {
                 $.post(OC.generateUrl('/apps/polls/get/displayname'), {username: text}, function(data) {
                     li.appendChild(document.createTextNode(text + " (" + data + ")"));
                     list.appendChild(li);
@@ -243,8 +270,8 @@ $(document).ready(function () {
         }
     );
 
-    $(document).on('click', '.toggle-all', function(e) {
-        if($(this).attr('class').indexOf('selected-all') > -1) {
+    $(document).on('click', '.toggle-all', function() {
+        if ($(this).attr('class').indexOf('selected-all') > -1) {
             var children = $(this).parent().children('.icon-checkmark');
             for(var i=0; i<children.length; i++) {
                 deselectItem($(children[i]));
@@ -262,7 +289,7 @@ $(document).ready(function () {
     });
 
     $('input[type=radio][name=pollType]').change(function() {
-        if(this.value == 'event') {
+        if (this.value == 'event') {
             chosen_type = 'event';
             document.getElementById('text-select-container').style.display = 'none';
             document.getElementById('date-select-container').style.display = 'inline';
@@ -275,7 +302,7 @@ $(document).ready(function () {
 
     $('input[type=radio][name=accessType]').click(function() {
         access_type = this.value;
-        if(access_type == 'select') {
+        if (access_type == 'select') {
             $("#access_rights").show();
             $("#selected_access").show();
         } else {
@@ -285,7 +312,7 @@ $(document).ready(function () {
     });
 
     $('input[type=checkbox][name=check_expire]').change(function() {
-        if(!$(this).is(':checked')) {
+        if (!$(this).is(':checked')) {
             document.getElementById('expireTs').value = '';
         }
     });
@@ -296,7 +323,7 @@ $(document).ready(function () {
             ul.removeChild(ul.firstChild);
         }
         var val = $(this).val();
-        if(val.length < 3) return;
+        if (val.length < 3) return;
         var formData = {
             searchTerm: val,
             groups: JSON.stringify(g_chosen_groups),
@@ -307,7 +334,7 @@ $(document).ready(function () {
                 var ug = data[i];
                 var li = document.createElement('li');
                 li.className = 'cl_item cl_access_item';
-                if(ug.isGroup) {
+                if (ug.isGroup) {
                     li.id = 'group_' + ug.gid;
                     li.className += ' is-group';
                     li.appendChild(document.createTextNode(ug.gid + " (group)"));
@@ -335,8 +362,8 @@ $(document).ready(function () {
             if ($(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0  || searchTerm.length < 1) {
                 $(this).show();
             } else {
-		$(this).hide();
-	    }
+				$(this).hide();
+			}
         });
     });
 
@@ -363,16 +390,20 @@ $(document).ready(function () {
                 alert(t('polls', 'Nothing selected!\nClick on cells to turn them green.'));
                 return false;
             }
-            if(chosen_type == 'event') form.elements['chosenDates'].value = JSON.stringify(g_chosen_datetimes);
-            else form.elements['chosenDates'].value = JSON.stringify(g_chosen_texts);
+            if (chosen_type == 'event') {
+				form.elements['chosenDates'].value = JSON.stringify(g_chosen_datetimes);
+			}
+            else {
+				form.elements['chosenDates'].value = JSON.stringify(g_chosen_texts);
+			}
             var title = document.getElementById('pollTitle');
             if (title == null || title.value.length == 0) {
                 alert(t('polls', 'You must enter at least a title for the new poll.'));
                 return false;
             }
 
-            if(access_type == 'select') {
-                if(g_chosen_groups.length == 0 && g_chosen_users == 0) {
+            if (access_type == 'select') {
+                if (g_chosen_groups.length == 0 && g_chosen_users == 0) {
                     alert(t('polls', 'Please select at least one user or group!'));
                     return false;
                 }
@@ -393,7 +424,7 @@ function selectItem(cell) {
     cell.addClass('icon-checkmark');
     cell.removeClass('date-text-not-selected');
     cell.addClass('date-text-selected');
-    if(cell.attr('class').indexOf('is-text') > -1) {
+    if (cell.attr('class').indexOf('is-text') > -1) {
         var id = cell.attr('id');
         g_chosen_texts.push(id.substring(id.indexOf('_') + 1));
     } else {
@@ -408,36 +439,43 @@ function deselectItem(cell) {
     cell.addClass('icon-close');
     cell.removeClass('date-text-selected');
     cell.addClass('date-text-not-selected');
-    if(cell.attr('class').indexOf('is-text') > -1) {
+    if (cell.attr('class').indexOf('is-text') > -1) {
         var id = cell.attr('id');
         var index = g_chosen_texts.indexOf(id.substring(id.indexOf('_') + 1));
-        if(index > -1) g_chosen_texts.splice(index, 1);
+        if (index > -1) g_chosen_texts.splice(index, 1);
     } else {
         var dateId = cell.parent().attr('id'); //timestamp of date
         var timeId = cell.attr('id');
         var index = g_chosen_datetimes.indexOf(parseInt(dateId) + parseInt(timeId));
-        if(index > -1) g_chosen_datetimes.splice(index, 1);
+        if (index > -1) g_chosen_datetimes.splice(index, 1);
     }
 }
 
 function insertText(text, set) {
-    if(typeof set === 'undefined') set = false;
+    if (typeof set === 'undefined') {
+		set = false;
+	}
     var table = document.getElementById('selected-texts-table');
     var tr = table.insertRow(-1);
     var td = tr.insertCell(-1);
     td.innerHTML = text;
     td.className = 'text-row';
     td = tr.insertCell(-1);
-    if(set) td.className = 'icon-checkmark is-text date-text-selected';
-    else td.className = 'icon-close is-text date-text-not-selected';
+    if (set) {
+		td.className = 'icon-checkmark is-text date-text-selected';
+	} else {
+		td.className = 'icon-close is-text date-text-not-selected';
+	}
     td.id = 'text_' + text;
 }
 
 function addRowToList(ts, text, timeTs) {
-    if(typeof timeTs === 'undefined') timeTs = -1;
+    if (typeof timeTs === 'undefined') {
+		timeTs = -1;
+	}
     var table = document.getElementById('selected-dates-table');
     var rows = table.rows;
-    if(rows.length == 0) {
+    if (rows.length == 0) {
         var tr = table.insertRow(-1); //start new header
         tr.insertCell(-1);
         tr = table.insertRow(-1); //append new row
@@ -449,16 +487,16 @@ function addRowToList(ts, text, timeTs) {
         return;
     }
     var curr;
-    for(var i=1; i<rows.length; i++) {
+    for (var i=1; i<rows.length; i++) {
         curr = rows[i];
-        if(curr.id == ts) {
+        if (curr.id == ts) {
             for(var j=1; j<curr.cells.length; j++) {
                 var td = curr.cells[j];
                 var tdId = curr.cells[j].id;
-                if(timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
+                if ( timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
             }
             return; //already in table, cancel
-        } else if(curr.id > ts) {
+        } else if (curr.id > ts) {
             var tr = table.insertRow(i); //insert row at current index
             tr.id = ts;
             tr.className = 'toggleable-row';
@@ -468,8 +506,11 @@ function addRowToList(ts, text, timeTs) {
             for(var j=1; j<rows[0].cells.length; j++) {
                 var tdId = rows[0].cells[j].id;
                 var td = tr.insertCell(-1);
-                if(timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
-                else td.className = 'icon-close date-text-not-selected';
+                if (timeTs == tdId) {
+					td.className = 'icon-checkmark date-text-selected';
+				}  else { 
+					td.className = 'icon-close date-text-not-selected';
+				}
                 td.id = tdId;
                 td.innerHTML = '';
             }
@@ -485,19 +526,23 @@ function addRowToList(ts, text, timeTs) {
     for(var j=1; j<rows[0].cells.length; j++) {
         var tdId = rows[0].cells[j].id;
         var td = tr.insertCell(-1);
-        if(timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
-        else td.className = 'icon-close date-text-not-selected';
+        if (timeTs == tdId) {
+			td.className = 'icon-checkmark date-text-selected';
+		} else {
+			td.className = 'icon-close date-text-not-selected';
+		}
         td.id = tdId;
         td.innerHTML = '';
     }
-    return;
 }
 
 function addColToList(ts, text, dateTs) {
-    if(typeof dateTs === 'undefined') dateTs = -1;
+    if (typeof dateTs === 'undefined') {
+		dateTs = -1;
+	}
     var table = document.getElementById('selected-dates-table');
     var rows = table.rows;
-    if(rows.length == 0) {
+    if (rows.length == 0) {
         var tr = table.insertRow(-1);
         tr.insertCell(-1);
     }
@@ -505,11 +550,11 @@ function addColToList(ts, text, dateTs) {
 
     var tmpRow = rows[0];
     var index = -1;
-    var found = false;
     for(var i=0; i<tmpRow.cells.length; i++) {
         var curr = tmpRow.cells[i];
-        if(curr.id == ts) return; //already in table, cancel
-        if(curr.id > ts) {
+        if (curr.id == ts) {
+			return; //already in table, cancel
+		} else if (curr.id > ts) {
             index = i;
             break;
         }
@@ -520,13 +565,16 @@ function addColToList(ts, text, dateTs) {
         var cells = row.cells;
         var td = row.insertCell(index);
         //only display time in header row
-        if(i==0) {
+        if (i==0) {
             td.innerHTML = text;
             td.className = 'date-col';
         } else {
             td.innerHTML = '';
-            if(row.id == dateTs) td.className = 'icon-checkmark date-text-selected';
-            else td.className = 'icon-close date-text-not-selected';
+            if (row.id == dateTs) {
+				td.className = 'icon-checkmark date-text-selected';
+			} else { 
+				td.className = 'icon-close date-text-not-selected';
+			}
         }
         td.id = ts;
     }
@@ -539,11 +587,15 @@ function debounce(f, wait, immediate) {
 		var args = arguments;
 		var later = function() {
 			timeout = null;
-			if(!immediate) f.apply(context, args);
+			if (!immediate) {
+				f.apply(context, args);
+			}
 		};
 		var callNow = immediate && !timeout;
 		clearTimeout(timeout);
 		timeout = setTimeout(later, wait);
-		if(callNow) f.apply(context, args);
+		if (callNow) {
+			f.apply(context, args);
+		}
 	}
 }

@@ -1,3 +1,5 @@
+/** global: OC */
+
 $(document).ready(function () {
 /*     
      $('.table-body div.column.expiry').each(function(i, obj) {
@@ -30,9 +32,7 @@ $(document).ready(function () {
     
 });
 
-function deletePoll(e) {
-    var tr = this.parentNode.parentNode;
-    var titleTd = $(this).attr('data-value');
+function deletePoll() {
     var str = t('polls', 'Do you really want to delete that poll?') + '\n\n' + $(this).attr('data-value');
     if (confirm(str)) {
         var form = document.form_delete_poll;

@@ -40,9 +40,7 @@ $(document).ready(function () {
         } else {
             arr_years[year] = 1;
         }
-        var c = (prev !== (year + day_month) ? ' bordered' : '');
         prev = (year + day_month);
-        var ch_obj = ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2);
         dateStr += '<th class="time-slot" value="' + obj.value + '">' +
         '<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) +
                             // ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) +
@@ -88,7 +86,6 @@ $(document).ready(function () {
             } else {
                 newUserTypes.push(-1);
             }
-            var userDate = $(this).attr('data-value');
             if (isNaN($(this).attr('data-value'))) {
                 newUserDates.push($(this).attr('data-value'));
             } else {
@@ -140,7 +137,7 @@ $(document).ready(function () {
     });
 });
 
-$(document).on('click', '.toggle-all, .cl_click', function(e) {
+$(document).on('click', '.toggle-all, .cl_click', function() {
     values_changed = true;
     var $cl = "";
     var $toggle = "";
