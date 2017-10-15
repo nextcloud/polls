@@ -52,7 +52,7 @@ $(document).ready(function () {
     if (accessValues.value.length > 0) {
         var list = document.getElementById('selected-search-list-id');
         var accessValueArr = accessValues.value.split(';');
-        for(var i=0; i<accessValueArr.length; i++) {
+        for (var i=0; i<accessValueArr.length; i++) {
             var val = accessValueArr[i];
             if (val == '') {
 				continue;
@@ -93,7 +93,7 @@ $(document).ready(function () {
         if (chosenDates.length > 0) {
 			g_chosen_datetimes = chosen;
 		}
-        for(var i=0; i<chosen.length; i++) {
+        for (var i=0; i<chosen.length; i++) {
             var date = new Date(chosen[i]*1000);
             var year = date.getFullYear();
             var month = date.getMonth();
@@ -116,7 +116,7 @@ $(document).ready(function () {
         if (chosenDates.length > 0) {
 			g_chosen_texts = chosen;
 		}
-        for(var i=0; i<chosen.length; i++) {
+        for (var i=0; i<chosen.length; i++) {
             insertText(chosen[i], true);
         }
     }
@@ -164,7 +164,7 @@ $(document).ready(function () {
         var dateId = parseInt(tr.attr('id'));
         var index = tr.index();
         var cells = tr[0].cells; //convert jQuery object to DOM
-        for(var i=1; i<cells.length; i++) {
+        for (var i=1; i<cells.length; i++) {
             var cell = cells[i];
             var delIndex = g_chosen_datetimes.indexOf(dateId + parseInt(cell.id));
             if (delIndex > -1) {
@@ -181,7 +181,7 @@ $(document).ready(function () {
         var table = document.getElementById('selected-dates-table');
         var rows = table.rows;
         rows[0].deleteCell(cellIndex);
-        for(var i=1; i<rows.length; i++) {
+        for (var i=1; i<rows.length; i++) {
             var row = rows[i];
             var delIndex = g_chosen_datetimes.indexOf(parseInt(row.id) + timeId);
             if (delIndex > -1) {
@@ -277,14 +277,14 @@ $(document).ready(function () {
     $(document).on('click', '.toggle-all', function() {
         if ($(this).attr('class').indexOf('selected-all') > -1) {
             var children = $(this).parent().children('.icon-checkmark');
-            for(var i=0; i<children.length; i++) {
+            for (var i=0; i<children.length; i++) {
                 deselectItem($(children[i]));
             }
             $(this).removeClass('selected-all');
             $(this).addClass('selected-none');
         } else {
             var children = $(this).parent().children('.icon-close');
-            for(var i=0; i<children.length; i++) {
+            for (var i=0; i<children.length; i++) {
                 selectItem($(children[i]));
             }
             $(this).removeClass('selected-none');
@@ -334,7 +334,7 @@ $(document).ready(function () {
             users: JSON.stringify(g_chosen_users)
         }
         $.post(OC.generateUrl('/apps/polls/search'), formData, function(data) {
-            for(var i=0; i<data.length; i++) {
+            for (var i=0; i<data.length; i++) {
                 var ug = data[i];
                 var li = document.createElement('li');
                 li.className = 'cl_item cl_access_item';
@@ -479,9 +479,11 @@ function addRowToList(ts, text, timeTs) {
 	}
     var table = document.getElementById('selected-dates-table');
     var rows = table.rows;
-	var td;
+	var td, tr, tdId;
+	var i, j;
+    var curr;
     if (rows.length == 0) {
-        var tr = table.insertRow(-1); //start new header
+        tr = table.insertRow(-1); //start new header
         tr.insertCell(-1);
         tr = table.insertRow(-1); //append new row
         tr.id = ts;
@@ -491,26 +493,25 @@ function addRowToList(ts, text, timeTs) {
         td.innerHTML = text;
         return;
     }
-    var curr;
-    for (var i=1; i<rows.length; i++) {
+    for ( i=1; i<rows.length; i++) {
         curr = rows[i];
         if (curr.id == ts) {
-            for(var j=1; j<curr.cells.length; j++) {
+            for (j=1; j<curr.cells.length; j++) {
                 td = curr.cells[j];
-                var tdId = curr.cells[j].id;
+                 tdId = curr.cells[j].id;
                 if ( timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
             }
             return; //already in table, cancel
         } else if (curr.id > ts) {
-            var tr = table.insertRow(i); //insert row at current index
+            tr = table.insertRow(i); //insert row at current index
             tr.id = ts;
             tr.className = 'toggleable-row';
-            var td = tr.insertCell(-1);
+            td = tr.insertCell(-1);
             td.className = 'date-row';
             td.innerHTML = text;
-            for(var j=1; j<rows[0].cells.length; j++) {
-                var tdId = rows[0].cells[j].id;
-                var td = tr.insertCell(-1);
+            for (j=1; j<rows[0].cells.length; j++) {
+                tdId = rows[0].cells[j].id;
+                td = tr.insertCell(-1);
                 if (timeTs == tdId) {
 					td.className = 'icon-checkmark date-text-selected';
 				}  else { 
@@ -522,15 +523,15 @@ function addRowToList(ts, text, timeTs) {
             return;
         }
     }
-    var tr = table.insertRow(-1); //highest value, append new row
+    tr = table.insertRow(-1); //highest value, append new row
     tr.id = ts;
     tr.className = 'toggleable-row';
-    var td = tr.insertCell(-1);
+    td = tr.insertCell(-1);
     td.className = 'date-row';
     td.innerHTML = text;
-    for(var j=1; j<rows[0].cells.length; j++) {
-        var tdId = rows[0].cells[j].id;
-        var td = tr.insertCell(-1);
+    for (j=1; j<rows[0].cells.length; j++) {
+        tdId = rows[0].cells[j].id;
+        td = tr.insertCell(-1);
         if (timeTs == tdId) {
 			td.className = 'icon-checkmark date-text-selected';
 		} else {
@@ -547,16 +548,17 @@ function addColToList(ts, text, dateTs) {
 	}
     var table = document.getElementById('selected-dates-table');
     var rows = table.rows;
+	var tr, row, td, cells, tmpRow;
+	var i, curr;
+    var index = -1;
     if (rows.length == 0) {
-        var tr = table.insertRow(-1);
+        tr = table.insertRow(-1);
         tr.insertCell(-1);
     }
     rows = table.rows;
-
-    var tmpRow = rows[0];
-    var index = -1;
-    for(var i=0; i<tmpRow.cells.length; i++) {
-        var curr = tmpRow.cells[i];
+    tmpRow = rows[0];
+    for (i=0; i<tmpRow.cells.length; i++) {
+        curr = tmpRow.cells[i];
         if (curr.id == ts) {
 			return; //already in table, cancel
 		} else if (curr.id > ts) {
@@ -565,10 +567,10 @@ function addColToList(ts, text, dateTs) {
         }
     }
 
-    for(var i=0; i<rows.length; i++) {
-        var row = rows[i];
-        var cells = row.cells;
-        var td = row.insertCell(index);
+    for (i=0; i<rows.length; i++) {
+        row = rows[i];
+        cells = row.cells;
+        td = row.insertCell(index);
         //only display time in header row
         if (i==0) {
             td.innerHTML = text;
