@@ -36,26 +36,26 @@
 	$dates = $_['dates'];
 	$votes = $_['votes'];
 	$comments = $_['comments'];
-	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
+	$isAnonymous = $poll->getIsAnonymous() && $userId != $poll->getOwner();
 	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
 	$notification = $_['notification'];
 
-	if ($poll->getExpire() === null) {
+	if ($poll->getExpire() == null) {
 		$expired = false;
 	} else {
 		$expired = time() > strtotime($poll->getExpire());
 	}
 ?>
 
-<?php if($poll->getType() === '0') : ?>
+<?php if($poll->getType() == '0') : ?>
 	<?php foreach($dates as $d) : ?>
 		<input class="hidden-dates" type="hidden" value="<?php print_unescaped($d->getDt()); ?>" />
 	<?php endforeach ?>
 <?php endif ?>
 
 <?php
-if (   $poll->getDescription() !== null 
-	&& $poll->getDescription() !== ''
+if (   $poll->getDescription() != null 
+	&& $poll->getDescription() != ''
 ) {
 	$description = nl2br($poll->getDescription());
 } else {
@@ -106,7 +106,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 						<table class="vote_table">
 							<thead>
 									<?php
-									if ($poll->getType() === '0') {
+									if ($poll->getType() == '0') {
 										print_unescaped('<tr id="time-slots-header"><th class="first_header_cell" colspan="3"></th>');
 									} else {
 										print_unescaped('<tr id="vote-options-header"><th class="first_header_cell" colspan="3"></th>');
@@ -119,7 +119,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 							</thead>
 							<tbody class="votes">
 								<?php
-								if ($votes !== null) {
+								if ($votes != null) {
 									//group by user
 									$others = array();
 									foreach ($votes as $vote) {
@@ -131,7 +131,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 									$userCnt = 0;
 									foreach (array_keys($others) as $usr) {
 										$userCnt++;
-										if ($usr === $userId) {
+										if ($usr == $userId) {
 											// if poll expired, just put current user among the others;
 											// otherwise skip here to add current user as last row (to vote)
 											if (!$expired) {
@@ -141,7 +141,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 										}
 										print_unescaped('<tr>');
 										print_unescaped('<td class="avatar-cell">');
-										if (	$userMgr->get($usr) !== null 
+										if (	$userMgr->get($usr) != null 
 											&& !$isAnonymous && !$hideNames
 										) {
 											print_unescaped('<div class="poll avatardiv" title="'.($usr).'"></div>');
@@ -165,7 +165,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 										// loop over dts
 										$i_tot = 0;
 										foreach ($dates as $dt) {
-											if ($poll->getType() === '0') {
+											if ($poll->getType() == '0') {
 												$date_id = strtotime($dt->getDt());
 												$poll_id = "pollid_" . $dt->getId();
 											} else {
@@ -176,19 +176,19 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 											$found = false;
 											foreach ($others[$usr] as $vote) {
 												$voteVal = null;
-												if ($poll->getType() === '0') {
+												if ($poll->getType() == '0') {
 													$voteVal = strtotime($vote->getDt());
 												} else {
 													$voteVal = $vote->getText();
 												}
-												if ($date_id === $voteVal) {
-													if ($vote->getType() === '1') {
+												if ($date_id == $voteVal) {
+													if ($vote->getType() == '1') {
 														$cl = 'poll-cell yes';
 														$total_y[$i_tot]++;
-													} else if ($vote->getType() === '0') {
+													} else if ($vote->getType() == '0') {
 														$cl = 'poll-cell no';
 														$total_n[$i_tot]++;
-													} else if ($vote->getType() === '2') {
+													} else if ($vote->getType() == '2') {
 														$cl = 'poll-cell maybe';
 													} else {
 														$cl = 'poll-cell unvoted';
@@ -228,7 +228,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 									// print_unescaped('</td><td class="toggle-cell"><div id="toggle" class="toggle-all toggle maybe"></div><img class="svg" src="../../../../core/img/actions/play-next.svg" "="" alt=""></td>');
 									$i_tot = 0;
 									foreach ($dates as $dt) {
-										if ($poll->getType() === '0') {
+										if ($poll->getType() == '0') {
 											$date_id = strtotime($dt->getDt());
 											$poll_id = "pollid_" . $dt->getId();
 										} else {
@@ -240,19 +240,19 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 										if (isset($user_voted)) {
 											foreach ($user_voted as $obj) {
 												$voteVal = null;
-												if($poll->getType() === '0') {
+												if($poll->getType() == '0') {
 													$voteVal = strtotime($obj->getDt());
 												} else {
 													$voteVal = $obj->getText();
 												}
-												if ($voteVal === $date_id) {
-													if ($obj->getType() === '1') {
+												if ($voteVal == $date_id) {
+													if ($obj->getType() == '1') {
 														$cl = 'poll-cell active yes';
 														$total_y[$i_tot]++;
-													} else if ($obj->getType() === '0') {
+													} else if ($obj->getType() == '0') {
 														$cl = 'poll-cell active no';
 														$total_n[$i_tot]++;
-													} else if($obj->getType() === '2') {
+													} else if($obj->getType() == '2') {
 														$cl = 'poll-cell active maybe';
 													}
 													break;
@@ -303,7 +303,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 									<?php
 									for ($i = 0; $i < count($dates); $i++) {
 										$check = '';
-										if ($total_y[$i] - $total_n[$i] === $max_votes) {
+										if ($total_y[$i] - $total_n[$i] == $max_votes) {
 											$check = 'icon-checkmark';
 										}
 										print_unescaped('<td class="win_row ' . $check . '" id="id_total_' . $i . '"></td>');
@@ -323,7 +323,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 						</form>
 						<?php if (User::isLoggedIn()) : ?>
 						<span class="notification">
-							<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification !== null) print_unescaped(' checked'); ?> />
+							<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification != null) print_unescaped(' checked'); ?> />
 							<label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
 						</span>
 						<?php endif; ?>
@@ -366,7 +366,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 								</div>
 							</form>
 						</div>
-						<?php if ($comments !== null) : ?>
+						<?php if ($comments != null) : ?>
 							<?php foreach ($comments as $comment) : ?>
 								<div class="comment">
 									<div class="comment-header">
@@ -375,7 +375,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 										if ($isAnonymous || $hideNames) {
 											p('Anonymous');
 										} else {
-											if ($userMgr->get($comment->getUserId()) !== null) {
+											if ($userMgr->get($comment->getUserId()) != null) {
 												p($userMgr->get($comment->getUserId())->getDisplayName());
 											} else {
 												print_unescaped('<i>');

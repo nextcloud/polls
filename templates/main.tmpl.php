@@ -48,7 +48,7 @@
 						<input class="stop icon-close" style="display:none" value="" type="button">
 					</div>
 				</div>
-	<?php if (count($_['polls']) === 0) : ?>
+	<?php if (count($_['polls']) == 0) : ?>
 		<div id="emptycontent" class="">
 			<div class="icon-polls"></div>
 			<h2><?php p($l->t('No existing polls.')); ?></h2>
@@ -89,7 +89,7 @@
 						$owner = $poll->getOwner();
 
 						$expiry_style = '';
-						if ($poll->getType() === '0') {
+						if ($poll->getType() == '0') {
 							$participated = $_['participations'];
 						} else {
 							$participated = $_['participations_text'];
@@ -103,11 +103,11 @@
 						$commented_title = 'You did not comment';
 						$commented_count = count($comments);
 
-						if ($owner === $userId) {
+						if ($owner == $userId) {
 							$owner = $l->t('Yourself');
 						}
 
-						if ($poll->getExpire() !== null) {
+						if ($poll->getExpire() != null) {
 							// $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
 							$expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
 							$expiry_style = ' progress';
@@ -121,7 +121,7 @@
 						}
 
 						for ($i = 0; $i < count($participated); $i++) {
-							if ($poll->getId() === intval($participated[$i]->getPollId())) {
+							if ($poll->getId() == intval($participated[$i]->getPollId())) {
 								$participated_class = 'partic_yes';
 								$participated_title = 'You voted';
 								array_splice($participated, $i, 1);
@@ -130,7 +130,7 @@
 						}
 
 						for ($i = 0; $i < count($comments); $i++) {
-							if ($poll->getId() === intval($comments[$i]->getPollId())) {
+							if ($poll->getId() == intval($comments[$i]->getPollId())) {
 								$commented_class = 'commented_yes';
 								$commented_title = 'You commented';
 								array_splice($comments, $i, 1);
@@ -158,7 +158,7 @@
 													<span>Copy Link</span>
 												</button>
 											</li>
-							<?php if ($poll->getOwner() === $userId) : ?>
+							<?php if ($poll->getOwner() == $userId) : ?>
 											<li>
 												<button class="menuitem delete_poll action permanent" id="id_del_<?php p($poll->getId()); ?>" data-value="<?php p($poll->getTitle()); ?>">
 													<span class="cl_delete icon-delete"></span>
@@ -231,7 +231,7 @@ function getGroups($userId) {
  * @return boolean 
  */
 function userHasAccess($poll, $userId) {
-	if ($poll === null) {
+	if ($poll == null) {
 		return false;
 	}
 	$access = $poll->getAccess();
@@ -239,16 +239,16 @@ function userHasAccess($poll, $userId) {
 	if (!User::isLoggedIn()) {
 		return false;
 	}
-	if ($access === 'public') {
+	if ($access == 'public') {
 		return true;
 	}
-	if ($access === 'hidden') {
+	if ($access == 'hidden') {
 		return true;
 	}
-	if ($access === 'registered') {
+	if ($access == 'registered') {
 		return true;
 	}
-	if ($owner === $userId) {
+	if ($owner == $userId) {
 		return true;
 	}
 	$user_groups = getGroups($userId);
@@ -256,15 +256,15 @@ function userHasAccess($poll, $userId) {
 	$arr = explode(';', $access);
 
 	foreach ($arr as $item) {
-		if (strpos($item, 'group_') === 0) {
+		if (strpos($item, 'group_') == 0) {
 			$grp = substr($item, 6);
 			foreach ($user_groups as $user_group) {
-				if ($user_group === $grp) return true;
+				if ($user_group == $grp) return true;
 			}
 		}
-		else if (strpos($item, 'user_') === 0) {
+		else if (strpos($item, 'user_') == 0) {
 			$usr = substr($item, 5);
-			if ($usr === $userId) return true;
+			if ($usr == $userId) return true;
 		}
 	}
 	return false;
