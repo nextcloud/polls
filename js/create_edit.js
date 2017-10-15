@@ -1,4 +1,3 @@
-/** global: OC */
 var g_chosen_datetimes = [];
 var g_chosen_texts = [];
 var g_chosen_groups = [];
