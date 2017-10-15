@@ -323,7 +323,10 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 						</form>
 						<?php if (User::isLoggedIn()) : ?>
 						<span class="notification">
-							<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification != null) print_unescaped(' checked'); ?> />
+							<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification != null) {
+    print_unescaped(' checked');
+}
+?> />
 							<label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
 						</span>
 						<?php endif; ?>
@@ -355,8 +358,11 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 									<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login')); ?></a>
 									<?php p($l->t('or')); ?>
 									<?php print_unescaped('<th id="id_ac_detected" class="external current-user"><input type="text" name="user_name_comm" id="user_name_comm" placeholder="' . $l->t('Your name here') . '" /></th>'); ?>
-								<?php else: ?>
-									<?php p($l->t('Logged in as') . ' ' . $userId); ?>
+								<?php else {
+    : ?>
+									<?php p($l->t('Logged in as') . ' ' . $userId);
+}
+?>
 								<?php endif; ?>
 									<textarea id="commentBox" name="commentBox"></textarea>
 									<p>
@@ -390,8 +396,11 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 									</div>
 								</div>
 							<?php endforeach; ?>
-						<?php else : ?>
-							<?php p($l->t('No comments yet. Be the first.')); ?>
+						<?php else {
+    : ?>
+							<?php p($l->t('No comments yet. Be the first.'));
+}
+?>
 						<?php endif; ?>
 					</div>
 				</div>
