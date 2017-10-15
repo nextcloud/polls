@@ -222,10 +222,10 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.cl_item', function() {
+		var index;
         var list = document.getElementById('selected-search-list-id');
         var isGroup = $(this).hasClass('is-group');
         if ($(this).hasClass('selected')) {
-            var index = -1;
             if (isGroup) {
 				index = g_chosen_groups.indexOf(this.id);
 			}
@@ -479,13 +479,14 @@ function addRowToList(ts, text, timeTs) {
 	}
     var table = document.getElementById('selected-dates-table');
     var rows = table.rows;
+	var td;
     if (rows.length == 0) {
         var tr = table.insertRow(-1); //start new header
         tr.insertCell(-1);
         tr = table.insertRow(-1); //append new row
         tr.id = ts;
         tr.className = 'toggleable-row';
-        var td = tr.insertCell(-1);
+        td = tr.insertCell(-1);
         td.className = 'date-row';
         td.innerHTML = text;
         return;
@@ -495,7 +496,7 @@ function addRowToList(ts, text, timeTs) {
         curr = rows[i];
         if (curr.id == ts) {
             for(var j=1; j<curr.cells.length; j++) {
-                var td = curr.cells[j];
+                td = curr.cells[j];
                 var tdId = curr.cells[j].id;
                 if ( timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
             }
