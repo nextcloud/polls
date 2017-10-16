@@ -199,7 +199,7 @@ function debounce(f, wait, immediate) {
 			f.apply(context, args);
 		}
 	}
-}
+};
 
 $(document).ready(function () {
 	// enable / disable date picker
@@ -528,7 +528,7 @@ $(document).ready(function () {
 		var formData = {
 			searchTerm: val,
 			groups: JSON.stringify(g_chosen_groups),
-			users: JSON.stringify(g_chosen_users);
+			users: JSON.stringify(g_chosen_users)
 		}
 		$.post(OC.generateUrl('/apps/polls/search'), formData, function(data) {
 			for (var i=0; i<data.length; i++) {
