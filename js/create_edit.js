@@ -7,6 +7,200 @@ var access_type = '';
 var isAnonymous;
 var hideNames;
 
+function selectItem(cell) {
+	cell.removeClass('icon-close');
+	cell.addClass('icon-checkmark');
+	cell.removeClass('date-text-not-selected');
+	cell.addClass('date-text-selected');
+	if (cell.attr('class').indexOf('is-text') > -1) {
+		var id = cell.attr('id');
+		g_chosen_texts.push(id.substring(id.indexOf('_') + 1));
+	} else {
+		var dateId = cell.parent().attr('id'); //timestamp of date
+		var timeId = cell.attr('id');
+		g_chosen_datetimes.push(parseInt(dateId) + parseInt(timeId));
+	}
+}
+
+function deselectItem(cell) {
+	var id;
+	var index;
+	var dateId;
+	var timeId;
+	cell.removeClass('icon-checkmark');
+	cell.addClass('icon-close');
+	cell.removeClass('date-text-selected');
+	cell.addClass('date-text-not-selected');
+	if (cell.attr('class').indexOf('is-text') > -1) {
+		id = cell.attr('id');
+		index = g_chosen_texts.indexOf(id.substring(id.indexOf('_') + 1));
+		if (index > -1) {
+			g_chosen_texts.splice(index, 1);
+		}
+	} else {
+		dateId = cell.parent().attr('id'); //timestamp of date
+		timeId = cell.attr('id');
+		index = g_chosen_datetimes.indexOf(parseInt(dateId) + parseInt(timeId));
+		if (index > -1) {
+			g_chosen_datetimes.splice(index, 1);
+		}
+	}
+}
+
+function insertText(text, set) {
+	if (typeof set === 'undefined') {
+		set = false;
+	}
+	var table = document.getElementById('selected-texts-table');
+	var tr = table.insertRow(-1);
+	var td = tr.insertCell(-1);
+	td.innerHTML = text;
+	td.className = 'text-row';
+	td = tr.insertCell(-1);
+	if (set) {
+		td.className = 'icon-checkmark is-text date-text-selected';
+	} else {
+		td.className = 'icon-close is-text date-text-not-selected';
+	}
+	td.id = 'text_' + text;
+}
+
+function addRowToList(ts, text, timeTs) {
+	if (typeof timeTs === 'undefined') {
+		timeTs = -1;
+	}
+	var table = document.getElementById('selected-dates-table');
+	var rows = table.rows;
+	var td, tr, tdId;
+	var i, j;
+	var curr;
+	if (rows.length == 0) {
+		tr = table.insertRow(-1); //start new header
+		tr.insertCell(-1);
+		tr = table.insertRow(-1); //append new row
+		tr.id = ts;
+		tr.className = 'toggleable-row';
+		td = tr.insertCell(-1);
+		td.className = 'date-row';
+		td.innerHTML = text;
+		return;
+	}
+	for ( i=1; i<rows.length; i++) {
+		curr = rows[i];
+		if (curr.id == ts) {
+			for (j=1; j<curr.cells.length; j++) {
+				td = curr.cells[j];
+				 tdId = curr.cells[j].id;
+				if ( timeTs == tdId) {
+					td.className = 'icon-checkmark date-text-selected';
+				}
+			}
+			return; //already in table, cancel
+		} else if (curr.id > ts) {
+			tr = table.insertRow(i); //insert row at current index
+			tr.id = ts;
+			tr.className = 'toggleable-row';
+			td = tr.insertCell(-1);
+			td.className = 'date-row';
+			td.innerHTML = text;
+			for (j=1; j<rows[0].cells.length; j++) {
+				tdId = rows[0].cells[j].id;
+				td = tr.insertCell(-1);
+				if (timeTs == tdId) {
+					td.className = 'icon-checkmark date-text-selected';
+				}  else { 
+					td.className = 'icon-close date-text-not-selected';
+				}
+				td.id = tdId;
+				td.innerHTML = '';
+			}
+			return;
+		}
+	}
+	tr = table.insertRow(-1); //highest value, append new row
+	tr.id = ts;
+	tr.className = 'toggleable-row';
+	td = tr.insertCell(-1);
+	td.className = 'date-row';
+	td.innerHTML = text;
+	for (j=1; j<rows[0].cells.length; j++) {
+		tdId = rows[0].cells[j].id;
+		td = tr.insertCell(-1);
+		if (timeTs == tdId) {
+			td.className = 'icon-checkmark date-text-selected';
+		} else {
+			td.className = 'icon-close date-text-not-selected';
+		}
+		td.id = tdId;
+		td.innerHTML = '';
+	}
+}
+
+function addColToList(ts, text, dateTs) {
+	if (typeof dateTs === 'undefined') {
+		dateTs = -1;
+	}
+	var table = document.getElementById('selected-dates-table');
+	var rows = table.rows;
+	var tr, row, td, cells, tmpRow;
+	var i, curr;
+	var index = -1;
+	if (rows.length == 0) {
+		tr = table.insertRow(-1);
+		tr.insertCell(-1);
+	}
+	rows = table.rows;
+	tmpRow = rows[0];
+	for (i=0; i<tmpRow.cells.length; i++) {
+		curr = tmpRow.cells[i];
+		if (curr.id == ts) {
+			return; //already in table, cancel
+		} else if (curr.id > ts) {
+			index = i;
+			break;
+		}
+	}
+
+	for (i=0; i<rows.length; i++) {
+		row = rows[i];
+		cells = row.cells;
+		td = row.insertCell(index);
+		//only display time in header row
+		if (i==0) {
+			td.innerHTML = text;
+			td.className = 'date-col';
+		} else {
+			td.innerHTML = '';
+			if (row.id == dateTs) {
+				td.className = 'icon-checkmark date-text-selected';
+			} else { 
+				td.className = 'icon-close date-text-not-selected';
+			}
+		}
+		td.id = ts;
+	}
+}
+
+function debounce(f, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this;
+		var args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) {
+				f.apply(context, args);
+			}
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) {
+			f.apply(context, args);
+		}
+	}
+}
+
 $(document).ready(function () {
 	// enable / disable date picker
 	$('#id_expire_set').click(function(){
@@ -274,16 +468,18 @@ $(document).ready(function () {
 	);
 
 	$(document).on('click', '.toggle-all', function() {
+		var children;
+		var i;
 		if ($(this).attr('class').indexOf('selected-all') > -1) {
-			var children = $(this).parent().children('.icon-checkmark');
-			for (var i=0; i<children.length; i++) {
+			children = $(this).parent().children('.icon-checkmark');
+			for (i=0; i<children.length; i++) {
 				deselectItem($(children[i]));
 			}
 			$(this).removeClass('selected-all');
 			$(this).addClass('selected-none');
 		} else {
-			var children = $(this).parent().children('.icon-close');
-			for (var i=0; i<children.length; i++) {
+			children = $(this).parent().children('.icon-close');
+			for (i=0; i<children.length; i++) {
 				selectItem($(children[i]));
 			}
 			$(this).removeClass('selected-none');
@@ -326,11 +522,13 @@ $(document).ready(function () {
 			ul.removeChild(ul.firstChild);
 		}
 		var val = $(this).val();
-		if (val.length < 3) return;
+		if (val.length < 3) {
+			return;
+		}
 		var formData = {
 			searchTerm: val,
 			groups: JSON.stringify(g_chosen_groups),
-			users: JSON.stringify(g_chosen_users)
+			users: JSON.stringify(g_chosen_users);
 		}
 		$.post(OC.generateUrl('/apps/polls/search'), formData, function(data) {
 			for (var i=0; i<data.length; i++) {
@@ -394,7 +592,7 @@ $(document).ready(function () {
 				return false;
 			}
 			if (chosen_type == 'event') {
-				form.elements['chosenDates'].value = JSON.stringify(g_chosen_datetimes);
+				form.elements.chosenDates.value = JSON.stringify(g_chosen_datetimes);
 			}
 			else {
 				form.elements['chosenDates'].value = JSON.stringify(g_chosen_texts);
@@ -410,198 +608,15 @@ $(document).ready(function () {
 					alert(t('polls', 'Please select at least one user or group!'));
 					return false;
 				}
-				form.elements['accessValues'].value = JSON.stringify({
+				form.elements.accessValues.value = JSON.stringify({
 					groups: g_chosen_groups,
 					users: g_chosen_users
 				});
 			}
-			form.elements['isAnonymous'].value = isAnonymous;
-			form.elements['hideNames'].value = hideNames;
+			form.elements.isAnonymous.value = isAnonymous;
+			form.elements.hideNames.value = hideNames;
 			form.submit();
-		}
+		};
 	}
 });
 
-function selectItem(cell) {
-	cell.removeClass('icon-close');
-	cell.addClass('icon-checkmark');
-	cell.removeClass('date-text-not-selected');
-	cell.addClass('date-text-selected');
-	if (cell.attr('class').indexOf('is-text') > -1) {
-		var id = cell.attr('id');
-		g_chosen_texts.push(id.substring(id.indexOf('_') + 1));
-	} else {
-		var dateId = cell.parent().attr('id'); //timestamp of date
-		var timeId = cell.attr('id');
-		g_chosen_datetimes.push(parseInt(dateId) + parseInt(timeId));
-	}
-}
-
-function deselectItem(cell) {
-	cell.removeClass('icon-checkmark');
-	cell.addClass('icon-close');
-	cell.removeClass('date-text-selected');
-	cell.addClass('date-text-not-selected');
-	if (cell.attr('class').indexOf('is-text') > -1) {
-		var id = cell.attr('id');
-		var index = g_chosen_texts.indexOf(id.substring(id.indexOf('_') + 1));
-		if (index > -1) g_chosen_texts.splice(index, 1);
-	} else {
-		var dateId = cell.parent().attr('id'); //timestamp of date
-		var timeId = cell.attr('id');
-		var index = g_chosen_datetimes.indexOf(parseInt(dateId) + parseInt(timeId));
-		if (index > -1) g_chosen_datetimes.splice(index, 1);
-	}
-}
-
-function insertText(text, set) {
-	if (typeof set === 'undefined') {
-		set = false;
-	}
-	var table = document.getElementById('selected-texts-table');
-	var tr = table.insertRow(-1);
-	var td = tr.insertCell(-1);
-	td.innerHTML = text;
-	td.className = 'text-row';
-	td = tr.insertCell(-1);
-	if (set) {
-		td.className = 'icon-checkmark is-text date-text-selected';
-	} else {
-		td.className = 'icon-close is-text date-text-not-selected';
-	}
-	td.id = 'text_' + text;
-}
-
-function addRowToList(ts, text, timeTs) {
-	if (typeof timeTs === 'undefined') {
-		timeTs = -1;
-	}
-	var table = document.getElementById('selected-dates-table');
-	var rows = table.rows;
-	var td, tr, tdId;
-	var i, j;
-	var curr;
-	if (rows.length == 0) {
-		tr = table.insertRow(-1); //start new header
-		tr.insertCell(-1);
-		tr = table.insertRow(-1); //append new row
-		tr.id = ts;
-		tr.className = 'toggleable-row';
-		td = tr.insertCell(-1);
-		td.className = 'date-row';
-		td.innerHTML = text;
-		return;
-	}
-	for ( i=1; i<rows.length; i++) {
-		curr = rows[i];
-		if (curr.id == ts) {
-			for (j=1; j<curr.cells.length; j++) {
-				td = curr.cells[j];
-				 tdId = curr.cells[j].id;
-				if ( timeTs == tdId) td.className = 'icon-checkmark date-text-selected';
-			}
-			return; //already in table, cancel
-		} else if (curr.id > ts) {
-			tr = table.insertRow(i); //insert row at current index
-			tr.id = ts;
-			tr.className = 'toggleable-row';
-			td = tr.insertCell(-1);
-			td.className = 'date-row';
-			td.innerHTML = text;
-			for (j=1; j<rows[0].cells.length; j++) {
-				tdId = rows[0].cells[j].id;
-				td = tr.insertCell(-1);
-				if (timeTs == tdId) {
-					td.className = 'icon-checkmark date-text-selected';
-				}  else { 
-					td.className = 'icon-close date-text-not-selected';
-				}
-				td.id = tdId;
-				td.innerHTML = '';
-			}
-			return;
-		}
-	}
-	tr = table.insertRow(-1); //highest value, append new row
-	tr.id = ts;
-	tr.className = 'toggleable-row';
-	td = tr.insertCell(-1);
-	td.className = 'date-row';
-	td.innerHTML = text;
-	for (j=1; j<rows[0].cells.length; j++) {
-		tdId = rows[0].cells[j].id;
-		td = tr.insertCell(-1);
-		if (timeTs == tdId) {
-			td.className = 'icon-checkmark date-text-selected';
-		} else {
-			td.className = 'icon-close date-text-not-selected';
-		}
-		td.id = tdId;
-		td.innerHTML = '';
-	}
-}
-
-function addColToList(ts, text, dateTs) {
-	if (typeof dateTs === 'undefined') {
-		dateTs = -1;
-	}
-	var table = document.getElementById('selected-dates-table');
-	var rows = table.rows;
-	var tr, row, td, cells, tmpRow;
-	var i, curr;
-	var index = -1;
-	if (rows.length == 0) {
-		tr = table.insertRow(-1);
-		tr.insertCell(-1);
-	}
-	rows = table.rows;
-	tmpRow = rows[0];
-	for (i=0; i<tmpRow.cells.length; i++) {
-		curr = tmpRow.cells[i];
-		if (curr.id == ts) {
-			return; //already in table, cancel
-		} else if (curr.id > ts) {
-			index = i;
-			break;
-		}
-	}
-
-	for (i=0; i<rows.length; i++) {
-		row = rows[i];
-		cells = row.cells;
-		td = row.insertCell(index);
-		//only display time in header row
-		if (i==0) {
-			td.innerHTML = text;
-			td.className = 'date-col';
-		} else {
-			td.innerHTML = '';
-			if (row.id == dateTs) {
-				td.className = 'icon-checkmark date-text-selected';
-			} else { 
-				td.className = 'icon-close date-text-not-selected';
-			}
-		}
-		td.id = ts;
-	}
-}
-
-function debounce(f, wait, immediate) {
-	var timeout;
-	return function() {
-		var context = this;
-		var args = arguments;
-		var later = function() {
-			timeout = null;
-			if (!immediate) {
-				f.apply(context, args);
-			}
-		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) {
-			f.apply(context, args);
-		}
-	}
-}
