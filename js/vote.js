@@ -17,6 +17,7 @@ $(document).ready(function () {
 	var arr_dates = [];  // will be like: [21.02] => 3
 	var arr_years = [];  // [1992] => 6
 	var dateStr = '';
+	var k;
 
 	$('.poll.avatardiv').each(function(i, obj) {
 		$(obj).avatar(obj.title, 32);
@@ -50,12 +51,12 @@ $(document).ready(function () {
 	});
 
 	var for_string_dates = '';
-	for(var k in arr_dates) {
+	for(k in arr_dates) {
 		for_string_dates += '<th colspan="' + arr_dates[k] + '" class="bordered">' + k + '</th>';
 	}
 
 	var for_string_years = '';
-	for(var k in arr_years) {
+	for(k in arr_years) {
 		for_string_years += '<th colspan="' + arr_years[k] + '" class="bordered">' + k + '</th>';
 	}
 
@@ -66,7 +67,7 @@ $(document).ready(function () {
 		var ac = document.getElementById('user_name');
 		if (ac !== null) {
 			if(ac.value.length >= 3){
-				form.elements['userId'].value = ac.value;
+				form.elements.userId.value = ac.value;
 			} else {
 				alert(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'));
 				return;
@@ -90,10 +91,10 @@ $(document).ready(function () {
 				newUserDates.push(parseInt($(this).attr('data-value')));
 			}
 		});
-		form.elements['dates'].value = JSON.stringify(newUserDates);
-		form.elements['types'].value = JSON.stringify(newUserTypes);
-		form.elements['receiveNotifications'].value = (check_notif && check_notif.checked) ? 'true' : 'false';
-		form.elements['changed'].value = values_changed ? 'true' : 'false';
+		form.elements.dates.value = JSON.stringify(newUserDates);
+		form.elements.types.value = JSON.stringify(newUserTypes);
+		form.elements.receiveNotifications.value = (check_notif && check_notif.checked) ? 'true' : 'false';
+		form.elements.changed.value = values_changed ? 'true' : 'false';
 		form.submit();
 	});
 
@@ -103,7 +104,7 @@ $(document).ready(function () {
 		var ac = document.getElementById('user_name_comm');
 		if (ac !== null) {
 			if(ac.value.length >= 3){
-				form.elements['userId'].value = ac.value;
+				form.elements.userId.value = ac.value;
 			} else {
 				alert(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'));
 				return;
@@ -115,8 +116,8 @@ $(document).ready(function () {
 			return;
 		}
 		var data = {
-			pollId: form.elements['pollId'].value,
-			userId: form.elements['userId'].value,
+			pollId: form.elements.pollId.value,
+			userId: form.elements.userId.value,
 			commentBox: comm.value.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
@@ -180,6 +181,6 @@ function updateCounts(){
 	$('td.total').each(function() {
 		var yes = parseInt($(this).find('.yes').text());
 		var no = parseInt($(this).find('.no').text());
-		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no == max_votes);
+		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no === max_votes);
 	});
 }

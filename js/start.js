@@ -39,7 +39,7 @@ function deletePoll() {
 		hiddenId.setAttribute("name", "pollId");
 		hiddenId.setAttribute("type", "hidden");
 		form.appendChild(hiddenId);
-		form.elements['pollId'].value = this.id.split('_')[2];
+		form.elements.pollId.value = this.id.split('_')[2];
 		form.submit();
 	}
 }
