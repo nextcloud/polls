@@ -25,7 +25,7 @@
 	\OCP\Util::addStyle('polls', 'createpoll');
 	\OCP\Util::addStyle('polls', 'jquery.datetimepicker');
 	\OCP\Util::addScript('polls', 'create_edit');
-	\OCP\Util::addScript('polls', 'jquery.datetimepicker.full.min');
+	\OCP\Util::addScript('polls', 'vendor/jquery.datetimepicker.full.min');
 
 	$userId = $_['userId'];
 	$userMgr = $_['userMgr'];
