@@ -2,7 +2,7 @@
 <info>
    <id>polls</id>
    <name>Polls</name>
-   <description>This is a poll app, similar to doodle or dudle with the possibility for restrict access (only members, certain groups/users, hidden and public).</description>
+   <description>A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
    <documentation>
       <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
    </documentation>
