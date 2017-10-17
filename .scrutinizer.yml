@@ -1,7 +1,7 @@
 filter:
     excluded_paths:
         - 'l10n/*'
-        - 'js/vendor/*
+        - 'js/vendor/*'
 
 
 imports:
