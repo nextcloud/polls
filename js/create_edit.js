@@ -203,6 +203,7 @@ function debounce(f, wait, immediate) {
 
 $(document).ready(function () {
 	// enable / disable date picker
+	var i;
 	$('#id_expire_set').click(function(){
 		$('#id_expire_date').prop("disabled", !this.checked);
 		if (this.checked) {
@@ -245,7 +246,7 @@ $(document).ready(function () {
 	if (accessValues.value.length > 0) {
 		var list = document.getElementById('selected-search-list-id');
 		var accessValueArr = accessValues.value.split(';');
-		for (var i=0; i<accessValueArr.length; i++) {
+		for (i=0; i<accessValueArr.length; i++) {
 			var val = accessValueArr[i];
 			if (val === '') {
 				continue;
@@ -286,7 +287,7 @@ $(document).ready(function () {
 		if (chosenDates.length > 0) {
 			g_chosen_datetimes = chosen;
 		}
-		for (var i=0; i<chosen.length; i++) {
+		for (i=0; i<chosen.length; i++) {
 			var date = new Date(chosen[i]*1000);
 			var year = date.getFullYear();
 			var month = date.getMonth();
@@ -309,7 +310,7 @@ $(document).ready(function () {
 		if (chosenDates.length > 0) {
 			g_chosen_texts = chosen;
 		}
-		for (var i=0; i<chosen.length; i++) {
+		for (i=0; i<chosen.length; i++) {
 			insertText(chosen[i], true);
 		}
 	}
@@ -601,7 +602,7 @@ $(document).ready(function () {
 				form.elements.chosenDates.value = JSON.stringify(g_chosen_datetimes);
 			}
 			else {
-				form.elements['chosenDates'].value = JSON.stringify(g_chosen_texts);
+				form.elements.chosenDates.value = JSON.stringify(g_chosen_texts);
 			}
 			var title = document.getElementById('pollTitle');
 			if (   title === null 

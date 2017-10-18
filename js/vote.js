@@ -136,6 +136,23 @@ $(document).ready(function () {
 	});
 });
 
+function updateCounts(){
+	max_votes = 0;
+	$('td.total').each(function() {
+		var yes = parseInt($(this).find('.yes').text());
+		var no = parseInt($(this).find('.no').text());
+		if(yes - no > max_votes) {
+			max_votes = yes - no;
+		}
+	});
+	var i = 0;
+	$('td.total').each(function() {
+		var yes = parseInt($(this).find('.yes').text());
+		var no = parseInt($(this).find('.no').text());
+		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no === max_votes);
+	});
+}
+
 $(document).on('click', '.toggle-all, .cl_click', function() {
 	values_changed = true;
 	var $cl = "";
@@ -168,19 +185,3 @@ $(document).on('click', '.toggle-all, .cl_click', function() {
 	updateCounts();
 });
 
-function updateCounts(){
-	max_votes = 0;
-	$('td.total').each(function() {
-		var yes = parseInt($(this).find('.yes').text());
-		var no = parseInt($(this).find('.no').text());
-		if(yes - no > max_votes) {
-			max_votes = yes - no;
-		}
-	});
-	var i = 0;
-	$('td.total').each(function() {
-		var yes = parseInt($(this).find('.yes').text());
-		var no = parseInt($(this).find('.no').text());
-		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no === max_votes);
-	});
-}
