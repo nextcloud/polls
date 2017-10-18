@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\AppInfo;
 
+
 use OC\AppFramework\Utility\SimpleContainer;
 use OCP\AppFramework\App;
 use OCA\Polls\Db\CommentMapper;
