@@ -1,0 +1,14 @@
+filter:
+    excluded_paths:
+        - 'l10n/*'
+        - 'js/jquery.datetimepicker.full.min.js'
+
+
+imports:
+    - javascript
+    - php
+
+build:
+    tests:
+        override:
+            -  jshint-run --config js/.jshintrc
