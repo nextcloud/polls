@@ -1,8 +1,7 @@
 filter:
     excluded_paths:
         - 'l10n/*'
-        - 'js/vendor/*'
-
+        - 'js/jquery.datetimepicker.full.min.js'
 
 imports:
     - javascript
