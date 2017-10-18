@@ -528,12 +528,13 @@ class PageController extends Controller {
         if ($changed === 'true') {
             $dates = json_decode($dates);
             $types = json_decode($types);
+			$count_dates = count($dates);
             if ($poll->getType() == '0') {
                 $this->participationMapper->deleteByPollAndUser($pollId, $userId);
             } else {
                 $this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
             }
-            for ($i = 0; $i < count($dates); $i++) {
+            for ($i = 0; $i < $count_dates; $i++) {
                 if ($poll->getType() == '0') {
                     $part = new Participation();
                     $part->setPollId($pollId);
@@ -677,7 +678,7 @@ class PageController extends Controller {
     }
 
     /**
-     * @param null $user
+     * @param $user
      * @return Event[]
      */
     public function getPollsForUserWithInfo($user = null) {
