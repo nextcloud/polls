@@ -306,6 +306,8 @@ class PageController extends Controller {
      * @param $expireTs
      * @param $accessType
      * @param $accessValues
+     * @param $isAnonymous
+     * @param $hideNames
      * @return RedirectResponse
      */
     public function updatePoll(
@@ -317,11 +319,15 @@ class PageController extends Controller {
         $chosenDates,
         $expireTs,
         $accessType,
-        $accessValues
+        $accessValues,
+        $isAnonymous,
+        $hideNames
     ) {
         $event = $this->eventMapper->find($pollId);
         $event->setTitle(htmlspecialchars($pollTitle));
         $event->setDescription(htmlspecialchars($pollDesc));
+        $event->setIsAnonymous($isAnonymous ? '1' : '0');
+        $event->setFullAnonymous($isAnonymous && $hideNames ? '1' : '0');
 
         if ($accessType === 'select') {
             if (isset($accessValues)) {
