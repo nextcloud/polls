@@ -143,6 +143,9 @@ th,tr,td {
 .votes th,.votes tr,.votes td {
  border-top:1px solid #ddd
 }
+.external {
+ min-width:150px
+}
 .external th {
  padding-left:40px
 }

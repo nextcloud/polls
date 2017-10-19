@@ -3,7 +3,6 @@ filter:
         - 'l10n/*'
         - 'js/jquery.datetimepicker.full.min.js'
 
-
 imports:
     - javascript
     - php
