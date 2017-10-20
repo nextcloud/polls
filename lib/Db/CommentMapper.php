@@ -28,41 +28,41 @@ use OCP\IDBConnection;
 
 class CommentMapper extends Mapper {
 
-    /**
-     * CommentMapper constructor.
-     * @param IDBConnection $db
-     */
-    public function __construct(IDBConnection $db) {
-        parent::__construct($db, 'polls_comments', '\OCA\Polls\Db\Comment');
-    }
+	/**
+	 * CommentMapper constructor.
+	 * @param IDBConnection $db
+	 */
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, 'polls_comments', '\OCA\Polls\Db\Comment');
+	}
 
-    /**
-     * @param string $userId
-     * @param int $limit
-     * @param int $offset
-     * @return Comment[]
-     */
-    public function findDistinctByUser($userId, $limit = null, $offset = null) {
-        $sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
-        return $this->findEntities($sql, [$userId], $limit, $offset);
-    }
+	/**
+	 * @param string $userId
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Comment[]
+	 */
+	public function findDistinctByUser($userId, $limit = null, $offset = null) {
+		$sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
+		return $this->findEntities($sql, [$userId], $limit, $offset);
+	}
 
-    /**
-     * @param string $pollId
-     * @param int $limit
-     * @param int $offset
-     * @return Comment[]
-     */
-    public function findByPoll($pollId, $limit = null, $offset = null) {
-        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ? ORDER BY Dt DESC';
-        return $this->findEntities($sql, [$pollId], $limit, $offset);
-    }
+	/**
+	 * @param string $pollId
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Comment[]
+	 */
+	public function findByPoll($pollId, $limit = null, $offset = null) {
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ? ORDER BY Dt DESC';
+		return $this->findEntities($sql, [$pollId], $limit, $offset);
+	}
 
-    /**
-     * @param string $pollId
-     */
-    public function deleteByPoll($pollId) {
-        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-        $this->execute($sql, [$pollId]);
-    }
+	/**
+	 * @param string $pollId
+	 */
+	public function deleteByPoll($pollId) {
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		$this->execute($sql, [$pollId]);
+	}
 }

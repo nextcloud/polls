@@ -36,8 +36,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollId(integer $value)
  */
 class Comment extends Entity {
-    public $userId;
-    public $dt;
-    public $comment;
-    public $pollId;
+	public $userId;
+	public $dt;
+	public $comment;
+	public $pollId;
 }

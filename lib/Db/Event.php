@@ -48,14 +48,14 @@ use OCP\AppFramework\Db\Entity;
  * @method void setFullAnonymous(integer $value)
  */
 class Event extends Entity {
-    public $type;
-    public $title;
-    public $description;
-    public $owner;
-    public $created;
-    public $access;
-    public $expire;
-    public $hash;
-    public $isAnonymous;
-    public $fullAnonymous;
+	public $type;
+	public $title;
+	public $description;
+	public $owner;
+	public $created;
+	public $access;
+	public $expire;
+	public $hash;
+	public $isAnonymous;
+	public $fullAnonymous;
 }

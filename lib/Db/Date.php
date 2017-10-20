@@ -32,6 +32,6 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollId(integer $value)
  */
 class Date extends Entity {
-    public $dt;
-    public $pollId;
+	public $dt;
+	public $pollId;
 }

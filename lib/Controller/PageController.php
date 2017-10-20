@@ -594,7 +594,6 @@ class PageController extends Controller {
 		));
 	}
 
-// ===============> Not used?
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -603,11 +602,10 @@ class PageController extends Controller {
 	 * @param $users
 	 * @return array
 	 */
-/*	 public function search($searchTerm, $groups, $users) {
+	 public function search($searchTerm, $groups, $users) {
 		return array_merge($this->searchForGroups($searchTerm, $groups), $this->searchForUsers($searchTerm, $users));
 	}
- */
-// ===============> Not used?
+
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -615,7 +613,7 @@ class PageController extends Controller {
 	 * @param $groups
 	 * @return array
 	 */
-/*	 public function searchForGroups($searchTerm, $groups) {
+	 public function searchForGroups($searchTerm, $groups) {
 		$selectedGroups = json_decode($groups);
 		$groups = $this->groupManager->search($searchTerm);
 		$gids = array();
@@ -633,8 +631,7 @@ class PageController extends Controller {
 		}
 		return $gids;
 	}
- */
-// ===============> Not used?
+
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -642,7 +639,7 @@ class PageController extends Controller {
 	 * @param $users
 	 * @return array
 	 */
-/*	 public function searchForUsers($searchTerm, $users) {
+	 public function searchForUsers($searchTerm, $users) {
 		$selectedUsers = json_decode($users);
 		Util::writeLog("polls", print_r($selectedUsers, true), Util::ERROR);
 		$userNames = $this->userMgr->searchDisplayName($searchTerm);
@@ -668,44 +665,39 @@ class PageController extends Controller {
 		}
 		return $users;
 	}
- */
-// ===============> Not used?
+
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param $username
 	 * @return string
 	 */
-/*	 public function getDisplayName($username) {
+	 public function getDisplayName($username) {
 		return $this->manager->get($username)->getDisplayName();
 	}
- */
-// ===============> Not used?
+
 	/**
 	 * @return Event[]
 	 */
-/*	 public function getPollsForUser() {
+	 public function getPollsForUser() {
 		return $this->eventMapper->findAllForUser($this->userId);
 	}
- */
-// ===============> Not used?
+
 	/**
 	 * @param $user
 	 * @return Event[]
 	 */
-/*	 public function getPollsForUserWithInfo($user = null) {
+	 public function getPollsForUserWithInfo($user = null) {
 		if ($user === null) {
 			return $this->eventMapper->findAllForUserWithInfo($this->userId);
 		} else {
 			return $this->eventMapper->findAllForUserWithInfo($user);
 		}
 	}
- */
-// ===============> Not used?
 	/**
 	 * @return array
 	 */
-/*	 public function getGroups() {
+	 public function getGroups() {
 		// $this->requireLogin();
 		if (class_exists('\OC_Group', true)) {
 			// Nextcloud <= 11, ownCloud
@@ -717,7 +709,7 @@ class PageController extends Controller {
 			return $group->getGID();
 		}, $groups);
 	}
- */
+
 	/**
 	 * @param $poll
 	 * @return bool
