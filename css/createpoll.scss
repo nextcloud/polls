@@ -1,81 +1,81 @@
 .user-group-list {
-    display: none;
-    border: 1px solid #DDD;
-    margin: 15px;
-    padding: 5px;
-    border-radius: 3px;
-    max-height: 150px;
-    overflow-y: auto;
+	display: none;
+	border: 1px solid #DDD;
+	margin: 15px;
+	padding: 5px;
+	border-radius: 3px;
+	max-height: 150px;
+	overflow-y: auto;
 }
 
 #sec_name {
-    display: none;
+	display: none;
 }
 
 .cl_access_item {
-    padding: 5px;
-    background-color: white;
-    color: #333;
-    cursor: pointer;
+	padding: 5px;
+	background-color: white;
+	color: #333;
+	cursor: pointer;
 }
 
 .cl_access_item:hover {
-    background-color: #EEE;
+	background-color: #EEE;
 }
 
 .cl_access_item.selected {
-    background-color: #409AE7;
-    color: #FFF;
+	background-color: #409AE7;
+	color: #FFF;
 }
 
 .cl_access_item.selected:hover {
-    background-color: #FF6F6F;
-    color: #FFF;
-    text-decoration: line-through;
+	background-color: #FF6F6F;
+	color: #FFF;
+	text-decoration: line-through;
 }
 
 textarea {
-    min-height: 66px;
+	min-height: 66px;
 }
 
 .choices {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 
 .choices td {
-    min-width: 30px;
+	min-width: 30px;
 }
 
 table td {
-    text-align: center;
+	text-align: center;
 }
 
 .text-row, .date-row {
-    font-weight: bold;
-    padding: 2px 5px;
-    background-color: #337AB7;
-    color: #FFF;
-    text-align: left;
+	font-weight: bold;
+	padding: 2px 5px;
+	background-color: #337AB7;
+	color: #FFF;
+	text-align: left;
 }
 
 .text-row:hover, .date-row:hover {
-    background-color: #ff6f6f;
-    text-decoration: line-through;
+	background-color: #ff6f6f;
+	text-decoration: line-through;
 }
-    
+	
 #selected-dates-table tr:first-child td {
-    font-weight: bold;
-    padding: 2px 5px;
-    background-color: #337AB7;
-    color: #FFF;
-    
+	font-weight: bold;
+	padding: 2px 5px;
+	background-color: #337AB7;
+	color: #FFF;
+	
 }
 
 table .icon-close {
-    cursor: pointer;
-    background-color: #ffede9; /*red*/
-    padding: 0 5px;
-    background-image: url('../img/no-vote.svg');
+	cursor: pointer;
+	background-color: #ffede9; /*red*/
+	padding: 0 5px;
+	background-image: url('../img/no-vote.svg');
 }
 
 table .icon-checkmark {
@@ -86,5 +86,5 @@ table .icon-checkmark {
 }
 
 #expiration {
-    max-width: 200px;
+	max-width: 200px;
 }

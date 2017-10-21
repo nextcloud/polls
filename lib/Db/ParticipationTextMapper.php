@@ -28,24 +28,24 @@ use OCP\IDBConnection;
 
 class ParticipationTextMapper extends Mapper {
 
-    /**
-     * ParticipationTextMapper constructor.
-     * @param IDBConnection $db
-     */
-    public function __construct(IDBConnection $db) {
-        parent::__construct($db, 'polls_particip_text', '\OCA\Polls\Db\ParticipationText');
-    }
+	/**
+	 * ParticipationTextMapper constructor.
+	 * @param IDBConnection $db
+	 */
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, 'polls_particip_text', '\OCA\Polls\Db\ParticipationText');
+	}
 
-    /**
-     * @param string $pollId
-     * @param int $limit
-     * @param int $offset
-     * @return ParticipationText[]
-     */
-    public function findByPoll($pollId, $limit = null, $offset = null) {
-        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-        return $this->findEntities($sql, [$pollId], $limit, $offset);
-    }
+	/**
+	 * @param string $pollId
+	 * @param int $limit
+	 * @param int $offset
+	 * @return ParticipationText[]
+	 */
+	public function findByPoll($pollId, $limit = null, $offset = null) {
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		return $this->findEntities($sql, [$pollId], $limit, $offset);
+	}
 
 	/**
 	 * @param string $userId
@@ -58,20 +58,20 @@ class ParticipationTextMapper extends Mapper {
 		return $this->findEntities($sql, [$userId], $limit, $offset);
 	}
 
-    /**
-     * @param string $pollId
-     */
-    public function deleteByPoll($pollId) {
-        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-        $this->execute($sql, [$pollId]);
-    }
+	/**
+	 * @param string $pollId
+	 */
+	public function deleteByPoll($pollId) {
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		$this->execute($sql, [$pollId]);
+	}
 
-    /**
-     * @param string $pollId
-     * @param string $userId
-     */
-    public function deleteByPollAndUser($pollId, $userId) {
-        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
-        $this->execute($sql, [$pollId, $userId]);
-    }
+	/**
+	 * @param string $pollId
+	 * @param string $userId
+	 */
+	public function deleteByPollAndUser($pollId, $userId) {
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
+		$this->execute($sql, [$pollId, $userId]);
+	}
 }

@@ -1,0 +1,4 @@
+build:
+    tests:
+        override:
+            - scss-lint-run /css

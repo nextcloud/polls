@@ -16,114 +16,114 @@ $border_current_user: 2px solid;
 .vote_table {
 	/* border-spacing: 1px 1px; */
 	white-space: normal;
-    width: 100%;
+	width: 100%;
 
-    thead {
-        white-space: normal;
+	thead {
+		white-space: normal;
 
-        .time-slot, .vote-option {
-            min-width: 50px;
-            text-align: center;
-            
-            .month, .dayow {
-                font-size: 1.2em;
-                color: #666;
-            }
+		.time-slot, .vote-option {
+			min-width: 50px;
+			text-align: center;
+			
+			.month, .dayow {
+				font-size: 1.2em;
+				color: #666;
+			}
 
-            .day {
-                font-size: 1.8em;
-                margin: 5px 0 5px 0;
-            }
-        }
-    }
+			.day {
+				font-size: 1.8em;
+				margin: 5px 0 5px 0;
+			}
+		}
+	}
 
-    td.avatar-cell {
-        width: 40px;
-    }
-    
-    td.name {
-        max-width: 170px;
-        min-width: 80px;
-    }
+	td.avatar-cell {
+		width: 40px;
+	}
+	
+	td.name {
+		max-width: 170px;
+		min-width: 80px;
+	}
 
-    .total th, .best th{
-        text-align: right;
-    }
-    
-    .total td, .best td{
-        text-align: center;
-    }
-    
-    .cl_click div, td.cl_click {
-        cursor: pointer;
-    }
-
-
-    .poll-cell, .toggle {
-        div {
-            background-repeat: no-repeat;
-            background-position: center;
-            transition: background-color 0.2s;
-            background-size: 32px;
-            height: 32px;
-            width: 32px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        &.yes div {
-            background-image: url('../img/yes-vote.svg');
-        }
-
-        &.maybe div {
-            background-image: url('../img/maybe-vote.svg');
-        }
-
-        &.no div {
-            background-image: url('../img/no-vote.svg');
-        }
-        
-    }
-
-    .toggle div {
-        width: 24px;
-        height: 24px;
-        background-size: 24px;
-       }
-
-    #toggle {
-        float: left;
-        cursor: pointer;
-    }
-    .poll-cell, .toggle {
-        border-right: 2px solid white;
-    }
+	.total th, .best th{
+		text-align: right;
+	}
+	
+	.total td, .best td{
+		text-align: center;
+	}
+	
+	.cl_click div, td.cl_click {
+		cursor: pointer;
+	}
 
 
-    td.toggle-all.toggle {
-        cursor: pointer;
-        min-width: 50px;
-        &.yes div {
-            background-image: url('../img/yes-toggle.svg');
-        }
+	.poll-cell, .toggle {
+		div {
+			background-repeat: no-repeat;
+			background-position: center;
+			transition: background-color 0.2s;
+			background-size: 32px;
+			height: 32px;
+			width: 32px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		
+		&.yes div {
+			background-image: url('../img/yes-vote.svg');
+		}
 
-        &.maybe div {
-            background-image: url('../img/maybe-toggle.svg');
-        }
+		&.maybe div {
+			background-image: url('../img/maybe-vote.svg');
+		}
 
-        &.no div {
-            background-image: url('../img/no-toggle.svg');
-        }
-        
-        img {
-        float: right;
-        padding-top: 4px;
-        cursor: pointer;
-        display: none;
-        }
-    }
+		&.no div {
+			background-image: url('../img/no-vote.svg');
+		}
+		
+	}
 
-    .current-user {
+	.toggle div {
+		width: 24px;
+		height: 24px;
+		background-size: 24px;
+	   }
+
+	#toggle {
+		float: left;
+		cursor: pointer;
+	}
+	.poll-cell, .toggle {
+		border-right: 2px solid white;
+	}
+
+
+	td.toggle-all.toggle {
+		cursor: pointer;
+		min-width: 50px;
+		&.yes div {
+			background-image: url('../img/yes-toggle.svg');
+		}
+
+		&.maybe div {
+			background-image: url('../img/maybe-toggle.svg');
+		}
+
+		&.no div {
+			background-image: url('../img/no-toggle.svg');
+		}
+		
+		img {
+		float: right;
+		padding-top: 4px;
+		cursor: pointer;
+		display: none;
+		}
+	}
+
+	.current-user {
 			
 		td {
 			border-top: $border_current_user $fg_current_user;
@@ -143,63 +143,63 @@ $border_current_user: 2px solid;
 
 		}
 
-        .name {
-            font-weight: bold;
-        }
+		.name {
+			font-weight: bold;
+		}
 		
-    }
+	}
 
-    .poll-cell, .toggle, .result-cell {
-        
-        div {
-            background-color: transparent;
-        }
-        &.unvoted {
-            background-color: $bg_unvoted;
-            color: $fg_unvoted;
-            div {
-                color: $fg_unvoted;
-            }
-        }
+	.poll-cell, .toggle, .result-cell {
+		
+		div {
+			background-color: transparent;
+		}
+		&.unvoted {
+			background-color: $bg_unvoted;
+			color: $fg_unvoted;
+			div {
+				color: $fg_unvoted;
+			}
+		}
 
-        &.yes {
-            background-color: $bg_yes;
-            color: $fg_yes;
-            div {
-                color: $fg_yes;
-            }
-        }
-        &.no {
-            background-color: $bg_no;
-            color: $fg_no;
-            div {
-                color: $fg_no;
-            }
-        }
-        &.maybe {
-            background-color: $bg_maybe;
-            color: $fg_maybe;
-            div {
-                color: $fg_maybe;
-            }
-        }
-    }
-    td.total {
-        padding: 2px 0 1px;
-    }
+		&.yes {
+			background-color: $bg_yes;
+			color: $fg_yes;
+			div {
+				color: $fg_yes;
+			}
+		}
+		&.no {
+			background-color: $bg_no;
+			color: $fg_no;
+			div {
+				color: $fg_no;
+			}
+		}
+		&.maybe {
+			background-color: $bg_maybe;
+			color: $fg_maybe;
+			div {
+				color: $fg_maybe;
+			}
+		}
+	}
+	td.total {
+		padding: 2px 0 1px;
+	}
 
 }
 
 th, tr, td {
-    padding: 4px;
-    /* text-align: center; */
+	padding: 4px;
+	/* text-align: center; */
 }
 
 .votes {
-        th, tr, td {
-        /* text-align: left; */
-        border-top: 1px solid #ddd;
-    }
+		th, tr, td {
+		/* text-align: left; */
+		border-top: 1px solid #ddd;
+	}
 }
 
 
@@ -212,73 +212,73 @@ th, tr, td {
 		input {
 			min-width: 100px;
 		}
-    }
+	}
 	
 }
 
 .finish_vote {
-    display: contents;
+	display: contents;
 }
 
 .share {
-    margin: 10px 0;
-    
-    .input-group-addon{
-        background-image: url('../img/share.svg');
-        background-repeat: no-repeat;
-        background-position: 10px center;
-        padding-left: 35px;
-    }
+	margin: 10px 0;
+	
+	.input-group-addon{
+		background-image: url('../img/share.svg');
+		background-repeat: no-repeat;
+		background-position: 10px center;
+		padding-left: 35px;
+	}
 }
 
 #poll-desc, #comments-container, #poll-dates {
-    margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 .comment {
-    border: 1px solid #DDD;
-    border-radius: 3px;
-    margin-bottom: 10px;
+	border: 1px solid #DDD;
+	border-radius: 3px;
+	margin-bottom: 10px;
 
-    &.new-comment {
-        border: none;
-    }
-    
-    .comment-header {
-        background-color: #EEE;
-        border-bottom: 1px solid #DDD;
-        border-radius: 3px 3px 0 0;
-        padding: 2px 5px;
-    }
-    
-    .comment-date {
-        float: right;
-        color: #555;
-    }
-	    
-    .comment-content {
-        padding: 5px;
-    }
+	&.new-comment {
+		border: none;
+	}
+	
+	.comment-header {
+		background-color: #EEE;
+		border-bottom: 1px solid #DDD;
+		border-radius: 3px 3px 0 0;
+		padding: 2px 5px;
+	}
+	
+	.comment-date {
+		float: right;
+		color: #555;
+	}
+		
+	.comment-content {
+		padding: 5px;
+	}
 }
 
 .new-comment {
-    
-    .icon-loading-small {
-    float: left;
-    margin-top: 10px;
-    display: none;
-    }
-    
-    .comment-content textarea {
-        display: block;
-        min-width: 100%;
-        max-width: 100%;
-        min-height: 66px;
-    }
+	
+	.icon-loading-small {
+	float: left;
+	margin-top: 10px;
+	display: none;
+	}
+	
+	.comment-content textarea {
+		display: block;
+		min-width: 100%;
+		max-width: 100%;
+		min-height: 66px;
+	}
 }
 
 #controls h2 {
-    margin-top: 12px;
+	margin-top: 12px;
 }
 
 

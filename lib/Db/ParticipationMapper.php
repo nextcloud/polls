@@ -28,50 +28,50 @@ use OCP\IDBConnection;
 
 class ParticipationMapper extends Mapper {
 
-    /**
-     * ParticipationMapper constructor.
-     * @param IDBConnection $db
-     */
-    public function __construct(IDBConnection $db) {
-        parent::__construct($db, 'polls_particip', '\OCA\Polls\Db\Participation');
-    }
+	/**
+	 * ParticipationMapper constructor.
+	 * @param IDBConnection $db
+	 */
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, 'polls_particip', '\OCA\Polls\Db\Participation');
+	}
 
-    /**
-     * @param string $userId
-     * @param int $limit
-     * @param int $offset
-     * @return Participation[]
-     */
-    public function findDistinctByUser($userId, $limit = null, $offset = null) {
-        $sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
-        return $this->findEntities($sql, [$userId], $limit, $offset);
-    }
+	/**
+	 * @param string $userId
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Participation[]
+	 */
+	public function findDistinctByUser($userId, $limit = null, $offset = null) {
+		$sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
+		return $this->findEntities($sql, [$userId], $limit, $offset);
+	}
 
-    /**
-     * @param string $pollId
-     * @param int $limit
-     * @param int $offset
-     * @return Participation[]
-     */
-    public function findByPoll($pollId, $limit = null, $offset = null) {
-        $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-        return $this->findEntities($sql, [$pollId], $limit, $offset);
-    }
+	/**
+	 * @param string $pollId
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Participation[]
+	 */
+	public function findByPoll($pollId, $limit = null, $offset = null) {
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		return $this->findEntities($sql, [$pollId], $limit, $offset);
+	}
 
-    /**
-     * @param string $pollId
-     */
-    public function deleteByPoll($pollId) {
-        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-        $this->execute($sql, [$pollId]);
-    }
+	/**
+	 * @param string $pollId
+	 */
+	public function deleteByPoll($pollId) {
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		$this->execute($sql, [$pollId]);
+	}
 
-    /**
-     * @param string $pollId
-     * @param string $userId
-     */
-    public function deleteByPollAndUser($pollId, $userId) {
-        $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
-        $this->execute($sql, [$pollId, $userId]);
-    }
+	/**
+	 * @param string $pollId
+	 * @param string $userId
+	 */
+	public function deleteByPollAndUser($pollId, $userId) {
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
+		$this->execute($sql, [$pollId, $userId]);
+	}
 }

@@ -36,8 +36,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setType(integer $value)
  */
 class ParticipationText extends Entity {
-    public $text;
-    public $userId;
-    public $pollId;
-    public $type;
+	public $text;
+	public $userId;
+	public $pollId;
+	public $type;
 }
