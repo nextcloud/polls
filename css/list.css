@@ -5,7 +5,7 @@
 }
 .icon-polls {
  background-color:black;
- mask:url('../../../apps/polls/css/../img/app-logo-polls.svg') no-repeat 50% 50%
+ mask:url('../img/app-logo-polls.svg') no-repeat 50% 50%
 }
 .table {
  position:relative
@@ -94,16 +94,16 @@
  width:80px
 }
 .participants div.partic_voted.icon-partic_yes {
- background-image:url('../../../apps/polls/css/../img/yes-vote.svg')
+ background-image:url('../img/yes-vote.svg')
 }
 .participants div.partic_voted.icon-partic_no {
- background-image:url('../../../apps/polls/css/../img/no-vote.svg')
+ background-image:url('../img/no-vote.svg')
 }
 .participants div.partic_commented.icon-commented_yes {
- background-image:url('../../../apps/polls/css/../img/yes-comment.svg')
+ background-image:url('../img/yes-comment.svg')
 }
 .participants div.partic_commented.icon-commented_no {
- background-image:url('../../../apps/polls/css/../img/no-comment.svg')
+ background-image:url('../img/no-comment.svg')
 }
 .actions {
  width:44px;
@@ -119,16 +119,16 @@
  background-position:center
 }
 .thumbnail.progress.partic_yes,.thumbnail.endless.partic_yes {
- background-image:url('../../../apps/polls/css/../img/open-voted-vote.svg')
+ background-image:url('../img/open-voted-vote.svg')
 }
 .thumbnail.progress.partic_no,.thumbnail.endless.partic_no {
- background-image:url('../../../apps/polls/css/../img/open-unvoted-vote.svg')
+ background-image:url('../img/open-unvoted-vote.svg')
 }
 .thumbnail.expired.partic_yes {
- background-image:url('../../../apps/polls/css/../img/expired-voted-vote.svg')
+ background-image:url('../img/expired-voted-vote.svg')
 }
 .thumbnail.expired.partic_no {
- background-image:url('../../../apps/polls/css/../img/expired-unvoted-vote.svg')
+ background-image:url('../img/expired-unvoted-vote.svg')
 }
 .options,.participants {
  display:flex;
