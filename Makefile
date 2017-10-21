@@ -12,7 +12,7 @@
 
 app_name=$(notdir $(CURDIR))
 build_tools_directory=$(CURDIR)/build/tools
-build_sign_directory=$(build_dir)/build/sign
+build_source_directory=$(CURDIR)/build/source
 appstore_build_directory=$(CURDIR)/build/artifacts/appstore
 appstore_package_name=$(appstore_build_directory)/$(app_name)
 marketplace_build_directory=$(CURDIR)/build/artifacts/marketplace
@@ -21,7 +21,6 @@ nc_cert_directory=$(HOME)/.nextcloud/certificates
 oc_cert_directory=$(HOME)/.owncloud/certificates
 composer=$(shell which composer 2> /dev/null)
 sass=$(shell which sass 2> /dev/null)
-occ=$(CURDIR)/../../occ
 
 all: composer
 
@@ -51,31 +50,46 @@ clean:
 .PHONY: appstore
 appstore:
 	rm -rf $(appstore_build_directory)
+	rm -rf $(build_source_directory)
 	mkdir -p $(appstore_build_directory)
-	tar cvzf $(appstore_package_name).tar.gz ../$(app_name) \
-	--exclude-vcs \
-	--exclude="../$(app_name)/build" \
-	--exclude="../$(app_name)/tests" \
-	--exclude="../$(app_name)/Makefile" \
-	--exclude="../$(app_name)/*.log" \
-	--exclude="../$(app_name)/phpunit*xml" \
-	--exclude="../$(app_name)/composer.*" \
-	--exclude="../$(app_name)/js/node_modules" \
-	--exclude="../$(app_name)/js/tests" \
-	--exclude="../$(app_name)/js/test" \
-	--exclude="../$(app_name)/js/*.log" \
-	--exclude="../$(app_name)/js/package.json" \
-	--exclude="../$(app_name)/js/bower.json" \
-	--exclude="../$(app_name)/js/karma.*" \
-	--exclude="../$(app_name)/js/protractor.*" \
-	--exclude="../$(app_name)/package.json" \
-	--exclude="../$(app_name)/bower.json" \
-	--exclude="../$(app_name)/karma.*" \
-	--exclude="../$(app_name)/protractor\.*" \
-	--exclude="../$(app_name)/.*" \
-	--exclude="../$(app_name)/js/.*" \
-	--exclude="../$(app_name)/l10n/.tx" \
-	--exclude="../$(app_name)/l10n/no-php"
+	mkdir -p $(build_source_directory)
+
+	rsync -a \
+	--exclude="build" \
+	--exclude="tests" \
+	--exclude="Makefile" \
+	--exclude="*.log" \
+	--exclude="phpunit*xml" \
+	--exclude="composer.*" \
+	--exclude="js/node_modules" \
+	--exclude="js/tests" \
+	--exclude="js/test" \
+	--exclude="js/*.log" \
+	--exclude="js/package.json" \
+	--exclude="js/bower.json" \
+	--exclude="js/karma.*" \
+	--exclude="js/protractor.*" \
+	--exclude="package.json" \
+	--exclude="bower.json" \
+	--exclude="karma.*" \
+	--exclude="protractor.*" \
+	--exclude=".*" \
+	--exclude="js/.*" \
+	--exclude="l10n/.tx" \
+	--exclude="l10n/no-php" \
+	./ $(build_source_directory)/$(app_name)
+
+	@if [ -f $(nc_cert_directory)/$(app_name).key ]; then \
+		echo "Creating integrity file..."; \
+		php ../../occ integrity:sign-app --privateKey="$(nc_cert_directory)/$(app_name).key" --certificate="$(nc_cert_directory)/$(app_name).crt" --path "$(build_source_directory)/$(app_name)"; \
+	fi
+
+	tar cvzf $(appstore_package_name).tar.gz $(build_source_directory)/$(app_name)
+
+	@if [ -f $(nc_cert_directory)/$(app_name).key ]; then \
+		echo "Signing package..."; \
+		openssl dgst -sha512 -sign $(nc_cert_directory)/$(app_name).key $(appstore_build_directory)/$(app_name).tar.gz | openssl base64; \
+	fi
 
 # Builds the source package for the marketplace, ignores php and js tests
 .PHONY: marketplace
@@ -85,32 +99,47 @@ ifeq (,$(sass))
 else
 	sass --update css:css
 	rm -rf $(marketplace_build_directory)
+	rm -rf $(build_source_directory)
 	mkdir -p $(marketplace_build_directory)
-	tar cvzf $(marketplace_package_name).tar.gz ../$(app_name) \
-	--exclude-vcs \
-	--exclude="../$(app_name)/build" \
-	--exclude="../$(app_name)/tests" \
-	--exclude="../$(app_name)/Makefile" \
-	--exclude="../$(app_name)/*.log" \
-	--exclude="../$(app_name)/phpunit*xml" \
-	--exclude="../$(app_name)/composer.*" \
-	--exclude="../$(app_name)/js/node_modules" \
-	--exclude="../$(app_name)/js/tests" \
-	--exclude="../$(app_name)/js/test" \
-	--exclude="../$(app_name)/js/*.log" \
-	--exclude="../$(app_name)/js/package.json" \
-	--exclude="../$(app_name)/js/bower.json" \
-	--exclude="../$(app_name)/js/karma.*" \
-	--exclude="../$(app_name)/js/protractor.*" \
-	--exclude="../$(app_name)/package.json" \
-	--exclude="../$(app_name)/bower.json" \
-	--exclude="../$(app_name)/karma.*" \
-	--exclude="../$(app_name)/protractor\.*" \
-	--exclude="../$(app_name)/.*" \
-	--exclude="../$(app_name)/js/.*" \
-	--exclude="../$(app_name)/l10n/.tx" \
-	--exclude="../$(app_name)/l10n/no-php" \
-	--exclude="../$(app_name)/css/*.scss"
+	mkdir -p $(build_source_directory)
+
+	rsync -a \
+	--exclude="build" \
+	--exclude="tests" \
+	--exclude="Makefile" \
+	--exclude="*.log" \
+	--exclude="phpunit*xml" \
+	--exclude="composer.*" \
+	--exclude="js/node_modules" \
+	--exclude="js/tests" \
+	--exclude="js/test" \
+	--exclude="js/*.log" \
+	--exclude="js/package.json" \
+	--exclude="js/bower.json" \
+	--exclude="js/karma.*" \
+	--exclude="js/protractor.*" \
+	--exclude="package.json" \
+	--exclude="bower.json" \
+	--exclude="karma.*" \
+	--exclude="protractor.*" \
+	--exclude=".*" \
+	--exclude="js/.*" \
+	--exclude="l10n/.tx" \
+	--exclude="l10n/no-php" \
+	--exclude="css/*.scss" \
+	./ $(build_source_directory)/$(app_name)
+
+	@if [ -f $(oc_cert_directory)/$(app_name).key ]; then \
+		echo "Creating integrity file..."; \
+		php ../../occ integrity:sign-app --privateKey="$(oc_cert_directory)/$(app_name).key" --certificate="$(oc_cert_directory)/$(app_name).crt" --path "$(build_source_directory)/$(app_name)"; \
+	fi
+
+	tar cvzf $(marketplace_package_name).tar.gz $(build_source_directory)/$(app_name)
+
+	@if [ -f $(oc_cert_directory)/$(app_name).key ]; then \
+		echo "Signing package..."; \
+		openssl dgst -sha512 -sign $(oc_cert_directory)/$(app_name).key $(marketplace_build_directory)/$(app_name).tar.gz | openssl base64; \
+	fi
 endif
 
 .PHONY: test
