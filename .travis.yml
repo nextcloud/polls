@@ -31,11 +31,11 @@ cache:
 
 before_install:
   # Install NC / oC and app
-  - if [ '$CLOUD' = 'nextcloud' ]; then wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh; fi
-  - if [ '$CLOUD' = 'owncloud' ]; then wget https://raw.githubusercontent.com/owncloud/administration/master/travis-ci/before_install.sh; fi
+  - if [ $CLOUD = 'nextcloud' ]; then wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh; fi
+  - if [ $CLOUD = 'owncloud' ]; then wget https://raw.githubusercontent.com/owncloud/administration/master/travis-ci/before_install.sh; fi
   - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-  - if [ '$CLOUD' = 'nextcloud' ]; then cd ../server; fi
-  - if [ '$CLOUD' = 'owncloud' ]; then cd ../core; fi
+  - if [ $CLOUD = 'nextcloud' ]; then cd ../server; fi
+  - if [ $CLOUD = 'owncloud' ]; then cd ../core; fi
   - ./occ app:enable $APP_NAME
 
 before_script:
