@@ -61,13 +61,13 @@ table .icon-close {
  cursor:pointer;
  background-color:#ffede9;
  padding:0 5px;
- background-image:url('../../../apps/polls/css/../img/no-vote.svg')
+ background-image:url('../img/no-vote.svg')
 }
 table .icon-checkmark {
  cursor:pointer;
  background-color:#ebf5d6;
  padding:0 5px;
- background-image:url('../../../apps/polls/css/../img/yes-vote.svg')
+ background-image:url('../img/yes-vote.svg')
 }
 #expiration {
  max-width:200px
