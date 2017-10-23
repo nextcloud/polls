@@ -1,0 +1,255 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ownCloud Core package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ownCloud Core 8.0.0\n"
+"Report-Msgid-Bugs-To: translations@owncloud.org\n"
+"POT-Creation-Date: 2017-10-21 08:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: js/create_edit.js:363
+msgid ""
+"Nothing selected!\n"
+"Click on cells to turn them green."
+msgstr ""
+
+#: js/create_edit.js:370
+msgid "You must enter at least a title for the new poll."
+msgstr ""
+
+#: js/create_edit.js:376
+msgid "Please select at least one user or group!"
+msgstr ""
+
+#: js/start.js:22
+msgid "Copy to clipboard: Ctrl+C, Enter"
+msgstr ""
+
+#: js/start.js:36
+msgid "Do you really want to delete that poll?"
+msgstr ""
+
+#: js/vote.js:75 js/vote.js:113
+msgid ""
+"You are not registered.\n"
+"Please enter your name to vote\n"
+"(at least 3 characters)."
+msgstr ""
+
+#: js/vote.js:119
+msgid "Please add some text to your comment before submitting it."
+msgstr ""
+
+#: js/vote.js:133
+msgid "An error occurred, your comment was not posted..."
+msgstr ""
+
+#: lib/AppInfo/Application.php:161
+msgid "Polls"
+msgstr ""
+
+#: lib/Controller/PageController.php:183
+#, php-format
+msgid ""
+"Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/"
+"><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>"
+msgstr ""
+
+#: lib/Controller/PageController.php:194
+msgid "Polls App - New Comment"
+msgstr ""
+
+#: lib/Controller/PageController.php:196
+msgid "Polls App"
+msgstr ""
+
+#: templates/create.tmpl.php:80
+msgid "Edit poll"
+msgstr ""
+
+#: templates/create.tmpl.php:82
+msgid "Create new poll"
+msgstr ""
+
+#: templates/create.tmpl.php:104 templates/main.tmpl.php:63
+msgid "Title"
+msgstr ""
+
+#: templates/create.tmpl.php:106
+msgid "Description"
+msgstr ""
+
+#: templates/create.tmpl.php:109 templates/main.tmpl.php:73
+msgid "Access"
+msgstr ""
+
+#: templates/create.tmpl.php:112
+msgid "Registered users only"
+msgstr ""
+
+#: templates/create.tmpl.php:115
+msgid "hidden"
+msgstr ""
+
+#: templates/create.tmpl.php:118
+msgid "Public access"
+msgstr ""
+
+#: templates/create.tmpl.php:121
+msgid "Select"
+msgstr ""
+
+#: templates/create.tmpl.php:130
+msgid "User/Group search"
+msgstr ""
+
+#: templates/create.tmpl.php:139
+msgid "Anonymous"
+msgstr ""
+
+#: templates/create.tmpl.php:143
+msgid "Hide user names for admin"
+msgstr ""
+
+#: templates/create.tmpl.php:147 templates/main.tmpl.php:77
+msgid "Expires"
+msgstr ""
+
+#: templates/create.tmpl.php:155
+msgid "Event schedule"
+msgstr ""
+
+#: templates/create.tmpl.php:159
+msgid "Text based"
+msgstr ""
+
+#: templates/create.tmpl.php:162
+msgid "Dates"
+msgstr ""
+
+#: templates/create.tmpl.php:168
+msgid "Text item"
+msgstr ""
+
+#: templates/create.tmpl.php:172
+msgid "Add"
+msgstr ""
+
+#: templates/create.tmpl.php:182
+msgid "Update poll"
+msgstr ""
+
+#: templates/create.tmpl.php:184
+msgid "Create poll"
+msgstr ""
+
+#: templates/create.tmpl.php:186
+msgid "Cancel"
+msgstr ""
+
+#: templates/goto.tmpl.php:60
+msgid "No description provided."
+msgstr ""
+
+#: templates/goto.tmpl.php:221 templates/goto.tmpl.php:353
+msgid "Your name here"
+msgstr ""
+
+#: templates/goto.tmpl.php:277
+msgid "Total"
+msgstr ""
+
+#: templates/goto.tmpl.php:298
+msgid "Best option"
+msgstr ""
+
+#: templates/goto.tmpl.php:318
+msgid "Vote!"
+msgstr ""
+
+#: templates/goto.tmpl.php:323
+msgid "Receive notification email on activity"
+msgstr ""
+
+#: templates/goto.tmpl.php:331
+msgid "Link"
+msgstr ""
+
+#: templates/goto.tmpl.php:337
+msgid "Poll expired"
+msgstr ""
+
+#: templates/goto.tmpl.php:339
+#, php-format
+msgid "The poll expired on %s. Voting is disabled, but you can still comment."
+msgstr ""
+
+#: templates/goto.tmpl.php:343
+msgid "Comments"
+msgstr ""
+
+#: templates/goto.tmpl.php:351
+msgid "Login"
+msgstr ""
+
+#: templates/goto.tmpl.php:352
+msgid "or"
+msgstr ""
+
+#: templates/goto.tmpl.php:355
+msgid "Logged in as"
+msgstr ""
+
+#: templates/goto.tmpl.php:359
+msgid "Send!"
+msgstr ""
+
+#: templates/goto.tmpl.php:390
+msgid "No comments yet. Be the first."
+msgstr ""
+
+#: templates/main.tmpl.php:54
+msgid "No existing polls."
+msgstr ""
+
+#: templates/main.tmpl.php:71
+msgid "By"
+msgstr ""
+
+#: templates/main.tmpl.php:74
+msgid "Created"
+msgstr ""
+
+#: templates/main.tmpl.php:78
+msgid "participated"
+msgstr ""
+
+#: templates/main.tmpl.php:107
+msgid "Yourself"
+msgstr ""
+
+#: templates/main.tmpl.php:120
+msgid "Never"
+msgstr ""
+
+#: templates/main.tmpl.php:156
+msgid "Click to get link"
+msgstr ""
+
+#: templates/no.acc.tmpl.php:33
+msgid "Access denied"
+msgstr ""
+
+#: templates/no.acc.tmpl.php:36
+msgid "You are not allowed to view this poll or the poll does not exist."
+msgstr ""
