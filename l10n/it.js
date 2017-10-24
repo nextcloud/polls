@@ -1,4 +1,6 @@
-{ "translations": {
+OC.L10N.register(
+    "polls",
+    {
     "Nothing selected!\nClick on cells to turn them green." : "Nessuna selezione!\nFai clic sulle celle per colorarle di verde.",
     "You must enter at least a title for the new poll." : "Devi digitare almeno un titolo per il nuovo sondaggio.",
     "Please select at least one user or group!" : "Seleziona almeno un utente o un gruppo!",
@@ -55,5 +57,5 @@
     "Click to get link" : "Fai clic per ottenere il collegamento",
     "Access denied" : "Accesso negato",
     "You are not allowed to view this poll or the poll does not exist." : "Non hai il permesso di vedere questo sondaggio o il sondaggio non esiste."
-},"pluralForm" :"nplurals=2; plural=(n != 1);"
-}
+},
+"nplurals=2; plural=(n != 1);");

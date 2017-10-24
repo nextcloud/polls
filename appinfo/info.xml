@@ -3,7 +3,7 @@
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>polls</id>
     <name>Polls</name>
-    <summary>A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</summary>
+    <summary>A polls app, similar to doodle/dudle with the possibility to restrict access.</summary>
     <description>A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
     <version>0.8.0</version>
     <licence>agpl</licence>
@@ -17,7 +17,7 @@
     <repository type="git">https://github.com/nextcloud/polls.git</repository>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/new-poll.png</screenshot>
     <dependencies>
-        <owncloud min-version="8.1" max-version="10"/>
+        <owncloud min-version="8.2" max-version="10.0"/>
         <nextcloud min-version="11" max-version="13" />
     </dependencies>
     <ocsid>174671</ocsid>
