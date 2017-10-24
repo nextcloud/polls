@@ -21,17 +21,19 @@
  *
  */
 
+use League\FactoryMuffin\Faker\Facade as Faker;
+
 /**
  * General factory for the event model.
  */
 $fm->define('OCA\Polls\Db\Event')->setDefinitions([
-	'hash' => 'regexify|[A-Za-z0-9]{16}',
+	'hash' => Faker::regexify('[A-Za-z0-9]{16}'),
 	'type' => 0,
-	'title' => 'sentence|10',
-	'description' => 'sentence|20',
-	'created' => 'date|Y-m-d H:i:s',
+	'title' => Faker::sentence(10),
+	'description' => Faker::sentence(20),
+	'created' => Faker::date('Y-m-d H:i:s'),
 	'access' => 'registered',
-	'expire' => 'date|Y-m-d H:i:s',
+	'expire' => Faker::date('Y-m-d H:i:s'),
 	'isAnonymous' => 0,
 	'fullAnonymous' => 0
 ]);
