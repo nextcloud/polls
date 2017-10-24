@@ -222,9 +222,11 @@ class PageController extends Controller {
 		if ($poll->getType() == '0') {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 			$votes = $this->participationMapper->findByPoll($poll->getId());
+			$participants = $this->participationMapper->listParticipantsByPoll($poll->getId());
 		} else {
 			$dates = $this->textMapper->findByPoll($poll->getId());
 			$votes = $this->participationTextMapper->findByPoll($poll->getId());
+			$participants = $this->participationTextMapper->listParticipantsByPoll($poll->getId());
 		}
 		$comments = $this->commentMapper->findByPoll($poll->getId());
 		try {
@@ -238,6 +240,7 @@ class PageController extends Controller {
 				'dates' => $dates,
 				'comments' => $comments,
 				'votes' => $votes,
+				'participants' => $participants,
 				'notification' => $notification,
 				'userId' => $this->userId,
 				'userMgr' => $this->manager,

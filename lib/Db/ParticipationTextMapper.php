@@ -60,6 +60,16 @@ class ParticipationTextMapper extends Mapper {
 
 	/**
 	 * @param string $pollId
+	 * @param int $limit
+	 * @param int $offset
+	 */
+	public function listParticipantsByPoll($pollId, $limit = null, $offset = null) {
+		$sql = 'SELECT DISTINCT user_id FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		return $this->findEntities($sql, [$pollId], $limit, $offset);
+	}
+
+	/**
+	 * @param string $pollId
 	 */
 	public function deleteByPoll($pollId) {
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
