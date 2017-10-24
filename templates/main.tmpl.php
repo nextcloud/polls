@@ -97,12 +97,12 @@
 							$participated = $_['participations_text'];
 						}
 						$participated_class = 'partic_no';
-						$participated_title = 'You did not vote';
+						$participated_title = $l->t('You did not vote');
 						$participated_count = count($participated);
 
 						$comments = $_['comments'];
 						$commented_class = 'commented_no';
-						$commented_title = 'You did not comment';
+						$commented_title = $l->t('You did not comment');
 						$commented_count = count($comments);
 
 						if ($owner == $userId) {
@@ -125,7 +125,7 @@
 						for ($i = 0; $i < count($participated); $i++) {
 							if ($poll->getId() == intval($participated[$i]->getPollId())) {
 								$participated_class = 'partic_yes';
-								$participated_title = 'You voted';
+								$participated_title = $l->t('You voted');
 								array_splice($participated, $i, 1);
 								break;
 							}
@@ -134,7 +134,7 @@
 						for ($i = 0; $i < count($comments); $i++) {
 							if ($poll->getId() == intval($comments[$i]->getPollId())) {
 								$commented_class = 'commented_yes';
-								$commented_title = 'You commented';
+								$commented_title = $l->t('You commented');
 								array_splice($comments, $i, 1);
 								break;
 							}
