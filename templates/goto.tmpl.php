@@ -95,11 +95,12 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 						<h2><?php p($poll->getTitle()); ?></h2>
 					</div>
 					<?php endif; ?>
+				</div>
+				<div title="Details" class="button details">
+					<span class="symbol icon-details"></span>
+				</div>			
 			</div>
-			</div>
-			<header class="row">
-			</header>
-			<div class="row">
+			<div class="table has-controls">
 				<div class="col-70">
 					<div class="wordwrap desc"><?php p($description); ?></div>
 					<div class="scroll_div">
@@ -108,6 +109,16 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 									<?php
 									if ($poll->getType() == '0') {
 										print_unescaped('<tr id="time-slots-header"><th class="first_header_cell" colspan="3"></th>');
+										foreach ($dates as $el) {
+											$datavalue = strtotime($el->getDt());
+											print_unescaped('<th id="slot-' . $datavalue . '" title="'		 . $el->getDt() . ' '.date_default_timezone_get().'" class="time-slot" data-value="' . $datavalue . '" value="' . $el->getDt() . '">');
+											
+											print_unescaped('<div class="month">' . $l->t(date('M', $datavalue)) . '</div>');
+											print_unescaped('<div class="day">' . date('j', $datavalue) . '</div>');
+											print_unescaped('<div class="dayow">' . $l->t(date('D', $datavalue)) . '</div>');
+											print_unescaped('<div class="time">' . date('G:i', $datavalue) . ' UTC</div>');
+											print_unescaped('</th>');
+										}
 									} else {
 										print_unescaped('<tr id="vote-options-header"><th class="first_header_cell" colspan="3"></th>');
 										foreach ($dates as $el) {
@@ -329,7 +340,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 						<?php endif; ?>
 					</div>
 				</div>
-				<div class="col-30">
+				<div id="app-sidebar" class="detailsView scroll-container">
 					<div class="input-group share">
 						<div class="input-group-addon">
 							<span class="icon-share"></span><?php p($l->t('Link')); ?>

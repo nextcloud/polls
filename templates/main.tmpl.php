@@ -31,6 +31,8 @@
 	$userMgr = $_['userMgr'];
 	$urlGenerator = $_['urlGenerator'];
 ?>
+
+<div id="app">
 	<div id="app-content">
 		<div id="app-content-wrapper">
 				<div id="controls">
@@ -40,12 +42,12 @@
 								<img class="svg" src="<?php print_unescaped(OCP\image_path("core", "places/home.svg")); ?>" alt="Home">
 							</a>
 						</div>
-					</div>
-					<div class="creatable" style="">
-						<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
-							<span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
-						</a>
-						<input class="stop icon-close" style="display:none" value="" type="button">
+						<div class="creatable" style="">
+							<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
+								<span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
+							</a>
+							<input class="stop icon-close" style="display:none" value="" type="button">
+						</div>
 					</div>
 				</div>
 	<?php if (count($_['polls']) == 0) : ?>
@@ -203,6 +205,7 @@
 	<?php endif; ?>
 		</div>
 	</div>
+</div>
 
 
 <?php
