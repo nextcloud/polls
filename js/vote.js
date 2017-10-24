@@ -23,44 +23,15 @@ $(document).ready(function () {
 		$(obj).avatar(obj.title, 32);
 	});
 
-	$('.hidden-dates').each(function(i, obj) {
-		var exDt = new Date(obj.value.replace(/ /g,"T")+"Z"); //Fix display in Safari and IE, still NaN on Firefox on iPad
-		var day = ('0' + exDt.getDate()).substr(-2);
-		var month = ('0' + (exDt.getMonth()+1)).substr(-2);
-		var day_month = day + '.' + month;
-		var year = exDt.getFullYear();
+	$('.time-slot').each(function() {
+        var extendedDate = new Date($(this).attr("value").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
 
-		if(typeof arr_dates[day_month] !== 'undefined') {
-			arr_dates[day_month] += 1;
-		} else {
-			arr_dates[day_month] = 1;
-		}
-		if(typeof arr_years[year] !== 'undefined') {
-			arr_years[year] += 1;
-		} else {
-			arr_years[year] = 1;
-		}
-		dateStr += '<th class="time-slot" value="' + obj.value + '">' +
-		'<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) +
-							// ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) +
-							'</div>' +
-		'<div class="day">'   + exDt.toLocaleString(window.navigator.language, {day: 'numeric'}) + '</div>' +
-		'<div class="dayow">' + exDt.toLocaleString(window.navigator.language, {weekday: 'short'}) + '</div>' +
-		'<div class="time">'  + ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2) + '</div>' +
-		'</th>';
-	});
-
-	var for_string_dates = '';
-	for(k in arr_dates) {
-		for_string_dates += '<th colspan="' + arr_dates[k] + '" class="bordered">' + k + '</th>';
-	}
-
-	var for_string_years = '';
-	for(k in arr_years) {
-		for_string_years += '<th colspan="' + arr_years[k] + '" class="bordered">' + k + '</th>';
-	}
-
-	$('#time-slots-header').append(dateStr);
+        $(this).children('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
+        $(this).children('.day').text(extendedDate.toLocaleString(window.navigator.language, {day: 'numeric'}));
+        $(this).children('.dayow').text(extendedDate.toLocaleString(window.navigator.language, {weekday: 'short'}));
+        $(this).children('.time').text(extendedDate.toLocaleTimeString(window.navigator.language, {hour: 'numeric', minute:'2-digit', timeZoneName:'short'}));
+        
+ 	});
 
 	$('#submit_finish_vote').click(function() {
 		var form = document.finish_vote;

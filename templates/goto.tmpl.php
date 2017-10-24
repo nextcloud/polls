@@ -47,12 +47,6 @@
 	}
 ?>
 
-<?php if($poll->getType() == '0') : ?>
-	<?php foreach($dates as $d) : ?>
-		<input class="hidden-dates" type="hidden" value="<?php print_unescaped($d->getDt()); ?>" />
-	<?php endforeach ?>
-<?php endif ?>
-
 <?php
 if (   $poll->getDescription() != null 
 	&& $poll->getDescription() != ''
