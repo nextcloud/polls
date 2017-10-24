@@ -14,10 +14,6 @@ $.fn.switchClass = function(a, b) {
 
 $(document).ready(function () {
 	// count how many times in each date
-	var arr_dates = [];  // will be like: [21.02] => 3
-	var arr_years = [];  // [1992] => 6
-	var dateStr = '';
-	var k;
 
 	$('.poll.avatardiv').each(function(i, obj) {
 		$(obj).avatar(obj.title, 32);

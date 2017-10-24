@@ -102,21 +102,23 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 							<thead>
 									<?php
 									if ($poll->getType() == '0') {
-										print_unescaped('<tr id="time-slots-header"><th class="first_header_cell" colspan="3"></th>');
-										foreach ($dates as $el) {
+										print_unescaped('<tr id="time-slots-header">');
+									} else {
+										print_unescaped('<tr id="vote-options-header">');
+									}
+                                    print_unescaped('<th class="first_header_cell" colspan="3"></th>');
+									foreach ($dates as $el) {
+										if ($poll->getType() == '0') {
 											$datavalue = strtotime($el->getDt());
-											print_unescaped('<th id="slot-' . $datavalue . '" title="'		 . $el->getDt() . ' '.date_default_timezone_get().'" class="time-slot" data-value="' . $datavalue . '" value="' . $el->getDt() . '">');
+											print_unescaped('<th id="slot-' . $datavalue . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="time-slot" data-value="' . $datavalue . '" value="' . $el->getDt() . '">');
 											
 											print_unescaped('<div class="month">' . $l->t(date('M', $datavalue)) . '</div>');
 											print_unescaped('<div class="day">' . date('j', $datavalue) . '</div>');
 											print_unescaped('<div class="dayow">' . $l->t(date('D', $datavalue)) . '</div>');
 											print_unescaped('<div class="time">' . date('G:i', $datavalue) . ' UTC</div>');
 											print_unescaped('</th>');
-										}
-									} else {
-										print_unescaped('<tr id="vote-options-header"><th class="first_header_cell" colspan="3"></th>');
-										foreach ($dates as $el) {
-											print_unescaped('<th title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="vote-option">' . preg_replace('/_\d+$/', '', $el->getText()) . '</th>');
+										} else {
+                                            print_unescaped('<th title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="vote-option">' . preg_replace('/_\d+$/', '', $el->getText()) . '</th>');
 										}
 									}
 									print_unescaped('</tr>');
