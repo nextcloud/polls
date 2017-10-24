@@ -32,6 +32,9 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 	private $controller;
 	private $userId = 'john';
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function setUp() {
 		$request = $this->getMockBuilder('OCP\IRequest')
 			->disableOriginalConstructor()
@@ -96,6 +99,9 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 
+	/**
+	 *
+	 */
 	public function testIndex() {
 		$result = $this->controller->index();
 

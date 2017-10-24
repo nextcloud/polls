@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,17 +21,17 @@
  *
  */
 
-namespace OCA\Polls\Db;
-
-use OCP\AppFramework\Db\Entity;
-
 /**
- * @method string getDt()
- * @method void setDt(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
+ * General factory for the event model.
  */
-class Date extends Entity {
-	public $dt;
-	public $pollId;
-}
+$fm->define('OCA\Polls\Db\Event')->setDefinitions([
+	'hash' => 'regexify|[A-Za-z0-9]{16}',
+	'type' => 0,
+	'title' => 'sentence|10',
+	'description' => 'sentence|20',
+	'created' => 'date|Y-m-d H:i:s',
+	'access' => 'registered',
+	'expire' => 'date|Y-m-d H:i:s',
+	'isAnonymous' => 0,
+	'fullAnonymous' => 0
+]);

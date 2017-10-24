@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,17 +21,25 @@
  *
  */
 
-namespace OCA\Polls\Db;
+namespace OCA\Polls\Tests\Unit\Db;
 
-use OCP\AppFramework\Db\Entity;
+use OCA\Polls\Db\ParticipationMapper;
+use OCP\IDBConnection;
+use PHPUnit_Framework_TestCase;
 
-/**
- * @method string getDt()
- * @method void setDt(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
- */
-class Date extends Entity {
-	public $dt;
-	public $pollId;
+class ParticipationMapperTest extends PHPUnit_Framework_TestCase {
+
+	/** @var IDBConnection */
+	private $con;
+	/** @var ParticipationMapper */
+	private $participationMapper;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setUp() {
+		parent::setUp();
+		$this->con = \OC::$server->getDatabaseConnection();
+		$this->participationMapper = new ParticipationMapper($this->con);
+	}
 }

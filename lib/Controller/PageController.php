@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
+use OC\Security\SecureRandom;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Date;
 use OCA\Polls\Db\Event;
@@ -423,15 +424,16 @@ class PageController extends Controller {
 		$isAnonymous,
 		$hideNames
 	) {
+		$secureRandom = new SecureRandom();
 		$event = new Event();
 		$event->setTitle(htmlspecialchars($pollTitle));
 		$event->setDescription(htmlspecialchars($pollDesc));
 		$event->setOwner($userId);
 		$event->setCreated(date('Y-m-d H:i:s'));
-		$event->setHash(\OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(16,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER));
+		$event->setHash($secureRandom->generate(
+			16,
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+		));
 		$event->setIsAnonymous($isAnonymous ? 1 : 0);
 		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
 

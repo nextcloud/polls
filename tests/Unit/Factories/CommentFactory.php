@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,17 +21,10 @@
  *
  */
 
-namespace OCA\Polls\Db;
-
-use OCP\AppFramework\Db\Entity;
-
 /**
- * @method string getDt()
- * @method void setDt(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
+ * General factory for the comment model.
  */
-class Date extends Entity {
-	public $dt;
-	public $pollId;
-}
+$fm->define('OCA\Polls\Db\Comment')->setDefinitions([
+	'dt' => 'date|Y-m-d H:i:s',
+	'comment' => 'sentence|20'
+]);
