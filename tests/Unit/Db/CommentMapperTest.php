@@ -57,8 +57,10 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 		$this->commentMapper = new CommentMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 
-		$this->fm = new FactoryMuffin();
-		$this->fm->loadFactories(__DIR__ . '/../Factories');
+		// Pass the $fm var to the Factories and set class var
+		$fm = new FactoryMuffin();
+		$fm->loadFactories(__DIR__ . '/../Factories');
+		$this->fm = $fm;
 	}
 
 	/**
