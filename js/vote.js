@@ -126,7 +126,7 @@ $(document).ready(function () {
 			$('.new-comment textarea').val('').focus();
 			$('.new-comment .icon-loading-small').hide();
 		}).error(function() {
-			alert(t('polls', 'An error occurred, your comment was not posted...'));
+			alert(t('polls', 'An error occurred, your comment was not posted…'));
 			$('.new-comment .icon-loading-small').hide();
 		});
 	});
