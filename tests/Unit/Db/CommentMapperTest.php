@@ -70,7 +70,7 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testCreate() {
 		$user = $this->userManager->createUser(
-			strtolower(Faker::unique()->firstNameMale()()),
+			Faker::unique()->firstNameMale()(),
 			Faker::unique()->password()()
 		);
 		$user->setDisplayName(Faker::firstNameMale()() . ' ' . Faker::firstNameMale()());
