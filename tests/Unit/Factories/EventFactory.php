@@ -27,13 +27,20 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  * General factory for the event model.
  */
 $fm->define('OCA\Polls\Db\Event')->setDefinitions([
-	'hash' => Faker::regexify('[A-Za-z0-9]{16}'),
 	'type' => 0,
 	'title' => Faker::sentence(10),
-	'description' => Faker::sentence(20),
-	'created' => Faker::date('Y-m-d H:i:s'),
+	'description' => Faker::paragraph(),
+	'owner' => Faker::firstNameMale(),
+	'created' => function () {
+		$date = new DateTime( 'today');
+		return $date->format('Y-m-d H:i:s');
+	},
 	'access' => 'registered',
-	'expire' => Faker::date('Y-m-d H:i:s'),
+	'expire' => function () {
+		$date = new DateTime( 'tomorrow');
+		return $date->format('Y-m-d H:i:s');
+	},
+	'hash' => Faker::regexify('[A-Za-z0-9]{16}'),
 	'isAnonymous' => 0,
 	'fullAnonymous' => 0
 ]);

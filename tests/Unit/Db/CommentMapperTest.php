@@ -28,7 +28,7 @@ use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCP\IDBConnection;
-use OCP\IUserManager;
+use OCP\IUser;
 use PHPUnit_Framework_TestCase;
 use League\FactoryMuffin\FactoryMuffin;
 use League\FactoryMuffin\Faker\Facade as Faker;
@@ -37,8 +37,6 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var IUserManager $user */
-	private $userManager;
 	/** @var CommentMapper */
 	private $commentMapper;
 	/** @var EventMapper */
@@ -53,14 +51,11 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 		parent::setUp();
 
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->userManager = \OC::$server->getUserManager();
 		$this->commentMapper = new CommentMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 
-		// Pass the $fm var to the Factories and set class var
-		$fm = new FactoryMuffin();
-		$fm->loadFactories(__DIR__ . '/../Factories');
-		$this->fm = $fm;
+		$this->fm = new FactoryMuffin();
+		$this->fm->loadFactories(__DIR__ . '/../Factories');
 	}
 
 	/**
@@ -69,21 +64,12 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 	 * @return Comment
 	 */
 	public function testCreate() {
-		$user = $this->userManager->createUser(
-			Faker::unique()->firstNameMale()(),
-			Faker::unique()->password()()
-		);
-		$user->setDisplayName(Faker::firstNameMale()() . ' ' . Faker::firstNameMale()());
-		$user->setEMailAddress(Faker::unique()->email()());
-
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
-		$event->setOwner($user->getUID());
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 
 		/** @var Comment $comment */
 		$comment = $this->fm->instance('OCA\Polls\Db\Comment');
-		$comment->setUserId($user->getUID());
 		$comment->setPollId($event->getId());
 		$this->assertInstanceOf(Comment::class, $this->commentMapper->insert($comment));
 
@@ -98,7 +84,7 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 	 * @return Comment
 	 */
 	public function testUpdate(Comment $comment) {
-		$comment->setComment(Faker::sentence(30)());
+		$comment->setComment(Faker::paragraph()());
 		$this->commentMapper->update($comment);
 
 		return $comment;
@@ -107,14 +93,12 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Delete the previously created entries from the database.
 	 *
-	 * @depends testCreate
+	 * @depends testUpdate
 	 * @param Comment $comment
 	 */
 	public function testDelete(Comment $comment) {
 		$event = $this->eventMapper->find($comment->getPollId());
 		$this->commentMapper->delete($comment);
 		$this->eventMapper->delete($event);
-		$user = $this->userManager->get($comment->getUserId());
-		$user->delete();
 	}
 }
