@@ -43,7 +43,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 
 .row {
-	display: flex;
+	display: flex;		   display: -webkit-flex;
 	width: 100%;
 	padding-left:  $row-padding;
 	padding-right: $row-padding;
@@ -94,7 +94,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 .wrapper {
-	display: flex;
+	display: flex; 			display: -webkit-flex;
 	align-items: center;
 	position: relative;
 	div {
@@ -203,15 +203,15 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 .options, .participants {
 	display: flex;
-	flex-direction: row;
+	flex-direction: row;	 -webkit-flex-direction: row;
 }
 
 .group-1, .group-1-1, .group-master {
-	flex-grow: 1;
+	flex-grow: 1;	 -webkit-flex-grow: 1;
 }
 
 .group-1-1 {
-	flex-direction: column;
+	flex-direction: column;		 -webkit-flex-direction: column;
 	width: $group-1-1-width;
 	> div {
 		 width: 100%;
@@ -225,7 +225,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		width: $group-1-width;
 	}
 	.group-2-1, .group-2-2 {
-		flex-direction: column;
+		flex-direction: column; -webkit-flex-direction: column;
 	}
 
 	.access, .created {
