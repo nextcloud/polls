@@ -84,7 +84,8 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 	 * @return Comment
 	 */
 	public function testUpdate(Comment $comment) {
-		$comment->setComment(Faker::paragraph()());
+		$newComment = Faker::paragraph();
+		$comment->setComment($newComment());
 		$this->commentMapper->update($comment);
 
 		return $comment;
