@@ -24,6 +24,7 @@ OC.L10N.register(
     "Select" : "Seleziona",
     "User/Group search" : "Cerca utente/gruppo",
     "Anonymous" : "Anonimo",
+    "Hide user names for admin" : "Nascondi i nomi utente degli amministratori",
     "Expires" : "Scade",
     "Event schedule" : "Pianificazione evento",
     "Text based" : "Basato su testo",

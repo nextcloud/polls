@@ -37,6 +37,7 @@ OC.L10N.register(
     "Total" : "Yhteensä",
     "Best option" : "Paras valinta",
     "Vote!" : "Äänestä!",
+    "Receive notification email on activity" : "Vastaanota sähköposti-ilmoituksia toimista",
     "Link" : "Linkki",
     "Poll expired" : "Äänestys päättyi",
     "The poll expired on %s. Voting is disabled, but you can still comment." : "Kysely päättyi %s. Kyselyyn vastaaminen ei ole mahdollista, mutta voit silti kommentoida.",
