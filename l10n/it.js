@@ -8,7 +8,6 @@ OC.L10N.register(
     "Copy to clipboard: Ctrl+C, Enter" : "Copia negli appunti: Ctrl+C, Invio",
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Non sei registrato.\nDigita il tuo nome per votare\n(almeno 3 caratteri).",
     "Please add some text to your comment before submitting it." : "Aggiungi del testo al tuo commento prima di inviarlo.",
-    "An error occurred, your comment was not posted..." : "Si è verificato un errore, il tuo commento non è stato pubblicato...",
     "Polls" : "Sondaggi",
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Ciao %s,<br/><br/><strong>%s</strong> ha partecipato al sondaggio '%s'.<br/><br/>Per andare direttamente al sondaggio, puoi utilizzare questo <a href=\"%s\">collegamento</a>",
     "Polls App - New Comment" : "Sondaggi - Nuovo commento",

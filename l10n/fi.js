@@ -7,7 +7,6 @@ OC.L10N.register(
     "Do you really want to delete that poll?" : "Haluatko varmasti poistaa kyseisen kyselyn?",
     "Copy to clipboard: Ctrl+C, Enter" : "Kopioi leikepöydälle: Ctrl+C, Enter",
     "Please add some text to your comment before submitting it." : "Lisää tekstiä kommenttiisi, ennen kuin lähetät sen.",
-    "An error occurred, your comment was not posted..." : "Tapahtui virhe, kommenttiasi ei lähetetty...",
     "Polls" : "Kyselyt",
     "Polls App - New Comment" : "Kyselysovellus - Uusi kommentti",
     "Polls App" : "Kyselysovellus",

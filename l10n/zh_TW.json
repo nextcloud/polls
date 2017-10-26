@@ -6,7 +6,6 @@
     "Copy to clipboard: Ctrl+C, Enter" : "複製到剪貼簿：請按Ctrl + C，並按Enter。",
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "您並非註冊使用者。\n請輸入您的名稱來進行投票。(至少3個字母)",
     "Please add some text to your comment before submitting it." : "在送出之前，請加入一些您的文字意見。",
-    "An error occurred, your comment was not posted..." : "發生錯誤，您的意見並未被送出。",
     "Polls" : "Polls",
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "%s你好,<br/><br/><strong>%s</strong>參與了這項意見調查'%s'。<br/><br/>直接透過此<a href=\"%s\">連結</a>前往這項調查",
     "Polls App - New Comment" : "Polls App - 新的意見",

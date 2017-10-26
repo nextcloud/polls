@@ -4,7 +4,6 @@ OC.L10N.register(
     "You must enter at least a title for the new poll." : "Naujai apklausai privalote įvesti bent pavadinimą.",
     "Do you really want to delete that poll?" : "Ar tikrai norite ištrinti apklausą?",
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Jūs nesate užsiregistravę.\nNorėdami balsuoti, įveskite vardą\n(bent 3 simbolius).",
-    "An error occurred, your comment was not posted..." : "Įvyko klaida, jūsų komentaras nebuvo paskelbtas...",
     "Polls" : "Apklausos",
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Sveiki, %s,<br/><br/><strong>%s</strong> dalyvavo apklausoje \"%s\".<br/><br/>Norėdami pereiti tiesiai į apklausą, galite pasinaudoti šia <a href=\"%s\">nuoroda</a>",
     "Polls App - New Comment" : "Apklausų programėlė - Naujas komentaras",
