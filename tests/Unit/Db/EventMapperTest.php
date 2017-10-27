@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2017 Kai Schröer <kai@schroeer.co>
  *
  * @author Kai Schröer <kai@schroeer.co>
  *
@@ -24,10 +24,10 @@
 namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
-use PHPUnit_Framework_TestCase;
 
-class EventMapperTest extends PHPUnit_Framework_TestCase {
+class EventMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;

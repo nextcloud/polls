@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2017 Kai Schröer <kai@schroeer.co>
  *
  * @author Kai Schröer <kai@schroeer.co>
  *
@@ -27,13 +27,11 @@ use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
-use OCP\IUser;
-use PHPUnit_Framework_TestCase;
-use League\FactoryMuffin\FactoryMuffin;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class CommentMapperTest extends PHPUnit_Framework_TestCase {
+class CommentMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
@@ -41,8 +39,6 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 	private $commentMapper;
 	/** @var EventMapper */
 	private $eventMapper;
-	/** @var FactoryMuffin */
-	private	$fm;
 
 	/**
 	 * {@inheritDoc}
@@ -53,9 +49,6 @@ class CommentMapperTest extends PHPUnit_Framework_TestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->commentMapper = new CommentMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
-
-		$this->fm = new FactoryMuffin();
-		$this->fm->loadFactories(__DIR__ . '/../Factories');
 	}
 
 	/**

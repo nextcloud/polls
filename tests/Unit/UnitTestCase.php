@@ -21,25 +21,22 @@
  *
  */
 
-namespace OCA\Polls\Tests\Unit\Db;
+namespace OCA\Polls\Tests\Unit;
 
-use OCA\Polls\Db\ParticipationMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
+use League\FactoryMuffin\FactoryMuffin;
+use PHPUnit_Framework_TestCase;
 
-class ParticipationMapperTest extends UnitTestCase {
+class UnitTestCase extends PHPUnit_Framework_TestCase {
 
-	/** @var IDBConnection */
-	private $con;
-	/** @var ParticipationMapper */
-	private $participationMapper;
+	/** @var FactoryMuffin */
+	protected $fm;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
-		$this->participationMapper = new ParticipationMapper($this->con);
+		$this->fm = new FactoryMuffin();
+		$this->fm->loadFactories(__DIR__ . '/Factories');
 	}
 }

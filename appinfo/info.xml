@@ -8,6 +8,7 @@
     <version>0.8.0</version>
     <licence>agpl</licence>
     <author>Vinzenz Rosenkranz</author>
+	<author>Kai Schröer</author>
     <documentation>
         <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
     </documentation>
