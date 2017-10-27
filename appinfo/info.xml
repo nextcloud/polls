@@ -1,23 +1,24 @@
 <?xml version="1.0"?>
-<info>
-   <id>polls</id>
-   <name>Polls</name>
-   <description>A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
-   <summary>A polls app, similar to doodle/dudle with the possibility to restrict access.</summary>
-   <documentation>
-      <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
-   </documentation>
-   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/new-poll.png</screenshot>
-   <version>0.8.0</version>
-   <licence>AGPL</licence>
-   <author>Vinzenz Rosenkranz</author>
-   <category>tools</category>
-   <website>https://github.com/nextcloud/polls</website>
-   <bugs>https://github.com/nextcloud/polls/issues</bugs>
-   <repository type="git">https://github.com/nextcloud/polls.git</repository>
-   <dependencies>
-      <owncloud min-version="8.2" max-version="10.0" />
-      <nextcloud min-version="11" max-version="13" />
-   </dependencies>
-   <ocsid>174671</ocsid>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>polls</id>
+    <name>Polls</name>
+    <summary>A polls app, similar to doodle/dudle with the possibility to restrict access.</summary>
+    <description>A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
+    <version>0.8.0</version>
+    <licence>agpl</licence>
+    <author>Vinzenz Rosenkranz</author>
+    <documentation>
+        <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
+    </documentation>
+    <category>tools</category>
+    <website>https://github.com/nextcloud/polls</website>
+    <bugs>https://github.com/nextcloud/polls/issues</bugs>
+    <repository type="git">https://github.com/nextcloud/polls.git</repository>
+    <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/new-poll.png</screenshot>
+    <dependencies>
+        <owncloud min-version="8.2" max-version="10.0" />
+        <nextcloud min-version="11" max-version="13" />
+    </dependencies>
+    <ocsid>174671</ocsid>
 </info>
