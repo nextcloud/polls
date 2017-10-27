@@ -32,12 +32,12 @@ $fm->define('OCA\Polls\Db\Event')->setDefinitions([
 	'description' => Faker::paragraph(),
 	'owner' => Faker::firstNameMale(),
 	'created' => function () {
-		$date = new DateTime( 'today');
+		$date = new DateTime('today');
 		return $date->format('Y-m-d H:i:s');
 	},
 	'access' => 'registered',
 	'expire' => function () {
-		$date = new DateTime( 'tomorrow');
+		$date = new DateTime('tomorrow');
 		return $date->format('Y-m-d H:i:s');
 	},
 	'hash' => Faker::regexify('[A-Za-z0-9]{16}'),
