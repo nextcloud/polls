@@ -108,6 +108,6 @@ class PageControllerTest extends UnitTestCase {
 		$result = $this->controller->index();
 
 		$this->assertEquals('main.tmpl', $result->getTemplateName());
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 	}
 }

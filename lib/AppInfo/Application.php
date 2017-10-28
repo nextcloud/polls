@@ -158,7 +158,7 @@ class Application extends App {
 				'id' => 'polls',
 				'order' => 77,
 				'href' => $urlGenerator->linkToRoute('polls.page.index'),
-				'icon' => $urlGenerator->imagePath('polls', 'app-logo-polls.svg'),
+				'icon' => $urlGenerator->imagePath('polls', 'app.svg'),
 				'name' => $l10n->t('Polls')
 			];
 		});
