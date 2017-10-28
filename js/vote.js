@@ -1,7 +1,7 @@
 var newUserDates = [];
 var newUserTypes = [];
 
-var max_votes = 0;
+var maxVotes = 0;
 var values_changed = false;
 
 var tzOffset = new Date().getTimezoneOffset();
@@ -12,9 +12,43 @@ $.fn.switchClass = function(a, b) {
 	return this;
 };
 
+function updateCommentsCount(){
+	//todo Update the Badgecounter
+	$('#comment-counter').removeClass('no-comments');
+	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
+	
+}
+
+function updateCounts(){
+	maxVotes = 0;
+	$('.column.total').each(function() {
+		var yes = parseInt($(this).find('.yes').text());
+		var no = parseInt($(this).find('.no').text());
+		if(yes - no > maxVotes) {
+			maxVotes = yes - no;
+		}
+	});
+	var i = 0;
+	$('.column.total').each(function() {
+		var yes = parseInt($(this).find('.yes').text());
+		var no = parseInt($(this).find('.no').text());
+		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no === maxVotes);
+	});
+}
+
+
 $(document).ready(function () {
 	// count how many times in each date
-
+    $('#switchDetails').click(function(){
+		OC.Apps.showAppSidebar();
+    });
+	
+    $('#closeDetails').click(function(){
+		OC.Apps.hideAppSidebar();
+    });
+	
+	
+	
 	$('.poll.avatardiv').each(function(i, obj) {
 		$(obj).avatar(obj.title, 32);
 	});
@@ -77,21 +111,22 @@ $(document).ready(function () {
 				return;
 			}
 		}
-		var comm = document.getElementById('commentBox');
-		if(comm.value.trim().length <= 0) {
+		var comment = document.getElementById('commentBox');
+		if(comment.value.trim().length <= 0) {
 			alert(t('polls', 'Please add some text to your comment before submitting it.'));
 			return;
 		}
 		var data = {
 			pollId: form.elements.pollId.value,
 			userId: form.elements.userId.value,
-			commentBox: comm.value.trim()
+			commentBox: comment.value.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function(data) {
 			$('.comments .comment:first').after('<div class="comment"><div class="comment-header"><span class="comment-date">' + data.date + '</span>' + data.userName + '</div><div class="wordwrap comment-content">' + data.comment + '</div></div>');
 			$('.new-comment textarea').val('').focus();
 			$('.new-comment .icon-loading-small').hide();
+			updateCommentsCount();
 		}).error(function() {
 			alert(t('polls', 'An error occurred, your comment was not posted...'));
 			$('.new-comment .icon-loading-small').hide();
@@ -102,23 +137,6 @@ $(document).ready(function () {
 		$(this).select();
 	});
 });
-
-function updateCounts(){
-	max_votes = 0;
-	$('td.total').each(function() {
-		var yes = parseInt($(this).find('.yes').text());
-		var no = parseInt($(this).find('.no').text());
-		if(yes - no > max_votes) {
-			max_votes = yes - no;
-		}
-	});
-	var i = 0;
-	$('td.total').each(function() {
-		var yes = parseInt($(this).find('.yes').text());
-		var no = parseInt($(this).find('.no').text());
-		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no === max_votes);
-	});
-}
 
 $(document).on('click', '.toggle-all, .cl_click', function() {
 	values_changed = true;
@@ -138,10 +156,10 @@ $(document).on('click', '.toggle-all, .cl_click', function() {
 		$toggle= "maybe";
 	}
 	if($(this).hasClass('toggle-all')) {
-		$(".cl_click").attr('class', 'cl_click poll-cell active ' + $toggle);
+		$(".cl_click").attr('class', 'column cl_click poll-cell active ' + $toggle);
 		$(this).attr('class', 'toggle-all toggle ' + $cl);
 	} else {
-		$(this).attr('class', 'cl_click poll-cell active ' + $cl);
+		$(this).attr('class', 'column cl_click poll-cell active ' + $cl);
 	}
 	$('.cl_click').each(function() {
 		var yes_c = $('#id_y_' + $(this).attr('id'));

@@ -16,16 +16,23 @@ h1 {
 	padding-top: 44px;
 }
 
+.main-container {
+	padding: 0 17px;
+}
+
 #controls {
+	padding: 0 17px 0 0;
  	width: inherit;
 	z-index: 120;
 	display: flex;
 	align-items: center;
 	position: inherit;
+	top: 0;
 	width: 100% !important;
 
 	#breadcrump {
 		min-width: 350px;
+		flex-grow: 1;
 	}
 
 	h2 {
@@ -38,10 +45,16 @@ h1 {
 }
 
 #app-sidebar {
-	display: flex;
+	display: none;
 	flex-direction: column;
 	
 	.share, h2, .comments {
+		padding: 15px;
+	}
+	.close {
+		position: absolute;
+		top: 0;
+		right: 0;
 		padding: 15px;
 	}
 }
@@ -160,7 +173,7 @@ td.td_shown {
 	table-layout: fixed;
 }
 
-.desc {
+.description {
 	color: #888;
 }
 
@@ -233,11 +246,6 @@ td.td_shown {
 }
 .cl_maybe:before, .cl_maybe:after{
 	content: "?";
-}
-
-.win_row {
-	color: #5ef56c;
-	font-size: 2em;
 }
 
 .cl_user_comments {
