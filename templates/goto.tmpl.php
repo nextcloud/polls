@@ -362,22 +362,6 @@
 				<div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
 				<div class="name-cell"><?php p($poll->getOwner() . ' ' . $userId);?></div>
 			</div>
-			<div class="poll-info expiry">
-				
-				<?php 
-					p($l->t('Poll expires: '));
-					if ($poll->getExpire() != null) {
-						p(OCP\relative_modified_date(strtotime($poll->getExpire())));
-					} else {
-						p($l->t('Never'));
-					}
-					print_unescaped('<div class="participant">');
-					p(var_dump($options));
-					print_unescaped('</div>');
-
-				?>
-			</div>
-
 			<?php if ($expired) : ?>
 				<div id="expired_info">
 					<h2><?php p($l->t('Poll expired')); ?></h2>
