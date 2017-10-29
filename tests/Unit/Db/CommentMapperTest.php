@@ -45,7 +45,6 @@ class CommentMapperTest extends UnitTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->commentMapper = new CommentMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);

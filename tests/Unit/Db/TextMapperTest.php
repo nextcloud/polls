@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\TextMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
@@ -33,6 +34,8 @@ class TextMapperTest extends UnitTestCase {
 	private $con;
 	/** @var TextMapper */
 	private $textMapper;
+	/** @var EventMapper */
+	private $eventMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -41,5 +44,24 @@ class TextMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->textMapper = new TextMapper($this->con);
+		$this->eventMapper = new EventMapper($this->con);
+	}
+
+	public function testCreate() {
+
+	}
+
+	/**
+	 * @depends testCreate
+	 */
+	public function testUpdate() {
+
+	}
+
+	/**
+	 * @depends testDelete
+	 */
+	public function testDelete() {
+
 	}
 }

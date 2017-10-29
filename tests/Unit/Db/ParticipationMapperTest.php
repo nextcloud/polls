@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\ParticipationMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
@@ -33,6 +34,8 @@ class ParticipationMapperTest extends UnitTestCase {
 	private $con;
 	/** @var ParticipationMapper */
 	private $participationMapper;
+	/** @var EventMapper */
+	private $eventMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -41,5 +44,24 @@ class ParticipationMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->participationMapper = new ParticipationMapper($this->con);
+		$this->eventMapper = new EventMapper($this->con);
+	}
+
+	public function testCreate() {
+
+	}
+
+	/**
+	 * @depends testCreate
+	 */
+	public function testUpdate() {
+
+	}
+
+	/**
+	 * @depends testDelete
+	 */
+	public function testDelete() {
+
 	}
 }

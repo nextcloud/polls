@@ -42,4 +42,22 @@ class EventMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->eventMapper = new EventMapper($this->con);
 	}
+
+	public function testCreate() {
+
+	}
+
+	/**
+	 * @depends testCreate
+	 */
+	public function testUpdate() {
+
+	}
+
+	/**
+	 * @depends testDelete
+	 */
+	public function testDelete() {
+
+	}
 }

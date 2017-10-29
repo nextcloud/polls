@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\NotificationMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
@@ -33,6 +34,8 @@ class NotificationMapperTest extends UnitTestCase {
 	private $con;
 	/** @var NotificationMapper */
 	private $notificationMapper;
+	/** @var EventMapper */
+	private $eventMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -41,5 +44,24 @@ class NotificationMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->notificationMapper = new NotificationMapper($this->con);
+		$this->eventMapper = new EventMapper($this->con);
+	}
+
+	public function testCreate() {
+
+	}
+
+	/**
+	 * @depends testCreate
+	 */
+	public function testUpdate() {
+
+	}
+
+	/**
+	 * @depends testDelete
+	 */
+	public function testDelete() {
+
 	}
 }
