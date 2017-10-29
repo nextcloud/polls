@@ -39,6 +39,15 @@ function updateCounts(){
 
 $(document).ready(function () {
 	// count how many times in each date
+	new Clipboard('.copy-link');
+	
+	$('.toggle-all').tooltip();
+	$('.poll-cell').tooltip();
+	
+    $('.delete-poll').click(function(){
+		deletePoll(this);
+    });
+ 
     $('#switchDetails').click(function(){
 		OC.Apps.showAppSidebar();
     });
@@ -49,7 +58,7 @@ $(document).ready(function () {
 	
 	
 	
-	$('.poll.avatardiv').each(function(i, obj) {
+	$('.avatardiv').each(function(i, obj) {
 		$(obj).avatar(obj.title, 32);
 	});
 
@@ -157,7 +166,7 @@ $(document).on('click', '.toggle-all, .cl_click', function() {
 	}
 	if($(this).hasClass('toggle-all')) {
 		$(".cl_click").attr('class', 'column cl_click poll-cell active ' + $toggle);
-		$(this).attr('class', 'toggle-all toggle ' + $cl);
+		$(this).attr('class', 'toggle-all ' + $cl);
 	} else {
 		$(this).attr('class', 'column cl_click poll-cell active ' + $cl);
 	}

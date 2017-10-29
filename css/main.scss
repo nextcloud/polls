@@ -17,10 +17,16 @@ h1 {
 }
 
 .main-container {
-	padding: 0 17px;
+	// padding: 10px 17px;
+}
+
+.icon-polls {
+	background-color: black;
+	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
 }
 
 #controls {
+	position: relative !important;
 	padding: 0 17px 0 0;
  	width: inherit;
 	z-index: 120;
@@ -31,7 +37,7 @@ h1 {
 	width: 100% !important;
 
 	#breadcrump {
-		min-width: 350px;
+		width: 350px;
 		flex-grow: 1;
 	}
 
@@ -56,18 +62,19 @@ h1 {
 		top: 0;
 		right: 0;
 		padding: 15px;
+		z-index: 200;
 	}
 }
    
 
-.row:after {
+/* .row:after {
 	content: ".";
 	display:block;
 	height:0;
 	clear:both;
 	visibility:hidden;
 }
-
+ */
 .col-100 {
 	width: 100%;
 	padding: 0px 15px;
@@ -164,7 +171,6 @@ td.td_shown {
 	border-width: 1px;
 	border-style: solid;
 	border-color: gray;
-	-moz-border-radius: initial;
 	text-align: center;
 	vertical-align: bottom;
 	cursor: pointer;

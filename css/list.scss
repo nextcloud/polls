@@ -29,21 +29,8 @@ $mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $d
 $mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
 $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
-
-/* #controls h2 {
-	float: left;
-	padding: 15px 15px 0 15px;
-}
- */
-
-.icon-polls {
-	background-color: black;
-	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
-}
-
-
 .row {
-	display: flex;		   display: -webkit-flex;
+	display: flex;
 	width: 100%;
 	padding-left:  $row-padding;
 	padding-right: $row-padding;
@@ -94,7 +81,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 .wrapper {
-	display: flex; 			display: -webkit-flex;
+	display: flex;
 	align-items: center;
 	position: relative;
 	div {
@@ -203,15 +190,15 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 .options, .participants {
 	display: flex;
-	flex-direction: row;	 -webkit-flex-direction: row;
+	flex-direction: row;
 }
 
 .group-1, .group-1-1, .group-master {
-	flex-grow: 1;	 -webkit-flex-grow: 1;
+	flex-grow: 1;
 }
 
 .group-1-1 {
-	flex-direction: column;		 -webkit-flex-direction: column;
+	flex-direction: column;
 	width: $group-1-1-width;
 	> div {
 		 width: 100%;
@@ -225,7 +212,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		width: $group-1-width;
 	}
 	.group-2-1, .group-2-2 {
-		flex-direction: column; -webkit-flex-direction: column;
+		flex-direction: column;
 	}
 
 	.access, .created {

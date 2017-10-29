@@ -25,6 +25,8 @@
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'vote');
+	\OCP\Util::addStyle('polls', 'app-navigation-simulation');
+	\OCP\Util::addScript('polls', 'app');
 	\OCP\Util::addScript('polls', 'vote');
 	
 	$userId = $_['userId'];
@@ -114,29 +116,32 @@
 				<?php endif; ?>
 			</a>			
 		</div>
+		
 		<div id="votings" class="main-container">
 			<div class="wordwrap description"><?php p($description); ?></div>
 			<div class="table">
-				<div id="header-row" class="row-container header" >
+				<div id="header-row" class="row header">
 					<div class="column first"></div>
-					<?php
-					foreach ($dates as $el) {
-						if ($poll->getType() == '0') {
-							$datavalue = strtotime($el->getDt());
-							print_unescaped('<div id="slot-' . $datavalue . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="column time-slot" data-value="' . $datavalue . '" value="' . $el->getDt() . '">');
-							
-							print_unescaped('<div class="month">' . $l->t(date('M', $datavalue))  . '</div>');
-							print_unescaped('<div class="day">'   .       date('j', $datavalue)   . '</div>');
-							print_unescaped('<div class="dayow">' . $l->t(date('D', $datavalue))  . '</div>');
-							print_unescaped('<div class="time">'  .       date('G:i', $datavalue) . ' UTC</div>');
-							print_unescaped('</div>');
-						} else {
-							print_unescaped('<div title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="column vote-option">' . preg_replace('/_\d+$/', '', $el->getText()) . '</div>');
+					<ul id="options" class="row" >
+						<?php
+						foreach ($dates as $el) {
+							if ($poll->getType() == '0') {
+								$datavalue = strtotime($el->getDt());
+								print_unescaped('<li id="slot-' . $datavalue . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="column time-slot" data-value="' . $datavalue . '" value="' . $el->getDt() . '">');
+								
+								print_unescaped('<div class="month">' . $l->t(date('M', $datavalue))  . '</div>');
+								print_unescaped('<div class="day">'   .       date('j', $datavalue)   . '</div>');
+								print_unescaped('<div class="dayow">' . $l->t(date('D', $datavalue))  . '</div>');
+								print_unescaped('<div class="time">'  .       date('G:i', $datavalue) . ' UTC</div>');
+								print_unescaped('</li>');
+							} else {
+								print_unescaped('<li title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="column vote-option">' . preg_replace('/_\d+$/', '', $el->getText()) . '</li>');
+							}
 						}
-					}
-					?>
+						?>
+					</ul>
 				</div>
-				<div class="votes">
+				<ul class="column table-body">
 					<?php
 					if ($votes != null) {
 						//group by user
@@ -158,34 +163,38 @@
 									continue;
 								}
 							}
-							print_unescaped('<div class="row-container">');
-							print_unescaped('	<div class="column first">');
+							print_unescaped('<li class="row user">');
+							print_unescaped('	<div class="first">');
+							print_unescaped('		<div class="wrapper user-cell">');
 							print_unescaped('		<div class="avatar-cell">');
 							if (	$userMgr->get($usr) != null 
 								&& !$isAnonymous && !$hideNames
 							) {
-								print_unescaped('			<div class="poll avatardiv" title="'.($usr).'"></div>');
-								print_unescaped('		</div>');
-								print_unescaped('	<div colspan="2" class="name">');
+								print_unescaped('		<div class="poll avatardiv" title="'.($usr).'"></div>');
+								print_unescaped('	</div>');
+								print_unescaped('	<div class="name">');
 								p($userMgr->get($usr)->getDisplayName());
 							} else {
 								if ($isAnonymous || $hideNames) {
-									print_unescaped('			<div class="poll avatardiv" title="'.($userCnt).'"></div>');
-									print_unescaped('		</div>');
-									print_unescaped('	<div colspan="2" class="name">');
+									print_unescaped('	<div class="poll avatardiv" title="'.($userCnt).'"></div>');
+									print_unescaped('</div>');
+									print_unescaped('<div class="name">');
 									p('Anonymous');
 								} else {
-									print_unescaped('			<div class="poll avatardiv" title="'.($usr).'"></div>');
-									print_unescaped('		</div>');
-									print_unescaped('	<div colspan="2" class="name">');
+									print_unescaped('	<div class="poll avatardiv" title="'.($usr).'"></div>');
+									print_unescaped('</div>');
+									print_unescaped('<div class="name">');
 									p($usr);
 								}
 							}
-							print_unescaped('	</div>');
+							print_unescaped('		 </div>');
 							print_unescaped('</div>');
+							print_unescaped('	</div>');
 
 							// loop over dts
 							$i_tot = 0;
+							print_unescaped('<ul class="wrapper row">');
+							
 							foreach ($dates as $dt) {
 								if ($poll->getType() == '0') {
 									$dateId = strtotime($dt->getDt());
@@ -205,15 +214,15 @@
 									}
 									if ($dateId == $voteVal) {
 										if ($vote->getType() == '1') {
-											$cl = 'poll-cell yes';
+											$cl = 'yes';
 											$total['yes'][$i_tot]++;
 										} else if ($vote->getType() == '0') {
-											$cl = 'poll-cell no';
+											$cl = 'no';
 											$total['no'][$i_tot]++;
 										} else if ($vote->getType() == '2') {
-											$cl = 'poll-cell maybe';
+											$cl = 'maybe';
 										} else {
-											$cl = 'poll-cell unvoted';
+											$cl = 'unvoted';
 										}
 										$found = true;
 										break;
@@ -222,18 +231,22 @@
 								if (!$found) {
 									$cl = 'poll-cell unvoted';
 								}
-								print_unescaped('<div class="column ' . $cl . '"><div></div></div>');
+								print_unescaped('<li class="column poll-cell ' . $cl . '"><div class="vote"></div></li>');
 								$i_tot++;
 							}
-							print_unescaped('</div>');
+							
+							print_unescaped('</ul>');
+							print_unescaped('</li>');
 						}
 					}
 					$totalYesOthers = array_merge(array(), $total['yes']);
 					$totalNoOthers = array_merge(array(), $total['no']);
+					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
-						print_unescaped('<div class="row-container current-user">');
-						print_unescaped('	<div class="column first">');
-						print_unescaped('		<div class="avatar-cell">');
+						print_unescaped('<li class="row user current-user">');
+						print_unescaped('	<div class="row first">');
+						print_unescaped('		<div class="wrapper user-cell">');
+						print_unescaped('			<div class="avatar-cell">');
 						if (User::isLoggedIn()) {
 							print_unescaped('			<div class="poll avatardiv" title="'.($userId).'"></div>');
 							print_unescaped('		</div>');
@@ -245,10 +258,13 @@
 							print_unescaped('		<div id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
 						}
 						print_unescaped('		</div>');
-						print_unescaped('	<div class="toggle-all toggle maybe">');
-						print_unescaped('		<div id="toggle"></div>');
+						print_unescaped('	</div>');
+						print_unescaped('	<div id="toggle-all" class="toggle-all maybe" title="'. $toggleTooltip .'">');
+						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
+						print_unescaped('<ul class="wrapper row">');
+
 						$i_tot = 0;
 						foreach ($dates as $dt) {
 							if ($poll->getType() == '0') {
@@ -259,7 +275,7 @@
 								$pollId = "pollid_" . $dt->getId();
 							}
 							// see if user already has data for this event
-							$cl = 'poll-cell active unvoted ';
+							$cl = 'unvoted';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $obj) {
 									$voteVal = null;
@@ -270,26 +286,27 @@
 									}
 									if ($voteVal == $dateId) {
 										if ($obj->getType() == '1') {
-											$cl = 'poll-cell active yes';
+											$cl = 'yes';
 											$total['yes'][$i_tot]++;
 										} else if ($obj->getType() == '0') {
-											$cl = 'poll-cell active no';
+											$cl = 'no';
 											$total['no'][$i_tot]++;
 										} else if($obj->getType() == '2') {
-											$cl = 'poll-cell active maybe';
+											$cl = 'maybe';
 										}
 										break;
 									}
 								}
 							}
-							print_unescaped('<div id="' . $pollId . '" class="column cl_click ' . $cl . '" data-value="' . $dateId . '"><div></div></div>');
+							print_unescaped('<li id="' . $pollId . '" class="column poll-cell active cl_click ' . $cl . '" data-value="' . $dateId . '" title="' . $cl . '"><div class="vote"></div></li>');
 
 							$i_tot++;
 						}
-						print_unescaped('</div>');
+						print_unescaped('</ul>');
+						print_unescaped('</li>');
 					}
 					?>
-				</div>
+				</ul>
 					<?php
 						$diffArray = $total['yes'];
 						for($i = 0 ; $i < count($diffArray) ; $i++) {
@@ -297,10 +314,11 @@
 						}
 						$maxVotes = max($diffArray);
 					?>
-					<div class="row-container total">
-						<div class="column first"><?php p($l->t('Total')); ?></div>
-						<?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
-							<div class="column total">
+					<div class="row total">
+						<div class="wrapper row first"><?php p($l->t('Total')); ?></div>
+						<ul class="wrapper row">
+					<?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
+							<li class="column total">
 								<?php
 								$classSuffix = "pollid_" . $dates[$i]->getId();
 								if (isset($total['yes'][$i])) {
@@ -309,28 +327,35 @@
 									$val = 0;
 								}
 								?>
-								<div id="id_y_<?php p($classSuffix); ?>" class="result-cell yes" data-value=<?php p(isset($totalYesOthers[$i]) ? $totalYesOthers[$i] : '0'); ?>>
-									<?php p($val); ?>
+								<div id="id_y_<?php p($classSuffix); ?>" class="result-cell column yes" data-value=<?php p(isset($totalYesOthers[$i]) ? $totalYesOthers[$i] : '0'); ?>>
+									<div>
+										<?php p($val); ?>
+									</div>
 								</div>
-								<div id="id_n_<?php p($classSuffix); ?>" class="result-cell no" data-value=<?php p(isset($totalNoOthers[$i]) ? $totalNoOthers[$i] : '0'); ?>>
-									<?php p(isset($total['no'][$i]) ? $total['no'][$i] : '0'); ?>
+								<div id="id_n_<?php p($classSuffix); ?>" class="result-cell column no" data-value=<?php p(isset($totalNoOthers[$i]) ? $totalNoOthers[$i] : '0'); ?>>
+									<div>
+										<?php p(isset($total['no'][$i]) ? $total['no'][$i] : '0'); ?>
+									</div>
 								</div>
-							</div>
-						<?php endfor; ?>
+							</li>
+					<?php endfor; ?>
+						</ul>
 					</div>
-					<div class="row-container best">
-						<div class="column first"></div>
+					<div class="row best">
+						<div class="wrapper row first"><?php p($l->t('Best option'));?> </div>
+						<ul class="wrapper row">
 						<?php
 						for ($i = 0; $i < count($dates); $i++) {
 							$check = '';
+							$bestOptionText = '';
 							if ($total['yes'][$i] - $total['no'][$i] == $maxVotes) {
 								$check = 'icon-checkmark';
 							}
-							print_unescaped('<div class="column win_row ' . $check . '" id="id_total_' . $i . '"><span>');
-							p($l->t('Best option'));
-							print_unescaped('</span></div>');
+							print_unescaped('<li class="column win_row ' . $check . '" id="id_total_' . $i . '"><span>');
+							print_unescaped('</span></li>');
 						}
 						?>
+						</ul>
 					</div>
 			</div>
 			<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
@@ -352,31 +377,57 @@
 					
 		<div id="app-sidebar" class="detailsView scroll-container">
 			<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
-			<div class="input-group share">
-				<div class="input-group-addon">
-					<span class="icon-share"></span><?php p($l->t('Link')); ?>
-				</div>
-				<input type="text" value="<?php p($pollUrl);?>" readonly="readonly">
-			</div>
-			<div class="poll-info owner">
-				<div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
-				<div class="name-cell"><?php p($poll->getOwner() . ' ' . $userId);?></div>
-			</div>
-			<div class="poll-info expiry">
-				
-				<?php 
-					p($l->t('Poll expires: '));
-					if ($poll->getExpire() != null) {
-						p(OCP\relative_modified_date(strtotime($poll->getExpire())));
-					} else {
-						p($l->t('Never'));
-					}
-					print_unescaped('<div class="participant">');
-					p(var_dump($options));
-					print_unescaped('</div>');
 
-				?>
+
+			<div class="table ">
+				<div class="row">
+					<div id="app-navigation-simulation">
+						<ul class="with-icons">
+							<li>
+								<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
+									<?php p($l->t('Copy Link')); ?>
+								</a>
+							</li>
+						
+					<?php if ($poll->getOwner() == $userId) : ?>
+							<li class="">
+								<a id="id_del_<?php p($poll->getId()); ?>" class="icon-delete svg delete-poll"  data-value="<?php p($poll->getTitle()); ?>" href="#">
+									<?php p($l->t('Delete poll')); ?>
+								</a>
+							</li>
+							<li>
+								<a id="id_edit_<?php p($poll->getId()); ?>" class="icon-rename svg" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
+									<?php p($l->t('Edit Poll')); ?>
+								</a>
+							</li>
+					<?php endif; ?>
+						</ul>
+					</div>
+				<div class="column">
+					<div class="poll-info owner">
+						<div class="wrapper user-cell">
+							<div class="avatar-cell">
+								<div class="poll avatardiv" title="<?php p($poll->getOwner());?>"></div>
+							</div>
+							<div class="name"><?php p($poll->getOwner());?></div>
+						</div>
+					</div>
+					<div class="poll-info expiry">
+						
+						<?php 
+							p($l->t('Poll expires: '));
+							if ($poll->getExpire() != null) {
+								p(OCP\relative_modified_date(strtotime($poll->getExpire())));
+							} else {
+								p($l->t('Never'));
+							}
+
+						?>
+					</div>
+				</div>
+				</div>
 			</div>
+
 
 			<?php if ($expired) : ?>
 				<div id="expired_info">
