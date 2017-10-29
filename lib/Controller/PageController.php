@@ -260,6 +260,10 @@ class PageController extends Controller {
 	 * @return RedirectResponse
 	 */
 	public function deletePoll($pollId) {
+		$pollToDelete = $this->eventMapper->find($pollId);
+		if ($this->userId !== $pollToDelete->getOwner()) {
+			return new TemplateResponse('polls', 'no.delete.tmpl');
+		}
 		$poll = new Event();
 		$poll->setId($pollId);
 		$this->eventMapper->delete($poll);
