@@ -59,55 +59,6 @@ $border_user: 1px solid #ddd;
 	width: 180px;
 }
 
-.current-user {
-	.vote {
-		border: 2px solid;
-		border-radius: 4px;
-		}
-	&.row {
- 		background-color: #e6f1f8;
-/*		border-top: 2px solid #0082c9;
-		border-bottom: 2px solid #0082c9;
-		border-left: 0px solid #0082c9;
-		border-right: 0px solid #0082c9;
- */	}
-
-	.toggle {
-		&.yes {
-		background-color: $bg_yes;
-		color: $fg_yes;
-		background-image: url('../img/yes-vote.svg');
-		div {
-			color: $bg_yes;
-		}
-
-	}
-
-	&.no {
-		background-color: $bg_no;
-		color: $fg_no;
-		background-image: url('../img/no-vote.svg');
-		div {
-			color: $bg_no;
-		}
-	}
-
-	&.maybe {
-		background-color: $bg_maybe;
-		color: $fg_maybe;
-		background-image: url('../img/maybe-vote.svg');
-		div {
-			color: $bg_maybe;
-		}
-	}
-
-	#toggle {
-		height: 32px;
-		width: 40px;
-		flex-grow: 0;
-	}
-}
-}
 
 .vote-option, .time-slot, .poll-cell, .win_row, .column.total, .toggle-all {
 	flex-grow: 1;
@@ -126,6 +77,7 @@ $border_user: 1px solid #ddd;
 		color: $fg_yes;
 		border-color: $fg_yes;
 		.vote {
+			background-color: $bg_yes;
 			background-image: url('../img/yes-vote.svg');
 		}
 		.toggle {
@@ -139,6 +91,7 @@ $border_user: 1px solid #ddd;
 		color: $fg_no;
 		border-color: $fg_no;
 		.vote {
+			background-color: $bg_no;
 			background-image: url('../img/no-vote.svg');
 		}
 		.toggle {
@@ -151,6 +104,7 @@ $border_user: 1px solid #ddd;
 		color: $fg_maybe;
 		border-color: $fg_maybe;
 		.vote {
+			background-color: $bg_maybe;
 			background-image: url('../img/maybe-vote.svg');
 		}
 		.toggle {
@@ -162,8 +116,32 @@ $border_user: 1px solid #ddd;
 		background-color: $bg_unvoted;
 		color: $fg_unvoted;
 		border-color: $fg_unvoted;
+		.vote {
+			background-color: $bg_unvoted;
+		}
 	}
 
+}
+
+.current-user {
+	.vote {
+		border: 2px solid;
+		border-radius: 4px;
+	}
+
+	&.row {
+		background-color: #e6f1f8;
+/*		border-top: 2px solid #0082c9;
+		border-bottom: 2px solid #0082c9;
+		border-left: 0px solid #0082c9;
+		border-right: 0px solid #0082c9;
+ */	}
+
+	.toggle-all {
+		height: 32px;
+		width: 40px;
+		flex-grow: 0;
+	}
 }
 
 .result-cell {
@@ -179,13 +157,9 @@ $border_user: 1px solid #ddd;
 }
 
 
-.vote-option, .time-slot {
+.vote-option, .time-slot, .result-cell {
 	align-items: center;
 }
-
-.result-cell {
-	align-items: center;
-	}
 
 .wrapper {
 	display: flex;
@@ -203,8 +177,6 @@ $border_user: 1px solid #ddd;
 	font-size: 1.8em;
 	margin: 5px 0 5px 0;
 }
-
-
 
 .badge {
 	position: relative;
@@ -272,11 +244,10 @@ $border_user: 1px solid #ddd;
 }
 
 .new-comment {
-	
 	.icon-loading-small {
-	float: left;
-	margin-top: 10px;
-	display: none;
+		float: left;
+		margin-top: 10px;
+		display: none;
 	}
 	
 	.comment-content textarea {
@@ -290,109 +261,82 @@ $border_user: 1px solid #ddd;
 
 @media all and (max-width: (940px) ) {
 
-.table { 
-	display: flex;
-}
-
-.first {
-	height: 44px;
-	width: unset;
-}
-		
-.row {
-	flex-direction: column;
-	&.user {
-		display: none;
-		width: 44px;
-		padding:0;
-		.poll-cell, .toggle-all  {
-			width: 40px;
-			height: 40px;
-		}
-		&.current-user {
-		  display: flex;
-		  > ul {
-			}
-			.user-cell {
-				display: none;
-			}
-		}
+	.table { 
+		display: flex;
 	}
 
-	&.header {
-		flex-grow: 1;
-		width:120px;
+	.first {
+		height: 44px;
+		width: unset;
 	}
-	&.total {
-		flex-grow: 0;
-		width:40px;
-	}
-	&.total, &.best {
-		flex-grow: 0;
-		width:80px;
-	}
-}
-
-
-.column {
-	&.table-body {
-		flex-grow: 0;
-		width:60px;
-	}
-	&.total {
-		width:80px;
-	}
-}
-
-.vote-option, .time-slot, .poll-cell, .win_row, .column.total, .toggle-all {
-	.vote, .toggle {
-		height: 100%;
-		width: 100%;
-	}
-}
-
-
-#options.row {
-	flex-direction: column;
-	width: 100%;
-	.vote-option {
-		align-items: baseline;
-		width: 100%;
-		border-top: $border_user;
-	}
-}
-
-
-/* 	.table {
-		flex-direction: row;
-		.column{
-			flex-direction: row;
-			flex-grow: 1;
-			flex-shrink: 0;
 			
-			&.vote-option {
+	.row {
+		flex-direction: column;
+		&.user {
+			display: none;
+			width: 44px;
+			padding:0;
+			.poll-cell, .toggle-all  {
+				width: 44px;
+				height: 44px;
 			}
-			&.first {
-				flex-grow:0;
-			}
-		}
-		.row-container {
-			flex-direction: column;
-			flex-grow: 1;
 			&.current-user {
-				.column {
-					flex-direction: column;
+			  display: flex;
+			  .poll-cell {
+					background-color: transparent;
+				}
+			  > ul {
+				}
+				.user-cell {
+					display: none;
 				}
 			}
 		}
-		.votes {
-			.row-container {
-			display: none;
-			&.current-user {
-				display: flex;
-			}
-			}
+
+		&.header {
+			flex-grow: 1;
+			width:120px;
+			padding: 0 0 0 4px;
+		}
+		&.total, &.best {
+			flex-grow: 0;
+			padding: 0;
 		}
 	}
- */
+
+
+	.column {
+		&.table-body {
+			flex-grow: 0;
+		}
+		&.total {
+			margin:0;
+			.result-cell {
+					flex-grow: 1;
+				}
+		}
+		&.poll-cell {
+			flex-direction: row;
+			align-items: center;
+			padding: 0 2px;
+		}
+	}
+
+	.vote-option, .time-slot, .poll-cell, .win_row, .column.total, .toggle-all {
+		.vote, .toggle {
+			height: 40px;
+			width: 40px;
+		}
+	}
+
+
+	#options.row {
+		flex-direction: column;
+		width: 100%;
+		.vote-option, .time-slot {
+			align-items: baseline;
+			width: 100%;
+			border-top: $border_user;
+		}
+	}
  }
