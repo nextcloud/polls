@@ -8,6 +8,7 @@ OC.L10N.register(
     "Copy to clipboard: Ctrl+C, Enter" : "Másolás vágólapra: Ctrl+C, Enter",
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Nem vagy regisztrálva.\nKérlek add meg a neved a szavazáshoz\n(Legalább 3 karakter).",
     "Please add some text to your comment before submitting it." : "Kérlek adj hozzá valamilyen szöveget a hozzászólásodhoz beküldés előtt.",
+    "An error occurred, your comment was not posted…" : "Hiba történt, a hozzászólás nem került elküldésre...",
     "Polls" : "Szavazások",
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Üdv %s,<br/><br/><strong>%s</strong> részt vett a '%s' szavazásban.<br/><br/>A szavazás közvetlen eléréséhez használd ezt a <a href=\"%s\">linket</a>",
     "Polls App - New Comment" : "Szavazó App - új hozzászólás",
