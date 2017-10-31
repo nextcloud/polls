@@ -2,7 +2,7 @@ var newUserDates = [];
 var newUserTypes = [];
 
 var maxVotes = 0;
-var values_changed = false;
+var valuesChanged = false;
 
 var tzOffset = new Date().getTimezoneOffset();
 
@@ -19,9 +19,9 @@ function updateCommentsCount(){
 	
 }
 
-function updateCounts(){
+function updateBest(){
 	maxVotes = 0;
-	$('.column.total').each(function() {
+	$('.counter').each(function() {
 		var yes = parseInt($(this).find('.yes').text());
 		var no = parseInt($(this).find('.no').text());
 		if(yes - no > maxVotes) {
@@ -29,21 +29,28 @@ function updateCounts(){
 		}
 	});
 	var i = 0;
-	$('.column.total').each(function() {
+	$('.counter').each(function() {
 		var yes = parseInt($(this).find('.yes').text());
 		var no = parseInt($(this).find('.no').text());
-		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no === maxVotes);
+		$(this).toggleClass('winner', yes - no === maxVotes);
 	});
+}
+
+function updateCounters(){
+	$('.result-cell.yes').each(function() {
+			$(this).text($('#voteid_'+ $(this).attr('data-voteId') + '.poll-cell.yes').length);
+	});
+	$('.result-cell.no').each(function() {
+			$(this).text($('#voteid_'+ $(this).attr('data-voteId') + '.poll-cell.no').length);
+	});
+	updateBest();
 }
 
 
 $(document).ready(function () {
 	// count how many times in each date
 	new Clipboard('.copy-link');
-	
-	$('.toggle-all').tooltip();
-	$('.poll-cell').tooltip();
-	
+	updateBest();
     $('.delete-poll').click(function(){
 		deletePoll(this);
     });
@@ -63,12 +70,12 @@ $(document).ready(function () {
 	});
 
 	$('.time-slot').each(function() {
-        var extendedDate = new Date($(this).attr("value").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
+        var extendedDate = new Date($(this).attr("data-value-utc").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
 
-        $(this).children('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
-        $(this).children('.day').text(extendedDate.toLocaleString(window.navigator.language, {day: 'numeric'}));
-        $(this).children('.dayow').text(extendedDate.toLocaleString(window.navigator.language, {weekday: 'short'}));
-        $(this).children('.time').text(extendedDate.toLocaleTimeString(window.navigator.language, {hour: 'numeric', minute:'2-digit', timeZoneName:'short'}));
+        $(this).find('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
+        $(this).find('.day').text(extendedDate.toLocaleString(window.navigator.language, {day: 'numeric'}));
+        $(this).find('.dayow').text(extendedDate.toLocaleString(window.navigator.language, {weekday: 'short'}));
+        $(this).find('.time').text(extendedDate.toLocaleTimeString(window.navigator.language, {hour: 'numeric', minute:'2-digit', timeZoneName:'short'}));
         
  	});
 
@@ -104,7 +111,7 @@ $(document).ready(function () {
 		form.elements.dates.value = JSON.stringify(newUserDates);
 		form.elements.types.value = JSON.stringify(newUserTypes);
 		form.elements.receiveNotifications.value = (check_notif && check_notif.checked) ? 'true' : 'false';
-		form.elements.changed.value = values_changed ? 'true' : 'false';
+		form.elements.changed.value = valuesChanged ? 'true' : 'false';
 		form.submit();
 	});
 
@@ -145,37 +152,44 @@ $(document).ready(function () {
 	$(".share input").click(function() {
 		$(this).select();
 	});
+	
+	$('.toggle-all').tooltip();
+	$('.time-slot').tooltip();
+	$('.avatardiv').tooltip();
+	updateCounters();
+
+/* 	$('.poll-cell').each(function() {
+		var yes_c = $('#counter_yes_' + $(this).attr('id'));
+		var no_c = $('#counter_no_' + $(this).attr('id'));
+		$(yes_c).text(parseInt($(yes_c).text()) + ($(this).hasClass('yes') ? 1 : 0));
+		$(no_c).text(parseInt($(no_c).text()) + ($(this).hasClass('no') ? 1 : 0));
+	});
+ */
 });
 
 $(document).on('click', '.toggle-all, .cl_click', function() {
-	values_changed = true;
-	var $cl = "";
+	valuesChanged = true;
+	var $class = "";
 	var $toggle = "";
 	if($(this).hasClass('yes')) {
-		$cl = "no";
+		$class = "no";
 		$toggle= "yes";
 	} else if($(this).hasClass('no')) {
-		$cl = "maybe";
+		$class = "maybe";
 		$toggle= "no";
 	} else if($(this).hasClass('maybe')) {
-		$cl = "yes";
+		$class = "yes";
 		$toggle= "maybe";
 	} else {
-		$cl = "yes";
+		$class = "yes";
 		$toggle= "maybe";
 	}
 	if($(this).hasClass('toggle-all')) {
 		$(".cl_click").attr('class', 'column cl_click poll-cell active ' + $toggle);
-		$(this).attr('class', 'toggle-all ' + $cl);
+		$(this).attr('class', 'toggle-all ' + $class);
 	} else {
-		$(this).attr('class', 'column cl_click poll-cell active ' + $cl);
+		$(this).attr('class', 'column cl_click poll-cell active ' + $class);
 	}
-	$('.cl_click').each(function() {
-		var yes_c = $('#id_y_' + $(this).attr('id'));
-		var no_c = $('#id_n_' + $(this).attr('id'));
-		$(yes_c).text(parseInt($(yes_c).attr('data-value')) + ($(this).hasClass('yes') ? 1 : 0));
-		$(no_c).text(parseInt($(no_c).attr('data-value')) + ($(this).hasClass('no') ? 1 : 0));
-	});
-	updateCounts();
+	updateCounters();
 });
 

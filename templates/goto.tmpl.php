@@ -121,24 +121,37 @@
 			<div class="wordwrap description"><?php p($description); ?></div>
 			<div class="table">
 				<div id="header-row" class="row header">
-					<div class="column first"></div>
 					<ul id="options" class="row" >
 						<?php
 						foreach ($dates as $el) {
 							if ($poll->getType() == '0') {
-								$datavalue = strtotime($el->getDt());
-								print_unescaped('<li id="slot-' . $datavalue . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="column time-slot" data-value="' . $datavalue . '" value="' . $el->getDt() . '">');
+								$timestamp = strtotime($el->getDt());
+								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="column time-slot" data-timestamp="' . $timestamp . '"data-value-utc="' . $el->getDt() . '">');
 								
-								print_unescaped('<div class="month">' . $l->t(date('M', $datavalue))  . '</div>');
-								print_unescaped('<div class="day">'   .       date('j', $datavalue)   . '</div>');
-								print_unescaped('<div class="dayow">' . $l->t(date('D', $datavalue))  . '</div>');
-								print_unescaped('<div class="time">'  .       date('G:i', $datavalue) . ' UTC</div>');
-								print_unescaped('</li>');
+								print_unescaped('	<div class="date-box">');
+								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp))  . '</div>');
+								print_unescaped('		<div class="day">'   .       date('j', $timestamp)   . '</div>');
+								print_unescaped('		<div class="dayow">' . $l->t(date('D', $timestamp))  . '</div>');
+								print_unescaped('		<div class="time">'  .       date('G:i', $timestamp) . ' UTC</div>');
+								print_unescaped('	</div>');
 							} else {
-								print_unescaped('<li title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="column vote-option">' . preg_replace('/_\d+$/', '', $el->getText()) . '</li>');
+								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="column vote-option">' . preg_replace('/_\d+$/', '', $el->getText()));
 							}
+							print_unescaped('<div class="summary">');
+							print_unescaped('	<div class="counter">');
+							print_unescaped('		<div class="yes">');
+							print_unescaped('			<div class="svg"></div>');
+							print_unescaped('			<div id="counter_yes_voteid_' . $el->getId() . '" class ="result-cell yes" data-voteId="' . $el->getId() . '">0</div>');
+							print_unescaped('		</div>');
+							print_unescaped('		<div class="no">');
+							print_unescaped('			<div class="svg"></div>');
+							print_unescaped('			<div id="counter_no_voteid_' . $el->getId() . '" class ="result-cell no" data-voteId="' . $el->getId() . '">0</div>');
+							print_unescaped('		</div>');
+							print_unescaped('	</div>');
+							print_unescaped('</div>');
 						}
 						?>
+						</li>
 					</ul>
 				</div>
 				<ul class="column table-body">
@@ -146,6 +159,9 @@
 					if ($votes != null) {
 						//group by user
 						$others = array();
+						$displayName = '';
+						$avatarName = '';
+						$activeClass = '';
 						foreach ($votes as $vote) {
 							if (!isset($others[$vote->getUserId()])) {
 								$others[$vote->getUserId()] = array();
@@ -163,48 +179,45 @@
 									continue;
 								}
 							}
-							print_unescaped('<li class="row user">');
-							print_unescaped('	<div class="first">');
-							print_unescaped('		<div class="wrapper user-cell">');
-							print_unescaped('		<div class="avatar-cell">');
 							if (	$userMgr->get($usr) != null 
 								&& !$isAnonymous && !$hideNames
 							) {
-								print_unescaped('		<div class="poll avatardiv" title="'.($usr).'"></div>');
-								print_unescaped('	</div>');
-								print_unescaped('	<div class="name">');
-								p($userMgr->get($usr)->getDisplayName());
+								$displayName = $userMgr->get($usr)->getDisplayName();
+								$avatarName = $usr;
 							} else {
 								if ($isAnonymous || $hideNames) {
-									print_unescaped('	<div class="poll avatardiv" title="'.($userCnt).'"></div>');
-									print_unescaped('</div>');
-									print_unescaped('<div class="name">');
-									p('Anonymous');
+									$displayName = 'Anonymous';
+									$avatarName = $userCnt;
 								} else {
-									print_unescaped('	<div class="poll avatardiv" title="'.($usr).'"></div>');
-									print_unescaped('</div>');
-									print_unescaped('<div class="name">');
-									p($usr);
+									$displayName = $usr;
+									$avatarName = $usr;
 								}
 							}
-							print_unescaped('		 </div>');
-							print_unescaped('</div>');
-							print_unescaped('	</div>');
-
+							?>
+							<li class="row user">
+								<div class="first">
+									<div class="wrapper user-cell">
+										<div class="avatar-cell">
+											<div class="poll avatardiv" title="<?php p($avatarName)?>"></div>
+										</div>
+										<div class="name"><?php p($displayName) ?></div>
+										</div>
+									</div>
+									<ul class="wrapper row">
+							<?php
 							// loop over dts
 							$i_tot = 0;
-							print_unescaped('<ul class="wrapper row">');
 							
 							foreach ($dates as $dt) {
 								if ($poll->getType() == '0') {
 									$dateId = strtotime($dt->getDt());
-									$pollId = "pollid_" . $dt->getId();
+									$pollId = "voteid_" . $dt->getId();
 								} else {
 									$dateId = $dt->getText();
-									$pollId = "pollid_" . $dt->getId();
+									$pollId = "voteid_" . $dt->getId();
 								}
 								// look what user voted for this dts
-								$found = false;
+								$class = 'column poll-cell unvoted';
 								foreach ($others[$usr] as $vote) {
 									$voteVal = null;
 									if ($poll->getType() == '0') {
@@ -214,24 +227,18 @@
 									}
 									if ($dateId == $voteVal) {
 										if ($vote->getType() == '1') {
-											$cl = 'yes';
+											$class = 'column poll-cell yes';
 											$total['yes'][$i_tot]++;
 										} else if ($vote->getType() == '0') {
-											$cl = 'no';
+											$class = 'column poll-cell no';
 											$total['no'][$i_tot]++;
 										} else if ($vote->getType() == '2') {
-											$cl = 'maybe';
-										} else {
-											$cl = 'unvoted';
+											$class = 'column poll-cell maybe';
 										}
-										$found = true;
 										break;
 									}
 								}
-								if (!$found) {
-									$cl = 'poll-cell unvoted';
-								}
-								print_unescaped('<li class="column poll-cell ' . $cl . '"><div class="vote"></div></li>');
+								print_unescaped('<li id="'. $pollId . '" class="' . $class . '"><div class="vote"></div></li>');
 								$i_tot++;
 							}
 							
@@ -269,13 +276,14 @@
 						foreach ($dates as $dt) {
 							if ($poll->getType() == '0') {
 								$dateId = strtotime($dt->getDt());
-								$pollId = "pollid_" . $dt->getId();
+								$pollId = "voteid_" . $dt->getId();
 							} else {
 								$dateId = $dt->getText();
-								$pollId = "pollid_" . $dt->getId();
+								$pollId = "voteid_" . $dt->getId();
 							}
 							// see if user already has data for this event
-							$cl = 'unvoted';
+							$class = 'unvoted';
+							$activeClass = 'poll-cell active cl_click';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $obj) {
 									$voteVal = null;
@@ -286,19 +294,19 @@
 									}
 									if ($voteVal == $dateId) {
 										if ($obj->getType() == '1') {
-											$cl = 'yes';
+											$class = 'column poll-cell yes';
 											$total['yes'][$i_tot]++;
 										} else if ($obj->getType() == '0') {
-											$cl = 'no';
+											$class = 'column poll-cell no';
 											$total['no'][$i_tot]++;
 										} else if($obj->getType() == '2') {
-											$cl = 'maybe';
+											$class = 'column poll-cell maybe';
 										}
 										break;
 									}
 								}
 							}
-							print_unescaped('<li id="' . $pollId . '" class="column poll-cell active cl_click ' . $cl . '" data-value="' . $dateId . '" title="' . $cl . '"><div class="vote"></div></li>');
+							print_unescaped('<li id="' . $pollId . '" class="' . $class . ' ' . $activeClass . '" data-value="' . $dateId . '"><div class="vote"></div></li>');
 
 							$i_tot++;
 						}
@@ -314,49 +322,6 @@
 						}
 						$maxVotes = max($diffArray);
 					?>
-					<div class="row total">
-						<div class="wrapper row first"><?php p($l->t('Total')); ?></div>
-						<ul class="wrapper row">
-					<?php for ($i = 0 ; $i < count($dates) ; $i++) : ?>
-							<li class="column total">
-								<?php
-								$classSuffix = "pollid_" . $dates[$i]->getId();
-								if (isset($total['yes'][$i])) {
-									$val = $total['yes'][$i];
-								} else {
-									$val = 0;
-								}
-								?>
-								<div id="id_y_<?php p($classSuffix); ?>" class="result-cell column yes" data-value=<?php p(isset($totalYesOthers[$i]) ? $totalYesOthers[$i] : '0'); ?>>
-									<div>
-										<?php p($val); ?>
-									</div>
-								</div>
-								<div id="id_n_<?php p($classSuffix); ?>" class="result-cell column no" data-value=<?php p(isset($totalNoOthers[$i]) ? $totalNoOthers[$i] : '0'); ?>>
-									<div>
-										<?php p(isset($total['no'][$i]) ? $total['no'][$i] : '0'); ?>
-									</div>
-								</div>
-							</li>
-					<?php endfor; ?>
-						</ul>
-					</div>
-					<div class="row best">
-						<div class="wrapper row first"><?php p($l->t('Best option'));?> </div>
-						<ul class="wrapper row">
-						<?php
-						for ($i = 0; $i < count($dates); $i++) {
-							$check = '';
-							$bestOptionText = '';
-							if ($total['yes'][$i] - $total['no'][$i] == $maxVotes) {
-								$check = 'icon-checkmark';
-							}
-							print_unescaped('<li class="column win_row ' . $check . '" id="id_total_' . $i . '"><span>');
-							print_unescaped('</span></li>');
-						}
-						?>
-						</ul>
-					</div>
 			</div>
 			<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
 				<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />

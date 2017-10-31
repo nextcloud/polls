@@ -14,6 +14,7 @@ $fg_current_user: #0082c9;
 $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 
+$user-column-width: 265px;
 
 .votings {
 	position: relative !important;
@@ -36,6 +37,10 @@ $border_user: 1px solid #ddd;
 	
 }
 
+#options.row {
+	margin-left: $user-column-width;
+}
+
 .description {
 	padding: 12px 17px;
 	}
@@ -48,7 +53,71 @@ $border_user: 1px solid #ddd;
 .first {
 	flex-grow: 0;
 	flex-shrink: 0;
-	width: 265px;
+	width: $user-column-width;
+}
+
+.date-box {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	width: 70px;
+	padding: 0 2px;
+	flex-shrink: 0;
+	flex-grow: 0;
+	.month, .dayow {
+		font-size: 1.2em;
+		color: #666;
+	}
+
+	.day {
+		font-size: 1.8em;
+		margin: 5px 0 5px 0;
+	}
+}
+
+.summary {
+	display:flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+
+	.counter {
+		flex-direction: row;
+		display: flex;
+		flex-grow:1;
+		font-size: 18px;
+		&.winner {
+			background-color: $bg_yes;
+		}
+		
+		> div {
+			display:flex; 
+			flex-grow:1;
+			flex-direction: row;
+			align-items: center;
+			margin: 0 8px;
+			.svg {
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: 24px;
+				height: 24px;
+				width: 24px;
+
+			}
+		}
+		.yes {
+			color: $fg_yes;
+			.svg {
+				background-image: url('../img/yes-vote.svg');
+			}
+		}			
+		.no {
+			color: $fg_no;
+			.svg {
+				background-image: url('../img/no-vote.svg');
+			}
+		}			
+	}
 }
 
 .avatar-cell {
@@ -144,19 +213,6 @@ $border_user: 1px solid #ddd;
 	}
 }
 
-.result-cell {
-	&.yes {
-		background-color: $bg_yes;
-		color: $fg_yes;
-	}
-
-	&.no {
-		background-color: $bg_no;
-		color: $fg_no;
-	}
-}
-
-
 .vote-option, .time-slot, .result-cell {
 	align-items: center;
 }
@@ -167,16 +223,6 @@ $border_user: 1px solid #ddd;
 }
 
 // div stylings
-
-.month, .dayow {
-	font-size: 1.2em;
-	color: #666;
-}
-
-.day {
-	font-size: 1.8em;
-	margin: 5px 0 5px 0;
-}
 
 .badge {
 	position: relative;
@@ -259,17 +305,18 @@ $border_user: 1px solid #ddd;
 }
 
 
-@media all and (max-width: (940px) ) {
+@media all and (max-width: (480px) ) {
 
 	.table { 
 		display: flex;
+		margin-right: 8px;
 	}
 
 	.first {
 		height: 44px;
 		width: unset;
 	}
-			
+	
 	.row {
 		flex-direction: column;
 		&.user {
@@ -302,6 +349,11 @@ $border_user: 1px solid #ddd;
 			flex-grow: 0;
 			padding: 0;
 		}
+	}
+
+	#options.row {
+		margin-left: 0;
+		margin-top: 44px;
 	}
 
 
