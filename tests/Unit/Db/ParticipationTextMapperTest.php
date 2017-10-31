@@ -25,13 +25,16 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\ParticipationTextMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 
-class EventMapperTest extends UnitTestCase {
+class ParticipationTextMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
+	/** @var ParticipationTextMapper */
+	private $participationTextMapper;
 	/** @var EventMapper */
 	private $eventMapper;
 
@@ -41,6 +44,7 @@ class EventMapperTest extends UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
+		$this->participationTextMapper = new ParticipationTextMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 	}
 

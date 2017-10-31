@@ -21,46 +21,11 @@
  *
  */
 
-namespace OCA\Polls\Tests\Unit\Db;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-
-class EventMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-	/** @var EventMapper */
-	private $eventMapper;
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUp() {
-		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
-		$this->eventMapper = new EventMapper($this->con);
-	}
-
-	public function testCreate() {
-		/** @var Event $event */
-		$event = $this->fm->instance('OCA\Polls\Db\Event');
-		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
-	}
-
-	/**
-	 * @depends testCreate
-	 */
-	public function testUpdate() {
-
-	}
-
-	/**
-	 * @depends testDelete
-	 */
-	public function testDelete() {
-
-	}
-}
+/**
+ * General factory for the text model.
+ */
+$fm->define('OCA\Polls\Db\Text')->setDefinitions([
+	'text' => Faker::paragraph()
+]);

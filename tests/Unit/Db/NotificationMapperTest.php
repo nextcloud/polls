@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Kai Schröer <kai@schroeer.co>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author Kai Schröer <kai@schroeer.co>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\NotificationMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
@@ -48,7 +49,9 @@ class NotificationMapperTest extends UnitTestCase {
 	}
 
 	public function testCreate() {
-
+		/** @var Event $event */
+		$event = $this->fm->instance('OCA\Polls\Db\Event');
+		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 	}
 
 	/**

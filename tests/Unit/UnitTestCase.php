@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Kai Schröer <kai@schroeer.co>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author Kai Schröer <kai@schroeer.co>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *

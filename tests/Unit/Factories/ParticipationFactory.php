@@ -21,46 +21,16 @@
  *
  */
 
-namespace OCA\Polls\Tests\Unit\Db;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-
-class EventMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-	/** @var EventMapper */
-	private $eventMapper;
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUp() {
-		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
-		$this->eventMapper = new EventMapper($this->con);
-	}
-
-	public function testCreate() {
-		/** @var Event $event */
-		$event = $this->fm->instance('OCA\Polls\Db\Event');
-		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
-	}
-
-	/**
-	 * @depends testCreate
-	 */
-	public function testUpdate() {
-
-	}
-
-	/**
-	 * @depends testDelete
-	 */
-	public function testDelete() {
-
-	}
-}
+/**
+ * General factory for the participation model.
+ */
+$fm->define('OCA\Polls\Db\Participation')->setDefinitions([
+	'userId' => Faker::firstNameMale(),
+	'dt' => function () {
+		$date = new DateTime('today');
+		return $date->format('Y-m-d H:i:s');
+	},
+	'type' => 0
+]);
