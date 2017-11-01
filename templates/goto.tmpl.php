@@ -25,6 +25,10 @@
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'vote');
+	if (!User::isLoggedIn()) {
+		\OCP\Util::addStyle('polls', 'public');
+	}
+
 	\OCP\Util::addStyle('polls', 'app-navigation-simulation');
 	\OCP\Util::addScript('polls', 'app');
 	\OCP\Util::addScript('polls', 'vote');
@@ -65,6 +69,7 @@
 		$pollTypeClass = 'option-poll';
 	}
 
+
 	if (   $poll->getDescription() != null 
 		&& $poll->getDescription() != ''
 	) {
@@ -79,7 +84,6 @@
 		$total['yes'][$i] = 0;
 		$total['no'][$i] = 0;
 	}
-
 	$userVoted = array();
 	$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
 ?>
