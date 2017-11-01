@@ -323,19 +323,27 @@ $user-column-width: 265px;
 			display: none;
 			width: 44px;
 			padding:0;
+			border: none;
 			.poll-cell, .toggle-all  {
 				width: 44px;
 				height: 44px;
+				background-color: transparent;
 			}
 			&.current-user {
-			  display: flex;
-			  .poll-cell {
+				display: flex;
+				&.row {
 					background-color: transparent;
 				}
-			  > ul {
+				.poll-cell {
+					border-top: 1px solid #ddd;
+					background-color: transparent;
+					// margin: 1px;
+				}
+				> ul {
 				}
 				.user-cell {
-					display: none;
+					position: absolute;
+					left: 22px;
 				}
 			}
 		}
