@@ -5,7 +5,7 @@
 }
 .icon-polls {
  background-color:black;
- mask:url('../img/app-logo-polls.svg') no-repeat 50% 50%
+ mask:url('../img/app.svg') no-repeat 50% 50%
 }
 .table {
  position:relative
