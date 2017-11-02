@@ -358,6 +358,9 @@ $user-column-width: 265px;
 					&.maybe {
 						background-image: url('../img/maybe-vote-bordered.svg');
 					}
+					&.unvoted {
+						background-image: url('../img/unvoted-vote-bordered.svg');
+					}
 				}
 			}
 			.user-cell {

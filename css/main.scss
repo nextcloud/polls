@@ -22,7 +22,15 @@ h1 {
 
 .icon-polls {
 	background-color: black;
-	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
+	mask: url('../img/polls.svg') no-repeat 50% 50%;
+}
+
+.description {
+	.expired-vote{
+		color: red;
+		font-weight: bold;
+	}
+	
 }
 
 #controls {

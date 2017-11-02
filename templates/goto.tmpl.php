@@ -116,13 +116,18 @@
 				<?php if (count($comments)) : ?>
 					<div id="comment-counter" class="badge"><?php p(count($comments)) ?></div>
 				<?php else: ?>
-					<div class="badge no-comments"><?php p(count($comments)) ?></div>
+					<div id="comment-counter" class="badge no-comments"><?php p(count($comments)) ?></div>
 				<?php endif; ?>
 			</a>			
 		</div>
 		
 		<div id="votings" class="main-container">
-			<div class="wordwrap description"><?php p($description); ?></div>
+			<div class="wordwrap description"><span><?php p($description); ?></span>
+			<?php 
+				if ($expired) {
+					print_unescaped('<span class="' . $statusClass . '">' . $l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire())))) . '</span>');
+				}?>
+			</div>
 			<div class="table">
 					<ul class="row header" >
 						<?php
@@ -369,28 +374,6 @@
 					<?php endif; ?>
 						</ul>
 					</div>
-				<div class="column">
-					<div class="poll-info owner">
-						<div class="user-cell row">
-							<div class="avatar-cell">
-								<div class="poll avatardiv" title="<?php p($poll->getOwner());?>"></div>
-							</div>
-							<div class="name"><?php p($poll->getOwner());?></div>
-						</div>
-					</div>
-					<div class="poll-info expiry">
-						
-						<?php 
-							p($l->t('Poll expires: '));
-							if ($poll->getExpire() != null) {
-								p(OCP\relative_modified_date(strtotime($poll->getExpire())));
-							} else {
-								p($l->t('Never'));
-							}
-
-						?>
-					</div>
-				</div>
 				</div>
 			</div>
 
