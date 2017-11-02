@@ -92,7 +92,7 @@ $(document).ready(function () {
 		}
 		var check_notif = document.getElementById('check_notif');
 		var newUserDates = [], newUserTypes = [];
-		$(".cl_click").each(function() {
+		$(".poll-cell.active").each(function() {
 			if($(this).hasClass('no')) {
 				newUserTypes.push(0);
 			} else if ($(this).hasClass('yes')){

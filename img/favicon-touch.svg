@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+   xmlns="http://www.w3.org/2000/svg" 
+   version="1.1" 
+   xml:space="preserve" 
+   height="128" 
+   width="128" 
+   enable-background="new 0 0 595.275 311.111" 
+   y="0px" 
+   x="0px" 
+   xmlns:cc="http://creativecommons.org/ns#" 
+   xmlns:dc="http://purl.org/dc/elements/1.1/" 
+   viewBox="0 0 128 128">
+   <rect 
+   rx="20" 
+   ry="20" 
+   height="128" 
+   width="128" 
+   y="0" 
+   x="0" 
+   fill="#0082c9"/>
+  <rect
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   width="32"
+   height="112"
+   x="8"
+   y="8" />
+  <rect
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   width="32"
+   height="72"
+   x="48"
+   y="48" />
+  <rect
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   width="32"
+   height="104"
+   x="88"
+   y="16" />
+</svg>
