@@ -124,40 +124,37 @@
 		<div id="votings" class="main-container">
 			<div class="wordwrap description"><?php p($description); ?></div>
 			<div class="table">
-				<div id="header-row" class="row header">
-					<ul id="options" class="row" >
+					<ul class="row header" >
 						<?php
 						foreach ($dates as $el) {
 							if ($poll->getType() == '0') {
 								$timestamp = strtotime($el->getDt());
-								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="column time-slot" data-timestamp="' . $timestamp . '"data-value-utc="' . $el->getDt() . '">');
+								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="column vote time" data-timestamp="' . $timestamp . '"data-value-utc="' . $el->getDt() . '">');
 								
-								print_unescaped('	<div class="date-box">');
+								print_unescaped('	<div class="date-box column">');
 								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp))  . '</div>');
 								print_unescaped('		<div class="day">'   .       date('j', $timestamp)   . '</div>');
 								print_unescaped('		<div class="dayow">' . $l->t(date('D', $timestamp))  . '</div>');
 								print_unescaped('		<div class="time">'  .       date('G:i', $timestamp) . ' UTC</div>');
 								print_unescaped('	</div>');
 							} else {
-								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="column vote-option">' . preg_replace('/_\d+$/', '', $el->getText()));
+								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="column vote option">');
+								print_unescaped('	<div class="date-box column">' . preg_replace('/_\d+$/', '', $el->getText()).'</div>');
 							}
-							print_unescaped('<div class="summary">');
-							print_unescaped('	<div class="counter">');
-							print_unescaped('		<div class="yes">');
-							print_unescaped('			<div class="svg"></div>');
-							print_unescaped('			<div id="counter_yes_voteid_' . $el->getId() . '" class ="result-cell yes" data-voteId="' . $el->getId() . '">0</div>');
-							print_unescaped('		</div>');
-							print_unescaped('		<div class="no">');
-							print_unescaped('			<div class="svg"></div>');
-							print_unescaped('			<div id="counter_no_voteid_' . $el->getId() . '" class ="result-cell no" data-voteId="' . $el->getId() . '">0</div>');
-							print_unescaped('		</div>');
+							print_unescaped('<div class="counter row">');
+							print_unescaped('	<div class="yes row">');
+							print_unescaped('		<div class="svg"></div>');
+							print_unescaped('		<div id="counter_yes_voteid_' . $el->getId() . '" class ="result-cell yes" data-voteId="' . $el->getId() . '">0</div>');
+							print_unescaped('	</div>');
+							print_unescaped('	<div class="no row">');
+							print_unescaped('		<div class="svg"></div>');
+							print_unescaped('		<div id="counter_no_voteid_' . $el->getId() . '" class ="result-cell no" data-voteId="' . $el->getId() . '">0</div>');
 							print_unescaped('	</div>');
 							print_unescaped('</div>');
 						}
 						?>
 						</li>
 					</ul>
-				</div>
 				<ul class="column table-body">
 					<?php
 					if ($votes != null) {
@@ -200,14 +197,14 @@
 							?>
 							<li class="row user">
 								<div class="first">
-									<div class="wrapper user-cell">
+									<div class="user-cell row">
 										<div class="avatar-cell">
 											<div class="poll avatardiv" title="<?php p($avatarName)?>"></div>
 										</div>
 										<div class="name"><?php p($displayName) ?></div>
 										</div>
 									</div>
-									<ul class="wrapper row">
+									<ul class="row">
 							<?php
 							// loop over dts
 							$i_tot = 0;
@@ -242,7 +239,7 @@
 										break;
 									}
 								}
-								print_unescaped('<li id="'. $pollId . '" class="' . $class . '"><div class="vote"></div></li>');
+								print_unescaped('<li id="'. $pollId . '" class="' . $class . '"></li>');
 								$i_tot++;
 							}
 							
@@ -256,7 +253,7 @@
 					if (!$expired) {
 						print_unescaped('<li class="row user current-user">');
 						print_unescaped('	<div class="row first">');
-						print_unescaped('		<div class="wrapper user-cell">');
+						print_unescaped('		<div class="user-cell row">');
 						print_unescaped('			<div class="avatar-cell">');
 						if (User::isLoggedIn()) {
 							print_unescaped('			<div class="poll avatardiv" title="'.($userId).'"></div>');
@@ -270,11 +267,11 @@
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
-						print_unescaped('	<div id="toggle-all" class="toggle-all maybe" title="'. $toggleTooltip .'">');
+						print_unescaped('	<div id="toggle-cell" class="toggle-cell maybe" title="'. $toggleTooltip .'">');
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
-						print_unescaped('<ul class="wrapper row">');
+						print_unescaped('<ul class="row">');
 
 						$i_tot = 0;
 						foreach ($dates as $dt) {
@@ -310,7 +307,7 @@
 									}
 								}
 							}
-							print_unescaped('<li id="' . $pollId . '" class="' . $class . ' ' . $activeClass . '" data-value="' . $dateId . '"><div class="vote"></div></li>');
+							print_unescaped('<li id="' . $pollId . '" class="' . $class . ' ' . $activeClass . '" data-value="' . $dateId . '"></li>');
 
 							$i_tot++;
 						}
@@ -374,7 +371,7 @@
 					</div>
 				<div class="column">
 					<div class="poll-info owner">
-						<div class="wrapper user-cell">
+						<div class="user-cell row">
 							<div class="avatar-cell">
 								<div class="poll avatardiv" title="<?php p($poll->getOwner());?>"></div>
 							</div>

@@ -29,7 +29,7 @@ function updateBest(){
 		}
 	});
 	var i = 0;
-	$('.counter').each(function() {
+	$('.vote').each(function() {
 		var yes = parseInt($(this).find('.yes').text());
 		var no = parseInt($(this).find('.no').text());
 		$(this).toggleClass('winner', yes - no === maxVotes);
@@ -153,21 +153,14 @@ $(document).ready(function () {
 		$(this).select();
 	});
 	
-	$('.toggle-all').tooltip();
+	$('.toggle-cell').tooltip();
 	$('.time-slot').tooltip();
 	$('.avatardiv').tooltip();
 	updateCounters();
 
-/* 	$('.poll-cell').each(function() {
-		var yes_c = $('#counter_yes_' + $(this).attr('id'));
-		var no_c = $('#counter_no_' + $(this).attr('id'));
-		$(yes_c).text(parseInt($(yes_c).text()) + ($(this).hasClass('yes') ? 1 : 0));
-		$(no_c).text(parseInt($(no_c).text()) + ($(this).hasClass('no') ? 1 : 0));
-	});
- */
 });
 
-$(document).on('click', '.toggle-all, .cl_click', function() {
+$(document).on('click', '.toggle-cell, .poll-cell.active', function() {
 	valuesChanged = true;
 	var $class = "";
 	var $toggle = "";
@@ -184,11 +177,11 @@ $(document).on('click', '.toggle-all, .cl_click', function() {
 		$class = "yes";
 		$toggle= "maybe";
 	}
-	if($(this).hasClass('toggle-all')) {
-		$(".cl_click").attr('class', 'column cl_click poll-cell active ' + $toggle);
-		$(this).attr('class', 'toggle-all ' + $class);
+	if($(this).hasClass('toggle-cell')) {
+		$(".poll-cell.active").attr('class', 'column poll-cell active ' + $toggle);
+		$(this).attr('class', 'toggle-cell ' + $class);
 	} else {
-		$(this).attr('class', 'column cl_click poll-cell active ' + $class);
+		$(this).attr('class', 'column poll-cell active ' + $class);
 	}
 	updateCounters();
 });
