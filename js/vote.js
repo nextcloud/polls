@@ -69,7 +69,7 @@ $(document).ready(function () {
 		$(obj).avatar(obj.title, 32);
 	});
 
-	$('.time-slot').each(function() {
+	$('.vote.time').each(function() {
         var extendedDate = new Date($(this).attr("data-value-utc").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
 
         $(this).find('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
