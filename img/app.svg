@@ -14,23 +14,20 @@
    viewBox="0 0 32 32">
   <rect
    style="fill:#ffffff;fill-opacity:1;stroke:none"
-   id="rect4345"
-   width="8"
-   height="28"
-   x="2"
-   y="2" />
-  <rect
-   style="fill:#ffffff;fill-opacity:1;stroke:none"
-   id="rect4347"
-   width="8"
-   height="18"
-   x="12"
-   y="12" />
-  <rect
-   style="fill:#ffffff;fill-opacity:1;stroke:none"
-   id="rect4349"
    width="8"
    height="26"
+   x="2"
+   y="3" />
+  <rect
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   width="8"
+   height="16"
+   x="12"
+   y="13" />
+  <rect
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   width="8"
+   height="22"
    x="22"
-   y="4" />
+   y="7" />
 </svg>

@@ -22,19 +22,19 @@
   <rect
    style="fill:#ffffff;fill-opacity:1;stroke:none"
    width="32"
-   height="112"
-   x="8"
-   y="8" />
-  <rect
-   style="fill:#ffffff;fill-opacity:1;stroke:none"
-   width="32"
-   height="72"
-   x="48"
-   y="48" />
-  <rect
-   style="fill:#ffffff;fill-opacity:1;stroke:none"
-   width="32"
    height="104"
+   x="8"
+   y="12" />
+  <rect
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   width="32"
+   height="64"
+   x="48"
+   y="52" />
+  <rect
+   style="fill:#ffffff;fill-opacity:1;stroke:none"
+   width="32"
+   height="96"
    x="88"
-   y="16" />
+   y="20" />
 </svg>
