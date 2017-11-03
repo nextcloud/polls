@@ -53,7 +53,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 .row {
-	display: flex;		   display: -webkit-flex;
+	display: flex;
 	width: 100%;
 	padding-left:  $row-padding;
 	padding-right: $row-padding;
@@ -104,7 +104,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 .wrapper {
-	display: flex; 			display: -webkit-flex;
+	display: flex;
 	align-items: center;
 	position: relative;
 	div {
