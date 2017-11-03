@@ -51,7 +51,7 @@ class CommentMapperTest extends UnitTestCase {
 	}
 
 	/**
-	 * Test the creation of an event and a comment object and save them to the database.
+	 * Create some fake data and persist them to the database.
 	 *
 	 * @return Comment
 	 */
@@ -69,7 +69,7 @@ class CommentMapperTest extends UnitTestCase {
 	}
 
 	/**
-	 * Update the previously created comment.
+	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
 	 * @param Comment $comment

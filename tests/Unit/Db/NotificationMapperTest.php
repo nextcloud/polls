@@ -25,9 +25,11 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Notification;
 use OCA\Polls\Db\NotificationMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
 class NotificationMapperTest extends UnitTestCase {
 
@@ -48,23 +50,48 @@ class NotificationMapperTest extends UnitTestCase {
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
+	/**
+	 * Create some fake data and persist them to the database.
+	 *
+	 * @return Notification
+	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+
+		/** @var Notification $notification */
+		$notification = $this->fm->instance('OCA\Polls\Db\Notification');
+		$notification->setPollId($event->getId());
+		$this->assertInstanceOf(Notification::class, $this->notificationMapper->insert($notification));
+
+		return $notification;
 	}
 
 	/**
+	 * Update the previously created entry and persist the changes.
+	 *
 	 * @depends testCreate
+	 * @param Notification $notification
+	 * @return Notification
 	 */
-	public function testUpdate() {
+	public function testUpdate(Notification $notification) {
+		$newUserId = Faker::firstNameMale();
+		$notification->setUserId($newUserId());
+		$this->notificationMapper->update($notification);
 
+		return $notification;
 	}
 
 	/**
+	 * Delete the previously created entries from the database.
+	 *
 	 * @depends testDelete
+	 * @param Notification $notification
 	 */
-	public function testDelete() {
-
+	public function testDelete(Notification $notification) {
+		$event = $this->eventMapper->find($notification->getPollId());
+		$this->notificationMapper->delete($notification);
+		$this->eventMapper->delete($event);
 	}
 }

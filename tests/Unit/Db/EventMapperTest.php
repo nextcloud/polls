@@ -27,6 +27,7 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
 class EventMapperTest extends UnitTestCase {
 
@@ -44,23 +45,43 @@ class EventMapperTest extends UnitTestCase {
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
+	/**
+	 * Create some fake data and persist them to the database.
+	 *
+	 * @return Event
+	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+
+		return $event;
 	}
 
 	/**
+	 * Update the previously created entry and persist the changes.
+	 *
 	 * @depends testCreate
+	 * @param Event $event
+	 * @return Event
 	 */
-	public function testUpdate() {
+	public function testUpdate(Event $event) {
+		$newTitle = Faker::sentence(10);
+		$newDescription = Faker::paragraph();
+		$event->setTitle($newTitle());
+		$event->setDescription($newDescription());
+		$this->eventMapper->update($event);
 
+		return $event;
 	}
 
 	/**
+	 * Delete the previously created entry from the database.
+	 *
 	 * @depends testDelete
+	 * @param Event $event
 	 */
-	public function testDelete() {
-
+	public function testDelete(Event $event) {
+		$this->eventMapper->delete($event);
 	}
 }

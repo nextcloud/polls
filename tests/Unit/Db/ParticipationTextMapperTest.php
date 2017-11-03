@@ -25,9 +25,11 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\ParticipationText;
 use OCA\Polls\Db\ParticipationTextMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
 class ParticipationTextMapperTest extends UnitTestCase {
 
@@ -48,23 +50,48 @@ class ParticipationTextMapperTest extends UnitTestCase {
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
+	/**
+	 * Create some fake data and persist them to the database.
+	 *
+	 * @return ParticipationText
+	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+
+		/** @var ParticipationText $participationText */
+		$participationText = $this->fm->instance('OCA\Polls\Db\ParticipationText');
+		$participationText->setPollId($event->getId());
+		$this->assertInstanceOf(ParticipationText::class, $this->participationTextMapper->insert($participationText));
+
+		return $participationText;
 	}
 
 	/**
+	 * Update the previously created entry and persist the changes.
+	 *
 	 * @depends testCreate
+	 * @param ParticipationText $participationText
+	 * @return ParticipationText
 	 */
-	public function testUpdate() {
+	public function testUpdate(ParticipationText $participationText) {
+		$newText = Faker::paragraph();
+		$participationText->setText($newText());
+		$this->participationTextMapper->update($participationText);
 
+		return $participationText;
 	}
 
 	/**
+	 * Delete the previously created entries from the database.
+	 *
 	 * @depends testDelete
+	 * @param ParticipationText $participationText
 	 */
-	public function testDelete() {
-
+	public function testDelete(ParticipationText $participationText) {
+		$event = $this->eventMapper->find($participationText->getPollId());
+		$this->participationTextMapper->delete($participationText);
+		$this->eventMapper->delete($event);
 	}
 }

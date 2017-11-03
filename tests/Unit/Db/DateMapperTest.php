@@ -23,11 +23,13 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use OCA\Polls\Db\Date;
 use OCA\Polls\Db\DateMapper;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
 class DateMapperTest extends UnitTestCase {
 
@@ -48,23 +50,48 @@ class DateMapperTest extends UnitTestCase {
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
+	/**
+	 * Create some fake data and persist them to the database.
+	 *
+	 * @return Date
+	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+
+		/** @var Date $date */
+		$date = $this->fm->instance('OCA\Polls\Db\Date');
+		$date->setPollId($event->getId());
+		$this->assertInstanceOf(Date::class, $this->dateMapper->insert($date));
+
+		return $date;
 	}
 
 	/**
+	 * Update the previously created entry and persist the changes.
+	 *
 	 * @depends testCreate
+	 * @param Date $date
+	 * @return Date
 	 */
-	public function testUpdate() {
+	public function testUpdate(Date $date) {
+		$newDt = Faker::date('Y-m-d H:i:s');
+		$date->setDt($newDt());
+		$this->dateMapper->update($date);
 
+		return $date;
 	}
 
 	/**
+	 * Delete the previously created entries from the database.
+	 *
 	 * @depends testDelete
+	 * @param Date $date
 	 */
-	public function testDelete() {
-
+	public function testDelete(Date $date) {
+		$event = $this->eventMapper->find($date->getPollId());
+		$this->dateMapper->delete($date);
+		$this->eventMapper->delete($event);
 	}
 }
