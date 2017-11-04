@@ -218,7 +218,11 @@ class PageController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function gotoPoll($hash) {
-		$poll = $this->eventMapper->findByHash($hash);
+		try {
+			$poll = $this->eventMapper->findByHash($hash);
+		} catch(DoesNotExistException $e) {
+			return new TemplateResponse('polls', 'no.acc.tmpl', []);
+		}
 		if ($poll->getType() == '0') {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 			$votes = $this->participationMapper->findByPoll($poll->getId());
