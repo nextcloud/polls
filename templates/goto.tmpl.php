@@ -89,9 +89,9 @@
 ?>
 
 <div id="app">
-	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass); ?>">
-		<div id="controls">
-			<div id="breadcrump">
+	<div id="app-content" class="column <?php p($statusClass . ' ' . $pollTypeClass); ?>">
+		<div id="controls" class="controls row">
+			<div id="breadcrump" class="breadcrump row">
 				<?php if (User::isLoggedIn()) : ?>
 				<div class="crumb svg" data-dir="/">
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">

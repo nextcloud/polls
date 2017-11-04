@@ -15,13 +15,6 @@ $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
-#votings {
-	position: relative !important;
-	.description {
-		padding: 12px 17px;
-	}
-}
-
 
 .row {
 	display: flex;
@@ -38,6 +31,26 @@ $user-column-width: 265px;
 	flex-shrink: 0;
 	
 }
+
+#votings {
+	position: relative !important;
+	.description {
+		padding: 12px 17px;
+	}
+}
+
+#controls, #breadcrump {
+	flex-grow: 0;
+	overflow: hidden;
+}
+
+div.crumb {
+	overflow: hidden;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+
 
 .header {
 	margin-left: $user-column-width;
@@ -300,8 +313,8 @@ $user-column-width: 265px;
 	.row {
 		flex-direction: column;
 
-		&.user-cell, &.counter, &.counter .yes, &.counter .no,  {
-			flex-direction: row
+		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump  {
+			flex-direction: row;
 		}
 
 		&.header {

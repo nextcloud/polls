@@ -46,6 +46,14 @@ function updateCounters(){
 	updateBest();
 }
 
+function switchSidebar() {
+	if ($('#app-content').hasClass('with-app-sidebar')) {
+		OC.Apps.hideAppSidebar();
+	} else {
+		OC.Apps.showAppSidebar();
+	}
+}
+
 
 $(document).ready(function () {
 	// count how many times in each date
@@ -56,14 +64,12 @@ $(document).ready(function () {
     });
  
     $('#switchDetails').click(function(){
-		OC.Apps.showAppSidebar();
+		switchSidebar();
     });
 	
     $('#closeDetails').click(function(){
 		OC.Apps.hideAppSidebar();
     });
-	
-	
 	
 	$('.poll.avatardiv').each(function(i, obj) {
 		$(obj).avatar(obj.title, 32);
@@ -144,7 +150,7 @@ $(document).ready(function () {
 			$('.new-comment .icon-loading-small').hide();
 			updateCommentsCount();
 		}).error(function() {
-			alert(t('polls', 'An error occurred, your comment was not posted...'));
+			alert(t('polls', 'An error occurred, your comment was not posted.'));
 			$('.new-comment .icon-loading-small').hide();
 		});
 	});
@@ -162,26 +168,29 @@ $(document).ready(function () {
 
 $(document).on('click', '.toggle-cell, .poll-cell.active', function() {
 	valuesChanged = true;
-	var $class = "";
-	var $toggle = "";
+	var $nextClass = "";
+	var $toggleAllClasses = "";
+	
 	if($(this).hasClass('yes')) {
-		$class = "no";
-		$toggle= "yes";
+		$nextClass = "no";
+		$toggleAllClasses= "yes";
 	} else if($(this).hasClass('no')) {
-		$class = "maybe";
-		$toggle= "no";
+		$nextClass = "maybe";
+		$toggleAllClasses= "no";
 	} else if($(this).hasClass('maybe')) {
-		$class = "yes";
-		$toggle= "maybe";
+		$nextClass = "yes";
+		$toggleAllClasses= "maybe";
 	} else {
-		$class = "yes";
-		$toggle= "maybe";
+		$nextClass = "yes";
+		$toggleAllClasses= "maybe";
 	}
+	
+	$(this).removeClass('yes no maybe unvoted');
+	$(this).addClass($nextClass);
+	
 	if($(this).hasClass('toggle-cell')) {
-		$(".poll-cell.active").attr('class', 'column poll-cell active ' + $toggle);
-		$(this).attr('class', 'toggle-cell ' + $class);
-	} else {
-		$(this).attr('class', 'column poll-cell active ' + $class);
+		$(".poll-cell.active").removeClass('yes no maybe unvoted');
+		$(".poll-cell.active").addClass($toggleAllClasses);
 	}
 	updateCounters();
 });
