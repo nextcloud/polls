@@ -321,36 +321,33 @@
 					}
 					?>
 				</ul>
-					<?php
-						$diffArray = $total['yes'];
-						for($i = 0 ; $i < count($diffArray) ; $i++) {
-							$diffArray[$i] = ($total['yes'][$i] - $total['no'][$i]);
-						}
-						$maxVotes = max($diffArray);
-					?>
 			</div>
-			<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
-				<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
-				<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-				<input type="hidden" name="dates" value="<?php p($poll->getId()); ?>" />
-				<input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
-				<input type="hidden" name="receiveNotifications" />
-				<input type="hidden" name="changed" />
-				<input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
-			</form>
-		<?php if (User::isLoggedIn()) : ?>
-			<span class="notification">
-				<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification != null) print_unescaped(' checked'); ?> />
-				<label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
-			</span>
-		<?php endif; ?>
+			<div class="submit row">
+				<div>
+					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
+						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="userId" value="<?php p($userId); ?>" />
+						<input type="hidden" name="dates" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="receiveNotifications" />
+						<input type="hidden" name="changed" />
+						<input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
+					</form>
+				</div>
+			<?php if (User::isLoggedIn()) : ?>
+				<div class="notification">
+					<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification != null) print_unescaped(' checked'); ?> />
+					<label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
+				</div>
+			<?php endif; ?>
+			</div>
 		</div>
 					
 		<div id="app-sidebar" class="detailsView scroll-container">
 			<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
 
 
-			<div class="table ">
+			<div class="table">
 				<div class="row">
 					<div id="app-navigation-simulation">
 						<ul class="with-icons">
