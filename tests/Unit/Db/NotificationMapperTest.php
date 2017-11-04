@@ -86,7 +86,7 @@ class NotificationMapperTest extends UnitTestCase {
 	/**
 	 * Delete the previously created entries from the database.
 	 *
-	 * @depends testDelete
+	 * @depends testUpdate
 	 * @param Notification $notification
 	 */
 	public function testDelete(Notification $notification) {

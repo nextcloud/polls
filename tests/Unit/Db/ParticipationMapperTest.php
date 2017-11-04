@@ -86,7 +86,7 @@ class ParticipationMapperTest extends UnitTestCase {
 	/**
 	 * Delete the previously created entries from the database.
 	 *
-	 * @depends testDelete
+	 * @depends testUpdate
 	 * @param Participation $participation
 	 */
 	public function testDelete(Participation $participation) {

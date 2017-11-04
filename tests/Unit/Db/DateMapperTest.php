@@ -86,7 +86,7 @@ class DateMapperTest extends UnitTestCase {
 	/**
 	 * Delete the previously created entries from the database.
 	 *
-	 * @depends testDelete
+	 * @depends testUpdate
 	 * @param Date $date
 	 */
 	public function testDelete(Date $date) {

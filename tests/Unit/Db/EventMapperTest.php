@@ -78,7 +78,7 @@ class EventMapperTest extends UnitTestCase {
 	/**
 	 * Delete the previously created entry from the database.
 	 *
-	 * @depends testDelete
+	 * @depends testUpdate
 	 * @param Event $event
 	 */
 	public function testDelete(Event $event) {

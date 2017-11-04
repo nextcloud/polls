@@ -86,7 +86,7 @@ class TextMapperTest extends UnitTestCase {
 	/**
 	 * Delete the previously created entries from the database.
 	 *
-	 * @depends testDelete
+	 * @depends testUpdate
 	 * @param Text $text
 	 */
 	public function testDelete(Text $text) {
