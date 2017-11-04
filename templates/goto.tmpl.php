@@ -101,7 +101,7 @@ $pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' =>
 			</header>
 			<div class="row">
 				<div class="col-70">
-					<div class="wordwrap desc"><?php p($description); ?></div>
+					<div class="wordwrap desc"><?php print_unescaped($description); ?></div>
 					<div class="scroll_div">
 						<table class="vote_table">
 							<thead>
