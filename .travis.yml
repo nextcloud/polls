@@ -37,6 +37,7 @@ before_install:
   - if [ $CLOUD = 'nextcloud' ]; then cd ../server; fi
   - if [ $CLOUD = 'owncloud' ]; then cd ../core; fi
   - ./occ app:enable $APP_NAME
+  - ./occ app:check-code $APP_NAME
 
 before_script:
   - cd apps/$APP_NAME
