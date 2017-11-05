@@ -1,5 +1,9 @@
 #header {	
-	#appmenu,.header-right {
+	#appmenu,.header-right, nav {
 	display:none;
 	}
+}
+
+div.crumb {
+	background-image: none;
 }

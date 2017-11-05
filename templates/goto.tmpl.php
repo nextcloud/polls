@@ -88,7 +88,7 @@
 	$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
 ?>
 
-<div id="app">
+<div id="app-disabled">
 	<div id="app-content" class="column <?php p($statusClass . ' ' . $pollTypeClass); ?>">
 		<div id="controls" class="controls row">
 			<div id="breadcrump" class="breadcrump row">
@@ -98,16 +98,11 @@
 						<img class="svg" src="<?php print_unescaped(OCP\image_path("core", "places/home.svg")); ?>"" alt="Home">
 					</a>
 				</div>
+				<?php endif; ?>
 				<div class="crumb svg last">
 					<span><?php p($poll->getTitle()); ?></span>
 				</div>
-				<?php endif; ?>
 
-				<?php if (!User::isLoggedIn()) : ?>
-				<div class="col-100">
-					<h2><?php p($poll->getTitle()); ?></h2>
-				</div>
-				<?php endif; ?>
 			</div>
 			
 			
@@ -223,7 +218,7 @@
 									$pollId = "voteid_" . $dt->getId();
 								}
 								// look what user voted for this dts
-								$class = 'column poll-cell unvoted';
+								$class = 'column poll-cell no';
 								foreach ($others[$usr] as $vote) {
 									$voteVal = null;
 									if ($poll->getType() == '0') {
@@ -288,7 +283,7 @@
 								$pollId = "voteid_" . $dt->getId();
 							}
 							// see if user already has data for this event
-							$class = 'unvoted';
+							$class = 'no';
 							$activeClass = 'poll-cell active cl_click';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $obj) {

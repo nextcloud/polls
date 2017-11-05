@@ -75,9 +75,11 @@ div.crumb {
 
 .user {
 	border-top: $border_user;
+	height: 44px;
+	padding: 0 17px;
 }
 
-.user, .header {
+.header {
 	padding: 0 17px;
 }
 
@@ -154,7 +156,7 @@ div.crumb {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: 32px;
-	height: 32px;
+	height: 44px;
 
 	&.active {
 		cursor: pointer;
@@ -303,6 +305,11 @@ div.crumb {
 }
 
 
+@media all and (max-width: (768px) ) {
+	#app-content {
+		position: relative !important;
+	}
+}
 @media all and (max-width: (480px) ) {
 
 	.table { 
@@ -434,3 +441,10 @@ div.crumb {
 		width: 100%;
 	}
  }
+
+ @media all and (max-width: (320px) ) {
+
+	.table { 
+		padding-bottom: 105px;
+	}
+}
