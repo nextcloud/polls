@@ -162,6 +162,7 @@ div.crumb {
 		cursor: pointer;
 		border: 2px solid;
 		border-radius: 4px;
+		box-sizing: border-box;
 	}
 
 	&.yes {
