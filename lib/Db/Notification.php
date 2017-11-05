@@ -26,8 +26,8 @@ namespace OCA\Polls\Db;
 /**
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method string getPollId()
- * @method void setPollId(string $value)
+ * @method integer getPollId()
+ * @method void setPollId(integer $value)
  */
 class Notification extends Model {
 	protected $userId;

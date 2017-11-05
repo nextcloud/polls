@@ -171,14 +171,13 @@ class PageController extends Controller {
 
 			$recUser = $this->userMgr->get($notification->getUserId());
 			$sendUser = $this->userMgr->get($from);
-			$rec = "";
+			$rec = '';
 			if ($recUser !== null) {
 				$rec = $recUser->getDisplayName();
 			}
+			$sender = $from;
 			if ($sendUser !== null) {
 				$sender = $sendUser->getDisplayName();
-			} else {
-				$sender = $from;
 			}
 			$msg = $this->trans->t('Hello %s,<br/><br/><strong>%s</strong> participated in the poll \'%s\'.<br/><br/>To go directly to the poll, you can use this <a href="%s">link</a>',
 				array(
@@ -188,12 +187,12 @@ class PageController extends Controller {
 					$url
 				));
 
-			$msg .= "<br/><br/>";
+			$msg .= '<br/><br/>';
 
 			$toName = $this->userMgr->get($notification->getUserId())->getDisplayName();
 			$subject = $this->trans->t('Polls App - New Comment');
 			$fromAddress = Util::getDefaultEmailAddress('no-reply');
-			$fromName = $this->trans->t("Polls App") . ' (' . $from . ')';
+			$fromName = $this->trans->t('Polls App') . ' (' . $from . ')';
 
 			try {
 				$mailer = \OC::$server->getMailer();
@@ -205,7 +204,7 @@ class PageController extends Controller {
 				$mailer->send($message);
 			} catch (\Exception $e) {
 				$message = 'Error sending mail to: ' . $toName . ' (' . $email . ')';
-				Util::writeLog("polls", $message, Util::ERROR);
+				Util::writeLog('polls', $message, Util::ERROR);
 			}
 		}
 	}
@@ -219,7 +218,7 @@ class PageController extends Controller {
 	 */
 	public function gotoPoll($hash) {
 		$poll = $this->eventMapper->findByHash($hash);
-		if ($poll->getType() == '0') {
+		if ($poll->getType() === 0) {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 			$votes = $this->participationMapper->findByPoll($poll->getId());
 		} else {
@@ -280,7 +279,7 @@ class PageController extends Controller {
 		if ($this->userId !== $poll->getOwner()) {
 			return new TemplateResponse('polls', 'no.create.tmpl');
 		}
-		if ($poll->getType() == '0') {
+		if ($poll->getType() === 0) {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 		} else {
 			$dates = $this->textMapper->findByPoll($poll->getId());
@@ -326,8 +325,8 @@ class PageController extends Controller {
 		$event = $this->eventMapper->find($pollId);
 		$event->setTitle(htmlspecialchars($pollTitle));
 		$event->setDescription(htmlspecialchars($pollDesc));
-		$event->setIsAnonymous($isAnonymous ? 1 : 0);
-		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
+		$event->setIsAnonymous($isAnonymous);
+		$event->setFullAnonymous($isAnonymous && $hideNames);
 
 		if ($accessType === 'select') {
 			if (isset($accessValues)) {
@@ -434,8 +433,8 @@ class PageController extends Controller {
 			ISecureRandom::CHAR_LOWER .
 			ISecureRandom::CHAR_UPPER
 		));
-		$event->setIsAnonymous($isAnonymous ? 1 : 0);
-		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
+		$event->setIsAnonymous($isAnonymous);
+		$event->setFullAnonymous($isAnonymous && $hideNames);
 
 		if ($accessType === 'select') {
 			if (isset($accessValues)) {
@@ -537,13 +536,13 @@ class PageController extends Controller {
 			$dates = json_decode($dates);
 			$types = json_decode($types);
 			$count_dates = count($dates);
-			if ($poll->getType() == '0') {
+			if ($poll->getType() === 0) {
 				$this->participationMapper->deleteByPollAndUser($pollId, $userId);
 			} else {
 				$this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
 			}
 			for ($i = 0; $i < $count_dates; $i++) {
-				if ($poll->getType() == '0') {
+				if ($poll->getType() === 0) {
 					$part = new Participation();
 					$part->setPollId($pollId);
 					$part->setUserId($userId);
@@ -643,7 +642,7 @@ class PageController extends Controller {
 	 */
 	 public function searchForUsers($searchTerm, $users) {
 		$selectedUsers = json_decode($users);
-		Util::writeLog("polls", print_r($selectedUsers, true), Util::ERROR);
+		Util::writeLog('polls', print_r($selectedUsers, true), Util::ERROR);
 		$userNames = $this->userMgr->searchDisplayName($searchTerm);
 		$users = array();
 		$sUsers = array();
@@ -734,7 +733,7 @@ class PageController extends Controller {
 		if ($owner === $this->userId) {
 			return true;
 		}
-		Util::writeLog("polls", $this->userId, Util::ERROR);
+		Util::writeLog('polls', $this->userId, Util::ERROR);
 		$user_groups = $this->getGroups();
 		$arr = explode(';', $access);
 		foreach ($arr as $item) {
@@ -748,7 +747,7 @@ class PageController extends Controller {
 			} else {
 				if (strpos($item, 'user_') === 0) {
 					$usr = substr($item, 5);
-					if ($usr === User::getUser()) {
+					if ($usr === \OC::$server->getUserSession()->getUser()->getUID()) {
 						return true;
 					}
 				}

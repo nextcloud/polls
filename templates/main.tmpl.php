@@ -28,8 +28,12 @@
 	\OCP\Util::addScript('polls', 'start');
 
 	$userId = $_['userId'];
+	/** @var \OCP\IUserManager $userMgr */
 	$userMgr = $_['userMgr'];
+	/** @var \OCP\IURLGenerator $urlGenerator */
 	$urlGenerator = $_['urlGenerator'];
+	/** @var \OCA\Polls\Db\Event[] $polls */
+	$polls = $_['polls'];
 ?>
 	<div id="app-content">
 		<div id="app-content-wrapper">
@@ -37,7 +41,7 @@
 					<div id="breadcrump">
 						<div class	="crumb svg last" data-dir="/">
 							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-								<img class="svg" src="<?php print_unescaped(OCP\image_path("core", "places/home.svg")); ?>" alt="Home">
+								<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 							</a>
 						</div>
 					</div>
@@ -48,7 +52,7 @@
 						<input class="stop icon-close" style="display:none" value="" type="button">
 					</div>
 				</div>
-	<?php if (count($_['polls']) == 0) : ?>
+	<?php if (count($_['polls']) === 0) : ?>
 		<div id="emptycontent" class="">
 			<div class="icon-polls"></div>
 			<h2><?php p($l->t('No existing polls.')); ?></h2>
@@ -81,7 +85,7 @@
 					 </div>
 				</div>
 
-				<?php foreach ($_['polls'] as $poll) : ?>
+				<?php foreach ($polls as $poll) : ?>
 					<?php
 						if (!userHasAccess($poll, $userId)) continue;
 						// direct url to poll
@@ -89,7 +93,7 @@
 						$owner = $poll->getOwner();
 
 						$expiry_style = '';
-						if ($poll->getType() == '0') {
+						if ($poll->getType() === 0) {
 							$participated = $_['participations'];
 						} else {
 							$participated = $_['participations_text'];
@@ -103,16 +107,16 @@
 						$commented_title = $l->t('You did not comment');
 						$commented_count = count($comments);
 
-						if ($owner == $userId) {
+						if ($owner === $userId) {
 							$owner = $l->t('Yourself');
 						}
 
-						if ($poll->getExpire() != null) {
+						if ($poll->getExpire() !== null) {
 							// $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
-							$expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
+							$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
 							$expiry_style = ' progress';
 							if (date('U') > strtotime($poll->getExpire())) {
-								$expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire()));
+								$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire()));
 								$expiry_style = ' expired';
 							}
 						} else {
@@ -121,7 +125,7 @@
 						}
 
 						for ($i = 0; $i < count($participated); $i++) {
-							if ($poll->getId() == intval($participated[$i]->getPollId())) {
+							if ($poll->getId() === $participated[$i]->getPollId()) {
 								$participated_class = 'partic_yes';
 								$participated_title = $l->t('You voted');
 								array_splice($participated, $i, 1);
@@ -130,7 +134,7 @@
 						}
 
 						for ($i = 0; $i < count($comments); $i++) {
-							if ($poll->getId() == intval($comments[$i]->getPollId())) {
+							if ($poll->getId() === $comments[$i]->getPollId()) {
 								$commented_class = 'commented_yes';
 								$commented_title = $l->t('You commented');
 								array_splice($comments, $i, 1);
@@ -143,7 +147,7 @@
 					<div class="row table-body">
 						<div class="wrapper group-master">
 							<div class="wrapper group-1">
-								<div class="thumbnail <?php p($expiry_style . " " . $commented_class. " " . $participated_class); ?>"></div>  <!-- Image to display status or type of poll */ -->
+								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class. ' ' . $participated_class); ?>"></div>  <!-- Image to display status or type of poll */ -->
 								<a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
 									<div class="column name">						  <?php p($poll->getTitle()); ?></div>
 									<div class="column description">				   <?php p($poll->getDescription()); ?></div>
@@ -158,7 +162,7 @@
 													<span>Copy Link</span>
 												</button>
 											</li>
-							<?php if ($poll->getOwner() == $userId) : ?>
+							<?php if ($poll->getOwner() === $userId) : ?>
 											<li>
 												<button class="menuitem delete_poll action permanent" id="id_del_<?php p($poll->getId()); ?>" data-value="<?php p($poll->getTitle()); ?>">
 													<span class="cl_delete icon-delete"></span>
@@ -185,7 +189,7 @@
 								</div>
 								<div class="wrapper group-2-1">
 									<div class="column access"><?php p($l->t($poll->getAccess())); ?></div>
-									<div class="column created" data-timestamp="<?php p(strtotime($poll->getCreated())); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(OCP\relative_modified_date(strtotime($poll->getCreated()))); ?></div>
+									<div class="column created" data-timestamp="<?php p(strtotime($poll->getCreated())); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
 								</div>
 								<div class="wrapper group-2-2">
 									<div class="column expiry<?php p($expiry_style); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
@@ -209,12 +213,12 @@
 // ---- helper functions ----
 // from spreed.me
 /**
- * @param $userId
+ * @param string $userId
  * @return array with groups
  */
 function getGroups($userId) {
 	// $this->requireLogin();
-	if (class_exists('\OC_Group', true)) {
+	if (class_exists('\OC_Group')) {
 		// Nextcloud <= 11, ownCloud
 		return \OC_Group::getUserGroups($userId);
 	}
@@ -226,12 +230,12 @@ function getGroups($userId) {
 }
 
 /**
- * @param $poll
- * @param $userId
- * @return boolean 
+ * @param OCA\Polls\Db\Event $poll
+ * @param string $userId
+ * @return boolean
  */
 function userHasAccess($poll, $userId) {
-	if ($poll == null) {
+	if ($poll === null) {
 		return false;
 	}
 	$access = $poll->getAccess();
@@ -239,32 +243,32 @@ function userHasAccess($poll, $userId) {
 	if (!User::isLoggedIn()) {
 		return false;
 	}
-	if ($access == 'public') {
+	if ($access === 'public') {
 		return true;
 	}
-	if ($access == 'hidden') {
+	if ($access === 'hidden') {
 		return true;
 	}
-	if ($access == 'registered') {
+	if ($access === 'registered') {
 		return true;
 	}
-	if ($owner == $userId) {
+	if ($owner === $userId) {
 		return true;
 	}
-	$user_groups = getGroups($userId);
 
+	$user_groups = getGroups($userId);
 	$arr = explode(';', $access);
 
 	foreach ($arr as $item) {
-		if (strpos($item, 'group_') == 0) {
+		if (strpos($item, 'group_') === 0) {
 			$grp = substr($item, 6);
 			foreach ($user_groups as $user_group) {
-				if ($user_group == $grp) return true;
+				if ($user_group === $grp) return true;
 			}
 		}
-		else if (strpos($item, 'user_') == 0) {
+		else if (strpos($item, 'user_') === 0) {
 			$usr = substr($item, 5);
-			if ($usr == $userId) return true;
+			if ($usr === $userId) return true;
 		}
 	}
 	return false;

@@ -40,10 +40,10 @@ namespace OCA\Polls\Db;
  * @method void setExpire(string $value)
  * @method string getHash()
  * @method void setHash(string $value)
- * @method integer getIsAnonymous()
- * @method void setIsAnonymous(integer $value)
- * @method integer getFullAnonymous()
- * @method void setFullAnonymous(integer $value)
+ * @method boolean getIsAnonymous()
+ * @method void setIsAnonymous(boolean $value)
+ * @method boolean getFullAnonymous()
+ * @method void setFullAnonymous(boolean $value)
  */
 class Event extends Model {
 	protected $type;
@@ -56,4 +56,12 @@ class Event extends Model {
 	protected $hash;
 	protected $isAnonymous;
 	protected $fullAnonymous;
+
+	/**
+	 * Event constructor.
+	 */
+	public function __construct() {
+		$this->addType('isAnonymous', 'boolean');
+		$this->addType('fullAnonymous', 'boolean');
+	}
 }
