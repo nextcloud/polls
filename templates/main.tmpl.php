@@ -156,15 +156,9 @@
 									<div class="popovermenu bubble menu hidden" id="expanddiv_<?php p($poll->getId()); ?>">
 										<ul>
 											<li>
-												<button class="menuitem alt-tooltip copy_link action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>">
-													<span class="cl_link icon-clippy"></span>
-													<span>Copy Link</span>
-												</button>
-											</li>
-											<li>
 												<a class="menuitem alt-tooltip copy-link has-tooltip action permanent" data-toggle="tooltip" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
 													<span class="icon-clippy"></span>
-													<span>Copy Link (2)</span>
+													<span>Copy Link</span>
 												</a>
 											</li>
 							<?php if ($poll->getOwner() == $userId) : ?>
