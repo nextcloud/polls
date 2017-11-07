@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Kai Schröer <git@schroeer.co>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -24,19 +24,14 @@
 namespace OCA\Polls\Tests\Unit\Controller;
 
 use OCA\Polls\Controller\PageController;
-use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\AppFramework\Http\TemplateResponse;
+use PHPUnit_Framework_TestCase;
 
-class PageControllerTest extends UnitTestCase {
+class PageControllerTest extends PHPUnit_Framework_TestCase {
 
-	/** @var PageController */
 	private $controller;
-
 	private $userId = 'john';
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function setUp() {
 		$request = $this->getMockBuilder('OCP\IRequest')
 			->disableOriginalConstructor()
@@ -101,13 +96,10 @@ class PageControllerTest extends UnitTestCase {
 		);
 	}
 
-	/**
-	 * Basic controller index route test.
-	 */
 	public function testIndex() {
 		$result = $this->controller->index();
 
 		$this->assertEquals('main.tmpl', $result->getTemplateName());
-		$this->assertInstanceOf(TemplateResponse::class, $result);
+		$this->assertTrue($result instanceof TemplateResponse);
 	}
 }

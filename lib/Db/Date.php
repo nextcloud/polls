@@ -23,13 +23,15 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
- * @method string getDt()
- * @method void setDt(string $value)
+ * @method timestamp getDt()
+ * @method void setDt(timestamp $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Date extends Model {
-	protected $dt;
-	protected $pollId;
+class Date extends Entity {
+	public $dt;
+	public $pollId;
 }

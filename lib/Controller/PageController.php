@@ -218,11 +218,7 @@ class PageController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function gotoPoll($hash) {
-		try {
-			$poll = $this->eventMapper->findByHash($hash);
-		} catch(DoesNotExistException $e) {
-			return new TemplateResponse('polls', 'no.acc.tmpl', []);
-		}
+		$poll = $this->eventMapper->findByHash($hash);
 		if ($poll->getType() == '0') {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 			$votes = $this->participationMapper->findByPoll($poll->getId());
@@ -439,12 +435,10 @@ class PageController extends Controller {
 		$event->setDescription(htmlspecialchars($pollDesc));
 		$event->setOwner($userId);
 		$event->setCreated(date('Y-m-d H:i:s'));
-		$event->setHash(\OC::$server->getSecureRandom()->generate(
-			16,
+		$event->setHash(\OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		));
+			ISecureRandom::CHAR_UPPER));
 		$event->setIsAnonymous($isAnonymous ? 1 : 0);
 		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
 

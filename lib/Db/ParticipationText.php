@@ -23,6 +23,8 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method text getText()
  * @method void setText(text $value)
@@ -33,9 +35,9 @@ namespace OCA\Polls\Db;
  * @method integer getType()
  * @method void setType(integer $value)
  */
-class ParticipationText extends Model {
-	protected $text;
-	protected $userId;
-	protected $pollId;
-	protected $type;
+class ParticipationText extends Entity {
+	public $text;
+	public $userId;
+	public $pollId;
+	public $type;
 }

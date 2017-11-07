@@ -23,9 +23,11 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
- * @method string getDt()
- * @method void setDt(string $value)
+ * @method timestamp getDt()
+ * @method void setDt(timestamp $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method integer getPollId()
@@ -33,9 +35,9 @@ namespace OCA\Polls\Db;
  * @method integer getType()
  * @method void setType(integer $value)
  */
-class Participation extends Model {
-	protected $dt;
-	protected $userId;
-	protected $pollId;
-	protected $type;
+class Participation extends Entity {
+	public $dt;
+	public $userId;
+	public $pollId;
+	public $type;
 }
