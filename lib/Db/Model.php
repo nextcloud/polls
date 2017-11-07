@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,19 +23,17 @@
 
 namespace OCA\Polls\Db;
 
-/**
- * @method text getText()
- * @method void setText(text $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
- * @method integer getType()
- * @method void setType(integer $value)
- */
-class ParticipationText extends Model {
-	protected $text;
-	protected $userId;
-	protected $pollId;
-	protected $type;
+use OCP\AppFramework\Db\Entity;
+
+abstract class Model extends Entity {
+	/**
+	 * FactoryMuffin checks for the existence of setters with method_exists($obj, $attr) but that returns false.
+	 * By overwriting the __set() magic method we can trigger the changed flag on $obj->attr assignment.
+	 *
+	 * @param $name
+	 * @param $value
+	 */
+	public function __set($name, $value) {
+		$this->setter($name, [$value]);
+	}
 }

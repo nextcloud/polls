@@ -432,10 +432,12 @@ class PageController extends Controller {
 		$event->setDescription(htmlspecialchars($pollDesc));
 		$event->setOwner($userId);
 		$event->setCreated(date('Y-m-d H:i:s'));
-		$event->setHash(\OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(16,
+		$event->setHash(\OC::$server->getSecureRandom()->generate(
+			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER));
+			ISecureRandom::CHAR_UPPER
+		));
 		$event->setIsAnonymous($isAnonymous ? 1 : 0);
 		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
 

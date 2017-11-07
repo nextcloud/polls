@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,21 +21,22 @@
  *
  */
 
-namespace OCA\Polls\Db;
+namespace OCA\Polls\Tests\Unit;
 
-/**
- * @method text getText()
- * @method void setText(text $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
- * @method integer getType()
- * @method void setType(integer $value)
- */
-class ParticipationText extends Model {
-	protected $text;
-	protected $userId;
-	protected $pollId;
-	protected $type;
+use League\FactoryMuffin\FactoryMuffin;
+use PHPUnit_Framework_TestCase;
+
+abstract class UnitTestCase extends PHPUnit_Framework_TestCase {
+
+	/** @var FactoryMuffin */
+	protected $fm;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setUp() {
+		parent::setUp();
+		$this->fm = new FactoryMuffin();
+		$this->fm->loadFactories(__DIR__ . '/Factories');
+	}
 }
