@@ -45,6 +45,7 @@ use OCP\ILogger;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\Mail\IMailer;
 use OCP\Security\ISecureRandom;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\RedirectResponse;
@@ -64,18 +65,17 @@ class PageController extends Controller {
 	private $participationTextMapper;
 	private $textMapper;
 	private $urlGenerator;
-	private $manager;
+	private $userMgr;
 	private $avatarManager;
 	private $logger;
 	private $trans;
-	private $userMgr;
 	private $groupManager;
 
 	/**
 	 * PageController constructor.
 	 * @param $appName
 	 * @param IRequest $request
-	 * @param IUserManager $manager
+	 * @param IUserManager $userMgr
 	 * @param IGroupManager $groupManager
 	 * @param IAvatarManager $avatarManager
 	 * @param ILogger $logger
@@ -93,7 +93,7 @@ class PageController extends Controller {
 	public function __construct(
 		$appName,
 		IRequest $request,
-		IUserManager $manager,
+		IUserManager $userMgr,
 		IGroupManager $groupManager,
 		IAvatarManager $avatarManager,
 		ILogger $logger,
@@ -109,7 +109,7 @@ class PageController extends Controller {
 		TextMapper $textMapper
 	) {
 		parent::__construct($appName, $request);
-		$this->manager = $manager;
+		$this->userMgr = $userMgr;
 		$this->groupManager = $groupManager;
 		$this->avatarManager = $avatarManager;
 		$this->logger = $logger;
@@ -123,7 +123,6 @@ class PageController extends Controller {
 		$this->participationMapper = $ParticipationMapper;
 		$this->participationTextMapper = $ParticipationTextMapper;
 		$this->textMapper = $textMapper;
-		$this->userMgr = \OC::$server->getUserManager();
 	}
 
 	/**
@@ -141,7 +140,7 @@ class PageController extends Controller {
 			'participations' => $partic,
 			'participations_text' => $particText,
 			'userId' => $this->userId,
-			'userMgr' => $this->manager,
+			'userMgr' => $this->userMgr,
 			'urlGenerator' => $this->urlGenerator
 		]);
 		if (class_exists('OCP\AppFramework\Http\ContentSecurityPolicy')) {
@@ -166,19 +165,20 @@ class PageController extends Controller {
 			if (strlen($email) === 0 || !isset($email)) {
 				continue;
 			}
-			$url = \OC::$server->getURLGenerator()->getAbsoluteURL(\OC::$server->getURLGenerator()->linkToRoute('polls.page.goto_poll',
-				array('hash' => $poll->getHash())));
+			$url = $this->urlGenerator->getAbsoluteURL(
+				$this->urlGenerator->linkToRoute('polls.page.goto_poll',
+				array('hash' => $poll->getHash()))
+			);
 
 			$recUser = $this->userMgr->get($notification->getUserId());
 			$sendUser = $this->userMgr->get($from);
-			$rec = "";
+			$rec = '';
 			if ($recUser !== null) {
 				$rec = $recUser->getDisplayName();
 			}
+			$sender = $from;
 			if ($sendUser !== null) {
 				$sender = $sendUser->getDisplayName();
-			} else {
-				$sender = $from;
 			}
 			$msg = $this->trans->t('Hello %s,<br/><br/><strong>%s</strong> participated in the poll \'%s\'.<br/><br/>To go directly to the poll, you can use this <a href="%s">link</a>',
 				array(
@@ -188,15 +188,17 @@ class PageController extends Controller {
 					$url
 				));
 
-			$msg .= "<br/><br/>";
+			$msg .= '<br/><br/>';
 
 			$toName = $this->userMgr->get($notification->getUserId())->getDisplayName();
 			$subject = $this->trans->t('Polls App - New Comment');
 			$fromAddress = Util::getDefaultEmailAddress('no-reply');
-			$fromName = $this->trans->t("Polls App") . ' (' . $from . ')';
+			$fromName = $this->trans->t('Polls App') . ' (' . $from . ')';
 
 			try {
+				/** @var IMailer $mailer */
 				$mailer = \OC::$server->getMailer();
+				/** @var \OC\Mail\Message $message */
 				$message = $mailer->createMessage();
 				$message->setSubject($subject);
 				$message->setFrom(array($fromAddress => $fromName));
@@ -205,7 +207,7 @@ class PageController extends Controller {
 				$mailer->send($message);
 			} catch (\Exception $e) {
 				$message = 'Error sending mail to: ' . $toName . ' (' . $email . ')';
-				Util::writeLog("polls", $message, Util::ERROR);
+				Util::writeLog('polls', $message, Util::ERROR);
 			}
 		}
 	}
@@ -223,7 +225,7 @@ class PageController extends Controller {
 		} catch(DoesNotExistException $e) {
 			return new TemplateResponse('polls', 'no.acc.tmpl', []);
 		}
-		if ($poll->getType() == '0') {
+		if ($poll->getType() === 0) {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 			$votes = $this->participationMapper->findByPoll($poll->getId());
 		} else {
@@ -244,7 +246,7 @@ class PageController extends Controller {
 				'votes' => $votes,
 				'notification' => $notification,
 				'userId' => $this->userId,
-				'userMgr' => $this->manager,
+				'userMgr' => $this->userMgr,
 				'urlGenerator' => $this->urlGenerator,
 				'avatarManager' => $this->avatarManager
 			]);
@@ -284,7 +286,7 @@ class PageController extends Controller {
 		if ($this->userId !== $poll->getOwner()) {
 			return new TemplateResponse('polls', 'no.create.tmpl');
 		}
-		if ($poll->getType() == '0') {
+		if ($poll->getType() === 0) {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 		} else {
 			$dates = $this->textMapper->findByPoll($poll->getId());
@@ -293,7 +295,7 @@ class PageController extends Controller {
 			'poll' => $poll,
 			'dates' => $dates,
 			'userId' => $this->userId,
-			'userMgr' => $this->manager,
+			'userMgr' => $this->userMgr,
 			'urlGenerator' => $this->urlGenerator
 		]);
 	}
@@ -397,7 +399,7 @@ class PageController extends Controller {
 	 */
 	public function createPoll() {
 		return new TemplateResponse('polls', 'create.tmpl',
-			['userId' => $this->userId, 'userMgr' => $this->manager, 'urlGenerator' => $this->urlGenerator]);
+			['userId' => $this->userId, 'userMgr' => $this->userMgr, 'urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
@@ -541,13 +543,13 @@ class PageController extends Controller {
 			$dates = json_decode($dates);
 			$types = json_decode($types);
 			$count_dates = count($dates);
-			if ($poll->getType() == '0') {
+			if ($poll->getType() === 0) {
 				$this->participationMapper->deleteByPollAndUser($pollId, $userId);
 			} else {
 				$this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
 			}
 			for ($i = 0; $i < $count_dates; $i++) {
-				if ($poll->getType() == '0') {
+				if ($poll->getType() === 0) {
 					$part = new Participation();
 					$part->setPollId($pollId);
 					$part->setUserId($userId);
@@ -588,8 +590,8 @@ class PageController extends Controller {
 		$comment->setDt(date('Y-m-d H:i:s'));
 		$this->commentMapper->insert($comment);
 		$this->sendNotifications($pollId, $userId);
-		if ($this->manager->get($userId) !== null) {
-			$newUserId = $this->manager->get($userId)->getDisplayName();
+		if ($this->userMgr->get($userId) !== null) {
+			$newUserId = $this->userMgr->get($userId)->getDisplayName();
 		} else {
 			$newUserId = $userId;
 		}
@@ -647,7 +649,7 @@ class PageController extends Controller {
 	 */
 	 public function searchForUsers($searchTerm, $users) {
 		$selectedUsers = json_decode($users);
-		Util::writeLog("polls", print_r($selectedUsers, true), Util::ERROR);
+		Util::writeLog('polls', print_r($selectedUsers, true), Util::ERROR);
 		$userNames = $this->userMgr->searchDisplayName($searchTerm);
 		$users = array();
 		$sUsers = array();
@@ -679,7 +681,7 @@ class PageController extends Controller {
 	 * @return string
 	 */
 	 public function getDisplayName($username) {
-		return $this->manager->get($username)->getDisplayName();
+		return $this->userMgr->get($username)->getDisplayName();
 	}
 
 	/**
@@ -694,39 +696,31 @@ class PageController extends Controller {
 	 * @return Event[]
 	 */
 	 public function getPollsForUserWithInfo($user = null) {
-		if ($user === null) {
-			return $this->eventMapper->findAllForUserWithInfo($this->userId);
-		} else {
-			return $this->eventMapper->findAllForUserWithInfo($user);
-		}
+		return $this->eventMapper->findAllForUserWithInfo((null === $user) ? $this->userId : $user);
 	}
 	/**
 	 * @return array
 	 */
 	 public function getGroups() {
-		// $this->requireLogin();
-		if (class_exists('\OC_Group', true)) {
+		if (class_exists('\OC_Group')) {
 			// Nextcloud <= 11, ownCloud
 			return \OC_Group::getUserGroups($this->userId);
 		}
 		// Nextcloud >= 12
-		$groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+		$groups = $this->groupManager->getUserGroups(\OC::$server->getUserSession()->getUser());
 		return array_map(function ($group) {
 			return $group->getGID();
 		}, $groups);
 	}
 
 	/**
-	 * @param $poll
+	 * @param Event $poll
 	 * @return bool
 	 */
 	private function hasUserAccess($poll) {
 		$access = $poll->getAccess();
 		$owner = $poll->getOwner();
-		if ($access === 'public') {
-			return true;
-		}
-		if ($access === 'hidden') {
+		if ($access === 'public' || $access === 'hidden') {
 			return true;
 		}
 		if ($this->userId === null) {
@@ -738,7 +732,7 @@ class PageController extends Controller {
 		if ($owner === $this->userId) {
 			return true;
 		}
-		Util::writeLog("polls", $this->userId, Util::ERROR);
+		Util::writeLog('polls', $this->userId, Util::ERROR);
 		$user_groups = $this->getGroups();
 		$arr = explode(';', $access);
 		foreach ($arr as $item) {
@@ -752,7 +746,7 @@ class PageController extends Controller {
 			} else {
 				if (strpos($item, 'user_') === 0) {
 					$usr = substr($item, 5);
-					if ($usr === User::getUser()) {
+					if ($usr === $this->userId) {
 						return true;
 					}
 				}
