@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,21 +21,16 @@
  *
  */
 
-namespace OCA\Polls\Db;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
- * @method text getText()
- * @method void setText(text $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
- * @method integer getType()
- * @method void setType(integer $value)
+ * General factory for the participation model.
  */
-class ParticipationText extends Model {
-	protected $text;
-	protected $userId;
-	protected $pollId;
-	protected $type;
-}
+$fm->define('OCA\Polls\Db\Participation')->setDefinitions([
+	'userId' => Faker::firstNameMale(),
+	'dt' => function () {
+		$date = new DateTime('today');
+		return $date->format('Y-m-d H:i:s');
+	},
+	'type' => 0
+]);

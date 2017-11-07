@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,21 +21,26 @@
  *
  */
 
-namespace OCA\Polls\Db;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
- * @method text getText()
- * @method void setText(text $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
- * @method integer getType()
- * @method void setType(integer $value)
+ * General factory for the event model.
  */
-class ParticipationText extends Model {
-	protected $text;
-	protected $userId;
-	protected $pollId;
-	protected $type;
-}
+$fm->define('OCA\Polls\Db\Event')->setDefinitions([
+	'type' => 0,
+	'title' => Faker::sentence(10),
+	'description' => Faker::paragraph(),
+	'owner' => Faker::firstNameMale(),
+	'created' => function () {
+		$date = new DateTime('today');
+		return $date->format('Y-m-d H:i:s');
+	},
+	'access' => 'registered',
+	'expire' => function () {
+		$date = new DateTime('tomorrow');
+		return $date->format('Y-m-d H:i:s');
+	},
+	'hash' => Faker::regexify('[A-Za-z0-9]{16}'),
+	'isAnonymous' => 0,
+	'fullAnonymous' => 0
+]);

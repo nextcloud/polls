@@ -1,14 +1,19 @@
 {
 	"name": "polls",
-	"description": "This is a poll app, similar to doodle or dudle with the possibility for restrict access (only members, certain groups/users, hidden and public).",
 	"type": "project",
-	"license": "AGPL",
+	"license": "AGPLv3",
 	"authors": [
 		{
 			"name": "Vinzenz Rosenkranz"
+		},
+		{
+			"name": "Kai Schröer"
 		}
 	],
 	"require-dev": {
-		"phpunit/phpunit": "^5.4"
+		"christophwurst/nextcloud": "^12.0",
+		"phpunit/phpunit": "^5.4",
+		"league/factory-muffin": "^3.0",
+		"league/factory-muffin-faker": "^2.0"
 	}
 }
