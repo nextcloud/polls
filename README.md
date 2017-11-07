@@ -1,6 +1,9 @@
 # Polls
 
-[![Build Status](https://travis-ci.org/nextcloud/polls.svg?branch=master)](https://travis-ci.org/nextcloud/polls)
+[![Build Status](https://img.shields.io/travis/nextcloud/polls.svg?style=flat-square)](https://travis-ci.org/nextcloud/polls)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/nextcloud/polls.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextcloud/polls)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/nextcloud/polls.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextcloud/polls)
+[![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](LICENSE)
 
 This is a poll app, similar to doodle or dudle, for Nextcloud / ownCloud written in PHP and JS / jQuery.
 It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
@@ -16,7 +19,9 @@ It is a rework of the already existing [polls app](https://github.com/raduvatav/
 
 ### Screenshots
 ![Overview](https://github.com/nextcloud/polls/blob/master/screenshots/overview.png)
+
 ![Vote](https://github.com/nextcloud/polls/blob/master/screenshots/vote.png)
+
 ![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/new-poll.png)
 
 ## Installation / Update

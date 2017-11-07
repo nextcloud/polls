@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Entity;
-
 /**
  * @method integer getType()
  * @method void setType(integer $value)
@@ -34,12 +32,12 @@ use OCP\AppFramework\Db\Entity;
  * @method void setDescription(string $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
- * @method timestamp getCreated()
- * @method void setCreated(timestamp $value)
+ * @method string getCreated()
+ * @method void setCreated(string $value)
  * @method string getAccess()
  * @method void setAccess(string $value)
- * @method timestamp getExpire()
- * @method void setExpire(timestamp $value)
+ * @method string getExpire()
+ * @method void setExpire(string $value)
  * @method string getHash()
  * @method void setHash(string $value)
  * @method integer getIsAnonymous()
@@ -47,15 +45,15 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
  */
-class Event extends Entity {
-	public $type;
-	public $title;
-	public $description;
-	public $owner;
-	public $created;
-	public $access;
-	public $expire;
-	public $hash;
-	public $isAnonymous;
-	public $fullAnonymous;
+class Event extends Model {
+	protected $type;
+	protected $title;
+	protected $description;
+	protected $owner;
+	protected $created;
+	protected $access;
+	protected $expire;
+	protected $hash;
+	protected $isAnonymous;
+	protected $fullAnonymous;
 }
