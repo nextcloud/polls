@@ -218,17 +218,15 @@ class PageController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function gotoPoll($hash) {
-		try {
-			$poll = $this->eventMapper->findByHash($hash);
-		} catch(DoesNotExistException $e) {
-			return new TemplateResponse('polls', 'no.acc.tmpl', []);
-		}
+		$poll = $this->eventMapper->findByHash($hash);
 		if ($poll->getType() == '0') {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 			$votes = $this->participationMapper->findByPoll($poll->getId());
+			$participants = $this->participationMapper->listParticipantsByPoll($poll->getId());
 		} else {
 			$dates = $this->textMapper->findByPoll($poll->getId());
 			$votes = $this->participationTextMapper->findByPoll($poll->getId());
+			$participants = $this->participationTextMapper->listParticipantsByPoll($poll->getId());
 		}
 		$comments = $this->commentMapper->findByPoll($poll->getId());
 		try {
@@ -242,6 +240,7 @@ class PageController extends Controller {
 				'dates' => $dates,
 				'comments' => $comments,
 				'votes' => $votes,
+				'participants' => $participants,
 				'notification' => $notification,
 				'userId' => $this->userId,
 				'userMgr' => $this->manager,
@@ -261,6 +260,10 @@ class PageController extends Controller {
 	 * @return RedirectResponse
 	 */
 	public function deletePoll($pollId) {
+		$pollToDelete = $this->eventMapper->find($pollId);
+		if ($this->userId !== $pollToDelete->getOwner()) {
+			return new TemplateResponse('polls', 'no.delete.tmpl');
+		}
 		$poll = new Event();
 		$poll->setId($pollId);
 		$this->eventMapper->delete($poll);
