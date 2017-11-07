@@ -38,6 +38,8 @@ OC.L10N.register(
     "or" : "eller",
     "Logged in as" : "Innlogget som",
     "Send!" : "Send!",
+    "No comments yet. Be the first." : "Ingen kommentarer enda. Vær først.",
+    "No existing polls." : "Ingen eksisterende avstemninger.",
     "By" : "Av",
     "Created" : "Opprettet",
     "participated" : "deltok",
