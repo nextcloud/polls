@@ -1,8 +1,8 @@
 var newUserDates = [];
 var newUserTypes = [];
 
-var max_votes = 0;
-var values_changed = false;
+var maxVotes = 0;
+var valuesChanged = false;
 
 var tzOffset = new Date().getTimezoneOffset();
 
@@ -12,55 +12,78 @@ $.fn.switchClass = function(a, b) {
 	return this;
 };
 
+function updateCommentsCount(){
+	//todo Update the Badgecounter
+	$('#comment-counter').removeClass('no-comments');
+	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
+	
+}
+
+function updateBest(){
+	maxVotes = 0;
+	$('.counter').each(function() {
+		var yes = parseInt($(this).find('.yes').text());
+		var no = parseInt($(this).find('.no').text());
+		if(yes - no > maxVotes) {
+			maxVotes = yes - no;
+		}
+	});
+	var i = 0;
+	$('.vote').each(function() {
+		var yes = parseInt($(this).find('.yes').text());
+		var no = parseInt($(this).find('.no').text());
+		$(this).toggleClass('winner', yes - no === maxVotes);
+	});
+}
+
+function updateCounters(){
+	$('.result-cell.yes').each(function() {
+			$(this).text($('#voteid_'+ $(this).attr('data-voteId') + '.poll-cell.yes').length);
+	});
+	$('.result-cell.no').each(function() {
+			$(this).text($('#voteid_'+ $(this).attr('data-voteId') + '.poll-cell.no').length);
+	});
+	updateBest();
+}
+
+function switchSidebar() {
+	if ($('#app-content').hasClass('with-app-sidebar')) {
+		OC.Apps.hideAppSidebar();
+	} else {
+		OC.Apps.showAppSidebar();
+	}
+}
+
+
 $(document).ready(function () {
 	// count how many times in each date
-	var arr_dates = [];  // will be like: [21.02] => 3
-	var arr_years = [];  // [1992] => 6
-	var dateStr = '';
-	var k;
-
+	new Clipboard('.copy-link');
+	updateBest();
+    $('.delete-poll').click(function(){
+		deletePoll(this);
+    });
+ 
+    $('#switchDetails').click(function(){
+		switchSidebar();
+    });
+	
+    $('#closeDetails').click(function(){
+		OC.Apps.hideAppSidebar();
+    });
+	
 	$('.poll.avatardiv').each(function(i, obj) {
 		$(obj).avatar(obj.title, 32);
 	});
 
-	$('.hidden-dates').each(function(i, obj) {
-		var exDt = new Date(obj.value.replace(/ /g,"T")+"Z"); //Fix display in Safari and IE, still NaN on Firefox on iPad
-		var day = ('0' + exDt.getDate()).substr(-2);
-		var month = ('0' + (exDt.getMonth()+1)).substr(-2);
-		var day_month = day + '.' + month;
-		var year = exDt.getFullYear();
+	$('.vote.time').each(function() {
+        var extendedDate = new Date($(this).attr("data-value-utc").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
 
-		if(typeof arr_dates[day_month] !== 'undefined') {
-			arr_dates[day_month] += 1;
-		} else {
-			arr_dates[day_month] = 1;
-		}
-		if(typeof arr_years[year] !== 'undefined') {
-			arr_years[year] += 1;
-		} else {
-			arr_years[year] = 1;
-		}
-		dateStr += '<th class="time-slot" value="' + obj.value + '">' +
-		'<div class="month">' + exDt.toLocaleString(window.navigator.language, {month: 'short'}) +
-							// ' \'' + exDt.toLocaleString(window.navigator.language, {year: '2-digit'}) +
-							'</div>' +
-		'<div class="day">'   + exDt.toLocaleString(window.navigator.language, {day: 'numeric'}) + '</div>' +
-		'<div class="dayow">' + exDt.toLocaleString(window.navigator.language, {weekday: 'short'}) + '</div>' +
-		'<div class="time">'  + ('0' + (exDt.getHours())).substr(-2) + ':' + ('0' + exDt.getMinutes()).substr(-2) + '</div>' +
-		'</th>';
-	});
-
-	var for_string_dates = '';
-	for(k in arr_dates) {
-		for_string_dates += '<th colspan="' + arr_dates[k] + '" class="bordered">' + k + '</th>';
-	}
-
-	var for_string_years = '';
-	for(k in arr_years) {
-		for_string_years += '<th colspan="' + arr_years[k] + '" class="bordered">' + k + '</th>';
-	}
-
-	$('#time-slots-header').append(dateStr);
+        $(this).find('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
+        $(this).find('.day').text(extendedDate.toLocaleString(window.navigator.language, {day: 'numeric'}));
+        $(this).find('.dayow').text(extendedDate.toLocaleString(window.navigator.language, {weekday: 'short'}));
+        $(this).find('.time').text(extendedDate.toLocaleTimeString(window.navigator.language, {hour: 'numeric', minute:'2-digit', timeZoneName:'short'}));
+        
+ 	});
 
 	$('#submit_finish_vote').click(function() {
 		var form = document.finish_vote;
@@ -75,7 +98,7 @@ $(document).ready(function () {
 		}
 		var check_notif = document.getElementById('check_notif');
 		var newUserDates = [], newUserTypes = [];
-		$(".cl_click").each(function() {
+		$(".poll-cell.active").each(function() {
 			if($(this).hasClass('no')) {
 				newUserTypes.push(0);
 			} else if ($(this).hasClass('yes')){
@@ -94,7 +117,7 @@ $(document).ready(function () {
 		form.elements.dates.value = JSON.stringify(newUserDates);
 		form.elements.types.value = JSON.stringify(newUserTypes);
 		form.elements.receiveNotifications.value = (check_notif && check_notif.checked) ? 'true' : 'false';
-		form.elements.changed.value = values_changed ? 'true' : 'false';
+		form.elements.changed.value = valuesChanged ? 'true' : 'false';
 		form.submit();
 	});
 
@@ -110,23 +133,24 @@ $(document).ready(function () {
 				return;
 			}
 		}
-		var comm = document.getElementById('commentBox');
-		if(comm.value.trim().length <= 0) {
+		var comment = document.getElementById('commentBox');
+		if(comment.value.trim().length <= 0) {
 			alert(t('polls', 'Please add some text to your comment before submitting it.'));
 			return;
 		}
 		var data = {
 			pollId: form.elements.pollId.value,
 			userId: form.elements.userId.value,
-			commentBox: comm.value.trim()
+			commentBox: comment.value.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function(data) {
 			$('.comments .comment:first').after('<div class="comment"><div class="comment-header"><span class="comment-date">' + data.date + '</span>' + data.userName + '</div><div class="wordwrap comment-content">' + data.comment + '</div></div>');
 			$('.new-comment textarea').val('').focus();
 			$('.new-comment .icon-loading-small').hide();
+			updateCommentsCount();
 		}).error(function() {
-			alert(t('polls', 'An error occurred, your comment was not posted…'));
+			alert(t('polls', 'An error occurred, your comment was not posted.'));
 			$('.new-comment .icon-loading-small').hide();
 		});
 	});
@@ -134,54 +158,40 @@ $(document).ready(function () {
 	$(".share input").click(function() {
 		$(this).select();
 	});
+	
+	$('.toggle-cell').tooltip();
+	$('.time-slot').tooltip();
+	$('.avatardiv').tooltip();
+	updateCounters();
+
 });
 
-function updateCounts(){
-	max_votes = 0;
-	$('td.total').each(function() {
-		var yes = parseInt($(this).find('.yes').text());
-		var no = parseInt($(this).find('.no').text());
-		if(yes - no > max_votes) {
-			max_votes = yes - no;
-		}
-	});
-	var i = 0;
-	$('td.total').each(function() {
-		var yes = parseInt($(this).find('.yes').text());
-		var no = parseInt($(this).find('.no').text());
-		$('#id_total_' + i++).toggleClass('icon-checkmark', yes - no === max_votes);
-	});
-}
-
-$(document).on('click', '.toggle-all, .cl_click', function() {
-	values_changed = true;
-	var $cl = "";
-	var $toggle = "";
+$(document).on('click', '.toggle-cell, .poll-cell.active', function() {
+	valuesChanged = true;
+	var $nextClass = "";
+	var $toggleAllClasses = "";
+	
 	if($(this).hasClass('yes')) {
-		$cl = "no";
-		$toggle= "yes";
+		$nextClass = "no";
+		$toggleAllClasses= "yes";
 	} else if($(this).hasClass('no')) {
-		$cl = "maybe";
-		$toggle= "no";
+		$nextClass = "maybe";
+		$toggleAllClasses= "no";
 	} else if($(this).hasClass('maybe')) {
-		$cl = "yes";
-		$toggle= "maybe";
+		$nextClass = "yes";
+		$toggleAllClasses= "maybe";
 	} else {
-		$cl = "yes";
-		$toggle= "maybe";
+		$nextClass = "yes";
+		$toggleAllClasses= "maybe";
 	}
-	if($(this).hasClass('toggle-all')) {
-		$(".cl_click").attr('class', 'cl_click poll-cell active ' + $toggle);
-		$(this).attr('class', 'toggle-all toggle ' + $cl);
-	} else {
-		$(this).attr('class', 'cl_click poll-cell active ' + $cl);
+	
+	$(this).removeClass('yes no maybe unvoted');
+	$(this).addClass($nextClass);
+	
+	if($(this).hasClass('toggle-cell')) {
+		$(".poll-cell.active").removeClass('yes no maybe unvoted');
+		$(".poll-cell.active").addClass($toggleAllClasses);
 	}
-	$('.cl_click').each(function() {
-		var yes_c = $('#id_y_' + $(this).attr('id'));
-		var no_c = $('#id_n_' + $(this).attr('id'));
-		$(yes_c).text(parseInt($(yes_c).attr('data-value')) + ($(this).hasClass('yes') ? 1 : 0));
-		$(no_c).text(parseInt($(no_c).attr('data-value')) + ($(this).hasClass('no') ? 1 : 0));
-	});
-	updateCounts();
+	updateCounters();
 });
 

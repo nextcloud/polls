@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Kai Schröer <git@schroeer.co>
+ * @author Kai Schröer <kai@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -25,14 +25,16 @@ if (!defined('PHPUNIT_RUN')) {
 	define('PHPUNIT_RUN', 1);
 }
 
-require_once __DIR__ . '/../../../lib/base.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once(__DIR__.'/../../../lib/base.php');
 
+// Fix for "Autoload path not allowed: .../tests/lib/testcase.php"
 \OC::$loader->addValidRoot(OC::$SERVERROOT . '/tests');
+
+// Fix for "Autoload path not allowed: .../polls/tests/testcase.php"
 \OC_App::loadApp('polls');
 
 if (!class_exists('PHPUnit_Framework_TestCase')) {
-	require_once 'PHPUnit/Autoload.php';
+	require_once('PHPUnit/Autoload.php');
 }
 
-\OC_Hook::clear();
+OC_Hook::clear();
