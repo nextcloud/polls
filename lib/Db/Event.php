@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -56,4 +57,13 @@ class Event extends Model {
 	protected $hash;
 	protected $isAnonymous;
 	protected $fullAnonymous;
+
+	/**
+	 * Event constructor.
+	 */
+	public function __construct() {
+		$this->addType('type', 'integer');
+		$this->addType('isAnonymous', 'integer');
+		$this->addType('fullAnonymous', 'integer');
+	}
 }

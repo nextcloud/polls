@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -38,4 +39,12 @@ class ParticipationText extends Model {
 	protected $userId;
 	protected $pollId;
 	protected $type;
+
+	/**
+	 * ParticipationText constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+		$this->addType('type', 'integer');
+	}
 }

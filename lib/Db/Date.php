@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -32,4 +33,11 @@ namespace OCA\Polls\Db;
 class Date extends Model {
 	protected $dt;
 	protected $pollId;
+
+	/**
+	 * Date constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+	}
 }
