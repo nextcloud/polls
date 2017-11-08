@@ -430,3 +430,7 @@ div.crumb {
     padding-bottom: 105px;
   }
 }
+/* line 449, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/vote.scss */
+.symbol.icon-settings {
+  display: inline-block;
+}
