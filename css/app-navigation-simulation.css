@@ -1,0 +1,52 @@
+/* line 1, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/app-navigation-simulation.scss */
+#app-navigation-simulation {
+  width: 250px;
+  height: 100%;
+  float: left;
+  box-sizing: border-box;
+  background-color: #fff;
+  padding-bottom: 44px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-right: 1px solid #ebebeb;
+  display: flex;
+  flex-direction: column;
+}
+/* line 17, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/app-navigation-simulation.scss */
+#app-navigation-simulation > ul > li:focus, #app-navigation-simulation > ul > li:hover, #app-navigation-simulation > ul > li.active, #app-navigation-simulation > ul > li a.selected, #app-navigation-simulation > ul > li:focus > a, #app-navigation-simulation > ul > li:hover > a, #app-navigation-simulation > ul > li.active > a, #app-navigation-simulation > ul > li a.selected > a {
+  opacity: 1;
+  box-shadow: inset 2px 0 #0082c9;
+}
+/* line 22, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/app-navigation-simulation.scss */
+#app-navigation-simulation > ul > li > a[class*="icon-"], #app-navigation-simulation > ul > li > ul > li > a[class*="icon-"], #app-navigation-simulation > ul > li > a[style*="background-image"], #app-navigation-simulation > ul > li > ul > li > a[style*="background-image"] {
+  padding-left: 44px;
+}
+/* line 26, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/app-navigation-simulation.scss */
+#app-navigation-simulation > ul > li > a, #app-navigation-simulation > ul > li > ul > li > a {
+  background-size: 16px 16px;
+  background-position: 14px center;
+  background-repeat: no-repeat;
+  display: block;
+  justify-content: space-between;
+  line-height: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #000;
+  opacity: 0.57;
+  flex: 1 1 0;
+  z-index: 100;
+}
+/* line 46, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/app-navigation-simulation.scss */
+#app-navigation-simulation > ul > li > a, #app-navigation-simulation > ul > li > .app-navigation-entry-deleted {
+  padding-left: 44px !important;
+}
+/* line 50, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/app-navigation-simulation.scss */
+#app-navigation-simulation * {
+  box-sizing: border-box;
+}
