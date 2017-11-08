@@ -91,40 +91,38 @@
 }
 /* line 125, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .expiry.expired {
-  color: #fff;
-  background-color: #f45573;
-  border-radius: 3px;
+  color: red;
 }
-/* line 133, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 130, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .participants {
   width: 80px;
 }
-/* line 135, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
-/* line 136, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
-/* line 137, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 132, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 133, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 134, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .participants div.partic_voted.icon-partic_yes {
   background-image: url('../../../apps/polls/css/../img/yes-vote.svg');
 }
-/* line 140, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 137, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .participants div.partic_voted.icon-partic_no {
   background-image: url('../../../apps/polls/css/../img/no-vote.svg');
 }
-/* line 145, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
-/* line 146, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 142, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 143, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .participants div.partic_commented.icon-commented_yes {
   background-image: url('../../../apps/polls/css/../img/yes-comment.svg');
 }
-/* line 150, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 147, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .participants div.partic_commented.icon-commented_no {
   background-image: url('../../../apps/polls/css/../img/no-comment.svg');
 }
-/* line 160, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 157, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .actions {
   width: 44px;
   position: relative;
   overflow: initial;
 }
-/* line 168, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 165, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .thumbnail {
   background-size: 32px;
   width: 44px;
@@ -133,72 +131,72 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-/* line 175, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
-/* line 176, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 172, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 173, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .thumbnail.progress.partic_yes, .thumbnail.endless.partic_yes {
   background-image: url('../../../apps/polls/css/../img/open-voted-vote.svg');
 }
-/* line 179, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 176, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .thumbnail.progress.partic_no, .thumbnail.endless.partic_no {
   background-image: url('../../../apps/polls/css/../img/open-unvoted-vote.svg');
 }
-/* line 183, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
-/* line 184, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 180, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 181, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .thumbnail.expired.partic_yes {
   background-image: url('../../../apps/polls/css/../img/expired-voted-vote.svg');
 }
-/* line 187, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 184, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .thumbnail.expired.partic_no {
   background-image: url('../../../apps/polls/css/../img/expired-unvoted-vote.svg');
 }
-/* line 194, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 191, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .options, .participants {
   display: flex;
   flex-direction: row;
 }
-/* line 199, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 196, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .group-1, .group-1-1, .group-master {
   flex-grow: 1;
 }
-/* line 203, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 200, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .group-1-1 {
   flex-direction: column;
   width: 150px;
 }
-/* line 206, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+/* line 203, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
 .group-1-1 > div {
   width: 100%;
 }
 @media all and (max-width: 868px) {
-  /* line 214, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+  /* line 211, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
   .group-1 {
     width: 238px;
   }
-  /* line 217, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+  /* line 214, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
   .group-2-1, .group-2-2 {
     flex-direction: column;
   }
-  /* line 221, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+  /* line 218, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
   .access, .created {
     width: 140px;
   }
-  /* line 224, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+  /* line 221, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
   .expiry, .participants {
     width: 120px;
   }
 }
 @media all and (max-width: 668px) {
-  /* line 231, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+  /* line 228, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
   .row {
     padding: 0;
   }
-  /* line 235, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+  /* line 232, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
   .group-2-1 {
     display: none;
   }
 }
 @media all and (max-width: 548px) {
-  /* line 242, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
+  /* line 239, /www/htdocs/v036898/sites/yagst.de/nc13/server/apps/polls/css/list.scss */
   .group-2 {
     display: none;
   }
