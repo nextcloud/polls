@@ -24,33 +24,33 @@
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Comment;
-use OCA\Polls\Db\Date;
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\Notification;
-use OCA\Polls\Db\Participation;
-use OCA\Polls\Db\ParticipationText;
-use OCA\Polls\Db\Text;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\Date;
 use OCA\Polls\Db\DateMapper;
+use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Notification;
 use OCA\Polls\Db\NotificationMapper;
+use OCA\Polls\Db\Participation;
 use OCA\Polls\Db\ParticipationMapper;
+use OCA\Polls\Db\ParticipationText;
 use OCA\Polls\Db\ParticipationTextMapper;
+use OCA\Polls\Db\Text;
 use OCA\Polls\Db\TextMapper;
+use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\IUserManager;
-use OCP\IGroupManager;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\RedirectResponse;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IAvatarManager;
-use OCP\ILogger;
+use OCP\IGroupManager;
 use OCP\IL10N;
+use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 use OCP\Mail\IMailer;
 use OCP\Security\ISecureRandom;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Http\RedirectResponse;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Controller;
 use OCP\User;
 use OCP\Util;
 
@@ -151,7 +151,7 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
 	 * @param string $from
 	 */
 	private function sendNotifications($pollId, $from) {
@@ -167,7 +167,7 @@ class PageController extends Controller {
 			}
 			$url = $this->urlGenerator->getAbsoluteURL(
 				$this->urlGenerator->linkToRoute('polls.page.goto_poll',
-				array('hash' => $poll->getHash()))
+					array('hash' => $poll->getHash()))
 			);
 
 			$recUser = $this->userMgr->get($notification->getUserId());
@@ -222,7 +222,7 @@ class PageController extends Controller {
 	public function gotoPoll($hash) {
 		try {
 			$poll = $this->eventMapper->findByHash($hash);
-		} catch(DoesNotExistException $e) {
+		} catch (DoesNotExistException $e) {
 			return new TemplateResponse('polls', 'no.acc.tmpl', []);
 		}
 		if ($poll->getType() === 0) {
@@ -259,7 +259,7 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param string $pollId
+	 * @param int $pollId
 	 * @return RedirectResponse
 	 */
 	public function deletePoll($pollId) {
@@ -303,17 +303,17 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param $pollId
-	 * @param $pollType
-	 * @param $pollTitle
-	 * @param $pollDesc
-	 * @param $userId
-	 * @param $chosenDates
-	 * @param $expireTs
-	 * @param $accessType
-	 * @param $accessValues
-	 * @param $isAnonymous
-	 * @param $hideNames
+	 * @param int $pollId
+	 * @param string $pollType
+	 * @param string $pollTitle
+	 * @param string $pollDesc
+	 * @param string $userId
+	 * @param string $chosenDates
+	 * @param string $expireTs
+	 * @param string $accessType
+	 * @param string $accessValues
+	 * @param bool $isAnonymous
+	 * @param bool $hideNames
 	 * @return RedirectResponse
 	 */
 	public function updatePoll(
@@ -358,7 +358,6 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
-
 		$chosenDates = json_decode($chosenDates);
 
 		$expire = null;
@@ -405,16 +404,16 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param $pollType
-	 * @param $pollTitle
-	 * @param $pollDesc
-	 * @param $userId
-	 * @param $chosenDates
-	 * @param $expireTs
-	 * @param $accessType
-	 * @param $accessValues
-	 * @param $isAnonymous
-	 * @param $hideNames
+	 * @param string $pollType
+	 * @param string $pollTitle
+	 * @param string $pollDesc
+	 * @param string $userId
+	 * @param string $chosenDates
+	 * @param string $expireTs
+	 * @param string $accessType
+	 * @param string $accessValues
+	 * @param bool $isAnonymous
+	 * @param bool $hideNames
 	 * @return RedirectResponse
 	 */
 	public function insertPoll(
@@ -466,7 +465,6 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
-
 		$chosenDates = json_decode($chosenDates);
 
 		$expire = null;
@@ -507,17 +505,17 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
-	 * @param $pollId
-	 * @param $userId
-	 * @param $types
-	 * @param $dates
-	 * @param $receiveNotifications
-	 * @param $changed
+	 * @param int $pollId
+	 * @param string $userId
+	 * @param string $types
+	 * @param string $dates
+	 * @param bool $receiveNotifications
+	 * @param bool $changed
 	 * @return RedirectResponse
 	 */
 	public function insertVote($pollId, $userId, $types, $dates, $receiveNotifications, $changed) {
 		if ($this->userId !== null) {
-			if ($receiveNotifications === 'true') {
+			if ($receiveNotifications) {
 				try {
 					//check if user already set notification for this poll
 					$this->notificationMapper->findByUserAndPoll($pollId, $userId);
@@ -539,7 +537,7 @@ class PageController extends Controller {
 			}
 		}
 		$poll = $this->eventMapper->find($pollId);
-		if ($changed === 'true') {
+		if ($changed) {
 			$dates = json_decode($dates);
 			$types = json_decode($types);
 			$count_dates = count($dates);
@@ -577,9 +575,9 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
-	 * @param $pollId
-	 * @param $userId
-	 * @param $commentBox
+	 * @param int $pollId
+	 * @param string $userId
+	 * @param string $commentBox
 	 * @return JSONResponse
 	 */
 	public function insertComment($pollId, $userId, $commentBox) {
@@ -590,10 +588,9 @@ class PageController extends Controller {
 		$comment->setDt(date('Y-m-d H:i:s'));
 		$this->commentMapper->insert($comment);
 		$this->sendNotifications($pollId, $userId);
+		$newUserId = $userId;
 		if ($this->userMgr->get($userId) !== null) {
 			$newUserId = $this->userMgr->get($userId)->getDisplayName();
-		} else {
-			$newUserId = $userId;
 		}
 		return new JSONResponse(array(
 			'comment' => $commentBox,
@@ -605,23 +602,23 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param $searchTerm
-	 * @param $groups
-	 * @param $users
+	 * @param string $searchTerm
+	 * @param string $groups
+	 * @param string $users
 	 * @return array
 	 */
-	 public function search($searchTerm, $groups, $users) {
+	public function search($searchTerm, $groups, $users) {
 		return array_merge($this->searchForGroups($searchTerm, $groups), $this->searchForUsers($searchTerm, $users));
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param $searchTerm
-	 * @param $groups
+	 * @param string $searchTerm
+	 * @param string $groups
 	 * @return array
 	 */
-	 public function searchForGroups($searchTerm, $groups) {
+	public function searchForGroups($searchTerm, $groups) {
 		$selectedGroups = json_decode($groups);
 		$groups = $this->groupManager->search($searchTerm);
 		$gids = array();
@@ -643,11 +640,11 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param $searchTerm
-	 * @param $users
+	 * @param string $searchTerm
+	 * @param string $users
 	 * @return array
 	 */
-	 public function searchForUsers($searchTerm, $users) {
+	public function searchForUsers($searchTerm, $users) {
 		$selectedUsers = json_decode($users);
 		Util::writeLog('polls', print_r($selectedUsers, true), Util::ERROR);
 		$userNames = $this->userMgr->searchDisplayName($searchTerm);
@@ -677,31 +674,17 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param $username
+	 * @param string $username
 	 * @return string
 	 */
-	 public function getDisplayName($username) {
+	public function getDisplayName($username) {
 		return $this->userMgr->get($username)->getDisplayName();
 	}
 
 	/**
-	 * @return Event[]
-	 */
-	 public function getPollsForUser() {
-		return $this->eventMapper->findAllForUser($this->userId);
-	}
-
-	/**
-	 * @param $user
-	 * @return Event[]
-	 */
-	 public function getPollsForUserWithInfo($user = null) {
-		return $this->eventMapper->findAllForUserWithInfo((null === $user) ? $this->userId : $user);
-	}
-	/**
 	 * @return array
 	 */
-	 public function getGroups() {
+	private function getGroups() {
 		if (class_exists('\OC_Group')) {
 			// Nextcloud <= 11, ownCloud
 			return \OC_Group::getUserGroups($this->userId);

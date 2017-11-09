@@ -234,7 +234,7 @@ function getGroups($userId) {
  * @param string $userId
  * @return boolean
  */
-function userHasAccess($poll, $userId) {
+function userHasAccess(OCA\Polls\Db\Event $poll, $userId) {
 	if ($poll === null) {
 		return false;
 	}
