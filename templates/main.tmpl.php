@@ -25,6 +25,7 @@
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'list');
+	\OCP\Util::addScript('polls', 'app');
 	\OCP\Util::addScript('polls', 'start');
 
 	$userId = $_['userId'];
@@ -35,6 +36,8 @@
 	/** @var \OCA\Polls\Db\Event[] $polls */
 	$polls = $_['polls'];
 ?>
+
+<div id="app">
 	<div id="app-content">
 		<div id="app-content-wrapper">
 				<div id="controls">
@@ -44,12 +47,12 @@
 								<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 							</a>
 						</div>
-					</div>
-					<div class="creatable" style="">
-						<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
-							<span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
-						</a>
-						<input class="stop icon-close" style="display:none" value="" type="button">
+						<div class="creatable" style="">
+							<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
+								<span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
+							</a>
+							<input class="stop icon-close" style="display:none" value="" type="button">
+						</div>
 					</div>
 				</div>
 	<?php if (count($_['polls']) === 0) : ?>
@@ -99,12 +102,12 @@
 							$participated = $_['participations_text'];
 						}
 						$participated_class = 'partic_no';
-						$participated_title = $l->t('You did not vote');
+						$participated_title = 'You did not vote';
 						$participated_count = count($participated);
 
 						$comments = $_['comments'];
 						$commented_class = 'commented_no';
-						$commented_title = $l->t('You did not comment');
+						$commented_title = 'You did not comment';
 						$commented_count = count($comments);
 
 						if ($owner === $userId) {
@@ -127,7 +130,7 @@
 						for ($i = 0; $i < count($participated); $i++) {
 							if ($poll->getId() === $participated[$i]->getPollId()) {
 								$participated_class = 'partic_yes';
-								$participated_title = $l->t('You voted');
+								$participated_title = 'You voted';
 								array_splice($participated, $i, 1);
 								break;
 							}
@@ -136,7 +139,7 @@
 						for ($i = 0; $i < count($comments); $i++) {
 							if ($poll->getId() === $comments[$i]->getPollId()) {
 								$commented_class = 'commented_yes';
-								$commented_title = $l->t('You commented');
+								$commented_title = 'You commented';
 								array_splice($comments, $i, 1);
 								break;
 							}
@@ -157,20 +160,20 @@
 									<div class="popovermenu bubble menu hidden" id="expanddiv_<?php p($poll->getId()); ?>">
 										<ul>
 											<li>
-												<button class="menuitem copy_link action permanent" data-url="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>">
-													<span class="cl_link icon-clippy"></span>
+												<a class="menuitem alt-tooltip copy-link has-tooltip action permanent" data-toggle="tooltip" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
+													<span class="icon-clippy"></span>
 													<span>Copy Link</span>
-												</button>
+												</a>
 											</li>
 							<?php if ($poll->getOwner() === $userId) : ?>
 											<li>
-												<button class="menuitem delete_poll action permanent" id="id_del_<?php p($poll->getId()); ?>" data-value="<?php p($poll->getTitle()); ?>">
-													<span class="cl_delete icon-delete"></span>
+												<a id="id_del_<?php p($poll->getId()); ?>" class="menuitem alt-tooltip delete-poll action permanent" data-value="<?php p($poll->getTitle()); ?>" href="#">
+													<span class="icon-delete"></span>
 													<span>Delete poll</span>
-												</button>
+												</a>
 											</li>
 											<li>
-												<a href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>" class="menuitem action permanent" id="id_edit_<?php p($poll->getId()); ?>">
+												<a id="id_edit_<?php p($poll->getId()); ?>" class="menuitem action permanent" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
 													<span class="icon-rename"></span>
 													<span>Edit Poll</span>
 												</a>
@@ -194,8 +197,8 @@
 								<div class="wrapper group-2-2">
 									<div class="column expiry<?php p($expiry_style); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
 									<div class="column participants">
-										<div class="symbol partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
-										<div class="symbol partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
+										<div class="symbol alt-tooltip partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
+										<div class="symbol alt-tooltip partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
 									</div>
 								</div>
 							</div>
@@ -207,6 +210,7 @@
 	<?php endif; ?>
 		</div>
 	</div>
+</div>
 
 
 <?php
