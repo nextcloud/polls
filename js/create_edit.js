@@ -48,7 +48,7 @@ function deselectItem(cell) {
 }
 
 function insertText(text, set) {
-	if (typeof set === 'undefined') {
+	if (typeof set == 'undefined') {
 		set = false;
 	}
 	var table = document.getElementById('selected-texts-table');
@@ -66,7 +66,7 @@ function insertText(text, set) {
 }
 
 function addRowToList(ts, text, timeTs) {
-	if (typeof timeTs === 'undefined') {
+	if (typeof timeTs == 'undefined') {
 		timeTs = -1;
 	}
 	var table = document.getElementById('selected-dates-table');
@@ -74,7 +74,7 @@ function addRowToList(ts, text, timeTs) {
 	var td, tr, tdId;
 	var i, j;
 	var curr;
-	if (rows.length === 0) {
+	if (rows.length == 0) {
 		tr = table.insertRow(-1); //start new header
 		tr.insertCell(-1);
 		tr = table.insertRow(-1); //append new row
@@ -87,11 +87,11 @@ function addRowToList(ts, text, timeTs) {
 	}
 	for ( i=1; i<rows.length; i++) {
 		curr = rows[i];
-		if (curr.id === ts) {
+		if (curr.id == ts) {
 			for (j=1; j<curr.cells.length; j++) {
 				td = curr.cells[j];
-				 tdId = curr.cells[j].id;
-				if ( timeTs === tdId) {
+				tdId = curr.cells[j].id;
+				if ( timeTs == tdId) {
 					td.className = 'icon-checkmark date-text-selected';
 				}
 			}
@@ -106,9 +106,9 @@ function addRowToList(ts, text, timeTs) {
 			for (j=1; j<rows[0].cells.length; j++) {
 				tdId = rows[0].cells[j].id;
 				td = tr.insertCell(-1);
-				if (timeTs === tdId) {
+				if (timeTs == tdId) {
 					td.className = 'icon-checkmark date-text-selected';
-				}  else { 
+				}  else {
 					td.className = 'icon-close date-text-not-selected';
 				}
 				td.id = tdId;
@@ -126,7 +126,7 @@ function addRowToList(ts, text, timeTs) {
 	for (j=1; j<rows[0].cells.length; j++) {
 		tdId = rows[0].cells[j].id;
 		td = tr.insertCell(-1);
-		if (timeTs === tdId) {
+		if (timeTs == tdId) {
 			td.className = 'icon-checkmark date-text-selected';
 		} else {
 			td.className = 'icon-close date-text-not-selected';
@@ -137,7 +137,7 @@ function addRowToList(ts, text, timeTs) {
 }
 
 function addColToList(ts, text, dateTs) {
-	if (typeof dateTs === 'undefined') {
+	if (typeof dateTs == 'undefined') {
 		dateTs = -1;
 	}
 	var table = document.getElementById('selected-dates-table');
@@ -145,7 +145,7 @@ function addColToList(ts, text, dateTs) {
 	var tr, row, td, cells, tmpRow;
 	var i, curr;
 	var index = -1;
-	if (rows.length === 0) {
+	if (rows.length == 0) {
 		tr = table.insertRow(-1);
 		tr.insertCell(-1);
 	}
@@ -153,7 +153,7 @@ function addColToList(ts, text, dateTs) {
 	tmpRow = rows[0];
 	for (i=0; i<tmpRow.cells.length; i++) {
 		curr = tmpRow.cells[i];
-		if (curr.id === ts) {
+		if (curr.id == ts) {
 			return; //already in table, cancel
 		} else if (curr.id > ts) {
 			index = i;
@@ -166,14 +166,14 @@ function addColToList(ts, text, dateTs) {
 		cells = row.cells;
 		td = row.insertCell(index);
 		//only display time in header row
-		if (i===0) {
+		if (i==0) {
 			td.innerHTML = text;
 			td.className = 'date-col';
 		} else {
 			td.innerHTML = '';
-			if (row.id === dateTs) {
+			if (row.id == dateTs) {
 				td.className = 'icon-checkmark date-text-selected';
-			} else { 
+			} else {
 				td.className = 'icon-close date-text-not-selected';
 			}
 		}
@@ -183,10 +183,10 @@ function addColToList(ts, text, dateTs) {
 
 function debounce(f, wait, immediate) {
 	var timeout;
-	return function() {
+	return function () {
 		var context = this;
 		var args = arguments;
-		var later = function() {
+		var later = function () {
 			timeout = null;
 			if (!immediate) {
 				f.apply(context, args);
@@ -204,19 +204,19 @@ function debounce(f, wait, immediate) {
 $(document).ready(function () {
 	// enable / disable date picker
 	var i;
-	$('#id_expire_set').click(function(){
+	$('#id_expire_set').click(function (){
 		$('#id_expire_date').prop("disabled", !this.checked);
 		if (this.checked) {
-		   $("#id_expire_date").focus();
+			$("#id_expire_date").focus();
 		}
 	});
 
 	var anonOptions = document.getElementById('anonOptions');
-	$('#hideNames').click(function() {
+	$('#hideNames').click(function () {
 		hideNames = this.checked;
 	});
 
-	$('#isAnonymous').click(function() {
+	$('#isAnonymous').click(function () {
 		isAnonymous = this.checked;
 		if (isAnonymous) {
 			anonOptions.style.display = 'inline';
@@ -248,25 +248,25 @@ $(document).ready(function () {
 		var accessValueArr = accessValues.value.split(';');
 		for (i=0; i<accessValueArr.length; i++) {
 			var val = accessValueArr[i];
-			if (val === '') {
+			if (val == '') {
 				continue;
 			}
 			var li = document.createElement('li');
 			li.id = val;
 			li.className = 'cl_item cl_access_item selected';
 			var index = val.indexOf('group_');
-			if (index === 0) {
+			if (index == 0) {
 				g_chosen_groups.push(val);
 				li.className += ' is-group';
 				li.appendChild(document.createTextNode(val.substring(6) + " (group)"));
 				list.appendChild(li);
 			} else {
 				index = val.indexOf('user_');
-				if (index === 0) {
+				if (index == 0) {
 					g_chosen_users.push(val);
 					li.className = 'cl_item cl_access_item selected';
 					var username = val.substring(5);
-					$.post(OC.generateUrl('/apps/polls/get/displayname'), {username: username}, function(data) {
+					$.post(OC.generateUrl('/apps/polls/get/displayname'), {username: username}, function (data) {
 						li.appendChild(document.createTextNode(username + " (" + data + ")"));
 						list.appendChild(li);
 					});
@@ -317,7 +317,7 @@ $(document).ready(function () {
 
 	var expirepicker = jQuery('#id_expire_date').datetimepicker({
 		inline: false,
-		onSelectDate: function(date) {
+		onSelectDate: function (date) {
 			var year = date.getFullYear();
 			var month = date.getMonth();
 			var day = date.getDate();
@@ -332,7 +332,7 @@ $(document).ready(function () {
 		inline:true,
 		step: 15,
 		todayButton: true,
-		onSelectDate: function(date) {
+		onSelectDate: function (date) {
 			var year = date.getFullYear();
 			var month = date.getMonth();
 			var day = date.getDate();
@@ -342,7 +342,7 @@ $(document).ready(function () {
 			var dateStr = day.substr(-2) + '.' + month.substr(-2) + '.' + year;
 			addRowToList(newDate/1000, dateStr);
 		},
-		onSelectTime: function(date) {
+		onSelectTime: function (date) {
 			var hours = date.getHours();
 			var minutes = date.getMinutes();
 			var ms = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000); //time of day in milliseconds
@@ -353,7 +353,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$(document).on('click', '.date-row', function() {
+	$(document).on('click', '.date-row', function () {
 		var tr = $(this).parent();
 		var dateId = parseInt(tr.attr('id'));
 		var index = tr.index();
@@ -369,7 +369,7 @@ $(document).ready(function () {
 		table.deleteRow(index);
 	});
 
-	$(document).on('click', '.date-col', function() {
+	$(document).on('click', '.date-col', function () {
 		var cellIndex = $(this).index();
 		var timeId = parseInt($(this).attr('id'));
 		var table = document.getElementById('selected-dates-table');
@@ -385,7 +385,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$(document).on('click', '.text-row', function() {
+	$(document).on('click', '.text-row', function () {
 		var tr = $(this).parent();
 		var rowIndex = tr.index();
 		var name = $(this).html();
@@ -397,17 +397,17 @@ $(document).ready(function () {
 		table.deleteRow(rowIndex);
 	});
 
-	$(document).on('click', '.icon-close', function() {
+	$(document).on('click', '.icon-close', function () {
 		selectItem($(this));
 	});
 
-	$(document).on('click', '.icon-checkmark', function() {
+	$(document).on('click', '.icon-checkmark', function () {
 		deselectItem($(this));
 	});
 
-	$(document).on('click', '#text-submit', function() {
+	$(document).on('click', '#text-submit', function () {
 		var text = document.getElementById('text-title');
-		if (text.value.length === 0) {
+		if (text.value.length == 0) {
 			alert('Please enter a text!');
 			return false;
 		}
@@ -415,7 +415,7 @@ $(document).ready(function () {
 		text.value = '';
 	});
 
-	$(document).on('click', '.cl_item', function() {
+	$(document).on('click', '.cl_item', function () {
 		var index;
 		var list = document.getElementById('selected-search-list-id');
 		var isGroup = $(this).hasClass('is-group');
@@ -423,7 +423,7 @@ $(document).ready(function () {
 			if (isGroup) {
 				index = g_chosen_groups.indexOf(this.id);
 			}
-			else { 
+			else {
 				index = g_chosen_users.indexOf(this.id);
 			}
 			if (index > -1) {
@@ -447,7 +447,7 @@ $(document).ready(function () {
 			li.id = this.id;
 			li.className = 'cl_item cl_access_item selected' + (isGroup ? ' is-group' : '');
 			if (!isGroup) {
-				$.post(OC.generateUrl('/apps/polls/get/displayname'), {username: text}, function(data) {
+				$.post(OC.generateUrl('/apps/polls/get/displayname'), {username: text}, function (data) {
 					li.appendChild(document.createTextNode(text + " (" + data + ")"));
 					list.appendChild(li);
 				});
@@ -460,15 +460,15 @@ $(document).ready(function () {
 	});
 
 	$('.toggleable-row').hover(
-		function() {
+		function () {
 			var td = this.insertCell(-1);
 			td.className = 'toggle-all selected-all';
-		}, function() {
+		}, function () {
 			$(this).find('td:last-child').remove();
 		}
 	);
 
-	$(document).on('click', '.toggle-all', function() {
+	$(document).on('click', '.toggle-all', function () {
 		var children;
 		var i;
 		if ($(this).attr('class').indexOf('selected-all') > -1) {
@@ -488,8 +488,8 @@ $(document).ready(function () {
 		}
 	});
 
-	$('input[type=radio][name=pollType]').change(function() {
-		if (this.value === 'event') {
+	$('input[type=radio][name=pollType]').change(function () {
+		if (this.value == 'event') {
 			chosen_type = 'event';
 			document.getElementById('text-select-container').style.display = 'none';
 			document.getElementById('date-select-container').style.display = 'inline';
@@ -500,9 +500,9 @@ $(document).ready(function () {
 		}
 	});
 
-	$('input[type=radio][name=accessType]').click(function() {
+	$('input[type=radio][name=accessType]').click(function () {
 		access_type = this.value;
-		if (access_type === 'select') {
+		if (access_type == 'select') {
 			$("#access_rights").show();
 			$("#selected_access").show();
 		} else {
@@ -511,13 +511,13 @@ $(document).ready(function () {
 		}
 	});
 
-	$('input[type=checkbox][name=check_expire]').change(function() {
+	$('input[type=checkbox][name=check_expire]').change(function () {
 		if (!$(this).is(':checked')) {
 			document.getElementById('expireTs').value = '';
 		}
 	});
 
-	$('#user-group-search-box').on('input', debounce(function() {
+	$('#user-group-search-box').on('input', debounce(function () {
 		var ul = document.getElementById('live-search-list-id');
 		while(ul.firstChild) {
 			ul.removeChild(ul.firstChild);
@@ -531,7 +531,7 @@ $(document).ready(function () {
 			groups: JSON.stringify(g_chosen_groups),
 			users: JSON.stringify(g_chosen_users)
 		};
-		$.post(OC.generateUrl('/apps/polls/search'), formData, function(data) {
+		$.post(OC.generateUrl('/apps/polls/search'), formData, function (data) {
 			for (var i=0; i<data.length; i++) {
 				var ug = data[i];
 				var li = document.createElement('li');
@@ -554,67 +554,71 @@ $(document).ready(function () {
 		});
 	}, 250));
 
-	$('.live-search-list-user li').each(function(){
-	$(this).attr('data-search-term', $(this).text().toLowerCase());
-	});
-
-	$('.live-search-box-user').on('keyup', function(){
-	var searchTerm = $(this).val().toLowerCase();
-		$('.live-search-list-user li').each(function(){
-			if (   $(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0  
-			    || searchTerm.length < 1
-			) {
-				$(this).show();
-			} else {
-				$(this).hide();
-			}
-		});
-	});
-
-	$('.live-search-list-group li').each(function(){
+	$('.live-search-list-user li').each(function (){
 		$(this).attr('data-search-term', $(this).text().toLowerCase());
 	});
- 
-	$('.live-search-box-group').on('keyup', function(){
-	var searchTerm = $(this).val().toLowerCase();
-		$('.live-search-list-group li').each(function(){
-			if (   $(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0 
-			    || searchTerm.length < 1
+
+	$('.live-search-box-user').on('keyup', function (){
+		var searchTerm = $(this).val().toLowerCase();
+		$('.live-search-list-user li').each(function (){
+			if (   $(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0
+				|| searchTerm.length < 1
 			) {
 				$(this).show();
 			} else {
 				$(this).hide();
 			}
 		});
-	}); 
+	});
+
+	$('.live-search-list-group li').each(function (){
+		$(this).attr('data-search-term', $(this).text().toLowerCase());
+	});
+
+	$('.live-search-box-group').on('keyup', function (){
+		var searchTerm = $(this).val().toLowerCase();
+		$('.live-search-list-group li').each(function (){
+			if (
+				$(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0 ||
+				searchTerm.length < 1
+			) {
+				$(this).show();
+			} else {
+				$(this).hide();
+			}
+		});
+	});
 
 	var form = document.finish_poll;
 	var submit_finish_poll = document.getElementById('submit_finish_poll');
 	if (submit_finish_poll !== null) {
-		submit_finish_poll.onclick = function() {
-			if (   g_chosen_datetimes.length === 0 
-			    && g_chosen_texts.length === 0
+		submit_finish_poll.onclick = function () {
+			if (
+				g_chosen_datetimes.length == 0 &&
+				g_chosen_texts.length == 0
 			) {
 				alert(t('polls', 'Nothing selected!\nClick on cells to turn them green.'));
 				return false;
 			}
-			if (chosen_type === 'event') {
+			if (chosen_type == 'event') {
 				form.elements.chosenDates.value = JSON.stringify(g_chosen_datetimes);
 			}
 			else {
 				form.elements.chosenDates.value = JSON.stringify(g_chosen_texts);
 			}
 			var title = document.getElementById('pollTitle');
-			if (   title === null 
-			    || title.value.length === 0
+			if (
+				title == null ||
+				title.value.length == 0
 			) {
 				alert(t('polls', 'You must enter at least a title for the new poll.'));
 				return false;
 			}
 
-			if (access_type === 'select') {
-				if (   g_chosen_groups.length === 0 
-				    && g_chosen_users === 0
+			if (access_type == 'select') {
+				if (
+					g_chosen_groups.length == 0 &&
+					g_chosen_users == 0
 				) {
 					alert(t('polls', 'Please select at least one user or group!'));
 					return false;
@@ -630,4 +634,3 @@ $(document).ready(function () {
 		};
 	}
 });
-

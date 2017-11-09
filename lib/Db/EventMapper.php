@@ -48,7 +48,7 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param $hash
+	 * @param string $hash
 	 * @param int $limit
 	 * @param int $offset
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
@@ -61,7 +61,7 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param $userId
+	 * @param string $userId
 	 * @param int $limit
 	 * @param int $offset
 	 * @return Event[]

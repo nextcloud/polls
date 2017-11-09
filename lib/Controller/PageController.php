@@ -228,11 +228,11 @@ class PageController extends Controller {
 		if ($poll->getType() === 0) {
 			$dates = $this->dateMapper->findByPoll($poll->getId());
 			$votes = $this->participationMapper->findByPoll($poll->getId());
-			$participants = $this->participationMapper->listParticipantsByPoll($poll->getId());
+			$participants = $this->participationMapper->findParticipantsByPoll($poll->getId());
 		} else {
 			$dates = $this->textMapper->findByPoll($poll->getId());
 			$votes = $this->participationTextMapper->findByPoll($poll->getId());
-			$participants = $this->participationTextMapper->listParticipantsByPoll($poll->getId());
+			$participants = $this->participationTextMapper->findParticipantsByPoll($poll->getId());
 		}
 		$comments = $this->commentMapper->findByPoll($poll->getId());
 		try {
@@ -263,7 +263,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param int $pollId
-	 * @return RedirectResponse
+	 * @return TemplateResponse|RedirectResponse
 	 */
 	public function deletePoll($pollId) {
 		$pollToDelete = $this->eventMapper->find($pollId);
@@ -316,7 +316,7 @@ class PageController extends Controller {
 	 * @param string $pollDesc
 	 * @param string $userId
 	 * @param string $chosenDates
-	 * @param string $expireTs
+	 * @param int $expireTs
 	 * @param string $accessType
 	 * @param string $accessValues
 	 * @param bool $isAnonymous
@@ -369,7 +369,8 @@ class PageController extends Controller {
 
 		$expire = null;
 		if ($expireTs !== null && $expireTs !== '') {
-			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24); //add one day, so it expires at the end of a day
+			// Add one day, so it expires at the end of a day
+			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24);
 		}
 		$event->setExpire($expire);
 
@@ -416,7 +417,7 @@ class PageController extends Controller {
 	 * @param string $pollDesc
 	 * @param string $userId
 	 * @param string $chosenDates
-	 * @param string $expireTs
+	 * @param int $expireTs
 	 * @param string $accessType
 	 * @param string $accessValues
 	 * @param bool $isAnonymous
@@ -476,7 +477,8 @@ class PageController extends Controller {
 
 		$expire = null;
 		if ($expireTs !== null && $expireTs !== '') {
-			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24); //add one day, so it expires at the end of a day
+			// Add one day, so it expires at the end of a day
+			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24);
 		}
 		$event->setExpire($expire);
 
@@ -689,7 +691,7 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @return array
+	 * @return \OCP\IGroup[]
 	 */
 	private function getGroups() {
 		if (class_exists('\OC_Group')) {

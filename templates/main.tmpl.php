@@ -90,7 +90,9 @@
 
 				<?php foreach ($polls as $poll) : ?>
 					<?php
-						if (!userHasAccess($poll, $userId)) continue;
+						if (!userHasAccess($poll, $userId)) {
+							continue;
+						}
 						// direct url to poll
 						$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
 						$owner = $poll->getOwner();
@@ -146,11 +148,10 @@
 						}
 					?>
 
-
 					<div class="row table-body">
 						<div class="wrapper group-master">
 							<div class="wrapper group-1">
-								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class. ' ' . $participated_class); ?>"></div>  <!-- Image to display status or type of poll */ -->
+								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class. ' ' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
 								<a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
 									<div class="column name">						  <?php p($poll->getTitle()); ?></div>
 									<div class="column description">				   <?php p($poll->getDescription()); ?></div>
@@ -218,10 +219,9 @@
 // from spreed.me
 /**
  * @param string $userId
- * @return array with groups
+ * @return \OCP\IGroup[]
  */
 function getGroups($userId) {
-	// $this->requireLogin();
 	if (class_exists('\OC_Group')) {
 		// Nextcloud <= 11, ownCloud
 		return \OC_Group::getUserGroups($userId);
