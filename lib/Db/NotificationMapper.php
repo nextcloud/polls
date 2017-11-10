@@ -67,7 +67,7 @@ class NotificationMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
 	 * @param int $limit
 	 * @param int $offset
 	 * @return Notification[]
@@ -78,9 +78,11 @@ class NotificationMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
 	 * @param string $userId
-	 * @return Notification if not found
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
+	 * @return Notification
 	 */
 	public function findByUserAndPoll($pollId, $userId) {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';

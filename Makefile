@@ -129,6 +129,9 @@ else
 	--exclude="css/*.scss" \
 	./ $(build_source_directory)/$(app_name)
 
+	# We need to replace Nc screenshot urls with the oC ones
+	sed -i -E "s~(<screenshot>)([^<]*).(png|jpg|jpeg)(</screenshot>)~\1\2-oc.\3\4~" $(build_source_directory)/$(app_name)/appinfo/info.xml
+
 	@if [ -f $(oc_cert_directory)/$(app_name).key ]; then \
 		echo "Creating integrity file..."; \
 		php ../../occ integrity:sign-app --privateKey="$(oc_cert_directory)/$(app_name).key" --certificate="$(oc_cert_directory)/$(app_name).crt" --path "$(build_source_directory)/$(app_name)"; \
@@ -144,5 +147,5 @@ endif
 
 .PHONY: test
 test: composer
-	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.xml
+	$(CURDIR)/vendor/phpunit/phpunit/phpunit --coverage-clover clover.xml -c phpunit.xml
 	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.integration.xml

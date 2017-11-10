@@ -25,7 +25,7 @@ namespace OCA\Polls\AppInfo;
 
 
 use OC\AppFramework\Utility\SimpleContainer;
-use OCP\AppFramework\App;
+use OCA\Polls\Controller\PageController;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\DateMapper;
 use OCA\Polls\Db\EventMapper;
@@ -33,7 +33,7 @@ use OCA\Polls\Db\NotificationMapper;
 use OCA\Polls\Db\ParticipationMapper;
 use OCA\Polls\Db\ParticipationTextMapper;
 use OCA\Polls\Db\TextMapper;
-use OCA\Polls\Controller\PageController;
+use OCP\AppFramework\App;
 
 class Application extends App {
 
@@ -50,8 +50,7 @@ class Application extends App {
 		/**
 		 * Controllers
 		 */
-		$container->registerService('PageController', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('PageController', function (SimpleContainer $c) {
 			return new PageController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -72,74 +71,63 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('UserManager', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('UserManager', function (SimpleContainer $c) {
 			return $c->query('ServerContainer')->getUserManager();
 		});
 
-		$container->registerService('GroupManager', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('GroupManager', function (SimpleContainer $c) {
 			return $c->query('ServerContainer')->getGroupManager();
 		});
 
-		$container->registerService('AvatarManager', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('AvatarManager', function (SimpleContainer $c) {
 			return $c->query('ServerContainer')->getAvatarManager();
 		});
 
-		$container->registerService('Logger', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('Logger', function (SimpleContainer $c) {
 			return $c->query('ServerContainer')->getLogger();
 		});
 
-		$container->registerService('L10N', function ($c) {
+		$container->registerService('L10N', function (SimpleContainer $c) {
 			return $c->query('ServerContainer')->getL10N($c->query('AppName'));
 		});
 
-		$container->registerService('CommentMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('CommentMapper', function (SimpleContainer $c) use ($server) {
 			return new CommentMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('DateMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('DateMapper', function (SimpleContainer $c) use ($server) {
 			return new DateMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('EventMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('EventMapper', function (SimpleContainer $c) use ($server) {
 			return new EventMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('NotificationMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('NotificationMapper', function (SimpleContainer $c) use ($server) {
 			return new NotificationMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('ParticipationMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('ParticipationMapper', function (SimpleContainer $c) use ($server) {
 			return new ParticipationMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('ParticipationTextMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('ParticipationTextMapper', function (SimpleContainer $c) use ($server) {
 			return new ParticipationTextMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('TextMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('TextMapper', function (SimpleContainer $c) use ($server) {
 			return new TextMapper(
 				$server->getDatabaseConnection()
 			);

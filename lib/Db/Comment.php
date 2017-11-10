@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,8 +24,6 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Entity;
-
 /**
  * @method string getUserId()
  * @method void setUserId(string $value)
@@ -35,9 +34,16 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Comment extends Entity {
-	public $userId;
-	public $dt;
-	public $comment;
-	public $pollId;
+class Comment extends Model {
+	protected $userId;
+	protected $dt;
+	protected $comment;
+	protected $pollId;
+
+	/**
+	 * Comment constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+	}
 }
