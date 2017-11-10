@@ -143,7 +143,17 @@ $(document).ready(function () {
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function(data) {
-			$('.comments .comment:first').after('<div class="comment"><div class="comment-header"><span class="comment-date">' + data.date + '</span>' + data.userName + '</div><div class="wordwrap comment-content">' + data.comment + '</div></div>');
+		var newCommentElement = '<li class="comment column"> ' +
+								'<div class="authorRow user-cell row"> ' +
+								'<div class="avatar avatardiv" title="' + data.userId + '"></div> ' +
+								'<div class="author">' + data.userName + '</div>' +
+								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' + 
+								'</div>' + 
+								'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
+								'</li>';
+
+
+			$('.comments .comment:first').before(newCommentElement);
 			$('.new-comment textarea').val('').focus();
 			$('.new-comment .icon-loading-small').hide();
 			updateCommentsCount();
