@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,11 +24,9 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Entity;
-
 /**
- * @method timestamp getDt()
- * @method void setDt(timestamp $value)
+ * @method string getDt()
+ * @method void setDt(string $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method integer getPollId()
@@ -35,9 +34,17 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getType()
  * @method void setType(integer $value)
  */
-class Participation extends Entity {
-	public $dt;
-	public $userId;
-	public $pollId;
-	public $type;
+class Participation extends Model {
+	protected $dt;
+	protected $userId;
+	protected $pollId;
+	protected $type;
+
+	/**
+	 * Participation constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+		$this->addType('type', 'integer');
+	}
 }
