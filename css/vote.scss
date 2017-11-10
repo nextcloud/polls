@@ -62,7 +62,6 @@ div.crumb {
 	.vote.option {
 		.date-box {
 			flex-grow: 1;
-			// height: 32px;
 		}
 
 
@@ -111,7 +110,6 @@ div.crumb {
 }
 
 .winner {
-	// background-color: $bg_yes;
 	font-style: italic;
 	font-weight: bold;
 	color: $fg_yes;
@@ -223,8 +221,9 @@ div.crumb {
 	background-color: #e6f1f8;
 }
 
-
-// div stylings
+#switchDetails {
+	margin-right: 6px;
+}
 
 .badge {
 	position: relative;
@@ -277,17 +276,13 @@ div.crumb {
 		background-color: #EEE;
 		border-bottom: 1px solid #DDD;
 		border-radius: 3px 3px 0 0;
-		// padding: 2px 5px;
 	}
 	
 	.comment-date {
 		float: right;
 		color: #555;
 	}
-		
-	.comment-content {
-		// padding: 5px;
-	}
+	
 }
 
 .new-comment {
