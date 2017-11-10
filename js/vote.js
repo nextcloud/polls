@@ -13,7 +13,6 @@ $.fn.switchClass = function(a, b) {
 };
 
 function updateCommentsCount(){
-	//todo Update the Badgecounter
 	$('#comment-counter').removeClass('no-comments');
 	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
 	
@@ -54,7 +53,6 @@ function switchSidebar() {
 	}
 }
 
-
 $(document).ready(function () {
 	// count how many times in each date
 	new Clipboard('.copy-link');
@@ -71,7 +69,7 @@ $(document).ready(function () {
 		OC.Apps.hideAppSidebar();
     });
 	
-	$('.poll.avatardiv').each(function(i, obj) {
+	$('.avatar').each(function (i, obj) {
 		$(obj).avatar(obj.title, 32);
 	});
 
@@ -162,6 +160,7 @@ $(document).ready(function () {
 	$('.toggle-cell').tooltip();
 	$('.time-slot').tooltip();
 	$('.avatardiv').tooltip();
+	$('.has-tooltip').tooltip();
 	updateCounters();
 
 });

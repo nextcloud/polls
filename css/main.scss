@@ -3,21 +3,8 @@ h1 {
 	margin-bottom: 5px;
 }
 
-/* a {
-	color: #35537a;
-}
- */
-/* a:not(.button):hover {
-	text-decoration: underline;
-}
-
- */
 #app header {
 	padding-top: 44px;
-}
-
-.main-container {
-	// padding: 10px 17px;
 }
 
 .icon-polls {
@@ -59,10 +46,9 @@ h1 {
 }
 
 #app-sidebar {
-	display: none;
 	flex-direction: column;
 	
-	.share, h2, .comments {
+	.share, h2 {
 		padding: 15px;
 	}
 	.close {
@@ -74,15 +60,6 @@ h1 {
 	}
 }
    
-
-/* .row:after {
-	content: ".";
-	display:block;
-	height:0;
-	clear:both;
-	visibility:hidden;
-}
- */
 .col-100 {
 	width: 100%;
 	padding: 0px 15px;
@@ -111,11 +88,11 @@ input[type="text"] {
 	width: 100%;
 }
 
-textarea {
+/* textarea {
 	min-width: 100%;
 	max-width: 100%;
 }
-
+ */
 .form-actions {
 	padding: 15px;
 }
@@ -386,3 +363,7 @@ td.td_shown {
 	border-radius: 0 0 3px 3px;
 }
 
+/* OC10 and NC11 fixes*/
+.symbol {
+	display: inline-block;
+}
