@@ -85,7 +85,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	align-items: center;
 	position: relative;
 	div {
-		// vertical-align: middle;
 	}
 }
 
@@ -141,11 +140,9 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 		&.partic_commented {
 			&.icon-commented_yes {
-				// background-color: $bg_yes;
 				background-image: url('../img/yes-comment.svg');
 			}
 			&.icon-commented_no {
-				// background-color: $bg_no;
 				background-image: url('../img/no-comment.svg');
 			}
 		}
@@ -153,14 +150,11 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 }
 
-
 .actions {
 	width: $action-width;
 	position: relative;
 	overflow: initial;
 }
-
-
 
 .thumbnail {
 	background-size: $thumbnail-icon-width;
@@ -187,7 +181,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	}
 }
 
-
 .options, .participants {
 	display: flex;
 	flex-direction: row;
@@ -204,8 +197,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		 width: 100%;
 	}
 }
-
-
 
 @media all and (max-width: ($mediabreak-1) ) {
 	.group-1 {
@@ -224,7 +215,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 @media all and (max-width: ($mediabreak-2) ) {
-
 	.row {
 		padding: 0;
 	}
@@ -235,9 +225,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 @media all and (max-width: ($mediabreak-3) ) {
-
 	.group-2 {
 		display: none;
 	}
 }
-	

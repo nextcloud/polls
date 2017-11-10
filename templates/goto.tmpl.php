@@ -347,8 +347,7 @@
 			<?php endif; ?>
 			</div>
 		</div>
-
-		<div id="app-sidebar" class="detailsView scroll-container">
+		<div id="app-sidebar" class="detailsView scroll-container disappear">
 			<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
 			<div class="table">
 				<div class="row">
