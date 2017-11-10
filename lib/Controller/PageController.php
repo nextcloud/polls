@@ -39,6 +39,7 @@ use OCA\Polls\Db\Text;
 use OCA\Polls\Db\TextMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -73,7 +74,7 @@ class PageController extends Controller {
 
 	/**
 	 * PageController constructor.
-	 * @param $appName
+	 * @param string $appName
 	 * @param IRequest $request
 	 * @param IUserManager $userMgr
 	 * @param IGroupManager $groupManager
@@ -81,7 +82,7 @@ class PageController extends Controller {
 	 * @param ILogger $logger
 	 * @param IL10N $trans
 	 * @param IURLGenerator $urlGenerator
-	 * @param $userId
+	 * @param string $userId
 	 * @param CommentMapper $commentMapper
 	 * @param DateMapper $dateMapper
 	 * @param EventMapper $eventMapper
@@ -143,10 +144,8 @@ class PageController extends Controller {
 			'userMgr' => $this->userMgr,
 			'urlGenerator' => $this->urlGenerator
 		]);
-		if (class_exists('OCP\AppFramework\Http\ContentSecurityPolicy')) {
-			$csp = new \OCP\AppFramework\Http\ContentSecurityPolicy();
-			$response->setContentSecurityPolicy($csp);
-		}
+		$csp = new ContentSecurityPolicy();
+		$response->setContentSecurityPolicy($csp);
 		return $response;
 	}
 
@@ -162,7 +161,7 @@ class PageController extends Controller {
 				continue;
 			}
 			$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
-			if (strlen($email) === 0 || !isset($email)) {
+			if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				continue;
 			}
 			$url = $this->urlGenerator->getAbsoluteURL(
@@ -191,7 +190,7 @@ class PageController extends Controller {
 			$msg .= '<br/><br/>';
 
 			$toName = $this->userMgr->get($notification->getUserId())->getDisplayName();
-			$subject = $this->trans->t('Polls App - New Comment');
+			$subject = $this->trans->t('Polls App - New Activity');
 			$fromAddress = Util::getDefaultEmailAddress('no-reply');
 			$fromName = $this->trans->t('Polls App') . ' (' . $from . ')';
 
@@ -365,6 +364,7 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
+		/** @var string[] $chosenDates */
 		$chosenDates = json_decode($chosenDates);
 
 		$expire = null;
@@ -391,8 +391,8 @@ class PageController extends Controller {
 			$this->eventMapper->update($event);
 			foreach ($chosenDates as $el) {
 				$text = new Text();
-				$text->setText($el);
 				$text->setPollId($pollId);
+				$text->setText($el);
 				$this->textMapper->insert($text);
 			}
 		}
@@ -473,6 +473,7 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
+		/** @var string[] $chosenDates */
 		$chosenDates = json_decode($chosenDates);
 
 		$expire = null;
@@ -485,23 +486,23 @@ class PageController extends Controller {
 		if ($pollType === 'event') {
 			$event->setType(0);
 			$ins = $this->eventMapper->insert($event);
-			$poll_id = $ins->getId();
+			$pollId = $ins->getId();
 			sort($chosenDates);
 			foreach ($chosenDates as $el) {
 				$date = new Date();
-				$date->setPollId($poll_id);
+				$date->setPollId($pollId);
 				$date->setDt(date('Y-m-d H:i:s', $el));
 				$this->dateMapper->insert($date);
 			}
 		} else {
 			$event->setType(1);
 			$ins = $this->eventMapper->insert($event);
-			$poll_id = $ins->getId();
+			$pollId = $ins->getId();
 			$cnt = 1;
 			foreach ($chosenDates as $el) {
 				$text = new Text();
+				$text->setPollId($pollId);
 				$text->setText($el . '_' . $cnt);
-				$text->setPollId($poll_id);
 				$this->textMapper->insert($text);
 				$cnt++;
 			}
@@ -725,13 +726,13 @@ class PageController extends Controller {
 			return true;
 		}
 		Util::writeLog('polls', $this->userId, Util::ERROR);
-		$user_groups = $this->getGroups();
+		$userGroups = $this->getGroups();
 		$arr = explode(';', $access);
 		foreach ($arr as $item) {
 			if (strpos($item, 'group_') === 0) {
 				$grp = substr($item, 6);
-				foreach ($user_groups as $user_group) {
-					if ($user_group === $grp) {
+				foreach ($userGroups as $userGroup) {
+					if ($userGroup === $grp) {
 						return true;
 					}
 				}
