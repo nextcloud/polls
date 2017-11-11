@@ -134,10 +134,10 @@
 			<div class="table">
 					<ul class="row header" >
 						<?php
-						foreach ($dates as $el) {
+						foreach ($dates as $dateElement) {
 							if ($poll->getType() === 0) {
-								$timestamp = strtotime($el->getDt());
-								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . $el->getDt() . ' ' . date_default_timezone_get() . '" class="column vote time" data-timestamp="' . $timestamp . '"data-value-utc="' . $el->getDt() . '">');
+								$timestamp = strtotime($dateElement->getDt());
+								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="column vote time" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
 
 								print_unescaped('	<div class="date-box column">');
 								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp))  . '</div>');
@@ -146,17 +146,17 @@
 								print_unescaped('		<div class="time">'  .       date('G:i', $timestamp) . ' UTC</div>');
 								print_unescaped('	</div>');
 							} else {
-								print_unescaped('<li id="slot_' . $el->getId() . '" title="' . preg_replace('/_\d+$/', '', $el->getText()) . '" class="column vote option">');
-								print_unescaped('	<div class="date-box column">' . preg_replace('/_\d+$/', '', $el->getText()).'</div>');
+								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '" class="column vote option">');
+								print_unescaped('	<div class="date-box column">' . preg_replace('/_\d+$/', '', $dateElement->getText()).'</div>');
 							}
 							print_unescaped('<div class="counter row">');
 							print_unescaped('	<div class="yes row">');
 							print_unescaped('		<div class="svg"></div>');
-							print_unescaped('		<div id="counter_yes_voteid_' . $el->getId() . '" class ="result-cell yes" data-voteId="' . $el->getId() . '">0</div>');
+							print_unescaped('		<div id="counter_yes_voteid_' . $dateElement->getId() . '" class ="result-cell yes" data-voteId="' . $dateElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
 							print_unescaped('	<div class="no row">');
 							print_unescaped('		<div class="svg"></div>');
-							print_unescaped('		<div id="counter_no_voteid_' . $el->getId() . '" class ="result-cell no" data-voteId="' . $el->getId() . '">0</div>');
+							print_unescaped('		<div id="counter_no_voteid_' . $dateElement->getId() . '" class ="result-cell no" data-voteId="' . $dateElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
 							print_unescaped('</div>');
 						}
@@ -217,13 +217,13 @@
 							// loop over dts
 							$i_tot = 0;
 
-							foreach ($dates as $dt) {
+							foreach ($dates as $dateElement) {
 								if ($poll->getType() === 0) {
-									$dateId = strtotime($dt->getDt());
-									$pollId = 'voteid_' . $dt->getId();
+									$dateId = strtotime($dateElement->getDt());
+									$pollId = 'voteid_' . $dateElement->getId();
 								} else {
-									$dateId = $dt->getText();
-									$pollId = 'voteid_' . $dt->getId();
+									$dateId = $dateElement->getText();
+									$pollId = 'voteid_' . $dateElement->getId();
 								}
 								// look what user voted for this dts
 								$class = 'column poll-cell no';
@@ -279,13 +279,13 @@
 						print_unescaped('<ul class="row">');
 
 						$i_tot = 0;
-						foreach ($dates as $dt) {
+						foreach ($dates as $dateElement) {
 							if ($poll->getType() === 0) {
-								$dateId = strtotime($dt->getDt());
-								$pollId = 'voteid_' . $dt->getId();
+								$dateId = strtotime($dateElement->getDt());
+								$pollId = 'voteid_' . $dateElement->getId();
 							} else {
-								$dateId = $dt->getText();
-								$pollId = 'voteid_' . $dt->getId();
+								$dateId = $dateElement->getText();
+								$pollId = 'voteid_' . $dateElement->getId();
 							}
 							// see if user already has data for this event
 							$class = 'no';
@@ -377,20 +377,28 @@
 					</p>
 				</div>
 			<?php endif; ?>
-			<h2><?php p($l->t('Comments')); ?></h2>
-			<div class="tabsContainer">	
+			<ul class="tabHeaders">			
+				<li class="tabHeader selected" data-tabid="commentsTabView" data-tabindex="0">
+					<a href="#"><?php p($l->t('Comments')); ?></a>
+				</li>
+			</ul>
+			<div class="tabsContainer">
 				<div id="commentsTabView" class="tab commentsTabView">
 					<div class="newCommentRow comment new-comment">
 					<?php if (User::isLoggedIn()) : ?>
 						<div class="authorRow user-cell row">
-							<div class="avatar avatardiv" title="<?php p($userId)?>"></div>
+							<div class="avatar" title="<?php p($userId)?>"></div>
 							<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
 						</div>
-							
+						
 					<?php else: ?>
-						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login')); ?></a>
-						<?php p($l->t('or')); ?>
-						<?php print_unescaped('<div id="id_ac_detected" class="column external current-user"><input type="text" name="user_name_comm" id="user_name_comm" placeholder="' . $l->t('Your name here') . '" /></div>'); ?>
+						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
+						<div class="authorRow user-cell row">
+							<div class="avatar" title="?"></div>
+							<div id="id_ac_detected" class="author  column external">
+								<input type="text" name="user_name_comm" id="user_name_comm" placeholder="<?php p($l->t('Your name here')); ?>" />
+							</div>
+						</div>
 					<?php endif; ?>
 						<form class="newCommentForm" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
 							<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -400,7 +408,7 @@
 							<span class="icon-loading-small" style="float:right;"></span>
 						</form>
 					</div>
-				
+			
 					<ul class="comments">
 					<?php if ($comments !== null) : ?>
 						<?php foreach ($comments as $comment) : ?>
@@ -411,7 +419,7 @@
 								// -> display user
 								$avatarName = $userId;
 								$displayName = $userMgr->get($userId)->getDisplayName();
-								
+							
 							} else if ( !$isAnonymous && !$hideNames ) {
 								// comment is from another user, 
 								// poll is not anoymous (for current user)
@@ -432,7 +440,7 @@
 							}
 						?>
 
-							<li class="comment column">
+							<li id="comment_<?php p($comment->getId()); ?>" class="comment column">
 								<div class="authorRow user-cell row">
 									<div class="avatar avatardiv" title="<?php p($avatarName)?>"></div>
 									<div class="author"><?php p($displayName) ?></div>
