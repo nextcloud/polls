@@ -145,7 +145,7 @@ $(document).ready(function () {
 		$.post(form.action, data, function(data) {
 		var newCommentElement = '<li class="comment column"> ' +
 								'<div class="authorRow user-cell row"> ' +
-								'<div class="avatar avatardiv" title="' + data.userId + '"></div> ' +
+								'<div class="avatar missing" title="' + data.userId + '"></div> ' +
 								'<div class="author">' + data.userName + '</div>' +
 								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' + 
 								'</div>' + 
@@ -156,6 +156,12 @@ $(document).ready(function () {
 			$('.comments .comment:first').before(newCommentElement);
 			$('.new-comment textarea').val('').focus();
 			$('.new-comment .icon-loading-small').hide();
+			
+			$('.avatar.missing').each(function (i, obj) {
+				$(obj).avatar(obj.title, 32);
+				$(obj).removeClass('missing');
+			});
+
 			updateCommentsCount();
 		}).error(function () {
 			alert(t('polls', 'An error occurred, your comment was not posted.'));
