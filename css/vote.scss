@@ -141,13 +141,8 @@ div.crumb {
 	}			
 }
 
-
-.avatar-cell {
-	width: 40px;
-}
-
 .name {
-	width: 180px;
+	margin-left: 5px;
 }
 
 .poll-cell {
@@ -264,9 +259,7 @@ div.crumb {
 }
 
 .comment {
-	border: 1px solid #DDD;
-	border-radius: 3px;
-	margin-bottom: 10px;
+	margin-bottom: 30px;
 
 	&.new-comment {
 		border: none;
@@ -285,18 +278,58 @@ div.crumb {
 	
 }
 
+.newCommentForm {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.author {
+	margin-left: 5px;
+	opacity: .5;
+}
+#commentsTabView .comment .date {
+	position: absolute;
+	right: 0;
+	top: 5px;
+	opacity: .5;
+}
+
+#commentsTabView .comments li .message {
+	padding-left: 40px;
+}
+
+.authorRow {
+	position: relative;
+}
+.authorRow > div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
 .new-comment {
+	.submit {
+		position: absolute;
+		bottom: 0px;
+		right: 8px;
+		width: 30px;
+		margin: 0;
+		padding: 7px 9px;
+		background-color: transparent;
+		border: none;
+		opacity: .3;
+	}
+
 	.icon-loading-small {
 		float: left;
 		margin-top: 10px;
 		display: none;
 	}
 	
-	.comment-content textarea {
+	textarea {
+		width: calc(100% - 81px);
 		display: block;
-		min-width: 100%;
-		max-width: 100%;
 		min-height: 66px;
+		margin-left: 40px;
 	}
 }
 

@@ -12,8 +12,7 @@ $.fn.switchClass = function (a, b) {
 	return this;
 };
 
-function updateCommentsCount() {
-	// TODO: Update the Badgecounter
+function updateCommentsCount(){
 	$('#comment-counter').removeClass('no-comments');
 	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
 
@@ -54,7 +53,6 @@ function switchSidebar() {
 	}
 }
 
-
 $(document).ready(function () {
 	// count how many times in each date
 	new Clipboard('.copy-link');
@@ -69,9 +67,9 @@ $(document).ready(function () {
 
 	$('#closeDetails').click(function () {
 		OC.Apps.hideAppSidebar();
-	});
-
-	$('.poll.avatardiv').each(function (i, obj) {
+    });
+	
+	$('.avatar').each(function (i, obj) {
 		$(obj).avatar(obj.title, 32);
 	});
 
@@ -144,8 +142,18 @@ $(document).ready(function () {
 			commentBox: comment.value.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
-		$.post(form.action, data, function (data) {
-			$('.comments .comment:first').after('<div class="comment"><div class="comment-header"><span class="comment-date">' + data.date + '</span>' + data.userName + '</div><div class="wordwrap comment-content">' + data.comment + '</div></div>');
+		$.post(form.action, data, function(data) {
+		var newCommentElement = '<li class="comment column"> ' +
+								'<div class="authorRow user-cell row"> ' +
+								'<div class="avatar avatardiv" title="' + data.userId + '"></div> ' +
+								'<div class="author">' + data.userName + '</div>' +
+								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' + 
+								'</div>' + 
+								'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
+								'</li>';
+
+
+			$('.comments .comment:first').before(newCommentElement);
 			$('.new-comment textarea').val('').focus();
 			$('.new-comment .icon-loading-small').hide();
 			updateCommentsCount();
@@ -162,6 +170,7 @@ $(document).ready(function () {
 	$('.toggle-cell').tooltip();
 	$('.time-slot').tooltip();
 	$('.avatardiv').tooltip();
+	$('.has-tooltip').tooltip();
 	updateCounters();
 
 });

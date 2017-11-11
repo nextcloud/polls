@@ -119,10 +119,10 @@
 						if ($poll->getExpire() !== null) {
 							// $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
 							$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
-							$expiry_style = ' progress';
+							$expiry_style = ' progress live-relative-timestamp';
 							if (date('U') > strtotime($poll->getExpire())) {
 								$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire()));
-								$expiry_style = ' expired';
+								$expiry_style = ' expired live-relative-timestamp';
 							}
 						} else {
 							$expiry_style = ' endless';
@@ -193,10 +193,10 @@
 								</div>
 								<div class="wrapper group-2-1">
 									<div class="column access"><?php p($l->t($poll->getAccess())); ?></div>
-									<div class="column created" data-timestamp="<?php p(strtotime($poll->getCreated())); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
+									<div class="column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated())*1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
 								</div>
 								<div class="wrapper group-2-2">
-									<div class="column expiry<?php p($expiry_style); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
+									<div class="column has-tooltip expiry<?php p($expiry_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire())*1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
 									<div class="column participants">
 										<div class="symbol alt-tooltip partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
 										<div class="symbol alt-tooltip partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
