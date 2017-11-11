@@ -208,9 +208,7 @@
 							<li class="row user">
 								<div class="first">
 									<div class="user-cell row">
-										<div class="avatar-cell">
-											<div class="poll avatardiv" title="<?php p($avatarName)?>"></div>
-										</div>
+										<div class="avatar" title="<?php p($avatarName)?>"></div>
 										<div class="name"><?php p($displayName) ?></div>
 										</div>
 									</div>
@@ -264,16 +262,13 @@
 						print_unescaped('<li class="row user current-user">');
 						print_unescaped('	<div class="row first">');
 						print_unescaped('		<div class="user-cell row">');
-						print_unescaped('			<div class="avatar-cell">');
 						if (User::isLoggedIn()) {
-							print_unescaped('			<div class="poll avatardiv" title="'.($userId).'"></div>');
-							print_unescaped('		</div>');
+							print_unescaped('		<div class="avatar" title="'.($userId).'"></div>');
 							print_unescaped('		<div class="name">');
 							p($userMgr->get($userId)->getDisplayName());
 						} else {
-							print_unescaped('			<div class="poll avatardiv" title="?"></div>');
-							print_unescaped('		</div>');
-							print_unescaped('		<div id="id_ac_detected" class="external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
+							print_unescaped('		<div class="avatar" title="?"></div>');
+							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
@@ -294,7 +289,7 @@
 							}
 							// see if user already has data for this event
 							$class = 'no';
-							$activeClass = 'poll-cell active cl_click';
+							$activeClass = 'column active poll-cell';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $obj) {
 									$voteVal = null;
@@ -305,19 +300,16 @@
 									}
 									if ($voteVal === $dateId) {
 										if ($obj->getType() === 1) {
-											$class = 'column poll-cell yes';
+											$class = 'yes';
 											$total['yes'][$i_tot]++;
-										} else if ($obj->getType() === 0) {
-											$class = 'column poll-cell no';
-											$total['no'][$i_tot]++;
 										} else if($obj->getType() === 2) {
-											$class = 'column poll-cell maybe';
+											$class = 'maybe';
 										}
 										break;
 									}
 								}
 							}
-							print_unescaped('<li id="' . $pollId . '" class="' . $class . ' ' . $activeClass . '" data-value="' . $dateId . '"></li>');
+							print_unescaped('<li id="' . $pollId . '" class="' . $activeClass . ' ' . $class . '" data-value="' . $dateId . '"></li>');
 
 							$i_tot++;
 						}
@@ -347,6 +339,7 @@
 			<?php endif; ?>
 			</div>
 		</div>
+					
 		<div id="app-sidebar" class="detailsView scroll-container disappear">
 			<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
 			<div class="table">
@@ -385,54 +378,75 @@
 				</div>
 			<?php endif; ?>
 			<h2><?php p($l->t('Comments')); ?></h2>
-			<div class="comments">
-				<div class="comment new-comment">
-					<form name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
-						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
-						<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-						<div class="comment-content">
-						<?php if (!User::isLoggedIn()) : ?>
-							<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login')); ?></a>
-							<?php p($l->t('or')); ?>
-							<?php print_unescaped('<div id="id_ac_detected" class="column external current-user"><input type="text" name="user_name_comm" id="user_name_comm" placeholder="' . $l->t('Your name here') . '" /></div>'); ?>
-						<?php else: ?>
-							<?php p($l->t('Logged in as') . ' ' . $userId); ?>
-						<?php endif; ?>
+			<div class="tabsContainer">	
+				<div id="commentsTabView" class="tab commentsTabView">
+					<div class="newCommentRow comment new-comment">
+					<?php if (User::isLoggedIn()) : ?>
+						<div class="authorRow user-cell row">
+							<div class="avatar avatardiv" title="<?php p($userId)?>"></div>
+							<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
+						</div>
+							
+					<?php else: ?>
+						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login')); ?></a>
+						<?php p($l->t('or')); ?>
+						<?php print_unescaped('<div id="id_ac_detected" class="column external current-user"><input type="text" name="user_name_comm" id="user_name_comm" placeholder="' . $l->t('Your name here') . '" /></div>'); ?>
+					<?php endif; ?>
+						<form class="newCommentForm" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
+							<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
+							<input type="hidden" name="userId" value="<?php p($userId); ?>" />
 							<textarea id="commentBox" name="commentBox"></textarea>
-							<p>
-								<input type="button" id="submit_send_comment" class="button btn" value="<?php p($l->t('Send!')); ?>" />
-								<span class="icon-loading-small" style="float:right;"></span>
-							</p>
-						</div>
-					</form>
-				</div>
-				<?php if ($comments !== null) : ?>
-					<?php foreach ($comments as $comment) : ?>
-						<div class="comment">
-							<div class="comment-header">
-								<?php
-								print_unescaped('<span class="comment-date">' . date('d.m.Y H:i:s', strtotime($comment->getDt())) . '</span>');
-								if ($isAnonymous || $hideNames) {
-									p('Anonymous');
-								} else {
-									if ($userMgr->get($comment->getUserId()) !== null) {
-										p($userMgr->get($comment->getUserId())->getDisplayName());
-									} else {
-										print_unescaped('<i>');
-										p($comment->getUserId());
-										print_unescaped('</i>');
-									}
+							<input id="submit_send_comment" class="submit icon-confirm" value="" type="submit">
+							<span class="icon-loading-small" style="float:right;"></span>
+						</form>
+					</div>
+				
+					<ul class="comments">
+					<?php if ($comments !== null) : ?>
+						<?php foreach ($comments as $comment) : ?>
+
+						<?php
+							if ( $comment->getUserId() === $userId ) {
+								// Comment is from current user 
+								// -> display user
+								$avatarName = $userId;
+								$displayName = $userMgr->get($userId)->getDisplayName();
+								
+							} else if ( !$isAnonymous && !$hideNames ) {
+								// comment is from another user, 
+								// poll is not anoymous (for current user)
+								// users are not hidden
+								// -> display user
+								$avatarName = $comment->getUserId();
+								$displayName = $avatarName;
+								if ($userMgr->get($comment->getUserId()) !== null) {
+									$displayName = $userMgr->get($avatarName)->getDisplayName();
 								}
-								?>
-							</div>
-							<div class="wordwrap comment-content">
-								<?php p($comment->getComment()); ?>
-							</div>
-						</div>
-					<?php endforeach; ?>
-				<?php else : ?>
-					<?php p($l->t('No comments yet. Be the first.')); ?>
-				<?php endif; ?>
+							} else {
+								// in all other cases
+								// -> make user anonymous
+								// poll is anonymous and current user is not owner 
+								// or names are hidden
+								$displayName = 'Anonymous';
+								$avatarName = $displayName;
+							}
+						?>
+
+							<li class="comment column">
+								<div class="authorRow user-cell row">
+									<div class="avatar avatardiv" title="<?php p($avatarName)?>"></div>
+									<div class="author"><?php p($displayName) ?></div>
+									<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
+								</div>
+								<div class="message wordwrap comment-content"><?php p($comment->getComment()); ?></div>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+					<?php else : ?>
+						<?php p($l->t('No comments yet. Be the first.')); ?>
+					<?php endif; ?>
+				</div>
+				</div>
 			</div>
 		</div>
 	</div>

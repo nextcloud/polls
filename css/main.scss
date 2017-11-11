@@ -48,7 +48,7 @@ h1 {
 #app-sidebar {
 	flex-direction: column;
 	
-	.share, h2, .comments {
+	.share, h2 {
 		padding: 15px;
 	}
 	.close {
@@ -88,11 +88,11 @@ input[type="text"] {
 	width: 100%;
 }
 
-textarea {
+/* textarea {
 	min-width: 100%;
 	max-width: 100%;
 }
-
+ */
 .form-actions {
 	padding: 15px;
 }
