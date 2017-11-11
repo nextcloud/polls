@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,15 +24,20 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Entity;
-
 /**
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method string getPollId()
- * @method void setPollId(string $value)
+ * @method integer getPollId()
+ * @method void setPollId(integer $value)
  */
-class Notification extends Entity {
-	public $userId;
-	public $pollId;
+class Notification extends Model {
+	protected $userId;
+	protected $pollId;
+
+	/**
+	 * Notification constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+	}
 }

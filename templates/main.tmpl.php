@@ -29,8 +29,12 @@
 	\OCP\Util::addScript('polls', 'start');
 
 	$userId = $_['userId'];
+	/** @var \OCP\IUserManager $userMgr */
 	$userMgr = $_['userMgr'];
+	/** @var \OCP\IURLGenerator $urlGenerator */
 	$urlGenerator = $_['urlGenerator'];
+	/** @var \OCA\Polls\Db\Event[] $polls */
+	$polls = $_['polls'];
 ?>
 
 <div id="app">
@@ -40,7 +44,7 @@
 					<div id="breadcrump">
 						<div class	="crumb svg last" data-dir="/">
 							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-								<img class="svg" src="<?php print_unescaped(OCP\image_path("core", "places/home.svg")); ?>" alt="Home">
+								<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 							</a>
 						</div>
 						<div class="creatable" style="">
@@ -51,7 +55,7 @@
 						</div>
 					</div>
 				</div>
-	<?php if (count($_['polls']) == 0) : ?>
+	<?php if (count($_['polls']) === 0) : ?>
 		<div id="emptycontent" class="">
 			<div class="icon-polls"></div>
 			<h2><?php p($l->t('No existing polls.')); ?></h2>
@@ -84,15 +88,17 @@
 					 </div>
 				</div>
 
-				<?php foreach ($_['polls'] as $poll) : ?>
+				<?php foreach ($polls as $poll) : ?>
 					<?php
-						if (!userHasAccess($poll, $userId)) continue;
+						if (!userHasAccess($poll, $userId)) {
+							continue;
+						}
 						// direct url to poll
 						$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', array('hash' => $poll->getHash()));
 						$owner = $poll->getOwner();
 
 						$expiry_style = '';
-						if ($poll->getType() == '0') {
+						if ($poll->getType() === 0) {
 							$participated = $_['participations'];
 						} else {
 							$participated = $_['participations_text'];
@@ -106,15 +112,16 @@
 						$commented_title = 'You did not comment';
 						$commented_count = count($comments);
 
-						if ($owner == $userId) {
+						if ($owner === $userId) {
 							$owner = $l->t('Yourself');
 						}
 
-						if ($poll->getExpire() != null) {
-							$expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
+						if ($poll->getExpire() !== null) {
+							// $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
+							$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
 							$expiry_style = ' progress live-relative-timestamp';
 							if (date('U') > strtotime($poll->getExpire())) {
-								$expiry_date = OCP\relative_modified_date(strtotime($poll->getExpire()));
+								$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire()));
 								$expiry_style = ' expired live-relative-timestamp';
 							}
 						} else {
@@ -123,7 +130,7 @@
 						}
 
 						for ($i = 0; $i < count($participated); $i++) {
-							if ($poll->getId() == intval($participated[$i]->getPollId())) {
+							if ($poll->getId() === $participated[$i]->getPollId()) {
 								$participated_class = 'partic_yes';
 								$participated_title = 'You voted';
 								array_splice($participated, $i, 1);
@@ -132,7 +139,7 @@
 						}
 
 						for ($i = 0; $i < count($comments); $i++) {
-							if ($poll->getId() == intval($comments[$i]->getPollId())) {
+							if ($poll->getId() === $comments[$i]->getPollId()) {
 								$commented_class = 'commented_yes';
 								$commented_title = 'You commented';
 								array_splice($comments, $i, 1);
@@ -141,11 +148,10 @@
 						}
 					?>
 
-
 					<div class="row table-body">
 						<div class="wrapper group-master">
 							<div class="wrapper group-1">
-								<div class="thumbnail <?php p($expiry_style . " " . $commented_class. " " . $participated_class); ?>"></div>  <!-- Image to display status or type of poll */ -->
+								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class. ' ' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
 								<a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
 									<div class="column name">						  <?php p($poll->getTitle()); ?></div>
 									<div class="column description">				   <?php p($poll->getDescription()); ?></div>
@@ -160,7 +166,7 @@
 													<span>Copy Link</span>
 												</a>
 											</li>
-							<?php if ($poll->getOwner() == $userId) : ?>
+							<?php if ($poll->getOwner() === $userId) : ?>
 											<li>
 												<a id="id_del_<?php p($poll->getId()); ?>" class="menuitem alt-tooltip delete-poll action permanent" data-value="<?php p($poll->getTitle()); ?>" href="#">
 													<span class="icon-delete"></span>
@@ -212,12 +218,11 @@
 // ---- helper functions ----
 // from spreed.me
 /**
- * @param $userId
- * @return array with groups
+ * @param string $userId
+ * @return \OCP\IGroup[]
  */
 function getGroups($userId) {
-	// $this->requireLogin();
-	if (class_exists('\OC_Group', true)) {
+	if (class_exists('\OC_Group')) {
 		// Nextcloud <= 11, ownCloud
 		return \OC_Group::getUserGroups($userId);
 	}
@@ -229,12 +234,12 @@ function getGroups($userId) {
 }
 
 /**
- * @param $poll
- * @param $userId
- * @return boolean 
+ * @param OCA\Polls\Db\Event $poll
+ * @param string $userId
+ * @return boolean
  */
-function userHasAccess($poll, $userId) {
-	if ($poll == null) {
+function userHasAccess(OCA\Polls\Db\Event $poll, $userId) {
+	if ($poll === null) {
 		return false;
 	}
 	$access = $poll->getAccess();
@@ -242,32 +247,30 @@ function userHasAccess($poll, $userId) {
 	if (!User::isLoggedIn()) {
 		return false;
 	}
-	if ($access == 'public') {
+	if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
 		return true;
 	}
-	if ($access == 'hidden') {
+	if ($owner === $userId) {
 		return true;
 	}
-	if ($access == 'registered') {
-		return true;
-	}
-	if ($owner == $userId) {
-		return true;
-	}
-	$user_groups = getGroups($userId);
 
+	$user_groups = getGroups($userId);
 	$arr = explode(';', $access);
 
 	foreach ($arr as $item) {
-		if (strpos($item, 'group_') == 0) {
+		if (strpos($item, 'group_') === 0) {
 			$grp = substr($item, 6);
 			foreach ($user_groups as $user_group) {
-				if ($user_group == $grp) return true;
+				if ($user_group === $grp) {
+					return true;
+				}
 			}
 		}
-		else if (strpos($item, 'user_') == 0) {
+		else if (strpos($item, 'user_') === 0) {
 			$usr = substr($item, 5);
-			if ($usr == $userId) return true;
+			if ($usr === $userId) {
+				return true;
+			}
 		}
 	}
 	return false;

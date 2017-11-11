@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,8 +24,6 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Entity;
-
 /**
  * @method text getText()
  * @method void setText(text $value)
@@ -35,9 +34,17 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getType()
  * @method void setType(integer $value)
  */
-class ParticipationText extends Entity {
-	public $text;
-	public $userId;
-	public $pollId;
-	public $type;
+class ParticipationText extends Model {
+	protected $text;
+	protected $userId;
+	protected $pollId;
+	protected $type;
+
+	/**
+	 * ParticipationText constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+		$this->addType('type', 'integer');
+	}
 }

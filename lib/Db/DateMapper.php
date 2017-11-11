@@ -37,7 +37,7 @@ class DateMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
 	 * @param int $limit
 	 * @param int $offset
 	 * @return Date[]
@@ -48,7 +48,7 @@ class DateMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
 	 */
 	public function deleteByPoll($pollId) {
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';

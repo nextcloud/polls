@@ -10,4 +10,3 @@ function deletePoll($pollEl) {
 		form.submit();
 	}
 }
-
