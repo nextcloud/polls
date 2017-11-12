@@ -2,6 +2,7 @@ $bg_no: #ffede9;
 $bg_maybe: #fcf7e1;
 $bg_unvoted: #fff4c8;
 $bg_yes: #ebf5d6;
+$bg_information: #b19c3e;
 
 $fg_no: #f45573;
 $fg_maybe: #f0db98;
@@ -15,6 +16,9 @@ $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
+#content {
+	display:flex;
+}
 
 .row {
 	display: flex;
@@ -220,21 +224,23 @@ div.crumb {
 	margin-right: 6px;
 }
 
-.badge {
-	position: relative;
-	top: -34px;
-	right: -24px;
-	background-image: url('../../../apps/polls/css/../img/yes-comment.svg');
-	background-repeat: no-repeat;
-	background-size: 33px;
-	padding: 10px;
-	margin: -10px;
-	background-position-y: 9px;
-	background-position-x: -3px;
-	text-shadow: 1px 1px #666;
-	color: #fff;
-	&.no-comments {
-		background-image: url('../../../apps/polls/css/../img/no-comment.svg');
+.button.details {
+	.badge {
+		position: relative;
+		top: -34px;
+		right: -24px;
+		background-image: url('../../../apps/polls/css/../img/yes-comment.svg');
+		background-repeat: no-repeat;
+		background-size: 33px;
+		padding: 10px;
+		margin: -10px;
+		background-position-y: 9px;
+		background-position-x: -3px;
+		text-shadow: 1px 1px #666;
+		color: #fff;
+		&.no-comments {
+			background-image: url('../../../apps/polls/css/../img/no-comment.svg');
+		}
 	}
 }
 
@@ -258,17 +264,63 @@ div.crumb {
 	margin-bottom: 15px;
 }
 
-#commentsTabView {
-	.authorRow {
-		position: relative;
+.authorRow {
+	position: relative;
+	.author {
+		margin-left: 8px;
+		opacity: .5;
+		&.external {
+			flex-grow: 1;
+			margin-right: 33px;
+			opacity: 1;
+			> input {
+				width: 100%
+			}
+		}
 	}
+}
+
+.pollInformation {
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 0 15px; 
+	.leftLabel {
+		margin-right: 4px;
+	}
+	.authorRow {
+		margin-top: 15px;
+	}
+	.status {
+		.badge {
+			margin: 2px;
+			padding: 2px 4px;
+			border-radius: 3px;
+			float: left;
+		}
+		.open {
+			color: #fff;
+			text-shadow: 1px 1px #666;
+			background-color: $fg_yes;
+		}
+		.expired {
+			color: #fff;
+			text-shadow: 1px 1px #666;
+			background-color: $fg_no;
+		}
+		.information {
+			color: #fff;
+			text-shadow: 1px 1px #666;
+			background-color: $bg_information;
+		}
+	}
+}
+
+
+
+#commentsTabView {
 	.comment {
 		margin-bottom: 30px;
 
-		&.new-comment {
-			border: none;
-		}
-		
 		.comment-header {
 			background-color: #EEE;
 			border-bottom: 1px solid #DDD;
@@ -294,23 +346,10 @@ div.crumb {
 		flex-shrink: 1;
 	}
 
-	.author {
-		margin-left: 8px;
-		opacity: .5;
-		&.external {
-			flex-grow: 1;
-			margin-right: 33px;
-		}
-	}
-
-	.newCommentForm {
-		margin-bottom: 20px;
-	}
 
 	.new-comment {
 		.submitComment {
-			bottom: 0px;
-			right: 8px;
+			align-self: last baseline;
 			width: 30px;
 			margin: 0;
 			padding: 7px 9px;
@@ -323,12 +362,6 @@ div.crumb {
 			float: left;
 			margin-top: 10px;
 			display: none;
-		}
-		
-		textarea {
-			width: calc(100% - 81px);
-			display: block;
-			margin-left: 40px;
 		}
 	}
 }

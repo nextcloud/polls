@@ -48,17 +48,18 @@
 	$votes = $_['votes'];
 	/** @var \OCA\Polls\Db\Comment[] $comments */
 	$comments = $_['comments'];
-	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
-	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
 	/** @var \OCA\Polls\Db\Notification $notification */
 	$notification = $_['notification'];
-
+	
+	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
+	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
+	$access = $poll->getAccess();
 	if ($poll->getExpire() === null) {
 		$expired = false;
 	} else {
 		$expired = time() > strtotime($poll->getExpire());
 	}
-
+	
 	if ($expired) {
 		$statusClass = 'expired-vote';
 	} else {
@@ -96,7 +97,7 @@
 	$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
 ?>
 
-<div id="app-disabled">
+<div id="app">
 	<div id="app-content" class="column <?php p($statusClass . ' ' . $pollTypeClass); ?>">
 		<div id="controls" class="controls row">
 			<div id="breadcrump" class="breadcrump row">
@@ -341,10 +342,46 @@
 		</div>
 					
 		<div id="app-sidebar" class="detailsView scroll-container disappear">
-			<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
-			<div class="table">
+			<div class="column">
 				<div class="row">
+					<div class="pollInformation column">
+						<div class="status">
+							<div class="authorRow user-cell row">
+								<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
+								<div class="avatar" title="<?php p($poll->getOwner())?>"></div>
+								<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
+							</div>
+
+							<?php 
+							if ($expired) {
+								print_unescaped('<span class="badge expired">' . $l->t('Expired'). '</span>');
+							} else {
+								if ($poll->getExpire() !== null){
+									print_unescaped('<span class="badge open">' . $l->t('Expires on %s', array(date('d.m.Y', strtotime($poll->getExpire())))) . '</span>');
+								} else {
+									print_unescaped('<span class="badge open">' . $l->t('Expires never') . '</span>');
+								}
+							}
+							
+							if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
+								print_unescaped('<span class="badge information">' . $access . '</span>');
+							} else {
+								print_unescaped('<span class="badge information">' . $l->t('Invitation access') . '</span>');
+							}
+							if ($isAnonymous) {
+								print_unescaped('<span class="badge information">' . $l->t('Anononymous poll') . '</span>');
+								if ($hideNames) {
+									print_unescaped('<span class="badge information">' . $l->t('Usernames hidden to Owner') . '</span>');
+								} else {
+									print_unescaped('<span class="badge information">' . $l->t('Usernames visible to Owner') . '</span>');
+								}
+							}
+							?>
+						</div>
+
+					</div>
 					<div id="app-navigation-simulation">
+						<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
 						<ul class="with-icons">
 							<li>
 								<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">

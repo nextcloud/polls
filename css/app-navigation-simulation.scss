@@ -1,17 +1,11 @@
 #app-navigation-simulation {
-    width: 250px;
     height: 100%;
     float: left;
     box-sizing: border-box;
     background-color: #fff;
-    padding-bottom: 44px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border-right: 1px solid #ebebeb;
     display: flex;
     flex-direction: column;
+	margin-right: 15px;
 }
 
 #app-navigation-simulation > ul > li:focus, #app-navigation-simulation > ul > li:hover, #app-navigation-simulation > ul > li.active, #app-navigation-simulation > ul > li a.selected, #app-navigation-simulation > ul > li:focus > a, #app-navigation-simulation > ul > li:hover > a, #app-navigation-simulation > ul > li.active > a, #app-navigation-simulation > ul > li a.selected > a {

@@ -52,11 +52,8 @@ h1 {
 		padding: 15px;
 	}
 	.close {
-		position: absolute;
-		top: 0;
-		right: 0;
 		padding: 15px;
-		z-index: 200;
+		align-self: right;
 	}
 }
    

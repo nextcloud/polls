@@ -121,7 +121,6 @@
 						$expiry_date = $l->t('Never');
 
 						if ($poll->getExpire() !== null) {
-							// $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
 							$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
 							$expiry_style = ' progress';
 							$timestamp_style = ' live-relative-timestamp';
