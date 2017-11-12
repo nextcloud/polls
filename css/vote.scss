@@ -340,7 +340,7 @@ div.crumb {
 		&:focus, &:hover, &.active, a.selected {
 			&, > a {
 				opacity: 1;
-				box-shadow: inset 2px 0 $color-primary;
+				box-shadow: inset 2px 0 #0082c9;
 			}
 		}
 
@@ -562,7 +562,8 @@ div.crumb {
 		flex-direction: column;
 		width: 100%;
 	}
- }
+
+}
 
  @media all and (max-width: (320px) ) {
 

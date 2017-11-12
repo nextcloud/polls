@@ -29,7 +29,6 @@
 		\OCP\Util::addStyle('polls', 'public');
 	}
 
-	\OCP\Util::addStyle('polls', 'app-navigation-simulation');
 	\OCP\Util::addScript('polls', 'app');
 	\OCP\Util::addScript('polls', 'vote');
 
