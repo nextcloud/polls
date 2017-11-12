@@ -62,6 +62,7 @@ div.crumb {
 
 .header {
 	margin-left: $user-column-width;
+	padding: 0 17px;
 	align-items: initial;
 	.vote.option {
 		.date-box {
@@ -79,10 +80,6 @@ div.crumb {
 .user {
 	border-top: $border_user;
 	height: 44px;
-	padding: 0 17px;
-}
-
-.header {
 	padding: 0 17px;
 }
 
@@ -269,8 +266,8 @@ div.crumb {
 	.author {
 		margin-left: 8px;
 		opacity: .5;
+		flex-grow: 1;
 		&.external {
-			flex-grow: 1;
 			margin-right: 33px;
 			opacity: 1;
 			> input {
@@ -280,37 +277,102 @@ div.crumb {
 	}
 }
 
+.close.row {
+	justify-content: flex-end;
+	margin: 8px 8px 0 0;
+}
+
+#app-sidebar .header.row {
+	flex-direction: row;
+	align-items: flex-start;
+	margin-left: 0;
+	margin-top:0;
+}
+
 .pollInformation {
+	width: 220px;
 	flex-grow: 1;
 	flex-shrink: 1;
-	padding: 0 15px; 
-	.leftLabel {
-		margin-right: 4px;
-	}
+	padding-right: 15px; 
+
+
 	.authorRow {
-		margin-top: 15px;
+		.leftLabel {
+			margin-right: 4px;
+		}
 	}
-	.status {
-		.badge {
+
+	.cloud {
+		> span {
+			color: #fff;
 			margin: 2px;
 			padding: 2px 4px;
 			border-radius: 3px;
 			float: left;
+			text-shadow: 1px 1px #666;
+			background-color: #aaa;
+			
 		}
 		.open {
-			color: #fff;
-			text-shadow: 1px 1px #666;
 			background-color: $fg_yes;
 		}
 		.expired {
-			color: #fff;
-			text-shadow: 1px 1px #666;
 			background-color: $fg_no;
 		}
 		.information {
-			color: #fff;
-			text-shadow: 1px 1px #666;
 			background-color: $bg_information;
+		}
+	}
+}
+
+.pollActions {
+    display: flex;
+    flex-direction: column;
+	margin-right: 15px;
+
+	.close {
+		margin: 15px;
+		background-position: right top;
+		height: 30px;
+	}
+	
+	> ul > li {
+		&:focus, &:hover, &.active, a.selected {
+			&, > a {
+				opacity: 1;
+				box-shadow: inset 2px 0 $color-primary;
+			}
+		}
+
+		> a[class*="icon-"], 
+		> ul > li > a[class*="icon-"], 
+		> a[style*="background-image"], 
+		> ul > li > a[style*="background-image"] {
+			padding-left: 44px;
+		}
+
+		> a, 
+		> ul > li > a {
+			background-size: 16px 16px;
+			background-position: 14px center;
+			background-repeat: no-repeat;
+			display: block;
+			justify-content: space-between;
+			line-height: 44px;
+			min-height: 44px;
+			padding: 0 12px;
+			overflow: hidden;
+			box-sizing: border-box;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			color: #000;
+			opacity: 0.57;
+			flex: 1 1 0;
+			z-index: 100;
+		}
+		a, 
+		.app-navigation-entry-deleted {
+			padding-left: 44px !important;
 		}
 	}
 }
@@ -376,7 +438,7 @@ div.crumb {
 	.row {
 		flex-direction: column;
 
-		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm {
+		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
 			flex-direction: row;
 		}
 
@@ -384,7 +446,7 @@ div.crumb {
 			flex-grow: 1;
 			margin-left: 0;
 			margin-top: 44px;
-			width:120px;
+			width: 120px;
 			padding: 0 0 0 4px;
 			.vote {
 				padding-right: 10px;

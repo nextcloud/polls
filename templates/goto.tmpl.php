@@ -342,69 +342,71 @@
 		</div>
 					
 		<div id="app-sidebar" class="detailsView scroll-container disappear">
-			<div class="column">
-				<div class="row">
-					<div class="pollInformation column">
-						<div class="status">
-							<div class="authorRow user-cell row">
-								<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
-								<div class="avatar" title="<?php p($poll->getOwner())?>"></div>
-								<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
-							</div>
+			<div class="close row">
+				<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
+			</div>
 
-							<?php 
-							if ($expired) {
-								print_unescaped('<span class="badge expired">' . $l->t('Expired'). '</span>');
-							} else {
-								if ($poll->getExpire() !== null){
-									print_unescaped('<span class="badge open">' . $l->t('Expires on %s', array(date('d.m.Y', strtotime($poll->getExpire())))) . '</span>');
-								} else {
-									print_unescaped('<span class="badge open">' . $l->t('Expires never') . '</span>');
-								}
-							}
-							
-							if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
-								print_unescaped('<span class="badge information">' . $access . '</span>');
-							} else {
-								print_unescaped('<span class="badge information">' . $l->t('Invitation access') . '</span>');
-							}
-							if ($isAnonymous) {
-								print_unescaped('<span class="badge information">' . $l->t('Anononymous poll') . '</span>');
-								if ($hideNames) {
-									print_unescaped('<span class="badge information">' . $l->t('Usernames hidden to Owner') . '</span>');
-								} else {
-									print_unescaped('<span class="badge information">' . $l->t('Usernames visible to Owner') . '</span>');
-								}
-							}
-							?>
-						</div>
-
+			<div class="header row">
+				<div class="pollInformation column">
+					<div class="authorRow user-cell row">
+						<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
+						<div class="avatar" title="<?php p($poll->getOwner())?>"></div>
+						<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
 					</div>
-					<div id="app-navigation-simulation">
-						<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
-						<ul class="with-icons">
-							<li>
-								<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
-									<?php p($l->t('Copy Link')); ?>
-								</a>
-							</li>
 
-					<?php if ($poll->getOwner() === $userId) : ?>
-							<li class="">
-								<a id="id_del_<?php p($poll->getId()); ?>" class="icon-delete svg delete-poll"  data-value="<?php p($poll->getTitle()); ?>" href="#">
-									<?php p($l->t('Delete poll')); ?>
-								</a>
-							</li>
-							<li>
-								<a id="id_edit_<?php p($poll->getId()); ?>" class="icon-rename svg" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
-									<?php p($l->t('Edit Poll')); ?>
-								</a>
-							</li>
-					<?php endif; ?>
-						</ul>
+					<div class="cloud">
+						<?php 
+						if ($expired) {
+							print_unescaped('<span class="expired">' . $l->t('Expired'). '</span>');
+						} else {
+							if ($poll->getExpire() !== null){
+								print_unescaped('<span class="open">' . $l->t('Expires on %s', array(date('d.m.Y', strtotime($poll->getExpire())))) . '</span>');
+							} else {
+								print_unescaped('<span class="open">' . $l->t('Expires never') . '</span>');
+							}
+						}
+						
+						if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
+							print_unescaped('<span class="information">' . $access . '</span>');
+						} else {
+							print_unescaped('<span class="information">' . $l->t('Invitation access') . '</span>');
+						}
+						if ($isAnonymous) {
+							print_unescaped('<span class="information">' . $l->t('Anononymous poll') . '</span>');
+							if ($hideNames) {
+								print_unescaped('<span class="information">' . $l->t('Usernames hidden to Owner') . '</span>');
+							} else {
+								print_unescaped('<span class="information">' . $l->t('Usernames visible to Owner') . '</span>');
+							}
+						}
+						?>
 					</div>
+
+				</div>
+				<div class="pollActions column">
+					<ul class="with-icons">
+						<li>
+							<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
+								<?php p($l->t('Copy Link')); ?>
+							</a>
+						</li>
+
+				<?php if ($poll->getOwner() === $userId) : ?>
+						<li class="">
+							<a id="id_del_<?php p($poll->getId()); ?>" class="icon-delete svg delete-poll"  data-value="<?php p($poll->getTitle()); ?>" href="#">
+								<?php p($l->t('Delete poll')); ?>
+							</a>
+						</li>
+						<li>
+							<a id="id_edit_<?php p($poll->getId()); ?>" class="icon-rename svg" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
+								<?php p($l->t('Edit Poll')); ?>
+							</a>
+						</li>
+				<?php endif; ?>
+					</ul>
 				</div>
 			</div>
+
 
 			<?php if ($expired) : ?>
 				<div id="expired_info">

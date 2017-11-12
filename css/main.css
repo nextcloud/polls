@@ -32,14 +32,6 @@ h1 {
 .table {
   position: relative; }
 
-#app-sidebar {
-  flex-direction: column; }
-  #app-sidebar .share, #app-sidebar h2 {
-    padding: 15px; }
-  #app-sidebar .close {
-    padding: 15px;
-    align-self: right; }
-
 .col-100 {
   width: 100%;
   padding: 0px 15px; }
