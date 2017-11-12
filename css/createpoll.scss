@@ -1,90 +1,41 @@
-.user-group-list {
-	display: none;
-	border: 1px solid #DDD;
-	margin: 15px;
-	padding: 5px;
-	border-radius: 3px;
-	max-height: 150px;
-	overflow-y: auto;
-}
+#app-navigation-simulation {
+  height: 100%;
+  float: left;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  margin-right: 15px; }
 
-#sec_name {
-	display: none;
-}
+#app-navigation-simulation > ul > li:focus, #app-navigation-simulation > ul > li:hover, #app-navigation-simulation > ul > li.active, #app-navigation-simulation > ul > li a.selected, #app-navigation-simulation > ul > li:focus > a, #app-navigation-simulation > ul > li:hover > a, #app-navigation-simulation > ul > li.active > a, #app-navigation-simulation > ul > li a.selected > a {
+  opacity: 1;
+  box-shadow: inset 2px 0 #0082c9; }
 
-.cl_access_item {
-	padding: 5px;
-	background-color: white;
-	color: #333;
-	cursor: pointer;
-}
+#app-navigation-simulation > ul > li > a[class*="icon-"], #app-navigation-simulation > ul > li > ul > li > a[class*="icon-"], #app-navigation-simulation > ul > li > a[style*="background-image"], #app-navigation-simulation > ul > li > ul > li > a[style*="background-image"] {
+  padding-left: 44px; }
 
-.cl_access_item:hover {
-	background-color: #EEE;
-}
+#app-navigation-simulation > ul > li > a, #app-navigation-simulation > ul > li > ul > li > a {
+  background-size: 16px 16px;
+  background-position: 14px center;
+  background-repeat: no-repeat;
+  display: block;
+  justify-content: space-between;
+  line-height: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #000;
+  opacity: 0.57;
+  flex: 1 1 0;
+  z-index: 100; }
 
-.cl_access_item.selected {
-	background-color: #409AE7;
-	color: #FFF;
-}
+#app-navigation-simulation > ul > li > a, #app-navigation-simulation > ul > li > .app-navigation-entry-deleted {
+  padding-left: 44px !important; }
 
-.cl_access_item.selected:hover {
-	background-color: #FF6F6F;
-	color: #FFF;
-	text-decoration: line-through;
-}
+#app-navigation-simulation * {
+  box-sizing: border-box; }
 
-textarea {
-	min-height: 66px;
-}
-
-.choices {
-	margin-top: 10px;
-}
-
-.choices td {
-	min-width: 30px;
-}
-
-table td {
-	text-align: center;
-}
-
-.text-row, .date-row {
-	font-weight: bold;
-	padding: 2px 5px;
-	background-color: #337AB7;
-	color: #FFF;
-	text-align: left;
-}
-
-.text-row:hover, .date-row:hover {
-	background-color: #ff6f6f;
-	text-decoration: line-through;
-}
-	
-#selected-dates-table tr:first-child td {
-	font-weight: bold;
-	padding: 2px 5px;
-	background-color: #337AB7;
-	color: #FFF;
-	
-}
-
-table .icon-close {
-	cursor: pointer;
-	background-color: #ffede9; /*red*/
-	padding: 0 5px;
-	background-image: url('../img/no-vote.svg');
-}
-
-table .icon-checkmark {
-	cursor: pointer;
-	background-color: #ebf5d6; /*green*/
-	padding: 0 5px;
-	background-image: url('../img/yes-vote.svg');
-}
-
-#expiration {
-	max-width: 200px;
-}
+/*# sourceMappingURL=createpoll.scss.map */
