@@ -132,14 +132,14 @@ $(document).ready(function () {
 			}
 		}
 		var comment = document.getElementById('commentBox');
-		if(comment.value.trim().length <= 0) {
+		if(comment.textContent.trim().length <= 0) {
 			alert(t('polls', 'Please add some text to your comment before submitting it.'));
 			return;
 		}
 		var data = {
 			pollId: form.elements.pollId.value,
 			userId: form.elements.userId.value,
-			commentBox: comment.value.trim()
+			commentBox: comment.textContent.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function(data) {
@@ -159,7 +159,7 @@ $(document).ready(function () {
 				$('#no-comments').addClass('hidden');
 			}
 
-			$('.new-comment textarea').val('').focus();
+			$('.new-comment .message').text('').focus();
 			$('.new-comment .icon-loading-small').hide();
 			
 			$('.avatar.missing').each(function (i, obj) {

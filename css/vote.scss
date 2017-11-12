@@ -258,81 +258,80 @@ div.crumb {
 	margin-bottom: 15px;
 }
 
-.comment {
-	margin-bottom: 30px;
+#commentsTabView {
+	.authorRow {
+		position: relative;
+	}
+	.comment {
+		margin-bottom: 30px;
 
-	&.new-comment {
-		border: none;
+		&.new-comment {
+			border: none;
+		}
+		
+		.comment-header {
+			background-color: #EEE;
+			border-bottom: 1px solid #DDD;
+			border-radius: 3px 3px 0 0;
+		}
+		
+		.comment-date {
+			float: right;
+			color: #555;
+		}
+
+		.date {
+			position: absolute;
+			right: 0;
+			top: 5px;
+			opacity: .5;
+		}
 	}
 	
-	.comment-header {
-		background-color: #EEE;
-		border-bottom: 1px solid #DDD;
-		border-radius: 3px 3px 0 0;
-	}
-	
-	.comment-date {
-		float: right;
-		color: #555;
-	}
-	
-}
-
-.newCommentForm {
-	position: relative;
-	margin-bottom: 20px;
-}
-
-.author {
-	margin-left: 5px;
-	opacity: .5;
-}
-#commentsTabView .comment .date {
-	position: absolute;
-	right: 0;
-	top: 5px;
-	opacity: .5;
-}
-
-#commentsTabView .comments li .message {
-	padding-left: 40px;
-}
-
-.authorRow {
-	position: relative;
-}
-.authorRow > div {
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.new-comment {
-	.submit {
-		position: absolute;
-		bottom: 0px;
-		right: 8px;
-		width: 30px;
-		margin: 0;
-		padding: 7px 9px;
-		background-color: transparent;
-		border: none;
-		opacity: .3;
-	}
-
-	.icon-loading-small {
-		float: left;
-		margin-top: 10px;
-		display: none;
-	}
-	
-	textarea {
-		width: calc(100% - 81px);
-		display: block;
-		min-height: 66px;
+	.message {
 		margin-left: 40px;
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+
+	.author {
+		margin-left: 8px;
+		opacity: .5;
+		&.external {
+			flex-grow: 1;
+			margin-right: 33px;
+		}
+	}
+
+	.newCommentForm {
+		margin-bottom: 20px;
+	}
+
+	.new-comment {
+		.submitComment {
+			bottom: 0px;
+			right: 8px;
+			width: 30px;
+			margin: 0;
+			padding: 7px 9px;
+			background-color: transparent;
+			border: none;
+			opacity: .3;
+		}
+
+		.icon-loading-small {
+			float: left;
+			margin-top: 10px;
+			display: none;
+		}
+		
+		textarea {
+			width: calc(100% - 81px);
+			display: block;
+			margin-left: 40px;
+		}
 	}
 }
-
 
 @media all and (max-width: (768px) ) {
 	#app-content {
@@ -341,39 +340,10 @@ div.crumb {
 }
 @media all and (max-width: (480px) ) {
 
-	.table { 
-		display: flex;
-		margin-right: 8px;
-		padding-bottom: 75px;
-	}
-	.submit {
-		border-top: $border_user;
-		box-shadow: 0px 0px 9px 2px rgba(153,153,153,1);
-		flex-wrap: wrap;
-		align-items: center;
-		position: fixed;
-		background-color: #fff;
-		bottom: 0;
-		width: 100%;
-		.finish_vote {
-			padding: 8px 8px;
-		}
-		.notification {
-			display: flex;
-			padding: 8px 8px;
-			line-height: 2em;
-		}
-	}
-	
-	.first {
-		height: 44px;
-		width: unset;
-	}
-	
 	.row {
 		flex-direction: column;
 
-		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submit  {
+		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm {
 			flex-direction: row;
 		}
 
@@ -463,7 +433,35 @@ div.crumb {
 		}
 	}
 
-
+	.table { 
+		display: flex;
+		margin-right: 8px;
+		padding-bottom: 75px;
+	}
+	
+	.submitPoll {
+		border-top: $border_user;
+		box-shadow: 0px 0px 9px 2px rgba(153,153,153,1);
+		flex-wrap: wrap;
+		align-items: center;
+		position: fixed;
+		background-color: #fff;
+		bottom: 0;
+		width: 100%;
+		.finish_vote {
+			padding: 8px 8px;
+		}
+		.notification {
+			display: flex;
+			padding: 8px 8px;
+			line-height: 2em;
+		}
+	}
+	
+	.first {
+		height: 44px;
+		width: unset;
+	}
 
 	#options.row {
 		flex-direction: column;

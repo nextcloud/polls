@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	/**
 	 * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
 	 *
@@ -319,7 +319,7 @@
 					?>
 				</ul>
 			</div>
-			<div class="submit row">
+			<div class="submitPoll row">
 				<div>
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
 						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -400,16 +400,16 @@
 							</div>
 						</div>
 					<?php endif; ?>
-						<form class="newCommentForm" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
+						<form class="newCommentForm row" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
 							<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 							<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-							<textarea id="commentBox" name="commentBox"></textarea>
-							<input id="submit_send_comment" class="submit icon-confirm" value="" type="submit">
+							<div id="commentBox" name="commentBox" class="message" placeholder="<?php p($l->t('New comment …'))?>" contenteditable="true"></div>
+							<input id="submit_send_comment" class="submitComment icon-confirm" value="" type="submit">
 							<span class="icon-loading-small" style="float:right;"></span>
 						</form>
 					</div>
 			
-					<ul class="comments">
+					<ul class="comments column">
 
 					<?php if ($comments == null) : ?>
 						<li id="no-comments" class="emptycontent">
