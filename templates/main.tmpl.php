@@ -116,17 +116,19 @@
 							$owner = $l->t('Yourself');
 						}
 
+						$timestamp_style = '';
+						$expiry_style = ' endless';
+						$expiry_date = $l->t('Never');
+
 						if ($poll->getExpire() !== null) {
 							// $expiry_date = date('d.m.Y', strtotime($poll->getExpire()));
 							$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
-							$expiry_style = ' progress live-relative-timestamp';
+							$expiry_style = ' progress';
+							$timestamp_style = ' live-relative-timestamp';
 							if (date('U') > strtotime($poll->getExpire())) {
 								$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire()));
-								$expiry_style = ' expired live-relative-timestamp';
+								$expiry_style = ' expired';
 							}
-						} else {
-							$expiry_style = ' endless';
-							$expiry_date = $l->t('Never');
 						}
 
 						for ($i = 0; $i < count($participated); $i++) {
@@ -196,7 +198,7 @@
 									<div class="column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated())*1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
 								</div>
 								<div class="wrapper group-2-2">
-									<div class="column has-tooltip expiry<?php p($expiry_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire())*1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
+									<div class="column has-tooltip expiry<?php p($expiry_style . $timestamp_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire())*1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
 									<div class="column participants">
 										<div class="symbol alt-tooltip partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
 										<div class="symbol alt-tooltip partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>

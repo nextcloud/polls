@@ -410,8 +410,18 @@
 					</div>
 			
 					<ul class="comments">
-					<?php if ($comments !== null) : ?>
-						<?php foreach ($comments as $comment) : ?>
+
+					<?php if ($comments == null) : ?>
+						<li id="no-comments" class="emptycontent">
+					<?php else : ?>
+						<li id="no-comments" class="emptycontent hidden">
+					<?php endif; ?>
+
+							<div class="icon-comment"></div>
+							<p><?php p($l->t('No comments yet. Be the first.')); ?></p>
+						</li>
+						
+					<?php foreach ($comments as $comment) : ?>
 
 						<?php
 							if ( $comment->getUserId() === $userId ) {
@@ -440,19 +450,16 @@
 							}
 						?>
 
-							<li id="comment_<?php p($comment->getId()); ?>" class="comment column">
-								<div class="authorRow user-cell row">
-									<div class="avatar avatardiv" title="<?php p($avatarName)?>"></div>
-									<div class="author"><?php p($displayName) ?></div>
-									<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
-								</div>
-								<div class="message wordwrap comment-content"><?php p($comment->getComment()); ?></div>
-							</li>
-						<?php endforeach; ?>
+						<li id="comment_<?php p($comment->getId()); ?>" class="comment column">
+							<div class="authorRow user-cell row">
+								<div class="avatar avatardiv" title="<?php p($avatarName)?>"></div>
+								<div class="author"><?php p($displayName) ?></div>
+								<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
+							</div>
+							<div class="message wordwrap comment-content"><?php p($comment->getComment()); ?></div>
+						</li>
+					<?php endforeach; ?>
 					</ul>
-					<?php else : ?>
-						<?php p($l->t('No comments yet. Be the first.')); ?>
-					<?php endif; ?>
 				</div>
 				</div>
 			</div>

@@ -153,7 +153,12 @@ $(document).ready(function () {
 								'</li>';
 
 
-			$('.comments .comment:first').before(newCommentElement);
+			$('#no-comments').after(newCommentElement);
+
+			if (!$('#no-comments').hasClass('hidden')) {
+				$('#no-comments').addClass('hidden');
+			}
+
 			$('.new-comment textarea').val('').focus();
 			$('.new-comment .icon-loading-small').hide();
 			
