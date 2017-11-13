@@ -4,232 +4,260 @@ $bg_unvoted: #fff4c8;
 $bg_yes: #ebf5d6;
 
 $fg_no: #f45573;
-$fg_maybe: #fff3cd;
-$fg_unvoted: #fff3cd;
+$fg_maybe: #f0db98;
+$fg_unvoted: #f0db98;
 $fg_yes: #49bc49;
 
 
 $bg_current_user: #f7f7f7;
 $fg_current_user: #0082c9;
 $border_current_user: 2px solid;
+$border_user: 1px solid #ddd;
+$user-column-width: 265px;
 
-.vote_table {
-	/* border-spacing: 1px 1px; */
-	white-space: normal;
-	width: 100%;
 
-	thead {
-		white-space: normal;
+.row {
+	display: flex;
+	flex-direction: row;
+	flex-grow: 1;
+	align-items: center;
 
-		.time-slot, .vote-option {
-			min-width: 50px;
-			text-align: center;
-			
-			.month, .dayow {
-				font-size: 1.2em;
-				color: #666;
-			}
+}
 
-			.day {
-				font-size: 1.8em;
-				margin: 5px 0 5px 0;
-			}
+.column {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 0;
+	flex-shrink: 0;
+	
+}
+
+#votings {
+	position: relative !important;
+	.description {
+		padding: 12px 17px;
+	}
+}
+
+#controls {
+	flex-grow: 0;
+}
+	
+#breadcrump {
+	flex-grow: 0;
+	overflow: hidden;
+}
+
+div.crumb {
+	overflow: hidden;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+
+
+.header {
+	margin-left: $user-column-width;
+	align-items: initial;
+	.vote.option {
+		.date-box {
+			flex-grow: 1;
 		}
-	}
-
-	td.avatar-cell {
-		width: 40px;
-	}
-	
-	td.name {
-		max-width: 170px;
-		min-width: 80px;
-	}
-
-	.total th, .best th{
-		text-align: right;
-	}
-	
-	.total td, .best td{
-		text-align: center;
-	}
-	
-	.cl_click div, td.cl_click {
-		cursor: pointer;
-	}
 
 
-	.poll-cell, .toggle {
-		div {
-			background-repeat: no-repeat;
-			background-position: center;
-			transition: background-color 0.2s;
-			background-size: 32px;
+		.counter {
+			flex-grow: 0;
 			height: 32px;
-			width: 32px;
-			margin-left: auto;
-			margin-right: auto;
+		}	
+	}
+}
+
+.user {
+	border-top: $border_user;
+	height: 44px;
+	padding: 0 17px;
+}
+
+.header {
+	padding: 0 17px;
+}
+
+.first {
+	flex-grow: 0;
+	flex-shrink: 0;
+	width: $user-column-width;
+}
+
+.vote, .poll-cell {
+	flex-grow: 1;
+	width: 85px;
+	margin: 2px;
+	align-items:center;
+}
+
+.date-box {
+	padding: 0 2px;
+	align-items: center;
+	.month, .dayow {
+		font-size: 1.2em;
+		color: #666;
+	}
+
+	.day {
+		font-size: 1.8em;
+		margin: 5px 0 5px 0;
+	}
+}
+
+.winner {
+	font-style: italic;
+	font-weight: bold;
+	color: $fg_yes;
+}
+
+.counter {
+	font-size: 18px;
+	.yes, .no {
+		margin: 0 2px;
+		.svg {
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: 24px;
+			height: 24px;
+			width: 24px;
 		}
-		
-		&.yes div {
+	}
+	.yes {
+		color: $fg_yes;
+		.svg {
 			background-image: url('../img/yes-vote.svg');
 		}
-
-		&.maybe div {
-			background-image: url('../img/maybe-vote.svg');
-		}
-
-		&.no div {
+	}			
+	.no {
+		color: $fg_no;
+		.svg {
 			background-image: url('../img/no-vote.svg');
 		}
-		
-	}
+	}			
+}
 
-	.toggle div {
-		width: 24px;
-		height: 24px;
-		background-size: 24px;
-	   }
 
-	#toggle {
-		float: left;
+.avatar-cell {
+	width: 40px;
+}
+
+.name {
+	width: 180px;
+}
+
+.poll-cell {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 32px;
+	height: 44px;
+
+	&.active {
 		cursor: pointer;
-	}
-	.poll-cell, .toggle {
-		border-right: 2px solid white;
-	}
-
-
-	td.toggle-all.toggle {
-		cursor: pointer;
-		min-width: 50px;
-		&.yes div {
-			background-image: url('../img/yes-toggle.svg');
-		}
-
-		&.maybe div {
-			background-image: url('../img/maybe-toggle.svg');
-		}
-
-		&.no div {
-			background-image: url('../img/no-toggle.svg');
-		}
-		
-		img {
-		float: right;
-		padding-top: 4px;
-		cursor: pointer;
-		display: none;
-		}
+		border: 2px solid;
+		border-radius: 4px;
+		box-sizing: border-box;
 	}
 
-	.current-user {
-			
-		td {
-			border-top: $border_current_user $fg_current_user;
-			border-bottom: $border_current_user $fg_current_user;
-			background-color: $bg_current_user;
-
-			&:first-child {
-				border-left: $border_current_user $fg_current_user;
-				border-top-left-radius: 4px;
-				border-bottom-left-radius: 4px;
-			}
-			&:last-child {
-				border-right: $border_current_user $fg_current_user;
-				border-top-right-radius: 4px;
-				border-bottom-right-radius: 4px;
-			}
-
-		}
-
-		.name {
-			font-weight: bold;
-		}
-		
+	&.yes {
+		background-color: $bg_yes;
+		color: $fg_yes;
+		background-image: url('../img/yes-vote.svg');
 	}
 
-	.poll-cell, .toggle, .result-cell {
-		
-		div {
-			background-color: transparent;
-		}
-		&.unvoted {
-			background-color: $bg_unvoted;
-			color: $fg_unvoted;
-			div {
-				color: $fg_unvoted;
-			}
-		}
-
-		&.yes {
-			background-color: $bg_yes;
-			color: $fg_yes;
-			div {
-				color: $fg_yes;
-			}
-		}
-		&.no {
-			background-color: $bg_no;
-			color: $fg_no;
-			div {
-				color: $fg_no;
-			}
-		}
-		&.maybe {
-			background-color: $bg_maybe;
-			color: $fg_maybe;
-			div {
-				color: $fg_maybe;
-			}
-		}
+	&.no {
+		background-color: $bg_no;
+		color: $fg_no;
+		background-image: url('../img/no-vote.svg');
 	}
-	td.total {
-		padding: 2px 0 1px;
+
+	&.maybe {
+		background-color: $bg_maybe;
+		color: $fg_maybe;
+		background-image: url('../img/maybe-vote.svg');
+	}
+
+	&.unvoted {
+		background-color: $bg_unvoted;
+		color: $fg_unvoted;
+		background-color: $bg_unvoted;
 	}
 
 }
 
-th, tr, td {
-	padding: 4px;
-	/* text-align: center; */
+.toggle-cell {
+	height: 28px;
+	height: 32px;
+	width: 32px;
+	flex-grow: 0;
+	cursor: pointer;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 28px;
+
+	&.yes {
+		background-color: $bg_yes;
+		background-image: url('../img/yes-toggle.svg');
+	}
+
+	&.no {
+		background-color: $bg_no;
+		background-image: url('../img/no-toggle.svg');
+	}
+
+	&.maybe {
+		background-color: $bg_maybe;
+		background-image: url('../img/maybe-toggle.svg');
+	}
+
 }
 
-.votes {
-		th, tr, td {
-		/* text-align: left; */
-		border-top: 1px solid #ddd;
+
+.current-user {
+	background-color: #e6f1f8;
+}
+
+#switchDetails {
+	margin-right: 6px;
+}
+
+.badge {
+	position: relative;
+	top: -34px;
+	right: -24px;
+	background-image: url('../../../apps/polls/css/../img/yes-comment.svg');
+	background-repeat: no-repeat;
+	background-size: 33px;
+	padding: 10px;
+	margin: -10px;
+	background-position-y: 9px;
+	background-position-x: -3px;
+	text-shadow: 1px 1px #666;
+	color: #fff;
+	&.no-comments {
+		background-image: url('../../../apps/polls/css/../img/no-comment.svg');
 	}
 }
-
-
 
 .external {
 	min-width: 150px;
-	th {
+	.th {
 		padding-left: 40px;
 		
 		input {
 			min-width: 100px;
 		}
 	}
-	
 }
 
 .finish_vote {
-	display: contents;
+	padding: 10px 17px;
 }
 
-.share {
-	margin: 10px 0;
-	
-	.input-group-addon{
-		background-image: url('../img/share.svg');
-		background-repeat: no-repeat;
-		background-position: 10px center;
-		padding-left: 35px;
-	}
-}
 
 #poll-desc, #comments-container, #poll-dates {
 	margin-bottom: 15px;
@@ -248,25 +276,20 @@ th, tr, td {
 		background-color: #EEE;
 		border-bottom: 1px solid #DDD;
 		border-radius: 3px 3px 0 0;
-		padding: 2px 5px;
 	}
 	
 	.comment-date {
 		float: right;
 		color: #555;
 	}
-		
-	.comment-content {
-		padding: 5px;
-	}
+	
 }
 
 .new-comment {
-	
 	.icon-loading-small {
-	float: left;
-	margin-top: 10px;
-	display: none;
+		float: left;
+		margin-top: 10px;
+		display: none;
 	}
 	
 	.comment-content textarea {
@@ -277,9 +300,147 @@ th, tr, td {
 	}
 }
 
-#controls h2 {
-	margin-top: 12px;
+
+@media all and (max-width: (768px) ) {
+	#app-content {
+		position: relative !important;
+	}
 }
+@media all and (max-width: (480px) ) {
+
+	.table { 
+		display: flex;
+		margin-right: 8px;
+		padding-bottom: 75px;
+	}
+	.submit {
+		border-top: $border_user;
+		box-shadow: 0px 0px 9px 2px rgba(153,153,153,1);
+		flex-wrap: wrap;
+		align-items: center;
+		position: fixed;
+		background-color: #fff;
+		bottom: 0;
+		width: 100%;
+		.finish_vote {
+			padding: 8px 8px;
+		}
+		.notification {
+			display: flex;
+			padding: 8px 8px;
+			line-height: 2em;
+		}
+	}
+	
+	.first {
+		height: 44px;
+		width: unset;
+	}
+	
+	.row {
+		flex-direction: column;
+
+		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submit  {
+			flex-direction: row;
+		}
+
+		&.header {
+			flex-grow: 1;
+			margin-left: 0;
+			margin-top: 44px;
+			width:120px;
+			padding: 0 0 0 4px;
+			.vote {
+				padding-right: 10px;
+				&.option {
+					align-items: baseline;
+					width: 100%;
+					border-top: $border_user;
+				}
+				&.time {
+					align-items: center;
+					width: 100%;
+					border-top: $border_user;
+					.counter {
+						flex-direction: column;
+						align-items: right;
+					}
+				}
+			}
+		}
+		
+		&.user {
+			display: none;
+		}
+
+		&.current-user {
+			display: flex;
+			width: 44px;
+			padding:0;
+			border: none;
+			background-color: transparent;
+
+			.poll-cell {
+				border:none;
+				border-radius: 0;
+				border-top: 1px solid #ddd;
+				background-color: transparent;
+				padding: 0 2px;
+				&.active {
+					&.yes {
+						background-image: url('../img/yes-vote-bordered.svg');
+					}
+
+					&.no {
+						background-image: url('../img/no-vote-bordered.svg');
+					}
+
+					&.maybe {
+						background-image: url('../img/maybe-vote-bordered.svg');
+					}
+					&.unvoted {
+						background-image: url('../img/unvoted-vote-bordered.svg');
+					}
+				}
+			}
+			.user-cell {
+				position: absolute;
+				left: 22px;
+			}
+			.poll-cell, .toggle-cell  {
+				width: 44px;
+				height: 44px;
+				background-color: transparent;
+			}
+		}
+
+	}
+	
+	.column {
+		&.table-body {
+			flex-grow: 0;
+		}
+
+		&.poll-cell, &.table {
+			flex-direction: row;
+			align-items: center;
+		}
+		&.vote.time {
+			flex-direction: row;
+		}
+	}
 
 
 
+	#options.row {
+		flex-direction: column;
+		width: 100%;
+	}
+ }
+
+ @media all and (max-width: (320px) ) {
+
+	.table { 
+		padding-bottom: 105px;
+	}
+}

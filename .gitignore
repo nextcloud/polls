@@ -1,3 +1,8 @@
-/.project
+build/
+vendor/
+.project/
 .idea/
+*.lock
 *.iml
+.DS_Store
+Thumbs.db

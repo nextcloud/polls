@@ -48,9 +48,11 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param $hash
+	 * @param string $hash
 	 * @param int $limit
 	 * @param int $offset
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
 	 */
 	public function findByHash($hash, $limit = null, $offset = null) {
@@ -59,7 +61,7 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param $userId
+	 * @param string $userId
 	 * @param int $limit
 	 * @param int $offset
 	 * @return Event[]

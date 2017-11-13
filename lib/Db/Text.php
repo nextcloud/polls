@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,15 +24,20 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Entity;
-
 /**
  * @method string getText()
  * @method void setText(string $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Text extends Entity {
-	public $text;
-	public $pollId;
+class Text extends Model {
+	protected $text;
+	protected $pollId;
+
+	/**
+	 * Text constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+	}
 }
