@@ -97,7 +97,7 @@
 ?>
 
 <div id="app">
-	<div id="app-content" class="column <?php p($statusClass . ' ' . $pollTypeClass); ?>">
+	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass); ?>">
 		<div id="controls" class="controls row">
 			<div id="breadcrump" class="breadcrump row">
 				<?php if (User::isLoggedIn()) : ?>
@@ -441,7 +441,7 @@
 						<form class="newCommentForm row" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
 							<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 							<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-							<div id="commentBox" name="commentBox" class="message" placeholder="<?php p($l->t('New comment …'))?>" contenteditable="true"></div>
+							<div id="commentBox" name="commentBox" class="message" data-placeholder="<?php p($l->t('New comment …'))?>" contenteditable="true"></div>
 							<input id="submit_send_comment" class="submitComment icon-confirm" value="" type="submit">
 							<span class="icon-loading-small" style="float:right;"></span>
 						</form>

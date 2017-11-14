@@ -203,20 +203,22 @@ div.crumb {
   padding-right: 15px; }
   .pollInformation .authorRow .leftLabel {
     margin-right: 4px; }
-  .pollInformation .cloud > span {
-    color: #fff;
-    margin: 2px;
-    padding: 2px 4px;
-    border-radius: 3px;
-    float: left;
-    text-shadow: 1px 1px #666;
-    background-color: #aaa; }
-  .pollInformation .cloud .open {
-    background-color: #49bc49; }
-  .pollInformation .cloud .expired {
-    background-color: #f45573; }
-  .pollInformation .cloud .information {
-    background-color: #b19c3e; }
+  .pollInformation .cloud {
+    margin: 4px0; }
+    .pollInformation .cloud > span {
+      color: #fff;
+      margin: 2px;
+      padding: 2px 4px;
+      border-radius: 3px;
+      float: left;
+      text-shadow: 1px 1px #666;
+      background-color: #aaa; }
+    .pollInformation .cloud .open {
+      background-color: #49bc49; }
+    .pollInformation .cloud .expired {
+      background-color: #f45573; }
+    .pollInformation .cloud .information {
+      background-color: #b19c3e; }
 
 .pollActions {
   display: flex;
@@ -256,6 +258,9 @@ div.crumb {
   .pollActions > ul > li .app-navigation-entry-deleted {
     padding-left: 44px !important; }
 
+#commentsTabView .newCommentForm div.message:empty:before {
+  content: attr(data-placeholder);
+  color: grey; }
 #commentsTabView .comment {
   margin-bottom: 30px; }
   #commentsTabView .comment .comment-header {
@@ -270,7 +275,7 @@ div.crumb {
     right: 0;
     top: 5px;
     opacity: .5; }
-#commentsTabView .message {
+#commentsTabView .message, #commentsTabView textarea {
   margin-left: 40px;
   flex-grow: 1;
   flex-shrink: 1; }
@@ -383,5 +388,3 @@ div.crumb {
 @media all and (max-width: 320px) {
   .table {
     padding-bottom: 105px; } }
-
-/*# sourceMappingURL=vote.css.map */

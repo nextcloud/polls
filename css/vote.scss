@@ -35,7 +35,6 @@ $user-column-width: 265px;
 	flex-shrink: 0;
 	
 }
-
 #votings {
 	position: relative !important;
 	.description {
@@ -303,6 +302,8 @@ div.crumb {
 	}
 
 	.cloud {
+		margin: 4px0;
+		
 		> span {
 			color: #fff;
 			margin: 2px;
@@ -377,9 +378,13 @@ div.crumb {
 	}
 }
 
-
-
 #commentsTabView {
+
+	.newCommentForm div.message:empty:before {
+		content: attr(data-placeholder);
+		color: grey;
+	}
+
 	.comment {
 		margin-bottom: 30px;
 
@@ -402,7 +407,7 @@ div.crumb {
 		}
 	}
 	
-	.message {
+	.message, textarea {
 		margin-left: 40px;
 		flex-grow: 1;
 		flex-shrink: 1;

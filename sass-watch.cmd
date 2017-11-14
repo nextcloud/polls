@@ -1,1 +1,1 @@
-sass --watch ./css 
+sass --watch --sourcemap=none ./css 
