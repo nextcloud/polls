@@ -204,7 +204,7 @@ div.crumb {
   .pollInformation .authorRow .leftLabel {
     margin-right: 4px; }
   .pollInformation .cloud {
-    margin: 4px0; }
+    margin: 4px 0; }
     .pollInformation .cloud > span {
       color: #fff;
       margin: 2px;
