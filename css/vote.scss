@@ -384,7 +384,12 @@ div.crumb {
 		content: attr(data-placeholder);
 		color: grey;
 	}
-
+	#commentBox {
+		border: 1px solid #dbdbdb;
+		border-radius: 3px;
+		padding: 7px 6px;
+		margin: 3px 3px 3px 40px;
+	}
 	.comment {
 		margin-bottom: 30px;
 
@@ -407,7 +412,7 @@ div.crumb {
 		}
 	}
 	
-	.message, textarea {
+	.message {
 		margin-left: 40px;
 		flex-grow: 1;
 		flex-shrink: 1;
