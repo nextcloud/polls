@@ -49,7 +49,7 @@
 	$comments = $_['comments'];
 	/** @var \OCA\Polls\Db\Notification $notification */
 	$notification = $_['notification'];
-	
+
 	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
 	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
 	$access = $poll->getAccess();
@@ -58,7 +58,7 @@
 	} else {
 		$expired = time() > strtotime($poll->getExpire());
 	}
-	
+
 	if ($expired) {
 		$statusClass = 'expired-vote';
 	} else {
@@ -137,7 +137,7 @@
 						foreach ($dates as $dateElement) {
 							if ($poll->getType() === 0) {
 								$timestamp = strtotime($dateElement->getDt());
-								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="column vote time" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
+								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
 
 								print_unescaped('	<div class="date-box column">');
 								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp))  . '</div>');
@@ -208,7 +208,7 @@
 							<li class="row user">
 								<div class="first">
 									<div class="user-cell row">
-										<div class="avatar" title="<?php p($avatarName)?>"></div>
+										<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
 										<div class="name"><?php p($displayName) ?></div>
 										</div>
 									</div>
@@ -263,16 +263,16 @@
 						print_unescaped('	<div class="row first">');
 						print_unescaped('		<div class="user-cell row">');
 						if (User::isLoggedIn()) {
-							print_unescaped('		<div class="avatar" title="'.($userId).'"></div>');
+							print_unescaped('		<div class="avatar has-tooltip" title="'.($userId).'"></div>');
 							print_unescaped('		<div class="name">');
 							p($userMgr->get($userId)->getDisplayName());
 						} else {
-							print_unescaped('		<div class="avatar" title="?"></div>');
+							print_unescaped('		<div class="avatar has-tooltip" title="?"></div>');
 							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
-						print_unescaped('	<div id="toggle-cell" class="toggle-cell maybe" title="'. $toggleTooltip .'">');
+						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="'. $toggleTooltip .'">');
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
@@ -339,7 +339,7 @@
 			<?php endif; ?>
 			</div>
 		</div>
-					
+
 		<div id="app-sidebar" class="detailsView scroll-container disappear">
 			<div class="close row">
 				<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
@@ -349,12 +349,12 @@
 				<div class="pollInformation column">
 					<div class="authorRow user-cell row">
 						<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
-						<div class="avatar" title="<?php p($poll->getOwner())?>"></div>
+						<div class="avatar has-tooltip" title="<?php p($poll->getOwner())?>"></div>
 						<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
 					</div>
 
 					<div class="cloud">
-						<?php 
+						<?php
 						if ($expired) {
 							print_unescaped('<span class="expired">' . $l->t('Expired'). '</span>');
 						} else {
@@ -364,7 +364,7 @@
 								print_unescaped('<span class="open">' . $l->t('Expires never') . '</span>');
 							}
 						}
-						
+
 						if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
 							print_unescaped('<span class="information">' . $access . '</span>');
 						} else {
@@ -415,7 +415,7 @@
 					</p>
 				</div>
 			<?php endif; ?>
-			<ul class="tabHeaders">			
+			<ul class="tabHeaders">
 				<li class="tabHeader selected" data-tabid="commentsTabView" data-tabindex="0">
 					<a href="#"><?php p($l->t('Comments')); ?></a>
 				</li>
@@ -425,14 +425,14 @@
 					<div class="newCommentRow comment new-comment">
 					<?php if (User::isLoggedIn()) : ?>
 						<div class="authorRow user-cell row">
-							<div class="avatar" title="<?php p($userId)?>"></div>
+							<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
 							<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
 						</div>
-						
+
 					<?php else: ?>
 						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
 						<div class="authorRow user-cell row">
-							<div class="avatar" title="?"></div>
+							<div class="avatar has-tooltip" title="?"></div>
 							<div id="id_ac_detected" class="author  column external">
 								<input type="text" name="user_name_comm" id="user_name_comm" placeholder="<?php p($l->t('Your name here')); ?>" />
 							</div>
@@ -446,7 +446,7 @@
 							<span class="icon-loading-small" style="float:right;"></span>
 						</form>
 					</div>
-			
+
 					<ul class="comments column">
 
 					<?php if ($comments == null) : ?>
@@ -458,18 +458,18 @@
 							<div class="icon-comment"></div>
 							<p><?php p($l->t('No comments yet. Be the first.')); ?></p>
 						</li>
-						
+
 					<?php foreach ($comments as $comment) : ?>
 
 						<?php
 							if ( $comment->getUserId() === $userId ) {
-								// Comment is from current user 
+								// Comment is from current user
 								// -> display user
 								$avatarName = $userId;
 								$displayName = $userMgr->get($userId)->getDisplayName();
-							
+
 							} else if ( !$isAnonymous && !$hideNames ) {
-								// comment is from another user, 
+								// comment is from another user,
 								// poll is not anoymous (for current user)
 								// users are not hidden
 								// -> display user
@@ -481,7 +481,7 @@
 							} else {
 								// in all other cases
 								// -> make user anonymous
-								// poll is anonymous and current user is not owner 
+								// poll is anonymous and current user is not owner
 								// or names are hidden
 								$displayName = 'Anonymous';
 								$avatarName = $displayName;
@@ -490,7 +490,7 @@
 
 						<li id="comment_<?php p($comment->getId()); ?>" class="comment column">
 							<div class="authorRow user-cell row">
-								<div class="avatar avatardiv" title="<?php p($avatarName)?>"></div>
+								<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
 								<div class="author"><?php p($displayName) ?></div>
 								<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
 							</div>

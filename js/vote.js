@@ -147,8 +147,8 @@ $(document).ready(function () {
 								'<div class="authorRow user-cell row"> ' +
 								'<div class="avatar missing" title="' + data.userId + '"></div> ' +
 								'<div class="author">' + data.userName + '</div>' +
-								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' + 
-								'</div>' + 
+								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' +
+								'</div>' +
 								'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
 								'</li>';
 
@@ -161,7 +161,7 @@ $(document).ready(function () {
 
 			$('.new-comment .message').text('').focus();
 			$('.new-comment .icon-loading-small').hide();
-			
+
 			$('.avatar.missing').each(function (i, obj) {
 				$(obj).avatar(obj.title, 32);
 				$(obj).removeClass('missing');
@@ -178,12 +178,16 @@ $(document).ready(function () {
 		$(this).select();
 	});
 
-	$('.toggle-cell').tooltip();
-	$('.time-slot').tooltip();
-	$('.avatardiv').tooltip();
 	$('.has-tooltip').tooltip();
 	updateCounters();
 
+});
+
+$('#commentBox').keyup(function() {
+	var $message = $('#commentBox');
+	if(!$message.text().trim().length) {
+		$message.empty();
+	}
 });
 
 $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
