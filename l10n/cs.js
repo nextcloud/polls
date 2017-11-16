@@ -16,6 +16,7 @@ OC.L10N.register(
     "hidden" : "skrýt",
     "Public access" : "Veřejný přístup",
     "Select" : "Vybrat",
+    "Add" : "Přidat",
     "Update poll" : "Aktualizovat anketu",
     "Create poll" : "Vytvořit anketu",
     "Cancel" : "Storno",
