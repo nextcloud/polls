@@ -50,7 +50,7 @@ OC.L10N.register(
     "Send!" : "Отправлено!",
     "No comments yet. Be the first." : "Тут нет комментариев, будьте первым.",
     "No existing polls." : "Нет голосований",
-    "By" : " ",
+    "By" : "Добавлено пользователем",
     "Created" : "Создано",
     "participated" : "Вы приняли участие",
     "You did not vote" : "Вы еще не голосовали",
