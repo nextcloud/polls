@@ -12,6 +12,7 @@ OC.L10N.register(
     "hidden" : "Ocult",
     "Public access" : "Accés públic",
     "Select" : "Sel·lecciona",
+    "User/Group search" : "Cercador d'usuari/grup",
     "Anonymous" : "Anònim",
     "Expires" : "Caduca",
     "Dates" : "Dates",
@@ -29,7 +30,10 @@ OC.L10N.register(
     "Logged in as" : "Sessió iniciada com a",
     "Send!" : "Envia!",
     "Created" : "Creada",
+    "Yourself" : "Tu mateix",
     "Never" : "Mai",
+    "You voted" : "Has votat",
+    "You commented" : "Has comentat",
     "Access denied" : "Accés denegat"
 },
 "nplurals=2; plural=(n != 1);");
