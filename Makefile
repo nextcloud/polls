@@ -79,11 +79,6 @@ appstore:
 	--exclude="l10n/no-php" \
 	./ $(build_source_directory)/$(app_name)
 
-	@if [ -f $(nc_cert_directory)/$(app_name).key ]; then \
-		echo "Creating integrity file..."; \
-		php ../../occ integrity:sign-app --privateKey="$(nc_cert_directory)/$(app_name).key" --certificate="$(nc_cert_directory)/$(app_name).crt" --path "$(build_source_directory)/$(app_name)"; \
-	fi
-
 	tar cvzf $(appstore_package_name).tar.gz --directory="$(build_source_directory)" $(app_name)
 
 	@if [ -f $(nc_cert_directory)/$(app_name).key ]; then \
