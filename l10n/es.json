@@ -1,5 +1,5 @@
 { "translations": {
-    "Nothing selected!\nClick on cells to turn them green." : "¡No se ha seleccionado nada!\nClic en las celdas para ponerlas en verde.",
+    "Nothing selected!\nClick on cells to turn them green." : "¡No se ha seleccionado nada!\nPulsa en las celdas para ponerlas en verde.",
     "You must enter at least a title for the new poll." : "Debes introducir al menos un título para la nueva votación.",
     "Please select at least one user or group!" : "Por favor, selecciona al menos un usuario o grupo.",
     "Do you really want to delete that poll?" : "¿Estás seguro de que quieres eliminar esa votación?",
