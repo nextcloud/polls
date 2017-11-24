@@ -132,11 +132,6 @@ else
 	# We need to replace Nc screenshot urls with the oC ones
 	sed -i -E "s~(<screenshot>)([^<]*).(png|jpg|jpeg)(</screenshot>)~\1\2-oc.\3\4~" $(build_source_directory)/$(app_name)/appinfo/info.xml
 
-	@if [ -f $(oc_cert_directory)/$(app_name).key ]; then \
-		echo "Creating integrity file..."; \
-		php ../../occ integrity:sign-app --privateKey="$(oc_cert_directory)/$(app_name).key" --certificate="$(oc_cert_directory)/$(app_name).crt" --path "$(build_source_directory)/$(app_name)"; \
-	fi
-
 	tar cvzf $(marketplace_package_name).tar.gz --directory="$(build_source_directory)" $(app_name)
 
 	@if [ -f $(oc_cert_directory)/$(app_name).key ]; then \
