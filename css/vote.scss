@@ -25,7 +25,6 @@ $user-column-width: 265px;
 	flex-direction: row;
 	flex-grow: 1;
 	align-items: center;
-
 }
 
 .column {
@@ -38,12 +37,16 @@ $user-column-width: 265px;
 #votings {
 	position: relative !important;
 	.description {
-		padding: 12px 17px;
+		.expired-vote{
+			color: red;
+			font-weight: bold;
+		}
 	}
+	padding: 12px 17px;	
 }
 
 #controls {
-	flex-grow: 0;
+	// flex-grow: 0;
 }
 	
 #breadcrump {
@@ -56,8 +59,6 @@ div.crumb {
 	white-space: nowrap;
 	flex-shrink: 0;
 }
-
-
 
 .header {
 	margin-left: $user-column-width;
@@ -225,15 +226,16 @@ div.crumb {
 		position: relative;
 		top: -34px;
 		right: -24px;
-		background-image: url('../../../apps/polls/css/../img/yes-comment.svg');
+		background-image: url("../../../apps/polls/css/../img/yes-comment.svg");
 		background-repeat: no-repeat;
 		background-size: 33px;
 		padding: 10px;
 		margin: -10px;
 		background-position-y: 9px;
-		background-position-x: -3px;
+		background-position-x: center;
 		text-shadow: 1px 1px #666;
 		color: #fff;
+		min-width: 34px;
 		&.no-comments {
 			background-image: url('../../../apps/polls/css/../img/no-comment.svg');
 		}

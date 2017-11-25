@@ -14,12 +14,11 @@
   flex-shrink: 0; }
 
 #votings {
-  position: relative !important; }
-  #votings .description {
-    padding: 12px 17px; }
-
-#controls {
-  flex-grow: 0; }
+  position: relative !important;
+  padding: 12px 17px; }
+  #votings .description .expired-vote {
+    color: red;
+    font-weight: bold; }
 
 #breadcrump {
   flex-grow: 0;
@@ -155,9 +154,10 @@ div.crumb {
   padding: 10px;
   margin: -10px;
   background-position-y: 9px;
-  background-position-x: -3px;
+  background-position-x: center;
   text-shadow: 1px 1px #666;
-  color: #fff; }
+  color: #fff;
+  min-width: 34px; }
   .button.details .badge.no-comments {
     background-image: url("../../../apps/polls/css/../img/no-comment.svg"); }
 

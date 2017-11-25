@@ -5,32 +5,19 @@ h1 {
 #app header {
   padding-top: 44px; }
 
+#app-content-wrapper {
+  flex-direction: column; }
+
 .icon-polls {
   background-color: black;
   mask: url("../img/polls.svg") no-repeat 50% 50%; }
 
-.description .expired-vote {
-  color: red;
-  font-weight: bold; }
+#controls h2 {
+  margin-top: 12px; }
 
-#controls {
-  position: relative !important;
-  padding: 0 17px 0 0;
-  width: inherit;
-  z-index: 120;
-  display: flex;
-  align-items: center;
-  position: inherit;
-  top: 0;
-  width: 100% !important; }
-  #controls #breadcrump {
-    width: 350px;
-    flex-grow: 1; }
-  #controls h2 {
-    margin-top: 12px; }
-
-.table {
-  position: relative; }
+.main-container {
+  position: relative;
+  margin-top: 44px; }
 
 .col-100 {
   width: 100%;
@@ -124,11 +111,6 @@ td.td_shown {
 
 .description {
   color: #888; }
-
-.wordwrap {
-  white-space: normal;
-  word-wrap: break-word;
-  word-break: normal; }
 
 .cl_title {
   font-size: 2em; }

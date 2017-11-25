@@ -47,12 +47,12 @@
 								<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 							</a>
 						</div>
-						<div class="creatable" style="">
-							<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
-								<span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
-							</a>
-							<input class="stop icon-close" style="display:none" value="" type="button">
-						</div>
+					</div>
+					<div class="actions creatable" style="">
+						<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
+							<span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
+						</a>
+						<input class="stop icon-close" style="display:none" value="" type="button">
 					</div>
 				</div>
 	<?php if (count($_['polls']) === 0) : ?>
@@ -61,7 +61,7 @@
 			<h2><?php p($l->t('No existing polls.')); ?></h2>
 		</div>
 	<?php else : ?>
-			<div class="table has-controls">
+			<div class="table main-container has-controls">
 				<div class ="row table-header">
 
 					<div class="wrapper group-master">
