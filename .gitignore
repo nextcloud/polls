@@ -1,9 +1,10 @@
 .sass-cache/
-build/
-vendor/
 .project/
 .idea/
+build/
 css/*.map
+vendor/
+*.cmd
 *.lock
 *.iml
 .DS_Store
