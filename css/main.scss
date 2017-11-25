@@ -6,6 +6,10 @@ h1 {
 #app header {
 	padding-top: 44px;
 }
+// Temp fix for NC13 beta 1
+#app-content-wrapper {
+	flex-direction: column;
+}
 
 .icon-polls {
 	background-color: black;
