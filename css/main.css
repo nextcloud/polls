@@ -12,8 +12,10 @@ h1 {
   background-color: black;
   mask: url("../img/polls.svg") no-repeat 50% 50%; }
 
-#controls h2 {
-  margin-top: 12px; }
+#controls {
+  display: inline-flex; }
+  #controls h2 {
+    margin-top: 12px; }
 
 .main-container {
   position: relative;
