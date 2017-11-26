@@ -256,6 +256,8 @@ div.crumb {
   #app-sidebar .pollActions > ul > li a,
   #app-sidebar .pollActions > ul > li .app-navigation-entry-deleted {
     padding-left: 44px !important; }
+#app-sidebar #commentsTabView textarea, #app-sidebar #commentsTabView div[contenteditable="true"] {
+  cursor: text; }
 #app-sidebar #commentsTabView .newCommentForm div.message:empty:before {
   content: attr(data-placeholder);
   color: grey; }

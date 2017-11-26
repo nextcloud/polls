@@ -386,7 +386,9 @@ div.crumb {
 	}
 
 	#commentsTabView {
-
+		textarea, div[contenteditable="true"] {
+			cursor: text;
+		}
 		.newCommentForm div.message:empty:before {
 			content: attr(data-placeholder);
 			color: grey;
