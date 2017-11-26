@@ -236,6 +236,7 @@ div.crumb {
 		text-shadow: 1px 1px #666;
 		color: #fff;
 		min-width: 34px;
+		text-align: center;
 		&.no-comments {
 			background-image: url('../../../apps/polls/css/../img/no-comment.svg');
 		}
@@ -386,9 +387,7 @@ div.crumb {
 	}
 
 	#commentsTabView {
-		textarea, div[contenteditable="true"] {
-			cursor: text;
-		}
+
 		.newCommentForm div.message:empty:before {
 			content: attr(data-placeholder);
 			color: grey;
