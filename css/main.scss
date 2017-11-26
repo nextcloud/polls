@@ -18,6 +18,8 @@ h1 {
 
 
 #controls {
+    // adopted from NC13 for compatibily with OC10 and NC11-NC12
+	display: inline-flex;
 	h2 {
 		margin-top: 12px;
 	}
