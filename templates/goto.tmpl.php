@@ -81,7 +81,7 @@
 		$poll->getDescription() !== null &&
 		$poll->getDescription() !== ''
 	) {
-		$description = nl2br($poll->getDescription());
+		$description = $poll->getDescription();
 	} else {
 		$description = $l->t('No description provided.');
 	}

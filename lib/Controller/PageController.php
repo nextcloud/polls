@@ -337,8 +337,8 @@ class PageController extends Controller {
 		$hideNames
 	) {
 		$event = $this->eventMapper->find($pollId);
-		$event->setTitle(htmlspecialchars($pollTitle));
-		$event->setDescription(htmlspecialchars($pollDesc));
+		$event->setTitle(htmlspecialchars(strip_tags($pollTitle)));
+		$event->setDescription(htmlspecialchars(strip_tags($pollDesc)));
 		$event->setIsAnonymous($isAnonymous ? 1 : 0);
 		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
 
@@ -437,8 +437,8 @@ class PageController extends Controller {
 		$hideNames
 	) {
 		$event = new Event();
-		$event->setTitle(htmlspecialchars($pollTitle));
-		$event->setDescription(htmlspecialchars($pollDesc));
+		$event->setTitle(htmlspecialchars(strip_tags($pollTitle)));
+		$event->setDescription(htmlspecialchars(strip_tags($pollDesc)));
 		$event->setOwner($userId);
 		$event->setCreated(date('Y-m-d H:i:s'));
 		$event->setHash(\OC::$server->getSecureRandom()->generate(
