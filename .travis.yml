@@ -51,5 +51,10 @@ script:
   # Execute tests
   - make test
 
+after_success:
+  # Generate Code Coverage
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+
 after_failure:
   - cat ../../data/${CLOUD}.log

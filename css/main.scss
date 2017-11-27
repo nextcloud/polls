@@ -1,29 +1,35 @@
-
 h1 {
 	font-size: 1.8em;
 	margin-bottom: 5px;
 }
 
-/* a {
-	color: #35537a;
-}
- */
-/* a:not(.button):hover {
-	text-decoration: underline;
-}
-
- */#app header {
+#app header {
 	padding-top: 44px;
 }
 
-.row:after {
-	content: ".";
-	display:block;
-	height:0;
-	clear:both;
-	visibility:hidden;
+#app-content-wrapper {
+	flex-direction: column;
 }
 
+.icon-polls {
+	background-color: black;
+	mask: url('../img/polls.svg') no-repeat 50% 50%;
+}
+
+
+#controls {
+    // adopted from NC13 for compatibily with OC10 and NC11-NC12
+	display: inline-flex;
+	h2 {
+		margin-top: 12px;
+	}
+}
+
+.main-container {
+	position: relative;
+	margin-top: 44px;
+}
+   
 .col-100 {
 	width: 100%;
 	padding: 0px 15px;
@@ -46,20 +52,17 @@ h1 {
 	}
 }
 
-#breadcrump {
-	min-width: 350px;
-}
 
 input[type="text"] {
 	display: block;
 	width: 100%;
 }
 
-textarea {
+/* textarea {
 	min-width: 100%;
 	max-width: 100%;
 }
-
+ */
 .form-actions {
 	padding: 15px;
 }
@@ -123,7 +126,6 @@ td.td_shown {
 	border-width: 1px;
 	border-style: solid;
 	border-color: gray;
-	-moz-border-radius: initial;
 	text-align: center;
 	vertical-align: bottom;
 	cursor: pointer;
@@ -132,14 +134,8 @@ td.td_shown {
 	table-layout: fixed;
 }
 
-.desc {
+.description {
 	color: #888;
-}
-
-.wordwrap {
-	white-space: normal;
-	word-wrap: break-word;
-	word-break: normal;
 }
 
 .cl_title {
@@ -205,11 +201,6 @@ td.td_shown {
 }
 .cl_maybe:before, .cl_maybe:after{
 	content: "?";
-}
-
-.win_row {
-	color: #5ef56c;
-	font-size: 2em;
 }
 
 .cl_user_comments {
@@ -336,3 +327,7 @@ td.td_shown {
 	border-radius: 0 0 3px 3px;
 }
 
+/* OC10 and NC11 fixes*/
+.symbol {
+	display: inline-block;
+}

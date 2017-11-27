@@ -1,3 +1,11 @@
-/.project
+.sass-cache/
+.project/
 .idea/
+build/
+css/*.map
+vendor/
+*.cmd
+*.lock
 *.iml
+.DS_Store
+Thumbs.db

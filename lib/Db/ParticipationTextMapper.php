@@ -37,7 +37,7 @@ class ParticipationTextMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
 	 * @param int $limit
 	 * @param int $offset
 	 * @return ParticipationText[]
@@ -59,7 +59,18 @@ class ParticipationTextMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
+	 * @param int $limit
+	 * @param int $offset
+	 * @return ParticipationText[]
+	 */
+	public function findParticipantsByPoll($pollId, $limit = null, $offset = null) {
+		$sql = 'SELECT DISTINCT user_id FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		return $this->findEntities($sql, [$pollId], $limit, $offset);
+	}
+
+	/**
+	 * @param int $pollId
 	 */
 	public function deleteByPoll($pollId) {
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
@@ -67,7 +78,7 @@ class ParticipationTextMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $pollId
+	 * @param int $pollId
 	 * @param string $userId
 	 */
 	public function deleteByPollAndUser($pollId, $userId) {
