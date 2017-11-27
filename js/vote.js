@@ -13,7 +13,6 @@ $.fn.switchClass = function (a, b) {
 };
 
 function updateCommentsCount() {
-	// TODO: Update the Badgecounter
 	$('#comment-counter').removeClass('no-comments');
 	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
 
@@ -54,7 +53,6 @@ function switchSidebar() {
 	}
 }
 
-
 $(document).ready(function () {
 	// count how many times in each date
 	new Clipboard('.copy-link');
@@ -71,7 +69,7 @@ $(document).ready(function () {
 		OC.Apps.hideAppSidebar();
 	});
 
-	$('.poll.avatardiv').each(function (i, obj) {
+	$('.avatar').each(function (i, obj) {
 		$(obj).avatar(obj.title, 32);
 	});
 
@@ -134,20 +132,41 @@ $(document).ready(function () {
 			}
 		}
 		var comment = document.getElementById('commentBox');
-		if(comment.value.trim().length <= 0) {
+		if(comment.textContent.trim().length <= 0) {
 			alert(t('polls', 'Please add some text to your comment before submitting it.'));
 			return;
 		}
 		var data = {
 			pollId: form.elements.pollId.value,
 			userId: form.elements.userId.value,
-			commentBox: comment.value.trim()
+			commentBox: comment.textContent.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
-		$.post(form.action, data, function (data) {
-			$('.comments .comment:first').after('<div class="comment"><div class="comment-header"><span class="comment-date">' + data.date + '</span>' + data.userName + '</div><div class="wordwrap comment-content">' + data.comment + '</div></div>');
-			$('.new-comment textarea').val('').focus();
+		$.post(form.action, data, function(data) {
+		var newCommentElement = '<li class="comment column"> ' +
+								'<div class="authorRow user-cell row"> ' +
+								'<div class="avatar missing" title="' + data.userName + '"></div> ' +
+								'<div class="author">' + data.userName + '</div>' +
+								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' +
+								'</div>' +
+								'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
+								'</li>';
+
+
+			$('#no-comments').after(newCommentElement);
+
+			if (!$('#no-comments').hasClass('hidden')) {
+				$('#no-comments').addClass('hidden');
+			}
+
+			$('.new-comment .message').text('').focus();
 			$('.new-comment .icon-loading-small').hide();
+
+			$('.avatar.missing').each(function (i, obj) {
+				$(obj).avatar(obj.title, 32);
+				$(obj).removeClass('missing');
+			});
+
 			updateCommentsCount();
 		}).error(function () {
 			alert(t('polls', 'An error occurred, your comment was not posted.'));
@@ -159,11 +178,16 @@ $(document).ready(function () {
 		$(this).select();
 	});
 
-	$('.toggle-cell').tooltip();
-	$('.time-slot').tooltip();
-	$('.avatardiv').tooltip();
+	$('.has-tooltip').tooltip();
 	updateCounters();
 
+});
+
+$('#commentBox').keyup(function() {
+	var $message = $('#commentBox');
+	if(!$message.text().trim().length) {
+		$message.empty();
+	}
 });
 
 $(document).on('click', '.toggle-cell, .poll-cell.active', function () {

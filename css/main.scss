@@ -7,57 +7,27 @@ h1 {
 	padding-top: 44px;
 }
 
+#app-content-wrapper {
+	flex-direction: column;
+}
+
 .icon-polls {
 	background-color: black;
 	mask: url('../img/polls.svg') no-repeat 50% 50%;
 }
 
-.description {
-	.expired-vote{
-		color: red;
-		font-weight: bold;
-	}
-	
-}
 
 #controls {
-	position: relative !important;
-	padding: 0 17px 0 0;
- 	width: inherit;
-	z-index: 120;
-	display: flex;
-	align-items: center;
-	position: inherit;
-	top: 0;
-	width: 100% !important;
-
-	#breadcrump {
-		width: 350px;
-		flex-grow: 1;
-	}
-
+    // adopted from NC13 for compatibily with OC10 and NC11-NC12
+	display: inline-flex;
 	h2 {
 		margin-top: 12px;
 	}
 }
 
-.table {
+.main-container {
 	position: relative;
-}
-
-#app-sidebar {
-	flex-direction: column;
-	
-	.share, h2, .comments {
-		padding: 15px;
-	}
-	.close {
-		position: absolute;
-		top: 0;
-		right: 0;
-		padding: 15px;
-		z-index: 200;
-	}
+	margin-top: 44px;
 }
    
 .col-100 {
@@ -88,11 +58,11 @@ input[type="text"] {
 	width: 100%;
 }
 
-textarea {
+/* textarea {
 	min-width: 100%;
 	max-width: 100%;
 }
-
+ */
 .form-actions {
 	padding: 15px;
 }
@@ -166,12 +136,6 @@ td.td_shown {
 
 .description {
 	color: #888;
-}
-
-.wordwrap {
-	white-space: normal;
-	word-wrap: break-word;
-	word-break: normal;
 }
 
 .cl_title {

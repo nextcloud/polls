@@ -2,6 +2,7 @@ $bg_no: #ffede9;
 $bg_maybe: #fcf7e1;
 $bg_unvoted: #fff4c8;
 $bg_yes: #ebf5d6;
+$bg_information: #b19c3e;
 
 $fg_no: #f45573;
 $fg_maybe: #f0db98;
@@ -15,13 +16,15 @@ $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
+#content {
+	display:flex;
+}
 
 .row {
 	display: flex;
 	flex-direction: row;
 	flex-grow: 1;
 	align-items: center;
-
 }
 
 .column {
@@ -31,16 +34,19 @@ $user-column-width: 265px;
 	flex-shrink: 0;
 	
 }
-
 #votings {
 	position: relative !important;
 	.description {
-		padding: 12px 17px;
+		.expired-vote{
+			color: red;
+			font-weight: bold;
+		}
 	}
+	padding: 12px 17px;	
 }
 
 #controls {
-	flex-grow: 0;
+	// flex-grow: 0;
 }
 	
 #breadcrump {
@@ -54,10 +60,9 @@ div.crumb {
 	flex-shrink: 0;
 }
 
-
-
 .header {
 	margin-left: $user-column-width;
+	padding: 0 17px;
 	align-items: initial;
 	.vote.option {
 		.date-box {
@@ -75,10 +80,6 @@ div.crumb {
 .user {
 	border-top: $border_user;
 	height: 44px;
-	padding: 0 17px;
-}
-
-.header {
 	padding: 0 17px;
 }
 
@@ -141,13 +142,8 @@ div.crumb {
 	}			
 }
 
-
-.avatar-cell {
-	width: 40px;
-}
-
 .name {
-	width: 180px;
+	margin-left: 5px;
 }
 
 .poll-cell {
@@ -225,21 +221,25 @@ div.crumb {
 	margin-right: 6px;
 }
 
-.badge {
-	position: relative;
-	top: -34px;
-	right: -24px;
-	background-image: url('../../../apps/polls/css/../img/yes-comment.svg');
-	background-repeat: no-repeat;
-	background-size: 33px;
-	padding: 10px;
-	margin: -10px;
-	background-position-y: 9px;
-	background-position-x: -3px;
-	text-shadow: 1px 1px #666;
-	color: #fff;
-	&.no-comments {
-		background-image: url('../../../apps/polls/css/../img/no-comment.svg');
+.button.details {
+	.badge {
+		position: relative;
+		top: -34px;
+		right: -24px;
+		background-image: url("../../../apps/polls/css/../img/yes-comment.svg");
+		background-repeat: no-repeat;
+		background-size: 33px;
+		padding: 10px;
+		margin: -10px;
+		background-position-y: 9px;
+		background-position-x: center;
+		text-shadow: 1px 1px #666;
+		color: #fff;
+		min-width: 34px;
+		text-align: center;
+		&.no-comments {
+			background-image: url('../../../apps/polls/css/../img/no-comment.svg');
+		}
 	}
 }
 
@@ -263,43 +263,189 @@ div.crumb {
 	margin-bottom: 15px;
 }
 
-.comment {
-	border: 1px solid #DDD;
-	border-radius: 3px;
-	margin-bottom: 10px;
-
-	&.new-comment {
-		border: none;
-	}
-	
-	.comment-header {
-		background-color: #EEE;
-		border-bottom: 1px solid #DDD;
-		border-radius: 3px 3px 0 0;
-	}
-	
-	.comment-date {
-		float: right;
-		color: #555;
-	}
-	
-}
-
-.new-comment {
-	.icon-loading-small {
-		float: left;
-		margin-top: 10px;
-		display: none;
-	}
-	
-	.comment-content textarea {
-		display: block;
-		min-width: 100%;
-		max-width: 100%;
-		min-height: 66px;
+.authorRow {
+	position: relative;
+	.author {
+		margin-left: 8px;
+		opacity: .5;
+		flex-grow: 1;
+		&.external {
+			margin-right: 33px;
+			opacity: 1;
+			> input {
+				width: 100%
+			}
+		}
 	}
 }
 
+
+#app-sidebar {
+	.close.row {
+		justify-content: flex-end;
+		margin: 8px 8px 0 0;
+	}
+
+	.header.row {
+		flex-direction: row;
+		align-items: flex-start;
+		margin-left: 0;
+		margin-top:0;
+	}
+	
+	.pollInformation {
+		width: 220px;
+		flex-grow: 1;
+		flex-shrink: 1;
+		padding-right: 15px; 
+
+
+		.authorRow {
+			.leftLabel {
+				margin-right: 4px;
+			}
+		}
+
+		.cloud {
+			margin: 4px 0;
+			
+			> span {
+				color: #fff;
+				margin: 2px;
+				padding: 2px 4px;
+				border-radius: 3px;
+				float: left;
+				text-shadow: 1px 1px #666;
+				background-color: #aaa;
+				
+			}
+			.open {
+				background-color: $fg_yes;
+			}
+			.expired {
+				background-color: $fg_no;
+			}
+			.information {
+				background-color: $bg_information;
+			}
+		}
+	}
+	#expired_info {
+		margin: 0 15px;
+	}
+
+	.pollActions {
+		display: flex;
+		flex-direction: column;
+		margin-right: 15px;
+
+		.close {
+			margin: 15px;
+			background-position: right top;
+			height: 30px;
+		}
+		
+		> ul > li {
+			&:focus, &:hover, &.active, a.selected {
+				&, > a {
+					opacity: 1;
+					box-shadow: inset 2px 0 #0082c9;
+				}
+			}
+
+			> a[class*="icon-"], 
+			> ul > li > a[class*="icon-"], 
+			> a[style*="background-image"], 
+			> ul > li > a[style*="background-image"] {
+				padding-left: 44px;
+			}
+
+			> a, 
+			> ul > li > a {
+				background-size: 16px 16px;
+				background-position: 14px center;
+				background-repeat: no-repeat;
+				display: block;
+				justify-content: space-between;
+				line-height: 44px;
+				min-height: 44px;
+				padding: 0 12px;
+				overflow: hidden;
+				box-sizing: border-box;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				color: #000;
+				opacity: 0.57;
+				flex: 1 1 0;
+				z-index: 100;
+			}
+			a, 
+			.app-navigation-entry-deleted {
+				padding-left: 44px !important;
+			}
+		}
+	}
+
+	#commentsTabView {
+
+		.newCommentForm div.message:empty:before {
+			content: attr(data-placeholder);
+			color: grey;
+		}
+		#commentBox {
+			border: 1px solid #dbdbdb;
+			border-radius: 3px;
+			padding: 7px 6px;
+			margin: 3px 3px 3px 40px;
+		}
+		.comment {
+			margin-bottom: 30px;
+
+			.comment-header {
+				background-color: #EEE;
+				border-bottom: 1px solid #DDD;
+				border-radius: 3px 3px 0 0;
+			}
+			
+			.comment-date {
+				float: right;
+				color: #555;
+			}
+
+			.date {
+				position: absolute;
+				right: 0;
+				top: 5px;
+				opacity: .5;
+			}
+		}
+		
+		.message {
+			margin-left: 40px;
+			flex-grow: 1;
+			flex-shrink: 1;
+		}
+
+
+		.new-comment {
+			.submitComment {
+				align-self: last baseline;
+				width: 30px;
+				margin: 0;
+				padding: 7px 9px;
+				background-color: transparent;
+				border: none;
+				opacity: .3;
+			}
+
+			.icon-loading-small {
+				float: left;
+				margin-top: 10px;
+				display: none;
+			}
+		}
+	}
+}
 
 @media all and (max-width: (768px) ) {
 	#app-content {
@@ -308,39 +454,10 @@ div.crumb {
 }
 @media all and (max-width: (480px) ) {
 
-	.table { 
-		display: flex;
-		margin-right: 8px;
-		padding-bottom: 75px;
-	}
-	.submit {
-		border-top: $border_user;
-		box-shadow: 0px 0px 9px 2px rgba(153,153,153,1);
-		flex-wrap: wrap;
-		align-items: center;
-		position: fixed;
-		background-color: #fff;
-		bottom: 0;
-		width: 100%;
-		.finish_vote {
-			padding: 8px 8px;
-		}
-		.notification {
-			display: flex;
-			padding: 8px 8px;
-			line-height: 2em;
-		}
-	}
-	
-	.first {
-		height: 44px;
-		width: unset;
-	}
-	
 	.row {
 		flex-direction: column;
 
-		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submit  {
+		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
 			flex-direction: row;
 		}
 
@@ -348,7 +465,7 @@ div.crumb {
 			flex-grow: 1;
 			margin-left: 0;
 			margin-top: 44px;
-			width:120px;
+			width: 120px;
 			padding: 0 0 0 4px;
 			.vote {
 				padding-right: 10px;
@@ -430,13 +547,42 @@ div.crumb {
 		}
 	}
 
-
+	.table { 
+		display: flex;
+		margin-right: 8px;
+		padding-bottom: 75px;
+	}
+	
+	.submitPoll {
+		border-top: $border_user;
+		box-shadow: 0px 0px 9px 2px rgba(153,153,153,1);
+		flex-wrap: wrap;
+		align-items: center;
+		position: fixed;
+		background-color: #fff;
+		bottom: 0;
+		width: 100%;
+		.finish_vote {
+			padding: 8px 8px;
+		}
+		.notification {
+			display: flex;
+			padding: 8px 8px;
+			line-height: 2em;
+		}
+	}
+	
+	.first {
+		height: 44px;
+		width: unset;
+	}
 
 	#options.row {
 		flex-direction: column;
 		width: 100%;
 	}
- }
+
+}
 
  @media all and (max-width: (320px) ) {
 

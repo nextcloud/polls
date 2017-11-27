@@ -1,0 +1,132 @@
+.row {
+  display: flex;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  line-height: 2em;
+  transition: background-color 0.3s ease;
+  background-color: #fff;
+  min-height: 4em;
+  border-bottom: 1px solid #eee; }
+  .row.table-header .name, .row.table-header .description {
+    padding-left: 52px; }
+  .row.table-header .owner {
+    padding-left: 6px; }
+  .row.table-body:hover, .row.table-body:focus, .row.table-body:active, .row.table-body.mouseOver {
+    transition: background-color 0.3s ease;
+    background-color: #f8f8f8; }
+  .row.table-body .column.owner {
+    display: flex; }
+    .row.table-body .column.owner .avatardiv {
+      margin-right: 4px; }
+  .row.table-body .icon-more {
+    right: 14px;
+    opacity: 0.3;
+    cursor: pointer;
+    height: 44px;
+    width: 44px; }
+  .row.table-body .symbol {
+    padding: 2px; }
+  .row.table-header {
+    color: #999; }
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  position: relative; }
+
+.column {
+  padding: 0 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  align-items: center;
+  min-height: 16px; }
+
+.name {
+  width: 150px; }
+
+.description {
+  width: 150px;
+  color: #888; }
+
+.owner {
+  width: 140px; }
+
+.access {
+  width: 140px; }
+
+.created {
+  width: 120px; }
+
+.expiry {
+  width: 120px; }
+  .expiry.expired {
+    color: red; }
+
+.participants {
+  width: 80px; }
+  .participants div.partic_voted.icon-partic_yes {
+    background-image: url("../img/yes-vote.svg"); }
+  .participants div.partic_voted.icon-partic_no {
+    background-image: url("../img/no-vote.svg"); }
+  .participants div.partic_commented.icon-commented_yes {
+    background-image: url("../img/yes-comment.svg"); }
+  .participants div.partic_commented.icon-commented_no {
+    background-image: url("../img/no-comment.svg"); }
+
+.actions {
+  width: 44px;
+  position: relative;
+  overflow: initial; }
+
+.thumbnail {
+  background-size: 32px;
+  width: 44px;
+  height: 44px;
+  padding-right: 4px;
+  background-repeat: no-repeat;
+  background-position: center; }
+  .thumbnail.progress.partic_yes, .thumbnail.endless.partic_yes {
+    background-image: url("../img/open-voted-vote.svg"); }
+  .thumbnail.progress.partic_no, .thumbnail.endless.partic_no {
+    background-image: url("../img/open-unvoted-vote.svg"); }
+  .thumbnail.expired.partic_yes {
+    background-image: url("../img/expired-voted-vote.svg"); }
+  .thumbnail.expired.partic_no {
+    background-image: url("../img/expired-unvoted-vote.svg"); }
+
+.options, .participants {
+  display: flex;
+  flex-direction: row; }
+
+.group-1, .group-1-1, .group-master {
+  flex-grow: 1; }
+
+.group-1-1 {
+  flex-direction: column;
+  width: 150px; }
+  .group-1-1 > div {
+    width: 100%; }
+
+@media all and (max-width: 868px) {
+  .group-1 {
+    width: 238px; }
+
+  .group-2-1, .group-2-2 {
+    flex-direction: column; }
+
+  .access, .created {
+    width: 140px; }
+
+  .expiry, .participants {
+    width: 120px; } }
+@media all and (max-width: 668px) {
+  .row {
+    padding: 0; }
+
+  .group-2-1 {
+    display: none; } }
+@media all and (max-width: 548px) {
+  .group-2 {
+    display: none; } }
