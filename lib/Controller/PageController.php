@@ -368,7 +368,7 @@ class PageController extends Controller {
 		$chosenDates = json_decode($chosenDates);
 
 		$expire = null;
-		if ($expireTs !== null && $expireTs !== '') {
+		if ($expireTs !== 0 && $expireTs !== '') {
 			// Add one day, so it expires at the end of a day
 			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24);
 		}
@@ -476,7 +476,7 @@ class PageController extends Controller {
 		$chosenDates = json_decode($chosenDates);
 
 		$expire = null;
-		if ($expireTs !== null && $expireTs !== '') {
+		if ($expireTs !== 0 && $expireTs !== '') {
 			// Add one day, so it expires at the end of a day
 			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24);
 		}
