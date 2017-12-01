@@ -73,3 +73,6 @@ table .icon-checkmark {
 
 #expiration {
   max-width: 200px; }
+
+#pollDesc {
+  width: 100%; }
