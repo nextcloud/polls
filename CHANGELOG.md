@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
  - New vote page design (responsive)
+ - New comment design
  - A lot of clean up
 
 ### Fixed

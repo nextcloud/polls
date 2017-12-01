@@ -19,7 +19,7 @@
     <repository type="git">https://github.com/nextcloud/polls.git</repository>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/overview.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
-    <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/new-poll.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
     <dependencies>
         <owncloud min-version="8.2" max-version="10.0" />
         <nextcloud min-version="11" max-version="13" />
