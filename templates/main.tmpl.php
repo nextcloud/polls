@@ -62,7 +62,7 @@
 		</div>
 	<?php else : ?>
 			<div class="table main-container has-controls">
-				<div class ="row table-header">
+				<div class ="table-row table-header">
 
 					<div class="wrapper group-master">
 						<div class="wrapper group-1">
@@ -149,7 +149,7 @@
 						}
 					?>
 
-					<div class="row table-body">
+					<div class="table-row table-body">
 						<div class="wrapper group-master">
 							<div class="wrapper group-1">
 								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class. ' ' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
