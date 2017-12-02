@@ -9,3 +9,4 @@ vendor/
 *.iml
 .DS_Store
 Thumbs.db
+/nbproject/
