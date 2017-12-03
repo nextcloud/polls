@@ -2,6 +2,7 @@
 namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
