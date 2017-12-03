@@ -15,9 +15,9 @@
   .table-row.table-body:hover, .table-row.table-body:focus, .table-row.table-body:active, .table-row.table-body.mouseOver {
     transition: background-color 0.3s ease;
     background-color: #f8f8f8; }
-  .table-row.table-body .column.owner {
+  .table-row.table-body .flex-column.owner {
     display: flex; }
-    .table-row.table-body .column.owner .avatardiv {
+    .table-row.table-body .flex-column.owner .avatardiv {
       margin-right: 4px; }
   .table-row.table-body .icon-more {
     right: 14px;
@@ -35,7 +35,7 @@
   align-items: center;
   position: relative; }
 
-.column {
+.flex-column {
   padding: 0 4px;
   overflow: hidden;
   white-space: nowrap;

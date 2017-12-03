@@ -132,29 +132,29 @@
 				}?>
 			</div>
 			<div class="table">
-					<ul class="table-row header" >
+					<ul class="flex-row header" >
 						<?php
 						foreach ($dates as $dateElement) {
 							if ($poll->getType() === 0) {
 								$timestamp = strtotime($dateElement->getDt());
-								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
+								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
 
-								print_unescaped('	<div class="date-box column">');
+								print_unescaped('	<div class="date-box flex-column">');
 								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp))  . '</div>');
 								print_unescaped('		<div class="day">'   .       date('j', $timestamp)   . '</div>');
 								print_unescaped('		<div class="dayow">' . $l->t(date('D', $timestamp))  . '</div>');
 								print_unescaped('		<div class="time">'  .       date('G:i', $timestamp) . ' UTC</div>');
 								print_unescaped('	</div>');
 							} else {
-								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '" class="column vote option">');
-								print_unescaped('	<div class="date-box column">' . preg_replace('/_\d+$/', '', $dateElement->getText()).'</div>');
+								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '" class="flex-column vote option">');
+								print_unescaped('	<div class="date-box flex-column">' . preg_replace('/_\d+$/', '', $dateElement->getText()).'</div>');
 							}
-							print_unescaped('<div class="counter table-row">');
-							print_unescaped('	<div class="yes table-row">');
+							print_unescaped('<div class="counter flex-row">');
+							print_unescaped('	<div class="yes flex-row">');
 							print_unescaped('		<div class="svg"></div>');
 							print_unescaped('		<div id="counter_yes_voteid_' . $dateElement->getId() . '" class ="result-cell yes" data-voteId="' . $dateElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
-							print_unescaped('	<div class="no table-row">');
+							print_unescaped('	<div class="no flex-row">');
 							print_unescaped('		<div class="svg"></div>');
 							print_unescaped('		<div id="counter_no_voteid_' . $dateElement->getId() . '" class ="result-cell no" data-voteId="' . $dateElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
@@ -163,7 +163,7 @@
 						?>
 						</li>
 					</ul>
-				<ul class="column table-body">
+				<ul class="flex-column table-body">
 					<?php
 					if ($votes !== null) {
 						//group by user
@@ -182,7 +182,7 @@
 							$userCnt++;
 							if ($usr === $userId) {
 								// if poll expired, just put current user among the others;
-								// otherwise skip here to add current user as last table-row (to vote)
+								// otherwise skip here to add current user as last flex-row (to vote)
 								if (!$expired) {
 									$userVoted = $others[$usr];
 									continue;
@@ -205,14 +205,14 @@
 								}
 							}
 							?>
-							<li class="table-row user">
+							<li class="flex-row user">
 								<div class="first">
-									<div class="user-cell table-row">
+									<div class="user-cell flex-row">
 										<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
 										<div class="name"><?php p($displayName) ?></div>
 										</div>
 									</div>
-									<ul class="table-row">
+									<ul class="flex-row">
 							<?php
 							// loop over dts
 							$i_tot = 0;
@@ -226,7 +226,7 @@
 									$pollId = 'voteid_' . $dateElement->getId();
 								}
 								// look what user voted for this dts
-								$class = 'column poll-cell no';
+								$class = 'flex-column poll-cell no';
 								foreach ($others[$usr] as $vote) {
 									$voteVal = null;
 									if ($poll->getType() === 0) {
@@ -236,13 +236,13 @@
 									}
 									if ($dateId === $voteVal) {
 										if ($vote->getType() === 1) {
-											$class = 'column poll-cell yes';
+											$class = 'flex-column poll-cell yes';
 											$total['yes'][$i_tot]++;
 										} else if ($vote->getType() === 0) {
-											$class = 'column poll-cell no';
+											$class = 'flex-column poll-cell no';
 											$total['no'][$i_tot]++;
 										} else if ($vote->getType() === 2) {
-											$class = 'column poll-cell maybe';
+											$class = 'flex-column poll-cell maybe';
 										}
 										break;
 									}
@@ -259,9 +259,9 @@
 					$totalNoOthers = array_merge(array(), $total['no']);
 					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
-						print_unescaped('<li class="table-row user current-user">');
-						print_unescaped('	<div class="table-row first">');
-						print_unescaped('		<div class="user-cell table-row">');
+						print_unescaped('<li class="flex-row user current-user">');
+						print_unescaped('	<div class="flex-row first">');
+						print_unescaped('		<div class="user-cell flex-row">');
 						if (User::isLoggedIn()) {
 							print_unescaped('		<div class="avatar has-tooltip" title="'.($userId).'"></div>');
 							print_unescaped('		<div class="name">');
@@ -276,7 +276,7 @@
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
-						print_unescaped('<ul class="table-row">');
+						print_unescaped('<ul class="flex-row">');
 
 						$i_tot = 0;
 						foreach ($dates as $dateElement) {
@@ -289,7 +289,7 @@
 							}
 							// see if user already has data for this event
 							$class = 'no';
-							$activeClass = 'column active poll-cell';
+							$activeClass = 'flex-column active poll-cell';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $obj) {
 									$voteVal = null;
@@ -319,7 +319,7 @@
 					?>
 				</ul>
 			</div>
-			<div class="submitPoll table-row">
+			<div class="submitPoll flex-row">
 				<div>
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
 						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -340,166 +340,166 @@
 			</div>
 		</div>
 
-		<div id="app-sidebar" class="detailsView scroll-container disappear">
-			<div class="close table-row">
-				<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
-			</div>
+	</div>
+	<div id="app-sidebar" class="detailsView scroll-container disappear">
+		<div class="close flex-row">
+			<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
+		</div>
 
-			<div class="header table-row">
-				<div class="pollInformation column">
-					<div class="authorRow user-cell table-row">
-						<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
-						<div class="avatar has-tooltip" title="<?php p($poll->getOwner())?>"></div>
-						<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
-					</div>
+		<div class="header flex-row">
+			<div class="pollInformation flex-column">
+				<div class="authorRow user-cell flex-row">
+					<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
+					<div class="avatar has-tooltip" title="<?php p($poll->getOwner())?>"></div>
+					<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
+				</div>
 
-					<div class="cloud">
-						<?php
-						if ($expired) {
-							print_unescaped('<span class="expired">' . $l->t('Expired'). '</span>');
+				<div class="cloud">
+					<?php
+					if ($expired) {
+						print_unescaped('<span class="expired">' . $l->t('Expired'). '</span>');
+					} else {
+						if ($poll->getExpire() !== null){
+							print_unescaped('<span class="open">' . $l->t('Expires on %s', array(date('d.m.Y', strtotime($poll->getExpire())))) . '</span>');
 						} else {
-							if ($poll->getExpire() !== null){
-								print_unescaped('<span class="open">' . $l->t('Expires on %s', array(date('d.m.Y', strtotime($poll->getExpire())))) . '</span>');
-							} else {
-								print_unescaped('<span class="open">' . $l->t('Expires never') . '</span>');
-							}
+							print_unescaped('<span class="open">' . $l->t('Expires never') . '</span>');
 						}
+					}
 
-						if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
-							print_unescaped('<span class="information">' . $access . '</span>');
+					if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
+						print_unescaped('<span class="information">' . $access . '</span>');
+					} else {
+						print_unescaped('<span class="information">' . $l->t('Invitation access') . '</span>');
+					}
+					if ($isAnonymous) {
+						print_unescaped('<span class="information">' . $l->t('Anononymous poll') . '</span>');
+						if ($hideNames) {
+							print_unescaped('<span class="information">' . $l->t('Usernames hidden to Owner') . '</span>');
 						} else {
-							print_unescaped('<span class="information">' . $l->t('Invitation access') . '</span>');
+							print_unescaped('<span class="information">' . $l->t('Usernames visible to Owner') . '</span>');
 						}
-						if ($isAnonymous) {
-							print_unescaped('<span class="information">' . $l->t('Anononymous poll') . '</span>');
-							if ($hideNames) {
-								print_unescaped('<span class="information">' . $l->t('Usernames hidden to Owner') . '</span>');
-							} else {
-								print_unescaped('<span class="information">' . $l->t('Usernames visible to Owner') . '</span>');
-							}
-						}
-						?>
-					</div>
-
+					}
+					?>
 				</div>
-				<div class="pollActions column">
-					<ul class="with-icons">
-						<li>
-							<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
-								<?php p($l->t('Copy Link')); ?>
-							</a>
-						</li>
 
-				<?php if ($poll->getOwner() === $userId) : ?>
-						<li class="">
-							<a id="id_del_<?php p($poll->getId()); ?>" class="icon-delete svg delete-poll"  data-value="<?php p($poll->getTitle()); ?>" href="#">
-								<?php p($l->t('Delete poll')); ?>
-							</a>
-						</li>
-						<li>
-							<a id="id_edit_<?php p($poll->getId()); ?>" class="icon-rename svg" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
-								<?php p($l->t('Edit Poll')); ?>
-							</a>
-						</li>
-				<?php endif; ?>
-					</ul>
-				</div>
 			</div>
+			<div class="pollActions flex-column">
+				<ul class="with-icons">
+					<li>
+						<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
+							<?php p($l->t('Copy Link')); ?>
+						</a>
+					</li>
 
-
-			<?php if ($expired) : ?>
-				<div id="expired_info">
-					<h2><?php p($l->t('Poll expired')); ?></h2>
-					<p>
-						<?php p($l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire()))))); ?>
-					</p>
-				</div>
+			<?php if ($poll->getOwner() === $userId) : ?>
+					<li class="">
+						<a id="id_del_<?php p($poll->getId()); ?>" class="icon-delete svg delete-poll"  data-value="<?php p($poll->getTitle()); ?>" href="#">
+							<?php p($l->t('Delete poll')); ?>
+						</a>
+					</li>
+					<li>
+						<a id="id_edit_<?php p($poll->getId()); ?>" class="icon-rename svg" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
+							<?php p($l->t('Edit Poll')); ?>
+						</a>
+					</li>
 			<?php endif; ?>
-			<ul class="tabHeaders">
-				<li class="tabHeader selected" data-tabid="commentsTabView" data-tabindex="0">
-					<a href="#"><?php p($l->t('Comments')); ?></a>
-				</li>
-			</ul>
-			<div class="tabsContainer">
-				<div id="commentsTabView" class="tab commentsTabView">
-					<div class="newCommentRow comment new-comment">
-					<?php if (User::isLoggedIn()) : ?>
-						<div class="authorRow user-cell table-row">
-							<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
-							<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
-						</div>
+				</ul>
+			</div>
+		</div>
 
-					<?php else: ?>
-						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
-						<div class="authorRow user-cell table-row">
-							<div class="avatar has-tooltip" title="?"></div>
-							<div id="id_ac_detected" class="author  column external">
-								<input type="text" name="user_name_comm" id="user_name_comm" placeholder="<?php p($l->t('Your name here')); ?>" />
-							</div>
-						</div>
-					<?php endif; ?>
-						<form class="newCommentForm table-row" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
-							<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
-							<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-							<div id="commentBox" name="commentBox" class="message" data-placeholder="<?php p($l->t('New comment …'))?>" contenteditable="true"></div>
-							<input id="submit_send_comment" class="submitComment icon-confirm" value="" type="submit">
-							<span class="icon-loading-small" style="float:right;"></span>
-						</form>
+
+		<?php if ($expired) : ?>
+			<div id="expired_info">
+				<h2><?php p($l->t('Poll expired')); ?></h2>
+				<p>
+					<?php p($l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire()))))); ?>
+				</p>
+			</div>
+		<?php endif; ?>
+		<ul class="tabHeaders">
+			<li class="tabHeader selected" data-tabid="commentsTabView" data-tabindex="0">
+				<a href="#"><?php p($l->t('Comments')); ?></a>
+			</li>
+		</ul>
+		<div class="tabsContainer">
+			<div id="commentsTabView" class="tab commentsTabView">
+				<div class="newCommentRow comment new-comment">
+				<?php if (User::isLoggedIn()) : ?>
+					<div class="authorRow user-cell flex-row">
+						<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
+						<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
 					</div>
 
-					<ul class="comments column">
+				<?php else: ?>
+					<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
+					<div class="authorRow user-cell flex-row">
+						<div class="avatar has-tooltip" title="?"></div>
+						<div id="id_ac_detected" class="author  flex-column external">
+							<input type="text" name="user_name_comm" id="user_name_comm" placeholder="<?php p($l->t('Your name here')); ?>" />
+						</div>
+					</div>
+				<?php endif; ?>
+					<form class="newCommentForm flex-row" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
+						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="userId" value="<?php p($userId); ?>" />
+						<div id="commentBox" name="commentBox" class="message" data-placeholder="<?php p($l->t('New comment …'))?>" contenteditable="true"></div>
+						<input id="submit_send_comment" class="submitComment icon-confirm" value="" type="submit">
+						<span class="icon-loading-small" style="float:right;"></span>
+					</form>
+				</div>
 
-					<?php if ($comments == null) : ?>
-						<li id="no-comments" class="emptycontent">
-					<?php else : ?>
-						<li id="no-comments" class="emptycontent hidden">
-					<?php endif; ?>
+				<ul class="comments flex-column">
 
-							<div class="icon-comment"></div>
-							<p><?php p($l->t('No comments yet. Be the first.')); ?></p>
-						</li>
+				<?php if ($comments == null) : ?>
+					<li id="no-comments" class="emptycontent">
+				<?php else : ?>
+					<li id="no-comments" class="emptycontent hidden">
+				<?php endif; ?>
 
-					<?php foreach ($comments as $comment) : ?>
+						<div class="icon-comment"></div>
+						<p><?php p($l->t('No comments yet. Be the first.')); ?></p>
+					</li>
 
-						<?php
-							if ( $comment->getUserId() === $userId ) {
-								// Comment is from current user
-								// -> display user
-								$avatarName = $userId;
-								$displayName = $userMgr->get($userId)->getDisplayName();
+				<?php foreach ($comments as $comment) : ?>
 
-							} else if ( !$isAnonymous && !$hideNames ) {
-								// comment is from another user,
-								// poll is not anoymous (for current user)
-								// users are not hidden
-								// -> display user
-								$avatarName = $comment->getUserId();
-								$displayName = $avatarName;
-								if ($userMgr->get($comment->getUserId()) !== null) {
-									$displayName = $userMgr->get($avatarName)->getDisplayName();
-								}
-							} else {
-								// in all other cases
-								// -> make user anonymous
-								// poll is anonymous and current user is not owner
-								// or names are hidden
-								$displayName = 'Anonymous';
-								$avatarName = $displayName;
+					<?php
+						if ( $comment->getUserId() === $userId ) {
+							// Comment is from current user
+							// -> display user
+							$avatarName = $userId;
+							$displayName = $userMgr->get($userId)->getDisplayName();
+
+						} else if ( !$isAnonymous && !$hideNames ) {
+							// comment is from another user,
+							// poll is not anoymous (for current user)
+							// users are not hidden
+							// -> display user
+							$avatarName = $comment->getUserId();
+							$displayName = $avatarName;
+							if ($userMgr->get($comment->getUserId()) !== null) {
+								$displayName = $userMgr->get($avatarName)->getDisplayName();
 							}
-						?>
+						} else {
+							// in all other cases
+							// -> make user anonymous
+							// poll is anonymous and current user is not owner
+							// or names are hidden
+							$displayName = 'Anonymous';
+							$avatarName = $displayName;
+						}
+					?>
 
-						<li id="comment_<?php p($comment->getId()); ?>" class="comment column">
-							<div class="authorRow user-cell table-row">
-								<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
-								<div class="author"><?php p($displayName) ?></div>
-								<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
-							</div>
-							<div class="message wordwrap comment-content"><?php p($comment->getComment()); ?></div>
-						</li>
-					<?php endforeach; ?>
-					</ul>
-				</div>
-				</div>
+					<li id="comment_<?php p($comment->getId()); ?>" class="comment flex-column">
+						<div class="authorRow user-cell flex-row">
+							<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
+							<div class="author"><?php p($displayName) ?></div>
+							<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
+						</div>
+						<div class="message wordwrap comment-content"><?php p($comment->getComment()); ?></div>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</div>
 			</div>
 		</div>
 	</div>

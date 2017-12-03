@@ -13,13 +13,19 @@ h1 {
   mask: url("../img/polls.svg") no-repeat 50% 50%; }
 
 #controls {
-  display: inline-flex; }
+  display: flex;
+  width: 100%;
+  position: relative;
+  top: 4px; }
   #controls h2 {
     margin-top: 12px; }
-
-.main-container {
-  position: relative;
-  margin-top: 44px; }
+  #controls #breadcrump {
+    flex-grow: 0;
+    overflow: hidden; }
+    #controls #breadcrump div.crumb {
+      overflow: hidden;
+      white-space: nowrap;
+      flex-shrink: 0; }
 
 .col-100 {
   width: 100%;
