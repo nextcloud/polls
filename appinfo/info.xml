@@ -16,7 +16,6 @@
     <category>tools</category>
     <website>https://github.com/nextcloud/polls</website>
     <bugs>https://github.com/nextcloud/polls/issues</bugs>
-    <use-migrations>true</use-migrations>
     <repository type="git">https://github.com/nextcloud/polls.git</repository>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/overview.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
