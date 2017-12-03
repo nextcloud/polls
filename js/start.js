@@ -1,3 +1,4 @@
+/** global: Clipboard */
 $(document).ready(function () {
 	new Clipboard('.copy-link');
 	$('.alt-tooltip').tooltip();
@@ -5,12 +6,6 @@ $(document).ready(function () {
 	$('.delete-poll').click(function () {
 		deletePoll(this);
 	});
-
-	/*
- 	$('.copy-link').click(function () {
-		copyToClipboard(this);
-	});
- 	*/
 
 	$('.table-body .avatardiv').each(function (i, obj) {
 		$(obj).avatar(obj.title, 32);

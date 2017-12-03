@@ -67,22 +67,21 @@
 					<div class="wrapper group-master">
 						<div class="wrapper group-1">
 							<div class="wrapper group-1-1">
-								<div class="column name">		<?php p($l->t('Title')); ?></div>
-								<div class="column description"></div>
+								<div class="flex-column name">		<?php p($l->t('Title')); ?></div>
 							</div>
 							<div class="wrapper group-1-2">
-								<div class="column actions"></div>
+								<div class="flex-column actions"></div>
 							</div>
 						</div>
 						<div class="wrapper group-2">
-							<div class="column owner">   <?php p($l->t('By')); ?></div>
+							<div class="flex-column owner">   <?php p($l->t('By')); ?></div>
 							<div class="wrapper group-2-1">
-								<div class="column access">	  <?php p($l->t('Access')); ?></div>
-								<div class="column created">		 <?php p($l->t('Created')); ?></div>
+								<div class="flex-column access">	  <?php p($l->t('Access')); ?></div>
+								<div class="flex-column created">		 <?php p($l->t('Created')); ?></div>
 							</div>
 							<div class="wrapper group-2-2">
-								<div class="column expiry">		  <?php p($l->t('Expires')); ?></div>
-								<div class="column participants">	<?php p($l->t('participated')); ?></div>
+								<div class="flex-column expiry">		  <?php p($l->t('Expires')); ?></div>
+								<div class="flex-column participants">	<?php p($l->t('participated')); ?></div>
 							</div>
 						</div>
 					 </div>
@@ -154,10 +153,10 @@
 							<div class="wrapper group-1">
 								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class. ' ' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
 								<a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
-									<div class="column name">						  <?php p($poll->getTitle()); ?></div>
-									<div class="column description">				   <?php p($poll->getDescription()); ?></div>
+									<div class="flex-column name">						  <?php p($poll->getTitle()); ?></div>
+									<div class="flex-column description">				   <?php p($poll->getDescription()); ?></div>
 								</a>
-								<div class="column actions">
+								<div class="flex-column actions">
 									<div class="icon-more popupmenu" value="<?php p($poll->getId()); ?>" id="expand_<?php p($poll->getId()); ?>"></div>
 									<div class="popovermenu bubble menu hidden" id="expanddiv_<?php p($poll->getId()); ?>">
 										<ul>
@@ -188,17 +187,17 @@
 								</div>
 							</div>
 							<div class="wrapper group-2">
-								<div class="column owner">
+								<div class="flex-column owner">
 									<div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
 									<div class="name-cell"><?php p($owner); ?></div>
 								</div>
 								<div class="wrapper group-2-1">
-									<div class="column access"><?php p($l->t($poll->getAccess())); ?></div>
-									<div class="column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated())*1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
+									<div class="flex-column access"><?php p($l->t($poll->getAccess())); ?></div>
+									<div class="flex-column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated())*1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
 								</div>
 								<div class="wrapper group-2-2">
-									<div class="column has-tooltip expiry<?php p($expiry_style . $timestamp_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire())*1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
-									<div class="column participants">
+									<div class="flex-column has-tooltip expiry<?php p($expiry_style . $timestamp_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire())*1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
+									<div class="flex-column participants">
 										<div class="symbol alt-tooltip partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
 										<div class="symbol alt-tooltip partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
 									</div>

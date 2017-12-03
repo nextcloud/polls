@@ -55,7 +55,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 			transition: background-color 0.3s ease;
 			background-color: #f8f8f8;
 		}
-		.column.owner {
+		.flex-column.owner {
 			display: flex;
 			.avatardiv {
 				margin-right: 4px;
@@ -89,7 +89,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 
-.column {
+.flex-column {
 	padding: 0 $table-padding;
 	overflow: hidden;
 	white-space: nowrap;

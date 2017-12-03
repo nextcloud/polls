@@ -20,14 +20,14 @@ $user-column-width: 265px;
 	display:flex;
 }
 
-.table-row {
+.flex-row {
 	display: flex;
 	flex-direction: row;
 	flex-grow: 1;
 	align-items: center;
 }
 
-.column {
+.flex-column {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 0;
@@ -43,21 +43,6 @@ $user-column-width: 265px;
 		}
 	}
 	padding: 12px 17px;	
-}
-
-#controls {
-	// flex-grow: 0;
-}
-	
-#breadcrump {
-	flex-grow: 0;
-	overflow: hidden;
-}
-
-div.crumb {
-	overflow: hidden;
-	white-space: nowrap;
-	flex-shrink: 0;
 }
 
 .header {
@@ -218,7 +203,7 @@ div.crumb {
 }
 
 #switchDetails {
-	margin-right: 6px;
+	margin-right: 32px;
 }
 
 .button.details {
@@ -280,13 +265,14 @@ div.crumb {
 }
 
 
-#app-sidebar {
-	.close.table-row {
+.detailsView  {
+	z-index: 1000 !important;
+	.close.flex-row {
 		justify-content: flex-end;
 		margin: 8px 8px 0 0;
 	}
 
-	.header.table-row {
+	.header.flex-row {
 		flex-direction: row;
 		align-items: flex-start;
 		margin-left: 0;
@@ -455,7 +441,11 @@ div.crumb {
 }
 @media all and (max-width: (480px) ) {
 
-	.table-row {
+	#votings {
+		padding: 0px 2px;
+	}
+
+	.flex-row {
 		flex-direction: column;
 
 		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
@@ -481,7 +471,7 @@ div.crumb {
 					border-top: $border_user;
 					.counter {
 						flex-direction: column;
-						align-items: right;
+						align-items: flex-end;
 					}
 				}
 			}
@@ -533,8 +523,11 @@ div.crumb {
 		}
 
 	}
+	.description {
+		margin: 4px;
+	}
 	
-	.column {
+	.flex-column {
 		&.table-body {
 			flex-grow: 0;
 		}
@@ -556,12 +549,13 @@ div.crumb {
 	
 	.submitPoll {
 		border-top: $border_user;
-		box-shadow: 0px 0px 9px 2px rgba(153,153,153,1);
+		box-shadow: 0 0 9px 2px rgba(153,153,153,1);
 		flex-wrap: wrap;
 		align-items: center;
 		position: fixed;
 		background-color: #fff;
 		bottom: 0;
+		left: 0;
 		width: 100%;
 		.finish_vote {
 			padding: 8px 8px;
@@ -578,7 +572,7 @@ div.crumb {
 		width: unset;
 	}
 
-	#options.table-row {
+	#options.flex-row {
 		flex-direction: column;
 		width: 100%;
 	}

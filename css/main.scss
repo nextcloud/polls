@@ -19,15 +19,24 @@ h1 {
 
 #controls {
     // adopted from NC13 for compatibily with OC10 and NC11-NC12
-	display: inline-flex;
+	display: flex;
+	width: 100%;
+	position: relative;
+	top: 4px;
 	h2 {
 		margin-top: 12px;
 	}
-}
+	#breadcrump {
+		flex-grow: 0;
+		overflow: hidden;
 
-.main-container {
-	position: relative;
-	margin-top: 44px;
+		div.crumb {
+			overflow: hidden;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+	}
+
 }
    
 .col-100 {
