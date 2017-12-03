@@ -15,27 +15,24 @@ addons:
   apt:
     packages:
     - libxml2-utils
-
 env:
   global:
+    - CORE_BRANCH=master
     - APP_NAME=polls
   matrix:
-    - DB=mysql;CLOUD=nextcloud;CORE_BRANCH=stable12
-    - DB=sqlite;CLOUD=nextcloud;CORE_BRANCH=stable12
-    - DB=pgsql;CLOUD=nextcloud;CORE_BRANCH=stable12
-    - DB=mysql;CLOUD=owncloud;CORE_BRANCH=stable10
+    - DB=mysql
+    - DB=sqlite
+    - DB=pgsql
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_install:
-  # Install NC / oC and app
-  - if [ $CLOUD = 'nextcloud' ]; then wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh; fi
-  - if [ $CLOUD = 'owncloud' ]; then wget https://raw.githubusercontent.com/owncloud/administration/master/travis-ci/before_install.sh; fi
+  # Install NC and app
+  - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh;
   - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-  - if [ $CLOUD = 'nextcloud' ]; then cd ../server; fi
-  - if [ $CLOUD = 'owncloud' ]; then cd ../core; fi
+  - cd ../server;
   - ./occ app:enable $APP_NAME
 
 before_script:
@@ -57,4 +54,4 @@ after_success:
   - php ocular.phar code-coverage:upload --format=php-clover clover.xml
 
 after_failure:
-  - cat ../../data/${CLOUD}.log
+  - cat ../../data/nextcloud.log
