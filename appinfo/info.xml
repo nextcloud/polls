@@ -22,7 +22,6 @@
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/new-poll.png</screenshot>
     <dependencies>
-        <owncloud min-version="10.0" max-version="10.0" />
         <nextcloud min-version="13" max-version="13" />
     </dependencies>
 </info>
