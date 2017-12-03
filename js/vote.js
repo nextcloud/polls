@@ -1,3 +1,4 @@
+/** global: Clipboard */
 var newUserDates = [];
 var newUserTypes = [];
 
@@ -27,7 +28,7 @@ function updateBest() {
 			maxVotes = yes - no;
 		}
 	});
-	var i = 0;
+
 	$('.vote').each(function () {
 		var yes = parseInt($(this).find('.yes').text());
 		var no = parseInt($(this).find('.no').text());
