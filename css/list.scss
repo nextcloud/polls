@@ -29,7 +29,7 @@ $mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $d
 $mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
 $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
-.row {
+.table-row {
 	display: flex;
 	width: 100%;
 	padding-left:  $row-padding;
@@ -215,7 +215,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 @media all and (max-width: ($mediabreak-2) ) {
-	.row {
+	.table-row {
 		padding: 0;
 	}
 

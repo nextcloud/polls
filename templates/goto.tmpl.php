@@ -132,7 +132,7 @@
 				}?>
 			</div>
 			<div class="table">
-					<ul class="row header" >
+					<ul class="table-row header" >
 						<?php
 						foreach ($dates as $dateElement) {
 							if ($poll->getType() === 0) {
@@ -149,12 +149,12 @@
 								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '" class="column vote option">');
 								print_unescaped('	<div class="date-box column">' . preg_replace('/_\d+$/', '', $dateElement->getText()).'</div>');
 							}
-							print_unescaped('<div class="counter row">');
-							print_unescaped('	<div class="yes row">');
+							print_unescaped('<div class="counter table-row">');
+							print_unescaped('	<div class="yes table-row">');
 							print_unescaped('		<div class="svg"></div>');
 							print_unescaped('		<div id="counter_yes_voteid_' . $dateElement->getId() . '" class ="result-cell yes" data-voteId="' . $dateElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
-							print_unescaped('	<div class="no row">');
+							print_unescaped('	<div class="no table-row">');
 							print_unescaped('		<div class="svg"></div>');
 							print_unescaped('		<div id="counter_no_voteid_' . $dateElement->getId() . '" class ="result-cell no" data-voteId="' . $dateElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
@@ -182,7 +182,7 @@
 							$userCnt++;
 							if ($usr === $userId) {
 								// if poll expired, just put current user among the others;
-								// otherwise skip here to add current user as last row (to vote)
+								// otherwise skip here to add current user as last table-row (to vote)
 								if (!$expired) {
 									$userVoted = $others[$usr];
 									continue;
@@ -205,14 +205,14 @@
 								}
 							}
 							?>
-							<li class="row user">
+							<li class="table-row user">
 								<div class="first">
-									<div class="user-cell row">
+									<div class="user-cell table-row">
 										<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
 										<div class="name"><?php p($displayName) ?></div>
 										</div>
 									</div>
-									<ul class="row">
+									<ul class="table-row">
 							<?php
 							// loop over dts
 							$i_tot = 0;
@@ -259,9 +259,9 @@
 					$totalNoOthers = array_merge(array(), $total['no']);
 					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
-						print_unescaped('<li class="row user current-user">');
-						print_unescaped('	<div class="row first">');
-						print_unescaped('		<div class="user-cell row">');
+						print_unescaped('<li class="table-row user current-user">');
+						print_unescaped('	<div class="table-row first">');
+						print_unescaped('		<div class="user-cell table-row">');
 						if (User::isLoggedIn()) {
 							print_unescaped('		<div class="avatar has-tooltip" title="'.($userId).'"></div>');
 							print_unescaped('		<div class="name">');
@@ -276,7 +276,7 @@
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
-						print_unescaped('<ul class="row">');
+						print_unescaped('<ul class="table-row">');
 
 						$i_tot = 0;
 						foreach ($dates as $dateElement) {
@@ -319,7 +319,7 @@
 					?>
 				</ul>
 			</div>
-			<div class="submitPoll row">
+			<div class="submitPoll table-row">
 				<div>
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
 						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
@@ -341,13 +341,13 @@
 		</div>
 
 		<div id="app-sidebar" class="detailsView scroll-container disappear">
-			<div class="close row">
+			<div class="close table-row">
 				<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
 			</div>
 
-			<div class="header row">
+			<div class="header table-row">
 				<div class="pollInformation column">
-					<div class="authorRow user-cell row">
+					<div class="authorRow user-cell table-row">
 						<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
 						<div class="avatar has-tooltip" title="<?php p($poll->getOwner())?>"></div>
 						<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
@@ -424,21 +424,21 @@
 				<div id="commentsTabView" class="tab commentsTabView">
 					<div class="newCommentRow comment new-comment">
 					<?php if (User::isLoggedIn()) : ?>
-						<div class="authorRow user-cell row">
+						<div class="authorRow user-cell table-row">
 							<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
 							<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
 						</div>
 
 					<?php else: ?>
 						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
-						<div class="authorRow user-cell row">
+						<div class="authorRow user-cell table-row">
 							<div class="avatar has-tooltip" title="?"></div>
 							<div id="id_ac_detected" class="author  column external">
 								<input type="text" name="user_name_comm" id="user_name_comm" placeholder="<?php p($l->t('Your name here')); ?>" />
 							</div>
 						</div>
 					<?php endif; ?>
-						<form class="newCommentForm row" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
+						<form class="newCommentForm table-row" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
 							<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 							<input type="hidden" name="userId" value="<?php p($userId); ?>" />
 							<div id="commentBox" name="commentBox" class="message" data-placeholder="<?php p($l->t('New comment …'))?>" contenteditable="true"></div>
@@ -489,7 +489,7 @@
 						?>
 
 						<li id="comment_<?php p($comment->getId()); ?>" class="comment column">
-							<div class="authorRow user-cell row">
+							<div class="authorRow user-cell table-row">
 								<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
 								<div class="author"><?php p($displayName) ?></div>
 								<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>

@@ -20,7 +20,7 @@ $user-column-width: 265px;
 	display:flex;
 }
 
-.row {
+.table-row {
 	display: flex;
 	flex-direction: row;
 	flex-grow: 1;
@@ -281,12 +281,12 @@ div.crumb {
 
 
 #app-sidebar {
-	.close.row {
+	.close.table-row {
 		justify-content: flex-end;
 		margin: 8px 8px 0 0;
 	}
 
-	.header.row {
+	.header.table-row {
 		flex-direction: row;
 		align-items: flex-start;
 		margin-left: 0;
@@ -455,7 +455,7 @@ div.crumb {
 }
 @media all and (max-width: (480px) ) {
 
-	.row {
+	.table-row {
 		flex-direction: column;
 
 		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
@@ -578,7 +578,7 @@ div.crumb {
 		width: unset;
 	}
 
-	#options.row {
+	#options.table-row {
 		flex-direction: column;
 		width: 100%;
 	}

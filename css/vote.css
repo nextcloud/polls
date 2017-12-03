@@ -1,7 +1,7 @@
 #content {
   display: flex; }
 
-.row {
+.table-row {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
@@ -187,10 +187,10 @@ div.crumb {
       .authorRow .author.external > input {
         width: 100%; }
 
-#app-sidebar .close.row {
+#app-sidebar .close.table-row {
   justify-content: flex-end;
   margin: 8px 8px 0 0; }
-#app-sidebar .header.row {
+#app-sidebar .header.table-row {
   flex-direction: row;
   align-items: flex-start;
   margin-left: 0;
@@ -301,55 +301,55 @@ div.crumb {
   #app-content {
     position: relative !important; } }
 @media all and (max-width: 480px) {
-  .row {
+  .table-row {
     flex-direction: column; }
-    .row.user-cell, .row.counter, .row.counter .yes, .row.counter .no, .row.controls, .row.breadcrump, .row.submitPoll, .row.newCommentForm, .row.close {
+    .table-row.user-cell, .table-row.counter, .table-row.counter .yes, .table-row.counter .no, .table-row.controls, .table-row.breadcrump, .table-row.submitPoll, .table-row.newCommentForm, .table-row.close {
       flex-direction: row; }
-    .row.header {
+    .table-row.header {
       flex-grow: 1;
       margin-left: 0;
       margin-top: 44px;
       width: 120px;
       padding: 0 0 0 4px; }
-      .row.header .vote {
+      .table-row.header .vote {
         padding-right: 10px; }
-        .row.header .vote.option {
+        .table-row.header .vote.option {
           align-items: baseline;
           width: 100%;
           border-top: 1px solid #ddd; }
-        .row.header .vote.time {
+        .table-row.header .vote.time {
           align-items: center;
           width: 100%;
           border-top: 1px solid #ddd; }
-          .row.header .vote.time .counter {
+          .table-row.header .vote.time .counter {
             flex-direction: column;
             align-items: right; }
-    .row.user {
+    .table-row.user {
       display: none; }
-    .row.current-user {
+    .table-row.current-user {
       display: flex;
       width: 44px;
       padding: 0;
       border: none;
       background-color: transparent; }
-      .row.current-user .poll-cell {
+      .table-row.current-user .poll-cell {
         border: none;
         border-radius: 0;
         border-top: 1px solid #ddd;
         background-color: transparent;
         padding: 0 2px; }
-        .row.current-user .poll-cell.active.yes {
+        .table-row.current-user .poll-cell.active.yes {
           background-image: url("../img/yes-vote-bordered.svg"); }
-        .row.current-user .poll-cell.active.no {
+        .table-row.current-user .poll-cell.active.no {
           background-image: url("../img/no-vote-bordered.svg"); }
-        .row.current-user .poll-cell.active.maybe {
+        .table-row.current-user .poll-cell.active.maybe {
           background-image: url("../img/maybe-vote-bordered.svg"); }
-        .row.current-user .poll-cell.active.unvoted {
+        .table-row.current-user .poll-cell.active.unvoted {
           background-image: url("../img/unvoted-vote-bordered.svg"); }
-      .row.current-user .user-cell {
+      .table-row.current-user .user-cell {
         position: absolute;
         left: 22px; }
-      .row.current-user .poll-cell, .row.current-user .toggle-cell {
+      .table-row.current-user .poll-cell, .table-row.current-user .toggle-cell {
         width: 44px;
         height: 44px;
         background-color: transparent; }
@@ -387,7 +387,7 @@ div.crumb {
     height: 44px;
     width: unset; }
 
-  #options.row {
+  #options.table-row {
     flex-direction: column;
     width: 100%; } }
 @media all and (max-width: 320px) {

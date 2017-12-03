@@ -22,7 +22,7 @@ It is a rework of the already existing [polls app](https://github.com/raduvatav/
 
 ![Vote](https://github.com/nextcloud/polls/blob/master/screenshots/vote.png)
 
-![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/new-poll.png)
+![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/edit-poll.png)
 
 ## Installation / Update
 This app is supposed to work on Nextcloud version 11+ or ownCloud version 8+.
