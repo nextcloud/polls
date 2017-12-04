@@ -144,8 +144,8 @@ $(document).ready(function () {
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function(data) {
-		var newCommentElement = '<li class="comment column"> ' +
-								'<div class="authorRow user-cell table-row"> ' +
+		var newCommentElement = '<li class="comment flex-column"> ' +
+								'<div class="authorRow user-cell flex-row"> ' +
 								'<div class="avatar missing" title="' + data.userName + '"></div> ' +
 								'<div class="author">' + data.userName + '</div>' +
 								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' +
