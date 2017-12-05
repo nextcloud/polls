@@ -81,7 +81,7 @@
 		$poll->getDescription() !== null &&
 		$poll->getDescription() !== ''
 	) {
-		$description = $poll->getDescription();
+		$description = str_replace(array("\r\n", "\r", "\n") , '<br/>', htmlspecialchars($poll->getDescription()));
 	} else {
 		$description = $l->t('No description provided.');
 	}
@@ -125,7 +125,7 @@
 		</div>
 
 		<div id="votings" class="main-container">
-			<div class="wordwrap description"><span><?php p($description); ?></span>
+			<div class="wordwrap description"><span><?php print_unescaped($description); ?></span>
 			<?php
 				if ($expired) {
 					print_unescaped('<span class="' . $statusClass . '">' . $l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire())))) . '</span>');
