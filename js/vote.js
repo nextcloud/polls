@@ -63,7 +63,7 @@ $(document).ready(function () {
 	var $hideAvatars = false;
 	if (!document.getElementById('nextcloud')) {
 		$product = 'ownCloud';
-		if (OC.currentUser === "") {
+		if (OC.currentUser === '') {
 			$hideAvatars = true;
 		}
 	}
@@ -91,7 +91,7 @@ $(document).ready(function () {
 	});
 
 	$('.vote.time').each(function () {
-		var extendedDate = new Date($(this).attr("data-value-utc").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
+		var extendedDate = new Date($(this).attr('data-value-utc').replace(/ /g,'T')+'Z'); //Fix display in Safari and IE
 
 		$(this).find('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
 		$(this).find('.day').text(extendedDate.toLocaleString(window.navigator.language, {day: 'numeric'}));
@@ -113,7 +113,7 @@ $(document).ready(function () {
 		}
 		var check_notif = document.getElementById('check_notif');
 		var newUserDates = [], newUserTypes = [];
-		$(".poll-cell.active").each(function () {
+		$('.poll-cell.active').each(function () {
 			if($(this).hasClass('no')) {
 				newUserTypes.push(0);
 			} else if ($(this).hasClass('yes')) {
@@ -196,7 +196,7 @@ $(document).ready(function () {
 		});
 	});
 
-	$(".share input").click(function () {
+	$('.share input').click(function () {
 		$(this).select();
 	});
 
@@ -214,29 +214,29 @@ $('#commentBox').keyup(function() {
 
 $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 	valuesChanged = true;
-	var $nextClass = "";
-	var $toggleAllClasses = "";
+	var $nextClass = '';
+	var $toggleAllClasses = '';
 
 	if($(this).hasClass('yes')) {
-		$nextClass = "no";
-		$toggleAllClasses= "yes";
+		$nextClass = 'no';
+		$toggleAllClasses= 'yes';
 	} else if($(this).hasClass('no')) {
-		$nextClass = "maybe";
-		$toggleAllClasses= "no";
+		$nextClass = 'maybe';
+		$toggleAllClasses= 'no';
 	} else if($(this).hasClass('maybe')) {
-		$nextClass = "yes";
-		$toggleAllClasses= "maybe";
+		$nextClass = 'yes';
+		$toggleAllClasses= 'maybe';
 	} else {
-		$nextClass = "yes";
-		$toggleAllClasses= "maybe";
+		$nextClass = 'yes';
+		$toggleAllClasses= 'maybe';
 	}
 
 	$(this).removeClass('yes no maybe unvoted');
 	$(this).addClass($nextClass);
 
 	if($(this).hasClass('toggle-cell')) {
-		$(".poll-cell.active").removeClass('yes no maybe unvoted');
-		$(".poll-cell.active").addClass($toggleAllClasses);
+		$('.poll-cell.active').removeClass('yes no maybe unvoted');
+		$('.poll-cell.active').addClass($toggleAllClasses);
 	}
 	updateCounters();
 });
