@@ -6,7 +6,7 @@ OC.L10N.register(
     "Please select at least one user or group!" : "Gelieve ten minste één gebruiker of groep te selecteren!",
     "Do you really want to delete that poll?" : "Wil je echt deze poll verwijderen?",
     "Copy to clipboard: Ctrl+C, Enter" : "Kopiëren naar het klembord: Ctrl+C, Enter",
-    "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "U bent niet geregistreerd\nGeef uw naam in om te stemmen\n(tenminste 3 tekens).",
+    "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Je bent niet geregistreerd\nGeef je naam in om te stemmen\n(tenminste 3 tekens).",
     "Please add some text to your comment before submitting it." : "Gelieve wat tekst aan de reactie toe te voegen voordat je hem plaatst.",
     "An error occurred, your comment was not posted…" : "Er heeft zich een fout voorgedaan, jouw reactie is niet geplaatst...",
     "Polls" : "Polls",
