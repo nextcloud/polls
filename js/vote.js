@@ -60,11 +60,10 @@ $(document).ready(function () {
 	updateBest();
 
 	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
-	var $hideAvatars = false;
+	var hideAvatars = false;
 	if (!document.getElementById('nextcloud')) {
-		$product = 'ownCloud';
 		if (OC.currentUser === '') {
-			$hideAvatars = true;
+			hideAvatars = true;
 		}
 	}
 	// 
@@ -83,7 +82,7 @@ $(document).ready(function () {
 
 	$('.avatar').each(function (i, obj) {
 		// oC hack
-		if (!$hideAvatars) {
+		if (!hideAvatars) {
 			$(obj).avatar(obj.title, 32);
 		} else {
 			$(obj).imageplaceholder(obj.title);
@@ -181,7 +180,7 @@ $(document).ready(function () {
 
 			$('.avatar.missing').each(function (i, obj) {
 				// oC hack
-				if (!$hideAvatars) {
+				if (!hideAvatars) {
 					$(obj).avatar(obj.title, 32);
 				} else {
 					$(obj).imageplaceholder(obj.title);
