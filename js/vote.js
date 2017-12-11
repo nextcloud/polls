@@ -55,9 +55,20 @@ function switchSidebar() {
 }
 
 $(document).ready(function () {
-	// count how many times in each date
 	new Clipboard('.copy-link');
+	// count how many times in each date
 	updateBest();
+
+	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
+	var $hideAvatars = false;
+	if (!document.getElementById('nextcloud')) {
+		$product = 'ownCloud';
+		if (OC.currentUser === "") {
+			$hideAvatars = true;
+		}
+	}
+	// 
+
 	$('.delete-poll').click(function () {
 		deletePoll(this);
 	});
@@ -71,7 +82,12 @@ $(document).ready(function () {
 	});
 
 	$('.avatar').each(function (i, obj) {
-		$(obj).avatar(obj.title, 32);
+		// oC hack
+		if (!$hideAvatars) {
+			$(obj).avatar(obj.title, 32);
+		} else {
+			$(obj).imageplaceholder(obj.title);
+		}
 	});
 
 	$('.vote.time').each(function () {
@@ -164,7 +180,12 @@ $(document).ready(function () {
 			$('.new-comment .icon-loading-small').hide();
 
 			$('.avatar.missing').each(function (i, obj) {
-				$(obj).avatar(obj.title, 32);
+				// oC hack
+				if (!$hideAvatars) {
+					$(obj).avatar(obj.title, 32);
+				} else {
+					$(obj).imageplaceholder(obj.title);
+				}
 				$(obj).removeClass('missing');
 			});
 
