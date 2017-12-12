@@ -46,6 +46,15 @@ function updateCounters() {
 	updateBest();
 }
 
+function updateAvatar(obj) {
+	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
+	if (!document.getElementById('nextcloud') && OC.currentUser === '') {
+		$(obj).imageplaceholder(obj.title);
+	} else {
+		$(obj).avatar(obj.title, 32);
+	}
+}
+
 function switchSidebar() {
 	if ($('#app-content').hasClass('with-app-sidebar')) {
 		OC.Apps.hideAppSidebar();
@@ -55,9 +64,19 @@ function switchSidebar() {
 }
 
 $(document).ready(function () {
-	// count how many times in each date
 	new Clipboard('.copy-link');
+	// count how many times in each date
 	updateBest();
+
+	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
+	var hideAvatars = false;
+	if (!document.getElementById('nextcloud')) {
+		if (OC.currentUser === '') {
+			hideAvatars = true;
+		}
+	}
+	// 
+
 	$('.delete-poll').click(function () {
 		deletePoll(this);
 	});
@@ -71,11 +90,11 @@ $(document).ready(function () {
 	});
 
 	$('.avatar').each(function (i, obj) {
-		$(obj).avatar(obj.title, 32);
+		updateAvatar(obj);
 	});
 
 	$('.vote.time').each(function () {
-		var extendedDate = new Date($(this).attr("data-value-utc").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
+		var extendedDate = new Date($(this).attr('data-value-utc').replace(/ /g,'T')+'Z'); //Fix display in Safari and IE
 
 		$(this).find('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
 		$(this).find('.day').text(extendedDate.toLocaleString(window.navigator.language, {day: 'numeric'}));
@@ -97,7 +116,7 @@ $(document).ready(function () {
 		}
 		var check_notif = document.getElementById('check_notif');
 		var newUserDates = [], newUserTypes = [];
-		$(".poll-cell.active").each(function () {
+		$('.poll-cell.active').each(function () {
 			if($(this).hasClass('no')) {
 				newUserTypes.push(0);
 			} else if ($(this).hasClass('yes')) {
@@ -164,7 +183,12 @@ $(document).ready(function () {
 			$('.new-comment .icon-loading-small').hide();
 
 			$('.avatar.missing').each(function (i, obj) {
-				$(obj).avatar(obj.title, 32);
+				// oC hack
+				if (!hideAvatars) {
+					$(obj).avatar(obj.title, 32);
+				} else {
+					$(obj).imageplaceholder(obj.title);
+				}
 				$(obj).removeClass('missing');
 			});
 
@@ -175,7 +199,7 @@ $(document).ready(function () {
 		});
 	});
 
-	$(".share input").click(function () {
+	$('.share input').click(function () {
 		$(this).select();
 	});
 
@@ -193,29 +217,29 @@ $('#commentBox').keyup(function() {
 
 $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 	valuesChanged = true;
-	var $nextClass = "";
-	var $toggleAllClasses = "";
+	var $nextClass = '';
+	var $toggleAllClasses = '';
 
 	if($(this).hasClass('yes')) {
-		$nextClass = "no";
-		$toggleAllClasses= "yes";
+		$nextClass = 'no';
+		$toggleAllClasses= 'yes';
 	} else if($(this).hasClass('no')) {
-		$nextClass = "maybe";
-		$toggleAllClasses= "no";
+		$nextClass = 'maybe';
+		$toggleAllClasses= 'no';
 	} else if($(this).hasClass('maybe')) {
-		$nextClass = "yes";
-		$toggleAllClasses= "maybe";
+		$nextClass = 'yes';
+		$toggleAllClasses= 'maybe';
 	} else {
-		$nextClass = "yes";
-		$toggleAllClasses= "maybe";
+		$nextClass = 'yes';
+		$toggleAllClasses= 'maybe';
 	}
 
 	$(this).removeClass('yes no maybe unvoted');
 	$(this).addClass($nextClass);
 
 	if($(this).hasClass('toggle-cell')) {
-		$(".poll-cell.active").removeClass('yes no maybe unvoted');
-		$(".poll-cell.active").addClass($toggleAllClasses);
+		$('.poll-cell.active').removeClass('yes no maybe unvoted');
+		$('.poll-cell.active').addClass($toggleAllClasses);
 	}
 	updateCounters();
 });
