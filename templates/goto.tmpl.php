@@ -81,7 +81,7 @@
 		$poll->getDescription() !== null &&
 		$poll->getDescription() !== ''
 	) {
-		$description = str_replace(array("\r\n", "\r", "\n") , '<br/>', htmlspecialchars($poll->getDescription()));
+		$description = str_replace(array('\r\n', '\r', '\n') , '<br/>', htmlspecialchars($poll->getDescription()));
 	} else {
 		$description = $l->t('No description provided.');
 	}

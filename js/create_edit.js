@@ -321,7 +321,8 @@ $(document).ready(function () {
 			var year = date.getFullYear();
 			var month = date.getMonth();
 			var day = date.getDate();
-			var newDate = new Date(year, month, day).getTime()/1000;
+			// set expiry date to the last second before midnight of the choosen date (local time)
+			var newDate = new Date(year, month, day, 23, 59, 59).getTime()/1000; 
 			document.getElementById('expireTs').value = newDate;
 		},
 		timepicker: false,

@@ -335,6 +335,8 @@ class PageController extends Controller {
 		$isAnonymous,
 		$hideNames
 	) {
+		
+		
 		$event = $this->eventMapper->find($pollId);
 		$event->setTitle($pollTitle);
 		$event->setDescription($pollDesc);
@@ -369,8 +371,7 @@ class PageController extends Controller {
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
-			// Add one day, so it expires at the end of a day
-			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24);
+			$expire = date('Y-m-d H:i:s', $expireTs);
 		}
 		$event->setExpire($expire);
 
@@ -478,8 +479,7 @@ class PageController extends Controller {
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
-			// Add one day, so it expires at the end of a day
-			$expire = date('Y-m-d H:i:s', $expireTs + 60 * 60 * 24);
+			$expire = date('Y-m-d H:i:s', $expireTs);
 		}
 		$event->setExpire($expire);
 
