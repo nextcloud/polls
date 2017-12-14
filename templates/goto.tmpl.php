@@ -114,7 +114,7 @@
 			</div>
 
 
-			<a id="switchDetails" class="button details" title="Details" href="#">
+			<a id="switchDetails" class="button has-tooltip-bottom details" title="Details" href="#">
 				<span class="symbol icon-settings"></span>
 				<?php if (count($comments)) : ?>
 					<div id="comment-counter" class="badge"><?php p(count($comments)) ?></div>
@@ -343,14 +343,14 @@
 	</div>
 	<div id="app-sidebar" class="detailsView scroll-container disappear">
 		<div class="close flex-row">
-			<a id="closeDetails" class="close icon-close" href="#" alt="<?php $l->t('Close');?>"></a>
+			<a id="closeDetails" class="close icon-close has-tooltip-bottom" title="<?php p($l->t('Close details')); ?>" href="#" alt="<?php $l->t('Close');?>"></a>
 		</div>
 
 		<div class="header flex-row">
 			<div class="pollInformation flex-column">
 				<div class="authorRow user-cell flex-row">
 					<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
-					<div class="avatar has-tooltip" title="<?php p($poll->getOwner())?>"></div>
+					<div class="avatar has-tooltip-bottom" title="<?php p($poll->getOwner())?>"></div>
 					<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
 				</div>
 
@@ -386,7 +386,7 @@
 			<div class="pollActions flex-column">
 				<ul class="with-icons">
 					<li>
-						<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
+						<a id="id_copy_<?php p($poll->getId()); ?>" class="icon-clippy has-tooltip-bottom svg copy-link" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
 							<?php p($l->t('Copy Link')); ?>
 						</a>
 					</li>
