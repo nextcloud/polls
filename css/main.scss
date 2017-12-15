@@ -13,6 +13,7 @@ h1 {
 
 .icon-polls {
 	background-color: black;
+	-webkit-mask: url('../img/app.svg') no-repeat 50% 50%;
 	mask: url('../img/app.svg') no-repeat 50% 50%;
 }
 
