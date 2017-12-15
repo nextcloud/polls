@@ -14,7 +14,7 @@ $(document).ready(function () {
 				$input.attr('data-original-title', t('core', 'Copy'))
 					.tooltip('fixTitle');
 			} else {
-				$input.tooltip("destroy");
+				$input.tooltip('destroy');
 			}
 		}, 3000);
 	});
