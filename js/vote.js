@@ -74,7 +74,7 @@ $(document).ready(function () {
 			.tooltip('show');
 		_.delay(function() {
 			$input.tooltip('hide');
-			if (OC.Share.Social.Collection.size() == 0) {
+			if (OC.Share.Social.Collection.size() === 0) {
 				$input.attr('data-original-title', t('core', 'Copy'))
 					.tooltip('fixTitle');
 			} else {
@@ -111,14 +111,13 @@ $(document).ready(function () {
 	// count how many times in each date
 	updateBest();
 
-	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
+	// Temporary hack - Check if we have Nextcloud or ownCloud with an anonymous user
 	var hideAvatars = false;
 	if (!document.getElementById('nextcloud')) {
 		if (OC.currentUser === '') {
 			hideAvatars = true;
 		}
 	}
-	// 
 
 	$('.delete-poll').click(function () {
 		deletePoll(this);
@@ -206,14 +205,14 @@ $(document).ready(function () {
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function(data) {
-		var newCommentElement = '<li class="comment flex-column"> ' +
-								'<div class="authorRow user-cell flex-row"> ' +
-								'<div class="avatar missing" title="' + data.userName + '"></div> ' +
-								'<div class="author">' + data.userName + '</div>' +
-								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' +
-								'</div>' +
-								'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
-								'</li>';
+			var newCommentElement = '<li class="comment flex-column"> ' +
+									'<div class="authorRow user-cell flex-row"> ' +
+									'<div class="avatar missing" title="' + data.userId + '"></div> ' +
+									'<div class="author">' + data.displayName + '</div>' +
+									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' +
+									'</div>' +
+									'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
+									'</li>';
 
 
 			$('#no-comments').after(newCommentElement);
