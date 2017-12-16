@@ -601,7 +601,6 @@ class PageController extends Controller {
 		$displayName = $userId;
 		$user = $this->userMgr->get($userId);
 		if ($user !== null) {
-			$userId = $user->getUID();
 			$displayName = $user->getDisplayName();
 		}
 		return new JSONResponse(array(

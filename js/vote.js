@@ -149,7 +149,7 @@ $(document).ready(function () {
 		var form = document.finish_vote;
 		var ac = document.getElementById('user_name');
 		if (ac !== null) {
-			if(ac.value.length >= 3){
+			if (ac.value.length >= 3) {
 				form.elements.userId.value = ac.value;
 			} else {
 				alert(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'));
@@ -204,12 +204,12 @@ $(document).ready(function () {
 			commentBox: comment.textContent.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
-		$.post(form.action, data, function(data) {
+		$.post(form.action, data, function (data) {
 			var newCommentElement = '<li class="comment flex-column"> ' +
 									'<div class="authorRow user-cell flex-row"> ' +
 									'<div class="avatar missing" title="' + data.userId + '"></div> ' +
 									'<div class="author">' + data.displayName + '</div>' +
-									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' +
+									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('polls', 'now') + '</div>' +
 									'</div>' +
 									'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
 									'</li>';
@@ -251,7 +251,7 @@ $(document).ready(function () {
 
 });
 
-$('#commentBox').keyup(function() {
+$('#commentBox').keyup(function () {
 	var $message = $('#commentBox');
 	if(!$message.text().trim().length) {
 		$message.empty();
@@ -263,7 +263,7 @@ $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 	var $nextClass = '';
 	var $toggleAllClasses = '';
 
-	if($(this).hasClass('yes')) {
+	if ($(this).hasClass('yes')) {
 		$nextClass = 'no';
 		$toggleAllClasses= 'yes';
 	} else if($(this).hasClass('no')) {
@@ -280,7 +280,7 @@ $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 	$(this).removeClass('yes no maybe unvoted');
 	$(this).addClass($nextClass);
 
-	if($(this).hasClass('toggle-cell')) {
+	if ($(this).hasClass('toggle-cell')) {
 		$('.poll-cell.active').removeClass('yes no maybe unvoted');
 		$('.poll-cell.active').addClass($toggleAllClasses);
 	}

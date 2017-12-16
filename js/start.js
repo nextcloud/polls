@@ -1,14 +1,14 @@
 /** global: Clipboard */
 $(document).ready(function () {
 	var clipboard = new Clipboard('.copy-link');
-	clipboard.on('success', function(e) {
+	clipboard.on('success', function (e) {
 		var $input = $(e.trigger);
 		$input.tooltip('hide')
 			.attr('data-original-title', t('core', 'Copied!'))
 			.tooltip('fixTitle')
 			.tooltip({placement: 'bottom', trigger: 'manual'})
 			.tooltip('show');
-		_.delay(function() {
+		_.delay(function () {
 			$input.tooltip('hide');
 			if (OC.Share.Social.Collection.size() === 0) {
 				$input.attr('data-original-title', t('core', 'Copy'))
