@@ -6,7 +6,7 @@
     "Copy to clipboard: Ctrl+C, Enter" : "Kopiëren naar het klembord: Ctrl+C, Enter",
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Je bent niet geregistreerd\nGeef je naam in om te stemmen\n(tenminste 3 tekens).",
     "Please add some text to your comment before submitting it." : "Gelieve wat tekst aan de reactie toe te voegen voordat je hem plaatst.",
-    "An error occurred, your comment was not posted…" : "Er heeft zich een fout voorgedaan, jouw reactie is niet geplaatst...",
+    "An error occurred, your comment was not posted…" : "Er heeft zich een fout voorgedaan, je reactie is niet geplaatst...",
     "Polls" : "Polls",
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Hallo %s,<br/><br/><strong>%s</strong> heeft deelgenomen aan de poll '%s'.<br/><br/>Om direct naar de poll te gaan gebruik je deze <a href=\"%s\">link</a>",
     "Polls App - New Comment" : "Polls App - Nieuwe Reactie",
