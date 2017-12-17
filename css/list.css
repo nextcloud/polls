@@ -1,3 +1,6 @@
+.table {
+  width: 100%; }
+
 .table-row {
   display: flex;
   width: 100%;
