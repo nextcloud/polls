@@ -335,8 +335,8 @@ class PageController extends Controller {
 		$isAnonymous,
 		$hideNames
 	) {
-		
-		
+
+
 		$event = $this->eventMapper->find($pollId);
 		$event->setTitle($pollTitle);
 		$event->setDescription($pollDesc);
@@ -598,14 +598,16 @@ class PageController extends Controller {
 		$comment->setDt(date('Y-m-d H:i:s'));
 		$this->commentMapper->insert($comment);
 		$this->sendNotifications($pollId, $userId);
-		$newUserId = $userId;
-		if ($this->userMgr->get($userId) !== null) {
-			$newUserId = $this->userMgr->get($userId)->getDisplayName();
+		$displayName = $userId;
+		$user = $this->userMgr->get($userId);
+		if ($user !== null) {
+			$displayName = $user->getDisplayName();
 		}
 		return new JSONResponse(array(
 			'comment' => $commentBox,
 			'date' => date('Y-m-d H:i:s'),
-			'userName' => $newUserId
+			'userId' => $userId,
+			'displayName' => $displayName
 		));
 	}
 
