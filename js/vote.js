@@ -209,7 +209,7 @@ $(document).ready(function () {
 									'<div class="authorRow user-cell flex-row"> ' +
 									'<div class="avatar missing" title="' + data.userId + '"></div> ' +
 									'<div class="author">' + data.displayName + '</div>' +
-									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('polls', 'now') + '</div>' +
+									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('polls', 'just now') + '</div>' +
 									'</div>' +
 									'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
 									'</li>';
