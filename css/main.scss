@@ -7,6 +7,14 @@ h1 {
 	padding-top: 44px;
 }
 
+/* allow horizontal scrollbar 
+   otherwise user management is not usable on mobile */
+@media only screen and (max-width: 768px) {
+	#app-content {
+		overflow-x: auto !important;
+	}
+}
+
 #app-content-wrapper {
 	flex-direction: column;
 }
