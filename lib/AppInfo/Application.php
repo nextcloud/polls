@@ -23,9 +23,7 @@
 
 namespace OCA\Polls\AppInfo;
 
-
-use OC\AppFramework\Utility\SimpleContainer;
-use OCP\AppFramework\App;
+use OCA\Polls\Controller\PageController;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\DateMapper;
 use OCA\Polls\Db\EventMapper;
@@ -33,7 +31,8 @@ use OCA\Polls\Db\NotificationMapper;
 use OCA\Polls\Db\ParticipationMapper;
 use OCA\Polls\Db\ParticipationTextMapper;
 use OCA\Polls\Db\TextMapper;
-use OCA\Polls\Controller\PageController;
+use OCP\AppFramework\App;
+use OCP\IContainer;
 
 class Application extends App {
 
@@ -50,8 +49,7 @@ class Application extends App {
 		/**
 		 * Controllers
 		 */
-		$container->registerService('PageController', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('PageController', function (IContainer $c) {
 			return new PageController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -72,74 +70,63 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('UserManager', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('UserManager', function (IContainer $c) {
 			return $c->query('ServerContainer')->getUserManager();
 		});
 
-		$container->registerService('GroupManager', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('GroupManager', function (IContainer $c) {
 			return $c->query('ServerContainer')->getGroupManager();
 		});
 
-		$container->registerService('AvatarManager', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('AvatarManager', function (IContainer $c) {
 			return $c->query('ServerContainer')->getAvatarManager();
 		});
 
-		$container->registerService('Logger', function ($c) {
-			/** @var SimpleContainer $c */
+		$container->registerService('Logger', function (IContainer $c) {
 			return $c->query('ServerContainer')->getLogger();
 		});
 
-		$container->registerService('L10N', function ($c) {
+		$container->registerService('L10N', function (IContainer $c) {
 			return $c->query('ServerContainer')->getL10N($c->query('AppName'));
 		});
 
-		$container->registerService('CommentMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('CommentMapper', function (IContainer $c) use ($server) {
 			return new CommentMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('DateMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('DateMapper', function (IContainer $c) use ($server) {
 			return new DateMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('EventMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('EventMapper', function (IContainer $c) use ($server) {
 			return new EventMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('NotificationMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('NotificationMapper', function (IContainer $c) use ($server) {
 			return new NotificationMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('ParticipationMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('ParticipationMapper', function (IContainer $c) use ($server) {
 			return new ParticipationMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('ParticipationTextMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('ParticipationTextMapper', function (IContainer $c) use ($server) {
 			return new ParticipationTextMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('TextMapper', function ($c) use ($server) {
-			/** @var SimpleContainer $c */
+		$container->registerService('TextMapper', function (IContainer $c) use ($server) {
 			return new TextMapper(
 				$server->getDatabaseConnection()
 			);
@@ -158,7 +145,7 @@ class Application extends App {
 				'id' => 'polls',
 				'order' => 77,
 				'href' => $urlGenerator->linkToRoute('polls.page.index'),
-				'icon' => $urlGenerator->imagePath('polls', 'app-logo-polls.svg'),
+				'icon' => $urlGenerator->imagePath('polls', 'app.svg'),
 				'name' => $l10n->t('Polls')
 			];
 		});

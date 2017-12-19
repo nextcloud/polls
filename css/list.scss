@@ -29,30 +29,10 @@ $mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $d
 $mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
 $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
-
-.table, .row, .column {
-	box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
-}
-
-/* #controls h2 {
-	float: left;
-	padding: 15px 15px 0 15px;
-}
- */
-
-.icon-polls {
-	background-color: black;
-	mask: url('../img/app-logo-polls.svg') no-repeat 50% 50%;
-}
-
 .table {
-	position: relative;
-	&.has-controls {
-		top: 44px;
-	}
+	width: 100%;
 }
-
-.row {
+.table-row {
 	display: flex;
 	width: 100%;
 	padding-left:  $row-padding;
@@ -78,7 +58,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 			transition: background-color 0.3s ease;
 			background-color: #f8f8f8;
 		}
-		.column.owner {
+		.flex-column.owner {
 			display: flex;
 			.avatardiv {
 				margin-right: 4px;
@@ -108,12 +88,11 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	align-items: center;
 	position: relative;
 	div {
-		// vertical-align: middle;
 	}
 }
 
 
-.column {
+.flex-column {
 	padding: 0 $table-padding;
 	overflow: hidden;
 	white-space: nowrap;
@@ -164,11 +143,9 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 		&.partic_commented {
 			&.icon-commented_yes {
-				// background-color: $bg_yes;
 				background-image: url('../img/yes-comment.svg');
 			}
 			&.icon-commented_no {
-				// background-color: $bg_no;
 				background-image: url('../img/no-comment.svg');
 			}
 		}
@@ -176,14 +153,11 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 }
 
-
 .actions {
 	width: $action-width;
 	position: relative;
 	overflow: initial;
 }
-
-
 
 .thumbnail {
 	background-size: $thumbnail-icon-width;
@@ -210,32 +184,29 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	}
 }
 
-
 .options, .participants {
 	display: flex;
-	flex-direction: row;	 -webkit-flex-direction: row;
+	flex-direction: row;
 }
 
 .group-1, .group-1-1, .group-master {
-	flex-grow: 1;	 -webkit-flex-grow: 1;
+	flex-grow: 1;
 }
 
 .group-1-1 {
-	flex-direction: column;		 -webkit-flex-direction: column;
+	flex-direction: column;
 	width: $group-1-1-width;
 	> div {
 		 width: 100%;
 	}
 }
 
-
-
 @media all and (max-width: ($mediabreak-1) ) {
 	.group-1 {
 		width: $group-1-width;
 	}
 	.group-2-1, .group-2-2 {
-		flex-direction: column; -webkit-flex-direction: column;
+		flex-direction: column;
 	}
 
 	.access, .created {
@@ -247,8 +218,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 @media all and (max-width: ($mediabreak-2) ) {
-
-	.row {
+	.table-row {
 		padding: 0;
 	}
 
@@ -258,9 +228,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 @media all and (max-width: ($mediabreak-3) ) {
-
 	.group-2 {
 		display: none;
 	}
 }
-	
