@@ -16,8 +16,9 @@ $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
-#content {
-	display:flex;
+.table {
+	display: flex;
+	flex-direction: column;
 }
 
 .flex-row {
@@ -34,20 +35,17 @@ $user-column-width: 265px;
 	flex-shrink: 0;
 	
 }
-#votings {
-	position: relative !important;
-	.description {
-		.expired-vote{
-			color: red;
-			font-weight: bold;
-		}
+.description {
+	padding: 12px 15px;	
+	.expired-vote{
+		color: red;
+		font-weight: bold;
 	}
-	padding: 12px 17px;	
 }
 
 .header {
 	margin-left: $user-column-width;
-	padding: 0 17px;
+	padding: 0 15px;
 	align-items: initial;
 	.vote.option {
 		.date-box {
@@ -204,6 +202,9 @@ $user-column-width: 265px;
 
 #switchDetails {
 	margin-right: 32px;
+	* {
+		box-sizing: border-box;
+	}
 }
 
 .button.details {

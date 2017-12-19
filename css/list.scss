@@ -30,7 +30,8 @@ $mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
 $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
 .table {
-	width: 100%;
+	display: flex;
+	flex-direction: column;
 }
 .table-row {
 	display: flex;
