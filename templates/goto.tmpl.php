@@ -268,7 +268,7 @@
 							p($userMgr->get($userId)->getDisplayName());
 						} else {
 							print_unescaped('		<div class="avatar has-tooltip" title="?"></div>');
-							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
+							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name') . '" />');
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
@@ -334,7 +334,7 @@
 			<?php if (User::isLoggedIn()) : ?>
 				<div class="notification">
 					<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification !== null) print_unescaped(' checked'); ?> />
-					<label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
+					<label for="check_notif"><?php p($l->t('Receive notifications of activity per email')); ?></label>
 				</div>
 			<?php endif; ?>
 			</div>
@@ -361,7 +361,7 @@
 							if ($poll->getExpire() !== null){
 								print_unescaped('<span class="open">' . $l->t('Expires on %s', array(date('d.m.Y', strtotime($poll->getExpire())))) . '</span>');
 							} else {
-								print_unescaped('<span class="open">' . $l->t('Expires never') . '</span>');
+								print_unescaped('<span class="open">' . $l->t('Does not expire') . '</span>');
 							}
 						}
 
@@ -373,9 +373,9 @@
 						if ($isAnonymous) {
 							print_unescaped('<span class="information">' . $l->t('Anononymous poll') . '</span>');
 							if ($hideNames) {
-								print_unescaped('<span class="information">' . $l->t('Usernames hidden to Owner') . '</span>');
+								print_unescaped('<span class="information">' . $l->t('Usernames hidden to owner') . '</span>');
 							} else {
-								print_unescaped('<span class="information">' . $l->t('Usernames visible to Owner') . '</span>');
+								print_unescaped('<span class="information">' . $l->t('Usernames visible to owner') . '</span>');
 							}
 						}
 						?>
@@ -430,7 +430,7 @@
 						</div>
 
 					<?php else: ?>
-						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
+						<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Log in or …')); ?></a>
 						<div class="authorRow user-cell row">
 							<div class="avatar has-tooltip" title="?"></div>
 							<div id="id_ac_detected" class="author  column external">
@@ -456,7 +456,7 @@
 					<?php endif; ?>
 
 							<div class="icon-comment"></div>
-							<p><?php p($l->t('No comments yet. Be the first.')); ?></p>
+							<p><?php p($l->t('Be the first to comment.')); ?></p>
 						</li>
 
 					<?php foreach ($comments as $comment) : ?>
