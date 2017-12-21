@@ -4,7 +4,6 @@
 build/
 css/*.map
 nbproject/
-vendor/
 *.cmd
 *.lock
 *.iml
