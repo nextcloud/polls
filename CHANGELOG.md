@@ -13,9 +13,13 @@ All notable changes to this project will be documented in this file.
  - New vote page design (responsive)
  - New comment design
  - A lot of clean up
+ - removing header elements for public polls
 
 ### Fixed
  - Linebreak bug
+ - Time picker bug (update to version 2.5.14, https://github.com/xdan/datetimepicker)
+ - Server error, if poll does not exist
+ - Several CSS fixes for NC 11 and oC 10
 
 ## [0.8.0] - 2017-10-13
 
