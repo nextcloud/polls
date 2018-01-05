@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.8.1] - 2017-12-xx
+## [0.8.1] - 2018-01-xx
 
 ### Added
  - Unit tests
