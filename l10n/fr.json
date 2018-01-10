@@ -1,4 +1,5 @@
 { "translations": {
+    "Do you really want to delete that poll (new)?" : "Voulez-vous réellement supprimer ce sondage (nouveau) ?",
     "Nothing selected!\nClick on cells to turn them green." : "Rien n'est sélectionné !\nCliquez sur les cellules pour les basculer en vert.",
     "You must enter at least a title for the new poll." : "Vous devez saisir au moins un titre pour ce nouveau sondage",
     "Please select at least one user or group!" : "Veuillez sélectionner au moins un utilisateur ou un groupe !",
