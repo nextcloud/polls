@@ -334,7 +334,7 @@
 			<?php if (User::isLoggedIn()) : ?>
 				<div class="notification">
 					<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification !== null) print_unescaped(' checked'); ?> />
-					<label for="check_notif"><?php p($l->t('Receive notifications of activity per email')); ?></label>
+					<label for="check_notif"><?php p($l->t('Email me about activity')); ?></label>
 				</div>
 			<?php endif; ?>
 			</div>
