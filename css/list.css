@@ -1,4 +1,7 @@
-.row {
+.table {
+  width: 100%; }
+
+.table-row {
   display: flex;
   width: 100%;
   padding-left: 15px;
@@ -8,26 +11,26 @@
   background-color: #fff;
   min-height: 4em;
   border-bottom: 1px solid #eee; }
-  .row.table-header .name, .row.table-header .description {
+  .table-row.table-header .name, .table-row.table-header .description {
     padding-left: 52px; }
-  .row.table-header .owner {
+  .table-row.table-header .owner {
     padding-left: 6px; }
-  .row.table-body:hover, .row.table-body:focus, .row.table-body:active, .row.table-body.mouseOver {
+  .table-row.table-body:hover, .table-row.table-body:focus, .table-row.table-body:active, .table-row.table-body.mouseOver {
     transition: background-color 0.3s ease;
     background-color: #f8f8f8; }
-  .row.table-body .column.owner {
+  .table-row.table-body .flex-column.owner {
     display: flex; }
-    .row.table-body .column.owner .avatardiv {
+    .table-row.table-body .flex-column.owner .avatardiv {
       margin-right: 4px; }
-  .row.table-body .icon-more {
+  .table-row.table-body .icon-more {
     right: 14px;
     opacity: 0.3;
     cursor: pointer;
     height: 44px;
     width: 44px; }
-  .row.table-body .symbol {
+  .table-row.table-body .symbol {
     padding: 2px; }
-  .row.table-header {
+  .table-row.table-header {
     color: #999; }
 
 .wrapper {
@@ -35,7 +38,7 @@
   align-items: center;
   position: relative; }
 
-.column {
+.flex-column {
   padding: 0 4px;
   overflow: hidden;
   white-space: nowrap;
@@ -122,7 +125,7 @@
   .expiry, .participants {
     width: 120px; } }
 @media all and (max-width: 668px) {
-  .row {
+  .table-row {
     padding: 0; }
 
   .group-2-1 {

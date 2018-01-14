@@ -27,5 +27,5 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  * General factory for the text model.
  */
 $fm->define('OCA\Polls\Db\Text')->setDefinitions([
-	'text' => Faker::paragraph()
+	'text' => Faker::text(255)
 ]);

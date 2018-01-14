@@ -1,3 +1,4 @@
+/** global: Clipboard */
 var newUserDates = [];
 var newUserTypes = [];
 
@@ -27,7 +28,7 @@ function updateBest() {
 			maxVotes = yes - no;
 		}
 	});
-	var i = 0;
+
 	$('.vote').each(function () {
 		var yes = parseInt($(this).find('.yes').text());
 		var no = parseInt($(this).find('.no').text());
@@ -45,6 +46,15 @@ function updateCounters() {
 	updateBest();
 }
 
+function updateAvatar(obj) {
+	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
+	if (!document.getElementById('nextcloud') && OC.currentUser === '') {
+		$(obj).imageplaceholder(obj.title);
+	} else {
+		$(obj).avatar(obj.title, 32);
+	}
+}
+
 function switchSidebar() {
 	if ($('#app-content').hasClass('with-app-sidebar')) {
 		OC.Apps.hideAppSidebar();
@@ -54,9 +64,61 @@ function switchSidebar() {
 }
 
 $(document).ready(function () {
+	var clipboard = new Clipboard('.copy-link');
+	clipboard.on('success', function(e) {
+		var $input = $(e.trigger);
+		$input.tooltip('hide')
+			.attr('data-original-title', t('core', 'Copied!'))
+			.tooltip('fixTitle')
+			.tooltip({placement: 'bottom', trigger: 'manual'})
+			.tooltip('show');
+		_.delay(function() {
+			$input.tooltip('hide');
+			if (OC.Share.Social.Collection.size() === 0) {
+				$input.attr('data-original-title', t('core', 'Copy'))
+					.tooltip('fixTitle');
+			} else {
+				$input.tooltip('destroy');
+			}
+		}, 3000);
+	});
+	clipboard.on('error', function (e) {
+		var $input = $(e.trigger);
+		var actionMsg = '';
+		if (/iPhone|iPad/i.test(navigator.userAgent)) {
+			actionMsg = t('core', 'Not supported!');
+		} else if (/Mac/i.test(navigator.userAgent)) {
+			actionMsg = t('core', 'Press ⌘-C to copy.');
+		} else {
+			actionMsg = t('core', 'Press Ctrl-C to copy.');
+		}
+
+		$input.tooltip('hide')
+			.attr('data-original-title', actionMsg)
+			.tooltip('fixTitle')
+			.tooltip({placement: 'bottom', trigger: 'manual'})
+			.tooltip('show');
+		_.delay(function () {
+			$input.tooltip('hide');
+			if (OC.Share.Social.Collection.size() == 0) {
+				$input.attr('data-original-title', t('core', 'Copy'))
+					.tooltip('fixTitle');
+			} else {
+				$input.tooltip("destroy");
+			}
+		}, 3000);
+	});
 	// count how many times in each date
-	new Clipboard('.copy-link');
 	updateBest();
+
+	// Temporary hack - Check if we have Nextcloud or ownCloud with an anonymous user
+	var hideAvatars = false;
+	if (!document.getElementById('nextcloud')) {
+		if (OC.currentUser === '') {
+			hideAvatars = true;
+		}
+	}
+
 	$('.delete-poll').click(function () {
 		deletePoll(this);
 	});
@@ -70,11 +132,11 @@ $(document).ready(function () {
 	});
 
 	$('.avatar').each(function (i, obj) {
-		$(obj).avatar(obj.title, 32);
+		updateAvatar(obj);
 	});
 
 	$('.vote.time').each(function () {
-		var extendedDate = new Date($(this).attr("data-value-utc").replace(/ /g,"T")+"Z"); //Fix display in Safari and IE
+		var extendedDate = new Date($(this).attr('data-value-utc').replace(/ /g,'T')+'Z'); //Fix display in Safari and IE
 
 		$(this).find('.month').text(extendedDate.toLocaleString(window.navigator.language, {month: 'short'}));
 		$(this).find('.day').text(extendedDate.toLocaleString(window.navigator.language, {day: 'numeric'}));
@@ -87,7 +149,7 @@ $(document).ready(function () {
 		var form = document.finish_vote;
 		var ac = document.getElementById('user_name');
 		if (ac !== null) {
-			if(ac.value.length >= 3){
+			if (ac.value.length >= 3) {
 				form.elements.userId.value = ac.value;
 			} else {
 				alert(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'));
@@ -96,7 +158,7 @@ $(document).ready(function () {
 		}
 		var check_notif = document.getElementById('check_notif');
 		var newUserDates = [], newUserTypes = [];
-		$(".poll-cell.active").each(function () {
+		$('.poll-cell.active').each(function () {
 			if($(this).hasClass('no')) {
 				newUserTypes.push(0);
 			} else if ($(this).hasClass('yes')) {
@@ -142,15 +204,15 @@ $(document).ready(function () {
 			commentBox: comment.textContent.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
-		$.post(form.action, data, function(data) {
-		var newCommentElement = '<li class="comment column"> ' +
-								'<div class="authorRow user-cell row"> ' +
-								'<div class="avatar missing" title="' + data.userName + '"></div> ' +
-								'<div class="author">' + data.userName + '</div>' +
-								'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('now') + '</div>' +
-								'</div>' +
-								'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
-								'</li>';
+		$.post(form.action, data, function (data) {
+			var newCommentElement = '<li class="comment flex-column"> ' +
+									'<div class="authorRow user-cell flex-row"> ' +
+									'<div class="avatar missing" title="' + data.userId + '"></div> ' +
+									'<div class="author">' + data.displayName + '</div>' +
+									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('polls', 'just now') + '</div>' +
+									'</div>' +
+									'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
+									'</li>';
 
 
 			$('#no-comments').after(newCommentElement);
@@ -163,7 +225,12 @@ $(document).ready(function () {
 			$('.new-comment .icon-loading-small').hide();
 
 			$('.avatar.missing').each(function (i, obj) {
-				$(obj).avatar(obj.title, 32);
+				// oC hack
+				if (!hideAvatars) {
+					$(obj).avatar(obj.title, 32);
+				} else {
+					$(obj).imageplaceholder(obj.title);
+				}
 				$(obj).removeClass('missing');
 			});
 
@@ -174,16 +241,17 @@ $(document).ready(function () {
 		});
 	});
 
-	$(".share input").click(function () {
+	$('.share input').click(function () {
 		$(this).select();
 	});
 
 	$('.has-tooltip').tooltip();
+	$('.has-tooltip-bottom').tooltip({placement:'bottom'});
 	updateCounters();
 
 });
 
-$('#commentBox').keyup(function() {
+$('#commentBox').keyup(function () {
 	var $message = $('#commentBox');
 	if(!$message.text().trim().length) {
 		$message.empty();
@@ -192,29 +260,29 @@ $('#commentBox').keyup(function() {
 
 $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 	valuesChanged = true;
-	var $nextClass = "";
-	var $toggleAllClasses = "";
+	var $nextClass = '';
+	var $toggleAllClasses = '';
 
-	if($(this).hasClass('yes')) {
-		$nextClass = "no";
-		$toggleAllClasses= "yes";
+	if ($(this).hasClass('yes')) {
+		$nextClass = 'no';
+		$toggleAllClasses= 'yes';
 	} else if($(this).hasClass('no')) {
-		$nextClass = "maybe";
-		$toggleAllClasses= "no";
+		$nextClass = 'maybe';
+		$toggleAllClasses= 'no';
 	} else if($(this).hasClass('maybe')) {
-		$nextClass = "yes";
-		$toggleAllClasses= "maybe";
+		$nextClass = 'yes';
+		$toggleAllClasses= 'maybe';
 	} else {
-		$nextClass = "yes";
-		$toggleAllClasses= "maybe";
+		$nextClass = 'yes';
+		$toggleAllClasses= 'maybe';
 	}
 
 	$(this).removeClass('yes no maybe unvoted');
 	$(this).addClass($nextClass);
 
-	if($(this).hasClass('toggle-cell')) {
-		$(".poll-cell.active").removeClass('yes no maybe unvoted');
-		$(".poll-cell.active").addClass($toggleAllClasses);
+	if ($(this).hasClass('toggle-cell')) {
+		$('.poll-cell.active').removeClass('yes no maybe unvoted');
+		$('.poll-cell.active').addClass($toggleAllClasses);
 	}
 	updateCounters();
 });

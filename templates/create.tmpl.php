@@ -23,7 +23,7 @@
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'createpoll');
-	\OCP\Util::addStyle('polls', 'vendor/jquery.datetimepicker');
+	\OCP\Util::addStyle('polls', 'vendor/jquery.datetimepicker.min');
 	\OCP\Util::addScript('polls', 'create_edit');
 	\OCP\Util::addScript('polls', 'vendor/jquery.datetimepicker.full.min');
 

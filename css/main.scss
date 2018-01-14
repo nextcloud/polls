@@ -7,27 +7,45 @@ h1 {
 	padding-top: 44px;
 }
 
+/* allow horizontal scrollbar 
+   otherwise user management is not usable on mobile */
+@media only screen and (max-width: 768px) {
+	#app-content {
+		overflow-x: auto !important;
+	}
+}
+
 #app-content-wrapper {
 	flex-direction: column;
 }
 
 .icon-polls {
 	background-color: black;
-	mask: url('../img/polls.svg') no-repeat 50% 50%;
+	-webkit-mask: url('../img/app.svg') no-repeat 50% 50%;
+	mask: url('../img/app.svg') no-repeat 50% 50%;
 }
 
 
 #controls {
     // adopted from NC13 for compatibily with OC10 and NC11-NC12
-	display: inline-flex;
+	display: flex;
+	width: 100%;
+	position: relative;
+	top: 4px;
 	h2 {
 		margin-top: 12px;
 	}
-}
+	#breadcrump {
+		flex-grow: 0;
+		overflow: hidden;
 
-.main-container {
-	position: relative;
-	margin-top: 44px;
+		div.crumb {
+			overflow: hidden;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+	}
+
 }
    
 .col-100 {
