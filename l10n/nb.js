@@ -41,6 +41,7 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "No description provided." : "Ingen beskrivelse angitt.",
     "The poll expired on %s. Voting is disabled, but you can still comment." : "Avstemningen utløp den %s. Du kan ikke lenger avgi stemme, men det går an å kommentere.",
+    "Switch all options at once" : "Bytt alle valg samtidig",
     "Your name here" : "Ditt navn her",
     "Vote!" : "Stem!",
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
