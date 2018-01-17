@@ -3,10 +3,9 @@
 .idea/
 build/
 css/*.map
-vendor/
+nbproject/
 *.cmd
 *.lock
 *.iml
 .DS_Store
 Thumbs.db
-nbproject/

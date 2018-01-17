@@ -61,9 +61,8 @@
 			<h2><?php p($l->t('No existing polls.')); ?></h2>
 		</div>
 	<?php else : ?>
-				<div class="table-row table-header">
 			<div class="table main-container has-controls">
-				<div class="table-row table-header">
+				<div class ="table-row table-header">
 
 					<div class="wrapper group-master">
 						<div class="wrapper group-1">
