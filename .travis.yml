@@ -15,14 +15,15 @@ addons:
   apt:
     packages:
     - libxml2-utils
+    
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=stable13
     - APP_NAME=polls
   matrix:
     - DB=mysql
-    - DB=sqlite
     - DB=pgsql
+    - DB=sqlite
 
 cache:
   directories:
