@@ -27,7 +27,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  * General factory for the participation text model.
  */
 $fm->define('OCA\Polls\Db\ParticipationText')->setDefinitions([
-	'text' => Faker::text(256),
+	'text' => Faker::text(255),
 	'userId' => Faker::firstNameMale(),
 	'type' => 0
 ]);

@@ -29,7 +29,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
 $fm->define('OCA\Polls\Db\Event')->setDefinitions([
 	'type' => 0,
 	'title' => Faker::sentence(10),
-	'description' => Faker::text(256),
+	'description' => Faker::text(255),
 	'owner' => Faker::firstNameMale(),
 	'created' => function () {
 		$date = new DateTime('today');
