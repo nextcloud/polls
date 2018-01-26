@@ -91,7 +91,30 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$table->setPrimaryKey(['id']);
 		}
 
+		if (!$schema->hasTable('polls_options')) {
+			$table = $schema->createTable('polls_options');
+			$table->addColumn('id', Type::INTEGER, [
+				'autoincrement' => true,
+				'notnull' => true,
+			]);
+			$table->addColumn('poll_id', Type::INTEGER, [
+				'notnull' => false,
+			]);
+			$table->addColumn('poll_date', Type::DATETIME, [
+				'notnull' => false,
+				'length' => 32,
+			]);
+			$table->addColumn('poll_text', Type::STRING, [
+				'notnull' => false,
+				'length' => 256,
+			]);
+			$table->setPrimaryKey(['id']);
+		}
+		
 		if (!$schema->hasTable('polls_dts')) {
+			// Todo: move contents to polls_options
+			// Todo: drop table polls_dts
+			// do this in postSchemaChange?
 			$table = $schema->createTable('polls_dts');
 			$table->addColumn('id', Type::INTEGER, [
 				'autoincrement' => true,
@@ -108,6 +131,9 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 		}
 
 		if (!$schema->hasTable('polls_txts')) {
+			// Todo: move contents to polls_options
+			// Todo: drop table polls_txts
+			// do this in postSchemaChange?
 			$table = $schema->createTable('polls_txts');
 			$table->addColumn('id', Type::INTEGER, [
 				'autoincrement' => true,
@@ -122,7 +148,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			]);
 			$table->setPrimaryKey(['id']);
 		}
-
+		
 		if (!$schema->hasTable('polls_particip')) {
 			$table = $schema->createTable('polls_particip');
 			$table->addColumn('id', Type::INTEGER, [
