@@ -341,6 +341,7 @@
 		</div>
 
 	</div>
+	
 	<div id="app-sidebar" class="detailsView scroll-container disappear">
 		<div class="close flex-row">
 			<a id="closeDetails" class="close icon-close has-tooltip-bottom" title="<?php p($l->t('Close details')); ?>" href="#" alt="<?php $l->t('Close');?>"></a>
@@ -500,7 +501,7 @@
 				<?php endforeach; ?>
 				</ul>
 			</div>
-			</div>
 		</div>
+		<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>
 	</div>
 </div>
