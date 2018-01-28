@@ -26,46 +26,24 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class ParticipationTextMapper extends Mapper {
+class OptionsMapper extends Mapper {
 
 	/**
-	 * ParticipationTextMapper constructor.
+	 * TextMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_particip_text', '\OCA\Polls\Db\ParticipationText');
+		parent::__construct($db, 'polls_options', '\OCA\Polls\Db\Options');
 	}
 
 	/**
 	 * @param int $pollId
 	 * @param int $limit
 	 * @param int $offset
-	 * @return ParticipationText[]
+	 * @return Text[]
 	 */
 	public function findByPoll($pollId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		return $this->findEntities($sql, [$pollId], $limit, $offset);
-	}
-
-	/**
-	 * @param string $userId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return ParticipationText[]
-	 */
-	public function findDistinctByUser($userId, $limit = null, $offset = null) {
-		$sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
-		return $this->findEntities($sql, [$userId], $limit, $offset);
-	}
-
-	/**
-	 * @param int $pollId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return ParticipationText[]
-	 */
-	public function findParticipantsByPoll($pollId, $limit = null, $offset = null) {
-		$sql = 'SELECT DISTINCT user_id FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
 		return $this->findEntities($sql, [$pollId], $limit, $offset);
 	}
 
@@ -75,14 +53,5 @@ class ParticipationTextMapper extends Mapper {
 	public function deleteByPoll($pollId) {
 		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
 		$this->execute($sql, [$pollId]);
-	}
-
-	/**
-	 * @param int $pollId
-	 * @param string $userId
-	 */
-	public function deleteByPollAndUser($pollId, $userId) {
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
-		$this->execute($sql, [$pollId, $userId]);
 	}
 }
