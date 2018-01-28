@@ -21,11 +21,3 @@ coding_style:
     indentation:
       general:
         use_tabs: true
-        size: 4
-      switch:
-        indent_case: true
-    spaces:
-      general:
-        linefeed_character: newline
-      within:
-        brackets: false
