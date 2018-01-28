@@ -15,9 +15,3 @@ build:
   tests:
     override:
       -  jshint-run --config js/.jshintrc
-
-coding_style:
-  php:
-    indentation:
-      general:
-        use_tabs: true
