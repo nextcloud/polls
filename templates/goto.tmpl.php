@@ -81,7 +81,7 @@
 		$poll->getDescription() !== null &&
 		$poll->getDescription() !== ''
 	) {
-		$description = str_replace(array('\r\n', '\r', '\n') , '<br/>', htmlspecialchars($poll->getDescription()));
+		$description = str_replace(array('\r\n', '\r', '\n'), '<br/>', htmlspecialchars($poll->getDescription()));
 	} else {
 		$description = $l->t('No description provided.');
 	}
@@ -140,14 +140,14 @@
 								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
 
 								print_unescaped('	<div class="date-box flex-column">');
-								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp))  . '</div>');
-								print_unescaped('		<div class="day">'   .       date('j', $timestamp)   . '</div>');
-								print_unescaped('		<div class="dayow">' . $l->t(date('D', $timestamp))  . '</div>');
-								print_unescaped('		<div class="time">'  .       date('G:i', $timestamp) . ' UTC</div>');
+								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp)) . '</div>');
+								print_unescaped('		<div class="day">' . date('j', $timestamp) . '</div>');
+								print_unescaped('		<div class="dayow">' . $l->t(date('D', $timestamp)) . '</div>');
+								print_unescaped('		<div class="time">' . date('G:i', $timestamp) . ' UTC</div>');
 								print_unescaped('	</div>');
 							} else {
 								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '" class="flex-column vote option">');
-								print_unescaped('	<div class="date-box flex-column">' . preg_replace('/_\d+$/', '', $dateElement->getText()).'</div>');
+								print_unescaped('	<div class="date-box flex-column">' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '</div>');
 							}
 							print_unescaped('<div class="counter flex-row">');
 							print_unescaped('	<div class="yes flex-row">');
@@ -175,7 +175,7 @@
 							if (!isset($others[$vote->getUserId()])) {
 								$others[$vote->getUserId()] = array();
 							}
-							$others[$vote->getUserId()][]= $vote;
+							$others[$vote->getUserId()][] = $vote;
 						}
 						$userCnt = 0;
 						foreach (array_keys($others) as $usr) {
@@ -247,7 +247,7 @@
 										break;
 									}
 								}
-								print_unescaped('<li id="'. $pollId . '" class="' . $class . '"></li>');
+								print_unescaped('<li id="' . $pollId . '" class="' . $class . '"></li>');
 								$i_tot++;
 							}
 
@@ -263,7 +263,7 @@
 						print_unescaped('	<div class="flex-row first">');
 						print_unescaped('		<div class="user-cell flex-row">');
 						if (User::isLoggedIn()) {
-							print_unescaped('		<div class="avatar has-tooltip" title="'.($userId).'"></div>');
+							print_unescaped('		<div class="avatar has-tooltip" title="' . ($userId) . '"></div>');
 							print_unescaped('		<div class="name">');
 							p($userMgr->get($userId)->getDisplayName());
 						} else {
@@ -272,7 +272,7 @@
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
-						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="'. $toggleTooltip .'">');
+						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
@@ -293,7 +293,7 @@
 							if (isset($userVoted)) {
 								foreach ($userVoted as $obj) {
 									$voteVal = null;
-									if($poll->getType() === 0) {
+									if ($poll->getType() === 0) {
 										$voteVal = strtotime($obj->getDt());
 									} else {
 										$voteVal = $obj->getText();
@@ -302,7 +302,7 @@
 										if ($obj->getType() === 1) {
 											$class = 'yes';
 											$total['yes'][$i_tot]++;
-										} else if($obj->getType() === 2) {
+										} else if ($obj->getType() === 2) {
 											$class = 'maybe';
 										}
 										break;
@@ -344,7 +344,7 @@
 	
 	<div id="app-sidebar" class="detailsView scroll-container disappear">
 		<div class="close flex-row">
-			<a id="closeDetails" class="close icon-close has-tooltip-bottom" title="<?php p($l->t('Close details')); ?>" href="#" alt="<?php $l->t('Close');?>"></a>
+			<a id="closeDetails" class="close icon-close has-tooltip-bottom" title="<?php p($l->t('Close details')); ?>" href="#" alt="<?php $l->t('Close'); ?>"></a>
 		</div>
 
 		<div class="header flex-row">
@@ -358,9 +358,9 @@
 				<div class="cloud">
 					<?php
 					if ($expired) {
-						print_unescaped('<span class="expired">' . $l->t('Expired'). '</span>');
+						print_unescaped('<span class="expired">' . $l->t('Expired') . '</span>');
 					} else {
-						if ($poll->getExpire() !== null){
+						if ($poll->getExpire() !== null) {
 							print_unescaped('<span class="open">' . $l->t('Expires on %s', array(date('d.m.Y', strtotime($poll->getExpire())))) . '</span>');
 						} else {
 							print_unescaped('<span class="open">' . $l->t('Expires never') . '</span>');
@@ -464,13 +464,13 @@
 				<?php foreach ($comments as $comment) : ?>
 
 					<?php
-						if ( $comment->getUserId() === $userId ) {
+						if ($comment->getUserId() === $userId) {
 							// Comment is from current user
 							// -> display user
 							$avatarName = $userId;
 							$displayName = $userMgr->get($userId)->getDisplayName();
 
-						} else if ( !$isAnonymous && !$hideNames ) {
+						} else if (!$isAnonymous && !$hideNames) {
 							// comment is from another user,
 							// poll is not anoymous (for current user)
 							// users are not hidden
@@ -494,7 +494,7 @@
 						<div class="authorRow user-cell flex-row">
 							<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
 							<div class="author"><?php p($displayName) ?></div>
-							<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt())*1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
+							<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt()) * 1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
 						</div>
 						<div class="message wordwrap comment-content"><?php p($comment->getComment()); ?></div>
 					</li>
