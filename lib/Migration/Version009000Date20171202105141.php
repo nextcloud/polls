@@ -148,6 +148,10 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
+			$table->addColumn('option_id', Type::STRING, [
+				'notnull' => true,
+				'length' => 64,
+			]);
 			$table->addColumn('vote_date', Type::DATETIME, [
 				'notnull' => false,
 			]);
@@ -370,6 +374,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
+				'option_id' => $insert->createParameter('option_id'),
 				'vote_type' => $insert->createParameter('vote_type'),
 				'vote_answer' => $insert->createParameter('vote_answer'),
 				'vote_date' => $insert->createParameter('vote_date'),
@@ -383,6 +388,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				->setParameter('user_id', $row['user_id'])
+				->setParameter('option_id', $this->findOptionId($row['poll_id'], $row['dt']))
 				->setParameter('vote_type', $row['type'])
 				->setParameter('vote_answer', $this->translateVoteTypeToAnswer($row['type']))
 				->setParameter('vote_date', $row['dt'])
@@ -401,6 +407,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
+				'option_id' => $insert->createParameter('option_id'),
 				'vote_type' => $insert->createParameter('vote_type'),
 				'vote_answer' => $insert->createParameter('vote_answer'),
 				'vote_text' => $insert->createParameter('vote_text'),
@@ -414,6 +421,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				->setParameter('user_id', $row['user_id'])
+				->setParameter('option_id', $this->findOptionId($row['poll_id'], preg_replace("/_\d*$/", "$1", $row['text'])))
 				->setParameter('vote_type', $row['type'])
 				->setParameter('vote_answer', $this->translateVoteTypeToAnswer($row['type']))
 				->setParameter('vote_text', $row['text'])
@@ -422,12 +430,12 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 		}
 		$result->closeCursor();
 	}
+
 	/**
 	 * @param int $voteType
 	 * @return string
 	 */
-
-	protected function translateVoteTypeToAnswer(String $voteType) {
+	protected function translateVoteTypeToAnswer($voteType) {
 		switch ($voteType) {
 			case 0:
 				$answer = "no";
@@ -439,8 +447,25 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 				$answer = "maybe";
 				break;
 			default:
-				$answer = "";
+				$answer = "no";
 		}
 		return $answer;
+	}
+
+	/**
+	 * @param String $pollId
+	 * @param String $option
+	 * @return string
+	 */
+	protected function findOptionId($pollId, $option) {
+		$queryFind = $this->connection->getQueryBuilder();
+		$queryFind->select(['id'])
+			->from('polls_options')
+			->where('poll_id = "'. $pollId .'"')
+			->andWhere('poll_option ="' .$option .'"');
+
+		$resultFind = $queryFind->execute();
+		$row = $resultFind->fetch();
+		return $row['id'];
 	}
 }

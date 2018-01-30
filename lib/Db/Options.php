@@ -34,9 +34,9 @@ namespace OCA\Polls\Db;
  */
 class Options extends Model {
 	protected $pollId;
-	protected $optionDate;
-	protected $optionText;
-	protected $optionOption;
+	protected $pollDate;
+	protected $pollText;
+	protected $pollOption;
 
 	/**
 	 * Options constructor.

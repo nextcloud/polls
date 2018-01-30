@@ -39,6 +39,7 @@ namespace OCA\Polls\Db;
 class Votes extends Model {
 	protected $pollId;
 	protected $userId;
+	protected $optionId;
 	protected $voteDate;
 	protected $voteText;
 	protected $voteOption;
