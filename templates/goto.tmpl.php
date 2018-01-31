@@ -285,8 +285,8 @@
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
 						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-						<input type="hidden" name="dates" value="<?php p($poll->getId()); ?>" />
-						<input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="options" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="answers" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="receiveNotifications" />
 						<input type="hidden" name="changed" />
 						<input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />

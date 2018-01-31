@@ -1,6 +1,6 @@
 /** global: Clipboard */
-var newUserDates = [];
-var newUserTypes = [];
+var newUserOptions = [];
+var newUserAnswers = [];
 
 var maxVotes = 0;
 var valuesChanged = false;
@@ -157,25 +157,25 @@ $(document).ready(function () {
 			}
 		}
 		var check_notif = document.getElementById('check_notif');
-		var newUserDates = [], newUserTypes = [];
+		var newUserOptions = [], newUserAnswers = [];
 		$('.poll-cell.active').each(function () {
 			if($(this).hasClass('no')) {
-				newUserTypes.push(0);
+				newUserAnswers.push('no');
 			} else if ($(this).hasClass('yes')) {
-				newUserTypes.push(1);
+				newUserAnswers.push('yes');
 			} else if($(this).hasClass('maybe')) {
-				newUserTypes.push(2);
+				newUserAnswers.push('maybe');
 			} else {
-				newUserTypes.push(-1);
+				newUserAnswers.push('no');
 			}
 			if (isNaN($(this).attr('data-value'))) {
-				newUserDates.push($(this).attr('data-value'));
+				newUserOptions.push($(this).attr('data-value'));
 			} else {
-				newUserDates.push(parseInt($(this).attr('data-value')));
+				newUserOptions.push(parseInt($(this).attr('data-value')));
 			}
 		});
-		form.elements.dates.value = JSON.stringify(newUserDates);
-		form.elements.types.value = JSON.stringify(newUserTypes);
+		form.elements.options.value = JSON.stringify(newUserOptions);
+		form.elements.answers.value = JSON.stringify(newUserAnswers);
 		form.elements.receiveNotifications.value = (check_notif && check_notif.checked) ? 'true' : 'false';
 		form.elements.changed.value = valuesChanged ? 'true' : 'false';
 		form.submit();
