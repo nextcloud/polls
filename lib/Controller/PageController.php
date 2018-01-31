@@ -121,11 +121,11 @@ class PageController extends Controller {
 	public function index() {
 		$polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
 		$comments = $this->commentMapper->findDistinctByUser($this->userId);
-		$participants = $this->votesMapper->findDistinctByUser($this->userId);
+		$votes = $this->votesMapper->findDistinctByUser($this->userId);
 		$response = new TemplateResponse('polls', 'main.tmpl', [
 			'polls' => $polls,
 			'comments' => $comments,
-			'participants' => $participants,
+			'votes' => $votes,
 			'userId' => $this->userId,
 			'userMgr' => $this->userMgr,
 			'urlGenerator' => $this->urlGenerator
