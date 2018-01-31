@@ -41,9 +41,9 @@
 	$avaMgr = $_['avatarManager'];
 	/** @var \OCA\Polls\Db\Event $poll */
 	$poll = $_['poll'];
-	/** @var OCA\Polls\Db\Date[]|OCA\Polls\Db\Text[] $dates */
-	$dates = $_['dates'];
-	/** @var OCA\Polls\Db\Participation[]|OCA\Polls\Db\ParticipationText[] $votes */
+	/** @var OCA\Polls\Db\Options[] $options */
+	$options = $_['options'];
+	/** @var OCA\Polls\Db\Votes[] $votes */
 	$votes = $_['votes'];
 	/** @var \OCA\Polls\Db\Comment[] $comments */
 	$comments = $_['comments'];
@@ -88,9 +88,10 @@
 
 	// init array for counting 'yes'-votes for each date
 	$total = array();
-	for ($i = 0; $i < count($dates); $i++) {
+	for ($i = 0; $i < count($votes); $i++) {
 		$total['yes'][$i] = 0;
 		$total['no'][$i] = 0;
+		$total['maybe'][$i] = 0;
 	}
 	$userVoted = array();
 	$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
@@ -134,11 +135,11 @@
 			<div class="table">
 					<ul class="flex-row header" >
 						<?php
-						foreach ($dates as $dateElement) {
+						foreach ($options as $optionElement) {
 							if ($poll->getType() === 0) {
-								$timestamp = strtotime($dateElement->getDt());
-								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
+								print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $optionElement->getPollOptionText() . '">');
 
+								$timestamp = strtotime($optionElement->getPollOptionText());
 								print_unescaped('	<div class="date-box flex-column">');
 								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp)) . '</div>');
 								print_unescaped('		<div class="day">' . date('j', $timestamp) . '</div>');
@@ -146,17 +147,17 @@
 								print_unescaped('		<div class="time">' . date('G:i', $timestamp) . ' UTC</div>');
 								print_unescaped('	</div>');
 							} else {
-								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '" class="flex-column vote option">');
-								print_unescaped('	<div class="date-box flex-column">' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '</div>');
+								print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . '" class="flex-column vote option">');
+								print_unescaped('	<div class="date-box flex-column">' . $optionElement->getPollOptionText() . '</div>');
 							}
 							print_unescaped('<div class="counter flex-row">');
 							print_unescaped('	<div class="yes flex-row">');
 							print_unescaped('		<div class="svg"></div>');
-							print_unescaped('		<div id="counter_yes_voteid_' . $dateElement->getId() . '" class ="result-cell yes" data-voteId="' . $dateElement->getId() . '">0</div>');
+							print_unescaped('		<div id="counter_yes_voteid_' . $optionElement->getId() . '" class ="result-cell yes" data-voteId="' . $optionElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
 							print_unescaped('	<div class="no flex-row">');
 							print_unescaped('		<div class="svg"></div>');
-							print_unescaped('		<div id="counter_no_voteid_' . $dateElement->getId() . '" class ="result-cell no" data-voteId="' . $dateElement->getId() . '">0</div>');
+							print_unescaped('		<div id="counter_no_voteid_' . $optionElement->getId() . '" class ="result-cell no" data-voteId="' . $optionElement->getId() . '">0</div>');
 							print_unescaped('	</div>');
 							print_unescaped('</div>');
 						}
@@ -170,7 +171,6 @@
 						$others = array();
 						$displayName = '';
 						$avatarName = '';
-						$activeClass = '';
 						foreach ($votes as $vote) {
 							if (!isset($others[$vote->getUserId()])) {
 								$others[$vote->getUserId()] = array();
@@ -217,37 +217,16 @@
 							// loop over dts
 							$i_tot = 0;
 
-							foreach ($dates as $dateElement) {
-								if ($poll->getType() === 0) {
-									$dateId = strtotime($dateElement->getDt());
-									$pollId = 'voteid_' . $dateElement->getId();
-								} else {
-									$dateId = $dateElement->getText();
-									$pollId = 'voteid_' . $dateElement->getId();
-								}
+							foreach ($options as $optionElement) {
 								// look what user voted for this dts
-								$class = 'flex-column poll-cell no';
 								foreach ($others[$usr] as $vote) {
-									$voteVal = null;
-									if ($poll->getType() === 0) {
-										$voteVal = strtotime($vote->getDt());
-									} else {
-										$voteVal = $vote->getText();
-									}
-									if ($dateId === $voteVal) {
-										if ($vote->getType() === 1) {
-											$class = 'flex-column poll-cell yes';
-											$total['yes'][$i_tot]++;
-										} else if ($vote->getType() === 0) {
-											$class = 'flex-column poll-cell no';
-											$total['no'][$i_tot]++;
-										} else if ($vote->getType() === 2) {
-											$class = 'flex-column poll-cell maybe';
-										}
-										break;
+									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
+										$class = $vote->getVoteAnswer();
+										$total[$vote->getVoteAnswer()][$i_tot]++;
+ 										break;
 									}
 								}
-								print_unescaped('<li id="' . $pollId . '" class="' . $class . '"></li>');
+								print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column poll-cell ' . $class . '"></li>');
 								$i_tot++;
 							}
 
@@ -279,37 +258,19 @@
 						print_unescaped('<ul class="flex-row">');
 
 						$i_tot = 0;
-						foreach ($dates as $dateElement) {
-							if ($poll->getType() === 0) {
-								$dateId = strtotime($dateElement->getDt());
-								$pollId = 'voteid_' . $dateElement->getId();
-							} else {
-								$dateId = $dateElement->getText();
-								$pollId = 'voteid_' . $dateElement->getId();
-							}
+						foreach ($options as $optionElement) {
 							// see if user already has data for this event
 							$class = 'no';
-							$activeClass = 'flex-column active poll-cell';
 							if (isset($userVoted)) {
-								foreach ($userVoted as $obj) {
-									$voteVal = null;
-									if ($poll->getType() === 0) {
-										$voteVal = strtotime($obj->getDt());
-									} else {
-										$voteVal = $obj->getText();
-									}
-									if ($voteVal === $dateId) {
-										if ($obj->getType() === 1) {
-											$class = 'yes';
-											$total['yes'][$i_tot]++;
-										} else if ($obj->getType() === 2) {
-											$class = 'maybe';
-										}
-										break;
+								foreach ($userVoted as $vote) {
+									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
+										$class = $vote->getVoteAnswer();
+										$total[$vote->getVoteAnswer()][$i_tot]++;
+ 										break;
 									}
 								}
 							}
-							print_unescaped('<li id="' . $pollId . '" class="' . $activeClass . ' ' . $class . '" data-value="' . $dateId . '"></li>');
+							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '"></li>');
 
 							$i_tot++;
 						}
@@ -324,8 +285,8 @@
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
 						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-						<input type="hidden" name="dates" value="<?php p($poll->getId()); ?>" />
-						<input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="options" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="answers" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="receiveNotifications" />
 						<input type="hidden" name="changed" />
 						<input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
@@ -501,6 +462,7 @@
 				<?php endforeach; ?>
 				</ul>
 			</div>
+		</div>
 		</div>
 		<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>
 	</div>
