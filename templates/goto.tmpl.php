@@ -137,9 +137,9 @@
 						<?php
 						foreach ($options as $optionElement) {
 							if ($poll->getType() === 0) {
-								print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOption() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $optionElement->getPollOption() . '">');
+								print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $optionElement->getPollOptionText() . '">');
 
-								$timestamp = strtotime($optionElement->getPollOption());
+								$timestamp = strtotime($optionElement->getPollOptionText());
 								print_unescaped('	<div class="date-box flex-column">');
 								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp)) . '</div>');
 								print_unescaped('		<div class="day">' . date('j', $timestamp) . '</div>');
@@ -147,8 +147,8 @@
 								print_unescaped('		<div class="time">' . date('G:i', $timestamp) . ' UTC</div>');
 								print_unescaped('	</div>');
 							} else {
-								print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOption() . '" class="flex-column vote option">');
-								print_unescaped('	<div class="date-box flex-column">' . $optionElement->getPollOption() . '</div>');
+								print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . '" class="flex-column vote option">');
+								print_unescaped('	<div class="date-box flex-column">' . $optionElement->getPollOptionText() . '</div>');
 							}
 							print_unescaped('<div class="counter flex-row">');
 							print_unescaped('	<div class="yes flex-row">');
@@ -220,7 +220,7 @@
 							foreach ($options as $optionElement) {
 								// look what user voted for this dts
 								foreach ($others[$usr] as $vote) {
-									if ($optionElement->getPollOption() === $vote->getVoteOption()) {
+									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
 										$class = $vote->getVoteAnswer();
 										$total[$vote->getVoteAnswer()][$i_tot]++;
  										break;
@@ -263,14 +263,14 @@
 							$class = 'no';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
-									if ($optionElement->getPollOption() === $vote->getVoteOption()) {
+									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
 										$class = $vote->getVoteAnswer();
 										$total[$vote->getVoteAnswer()][$i_tot]++;
  										break;
 									}
 								}
 							}
-							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOption() . '"></li>');
+							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '"></li>');
 
 							$i_tot++;
 						}

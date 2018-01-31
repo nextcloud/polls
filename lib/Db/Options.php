@@ -36,7 +36,7 @@ class Options extends Model {
 	protected $pollId;
 	protected $pollDate;
 	protected $pollText;
-	protected $pollOption;
+	protected $pollOptionText;
 
 	/**
 	 * Options constructor.
