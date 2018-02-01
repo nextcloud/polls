@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.8.1] - 2018-01-xx
+## [0.8.2] - tbD
+
+### Added
+
+### Changed
+
+### Fixed
+ - 'Edit poll' did not work from poll's details view #294
+
+## [0.8.1] - 2018-01-19
 
 ### Added
  - Unit tests
