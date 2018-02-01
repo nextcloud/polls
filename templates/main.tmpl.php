@@ -128,7 +128,7 @@
 						for ($i = 0; $i < count($participated); $i++) {
 							if ($poll->getId() === $participated[$i]->getPollId()) {
 								$participated_class = 'partic_yes';
-								$participated_title = 'You voted';
+								$participated_title = 'You voted in this poll';
 								array_splice($participated, $i, 1);
 								break;
 							}
@@ -137,7 +137,7 @@
 						for ($i = 0; $i < count($comments); $i++) {
 							if ($poll->getId() === $comments[$i]->getPollId()) {
 								$commented_class = 'commented_yes';
-								$commented_title = 'You commented';
+								$commented_title = 'You commented this poll';
 								array_splice($comments, $i, 1);
 								break;
 							}
