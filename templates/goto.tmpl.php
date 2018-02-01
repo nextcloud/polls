@@ -268,7 +268,13 @@
 									$class = 'unvoted';
 								}
 							}
-							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '"></li>');
+							
+							if ($class === 'unvoted') {
+								$dataUnvoted = $l->t('New option!');
+								$updatedPoll=true;
+							}
+							
+							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></li>');
 
 							$i_tot++;
 						}
