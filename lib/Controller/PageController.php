@@ -48,7 +48,7 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\Mail\IMailer;
 use OCP\Security\ISecureRandom;
-use OCP\User;
+use OCP\User; //depricated
 use OCP\Util;
 
 class PageController extends Controller {
@@ -271,14 +271,10 @@ class PageController extends Controller {
 		if ($this->userId !== $poll->getOwner()) {
 			return new TemplateResponse('polls', 'no.create.tmpl');
 		}
-		if ($poll->getType() === 0) {
-			$votes = $this->optionsMapper->findByPoll($poll->getId());
-		} else {
-			$votes = $this->optionsMapper->findByPoll($poll->getId());
-		}
+		$options = $this->optionsMapper->findByPoll($poll->getId());
 		return new TemplateResponse('polls', 'create.tmpl', [
 			'poll' => $poll,
-			'votes' => $votes,
+			'options' => $options,
 			'userId' => $this->userId,
 			'userMgr' => $this->userMgr,
 			'urlGenerator' => $this->urlGenerator
@@ -293,7 +289,7 @@ class PageController extends Controller {
 	 * @param string $pollTitle
 	 * @param string $pollDesc
 	 * @param string $userId
-	 * @param string $chosenDates
+	 * @param string $chosenOptions
 	 * @param int $expireTs
 	 * @param string $accessType
 	 * @param string $accessValues
@@ -306,8 +302,7 @@ class PageController extends Controller {
 		$pollType,
 		$pollTitle,
 		$pollDesc,
-		$userId,
-		$chosenDates,
+		$chosenOptions,
 		$expireTs,
 		$accessType,
 		$accessValues,
@@ -345,8 +340,8 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
-		/** @var string[] $chosenDates */
-		$chosenDates = json_decode($chosenDates);
+		/** @var string[] $chosenOptions */
+		$chosenOptions = json_decode($chosenOptions);
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
@@ -358,21 +353,21 @@ class PageController extends Controller {
 		if ($pollType === 'event') {
 			$event->setType(0);
 			$this->eventMapper->update($event);
-			sort($chosenDates);
-			foreach ($chosenDates as $el) {
-				$date = new Date();
-				$date->setPollId($pollId);
-				$date->setDt(date('Y-m-d H:i:s', $el));
-				$this->optionsMapper->insert($date);
+			sort($chosenOptions);
+			foreach ($chosenOptions as $optionElement) {
+				$option = new Options();
+				$option->setPollId($pollId);
+				$option->setPollOptionText(date('Y-m-d H:i:s', $optionElement));
+				$this->optionsMapper->insert($option);
 			}
 		} else {
 			$event->setType(1);
 			$this->eventMapper->update($event);
-			foreach ($chosenDates as $el) {
-				$text = new Text();
-				$text->setPollId($pollId);
-				$text->setText($el);
-				$this->optionsMapper->insert($text);
+			foreach ($chosenOptions as $optionElement) {
+				$option = new Options();
+				$option->setPollId($pollId);
+				$option->setpollOptionText($optionElement);
+				$this->optionsMapper->insert($option);
 			}
 		}
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');
@@ -395,7 +390,7 @@ class PageController extends Controller {
 	 * @param string $pollTitle
 	 * @param string $pollDesc
 	 * @param string $userId
-	 * @param string $chosenDates
+	 * @param string $chosenOptions
 	 * @param int $expireTs
 	 * @param string $accessType
 	 * @param string $accessValues
@@ -408,7 +403,7 @@ class PageController extends Controller {
 		$pollTitle,
 		$pollDesc,
 		$userId,
-		$chosenDates,
+		$chosenOptions,
 		$expireTs,
 		$accessType,
 		$accessValues,
@@ -452,8 +447,8 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
-		/** @var string[] $chosenDates */
-		$chosenDates = json_decode($chosenDates);
+		/** @var string[] $chosenOptions */
+		$chosenOptions = json_decode($chosenOptions);
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
@@ -465,24 +460,22 @@ class PageController extends Controller {
 			$event->setType(0);
 			$ins = $this->eventMapper->insert($event);
 			$pollId = $ins->getId();
-			sort($chosenDates);
-			foreach ($chosenDates as $el) {
-				$date = new Date();
-				$date->setPollId($pollId);
-				$date->setDt(date('Y-m-d H:i:s', $el));
-				$this->optionsMapper->insert($date);
+			sort($chosenOptions);
+			foreach ($chosenOptions as $optionElement) {
+				$option = new Options();
+				$option->setPollId($pollId);
+				$option->setPollOptionText(date('Y-m-d H:i:s', $optionElement));
+				$this->optionsMapper->insert($option);
 			}
 		} else {
 			$event->setType(1);
 			$ins = $this->eventMapper->insert($event);
 			$pollId = $ins->getId();
-			$cnt = 1;
-			foreach ($chosenDates as $el) {
-				$text = new Text();
-				$text->setPollId($pollId);
-				$text->setText($el . '_' . $cnt);
-				$this->optionsMapper->insert($text);
-				$cnt++;
+			foreach ($chosenOptions as $optionElement) {
+				$option = new Options();
+				$option->setPollId($pollId);
+				$option->setpollOptionText($optionElement);
+				$this->optionsMapper->insert($option);
 			}
 		}
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');

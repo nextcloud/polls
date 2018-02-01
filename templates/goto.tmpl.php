@@ -222,9 +222,9 @@
 								foreach ($others[$usr] as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
 										$class = $vote->getVoteAnswer();
-										$total[$vote->getVoteAnswer()][$i_tot]++;
  										break;
 									}
+									$class = 'no';
 								}
 								print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column poll-cell ' . $class . '"></li>');
 								$i_tot++;
@@ -234,8 +234,6 @@
 							print_unescaped('</li>');
 						}
 					}
-					$totalYesOthers = array_merge(array(), $total['yes']);
-					$totalNoOthers = array_merge(array(), $total['no']);
 					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
 						print_unescaped('<li class="flex-row user current-user">');
@@ -265,9 +263,9 @@
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
 										$class = $vote->getVoteAnswer();
-										$total[$vote->getVoteAnswer()][$i_tot]++;
  										break;
 									}
+									$class = 'unvoted';
 								}
 							}
 							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '"></li>');
@@ -280,6 +278,12 @@
 					?>
 				</ul>
 			</div>
+			<?php if ($updatedPoll) : ?>
+				<div class="updated-poll alert">
+				<p> <?php p($l->t('This poll was updated since your last visit. Please check your votes.'));?></p>
+				</div>
+			<?php endif; ?>
+			
 			<div class="submitPoll flex-row">
 				<div>
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
