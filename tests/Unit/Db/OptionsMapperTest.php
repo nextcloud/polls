@@ -31,7 +31,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class DateMapperTest extends UnitTestCase {
+class OptionsMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
