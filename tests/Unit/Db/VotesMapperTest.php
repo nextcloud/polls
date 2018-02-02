@@ -64,16 +64,11 @@ class VotesMapperTest extends UnitTestCase {
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 
-		/** @var Option $option */
-		$options = $this->fm->instance('OCA\Polls\Db\Options');
-		$options->setPollId($event->getId());
-		$this->assertInstanceOf(Options::class, $this->optionsMapper->insert($options));
-
 		
 		/** @var Votes $votes */
 		$votes = $this->fm->instance('OCA\Polls\Db\Votes');
 		$votes->setPollId($event->getId());
-		$votes->setVoteOptionId($options->getId());
+		$votes->setVoteOptionId(1);
 		$this->assertInstanceOf(Votes::class, $this->votesMapper->insert($votes));
 
 		return $votes;
