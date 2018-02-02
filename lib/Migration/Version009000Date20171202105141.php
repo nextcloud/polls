@@ -120,14 +120,6 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$table->addColumn('poll_id', Type::INTEGER, [
 				'notnull' => false,
 			]);
-			$table->addColumn('poll_date', Type::DATETIME, [
-				'notnull' => false,
-				'length' => 32,
-			]);
-			$table->addColumn('poll_text', Type::STRING, [
-				'notnull' => false,
-				'length' => 256,
-			]);
 			$table->addColumn('poll_option_text', Type::STRING, [
 				'notnull' => false,  // maybe true?
 				'length' => 256,
@@ -148,24 +140,13 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('vote_option_id', Type::STRING, [
+			$table->addColumn('vote_option_id', Type::INTEGER, [
 				'notnull' => true,
 				'length' => 64,
-			]);
-			$table->addColumn('vote_date', Type::DATETIME, [
-				'notnull' => false,
-			]);
-			$table->addColumn('vote_text', Type::STRING, [
-				'notnull' => false,
-				'length' => 256,
 			]);
 			$table->addColumn('vote_option_text', Type::STRING, [
 				'notnull' => false, // maybe true?
 				'length' => 256,
-			]);
-			//remove
-			$table->addColumn('vote_type', Type::INTEGER, [
-				'notnull' => false,
 			]);
 			$table->addColumn('vote_answer', Type::STRING, [
 				'notnull' => false,
@@ -213,87 +194,6 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			]);
 			$table->setPrimaryKey(['id']);
 		}
-// -------------- Depricated tables
-		// remove
-		if (!$schema->hasTable('polls_dts')) {
-			$table = $schema->createTable('polls_dts');
-			$table->addColumn('id', Type::INTEGER, [
-				'autoincrement' => true,
-				'notnull' => true,
-			]);
-			$table->addColumn('poll_id', Type::INTEGER, [
-				'notnull' => false,
-			]);
-			$table->addColumn('dt', Type::DATETIME, [
-				'notnull' => false,
-				'length' => 32,
-			]);
-			$table->setPrimaryKey(['id']);
-		}
-
-		// remove
-		if (!$schema->hasTable('polls_txts')) {
-			$table = $schema->createTable('polls_txts');
-			$table->addColumn('id', Type::INTEGER, [
-				'autoincrement' => true,
-				'notnull' => true,
-			]);
-			$table->addColumn('poll_id', Type::INTEGER, [
-				'notnull' => false,
-			]);
-			$table->addColumn('text', Type::STRING, [
-				'notnull' => false,
-				'length' => 256,
-			]);
-			$table->setPrimaryKey(['id']);
-		}
-		
-		//remove
-		if (!$schema->hasTable('polls_particip')) {
-			$table = $schema->createTable('polls_particip');
-			$table->addColumn('id', Type::INTEGER, [
-				'autoincrement' => true,
-				'notnull' => true,
-			]);
-			$table->addColumn('poll_id', Type::INTEGER, [
-				'notnull' => false,
-			]);
-			$table->addColumn('dt', Type::DATETIME, [
-				'notnull' => false,
-			]);
-			$table->addColumn('type', Type::INTEGER, [
-				'notnull' => false,
-			]);
-			$table->addColumn('user_id', Type::STRING, [
-				'notnull' => true,
-				'length' => 64,
-			]);
-			$table->setPrimaryKey(['id']);
-		}
-
-		//remove
-		if (!$schema->hasTable('polls_particip_text')) {
-			$table = $schema->createTable('polls_particip_text');
-			$table->addColumn('id', Type::INTEGER, [
-				'autoincrement' => true,
-				'notnull' => true,
-			]);
-			$table->addColumn('poll_id', Type::INTEGER, [
-				'notnull' => false,
-			]);
-			$table->addColumn('text', Type::STRING, [
-				'notnull' => false,
-				'length' => 256,
-			]);
-			$table->addColumn('user_id', Type::STRING, [
-				'notnull' => true,
-				'length' => 64,
-			]);
-			$table->addColumn('type', Type::INTEGER, [
-				'notnull' => false,
-			]);
-			$table->setPrimaryKey(['id']);
-		}
 
 		return $schema;
 	}
@@ -320,7 +220,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				// Decide between one of both
-				'poll_date' => $insert->createParameter('poll_date'),
+				// 'poll_date' => $insert->createParameter('poll_date'),
 				'poll_option_text' => $insert->createParameter('poll_option_text'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -331,7 +231,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				// Decide between one of both
-				->setParameter('poll_date', $row['dt'])
+				// ->setParameter('poll_date', $row['dt'])
 				->setParameter('poll_option_text', date($row['dt']));
 			$insert->execute();
 		}
@@ -347,7 +247,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				// Decide between one of both
-				'poll_text' => $insert->createParameter('poll_text'),
+				// 'poll_text' => $insert->createParameter('poll_text'),
 				'poll_option_text' => $insert->createParameter('poll_option_text'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -358,7 +258,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				// Decide between one of both
-				->setParameter('poll_text', $row['text'])
+				// ->setParameter('poll_text', $row['text'])
 				->setParameter('poll_option_text', preg_replace("/_\d*$/", "$1", $row['text']));
 			$insert->execute();
 		}
@@ -374,10 +274,10 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
-				'vote_date' => $insert->createParameter('vote_date'),
+				// 'vote_date' => $insert->createParameter('vote_date'),
 				'vote_option_id' => $insert->createParameter('vote_option_id'),
 				'vote_option_text' => $insert->createParameter('vote_option_text'),
-				'vote_type' => $insert->createParameter('vote_type'),
+				// 'vote_type' => $insert->createParameter('vote_type'),
 				'vote_answer' => $insert->createParameter('vote_answer'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -388,10 +288,10 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				->setParameter('user_id', $row['user_id'])
-				->setParameter('vote_date', $row['dt'])
+				// ->setParameter('vote_date', $row['dt'])
 				->setParameter('vote_option_id', $this->findOptionId($row['poll_id'], $row['dt']))
 				->setParameter('vote_option_text', date($row['dt']))
-				->setParameter('vote_type', $row['type'])
+				// ->setParameter('vote_type', $row['type'])
 				->setParameter('vote_answer', $this->translateVoteTypeToAnswer($row['type']));
 			$insert->execute();
 		}
@@ -407,10 +307,10 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
-				'vote_text' => $insert->createParameter('vote_text'),
+				// 'vote_text' => $insert->createParameter('vote_text'),
 				'vote_option_id' => $insert->createParameter('vote_option_id'),
 				'vote_option_text' => $insert->createParameter('vote_option_text'),
-				'vote_type' => $insert->createParameter('vote_type'),
+				// 'vote_type' => $insert->createParameter('vote_type'),
 				'vote_answer' => $insert->createParameter('vote_answer'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -421,10 +321,10 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				->setParameter('user_id', $row['user_id'])
-				->setParameter('vote_text', $row['text'])
+				// ->setParameter('vote_text', $row['text'])
 				->setParameter('vote_option_id', $this->findOptionId($row['poll_id'], preg_replace("/_\d*$/", "$1", $row['text'])))
 				->setParameter('vote_option_text', preg_replace("/_\d*$/", "$1", $row['text']))
-				->setParameter('vote_type', $row['type'])
+				// ->setParameter('vote_type', $row['type'])
 				->setParameter('vote_answer', $this->translateVoteTypeToAnswer($row['type']));
 			$insert->execute();
 		}
