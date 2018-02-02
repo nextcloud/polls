@@ -53,15 +53,15 @@ class OptionsMapperTest extends UnitTestCase {
 	/**
 	 * Create some fake data and persist them to the database.
 	 *
-	 * @return Date
+	 * @return Options
 	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 
-		/** @var Date $date */
-		$option = $this->fm->instance('OCA\Polls\Db\Date');
+		/** @var Options $options */
+		$options = $this->fm->instance('OCA\Polls\Db\Options');
 		$options->setPollId($event->getId());
 		$this->assertInstanceOf(Options::class, $this->optionsMappper->insert($options));
 
@@ -72,8 +72,8 @@ class OptionsMapperTest extends UnitTestCase {
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Date $date
-	 * @return Date
+	 * @param Text $text
+	 * @return Text
 	 */
 	public function testUpdate(Text $text) {
 		$newText = Faker::paragraph();
@@ -87,11 +87,11 @@ class OptionsMapperTest extends UnitTestCase {
 	 * Delete the previously created entries from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Date $date
+	 * @param Options $options
 	 */
-	public function testDelete(Date $date) {
-		$event = $this->eventMapper->find($date->getPollId());
-		$this->optionsMappper->delete($date);
+	public function testDelete(Options $options) {
+		$event = $this->eventMapper->find($options->getPollId());
+		$this->optionsMappper->delete($options);
 		$this->eventMapper->delete($event);
 	}
 }
