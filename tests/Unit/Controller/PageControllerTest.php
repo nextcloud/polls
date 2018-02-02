@@ -89,7 +89,7 @@ class PageControllerTest extends UnitTestCase {
 			$optionsMapper,
 			$eventMapper,
 			$notificationMapper,
-			$votesMapper,
+			$votesMapper
 		);
 	}
 
