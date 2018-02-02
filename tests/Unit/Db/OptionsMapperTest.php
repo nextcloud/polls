@@ -72,15 +72,15 @@ class OptionsMapperTest extends UnitTestCase {
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Text $text
-	 * @return Text
+	 * @param Options $options
+	 * @return Options
 	 */
-	public function testUpdate(Text $text) {
-		$newText = Faker::paragraph();
-		$text->setPollOptionText($newText());
-		$this->optionsMapper->update($text);
+	public function testUpdate(Options $options) {
+		$newPollOptionText = Faker::paragraph();
+		$options->setPollOptionText($newPollOptionText());
+		$this->optionsMapper->update($options);
 
-		return $text;
+		return $options;
 	}
 	
 	/**

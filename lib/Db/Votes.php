@@ -25,16 +25,22 @@
 namespace OCA\Polls\Db;
 
 /**
- * @method string getDate()
- * @method void setDate(string $value)
- * @method string getText()
- * @method void setText(string $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
+ * @method string getUserId()
+ * @method void setUserId(string $value)
+ * @method string getVoteDate()
+ * @method void setVoteDate(string $value)
+ * @method string getVoteText()
+ * @method void setVoteText(string $value)
+ * @method integer getOptionId()
+ * @method void setOptionId(integer $value)
+ * @method integer getOptionText()
+ * @method void setOptionText(string $value)
  * @method integer getVoteType()
  * @method void setVoteType(integer $value)
+ * @method integer getVoteAnswer()
+ * @method void setVoteAnswer(string $value)
  */
 class Votes extends Model {
 	protected $pollId;
@@ -51,6 +57,5 @@ class Votes extends Model {
 	 */
 	public function __construct() {
 		$this->addType('pollId', 'integer');
-		$this->addType('vote_type', 'integer');
 	}
 }
