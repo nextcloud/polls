@@ -23,10 +23,10 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use OCA\Polls\Db\Options;
-use OCA\Polls\Db\OptionsMapper;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Options;
+use OCA\Polls\Db\OptionsMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
@@ -46,7 +46,7 @@ class OptionsMapperTest extends UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->optionsMappper = new OptionsMappper($this->con);
+		$this->optionsMappper = new OptionsMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
