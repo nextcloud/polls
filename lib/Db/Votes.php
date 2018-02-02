@@ -29,27 +29,18 @@ namespace OCA\Polls\Db;
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method string getVoteDate()
- * @method void setVoteDate(string $value)
- * @method string getVoteText()
- * @method void setVoteText(string $value)
  * @method integer getVoteOptionId()
  * @method void setVoteOptionId(integer $value)
  * @method integer getVoteOptionText()
  * @method void setVoteOptionText(string $value)
- * @method integer getVoteType()
- * @method void setVoteType(integer $value)
  * @method integer getVoteAnswer()
  * @method void setVoteAnswer(string $value)
  */
 class Votes extends Model {
 	protected $pollId;
 	protected $userId;
-	protected $voteDate;
-	protected $voteText;
 	protected $voteOptionId;
 	protected $voteOptionText;
-	protected $voteType;
 	protected $voteAnswer;
 
 	/**
