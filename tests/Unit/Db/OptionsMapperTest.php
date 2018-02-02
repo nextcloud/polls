@@ -35,8 +35,8 @@ class OptionsMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var OptionsMappper */
-	private $optionsMappper;
+	/** @var OptionsMapper */
+	private $optionsMapper;
 	/** @var EventMapper */
 	private $eventMapper;
 
@@ -46,7 +46,7 @@ class OptionsMapperTest extends UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->optionsMappper = new OptionsMapper($this->con);
+		$this->optionsMapper = new OptionsMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
@@ -63,7 +63,7 @@ class OptionsMapperTest extends UnitTestCase {
 		/** @var Options $options */
 		$options = $this->fm->instance('OCA\Polls\Db\Options');
 		$options->setPollId($event->getId());
-		$this->assertInstanceOf(Options::class, $this->optionsMappper->insert($options));
+		$this->assertInstanceOf(Options::class, $this->optionsMapper->insert($options));
 
 		return $options;
 	}
@@ -91,7 +91,7 @@ class OptionsMapperTest extends UnitTestCase {
 	 */
 	public function testDelete(Options $options) {
 		$event = $this->eventMapper->find($options->getPollId());
-		$this->optionsMappper->delete($options);
+		$this->optionsMapper->delete($options);
 		$this->eventMapper->delete($event);
 	}
 }
