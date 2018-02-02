@@ -148,7 +148,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('vote_option_id', Type::STRING, [
+			$table->addColumn('vote_option_id', Type::INTEGER, [
 				'notnull' => true,
 				'length' => 64,
 			]);
