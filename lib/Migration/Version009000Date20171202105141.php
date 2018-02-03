@@ -205,10 +205,17 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	 * @since 13.0.0
 	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		$this->copyDateOptions();
-		$this->copyTextOptions();
-		$this->copyDateVotes();
-		$this->copyTextVotes();
+		/** @var ISchemaWrapper $schema */
+		$schema = $schemaClosure();
+
+		if (!$schema->hasTable('polls_dts')) {
+			$this->copyDateOptions();
+			$this->copyDateVotes();
+		}
+		if (!$schema->hasTable('polls_txts')) {
+			$this->copyTextOptions();
+			$this->copyTextVotes();
+		}
 	}
 
 	/**
