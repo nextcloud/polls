@@ -208,11 +208,11 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable('polls_dts')) {
+		if ($schema->hasTable('polls_dts')) {
 			$this->copyDateOptions();
 			$this->copyDateVotes();
 		}
-		if (!$schema->hasTable('polls_txts')) {
+		if ($schema->hasTable('polls_txts')) {
 			$this->copyTextOptions();
 			$this->copyTextVotes();
 		}
