@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	use OCP\User;
+	use OCP\User; //To do: replace according to API
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'list');

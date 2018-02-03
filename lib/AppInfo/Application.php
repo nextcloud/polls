@@ -25,12 +25,10 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\Controller\PageController;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\DateMapper;
+use OCA\Polls\Db\OptionsMapper;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\NotificationMapper;
-use OCA\Polls\Db\ParticipationMapper;
-use OCA\Polls\Db\ParticipationTextMapper;
-use OCA\Polls\Db\TextMapper;
+use OCA\Polls\Db\VotesMapper;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 
@@ -61,12 +59,10 @@ class Application extends App {
 				$c->query('ServerContainer')->getURLGenerator(),
 				$c->query('UserId'),
 				$c->query('CommentMapper'),
-				$c->query('DateMapper'),
+				$c->query('OptionsMapper'),
 				$c->query('EventMapper'),
 				$c->query('NotificationMapper'),
-				$c->query('ParticipationMapper'),
-				$c->query('ParticipationTextMapper'),
-				$c->query('TextMapper')
+				$c->query('VotesMapper')
 			);
 		});
 
@@ -96,8 +92,8 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('DateMapper', function (IContainer $c) use ($server) {
-			return new DateMapper(
+		$container->registerService('OptionsMapper', function (IContainer $c) use ($server) {
+			return new OptionsMapper(
 				$server->getDatabaseConnection()
 			);
 		});
@@ -114,24 +110,12 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('ParticipationMapper', function (IContainer $c) use ($server) {
-			return new ParticipationMapper(
+		$container->registerService('VotesMapper', function (IContainer $c) use ($server) {
+			return new VotesMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('ParticipationTextMapper', function (IContainer $c) use ($server) {
-			return new ParticipationTextMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-
-		$container->registerService('TextMapper', function (IContainer $c) use ($server) {
-			return new TextMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-	}
 
 	/**
 	 * Register navigation entry for main navigation.

@@ -48,7 +48,7 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\Mail\IMailer;
 use OCP\Security\ISecureRandom;
-use OCP\User; //depricated
+use OCP\User; //To do: replace according to API
 use OCP\Util;
 
 class PageController extends Controller {
