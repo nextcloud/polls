@@ -565,16 +565,20 @@ class PageController extends Controller {
 		$comment->setDt(date('Y-m-d H:i:s'));
 		$this->commentMapper->insert($comment);
 		$this->sendNotifications($pollId, $userId);
+		$timeStamp = time();
+		$relativeNow = $this->trans->t('just now');
 		$displayName = $userId;
 		$user = $this->userMgr->get($userId);
 		if ($user !== null) {
 			$displayName = $user->getDisplayName();
 		}
 		return new JSONResponse(array(
-			'comment' => $commentBox,
-			'date' => date('Y-m-d H:i:s'),
 			'userId' => $userId,
-			'displayName' => $displayName
+			'displayName' => $displayName,
+			'timeStamp' => $timeStamp *100, 
+			'date' => date('Y-m-d H:i:s', $timeStamp),
+			'relativeNow' => $this->trans->t('just now'),
+			'comment' => $commentBox
 		));
 	}
 
