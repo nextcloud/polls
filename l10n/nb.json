@@ -70,6 +70,7 @@
     "Never" : "Aldri",
     "Access denied" : "Tilgang nektet",
     "You are not allowed to view this poll or the poll does not exist." : "Du har ikke tilgang til å se denne avstemningen, eller så finnes den ikke.",
-    "You are not allowed to edit this poll or the poll does not exist." : "Du har ikke tilgang til å redigere denne avstemningen, eller så finnes den ikke."
+    "You are not allowed to edit this poll or the poll does not exist." : "Du har ikke tilgang til å redigere denne avstemningen, eller så finnes den ikke.",
+    "You are not allowed to delete this poll or the poll does not exist." : "Du har enten ikke tilgang til å slette denne avstemningen, eller så finnes den ikke."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
