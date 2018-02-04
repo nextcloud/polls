@@ -116,7 +116,7 @@ class Application extends App {
 			);
 		});
 
-
+	}
 	/**
 	 * Register navigation entry for main navigation.
 	 */
