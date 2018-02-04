@@ -36,6 +36,7 @@ OC.L10N.register(
     "Your name here" : "Vaše meno sem",
     "Vote!" : "Hlasujte!",
     "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
+    "Owner" : "Vlastník",
     "Click to get link" : "Kliknite na získanie odkazu",
     "Poll expired" : "Anketa vypršala",
     "Comments" : "Komentáre",
