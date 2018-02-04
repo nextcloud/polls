@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
+ * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
@@ -21,13 +22,22 @@
  *
  */
 
-use League\FactoryMuffin\Faker\Facade as Faker;
+namespace OCA\Polls\Db;
 
 /**
- * General factory for the participation text model.
+ * @method integer getPollId()
+ * @method void setPollId(integer $value)
+ * @method string getPollOptionText()
+ * @method void setPollOptionText(string $value)
  */
-$fm->define('OCA\Polls\Db\ParticipationText')->setDefinitions([
-	'text' => Faker::text(255),
-	'userId' => Faker::firstNameMale(),
-	'type' => 0
-]);
+class Options extends Model {
+	protected $pollId;
+	protected $pollOptionText;
+
+	/**
+	 * Options constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+	}
+}

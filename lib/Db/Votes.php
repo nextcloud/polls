@@ -25,26 +25,29 @@
 namespace OCA\Polls\Db;
 
 /**
- * @method text getText()
- * @method void setText(text $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
- * @method integer getType()
- * @method void setType(integer $value)
+ * @method string getUserId()
+ * @method void setUserId(string $value)
+ * @method integer getVoteOptionId()
+ * @method void setVoteOptionId(integer $value)
+ * @method integer getVoteOptionText()
+ * @method void setVoteOptionText(string $value)
+ * @method integer getVoteAnswer()
+ * @method void setVoteAnswer(string $value)
  */
-class ParticipationText extends Model {
-	protected $text;
-	protected $userId;
+class Votes extends Model {
 	protected $pollId;
-	protected $type;
+	protected $userId;
+	protected $voteOptionId;
+	protected $voteOptionText;
+	protected $voteAnswer;
 
 	/**
-	 * ParticipationText constructor.
+	 * Options constructor.
 	 */
 	public function __construct() {
 		$this->addType('pollId', 'integer');
-		$this->addType('type', 'integer');
+		$this->addType('vote_type', 'integer');
 	}
 }

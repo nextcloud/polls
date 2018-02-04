@@ -41,14 +41,14 @@
 		$poll = $_['poll'];
 		$isAnonymous = $poll->getIsAnonymous();
 		$hideNames = $isAnonymous && $poll->getFullAnonymous();
-		/** @var OCA\Polls\Db\Date[]|OCA\Polls\Db\Text[] $dates */
-		$dates = $_['dates'];
+		/** @var OCA\Polls\Db\options $options */
+		$options = $_['options'];
 		$chosen = '[';
-		foreach ($dates as $d) {
+		foreach ($options as $optionElement) {
 			if ($poll->getType() === 0) {
-				$chosen .= strtotime($d->getDt());
+				$chosen .= strtotime($optionElement->getPollOptionText());
 			} else {
-				$chosen .= '"' . $d->getText() . '"';
+				$chosen .= '"' . $optionElement->getPollOptionText() . '"';
 			}
 			$chosen .= ',';
 		}
@@ -99,7 +99,7 @@
 		<?php else: ?>
 			<form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_poll')); ?>" method="POST">
 		<?php endif; ?>
-				<input type="hidden" name="chosenDates" id="chosenDates" value="<?php if (isset($chosen)) p($chosen); ?>" />
+				<input type="hidden" name="chosenOptions" id="chosenOptions" value="<?php if (isset($chosen)) p($chosen); ?>" />
 				<input type="hidden" name="expireTs" id="expireTs" value="<?php if (isset($expireTs)) p($expireTs); ?>" />
 				<input type="hidden" name="userId" id="userId" value="<?php p($userId); ?>" />
 

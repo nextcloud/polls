@@ -21,7 +21,7 @@
 	 *
 	 */
 
-	use OCP\User;
+	use OCP\User; //To do: replace according to API
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'list');
@@ -97,11 +97,7 @@
 						$owner = $poll->getOwner();
 
 						$expiry_style = '';
-						if ($poll->getType() === 0) {
-							$participated = $_['participations'];
-						} else {
-							$participated = $_['participations_text'];
-						}
+						$participated = $_['votes'];
 						$participated_class = 'partic_no';
 						$participated_title = 'You did not vote';
 						$participated_count = count($participated);
@@ -132,7 +128,7 @@
 						for ($i = 0; $i < count($participated); $i++) {
 							if ($poll->getId() === $participated[$i]->getPollId()) {
 								$participated_class = 'partic_yes';
-								$participated_title = 'You voted';
+								$participated_title = 'You voted in this poll';
 								array_splice($participated, $i, 1);
 								break;
 							}
@@ -141,7 +137,7 @@
 						for ($i = 0; $i < count($comments); $i++) {
 							if ($poll->getId() === $comments[$i]->getPollId()) {
 								$commented_class = 'commented_yes';
-								$commented_title = 'You commented';
+								$commented_title = 'You commented this poll';
 								array_splice($comments, $i, 1);
 								break;
 							}

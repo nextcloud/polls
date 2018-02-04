@@ -24,13 +24,10 @@
 use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
- * General factory for the participation model.
+ * General factory for the votes model.
  */
-$fm->define('OCA\Polls\Db\Participation')->setDefinitions([
+$fm->define('OCA\Polls\Db\Votes')->setDefinitions([
+	'voteOptionText' => Faker::text(255),
 	'userId' => Faker::firstNameMale(),
-	'dt' => function () {
-		$date = new DateTime('today');
-		return $date->format('Y-m-d H:i:s');
-	},
-	'type' => 0
+	'voteAnswer' => 'yes'
 ]);

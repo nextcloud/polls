@@ -275,16 +275,16 @@ $(document).ready(function () {
 		}
 	}
 
-	var chosenDates = document.getElementById('chosenDates').value;
+	var chosenOptions = document.getElementById('chosenOptions').value;
 	var chosen = '';
-	if (chosenDates.length > 0) {
-		chosen = JSON.parse(chosenDates);
+	if (chosenOptions.length > 0) {
+		chosen = JSON.parse(chosenOptions);
 	}
 	var text = document.getElementById('text');
 	var event = document.getElementById('event');
 	if (event.checked) {
 		chosen_type = event.value;
-		if (chosenDates.length > 0) {
+		if (chosenOptions.length > 0) {
 			g_chosen_datetimes = chosen;
 		}
 		for (i=0; i<chosen.length; i++) {
@@ -307,7 +307,7 @@ $(document).ready(function () {
 		}
 	} else {
 		chosen_type = text.value;
-		if (chosenDates.length > 0) {
+		if (chosenOptions.length > 0) {
 			g_chosen_texts = chosen;
 		}
 		for (i=0; i<chosen.length; i++) {
@@ -602,10 +602,10 @@ $(document).ready(function () {
 				return false;
 			}
 			if (chosen_type == 'event') {
-				form.elements.chosenDates.value = JSON.stringify(g_chosen_datetimes);
+				form.elements.chosenOptions.value = JSON.stringify(g_chosen_datetimes);
 			}
 			else {
-				form.elements.chosenDates.value = JSON.stringify(g_chosen_texts);
+				form.elements.chosenOptions.value = JSON.stringify(g_chosen_texts);
 			}
 			var title = document.getElementById('pollTitle');
 			if (
