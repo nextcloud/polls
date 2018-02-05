@@ -566,7 +566,6 @@ class PageController extends Controller {
 		$this->commentMapper->insert($comment);
 		$this->sendNotifications($pollId, $userId);
 		$timeStamp = time();
-		$relativeNow = $this->trans->t('just now');
 		$displayName = $userId;
 		$user = $this->userMgr->get($userId);
 		if ($user !== null) {
