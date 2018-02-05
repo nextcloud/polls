@@ -81,7 +81,7 @@ class PageController extends Controller {
 	 * @param EventMapper $eventMapper
 	 * @param NotificationMapper $notificationMapper
 	 * @param OptionsMapper $optionsMapper
-	 * @param VoteMapper $VoteMapper
+	 * @param VotesMapper $VotesMapper
 	 */
 	public function __construct(
 		$appName,
@@ -341,7 +341,7 @@ class PageController extends Controller {
 		}
 		$event->setAccess($accessType);
 		/** @var string[] $chosenOptions */
-		$chosenOptions = json_decode($chosenOptions);
+		$chosenOptions = json_decode($chosenOptions, true);
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
@@ -357,7 +357,7 @@ class PageController extends Controller {
 			foreach ($chosenOptions as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
-				$option->setPollOptionText(date('Y-m-d H:i:s', $optionElement));
+				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
 				$this->optionsMapper->insert($option);
 			}
 		} else {
@@ -448,7 +448,7 @@ class PageController extends Controller {
 		}
 		$event->setAccess($accessType);
 		/** @var string[] $chosenOptions */
-		$chosenOptions = json_decode($chosenOptions);
+		$chosenOptions = json_decode($chosenOptions, true);
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
@@ -464,7 +464,7 @@ class PageController extends Controller {
 			foreach ($chosenOptions as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
-				$option->setPollOptionText(date('Y-m-d H:i:s', $optionElement));
+				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
 				$this->optionsMapper->insert($option);
 			}
 		} else {
@@ -565,16 +565,20 @@ class PageController extends Controller {
 		$comment->setDt(date('Y-m-d H:i:s'));
 		$this->commentMapper->insert($comment);
 		$this->sendNotifications($pollId, $userId);
+		$timeStamp = time();
+		$relativeNow = $this->trans->t('just now');
 		$displayName = $userId;
 		$user = $this->userMgr->get($userId);
 		if ($user !== null) {
 			$displayName = $user->getDisplayName();
 		}
 		return new JSONResponse(array(
-			'comment' => $commentBox,
-			'date' => date('Y-m-d H:i:s'),
 			'userId' => $userId,
-			'displayName' => $displayName
+			'displayName' => $displayName,
+			'timeStamp' => $timeStamp *100, 
+			'date' => date('Y-m-d H:i:s', $timeStamp),
+			'relativeNow' => $this->trans->t('just now'),
+			'comment' => $commentBox
 		));
 	}
 
