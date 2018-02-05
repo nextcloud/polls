@@ -53,6 +53,9 @@
 	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
 	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
 	$access = $poll->getAccess();
+	$updatedPoll = false;
+	$dataUnvoted = ''
+
 	if ($poll->getExpire() === null) {
 		$expired = false;
 	} else {
