@@ -340,8 +340,8 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
-		/** @var string[] $chosenOptions */
-		$chosenOptions = json_decode($chosenOptions, true);
+		/** @var string[] $optionsArray */
+		$optionsArray = json_decode($chosenOptions, true);
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
@@ -353,8 +353,8 @@ class PageController extends Controller {
 		if ($pollType === 'event') {
 			$event->setType(0);
 			$this->eventMapper->update($event);
-			sort($chosenOptions);
-			foreach ($chosenOptions as $optionElement) {
+			sort($optionsArray);
+			foreach ($optionsArray as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
 				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
@@ -363,7 +363,7 @@ class PageController extends Controller {
 		} else {
 			$event->setType(1);
 			$this->eventMapper->update($event);
-			foreach ($chosenOptions as $optionElement) {
+			foreach ($optionsArray as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
 				$option->setpollOptionText($optionElement);
@@ -447,8 +447,8 @@ class PageController extends Controller {
 			}
 		}
 		$event->setAccess($accessType);
-		/** @var string[] $chosenOptions */
-		$chosenOptions = json_decode($chosenOptions, true);
+		/** @var string[] $optionsArray */
+		$optionsArray = json_decode($chosenOptions, true);
 
 		$expire = null;
 		if ($expireTs !== 0 && $expireTs !== '') {
@@ -460,8 +460,8 @@ class PageController extends Controller {
 			$event->setType(0);
 			$ins = $this->eventMapper->insert($event);
 			$pollId = $ins->getId();
-			sort($chosenOptions);
-			foreach ($chosenOptions as $optionElement) {
+			sort($optionsArray);
+			foreach ($optionsArray as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
 				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
@@ -471,7 +471,7 @@ class PageController extends Controller {
 			$event->setType(1);
 			$ins = $this->eventMapper->insert($event);
 			$pollId = $ins->getId();
-			foreach ($chosenOptions as $optionElement) {
+			foreach ($optionsArray as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
 				$option->setpollOptionText($optionElement);
