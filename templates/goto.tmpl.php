@@ -274,7 +274,7 @@
 							
 							if ($class === 'unvoted') {
 								$dataUnvoted = $l->t('New option!');
-								$updatedPoll=true;
+								$updatedPoll = true;
 							}
 							
 							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></li>');
@@ -289,7 +289,7 @@
 			</div>
 			<?php if ($updatedPoll) : ?>
 				<div class="updated-poll alert">
-				<p> <?php p($l->t('This poll was updated since your last visit. Please check your votes.'));?></p>
+				<p> <?php p($l->t('This poll was updated since your last visit. Please check your votes.')); ?></p>
 				</div>
 			<?php endif; ?>
 			
