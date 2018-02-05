@@ -670,7 +670,7 @@ class PageController extends Controller {
 		}
 		// Nextcloud >= 12
 		$groups = $this->groupManager->getUserGroups(\OC::$server->getUserSession()->getUser());
-		return array_map(function ($group) {
+		return array_map(function($group) {
 			return $group->getGID();
 		}, $groups);
 	}
