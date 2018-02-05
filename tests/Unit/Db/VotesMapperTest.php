@@ -25,8 +25,6 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Options;
-use OCA\Polls\Db\OptionsMapper;
 use OCA\Polls\Db\Votes;
 use OCA\Polls\Db\VotesMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
@@ -37,8 +35,6 @@ class VotesMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var OptionsMapper */
-	private $optionsMapper;
 	/** @var VotesMapper */
 	private $votesMapper;
 	/** @var EventMapper */
