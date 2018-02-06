@@ -213,7 +213,6 @@ $(document).ready(function () {
 			commentBox: comment.textContent.trim()
 		};
 		$('.new-comment .icon-loading-small').show();
-
 		$.post(form.action, data, function (data) {
 			$('#no-comments').after(tmpl_comment_new(data));
 
