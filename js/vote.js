@@ -1,4 +1,6 @@
-/** global: Clipboard */
+/* global Clipboard */
+/* global Handlebars */
+
 var newUserOptions = [];
 var newUserAnswers = [];
 
