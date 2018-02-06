@@ -1,4 +1,6 @@
-/** global: Clipboard */
+/* global Clipboard */
+/* global Handlebars */
+
 var newUserOptions = [];
 var newUserAnswers = [];
 
@@ -6,6 +8,16 @@ var maxVotes = 0;
 var valuesChanged = false;
 
 var tzOffset = new Date().getTimezoneOffset();
+
+// HTML template for new comment (handlebars.js)
+var tmpl_comment = Handlebars.compile('<li class="comment flex-column"> ' +
+	'<div class="authorRow user-cell flex-row"> ' +
+	'<div class="avatar missing" title="{{userId}}"></div> ' +
+	'<div class="author">{{displayName}}</div>' +
+	'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="{{timeStamp}}" title="{{date}}">{{relativeNow}}</div>' +
+	'</div>' +
+	'<div class="message wordwrap comment-content">{{comment}}</div>' +
+	'</li>');
 
 $.fn.switchClass = function (a, b) {
 	this.removeClass(a);
@@ -16,7 +28,6 @@ $.fn.switchClass = function (a, b) {
 function updateCommentsCount() {
 	$('#comment-counter').removeClass('no-comments');
 	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
-
 }
 
 function updateBest() {
@@ -205,17 +216,7 @@ $(document).ready(function () {
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function (data) {
-			var newCommentElement = '<li class="comment flex-column"> ' +
-									'<div class="authorRow user-cell flex-row"> ' +
-									'<div class="avatar missing" title="' + data.userId + '"></div> ' +
-									'<div class="author">' + data.displayName + '</div>' +
-									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('polls', 'just now') + '</div>' +
-									'</div>' +
-									'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
-									'</li>';
-
-
-			$('#no-comments').after(newCommentElement);
+			$('#no-comments').after(tmpl_comment(data));
 
 			if (!$('#no-comments').hasClass('hidden')) {
 				$('#no-comments').addClass('hidden');
