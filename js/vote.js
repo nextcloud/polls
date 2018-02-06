@@ -216,12 +216,6 @@ $(document).ready(function () {
 		$('.new-comment .icon-loading-small').show();
 
 		$.post(form.action, data, function (data) {
-			var values  = {userId: data.userId,
-							displayName: data.displayName, 
-							now: Date.now(), 
-							date: data.date, 
-							relativeNow: t('polls', 'just now'), 
-							commentText: data.comment};
 			$('#no-comments').after(tmpl_comment_new(data));
 
 			if (!$('#no-comments').hasClass('hidden')) {
