@@ -8,7 +8,7 @@ var valuesChanged = false;
 var tzOffset = new Date().getTimezoneOffset();
 
 // HTML template for new comment (handlebars.js)
-var tmpl_comment_new = Handlebars.compile('<li class="comment flex-column"> ' +
+var tmpl_comment = Handlebars.compile('<li class="comment flex-column"> ' +
 	'<div class="authorRow user-cell flex-row"> ' +
 	'<div class="avatar missing" title="{{userId}}"></div> ' +
 	'<div class="author">{{displayName}}</div>' +
@@ -214,7 +214,7 @@ $(document).ready(function () {
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function (data) {
-			$('#no-comments').after(tmpl_comment_new(data));
+			$('#no-comments').after(tmpl_comment(data));
 
 			if (!$('#no-comments').hasClass('hidden')) {
 				$('#no-comments').addClass('hidden');
