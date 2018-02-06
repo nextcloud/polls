@@ -212,7 +212,6 @@ $(document).ready(function () {
 			userId: form.elements.userId.value,
 			commentBox: comment.textContent.trim()
 		};
-
 		$('.new-comment .icon-loading-small').show();
 
 		$.post(form.action, data, function (data) {
