@@ -1,11 +1,23 @@
-/** global: Clipboard */
-var newUserDates = [];
-var newUserTypes = [];
+/* global Clipboard */
+/* global Handlebars */
+
+var newUserOptions = [];
+var newUserAnswers = [];
 
 var maxVotes = 0;
 var valuesChanged = false;
 
 var tzOffset = new Date().getTimezoneOffset();
+
+// HTML template for new comment (handlebars.js)
+var tmpl_comment = Handlebars.compile('<li class="comment flex-column"> ' +
+	'<div class="authorRow user-cell flex-row"> ' +
+	'<div class="avatar missing" title="{{userId}}"></div> ' +
+	'<div class="author">{{displayName}}</div>' +
+	'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="{{timeStamp}}" title="{{date}}">{{relativeNow}}</div>' +
+	'</div>' +
+	'<div class="message wordwrap comment-content">{{comment}}</div>' +
+	'</li>');
 
 $.fn.switchClass = function (a, b) {
 	this.removeClass(a);
@@ -16,7 +28,6 @@ $.fn.switchClass = function (a, b) {
 function updateCommentsCount() {
 	$('#comment-counter').removeClass('no-comments');
 	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
-
 }
 
 function updateBest() {
@@ -157,25 +168,25 @@ $(document).ready(function () {
 			}
 		}
 		var check_notif = document.getElementById('check_notif');
-		var newUserDates = [], newUserTypes = [];
+		var newUserOptions = [], newUserAnswers = [];
 		$('.poll-cell.active').each(function () {
 			if($(this).hasClass('no')) {
-				newUserTypes.push(0);
+				newUserAnswers.push('no');
 			} else if ($(this).hasClass('yes')) {
-				newUserTypes.push(1);
+				newUserAnswers.push('yes');
 			} else if($(this).hasClass('maybe')) {
-				newUserTypes.push(2);
+				newUserAnswers.push('maybe');
 			} else {
-				newUserTypes.push(-1);
+				newUserAnswers.push('no');
 			}
 			if (isNaN($(this).attr('data-value'))) {
-				newUserDates.push($(this).attr('data-value'));
+				newUserOptions.push($(this).attr('data-value'));
 			} else {
-				newUserDates.push(parseInt($(this).attr('data-value')));
+				newUserOptions.push(parseInt($(this).attr('data-value')));
 			}
 		});
-		form.elements.dates.value = JSON.stringify(newUserDates);
-		form.elements.types.value = JSON.stringify(newUserTypes);
+		form.elements.options.value = JSON.stringify(newUserOptions);
+		form.elements.answers.value = JSON.stringify(newUserAnswers);
 		form.elements.receiveNotifications.value = (check_notif && check_notif.checked) ? 'true' : 'false';
 		form.elements.changed.value = valuesChanged ? 'true' : 'false';
 		form.submit();
@@ -205,17 +216,7 @@ $(document).ready(function () {
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function (data) {
-			var newCommentElement = '<li class="comment flex-column"> ' +
-									'<div class="authorRow user-cell flex-row"> ' +
-									'<div class="avatar missing" title="' + data.userId + '"></div> ' +
-									'<div class="author">' + data.displayName + '</div>' +
-									'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + Date.now() + '" title="' + data.date + '">' + t('polls', 'just now') + '</div>' +
-									'</div>' +
-									'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
-									'</li>';
-
-
-			$('#no-comments').after(newCommentElement);
+			$('#no-comments').after(tmpl_comment(data));
 
 			if (!$('#no-comments').hasClass('hidden')) {
 				$('#no-comments').addClass('hidden');

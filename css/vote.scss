@@ -137,13 +137,6 @@ $user-column-width: 265px;
 	background-size: 32px;
 	height: 44px;
 
-	&.active {
-		cursor: pointer;
-		border: 2px solid;
-		border-radius: 4px;
-		box-sizing: border-box;
-	}
-
 	&.yes {
 		background-color: $bg_yes;
 		color: $fg_yes;
@@ -163,11 +156,28 @@ $user-column-width: 265px;
 	}
 
 	&.unvoted {
-		background-color: $bg_unvoted;
-		color: $fg_unvoted;
-		background-color: $bg_unvoted;
+		background-color: $bg_no;
+		color: $fg_no;
+		&:before {
+			content: attr(data-unvoted);
+			color: $fg_no;
+			font-size: 18px;
+			font-style: italic;
+			font-weight: bold;
+			line-height: 38px;
+		}
 	}
 
+	&.active {
+		cursor: pointer;
+		border: 2px solid;
+		border-radius: 4px;
+		box-sizing: border-box;
+		&.unvoted {
+		background-color: $bg_maybe;
+		color: $fg_maybe;
+		}
+	}
 }
 
 .toggle-cell {
@@ -284,7 +294,6 @@ $user-column-width: 265px;
 		flex-grow: 1;
 		flex-shrink: 1;
 		padding-right: 15px; 
-
 
 		.authorRow {
 			.leftLabel {

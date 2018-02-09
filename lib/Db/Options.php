@@ -25,17 +25,17 @@
 namespace OCA\Polls\Db;
 
 /**
- * @method string getText()
- * @method void setText(string $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
+ * @method string getPollOptionText()
+ * @method void setPollOptionText(string $value)
  */
-class Text extends Model {
-	protected $text;
+class Options extends Model {
 	protected $pollId;
+	protected $pollOptionText;
 
 	/**
-	 * Text constructor.
+	 * Options constructor.
 	 */
 	public function __construct() {
 		$this->addType('pollId', 'integer');
