@@ -25,6 +25,8 @@ h1 {
   top: 4px; }
   #controls h2 {
     margin-top: 12px; }
+  #controls .button {
+    display: inline-flex; }
   #controls #breadcrump {
     flex-grow: 0;
     overflow: hidden; }
