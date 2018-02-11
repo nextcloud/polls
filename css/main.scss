@@ -35,6 +35,10 @@ h1 {
 	h2 {
 		margin-top: 12px;
 	}
+	.button {
+		display: inline-flex;
+	}
+
 	#breadcrump {
 		flex-grow: 0;
 		overflow: hidden;
