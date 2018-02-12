@@ -75,7 +75,6 @@ appstore:
 	--exclude="protractor.*" \
 	--exclude=".*" \
 	--exclude="js/.*" \
-	--exclude="l10n/.tx" \
 	--exclude="l10n/no-php" \
 	./ $(build_source_directory)/$(app_name)
 
@@ -119,7 +118,6 @@ else
 	--exclude="protractor.*" \
 	--exclude=".*" \
 	--exclude="js/.*" \
-	--exclude="l10n/.tx" \
 	--exclude="l10n/no-php" \
 	--exclude="css/*.scss" \
 	./ $(build_source_directory)/$(app_name)
