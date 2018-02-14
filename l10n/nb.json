@@ -1,4 +1,5 @@
 { "translations": {
+    "Do you really want to delete that poll (new)?" : "Ønsker du virkelig å slette den avstemningen (ny)?",
     "Nothing selected!\nClick on cells to turn them green." : "Ingenting valgt!\nKlikk på celler for å gjøre dem grønne.",
     "You must enter at least a title for the new poll." : "Du må skrive inn minst en tittel for ny avstemning",
     "Please select at least one user or group!" : "Velg minst én bruker eller gruppe",
