@@ -21,11 +21,15 @@
 	 *
 	 */
 
+
+
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'createpoll');
-	\OCP\Util::addStyle('polls', 'vendor/jquery.datetimepicker.min');
-	\OCP\Util::addScript('polls', 'create_edit');
-	\OCP\Util::addScript('polls', 'vendor/jquery.datetimepicker.full.min');
+	\OCP\Util::addStyle('polls', 'createpoll-newui');
+
+	\OCP\Util::addscript('polls', 'vendor/vue');
+	\OCP\Util::addScript('polls', 'app');
+	// \OCP\Util::addScript('polls', 'create_edit');
 
 	$userId = $_['userId'];
 	/** @var \OCP\IUserManager $userMgr */
@@ -92,107 +96,99 @@
 					</div>
 				</div>
 			</div>
-
-		<?php if ($isUpdate): ?>
-			<form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.update_poll')); ?>" method="POST">
-				<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
-		<?php else: ?>
-			<form name="finish_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_poll')); ?>" method="POST">
-		<?php endif; ?>
-				<input type="hidden" name="chosenOptions" id="chosenOptions" value="<?php if (isset($chosen)) p($chosen); ?>" />
-				<input type="hidden" name="expireTs" id="expireTs" value="<?php if (isset($expireTs)) p($expireTs); ?>" />
-				<input type="hidden" name="userId" id="userId" value="<?php p($userId); ?>" />
-
-				<header class="row">
-				</header>
-
-				<div class="new_poll row">
-					<div class="col-50">
-						<label for="pollTitle" class="input_title"><?php p($l->t('Title')); ?></label>
-						<input type="text" class="input_field" id="pollTitle" name="pollTitle" value="<?php if (isset($title)) p($title); ?>" />
-						<label for="pollDesc" class="input_title"><?php p($l->t('Description')); ?></label>
-						<textarea class="input_field" id="pollDesc" name="pollDesc"><?php if (isset($desc)) p($desc); ?></textarea>
-
-						<label class="input_title"><?php p($l->t('Access')); ?></label>
-
-						<input type="radio" name="accessType" id="private" value="registered" class="radio" <?php if (!$isUpdate || $access === 'registered') print_unescaped('checked'); ?> />
-						<label for="private"><?php p($l->t('Registered users only')); ?></label>
-
-						<input type="radio" name="accessType" id="hidden" value="hidden" class="radio" <?php if ($isUpdate && $access === 'hidden') print_unescaped('checked'); ?> />
-						<label for="hidden"><?php p($l->t('hidden')); ?></label>
-
-						<input type="radio" name="accessType" id="public" value="public" class="radio" <?php if ($isUpdate && $access === 'public') print_unescaped('checked'); ?> />
-						<label for="public"><?php p($l->t('Public access')); ?></label>
-
-						<input type="radio" name="accessType" id="select" value="select" class="radio" <?php if ($isUpdate && $access === 'select') print_unescaped('checked'); ?>>
-						<label for="select"><?php p($l->t('Select')); ?></label>
-						<span id="id_label_select">...</span>
-
-						<div id="selected_access" class="row user-group-list">
-							<ul id="selected-search-list-id">
-							</ul>
+		
+			<div id="workbench" class="main-container">
+				<div class="flex-row first">
+		
+					<div class="flex-column poll_description">
+						<label for="pollTitle" ><?php p($l->t('Title')); ?></label>
+						<input type="text" id="pollTitle" name="pollTitle" v-model="title">
+						<label for="pollDesc"><?php p($l->t('Description')); ?></label>
+						<textarea id="pollDesc" name="pollDesc" v-model="description"></textarea>
+					</div>
+					
+					<div class="flex-column">
+						<label><?php p($l->t('Access')); ?></label>
+						<div>
+							<input type="radio" v-model="accessType" value="registered" id="private" class="radio"/>
+							<label for="private"><?php p($l->t('Registered users only')); ?></label>
 						</div>
-						<div id="access_rights" class="row user-group-list">
-							<div class="col-50">
-								<input type="text" class="live-search-box" id="user-group-search-box" placeholder="<?php p($l->t('User/Group search')); ?>" />
-								<ul class="live-search-list" id="live-search-list-id">
+						<div>
+							<input type="radio" v-model="accessType" value="hidden" id="hidden" class="radio"/>
+							<label for="hidden"><?php p($l->t('hidden')); ?></label>
+						</div>
+						<div>
+							<input type="radio" v-model="accessType" value="public" id="public" class="radio"/>
+							<label for="public"><?php p($l->t('Public access')); ?></label>
+						</div>
+						<div>
+							<input type="radio" v-model="accessType" value="select" id="select" class="radio"/>
+							<label for="select"><?php p($l->t('Select')); ?></label>
+							<span id="id_label_select">...</span>
+
+							<div id="selected_access" class="row user-group-list">
+								<ul id="selected-search-list-id">
 								</ul>
 							</div>
-						</div>
-
-						<input type="hidden" name="accessValues" id="accessValues" value="<?php if ($isUpdate && $access === 'select') p($accessTypes) ?>" />
-
-						<input id="isAnonymous" name="isAnonymous" type="checkbox" class="checkbox" <?php $isAnonymous ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
-						<label for="isAnonymous" class="input_title"><?php p($l->t('Anonymous')) ?></label>
-
-						<div id="anonOptions" style="display:none;">
-							<input id="hideNames" name="hideNames" type="checkbox" class="checkbox" <?php $hideNames ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
-							<label for="hideNames" class="input_title"><?php p($l->t('Hide user names for admin')) ?></label>
-						</div>
-
-						<input id="id_expire_set" name="check_expire" type="checkbox" class="checkbox" <?php ($isUpdate && $poll->getExpire() !== null) ? print_unescaped('value="true" checked') : print_unescaped('value="false"'); ?> />
-						<label for="id_expire_set" class="input_title"><?php p($l->t('Expires')); ?></label>
-						<div class="input-group" id="expiration">
-							<input id="id_expire_date" type="text" required="" <?php (!$isUpdate || $poll->getExpire() === null) ? print_unescaped('disabled="true"') : print_unescaped('value="' . $expireStr . '"'); ?> name="expire_date_input" />
-						</div>
-					</div>
-					<div class="col-50">
-
-						<input type="radio" name="pollType" id="event" value="event" class="radio" <?php if (!$isUpdate || $poll->getType() === 0) print_unescaped('checked'); ?> />
-						<label for="event"><?php p($l->t('Event schedule')); ?></label>
-
-						<!-- TODO texts to db -->
-						<input type="radio" name="pollType" id="text" value="text" class="radio" <?php if ($isUpdate && $poll->getType() === 1) print_unescaped('checked'); ?>>
-						<label for="text"><?php p($l->t('Text based')); ?></label>
-
-						<div id="date-select-container" <?php if ($isUpdate && $poll->getType() === 1) print_unescaped('style="display:none;"'); ?> >
-							<label for="datetimepicker" class="input_title"><?php p($l->t('Dates')); ?></label>
-							<input id="datetimepicker" type="text" />
-							<table id="selected-dates-table" class="choices">
-							</table>
-						</div>
-						<div id="text-select-container" <?php if(!$isUpdate || $poll->getType() === 0) print_unescaped('style="display:none;"'); ?> >
-							<label for="text-title" class="input_title"><?php p($l->t('Text item')); ?></label>
-							<div class="input-group">
-								<input type="text" id="text-title" placeholder="<?php print_unescaped('Insert text...'); ?>" />
-								<div class="input-group-btn">
-									<input type="button" id="text-submit" class="button btn" value="<?php p($l->t('Add')); ?>" class="btn"/>
+							<div id="access_rights" class="row user-group-list">
+								<div class="col-50">
+									<input type="text" class="live-search-box" id="user-group-search-box" placeholder="<?php p($l->t('User/Group search')); ?>" />
+									<ul class="live-search-list" id="live-search-list-id">
+									</ul>
 								</div>
 							</div>
-							<table id="selected-texts-table" class="choices">
-							</table>
+						</div>
+					</div>
+
+					<div class="flex-column">
+						<input id="anonymous" v-model="anonymousType"type="checkbox" class="checkbox" />
+						<label for="anonymous">{{anonymousLabel}}</label>
+
+						<div v-show="anonymousType">
+							<input id="trueAnonymous" v-model="trueAnonymousType" type="checkbox" class="checkbox"/>
+							<label for="trueAnonymous">{{trueAnonymousLabel}}</label>
+						</div>
+
+						<div class="expirationView subView">
+							<input id="expiration" v-model="expiration" type="checkbox" class="checkbox" />
+							<label for="expiration">{{expirationDateLabel}}</label>
+							  <date-picker v-model="expirationDate" date-format="yy-mm-dd" v-show="expiration"></date-picker>
+							<pre>{{ $data }}</pre>
+						</div>
+						
+					</div>
+				</div>
+				<div class="flex-column">
+					<div id="pollType">
+						<input id="datePoll" v-model="pollType" value="datePoll" type="radio" class="radio"/>
+						<label for="datePoll"><?php p($l->t('Event schedule')); ?></label>
+						<input id="textPoll" v-model="pollType" value="textPoll" type="radio" class="radio"/>
+						<label for="textPoll"><?php p($l->t('Text based')); ?></label>
+					</div>
+					<div id="pollContent" class="flex-column poll_table">
+						<div id="date-select-container" v-show="pollType === 'datePoll'">
+							<div id="addOptionButton">
+								<button class="events--button button btn primary" type="button"><?php p($l->t('Add date option')); ?></button>
+							</div>
+							<date-poll-table></date-poll-table>
+						</div>
+						<div id="text-select-container" v-show="pollType === 'textPoll'">
+							<div id="addOptionButton">
+								<button class="events--button button btn primary" type="button"><?php p($l->t('Add text option')); ?></button>
+							</div>
+							<text-poll-table></text-poll-table>
+						</div>
+						<div class="form-actions">
+							<?php if ($isUpdate): ?>
+								<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
+							<?php else: ?>
+								<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />
+							<?php endif; ?>
+							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
 						</div>
 					</div>
 				</div>
-				<div class="form-actions">
-					<?php if ($isUpdate): ?>
-						<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
-					<?php else: ?>
-						<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />
-					<?php endif; ?>
-					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
-				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 </div>
