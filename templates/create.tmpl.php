@@ -27,7 +27,9 @@
 	\OCP\Util::addStyle('polls', 'createpoll');
 	\OCP\Util::addStyle('polls', 'createpoll-newui');
 
-	\OCP\Util::addscript('polls', 'vendor/vue');
+	\OCP\Util::addscript('polls', 'vendor/lodash.core.min');
+	\OCP\Util::addscript('polls', 'vendor/vue'); //developing
+	// \OCP\Util::addscript('polls', 'vendor/vue.min'); // production
 	\OCP\Util::addScript('polls', 'app');
 	// \OCP\Util::addScript('polls', 'create_edit');
 
@@ -153,7 +155,6 @@
 							<input id="expiration" v-model="expiration" type="checkbox" class="checkbox" />
 							<label for="expiration">{{expirationDateLabel}}</label>
 							  <date-picker v-model="expirationDate" date-format="yy-mm-dd" v-show="expiration"></date-picker>
-							<pre>{{ $data }}</pre>
 						</div>
 						
 					</div>
@@ -171,6 +172,18 @@
 								<button class="events--button button btn primary" type="button"><?php p($l->t('Add date option')); ?></button>
 							</div>
 							<date-poll-table></date-poll-table>
+							<div id="date-poll-list">
+							  <input v-model="newPollDate" @keyup.enter="addNewPollDate" placeholder="Add date">
+							  <ol>
+								<li
+									is="date-poll-item"
+									v-for="(pollDate, index) in pollDates"
+									v-bind:option="pollDate"
+									v-bind:key="pollDate.id"
+									v-on:remove="pollDates.splice(pollDate, 1)">
+								</li>
+							</ol>
+							</div>
 						</div>
 						<div id="text-select-container" v-show="pollType === 'textPoll'">
 							<div id="addOptionButton">
@@ -178,6 +191,7 @@
 							</div>
 							<text-poll-table></text-poll-table>
 						</div>
+						<pre>{{ $data }}</pre>
 						<div class="form-actions">
 							<?php if ($isUpdate): ?>
 								<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
