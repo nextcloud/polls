@@ -1,4 +1,17 @@
+var pollDates = [
+			{ id:0, fromDate: '2018-02-02', fromTime: '' },
+			{ id:1, fromDate: '2018-02-04', fromTime: '11:00' },
+			{ id:2, fromDate: '2018-02-03', fromTime: '09:00' },
+			{ id:3, fromDate: '2018-02-05', fromTime: '11:00', toDate: '2018-02-06', toTime: '17:00' },
+			{ id:4, fromDate: '2018-02-08', fromTime: '', toDate: '2018-02-09', toTime: '' }
+];
 
+var pollTexts = [
+			{ id:0, text: 'Option Nr. 1' },
+			{ id:1, text: 'Option Nr. 2' },
+			{ id:2, text: 'Option Nr. 3' },
+			{ id:3, text: 'Option Nr. 4' }
+];
 // inject jQuery date picker
 Vue.component('date-picker', {
   template: '<input placeholder="' + 
@@ -33,18 +46,21 @@ Vue.component('date-poll-table', {
 
 Vue.component('date-poll-item', {
   props: ['option'],
-  template: '<li><div>{{ option.fromDate }}</div>\
-			<div> {{ option.fromTime }}</div>\
-			<div> {{ option.fromTimestamp }}</div>\
-			<div> {{ option.toDate }}</div>\
-			<div> {{ option.toTime }}</div> \
-			<div> {{ option.toTimestamp }}</div>\
-			<button v-on:click="$emit(\'remove\')">X</button>\
+  template: '<li>{{ option.fromDate }} {{ option.fromTime }} {{ option.fromTimestamp }}\
+			{{ option.toDate }} {{ option.toTime }} {{ option.toTimestamp }}\
+			<a v-on:click="$emit(\'remove\')" class="icon-delete svg delete-poll"></a>\
+			</li>'
+});
+
+Vue.component('text-poll-item', {
+  props: ['option'],
+  template: '<li>{{ option.text }}\
+			<a v-on:click="$emit(\'remove\')" class="icon-delete svg delete-poll"></a>\
 			</li>'
 });
 
 Vue.component('text-poll-table', {
-	template: '<div>Here comes the table for text polls</div>'
+	template: '<div>Here is the table for text polls</div>'
 });
 
 var setOptions = new Vue({
@@ -63,25 +79,17 @@ var setOptions = new Vue({
 		expirationDateLabel: t('polls', 'Expires'),
 		expirationDatePlaceholder: t('polls', 'Expiration date'),
 		newPollDate: '',
-		pollDates: [
-			{ id:0, fromDate: '2018-02-02', fromTime: '' },
-			{ id:1, fromDate: '2018-02-04', fromTime: '11:00' },
-			{ id:2, fromDate: '2018-02-03', fromTime: '09:00' },
-			{ id:3, fromDate: '2018-02-05', fromTime: '11:00', toDate: '2018-02-06', toTime: '17:00' },
-			{ id:4, fromDate: '2018-02-08', fromTime: '', toDate: '2018-02-09', toTime: '' }
-		],
-		nextPollDateId: 5
+		newPollText: '',
+		pollDates: _.sortBy(this.pollDates, 'fromDate'),
+		pollTexts: pollTexts,
+		nextPollDateId: pollDates.length,
+		nextPollTextId: pollTexts.length
 	},
 	
 	events: {
 		'datepicker-changed': function() {
 			this.from = document.getElementById('from').value
 			this.to = document.getElementById('to').value
-		}
-	},
-	computed: {
-		sortedPollDates: function () {
-			return _.sortBy(this.pollDates, 'fromDate')
 		}
 	},
     
@@ -95,6 +103,14 @@ var setOptions = new Vue({
 				fromDate: this.newPollDate
 			})
 			this.newPollDate = ''
+			this.pollDates = _.sortBy(this.pollDates, 'fromDate')
+		},
+		addNewPollText: function () {
+			this.pollTexts.push({
+				id: this.nextPollTextId++,
+				text: this.newPollText
+			})
+			this.newPollText = ''
 		}
 	}	
   

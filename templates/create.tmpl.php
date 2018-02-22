@@ -173,16 +173,16 @@
 							</div>
 							<date-poll-table></date-poll-table>
 							<div id="date-poll-list">
-							  <input v-model="newPollDate" @keyup.enter="addNewPollDate" placeholder="Add date">
-							  <ol>
-								<li
-									is="date-poll-item"
-									v-for="(pollDate, index) in pollDates"
-									v-bind:option="pollDate"
-									v-bind:key="pollDate.id"
-									v-on:remove="pollDates.splice(pollDate, 1)">
-								</li>
-							</ol>
+								<input v-model="newPollDate" @keyup.enter="addNewPollDate" placeholder="Add date">
+								<ol>
+									<li
+										is="date-poll-item"
+										v-for="(pollDate, index) in pollDates"
+										v-bind:option="pollDate"
+										v-bind:key="pollDate.id"
+										v-on:remove="pollDates.splice(index, 1)">
+									</li>
+								</ol>
 							</div>
 						</div>
 						<div id="text-select-container" v-show="pollType === 'textPoll'">
@@ -190,6 +190,18 @@
 								<button class="events--button button btn primary" type="button"><?php p($l->t('Add text option')); ?></button>
 							</div>
 							<text-poll-table></text-poll-table>
+							<div id="text-poll-list">
+								<input v-model="newPollText" @keyup.enter="addNewPollText" placeholder="Add poll Option">
+								<ol>
+									<li
+										is="text-poll-item"
+										v-for="(pollText, index) in pollTexts"
+										v-bind:option="pollText"
+										v-bind:key="pollText.id"
+										v-on:remove="pollTexts.splice(index, 1)">
+									</li>
+								</ol>
+							</div>
 						</div>
 						<pre>{{ $data }}</pre>
 						<div class="form-actions">
