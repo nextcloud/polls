@@ -10,6 +10,7 @@ OC.L10N.register(
     "Press ⌘-C to copy." : "Paina ⌘-C kopioidaksesi.",
     "Press Ctrl-C to copy." : "Paina Ctrl-C kopioidaksesi.",
     "Copy to clipboard: Ctrl+C, Enter" : "Kopioi leikepöydälle: Ctrl+C, Enter",
+    "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Et ole rekisteröitynyt.\nKirjoita nimesi äänestääksesi\n(vähintään kolme merkkiä).",
     "Please add some text to your comment before submitting it." : "Lisää tekstiä kommenttiisi, ennen kuin lähetät sen.",
     "just now" : "juuri nyt",
     "An error occurred, your comment was not posted." : "Tapahtui virhe, kommenttiasi ei lähetetty.",
