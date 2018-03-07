@@ -1,9 +1,11 @@
+// Mocks
 var pollDates = [
 			{ id:0, fromDate: '2018-02-02', fromTime: '' },
 			{ id:1, fromDate: '2018-02-04', fromTime: '11:00' },
 			{ id:2, fromDate: '2018-02-03', fromTime: '09:00' },
 			{ id:3, fromDate: '2018-02-05', fromTime: '11:00', toDate: '2018-02-06', toTime: '17:00' },
-			{ id:4, fromDate: '2018-02-08', fromTime: '', toDate: '2018-02-09', toTime: '' }
+			{ id:4, fromDate: '2018-02-08', fromTime: '', toDate: '2018-02-09', toTime: '' },
+			{ id:5, fromDate: '2018-02-08', fromTime: '00:00', toDate: '2018-02-09', toTime: '00:00' }
 ];
 
 var pollTexts = [
@@ -12,6 +14,8 @@ var pollTexts = [
 			{ id:2, text: 'Option Nr. 3' },
 			{ id:3, text: 'Option Nr. 4' }
 ];
+
+
 // inject jQuery date picker
 Vue.component('date-picker', {
   template: '<input placeholder="' + 
@@ -46,9 +50,12 @@ Vue.component('date-poll-table', {
 
 Vue.component('date-poll-item', {
   props: ['option'],
-  template: '<li>{{ option.fromDate }} {{ option.fromTime }} {{ option.fromTimestamp }}\
-			{{ option.toDate }} {{ option.toTime }} {{ option.toTimestamp }}\
-			<a v-on:click="$emit(\'remove\')" class="icon-delete svg delete-poll"></a>\
+  template: '<li class="flex-row poll-option">\
+			<div class="flex-column from-date" v-bind:data-timestamp="option.fromTimestamp">{{ option.fromDate }} {{ option.fromTime }}</div>\
+			<div class="flex-column to-date" v-bind:data-timestamp="option.toTimestamp">{{ option.toDate }} {{ option.toTime }}</div>\
+			<div class="flex-column options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>\
+			<div class="flex-column options"><a class="icon icon-rename svg edit-poll"></a></div>\
+			<div class="flex-column options"><a class="icon icon-clippy svg copy-poll"></a></div>\
 			</li>'
 });
 
@@ -85,10 +92,20 @@ var setOptions = new Vue({
 		nextPollDateId: pollDates.length,
 		nextPollTextId: pollTexts.length
 	},
-	
+
+	created: function() {
+		for (i = 0; i < this.pollDates.length; i++) {
+			if (this.pollDates[i].fromTime === '') {
+					this.pollDates[i].fromTimestamp = new Date(this.pollDates[i].fromDate).getTime();
+				} else {
+					this.pollDates[i].fromTimestamp = new Date(this.pollDates[i].fromDate + 'T' + this.pollDates[i].fromTime).getTime();
+				}
+		} 
+	},
+
 	events: {
 		'datepicker-changed': function() {
-			this.from = document.getElementById('from').value
+			this.from = document.getElementById('from').value;
 			this.to = document.getElementById('to').value
 		}
 	},
@@ -100,10 +117,11 @@ var setOptions = new Vue({
 		addNewPollDate: function () {
 			this.pollDates.push({
 				id: this.nextPollDateId++,
-				fromDate: this.newPollDate
+				fromDate: this.newPollDate,
+				fromTimestamp: new Date(this.newPollDate).getTime()
 			})
-			this.newPollDate = ''
-			this.pollDates = _.sortBy(this.pollDates, 'fromDate')
+			this.newPollDate = '';
+			this.pollDates = _.sortBy(this.pollDates, 'fromTimestamp')
 		},
 		addNewPollText: function () {
 			this.pollTexts.push({
@@ -129,3 +147,5 @@ function deletePoll($pollEl) {
 		form.submit();
 	}
 };
+
+

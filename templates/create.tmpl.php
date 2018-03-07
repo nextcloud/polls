@@ -174,7 +174,7 @@
 							<date-poll-table></date-poll-table>
 							<div id="date-poll-list">
 								<input v-model="newPollDate" @keyup.enter="addNewPollDate" placeholder="Add date">
-								<ol>
+								<ol class="flex-column">
 									<li
 										is="date-poll-item"
 										v-for="(pollDate, index) in pollDates"
@@ -192,7 +192,7 @@
 							<text-poll-table></text-poll-table>
 							<div id="text-poll-list">
 								<input v-model="newPollText" @keyup.enter="addNewPollText" placeholder="Add poll Option">
-								<ol>
+								<ol class="flex-column">
 									<li
 										is="text-poll-item"
 										v-for="(pollText, index) in pollTexts"
