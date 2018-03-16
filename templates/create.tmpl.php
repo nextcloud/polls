@@ -30,6 +30,7 @@
 	\OCP\Util::addscript('polls', 'vendor/lodash.core.min');
 	\OCP\Util::addscript('polls', 'vendor/vue'); //developing
 	// \OCP\Util::addscript('polls', 'vendor/vue.min'); // production
+	\OCP\Util::addscript('polls', 'vendor/jquery.ui.timepicker');
 	\OCP\Util::addScript('polls', 'app');
 	// \OCP\Util::addScript('polls', 'create_edit');
 
@@ -143,18 +144,23 @@
 					</div>
 
 					<div class="flex-column">
-						<input id="anonymous" v-model="anonymousType"type="checkbox" class="checkbox" />
-						<label for="anonymous">{{anonymousLabel}}</label>
+						<div>
+							<input id="maybeOptionAllowed" v-model="maybeOptionAllowed"type="checkbox" class="checkbox" />
+							<label for="maybeOptionAllowed">{{maybeOptionAllowedLabel}}</label>
+						</div>
+						
+						<div>
+							<input id="anonymous" v-model="anonymousType"type="checkbox" class="checkbox" />
+							<label for="anonymous">{{anonymousLabel}}</label>
 
-						<div v-show="anonymousType">
-							<input id="trueAnonymous" v-model="trueAnonymousType" type="checkbox" class="checkbox"/>
-							<label for="trueAnonymous">{{trueAnonymousLabel}}</label>
+							<input id="trueAnonymous" v-model="trueAnonymousType" v-show="anonymousType" type="checkbox" class="checkbox"/>
+							<label for="trueAnonymous" v-show="anonymousType">{{trueAnonymousLabel}} </label>
 						</div>
 
 						<div class="expirationView subView">
 							<input id="expiration" v-model="expiration" type="checkbox" class="checkbox" />
 							<label for="expiration">{{expirationDateLabel}}</label>
-							  <date-picker v-model="expirationDate" date-format="yy-mm-dd" v-show="expiration"></date-picker>
+							  <date-picker placeholder="<?php p($l->t('Expiration date')); ?>" v-model="expirationDate" date-format="yy-mm-dd" v-show="expiration"></date-picker>
 						</div>
 						
 					</div>
@@ -168,12 +174,11 @@
 					</div>
 					<div id="pollContent" class="flex-column poll_table">
 						<div id="date-select-container" v-show="pollType === 'datePoll'">
-							<div id="addOptionButton">
-								<button class="events--button button btn primary" type="button"><?php p($l->t('Add date option')); ?></button>
+							<div>
+								<date-picker placeholder="<?php p($l->t('Add option')); ?>" v-model="newPollDate" date-format="yy-mm-dd"></date-picker>
+								<button class="events--button button btn primary" type="button" @click="addNewPollDate"><?php p($l->t('Add option')); ?></button>
 							</div>
-							<date-poll-table></date-poll-table>
 							<div id="date-poll-list">
-								<input v-model="newPollDate" @keyup.enter="addNewPollDate" placeholder="Add date">
 								<ol class="flex-column">
 									<li
 										is="date-poll-item"
@@ -186,12 +191,11 @@
 							</div>
 						</div>
 						<div id="text-select-container" v-show="pollType === 'textPoll'">
-							<div id="addOptionButton">
-								<button class="events--button button btn primary" type="button"><?php p($l->t('Add text option')); ?></button>
+							<div>
+								<input v-model="newPollText" @keyup.enter="addNewPollText" placeholder="<?php p($l->t('Add option')); ?>">
+								<button class="events--button button btn primary" type="button"><?php p($l->t('Add option')); ?></button>
 							</div>
-							<text-poll-table></text-poll-table>
 							<div id="text-poll-list">
-								<input v-model="newPollText" @keyup.enter="addNewPollText" placeholder="Add poll Option">
 								<ol class="flex-column">
 									<li
 										is="text-poll-item"

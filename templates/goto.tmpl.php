@@ -302,7 +302,7 @@
 						<input type="hidden" name="answers" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="receiveNotifications" />
 						<input type="hidden" name="changed" />
-						<input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
+						<input type="button" id="submit_finish_vote" class="button btn primary" value="<?php p($l->t('Vote!')); ?>" />
 					</form>
 				</div>
 			<?php if (User::isLoggedIn()) : ?>
