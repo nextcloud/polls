@@ -22,10 +22,12 @@
 	 */
 
 
+	use OCP\User; //To do: replace according to API
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'createpoll');
 	\OCP\Util::addStyle('polls', 'createpoll-newui');
+	\OCP\Util::addStyle('polls', 'vendor/jquery.ui.timepicker');
 
 	\OCP\Util::addscript('polls', 'vendor/lodash.core.min');
 	\OCP\Util::addscript('polls', 'vendor/vue'); //developing
@@ -42,6 +44,7 @@
 	$isUpdate = isset($_['poll']) && $_['poll'] !== null;
 	$isAnonymous = false;
 	$hideNames = false;
+	$lang = \OC::$server->getL10NFactory()->findLanguage();
 
 	if ($isUpdate) {
 		/** @var OCA\Polls\Db\Event $poll */
@@ -100,9 +103,8 @@
 				</div>
 			</div>
 		
-			<div id="workbench" class="main-container">
-				<div class="flex-row first">
-		
+			<div id="workbench" class="main-container flex-row">
+				<div class="flex-column">
 					<div class="flex-column poll_description">
 						<label for="pollTitle" ><?php p($l->t('Title')); ?></label>
 						<input type="text" id="pollTitle" name="pollTitle" v-model="title">
@@ -110,6 +112,78 @@
 						<textarea id="pollDesc" name="pollDesc" v-model="description"></textarea>
 					</div>
 					
+					<div class="flex-column">
+						<div id="pollContent" class="flex-column poll_table">
+							<div id="date-poll-list" v-show="pollType === 'datePoll'">
+								<transition-group name="list" tag="ul" class="flex-row">
+									<li
+										is="date-poll-item"
+										v-for="(pollDate, index) in pollDates"
+										v-bind:option="pollDate"
+										v-bind:key="pollDate.id"
+										v-on:remove="pollDates.splice(index, 1)">
+									</li>
+								</transition-group>
+							</div>
+							<div id="text-poll-list" v-show="pollType === 'textPoll'">
+								<transition-group name="list" tag="ul" class="flex-column">
+									<li
+										is="text-poll-item"
+										v-for="(pollText, index) in pollTexts"
+										v-bind:option="pollText"
+										v-bind:key="pollText.id"
+										v-on:remove="pollTexts.splice(index, 1)">
+									</li>
+								</transition-group>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="flex-column">
+					<div id="pollType">
+						<input id="datePoll" v-model="pollType" value="datePoll" type="radio" class="radio"/>
+						<label for="datePoll"><?php p($l->t('Event schedule')); ?></label>
+						<input id="textPoll" v-model="pollType" value="textPoll" type="radio" class="radio"/>
+						<label for="textPoll"><?php p($l->t('Text based')); ?></label>
+					</div>
+					<div id="date-select-container" v-show="pollType === 'datePoll'">
+						<span><?php p($l->t('Select the time for the poll option to add:')); ?></span>
+						<time-picker placeholder="<?php p($l->t('Add time')); ?>" v-model="newPollTime"></time-picker>
+						<date-picker-inline v-model="newPollDate" date-format="yy-mm-dd" v-show="pollType === 'datePoll'"></date-picker-inline>
+					</div>
+					<div id="text-select-container" v-show="pollType === 'textPoll'">
+						<input v-model="newPollText" @keyup.enter="addNewPollText" placeholder="<?php p($l->t('Add option')); ?>">
+					</div>
+					<div class="form-actions">
+						<?php if ($isUpdate): ?>
+							<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
+						<?php else: ?>
+							<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />
+						<?php endif; ?>
+						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="app-sidebar" class="detailsView scroll-container">
+		<side-bar-close></side-bar-close>
+		<div class="header flex-row">
+			<div class="pollInformation flex-column">
+				<autor-div class="authorRow user-cell flex-row"></autor-div>
+			</div>
+		</div>
+
+		<ul class="tabHeaders">
+			<li class="tabHeader selected" data-tabid="optionsTabView" data-tabindex="0">
+				<a href="#"><?php p($l->t('Poll options')); ?></a>
+			</li>
+		</ul>		
+		<div class="tabsContainer">
+			<div id="optionsTabView" class="tab optionsTabView">
+				<div class="flex-row">
 					<div class="flex-column">
 						<label><?php p($l->t('Access')); ?></label>
 						<div>
@@ -142,8 +216,9 @@
 							</div>
 						</div>
 					</div>
-
+					
 					<div class="flex-column">
+						<label><?php p($l->t('Poll options')); ?></label>
 						<div>
 							<input id="maybeOptionAllowed" v-model="maybeOptionAllowed"type="checkbox" class="checkbox" />
 							<label for="maybeOptionAllowed">{{maybeOptionAllowedLabel}}</label>
@@ -162,63 +237,10 @@
 							<label for="expiration">{{expirationDateLabel}}</label>
 							  <date-picker placeholder="<?php p($l->t('Expiration date')); ?>" v-model="expirationDate" date-format="yy-mm-dd" v-show="expiration"></date-picker>
 						</div>
-						
-					</div>
-				</div>
-				<div class="flex-column">
-					<div id="pollType">
-						<input id="datePoll" v-model="pollType" value="datePoll" type="radio" class="radio"/>
-						<label for="datePoll"><?php p($l->t('Event schedule')); ?></label>
-						<input id="textPoll" v-model="pollType" value="textPoll" type="radio" class="radio"/>
-						<label for="textPoll"><?php p($l->t('Text based')); ?></label>
-					</div>
-					<div id="pollContent" class="flex-column poll_table">
-						<div id="date-select-container" v-show="pollType === 'datePoll'">
-							<div>
-								<date-picker placeholder="<?php p($l->t('Add option')); ?>" v-model="newPollDate" date-format="yy-mm-dd"></date-picker>
-								<button class="events--button button btn primary" type="button" @click="addNewPollDate"><?php p($l->t('Add option')); ?></button>
-							</div>
-							<div id="date-poll-list">
-								<ol class="flex-column">
-									<li
-										is="date-poll-item"
-										v-for="(pollDate, index) in pollDates"
-										v-bind:option="pollDate"
-										v-bind:key="pollDate.id"
-										v-on:remove="pollDates.splice(index, 1)">
-									</li>
-								</ol>
-							</div>
-						</div>
-						<div id="text-select-container" v-show="pollType === 'textPoll'">
-							<div>
-								<input v-model="newPollText" @keyup.enter="addNewPollText" placeholder="<?php p($l->t('Add option')); ?>">
-								<button class="events--button button btn primary" type="button"><?php p($l->t('Add option')); ?></button>
-							</div>
-							<div id="text-poll-list">
-								<ol class="flex-column">
-									<li
-										is="text-poll-item"
-										v-for="(pollText, index) in pollTexts"
-										v-bind:option="pollText"
-										v-bind:key="pollText.id"
-										v-on:remove="pollTexts.splice(index, 1)">
-									</li>
-								</ol>
-							</div>
-						</div>
-						<pre>{{ $data }}</pre>
-						<div class="form-actions">
-							<?php if ($isUpdate): ?>
-								<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
-							<?php else: ?>
-								<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />
-							<?php endif; ?>
-							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
 </div>
