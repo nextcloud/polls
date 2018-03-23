@@ -1,43 +1,5 @@
 /** global: Vue */
-
-var today = new Date();
-var todayTS = new Date(today).getTime();
-
-//Templates
-var datePickerTemplate = '<input size="10" maxlength="10" :placeholder="placeholder" ' +
-	'v-bind:value="value" ' +
-	'v-on:input="$emit(\'input\', $event.target.value)" />';
-	
-var datePickerInlineTemplate = '<div v-bind:value="value" > </div>';
-	
-var timePickerTemplate = '<input size="10" maxlength="10" :placeholder="placeholder"  ' +
-	'v-bind:value="value" ' +
-	'v-on:input="$emit(\'input\', $event.target.value)" />';
-
-
-var datePollItemTemplate =  '<li class="flex-row date-box">' +
-							'	<div class="flex-column">' +
-							'		<div class="month">{{option.fromMonth}} \'{{option.fromYear}}</div>' +
-							'		<div class="dayow">{{option.fromDow}}, {{option.fromDay}}, {{option.fromTime}}</div>' +
-							'	</div>' +
-							'	<div class="options-box flex-column">' +
-							'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
-							'		<div class="options"><a class="icon icon-clippy svg copy-poll"></a></div>' +
-							'	</div>' +
-							'</li>';
-							
-var textPollItemTemplate = 	'<li class="flex-row text-box">' +
-							'	<div class="flex-row">' +
-							'		<div class="text">{{ option.text }}</div>' +
-							'	</div>' +
-							'	<div class="options-box flex-row">' +
-							'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
-							'	</div>' +
-							'</li>';
-							// '	<div class=action> <a @click="$emit(\'remove\')" class="icon-delete svg delete-poll"></a></div>'+
-
 Vue.config.devtools = true;
-// inject jQuery date picker
 
 Vue.component('autor-div', {
 	template: 	'<div>' +
@@ -60,7 +22,7 @@ Vue.component('autor-div', {
 			})
 		}
 	}
-}) ;
+});
 
 Vue.component('side-bar-close', {
 	template: 	'<div class="close flex-row">' +
@@ -74,9 +36,12 @@ Vue.component('side-bar-close', {
 	}
 });
 
+// inject jQuery date picker
 Vue.component('date-picker', {
 	props: ['value', 'placeholder', 'dateFormat', 'minDate'],
-	template: datePickerTemplate,
+	template: 	'<input size="10" maxlength="10" :placeholder="placeholder" ' +
+				'v-bind:value="value" ' +
+				'v-on:input="$emit(\'input\', $event.target.value)" />',
 	mounted: function() {
 		$(this.$el).datepicker({
 			dateFormat: this.dateFormat,
@@ -97,6 +62,7 @@ Vue.component('date-picker', {
 	}
 });
 
+// inject jQuery date picker inline
 Vue.component('date-picker-inline', {
 	props: ['value', 'placeholder', 'dateFormat', 'minDate'],
 	template: '<div v-bind:value="value" > </div>',
@@ -121,9 +87,13 @@ Vue.component('date-picker-inline', {
 	}
 });
 
+// inject jQuery time picker
 Vue.component('time-picker', {
 	props: ['value', 'placeholder', 'dateFormat', 'minDate'],
-	template: timePickerTemplate,
+	template: 
+			'<input size="10" maxlength="10" :placeholder="placeholder"  ' +
+			'v-bind:value="value" ' +
+			'v-on:input="$emit(\'input\', $event.target.value)" />',
 	mounted: function() {
 		$(this.$el).timepicker({
 			dateFormat: this.dateFormat,
@@ -144,81 +114,91 @@ Vue.component('time-picker', {
 	}
 });
 
-Vue.component('date-poll-table', {
-	template: '<div>Here is the table for date polls</div>'
-});
-
 Vue.component('date-poll-item', {
-  props: ['option'],
-  template: datePollItemTemplate
+	props: ['option'],
+	template: 
+			'<li class="flex-row date-box">' +
+			'	<div class="flex-column">' +
+			'		<div class="month">{{option.fromMonth}} \'{{option.fromYear}}</div>' +
+			'		<div class="dayow">{{option.fromDow}}, {{option.fromDay}}, {{option.fromTime}}</div>' +
+			'	</div>' +
+			'	<div class="options-box flex-column">' +
+			'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
+			'		<div class="options"><a class="icon icon-clippy svg copy-poll"></a></div>' +
+			'	</div>' +
+			'</li>'
 });
 
 Vue.component('text-poll-item', {
   props: ['option'],
-  template: textPollItemTemplate
-});
-
-Vue.component('text-poll-table', {
-	template: '<div>Here is the table for text polls</div>'
+  template: 
+			'<li class="flex-row text-box">' +
+			'	<div class="flex-row">' +
+			'		<div class="text">{{ option.text }}</div>' +
+			'	</div>' +
+			'	<div class="options-box flex-row">' +
+			'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
+			'	</div>' +
+			'</li>'
 });
 
 var newPoll = new Vue({
 	el: '#app',
 	data: {
-		today: today,
+		label: {
+			is_anonymous: t('polls', 'Anonymous poll'),
+			full_anonymous: t('polls', 'Hide user names for admin'),
+			expirationDate: t('polls', 'Expires'),
+			maybeOptionAllowed: t('polls', 'Allow maybe option')
+		},
+		polls_event: {
+			poll_id: 0,
+			hash: '',
+			pollType: 'datePoll',
+			title: '',
+			description: '',
+			owner:'',
+			created: '',
+			accessType: 'registered',
+			expiration: false,
+			expirationDate: null,
+			is_anonymous: false,
+			full_anonymous: false,
+			maybeOptionAllowed: true,
+		},
+		votes: {
+			pollDates: [],
+			pollTexts:[]
+		},
 		lang: OC.getLocale(),
-		todayTS: todayTS,
-		title: '',
-		description: '',
-		pollType: 'datePoll',
-		accessType: 'registered',
-		maybeOptionAllowed: true,
-		maybeOptionAllowedLabel: t('polls', 'Allow maybe option'),
-		anonymousType: false,
-		anonymousLabel: t('polls', 'Anonymous poll'),
-		trueAnonymousType: false,
-		trueAnonymousLabel: t('polls', 'Hide user names for admin'),
-		expiration: false,
-		expirationDate: null,
-		expirationDateLabel: t('polls', 'Expires'),
 		placeholder: '',
 		newPollDate: '',
 		newPollTime: '',
 		newPollText: '',
-		pollDates: [],
-		pollTexts:[],
 		nextPollDateId: 0,
-		nextPollTextId: 0,
-		OC: OC,
-		OCP: OCP,
-		OCA: OCA
+		nextPollTextId: 0
 	},
 
 	created: function() {
-		for (i = 0; i < this.pollDates.length; i++) {
-			if (this.pollDates[i].fromTime == null) {
-					this.pollDates[i].fromTimestamp = new Date(this.pollDates[i].fromDate).getTime();
+		for (i = 0; i < this.votes.pollDates.length; i++) {
+			if (this.votes.pollDates[i].fromTime == null) {
+					this.votes.pollDates[i].fromTimestamp = new Date(this.votes.pollDates[i].fromDate).getTime();
 				} else {
-					this.pollDates[i].fromTimestamp = new Date(this.pollDates[i].fromDate + 'T' + this.pollDates[i].fromTime).getTime();
+					this.votes.pollDates[i].fromTimestamp = new Date(this.votes.pollDates[i].fromDate + 'T' + this.votes.pollDates[i].fromTime).getTime();
 				}
 		} 
 	},
 	
 	mounted: function() {
 // Mocks
-			this.pollDates.push({ id:0, fromDate: '2018-02-02', fromTime: '11:00', fromDow:'Fr', fromDay:'02', fromMonth:'Feb', fromYear:'18', fromTimestamp: '1517529600000'});
-			// this.pollDates.push({ id:1, fromDate: '2018-02-04', fromTimestamp: '1517738400000', fromTime: '11:00' });
-			// this.pollDates.push({ id:2, fromDate: '2018-02-03', fromTimestamp: '1517644800000', fromTime: '09:00' });
-			// this.pollDates.push({ id:3, fromDate: '2018-02-05', fromTimestamp: '1517824800000', fromTime: '11:00'});
-			// this.pollDates.push({ id:4, fromDate: '2018-02-08', fromTimestamp: '1518048000000'});
-			// this.pollDates.push({ id:5, fromDate: '2018-02-08', fromTimestamp: '1518044400000', fromTime: '00:00'});
-			this.nextPollDateId = 1;
+			this.addNewPollDate('2018-02-04', '11:00');
+			this.addNewPollDate('2018-02-08', '11:00');
 
-			this.pollTexts.push({ id:0, text: 'Option Nr. 1' });
-			this.pollTexts.push({ id:1, text: 'Option Nr. 2' });
-			this.pollTexts.push({ id:2, text: 'Option Nr. 3' });
-			this.pollTexts.push({ id:3, text: 'Option Nr. 4' });
-			this.nextPollTextId = 6;
+			this.addNewPollText('Option Nr. 1');
+			this.addNewPollText('Option Nr. 2');
+			this.addNewPollText('Option Nr. 3');
+			this.addNewPollText('Option Nr. 4');
+
 	},
 	
 	events: {
@@ -227,20 +207,16 @@ var newPoll = new Vue({
 			this.to = document.getElementById('to').value
 		}
 	},
-    watch: {
-		pollDates: {
-			handler: function (val, oldVal) {
-			},
-			deep: true
-		}
-	},
 	methods: {
-		updateDate: function(date) {
-			this.date = date;
-		},
-		addNewPollDate: function () {
+		addNewPollDate: function (newPollDate, newPollTime) {
+			if (newPollDate != null) {
+				this.newPollDate = newPollDate
+			}
+			if (newPollTime != null) {
+				this.newPollTime = newPollTime
+			}
 			var timeStamp = new Date(this.newPollDate + 'T' + this .newPollTime +':00');
-			this.pollDates.push({
+			this.votes.pollDates.push({
 				id: this.nextPollDateId++,
 				fromTimestamp: timeStamp.getTime(),
 				fromTimeLocal: timeStamp.toLocaleString(),
@@ -253,12 +229,13 @@ var newPoll = new Vue({
 				fromYear: timeStamp.toLocaleString(window.navigator.language, {year: '2-digit'}),
 				fromDow: timeStamp.toLocaleString(window.navigator.language, {weekday: 'short'})
 			})
-/* 			this.newPollDate = '';
-			this.newPollTime = '';
- */			this.pollDates = _.sortBy(this.pollDates, 'fromTimestamp')
+			this.votes.pollDates = _.sortBy(this.votes.pollDates, 'fromTimestamp')
 		},
-		addNewPollText: function () {
-			this.pollTexts.push({
+		addNewPollText: function (newPollText) {
+			if (newPollText != null) {
+				this.newPollText = newPollText
+			}
+			this.votes.pollTexts.push({
 				id: this.nextPollTextId++,
 				text: this.newPollText
 			})
