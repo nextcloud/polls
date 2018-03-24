@@ -82,7 +82,7 @@
 ?>
 
 <div id="app">
-	<div id="app-content">
+	<div id="app-content" class="with-app-sidebar">
 		<div id="app-content-wrapper">
 			<div id="controls">
 				<div id="breadcrump">
@@ -103,67 +103,64 @@
 				</div>
 			</div>
 		
-			<div id="workbench" class="main-container flex-row">
-				<div class="flex-column">
-					<div class="flex-column poll_description">
-						<label for="pollTitle" ><?php p($l->t('Title')); ?></label>
-						<input type="text" id="pollTitle" name="pollTitle" v-model="polls_event.title">
-						<label for="pollDesc"><?php p($l->t('Description')); ?></label>
-						<textarea id="pollDesc" name="pollDesc" v-model="polls_event.description"></textarea>
-					</div>
-					
-					<div class="flex-column">
-						<div id="pollContent" class="flex-column poll_table">
-							<div id="date-poll-list" v-show="polls_event.pollType === 'datePoll'">
-								<transition-group name="list" tag="ul" class="flex-row">
-									<li
-										is="date-poll-item"
-										v-for="(pollDate, index) in votes.pollDates"
-										v-bind:option="pollDate"
-										v-bind:key="pollDate.id"
-										v-on:remove="votes.pollDates.splice(index, 1)">
-									</li>
-								</transition-group>
-							</div>
-							<div id="text-poll-list" v-show="polls_event.pollType === 'textPoll'">
-								<transition-group name="list" tag="ul" class="flex-column">
-									<li
-										is="text-poll-item"
-										v-for="(pollText, index) in votes.pollTexts"
-										v-bind:option="pollText"
-										v-bind:key="pollText.id"
-										v-on:remove="votes.pollTexts.splice(index, 1)">
-									</li>
-								</transition-group>
-							</div>
+			<div class="flex-column workbench">
+				<div class="poll_description">
+					<label for="pollTitle" ><?php p($l->t('Title')); ?></label>
+					<input type="text" id="pollTitle" name="pollTitle" v-model="polls_event.title">
+					<label for="pollDesc"><?php p($l->t('Description')); ?></label>
+					<textarea id="pollDesc" name="pollDesc" v-model="polls_event.description"></textarea>
+				</div>
+				<div class="flex-row">
+					<div class="flex-column poll-creation">
+	
+						<div id="poll-type">
+							<input id="datePoll" v-model="polls_event.pollType" value="datePoll" type="radio" class="radio"/>
+							<label for="datePoll"><?php p($l->t('Event schedule')); ?></label>
+							<input id="textPoll" v-model="polls_event.pollType" value="textPoll" type="radio" class="radio"/>
+							<label for="textPoll"><?php p($l->t('Text based')); ?></label>
 						</div>
-					</div>
-				</div>
 
-				<div class="flex-column">
-					<div id="polls_event.pollType">
-						<input id="datePoll" v-model="polls_event.pollType" value="datePoll" type="radio" class="radio"/>
-						<label for="datePoll"><?php p($l->t('Event schedule')); ?></label>
-						<input id="textPoll" v-model="polls_event.pollType" value="textPoll" type="radio" class="radio"/>
-						<label for="textPoll"><?php p($l->t('Text based')); ?></label>
-					</div>
-					<div id="date-select-container" v-show="polls_event.pollType === 'datePoll'">
-						<span><?php p($l->t('Select the time for the poll option to add:')); ?></span>
-						<time-picker placeholder="<?php p($l->t('Add time')); ?>" v-model="newPollTime"></time-picker>
-						<date-picker-inline v-model="newPollDate" date-format="yy-mm-dd" v-show="polls_event.pollType === 'datePoll'"></date-picker-inline>
-					</div>
-					<div id="text-select-container" v-show="polls_event.pollType === 'textPoll'">
-						<input v-model="newPollText" @keyup.enter="addNewPollText" placeholder="<?php p($l->t('Add option')); ?>">
-					</div>
-					<div class="form-actions">
-						<?php if ($isUpdate): ?>
-							<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
-						<?php else: ?>
-							<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />
-						<?php endif; ?>
-						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
-					</div>
+						<div id="date-select-container" v-show="polls_event.pollType === 'datePoll'">
+							<span><?php p($l->t('Select time for the date:')); ?></span>
+							<time-picker placeholder="<?php p($l->t('Add time')); ?>" v-model="newPollTime"></time-picker>
+							<date-picker-inline v-model="newPollDate" date-format="yy-mm-dd" v-show="polls_event.pollType === 'datePoll'"></date-picker-inline>
+						</div>
+
+						<div id="text-select-container" v-show="polls_event.pollType === 'textPoll'">
+							<input v-model="newPollText" @keyup.enter="addNewPollText()" placeholder="<?php p($l->t('Add option')); ?>">
+						</div>
+				<div class="form-actions">
+					<?php if ($isUpdate): ?>
+						<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Update poll')); ?>" />
+					<?php else: ?>
+						<input type="submit" id="submit_finish_poll" class="button btn primary" value="<?php p($l->t('Create poll')); ?>" />
+					<?php endif; ?>
+					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
 				</div>
+					</div>
+
+					<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table" v-show="polls_event.pollType === 'datePoll'">
+						<li
+							is="date-poll-item"
+							v-for="(pollDate, index) in votes.pollDates"
+							v-bind:option="pollDate"
+							v-bind:key="pollDate.id"
+							v-on:remove="votes.pollDates.splice(index, 1)">
+						</li>
+					</transition-group>
+
+					<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table" v-show="polls_event.pollType === 'textPoll'">
+						<li
+							is="text-poll-item"
+							v-for="(pollText, index) in votes.pollTexts"
+							v-bind:option="pollText"
+							v-bind:key="pollText.id"
+							v-on:remove="votes.pollTexts.splice(index, 1)">
+						</li>
+					</transition-group>
+
+				</div>
+				
 			</div>
 		</div>
 	</div>

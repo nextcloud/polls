@@ -117,28 +117,18 @@ Vue.component('time-picker', {
 Vue.component('date-poll-item', {
 	props: ['option'],
 	template: 
-			'<li class="flex-row date-box">' +
-			'	<div class="flex-column">' +
-			'		<div class="month">{{option.fromMonth}} \'{{option.fromYear}}</div>' +
-			'		<div class="dayow">{{option.fromDow}}, {{option.fromDay}}, {{option.fromTime}}</div>' +
-			'	</div>' +
-			'	<div class="options-box flex-column">' +
-			'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
-			'		<div class="options"><a class="icon icon-clippy svg copy-poll"></a></div>' +
-			'	</div>' +
+			'<li class="flex-row poll-box">' +
+		'		<div class="poll-item">{{option.fromTimeLocal}}</div>' +
+		'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
 			'</li>'
 });
 
 Vue.component('text-poll-item', {
   props: ['option'],
   template: 
-			'<li class="flex-row text-box">' +
-			'	<div class="flex-row">' +
-			'		<div class="text">{{ option.text }}</div>' +
-			'	</div>' +
-			'	<div class="options-box flex-row">' +
-			'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
-			'	</div>' +
+			'<li class="flex-row poll-box">' +
+		'		<div class="poll-item">{{ option.text }}</div>' +
+		'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
 			'</li>'
 });
 
@@ -178,7 +168,6 @@ var newPoll = new Vue({
 		nextPollDateId: 0,
 		nextPollTextId: 0
 	},
-
 	created: function() {
 		for (i = 0; i < this.votes.pollDates.length; i++) {
 			if (this.votes.pollDates[i].fromTime == null) {
@@ -188,7 +177,6 @@ var newPoll = new Vue({
 				}
 		} 
 	},
-	
 	mounted: function() {
 // Mocks
 			this.addNewPollDate('2018-02-04', '11:00');
@@ -199,13 +187,6 @@ var newPoll = new Vue({
 			this.addNewPollText('Option Nr. 3');
 			this.addNewPollText('Option Nr. 4');
 
-	},
-	
-	events: {
-		'datepicker-changed': function() {
-			this.from = document.getElementById('from').value;
-			this.to = document.getElementById('to').value
-		}
 	},
 	methods: {
 		addNewPollDate: function (newPollDate, newPollTime) {
@@ -221,13 +202,13 @@ var newPoll = new Vue({
 				fromTimestamp: timeStamp.getTime(),
 				fromTimeLocal: timeStamp.toLocaleString(),
 				fromTimeUTC: timeStamp,
-				fromTimeLocal: timeStamp.toLocaleDateString(window.navigator.language, {hour: 'numeric', minute:'2-digit', timeZoneName:'short'}),
-				fromTime: timeStamp.toLocaleTimeString(window.navigator.language, {hour: 'numeric', minute:'2-digit'}),
-				fromDate: timeStamp.toLocaleDateString(window.navigator.language, {day: 'numeric', month:'2-digit', year:'numeric'}),
-				fromDay: timeStamp.toLocaleString(window.navigator.language, {day: 'numeric'}),
-				fromMonth: timeStamp.toLocaleString(window.navigator.language, {month: 'short'}),
-				fromYear: timeStamp.toLocaleString(window.navigator.language, {year: '2-digit'}),
-				fromDow: timeStamp.toLocaleString(window.navigator.language, {weekday: 'short'})
+				fromTimeLocal: timeStamp.toLocaleDateString(this.lang, {hour: 'numeric', minute:'2-digit', timeZoneName:'short'}),
+				fromTime: timeStamp.toLocaleTimeString(this.lang, {hour: 'numeric', minute:'2-digit'}),
+				fromDate: timeStamp.toLocaleDateString(this.lang, {day: 'numeric', month:'2-digit', year:'numeric'}),
+				fromDay: timeStamp.toLocaleString(this.lang, {day: 'numeric'}),
+				fromMonth: timeStamp.toLocaleString(this.lang, {month: 'short'}),
+				fromYear: timeStamp.toLocaleString(this.lang, {year: '2-digit'}),
+				fromDow: timeStamp.toLocaleString(this.lang, {weekday: 'short'})
 			})
 			this.votes.pollDates = _.sortBy(this.votes.pollDates, 'fromTimestamp')
 		},
@@ -244,7 +225,6 @@ var newPoll = new Vue({
 	}	
   
 });
-
 
 function deletePoll($pollEl) {
 	var str = t('polls', 'Do you really want to delete this new poll?') + '\n\n' + $($pollEl).attr('data-value');
