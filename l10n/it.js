@@ -42,7 +42,7 @@ OC.L10N.register(
     "Cancel" : "Annulla",
     "No description provided." : "Nessuna descrizione fornita.",
     "The poll expired on %s. Voting is disabled, but you can still comment." : "Il sondaggio è scaduto il %s. Il voto è disabilitato, ma puoi ancora commentare.",
-    "Switch all options at once" : "Cambia tutte le opzioni in un colpo",
+    "Switch all options at once" : "Cambia tutte le opzioni contemporaneamente",
     "Your name here" : "Qui il tuo nome",
     "Vote!" : "Vota!",
     "Receive notification email on activity" : "Ricevi un email di notifica sull'attività",
@@ -73,7 +73,7 @@ OC.L10N.register(
     "Never" : "Mai",
     "Access denied" : "Accesso negato",
     "You are not allowed to view this poll or the poll does not exist." : "Non hai il permesso di vedere questo sondaggio o il sondaggio non esiste.",
-    "You are not allowed to edit this poll or the poll does not exist." : "Non ti è permesso modificare questo sondaggio oppure il sondaggio non esiste",
-    "You are not allowed to delete this poll or the poll does not exist." : "Non ti è permesso eliminare questo sondaggio oppure il sondaggio non esiste"
+    "You are not allowed to edit this poll or the poll does not exist." : "Non ti è consentito modificare questo sondaggio oppure il sondaggio non esiste.",
+    "You are not allowed to delete this poll or the poll does not exist." : "Non ti è consentito eliminare questo sondaggio oppure il sondaggio non esiste."
 },
 "nplurals=2; plural=(n != 1);");
