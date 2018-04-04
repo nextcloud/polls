@@ -1,14 +1,14 @@
 /** global: Vue */
 Vue.config.devtools = true;
-
 Vue.component('autor-div', {
-	template: 	'<div>' +
-				'	<div class="description leftLabel">{{ownerLabel}}</div>' + 
-				'	<div class="avatar has-tooltip-bottom" style="height: 32px; width: 32px;" >' +
-				'		<img :src="avatarURL" width="32" height="32">' +
-				'	</div>' +
-				'	<div class="author">{{displayName}}</div>' +
-				'</div>',
+	template: 	
+		'<div>' +
+		'	<div class="description leftLabel">{{ownerLabel}}</div>' + 
+		'	<div class="avatar has-tooltip-bottom" style="height: 32px; width: 32px;" >' +
+		'		<img :src="avatarURL" width="32" height="32">' +
+		'	</div>' +
+		'	<div class="author">{{displayName}}</div>' +
+		'</div>',
 	data: function () {
 		return {
 			ownerLabel: t('polls', 'Owner'),
@@ -25,9 +25,10 @@ Vue.component('autor-div', {
 });
 
 Vue.component('side-bar-close', {
-	template: 	'<div class="close flex-row">' +
-				'	<a id="closeDetails" class="close icon-close has-tooltip-bottom" :title="closeDetailLabel" href="#" :alt="closeDetailLabelAlt"></a>' +
-				'</div>',
+	template:
+		'<div class="close flex-row">' +
+		'	<a id="closeDetails" class="close icon-close has-tooltip-bottom" :title="closeDetailLabel" href="#" :alt="closeDetailLabelAlt"></a>' +
+		'</div>',
 	data: function () {
 		return {
 			closeDetailLabel: t('Close details'),
@@ -39,9 +40,10 @@ Vue.component('side-bar-close', {
 // inject jQuery date picker
 Vue.component('date-picker', {
 	props: ['value', 'placeholder', 'dateFormat', 'minDate'],
-	template: 	'<input size="10" maxlength="10" :placeholder="placeholder" ' +
-				'v-bind:value="value" ' +
-				'v-on:input="$emit(\'input\', $event.target.value)" />',
+	template:
+		'<input size="10" maxlength="10" :placeholder="placeholder" ' +
+		'v-bind:value="value" ' +
+		'v-on:input="$emit(\'input\', $event.target.value)" />',
 	mounted: function() {
 		$(this.$el).datepicker({
 			dateFormat: this.dateFormat,
@@ -91,9 +93,9 @@ Vue.component('date-picker-inline', {
 Vue.component('time-picker', {
 	props: ['value', 'placeholder', 'dateFormat', 'minDate'],
 	template: 
-			'<input size="10" maxlength="10" :placeholder="placeholder"  ' +
-			'v-bind:value="value" ' +
-			'v-on:input="$emit(\'input\', $event.target.value)" />',
+		'<input size="10" maxlength="10" :placeholder="placeholder"  ' +
+		'v-bind:value="value" ' +
+		'v-on:input="$emit(\'input\', $event.target.value)" />',
 	mounted: function() {
 		$(this.$el).timepicker({
 			dateFormat: this.dateFormat,
@@ -117,30 +119,36 @@ Vue.component('time-picker', {
 Vue.component('date-poll-item', {
 	props: ['option'],
 	template: 
-			'<li class="flex-row poll-box">' +
-		'		<div class="poll-item">{{option.fromTimeLocal}}</div>' +
-		'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
-			'</li>'
+		'<li class="flex-row poll-box">' +
+		'	<div class="poll-item">{{option.fromTimeLocal}}</div>' +
+		'	<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
+		'</li>'
 });
 
 Vue.component('text-poll-item', {
   props: ['option'],
   template: 
-			'<li class="flex-row poll-box">' +
-		'		<div class="poll-item">{{ option.text }}</div>' +
-		'		<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
-			'</li>'
+		'<li class="flex-row poll-box">' +
+		'	<div class="poll-item">{{ option.text }}</div>' +
+		'	<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
+		'</li>'
 });
+
+Vue.mixin({
+	methods: {
+		t: function(app, text, vars, count, options) {
+			return OC.L10N.translate(app, text, vars, count, options);
+		},
+		n: function(app, textSingular, textPlural, count, vars, options) {
+			return OC.L10N.translatePlural(app, textSingular, textPlural, count, vars, options);
+		}
+	}
+});
+
 
 var newPoll = new Vue({
 	el: '#app',
 	data: {
-		label: {
-			is_anonymous: t('polls', 'Anonymous poll'),
-			full_anonymous: t('polls', 'Hide user names for admin'),
-			expirationDate: t('polls', 'Expires'),
-			maybeOptionAllowed: t('polls', 'Allow maybe option')
-		},
 		polls_event: {
 			poll_id: 0,
 			hash: '',

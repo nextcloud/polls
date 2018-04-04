@@ -24,7 +24,9 @@
 	use OCP\User; //To do: replace according to API
 
 	\OCP\Util::addStyle('polls', 'main');
+	\OCP\Util::addStyle('polls', 'flex');
 	\OCP\Util::addStyle('polls', 'vote');
+	\OCP\Util::addStyle('polls', 'sidebar');
 	if (!User::isLoggedIn()) {
 		\OCP\Util::addStyle('polls', 'public');
 	}
