@@ -1,6 +1,31 @@
 /** global: Vue */
 Vue.config.devtools = true;
-Vue.component('autor-div', {
+
+
+
+Vue.component('breadcrump', {
+	props: ['intitle'],
+	template: 	
+		'<div id="breadcrump">' +
+		'	<div class="crumb svg" data-dir="/">' +
+		'		<a :href="home">' +
+		'			<img class="svg" :src="imagePath" alt="Home">' +
+		'		</a>' +
+		'	</div>' +
+		'	<div class="crumb svg last">' +
+		'		<span v-text="intitle" />' +
+		'	</div>' +
+		'</div>',
+	data: function () {
+		return {
+			home: OC.generateUrl('apps/polls'),
+			imagePath: OC.imagePath('core', 'places/home.svg'),
+			itemStatic: t('polls', 'Create new poll')
+		}
+	}
+});
+
+Vue.component('author-div', {
 	template: 	
 		'<div>' +
 		'	<div class="description leftLabel">{{ownerLabel}}</div>' + 
@@ -27,12 +52,17 @@ Vue.component('autor-div', {
 Vue.component('side-bar-close', {
 	template:
 		'<div class="close flex-row">' +
-		'	<a id="closeDetails" class="close icon-close has-tooltip-bottom" :title="closeDetailLabel" href="#" :alt="closeDetailLabelAlt"></a>' +
+		'	<a id="closeDetails" @:click="hideSidebar" class="close icon-close has-tooltip-bottom" :title="closeDetailLabel" href="#" :alt="closeDetailLabelAlt"></a>' +
 		'</div>',
 	data: function () {
 		return {
 			closeDetailLabel: t('Close details'),
 			closeDetailLabelAlt: t('Close')
+		}
+	},
+	methods: {
+		hideSidebar: function () {
+			OC.Apps.hideAppSidebar();
 		}
 	}
 });
@@ -149,24 +179,27 @@ Vue.mixin({
 var newPoll = new Vue({
 	el: '#app',
 	data: {
-		polls_event: {
-			poll_id: 0,
-			hash: '',
-			pollType: 'datePoll',
-			title: '',
-			description: '',
-			owner:'',
-			created: '',
-			accessType: 'registered',
-			expiration: false,
-			expirationDate: null,
-			is_anonymous: false,
-			full_anonymous: false,
-			maybeOptionAllowed: true,
-		},
-		votes: {
-			pollDates: [],
-			pollTexts:[]
+		mock : true,
+		poll : {
+			event: {
+				id: 0,
+				hash: '',
+				type: '',
+				title: '',
+				description: '',
+				owner:'',
+				created: '',
+				access: '',
+				expiration: false,
+				expire: null,
+				is_anonymous: false,
+				full_anonymous: false,
+				maybeVoteDisallowed: false,
+			},
+			options: {
+				pollDates: [],
+				pollTexts:[]
+			}
 		},
 		lang: OC.getLocale(),
 		placeholder: '',
@@ -176,17 +209,31 @@ var newPoll = new Vue({
 		nextPollDateId: 0,
 		nextPollTextId: 0
 	},
-	created: function() {
-		for (i = 0; i < this.votes.pollDates.length; i++) {
-			if (this.votes.pollDates[i].fromTime == null) {
-					this.votes.pollDates[i].fromTimestamp = new Date(this.votes.pollDates[i].fromDate).getTime();
-				} else {
-					this.votes.pollDates[i].fromTimestamp = new Date(this.votes.pollDates[i].fromDate + 'T' + this.votes.pollDates[i].fromTime).getTime();
-				}
+/* 	created: function() {
+
+		for (i = 0; i < this.poll.options.pollDates.length; i++) {
+			if (this.poll.options.pollDates[i].fromTime == null) {
+				this.poll.options.pollDates[i].fromTimestamp = new Date(this.poll.options.pollDates[i].fromDate).getTime();
+			} else {
+				this.poll.options.pollDates[i].fromTimestamp = new Date(this.poll.options.pollDates[i].fromDate + 'T' + this.poll.options.pollDates[i].fromTime).getTime();
+			}
 		} 
-	},
+	}, 
+ */	
 	mounted: function() {
-// Mocks
+		if (this.mock) {
+			this.poll.event.id = 1; 
+			this.poll.event.hash = 'EN6l9V8A3kh6shJp'; 
+			// this.poll.event.type = 'datePoll'; 
+			this.poll.event.title = 'Mock title'; 
+			this.poll.event.description = 'Mock description'; 
+			this.poll.event.created = ''; 
+			this.poll.event.access = 'public'; 
+			this.poll.event.expiration = true; 
+			this.poll.event.expire = '2018-08-21'; 
+			this.poll.event.is_anonymous = false; 
+			this.poll.event.full_anonymous = false; 
+			this.poll.event.maybeVoteDisallowed = false; 
 			this.addNewPollDate('2018-02-04', '11:00');
 			this.addNewPollDate('2018-02-08', '11:00');
 
@@ -194,9 +241,24 @@ var newPoll = new Vue({
 			this.addNewPollText('Option Nr. 2');
 			this.addNewPollText('Option Nr. 3');
 			this.addNewPollText('Option Nr. 4');
+		
+		} else {
 
+			this.loadPoll('EN6l9VYT3kh6shJp'); // Test Textpoll
+			// this.loadPoll('12rdzh9QYiFZaFz4'); // Test Datepoll
+		}
 	},
-	methods: {
+/* 	watch: {
+		title: function (val, old) {
+			if (val == '') {
+				document.title = t('polls', 'Create new poll')
+			} else {
+				document.title = t('polls', 'Create ') + val
+			}
+		}
+	},
+ */	methods: {
+		
 		addNewPollDate: function (newPollDate, newPollTime) {
 			if (newPollDate != null) {
 				this.newPollDate = newPollDate
@@ -204,8 +266,12 @@ var newPoll = new Vue({
 			if (newPollTime != null) {
 				this.newPollTime = newPollTime
 			}
-			var timeStamp = new Date(this.newPollDate + 'T' + this .newPollTime +':00');
-			this.votes.pollDates.push({
+			if (this.newPollTime == '') {
+				var timeStamp = new Date(this.newPollDate);
+			} else {
+				var timeStamp = new Date(this.newPollDate + 'T' + this .newPollTime +':00');
+			}
+			this.poll.options.pollDates.push({
 				id: this.nextPollDateId++,
 				fromTimestamp: timeStamp.getTime(),
 				fromTimeLocal: timeStamp.toLocaleString(),
@@ -218,21 +284,50 @@ var newPoll = new Vue({
 				fromYear: timeStamp.toLocaleString(this.lang, {year: '2-digit'}),
 				fromDow: timeStamp.toLocaleString(this.lang, {weekday: 'short'})
 			})
-			this.votes.pollDates = _.sortBy(this.votes.pollDates, 'fromTimestamp')
+			this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'fromTimestamp')
 		},
+		
 		addNewPollText: function (newPollText) {
 			if (newPollText != null) {
 				this.newPollText = newPollText
 			}
-			this.votes.pollTexts.push({
+			this.poll.options.pollTexts.push({
 				id: this.nextPollTextId++,
 				text: this.newPollText
 			})
 			this.newPollText = ''
+		},
+		
+		loadPoll: function (hash) {
+			axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
+			.then((response) => {
+				this.poll.event = response.data.poll.event;
+ 				for (i = 0; i < response.data.poll.optionlist.length; i++) {
+					if (response.data.poll.event.type == 'textPoll') {
+						this.addNewPollText(response.data.poll.optionlist[i].text);
+					} else {
+						date = new Date(response.data.poll.optionlist[i].text);
+						this.addNewPollDate(date +' UTC');
+					}
+				}
+			}, (error) => {
+				console.log(error);
+			});
+
+		
 		}
+		
 	}	
   
 });
+
+function switchSidebar() {
+	if ($('#app-content').hasClass('with-app-sidebar')) {
+		OC.Apps.hideAppSidebar();
+	} else {
+		OC.Apps.showAppSidebar();
+	}
+}
 
 function deletePoll($pollEl) {
 	var str = t('polls', 'Do you really want to delete this new poll?') + '\n\n' + $($pollEl).attr('data-value');

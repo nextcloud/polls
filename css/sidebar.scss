@@ -16,8 +16,26 @@ $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
+#polls-content {
+	width: 500px;
+	flex-grow: 1;
+}
+#polls-sidebar {
+	width: 600px;
+	display: block;
+	background: #fff;
+	border-left: 8px solid #ebebeb;
+	-webkit-transition: margin-right 300ms;
+	transition: margin-right 300ms;
+	overflow-x: hidden;
+	overflow-y: auto;
+	visibility: visible;
+	z-index: 500;
+}
+
+
 	.authorRow {
-		position: relative;
+		align-items: center;
 		.author {
 			margin-left: 8px;
 			opacity: .5;
@@ -138,7 +156,18 @@ $user-column-width: 265px;
 				}
 			}
 		}
-
+		#configurationsTabView {
+			#poll-access, #poll-configuration {
+				padding: 8px 8px;
+				> label {
+					font-weight: bold;
+					margin-bottom: 4px;
+				}
+				> div {
+					padding-left: 4px;
+				}
+			}
+		}
 		#commentsTabView {
 
 			.newCommentForm div.message:empty:before {
@@ -167,7 +196,6 @@ $user-column-width: 265px;
 				}
 
 				.date {
-					position: absolute;
 					right: 0;
 					top: 5px;
 					opacity: .5;

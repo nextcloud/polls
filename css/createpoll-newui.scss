@@ -10,19 +10,19 @@
 	transition: transform 0.5s;
 }
 
-/* .flex-row {
-	display: flex;
-	flex-direction: row;
+.flex-row {
+	&.poll-box {
+		flex-grow: 0;
+		align-items: center;
+	}
 }
 
-.flex-column {
-	display: flex;
-	flex-direction: column;
-}
- */
 .workbench {
 	width: 100%;
 	padding: 12px 17px;
+	#poll-item-selector-date {
+		padding: 0 8px 0 0;
+	}
 	.poll-creation {
 		width: 260px;
 		padding: 8px 8px 0 0;
@@ -34,8 +34,8 @@
 		}
 	}
 	.poll-table {
-		padding: 32px 8px 0 0;
-		width: 100%;
+		padding: 8px 8px 0 0;
+		flex-grow: 1;
 	}
 	.form-actions {
 		padding: 15px 0 15px 0;
@@ -79,6 +79,8 @@
 	}
 	.poll-item {
 		flex-grow: 1;
+		font-size: 1.2em;
+		color: #666;
 	}
 }
 
@@ -88,9 +90,17 @@ button {
 		background-color: transparent;
 	}
 }
+.time-seletcion {
+	align-items: center;
+	> label {
+	flex-grow: 1;
+	}
+}
 
-#poll-item-selector-text > input {
-	width: 100%
+#poll-item-selector-text {
+	> input {
+		width: 100%
+	}
 }
 
 /* [class^="icon-"], [class*=" icon-"] {
