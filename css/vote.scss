@@ -437,88 +437,94 @@ $user-column-width: 265px;
 }
 @media all and (max-width: (480px) ) {
 
-	#votings {
+	#app-content #votings {
 		padding: 0px 2px;
-	}
 
-	.flex-row {
-		flex-direction: column;
-
-		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
-			flex-direction: row;
-		}
-
-		&.header {
-			flex-grow: 1;
-			margin-left: 0;
-			margin-top: 44px;
-			width: 120px;
-			padding: 0 0 0 4px;
-			.vote {
-				padding-right: 10px;
-				&.option {
-					align-items: baseline;
-					width: 100%;
-					border-top: $border_user;
+		.flex-row {
+			flex-direction: column;
+				.first {
+					height: 44px;
+					width: unset;
 				}
-				&.time {
-					align-items: center;
-					width: 100%;
-					border-top: $border_user;
-					.counter {
-						flex-direction: column;
-						align-items: flex-end;
+
+			&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
+				flex-direction: row;
+			}
+
+			&.header {
+				flex-grow: 1;
+				margin-left: 0;
+				margin-top: 44px;
+				width: 120px;
+				padding: 0 0 0 4px;
+				.vote {
+					padding-right: 10px;
+					&.option {
+						align-items: baseline;
+						width: 100%;
+						border-top: $border_user;
+					}
+					&.time {
+						align-items: center;
+						width: 100%;
+						border-top: $border_user;
+						.counter {
+							flex-direction: column;
+							align-items: flex-end;
+						}
 					}
 				}
 			}
+			
+			&.user {
+				display: none;
+			}
+
+			&.current-user {
+				display: flex;
+				width: 44px;
+				padding:0;
+				border: none;
+				background-color: transparent;
+
+				.poll-cell {
+					border:none;
+					border-radius: 0;
+					border-top: 1px solid #ddd;
+					background-color: transparent;
+					padding: 0 2px;
+					&.active {
+						&.yes {
+							background-image: url('../img/yes-vote-bordered.svg');
+						}
+
+						&.no {
+							background-image: url('../img/no-vote-bordered.svg');
+						}
+
+						&.maybe {
+							background-image: url('../img/maybe-vote-bordered.svg');
+						}
+						&.unvoted {
+							background-image: url('../img/unvoted-vote-bordered.svg');
+						}
+					}
+				}
+				.user-cell {
+					position: absolute;
+					left: 22px;
+				}
+				.poll-cell, .toggle-cell  {
+					width: 44px;
+					height: 44px;
+					background-color: transparent;
+				}
+			}
+
 		}
 		
-		&.user {
-			display: none;
-		}
-
-		&.current-user {
-			display: flex;
-			width: 44px;
-			padding:0;
-			border: none;
-			background-color: transparent;
-
-			.poll-cell {
-				border:none;
-				border-radius: 0;
-				border-top: 1px solid #ddd;
-				background-color: transparent;
-				padding: 0 2px;
-				&.active {
-					&.yes {
-						background-image: url('../img/yes-vote-bordered.svg');
-					}
-
-					&.no {
-						background-image: url('../img/no-vote-bordered.svg');
-					}
-
-					&.maybe {
-						background-image: url('../img/maybe-vote-bordered.svg');
-					}
-					&.unvoted {
-						background-image: url('../img/unvoted-vote-bordered.svg');
-					}
-				}
-			}
-			.user-cell {
-				position: absolute;
-				left: 22px;
-			}
-			.poll-cell, .toggle-cell  {
-				width: 44px;
-				height: 44px;
-				background-color: transparent;
-			}
-		}
-
 	}
+
 	.description {
 		margin: 4px;
 	}
@@ -563,10 +569,6 @@ $user-column-width: 265px;
 		}
 	}
 	
-	.first {
-		height: 44px;
-		width: unset;
-	}
 
 	#options.flex-row {
 		flex-direction: column;

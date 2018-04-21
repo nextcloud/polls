@@ -205,8 +205,8 @@
 				<div id="poll-configuration" class="flex-column">
 					<label>{{ t('polls', 'Poll configurations') }}</label>
 					<div>
-						<input id="maybeVoteDisallowed" v-model="poll.event.maybeVoteDisallowed"type="checkbox" class="checkbox" />
-						<label for="maybeVoteDisallowed">{{ t('polls', 'Disallow maybe vote') }}</label>
+						<input id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
+						<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
 					</div>
 					
 					<div>

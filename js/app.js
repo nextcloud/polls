@@ -194,7 +194,7 @@ var newPoll = new Vue({
 				expire: null,
 				is_anonymous: false,
 				full_anonymous: false,
-				maybeVoteDisallowed: false,
+				disallowMaybe: false,
 			},
 			options: {
 				pollDates: [],
@@ -233,7 +233,7 @@ var newPoll = new Vue({
 			this.poll.event.expire = '2018-08-21'; 
 			this.poll.event.is_anonymous = false; 
 			this.poll.event.full_anonymous = false; 
-			this.poll.event.maybeVoteDisallowed = false; 
+			this.poll.event.disallowMaybe = false; 
 			this.addNewPollDate('2018-02-04', '11:00');
 			this.addNewPollDate('2018-02-08', '11:00');
 
