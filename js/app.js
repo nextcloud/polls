@@ -20,7 +20,6 @@ Vue.component('breadcrump', {
 		return {
 			home: OC.generateUrl('apps/polls'),
 			imagePath: OC.imagePath('core', 'places/home.svg'),
-			itemStatic: t('polls', 'Create new poll')
 		}
 	}
 });
@@ -151,7 +150,9 @@ Vue.component('date-poll-item', {
 	template: 
 		'<li class="flex-row poll-box">' +
 		'	<div class="poll-item">{{option.fromTimeLocal}}</div>' +
-		'	<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
+		'	<div class="flex-row options">' +
+		'		<a @click="$emit(\'remove\')" class="icon-delete"></a>' +
+		'	</div>' +
 		'</li>'
 });
 
@@ -160,7 +161,9 @@ Vue.component('text-poll-item', {
   template: 
 		'<li class="flex-row poll-box">' +
 		'	<div class="poll-item">{{ option.text }}</div>' +
-		'	<div class="options"><a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a></div>' +
+		'	<div class="flex-row options">' +
+		'		<a @click="$emit(\'remove\')" class="icon icon-delete svg delete-poll"></a>' +
+		'</div>' +
 		'</li>'
 });
 
@@ -179,17 +182,16 @@ Vue.mixin({
 var newPoll = new Vue({
 	el: '#app',
 	data: {
-		mock : true,
-		poll : {
+		poll: {
 			event: {
 				id: 0,
 				hash: '',
-				type: '',
+				type: 'datePoll',
 				title: '',
 				description: '',
 				owner:'',
 				created: '',
-				access: '',
+				access: 'public',
 				expiration: false,
 				expire: null,
 				is_anonymous: false,
@@ -207,57 +209,30 @@ var newPoll = new Vue({
 		newPollTime: '',
 		newPollText: '',
 		nextPollDateId: 0,
-		nextPollTextId: 0
+		nextPollTextId: 0,
+		protect: false
 	},
-/* 	created: function() {
 
-		for (i = 0; i < this.poll.options.pollDates.length; i++) {
-			if (this.poll.options.pollDates[i].fromTime == null) {
-				this.poll.options.pollDates[i].fromTimestamp = new Date(this.poll.options.pollDates[i].fromDate).getTime();
-			} else {
-				this.poll.options.pollDates[i].fromTimestamp = new Date(this.poll.options.pollDates[i].fromDate + 'T' + this.poll.options.pollDates[i].fromTime).getTime();
-			}
-		} 
-	}, 
- */	
 	mounted: function() {
-		if (this.mock) {
-			this.poll.event.id = 1; 
-			this.poll.event.hash = 'EN6l9V8A3kh6shJp'; 
-			// this.poll.event.type = 'datePoll'; 
-			this.poll.event.title = 'Mock title'; 
-			this.poll.event.description = 'Mock description'; 
-			this.poll.event.created = ''; 
-			this.poll.event.access = 'public'; 
-			this.poll.event.expiration = true; 
-			this.poll.event.expire = '2018-08-21'; 
-			this.poll.event.is_anonymous = false; 
-			this.poll.event.full_anonymous = false; 
-			this.poll.event.disallowMaybe = false; 
-			this.addNewPollDate('2018-02-04', '11:00');
-			this.addNewPollDate('2018-02-08', '11:00');
+		this.poll.event.hash = document.getElementById("app").getAttribute("data-hash"); 
 
-			this.addNewPollText('Option Nr. 1');
-			this.addNewPollText('Option Nr. 2');
-			this.addNewPollText('Option Nr. 3');
-			this.addNewPollText('Option Nr. 4');
-		
-		} else {
+		if (!this.poll.event.hash == '') {
+			this.loadPoll(this.poll.event.hash);
+			this.create = 'No';
+			this.protect = true;
 
-			this.loadPoll('EN6l9VYT3kh6shJp'); // Test Textpoll
-			// this.loadPoll('12rdzh9QYiFZaFz4'); // Test Datepoll
 		}
 	},
-/* 	watch: {
-		title: function (val, old) {
-			if (val == '') {
-				document.title = t('polls', 'Create new poll')
+	computed: {
+		title: function () {
+			if (this.poll.event.title == '') {
+				return t('poll','Create new poll')
 			} else {
-				document.title = t('polls', 'Create ') + val
+				return this.poll.event.title
 			}
 		}
 	},
- */	methods: {
+	methods: {
 		
 		addNewPollDate: function (newPollDate, newPollTime) {
 			if (newPollDate != null) {

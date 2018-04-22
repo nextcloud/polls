@@ -300,7 +300,7 @@ class PageController extends Controller {
 				'expire' => $poll->getExpire(),
 				'is_anonymous' => $poll->getIsAnonymous(),
 				'full_anonymous' => $poll->getFullAnonymous(),
-				'maybeVoteAllowed' => true
+				'disallowMaybe' => $poll->getDisallowMaybe()
 			],
 			'optionlist' => $optionList,
 			'options' => [
@@ -348,6 +348,7 @@ class PageController extends Controller {
 		$options = $this->optionsMapper->findByPoll($poll->getId());
 		return new TemplateResponse('polls', 'create.tmpl', [
 			'poll' => $poll,
+			'hash' => $hash,
 			'options' => $options,
 			'userId' => $this->userId,
 			'userMgr' => $this->userMgr,

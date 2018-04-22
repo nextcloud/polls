@@ -157,14 +157,20 @@ $user-column-width: 265px;
 			}
 		}
 		#configurationsTabView {
-			#poll-access, #poll-configuration {
+			.configBox {
 				padding: 8px 8px;
-				> label {
+				
+				> .title {
 					font-weight: bold;
 					margin-bottom: 4px;
 				}
+				
 				> div {
 					padding-left: 4px;
+				}
+				
+				input.hasDatepicker {
+					margin-left:17px;
 				}
 			}
 		}

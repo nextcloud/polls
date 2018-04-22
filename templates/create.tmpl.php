@@ -50,10 +50,9 @@
 	$isAnonymous = false;
 	$hideNames = false;
 	$lang = \OC::$server->getL10NFactory()->findLanguage();
-
 	if ($isUpdate) {
 		/** @var OCA\Polls\Db\Event $poll */
-		$poll = $_['poll'];
+		$poll = $_['poll'];		
 		$isAnonymous = $poll->getIsAnonymous();
 		$hideNames = $isAnonymous && $poll->getFullAnonymous();
 		/** @var OCA\Polls\Db\options $options */
@@ -86,10 +85,11 @@
 	}
 ?>
 
-<div id="app" class="flex-row">
+<div id="app" class="flex-row" data-hash="<?php p($_['hash'])?>">
+
 	<div id="polls-content">
 			<div id="controls">
-				<breadcrump :intitle="poll.event.title" />
+				<breadcrump :intitle="title" />
 			</div>
 		
 			<div class="flex-column workbench">
@@ -100,12 +100,6 @@
 				<div id="poll-description">
 					<label for="pollDesc">{{ t('polls', 'Description') }}</label>
 					<textarea id="pollDesc" name="pollDesc" v-model="poll.event.description"></textarea>
-				</div>
-				<div id="poll-type">
-					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio"/>
-					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
-					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio"/>
-					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 				</div>
 				<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
 					<div id="poll-item-selector-date">
@@ -168,23 +162,42 @@
 			</li>
 		</ul>		
 		<div class="tabsContainer">
+			<span v-if="protect">{{ t('polls', 'Configuration is disabled to prevent voter\'s confusion') }}</span>
 			<div id="configurationsTabView" class="tab configurationsTabView flex-row flex-wrap">
-				<div id="poll-access" class="flex-column">
-					<label>{{ t('polls', 'Access') }}</label>
-					<div>
-						<input type="radio" v-model="poll.event.access" value="registered" id="private" class="radio"/>
-						<label for="private">{{ t('polls', 'Registered users only') }}</label>
-					</div>
-					<div>
-						<input type="radio" v-model="poll.event.access" value="hidden" id="hidden" class="radio"/>
-						<label for="hidden">{{ t('polls', 'hidden') }}</label>
-					</div>
-					<div>
-						<input type="radio" v-model="poll.event.access" value="public" id="public" class="radio"/>
-						<label for="public">{{ t('polls', 'Public access') }}</label>
-					</div>
-					<div>
-						<input type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
+
+				<div class="configBox flex-column">
+					<label class="title">{{ t('polls', 'Poll type') }}</label>
+					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
+				</div>
+
+				<div id="poll-configuration" class="configBox flex-column">
+					<label class="title">{{ t('polls', 'Poll configurations') }}</label>
+						<input :disabled="protect" id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
+						<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
+					
+						<input :disabled="protect" id="anonymous" v-model="poll.event.is_anonymous"type="checkbox" class="checkbox" />
+						<label for="anonymous">{{ t('polls', 'Anonymous poll') }}</label>
+
+						<input :disabled="protect" id="trueAnonymous" v-model="poll.event.full_anonymous" v-show="poll.event.is_anonymous" type="checkbox" class="checkbox"/>
+						<label for="trueAnonymous" v-show="poll.event.is_anonymous">{{ t('polls', 'Hide user names for admin') }} </label>
+
+						<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
+						<label for="expiration">{{ t('polls', 'Expires') }}</label>
+						<date-picker :disabled="protect" :placeholder="t('polls', 'Expiration date')" v-model="poll.event.expire" date-format="yy-mm-dd" v-show="poll.event.expiration"></date-picker>
+				</div>
+
+				<div class="configBox flex-column">
+					<label class="title">{{ t('polls', 'Access') }}</label>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="registered" id="private" class="radio"/>
+					<label for="private">{{ t('polls', 'Registered users only') }}</label>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="hidden" id="hidden" class="radio"/>
+					<label for="hidden">{{ t('polls', 'hidden') }}</label>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="public" id="public" class="radio"/>
+					<label for="public">{{ t('polls', 'Public access') }}</label>
+						<input :disabled="protect" type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
 						<label for="select">{{ t('polls', 'Select') }}</label>
 						<span id="id_label_select">...</span>
 
@@ -193,36 +206,15 @@
 							</ul>
 						</div>
 						<div id="access_rights" class="row user-group-list">
-							<div class="col-50">
+							<div>
 								<input type="text" class="live-search-box" id="user-group-search-box" :placeholder="t('polls', 'User/Group search')" />
 								<ul class="live-search-list" id="live-search-list-id">
 								</ul>
 							</div>
 						</div>
-					</div>
 				</div>
 				
-				<div id="poll-configuration" class="flex-column">
-					<label>{{ t('polls', 'Poll configurations') }}</label>
-					<div>
-						<input id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
-						<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
-					</div>
-					
-					<div>
-						<input id="anonymous" v-model="poll.event.is_anonymous"type="checkbox" class="checkbox" />
-						<label for="anonymous">{{ t('polls', 'Anonymous poll') }}</label>
 
-						<input id="trueAnonymous" v-model="poll.event.full_anonymous" v-show="poll.event.is_anonymous" type="checkbox" class="checkbox"/>
-						<label for="trueAnonymous" v-show="poll.event.is_anonymous">{{ t('polls', 'Hide user names for admin') }} </label>
-					</div>
-
-					<div class="expirationView subView">
-						<input id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
-						<label for="expiration">{{ t('polls', 'Expires') }}</label>
-						  <date-picker :placeholder="t('polls', 'Expiration date')" v-model="poll.event.expire" date-format="yy-mm-dd" v-show="poll.event.expiration"></date-picker>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>

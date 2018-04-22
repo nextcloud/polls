@@ -17,10 +17,6 @@
 	}
 }
 
-[class^="icon-"], [class*="icon-"] {
-	padding: 18px;
-}
-
 .workbench {
 	width: 100%;
 	padding: 12px 17px;
@@ -81,10 +77,14 @@
 		transition: background-color 0.3s ease;
 		background-color: #f8f8f8;
 	}
+	.options {
+		justify-content: flex-end;
+	}
 	.poll-item {
 		flex-grow: 1;
 		font-size: 1.2em;
 		color: #666;
+		
 	}
 }
 
@@ -106,7 +106,3 @@ button {
 		width: 100%
 	}
 }
-
-/* [class^="icon-"], [class*=" icon-"] {
-	padding-left: 44px;
-} */
