@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Do you really want to delete that poll (new)?" : "Θέλετε πραγματικά να διαγράψετε αυτή τη δημοσκόπηση (νέα);",
     "Nothing selected!\nClick on cells to turn them green." : "Τίποτα δεν έχει επιλεγεί.\nΚάντε κλικ στα κελιά ώστε να γίνουν πράσινα",
     "You must enter at least a title for the new poll." : "Πρέπει να εισάγετεε τουλάχιστον έναν τίτλο για την νέα ψηφοφορία",
     "Please select at least one user or group!" : "Παρακαλούμε επιλέξτε τουλάχιστον έναν χρήστη ή ομάδα!",
