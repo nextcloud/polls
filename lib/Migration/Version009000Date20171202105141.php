@@ -35,6 +35,7 @@ use OCP\Migration\IOutput;
 
 /**
  * Installation class for the polls app.
+ * Initial db creation
  */
 class Version009000Date20171202105141 extends SimpleMigrationStep {
 	
