@@ -198,7 +198,7 @@
 								!$isAnonymous &&
 								!$hideNames
 							) {
-								$displayName = $userMgr->get($usr)->getDisplayName();
+								$displayName = $usr;
 								$avatarName = $usr;
 							} else {
 								if ($isAnonymous || $hideNames) {
@@ -247,7 +247,7 @@
 						if (User::isLoggedIn()) {
 							print_unescaped('		<div class="avatar has-tooltip" title="' . ($userId) . '"></div>');
 							print_unescaped('		<div class="name">');
-							p($userMgr->get($userId)->getDisplayName());
+							p($userId);
 						} else {
 							print_unescaped('		<div class="avatar has-tooltip" title="?"></div>');
 							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
@@ -328,7 +328,7 @@
 				<div class="authorRow user-cell flex-row">
 					<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
 					<div class="avatar has-tooltip-bottom" title="<?php p($poll->getOwner())?>"></div>
-					<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
+					<div class="author"><?php p($poll->getOwner()); ?></div>
 				</div>
 
 				<div class="cloud">
@@ -404,7 +404,7 @@
 				<?php if (User::isLoggedIn()) : ?>
 					<div class="authorRow user-cell flex-row">
 						<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
-						<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
+						<div class="author"><?php p($userId) ?></div>
 					</div>
 
 				<?php else: ?>
@@ -444,7 +444,7 @@
 							// Comment is from current user
 							// -> display user
 							$avatarName = $userId;
-							$displayName = $userMgr->get($userId)->getDisplayName();
+							$displayName = $userId;
 
 						} else if (!$isAnonymous && !$hideNames) {
 							// comment is from another user,
@@ -453,9 +453,6 @@
 							// -> display user
 							$avatarName = $comment->getUserId();
 							$displayName = $avatarName;
-							if ($userMgr->get($comment->getUserId()) !== null) {
-								$displayName = $userMgr->get($avatarName)->getDisplayName();
-							}
 						} else {
 							// in all other cases
 							// -> make user anonymous

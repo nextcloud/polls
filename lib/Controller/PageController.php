@@ -242,80 +242,6 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param string $hash
-	 * @return JSONResponse
-	 */
-	public function getPoll($hash) {
-		try {
-			$poll = $this->eventMapper->findByHash($hash);
-		} catch (DoesNotExistException $e) {
-			$data[] = [
-				'Error' => 'Poll not found',
-				'hash' => $hash
-			];
-			return new JSONResponse($data);
-		};
-
-		$options = $this->optionsMapper->findByPoll($poll->getId());
-		$lastPollId = 0;
-		foreach ($options as $optionElement) {
-			$optionList[] = [
-				'text' => $optionElement->getPollOptionText(),
-				'id' => $optionElement->getId()
-			];
-			if ($optionElement->getId() > $lastPollId) {
-				$lastPollId = $optionElement->getId();
-			}
-		};
-		
-		if ($poll->getType() == 0) {
-			$pollType = 'datePoll'; 
-		} else {
-			$pollType = 'textPoll';
-		};
-		
-		if ($poll->getExpire() == null) {
-			$expiration = false;
-			$expire = null;
-		} else {
-			$expiration = true;
-			$expire = $poll->getExpire();
-		}
-			
-		
-		$data['poll'] = [
-			'result' => 'found',
-			'lastPollId' => $lastPollId,
-			'event' => [
-				'hash' => $hash,
-				'id' => $poll->getId(),
-				'type' => $pollType,
-				'title' => $poll->getTitle(),
-				'description' => $poll->getDescription(),
-				'owner' => $poll->getOwner(),
-				'created' => $poll->getCreated(),
-				'access' => $poll->getAccess(),
-				'expiration' => $expiration,
-				'expire' => $poll->getExpire(),
-				'is_anonymous' => $poll->getIsAnonymous(),
-				'full_anonymous' => $poll->getFullAnonymous(),
-				'disallowMaybe' => $poll->getDisallowMaybe()
-			],
-			'optionlist' => $optionList,
-			'options' => [
-				'pollDates' => [],
-				'pollTexts' => []
-			]
-			
-		];			
-		return new JSONResponse($data);
-
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param int $pollId
 	 * @return TemplateResponse|RedirectResponse
 	 */
@@ -341,18 +267,9 @@ class PageController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function editPoll($hash) {
-		$poll = $this->eventMapper->findByHash($hash);
-		if ($this->userId !== $poll->getOwner()) {
-			return new TemplateResponse('polls', 'no.create.tmpl');
-		}
-		$options = $this->optionsMapper->findByPoll($poll->getId());
 		return new TemplateResponse('polls', 'create.tmpl', [
-			'poll' => $poll,
-			'hash' => $hash,
-			'options' => $options,
-			'userId' => $this->userId,
-			'userMgr' => $this->userMgr,
-			'urlGenerator' => $this->urlGenerator
+			'urlGenerator' => $this->urlGenerator,
+ 			'hash' => $hash
 		]);
 	}
 
@@ -384,8 +301,6 @@ class PageController extends Controller {
 		$isAnonymous,
 		$hideNames
 	) {
-
-
 		$event = $this->eventMapper->find($pollId);
 		$event->setTitle($pollTitle);
 		$event->setDescription($pollDesc);
@@ -455,7 +370,7 @@ class PageController extends Controller {
 	 */
 	public function createPoll() {
 		return new TemplateResponse('polls', 'create.tmpl',
-			['userId' => $this->userId, 'userMgr' => $this->userMgr, 'urlGenerator' => $this->urlGenerator]);
+			['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**

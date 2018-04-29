@@ -41,66 +41,39 @@
 	\OCP\Util::addScript('polls', 'app');
 	// \OCP\Util::addScript('polls', 'create_edit');
 
-	$userId = $_['userId'];
-	/** @var \OCP\IUserManager $userMgr */
-	$userMgr = $_['userMgr'];
 	/** @var \OCP\IURLGenerator $urlGenerator */
 	$urlGenerator = $_['urlGenerator'];
-	$isUpdate = isset($_['poll']) && $_['poll'] !== null;
-	$isAnonymous = false;
-	$hideNames = false;
 	$lang = \OC::$server->getL10NFactory()->findLanguage();
-	if ($isUpdate) {
-		/** @var OCA\Polls\Db\Event $poll */
-		$poll = $_['poll'];		
-		$isAnonymous = $poll->getIsAnonymous();
-		$hideNames = $isAnonymous && $poll->getFullAnonymous();
-		/** @var OCA\Polls\Db\options $options */
-		$options = $_['options'];
-		$chosen = '[';
-		foreach ($options as $optionElement) {
-			if ($poll->getType() === 0) {
-				$chosen .= strtotime($optionElement->getPollOptionText());
-			} else {
-				$chosen .= '"' . $optionElement->getPollOptionText() . '"';
-			}
-			$chosen .= ',';
-		}
-		$chosen = trim($chosen, ',');
-		$chosen .= ']';
-		$title = $poll->getTitle();
-		$desc = $poll->getDescription();
-		if ($poll->getExpire() !== null) {
-			$expireTs = strtotime($poll->getExpire());
-			$expireStr = date('d.m.Y', $expireTs);
-		}
-		$access = $poll->getAccess();
-		$accessTypes = $access;
-		if (
-			$access !== 'registered'
-			&& $access !== 'hidden' && $access !== 'public'
-		) {
-			$access = 'select';
-		}
-	}
 ?>
 
 <div id="app" class="flex-row" data-hash="<?php p($_['hash'])?>">
 
 	<div id="polls-content">
 			<div id="controls">
-				<breadcrump :intitle="title" />
+				<breadcrump :intitle="title"></breadcrump>
+				<button v-on:click="switchSidebar" class="button">
+					<span class="symbol icon-settings"></span>
+				</button>
 			</div>
 		
 			<div class="flex-column workbench">
-				<div id="poll-title">
-					<label for="pollTitle">{{ t('polls', 'Title') }}</label>
-					<input type="text" id="pollTitle" name="pollTitle" v-model="poll.event.title">
+				<div>
+					<div>
+						<label>{{ t('polls', 'Title') }}</label>
+						<input type="text" id="pollTitle" v-model="poll.event.title">
+					</div>
+					<div>
+						<label>{{ t('polls', 'Description') }}</label>
+						<textarea id="pollDesc" v-model="poll.event.description"></textarea>
+					</div>
 				</div>
-				<div id="poll-description">
-					<label for="pollDesc">{{ t('polls', 'Description') }}</label>
-					<textarea id="pollDesc" name="pollDesc" v-model="poll.event.description"></textarea>
+				<div v-if="poll.mode == 'create'">
+					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 				</div>
+
 				<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
 					<div id="poll-item-selector-date">
 						<div class="time-seletcion flex-row">
@@ -135,24 +108,20 @@
 					</div>
 				</div>
 
-
-				<div class="form-actions">
-					<?php if ($isUpdate): ?>
-						<input type="submit" id="submit_finish_poll" class="button btn primary" :value="t('polls', 'Update poll')" />
-					<?php else: ?>
-						<input type="submit" id="submit_finish_poll" class="button btn primary" :value="t('polls', 'Create poll')" />
-					<?php endif; ?>
-					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button">{{ t('polls', 'Cancel') }}</a>
+				<div>
+					<button v-if="poll.mode === 'edit'" v-on:click="writePoll('edit')" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
+					<button v-on:click="writePoll('create')" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
+					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button">{{ t('polls', 'Cancel') }}</a>
 				</div>
 
 			</div>
 	</div>
 	
-	<div id="polls-sidebar" class="detailsView scroll-container">
+	<div id="polls-sidebar" v-if="sidebar" class="detailsView scroll-container">
 		<side-bar-close></side-bar-close>
 		<div class="header flex-row">
 			<div class="pollInformation flex-column">
-				<author-div class="authorRow user-cell flex-row" />
+				<author-div :userid="poll.event.owner" class="authorRow user-cell flex-row" />
 			</div>
 		</div>
 
@@ -164,8 +133,8 @@
 		<div class="tabsContainer">
 			<span v-if="protect">{{ t('polls', 'Configuration is disabled to prevent voter\'s confusion') }}</span>
 			<div id="configurationsTabView" class="tab configurationsTabView flex-row flex-wrap">
-
-				<div class="configBox flex-column">
+				
+				<div class="configBox flex-column" v-if="poll.mode =='edit'">
 					<label class="title">{{ t('polls', 'Poll type') }}</label>
 					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
 					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
@@ -213,8 +182,6 @@
 							</div>
 						</div>
 				</div>
-				
-
 			</div>
 		</div>
 	</div>

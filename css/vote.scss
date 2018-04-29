@@ -1,17 +1,5 @@
-$bg_no: #ffede9;
-$bg_maybe: #fcf7e1;
-$bg_unvoted: #fff4c8;
-$bg_yes: #ebf5d6;
-$bg_information: #b19c3e;
+@import 'colors.scss';
 
-$fg_no: #f45573;
-$fg_maybe: #f0db98;
-$fg_unvoted: #f0db98;
-$fg_yes: #49bc49;
-
-
-$bg_current_user: #f7f7f7;
-$fg_current_user: #0082c9;
 $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
@@ -20,6 +8,9 @@ $user-column-width: 265px;
 	display:flex;
 }
 
+.flex-row {
+	align-items: center;
+}
 
 #app-content {
 	#votings {
@@ -27,7 +18,7 @@ $user-column-width: 265px;
 		padding: 12px 17px;	
 		.description {
 			.expired-vote{
-				color: red;
+				color: $color-error;
 				font-weight: bold;
 			}
 		}

@@ -1,30 +1,18 @@
-$bg_no: #ffede9;
-$bg_maybe: #fcf7e1;
-$bg_unvoted: #fff4c8;
-$bg_yes: #ebf5d6;
-$bg_information: #b19c3e;
+@import 'colors.scss';
 
-$fg_no: #f45573;
-$fg_maybe: #f0db98;
-$fg_unvoted: #f0db98;
-$fg_yes: #49bc49;
-
-
-$bg_current_user: #f7f7f7;
-$fg_current_user: #0082c9;
 $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
 #polls-content {
-	width: 500px;
 	flex-grow: 1;
 }
 #polls-sidebar {
-	width: 600px;
+	min-width: 300px;
+	
 	display: block;
 	background: #fff;
-	border-left: 8px solid #ebebeb;
+	border-left: 1px solid #ebebeb;
 	-webkit-transition: margin-right 300ms;
 	transition: margin-right 300ms;
 	overflow-x: hidden;

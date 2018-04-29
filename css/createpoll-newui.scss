@@ -1,3 +1,17 @@
+@import 'colors.scss';
+
+
+textarea {
+	&:not(:disabled) {
+		&:active, 
+		&:hover, 
+		&:focus {
+			border-color: $color-primary-element !important;
+			outline: none !important;
+		}
+	}
+}
+
 .list-enter-active, .list-leave-active {
 	transition: all 0.5s ease;
 }
@@ -10,35 +24,18 @@
 	transition: transform 0.5s;
 }
 
-.flex-row {
-	&.poll-box {
-		flex-grow: 0;
-		align-items: center;
-	}
+#poll-item-selector-date {
+	padding: 0 8px 0 0;
 }
 
+.poll-table {
+	padding: 8px 8px 0 0;
+	flex-grow: 1;
+}
 .workbench {
-	width: 100%;
-	padding: 12px 17px;
-	#poll-item-selector-date {
-		padding: 0 8px 0 0;
-	}
-	.poll-creation {
-		width: 260px;
-		padding: 8px 8px 0 0;
-		flex-shrink: 0;
-		#text-select-container {
-			> input {
-				width: 100%;
-			}
-		}
-	}
-	.poll-table {
-		padding: 8px 8px 0 0;
-		flex-grow: 1;
-	}
-	.form-actions {
-		padding: 15px 0 15px 0;
+	padding: 0 17px;
+	> div {
+		padding-bottom: 15px;
 	}
 }
 
@@ -60,31 +57,32 @@
 	}
 }
 
-.table-row.table-body, .table-row.table-body:focus, .table-row.table-body:active, .table-row.table-body.mouseOver {
-}
-
-.poll-box {
+li.flex-row {
+	flex-grow: 0;
+	align-items: center;
 	width: 100%;
 	padding-left: 15px;
 	padding-right: 15px;
 	line-height: 2em;
-	background-color: #fff;
+	background-color: $color-main-background;
 	min-height: 4em;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #ebebeb;
 	overflow: hidden;
 	white-space: nowrap;
 	&:hover {
 		transition: background-color 0.3s ease;
-		background-color: #f8f8f8;
+		background-color: $hover-color;
 	}
-	.options {
-		justify-content: flex-end;
-	}
-	.poll-item {
+	> div {
 		flex-grow: 1;
 		font-size: 1.2em;
-		color: #666;
-		
+		opacity: 0.7;
+	}
+
+	> div:nth-last-child(1) {
+		justify-content: center;
+		flex-grow: 0;
+		flex-shrink: 0;
 	}
 }
 
