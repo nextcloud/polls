@@ -41,8 +41,8 @@
 	<div id="app-content">
 		<div id="app-content-wrapper">
 				<div id="controls">
-					<div id="breadcrump">
-						<div class	="crumb svg last" data-dir="/">
+					<div class="breadcrump">
+						<div class="crumb svg last">
 							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
 								<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 							</a>

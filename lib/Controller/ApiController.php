@@ -133,9 +133,15 @@ class ApiController extends Controller {
 			$expiration = true;
 			$expire = $poll->getExpire();
 		}
-
+		If ($poll->getOwner() !== $this->userId) {
+			$mode = 'create';
+		} else {
+			$mode = 'edit';
+		}
+		
 		$data['poll'] = [
 			'result' => 'found',
+			'mode' => $mode,
 			'comments' => $commentsList,
 			'votes' => $votesList,
 			'event' => [
@@ -168,7 +174,7 @@ class ApiController extends Controller {
 	 * @param string $poll
 	 * @return JSONResponse
 	 */
-	public function addPoll($event, $options, $mode) {
+	public function writePoll($event, $options, $mode) {
 		
 		$newEvent = new Event();
 
@@ -180,16 +186,18 @@ class ApiController extends Controller {
 			if ($oldPoll->getOwner() !== $this->userId) {
 				// If current user is not owner of existing poll deny access
 				return new TemplateResponse('polls', 'no.acc.tmpl', []);
-			} else {
-				// else take owner and hash of existing poll
-				$newEvent->setOwner($oldPoll->getOwner());
-				$newEvent->setHash($oldPoll->getHash());
-			}		
+			} 
+
+			// else take owner, hash and id of existing poll
+			$newEvent->setOwner($oldPoll->getOwner());
+			$newEvent->setHash($oldPoll->getHash());
+			$newEvent->setId($oldPoll->getId());
+					
 		} else if ($mode === 'create') {
 			// A new poll shall be created
-			// Define current user as owner
+			// Define current user as owner, set new creation date and create a new hash
 			$newEvent->setOwner($this->userId);
-			// create a new hash
+			$newEvent->setCreated(date('Y-m-d H:i:s'));
 			$newEvent->setHash(\OC::$server->getSecureRandom()->generate(
 				16,
 				ISecureRandom::CHAR_DIGITS .
@@ -197,11 +205,10 @@ class ApiController extends Controller {
 				ISecureRandom::CHAR_UPPER
 			));
 		}
-		// Set the entered configuration
+		// Set the configuration options entered by the user
 		$newEvent->setTitle($event['title']);
 		$newEvent->setDescription($event['description']);
 
-		$newEvent->setCreated(date('Y-m-d H:i:s'));
 		$newEvent->setType($event['type']);
 		$newEvent->setAccess($event['access']);
 		$newEvent->setIsAnonymous($event['is_anonymous']);
@@ -219,7 +226,37 @@ class ApiController extends Controller {
 		} else if ($event['type'] === "textPoll") {
 			$newEvent->setType(1);
 		}
- 		$ins = $this->eventMapper->insert($newEvent);
-		return new JSONResponse(json_encode($event));
+
+		if ($mode === 'edit') {
+			$this->eventMapper->update($newEvent);
+			$this->optionsMapper->deleteByPoll($newEvent->getId());
+			
+		} else if ($mode === 'create'){
+			$newEvent = $this->eventMapper->insert($newEvent);
+/* 			$ins = $this->eventMapper->insert($newEvent);
+			$newEvent->setId($ins->getId());
+ */		}
+
+		if ($event['type'] === 'datePoll') {
+			foreach ($options['pollDates'] as $optionElement) {
+				$newOption = new Options();
+				
+				$newOption->setPollId($newEvent->getId());
+				$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['fromTimestamp'] /1000));
+				
+				$this->optionsMapper->insert($newOption);
+			}
+		} else if ($event['type'] === "textPoll") {
+			foreach ($options['pollTexts'] as $optionElement) {
+				$newOption = new Options();
+				
+				$newOption->setPollId($newEvent->getId());
+				$newOption->setpollOptionText($optionElement['text']);
+				
+				$this->optionsMapper->insert($newOption);
+			}
+		}
+
+		return new JSONResponse(json_encode($options.pollTexts));
 	}
 }

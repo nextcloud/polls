@@ -34,7 +34,7 @@ return [
 		['name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'],
 		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
 		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
-		['name' => 'api#add_poll', 'url' => '/add', 'verb' => 'POST'],
+		['name' => 'api#write_poll', 'url' => '/write', 'verb' => 'POST'],
 		['name' => 'api#get_poll', 'url' => '/get/poll/{hash}', 'verb' => 'GET']
 	]
 ];

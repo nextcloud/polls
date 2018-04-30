@@ -60,7 +60,7 @@
 				<div>
 					<div>
 						<label>{{ t('polls', 'Title') }}</label>
-						<input type="text" id="pollTitle" v-model="poll.event.title">
+						<input type="text" id="pollTitle" v-bind:class="{ error: titleEmpty }" v-model="poll.event.title">
 					</div>
 					<div>
 						<label>{{ t('polls', 'Description') }}</label>

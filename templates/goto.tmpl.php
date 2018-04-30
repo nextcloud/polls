@@ -107,7 +107,7 @@
 		<div id="controls" class="controls">
 			<div id="breadcrump" class="breadcrump">
 				<?php if (User::isLoggedIn()) : ?>
-				<div class="crumb svg" data-dir="/">
+				<div class="crumb svg">
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
 						<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 					</a>

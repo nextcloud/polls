@@ -5,7 +5,7 @@ Vue.component('breadcrump', {
 	props: ['intitle'],
 	template: 	
 		'<div id="breadcrump">' +
-		'	<div class="crumb svg" data-dir="/">' +
+		'	<div class="crumb svg">' +
 		'		<a :href="home">' +
 		'			<img class="svg" :src="imagePath" alt="Home">' +
 		'		</a>' +
@@ -211,7 +211,8 @@ var newPoll = new Vue({
 		nextPollDateId: 0,
 		nextPollTextId: 0,
 		protect: false,
-		sidebar: false
+		sidebar: false,
+		titleEmpty: false
 	},
 
 	mounted: function() {
@@ -276,23 +277,28 @@ var newPoll = new Vue({
 			})
 			this.newPollText = ''
 		},
+
 		writePoll: function (mode) {
-			// console.log(JSON.stringify(this.poll));
 			if (mode !='') {
 				this.poll.mode = mode
 			}
-			axios.post(OC.generateUrl('apps/polls/add'), this.poll)
-				.then(function (response) {
-					console.log(response);
-				})
-				.catch(function (error) {
-				console.log('error');
-			});
+			if (this.poll.event.title.length == 0) {
+				this.titleEmpty = true;
+			} else {
+				this.titleEmpty = false;
+				axios.post(OC.generateUrl('apps/polls/write'), this.poll)
+					.then(function (response) {
+						console.log(response);
+					})
+					.catch(function (error) {
+					console.log('error');
+				});
+			};
 		},
+		
 		loadPoll: function (hash) {
 			axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 			.then((response) => {
-				// console.log(response.data);
 				this.poll = response.data.poll;
 				if (response.data.poll.event.type == 'datePoll') {
 					for (i = 0; i < response.data.poll.options.pollTexts.length; i++) {
