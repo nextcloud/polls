@@ -242,7 +242,8 @@ class ApiController extends Controller {
 				$newOption = new Options();
 				
 				$newOption->setPollId($newEvent->getId());
-				$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['fromTimestamp'] /1000));
+				$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['timestamp']));
+				$newOption->setTimestamp($optionElement['timestamp']);
 				
 				$this->optionsMapper->insert($newOption);
 			}

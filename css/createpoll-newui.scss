@@ -12,6 +12,12 @@ textarea {
 	}
 }
 
+
+#pollTitle.error {
+	border: 2px solid #c58585;
+	box-shadow: 1px 0 3px #888;
+}
+
 .list-enter-active, .list-leave-active {
 	transition: all 0.5s ease;
 }

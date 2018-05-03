@@ -38,8 +38,8 @@
 	\OCP\Util::addscript('polls', 'vendor/vue'); //developing
 	// \OCP\Util::addscript('polls', 'vendor/vue.min'); // production
 	\OCP\Util::addscript('polls', 'vendor/jquery.ui.timepicker');
+	\OCP\Util::addScript('polls', 'app_create');
 	\OCP\Util::addScript('polls', 'app');
-	// \OCP\Util::addScript('polls', 'create_edit');
 
 	/** @var \OCP\IURLGenerator $urlGenerator */
 	$urlGenerator = $_['urlGenerator'];
@@ -77,10 +77,10 @@
 				<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
 					<div id="poll-item-selector-date">
 						<div class="time-seletcion flex-row">
-							<label for="poll-date-picker">{{ t('polls', 'Select time for the date:') }}</label>
-							<time-picker id="poll-date-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
+							<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
+							<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
 						</div>
-						<date-picker-inline v-model="newPollDate" date-format="yy-mm-dd" v-show="poll.event.type === 'datePoll'" />
+						<date-picker-inline v-on:selected="addNewPollDate" v-bind:locale-data="localeData" :use-time="newPollTime" v-show="poll.event.type === 'datePoll'" />
 					</div>
 					<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
 						<li
@@ -155,7 +155,7 @@
 
 						<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
 						<label for="expiration">{{ t('polls', 'Expires') }}</label>
-						<date-picker :disabled="protect" :placeholder="t('polls', 'Expiration date')" v-model="poll.event.expire" date-format="yy-mm-dd" v-show="poll.event.expiration"></date-picker>
+						<date-picker-input :disabled="protect" :placeholder="t('polls', 'Expiration date')" v-model="poll.event.expire" :date-format="dateFormat" v-show="poll.event.expiration"></date-picker-input>
 				</div>
 
 				<div class="configBox flex-column">
