@@ -220,7 +220,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	* Copy date options 
+	 * Copy date options 
 	 */
 	protected function copyDateOptions() {
 		$insert = $this->connection->getQueryBuilder();
@@ -247,7 +247,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	* Copy text options 
+	 * Copy text options 
 	 */
 	protected function copyTextOptions() {
 		$insert = $this->connection->getQueryBuilder();
@@ -274,7 +274,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	* Copy date votes 
+	 * Copy date votes 
 	 */
 	protected function copyDateVotes() {
 		$insert = $this->connection->getQueryBuilder();
