@@ -101,7 +101,8 @@ Vue.component('date-picker-inline', {
 		minDate: {
 			default: null
 		},
-		localeData: { // get moment.js locale information, because datepicker initializes in default mode
+		// get moment.js locale information, because datepicker initializes in default localization
+		localeData: {
 		},
 		useTime: {
 			default: '00:00'
@@ -270,6 +271,7 @@ var newPoll = new Vue({
 			this.poll.options.pollDates.push({
 				id: this.nextPollDateId++,
 				timestamp: moment(newPollDate).unix(),
+				date: moment(newPollDate).format('llll')
 			})
 			this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp')
 		},
