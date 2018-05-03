@@ -97,7 +97,8 @@ class ApiController extends Controller {
 		foreach ($options as $optionElement) {
 			$optionList[] = [
 				'id' => $optionElement->getId(),
-				'text' => $optionElement->getPollOptionText()
+				'text' => $optionElement->getPollOptionText(),
+				'timestamp' => $optionElement->getTimestamp()
 			];
 		};
 
