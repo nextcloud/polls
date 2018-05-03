@@ -347,7 +347,7 @@ class PageController extends Controller {
 			foreach ($optionsArray as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
-				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
+				$option->setPollOptionText(date('Y-m-d H:i:s', (int) $optionElement));
 				$this->optionsMapper->insert($option);
 			}
 		} else {
@@ -454,7 +454,7 @@ class PageController extends Controller {
 			foreach ($optionsArray as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
-				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
+				$option->setPollOptionText(date('Y-m-d H:i:s', (int) $optionElement));
 				$this->optionsMapper->insert($option);
 			}
 		} else {
@@ -557,7 +557,7 @@ class PageController extends Controller {
 		return new JSONResponse(array(
 			'userId' => $userId,
 			'displayName' => $displayName,
-			'timeStamp' => $timeStamp *100, 
+			'timeStamp' => $timeStamp * 100, 
 			'date' => date('Y-m-d H:i:s', $timeStamp),
 			'relativeNow' => $this->trans->t('just now'),
 			'comment' => $commentBox
@@ -656,7 +656,7 @@ class PageController extends Controller {
 		}
 		// Nextcloud >= 12
 		$groups = $this->groupManager->getUserGroups(\OC::$server->getUserSession()->getUser());
-		return array_map(function ($group) {
+		return array_map(function($group) {
 			return $group->getGID();
 		}, $groups);
 	}

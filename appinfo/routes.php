@@ -22,7 +22,7 @@
  */
 
 return [
-    'routes' => [
+	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
 		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
