@@ -74,12 +74,12 @@ class ApiController extends Controller {
 	}
 
   	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param string $hash
-	 * @return JSONResponse
-	 */
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @PublicPage
+	* @param string $hash
+	* @return JSONResponse
+	*/
 	public function getPoll($hash) {
 		try {
 			$poll = $this->eventMapper->findByHash($hash);
@@ -134,7 +134,7 @@ class ApiController extends Controller {
 			$expiration = true;
 			$expire = $poll->getExpire();
 		}
-		If ($poll->getOwner() !== $this->userId) {
+		if ($poll->getOwner() !== $this->userId) {
 			$mode = 'create';
 		} else {
 			$mode = 'edit';
@@ -179,7 +179,7 @@ class ApiController extends Controller {
 		
 		$newEvent = new Event();
 
-		If ($mode === 'edit') {
+		if ($mode === 'edit') {
 			// Existing poll shall be edited
 			$oldPoll = $this->eventMapper->findByHash($event['hash']);
 
@@ -232,7 +232,7 @@ class ApiController extends Controller {
 			$this->eventMapper->update($newEvent);
 			$this->optionsMapper->deleteByPoll($newEvent->getId());
 			
-		} else if ($mode === 'create'){
+		} else if ($mode === 'create') {
 			$newEvent = $this->eventMapper->insert($newEvent);
 /* 			$ins = $this->eventMapper->insert($newEvent);
 			$newEvent->setId($ins->getId());
@@ -259,6 +259,10 @@ class ApiController extends Controller {
 			}
 		}
 
-		return new JSONResponse(json_encode($options.pollTexts));
+		return new JSONResponse( json_encode(array(
+			'id' => $newEvent->getId(),
+			'hash' => $newEvent->getHash()
+		)));
+
 	}
 }
