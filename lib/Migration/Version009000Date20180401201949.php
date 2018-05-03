@@ -6,6 +6,7 @@ use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
+use OCP\IConfig;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
