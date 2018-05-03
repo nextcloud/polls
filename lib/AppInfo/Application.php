@@ -47,7 +47,7 @@ class Application extends App {
 		/**
 		 * Controllers
 		 */
-		$container->registerService('PageController', function(IContainer $c) {
+		$container->registerService('PageController', function (IContainer $c) {
 			return new PageController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -66,51 +66,51 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('UserManager', function(IContainer $c) {
+		$container->registerService('UserManager', function (IContainer $c) {
 			return $c->query('ServerContainer')->getUserManager();
 		});
 
-		$container->registerService('GroupManager', function(IContainer $c) {
+		$container->registerService('GroupManager', function (IContainer $c) {
 			return $c->query('ServerContainer')->getGroupManager();
 		});
 
-		$container->registerService('AvatarManager', function(IContainer $c) {
+		$container->registerService('AvatarManager', function (IContainer $c) {
 			return $c->query('ServerContainer')->getAvatarManager();
 		});
 
-		$container->registerService('Logger', function(IContainer $c) {
+		$container->registerService('Logger', function (IContainer $c) {
 			return $c->query('ServerContainer')->getLogger();
 		});
 
-		$container->registerService('L10N', function(IContainer $c) {
+		$container->registerService('L10N', function (IContainer $c) {
 			return $c->query('ServerContainer')->getL10N($c->query('AppName'));
 		});
 
-		$container->registerService('CommentMapper', function(IContainer $c) use ($server) {
+		$container->registerService('CommentMapper', function (IContainer $c) use ($server) {
 			return new CommentMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('OptionsMapper', function(IContainer $c) use ($server) {
+		$container->registerService('OptionsMapper', function (IContainer $c) use ($server) {
 			return new OptionsMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('EventMapper', function(IContainer $c) use ($server) {
+		$container->registerService('EventMapper', function (IContainer $c) use ($server) {
 			return new EventMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('NotificationMapper', function(IContainer $c) use ($server) {
+		$container->registerService('NotificationMapper', function (IContainer $c) use ($server) {
 			return new NotificationMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('VotesMapper', function(IContainer $c) use ($server) {
+		$container->registerService('VotesMapper', function (IContainer $c) use ($server) {
 			return new VotesMapper(
 				$server->getDatabaseConnection()
 			);
@@ -122,7 +122,7 @@ class Application extends App {
 	 */
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function() use ($container) {
+		$container->query('OCP\INavigationManager')->add(function () use ($container) {
 			$urlGenerator = $container->query('OCP\IURLGenerator');
 			$l10n = $container->query('OCP\IL10N');
 			return [
