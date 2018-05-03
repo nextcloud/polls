@@ -454,7 +454,7 @@ class PageController extends Controller {
 			foreach ($optionsArray as $optionElement) {
 				$option = new Options();
 				$option->setPollId($pollId);
-				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
+				$option->setPollOptionText(date('Y-m-d H:i:s', (int) $optionElement));
 				$this->optionsMapper->insert($option);
 			}
 		} else {

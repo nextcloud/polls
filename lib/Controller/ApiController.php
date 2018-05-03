@@ -74,11 +74,11 @@ class ApiController extends Controller {
 	}
 
   	/**
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @PublicPage
-	* @param string $hash
-	* @return JSONResponse
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @param string $hash
+	 * @return JSONResponse
 	*/
 	public function getPoll($hash) {
 		try {
@@ -259,10 +259,10 @@ class ApiController extends Controller {
 			}
 		}
 
-		return new JSONResponse( json_encode(array(
+		return new JSONResponse(array(
 			'id' => $newEvent->getId(),
 			'hash' => $newEvent->getHash()
-		)));
+		));
 
 	}
 }
