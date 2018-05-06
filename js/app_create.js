@@ -1,7 +1,4 @@
 /** global: Vue */
-Vue.config.devtools = true;
-// var localeData = moment.localeData();
-
 
 Vue.component('breadcrump', {
 	props: ['intitle'],
@@ -67,7 +64,6 @@ Vue.component('side-bar-close', {
 	}
 });
 
-// inject jQuery date picker
 Vue.component('date-picker-input', {
 	props: ['value', 'placeholder', 'dateFormat'],
 	template:
@@ -141,7 +137,6 @@ Vue.component('date-picker-inline', {
 		
 });
 
-// inject jQuery time picker
 Vue.component('time-picker', {
 	props: ['value', 'placeholder'],
 	template: 
@@ -235,7 +230,7 @@ var newPoll = new Vue({
 		nextPollTextId: 0,
 		protect: false,
 		sidebar: false,
-		titleEmpty: false,
+		titleEmpty: false
 	},
 
 	mounted: function() {
@@ -262,7 +257,6 @@ var newPoll = new Vue({
 		},
 
 		addNewPollDate: function (newPollDate, newPollTime) {
-			// dependency moment.js
  			if (newPollTime !== undefined) {
 				this.newPollDate = moment(newPollDate +' ' + newPollTime)
 			} else {
@@ -296,11 +290,14 @@ var newPoll = new Vue({
 			} else {
 				this.titleEmpty = false;
 				axios.post(OC.generateUrl('apps/polls/write'), this.poll)
-					.then(function (response) {
+					.then((response) => {
 						console.log(response);
-					})
-					.catch(function (error) {
-					console.log('error');
+						this.poll.mode = 'edit';
+ 						this.poll.event.hash = response.data.hash;
+						this.poll.event.id = response.data.id;
+						window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
+					}, (error) => {
+						console.log(error.response);
 				});
 			};
 		},
@@ -308,22 +305,17 @@ var newPoll = new Vue({
 		loadPoll: function (hash) {
 			axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 			.then((response) => {
+				console.log(response);
 				this.poll = response.data.poll;
 				if (response.data.poll.event.type == 'datePoll') {
 					for (i = 0; i < response.data.poll.options.pollTexts.length; i++) {
-						// date = new Date(response.data.poll.options.pollTexts[i].text);
 						this.addNewPollDate(new Date(response.data.poll.options.pollTexts[i].text) +' UTC');
 					}
 				this.poll.options.pollTexts = [];
 				}
-				// }
 			}, (error) => {
-				console.log(error);
+				console.log(error.response);
 			});
-
-		
 		}
-		
 	}	
-  
 });

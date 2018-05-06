@@ -24,8 +24,13 @@
 namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Db\DoesNotExistException;
+
 use OCP\IRequest;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
@@ -59,6 +64,7 @@ class ApiController extends Controller {
 	public function __construct(
 		$appName,
 		IRequest $request,
+		IUserManager $userManager,
 		$userId,
 		EventMapper $eventMapper,
 		OptionsMapper $optionsMapper,
@@ -67,6 +73,7 @@ class ApiController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
+		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
 		$this->optionsMapper = $optionsMapper;
 		$this->votesMapper = $VotesMapper;
@@ -78,22 +85,25 @@ class ApiController extends Controller {
 	 * @NoCSRFRequired
 	 * @PublicPage
 	 * @param string $hash
-	 * @return JSONResponse
+	 * @return DataResponse
 	*/
 	public function getPoll($hash) {
+
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+		
 		try {
 			$poll = $this->eventMapper->findByHash($hash);
 		} catch (DoesNotExistException $e) {
-			$data[] = [
-				'Error' => 'Poll not found',
-				'hash' => $hash
-			];
-			return new JSONResponse($data);
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		};
 
-		$options = $this->optionsMapper->findByPoll($poll->getId());
-		$votes = $this->votesMapper->findByPoll($poll->getId());
-		$comments = $this->commentMapper->findByPoll($poll->getId());
+		try {
+			$options = $this->optionsMapper->findByPoll($poll->getId());
+		} catch (DoesNotExistException $e) {
+			$optionList = '';
+		};
 		foreach ($options as $optionElement) {
 			$optionList[] = [
 				'id' => $optionElement->getId(),
@@ -102,6 +112,11 @@ class ApiController extends Controller {
 			];
 		};
 
+		try {
+			$votes = $this->votesMapper->findByPoll($poll->getId());
+		} catch (DoesNotExistException $e) {
+			$voteslist = '';
+		};
 		foreach ($votes as $voteElement) {
 			$votesList[] = [
 				'id' => $voteElement->getId(),
@@ -112,6 +127,11 @@ class ApiController extends Controller {
 			];
 		};
 
+		try {
+			$comments = $this->commentMapper->findByPoll($poll->getId());
+		} catch (DoesNotExistException $e) {
+			$commentsList = '';
+		};
 		foreach ($comments as $commentElement) {
 			$commentsList[] = [
 				'id' => $commentElement->getId(),
@@ -134,7 +154,7 @@ class ApiController extends Controller {
 			$expiration = true;
 			$expire = $poll->getExpire();
 		}
-		if ($poll->getOwner() !== $this->userId) {
+		if ($poll->getOwner() !== \OC::$server->getUserSession()->getUser()->getUID()) {
 			$mode = 'create';
 		} else {
 			$mode = 'edit';
@@ -160,23 +180,29 @@ class ApiController extends Controller {
 				'full_anonymous' => $poll->getFullAnonymous(),
 				'disallowMaybe' => $poll->getDisallowMaybe()
 			],
-			// 'optionlist' => $optionList,
 			'options' => [
 				'pollDates' => [],
 				'pollTexts' => $optionList
 			]
-		];			
-		return new JSONResponse($data);
+		];
+
+		return new DataResponse($data, Http::STATUS_OK);
 	}
 	
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param string $poll
-	 * @return JSONResponse
+	 * @return DataResponse
 	 */
 	public function writePoll($event, $options, $mode) {
-		
+		$user = \OC::$server->getUserSession()->getUser();
+
+		if (!$user instanceof IUser) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+		$userId = \OC::$server->getUserSession()->getUser()->getUID();
+
 		$newEvent = new Event();
 
 		if ($mode === 'edit') {
@@ -234,9 +260,7 @@ class ApiController extends Controller {
 			
 		} else if ($mode === 'create') {
 			$newEvent = $this->eventMapper->insert($newEvent);
-/* 			$ins = $this->eventMapper->insert($newEvent);
-			$newEvent->setId($ins->getId());
- */		}
+		}
 
 		if ($event['type'] === 'datePoll') {
 			foreach ($options['pollDates'] as $optionElement) {
@@ -258,11 +282,10 @@ class ApiController extends Controller {
 				$this->optionsMapper->insert($newOption);
 			}
 		}
-
-		return new JSONResponse(array(
+		return new DataResponse(array(
 			'id' => $newEvent->getId(),
 			'hash' => $newEvent->getHash()
-		));
+		), Http::STATUS_OK);
 
 	}
 }

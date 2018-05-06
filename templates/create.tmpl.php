@@ -43,7 +43,6 @@
 
 	/** @var \OCP\IURLGenerator $urlGenerator */
 	$urlGenerator = $_['urlGenerator'];
-	$lang = \OC::$server->getL10NFactory()->findLanguage();
 ?>
 
 <div id="app" class="flex-row" data-hash="<?php p($_['hash'])?>">
@@ -109,11 +108,10 @@
 				</div>
 
 				<div>
-					<button v-if="poll.mode === 'edit'" v-on:click="writePoll('edit')" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
-					<button v-on:click="writePoll('create')" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
+					<button v-if="poll.mode === 'edit'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
+					<button v-if="poll.mode === 'create'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button">{{ t('polls', 'Cancel') }}</a>
 				</div>
-
 			</div>
 	</div>
 	
@@ -155,7 +153,7 @@
 
 						<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
 						<label for="expiration">{{ t('polls', 'Expires') }}</label>
-						<date-picker-input :disabled="protect" :placeholder="t('polls', 'Expiration date')" v-model="poll.event.expire" :date-format="dateFormat" v-show="poll.event.expiration"></date-picker-input>
+						<date-picker-input :disabled="protect" :placeholder="t('polls', 'Expiration date')" v-model="poll.event.expire" v-show="poll.event.expiration"></date-picker-input>
 				</div>
 
 				<div class="configBox flex-column">

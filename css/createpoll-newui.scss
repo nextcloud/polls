@@ -1,6 +1,5 @@
 @import 'colors.scss';
 
-
 textarea {
 	&:not(:disabled) {
 		&:active, 
@@ -18,20 +17,29 @@ textarea {
 	box-shadow: 1px 0 3px #888;
 }
 
-.list-enter-active, .list-leave-active {
-	transition: all 0.5s ease;
-}
+/* Transitions for inserting and removing list items */
+	.list-enter-active, .list-leave-active {
+		transition: all 0.5s ease;
+	}
 
-.list-enter, .list-leave-to {
-	opacity: 0;
-}
+	.list-enter, .list-leave-to {
+		opacity: 0;
+	}
 
-.list-move {
-	transition: transform 0.5s;
-}
+	.list-move {
+		transition: transform 0.5s;
+	}
+/*  */
+
 
 #poll-item-selector-date {
 	padding: 0 8px 0 0;
+}
+
+#poll-item-selector-text {
+	> input {
+		width: 100%
+	}
 }
 
 .poll-table {
@@ -102,11 +110,5 @@ button {
 	align-items: center;
 	> label {
 	flex-grow: 1;
-	}
-}
-
-#poll-item-selector-text {
-	> input {
-		width: 100%
 	}
 }
