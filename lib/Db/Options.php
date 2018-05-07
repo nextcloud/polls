@@ -34,7 +34,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getTimestamp()
  * @method void setTimestamp(Integer $value)
  */
-class Options extends Entity {
+class Options extends Model {
 	protected $pollId;
 	protected $pollOptionText;
 	protected $timestamp;

@@ -36,7 +36,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Comment extends Entity {
+class Comment extends Model {
 	protected $userId;
 	protected $dt;
 	protected $comment;

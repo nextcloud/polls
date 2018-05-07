@@ -38,7 +38,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getVoteAnswer()
  * @method void setVoteAnswer(string $value)
  */
-class Votes extends Entity {
+class Votes extends Model {
 	protected $pollId;
 	protected $userId;
 	protected $voteOptionId;

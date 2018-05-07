@@ -50,7 +50,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getDisallowMaybe()
  * @method void setDisallowMaybe(integer $value)
  */
-class Event extends Entity {
+class Event extends Model {
 	protected $type;
 	protected $title;
 	protected $description;

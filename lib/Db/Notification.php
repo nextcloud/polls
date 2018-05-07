@@ -32,7 +32,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Notification extends Entity {
+class Notification extends Model {
 	protected $userId;
 	protected $pollId;
 

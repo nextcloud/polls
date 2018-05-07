@@ -94,8 +94,8 @@ class ApiController extends Controller {
 		
 		try {
 			$poll = $this->eventMapper->findByHash($hash);
+
 			$expiration = ($poll->getExpire() !== null);
-			$expire = $poll->getExpire();
 
 			if ($poll->getType() == 0) {
 				$pollType = 'datePoll'; 
@@ -109,6 +109,7 @@ class ApiController extends Controller {
 				$mode = 'edit';
 			}
 			
+			$data = array();
 			$commentsList = array();
 			$optionList = array();
 			$votesList = array();
@@ -205,33 +206,6 @@ class ApiController extends Controller {
 
 		$newEvent = new Event();
 
-		if ($mode === 'edit') {
-			// Existing poll shall be edited
-			$oldPoll = $this->eventMapper->findByHash($event['hash']);
-
-			// Check if current user is allowed to edit existing poll
-			if ($oldPoll->getOwner() !== $this->userId) {
-				// If current user is not owner of existing poll deny access
-				return new TemplateResponse('polls', 'no.acc.tmpl', []);
-			} 
-
-			// else take owner, hash and id of existing poll
-			$newEvent->setOwner($oldPoll->getOwner());
-			$newEvent->setHash($oldPoll->getHash());
-			$newEvent->setId($oldPoll->getId());
-					
-		} else if ($mode === 'create') {
-			// A new poll shall be created
-			// Define current user as owner, set new creation date and create a new hash
-			$newEvent->setOwner($this->userId);
-			$newEvent->setCreated(date('Y-m-d H:i:s'));
-			$newEvent->setHash(\OC::$server->getSecureRandom()->generate(
-				16,
-				ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
-			));
-		}
 		// Set the configuration options entered by the user
 		$newEvent->setTitle($event['title']);
 		$newEvent->setDescription($event['description']);
@@ -241,7 +215,7 @@ class ApiController extends Controller {
 		$newEvent->setIsAnonymous($event['isAnonymous']);
 		$newEvent->setFullAnonymous($event['fullAnonymous']);
 		$newEvent->setDisallowMaybe($event['disallowMaybe']);
- 		
+
 		if ($event['expiration']) {
 			$newEvent->setExpire($event['expire']);
 		} else {
@@ -255,13 +229,37 @@ class ApiController extends Controller {
 		}
 
 		if ($mode === 'edit') {
+			// Edit existing poll
+			$oldPoll = $this->eventMapper->findByHash($event['hash']);
+
+			// Check if current user is allowed to edit existing poll
+			if ($oldPoll->getOwner() !== $this->userId) {
+				// If current user is not owner of existing poll deny access
+				return new TemplateResponse('polls', 'no.acc.tmpl', []);
+			} 
+
+			// else take owner, hash and id of existing poll
+			$newEvent->setOwner($oldPoll->getOwner());
+			$newEvent->setHash($oldPoll->getHash());
+			$newEvent->setId($oldPoll->getId());
 			$this->eventMapper->update($newEvent);
 			$this->optionsMapper->deleteByPoll($newEvent->getId());
-			
+					
 		} else if ($mode === 'create') {
+			// Create new poll
+			// Define current user as owner, set new creation date and create a new hash
+			$newEvent->setOwner($this->userId);
+			$newEvent->setCreated(date('Y-m-d H:i:s'));
+			$newEvent->setHash(\OC::$server->getSecureRandom()->generate(
+				16,
+				ISecureRandom::CHAR_DIGITS .
+				ISecureRandom::CHAR_LOWER .
+				ISecureRandom::CHAR_UPPER
+			));
 			$newEvent = $this->eventMapper->insert($newEvent);
 		}
-
+		
+		// Update options
 		if ($event['type'] === 'datePoll') {
 			foreach ($options['pollDates'] as $optionElement) {
 				$newOption = new Options();
