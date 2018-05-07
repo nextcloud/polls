@@ -88,7 +88,6 @@ class ApiController extends Controller {
 	 * @return DataResponse
 	*/
 	public function getPoll($hash) {
-
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
@@ -99,46 +98,47 @@ class ApiController extends Controller {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		};
 
+		$commentsList = array();
+		$optionList = array();
+		$votesList = array();
+
 		try {
 			$options = $this->optionsMapper->findByPoll($poll->getId());
+			foreach ($options as $optionElement) {
+				$optionList[] = [
+					'id' => $optionElement->getId(),
+					'text' => $optionElement->getPollOptionText(),
+					'timestamp' => $optionElement->getTimestamp()
+				];
+			};
 		} catch (DoesNotExistException $e) {
-			$optionList = '';
-		};
-		foreach ($options as $optionElement) {
-			$optionList[] = [
-				'id' => $optionElement->getId(),
-				'text' => $optionElement->getPollOptionText(),
-				'timestamp' => $optionElement->getTimestamp()
-			];
 		};
 
 		try {
 			$votes = $this->votesMapper->findByPoll($poll->getId());
+			foreach ($votes as $voteElement) {
+				$votesList[] = [
+					'id' => $voteElement->getId(),
+					'userId' => $voteElement->getUserId(),
+					'voteOptionId' => $voteElement->getVoteOptionId(),
+					'voteOptionText' => $voteElement->getVoteOptionText(),
+					'voteAnswer' => $voteElement->getVoteAnswer()
+				];
+			};
 		} catch (DoesNotExistException $e) {
-			$voteslist = '';
-		};
-		foreach ($votes as $voteElement) {
-			$votesList[] = [
-				'id' => $voteElement->getId(),
-				'userId' => $voteElement->getUserId(),
-				'voteOptionId' => $voteElement->getVoteOptionId(),
-				'voteOptionText' => $voteElement->getVoteOptionText(),
-				'voteAnswer' => $voteElement->getVoteAnswer()
-			];
 		};
 
 		try {
 			$comments = $this->commentMapper->findByPoll($poll->getId());
+			foreach ($comments as $commentElement) {
+				$commentsList[] = [
+					'id' => $commentElement->getId(),
+					'userId' => $commentElement->getUserId(),
+					'date' => $commentElement->getDt() . ' UTC',
+					'comment' => $commentElement->getComment()
+				];
+			};
 		} catch (DoesNotExistException $e) {
-			$commentsList = '';
-		};
-		foreach ($comments as $commentElement) {
-			$commentsList[] = [
-				'id' => $commentElement->getId(),
-				'userId' => $commentElement->getUserId(),
-				'date' => $commentElement->getDt() . ' UTC',
-				'comment' => $commentElement->getComment()
-			];
 		};
 
 		if ($poll->getType() == 0) {
@@ -149,7 +149,7 @@ class ApiController extends Controller {
 
 		if ($poll->getExpire() == null) {
 			$expiration = false;
-			$expire = null;
+			// $expire = null;
 		} else {
 			$expiration = true;
 			$expire = $poll->getExpire();
