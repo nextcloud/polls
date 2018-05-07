@@ -24,13 +24,15 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Notification extends Model {
+class Notification extends Entity {
 	protected $userId;
 	protected $pollId;
 

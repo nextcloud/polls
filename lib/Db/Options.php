@@ -24,6 +24,8 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method integer getPollId()
  * @method void setPollId(integer $value)
@@ -32,7 +34,7 @@ namespace OCA\Polls\Db;
  * @method string getTimestamp()
  * @method void setTimestamp(Integer $value)
  */
-class Options extends Model {
+class Options extends Entity {
 	protected $pollId;
 	protected $pollOptionText;
 	protected $timestamp;

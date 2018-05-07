@@ -24,6 +24,8 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method string getUserId()
  * @method void setUserId(string $value)
@@ -34,7 +36,7 @@ namespace OCA\Polls\Db;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Comment extends Model {
+class Comment extends Entity {
 	protected $userId;
 	protected $dt;
 	protected $comment;

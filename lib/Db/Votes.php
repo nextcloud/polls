@@ -24,6 +24,8 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method integer getPollId()
  * @method void setPollId(integer $value)
@@ -36,7 +38,7 @@ namespace OCA\Polls\Db;
  * @method integer getVoteAnswer()
  * @method void setVoteAnswer(string $value)
  */
-class Votes extends Model {
+class Votes extends Entity {
 	protected $pollId;
 	protected $userId;
 	protected $voteOptionId;

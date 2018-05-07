@@ -94,13 +94,29 @@ class ApiController extends Controller {
 		
 		try {
 			$poll = $this->eventMapper->findByHash($hash);
+			$expiration = ($poll->getExpire() !== null);
+			$expire = $poll->getExpire();
+
+			if ($poll->getType() == 0) {
+				$pollType = 'datePoll'; 
+			} else {
+				$pollType = 'textPoll';
+			};
+
+			if ($poll->getOwner() !== \OC::$server->getUserSession()->getUser()->getUID()) {
+				$mode = 'create';
+			} else {
+				$mode = 'edit';
+			}
+			
+			$commentsList = array();
+			$optionList = array();
+			$votesList = array();
+			
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		};
 
-		$commentsList = array();
-		$optionList = array();
-		$votesList = array();
 
 		try {
 			$options = $this->optionsMapper->findByPoll($poll->getId());
@@ -112,6 +128,7 @@ class ApiController extends Controller {
 				];
 			};
 		} catch (DoesNotExistException $e) {
+			// ignore
 		};
 
 		try {
@@ -126,6 +143,7 @@ class ApiController extends Controller {
 				];
 			};
 		} catch (DoesNotExistException $e) {
+			// ignore
 		};
 
 		try {
@@ -139,27 +157,9 @@ class ApiController extends Controller {
 				];
 			};
 		} catch (DoesNotExistException $e) {
+			// ignore
 		};
-
-		if ($poll->getType() == 0) {
-			$pollType = 'datePoll'; 
-		} else {
-			$pollType = 'textPoll';
-		};
-
-		if ($poll->getExpire() == null) {
-			$expiration = false;
-			// $expire = null;
-		} else {
-			$expiration = true;
-			$expire = $poll->getExpire();
-		}
-		if ($poll->getOwner() !== \OC::$server->getUserSession()->getUser()->getUID()) {
-			$mode = 'create';
-		} else {
-			$mode = 'edit';
-		}
-		
+	
 		$data['poll'] = [
 			'result' => 'found',
 			'mode' => $mode,
@@ -176,8 +176,8 @@ class ApiController extends Controller {
 				'access' => $poll->getAccess(),
 				'expiration' => $expiration,
 				'expire' => $poll->getExpire(),
-				'is_anonymous' => $poll->getIsAnonymous(),
-				'full_anonymous' => $poll->getFullAnonymous(),
+				'isAnonymous' => $poll->getIsAnonymous(),
+				'fullAnonymous' => $poll->getFullAnonymous(),
 				'disallowMaybe' => $poll->getDisallowMaybe()
 			],
 			'options' => [
@@ -238,8 +238,8 @@ class ApiController extends Controller {
 
 		$newEvent->setType($event['type']);
 		$newEvent->setAccess($event['access']);
-		$newEvent->setIsAnonymous($event['is_anonymous']);
-		$newEvent->setFullAnonymous($event['full_anonymous']);
+		$newEvent->setIsAnonymous($event['isAnonymous']);
+		$newEvent->setFullAnonymous($event['fullAnonymous']);
 		$newEvent->setDisallowMaybe($event['disallowMaybe']);
  		
 		if ($event['expiration']) {

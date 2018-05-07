@@ -24,6 +24,8 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method integer getType()
  * @method void setType(integer $value)
@@ -48,7 +50,7 @@ namespace OCA\Polls\Db;
  * @method integer getDisallowMaybe()
  * @method void setDisallowMaybe(integer $value)
  */
-class Event extends Model {
+class Event extends Entity {
 	protected $type;
 	protected $title;
 	protected $description;
