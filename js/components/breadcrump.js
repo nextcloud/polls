@@ -1,4 +1,4 @@
-/* global: Vue */
+/* global Vue */
 Vue.component('breadcrump', {
 	props: ['intitle'],
 	template: 	

@@ -1,5 +1,4 @@
-/* global: Vue */
-/* global: oc_userconfig */
+/* global Vue, oc_userconfig */
 Vue.component('author-div', {
 	template: 	
 		'<div>' +

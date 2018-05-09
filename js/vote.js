@@ -1,6 +1,4 @@
-/* global: clipboard */
-/* global: handlebars */
-/* global: navigator */
+/* global Clipboard, Handlebars, navigator */
 
 var newUserOptions = [];
 var newUserAnswers = [];

@@ -1,4 +1,4 @@
-/* global: Vue */
+/* globals Vue */
 Vue.component('side-bar-close', {
 	template:
 		'<div class="close flex-row">' +
