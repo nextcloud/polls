@@ -38,14 +38,25 @@
 	\OCP\Util::addscript('polls', 'vendor/vue'); //developing
 	// \OCP\Util::addscript('polls', 'vendor/vue.min'); // production
 	\OCP\Util::addscript('polls', 'vendor/jquery.ui.timepicker');
+	// prepare for components
+	\OCP\Util::addScript('polls', 'components/sideBarClose');
+	\OCP\Util::addScript('polls', 'components/breadcrump');
+	\OCP\Util::addScript('polls', 'components/authorDiv');
+	\OCP\Util::addScript('polls', 'components/datePickerInput');
+	\OCP\Util::addScript('polls', 'components/datePickerInline');
+	\OCP\Util::addScript('polls', 'components/timePicker');
+	\OCP\Util::addScript('polls', 'components/datePollItem');
+	\OCP\Util::addScript('polls', 'components/textPollItem');
+	// vue app
 	\OCP\Util::addScript('polls', 'app_create');
 	\OCP\Util::addScript('polls', 'app');
 
 	/** @var \OCP\IURLGenerator $urlGenerator */
 	$urlGenerator = $_['urlGenerator'];
+	$hash = $_['hash'];
 ?>
 
-<div id="app" class="flex-row" data-hash="<?php p($_['hash'])?>">
+<div id="app" class="flex-row" data-hash="<?php p($hash)?>">
 
 	<div id="polls-content">
 			<div id="controls">
@@ -114,7 +125,8 @@
 				</div>
 			</div>
 	</div>
-	
+	<div id="divider" class="divider" v-on:click="switchSidebar">
+	</div>
 	<div id="polls-sidebar" v-if="sidebar" class="detailsView scroll-container">
 		<side-bar-close></side-bar-close>
 		<div class="header flex-row">
@@ -129,7 +141,10 @@
 			</li>
 		</ul>		
 		<div class="tabsContainer">
-			<span v-if="protect">{{ t('polls', 'Configuration is disabled to prevent voter\'s confusion') }}</span>
+			<div class="tab configurationsTabView flex-row flex-wrap align-centered space-between" @click="protect=false" v-if="protect">
+				<span>{{ t('polls', 'Configuration is locked due to existing votes') }}</span>
+				<button> {{ t('polls', 'Unlock configuration ') }} </button>
+			</div>
 			<div id="configurationsTabView" class="tab configurationsTabView flex-row flex-wrap">
 				
 				<div class="configBox flex-column" v-if="poll.mode =='edit'">
@@ -140,16 +155,16 @@
 					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 				</div>
 
-				<div id="poll-configuration" class="configBox flex-column">
+				<div class="configBox flex-column">
 					<label class="title">{{ t('polls', 'Poll configurations') }}</label>
 						<input :disabled="protect" id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
 						<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
 					
-						<input :disabled="protect" id="anonymous" v-model="poll.event.is_anonymous"type="checkbox" class="checkbox" />
+						<input :disabled="protect" id="anonymous" v-model="poll.event.isAnonymous"type="checkbox" class="checkbox" />
 						<label for="anonymous">{{ t('polls', 'Anonymous poll') }}</label>
 
-						<input :disabled="protect" id="trueAnonymous" v-model="poll.event.full_anonymous" v-show="poll.event.is_anonymous" type="checkbox" class="checkbox"/>
-						<label for="trueAnonymous" v-show="poll.event.is_anonymous">{{ t('polls', 'Hide user names for admin') }} </label>
+						<input :disabled="protect" id="trueAnonymous" v-model="poll.event.fullAnonymous" v-show="poll.event.isAnonymous" type="checkbox" class="checkbox"/>
+						<label for="trueAnonymous" v-show="poll.event.isAnonymous">{{ t('polls', 'Hide user names for admin') }} </label>
 
 						<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
 						<label for="expiration">{{ t('polls', 'Expires') }}</label>

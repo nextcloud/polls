@@ -1,6 +1,7 @@
 /** global: Vue */
+Vue.config.devtools = true;
 
-Vue.component('breadcrump', {
+/* Vue.component('breadcrump', {
 	props: ['intitle'],
 	template: 	
 		'<div id="breadcrump">' +
@@ -19,8 +20,7 @@ Vue.component('breadcrump', {
 			imagePath: OC.imagePath('core', 'places/home.svg'),
 		}
 	}
-});
-
+}); 
 
 Vue.component('author-div', {
 	template: 	
@@ -136,8 +136,8 @@ Vue.component('date-picker-inline', {
 	}
 		
 });
-
-Vue.component('time-picker', {
+ */
+/* Vue.component('time-picker', {
 	props: ['value', 'placeholder'],
 	template: 
 		'<input size="10" maxlength="10" :placeholder="placeholder"  ' +
@@ -182,6 +182,7 @@ Vue.component('text-poll-item', {
 		'</div>' +
 		'</li>'
 });
+*/
 
 Vue.mixin({
 	methods: {
@@ -211,8 +212,8 @@ var newPoll = new Vue({
 				access: 'public',
 				expiration: false,
 				expire: null,
-				is_anonymous: false,
-				full_anonymous: false,
+				isAnonymous: false,
+				fullAnonymous: false,
 				disallowMaybe: false,
 			},
 			options: {
@@ -241,7 +242,7 @@ var newPoll = new Vue({
 			this.poll.mode = 'edit';
 		};
 	},
-
+	
 	computed: {
 		title: function () {
 			if (this.poll.event.title == '') {
@@ -251,6 +252,7 @@ var newPoll = new Vue({
 			}
 		}
 	},
+	
 	methods: {
 		switchSidebar: function() {
 			this.sidebar = !this.sidebar;
@@ -265,7 +267,9 @@ var newPoll = new Vue({
 			this.poll.options.pollDates.push({
 				id: this.nextPollDateId++,
 				timestamp: moment(newPollDate).unix(),
-				date: moment(newPollDate).format('llll')
+				date: moment(newPollDate).format('llll'),
+				time: moment(newPollDate).format('LT'),
+				dateOnly: moment(newPollDate).format('dddd[,] ll')
 			})
 			this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp')
 		},
@@ -309,7 +313,8 @@ var newPoll = new Vue({
 				this.poll = response.data.poll;
 				if (response.data.poll.event.type == 'datePoll') {
 					for (i = 0; i < response.data.poll.options.pollTexts.length; i++) {
-						this.addNewPollDate(new Date(response.data.poll.options.pollTexts[i].text) +' UTC');
+						this.addNewPollDate(new Date(moment.utc(response.data.poll.options.pollTexts[i].text)));
+						// this.addNewPollDate(new Date(response.data.poll.options.pollTexts[i].text)  +' UTC');
 					}
 				this.poll.options.pollTexts = [];
 				}

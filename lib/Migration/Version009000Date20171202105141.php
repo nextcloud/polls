@@ -353,7 +353,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			// ->where($queryFind->expr()->eq('poll_id', $pollId))
 			// ->andWhere($queryFind->expr()->eq('poll_option', $text));
 			->where('poll_id = "' . $pollId . '"')
-			->andWhere('poll_option_text ="' . $text .'"');
+			->andWhere('poll_option_text ="' . $text . '"');
 
 		$resultFind = $queryFind->execute();
 		$row = $resultFind->fetch();

@@ -3,6 +3,9 @@
 	flex-direction: row;
 	flex-grow: 1;
 	// align-items: center;
+	&.align-centered {
+		align-items: center;
+	}
 }
 
 .flex-column {
@@ -10,9 +13,29 @@
 	flex-direction: column;
 	flex-grow: 0;
 	flex-shrink: 0;
-	
+	&.align-centered {
+		align-items: center;
+	}
 }
 
 .flex-wrap {
 	flex-wrap: wrap;
+}
+
+.space-between {
+	justify-content: space-between,
+}
+
+.divider {
+	width: 25px;
+	border-left: 1px solid #ddd;
+	background-color: #eee;
+	border-right: 1px solid #ddd;
+	background-image: url('/apps/polls/css/../img/toggle.svg?v=1');
+	background-repeat: no-repeat;
+	background-position-x: 5px;
+	background-position-y: center;
+	opacity: 0.5;
+	flex-grow: 0;
+	flex-shrink: 0;
 }

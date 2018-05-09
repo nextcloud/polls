@@ -86,7 +86,7 @@ class ApiController extends Controller {
 	 * @PublicPage
 	 * @param string $hash
 	 * @return DataResponse
-	*/
+	 */
 	public function getPoll($hash) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
@@ -233,9 +233,9 @@ class ApiController extends Controller {
 			$oldPoll = $this->eventMapper->findByHash($event['hash']);
 
 			// Check if current user is allowed to edit existing poll
-			if ($oldPoll->getOwner() !== $this->userId) {
+			if ($oldPoll->getOwner() !== $userId) {
 				// If current user is not owner of existing poll deny access
-				return new TemplateResponse('polls', 'no.acc.tmpl', []);
+				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			} 
 
 			// else take owner, hash and id of existing poll
@@ -248,7 +248,7 @@ class ApiController extends Controller {
 		} else if ($mode === 'create') {
 			// Create new poll
 			// Define current user as owner, set new creation date and create a new hash
-			$newEvent->setOwner($this->userId);
+			$newEvent->setOwner($userId);
 			$newEvent->setCreated(date('Y-m-d H:i:s'));
 			$newEvent->setHash(\OC::$server->getSecureRandom()->generate(
 				16,
