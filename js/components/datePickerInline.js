@@ -1,3 +1,4 @@
+/* global: Vue */
 Vue.component('date-picker-inline', {
 	
 	props: {		
@@ -30,12 +31,13 @@ Vue.component('date-picker-inline', {
 	},
 	methods: {
 		onSelect(date) {
+			var useTime;
 			if (this.useTime === '') {
-				useTime = '00:00'
+				useTime = '00:00';
 			} else {
-				useTime= this.useTime
+				useTime = this.useTime
 			};
-			this.$emit('selected', date + ' ' + useTime)
+			this.$emit('selected', date + ' ' + useTime);
 		}
 	},
 	beforeDestroy: function() {

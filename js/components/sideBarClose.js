@@ -1,3 +1,4 @@
+/* global: Vue */
 Vue.component('side-bar-close', {
 	template:
 		'<div class="close flex-row">' +
@@ -7,7 +8,7 @@ Vue.component('side-bar-close', {
 		return {
 			closeDetailLabel: t('Close details'),
 			closeDetailLabelAlt: t('Close')
-		}
+		};
 	},
 	methods: {
 		hideSidebar: function () {

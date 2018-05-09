@@ -1,4 +1,5 @@
-/** global: Clipboard */
+/* global: clipboard */
+/* global: navigator */
 $(document).ready(function () {
 	var clipboard = new Clipboard('.copy-link');
 	clipboard.on('success', function (e) {
@@ -18,6 +19,7 @@ $(document).ready(function () {
 			}
 		}, 3000);
 	});
+	
 	clipboard.on('error', function (e) {
 		var $input = $(e.trigger);
 		var actionMsg = '';
@@ -36,7 +38,7 @@ $(document).ready(function () {
 			.tooltip('show');
 		_.delay(function () {
 			$input.tooltip('hide');
-			if (OC.Share.Social.Collection.size() == 0) {
+			if (OC.Share.Social.Collection.size() === 0) {
 				$input.attr('data-original-title', t('core', 'Copy'))
 					.tooltip('fixTitle');
 			} else {

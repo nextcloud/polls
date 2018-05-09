@@ -1,3 +1,5 @@
+/* global: Vue */
+/* global: oc_userconfig */
 Vue.component('author-div', {
 	template: 	
 		'<div>' +
@@ -18,6 +20,6 @@ Vue.component('author-div', {
 					size: Math.ceil(32 * window.devicePixelRatio),
 					version: oc_userconfig.avatar.version
 			})
-		}
+		};
 	}
 });

@@ -1,5 +1,6 @@
-/* global Clipboard */
-/* global Handlebars */
+/* global: clipboard */
+/* global: handlebars */
+/* global: navigator */
 
 var newUserOptions = [];
 var newUserAnswers = [];
@@ -111,7 +112,7 @@ $(document).ready(function () {
 			.tooltip('show');
 		_.delay(function () {
 			$input.tooltip('hide');
-			if (OC.Share.Social.Collection.size() == 0) {
+			if (OC.Share.Social.Collection.size() === 0) {
 				$input.attr('data-original-title', t('core', 'Copy'))
 					.tooltip('fixTitle');
 			} else {

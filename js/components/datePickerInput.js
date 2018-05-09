@@ -1,3 +1,4 @@
+/* global: Vue */
 Vue.component('date-picker-input', {
 	props: ['value', 'placeholder', 'dateFormat'],
 	template:

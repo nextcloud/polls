@@ -1,3 +1,4 @@
+/* global: Vue */
 Vue.component('time-picker', {
 	props: ['value', 'placeholder'],
 	template: 

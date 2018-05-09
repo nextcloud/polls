@@ -9,6 +9,6 @@ function deletePoll($pollEl) {
 		form.elements.pollId.value = $pollEl.id.split('_')[2];
 		form.submit();
 	}
-};
+}
 
 

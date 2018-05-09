@@ -1,4 +1,5 @@
-/** global: Vue */
+/* global: Vue */
+/* global: axios */
 Vue.config.devtools = true;
 
 /* Vue.component('breadcrump', {
@@ -236,19 +237,19 @@ var newPoll = new Vue({
 
 	mounted: function() {
 		this.poll.event.hash = document.getElementById("app").getAttribute("data-hash"); 
-		if (!this.poll.event.hash == '') {
+		if (this.poll.event.hash !== '') {
 			this.loadPoll(this.poll.event.hash);
 			this.protect = true;
 			this.poll.mode = 'edit';
-		};
+		}
 	},
 	
 	computed: {
 		title: function () {
-			if (this.poll.event.title == '') {
-				return t('poll','Create new poll')
+			if (this.poll.event.title === '') {
+				return t('poll','Create new poll');
 			} else {
-				return this.poll.event.title
+				return this.poll.event.title;
 			}
 		}
 	},
@@ -260,9 +261,9 @@ var newPoll = new Vue({
 
 		addNewPollDate: function (newPollDate, newPollTime) {
  			if (newPollTime !== undefined) {
-				this.newPollDate = moment(newPollDate +' ' + newPollTime)
+				this.newPollDate = moment(newPollDate +' ' + newPollTime);
 			} else {
-				this.newPollDate = moment(newPollDate)
+				this.newPollDate = moment(newPollDate);
 			}
 			this.poll.options.pollDates.push({
 				id: this.nextPollDateId++,
@@ -270,32 +271,31 @@ var newPoll = new Vue({
 				date: moment(newPollDate).format('llll'),
 				time: moment(newPollDate).format('LT'),
 				dateOnly: moment(newPollDate).format('dddd[,] ll')
-			})
-			this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp')
+			});
+			this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp');
 		},
 		
 		addNewPollText: function (newPollText) {
-			if (newPollText != null) {
-				this.newPollText = newPollText
+			if (newPollText !== null) {
+				this.newPollText = newPollText;
 			}
 			this.poll.options.pollTexts.push({
 				id: this.nextPollTextId++,
 				text: this.newPollText
-			})
-			this.newPollText = ''
+			});
+			this.newPollText = '';
 		},
 
 		writePoll: function (mode) {
-			if (mode !='') {
-				this.poll.mode = mode
+			if (mode !== '') {
+				this.poll.mode = mode;
 			}
-			if (this.poll.event.title.length == 0) {
+			if (this.poll.event.title.length === 0) {
 				this.titleEmpty = true;
 			} else {
 				this.titleEmpty = false;
 				axios.post(OC.generateUrl('apps/polls/write'), this.poll)
 					.then((response) => {
-						console.log(response);
 						this.poll.mode = 'edit';
  						this.poll.event.hash = response.data.hash;
 						this.poll.event.id = response.data.id;
@@ -303,15 +303,15 @@ var newPoll = new Vue({
 					}, (error) => {
 						console.log(error.response);
 				});
-			};
+			}
 		},
 		
 		loadPoll: function (hash) {
 			axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 			.then((response) => {
-				console.log(response);
+				var i;
 				this.poll = response.data.poll;
-				if (response.data.poll.event.type == 'datePoll') {
+				if (response.data.poll.event.type === 'datePoll') {
 					for (i = 0; i < response.data.poll.options.pollTexts.length; i++) {
 						this.addNewPollDate(new Date(moment.utc(response.data.poll.options.pollTexts[i].text)));
 						// this.addNewPollDate(new Date(response.data.poll.options.pollTexts[i].text)  +' UTC');

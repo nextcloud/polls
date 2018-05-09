@@ -1,3 +1,4 @@
+/* global: Vue */
 Vue.component('date-poll-item', {
 	props: ['option'],
 	template: 

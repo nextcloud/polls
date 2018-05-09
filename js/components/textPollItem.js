@@ -1,3 +1,4 @@
+/* global: Vue */
 Vue.component('text-poll-item', {
 	props: ['option'],
 	template: 

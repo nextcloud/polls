@@ -1,3 +1,4 @@
+/* global: Vue */
 Vue.component('breadcrump', {
 	props: ['intitle'],
 	template: 	
@@ -15,6 +16,6 @@ Vue.component('breadcrump', {
 		return {
 			home: OC.generateUrl('apps/polls'),
 			imagePath: OC.imagePath('core', 'places/home.svg'),
-		}
+		};
 	}
 });
