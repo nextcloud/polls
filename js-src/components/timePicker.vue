@@ -1,7 +1,7 @@
 <template>
 	<input size="10" maxlength="10" :placeholder="placeholder"  
 	:value="value" 
-	@input="$emit('input', $event.target.value)" />',
+	@input="$emit('input', $event.target.value)" />
 </template>
 
 <script>

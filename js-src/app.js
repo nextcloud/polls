@@ -33,6 +33,7 @@ import DatePollItem from './components/datePollItem.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
 import TimePicker from './components/timePicker.vue';
+		Vue.config.devtools = true;
 
 export class App {
 	start() {
@@ -181,86 +182,6 @@ export class App {
 					});
 				}
 			},
-			
-			filters: {
-				localDateOnly: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('dddd[,] ll');
-				},
-
-				localYear: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('YYYY');
-				},
-
-				localMonthNameShort: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('MMM');
-				},
-
-				localDowShort: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('dd');
-				},
-
-				localDay: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('D');
-				},
-
-				localDayOrdinal: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('Do');
-				},
-
-				local: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('dddd[,] ll');
-				},
-
-				localTime: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment(timestamp).format('LT');
-				},
-
-				// UTC variants
-				utcDateOnly: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment.utc(timestamp).format('dddd[,] ll');
-				},
-
-				utcTime: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment.utc(timestamp).format('LT');
-				},
-
-				utcFullDate: function (timestamp) {
-					if (!timestamp) return '';
-					if (!moment(timestamp).isValid()) return 'Invalid Date';
-					if (timestamp <  999999999999) timestamp = timestamp *1000;
-					return moment.utc(timestamp).format('llll');
-				}
-			}
 		});
 	}
 }
