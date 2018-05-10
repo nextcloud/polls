@@ -1,56 +1,46 @@
-/* globals Vue, axios */
-Vue.config.devtools = true;
 
-Vue.mixin({
-	methods: {
-		t: function(app, text, vars, count, options) {
-			return OC.L10N.translate(app, text, vars, count, options);
-		},
-		n: function(app, textSingular, textPlural, count, vars, options) {
-			return OC.L10N.translatePlural(app, textSingular, textPlural, count, vars, options);
-		}
-	}
-});
-
-var newPoll = new Vue({
-	el: '#app',
-	data: {
-		poll: {
-			mode: 'create',
-			event: {
-				id: 0,
-				hash: '',
-				type: 'datePoll',
-				title: '',
-				description: '',
-				owner:'',
-				created: '',
-				access: 'public',
-				expiration: false,
-				expire: null,
-				isAnonymous: false,
-				fullAnonymous: false,
-				disallowMaybe: false,
+<script>
+export default {
+	name: 'app',
+	data () {
+		return {
+			poll: {
+				mode: 'create',
+				event: {
+					id: 0,
+					hash: '',
+					type: 'datePoll',
+					title: '',
+					description: '',
+					owner:'',
+					created: '',
+					access: 'public',
+					expiration: false,
+					expire: null,
+					isAnonymous: false,
+					fullAnonymous: false,
+					disallowMaybe: false,
+				},
+				options: {
+					pollDates: [],
+					pollTexts:[]
+				}
 			},
-			options: {
-				pollDates: [],
-				pollTexts:[]
-			}
-		},
-		lang: OC.getLocale(),
-		localeData: moment.localeData(moment.locale(OC.getLocale())),
-		placeholder: '',
-		newPollDate: '',
-		newPollTime: '',
-		newPollText: '',
-		nextPollDateId: 0,
-		nextPollTextId: 0,
-		protect: false,
-		sidebar: false,
-		titleEmpty: false
+			lang: 'de', //		lang: OC.getLocale(),
+			localeData: moment.localeData(moment.locale('de')), //		localeData: moment.localeData(moment.locale(OC.getLocale())),
+			placeholder: '',
+			newPollDate: '',
+			newPollTime: '',
+			newPollText: '',
+			nextPollDateId: 0,
+			nextPollTextId: 0,
+			protect: false,
+			sidebar: false,
+			titleEmpty: false
+		}
 	},
-
-	mounted: function() {
+	
+  	mounted: function() {
 		this.poll.event.hash = document.getElementById("app").getAttribute("data-hash"); 
 		if (this.poll.event.hash !== '') {
 			this.loadPoll(this.poll.event.hash);
@@ -134,5 +124,35 @@ var newPoll = new Vue({
 				console.log(error.response);
 			});
 		}
-	}	
-});
+	}
+}
+</script>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
+}
+</style>

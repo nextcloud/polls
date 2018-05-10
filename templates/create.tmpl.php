@@ -32,25 +32,9 @@
 	\OCP\Util::addStyle('polls', 'sidebar');
 	\OCP\Util::addStyle('polls', 'createpoll-newui');
 	\OCP\Util::addStyle('polls', 'vendor/jquery.ui.timepicker');
-
-	\OCP\Util::addscript('polls', 'vendor/axios.min');
 	\OCP\Util::addscript('polls', 'vendor/lodash.core.min');
-	\OCP\Util::addscript('polls', 'vendor/vue'); //developing
-	// \OCP\Util::addscript('polls', 'vendor/vue.min'); // production
 	\OCP\Util::addscript('polls', 'vendor/jquery.ui.timepicker');
-	// prepare for components
-	\OCP\Util::addScript('polls', 'components/sideBarClose');
-	\OCP\Util::addScript('polls', 'components/breadcrump');
-	\OCP\Util::addScript('polls', 'components/authorDiv');
-	\OCP\Util::addScript('polls', 'components/datePickerInput');
-	\OCP\Util::addScript('polls', 'components/datePickerInline');
-	\OCP\Util::addScript('polls', 'components/timePicker');
-	\OCP\Util::addScript('polls', 'components/datePollItem');
-	\OCP\Util::addScript('polls', 'components/textPollItem');
-	\OCP\Util::addScript('polls', 'components/filtersDate');
-	// vue app
-	\OCP\Util::addScript('polls', 'app_create');
-	\OCP\Util::addScript('polls', 'app');
+	\OCP\Util::addScript('polls', 'app-create');
 
 	/** @var \OCP\IURLGenerator $urlGenerator */
 	$urlGenerator = $_['urlGenerator'];
