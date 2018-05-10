@@ -81,12 +81,12 @@ class ApiController extends Controller {
 	}
 
   	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param string $hash
-	 * @return DataResponse
-	 */
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @PublicPage
+	* @param string $hash
+	* @return DataResponse
+	*/
 	public function getPoll($hash) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);

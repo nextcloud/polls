@@ -47,6 +47,7 @@
 	\OCP\Util::addScript('polls', 'components/timePicker');
 	\OCP\Util::addScript('polls', 'components/datePollItem');
 	\OCP\Util::addScript('polls', 'components/textPollItem');
+	\OCP\Util::addScript('polls', 'components/filtersDate');
 	// vue app
 	\OCP\Util::addScript('polls', 'app_create');
 	\OCP\Util::addScript('polls', 'app');
@@ -59,74 +60,75 @@
 <div id="app" class="flex-row" data-hash="<?php p($hash)?>">
 
 	<div id="polls-content">
-			<div id="controls">
-				<breadcrump :intitle="title"></breadcrump>
-				<button v-on:click="switchSidebar" class="button">
-					<span class="symbol icon-settings"></span>
-				</button>
-			</div>
+		<div id="controls">
+			<breadcrump :intitle="title"></breadcrump>
+			<button v-on:click="switchSidebar" class="button">
+				<span class="symbol icon-settings"></span>
+			</button>
+		</div>
 		
-			<div class="flex-column workbench">
+		<div class="flex-column workbench">
+			<div>
 				<div>
-					<div>
-						<label>{{ t('polls', 'Title') }}</label>
-						<input type="text" id="pollTitle" v-bind:class="{ error: titleEmpty }" v-model="poll.event.title">
-					</div>
-					<div>
-						<label>{{ t('polls', 'Description') }}</label>
-						<textarea id="pollDesc" v-model="poll.event.description"></textarea>
-					</div>
+					<label>{{ t('polls', 'Title') }}</label>
+					<input type="text" id="pollTitle" v-bind:class="{ error: titleEmpty }" v-model="poll.event.title">
 				</div>
-				<div v-if="poll.mode == 'create'">
-					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
-					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
-					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
-					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
-				</div>
-
-				<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
-					<div id="poll-item-selector-date">
-						<div class="time-seletcion flex-row">
-							<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
-							<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
-						</div>
-						<date-picker-inline v-on:selected="addNewPollDate" v-bind:locale-data="localeData" :use-time="newPollTime" v-show="poll.event.type === 'datePoll'" />
-					</div>
-					<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
-						<li
-							is="date-poll-item"
-							v-for="(pollDate, index) in poll.options.pollDates"
-							v-bind:option="pollDate"
-							v-bind:key="pollDate.id"
-							v-on:remove="poll.options.pollDates.splice(index, 1)">
-						</li>
-					</transition-group>
-				</div>
-				<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
-					<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
-						<li
-							is="text-poll-item"
-							v-for="(pollText, index) in poll.options.pollTexts"
-							v-bind:option="pollText"
-							v-bind:key="pollText.id"
-							v-on:remove="poll.options.pollTexts.splice(index, 1)">
-						</li>
-					</transition-group>
-
-					<div id="poll-item-selector-text" >
-						<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
-					</div>
-				</div>
-
 				<div>
-					<button v-if="poll.mode === 'edit'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
-					<button v-if="poll.mode === 'create'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
-					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button">{{ t('polls', 'Cancel') }}</a>
+					<label>{{ t('polls', 'Description') }}</label>
+					<textarea id="pollDesc" v-model="poll.event.description"></textarea>
 				</div>
 			</div>
+			<div v-if="poll.mode == 'create'">
+				<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
+				<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+				<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
+				<label for="textPoll">{{ t('polls', 'Text based') }}</label>
+			</div>
+
+			<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
+				<div id="poll-item-selector-date">
+					<div class="time-seletcion flex-row">
+						<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
+						<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
+					</div>
+					<date-picker-inline v-on:selected="addNewPollDate" v-bind:locale-data="localeData" :use-time="newPollTime" v-show="poll.event.type === 'datePoll'" />
+				</div>
+				<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
+					<li
+						is="date-poll-item"
+						v-for="(pollDate, index) in poll.options.pollDates"
+						v-bind:option="pollDate"
+						v-bind:key="pollDate.id"
+						v-on:remove="poll.options.pollDates.splice(index, 1)">
+					</li>
+				</transition-group>
+			</div>
+			<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
+				<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
+					<li
+						is="text-poll-item"
+						v-for="(pollText, index) in poll.options.pollTexts"
+						v-bind:option="pollText"
+						v-bind:key="pollText.id"
+						v-on:remove="poll.options.pollTexts.splice(index, 1)">
+					</li>
+				</transition-group>
+
+				<div id="poll-item-selector-text" >
+					<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
+				</div>
+			</div>
+
+			<div>
+				<button v-if="poll.mode === 'edit'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
+				<button v-if="poll.mode === 'create'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
+				<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button">{{ t('polls', 'Cancel') }}</a>
+			</div>
+		</div>
 	</div>
-	<div id="divider" class="divider" v-on:click="switchSidebar">
-	</div>
+	
+	<div id="divider" class="divider" v-on:click="switchSidebar"></div>
+	
 	<div id="polls-sidebar" v-if="sidebar" class="detailsView scroll-container">
 		<side-bar-close></side-bar-close>
 		<div class="header flex-row">
@@ -140,6 +142,7 @@
 				<a href="#">{{ t('polls', 'Poll configurations') }}</a>
 			</li>
 		</ul>		
+
 		<div class="tabsContainer">
 			<div class="tab configurationsTabView flex-row flex-wrap align-centered space-between" @click="protect=false" v-if="protect">
 				<span>{{ t('polls', 'Configuration is locked due to existing votes') }}</span>
@@ -179,21 +182,21 @@
 					<label for="hidden">{{ t('polls', 'hidden') }}</label>
 					<input :disabled="protect" type="radio" v-model="poll.event.access" value="public" id="public" class="radio"/>
 					<label for="public">{{ t('polls', 'Public access') }}</label>
-						<input :disabled="protect" type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
-						<label for="select">{{ t('polls', 'Select') }}</label>
-						<span id="id_label_select">...</span>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
+					<label for="select">{{ t('polls', 'Select') }}</label>
+					<span id="id_label_select">...</span>
 
-						<div id="selected_access" class="row user-group-list">
-							<ul id="selected-search-list-id">
+					<div id="selected_access" class="row user-group-list">
+						<ul id="selected-search-list-id">
+						</ul>
+					</div>
+					<div id="access_rights" class="row user-group-list">
+						<div>
+							<input type="text" class="live-search-box" id="user-group-search-box" :placeholder="t('polls', 'User/Group search')" />
+							<ul class="live-search-list" id="live-search-list-id">
 							</ul>
 						</div>
-						<div id="access_rights" class="row user-group-list">
-							<div>
-								<input type="text" class="live-search-box" id="user-group-search-box" :placeholder="t('polls', 'User/Group search')" />
-								<ul class="live-search-list" id="live-search-list-id">
-								</ul>
-							</div>
-						</div>
+					</div>
 				</div>
 			</div>
 		</div>

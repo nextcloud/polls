@@ -13,7 +13,7 @@ use OCP\Migration\IOutput;
 /**
  * Adding timestamp to options table
  */
-class Version009000Date20180401201949 extends SimpleMigrationStep {
+class Version009000Date20180501201949 extends SimpleMigrationStep {
 	/** @var IDBConnection */
 	protected $connection;
 	

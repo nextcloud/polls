@@ -1,5 +1,4 @@
-/* global: Vue */
-/* global: axios */
+/* globals Vue, axios */
 Vue.config.devtools = true;
 
 Vue.mixin({
@@ -12,7 +11,6 @@ Vue.mixin({
 		}
 	}
 });
-
 
 var newPoll = new Vue({
 	el: '#app',
@@ -85,9 +83,6 @@ var newPoll = new Vue({
 			this.poll.options.pollDates.push({
 				id: this.nextPollDateId++,
 				timestamp: moment(newPollDate).unix(),
-				date: moment(newPollDate).format('llll'),
-				time: moment(newPollDate).format('LT'),
-				dateOnly: moment(newPollDate).format('dddd[,] ll')
 			});
 			this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp');
 		},
