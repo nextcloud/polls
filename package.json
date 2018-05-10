@@ -21,7 +21,8 @@
   "dependencies": {
     "vue": "^2.5.16",
     "axios": "^0.17.1",
-    "moment": "^2.22.1"
+    "moment": "^2.22.1",
+    "lodash": "^4.17.10"
   },
   "browserslist": [
     "> 1%",

@@ -32,7 +32,7 @@
 	\OCP\Util::addStyle('polls', 'sidebar');
 	\OCP\Util::addStyle('polls', 'createpoll-newui');
 	\OCP\Util::addStyle('polls', 'vendor/jquery.ui.timepicker');
-	\OCP\Util::addscript('polls', 'vendor/lodash.core.min');
+
 	\OCP\Util::addscript('polls', 'vendor/jquery.ui.timepicker');
 	\OCP\Util::addScript('polls', 'app-create');
 

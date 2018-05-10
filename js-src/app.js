@@ -23,6 +23,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
+import lodash from 'lodash';
 
 import AuthorDiv from './components/authorDiv.vue';
 import Breadcrump from './components/breadcrump.vue';
@@ -31,6 +32,7 @@ import DatePickerInput from './components/datePickerInput.vue';
 import DatePollItem from './components/datePollItem.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
+import TimePicker from './components/timePicker.vue';
 
 export class App {
 	start() {
