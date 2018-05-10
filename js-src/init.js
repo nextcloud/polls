@@ -1,7 +1,7 @@
 /**
- * @copyright 2017 Christoph Wurst <christoph@winzerhof-wurst.at>
+ * @copyright 2018 René Gieling <github@dartcafe.de>
  *
- * @author 2017 Christoph Wurst <christoph@winzerhof-wurst.at>
+ * @author 2018 René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -19,7 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+ 
+ /*jshint esversion: 6 */
 import {App} from "./app";
 
 let app = new App();

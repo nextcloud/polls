@@ -1,7 +1,7 @@
 /**
- * @copyright 2017 Christoph Wurst <christoph@winzerhof-wurst.at>
+ * @copyright 2018 René Gieling <github@dartcafe.de>
  *
- * @author 2017 Christoph Wurst <christoph@winzerhof-wurst.at>
+ * @author 2018 René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -19,7 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+ 
+/*jshint esversion: 6 */
+/* global OC */
 import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -33,7 +35,6 @@ import DatePollItem from './components/datePollItem.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
 import TimePicker from './components/timePicker.vue';
-		Vue.config.devtools = true;
 
 export class App {
 	start() {
@@ -73,8 +74,8 @@ export class App {
 						pollTexts:[]
 					}
 				},
-				lang: 'de', //lang: OC.getLocale(),
-				localeData: moment.localeData(moment.locale('de')), // localeData: moment.localeData(moment.locale(OC.getLocale())),
+				lang: OC.getLocale(),
+				localeData: moment.localeData(moment.locale(OC.getLocale())),
 				placeholder: '',
 				newPollDate: '',
 				newPollTime: '',
