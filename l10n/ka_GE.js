@@ -76,4 +76,4 @@ OC.L10N.register(
     "You are not allowed to edit this poll or the poll does not exist." : "ამ გამოკითხვის ცვილების უფლება არ გაქვთ, ან გამოკითხვა არ არსებობს.",
     "You are not allowed to delete this poll or the poll does not exist." : "ამ გამოკითხვის გაუქმების უფლება არ გაქვთ, ან გამოკითხვა არ არსებობს."
 },
-"nplurals=1; plural=0;");
+"nplurals=2; plural=(n==1);");

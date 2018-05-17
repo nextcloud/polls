@@ -73,5 +73,5 @@
     "You are not allowed to view this poll or the poll does not exist." : "ამ გამოკითხვის ჩვენების უფლებები არ გაქვთ, ან ის არ არსებობს.",
     "You are not allowed to edit this poll or the poll does not exist." : "ამ გამოკითხვის ცვილების უფლება არ გაქვთ, ან გამოკითხვა არ არსებობს.",
     "You are not allowed to delete this poll or the poll does not exist." : "ამ გამოკითხვის გაუქმების უფლება არ გაქვთ, ან გამოკითხვა არ არსებობს."
-},"pluralForm" :"nplurals=1; plural=0;"
+},"pluralForm" :"nplurals=2; plural=(n==1);"
 }
