@@ -65,4 +65,4 @@ OC.L10N.register(
     "You are not allowed to edit this poll or the poll does not exist." : "Nemáte oprávnenie na úpravy tejto ankety alebo už anketa neexistuje.",
     "You are not allowed to delete this poll or the poll does not exist." : "Nemáte oprávnenie na zmazanie tejto ankety alebo už anketa neexistuje."
 },
-"nplurals=4; plural=(n % 1 == 0 ? 4: n==1 ? 1: n % 1 == 0 && n>=2 && n<=4 ? 3);");
+"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

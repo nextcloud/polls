@@ -63,5 +63,5 @@
     "Never" : "Nikdy",
     "Access denied" : "Přístup zamítnut",
     "You are not allowed to view this poll or the poll does not exist." : "Nemáte oprávnění k zobrazení této ankety nebo anketa neexistuje."
-},"pluralForm" :"nplurals=4; plural=(n < 10 && n % 1 == 0) ? 1 : (n < 9999 && n >= 10 && n % 1 == 0) ? 3 : (n % 1 != 0) : 4;"
+},"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }
