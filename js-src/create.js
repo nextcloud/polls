@@ -36,7 +36,7 @@ import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
 import TimePicker from './components/timePicker.vue';
 
-export class App {
+export class Create {
 	start() {
 		Vue.mixin({
 			methods: {

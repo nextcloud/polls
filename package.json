@@ -19,10 +19,10 @@
   },
   "homepage": "https://github.com/nextcloud/polls#readme",
   "dependencies": {
-    "vue": "^2.5.16",
     "axios": "^0.17.1",
+    "lodash": "^4.17.10",
     "moment": "^2.22.1",
-    "lodash": "^4.17.10"
+    "vue": "^2.5.16"
   },
   "browserslist": [
     "> 1%",
@@ -39,6 +39,6 @@
     "file-loader": "^1.1.6",
     "vue-loader": "^13.7.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^3.6.0"
+    "webpack": "^3.12.0"
   }
 }

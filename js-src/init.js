@@ -21,7 +21,7 @@
  */
  
  /*jshint esversion: 6 */
-import {App} from "./app";
+import {Create} from "./create";
 
-let app = new App();
-app.start();
+let create = new Create();
+create.start();
