@@ -56,7 +56,7 @@
 		
 	<div id="polls-content" class="flex-row">
 		<div class="flex-column workbench">
-			<div>
+			<div id="poll-description">
 				<div>
 					<label>{{ t('polls', 'Title') }}</label>
 					<input type="text" id="pollTitle" v-bind:class="{ error: titleEmpty }" v-model="poll.event.title">
