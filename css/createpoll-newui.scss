@@ -1,5 +1,25 @@
 @import 'colors.scss';
 
+#controls {
+	border-bottom: 1px solid $color-border;
+	.button, button {
+		box-sizing: border-box;
+		display: inline-block;
+		height: 36px;
+		padding: 7px 10px;
+		border: 0;
+		background: transparent;
+		color: #aaa;
+		&.primary {
+			background: $color-primary;
+			// border: 1px solid $color-border;
+			color: $color-primary-text;
+		}
+	}
+}
+
+
+
 textarea {
 	&:not(:disabled) {
 		&:active, 
@@ -12,9 +32,12 @@ textarea {
 }
 
 
-#pollTitle.error {
-	border: 2px solid #c58585;
-	box-shadow: 1px 0 3px #888;
+#pollTitle, #pollDesc {
+		min-width: 240px;
+		&.error {
+			border: 2px solid $color-error;
+			box-shadow: 1px 0 $border-radius $color-box-shadow;
+	}
 }
 
 /* Transitions for inserting and removing list items */
@@ -47,7 +70,11 @@ textarea {
 	flex-grow: 1;
 }
 .workbench {
-	padding: 0 17px;
+	padding: 8px 17px;
+	flex-grow: 1;
+	flex-shrink: 1;
+	width: 465px;
+	overflow: hidden;
 	> div {
 		padding-bottom: 15px;
 	}
