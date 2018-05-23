@@ -1,4 +1,5 @@
-/* global clipboard, navigator */
+/* global: clipboard */
+/* global: navigator */
 $(document).ready(function () {
 	var clipboard = new Clipboard('.copy-link');
 	clipboard.on('success', function (e) {
