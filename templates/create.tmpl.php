@@ -43,7 +43,7 @@
 
 <div id="app" class="flex-column" data-hash="<?php p($hash)?>">
 
-	<div id="controls">
+	<div class="controls flex-row">
 		<breadcrump :intitle="title"></breadcrump>
 		<button v-if="poll.mode === 'edit'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
 		<button v-if="poll.mode === 'create'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>

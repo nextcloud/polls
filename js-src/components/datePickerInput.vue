@@ -1,8 +1,8 @@
 ﻿<template>
 	<input size="10" maxlength="10" 
 	:placeholder="placeholder" 
-	:value="value" 
 	:dateFormat="dateFormat" 
+	:value="value" 
 	@input="$emit('input', $event.target.value)" />
 </template>
 
@@ -11,13 +11,13 @@
 		props: ['value', 'placeholder', 'dateFormat'],
 		mounted: function() {
 			$(this.$el).datepicker({
-				dateFormat: this.dateFormat,
+				dateFormat: 'yy-mm-dd',
 				onSelect: this.onClose
 			});
 		},
 		methods: {
-			onClose(date) {
-				this.$emit('input', date);
+			onClose(value) {
+				this.$emit('input', value);
 			}
 		},
 		beforeDestroy: function() {

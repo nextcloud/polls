@@ -1,5 +1,5 @@
 <template>
-	<div id="breadcrump">
+	<div class="breadcrump flex-row">
 		<div class="crumb svg">
 			<a :href="home">
 				<img class="svg" :src="imagePath" alt="Home">
