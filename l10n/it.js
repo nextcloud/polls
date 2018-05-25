@@ -19,6 +19,8 @@ OC.L10N.register(
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Ciao %s,<br/><br/><strong>%s</strong> ha partecipato al sondaggio '%s'.<br/><br/>Per andare direttamente al sondaggio, puoi utilizzare questo <a href=\"%s\">collegamento</a>",
     "Polls App - New Activity" : "Sondaggi - Nuova attività",
     "Polls App" : "Sondaggi",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Un'applicazione di sondaggi, simile a doodle/dudle con la possibilità di limitare l'accesso.",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Un'applicazione di sondaggi, simile a doodle/dudle con la possibilità di limitare l'accesso (membri, determinati gruppi/utenti, nascosti e pubblici).",
     "Edit poll" : "Modifica sondaggio",
     "Create new poll" : "Crea nuovo sondaggio",
     "Title" : "Titolo",
