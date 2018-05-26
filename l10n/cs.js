@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Do you really want to delete that poll (new)?" : "Opravdu chcete smazat tento fond (nový)?",
     "Nothing selected!\nClick on cells to turn them green." : "Nic nevybráno! Kliknutím obarvěte buňky na zeleno.",
     "You must enter at least a title for the new poll." : "Je třeba zadat alespoň název nové ankety.",
     "Please select at least one user or group!" : "Vyberte prosím alespoň jednoho uživatele nebo skupinu!",
