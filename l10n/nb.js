@@ -62,7 +62,7 @@ OC.L10N.register(
     "Edit Poll" : "Rediger avstemning",
     "Poll expired" : "Avstemning utløpt",
     "Comments" : "Kommentarer",
-    "Login or ..." : "Logg inn eller…",
+    "Login or ..." : "Logg inn eller …",
     "New comment …" : "Ny kommentar…",
     "No comments yet. Be the first." : "Ingen kommentarer enda. Vær først.",
     "No existing polls." : "Ingen eksisterende avstemninger.",
