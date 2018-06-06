@@ -14,6 +14,11 @@
     "just now" : "כרגע",
     "An error occurred, your comment was not posted." : "אירעה שגיאה, התגובה שלך לא פורסמה.",
     "Polls" : "סקרים",
+    "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "שלום %s,<br/><br/><strong>%s</strong> השתתפו בסקר '%s'.<br/><br/>כדי לעבור ישירות לסקר, ניתן להשתמש ב<a href=\"%s\">קישור</a>",
+    "Polls App - New Activity" : "יישומון סקרים - פעילות חדשה",
+    "Polls App" : "יישומון סקרים",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "יישומון סקרים, בדומה ל־doodle/dudle אם האפשרות להגבלת גישה.",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "יישומון סקרים, דומה ל־doodle/dudle עם אפשרות להגבלת גישה (חברים, קבוצות/משתמשים מסוימים, הסתרה או חשיפה).",
     "Edit poll" : "עריכת סקר",
     "Create new poll" : "יצירת סקר חדש",
     "Title" : "כותרת",
@@ -36,6 +41,7 @@
     "Create poll" : "יצירת סקר",
     "Cancel" : "ביטול",
     "No description provided." : "לא סופק תיאור.",
+    "The poll expired on %s. Voting is disabled, but you can still comment." : "הסקר פג ב־%s. ההצבעה מושבתת, אך עדיין ניתן להגיב.",
     "Switch all options at once" : "החלפת מצב כל האפשרויות בבת אחת",
     "Your name here" : "שמך כאן",
     "Vote!" : "הצבעה!",
@@ -65,6 +71,9 @@
     "participated" : "השתתפת",
     "Yourself" : "עצמך",
     "Never" : "מעולם לא",
-    "Access denied" : "הגישה נדחתה"
+    "Access denied" : "הגישה נדחתה",
+    "You are not allowed to view this poll or the poll does not exist." : "אסור לך לצפות בסקר זה או שהסקר אינו קיים.",
+    "You are not allowed to edit this poll or the poll does not exist." : "אסור לך לערוך את הסקר הזה או שהסקר אינו קיים.",
+    "You are not allowed to delete this poll or the poll does not exist." : "אסור לך למחוק את הסקר הזה או שהסקר אינו קיים."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"
 }
