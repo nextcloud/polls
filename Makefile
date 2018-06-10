@@ -55,6 +55,7 @@ appstore:
 	--exclude="*.log" \
 	--exclude="phpunit*xml" \
 	--exclude="composer.*" \
+	--exclude="js-src" \
 	--exclude="js/node_modules" \
 	--exclude="js/tests" \
 	--exclude="js/test" \
@@ -63,6 +64,7 @@ appstore:
 	--exclude="js/bower.json" \
 	--exclude="js/karma.*" \
 	--exclude="js/protractor.*" \
+	--exclude="node_modules" \
 	--exclude="package.json" \
 	--exclude="bower.json" \
 	--exclude="karma.*" \
