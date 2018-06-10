@@ -69,7 +69,6 @@ appstore:
 	--exclude="protractor.*" \
 	--exclude=".*" \
 	--exclude="js/.*" \
-	--exclude="l10n/.tx" \
 	--exclude="l10n/no-php" \
 	./ $(build_source_directory)/$(app_name)
 
