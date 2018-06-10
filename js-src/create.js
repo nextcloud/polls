@@ -135,14 +135,13 @@ export class Create {
 					this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp');
 				},
 				
-				addNewPollText: function (newPollText) {
-					if (newPollText !== null) {
-						this.newPollText = newPollText;
+				addNewPollText: function () {
+					if (this.newPollText !== null & this.newPollText !== '') {
+						this.poll.options.pollTexts.push({
+							id: this.nextPollTextId++,
+							text: this.newPollText
+						});
 					}
-					this.poll.options.pollTexts.push({
-						id: this.nextPollTextId++,
-						text: this.newPollText
-					});
 					this.newPollText = '';
 				},
 
