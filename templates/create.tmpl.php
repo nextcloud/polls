@@ -57,11 +57,11 @@
 	<div id="polls-content" class="flex-row">
 		<div class="flex-column workbench">
 			<div id="poll-description">
-				<div>
+				<div class="flex-column">
 					<label>{{ t('polls', 'Title') }}</label>
 					<input type="text" id="pollTitle" v-bind:class="{ error: titleEmpty }" v-model="poll.event.title">
 				</div>
-				<div>
+				<div class="flex-column">
 					<label>{{ t('polls', 'Description') }}</label>
 					<textarea id="pollDesc" v-model="poll.event.description"></textarea>
 				</div>

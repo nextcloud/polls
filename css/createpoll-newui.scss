@@ -7,6 +7,11 @@
 .controls {
 	border-bottom: 1px solid $color-border;
 	flex-grow: 0;
+	position: fixed;
+	background: $color-main-background;
+	width: 100%;
+	height: 45px;
+	z-index: 1001;
 	.button, button {
 		flex-shrink: 0;
 		box-sizing: border-box;
@@ -18,7 +23,6 @@
 		color: #aaa;
 		&.primary {
 			background: $color-primary;
-			// border: 1px solid $color-border;
 			color: $color-primary-text;
 		}
 	}
@@ -52,7 +56,8 @@ textarea {
 
 
 #pollTitle, #pollDesc {
-		min-width: 275px;
+		min-width: 245px;
+		max-width: 100%;
 		&.error {
 			border: 2px solid $color-error;
 			box-shadow: 1px 0 $border-radius $color-box-shadow;

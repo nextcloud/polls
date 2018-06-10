@@ -6,13 +6,14 @@ $user-column-width: 265px;
 
 #polls-content {
 	flex-grow: 1;
+	padding-top: 45px;
 }
 #polls-sidebar {
 	width: 525px;
 	flex-grow: 0;
 	flex-shrink: 1;
 	min-width: 300px;
-	padding-top: 8px;
+	padding-top: 8px; 
 	margin-top: 3px;
 	border-left: 1px solid $color-border;
 	-webkit-transition: margin-right 300ms;
