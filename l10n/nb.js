@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Do you really want to delete that poll (new)?" : "Ønsker du virkelig å slette den avstemningen (ny)?",
     "Nothing selected!\nClick on cells to turn them green." : "Ingenting valgt!\nKlikk på celler for å gjøre dem grønne.",
     "You must enter at least a title for the new poll." : "Du må skrive inn minst en tittel for ny avstemning",
     "Please select at least one user or group!" : "Velg minst én bruker eller gruppe",
@@ -61,7 +62,7 @@ OC.L10N.register(
     "Edit Poll" : "Rediger avstemning",
     "Poll expired" : "Avstemning utløpt",
     "Comments" : "Kommentarer",
-    "Login or ..." : "Logg inn eller…",
+    "Login or ..." : "Logg inn eller …",
     "New comment …" : "Ny kommentar…",
     "No comments yet. Be the first." : "Ingen kommentarer enda. Vær først.",
     "No existing polls." : "Ingen eksisterende avstemninger.",
