@@ -1,5 +1,44 @@
 @import 'colors.scss';
 
+.icon-save {
+	background-image: url('../img/save.svg');
+}
+
+.controls {
+	border-bottom: 1px solid $color-border;
+	flex-grow: 0;
+	.button, button {
+		flex-shrink: 0;
+		box-sizing: border-box;
+		display: inline-block;
+		height: 36px;
+		padding: 7px 10px;
+		border: 0;
+		background: transparent;
+		color: #aaa;
+		&.primary {
+			background: $color-primary;
+			// border: 1px solid $color-border;
+			color: $color-primary-text;
+		}
+	}
+	.breadcrump {
+		flex-shrink: 1;
+		overflow: hidden;
+		min-width: 0;
+		div.crumb:last-child {
+				flex-shrink: 1;
+				overflow: hidden;
+			> span {
+				flex-shrink: 1;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+}
+
+
+
 textarea {
 	&:not(:disabled) {
 		&:active, 
@@ -12,9 +51,12 @@ textarea {
 }
 
 
-#pollTitle.error {
-	border: 2px solid #c58585;
-	box-shadow: 1px 0 3px #888;
+#pollTitle, #pollDesc {
+		min-width: 275px;
+		&.error {
+			border: 2px solid $color-error;
+			box-shadow: 1px 0 $border-radius $color-box-shadow;
+	}
 }
 
 /* Transitions for inserting and removing list items */
@@ -47,7 +89,11 @@ textarea {
 	flex-grow: 1;
 }
 .workbench {
-	padding: 0 17px;
+	padding: 8px 17px;
+	flex-grow: 1;
+	flex-shrink: 1;
+	width: 465px;
+	overflow: hidden;
 	> div {
 		padding-bottom: 15px;
 	}
@@ -91,6 +137,8 @@ li.flex-row {
 		flex-grow: 1;
 		font-size: 1.2em;
 		opacity: 0.7;
+		white-space: normal;
+		padding-right: 4px;
 	}
 
 	> div:nth-last-child(1) {

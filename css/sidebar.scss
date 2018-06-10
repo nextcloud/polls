@@ -8,11 +8,13 @@ $user-column-width: 265px;
 	flex-grow: 1;
 }
 #polls-sidebar {
+	width: 525px;
+	flex-grow: 0;
+	flex-shrink: 1;
 	min-width: 300px;
-	
-	display: block;
-	background: #fff;
-	border-left: 1px solid #ebebeb;
+	padding-top: 8px;
+	margin-top: 3px;
+	border-left: 1px solid $color-border;
 	-webkit-transition: margin-right 300ms;
 	transition: margin-right 300ms;
 	overflow-x: hidden;
@@ -47,6 +49,7 @@ $user-column-width: 265px;
 
 		.header.flex-row {
 			flex-direction: row;
+			flex-grow: 0;
 			align-items: flex-start;
 			margin-left: 0;
 			margin-top: 0;

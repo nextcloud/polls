@@ -1,0 +1,44 @@
+{
+  "name": "polls",
+  "description": "Polls app for nextcloud",
+  "version": "0.9.0",
+  "author": "Rene Gieling",
+  "license": "AGPL-3.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack --progress --hot --config js-src/webpack.config.js --watch",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config js-src/webpack.config.js",
+    "test": "cross-env NODE_ENV=development webpack --progress --hide-modules --config js-src/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nextcloud/polls.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nextcloud/polls/issues"
+  },
+  "homepage": "https://github.com/nextcloud/polls#readme",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.1",
+    "vue": "^2.5.16"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "cross-env": "^5.1.3",
+    "css-loader": "^0.28.8",
+    "file-loader": "^1.1.6",
+    "vue-loader": "^13.7.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^3.12.0"
+  }
+}
