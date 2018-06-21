@@ -19,6 +19,8 @@ OC.L10N.register(
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Приветствую %s! <br/><br/><strong>%s</strong> принял(а) участие в опросе «%s».<br/><br/>Для перехода к опросу нажмите <a href=\"%s\">здесь</a>.",
     "Polls App - New Activity" : "Приложение опросов  — Новые события",
     "Polls App" : "Приложение опросов",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Приложение опросов, похожее на doodle / dudle с возможностью ограничения доступа.",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Приложение опросов, похожее на doodle / dudle с возможностью ограничения доступа (участники, определенные группы и/или пользователи, скрытые и публичные).",
     "Edit poll" : "Редактировать опрос",
     "Create new poll" : "Создать новый опрос",
     "Title" : "Название",
