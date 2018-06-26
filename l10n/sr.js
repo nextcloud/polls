@@ -19,6 +19,8 @@ OC.L10N.register(
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Поздрав %s,<br/><br/><strong>%s</strong> је учествовао у гласању '%s'.<br/><br/> Да одете директно на гласање, можете користити ову <a href=\"%s\">везу</a>",
     "Polls App - New Activity" : "Апликација Гласања - Нова активност",
     "Polls App" : "Апликација Гласања",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа.",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа (чланова, група/корисника, скривено и јавно),",
     "Edit poll" : "Измени гласање",
     "Create new poll" : "Направи ново гласање",
     "Title" : "Наслов",
