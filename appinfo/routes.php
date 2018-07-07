@@ -35,6 +35,7 @@ return [
 		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
 		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
 		['name' => 'api#write_poll', 'url' => '/write', 'verb' => 'POST'],
-		['name' => 'api#get_poll', 'url' => '/get/poll/{hash}', 'verb' => 'GET']
+		['name' => 'api#get_poll', 'url' => '/get/poll/{hash}', 'verb' => 'GET'],
+		['name' => 'api#get_site_users', 'url' => '/get/siteusers', 'verb' => 'GET']
 	]
 ];

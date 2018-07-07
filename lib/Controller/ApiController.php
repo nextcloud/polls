@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -28,6 +28,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Db\DoesNotExistException;
 
+use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -63,6 +64,7 @@ class ApiController extends Controller {
 	 */
 	public function __construct(
 		$appName,
+		IGroupManager $groupManager,
 		IRequest $request,
 		IUserManager $userManager,
 		$userId,
@@ -73,11 +75,41 @@ class ApiController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
+		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
 		$this->optionsMapper = $optionsMapper;
 		$this->votesMapper = $VotesMapper;
 		$this->commentMapper = $CommentMapper;
+	}
+
+  	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @return DataResponse
+	*/
+	public function getSiteUsers() {
+		$groups = $this->groupManager->search('');
+		$list = array();
+		$data = array();
+		foreach ($groups as $group) {
+			$list[] = [
+				'id' => $group->getGID(),
+				'type' => 'group',
+				'displayName' => $group->getGID()
+			];
+		};
+		$users = $this->userManager->searchDisplayName('');
+		foreach ($users as $user) {
+			$list[] = [
+				'id' => $user->getUID(),
+				'type' => 'user',
+				'displayName' => $user->getDisplayName()
+			];
+		};
+		$data['siteusers'] = $list;
+
+		return new DataResponse($data, Http::STATUS_OK);
 	}
 
   	/**
@@ -166,6 +198,7 @@ class ApiController extends Controller {
 			'mode' => $mode,
 			'comments' => $commentsList,
 			'votes' => $votesList,
+			'shares'=> [],
 			'event' => [
 				'hash' => $hash,
 				'id' => $poll->getId(),

@@ -14,7 +14,7 @@
 		data: function () {
 			return {
 				ownerLabel: t('polls', 'Owner'),
-				displayName: OC.getCurrentUser().uid,
+				displayName: OC.getCurrentUser().displayName,
 				avatarURL: OC.generateUrl(
 					'/avatar/{user}/{size}?v={version}',
 					{

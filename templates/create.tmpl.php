@@ -117,7 +117,7 @@
 
 			<ul class="tabHeaders">
 				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
-					<a href="#">{{ t('polls', 'Poll configurations') }}</a>
+					<a href="#">{{ t('polls', 'Configuration') }}</a>
 				</li>
 			</ul>		
 
@@ -161,22 +161,10 @@
 						<input :disabled="protect" type="radio" v-model="poll.event.access" value="public" id="public" class="radio"/>
 						<label for="public">{{ t('polls', 'Public access') }}</label>
 						<input :disabled="protect" type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
-						<label for="select">{{ t('polls', 'Select') }}</label>
-						<span id="id_label_select">...</span>
+						<label for="select">{{ t('polls', 'Shared') }}</label>
 
-						<div id="selected_access" class="row user-group-list">
-							<ul id="selected-search-list-id">
-							</ul>
-						</div>
-						<div id="access_rights" class="row user-group-list">
-							<div>
-								<input type="text" class="live-search-box" id="user-group-search-box" :placeholder="t('polls', 'User/Group search')" />
-								<ul class="live-search-list" id="live-search-list-id">
-								</ul>
-							</div>
-						</div>
 					</div>
-				</div>
+					<share-div id="share-list" class="configBox flex-column oneline" :placeholder="t('polls', 'Name of user or group')" v-model="poll.shares" />
 			</div>
 		</div>
 	</div>

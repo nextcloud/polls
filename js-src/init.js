@@ -22,6 +22,5 @@
  
  /*jshint esversion: 6 */
 import {Create} from "./create";
-
 let create = new Create();
 create.start();

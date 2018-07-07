@@ -26,8 +26,8 @@ import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import lodash from 'lodash';
-
 import AuthorDiv from './components/authorDiv.vue';
+import ShareDiv from './components/shareDiv.vue';
 import Breadcrump from './components/breadcrump.vue';
 import DatePickerInline from './components/datePickerInline.vue';
 import DatePickerInput from './components/datePickerInput.vue';
@@ -35,6 +35,7 @@ import DatePollItem from './components/datePollItem.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
 import TimePicker from './components/timePicker.vue';
+Vue.config.devtools;
 
 export class Create {
 	start() {
@@ -54,6 +55,7 @@ export class Create {
 			data: {
 				poll: {
 					mode: 'create',
+					shares: [],
 					event: {
 						id: 0,
 						hash: '',
@@ -71,7 +73,7 @@ export class Create {
 					},
 					options: {
 						pollDates: [],
-						pollTexts:[]
+						pollTexts: []
 					}
 				},
 				lang: OC.getLocale(),
@@ -89,6 +91,7 @@ export class Create {
 
 			components: {
 				'author-div': AuthorDiv,
+				'share-div': ShareDiv,
 				'breadcrump': Breadcrump,
 				'date-picker-inline': DatePickerInline,
 				'date-picker-input': DatePickerInput,
@@ -168,14 +171,13 @@ export class Create {
 				loadPoll: function (hash) {
 					axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 					.then((response) => {
-						var i;
 						this.poll = response.data.poll;
 						if (response.data.poll.event.type === 'datePoll') {
+							var i;
 							for (i = 0; i < response.data.poll.options.pollTexts.length; i++) {
 								this.addNewPollDate(new Date(moment.utc(response.data.poll.options.pollTexts[i].text)));
-								// this.addNewPollDate(new Date(response.data.poll.options.pollTexts[i].text)  +' UTC');
 							}
-						this.poll.options.pollTexts = [];
+							this.poll.options.pollTexts = [];
 						}
 					}, (error) => {
 						console.log(error.response);

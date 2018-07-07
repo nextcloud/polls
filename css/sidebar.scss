@@ -164,6 +164,9 @@ $user-column-width: 265px;
 				input.hasDatepicker {
 					margin-left:17px;
 				}
+				&.oneline {
+					width: 100%;
+				}
 			}
 		}
 		#commentsTabView {
