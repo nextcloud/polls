@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<h2> {{ t('polls', 'Share with') }}</h2>
 		<input v-model="query" 
 			:placeholder="placeholder" 
 			class="shareWithField" 
@@ -8,8 +9,9 @@
 		<transition-group v-show="query !== ''" name="staggered-fade" tag="ul" v-bind:css="false"	>
 			<li v-for="(item, index) in computedList" 
 				v-bind:key="item.displayName" 
-				v-bind:data-index="index" >
-				<div class="avatar has-tooltip-bottom" style="height: 32px; width: 32px;" >
+				v-bind:data-index="index" 
+				class="flex-row">
+				<div class="avatar has-tooltip-bottom" style="height: 32px; width: 40px;" >
 					<img :src="item.avatarURL" width="32" height="32">
 				</div>
 				<div>{{ item.displayName }}  {{ item.type === 'group' ? '(group)' : '' }}</div>
@@ -47,9 +49,7 @@
 				.then((response) => {
 					this.users = response.data.siteusers;
 					var i;
-					console.log(this.users.length);
 					for (i = 0; i < this.users.length; i++) {
-						console.log(i);
 						this.users[i].avatarURL = OC.generateUrl(
 						'/avatar/{user}/{size}?v={version}', {
 							user: this.users[i].id,

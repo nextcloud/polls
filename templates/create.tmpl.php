@@ -55,8 +55,9 @@
 	</div>
 		
 	<div id="polls-content" class="flex-row">
-		<div class="flex-column workbench">
+		<div class="flex-row workbench">
 			<div id="poll-description">
+				<h2>{{ t('polls', 'Poll description') }}</h2>
 				<div class="flex-column">
 					<label>{{ t('polls', 'Title') }}</label>
 					<input type="text" id="pollTitle" v-bind:class="{ error: titleEmpty }" v-model="poll.event.title">
@@ -66,44 +67,47 @@
 					<textarea id="pollDesc" v-model="poll.event.description"></textarea>
 				</div>
 			</div>
-			<div v-if="poll.mode == 'create'">
-				<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
-				<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
-				<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
-				<label for="textPoll">{{ t('polls', 'Text based') }}</label>
-			</div>
-
-			<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
-				<div id="poll-item-selector-date">
-					<div class="time-seletcion flex-row">
-						<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
-						<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
-					</div>
-					<date-picker-inline v-on:selected="addNewPollDate" v-bind:locale-data="localeData" :use-time="newPollTime" v-show="poll.event.type === 'datePoll'" />
+			<div id="poll-options" class="flex-column">
+				<h2>{{ t('polls', 'Vote options') }}</h2>
+				<div v-if="poll.mode == 'create'">
+					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 				</div>
-				<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
-					<li
-						is="date-poll-item"
-						v-for="(pollDate, index) in poll.options.pollDates"
-						v-bind:option="pollDate"
-						v-bind:key="pollDate.id"
-						v-on:remove="poll.options.pollDates.splice(index, 1)">
-					</li>
-				</transition-group>
-			</div>
-			<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
-				<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
-					<li
-						is="text-poll-item"
-						v-for="(pollText, index) in poll.options.pollTexts"
-						v-bind:option="pollText"
-						v-bind:key="pollText.id"
-						v-on:remove="poll.options.pollTexts.splice(index, 1)">
-					</li>
-				</transition-group>
 
-				<div id="poll-item-selector-text" >
-					<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
+				<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
+					<div id="poll-item-selector-date">
+						<div class="time-seletcion flex-row">
+							<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
+							<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
+						</div>
+						<date-picker-inline v-on:selected="addNewPollDate" v-bind:locale-data="localeData" :use-time="newPollTime" v-show="poll.event.type === 'datePoll'" />
+					</div>
+					<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
+						<li
+							is="date-poll-item"
+							v-for="(pollDate, index) in poll.options.pollDates"
+							v-bind:option="pollDate"
+							v-bind:key="pollDate.id"
+							v-on:remove="poll.options.pollDates.splice(index, 1)">
+						</li>
+					</transition-group>
+				</div>
+				<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
+					<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
+						<li
+							is="text-poll-item"
+							v-for="(pollText, index) in poll.options.pollTexts"
+							v-bind:option="pollText"
+							v-bind:key="pollText.id"
+							v-on:remove="poll.options.pollTexts.splice(index, 1)">
+						</li>
+					</transition-group>
+
+					<div id="poll-item-selector-text" >
+						<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -161,7 +165,7 @@
 						<input :disabled="protect" type="radio" v-model="poll.event.access" value="public" id="public" class="radio"/>
 						<label for="public">{{ t('polls', 'Public access') }}</label>
 						<input :disabled="protect" type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
-						<label for="select">{{ t('polls', 'Shared') }}</label>
+						<label for="select">{{ t('polls', 'Only shared') }}</label>
 
 					</div>
 					<share-div id="share-list" class="configBox flex-column oneline" :placeholder="t('polls', 'Name of user or group')" v-model="poll.shares" />

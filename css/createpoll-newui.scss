@@ -1,5 +1,10 @@
 @import 'colors.scss';
 
+#app {
+	height: unset;
+	width: unset;
+}
+
 .icon-save {
 	background-image: url('../img/save.svg');
 }
@@ -99,8 +104,14 @@ textarea {
 	flex-shrink: 1;
 	width: 465px;
 	overflow: hidden;
+	flex-wrap: wrap;
+	
 	> div {
+		width: 540px;
+		flex-shrink: 1;
+		flex-grow: 1;
 		padding-bottom: 15px;
+		padding-right: 15px;
 	}
 }
 
@@ -144,6 +155,9 @@ li.flex-row {
 		opacity: 0.7;
 		white-space: normal;
 		padding-right: 4px;
+		&.avatar {
+			flex-grow: 0;
+		}
 	}
 
 	> div:nth-last-child(1) {
@@ -163,5 +177,15 @@ button {
 	align-items: center;
 	> label {
 	flex-grow: 1;
+	}
+}
+
+#share-list {
+	> ul {
+		max-height: 180px;
+		overflow: auto;
+		border: 1px solid #ccc;	
+		margin-top: -3px;
+		border-top: none;
 	}
 }
