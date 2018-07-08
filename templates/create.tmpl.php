@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 	/**
 	 * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
 	 *
 	 * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
-	 * @author Ren� Gieling <github@dartcafe.de>
+	 * @author René Gieling <github@dartcafe.de>
 	 *
 	 * @license GNU AGPL version 3 or any later version
 	 *
@@ -43,7 +43,7 @@
 
 <div id="app" class="flex-column" data-hash="<?php p($hash)?>">
 
-	<div class="controls flex-row">
+	<div class="controls">
 		<breadcrump :intitle="title"></breadcrump>
 		<button v-if="poll.mode === 'edit'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
 		<button v-if="poll.mode === 'create'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
@@ -54,9 +54,9 @@
 		</button>
 	</div>
 		
-	<div id="polls-content" class="flex-row">
-		<div class="flex-row workbench">
-			<div id="poll-description">
+	<div class="polls-content flex-row">
+		<div class="workbench">
+			<div class="flex-column">
 				<h2>{{ t('polls', 'Poll description') }}</h2>
 				<div class="flex-column">
 					<label>{{ t('polls', 'Title') }}</label>
@@ -67,7 +67,7 @@
 					<textarea id="pollDesc" v-model="poll.event.description"></textarea>
 				</div>
 			</div>
-			<div id="poll-options" class="flex-column">
+			<div class="flex-column">
 				<h2>{{ t('polls', 'Vote options') }}</h2>
 				<div v-if="poll.mode == 'create'">
 					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
@@ -168,7 +168,11 @@
 						<label for="select">{{ t('polls', 'Only shared') }}</label>
 
 					</div>
-					<share-div id="share-list" class="configBox flex-column oneline" :placeholder="t('polls', 'Name of user or group')" v-model="poll.shares" />
+					<share-div id="share-list" class="configBox flex-column oneline" 
+								:placeholder="t('polls', 'Name of user or group')" 
+								v-model="poll.shares" 
+								v-on:add-share="addShare" 
+								v-on:remove-share="removeShare"/>
 			</div>
 		</div>
 	</div>

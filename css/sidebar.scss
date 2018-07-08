@@ -4,12 +4,8 @@ $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
-#polls-content {
-	flex-grow: 1;
-	padding-top: 45px;
-}
 #polls-sidebar {
-	width: 525px;
+	width: 480px;
 	flex-grow: 0;
 	flex-shrink: 1;
 	min-width: 300px;
@@ -22,6 +18,7 @@ $user-column-width: 265px;
 	overflow-y: auto;
 	visibility: visible;
 	z-index: 500;
+	height: 100%;
 }
 
 

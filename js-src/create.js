@@ -1,7 +1,7 @@
-/**
- * @copyright 2018 René Gieling <github@dartcafe.de>
+ï»¿/**
+ * @copyright 2018 RenÃ© Gieling <github@dartcafe.de>
  *
- * @author 2018 René Gieling <github@dartcafe.de>
+ * @author 2018 RenÃ© Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -108,6 +108,11 @@ export class Create {
 					this.protect = true;
 					this.poll.mode = 'edit';
 				}
+				console.log(window.outerWidth);
+				console.log(window.innerWidth);
+				if (window.innerWidth >1024) {
+					this.sidebar = true;
+				}
 			},
 			
 			computed: {
@@ -119,10 +124,16 @@ export class Create {
 					}
 				}
 			},
-			
 			methods: {
 				switchSidebar: function() {
 					this.sidebar = !this.sidebar;
+				},
+				addShare: function (item){
+					this.poll.shares.push(item);
+				},
+
+				removeShare: function (item){
+					this.poll.shares.splice(this.poll.shares.indexOf(item), 1)
 				},
 
 				addNewPollDate: function (newPollDate, newPollTime) {

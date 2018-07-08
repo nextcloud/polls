@@ -1,8 +1,36 @@
-@import 'colors.scss';
+﻿@import 'colors.scss';
 
-#app {
+#content {
+	display: flex;
 	height: unset;
-	width: unset;
+	width: unset; 
+}
+
+.polls-content {
+	display: flex;
+	flex-direction: row;
+	flex-grow: 1;
+	padding-top: 45px;
+	.workbench {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 1;
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-wrap: wrap;
+		padding: 8px 0px 8px 17px;
+		width: 465px;
+		overflow: hidden;
+		
+		
+		> div {
+			width: 540px;
+			flex-shrink: 1;
+			flex-grow: 1;
+			padding-bottom: 15px;
+			padding-right: 15px;
+		}
+	}
 }
 
 .icon-save {
@@ -10,8 +38,10 @@
 }
 
 .controls {
-	border-bottom: 1px solid $color-border;
+	display: flex;
+	flex-direction: row;
 	flex-grow: 0;
+	border-bottom: 1px solid $color-border;
 	position: fixed;
 	background: $color-main-background;
 	width: 100%;
@@ -98,22 +128,6 @@ textarea {
 	padding: 8px 8px 0 0;
 	flex-grow: 1;
 }
-.workbench {
-	padding: 8px 17px;
-	flex-grow: 1;
-	flex-shrink: 1;
-	width: 465px;
-	overflow: hidden;
-	flex-wrap: wrap;
-	
-	> div {
-		width: 540px;
-		flex-shrink: 1;
-		flex-grow: 1;
-		padding-bottom: 15px;
-		padding-right: 15px;
-	}
-}
 
 #app {
 	.ui-datepicker-inline{
@@ -181,7 +195,7 @@ button {
 }
 
 #share-list {
-	> ul {
+	.user-list {
 		max-height: 180px;
 		overflow: auto;
 		border: 1px solid #ccc;	

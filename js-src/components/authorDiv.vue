@@ -1,4 +1,4 @@
-/* global Vue, oc_userconfig */
+﻿/* global Vue, oc_userconfig */
 <template>
 	<div>
 		<div class="description leftLabel">{{ownerLabel}}</div> 

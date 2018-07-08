@@ -51,11 +51,12 @@ class Version009000Date20180625070613 extends SimpleMigrationStep {
 		if (!$schema->hasTable('polls_share')) {
 			$table = $schema->createTable('polls_share');
 			$table->addColumn('share_type', Type::INTEGER, [
-				/** share_type 0 = user; 1 = group; 3 = public link; 6 = federated cloud share */
+				/** share_type 0 = user; 1 = group; 3 = public link; 4 = external (not implemented); 6 = federated cloud share (not implemented) */
 				'notnull' => true,
 				'default' => 0
 			]);
 			$table->addColumn('share_with', Type::STRING, [
+				/** User id, group id, email address, federation address */
 				'notnull' => false,
 				'length' => 255
 			]);
@@ -70,12 +71,15 @@ class Version009000Date20180625070613 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->addColumn('share_pollid', Type::INTEGER, [
+				/** id of the shared poll */
 				'notnull' => true
 			]);
 			$table->addColumn('share_voteid', Type::INTEGER, [
+				/** For editing the vote for external users, empty, if item_type = 'polls_event' */
 				'notnull' => false
 			]);
-			$table->addColumn('mail_send', Type::INTEGER, [
+			$table->addColumn('mail_sent', Type::INTEGER, [
+				/** check if mail was sent */
 				'notnull' => false,
 				'default' => 0
 			]);
@@ -84,7 +88,8 @@ class Version009000Date20180625070613 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->addColumn('uid_initiator', Type::INTEGER, [
-				'notnull' => false,
+				/** can differ from uid_owner if the share was not created from the owner */
+				'notnull' => true,
 				'length' => 255,
 			]);
 		}
