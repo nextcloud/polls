@@ -47,7 +47,7 @@ OC.L10N.register(
     "Switch all options at once" : "Mude todas as opções ao mesmo tempo",
     "Your name here" : "Seu nome aqui",
     "Vote!" : "Vote!",
-    "Receive notification email on activity" : "Receber email notificando atividade",
+    "Receive notification email on activity" : "Receber e-mail notificando atividade",
     "Close details" : "Fechar detalhes",
     "Close" : "Fechar",
     "Owner" : "Proprietário",
