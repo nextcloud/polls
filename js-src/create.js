@@ -108,8 +108,6 @@ export class Create {
 					this.protect = true;
 					this.poll.mode = 'edit';
 				}
-				console.log(window.outerWidth);
-				console.log(window.innerWidth);
 				if (window.innerWidth >1024) {
 					this.sidebar = true;
 				}
@@ -133,7 +131,7 @@ export class Create {
 				},
 
 				removeShare: function (item){
-					this.poll.shares.splice(this.poll.shares.indexOf(item), 1)
+					this.poll.shares.splice(this.poll.shares.indexOf(item), 1);
 				},
 
 				addNewPollDate: function (newPollDate, newPollTime) {

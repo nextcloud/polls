@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
 		
@@ -9,14 +9,18 @@
 				:placeholder="placeholder" 
 				v-model="query"
 				@input="onInput"
-				@focus="onInput">
+				@focus="onInput"
+				@keyup.down="onArrowDown"
+				@keyup.up="onArrowUp"
+				@keyup.enter="onEnter">
 			
-			<transition-group v-show="openList" name="user-list-fade" tag="ul" v-bind:css="false" class="user-list suggestion">
-				<li v-for="(item, index) in sortedSiteusers" 
-					v-bind:key="item.displayName" 
-					v-bind:data-index="index" 
-					class="flex-row"
-					v-on:click="addShare(index, item)">
+			<transition-group v-show="openList" name="user-list-fade" tag="ul" :css="false" class="user-list suggestion">
+				<li class="flex-row"
+					v-for="(item, index) in sortedSiteusers" 
+					:key="index" 
+					:data-index="index" 
+					:class="{ 'is-active': index === arrowCounter }"
+					@click="addShare(index, item)">
 					<div class="avatar has-tooltip-bottom" style="height: 32px; width: 40px;" >
 						<img :src="item.avatarURL" width="32" height="32">
 					</div>
@@ -25,11 +29,11 @@
 			</transition-group>
 		</div>
 		
-		<transition-group name="shared-list-fade" tag="ul" v-bind:css="false" class="shared-list">
-			<li v-for="(item, index) in sortedShares" 
-				v-bind:key="item.displayName" 
-				v-bind:data-index="index" 
-				class="flex-row">
+		<transition-group name="shared-list-fade" tag="ul" :css="false" class="shared-list">
+			<li class="flex-row"
+				v-for="(item, index) in sortedShares" 
+				:key="item.displayName" 
+				:data-index="index">
 				<div class="avatar has-tooltip-bottom" style="height: 32px; width: 40px;" >
 					<img :src="item.avatarURL" width="32" height="32">
 				</div>
@@ -53,7 +57,8 @@
 			return {
 				query: '',
 				users: [],
-				openList: false
+				openList: false,
+				arrowCounter: -1
 			}
 		},
 		
@@ -117,6 +122,24 @@
 				if (this.query !== '') {
 					this.openList = true;
 				}
+			},
+			
+			onArrowDown: function() {
+				if (this.arrowCounter < this.sortedSiteusers.length) {
+					this.arrowCounter = this.arrowCounter + 1;
+				}
+			},
+				
+			onArrowUp: function() {
+				if (this.arrowCounter > 0) {
+					this.arrowCounter = this.arrowCounter - 1;
+				}
+			},
+			
+			onEnter: function() {
+				this.query = this.sortedSiteusers[this.arrowCounter].displayName;
+				this.openList = false;
+				this.arrowCounter = -1;
 			},
 			
 			sortByDisplayname: function (a, b) {

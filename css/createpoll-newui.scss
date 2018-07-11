@@ -2,8 +2,8 @@
 
 #content {
 	display: flex;
-	height: unset;
-	width: unset; 
+/* 	height: unset;
+	width: unset;  */
 }
 
 .polls-content {
@@ -15,9 +15,10 @@
 		display: flex;
 		flex-direction: row;
 		flex-grow: 1;
-		flex-grow: 1;
 		flex-shrink: 1;
 		flex-wrap: wrap;
+		align-items: flex-start;
+		align-content: flex-start;
 		padding: 8px 0px 8px 17px;
 		width: 465px;
 		overflow: hidden;
@@ -159,7 +160,7 @@ li.flex-row {
 	border-bottom: 1px solid #ebebeb;
 	overflow: hidden;
 	white-space: nowrap;
-	&:hover {
+	&:hover, &:active {
 		transition: background-color 0.3s ease;
 		background-color: $hover-color;
 	}
@@ -194,6 +195,10 @@ button {
 	}
 }
 
+.autocomplete {
+	width: 100%;
+	position: relative;
+}
 #share-list {
 	.user-list {
 		max-height: 180px;
@@ -201,5 +206,9 @@ button {
 		border: 1px solid #ccc;	
 		margin-top: -3px;
 		border-top: none;
+		position: absolute;
+		background: #fff;
+		z-index: 1;
+		width: 99%;
 	}
 }
