@@ -6,9 +6,9 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack --progress --hot --config js-src/webpack.config.js --watch",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config js-src/webpack.config.js",
-    "test": "cross-env NODE_ENV=development webpack --progress --hide-modules --config js-src/webpack.config.js"
+    "dev":   "cross-env NODE_ENV=development webpack --progress --hide-modules --config js-src/webpack.config.js --watch",
+    "build": "cross-env NODE_ENV=production  webpack --progress --hide-modules --config js-src/webpack.config.js",
+    "test":  "cross-env NODE_ENV=development webpack --progress --hide-modules --config js-src/webpack.config.js"
   },
   "repository": {
     "type": "git",

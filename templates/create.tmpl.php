@@ -115,7 +115,7 @@
 		<div id="polls-sidebar" v-if="sidebar" class="flex-column detailsView scroll-container">
 			<div class="header flex-row">
 				<div class="pollInformation flex-column">
-					<author-div :userid="poll.event.owner" class="authorRow user-cell flex-row" />
+					<user-div description="Owner" :user-id="poll.event.owner"></user-div>
 				</div>
 			</div>
 
@@ -170,6 +170,7 @@
 					</div>
 					<share-div id="share-list" class="configBox flex-column oneline" 
 								:placeholder="t('polls', 'Name of user or group')" 
+								v-show="poll.event.access === 'select'"
 								v-model="poll.shares" 
 								v-on:add-share="addShare" 
 								v-on:remove-share="removeShare"/>

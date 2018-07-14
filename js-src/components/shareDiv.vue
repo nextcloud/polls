@@ -98,18 +98,22 @@
 				axios.get(OC.generateUrl('apps/polls/get/siteusers'))
 				.then((response) => {
 					this.users = response.data.siteusers;
-					var i;
-					for (i = 0; i < this.users.length; i++) {
-						this.users[i].avatarURL = OC.generateUrl(
-						'/avatar/{user}/{size}?v={version}', {
-							user: this.users[i].id,
-							size: Math.ceil(32 * window.devicePixelRatio),
-							version: oc_userconfig.avatar.version
-						})
-					}
+					
+					this.users.forEach(function(item) {
+						item.avatarURL = OC.generateUrl(
+							'/avatar/{user}/{size}?v={version}', {
+								user: item.id,
+								size: Math.ceil(32 * window.devicePixelRatio),
+								version: oc_userconfig.avatar.version
+							}
+						)
+					});
 					
 				}, (error) => {
 					console.log(error.response);
+				});
+				this.users.forEach(function(item) {
+					console.log(item.id);
 				});
 			},
 			

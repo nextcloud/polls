@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author René Gieling <github@dartcafe.de>
+ * @author RenÃ© Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -96,7 +96,8 @@ class ApiController extends Controller {
 			$list[] = [
 				'id' => $group->getGID(),
 				'type' => 'group',
-				'displayName' => $group->getGID()
+				'displayName' => $group->getGID(),
+				'avatarURL' => ''
 			];
 		};
 		$users = $this->userManager->searchDisplayName('');
@@ -104,12 +105,42 @@ class ApiController extends Controller {
 			$list[] = [
 				'id' => $user->getUID(),
 				'type' => 'user',
-				'displayName' => $user->getDisplayName()
+				'displayName' => $user->getDisplayName(),
+				'avatarURL' => ''
 			];
 		};
 		$data['siteusers'] = $list;
 
 		return new DataResponse($data, Http::STATUS_OK);
+	}
+  	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @return Array
+	*/	
+	function convertAccessList($item) {
+		$split = Array();
+		if (strpos($item, 'user_') === 0) {
+			$user = $this->userManager->get(substr($item, 5));
+			$split = [
+				'id' => $user->getUID(),
+				'type' => 'user',
+				'displayName' => $user->getDisplayName(),
+				'avatarURL' => ''
+			];
+		} elseif (strpos($item, 'group_') === 0) {
+			$group = substr($item, 6);
+			$group = $this->groupManager->get($group);
+			$split = [
+				'id' => $group->getGID(),
+				'type' => 'group',
+				'displayName' => $group->getDisplayName(),
+				'avatarURL' => '',
+			];
+		}
+		
+
+		return($split);
 	}
 
   	/**
@@ -119,6 +150,7 @@ class ApiController extends Controller {
 	* @param string $hash
 	* @return DataResponse
 	*/
+	
 	public function getPoll($hash) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
@@ -140,7 +172,15 @@ class ApiController extends Controller {
 			} else {
 				$mode = 'edit';
 			}
-			
+			$accessList = Array();
+			$accessType = $poll->getAccess();
+			if (!strpos('|public|hidden|registered', $accessType)) {
+				$accessList = explode(';',$accessType);
+				$accessList = array_filter($accessList);
+				$accessList = array_map(Array($this,'convertAccessList'), $accessList);
+				$accessType = 'select';
+			}
+				
 			$data = array();
 			$commentsList = array();
 			$optionList = array();
@@ -207,7 +247,7 @@ class ApiController extends Controller {
 				'description' => $poll->getDescription(),
 				'owner' => $poll->getOwner(),
 				'created' => $poll->getCreated(),
-				'access' => $poll->getAccess(),
+				'access' => $accessType,
 				'expiration' => $expiration,
 				'expire' => $poll->getExpire(),
 				'isAnonymous' => $poll->getIsAnonymous(),
@@ -217,7 +257,8 @@ class ApiController extends Controller {
 			'options' => [
 				'pollDates' => [],
 				'pollTexts' => $optionList
-			]
+			],
+			'shares' => $accessList
 		];
 
 		return new DataResponse($data, Http::STATUS_OK);
@@ -229,7 +270,7 @@ class ApiController extends Controller {
 	 * @param string $poll
 	 * @return DataResponse
 	 */
-	public function writePoll($event, $options, $mode) {
+	public function writePoll($event, $options, $shares, $mode) {
 		$user = \OC::$server->getUserSession()->getUser();
 
 		if (!$user instanceof IUser) {
@@ -244,10 +285,23 @@ class ApiController extends Controller {
 		$newEvent->setDescription($event['description']);
 
 		$newEvent->setType($event['type']);
-		$newEvent->setAccess($event['access']);
 		$newEvent->setIsAnonymous($event['isAnonymous']);
 		$newEvent->setFullAnonymous($event['fullAnonymous']);
 		$newEvent->setDisallowMaybe($event['disallowMaybe']);
+	
+		if ($event['access'] === 'select') {
+			$shareAccess = '';
+			foreach ($shares as $shareElement) {
+				if ($shareElement['type'] === 'user') {
+					$shareAccess = $shareAccess . 'user_' . $shareElement['id'] . ';';
+				} elseif ($shareElement['type'] === 'group') {
+					$shareAccess = $shareAccess . 'group_' . $shareElement['id'] . ';';
+				}
+			}
+			$newEvent->setAccess(rtrim($shareAccess, ';'));
+		} else {
+			$newEvent->setAccess($event['access']);
+		}
 
 		if ($event['expiration']) {
 			$newEvent->setExpire($event['expire']);
@@ -255,9 +309,9 @@ class ApiController extends Controller {
 			$newEvent->setExpire(null);
 		}
 		
-		if ($event['type'] === "datePoll") {
+		if ($event['type'] === 'datePoll') {
 			$newEvent->setType(0);
-		} else if ($event['type'] === "textPoll") {
+		} elseif ($event['type'] === 'textPoll') {
 			$newEvent->setType(1);
 		}
 
@@ -278,7 +332,7 @@ class ApiController extends Controller {
 			$this->eventMapper->update($newEvent);
 			$this->optionsMapper->deleteByPoll($newEvent->getId());
 					
-		} else if ($mode === 'create') {
+		} elseif ($mode === 'create') {
 			// Create new poll
 			// Define current user as owner, set new creation date and create a new hash
 			$newEvent->setOwner($userId);
@@ -303,7 +357,7 @@ class ApiController extends Controller {
 				
 				$this->optionsMapper->insert($newOption);
 			}
-		} else if ($event['type'] === "textPoll") {
+		} elseif ($event['type'] === "textPoll") {
 			foreach ($options['pollTexts'] as $optionElement) {
 				$newOption = new Options();
 				

@@ -26,7 +26,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import lodash from 'lodash';
-import AuthorDiv from './components/authorDiv.vue';
+import UserDiv from './components/userDiv.vue';
 import ShareDiv from './components/shareDiv.vue';
 import Breadcrump from './components/breadcrump.vue';
 import DatePickerInline from './components/datePickerInline.vue';
@@ -90,7 +90,7 @@ export class Create {
 			},
 
 			components: {
-				'author-div': AuthorDiv,
+				'user-div': UserDiv,
 				'share-div': ShareDiv,
 				'breadcrump': Breadcrump,
 				'date-picker-inline': DatePickerInline,
@@ -181,10 +181,10 @@ export class Create {
 					axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 					.then((response) => {
 						this.poll = response.data.poll;
-						if (response.data.poll.event.type === 'datePoll') {
+						if (this.poll.event.type === 'datePoll') {
 							var i;
-							for (i = 0; i < response.data.poll.options.pollTexts.length; i++) {
-								this.addNewPollDate(new Date(moment.utc(response.data.poll.options.pollTexts[i].text)));
+							for (i = 0; i < this.poll.options.pollTexts.length; i++) {
+								this.addNewPollDate(new Date(moment.utc(this.poll.options.pollTexts[i].text)));
 							}
 							this.poll.options.pollTexts = [];
 						}

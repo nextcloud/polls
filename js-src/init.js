@@ -1,7 +1,7 @@
-/**
- * @copyright 2018 René Gieling <github@dartcafe.de>
+ï»¿/**
+ * @copyright 2018 RenÃ© Gieling <github@dartcafe.de>
  *
- * @author 2018 René Gieling <github@dartcafe.de>
+ * @author 2018 RenÃ© Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
