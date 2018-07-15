@@ -5,8 +5,16 @@
 		<div class="avatar">
 			<img :src="avatarURL" :width="size" :height="size">
 		</div>
-		<div class="user">{{showDisplayName}}</div>
+		<div v-show="nothidden" class="avatar imageplaceholderseed" :data-username="userId" :data-displayname="computedDisplayName" data-seed="Poll users 1">
+			{{ computedDisplayName.toUpperCase().substr(0,1) }}
+		</div>
+		<div class="user">{{ computedDisplayName }}</div>
 	</div>
+
+	<div class="avatar imageplaceholderseed"  P</div>
+
+
+	
 </template>
 
 <script>
@@ -29,16 +37,30 @@
 			},
 			description: String
 		},
+
+		data: function () {
+			return {
+				nothidden: false,
+			}
+		},
+
 		computed: {
-			showDisplayName: function () {
-					if (this.userId === OC.getCurrentUser().uid) {
-						return OC.getCurrentUser().displayName
-					} else {
-						if (!this.displayName) {
-							return this.userId;
-						}
+			computedDisplayName: function () {
+				var value = this.displayName;
+				
+				if (this.userId === OC.getCurrentUser().uid) {
+					value = OC.getCurrentUser().displayName;
+				} else {
+					if (!this.displayName) {
+						value = this.userId;
 					}
-				},
+				}
+				if (this.type === 'group') {
+					value = value + ' (' + t('polls','Group') +')';
+				}
+				return value;
+			},
+
 			avatarURL: function() {
 				if (this.userId === OC.getCurrentUser().uid) {
 					return OC.generateUrl(
@@ -61,11 +83,12 @@
 		}	
 	}
 </script>
+
 <style scoped>
 	.userRow {
 		display: flex;
 		flex-direction: row;
-		flex-grow: 0;
+		flex-grow: 1;
 		align-items: center;
 		margin-left: 0;
 		margin-top: 0;
@@ -82,5 +105,15 @@
 		margin-left: 8px;
 		opacity: 0.5;
 		flex-grow: 1;
+	}
+	.imageplaceholderseed {
+		height: 32px; 
+		width: 32px; 
+		background-color: rgb(185, 185, 185); 
+		color: rgb(255, 255, 255); 
+		font-weight: normal; 
+		text-align: center; 
+		line-height: 32px; 
+		font-size: 17.6px;
 	}
 </style>

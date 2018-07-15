@@ -36,6 +36,7 @@ import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
 import TimePicker from './components/timePicker.vue';
 Vue.config.devtools;
+Vue.component('user-div', UserDiv);
 
 export class Create {
 	start() {
@@ -90,7 +91,6 @@ export class Create {
 			},
 
 			components: {
-				'user-div': UserDiv,
 				'share-div': ShareDiv,
 				'breadcrump': Breadcrump,
 				'date-picker-inline': DatePickerInline,
@@ -101,7 +101,7 @@ export class Create {
 				'time-picker': TimePicker
 			},
 			
-			mounted: function() {
+			created: function() {
 				this.poll.event.hash = document.getElementById("app").getAttribute("data-hash"); 
 				if (this.poll.event.hash !== '') {
 					this.loadPoll(this.poll.event.hash);
@@ -122,6 +122,7 @@ export class Create {
 					}
 				}
 			},
+			
 			methods: {
 				switchSidebar: function() {
 					this.sidebar = !this.sidebar;

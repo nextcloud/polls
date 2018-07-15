@@ -170,8 +170,8 @@
 					</div>
 					<share-div id="share-list" class="configBox flex-column oneline" 
 								:placeholder="t('polls', 'Name of user or group')" 
+								:active-shares="poll.shares" 
 								v-show="poll.event.access === 'select'"
-								v-model="poll.shares" 
 								v-on:add-share="addShare" 
 								v-on:remove-share="removeShare"/>
 			</div>

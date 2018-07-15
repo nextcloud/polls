@@ -1,7 +1,6 @@
 ﻿<template>
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
-		
 		<div class="autocomplete">
 			<input class="shareWithField" 
 				autocomplete="off"
@@ -11,30 +10,24 @@
 				@input="onInput"
 				@focus="onInput">
 			
-			<transition-group v-show="openList" name="user-list-fade" tag="ul" v-bind:css="false" class="user-list suggestion">
+			<transition-group v-show="openList" tag="ul" v-bind:css="false" class="user-list suggestion">
 				<li v-for="(item, index) in sortedSiteusers" 
 					v-bind:key="item.displayName" 
 					v-bind:data-index="index" 
 					class="flex-row"
 					v-on:click="addShare(index, item)">
-					<div class="avatar has-tooltip-bottom" style="height: 32px; width: 40px;" >
-						<img :src="item.avatarURL" width="32" height="32">
-					</div>
-					<div>{{ item.displayName }}  {{ item.type === 'group' ? '(group)' : '' }}</div>
+					<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type"></user-div>
 				</li>
 			</transition-group>
 		</div>
 		
-		<transition-group name="shared-list-fade" tag="ul" v-bind:css="false" class="shared-list">
+		<transition-group tag="ul" v-bind:css="false" class="shared-list">
 			<li v-for="(item, index) in sortedShares" 
 				v-bind:key="item.displayName" 
 				v-bind:data-index="index" 
 				class="flex-row">
-				<div class="avatar has-tooltip-bottom" style="height: 32px; width: 40px;" >
-					<img :src="item.avatarURL" width="32" height="32">
-				</div>
+				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type"></user-div>
 
-				<div>{{ item.displayName }} {{ item.type === 'group' ? '(group)' : '' }}</div>
 				<div class="flex-row options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
@@ -44,21 +37,38 @@
 </template>
 
 <script>
-	import Velocity from 'velocity-animate';
 	import axios from 'axios';
 	
 	export default {
-		props: ['placeholder', 'value'],
+		props: {
+			placeholder: {
+				type: String
+			},
+			activeShares: {
+				type: Array
+			}
+		},
+		
 		data: function () {
 			return {
 				query: '',
 				users: [],
-				openList: false
+				openList: false,
+				siteUsersLoaded: false,
+				siteUsersListOptions: {
+					getUsers: true,
+					getGroups: true,
+					skipUsers: [],
+					skipGroups: []
+				}
 			}
 		},
 		
+		created: function() {
+			this.loadSiteUsers();
+		},
+		
 		mounted: function() {
-			this.loadSiteUsers()
 			document.addEventListener('click', this.handleClickOutside)
 		},
 		
@@ -67,8 +77,8 @@
 		},
 
 		computed: {
-			filteredSiteusers: function () {
-				var vm = this
+			filteredSiteusers: function() {
+				var vm = this;
 				return this.users.filter(function (item) {
 					return item.displayName.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1
 				})
@@ -77,9 +87,9 @@
 			sortedSiteusers: function() {
 				return this.filteredSiteusers.sort(this.sortByDisplayname);
 			},
-			
+
 			sortedShares: function() {
-				return this.value.sort(this.sortByDisplayname);
+				return this.activeShares.sort(this.sortByDisplayname);
 			}
 		},
 		
@@ -95,29 +105,27 @@
 			},
 			
 			loadSiteUsers: function () {
-				axios.get(OC.generateUrl('apps/polls/get/siteusers'))
+				var vm = this;
+				vm.siteUsersListOptions.skipUsers = [];
+				vm.siteUsersListOptions.skipGroups = [];
+				this.activeShares.forEach(function(item) {
+					if (item.type === 'group') { 
+						vm.siteUsersListOptions.skipGroups.push(item.id)
+					} else if (item.type === 'user') {
+						vm.siteUsersListOptions.skipUsers.push(item.id)
+					}
+				});
+
+				axios.post(OC.generateUrl('apps/polls/get/siteusers'), this.siteUsersListOptions)
 				.then((response) => {
 					this.users = response.data.siteusers;
-					
-					this.users.forEach(function(item) {
-						item.avatarURL = OC.generateUrl(
-							'/avatar/{user}/{size}?v={version}', {
-								user: item.id,
-								size: Math.ceil(32 * window.devicePixelRatio),
-								version: oc_userconfig.avatar.version
-							}
-						)
-					});
-					
 				}, (error) => {
 					console.log(error.response);
-				});
-				this.users.forEach(function(item) {
-					console.log(item.id);
 				});
 			},
 			
 			onInput: function() {
+				this.loadSiteUsers();
 				if (this.query !== '') {
 					this.openList = true;
 				}

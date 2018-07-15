@@ -88,29 +88,37 @@ class ApiController extends Controller {
 	* @NoCSRFRequired
 	* @return DataResponse
 	*/
-	public function getSiteUsers() {
-		$groups = $this->groupManager->search('');
+	public function getSiteUsersAndGroups($getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
 		$data = array();
-		foreach ($groups as $group) {
-			$list[] = [
-				'id' => $group->getGID(),
-				'type' => 'group',
-				'displayName' => $group->getGID(),
-				'avatarURL' => ''
-			];
-		};
-		$users = $this->userManager->searchDisplayName('');
-		foreach ($users as $user) {
-			$list[] = [
-				'id' => $user->getUID(),
-				'type' => 'user',
-				'displayName' => $user->getDisplayName(),
-				'avatarURL' => ''
-			];
-		};
-		$data['siteusers'] = $list;
+		if ($getGroups) {
+			$groups = $this->groupManager->search('');
+			foreach ($groups as $group) {
+				if (!in_array($group->getGID(), $skipGroups)) {
+					$list[] = [
+						'id' => $group->getGID(),
+						'type' => 'group',
+						'displayName' => $group->getGID(),
+						'avatarURL' => ''
+					];
+				}
+			}
+		}
+		if ($getUsers) {
+			$users = $this->userManager->searchDisplayName('');
+			foreach ($users as $user) {
+				if (!in_array($user->getUID(), $skipUsers)) {
+					$list[] = [
+						'id' => $user->getUID(),
+						'type' => 'user',
+						'displayName' => $user->getDisplayName(),
+						'avatarURL' => ''
+					];
+				}
+			}
+		}
 
+		$data['siteusers'] = $list;
 		return new DataResponse($data, Http::STATUS_OK);
 	}
   	/**
