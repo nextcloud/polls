@@ -5,7 +5,7 @@ var newUserAnswers = [];
 
 var maxVotes = 0;
 var valuesChanged = false;
-
+var maybeAllowed = true;
 var tzOffset = new Date().getTimezoneOffset();
 
 // HTML template for new comment (handlebars.js)
@@ -74,7 +74,9 @@ function switchSidebar() {
 }
 
 $(document).ready(function () {
+	
 	var clipboard = new Clipboard('.copy-link');
+
 	clipboard.on('success', function(e) {
 		var $input = $(e.trigger);
 		$input.tooltip('hide')
@@ -92,6 +94,7 @@ $(document).ready(function () {
 			}
 		}, 3000);
 	});
+
 	clipboard.on('error', function (e) {
 		var $input = $(e.trigger);
 		var actionMsg = '';
@@ -120,6 +123,10 @@ $(document).ready(function () {
 	});
 	// count how many times in each date
 	updateBest();
+
+	if ($('#app-content').hasClass('maybedisallowed')) {
+		maybeAllowed = false;
+	}
 
 	// Temporary hack - Check if we have Nextcloud or ownCloud with an anonymous user
 	var hideAvatars = false;
@@ -267,7 +274,11 @@ $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 		$nextClass = 'no';
 		$toggleAllClasses= 'yes';
 	} else if($(this).hasClass('no')) {
-		$nextClass = 'maybe';
+		if (maybeAllowed) {
+			$nextClass = 'maybe';
+		} else {
+			$nextClass = 'yes';
+		}
 		$toggleAllClasses= 'no';
 	} else if($(this).hasClass('maybe')) {
 		$nextClass = 'yes';

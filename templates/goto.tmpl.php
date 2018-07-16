@@ -54,6 +54,11 @@
 
 	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
 	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
+	if ($poll->getDisallowMaybe()) {
+		$maybe = 'maybedisallowed';
+	} else {
+		$maybe = 'maybeallowed';
+	}
 	$access = $poll->getAccess();
 	$updatedPoll = false;
 	$dataUnvoted = '';
@@ -103,7 +108,7 @@
 ?>
 
 <div id="app">
-	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass); ?>">
+	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass . ' ' . $maybe); ?>">
 		<div id="controls" class="controls">
 			<div id="breadcrump" class="breadcrump">
 				<?php if (User::isLoggedIn()) : ?>
@@ -254,7 +259,11 @@
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
+						if ($maybe === 'maybeallowed') {
 						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
+						} else {
+							print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip yes" title="' . $toggleTooltip . '">');
+						}
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
