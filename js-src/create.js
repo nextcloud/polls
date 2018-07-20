@@ -26,6 +26,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import lodash from 'lodash';
+import CloudDiv from './components/cloudDiv.vue';
 import UserDiv from './components/userDiv.vue';
 import ShareDiv from './components/shareDiv.vue';
 import Breadcrump from './components/breadcrump.vue';
@@ -35,8 +36,13 @@ import DatePollItem from './components/datePollItem.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
 import TimePicker from './components/timePicker.vue';
+
 Vue.config.devtools;
+
 Vue.component('user-div', UserDiv);
+Vue.component('cloud-div', CloudDiv);
+Vue.component('date-picker-input', DatePickerInput);
+Vue.component('time-picker', TimePicker);
 
 export class Create {
 	start() {
@@ -67,7 +73,8 @@ export class Create {
 						created: '',
 						access: 'public',
 						expiration: false,
-						expire: null,
+						expire: false,
+						expired: false,
 						isAnonymous: false,
 						fullAnonymous: false,
 						disallowMaybe: false,
@@ -94,11 +101,9 @@ export class Create {
 				'share-div': ShareDiv,
 				'breadcrump': Breadcrump,
 				'date-picker-inline': DatePickerInline,
-				'date-picker-input': DatePickerInput,
 				'date-poll-item': DatePollItem,
 				'side-bar-close': SideBarClose,
 				'text-poll-item': TextPollItem,
-				'time-picker': TimePicker
 			},
 			
 			created: function() {
@@ -114,12 +119,20 @@ export class Create {
 			},
 			
 			computed: {
-				title: function () {
+				title: function() {
 					if (this.poll.event.title === '') {
-						return t('poll','Create new poll');
+						return t('polls','Create new poll');
 					} else {
 						return this.poll.event.title;
+						
 					}
+				}
+			},
+			
+			watch: {
+				title () {
+					// only used when the title changes after page load
+					document.title = t('polls','Polls') + ' - ' + this.title;
 				}
 			},
 			

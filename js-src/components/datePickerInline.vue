@@ -23,7 +23,7 @@
 				monthNames: this.localeData.months(),
 				dayNamesMin: this.localeData.weekdaysMin(),
 				dayNamesShort: this.localeData.weekdaysShort(),
-				firstDay: +this.localeData.firstDayOfWeek(),
+				firstDay: this.localeData.firstDayOfWeek(),
 				showOtherMonths: true,
 				selectOtherMonths: true,
 				onSelect: this.onSelect

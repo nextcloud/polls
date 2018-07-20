@@ -169,6 +169,12 @@ class ApiController extends Controller {
 
 			$expiration = ($poll->getExpire() !== null);
 
+			if ($poll->getExpire() === null) {
+				$expired = false;
+			} else {
+				$expired = time() > strtotime($poll->getExpire());
+			}
+
 			if ($poll->getType() == 0) {
 				$pollType = 'datePoll'; 
 			} else {
@@ -257,6 +263,7 @@ class ApiController extends Controller {
 				'created' => $poll->getCreated(),
 				'access' => $accessType,
 				'expiration' => $expiration,
+				'expired' => $expired,
 				'expire' => $poll->getExpire(),
 				'isAnonymous' => $poll->getIsAnonymous(),
 				'fullAnonymous' => $poll->getFullAnonymous(),
