@@ -58,7 +58,7 @@ function updateCounters() {
 
 function updateAvatar(obj) {
 	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
-	if (!document.getElementById('nextcloud') && OC.currentUser === '') {
+	if (!document.getElementById('nextcloud') && !OC.currentUser) {
 		$(obj).imageplaceholder(obj.title);
 	} else {
 		$(obj).avatar(obj.title, 32);
