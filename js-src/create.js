@@ -32,6 +32,7 @@ import ShareDiv from './components/shareDiv.vue';
 import Breadcrump from './components/breadcrump.vue';
 import DatePickerInline from './components/datePickerInline.vue';
 import DatePickerInput from './components/datePickerInput.vue';
+import DateOptionPicker from './components/DateOptionPicker.vue';
 import DatePollItem from './components/datePollItem.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
@@ -101,6 +102,7 @@ export class Create {
 				'share-div': ShareDiv,
 				'breadcrump': Breadcrump,
 				'date-picker-inline': DatePickerInline,
+				'date-option-picker': DateOptionPicker,
 				'date-poll-item': DatePollItem,
 				'side-bar-close': SideBarClose,
 				'text-poll-item': TextPollItem,
@@ -132,7 +134,7 @@ export class Create {
 			watch: {
 				title () {
 					// only used when the title changes after page load
-					document.title = t('polls','Polls') + ' - ' + this.title;
+					document.title = t('polls','Polls') + ' - ' + this.poll.title;
 				}
 			},
 			
