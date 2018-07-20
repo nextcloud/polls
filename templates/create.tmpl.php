@@ -93,6 +93,8 @@
 							v-on:remove="poll.options.pollDates.splice(index, 1)">
 						</li>
 					</transition-group>
+					<date-option-picker></date-option-picker>
+
 				</div>
 				<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
 					<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
@@ -116,6 +118,7 @@
 			<div class="header flex-row">
 				<div class="pollInformation flex-column">
 					<user-div description="Owner" :user-id="poll.event.owner"></user-div>
+					<cloud-div v-bind:options="poll.event"></cloud-div>
 				</div>
 			</div>
 
