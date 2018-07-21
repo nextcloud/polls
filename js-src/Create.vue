@@ -74,6 +74,7 @@
 				<div class="header flex-row">
 					<div class="pollInformation flex-column">
 						<user-div description="Owner" :user-id="poll.event.owner"></user-div>
+						<cloud-div v-bind:options="poll.event"></cloud-div>
 					</div>
 				</div>
 
@@ -202,19 +203,22 @@
 				protect: false,
 				sidebar: false,
 				titleEmpty: false,
-				slug: '',
 				indexPage: ''
 			}
 		},
 
 		created: function() {
+
+			this.indexPage = OC.generateUrl('apps/polls/');
+
 			var urlArray = window.location.pathname.split( '/' );
 			this.poll.event.hash = urlArray[urlArray.length - 1];
-			this.indexPage = OC.generateUrl('apps/polls/');
+			this.loadPoll(this.poll.event.hash);
+			
 			if (this.poll.event.hash !== '') {
-				this.loadPoll(this.poll.event.hash);
 				this.protect = true;
 				this.poll.mode = 'edit';
+				this.poll.event.owner = OC.getCurrentUser().uid;
 			}
 			if (window.innerWidth >1024) {
 				this.sidebar = true;
@@ -306,6 +310,7 @@
 						this.poll.options.pollTexts = [];
 					}
 				}, (error) => {
+					this.poll.event.hash = '';
 					console.log(error.response);
 				});
 			}
