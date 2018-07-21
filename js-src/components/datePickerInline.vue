@@ -1,4 +1,4 @@
-^<template>
+<template>
 		<div class="datepicker-inline"></div>
 </template>
 
@@ -36,7 +36,7 @@
 				} else {
 					time = this.time
 				};
-				this.$emit('selected', moment(date + ' ' + time)).date;
+				this.$emit('selected', moment(date + ' ' + time));
 			}
 		},
 		beforeDestroy: function() {

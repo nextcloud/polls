@@ -8,10 +8,20 @@
 
 <script>
 	export default {
-		props: ['value', 'placeholder', 'dateFormat'],
+		props: {
+			minDate: {
+				default: null
+			},
+			value: {
+			},
+			placeholder: {
+			},
+		},
 		mounted: function() {
 			$(this.$el).datepicker({
-				dateFormat: 'yy-mm-dd',
+				minDate: this.minDate,
+				showOtherMonths: true,
+				selectOtherMonths: true,
 				onSelect: this.onClose
 			});
 		},

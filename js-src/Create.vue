@@ -34,14 +34,7 @@
 						<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 					</div>
 
-					<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
-						<div id="poll-item-selector-date">
-							<div class="time-seletcion flex-row">
-								<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
-								<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
-							</div>
-							<date-picker-inline @selected="addNewPollDate" :locale-data="localeData" :time="newPollTime" v-show="poll.event.type === 'datePoll'" />
-						</div>
+					<div class="flex-column flex-wrap" v-show="poll.event.type === 'datePoll'">
 						<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
 							<li
 								is="date-poll-item"
@@ -128,11 +121,11 @@
 
 						</div>
 						<share-div id="share-list" class="configBox flex-column oneline" 
-									:placeholder="t('polls', 'Name of user or group')" 
-									:active-shares="poll.shares" 
-									v-show="poll.event.access === 'select'"
-									@add-share="addShare" 
-									@remove-share="removeShare"/>
+							:placeholder="t('polls', 'Name of user or group')" 
+							:active-shares="poll.shares" 
+							v-show="poll.event.access === 'select'"
+							@add-share="addShare" 
+							@remove-share="removeShare"/>
 					</div>
 				</div>
 			</div>
