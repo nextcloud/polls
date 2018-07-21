@@ -26,16 +26,18 @@ import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import lodash from 'lodash';
-import CloudDiv from './components/cloudDiv.vue';
+
 import UserDiv from './components/userDiv.vue';
+import CloudDiv from './components/cloudDiv.vue';
+import DatePickerInput from './components/datePickerInput.vue';
+import TimePicker from './components/timePicker.vue';
+
 import ShareDiv from './components/shareDiv.vue';
 import Breadcrump from './components/breadcrump.vue';
 import DatePickerInline from './components/datePickerInline.vue';
-import DatePickerInput from './components/datePickerInput.vue';
 import DatePollItem from './components/datePollItem.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import TextPollItem from './components/textPollItem.vue';
-import TimePicker from './components/timePicker.vue';
 
 Vue.config.devtools;
 
@@ -62,6 +64,8 @@ export class Create {
 			data: {
 				poll: {
 					mode: 'create',
+					comments: [],
+					votes: [],
 					shares: [],
 					event: {
 						id: 0,
@@ -94,7 +98,9 @@ export class Create {
 				nextPollTextId: 0,
 				protect: false,
 				sidebar: false,
-				titleEmpty: false
+				titleEmpty: false,
+				slug: '',
+				indexPage: ''
 			},
 
 			components: {
@@ -107,7 +113,9 @@ export class Create {
 			},
 			
 			created: function() {
-				this.poll.event.hash = document.getElementById("app").getAttribute("data-hash"); 
+				var urlArray = window.location.pathname.split( '/' );
+				this.poll.event.hash = urlArray[urlArray.length - 1];
+				this.indexPage = OC.generateUrl('apps/polls/');
 				if (this.poll.event.hash !== '') {
 					this.loadPoll(this.poll.event.hash);
 					this.protect = true;

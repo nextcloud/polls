@@ -1,7 +1,7 @@
 <template>
 	<div class="breadcrump flex-row">
 		<div class="crumb svg">
-			<a :href="home">
+			<a :href="indexPage">
 				<img class="svg" :src="imagePath" alt="Home">
 			</a>
 		</div>
@@ -13,10 +13,9 @@
 
 <script>
 	export default {
-		props: ['intitle'],
+		props: ['intitle','indexPage'],
 		data: function () {
 			return {
-				home: OC.generateUrl('apps/polls'),
 				imagePath: OC.imagePath('core', 'places/home.svg'),
 			};
 		}

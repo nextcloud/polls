@@ -11,10 +11,7 @@
 		<div class="user">{{ computedDisplayName }}</div>
 	</div>
 
-	<div class="avatar imageplaceholderseed"  P</div>
-
-
-	
+	<div class="avatar imageplaceholderseed"</div>
 </template>
 
 <script>

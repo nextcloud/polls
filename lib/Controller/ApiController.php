@@ -252,10 +252,10 @@ class ApiController extends Controller {
 			'mode' => $mode,
 			'comments' => $commentsList,
 			'votes' => $votesList,
-			'shares'=> [],
+			'shares' => $accessList,
 			'event' => [
-				'hash' => $hash,
 				'id' => $poll->getId(),
+				'hash' => $hash,
 				'type' => $pollType,
 				'title' => $poll->getTitle(),
 				'description' => $poll->getDescription(),
@@ -272,8 +272,7 @@ class ApiController extends Controller {
 			'options' => [
 				'pollDates' => [],
 				'pollTexts' => $optionList
-			],
-			'shares' => $accessList
+			]
 		];
 
 		return new DataResponse($data, Http::STATUS_OK);

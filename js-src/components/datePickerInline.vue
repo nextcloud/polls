@@ -1,4 +1,4 @@
-<template>
+^<template>
 		<div class="datepicker-inline"></div>
 </template>
 
@@ -11,8 +11,7 @@
 			// get moment.js locale information, because datepicker initializes in default localization
 			localeData: {
 			},
-			useTime: {
-				default: '00:00'
+			time: {
 			}
 		},
 
@@ -31,13 +30,13 @@
 		},
 		methods: {
 			onSelect(date) {
-				var useTime;
-				if (this.useTime === '') {
-					useTime = '00:00';
+				var time;
+				if (this.time === '') {
+					time = '12:00';
 				} else {
-					useTime = this.useTime
+					time = this.time
 				};
-				this.$emit('selected', date + ' ' + useTime);
+				this.$emit('selected', moment(date + ' ' + time)).date;
 			}
 		},
 		beforeDestroy: function() {

@@ -23,8 +23,6 @@
 	 */
 
 
-	/* global OC, OCA, $, _, t, define, console */
-	use OCP\User; //To do: replace according to API
 
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'flex');
@@ -36,20 +34,17 @@
 	\OCP\Util::addscript('polls', 'vendor/jquery.ui.timepicker');
 	\OCP\Util::addScript('polls', 'app-create');
 
-	/** @var \OCP\IURLGenerator $urlGenerator */
-	$urlGenerator = $_['urlGenerator'];
-	$hash = $_['hash'];
 ?>
 
-<div id="app" class="flex-column" data-hash="<?php p($hash)?>">
+<div id="app" class="flex-column">
 
 	<div class="controls">
-		<breadcrump :intitle="title"></breadcrump>
-		<button v-if="poll.mode === 'edit'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
-		<button v-if="poll.mode === 'create'" v-on:click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
-		<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" class="button">{{ t('polls', 'Cancel') }}</a>
+		<breadcrump :index-page="indexPage" :intitle="title"></breadcrump>
+		<button v-if="poll.mode === 'edit'" @click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
+		<button v-if="poll.mode === 'create'" @click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
+		<a :href="indexPage" class="button">{{ t('polls', 'Cancel') }}</a>
 
-		<button v-on:click="switchSidebar" class="button">
+		<button @click="switchSidebar" class="button">
 			<span class="symbol icon-settings"></span>
 		</button>
 	</div>
@@ -60,7 +55,7 @@
 				<h2>{{ t('polls', 'Poll description') }}</h2>
 				<div class="flex-column">
 					<label>{{ t('polls', 'Title') }}</label>
-					<input type="text" id="pollTitle" v-bind:class="{ error: titleEmpty }" v-model="poll.event.title">
+					<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
 				</div>
 				<div class="flex-column">
 					<label>{{ t('polls', 'Description') }}</label>
@@ -82,15 +77,15 @@
 							<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
 							<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
 						</div>
-						<date-picker-inline v-on:selected="addNewPollDate" v-bind:locale-data="localeData" :use-time="newPollTime" v-show="poll.event.type === 'datePoll'" />
+						<date-picker-inline @selected="addNewPollDate" :locale-data="localeData" :time="newPollTime" v-show="poll.event.type === 'datePoll'" />
 					</div>
 					<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
 						<li
 							is="date-poll-item"
 							v-for="(pollDate, index) in poll.options.pollDates"
-							v-bind:option="pollDate"
-							v-bind:key="pollDate.id"
-							v-on:remove="poll.options.pollDates.splice(index, 1)">
+							:option="pollDate"
+							:key="pollDate.id"
+							@remove="poll.options.pollDates.splice(index, 1)">
 						</li>
 					</transition-group>
 				</div>
@@ -99,9 +94,9 @@
 						<li
 							is="text-poll-item"
 							v-for="(pollText, index) in poll.options.pollTexts"
-							v-bind:option="pollText"
-							v-bind:key="pollText.id"
-							v-on:remove="poll.options.pollTexts.splice(index, 1)">
+							:option="pollText"
+							:key="pollText.id"
+							@remove="poll.options.pollTexts.splice(index, 1)">
 						</li>
 					</transition-group>
 
@@ -172,8 +167,8 @@
 								:placeholder="t('polls', 'Name of user or group')" 
 								:active-shares="poll.shares" 
 								v-show="poll.event.access === 'select'"
-								v-on:add-share="addShare" 
-								v-on:remove-share="removeShare"/>
+								@add-share="addShare" 
+								@remove-share="removeShare"/>
 			</div>
 		</div>
 	</div>
