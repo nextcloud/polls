@@ -51,6 +51,7 @@
 								@remove="poll.options.pollDates.splice(index, 1)">
 							</li>
 						</transition-group>
+						<date-option-picker></date-option-picker>
 					</div>
 					<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
 						<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
@@ -150,7 +151,7 @@
 	import DatePollItem from './components/datePollItem.vue';
 	import SideBarClose from './components/sideBarClose.vue';
 	import TextPollItem from './components/textPollItem.vue';
-
+	import DateOptionPicker from './components/DateOptionPicker.vue'; 
 	export default {
 		name: 'create-poll',
 
@@ -161,6 +162,7 @@
 			'date-poll-item': DatePollItem,
 			'side-bar-close': SideBarClose,
 			'text-poll-item': TextPollItem,
+			'date-option-picker': DateOptionPicker
 		},
 
 		data: function () {
@@ -235,7 +237,7 @@
 		watch: {
 			title () {
 				// only used when the title changes after page load
-				document.title = t('polls','Polls') + ' - ' + this.title;
+				document.title = t('polls','Polls') + ' - ' + this.poll.title;
 			}
 		},
 
