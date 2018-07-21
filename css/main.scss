@@ -3,8 +3,10 @@ h1 {
 	margin-bottom: 5px;
 }
 
-#app header {
-	padding-top: 44px;
+#app, #create-poll {
+	header {
+		padding-top: 44px;
+	}
 }
 
 /* allow horizontal scrollbar 

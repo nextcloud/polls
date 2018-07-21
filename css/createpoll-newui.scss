@@ -130,7 +130,10 @@ textarea {
 	flex-grow: 1;
 }
 
-#app {
+#create-poll {
+	height: 100%;
+	width: 100%;
+
 	.ui-datepicker-inline{
 		width: 240px;
 		&.ui-datepicker{

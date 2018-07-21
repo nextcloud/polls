@@ -2,11 +2,11 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './js-src/init.js',
+  entry: './js-src/main.js',
   output: {
     path: path.resolve(__dirname, '../js'),
     publicPath: '/js/',
-    filename: 'app-create.js'
+    filename: 'create-poll.js'
   },
   module: {
     rules: [
