@@ -3,8 +3,7 @@
 
 		<div class="controls">
 			<breadcrump :index-page="indexPage" :intitle="title"></breadcrump>
-			<button v-if="poll.mode === 'edit'" @click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Update poll') }}</span></button>
-			<button v-if="poll.mode === 'create'" @click="writePoll(poll.mode)" class="button btn primary"><span>{{ t('polls', 'Create new poll') }}</span></button>
+			<button @click="writePoll(poll.mode)" class="button btn primary"><span>{{ saveButtonTitle }}</span></button>
 			<a :href="indexPage" class="button">{{ t('polls', 'Cancel') }}</a>
 
 			<button @click="switchSidebar" class="button">
@@ -84,8 +83,8 @@
 					</li>
 				</ul>
 
-				<div class="tabsContainer">
-					<div class="tab configurationsTabView flex-row flex-wrap align-centered space-between" @click="protect=false" v-if="protect">
+				<div>
+					<div class="flex-row flex-wrap align-centered space-between" @click="protect=false" v-if="protect">
 						<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour,but you can unlock it anyway.') }}</span>
 						<button> {{ t('polls', 'Unlock configuration ') }} </button>
 					</div>
@@ -212,14 +211,15 @@
 			this.indexPage = OC.generateUrl('apps/polls/');
 
 			var urlArray = window.location.pathname.split( '/' );
-			this.poll.event.hash = urlArray[urlArray.length - 1];
-			this.loadPoll(this.poll.event.hash);
-			
-			if (this.poll.event.hash !== '') {
+
+			if (urlArray[urlArray.length - 1] === 'create') {
+				this.poll.event.owner = OC.getCurrentUser().uid;
+			} else {
+				this.loadPoll(urlArray[urlArray.length - 1])
 				this.protect = true;
 				this.poll.mode = 'edit';
-				this.poll.event.owner = OC.getCurrentUser().uid;
-			}
+			};
+
 			if (window.innerWidth >1024) {
 				this.sidebar = true;
 			}
@@ -233,7 +233,15 @@
 					return this.poll.event.title;
 					
 				}
+			},
+			saveButtonTitle: function() {
+				if (this.poll.mode === 'edit') {
+					return t('polls', 'Update poll')
+				} else {
+					return t('polls', 'Create new poll')
+				}
 			}
+			
 		},
 
 		watch: {
@@ -293,6 +301,8 @@
 							this.poll.event.id = response.data.id;
 							window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
 						}, (error) => {
+							this.poll.event.hash = '';
+							console.log(this.poll.event.hash);
 							console.log(error.response);
 					});
 				}

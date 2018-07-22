@@ -19,7 +19,6 @@
 		flex-wrap: wrap;
 		align-items: flex-start;
 		align-content: flex-start;
-		padding: 8px 0px 8px 17px;
 		width: 465px;
 		overflow: hidden;
 		
@@ -28,8 +27,7 @@
 			width: 540px;
 			flex-shrink: 1;
 			flex-grow: 1;
-			padding-bottom: 15px;
-			padding-right: 15px;
+			padding: 8px 8px 8px 8px;
 		}
 	}
 }
@@ -116,7 +114,7 @@ textarea {
 
 
 #poll-item-selector-date {
-	padding: 0 8px 0 0;
+	padding-right: 8px;
 }
 
 #poll-item-selector-text {
@@ -126,7 +124,7 @@ textarea {
 }
 
 .poll-table {
-	padding: 8px 8px 0 0;
+	/* padding: 8px 8px 0 0; */
 	flex-grow: 1;
 }
 
@@ -154,9 +152,9 @@ textarea {
 li.flex-row {
 	flex-grow: 0;
 	align-items: center;
-	width: 100%;
-	padding-left: 15px;
-	padding-right: 15px;
+	/* width: 100%; */
+	padding-left: 8px;
+	padding-right: 8px;
 	line-height: 2em;
 	background-color: $color-main-background;
 	min-height: 4em;
