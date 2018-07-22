@@ -203,12 +203,12 @@
 				protect: false,
 				sidebar: false,
 				titleEmpty: false,
-				indexPage: ''
+				indexPage: '',
+				longDateFormat: moment.localeData().longDateFormat('L')
 			}
 		},
 
 		created: function() {
-
 			this.indexPage = OC.generateUrl('apps/polls/');
 
 			var urlArray = window.location.pathname.split( '/' );

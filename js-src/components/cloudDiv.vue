@@ -2,7 +2,7 @@
 <template>
 	<div class="cloud">
 		<span class="expired" v-if="options.expired">{{ t('polls', 'Expired')}} </span>
-		<span class="open" v-if="options.expiration">{{ t('polls', 'Expires on %n', 1, expirationdate) }}</span>
+		<span class="open" v-if="options.expiration">{{ t('polls', 'Expires %n', 1, expirationdate) }}</span>
 		<span class="open" v-else>{{ t('polls', 'Expires never') }}</span>
 
 		<span class="information">{{ options.access }}</span>
@@ -18,12 +18,7 @@
 		
 		computed: {
 			expirationdate: function() {
-				var date = moment(this.options.expire);
-				console.log(this.options.expire)
-				console.log(date)
-				console.log(OC.getLocale())
-				date.locale(OC.getLocale());
-				console.log(date)
+				var date = moment(this.options.expire, moment.localeData().longDateFormat('L')).fromNow();
 				return date
 			}
 		}

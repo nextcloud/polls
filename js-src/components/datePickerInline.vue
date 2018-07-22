@@ -1,4 +1,4 @@
-^<template>
+<template>
 		<div class="datepicker-inline"></div>
 </template>
 
@@ -16,6 +16,7 @@
 		},
 
 		mounted: function() {
+			moment.locale(OC.getLocale())
 			$(this.$el).datepicker({
 				dateFormat: 'yy-mm-dd',
 				minDate: this.minDate,
@@ -28,6 +29,7 @@
 				onSelect: this.onSelect
 			});
 		},
+		
 		methods: {
 			onSelect(date) {
 				var time;
@@ -36,9 +38,10 @@
 				} else {
 					time = this.time
 				};
-				this.$emit('selected', moment(date + ' ' + time)).date;
+				this.$emit('selected', moment(date + ' ' + time));
 			}
 		},
+		
 		beforeDestroy: function() {
 			$(this.$el).datepicker('hide').datepicker('destroy');
 		}
