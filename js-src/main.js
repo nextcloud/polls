@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Create from './Create.vue'
-import UserDiv from './components/userDiv.vue';
-import CloudDiv from './components/cloudDiv.vue';
-import DatePickerInput from './components/datePickerInput.vue';
-import TimePicker from './components/timePicker.vue';
+import UserDiv from './components/_base-UserDiv.vue';
+import CloudDiv from './components/_base-CloudDiv.vue';
+import DatePickerInput from './components/_base-DatePickerInput.vue';
+import TimePicker from './components/_base-TimePicker.vue';
 
 Vue.config.devtools;
 
@@ -26,4 +26,4 @@ Vue.mixin({
 new Vue({
   el: '#create-poll',
   render: h => h(Create)
-})
+});
