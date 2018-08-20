@@ -1,17 +1,5 @@
-$bg_no: #ffede9;
-$bg_maybe: #fcf7e1;
-$bg_unvoted: #fff4c8;
-$bg_yes: #ebf5d6;
-$bg_information: #b19c3e;
+@import 'colors.scss';
 
-$fg_no: #f45573;
-$fg_maybe: #f0db98;
-$fg_unvoted: #f0db98;
-$fg_yes: #49bc49;
-
-
-$bg_current_user: #f7f7f7;
-$fg_current_user: #0082c9;
 $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
@@ -21,111 +9,101 @@ $user-column-width: 265px;
 }
 
 .flex-row {
-	display: flex;
-	flex-direction: row;
-	flex-grow: 1;
 	align-items: center;
 }
 
-.flex-column {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 0;
-	flex-shrink: 0;
-	
-}
-#votings {
-	position: relative !important;
-	.description {
-		.expired-vote{
-			color: red;
-			font-weight: bold;
+#app-content {
+	#votings {
+		position: relative !important;
+		padding: 12px 17px;	
+		.description {
+			.expired-vote{
+				color: $color-error;
+				font-weight: bold;
+			}
 		}
-	}
-	padding: 12px 17px;	
-}
+		.header {
+			margin-left: $user-column-width;
+			padding: 0 17px;
+			align-items: initial;
+			
+			.date-box {
+				padding: 0 2px;
+				align-items: center;
+				.month, .dayow {
+					font-size: 1.2em;
+					color: #666;
+				}
 
-.header {
-	margin-left: $user-column-width;
-	padding: 0 17px;
-	align-items: initial;
-	.vote.option {
-		.date-box {
-			flex-grow: 1;
+				.day {
+					font-size: 1.8em;
+					margin: 5px 0 5px 0;
+				}
+			}
+
+			.counter {
+				font-size: 18px;
+				.yes, .no {
+					margin: 0 2px;
+					.svg {
+						background-position: center;
+						background-repeat: no-repeat;
+						background-size: 24px;
+						height: 24px;
+						width: 24px;
+					}
+				}
+				.yes {
+					color: $fg_yes;
+					.svg {
+						background-image: url('../img/yes-vote.svg');
+					}
+				}			
+				.no {
+					color: $fg_no;
+					.svg {
+						background-image: url('../img/no-vote.svg');
+					}
+				}			
+			}
+			
+			.winner {
+				font-style: italic;
+				font-weight: bold;
+				color: $fg_yes;
+			}
+			.vote.option {
+				.date-box {
+					flex-grow: 1;
+				}
+
+				.counter {
+					flex-grow: 0;
+					height: 32px;
+				}	
+			}
 		}
-
-
-		.counter {
+		.user {
+			border-top: $border_user;
+			height: 44px;
+			padding: 0 17px;
+		}
+		.first {
 			flex-grow: 0;
-			height: 32px;
-		}	
-	}
-}
+			flex-shrink: 0;
+			width: $user-column-width;
+		}
 
-.user {
-	border-top: $border_user;
-	height: 44px;
-	padding: 0 17px;
-}
-
-.first {
-	flex-grow: 0;
-	flex-shrink: 0;
-	width: $user-column-width;
-}
-
-.vote, .poll-cell {
-	flex-grow: 1;
-	width: 85px;
-	margin: 2px;
-	align-items:center;
-}
-
-.date-box {
-	padding: 0 2px;
-	align-items: center;
-	.month, .dayow {
-		font-size: 1.2em;
-		color: #666;
-	}
-
-	.day {
-		font-size: 1.8em;
-		margin: 5px 0 5px 0;
-	}
-}
-
-.winner {
-	font-style: italic;
-	font-weight: bold;
-	color: $fg_yes;
-}
-
-.counter {
-	font-size: 18px;
-	.yes, .no {
-		margin: 0 2px;
-		.svg {
-			background-position: center;
-			background-repeat: no-repeat;
-			background-size: 24px;
-			height: 24px;
-			width: 24px;
+		.vote, .poll-cell {
+			flex-grow: 1;
+			width: 85px;
+			margin: 2px;
+			align-items:center;
 		}
 	}
-	.yes {
-		color: $fg_yes;
-		.svg {
-			background-image: url('../img/yes-vote.svg');
-		}
-	}			
-	.no {
-		color: $fg_no;
-		.svg {
-			background-image: url('../img/no-vote.svg');
-		}
-	}			
 }
+
+
 
 .name {
 	margin-left: 5px;
@@ -136,13 +114,6 @@ $user-column-width: 265px;
 	background-repeat: no-repeat;
 	background-size: 32px;
 	height: 44px;
-
-	&.active {
-		cursor: pointer;
-		border: 2px solid;
-		border-radius: 4px;
-		box-sizing: border-box;
-	}
 
 	&.yes {
 		background-color: $bg_yes;
@@ -163,11 +134,28 @@ $user-column-width: 265px;
 	}
 
 	&.unvoted {
-		background-color: $bg_unvoted;
-		color: $fg_unvoted;
-		background-color: $bg_unvoted;
+		background-color: $bg_no;
+		color: $fg_no;
+		&:before {
+			content: attr(data-unvoted);
+			color: $fg_no;
+			font-size: 18px;
+			font-style: italic;
+			font-weight: bold;
+			line-height: 38px;
+		}
 	}
 
+	&.active {
+		cursor: pointer;
+		border: 2px solid;
+		border-radius: 4px;
+		box-sizing: border-box;
+		&.unvoted {
+		background-color: $bg_maybe;
+		color: $fg_maybe;
+		}
+	}
 }
 
 .toggle-cell {
@@ -248,7 +236,7 @@ $user-column-width: 265px;
 	margin-bottom: 15px;
 }
 
-.authorRow {
+/* .authorRow {
 	position: relative;
 	.author {
 		margin-left: 8px;
@@ -263,9 +251,9 @@ $user-column-width: 265px;
 		}
 	}
 }
+ */
 
-
-.detailsView  {
+/* .detailsView  {
 	z-index: 1000 !important;
 	.close.flex-row {
 		justify-content: flex-end;
@@ -284,7 +272,6 @@ $user-column-width: 265px;
 		flex-grow: 1;
 		flex-shrink: 1;
 		padding-right: 15px; 
-
 
 		.authorRow {
 			.leftLabel {
@@ -432,7 +419,7 @@ $user-column-width: 265px;
 			}
 		}
 	}
-}
+} */
 
 @media all and (max-width: (768px) ) {
 	#app-content {
@@ -441,88 +428,94 @@ $user-column-width: 265px;
 }
 @media all and (max-width: (480px) ) {
 
-	#votings {
+	#app-content #votings {
 		padding: 0px 2px;
-	}
 
-	.flex-row {
-		flex-direction: column;
-
-		&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
-			flex-direction: row;
-		}
-
-		&.header {
-			flex-grow: 1;
-			margin-left: 0;
-			margin-top: 44px;
-			width: 120px;
-			padding: 0 0 0 4px;
-			.vote {
-				padding-right: 10px;
-				&.option {
-					align-items: baseline;
-					width: 100%;
-					border-top: $border_user;
+		.flex-row {
+			flex-direction: column;
+				.first {
+					height: 44px;
+					width: unset;
 				}
-				&.time {
-					align-items: center;
-					width: 100%;
-					border-top: $border_user;
-					.counter {
-						flex-direction: column;
-						align-items: flex-end;
+
+			&.user-cell, &.counter, &.counter .yes, &.counter .no, &.controls, &.breadcrump, &.submitPoll, &.newCommentForm, &.close {
+				flex-direction: row;
+			}
+
+			&.header {
+				flex-grow: 1;
+				margin-left: 0;
+				margin-top: 44px;
+				width: 120px;
+				padding: 0 0 0 4px;
+				.vote {
+					padding-right: 10px;
+					&.option {
+						align-items: baseline;
+						width: 100%;
+						border-top: $border_user;
+					}
+					&.time {
+						align-items: center;
+						width: 100%;
+						border-top: $border_user;
+						.counter {
+							flex-direction: column;
+							align-items: flex-end;
+						}
 					}
 				}
 			}
+			
+			&.user {
+				display: none;
+			}
+
+			&.current-user {
+				display: flex;
+				width: 44px;
+				padding:0;
+				border: none;
+				background-color: transparent;
+
+				.poll-cell {
+					border:none;
+					border-radius: 0;
+					border-top: 1px solid #ddd;
+					background-color: transparent;
+					padding: 0 2px;
+					&.active {
+						&.yes {
+							background-image: url('../img/yes-vote-bordered.svg');
+						}
+
+						&.no {
+							background-image: url('../img/no-vote-bordered.svg');
+						}
+
+						&.maybe {
+							background-image: url('../img/maybe-vote-bordered.svg');
+						}
+						&.unvoted {
+							background-image: url('../img/unvoted-vote-bordered.svg');
+						}
+					}
+				}
+				.user-cell {
+					position: absolute;
+					left: 22px;
+				}
+				.poll-cell, .toggle-cell  {
+					width: 44px;
+					height: 44px;
+					background-color: transparent;
+				}
+			}
+
 		}
 		
-		&.user {
-			display: none;
-		}
-
-		&.current-user {
-			display: flex;
-			width: 44px;
-			padding:0;
-			border: none;
-			background-color: transparent;
-
-			.poll-cell {
-				border:none;
-				border-radius: 0;
-				border-top: 1px solid #ddd;
-				background-color: transparent;
-				padding: 0 2px;
-				&.active {
-					&.yes {
-						background-image: url('../img/yes-vote-bordered.svg');
-					}
-
-					&.no {
-						background-image: url('../img/no-vote-bordered.svg');
-					}
-
-					&.maybe {
-						background-image: url('../img/maybe-vote-bordered.svg');
-					}
-					&.unvoted {
-						background-image: url('../img/unvoted-vote-bordered.svg');
-					}
-				}
-			}
-			.user-cell {
-				position: absolute;
-				left: 22px;
-			}
-			.poll-cell, .toggle-cell  {
-				width: 44px;
-				height: 44px;
-				background-color: transparent;
-			}
-		}
-
 	}
+
 	.description {
 		margin: 4px;
 	}
@@ -567,10 +560,6 @@ $user-column-width: 265px;
 		}
 	}
 	
-	.first {
-		height: 44px;
-		width: unset;
-	}
 
 	#options.flex-row {
 		flex-direction: column;
