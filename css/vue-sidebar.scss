@@ -1,0 +1,19 @@
+@import 'colors.scss';
+
+
+#polls-sidebar {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 0;
+	flex-shrink: 1;
+	justify-content: flex-start;
+	width: 520px;
+	min-width: 300px;
+	border-left: 1px solid $color-border;
+	transition: margin-right 300ms;
+	overflow-x: hidden;
+	overflow-y: auto;
+	> * {
+		margin: 8px 8px 0 8px;
+	}
+}

@@ -27,7 +27,7 @@
 	\OCP\Util::addStyle('polls', 'main');
 	\OCP\Util::addStyle('polls', 'flex');
 	\OCP\Util::addStyle('polls', 'createpoll');
-	\OCP\Util::addStyle('polls', 'sidebar');
+	\OCP\Util::addStyle('polls', 'vue-sidebar');
 	\OCP\Util::addStyle('polls', 'createpoll-newui');
 	\OCP\Util::addStyle('polls', 'vendor/jquery.ui.timepicker');
 

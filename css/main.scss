@@ -1,13 +1,13 @@
+#content {
+	margin-top: 0;
+	padding-top: 50px;
+}
+
 h1 {
 	font-size: 1.8em;
 	margin-bottom: 5px;
 }
 
-#app, #create-poll {
-	header {
-		padding-top: 44px;
-	}
-}
 
 /* allow horizontal scrollbar 
    otherwise user management is not usable on mobile */
@@ -31,7 +31,7 @@ h1 {
 #controls {
     // adopted from NC13 for compatibily with OC10 and NC11-NC12
 	width: 100%;
-	position: relative;
+	position: fixed;
 	top: 4px;
 	h2 {
 		margin-top: 12px;
@@ -314,7 +314,7 @@ td.td_shown {
 
 .input-group>input {
 	position: relative;
-	z-index: 2;
+	/* z-index: 2; */
 	float: left;
 	width: 100%;
 	margin: 0;
