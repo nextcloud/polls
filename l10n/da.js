@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Do you really want to delete that poll (new)?" : "Er du sikker på du vil slette afstemning (ny)?",
     "Nothing selected!\nClick on cells to turn them green." : "Ingenting valgt\nKlik på en celle for at gøre den grøn.",
     "You must enter at least a title for the new poll." : "Du skal indtaste en titel på den nye afstemning.",
     "Please select at least one user or group!" : "Vælg venligst mindst en bruger eller gruppe!",

@@ -19,6 +19,8 @@ OC.L10N.register(
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>",
     "Polls App - New Activity" : "Polls App - New Activity",
     "Polls App" : "Polls App",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "A polls app, similar to doodle/dudle with the possibility to restrict access.",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "Edit poll" : "Edit poll",
     "Create new poll" : "Create new poll",
     "Title" : "Title",

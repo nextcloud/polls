@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Do you really want to delete that poll (new)?" : "Ønsker du virkelig å slette den avstemningen (ny)?",
     "Nothing selected!\nClick on cells to turn them green." : "Ingenting valgt!\nKlikk på celler for å gjøre dem grønne.",
     "You must enter at least a title for the new poll." : "Du må skrive inn minst en tittel for ny avstemning",
     "Please select at least one user or group!" : "Velg minst én bruker eller gruppe",
@@ -61,7 +62,7 @@ OC.L10N.register(
     "Edit Poll" : "Rediger avstemning",
     "Poll expired" : "Avstemning utløpt",
     "Comments" : "Kommentarer",
-    "Login or ..." : "Logg inn eller…",
+    "Login or ..." : "Logg inn eller …",
     "New comment …" : "Ny kommentar…",
     "No comments yet. Be the first." : "Ingen kommentarer enda. Vær først.",
     "No existing polls." : "Ingen eksisterende avstemninger.",
@@ -72,6 +73,7 @@ OC.L10N.register(
     "Never" : "Aldri",
     "Access denied" : "Tilgang nektet",
     "You are not allowed to view this poll or the poll does not exist." : "Du har ikke tilgang til å se denne avstemningen, eller så finnes den ikke.",
-    "You are not allowed to edit this poll or the poll does not exist." : "Du har ikke tilgang til å redigere denne avstemningen, eller så finnes den ikke."
+    "You are not allowed to edit this poll or the poll does not exist." : "Du har ikke tilgang til å redigere denne avstemningen, eller så finnes den ikke.",
+    "You are not allowed to delete this poll or the poll does not exist." : "Du har enten ikke tilgang til å slette denne avstemningen, eller så finnes den ikke."
 },
 "nplurals=2; plural=(n != 1);");
