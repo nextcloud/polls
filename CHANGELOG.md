@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.9.0] - tbD
+
+## [0.8.2] - tbD
 
 ### Added
 
@@ -10,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
  - 'Edit poll' did not work from poll's details view #294
- 
+
 ## [0.8.1] - 2018-01-19
 
 ### Added
