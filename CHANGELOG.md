@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
  - 'Edit poll' did not work from poll's details view #294
  - Reload of public polls with ownCloud 10
+ - Compatibility to NC 14
 
 ## [0.8.1] - 2018-01-19
 
