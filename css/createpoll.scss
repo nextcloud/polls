@@ -12,6 +12,10 @@
 	display: none;
 }
 
+#app-content #app-content-wrapper {
+	flex-direction: column;
+}
+
 .cl_access_item {
 	padding: 5px;
 	background-color: white;
