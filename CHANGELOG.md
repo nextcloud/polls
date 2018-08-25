@@ -3,14 +3,13 @@
 All notable changes to this project will be documented in this file.
 
 
-## [0.8.2] - tbD
-
-### Added
+## [0.8.2] - 2018-08-25
 
 ### Changed
 
 ### Fixed
  - 'Edit poll' did not work from poll's details view #294
+ - Reload of public polls with ownCloud 10
 
 ## [0.8.1] - 2018-01-19
 
