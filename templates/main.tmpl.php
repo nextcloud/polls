@@ -22,11 +22,13 @@
 	 */
 
 	use OCP\User; //To do: replace according to API
+	use OCP\Util;
+	use OCP\Template;
 
-	\OCP\Util::addStyle('polls', 'main');
-	\OCP\Util::addStyle('polls', 'list');
-	\OCP\Util::addScript('polls', 'app');
-	\OCP\Util::addScript('polls', 'start');
+	Util::addStyle('polls', 'main');
+	Util::addStyle('polls', 'list');
+	Util::addScript('polls', 'app');
+	Util::addScript('polls', 'start');
 
 	$userId = $_['userId'];
 	/** @var \OCP\IUserManager $userMgr */
@@ -41,7 +43,7 @@
 			<div class="breadcrump">
 				<div class="crumb svg last">
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-						<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
+						<img class="svg" src="<?php print_unescaped(Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 					</a>
 				</div>
 			</div>
@@ -115,11 +117,11 @@
 		$expiry_date = $l->t('Never');
 
 		if ($poll->getExpire() !== null) {
-			$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
+			$expiry_date = Template::relative_modified_date(strtotime($poll->getExpire())); // does not work, because relative_modified_date seems not to recognise future time diffs
 			$expiry_style = ' progress';
 			$timestamp_style = ' live-relative-timestamp';
 			if (date('U') > strtotime($poll->getExpire())) {
-				$expiry_date = \OCP\Template::relative_modified_date(strtotime($poll->getExpire()));
+				$expiry_date = Template::relative_modified_date(strtotime($poll->getExpire()));
 				$expiry_style = ' expired';
 			}
 		}
@@ -186,7 +188,7 @@
 						</div>
 						<div class="wrapper group-2-1">
 							<div class="flex-column access"><?php p($l->t($poll->getAccess())); ?></div>
-							<div class="flex-column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated()) * 1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
+							<div class="flex-column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated()) * 1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
 						</div>
 						<div class="wrapper group-2-2">
 							<div class="flex-column has-tooltip expiry<?php p($expiry_style . $timestamp_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire()) * 1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>

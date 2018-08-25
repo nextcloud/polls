@@ -20,12 +20,14 @@
 	 *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	 *
 	 */
+	use OCP\Util;
+	use OCP\Template;
 
-	\OCP\Util::addStyle('polls', 'main');
-	\OCP\Util::addStyle('polls', 'createpoll');
-	\OCP\Util::addStyle('polls', 'vendor/jquery.datetimepicker.min');
-	\OCP\Util::addScript('polls', 'create_edit');
-	\OCP\Util::addScript('polls', 'vendor/jquery.datetimepicker.full.min');
+	Util::addStyle('polls', 'main');
+	Util::addStyle('polls', 'createpoll');
+	Util::addStyle('polls', 'vendor/jquery.datetimepicker.min');
+	Util::addScript('polls', 'create_edit');
+	Util::addScript('polls', 'vendor/jquery.datetimepicker.full.min');
 
 	$userId = $_['userId'];
 	/** @var \OCP\IUserManager $userMgr */
@@ -78,7 +80,7 @@
 				<div id="breadcrump">
 					<div class="crumb svg" data-dir="/">
 						<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-							<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
+							<img class="svg" src="<?php print_unescaped(Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 						</a>
 					</div>
 					<div class="crumb svg last">

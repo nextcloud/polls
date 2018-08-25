@@ -21,7 +21,8 @@
 	 *
 	 */
 
-	\OCP\Util::addStyle('polls', 'main');
+	use OCP\Util;
+	Util::addStyle('polls', 'main');
 ?>
 <div id="app">
 	<div id="app-content">
