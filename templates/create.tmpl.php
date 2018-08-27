@@ -73,9 +73,8 @@
 	}
 ?>
 
-<div id="app">
 	<div id="app-content">
-		<div id="app-content-wrapper">
+
 			<div id="controls">
 				<div id="breadcrump">
 					<div class="crumb svg" data-dir="/">
@@ -195,6 +194,6 @@
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>" id="submit_cancel_poll" class="button"><?php p($l->t('Cancel')); ?></a>
 				</div>
 			</form>
-		</div>
+		
 	</div>
-</div>
+
