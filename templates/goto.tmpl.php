@@ -22,15 +22,15 @@
 	 */
 
 	use OCP\User;
+	use OCP\Util;
+	use OCP\Template;
 
-	\OCP\Util::addStyle('polls', 'main');
-	\OCP\Util::addStyle('polls', 'vote');
+	Util::addStyle('polls', 'vote');
 	if (!User::isLoggedIn()) {
-		\OCP\Util::addStyle('polls', 'public');
+		Util::addStyle('polls', 'public');
 	}
-
-	\OCP\Util::addScript('polls', 'app');
-	\OCP\Util::addScript('polls', 'vote');
+	Util::addScript('polls', 'app');
+	Util::addScript('polls', 'vote');
 
 	$userId = $_['userId'];
 	/** @var \OCP\IUserManager $userMgr */
@@ -96,14 +96,13 @@
 	$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
 ?>
 
-<div id="app">
 	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass); ?>">
 		<div id="controls" class="controls">
 			<div id="breadcrump" class="breadcrump">
 				<?php if (User::isLoggedIn()) : ?>
 				<div class="crumb svg" data-dir="/">
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-						<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
+						<img class="svg" src="<?php print_unescaped(Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 					</a>
 				</div>
 				<?php endif; ?>
@@ -494,7 +493,7 @@
 						<div class="authorRow user-cell flex-row">
 							<div class="avatar has-tooltip" title="<?php p($avatarName)?>"></div>
 							<div class="author"><?php p($displayName) ?></div>
-							<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt()) * 1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
+							<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="<?php p(strtotime($comment->getDt()) * 1000); ?>" title="<?php p($comment->getDt()) ?>"><?php p(Template::relative_modified_date(strtotime($comment->getDt()))) ?></div>
 						</div>
 						<div class="message wordwrap comment-content"><?php p($comment->getComment()); ?></div>
 					</li>
@@ -504,4 +503,4 @@
 		</div>
 		<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>
 	</div>
-</div>
+

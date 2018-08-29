@@ -4,6 +4,7 @@
 build/
 css/*.map
 nbproject/
+node_modules/
 *.cmd
 *.lock
 *.iml
