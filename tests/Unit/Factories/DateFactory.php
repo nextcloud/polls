@@ -25,7 +25,7 @@
  * General factory for the date model.
  */
 $fm->define('OCA\Polls\Db\Date')->setDefinitions([
-	'dt' => function () {
+	'dt' => function() {
 		$date = new DateTime('today');
 		return $date->format('Y-m-d H:i:s');
 	}

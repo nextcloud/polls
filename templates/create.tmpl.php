@@ -171,7 +171,7 @@
 							<table id="selected-dates-table" class="choices">
 							</table>
 						</div>
-						<div id="text-select-container" <?php if(!$isUpdate || $poll->getType() === 0) print_unescaped('style="display:none;"'); ?> >
+						<div id="text-select-container" <?php if (!$isUpdate || $poll->getType() === 0) print_unescaped('style="display:none;"'); ?> >
 							<label for="text-title" class="input_title"><?php p($l->t('Text item')); ?></label>
 							<div class="input-group">
 								<input type="text" id="text-title" placeholder="<?php print_unescaped('Insert text...'); ?>" />
