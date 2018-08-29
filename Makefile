@@ -79,7 +79,6 @@ appstore:
 	--exclude="js/.*" \
 	--exclude="l10n/no-php" \
 	--exclude="node_modules" \
-	--exclude="oc-css" \
 	--exclude="src" \
 	--exclude="tests" \
 	--exclude="vendor" \
@@ -129,7 +128,6 @@ else
 	--exclude="js/.*" \
 	--exclude="l10n/no-php" \
 	--exclude="node_modules" \
-	--exclude="oc-css" \
 	--exclude="src" \
 	--exclude="tests" \
 	--exclude="vendor" \
