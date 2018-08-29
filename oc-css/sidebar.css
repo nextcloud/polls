@@ -1,0 +1,190 @@
+#polls-sidebar {
+  width: 520px;
+  flex-grow: 0;
+  flex-shrink: 1;
+  min-width: 300px;
+  /* padding-top: 8px;  */
+  /* margin-top: 3px; */
+  border-left: 1px solid #ebebeb;
+  /* -webkit-transition: margin-right 300ms; */
+  transition: margin-right 300ms;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* visibility: visible; */
+  z-index: 500;
+  /* height: 100%; */
+}
+#polls-sidebar > div, #polls-sidebar > ul {
+  padding: 8px;
+}
+
+.authorRow {
+  align-items: center;
+}
+.authorRow .author {
+  margin-left: 8px;
+  opacity: 0.5;
+  flex-grow: 1;
+}
+.authorRow .author.external {
+  margin-right: 33px;
+  opacity: 1;
+}
+.authorRow .author.external > input {
+  width: 100%;
+}
+
+.detailsView {
+  z-index: 1000 !important;
+}
+.detailsView .close.flex-row {
+  justify-content: flex-end;
+  margin: 8px 8px 0 0;
+}
+.detailsView .header.flex-row {
+  flex-direction: row;
+  flex-grow: 0;
+  align-items: flex-start;
+  margin-left: 0;
+  margin-top: 0;
+  padding: 0 17px;
+}
+.detailsView .pollInformation {
+  width: 220px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding-right: 15px;
+}
+.detailsView .pollInformation .authorRow .leftLabel {
+  margin-right: 4px;
+}
+.detailsView .pollInformation .cloud {
+  margin: 4px 0;
+}
+.detailsView .pollInformation .cloud > span {
+  color: #fff;
+  margin: 2px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  float: left;
+  text-shadow: 1px 1px #666;
+  background-color: #aaa;
+}
+.detailsView .pollInformation .cloud .open {
+  background-color: #49bc49;
+}
+.detailsView .pollInformation .cloud .expired {
+  background-color: #f45573;
+}
+.detailsView .pollInformation .cloud .information {
+  background-color: #b19c3e;
+}
+.detailsView #expired_info {
+  margin: 0 15px;
+}
+.detailsView .pollActions {
+  display: flex;
+  flex-direction: column;
+  margin-right: 15px;
+}
+.detailsView .pollActions .close {
+  margin: 15px;
+  background-position: right top;
+  height: 30px;
+}
+.detailsView .pollActions > ul > li:focus, .detailsView .pollActions > ul > li:focus > a, .detailsView .pollActions > ul > li:hover, .detailsView .pollActions > ul > li:hover > a, .detailsView .pollActions > ul > li.active, .detailsView .pollActions > ul > li.active > a, .detailsView .pollActions > ul > li a.selected, .detailsView .pollActions > ul > li a.selected > a {
+  opacity: 1;
+  box-shadow: inset 2px 0 #0082c9;
+}
+.detailsView .pollActions > ul > li > a[class*=icon-],
+.detailsView .pollActions > ul > li > ul > li > a[class*=icon-],
+.detailsView .pollActions > ul > li > a[style*=background-image],
+.detailsView .pollActions > ul > li > ul > li > a[style*=background-image] {
+  padding-left: 44px;
+}
+.detailsView .pollActions > ul > li > a,
+.detailsView .pollActions > ul > li > ul > li > a {
+  background-size: 16px 16px;
+  background-position: 14px center;
+  background-repeat: no-repeat;
+  display: block;
+  justify-content: space-between;
+  line-height: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #000;
+  opacity: 0.57;
+  flex: 1 1 0;
+  z-index: 100;
+}
+.detailsView .pollActions > ul > li a,
+.detailsView .pollActions > ul > li .app-navigation-entry-deleted {
+  padding-left: 44px !important;
+}
+.detailsView #configurationsTabView .configBox {
+  padding: 8px 8px;
+}
+.detailsView #configurationsTabView .configBox > .title {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.detailsView #configurationsTabView .configBox > div {
+  padding-left: 4px;
+}
+.detailsView #configurationsTabView .configBox input.hasDatepicker {
+  margin-left: 17px;
+}
+.detailsView #configurationsTabView .configBox.oneline {
+  width: 100%;
+}
+.detailsView #commentsTabView .newCommentForm div.message:empty:before {
+  content: attr(data-placeholder);
+  color: grey;
+}
+.detailsView #commentsTabView #commentBox {
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  padding: 7px 6px;
+  margin: 3px 3px 3px 40px;
+  cursor: text;
+}
+.detailsView #commentsTabView .comment {
+  margin-bottom: 30px;
+}
+.detailsView #commentsTabView .comment .comment-header {
+  background-color: #EEE;
+  border-bottom: 1px solid #DDD;
+  border-radius: 3px 3px 0 0;
+}
+.detailsView #commentsTabView .comment .comment-date {
+  float: right;
+  color: #555;
+}
+.detailsView #commentsTabView .comment .date {
+  right: 0;
+  top: 5px;
+  opacity: 0.5;
+}
+.detailsView #commentsTabView .message {
+  margin-left: 40px;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.detailsView #commentsTabView .new-comment .submitComment {
+  align-self: last baseline;
+  width: 30px;
+  margin: 0;
+  padding: 7px 9px;
+  background-color: transparent;
+  border: none;
+  opacity: 0.3;
+}
+.detailsView #commentsTabView .new-comment .icon-loading-small {
+  float: left;
+  margin-top: 10px;
+  display: none;
+}

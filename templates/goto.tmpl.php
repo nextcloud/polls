@@ -25,7 +25,6 @@
 	use OCP\Util;
 	use OCP\Template;
 
-	Util::addStyle('polls', 'main');
 	Util::addStyle('polls', 'vote');
 	if (!User::isLoggedIn()) {
 		Util::addStyle('polls', 'public');

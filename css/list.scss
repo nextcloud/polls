@@ -1,30 +1,5 @@
-﻿@import 'colors.scss';
-
-$row-padding: 15px;
-$table-padding: 4px;
-
-$date-width: 120px;
-$participants-width: 80px;
-$group-2-2-width: max($date-width, $participants-width);
-
-$owner-width: 140px;
-$access-width: 140px;
-$group-2-1-width: max($access-width, $date-width);
-$group-2-width: $owner-width + $group-2-1-width + $group-2-2-width;
-
-$action-width: 44px;
-$thumbnail-width: 44px;
-$thumbnail-icon-width: 32px;
-$name-width: 150px;
-$description-width: 150px;
-$group-1-1-width: max($name-width, $description-width);
-$group-1-width: $thumbnail-width + $group-1-1-width + $action-width;
-
-$group-master-width: max($group-1-width, $group-2-width);
-
-$mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $date-width + $participants-width + $row-padding * 2);
-$mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
-$mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
+﻿@import 'polls-variables.scss';
+@import 'main.scss';
 
 .table {
 	width: 100%;
@@ -126,7 +101,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	}
 }
 
-.participants{
+.participants {
 	width: $participants-width;
 	div {
 		&.partic_voted {
@@ -150,11 +125,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 }
 
-/* .actions {
-	width: $action-width;
-	position: relative;
-	overflow: initial;
-} */
 
 .thumbnail {
 	background-size: $thumbnail-icon-width;

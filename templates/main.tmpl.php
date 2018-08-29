@@ -25,7 +25,6 @@
 	use OCP\Util;
 	use OCP\Template;
 
-	Util::addStyle('polls', 'main');
 	Util::addStyle('polls', 'list');
 	Util::addScript('polls', 'app');
 	Util::addScript('polls', 'start');

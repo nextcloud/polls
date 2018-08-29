@@ -91,7 +91,7 @@ marketplace:
 ifeq (,$(sass))
 	@echo "No sass command available, please install it and rerun"
 else
-	sass --update css:css
+	sass --no-source-map ./src/css-oc:css
 	rm -rf $(marketplace_build_directory)
 	rm -rf $(build_source_directory)
 	mkdir -p $(marketplace_build_directory)

@@ -1,26 +1,8 @@
-/* #content {
-	margin-top: 0;
-	padding-top: 50px;
-}
- */
 h1 {
 	font-size: 1.8em;
 	margin-bottom: 5px;
 }
 
-
-/* allow horizontal scrollbar 
-   otherwise user management is not usable on mobile */
- /* @media only screen and (max-width: 768px) {
-	#app-content {
-		overflow-x: auto !important;
-	}
-} */
-
-/* #app-content-wrapper {
-	flex-direction: column;
-}
- */
 .icon-polls {
 	background-color: black;
 	-webkit-mask: url('../img/app.svg') no-repeat 50% 50%;
@@ -56,16 +38,17 @@ h1 {
 	padding: 0px 15px;
 }
 
-.col-70 { width: 65%; float: left; padding: 0px 15px; }
+.col-70 { 
+	width: 65%; 
+	float: left; 
+	padding: 0px 15px; 
+}
 
-.col-30 { width: 35%; float: left; padding: 0px 15px; }
-
-/* @media(max-width: 992px) {
-	.col-70, .col-30, .col-50 {
-		float: none;
-		width: 100%;
-	}
-} */
+.col-30 { 
+	width: 35%; 
+	float: left; 
+	padding: 0px 15px; 
+}
 
 
 input[type="text"] {
@@ -73,11 +56,6 @@ input[type="text"] {
 	width: 100%;
 }
 
-/* textarea {
-	min-width: 100%;
-	max-width: 100%;
-}
- */
 .form-actions {
 	padding: 15px;
 }
@@ -86,8 +64,21 @@ input[type="text"] {
 	width: 100%;
 }
 
-div.new_poll {
-	width: 100%;
+div {
+	.new_poll {
+		width: 100%;
+	}
+	.scroll_div {
+		width: 100%;
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+
+	.scroll_div_dialog {
+		width: 100%;
+		height: 250px;
+		overflow-y: auto;
+	}
 }
 
 input.table_button {
@@ -98,17 +89,6 @@ input.table_button {
 	vertical-align: middle;
 }
 
-div.scroll_div {
-	width: 100%;
-	overflow-x: auto;
-	overflow-y: hidden;
-}
-
-div.scroll_div_dialog {
-	width: 100%;
-	height: 250px;
-	overflow-y: auto;
-}
 
 .bordered {
 	border-left: 1px solid #FFF;
@@ -157,11 +137,12 @@ td.td_shown {
 	font-size: 2em;
 }
 
-.input_title{
+.input_title {
 	display: block;
 	font-size: 1.2em;
 	margin-top: 5px;
 }
+
 .padded td {
 	padding: 10px;
 }
@@ -210,33 +191,30 @@ td.td_shown {
 	cursor: pointer;
 	padding: 0px 5px 0px 5px;
 
+	&:hover { 
+		background-color: #ffccca;
+	}
 }
-.cl_del_item:hover {
-	background-color: #ffccca;
-}
+
 .cl_maybe:before, .cl_maybe:after{
 	content: "?";
 }
 
 .cl_user_comments {
 	table-layout: fixed;
+	td {
+		text-align: left;
+	}
+	th {
+		word-wrap: break-word;
+		vertical-align: top;
+		text-align: center;
+	}
 }
 
-.cl_user_comments td {
-	text-align: left;
-}
-
-.cl_user_comments th {
-	word-wrap: break-word;
-	vertical-align: top;
-	text-align: center;
-}
 
 .user_comment {
 	font-size: 0.9em;
-}
-
-.user_comment {
 	padding-bottom: 10px;
 }
 
@@ -288,24 +266,24 @@ td.td_shown {
 	white-space: nowrap;
 	vertical-align: middle;
 	width: 1%;
+	
+	input[type="checkbox"] {
+		margin: 0;
 	}
-
-.input-group-addon input[type="checkbox"] {
-	margin: 0;
 }
+
 
 .input-group-btn {
 	vertical-align: top;
-}
-
-.input-group-btn .btn {
-	height: 31.25px;
-	border: 1px solid #DDD;
-	margin: 0;
-	border-radius: 3px;
-	vertical-align: middle;
-	display: block;
-	width: 100%;
+	.btn {
+		height: 31.25px;
+		border: 1px solid #DDD;
+		margin: 0;
+		border-radius: 3px;
+		vertical-align: middle;
+		display: block;
+		width: 100%;
+	}
 }
 
 .input-group>input {
