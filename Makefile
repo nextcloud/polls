@@ -56,6 +56,7 @@ appstore:
 
 	rsync -a \
 	--include="js/vendor" \
+	--include="css/vendor" \
 	--exclude="*.log" \
 	--exclude=".*" \
 	--exclude="bower.json" \
@@ -105,6 +106,7 @@ else
 
 	rsync -a \
 	--include="js/vendor" \
+	--include="css/vendor" \
 	--exclude="*.log" \
 	--exclude=".*" \
 	--exclude="bower.json" \
