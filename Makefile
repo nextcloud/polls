@@ -55,6 +55,7 @@ appstore:
 	mkdir -p $(build_source_directory)
 
 	rsync -a \
+	--include="js/vendor" \
 	--exclude="*.log" \
 	--exclude=".*" \
 	--exclude="bower.json" \
@@ -103,6 +104,7 @@ else
 	mkdir -p $(build_source_directory)
 
 	rsync -a \
+	--include="js/vendor" \
 	--exclude="*.log" \
 	--exclude=".*" \
 	--exclude="bower.json" \
