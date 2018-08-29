@@ -60,6 +60,7 @@ appstore:
 	--exclude=".*" \
 	--exclude="bower.json" \
 	--exclude="composer.*" \
+	--exclude="ISSUE_TEMPLATE.md" \
 	--exclude="karma.*" \
 	--exclude="Makefile" \
 	--exclude="package.json" \
@@ -109,6 +110,7 @@ else
 	--exclude=".*" \
 	--exclude="bower.json" \
 	--exclude="composer.*" \
+	--exclude="ISSUE_TEMPLATE.md" \
 	--exclude="karma.*" \
 	--exclude="Makefile" \
 	--exclude="package.json" \
