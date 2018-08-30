@@ -1,31 +1,96 @@
 ﻿@import 'colors.scss';
 
-#content {
-	display: flex;
-/* 	height: unset;
-	width: unset;  */
+#create-poll {
+	/* display: flex; */
+	/* flex-direction: column; */
+	width: 100%;
+
+	.controls {
+		position: fixed;
+		flex-grow: 0;
+		display: flex;
+		border-bottom: 1px solid $color-border;
+		background: $color-main-background;
+		width: 100%;
+		height: $header-height;
+		z-index: 1;
+		align-items: center;
+		
+		.button, button {
+			flex-shrink: 0;
+			box-sizing: border-box;
+			display: inline-block;
+			height: 36px;
+			padding: 7px 10px;
+			border: 0;
+			background: transparent;
+			color: #aaa;
+			&.primary {
+				background: $color-primary;
+				color: $color-primary-text;
+			}
+		}
+	}
+	
+	input, textarea {
+			&.error {
+				border: 2px solid $color-error;
+				box-shadow: 1px 0 $border-radius $color-box-shadow;
+		}
+	}
+
+	.ui-datepicker-inline{
+		width: 240px;
+		&.ui-datepicker{
+			&.ui-widget {
+				filter: unset;
+				border: 1px solid #ddd;
+			}
+		}
+		& * {
+			box-sizing: content-box;
+		}
+	}
+	input.hasTimepicker {
+		width: 75px;
+	}
 }
+
+#poll-options {
+	> div {
+		display: flex;
+		flex-grow: 1;
+		flex-wrap: wrap;
+		> div {
+			padding-right: 8px;
+		}
+	}
+}
+#text-poll-container > * {
+	width: 100%;
+}
+
 
 .polls-content {
 	display: flex;
-	flex-direction: row;
 	flex-grow: 1;
-	padding-top: 45px;
+	padding-top: $header-height;
+	height: 100%;
+	
 	.workbench {
 		display: flex;
-		flex-direction: row;
 		flex-grow: 1;
 		flex-shrink: 1;
 		flex-wrap: wrap;
-		align-items: flex-start;
+		/* align-items: flex-start; */
 		align-content: flex-start;
-		width: 465px;
+		width: 440px;
 		overflow: hidden;
 		
 		
 		> div {
-			width: 540px;
-			flex-shrink: 1;
+			width: 440px;
+			flex-shrink: 0;
 			flex-grow: 1;
 			padding: 8px 8px 8px 8px;
 		}
@@ -36,44 +101,6 @@
 	background-image: url('../img/save.svg');
 }
 
-.controls {
-	display: flex;
-	flex-direction: row;
-	flex-grow: 0;
-	border-bottom: 1px solid $color-border;
-	position: fixed;
-	background: $color-main-background;
-	width: 100%;
-	height: 45px;
-	z-index: 1001;
-	.button, button {
-		flex-shrink: 0;
-		box-sizing: border-box;
-		display: inline-block;
-		height: 36px;
-		padding: 7px 10px;
-		border: 0;
-		background: transparent;
-		color: #aaa;
-		&.primary {
-			background: $color-primary;
-			color: $color-primary-text;
-		}
-	}
-	.breadcrump {
-		flex-shrink: 1;
-		overflow: hidden;
-		min-width: 0;
-		div.crumb:last-child {
-				flex-shrink: 1;
-				overflow: hidden;
-			> span {
-				flex-shrink: 1;
-				text-overflow: ellipsis;
-			}
-		}
-	}
-}
 
 
 
@@ -89,14 +116,6 @@ textarea {
 }
 
 
-#pollTitle, #pollDesc {
-		min-width: 245px;
-		max-width: 100%;
-		&.error {
-			border: 2px solid $color-error;
-			box-shadow: 1px 0 $border-radius $color-box-shadow;
-	}
-}
 
 /* Transitions for inserting and removing list items */
 	.list-enter-active, .list-leave-active {
@@ -128,26 +147,6 @@ textarea {
 	flex-grow: 1;
 }
 
-#create-poll {
-	height: 100%;
-	width: 100%;
-
-	.ui-datepicker-inline{
-		width: 240px;
-		&.ui-datepicker{
-			&.ui-widget {
-				filter: unset;
-				border: 1px solid #ddd;
-			}
-		}
-		& * {
-			box-sizing: content-box;
-		}
-	}
-	input.hasTimepicker {
-		width: 75px;
-	}
-}
 
 li.flex-row {
 	flex-grow: 0;
@@ -209,7 +208,7 @@ button {
 		border-top: none;
 		position: absolute;
 		background: #fff;
-		z-index: 1;
+		/* z-index: 1; */
 		width: 99%;
 	}
 }

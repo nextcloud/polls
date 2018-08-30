@@ -1,6 +1,5 @@
 ﻿<template>
 	<div>
-		<h2> {{ t('polls', 'Share with') }}</h2>
 		<div class="autocomplete">
 			<input class="shareWithField" 
 				autocomplete="off"

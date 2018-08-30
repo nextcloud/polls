@@ -1,5 +1,5 @@
 <template>
-	<div class="breadcrump flex-row">
+	<div class="breadcrump">
 		<div class="crumb svg">
 			<a :href="indexPage">
 				<img class="svg" :src="imagePath" alt="Home">
@@ -21,3 +21,24 @@
 		}
 	}
 </script>
+
+<style lang="scss" scoped>
+.breadcrump {
+	flex-shrink: 1;
+	overflow: hidden;
+	min-width: 0;
+	flex-grow: 1;
+	display: flex;
+
+	div.crumb:last-child {
+		flex-shrink: 1;
+		overflow: hidden;
+		
+		> span {
+			flex-shrink: 1;
+			text-overflow: ellipsis;
+		}
+	}
+}
+
+</style>

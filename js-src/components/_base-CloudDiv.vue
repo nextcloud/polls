@@ -25,5 +25,29 @@
 	}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+	.cloud {
+		display: flex;
+		flex-wrap: wrap;
+		
+		> span {
+			color: #fff;
+			margin: 2px;
+			padding: 2px 4px;
+			border-radius: 3px;
+			text-shadow: 1px 1px #666;
+			background-color: #aaa;
+			
+		}
+		.open {
+			background-color: #49bc49;
+		}
+		.expired {
+			background-color: #f45573;
+		}
+		.information {
+			background-color: #b19c3e;
+		}
+	}
+
 </style>

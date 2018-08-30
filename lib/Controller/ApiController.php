@@ -154,6 +154,38 @@ class ApiController extends Controller {
   	/**
 	* @NoAdminRequired
 	* @NoCSRFRequired
+	* @return DataResponse
+	*/
+	public function getGrantedEvents() {
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+		$events = $this->eventMapper->findAllForUserWithInfo(\OC::$server->getUserSession()->getUser()->getUID());
+		$data = array();
+		
+		foreach ($events as $event) {
+				$data[] = [
+				'id' => $event->getId(),
+				'hash' => $event->getHash(),
+				'type' => $event->getType(),
+				'title' => $event->getTitle(),
+				'description' => $event->getDescription(),
+				'owner' => $event->getOwner(),
+				'created' => $event->getCreated(),
+				'access' => $event->getAccess(),
+				'expire' => $event->getExpire(),
+				'is_anonymous' => $event->getIsAnonymous(),
+				'full_anonymous' => $event->getFullAnonymous(),
+				'disallow_maybe' => $event->getDisallowMaybe()
+			];
+		}
+
+		return new DataResponse($data, Http::STATUS_OK);
+	}
+
+  	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
 	* @PublicPage
 	* @param string $hash
 	* @return DataResponse
