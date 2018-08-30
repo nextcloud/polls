@@ -45,6 +45,7 @@ endif
 clean:
 	rm -rf ./.sass-cache
 	rm -rf ./build
+	rm -rf ./css/*.css
 
 # Builds the source package for the app store, ignores php and js tests
 .PHONY: appstore
