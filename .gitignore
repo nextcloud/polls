@@ -12,7 +12,7 @@ yarn-error.log
 *.cmd
 *.lock
 *.iml
-*.suo
 *.ntvs*
 *.njsproj
 *.sln	
+*.suo
