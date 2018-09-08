@@ -55,7 +55,7 @@ appstore:
 	--exclude="*.log" \
 	--exclude="phpunit*xml" \
 	--exclude="composer.*" \
-	--exclude="js-src" \
+	--exclude="src" \
 	--exclude="js/node_modules" \
 	--exclude="js/tests" \
 	--exclude="js/test" \
