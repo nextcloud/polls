@@ -146,6 +146,7 @@ $(document).ready(function () {
 	});
 
 	$('#submit_finish_vote').click(function () {
+		$(this).prop("disabled", true);
 		var form = document.finish_vote;
 		var ac = document.getElementById('user_name');
 		if (ac !== null) {
