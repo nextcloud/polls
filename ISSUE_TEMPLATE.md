@@ -1,8 +1,6 @@
 **Which Polls version are you running?** (see apps page)
 
 **Nextcloud or ownCloud?:**
-- [ ] Nextcloud
-- [ ] ownCloud
 
 **Nextcloud/ownCloud version:** (see Nextcloud admin page)
 
