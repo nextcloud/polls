@@ -37,7 +37,6 @@
 	$polls = $_['polls'];
 ?>
 
-<div id="app">
 	<div id="app-content">
 		<div id="app-content-wrapper">
 				<div id="controls">
@@ -159,20 +158,20 @@
 											<li>
 												<a class="menuitem alt-tooltip copy-link has-tooltip action permanent" data-toggle="tooltip" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
 													<span class="icon-clippy"></span>
-													<span>Copy Link</span>
+													<span><?php p($l->t('Copy Link')); ?></span>
 												</a>
 											</li>
 							<?php if ($poll->getOwner() === $userId) : ?>
 											<li>
 												<a id="id_del_<?php p($poll->getId()); ?>" class="menuitem alt-tooltip delete-poll action permanent" data-value="<?php p($poll->getTitle()); ?>" href="#">
 													<span class="icon-delete"></span>
-													<span>Delete poll</span>
+													<span><?php p($l->t('Delete poll')); ?></span>
 												</a>
 											</li>
 											<li>
 												<a id="id_edit_<?php p($poll->getId()); ?>" class="menuitem action permanent" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
 													<span class="icon-rename"></span>
-													<span>Edit Poll</span>
+													<span><?php p($l->t('Edit Poll')); ?></span>
 												</a>
 											</li>
 							<?php endif; ?>
@@ -207,7 +206,7 @@
 	<?php endif; ?>
 		</div>
 	</div>
-</div>
+
 
 
 <?php
