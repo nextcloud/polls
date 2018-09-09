@@ -272,18 +272,20 @@
 						foreach ($options as $optionElement) {
 							// see if user already has data for this event
 							$class = 'no';
+							$dataUnvoted = '';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
 										$class = $vote->getVoteAnswer();
  										break;
+									} else {
+										$class = 'unvoted';
 									}
-									$class = 'unvoted';
 								}
 							}
 							
 							if ($class === 'unvoted') {
-								$dataUnvoted = $l->t('New option!');
+								$dataUnvoted = $l->t('New');
 								$updatedPoll = true;
 							}
 							

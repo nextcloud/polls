@@ -13,9 +13,13 @@ $user-column-width: 265px;
 }
 
 #app-content {
+	width: 100%;
+	overflow-x: hidden;
+
 	#votings {
 		position: relative !important;
 		padding: 12px 17px;	
+		overflow-x: auto;
 		.description {
 			.expired-vote{
 				color: $color-error;
@@ -139,7 +143,7 @@ $user-column-width: 265px;
 		&:before {
 			content: attr(data-unvoted);
 			color: $fg_no;
-			font-size: 18px;
+			font-size: 14px;
 			font-style: italic;
 			font-weight: bold;
 			line-height: 38px;
