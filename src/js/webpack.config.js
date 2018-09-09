@@ -4,7 +4,7 @@ var webpack = require('webpack')
 module.exports = {
   entry: './src/js/main.js',
   output: {
-    path: path.resolve(__dirname, '../js'),
+    path: path.resolve(__dirname, '../../js'),
     publicPath: '/js/',
     filename: 'create-poll.js'
   },

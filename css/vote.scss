@@ -19,7 +19,10 @@ $user-column-width: 265px;
 	#votings {
 		position: relative !important;
 		padding: 12px 17px;	
-		overflow-x: auto;
+		.table {
+			overflow-x: auto;
+			padding-bottom: 10px;
+		}
 		.description {
 			.expired-vote{
 				color: $color-error;
