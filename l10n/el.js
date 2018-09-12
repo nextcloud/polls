@@ -21,6 +21,7 @@ OC.L10N.register(
     "Create new poll" : "Δημιουργία νέας ψηφοφορίας",
     "Title" : "Τίτλος",
     "Description" : "Περιγραφή",
+    "Access" : "Πρόσβαση",
     "Registered users only" : "Μόνο οι εγγεγραμμένοι χρήστες",
     "Public access" : "Δημόσια πρόσβαση",
     "Select" : "Επιλογή",
