@@ -36,14 +36,7 @@
 						<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 					</div>
 
-					<div class="flex-row flex-wrap" v-show="poll.event.type === 'datePoll'">
-						<div id="poll-item-selector-date">
-							<div class="time-seletcion flex-row">
-								<label for="poll-time-picker">{{ t('polls', 'Select time for the date:') }}</label>
-								<time-picker id="poll-time-picker" :placeholder=" t('polls', 'Add time') " v-model="newPollTime" />
-							</div>
-							<date-picker-inline @selected="addNewPollDate" :locale-data="localeData" :time="newPollTime" v-show="poll.event.type === 'datePoll'" />
-						</div>
+					<div class="flex-column flex-wrap" v-show="poll.event.type === 'datePoll'">
 						
 						<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
 							<li
@@ -54,7 +47,11 @@
 								@remove="poll.options.pollDates.splice(index, 1)">
 							</li>
 						</transition-group>
-						
+						<date-picker-input @change="addNewPollDate" 
+							v-bind="optionDatePicker" 
+							style="width:100%" 
+							confirm />
+
 					</div>
 					
 					<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
@@ -117,15 +114,12 @@
 
 								<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
 								<label for="expiration">{{ t('polls', 'Expires') }}</label>
-								<date-picker-input 
-									:type="datePickerOptions.expirationDate.type" 
-									:minute-step="datePickerOptions.expirationDate.minuteStep" 
-									:format="dateTimeFormat" 
-									:lang="lang" 
+								<date-picker-input v-bind="expirationDatePicker"
 									:disabled="protect" 
-									:placeholder="t('polls', 'Expiration date')" 
 									v-model="poll.event.expirationDate" 
-									v-show="poll.event.expiration" confirm></date-picker-input>
+									v-show="poll.event.expiration" 
+									style="width:150px" 
+									confirm />
 						</div>
 
 						<div class="configBox flex-column">
@@ -211,11 +205,21 @@
 				indexPage: '',
 				longDateFormat: moment.localeData().longDateFormat('L'),
 				dateTimeFormat: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				datePickerOptions: {
-					expirationDate: {
-						minuteStep: 1,
-						type: 'datetime'
-					}
+				expirationDatePicker: {
+					editable: true,
+					minuteStep: 1,
+					type: 'datetime',
+					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+					lang: OC.getLanguage(),
+					placeholder: t('polls', 'Expiration date') 
+				},
+				optionDatePicker: {
+					editable: false,
+					minuteStep: 1,
+					type: 'datetime',
+					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+					lang: OC.getLanguage(),
+					placeholder: t('polls', 'Click to add a date') 
 				}
 			}
 		},
