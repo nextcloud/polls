@@ -1,16 +1,25 @@
 import Vue from 'vue'
 import Create from './Create.vue'
-import UserDiv from './components/_base-UserDiv.vue';
+import { DatetimePicker } from 'nextcloud-vue'
+
+import Breadcrump from './components/breadcrump.vue';
 import CloudDiv from './components/_base-CloudDiv.vue';
-import DatePickerInput from './components/_base-DatePickerInput.vue';
+import DatePickerInline from './components/datePickerInline.vue';
 import TimePicker from './components/_base-TimePicker.vue';
+import ShareDiv from './components/shareDiv.vue';
+import SideBarClose from './components/sideBarClose.vue';
+import UserDiv from './components/_base-UserDiv.vue';
 
 Vue.config.devtools;
 
-Vue.component('user-div', UserDiv);
-Vue.component('cloud-div', CloudDiv);
-Vue.component('date-picker-input', DatePickerInput);
-Vue.component('time-picker', TimePicker);
+Vue.component('Breadcrump', Breadcrump);
+Vue.component('CloudDiv', CloudDiv);
+Vue.component('DatePickerInput', DatetimePicker);
+Vue.component('DatePickerInline', DatePickerInline);
+Vue.component('TimePicker', TimePicker);
+Vue.component('ShareDiv', ShareDiv);
+Vue.component('SideBarClose', SideBarClose);
+Vue.component('UserDiv', UserDiv);
 
 Vue.mixin({
 	methods: {

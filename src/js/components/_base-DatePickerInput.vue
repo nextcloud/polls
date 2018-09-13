@@ -1,5 +1,5 @@
 ﻿<template>
-	<input size="10" maxlength="10" 
+	<input size="16" maxlength="16" 
 	:placeholder="placeholder" 
 	:value="value" 
 	@input="$emit('input', $event.target.value)" />
@@ -19,7 +19,8 @@
 		
 		methods: {
 			onClose(value) {
-				this.$emit('input', moment(value, moment.localeData().longDateFormat('l')).format('L'));
+				this.$emit('input', value);
+				console.log(value);
 			}
 		},
 		

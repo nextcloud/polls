@@ -1,6 +1,5 @@
 ﻿<template>
 	<div id="create-poll" class="flex-column">
-
 		<div class="controls">
 			<breadcrump :index-page="indexPage" :intitle="title"></breadcrump>
 			<button @click="writePoll(poll.mode)" class="button btn primary"><span>{{ saveButtonTitle }}</span></button>
@@ -15,17 +14,21 @@
 			<div class="workbench">
 				<div class="flex-column">
 					<h2>{{ t('polls', 'Poll description') }}</h2>
+					
 					<div class="flex-column">
 						<label>{{ t('polls', 'Title') }}</label>
 						<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
 					</div>
+					
 					<div class="flex-column">
 						<label>{{ t('polls', 'Description') }}</label>
 						<textarea id="pollDesc" v-model="poll.event.description"></textarea>
 					</div>
 				</div>
+				
 				<div class="flex-column">
 					<h2>{{ t('polls', 'Vote options') }}</h2>
+					
 					<div v-if="poll.mode == 'create'">
 						<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
 						<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
@@ -41,6 +44,7 @@
 							</div>
 							<date-picker-inline @selected="addNewPollDate" :locale-data="localeData" :time="newPollTime" v-show="poll.event.type === 'datePoll'" />
 						</div>
+						
 						<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
 							<li
 								is="date-poll-item"
@@ -50,7 +54,9 @@
 								@remove="poll.options.pollDates.splice(index, 1)">
 							</li>
 						</transition-group>
+						
 					</div>
+					
 					<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
 						<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
 							<li
@@ -111,7 +117,15 @@
 
 								<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
 								<label for="expiration">{{ t('polls', 'Expires') }}</label>
-								<date-picker-input :disabled="protect" :placeholder="t('polls', 'Expiration date')" v-model="poll.event.expire" v-show="poll.event.expiration"></date-picker-input>
+								<date-picker-input 
+									:type="datePickerOptions.expirationDate.type" 
+									:minute-step="datePickerOptions.expirationDate.minuteStep" 
+									:format="dateTimeFormat" 
+									:lang="lang" 
+									:disabled="protect" 
+									:placeholder="t('polls', 'Expiration date')" 
+									v-model="poll.event.expirationDate" 
+									v-show="poll.event.expiration" confirm></date-picker-input>
 						</div>
 
 						<div class="configBox flex-column">
@@ -144,23 +158,15 @@
 	import moment from 'moment';
 	import lodash from 'lodash';
 
-	import ShareDiv from './components/shareDiv.vue';
-	import Breadcrump from './components/breadcrump.vue';
-	import DatePickerInline from './components/datePickerInline.vue';
 	import DatePollItem from './components/datePollItem.vue';
-	import SideBarClose from './components/sideBarClose.vue';
 	import TextPollItem from './components/textPollItem.vue';
-
+	
 	export default {
 		name: 'create-poll',
 
 		components: {
-			'share-div': ShareDiv,
-			'breadcrump': Breadcrump,
-			'date-picker-inline': DatePickerInline,
-			'date-poll-item': DatePollItem,
-			'side-bar-close': SideBarClose,
-			'text-poll-item': TextPollItem,
+			'DatePollItem': DatePollItem,
+			'TextPollItem': TextPollItem,
 		},
 
 		data: function () {
@@ -180,7 +186,7 @@
 						created: '',
 						access: 'public',
 						expiration: false,
-						expire: false,
+						expirationDate: '',
 						expired: false,
 						isAnonymous: false,
 						fullAnonymous: false,
@@ -191,19 +197,26 @@
 						pollTexts: []
 					}
 				},
-				lang: OC.getLocale(),
+				lang: OC.getLanguage(),
 				localeData: moment.localeData(moment.locale(OC.getLocale())),
 				placeholder: '',
 				newPollDate: '',
 				newPollTime: '',
 				newPollText: '',
-				nextPollDateId: 0,
-				nextPollTextId: 0,
+				nextPollDateId: 1,
+				nextPollTextId: 1,
 				protect: false,
 				sidebar: false,
 				titleEmpty: false,
 				indexPage: '',
-				longDateFormat: moment.localeData().longDateFormat('L')
+				longDateFormat: moment.localeData().longDateFormat('L'),
+				dateTimeFormat: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+				datePickerOptions: {
+					expirationDate: {
+						minuteStep: 1,
+						type: 'datetime'
+					}
+				}
 			}
 		},
 
@@ -226,6 +239,9 @@
 		},
 
 		computed: {
+			langShort: function () {
+				return getLaguage()
+			},
 			title: function() {
 				if (this.poll.event.title === '') {
 					return t('polls','Create new poll');
@@ -299,7 +315,7 @@
 							this.poll.mode = 'edit';
 							this.poll.event.hash = response.data.hash;
 							this.poll.event.id = response.data.id;
-							window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
+							// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
 						}, (error) => {
 							this.poll.event.hash = '';
 							console.log(this.poll.event.hash);
@@ -312,10 +328,16 @@
 				axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 				.then((response) => {
 					this.poll = response.data.poll;
+					if (this.poll.event.expirationDate !== null) {
+						this.poll.event.expirationDate = new Date(moment.utc(this.poll.event.expirationDate))
+					} else {
+						this.poll.event.expirationDate = ''
+					}
+
 					if (this.poll.event.type === 'datePoll') {
 						var i;
 						for (i = 0; i < this.poll.options.pollTexts.length; i++) {
-							this.addNewPollDate(new Date(moment.utc(this.poll.options.pollTexts[i].text)));
+							this.addNewPollDate(new Date(moment.utc(this.poll.options.pollTexts[i].text)))
 						}
 						this.poll.options.pollTexts = [];
 					}

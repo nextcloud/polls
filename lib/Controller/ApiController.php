@@ -167,12 +167,12 @@ class ApiController extends Controller {
 		try {
 			$poll = $this->eventMapper->findByHash($hash);
 
-			$expiration = ($poll->getExpire() !== null);
-
 			if ($poll->getExpire() === null) {
 				$expired = false;
+				$expiration = false;
 			} else {
 				$expired = time() > strtotime($poll->getExpire());
+				$expiration = true;
 			}
 
 			if ($poll->getType() == 0) {
@@ -264,7 +264,7 @@ class ApiController extends Controller {
 				'access' => $accessType,
 				'expiration' => $expiration,
 				'expired' => $expired,
-				'expire' => $poll->getExpire(),
+				'expirationDate' => $poll->getExpire(),
 				'isAnonymous' => $poll->getIsAnonymous(),
 				'fullAnonymous' => $poll->getFullAnonymous(),
 				'disallowMaybe' => $poll->getDisallowMaybe()
@@ -318,7 +318,7 @@ class ApiController extends Controller {
 		}
 
 		if ($event['expiration']) {
-			$newEvent->setExpire($event['expire']);
+			$newEvent->setExpire($event['expirationDate']);
 		} else {
 			$newEvent->setExpire(null);
 		}
