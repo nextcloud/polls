@@ -6,40 +6,17 @@
 	width: unset;  */
 }
 
-.polls-content {
-	display: flex;
-	flex-direction: row;
-	flex-grow: 1;
-	padding-top: 45px;
-	.workbench {
-		display: flex;
-		flex-direction: row;
-		flex-grow: 1;
-		flex-shrink: 1;
-		flex-wrap: wrap;
-		align-items: flex-start;
-		align-content: flex-start;
-		width: 465px;
-		overflow: hidden;
-		
-		
-		> div {
-			width: 540px;
-			flex-shrink: 1;
-			flex-grow: 1;
-			padding: 8px 8px 8px 8px;
-		}
+#create-poll {
+	width: 100%;
+	input.hasTimepicker {
+		width: 75px;
 	}
-}
-
-.icon-save {
-	background-image: url('../img/save.svg');
 }
 
 .controls {
 	display: flex;
-	flex-direction: row;
-	flex-grow: 0;
+	/* flex-direction: row; */
+	/* flex-grow: 0; */
 	border-bottom: 1px solid $color-border;
 	position: fixed;
 	background: $color-main-background;
@@ -48,8 +25,8 @@
 	z-index: 1001;
 	.button, button {
 		flex-shrink: 0;
-		box-sizing: border-box;
-		display: inline-block;
+		/* box-sizing: border-box; */
+		/* display: inline-block; */
 		height: 36px;
 		padding: 7px 10px;
 		border: 0;
@@ -61,9 +38,9 @@
 		}
 	}
 	.breadcrump {
-		flex-shrink: 1;
+		/* flex-shrink: 1; */
 		overflow: hidden;
-		min-width: 0;
+		min-width: 35px;
 		div.crumb:last-child {
 				flex-shrink: 1;
 				overflow: hidden;
@@ -75,26 +52,39 @@
 	}
 }
 
-
-
-textarea {
-	&:not(:disabled) {
-		&:active, 
-		&:hover, 
-		&:focus {
-			border-color: $color-primary-element !important;
-			outline: none !important;
+.polls-content {
+	display: flex;
+	padding-top: 45px;
+	/* flex-direction: row; */
+	/* flex-grow: 1; */
+	.workbench {
+		display: flex;
+		flex-grow: 1;
+		flex-wrap: wrap;
+		overflow: hidden;
+		/* flex-shrink: 1; */
+		/* flex-direction: row; */
+		/* align-items: flex-start; */
+		/* align-content: flex-start; */
+		/* width: 465px; */
+		
+		
+		> div {
+			min-width: 245px;
+			display: flex;
+			flex-direction: column;
+			/* width: 540px; */
+			/* flex-shrink: 1; */
+			flex-grow: 1;
+			padding: 8px;
 		}
 	}
 }
 
-
-#pollTitle, #pollDesc {
-		min-width: 245px;
-		max-width: 100%;
-		&.error {
-			border: 2px solid $color-error;
-			box-shadow: 1px 0 $border-radius $color-box-shadow;
+input, textarea {
+	&.error {
+		border: 2px solid $color-error;
+		box-shadow: 1px 0 $border-radius $color-box-shadow;
 	}
 }
 
@@ -113,9 +103,9 @@ textarea {
 /*  */
 
 
-#poll-item-selector-date {
-	padding-right: 8px;
-}
+/* #poll-item-selector-date { */
+	/* padding-right: 8px; */
+/* } */
 
 #poll-item-selector-text {
 	> input {
@@ -124,62 +114,41 @@ textarea {
 }
 
 .poll-table {
-	/* padding: 8px 8px 0 0; */
-	flex-grow: 1;
-}
-
-#create-poll {
-	/* height: 100%; */
-	width: 100%;
-
-	.ui-datepicker-inline{
-		width: 240px;
-		&.ui-datepicker{
-			&.ui-widget {
-				filter: unset;
-				border: 1px solid #ddd;
+	>li {
+		display: flex;
+		align-items: center;
+		padding-left: 8px;
+		padding-right: 8px;
+		line-height: 2em;
+		min-height: 4em;
+		border-bottom: 1px solid #ebebeb;
+		overflow: hidden;
+		white-space: nowrap;
+		/* flex-direction: row; */
+		/* flex-grow: 1; */
+		/* width: 100%; */
+		/* background-color: $color-main-background; */
+		&:hover, &:active {
+			transition: background-color 0.3s ease;
+			background-color: $hover-color;
+		}
+		> div {
+			display: flex;
+			flex-grow: 1;
+			font-size: 1.2em;
+			opacity: 0.7;
+			white-space: normal;
+			padding-right: 4px;
+			&.avatar {
+				flex-grow: 0;
 			}
 		}
-		& * {
-			box-sizing: content-box;
-		}
-	}
-	input.hasTimepicker {
-		width: 75px;
-	}
-}
 
-li.flex-row {
-	flex-grow: 0;
-	align-items: center;
-	/* width: 100%; */
-	padding-left: 8px;
-	padding-right: 8px;
-	line-height: 2em;
-	background-color: $color-main-background;
-	min-height: 4em;
-	border-bottom: 1px solid #ebebeb;
-	overflow: hidden;
-	white-space: nowrap;
-	&:hover, &:active {
-		transition: background-color 0.3s ease;
-		background-color: $hover-color;
-	}
-	> div {
-		flex-grow: 1;
-		font-size: 1.2em;
-		opacity: 0.7;
-		white-space: normal;
-		padding-right: 4px;
-		&.avatar {
+		> div:nth-last-child(1) {
+			justify-content: center;
 			flex-grow: 0;
+			flex-shrink: 0;
 		}
-	}
-
-	> div:nth-last-child(1) {
-		justify-content: center;
-		flex-grow: 0;
-		flex-shrink: 0;
 	}
 }
 
@@ -189,17 +158,12 @@ button {
 		background-color: transparent;
 	}
 }
-.time-seletcion {
-	align-items: center;
-	> label {
-	flex-grow: 1;
-	}
-}
 
 .autocomplete {
-	width: 100%;
+	/* width: 100%; */
 	position: relative;
 }
+
 #share-list {
 	.user-list {
 		max-height: 180px;

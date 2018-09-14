@@ -12,21 +12,18 @@
 
 		<div class="polls-content flex-row">
 			<div class="workbench">
-				<div class="flex-column">
+				<div>
 					<h2>{{ t('polls', 'Poll description') }}</h2>
 					
-					<div class="flex-column">
-						<label>{{ t('polls', 'Title') }}</label>
-						<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
-					</div>
-					
-					<div class="flex-column">
-						<label>{{ t('polls', 'Description') }}</label>
-						<textarea id="pollDesc" v-model="poll.event.description"></textarea>
-					</div>
+					<label>{{ t('polls', 'Title') }}</label>
+					<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
+				
+					<label>{{ t('polls', 'Description') }}</label>
+					<textarea id="pollDesc" v-model="poll.event.description" style="resize: vertical"></textarea>
+
 				</div>
 				
-				<div class="flex-column">
+				<div>
 					<h2>{{ t('polls', 'Vote options') }}</h2>
 					
 					<div v-if="poll.mode == 'create'">
@@ -36,39 +33,47 @@
 						<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 					</div>
 
-					<div class="flex-column flex-wrap" v-show="poll.event.type === 'datePoll'">
 						
-						<transition-group id="date-poll-list" name="list" tag="ul" class="flex-column poll-table">
-							<li
-								is="date-poll-item"
-								v-for="(pollDate, index) in poll.options.pollDates"
-								:option="pollDate"
-								:key="pollDate.id"
-								@remove="poll.options.pollDates.splice(index, 1)">
-							</li>
-						</transition-group>
-						<date-picker-input @change="addNewPollDate" 
-							v-bind="optionDatePicker" 
-							style="width:100%" 
-							confirm />
+					<transition-group 
+						id="date-poll-list" 
+						name="list" 
+						tag="ul" 
+						class="poll-table" 
+						v-show="poll.event.type === 'datePoll'">
+						<li
+							is="date-poll-item"
+							v-for="(pollDate, index) in poll.options.pollDates"
+							:option="pollDate"
+							:key="pollDate.id"
+							@remove="poll.options.pollDates.splice(index, 1)">
+						</li>
+					</transition-group>
+					<date-picker-input @change="addNewPollDate" 
+						v-bind="optionDatePicker" 
+						style="width:100%" 
+						v-show="poll.event.type === 'datePoll'"
+						confirm />
 
-					</div>
-					
-					<div class="flex-column flex-wrap" v-show="poll.event.type === 'textPoll'">
-						<transition-group id="text-poll-list" name="list" tag="ul" class="poll-table">
-							<li
-								is="text-poll-item"
-								v-for="(pollText, index) in poll.options.pollTexts"
-								:option="pollText"
-								:key="pollText.id"
-								@remove="poll.options.pollTexts.splice(index, 1)">
-							</li>
-						</transition-group>
+				
+					<transition-group 
+						id="text-poll-list" 
+						name="list" 
+						tag="ul" 
+						class="poll-table" 
+						v-show="poll.event.type === 'textPoll'">
+						<li
+							is="text-poll-item"
+							v-for="(pollText, index) in poll.options.pollTexts"
+							:option="pollText"
+							:key="pollText.id"
+							@remove="poll.options.pollTexts.splice(index, 1)">
+						</li>
+					</transition-group>
 
-						<div id="poll-item-selector-text" >
-							<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
-						</div>
+					<div id="poll-item-selector-text" v-show="poll.event.type === 'textPoll'" >
+						<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
 					</div>
+
 				</div>
 			</div>
 
