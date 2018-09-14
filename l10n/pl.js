@@ -19,6 +19,8 @@ OC.L10N.register(
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Witaj %s, <br/><br/><strong>%s</strong> zagłosował(a) w sondzie '%s'.<br/><br/> Aby przejść bezpośrednio do sondy, kliknij w ten <a href=\"%s\">link</a>",
     "Polls App - New Activity" : "Aplikacja Sondy - Nowa aktywność",
     "Polls App" : "Aplikacja Sondy",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikacja ankietowa przypominająca doodle/dudle z możliwością ograniczania dostępu.",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikacja ankietowa przypominająca doodle/dudle z możliwością ograniczania dostępu (członkowie, określone grupy/użytkownicy, ukryte i publiczne).",
     "Edit poll" : "Edytuj sondę",
     "Create new poll" : "Stwórz nową sondę",
     "Title" : "Tytuł",
@@ -42,6 +44,7 @@ OC.L10N.register(
     "Cancel" : "Anuluj",
     "No description provided." : "Nie podano opisu.",
     "The poll expired on %s. Voting is disabled, but you can still comment." : "Sonda wygasła %s. Głosowanie zablokowane, ale ciągle możesz wpisywać komentarze.",
+    "Switch all options at once" : "Przełącz wszystkie opcje jednocześnie",
     "Your name here" : "Twoje imię",
     "Vote!" : "Głosuj!",
     "Receive notification email on activity" : "Odbieraj powiadomienia email o aktywności",
@@ -51,7 +54,10 @@ OC.L10N.register(
     "Expired" : "Wygasło",
     "Expires on %s" : "Wygaśnie o %s",
     "Expires never" : "Nigdy nie wygasa",
+    "Invitation access" : "Dostęp na zaproszenie",
     "Anononymous poll" : "Sonda anonimowa",
+    "Usernames hidden to Owner" : "Nazwy użytkownika ukryte dla właściciela",
+    "Usernames visible to Owner" : "Nazwy użytkownika widoczne dla właściciela",
     "Click to get link" : "Kliknij aby pobrać odnośnik",
     "Copy Link" : "Skopiuj link",
     "Delete poll" : "Usuń sondę",
@@ -68,6 +74,8 @@ OC.L10N.register(
     "Yourself" : "Przez siebie",
     "Never" : "Nigdy",
     "Access denied" : "Dostęp zabroniony",
-    "You are not allowed to view this poll or the poll does not exist." : "Nie masz uprawnień do tej sondy lub sonda nie istnieje."
+    "You are not allowed to view this poll or the poll does not exist." : "Nie masz uprawnień do tej sondy lub sonda nie istnieje.",
+    "You are not allowed to edit this poll or the poll does not exist." : "Nie masz uprawnień do edycji tej ankiety lub ankieta nie istnieje.",
+    "You are not allowed to delete this poll or the poll does not exist." : "Nie masz uprawnień do usunięcia tej ankiety lub ankieta nie istnieje."
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");
