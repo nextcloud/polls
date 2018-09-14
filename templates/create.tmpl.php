@@ -29,10 +29,6 @@
 	\OCP\Util::addStyle('polls', 'createpoll');
 	\OCP\Util::addStyle('polls', 'sidebar');
 	\OCP\Util::addStyle('polls', 'createpoll-newui');
-	\OCP\Util::addStyle('polls', 'vendor/jquery.ui.timepicker');
-
-	\OCP\Util::addscript('polls', 'vendor/jquery.ui.timepicker');
-
 ?>
 
 <div id="create-poll"></div>
