@@ -9,7 +9,7 @@
 				<span class="symbol icon-settings"></span>
 			</button>
 		</div>
-
+		
 		<div class="polls-content">
 			<div class="workbench">
 				<div>

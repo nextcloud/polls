@@ -376,7 +376,7 @@ class ApiController extends Controller {
 				$newOption = new Options();
 				
 				$newOption->setPollId($newEvent->getId());
-				$newOption->setpollOptionText($optionElement['text']);
+				$newOption->setpollOptionText(htmlspecialchars($optionElement['text']));
 				
 				$this->optionsMapper->insert($newOption);
 			}

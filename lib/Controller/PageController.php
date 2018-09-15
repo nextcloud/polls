@@ -329,7 +329,7 @@ class PageController extends Controller {
 				$vote = new Votes();
 				$vote->setPollId($pollId);
 				$vote->setUserId($userId);
-				$vote->setVoteOptionText($options[$i]);
+				$vote->setVoteOptionText(htmlspecialchars($options[$i]));
 				$vote->setVoteAnswer($answers[$i]);
 				$this->votesMapper->insert($vote);
 

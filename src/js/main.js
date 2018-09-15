@@ -9,6 +9,9 @@ import ShareDiv from './components/shareDiv.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import UserDiv from './components/_base-UserDiv.vue';
 
+Vue.config.debug = true
+Vue.config.devTools = true
+
 Vue.component('Breadcrump', Breadcrump);
 Vue.component('CloudDiv', CloudDiv);
 Vue.component('DatePickerInput', DatetimePicker);
