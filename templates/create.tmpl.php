@@ -28,7 +28,6 @@
 	\OCP\Util::addStyle('polls', 'flex');
 	\OCP\Util::addStyle('polls', 'createpoll');
 	\OCP\Util::addStyle('polls', 'sidebar');
-	\OCP\Util::addStyle('polls', 'createpoll-newui');
 ?>
 
 <div id="create-poll"></div>
