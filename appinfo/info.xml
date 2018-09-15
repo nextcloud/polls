@@ -14,7 +14,7 @@
         <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
     </documentation>
     <category>tools</category>
-	<category>social</category>
+    <category>social</category>
     <category>organization</category>
     <website>https://github.com/nextcloud/polls</website>
     <bugs>https://github.com/nextcloud/polls/issues</bugs>
