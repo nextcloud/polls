@@ -22,8 +22,9 @@ All notable changes to this project will be documented in this file.
   - Polls is a Nextcloud only app now. If you wish to proceed developing the ownCloud version, make a fork from the `stable-0.8` branch.
 
 ### Fixed
- - 'Edit poll' did not work from poll's details view #294
+ - 'Edit poll' did not work from poll's details view (#294)
  - Bug which makes voting impossible after edit
+ - Write escapes option texts to db (#341)
  - ... a lot more minor bugs
 
 See https://github.com/nextcloud/polls/milestone/9?closed=1 for all changes and additions.
