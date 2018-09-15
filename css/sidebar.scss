@@ -9,16 +9,9 @@ $user-column-width: 265px;
 	flex-grow: 0;
 	flex-shrink: 1;
 	min-width: 300px;
-	/* padding-top: 8px;  */
-	/* margin-top: 3px; */
-	border-left: 1px solid $color-border;
-	/* -webkit-transition: margin-right 300ms; */
+	border-left: 1px solid var(--color-border);
 	transition: margin-right 300ms;
-	/* overflow-x: hidden; */
-	/* overflow-y: auto; */
-	/* visibility: visible; */
 	z-index: 500;
-	/* height: 100%; */
 	> div, > ul {
 		padding: 8px;
 	}

@@ -10,7 +10,7 @@
 			</button>
 		</div>
 
-		<div class="polls-content flex-row">
+		<div class="polls-content">
 			<div class="workbench">
 				<div>
 					<h2>{{ t('polls', 'Poll description') }}</h2>
@@ -19,7 +19,7 @@
 					<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
 				
 					<label>{{ t('polls', 'Description') }}</label>
-					<textarea id="pollDesc" v-model="poll.event.description" style="resize: vertical"></textarea>
+					<textarea id="pollDesc" v-model="poll.event.description" style="resize: vertical; 	width: 100%;"></textarea>
 
 				</div>
 				
@@ -78,7 +78,7 @@
 			</div>
 
 			<div id="polls-sidebar" v-if="sidebar" class="flex-column detailsView scroll-container">
-				<div class="header flex-row">
+				<div class="header">
 					<div class="pollInformation flex-column">
 						<user-div description="Owner" :user-id="poll.event.owner"></user-div>
 						<cloud-div v-bind:options="poll.event"></cloud-div>
@@ -92,11 +92,11 @@
 				</ul>
 
 				<div>
-					<div class="flex-row flex-wrap align-centered space-between" @click="protect=false" v-if="protect">
+					<div class="flex-wrap align-centered space-between" @click="protect=false" v-if="protect">
 						<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour,but you can unlock it anyway.') }}</span>
 						<button> {{ t('polls', 'Unlock configuration ') }} </button>
 					</div>
-					<div id="configurationsTabView" class="tab configurationsTabView flex-row flex-wrap">
+					<div id="configurationsTabView" class="tab configurationsTabView flex-wrap">
 
 						<div class="configBox flex-column" v-if="poll.mode =='edit'">
 							<label class="title">{{ t('polls', 'Poll type') }}</label>
@@ -362,8 +362,6 @@
 <style lang="scss">
 #content {
 	display: flex;
-/* 	height: unset;
-	width: unset;  */
 }
 
 #create-poll {
@@ -415,26 +413,17 @@
 .polls-content {
 	display: flex;
 	padding-top: 45px;
-	/* flex-direction: row; */
-	/* flex-grow: 1; */
 	.workbench {
 		display: flex;
 		flex-grow: 1;
 		flex-wrap: wrap;
 		overflow: hidden;
-		/* flex-shrink: 1; */
-		/* flex-direction: row; */
-		/* align-items: flex-start; */
-		/* align-content: flex-start; */
-		/* width: 465px; */
 		
 		
 		> div {
 			min-width: 245px;
 			display: flex;
 			flex-direction: column;
-			/* width: 540px; */
-			/* flex-shrink: 1; */
 			flex-grow: 1;
 			padding: 8px;
 		}
@@ -463,10 +452,6 @@ input, textarea {
 /*  */
 
 
-/* #poll-item-selector-date { */
-	/* padding-right: 8px; */
-/* } */
-
 #poll-item-selector-text {
 	> input {
 		width: 100%
@@ -484,10 +469,6 @@ input, textarea {
 		border-bottom: 1px solid var(--color-border);
 		overflow: hidden;
 		white-space: nowrap;
-		/* flex-direction: row; */
-		/* flex-grow: 1; */
-		/* width: 100%; */
-		/* background-color: $color-main-background; */
 		&:hover, &:active {
 			transition: var(--background-dark) 0.3s ease;
 			background-color: var(--color-loading-light); //$hover-color;
@@ -520,7 +501,6 @@ button {
 }
 
 .autocomplete {
-	/* width: 100%; */
 	position: relative;
 }
 
