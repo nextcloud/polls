@@ -24,20 +24,27 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  * @method string getPollOptionText()
  * @method void setPollOptionText(string $value)
+ * @method string getTimestamp()
+ * @method void setTimestamp(Integer $value)
  */
 class Options extends Model {
 	protected $pollId;
 	protected $pollOptionText;
+	protected $timestamp;
 
 	/**
 	 * Options constructor.
 	 */
 	public function __construct() {
 		$this->addType('pollId', 'integer');
+		$this->addType('pollOptionText', 'string');
+		$this->addType('timestamp', 'integer');
 	}
 }

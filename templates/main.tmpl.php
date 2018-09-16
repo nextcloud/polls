@@ -37,12 +37,11 @@
 	$polls = $_['polls'];
 ?>
 
-<div id="app">
 	<div id="app-content">
 		<div id="app-content-wrapper">
 				<div id="controls">
-					<div id="breadcrump">
-						<div class	="crumb svg last" data-dir="/">
+					<div class="breadcrump">
+						<div class="crumb svg last">
 							<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
 								<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 							</a>
@@ -147,7 +146,7 @@
 					<div class="table-row table-body">
 						<div class="wrapper group-master">
 							<div class="wrapper group-1">
-								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class. ' ' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
+								<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class . ' ' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
 								<a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
 									<div class="flex-column name">						  <?php p($poll->getTitle()); ?></div>
 									<div class="flex-column description">				   <?php p($poll->getDescription()); ?></div>
@@ -159,20 +158,20 @@
 											<li>
 												<a class="menuitem alt-tooltip copy-link has-tooltip action permanent" data-toggle="tooltip" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
 													<span class="icon-clippy"></span>
-													<span>Copy Link</span>
+													<span><?php p($l->t('Copy Link')); ?></span>
 												</a>
 											</li>
 							<?php if ($poll->getOwner() === $userId) : ?>
 											<li>
 												<a id="id_del_<?php p($poll->getId()); ?>" class="menuitem alt-tooltip delete-poll action permanent" data-value="<?php p($poll->getTitle()); ?>" href="#">
 													<span class="icon-delete"></span>
-													<span>Delete poll</span>
+													<span><?php p($l->t('Delete poll')); ?></span>
 												</a>
 											</li>
 											<li>
 												<a id="id_edit_<?php p($poll->getId()); ?>" class="menuitem action permanent" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
 													<span class="icon-rename"></span>
-													<span>Edit Poll</span>
+													<span><?php p($l->t('Edit Poll')); ?></span>
 												</a>
 											</li>
 							<?php endif; ?>
@@ -189,10 +188,10 @@
 								</div>
 								<div class="wrapper group-2-1">
 									<div class="flex-column access"><?php p($l->t($poll->getAccess())); ?></div>
-									<div class="flex-column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated())*1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
+									<div class="flex-column created has-tooltip live-relative-timestamp" data-timestamp="<?php p(strtotime($poll->getCreated()) * 1000); ?>" data-value="<?php p($poll->getCreated()); ?>"><?php p(\OCP\Template::relative_modified_date(strtotime($poll->getCreated()))); ?></div>
 								</div>
 								<div class="wrapper group-2-2">
-									<div class="flex-column has-tooltip expiry<?php p($expiry_style . $timestamp_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire())*1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
+									<div class="flex-column has-tooltip expiry<?php p($expiry_style . $timestamp_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire()) * 1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
 									<div class="flex-column participants">
 										<div class="symbol alt-tooltip partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
 										<div class="symbol alt-tooltip partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
@@ -207,7 +206,7 @@
 	<?php endif; ?>
 		</div>
 	</div>
-</div>
+
 
 
 <?php
@@ -224,7 +223,7 @@ function getGroups($userId) {
 	}
 	// Nextcloud >= 12
 	$groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
-	return array_map(function ($group) {
+	return array_map(function($group) {
 		return $group->getGID();
 	}, $groups);
 }
@@ -261,8 +260,7 @@ function userHasAccess(OCA\Polls\Db\Event $poll, $userId) {
 					return true;
 				}
 			}
-		}
-		else if (strpos($item, 'user_') === 0) {
+		} else if (strpos($item, 'user_') === 0) {
 			$usr = substr($item, 5);
 			if ($usr === $userId) {
 				return true;

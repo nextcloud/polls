@@ -7,6 +7,7 @@ css/*.map
 nbproject/
 node_modules/
 npm-debug.log
+package-lock.json
 Thumbs.db
 yarn-error.log
 *.cmd

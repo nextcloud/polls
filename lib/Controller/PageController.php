@@ -267,111 +267,10 @@ class PageController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function editPoll($hash) {
-		$poll = $this->eventMapper->findByHash($hash);
-		if ($this->userId !== $poll->getOwner()) {
-			return new TemplateResponse('polls', 'no.create.tmpl');
-		}
-		$options = $this->optionsMapper->findByPoll($poll->getId());
 		return new TemplateResponse('polls', 'create.tmpl', [
-			'poll' => $poll,
-			'options' => $options,
-			'userId' => $this->userId,
-			'userMgr' => $this->userMgr,
-			'urlGenerator' => $this->urlGenerator
+			'urlGenerator' => $this->urlGenerator,
+ 			'hash' => $hash
 		]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $pollType
-	 * @param string $pollTitle
-	 * @param string $pollDesc
-	 * @param string $userId
-	 * @param string $chosenOptions
-	 * @param int $expireTs
-	 * @param string $accessType
-	 * @param string $accessValues
-	 * @param bool $isAnonymous
-	 * @param bool $hideNames
-	 * @return RedirectResponse
-	 */
-	public function updatePoll(
-		$pollId,
-		$pollType,
-		$pollTitle,
-		$pollDesc,
-		$chosenOptions,
-		$expireTs,
-		$accessType,
-		$accessValues,
-		$isAnonymous,
-		$hideNames
-	) {
-
-
-		$event = $this->eventMapper->find($pollId);
-		$event->setTitle($pollTitle);
-		$event->setDescription($pollDesc);
-		$event->setIsAnonymous($isAnonymous ? 1 : 0);
-		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
-
-		if ($accessType === 'select') {
-			if (isset($accessValues)) {
-				$accessValues = json_decode($accessValues);
-				if ($accessValues !== null) {
-					$groups = array();
-					$users = array();
-					if ($accessValues->groups !== null) {
-						$groups = $accessValues->groups;
-					}
-					if ($accessValues->users !== null) {
-						$users = $accessValues->users;
-					}
-					$accessType = '';
-					foreach ($groups as $gid) {
-						$accessType .= $gid . ';';
-					}
-					foreach ($users as $uid) {
-						$accessType .= $uid . ';';
-					}
-				}
-			}
-		}
-		$event->setAccess($accessType);
-		/** @var string[] $optionsArray */
-		$optionsArray = json_decode($chosenOptions, true);
-
-		$expire = null;
-		if ($expireTs !== 0 && $expireTs !== '') {
-			$expire = date('Y-m-d H:i:s', $expireTs);
-		}
-		$event->setExpire($expire);
-
-		$this->optionsMapper->deleteByPoll($pollId);
-		if ($pollType === 'event') {
-			$event->setType(0);
-			$this->eventMapper->update($event);
-			sort($optionsArray);
-			foreach ($optionsArray as $optionElement) {
-				$option = new Options();
-				$option->setPollId($pollId);
-				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
-				$this->optionsMapper->insert($option);
-			}
-		} else {
-			$event->setType(1);
-			$this->eventMapper->update($event);
-			foreach ($optionsArray as $optionElement) {
-				$option = new Options();
-				$option->setPollId($pollId);
-				$option->setpollOptionText($optionElement);
-				$this->optionsMapper->insert($option);
-			}
-		}
-		$url = $this->urlGenerator->linkToRoute('polls.page.index');
-		return new RedirectResponse($url);
 	}
 
 	/**
@@ -380,106 +279,7 @@ class PageController extends Controller {
 	 */
 	public function createPoll() {
 		return new TemplateResponse('polls', 'create.tmpl',
-			['userId' => $this->userId, 'userMgr' => $this->userMgr, 'urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $pollType
-	 * @param string $pollTitle
-	 * @param string $pollDesc
-	 * @param string $userId
-	 * @param string $chosenOptions
-	 * @param int $expireTs
-	 * @param string $accessType
-	 * @param string $accessValues
-	 * @param bool $isAnonymous
-	 * @param bool $hideNames
-	 * @return RedirectResponse
-	 */
-	public function insertPoll(
-		$pollType,
-		$pollTitle,
-		$pollDesc,
-		$userId,
-		$chosenOptions,
-		$expireTs,
-		$accessType,
-		$accessValues,
-		$isAnonymous,
-		$hideNames
-	) {
-		$event = new Event();
-		$event->setTitle($pollTitle);
-		$event->setDescription($pollDesc);
-		$event->setOwner($userId);
-		$event->setCreated(date('Y-m-d H:i:s'));
-		$event->setHash(\OC::$server->getSecureRandom()->generate(
-			16,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		));
-		$event->setIsAnonymous($isAnonymous ? 1 : 0);
-		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
-
-		if ($accessType === 'select') {
-			if (isset($accessValues)) {
-				$accessValues = json_decode($accessValues);
-				if ($accessValues !== null) {
-					$groups = array();
-					$users = array();
-					if ($accessValues->groups !== null) {
-						$groups = $accessValues->groups;
-					}
-					if ($accessValues->users !== null) {
-						$users = $accessValues->users;
-					}
-					$accessType = '';
-					foreach ($groups as $gid) {
-						$accessType .= $gid . ';';
-					}
-					foreach ($users as $uid) {
-						$accessType .= $uid . ';';
-					}
-				}
-			}
-		}
-		$event->setAccess($accessType);
-		/** @var string[] $optionsArray */
-		$optionsArray = json_decode($chosenOptions, true);
-
-		$expire = null;
-		if ($expireTs !== 0 && $expireTs !== '') {
-			$expire = date('Y-m-d H:i:s', $expireTs);
-		}
-		$event->setExpire($expire);
-
-		if ($pollType === 'event') {
-			$event->setType(0);
-			$ins = $this->eventMapper->insert($event);
-			$pollId = $ins->getId();
-			sort($optionsArray);
-			foreach ($optionsArray as $optionElement) {
-				$option = new Options();
-				$option->setPollId($pollId);
-				$option->setPollOptionText(date('Y-m-d H:i:s', (int)$optionElement));
-				$this->optionsMapper->insert($option);
-			}
-		} else {
-			$event->setType(1);
-			$ins = $this->eventMapper->insert($event);
-			$pollId = $ins->getId();
-			foreach ($optionsArray as $optionElement) {
-				$option = new Options();
-				$option->setPollId($pollId);
-				$option->setpollOptionText($optionElement);
-				$this->optionsMapper->insert($option);
-			}
-		}
-		$url = $this->urlGenerator->linkToRoute('polls.page.index');
-		return new RedirectResponse($url);
+			['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
@@ -520,8 +320,6 @@ class PageController extends Controller {
 		$poll = $this->eventMapper->find($pollId);
 		
 		if ($changed) {
-			// $dates = json_decode($dates);
-			// $types = json_decode($types);
 			$options = json_decode($options);
 			$answers = json_decode($answers);
 			$count_options = count($options);
@@ -531,12 +329,7 @@ class PageController extends Controller {
 				$vote = new Votes();
 				$vote->setPollId($pollId);
 				$vote->setUserId($userId);
-				// $part->setDt(date('Y-m-d H:i:s', $options[$i]));
-				// $part->setType($types[$i]);
-				// $vote->setVoteOptionId($options[$i]); //Todo
-				// $vote->setVoteOptionText($poll->getOptionTextFromId($options[$i])); //Todo
-				// $vote->setVoteType($types[$i]); //needed?
-				$vote->setVoteOptionText($options[$i]);
+				$vote->setVoteOptionText(htmlspecialchars($options[$i]));
 				$vote->setVoteAnswer($answers[$i]);
 				$this->votesMapper->insert($vote);
 
@@ -574,7 +367,7 @@ class PageController extends Controller {
 		return new JSONResponse(array(
 			'userId' => $userId,
 			'displayName' => $displayName,
-			'timeStamp' => $timeStamp *100, 
+			'timeStamp' => $timeStamp * 100, 
 			'date' => date('Y-m-d H:i:s', $timeStamp),
 			'relativeNow' => $this->trans->t('just now'),
 			'comment' => $commentBox
@@ -636,15 +429,15 @@ class PageController extends Controller {
 			$sUsers[] = str_replace('user_', '', $su);
 		}
 		foreach ($userNames as $u) {
-			$alreadyAdded = false;
+			$allreadyAdded = false;
 			foreach ($sUsers as &$su) {
 				if ($su === $u->getUID()) {
 					unset($su);
-					$alreadyAdded = true;
+					$allreadyAdded = true;
 					break;
 				}
 			}
-			if (!$alreadyAdded) {
+			if (!$allreadyAdded) {
 				$users[] = array('uid' => $u->getUID(), 'displayName' => $u->getDisplayName(), 'isGroup' => false);
 			} else {
 				continue;
@@ -673,12 +466,14 @@ class PageController extends Controller {
 		}
 		// Nextcloud >= 12
 		$groups = $this->groupManager->getUserGroups(\OC::$server->getUserSession()->getUser());
-		return array_map(function ($group) {
+		return array_map(function($group) {
 			return $group->getGID();
 		}, $groups);
 	}
 
 	/**
+	 * Check if user has access to this poll
+	 *
 	 * @param Event $poll
 	 * @return bool
 	 */
@@ -717,6 +512,22 @@ class PageController extends Controller {
 				}
 			}
 		}
+		return false;
+	}
+	/**
+	 * Check if user is owner of this poll
+	 *
+	 * @param Event $poll
+	 * @return bool
+	 */
+
+	private function userIsOwner($poll) {
+		$owner = $poll->getOwner();
+
+		if ($owner === $this->userId) {
+			return true;
+		}
+		Util::writeLog('polls', $this->userId, Util::ERROR);
 		return false;
 	}
 }

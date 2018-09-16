@@ -1,12 +1,11 @@
-/* global Clipboard */
-/* global Handlebars */
+/* global Clipboard, Handlebars, navigator */
 
 var newUserOptions = [];
 var newUserAnswers = [];
 
 var maxVotes = 0;
 var valuesChanged = false;
-
+var maybeAllowed = true;
 var tzOffset = new Date().getTimezoneOffset();
 
 // HTML template for new comment (handlebars.js)
@@ -59,7 +58,7 @@ function updateCounters() {
 
 function updateAvatar(obj) {
 	// Temporary hack - Check if we have Nextcloud or ownCloud with an anomymous user
-	if (!document.getElementById('nextcloud') && OC.currentUser === '') {
+	if (!document.getElementById('nextcloud') && !OC.currentUser) {
 		$(obj).imageplaceholder(obj.title);
 	} else {
 		$(obj).avatar(obj.title, 32);
@@ -75,7 +74,9 @@ function switchSidebar() {
 }
 
 $(document).ready(function () {
+	
 	var clipboard = new Clipboard('.copy-link');
+
 	clipboard.on('success', function(e) {
 		var $input = $(e.trigger);
 		$input.tooltip('hide')
@@ -93,6 +94,7 @@ $(document).ready(function () {
 			}
 		}, 3000);
 	});
+
 	clipboard.on('error', function (e) {
 		var $input = $(e.trigger);
 		var actionMsg = '';
@@ -111,7 +113,7 @@ $(document).ready(function () {
 			.tooltip('show');
 		_.delay(function () {
 			$input.tooltip('hide');
-			if (OC.Share.Social.Collection.size() == 0) {
+			if (OC.Share.Social.Collection.size() === 0) {
 				$input.attr('data-original-title', t('core', 'Copy'))
 					.tooltip('fixTitle');
 			} else {
@@ -121,6 +123,10 @@ $(document).ready(function () {
 	});
 	// count how many times in each date
 	updateBest();
+
+	if ($('#app-content').hasClass('maybedisallowed')) {
+		maybeAllowed = false;
+	}
 
 	// Temporary hack - Check if we have Nextcloud or ownCloud with an anonymous user
 	var hideAvatars = false;
@@ -268,7 +274,11 @@ $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 		$nextClass = 'no';
 		$toggleAllClasses= 'yes';
 	} else if($(this).hasClass('no')) {
-		$nextClass = 'maybe';
+		if (maybeAllowed) {
+			$nextClass = 'maybe';
+		} else {
+			$nextClass = 'yes';
+		}
 		$toggleAllClasses= 'no';
 	} else if($(this).hasClass('maybe')) {
 		$nextClass = 'yes';

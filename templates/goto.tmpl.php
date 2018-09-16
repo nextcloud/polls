@@ -24,7 +24,9 @@
 	use OCP\User; //To do: replace according to API
 
 	\OCP\Util::addStyle('polls', 'main');
+	\OCP\Util::addStyle('polls', 'flex');
 	\OCP\Util::addStyle('polls', 'vote');
+	\OCP\Util::addStyle('polls', 'sidebar');
 	if (!User::isLoggedIn()) {
 		\OCP\Util::addStyle('polls', 'public');
 	}
@@ -52,6 +54,11 @@
 
 	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
 	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
+	if ($poll->getDisallowMaybe()) {
+		$maybe = 'maybedisallowed';
+	} else {
+		$maybe = 'maybeallowed';
+	}
 	$access = $poll->getAccess();
 	$updatedPoll = false;
 	$dataUnvoted = '';
@@ -100,12 +107,11 @@
 	$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
 ?>
 
-<div id="app">
-	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass); ?>">
+	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass . ' ' . $maybe); ?>">
 		<div id="controls" class="controls">
 			<div id="breadcrump" class="breadcrump">
 				<?php if (User::isLoggedIn()) : ?>
-				<div class="crumb svg" data-dir="/">
+				<div class="crumb svg">
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
 						<img class="svg" src="<?php print_unescaped(\OCP\Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 					</a>
@@ -196,7 +202,7 @@
 								!$isAnonymous &&
 								!$hideNames
 							) {
-								$displayName = $userMgr->get($usr)->getDisplayName();
+								$displayName = $usr;
 								$avatarName = $usr;
 							} else {
 								if ($isAnonymous || $hideNames) {
@@ -245,14 +251,18 @@
 						if (User::isLoggedIn()) {
 							print_unescaped('		<div class="avatar has-tooltip" title="' . ($userId) . '"></div>');
 							print_unescaped('		<div class="name">');
-							p($userMgr->get($userId)->getDisplayName());
+							p($userId);
 						} else {
 							print_unescaped('		<div class="avatar has-tooltip" title="?"></div>');
 							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
+						if ($maybe === 'maybeallowed') {
 						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
+						} else {
+							print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip yes" title="' . $toggleTooltip . '">');
+						}
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
@@ -262,19 +272,21 @@
 						foreach ($options as $optionElement) {
 							// see if user already has data for this event
 							$class = 'no';
+							$dataUnvoted = '';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
 										$class = $vote->getVoteAnswer();
  										break;
+									} else {
+										$class = 'unvoted';
 									}
-									$class = 'unvoted';
 								}
 							}
 							
 							if ($class === 'unvoted') {
-								$dataUnvoted = $l->t('New option!');
-								$updatedPoll=true;
+								$dataUnvoted = $l->t('New');
+								$updatedPoll = true;
 							}
 							
 							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></li>');
@@ -289,7 +301,7 @@
 			</div>
 			<?php if ($updatedPoll) : ?>
 				<div class="updated-poll alert">
-				<p> <?php p($l->t('This poll was updated since your last visit. Please check your votes.'));?></p>
+				<p> <?php p($l->t('This poll was updated since your last visit. Please check your votes.')); ?></p>
 				</div>
 			<?php endif; ?>
 			
@@ -302,7 +314,7 @@
 						<input type="hidden" name="answers" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="receiveNotifications" />
 						<input type="hidden" name="changed" />
-						<input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
+						<input type="button" id="submit_finish_vote" class="button btn primary" value="<?php p($l->t('Vote!')); ?>" />
 					</form>
 				</div>
 			<?php if (User::isLoggedIn()) : ?>
@@ -326,7 +338,7 @@
 				<div class="authorRow user-cell flex-row">
 					<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
 					<div class="avatar has-tooltip-bottom" title="<?php p($poll->getOwner())?>"></div>
-					<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
+					<div class="author"><?php p($poll->getOwner()); ?></div>
 				</div>
 
 				<div class="cloud">
@@ -402,7 +414,7 @@
 				<?php if (User::isLoggedIn()) : ?>
 					<div class="authorRow user-cell flex-row">
 						<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
-						<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
+						<div class="author"><?php p($userId) ?></div>
 					</div>
 
 				<?php else: ?>
@@ -442,7 +454,7 @@
 							// Comment is from current user
 							// -> display user
 							$avatarName = $userId;
-							$displayName = $userMgr->get($userId)->getDisplayName();
+							$displayName = $userId;
 
 						} else if (!$isAnonymous && !$hideNames) {
 							// comment is from another user,
@@ -451,9 +463,6 @@
 							// -> display user
 							$avatarName = $comment->getUserId();
 							$displayName = $avatarName;
-							if ($userMgr->get($comment->getUserId()) !== null) {
-								$displayName = $userMgr->get($avatarName)->getDisplayName();
-							}
 						} else {
 							// in all other cases
 							// -> make user anonymous
@@ -479,4 +488,3 @@
 		</div>
 		<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>
 	</div>
-</div>

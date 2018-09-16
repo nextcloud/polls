@@ -21,9 +21,16 @@
  *
  */
 namespace OCA\Polls\Migration;
+
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+
+/**
+ * Deleting unused tables 'polls_dts', 'polls_txts', 'polls_particip' and 'polls_particip_text' 
+ * after migration in 'Version009000Date20171202105141.php'
+ */
+
 class Version009000Date20180202213017 extends SimpleMigrationStep {
 	/**
 	 * @param IOutput $output

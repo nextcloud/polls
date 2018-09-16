@@ -62,7 +62,7 @@ OC.L10N.register(
     "Edit Poll" : "Editar encuesta",
     "Poll expired" : "La votación ha caducado",
     "Comments" : "Comentarios",
-    "Login or ..." : "Registrarse o...",
+    "Login or ..." : "Iniciar sesión o...",
     "New comment …" : "Nuevo comentario...",
     "No comments yet. Be the first." : "Todavía no hay comentarios. Sé el primero.",
     "No existing polls." : "No hay votaciones.",

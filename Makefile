@@ -49,12 +49,20 @@ appstore:
 	mkdir -p $(build_source_directory)
 
 	rsync -a \
-	--exclude="build" \
-	--exclude="tests" \
-	--exclude="Makefile" \
+	--include="js/vendor" \
+	--include="css/vendor" \
 	--exclude="*.log" \
-	--exclude="phpunit*xml" \
+	--exclude=".*" \
+	--exclude="bower.json" \
 	--exclude="composer.*" \
+	--exclude="ISSUE_TEMPLATE.md" \
+	--exclude="karma.*" \
+	--exclude="Makefile" \
+	--exclude="package*" \
+	--exclude="phpunit*xml" \
+	--exclude="protractor.*" \
+	--exclude="build" \
+	--exclude="css/*.css" \
 	--exclude="js/node_modules" \
 	--exclude="js/tests" \
 	--exclude="js/test" \
@@ -63,14 +71,13 @@ appstore:
 	--exclude="js/bower.json" \
 	--exclude="js/karma.*" \
 	--exclude="js/protractor.*" \
-	--exclude="package.json" \
-	--exclude="bower.json" \
-	--exclude="karma.*" \
-	--exclude="protractor.*" \
-	--exclude=".*" \
 	--exclude="js/.*" \
-	--exclude="l10n/.tx" \
 	--exclude="l10n/no-php" \
+	--exclude="node_modules" \
+	--exclude="screenshots" \
+	--exclude="src" \
+	--exclude="tests" \
+	--exclude="vendor" \
 	./ $(build_source_directory)/$(app_name)
 
 	tar cvzf $(appstore_package_name).tar.gz --directory="$(build_source_directory)" $(app_name)

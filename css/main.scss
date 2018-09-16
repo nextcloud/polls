@@ -3,8 +3,10 @@ h1 {
 	margin-bottom: 5px;
 }
 
-#app header {
-	padding-top: 44px;
+#app, #create-poll {
+	header {
+		padding-top: 44px;
+	}
 }
 
 /* allow horizontal scrollbar 
@@ -28,7 +30,6 @@ h1 {
 
 #controls {
     // adopted from NC13 for compatibily with OC10 and NC11-NC12
-	display: flex;
 	width: 100%;
 	position: relative;
 	top: 4px;
@@ -36,7 +37,7 @@ h1 {
 		margin-top: 12px;
 	}
 	#breadcrump {
-		flex-grow: 0;
+		flex-grow: 1;
 		overflow: hidden;
 
 		div.crumb {
@@ -153,7 +154,7 @@ td.td_shown {
 }
 
 .description {
-	color: #888;
+	opacity: 0.7;
 }
 
 .cl_title {

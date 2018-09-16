@@ -35,6 +35,7 @@ use OCP\Migration\IOutput;
 
 /**
  * Installation class for the polls app.
+ * Initial db creation
  */
 class Version009000Date20171202105141 extends SimpleMigrationStep {
 	
@@ -121,7 +122,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 				'notnull' => false,
 			]);
 			$table->addColumn('poll_option_text', Type::STRING, [
-				'notnull' => false,  // maybe true?
+				'notnull' => false, // maybe true?
 				'length' => 256,
 			]);
 			$table->setPrimaryKey(['id']);
@@ -219,7 +220,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	* Copy date options 
+	 * Copy date options 
 	 */
 	protected function copyDateOptions() {
 		$insert = $this->connection->getQueryBuilder();
@@ -246,7 +247,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	* Copy text options 
+	 * Copy text options 
 	 */
 	protected function copyTextOptions() {
 		$insert = $this->connection->getQueryBuilder();
@@ -273,7 +274,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	* Copy date votes 
+	 * Copy date votes 
 	 */
 	protected function copyDateVotes() {
 		$insert = $this->connection->getQueryBuilder();
@@ -351,8 +352,8 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			->from('polls_options')
 			// ->where($queryFind->expr()->eq('poll_id', $pollId))
 			// ->andWhere($queryFind->expr()->eq('poll_option', $text));
-			->where('poll_id = "'. $pollId .'"')
-			->andWhere('poll_option_text ="' .$text .'"');
+			->where('poll_id = "' . $pollId . '"')
+			->andWhere('poll_option_text ="' . $text . '"');
 
 		$resultFind = $queryFind->execute();
 		$row = $resultFind->fetch();

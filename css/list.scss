@@ -1,13 +1,10 @@
-﻿$bg_no: #ffede9;
-$bg_yes: #ebf5d6;
-$fg_no: #f45573;
-$fg_yes: #49bc49;
+﻿@import 'colors.scss';
 
 $row-padding: 15px;
 $table-padding: 4px;
 
 $date-width: 120px;
-$participants-width: 80px;
+$participants-width: 95px;
 $group-2-2-width: max($date-width, $participants-width);
 
 $owner-width: 140px;
@@ -40,7 +37,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 	line-height: 2em;
 	transition: background-color 0.3s ease;
-	background-color: #fff;
+	background-color: var(--color-main-background);
 	min-height: 4em;
 	border-bottom: 1px solid #eee;
 
@@ -56,7 +53,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	&.table-body {
 		&:hover, &:focus, &:active, &.mouseOver {
 			transition: background-color 0.3s ease;
-			background-color: #f8f8f8;
+			background-color: $hover-color;
 		}
 		.flex-column.owner {
 			display: flex;
@@ -79,7 +76,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	}
 
 	&.table-header {
-		color: #999;
+		opacity: 0.5;
 	}
 }
 
