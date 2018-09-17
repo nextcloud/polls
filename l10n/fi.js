@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Do you really want to delete that poll (new)?" : "Haluatko varmasti poistaa kyselyn (new)?",
     "Nothing selected!\nClick on cells to turn them green." : "Mitään ei ole valittu!\nNapsauta soluja muuttaaksesi ne vihreiksi.",
     "You must enter at least a title for the new poll." : "Uudelle kyselylle on määritettävä vähintään nimi.",
     "Please select at least one user or group!" : "Valitse vähintään yksi käyttäjä tai ryhmä",
