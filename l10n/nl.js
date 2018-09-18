@@ -19,6 +19,7 @@ OC.L10N.register(
     "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Hallo %s,<br/><br/><strong>%s</strong> heeft deelgenomen aan de peiling '%s'.<br/><br/>Om direct naar de peiling te gaan gebruik je deze <a href=\"%s\">link</a>",
     "Polls App - New Activity" : "Peilingen  App - Nieuwe Activiteit",
     "Polls App" : "Peilingen App",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Een peilingenapp, net als doodle/dudle met de mogelijkheid om toegang te beperken.",
     "Edit poll" : "Peiling bijwerken",
     "Create new poll" : "Nieuwe peiling aanmaken",
     "Title" : "Titel",

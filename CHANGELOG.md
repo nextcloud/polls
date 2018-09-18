@@ -29,6 +29,26 @@ All notable changes to this project will be documented in this file.
 
 See https://github.com/nextcloud/polls/milestone/9?closed=1 for all changes and additions.
  
+## [0.8.3] - 2018-08-30
+
+### Added
+
+### Changed
+
+### Fixed
+ - Display own participation in polls in list view
+
+## [0.8.2] - 2018-08-25
+
+### Added
+ - Compatibility to NC 14 #360
+
+### Changed
+
+### Fixed
+ - 'Edit poll' did not work from poll's details view #294
+ - Reload of public polls with ownCloud 10 #344 #340 #283 #96
+
 ## [0.8.1] - 2018-01-19
 
 ### Added

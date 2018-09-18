@@ -70,6 +70,9 @@ OC.L10N.register(
     "participated" : "deltog",
     "Yourself" : "Du själv",
     "Never" : "Aldrig",
-    "Access denied" : "Tillgång nekades"
+    "Access denied" : "Tillgång nekades",
+    "You are not allowed to view this poll or the poll does not exist." : "Du får inte se den här pollen eller så existerar den inte.",
+    "You are not allowed to edit this poll or the poll does not exist." : "Du får inte redigera den här pollen eller så existerar den inte.",
+    "You are not allowed to delete this poll or the poll does not exist." : "Du får inte radera den här pollen eller så existerar den inte."
 },
 "nplurals=2; plural=(n != 1);");

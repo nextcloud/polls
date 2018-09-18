@@ -1,18 +1,28 @@
+**Which Polls version are you running?** (see apps page)
+
+**Nextcloud or ownCloud?:**
+
+**Nextcloud/ownCloud version:** (see Nextcloud admin page)
+
 ### Steps to reproduce
 1.
 2.
 3.
 
-### Expected behaviour
-Tell us what should happen
-
 ### Actual behaviour
-Tell us what happens instead
+Tell us what happens
+
+### Expected behaviour
+Tell us what should happen instead
+
+**In case of a bug, please answer the following questions**
 
 ### Server configuration
 <!--
 You can use the Issue Template application to prefill most of the required information: https://apps.nextcloud.com/apps/issuetemplate
 -->
+
+**Where did you install Nextcloud from:**
 
 **Operating system**:
 
@@ -21,10 +31,6 @@ You can use the Issue Template application to prefill most of the required infor
 **Database:**
 
 **PHP version:**
-
-**Nextcloud version:** (see Nextcloud admin page)
-
-**Where did you install Nextcloud from:**
 
 **Signing status:**
 
