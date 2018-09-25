@@ -1,0 +1,24 @@
+{ "translations": {
+    "Do you really want to delete that poll (new)?" : "Ali zares želite izbrisati anketo (novo)?",
+    "Copied!" : "Kopirano!",
+    "Copy" : "Kopiraj",
+    "Not supported!" : "Ni podprto!",
+    "Press ⌘-C to copy." : "Pritisnite ⌘-C za kopiranje.",
+    "Press Ctrl-C to copy." : "Pritisnite Ctrl-C za kopiranje.",
+    "just now" : "ravnokar",
+    "Title" : "Naslov",
+    "Description" : "Opis",
+    "Access" : "Dostop",
+    "Public access" : "Javni dostop",
+    "Select" : "Izbor",
+    "Dates" : "Datumi",
+    "Add" : "Dodaj",
+    "Cancel" : "Prekliči",
+    "Close details" : "Zapri podrobnosti",
+    "Close" : "Zapri",
+    "Owner" : "Lastnik",
+    "Copy Link" : "Kopiraj povezavo",
+    "Comments" : "Opombe",
+    "Never" : "Nikoli"
+},"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
+}
