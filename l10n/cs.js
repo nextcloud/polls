@@ -8,7 +8,7 @@ OC.L10N.register(
     "Copied!" : "Zkopírováno!",
     "Copy" : "Zkopírovat",
     "Not supported!" : "Nepodporováno!",
-    "Press ⌘-C to copy." : "Pro zkopírování stiskněte ⌘-C.",
+    "Press ⌘-C to copy." : "Zkopírujete stisknutím ⌘-C.",
     "Press Ctrl-C to copy." : "Zkopírujte stiskem Ctrl-C.",
     "Copy to clipboard: Ctrl+C, Enter" : "Kopírovat do schránky: Ctrl + C, Enter",
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Nejste registrováni.\nPro hlasování, zadejte své jméno\n(alespoň 3 znaky).",
