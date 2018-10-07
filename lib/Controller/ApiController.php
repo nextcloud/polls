@@ -31,6 +31,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUser;
+use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
@@ -51,6 +52,7 @@ class ApiController extends Controller {
 	private $optionsMapper;
 	private $votesMapper;
 	private $commentMapper;
+	private $systemConfig;
 
 	/**
 	 * PageController constructor.
@@ -64,6 +66,7 @@ class ApiController extends Controller {
 	 */
 	public function __construct(
 		$appName,
+		IConfig $systemConfig,
 		IGroupManager $groupManager,
 		IRequest $request,
 		IUserManager $userManager,
@@ -76,6 +79,7 @@ class ApiController extends Controller {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->groupManager = $groupManager;
+		$this->systemConfig = $systemConfig;
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
 		$this->optionsMapper = $optionsMapper;
@@ -386,5 +390,28 @@ class ApiController extends Controller {
 			'hash' => $newEvent->getHash()
 		), Http::STATUS_OK);
 
+	}
+
+	private function getVendor() {
+		// this should really be a JSON file
+		require \OC::$SERVERROOT . '/version.php';
+		/** @var string $vendor */
+		return (string) $vendor;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return DataResponse
+	 */
+	public function getSystem() {
+		$userId = \OC::$server->getUserSession()->getUser()->getUID();
+		$data['system'] = [
+			'versionArray' => \OCP\Util::getVersion(),
+			'version' => implode('.', \OCP\Util::getVersion()),
+			'vendor' => $this->getVendor(),
+			'language' => $this->systemConfig->getUserValue($userId, 'core', 'lang')
+		];
+		return new DataResponse($data, Http::STATUS_OK);
 	}
 }

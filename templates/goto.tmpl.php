@@ -22,11 +22,13 @@
 	 */
 
 	use OCP\User; //To do: replace according to API
+	use OCP\Util;
+	use OCP\Template;
 
-	\OCP\Util::addStyle('polls', 'main');
-	\OCP\Util::addStyle('polls', 'flex');
-	\OCP\Util::addStyle('polls', 'vote');
-	\OCP\Util::addStyle('polls', 'sidebar');
+	Util::addStyle('polls', 'main');
+	Util::addStyle('polls', 'flex');
+	Util::addStyle('polls', 'vote');
+	Util::addStyle('polls', 'sidebar');
 	if (!User::isLoggedIn()) {
 		Util::addStyle('polls', 'public');
 	}
@@ -137,7 +139,7 @@
 			</a>
 		</div>
 
-		d<div id="votings" class="main-container">
+		<div id="votings" class="main-container">
 			<div class="wordwrap description">
 				<span>
 					<?php print_unescaped($description); ?>

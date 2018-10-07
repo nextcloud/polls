@@ -9,7 +9,6 @@
 				<span class="symbol icon-settings"></span>
 			</button>
 		</div>
-		
 		<div class="polls-content">
 			<div class="workbench">
 				<div>
@@ -34,6 +33,13 @@
 					</div>
 
 						
+					<date-picker @change="addNewPollDate" 
+						v-bind="optionDatePicker"
+						v-model="newPollDate"
+						style="width:100%" 
+						v-show="poll.event.type === 'datePoll'"
+						confirm />
+						
 					<transition-group 
 						id="date-poll-list" 
 						name="list" 
@@ -48,13 +54,12 @@
 							@remove="poll.options.pollDates.splice(index, 1)">
 						</li>
 					</transition-group>
-					<date-picker-input @change="addNewPollDate" 
-						v-bind="optionDatePicker" 
-						style="width:100%" 
-						v-show="poll.event.type === 'datePoll'"
-						confirm />
 
 				
+					<div id="poll-item-selector-text" v-show="poll.event.type === 'textPoll'" >
+						<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
+					</div>
+					
 					<transition-group 
 						id="text-poll-list" 
 						name="list" 
@@ -70,9 +75,6 @@
 						</li>
 					</transition-group>
 
-					<div id="poll-item-selector-text" v-show="poll.event.type === 'textPoll'" >
-						<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
-					</div>
 
 				</div>
 			</div>
@@ -80,7 +82,7 @@
 			<div id="polls-sidebar" v-if="sidebar" class="flex-column detailsView scroll-container">
 				<div class="header">
 					<div class="pollInformation flex-column">
-						<user-div description="Owner" :user-id="poll.event.owner"></user-div>
+						<user-div :description="t('polls', 'Owner')" :user-id="poll.event.owner"></user-div>
 						<cloud-div v-bind:options="poll.event"></cloud-div>
 					</div>
 				</div>
@@ -92,9 +94,9 @@
 				</ul>
 
 				<div>
-					<div class="flex-wrap align-centered space-between" @click="protect=false" v-if="protect">
+					<div class="flex-wrap align-centered space-between" v-if="protect">
 						<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour,but you can unlock it anyway.') }}</span>
-						<button> {{ t('polls', 'Unlock configuration ') }} </button>
+						<button @click="protect=false" > {{ t('polls', 'Unlock configuration ') }} </button>
 					</div>
 					<div id="configurationsTabView" class="tab configurationsTabView flex-wrap">
 
@@ -119,12 +121,12 @@
 
 								<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
 								<label for="expiration">{{ t('polls', 'Expires') }}</label>
-								<date-picker-input v-bind="expirationDatePicker"
+								<date-picker v-bind="expirationDatePicker"
 									:disabled="protect" 
 									v-model="poll.event.expirationDate" 
 									v-show="poll.event.expiration" 
 									style="width:170px" 
-									confirm />
+									:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" />
 						</div>
 
 						<div class="configBox flex-column">
@@ -196,7 +198,9 @@
 						pollTexts: []
 					}
 				},
+				system:[],
 				lang: OC.getLanguage(),
+				locale: OC.getLocale(),
 				localeData: moment.localeData(moment.locale(OC.getLocale())),
 				placeholder: '',
 				newPollDate: '',
@@ -215,23 +219,28 @@
 					minuteStep: 1,
 					type: 'datetime',
 					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					lang: OC.getLanguage(),
+					lang: OC.getLanguage().split("-")[0],
 					placeholder: t('polls', 'Expiration date') 
 				},
 				optionDatePicker: {
 					editable: false,
 					minuteStep: 1,
-					type: 'datetime',
+					type: 'datetime', 
 					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					lang: OC.getLanguage(),
-					placeholder: t('polls', 'Click to add a date') 
+					lang: OC.getLanguage().split("-")[0],
+					placeholder: t('polls', 'Click to add a date'),
+					timePickerOptions: { 
+						start: '00:00', 
+						step: '00:05', 
+						end: '23:55' 
+					}
 				}
 			}
 		},
 
 		created: function() {
 			this.indexPage = OC.generateUrl('apps/polls/');
-
+			this.getSystemValues();
 			var urlArray = window.location.pathname.split( '/' );
 
 			if (urlArray[urlArray.length - 1] === 'create') {
@@ -249,8 +258,9 @@
 
 		computed: {
 			langShort: function () {
-				return getLaguage()
+				return OC.getLanguage().split("-")[0]
 			},
+			
 			title: function() {
 				if (this.poll.event.title === '') {
 					return t('polls','Create new poll');
@@ -259,6 +269,7 @@
 					
 				}
 			},
+
 			saveButtonTitle: function() {
 				if (this.poll.mode === 'edit') {
 					return t('polls', 'Update poll')
@@ -266,7 +277,7 @@
 					return t('polls', 'Create new poll')
 				}
 			}
-			
+
 		},
 
 		watch: {
@@ -277,9 +288,21 @@
 		},
 
 		methods: {
-			switchSidebar: function() {
+		
+			switchSidebar () {
 				this.sidebar = !this.sidebar;
 			},
+			
+			getSystemValues: function() {
+				axios.get(OC.generateUrl('apps/polls/get/system'))
+				.then((response) => {
+					this.system = response.data.system;
+				}, (error) => {
+					this.poll.event.hash = '';
+					console.log(error.response);
+				});
+			},
+			
 			addShare: function (item){
 				this.poll.shares.push(item);
 			},
@@ -288,12 +311,8 @@
 				this.poll.shares.splice(this.poll.shares.indexOf(item), 1);
 			},
 
-			addNewPollDate: function (newPollDate, newPollTime) {
-				if (newPollTime !== undefined) {
-					this.newPollDate = moment(newPollDate +' ' + newPollTime);
-				} else {
-					this.newPollDate = moment(newPollDate);
-				}
+			addNewPollDate: function (newPollDate) {
+				this.newPollDate = moment(newPollDate);
 				this.poll.options.pollDates.push({
 					id: this.nextPollDateId++,
 					timestamp: moment(newPollDate).unix(),
@@ -360,162 +379,165 @@
 	
 </script>
 <style lang="scss">
-#content {
-	display: flex;
-}
-
-#create-poll {
-	width: 100%;
-	input.hasTimepicker {
-		width: 75px;
-	}
-}
-
-.controls {
-	display: flex;
-	/* flex-direction: row; */
-	/* flex-grow: 0; */
-	border-bottom: 1px solid var(--color-border);
-	position: fixed;
-	background: var(--color-main-background);
-	width: 100%;
-	height: 45px;
-	z-index: 1001;
-	.button, button {
-		flex-shrink: 0;
-		/* box-sizing: border-box; */
-		/* display: inline-block; */
-		height: 36px;
-		padding: 7px 10px;
-		border: 0;
-		background: transparent;
-		color: var(--color-text-lighter);
-		&.primary {
-			background: var(--color-primary);
-			color: var(--color-primary-text);
-		}
-	}
-	.breadcrump {
-		/* flex-shrink: 1; */
-		overflow: hidden;
-		min-width: 35px;
-		div.crumb:last-child {
-				flex-shrink: 1;
-				overflow: hidden;
-			> span {
-				flex-shrink: 1;
-				text-overflow: ellipsis;
-			}
-		}
-	}
-}
-
-.polls-content {
-	display: flex;
-	padding-top: 45px;
-	.workbench {
+	#content {
 		display: flex;
-		flex-grow: 1;
-		flex-wrap: wrap;
-		overflow: hidden;
-		
-		
-		> div {
-			min-width: 245px;
-			display: flex;
-			flex-direction: column;
-			flex-grow: 1;
-			padding: 8px;
+	}
+
+	#create-poll {
+		width: 100%;
+		input.hasTimepicker {
+			width: 75px;
 		}
 	}
-}
 
-input, textarea {
-	&.error {
-		border: 2px solid var(--color-error);
-		box-shadow: 1px 0 var(--border-radius) var(--color-box-shadow);
-	}
-}
-
-/* Transitions for inserting and removing list items */
-	.list-enter-active, .list-leave-active {
-		transition: all 0.5s ease;
-	}
-
-	.list-enter, .list-leave-to {
-		opacity: 0;
-	}
-
-	.list-move {
-		transition: transform 0.5s;
-	}
-/*  */
-
-
-#poll-item-selector-text {
-	> input {
-		width: 100%
-	}
-}
-
-.poll-table {
-	>li {
+	.controls {
 		display: flex;
-		align-items: center;
-		padding-left: 8px;
-		padding-right: 8px;
-		line-height: 2em;
-		min-height: 4em;
+		/* flex-direction: row; */
+		/* flex-grow: 0; */
 		border-bottom: 1px solid var(--color-border);
-		overflow: hidden;
-		white-space: nowrap;
-		&:hover, &:active {
-			transition: var(--background-dark) 0.3s ease;
-			background-color: var(--color-loading-light); //$hover-color;
-		}
-		> div {
-			display: flex;
-			flex-grow: 1;
-			font-size: 1.2em;
-			opacity: 0.7;
-			white-space: normal;
-			padding-right: 4px;
-			&.avatar {
-				flex-grow: 0;
+		position: fixed;
+		background: var(--color-main-background);
+		width: 100%;
+		height: 45px;
+		z-index: 1001;
+		.button, button {
+			flex-shrink: 0;
+			/* box-sizing: border-box; */
+			/* display: inline-block; */
+			height: 36px;
+			padding: 7px 10px;
+			border: 0;
+			background: transparent;
+			color: var(--color-text-lighter);
+			&.primary {
+				background: var(--color-primary);
+				color: var(--color-primary-text);
 			}
 		}
-
-		> div:nth-last-child(1) {
-			justify-content: center;
-			flex-grow: 0;
-			flex-shrink: 0;
+		.breadcrump {
+			/* flex-shrink: 1; */
+			overflow: hidden;
+			min-width: 35px;
+			div.crumb:last-child {
+					flex-shrink: 1;
+					overflow: hidden;
+				> span {
+					flex-shrink: 1;
+					text-overflow: ellipsis;
+				}
+			}
 		}
 	}
-}
 
-button {
-	&.button-inline{
-		border: 0;
-		background-color: transparent;
+	.polls-content {
+		display: flex;
+		padding-top: 45px;
+		flex-grow: 1;
+		.workbench {
+			display: flex;
+			justify-content: center;
+			flex-grow: 1;
+			flex-wrap: wrap;
+			overflow-x: hidden;
+			
+			
+			> div {
+				min-width: 245px;
+				max-width: 540px;
+				display: flex;
+				flex-direction: column;
+				flex-grow: 1;
+				padding: 8px;
+			}
+		}
 	}
-}
 
-.autocomplete {
-	position: relative;
-}
-
-#share-list {
-	.user-list {
-		max-height: 180px;
-		overflow: auto;
-		border: 1px solid var(--color-border);	
-		margin-top: -3px;
-		border-top: none;
-		position: absolute;
-		background: var(--color-main-background);
-		z-index: 1;
-		width: 99%;
+	input, textarea {
+		&.error {
+			border: 2px solid var(--color-error);
+			box-shadow: 1px 0 var(--border-radius) var(--color-box-shadow);
+		}
 	}
-}
+
+	/* Transitions for inserting and removing list items */
+		.list-enter-active, .list-leave-active {
+			transition: all 0.5s ease;
+		}
+
+		.list-enter, .list-leave-to {
+			opacity: 0;
+		}
+
+		.list-move {
+			transition: transform 0.5s;
+		}
+	/*  */
+
+
+	#poll-item-selector-text {
+		> input {
+			width: 100%
+		}
+	}
+
+	.poll-table {
+		>li {
+			display: flex;
+			align-items: center;
+			padding-left: 8px;
+			padding-right: 8px;
+			line-height: 2em;
+			min-height: 4em;
+			border-bottom: 1px solid var(--color-border);
+			overflow: hidden;
+			white-space: nowrap;
+			&:hover, &:active {
+				transition: var(--background-dark) 0.3s ease;
+				background-color: var(--color-loading-light); //$hover-color;
+			}
+			> div {
+				display: flex;
+				flex-grow: 1;
+				font-size: 1.2em;
+				opacity: 0.7;
+				white-space: normal;
+				padding-right: 4px;
+				&.avatar {
+					flex-grow: 0;
+				}
+			}
+
+			> div:nth-last-child(1) {
+				justify-content: center;
+				flex-grow: 0;
+				flex-shrink: 0;
+			}
+		}
+	}
+
+	button {
+		&.button-inline{
+			border: 0;
+			background-color: transparent;
+		}
+	}
+
+	.autocomplete {
+		position: relative;
+	}
+
+	#share-list {
+		.user-list {
+			max-height: 180px;
+			overflow: auto;
+			border: 1px solid var(--color-border);	
+			margin-top: -3px;
+			border-top: none;
+			position: absolute;
+			background: var(--color-main-background);
+			z-index: 1;
+			width: 99%;
+		}
+	}
 
 </style>
