@@ -83,7 +83,6 @@
 				<div class="header">
 					<div class="pollInformation flex-column">
 						<user-div :description="t('polls', 'Owner')" :user-id="poll.event.owner"></user-div>
-						<cloud-div v-bind:options="poll.event"></cloud-div>
 					</div>
 				</div>
 
@@ -95,7 +94,7 @@
 
 				<div>
 					<div class="flex-wrap align-centered space-between" v-if="protect">
-						<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour,but you can unlock it anyway.') }}</span>
+						<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway.') }}</span>
 						<button @click="protect=false" > {{ t('polls', 'Unlock configuration ') }} </button>
 					</div>
 					<div id="configurationsTabView" class="tab configurationsTabView flex-wrap">
@@ -145,8 +144,7 @@
 									:placeholder="t('polls', 'Name of user or group')" 
 									:active-shares="poll.shares" 
 									v-show="poll.event.access === 'select'"
-									@add-share="addShare" 
-									@remove-share="removeShare"/>
+									:shares="poll.shares"/>
 					</div>
 				</div>
 			</div>
@@ -199,9 +197,8 @@
 					}
 				},
 				system:[],
-				lang: OC.getLanguage(),
-				locale: OC.getLocale(),
-				localeData: moment.localeData(moment.locale(OC.getLocale())),
+				lang: '',
+				locale: '',
 				placeholder: '',
 				newPollDate: '',
 				newPollTime: '',
@@ -212,35 +209,27 @@
 				sidebar: false,
 				titleEmpty: false,
 				indexPage: '',
-				longDateFormat: moment.localeData().longDateFormat('L'),
-				dateTimeFormat: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				expirationDatePicker: {
-					editable: true,
-					minuteStep: 1,
-					type: 'datetime',
-					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					lang: OC.getLanguage().split("-")[0],
-					placeholder: t('polls', 'Expiration date') 
-				},
-				optionDatePicker: {
-					editable: false,
-					minuteStep: 1,
-					type: 'datetime', 
-					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					lang: OC.getLanguage().split("-")[0],
-					placeholder: t('polls', 'Click to add a date'),
-					timePickerOptions: { 
-						start: '00:00', 
-						step: '00:05', 
-						end: '23:55' 
-					}
-				}
+				longDateFormat: '',
+				dateTimeFormat: '',
 			}
 		},
 
 		created: function() {
 			this.indexPage = OC.generateUrl('apps/polls/');
 			this.getSystemValues();
+			this.lang = OC.getLanguage();
+			try {
+				this.locale = OC.getLocale();
+			} catch (e) {
+				if (e instanceof TypeError) {
+					this.locale = this.lang;
+				} else {
+					console.log(e)
+				}
+			}
+			moment.locale(this.locale);
+			this.longDateFormat = moment.localeData().longDateFormat('L');
+			this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT');
 			var urlArray = window.location.pathname.split( '/' );
 
 			if (urlArray[urlArray.length - 1] === 'create') {
@@ -258,7 +247,7 @@
 
 		computed: {
 			langShort: function () {
-				return OC.getLanguage().split("-")[0]
+				return this.lang.split("-")[0]
 			},
 			
 			title: function() {
@@ -276,7 +265,38 @@
 				} else {
 					return t('polls', 'Create new poll')
 				}
+			},
+			localeData:  function () {
+				return moment.localeData(moment.locale(this.locale))
+			},
+
+			expirationDatePicker:   function () {
+				return {
+					editable: true,
+					minuteStep: 1,
+					type: 'datetime',
+					lang: this.lang.split("-")[0],
+					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+					placeholder: t('polls', 'Expiration date') 
+				}
+			},
+
+			optionDatePicker: function () {
+				return {
+					editable: false,
+					minuteStep: 1,
+					type: 'datetime', 
+					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+					lang: this.lang.split("-")[0],
+					placeholder: t('polls', 'Click to add a date'),
+					timePickerOptions: { 
+						start: '00:00', 
+						step: '00:05', 
+						end: '23:55' 
+					}
+				}
 			}
+
 
 		},
 
@@ -312,12 +332,14 @@
 			},
 
 			addNewPollDate: function (newPollDate) {
-				this.newPollDate = moment(newPollDate);
-				this.poll.options.pollDates.push({
-					id: this.nextPollDateId++,
-					timestamp: moment(newPollDate).unix(),
-				});
-				this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp');
+				if (newPollDate != null) {
+					this.newPollDate = moment(newPollDate);
+					this.poll.options.pollDates.push({
+						id: this.nextPollDateId++,
+						timestamp: moment(newPollDate).unix(),
+					});
+					this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp');
+				}
 			},
 			
 			addNewPollText: function () {
@@ -378,6 +400,7 @@
 	}
 	
 </script>
+
 <style lang="scss">
 	#content {
 		display: flex;
@@ -491,10 +514,12 @@
 			border-bottom: 1px solid var(--color-border);
 			overflow: hidden;
 			white-space: nowrap;
+			
 			&:hover, &:active {
 				transition: var(--background-dark) 0.3s ease;
 				background-color: var(--color-loading-light); //$hover-color;
 			}
+			
 			> div {
 				display: flex;
 				flex-grow: 1;
@@ -525,7 +550,10 @@
 	.autocomplete {
 		position: relative;
 	}
-
+	.configurationsTabView {
+		display: flex;
+	}
+	
 	#share-list {
 		.user-list {
 			max-height: 180px;
@@ -539,5 +567,4 @@
 			width: 99%;
 		}
 	}
-
 </style>

@@ -116,7 +116,9 @@ class ApiController extends Controller {
 						'id' => $user->getUID(),
 						'type' => 'user',
 						'displayName' => $user->getDisplayName(),
-						'avatarURL' => ''
+						'avatarURL' => '',
+						'lastLogin' => $user->getLastLogin(),
+						'cloudId' => $user->getCloudId()
 					];
 				}
 			}

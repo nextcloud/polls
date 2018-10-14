@@ -98,11 +98,7 @@
 		$owner = $poll->getOwner();
 
 		$expiry_style = '';
-		if ($poll->getType() === 0) {
-			$participated = $_['participations'];
-		} else {
-			$participated = $_['participations_text'];
-		}
+			$participated = $_['votes'];
 		$participated_class = 'partic_no';
 		$participated_title = 'You did not vote';
 		$participated_count = count($participated);
