@@ -44,19 +44,12 @@
 			Multiselect
 		},
 		
-		props: {
-			placeholder: {
-				type: String
-			},
-			activeShares: {
-				type: Array
-			}
-		},
+		props: ['placeholder', 'activeShares'],
 		
 		data: function () {
 			return {
-				query: '',
 				shares: [],
+				query: '',
 				users: [],
 				siteUsersListOptions: {
 					getUsers: true,
@@ -68,11 +61,10 @@
 		created: function() {
 			this.loadSiteUsers();
 		},
-		
 
 		computed: {
 			sortedShares: function() {
-				return this.shares.sort(this.sortByDisplayname);
+				return this.activeShares.sort(this.sortByDisplayname)
 			}
 		},
 		
@@ -97,7 +89,12 @@
 					return 0;
 			}
 			
+		},
+		watch: {
+			activeShares(value) {
+			this.shares = value.slice(0);
 		}
+}
 	}
 </script>
 

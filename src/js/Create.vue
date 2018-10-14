@@ -141,10 +141,9 @@
 
 						</div>
 						<share-div id="share-list" class="configBox flex-column oneline" 
-									:placeholder="t('polls', 'Name of user or group')" 
 									:active-shares="poll.shares" 
-									v-show="poll.event.access === 'select'"
-									:shares="poll.shares"/>
+									:placeholder="t('polls', 'Name of user or group')" 
+									v-show="poll.event.access === 'select'"/>
 					</div>
 				</div>
 			</div>
