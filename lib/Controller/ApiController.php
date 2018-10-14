@@ -92,11 +92,11 @@ class ApiController extends Controller {
 	* @NoCSRFRequired
 	* @return DataResponse
 	*/
-	public function getSiteUsersAndGroups($getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
+	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
 		$data = array();
 		if ($getGroups) {
-			$groups = $this->groupManager->search('');
+			$groups = $this->groupManager->search($query);
 			foreach ($groups as $group) {
 				if (!in_array($group->getGID(), $skipGroups)) {
 					$list[] = [
@@ -109,7 +109,7 @@ class ApiController extends Controller {
 			}
 		}
 		if ($getUsers) {
-			$users = $this->userManager->searchDisplayName('');
+			$users = $this->userManager->searchDisplayName($query);
 			foreach ($users as $user) {
 				if (!in_array($user->getUID(), $skipUsers)) {
 					$list[] = [

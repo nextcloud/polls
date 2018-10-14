@@ -11,6 +11,14 @@
 			:preserve-search="true" 
 			label="displayName" 
 			track-by="id" 
+			:options-limit="20" 
+			id="ajax" 
+			@search-change="loadUsersAsync"
+			@close="updateShares"
+			:loading="isLoading"
+			:internal-search="false"
+			:hide-selected="true" 
+			:searchable="true" 
 			:preselect-first="true"
 			:placeholder="placeholder">
 			<template slot="selection" slot-scope="{ values, search, isOpen }">
@@ -29,7 +37,10 @@
 			<li v-for="(item, index) in sortedShares" 
 				v-bind:key="item.displayName" 
 				v-bind:data-index="index">
-				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type" only-avatar="true"></user-div>
+				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type"></user-div>
+				<div class="flex-row options">
+					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
+				</div>
 			</li>
 		</transition-group>
 	</div>
@@ -49,37 +60,39 @@
 		data: function () {
 			return {
 				shares: [],
-				query: '',
 				users: [],
+				isLoading: false,
 				siteUsersListOptions: {
 					getUsers: true,
-					getGroups: true,
+					getGroups: false,
+					query: ''
 				}
 			}
 		},
 		
-		created: function() {
-			this.loadSiteUsers();
-		},
-
 		computed: {
 			sortedShares: function() {
-				return this.activeShares.sort(this.sortByDisplayname)
+				return this.shares.sort(this.sortByDisplayname)
 			}
 		},
 		
 		methods: {
 			removeShare: function (index, item){
 				this.$emit('remove-share', item);
-				this.users.push(item);
 			},
 			
-			loadSiteUsers: function () {
+			updateShares: function (){
+				this.$emit('update-shares', this.shares);
+			},
+			
+			loadUsersAsync: function (query) {
+				this.siteUsersListOptions.query = query
 				axios.post(OC.generateUrl('apps/polls/get/siteusers'), this.siteUsersListOptions)
 				.then((response) => {
-					this.users = response.data.siteusers;
+					this.users = response.data.siteusers
+					this.isLoading = false
 				}, (error) => {
-					console.log(error.response);
+					console.log(error.response)
 				});
 			},
 			
@@ -104,6 +117,7 @@
 		display: flex;
 		padding-top: 8px;
 		flex-grow: 0;
+		flex-wrap: wrap;
 		justify-content: flex-start;
 	
 		> li {
@@ -136,6 +150,8 @@
 				content: attr(data-select);
 				background: #41b883;
 				color: #fff;
+				border-radius: 4px;
+				padding: 2px;
 			}
 		}
 
@@ -152,6 +168,8 @@
 					background: #ff6a6a;
 					content: attr(data-deselect);
 					color: #fff;
+					border-radius: 4px;
+					padding: 2px;
 				}
 			}
 		}

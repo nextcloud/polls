@@ -142,6 +142,8 @@
 						</div>
 						<share-div id="share-list" class="configBox flex-column oneline" 
 									:active-shares="poll.shares" 
+									@update-shares="updateShares" 
+									@remove-share="removeShare"
 									:placeholder="t('polls', 'Name of user or group')" 
 									v-show="poll.event.access === 'select'"/>
 					</div>
@@ -324,6 +326,10 @@
 			
 			addShare: function (item){
 				this.poll.shares.push(item);
+			},
+
+			updateShares: function (share){
+				this.poll.shares= share.slice(0);
 			},
 
 			removeShare: function (item){

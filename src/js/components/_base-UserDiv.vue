@@ -87,7 +87,7 @@
 		margin-top: 0;
 		
 		> div {
-			margin: 0 4px 0 4px;
+			margin: 2px 4px 2px 4px;
 		}
 		
 		.description {
