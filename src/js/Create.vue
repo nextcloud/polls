@@ -1,155 +1,152 @@
 ﻿<template>
-	<div id="create-poll" class="flex-column">
-		<div class="controls">
-			<breadcrump :index-page="indexPage" :intitle="title"></breadcrump>
-			<button @click="writePoll(poll.mode)" class="button btn primary"><span>{{ saveButtonTitle }}</span></button>
-			<a :href="indexPage" class="button">{{ t('polls', 'Cancel') }}</a>
-
+	<div id="create-poll">
+		<controls :index-page="indexPage" :intitle="title">
+			<button @click="writePoll(poll.mode)" class="button btn primary" :disabled="saving">
+				<span>{{ saveButtonTitle }}</span>
+				<span v-if="saving" class="shareWithLoading icon-loading-small hidden"></span>
+			</button>
 			<button @click="switchSidebar" class="button">
 				<span class="symbol icon-settings"></span>
 			</button>
-		</div>
-		<div class="polls-content">
-			<div class="workbench">
-				<div>
-					<h2>{{ t('polls', 'Poll description') }}</h2>
-					
-					<label>{{ t('polls', 'Title') }}</label>
-					<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
+		</controls>
+
+		<div class="workbench">
+			<div>
+				<h2>{{ t('polls', 'Poll description') }}</h2>
 				
-					<label>{{ t('polls', 'Description') }}</label>
-					<textarea id="pollDesc" v-model="poll.event.description" style="resize: vertical; 	width: 100%;"></textarea>
-
-				</div>
-				
-				<div>
-					<h2>{{ t('polls', 'Vote options') }}</h2>
-					
-					<div v-if="poll.mode == 'create'">
-						<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
-						<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
-						<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
-						<label for="textPoll">{{ t('polls', 'Text based') }}</label>
-					</div>
-
-						
-					<date-picker @change="addNewPollDate" 
-						v-bind="optionDatePicker"
-						v-model="newPollDate"
-						style="width:100%" 
-						v-show="poll.event.type === 'datePoll'"
-						confirm />
-						
-					<transition-group 
-						id="date-poll-list" 
-						name="list" 
-						tag="ul" 
-						class="poll-table" 
-						v-show="poll.event.type === 'datePoll'">
-						<li
-							is="date-poll-item"
-							v-for="(pollDate, index) in poll.options.pollDates"
-							:option="pollDate"
-							:key="pollDate.id"
-							@remove="poll.options.pollDates.splice(index, 1)">
-						</li>
-					</transition-group>
-
-				
-					<div id="poll-item-selector-text" v-show="poll.event.type === 'textPoll'" >
-						<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
-					</div>
-					
-					<transition-group 
-						id="text-poll-list" 
-						name="list" 
-						tag="ul" 
-						class="poll-table" 
-						v-show="poll.event.type === 'textPoll'">
-						<li
-							is="text-poll-item"
-							v-for="(pollText, index) in poll.options.pollTexts"
-							:option="pollText"
-							:key="pollText.id"
-							@remove="poll.options.pollTexts.splice(index, 1)">
-						</li>
-					</transition-group>
-
-
-				</div>
+				<label>{{ t('polls', 'Title') }}</label>
+				<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
+			
+				<label>{{ t('polls', 'Description') }}</label>
+				<textarea id="pollDesc" v-model="poll.event.description" style="resize: vertical; 	width: 100%;"></textarea>
 			</div>
-
-			<div id="polls-sidebar" v-if="sidebar" class="flex-column detailsView scroll-container">
-				<div class="header">
-					<div class="pollInformation flex-column">
-						<user-div :description="t('polls', 'Owner')" :user-id="poll.event.owner"></user-div>
-					</div>
+			
+			<div>
+				<h2>{{ t('polls', 'Vote options') }}</h2>
+				
+				<div v-if="poll.mode == 'create'">
+					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 				</div>
 
-				<ul class="tabHeaders">
-					<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
-						<a href="#">{{ t('polls', 'Configuration') }}</a>
+					
+				<date-picker @change="addNewPollDate" 
+					v-bind="optionDatePicker"
+					v-model="newPollDate"
+					style="width:100%" 
+					v-show="poll.event.type === 'datePoll'"
+					confirm />
+					
+				<transition-group 
+					id="date-poll-list" 
+					name="list" 
+					tag="ul" 
+					class="poll-table" 
+					v-show="poll.event.type === 'datePoll'">
+					<li
+						is="date-poll-item"
+						v-for="(pollDate, index) in poll.options.pollDates"
+						:option="pollDate"
+						:key="pollDate.id"
+						@remove="poll.options.pollDates.splice(index, 1)">
 					</li>
-				</ul>
+				</transition-group>
 
-				<div>
-					<div class="flex-wrap align-centered space-between" v-if="protect">
-						<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway.') }}</span>
-						<button @click="protect=false" > {{ t('polls', 'Unlock configuration ') }} </button>
-					</div>
-					<div id="configurationsTabView" class="tab configurationsTabView flex-wrap">
-
-						<div class="configBox flex-column" v-if="poll.mode =='edit'">
-							<label class="title">{{ t('polls', 'Poll type') }}</label>
-							<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
-							<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
-							<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
-							<label for="textPoll">{{ t('polls', 'Text based') }}</label>
-						</div>
-
-						<div class="configBox flex-column">
-							<label class="title">{{ t('polls', 'Poll configurations') }}</label>
-								<input :disabled="protect" id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
-								<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
-
-								<input :disabled="protect" id="anonymous" v-model="poll.event.isAnonymous"type="checkbox" class="checkbox" />
-								<label for="anonymous">{{ t('polls', 'Anonymous poll') }}</label>
-
-								<input :disabled="protect" id="trueAnonymous" v-model="poll.event.fullAnonymous" v-show="poll.event.isAnonymous" type="checkbox" class="checkbox"/>
-								<label for="trueAnonymous" v-show="poll.event.isAnonymous">{{ t('polls', 'Hide user names for admin') }} </label>
-
-								<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
-								<label for="expiration">{{ t('polls', 'Expires') }}</label>
-								<date-picker v-bind="expirationDatePicker"
-									:disabled="protect" 
-									v-model="poll.event.expirationDate" 
-									v-show="poll.event.expiration" 
-									style="width:170px" 
-									:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" />
-						</div>
-
-						<div class="configBox flex-column">
-							<label class="title">{{ t('polls', 'Access') }}</label>
-							<input :disabled="protect" type="radio" v-model="poll.event.access" value="registered" id="private" class="radio"/>
-							<label for="private">{{ t('polls', 'Registered users only') }}</label>
-							<input :disabled="protect" type="radio" v-model="poll.event.access" value="hidden" id="hidden" class="radio"/>
-							<label for="hidden">{{ t('polls', 'hidden') }}</label>
-							<input :disabled="protect" type="radio" v-model="poll.event.access" value="public" id="public" class="radio"/>
-							<label for="public">{{ t('polls', 'Public access') }}</label>
-							<input :disabled="protect" type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
-							<label for="select">{{ t('polls', 'Only shared') }}</label>
-
-						</div>
-						<share-div id="share-list" class="configBox flex-column oneline" 
-									:active-shares="poll.shares" 
-									@update-shares="updateShares" 
-									@remove-share="removeShare"
-									:placeholder="t('polls', 'Name of user or group')" 
-									v-show="poll.event.access === 'select'"/>
-					</div>
+			
+				<div id="poll-item-selector-text" v-show="poll.event.type === 'textPoll'" >
+					<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
 				</div>
+				
+				<transition-group 
+					id="text-poll-list" 
+					name="list" 
+					tag="ul" 
+					class="poll-table" 
+					v-show="poll.event.type === 'textPoll'">
+					<li
+						is="text-poll-item"
+						v-for="(pollText, index) in poll.options.pollTexts"
+						:option="pollText"
+						:key="pollText.id"
+						@remove="poll.options.pollTexts.splice(index, 1)">
+					</li>
+				</transition-group>
+
+
 			</div>
 		</div>
+
+		<side-bar v-if="sidebar">
+			<user-div :description="t('polls', 'Owner')" :user-id="poll.event.owner"></user-div>
+
+			<ul class="tabHeaders">
+				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
+					<a href="#">{{ t('polls', 'Configuration') }}</a>
+				</li>
+			</ul>
+
+			<div v-if="protect">
+				<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway.') }}</span>
+				<button @click="protect=false" > {{ t('polls', 'Unlock configuration ') }} </button>
+			</div>
+			<div id="configurationsTabView" class="tab">
+
+				<div class="configBox" v-if="poll.mode =='edit'">
+					<label class="title">{{ t('polls', 'Poll type') }}</label>
+					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
+					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
+				</div>
+
+				<div class="configBox">
+					<label class="title">{{ t('polls', 'Poll configurations') }}</label>
+
+					<input :disabled="protect" id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
+					<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
+
+					<input :disabled="protect" id="anonymous" v-model="poll.event.isAnonymous"type="checkbox" class="checkbox" />
+					<label for="anonymous">{{ t('polls', 'Anonymous poll') }}</label>
+
+					<input :disabled="protect" id="trueAnonymous" v-model="poll.event.fullAnonymous" v-show="poll.event.isAnonymous" type="checkbox" class="checkbox"/>
+					<label for="trueAnonymous" v-show="poll.event.isAnonymous">{{ t('polls', 'Hide user names for admin') }} </label>
+
+					<input :disabled="protect" id="expiration" v-model="poll.event.expiration" type="checkbox" class="checkbox" />
+					<label for="expiration">{{ t('polls', 'Expires') }}</label>
+
+					<date-picker v-bind="expirationDatePicker"
+						:disabled="protect" 
+						v-model="poll.event.expirationDate" 
+						v-show="poll.event.expiration" 
+						style="width:170px" 
+						:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" />
+
+				</div>
+
+				<div class="configBox">
+					<label class="title">{{ t('polls', 'Access') }}</label>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="registered" id="private" class="radio"/>
+					<label for="private">{{ t('polls', 'Registered users only') }}</label>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="hidden" id="hidden" class="radio"/>
+					<label for="hidden">{{ t('polls', 'hidden') }}</label>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="public" id="public" class="radio"/>
+					<label for="public">{{ t('polls', 'Public access') }}</label>
+					<input :disabled="protect" type="radio" v-model="poll.event.access" value="select" id="select" class="radio"/>
+					<label for="select">{{ t('polls', 'Only shared') }}</label>
+
+				</div>
+			</div>
+
+			<share-div	:active-shares="poll.shares" 
+						@update-shares="updateShares" 
+						@remove-share="removeShare"
+						hide-names="true"
+						:placeholder="t('polls', 'Name of user or group')" 
+						v-show="poll.event.access === 'select'"/>
+
+		</side-bar>
 	</div>
 </template>
 
@@ -207,6 +204,7 @@
 				nextPollDateId: 1,
 				nextPollTextId: 1,
 				protect: false,
+				saving: false,
 				sidebar: false,
 				titleEmpty: false,
 				indexPage: '',
@@ -261,7 +259,9 @@
 			},
 
 			saveButtonTitle: function() {
-				if (this.poll.mode === 'edit') {
+				if (this.saving) {
+					return t('polls', 'Writing poll')
+				} else if (this.poll.mode === 'edit') {
 					return t('polls', 'Update poll')
 				} else {
 					return t('polls', 'Create new poll')
@@ -358,6 +358,7 @@
 			},
 
 			writePoll: function (mode) {
+				this.saving = true
 				if (mode !== '') {
 					this.poll.mode = mode;
 				}
@@ -370,6 +371,7 @@
 							this.poll.mode = 'edit';
 							this.poll.event.hash = response.data.hash;
 							this.poll.event.id = response.data.id;
+							this.saving = false;
 							// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
 						}, (error) => {
 							this.poll.event.hash = '';
@@ -407,53 +409,12 @@
 </script>
 
 <style lang="scss">
-	#content {
-		display: flex;
-	}
 
 	#create-poll {
 		width: 100%;
+		display: flex;
 		input.hasTimepicker {
 			width: 75px;
-		}
-	}
-
-	.controls {
-		display: flex;
-		/* flex-direction: row; */
-		/* flex-grow: 0; */
-		border-bottom: 1px solid var(--color-border);
-		position: fixed;
-		background: var(--color-main-background);
-		width: 100%;
-		height: 45px;
-		z-index: 1001;
-		.button, button {
-			flex-shrink: 0;
-			/* box-sizing: border-box; */
-			/* display: inline-block; */
-			height: 36px;
-			padding: 7px 10px;
-			border: 0;
-			background: transparent;
-			color: var(--color-text-lighter);
-			&.primary {
-				background: var(--color-primary);
-				color: var(--color-primary-text);
-			}
-		}
-		.breadcrump {
-			/* flex-shrink: 1; */
-			overflow: hidden;
-			min-width: 35px;
-			div.crumb:last-child {
-					flex-shrink: 1;
-					overflow: hidden;
-				> span {
-					flex-shrink: 1;
-					text-overflow: ellipsis;
-				}
-			}
 		}
 	}
 
@@ -461,24 +422,47 @@
 		display: flex;
 		padding-top: 45px;
 		flex-grow: 1;
-		.workbench {
+	}
+	
+	input[type="text"] {
+		display: block;
+		width: 100%;
+	}
+	
+	.workbench {
+		margin-top: 45px;
+		display: flex;
+		flex-grow: 1;
+		flex-wrap: wrap;
+		overflow-x: hidden;
+		
+		
+		> div {
+			min-width: 245px;
+			max-width: 540px;
 			display: flex;
-			justify-content: center;
+			flex-direction: column;
 			flex-grow: 1;
-			flex-wrap: wrap;
-			overflow-x: hidden;
-			
-			
-			> div {
-				min-width: 245px;
-				max-width: 540px;
-				display: flex;
-				flex-direction: column;
-				flex-grow: 1;
-				padding: 8px;
-			}
+			padding: 8px;
 		}
 	}
+	
+	.polls-sidebar {
+		margin-top: 45px;
+		
+		.configBox {
+			display: flex;
+			flex-direction: column;
+			padding: 8px 8px;
+			
+			&> .title {
+				font-weight: bold;
+				margin-bottom: 4px;
+			}
+			
+		}
+	}
+
 
 	input, textarea {
 		&.error {
@@ -552,24 +536,10 @@
 		}
 	}
 
-	.autocomplete {
-		position: relative;
-	}
-	.configurationsTabView {
+	.tab {
 		display: flex;
+		flex-wrap: wrap;
 	}
 	
-	#share-list {
-		.user-list {
-			max-height: 180px;
-			overflow: auto;
-			border: 1px solid var(--color-border);	
-			margin-top: -3px;
-			border-top: none;
-			position: absolute;
-			background: var(--color-main-background);
-			z-index: 1;
-			width: 99%;
-		}
-	}
+	
 </style>

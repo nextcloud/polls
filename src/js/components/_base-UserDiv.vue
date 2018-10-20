@@ -3,14 +3,14 @@
 	<div class="user-row" :class="type">
 		<div v-show="description" class="description">{{description}}</div>
 		<div class="avatar"><img :src="avatarURL" :width="size" :height="size" :title="computedDisplayName"></div>
-		<div v-show="!onlyAvatar" class="user-name">{{ computedDisplayName }}</div>
+		<div v-show="!hideNames" class="user-name">{{ computedDisplayName }}</div>
 	</div>
 </template>
 
 <script>
 	export default {
 		props: {
-			onlyAvatar: {
+			hideNames: {
 				default: false
 			},
 			userId: {
@@ -80,8 +80,7 @@
 <style lang="scss">
 	.user-row {
 		display: flex;
-		flex-direction: row;
-		flex-grow: 1;
+		flex-grow: 0;
 		align-items: center;
 		margin-left: 0;
 		margin-top: 0;

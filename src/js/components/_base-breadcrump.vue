@@ -1,5 +1,5 @@
 <template>
-	<div class="breadcrump flex-row">
+	<div class="breadcrump">
 		<div class="crumb svg">
 			<a :href="indexPage">
 				<img class="svg" :src="imagePath" alt="Home">
@@ -21,3 +21,9 @@
 		}
 	}
 </script>
+
+<style lang="scss">
+	.breadcrump {
+		flex-grow: 1;
+	}
+</style>

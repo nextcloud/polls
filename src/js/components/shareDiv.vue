@@ -37,10 +37,10 @@
 			<li v-for="(item, index) in sortedShares" 
 				v-bind:key="item.displayName" 
 				v-bind:data-index="index">
-				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type"></user-div>
-				<div class="flex-row options">
+				<div class="options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
+				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type" :hide-names="hideNames"></user-div>
 			</li>
 		</transition-group>
 	</div>
@@ -55,7 +55,7 @@
 			Multiselect
 		},
 		
-		props: ['placeholder', 'activeShares'],
+		props: ['placeholder', 'activeShares','hideNames'],
 		
 		data: function () {
 			return {
@@ -86,6 +86,7 @@
 			},
 			
 			loadUsersAsync: function (query) {
+				this.isLoading = false
 				this.siteUsersListOptions.query = query
 				axios.post(OC.generateUrl('apps/polls/get/siteusers'), this.siteUsersListOptions)
 				.then((response) => {
@@ -115,17 +116,22 @@
 
 	.shared-list {
 		display: flex;
-		padding-top: 8px;
-		flex-grow: 0;
 		flex-wrap: wrap;
 		justify-content: flex-start;
+		padding-top: 8px;
 	
 		> li {
 			display: flex;
-			flex-grow: 0;
 		}
 	}
-
+	
+	.options {
+		display: flex;
+		position: relative;
+		top: 13px;
+		left: 43px;
+	}
+	
 	div, select {
 		&.multiselect:not(.multiselect-vue), &.multiselect:not(.multiselect-vue) {
 			max-width: unset;
@@ -174,7 +180,5 @@
 			}
 		}
 	}
-
-
 
 </style>
