@@ -3,14 +3,14 @@
 	<div class="user-row" :class="type">
 		<div v-show="description" class="description">{{description}}</div>
 		<div class="avatar"><img :src="avatarURL" :width="size" :height="size" :title="computedDisplayName"></div>
-		<div v-show="!onlyAvatar" class="user-name">{{ computedDisplayName }}</div>
+		<div v-show="!hideNames" class="user-name">{{ computedDisplayName }}</div>
 	</div>
 </template>
 
 <script>
 	export default {
 		props: {
-			onlyAvatar: {
+			hideNames: {
 				default: false
 			},
 			userId: {

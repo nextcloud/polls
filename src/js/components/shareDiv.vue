@@ -37,10 +37,10 @@
 			<li v-for="(item, index) in sortedShares" 
 				v-bind:key="item.displayName" 
 				v-bind:data-index="index">
-				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type"></user-div>
 				<div class="options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
+				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type" :hide-names="hideNames"></user-div>
 			</li>
 		</transition-group>
 	</div>
@@ -55,7 +55,7 @@
 			Multiselect
 		},
 		
-		props: ['placeholder', 'activeShares'],
+		props: ['placeholder', 'activeShares','hideNames'],
 		
 		data: function () {
 			return {
@@ -127,6 +127,9 @@
 	
 	.options {
 		display: flex;
+		position: relative;
+		top: 13px;
+		left: 43px;
 	}
 	
 	div, select {

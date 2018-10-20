@@ -142,6 +142,7 @@
 			<share-div	:active-shares="poll.shares" 
 						@update-shares="updateShares" 
 						@remove-share="removeShare"
+						hide-names="true"
 						:placeholder="t('polls', 'Name of user or group')" 
 						v-show="poll.event.access === 'select'"/>
 
