@@ -2,20 +2,20 @@
 import Vue from 'vue';
 import Create from './Create.vue';
 import { DatetimePicker } from 'nextcloud-vue';
-import Breadcrump from './components/breadcrump.vue';
-import CloudDiv from './components/_base-CloudDiv.vue';
-import ShareDiv from './components/shareDiv.vue';
+import Controls from './components/_base-controls.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import UserDiv from './components/_base-UserDiv.vue';
+import SideBar from './components/_base-SideBar.vue';
+import ShareDiv from './components/shareDiv.vue';
 
 Vue.config.debug = true
 Vue.config.devTools = true
-Vue.component('Breadcrump', Breadcrump);
-Vue.component('CloudDiv', CloudDiv);
+Vue.component('Controls', Controls);
 Vue.component('DatePicker', DatetimePicker);
-Vue.component('ShareDiv', ShareDiv);
 Vue.component('SideBarClose', SideBarClose);
 Vue.component('UserDiv', UserDiv);
+Vue.component('SideBar', SideBar);
+Vue.component('ShareDiv', ShareDiv);
 
 Vue.mixin({
 	methods: {

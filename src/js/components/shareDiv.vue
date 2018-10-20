@@ -38,7 +38,7 @@
 				v-bind:key="item.displayName" 
 				v-bind:data-index="index">
 				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type"></user-div>
-				<div class="flex-row options">
+				<div class="options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
 			</li>
@@ -125,7 +125,11 @@
 			flex-grow: 0;
 		}
 	}
-
+	
+	.options {
+		display: flex;
+	}
+	
 	div, select {
 		&.multiselect:not(.multiselect-vue), &.multiselect:not(.multiselect-vue) {
 			max-width: unset;
@@ -174,7 +178,5 @@
 			}
 		}
 	}
-
-
 
 </style>

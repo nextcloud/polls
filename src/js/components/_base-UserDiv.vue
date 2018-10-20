@@ -81,7 +81,7 @@
 	.user-row {
 		display: flex;
 		flex-direction: row;
-		flex-grow: 1;
+		flex-grow: 0;
 		align-items: center;
 		margin-left: 0;
 		margin-top: 0;

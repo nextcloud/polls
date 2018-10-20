@@ -22,11 +22,6 @@
 	 *
 	 */
 
-
-
-	\OCP\Util::addStyle('polls', 'main');
-	\OCP\Util::addStyle('polls', 'flex');
-	\OCP\Util::addStyle('polls', 'sidebar');
 ?>
 
 <div id="create-poll"></div>
