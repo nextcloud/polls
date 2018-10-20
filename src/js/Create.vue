@@ -431,7 +431,6 @@
 	.workbench {
 		margin-top: 45px;
 		display: flex;
-		justify-content: center;
 		flex-grow: 1;
 		flex-wrap: wrap;
 		overflow-x: hidden;
