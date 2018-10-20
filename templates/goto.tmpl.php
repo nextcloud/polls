@@ -152,9 +152,8 @@
 					<?php
 					foreach ($options as $optionElement) {
 						if ($poll->getType() === 0) {
-							print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $optionElement->getPollOptionText() . '">');
-
 							$timestamp = strtotime($optionElement->getPollOptionText());
+							print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $optionElement->getPollOptionText() . '">');
 							print_unescaped('	<div class="date-box flex-column">');
 							print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp)) . '</div>');
 							print_unescaped('		<div class="day">' . date('j', $timestamp) . '</div>');
