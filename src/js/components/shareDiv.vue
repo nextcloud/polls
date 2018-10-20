@@ -86,6 +86,7 @@
 			},
 			
 			loadUsersAsync: function (query) {
+				this.isLoading = false
 				this.siteUsersListOptions.query = query
 				axios.post(OC.generateUrl('apps/polls/get/siteusers'), this.siteUsersListOptions)
 				.then((response) => {
@@ -115,14 +116,12 @@
 
 	.shared-list {
 		display: flex;
-		padding-top: 8px;
-		flex-grow: 0;
 		flex-wrap: wrap;
 		justify-content: flex-start;
+		padding-top: 8px;
 	
 		> li {
 			display: flex;
-			flex-grow: 0;
 		}
 	}
 	

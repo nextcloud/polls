@@ -1,9 +1,10 @@
 ﻿<template>
 	<div id="create-poll">
 		<controls :index-page="indexPage" :intitle="title">
-			<button @click="writePoll(poll.mode)" class="button btn primary"><span>{{ saveButtonTitle }}</span></button>
-			<a :href="indexPage" class="button">{{ t('polls', 'Cancel') }}</a>
-
+			<button @click="writePoll(poll.mode)" class="button btn primary" :disabled="saving">
+				<span>{{ saveButtonTitle }}</span>
+				<span v-if="saving" class="shareWithLoading icon-loading-small hidden"></span>
+			</button>
 			<button @click="switchSidebar" class="button">
 				<span class="symbol icon-settings"></span>
 			</button>
@@ -202,6 +203,7 @@
 				nextPollDateId: 1,
 				nextPollTextId: 1,
 				protect: false,
+				saving: false,
 				sidebar: false,
 				titleEmpty: false,
 				indexPage: '',
@@ -256,7 +258,9 @@
 			},
 
 			saveButtonTitle: function() {
-				if (this.poll.mode === 'edit') {
+				if (this.saving) {
+					return t('polls', 'Writing poll')
+				} else if (this.poll.mode === 'edit') {
 					return t('polls', 'Update poll')
 				} else {
 					return t('polls', 'Create new poll')
@@ -353,6 +357,7 @@
 			},
 
 			writePoll: function (mode) {
+				this.saving = true
 				if (mode !== '') {
 					this.poll.mode = mode;
 				}
@@ -365,6 +370,7 @@
 							this.poll.mode = 'edit';
 							this.poll.event.hash = response.data.hash;
 							this.poll.event.id = response.data.id;
+							this.saving = false;
 							// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
 						}, (error) => {
 							this.poll.event.hash = '';
@@ -403,15 +409,9 @@
 
 <style lang="scss">
 
-	#content {
-		display: flex;
-	}
-
 	#create-poll {
 		width: 100%;
 		display: flex;
-		flex-direction: row;
-		flex-grow: 1;
 		input.hasTimepicker {
 			width: 75px;
 		}
@@ -453,8 +453,6 @@
 		.configBox {
 			display: flex;
 			flex-direction: column;
-			flex-grow: 0;
-			flex-shrink: 0;
 			padding: 8px 8px;
 			
 			&> .title {

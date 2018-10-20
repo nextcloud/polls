@@ -24,8 +24,6 @@
 
 <style lang="scss">
 	.breadcrump {
-		display: flex;
-		flex-direction: row;
 		flex-grow: 1;
 	}
 </style>

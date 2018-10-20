@@ -80,7 +80,6 @@
 <style lang="scss">
 	.user-row {
 		display: flex;
-		flex-direction: row;
 		flex-grow: 0;
 		align-items: center;
 		margin-left: 0;
