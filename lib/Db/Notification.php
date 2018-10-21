@@ -24,6 +24,8 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
+
 /**
  * @method string getUserId()
  * @method void setUserId(string $value)

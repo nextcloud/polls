@@ -25,18 +25,14 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\Date;
-use OCA\Polls\Db\DateMapper;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Notification;
 use OCA\Polls\Db\NotificationMapper;
-use OCA\Polls\Db\Participation;
-use OCA\Polls\Db\ParticipationMapper;
-use OCA\Polls\Db\ParticipationText;
-use OCA\Polls\Db\ParticipationTextMapper;
-use OCA\Polls\Db\Text;
-use OCA\Polls\Db\TextMapper;
+use OCA\Polls\Db\Options;
+use OCA\Polls\Db\OptionsMapper;
+use OCA\Polls\Db\Votes;
+use OCA\Polls\Db\VotesMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -52,19 +48,17 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\Mail\IMailer;
 use OCP\Security\ISecureRandom;
-use OCP\User;
+use OCP\User; //To do: replace according to API
 use OCP\Util;
 
 class PageController extends Controller {
 
 	private $userId;
 	private $commentMapper;
-	private $dateMapper;
 	private $eventMapper;
 	private $notificationMapper;
-	private $participationMapper;
-	private $participationTextMapper;
-	private $textMapper;
+	private $optionsMapper;
+	private $votesMapper;
 	private $urlGenerator;
 	private $userMgr;
 	private $avatarManager;
@@ -84,12 +78,10 @@ class PageController extends Controller {
 	 * @param IURLGenerator $urlGenerator
 	 * @param string $userId
 	 * @param CommentMapper $commentMapper
-	 * @param DateMapper $dateMapper
 	 * @param EventMapper $eventMapper
 	 * @param NotificationMapper $notificationMapper
-	 * @param ParticipationMapper $ParticipationMapper
-	 * @param ParticipationTextMapper $ParticipationTextMapper
-	 * @param TextMapper $textMapper
+	 * @param OptionsMapper $optionsMapper
+	 * @param VotesMapper $VotesMapper
 	 */
 	public function __construct(
 		$appName,
@@ -102,12 +94,10 @@ class PageController extends Controller {
 		IURLGenerator $urlGenerator,
 		$userId,
 		CommentMapper $commentMapper,
-		DateMapper $dateMapper,
+		OptionsMapper $optionsMapper,
 		EventMapper $eventMapper,
 		NotificationMapper $notificationMapper,
-		ParticipationMapper $ParticipationMapper,
-		ParticipationTextMapper $ParticipationTextMapper,
-		TextMapper $textMapper
+		VotesMapper $VotesMapper
 	) {
 		parent::__construct($appName, $request);
 		$this->userMgr = $userMgr;
@@ -118,12 +108,10 @@ class PageController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userId = $userId;
 		$this->commentMapper = $commentMapper;
-		$this->dateMapper = $dateMapper;
 		$this->eventMapper = $eventMapper;
 		$this->notificationMapper = $notificationMapper;
-		$this->participationMapper = $ParticipationMapper;
-		$this->participationTextMapper = $ParticipationTextMapper;
-		$this->textMapper = $textMapper;
+		$this->optionsMapper = $optionsMapper;
+		$this->votesMapper = $VotesMapper;
 	}
 
 	/**
@@ -133,13 +121,11 @@ class PageController extends Controller {
 	public function index() {
 		$polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
 		$comments = $this->commentMapper->findDistinctByUser($this->userId);
-		$partic = $this->participationMapper->findDistinctByUser($this->userId);
-		$particText = $this->participationTextMapper->findDistinctByUser($this->userId);
+		$votes = $this->votesMapper->findDistinctByUser($this->userId);
 		$response = new TemplateResponse('polls', 'main.tmpl', [
 			'polls' => $polls,
 			'comments' => $comments,
-			'participations' => $partic,
-			'participations_text' => $particText,
+			'votes' => $votes,
 			'userId' => $this->userId,
 			'userMgr' => $this->userMgr,
 			'urlGenerator' => $this->urlGenerator
@@ -224,16 +210,11 @@ class PageController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new TemplateResponse('polls', 'no.acc.tmpl', []);
 		}
-		if ($poll->getType() === 0) {
-			$dates = $this->dateMapper->findByPoll($poll->getId());
-			$votes = $this->participationMapper->findByPoll($poll->getId());
-			$participants = $this->participationMapper->findParticipantsByPoll($poll->getId());
-		} else {
-			$dates = $this->textMapper->findByPoll($poll->getId());
-			$votes = $this->participationTextMapper->findByPoll($poll->getId());
-			$participants = $this->participationTextMapper->findParticipantsByPoll($poll->getId());
-		}
+		$options = $this->optionsMapper->findByPoll($poll->getId());
+		$votes = $this->votesMapper->findByPoll($poll->getId());
+		$participants = $this->votesMapper->findParticipantsByPoll($poll->getId());
 		$comments = $this->commentMapper->findByPoll($poll->getId());
+
 		try {
 			$notification = $this->notificationMapper->findByUserAndPoll($poll->getId(), $this->userId);
 		} catch (DoesNotExistException $e) {
@@ -242,10 +223,10 @@ class PageController extends Controller {
 		if ($this->hasUserAccess($poll)) {
 			return new TemplateResponse('polls', 'goto.tmpl', [
 				'poll' => $poll,
-				'dates' => $dates,
+				'options' => $options,
 				'comments' => $comments,
 				'votes' => $votes,
-				'participants' => $participants,
+				'participant' => $participants,
 				'notification' => $notification,
 				'userId' => $this->userId,
 				'userMgr' => $this->userMgr,
@@ -272,10 +253,8 @@ class PageController extends Controller {
 		$poll = new Event();
 		$poll->setId($pollId);
 		$this->eventMapper->delete($poll);
-		$this->textMapper->deleteByPoll($pollId);
-		$this->dateMapper->deleteByPoll($pollId);
-		$this->participationMapper->deleteByPoll($pollId);
-		$this->participationTextMapper->deleteByPoll($pollId);
+		$this->optionsMapper->deleteByPoll($pollId);
+		$this->votesMapper->deleteByPoll($pollId);
 		$this->commentMapper->deleteByPoll($pollId);
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new RedirectResponse($url);
@@ -288,117 +267,10 @@ class PageController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function editPoll($hash) {
-		$poll = $this->eventMapper->findByHash($hash);
-		if ($this->userId !== $poll->getOwner()) {
-			return new TemplateResponse('polls', 'no.create.tmpl');
-		}
-		if ($poll->getType() === 0) {
-			$dates = $this->dateMapper->findByPoll($poll->getId());
-		} else {
-			$dates = $this->textMapper->findByPoll($poll->getId());
-		}
 		return new TemplateResponse('polls', 'create.tmpl', [
-			'poll' => $poll,
-			'dates' => $dates,
-			'userId' => $this->userId,
-			'userMgr' => $this->userMgr,
-			'urlGenerator' => $this->urlGenerator
+			'urlGenerator' => $this->urlGenerator,
+ 			'hash' => $hash
 		]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $pollType
-	 * @param string $pollTitle
-	 * @param string $pollDesc
-	 * @param string $userId
-	 * @param string $chosenDates
-	 * @param int $expireTs
-	 * @param string $accessType
-	 * @param string $accessValues
-	 * @param bool $isAnonymous
-	 * @param bool $hideNames
-	 * @return RedirectResponse
-	 */
-	public function updatePoll(
-		$pollId,
-		$pollType,
-		$pollTitle,
-		$pollDesc,
-		$userId,
-		$chosenDates,
-		$expireTs,
-		$accessType,
-		$accessValues,
-		$isAnonymous,
-		$hideNames
-	) {
-
-
-		$event = $this->eventMapper->find($pollId);
-		$event->setTitle($pollTitle);
-		$event->setDescription($pollDesc);
-		$event->setIsAnonymous($isAnonymous ? 1 : 0);
-		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
-
-		if ($accessType === 'select') {
-			if (isset($accessValues)) {
-				$accessValues = json_decode($accessValues);
-				if ($accessValues !== null) {
-					$groups = array();
-					$users = array();
-					if ($accessValues->groups !== null) {
-						$groups = $accessValues->groups;
-					}
-					if ($accessValues->users !== null) {
-						$users = $accessValues->users;
-					}
-					$accessType = '';
-					foreach ($groups as $gid) {
-						$accessType .= $gid . ';';
-					}
-					foreach ($users as $uid) {
-						$accessType .= $uid . ';';
-					}
-				}
-			}
-		}
-		$event->setAccess($accessType);
-		/** @var string[] $chosenDates */
-		$chosenDates = json_decode($chosenDates);
-
-		$expire = null;
-		if ($expireTs !== 0 && $expireTs !== '') {
-			$expire = date('Y-m-d H:i:s', $expireTs);
-		}
-		$event->setExpire($expire);
-
-		$this->dateMapper->deleteByPoll($pollId);
-		$this->textMapper->deleteByPoll($pollId);
-		if ($pollType === 'event') {
-			$event->setType(0);
-			$this->eventMapper->update($event);
-			sort($chosenDates);
-			foreach ($chosenDates as $el) {
-				$date = new Date();
-				$date->setPollId($pollId);
-				$date->setDt(date('Y-m-d H:i:s', $el));
-				$this->dateMapper->insert($date);
-			}
-		} else {
-			$event->setType(1);
-			$this->eventMapper->update($event);
-			foreach ($chosenDates as $el) {
-				$text = new Text();
-				$text->setPollId($pollId);
-				$text->setText($el);
-				$this->textMapper->insert($text);
-			}
-		}
-		$url = $this->urlGenerator->linkToRoute('polls.page.index');
-		return new RedirectResponse($url);
 	}
 
 	/**
@@ -407,108 +279,7 @@ class PageController extends Controller {
 	 */
 	public function createPoll() {
 		return new TemplateResponse('polls', 'create.tmpl',
-			['userId' => $this->userId, 'userMgr' => $this->userMgr, 'urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $pollType
-	 * @param string $pollTitle
-	 * @param string $pollDesc
-	 * @param string $userId
-	 * @param string $chosenDates
-	 * @param int $expireTs
-	 * @param string $accessType
-	 * @param string $accessValues
-	 * @param bool $isAnonymous
-	 * @param bool $hideNames
-	 * @return RedirectResponse
-	 */
-	public function insertPoll(
-		$pollType,
-		$pollTitle,
-		$pollDesc,
-		$userId,
-		$chosenDates,
-		$expireTs,
-		$accessType,
-		$accessValues,
-		$isAnonymous,
-		$hideNames
-	) {
-		$event = new Event();
-		$event->setTitle($pollTitle);
-		$event->setDescription($pollDesc);
-		$event->setOwner($userId);
-		$event->setCreated(date('Y-m-d H:i:s'));
-		$event->setHash(\OC::$server->getSecureRandom()->generate(
-			16,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		));
-		$event->setIsAnonymous($isAnonymous ? 1 : 0);
-		$event->setFullAnonymous($isAnonymous && $hideNames ? 1 : 0);
-
-		if ($accessType === 'select') {
-			if (isset($accessValues)) {
-				$accessValues = json_decode($accessValues);
-				if ($accessValues !== null) {
-					$groups = array();
-					$users = array();
-					if ($accessValues->groups !== null) {
-						$groups = $accessValues->groups;
-					}
-					if ($accessValues->users !== null) {
-						$users = $accessValues->users;
-					}
-					$accessType = '';
-					foreach ($groups as $gid) {
-						$accessType .= $gid . ';';
-					}
-					foreach ($users as $uid) {
-						$accessType .= $uid . ';';
-					}
-				}
-			}
-		}
-		$event->setAccess($accessType);
-		/** @var string[] $chosenDates */
-		$chosenDates = json_decode($chosenDates);
-
-		$expire = null;
-		if ($expireTs !== 0 && $expireTs !== '') {
-			$expire = date('Y-m-d H:i:s', $expireTs);
-		}
-		$event->setExpire($expire);
-
-		if ($pollType === 'event') {
-			$event->setType(0);
-			$ins = $this->eventMapper->insert($event);
-			$pollId = $ins->getId();
-			sort($chosenDates);
-			foreach ($chosenDates as $el) {
-				$date = new Date();
-				$date->setPollId($pollId);
-				$date->setDt(date('Y-m-d H:i:s', $el));
-				$this->dateMapper->insert($date);
-			}
-		} else {
-			$event->setType(1);
-			$ins = $this->eventMapper->insert($event);
-			$pollId = $ins->getId();
-			$cnt = 1;
-			foreach ($chosenDates as $el) {
-				$text = new Text();
-				$text->setPollId($pollId);
-				$text->setText($el . '_' . $cnt);
-				$this->textMapper->insert($text);
-				$cnt++;
-			}
-		}
-		$url = $this->urlGenerator->linkToRoute('polls.page.index');
-		return new RedirectResponse($url);
+			['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
@@ -517,13 +288,13 @@ class PageController extends Controller {
 	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $userId
-	 * @param string $types
-	 * @param string $dates
+	 * @param string $answers
+	 * @param string $options
 	 * @param bool $receiveNotifications
 	 * @param bool $changed
 	 * @return RedirectResponse
 	 */
-	public function insertVote($pollId, $userId, $types, $dates, $receiveNotifications, $changed) {
+	public function insertVote($pollId, $userId, $answers, $options, $receiveNotifications, $changed) {
 		if ($this->userId !== null) {
 			if ($receiveNotifications) {
 				try {
@@ -547,31 +318,20 @@ class PageController extends Controller {
 			}
 		}
 		$poll = $this->eventMapper->find($pollId);
+		
 		if ($changed) {
-			$dates = json_decode($dates);
-			$types = json_decode($types);
-			$count_dates = count($dates);
-			if ($poll->getType() === 0) {
-				$this->participationMapper->deleteByPollAndUser($pollId, $userId);
-			} else {
-				$this->participationTextMapper->deleteByPollAndUser($pollId, $userId);
-			}
-			for ($i = 0; $i < $count_dates; $i++) {
-				if ($poll->getType() === 0) {
-					$part = new Participation();
-					$part->setPollId($pollId);
-					$part->setUserId($userId);
-					$part->setDt(date('Y-m-d H:i:s', $dates[$i]));
-					$part->setType($types[$i]);
-					$this->participationMapper->insert($part);
-				} else {
-					$part = new ParticipationText();
-					$part->setPollId($pollId);
-					$part->setUserId($userId);
-					$part->setText($dates[$i]);
-					$part->setType($types[$i]);
-					$this->participationTextMapper->insert($part);
-				}
+			$options = json_decode($options);
+			$answers = json_decode($answers);
+			$count_options = count($options);
+			$this->votesMapper->deleteByPollAndUser($pollId, $userId);
+			
+			for ($i = 0; $i < $count_options; $i++) {
+				$vote = new Votes();
+				$vote->setPollId($pollId);
+				$vote->setUserId($userId);
+				$vote->setVoteOptionText(htmlspecialchars($options[$i]));
+				$vote->setVoteAnswer($answers[$i]);
+				$this->votesMapper->insert($vote);
 
 			}
 			$this->sendNotifications($pollId, $userId);
@@ -598,16 +358,19 @@ class PageController extends Controller {
 		$comment->setDt(date('Y-m-d H:i:s'));
 		$this->commentMapper->insert($comment);
 		$this->sendNotifications($pollId, $userId);
+		$timeStamp = time();
 		$displayName = $userId;
 		$user = $this->userMgr->get($userId);
 		if ($user !== null) {
 			$displayName = $user->getDisplayName();
 		}
 		return new JSONResponse(array(
-			'comment' => $commentBox,
-			'date' => date('Y-m-d H:i:s'),
 			'userId' => $userId,
-			'displayName' => $displayName
+			'displayName' => $displayName,
+			'timeStamp' => $timeStamp * 100, 
+			'date' => date('Y-m-d H:i:s', $timeStamp),
+			'relativeNow' => $this->trans->t('just now'),
+			'comment' => $commentBox
 		));
 	}
 
@@ -666,15 +429,15 @@ class PageController extends Controller {
 			$sUsers[] = str_replace('user_', '', $su);
 		}
 		foreach ($userNames as $u) {
-			$alreadyAdded = false;
+			$allreadyAdded = false;
 			foreach ($sUsers as &$su) {
 				if ($su === $u->getUID()) {
 					unset($su);
-					$alreadyAdded = true;
+					$allreadyAdded = true;
 					break;
 				}
 			}
-			if (!$alreadyAdded) {
+			if (!$allreadyAdded) {
 				$users[] = array('uid' => $u->getUID(), 'displayName' => $u->getDisplayName(), 'isGroup' => false);
 			} else {
 				continue;
@@ -703,12 +466,14 @@ class PageController extends Controller {
 		}
 		// Nextcloud >= 12
 		$groups = $this->groupManager->getUserGroups(\OC::$server->getUserSession()->getUser());
-		return array_map(function ($group) {
+		return array_map(function($group) {
 			return $group->getGID();
 		}, $groups);
 	}
 
 	/**
+	 * Check if user has access to this poll
+	 *
 	 * @param Event $poll
 	 * @return bool
 	 */
@@ -747,6 +512,22 @@ class PageController extends Controller {
 				}
 			}
 		}
+		return false;
+	}
+	/**
+	 * Check if user is owner of this poll
+	 *
+	 * @param Event $poll
+	 * @return bool
+	 */
+
+	private function userIsOwner($poll) {
+		$owner = $poll->getOwner();
+
+		if ($owner === $this->userId) {
+			return true;
+		}
+		Util::writeLog('polls', $this->userId, Util::ERROR);
 		return false;
 	}
 }

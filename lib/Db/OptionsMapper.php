@@ -26,21 +26,21 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class DateMapper extends Mapper {
+class OptionsMapper extends Mapper {
 
 	/**
-	 * DateMapper constructor.
+	 * TextMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_dts', '\OCA\Polls\Db\Date');
+		parent::__construct($db, 'polls_options', '\OCA\Polls\Db\Options');
 	}
 
 	/**
 	 * @param int $pollId
 	 * @param int $limit
 	 * @param int $offset
-	 * @return Date[]
+	 * @return Text[]
 	 */
 	public function findByPoll($pollId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';

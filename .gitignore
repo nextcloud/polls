@@ -1,3 +1,4 @@
+.DS_Store
 .sass-cache/
 .project/
 .idea/
@@ -5,9 +6,14 @@ build/
 css/*.map
 nbproject/
 node_modules/
+npm-debug.log
+package-lock.json
+Thumbs.db
+yarn-error.log
 *.cmd
 *.lock
 *.iml
-.DS_Store
-Thumbs.db
-package-lock.json
+*.ntvs*
+*.njsproj
+*.sln
+*.suo

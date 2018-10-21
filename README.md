@@ -5,7 +5,7 @@
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/nextcloud/polls.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextcloud/polls)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](LICENSE)
 
-This is a poll app, similar to doodle or dudle, for Nextcloud / ownCloud written in PHP and JS / jQuery.
+This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / jQuery.
 It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
 
 ### Features
@@ -22,17 +22,17 @@ It is a rework of the already existing [polls app](https://github.com/raduvatav/
 
 ![Vote](https://github.com/nextcloud/polls/blob/master/screenshots/vote.png)
 
+![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/edit-poll.png)
+
 ![Vote mobile portrait](https://github.com/nextcloud/polls/blob/master/screenshots/vote-mobile-portrait.png)
 
 ![Vote mobile landscape](https://github.com/nextcloud/polls/blob/master/screenshots/vote-mobile-landscape.png)
 
-![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/edit-poll.png)
-
 ## Installation / Update
-This app is supposed to work on Nextcloud version 12+ or ownCloud version 10.
+This app is supposed to work on Nextcloud version 13+.
 
 ### Install latest release
-You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls) or from the [ownCloud marketplace](https://marketplace.owncloud.com/apps/polls).
+You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls) or a legacy version from the [ownCloud marketplace](https://marketplace.owncloud.com/apps/polls).
 
 ### Install from git
 If you want to run the latest development version from git source, you need to clone the repo to your apps folder:

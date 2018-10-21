@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c] 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -9,7 +9,7 @@
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ *  License, or (at your option] any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,19 +21,22 @@
  *
  */
 
-$app = new \OCA\Polls\AppInfo\Application();
-$app->registerRoutes($this, array(
-	'routes' => array(
-		array('name' => 'page#index', 'url' => '/', 'verb' => 'GET'),
-		array('name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'),
-		array('name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'),
-		array('name' => 'page#create_poll', 'url' => '/create', 'verb' => 'GET'),
-		array('name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'),
-		array('name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'),
-		array('name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'),
-		array('name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'),
-		array('name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'),
-		array('name' => 'page#search', 'url' => '/search', 'verb' => 'POST'),
-		array('name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'),
-	)
-));
+return [
+	'routes' => [
+		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
+		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
+		['name' => 'page#create_poll', 'url' => '/create', 'verb' => 'GET'],
+		['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
+		['name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'],
+		['name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'],
+		['name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'],
+		['name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'],
+		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
+		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
+		['name' => 'api#write_poll', 'url' => '/write', 'verb' => 'POST'],
+		['name' => 'api#get_poll', 'url' => '/get/poll/{hash}', 'verb' => 'GET'],
+		['name' => 'api#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
+		['name' => 'api#get_system', 'url' => '/get/system', 'verb' => 'GET']
+	]
+];
