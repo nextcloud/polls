@@ -37,6 +37,7 @@
 	/** @var \OCA\Polls\Db\Event[] $polls */
 	$polls = $_['polls'];
 ?>
+
 	<div id="app-content">
 		<div id="controls">
 			<div class="breadcrump">
@@ -97,11 +98,7 @@
 		$owner = $poll->getOwner();
 
 		$expiry_style = '';
-		if ($poll->getType() === 0) {
-			$participated = $_['participations'];
-		} else {
-			$participated = $_['participations_text'];
-		}
+		$participated = $_['votes'];
 		$participated_class = 'partic_no';
 		$participated_title = 'You did not vote';
 		$participated_count = count($participated);
@@ -114,6 +111,7 @@
 		if ($owner === $userId) {
 			$owner = $l->t('Yourself');
 		}
+
 
 		$timestamp_style = '';
 		$expiry_style = ' endless';

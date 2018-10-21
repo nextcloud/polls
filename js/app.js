@@ -1,5 +1,5 @@
 function deletePoll($pollEl) {
-	var str = t('polls', 'Do you really want to delete that poll (new)?') + '\n\n' + $($pollEl).attr('data-value');
+	var str = t('polls', 'Do you really want to delete this new poll?') + '\n\n' + $($pollEl).attr('data-value');
 	if (confirm(str)) {
 		var form = document.form_delete_poll;
 		var hiddenId = document.createElement("input");
@@ -10,3 +10,5 @@ function deletePoll($pollEl) {
 		form.submit();
 	}
 }
+
+

@@ -33,7 +33,7 @@
 						<?php p($l->t('Access denied')); ?>
 					</h1>
 					<h2>
-						<?php p($l->t('You are not allowed to delete this poll or the poll does not exist.')); ?>
+						<?php p($l->t('You are either not allowed to delete this poll or it doesn\'t exist.')); ?>
 					</h2>
 			</div>
 		</div>

@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
@@ -22,22 +21,11 @@
  *
  */
 
-namespace OCA\Polls\Db;
+use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
- * @method string getText()
- * @method void setText(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
+ * General factory for the text model.
  */
-class Text extends Model {
-	protected $text;
-	protected $pollId;
-
-	/**
-	 * Text constructor.
-	 */
-	public function __construct() {
-		$this->addType('pollId', 'integer');
-	}
-}
+$fm->define('OCA\Polls\Db\Options')->setDefinitions([
+	'pollOptionText' => Faker::text(255)
+]);

@@ -25,18 +25,18 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Participation;
-use OCA\Polls\Db\ParticipationMapper;
+use OCA\Polls\Db\Options;
+use OCA\Polls\Db\OptionsMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class ParticipationMapperTest extends UnitTestCase {
+class OptionsMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var ParticipationMapper */
-	private $participationMapper;
+	/** @var OptionsMapper */
+	private $optionsMapper;
 	/** @var EventMapper */
 	private $eventMapper;
 
@@ -46,52 +46,52 @@ class ParticipationMapperTest extends UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->participationMapper = new ParticipationMapper($this->con);
+		$this->optionsMapper = new OptionsMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 *
-	 * @return Participation
+	 * @return Options
 	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 
-		/** @var Participation $participation */
-		$participation = $this->fm->instance('OCA\Polls\Db\Participation');
-		$participation->setPollId($event->getId());
-		$this->assertInstanceOf(Participation::class, $this->participationMapper->insert($participation));
+		/** @var Options $options */
+		$options = $this->fm->instance('OCA\Polls\Db\Options');
+		$options->setPollId($event->getId());
+		$this->assertInstanceOf(Options::class, $this->optionsMapper->insert($options));
 
-		return $participation;
+		return $options;
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Participation $participation
-	 * @return Participation
+	 * @param Options $options
+	 * @return Options
 	 */
-	public function testUpdate(Participation $participation) {
-		$newDt = Faker::date('Y-m-d H:i:s');
-		$participation->setDt($newDt());
-		$this->participationMapper->update($participation);
+	public function testUpdate(Options $options) {
+		$newPollOptionText = Faker::paragraph();
+		$options->setPollOptionText($newPollOptionText());
+		$this->optionsMapper->update($options);
 
-		return $participation;
+		return $options;
 	}
-
+	
 	/**
 	 * Delete the previously created entries from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Participation $participation
+	 * @param Options $options
 	 */
-	public function testDelete(Participation $participation) {
-		$event = $this->eventMapper->find($participation->getPollId());
-		$this->participationMapper->delete($participation);
+	public function testDelete(Options $options) {
+		$event = $this->eventMapper->find($options->getPollId());
+		$this->optionsMapper->delete($options);
 		$this->eventMapper->delete($event);
 	}
 }

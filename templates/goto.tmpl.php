@@ -21,14 +21,18 @@
 	 *
 	 */
 
-	use OCP\User;
+	use OCP\User; //To do: replace according to API
 	use OCP\Util;
 	use OCP\Template;
 
+	Util::addStyle('polls', 'main');
+	Util::addStyle('polls', 'flex');
 	Util::addStyle('polls', 'vote');
+	Util::addStyle('polls', 'sidebar');
 	if (!User::isLoggedIn()) {
 		Util::addStyle('polls', 'public');
 	}
+	
 	Util::addScript('polls', 'app');
 	Util::addScript('polls', 'vote');
 
@@ -41,9 +45,9 @@
 	$avaMgr = $_['avatarManager'];
 	/** @var \OCA\Polls\Db\Event $poll */
 	$poll = $_['poll'];
-	/** @var OCA\Polls\Db\Date[]|OCA\Polls\Db\Text[] $dates */
-	$dates = $_['dates'];
-	/** @var OCA\Polls\Db\Participation[]|OCA\Polls\Db\ParticipationText[] $votes */
+	/** @var OCA\Polls\Db\Options[] $options */
+	$options = $_['options'];
+	/** @var OCA\Polls\Db\Votes[] $votes */
 	$votes = $_['votes'];
 	/** @var \OCA\Polls\Db\Comment[] $comments */
 	$comments = $_['comments'];
@@ -52,7 +56,15 @@
 
 	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
 	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
+	if ($poll->getDisallowMaybe()) {
+		$maybe = 'maybedisallowed';
+	} else {
+		$maybe = 'maybeallowed';
+	}
 	$access = $poll->getAccess();
+	$updatedPoll = false;
+	$dataUnvoted = '';
+
 	if ($poll->getExpire() === null) {
 		$expired = false;
 	} else {
@@ -88,24 +100,28 @@
 
 	// init array for counting 'yes'-votes for each date
 	$total = array();
-	for ($i = 0; $i < count($dates); $i++) {
+	for ($i = 0; $i < count($votes); $i++) {
 		$total['yes'][$i] = 0;
 		$total['no'][$i] = 0;
+		$total['maybe'][$i] = 0;
 	}
 	$userVoted = array();
 	$pollUrl = $urlGenerator->linkToRouteAbsolute('polls.page.goto_poll', ['hash' => $poll->getHash()]);
 ?>
 
-	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass); ?>">
+	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass . ' ' . $maybe); ?>">
 		<div id="controls" class="controls">
+			
 			<div id="breadcrump" class="breadcrump">
-				<?php if (User::isLoggedIn()) : ?>
-				<div class="crumb svg" data-dir="/">
+
+	<?php if (User::isLoggedIn()) : ?>
+				<div class="crumb svg">
 					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
 						<img class="svg" src="<?php print_unescaped(Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
 					</a>
 				</div>
-				<?php endif; ?>
+	<?php endif; ?>
+
 				<div class="crumb svg last">
 					<span><?php p($poll->getTitle()); ?></span>
 				</div>
@@ -124,44 +140,45 @@
 		</div>
 
 		<div id="votings" class="main-container">
-			<div class="wordwrap description"><span><?php print_unescaped($description); ?></span>
-			<?php
-				if ($expired) {
-					print_unescaped('<span class="' . $statusClass . '">' . $l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire())))) . '</span>');
-				}?>
+			<div class="wordwrap description">
+				<span>
+					<?php print_unescaped($description); ?>
+				</span>
+					<?php if ($expired) { print_unescaped('<span class="' . $statusClass . '">' . $l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire())))) . '</span>'); }?>
 			</div>
+			
 			<div class="table">
-					<ul class="flex-row header" >
-						<?php
-						foreach ($dates as $dateElement) {
-							if ($poll->getType() === 0) {
-								$timestamp = strtotime($dateElement->getDt());
-								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . $dateElement->getDt() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $dateElement->getDt() . '">');
-
-								print_unescaped('	<div class="date-box flex-column">');
-								print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp)) . '</div>');
-								print_unescaped('		<div class="day">' . date('j', $timestamp) . '</div>');
-								print_unescaped('		<div class="dayow">' . $l->t(date('D', $timestamp)) . '</div>');
-								print_unescaped('		<div class="time">' . date('G:i', $timestamp) . ' UTC</div>');
-								print_unescaped('	</div>');
-							} else {
-								print_unescaped('<li id="slot_' . $dateElement->getId() . '" title="' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '" class="flex-column vote option">');
-								print_unescaped('	<div class="date-box flex-column">' . preg_replace('/_\d+$/', '', $dateElement->getText()) . '</div>');
-							}
-							print_unescaped('<div class="counter flex-row">');
-							print_unescaped('	<div class="yes flex-row">');
-							print_unescaped('		<div class="svg"></div>');
-							print_unescaped('		<div id="counter_yes_voteid_' . $dateElement->getId() . '" class ="result-cell yes" data-voteId="' . $dateElement->getId() . '">0</div>');
+				<ul class="flex-row header" >
+					<?php
+					foreach ($options as $optionElement) {
+						if ($poll->getType() === 0) {
+							$timestamp = strtotime($optionElement->getPollOptionText());
+							print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . ' ' . date_default_timezone_get() . '" class="flex-column vote time has-tooltip" data-timestamp="' . $timestamp . '"data-value-utc="' . $optionElement->getPollOptionText() . '">');
+							print_unescaped('	<div class="date-box flex-column">');
+							print_unescaped('		<div class="month">' . $l->t(date('M', $timestamp)) . '</div>');
+							print_unescaped('		<div class="day">' . date('j', $timestamp) . '</div>');
+							print_unescaped('		<div class="dayow">' . $l->t(date('D', $timestamp)) . '</div>');
+							print_unescaped('		<div class="time">' . date('G:i', $timestamp) . ' UTC</div>');
 							print_unescaped('	</div>');
-							print_unescaped('	<div class="no flex-row">');
-							print_unescaped('		<div class="svg"></div>');
-							print_unescaped('		<div id="counter_no_voteid_' . $dateElement->getId() . '" class ="result-cell no" data-voteId="' . $dateElement->getId() . '">0</div>');
-							print_unescaped('	</div>');
-							print_unescaped('</div>');
+						} else {
+							print_unescaped('<li id="slot_' . $optionElement->getId() . '" title="' . $optionElement->getPollOptionText() . '" class="flex-column vote option">');
+							print_unescaped('	<div class="date-box flex-column">' . $optionElement->getPollOptionText() . '</div>');
 						}
-						?>
-						</li>
-					</ul>
+						print_unescaped('<div class="counter flex-row">');
+						print_unescaped('	<div class="yes flex-row">');
+						print_unescaped('		<div class="svg"></div>');
+						print_unescaped('		<div id="counter_yes_voteid_' . $optionElement->getId() . '" class ="result-cell yes" data-voteId="' . $optionElement->getId() . '">0</div>');
+						print_unescaped('	</div>');
+						print_unescaped('	<div class="no flex-row">');
+						print_unescaped('		<div class="svg"></div>');
+						print_unescaped('		<div id="counter_no_voteid_' . $optionElement->getId() . '" class ="result-cell no" data-voteId="' . $optionElement->getId() . '">0</div>');
+						print_unescaped('	</div>');
+						print_unescaped('</div>');
+					}
+					?>
+					</li>
+				</ul>
+				
 				<ul class="flex-column table-body">
 					<?php
 					if ($votes !== null) {
@@ -169,7 +186,6 @@
 						$others = array();
 						$displayName = '';
 						$avatarName = '';
-						$activeClass = '';
 						foreach ($votes as $vote) {
 							if (!isset($others[$vote->getUserId()])) {
 								$others[$vote->getUserId()] = array();
@@ -192,7 +208,7 @@
 								!$isAnonymous &&
 								!$hideNames
 							) {
-								$displayName = $userMgr->get($usr)->getDisplayName();
+								$displayName = $usr;
 								$avatarName = $usr;
 							} else {
 								if ($isAnonymous || $hideNames) {
@@ -216,37 +232,16 @@
 							// loop over dts
 							$i_tot = 0;
 
-							foreach ($dates as $dateElement) {
-								if ($poll->getType() === 0) {
-									$dateId = strtotime($dateElement->getDt());
-									$pollId = 'voteid_' . $dateElement->getId();
-								} else {
-									$dateId = $dateElement->getText();
-									$pollId = 'voteid_' . $dateElement->getId();
-								}
+							foreach ($options as $optionElement) {
 								// look what user voted for this dts
-								$class = 'flex-column poll-cell no';
 								foreach ($others[$usr] as $vote) {
-									$voteVal = null;
-									if ($poll->getType() === 0) {
-										$voteVal = strtotime($vote->getDt());
-									} else {
-										$voteVal = $vote->getText();
-									}
-									if ($dateId === $voteVal) {
-										if ($vote->getType() === 1) {
-											$class = 'flex-column poll-cell yes';
-											$total['yes'][$i_tot]++;
-										} else if ($vote->getType() === 0) {
-											$class = 'flex-column poll-cell no';
-											$total['no'][$i_tot]++;
-										} else if ($vote->getType() === 2) {
-											$class = 'flex-column poll-cell maybe';
-										}
+									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
+										$class = $vote->getVoteAnswer();
 										break;
 									}
+									$class = 'no';
 								}
-								print_unescaped('<li id="' . $pollId . '" class="' . $class . '"></li>');
+								print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column poll-cell ' . $class . '"></li>');
 								$i_tot++;
 							}
 
@@ -254,8 +249,6 @@
 							print_unescaped('</li>');
 						}
 					}
-					$totalYesOthers = array_merge(array(), $total['yes']);
-					$totalNoOthers = array_merge(array(), $total['no']);
 					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
 						print_unescaped('<li class="flex-row user current-user">');
@@ -264,51 +257,45 @@
 						if (User::isLoggedIn()) {
 							print_unescaped('		<div class="avatar has-tooltip" title="' . ($userId) . '"></div>');
 							print_unescaped('		<div class="name">');
-							p($userMgr->get($userId)->getDisplayName());
+							p($userId);
 						} else {
 							print_unescaped('		<div class="avatar has-tooltip" title="?"></div>');
 							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
+						if ($maybe === 'maybeallowed') {
 						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
+						} else {
+							print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip yes" title="' . $toggleTooltip . '">');
+						}
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
 						print_unescaped('<ul class="flex-row">');
 
 						$i_tot = 0;
-						foreach ($dates as $dateElement) {
-							if ($poll->getType() === 0) {
-								$dateId = strtotime($dateElement->getDt());
-								$pollId = 'voteid_' . $dateElement->getId();
-							} else {
-								$dateId = $dateElement->getText();
-								$pollId = 'voteid_' . $dateElement->getId();
-							}
+						foreach ($options as $optionElement) {
 							// see if user already has data for this event
 							$class = 'no';
-							$activeClass = 'flex-column active poll-cell';
+							$dataUnvoted = '';
 							if (isset($userVoted)) {
-								foreach ($userVoted as $obj) {
-									$voteVal = null;
-									if ($poll->getType() === 0) {
-										$voteVal = strtotime($obj->getDt());
-									} else {
-										$voteVal = $obj->getText();
-									}
-									if ($voteVal === $dateId) {
-										if ($obj->getType() === 1) {
-											$class = 'yes';
-											$total['yes'][$i_tot]++;
-										} else if ($obj->getType() === 2) {
-											$class = 'maybe';
-										}
+								foreach ($userVoted as $vote) {
+									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
+										$class = $vote->getVoteAnswer();
 										break;
+									} else {
+										$class = 'unvoted';
 									}
 								}
 							}
-							print_unescaped('<li id="' . $pollId . '" class="' . $activeClass . ' ' . $class . '" data-value="' . $dateId . '"></li>');
+							
+							if ($class === 'unvoted') {
+								$dataUnvoted = $l->t('New');
+								$updatedPoll = true;
+							}
+							
+							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></li>');
 
 							$i_tot++;
 						}
@@ -318,24 +305,33 @@
 					?>
 				</ul>
 			</div>
+
+	<?php if ($updatedPoll) : ?>
+			<div class="updated-poll alert">
+				<p> <?php p($l->t('This poll was updated since your last visit. Please check your votes.')); ?></p>
+			</div>
+	<?php endif; ?>
+			
 			<div class="submitPoll flex-row">
 				<div>
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
 						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="userId" value="<?php p($userId); ?>" />
-						<input type="hidden" name="dates" value="<?php p($poll->getId()); ?>" />
-						<input type="hidden" name="types" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="options" value="<?php p($poll->getId()); ?>" />
+						<input type="hidden" name="answers" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="receiveNotifications" />
 						<input type="hidden" name="changed" />
-						<input type="button" id="submit_finish_vote" class="button btn" value="<?php p($l->t('Vote!')); ?>" />
+						<input type="button" id="submit_finish_vote" class="button btn primary" value="<?php p($l->t('Vote!')); ?>" />
 					</form>
 				</div>
-			<?php if (User::isLoggedIn()) : ?>
+
+	<?php if (User::isLoggedIn()) : ?>
 				<div class="notification">
 					<input type="checkbox" id="check_notif" class="checkbox" <?php if ($notification !== null) print_unescaped(' checked'); ?> />
 					<label for="check_notif"><?php p($l->t('Receive notification email on activity')); ?></label>
 				</div>
-			<?php endif; ?>
+	<?php endif; ?>
+
 			</div>
 		</div>
 
@@ -351,7 +347,7 @@
 				<div class="authorRow user-cell flex-row">
 					<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
 					<div class="avatar has-tooltip-bottom" title="<?php p($poll->getOwner())?>"></div>
-					<div class="author"><?php p($userMgr->get($poll->getOwner())->getDisplayName()); ?></div>
+					<div class="author"><?php p($poll->getOwner()); ?></div>
 				</div>
 
 				<div class="cloud">
@@ -407,30 +403,31 @@
 			</div>
 		</div>
 
-
-		<?php if ($expired) : ?>
-			<div id="expired_info">
-				<h2><?php p($l->t('Poll expired')); ?></h2>
-				<p>
-					<?php p($l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire()))))); ?>
-				</p>
-			</div>
-		<?php endif; ?>
+	<?php if ($expired) : ?>
+		<div id="expired_info">
+			<h2><?php p($l->t('Poll expired')); ?></h2>
+			<p>
+				<?php p($l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire()))))); ?>
+			</p>
+		</div>
+	<?php endif; ?>
+	
 		<ul class="tabHeaders">
 			<li class="tabHeader selected" data-tabid="commentsTabView" data-tabindex="0">
 				<a href="#"><?php p($l->t('Comments')); ?></a>
 			</li>
 		</ul>
+		
 		<div class="tabsContainer">
 			<div id="commentsTabView" class="tab commentsTabView">
 				<div class="newCommentRow comment new-comment">
-				<?php if (User::isLoggedIn()) : ?>
+	
+	<?php if (User::isLoggedIn()) : ?>
 					<div class="authorRow user-cell flex-row">
 						<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
-						<div class="author"><?php p($userMgr->get($userId)->getDisplayName()) ?></div>
+						<div class="author"><?php p($userId) ?></div>
 					</div>
-
-				<?php else: ?>
+	<?php else: ?>
 					<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
 					<div class="authorRow user-cell flex-row">
 						<div class="avatar has-tooltip" title="?"></div>
@@ -438,7 +435,8 @@
 							<input type="text" name="user_name_comm" id="user_name_comm" placeholder="<?php p($l->t('Your name here')); ?>" />
 						</div>
 					</div>
-				<?php endif; ?>
+	<?php endif; ?>
+
 					<form class="newCommentForm flex-row" name="send_comment" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_comment')); ?>" method="POST">
 						<input type="hidden" name="pollId" value="<?php p($poll->getId()); ?>" />
 						<input type="hidden" name="userId" value="<?php p($userId); ?>" />
@@ -467,7 +465,7 @@
 							// Comment is from current user
 							// -> display user
 							$avatarName = $userId;
-							$displayName = $userMgr->get($userId)->getDisplayName();
+							$displayName = $userId;
 
 						} else if (!$isAnonymous && !$hideNames) {
 							// comment is from another user,
@@ -476,9 +474,6 @@
 							// -> display user
 							$avatarName = $comment->getUserId();
 							$displayName = $avatarName;
-							if ($userMgr->get($comment->getUserId()) !== null) {
-								$displayName = $userMgr->get($avatarName)->getDisplayName();
-							}
 						} else {
 							// in all other cases
 							// -> make user anonymous
@@ -501,6 +496,6 @@
 				</ul>
 			</div>
 		</div>
-		<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>
 	</div>
-
+	
+	<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>

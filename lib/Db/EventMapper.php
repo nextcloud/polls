@@ -90,8 +90,8 @@ class EventMapper extends Mapper {
 								*PREFIX*polls_events.is_anonymous,
 								*PREFIX*polls_events.full_anonymous
 				FROM *PREFIX*polls_events
-				LEFT JOIN *PREFIX*polls_particip
-					ON *PREFIX*polls_events.id = *PREFIX*polls_particip.id
+				LEFT JOIN *PREFIX*polls_votes
+					ON *PREFIX*polls_events.id = *PREFIX*polls_votes.id
 				LEFT JOIN *PREFIX*polls_comments
 					ON *PREFIX*polls_events.id = *PREFIX*polls_comments.id
 				WHERE
@@ -99,7 +99,7 @@ class EventMapper extends Mapper {
 					OR
 					*PREFIX*polls_events.access != ?
 					OR
-					*PREFIX*polls_particip.user_id = ?
+					*PREFIX*polls_votes.user_id = ?
 					OR
 					*PREFIX*polls_comments.user_id = ?
 					ORDER BY created';

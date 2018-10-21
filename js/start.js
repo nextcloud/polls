@@ -1,4 +1,4 @@
-/** global: Clipboard */
+/* global clipboard, navigator */
 $(document).ready(function () {
 	var clipboard = new Clipboard('.copy-link');
 	clipboard.on('success', function (e) {
@@ -18,13 +18,14 @@ $(document).ready(function () {
 			}
 		}, 3000);
 	});
+	
 	clipboard.on('error', function (e) {
 		var $input = $(e.trigger);
 		var actionMsg = '';
 		if (/iPhone|iPad/i.test(navigator.userAgent)) {
 			actionMsg = t('core', 'Not supported!');
 		} else if (/Mac/i.test(navigator.userAgent)) {
-			actionMsg = t('core', 'Press ⌘-C to copy.');
+			actionMsg = t('core', 'Press ?-C to copy.');
 		} else {
 			actionMsg = t('core', 'Press Ctrl-C to copy.');
 		}
@@ -36,7 +37,7 @@ $(document).ready(function () {
 			.tooltip('show');
 		_.delay(function () {
 			$input.tooltip('hide');
-			if (OC.Share.Social.Collection.size() == 0) {
+			if (OC.Share.Social.Collection.size() === 0) {
 				$input.attr('data-original-title', t('core', 'Copy'))
 					.tooltip('fixTitle');
 			} else {

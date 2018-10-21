@@ -25,12 +25,10 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\Controller\PageController;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\DateMapper;
+use OCA\Polls\Db\OptionsMapper;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\NotificationMapper;
-use OCA\Polls\Db\ParticipationMapper;
-use OCA\Polls\Db\ParticipationTextMapper;
-use OCA\Polls\Db\TextMapper;
+use OCA\Polls\Db\VotesMapper;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 
@@ -49,7 +47,7 @@ class Application extends App {
 		/**
 		 * Controllers
 		 */
-		$container->registerService('PageController', function (IContainer $c) {
+		$container->registerService('PageController', function(IContainer $c) {
 			return new PageController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -61,84 +59,70 @@ class Application extends App {
 				$c->query('ServerContainer')->getURLGenerator(),
 				$c->query('UserId'),
 				$c->query('CommentMapper'),
-				$c->query('DateMapper'),
+				$c->query('OptionsMapper'),
 				$c->query('EventMapper'),
 				$c->query('NotificationMapper'),
-				$c->query('ParticipationMapper'),
-				$c->query('ParticipationTextMapper'),
-				$c->query('TextMapper')
+				$c->query('VotesMapper')
 			);
 		});
 
-		$container->registerService('UserManager', function (IContainer $c) {
+		$container->registerService('UserManager', function(IContainer $c) {
 			return $c->query('ServerContainer')->getUserManager();
 		});
 
-		$container->registerService('GroupManager', function (IContainer $c) {
+		$container->registerService('GroupManager', function(IContainer $c) {
 			return $c->query('ServerContainer')->getGroupManager();
 		});
 
-		$container->registerService('AvatarManager', function (IContainer $c) {
+		$container->registerService('AvatarManager', function(IContainer $c) {
 			return $c->query('ServerContainer')->getAvatarManager();
 		});
 
-		$container->registerService('Logger', function (IContainer $c) {
+		$container->registerService('Logger', function(IContainer $c) {
 			return $c->query('ServerContainer')->getLogger();
 		});
 
-		$container->registerService('L10N', function (IContainer $c) {
+		$container->registerService('L10N', function(IContainer $c) {
 			return $c->query('ServerContainer')->getL10N($c->query('AppName'));
 		});
 
-		$container->registerService('CommentMapper', function (IContainer $c) use ($server) {
+		$container->registerService('CommentMapper', function(IContainer $c) use ($server) {
 			return new CommentMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('DateMapper', function (IContainer $c) use ($server) {
-			return new DateMapper(
+		$container->registerService('OptionsMapper', function(IContainer $c) use ($server) {
+			return new OptionsMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('EventMapper', function (IContainer $c) use ($server) {
+		$container->registerService('EventMapper', function(IContainer $c) use ($server) {
 			return new EventMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('NotificationMapper', function (IContainer $c) use ($server) {
+		$container->registerService('NotificationMapper', function(IContainer $c) use ($server) {
 			return new NotificationMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('ParticipationMapper', function (IContainer $c) use ($server) {
-			return new ParticipationMapper(
+		$container->registerService('VotesMapper', function(IContainer $c) use ($server) {
+			return new VotesMapper(
 				$server->getDatabaseConnection()
 			);
 		});
 
-		$container->registerService('ParticipationTextMapper', function (IContainer $c) use ($server) {
-			return new ParticipationTextMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-
-		$container->registerService('TextMapper', function (IContainer $c) use ($server) {
-			return new TextMapper(
-				$server->getDatabaseConnection()
-			);
-		});
 	}
-
 	/**
 	 * Register navigation entry for main navigation.
 	 */
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function () use ($container) {
+		$container->query('OCP\INavigationManager')->add(function() use ($container) {
 			$urlGenerator = $container->query('OCP\IURLGenerator');
 			$l10n = $container->query('OCP\IL10N');
 			return [
