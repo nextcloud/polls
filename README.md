@@ -18,14 +18,19 @@ It is a rework of the already existing [polls app](https://github.com/raduvatav/
 - https://github.com/nextcloud/polls/issues
 
 ### Screenshots
+Overview of all polls
 ![Overview](https://github.com/nextcloud/polls/blob/master/screenshots/overview.png)
 
+The vote page
 ![Vote](https://github.com/nextcloud/polls/blob/master/screenshots/vote.png)
 
+Creating a new poll
 ![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/edit-poll.png)
 
+View the vote page on mobiles
 ![Vote mobile portrait](https://github.com/nextcloud/polls/blob/master/screenshots/vote-mobile-portrait.png)
 
+Turn phone to landscape to see details
 ![Vote mobile landscape](https://github.com/nextcloud/polls/blob/master/screenshots/vote-mobile-landscape.png)
 
 ## Installation / Update
