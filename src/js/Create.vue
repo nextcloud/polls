@@ -208,7 +208,7 @@
 				nextPollTextId: 1,
 				protect: false,
 				writingPoll: false,
-				loadingPoll: false,
+				loadingPoll: true,
 				sidebar: false,
 				titleEmpty: false,
 				indexPage: '',
@@ -237,8 +237,8 @@
 
 			if (urlArray[urlArray.length - 1] === 'create') {
 				this.poll.event.owner = OC.getCurrentUser().uid;
+				this.loadingPoll = false
 			} else {
-				this.loadingPoll = true
 				this.loadPoll(urlArray[urlArray.length - 1])
 				this.protect = true;
 				this.poll.mode = 'edit';
@@ -405,6 +405,8 @@
 						this.poll.options.pollTexts = [];
 					}
 					this.loadingPoll = false
+					this.newPollDate = ''
+					this.newPollText = ''
 				}, (error) => {
 					this.poll.event.hash = '';
 					console.log(error.response);

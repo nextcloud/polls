@@ -64,7 +64,7 @@
 				isLoading: false,
 				siteUsersListOptions: {
 					getUsers: true,
-					getGroups: false,
+					getGroups: true,
 					query: ''
 				}
 			}
