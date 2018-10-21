@@ -1,9 +1,9 @@
 ﻿<template>
 	<div id="create-poll">
 		<controls :index-page="indexPage" :intitle="title">
-			<button @click="writePoll(poll.mode)" class="button btn primary" :disabled="saving">
+			<button @click="writePoll(poll.mode)" class="button btn primary" :disabled="writingPoll">
 				<span>{{ saveButtonTitle }}</span>
-				<span v-if="saving" class="shareWithLoading icon-loading-small hidden"></span>
+				<span v-if="writingPoll" class="icon-loading-small"></span>
 			</button>
 			<button @click="switchSidebar" class="button">
 				<span class="symbol icon-settings"></span>
@@ -147,6 +147,9 @@
 						v-show="poll.event.access === 'select'"/>
 
 		</side-bar>
+		<div class="loading-overlay" v-if="loadingPoll">
+			<span class="icon-loading"></span>
+		</div>
 	</div>
 </template>
 
@@ -204,7 +207,8 @@
 				nextPollDateId: 1,
 				nextPollTextId: 1,
 				protect: false,
-				saving: false,
+				writingPoll: false,
+				loadingPoll: false,
 				sidebar: false,
 				titleEmpty: false,
 				indexPage: '',
@@ -234,6 +238,7 @@
 			if (urlArray[urlArray.length - 1] === 'create') {
 				this.poll.event.owner = OC.getCurrentUser().uid;
 			} else {
+				this.loadingPoll = true
 				this.loadPoll(urlArray[urlArray.length - 1])
 				this.protect = true;
 				this.poll.mode = 'edit';
@@ -259,7 +264,7 @@
 			},
 
 			saveButtonTitle: function() {
-				if (this.saving) {
+				if (this.writingPoll) {
 					return t('polls', 'Writing poll')
 				} else if (this.poll.mode === 'edit') {
 					return t('polls', 'Update poll')
@@ -358,7 +363,7 @@
 			},
 
 			writePoll: function (mode) {
-				this.saving = true
+				this.writingPoll = true
 				if (mode !== '') {
 					this.poll.mode = mode;
 				}
@@ -371,7 +376,7 @@
 							this.poll.mode = 'edit';
 							this.poll.event.hash = response.data.hash;
 							this.poll.event.id = response.data.id;
-							this.saving = false;
+							this.writingPoll = false;
 							// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
 						}, (error) => {
 							this.poll.event.hash = '';
@@ -382,6 +387,7 @@
 			},
 			
 			loadPoll: function (hash) {
+				this.loadingPoll = true
 				axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 				.then((response) => {
 					this.poll = response.data.poll;
@@ -398,9 +404,11 @@
 						}
 						this.poll.options.pollTexts = [];
 					}
+					this.loadingPoll = false
 				}, (error) => {
 					this.poll.event.hash = '';
 					console.log(error.response);
+					this.loadingPoll = false
 				});
 			}
 		}
@@ -447,8 +455,33 @@
 		}
 	}
 	
+	.loading-overlay {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		opacity: 0.9;
+		z-index: 1001;
+		.icon-loading {
+			position: fixed;
+			left: 50%;
+			top: 50%;
+			margin-left: -35px;
+			margin-top: -10px;
+			&::after {
+				border: 10px solid var(--color-loading-light);
+				border-top-color: var(--color-primary-element);
+				height: 70px;
+				width: 70px;
+			}
+		}
+	}
+	
 	.polls-sidebar {
 		margin-top: 45px;
+		width: 40%;
 		
 		.configBox {
 			display: flex;
