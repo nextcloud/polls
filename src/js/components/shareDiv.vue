@@ -40,15 +40,15 @@
 				<div class="options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
-				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type" :hide-names="hideNames"></user-div>
+				<user-div :user-id="item.id" :type="item.type" :hide-names="hideNames"></user-div>
 			</li>
 		</transition-group>
 	</div>
 </template>
 
 <script>
-	import axios from 'axios';
-	import { Multiselect } from 'nextcloud-vue';
+	import axios from 'axios'
+	import { Multiselect } from 'nextcloud-vue'
 
 	export default {
 		components: {
@@ -78,11 +78,11 @@
 		
 		methods: {
 			removeShare: function (index, item){
-				this.$emit('remove-share', item);
+				this.$emit('remove-share', item)
 			},
 			
 			updateShares: function (){
-				this.$emit('update-shares', this.shares);
+				this.$emit('update-shares', this.shares)
 			},
 			
 			loadUsersAsync: function (query) {
@@ -94,19 +94,19 @@
 					this.isLoading = false
 				}, (error) => {
 					console.log(error.response)
-				});
+				})
 			},
 			
 			sortByDisplayname: function (a, b) {
-					if (a.displayName.toLowerCase() < b.displayName.toLowerCase()) return -1;
-					if (a.displayName.toLowerCase() > b.displayName.toLowerCase()) return 1;
-					return 0;
+					if (a.displayName.toLowerCase() < b.displayName.toLowerCase()) return -1
+					if (a.displayName.toLowerCase() > b.displayName.toLowerCase()) return 1
+					return 0
 			}
 			
 		},
 		watch: {
 			activeShares(value) {
-			this.shares = value.slice(0);
+			this.shares = value.slice(0)
 		}
 }
 	}

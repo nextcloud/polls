@@ -10,11 +10,11 @@
 			return {
 				closeDetailLabel: t('Close details'),
 				closeDetailLabelAlt: t('Close')
-			};
+			}
 		},
 		methods: {
 			hideSidebar: function () {
-				OC.Apps.hideAppSidebar();
+				OC.Apps.hideAppSidebar()
 			}
 		}
 	}

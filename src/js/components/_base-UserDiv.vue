@@ -2,13 +2,17 @@
 <template>
 	<div class="user-row" :class="type">
 		<div v-show="description" class="description">{{description}}</div>
-		<div class="avatar"><img :src="avatarURL" :width="size" :height="size" :title="computedDisplayName"></div>
+		<avatar :user="userId" :display-name="computedDisplayName"></avatar>
 		<div v-show="!hideNames" class="user-name">{{ computedDisplayName }}</div>
 	</div>
 </template>
 
 <script>
+	import { Avatar } from './Avatar/index.js'
 	export default {
+		components: {
+			Avatar
+		},
 		props: {
 			hideNames: {
 				default: false
@@ -39,40 +43,21 @@
 
 		computed: {
 			computedDisplayName: function () {
-				var value = this.displayName;
+				var value = this.displayName
 				
 				if (this.userId === OC.getCurrentUser().uid) {
-					value = OC.getCurrentUser().displayName;
+					value = OC.getCurrentUser().displayName
 				} else {
 					if (!this.displayName) {
-						value = this.userId;
+						value = this.userId
 					}
 				}
 				if (this.type === 'group') {
-					value = value + ' (' + t('polls','Group') +')';
+					value = value + ' (' + t('polls','Group') +')'
 				}
-				return value;
-			},
-
-			avatarURL: function() {
-				if (this.userId === OC.getCurrentUser().uid) {
-					return OC.generateUrl(
-						'/avatar/{user}/{size}?v={version}',
-						{
-							user: OC.getCurrentUser().uid,
-							size: Math.ceil(this.size * window.devicePixelRatio),
-							version: oc_userconfig.avatar.version
-					})
-				} else {
-					return OC.generateUrl(
-						'/avatar/{user}/{size}',
-						{
-							user: this.userId,
-							size: Math.ceil(this.size * window.devicePixelRatio),
-					})
-					
-				}
+				return value
 			}
+
 		}	
 	}
 </script>

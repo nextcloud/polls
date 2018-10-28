@@ -6,7 +6,7 @@
 </template>
 
 <script>
-	import Breadcrump from './_base-breadcrump.vue';
+	import Breadcrump from './_base-breadcrump.vue'
 	export default {
 		components: {
 			Breadcrump

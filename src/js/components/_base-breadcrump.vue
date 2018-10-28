@@ -17,7 +17,7 @@
 		data: function () {
 			return {
 				imagePath: OC.imagePath('core', 'places/home.svg'),
-			};
+			}
 		}
 	}
 </script>

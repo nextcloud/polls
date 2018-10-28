@@ -12,10 +12,10 @@
 		props: ['option'],
 		filters: {
 			localFullDate: function (timestamp) {
-				if (!timestamp) return '';
-				if (!moment(timestamp).isValid()) return 'Invalid Date';
-				if (timestamp <  999999999999) timestamp = timestamp *1000;
-				return moment(timestamp).format('llll');
+				if (!timestamp) return ''
+				if (!moment(timestamp).isValid()) return 'Invalid Date'
+				if (timestamp <  999999999999) timestamp = timestamp *1000
+				return moment(timestamp).format('llll')
 			}
 		}
 	}

@@ -18,7 +18,7 @@
 		
 		computed: {
 			expirationdate: function() {
-				var date = moment(this.options.expirationDate, moment.localeData().longDateFormat('L')).fromNow();
+				var date = moment(this.options.expirationDate, moment.localeData().longDateFormat('L')).fromNow()
 				return date
 			}
 		}
