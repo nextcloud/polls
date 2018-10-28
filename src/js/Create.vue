@@ -190,7 +190,7 @@
 						isAnonymous: false,
 						fullAnonymous: false,
 						disallowMaybe: false,
-						owner: ''
+						owner: undefined
 					},
 					options: {
 						pollDates: [],

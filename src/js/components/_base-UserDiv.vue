@@ -2,7 +2,7 @@
 <template>
 	<div class="user-row" :class="type">
 		<div v-show="description" class="description">{{description}}</div>
-		<avatar :user="userId" :display-name="computedDisplayName"></avatar>
+		<avatar :user="userId" :display-name="computedDisplayName" :isNoUser="isNoUser"></avatar>
 		<div v-show="!hideNames" class="user-name">{{ computedDisplayName }}</div>
 	</div>
 </template>
@@ -19,7 +19,7 @@
 			},
 			userId: {
 				type: String,
-				default: OC.getCurrentUser().uid
+				default: undefined
 			},
 			displayName: {
 				type: String
@@ -42,6 +42,9 @@
 		},
 
 		computed: {
+			isNoUser() {
+				return this.type !== 'user'
+			},
 			computedDisplayName: function () {
 				var value = this.displayName
 				
