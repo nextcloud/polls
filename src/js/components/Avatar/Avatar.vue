@@ -101,7 +101,7 @@ export default {
 			default: false
 		},
 		/**
-		 * Define username is not a user name
+		 * Declare username is not a user name
 		 */
 		isNoUser: {
 			type: Boolean,
@@ -208,12 +208,7 @@ export default {
 			})
 		},
 		loadAvatarUrl() {
-			/** Only run avatar image loading if either user or url property is defined */
-			console.log('User: ' + this.user)
-			console.log('!isUrlDefined: ' + !this.isUrlDefined)
-			console.log('!this.isUserDefined: ' + !this.isUserDefined)
-			console.log('this.isNoUser: ' + this.isNoUser)
-			console.log('combined: ' + !this.isUrlDefined && !this.isUserDefined && this.isNoUser)
+			/** Only run avatar image loading if either user or url property is defined and if user is of type user*/
 			if (!this.isUrlDefined && (!this.isUserDefined || this.isNoUser)) {
 				this.loadingState = false
 				this.userDoesNotExist = true
