@@ -178,14 +178,14 @@ export default {
 			})
 		}
 	},
-	mounted() {
-		this.loadAvatarUrl()
-	},
 	watch: {
 		user() {
 			this.userDoesNotExist = false
 			this.loadAvatarUrl()
 		}
+	},
+	mounted() {
+		this.loadAvatarUrl()
 	},
 	methods: {
 		toggleMenu() {
