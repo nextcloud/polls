@@ -1,4 +1,26 @@
-﻿<template>
+<!--
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  -
+  - @author René Gieling <github@dartcafe.de>
+  -
+  - @license GNU AGPL version 3 or any later version
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Affero General Public License as
+  - published by the Free Software Foundation, either version 3 of the
+  - License, or (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+  <template>
 	<div id="create-poll">
 		<controls :index-page="indexPage" :intitle="title">
 			<button @click="writePoll(poll.mode)" class="button btn primary" :disabled="writingPoll">
@@ -79,7 +101,7 @@
 		</div>
 
 		<side-bar v-if="sidebar">
-			<user-div :description="t('polls', 'Owner')" :user-id="poll.event.owner"></user-div>
+			<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')"></user-div>
 
 			<ul class="tabHeaders">
 				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
@@ -154,12 +176,12 @@
 </template>
 
 <script>
-	import axios from 'axios';
-	import moment from 'moment';
-	import lodash from 'lodash';
+	import axios from 'axios'
+	import moment from 'moment'
+	import lodash from 'lodash'
 
-	import DatePollItem from './components/datePollItem.vue';
-	import TextPollItem from './components/textPollItem.vue';
+	import DatePollItem from './components/datePollItem.vue'
+	import TextPollItem from './components/textPollItem.vue'
 	
 	export default {
 		name: 'create-poll',
@@ -182,7 +204,6 @@
 						type: 'datePoll',
 						title: '',
 						description: '',
-						owner:'',
 						created: '',
 						access: 'public',
 						expiration: false,
@@ -191,13 +212,14 @@
 						isAnonymous: false,
 						fullAnonymous: false,
 						disallowMaybe: false,
+						owner: undefined
 					},
 					options: {
 						pollDates: [],
 						pollTexts: []
 					}
 				},
-				system:[],
+				system: [],
 				lang: '',
 				locale: '',
 				placeholder: '',
@@ -218,34 +240,33 @@
 		},
 
 		created: function() {
-			this.indexPage = OC.generateUrl('apps/polls/');
-			this.getSystemValues();
-			this.lang = OC.getLanguage();
+			this.indexPage = OC.generateUrl('apps/polls/')
+			this.getSystemValues()
+			this.lang = OC.getLanguage()
 			try {
-				this.locale = OC.getLocale();
+				this.locale = OC.getLocale()
 			} catch (e) {
 				if (e instanceof TypeError) {
-					this.locale = this.lang;
+					this.locale = this.lang
 				} else {
 					console.log(e)
 				}
 			}
-			moment.locale(this.locale);
-			this.longDateFormat = moment.localeData().longDateFormat('L');
-			this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT');
-			var urlArray = window.location.pathname.split( '/' );
+			moment.locale(this.locale)
+			this.longDateFormat = moment.localeData().longDateFormat('L')
+			this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
+			var urlArray = window.location.pathname.split( '/' )
 
 			if (urlArray[urlArray.length - 1] === 'create') {
-				this.poll.event.owner = OC.getCurrentUser().uid;
+				this.poll.event.owner = OC.getCurrentUser().uid
 				this.loadingPoll = false
 			} else {
 				this.loadPoll(urlArray[urlArray.length - 1])
-				this.protect = true;
-				this.poll.mode = 'edit';
-			};
-
+				this.protect = true
+				this.poll.mode = 'edit'
+			}
 			if (window.innerWidth >1024) {
-				this.sidebar = true;
+				this.sidebar = true
 			}
 		},
 
@@ -256,9 +277,9 @@
 			
 			title: function() {
 				if (this.poll.event.title === '') {
-					return t('polls','Create new poll');
+					return t('polls','Create new poll')
 				} else {
-					return this.poll.event.title;
+					return this.poll.event.title
 					
 				}
 			},
@@ -309,46 +330,46 @@
 		watch: {
 			title () {
 				// only used when the title changes after page load
-				document.title = t('polls','Polls') + ' - ' + this.title;
+				document.title = t('polls','Polls') + ' - ' + this.title
 			}
 		},
 
 		methods: {
 		
 			switchSidebar () {
-				this.sidebar = !this.sidebar;
+				this.sidebar = !this.sidebar
 			},
 			
 			getSystemValues: function() {
 				axios.get(OC.generateUrl('apps/polls/get/system'))
 				.then((response) => {
-					this.system = response.data.system;
+					this.system = response.data.system
 				}, (error) => {
-					this.poll.event.hash = '';
-					console.log(error.response);
-				});
+					this.poll.event.hash = ''
+					console.log(error.response)
+				})
 			},
 			
 			addShare: function (item){
-				this.poll.shares.push(item);
+				this.poll.shares.push(item)
 			},
 
 			updateShares: function (share){
-				this.poll.shares= share.slice(0);
+				this.poll.shares= share.slice(0)
 			},
 
 			removeShare: function (item){
-				this.poll.shares.splice(this.poll.shares.indexOf(item), 1);
+				this.poll.shares.splice(this.poll.shares.indexOf(item), 1)
 			},
 
 			addNewPollDate: function (newPollDate) {
 				if (newPollDate != null) {
-					this.newPollDate = moment(newPollDate);
+					this.newPollDate = moment(newPollDate)
 					this.poll.options.pollDates.push({
 						id: this.nextPollDateId++,
 						timestamp: moment(newPollDate).unix(),
-					});
-					this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp');
+					})
+					this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp')
 				}
 			},
 			
@@ -357,32 +378,32 @@
 					this.poll.options.pollTexts.push({
 						id: this.nextPollTextId++,
 						text: this.newPollText
-					});
+					})
 				}
-				this.newPollText = '';
+				this.newPollText = ''
 			},
 
 			writePoll: function (mode) {
 				this.writingPoll = true
 				if (mode !== '') {
-					this.poll.mode = mode;
+					this.poll.mode = mode
 				}
 				if (this.poll.event.title.length === 0) {
-					this.titleEmpty = true;
+					this.titleEmpty = true
 				} else {
-					this.titleEmpty = false;
+					this.titleEmpty = false
 					axios.post(OC.generateUrl('apps/polls/write'), this.poll)
 						.then((response) => {
-							this.poll.mode = 'edit';
-							this.poll.event.hash = response.data.hash;
-							this.poll.event.id = response.data.id;
-							this.writingPoll = false;
-							// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash);
+							this.poll.mode = 'edit'
+							this.poll.event.hash = response.data.hash
+							this.poll.event.id = response.data.id
+							this.writingPoll = false
+							// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash)
 						}, (error) => {
-							this.poll.event.hash = '';
-							console.log(this.poll.event.hash);
-							console.log(error.response);
-					});
+							this.poll.event.hash = ''
+							console.log(this.poll.event.hash)
+							console.log(error.response)
+					})
 				}
 			},
 			
@@ -390,7 +411,7 @@
 				this.loadingPoll = true
 				axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 				.then((response) => {
-					this.poll = response.data.poll;
+					this.poll = response.data.poll
 					if (this.poll.event.expirationDate !== null) {
 						this.poll.event.expirationDate = new Date(moment.utc(this.poll.event.expirationDate))
 					} else {
@@ -398,20 +419,20 @@
 					}
 
 					if (this.poll.event.type === 'datePoll') {
-						var i;
+						var i
 						for (i = 0; i < this.poll.options.pollTexts.length; i++) {
 							this.addNewPollDate(new Date(moment.utc(this.poll.options.pollTexts[i].text)))
 						}
-						this.poll.options.pollTexts = [];
+						this.poll.options.pollTexts = []
 					}
 					this.loadingPoll = false
 					this.newPollDate = ''
 					this.newPollText = ''
 				}, (error) => {
-					this.poll.event.hash = '';
-					console.log(error.response);
+					this.poll.event.hash = ''
+					console.log(error.response)
 					this.loadingPoll = false
-				});
+				})
 			}
 		}
 	}
