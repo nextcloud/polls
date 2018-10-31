@@ -4,6 +4,7 @@ $border_current_user: 2px solid;
 $border_user: 1px solid #ddd;
 $user-column-width: 265px;
 
+
 #content {
 	display:flex;
 }
@@ -50,12 +51,12 @@ $user-column-width: 265px;
 
 			.counter {
 				font-size: 18px;
-				.yes, .no {
+				& > div {
 					margin: 0 2px;
 					.svg {
 						background-position: center;
 						background-repeat: no-repeat;
-						background-size: 24px;
+						background-size: 18px;
 						height: 24px;
 						width: 24px;
 					}
@@ -63,13 +64,13 @@ $user-column-width: 265px;
 				.yes {
 					color: $fg_yes;
 					.svg {
-						background-image: url('../img/yes-vote.svg');
+						background-image: var(--icon-yes);
 					}
 				}			
 				.no {
 					color: $fg_no;
 					.svg {
-						background-image: url('../img/no-vote.svg');
+						background-image: var(--icon-no);
 					}
 				}			
 			}
@@ -125,19 +126,19 @@ $user-column-width: 265px;
 	&.yes {
 		background-color: $bg_yes;
 		color: $fg_yes;
-		background-image: url('../img/yes-vote.svg');
+		background-image: var(--icon-yes);
 	}
 
 	&.no {
 		background-color: $bg_no;
 		color: $fg_no;
-		background-image: url('../img/no-vote.svg');
+		background-image: var(--icon-no);
 	}
 
 	&.maybe {
 		background-color: $bg_maybe;
 		color: $fg_maybe;
-		background-image: url('../img/maybe-vote.svg');
+		background-image: var(--icon-maybe);
 	}
 
 	&.unvoted {
@@ -205,8 +206,8 @@ $user-column-width: 265px;
 	.badge {
 		position: relative;
 		top: -34px;
-		right: -24px;
-		background-image: url("../../../apps/polls/css/../img/yes-comment.svg");
+		left: -26px;
+		background-image: var(--icon-comment-yes);
 		background-repeat: no-repeat;
 		background-size: 33px;
 		padding: 10px;
@@ -218,7 +219,7 @@ $user-column-width: 265px;
 		min-width: 34px;
 		text-align: center;
 		&.no-comments {
-			background-image: url('../../../apps/polls/css/../img/no-comment.svg');
+			background-image: var(--icon-comment-no);
 		}
 	}
 }

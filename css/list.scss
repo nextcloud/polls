@@ -131,19 +131,19 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	div {
 		&.partic_voted {
 			&.icon-partic_yes {
-				background-image: url('../img/yes-vote.svg');
+				background-image: var(--icon-yes);
 			}
 			&.icon-partic_no {
-				background-image: url('../img/no-vote.svg');
+				background-image: var(--icon-no);
 			}
 		}
 
 		&.partic_commented {
 			&.icon-commented_yes {
-				background-image: url('../img/yes-comment.svg');
+				background-image: var(--icon-comment-yes);
 			}
 			&.icon-commented_no {
-				background-image: url('../img/no-comment.svg');
+				background-image: var(--icon-comment-no);
 			}
 		}
 	}

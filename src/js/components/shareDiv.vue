@@ -59,10 +59,10 @@
 			<li v-for="(item, index) in sortedShares" 
 				v-bind:key="item.displayName" 
 				v-bind:data-index="index">
+				<user-div :user-id="item.id" :type="item.type" :hide-names="hideNames"></user-div>
 				<div class="options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
-				<user-div :user-id="item.id" :type="item.type" :hide-names="hideNames"></user-div>
 			</li>
 		</transition-group>
 	</div>
@@ -150,8 +150,8 @@
 	.options {
 		display: flex;
 		position: relative;
-		top: 13px;
-		left: 43px;
+		top: -12px;
+		left: -13px;
 	}
 	
 	div, select {

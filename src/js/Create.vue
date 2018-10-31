@@ -116,15 +116,15 @@
 			<div id="configurationsTabView" class="tab">
 
 				<div class="configBox" v-if="poll.mode =='edit'">
-					<label class="title">{{ t('polls', 'Poll type') }}</label>
+					<label class="title icon-checkmark">{{ t('polls', 'Poll type') }}</label>
 					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
 					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
 					<input id="textPoll" v-model="poll.event.type" value="textPoll" type="radio" class="radio" :disabled="protect"/>
 					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 				</div>
 
-				<div class="configBox">
-					<label class="title">{{ t('polls', 'Poll configurations') }}</label>
+				<div class="configBox ">
+					<label class="title icon-settings">{{ t('polls', 'Poll configurations') }}</label>
 
 					<input :disabled="protect" id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
 					<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
@@ -148,7 +148,7 @@
 				</div>
 
 				<div class="configBox">
-					<label class="title">{{ t('polls', 'Access') }}</label>
+					<label class="title icon-user">{{ t('polls', 'Access') }}</label>
 					<input :disabled="protect" type="radio" v-model="poll.event.access" value="registered" id="private" class="radio"/>
 					<label for="private">{{ t('polls', 'Registered users only') }}</label>
 					<input :disabled="protect" type="radio" v-model="poll.event.access" value="hidden" id="hidden" class="radio"/>
@@ -510,12 +510,16 @@
 			display: flex;
 			flex-direction: column;
 			padding: 8px 8px;
-			
+			&> * {
+				padding-left: 21px;
+			}			
 			&> .title {
+				background-position: 0px 2px;
+				padding-left: 24px;
+				opacity: 0.7;
 				font-weight: bold;
 				margin-bottom: 4px;
 			}
-			
 		}
 	}
 
