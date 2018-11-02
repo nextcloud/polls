@@ -64,7 +64,6 @@ function updateAvatar(obj) {
 		$(obj).avatar(obj.title, 32);
 	}
 }
-
 function switchSidebar() {
 	if ($('#app-content').hasClass('with-app-sidebar')) {
 		OC.Apps.hideAppSidebar();
@@ -74,7 +73,7 @@ function switchSidebar() {
 }
 
 $(document).ready(function () {
-	
+
 	var clipboard = new Clipboard('.copy-link');
 
 	clipboard.on('success', function(e) {
@@ -126,6 +125,10 @@ $(document).ready(function () {
 
 	if ($('#app-content').hasClass('maybedisallowed')) {
 		maybeAllowed = false;
+	}
+
+	if (window.innerWidth > 1024) {
+		OC.Apps.showAppSidebar();
 	}
 
 	// Temporary hack - Check if we have Nextcloud or ownCloud with an anonymous user
