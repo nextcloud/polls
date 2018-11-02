@@ -9,7 +9,7 @@ h1 {
 	}
 }
 
-/* allow horizontal scrollbar 
+/* allow horizontal scrollbar
    otherwise user management is not usable on mobile */
 @media only screen and (max-width: 768px) {
 	#app-content {
@@ -20,13 +20,6 @@ h1 {
 #app-content-wrapper {
 	flex-direction: column;
 }
-
-.icon-polls {
-	background-color: black;
-	-webkit-mask: url('../img/app.svg') no-repeat 50% 50%;
-	mask: url('../img/app.svg') no-repeat 50% 50%;
-}
-
 
 #controls {
     // adopted from NC13 for compatibily with OC10 and NC11-NC12
@@ -48,7 +41,7 @@ h1 {
 	}
 
 }
-   
+
 .col-100 {
 	width: 100%;
 	padding: 0px 15px;
