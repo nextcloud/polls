@@ -35,17 +35,17 @@
 		<div class="workbench">
 			<div>
 				<h2>{{ t('polls', 'Poll description') }}</h2>
-				
+
 				<label>{{ t('polls', 'Title') }}</label>
 				<input type="text" id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title">
-			
+
 				<label>{{ t('polls', 'Description') }}</label>
 				<textarea id="pollDesc" v-model="poll.event.description" style="resize: vertical; 	width: 100%;"></textarea>
 			</div>
-			
+
 			<div>
 				<h2>{{ t('polls', 'Vote options') }}</h2>
-				
+
 				<div v-if="poll.mode == 'create'">
 					<input id="datePoll" v-model="poll.event.type" value="datePoll" type="radio" class="radio" :disabled="protect"/>
 					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
@@ -53,19 +53,19 @@
 					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
 				</div>
 
-					
-				<date-picker @change="addNewPollDate" 
+
+				<date-picker @change="addNewPollDate"
 					v-bind="optionDatePicker"
 					v-model="newPollDate"
-					style="width:100%" 
+					style="width:100%"
 					v-show="poll.event.type === 'datePoll'"
 					confirm />
-					
-				<transition-group 
-					id="date-poll-list" 
-					name="list" 
-					tag="ul" 
-					class="poll-table" 
+
+				<transition-group
+					id="date-poll-list"
+					name="list"
+					tag="ul"
+					class="poll-table"
 					v-show="poll.event.type === 'datePoll'">
 					<li
 						is="date-poll-item"
@@ -76,16 +76,16 @@
 					</li>
 				</transition-group>
 
-			
+
 				<div id="poll-item-selector-text" v-show="poll.event.type === 'textPoll'" >
 					<input v-model="newPollText" @keyup.enter="addNewPollText()" :placeholder=" t('polls', 'Add option') ">
 				</div>
-				
-				<transition-group 
-					id="text-poll-list" 
-					name="list" 
-					tag="ul" 
-					class="poll-table" 
+
+				<transition-group
+					id="text-poll-list"
+					name="list"
+					tag="ul"
+					class="poll-table"
 					v-show="poll.event.type === 'textPoll'">
 					<li
 						is="text-poll-item"
@@ -101,6 +101,7 @@
 		</div>
 
 		<side-bar v-if="sidebar">
+			<div v-if="adminMode" class="warning">{{ t('polls', 'You are editing in admin mode')}}</div>
 			<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')"></user-div>
 
 			<ul class="tabHeaders">
@@ -139,10 +140,10 @@
 					<label for="expiration">{{ t('polls', 'Expires') }}</label>
 
 					<date-picker v-bind="expirationDatePicker"
-						:disabled="protect" 
-						v-model="poll.event.expirationDate" 
-						v-show="poll.event.expiration" 
-						style="width:170px" 
+						:disabled="protect"
+						v-model="poll.event.expirationDate"
+						v-show="poll.event.expiration"
+						style="width:170px"
 						:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" />
 
 				</div>
@@ -161,11 +162,11 @@
 				</div>
 			</div>
 
-			<share-div	:active-shares="poll.shares" 
-						@update-shares="updateShares" 
+			<share-div	:active-shares="poll.shares"
+						@update-shares="updateShares"
 						@remove-share="removeShare"
 						hide-names="true"
-						:placeholder="t('polls', 'Name of user or group')" 
+						:placeholder="t('polls', 'Name of user or group')"
 						v-show="poll.event.access === 'select'"/>
 
 		</side-bar>
@@ -182,7 +183,7 @@
 
 	import DatePollItem from './components/datePollItem.vue'
 	import TextPollItem from './components/textPollItem.vue'
-	
+
 	export default {
 		name: 'create-poll',
 
@@ -236,6 +237,7 @@
 				indexPage: '',
 				longDateFormat: '',
 				dateTimeFormat: '',
+				adminMode: false,
 			}
 		},
 
@@ -274,13 +276,13 @@
 			langShort: function () {
 				return this.lang.split("-")[0]
 			},
-			
+
 			title: function() {
 				if (this.poll.event.title === '') {
 					return t('polls','Create new poll')
 				} else {
 					return this.poll.event.title
-					
+
 				}
 			},
 
@@ -304,7 +306,7 @@
 					type: 'datetime',
 					lang: this.lang.split("-")[0],
 					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					placeholder: t('polls', 'Expiration date') 
+					placeholder: t('polls', 'Expiration date')
 				}
 			},
 
@@ -312,14 +314,14 @@
 				return {
 					editable: false,
 					minuteStep: 1,
-					type: 'datetime', 
+					type: 'datetime',
 					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
 					lang: this.lang.split("-")[0],
 					placeholder: t('polls', 'Click to add a date'),
-					timePickerOptions: { 
-						start: '00:00', 
-						step: '00:05', 
-						end: '23:55' 
+					timePickerOptions: {
+						start: '00:00',
+						step: '00:05',
+						end: '23:55'
 					}
 				}
 			}
@@ -335,11 +337,11 @@
 		},
 
 		methods: {
-		
+
 			switchSidebar () {
 				this.sidebar = !this.sidebar
 			},
-			
+
 			getSystemValues: function() {
 				axios.get(OC.generateUrl('apps/polls/get/system'))
 				.then((response) => {
@@ -349,7 +351,7 @@
 					console.log(error.response)
 				})
 			},
-			
+
 			addShare: function (item){
 				this.poll.shares.push(item)
 			},
@@ -372,7 +374,7 @@
 					this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp')
 				}
 			},
-			
+
 			addNewPollText: function () {
 				if (this.newPollText !== null & this.newPollText !== '') {
 					this.poll.options.pollTexts.push({
@@ -406,7 +408,7 @@
 					})
 				}
 			},
-			
+
 			loadPoll: function (hash) {
 				this.loadingPoll = true
 				axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
@@ -416,6 +418,12 @@
 						this.poll.event.expirationDate = new Date(moment.utc(this.poll.event.expirationDate))
 					} else {
 						this.poll.event.expirationDate = ''
+					}
+
+					if (this.poll.event.owner !== OC.getCurrentUser().uid) {
+						this.adminMode = true
+						console.log(OC.getCurrentUser().uid)
+						console.log(this.poll.event.owner)
 					}
 
 					if (this.poll.event.type === 'datePoll') {
@@ -436,7 +444,7 @@
 			}
 		}
 	}
-	
+
 </script>
 
 <style lang="scss">
@@ -449,25 +457,30 @@
 		}
 	}
 
+	.warning {
+		color: var(--color-error);
+		font-weight: bold;
+	}
+
 	.polls-content {
 		display: flex;
 		padding-top: 45px;
 		flex-grow: 1;
 	}
-	
+
 	input[type="text"] {
 		display: block;
 		width: 100%;
 	}
-	
+
 	.workbench {
 		margin-top: 45px;
 		display: flex;
 		flex-grow: 1;
 		flex-wrap: wrap;
 		overflow-x: hidden;
-		
-		
+
+
 		> div {
 			min-width: 245px;
 			max-width: 540px;
@@ -477,7 +490,7 @@
 			padding: 8px;
 		}
 	}
-	
+
 	.loading-overlay {
 		position: absolute;
 		left: 0;
@@ -501,18 +514,18 @@
 			}
 		}
 	}
-	
+
 	.polls-sidebar {
 		margin-top: 45px;
 		width: 40%;
-		
+
 		.configBox {
 			display: flex;
 			flex-direction: column;
 			padding: 8px 8px;
 			&> * {
 				padding-left: 21px;
-			}			
+			}
 			&> .title {
 				background-position: 0px 2px;
 				padding-left: 24px;
@@ -563,12 +576,12 @@
 			border-bottom: 1px solid var(--color-border);
 			overflow: hidden;
 			white-space: nowrap;
-			
+
 			&:hover, &:active {
 				transition: var(--background-dark) 0.3s ease;
 				background-color: var(--color-loading-light); //$hover-color;
 			}
-			
+
 			> div {
 				display: flex;
 				flex-grow: 1;
@@ -600,6 +613,6 @@
 		display: flex;
 		flex-wrap: wrap;
 	}
-	
-	
+
+
 </style>
