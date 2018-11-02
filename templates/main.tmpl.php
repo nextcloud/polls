@@ -24,6 +24,8 @@
 	use OCP\User; //To do: replace according to API
 	use OCP\Util;
 	use OCP\Template;
+	use OCP\IGroupManager;
+
 
 	Util::addStyle('polls', 'list');
 	Util::addScript('polls', 'app');
@@ -36,6 +38,7 @@
 	$urlGenerator = $_['urlGenerator'];
 	/** @var \OCA\Polls\Db\Event[] $polls */
 	$polls = $_['polls'];
+	$adminMode = (\OC::$server->getGroupManager()->isAdmin($userId))
 ?>
 
 	<div id="app-content">
@@ -163,20 +166,34 @@
 									<li>
 										<a class="menuitem alt-tooltip copy-link has-tooltip action permanent" data-toggle="tooltip" data-clipboard-text="<?php p($pollUrl); ?>" title="<?php p($l->t('Click to get link')); ?>" href="#">
 											<span class="icon-clippy"></span>
-											<span>Copy Link</span>
+											<span>
+												<?php p($l->t('Copy Link')); ?>
+											</span>
 										</a>
 									</li>
-		<?php if ($poll->getOwner() === $userId) : ?>
+		<?php if (($poll->getOwner() === $userId) || $adminMode) : ?>
 									<li>
 										<a id="id_del_<?php p($poll->getId()); ?>" class="menuitem alt-tooltip delete-poll action permanent" data-value="<?php p($poll->getTitle()); ?>" href="#">
 											<span class="icon-delete"></span>
-											<span>Delete poll</span>
+											<span>
+												<?php p($l->t('Delete poll'));
+													if (($poll->getOwner() !== $userId) && $adminMode) {
+														p(' (') & p($l->t('as admin')) & p(')');
+													}
+												?>
+											</span>
 										</a>
 									</li>
 									<li>
 										<a id="id_edit_<?php p($poll->getId()); ?>" class="menuitem action permanent" href="<?php p($urlGenerator->linkToRoute('polls.page.edit_poll', ['hash' => $poll->getHash()])); ?>">
 											<span class="icon-rename"></span>
-											<span>Edit Poll</span>
+											<span>
+												<?php p($l->t('Edit poll'));
+													if (($poll->getOwner() !== $userId) && $adminMode) {
+														p(' (') & p($l->t('as admin')) & p(')');
+													}
+												?>
+											</span>
 										</a>
 									</li>
 		<?php endif; ?>

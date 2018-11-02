@@ -131,7 +131,7 @@ class ApiController extends Controller {
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @return Array
-	*/	
+	*/
 	function convertAccessList($item) {
 		$split = Array();
 		if (strpos($item, 'user_') === 0) {
@@ -152,7 +152,7 @@ class ApiController extends Controller {
 				'avatarURL' => '',
 			];
 		}
-		
+
 
 		return($split);
 	}
@@ -164,12 +164,15 @@ class ApiController extends Controller {
 	* @param string $hash
 	* @return DataResponse
 	*/
-	
+
 	public function getPoll($hash) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+			$AdminAccess = $this->groupManager->isAdmin($currentUser);
 		}
-		
+
 		try {
 			$poll = $this->eventMapper->findByHash($hash);
 
@@ -182,12 +185,12 @@ class ApiController extends Controller {
 			}
 
 			if ($poll->getType() == 0) {
-				$pollType = 'datePoll'; 
+				$pollType = 'datePoll';
 			} else {
 				$pollType = 'textPoll';
 			};
 
-			if ($poll->getOwner() !== \OC::$server->getUserSession()->getUser()->getUID()) {
+			if ($poll->getOwner() !== $currentUser && !$AdminAccess) {
 				$mode = 'create';
 			} else {
 				$mode = 'edit';
@@ -200,12 +203,12 @@ class ApiController extends Controller {
 				$accessList = array_map(Array($this,'convertAccessList'), $accessList);
 				$accessType = 'select';
 			}
-				
+
 			$data = array();
 			$commentsList = array();
 			$optionList = array();
 			$votesList = array();
-			
+
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		};
@@ -252,7 +255,7 @@ class ApiController extends Controller {
 		} catch (DoesNotExistException $e) {
 			// ignore
 		};
-	
+
 		$data['poll'] = [
 			'result' => 'found',
 			'mode' => $mode,
@@ -283,7 +286,7 @@ class ApiController extends Controller {
 
 		return new DataResponse($data, Http::STATUS_OK);
 	}
-	
+
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -291,12 +294,12 @@ class ApiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function writePoll($event, $options, $shares, $mode) {
-		$user = \OC::$server->getUserSession()->getUser();
-
-		if (!$user instanceof IUser) {
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+			$AdminAccess = $this->groupManager->isAdmin($currentUser);
 		}
-		$userId = \OC::$server->getUserSession()->getUser()->getUID();
 
 		$newEvent = new Event();
 
@@ -308,7 +311,7 @@ class ApiController extends Controller {
 		$newEvent->setIsAnonymous($event['isAnonymous']);
 		$newEvent->setFullAnonymous($event['fullAnonymous']);
 		$newEvent->setDisallowMaybe($event['disallowMaybe']);
-	
+
 		if ($event['access'] === 'select') {
 			$shareAccess = '';
 			foreach ($shares as $shareElement) {
@@ -328,7 +331,7 @@ class ApiController extends Controller {
 		} else {
 			$newEvent->setExpire(null);
 		}
-		
+
 		if ($event['type'] === 'datePoll') {
 			$newEvent->setType(0);
 		} elseif ($event['type'] === 'textPoll') {
@@ -340,10 +343,10 @@ class ApiController extends Controller {
 			$oldPoll = $this->eventMapper->findByHash($event['hash']);
 
 			// Check if current user is allowed to edit existing poll
-			if ($oldPoll->getOwner() !== $userId) {
+			if ($oldPoll->getOwner() !== $currentUser && !$AdminAccess) {
 				// If current user is not owner of existing poll deny access
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			} 
+			}
 
 			// else take owner, hash and id of existing poll
 			$newEvent->setOwner($oldPoll->getOwner());
@@ -351,11 +354,11 @@ class ApiController extends Controller {
 			$newEvent->setId($oldPoll->getId());
 			$this->eventMapper->update($newEvent);
 			$this->optionsMapper->deleteByPoll($newEvent->getId());
-					
+
 		} elseif ($mode === 'create') {
 			// Create new poll
 			// Define current user as owner, set new creation date and create a new hash
-			$newEvent->setOwner($userId);
+			$newEvent->setOwner($currentUser);
 			$newEvent->setCreated(date('Y-m-d H:i:s'));
 			$newEvent->setHash(\OC::$server->getSecureRandom()->generate(
 				16,
@@ -365,25 +368,25 @@ class ApiController extends Controller {
 			));
 			$newEvent = $this->eventMapper->insert($newEvent);
 		}
-		
+
 		// Update options
 		if ($event['type'] === 'datePoll') {
 			foreach ($options['pollDates'] as $optionElement) {
 				$newOption = new Options();
-				
+
 				$newOption->setPollId($newEvent->getId());
 				$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['timestamp']));
 				$newOption->setTimestamp($optionElement['timestamp']);
-				
+
 				$this->optionsMapper->insert($newOption);
 			}
 		} elseif ($event['type'] === "textPoll") {
 			foreach ($options['pollTexts'] as $optionElement) {
 				$newOption = new Options();
-				
+
 				$newOption->setPollId($newEvent->getId());
 				$newOption->setpollOptionText(htmlspecialchars($optionElement['text']));
-				
+
 				$this->optionsMapper->insert($newOption);
 			}
 		}
