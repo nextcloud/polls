@@ -23,24 +23,24 @@
 <template>
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
-		<multiselect 
-			v-model="shares" 
-			:options="users" 
+		<multiselect
+			v-model="shares"
+			:options="users"
 			:option-height=32
-			:multiple="true" 
-			:close-on-select="false" 
-			:clear-on-select="false" 
-			:preserve-search="true" 
-			label="displayName" 
-			track-by="id" 
-			:options-limit="20" 
-			id="ajax" 
+			:multiple="true"
+			:close-on-select="false"
+			:clear-on-select="false"
+			:preserve-search="true"
+			label="displayName"
+			track-by="id"
+			:options-limit="20"
+			id="ajax"
 			@search-change="loadUsersAsync"
 			@close="updateShares"
 			:loading="isLoading"
 			:internal-search="false"
-			:hide-selected="true" 
-			:searchable="true" 
+			:hide-selected="true"
+			:searchable="true"
 			:preselect-first="true"
 			:placeholder="placeholder">
 			<template slot="selection" slot-scope="{ values, search, isOpen }">
@@ -54,12 +54,12 @@
 				</div>
 			</template>
 		</multiselect>
-		
+
 		<transition-group tag="ul" v-bind:css="false" class="shared-list">
-			<li v-for="(item, index) in sortedShares" 
-				v-bind:key="item.displayName" 
+			<li v-for="(item, index) in sortedShares"
+				v-bind:key="item.displayName"
 				v-bind:data-index="index">
-				<user-div :user-id="item.id" :type="item.type" :hide-names="hideNames"></user-div>
+				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type" :hide-names="hideNames"></user-div>
 				<div class="options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
@@ -76,9 +76,9 @@
 		components: {
 			Multiselect
 		},
-		
+
 		props: ['placeholder', 'activeShares','hideNames'],
-		
+
 		data: function () {
 			return {
 				shares: [],
@@ -91,22 +91,22 @@
 				}
 			}
 		},
-		
+
 		computed: {
 			sortedShares: function() {
 				return this.shares.sort(this.sortByDisplayname)
 			}
 		},
-		
+
 		methods: {
 			removeShare: function (index, item){
 				this.$emit('remove-share', item)
 			},
-			
+
 			updateShares: function (){
 				this.$emit('update-shares', this.shares)
 			},
-			
+
 			loadUsersAsync: function (query) {
 				this.isLoading = false
 				this.siteUsersListOptions.query = query
@@ -118,13 +118,13 @@
 					console.log(error.response)
 				})
 			},
-			
+
 			sortByDisplayname: function (a, b) {
 					if (a.displayName.toLowerCase() < b.displayName.toLowerCase()) return -1
 					if (a.displayName.toLowerCase() > b.displayName.toLowerCase()) return 1
 					return 0
 			}
-			
+
 		},
 		watch: {
 			activeShares(value) {
@@ -141,19 +141,19 @@
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		padding-top: 8px;
-	
+
 		> li {
 			display: flex;
 		}
 	}
-	
+
 	.options {
 		display: flex;
 		position: relative;
 		top: -12px;
 		left: -13px;
 	}
-	
+
 	div, select {
 		&.multiselect:not(.multiselect-vue), &.multiselect:not(.multiselect-vue) {
 			max-width: unset;
@@ -168,7 +168,7 @@
 		.option__desc {
 			flex-grow: 1;
 		}
-	
+
 
 		.multiselect__option--highlight {
 			background: #41b883;
