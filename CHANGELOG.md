@@ -9,12 +9,13 @@ All notable changes to this project will be documented in this file.
     - rewrite as a vue app
     - improved UI
 	- introduced new NC date time picker from vue-nextcloud
-	- added option to forbid "maybe" vote	
-	
+	- added option to forbid "maybe" vote
+
   - vote page
 	- made polls table scrollable
 	- show new vote options after voting
-  
+    - open sidebar by default on wide screens
+
 ### Changed
   - Compatibility to NC 14
   - Introduced vue
@@ -28,7 +29,7 @@ All notable changes to this project will be documented in this file.
  - ... a lot more minor bugs
 
 See https://github.com/nextcloud/polls/milestone/9?closed=1 for all changes and additions.
- 
+
 ## [0.8.3] - 2018-08-30
 
 ### Added
