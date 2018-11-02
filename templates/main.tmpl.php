@@ -59,6 +59,9 @@
 		<div id="emptycontent" class="">
 			<div class="icon-polls"></div>
 			<h2><?php p($l->t('No existing polls.')); ?></h2>
+			<a href="/index.php/apps/polls/create" class="button new">
+				<span><?php p($l->t('Click here to add a poll')); ?></span>
+			</a>
 		</div>
 	<?php else : ?>
 
@@ -201,7 +204,7 @@
 					</div>
 				</div>
 			</div>
-	<?php endforeach; ?> 
+	<?php endforeach; ?>
 		</div>
 	</div>
 	<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>

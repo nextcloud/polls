@@ -29,6 +29,15 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 .table {
 	width: 100%;
 }
+
+#emptycontent {
+	.icon-polls {
+		background-color: black;
+		-webkit-mask: url('../img/app.svg') no-repeat 50% 50%;
+		mask: url('../img/app.svg') no-repeat 50% 50%;
+	}
+}
+
 .table-row {
 	display: flex;
 	width: 100%;
