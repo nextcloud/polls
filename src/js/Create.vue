@@ -177,12 +177,11 @@
 </template>
 
 <script>
-	import axios from 'axios'
-	import moment from 'moment'
-	import lodash from 'lodash'
-
-	import DatePollItem from './components/datePollItem.vue'
-	import TextPollItem from './components/textPollItem.vue'
+import axios from 'axios'
+import moment from 'moment'
+import lodash from 'lodash'
+import DatePollItem from './components/datePollItem.vue'
+import TextPollItem from './components/textPollItem.vue'
 
 	export default {
 		name: 'create-poll',
@@ -273,6 +272,13 @@
 		},
 
 		computed: {
+            adminMode() {
+    			if (this.poll.event.owner !== OC.getCurrentUser().uid) {
+    				return true
+    			} else {
+    				return false
+    			}
+    		},
 			langShort: function () {
 				return this.lang.split("-")[0]
 			},
@@ -418,12 +424,6 @@
 						this.poll.event.expirationDate = new Date(moment.utc(this.poll.event.expirationDate))
 					} else {
 						this.poll.event.expirationDate = ''
-					}
-
-					if (this.poll.event.owner !== OC.getCurrentUser().uid) {
-						this.adminMode = true
-						console.log(OC.getCurrentUser().uid)
-						console.log(this.poll.event.owner)
 					}
 
 					if (this.poll.event.type === 'datePoll') {
