@@ -236,7 +236,6 @@ import TextPollItem from './components/textPollItem.vue'
 				indexPage: '',
 				longDateFormat: '',
 				dateTimeFormat: '',
-				adminMode: false,
 			}
 		},
 
