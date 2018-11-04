@@ -30,7 +30,7 @@
 </template>
 
 <script>
-	import { Avatar } from './Avatar/index.js'
+	import { Avatar } from 'nextcloud-vue'
 	export default {
 		components: {
 			Avatar
@@ -69,7 +69,7 @@
 			},
 			computedDisplayName: function () {
 				var value = this.displayName
-				
+
 				if (this.userId === OC.getCurrentUser().uid) {
 					value = OC.getCurrentUser().displayName
 				} else {
@@ -83,7 +83,7 @@
 				return value
 			}
 
-		}	
+		}
 	}
 </script>
 
@@ -94,22 +94,22 @@
 		align-items: center;
 		margin-left: 0;
 		margin-top: 0;
-		
+
 		> div {
 			margin: 2px 4px 2px 4px;
 		}
-		
+
 		.description {
 			opacity: 0.7;
 			flex-grow: 0;
 		}
-		
+
 		.avatar {
 			height: 32px;
 			width: 32px;
 			flex-grow: 0;
 		}
-		
+
 		.user-name {
 			opacity: 0.5;
 			flex-grow: 1;
