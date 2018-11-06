@@ -29,13 +29,10 @@
 			:option-height=32
 			:multiple="true"
 			:close-on-select="false"
-			:tagging="false"
 			:clear-on-select="false"
 			:preserve-search="true"
-			:placeholder="placeholder"
 			label="displayName"
 			track-by="id"
-			:preselect-first="true"
 			:options-limit="20"
 			id="ajax"
 			@search-change="loadUsersAsync"
@@ -44,21 +41,18 @@
 			:internal-search="false"
 			:hide-selected="true"
 			:searchable="true"
-			>
-
-
-			<span slot="noResult">
-				{{ t('polls','No users/groups found for search string')}}
-			</span>
-
-			<span slot="selection" slot-scope="{ values, search, isOpen }" v-if="values.length &amp;&amp; !isOpen">
-				{{ t('polls', '{count} users selected', {count: values.length}) }}
-			</span>
-
-			<div slot="option" slot-scope="props" class="option__desc">
-				<user-div :user-id="props.option.id" :display-name="props.option.displayName" :type="props.option.type"></user-div>
-			</div>
-
+			:preselect-first="true"
+			:placeholder="placeholder">
+			<template slot="selection" slot-scope="{ values, search, isOpen }">
+				<span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">
+					{{ values.length }} users selected
+				</span>
+			</template>
+			<template slot="option" slot-scope="props">
+				<div class="option__desc">
+					<user-div :user-id="props.option.id" :display-name="props.option.displayName" :type="props.option.type"></user-div>
+				</div>
+			</template>
 		</multiselect>
 
 		<transition-group tag="ul" v-bind:css="false" class="shared-list">
@@ -160,11 +154,16 @@
 		left: -13px;
 	}
 
+	div, select {
+		&.multiselect:not(.multiselect-vue), &.multiselect:not(.multiselect-vue) {
+			max-width: unset;
+		}
+	}
+
 	.multiselect {
-		width: 100% !important;
-		max-width: unset !important;
+		width: 100%;
 		.multiselect__content-wrapper li > span {
-			height: unset !important;
+			height: unset;
 		}
 		.option__desc {
 			flex-grow: 1;
