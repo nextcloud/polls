@@ -45,7 +45,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^0.28.8",
     "file-loader": "^1.1.6",
-    "node-sass": "^4.9.4",
+    "node-sass": "^4.10.0",
     "sass-loader": "^7.1.0",
     "vue-loader": "^13.7.3",
     "vue-template-compiler": "^2.5.17",
