@@ -24,19 +24,12 @@
 	use OCP\Util;
 	Util::addStyle('polls', 'main');
 ?>
-<div id="app">
-	<div id="app-content">
-		<div id="app-content-wrapper">
-			<div id="emptycontent" class="">
-				<div class="icon-polls"></div>
-					<h1>
-						<?php p($l->t('Access denied')); ?>
-					</h1>
-					<h2>
-						<?php p($l->t('You are not allowed to view this poll or the poll does not exist.')); ?>
-					</h2>
-			</div>
-		</div>
-	</div>
+<div id="emptycontent" class="">
+	<div class="icon-polls"></div>
+	<h1>
+		<?php p($l->t('Access denied')); ?>
+	</h1>
+	<h2>
+		<?php p($l->t('You are not allowed to view this poll or the poll does not exist.')); ?>
+	</h2>
 </div>
-
