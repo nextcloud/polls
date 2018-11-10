@@ -19,7 +19,7 @@ $user-column-width: 265px;
 
 	#votings {
 		position: relative !important;
-		padding: 12px 17px;	
+		padding: 12px 17px;
 		.table {
 			overflow-x: auto;
 			padding-bottom: 10px;
@@ -34,7 +34,7 @@ $user-column-width: 265px;
 			margin-left: $user-column-width;
 			padding: 0 17px;
 			align-items: initial;
-			
+
 			.date-box {
 				padding: 0 2px;
 				align-items: center;
@@ -62,23 +62,23 @@ $user-column-width: 265px;
 					}
 				}
 				.yes {
-					color: $fg_yes;
+					color: $fg-yes;
 					.svg {
 						background-image: var(--icon-yes);
 					}
-				}			
+				}
 				.no {
-					color: $fg_no;
+					color: $fg-no;
 					.svg {
 						background-image: var(--icon-no);
 					}
-				}			
+				}
 			}
-			
+
 			.winner {
 				font-style: italic;
 				font-weight: bold;
-				color: $fg_yes;
+				color: $fg-yes;
 			}
 			.vote.option {
 				.date-box {
@@ -88,7 +88,7 @@ $user-column-width: 265px;
 				.counter {
 					flex-grow: 0;
 					height: 32px;
-				}	
+				}
 			}
 		}
 		.user {
@@ -124,29 +124,29 @@ $user-column-width: 265px;
 	height: 44px;
 
 	&.yes {
-		background-color: $bg_yes;
-		color: $fg_yes;
+		background-color: $bg-yes;
+		color: $fg-yes;
 		background-image: var(--icon-yes);
 	}
 
 	&.no {
-		background-color: $bg_no;
-		color: $fg_no;
+		background-color: $bg-no;
+		color: $fg-no;
 		background-image: var(--icon-no);
 	}
 
 	&.maybe {
-		background-color: $bg_maybe;
-		color: $fg_maybe;
+		background-color: $bg-maybe;
+		color: $fg-maybe;
 		background-image: var(--icon-maybe);
 	}
 
 	&.unvoted {
-		background-color: $bg_no;
-		color: $fg_no;
+		background-color: $bg-no;
+		color: $fg-no;
 		&:before {
 			content: attr(data-unvoted);
-			color: $fg_no;
+			color: $fg-no;
 			font-size: 14px;
 			font-style: italic;
 			font-weight: bold;
@@ -160,8 +160,8 @@ $user-column-width: 265px;
 		border-radius: 4px;
 		box-sizing: border-box;
 		&.unvoted {
-		background-color: $bg_maybe;
-		color: $fg_maybe;
+		background-color: $bg-maybe;
+		color: $fg-maybe;
 		}
 	}
 }
@@ -177,17 +177,17 @@ $user-column-width: 265px;
 	background-size: 28px;
 
 	&.yes {
-		background-color: $bg_yes;
+		background-color: $bg-yes;
 		background-image: url('../img/yes-toggle.svg');
 	}
 
 	&.no {
-		background-color: $bg_no;
+		background-color: $bg-no;
 		background-image: url('../img/no-toggle.svg');
 	}
 
 	&.maybe {
-		background-color: $bg_maybe;
+		background-color: $bg-maybe;
 		background-image: url('../img/maybe-toggle.svg');
 	}
 
@@ -228,7 +228,7 @@ $user-column-width: 265px;
 	min-width: 150px;
 	.th {
 		padding-left: 40px;
-		
+
 		input {
 			min-width: 100px;
 		}
@@ -289,7 +289,7 @@ $user-column-width: 265px;
 					}
 				}
 			}
-			
+
 			&.user {
 				display: none;
 			}
@@ -336,13 +336,13 @@ $user-column-width: 265px;
 			}
 
 		}
-		
+
 	}
 
 	.description {
 		margin: 4px;
 	}
-	
+
 	.flex-column {
 		&.table-body {
 			flex-grow: 0;
@@ -357,12 +357,12 @@ $user-column-width: 265px;
 		}
 	}
 
-	.table { 
+	.table {
 		display: flex;
 		margin-right: 8px;
 		padding-bottom: 75px;
 	}
-	
+
 	.submitPoll {
 		border-top: $border_user;
 		box-shadow: 0 0 9px 2px rgba(153,153,153,1);
@@ -382,7 +382,7 @@ $user-column-width: 265px;
 			line-height: 2em;
 		}
 	}
-	
+
 
 	#options.flex-row {
 		flex-direction: column;
@@ -393,7 +393,7 @@ $user-column-width: 265px;
 
  @media all and (max-width: (320px) ) {
 
-	.table { 
+	.table {
 		padding-bottom: 105px;
 	}
 }
