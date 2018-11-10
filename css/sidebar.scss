@@ -49,12 +49,12 @@ $user-column-width: 265px;
 			margin-top: 0;
 			padding: 0 17px;
 		}
-		
+
 		.pollInformation {
 			width: 220px;
 			flex-grow: 1;
 			flex-shrink: 1;
-			padding-right: 15px; 
+			padding-right: 15px;
 
 			.authorRow {
 				.leftLabel {
@@ -64,7 +64,7 @@ $user-column-width: 265px;
 
 			.cloud {
 				margin: 4px 0;
-				
+
 				> span {
 					color: #fff;
 					margin: 2px;
@@ -73,16 +73,16 @@ $user-column-width: 265px;
 					float: left;
 					text-shadow: 1px 1px #666;
 					background-color: #aaa;
-					
+
 				}
 				.open {
-					background-color: $fg_yes;
+					background-color: $fg-yes;
 				}
 				.expired {
-					background-color: $fg_no;
+					background-color: $fg-no;
 				}
 				.information {
-					background-color: $bg_information;
+					background-color: $bg-information;
 				}
 			}
 		}
@@ -100,7 +100,7 @@ $user-column-width: 265px;
 				background-position: right top;
 				height: 30px;
 			}
-			
+
 			> ul > li {
 				&:focus, &:hover, &.active, a.selected {
 					&, > a {
@@ -109,14 +109,14 @@ $user-column-width: 265px;
 					}
 				}
 
-				> a[class*="icon-"], 
-				> ul > li > a[class*="icon-"], 
-				> a[style*="background-image"], 
+				> a[class*="icon-"],
+				> ul > li > a[class*="icon-"],
+				> a[style*="background-image"],
 				> ul > li > a[style*="background-image"] {
 					padding-left: 44px;
 				}
 
-				> a, 
+				> a,
 				> ul > li > a {
 					background-size: 16px 16px;
 					background-position: 14px center;
@@ -135,7 +135,7 @@ $user-column-width: 265px;
 					flex: 1 1 0;
 					z-index: 100;
 				}
-				a, 
+				a,
 				.app-navigation-entry-deleted {
 					padding-left: 44px !important;
 				}
@@ -144,16 +144,16 @@ $user-column-width: 265px;
 		#configurationsTabView {
 			.configBox {
 				padding: 8px 8px;
-				
+
 				> .title {
 					font-weight: bold;
 					margin-bottom: 4px;
 				}
-				
+
 				> div {
 					padding-left: 4px;
 				}
-				
+
 				input.hasDatepicker {
 					margin-left:17px;
 				}
@@ -183,7 +183,7 @@ $user-column-width: 265px;
 					border-bottom: 1px solid #DDD;
 					border-radius: 3px 3px 0 0;
 				}
-				
+
 				.comment-date {
 					float: right;
 					color: #555;
@@ -195,7 +195,7 @@ $user-column-width: 265px;
 					opacity: .5;
 				}
 			}
-			
+
 			.message {
 				margin-left: 40px;
 				flex-grow: 1;
@@ -222,4 +222,3 @@ $user-column-width: 265px;
 			}
 		}
 	}
-
