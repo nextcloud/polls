@@ -23,35 +23,30 @@
 <template>
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
+
 		<multiselect
 			v-model="shares"
 			:options="users"
-			:option-height=32
+			label="displayName"
+			track-by="user"
 			:multiple="true"
-			:close-on-select="false"
+			:user-select="true"
+			:tag-width="80"
 			:clear-on-select="false"
 			:preserve-search="true"
-			label="displayName"
-			track-by="id"
 			:options-limit="20"
 			id="ajax"
 			@search-change="loadUsersAsync"
 			@close="updateShares"
 			:loading="isLoading"
 			:internal-search="false"
-			:hide-selected="true"
 			:searchable="true"
 			:preselect-first="true"
 			:placeholder="placeholder">
 			<template slot="selection" slot-scope="{ values, search, isOpen }">
-				<span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">
-					{{ values.length }} users selected
-				</span>
-			</template>
-			<template slot="option" slot-scope="props">
-				<div class="option__desc">
-					<user-div :user-id="props.option.id" :display-name="props.option.displayName" :type="props.option.type"></user-div>
-				</div>
+							<span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">
+								{{ values.length }} users selected
+							</span>
 			</template>
 		</multiselect>
 
@@ -59,7 +54,7 @@
 			<li v-for="(item, index) in sortedShares"
 				v-bind:key="item.displayName"
 				v-bind:data-index="index">
-				<user-div :user-id="item.id" :display-name="item.displayName" :type="item.type" :hide-names="hideNames"></user-div>
+				<user-div :user-id="item.user" :display-name="item.displayName" :type="item.type" :hide-names="hideNames"></user-div>
 				<div class="options">
 					<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
 				</div>
@@ -161,6 +156,10 @@
 	}
 
 	.multiselect {
+		width: 100% !important;
+	}
+
+	.multiselect7 {
 		width: 100%;
 		.multiselect__content-wrapper li > span {
 			height: unset;

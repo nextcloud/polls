@@ -114,9 +114,7 @@
 		$commented_title = 'You did not comment';
 		$commented_count = count($comments);
 
-		if ($owner === $userId) {
-			$owner = $l->t('Yourself');
-		}
+		$owner = \OC_User::getDisplayName($owner);
 
 
 		$timestamp_style = '';
@@ -205,7 +203,7 @@
 					<div class="wrapper group-2">
 						<div class="flex-column owner">
 							<div class="avatardiv" title="<?php p($poll->getOwner()); ?>" style="height: 32px; width: 32px;"></div>
-							<div class="name-cell"><?php p($owner); ?></div>
+							<div class="name-cell"><?php p(\OC_User::getDisplayName($owner)); ?></div>
 						</div>
 						<div class="wrapper group-2-1">
 							<div class="flex-column access"><?php p($l->t($poll->getAccess())); ?></div>
@@ -257,14 +255,13 @@ function userHasAccess(OCA\Polls\Db\Event $poll, $userId) {
 		return false;
 	}
 	$access = $poll->getAccess();
-	$owner = $poll->getOwner();
 	if (!User::isLoggedIn()) {
 		return false;
 	}
 	if ($access === 'public' || $access === 'hidden' || $access === 'registered') {
 		return true;
 	}
-	if ($owner === $userId) {
+	if ($poll->getOwner() === $userId) {
 		return true;
 	}
 
