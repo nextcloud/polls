@@ -101,7 +101,9 @@ class ApiController extends Controller {
 				if (!in_array($group->getGID(), $skipGroups)) {
 					$list[] = [
 						'id' => $group->getGID(),
+						'user' => $group->getGID(),
 						'type' => 'group',
+						'icon' => 'icon-group',
 						'displayName' => $group->getGID(),
 						'avatarURL' => ''
 					];
@@ -114,7 +116,9 @@ class ApiController extends Controller {
 				if (!in_array($user->getUID(), $skipUsers)) {
 					$list[] = [
 						'id' => $user->getUID(),
+						'user' => $user->getUID(),
 						'type' => 'user',
+						'icon' => 'icon-user',
 						'displayName' => $user->getDisplayName(),
 						'avatarURL' => '',
 						'lastLogin' => $user->getLastLogin(),
@@ -138,16 +142,22 @@ class ApiController extends Controller {
 			$user = $this->userManager->get(substr($item, 5));
 			$split = [
 				'id' => $user->getUID(),
+				'user' => $user->getUID(),
 				'type' => 'user',
+				'icon' => 'icon-user',
 				'displayName' => $user->getDisplayName(),
-				'avatarURL' => ''
+				'avatarURL' => '',
+				'lastLogin' => $user->getLastLogin(),
+				'cloudId' => $user->getCloudId()
 			];
 		} elseif (strpos($item, 'group_') === 0) {
 			$group = substr($item, 6);
 			$group = $this->groupManager->get($group);
 			$split = [
 				'id' => $group->getGID(),
+				'user' => $group->getGID(),
 				'type' => 'group',
+				'icon' => 'icon-group',
 				'displayName' => $group->getDisplayName(),
 				'avatarURL' => '',
 			];
