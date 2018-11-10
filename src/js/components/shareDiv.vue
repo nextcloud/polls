@@ -149,57 +149,7 @@
 		left: -13px;
 	}
 
-	div, select {
-		&.multiselect:not(.multiselect-vue), &.multiselect:not(.multiselect-vue) {
-			max-width: unset;
-		}
-	}
-
-	.multiselect {
-		width: 100% !important;
-	}
-
-	.multiselect7 {
+	.multiselect.multiselect-vue {
 		width: 100%;
-		.multiselect__content-wrapper li > span {
-			height: unset;
-		}
-		.option__desc {
-			flex-grow: 1;
-		}
-
-
-		.multiselect__option--highlight {
-			background: #41b883;
-			outline: none;
-			color: #fff;
-			&::after {
-				content: attr(data-select);
-				background: #41b883;
-				color: #fff;
-				border-radius: 4px;
-				padding: 2px;
-			}
-		}
-
-
-		.multiselect__option--selected {
-			&::after {
-				content: attr(data-selected);
-				color: silver;
-			}
-			&.multiselect__option--highlight {
-				background: #ff6a6a;
-				color: #fff;
-				&::after {
-					background: #ff6a6a;
-					content: attr(data-deselect);
-					color: #fff;
-					border-radius: 4px;
-					padding: 2px;
-				}
-			}
-		}
 	}
-
 </style>
