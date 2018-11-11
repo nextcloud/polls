@@ -575,7 +575,7 @@ textarea {
         &:active,
         &:hover {
             transition: var(--background-dark) 0.3s ease;
-            background-color: var(--color-loading-light); //$hover-color;
+            background-color: var(--color-background-dark); //$hover-color;
         }
 
         > div {

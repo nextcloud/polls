@@ -62,7 +62,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	&.table-body {
 		&:hover, &:focus, &:active, &.mouseOver {
 			transition: background-color 0.3s ease;
-			background-color: $hover-color;
+			background-color: var(--color-background-dark);
 		}
 		.flex-column.owner {
 			display: flex;

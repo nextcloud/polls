@@ -1,5 +1,3 @@
-$hover-color: #f7f7f7;
-
 $bg-no: #ffede9;
 $bg-maybe: #fcf7e1;
 $bg-unvoted: #fff4c8;
@@ -10,10 +8,6 @@ $fg-no: #f45573;
 $fg-maybe: #f0db98;
 $fg-unvoted: #f0db98;
 $fg-yes: #49bc49;
-
-$bg-current_user: #f7f7f7;
-$fg-current_user: #0082c9;
-
 
 // Icon definitions
 @mixin icon-color($icon, $dir, $color, $version: 1, $core: false)

@@ -1,7 +1,7 @@
 @import 'colors.scss';
 
 $border_current_user: 2px solid;
-$border_user: 1px solid #ddd;
+$border_user: 1px solidvar(--color-border-dark);
 $user-column-width: 265px;
 
 
@@ -195,7 +195,7 @@ $user-column-width: 265px;
 
 
 .current-user {
-	background-color: #e6f1f8;
+	background-color: var(--color-background-dark);
 }
 
 #switchDetails {
@@ -214,7 +214,7 @@ $user-column-width: 265px;
 		margin: -10px;
 		background-position-y: 9px;
 		background-position-x: center;
-		text-shadow: 1px 1px #666;
+		text-shadow: 1px 1px var(--color-box-shadow);
 		color: #fff;
 		min-width: 34px;
 		text-align: center;
