@@ -35,9 +35,3 @@ $fg-current_user: #0082c9;
 .icon-maybe {
 	@include icon-color('maybe-vote','polls',$fg-maybe)
 }
-
-// --icon-yes: url('/index.php/svg/core/actions/checkmark/49bc49?v=1');
-// --icon-no: url('/index.php/svg/core/actions/close/f45573?v=1');
-// --icon-maybe: url('/index.php/svg/polls/maybe-vote/f0db98?v=1');
-// --icon-comment-yes: url('/index.php/svg/core/actions/comment/49bc49?v=1');
-// --icon-comment-no: url('/index.php/svg/core/actions/comment/f45573?v=1');

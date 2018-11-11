@@ -3,10 +3,8 @@ h1 {
 	margin-bottom: 5px;
 }
 
-#app, #create-poll {
-	header {
-		padding-top: 44px;
-	}
+.icon-polls {
+	background-image: var(--icon-polls);
 }
 
 /* allow horizontal scrollbar
@@ -15,17 +13,6 @@ h1 {
 	#app-content {
 		overflow-x: auto !important;
 	}
-}
-
-.icon-polls {
-	background-color: black;
-	-webkit-mask: url('../img/app.svg') no-repeat 50% 50%;
-	mask: url('../img/app.svg') no-repeat 50% 50%;
-}
-
-
-#app-content-wrapper {
-	flex-direction: column;
 }
 
 #controls {
@@ -52,10 +39,6 @@ h1 {
 input[type="text"] {
 	display: block;
 	width: 100%;
-}
-
-tbody th {
-	text-align: left;
 }
 
 /* OC10 and NC11 fixes*/

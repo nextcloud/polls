@@ -183,240 +183,238 @@ import lodash from 'lodash'
 import DatePollItem from './components/datePollItem.vue'
 import TextPollItem from './components/textPollItem.vue'
 
-	export default {
-		name: 'create-poll',
+export default {
+	name: 'create-poll',
 
-		components: {
-			'DatePollItem': DatePollItem,
-			'TextPollItem': TextPollItem,
-		},
+	components: {
+		'DatePollItem': DatePollItem,
+		'TextPollItem': TextPollItem,
+	},
 
-		data: function () {
-			return {
-				poll: {
-					mode: 'create',
-					comments: [],
-					votes: [],
-					shares: [],
-					event: {
-						id: 0,
-						hash: '',
-						type: 'datePoll',
-						title: '',
-						description: '',
-						created: '',
-						access: 'public',
-						expiration: false,
-						expirationDate: '',
-						expired: false,
-						isAnonymous: false,
-						fullAnonymous: false,
-						disallowMaybe: false,
-						owner: undefined
-					},
-					options: {
-						pollDates: [],
-						pollTexts: []
-					}
+	data() {
+		return {
+			poll: {
+				mode: 'create',
+				comments: [],
+				votes: [],
+				shares: [],
+				event: {
+					id: 0,
+					hash: '',
+					type: 'datePoll',
+					title: '',
+					description: '',
+					created: '',
+					access: 'public',
+					expiration: false,
+					expirationDate: '',
+					expired: false,
+					isAnonymous: false,
+					fullAnonymous: false,
+					disallowMaybe: false,
+					owner: undefined
 				},
-				system: [],
-				lang: '',
-				locale: '',
-				placeholder: '',
-				newPollDate: '',
-				newPollTime: '',
-				newPollText: '',
-				nextPollDateId: 1,
-				nextPollTextId: 1,
-				protect: false,
-				writingPoll: false,
-				loadingPoll: true,
-				sidebar: false,
-				titleEmpty: false,
-				indexPage: '',
-				longDateFormat: '',
-				dateTimeFormat: '',
-			}
-		},
-
-		created: function() {
-			this.indexPage = OC.generateUrl('apps/polls/')
-			this.getSystemValues()
-			this.lang = OC.getLanguage()
-			try {
-				this.locale = OC.getLocale()
-			} catch (e) {
-				if (e instanceof TypeError) {
-					this.locale = this.lang
-				} else {
-					console.log(e)
+				options: {
+					pollDates: [],
+					pollTexts: []
 				}
-			}
-			moment.locale(this.locale)
-			this.longDateFormat = moment.localeData().longDateFormat('L')
-			this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
-			var urlArray = window.location.pathname.split( '/' )
+			},
+			system: [],
+			lang: '',
+			locale: '',
+			placeholder: '',
+			newPollDate: '',
+			newPollTime: '',
+			newPollText: '',
+			nextPollDateId: 1,
+			nextPollTextId: 1,
+			protect: false,
+			writingPoll: false,
+			loadingPoll: true,
+			sidebar: false,
+			titleEmpty: false,
+			indexPage: '',
+			longDateFormat: '',
+			dateTimeFormat: '',
+		}
+	},
 
-			if (urlArray[urlArray.length - 1] === 'create') {
-				this.poll.event.owner = OC.getCurrentUser().uid
-				this.loadingPoll = false
+	created() {
+		this.indexPage = OC.generateUrl('apps/polls/')
+		this.getSystemValues()
+		this.lang = OC.getLanguage()
+		try {
+			this.locale = OC.getLocale()
+		} catch (e) {
+			if (e instanceof TypeError) {
+				this.locale = this.lang
 			} else {
-				this.loadPoll(urlArray[urlArray.length - 1])
-				this.protect = true
-				this.poll.mode = 'edit'
+				console.log(e)
 			}
-			if (window.innerWidth >1024) {
-				this.sidebar = true
+		}
+		moment.locale(this.locale)
+		this.longDateFormat = moment.localeData().longDateFormat('L')
+		this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
+		var urlArray = window.location.pathname.split('/')
+
+		if (urlArray[urlArray.length - 1] === 'create') {
+			this.poll.event.owner = OC.getCurrentUser().uid
+			this.loadingPoll = false
+		} else {
+			this.loadPoll(urlArray[urlArray.length - 1])
+			this.protect = true
+			this.poll.mode = 'edit'
+		}
+		if (window.innerWidth > 1024) {
+			this.sidebar = true
+		}
+	},
+
+	computed: {
+		adminMode() {
+			return (this.poll.event.owner !== OC.getCurrentUser().uid)
+		},
+
+		langShort() {
+			return this.lang.split("-")[0]
+		},
+
+		title() {
+			if (this.poll.event.title === '') {
+				return t('polls', 'Create new poll')
+			} else {
+				return this.poll.event.title
+
 			}
 		},
 
-		computed: {
-            adminMode() {
-    			if (this.poll.event.owner !== OC.getCurrentUser().uid) {
-    				return true
-    			} else {
-    				return false
-    			}
-    		},
-			langShort: function () {
-				return this.lang.split("-")[0]
-			},
-
-			title: function() {
-				if (this.poll.event.title === '') {
-					return t('polls','Create new poll')
-				} else {
-					return this.poll.event.title
-
-				}
-			},
-
-			saveButtonTitle: function() {
-				if (this.writingPoll) {
-					return t('polls', 'Writing poll')
-				} else if (this.poll.mode === 'edit') {
-					return t('polls', 'Update poll')
-				} else {
-					return t('polls', 'Create new poll')
-				}
-			},
-			localeData:  function () {
-				return moment.localeData(moment.locale(this.locale))
-			},
-
-			expirationDatePicker:   function () {
-				return {
-					editable: true,
-					minuteStep: 1,
-					type: 'datetime',
-					lang: this.lang.split("-")[0],
-					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					placeholder: t('polls', 'Expiration date')
-				}
-			},
-
-			optionDatePicker: function () {
-				return {
-					editable: false,
-					minuteStep: 1,
-					type: 'datetime',
-					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					lang: this.lang.split("-")[0],
-					placeholder: t('polls', 'Click to add a date'),
-					timePickerOptions: {
-						start: '00:00',
-						step: '00:05',
-						end: '23:55'
-					}
-				}
-			}
-
-
-		},
-
-		watch: {
-			title () {
-				// only used when the title changes after page load
-				document.title = t('polls','Polls') + ' - ' + this.title
+		saveButtonTitle() {
+			if (this.writingPoll) {
+				return t('polls', 'Writing poll')
+			} else if (this.poll.mode === 'edit') {
+				return t('polls', 'Update poll')
+			} else {
+				return t('polls', 'Create new poll')
 			}
 		},
 
-		methods: {
+		localeData() {
+			return moment.localeData(moment.locale(this.locale))
+		},
 
-			switchSidebar () {
-				this.sidebar = !this.sidebar
-			},
+		expirationDatePicker() {
+			return {
+				editable: true,
+				minuteStep: 1,
+				type: 'datetime',
+				lang: this.lang.split("-")[0],
+				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+				placeholder: t('polls', 'Expiration date')
+			}
+		},
 
-			getSystemValues: function() {
-				axios.get(OC.generateUrl('apps/polls/get/system'))
+		optionDatePicker() {
+			return {
+				editable: false,
+				minuteStep: 1,
+				type: 'datetime',
+				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+				lang: this.lang.split("-")[0],
+				placeholder: t('polls', 'Click to add a date'),
+				timePickerOptions: {
+					start: '00:00',
+					step: '00:05',
+					end: '23:55'
+				}
+			}
+		}
+
+
+	},
+
+	watch: {
+		title() {
+			// only used when the title changes after page load
+			document.title = t('polls', 'Polls') + ' - ' + this.title
+		}
+	},
+
+	methods: {
+
+		switchSidebar() {
+			this.sidebar = !this.sidebar
+		},
+
+		getSystemValues() {
+			axios.get(OC.generateUrl('apps/polls/get/system'))
 				.then((response) => {
 					this.system = response.data.system
 				}, (error) => {
 					this.poll.event.hash = ''
 					console.log(error.response)
 				})
-			},
+		},
 
-			addShare: function (item){
-				this.poll.shares.push(item)
-			},
+		addShare(item) {
+			this.poll.shares.push(item)
+		},
 
-			updateShares: function (share){
-				this.poll.shares= share.slice(0)
-			},
+		updateShares(share) {
+			this.poll.shares = share.slice(0)
+		},
 
-			removeShare: function (item){
-				this.poll.shares.splice(this.poll.shares.indexOf(item), 1)
-			},
+		removeShare(item) {
+			this.poll.shares.splice(this.poll.shares.indexOf(item), 1)
+		},
 
-			addNewPollDate: function (newPollDate) {
-				if (newPollDate != null) {
-					this.newPollDate = moment(newPollDate)
-					this.poll.options.pollDates.push({
-						id: this.nextPollDateId++,
-						timestamp: moment(newPollDate).unix(),
+		addNewPollDate(newPollDate) {
+			if (newPollDate != null) {
+				this.newPollDate = moment(newPollDate)
+				this.poll.options.pollDates.push({
+					id: this.nextPollDateId++,
+					timestamp: moment(newPollDate).unix(),
+				})
+				this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp')
+			}
+		},
+
+		addNewPollText() {
+			if (this.newPollText !== null & this.newPollText !== '') {
+				this.poll.options.pollTexts.push({
+					id: this.nextPollTextId++,
+					text: this.newPollText
+				})
+			}
+			this.newPollText = ''
+		},
+
+		writePoll(mode) {
+			this.writingPoll = true
+			if (mode !== '') {
+				this.poll.mode = mode
+			}
+			if (this.poll.event.title.length === 0) {
+				this.titleEmpty = true
+			} else {
+				this.titleEmpty = false
+				axios.post(OC.generateUrl('apps/polls/write'), this.poll)
+					.then((response) => {
+						this.poll.mode = 'edit'
+						this.poll.event.hash = response.data.hash
+						this.poll.event.id = response.data.id
+						this.writingPoll = false
+						// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash)
+					}, (error) => {
+						this.poll.event.hash = ''
+						console.log(this.poll.event.hash)
+						console.log(error.response)
 					})
-					this.poll.options.pollDates = _.sortBy(this.poll.options.pollDates, 'timestamp')
-				}
-			},
+			}
+		},
 
-			addNewPollText: function () {
-				if (this.newPollText !== null & this.newPollText !== '') {
-					this.poll.options.pollTexts.push({
-						id: this.nextPollTextId++,
-						text: this.newPollText
-					})
-				}
-				this.newPollText = ''
-			},
-
-			writePoll: function (mode) {
-				this.writingPoll = true
-				if (mode !== '') {
-					this.poll.mode = mode
-				}
-				if (this.poll.event.title.length === 0) {
-					this.titleEmpty = true
-				} else {
-					this.titleEmpty = false
-					axios.post(OC.generateUrl('apps/polls/write'), this.poll)
-						.then((response) => {
-							this.poll.mode = 'edit'
-							this.poll.event.hash = response.data.hash
-							this.poll.event.id = response.data.id
-							this.writingPoll = false
-							// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash)
-						}, (error) => {
-							this.poll.event.hash = ''
-							console.log(this.poll.event.hash)
-							console.log(error.response)
-					})
-				}
-			},
-
-			loadPoll: function (hash) {
-				this.loadingPoll = true
-				axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
+		loadPoll(hash) {
+			this.loadingPoll = true
+			axios.get(OC.generateUrl('apps/polls/get/poll/' + hash))
 				.then((response) => {
 					this.poll = response.data.poll
 					if (this.poll.event.expirationDate !== null) {
@@ -440,178 +438,175 @@ import TextPollItem from './components/textPollItem.vue'
 					console.log(error.response)
 					this.loadingPoll = false
 				})
-			}
 		}
 	}
-
+}
 </script>
 
 <style lang="scss">
+#create-poll {
+    width: 100%;
+    display: flex;
+    input.hasTimepicker {
+        width: 75px;
+    }
+}
 
-	#create-poll {
-		width: 100%;
-		display: flex;
-		input.hasTimepicker {
-			width: 75px;
-		}
-	}
+.warning {
+    color: var(--color-error);
+    font-weight: bold;
+}
 
-	.warning {
-		color: var(--color-error);
-		font-weight: bold;
-	}
+.polls-content {
+    display: flex;
+    padding-top: 45px;
+    flex-grow: 1;
+}
 
-	.polls-content {
-		display: flex;
-		padding-top: 45px;
-		flex-grow: 1;
-	}
+input[type="text"] {
+    display: block;
+    width: 100%;
+}
 
-	input[type="text"] {
-		display: block;
-		width: 100%;
-	}
+.workbench {
+    margin-top: 45px;
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    overflow-x: hidden;
 
-	.workbench {
-		margin-top: 45px;
-		display: flex;
-		flex-grow: 1;
-		flex-wrap: wrap;
-		overflow-x: hidden;
+    > div {
+        min-width: 245px;
+        max-width: 540px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        padding: 8px;
+    }
+}
 
+.loading-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0.9;
+    z-index: 1001;
+    .icon-loading {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -35px;
+        margin-top: -10px;
+        &::after {
+            border: 10px solid var(--color-loading-light);
+            border-top-color: var(--color-primary-element);
+            height: 70px;
+            width: 70px;
+        }
+    }
+}
 
-		> div {
-			min-width: 245px;
-			max-width: 540px;
-			display: flex;
-			flex-direction: column;
-			flex-grow: 1;
-			padding: 8px;
-		}
-	}
+.polls-sidebar {
+    margin-top: 45px;
+    width: 40%;
 
-	.loading-overlay {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		background: #fff;
-		opacity: 0.9;
-		z-index: 1001;
-		.icon-loading {
-			position: fixed;
-			left: 50%;
-			top: 50%;
-			margin-left: -35px;
-			margin-top: -10px;
-			&::after {
-				border: 10px solid var(--color-loading-light);
-				border-top-color: var(--color-primary-element);
-				height: 70px;
-				width: 70px;
-			}
-		}
-	}
+    .configBox {
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        & > * {
+            padding-left: 21px;
+        }
+        & > .title {
+            background-position: 0 2px;
+            padding-left: 24px;
+            opacity: 0.7;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+    }
+}
 
-	.polls-sidebar {
-		margin-top: 45px;
-		width: 40%;
+input,
+textarea {
+    &.error {
+        border: 2px solid var(--color-error);
+        box-shadow: 1px 0 var(--border-radius) var(--color-box-shadow);
+    }
+}
 
-		.configBox {
-			display: flex;
-			flex-direction: column;
-			padding: 8px 8px;
-			&> * {
-				padding-left: 21px;
-			}
-			&> .title {
-				background-position: 0px 2px;
-				padding-left: 24px;
-				opacity: 0.7;
-				font-weight: bold;
-				margin-bottom: 4px;
-			}
-		}
-	}
+/* Transitions for inserting and removing list items */
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
 
+.list-enter,
+.list-leave-to {
+    opacity: 0;
+}
 
-	input, textarea {
-		&.error {
-			border: 2px solid var(--color-error);
-			box-shadow: 1px 0 var(--border-radius) var(--color-box-shadow);
-		}
-	}
+.list-move {
+    transition: transform 0.5s;
+}
+/*  */
 
-	/* Transitions for inserting and removing list items */
-		.list-enter-active, .list-leave-active {
-			transition: all 0.5s ease;
-		}
+#poll-item-selector-text {
+    > input {
+        width: 100%;
+    }
+}
 
-		.list-enter, .list-leave-to {
-			opacity: 0;
-		}
+.poll-table {
+    > li {
+        display: flex;
+        align-items: center;
+        padding-left: 8px;
+        padding-right: 8px;
+        line-height: 2em;
+        min-height: 4em;
+        border-bottom: 1px solid var(--color-border);
+        overflow: hidden;
+        white-space: nowrap;
 
-		.list-move {
-			transition: transform 0.5s;
-		}
-	/*  */
+        &:active,
+        &:hover {
+            transition: var(--background-dark) 0.3s ease;
+            background-color: var(--color-loading-light); //$hover-color;
+        }
 
+        > div {
+            display: flex;
+            flex-grow: 1;
+            font-size: 1.2em;
+            opacity: 0.7;
+            white-space: normal;
+            padding-right: 4px;
+            &.avatar {
+                flex-grow: 0;
+            }
+        }
 
-	#poll-item-selector-text {
-		> input {
-			width: 100%
-		}
-	}
+        > div:nth-last-child(1) {
+            justify-content: center;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+    }
+}
 
-	.poll-table {
-		>li {
-			display: flex;
-			align-items: center;
-			padding-left: 8px;
-			padding-right: 8px;
-			line-height: 2em;
-			min-height: 4em;
-			border-bottom: 1px solid var(--color-border);
-			overflow: hidden;
-			white-space: nowrap;
+button {
+    &.button-inline {
+        border: 0;
+        background-color: transparent;
+    }
+}
 
-			&:hover, &:active {
-				transition: var(--background-dark) 0.3s ease;
-				background-color: var(--color-loading-light); //$hover-color;
-			}
-
-			> div {
-				display: flex;
-				flex-grow: 1;
-				font-size: 1.2em;
-				opacity: 0.7;
-				white-space: normal;
-				padding-right: 4px;
-				&.avatar {
-					flex-grow: 0;
-				}
-			}
-
-			> div:nth-last-child(1) {
-				justify-content: center;
-				flex-grow: 0;
-				flex-shrink: 0;
-			}
-		}
-	}
-
-	button {
-		&.button-inline{
-			border: 0;
-			background-color: transparent;
-		}
-	}
-
-	.tab {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-
+.tab {
+    display: flex;
+    flex-wrap: wrap;
+}
 </style>

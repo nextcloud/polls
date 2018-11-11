@@ -20,10 +20,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 import Vue from 'vue';
 import Create from './Create.vue';
-import { DatetimePicker } from 'nextcloud-vue';
+import {DatetimePicker} from 'nextcloud-vue';
 import Controls from './components/_base-controls.vue';
 import SideBarClose from './components/sideBarClose.vue';
 import UserDiv from './components/_base-UserDiv.vue';
@@ -51,6 +51,6 @@ Vue.mixin({
 });
 
 new Vue({
-  el: '#create-poll',
-  render: h => h(Create)
+	el: '#create-poll',
+	render: h => h(Create)
 });

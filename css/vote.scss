@@ -337,10 +337,18 @@ $user-column-width: 265px;
 
 		}
 
+		.vote, .poll-cell {
+			margin: 0;
+		}
+
+		.table {
+			display: flex;
+			padding: 0 8px 105px 0;
+		}
 	}
 
 	.description {
-		margin: 4px;
+		padding: 4px;
 	}
 
 	.flex-column {
@@ -357,11 +365,6 @@ $user-column-width: 265px;
 		}
 	}
 
-	.table {
-		display: flex;
-		margin-right: 8px;
-		padding-bottom: 75px;
-	}
 
 	.submitPoll {
 		border-top: $border_user;
@@ -393,7 +396,7 @@ $user-column-width: 265px;
 
  @media all and (max-width: (320px) ) {
 
-	.table {
-		padding-bottom: 105px;
+	#app-content #votings .table {
+		padding-bottom: 130px;
 	}
 }
