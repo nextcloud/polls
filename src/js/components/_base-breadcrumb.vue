@@ -21,11 +21,9 @@
   -->
 
 <template>
-<div class="breadcrump">
-	<div class="crumb svg">
-		<a :href="indexPage">
-			<img class="svg" :src="imagePath" alt="Home">
-		</a>
+<div class="breadcrumb">
+	<div class="crumb svg crumbhome">
+		<a class="icon-home" :href="indexPage">Home</a>
 	</div>
 	<div class="crumb svg last">
 		<span v-text="intitle" />
@@ -45,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss">
-.breadcrump {
+.breadcrumb {
     flex-grow: 1;
 }
 </style>

@@ -129,7 +129,8 @@ export default {
     left: -13px;
 }
 
-.multiselect.multiselect-vue {
-    width: 100%;
+.multiselect {
+	width: 100% !important;
+	max-width: 100% !important;
 }
 </style>
