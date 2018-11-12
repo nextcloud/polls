@@ -247,15 +247,15 @@ class PageController extends Controller {
 	 */
 	public function deletePoll($pollId) {
 		$pollToDelete = $this->eventMapper->find($pollId);
-		if ($this->userId !== $pollToDelete->getOwner()) {
+		if ($this->userId !== $pollToDelete->getOwner() && !$this->groupManager->isAdmin($this->userId)) {
 			return new TemplateResponse('polls', 'no.delete.tmpl');
 		}
 		$poll = new Event();
 		$poll->setId($pollId);
-		$this->eventMapper->delete($poll);
-		$this->optionsMapper->deleteByPoll($pollId);
-		$this->votesMapper->deleteByPoll($pollId);
 		$this->commentMapper->deleteByPoll($pollId);
+		$this->votesMapper->deleteByPoll($pollId);
+		$this->optionsMapper->deleteByPoll($pollId);
+		$this->eventMapper->delete($poll);
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new RedirectResponse($url);
 	}
@@ -318,13 +318,13 @@ class PageController extends Controller {
 			}
 		}
 		$poll = $this->eventMapper->find($pollId);
-		
+
 		if ($changed) {
 			$options = json_decode($options);
 			$answers = json_decode($answers);
 			$count_options = count($options);
 			$this->votesMapper->deleteByPollAndUser($pollId, $userId);
-			
+
 			for ($i = 0; $i < $count_options; $i++) {
 				$vote = new Votes();
 				$vote->setPollId($pollId);
@@ -367,7 +367,7 @@ class PageController extends Controller {
 		return new JSONResponse(array(
 			'userId' => $userId,
 			'displayName' => $displayName,
-			'timeStamp' => $timeStamp * 100, 
+			'timeStamp' => $timeStamp * 100,
 			'date' => date('Y-m-d H:i:s', $timeStamp),
 			'relativeNow' => $this->trans->t('just now'),
 			'comment' => $commentBox
