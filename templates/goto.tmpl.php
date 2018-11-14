@@ -32,7 +32,7 @@
 	if (!User::isLoggedIn()) {
 		Util::addStyle('polls', 'public');
 	}
-	
+
 	Util::addScript('polls', 'app');
 	Util::addScript('polls', 'vote');
 
@@ -111,14 +111,12 @@
 
 	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass . ' ' . $maybe); ?>">
 		<div id="controls" class="controls">
-			
-			<div id="breadcrump" class="breadcrump">
+
+			<div class="breadcrumb">
 
 	<?php if (User::isLoggedIn()) : ?>
-				<div class="crumb svg">
-					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-						<img class="svg" src="<?php print_unescaped(Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
-					</a>
+				<div class="crumb svg crumbhome">
+					<a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"> Home </a>
 				</div>
 	<?php endif; ?>
 
@@ -146,7 +144,7 @@
 				</span>
 					<?php if ($expired) { print_unescaped('<span class="' . $statusClass . '">' . $l->t('The poll expired on %s. Voting is disabled, but you can still comment.', array(date('d.m.Y H:i', strtotime($poll->getExpire())))) . '</span>'); }?>
 			</div>
-			
+
 			<div class="table">
 				<ul class="flex-row header" >
 					<?php
@@ -178,7 +176,7 @@
 					?>
 					</li>
 				</ul>
-				
+
 				<ul class="flex-column table-body">
 					<?php
 					if ($votes !== null) {
@@ -208,7 +206,7 @@
 								!$isAnonymous &&
 								!$hideNames
 							) {
-								$displayName = $usr;
+								$displayName = \OC_User::getDisplayName($usr);
 								$avatarName = $usr;
 							} else {
 								if ($isAnonymous || $hideNames) {
@@ -257,7 +255,7 @@
 						if (User::isLoggedIn()) {
 							print_unescaped('		<div class="avatar has-tooltip" title="' . ($userId) . '"></div>');
 							print_unescaped('		<div class="name">');
-							p($userId);
+							p(\OC_User::getDisplayName($userId));
 						} else {
 							print_unescaped('		<div class="avatar has-tooltip" title="?"></div>');
 							print_unescaped('		<div id="id_ac_detected" class="name external current-user"><input type="text" name="user_name" id="user_name" placeholder="' . $l->t('Your name here') . '" />');
@@ -289,12 +287,12 @@
 									}
 								}
 							}
-							
+
 							if ($class === 'unvoted') {
 								$dataUnvoted = $l->t('New');
 								$updatedPoll = true;
 							}
-							
+
 							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></li>');
 
 							$i_tot++;
@@ -311,7 +309,7 @@
 				<p> <?php p($l->t('This poll was updated since your last visit. Please check your votes.')); ?></p>
 			</div>
 	<?php endif; ?>
-			
+
 			<div class="submitPoll flex-row">
 				<div>
 					<form class="finish_vote" name="finish_vote" action="<?php p($urlGenerator->linkToRoute('polls.page.insert_vote')); ?>" method="POST">
@@ -336,7 +334,7 @@
 		</div>
 
 	</div>
-	
+
 	<div id="app-sidebar" class="detailsView scroll-container disappear">
 		<div class="close flex-row">
 			<a id="closeDetails" class="close icon-close has-tooltip-bottom" title="<?php p($l->t('Close details')); ?>" href="#" alt="<?php $l->t('Close'); ?>"></a>
@@ -347,7 +345,7 @@
 				<div class="authorRow user-cell flex-row">
 					<div class="description leftLabel"><?php p($l->t('Owner')); ?></div>
 					<div class="avatar has-tooltip-bottom" title="<?php p($poll->getOwner())?>"></div>
-					<div class="author"><?php p($poll->getOwner()); ?></div>
+					<div class="author"><?php p(\OC_User::getDisplayName($poll->getOwner())); ?></div>
 				</div>
 
 				<div class="cloud">
@@ -411,21 +409,21 @@
 			</p>
 		</div>
 	<?php endif; ?>
-	
+
 		<ul class="tabHeaders">
 			<li class="tabHeader selected" data-tabid="commentsTabView" data-tabindex="0">
 				<a href="#"><?php p($l->t('Comments')); ?></a>
 			</li>
 		</ul>
-		
+
 		<div class="tabsContainer">
 			<div id="commentsTabView" class="tab commentsTabView">
 				<div class="newCommentRow comment new-comment">
-	
+
 	<?php if (User::isLoggedIn()) : ?>
 					<div class="authorRow user-cell flex-row">
 						<div class="avatar has-tooltip" title="<?php p($userId)?>"></div>
-						<div class="author"><?php p($userId) ?></div>
+						<div class="author"><?php p(\OC_User::getDisplayName($userId)) ?></div>
 					</div>
 	<?php else: ?>
 					<a href="<?php p($urlGenerator->linkToRouteAbsolute('core.login.showLoginForm')); ?>"><?php p($l->t('Login or ...')); ?></a>
@@ -465,7 +463,7 @@
 							// Comment is from current user
 							// -> display user
 							$avatarName = $userId;
-							$displayName = $userId;
+							$displayName = \OC_User::getDisplayName($userId);
 
 						} else if (!$isAnonymous && !$hideNames) {
 							// comment is from another user,
@@ -473,7 +471,7 @@
 							// users are not hidden
 							// -> display user
 							$avatarName = $comment->getUserId();
-							$displayName = $avatarName;
+							$displayName = \OC_User::getDisplayName($comment->getUserId());
 						} else {
 							// in all other cases
 							// -> make user anonymous
@@ -497,5 +495,5 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<form id="form_delete_poll" name="form_delete_poll" action="<?php p($urlGenerator->linkToRoute('polls.page.delete_poll')); ?>" method="POST"></form>

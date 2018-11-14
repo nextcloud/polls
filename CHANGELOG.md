@@ -2,19 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.9.0] - tbD
+## [0.9.0] - eta Nov 2018
 
 ### Added
   - create/edit page
     - rewrite as a vue app
     - improved UI
 	- introduced new NC date time picker from vue-nextcloud
-	- added option to forbid "maybe" vote	
-	
+	- introduced multiselect from vue-nextcloud
+	- added option to forbid "maybe" vote
+
   - vote page
 	- made polls table scrollable
 	- show new vote options after voting
-  
+    - open sidebar by default on wide screens
+  - Users in the admin group should be able to edit polls (#386)
+
 ### Changed
   - Compatibility to NC 14
   - Introduced vue
@@ -25,10 +28,12 @@ All notable changes to this project will be documented in this file.
  - 'Edit poll' did not work from poll's details view (#294)
  - Bug which makes voting impossible after edit
  - Write escapes option texts to db (#341)
+ - display user's display name instead of user name (#402)
+ - support for asynchronus operations (#371)
  - ... a lot more minor bugs
 
 See https://github.com/nextcloud/polls/milestone/9?closed=1 for all changes and additions.
- 
+
 ## [0.8.3] - 2018-08-30
 
 ### Added
