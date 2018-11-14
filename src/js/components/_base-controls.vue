@@ -22,16 +22,16 @@
 
 <template>
 <div class="controls">
-	<breadcrump :index-page="indexPage" :intitle="intitle"></breadcrump>
+	<breadcrumb :index-page="indexPage" :intitle="intitle"></breadcrumb>
 	<slot></slot>
 </div>
 </template>
 
 <script>
-import Breadcrump from './_base-breadcrump.vue'
+import Breadcrumb from './_base-breadcrumb.vue'
 export default {
 	components: {
-		Breadcrump
+		Breadcrumb
 	},
 	props: ['intitle', 'indexPage'],
 }
@@ -60,7 +60,7 @@ export default {
         }
     }
 
-    .breadcrump {
+    .breadcrumb {
         overflow: hidden;
         min-width: 35px;
         div.crumb:last-child {

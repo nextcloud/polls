@@ -112,13 +112,11 @@
 	<div id="app-content" class="<?php p($statusClass . ' ' . $pollTypeClass . ' ' . $maybe); ?>">
 		<div id="controls" class="controls">
 
-			<div id="breadcrump" class="breadcrump">
+			<div class="breadcrumb">
 
 	<?php if (User::isLoggedIn()) : ?>
-				<div class="crumb svg">
-					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-						<img class="svg" src="<?php print_unescaped(Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
-					</a>
+				<div class="crumb svg crumbhome">
+					<a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"> Home </a>
 				</div>
 	<?php endif; ?>
 
