@@ -43,11 +43,9 @@
 
 	<div id="app-content">
 		<div id="controls">
-			<div class="breadcrump">
-				<div class="crumb svg last">
-					<a href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>">
-						<img class="svg" src="<?php print_unescaped(Template::image_path('core', 'places/home.svg')); ?>" alt="Home">
-					</a>
+			<div class="breadcrumb">
+				<div class="crumb svg crumbhome">
+					<a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"> Home </a>
 				</div>
 			</div>
 			<div class="actions creatable" style="">
