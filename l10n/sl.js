@@ -9,6 +9,7 @@ OC.L10N.register(
     "Polls" : "Vprašalniki",
     "just now" : "ravnokar",
     "Description" : "Opis",
+    "Access" : "Dostop",
     "Create new poll" : "Ustvari nov vprašalnik",
     "Update poll" : "Posodobi vprašalnik",
     "Expired" : "Poteklo",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Edit Poll" : "Uredi vprašalnik",
     "Comments" : "Opombe",
     "Title" : "Naslov",
-    "Access" : "Dostop",
     "Never" : "Nikoli"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

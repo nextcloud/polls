@@ -14,8 +14,7 @@ OC.L10N.register(
     "Polls App" : "Εφαρμογή ψηφοφοριών",
     "just now" : "μόλις τώρα",
     "Description" : "Περιγραφή",
-    "Hide user names for admin" : "Απόκρυψη ονομάτων χρηστών για τον διαχειριστή",
-    "Expires" : "Λήγει",
+    "Access" : "Πρόσβαση",
     "Create new poll" : "Δημιουργία νέας ψηφοφορίας",
     "Update poll" : "Ενημέρωση ψηφοφορίας",
     "Expired" : "Έληξε",
@@ -33,7 +32,7 @@ OC.L10N.register(
     "Comments" : "Σχόλια",
     "New comment …" : "Νέο σχόλιο …",
     "Title" : "Τίτλος",
-    "Access" : "Πρόσβαση",
+    "Expires" : "Λήγει",
     "Never" : "Ποτέ",
     "Access denied" : "Δεν επιτρέπεται η πρόσβαση"
 },
