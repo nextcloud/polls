@@ -40,12 +40,15 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IAvatarManager;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUser;
 use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
 use OCP\Security\ISecureRandom;
 use OCP\User; //To do: replace according to API
@@ -54,6 +57,7 @@ use OCP\Util;
 class PageController extends Controller {
 
 	private $userId;
+	private $config;
 	private $commentMapper;
 	private $eventMapper;
 	private $notificationMapper;
@@ -64,12 +68,15 @@ class PageController extends Controller {
 	private $avatarManager;
 	private $logger;
 	private $trans;
+	private $transFactory;
 	private $groupManager;
+	private $mailer;
 
 	/**
 	 * PageController constructor.
 	 * @param string $appName
 	 * @param IRequest $request
+	 * @param IConfig $config
 	 * @param IUserManager $userMgr
 	 * @param IGroupManager $groupManager
 	 * @param IAvatarManager $avatarManager
@@ -82,29 +89,35 @@ class PageController extends Controller {
 	 * @param NotificationMapper $notificationMapper
 	 * @param OptionsMapper $optionsMapper
 	 * @param VotesMapper $VotesMapper
+	 * @param IMailer $mailer
 	 */
 	public function __construct(
 		$appName,
 		IRequest $request,
+		IConfig $config,
 		IUserManager $userMgr,
 		IGroupManager $groupManager,
 		IAvatarManager $avatarManager,
 		ILogger $logger,
 		IL10N $trans,
+		IFactory $transFactory,
 		IURLGenerator $urlGenerator,
 		$userId,
 		CommentMapper $commentMapper,
 		OptionsMapper $optionsMapper,
 		EventMapper $eventMapper,
 		NotificationMapper $notificationMapper,
-		VotesMapper $VotesMapper
+		VotesMapper $VotesMapper,
+		IMailer $mailer
 	) {
 		parent::__construct($appName, $request);
+		$this->config = $config;
 		$this->userMgr = $userMgr;
 		$this->groupManager = $groupManager;
 		$this->avatarManager = $avatarManager;
 		$this->logger = $logger;
 		$this->trans = $trans;
+		$this->transFactory = $transFactory;
 		$this->urlGenerator = $urlGenerator;
 		$this->userId = $userId;
 		$this->commentMapper = $commentMapper;
@@ -112,6 +125,7 @@ class PageController extends Controller {
 		$this->notificationMapper = $notificationMapper;
 		$this->optionsMapper = $optionsMapper;
 		$this->votesMapper = $VotesMapper;
+		$this->mailer = $mailer;
 	}
 
 	/**
@@ -146,6 +160,10 @@ class PageController extends Controller {
 			if ($from === $notification->getUserId()) {
 				continue;
 			}
+			$recUser = $this->userMgr->get($notification->getUserId());
+			if (!$recUser instanceof IUser) {
+				continue;
+			}
 			$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
 			if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				continue;
@@ -155,44 +173,43 @@ class PageController extends Controller {
 					array('hash' => $poll->getHash()))
 			);
 
-			$recUser = $this->userMgr->get($notification->getUserId());
 			$sendUser = $this->userMgr->get($from);
-			$rec = '';
-			if ($recUser !== null) {
-				$rec = $recUser->getDisplayName();
-			}
 			$sender = $from;
-			if ($sendUser !== null) {
+			if ($sendUser instanceof IUser) {
 				$sender = $sendUser->getDisplayName();
 			}
-			$msg = $this->trans->t('Hello %s,<br/><br/><strong>%s</strong> participated in the poll \'%s\'.<br/><br/>To go directly to the poll, you can use this <a href="%s">link</a>',
-				array(
-					$rec,
-					$sender,
-					$poll->getTitle(),
-					$url
-				));
 
-			$msg .= '<br/><br/>';
+			$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
+			$trans = $this->transFactory->get('polls', $lang);
+			$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
+				'user' => $sender,
+				'title' => $poll->getTitle(),
+				'link' => $url,
+			]);
+			$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
+			$emailTemplate->addHeader();
+			$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
 
-			$toName = $this->userMgr->get($notification->getUserId())->getDisplayName();
-			$subject = $this->trans->t('Polls App - New Activity');
-			$fromAddress = Util::getDefaultEmailAddress('no-reply');
-			$fromName = $this->trans->t('Polls App') . ' (' . $from . ')';
+			$emailTemplate->addBodyText(str_replace(
+				['{user}', '{title}'],
+				[$sender, $poll->getTitle()],
+				$trans->t('{user} participated in the poll "{title}"')
+			));
 
+			$emailTemplate->addBodyButton(
+				htmlspecialchars($trans->t('Go to poll')),
+				$url,
+				false
+			);
+
+			$emailTemplate->addFooter();
 			try {
-				/** @var IMailer $mailer */
-				$mailer = \OC::$server->getMailer();
-				/** @var \OC\Mail\Message $message */
-				$message = $mailer->createMessage();
-				$message->setSubject($subject);
-				$message->setFrom(array($fromAddress => $fromName));
-				$message->setTo(array($email => $toName));
-				$message->setHtmlBody($msg);
-				$mailer->send($message);
+				$message = $this->mailer->createMessage();
+				$message->setTo([$email => $recUser->getDisplayName()]);
+				$message->useTemplate($emailTemplate);
+				$this->mailer->send($message);
 			} catch (\Exception $e) {
-				$message = 'Error sending mail to: ' . $toName . ' (' . $email . ')';
-				Util::writeLog('polls', $message, Util::ERROR);
+				$this->logger->logException($e, ['app' => 'polls']);
 			}
 		}
 	}
