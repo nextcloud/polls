@@ -89,23 +89,21 @@ class PageControllerTest extends UnitTestCase {
 
 		$this->controller = new PageController(
 			'polls',
-			$avatarManager,
-			$config,
-			$groupManager,
-			$l10n,
-			$logger,
 			$request,
-			$urlGenerator,
-			$user,
+			$config,
 			$userManager,
-			$transFactory,
-			$mailer,
+			$groupManager,
+			$avatarManager,
+			$logger,
+			$l10n,
+			$urlGenerator,
+			$this->userId,
 			$commentMapper,
-			$optionsMapper,
 			$eventMapper,
 			$notificationMapper,
+			$optionsMapper,
 			$votesMapper,
-			$this->userId
+			$mailer
 		);
 	}
 
