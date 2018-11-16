@@ -38,25 +38,37 @@ class PageControllerTest extends UnitTestCase {
 	 * {@inheritDoc}
 	 */
 	public function setUp() {
-		$request = $this->getMockBuilder('OCP\IRequest')
+		$avatarManager = $this->getMockBuilder('OCP\IAvatarManager')
 			->disableOriginalConstructor()
 			->getMock();
-		$userManager = $this->getMockBuilder('OCP\IUserManager')
+		$config = $this->getMockBuilder('OCP\IConfig')
 			->disableOriginalConstructor()
 			->getMock();
 		$groupManager = $this->getMockBuilder('OCP\IGroupManager')
 			->disableOriginalConstructor()
 			->getMock();
-		$avatarManager = $this->getMockBuilder('OCP\IAvatarManager')
+		$l10n = $this->getMockBuilder('OCP\IL10N')
 			->disableOriginalConstructor()
 			->getMock();
 		$logger = $this->getMockBuilder('OCP\ILogger')
 			->disableOriginalConstructor()
 			->getMock();
-		$l10n = $this->getMockBuilder('OCP\IL10N')
+		$request = $this->getMockBuilder('OCP\IRequest')
 			->disableOriginalConstructor()
 			->getMock();
 		$urlGenerator = $this->getMockBuilder('OCP\IURLGenerator')
+			->disableOriginalConstructor()
+			->getMock();
+		$user = $this->getMockBuilder('OCP\IUser')
+			->disableOriginalConstructor()
+			->getMock();
+		$userManager = $this->getMockBuilder('OCP\IUserManager')
+			->disableOriginalConstructor()
+			->getMock();
+		$transFactory = $this->getMockBuilder('OCP\IL10N\IFactory')
+			->disableOriginalConstructor()
+			->getMock();
+		$mailer = $this->getMockBuilder('OCP\IMailer')
 			->disableOriginalConstructor()
 			->getMock();
 		$commentMapper = $this->getMockBuilder('OCA\Polls\Db\CommentMapper')
@@ -77,19 +89,23 @@ class PageControllerTest extends UnitTestCase {
 
 		$this->controller = new PageController(
 			'polls',
-			$request,
-			$userManager,
-			$groupManager,
 			$avatarManager,
-			$logger,
+			$config,
+			$groupManager,
 			$l10n,
+			$logger,
+			$request,
 			$urlGenerator,
-			$this->userId,
+			$user,
+			$userManager,
+			$transFactory,
+			$mailer,
 			$commentMapper,
 			$optionsMapper,
 			$eventMapper,
 			$notificationMapper,
 			$votesMapper
+			$this->userId,
 		);
 	}
 
