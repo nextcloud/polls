@@ -105,7 +105,7 @@ class PageControllerTest extends UnitTestCase {
 			$eventMapper,
 			$notificationMapper,
 			$votesMapper,
-			$this->userId,
+			$this->userId
 		);
 	}
 
