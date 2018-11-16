@@ -82,12 +82,13 @@ class PageController extends Controller {
 	 * @param IAvatarManager $avatarManager
 	 * @param ILogger $logger
 	 * @param IL10N $trans
+	 * @param IFactory $transFactory
 	 * @param IURLGenerator $urlGenerator
 	 * @param string $userId
 	 * @param CommentMapper $commentMapper
+	 * @param OptionsMapper $optionsMapper
 	 * @param EventMapper $eventMapper
 	 * @param NotificationMapper $notificationMapper
-	 * @param OptionsMapper $optionsMapper
 	 * @param VotesMapper $VotesMapper
 	 * @param IMailer $mailer
 	 */
@@ -111,6 +112,7 @@ class PageController extends Controller {
 		IMailer $mailer
 	) {
 		parent::__construct($appName, $request);
+		$this->request = $request;
 		$this->config = $config;
 		$this->userMgr = $userMgr;
 		$this->groupManager = $groupManager;
@@ -121,9 +123,9 @@ class PageController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userId = $userId;
 		$this->commentMapper = $commentMapper;
+		$this->optionsMapper = $optionsMapper;
 		$this->eventMapper = $eventMapper;
 		$this->notificationMapper = $notificationMapper;
-		$this->optionsMapper = $optionsMapper;
 		$this->votesMapper = $VotesMapper;
 		$this->mailer = $mailer;
 	}
