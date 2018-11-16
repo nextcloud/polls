@@ -65,7 +65,7 @@ class PageControllerTest extends UnitTestCase {
 		$userManager = $this->getMockBuilder('OCP\IUserManager')
 			->disableOriginalConstructor()
 			->getMock();
-		$transFactory = $this->getMockBuilder('OCP\IL10N\IFactory')
+		$transFactory = $this->getMockBuilder('OCP\L10N\IFactory')
 			->disableOriginalConstructor()
 			->getMock();
 		$mailer = $this->getMockBuilder('OCP\IMailer')
