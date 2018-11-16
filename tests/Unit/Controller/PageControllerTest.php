@@ -96,12 +96,13 @@ class PageControllerTest extends UnitTestCase {
 			$avatarManager,
 			$logger,
 			$l10n,
+			$transFactory,
 			$urlGenerator,
 			$this->userId,
 			$commentMapper,
+			$optionsMapper,
 			$eventMapper,
 			$notificationMapper,
-			$optionsMapper,
 			$votesMapper,
 			$mailer
 		);
