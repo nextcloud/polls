@@ -11,7 +11,10 @@
     "Polls App - New Activity" : "Εφαρμογή ψηφοφοριών - Νέα δραστηριότητα",
     "Polls App" : "Εφαρμογή ψηφοφοριών",
     "just now" : "μόλις τώρα",
+    "Title" : "Τίτλος",
     "Description" : "Περιγραφή",
+    "Owner" : "Ιδιοκτήτης",
+    "Expires" : "Λήγει",
     "Access" : "Πρόσβαση",
     "Create new poll" : "Δημιουργία νέας ψηφοφορίας",
     "Update poll" : "Ενημέρωση ψηφοφορίας",
@@ -20,7 +23,6 @@
     "Your name here" : "Το όνομά σας εδώ",
     "Close details" : "Κλείσιμο λεπτομερειών",
     "Close" : "Κλείσιμο",
-    "Owner" : "Ιδιοκτήτης",
     "Expires on %s" : "Λήγει στις %s",
     "Click to get link" : "Κάντε κλικ για αντιγραφή συνδέσμου",
     "Copy Link" : "Αντιγραφή συνδέσμου",
@@ -29,8 +31,6 @@
     "Poll expired" : "Η ψηφοφορία έληξε",
     "Comments" : "Σχόλια",
     "New comment …" : "Νέο σχόλιο …",
-    "Title" : "Τίτλος",
-    "Expires" : "Λήγει",
     "Never" : "Ποτέ",
     "Access denied" : "Δεν επιτρέπεται η πρόσβαση"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
