@@ -29,7 +29,7 @@ OC.L10N.register(
     "You are editing in admin mode" : "Sie bearbeiten im Administratorenmodus",
     "Owner" : "Inhaber",
     "Configuration" : "Einstellung",
-    "Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway." : "Konfiguration ist gesperrt. Das Ändern von Optionen kann zu unerwünschtem Verhalten führen, Sie können es jedoch dennoch entsperren.",
+    "Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway." : "Die Konfiguration ist gesperrt. Das Ändern von Optionen kann zu unerwünschtem Verhalten führen, Sie können sie jedoch dennoch entsperren.",
     "Unlock configuration " : "Konfiguration freischalten",
     "Poll type" : "Umfragetyp",
     "Poll configurations" : "Umfrage Einstellungen",
