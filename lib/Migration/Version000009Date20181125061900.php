@@ -37,7 +37,7 @@ use OCP\Migration\IOutput;
  * Installation class for the polls app.
  * Initial db creation
  */
-class Version000009Date20171202105141 extends SimpleMigrationStep {
+class Version000009Date20181125061900 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
@@ -53,7 +53,7 @@ class Version000009Date20171202105141 extends SimpleMigrationStep {
 		$this->connection = $connection;
 		$this->config = $config;
 	}
-	
+
 	/**
 	 * @param IOutput $output
 	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
