@@ -38,85 +38,10 @@ class Application extends App {
 	 * Application constructor.
 	 * @param array $urlParams
 	 */
-	public function __construct(array $urlParams = array()) {
+	public function __construct(array $urlParams = []) {
 		parent::__construct('polls', $urlParams);
-
-		$container = $this->getContainer();
-		$server = $container->getServer();
-
-		/**
-		 * Controllers
-		 */
-		$container->registerService('PageController', function(IContainer $c) {
-			return new PageController(
-				$c->query('AppName'),
-				$c->query('Request'),
-				$c->query('UserManager'),
-				$c->query('GroupManager'),
-				$c->query('AvatarManager'),
-				$c->query('Logger'),
-				$c->query('L10N'),
-				$c->query('ServerContainer')->getURLGenerator(),
-				$c->query('UserId'),
-				$c->query('CommentMapper'),
-				$c->query('OptionsMapper'),
-				$c->query('EventMapper'),
-				$c->query('NotificationMapper'),
-				$c->query('VotesMapper')
-			);
-		});
-
-		$container->registerService('UserManager', function(IContainer $c) {
-			return $c->query('ServerContainer')->getUserManager();
-		});
-
-		$container->registerService('GroupManager', function(IContainer $c) {
-			return $c->query('ServerContainer')->getGroupManager();
-		});
-
-		$container->registerService('AvatarManager', function(IContainer $c) {
-			return $c->query('ServerContainer')->getAvatarManager();
-		});
-
-		$container->registerService('Logger', function(IContainer $c) {
-			return $c->query('ServerContainer')->getLogger();
-		});
-
-		$container->registerService('L10N', function(IContainer $c) {
-			return $c->query('ServerContainer')->getL10N($c->query('AppName'));
-		});
-
-		$container->registerService('CommentMapper', function(IContainer $c) use ($server) {
-			return new CommentMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-
-		$container->registerService('OptionsMapper', function(IContainer $c) use ($server) {
-			return new OptionsMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-
-		$container->registerService('EventMapper', function(IContainer $c) use ($server) {
-			return new EventMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-
-		$container->registerService('NotificationMapper', function(IContainer $c) use ($server) {
-			return new NotificationMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-
-		$container->registerService('VotesMapper', function(IContainer $c) use ($server) {
-			return new VotesMapper(
-				$server->getDatabaseConnection()
-			);
-		});
-
 	}
+
 	/**
 	 * Register navigation entry for main navigation.
 	 */
