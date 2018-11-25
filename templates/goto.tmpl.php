@@ -130,9 +130,9 @@
 			<a id="switchDetails" class="button has-tooltip-bottom details" title="Details" href="#">
 				<span class="symbol icon-settings"></span>
 				<?php if (count($comments)) : ?>
-					<div id="comment-counter" class="badge"><?php p(count($comments)) ?></div>
+					<div id="comment-counter" class="badge icon-comment-yes"><?php p(count($comments)) ?></div>
 				<?php else: ?>
-					<div id="comment-counter" class="badge no-comments"><?php p(count($comments)) ?></div>
+					<div id="comment-counter" class="badge no-comments icon-comment-no"><?php p(count($comments)) ?></div>
 				<?php endif; ?>
 			</a>
 		</div>
@@ -164,11 +164,11 @@
 						}
 						print_unescaped('<div class="counter flex-row">');
 						print_unescaped('	<div class="yes flex-row">');
-						print_unescaped('		<div class="svg"></div>');
+						print_unescaped('		<div class="icon-yes"></div>');
 						print_unescaped('		<div id="counter_yes_voteid_' . $optionElement->getId() . '" class ="result-cell yes" data-voteId="' . $optionElement->getId() . '">0</div>');
 						print_unescaped('	</div>');
 						print_unescaped('	<div class="no flex-row">');
-						print_unescaped('		<div class="svg"></div>');
+						print_unescaped('		<div class="icon-no"></div>');
 						print_unescaped('		<div id="counter_no_voteid_' . $optionElement->getId() . '" class ="result-cell no" data-voteId="' . $optionElement->getId() . '">0</div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
@@ -234,10 +234,10 @@
 								// look what user voted for this dts
 								foreach ($others[$usr] as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer()  . ' icon-'.$vote->getVoteAnswer();
 										break;
 									}
-									$class = 'no';
+									$class = 'no icon-no';
 								}
 								print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column poll-cell ' . $class . '"></li>');
 								$i_tot++;
@@ -275,12 +275,12 @@
 						$i_tot = 0;
 						foreach ($options as $optionElement) {
 							// see if user already has data for this event
-							$class = 'no';
+							$class = 'no icon-no';
 							$dataUnvoted = '';
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer() . ' icon-'.$vote->getVoteAnswer();
 										break;
 									} else {
 										$class = 'unvoted';
