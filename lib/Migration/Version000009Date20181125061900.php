@@ -113,10 +113,6 @@ class Version000009Date20181125061900 extends SimpleMigrationStep {
 				'notnull' => false,
 				'default' => 0
 			]);
-			$table->addColumn('timestamp', Type::INTEGER, [
-				'notnull' => false,
-				'default' => 0
-			]);
 			$table->setPrimaryKey(['id']);
 		}
 
@@ -132,6 +128,10 @@ class Version000009Date20181125061900 extends SimpleMigrationStep {
 			$table->addColumn('poll_option_text', Type::STRING, [
 				'notnull' => false, // maybe true?
 				'length' => 256,
+			]);
+			$table->addColumn('timestamp', Type::INTEGER, [
+				'notnull' => false,
+				'default' => 0
 			]);
 			$table->setPrimaryKey(['id']);
 		}
