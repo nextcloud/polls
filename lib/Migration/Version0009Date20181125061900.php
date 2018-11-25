@@ -37,14 +37,14 @@ use OCP\Migration\IOutput;
  * Installation class for the polls app.
  * Initial db creation
  */
-class Version009000Date20171202105141 extends SimpleMigrationStep {
-	
+class Version0009Date20181125061900 extends SimpleMigrationStep {
+
 	/** @var IDBConnection */
 	protected $connection;
-	
+
 	/** @var IConfig */
 	protected $config;
-	
+
 	/**
 	 * @param IDBConnection $connection
 	 * @param IConfig $config
@@ -53,7 +53,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 		$this->connection = $connection;
 		$this->config = $config;
 	}
-	
+
 	/**
 	 * @param IOutput $output
 	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -109,6 +109,10 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 				'notnull' => false,
 				'default' => 0,
 			]);
+			$table->addColumn('disallow_maybe', Type::INTEGER, [
+				'notnull' => false,
+				'default' => 0
+			]);
 			$table->setPrimaryKey(['id']);
 		}
 
@@ -125,9 +129,13 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 				'notnull' => false, // maybe true?
 				'length' => 256,
 			]);
+			$table->addColumn('timestamp', Type::INTEGER, [
+				'notnull' => false,
+				'default' => 0
+			]);
 			$table->setPrimaryKey(['id']);
 		}
-		
+
 		if (!$schema->hasTable('polls_votes')) {
 			$table = $schema->createTable('polls_votes');
 			$table->addColumn('id', Type::INTEGER, [
@@ -143,6 +151,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('vote_option_id', Type::INTEGER, [
 				'notnull' => true,
+				'default' => 0,
 				'length' => 64,
 			]);
 			$table->addColumn('vote_option_text', Type::STRING, [
@@ -220,7 +229,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * Copy date options 
+	 * Copy date options
 	 */
 	protected function copyDateOptions() {
 		$insert = $this->connection->getQueryBuilder();
@@ -247,7 +256,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * Copy text options 
+	 * Copy text options
 	 */
 	protected function copyTextOptions() {
 		$insert = $this->connection->getQueryBuilder();
@@ -274,7 +283,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * Copy date votes 
+	 * Copy date votes
 	 */
 	protected function copyDateVotes() {
 		$insert = $this->connection->getQueryBuilder();
@@ -305,9 +314,9 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 		}
 		$result->closeCursor();
 	}
-	
+
 	/**
-	 * Copy text votes 
+	 * Copy text votes
 	 */
 	protected function copyTextVotes() {
 		$insert = $this->connection->getQueryBuilder();
@@ -338,14 +347,11 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 		}
 		$result->closeCursor();
 	}
+
 	/**
 	 * @param int $voteType
 	 * @return string
 	 */
-
-	 
-	 
-
 	protected function findOptionId($pollId, $text) {
 		$queryFind = $this->connection->getQueryBuilder();
 		$queryFind->select(['id'])
@@ -360,7 +366,7 @@ class Version009000Date20171202105141 extends SimpleMigrationStep {
 		return $row['id'];
 
 	}
-	
+
 	protected function translateVoteTypeToAnswer($voteType) {
 		switch ($voteType) {
 			case 0:
