@@ -31,7 +31,7 @@ use OCP\Migration\IOutput;
  * after migration in 'Version000009Date20171202105141.php'
  */
 
-class Version000009Date20181125062101 extends SimpleMigrationStep {
+class Version0009Date20181125062101 extends SimpleMigrationStep {
 	/**
 	 * @param IOutput $output
 	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
