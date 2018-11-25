@@ -42,16 +42,16 @@ class Version000009Date20181125062101 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-		if ($schema->hasTable('polls_dts') & $schema->hasTable('polls_options')) {
+		if ($schema->hasTable('polls_dts')) {
 			$schema->dropTable('polls_dts');
 		}
-		if ($schema->hasTable('polls_txts') & $schema->hasTable('polls_options')) {
+		if ($schema->hasTable('polls_txts')) {
 			$schema->dropTable('polls_txts');
 		}
-		if ($schema->hasTable('polls_particip') & $schema->hasTable('polls_votes')) {
+		if ($schema->hasTable('polls_particip')) {
 			$schema->dropTable('polls_particip');
 		}
-		if ($schema->hasTable('polls_particip_text') & $schema->hasTable('polls_votes')) {
+		if ($schema->hasTable('polls_particip_text')) {
 			$schema->dropTable('polls_particip_text');
 		}
 		return $schema;
