@@ -27,11 +27,11 @@ use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
 /**
- * Deleting unused tables 'polls_dts', 'polls_txts', 'polls_particip' and 'polls_particip_text' 
- * after migration in 'Version009000Date20171202105141.php'
+ * Deleting unused tables 'polls_dts', 'polls_txts', 'polls_particip' and 'polls_particip_text'
+ * after migration in 'Version000009Date20171202105141.php'
  */
 
-class Version009000Date20180202213017 extends SimpleMigrationStep {
+class Version000009Date20180202213017 extends SimpleMigrationStep {
 	/**
 	 * @param IOutput $output
 	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -42,16 +42,16 @@ class Version009000Date20180202213017 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-		if ($schema->hasTable('polls_dts')) {
+		if ($schema->hasTable('polls_dts') & $schema->hasTable('polls_options')) {
 			$schema->dropTable('polls_dts');
 		}
-		if ($schema->hasTable('polls_txts')) {
+		if ($schema->hasTable('polls_txts') & $schema->hasTable('polls_options')) {
 			$schema->dropTable('polls_txts');
 		}
-		if ($schema->hasTable('polls_particip')) {
+		if ($schema->hasTable('polls_particip') & $schema->hasTable('polls_votes')) {
 			$schema->dropTable('polls_particip');
 		}
-		if ($schema->hasTable('polls_particip_text')) {
+		if ($schema->hasTable('polls_particip_text') & $schema->hasTable('polls_votes')) {
 			$schema->dropTable('polls_particip_text');
 		}
 		return $schema;
