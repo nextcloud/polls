@@ -103,12 +103,12 @@
 
 		$expiry_style = '';
 		$participated = $_['votes'];
-		$participated_class = 'partic_no';
+		$participated_class = 'no';
 		$participated_title = 'You did not vote';
 		$participated_count = count($participated);
 
 		$comments = $_['comments'];
-		$commented_class = 'commented_no';
+		$commented_class = 'no';
 		$commented_title = 'You did not comment';
 		$commented_count = count($comments);
 
@@ -131,7 +131,7 @@
 
 		for ($i = 0; $i < count($participated); $i++) {
 			if ($poll->getId() === $participated[$i]->getPollId()) {
-				$participated_class = 'partic_yes';
+				$participated_class = 'yes';
 				$participated_title = 'You voted in this poll';
 				array_splice($participated, $i, 1);
 				break;
@@ -140,7 +140,7 @@
 
 		for ($i = 0; $i < count($comments); $i++) {
 			if ($poll->getId() === $comments[$i]->getPollId()) {
-				$commented_class = 'commented_yes';
+				$commented_class = 'yes';
 				$commented_title = 'You commented this poll';
 				array_splice($comments, $i, 1);
 				break;
@@ -150,7 +150,7 @@
 			<div class="table-row table-body">
 				<div class="wrapper group-master">
 					<div class="wrapper group-1">
-						<div class="thumbnail <?php p($expiry_style . ' ' . $commented_class . ' ' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
+						<div class="thumbnail <?php p($expiry_style . ' commented_' . $commented_class . ' partic_' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
 						<a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
 							<div class="flex-column name">						  <?php p($poll->getTitle()); ?></div>
 							<div class="flex-column description">				   <?php p($poll->getDescription()); ?></div>
@@ -211,7 +211,7 @@
 							<div class="flex-column has-tooltip expiry<?php p($expiry_style . $timestamp_style); ?>" data-timestamp="<?php p(strtotime($poll->getExpire()) * 1000); ?>" data-value="<?php p($poll->getExpire()); ?>"> <?php p($expiry_date); ?></div>
 							<div class="flex-column participants">
 								<div class="symbol alt-tooltip partic_voted icon-<?php p($participated_class); ?>" title="<?php p($participated_title); ?>"></div>
-								<div class="symbol alt-tooltip partic_commented icon-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
+								<div class="symbol alt-tooltip partic_commented icon-comment-<?php p($commented_class); ?>" title="<?php p($commented_title); ?>"></div>
 							</div>
 						</div>
 					</div>

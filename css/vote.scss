@@ -52,7 +52,7 @@ $user-column-width: 265px;
 			.counter {
 				font-size: 18px;
 				& > div {
-					margin: 0 2px;
+					margin: 0 5px;
 					.svg {
 						background-position: center;
 						background-repeat: no-repeat;
@@ -64,13 +64,13 @@ $user-column-width: 265px;
 				.yes {
 					color: $fg-yes;
 					.svg {
-						background-image: var(--icon-yes);
+						// background-image: var(--icon-yes);
 					}
 				}
 				.no {
 					color: $fg-no;
 					.svg {
-						background-image: var(--icon-no);
+						// background-image: var(--icon-no);
 					}
 				}
 			}
@@ -125,19 +125,19 @@ $user-column-width: 265px;
 	&.yes {
 		background-color: $bg-yes;
 		color: $fg-yes;
-		background-image: var(--icon-yes);
+		// background-image: var(--icon-yes);
 	}
 
 	&.no {
 		background-color: $bg-no;
 		color: $fg-no;
-		background-image: var(--icon-no);
+		// background-image: var(--icon-no);
 	}
 
 	&.maybe {
 		background-color: $bg-maybe;
 		color: $fg-maybe;
-		background-image: var(--icon-maybe);
+		// background-image: var(--icon-maybe);
 	}
 
 	&.unvoted {
@@ -205,7 +205,7 @@ $user-column-width: 265px;
 		position: relative;
 		top: -34px;
 		left: -26px;
-		background-image: var(--icon-comment-yes);
+		// background-image: var(--icon-comment-yes);
 		background-repeat: no-repeat;
 		background-size: 33px;
 		padding: 10px;
@@ -213,11 +213,11 @@ $user-column-width: 265px;
 		background-position-y: 9px;
 		background-position-x: center;
 		text-shadow: 1px 1px var(--color-box-shadow);
-		color: var(--color-main-text);
+		color: var(--color-primary-text);
 		min-width: 34px;
 		text-align: center;
 		&.no-comments {
-			background-image: var(--icon-comment-no);
+			// background-image: var(--icon-comment-no);
 		}
 	}
 }

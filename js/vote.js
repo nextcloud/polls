@@ -26,6 +26,8 @@ $.fn.switchClass = function (a, b) {
 
 function updateCommentsCount() {
 	$('#comment-counter').removeClass('no-comments');
+	$('#comment-counter').removeClass('no-comments icon-comment-no');
+	$('#comment-counter').addClass('icon-comment-yes');
 	$('#comment-counter').text(parseInt($('#comment-counter').text()) +1);
 }
 
@@ -292,8 +294,9 @@ $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 		$toggleAllClasses= 'maybe';
 	}
 
-	$(this).removeClass('yes no maybe unvoted');
+	$(this).removeClass('yes no maybe unvoted icon-no icon-yes icon-maybe');
 	$(this).addClass($nextClass);
+	$(this).addClass('icon-' + $nextClass);
 
 	if ($(this).hasClass('toggle-cell')) {
 		$('.poll-cell.active').removeClass('yes no maybe unvoted');
