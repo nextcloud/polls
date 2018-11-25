@@ -76,7 +76,6 @@ $user-column-width: 265px;
 			}
 
 			.winner {
-				font-style: italic;
 				font-weight: bold;
 				color: $fg-yes;
 			}
@@ -148,7 +147,6 @@ $user-column-width: 265px;
 			content: attr(data-unvoted);
 			color: $fg-no;
 			font-size: 14px;
-			font-style: italic;
 			font-weight: bold;
 			line-height: 38px;
 		}
