@@ -23,6 +23,6 @@
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
     <dependencies>
-        <nextcloud min-version="14" max-version="14" />
+        <nextcloud min-version="14" max-version="15" />
     </dependencies>
 </info>
