@@ -5,8 +5,6 @@ OC.L10N.register(
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "No estás registrado.\nPor favor ingresa tu nombre para votar\n(al menos 3 caracteres).",
     "Please add some text to your comment before submitting it." : "Por favor agrega algo de texto a tu comentario antes de enviarlo. ",
     "Polls" : "Encuestas",
-    "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Hola%s,<br/><br/><strong>%s</strong> participó en la encuesta '%s'.<br/><br/> Para ir directamente a la encuesta, puedes usar esta <a href=\"%s\">liga</a>",
-    "Polls App" : "Aplicación para encuestas",
     "Title" : "Título",
     "Description" : "Descripción",
     "Expires" : "Expira",

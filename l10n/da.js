@@ -5,8 +5,6 @@ OC.L10N.register(
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Du er ikke registreret.\nIndtast dit navn og stem\n(mindst 3 karakterer).",
     "Please add some text to your comment before submitting it." : "Tilføj noget tekst til din kommentar for du sender den.",
     "Polls" : "Afstemning",
-    "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Hallo %s,<br/><br/><strong>%s</strong> deltog i afstemningen '%s'.<br/><br/>For at tilgå afstemningen direkte kan du bruge dette <a href=\"%s\">link</a>",
-    "Polls App" : "Polls App",
     "Title" : "Titel",
     "Description" : "Beskrivelse",
     "Expires" : "Udløber",

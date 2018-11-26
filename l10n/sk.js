@@ -11,8 +11,6 @@ OC.L10N.register(
     "Please add some text to your comment before submitting it." : "Zadajte prosím nejaký text predtým než odošlete svoj komentár.",
     "An error occurred, your comment was not posted." : "Vyskytla sa chyba, váš komentár sa neodoslal.",
     "Polls" : "Ankety",
-    "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "Ahoj %s,<br/><br/><strong>%s</strong>sa zúčastnil v ankete '%s'.<br/><br/>Kliknutím na <a href=\"%s\">link</a> sa dostanete priamo k ankete.",
-    "Polls App" : "Aplikácia Ankety",
     "just now" : "práve teraz",
     "Title" : "Názov",
     "Description" : "Popis",

@@ -5,8 +5,6 @@ OC.L10N.register(
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "您並非註冊使用者。\n請輸入您的名稱來進行投票。(至少3個字母)",
     "Please add some text to your comment before submitting it." : "在送出之前，請加入一些您的文字意見。",
     "Polls" : "調查",
-    "Hello %s,<br/><br/><strong>%s</strong> participated in the poll '%s'.<br/><br/>To go directly to the poll, you can use this <a href=\"%s\">link</a>" : "%s你好,<br/><br/><strong>%s</strong>參與了這項意見調查'%s'。<br/><br/>直接透過此<a href=\"%s\">連結</a>前往這項調查",
-    "Polls App" : "Polls App",
     "Title" : "標題",
     "Description" : "調查內容描述",
     "Expires" : "投票期限",

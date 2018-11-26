@@ -11,7 +11,6 @@ OC.L10N.register(
     "Please add some text to your comment before submitting it." : "Παρακαλώ προσθέστε ένα κείμενο στο σχόλιό σας πριν το υποβάλλετε",
     "Polls" : "Ψηφοφορίες",
     "Polls App - New Activity" : "Εφαρμογή ψηφοφοριών - Νέα δραστηριότητα",
-    "Polls App" : "Εφαρμογή ψηφοφοριών",
     "just now" : "μόλις τώρα",
     "Title" : "Τίτλος",
     "Description" : "Περιγραφή",

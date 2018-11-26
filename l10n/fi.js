@@ -11,7 +11,6 @@ OC.L10N.register(
     "Please add some text to your comment before submitting it." : "Lisää tekstiä kommenttiisi, ennen kuin lähetät sen.",
     "An error occurred, your comment was not posted." : "Tapahtui virhe, kommenttiasi ei lähetetty.",
     "Polls" : "Kyselyt",
-    "Polls App" : "Kyselysovellus",
     "just now" : "juuri nyt",
     "Title" : "Nimi",
     "Description" : "Kuvaus",
