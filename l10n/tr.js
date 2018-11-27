@@ -14,6 +14,8 @@ OC.L10N.register(
     "An error occurred, your comment was not posted." : "Yorumunuz gönderilirken bir sorun çıktı.",
     "Polls" : "Anketler",
     "Polls App - New Activity" : "Anketler Uygulaması - Yeni İşlem",
+    "{user} participated in the poll \"{title}\"" : "{user} kullanıcısı \"{title}\" anketine katıldı",
+    "Go to poll" : "Ankete git",
     "just now" : "şimdi",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Doodle/Dudle benzeri, erişim kısıtlama özelliği bulunan bir anket uygulamasıdır.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Doodle/Dudle benzeri, erişim kısıtlama özelliği (üyeler, belirli grup ve kullanıcılar, gizli ve herkese açık gibi) bulunan bir anket uygulamasıdır.",

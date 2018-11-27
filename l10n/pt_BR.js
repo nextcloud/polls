@@ -14,6 +14,8 @@ OC.L10N.register(
     "An error occurred, your comment was not posted." : "Ocorreu um erro e seu comentário não foi publicado.",
     "Polls" : "Pesquisas",
     "Polls App - New Activity" : "Aplicativo Polls - Atividade Nova",
+    "{user} participated in the poll \"{title}\"" : "{user} participaram na enquete \"{title}\"",
+    "Go to poll" : "Ir para enquete",
     "just now" : "Agora mesmo",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Um aplicativo de enquetes, semelhante ao doodle/dudle podendo restringir o acesso.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Um aplicativo de enquetes, semelhante ao doodle/dudle podendo restringir o acesso (membros, certos grupos/usuários, ocultos e públicos).",
