@@ -14,6 +14,8 @@ OC.L10N.register(
     "An error occurred, your comment was not posted." : "Десила се грешка, Ваш коментар није објављен.",
     "Polls" : "Гласања",
     "Polls App - New Activity" : "Апликација Гласања - Нова активност",
+    "{user} participated in the poll \"{title}\"" : "{user} је учествовао у гласању „{title}“",
+    "Go to poll" : "Иди на гласање",
     "just now" : "управо сад",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа (чланова, група/корисника, скривено и јавно),",

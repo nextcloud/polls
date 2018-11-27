@@ -14,6 +14,8 @@ OC.L10N.register(
     "An error occurred, your comment was not posted." : "Došlo k chybě, váš komentář nebyl odeslán.",
     "Polls" : "Ankety",
     "Polls App - New Activity" : "Aplikace ankety - Nová akce",
+    "{user} participated in the poll \"{title}\"" : "{user} se zúčastnil ankety „{title}“",
+    "Go to poll" : "Přejít na anketu",
     "just now" : "právě teď",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikace pro ankety podobná doodle/dudle s možností omezit přístup.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikace pro ankety podobná doodle/dudle s možností omezit přístup (členům, určitým skupinám/uživatelům, skryté i veřejné).",

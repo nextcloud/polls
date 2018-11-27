@@ -12,6 +12,8 @@
     "An error occurred, your comment was not posted." : "Une erreur s'est produite, votre commentaire n'a pas été publié.",
     "Polls" : "Sondages",
     "Polls App - New Activity" : "Application de sondages - Nouvelle activité",
+    "{user} participated in the poll \"{title}\"" : "{user} a participé au sondage \"{title}\"",
+    "Go to poll" : "Accéder au sondage",
     "just now" : "à l'instant",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Une application de sondage, similaire à Doodle, avec la possibilité de restreindre l'accès.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Une application de sondage, similaire à Doodle, avec la possibilité de restreindre l'accès (membres, certain groupes/utilisateurs, caché et public).",

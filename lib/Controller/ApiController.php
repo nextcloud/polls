@@ -233,7 +233,7 @@ class ApiController extends Controller {
 			foreach ($options as $optionElement) {
 				$optionList[] = [
 					'id' => $optionElement->getId(),
-					'text' => $optionElement->getPollOptionText(),
+					'text' => htmlspecialchars_decode($optionElement->getPollOptionText()),
 					'timestamp' => $optionElement->getTimestamp()
 				];
 			};
@@ -248,7 +248,7 @@ class ApiController extends Controller {
 					'id' => $voteElement->getId(),
 					'userId' => $voteElement->getUserId(),
 					'voteOptionId' => $voteElement->getVoteOptionId(),
-					'voteOptionText' => $voteElement->getVoteOptionText(),
+					'voteOptionText' => htmlspecialchars_decode($voteElement->getVoteOptionText()),
 					'voteAnswer' => $voteElement->getVoteAnswer()
 				];
 			};
@@ -399,7 +399,7 @@ class ApiController extends Controller {
 				$newOption = new Options();
 
 				$newOption->setPollId($newEvent->getId());
-				$newOption->setpollOptionText(htmlspecialchars($optionElement['text']));
+				$newOption->setpollOptionText(trim(htmlspecialchars($optionElement['text'])));
 
 				$this->optionsMapper->insert($newOption);
 			}
