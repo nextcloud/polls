@@ -299,7 +299,7 @@ $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 	$(this).addClass('icon-' + $nextClass);
 
 	if ($(this).hasClass('toggle-cell')) {
-		$('.poll-cell.active').removeClass('yes no maybe unvoted');
+		$('.poll-cell.active').removeClass('yes no maybe unvoted icon-no icon-yes icon-maybe');
 		$('.poll-cell.active').addClass($toggleAllClasses);
 		$('.poll-cell.active').addClass('icon-' + $toggleAllClasses);
 	}
