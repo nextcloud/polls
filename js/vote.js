@@ -301,6 +301,7 @@ $(document).on('click', '.toggle-cell, .poll-cell.active', function () {
 	if ($(this).hasClass('toggle-cell')) {
 		$('.poll-cell.active').removeClass('yes no maybe unvoted');
 		$('.poll-cell.active').addClass($toggleAllClasses);
+		$('.poll-cell.active').addClass('icon-' + $toggleAllClasses);
 	}
 	updateCounters();
 });
