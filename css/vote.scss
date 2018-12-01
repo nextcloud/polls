@@ -103,14 +103,17 @@ $user-column-width: 265px;
 
 		.vote, .poll-cell {
 			flex-grow: 1;
-			max-width: 85px;
 			margin: 2px;
 			align-items:center;
 		}
 	}
 }
 
-
+.date-poll {
+	.vote, .poll-cell {
+		width: 85px;
+	}
+}
 
 .name {
 	margin-left: 5px;
