@@ -47,8 +47,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setIsAnonymous(integer $value)
  * @method integer getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
- * @method integer getDisallowMaybe()
- * @method void setDisallowMaybe(integer $value)
+ * @method integer getAllowMaybe()
+ * @method void setAllowMaybe(integer $value)
  */
 class Event extends Model {
 	protected $type;
@@ -61,7 +61,7 @@ class Event extends Model {
 	protected $hash;
 	protected $isAnonymous;
 	protected $fullAnonymous;
-	protected $disallowMaybe;
+	protected $allowMaybe;
 
 	/**
 	 * Event constructor.
@@ -70,6 +70,6 @@ class Event extends Model {
 		$this->addType('type', 'integer');
 		$this->addType('isAnonymous', 'integer');
 		$this->addType('fullAnonymous', 'integer');
-		$this->addType('disallowMaybe', 'integer');
+		$this->addType('allowMaybe', 'integer');
 	}
 }

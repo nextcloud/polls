@@ -109,7 +109,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 				'notnull' => false,
 				'default' => 0,
 			]);
-			$table->addColumn('disallow_maybe', Type::INTEGER, [
+			$table->addColumn('allow_maybe', Type::INTEGER, [
 				'notnull' => false,
 				'default' => 0
 			]);

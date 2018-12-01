@@ -5,7 +5,7 @@ var newUserAnswers = [];
 
 var maxVotes = 0;
 var valuesChanged = false;
-var maybeAllowed = true;
+var maybeAllowed = false;
 var tzOffset = new Date().getTimezoneOffset();
 
 // HTML template for new comment (handlebars.js)
@@ -125,8 +125,8 @@ $(document).ready(function () {
 	// count how many times in each date
 	updateBest();
 
-	if ($('#app-content').hasClass('maybedisallowed')) {
-		maybeAllowed = false;
+	if ($('#app-content').hasClass('maybeallowed')) {
+		maybeAllowed = true;
 	}
 
 	if (window.innerWidth > 1024) {
