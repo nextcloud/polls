@@ -14,6 +14,8 @@ OC.L10N.register(
     "An error occurred, your comment was not posted." : "Je opmerking is niet geplaatst vanwege een probleem.",
     "Polls" : "Peilingen",
     "Polls App - New Activity" : "Peilingen  App - Nieuwe Activiteit",
+    "{user} participated in the poll \"{title}\"" : "{user} deed mee aan peiliing \"{title}\"",
+    "Go to poll" : "Ga naar peiling",
     "just now" : "zojuist",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Een peilingenapp, net als doodle/dudle met de mogelijkheid om toegang te beperken.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Een peilingenapp, zoals doodle/dudle met de mogelijkheid om toegang te beperken (leden, bepaalde groepen/gebruikers, verborgen en openbaar).",
