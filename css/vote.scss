@@ -103,7 +103,7 @@ $user-column-width: 265px;
 
 		.vote, .poll-cell {
 			flex-grow: 1;
-			width: 85px;
+			max-width: 85px;
 			margin: 2px;
 			align-items:center;
 		}
@@ -121,6 +121,7 @@ $user-column-width: 265px;
 	background-repeat: no-repeat;
 	background-size: 32px;
 	height: 44px;
+	display: flex;
 
 	&.yes {
 		background-color: $bg-yes;
@@ -153,13 +154,24 @@ $user-column-width: 265px;
 	}
 
 	&.active {
+
 		cursor: pointer;
-		border: 2px solid;
+		// border: 2px solid;
 		border-radius: var(--border-radius);
 		box-sizing: border-box;
+		width: 25px;
+		height: 25px;
+		background-size: 20px;
+		margin: auto !important;
+		background-color: var(--color-main-background);
+		color: var(--color-primary);
+		flex-grow: 0 !important;
+		&.icon-no {
+			background-image: initial;
+		}
 		&.unvoted {
-		background-color: $bg-maybe;
-		color: $fg-maybe;
+			background-color: $bg-maybe;
+			color: $fg-maybe;
 		}
 	}
 }
@@ -193,7 +205,11 @@ $user-column-width: 265px;
 
 
 .current-user {
-	background-color: var(--color-background-dark);
+	background-color: var(--color-primary-element-light);
+	.name {
+		color: var(--color-primary-text);
+		font-weight: bold;
+	}
 }
 
 #switchDetails {
