@@ -87,6 +87,372 @@ class ApiController extends Controller {
 		$this->commentMapper = $CommentMapper;
 	}
 
+	/**
+	* Transforms an array of users fromt he event's access list to an array
+	* of nextcloud users
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @return Array
+	*/
+	private function convertAccessList($item) {
+		$split = Array();
+		if (strpos($item, 'user_') === 0) {
+			$user = $this->userManager->get(substr($item, 5));
+			$split = [
+				'id' => $user->getUID(),
+				'user' => $user->getUID(),
+				'type' => 'user',
+				'desc' => 'user',
+				'icon' => 'icon-user',
+				'displayName' => $user->getDisplayName(),
+				'avatarURL' => '',
+				'lastLogin' => $user->getLastLogin(),
+				'cloudId' => $user->getCloudId()
+			];
+		} elseif (strpos($item, 'group_') === 0) {
+			$group = substr($item, 6);
+			$group = $this->groupManager->get($group);
+			$split = [
+				'id' => $group->getGID(),
+				'user' => $group->getGID(),
+				'type' => 'group',
+				'desc' => 'group',
+				'icon' => 'icon-group',
+				'displayName' => $group->getDisplayName(),
+				'avatarURL' => '',
+			];
+		}
+
+
+		return($split);
+	}
+
+	/**
+	* Transforms an event into an array that fits to the expected structure
+	* of the vue app
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @PublicPage
+	* @param object $event
+	* @return Array
+	*/
+	private function convertEvent($event) {
+
+		if ($event->getType() == 0) {
+			$pollType = 'datePoll';
+		} else {
+			$pollType = 'textPoll';
+		};
+
+		$accessType = $event->getAccess();
+		if (!strpos('|public|hidden|registered', $accessType)) {
+			$accessType = 'select';
+		}
+
+		if ($event->getExpire() === null) {
+			$expired = false;
+			$expiration = false;
+		} else {
+			$expired = time() > strtotime($event->getExpire());
+			$expiration = true;
+		}
+
+		return [
+			'id' => $event->getId(),
+			'hash' => $event->getHash(),
+			'type' => $pollType,
+			'title' => $event->getTitle(),
+			'description' => $event->getDescription(),
+			'owner' => $event->getOwner(),
+			'created' => $event->getCreated(),
+			'access' => $accessType,
+			'expiration' => $expiration,
+			'expired' => $expired,
+			'expirationDate' => $event->getExpire(),
+			'isAnonymous' => $event->getIsAnonymous(),
+			'fullAnonymous' => $event->getFullAnonymous(),
+			'disallowMaybe' => $event->getDisallowMaybe()
+		];
+	}
+
+	/**
+	* Check If current user is in the access list
+	* @param string $accessList
+	* @return Boolean
+	*/
+	private function checkUserAccess($accessList) {
+		foreach ($accessList as $accessItem ) {
+			if ($accessItem['type'] === 'user' &&  $accessItem['id'] === \OC::$server->getUserSession()->getUser()->getUID()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	* Check If current user is in the access list
+	* @param string $accessList
+	* @return Boolean
+	*/
+	private function checkGroupAccess($accessList) {
+		foreach ($accessList as $accessItem ) {
+			if ($accessItem['type'] === 'group' &&  $this->groupManager->isInGroup(\OC::$server->getUserSession()->getUser()->getUID(),$accessItem['id'])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	* Read an entire poll based on it's id
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @param string $pollId
+	* @return Array
+	*/
+	public function getOptions($pollId) {
+		$optionsList = Array();
+		try {
+			$options = $this->optionsMapper->findByPoll($pollId);
+			foreach ($options as $optionElement) {
+				$optionList[] = [
+					'id' => $optionElement->getId(),
+					'text' => htmlspecialchars_decode($optionElement->getPollOptionText()),
+					'timestamp' => $optionElement->getTimestamp()
+				];
+			};
+		} catch (DoesNotExistException $e) {
+			return [];
+		};
+		return $optionList;
+	}
+
+	/**
+	* Read an entire poll based on it's id
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @param string $pollId
+	* @return Array
+	*/
+	public function getVotes($pollId) {
+		$votesList = Array();
+		try {
+			$votes = $this->votesMapper->findByPoll($pollId);
+			foreach ($votes as $voteElement) {
+				$votesList[] = [
+					'id' => $voteElement->getId(),
+					'userId' => $voteElement->getUserId(),
+					'voteOptionId' => $voteElement->getVoteOptionId(),
+					'voteOptionText' => htmlspecialchars_decode($voteElement->getVoteOptionText()),
+					'voteAnswer' => $voteElement->getVoteAnswer()
+				];
+			};
+		} catch (DoesNotExistException $e) {
+			return [];
+		};
+		return $votesList;
+	}
+
+	/**
+	* Read an entire poll based on it's id
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @param string $pollId
+	* @return Array
+	*/
+	public function getComments($pollId) {
+		$commentsList = Array();
+		try {
+			$comments = $this->commentMapper->findByPoll($pollId);
+			foreach ($comments as $commentElement) {
+				$commentsList[] = [
+					'id' => $commentElement->getId(),
+					'userId' => $commentElement->getUserId(),
+					'date' => $commentElement->getDt() . ' UTC',
+					'comment' => $commentElement->getComment()
+				];
+			};
+		} catch (DoesNotExistException $e) {
+			return [];
+		};
+		return $commentsList;
+	}
+
+	/**
+	* Read an entire poll based on it's id
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @param string $pollId
+	* @return Array
+	*/
+	public function getEvent($pollId) {
+
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			$currentUser = '';
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		}
+
+		try {
+			$event = $this->eventMapper->find($pollId);
+		} catch (DoesNotExistException $e) {
+			return [];
+		};
+
+		if ($event->getType() == 0) {
+			$pollType = 'datePoll';
+		} else {
+			$pollType = 'textPoll';
+		};
+
+		$accessType = $event->getAccess();
+		if (!strpos('|public|hidden|registered', $accessType)) {
+			$accessType = 'select';
+		}
+
+		if ($event->getExpire() === null) {
+			$expired = false;
+			$expiration = false;
+		} else {
+			$expired = time() > strtotime($event->getExpire());
+			$expiration = true;
+		}
+
+		return [
+			'id' => $event->getId(),
+			'hash' => $event->getHash(),
+			'type' => $pollType,
+			'title' => $event->getTitle(),
+			'description' => $event->getDescription(),
+			'owner' => $event->getOwner(),
+			'created' => $event->getCreated(),
+			'access' => $accessType,
+			'expiration' => $expiration,
+			'expired' => $expired,
+			'expirationDate' => $event->getExpire(),
+			'isAnonymous' => $event->getIsAnonymous(),
+			'fullAnonymous' => $event->getFullAnonymous()
+		];
+	}
+
+	/**
+	* Read an entire poll based on it's id
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @param string $pollId
+	* @return Array
+	*/
+	public function getShares($pollId) {
+
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			$currentUser = '';
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		}
+
+		try {
+			$poll = $this->eventMapper->find($pollId);
+		} catch (DoesNotExistException $e) {
+			return [];
+		};
+
+		if (!strpos('|public|hidden|registered', $poll->getAccess())) {
+			$accessList = explode(';',$poll->getAccess());
+			$accessList = array_filter($accessList);
+			$accessList = array_map(Array($this,'convertAccessList'), $accessList);
+		} else {
+			return [];
+		}
+		return $accessList;
+	}
+
+	/**
+	* @param string $event
+	* @return Boolean
+	*/
+	private function grantAccessAs($pollId) {
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			$currentUser = '';
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		}
+		$event = $this->getEvent($pollId);
+		$accessList =$this->getShares($pollId);
+
+		if ($event['owner'] === $currentUser) {
+			return 'owner';
+		} elseif ($event['access'] === 'public') {
+			return 'public';
+		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser){
+			return 'registered';
+		} elseif ($this->checkUserAccess($accessList)) {
+			return 'userInvitation';
+		} elseif ($this->checkGroupAccess($accessList)) {
+			return 'groupInvitation';
+		} elseif ($this->groupManager->isAdmin($currentUser)) {
+			return 'admin';
+		} else {
+			return 'none';
+		}
+	}
+
+
+	/**
+	* Read an entire poll based on it's id
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @param string $id
+	* @return Array
+	*/
+	public function getPoll($pollId) {
+
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			$currentUser = '';
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		}
+		$data['poll'] = ['result' => 'notFound'];
+		$result = 'foundById';
+		try {
+			// try to find poll by hash
+			$pollId = $this->eventMapper->findByHash($pollId)->id;
+			$result = 'foundByHash';
+		} catch (DoesNotExistException $e) {
+			// hash is not found, try id in finally
+		} finally {
+			try {
+				$poll = $this->eventMapper->find($pollId);
+			} catch (DoesNotExistException $e) {
+				return $data;
+			}
+		}
+
+
+		$event = $this->getEvent($pollId);
+
+		if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
+			$mode = 'create';
+		} else {
+			$mode = 'edit';
+		}
+		;
+
+		$data['poll'] = [
+			'result' => $result,
+			'grantedAs' => $this->grantAccessAs($pollId),
+			'mode' => $mode,
+			'comments' => $this->getComments($pollId),
+			'votes' => $this->getVotes($pollId),
+			'shares' => $this->getShares($pollId),
+			'event' => $event,
+			'options' => [
+				'pollDates' => [],
+				'pollTexts' => $this->getOptions($pollId)
+			]
+		];
+		return $data;
+	}
+
   	/**
 	* @NoAdminRequired
 	* @NoCSRFRequired
@@ -133,45 +499,10 @@ class ApiController extends Controller {
 		$data['siteusers'] = $list;
 		return new DataResponse($data, Http::STATUS_OK);
 	}
-  	/**
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @return Array
-	*/
-	function convertAccessList($item) {
-		$split = Array();
-		if (strpos($item, 'user_') === 0) {
-			$user = $this->userManager->get(substr($item, 5));
-			$split = [
-				'id' => $user->getUID(),
-				'user' => $user->getUID(),
-				'type' => 'user',
-				'desc' => 'user',
-				'icon' => 'icon-user',
-				'displayName' => $user->getDisplayName(),
-				'avatarURL' => '',
-				'lastLogin' => $user->getLastLogin(),
-				'cloudId' => $user->getCloudId()
-			];
-		} elseif (strpos($item, 'group_') === 0) {
-			$group = substr($item, 6);
-			$group = $this->groupManager->get($group);
-			$split = [
-				'id' => $group->getGID(),
-				'user' => $group->getGID(),
-				'type' => 'group',
-				'desc' => 'group',
-				'icon' => 'icon-group',
-				'displayName' => $group->getDisplayName(),
-				'avatarURL' => '',
-			];
-		}
 
 
-		return($split);
-	}
-
-  	/**
+	/**
+	* Read an entire poll based on it's hash
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @PublicPage
@@ -179,126 +510,24 @@ class ApiController extends Controller {
 	* @return DataResponse
 	*/
 
-	public function getPoll($hash) {
+	public function getPolls() {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			$AdminAccess = $this->groupManager->isAdmin($currentUser);
 		}
 
 		try {
-			$poll = $this->eventMapper->findByHash($hash);
-
-			if ($poll->getExpire() === null) {
-				$expired = false;
-				$expiration = false;
-			} else {
-				$expired = time() > strtotime($poll->getExpire());
-				$expiration = true;
-			}
-
-			if ($poll->getType() == 0) {
-				$pollType = 'datePoll';
-			} else {
-				$pollType = 'textPoll';
-			};
-
-			if ($poll->getOwner() !== $currentUser && !$AdminAccess) {
-				$mode = 'create';
-			} else {
-				$mode = 'edit';
-			}
-			$accessList = Array();
-			$accessType = $poll->getAccess();
-			if (!strpos('|public|hidden|registered', $accessType)) {
-				$accessList = explode(';',$accessType);
-				$accessList = array_filter($accessList);
-				$accessList = array_map(Array($this,'convertAccessList'), $accessList);
-				$accessType = 'select';
-			}
-
-			$data = array();
-			$commentsList = array();
-			$optionList = array();
-			$votesList = array();
-
+			$events = $this->eventMapper->findAll();
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+		$eventsList = Array();
+		foreach ($events as $eventElement) {
+			$eventsList[] = $this->getEvent($eventElement->id);
 		};
 
-
-		try {
-			$options = $this->optionsMapper->findByPoll($poll->getId());
-			foreach ($options as $optionElement) {
-				$optionList[] = [
-					'id' => $optionElement->getId(),
-					'text' => htmlspecialchars_decode($optionElement->getPollOptionText()),
-					'timestamp' => $optionElement->getTimestamp()
-				];
-			};
-		} catch (DoesNotExistException $e) {
-			// ignore
-		};
-
-		try {
-			$votes = $this->votesMapper->findByPoll($poll->getId());
-			foreach ($votes as $voteElement) {
-				$votesList[] = [
-					'id' => $voteElement->getId(),
-					'userId' => $voteElement->getUserId(),
-					'voteOptionId' => $voteElement->getVoteOptionId(),
-					'voteOptionText' => htmlspecialchars_decode($voteElement->getVoteOptionText()),
-					'voteAnswer' => $voteElement->getVoteAnswer()
-				];
-			};
-		} catch (DoesNotExistException $e) {
-			// ignore
-		};
-
-		try {
-			$comments = $this->commentMapper->findByPoll($poll->getId());
-			foreach ($comments as $commentElement) {
-				$commentsList[] = [
-					'id' => $commentElement->getId(),
-					'userId' => $commentElement->getUserId(),
-					'date' => $commentElement->getDt() . ' UTC',
-					'comment' => $commentElement->getComment()
-				];
-			};
-		} catch (DoesNotExistException $e) {
-			// ignore
-		};
-
-		$data['poll'] = [
-			'result' => 'found',
-			'mode' => $mode,
-			'comments' => $commentsList,
-			'votes' => $votesList,
-			'shares' => $accessList,
-			'event' => [
-				'id' => $poll->getId(),
-				'hash' => $hash,
-				'type' => $pollType,
-				'title' => $poll->getTitle(),
-				'description' => $poll->getDescription(),
-				'owner' => $poll->getOwner(),
-				'created' => $poll->getCreated(),
-				'access' => $accessType,
-				'expiration' => $expiration,
-				'expired' => $expired,
-				'expirationDate' => $poll->getExpire(),
-				'isAnonymous' => $poll->getIsAnonymous(),
-				'fullAnonymous' => $poll->getFullAnonymous(),
-				'disallowMaybe' => $poll->getDisallowMaybe()
-			],
-			'options' => [
-				'pollDates' => [],
-				'pollTexts' => $optionList
-			]
-		];
-
-		return new DataResponse($data, Http::STATUS_OK);
+		return new DataResponse($eventsList, Http::STATUS_OK);
 	}
 
 	/**

@@ -72,6 +72,16 @@ class EventMapper extends Mapper {
 	}
 
 	/**
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Event[]
+	 */
+	public function findAll($limit = null, $offset = null) {
+		$sql = 'SELECT * FROM ' . $this->getTableName();
+		return $this->findEntities($sql, ['*'], $limit, $offset);
+	}
+
+	/**
 	 * @param string $userId
 	 * @param int $limit
 	 * @param int $offset

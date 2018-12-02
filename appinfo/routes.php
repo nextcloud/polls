@@ -35,7 +35,14 @@ return [
 		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
 		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
 		['name' => 'api#write_poll', 'url' => '/write', 'verb' => 'POST'],
-		['name' => 'api#get_poll', 'url' => '/get/poll/{hash}', 'verb' => 'GET'],
+		['name' => 'api#get_poll', 'url' => '/get/poll/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_options', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_votes', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_comments', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_event', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_fullPoll', 'url' => '/get/fullpoll/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_polls', 'url' => '/get/polls/', 'verb' => 'GET'],
 		['name' => 'api#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
 		['name' => 'api#get_system', 'url' => '/get/system', 'verb' => 'GET']
 	]
