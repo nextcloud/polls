@@ -88,7 +88,7 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Transforms an array of users fromt he event's access list to an array
+	* Transforms an array of users from the event's access list to an array
 	* of nextcloud users
 	* @NoAdminRequired
 	* @NoCSRFRequired
