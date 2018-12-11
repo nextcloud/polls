@@ -290,7 +290,7 @@ class ApiController extends Controller {
 				'expirationDate' => $poll->getExpire(),
 				'isAnonymous' => $poll->getIsAnonymous(),
 				'fullAnonymous' => $poll->getFullAnonymous(),
-				'disallowMaybe' => $poll->getDisallowMaybe()
+				'allowMaybe' => $poll->getAllowMaybe()
 			],
 			'options' => [
 				'pollDates' => [],
@@ -324,7 +324,7 @@ class ApiController extends Controller {
 		$newEvent->setType($event['type']);
 		$newEvent->setIsAnonymous($event['isAnonymous']);
 		$newEvent->setFullAnonymous($event['fullAnonymous']);
-		$newEvent->setDisallowMaybe($event['disallowMaybe']);
+		$newEvent->setAllowMaybe($event['allowMaybe']);
 
 		if ($event['access'] === 'select') {
 			$shareAccess = '';

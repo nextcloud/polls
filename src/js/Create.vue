@@ -127,8 +127,8 @@
 				<div class="configBox ">
 					<label class="title icon-settings">{{ t('polls', 'Poll configurations') }}</label>
 
-					<input :disabled="protect" id="disallowMaybe" v-model="poll.event.disallowMaybe"type="checkbox" class="checkbox" />
-					<label for="disallowMaybe">{{ t('polls', 'Disallow maybe vote') }}</label>
+					<input :disabled="protect" id="allowMaybe" v-model="poll.event.allowMaybe"type="checkbox" class="checkbox" />
+					<label for="allowMaybe">{{ t('polls', 'Allow "maybe" vote') }}</label>
 
 					<input :disabled="protect" id="anonymous" v-model="poll.event.isAnonymous"type="checkbox" class="checkbox" />
 					<label for="anonymous">{{ t('polls', 'Anonymous poll') }}</label>
@@ -211,7 +211,7 @@ export default {
 					expired: false,
 					isAnonymous: false,
 					fullAnonymous: false,
-					disallowMaybe: false,
+					allowMaybe: false,
 					owner: undefined
 				},
 				options: {

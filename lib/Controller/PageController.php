@@ -240,7 +240,7 @@ class PageController extends Controller {
 			$notification = null;
 		}
 		if ($this->hasUserAccess($poll)) {
-			return new TemplateResponse('polls', 'goto.tmpl', [
+			return new TemplateResponse('polls', 'vote.tmpl', [
 				'poll' => $poll,
 				'options' => $options,
 				'comments' => $comments,

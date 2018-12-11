@@ -109,11 +109,20 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 				'notnull' => false,
 				'default' => 0,
 			]);
-			$table->addColumn('disallow_maybe', Type::INTEGER, [
+			$table->addColumn('allow_maybe', Type::INTEGER, [
 				'notnull' => false,
-				'default' => 0
+				'default' => 1,
 			]);
 			$table->setPrimaryKey(['id']);
+		} else {
+
+			$table = $schema->getTable('polls_events');
+
+			$table->addColumn('allow_maybe', Type::INTEGER, [
+				'notnull' => false,
+				'default' => 1,
+			]);
+
 		}
 
 		if (!$schema->hasTable('polls_options')) {

@@ -56,10 +56,10 @@
 
 	$isAnonymous = $poll->getIsAnonymous() && $userId !== $poll->getOwner();
 	$hideNames = $poll->getIsAnonymous() && $poll->getFullAnonymous();
-	if ($poll->getDisallowMaybe()) {
-		$maybe = 'maybedisallowed';
-	} else {
+	if ($poll->getAllowMaybe()) {
 		$maybe = 'maybeallowed';
+	} else {
+		$maybe = 'maybedisallowed';
 	}
 	$access = $poll->getAccess();
 	$updatedPoll = false;

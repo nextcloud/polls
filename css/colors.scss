@@ -27,5 +27,5 @@ $fg-yes: #49bc49;
 	@include icon-color('close','actions',$fg-no,1,true)
 }
 .icon-maybe {
-	@include icon-color('maybe-vote','polls',$fg-maybe)
+	@include icon-color('maybe-vote-variant','polls',$fg-maybe)
 }
