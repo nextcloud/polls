@@ -171,7 +171,7 @@ class ApiController extends Controller {
 			'expirationDate' => $event->getExpire(),
 			'isAnonymous' => $event->getIsAnonymous(),
 			'fullAnonymous' => $event->getFullAnonymous(),
-			'disallowMaybe' => $event->getDisallowMaybe()
+			'allowMaybe' => $event->getAllowMaybe()
 		];
 	}
 
