@@ -111,7 +111,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('allow_maybe', Type::INTEGER, [
 				'notnull' => false,
-				'default' => 0
+				'default' => 1,
 			]);
 			$table->setPrimaryKey(['id']);
 		}
