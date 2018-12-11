@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.9.0] - eta Nov 2018
+## [0.9.1] - 2018-12-11
 
 ### Added
   - create/edit page
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
     - improved UI
 	- introduced new NC date time picker from vue-nextcloud
 	- introduced multiselect from vue-nextcloud
-	- added option to forbid "maybe" vote
+	- added option to allow "maybe" vote
 
   - vote page
 	- made polls table scrollable
@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
   - Users in the admin group should be able to edit polls (#386)
 
 ### Changed
-  - Compatibility to NC 14
+  - Compatibility to NC 14 and 15
   - Introduced vue
   - Changing database theme
   - Polls is a Nextcloud only app now. If you wish to proceed developing the ownCloud version, make a fork from the `stable-0.8` branch.
