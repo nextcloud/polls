@@ -19,18 +19,18 @@
     "Update poll" : "Ενημέρωση ψηφοφορίας",
     "Expired" : "Έληξε",
     "Expires never" : "Δεν λήγει ποτέ",
+    "Never" : "Ποτέ",
+    "Click to get link" : "Κάντε κλικ για αντιγραφή συνδέσμου",
+    "Copy Link" : "Αντιγραφή συνδέσμου",
+    "Delete poll" : "Διαγραφή ψηφοφορίας",
+    "Access denied" : "Δεν επιτρέπεται η πρόσβαση",
     "Your name here" : "Το όνομά σας εδώ",
     "Close details" : "Κλείσιμο λεπτομερειών",
     "Close" : "Κλείσιμο",
     "Expires on %s" : "Λήγει στις %s",
-    "Click to get link" : "Κάντε κλικ για αντιγραφή συνδέσμου",
-    "Copy Link" : "Αντιγραφή συνδέσμου",
-    "Delete poll" : "Διαγραφή ψηφοφορίας",
     "Edit Poll" : "Επεξεργασία ψηφοφορίας",
     "Poll expired" : "Η ψηφοφορία έληξε",
     "Comments" : "Σχόλια",
-    "New comment …" : "Νέο σχόλιο …",
-    "Never" : "Ποτέ",
-    "Access denied" : "Δεν επιτρέπεται η πρόσβαση"
+    "New comment …" : "Νέο σχόλιο …"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

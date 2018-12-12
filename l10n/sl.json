@@ -14,16 +14,16 @@
     "Update poll" : "Posodobi vprašalnik",
     "Expired" : "Poteklo",
     "Expires never" : "Nikoli ne poteče",
+    "Never" : "Nikoli",
+    "Copy Link" : "Kopiraj povezavo",
+    "Delete poll" : "Izbriši vprašalnik",
     "No description provided." : "Ni podanega opisa.",
     "Switch all options at once" : "Preklopi vse možnosti naenkrat",
     "Vote!" : "Glasuj!",
     "Close details" : "Zapri podrobnosti",
     "Close" : "Zapri",
     "Expires on %s" : "Poteče %s",
-    "Copy Link" : "Kopiraj povezavo",
-    "Delete poll" : "Izbriši vprašalnik",
     "Edit Poll" : "Uredi vprašalnik",
-    "Comments" : "Opombe",
-    "Never" : "Nikoli"
+    "Comments" : "Opombe"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }
