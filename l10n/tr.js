@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Yapılandırma kilidini aç",
     "Poll type" : "Anket türü",
     "Poll configurations" : "Anket yapılandırmaları",
+    "Allow \"maybe\" vote" : "\"Belki\" oyu verilebilsin",
     "Anonymous poll" : "Anonim anket",
     "Hide user names for admin" : "Yönetici için kullanıcı adları gizlensin",
     "Expires" : "Sona Erme",

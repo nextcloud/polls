@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Konfiguration freischalten",
     "Poll type" : "Umfragetyp",
     "Poll configurations" : "Umfrage Einstellungen",
+    "Allow \"maybe\" vote" : "\"Vielleicht\" erlauben",
     "Anonymous poll" : "Anonyme Umfrage",
     "Hide user names for admin" : "Namen der Teilnehmer vor Administrator verbergen",
     "Expires" : "Ablaufdatum",
