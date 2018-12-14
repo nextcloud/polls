@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Sblocca la configurazione",
     "Poll type" : "Tipo di sondaggio",
     "Poll configurations" : "Configurazioni dei sondaggi",
+    "Allow \"maybe\" vote" : "Consenti il voto \"Forse\"",
     "Anonymous poll" : "Sondaggio anonimo",
     "Hide user names for admin" : "Nascondi i nomi utente degli amministratori",
     "Expires" : "Scade",
