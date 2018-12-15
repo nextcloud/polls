@@ -103,7 +103,8 @@ $user-column-width: 265px;
 
 		.vote, .poll-cell {
 			flex-grow: 1;
-			// max-width: 85px;
+			width: 85px;
+			min-width: 85px;
 			margin: 2px;
 			align-items:center;
 		}
