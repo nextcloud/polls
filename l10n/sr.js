@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Откључај конфигурацију",
     "Poll type" : "Тип гласања",
     "Poll configurations" : "Конфигурације гласања",
+    "Allow \"maybe\" vote" : "Дозволи глас за „можда“",
     "Anonymous poll" : "Анонимно гласање",
     "Hide user names for admin" : "Сакриј корисничка имена од администратора",
     "Expires" : "Истиче",
