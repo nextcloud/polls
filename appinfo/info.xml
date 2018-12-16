@@ -5,7 +5,7 @@
     <name>Polls</name>
     <summary>A polls app, similar to doodle/dudle with the possibility to restrict access.</summary>
     <description>A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <licence>agpl</licence>
     <author>Vinzenz Rosenkranz</author>
     <author>René Gieling</author>
