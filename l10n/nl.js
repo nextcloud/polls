@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Vrijgeven configuratie",
     "Poll type" : "Type peiling",
     "Poll configurations" : "Peilingconfiguratie",
+    "Allow \"maybe\" vote" : "Sta een Misschien stem toe",
     "Anonymous poll" : "Anonieme peiling",
     "Hide user names for admin" : "Verberg gebruikersnamen voor beheerder",
     "Expires" : "Verstreken termijn",
