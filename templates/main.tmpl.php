@@ -60,7 +60,7 @@
 		<div id="emptycontent" class="">
 			<div class="icon-polls"></div>
 			<h2><?php p($l->t('No existing polls.')); ?></h2>
-			<a href="/index.php/apps/polls/create" class="button new">
+			<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
 				<span><?php p($l->t('Click here to add a poll')); ?></span>
 			</a>
 		</div>
