@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Odemknout nastavení",
     "Poll type" : "Typ ankety",
     "Poll configurations" : "Nastavení ankety",
+    "Allow \"maybe\" vote" : "Umožnit hlasovat „možná“",
     "Anonymous poll" : "Anonymní anketa",
     "Hide user names for admin" : "Skrýt správcům uživatelská jména",
     "Expires" : "Platnost vyprší",
