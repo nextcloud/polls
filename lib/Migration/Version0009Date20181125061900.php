@@ -301,10 +301,8 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
-				// 'vote_date' => $insert->createParameter('vote_date'),
 				'vote_option_id' => $insert->createParameter('vote_option_id'),
 				'vote_option_text' => $insert->createParameter('vote_option_text'),
-				// 'vote_type' => $insert->createParameter('vote_type'),
 				'vote_answer' => $insert->createParameter('vote_answer'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -315,10 +313,8 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				->setParameter('user_id', $row['user_id'])
-				// ->setParameter('vote_date', $row['dt'])
 				->setParameter('vote_option_id', $this->findOptionId($row['poll_id'], $row['dt']))
 				->setParameter('vote_option_text', date($row['dt']))
-				// ->setParameter('vote_type', $row['type'])
 				->setParameter('vote_answer', $this->translateVoteTypeToAnswer($row['type']));
 			$insert->execute();
 		}
@@ -334,10 +330,8 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
-				// 'vote_text' => $insert->createParameter('vote_text'),
 				'vote_option_id' => $insert->createParameter('vote_option_id'),
 				'vote_option_text' => $insert->createParameter('vote_option_text'),
-				// 'vote_type' => $insert->createParameter('vote_type'),
 				'vote_answer' => $insert->createParameter('vote_answer'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -348,10 +342,8 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
 				->setParameter('user_id', $row['user_id'])
-				// ->setParameter('vote_text', $row['text'])
 				->setParameter('vote_option_id', $this->findOptionId($row['poll_id'], preg_replace("/_\d*$/", "$1", $row['text'])))
 				->setParameter('vote_option_text', preg_replace("/_\d*$/", "$1", $row['text']))
-				// ->setParameter('vote_type', $row['type'])
 				->setParameter('vote_answer', $this->translateVoteTypeToAnswer($row['type']));
 			$insert->execute();
 		}
@@ -368,13 +360,18 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			->from('polls_options')
 			// ->where($queryFind->expr()->eq('poll_id', $pollId))
 			// ->andWhere($queryFind->expr()->eq('poll_option', $text));
-			->where('poll_id = "' . $pollId . '"')
-			->andWhere('poll_option_text ="' . $text . '"');
-
+			->where('poll_id = \'' . $pollId . '\'')
+			->andWhere('poll_option_text =\'' . $text . '\'');
+			
 		$resultFind = $queryFind->execute();
 		$row = $resultFind->fetch();
-		return $row['id'];
 
+		if ($row['id'] === null) {
+			// seems, we have an orphaned vote, return 0 as vote_option_id
+			return 0;
+		} else {
+			return $row['id'];
+		}
 	}
 
 	protected function translateVoteTypeToAnswer($voteType) {
