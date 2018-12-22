@@ -113,7 +113,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 
 .description {
 	width: $description-width;
-	color: var(--text-maxcontrast);
+	color: var(--color-text-maxcontrast);
 	}
 
 .owner {
