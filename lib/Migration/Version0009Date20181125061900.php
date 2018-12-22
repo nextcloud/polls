@@ -360,9 +360,9 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			->from('polls_options')
 			// ->where($queryFind->expr()->eq('poll_id', $pollId))
 			// ->andWhere($queryFind->expr()->eq('poll_option', $text));
-			->where('poll_id = "' . $pollId . '"')
-			->andWhere('poll_option_text ="' . $text . '"');
-
+			->where('poll_id = \'' . $pollId . '\'')
+			->andWhere('poll_option_text =\'' . $text . '\'');
+			
 		$resultFind = $queryFind->execute();
 		$row = $resultFind->fetch();
 
