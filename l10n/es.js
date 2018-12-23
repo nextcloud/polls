@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Desbloquear configuracioń",
     "Poll type" : "Tipo de votación",
     "Poll configurations" : "Configuraciones de la votación",
+    "Allow \"maybe\" vote" : "Permitir voto \"quizás\"",
     "Anonymous poll" : "Votación anónima",
     "Hide user names for admin" : "Esconder los nombres de usuario al administrador",
     "Expires" : "Expira",
