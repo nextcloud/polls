@@ -127,56 +127,8 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Transforms an event into an array that fits to the expected structure
-	* of the vue app
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @PublicPage
-	* @param object $event
-	* @return Array
-	*/
-	private function convertEvent($event) {
-
-		if ($event->getType() == 0) {
-			$pollType = 'datePoll';
-		} else {
-			$pollType = 'textPoll';
-		};
-
-		$accessType = $event->getAccess();
-		if (!strpos('|public|hidden|registered', $accessType)) {
-			$accessType = 'select';
-		}
-
-		if ($event->getExpire() === null) {
-			$expired = false;
-			$expiration = false;
-		} else {
-			$expired = time() > strtotime($event->getExpire());
-			$expiration = true;
-		}
-
-		return [
-			'id' => $event->getId(),
-			'hash' => $event->getHash(),
-			'type' => $pollType,
-			'title' => $event->getTitle(),
-			'description' => $event->getDescription(),
-			'owner' => $event->getOwner(),
-			'created' => $event->getCreated(),
-			'access' => $accessType,
-			'expiration' => $expiration,
-			'expired' => $expired,
-			'expirationDate' => $event->getExpire(),
-			'isAnonymous' => $event->getIsAnonymous(),
-			'fullAnonymous' => $event->getFullAnonymous(),
-			'allowMaybe' => $event->getAllowMaybe()
-		];
-	}
-
-	/**
 	* Check if current user is in the access list
-	* @param string $accessList
+	* @param Array $accessList
 	* @return Boolean
 	*/
 	private function checkUserAccess($accessList) {
@@ -190,7 +142,7 @@ class ApiController extends Controller {
 
 	/**
 	* Check If current user is member of a group in the access list
-	* @param string $accessList
+	* @param Array $accessList
 	* @return Boolean
 	*/
 	private function checkGroupAccess($accessList) {
@@ -210,7 +162,7 @@ class ApiController extends Controller {
 	* @return Array
 	*/
 	public function getOptions($pollId) {
-		$optionsList = Array();
+		$optionList = Array();
 		try {
 			$options = $this->optionsMapper->findByPoll($pollId);
 			foreach ($options as $optionElement) {
@@ -230,7 +182,7 @@ class ApiController extends Controller {
 	* Read all votes of a poll based on th poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
-	* @param string $pollId
+	* @param Integer $pollId
 	* @return Array
 	*/
 	public function getVotes($pollId) {
@@ -256,7 +208,7 @@ class ApiController extends Controller {
 	* Read all comments of a poll based on the poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
-	* @param string $pollId
+	* @param Integer $pollId
 	* @return Array
 	*/
 	public function getComments($pollId) {
@@ -278,19 +230,13 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read an entire poll based on it's id
+	* Read an entire poll based on poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
-	* @param string $pollId
+	* @param Integer $pollId
 	* @return Array
 	*/
 	public function getEvent($pollId) {
-
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$currentUser = '';
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		}
 
 		try {
 			$event = $this->eventMapper->find($pollId);
@@ -330,7 +276,8 @@ class ApiController extends Controller {
 			'expired' => $expired,
 			'expirationDate' => $event->getExpire(),
 			'isAnonymous' => $event->getIsAnonymous(),
-			'fullAnonymous' => $event->getFullAnonymous()
+			'fullAnonymous' => $event->getFullAnonymous(),
+			'allowMaybe' => $event->getAllowMaybe()
 		];
 	}
 
@@ -338,16 +285,10 @@ class ApiController extends Controller {
 	* Read all shares (users and groups with access) of a poll based on the poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
-	* @param string $pollId
+	* @param Integer $pollId
 	* @return Array
 	*/
 	public function getShares($pollId) {
-
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$currentUser = '';
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		}
 
 		try {
 			$poll = $this->eventMapper->find($pollId);
@@ -367,7 +308,7 @@ class ApiController extends Controller {
 
 	/**
 	* Set the access right of the current user for the poll
-	* @param string $event
+	* @param Integer $pollId
 	* @return Boolean
 	*/
 	private function grantAccessAs($pollId) {
@@ -377,7 +318,7 @@ class ApiController extends Controller {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
 		$event = $this->getEvent($pollId);
-		$accessList =$this->getShares($pollId);
+		$accessList = $this->getShares($pollId);
 
 		if ($event['owner'] === $currentUser) {
 			return 'owner';
@@ -411,6 +352,7 @@ class ApiController extends Controller {
 		} else {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
+		$data = array();
 		$data['poll'] = ['result' => 'notFound'];
 		$result = 'foundById';
 		try {
@@ -421,7 +363,7 @@ class ApiController extends Controller {
 			// hash is not found, try id in finally
 		} finally {
 			try {
-				$poll = $this->eventMapper->find($pollId);
+				$pollId = $this->eventMapper->find($pollId)->id;
 			} catch (DoesNotExistException $e) {
 				return $data;
 			}
@@ -434,7 +376,7 @@ class ApiController extends Controller {
 		} else {
 			$mode = 'edit';
 		}
-		
+
 
 		$data['poll'] = [
 			'result' => $result,
@@ -512,8 +454,6 @@ class ApiController extends Controller {
 	public function getPolls() {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
 
 		try {
