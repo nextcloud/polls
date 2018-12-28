@@ -29,22 +29,27 @@ use OCP\AppFramework\Db\Entity;
 /**
  * @method integer getPollId()
  * @method void setPollId(integer $value)
- * @method string getPollOptionText()
- * @method void setPollOptionText(string $value)
- * @method string getTimestamp()
- * @method void setTimestamp(Integer $value)
+ * @method string getUserId()
+ * @method void setUserId(string $value)
+ * @method integer getVoteOptionId()
+ * @method void setVoteOptionId(integer $value)
+ * @method string getVoteOptionText()
+ * @method void setVoteOptionText(string $value)
+ * @method string getVoteAnswer()
+ * @method void setVoteAnswer(string $value)
  */
-class Options extends Model {
+class Vote extends Model {
 	protected $pollId;
-	protected $pollOptionText;
-	protected $timestamp;
+	protected $userId;
+	protected $voteOptionId;
+	protected $voteOptionText;
+	protected $voteAnswer;
 
 	/**
 	 * Options constructor.
 	 */
 	public function __construct() {
 		$this->addType('pollId', 'integer');
-		$this->addType('pollOptionText', 'string');
-		$this->addType('timestamp', 'integer');
+		$this->addType('voteOptionId', 'integer');
 	}
 }

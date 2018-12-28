@@ -45,9 +45,9 @@
 	$avaMgr = $_['avatarManager'];
 	/** @var \OCA\Polls\Db\Event $poll */
 	$poll = $_['poll'];
-	/** @var OCA\Polls\Db\Options[] $options */
+	/** @var OCA\Polls\Db\Option[] $options */
 	$options = $_['options'];
-	/** @var OCA\Polls\Db\Votes[] $votes */
+	/** @var OCA\Polls\Db\Vote[] $votes */
 	$votes = $_['votes'];
 	/** @var \OCA\Polls\Db\Comment[] $comments */
 	$comments = $_['comments'];

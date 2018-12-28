@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,35 +24,26 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Mapper;
-use OCP\IDBConnection;
+use OCP\AppFramework\Db\Entity;
 
-class OptionsMapper extends Mapper {
-
-	/**
-	 * TextMapper constructor.
-	 * @param IDBConnection $db
-	 */
-	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_options', '\OCA\Polls\Db\Options');
-	}
-
-	/**
-	 * @param Integer $pollId
-	 * @param Integer $limit
-	 * @param Integer $offset
-	 * @return Options[]
-	 */
-	public function findByPoll($pollId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		return $this->findEntities($sql, [$pollId], $limit, $offset);
-	}
+/**
+ * @method integer getPollId()
+ * @method void setPollId(integer $value)
+ * @method string getPollOptionText()
+ * @method void setPollOptionText(string $value)
+ * @method integer getTimestamp()
+ * @method void setTimestamp(integer $value)
+ */
+class Option extends Model {
+	protected $pollId;
+	protected $pollOptionText;
+	protected $timestamp;
 
 	/**
-	 * @param int $pollId
+	 * Option constructor.
 	 */
-	public function deleteByPoll($pollId) {
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		$this->execute($sql, [$pollId]);
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+		$this->addType('timestamp', 'integer');
 	}
 }

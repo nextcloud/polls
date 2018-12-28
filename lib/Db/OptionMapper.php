@@ -3,7 +3,6 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -24,32 +23,35 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\Mapper;
+use OCP\IDBConnection;
 
-/**
- * @method integer getPollId()
- * @method void setPollId(integer $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
- * @method integer getVoteOptionId()
- * @method void setVoteOptionId(integer $value)
- * @method integer getVoteOptionText()
- * @method void setVoteOptionText(string $value)
- * @method integer getVoteAnswer()
- * @method void setVoteAnswer(string $value)
- */
-class Votes extends Model {
-	protected $pollId;
-	protected $userId;
-	protected $voteOptionId;
-	protected $voteOptionText;
-	protected $voteAnswer;
+class OptionMapper extends Mapper {
 
 	/**
-	 * Options constructor.
+	 * TextMapper constructor.
+	 * @param IDBConnection $db
 	 */
-	public function __construct() {
-		$this->addType('pollId', 'integer');
-		$this->addType('vote_type', 'integer');
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, 'polls_options', '\OCA\Polls\Db\Option');
+	}
+
+	/**
+	 * @param Integer $pollId
+	 * @param Integer $limit
+	 * @param Integer $offset
+	 * @return Option[]
+	 */
+	public function findByPoll($pollId, $limit = null, $offset = null) {
+		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		return $this->findEntities($sql, [$pollId], $limit, $offset);
+	}
+
+	/**
+	 * @param int $pollId
+	 */
+	public function deleteByPoll($pollId) {
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		$this->execute($sql, [$pollId]);
 	}
 }

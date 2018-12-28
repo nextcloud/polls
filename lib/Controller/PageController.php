@@ -29,10 +29,10 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Notification;
 use OCA\Polls\Db\NotificationMapper;
-use OCA\Polls\Db\Options;
-use OCA\Polls\Db\OptionsMapper;
-use OCA\Polls\Db\Votes;
-use OCA\Polls\Db\VotesMapper;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -61,8 +61,8 @@ class PageController extends Controller {
 	private $commentMapper;
 	private $eventMapper;
 	private $notificationMapper;
-	private $optionsMapper;
-	private $votesMapper;
+	private $optionMapper;
+	private $voteMapper;
 	private $urlGenerator;
 	private $userMgr;
 	private $avatarManager;
@@ -86,10 +86,10 @@ class PageController extends Controller {
 	 * @param IURLGenerator $urlGenerator
 	 * @param string $userId
 	 * @param CommentMapper $commentMapper
-	 * @param OptionsMapper $optionsMapper
+	 * @param OptionMapper $optionMapper
 	 * @param EventMapper $eventMapper
 	 * @param NotificationMapper $notificationMapper
-	 * @param VotesMapper $VotesMapper
+	 * @param VoteMapper $VoteMapper
 	 * @param IMailer $mailer
 	 */
 	public function __construct(
@@ -105,10 +105,10 @@ class PageController extends Controller {
 		IURLGenerator $urlGenerator,
 		$userId,
 		CommentMapper $commentMapper,
-		OptionsMapper $optionsMapper,
+		OptionMapper $optionMapper,
 		EventMapper $eventMapper,
 		NotificationMapper $notificationMapper,
-		VotesMapper $VotesMapper,
+		VoteMapper $VoteMapper,
 		IMailer $mailer
 	) {
 		parent::__construct($appName, $request);
@@ -123,10 +123,10 @@ class PageController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userId = $userId;
 		$this->commentMapper = $commentMapper;
-		$this->optionsMapper = $optionsMapper;
+		$this->optionMapper = $optionMapper;
 		$this->eventMapper = $eventMapper;
 		$this->notificationMapper = $notificationMapper;
-		$this->votesMapper = $VotesMapper;
+		$this->voteMapper = $VoteMapper;
 		$this->mailer = $mailer;
 	}
 
@@ -137,7 +137,7 @@ class PageController extends Controller {
 	public function index() {
 		$polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
 		$comments = $this->commentMapper->findDistinctByUser($this->userId);
-		$votes = $this->votesMapper->findDistinctByUser($this->userId);
+		$votes = $this->voteMapper->findDistinctByUser($this->userId);
 		$response = new TemplateResponse('polls', 'main.tmpl', [
 			'polls' => $polls,
 			'comments' => $comments,
@@ -229,9 +229,9 @@ class PageController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new TemplateResponse('polls', 'no.acc.tmpl', []);
 		}
-		$options = $this->optionsMapper->findByPoll($poll->getId());
-		$votes = $this->votesMapper->findByPoll($poll->getId());
-		$participants = $this->votesMapper->findParticipantsByPoll($poll->getId());
+		$options = $this->optionMapper->findByPoll($poll->getId());
+		$votes = $this->voteMapper->findByPoll($poll->getId());
+		$participants = $this->voteMapper->findParticipantsByPoll($poll->getId());
 		$comments = $this->commentMapper->findByPoll($poll->getId());
 
 		try {
@@ -272,8 +272,8 @@ class PageController extends Controller {
 		$poll = new Event();
 		$poll->setId($pollId);
 		$this->commentMapper->deleteByPoll($pollId);
-		$this->votesMapper->deleteByPoll($pollId);
-		$this->optionsMapper->deleteByPoll($pollId);
+		$this->voteMapper->deleteByPoll($pollId);
+		$this->optionMapper->deleteByPoll($pollId);
 		$this->eventMapper->delete($poll);
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new RedirectResponse($url);
@@ -342,15 +342,15 @@ class PageController extends Controller {
 			$options = json_decode($options);
 			$answers = json_decode($answers);
 			$count_options = count($options);
-			$this->votesMapper->deleteByPollAndUser($pollId, $userId);
+			$this->voteMapper->deleteByPollAndUser($pollId, $userId);
 
 			for ($i = 0; $i < $count_options; $i++) {
-				$vote = new Votes();
+				$vote = new Vote();
 				$vote->setPollId($pollId);
 				$vote->setUserId($userId);
 				$vote->setVoteOptionText(htmlspecialchars($options[$i]));
 				$vote->setVoteAnswer($answers[$i]);
-				$this->votesMapper->insert($vote);
+				$this->voteMapper->insert($vote);
 
 			}
 			$this->sendNotifications($pollId, $userId);

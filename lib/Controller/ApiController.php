@@ -37,10 +37,10 @@ use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Options;
-use OCA\Polls\Db\OptionsMapper;
-use OCA\Polls\Db\Votes;
-use OCA\Polls\Db\VotesMapper;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 
@@ -49,8 +49,8 @@ use OCA\Polls\Db\CommentMapper;
 class ApiController extends Controller {
 
 	private $eventMapper;
-	private $optionsMapper;
-	private $votesMapper;
+	private $optionMapper;
+	private $voteMapper;
 	private $commentMapper;
 	private $systemConfig;
 
@@ -60,8 +60,8 @@ class ApiController extends Controller {
 	 * @param IRequest $request
 	 * @param string $userId
 	 * @param EventMapper $eventMapper
-	 * @param OptionsMapper $optionsMapper
-	 * @param VotesMapper $VotesMapper
+	 * @param OptionMapper $optionMapper
+	 * @param VoteMapper $VoteMapper
 	 * @param CommentMapper $CommentMapper
 	 */
 	public function __construct(
@@ -72,8 +72,8 @@ class ApiController extends Controller {
 		IUserManager $userManager,
 		$userId,
 		EventMapper $eventMapper,
-		OptionsMapper $optionsMapper,
-		VotesMapper $VotesMapper,
+		OptionMapper $optionMapper,
+		VoteMapper $VoteMapper,
 		CommentMapper $CommentMapper
 	) {
 		parent::__construct($appName, $request);
@@ -82,8 +82,8 @@ class ApiController extends Controller {
 		$this->systemConfig = $systemConfig;
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
-		$this->optionsMapper = $optionsMapper;
-		$this->votesMapper = $VotesMapper;
+		$this->optionMapper = $optionMapper;
+		$this->voteMapper = $VoteMapper;
 		$this->commentMapper = $CommentMapper;
 	}
 
@@ -166,9 +166,9 @@ class ApiController extends Controller {
 	 */
 	public function getOptions($pollId) {
 		$optionList = array();
-		$options = $this->optionsMapper->findByPoll($pollId);
+		$options = $this->optionMapper->findByPoll($pollId);
 		foreach ($options as $optionElement) {
-			$optionList[$optionElement->getId()] = [
+			$optionList[] = [
 				'id' => $optionElement->getId(),
 				'text' => htmlspecialchars_decode($optionElement->getPollOptionText()),
 				'timestamp' => $optionElement->getTimestamp()
@@ -187,9 +187,9 @@ class ApiController extends Controller {
 	 */
 	public function getVotes($pollId) {
 		$votesList = array();
-		$votes = $this->votesMapper->findByPoll($pollId);
+		$votes = $this->voteMapper->findByPoll($pollId);
 		foreach ($votes as $voteElement) {
-			$votesList[$voteElement->getId()] = [
+			$votesList[] = [
 				'id' => $voteElement->getId(),
 				'userId' => $voteElement->getUserId(),
 				'voteOptionId' => $voteElement->getVoteOptionId(),
@@ -212,7 +212,7 @@ class ApiController extends Controller {
 		$commentsList = array();
 		$comments = $this->commentMapper->findByPoll($pollId);
 		foreach ($comments as $commentElement) {
-			$commentsList[$commentElement->getId()] = [
+			$commentsList[] = [
 				'id' => $commentElement->getId(),
 				'userId' => $commentElement->getUserId(),
 				'date' => $commentElement->getDt() . ' UTC',
@@ -377,15 +377,15 @@ class ApiController extends Controller {
 
 				$data['poll'] = [
 					'result' => $result,
-					'grantedAs' => $this->grantAccessAs($pollId),
+					'grantedAs' => $this->grantAccessAs($event['id']),
 					'mode' => $mode,
-					'comments' => $this->getComments($pollId),
-					'votes' => $this->getVotes($pollId),
-					'shares' => $this->getShares($pollId),
 					'event' => $event,
+					'comments' => $this->getComments($event['id']),
+					'votes' => $this->getVotes($event['id']),
+					'shares' => $this->getShares($event['id']),
 					'options' => [
 						'pollDates' => [],
-						'pollTexts' => $this->getOptions($pollId)
+						'pollTexts' => $this->getOptions($event['id'])
 					]
 				];
 			}
@@ -541,7 +541,7 @@ class ApiController extends Controller {
 			$newEvent->setHash($oldPoll->getHash());
 			$newEvent->setId($oldPoll->getId());
 			$this->eventMapper->update($newEvent);
-			$this->optionsMapper->deleteByPoll($newEvent->getId());
+			$this->optionMapper->deleteByPoll($newEvent->getId());
 
 		} elseif ($mode === 'create') {
 			// Create new poll
@@ -560,22 +560,22 @@ class ApiController extends Controller {
 		// Update options
 		if ($event['type'] === 'datePoll') {
 			foreach ($options['pollDates'] as $optionElement) {
-				$newOption = new Options();
+				$newOption = new Option();
 
 				$newOption->setPollId($newEvent->getId());
 				$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['timestamp']));
 				$newOption->setTimestamp($optionElement['timestamp']);
 
-				$this->optionsMapper->insert($newOption);
+				$this->optionMapper->insert($newOption);
 			}
 		} elseif ($event['type'] === "textPoll") {
 			foreach ($options['pollTexts'] as $optionElement) {
-				$newOption = new Options();
+				$newOption = new Option();
 
 				$newOption->setPollId($newEvent->getId());
 				$newOption->setpollOptionText(trim(htmlspecialchars($optionElement['text'])));
 
-				$this->optionsMapper->insert($newOption);
+				$this->optionMapper->insert($newOption);
 			}
 		}
 

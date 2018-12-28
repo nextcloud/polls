@@ -26,21 +26,21 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
 
-class VotesMapper extends Mapper {
+class VoteMapper extends Mapper {
 
 	/**
-	 * VotesMapper constructor.
+	 * VoteMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_votes', '\OCA\Polls\Db\Votes');
+		parent::__construct($db, 'polls_votes', '\OCA\Polls\Db\Vote');
 	}
 
 	/**
 	 * @param string $userId
 	 * @param int $limit
 	 * @param int $offset
-	 * @return Votes[]
+	 * @return Vote[]
 	 */
 	public function findDistinctByUser($userId, $limit = null, $offset = null) {
 		$sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
@@ -51,7 +51,7 @@ class VotesMapper extends Mapper {
 	 * @param int $pollId
 	 * @param int $limit
 	 * @param int $offset
-	 * @return Votes[]
+	 * @return Vote[]
 	 */
 	public function findByPoll($pollId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
@@ -62,7 +62,7 @@ class VotesMapper extends Mapper {
 	 * @param int $pollId
 	 * @param int $limit
 	 * @param int $offset
-	 * @return Votes[]
+	 * @return Vote[]
 	 */
 	public function findParticipantsByPoll($pollId, $limit = null, $offset = null) {
 		$sql = 'SELECT DISTINCT user_id FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
