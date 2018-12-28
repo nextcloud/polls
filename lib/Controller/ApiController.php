@@ -339,31 +339,33 @@ class ApiController extends Controller {
 
 
 	/**
-	* Read an entire poll based on it's id or hash
+	* Read an entire poll based on the poll id or hash
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @param string $id hash or id of the poll
 	* @return Array
 	*/
-	public function getPoll($pollId) {
+	public function getPoll($pollIdOrHash) {
 
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			$currentUser = '';
 		} else {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
+		
 		$data = array();
 		$data['poll'] = ['result' => 'notFound'];
 		$result = 'foundById';
+
 		try {
 			// try to find poll by hash
-			$pollId = $this->eventMapper->findByHash($pollId)->id;
+			$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
 			$result = 'foundByHash';
 		} catch (DoesNotExistException $e) {
 			// hash is not found, try id in finally
 		} finally {
 			try {
-				$pollId = $this->eventMapper->find($pollId)->id;
+				$pollId = $this->eventMapper->find($pollIdOrHash)->id;
 			} catch (DoesNotExistException $e) {
 				return $data;
 			}
