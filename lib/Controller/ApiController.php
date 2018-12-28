@@ -398,10 +398,10 @@ class ApiController extends Controller {
 
 
 	/**
-	* Read an entire poll based on it's id
+	* Read an entire poll based on it's id or hash
 	* @NoAdminRequired
 	* @NoCSRFRequired
-	* @param string $id
+	* @param string $id hash or id of the poll
 	* @return Array
 	*/
 	public function getPoll($pollId) {
@@ -427,7 +427,6 @@ class ApiController extends Controller {
 			}
 		}
 
-
 		$event = $this->getEvent($pollId);
 
 		if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
@@ -435,7 +434,7 @@ class ApiController extends Controller {
 		} else {
 			$mode = 'edit';
 		}
-		;
+		
 
 		$data['poll'] = [
 			'result' => $result,
@@ -648,7 +647,6 @@ class ApiController extends Controller {
 	 * @return String
 	 */
 	private function getVendor() {
-		// this should really be a JSON file
 		require \OC::$SERVERROOT . '/version.php';
 		/** @var string $vendor */
 		return (string) $vendor;
