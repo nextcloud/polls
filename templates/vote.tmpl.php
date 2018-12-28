@@ -234,7 +234,7 @@
 								// look what user voted for this dts
 								foreach ($others[$usr] as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer()  . ' icon-'.$vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer() . ' icon-'.$vote->getVoteAnswer();
 										break;
 									}
 									$class = 'no icon-no';
@@ -280,7 +280,7 @@
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer() . ' icon-'.$vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer();
 										break;
 									} else {
 										$class = 'unvoted';

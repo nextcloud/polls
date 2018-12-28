@@ -117,7 +117,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		} else {
 
 			$table = $schema->getTable('polls_events');
-			if(!$table->hasColumn('allow_maybe')) {
+			if (!$table->hasColumn('allow_maybe')) {
 				$table->addColumn('allow_maybe', Type::INTEGER, [
 					'notnull' => false,
 					'default' => 1,
