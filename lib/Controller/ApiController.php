@@ -351,23 +351,18 @@ class ApiController extends Controller {
 		}
 
 		$data = array();
-		$data['poll'] = ['result' => $result];
 
 		try {
-			// try to find poll by hash
-			$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
-			$result = 'foundByHash';
-
-		} catch (DoesNotExistException $e) {
-			// hash is not found, try id instead
-			try {
-				$pollId = $this->eventMapper->find($pollIdOrHash)->id;
+			if (is_numeric($pollIdOrHash)) {
+				$pollId = $this->eventMapper->find(intval($pollIdOrHash))->id;
 				$result = 'foundById';
-			} catch (DoesNotExistException $e) {
+			} else {
+				$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
+				$result = 'foundByHash';
+			}
+		} catch (DoesNotExistException $e) {
 				$pollId = 0;
 				$result = 'notFound';
-			}
-
 		} finally {
 			if ($result === 'notFound') {
 				$data['poll'] = ['result' => $result];
