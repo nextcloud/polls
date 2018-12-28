@@ -88,10 +88,11 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Transforms an array of users from the event's access list to an array
-	* of nextcloud users
+	* Transforms a string with user and group names to an array
+	* of nextcloud users and groups
 	* @NoAdminRequired
 	* @NoCSRFRequired
+	* @param string $item
 	* @return Array
 	*/
 	private function convertAccessList($item) {
@@ -122,8 +123,6 @@ class ApiController extends Controller {
 				'avatarURL' => '',
 			];
 		}
-
-
 		return($split);
 	}
 
@@ -176,7 +175,7 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Check If current user is in the access list
+	* Check if current user is in the access list
 	* @param string $accessList
 	* @return Boolean
 	*/
@@ -190,7 +189,7 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Check If current user is in the access list
+	* Check If current user is member of a group in the access list
 	* @param string $accessList
 	* @return Boolean
 	*/
@@ -204,7 +203,7 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read an entire poll based on it's id
+	* Read all options of a poll based on the poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @param string $pollId
@@ -228,7 +227,7 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read an entire poll based on it's id
+	* Read all votes of a poll based on th poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @param string $pollId
@@ -254,7 +253,7 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read an entire poll based on it's id
+	* Read all comments of a poll based on the poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @param string $pollId
@@ -336,7 +335,7 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read an entire poll based on it's id
+	* Read all shares (users and groups with access) of a poll based on the poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @param string $pollId
@@ -367,6 +366,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	* Set the access right of the current user for the poll
 	* @param string $event
 	* @return Boolean
 	*/
@@ -454,6 +454,7 @@ class ApiController extends Controller {
 	}
 
   	/**
+	* Get a list of NC users and groups
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @return DataResponse
@@ -502,11 +503,10 @@ class ApiController extends Controller {
 
 
 	/**
-	* Read an entire poll based on it's hash
+	* Get all polls
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	* @PublicPage
-	* @param string $hash
 	* @return DataResponse
 	*/
 
@@ -531,6 +531,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Write poll (create/update)
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param string $poll
@@ -640,6 +641,12 @@ class ApiController extends Controller {
 
 	}
 
+	/**
+	 * Get the endor  name of the installation ('ownCloud' or 'Nextcloud')
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return String
+	 */
 	private function getVendor() {
 		// this should really be a JSON file
 		require \OC::$SERVERROOT . '/version.php';
@@ -648,6 +655,7 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Get some system informations
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @return DataResponse
