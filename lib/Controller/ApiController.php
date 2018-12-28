@@ -362,7 +362,7 @@ class ApiController extends Controller {
 			$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
 			$result = 'foundByHash';
 		} catch (DoesNotExistException $e) {
-			// hash is not found, try id in finally
+			// hash is not found, try id instead
 		} finally {
 			try {
 				$pollId = $this->eventMapper->find($pollIdOrHash)->id;
