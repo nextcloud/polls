@@ -13,7 +13,7 @@ OC.L10N.register(
     "Please add some text to your comment before submitting it." : "Debe engadir algún texto ao seu comentario antes de envialo.",
     "An error occurred, your comment was not posted." : "Produciuse un erro, o seu comentario non se publicou.",
     "Polls" : "Enquisas",
-    "Polls App - New Activity" : "Apli de enquisas – Actividade nova",
+    "Polls App - New Activity" : "Aplicación de enquisas – Actividade nova",
     "{user} participated in the poll \"{title}\"" : "{user} participou na enquisa «{title}»",
     "Go to poll" : "Ir á enquisa",
     "just now" : "agora mesmo",
