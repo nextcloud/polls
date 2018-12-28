@@ -123,6 +123,7 @@ class ApiController extends Controller {
 				'avatarURL' => '',
 			];
 		}
+
 		return($split);
 	}
 
@@ -137,6 +138,7 @@ class ApiController extends Controller {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -151,6 +153,7 @@ class ApiController extends Controller {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -163,18 +166,15 @@ class ApiController extends Controller {
 	 */
 	public function getOptions($pollId) {
 		$optionList = array();
-		try {
-			$options = $this->optionsMapper->findByPoll($pollId);
-			foreach ($options as $optionElement) {
-				$optionList[] = [
-					'id' => $optionElement->getId(),
-					'text' => htmlspecialchars_decode($optionElement->getPollOptionText()),
-					'timestamp' => $optionElement->getTimestamp()
-				];
-			};
-		} catch (DoesNotExistException $e) {
-			return [];
-		};
+		$options = $this->optionsMapper->findByPoll($pollId);
+		foreach ($options as $optionElement) {
+			$optionList[$optionElement->getId()] = [
+				'id' => $optionElement->getId(),
+				'text' => htmlspecialchars_decode($optionElement->getPollOptionText()),
+				'timestamp' => $optionElement->getTimestamp()
+			];
+		}
+
 		return $optionList;
 	}
 
@@ -187,20 +187,17 @@ class ApiController extends Controller {
 	 */
 	public function getVotes($pollId) {
 		$votesList = array();
-		try {
-			$votes = $this->votesMapper->findByPoll($pollId);
-			foreach ($votes as $voteElement) {
-				$votesList[] = [
-					'id' => $voteElement->getId(),
-					'userId' => $voteElement->getUserId(),
-					'voteOptionId' => $voteElement->getVoteOptionId(),
-					'voteOptionText' => htmlspecialchars_decode($voteElement->getVoteOptionText()),
-					'voteAnswer' => $voteElement->getVoteAnswer()
-				];
-			};
-		} catch (DoesNotExistException $e) {
-			return [];
-		};
+		$votes = $this->votesMapper->findByPoll($pollId);
+		foreach ($votes as $voteElement) {
+			$votesList[$voteElement->getId()] = [
+				'id' => $voteElement->getId(),
+				'userId' => $voteElement->getUserId(),
+				'voteOptionId' => $voteElement->getVoteOptionId(),
+				'voteOptionText' => htmlspecialchars_decode($voteElement->getVoteOptionText()),
+				'voteAnswer' => $voteElement->getVoteAnswer()
+			];
+		}
+
 		return $votesList;
 	}
 
@@ -213,19 +210,16 @@ class ApiController extends Controller {
 	 */
 	public function getComments($pollId) {
 		$commentsList = array();
-		try {
-			$comments = $this->commentMapper->findByPoll($pollId);
-			foreach ($comments as $commentElement) {
-				$commentsList[] = [
-					'id' => $commentElement->getId(),
-					'userId' => $commentElement->getUserId(),
-					'date' => $commentElement->getDt() . ' UTC',
-					'comment' => $commentElement->getComment()
-				];
-			};
-		} catch (DoesNotExistException $e) {
-			return [];
-		};
+		$comments = $this->commentMapper->findByPoll($pollId);
+		foreach ($comments as $commentElement) {
+			$commentsList[$commentElement->getId()] = [
+				'id' => $commentElement->getId(),
+				'userId' => $commentElement->getUserId(),
+				'date' => $commentElement->getDt() . ' UTC',
+				'comment' => $commentElement->getComment()
+			];
+		}
+
 		return $commentsList;
 	}
 
@@ -242,13 +236,13 @@ class ApiController extends Controller {
 			$event = $this->eventMapper->find($pollId);
 		} catch (DoesNotExistException $e) {
 			return [];
-		};
+		}
 
 		if ($event->getType() == 0) {
 			$pollType = 'datePoll';
 		} else {
 			$pollType = 'textPoll';
-		};
+		}
 
 		$accessType = $event->getAccess();
 		if (!strpos('|public|hidden|registered', $accessType)) {
@@ -294,7 +288,7 @@ class ApiController extends Controller {
 			$poll = $this->eventMapper->find($pollId);
 		} catch (DoesNotExistException $e) {
 			return [];
-		};
+		}
 
 		if (!strpos('|public|hidden|registered', $poll->getAccess())) {
 			$accessList = explode(';', $poll->getAccess());
@@ -303,13 +297,14 @@ class ApiController extends Controller {
 		} else {
 			return [];
 		}
+
 		return $accessList;
 	}
 
 	/**
 	 * Set the access right of the current user for the poll
 	 * @param Integer $pollId
-	 * @return Boolean
+	 * @return String
 	 */
 	private function grantAccessAs($pollId) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
@@ -317,24 +312,26 @@ class ApiController extends Controller {
 		} else {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
+
 		$event = $this->getEvent($pollId);
 		$accessList = $this->getShares($pollId);
+		$grantAccessAs = 'none';
 
 		if ($event['owner'] === $currentUser) {
-			return 'owner';
+			$grantAccessAs = 'owner';
 		} elseif ($event['access'] === 'public') {
-			return 'public';
+			$grantAccessAs = 'public';
 		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser) {
-			return 'registered';
+			$grantAccessAs = 'registered';
 		} elseif ($this->checkUserAccess($accessList)) {
-			return 'userInvitation';
+			$grantAccessAs = 'userInvitation';
 		} elseif ($this->checkGroupAccess($accessList)) {
-			return 'groupInvitation';
+			$grantAccessAs = 'groupInvitation';
 		} elseif ($this->groupManager->isAdmin($currentUser)) {
-			return 'admin';
-		} else {
-			return 'none';
+			$grantAccessAs = 'admin';
 		}
+
+		return $grantAccessAs;
 	}
 
 
@@ -342,7 +339,7 @@ class ApiController extends Controller {
 	 * Read an entire poll based on the poll id or hash
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param string $id hash or id of the poll
+	 * @param String $pollIdOrHash poll id or hash
 	 * @return Array
 	 */
 	public function getPoll($pollIdOrHash) {
@@ -354,45 +351,52 @@ class ApiController extends Controller {
 		}
 
 		$data = array();
-		$data['poll'] = ['result' => 'notFound'];
-		$result = 'foundById';
+		$data['poll'] = ['result' => $result];
 
 		try {
 			// try to find poll by hash
 			$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
 			$result = 'foundByHash';
+
 		} catch (DoesNotExistException $e) {
 			// hash is not found, try id instead
-		} finally {
 			try {
 				$pollId = $this->eventMapper->find($pollIdOrHash)->id;
+				$result = 'foundById';
 			} catch (DoesNotExistException $e) {
-				return $data;
+				$pollId = 0;
+				$result = 'notFound';
 			}
+
+		} finally {
+			if ($result === 'notFound') {
+				$data['poll'] = ['result' => $result];
+			} else {
+				$event = $this->getEvent($pollId);
+
+				if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
+					$mode = 'create';
+				} else {
+					$mode = 'edit';
+				}
+
+				$data['poll'] = [
+					'result' => $result,
+					'grantedAs' => $this->grantAccessAs($pollId),
+					'mode' => $mode,
+					'comments' => $this->getComments($pollId),
+					'votes' => $this->getVotes($pollId),
+					'shares' => $this->getShares($pollId),
+					'event' => $event,
+					'options' => [
+						'pollDates' => [],
+						'pollTexts' => $this->getOptions($pollId)
+					]
+				];
+			}
+
+			return $data;
 		}
-
-		$event = $this->getEvent($pollId);
-
-		if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
-			$mode = 'create';
-		} else {
-			$mode = 'edit';
-		}
-
-		$data['poll'] = [
-			'result' => $result,
-			'grantedAs' => $this->grantAccessAs($pollId),
-			'mode' => $mode,
-			'comments' => $this->getComments($pollId),
-			'votes' => $this->getVotes($pollId),
-			'shares' => $this->getShares($pollId),
-			'event' => $event,
-			'options' => [
-				'pollDates' => [],
-				'pollTexts' => $this->getOptions($pollId)
-			]
-		];
-		return $data;
 	}
 
   	/**
@@ -408,7 +412,7 @@ class ApiController extends Controller {
 			$groups = $this->groupManager->search($query);
 			foreach ($groups as $group) {
 				if (!in_array($group->getGID(), $skipGroups)) {
-					$list[] = [
+					$list['g_' . $group->getGID()] = [
 						'id' => $group->getGID(),
 						'user' => $group->getGID(),
 						'type' => 'group',
@@ -420,11 +424,12 @@ class ApiController extends Controller {
 				}
 			}
 		}
+
 		if ($getUsers) {
 			$users = $this->userManager->searchDisplayName($query);
 			foreach ($users as $user) {
 				if (!in_array($user->getUID(), $skipUsers)) {
-					$list[] = [
+					$list['u_' . $user->getUID()] = [
 						'id' => $user->getUID(),
 						'user' => $user->getUID(),
 						'type' => 'user',
@@ -465,8 +470,8 @@ class ApiController extends Controller {
 		$eventsList = array();
 
 		foreach ($events as $eventElement) {
-			$eventsList[] = $this->getEvent($eventElement->id);
-		};
+			$eventsList[$eventElement->id] = $this->getEvent($eventElement->id);
+		}
 
 		return new DataResponse($eventsList, Http::STATUS_OK);
 	}
@@ -594,6 +599,7 @@ class ApiController extends Controller {
 	 */
 	private function getVendor() {
 		require \OC::$SERVERROOT . '/version.php';
+
 		/** @var string $vendor */
 		return (string) $vendor;
 	}
@@ -612,6 +618,7 @@ class ApiController extends Controller {
 			'vendor' => $this->getVendor(),
 			'language' => $this->systemConfig->getUserValue($userId, 'core', 'lang')
 		];
+
 		return new DataResponse($data, Http::STATUS_OK);
 	}
 }

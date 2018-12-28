@@ -37,10 +37,10 @@ class OptionsMapper extends Mapper {
 	}
 
 	/**
-	 * @param int $pollId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return Text[]
+	 * @param Integer $pollId
+	 * @param Integer $limit
+	 * @param Integer $offset
+	 * @return Options[]
 	 */
 	public function findByPoll($pollId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';

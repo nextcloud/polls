@@ -37,7 +37,7 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param int $id
+	 * @param Integer $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
@@ -48,9 +48,9 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $hash
-	 * @param int $limit
-	 * @param int $offset
+	 * @param String $hash
+	 * @param Integer $limit
+	 * @param Integer $offset
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
