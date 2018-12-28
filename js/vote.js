@@ -176,6 +176,7 @@ $(document).ready(function () {
 				form.elements.userId.value = ac.value;
 			} else {
 				alert(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'));
+				$(this).prop("disabled", false);
 				return;
 			}
 		}
