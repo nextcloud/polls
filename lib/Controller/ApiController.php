@@ -88,15 +88,15 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Transforms a string with user and group names to an array
-	* of nextcloud users and groups
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @param string $item
-	* @return Array
-	*/
+	 * Transforms a string with user and group names to an array
+	 * of nextcloud users and groups
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param string $item
+	 * @return Array
+	 */
 	private function convertAccessList($item) {
-		$split = Array();
+		$split = array();
 		if (strpos($item, 'user_') === 0) {
 			$user = $this->userManager->get(substr($item, 5));
 			$split = [
@@ -127,13 +127,13 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Check if current user is in the access list
-	* @param Array $accessList
-	* @return Boolean
-	*/
+	 * Check if current user is in the access list
+	 * @param Array $accessList
+	 * @return Boolean
+	 */
 	private function checkUserAccess($accessList) {
 		foreach ($accessList as $accessItem ) {
-			if ($accessItem['type'] === 'user' &&  $accessItem['id'] === \OC::$server->getUserSession()->getUser()->getUID()) {
+			if ($accessItem['type'] === 'user' && $accessItem['id'] === \OC::$server->getUserSession()->getUser()->getUID()) {
 				return true;
 			}
 		}
@@ -141,13 +141,13 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Check If current user is member of a group in the access list
-	* @param Array $accessList
-	* @return Boolean
-	*/
+	 * Check If current user is member of a group in the access list
+	 * @param Array $accessList
+	 * @return Boolean
+	 */
 	private function checkGroupAccess($accessList) {
 		foreach ($accessList as $accessItem ) {
-			if ($accessItem['type'] === 'group' &&  $this->groupManager->isInGroup(\OC::$server->getUserSession()->getUser()->getUID(),$accessItem['id'])) {
+			if ($accessItem['type'] === 'group' && $this->groupManager->isInGroup(\OC::$server->getUserSession()->getUser()->getUID(),$accessItem['id'])) {
 				return true;
 			}
 		}
@@ -155,14 +155,14 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read all options of a poll based on the poll id
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @param string $pollId
-	* @return Array
-	*/
+	 * Read all options of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
 	public function getOptions($pollId) {
-		$optionList = Array();
+		$optionList = array();
 		try {
 			$options = $this->optionsMapper->findByPoll($pollId);
 			foreach ($options as $optionElement) {
@@ -179,14 +179,14 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read all votes of a poll based on th poll id
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @param Integer $pollId
-	* @return Array
-	*/
+	 * Read all votes of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
 	public function getVotes($pollId) {
-		$votesList = Array();
+		$votesList = array();
 		try {
 			$votes = $this->votesMapper->findByPoll($pollId);
 			foreach ($votes as $voteElement) {
@@ -205,14 +205,14 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read all comments of a poll based on the poll id
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @param Integer $pollId
-	* @return Array
-	*/
+	 * Read all comments of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
 	public function getComments($pollId) {
-		$commentsList = Array();
+		$commentsList = array();
 		try {
 			$comments = $this->commentMapper->findByPoll($pollId);
 			foreach ($comments as $commentElement) {
@@ -230,12 +230,12 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read an entire poll based on poll id
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @param Integer $pollId
-	* @return Array
-	*/
+	 * Read an entire poll based on poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
 	public function getEvent($pollId) {
 
 		try {
@@ -282,12 +282,12 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Read all shares (users and groups with access) of a poll based on the poll id
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @param Integer $pollId
-	* @return Array
-	*/
+	 * Read all shares (users and groups with access) of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
 	public function getShares($pollId) {
 
 		try {
@@ -297,9 +297,9 @@ class ApiController extends Controller {
 		};
 
 		if (!strpos('|public|hidden|registered', $poll->getAccess())) {
-			$accessList = explode(';',$poll->getAccess());
+			$accessList = explode(';', $poll->getAccess());
 			$accessList = array_filter($accessList);
-			$accessList = array_map(Array($this,'convertAccessList'), $accessList);
+			$accessList = array_map(array($this, 'convertAccessList'), $accessList);
 		} else {
 			return [];
 		}
@@ -307,10 +307,10 @@ class ApiController extends Controller {
 	}
 
 	/**
-	* Set the access right of the current user for the poll
-	* @param Integer $pollId
-	* @return Boolean
-	*/
+	 * Set the access right of the current user for the poll
+	 * @param Integer $pollId
+	 * @return Boolean
+	 */
 	private function grantAccessAs($pollId) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			$currentUser = '';
@@ -324,7 +324,7 @@ class ApiController extends Controller {
 			return 'owner';
 		} elseif ($event['access'] === 'public') {
 			return 'public';
-		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser){
+		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return 'registered';
 		} elseif ($this->checkUserAccess($accessList)) {
 			return 'userInvitation';
@@ -339,12 +339,12 @@ class ApiController extends Controller {
 
 
 	/**
-	* Read an entire poll based on the poll id or hash
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @param string $id hash or id of the poll
-	* @return Array
-	*/
+	 * Read an entire poll based on the poll id or hash
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param string $id hash or id of the poll
+	 * @return Array
+	 */
 	public function getPoll($pollIdOrHash) {
 
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
@@ -352,7 +352,7 @@ class ApiController extends Controller {
 		} else {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
-		
+
 		$data = array();
 		$data['poll'] = ['result' => 'notFound'];
 		$result = 'foundById';
@@ -379,7 +379,6 @@ class ApiController extends Controller {
 			$mode = 'edit';
 		}
 
-
 		$data['poll'] = [
 			'result' => $result,
 			'grantedAs' => $this->grantAccessAs($pollId),
@@ -397,11 +396,11 @@ class ApiController extends Controller {
 	}
 
   	/**
-	* Get a list of NC users and groups
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @return DataResponse
-	*/
+	 * Get a list of NC users and groups
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return DataResponse
+	 */
 	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
 		$data = array();
@@ -444,14 +443,13 @@ class ApiController extends Controller {
 		return new DataResponse($data, Http::STATUS_OK);
 	}
 
-
 	/**
-	* Get all polls
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @PublicPage
-	* @return DataResponse
-	*/
+	 * Get all polls
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @return DataResponse
+	 */
 
 	public function getPolls() {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
@@ -463,7 +461,9 @@ class ApiController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-		$eventsList = Array();
+
+		$eventsList = array();
+
 		foreach ($events as $eventElement) {
 			$eventsList[] = $this->getEvent($eventElement->id);
 		};
@@ -475,7 +475,10 @@ class ApiController extends Controller {
 	 * Write poll (create/update)
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param string $poll
+	 * @param Array $event
+	 * @param Array $options
+	 * @param Array  $shares
+	 * @param String $mode
 	 * @return DataResponse
 	 */
 	public function writePoll($event, $options, $shares, $mode) {
@@ -575,6 +578,7 @@ class ApiController extends Controller {
 				$this->optionsMapper->insert($newOption);
 			}
 		}
+
 		return new DataResponse(array(
 			'id' => $newEvent->getId(),
 			'hash' => $newEvent->getHash()
