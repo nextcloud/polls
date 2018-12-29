@@ -388,7 +388,6 @@ class ApiController extends Controller {
 				]
 			];
 		} catch (DoesNotExistException $e) {
-				$pollId = 0;
 				$data['poll'] = ['result' => 'notFound'];
 		} finally {
 			return $data;
