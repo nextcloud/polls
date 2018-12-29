@@ -230,47 +230,53 @@ class ApiController extends Controller {
 	 */
 	public function getEvent($pollId) {
 
+		$data = array();
+
 		try {
 			$event = $this->eventMapper->find($pollId);
+
+			if ($event->getType() == 0) {
+				$pollType = 'datePoll';
+			} else {
+				$pollType = 'textPoll';
+			}
+
+			$accessType = $event->getAccess();
+			if (!strpos('|public|hidden|registered', $accessType)) {
+				$accessType = 'select';
+			}
+
+			if ($event->getExpire() === null) {
+				$expired = false;
+				$expiration = false;
+			} else {
+				$expired = time() > strtotime($event->getExpire());
+				$expiration = true;
+			}
+
+			$data = [
+				'id' => $event->getId(),
+				'hash' => $event->getHash(),
+				'type' => $pollType,
+				'title' => $event->getTitle(),
+				'description' => $event->getDescription(),
+				'owner' => $event->getOwner(),
+				'created' => $event->getCreated(),
+				'access' => $accessType,
+				'expiration' => $expiration,
+				'expired' => $expired,
+				'expirationDate' => $event->getExpire(),
+				'isAnonymous' => $event->getIsAnonymous(),
+				'fullAnonymous' => $event->getFullAnonymous(),
+				'allowMaybe' => $event->getAllowMaybe()
+			];
+
 		} catch (DoesNotExistException $e) {
-			return [];
+			// return silently
+		} finally {
+			return $data;
 		}
 
-		if ($event->getType() == 0) {
-			$pollType = 'datePoll';
-		} else {
-			$pollType = 'textPoll';
-		}
-
-		$accessType = $event->getAccess();
-		if (!strpos('|public|hidden|registered', $accessType)) {
-			$accessType = 'select';
-		}
-
-		if ($event->getExpire() === null) {
-			$expired = false;
-			$expiration = false;
-		} else {
-			$expired = time() > strtotime($event->getExpire());
-			$expiration = true;
-		}
-
-		return [
-			'id' => $event->getId(),
-			'hash' => $event->getHash(),
-			'type' => $pollType,
-			'title' => $event->getTitle(),
-			'description' => $event->getDescription(),
-			'owner' => $event->getOwner(),
-			'created' => $event->getCreated(),
-			'access' => $accessType,
-			'expiration' => $expiration,
-			'expired' => $expired,
-			'expirationDate' => $event->getExpire(),
-			'isAnonymous' => $event->getIsAnonymous(),
-			'fullAnonymous' => $event->getFullAnonymous(),
-			'allowMaybe' => $event->getAllowMaybe()
-		];
 	}
 
 	/**
@@ -282,21 +288,21 @@ class ApiController extends Controller {
 	 */
 	public function getShares($pollId) {
 
+		$accessList = array();
+
 		try {
 			$poll = $this->eventMapper->find($pollId);
+			if (!strpos('|public|hidden|registered', $poll->getAccess())) {
+				$accessList = explode(';', $poll->getAccess());
+				$accessList = array_filter($accessList);
+				$accessList = array_map(array($this, 'convertAccessList'), $accessList);
+			}
 		} catch (DoesNotExistException $e) {
-			return [];
+			// return silently
+		} finally {
+			return $accessList;
 		}
 
-		if (!strpos('|public|hidden|registered', $poll->getAccess())) {
-			$accessList = explode(';', $poll->getAccess());
-			$accessList = array_filter($accessList);
-			$accessList = array_map(array($this, 'convertAccessList'), $accessList);
-		} else {
-			return [];
-		}
-
-		return $accessList;
 	}
 
 	/**
@@ -351,6 +357,7 @@ class ApiController extends Controller {
 		$data = array();
 
 		try {
+
 			if (is_numeric($pollIdOrHash)) {
 				$pollId = $this->eventMapper->find(intval($pollIdOrHash))->id;
 				$result = 'foundById';
@@ -358,36 +365,32 @@ class ApiController extends Controller {
 				$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
 				$result = 'foundByHash';
 			}
-		} catch (DoesNotExistException $e) {
-				$pollId = 0;
-				$result = 'notFound';
-		} finally {
-			if ($result === 'notFound') {
-				$data['poll'] = ['result' => $result];
+
+			$event = $this->getEvent($pollId);
+
+			if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
+				$mode = 'create';
 			} else {
-				$event = $this->getEvent($pollId);
-
-				if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
-					$mode = 'create';
-				} else {
-					$mode = 'edit';
-				}
-
-				$data['poll'] = [
-					'result' => $result,
-					'grantedAs' => $this->grantAccessAs($event['id']),
-					'mode' => $mode,
-					'event' => $event,
-					'comments' => $this->getComments($event['id']),
-					'votes' => $this->getVotes($event['id']),
-					'shares' => $this->getShares($event['id']),
-					'options' => [
-						'pollDates' => [],
-						'pollTexts' => $this->getOptions($event['id'])
-					]
-				];
+				$mode = 'edit';
 			}
 
+			$data['poll'] = [
+				'result' => $result,
+				'grantedAs' => $this->grantAccessAs($event['id']),
+				'mode' => $mode,
+				'event' => $event,
+				'comments' => $this->getComments($event['id']),
+				'votes' => $this->getVotes($event['id']),
+				'shares' => $this->getShares($event['id']),
+				'options' => [
+					'pollDates' => [],
+					'pollTexts' => $this->getOptions($event['id'])
+				]
+			];
+		} catch (DoesNotExistException $e) {
+				$pollId = 0;
+				$data['poll'] = ['result' => 'notFound'];
+		} finally {
 			return $data;
 		}
 	}
