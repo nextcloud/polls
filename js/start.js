@@ -1,4 +1,4 @@
-/* global clipboard, navigator */
+/* global Clipboard, navigator, deletePoll */
 $(document).ready(function () {
 	var clipboard = new Clipboard('.copy-link');
 	clipboard.on('success', function (e) {
@@ -18,7 +18,7 @@ $(document).ready(function () {
 			}
 		}, 3000);
 	});
-	
+
 	clipboard.on('error', function (e) {
 		var $input = $(e.trigger);
 		var actionMsg = '';

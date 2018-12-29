@@ -45,9 +45,9 @@
 	$avaMgr = $_['avatarManager'];
 	/** @var \OCA\Polls\Db\Event $poll */
 	$poll = $_['poll'];
-	/** @var OCA\Polls\Db\Options[] $options */
+	/** @var OCA\Polls\Db\Option[] $options */
 	$options = $_['options'];
-	/** @var OCA\Polls\Db\Votes[] $votes */
+	/** @var OCA\Polls\Db\Vote[] $votes */
 	$votes = $_['votes'];
 	/** @var \OCA\Polls\Db\Comment[] $comments */
 	$comments = $_['comments'];
@@ -234,7 +234,7 @@
 								// look what user voted for this dts
 								foreach ($others[$usr] as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer()  . ' icon-'.$vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer() . ' icon-'.$vote->getVoteAnswer();
 										break;
 									}
 									$class = 'no icon-no';
@@ -280,7 +280,7 @@
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer() . ' icon-'.$vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer();
 										break;
 									} else {
 										$class = 'unvoted';

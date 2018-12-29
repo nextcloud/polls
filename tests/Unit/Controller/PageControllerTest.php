@@ -74,7 +74,7 @@ class PageControllerTest extends UnitTestCase {
 		$commentMapper = $this->getMockBuilder('OCA\Polls\Db\CommentMapper')
 			->disableOriginalConstructor()
 			->getMock();
-		$optionsMapper = $this->getMockBuilder('OCA\Polls\Db\OptionsMapper')
+		$optionMapper = $this->getMockBuilder('OCA\Polls\Db\OptionMapper')
 			->disableOriginalConstructor()
 			->getMock();
 		$eventMapper = $this->getMockBuilder('OCA\Polls\Db\EventMapper')
@@ -83,7 +83,7 @@ class PageControllerTest extends UnitTestCase {
 		$notificationMapper = $this->getMockBuilder('OCA\Polls\Db\NotificationMapper')
 			->disableOriginalConstructor()
 			->getMock();
-		$votesMapper = $this->getMockBuilder('OCA\Polls\Db\VotesMapper')
+		$voteMapper = $this->getMockBuilder('OCA\Polls\Db\VoteMapper')
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -100,10 +100,10 @@ class PageControllerTest extends UnitTestCase {
 			$urlGenerator,
 			$this->userId,
 			$commentMapper,
-			$optionsMapper,
+			$optionMapper,
 			$eventMapper,
 			$notificationMapper,
-			$votesMapper,
+			$voteMapper,
 			$mailer
 		);
 	}

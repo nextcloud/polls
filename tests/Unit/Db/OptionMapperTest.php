@@ -25,18 +25,18 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Options;
-use OCA\Polls\Db\OptionsMapper;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class OptionsMapperTest extends UnitTestCase {
+class OptionMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var OptionsMapper */
-	private $optionsMapper;
+	/** @var OptionMapper */
+	private $optionMapper;
 	/** @var EventMapper */
 	private $eventMapper;
 
@@ -46,52 +46,52 @@ class OptionsMapperTest extends UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->optionsMapper = new OptionsMapper($this->con);
+		$this->optionMapper = new OptionMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 *
-	 * @return Options
+	 * @return Option
 	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 
-		/** @var Options $options */
-		$options = $this->fm->instance('OCA\Polls\Db\Options');
-		$options->setPollId($event->getId());
-		$this->assertInstanceOf(Options::class, $this->optionsMapper->insert($options));
+		/** @var Option $option */
+		$option = $this->fm->instance('OCA\Polls\Db\Option');
+		$option->setPollId($event->getId());
+		$this->assertInstanceOf(Option::class, $this->optionMapper->insert($option));
 
-		return $options;
+		return $option;
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Options $options
-	 * @return Options
+	 * @param Option $option
+	 * @return Option
 	 */
-	public function testUpdate(Options $options) {
-		$newPollOptionText = Faker::paragraph();
-		$options->setPollOptionText($newPollOptionText());
-		$this->optionsMapper->update($options);
+	public function testUpdate(Option $option) {
+		$newPollOptionText = Faker::text(255);
+		$option->setPollOptionText($newPollOptionText());
+		$this->optionMapper->update($option);
 
-		return $options;
+		return $option;
 	}
-	
+
 	/**
 	 * Delete the previously created entries from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Options $options
+	 * @param Option $option
 	 */
-	public function testDelete(Options $options) {
-		$event = $this->eventMapper->find($options->getPollId());
-		$this->optionsMapper->delete($options);
+	public function testDelete(Option $option) {
+		$event = $this->eventMapper->find($option->getPollId());
+		$this->optionMapper->delete($option);
 		$this->eventMapper->delete($event);
 	}
 }

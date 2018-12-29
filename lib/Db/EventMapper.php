@@ -37,7 +37,7 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param int $id
+	 * @param Integer $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
@@ -48,9 +48,9 @@ class EventMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $hash
-	 * @param int $limit
-	 * @param int $offset
+	 * @param String $hash
+	 * @param Integer $limit
+	 * @param Integer $offset
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
@@ -69,6 +69,16 @@ class EventMapper extends Mapper {
 	public function findAllForUser($userId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE owner = ?';
 		return $this->findEntities($sql, [$userId], $limit, $offset);
+	}
+
+	/**
+	 * @param int $limit
+	 * @param int $offset
+	 * @return Event[]
+	 */
+	public function findAll($limit = null, $offset = null) {
+		$sql = 'SELECT * FROM ' . $this->getTableName();
+		return $this->findEntities($sql, ['*'], $limit, $offset);
 	}
 
 	/**

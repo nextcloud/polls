@@ -25,18 +25,18 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Votes;
-use OCA\Polls\Db\VotesMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class VotesMapperTest extends UnitTestCase {
+class VoteMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var VotesMapper */
-	private $votesMapper;
+	/** @var VoteMapper */
+	private $voteMapper;
 	/** @var EventMapper */
 	private $eventMapper;
 
@@ -46,54 +46,54 @@ class VotesMapperTest extends UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->votesMapper = new VotesMapper($this->con);
+		$this->voteMapper = new VoteMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 *
-	 * @return Votes
+	 * @return Vote
 	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 
-		
-		/** @var Votes $votes */
-		$votes = $this->fm->instance('OCA\Polls\Db\Votes');
-		$votes->setPollId($event->getId());
-		$votes->setVoteOptionId(1);
-		$this->assertInstanceOf(Votes::class, $this->votesMapper->insert($votes));
 
-		return $votes;
+		/** @var Vote $vote */
+		$vote = $this->fm->instance('OCA\Polls\Db\Vote');
+		$vote->setPollId($event->getId());
+		$vote->setVoteOptionId(1);
+		$this->assertInstanceOf(Vote::class, $this->voteMapper->insert($vote));
+
+		return $vote;
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Votes $votes
-	 * @return Votes
+	 * @param Vote $vote
+	 * @return Vote
 	 */
-	public function testUpdate(Votes $votes) {
+	public function testUpdate(Vote $vote) {
 		$newVoteOptionText = Faker::date('Y-m-d H:i:s');
-		$votes->setVoteOptionText($newVoteOptionText());
-		$this->votesMapper->update($votes);
+		$vote->setVoteOptionText($newVoteOptionText());
+		$this->voteMapper->update($vote);
 
-		return $votes;
+		return $vote;
 	}
 
 	/**
 	 * Delete the previously created entries from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Votes $votes
+	 * @param Vote $vote
 	 */
-	public function testDelete(Votes $votes) {
-		$event = $this->eventMapper->find($votes->getPollId());
-		$this->votesMapper->delete($votes);
+	public function testDelete(Vote $vote) {
+		$event = $this->eventMapper->find($vote->getPollId());
+		$this->voteMapper->delete($vote);
 		$this->eventMapper->delete($event);
 	}
 }

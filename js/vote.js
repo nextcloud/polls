@@ -1,4 +1,4 @@
-/* global Clipboard, Handlebars, navigator */
+/* global Clipboard, Handlebars, navigator, deletePoll  */
 
 var newUserOptions = [];
 var newUserAnswers = [];

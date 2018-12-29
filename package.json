@@ -28,7 +28,7 @@
     "nextcloud-vue": "^0.4.5",
     "v-tooltip": "^2.0.0-rc.33",
     "velocity-animate": "^1.5.1",
-    "vue": "^2.5.16",
+    "vue": "^2.5.20",
     "vue-click-outside": "^1.0.7",
     "vue-js-modal": "^1.3.26"
   },
@@ -45,10 +45,10 @@
     "cross-env": "^5.2.0",
     "css-loader": "^0.28.8",
     "file-loader": "^1.1.6",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "vue-loader": "^13.7.3",
-    "vue-template-compiler": "^2.5.17",
+    "vue-template-compiler": "^2.5.20",
     "webpack": "^3.12.0"
   }
 }
