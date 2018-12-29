@@ -31,7 +31,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUser;
-use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
@@ -52,12 +51,13 @@ class ApiController extends Controller {
 	private $optionMapper;
 	private $voteMapper;
 	private $commentMapper;
-	private $systemConfig;
 
 	/**
 	 * PageController constructor.
 	 * @param string $appName
+	 * @param IGroupManager $groupManager
 	 * @param IRequest $request
+	 * @param IUserManager $userManager
 	 * @param string $userId
 	 * @param EventMapper $eventMapper
 	 * @param OptionMapper $optionMapper
@@ -66,7 +66,6 @@ class ApiController extends Controller {
 	 */
 	public function __construct(
 		$appName,
-		IConfig $systemConfig,
 		IGroupManager $groupManager,
 		IRequest $request,
 		IUserManager $userManager,
@@ -79,7 +78,6 @@ class ApiController extends Controller {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->groupManager = $groupManager;
-		$this->systemConfig = $systemConfig;
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
 		$this->optionMapper = $optionMapper;
@@ -584,36 +582,5 @@ class ApiController extends Controller {
 			'hash' => $newEvent->getHash()
 		), Http::STATUS_OK);
 
-	}
-
-	/**
-	 * Get the endor  name of the installation ('ownCloud' or 'Nextcloud')
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @return String
-	 */
-	private function getVendor() {
-		require \OC::$SERVERROOT . '/version.php';
-
-		/** @var string $vendor */
-		return (string) $vendor;
-	}
-
-	/**
-	 * Get some system informations
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @return DataResponse
-	 */
-	public function getSystem() {
-		$userId = \OC::$server->getUserSession()->getUser()->getUID();
-		$data['system'] = [
-			'versionArray' => \OCP\Util::getVersion(),
-			'version' => implode('.', \OCP\Util::getVersion()),
-			'vendor' => $this->getVendor(),
-			'language' => $this->systemConfig->getUserValue($userId, 'core', 'lang')
-		];
-
-		return new DataResponse($data, Http::STATUS_OK);
 	}
 }
