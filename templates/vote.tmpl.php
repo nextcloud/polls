@@ -253,7 +253,7 @@
 							print_unescaped('</li>');
 						}
 					}
-					
+
 					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
 						print_unescaped('<li class="flex-row user current-user">');
@@ -287,7 +287,7 @@
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = 'lala' . $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer() . ' ' . $vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer();
 										break;
 									} else {
 										$class = 'unvoted';
