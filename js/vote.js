@@ -272,7 +272,7 @@ $('#commentBox').keyup(function () {
 	}
 });
 
-$(document).on('click', '.toggle-cell, .poll-cell.active', function () {
+$(document).on('mousedown', '.toggle-cell, .poll-cell.active', function () {
 	valuesChanged = true;
 	var $nextClass = '';
 	var $toggleAllClasses = '';

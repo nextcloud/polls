@@ -179,6 +179,12 @@
 
 				<ul class="flex-column table-body">
 					<?php
+
+
+
+
+
+
 					if ($votes !== null) {
 						//group by user
 						$others = array();
@@ -247,6 +253,7 @@
 							print_unescaped('</li>');
 						}
 					}
+					
 					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
 						print_unescaped('<li class="flex-row user current-user">');
@@ -270,7 +277,7 @@
 						print_unescaped('		<div class="toggle"></div>');
 						print_unescaped('	</div>');
 						print_unescaped('</div>');
-						print_unescaped('<ul class="flex-row">');
+						print_unescaped('<div class="flex-row">');
 
 						$i_tot = 0;
 						foreach ($options as $optionElement) {
@@ -280,7 +287,7 @@
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer();
+										$class = 'lala' . $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer() . ' ' . $vote->getVoteAnswer();
 										break;
 									} else {
 										$class = 'unvoted';
@@ -293,11 +300,12 @@
 								$updatedPoll = true;
 							}
 
-							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></li>');
-
+							print_unescaped('<div class="poll-cell">');
+ 							print_unescaped('    <div id="voteid_' . $optionElement->getId() . '" class="flex-column poll-cell active  ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></div>');
+ 							print_unescaped('</div>');
 							$i_tot++;
 						}
-						print_unescaped('</ul>');
+						print_unescaped('</div>');
 						print_unescaped('</li>');
 					}
 					?>
