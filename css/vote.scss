@@ -15,6 +15,20 @@ $header-padding: $user-column-width + $table-padding;
 #app-content {
 	// width: 100%;
 	overflow-x: hidden;
+	overflow-y: auto;
+}
+.actions {
+	width: 44px;
+	position: relative;
+	overflow: initial;
+}
+
+.icon-more {
+	right: 14px;
+	opacity: 0.3;
+	cursor: pointer;
+	height: 44px;
+	width: 44px;
 }
 
 .user {
@@ -186,9 +200,9 @@ $header-padding: $user-column-width + $table-padding;
 		background-size: 20px;
 		margin: auto !important;
 		background-color: var(--color-main-background);
-		color: var(--color-primary);
+		// color: var(--color-primary);
 		flex-grow: 0 !important;
-		box-shadow: 2px 2px 2px gray;
+		// box-shadow: 2px 2px 2px gray;
 		&.icon-no {
 			background-image: initial;
 		}

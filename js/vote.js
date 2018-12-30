@@ -140,6 +140,9 @@ $(document).ready(function () {
 			hideAvatars = true;
 		}
 	}
+	$('.popupmenu').each(function () {
+		OC.registerMenu($('#expand_' + $(this).attr('value')), $('#expanddiv_' + $(this).attr('value')) );
+	});
 
 	$('.delete-poll').click(function () {
 		deletePoll(this);

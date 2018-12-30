@@ -269,8 +269,41 @@
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
+							?>
+						<div class="actions">
+							<div class="icon-more popupmenu" value="1" id="expand_1"></div>
+							<div class="popovermenu bubble menu hidden" id="expanddiv_1">
+								<ul>
+									<li>
+										<a class="menuitem alt-tooltip copy-link action permanent" href="#">
+											<span class="icon-yes"></span>
+											<span><?php p($l->t('Say yes to all')); ?></span>
+										</a>
+									</li>
+									<li>
+										<a class="menuitem alt-tooltip copy-link action permanent" href="#">
+											<span class="icon-no"></span>
+											<span><?php p($l->t('Reset all (say no)')); ?></span>
+										</a>
+									</li>
+<?php if ($maybe === 'maybeallowed') :?>
+									<li>
+										<a class="menuitem alt-tooltip copy-link action permanent" href="#">
+											<span class="icon-maybe"></span>
+											<span><?php p($l->t('Say maybe to all')); ?></span>
+										</a>
+									</li>
+<?php endif; ?>
+								</ul>
+							</div>
+						</div>
+
+
+
+
+							<?php
 						if ($maybe === 'maybeallowed') {
-						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
+							print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
 						} else {
 							print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip yes" title="' . $toggleTooltip . '">');
 						}
