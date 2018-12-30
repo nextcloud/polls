@@ -47,7 +47,7 @@
     "file-loader": "^1.1.6",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "vue-loader": "^13.7.3",
+    "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.20",
     "webpack": "^3.12.0"
   }
