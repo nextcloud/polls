@@ -320,7 +320,7 @@
 							if (isset($userVoted)) {
 								foreach ($userVoted as $vote) {
 									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = 'lala' . $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer() . ' ' . $vote->getVoteAnswer();
+										$class = $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer();
 										break;
 									} else {
 										$class = 'unvoted';
