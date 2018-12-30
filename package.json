@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/nextcloud/polls#readme",
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "md5": "^2.2.1",
     "moment": "^2.22.1",
