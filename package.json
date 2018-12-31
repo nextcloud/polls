@@ -43,7 +43,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^5.2.0",
-    "css-loader": "^0.28.8",
+    "css-loader": "^2.1.0",
     "file-loader": "^2.0.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
