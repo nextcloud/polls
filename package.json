@@ -44,7 +44,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^5.2.0",
     "css-loader": "^0.28.8",
-    "file-loader": "^2.0.0",
+    "file-loader": "^3.0.1",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "vue-loader": "^15.4.2",
