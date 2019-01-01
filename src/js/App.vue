@@ -22,7 +22,7 @@
 
 <template>
 	<div id="create-poll">
-		<controls :index-page="indexPage" :intitle="title">
+		<Controls :index-page="indexPage" :intitle="title">
 			<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
 				<span>{{ saveButtonTitle }}</span>
 				<span v-if="writingPoll" class="icon-loading-small" />
@@ -30,15 +30,16 @@
 			<button class="button" @click="switchSidebar">
 				<span class="symbol icon-settings" />
 			</button>
-		</controls>
+		</Controls>
 
 		<div class="workbench">
 			<div>
 				<h2>{{ t('polls', 'Poll description') }}</h2>
 
 				<label>{{ t('polls', 'Title') }}</label>
-				<input id="pollTitle" :class="{ error: titleEmpty }" v-model="poll.event.title"
-					type="text">
+				<input id="pollTitle" v-model="poll.event.title" :class="{ error: titleEmpty }"
+					type="text"
+				>
 
 				<label>{{ t('polls', 'Description') }}</label>
 				<textarea id="pollDesc" v-model="poll.event.description" style="resize: vertical; 	width: 100%;" />
@@ -49,135 +50,185 @@
 
 				<div v-if="poll.mode == 'create'">
 					<input id="datePoll" v-model="poll.event.type" :disabled="protect"
-						value="datePoll" type="radio" class="radio">
-					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+						value="datePoll" type="radio" class="radio"
+					>
+					<label for="datePoll">
+						{{ t('polls', 'Event schedule') }}
+					</label>
 					<input id="textPoll" v-model="poll.event.type" :disabled="protect"
-						value="textPoll" type="radio" class="radio">
-					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
+						value="textPoll" type="radio" class="radio"
+					>
+					<label for="textPoll">
+						{{ t('polls', 'Text based') }}
+					</label>
 				</div>
 
-				<date-picker v-show="poll.event.type === 'datePoll'"
-					v-bind="optionDatePicker"
+				<DatePicker v-show="poll.event.type === 'datePoll'"
 					v-model="newPollDate"
+					v-bind="optionDatePicker"
 					style="width:100%"
 					confirm
-					@change="addNewPollDate" />
+					@change="addNewPollDate"
+				/>
 
-				<transition-group
+				<TransitionGroup
 					v-show="poll.event.type === 'datePoll'"
 					id="date-poll-list"
 					name="list"
 					tag="ul"
-					class="poll-table">
+					class="poll-table"
+				>
 					<li
 						is="date-poll-item"
 						v-for="(pollDate, index) in poll.options.pollDates"
-						:option="pollDate"
 						:key="pollDate.id"
-						@remove="poll.options.pollDates.splice(index, 1)" />
-				</transition-group>
+						:option="pollDate"
+						@remove="poll.options.pollDates.splice(index, 1)"
+					/>
+				</TransitionGroup>
 
 				<div v-show="poll.event.type === 'textPoll'" id="poll-item-selector-text">
 					<input v-model="newPollText" :placeholder=" t('polls', 'Add option') " @keyup.enter="addNewPollText()">
 				</div>
 
-				<transition-group
+				<TransitionGroup
 					v-show="poll.event.type === 'textPoll'"
 					id="text-poll-list"
 					name="list"
 					tag="ul"
-					class="poll-table">
+					class="poll-table"
+				>
 					<li
 						is="text-poll-item"
 						v-for="(pollText, index) in poll.options.pollTexts"
-						:option="pollText"
 						:key="pollText.id"
-						@remove="poll.options.pollTexts.splice(index, 1)" />
-				</transition-group>
-
+						:option="pollText"
+						@remove="poll.options.pollTexts.splice(index, 1)"
+					/>
+				</TransitionGroup>
 			</div>
 		</div>
 
-		<side-bar v-if="sidebar">
-			<div v-if="adminMode" class="warning">{{ t('polls', 'You are editing in admin mode') }}</div>
-			<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
+		<SideBar v-if="sidebar">
+			<div v-if="adminMode" class="warning">
+				{{ t('polls', 'You are editing in admin mode') }}
+			</div>
+			<UserDiv :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
 
 			<ul class="tabHeaders">
 				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
-					<a href="#">{{ t('polls', 'Configuration') }}</a>
+					<a href="#">
+						{{ t('polls', 'Configuration') }}
+					</a>
 				</li>
 			</ul>
 
 			<div v-if="protect">
 				<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway.') }}</span>
-				<button @click="protect=false"> {{ t('polls', 'Unlock configuration ') }} </button>
+				<button @click="protect=false">
+					{{ t('polls', 'Unlock configuration ') }}
+				</button>
 			</div>
 			<div id="configurationsTabView" class="tab">
-
 				<div v-if="poll.mode =='edit'" class="configBox">
-					<label class="title icon-checkmark">{{ t('polls', 'Poll type') }}</label>
+					<label class="title icon-checkmark">
+						{{ t('polls', 'Poll type') }}
+					</label>
 					<input id="datePoll" v-model="poll.event.type" :disabled="protect"
-						value="datePoll" type="radio" class="radio">
-					<label for="datePoll">{{ t('polls', 'Event schedule') }}</label>
+						value="datePoll" type="radio" class="radio"
+					>
+					<label for="datePoll">
+						{{ t('polls', 'Event schedule') }}
+					</label>
 					<input id="textPoll" v-model="poll.event.type" :disabled="protect"
-						value="textPoll" type="radio" class="radio">
-					<label for="textPoll">{{ t('polls', 'Text based') }}</label>
+						value="textPoll" type="radio" class="radio"
+					>
+					<label for="textPoll">
+						{{ t('polls', 'Text based') }}
+					</label>
 				</div>
 
 				<div class="configBox ">
-					<label class="title icon-settings">{{ t('polls', 'Poll configurations') }}</label>
+					<label class="title icon-settings">
+						{{ t('polls', 'Poll configurations') }}
+					</label>
 
-					<input id="allowMaybe" :disabled="protect" v-model="poll.event.allowMaybe"
-						type="checkbox" class="checkbox">
-					<label for="allowMaybe">{{ t('polls', 'Allow "maybe" vote') }}</label>
+					<input id="allowMaybe" v-model="poll.event.allowMaybe" :disabled="protect"
+						type="checkbox" class="checkbox"
+					>
+					<label for="allowMaybe">
+						{{ t('polls', 'Allow "maybe" vote') }}
+					</label>
 
-					<input id="anonymous" :disabled="protect" v-model="poll.event.isAnonymous"
-						type="checkbox" class="checkbox">
-					<label for="anonymous">{{ t('polls', 'Anonymous poll') }}</label>
+					<input id="anonymous" v-model="poll.event.isAnonymous" :disabled="protect"
+						type="checkbox" class="checkbox"
+					>
+					<label for="anonymous">
+						{{ t('polls', 'Anonymous poll') }}
+					</label>
 
-					<input v-show="poll.event.isAnonymous" id="trueAnonymous" :disabled="protect"
-						v-model="poll.event.fullAnonymous" type="checkbox" class="checkbox">
-					<label v-show="poll.event.isAnonymous" for="trueAnonymous">{{ t('polls', 'Hide user names for admin') }} </label>
+					<input v-show="poll.event.isAnonymous" id="trueAnonymous" v-model="poll.event.fullAnonymous"
+						:disabled="protect" type="checkbox" class="checkbox"
+					>
+					<label v-show="poll.event.isAnonymous" for="trueAnonymous">
+						{{ t('polls', 'Hide user names for admin') }}
+					</label>
 
-					<input id="expiration" :disabled="protect" v-model="poll.event.expiration"
-						type="checkbox" class="checkbox">
-					<label for="expiration">{{ t('polls', 'Expires') }}</label>
+					<input id="expiration" v-model="poll.event.expiration" :disabled="protect"
+						type="checkbox" class="checkbox"
+					>
+					<label for="expiration">
+						{{ t('polls', 'Expires') }}
+					</label>
 
-					<date-picker v-show="poll.event.expiration"
+					<DatePicker v-show="poll.event.expiration"
+						v-model="poll.event.expirationDate"
 						v-bind="expirationDatePicker"
 						:disabled="protect"
-						v-model="poll.event.expirationDate"
 						:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }"
-						style="width:170px" />
-
+						style="width:170px"
+					/>
 				</div>
 
 				<div class="configBox">
-					<label class="title icon-user">{{ t('polls', 'Access') }}</label>
-					<input id="private" :disabled="protect" v-model="poll.event.access"
-						type="radio" value="registered" class="radio">
-					<label for="private">{{ t('polls', 'Registered users only') }}</label>
-					<input id="hidden" :disabled="protect" v-model="poll.event.access"
-						type="radio" value="hidden" class="radio">
-					<label for="hidden">{{ t('polls', 'hidden') }}</label>
-					<input id="public" :disabled="protect" v-model="poll.event.access"
-						type="radio" value="public" class="radio">
-					<label for="public">{{ t('polls', 'Public access') }}</label>
-					<input id="select" :disabled="protect" v-model="poll.event.access"
-						type="radio" value="select" class="radio">
-					<label for="select">{{ t('polls', 'Only shared') }}</label>
-
+					<label class="title icon-user">
+						{{ t('polls', 'Access') }}
+					</label>
+					<input id="private" v-model="poll.event.access" :disabled="protect"
+						type="radio" value="registered" class="radio"
+					>
+					<label for="private">
+						{{ t('polls', 'Registered users only') }}
+					</label>
+					<input id="hidden" v-model="poll.event.access" :disabled="protect"
+						type="radio" value="hidden" class="radio"
+					>
+					<label for="hidden">
+						{{ t('polls', 'hidden') }}
+					</label>
+					<input id="public" v-model="poll.event.access" :disabled="protect"
+						type="radio" value="public" class="radio"
+					>
+					<label for="public">
+						{{ t('polls', 'Public access') }}
+					</label>
+					<input id="select" v-model="poll.event.access" :disabled="protect"
+						type="radio" value="select" class="radio"
+					>
+					<label for="select">
+						{{ t('polls', 'Only shared') }}
+					</label>
 				</div>
 			</div>
 
-			<share-div	v-show="poll.event.access === 'select'"
+			<ShareDiv	v-show="poll.event.access === 'select'"
 				:active-shares="poll.shares"
 				:placeholder="t('polls', 'Name of user or group')"
 				hide-names="true"
 				@update-shares="updateShares"
-				@remove-share="removeShare" />
-
-		</side-bar>
+				@remove-share="removeShare"
+			/>
+		</SideBar>
 		<div v-if="loadingPoll" class="loading-overlay">
 			<span class="icon-loading" />
 		</div>

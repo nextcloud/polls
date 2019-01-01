@@ -23,9 +23,13 @@
 /* global Vue, oc_userconfig */
 <template>
 	<div :class="type" class="user-row">
-		<div v-show="description" class="description">{{ description }}</div>
-		<avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
-		<div v-show="!hideNames" class="user-name">{{ computedDisplayName }}</div>
+		<div v-show="description" class="description">
+			{{ description }}
+		</div>
+		<Avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
+		<div v-show="!hideNames" class="user-name">
+			{{ computedDisplayName }}
+		</div>
 	</div>
 </template>
 

@@ -22,7 +22,7 @@
 
 <template>
 	<div class="controls">
-		<breadcrumb :index-page="indexPage" :intitle="intitle" />
+		<Breadcrumb :index-page="indexPage" :intitle="intitle" />
 		<slot />
 	</div>
 </template>

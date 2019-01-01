@@ -24,28 +24,30 @@
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
 
-		<multiselect id="ajax" v-model="shares" :options="users"
+		<Multiselect id="ajax" v-model="shares" :options="users"
 			:multiple="true" :user-select="true" :tag-width="80"
 			:clear-on-select="false" :preserve-search="true" :options-limit="20"
 			:loading="isLoading" :internal-search="false" :searchable="true"
 			:preselect-first="true" :placeholder="placeholder" label="displayName"
-			track-by="user" @search-change="loadUsersAsync" @close="updateShares">
+			track-by="user" @search-change="loadUsersAsync" @close="updateShares"
+		>
 			<template slot="selection" slot-scope="{ values, search, isOpen }">
 				<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
 					{{ values.length }} users selected
 				</span>
 			</template>
-		</multiselect>
+		</Multiselect>
 
-		<transition-group :css="false" tag="ul" class="shared-list">
+		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(item, index) in sortedShares" :key="item.displayName" :data-index="index">
-				<user-div :user-id="item.user" :display-name="item.displayName" :type="item.type"
-					:hide-names="hideNames" />
+				<UserDiv :user-id="item.user" :display-name="item.displayName" :type="item.type"
+					:hide-names="hideNames"
+				/>
 				<div class="options">
 					<a class="icon icon-delete svg delete-poll" @click="removeShare(index, item)" />
 				</div>
 			</li>
-		</transition-group>
+		</TransitionGroup>
 	</div>
 </template>
 

@@ -23,7 +23,9 @@
 <template>
 	<div class="breadcrumb">
 		<div class="crumb svg crumbhome">
-			<a :href="indexPage" class="icon-home">Home</a>
+			<a :href="indexPage" class="icon-home">
+				Home
+			</a>
 		</div>
 		<div class="crumb svg last">
 			<span v-text="intitle" />
