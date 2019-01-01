@@ -6,7 +6,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
-		filename: 'create-poll.js'
+		filename: 'polls.js'
 	},
 	module: {
 		rules: [

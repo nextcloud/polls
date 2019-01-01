@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 /**
  * @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
  *
@@ -21,23 +21,32 @@
  *
  */
 
-import Vue from 'vue';
-import Create from './Create.vue';
-import {DatetimePicker} from 'nextcloud-vue';
-import Controls from './components/_base-controls.vue';
-import SideBarClose from './components/sideBarClose.vue';
-import UserDiv from './components/_base-UserDiv.vue';
-import SideBar from './components/_base-SideBar.vue';
-import ShareDiv from './components/shareDiv.vue';
+import Vue from 'vue'
+import App from './App.vue'
+import { DatetimePicker } from 'nextcloud-vue'
+import Controls from './components/_base-controls.vue'
+import SideBarClose from './components/sideBarClose.vue'
+import UserDiv from './components/_base-UserDiv.vue'
+import SideBar from './components/_base-SideBar.vue'
+import ShareDiv from './components/shareDiv.vue'
 
 Vue.config.debug = true
 Vue.config.devTools = true
-Vue.component('Controls', Controls);
-Vue.component('DatePicker', DatetimePicker);
-Vue.component('SideBarClose', SideBarClose);
-Vue.component('UserDiv', UserDiv);
-Vue.component('SideBar', SideBar);
-Vue.component('ShareDiv', ShareDiv);
+Vue.component('Controls', Controls)
+Vue.component('DatePicker', DatetimePicker)
+Vue.component('SideBarClose', SideBarClose)
+Vue.component('UserDiv', UserDiv)
+Vue.component('SideBar', SideBar)
+Vue.component('ShareDiv', ShareDiv)
+
+// CSP config for webpack dynamic chunk loading
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(OC.requestToken)
+
+// Correct the root of the app for chunk loading
+// OC.linkTo matches the apps folders
+// eslint-disable-next-line
+__webpack_public_path__ = OC.linkTo('polls', 'js/')
 
 Vue.mixin({
 	methods: {
@@ -48,9 +57,10 @@ Vue.mixin({
 			return OC.L10N.translatePlural(app, textSingular, textPlural, count, vars, options)
 		}
 	}
-});
+})
 
+/* eslint-disable-next-line no-new */
 new Vue({
 	el: '#create-poll',
-	render: h => h(Create)
-});
+	render: h => h(App)
+})

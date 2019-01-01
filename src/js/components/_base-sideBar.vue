@@ -21,9 +21,9 @@
   -->
 
 <template>
-<div class="polls-sidebar">
-	<slot></slot>
-</div>
+	<div class="polls-sidebar">
+		<slot />
+	</div>
 </template>
 
 <style lang="scss">

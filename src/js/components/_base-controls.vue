@@ -21,10 +21,10 @@
   -->
 
 <template>
-<div class="controls">
-	<breadcrumb :index-page="indexPage" :intitle="intitle"></breadcrumb>
-	<slot></slot>
-</div>
+	<div class="controls">
+		<breadcrumb :index-page="indexPage" :intitle="intitle" />
+		<slot />
+	</div>
 </template>
 
 <script>
@@ -33,7 +33,16 @@ export default {
 	components: {
 		Breadcrumb
 	},
-	props: ['intitle', 'indexPage'],
+	props: {
+		intitle: {
+			type: String,
+			default: undefined
+		},
+		indexPage: {
+			type: String,
+			default: undefined
+		}
+	}
 }
 </script>
 
