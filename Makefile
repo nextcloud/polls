@@ -10,17 +10,18 @@
 # * curl: used if phpunit and composer are not installed to fetch them from the web
 # * tar: for building the archive
 
-app_name=$(notdir $(CURDIR))
+app_name=polls
+
+project_dir=$(CURDIR)
 build_dir=$(CURDIR)/build
 build_tools_dir=$(build_dir)/tools
 build_source_dir=$(build_dir)/source
 appstore_build_dir=$(build_dir)/artifacts/appstore
-sign_dir=$(build_dir)/sign
 appstore_package_name=$(appstore_build_dir)/$(app_name)
 nc_cert_dir=$(HOME)/.nextcloud/certificates
 composer=$(shell which composer 2> /dev/null)
 
-all: dev-setup lint build-js-production test
+all: dev-setup lint build-js-production
 
 # Dev environment setup
 dev-setup: clean clean-dev npm-init composer
@@ -59,20 +60,18 @@ lint-fix:
 .PHONY: clean
 clean:
 	rm -rf $(build_dir)
+	rm -f ./vendor
 	rm -f js/polls.js
 	rm -f js/polls.js.map
 
 clean-dev:
 	rm -rf node_modules
 
-
 # Builds the source package for the app store, ignores php and js tests
 .PHONY: appstore
 appstore: dev-setup lint build-js-production
-	mkdir -p $(sign_dir)
 	mkdir -p $(build_source_dir)
 	mkdir -p $(appstore_build_dir)
-
 	rsync -a \
 	--exclude="ISSUE_TEMPLATE.md" \
 	--exclude="*.log" \
@@ -102,11 +101,9 @@ appstore: dev-setup lint build-js-production
 	--exclude="tests" \
 	--exclude="vendor" \
 	--exclude="webpack.*" \
-	./ $(build_source_dir)/$(app_name)
-
-	tar cvzf $(appstore_package_name).tar.gz \
+	$(project_dir)/ $(build_source_dir)/$(app_name)
+	tar -czf $(appstore_package_name).tar.gz \
 	   --directory="$(build_source_dir)" $(app_name)
-
 	@if [ -f $(nc_cert_dir)/$(app_name).key ]; then \
 		echo "Signing package..."; \
 		openssl dgst -sha512 -sign $(nc_cert_dir)/$(app_name).key $(appstore_build_dir)/$(app_name).tar.gz | openssl base64; \
