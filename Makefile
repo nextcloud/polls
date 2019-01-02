@@ -70,6 +70,9 @@ clean-dev:
 .PHONY: appstore
 appstore: dev-setup lint build-js-production composer
 	mkdir -p $(sign_dir)
+	mkdir -p $(build_source_dir)
+	mkdir -p $(appstore_build_dir)
+	
 	rsync -a \
 	--exclude="ISSUE_TEMPLATE.md" \
 	--exclude="*.log" \
@@ -77,8 +80,6 @@ appstore: dev-setup lint build-js-production composer
 	--exclude="build" \
 	--exclude="bower.json" \
 	--exclude="composer.*" \
-	--include="css/vendor" \
-	--exclude="css/*.css" \
 	--exclude="js/.*" \
 	--exclude="js/*.log" \
 	--exclude="js/bower.json" \
@@ -88,7 +89,6 @@ appstore: dev-setup lint build-js-production composer
 	--exclude="js/protractor.*" \
 	--exclude="js/test" \
 	--exclude="js/tests" \
-	--include="js/vendor" \
 	--exclude="karma.*" \
 	--exclude="l10n/no-php" \
 	--exclude="Makefile" \
