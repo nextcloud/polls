@@ -68,15 +68,16 @@ clean-dev:
 
 # Builds the source package for the app store, ignores php and js tests
 .PHONY: appstore
-appstore: dev-setup lint build-js-production composer
+appstore: dev-setup lint build-js-production
 	mkdir -p $(sign_dir)
 	mkdir -p $(build_source_dir)
 	mkdir -p $(appstore_build_dir)
-	
+
 	rsync -a \
 	--exclude="ISSUE_TEMPLATE.md" \
 	--exclude="*.log" \
 	--exclude=".*" \
+	--exclude="_*" \
 	--exclude="build" \
 	--exclude="bower.json" \
 	--exclude="composer.*" \
@@ -100,6 +101,7 @@ appstore: dev-setup lint build-js-production composer
 	--exclude="src" \
 	--exclude="tests" \
 	--exclude="vendor" \
+	--exclude="webpack.*" \
 	./ $(build_source_dir)/$(app_name)
 
 	tar cvzf $(appstore_package_name).tar.gz \
