@@ -24,11 +24,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { DatetimePicker } from 'nextcloud-vue'
-import Controls from './components/_base-controls.vue'
-import SideBarClose from './components/sideBarClose.vue'
-import UserDiv from './components/_base-UserDiv.vue'
+import Controls from './components/_base-Controls.vue'
 import SideBar from './components/_base-SideBar.vue'
+import SideBarClose from './components/sideBarClose.vue'
 import ShareDiv from './components/shareDiv.vue'
+import UserDiv from './components/_base-UserDiv.vue'
 
 Vue.config.debug = true
 Vue.config.devTools = true
