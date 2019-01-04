@@ -21,19 +21,14 @@ appstore_package_name=$(appstore_build_dir)/$(app_name)
 nc_cert_dir=$(HOME)/.nextcloud/certificates
 composer=$(shell which composer 2> /dev/null)
 
-all: dev-setup lint build-js-production
+all: dev-setup appstore
 
 # Dev environment setup
-dev-setup: clean clean-dev npm-init composer
+dev-setup: clean-dev npm-init composer
 
 npm-init:
 	npm install
 
-# Build js
-build-js-production:
-	npm run build
-
-# Installs and updates the composer dependencies. If composer is not installed
 # a copy is fetched from the web
 .PHONY: composer
 composer:
@@ -60,16 +55,21 @@ lint-fix:
 .PHONY: clean
 clean:
 	rm -rf $(build_dir)
-	rm -f ./vendor
 	rm -f js/polls.js
 	rm -f js/polls.js.map
 
-clean-dev:
+clean-dev: clean
 	rm -rf node_modules
+	rm -rf ./vendor
+
+# Build js
+# Installs and updates the composer dependencies. If composer is not installed
+build-js-production:
+		npm run build
 
 # Builds the source package for the app store, ignores php and js tests
 .PHONY: appstore
-appstore: dev-setup lint build-js-production
+appstore: clean lint build-js-production
 	mkdir -p $(build_source_dir)
 	mkdir -p $(appstore_build_dir)
 	rsync -a \
