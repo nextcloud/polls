@@ -8,6 +8,8 @@
 This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / jQuery.
 It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
 
+**Note**: ownCloud is **no longer** supported! Last (confirmed) working version is 0.8.1 and is released in the oC marketplace.
+
 ### Features
 - :bar_chart: Create / edit polls (datetimes _and_ texts)
 - :date: Set expiration date
