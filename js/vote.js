@@ -229,7 +229,16 @@ $(document).ready(function () {
 		};
 		$('.new-comment .icon-loading-small').show();
 		$.post(form.action, data, function (data) {
-			$('#no-comments').after(tmpl_comment(data));
+			$('#no-comments').after(
+						'<li class="comment flex-column"> ' +
+							'<div class="authorRow user-cell flex-row"> ' +
+							'<div class="avatar missing" title="' + data.userId + '"></div> ' +
+							'<div class="author">' + data.displayName + '</div>' +
+							'<div class="date has-tooltip live-relative-timestamp datespan" data-timestamp="' + data.timeStamp + '" title="' + data.date + '">' + data.relativeNow + '</div>' +
+							'</div>' +
+							'<div class="message wordwrap comment-content">' + data.comment + '</div>' +
+							'</li>');
+
 
 			if (!$('#no-comments').hasClass('hidden')) {
 				$('#no-comments').addClass('hidden');

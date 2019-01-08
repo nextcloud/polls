@@ -296,8 +296,17 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function createPoll() {
+	public function newPoll() {
 		return new TemplateResponse('polls', 'create.tmpl',
+			['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function listPolls() {
+		return new TemplateResponse('polls', 'list.tmpl',
 			['urlGenerator' => $this->urlGenerator]);
 	}
 

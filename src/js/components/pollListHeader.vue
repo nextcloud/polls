@@ -19,43 +19,40 @@
   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -
   -->
-
 <template>
-	<div class="breadcrumb">
-		<div class="crumb svg crumbhome">
-			<a :href="indexPage" class="icon-home">
-				Home
-			</a>
-		</div>
-		<div v-show="intitle ===''" class="crumb svg last">
-			<span v-text="intitle" />
+	<div>
+		<div class="wrapper group-master">
+			<div class="wrapper group-1">
+				<div class="wrapper group-1-1">
+					<div class="flex-column name">
+						{{ t('polls', 'Title') }}
+					</div>
+				</div>
+				<div class="wrapper group-1-2">
+					<div class="flex-column actions" />
+				</div>
+			</div>
+			<div class="wrapper group-2">
+				<div class="flex-column owner">
+					{{ t('polls', 'By') }}
+				</div>
+				<div class="wrapper group-2-1">
+					<div class="flex-column access">
+						{{ t('polls', 'Access') }}
+					</div>
+					<div class="flex-column created">
+						{{ t('polls', 'Created') }}
+					</div>
+				</div>
+				<div class="wrapper group-2-2">
+					<div class="flex-column expiry">
+						{{ t('polls', 'Expires') }}
+					</div>
+					<div class="flex-column participants">
+						{{ t('polls', 'participated') }}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
-
-<script>
-export default {
-	props: {
-		intitle: {
-			type: String,
-			default: undefined
-		},
-		indexPage: {
-			type: String,
-			default: undefined
-		}
-	},
-
-	data() {
-		return {
-			imagePath: OC.imagePath('core', 'places/home.svg')
-		}
-	}
-}
-</script>
-
-<style lang="scss">
-.breadcrumb {
-    flex-grow: 1;
-}
-</style>

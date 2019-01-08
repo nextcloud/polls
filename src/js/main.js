@@ -22,6 +22,8 @@
  */
 
 import Vue from 'vue'
+import router from './router'
+import axios from 'nextcloud-axios'
 import App from './App.vue'
 import { DatetimePicker } from 'nextcloud-vue'
 import Controls from './components/_base-Controls.vue'
@@ -39,6 +41,10 @@ Vue.component('UserDiv', UserDiv)
 Vue.component('SideBar', SideBar)
 Vue.component('ShareDiv', ShareDiv)
 
+Vue.prototype.t = t
+Vue.prototype.n = n
+Vue.prototype.$http = axios
+
 // CSP config for webpack dynamic chunk loading
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
@@ -48,19 +54,9 @@ __webpack_nonce__ = btoa(OC.requestToken)
 // eslint-disable-next-line
 __webpack_public_path__ = OC.linkTo('polls', 'js/')
 
-Vue.mixin({
-	methods: {
-		t: function(app, text, vars, count, options) {
-			return OC.L10N.translate(app, text, vars, count, options)
-		},
-		n: function(app, textSingular, textPlural, count, vars, options) {
-			return OC.L10N.translatePlural(app, textSingular, textPlural, count, vars, options)
-		}
-	}
-})
-
 /* eslint-disable-next-line no-new */
 new Vue({
-	el: '#create-poll',
+	el: '#app-polls',
+	router: router,
 	render: h => h(App)
 })

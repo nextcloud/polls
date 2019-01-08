@@ -23,11 +23,11 @@
 /* global Vue, oc_userconfig */
 <template>
 	<div :class="type" class="user-row">
-		<div v-show="description" class="description">
+		<div v-if="description" class="description">
 			{{ description }}
 		</div>
 		<Avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
-		<div v-show="!hideNames" class="user-name">
+		<div v-if="!hideNames" class="user-name">
 			{{ computedDisplayName }}
 		</div>
 	</div>
@@ -35,6 +35,7 @@
 
 <script>
 import { Avatar } from 'nextcloud-vue'
+
 export default {
 	components: {
 		Avatar

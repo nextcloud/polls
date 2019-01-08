@@ -261,6 +261,7 @@ class ApiController extends Controller {
 				'title' => $event->getTitle(),
 				'description' => $event->getDescription(),
 				'owner' => $event->getOwner(),
+				'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
 				'created' => $event->getCreated(),
 				'access' => $accessType,
 				'expiration' => $expiration,
@@ -374,7 +375,8 @@ class ApiController extends Controller {
 				$mode = 'edit';
 			}
 
-			$data['poll'] = [
+			$data = [
+				'id' => $event['id'],
 				'result' => $result,
 				'grantedAs' => $this->grantAccessAs($event['id']),
 				'mode' => $mode,
@@ -407,7 +409,7 @@ class ApiController extends Controller {
 			$groups = $this->groupManager->search($query);
 			foreach ($groups as $group) {
 				if (!in_array($group->getGID(), $skipGroups)) {
-					$list['g_' . $group->getGID()] = [
+					$list[] = [
 						'id' => $group->getGID(),
 						'user' => $group->getGID(),
 						'type' => 'group',
@@ -424,7 +426,7 @@ class ApiController extends Controller {
 			$users = $this->userManager->searchDisplayName($query);
 			foreach ($users as $user) {
 				if (!in_array($user->getUID(), $skipUsers)) {
-					$list['u_' . $user->getUID()] = [
+					$list[] = [
 						'id' => $user->getUID(),
 						'user' => $user->getUID(),
 						'type' => 'user',
@@ -465,7 +467,7 @@ class ApiController extends Controller {
 		$eventsList = array();
 
 		foreach ($events as $eventElement) {
-			$eventsList[$eventElement->id] = $this->getEvent($eventElement->id);
+			$eventsList[$eventElement->id] = $this->getPoll($eventElement->id);
 		}
 
 		return new DataResponse($eventsList, Http::STATUS_OK);

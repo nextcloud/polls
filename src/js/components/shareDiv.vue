@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import axios from 'nextcloud-axios'
 import { Multiselect } from 'nextcloud-vue'
 
 export default {
@@ -113,7 +112,7 @@ export default {
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
-			axios.post(OC.generateUrl('apps/polls/get/siteusers'), this.siteUsersListOptions)
+			this.$http.post(OC.generateUrl('apps/polls/get/siteusers'), this.siteUsersListOptions)
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false

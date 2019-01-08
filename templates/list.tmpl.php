@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	/**
 	 * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
 	 *

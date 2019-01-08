@@ -24,9 +24,10 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#list_polls', 'url' => '/list', 'verb' => 'GET'],
 		['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
 		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
-		['name' => 'page#create_poll', 'url' => '/create', 'verb' => 'GET'],
+		['name' => 'page#new_poll', 'url' => '/new', 'verb' => 'GET'],
 		['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
 		['name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'],
 		['name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'],
@@ -41,7 +42,7 @@ return [
 		['name' => 'api#get_comments', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_event', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#get_polls', 'url' => '/get/polls/', 'verb' => 'GET'],
+		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
 		['name' => 'api#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
 		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']
 	]
