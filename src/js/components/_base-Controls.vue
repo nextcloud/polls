@@ -21,19 +21,28 @@
   -->
 
 <template>
-<div class="controls">
-	<breadcrumb :index-page="indexPage" :intitle="intitle"></breadcrumb>
-	<slot></slot>
-</div>
+	<div class="controls">
+		<Breadcrumb :index-page="indexPage" :intitle="intitle" />
+		<slot />
+	</div>
 </template>
 
 <script>
-import Breadcrumb from './_base-breadcrumb.vue'
+import Breadcrumb from './_base-Breadcrumb.vue'
 export default {
 	components: {
 		Breadcrumb
 	},
-	props: ['intitle', 'indexPage'],
+	props: {
+		intitle: {
+			type: String,
+			default: undefined
+		},
+		indexPage: {
+			type: String,
+			default: undefined
+		}
+	}
 }
 </script>
 

@@ -25,4 +25,4 @@
 ?>
 
 <div id="create-poll"></div>
-<?php \OCP\Util::addScript('polls', 'create-poll'); ?>
+<?php \OCP\Util::addScript('polls', 'polls'); ?>

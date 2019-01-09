@@ -21,19 +21,41 @@
   -->
 
 <template>
-<div class="polls-sidebar">
-	<slot></slot>
-</div>
+	<div class="breadcrumb">
+		<div class="crumb svg crumbhome">
+			<a :href="indexPage" class="icon-home">
+				Home
+			</a>
+		</div>
+		<div class="crumb svg last">
+			<span v-text="intitle" />
+		</div>
+	</div>
 </template>
 
+<script>
+export default {
+	props: {
+		intitle: {
+			type: String,
+			default: undefined
+		},
+		indexPage: {
+			type: String,
+			default: undefined
+		}
+	},
+
+	data() {
+		return {
+			imagePath: OC.imagePath('core', 'places/home.svg')
+		}
+	}
+}
+</script>
+
 <style lang="scss">
-.polls-sidebar {
-    min-width: 300px;
-    border-left: 1px solid var(--color-border);
-    z-index: 500;
-    > ul,
-    > div {
-        padding: 8px;
-    }
+.breadcrumb {
+    flex-grow: 1;
 }
 </style>

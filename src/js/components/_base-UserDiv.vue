@@ -22,21 +22,26 @@
 
 /* global Vue, oc_userconfig */
 <template>
-<div class="user-row" :class="type">
-	<div v-show="description" class="description">{{description}}</div>
-	<avatar :user="userId" :display-name="computedDisplayName" :isNoUser="isNoUser"></avatar>
-	<div v-show="!hideNames" class="user-name">{{ computedDisplayName }}</div>
-</div>
+	<div :class="type" class="user-row">
+		<div v-show="description" class="description">
+			{{ description }}
+		</div>
+		<Avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
+		<div v-show="!hideNames" class="user-name">
+			{{ computedDisplayName }}
+		</div>
+	</div>
 </template>
 
 <script>
-import {Avatar} from 'nextcloud-vue'
+import { Avatar } from 'nextcloud-vue'
 export default {
 	components: {
 		Avatar
 	},
 	props: {
 		hideNames: {
+			type: Boolean,
 			default: false
 		},
 		userId: {
@@ -44,7 +49,8 @@ export default {
 			default: undefined
 		},
 		displayName: {
-			type: String
+			type: String,
+			default: ''
 		},
 		size: {
 			type: Number,
@@ -54,12 +60,16 @@ export default {
 			type: String,
 			default: 'user'
 		},
-		description: String
+		description: {
+			type: String,
+			default: ''
+		}
+
 	},
 
 	data() {
 		return {
-			nothidden: false,
+			nothidden: false
 		}
 	},
 

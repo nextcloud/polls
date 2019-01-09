@@ -48,6 +48,10 @@ If you want to run the latest development version from git source, you need to c
 git clone https://github.com/nextcloud/polls.git
 ```
 
+* Install dev environment with ```make dev-setup```
+* Compile polls.js with ```make build-js-production``` or ```npm run build```
+* Run a complete build with ```make all``` (installs dev env, runs linter and builds the polls.js)
+
 ## Contribution Guidelines
 Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance 
 to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together 

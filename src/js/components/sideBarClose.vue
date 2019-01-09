@@ -21,9 +21,11 @@
   -->
 
 <template>
-<div class="close flex-row">
-	<a id="closeDetails" @:click="hideSidebar" class="close icon-close has-tooltip-bottom" :title="closeDetailLabel" href="#" :alt="closeDetailLabelAlt"></a>
-</div>
+	<div class="close flex-row">
+		<a id="closeDetails" :title="closeDetailLabel" :alt="closeDetailLabelAlt"
+			class="close icon-close has-tooltip-bottom" href="#" @:click="hideSidebar"
+		/>
+	</div>
 </template>
 
 <script>

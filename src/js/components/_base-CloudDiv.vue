@@ -22,21 +22,43 @@
 
 /* global Vue, oc_userconfig */
 <template>
-<div class="cloud">
-	<span class="expired" v-if="options.expired">{{ t('polls', 'Expired')}} </span>
-	<span class="open" v-if="options.expiration">{{ t('polls', 'Expires %n', 1, expirationdate) }}</span>
-	<span class="open" v-else>{{ t('polls', 'Expires never') }}</span>
+	<div class="cloud">
+		<span v-if="options.expired" class="expired">
+			{{ t('polls', 'Expired') }}
+		</span>
+		<span v-if="options.expiration" class="open">
+			{{ t('polls', 'Expires %n', 1, expirationdate) }}
+		</span>
+		<span v-else class="open">
+			{{ t('polls', 'Expires never') }}
+		</span>
 
-	<span class="information">{{ options.access }}</span>
-	<span class="information" v-if="options.isAnonymous"> {{ t('polls', 'Anonymous poll') }}</span>
-	<span class="information" v-if="options.fullAnonymous"> {{ t('polls', 'Usernames hidden to Owner') }}</span>
-	<span class="information" v-if="options.isAnonymous & !options.fullAnonymous"> {{ t('polls', 'Usernames visible to Owner') }}</span>
-</div>
+		<span class="information">
+			{{ options.access }}
+		</span>
+		<span v-if="options.isAnonymous" class="information">
+			{{ t('polls', 'Anonymous poll') }}
+		</span>
+		<span v-if="options.fullAnonymous" class="information">
+			{{ t('polls', 'Usernames hidden to Owner') }}
+		</span>
+		<span v-if="options.isAnonymous & !options.fullAnonymous" class="information">
+			{{ t('polls', 'Usernames visible to Owner') }}
+		</span>
+	</div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
-	props: ['options', ],
+	props: {
+		options: {
+			type: Object,
+			default: undefined
+		}
+
+	},
 
 	computed: {
 		expirationdate() {

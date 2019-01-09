@@ -4,6 +4,8 @@
 .idea/
 build/
 css/*.map
+js/polls.js
+js/polls.js.map
 nbproject/
 node_modules/
 npm-debug.log

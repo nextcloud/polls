@@ -21,39 +21,61 @@
   -->
 
 <template>
-<div>
-	<h2> {{ t('polls', 'Share with') }}</h2>
+	<div>
+		<h2> {{ t('polls', 'Share with') }}</h2>
 
-	<multiselect v-model="shares" :options="users" label="displayName" track-by="user" :multiple="true" :user-select="true" :tag-width="80" :clear-on-select="false" :preserve-search="true" :options-limit="20" id="ajax" @search-change="loadUsersAsync"
-	 @close="updateShares" :loading="isLoading" :internal-search="false" :searchable="true" :preselect-first="true" :placeholder="placeholder">
-		<template slot="selection" slot-scope="{ values, search, isOpen }">
-			<span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">
-				{{ values.length }} users selected
-			</span>
-		</template>
-	</multiselect>
+		<Multiselect id="ajax" v-model="shares" :options="users"
+			:multiple="true" :user-select="true" :tag-width="80"
+			:clear-on-select="false" :preserve-search="true" :options-limit="20"
+			:loading="isLoading" :internal-search="false" :searchable="true"
+			:preselect-first="true" :placeholder="placeholder" label="displayName"
+			track-by="user" @search-change="loadUsersAsync" @close="updateShares"
+		>
+			<template slot="selection" slot-scope="{ values, search, isOpen }">
+				<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
+					{{ values.length }} users selected
+				</span>
+			</template>
+		</Multiselect>
 
-	<transition-group tag="ul" v-bind:css="false" class="shared-list">
-		<li v-for="(item, index) in sortedShares" v-bind:key="item.displayName" v-bind:data-index="index">
-			<user-div :user-id="item.user" :display-name="item.displayName" :type="item.type" :hide-names="hideNames"></user-div>
-			<div class="options">
-				<a @click="removeShare(index, item)" class="icon icon-delete svg delete-poll"></a>
-			</div>
-		</li>
-	</transition-group>
-</div>
+		<TransitionGroup :css="false" tag="ul" class="shared-list">
+			<li v-for="(item, index) in sortedShares" :key="item.displayName" :data-index="index">
+				<UserDiv :user-id="item.user" :display-name="item.displayName" :type="item.type"
+					:hide-names="hideNames"
+				/>
+				<div class="options">
+					<a class="icon icon-delete svg delete-poll" @click="removeShare(index, item)" />
+				</div>
+			</li>
+		</TransitionGroup>
+	</div>
 </template>
 
 <script>
-import axios from 'axios'
-import {Multiselect} from 'nextcloud-vue'
+import axios from 'nextcloud-axios'
+import { Multiselect } from 'nextcloud-vue'
 
 export default {
 	components: {
 		Multiselect
 	},
 
-	props: ['placeholder', 'activeShares', 'hideNames'],
+	props: {
+		placeholder: {
+			type: String,
+			default: ''
+		},
+		activeShares: {
+			type: Array,
+			default: function() {
+				return []
+			}
+		},
+		hideNames: {
+			type: Boolean,
+			default: false
+		}
+	},
 
 	data() {
 		return {
@@ -70,7 +92,12 @@ export default {
 
 	computed: {
 		sortedShares() {
-			return this.shares.sort(this.sortByDisplayname)
+			return this.shares.slice(0).sort(this.sortByDisplayname)
+		}
+	},
+	watch: {
+		activeShares(value) {
+			this.shares = value.slice(0)
 		}
 	},
 
@@ -91,6 +118,7 @@ export default {
 					this.users = response.data.siteusers
 					this.isLoading = false
 				}, (error) => {
+					/* eslint-disable-next-line no-console */
 					console.log(error.response)
 				})
 		},
@@ -101,11 +129,6 @@ export default {
 			return 0
 		}
 
-	},
-	watch: {
-		activeShares(value) {
-			this.shares = value.slice(0)
-		}
 	}
 }
 </script>
