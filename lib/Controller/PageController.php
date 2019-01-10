@@ -152,6 +152,37 @@ class PageController extends Controller {
 	}
 
 	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function createPoll() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function listPolls() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param string $hash
+	 * @return TemplateResponse
+	 */
+	public function editPoll($hash) {
+		return new TemplateResponse('polls', 'polls.tmpl', [
+			'urlGenerator' => $this->urlGenerator,
+ 			'hash' => $hash
+		]);
+	}
+
+	/**
 	 * @param int $pollId
 	 * @param string $from
 	 */
@@ -277,37 +308,6 @@ class PageController extends Controller {
 		$this->eventMapper->delete($poll);
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new RedirectResponse($url);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $hash
-	 * @return TemplateResponse
-	 */
-	public function editPoll($hash) {
-		return new TemplateResponse('polls', 'create.tmpl', [
-			'urlGenerator' => $this->urlGenerator,
- 			'hash' => $hash
-		]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function newPoll() {
-		return new TemplateResponse('polls', 'create.tmpl',
-			['urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function listPolls() {
-		return new TemplateResponse('polls', 'list.tmpl',
-			['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**

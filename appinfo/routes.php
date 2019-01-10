@@ -24,10 +24,12 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'page#list_polls', 'url' => '/list', 'verb' => 'GET'],
 		['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
+
+		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
+		['name' => 'page#list_polls', 'url' => '/list', 'verb' => 'GET'],
 		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
-		['name' => 'page#new_poll', 'url' => '/new', 'verb' => 'GET'],
+
 		['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
 		['name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'],
 		['name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'],

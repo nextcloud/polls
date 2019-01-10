@@ -23,9 +23,9 @@
 <template>
 	<div class="breadcrumb">
 		<div class="crumb svg crumbhome">
-			<a :href="indexPage" class="icon-home">
+			<router-link :to="{ name: 'list'}" class="icon-home">
 				Home
-			</a>
+			</router-link>
 		</div>
 		<div v-show="intitle ===''" class="crumb svg last">
 			<span v-text="intitle" />

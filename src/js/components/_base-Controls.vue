@@ -22,7 +22,7 @@
 
 <template>
 	<div class="controls">
-		<Breadcrumb :index-page="indexPage" :intitle="intitle" />
+		<Breadcrumb :intitle="intitle" />
 		<slot />
 	</div>
 </template>
@@ -35,10 +35,6 @@ export default {
 	},
 	props: {
 		intitle: {
-			type: String,
-			default: undefined
-		},
-		indexPage: {
 			type: String,
 			default: undefined
 		}

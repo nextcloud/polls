@@ -22,7 +22,7 @@
 
 <template>
 	<div id="app-content">
-		<controls :index-page="indexPage" :intitle="title">
+		<controls :intitle="title">
 			<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
 				<span>{{ saveButtonTitle }}</span>
 				<span v-if="writingPoll" class="icon-loading-small" />
@@ -384,7 +384,7 @@ export default {
 		this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
 		var urlArray = window.location.pathname.split('/')
 
-		if (urlArray[urlArray.length - 1] === 'create') {
+		if (this.$route.name === 'create') {
 			this.poll.event.owner = OC.getCurrentUser().uid
 			this.loadingPoll = false
 		} else {

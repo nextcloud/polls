@@ -22,23 +22,23 @@
 
 <template>
 	<div id="app-content">
-		<controls :index-page="indexPage">
+		<controls>
 			<div class="actions creatable" style="">
-				<a href="/" class="button new">
+				<router-link :to="{ name: 'create'}" class="button new">
 					<span class="symbol icon-add" />
 					<span class="hidden-visually">
 						{{ t('polls', 'New') }}
 					</span>
-				</a>
+				</router-link>
 			</div>
 		</controls>
 
 		<div v-if="noPolls" class="">
 			<div class="icon-polls" />
 			<h2> {{ t('No existing polls.') }} </h2>
-			<a href="indexPage" class="button new">
+			<router-link :to="{ name: 'create'}" class="button new">
 				<span>{{ t('polls', 'Click here to add a poll') }}</span>
-			</a>
+			</router-link>
 		</div>
 
 		<transition-group
@@ -272,30 +272,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	overflow: initial;
 }
 
-.thumbnail {
-	background-size: $thumbnail-icon-width;
-	width: $thumbnail-width;
-	height: $thumbnail-width;
-	padding-right: $table-padding;
-	background-repeat: no-repeat;
-	background-position: center;
-	&.progress, &.endless {
-		&.partic_yes {
-		background-image: url('./img/open-voted-vote.svg');
-		}
-		&.partic_no {
-		background-image: url('./img/open-unvoted-vote.svg');
-		}
-	}
-	&.expired {
-		&.partic_yes {
-		background-image: url('./img/expired-voted-vote.svg');
-		}
-		&.partic_no {
-		background-image: url('./img/expired-unvoted-vote.svg');
-		}
-	}
-}
 
 .options, .participants {
 	display: flex;

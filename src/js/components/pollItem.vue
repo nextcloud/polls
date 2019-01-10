@@ -24,7 +24,7 @@
 	<div>
 		<div class="wrapper group-master">
 			<div class="wrapper group-1">
-				<div class="thumbnail progress commented_yes partic_yes" />
+				<div :class="iconClass" />
 				<router-link class="wrapper group-1-1" :to="{name: 'vote', params: {hash: poll.event.hash }}">
 					<div class="flex-column name">
 						{{ poll.event.title }}
@@ -67,7 +67,7 @@
 				</div>
 				<div class="wrapper group-2-1">
 					<div class="flex-column access">
-						{{ poll.event.access }}
+						{{ accessType }}
 					</div>
 					<div class="flex-column created ">
 						{{ poll.event.created }}
@@ -94,7 +94,48 @@ export default {
 			type: Object,
 			default: undefined
 		}
+	},
+	computed: {
+		iconClass() {
+			return 'thumbnail ' + this.poll.event.type + (this.poll.event.expired ? ' expired' : '')
+		},
+
+		accessType() {
+			if (this.poll.event.access === 'public') {
+				return t('polls', 'Public access')
+			} else if (this.poll.event.access === 'select') {
+				return t('polls', 'Only shared')
+			} else if (this.poll.event.access === 'registered') {
+				return t('polls','Registered users only')
+			} else if (this.poll.event.access === 'hidden') {
+				return t('polls','Hidden poll')
+			} else {
+				return ''
+			}
+		}
 	}
 }
 
 </script>
+<style lang="scss">
+.thumbnail {
+	width: 44px;
+	height: 44px;
+	padding-right: 4px;
+	background-color: var(--color-primary-text-dark);
+	&.datePoll {
+		mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
+		-webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
+		mask-size: 32px;
+	}
+	&.textPoll {
+		mask-image: var(--icon-organization-000) no-repeat 50% 50%;
+		-webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
+		mask-size: 32px;
+	}
+	&.expired {
+		background-color: var(--color-error);
+	}
+}
+
+</style>
