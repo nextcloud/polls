@@ -24,40 +24,21 @@
 	<div>
 		<div class="wrapper group-master">
 			<div class="wrapper group-1">
-				<div :class="iconClass" />
-				<router-link class="wrapper group-1-1" :to="{name: 'vote', params: {hash: poll.event.hash }}">
+				<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] " />
+				<a :href="voteUrl" class="wrapper group-1-1">
 					<div class="flex-column name">
 						{{ poll.event.title }}
 					</div>
 					<div class="flex-column description">
 						{{ poll.event.description }}
 					</div>
-				</router-link>
+				</a>
 				<div class="flex-column actions">
-					<div class="icon-more popupmenu" />
-					<div class="popovermenu bubble menu hidden">
-						<ul>
-							<li>
-								<a class="menuitem alt-tooltip copy-link has-tooltip action permanent" href="#">
-									<span class="icon-clippy" />
-									<span> {{ t('polls', 'Copy Link') }} </span>
-								</a>
-							</li>
-							<li>
-								<a class="menuitem alt-tooltip delete-poll action
-									permanent" href="#"
-								>
-									<span class="icon-delete" />
-									<span> {{ t('polls', 'Delete poll') }} </span>
-								</a>
-							</li>
-							<li>
-								<a class="menuitem action permanent" href="#">
-									<span class="icon-rename" />
-									<span>{{ t('polls', 'Edit poll') }} </span>
-								</a>
-							</li>
-						</ul>
+					<div class="toggleUserActions">
+						<div class="icon-more" v-click-outside="hideMenu" @click="toggleMenu"></div>
+						<div class="popovermenu" :class="{ 'open': openedMenu }">
+							<popover-menu :menu="menuItems" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -70,12 +51,12 @@
 						{{ accessType }}
 					</div>
 					<div class="flex-column created ">
-						{{ poll.event.created }}
+						{{ timeSpanCreated }}
 					</div>
 				</div>
 				<div class="wrapper group-2-2">
-					<div class="flex-column expiry">
-						{{ poll.event.expirationDate }}
+					<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
+						{{ timeSpanExpiration }}
 					</div>
 					<div class="flex-column participants">
 						<div class="symbol alt-tooltip partic_voted icon-voted" />
@@ -88,30 +69,119 @@
 </template>
 
 <script>
+
 export default {
+	data() {
+		return {
+			openedMenu: false,
+			hostName: this.$route.query.page
+		}
+
+	},
+
 	props: {
 		poll: {
 			type: Object,
 			default: undefined
 		}
 	},
-	computed: {
-		iconClass() {
-			return 'thumbnail ' + this.poll.event.type + (this.poll.event.expired ? ' expired' : '')
+
+	methods: {
+		toggleMenu() {
+			this.openedMenu = !this.openedMenu;
 		},
 
+		hideMenu() {
+			this.openedMenu = false;
+		},
+
+		copyLink() {
+			this.$copyText(window.location.origin + this.voteUrl).then(
+				function (e) {
+					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
+				},
+				function (e) {
+					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
+				}
+			)
+			this.hideMenu()
+		},
+
+		deletePoll() {
+			// Todo: Remove Item self and update transition group in parent.
+			// Event must be triggert from parent
+		},
+
+		editPoll() {
+			this.$router.push(
+				{
+					name: 'edit',
+					params: {hash: this.poll.event.hash}
+				}
+			)
+		}
+
+	},
+
+	computed: {
 		accessType() {
 			if (this.poll.event.access === 'public') {
 				return t('polls', 'Public access')
 			} else if (this.poll.event.access === 'select') {
 				return t('polls', 'Only shared')
 			} else if (this.poll.event.access === 'registered') {
-				return t('polls','Registered users only')
+				return t('polls', 'Registered users only')
 			} else if (this.poll.event.access === 'hidden') {
-				return t('polls','Hidden poll')
+				return t('polls', 'Hidden poll')
 			} else {
 				return ''
 			}
+		},
+
+		timeSpanCreated() {
+			return moment(this.poll.event.created).fromNow()
+		},
+
+		timeSpanExpiration() {
+			if (this.poll.event.expiration) {
+				return moment(this.poll.event.expirationDate).fromNow()
+			} else {
+				return t('polls','never')
+			}
+		},
+		participants() {
+			return this.poll.votes.map(item => item.userId)
+				.filter((value, index, self) => self.indexOf(value) === index)
+		},
+		countvotes() {
+			return this.participants.length
+		},
+		countComments() {
+			return this.poll.comments.length
+		},
+		countShares() {
+			return this.poll.shares.length
+		},
+		voteUrl() {
+			return 	OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
+
+		},
+		menuItems() {
+			return [{
+				icon: 'icon-clippy',
+				text: t('polls', 'Copy Link'),
+				action: this.copyLink
+			},
+			{
+				icon: 'icon-delete',
+				text: t('polls', 'Delete poll'),
+				action: this.deletePoll
+			},
+			{
+				icon: 'icon-rename',
+				text: t('polls', 'Edit poll'),
+				action: this.editPoll
+			}]
 		}
 	}
 }
@@ -122,7 +192,7 @@ export default {
 	width: 44px;
 	height: 44px;
 	padding-right: 4px;
-	background-color: var(--color-primary-text-dark);
+	background-color: var(--color-primary-element);
 	&.datePoll {
 		mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
 		-webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;

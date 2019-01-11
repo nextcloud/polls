@@ -272,7 +272,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	overflow: initial;
 }
 
-
 .options, .participants {
 	display: flex;
 	flex-direction: row;

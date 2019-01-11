@@ -382,7 +382,6 @@ export default {
 		moment.locale(this.locale)
 		this.longDateFormat = moment.localeData().longDateFormat('L')
 		this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
-		var urlArray = window.location.pathname.split('/')
 
 		if (this.$route.name === 'create') {
 			this.poll.event.owner = OC.getCurrentUser().uid
@@ -462,10 +461,12 @@ export default {
 						this.poll.event.hash = response.data.hash
 						this.poll.event.id = response.data.id
 						this.writingPoll = false
+						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.poll.event.title))
 						// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash)
 					}, (error) => {
 						this.poll.event.hash = ''
 						/* eslint-disable-next-line no-console */
+						OC.Notification.showTemporary(t('polls', 'Error on saving poll, see console'))
 						console.log(error.response)
 					})
 			}
