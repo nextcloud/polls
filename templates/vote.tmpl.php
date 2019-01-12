@@ -116,7 +116,7 @@
 
 	<?php if (User::isLoggedIn()) : ?>
 				<div class="crumb svg crumbhome">
-					<a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.index')); ?>"> Home </a>
+					<a class="icon-home" href="<?php p($urlGenerator->linkToRoute('polls.page.list_polls')); ?>"> Home </a>
 				</div>
 	<?php endif; ?>
 

@@ -36,7 +36,7 @@ export default new Router({
 	linkActiveClass: 'active',
 	routes: [
 		{
-			path: '/:index(index.php/)?apps/polls/list',
+			path: '/:index(index.php/)?apps/polls/',
 			components: {
 				default: List
 			},

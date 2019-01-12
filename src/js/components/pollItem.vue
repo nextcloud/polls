@@ -35,7 +35,7 @@
 				</a>
 				<div class="flex-column actions">
 					<div class="toggleUserActions">
-						<div class="icon-more" v-click-outside="hideMenu" @click="toggleMenu"></div>
+						<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
 						<div class="popovermenu" :class="{ 'open': openedMenu }">
 							<popover-menu :menu="menuItems" />
 						</div>
@@ -69,56 +69,19 @@
 </template>
 
 <script>
+import moment from 'moment'
 
 export default {
-	data() {
-		return {
-			openedMenu: false,
-			hostName: this.$route.query.page
-		}
-
-	},
-
 	props: {
 		poll: {
 			type: Object,
 			default: undefined
 		}
 	},
-
-	methods: {
-		toggleMenu() {
-			this.openedMenu = !this.openedMenu;
-		},
-
-		hideMenu() {
-			this.openedMenu = false;
-		},
-
-		copyLink() {
-			this.$copyText(window.location.origin + this.voteUrl).then(
-				function (e) {
-					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
-				},
-				function (e) {
-					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
-				}
-			)
-			this.hideMenu()
-		},
-
-		deletePoll() {
-			// Todo: Remove Item self and update transition group in parent.
-			// Event must be triggert from parent
-		},
-
-		editPoll() {
-			this.$router.push(
-				{
-					name: 'edit',
-					params: {hash: this.poll.event.hash}
-				}
-			)
+	data() {
+		return {
+			openedMenu: false,
+			hostName: this.$route.query.page
 		}
 
 	},
@@ -146,7 +109,7 @@ export default {
 			if (this.poll.event.expiration) {
 				return moment(this.poll.event.expirationDate).fromNow()
 			} else {
-				return t('polls','never')
+				return t('polls', 'never')
 			}
 		},
 		participants() {
@@ -161,6 +124,9 @@ export default {
 		},
 		countShares() {
 			return this.poll.shares.length
+		},
+		votedBycurrentUser() {
+			return this.participants.indexOf(OC.getCurrentUser().uid) > -1
 		},
 		voteUrl() {
 			return 	OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
@@ -183,6 +149,46 @@ export default {
 				action: this.editPoll
 			}]
 		}
+	},
+
+	methods: {
+		toggleMenu() {
+			this.openedMenu = !this.openedMenu
+		},
+
+		hideMenu() {
+			this.openedMenu = false
+		},
+
+		copyLink() {
+			this.$copyText(window.location.origin + this.voteUrl).then(
+				function(e) {
+					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
+				},
+				function(e) {
+					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
+				}
+			)
+			this.hideMenu()
+		},
+
+		deletePoll() {
+			// Todo: Remove Item self and update transition group in parent.
+			// Event must be triggert from parent
+
+			this.$emit('deletePoll')
+			this.hideMenu()
+		},
+
+		editPoll() {
+			this.$router.push(
+				{
+					name: 'edit',
+					params: { hash: this.poll.event.hash }
+				}
+			)
+		}
+
 	}
 }
 

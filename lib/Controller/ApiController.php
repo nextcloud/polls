@@ -42,6 +42,8 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\Notification;
+use OCA\Polls\Db\NotificationMapper;
 
 
 
@@ -51,6 +53,7 @@ class ApiController extends Controller {
 	private $optionMapper;
 	private $voteMapper;
 	private $commentMapper;
+	private $notificationMapper;
 
 	/**
 	 * PageController constructor.
@@ -467,11 +470,35 @@ class ApiController extends Controller {
 		$eventsList = array();
 
 		foreach ($events as $eventElement) {
-			$eventsList[$eventElement->id] = $this->getPoll($eventElement->id);
+			$eventsList[] = $this->getPoll($eventElement->id);
 		}
 
 		return new DataResponse($eventsList, Http::STATUS_OK);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param int $pollId
+	 * @return DataResponse
+	 */
+	public function removePoll($id) {
+		$pollToDelete = $this->eventMapper->find($id);
+		if ($this->userId !== $pollToDelete->getOwner() && !$this->groupManager->isAdmin($this->userId)) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+		$this->commentMapper->deleteByPoll($id);
+		$this->voteMapper->deleteByPoll($id);
+		$this->optionMapper->deleteByPoll($id);
+		// $this->notificationMapper->deleteByPoll($id);
+		$this->eventMapper->delete($pollToDelete);
+		// $url = $this->urlGenerator->linkToRoute('polls.page.index');
+		return new DataResponse(array(
+			'id' => $id,
+			'action' => 'deleted'
+		), Http::STATUS_OK);
+	}
+
 
 	/**
 	 * Write poll (create/update)

@@ -23,14 +23,11 @@
 <template>
 	<div id="app-content">
 		<controls>
-			<div class="actions creatable" style="">
-				<router-link :to="{ name: 'create'}" class="button new">
-					<span class="symbol icon-add" />
-					<span class="hidden-visually">
-						{{ t('polls', 'New') }}
-					</span>
-				</router-link>
-			</div>
+			<router-link :to="{ name: 'create'}" class="button symbol icon-add">
+				<span class="hidden-visually">
+					{{ t('polls', 'New') }}
+				</span>
+			</router-link>
 		</controls>
 
 		<div v-if="noPolls" class="">
@@ -43,10 +40,9 @@
 
 		<transition-group
 			v-if="!noPolls"
-			id="poll-list"
 			name="list"
 			tag="div"
-			class="table main-container has-controls"
+			class="poll-list table main-container has-controls"
 		>
 			<poll-list-header
 				key="0"
@@ -54,10 +50,11 @@
 			/>
 			<li
 				is="poll-item"
-				v-for="(poll) in polls"
+				v-for="(poll, index) in polls"
 				:key="poll.id"
 				:poll="poll"
 				class="table-row table-body"
+				@deletePoll="removePoll(index, poll.event)"
 			/>
 		</transition-group>
 	</div>
@@ -102,6 +99,23 @@ export default {
 					console.log(error.response)
 					this.loading = false
 				})
+		},
+
+		removePoll: function (index, event) {
+			this.loading = true
+			this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event )
+			.then((response) => {
+				OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
+				this.polls.splice(index, 1)
+				this.loading = false
+				console.log(response.data)
+
+			}, (error) => {
+				/* eslint-disable-next-line no-console */
+				OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title))
+				console.log(error.response)
+				this.loading = false
+			})
 		}
 	}
 }
@@ -144,6 +158,14 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		-webkit-mask: url('./img/app.svg') no-repeat 50% 50%;
 		mask: url('./img/app.svg') no-repeat 50% 50%;
 	}
+}
+
+.poll-list {
+	margin-top: 45px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-wrap: nowrap;
 }
 
 .table-row {

@@ -23,13 +23,13 @@
 <template>
 	<div id="app-content">
 		<controls :intitle="title">
-			<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
-				<span>{{ saveButtonTitle }}</span>
-				<span v-if="writingPoll" class="icon-loading-small" />
-			</button>
-			<button class="button" @click="switchSidebar">
-				<span class="symbol icon-settings" />
-			</button>
+			<template slot="after">
+				<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
+					<span>{{ saveButtonTitle }}</span>
+					<span v-if="writingPoll" class="icon-loading-small" />
+				</button>
+				<button class="button symbol icon-settings" @click="switchSidebar" />
+			</template>
 		</controls>
 
 		<div class="workbench">
@@ -455,7 +455,7 @@ export default {
 				this.titleEmpty = true
 			} else {
 				this.titleEmpty = false
-				this.$http.post(OC.generateUrl('apps/polls/write'), this.poll)
+				this.$http.post(OC.generateUrl('apps/polls/write/poll'), this.poll)
 					.then((response) => {
 						this.poll.mode = 'edit'
 						this.poll.event.hash = response.data.hash
@@ -465,8 +465,8 @@ export default {
 						// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash)
 					}, (error) => {
 						this.poll.event.hash = ''
-						/* eslint-disable-next-line no-console */
 						OC.Notification.showTemporary(t('polls', 'Error on saving poll, see console'))
+						/* eslint-disable-next-line no-console */
 						console.log(error.response)
 					})
 			}
