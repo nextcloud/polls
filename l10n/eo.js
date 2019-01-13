@@ -23,7 +23,7 @@ OC.L10N.register(
     "Title" : "Titolo",
     "Description" : "Priskribo",
     "Vote options" : "Voĉdonaj opcioj",
-    "Event schedule" : "Plani eventon",
+    "Event schedule" : "Plani okazaĵon",
     "Text based" : "Uzi tekstajn elektojn",
     "Add option" : "Aldoni opcion",
     "You are editing in admin mode" : "Vi modifas kiel administranto",
