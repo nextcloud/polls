@@ -23,8 +23,8 @@
 
 return [
 	'routes' => [
-		['name' => 'page#list_polls', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'page#index', 'url' => '/list', 'verb' => 'GET'],
+		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#index_old', 'url' => '/list', 'verb' => 'GET'],
 		['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
 
 		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],

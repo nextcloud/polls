@@ -134,7 +134,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function index() {
+	public function indexOld() {
 		$polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
 		$comments = $this->commentMapper->findDistinctByUser($this->userId);
 		$votes = $this->voteMapper->findDistinctByUser($this->userId);
@@ -164,7 +164,7 @@ class PageController extends Controller {
 	* @NoAdminRequired
 	* @NoCSRFRequired
 	*/
-	public function listPolls() {
+	public function index() {
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);
 	}

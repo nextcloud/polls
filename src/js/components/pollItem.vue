@@ -24,7 +24,11 @@
 	<div>
 		<div class="wrapper group-master">
 			<div class="wrapper group-1">
-				<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] " />
+				<div v-if="countComments" class="comment-badge">
+					{{ countComments }}
+				</div>
+				<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] ">
+				</div>
 				<a :href="voteUrl" class="wrapper group-1-1">
 					<div class="flex-column name">
 						{{ poll.event.title }}
@@ -59,8 +63,7 @@
 						{{ timeSpanExpiration }}
 					</div>
 					<div class="flex-column participants">
-						<div class="symbol alt-tooltip partic_voted icon-voted" />
-						<div class="symbol alt-tooltip partic_commented icon-comment-yes" />
+						<div v-if="votedBycurrentUser" class="symbol icon-voted" />
 					</div>
 				</div>
 			</div>
@@ -69,7 +72,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+// import moment from 'moment'
 
 export default {
 	props: {
@@ -212,6 +215,23 @@ export default {
 	&.expired {
 		background-color: var(--color-error);
 	}
+
 }
 
+.icon-voted {
+	background-image: var(--icon-checkmark-49bc49);
+}
+.comment-badge {
+	position: absolute;
+	top: 0px;
+	width: 26px;
+	line-height: 26px;
+	text-align: center;
+	font-size: 0.7rem;
+	color: white;
+	background-image: var(--icon-comment-49bc49);
+	background-repeat: no-repeat;
+	background-size: 26px;
+	z-index: 1;
+}
 </style>

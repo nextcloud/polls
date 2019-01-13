@@ -27,6 +27,7 @@ import axios from 'nextcloud-axios'
 import App from './App.vue'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
+import Modal from './plugins/plugin.js'
 
 import { DatetimePicker, PopoverMenu } from 'nextcloud-vue'
 
@@ -48,10 +49,13 @@ Vue.component('ShareDiv', ShareDiv)
 
 Vue.use(vClickOutside)
 Vue.use(VueClipboard)
+Vue.use(Modal)
 
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.$http = axios
+Vue.prototype.OC = OC
+Vue.prototype.OCA = OCA
 
 // CSP config for webpack dynamic chunk loading
 // eslint-disable-next-line

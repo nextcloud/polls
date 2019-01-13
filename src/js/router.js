@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 /**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>

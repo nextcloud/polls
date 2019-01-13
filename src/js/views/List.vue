@@ -23,7 +23,8 @@
 <template>
 	<div id="app-content">
 		<controls>
-			<router-link :to="{ name: 'create'}" class="button symbol icon-add">
+			<router-link :to="{ name: 'create'}" class="button">
+				<span class="symbol icon-add"></span>
 				<span class="hidden-visually">
 					{{ t('polls', 'New') }}
 				</span>
@@ -57,6 +58,7 @@
 				@deletePoll="removePoll(index, poll.event)"
 			/>
 		</transition-group>
+		<modal-dialog/>
 	</div>
 </template>
 
@@ -101,22 +103,27 @@ export default {
 				})
 		},
 
-		removePoll: function (index, event) {
-			this.loading = true
-			this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event )
-			.then((response) => {
-				OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
-				this.polls.splice(index, 1)
-				this.loading = false
-				console.log(response.data)
+		removePoll: function(index, event) {
+			const params = {
+				title: t('polls','Delete poll'),
+				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
+				onConfirm: () => {
+					// this.deletePoll(index, event)
+					this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event)
+						.then((response) => {
+							this.polls.splice(index, 1)
+							OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
+						}, (error) => {
+							OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title))
+							/* eslint-disable-next-line no-console */
+							console.log(error.response)
+						}
+					)
+				}
+			}
+			this.$modal.show(params)
+		},
 
-			}, (error) => {
-				/* eslint-disable-next-line no-console */
-				OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title))
-				console.log(error.response)
-				this.loading = false
-			})
-		}
 	}
 }
 </script>

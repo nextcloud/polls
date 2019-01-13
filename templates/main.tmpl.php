@@ -49,7 +49,7 @@
 				</div>
 			</div>
 			<div class="actions creatable" style="">
-				<a href="<?php p($urlGenerator->linkToRoute('polls.page.polls_app')); ?>" class="button new">
+				<a href="<?php p($urlGenerator->linkToRoute('polls.page.create_poll')); ?>" class="button new">
 					<span class="symbol icon-add"></span><span class="hidden-visually">Neu</span>
 				</a>
 				<input class="stop icon-close" style="display:none" value="" type="button">
