@@ -18,6 +18,7 @@ OC.L10N.register(
     "Owner" : "Ägare",
     "Expires" : "Går ut",
     "Access" : "Åtkomst",
+    "Public access" : "Publik åtkomst",
     "Create new poll" : "Skapa ny omröstning",
     "Update poll" : "Uppdatera omröstning",
     "Expired" : "Utgången",
