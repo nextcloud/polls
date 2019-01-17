@@ -87,7 +87,7 @@ OC.L10N.register(
     "Poll expired" : "Enquisa expirada",
     "Comments" : "Comentarios",
     "Login or ..." : "Acceder ou ...",
-    "New comment …" : "Comentario novo …",
+    "New comment …" : "Comentario novo…",
     "No comments yet. Be the first." : "Aínda non hai comentarios, Sexa o primeiro."
 },
 "nplurals=2; plural=(n != 1);");

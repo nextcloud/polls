@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unlock configuration " : "Aflæsa uppsetningu",
     "Poll type" : "Gerð könnunar",
     "Poll configurations" : "Uppsetningar kannana",
+    "Allow \"maybe\" vote" : "Leyfa \"kannski\"-atkvæði",
     "Anonymous poll" : "Nafnlaus könnun",
     "Hide user names for admin" : "Fela notendanöfn fyrir kerfisstjórum",
     "Expires" : "Rennur út",
