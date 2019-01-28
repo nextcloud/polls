@@ -213,7 +213,7 @@ export default {
 		mask-size: 32px;
 	}
 	&.expired {
-		background-color: var(--color-error);
+		background-color: var(--color-background-darker);
 	}
 
 }
