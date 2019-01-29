@@ -121,7 +121,7 @@ export default {
 			return this.participants.length
 		},
 		countComments() {
-			if (this.poll.comments.length > 9) {
+			if (this.poll.comments.length > 999) {
 				return '999+';
 			}
 			return this.poll.comments.length;
