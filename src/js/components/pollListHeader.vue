@@ -33,9 +33,6 @@
 				</div>
 			</div>
 			<div class="wrapper group-2">
-				<div class="flex-column owner">
-					{{ t('polls', 'By') }}
-				</div>
 				<div class="wrapper group-2-1">
 					<div class="flex-column access">
 						{{ t('polls', 'Access') }}
@@ -44,12 +41,12 @@
 						{{ t('polls', 'Created') }}
 					</div>
 				</div>
+				<div class="flex-column owner">
+					{{ t('polls', 'By') }}
+				</div>
 				<div class="wrapper group-2-2">
 					<div class="flex-column expiry">
 						{{ t('polls', 'Expires') }}
-					</div>
-					<div class="flex-column participants">
-						{{ t('polls', 'participated') }}
 					</div>
 				</div>
 			</div>

@@ -21,54 +21,52 @@
   -->
 
 <template>
-	<div>
-		<div class="wrapper group-master">
-			<div class="wrapper group-1">
-				<div v-if="countComments" class="comment-badge">
-					{{ countComments }}
-				</div>
-				<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] ">
-				</div>
-				<a :href="voteUrl" class="wrapper group-1-1">
+<div>
+	<div class="wrapper group-master">
+		<div class="wrapper group-1">
+			<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] ">
+			</div>
+			<div v-if="votedBycurrentUser" class="symbol icon-voted" />
+			<a :href="voteUrl" class="wrapper group-1-1">
 					<div class="flex-column name">
 						{{ poll.event.title }}
 					</div>
 					<div class="flex-column description">
 						{{ poll.event.description }}
 					</div>
-				</a>
-				<div class="flex-column actions">
-					<div class="toggleUserActions">
-						<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
-						<div class="popovermenu" :class="{ 'open': openedMenu }">
-							<popover-menu :menu="menuItems" />
-						</div>
-					</div>
-				</div>
+			</a>
+			<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted">
+				<span>{{ countComments }}</span>
 			</div>
-			<div class="wrapper group-2">
-				<div class="flex-column owner">
-					<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
-				</div>
-				<div class="wrapper group-2-1">
-					<div class="flex-column access">
-						{{ accessType }}
-					</div>
-					<div class="flex-column created ">
-						{{ timeSpanCreated }}
-					</div>
-				</div>
-				<div class="wrapper group-2-2">
-					<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
-						{{ timeSpanExpiration }}
-					</div>
-					<div class="flex-column participants">
-						<div v-if="votedBycurrentUser" class="symbol icon-voted" />
+			<div class="actions">
+				<div class="toggleUserActions">
+					<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
+					<div class="popovermenu" :class="{ 'open': openedMenu }">
+						<popover-menu :menu="menuItems" />
 					</div>
 				</div>
 			</div>
 		</div>
+		<div class="wrapper group-2">
+			<div class="wrapper group-2-1">
+				<div class="flex-column access">
+					{{ accessType }}
+				</div>
+				<div class="flex-column created ">
+					{{ timeSpanCreated }}
+				</div>
+			</div>
+			<div class="flex-column owner">
+				<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
+			</div>
+			<div class="wrapper group-2-2">
+				<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
+					{{ timeSpanExpiration }}
+				</div>
+			</div>
+		</div>
 	</div>
+</div>
 </template>
 
 <script>
@@ -123,7 +121,10 @@ export default {
 			return this.participants.length
 		},
 		countComments() {
-			return this.poll.comments.length
+			if (this.poll.comments.length > 9) {
+				return '999+';
+			}
+			return this.poll.comments.length;
 		},
 		countShares() {
 			return this.poll.shares.length
@@ -132,24 +133,24 @@ export default {
 			return this.participants.indexOf(OC.getCurrentUser().uid) > -1
 		},
 		voteUrl() {
-			return 	OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
+			return OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
 
 		},
 		menuItems() {
 			return [{
-				icon: 'icon-clippy',
-				text: t('polls', 'Copy Link'),
-				action: this.copyLink
+					icon: 'icon-clippy',
+					text: t('polls', 'Copy Link'),
+					action: this.copyLink
 			},
-			{
-				icon: 'icon-delete',
-				text: t('polls', 'Delete poll'),
-				action: this.deletePoll
+				{
+					icon: 'icon-rename',
+					text: t('polls', 'Edit poll'),
+					action: this.editPoll
 			},
-			{
-				icon: 'icon-rename',
-				text: t('polls', 'Edit poll'),
-				action: this.editPoll
+				{
+					icon: 'icon-delete',
+					text: t('polls', 'Delete poll'),
+					action: this.deletePoll
 			}]
 		}
 	},
@@ -165,10 +166,10 @@ export default {
 
 		copyLink() {
 			this.$copyText(window.location.origin + this.voteUrl).then(
-				function(e) {
+				function (e) {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
 				},
-				function(e) {
+				function (e) {
 					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
 				}
 			)
@@ -184,54 +185,81 @@ export default {
 		},
 
 		editPoll() {
-			this.$router.push(
-				{
-					name: 'edit',
-					params: { hash: this.poll.event.hash }
+			this.$router.push({
+				name: 'edit',
+				params: {
+					hash: this.poll.event.hash
 				}
-			)
+			})
 		}
 
 	}
 }
-
 </script>
 <style lang="scss">
 .thumbnail {
-	width: 44px;
-	height: 44px;
-	padding-right: 4px;
-	background-color: var(--color-primary-element);
-	&.datePoll {
-		mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
-		-webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
-		mask-size: 32px;
-	}
-	&.textPoll {
-		mask-image: var(--icon-organization-000) no-repeat 50% 50%;
-		-webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
-		mask-size: 32px;
-	}
-	&.expired {
-		background-color: var(--color-background-darker);
-	}
+    width: 44px;
+    height: 44px;
+    padding-right: 4px;
+    background-color: var(--color-text-light);
+    &.datePoll {
+        mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
+        -webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
+        mask-size: 32px;
+    }
+    &.textPoll {
+        mask-image: var(--icon-organization-000) no-repeat 50% 50%;
+        -webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
+        mask-size: 32px;
+    }
+    &.expired {
+        background-color: var(--color-background-darker);
+    }
 
 }
 
 .icon-voted {
-	background-image: var(--icon-checkmark-49bc49);
+    background-image: var(--icon-checkmark-49bc49);
 }
 .comment-badge {
+    position: absolute;
+    top: 0;
+    width: 26px;
+    line-height: 26px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: white;
+    background-image: var(--icon-comment-49bc49);
+    background-repeat: no-repeat;
+    background-size: 26px;
+    z-index: 1;
+}
+
+.app-navigation-entry-utils-counter {
+	padding-right: 0 !important;
+    overflow: hidden;
+    text-align: right;
+    font-size: 9pt;
+    line-height: 44px;
+    padding: 0 12px;
+	// min-width: 25px;
+    &.highlighted {
+        padding: 0;
+        text-align: center;
+        span {
+            padding: 2px 5px;
+            border-radius: 10px;
+            background-color: var(--color-primary);
+            color: var(--color-primary-text);
+        }
+    }
+}
+.symbol.icon-voted {
 	position: absolute;
-	top: 0px;
-	width: 26px;
-	line-height: 26px;
-	text-align: center;
-	font-size: 0.7rem;
-	color: white;
-	background-image: var(--icon-comment-49bc49);
-	background-repeat: no-repeat;
-	background-size: 26px;
-	z-index: 1;
+	left: 5px;
+	top: 8px;
+	background-size: 3em;
+	min-width: 3em;
+	min-height: 3em;
 }
 </style>

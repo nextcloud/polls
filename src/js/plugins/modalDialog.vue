@@ -1,5 +1,5 @@
 <template>
-	<div class="modal-wrapper" v-if="visible">
+	<div class="modal-dialog" v-if="visible">
 		<div class="modal-header">
 			<h2>{{ title }}</h2>
 		</div>
@@ -7,8 +7,8 @@
 			<p>{{ text }}</p>
 		</div>
 		<div class="modal-buttons">
-			<button class="button" @click="hide">{{ t('polls','No') }}</button>
-			<button class="button primary" @click="confirm">{{ t('polls','yes') }}</button>
+			<button class="button" @click="hide">{{ t('polls','No, keep poll.') }}</button>
+			<button class="button primary" @click="confirm">{{ t('polls','Yes, delete poll.') }}</button>
 		</div>
 	</div>
 </template>
@@ -65,7 +65,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.modal-wrapper {
+.modal-dialog {
 	display: flex;
 	flex-direction: column;
 	position: fixed;
@@ -76,17 +76,20 @@ export default {
 	max-width: 500px;
 	z-index: 1000;
 	background-color: var(--color-main-background);
-	box-shadow: 10px 10px 30px 1px rgba(0, 0, 0, 0.24);
-	& > * {
-		padding: 7px;
-	}
+	box-shadow: 0 0 3px rgba(77, 77, 77, 0.5);
+	padding: 20px;
 }
 
-.modal-header {
-	background-color: var(--color-primary);
-	& > * {
-		color: var(--color-primary-text);
-	}
+.modal-buttons {
+	display: flex;
+	justify-content: space-between;
 }
+
+// .modal-header {
+// 	background-color: var(--color-primary);
+// 	& > * {
+// 		color: var(--color-primary-text);
+// 	}
+// }
 
 </style>
