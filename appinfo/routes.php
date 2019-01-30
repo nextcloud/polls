@@ -47,7 +47,7 @@ return [
 		['name' => 'api#get_event', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],
 		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
-		['name' => 'api#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
+		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
 		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']
 	]
 ];
