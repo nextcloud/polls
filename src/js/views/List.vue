@@ -24,7 +24,7 @@
 	<div id="app-content">
 		<controls>
 			<router-link :to="{ name: 'create'}" class="button">
-				<span class="symbol icon-add"></span>
+				<span class="symbol icon-add" />
 				<span class="hidden-visually">
 					{{ t('polls', 'New') }}
 				</span>
@@ -58,7 +58,8 @@
 				@deletePoll="removePoll(index, poll.event)"
 			/>
 		</transition-group>
-		<modal-dialog/>
+		<loading-overlay v-if="loading" />
+		<modal-dialog />
 	</div>
 </template>
 
@@ -79,7 +80,7 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			loading: false,
+			loading: true,
 			polls: []
 		}
 	},
@@ -105,7 +106,7 @@ export default {
 
 		removePoll: function(index, event) {
 			const params = {
-				title: t('polls','Delete poll'),
+				title: t('polls', 'Delete poll'),
 				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
 				onConfirm: () => {
 					// this.deletePoll(index, event)
@@ -118,11 +119,11 @@ export default {
 							/* eslint-disable-next-line no-console */
 							console.log(error.response)
 						}
-					)
+						)
 				}
 			}
 			this.$modal.show(params)
-		},
+		}
 
 	}
 }

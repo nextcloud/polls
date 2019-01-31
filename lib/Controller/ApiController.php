@@ -49,11 +49,12 @@ use OCA\Polls\Db\NotificationMapper;
 
 class ApiController extends Controller {
 
+	private $groupManager;
+	private $userManager;
 	private $eventMapper;
 	private $optionMapper;
 	private $voteMapper;
 	private $commentMapper;
-	private $notificationMapper;
 
 	/**
 	 * PageController constructor.
@@ -75,8 +76,8 @@ class ApiController extends Controller {
 		$userId,
 		EventMapper $eventMapper,
 		OptionMapper $optionMapper,
-		VoteMapper $VoteMapper,
-		CommentMapper $CommentMapper
+		VoteMapper $voteMapper,
+		CommentMapper $commentMapper
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
@@ -84,8 +85,8 @@ class ApiController extends Controller {
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
 		$this->optionMapper = $optionMapper;
-		$this->voteMapper = $VoteMapper;
-		$this->commentMapper = $CommentMapper;
+		$this->voteMapper = $voteMapper;
+		$this->commentMapper = $commentMapper;
 	}
 
 	/**
@@ -158,8 +159,8 @@ class ApiController extends Controller {
 
 	/**
 	 * Set the access right of the current user for the poll
-	 * @param Object $event
-	 * @param Object $shares
+	 * @param Array $event
+	 * @param Array $shares
 	 * @return String
 	 */
 	private function grantAccessAs($event, $shares) {

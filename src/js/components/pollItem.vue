@@ -21,56 +21,55 @@
   -->
 
 <template>
-<div>
-	<div class="wrapper group-master">
-		<div class="wrapper group-1">
-			<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] ">
-			</div>
-			<div v-if="votedBycurrentUser" class="symbol icon-voted" />
-			<a :href="voteUrl" class="wrapper group-1-1">
+	<div>
+		<div class="wrapper group-master">
+			<div class="wrapper group-1">
+				<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] " />
+				<div v-if="votedBycurrentUser" class="symbol icon-voted" />
+				<a :href="voteUrl" class="wrapper group-1-1">
 					<div class="flex-column name">
 						{{ poll.event.title }}
 					</div>
 					<div class="flex-column description">
 						{{ poll.event.description }}
 					</div>
-			</a>
-			<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted">
-				<span>{{ countComments }}</span>
+				</a>
+				<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted">
+					<span>{{ countComments }}</span>
+				</div>
+				<div class="actions">
+					<div class="toggleUserActions">
+						<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
+						<div class="popovermenu" :class="{ 'open': openedMenu }">
+							<popover-menu :menu="menuItems" />
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="actions">
-				<div class="toggleUserActions">
-					<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
-					<div class="popovermenu" :class="{ 'open': openedMenu }">
-						<popover-menu :menu="menuItems" />
+			<div class="wrapper group-2">
+				<div class="wrapper group-2-1">
+					<div class="flex-column access">
+						{{ accessType }}
+					</div>
+					<div class="flex-column created ">
+						{{ timeSpanCreated }}
+					</div>
+				</div>
+				<div class="flex-column owner">
+					<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
+				</div>
+				<div class="wrapper group-2-2">
+					<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
+						{{ timeSpanExpiration }}
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="wrapper group-2">
-			<div class="wrapper group-2-1">
-				<div class="flex-column access">
-					{{ accessType }}
-				</div>
-				<div class="flex-column created ">
-					{{ timeSpanCreated }}
-				</div>
-			</div>
-			<div class="flex-column owner">
-				<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
-			</div>
-			<div class="wrapper group-2-2">
-				<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
-					{{ timeSpanExpiration }}
-				</div>
-			</div>
-		</div>
 	</div>
-</div>
 </template>
 
 <script>
-// import moment from 'moment'
+import moment from 'moment'
 
 export default {
 	props: {
@@ -122,9 +121,9 @@ export default {
 		},
 		countComments() {
 			if (this.poll.comments.length > 999) {
-				return '999+';
+				return '999+'
 			}
-			return this.poll.comments.length;
+			return this.poll.comments.length
 		},
 		countShares() {
 			return this.poll.shares.length
@@ -138,19 +137,19 @@ export default {
 		},
 		menuItems() {
 			return [{
-					icon: 'icon-clippy',
-					text: t('polls', 'Copy Link'),
-					action: this.copyLink
+				icon: 'icon-clippy',
+				text: t('polls', 'Copy Link'),
+				action: this.copyLink
 			},
-				{
-					icon: 'icon-rename',
-					text: t('polls', 'Edit poll'),
-					action: this.editPoll
+			{
+				icon: 'icon-rename',
+				text: t('polls', 'Edit poll'),
+				action: this.editPoll
 			},
-				{
-					icon: 'icon-delete',
-					text: t('polls', 'Delete poll'),
-					action: this.deletePoll
+			{
+				icon: 'icon-delete',
+				text: t('polls', 'Delete poll'),
+				action: this.deletePoll
 			}]
 		}
 	},
@@ -166,10 +165,10 @@ export default {
 
 		copyLink() {
 			this.$copyText(window.location.origin + this.voteUrl).then(
-				function (e) {
+				function(e) {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
 				},
-				function (e) {
+				function(e) {
 					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
 				}
 			)
@@ -219,7 +218,7 @@ export default {
 }
 
 .icon-voted {
-    background-image: var(--icon-checkmark-49bc49);
+    background-image: var(--icon-checkmark-fff);
 }
 .comment-badge {
     position: absolute;
@@ -258,8 +257,10 @@ export default {
 	position: absolute;
 	left: 5px;
 	top: 8px;
-	background-size: 3em;
-	min-width: 3em;
-	min-height: 3em;
+	background-size: 1em;
+	min-width: 1.2em;
+	min-height: 1.2em;
+	background-color: var(--color-success);
+	border-radius: 50%;
 }
 </style>

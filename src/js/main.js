@@ -31,21 +31,23 @@ import Modal from './plugins/plugin.js'
 
 import { DatetimePicker, PopoverMenu } from 'nextcloud-vue'
 
-import Controls from './components/_base-Controls.vue'
-import SideBar from './components/_base-SideBar.vue'
-import SideBarClose from './components/sideBarClose.vue'
-import ShareDiv from './components/shareDiv.vue'
-import UserDiv from './components/_base-UserDiv.vue'
+import Controls from './components/_base-Controls'
+import UserDiv from './components/_base-UserDiv'
+import SideBar from './components/_base-SideBar'
+import SideBarClose from './components/sideBarClose'
+import ShareDiv from './components/shareDiv'
+import LoadingOverlay from './components/_base-LoadingOverlay'
 
 Vue.config.debug = true
 Vue.config.devTools = true
 Vue.component('Controls', Controls)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
-Vue.component('SideBarClose', SideBarClose)
 Vue.component('UserDiv', UserDiv)
 Vue.component('SideBar', SideBar)
+Vue.component('SideBarClose', SideBarClose)
 Vue.component('ShareDiv', ShareDiv)
+Vue.component('LoadingOverlay', LoadingOverlay)
 
 Vue.use(vClickOutside)
 Vue.use(VueClipboard)

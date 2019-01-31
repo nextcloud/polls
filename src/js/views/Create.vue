@@ -109,7 +109,7 @@
 			</div>
 		</div>
 
-		<sideBar v-if="sidebar">
+		<side-bar v-if="sidebar">
 			<div v-if="adminMode" class="warning">
 				{{ t('polls', 'You are editing in admin mode') }}
 			</div>
@@ -228,10 +228,8 @@
 				@update-shares="updateShares"
 				@remove-share="removeShare"
 			/>
-		</sideBar>
-		<div v-if="loadingPoll" class="loading-overlay">
-			<span class="icon-loading" />
-		</div>
+		</side-bar>
+		<loading-overlay v-if="loadingPoll" />
 	</div>
 </template>
 
@@ -541,30 +539,6 @@ input[type="text"] {
         flex-direction: column;
         flex-grow: 1;
         padding: 8px;
-    }
-}
-
-.loading-overlay {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    opacity: 0.9;
-    z-index: 1001;
-    .icon-loading {
-        position: fixed;
-        left: 50%;
-        top: 50%;
-        margin-left: -35px;
-        margin-top: -10px;
-        &::after {
-            border: 10px solid var(--color-loading-light);
-            border-top-color: var(--color-primary-element);
-            height: 70px;
-            width: 70px;
-        }
     }
 }
 
