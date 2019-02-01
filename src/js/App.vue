@@ -355,6 +355,10 @@ export default {
 					end: '23:55'
 				}
 			}
+		},
+
+		isPollValid() {
+			return !this.titleEmpty
 		}
 
 	},
@@ -448,15 +452,17 @@ export default {
 			this.newPollText = ''
 		},
 
+		validatePoll() {
+			this.titleEmpty = (this.poll.event.title.length === 0)
+		},
+
 		writePoll(mode) {
-			this.writingPoll = true
 			if (mode !== '') {
 				this.poll.mode = mode
 			}
-			if (this.poll.event.title.length === 0) {
-				this.titleEmpty = true
-			} else {
-				this.titleEmpty = false
+			this.validatePoll()
+			if (this.isPollValid) {
+				this.writingPoll = true
 				axios.post(OC.generateUrl('apps/polls/write'), this.poll)
 					.then((response) => {
 						this.poll.mode = 'edit'
