@@ -50,7 +50,7 @@
 				class="table-row table-header"
 			/>
 			<li
-				is="poll-item"
+				is="poll-list-item"
 				v-for="(poll, index) in polls"
 				:key="poll.id"
 				:poll="poll"
@@ -66,14 +66,14 @@
 <script>
 // import moment from 'moment'
 // import lodash from 'lodash'
-import pollItem from '../components/pollItem'
+import pollListItem from '../components/pollListItem'
 import pollListHeader from '../components/pollListHeader'
 
 export default {
 	name: 'List',
 
 	components: {
-		pollItem,
+		pollListItem,
 		pollListHeader
 	},
 

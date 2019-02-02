@@ -136,21 +136,41 @@ export default {
 
 		},
 		menuItems() {
-			return [{
+
+			let items = [{
 				icon: 'icon-clippy',
 				text: t('polls', 'Copy Link'),
 				action: this.copyLink
-			},
-			{
-				icon: 'icon-rename',
-				text: t('polls', 'Edit poll'),
-				action: this.editPoll
-			},
-			{
-				icon: 'icon-delete',
-				text: t('polls', 'Delete poll'),
-				action: this.deletePoll
 			}]
+			if (this.poll.event.owner === OC.getCurrentUser().uid) {
+				items.push(
+					{
+						icon: 'icon-rename',
+						text: t('polls', 'Edit poll'),
+						action: this.editPoll
+					})
+				items.push({
+					icon: 'icon-delete',
+					text: t('polls', 'Delete poll'),
+					action: this.deletePoll
+				}
+				)
+			} else if (OC.isUserAdmin()) {
+				items.push(
+					{
+						icon: 'icon-rename',
+						text: t('polls', 'Edit poll as admin'),
+						action: this.editPoll
+					})
+				items.push({
+					icon: 'icon-delete',
+					text: t('polls', 'Delete poll as admin'),
+					action: this.deletePoll
+				}
+				)
+			}
+
+			return items
 		}
 	},
 
