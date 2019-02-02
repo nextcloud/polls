@@ -445,13 +445,14 @@ export default {
 		},
 
 		writePoll(mode) {
-			this.writingPoll = true
 			if (mode !== '') {
 				this.poll.mode = mode
 			}
 			if (this.poll.event.title.length === 0) {
 				this.titleEmpty = true
+				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'))
 			} else {
+				this.writingPoll = true
 				this.titleEmpty = false
 				this.$http.post(OC.generateUrl('apps/polls/write/poll'), this.poll)
 					.then((response) => {
@@ -463,6 +464,7 @@ export default {
 						// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash)
 					}, (error) => {
 						this.poll.event.hash = ''
+						this.writingPoll = false
 						OC.Notification.showTemporary(t('polls', 'Error on saving poll, see console'))
 						/* eslint-disable-next-line no-console */
 						console.log(error.response)
