@@ -53,6 +53,14 @@ export default new Router({
 			name: 'edit'
 		},
 		{
+			path: '/:index(index.php/)?apps/polls/clone/:hash',
+			components: {
+				default: Create
+			},
+			props: true,
+			name: 'clone'
+		},
+		{
 			path: '/:index(index.php/)?apps/polls/new',
 			components: {
 				default: Create

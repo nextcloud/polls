@@ -29,6 +29,7 @@ return [
 
 		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
 		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
+		['name' => 'page#clone_poll', 'url' => '/clone/{hash}', 'verb' => 'GET'],
 
 		['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
 		['name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'],

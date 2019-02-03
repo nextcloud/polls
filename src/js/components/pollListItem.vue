@@ -141,6 +141,11 @@ export default {
 				icon: 'icon-clippy',
 				text: t('polls', 'Copy Link'),
 				action: this.copyLink
+			},
+			{
+				icon: 'icon-confirm',
+				text: t('polls', 'Clone poll'),
+				action: this.clonePoll
 			}]
 			if (this.poll.event.owner === OC.getCurrentUser().uid) {
 				items.push(
@@ -207,7 +212,16 @@ export default {
 			this.$router.push({
 				name: 'edit',
 				params: {
-					hash: this.poll.event.hash
+					hash: this.poll.event.id
+				}
+			})
+		},
+
+		clonePoll() {
+			this.$router.push({
+				name: 'clone',
+				params: {
+					hash: this.poll.event.id
 				}
 			})
 		}
