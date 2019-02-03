@@ -297,9 +297,6 @@ export default {
 
 	computed: {
 		adminMode() {
-			console.log(OC.isUserAdmin())
-			console.log(this.poll.event.owner)
-			console.log((this.poll.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin()))
 			return (this.poll.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
 		},
 
@@ -391,7 +388,7 @@ export default {
 			this.loadPoll(this.$route.params.hash)
 			this.protect = true
 			this.poll.mode = 'edit'
-		}  else if (this.$route.name === 'clone') {
+		} else if (this.$route.name === 'clone') {
 			this.loadPoll(this.$route.params.hash)
 		}
 		if (window.innerWidth > 1024) {
@@ -501,15 +498,13 @@ export default {
 						this.poll.event.hash = ''
 						this.poll.event.id = 0
 						this.poll.id = this.poll.event.id
-						this.poll.event.title = t('polls', 'Clone of %n',1, this.poll.event.title)
+						this.poll.event.title = t('polls', 'Clone of %n', 1, this.poll.event.title)
 						this.poll.mode = 'create'
 					}
 
 					this.loadingPoll = false
 					this.newPollDate = ''
 					this.newPollText = ''
-
-
 
 				}, (error) => {
 					/* eslint-disable-next-line no-console */
