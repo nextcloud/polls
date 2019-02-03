@@ -147,7 +147,9 @@ export default {
 				text: t('polls', 'Clone poll'),
 				action: this.clonePoll
 			}]
+
 			if (this.poll.event.owner === OC.getCurrentUser().uid) {
+
 				items.push(
 					{
 						icon: 'icon-rename',
@@ -158,9 +160,10 @@ export default {
 					icon: 'icon-delete',
 					text: t('polls', 'Delete poll'),
 					action: this.deletePoll
-				}
-				)
+				})
+
 			} else if (OC.isUserAdmin()) {
+
 				items.push(
 					{
 						icon: 'icon-rename',
@@ -171,8 +174,7 @@ export default {
 					icon: 'icon-delete',
 					text: t('polls', 'Delete poll as admin'),
 					action: this.deletePoll
-				}
-				)
+				})
 			}
 
 			return items

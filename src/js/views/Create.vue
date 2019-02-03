@@ -254,6 +254,9 @@ export default {
 				comments: [],
 				votes: [],
 				shares: [],
+				grantedAs: 'owner',
+				id: 0,
+				result: 'new',
 				event: {
 					id: 0,
 					hash: '',
@@ -495,11 +498,15 @@ export default {
 
 					if (this.$route.name === 'clone') {
 						this.poll.event.owner = OC.getCurrentUser().uid
-						this.poll.event.hash = ''
-						this.poll.event.id = 0
-						this.poll.id = this.poll.event.id
 						this.poll.event.title = t('polls', 'Clone of %n', 1, this.poll.event.title)
+						this.poll.event.id = 0
+						this.poll.id = 0
+						this.poll.event.hash = ''
+						this.poll.grantedAs = 'owner'
+						this.poll.result = 'new'
 						this.poll.mode = 'create'
+						this.poll.comments = []
+						this.poll.votes = []
 					}
 
 					this.loadingPoll = false

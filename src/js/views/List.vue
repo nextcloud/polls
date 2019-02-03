@@ -108,6 +108,8 @@ export default {
 			const params = {
 				title: t('polls', 'Delete poll'),
 				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
+				buttonHideText: t('polls','No, keep poll.'),
+				buttonConfirmText: t('polls','Yes, delete poll.'),
 				onConfirm: () => {
 					// this.deletePoll(index, event)
 					this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event)

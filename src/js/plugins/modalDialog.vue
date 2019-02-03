@@ -8,10 +8,10 @@
 		</div>
 		<div class="modal-buttons">
 			<button class="button" @click="hide">
-				{{ t('polls','No, keep poll.') }}
+				{{ buttonHideText }}
 			</button>
 			<button class="button primary" @click="confirm">
-				{{ t('polls','Yes, delete poll.') }}
+				{{ buttonConfirmText }}
 			</button>
 		</div>
 	</div>
@@ -28,6 +28,8 @@ export default {
 			visible: false,
 			title: '',
 			text: '',
+			buttonHideText: 'Close',
+			buttonConfirmText: 'OK',
 			onConfirm: {}
 		}
 	},
@@ -56,9 +58,11 @@ export default {
 		show(params) {
 			// making modal visible
 			this.visible = true
-			// setting title and text
+			// setting texts
 			this.title = params.title
 			this.text = params.text
+			this.buttonHideText = params.buttonHideText
+			this.buttonConfirmText = params.buttonConfirmText
 			// setting callback function
 			this.onConfirm = params.onConfirm
 		}
@@ -87,12 +91,5 @@ export default {
 	display: flex;
 	justify-content: space-between;
 }
-
-// .modal-header {
-// 	background-color: var(--color-primary);
-// 	& > * {
-// 		color: var(--color-primary-text);
-// 	}
-// }
 
 </style>
