@@ -22,22 +22,42 @@
  */
 
 import Vue from 'vue'
+import router from './router'
+import axios from 'nextcloud-axios'
 import App from './App.vue'
-import { DatetimePicker } from 'nextcloud-vue'
-import Controls from './components/_base-Controls.vue'
-import SideBar from './components/_base-SideBar.vue'
-import SideBarClose from './components/sideBarClose.vue'
-import ShareDiv from './components/shareDiv.vue'
-import UserDiv from './components/_base-UserDiv.vue'
+import vClickOutside from 'v-click-outside'
+import VueClipboard from 'vue-clipboard2'
+import Modal from './plugins/plugin.js'
+
+import { DatetimePicker, PopoverMenu } from 'nextcloud-vue'
+
+import Controls from './components/_base-Controls'
+import UserDiv from './components/_base-UserDiv'
+import SideBar from './components/_base-SideBar'
+import SideBarClose from './components/sideBarClose'
+import ShareDiv from './components/shareDiv'
+import LoadingOverlay from './components/_base-LoadingOverlay'
 
 Vue.config.debug = true
 Vue.config.devTools = true
 Vue.component('Controls', Controls)
+Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
-Vue.component('SideBarClose', SideBarClose)
 Vue.component('UserDiv', UserDiv)
 Vue.component('SideBar', SideBar)
+Vue.component('SideBarClose', SideBarClose)
 Vue.component('ShareDiv', ShareDiv)
+Vue.component('LoadingOverlay', LoadingOverlay)
+
+Vue.use(vClickOutside)
+Vue.use(VueClipboard)
+Vue.use(Modal)
+
+Vue.prototype.t = t
+Vue.prototype.n = n
+Vue.prototype.$http = axios
+Vue.prototype.OC = OC
+Vue.prototype.OCA = OCA
 
 // CSP config for webpack dynamic chunk loading
 // eslint-disable-next-line
@@ -48,19 +68,9 @@ __webpack_nonce__ = btoa(OC.requestToken)
 // eslint-disable-next-line
 __webpack_public_path__ = OC.linkTo('polls', 'js/')
 
-Vue.mixin({
-	methods: {
-		t: function(app, text, vars, count, options) {
-			return OC.L10N.translate(app, text, vars, count, options)
-		},
-		n: function(app, textSingular, textPlural, count, vars, options) {
-			return OC.L10N.translatePlural(app, textSingular, textPlural, count, vars, options)
-		}
-	}
-})
-
 /* eslint-disable-next-line no-new */
 new Vue({
-	el: '#create-poll',
+	el: '#app-polls',
+	router: router,
 	render: h => h(App)
 })

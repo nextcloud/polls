@@ -22,64 +22,85 @@
 
 <template>
 	<div class="controls">
-		<Breadcrumb :index-page="indexPage" :intitle="intitle" />
-		<slot />
+		<div class="breadcrumb">
+			<div class="crumb svg crumbhome">
+				<router-link :to="{ name: 'list'}" class="icon-home">
+					Home
+				</router-link>
+			</div>
+			<div v-show="intitle ===''" class="crumb svg last">
+				<span v-text="intitle" />
+			</div>
+			<div class="action">
+				<slot />
+			</div>
+		</div>
+		<slot name="after" class="after" />
 	</div>
 </template>
 
 <script>
-import Breadcrumb from './_base-Breadcrumb.vue'
 export default {
-	components: {
-		Breadcrumb
-	},
+
 	props: {
 		intitle: {
 			type: String,
 			default: undefined
-		},
-		indexPage: {
-			type: String,
-			default: undefined
+		}
+	},
+	data() {
+		return {
+			imagePath: OC.imagePath('core', 'places/home.svg')
 		}
 	}
 }
 </script>
 
 <style lang="scss">
+
 .controls {
     display: flex;
+	position: fixed;
     border-bottom: 1px solid var(--color-border);
-    position: fixed;
     background: var(--color-main-background);
     width: 100%;
     height: 45px;
     z-index: 1001;
-    .button,
-    button {
-        flex-shrink: 0;
-        height: 36px;
-        padding: 7px 10px;
-        border: 0;
-        background: transparent;
-        color: var(--color-text-lighter);
-        &.primary {
-            background: var(--color-primary);
-            color: var(--color-primary-text);
-        }
-    }
+
+	.action {
+		order: 999;
+	}
+
+	.button, button {
+		box-sizing: border-box;
+		display: inline-block;
+		display: flex;
+		height: 36px;
+		padding: 9px;
+		align-items: center;
+		justify-content: center;
+		margin-left: 7px;
+		&.symbol {
+			width: 36px;
+		}
+		&.primary {
+			background: var(--color-primary);
+			color: var(--color-primary-text);
+		}
+	}
 
     .breadcrumb {
+		flex-grow: 1;
         overflow: hidden;
         min-width: 35px;
-        div.crumb:last-child {
-            flex-shrink: 1;
-            overflow: hidden;
-            > span {
-                flex-shrink: 1;
-                text-overflow: ellipsis;
-            }
-        }
+        // div.crumb:last-child {
+        //     flex-shrink: 1;
+        //     overflow: hidden;
+        //     > span {
+        //         flex-shrink: 1;
+        //         text-overflow: ellipsis;
+        //     }
+        // }
     }
 }
 </style>

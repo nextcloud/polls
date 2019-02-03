@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	/**
 	 * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
 	 *
@@ -24,5 +24,5 @@
 
 ?>
 
-<div id="create-poll"></div>
 <?php \OCP\Util::addScript('polls', 'polls'); ?>
+<div id="app-polls"></div>

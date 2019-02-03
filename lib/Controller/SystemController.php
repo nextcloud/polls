@@ -27,6 +27,9 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
+use OCP\IGroupManager;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\IConfig;
 use OCP\IRequest;
 
@@ -39,20 +42,25 @@ class SystemController extends Controller {
 	 * @param String $appName
 	 * @param IConfig $systemConfig
 	 * @param IRequest $request
+	 * @param IGroupManager $groupManager
+	 * @param IUserManager $userManager
 	 */
 	public function __construct(
 		$appName,
+		IGroupManager $groupManager,
+		IUserManager $userManager,
 		IConfig $systemConfig,
 		IRequest $request
 	) {
 		parent::__construct($appName, $request);
 		$this->systemConfig = $systemConfig;
+		$this->groupManager = $groupManager;
+		$this->userManager = $userManager;
 	}
 
 	/**
 	 * Get the endor  name of the installation ('ownCloud' or 'Nextcloud')
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @return String
 	 */
 	private function getVendor() {
@@ -63,9 +71,56 @@ class SystemController extends Controller {
 	}
 
 	/**
+	 * Get a list of NC users and groups
+	 * @NoAdminRequired
+	 * @return DataResponse
+	 */
+	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
+		$list = array();
+		$data = array();
+		if ($getGroups) {
+			$groups = $this->groupManager->search($query);
+			foreach ($groups as $group) {
+				if (!in_array($group->getGID(), $skipGroups)) {
+					$list[] = [
+						'id' => $group->getGID(),
+						'user' => $group->getGID(),
+						'type' => 'group',
+						'desc' => 'group',
+						'icon' => 'icon-group',
+						'displayName' => $group->getGID(),
+						'avatarURL' => ''
+					];
+				}
+			}
+		}
+
+		if ($getUsers) {
+			$users = $this->userManager->searchDisplayName($query);
+			foreach ($users as $user) {
+				if (!in_array($user->getUID(), $skipUsers)) {
+					$list[] = [
+						'id' => $user->getUID(),
+						'user' => $user->getUID(),
+						'type' => 'user',
+						'desc' => 'user',
+						'icon' => 'icon-user',
+						'displayName' => $user->getDisplayName(),
+						'avatarURL' => '',
+						'lastLogin' => $user->getLastLogin(),
+						'cloudId' => $user->getCloudId()
+					];
+				}
+			}
+		}
+
+		$data['siteusers'] = $list;
+		return new DataResponse($data, Http::STATUS_OK);
+	}
+
+	/**
 	 * Get some system informations
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @return DataResponse
 	 */
 	public function getSystem() {

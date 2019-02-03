@@ -134,7 +134,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function index() {
+	public function indexOld() {
 		$polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
 		$comments = $this->commentMapper->findDistinctByUser($this->userId);
 		$votes = $this->voteMapper->findDistinctByUser($this->userId);
@@ -149,6 +149,46 @@ class PageController extends Controller {
 		$csp = new ContentSecurityPolicy();
 		$response->setContentSecurityPolicy($csp);
 		return $response;
+	}
+
+	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function createPoll() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function clonePoll() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function index() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param string $hash
+	 * @return TemplateResponse
+	 */
+	public function editPoll($hash) {
+		return new TemplateResponse('polls', 'polls.tmpl', [
+			'urlGenerator' => $this->urlGenerator,
+ 			'hash' => $hash
+		]);
 	}
 
 	/**
@@ -277,28 +317,6 @@ class PageController extends Controller {
 		$this->eventMapper->delete($poll);
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new RedirectResponse($url);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $hash
-	 * @return TemplateResponse
-	 */
-	public function editPoll($hash) {
-		return new TemplateResponse('polls', 'create.tmpl', [
-			'urlGenerator' => $this->urlGenerator,
- 			'hash' => $hash
-		]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function createPoll() {
-		return new TemplateResponse('polls', 'create.tmpl',
-			['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**

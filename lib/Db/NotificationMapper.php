@@ -88,4 +88,13 @@ class NotificationMapper extends Mapper {
 		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
 		return $this->findEntity($sql, [$pollId, $userId]);
 	}
+
+	/**
+	 * @param int $pollId
+	 */
+	public function deleteByPoll($pollId) {
+		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
+		$this->execute($sql, [$pollId]);
+	}
+
 }
