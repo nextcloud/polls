@@ -179,6 +179,7 @@
 
 				<ul class="flex-column table-body">
 					<?php
+
 					if ($votes !== null) {
 						//group by user
 						$others = array();
@@ -247,6 +248,7 @@
 							print_unescaped('</li>');
 						}
 					}
+
 					$toggleTooltip = $l->t('Switch all options at once');
 					if (!$expired) {
 						print_unescaped('<li class="flex-row user current-user">');
@@ -262,44 +264,76 @@
 						}
 						print_unescaped('		</div>');
 						print_unescaped('	</div>');
-						if ($maybe === 'maybeallowed') {
-						print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
-						} else {
-							print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip yes" title="' . $toggleTooltip . '">');
-						}
-						print_unescaped('		<div class="toggle"></div>');
-						print_unescaped('	</div>');
-						print_unescaped('</div>');
-						print_unescaped('<ul class="flex-row">');
+						?>
 
-						$i_tot = 0;
-						foreach ($options as $optionElement) {
-							// see if user already has data for this event
-							$class = 'no icon-no';
-							$dataUnvoted = '';
-							if (isset($userVoted)) {
-								foreach ($userVoted as $vote) {
-									if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
-										$class = $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer();
-										break;
-									} else {
-										$class = 'unvoted';
+						<div class="actions">
+							<div class="icon-more popupmenu" value="1" id="expand_1"></div>
+							<div class="popovermenu bubble menu hidden" id="expanddiv_1">
+								<ul>
+									<li>
+										<a id="toggle-yes" class="toggle toggle-yes menuitem alt-tooltip copy-link action permanent" href="#">
+											<span class="icon-yes"></span>
+											<span><?php p($l->t('Say yes to all')); ?></span>
+										</a>
+									</li>
+									<li>
+										<a id="toggle-no" class="toggle toggle-no menuitem alt-tooltip copy-link action permanent" href="#">
+											<span class="icon-no"></span>
+											<span><?php p($l->t('Reset all (say no)')); ?></span>
+										</a>
+									</li>
+									<?php if ($maybe === 'maybeallowed') :?>
+									<li>
+										<a id="toggle-maybe" class="toggle toggle-maybe menuitem alt-tooltip copy-link action permanent" href="#">
+											<span class="icon-maybe"></span>
+											<span><?php p($l->t('Say maybe to all')); ?></span>
+										</a>
+									</li>
+									<?php endif; ?>
+								</ul>
+							</div>
+						</div>
+
+						<?php
+							if ($maybe === 'maybeallowed') {
+								print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip maybe" title="' . $toggleTooltip . '">');
+							} else {
+								print_unescaped('	<div id="toggle-cell" class="toggle-cell has-tooltip yes" title="' . $toggleTooltip . '">');
+							}
+							print_unescaped('		<div class="toggle"></div>');
+							print_unescaped('	</div>');
+							print_unescaped('</div>');
+							print_unescaped('<div class="flex-row">');
+
+							$i_tot = 0;
+							foreach ($options as $optionElement) {
+								// see if user already has data for this event
+								$class = 'no icon-no';
+								$dataUnvoted = '';
+								if (isset($userVoted)) {
+									foreach ($userVoted as $vote) {
+										if ($optionElement->getPollOptionText() === $vote->getVoteOptionText()) {
+											$class = $vote->getVoteAnswer() . ' icon-' . $vote->getVoteAnswer();
+											break;
+										} else {
+											$class = 'unvoted';
+										}
 									}
 								}
+
+								if ($class === 'unvoted') {
+									$dataUnvoted = $l->t('New');
+									$updatedPoll = true;
+								}
+
+								print_unescaped('<div class="poll-cell">');
+	 							print_unescaped('    <div id="voteid_' . $optionElement->getId() . '" class="flex-column poll-cell active  ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></div>');
+	 							print_unescaped('</div>');
+								$i_tot++;
 							}
-
-							if ($class === 'unvoted') {
-								$dataUnvoted = $l->t('New');
-								$updatedPoll = true;
-							}
-
-							print_unescaped('<li id="voteid_' . $optionElement->getId() . '" class="flex-column active poll-cell ' . $class . '" data-value="' . $optionElement->getPollOptionText() . '" data-unvoted="' . $dataUnvoted . '"></li>');
-
-							$i_tot++;
+							print_unescaped('</div>');
+							print_unescaped('</li>');
 						}
-						print_unescaped('</ul>');
-						print_unescaped('</li>');
-					}
 					?>
 				</ul>
 			</div>

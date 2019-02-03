@@ -130,6 +130,9 @@ $(document).ready(function () {
 			hideAvatars = true;
 		}
 	}
+	$('.popupmenu').each(function () {
+		OC.registerMenu($('#expand_' + $(this).attr('value')), $('#expanddiv_' + $(this).attr('value')) );
+	});
 
 	$('.delete-poll').click(function () {
 		deletePoll(this);
@@ -271,7 +274,24 @@ $('#commentBox').keyup(function () {
 	}
 });
 
-$(document).on('click', '.toggle-cell, .poll-cell.active', function () {
+$(document).on('mousedown', '.toggle', function () {
+	var $toggleAllClasses = '';
+	valuesChanged = true;
+
+	if ($(this).hasClass('toggle-yes')) {
+		$toggleAllClasses= 'yes';
+	} else if($(this).hasClass('toggle-no')) {
+		$toggleAllClasses= 'no';
+	} else if($(this).hasClass('toggle-maybe')) {
+		$toggleAllClasses= 'maybe';
+	}
+	$('.poll-cell.active').removeClass('yes no maybe unvoted icon-no icon-yes icon-maybe');
+	$('.poll-cell.active').addClass($toggleAllClasses);
+	$('.poll-cell.active').addClass('icon-' + $toggleAllClasses);
+	updateCounters();
+});
+
+$(document).on('mousedown', '.poll-cell.active', function () {
 	valuesChanged = true;
 	var $nextClass = '';
 	var $toggleAllClasses = '';
