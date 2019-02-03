@@ -47,6 +47,24 @@
 
 			<div>
 				<h2>{{ t('polls', 'Vote options') }}</h2>
+				<div>
+					<a class="icon-delete" @click="shiftDates()">
+						Hier
+					</a>
+				</div>
+
+				<modal-dialog>
+					<div>
+						<label for="interval">
+							{{ t('polls', 'Interval:') }}
+						</label>
+						<input id="moveStep" v-model="move.step">
+						<label for="unit">
+							{{ t('polls', 'Unit') }}
+						</label>
+						<Multiselect id="unit" v-model="move.unit" :options="move.options"></multiselect>
+					</div>
+				</modal-dialog>
 
 				<div v-if="poll.mode == 'create'">
 					<input id="datePoll" v-model="poll.event.type" :disabled="protect"
@@ -236,6 +254,7 @@
 <script>
 import moment from 'moment'
 import sortBy from 'lodash/sortBy'
+import { Multiselect } from 'nextcloud-vue'
 import DatePollItem from '../components/datePollItem'
 import TextPollItem from '../components/textPollItem'
 
@@ -244,11 +263,17 @@ export default {
 
 	components: {
 		DatePollItem,
-		TextPollItem
+		TextPollItem,
+		Multiselect
 	},
 
 	data() {
 		return {
+			move: {
+				step: 1,
+				unit: 'week',
+				options: ['minute','hour','day','week','month','year']
+			},
 			poll: {
 				mode: 'create',
 				comments: [],
@@ -400,6 +425,24 @@ export default {
 	},
 
 	methods: {
+		shiftDates() {
+			const params = {
+				title: t('polls', 'Move all options'),
+				text: t('polls', 'Define the shift of all date options'),
+				buttonHideText: t('polls', 'Cancel'),
+				buttonConfirmText: t('polls', 'Shift all polls'),
+				onConfirm: () => {
+					for (i=0; i < this.poll.options.pollDates.length; i++) {
+						console.log(moment(this.poll.options.pollDates[i].timestamp*1000))
+						this.poll.options.pollDates[i].timestamp = parseInt(moment(this.poll.options.pollDates[i].timestamp*1000).add(this.move.step,this.move.unit).format('X'))
+
+					}
+
+				}
+			}
+			this.$modal.show(params)
+
+		},
 
 		switchSidebar() {
 			this.sidebar = !this.sidebar

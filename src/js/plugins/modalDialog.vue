@@ -6,6 +6,7 @@
 		<div class="modal-text">
 			<p>{{ text }}</p>
 		</div>
+		<slot />
 		<div class="modal-buttons">
 			<button class="button" @click="hide">
 				{{ buttonHideText }}

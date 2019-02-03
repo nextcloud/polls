@@ -78,6 +78,7 @@ export default {
 			default: undefined
 		}
 	},
+
 	data() {
 		return {
 			openedMenu: false,
@@ -133,16 +134,18 @@ export default {
 		},
 		voteUrl() {
 			return OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
-
 		},
+
 		menuItems() {
 
 			let items = [{
+				key: 'copyLink',
 				icon: 'icon-clippy',
 				text: t('polls', 'Copy Link'),
 				action: this.copyLink
 			},
 			{
+				key: 'clonePoll',
 				icon: 'icon-confirm',
 				text: t('polls', 'Clone poll'),
 				action: this.clonePoll
@@ -152,11 +155,13 @@ export default {
 
 				items.push(
 					{
+						key: 'deletePoll',
 						icon: 'icon-rename',
 						text: t('polls', 'Edit poll'),
 						action: this.editPoll
 					})
 				items.push({
+					key: 'deletePoll',
 					icon: 'icon-delete',
 					text: t('polls', 'Delete poll'),
 					action: this.deletePoll
@@ -166,11 +171,13 @@ export default {
 
 				items.push(
 					{
+						key: 'editPoll',
 						icon: 'icon-rename',
 						text: t('polls', 'Edit poll as admin'),
 						action: this.editPoll
 					})
 				items.push({
+					key: 'deletePoll',
 					icon: 'icon-delete',
 					text: t('polls', 'Delete poll as admin'),
 					action: this.deletePoll
@@ -191,6 +198,7 @@ export default {
 		},
 
 		copyLink() {
+			// this.$emit('copyLink')
 			this.$copyText(window.location.origin + this.voteUrl).then(
 				function(e) {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
@@ -203,29 +211,18 @@ export default {
 		},
 
 		deletePoll() {
-			// Todo: Remove Item self and update transition group in parent.
-			// Event must be triggert from parent
-
 			this.$emit('deletePoll')
 			this.hideMenu()
 		},
 
 		editPoll() {
-			this.$router.push({
-				name: 'edit',
-				params: {
-					hash: this.poll.event.id
-				}
-			})
+			this.$emit('editPoll')
+			this.hideMenu()
 		},
 
 		clonePoll() {
-			this.$router.push({
-				name: 'clone',
-				params: {
-					hash: this.poll.event.id
-				}
-			})
+			this.$emit('clonePoll')
+			this.hideMenu()
 		}
 
 	}
