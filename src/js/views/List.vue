@@ -60,7 +60,7 @@
 				@clonePoll="editPoll(index, poll.event, 'clone')"
 			/>
 		</transition-group>
-		<loading-overlay v-if='loading' />
+		<loading-overlay v-if="loading" />
 		<modal-dialog />
 	</div>
 </template>

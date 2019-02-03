@@ -47,25 +47,6 @@
 
 			<div>
 				<h2>{{ t('polls', 'Vote options') }}</h2>
-				<div>
-					<a class="icon-delete" @click="shiftDates()">
-						Hier
-					</a>
-				</div>
-
-				<modal-dialog>
-					<div>
-						<label for="interval">
-							{{ t('polls', 'Interval:') }}
-						</label>
-						<input id="moveStep" v-model="move.step">
-						<label for="unit">
-							{{ t('polls', 'Unit') }}
-						</label>
-						<Multiselect id="unit" v-model="move.unit" :options="move.options"></multiselect>
-					</div>
-				</modal-dialog>
-
 				<div v-if="poll.mode == 'create'">
 					<input id="datePoll" v-model="poll.event.type" :disabled="protect"
 						value="datePoll" type="radio" class="radio"
@@ -88,6 +69,21 @@
 					confirm
 					@change="addNewPollDate"
 				/>
+				<button v-show="poll.event.type === 'datePoll'" id="shiftDates" class="icon-history" @click="shiftDates()">
+					{{ t('polls', 'Shift dates') }}
+				</button>
+
+				<modal-dialog>
+					<div>
+						<div class="selectUnit">
+							<!-- <label for="interval">
+								{{ t('polls', 'Shift all dates for ') }}
+							</label> -->
+							<input id="moveStep" v-model="move.step">
+							<Multiselect id="unit" v-model="move.unit" :options="move.units"> />
+						</div>
+					</div>
+				</modal-dialog>
 
 				<transitionGroup
 					v-show="poll.event.type === 'datePoll'"
@@ -272,7 +268,7 @@ export default {
 			move: {
 				step: 1,
 				unit: 'week',
-				options: ['minute','hour','day','week','month','year']
+				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
 			},
 			poll: {
 				mode: 'create',
@@ -426,20 +422,21 @@ export default {
 
 	methods: {
 		shiftDates() {
+			var i = 0
 			const params = {
-				title: t('polls', 'Move all options'),
-				text: t('polls', 'Define the shift of all date options'),
+				title: t('polls', 'Shift all date options'),
+				text: t('polls', 'Shift all dates for '),
 				buttonHideText: t('polls', 'Cancel'),
-				buttonConfirmText: t('polls', 'Shift all polls'),
+				buttonConfirmText: t('polls', 'Apply'),
 				onConfirm: () => {
-					for (i=0; i < this.poll.options.pollDates.length; i++) {
-						console.log(moment(this.poll.options.pollDates[i].timestamp*1000))
-						this.poll.options.pollDates[i].timestamp = parseInt(moment(this.poll.options.pollDates[i].timestamp*1000).add(this.move.step,this.move.unit).format('X'))
+					for (i = 0; i < this.poll.options.pollDates.length; i++) {
+						this.poll.options.pollDates[i].timestamp = parseInt(moment(this.poll.options.pollDates[i].timestamp * 1000).add(this.move.step, this.move.unit).format('X'))
 
 					}
 
 				}
 			}
+
 			this.$modal.show(params)
 
 		},
@@ -706,5 +703,24 @@ button {
 .tab {
     display: flex;
     flex-wrap: wrap;
+}
+.selectUnit {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	> label {
+		padding-right: 4px;
+	}
+}
+
+#shiftDates {
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	min-width: 16px;
+	min-height: 16px;
+	padding: 10px;
+	padding-left: 34px;
+	text-align: left;
+	margin: 0;
 }
 </style>
