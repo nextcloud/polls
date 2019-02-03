@@ -25,24 +25,28 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
+
+		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
 		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
-		['name' => 'page#create_poll', 'url' => '/create', 'verb' => 'GET'],
+		['name' => 'page#clone_poll', 'url' => '/clone/{hash}', 'verb' => 'GET'],
+
 		['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
-		['name' => 'page#update_poll', 'url' => '/update', 'verb' => 'POST'],
-		['name' => 'page#insert_poll', 'url' => '/insert', 'verb' => 'POST'],
 		['name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'],
 		['name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'],
 		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
 		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
-		['name' => 'api#write_poll', 'url' => '/write', 'verb' => 'POST'],
+
+		['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
 		['name' => 'api#get_poll', 'url' => '/get/poll/{pollIdOrHash}', 'verb' => 'GET'],
 		['name' => 'api#get_options', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_votes', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_comments', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_event', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#get_polls', 'url' => '/get/polls/', 'verb' => 'GET'],
-		['name' => 'api#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
+		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],
+		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
+
+		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
 		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']
 	]
 ];

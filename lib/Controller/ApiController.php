@@ -42,11 +42,15 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\Notification;
+use OCA\Polls\Db\NotificationMapper;
 
 
 
 class ApiController extends Controller {
 
+	private $groupManager;
+	private $userManager;
 	private $eventMapper;
 	private $optionMapper;
 	private $voteMapper;
@@ -72,8 +76,8 @@ class ApiController extends Controller {
 		$userId,
 		EventMapper $eventMapper,
 		OptionMapper $optionMapper,
-		VoteMapper $VoteMapper,
-		CommentMapper $CommentMapper
+		VoteMapper $voteMapper,
+		CommentMapper $commentMapper
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
@@ -81,15 +85,13 @@ class ApiController extends Controller {
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
 		$this->optionMapper = $optionMapper;
-		$this->voteMapper = $VoteMapper;
-		$this->commentMapper = $CommentMapper;
+		$this->voteMapper = $voteMapper;
+		$this->commentMapper = $commentMapper;
 	}
 
 	/**
 	 * Transforms a string with user and group names to an array
 	 * of nextcloud users and groups
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param string $item
 	 * @return Array
 	 */
@@ -153,6 +155,38 @@ class ApiController extends Controller {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Set the access right of the current user for the poll
+	 * @param Array $event
+	 * @param Array $shares
+	 * @return String
+	 */
+	private function grantAccessAs($event, $shares) {
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			$currentUser = '';
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		}
+
+		$grantAccessAs = 'none';
+
+		if ($event['owner'] === $currentUser) {
+			$grantAccessAs = 'owner';
+		} elseif ($event['access'] === 'public') {
+			$grantAccessAs = 'public';
+		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser) {
+			$grantAccessAs = 'registered';
+		} elseif ($this->checkUserAccess($shares)) {
+			$grantAccessAs = 'userInvitation';
+		} elseif ($this->checkGroupAccess($shares)) {
+			$grantAccessAs = 'groupInvitation';
+		} elseif ($this->groupManager->isAdmin($currentUser)) {
+			$grantAccessAs = 'admin';
+		}
+
+		return $grantAccessAs;
 	}
 
 	/**
@@ -261,6 +295,7 @@ class ApiController extends Controller {
 				'title' => $event->getTitle(),
 				'description' => $event->getDescription(),
 				'owner' => $event->getOwner(),
+				'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
 				'created' => $event->getCreated(),
 				'access' => $accessType,
 				'expiration' => $expiration,
@@ -306,40 +341,6 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Set the access right of the current user for the poll
-	 * @param Integer $pollId
-	 * @return String
-	 */
-	private function grantAccessAs($pollId) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$currentUser = '';
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		}
-
-		$event = $this->getEvent($pollId);
-		$accessList = $this->getShares($pollId);
-		$grantAccessAs = 'none';
-
-		if ($event['owner'] === $currentUser) {
-			$grantAccessAs = 'owner';
-		} elseif ($event['access'] === 'public') {
-			$grantAccessAs = 'public';
-		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$grantAccessAs = 'registered';
-		} elseif ($this->checkUserAccess($accessList)) {
-			$grantAccessAs = 'userInvitation';
-		} elseif ($this->checkGroupAccess($accessList)) {
-			$grantAccessAs = 'groupInvitation';
-		} elseif ($this->groupManager->isAdmin($currentUser)) {
-			$grantAccessAs = 'admin';
-		}
-
-		return $grantAccessAs;
-	}
-
-
-	/**
 	 * Read an entire poll based on the poll id or hash
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -367,6 +368,7 @@ class ApiController extends Controller {
 			}
 
 			$event = $this->getEvent($pollId);
+			$shares = $this->getShares($event['id']);
 
 			if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
 				$mode = 'create';
@@ -374,14 +376,15 @@ class ApiController extends Controller {
 				$mode = 'edit';
 			}
 
-			$data['poll'] = [
+			$data = [
+				'id' => $event['id'],
 				'result' => $result,
-				'grantedAs' => $this->grantAccessAs($event['id']),
+				'grantedAs' => $this->grantAccessAs($event, $shares),
 				'mode' => $mode,
 				'event' => $event,
 				'comments' => $this->getComments($event['id']),
 				'votes' => $this->getVotes($event['id']),
-				'shares' => $this->getShares($event['id']),
+				'shares' => $shares,
 				'options' => [
 					'pollDates' => [],
 					'pollTexts' => $this->getOptions($event['id'])
@@ -394,60 +397,10 @@ class ApiController extends Controller {
 		}
 	}
 
-  	/**
-	 * Get a list of NC users and groups
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @return DataResponse
-	 */
-	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
-		$list = array();
-		$data = array();
-		if ($getGroups) {
-			$groups = $this->groupManager->search($query);
-			foreach ($groups as $group) {
-				if (!in_array($group->getGID(), $skipGroups)) {
-					$list['g_' . $group->getGID()] = [
-						'id' => $group->getGID(),
-						'user' => $group->getGID(),
-						'type' => 'group',
-						'desc' => 'group',
-						'icon' => 'icon-group',
-						'displayName' => $group->getGID(),
-						'avatarURL' => ''
-					];
-				}
-			}
-		}
-
-		if ($getUsers) {
-			$users = $this->userManager->searchDisplayName($query);
-			foreach ($users as $user) {
-				if (!in_array($user->getUID(), $skipUsers)) {
-					$list['u_' . $user->getUID()] = [
-						'id' => $user->getUID(),
-						'user' => $user->getUID(),
-						'type' => 'user',
-						'desc' => 'user',
-						'icon' => 'icon-user',
-						'displayName' => $user->getDisplayName(),
-						'avatarURL' => '',
-						'lastLogin' => $user->getLastLogin(),
-						'cloudId' => $user->getCloudId()
-					];
-				}
-			}
-		}
-
-		$data['siteusers'] = $list;
-		return new DataResponse($data, Http::STATUS_OK);
-	}
-
 	/**
 	 * Get all polls
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @return DataResponse
 	 */
 
@@ -465,16 +418,38 @@ class ApiController extends Controller {
 		$eventsList = array();
 
 		foreach ($events as $eventElement) {
-			$eventsList[$eventElement->id] = $this->getEvent($eventElement->id);
+			$eventsList[] = $this->getPoll($eventElement->id);
 		}
 
 		return new DataResponse($eventsList, Http::STATUS_OK);
 	}
 
 	/**
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return DataResponse
+	 */
+	public function removePoll($id) {
+		$pollToDelete = $this->eventMapper->find($id);
+		if ($this->userId !== $pollToDelete->getOwner() && !$this->groupManager->isAdmin($this->userId)) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+		$this->commentMapper->deleteByPoll($id);
+		$this->voteMapper->deleteByPoll($id);
+		$this->optionMapper->deleteByPoll($id);
+		// $this->notificationMapper->deleteByPoll($id);
+		$this->eventMapper->delete($pollToDelete);
+		// $url = $this->urlGenerator->linkToRoute('polls.page.index');
+		return new DataResponse(array(
+			'id' => $id,
+			'action' => 'deleted'
+		), Http::STATUS_OK);
+	}
+
+
+	/**
 	 * Write poll (create/update)
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param Array $event
 	 * @param Array $options
 	 * @param Array  $shares

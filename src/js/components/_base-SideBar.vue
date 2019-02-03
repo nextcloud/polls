@@ -21,23 +21,19 @@
   -->
 
 <template>
-	<li>
-		<div>{{ option.text }}</div>
-		<div>
-			<a class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
-		</div>
-	</li>
+	<div class="polls-sidebar">
+		<slot />
+	</div>
 </template>
 
-<script>
-export default {
-	props: {
-		option: {
-			type: Object,
-			default: undefined
-		}
-
-	}
+<style lang="scss">
+.polls-sidebar {
+    min-width: 300px;
+    border-left: 1px solid var(--color-border);
+    z-index: 500;
+    > ul,
+    > div {
+        padding: 8px;
+    }
 }
-
-</script>
+</style>

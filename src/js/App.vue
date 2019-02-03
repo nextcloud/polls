@@ -21,29 +21,35 @@
   -->
 
 <template>
-<div class="breadcrumb">
-	<div class="crumb svg crumbhome">
-		<a class="icon-home" :href="indexPage">Home</a>
+	<div id="app-polls">
+		<router-view />
 	</div>
-	<div class="crumb svg last">
-		<span v-text="intitle" />
-	</div>
-</div>
 </template>
 
 <script>
+// import moment from 'moment'
+// import lodash from 'lodash'
+// import pollItem from './components/pollItem'
+// import pollListHeader from './components/pollListHeader'
+
 export default {
-	props: ['intitle', 'indexPage'],
-	data() {
-		return {
-			imagePath: OC.imagePath('core', 'places/home.svg'),
-		}
-	}
+	name: 'App'
+
+	// components: {
+	// 	pollItem,
+	// 	pollListHeader
+	// }
 }
 </script>
 
-<style lang="scss">
-.breadcrumb {
-    flex-grow: 1;
+<style  lang="scss">
+#app-polls {
+	width: 100%;
+	display: flex;
+}
+
+#app-content {
+    width: 100%;
+    display: flex;
 }
 </style>

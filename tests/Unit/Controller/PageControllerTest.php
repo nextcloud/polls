@@ -114,7 +114,7 @@ class PageControllerTest extends UnitTestCase {
 	public function testIndex() {
 		$result = $this->controller->index();
 
-		$this->assertEquals('main.tmpl', $result->getTemplateName());
+		$this->assertEquals('polls.tmpl', $result->getTemplateName());
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 	}
 }

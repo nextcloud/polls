@@ -19,21 +19,37 @@
   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -
   -->
-
 <template>
-<div class="polls-sidebar">
-	<slot></slot>
-</div>
+	<div>
+		<div class="wrapper group-master">
+			<div class="wrapper group-1">
+				<div class="wrapper group-1-1">
+					<div class="flex-column name">
+						{{ t('polls', 'Title') }}
+					</div>
+				</div>
+				<div class="wrapper group-1-2">
+					<div class="flex-column actions" />
+				</div>
+			</div>
+			<div class="wrapper group-2">
+				<div class="wrapper group-2-1">
+					<div class="flex-column access">
+						{{ t('polls', 'Access') }}
+					</div>
+					<div class="flex-column created">
+						{{ t('polls', 'Created') }}
+					</div>
+				</div>
+				<div class="flex-column owner">
+					{{ t('polls', 'By') }}
+				</div>
+				<div class="wrapper group-2-2">
+					<div class="flex-column expiry">
+						{{ t('polls', 'Expires') }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
-
-<style lang="scss">
-.polls-sidebar {
-    min-width: 300px;
-    border-left: 1px solid var(--color-border);
-    z-index: 500;
-    > ul,
-    > div {
-        padding: 8px;
-    }
-}
-</style>

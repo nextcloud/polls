@@ -131,24 +131,43 @@ class PageController extends Controller {
 	}
 
 	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function index() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function createPoll() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function clonePoll() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @param string $hash
+	 * @return TemplateResponse
 	 */
-	public function index() {
-		$polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
-		$comments = $this->commentMapper->findDistinctByUser($this->userId);
-		$votes = $this->voteMapper->findDistinctByUser($this->userId);
-		$response = new TemplateResponse('polls', 'main.tmpl', [
-			'polls' => $polls,
-			'comments' => $comments,
-			'votes' => $votes,
-			'userId' => $this->userId,
-			'userMgr' => $this->userMgr,
-			'urlGenerator' => $this->urlGenerator
+	public function editPoll($hash) {
+		return new TemplateResponse('polls', 'polls.tmpl', [
+			'urlGenerator' => $this->urlGenerator,
+ 			'hash' => $hash
 		]);
-		$csp = new ContentSecurityPolicy();
-		$response->setContentSecurityPolicy($csp);
-		return $response;
 	}
 
 	/**
@@ -277,28 +296,6 @@ class PageController extends Controller {
 		$this->eventMapper->delete($poll);
 		$url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new RedirectResponse($url);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $hash
-	 * @return TemplateResponse
-	 */
-	public function editPoll($hash) {
-		return new TemplateResponse('polls', 'create.tmpl', [
-			'urlGenerator' => $this->urlGenerator,
- 			'hash' => $hash
-		]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function createPoll() {
-		return new TemplateResponse('polls', 'create.tmpl',
-			['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
