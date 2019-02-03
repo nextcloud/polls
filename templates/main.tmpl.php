@@ -152,8 +152,11 @@
 					<div class="wrapper group-1">
 						<div class="thumbnail <?php p($expiry_style . ' commented_' . $commented_class . ' partic_' . $participated_class); ?>"></div><!-- Image to display the status or type of poll -->
 						<a href="<?php p($pollUrl); ?>" class="wrapper group-1-1">
-							<div class="flex-column name">						  <?php p($poll->getTitle()); ?></div>
-							<div class="flex-column description">				   <?php p($poll->getDescription()); ?></div>
+							<div class="flex-column name"><?php p($poll->getTitle()); ?></div>
+							<div class="flex-column description"><?php 
+							$description = str_replace('<br>', ' ', $poll->getDescription());
+							p($description); 
+							?></div>
 						</a>
 						<div class="flex-column actions">
 							<div class="icon-more popupmenu" value="<?php p($poll->getId()); ?>" id="expand_<?php p($poll->getId()); ?>"></div>
