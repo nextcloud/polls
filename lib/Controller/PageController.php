@@ -131,24 +131,12 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function indexOld() {
-		$polls = $this->eventMapper->findAllForUserWithInfo($this->userId);
-		$comments = $this->commentMapper->findDistinctByUser($this->userId);
-		$votes = $this->voteMapper->findDistinctByUser($this->userId);
-		$response = new TemplateResponse('polls', 'main.tmpl', [
-			'polls' => $polls,
-			'comments' => $comments,
-			'votes' => $votes,
-			'userId' => $this->userId,
-			'userMgr' => $this->userMgr,
-			'urlGenerator' => $this->urlGenerator
-		]);
-		$csp = new ContentSecurityPolicy();
-		$response->setContentSecurityPolicy($csp);
-		return $response;
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	*/
+	public function index() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
@@ -165,15 +153,6 @@ class PageController extends Controller {
 	* @NoCSRFRequired
 	*/
 	public function clonePoll() {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	*/
-	public function index() {
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);
 	}
