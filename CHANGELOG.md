@@ -1,6 +1,36 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
+
+## [0.10.0] - [tbd]
+
+### Added
+  - main list page
+    - rewrite as a vue app
+    - improved UI
+  - ability to clone any poll and shift date options  
+  - design updates to vote page
+  - some more UI enhancements
+  - Maybe option for a poll is configurable
+
+## [0.9.5] - 2018-12-22
+
+### Fixed
+
+  - #457 - update to 0.9.4 failed for postgres database
+  - #454 - Update to 0.9.3 failed for postgresql database
+
+## [0.9.4] - 2018-12-18
+
+### Fixed
+
+  - #453 - Polls upgrade leads to NotNullConstraintViolationException
+  - #454 - Update to 0.9.3 failed for postgresql database
+  - #455 - Fix color variable name in list.scss
+
+## [0.9.3] - 2018-12-18
+
+### Fixed
+  - Fix minor problem with migration
 
 ## [0.9.1] - 2018-12-11
 
