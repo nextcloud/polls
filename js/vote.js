@@ -65,6 +65,7 @@ function switchSidebar() {
 }
 
 $(document).ready(function () {
+	valuesChanged = true;
 
 	var clipboard = new Clipboard('.copy-link');
 
