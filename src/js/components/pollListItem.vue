@@ -242,6 +242,7 @@ export default {
 }
 </script>
 <style lang="scss">
+
 .thumbnail {
     width: 44px;
     height: 44px;
@@ -290,6 +291,7 @@ export default {
 .icon-voted {
     background-image: var(--icon-checkmark-fff);
 }
+
 .comment-badge {
     position: absolute;
     top: 0;
@@ -323,6 +325,7 @@ export default {
         }
     }
 }
+
 .symbol.icon-voted {
 	position: absolute;
 	left: 5px;
@@ -334,57 +337,4 @@ export default {
 	border-radius: 50%;
 }
 
-
-.thumbnail.accessasd {
-	display: inherit;
-	font-size: 0;
-    width: 44px;
-    height: 44px;
-    padding-right: 4px;
-    background-color: var(--color-text-light);
-
-    &.hidden {
-        mask-image: var(--icon-password-000) no-repeat 50% 50%;
-        -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
-        mask-size: 32px;
-    }
-    &.public {
-        mask-image: var(--icon-link-000) no-repeat 50% 50%;
-        -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
-        mask-size: 32px;
-    }
-    &.select {
-		mask-image: var(--icon-share-000) no-repeat 50% 50%;
-        -webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
-        mask-size: 32px;
-    }
-    &.registered {
-		mask-image: var(--icon-group-000) no-repeat 50% 50%;
-        -webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
-        mask-size: 32px;
-    }
-
-}
-
-
-.accessaa {
-	display: inherit;
-	font-size: 0;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: 32px;
-	&.hidden {
-		background-image: var(--icon-password-000);
-	}
-	&.public {
-		background-image: var(--icon-link-000);
-	}
-	&.select {
-		background-image: var(--icon-share-000);
-	}
-	&.registered {
-		background-image: var(--icon-group-000);
-	}
-
-}
 </style>
