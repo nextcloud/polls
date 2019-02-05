@@ -56,6 +56,8 @@
 				:poll="poll"
 				class="table-row table-body"
 				@deletePoll="removePoll(index, poll.event)"
+				@editPoll="editPoll(index, poll.event, 'edit')"
+				@clonePoll="editPoll(index, poll.event, 'clone')"
 			/>
 		</transition-group>
 		<loading-overlay v-if="loading" />
@@ -104,12 +106,30 @@ export default {
 				})
 		},
 
-		removePoll: function(index, event) {
+		editPoll(index, event, name) {
+			this.$router.push({
+				name: name,
+				params: {
+					hash: event.id
+				}
+			})
+		},
+
+		clonePoll(index, event, name) {
+			this.$router.push({
+				name: name,
+				params: {
+					hash: event.id
+				}
+			})
+		},
+
+		removePoll(index, event) {
 			const params = {
 				title: t('polls', 'Delete poll'),
 				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
-				buttonHideText: t('polls','No, keep poll.'),
-				buttonConfirmText: t('polls','Yes, delete poll.'),
+				buttonHideText: t('polls', 'No, keep poll.'),
+				buttonConfirmText: t('polls', 'Yes, delete poll.'),
 				onConfirm: () => {
 					// this.deletePoll(index, event)
 					this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event)

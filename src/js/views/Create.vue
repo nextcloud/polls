@@ -47,7 +47,6 @@
 
 			<div>
 				<h2>{{ t('polls', 'Vote options') }}</h2>
-
 				<div v-if="poll.mode == 'create'">
 					<input id="datePoll" v-model="poll.event.type" :disabled="protect"
 						value="datePoll" type="radio" class="radio"
@@ -70,6 +69,21 @@
 					confirm
 					@change="addNewPollDate"
 				/>
+				<button v-show="poll.event.type === 'datePoll'" id="shiftDates" class="icon-history" @click="shiftDates()">
+					{{ t('polls', 'Shift dates') }}
+				</button>
+
+				<modal-dialog>
+					<div>
+						<div class="selectUnit">
+							<!-- <label for="interval">
+								{{ t('polls', 'Shift all dates for ') }}
+							</label> -->
+							<input id="moveStep" v-model="move.step">
+							<Multiselect id="unit" v-model="move.unit" :options="move.units" />
+						</div>
+					</div>
+				</modal-dialog>
 
 				<transitionGroup
 					v-show="poll.event.type === 'datePoll'"
@@ -236,6 +250,7 @@
 <script>
 import moment from 'moment'
 import sortBy from 'lodash/sortBy'
+import { Multiselect } from 'nextcloud-vue'
 import DatePollItem from '../components/datePollItem'
 import TextPollItem from '../components/textPollItem'
 
@@ -244,11 +259,17 @@ export default {
 
 	components: {
 		DatePollItem,
-		TextPollItem
+		TextPollItem,
+		Multiselect
 	},
 
 	data() {
 		return {
+			move: {
+				step: 1,
+				unit: 'week',
+				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
+			},
 			poll: {
 				mode: 'create',
 				comments: [],
@@ -400,6 +421,25 @@ export default {
 	},
 
 	methods: {
+		shiftDates() {
+			var i = 0
+			const params = {
+				title: t('polls', 'Shift all date options'),
+				text: t('polls', 'Shift all dates for '),
+				buttonHideText: t('polls', 'Cancel'),
+				buttonConfirmText: t('polls', 'Apply'),
+				onConfirm: () => {
+					for (i = 0; i < this.poll.options.pollDates.length; i++) {
+						this.poll.options.pollDates[i].timestamp = parseInt(moment(this.poll.options.pollDates[i].timestamp * 1000).add(this.move.step, this.move.unit).format('X'))
+
+					}
+
+				}
+			}
+
+			this.$modal.show(params)
+
+		},
 
 		switchSidebar() {
 			this.sidebar = !this.sidebar
@@ -663,5 +703,24 @@ button {
 .tab {
     display: flex;
     flex-wrap: wrap;
+}
+.selectUnit {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	> label {
+		padding-right: 4px;
+	}
+}
+
+#shiftDates {
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	min-width: 16px;
+	min-height: 16px;
+	padding: 10px;
+	padding-left: 34px;
+	text-align: left;
+	margin: 0;
 }
 </style>
