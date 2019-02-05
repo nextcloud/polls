@@ -24,7 +24,9 @@
 	<div>
 		<div class="wrapper group-master">
 			<div class="wrapper group-1">
-				<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] " />
+				<div class="thumbnail has-tooltip" :class="[poll.event.type, {expired : poll.event.expired}] " :title="pollType">
+					{{ pollType }}
+				</div>
 				<div v-if="votedBycurrentUser" class="symbol icon-voted" />
 				<a :href="voteUrl" class="wrapper group-1-1">
 					<div class="flex-column name">
@@ -48,7 +50,7 @@
 			</div>
 			<div class="wrapper group-2">
 				<div class="wrapper group-2-1">
-					<div class="flex-column access">
+					<div class="flex-column thumbnail access has-tooltip" :class="this.poll.event.access" :title="accessType">
 						{{ accessType }}
 					</div>
 					<div class="flex-column created ">
@@ -98,6 +100,14 @@ export default {
 				return t('polls', 'Hidden poll')
 			} else {
 				return ''
+			}
+		},
+
+		pollType() {
+			if (this.poll.event.type === 'textPoll') {
+				return t('polls', 'Text poll')
+			} else if (this.poll.event.type === 'datePoll') {
+				return t('polls', 'Date poll')
 			}
 		},
 
@@ -236,6 +246,7 @@ export default {
     width: 44px;
     height: 44px;
     padding-right: 4px;
+	font-size: 0;
     background-color: var(--color-text-light);
     &.datePoll {
         mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
@@ -250,7 +261,30 @@ export default {
     &.expired {
         background-color: var(--color-background-darker);
     }
+	&.access {
+		display: inherit;
+	    &.hidden {
+	        mask-image: var(--icon-password-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
+	        mask-size: 32px;
+	    }
+	    &.public {
+	        mask-image: var(--icon-link-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
+	        mask-size: 32px;
+	    }
+	    &.select {
+			mask-image: var(--icon-share-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
+	        mask-size: 32px;
+	    }
+	    &.registered {
+			mask-image: var(--icon-group-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
+	        mask-size: 32px;
+	    }
 
+	}
 }
 
 .icon-voted {
@@ -298,5 +332,59 @@ export default {
 	min-height: 1.2em;
 	background-color: var(--color-success);
 	border-radius: 50%;
+}
+
+
+.thumbnail.accessasd {
+	display: inherit;
+	font-size: 0;
+    width: 44px;
+    height: 44px;
+    padding-right: 4px;
+    background-color: var(--color-text-light);
+
+    &.hidden {
+        mask-image: var(--icon-password-000) no-repeat 50% 50%;
+        -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
+        mask-size: 32px;
+    }
+    &.public {
+        mask-image: var(--icon-link-000) no-repeat 50% 50%;
+        -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
+        mask-size: 32px;
+    }
+    &.select {
+		mask-image: var(--icon-share-000) no-repeat 50% 50%;
+        -webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
+        mask-size: 32px;
+    }
+    &.registered {
+		mask-image: var(--icon-group-000) no-repeat 50% 50%;
+        -webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
+        mask-size: 32px;
+    }
+
+}
+
+
+.accessaa {
+	display: inherit;
+	font-size: 0;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 32px;
+	&.hidden {
+		background-image: var(--icon-password-000);
+	}
+	&.public {
+		background-image: var(--icon-link-000);
+	}
+	&.select {
+		background-image: var(--icon-share-000);
+	}
+	&.registered {
+		background-image: var(--icon-group-000);
+	}
+
 }
 </style>
