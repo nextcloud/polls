@@ -80,7 +80,7 @@
 								{{ t('polls', 'Shift all dates for ') }}
 							</label> -->
 							<input id="moveStep" v-model="move.step">
-							<Multiselect id="unit" v-model="move.unit" :options="move.units"> />
+							<Multiselect id="unit" v-model="move.unit" :options="move.units" />
 						</div>
 					</div>
 				</modal-dialog>
