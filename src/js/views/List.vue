@@ -329,7 +329,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		flex-direction: column;
 	}
 
-	.access, .created {
+	.created {
 		width: $group-2-1-width;;
 	}
 	.expiry, .participants {

@@ -53,14 +53,14 @@
 					<div class="flex-column thumbnail access has-tooltip" :class="this.poll.event.access" :title="accessType">
 						{{ accessType }}
 					</div>
-					<div class="flex-column created ">
-						{{ timeSpanCreated }}
-					</div>
 				</div>
 				<div class="flex-column owner">
 					<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
 				</div>
 				<div class="wrapper group-2-2">
+					<div class="flex-column created ">
+						{{ timeSpanCreated }}
+					</div>
 					<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
 						{{ timeSpanExpiration }}
 					</div>

@@ -37,14 +37,14 @@
 					<div class="flex-column access">
 						{{ t('polls', 'Access') }}
 					</div>
+				</div>
+				<div class="flex-column owner">
+					{{ t('polls', 'Owner') }}
+				</div>
+				<div class="wrapper group-2-2">
 					<div class="flex-column created">
 						{{ t('polls', 'Created') }}
 					</div>
-				</div>
-				<div class="flex-column owner">
-					{{ t('polls', 'By') }}
-				</div>
-				<div class="wrapper group-2-2">
 					<div class="flex-column expiry">
 						{{ t('polls', 'Expires') }}
 					</div>
