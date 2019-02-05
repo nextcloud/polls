@@ -267,22 +267,22 @@ export default {
 	    &.hidden {
 	        mask-image: var(--icon-password-000) no-repeat 50% 50%;
 	        -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
-	        mask-size: 32px;
+	        mask-size: 16px;
 	    }
 	    &.public {
 	        mask-image: var(--icon-link-000) no-repeat 50% 50%;
 	        -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
-	        mask-size: 32px;
+	        mask-size: 16px;
 	    }
 	    &.select {
 			mask-image: var(--icon-share-000) no-repeat 50% 50%;
 	        -webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
-	        mask-size: 32px;
+	        mask-size: 16px;
 	    }
 	    &.registered {
 			mask-image: var(--icon-group-000) no-repeat 50% 50%;
 	        -webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
-	        mask-size: 32px;
+	        mask-size: 16px;
 	    }
 
 	}
