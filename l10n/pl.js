@@ -23,6 +23,7 @@ OC.L10N.register(
     "Created" : "Utworzona",
     "By" : "Przez",
     "Expires" : "Wygasa",
+    "Registered users only" : "Tylko dla zarejestrowanych użytkowników",
     "Copy Link" : "Skopiuj link",
     "Delete poll" : "Usuń sondę",
     "Description" : "Opis",
