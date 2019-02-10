@@ -24,7 +24,9 @@
 	<div>
 		<div class="wrapper group-master">
 			<div class="wrapper group-1">
-				<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}] " />
+				<div class="thumbnail has-tooltip" :class="[poll.event.type, {expired : poll.event.expired}] " :title="pollType">
+					{{ pollType }}
+				</div>
 				<div v-if="votedBycurrentUser" class="symbol icon-voted" />
 				<a :href="voteUrl" class="wrapper group-1-1">
 					<div class="flex-column name">
@@ -48,17 +50,17 @@
 			</div>
 			<div class="wrapper group-2">
 				<div class="wrapper group-2-1">
-					<div class="flex-column access">
+					<div class="flex-column thumbnail access has-tooltip" :class="this.poll.event.access" :title="accessType">
 						{{ accessType }}
-					</div>
-					<div class="flex-column created ">
-						{{ timeSpanCreated }}
 					</div>
 				</div>
 				<div class="flex-column owner">
 					<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
 				</div>
 				<div class="wrapper group-2-2">
+					<div class="flex-column created ">
+						{{ timeSpanCreated }}
+					</div>
 					<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
 						{{ timeSpanExpiration }}
 					</div>
@@ -78,6 +80,7 @@ export default {
 			default: undefined
 		}
 	},
+
 	data() {
 		return {
 			openedMenu: false,
@@ -98,6 +101,14 @@ export default {
 				return t('polls', 'Hidden poll')
 			} else {
 				return ''
+			}
+		},
+
+		pollType() {
+			if (this.poll.event.type === 'textPoll') {
+				return t('polls', 'Text poll')
+			} else if (this.poll.event.type === 'datePoll') {
+				return t('polls', 'Date poll')
 			}
 		},
 
@@ -133,16 +144,18 @@ export default {
 		},
 		voteUrl() {
 			return OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
-
 		},
+
 		menuItems() {
 
 			let items = [{
+				key: 'copyLink',
 				icon: 'icon-clippy',
 				text: t('polls', 'Copy Link'),
 				action: this.copyLink
 			},
 			{
+				key: 'clonePoll',
 				icon: 'icon-confirm',
 				text: t('polls', 'Clone poll'),
 				action: this.clonePoll
@@ -152,11 +165,13 @@ export default {
 
 				items.push(
 					{
+						key: 'deletePoll',
 						icon: 'icon-rename',
 						text: t('polls', 'Edit poll'),
 						action: this.editPoll
 					})
 				items.push({
+					key: 'deletePoll',
 					icon: 'icon-delete',
 					text: t('polls', 'Delete poll'),
 					action: this.deletePoll
@@ -166,11 +181,13 @@ export default {
 
 				items.push(
 					{
+						key: 'editPoll',
 						icon: 'icon-rename',
 						text: t('polls', 'Edit poll as admin'),
 						action: this.editPoll
 					})
 				items.push({
+					key: 'deletePoll',
 					icon: 'icon-delete',
 					text: t('polls', 'Delete poll as admin'),
 					action: this.deletePoll
@@ -191,6 +208,7 @@ export default {
 		},
 
 		copyLink() {
+			// this.$emit('copyLink')
 			this.$copyText(window.location.origin + this.voteUrl).then(
 				function(e) {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
@@ -203,39 +221,30 @@ export default {
 		},
 
 		deletePoll() {
-			// Todo: Remove Item self and update transition group in parent.
-			// Event must be triggert from parent
-
 			this.$emit('deletePoll')
 			this.hideMenu()
 		},
 
 		editPoll() {
-			this.$router.push({
-				name: 'edit',
-				params: {
-					hash: this.poll.event.id
-				}
-			})
+			this.$emit('editPoll')
+			this.hideMenu()
 		},
 
 		clonePoll() {
-			this.$router.push({
-				name: 'clone',
-				params: {
-					hash: this.poll.event.id
-				}
-			})
+			this.$emit('clonePoll')
+			this.hideMenu()
 		}
 
 	}
 }
 </script>
 <style lang="scss">
+
 .thumbnail {
     width: 44px;
     height: 44px;
     padding-right: 4px;
+	font-size: 0;
     background-color: var(--color-text-light);
     &.datePoll {
         mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
@@ -250,12 +259,36 @@ export default {
     &.expired {
         background-color: var(--color-background-darker);
     }
+	&.access {
+		display: inherit;
+	    &.hidden {
+	        mask-image: var(--icon-password-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
+	        mask-size: 16px;
+	    }
+	    &.public {
+	        mask-image: var(--icon-link-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
+	        mask-size: 16px;
+	    }
+	    &.select {
+			mask-image: var(--icon-share-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
+	        mask-size: 16px;
+	    }
+	    &.registered {
+			mask-image: var(--icon-group-000) no-repeat 50% 50%;
+	        -webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
+	        mask-size: 16px;
+	    }
 
+	}
 }
 
 .icon-voted {
     background-image: var(--icon-checkmark-fff);
 }
+
 .comment-badge {
     position: absolute;
     top: 0;
@@ -289,6 +322,7 @@ export default {
         }
     }
 }
+
 .symbol.icon-voted {
 	position: absolute;
 	left: 5px;
@@ -299,4 +333,5 @@ export default {
 	background-color: var(--color-success);
 	border-radius: 50%;
 }
+
 </style>

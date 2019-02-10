@@ -27,10 +27,10 @@ import axios from 'nextcloud-axios'
 import App from './App.vue'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
-import Modal from './plugins/plugin.js'
 
 import { DatetimePicker, PopoverMenu } from 'nextcloud-vue'
 
+import Modal from './plugins/plugin.js'
 import Controls from './components/_base-Controls'
 import UserDiv from './components/_base-UserDiv'
 import SideBar from './components/_base-SideBar'

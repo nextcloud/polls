@@ -24,12 +24,24 @@
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
 
-		<Multiselect id="ajax" v-model="shares" :options="users"
-			:multiple="true" :user-select="true" :tag-width="80"
-			:clear-on-select="false" :preserve-search="true" :options-limit="20"
-			:loading="isLoading" :internal-search="false" :searchable="true"
-			:preselect-first="true" :placeholder="placeholder" label="displayName"
-			track-by="user" @search-change="loadUsersAsync" @close="updateShares"
+		<Multiselect id="ajax"
+			v-model="shares"
+			:options="users"
+			:multiple="true"
+			:user-select="true"
+			:tag-width="80"
+			:clear-on-select="false"
+			:preserve-search="true"
+			:options-limit="20"
+			:loading="isLoading"
+			:internal-search="false"
+			:searchable="true"
+			:preselect-first="true"
+			:placeholder="placeholder"
+			label="displayName"
+			track-by="user"
+			@search-change="loadUsersAsync"
+			@close="updateShares"
 		>
 			<template slot="selection" slot-scope="{ values, search, isOpen }">
 				<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
@@ -64,12 +76,14 @@ export default {
 			type: String,
 			default: ''
 		},
+
 		activeShares: {
 			type: Array,
 			default: function() {
 				return []
 			}
 		},
+
 		hideNames: {
 			type: Boolean,
 			default: false
@@ -94,6 +108,7 @@ export default {
 			return this.shares.slice(0).sort(this.sortByDisplayname)
 		}
 	},
+
 	watch: {
 		activeShares(value) {
 			this.shares = value.slice(0)
@@ -133,26 +148,26 @@ export default {
 </script>
 
 <style lang="scss">
-.shared-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    padding-top: 8px;
+	.shared-list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		padding-top: 8px;
 
-    > li {
-        display: flex;
-    }
-}
+		> li {
+			display: flex;
+		}
+	}
 
-.options {
-    display: flex;
-    position: relative;
-    top: -12px;
-    left: -13px;
-}
+	.options {
+		display: flex;
+		position: relative;
+		top: -12px;
+		left: -13px;
+	}
 
-.multiselect {
-	width: 100% !important;
-	max-width: 100% !important;
-}
+	.multiselect {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
 </style>

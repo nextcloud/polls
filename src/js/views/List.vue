@@ -56,6 +56,8 @@
 				:poll="poll"
 				class="table-row table-body"
 				@deletePoll="removePoll(index, poll.event)"
+				@editPoll="editPoll(index, poll.event, 'edit')"
+				@clonePoll="editPoll(index, poll.event, 'clone')"
 			/>
 		</transition-group>
 		<loading-overlay v-if="loading" />
@@ -104,12 +106,30 @@ export default {
 				})
 		},
 
-		removePoll: function(index, event) {
+		editPoll(index, event, name) {
+			this.$router.push({
+				name: name,
+				params: {
+					hash: event.id
+				}
+			})
+		},
+
+		clonePoll(index, event, name) {
+			this.$router.push({
+				name: name,
+				params: {
+					hash: event.id
+				}
+			})
+		},
+
+		removePoll(index, event) {
 			const params = {
 				title: t('polls', 'Delete poll'),
 				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
-				buttonHideText: t('polls','No, keep poll.'),
-				buttonConfirmText: t('polls','Yes, delete poll.'),
+				buttonHideText: t('polls', 'No, keep poll.'),
+				buttonConfirmText: t('polls', 'Yes, delete poll.'),
 				onConfirm: () => {
 					// this.deletePoll(index, event)
 					this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event)
@@ -140,7 +160,7 @@ $participants-width: 95px;
 $group-2-2-width: max($date-width, $participants-width);
 
 $owner-width: 140px;
-$access-width: 140px;
+$access-width: 44px;
 $group-2-1-width: max($access-width, $date-width);
 $group-2-width: $owner-width + $group-2-1-width + $group-2-2-width;
 
@@ -329,7 +349,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		flex-direction: column;
 	}
 
-	.access, .created {
+	.created {
 		width: $group-2-1-width;;
 	}
 	.expiry, .participants {
