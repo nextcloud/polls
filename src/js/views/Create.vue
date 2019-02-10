@@ -137,14 +137,14 @@
 					<input id="datePoll" v-model="poll.event.type" :disabled="protect"
 						value="datePoll" type="radio" class="radio"
 					>
-					<label for="datePoll">
-						{{ t('polls', 'Event schedule') }}
+					<label for="datePoll" class="title">
+						<span>{{ t('polls', 'Event schedule') }}</span>
 					</label>
 					<input id="textPoll" v-model="poll.event.type" :disabled="protect"
 						value="textPoll" type="radio" class="radio"
 					>
-					<label for="textPoll">
-						{{ t('polls', 'Text based') }}
+					<label for="textPoll" class="title">
+						<span>{{ t('polls', 'Text based') }}</span>
 					</label>
 				</div>
 
@@ -156,28 +156,28 @@
 					<input id="allowMaybe" v-model="poll.event.allowMaybe" :disabled="protect"
 						type="checkbox" class="checkbox"
 					>
-					<label for="allowMaybe">
+					<label for="allowMaybe" class="title">
 						{{ t('polls', 'Allow "maybe" vote') }}
 					</label>
 
 					<input id="anonymous" v-model="poll.event.isAnonymous" :disabled="protect"
 						type="checkbox" class="checkbox"
 					>
-					<label for="anonymous">
+					<label for="anonymous" class="title">
 						{{ t('polls', 'Anonymous poll') }}
 					</label>
 
 					<input v-show="poll.event.isAnonymous" id="trueAnonymous" v-model="poll.event.fullAnonymous"
 						:disabled="protect" type="checkbox" class="checkbox"
 					>
-					<label v-show="poll.event.isAnonymous" for="trueAnonymous">
+					<label class="title" v-show="poll.event.isAnonymous" for="trueAnonymous">
 						{{ t('polls', 'Hide user names for admin') }}
 					</label>
 
 					<input id="expiration" v-model="poll.event.expiration" :disabled="protect"
 						type="checkbox" class="checkbox"
 					>
-					<label for="expiration">
+					<label class="title" for="expiration">
 						{{ t('polls', 'Expires') }}
 					</label>
 
@@ -197,26 +197,30 @@
 					<input id="private" v-model="poll.event.access" :disabled="protect"
 						type="radio" value="registered" class="radio"
 					>
-					<label for="private">
-						{{ t('polls', 'Registered users only') }}
+					<label for="private" class="title">
+						<div class="title icon-group" />
+						<span>{{ t('polls', 'Registered users only') }}</span>
 					</label>
 					<input id="hidden" v-model="poll.event.access" :disabled="protect"
 						type="radio" value="hidden" class="radio"
 					>
-					<label for="hidden">
-						{{ t('polls', 'hidden') }}
+					<label for="hidden" class="title">
+						<div class="title icon-category-security" />
+						<span>{{ t('polls', 'hidden') }}</span>
 					</label>
 					<input id="public" v-model="poll.event.access" :disabled="protect"
 						type="radio" value="public" class="radio"
 					>
-					<label for="public">
-						{{ t('polls', 'Public access') }}
+					<label for="public" class="title">
+						<div class="title icon-link" />
+						<span>{{ t('polls', 'Public access') }}</span>
 					</label>
 					<input id="select" v-model="poll.event.access" :disabled="protect"
 						type="radio" value="select" class="radio"
 					>
-					<label for="select">
-						{{ t('polls', 'Only shared') }}
+					<label for="select" class="title">
+						<div class="title icon-shared" />
+						<span>{{ t('polls', 'Only shared') }}</span>
 					</label>
 				</div>
 			</div>
@@ -576,11 +580,15 @@ input[type="text"] {
             padding-left: 21px;
         }
         & > .title {
+			display: flex;
             background-position: 0 2px;
             padding-left: 24px;
             opacity: 0.7;
             font-weight: bold;
             margin-bottom: 4px;
+			& > span {
+				padding-left: 4px;
+			}
         }
     }
 }
