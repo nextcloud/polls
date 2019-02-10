@@ -160,7 +160,7 @@ $participants-width: 95px;
 $group-2-2-width: max($date-width, $participants-width);
 
 $owner-width: 140px;
-$access-width: 140px;
+$access-width: 44px;
 $group-2-1-width: max($access-width, $date-width);
 $group-2-width: $owner-width + $group-2-1-width + $group-2-2-width;
 
@@ -349,7 +349,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		flex-direction: column;
 	}
 
-	.access, .created {
+	.created {
 		width: $group-2-1-width;;
 	}
 	.expiry, .participants {
