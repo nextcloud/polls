@@ -178,6 +178,8 @@ class ApiController extends Controller {
 			$grantAccessAs = 'public';
 		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser) {
 			$grantAccessAs = 'registered';
+		} elseif ($event['access'] === 'hidden' && ($event['owner'] === \OC::$server->getUserSession()->getUser())) {
+			$grantAccessAs = 'hidden';
 		} elseif ($this->checkUserAccess($shares)) {
 			$grantAccessAs = 'userInvitation';
 		} elseif ($this->checkGroupAccess($shares)) {
@@ -418,7 +420,10 @@ class ApiController extends Controller {
 		$eventsList = array();
 
 		foreach ($events as $eventElement) {
-			$eventsList[] = $this->getPoll($eventElement->id);
+			$event = $this->getPoll($eventElement->id);
+			if ($event['grantedAs'] !== 'none') {
+				$eventsList[] = $event;
+			}
 		}
 
 		return new DataResponse($eventsList, Http::STATUS_OK);
