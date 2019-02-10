@@ -490,7 +490,7 @@ class ApiController extends Controller {
 		}
 
 		if ($event['expiration']) {
-			$newEvent->setExpire($event['expirationDate']);
+			$newEvent->setExpire(date('Y-m-d H:i:s', strtotime($event['expirationDate'])));
 		} else {
 			$newEvent->setExpire(null);
 		}

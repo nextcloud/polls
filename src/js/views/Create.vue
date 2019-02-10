@@ -335,9 +335,14 @@ export default {
 				editable: true,
 				minuteStep: 1,
 				type: 'datetime',
-				lang: this.lang.split('-')[0],
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				placeholder: t('polls', 'Expiration date')
+				lang: this.lang.split('-')[0],
+				placeholder: t('polls', 'Expiration date'),
+				timePickerOptions: {
+					start: '00:00',
+					step: '00:30',
+					end: '23:30'
+				}
 			}
 		},
 
@@ -459,6 +464,8 @@ export default {
 			} else {
 				this.writingPoll = true
 				this.titleEmpty = false
+				// this.poll.event.expirationDate = moment(this.poll.event.expirationDate).utc()
+
 				this.$http.post(OC.generateUrl('apps/polls/write/poll'), this.poll)
 					.then((response) => {
 						this.poll.mode = 'edit'
