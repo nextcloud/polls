@@ -4,13 +4,25 @@ All notable changes to this project will be documented in this file.
 ## [0.10.0] - [tbd]
 
 ### Added
+
   - main list page
     - rewrite as a vue app
     - improved UI
-  - ability to clone any poll and shift date options  
+  - ability to clone any poll and shift date options (#323, #245)
   - design updates to vote page
   - some more UI enhancements
   - Maybe option for a poll is configurable
+
+### Fixed
+
+  - #82  - "user_" / "group_" prefix
+  - #206 - User name is prefixed with user_, + incorrect translation
+  - #461 - Polls with expire date could not be created/edited
+  - #478 - Send comment bug
+  - #479 - Not possible to vote for none of the options
+  - #498 - "Create Poll" button disabled after failed validation
+  - #507 - Fix query params in eventmapper
+  - #511 - No difference between hidden and open poll
 
 ## [0.9.5] - 2018-12-22
 
