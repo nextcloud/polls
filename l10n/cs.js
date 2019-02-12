@@ -33,6 +33,8 @@ OC.L10N.register(
     "Only shared" : "Pouze sdílené",
     "Registered users only" : "Pouze registrovaní uživatelé",
     "Hidden poll" : "Skrytá anketa",
+    "Text poll" : "Textová anketa",
+    "Date poll" : "Datumová anketa",
     "never" : "nikdy",
     "Copy Link" : "Zkopírovat odkaz",
     "Clone poll" : "Klonovat anketu",

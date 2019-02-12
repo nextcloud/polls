@@ -33,6 +33,8 @@ OC.L10N.register(
     "Only shared" : "Nur geteilt",
     "Registered users only" : "Nur für registrierte Benutzer",
     "Hidden poll" : "Versteckte Umfrage",
+    "Text poll" : "Text der Umfrage",
+    "Date poll" : "Datum der Umfrage",
     "never" : "nie",
     "Copy Link" : "Link kopieren",
     "Clone poll" : "Umfrage duplizieren",

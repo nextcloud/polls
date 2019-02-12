@@ -33,6 +33,8 @@ OC.L10N.register(
     "Only shared" : "Alleen gedeeld",
     "Registered users only" : "Alleen geregistreerde gebruikers",
     "Hidden poll" : "Verborgen peiling",
+    "Text poll" : "Tekst peiling",
+    "Date poll" : "Datum peiling",
     "never" : "nooit",
     "Copy Link" : "Kopieer Link",
     "Clone poll" : "Kopieer de peiling",

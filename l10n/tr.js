@@ -33,6 +33,8 @@ OC.L10N.register(
     "Only shared" : "Yalnız paylaşılanlarla",
     "Registered users only" : "Yalnız kayıtlı kullanıcılar",
     "Hidden poll" : "Gizli anket",
+    "Text poll" : "Metin anketi",
+    "Date poll" : "Tarih anketi",
     "never" : "asla",
     "Copy Link" : "Bağlantıyı Kopyala",
     "Clone poll" : "Anketi kopyala",
