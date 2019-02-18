@@ -249,12 +249,12 @@ export default {
     &.datePoll {
         mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
         -webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
-        mask-size: 32px;
+        mask-size: 16px;
     }
     &.textPoll {
         mask-image: var(--icon-organization-000) no-repeat 50% 50%;
         -webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
-        mask-size: 32px;
+        mask-size: 16px;
     }
     &.expired {
         background-color: var(--color-background-darker);
@@ -325,11 +325,11 @@ export default {
 
 .symbol.icon-voted {
 	position: absolute;
-	left: 5px;
-	top: 8px;
-	background-size: 1em;
-	min-width: 1.2em;
-	min-height: 1.2em;
+	left: 11px;
+	top: 16px;
+	background-size: 0px;
+	min-width: 8px;
+	min-height: 8px;
 	background-color: var(--color-success);
 	border-radius: 50%;
 }
