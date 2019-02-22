@@ -69,7 +69,9 @@
 					confirm
 					@change="addNewPollDate"
 				/>
-				<button v-show="poll.event.type === 'datePoll'" id="shiftDates" class="icon-history" @click="shiftDates()">
+				<button v-show="poll.event.type === 'datePoll'" id="shiftDates" class="icon-history"
+					@click="shiftDates()"
+				>
 					{{ t('polls', 'Shift dates') }}
 				</button>
 
@@ -184,7 +186,7 @@
 					<input v-show="poll.event.isAnonymous" id="trueAnonymous" v-model="poll.event.fullAnonymous"
 						:disabled="protect" type="checkbox" class="checkbox"
 					>
-					<label class="title" v-show="poll.event.isAnonymous" for="trueAnonymous">
+					<label v-show="poll.event.isAnonymous" class="title" for="trueAnonymous">
 						{{ t('polls', 'Hide user names for admin') }}
 					</label>
 

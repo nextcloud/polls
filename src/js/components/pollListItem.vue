@@ -50,7 +50,7 @@
 			</div>
 			<div class="wrapper group-2">
 				<div class="wrapper group-2-1">
-					<div class="flex-column thumbnail access has-tooltip" :class="this.poll.event.access" :title="accessType">
+					<div class="flex-column thumbnail access has-tooltip" :class="poll.event.access" :title="accessType">
 						{{ accessType }}
 					</div>
 				</div>
@@ -107,7 +107,7 @@ export default {
 		pollType() {
 			if (this.poll.event.type === 'textPoll') {
 				return t('polls', 'Text poll')
-			} else if (this.poll.event.type === 'datePoll') {
+			} else {
 				return t('polls', 'Date poll')
 			}
 		},
@@ -163,13 +163,12 @@ export default {
 
 			if (this.poll.event.owner === OC.getCurrentUser().uid) {
 
-				items.push(
-					{
-						key: 'deletePoll',
-						icon: 'icon-rename',
-						text: t('polls', 'Edit poll'),
-						action: this.editPoll
-					})
+				items.push({
+					key: 'deletePoll',
+					icon: 'icon-rename',
+					text: t('polls', 'Edit poll'),
+					action: this.editPoll
+				})
 				items.push({
 					key: 'deletePoll',
 					icon: 'icon-delete',
@@ -179,13 +178,12 @@ export default {
 
 			} else if (OC.isUserAdmin()) {
 
-				items.push(
-					{
-						key: 'editPoll',
-						icon: 'icon-rename',
-						text: t('polls', 'Edit poll as admin'),
-						action: this.editPoll
-					})
+				items.push({
+					key: 'editPoll',
+					icon: 'icon-rename',
+					text: t('polls', 'Edit poll as admin'),
+					action: this.editPoll
+				})
 				items.push({
 					key: 'deletePoll',
 					icon: 'icon-delete',
@@ -239,12 +237,11 @@ export default {
 }
 </script>
 <style lang="scss">
-
 .thumbnail {
     width: 44px;
     height: 44px;
     padding-right: 4px;
-	font-size: 0;
+    font-size: 0;
     background-color: var(--color-text-light);
     &.datePoll {
         mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
@@ -259,30 +256,30 @@ export default {
     &.expired {
         background-color: var(--color-background-darker);
     }
-	&.access {
-		display: inherit;
-	    &.hidden {
-	        mask-image: var(--icon-password-000) no-repeat 50% 50%;
-	        -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
-	        mask-size: 16px;
-	    }
-	    &.public {
-	        mask-image: var(--icon-link-000) no-repeat 50% 50%;
-	        -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
-	        mask-size: 16px;
-	    }
-	    &.select {
-			mask-image: var(--icon-share-000) no-repeat 50% 50%;
-	        -webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
-	        mask-size: 16px;
-	    }
-	    &.registered {
-			mask-image: var(--icon-group-000) no-repeat 50% 50%;
-	        -webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
-	        mask-size: 16px;
-	    }
+    &.access {
+        display: inherit;
+        &.hidden {
+            mask-image: var(--icon-password-000) no-repeat 50% 50%;
+            -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
+            mask-size: 16px;
+        }
+        &.public {
+            mask-image: var(--icon-link-000) no-repeat 50% 50%;
+            -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
+            mask-size: 16px;
+        }
+        &.select {
+            mask-image: var(--icon-share-000) no-repeat 50% 50%;
+            -webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
+            mask-size: 16px;
+        }
+        &.registered {
+            mask-image: var(--icon-group-000) no-repeat 50% 50%;
+            -webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
+            mask-size: 16px;
+        }
 
-	}
+    }
 }
 
 .icon-voted {
@@ -304,13 +301,13 @@ export default {
 }
 
 .app-navigation-entry-utils-counter {
-	padding-right: 0 !important;
+    padding-right: 0 !important;
     overflow: hidden;
     text-align: right;
     font-size: 9pt;
     line-height: 44px;
     padding: 0 12px;
-	// min-width: 25px;
+    // min-width: 25px;
     &.highlighted {
         padding: 0;
         text-align: center;
@@ -324,14 +321,13 @@ export default {
 }
 
 .symbol.icon-voted {
-	position: absolute;
-	left: 11px;
-	top: 16px;
-	background-size: 0px;
-	min-width: 8px;
-	min-height: 8px;
-	background-color: var(--color-success);
-	border-radius: 50%;
+    position: absolute;
+    left: 11px;
+    top: 16px;
+    background-size: 0;
+    min-width: 8px;
+    min-height: 8px;
+    background-color: var(--color-success);
+    border-radius: 50%;
 }
-
 </style>
