@@ -50,7 +50,7 @@ $header-padding: $user-column-width + $table-padding;
 }
 
 .table {
-	overflow-x: auto;
+	overflow-x: visible;
 	padding-bottom: 10px;
 }
 
