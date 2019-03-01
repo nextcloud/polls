@@ -21,49 +21,78 @@
   -->
 
 <template>
-	<div>
-		<div class="wrapper group-master">
-			<div class="wrapper group-1">
-				<div class="thumbnail has-tooltip" :class="[poll.event.type, {expired : poll.event.expired}] " :title="pollType">
-					{{ pollType }}
+	<div v-if="header" class="wrapper group-master table-row table-header">
+		<div class="wrapper group-1">
+			<div class="wrapper group-1-1">
+				<div class="name">
+					{{ t('polls', 'Title') }}
 				</div>
-				<div v-if="votedBycurrentUser" class="symbol icon-voted" />
-				<a :href="voteUrl" class="wrapper group-1-1">
-					<div class="flex-column name">
-						{{ poll.event.title }}
-					</div>
-					<div class="flex-column description">
-						{{ poll.event.description }}
-					</div>
-				</a>
-				<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted">
-					<span>{{ countComments }}</span>
+			</div>
+			<div class="wrapper group-1-2">
+				<div class="actions" />
+			</div>
+		</div>
+		<div class="wrapper group-2">
+			<div class="wrapper group-2-1">
+				<div class="access">
+					{{ t('polls', 'Access') }}
 				</div>
-				<div class="actions">
-					<div class="toggleUserActions">
-						<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
-						<div class="popovermenu" :class="{ 'open': openedMenu }">
-							<popover-menu :menu="menuItems" />
-						</div>
+			</div>
+			<div class="owner">
+				{{ t('polls', 'Owner') }}
+			</div>
+			<div class="wrapper group-2-2">
+				<div class="created">
+					{{ t('polls', 'Created') }}
+				</div>
+				<div class="expiry">
+					{{ t('polls', 'Expires') }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div v-else class="wrapper table-row table-body group-master">
+		<div class="wrapper group-1">
+			<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}]" v-tooltip="pollType">
+				{{ pollType }}
+			</div>
+			<div v-if="votedBycurrentUser" class="symbol icon-voted" />
+			<a :href="voteUrl" class="wrapper group-1-1">
+				<div class="name">
+					{{ poll.event.title }}
+				</div>
+				<div class="description">
+					{{ poll.event.description }}
+				</div>
+			</a>
+			<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted" v-tooltip="countCommentsHint">
+				<span>{{ countComments }}</span>
+			</div>
+			<div class="actions">
+				<div class="toggleUserActions">
+					<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
+					<div class="popovermenu" :class="{ 'open': openedMenu }">
+						<popover-menu :menu="menuItems" />
 					</div>
 				</div>
 			</div>
-			<div class="wrapper group-2">
-				<div class="wrapper group-2-1">
-					<div class="flex-column thumbnail access has-tooltip" :class="poll.event.access" :title="accessType">
-						{{ accessType }}
-					</div>
+		</div>
+		<div class="wrapper group-2">
+			<div class="wrapper group-2-1">
+				<div class="thumbnail access" :class="poll.event.access" v-tooltip="accessType">
+					{{ accessType }}
 				</div>
-				<div class="flex-column owner">
-					<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
+			</div>
+			<div class="owner">
+				<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
+			</div>
+			<div class="wrapper group-2-2">
+				<div class="created ">
+					{{ timeSpanCreated }}
 				</div>
-				<div class="wrapper group-2-2">
-					<div class="flex-column created ">
-						{{ timeSpanCreated }}
-					</div>
-					<div class="flex-column expiry" :class="{ expired : poll.event.expired }">
-						{{ timeSpanExpiration }}
-					</div>
+				<div class="expiry" :class="{ expired : poll.event.expired }">
+					{{ timeSpanExpiration }}
 				</div>
 			</div>
 		</div>
@@ -75,6 +104,10 @@ import moment from 'moment'
 
 export default {
 	props: {
+		header: {
+			type: Boolean,
+			default: false
+		},
 		poll: {
 			type: Object,
 			default: undefined
@@ -135,6 +168,9 @@ export default {
 				return '999+'
 			}
 			return this.poll.comments.length
+		},
+		countCommentsHint() {
+			return n('polls', 'There is %n comment','There are %n comments', this.poll.comments.length)
 		},
 		countShares() {
 			return this.poll.shares.length
@@ -237,6 +273,182 @@ export default {
 }
 </script>
 <style lang="scss">
+$row-padding: 15px;
+$table-padding: 4px;
+
+$date-width: 120px;
+$participants-width: 95px;
+$group-2-2-width: max($date-width, $participants-width);
+
+$owner-width: 140px;
+$access-width: 44px;
+$group-2-1-width: max($access-width, $date-width);
+$group-2-width: $owner-width + $group-2-1-width + $group-2-2-width;
+
+$action-width: 44px;
+$thumbnail-width: 44px;
+$thumbnail-icon-width: 32px;
+$name-width: 150px;
+$description-width: 150px;
+$group-1-1-width: max($name-width, $description-width);
+$group-1-width: $thumbnail-width + $group-1-1-width + $action-width;
+
+$group-master-width: max($group-1-width, $group-2-width);
+
+$mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $date-width + $participants-width + $row-padding * 2);
+$mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
+$mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
+
+
+
+.table-row {
+	width: 100%;
+	padding-left:  $row-padding;
+	padding-right: $row-padding;
+
+	line-height: 2em;
+	transition: background-color 0.3s ease;
+	background-color: var(--color-main-background);
+	min-height: 4em;
+	border-bottom: 1px solid var(--color-border);
+
+	&.table-header {
+		.name, .description {
+			padding-left: ($thumbnail-width + $table-padding *2);
+		}
+		.owner {
+			padding-left: 6px;
+		}
+	}
+
+	&.table-body {
+		&:hover, &:focus, &:active, &.mouseOver {
+			transition: background-color 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
+		.icon-more {
+			right: 14px;
+			opacity: 0.3;
+			cursor: pointer;
+			height: 44px;
+			width: 44px;
+		}
+
+		.symbol {
+			padding: 2px;
+		}
+
+	}
+
+	&.table-header {
+		opacity: 0.5;
+	}
+}
+
+
+.wrapper {
+	display: flex;
+	align-items: center;
+	position: relative;
+	flex-grow: 0;
+	div {
+	}
+}
+
+.name {
+	width: $name-width;
+}
+
+.description {
+	width: $description-width;
+	opacity: 0.5;
+}
+
+.name, .description {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.actions {
+	width: $action-width;
+	position: relative;
+	overflow: initial;
+}
+
+.access {
+	width: $access-width;
+}
+
+.owner {
+	width: $owner-width;
+}
+
+.created {
+	width: $date-width;
+}
+
+.expiry {
+	width: $date-width;
+	&.expired {
+		color: red;
+	}
+}
+
+
+.group-1, .group-1-1 {
+	flex-grow: 1;
+}
+
+.group-1-1 {
+	flex-direction: column;
+	width: $group-1-1-width;
+	> div {
+		width: 100%;
+	}
+}
+
+@media all and (max-width: ($mediabreak-1) ) {
+	.group-1 {
+		width: $group-1-width;
+	}
+	.group-2-1, .group-2-2 {
+		flex-direction: column;
+	}
+
+	.created {
+		width: $group-2-1-width;;
+	}
+	.expiry, .participants {
+		width: $group-2-2-width;;
+	}
+}
+
+@media all and (max-width: ($mediabreak-2) ) {
+	.table-row {
+		padding: 0;
+	}
+
+	.group-2-1 {
+		display: none;
+	}
+}
+
+@media all and (max-width: ($mediabreak-3) ) {
+	.group-2 {
+		display: none;
+	}
+}
+
+
+
+
+
+
+
+
+
+
 .thumbnail {
     width: 44px;
     height: 44px;

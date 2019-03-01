@@ -27,18 +27,8 @@
 </template>
 
 <script>
-// import moment from 'moment'
-// import lodash from 'lodash'
-// import pollItem from './components/pollItem'
-// import pollListHeader from './components/pollListHeader'
-
 export default {
 	name: 'App'
-
-	// components: {
-	// 	pollItem,
-	// 	pollListHeader
-	// }
 }
 </script>
 

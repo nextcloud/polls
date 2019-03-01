@@ -43,18 +43,17 @@
 			v-if="!noPolls"
 			name="list"
 			tag="div"
-			class="poll-list table main-container has-controls"
+			class="table"
 		>
-			<poll-list-header
+			<poll-list-item
 				key="0"
-				class="table-row table-header"
+				:header="true"
 			/>
 			<li
 				is="poll-list-item"
 				v-for="(poll, index) in polls"
 				:key="poll.id"
 				:poll="poll"
-				class="table-row table-body"
 				@deletePoll="removePoll(index, poll.event)"
 				@editPoll="editPoll(index, poll.event, 'edit')"
 				@clonePoll="editPoll(index, poll.event, 'clone')"
@@ -69,14 +68,12 @@
 // import moment from 'moment'
 // import lodash from 'lodash'
 import pollListItem from '../components/pollListItem'
-import pollListHeader from '../components/pollListHeader'
 
 export default {
 	name: 'List',
 
 	components: {
 		pollListItem,
-		pollListHeader
 	},
 
 	data() {
@@ -152,45 +149,9 @@ export default {
 </script>
 
 <style lang="scss">
-$row-padding: 15px;
-$table-padding: 4px;
-
-$date-width: 120px;
-$participants-width: 95px;
-$group-2-2-width: max($date-width, $participants-width);
-
-$owner-width: 140px;
-$access-width: 44px;
-$group-2-1-width: max($access-width, $date-width);
-$group-2-width: $owner-width + $group-2-1-width + $group-2-2-width;
-
-$action-width: 44px;
-$thumbnail-width: 44px;
-$thumbnail-icon-width: 32px;
-$name-width: 150px;
-$description-width: 150px;
-$group-1-1-width: max($name-width, $description-width);
-$group-1-width: $thumbnail-width + $group-1-1-width + $action-width;
-
-$group-master-width: max($group-1-width, $group-2-width);
-
-$mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $date-width + $participants-width + $row-padding * 2);
-$mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
-$mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
 .table {
 	width: 100%;
-}
-
-#emptycontent {
-	.icon-polls {
-		background-color: black;
-		-webkit-mask: url('./img/app.svg') no-repeat 50% 50%;
-		mask: url('./img/app.svg') no-repeat 50% 50%;
-	}
-}
-
-.poll-list {
 	margin-top: 45px;
 	display: flex;
 	flex-direction: column;
@@ -198,178 +159,11 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	flex-wrap: nowrap;
 }
 
-.table-row {
-	display: flex;
-	width: 100%;
-	padding-left:  $row-padding;
-	padding-right: $row-padding;
-
-	line-height: 2em;
-	transition: background-color 0.3s ease;
-	background-color: var(--color-main-background);
-	min-height: 4em;
-	border-bottom: 1px solid var(--color-border);
-
-	&.table-header {
-		.name, .description {
-			padding-left: ($thumbnail-width + $table-padding *2);
-		}
-		.owner {
-			padding-left: 6px;
-		}
-	}
-
-	&.table-body {
-		&:hover, &:focus, &:active, &.mouseOver {
-			transition: background-color 0.3s ease;
-			background-color: var(--color-background-dark);
-		}
-		.flex-column.owner {
-			display: flex;
-			.avatardiv {
-				margin-right: 4px;
-			}
-		}
-		.icon-more {
-			right: 14px;
-			opacity: 0.3;
-			cursor: pointer;
-			height: 44px;
-			width: 44px;
-		}
-
-		.symbol {
-			padding: 2px;
-		}
-
-	}
-
-	&.table-header {
-		opacity: 0.5;
-	}
-}
-
-.wrapper {
-	display: flex;
-	align-items: center;
-	position: relative;
-	div {
-	}
-}
-
-.flex-column {
-	padding: 0 $table-padding;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	align-items: center;
-	min-height: 16px;
-}
-
-.name {
-	width: $name-width;
-}
-
-.description {
-	width: $description-width;
-	color: var(--color-text-maxcontrast);
-	}
-
-.owner {
-	width: $owner-width;
-}
-
-.access {
-	width: $access-width;
-}
-
-.created {
-	width: $date-width;
-}
-
-.expiry {
-	width: $date-width;
-	&.expired {
-		color: red;
-	}
-}
-
-.participants{
-	width: $participants-width;
-	div {
-		&.partic_voted {
-			&.icon-partic_yes {
-				background-image: var(--icon-yes);
-			}
-			&.icon-partic_no {
-				background-image: var(--icon-no);
-			}
-		}
-
-		&.partic_commented {
-			&.icon-commented_yes {
-				background-image: var(--icon-comment-yes);
-			}
-			&.icon-commented_no {
-				background-image: var(--icon-comment-no);
-			}
-		}
-	}
-
-}
-
-.actions {
-	width: $action-width;
-	position: relative;
-	overflow: initial;
-}
-
-.options, .participants {
-	display: flex;
-	flex-direction: row;
-}
-
-.group-1, .group-1-1, .group-master {
-	flex-grow: 1;
-}
-
-.group-1-1 {
-	flex-direction: column;
-	width: $group-1-1-width;
-	> div {
-		width: 100%;
-	}
-}
-
-@media all and (max-width: ($mediabreak-1) ) {
-	.group-1 {
-		width: $group-1-width;
-	}
-	.group-2-1, .group-2-2 {
-		flex-direction: column;
-	}
-
-	.created {
-		width: $group-2-1-width;;
-	}
-	.expiry, .participants {
-		width: $group-2-2-width;;
-	}
-}
-
-@media all and (max-width: ($mediabreak-2) ) {
-	.table-row {
-		padding: 0;
-	}
-
-	.group-2-1 {
-		display: none;
-	}
-}
-
-@media all and (max-width: ($mediabreak-3) ) {
-	.group-2 {
-		display: none;
+#emptycontent {
+	.icon-polls {
+		background-color: black;
+		-webkit-mask: url('./img/app.svg') no-repeat 50% 50%;
+		mask: url('./img/app.svg') no-repeat 50% 50%;
 	}
 }
 
