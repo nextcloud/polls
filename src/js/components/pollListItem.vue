@@ -170,7 +170,7 @@ export default {
 			return this.poll.comments.length
 		},
 		countCommentsHint() {
-			return t('polls', 'There are %n comments', 1, this.poll.comments.length)
+			return n('polls', 'There is %n comment','There are %n comments', this.poll.comments.length)
 		},
 		countShares() {
 			return this.poll.shares.length
