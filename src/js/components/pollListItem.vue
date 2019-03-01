@@ -66,7 +66,7 @@
 					{{ poll.event.description }}
 				</div>
 			</a>
-			<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted">
+			<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted" v-tooltip="countCommentsHint">
 				<span>{{ countComments }}</span>
 			</div>
 			<div class="actions">
@@ -168,6 +168,9 @@ export default {
 				return '999+'
 			}
 			return this.poll.comments.length
+		},
+		countCommentsHint() {
+			return t('polls', 'There are %n comments', 1, this.poll.comments.length)
 		},
 		countShares() {
 			return this.poll.shares.length
