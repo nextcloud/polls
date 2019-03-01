@@ -50,8 +50,9 @@ $header-padding: $user-column-width + $table-padding;
 }
 
 .table {
-	overflow-x: visible;
+	overflow-x: auto;
 	padding-bottom: 10px;
+	min-height: 280px;
 }
 
 .expired-vote{
