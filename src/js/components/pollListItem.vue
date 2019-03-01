@@ -54,7 +54,7 @@
 
 	<div v-else class="wrapper table-row table-body group-master">
 		<div class="wrapper group-1">
-			<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}]" v-tooltip="pollType">
+			<div v-tooltip="pollType" class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}]">
 				{{ pollType }}
 			</div>
 			<div v-if="votedBycurrentUser" class="symbol icon-voted" />
@@ -66,7 +66,7 @@
 					{{ poll.event.description }}
 				</div>
 			</a>
-			<div v-if="countComments" class="app-navigation-entry-utils-counter highlighted" v-tooltip="countCommentsHint">
+			<div v-if="countComments" v-tooltip="countCommentsHint" class="app-navigation-entry-utils-counter highlighted">
 				<span>{{ countComments }}</span>
 			</div>
 			<div class="actions">
@@ -80,7 +80,7 @@
 		</div>
 		<div class="wrapper group-2">
 			<div class="wrapper group-2-1">
-				<div class="thumbnail access" :class="poll.event.access" v-tooltip="accessType">
+				<div v-tooltip="accessType" class="thumbnail access" :class="poll.event.access">
 					{{ accessType }}
 				</div>
 			</div>
@@ -170,7 +170,7 @@ export default {
 			return this.poll.comments.length
 		},
 		countCommentsHint() {
-			return n('polls', 'There is %n comment','There are %n comments', this.poll.comments.length)
+			return n('polls', 'There is %n comment', 'There are %n comments', this.poll.comments.length)
 		},
 		countShares() {
 			return this.poll.shares.length
@@ -299,8 +299,6 @@ $mediabreak-1: ($group-1-width + $owner-width + $access-width + $date-width + $d
 $mediabreak-2: ($group-1-width + $group-2-width + $row-padding * 2);
 $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-width) + $row-padding *2 ;
 
-
-
 .table-row {
 	width: 100%;
 	padding-left:  $row-padding;
@@ -344,7 +342,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		opacity: 0.5;
 	}
 }
-
 
 .wrapper {
 	display: flex;
@@ -395,7 +392,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	}
 }
 
-
 .group-1, .group-1-1 {
 	flex-grow: 1;
 }
@@ -439,15 +435,6 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 		display: none;
 	}
 }
-
-
-
-
-
-
-
-
-
 
 .thumbnail {
     width: 44px;

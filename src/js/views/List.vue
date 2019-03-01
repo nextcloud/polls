@@ -73,7 +73,7 @@ export default {
 	name: 'List',
 
 	components: {
-		pollListItem,
+		pollListItem
 	},
 
 	data() {
