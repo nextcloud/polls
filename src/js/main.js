@@ -28,7 +28,7 @@ import App from './App.vue'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu } from 'nextcloud-vue'
+import { DatetimePicker, PopoverMenu, Tooltip } from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
 import Controls from './components/_base-Controls'
@@ -48,6 +48,8 @@ Vue.component('SideBar', SideBar)
 Vue.component('SideBarClose', SideBarClose)
 Vue.component('ShareDiv', ShareDiv)
 Vue.component('LoadingOverlay', LoadingOverlay)
+
+Vue.directive('tooltip', Tooltip)
 
 Vue.use(vClickOutside)
 Vue.use(VueClipboard)

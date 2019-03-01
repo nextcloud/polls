@@ -54,7 +54,7 @@
 
 	<div v-else class="wrapper table-row table-body group-master">
 		<div class="wrapper group-1">
-			<div class="thumbnail has-tooltip" :class="[poll.event.type, {expired : poll.event.expired}] " :title="pollType">
+			<div class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}]" v-tooltip="pollType">
 				{{ pollType }}
 			</div>
 			<div v-if="votedBycurrentUser" class="symbol icon-voted" />
@@ -80,7 +80,7 @@
 		</div>
 		<div class="wrapper group-2">
 			<div class="wrapper group-2-1">
-				<div class="thumbnail access has-tooltip" :class="poll.event.access" :title="accessType">
+				<div class="thumbnail access" :class="poll.event.access" v-tooltip="accessType">
 					{{ accessType }}
 				</div>
 			</div>
