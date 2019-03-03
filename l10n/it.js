@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Elimina sondaggio come amministratore",
     "Link copied to clipboard" : "Collegamento copiato negli appunti",
     "Error, while copying link to clipboard" : "Errore durante la copia del collegamento negli appunti",
+    "_There is %n comment_::_There are %n comments_" : ["C'è %n commento","Ci sono %n commenti"],
     "Share with" : "Condividi con",
     "Poll description" : "Descrizione del sondaggio",
     "Description" : "Descrizione",
