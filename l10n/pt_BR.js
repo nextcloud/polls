@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Excluir a pesquisa como administrador",
     "Link copied to clipboard" : "Link copiado para a área de transferência",
     "Error, while copying link to clipboard" : "Erro ao copiar o link para a área de transferência",
+    "_There is %n comment_::_There are %n comments_" : ["Há %n comentário","Há %n comentários"],
     "Share with" : "Compartilhar com",
     "Poll description" : "Descrição da enquete",
     "Description" : "Descrição",

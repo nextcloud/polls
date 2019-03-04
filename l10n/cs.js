@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Smazat anketu jako správce",
     "Link copied to clipboard" : "Odkaz zkopírován do schánky",
     "Error, while copying link to clipboard" : "Chyba při kopírování odkazu do schránky",
+    "_There is %n comment_::_There are %n comments_" : ["Je zde %n komentář","Jsou zde %n komentáře","Je zde %n komentářů","Jsou zde %n komentáře"],
     "Share with" : "Sdílet s",
     "Poll description" : "Popis ankety",
     "Description" : "Popis",

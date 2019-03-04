@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Eliminar a enquisa como administrador",
     "Link copied to clipboard" : "A ligazón foi copiada no portapapeis.",
     "Error, while copying link to clipboard" : "Produciuse un erro ao copiar a ligazón no portapapeis",
+    "_There is %n comment_::_There are %n comments_" : ["Hai %n comentario","Hai %n comentarios"],
     "Share with" : "Compartir con",
     "Poll description" : "Descrición da enquisa",
     "Description" : "Descrición",
