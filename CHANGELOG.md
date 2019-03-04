@@ -1,10 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.10.1] - tbd
+## [0.10.2] - tdb
+
+  - #532 - cannot share poll (only share option)
+
+## [0.10.1] - 2019-03-02
+
+### Fixed
 
   - #528 - pull down on three-dot menu hidden for first participant
-  - #532 - cannot share poll (only share option)
 
 ## [0.10.0] - 2019-02-24
 
