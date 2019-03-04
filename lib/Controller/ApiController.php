@@ -219,20 +219,86 @@ class ApiController extends Controller {
 	 * @param Integer $pollId
 	 * @return Array
 	 */
-	public function getVotes($pollId) {
-		$votesList = array();
+	private function anonMapper($pollId) {
+		$anonList = array();
 		$votes = $this->voteMapper->findByPoll($pollId);
-		foreach ($votes as $voteElement) {
+		$i = 0;
+
+		foreach ($votes as $element) {
+			if (!array_key_exists($element->getUserId(), $anonList)) {
+				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i ;
+			}
+		}
+
+		$comments = $this->commentMapper->findByPoll($pollId);
+		foreach ($comments as $element) {
+			if (!array_key_exists($element->getUserId(), $anonList)) {
+				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
+			}
+		}
+		return $anonList;
+	}
+
+	/**
+	 * Read all votes of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
+	public function getVotes($pollId, $anonymize = true) {
+		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		$votes = $this->voteMapper->findByPoll($pollId);
+		$anonMapper = $this->anonMapper($pollId);
+		$votesList = array();
+
+		foreach ($votes as $vote) {
+
+			if (!$anonymize || $currentUser === $vote->getUserId()) {
+				$setName = $vote->getUserId();
+			} else {
+				$setName = $anonMapper[$vote->getUserId()];
+			}
+
 			$votesList[] = [
-				'id' => $voteElement->getId(),
-				'userId' => $voteElement->getUserId(),
-				'voteOptionId' => $voteElement->getVoteOptionId(),
-				'voteOptionText' => htmlspecialchars_decode($voteElement->getVoteOptionText()),
-				'voteAnswer' => $voteElement->getVoteAnswer()
+				'id' => $vote->getId(),
+				'userId' => $setName,
+				'voteOptionId' => $vote->getVoteOptionId(),
+				'voteOptionText' => htmlspecialchars_decode($vote->getVoteOptionText()),
+				'voteAnswer' => $vote->getVoteAnswer()
 			];
 		}
 
 		return $votesList;
+	}
+
+	/**
+	 * Read all votes of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
+	public function getParticipants($pollId, $anonymize = true) {
+		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		$votes = $this->voteMapper->findByPoll($pollId);
+		$anonMapper = $this->anonMapper($pollId);
+		$participants = array();
+
+		foreach ($votes as $vote) {
+
+			if (!$anonymize || $currentUser === $vote->getUserId()) {
+				$setName = $vote->getUserId();
+			} else {
+				$setName = $anonMapper[$vote->getUserId()];
+			}
+
+			if (!in_array($setName, $participants)) {
+				$participants[] = $setName;
+			}
+		}
+
+		return $participants;
 	}
 
 	/**
@@ -242,15 +308,24 @@ class ApiController extends Controller {
 	 * @param Integer $pollId
 	 * @return Array
 	 */
-	public function getComments($pollId) {
+	public function getComments($pollId, $anonymize = true) {
+		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		$commentsList = array();
 		$comments = $this->commentMapper->findByPoll($pollId);
-		foreach ($comments as $commentElement) {
+		$anonMapper = $this->anonMapper($pollId);
+		foreach ($comments as $comment) {
+
+			if (!$anonymize || $currentUser === $comment->getUserId()) {
+				$setName = $comment->getUserId();
+			} else {
+				$setName = $anonMapper[$comment->getUserId()];
+			}
+
 			$commentsList[] = [
-				'id' => $commentElement->getId(),
-				'userId' => $commentElement->getUserId(),
-				'date' => $commentElement->getDt() . ' UTC',
-				'comment' => $commentElement->getComment()
+				'id' => $comment->getId(),
+				'userId' => $setName,
+				'date' => $comment->getDt() . ' UTC',
+				'comment' => $comment->getComment()
 			];
 		}
 
@@ -307,7 +382,6 @@ class ApiController extends Controller {
 				'fullAnonymous' => $event->getFullAnonymous(),
 				'allowMaybe' => $event->getAllowMaybe()
 			];
-
 		} catch (DoesNotExistException $e) {
 			// return silently
 		} finally {
@@ -370,7 +444,17 @@ class ApiController extends Controller {
 			}
 
 			$event = $this->getEvent($pollId);
-			$shares = $this->getShares($event['id']);
+			$anonymize = ($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $currentUser));
+
+			// Anonymize shares, if anonimize is configured and
+			// user is not owner and not admin
+			if ((($event['fullAnonymous'] || $event['isAnonymous'])
+				&& $event['owner'] !== $currentUser
+				&& !$this->groupManager->isAdmin($currentUser))) {
+				$shares = array();
+			} else {
+				$shares = $this->getShares($event['id']);
+			}
 
 			if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
 				$mode = 'create';
@@ -384,14 +468,16 @@ class ApiController extends Controller {
 				'grantedAs' => $this->grantAccessAs($event, $shares),
 				'mode' => $mode,
 				'event' => $event,
-				'comments' => $this->getComments($event['id']),
-				'votes' => $this->getVotes($event['id']),
+				'comments' => $this->getComments($event['id'], $anonymize),
+				'votes' => $this->getVotes($event['id'], $anonymize),
+				'participants' => $this->getParticipants($event['id'], $anonymize),
 				'shares' => $shares,
 				'options' => [
 					'pollDates' => [],
 					'pollTexts' => $this->getOptions($event['id'])
 				]
 			];
+
 		} catch (DoesNotExistException $e) {
 				$data['poll'] = ['result' => 'notFound'];
 		} finally {

@@ -171,6 +171,19 @@ class PageController extends Controller {
 	}
 
 	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param string $hash
+	 * @return TemplateResponse
+	 */
+	public function votePoll($hash) {
+		return new TemplateResponse('polls', 'polls.tmpl', [
+			'urlGenerator' => $this->urlGenerator,
+ 			'hash' => $hash
+		]);
+	}
+
+	/**
 	 * @param int $pollId
 	 * @param string $from
 	 */

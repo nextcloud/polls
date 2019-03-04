@@ -28,8 +28,8 @@
 					Home
 				</router-link>
 			</div>
-			<div v-show="intitle ===''" class="crumb svg last">
-				<span v-text="intitle" />
+			<div v-show="intitle !==''" class="crumb svg last">
+				<span v-tooltip="intitle" v-text="intitle" />
 			</div>
 			<div class="action">
 				<slot />

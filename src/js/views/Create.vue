@@ -129,8 +129,8 @@
 			<div v-if="adminMode" class="warning">
 				{{ t('polls', 'You are editing in admin mode') }}
 			</div>
-			<UserDiv :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
-
+			<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
+			<div>{{ n('polls', 'This poll has %n participant', 'This poll has %n participants', poll.participants.length ) }}
 			<ul class="tabHeaders">
 				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
 					<a href="#">
@@ -280,6 +280,7 @@ export default {
 				mode: 'create',
 				comments: [],
 				votes: [],
+				participants: [],
 				shares: [],
 				grantedAs: 'owner',
 				id: 0,
