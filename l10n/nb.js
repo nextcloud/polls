@@ -23,6 +23,7 @@ OC.L10N.register(
     "Expires" : "Utløper",
     "Copy Link" : "Kopier lenke",
     "Delete poll" : "Slett avstemning",
+    "_There is %n comment_::_There are %n comments_" : ["Det er én %n kommentar","Det er %n kommentarer"],
     "Description" : "Beskrivelse",
     "Create new poll" : "Opprett ny avstemning",
     "Update poll" : "Oppdater avstemning",
