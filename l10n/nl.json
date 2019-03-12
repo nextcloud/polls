@@ -42,6 +42,7 @@
     "Delete poll as admin" : "Verwijder de peiling als beheerder",
     "Link copied to clipboard" : "Link gekopieerd naar het klembord",
     "Error, while copying link to clipboard" : "Fout bij kopiëren link naar klembord",
+    "_There is %n comment_::_There are %n comments_" : ["Er is %n reactie","Er zijn %n reacties"],
     "Share with" : "Delen met",
     "Poll description" : "Beschrijving peiling",
     "Description" : "Beschrijving",
