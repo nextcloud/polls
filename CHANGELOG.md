@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.10.2] - tdb
+## [0.10.2] - 2019-03-13
 
   - #532 - cannot share poll (only share option)
 
