@@ -28,6 +28,7 @@ OC.L10N.register(
     "Copy Link" : "Copia l'enllaç",
     "Edit poll" : "Edita l'enquesta",
     "Delete poll" : "Esborrar enquesta",
+    "_There is %n comment_::_There are %n comments_" : ["Hi ha %n comentari","Hi ha %n comentaris"],
     "Description" : "Descripció",
     "Add option" : "Afegeix una opció",
     "Poll type" : "Tipus d'enquesta",
