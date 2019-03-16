@@ -256,7 +256,6 @@ class ApiController extends Controller {
 		$data = array();
 		try {
 			$data = $this->eventMapper->find($pollId)->read();
-			$data['ownerDisplayName'] = $this->userManager->get($data['owner'])->getDisplayName();
 		} catch (DoesNotExistException $e) {
 			// return silently
 		} finally {
