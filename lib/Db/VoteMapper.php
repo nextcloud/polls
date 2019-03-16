@@ -3,7 +3,8 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- *
+ * @author René Gieling <github@dartcafe.de>
+*
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -23,10 +24,11 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Mapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\AppFramework\Db\QBMapper;
 
-class VoteMapper extends Mapper {
+class VoteMapper extends QBMapper {
 
 	/**
 	 * VoteMapper constructor.
@@ -37,52 +39,52 @@ class VoteMapper extends Mapper {
 	}
 
 	/**
+	 * @param int $pollId
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Comment[]
+	 */
+
+	public function findByPoll($pollId) {
+		$qb = $this->db->getQueryBuilder();
+
+        $qb->select('*')
+           ->from($this->getTableName())
+           ->where(
+               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+           );
+
+        return $this->findEntities($qb);
+	}
+
+	/**
+	 * @param int $pollId
 	 * @param string $userId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return Vote[]
 	 */
-	public function findDistinctByUser($userId, $limit = null, $offset = null) {
-		$sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
-		return $this->findEntities($sql, [$userId], $limit, $offset);
+	 public function deleteByPollAndUser($pollId, $userId) {
+		$qb = $this->db->getQueryBuilder();
+
+        $qb->delete($this->getTableName())
+           ->where(
+               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+           )
+           ->andWhere(
+               $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+           );
+
+	   $qb->execute();
 	}
 
 	/**
-	 * @param int $pollId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return Vote[]
-	 */
-	public function findByPoll($pollId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		return $this->findEntities($sql, [$pollId], $limit, $offset);
-	}
-
-	/**
-	 * @param int $pollId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return Vote[]
-	 */
-	public function findParticipantsByPoll($pollId, $limit = null, $offset = null) {
-		$sql = 'SELECT DISTINCT user_id FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		return $this->findEntities($sql, [$pollId], $limit, $offset);
-	}
-
-	/**
-	 * @param int $pollId
-	 */
+	* @param int $pollId
+	*/
 	public function deleteByPoll($pollId) {
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		$this->execute($sql, [$pollId]);
-	}
+		$qb = $this->db->getQueryBuilder();
 
-	/**
-	 * @param int $pollId
-	 * @param string $userId
-	 */
-	public function deleteByPollAndUser($pollId, $userId) {
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
-		$this->execute($sql, [$pollId, $userId]);
+		$qb->delete($this->getTableName())
+		->where(
+			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		);
+
+		$qb->execute();
 	}
 }

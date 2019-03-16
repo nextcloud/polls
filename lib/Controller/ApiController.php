@@ -392,7 +392,6 @@ class ApiController extends Controller {
 		$this->optionMapper->deleteByPoll($id);
 		// $this->notificationMapper->deleteByPoll($id);
 		$this->eventMapper->delete($pollToDelete);
-		// $url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new DataResponse(array(
 			'id' => $id,
 			'action' => 'deleted'

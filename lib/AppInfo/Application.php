@@ -24,6 +24,7 @@
 namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\Controller\PageController;
+use OCA\Polls\Controller\ApiController;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\EventMapper;

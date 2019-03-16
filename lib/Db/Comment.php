@@ -4,6 +4,7 @@
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author Kai Schröer <git@schroeer.co>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
