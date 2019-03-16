@@ -416,9 +416,9 @@ class ApiController extends Controller {
 			// $anonymize = true;
 			// Anonymize shares, if anonimize is configured and
 			// user is not owner and not admin
-			if (($anonymize
+			if ($anonymize
 				&& $event['owner'] !== $currentUser
-				&& !$this->groupManager->isAdmin($currentUser))) {
+				&& !$this->groupManager->isAdmin($currentUser)) {
 				$shares = array();
 			} else {
 				$shares = $this->getShares($event['id']);
