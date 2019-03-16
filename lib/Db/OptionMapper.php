@@ -3,7 +3,8 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- *
+ * @author René Gieling <github@dartcafe.de>
+*
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -23,10 +24,11 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Mapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\AppFramework\Db\QBMapper;
 
-class OptionMapper extends Mapper {
+class OptionMapper extends QBMapper {
 
 	/**
 	 * TextMapper constructor.
@@ -37,21 +39,34 @@ class OptionMapper extends Mapper {
 	}
 
 	/**
-	 * @param Integer $pollId
-	 * @param Integer $limit
-	 * @param Integer $offset
+	 * @param int $pollId
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Option[]
 	 */
-	public function findByPoll($pollId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		return $this->findEntities($sql, [$pollId], $limit, $offset);
+
+	public function findByPoll($pollId) {
+		$qb = $this->db->getQueryBuilder();
+
+        $qb->select('*')
+           ->from($this->getTableName())
+           ->where(
+               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+           );
+
+        return $this->findEntities($qb);
 	}
 
 	/**
 	 * @param int $pollId
 	 */
 	public function deleteByPoll($pollId) {
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		$this->execute($sql, [$pollId]);
+		$qb = $this->db->getQueryBuilder();
+
+        $qb->delete($this->getTableName())
+           ->where(
+               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+           );
+
+	   $qb->execute();
 	}
 }

@@ -4,7 +4,8 @@
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author Kai Schröer <git@schroeer.co>
- *
+ * @author René Gieling <github@dartcafe.de>
+*
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -45,5 +46,13 @@ class Option extends Model {
 	public function __construct() {
 		$this->addType('pollId', 'integer');
 		$this->addType('timestamp', 'integer');
+	}
+
+	public function read() {
+		return [
+			'id' => $this->getId(),
+			'text' => htmlspecialchars_decode($this->getPollOptionText()),
+			'timestamp' => $this->getTimestamp()
+		];
 	}
 }

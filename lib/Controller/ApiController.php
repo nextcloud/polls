@@ -65,8 +65,8 @@ class ApiController extends Controller {
 	 * @param string $userId
 	 * @param EventMapper $eventMapper
 	 * @param OptionMapper $optionMapper
-	 * @param VoteMapper $VoteMapper
-	 * @param CommentMapper $CommentMapper
+	 * @param VoteMapper $voteMapper
+	 * @param CommentMapper $commentMapper
 	 */
 	public function __construct(
 		$appName,
@@ -202,11 +202,7 @@ class ApiController extends Controller {
 		$optionList = array();
 		$options = $this->optionMapper->findByPoll($pollId);
 		foreach ($options as $optionElement) {
-			$optionList[] = [
-				'id' => $optionElement->getId(),
-				'text' => htmlspecialchars_decode($optionElement->getPollOptionText()),
-				'timestamp' => $optionElement->getTimestamp()
-			];
+			$optionList[] = $optionElement->read();
 		}
 
 		return $optionList;
@@ -222,14 +218,9 @@ class ApiController extends Controller {
 	public function getVotes($pollId) {
 		$votesList = array();
 		$votes = $this->voteMapper->findByPoll($pollId);
+
 		foreach ($votes as $voteElement) {
-			$votesList[] = [
-				'id' => $voteElement->getId(),
-				'userId' => $voteElement->getUserId(),
-				'voteOptionId' => $voteElement->getVoteOptionId(),
-				'voteOptionText' => htmlspecialchars_decode($voteElement->getVoteOptionText()),
-				'voteAnswer' => $voteElement->getVoteAnswer()
-			];
+			$votesList[] = $voteElement->read();
 		}
 
 		return $votesList;
@@ -245,13 +236,9 @@ class ApiController extends Controller {
 	public function getComments($pollId) {
 		$commentsList = array();
 		$comments = $this->commentMapper->findByPoll($pollId);
+
 		foreach ($comments as $commentElement) {
-			$commentsList[] = [
-				'id' => $commentElement->getId(),
-				'userId' => $commentElement->getUserId(),
-				'date' => $commentElement->getDt() . ' UTC',
-				'comment' => $commentElement->getComment()
-			];
+			$commentsList[] = $commentElement->read();
 		}
 
 		return $commentsList;
@@ -267,47 +254,8 @@ class ApiController extends Controller {
 	public function getEvent($pollId) {
 
 		$data = array();
-
 		try {
-			$event = $this->eventMapper->find($pollId);
-
-			if ($event->getType() == 0) {
-				$pollType = 'datePoll';
-			} else {
-				$pollType = 'textPoll';
-			}
-
-			$accessType = $event->getAccess();
-			if (!strpos('|public|hidden|registered', $accessType)) {
-				$accessType = 'select';
-			}
-
-			if ($event->getExpire() === null) {
-				$expired = false;
-				$expiration = false;
-			} else {
-				$expired = time() > strtotime($event->getExpire());
-				$expiration = true;
-			}
-
-			$data = [
-				'id' => $event->getId(),
-				'hash' => $event->getHash(),
-				'type' => $pollType,
-				'title' => $event->getTitle(),
-				'description' => $event->getDescription(),
-				'owner' => $event->getOwner(),
-				'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
-				'created' => $event->getCreated(),
-				'access' => $accessType,
-				'expiration' => $expiration,
-				'expired' => $expired,
-				'expirationDate' => $event->getExpire(),
-				'isAnonymous' => $event->getIsAnonymous(),
-				'fullAnonymous' => $event->getFullAnonymous(),
-				'allowMaybe' => $event->getAllowMaybe()
-			];
-
+			$data = $this->eventMapper->find($pollId)->read();
 		} catch (DoesNotExistException $e) {
 			// return silently
 		} finally {
@@ -444,7 +392,6 @@ class ApiController extends Controller {
 		$this->optionMapper->deleteByPoll($id);
 		// $this->notificationMapper->deleteByPoll($id);
 		$this->eventMapper->delete($pollToDelete);
-		// $url = $this->urlGenerator->linkToRoute('polls.page.index');
 		return new DataResponse(array(
 			'id' => $id,
 			'action' => 'deleted'
