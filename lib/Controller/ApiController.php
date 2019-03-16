@@ -249,14 +249,16 @@ class ApiController extends Controller {
 		$votesList = array();
 
 
-		foreach ($votes as $voteElement) {
+		foreach ($votes as $vote) {
+			$votesList[] = $vote->read();
+		}
 
-			if (!$anonymize || $currentUser === $vote->getUserId()) {
-				$setName = $vote->getUserId();
-			} else {
-				$setName = $anonMapper[$vote->getUserId()];
+		if ($anonymize) {
+			foreach ($votesList as $vote) {
+				if ($currentUser !== $vote['userId']) {
+					$vote['userId'] = $anonMapper[$vote['userId']];
+				}
 			}
-			$votesList[] = $voteElement->read();
 		}
 
 		return $votesList;
@@ -277,10 +279,10 @@ class ApiController extends Controller {
 
 		foreach ($votes as $vote) {
 
-			if (!$anonymize || $currentUser === $vote->getUserId()) {
-				$setName = $vote->getUserId();
-			} else {
+			if ($anonymize && $currentUser !== $vote->getUserId()) {
 				$setName = $anonMapper[$vote->getUserId()];
+			} else {
+				$setName = $vote->getUserId();
 			}
 
 			if (!in_array($setName, $participants)) {
@@ -300,19 +302,20 @@ class ApiController extends Controller {
 	 */
 	public function getComments($pollId, $anonymize = true) {
 		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		$commentsList = array();
 		$comments = $this->commentMapper->findByPoll($pollId);
 		$anonMapper = $this->anonMapper($pollId);
+		$commentsList = array();
 
-		foreach ($comments as $commentElement) {
+		foreach ($comments as $comment) {
+			$commentsList[] = $comment->read();
+		}
 
-			if (!$anonymize || $currentUser === $comment->getUserId()) {
-				$setName = $comment->getUserId();
-			} else {
-				$setName = $anonMapper[$comment->getUserId()];
+		if ($anonymize) {
+			foreach ($commentsList as $comment) {
+				if ($currentUser !== $comment['userId']) {
+					$comment['userId'] = $anonMapper[$comment['userId']];
+				}
 			}
-
-			$commentsList[] = $commentElement->read();
 		}
 
 		return $commentsList;
