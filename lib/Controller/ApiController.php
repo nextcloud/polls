@@ -236,6 +236,29 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * Read all votes of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array
+	 */
+	private function anonymize($array, $pollId, $anomizeField = 'userId') {
+		$anonList = $this->anonMapper($pollId);
+		$votes = $this->voteMapper->findByPoll($pollId);
+		$comments = $this->commentMapper->findByPoll($pollId);
+		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		$i = 0;
+
+		for ($i = 0; $i < count($array); ++$i) {
+			if ($array[$i][$anomizeField] !== \OC::$server->getUserSession()->getUser()->getUID()) {
+				$array[$i][$anomizeField] = $anonList[$array[$i][$anomizeField]];
+			}
+		}
+
+		return $array;
+	}
+
+	/**
 	* Read all votes of a poll based on the poll id
 	* @NoAdminRequired
 	* @NoCSRFRequired
@@ -254,14 +277,11 @@ class ApiController extends Controller {
 		}
 
 		if ($anonymize) {
-			foreach ($votesList as $vote) {
-				if ($currentUser !== $vote['userId']) {
-					$vote['userId'] = $anonMapper[$vote['userId']];
-				}
-			}
+			return $this->anonymize($votesList, $pollId);
+		} else {
+			return $votesList;
 		}
 
-		return $votesList;
 	}
 
 	/**
@@ -271,27 +291,27 @@ class ApiController extends Controller {
 	 * @param Integer $pollId
 	 * @return Array
 	 */
-	public function getParticipants($pollId, $anonymize = true) {
-		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		$votes = $this->voteMapper->findByPoll($pollId);
-		$anonMapper = $this->anonMapper($pollId);
-		$participants = array();
+	 public function getParticipants($pollId, $anonymize = true) {
+ 		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+ 		$votes = $this->voteMapper->findByPoll($pollId);
+ 		$anonMapper = $this->anonMapper($pollId);
+ 		$participants = array();
 
-		foreach ($votes as $vote) {
+ 		foreach ($votes as $vote) {
 
-			if ($anonymize && $currentUser !== $vote->getUserId()) {
-				$setName = $anonMapper[$vote->getUserId()];
-			} else {
-				$setName = $vote->getUserId();
-			}
+ 			if ($anonymize && $currentUser !== $vote->getUserId()) {
+ 				$setName = $anonMapper[$vote->getUserId()];
+ 			} else {
+ 				$setName = $vote->getUserId();
+ 			}
 
-			if (!in_array($setName, $participants)) {
-				$participants[] = $setName;
-			}
-		}
+ 			if (!in_array($setName, $participants)) {
+ 				$participants[] = $setName;
+ 			}
+ 		}
 
-		return $participants;
-	}
+ 		return $participants;
+ 	}
 
 	/**
 	 * Read all comments of a poll based on the poll id
@@ -311,14 +331,11 @@ class ApiController extends Controller {
 		}
 
 		if ($anonymize) {
-			foreach ($commentsList as $comment) {
-				if ($currentUser !== $comment['userId']) {
-					$comment['userId'] = $anonMapper[$comment['userId']];
-				}
-			}
+			return $this->anonymize($commentsList, $pollId);
+		} else {
+			return $commentsList;
 		}
 
-		return $commentsList;
 	}
 
 	/**
@@ -396,10 +413,10 @@ class ApiController extends Controller {
 
 			$event = $this->getEvent($pollId);
 			$anonymize = ($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $currentUser));
-
+			// $anonymize = true;
 			// Anonymize shares, if anonimize is configured and
 			// user is not owner and not admin
-			if ((($event['fullAnonymous'] || $event['isAnonymous'])
+			if (($anonymize
 				&& $event['owner'] !== $currentUser
 				&& !$this->groupManager->isAdmin($currentUser))) {
 				$shares = array();
