@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Anketi yönetici olarak sil",
     "Link copied to clipboard" : "Bağlantı panoya kopyalandı",
     "Error, while copying link to clipboard" : "Bağlantı panoya kopyalanırken sorun çıktı",
+    "_There is %n comment_::_There are %n comments_" : ["%n yorum var","%n yorum var"],
     "Share with" : "Şununla paylaş",
     "Poll description" : "Anket açıklaması",
     "Description" : "Açıklama",

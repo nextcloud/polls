@@ -42,6 +42,7 @@
     "Delete poll as admin" : "Forigi enketon kiel administranto",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",
     "Error, while copying link to clipboard" : "Eraro dum kopio de ligilo al tondujo",
+    "_There is %n comment_::_There are %n comments_" : ["Estas %n komento","Estas %n komentoj"],
     "Share with" : "Kunhavigi kun",
     "Poll description" : "Enketa priskribo",
     "Description" : "Priskribo",

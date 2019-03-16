@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,10 +24,11 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Mapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\AppFramework\Db\QBMapper;
 
-class CommentMapper extends Mapper {
+class CommentMapper extends QBMapper {
 
 	/**
 	 * CommentMapper constructor.
@@ -37,32 +39,34 @@ class CommentMapper extends Mapper {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return Comment[]
-	 */
-	public function findDistinctByUser($userId, $limit = null, $offset = null) {
-		$sql = 'SELECT DISTINCT * FROM ' . $this->getTableName() . ' WHERE user_id = ?';
-		return $this->findEntities($sql, [$userId], $limit, $offset);
-	}
-
-	/**
 	 * @param int $pollId
-	 * @param int $limit
-	 * @param int $offset
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Comment[]
 	 */
-	public function findByPoll($pollId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ? ORDER BY Dt DESC';
-		return $this->findEntities($sql, [$pollId], $limit, $offset);
+
+	public function findByPoll($pollId) {
+		$qb = $this->db->getQueryBuilder();
+
+        $qb->select('*')
+           ->from($this->getTableName())
+           ->where(
+               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+           );
+
+        return $this->findEntities($qb);
 	}
 
 	/**
 	 * @param int $pollId
 	 */
 	public function deleteByPoll($pollId) {
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		$this->execute($sql, [$pollId]);
+		$qb = $this->db->getQueryBuilder();
+
+        $qb->delete($this->getTableName())
+           ->where(
+               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+           );
+
+	   $qb->execute();
 	}
 }

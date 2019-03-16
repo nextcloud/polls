@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Обриши гласање као администратор",
     "Link copied to clipboard" : "Веза копирана у оставу",
     "Error, while copying link to clipboard" : "Грешка приликом копирања везе у оставу",
+    "_There is %n comment_::_There are %n comments_" : ["Постоји %n коментар","Постоји %n коментара","Постоји %n коментара"],
     "Share with" : "Подели са",
     "Poll description" : "Опис гласања",
     "Description" : "Опис",

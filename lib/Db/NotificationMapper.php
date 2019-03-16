@@ -3,7 +3,8 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- *
+ * @author René Gieling <github@dartcafe.de>
+*
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -23,59 +24,35 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\Mapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\AppFramework\Db\QBMapper;
 
-class NotificationMapper extends Mapper {
+class NotificationMapper extends QBMapper {
 
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_notif', '\OCA\Polls\Db\Notification');
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Notification
-	 */
-	public function find($id) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE id = ?';
-		return $this->findEntity($sql, [$id]);
-	}
-
-	/**
-	 * @param string $userId
-	 * @param string $from
-	 * @param string $until
-	 * @param int $limit
-	 * @param int $offset
 	 * @return Notification[]
 	 */
-	public function findBetween($userId, $from, $until, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE userId = ? AND timestamp BETWEEN ? AND ?';
-		return $this->findEntities($sql, [$userId, $from, $until], $limit, $offset);
-	}
 
-	/**
-	 * @param int $limit
-	 * @param int $offset
-	 * @return Notification[]
-	 */
-	public function findAll($limit = null, $offset = null) {
-		$sql = 'SELECT * FROM ' . $this->getTableName();
-		return $this->findEntities($sql, [], $limit, $offset);
-	}
+	 public function findAllByPoll($pollId) {
+		 $qb = $this->db->getQueryBuilder();
 
-	/**
-	 * @param int $pollId
-	 * @param int $limit
-	 * @param int $offset
-	 * @return Notification[]
-	 */
-	public function findAllByPoll($pollId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		return $this->findEntities($sql, [$pollId], $limit, $offset);
-	}
+		  $qb->select('*')
+			 ->from($this->getTableName())
+			 ->where(
+				 $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+			 );
+
+		  return $this->findEntities($qb);
+	 }
+
 
 	/**
 	 * @param int $pollId
@@ -85,16 +62,32 @@ class NotificationMapper extends Mapper {
 	 * @return Notification
 	 */
 	public function findByUserAndPoll($pollId, $userId) {
-		$sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE poll_id = ? AND user_id = ?';
-		return $this->findEntity($sql, [$pollId, $userId]);
+		$qb = $this->db->getQueryBuilder();
+
+		 $qb->select('*')
+			->from($this->getTableName())
+			->where(
+				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+			)
+	        ->andWhere(
+	        	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+	        );
+
+		 return $this->findEntities($qb);
 	}
 
 	/**
 	 * @param int $pollId
 	 */
-	public function deleteByPoll($pollId) {
-		$sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE poll_id = ?';
-		$this->execute($sql, [$pollId]);
-	}
+	 public function deleteByPoll($pollId) {
+ 		$qb = $this->db->getQueryBuilder();
+
+ 		$qb->delete($this->getTableName())
+ 		->where(
+ 			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+ 		);
+
+ 		$qb->execute();
+ 	}
 
 }

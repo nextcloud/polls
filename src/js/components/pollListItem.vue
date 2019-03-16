@@ -139,8 +139,10 @@ export default {
 
 		pollType() {
 			if (this.poll.event.type === 'textPoll') {
+				// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
 				return t('polls', 'Text poll')
 			} else {
+				// TRANSLATORS This means that this is the type of the poll. Another type is a 'text poll'.
 				return t('polls', 'Date poll')
 			}
 		},
