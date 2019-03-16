@@ -52,4 +52,15 @@ class Vote extends Model {
 		$this->addType('pollId', 'integer');
 		$this->addType('voteOptionId', 'integer');
 	}
+
+	public function read() {
+		return [
+			'id' => $this->getId(),
+			'userId' => $this->getUserId(),
+			'voteOptionId' => $this->getVoteOptionId(),
+			'voteOptionText' => htmlspecialchars_decode($this->getVoteOptionText()),
+			'voteAnswer' => $this->getVoteAnswer()
+		];
+	}
+
 }

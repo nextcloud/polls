@@ -46,4 +46,12 @@ class Option extends Model {
 		$this->addType('pollId', 'integer');
 		$this->addType('timestamp', 'integer');
 	}
+
+	public function read() {
+		return [
+			'id' => $this->getId(),
+			'text' => htmlspecialchars_decode($this->getPollOptionText()),
+			'timestamp' => $this->getTimestamp()
+		];
+	}
 }

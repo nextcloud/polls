@@ -72,4 +72,44 @@ class Event extends Model {
 		$this->addType('fullAnonymous', 'integer');
 		$this->addType('allowMaybe', 'integer');
 	}
+
+	public function read() {
+
+		if ($this->getType() == 0) {
+			$pollType = 'datePoll';
+		} else {
+			$pollType = 'textPoll';
+		}
+
+		$accessType = $this->getAccess();
+		if (!strpos('|public|hidden|registered', $accessType)) {
+			$accessType = 'select';
+		}
+		if ($this->getExpire() === null) {
+			$expired = false;
+			$expiration = false;
+		} else {
+			$expired = time() > strtotime($this->getExpire());
+			$expiration = true;
+		}
+
+		return [
+			'id' => $this->getId(),
+			'hash' => $this->getHash(),
+			'type' => $pollType,
+			'title' => $this->getTitle(),
+			'description' => $this->getDescription(),
+			'owner' => $this->getOwner(),
+			// 'ownerDisplayName' => $this->userManager->get($this->getOwner())->getDisplayName(),
+			'ownerDisplayName' => '',
+			'created' => $this->getCreated(),
+			'access' => $accessType,
+			'expiration' => $expiration,
+			'expired' => $expired,
+			'expirationDate' => $this->getExpire(),
+			'isAnonymous' => $this->getIsAnonymous(),
+			'fullAnonymous' => $this->getFullAnonymous(),
+			'allowMaybe' => $this->getAllowMaybe()
+		];
+	}
 }

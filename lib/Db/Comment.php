@@ -48,4 +48,14 @@ class Comment extends Model {
 	public function __construct() {
 		$this->addType('pollId', 'integer');
 	}
+
+	public function read() {
+		return [
+			'id' => $this->getId(),
+			'userId' => $this->getUserId(),
+			'date' => $this->getDt() . ' UTC',
+			'comment' => $this->getComment()
+		];
+
+	}
 }
