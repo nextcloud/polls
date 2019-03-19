@@ -52,7 +52,7 @@
     "Shift dates" : "Datumsangaben verschieben",
     "Shift all dates for " : "Alle Datumsangaben verschieben für",
     "Add option" : "Option hinzufügen",
-    "You are editing in admin mode" : "Sie bearbeiten im Administratorenmodus",
+    "You are editing in admin mode" : "Du bearbeitest im Administratorenmodus",
     "Configuration" : "Einstellung",
     "Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway." : "Die Konfiguration ist gesperrt. Das Ändern von Optionen kann zu unerwünschtem Verhalten führen, Du kannst sie jedoch dennoch entsperren.",
     "Unlock configuration " : "Konfiguration freischalten",
