@@ -38,6 +38,8 @@ OC.L10N.register(
     "Edit poll as admin" : "Muokkaa kyselyä ylläpitäjänä",
     "Delete poll as admin" : "Poista kysely ylläpitäjänä",
     "Link copied to clipboard" : "Linkki kopioitu leikepöydälle",
+    "_There is %n comment_::_There are %n comments_" : ["%n kommentti","%n kommenttia"],
+    "Share with" : "Jaa",
     "Poll description" : "Kyselyn kuvaus",
     "Description" : "Kuvaus",
     "Vote options" : "Äänestysvalinnat",
