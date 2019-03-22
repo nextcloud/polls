@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Eliminar votación como administrador",
     "Link copied to clipboard" : "Enlace copiado al portapapeles",
     "Error, while copying link to clipboard" : "Error al copiar enlace al portapapeles",
+    "_There is %n comment_::_There are %n comments_" : ["Hay %n comentario","Hay %n comentarios"],
     "Share with" : "Compartir con",
     "Poll description" : "Descripción de la votación",
     "Description" : "Descripción",
