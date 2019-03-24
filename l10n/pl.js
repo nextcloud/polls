@@ -96,7 +96,7 @@ OC.L10N.register(
     "Say maybe to all" : "Powiedz wszystkim może",
     "This poll was updated since your last visit. Please check your votes." : "Ta sonda została zaktualizowana od ostatniej wizyty. Sprawdź swoje głosy.",
     "Vote!" : "Głosuj!",
-    "Receive notification email on activity" : "Odbieraj powiadomienia email o aktywności",
+    "Receive notification email on activity" : "Otrzymuj powiadomienia e-mail o aktywności",
     "Close details" : "Ukryj szczegóły",
     "Close" : "Zamknij",
     "Expires on %s" : "Wygaśnie o %s",
