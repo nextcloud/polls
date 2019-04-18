@@ -130,7 +130,7 @@
 				{{ t('polls', 'You are editing in admin mode') }}
 			</div>
 			<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
-			<div>{{ n('polls', 'This poll has %n participant', 'This poll has %n participants', poll.participants.length ) }}
+			<div>{{ n('polls', 'This poll has %n participant', 'This poll has %n participants', poll.participants.length ) }}</div>
 			<ul class="tabHeaders">
 				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
 					<a href="#">
