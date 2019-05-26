@@ -21,9 +21,9 @@
   -->
 
 <template>
-	<div v-if="header">
+	<li>
 		{{ option.text }}
-	</div>
+	</li>
 </template>
 
 <script>
@@ -32,10 +32,6 @@ export default {
 	name: 'VoteTextPoll',
 
 	props: {
-		header: {
-			type: Boolean,
-			default: false
-		},
 		option: {
 			type: Object,
 			default: undefined
@@ -57,6 +53,5 @@ export default {
 </script>
 
 <style lang="scss">
-
 
 </style>

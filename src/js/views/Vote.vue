@@ -49,20 +49,24 @@
 				<div class="table">
 					<ul	v-if="poll.event.type === 'datePoll'"	class="header">
 						<li	v-for="pollDate in poll.options.pollDates">
-							<vote-date-poll :option="pollDate" :pollType="poll.event.type" :header="true"/>
+							<date-poll-vote-header :option="pollDate" :pollType="poll.event.type"/>
 						</li>
 					</ul>
-					<ul	v-if="poll.event.type === 'textPoll'"	class="header">
+					<ul	v-if="poll.event.type === 'textPoll'" class="header">
 						<li	v-for="pollText in poll.options.pollTexts">
-							<vote-text-poll :option="pollText" :pollType="poll.event.type" :header="true"/>
+							<text-poll-vote-header :option="pollText" :pollType="poll.event.type"/>
 						</li>
 					</ul>
 					<ul	class="votes">
 						<li	v-for="(participant, index) in poll.participants">
-							<ul>
-								<li v-for="vote in usersVotes(participant)">
-									{{ vote }}
-								</li>
+							<ul class="flex-row">
+								<li
+									is="vote-item"
+									v-for="vote in usersVotes(participant)"
+									class="poll-cell"
+									:option="vote"
+									:pollType="poll.event.type"
+								/>
 							</ul>
 						</li>
 					</ul>
@@ -92,15 +96,17 @@
 <script>
 import moment from 'moment'
 import sortBy from 'lodash/sortBy'
-import voteDatePoll from '../components/datePoll/vote'
-import voteTextPoll from '../components/textPoll/vote'
+import DatePollVoteHeader from '../components/datePoll/voteHeader'
+import TextPollVoteHeader from '../components/textPoll/voteHeader'
+import VoteItem from '../components/base/voteItem'
 // import voteUsersVotes from '../components/voteUsersVotes'
 
 export default {
 	name: 'Vote',
 	components: {
-		voteDatePoll,
-		voteTextPoll
+		DatePollVoteHeader,
+		TextPollVoteHeader,
+		VoteItem
 	},
 
 	data() {
@@ -316,7 +322,10 @@ export default {
 
 <style lang="scss">
 
-
+.flex-row {
+	display: flex;
+	flex-direction: row;
+}
 .main-container {
     display: flex;
 	flex-direction: column;

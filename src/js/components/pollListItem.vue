@@ -54,7 +54,7 @@
 
 	<div v-else class="wrapper table-row table-body group-master">
 		<div class="wrapper group-1">
-			<div v-tooltip="pollType" class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}]">
+			<div v-tooltip.auto="pollType" class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}]">
 				{{ pollType }}
 			</div>
 			<div v-if="votedBycurrentUser" class="symbol icon-voted" />
@@ -66,7 +66,7 @@
 					{{ poll.event.description }}
 				</div>
 			</a>
-			<div v-if="countComments" v-tooltip="countCommentsHint" class="app-navigation-entry-utils-counter highlighted">
+			<div v-if="countComments" v-tooltip.auto="countCommentsHint" class="app-navigation-entry-utils-counter highlighted">
 				<span>{{ countComments }}</span>
 			</div>
 			<div class="actions">
@@ -80,7 +80,7 @@
 		</div>
 		<div class="wrapper group-2">
 			<div class="wrapper group-2-1">
-				<div v-tooltip="accessType" class="thumbnail access" :class="poll.event.access">
+				<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.event.access">
 					{{ accessType }}
 				</div>
 			</div>

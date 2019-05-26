@@ -21,26 +21,22 @@
   -->
 
 <template>
-	<div v-if="header" class="date-box" v-tooltip="localFullDate">
+	<li class="date-box" v-tooltip.auto="localFullDate">
 		<div class="month">{{ month }}</div>
 		<div class="day">{{ day }}</div>
 		<div class="dow">{{ dow }}</div>
 		<div class="year">{{ year }}</div>
 		<div class="time">{{ time }}</div>
-	</div>
+	</li>
 </template>
 
 <script>
 import moment from 'moment'
 
 export default {
-	name: 'VoteDatePoll',
+	name: 'DatePollVoteHeader',
 
 	props: {
-		header: {
-			type: Boolean,
-			default: false
-		},
 		option: {
 			type: Object,
 			default: undefined
@@ -83,7 +79,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .date-box {
 	display: flex;
 	flex-direction: column;
@@ -100,6 +95,4 @@ export default {
 		margin: 5px 0 5px 0;
 	}
 }
-
-
 </style>
