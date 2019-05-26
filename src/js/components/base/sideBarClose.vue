@@ -30,12 +30,15 @@
 
 <script>
 export default {
+	name: 'SideBarClose',
+
 	data() {
 		return {
 			closeDetailLabel: t('Close details'),
 			closeDetailLabelAlt: t('Close')
 		}
 	},
+	
 	methods: {
 		hideSidebar() {
 			OC.Apps.hideAppSidebar()

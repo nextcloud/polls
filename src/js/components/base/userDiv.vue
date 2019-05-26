@@ -37,9 +37,12 @@
 import { Avatar } from 'nextcloud-vue'
 
 export default {
+	name: 'UserDiv',
+	
 	components: {
 		Avatar
 	},
+
 	props: {
 		hideNames: {
 			type: Boolean,

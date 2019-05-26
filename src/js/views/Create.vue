@@ -257,8 +257,8 @@
 import moment from 'moment'
 import sortBy from 'lodash/sortBy'
 import { Multiselect } from 'nextcloud-vue'
-import DatePollItem from '../components/datePollItem'
-import TextPollItem from '../components/textPollItem'
+import DatePollItem from '../components/datePoll/createItem'
+import TextPollItem from '../components/textPoll/createItem'
 
 export default {
 	name: 'Create',

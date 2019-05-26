@@ -103,6 +103,8 @@
 import moment from 'moment'
 
 export default {
+	name: 'PollListItem',
+
 	props: {
 		header: {
 			type: Boolean,

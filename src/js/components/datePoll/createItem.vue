@@ -33,6 +33,15 @@
 import moment from 'moment'
 
 export default {
+	name: 'DatePollItem',
+
+	props: {
+		option: {
+			type: Object,
+			default: undefined
+		}
+	},
+
 	filters: {
 		localFullDate(timestamp) {
 			if (!timestamp) return ''
@@ -41,12 +50,5 @@ export default {
 			return moment(timestamp).format('llll')
 		}
 	},
-	props: {
-		option: {
-			type: Object,
-			default: undefined
-		}
-
-	}
 }
 </script>

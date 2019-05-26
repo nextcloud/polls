@@ -41,6 +41,7 @@
 
 <script>
 export default {
+	name: 'Controls',
 
 	props: {
 		intitle: {
@@ -48,6 +49,7 @@ export default {
 			default: undefined
 		}
 	},
+	
 	data() {
 		return {
 			imagePath: OC.imagePath('core', 'places/home.svg')

@@ -34,6 +34,8 @@
 import moment from 'moment'
 
 export default {
+	name: 'VoteDatePoll',
+
 	props: {
 		header: {
 			type: Boolean,

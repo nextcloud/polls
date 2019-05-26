@@ -54,7 +54,7 @@
 					</ul>
 					<ul	v-if="poll.event.type === 'textPoll'"	class="header">
 						<li	v-for="pollText in poll.options.pollTexts">
-							{{ pollText.text }}
+							<vote-text-poll :option="pollText" :pollType="poll.event.type" :header="true"/>
 						</li>
 					</ul>
 					<ul	class="votes">
@@ -92,13 +92,15 @@
 <script>
 import moment from 'moment'
 import sortBy from 'lodash/sortBy'
-import voteDatePoll from '../components/voteDatePoll'
+import voteDatePoll from '../components/datePoll/vote'
+import voteTextPoll from '../components/textPoll/vote'
 // import voteUsersVotes from '../components/voteUsersVotes'
 
 export default {
 	name: 'Vote',
 	components: {
-		voteDatePoll
+		voteDatePoll,
+		voteTextPoll
 	},
 
 	data() {

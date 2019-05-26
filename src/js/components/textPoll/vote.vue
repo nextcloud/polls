@@ -20,31 +20,25 @@
   -
   -->
 
-<!-- 							<vote-users-votes :vote="poll.votes" :participant="participant">
- -->
-
 <template>
-	<ul>
-		<li v-for="vote in filteredVotes">
-			{{ vote.answer }}
-		</li>
-	</ul>
-
+	<div v-if="header">
+		{{ option.text }}
+	</div>
 </template>
 
 <script>
-import moment from 'moment'
 
 export default {
-	name: 'VoteUsersVotes',
+	name: 'VoteTextPoll',
 
 	props: {
-		votes: {
-			type: Array
+		header: {
+			type: Boolean,
+			default: false
 		},
-		participant: {
-			type: String,
-			default: ''
+		option: {
+			type: Object,
+			default: undefined
 		},
 		pollType: {
 			type: String,
@@ -52,19 +46,17 @@ export default {
 		}
 	},
 
-	computed: {
-		filteredVotes() {
-	        return this.votes.filter(function(vote) {
-	          return this.partitipant === vote.userId;
-	        })
-			// var newArray = this.votes.filter(function (vote) {
-			// 	return vote.userId === this.participant
-			// })
+	data() {
+		return {
+			openedMenu: false,
+			hostName: this.$route.query.page
 		}
+
 	}
 }
 </script>
 
 <style lang="scss">
+
 
 </style>
