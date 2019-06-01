@@ -21,9 +21,9 @@
   -->
 
 <template>
-	<li>
+	<div>
 		{{ option.text }}
-	</li>
+	</div>
 </template>
 
 <script>

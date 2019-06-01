@@ -199,13 +199,13 @@ class ApiController extends Controller {
 	 * @return Array
 	 */
 	public function getOptions($pollId) {
-		$optionList = array();
-		$options = $this->optionMapper->findByPoll($pollId);
-		foreach ($options as $optionElement) {
-			$optionList[] = $optionElement->read();
+		$returnList = array();
+		$voteOptions = $this->optionMapper->findByPoll($pollId);
+		foreach ($voteOptions as $element) {
+			$returnList[] = $element->read();
 		}
 
-		return $optionList;
+		return $returnList;
 	}
 
 	/**
@@ -440,10 +440,7 @@ class ApiController extends Controller {
 				'votes' => $this->getVotes($event['id'], $anonymize),
 				'participants' => $this->getParticipants($event['id'], $anonymize),
 				'shares' => $shares,
-				'options' => [
-					'pollDates' => [],
-					'pollTexts' => $this->getOptions($event['id'])
-				]
+				'voteOptions' => $this->getOptions($event['id'])
 			];
 
 		} catch (DoesNotExistException $e) {
@@ -514,7 +511,7 @@ class ApiController extends Controller {
 	 * @param String $mode
 	 * @return DataResponse
 	 */
-	public function writePoll($event, $options, $shares, $mode) {
+	public function writePoll($event, $voteOptions, $shares, $mode) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
@@ -591,26 +588,36 @@ class ApiController extends Controller {
 		}
 
 		// Update options
-		if ($event['type'] === 'datePoll') {
-			foreach ($options['pollDates'] as $optionElement) {
-				$newOption = new Option();
+		foreach ($voteOptions as $optionElement) {
+			$newOption = new Option();
 
-				$newOption->setPollId($newEvent->getId());
-				$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['timestamp']));
-				$newOption->setTimestamp($optionElement['timestamp']);
+			$newOption->setPollId($newEvent->getId());
+			$newOption->setpollOptionText(trim(htmlspecialchars($optionElement['text'])));
+			$newOption->setTimestamp($optionElement['timestamp']);
 
-				$this->optionMapper->insert($newOption);
-			}
-		} elseif ($event['type'] === "textPoll") {
-			foreach ($options['pollTexts'] as $optionElement) {
-				$newOption = new Option();
-
-				$newOption->setPollId($newEvent->getId());
-				$newOption->setpollOptionText(trim(htmlspecialchars($optionElement['text'])));
-
-				$this->optionMapper->insert($newOption);
-			}
+			$this->optionMapper->insert($newOption);
 		}
+
+		// if ($event['type'] === 'datePoll') {
+		// 	foreach ($options['pollDates'] as $optionElement) {
+		// 		$newOption = new Option();
+		//
+		// 		$newOption->setPollId($newEvent->getId());
+		// 		$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['timestamp']));
+		// 		$newOption->setTimestamp($optionElement['timestamp']);
+		//
+		// 		$this->optionMapper->insert($newOption);
+		// 	}
+		// } elseif ($event['type'] === "textPoll") {
+		// 	foreach ($options['pollTexts'] as $optionElement) {
+		// 		$newOption = new Option();
+		//
+		// 		$newOption->setPollId($newEvent->getId());
+		// 		$newOption->setpollOptionText(trim(htmlspecialchars($optionElement['text'])));
+		//
+		// 		$this->optionMapper->insert($newOption);
+		// 	}
+		// }
 
 		return new DataResponse(array(
 			'id' => $newEvent->getId(),

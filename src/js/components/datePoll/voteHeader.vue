@@ -21,13 +21,13 @@
   -->
 
 <template>
-	<li class="date-box" v-tooltip.auto="localFullDate">
+	<div class="date-box" v-tooltip.auto="localFullDate">
 		<div class="month">{{ month }}</div>
 		<div class="day">{{ day }}</div>
 		<div class="dow">{{ dow }}</div>
 		<div class="year">{{ year }}</div>
 		<div class="time">{{ time }}</div>
-	</li>
+	</div>
 </template>
 
 <script>
@@ -73,6 +73,25 @@ export default {
 		},
 		time() {
 			return moment(this.option.timestamp * 1000).format('LT')
+		},
+
+		localFullDateT() {
+			return moment(this.option.text).format('llll')
+		},
+		dayT() {
+			return moment(this.option.text).format('Do')
+		},
+		dowT() {
+			return moment(this.option.text).format('ddd')
+		},
+		monthT() {
+			return moment(this.option.text).format('MMM')
+		},
+		yearT() {
+			return moment(this.option.text).format('YYYY')
+		},
+		timeT() {
+			return moment(this.option.text).format('LT')
 		}
 	}
 }

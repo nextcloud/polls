@@ -40,36 +40,60 @@
 
 			<div class="workbench">
 
-				<ul class="participants">
-					<li v-for="participant in poll.participants">
-						<user-div :user-id="participant" />
-					</li>
+				<ul name="participants" class="participants">
+					<user-div
+						v-for="(participant, index) in poll.participants"
+						tag="li"
+						:key="participant"
+						:user-id="participant" />
 				</ul>
 
-				<div class="table">
-					<ul	v-if="poll.event.type === 'datePoll'"	class="header">
-						<li	v-for="pollDate in poll.options.pollDates">
-							<date-poll-vote-header :option="pollDate" :pollType="poll.event.type"/>
-						</li>
-					</ul>
-					<ul	v-if="poll.event.type === 'textPoll'" class="header">
-						<li	v-for="pollText in poll.options.pollTexts">
-							<text-poll-vote-header :option="pollText" :pollType="poll.event.type"/>
-						</li>
-					</ul>
-					<ul	class="votes">
-						<li	v-for="(participant, index) in poll.participants">
-							<ul class="flex-row">
-								<li
+				<div class="vote-table">
+					<transition-group
+						v-if="poll.event.type === 'datePoll'"
+						name="voteOptions"
+						:tag="div"
+						class="header">
+
+						<div
+							is="date-poll-vote-header"
+							v-for="(option, index) in poll.voteOptions"
+							:key="option.text"
+							:option="option"
+							:pollType="poll.event.type"/>
+					</transition-group>
+
+					<transition-group
+						v-if="poll.event.type === 'textPoll'"
+						name="voteOptions"
+						tag="div"
+						class="header">
+						<div
+							is="text-poll-vote-header"
+							v-for="(option, index) in poll.voteOptions"
+							:key="option.text"
+							:option="option"
+							:pollType="poll.event.type"/>
+					</transition-group>
+
+					<transition-group
+						name="votes"
+						tag="div"
+						class="votes">
+						<div
+							v-for="(participant, index) in participantsVotes"
+							:key="index"
+						>
+								<div
 									is="vote-item"
-									v-for="vote in usersVotes(participant)"
+									v-for="vote in participant.votes"
 									class="poll-cell"
+									:key="vote.id"
 									:option="vote"
 									:pollType="poll.event.type"
 								/>
-							</ul>
-						</li>
-					</ul>
+						</div>
+					</transition-group>
 
 				</div>
 			</div>
@@ -116,6 +140,7 @@ export default {
 				comments: [],
 				votes: [],
 				shares: [],
+				participants: [],
 				grantedAs: 'owner',
 				id: 0,
 				result: 'new',
@@ -135,10 +160,7 @@ export default {
 					allowMaybe: false,
 					owner: undefined
 				},
-				options: {
-					pollDates: [],
-					pollTexts: []
-				}
+				voteOptions: []
 			},
 			system: [],
 			lang: '',
@@ -159,48 +181,40 @@ export default {
 	},
 
 	computed: {
-		filteredVotes() {
-			var voteList = Array()
-			var optionsList = Array()
-			var voteText
+		participantsVotes() {
+			var votesList = Array()
+			var thisPoll = this.poll
 
-			if (this.poll.event.type === 'datePoll') {
-				optionsList = this.poll.options.pollDates
-			} else {
-				optionsList = this.poll.options.pollTexts
-			}
-			for (var i = 0; i < this.poll.participants.length; ++i) {
-				var participant = this.poll.participants[i]
+			this.poll.participants.forEach(function(participant) {
 
-				for (var j = 0; j < optionsList.length; ++j) {
-
-					if (this.poll.event.type === 'datePoll') {
-						var foundOption = this.poll.votes.filter(obj => {
-							voteText = optionsList[j].timestamp
-							return obj.userId === participant && moment.utc(obj.voteOptionText).unix() === optionsList[j].timestamp
-						})
-					} else {
-						var foundOption = this.poll.votes.filter(obj => {
-							voteText = optionsList[j].text
-							return obj.userId === participant && obj.voteOptionText === optionsList[j].text
+				votesList.push(
+					{
+						name: participant,
+						votes: thisPoll.votes.filter(obj => {
+							return obj.userId === participant
 						})
 					}
+				)
+			})
+			return votesList
+		},
 
-					if (foundOption.length > 0) {
-						voteList.push(foundOption[foundOption.length -1])
-					} else {
-						console.log(voteText)
-						voteList.push({
-							'id':++this.lastVoteId,
-							'userId': this.poll.participants[i],
-							'voteOptionId': optionsList[j].id,
-							'voteOptionText': voteText,
-							'voteAnswer': 'no'
+		optionsVotes() {
+			var votesList = Array()
+			var thisPoll = this.poll
+
+
+			this.poll.voteOptions.forEach(function(option) {
+				votesList.push(
+					{
+						option: option.id,
+						votes: thisPoll.votes.filter(obj => {
+							return obj.voteOptionText === option.text
 						})
 					}
-				}
-			}
-			return voteList
+				)
+			})
+			return votesList
 		},
 
 		adminMode() {
@@ -214,6 +228,7 @@ export default {
 		title() {
 			return t('polls', 'Polls') + ' - ' + this.poll.event.title
 		},
+
 		saveButtonTitle() {
 			if (this.writingPoll) {
 				return t('polls', 'Writing poll')
@@ -255,11 +270,6 @@ export default {
 	},
 
 	methods: {
-		usersVotes(userId, options) {
-			return this.filteredVotes.filter((element) => {
-				return element.userId === userId
-	       	})
-		},
 		switchSidebar() {
 			this.sidebar = !this.sidebar
 		},
@@ -275,17 +285,6 @@ export default {
 				})
 		},
 
-		addNewPollDate(newPollDate) {
-			if (newPollDate != null) {
-				this.newPollDate = moment(newPollDate)
-				this.poll.options.pollDates.push({
-					id: this.nextPollDateId++,
-					timestamp: moment(newPollDate).unix()
-				})
-				this.poll.options.pollDates = sortBy(this.poll.options.pollDates, 'timestamp')
-			}
-		},
-
 		loadPoll(hash) {
 			this.loadingPoll = true
 			this.$http.get(OC.generateUrl('apps/polls/get/poll/' + hash))
@@ -298,11 +297,9 @@ export default {
 					}
 
 					if (this.poll.event.type === 'datePoll') {
-						var i
-						for (i = 0; i < this.poll.options.pollTexts.length; i++) {
-							this.addNewPollDate(new Date(moment.utc(this.poll.options.pollTexts[i].text)))
-						}
-						this.poll.options.pollTexts = []
+						this.poll.voteOptions.forEach(function(option) {
+							option.timestamp = moment.utc(option.text).unix()
+						})
 					}
 
 					this.loadingPoll = false
@@ -322,17 +319,14 @@ export default {
 
 <style lang="scss">
 
-.flex-row {
-	display: flex;
-	flex-direction: row;
-}
 .main-container {
     display: flex;
 	flex-direction: column;
-    flex-grow: 1;
+    flex: 1;
     flex-wrap: nowrap;
     overflow-x: hidden;
 	margin-top: 45px;
+	padding: 8px;
 
 	.workbench {
 		display: flex;
@@ -345,19 +339,22 @@ export default {
 		.participants {
 			display: flex;
 			flex-direction: column;
-			flex: 0 0;
+			flex: 1 0;
 			margin-top: 149px;
 			border-top: 1px solid var(--color-border-dark);
-			&> li {
+			&> div {
+				display: flex;
+				flex-direction: row;
+				flex-grow: 1;
 				border-bottom: 1px solid var(--color-border-dark);
 				height: 44px;
 				padding: 0 17px;
 				order: 2;
 			}
 		}
-		.table {
+		.vote-table {
 			display: flex;
-			flex: 1;
+			flex: 5;
 			flex-direction: column;
 			justify-content: flex-start;
 
@@ -367,8 +364,15 @@ export default {
 				height: 150px;
 				align-items: center;
 				border-bottom: 1px solid var(--color-border-dark);
-				&> li {
+				&> div {
 					flex: 1;
+				}
+			}
+			.votes {
+				&> div {
+					display: flex;
+					flex-direction: row;
+					border-bottom: 1px solid var(--color-border-dark);
 				}
 			}
 		}
