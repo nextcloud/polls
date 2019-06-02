@@ -20,54 +20,38 @@
   -
   -->
 
-/* global Vue, oc_userconfig */
 <template>
-	<div class="cloud">
-		<span v-if="options.expired" class="expired">
-			{{ t('polls', 'Expired') }}
-		</span>
-		<span v-if="options.expiration" class="open">
-			{{ t('polls', 'Expires %n', 1, expirationdate) }}
-		</span>
-		<span v-else class="open">
-			{{ t('polls', 'Expires never') }}
-		</span>
-
-		<span class="information">
-			{{ options.access }}
-		</span>
-		<span v-if="options.isAnonymous" class="information">
-			{{ t('polls', 'Anonymous poll') }}
-		</span>
-		<span v-if="options.fullAnonymous" class="information">
-			{{ t('polls', 'Usernames hidden to Owner') }}
-		</span>
-		<span v-if="options.isAnonymous & !options.fullAnonymous" class="information">
-			{{ t('polls', 'Usernames visible to Owner') }}
-		</span>
+	<div>
+		{{ option.text }}
 	</div>
 </template>
 
 <script>
-import moment from 'moment'
 
 export default {
+	name: 'VoteTextPoll',
+
 	props: {
-		options: {
+		option: {
 			type: Object,
 			default: undefined
+		},
+		pollType: {
+			type: String,
+			default: undefined
 		}
-
 	},
 
-	computed: {
-		expirationdate() {
-			var date = moment(this.options.expirationDate, moment.localeData().longDateFormat('L')).fromNow()
-			return date
+	data() {
+		return {
+			openedMenu: false,
+			hostName: this.$route.query.page
 		}
+
 	}
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+
 </style>

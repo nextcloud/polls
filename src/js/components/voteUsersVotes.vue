@@ -20,33 +20,51 @@
   -
   -->
 
+<!-- 							<vote-users-votes :vote="poll.votes" :participant="participant">
+ -->
+
 <template>
-	<li>
-		<div>{{ option.timestamp | localFullDate }}</div>
-		<div>
-			<a class="icon-delete" @click="$emit('remove')" />
-		</div>
-	</li>
+	<ul>
+		<li v-for="vote in filteredVotes">
+			{{ vote.answer }}
+		</li>
+	</ul>
+
 </template>
 
 <script>
 import moment from 'moment'
 
 export default {
-	filters: {
-		localFullDate(timestamp) {
-			if (!timestamp) return ''
-			if (!moment(timestamp).isValid()) return 'Invalid Date'
-			if (timestamp < 999999999999) timestamp = timestamp * 1000
-			return moment(timestamp).format('llll')
-		}
-	},
+	name: 'VoteUsersVotes',
+
 	props: {
-		option: {
-			type: Object,
+		votes: {
+			type: Array
+		},
+		participant: {
+			type: String,
+			default: ''
+		},
+		pollType: {
+			type: String,
 			default: undefined
 		}
+	},
 
+	computed: {
+		filteredVotes() {
+	        return this.votes.filter(function(vote) {
+	          return this.partitipant === vote.userId;
+	        })
+			// var newArray = this.votes.filter(function (vote) {
+			// 	return vote.userId === this.participant
+			// })
+		}
 	}
 }
 </script>
+
+<style lang="scss">
+
+</style>

@@ -96,10 +96,10 @@
 				>
 					<li
 						is="date-poll-item"
-						v-for="(pollDate, index) in poll.options.pollDates"
-						:key="pollDate.id"
-						:option="pollDate"
-						@remove="poll.options.pollDates.splice(index, 1)"
+						v-for="(option, index) in poll.voteOptions"
+						:key="option.id"
+						:option="option"
+						@remove="poll.voteOptions.splice(index, 1)"
 					/>
 				</transitionGroup>
 
@@ -116,10 +116,10 @@
 				>
 					<li
 						is="text-poll-item"
-						v-for="(pollText, index) in poll.options.pollTexts"
-						:key="pollText.id"
-						:option="pollText"
-						@remove="poll.options.pollTexts.splice(index, 1)"
+						v-for="(option, index) in poll.voteOptions"
+						:key="option.id"
+						:option="option"
+						@remove="poll.voteOptions.splice(index, 1)"
 					/>
 				</transitionGroup>
 			</div>
@@ -129,8 +129,8 @@
 			<div v-if="adminMode" class="warning">
 				{{ t('polls', 'You are editing in admin mode') }}
 			</div>
-			<UserDiv :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
-
+			<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
+			<div>{{ n('polls', 'This poll has %n participant', 'This poll has %n participants', poll.participants.length ) }}</div>
 			<ul class="tabHeaders">
 				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
 					<a href="#">
@@ -257,8 +257,8 @@
 import moment from 'moment'
 import sortBy from 'lodash/sortBy'
 import { Multiselect } from 'nextcloud-vue'
-import DatePollItem from '../components/datePollItem'
-import TextPollItem from '../components/textPollItem'
+import DatePollItem from '../components/datePoll/createItem'
+import TextPollItem from '../components/textPoll/createItem'
 
 export default {
 	name: 'Create',
@@ -280,6 +280,7 @@ export default {
 				mode: 'create',
 				comments: [],
 				votes: [],
+				participants: [],
 				shares: [],
 				grantedAs: 'owner',
 				id: 0,
@@ -300,10 +301,7 @@ export default {
 					allowMaybe: false,
 					owner: undefined
 				},
-				options: {
-					pollDates: [],
-					pollTexts: []
-				}
+				voteOptions: []
 			},
 			system: [],
 			lang: '',
@@ -440,8 +438,9 @@ export default {
 				buttonHideText: t('polls', 'Cancel'),
 				buttonConfirmText: t('polls', 'Apply'),
 				onConfirm: () => {
-					for (i = 0; i < this.poll.options.pollDates.length; i++) {
-						this.poll.options.pollDates[i].timestamp = parseInt(moment(this.poll.options.pollDates[i].timestamp * 1000).add(this.move.step, this.move.unit).format('X'))
+					for (i = 0; i < this.poll.newOptions.length; i++) {
+						this.poll.newOptions[i].timestamp = parseInt(moment(this.poll.newOptions[i].timestamp * 1000).add(this.move.step, this.move.unit).format('X'))
+						this.poll.newOptions[i].text = moment(this.poll.newOptions[i].timestamp).utc()
 
 					}
 
@@ -482,19 +481,21 @@ export default {
 		addNewPollDate(newPollDate) {
 			if (newPollDate != null) {
 				this.newPollDate = moment(newPollDate)
-				this.poll.options.pollDates.push({
+				this.poll.voteOptions.push({
 					id: this.nextPollDateId++,
-					timestamp: moment(newPollDate).unix()
+					timestamp: moment(newPollDate).unix(),
+					text: moment.utc(newPollDate).format("YYYY-MM-DD HH:mm:ss")
 				})
-				this.poll.options.pollDates = sortBy(this.poll.options.pollDates, 'timestamp')
+				this.poll.voteOptions = sortBy(this.poll.voteOptions, 'timestamp')
 			}
 		},
 
 		addNewPollText() {
 			if (this.newPollText !== null & this.newPollText !== '') {
-				this.poll.options.pollTexts.push({
+				this.poll.voteOptions.push({
 					id: this.nextPollTextId++,
-					text: this.newPollText
+					text: this.newPollText,
+					timestamp: 0
 				})
 			}
 			this.newPollText = ''
@@ -542,11 +543,9 @@ export default {
 					}
 
 					if (this.poll.event.type === 'datePoll') {
-						var i
-						for (i = 0; i < this.poll.options.pollTexts.length; i++) {
-							this.addNewPollDate(new Date(moment.utc(this.poll.options.pollTexts[i].text)))
-						}
-						this.poll.options.pollTexts = []
+						this.poll.voteOptions.forEach(function(option) {
+							option.timestamp = moment.utc(option.text).unix()
+						})
 					}
 
 					if (this.$route.name === 'clone') {

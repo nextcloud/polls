@@ -31,18 +31,18 @@ import VueClipboard from 'vue-clipboard2'
 import { DatetimePicker, PopoverMenu, Tooltip } from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
-import Controls from './components/_base-Controls'
-import UserDiv from './components/_base-UserDiv'
-import SideBar from './components/_base-SideBar'
-import SideBarClose from './components/sideBarClose'
-import ShareDiv from './components/shareDiv'
-import LoadingOverlay from './components/_base-LoadingOverlay'
+import Controls from './components/base/controls'
+import UserDiv from './components/base/userDiv'
+import SideBar from './components/base/sideBar'
+import SideBarClose from './components/base/sideBarClose'
+import ShareDiv from './components/base/shareDiv'
+import LoadingOverlay from './components/base/loadingOverlay'
 
 Vue.config.debug = true
 Vue.config.devTools = true
-Vue.component('Controls', Controls)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
+Vue.component('Controls', Controls)
 Vue.component('UserDiv', UserDiv)
 Vue.component('SideBar', SideBar)
 Vue.component('SideBarClose', SideBarClose)
@@ -61,13 +61,7 @@ Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-// CSP config for webpack dynamic chunk loading
-// eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
-
-// Correct the root of the app for chunk loading
-// OC.linkTo matches the apps folders
-// eslint-disable-next-line
 __webpack_public_path__ = OC.linkTo('polls', 'js/')
 
 /* eslint-disable-next-line no-new */

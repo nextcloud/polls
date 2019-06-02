@@ -21,25 +21,34 @@
   -->
 
 <template>
-	<div class="close flex-row">
-		<a id="closeDetails" :title="closeDetailLabel" :alt="closeDetailLabelAlt"
-			class="close icon-close has-tooltip-bottom" href="#" @:click="hideSidebar"
-		/>
-	</div>
+	<li>
+		<div>{{ option.timestamp | localFullDate }}</div>
+		<div>
+			<a class="icon-delete" @click="$emit('remove')" />
+		</div>
+	</li>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
-	data() {
-		return {
-			closeDetailLabel: t('Close details'),
-			closeDetailLabelAlt: t('Close')
+	name: 'DatePollItem',
+
+	props: {
+		option: {
+			type: Object,
+			default: undefined
 		}
 	},
-	methods: {
-		hideSidebar() {
-			OC.Apps.hideAppSidebar()
+
+	filters: {
+		localFullDate(timestamp) {
+			if (!timestamp) return ''
+			if (!moment(timestamp).isValid()) return 'Invalid Date'
+			if (timestamp < 999999999999) timestamp = timestamp * 1000
+			return moment(timestamp).format('llll')
 		}
-	}
+	},
 }
 </script>

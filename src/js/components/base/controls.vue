@@ -28,8 +28,8 @@
 					Home
 				</router-link>
 			</div>
-			<div v-show="intitle ===''" class="crumb svg last">
-				<span v-text="intitle" />
+			<div v-show="intitle !==''" class="crumb svg last">
+				<span v-tooltip.auto="intitle" v-text="intitle" />
 			</div>
 			<div class="action">
 				<slot />
@@ -41,13 +41,15 @@
 
 <script>
 export default {
+	name: 'Controls',
 
 	props: {
 		intitle: {
 			type: String,
-			default: undefined
+			default: ''
 		}
 	},
+
 	data() {
 		return {
 			imagePath: OC.imagePath('core', 'places/home.svg')
