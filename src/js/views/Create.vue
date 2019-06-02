@@ -438,9 +438,9 @@ export default {
 				buttonHideText: t('polls', 'Cancel'),
 				buttonConfirmText: t('polls', 'Apply'),
 				onConfirm: () => {
-					for (i = 0; i < this.poll.newOptions.length; i++) {
-						this.poll.newOptions[i].timestamp = parseInt(moment(this.poll.newOptions[i].timestamp * 1000).add(this.move.step, this.move.unit).format('X'))
-						this.poll.newOptions[i].text = moment(this.poll.newOptions[i].timestamp).utc()
+					for (i = 0; i < this.poll.voteOptions.length; i++) {
+						this.poll.voteOptions[i].text = moment(this.poll.voteOptions[i].text).add(this.move.step, this.move.unit).format('YYYY-MM-DD HH:mm:ss')
+						this.poll.voteOptions[i].timestamp = moment.utc(this.poll.voteOptions[i].text).unix()
 
 					}
 
@@ -484,7 +484,7 @@ export default {
 				this.poll.voteOptions.push({
 					id: this.nextPollDateId++,
 					timestamp: moment(newPollDate).unix(),
-					text: moment.utc(newPollDate).format("YYYY-MM-DD HH:mm:ss")
+					text: moment.utc(newPollDate).format('YYYY-MM-DD HH:mm:ss')
 				})
 				this.poll.voteOptions = sortBy(this.poll.voteOptions, 'timestamp')
 			}

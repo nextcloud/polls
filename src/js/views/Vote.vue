@@ -34,18 +34,19 @@
 
 		<div class="main-container">
 			<div class="wordwrap description">
-				<span> {{ poll.event.description }} </span>
+				<h2> {{ poll.event.title }} </h2>
+				<h3> {{ poll.event.description }} </h3>
 				<span v-if="poll.event.expired" class="warning"> {{ t('poll', 'The poll expired on %s. Voting is disabled, but you can still comment.', 1, poll.event.expirationDate) }} </span>
 			</div>
 
 			<div class="workbench">
-
 				<ul name="participants" class="participants">
 					<user-div
-						v-for="(participant, index) in poll.participants"
-						tag="li"
+						v-for="(participant) in poll.participants"
 						:key="participant"
-						:user-id="participant" />
+						tag="li"
+						:user-id="participant"
+					/>
 				</ul>
 
 				<div class="vote-table">
@@ -53,48 +54,51 @@
 						v-if="poll.event.type === 'datePoll'"
 						name="voteOptions"
 						:tag="div"
-						class="header">
-
+						class="header"
+					>
 						<div
 							is="date-poll-vote-header"
-							v-for="(option, index) in poll.voteOptions"
+							v-for="(option) in poll.voteOptions"
 							:key="option.text"
 							:option="option"
-							:pollType="poll.event.type"/>
+							:poll-type="poll.event.type"
+						/>
 					</transition-group>
 
 					<transition-group
 						v-if="poll.event.type === 'textPoll'"
 						name="voteOptions"
 						tag="div"
-						class="header">
+						class="header"
+					>
 						<div
 							is="text-poll-vote-header"
-							v-for="(option, index) in poll.voteOptions"
+							v-for="(option) in poll.voteOptions"
 							:key="option.text"
 							:option="option"
-							:pollType="poll.event.type"/>
+							:poll-type="poll.event.type"
+						/>
 					</transition-group>
 
 					<transition-group
 						name="votes"
 						tag="div"
-						class="votes">
+						class="votes"
+					>
 						<div
 							v-for="(participant, index) in participantsVotes"
 							:key="index"
 						>
-								<div
-									is="vote-item"
-									v-for="vote in participant.votes"
-									class="poll-cell"
-									:key="vote.id"
-									:option="vote"
-									:pollType="poll.event.type"
-								/>
+							<div
+								is="vote-item"
+								v-for="vote in participant.votes"
+								:key="vote.id"
+								class="poll-cell"
+								:option="vote"
+								:poll-type="poll.event.type"
+							/>
 						</div>
 					</transition-group>
-
 				</div>
 			</div>
 		</div>
@@ -112,14 +116,12 @@
 		</side-bar>
 
 		<loading-overlay v-if="loadingPoll" />
-
-
 	</div>
 </template>
 
 <script>
 import moment from 'moment'
-import sortBy from 'lodash/sortBy'
+// import sortBy from 'lodash/sortBy'
 import DatePollVoteHeader from '../components/datePoll/voteHeader'
 import TextPollVoteHeader from '../components/textPoll/voteHeader'
 import VoteItem from '../components/base/voteItem'
@@ -181,8 +183,47 @@ export default {
 	},
 
 	computed: {
+		// TODO: Cleanup
 		participantsVotes() {
-			var votesList = Array()
+			var votesList = []
+			var thisPoll = this.poll
+			var templist = []
+			var foundVote = []
+			var fakeVoteId = 78946456
+
+			this.poll.participants.forEach(function(participant) {
+				templist = []
+				thisPoll.voteOptions.forEach(function(voteOption) {
+					foundVote = thisPoll.votes.filter(obj => {
+						return obj.userId === participant && obj.voteOptionText === voteOption.text
+					})
+
+					if (foundVote.length > 0) {
+						templist.push(foundVote[0])
+					} else {
+						templist.push({
+							id: ++fakeVoteId,
+							userId: participant,
+							voteAnswer: 'unvoted',
+							voteOptionText: voteOption.text,
+							voteOptionId: voteOption.id
+						})
+					}
+				})
+
+				votesList.push(
+					{
+						name: participant,
+						votes: templist
+					}
+				)
+			})
+			return votesList
+		},
+
+		// TODO: delete if not needed
+		participantsVotesOld() {
+			var votesList = []
 			var thisPoll = this.poll
 
 			this.poll.participants.forEach(function(participant) {
@@ -200,9 +241,8 @@ export default {
 		},
 
 		optionsVotes() {
-			var votesList = Array()
+			var votesList = []
 			var thisPoll = this.poll
-
 
 			this.poll.voteOptions.forEach(function(option) {
 				votesList.push(
@@ -241,7 +281,7 @@ export default {
 
 		localeData() {
 			return moment.localeData(moment.locale(this.locale))
-		},
+		}
 
 	},
 
@@ -305,7 +345,7 @@ export default {
 					this.loadingPoll = false
 					this.newPollDate = ''
 					this.newPollText = ''
-					this.lastVoteId = Math.max.apply(Math, this.poll.votes.map(function(o) { return o.id; }))
+					this.lastVoteId = Math.max.apply(Math, this.poll.votes.map(function(o) { return o.id }))
 				}, (error) => {
 					/* eslint-disable-next-line no-console */
 					console.log(error.response)
@@ -378,6 +418,5 @@ export default {
 		}
 	}
 }
-
 
 </style>

@@ -25,15 +25,13 @@
 
 <template>
 	<ul>
-		<li v-for="vote in filteredVotes">
+		<li v-for="vote in filteredVotes" :key="vote.id">
 			{{ vote.answer }}
 		</li>
 	</ul>
-
 </template>
 
 <script>
-import moment from 'moment'
 
 export default {
 	name: 'VoteUsersVotes',
@@ -54,9 +52,9 @@ export default {
 
 	computed: {
 		filteredVotes() {
-	        return this.votes.filter(function(vote) {
-	          return this.partitipant === vote.userId;
-	        })
+			return this.votes.filter(function(vote) {
+				return this.partitipant === vote.userId
+			})
 			// var newArray = this.votes.filter(function (vote) {
 			// 	return vote.userId === this.participant
 			// })

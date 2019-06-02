@@ -38,7 +38,7 @@ export default {
 			closeDetailLabelAlt: t('Close')
 		}
 	},
-	
+
 	methods: {
 		hideSidebar() {
 			OC.Apps.hideAppSidebar()

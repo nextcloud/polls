@@ -21,12 +21,22 @@
   -->
 
 <template>
-	<div class="date-box" v-tooltip.auto="localFullDate">
-		<div class="month">{{ month }}</div>
-		<div class="day">{{ day }}</div>
-		<div class="dow">{{ dow }}</div>
-		<div class="year">{{ year }}</div>
-		<div class="time">{{ time }}</div>
+	<div v-tooltip.auto="localFullDate" class="date-box">
+		<div class="month">
+			{{ month }}
+		</div>
+		<div class="day">
+			{{ day }}
+		</div>
+		<div class="dow">
+			{{ dow }}
+		</div>
+		<div class="year">
+			{{ year }}
+		</div>
+		<div class="time">
+			{{ time }}
+		</div>
 	</div>
 </template>
 

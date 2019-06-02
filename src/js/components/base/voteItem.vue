@@ -21,11 +21,10 @@
   -->
 
 <template>
-	    <li :id="'voteid_' + option.id" :class="iconClass" :data-value="option.voteOptionText" />
+	<li :id="'voteid_' + option.id" :class="iconClass" :data-value="option.voteOptionText" />
 </template>
 
 <script>
-import moment from 'moment'
 
 export default {
 	name: 'DatePollVoteItem',
@@ -51,12 +50,12 @@ export default {
 
 	computed: {
 		iconClass() {
-			if (this.option.voteAnswer === "yes") {
-				return "flex-column poll-cell yes icon-yes"
-			} else if (this.option.voteAnswer === "maybe") {
-				return "flex-column poll-cell maybe icon-maybe"
-			} else {
-				return "flex-column poll-cell no icon-no"
+			if (this.option.voteAnswer === 'yes') {
+				return 'flex-column poll-cell yes icon-yes'
+			} else if (this.option.voteAnswer === 'maybe') {
+				return 'flex-column poll-cell maybe icon-maybe'
+			} else if (this.option.voteAnswer === 'no') {
+				return 'flex-column poll-cell no icon-no'
 			}
 		}
 	}
@@ -75,7 +74,6 @@ $fg-maybe: #f0db98;
 $fg-unvoted: #f0db98;
 $fg-yes: #49bc49;
 
-
 .poll-cell {
 	background-position: center;
 	background-repeat: no-repeat;
@@ -87,20 +85,26 @@ $fg-yes: #49bc49;
 	// min-width: 85px;
 	margin: 2px;
 	align-items: center;
+	background-color: var(--color-background-dark);
+	color: var(--color-main-text);
+	background-image: var(--icon-close);
 
 	&.yes {
 		background-color: $bg-yes;
 		color: $fg-yes;
+		background-image: var(--icon-checkmark-49bc49);
 	}
 
 	&.no {
 		background-color: $bg-no;
 		color: $fg-no;
+		background-image: var(--icon-close-f45573);
 	}
 
 	&.maybe {
 		background-color: $bg-maybe;
 		color: $fg-maybe;
+		background-image: var(--icon-polls-maybe-vote-variant-f0db98);
 	}
 
 	&.unvoted {
