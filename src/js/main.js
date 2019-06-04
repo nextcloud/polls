@@ -38,8 +38,8 @@ import SideBarClose from './components/sideBarClose'
 import ShareDiv from './components/shareDiv'
 import LoadingOverlay from './components/_base-LoadingOverlay'
 
-Vue.config.debug = true
-Vue.config.devTools = true
+Vue.config.debug = process.env.NODE_ENV !== 'production'
+Vue.config.devTools = process.env.NODE_ENV !== 'production'
 Vue.component('Controls', Controls)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
