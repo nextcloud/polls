@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div id="app-content">
+	<app-content>
 		<controls :intitle="title">
 			<template slot="after">
 				<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
@@ -250,7 +250,7 @@
 			/>
 		</side-bar>
 		<loading-overlay v-if="loadingPoll" />
-	</div>
+	</app-content>
 </template>
 
 <script>

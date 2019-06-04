@@ -87,7 +87,7 @@ $fg-yes: #49bc49;
 	align-items: center;
 	background-color: var(--color-background-dark);
 	color: var(--color-main-text);
-	background-image: var(--icon-close);
+	background-image: var(--icon-close-000);
 
 	&.yes {
 		background-color: $bg-yes;

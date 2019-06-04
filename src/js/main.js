@@ -28,7 +28,7 @@ import App from './App.vue'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu, Tooltip } from 'nextcloud-vue'
+import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppNavigation} from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
 import Controls from './components/base/controls'
@@ -40,6 +40,9 @@ import LoadingOverlay from './components/base/loadingOverlay'
 
 Vue.config.debug = true
 Vue.config.devTools = true
+Vue.config.performance = true
+
+Vue.component('AppContent', AppContent)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
 Vue.component('Controls', Controls)

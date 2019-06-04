@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div id="app-content">
+	<app-content>
 		<controls :intitle="poll.event.title">
 			<template slot="after">
 				<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
@@ -116,7 +116,7 @@
 		</side-bar>
 
 		<loading-overlay v-if="loadingPoll" />
-	</div>
+	</app-content>
 </template>
 
 <script>
@@ -250,7 +250,7 @@ export default {
 						option: option.id,
 						votes: thisPoll.votes.filter(obj => {
 							return obj.voteOptionText === option.text
-						})
+						}),
 					}
 				)
 			})
@@ -287,7 +287,6 @@ export default {
 
 	created() {
 		this.indexPage = OC.generateUrl('apps/polls/')
-		this.getSystemValues()
 		this.lang = OC.getLanguage()
 		try {
 			this.locale = OC.getLocale()
@@ -312,17 +311,6 @@ export default {
 	methods: {
 		switchSidebar() {
 			this.sidebar = !this.sidebar
-		},
-
-		getSystemValues() {
-			this.$http.get(OC.generateUrl('apps/polls/get/system'))
-				.then((response) => {
-					this.system = response.data.system
-				}, (error) => {
-					this.poll.event.hash = ''
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
-				})
 		},
 
 		loadPoll(hash) {

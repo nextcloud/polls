@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div id="app-content">
+	<app-content>
 		<controls>
 			<router-link :to="{ name: 'create'}" class="button">
 				<span class="symbol icon-add" />
@@ -61,7 +61,7 @@
 		</transition-group>
 		<loading-overlay v-if="loading" />
 		<modal-dialog />
-	</div>
+	</app-content>
 </template>
 
 <script>
