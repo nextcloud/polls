@@ -51,7 +51,7 @@
 			/>
 			<li
 				is="poll-list-item"
-				v-for="(poll, index) in polls"
+				v-for="(poll, index) in pollList.polls"
 				:key="poll.id"
 				:poll="poll"
 				@deletePoll="removePoll(index, poll.event)"
@@ -67,6 +67,7 @@
 <script>
 // import moment from 'moment'
 // import lodash from 'lodash'
+import { mapState } from 'vuex'
 import pollListItem from '../components/pollListItem'
 
 export default {
@@ -79,29 +80,25 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			loading: true,
-			polls: []
+			loading: true
 		}
 	},
 
+	computed: {
+		pollList() {
+			return this.$store.state.polls
+		}
+	},
+
+	mounted() {
+		this.$store.dispatch('loadPolls')
+	},
+
 	created() {
-		this.indexPage = OC.generateUrl('apps/polls/')
-		this.loadPolls()
+		this.loading = false
 	},
 
 	methods: {
-		loadPolls() {
-			this.loading = true
-			this.$http.get(OC.generateUrl('apps/polls/get/polls'))
-				.then((response) => {
-					this.polls = response.data
-					this.loading = false
-				}, (error) => {
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
-					this.loading = false
-				})
-		},
 
 		editPoll(index, event, name) {
 			this.$router.push({

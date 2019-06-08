@@ -49,12 +49,6 @@ export default {
 			default: ''
 		}
 	},
-
-	data() {
-		return {
-			imagePath: OC.imagePath('core', 'places/home.svg')
-		}
-	}
 }
 </script>
 

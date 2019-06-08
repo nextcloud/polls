@@ -28,7 +28,6 @@
 					<span>{{ saveButtonTitle }}</span>
 					<span v-if="writingPoll" class="icon-loading-small" />
 				</button>
-				<button class="button symbol icon-settings" @click="switchSidebar" />
 			</template>
 		</controls>
 
@@ -43,8 +42,8 @@
 				<ul name="participants" class="participants">
 					<user-div
 						v-for="(participant) in poll.participants"
-						:key="participant"
 						tag="li"
+						:key="participant"
 						:user-id="participant"
 					/>
 				</ul>
@@ -53,7 +52,7 @@
 					<transition-group
 						v-if="poll.event.type === 'datePoll'"
 						name="voteOptions"
-						:tag="div"
+						tag="div"
 						class="header"
 					>
 						<div
@@ -103,17 +102,30 @@
 			</div>
 		</div>
 
-		<side-bar v-if="sidebar">
-			<UserDiv :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
+		<app-sidebar :title="t('polls', 'Details')">
 
-			<ul class="tabHeaders">
-				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
-					<a href="#">
-						{{ t('polls', 'Comments') }}
-					</a>
-				</li>
-			</ul>
-		</side-bar>
+			<template slot="primary-actions">
+			</template>
+
+			<app-sidebar-tab :name="t('polls', 'Comments')" icon="icon-comment">
+			</app-sidebar-tab>
+			<app-sidebar-tab :name="t('polls', 'Information')" icon="icon-info">
+				<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
+				<h3> {{ t('polls', 'Title') }} </h3>
+				<div>{{ poll.event.title }}</div>
+				<h3> {{ t('polls', 'Description') }} </h3>
+				<div>{{ poll.event.description }}</div>
+				<h3> {{ t('polls', 'Access') }} </h3>
+				<div>{{ poll.event.access }}</div>
+				<div>{{ poll.event.hash }}</div>
+				<div>{{ accessType }}</div>
+				<h3> {{ t('polls', 'Created') }} </h3>
+				<div>{{ timeSpanCreated }}</div>
+				<h3> {{ t('polls', 'Expires') }} </h3>
+				<div>{{ timeSpanExpiration }}</div>
+				<div>{{ countCommentsHint }}</div>
+			</app-sidebar-tab>
+		</app-sidebar>
 
 		<loading-overlay v-if="loadingPoll" />
 	</app-content>
@@ -173,7 +185,6 @@ export default {
 			protect: false,
 			writingPoll: false,
 			loadingPoll: true,
-			sidebar: false,
 			titleEmpty: false,
 			indexPage: '',
 			longDateFormat: '',
@@ -219,6 +230,34 @@ export default {
 				)
 			})
 			return votesList
+		},
+
+		accessType() {
+			if (this.poll.event.access === 'public') {
+				return t('polls', 'Public access')
+			} else if (this.poll.event.access === 'select') {
+				return t('polls', 'Only shared')
+			} else if (this.poll.event.access === 'registered') {
+				return t('polls', 'Registered users only')
+			} else if (this.poll.event.access === 'hidden') {
+				return t('polls', 'Hidden poll')
+			} else {
+				return ''
+			}
+		},
+		timeSpanCreated() {
+			return moment(this.poll.event.created).fromNow()
+		},
+
+		timeSpanExpiration() {
+			if (this.poll.event.expiration) {
+				return moment(this.poll.event.expirationDate).fromNow()
+			} else {
+				return t('polls', 'never')
+			}
+		},
+		countCommentsHint() {
+			return n('polls', 'There is %n comment', 'There are %n comments', this.poll.comments.length)
 		},
 
 		// TODO: delete if not needed
@@ -288,6 +327,7 @@ export default {
 	created() {
 		this.indexPage = OC.generateUrl('apps/polls/')
 		this.lang = OC.getLanguage()
+
 		try {
 			this.locale = OC.getLocale()
 		} catch (e) {
@@ -303,15 +343,15 @@ export default {
 		this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
 		this.loadPoll(this.$route.params.hash)
 
-		if (window.innerWidth > 1024) {
-			this.sidebar = true
-		}
+		// if (window.innerWidth > 1024) {
+		// 	this.sidebar = true
+		// }
 	},
 
 	methods: {
-		switchSidebar() {
-			this.sidebar = !this.sidebar
-		},
+		// switchSidebar() {
+		// 	this.sidebar = !this.sidebar
+		// },
 
 		loadPoll(hash) {
 			this.loadingPoll = true

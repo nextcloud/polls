@@ -25,10 +25,11 @@ import Vue from 'vue'
 import router from './router'
 import axios from 'nextcloud-axios'
 import App from './App.vue'
+import store from './store'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppNavigation} from 'nextcloud-vue'
+import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab} from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
 import Controls from './components/base/controls'
@@ -38,11 +39,13 @@ import SideBarClose from './components/base/sideBarClose'
 import ShareDiv from './components/base/shareDiv'
 import LoadingOverlay from './components/base/loadingOverlay'
 
-Vue.config.debug = true
-Vue.config.devTools = true
-Vue.config.performance = true
+Vue.config.debug = process.env.NODE_ENV !== 'production'
+Vue.config.devTools = process.env.NODE_ENV !== 'production'
+Vue.config.performance = process.env.NODE_ENV !== 'production'
 
 Vue.component('AppContent', AppContent)
+Vue.component('AppSidebar', AppSidebar)
+Vue.component('AppSidebarTab', AppSidebarTab)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
 Vue.component('Controls', Controls)
@@ -71,5 +74,6 @@ __webpack_public_path__ = OC.linkTo('polls', 'js/')
 new Vue({
 	el: '#app-polls',
 	router: router,
+	store: store,
 	render: h => h(App)
 })

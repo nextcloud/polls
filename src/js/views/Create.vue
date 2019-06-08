@@ -125,27 +125,21 @@
 			</div>
 		</div>
 
-		<side-bar v-if="sidebar">
-			<div v-if="adminMode" class="warning">
-				{{ t('polls', 'You are editing in admin mode') }}
-			</div>
-			<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
-			<div>{{ n('polls', 'This poll has %n participant', 'This poll has %n participants', poll.participants.length ) }}</div>
-			<ul class="tabHeaders">
-				<li class="tabHeader selected" data-tabid="configurationsTabView" data-tabindex="0">
-					<a href="#">
-						{{ t('polls', 'Configuration') }}
-					</a>
-				</li>
-			</ul>
+		<app-sidebar :title="t('polls', 'Settings')">
+			<template slot="primary-actions">
+				<div v-if="adminMode" class="warning">
+					{{ t('polls', 'You are editing in admin mode') }}
+				</div>
+			</template>
 
-			<div v-if="protect">
-				<span>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway.') }}</span>
-				<button @click="protect=false">
-					{{ t('polls', 'Unlock configuration ') }}
-				</button>
-			</div>
-			<div id="configurationsTabView" class="tab">
+
+			<app-sidebar-tab :name="t('polls', 'Configuration')" icon="icon-settings">
+				<div v-if="protect">
+					<div>{{ t('polls', 'Configuration is locked. Changing options may result in unwanted behaviour, but you can unlock it anyway.') }}</div>
+					<button @click="protect=false">
+						{{ t('polls', 'Unlock configuration ') }}
+					</button>
+				</div>
 				<div v-if="poll.mode =='edit'" class="configBox">
 					<label class="title icon-checkmark">
 						{{ t('polls', 'Poll type') }}
@@ -164,7 +158,7 @@
 					</label>
 				</div>
 
-				<div class="configBox ">
+				<div class="configBox">
 					<label class="title icon-settings">
 						{{ t('polls', 'Poll configurations') }}
 					</label>
@@ -239,16 +233,30 @@
 						<span>{{ t('polls', 'Only shared') }}</span>
 					</label>
 				</div>
-			</div>
 
-			<share-div	v-show="poll.event.access === 'select'"
-				:active-shares="poll.shares"
-				:placeholder="t('polls', 'Name of user or group')"
-				:hide-names="true"
-				@update-shares="updateShares"
-				@remove-share="removeShare"
-			/>
-		</side-bar>
+				<share-div	v-show="poll.event.access === 'select'"
+					:active-shares="poll.shares"
+					:placeholder="t('polls', 'Name of user or group')"
+					:hide-names="true"
+					@update-shares="updateShares"
+					@remove-share="removeShare"
+				/>
+			</app-sidebar-tab>
+
+			<app-sidebar-tab :name="t('polls', 'Information')" icon="icon-info">
+				<h3> {{ t('polls', 'Title') }} </h3>
+				<div>{{ poll.event.title }}</div>
+				<h3> {{ t('polls', 'Description') }} </h3>
+				<div>{{ poll.event.description }}</div>
+				<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
+				<h3> {{ t('polls', 'Access') }} </h3>
+				<div>{{ poll.event.access }}</div>
+				<div>{{ voteUrl }}</div>
+
+				<div>{{ n('polls', 'This poll has %n participant', 'This poll has %n participants', poll.participants.length ) }}</div>
+			</app-sidebar-tab>
+
+		</app-sidebar>
 		<loading-overlay v-if="loadingPoll" />
 	</app-content>
 </template>
@@ -326,6 +334,9 @@ export default {
 	computed: {
 		adminMode() {
 			return (this.poll.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
+		},
+		voteUrl() {
+			return OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
 		},
 
 		langShort() {
@@ -616,28 +627,24 @@ input[type="text"] {
     }
 }
 
-.polls-sidebar {
-    margin-top: 45px;
-    width: 40%;
 
-    .configBox {
-        display: flex;
-        flex-direction: column;
-        padding: 8px;
-        & > * {
-            padding-left: 21px;
-        }
-        & > .title {
-			display: flex;
-            background-position: 0 2px;
-            padding-left: 24px;
-            opacity: 0.7;
-            font-weight: bold;
-            margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
-        }
+.configBox {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    & > * {
+        padding-left: 21px;
+    }
+    & > .title {
+		display: flex;
+        background-position: 0 2px;
+        padding-left: 24px;
+        opacity: 0.7;
+        font-weight: bold;
+        margin-bottom: 4px;
+		& > span {
+			padding-left: 4px;
+		}
     }
 }
 
