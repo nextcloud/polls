@@ -22,10 +22,12 @@
  */
 
 import Vue from 'vue'
-import router from './router'
 import axios from 'nextcloud-axios'
+import { sync } from 'vuex-router-sync'
+
 import App from './App.vue'
 import store from './store'
+import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
@@ -34,14 +36,23 @@ import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSideba
 import Modal from './plugins/plugin.js'
 import Controls from './components/base/controls'
 import UserDiv from './components/base/userDiv'
-import SideBar from './components/base/sideBar'
-import SideBarClose from './components/base/sideBarClose'
 import ShareDiv from './components/base/shareDiv'
 import LoadingOverlay from './components/base/loadingOverlay'
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
 Vue.config.performance = process.env.NODE_ENV !== 'production'
+
+sync(store, router)
+
+__webpack_nonce__ = btoa(OC.requestToken)
+__webpack_public_path__ = OC.linkTo('polls', 'js/')
+
+Vue.prototype.t = t
+Vue.prototype.n = n
+Vue.prototype.$http = axios
+Vue.prototype.OC = OC
+Vue.prototype.OCA = OCA
 
 Vue.component('AppContent', AppContent)
 Vue.component('AppSidebar', AppSidebar)
@@ -50,8 +61,6 @@ Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
 Vue.component('Controls', Controls)
 Vue.component('UserDiv', UserDiv)
-Vue.component('SideBar', SideBar)
-Vue.component('SideBarClose', SideBarClose)
 Vue.component('ShareDiv', ShareDiv)
 Vue.component('LoadingOverlay', LoadingOverlay)
 
@@ -61,14 +70,7 @@ Vue.use(vClickOutside)
 Vue.use(VueClipboard)
 Vue.use(Modal)
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.$http = axios
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
 
-__webpack_nonce__ = btoa(OC.requestToken)
-__webpack_public_path__ = OC.linkTo('polls', 'js/')
 
 /* eslint-disable-next-line no-new */
 new Vue({

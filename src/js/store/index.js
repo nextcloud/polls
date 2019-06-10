@@ -25,6 +25,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import polls from './polls'
+import poll from './currentPoll'
 
 Vue.use(Vuex)
 
@@ -32,7 +33,8 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
 	modules: {
-		polls
+		polls,
+		poll
 	},
 	strict: debug
 })

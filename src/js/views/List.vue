@@ -51,7 +51,7 @@
 			/>
 			<li
 				is="poll-list-item"
-				v-for="(poll, index) in pollList.polls"
+				v-for="(poll, index) in pollList"
 				:key="poll.id"
 				:poll="poll"
 				@deletePoll="removePoll(index, poll.event)"
@@ -65,10 +65,8 @@
 </template>
 
 <script>
-// import moment from 'moment'
-// import lodash from 'lodash'
-import { mapState } from 'vuex'
-import pollListItem from '../components/pollListItem'
+import pollListItem from '../components/pollListItem';
+import { mapState }from 'vuex';
 
 export default {
 	name: 'List',
@@ -86,16 +84,12 @@ export default {
 
 	computed: {
 		pollList() {
-			return this.$store.state.polls
+			return this.$store.state.polls.list
 		}
 	},
 
-	mounted() {
-		this.$store.dispatch('loadPolls')
-	},
-
 	created() {
-		this.loading = false
+		this.refreshPolls()
 	},
 
 	methods: {
@@ -107,6 +101,21 @@ export default {
 					hash: event.id
 				}
 			})
+		},
+
+		refreshPolls() {
+			this.loading = true
+			this.$store.dispatch('loadPolls')
+			.then((response) => {
+				this.loading = false
+			})
+			.catch((error) => {
+				/* eslint-disable-next-line no-console */
+				this.loading = false
+				console.log('remove poll: ', error.response)
+				OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, {'type':'error'}))
+			})
+
 		},
 
 		clonePoll(index, event, name) {
@@ -124,21 +133,30 @@ export default {
 				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
 				buttonHideText: t('polls', 'No, keep poll.'),
 				buttonConfirmText: t('polls', 'Yes, delete poll.'),
+				// Call store action here
 				onConfirm: () => {
-					// this.deletePoll(index, event)
-					this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event)
-						.then((response) => {
-							this.polls.splice(index, 1)
-							OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
-						}, (error) => {
-							OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title))
-							/* eslint-disable-next-line no-console */
-							console.log(error.response)
-						}
-						)
+					this.loading = true
+					this.$store.dispatch({
+						'type': 'deletePollPromise',
+					 	'event': event
+					})
+					.then((response) => {
+						this.loading = false
+						this.refreshPolls()
+						OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
+
+					})
+					.catch((error) => {
+						/* eslint-disable-next-line no-console */
+						this.loading = false
+						console.log('remove poll: ', error.response)
+						OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title, {'type':'error'}))
+					})
 				}
 			}
+
 			this.$modal.show(params)
+
 		}
 
 	}

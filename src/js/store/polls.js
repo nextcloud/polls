@@ -25,29 +25,51 @@
  import Vue from 'vue'
 
  const state = {
- 	polls: []
+ 	list: []
  }
 
 const mutations = {
- 	setPolls(state, { polls }) {
-		state.polls = polls
+ 	setPolls(state, { list }) {
+		state.list = list
 	}
 }
 
 const getters = {
+	countPolls: (state) => {
+		return state.list.length
+	},
+	myPolls: (state) => {
+		return state.list.filter(poll => (poll.event.owner === OC.currentUser))
+	},
+	invitationPolls: (state) => {
+		return state.list.filter(poll => (poll.grantedAs === 'userInvitation'))
+	},
+	publicPolls: (state) => {
+		return state.list.filter(poll => (poll.event.access === 'public'))
+	},
+	hiddenPolls: (state) => {
+		return state.list.filter(poll => (poll.event.access === 'hidden'))
+	}
 }
 
 const actions = {
  	loadPolls({ commit }) {
-		axios.get(OC.generateUrl('apps/polls/get/polls'))
+		return axios.get(OC.generateUrl('apps/polls/get/polls'))
 			.then((response) => {
-				commit('setPolls', { polls: response.data })
+				commit('setPolls', { list: response.data })
 			}, (err) => {
 				/* eslint-disable-next-line no-console */
 				console.log(error.response)
-				this.loading = false
-			})
- 	}
+			}
+		)
+ 	},
+
+	deletePollPromise(context, payload) {
+		return axios.post(
+			OC.generateUrl('apps/polls/remove/poll'),
+			payload.event
+		)
+	}
  }
 
  export default { state, mutations, getters, actions }

@@ -33,9 +33,12 @@
 
 		<div class="main-container">
 			<div class="wordwrap description">
-				<h2> {{ poll.event.title }} </h2>
+				<h2>
+					{{ poll.event.title }}
+					<span v-if="poll.event.expired" class="error"> {{ t('poll', 'Expired') }} </span>
+				</h2>
 				<h3> {{ poll.event.description }} </h3>
-				<span v-if="poll.event.expired" class="warning"> {{ t('poll', 'The poll expired on %s. Voting is disabled, but you can still comment.', 1, poll.event.expirationDate) }} </span>
+
 			</div>
 
 			<div class="workbench">
@@ -127,17 +130,16 @@
 			</app-sidebar-tab>
 		</app-sidebar>
 
-		<loading-overlay v-if="loadingPoll" />
+		<!-- <loading-overlay v-if="loadingPoll" /> -->
 	</app-content>
 </template>
 
 <script>
-import moment from 'moment'
-// import sortBy from 'lodash/sortBy'
-import DatePollVoteHeader from '../components/datePoll/voteHeader'
-import TextPollVoteHeader from '../components/textPoll/voteHeader'
-import VoteItem from '../components/base/voteItem'
-// import voteUsersVotes from '../components/voteUsersVotes'
+import moment from 'moment';
+import DatePollVoteHeader from '../components/datePoll/voteHeader';
+import TextPollVoteHeader from '../components/textPoll/voteHeader';
+import VoteItem from '../components/base/voteItem';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
 	name: 'Vote',
@@ -149,33 +151,6 @@ export default {
 
 	data() {
 		return {
-			poll: {
-				mode: 'vote',
-				comments: [],
-				votes: [],
-				shares: [],
-				participants: [],
-				grantedAs: 'owner',
-				id: 0,
-				result: 'new',
-				event: {
-					id: 0,
-					hash: '',
-					type: 'datePoll',
-					title: '',
-					description: '',
-					created: '',
-					access: 'public',
-					expiration: false,
-					expirationDate: '',
-					expired: false,
-					isAnonymous: false,
-					fullAnonymous: false,
-					allowMaybe: false,
-					owner: undefined
-				},
-				voteOptions: []
-			},
 			system: [],
 			lang: '',
 			locale: '',
@@ -193,122 +168,34 @@ export default {
 		}
 	},
 
-	computed: {
-		// TODO: Cleanup
-		participantsVotes() {
-			var votesList = []
-			var thisPoll = this.poll
-			var templist = []
-			var foundVote = []
-			var fakeVoteId = 78946456
 
-			this.poll.participants.forEach(function(participant) {
-				templist = []
-				thisPoll.voteOptions.forEach(function(voteOption) {
-					foundVote = thisPoll.votes.filter(obj => {
-						return obj.userId === participant && obj.voteOptionText === voteOption.text
-					})
+	computed:	 {
+		...mapState({
+			poll: state => state.poll.poll
+		}),
 
-					if (foundVote.length > 0) {
-						templist.push(foundVote[0])
-					} else {
-						templist.push({
-							id: ++fakeVoteId,
-							userId: participant,
-							voteAnswer: 'unvoted',
-							voteOptionText: voteOption.text,
-							voteOptionId: voteOption.id
-						})
-					}
-				})
+		...mapGetters([
+			'participantsVotes',
+			'accessType',
+			'timeSpanCreated',
+			'timeSpanExpiration',
+			'optionsVotes',
+			'adminMode'
+		]),
 
-				votesList.push(
-					{
-						name: participant,
-						votes: templist
-					}
-				)
-			})
-			return votesList
-		},
-
-		accessType() {
-			if (this.poll.event.access === 'public') {
-				return t('polls', 'Public access')
-			} else if (this.poll.event.access === 'select') {
-				return t('polls', 'Only shared')
-			} else if (this.poll.event.access === 'registered') {
-				return t('polls', 'Registered users only')
-			} else if (this.poll.event.access === 'hidden') {
-				return t('polls', 'Hidden poll')
-			} else {
-				return ''
-			}
-		},
-		timeSpanCreated() {
-			return moment(this.poll.event.created).fromNow()
-		},
-
-		timeSpanExpiration() {
-			if (this.poll.event.expiration) {
-				return moment(this.poll.event.expirationDate).fromNow()
-			} else {
-				return t('polls', 'never')
-			}
-		},
-		countCommentsHint() {
+		countCommentsHint: function () {
 			return n('polls', 'There is %n comment', 'There are %n comments', this.poll.comments.length)
 		},
 
-		// TODO: delete if not needed
-		participantsVotesOld() {
-			var votesList = []
-			var thisPoll = this.poll
-
-			this.poll.participants.forEach(function(participant) {
-
-				votesList.push(
-					{
-						name: participant,
-						votes: thisPoll.votes.filter(obj => {
-							return obj.userId === participant
-						})
-					}
-				)
-			})
-			return votesList
-		},
-
-		optionsVotes() {
-			var votesList = []
-			var thisPoll = this.poll
-
-			this.poll.voteOptions.forEach(function(option) {
-				votesList.push(
-					{
-						option: option.id,
-						votes: thisPoll.votes.filter(obj => {
-							return obj.voteOptionText === option.text
-						}),
-					}
-				)
-			})
-			return votesList
-		},
-
-		adminMode() {
-			return (this.poll.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
-		},
-
-		langShort() {
+		langShort: function () {
 			return this.lang.split('-')[0]
 		},
 
-		title() {
+		title: function () {
 			return t('polls', 'Polls') + ' - ' + this.poll.event.title
 		},
 
-		saveButtonTitle() {
+		saveButtonTitle: function () {
 			if (this.writingPoll) {
 				return t('polls', 'Writing poll')
 			} else if (this.poll.mode === 'edit') {
@@ -318,7 +205,7 @@ export default {
 			}
 		},
 
-		localeData() {
+		localeData: function () {
 			return moment.localeData(moment.locale(this.locale))
 		}
 
@@ -341,48 +228,14 @@ export default {
 		moment.locale(this.locale)
 		this.longDateFormat = moment.localeData().longDateFormat('L')
 		this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
-		this.loadPoll(this.$route.params.hash)
+		this.$store.dispatch({
+			type: 'loadPoll',
+			hash: this.$route.params.hash
+		})
 
-		// if (window.innerWidth > 1024) {
-		// 	this.sidebar = true
-		// }
-	},
-
-	methods: {
-		// switchSidebar() {
-		// 	this.sidebar = !this.sidebar
-		// },
-
-		loadPoll(hash) {
-			this.loadingPoll = true
-			this.$http.get(OC.generateUrl('apps/polls/get/poll/' + hash))
-				.then((response) => {
-					this.poll = response.data
-					if (this.poll.event.expirationDate !== null) {
-						this.poll.event.expirationDate = new Date(moment.utc(this.poll.event.expirationDate))
-					} else {
-						this.poll.event.expirationDate = ''
-					}
-
-					if (this.poll.event.type === 'datePoll') {
-						this.poll.voteOptions.forEach(function(option) {
-							option.timestamp = moment.utc(option.text).unix()
-						})
-					}
-
-					this.loadingPoll = false
-					this.newPollDate = ''
-					this.newPollText = ''
-					this.lastVoteId = Math.max.apply(Math, this.poll.votes.map(function(o) { return o.id }))
-				}, (error) => {
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
-					this.poll.event.hash = ''
-					this.loadingPoll = false
-				})
-		}
 	}
 }
+
 </script>
 
 <style lang="scss">

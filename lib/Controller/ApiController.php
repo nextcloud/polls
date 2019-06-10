@@ -486,10 +486,16 @@ class ApiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function removePoll($id) {
-		$pollToDelete = $this->eventMapper->find($id);
+		try {
+			$pollToDelete = $this->eventMapper->find($id);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
 		if ($this->userId !== $pollToDelete->getOwner() && !$this->groupManager->isAdmin($this->userId)) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
+
 		$this->commentMapper->deleteByPoll($id);
 		$this->voteMapper->deleteByPoll($id);
 		$this->optionMapper->deleteByPoll($id);
