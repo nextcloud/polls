@@ -400,7 +400,7 @@
 						print_unescaped('<span class="information">' . $l->t('Invitation access') . '</span>');
 					}
 					if ($isAnonymous) {
-						print_unescaped('<span class="information">' . $l->t('Anononymous poll') . '</span>');
+						print_unescaped('<span class="information">' . $l->t('Anonymous poll') . '</span>');
 						if ($hideNames) {
 							print_unescaped('<span class="information">' . $l->t('Usernames hidden to Owner') . '</span>');
 						} else {
