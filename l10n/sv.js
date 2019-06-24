@@ -100,7 +100,6 @@ OC.L10N.register(
     "Close" : "Stäng",
     "Expires on %s" : "Gick ut %s",
     "Invitation access" : "Inbjudan tillgång",
-    "Anononymous poll" : "Anonym omröstning",
     "Click to get link" : "Klicka för att få länk",
     "Edit Poll" : "Ändra omröstning",
     "Poll expired" : "Omröstning utgången",

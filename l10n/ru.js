@@ -58,7 +58,6 @@ OC.L10N.register(
     "Close" : "Закрыть",
     "Expires on %s" : "Истекает %s",
     "Invitation access" : "Доступ по приглашению",
-    "Anononymous poll" : "Анонимный опрос",
     "Click to get link" : "Нажмите чтобы получить ссылку",
     "Edit Poll" : "Редактировать опрос",
     "Poll expired" : "Опрос завершён",

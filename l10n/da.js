@@ -66,7 +66,6 @@ OC.L10N.register(
     "Close details" : "Luk detaljer",
     "Close" : "Luk",
     "Expires on %s" : "Udløber den %s",
-    "Anononymous poll" : "Anonym afstemning",
     "Click to get link" : "Klik for at få link",
     "Edit Poll" : "Rediger afstemning",
     "Poll expired" : "Afstemning udløbet",

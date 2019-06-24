@@ -89,7 +89,6 @@ OC.L10N.register(
     "Close" : "Bezárás",
     "Expires on %s" : "Lejárt ekkor: %s",
     "Invitation access" : "Meghívó hozzáférés",
-    "Anononymous poll" : "Névtelen szavazás",
     "Click to get link" : "Kattints a link beszerzéséért",
     "Edit Poll" : "Szavazás szerkesztése",
     "Poll expired" : "Szavazás lejárt",

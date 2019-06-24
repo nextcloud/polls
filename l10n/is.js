@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Loka",
     "Expires on %s" : "Rennur út %s",
     "Invitation access" : "Boðsaðgangur",
-    "Anononymous poll" : "Nafnlaus könnun",
     "Click to get link" : "Smelltu til að fá tengil",
     "Edit Poll" : "Breyta könnun",
     "Poll expired" : "Könnun útrunnin",
