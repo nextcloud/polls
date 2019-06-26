@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete poll as admin" : "Ta bort omröstningen som admin",
     "Link copied to clipboard" : "Länken kopierades till urklipp",
     "Error, while copying link to clipboard" : "Fel vid kopiera länk till urklipp",
+    "_There is %n comment_::_There are %n comments_" : ["Det finns %n kommentar","Det finns %n kommentarer"],
     "Share with" : "Dela med",
     "Poll description" : "Beskrivning",
     "Description" : "Beskrivning",
