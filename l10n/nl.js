@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Sluiten",
     "Expires on %s" : "Vervalt op %s",
     "Invitation access" : "Ongeldige toegang",
-    "Anononymous poll" : "Anonieme peiling",
     "Click to get link" : "Klik om de link te krijgen",
     "Edit Poll" : "Peiling aanpassen",
     "Poll expired" : "Peiling  is verlopen",

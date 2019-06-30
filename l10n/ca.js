@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Tanca",
     "Expires on %s" : "Caduca el %s",
     "Invitation access" : "Accés d'invitació",
-    "Anononymous poll" : "Enquesta anònima",
     "Click to get link" : "Premeu per obtenir l'enllaç",
     "Edit Poll" : "Edita l'enquesta",
     "Poll expired" : "Enquesta caducada",

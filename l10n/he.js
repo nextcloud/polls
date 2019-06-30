@@ -41,7 +41,6 @@ OC.L10N.register(
     "Close" : "סגירה",
     "Expires on %s" : "יפוג ב־%s",
     "Invitation access" : "גישה להזמנה",
-    "Anononymous poll" : "סקר אלמוני",
     "Click to get link" : "יש ללחוץ כדי לקבל קישור",
     "Edit Poll" : "עריכת סקר",
     "Poll expired" : "הסקר פג",
