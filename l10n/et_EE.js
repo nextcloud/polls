@@ -39,7 +39,6 @@ OC.L10N.register(
     "Close" : "Sulge",
     "Expires on %s" : "Aegub %s",
     "Invitation access" : "Kutsetega ligipääs",
-    "Anononymous poll" : "Anonüümne küsitlus",
     "Click to get link" : "Vajuta, et saada link",
     "Edit Poll" : "Muuda küsitlust",
     "Poll expired" : "Küsitlus on aegunud",
