@@ -21,11 +21,12 @@
  *
  */
 
- import axios from 'nextcloud-axios'
- import Vue from 'vue'
+import axios from 'nextcloud-axios'
+import sortBy from 'lodash/sortBy'
+import moment from 'moment'
 
- const state = {
-	poll: {
+const defaultPoll = () => {
+	return {
 		comments: [],
 		event: {
 			id: 0,
@@ -45,7 +46,7 @@
 		},
 		grantedAs: 'owner',
 		id: 0,
-		mode: 'vote',
+		mode: 'create',
 		participants: [],
 		result: 'new',
 		shares: [],
@@ -54,27 +55,69 @@
 	}
 }
 
+const state = defaultPoll()
+
 const mutations = {
- 	setPoll(state , payload ) {
-		state.poll = payload.poll
+	setPoll(state, payload) {
+		Object.assign(state, payload.poll)
 	},
+
 	resetPoll(state) {
-		state.poll = {}
+		Object.assign(state, defaultPoll())
+	},
+
+	setPollProperty(state, payload) {
+		state[payload.property] = payload.value
+	},
+
+	setEventProperty(state, payload) {
+		state.event[payload.property] = payload.value
+	},
+
+	addDate(state, payload) {
+		state.voteOptions.push({
+			id: 0,
+			timestamp: moment(payload).unix(),
+			text: moment.utc(payload).format('YYYY-MM-DD HH:mm:ss')
+		})
+	},
+
+	addText(state, payload) {
+		state.voteOptions.push({
+			id: 0,
+			text: payload,
+			timestamp: 0
+		})
+	},
+
+	shiftDates(state, payload) {
+		state.voteOptions.forEach(function(option) {
+			option.text = moment(option.text).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
+			option.timestamp = moment.utc(option.text).unix()
+		})
+	},
+
+	removeDate(state, payload) {
 	}
+
 }
 
 const getters = {
-	lastVoteId( state ) {
-		return Math.max.apply(Math, state.poll.votes.map(function(o) { return o.id }))
+	lastVoteId(state) {
+		return Math.max.apply(Math, state.votes.map(function(o) { return o.id }))
 	},
 
-	timeSpanCreated( state ) {
-		return moment(state.poll.event.created).fromNow()
+	timeSpanCreated(state) {
+		return moment(state.event.created).fromNow()
+	},
+
+	sortedDates(state) {
+		return sortBy(state.voteOptions, 'timestamp')
 	},
 
 	timeSpanExpiration(state) {
-		if (state.poll.event.expiration) {
-			return moment(state.poll.event.expirationDate).fromNow()
+		if (state.event.expiration) {
+			return moment(state.event.expirationDate).fromNow()
 		} else {
 			return t('polls', 'never')
 		}
@@ -83,38 +126,39 @@ const getters = {
 	optionsVotes() {
 		var votesList = []
 
-		state.poll.voteOptions.forEach(function(option) {
+		state.voteOptions.forEach(function(option) {
 			votesList.push(
 				{
 					option: option.id,
-					votes: state.poll.votes.filter(obj => {
+					votes: state.votes.filter(obj => {
 						return obj.voteOptionText === option.text
-					}),
+					})
 				}
 			)
 		})
 		return votesList
 	},
 
-	sentences(state) {
-		return {
-			'countComments': n('polls', 'There is %n comment', 'There are %n comments', state.poll.comments.length),
-			'countParticipants': n('polls', 'This poll has %n participant', 'This poll has %n participants', state.poll.participants.length)
-		}
+	countParticipants(state) {
+		return state.participants.length
+	},
+
+	countComments(state) {
+		return state.comments.length
 	},
 
 	adminMode(state) {
-		return (state.poll.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
+		return (state.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
 	},
 
 	accessType(state) {
-		if (state.poll.event.access === 'public') {
+		if (state.event.access === 'public') {
 			return t('polls', 'Public access')
-		} else if (state.poll.event.access === 'select') {
+		} else if (state.event.access === 'select') {
 			return t('polls', 'Only shared')
-		} else if (state.poll.event.access === 'registered') {
+		} else if (state.event.access === 'registered') {
 			return t('polls', 'Registered users only')
-		} else if (state.poll.event.access === 'hidden') {
+		} else if (state.event.access === 'hidden') {
 			return t('polls', 'Hidden poll')
 		} else {
 			return ''
@@ -123,15 +167,14 @@ const getters = {
 
 	participantsVotes(state) {
 		var votesList = []
-		var thisPoll = state.poll
 		var templist = []
 		var foundVote = []
 		var fakeVoteId = 78946456
 
-		state.poll.participants.forEach(function(participant) {
+		state.participants.forEach(function(participant) {
 			templist = []
-			state.poll.voteOptions.forEach(function(voteOption) {
-				foundVote = state.poll.votes.filter(obj => {
+			state.voteOptions.forEach(function(voteOption) {
+				foundVote = state.votes.filter(obj => {
 					return obj.userId === participant && obj.voteOptionText === voteOption.text
 				})
 
@@ -156,24 +199,72 @@ const getters = {
 			)
 		})
 		return votesList
-	},
+	}
 
 }
 
 const actions = {
- 	loadPoll({ commit }, payload) {
-		axios.get(OC.generateUrl('apps/polls/get/poll/' + payload.hash))
+	addShare({ commit }, payload) {
+	// 	this.poll.shares.push(item)
+	},
 
-			.then((response) => {
-				commit({ type: 'setPoll', poll: response.data })
+	updateShares({ commit }, payload) {
+	// 	this.poll.shares = share.slice(0)
+	},
 
-			}, (error) => {
+	removeShare({ commit }, payload) {
+	// 	this.shares.splice(this.shares.indexOf(item), 1)
+	},
+
+	loadPoll({ commit }, payload) {
+		commit({ type: 'resetPoll' })
+		if (payload.mode !== 'create') {
+
+			axios.get(OC.generateUrl('apps/polls/get/poll/' + payload.hash))
+				.then((response) => {
+					commit('setPoll', { 'poll': response.data })
+					switch (payload.mode) {
+					case 'edit':
+						commit('setPollProperty', { 'property': 'mode', 'value': payload.mode })
+						break
+					case 'vote':
+						commit('setPollProperty', { 'property': 'mode', 'value': payload.mode })
+						break
+					case 'clone':
+						commit('setPollProperty', { 'property': 'mode', 'value': 'create' })
+						commit('setPollProperty', { 'property': 'comments', 'value': [] })
+						commit('setPollProperty', { 'property': 'shares', 'value': [] })
+						commit('setPollProperty', { 'property': 'participants', 'value': [] })
+						commit('setPollProperty', { 'property': 'votes', 'value': [] })
+						commit('setEventProperty', { 'property': 'owner', 'value': OC.getCurrentUser().uid })
+						break
+					}
+
+				}, (error) => {
 				/* eslint-disable-next-line no-console */
-				console.log(error)
-				commit('resetPoll')
-			}
-		)
- 	}
- }
+					console.log(error)
+				})
+		}
+	},
 
- export default { state, mutations, getters, actions }
+	writePollPromise({ commit }) {
+		if (state.mode !== 'vote') {
+
+			return axios.post(OC.generateUrl('apps/polls/write/poll'), state.event.id)
+				.then((response) => {
+					commit('setPollProperty', { 'property': 'mode', 'value': 'edit' })
+					commit('setPollProperty', { 'property': 'id', 'value': response.data.id })
+					commit('setEventProperty', { 'property': 'id', 'value': response.data.id })
+					commit('setEventProperty', { 'property': 'hash', 'value': response.data.hash })
+				// window.location.href = OC.generateUrl('apps/polls/edit/' + this.poll.event.hash)
+				}, (error) => {
+					state.poll.event.hash = ''
+					/* eslint-disable-next-line no-console */
+					console.log(error.response)
+				})
+
+		}
+	}
+}
+
+export default { state, mutations, getters, actions }

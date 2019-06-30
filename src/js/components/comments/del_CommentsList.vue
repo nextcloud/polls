@@ -22,19 +22,34 @@
 
 <template>
 	<div>
-	<div class="newCommentRow comment new-comment">
-		<div class="authorRow user-cell flex-row">
-		<div class="avatar has-tooltip" title="" style="height: 32px; width: 32px;" data-original-title="dartcafe"><img src="/index.php/avatar/dartcafe/32?v=0" alt="" width="32" height="32"></div>
-		<div class="author">Dartcafe</div>
-	</div>
+		<div class="newCommentRow comment new-comment">
+			<div class="authorRow user-cell flex-row">
+				<div class="avatar has-tooltip" title="" style="height: 32px; width: 32px;"
+					data-original-title="dartcafe"
+				>
+					<img src="/index.php/avatar/dartcafe/32?v=0" alt="" width="32"
+						height="32"
+					>
+				</div>
+				<div class="author">
+					Dartcafe
+				</div>
+			</div>
 
-	<form class="newCommentForm flex-row" name="send_comment" action="/index.php/apps/polls/insert/comment" method="POST">
-		<input type="hidden" name="pollId" value="1">
-		<input type="hidden" name="userId" value="dartcafe">
-		<div id="commentBox" name="commentBox" class="message" data-placeholder="Neuer Kommentar ..." contenteditable="true"></div>
-		<input id="submit_send_comment" class="submitComment icon-confirm" value="" type="submit">
-		<span class="icon-loading-small" style="float:right;"></span>
-	</form>
+			<form class="newCommentForm flex-row" name="send_comment" action="/index.php/apps/polls/insert/comment"
+				method="POST"
+			>
+				<input type="hidden" name="pollId" value="1">
+				<input type="hidden" name="userId" value="dartcafe">
+				<div id="commentBox" name="commentBox" class="message"
+					data-placeholder="Neuer Kommentar ..." contenteditable="true"
+				/>
+				<input id="submit_send_comment" class="submitComment icon-confirm" value=""
+					type="submit"
+				>
+				<span class="icon-loading-small" style="float:right;" />
+			</form>
+		</div>
 	</div>
 </template>
 
@@ -44,14 +59,9 @@ export default {
 	name: 'CommentsList',
 
 	components: {
-		CommentsItem
+		// CommentsItem
 	},
 
 	data() {
-		return {
-			move: {
-				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
-			},
-			poll: {
+	}
+}

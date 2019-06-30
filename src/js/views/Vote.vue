@@ -22,7 +22,7 @@
 
 <template>
 	<app-content>
-		<controls :intitle="poll.event.title">
+		<controls :intitle="event.title">
 			<template slot="after">
 				<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
 					<span>{{ saveButtonTitle }}</span>
@@ -34,71 +34,29 @@
 		<div class="main-container">
 			<div class="wordwrap description">
 				<h2>
-					{{ poll.event.title }}
-					<span v-if="poll.event.expired" class="error"> {{ t('poll', 'Expired') }} </span>
+					{{ event.title }}
+					<span v-if="event.expired" class="error"> {{ t('poll', 'Expired') }} </span>
 				</h2>
-				<h3> {{ poll.event.description }} </h3>
-
+				<h3> {{ event.description }} </h3>
 			</div>
 
 			<div class="workbench">
 				<ul name="participants" class="participants">
-					<user-div
-						v-for="(participant) in poll.participants"
-						tag="li"
-						:key="participant"
-						:user-id="participant"
-					/>
+					<user-div v-for="(participant) in participants" :key="participant" tag="li" :user-id="participant" />
 				</ul>
 
 				<div class="vote-table">
-					<transition-group
-						v-if="poll.event.type === 'datePoll'"
-						name="voteOptions"
-						tag="div"
-						class="header"
-					>
-						<div
-							is="date-poll-vote-header"
-							v-for="(option) in poll.voteOptions"
-							:key="option.text"
-							:option="option"
-							:poll-type="poll.event.type"
-						/>
+					<transition-group v-if="event.type === 'datePoll'" name="voteOptions" tag="div" class="header" >
+						<date-poll-vote-header v-for="(option) in voteOptions" :key="option.text" :option="option" :poll-type="event.type" />
 					</transition-group>
 
-					<transition-group
-						v-if="poll.event.type === 'textPoll'"
-						name="voteOptions"
-						tag="div"
-						class="header"
-					>
-						<div
-							is="text-poll-vote-header"
-							v-for="(option) in poll.voteOptions"
-							:key="option.text"
-							:option="option"
-							:poll-type="poll.event.type"
-						/>
+					<transition-group v-if="event.type === 'textPoll'" name="voteOptions" tag="div" class="header" >
+						<text-poll-vote-header v-for="(option) in voteOptions" :key="option.text" :option="option" :poll-type="event.type" />
 					</transition-group>
 
-					<transition-group
-						name="votes"
-						tag="div"
-						class="votes"
-					>
-						<div
-							v-for="(participant, index) in participantsVotes"
-							:key="index"
-						>
-							<div
-								is="vote-item"
-								v-for="vote in participant.votes"
-								:key="vote.id"
-								class="poll-cell"
-								:option="vote"
-								:poll-type="poll.event.type"
-							/>
+					<transition-group name="votes" tag="div" class="votes" >
+						<div v-for="(participant, index) in participantsVotes" :key="index" >
+							<vote-item v-for="vote in participant.votes" :key="vote.id" class="poll-cell" :option="vote" :poll-type="event.type" />
 						</div>
 					</transition-group>
 				</div>
@@ -106,28 +64,18 @@
 		</div>
 
 		<app-sidebar :title="t('polls', 'Details')">
-
-			<template slot="primary-actions">
-			</template>
-
 			<app-sidebar-tab :name="t('polls', 'Comments')" icon="icon-comment">
+				<comments-tab/>
 			</app-sidebar-tab>
+
 			<app-sidebar-tab :name="t('polls', 'Information')" icon="icon-info">
-				<user-div :user-id="poll.event.owner" :description="t('polls', 'Owner')" />
-				<h3> {{ t('polls', 'Title') }} </h3>
-				<div>{{ poll.event.title }}</div>
-				<h3> {{ t('polls', 'Description') }} </h3>
-				<div>{{ poll.event.description }}</div>
-				<h3> {{ t('polls', 'Access') }} </h3>
-				<div>{{ poll.event.access }}</div>
-				<div>{{ poll.event.hash }}</div>
-				<div>{{ accessType }}</div>
-				<h3> {{ t('polls', 'Created') }} </h3>
-				<div>{{ timeSpanCreated }}</div>
-				<h3> {{ t('polls', 'Expires') }} </h3>
-				<div>{{ timeSpanExpiration }}</div>
-				<div>{{ countCommentsHint }}</div>
+				<information-tab/>
 			</app-sidebar-tab>
+
+			<app-sidebar-tab :name="t('polls', 'Configuration')" icon="icon-settings">
+				<configuration-tab/>
+			</app-sidebar-tab>
+
 		</app-sidebar>
 
 		<!-- <loading-overlay v-if="loadingPoll" /> -->
@@ -135,67 +83,65 @@
 </template>
 
 <script>
-import moment from 'moment';
-import DatePollVoteHeader from '../components/datePoll/voteHeader';
-import TextPollVoteHeader from '../components/textPoll/voteHeader';
-import VoteItem from '../components/base/voteItem';
-import { mapState, mapGetters } from 'vuex';
+import moment from 'moment'
+import DatePollVoteHeader from '../components/datePoll/voteHeader'
+import TextPollVoteHeader from '../components/textPoll/voteHeader'
+import InformationTab from '../components/tabs/information'
+import ConfigurationTab from '../components/tabs/configuration'
+import CommentsTab from '../components/tabs/comments'
+import VoteItem from '../components/base/voteItem'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'Vote',
 	components: {
 		DatePollVoteHeader,
 		TextPollVoteHeader,
+		InformationTab,
+		ConfigurationTab,
+		CommentsTab,
 		VoteItem
 	},
 
 	data() {
 		return {
-			system: [],
-			lang: '',
-			locale: '',
-			placeholder: '',
-			nextPollDateId: 1,
-			nextPollTextId: 1,
-			protect: false,
-			writingPoll: false,
-			loadingPoll: true,
-			titleEmpty: false,
-			indexPage: '',
-			longDateFormat: '',
-			dateTimeFormat: '',
-			lastVoteId: 0
+			writingPoll: false
 		}
 	},
 
-
-	computed:	 {
+	computed:	{
 		...mapState({
-			poll: state => state.poll.poll
+			poll: state => state.poll,
+			event: state => state.poll.event,
+			comments: state => state.poll.comments,
+			participants: state => state.poll.participants,
+			shares: state => state.poll.shares,
+			votes: state => state.poll.votes,
+			voteOptions: state => state.poll.voteOptions
 		}),
 
 		...mapGetters([
-			'participantsVotes',
 			'accessType',
+			'adminMode',
+			'countComments',
+			'optionsVotes',
+			'participantsVotes',
 			'timeSpanCreated',
 			'timeSpanExpiration',
-			'optionsVotes',
-			'adminMode'
+			'languageCode',
+			'languageCodeShort',
+			'localeCode'
 		]),
 
-		countCommentsHint: function () {
-			return n('polls', 'There is %n comment', 'There are %n comments', this.poll.comments.length)
+		countCommentsHint: function() {
+			return n('polls', 'There is %n comment', 'There are %n comments', this.countComments)
 		},
 
-		langShort: function () {
-			return this.lang.split('-')[0]
+		title: function() {
+			return t('polls', 'Polls') + ' - ' + this.event.title
 		},
 
-		title: function () {
-			return t('polls', 'Polls') + ' - ' + this.poll.event.title
-		},
-
-		saveButtonTitle: function () {
+		saveButtonTitle: function() {
 			if (this.writingPoll) {
 				return t('polls', 'Writing poll')
 			} else if (this.poll.mode === 'edit') {
@@ -203,37 +149,19 @@ export default {
 			} else {
 				return t('polls', 'Create new poll')
 			}
-		},
-
-		localeData: function () {
-			return moment.localeData(moment.locale(this.locale))
 		}
-
 	},
 
 	created() {
-		this.indexPage = OC.generateUrl('apps/polls/')
-		this.lang = OC.getLanguage()
-
-		try {
-			this.locale = OC.getLocale()
-		} catch (e) {
-			if (e instanceof TypeError) {
-				this.locale = this.lang
-			} else {
-				/* eslint-disable-next-line no-console */
-				console.log(e)
-			}
-		}
-		moment.locale(this.locale)
-		this.longDateFormat = moment.localeData().longDateFormat('L')
-		this.dateTimeFormat = moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
+		moment.locale(this.localeString)
 		this.$store.dispatch({
 			type: 'loadPoll',
-			hash: this.$route.params.hash
+			hash: this.$route.params.hash,
+			mode: 'vote'
 		})
 
 	}
+
 }
 
 </script>
@@ -255,7 +183,7 @@ export default {
 		flex-grow: 0;
 		overflow-x: auto;
 		padding-bottom: 10px;
-		min-height: 280px;
+		// min-height: 280px;
 
 		.participants {
 			display: flex;

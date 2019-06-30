@@ -56,6 +56,8 @@ export default {
 				return 'flex-column poll-cell maybe icon-maybe'
 			} else if (this.option.voteAnswer === 'no') {
 				return 'flex-column poll-cell no icon-no'
+			} else {
+				return 'flex-column poll-cell'
 			}
 		}
 	}

@@ -21,15 +21,14 @@
  *
  */
 
- import axios from 'nextcloud-axios'
- import Vue from 'vue'
+import axios from 'nextcloud-axios'
 
- const state = {
- 	list: []
- }
+const state = {
+	list: []
+}
 
 const mutations = {
- 	setPolls(state, { list }) {
+	setPolls(state, { list }) {
 		state.list = list
 	}
 }
@@ -53,16 +52,15 @@ const getters = {
 }
 
 const actions = {
- 	loadPolls({ commit }) {
+	loadPolls({ commit }) {
 		return axios.get(OC.generateUrl('apps/polls/get/polls'))
 			.then((response) => {
 				commit('setPolls', { list: response.data })
-			}, (err) => {
-				/* eslint-disable-next-line no-console */
+			}, (error) => {
+			/* eslint-disable-next-line no-console */
 				console.log(error.response)
-			}
-		)
- 	},
+			})
+	},
 
 	deletePollPromise(context, payload) {
 		return axios.post(
@@ -70,6 +68,6 @@ const actions = {
 			payload.event
 		)
 	}
- }
+}
 
- export default { state, mutations, getters, actions }
+export default { state, mutations, getters, actions }

@@ -38,7 +38,8 @@ export default {
 
 	props: {
 		votes: {
-			type: Array
+			type: Array,
+			default: undefined
 		},
 		participant: {
 			type: String,

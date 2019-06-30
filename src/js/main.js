@@ -23,7 +23,6 @@
 
 import Vue from 'vue'
 import axios from 'nextcloud-axios'
-import { sync } from 'vuex-router-sync'
 
 import App from './App.vue'
 import store from './store'
@@ -31,7 +30,7 @@ import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab} from 'nextcloud-vue'
+import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab } from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
 import Controls from './components/base/controls'
@@ -43,9 +42,9 @@ Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
 Vue.config.performance = process.env.NODE_ENV !== 'production'
 
-sync(store, router)
-
+/* eslint-disable-next-line camelcase, no-undef */
 __webpack_nonce__ = btoa(OC.requestToken)
+/* eslint-disable-next-line camelcase, no-undef */
 __webpack_public_path__ = OC.linkTo('polls', 'js/')
 
 Vue.prototype.t = t
@@ -69,8 +68,6 @@ Vue.directive('tooltip', Tooltip)
 Vue.use(vClickOutside)
 Vue.use(VueClipboard)
 Vue.use(Modal)
-
-
 
 /* eslint-disable-next-line no-new */
 new Vue({

@@ -2,7 +2,6 @@
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author John Molakvoæ <skjnldsv@protonmail.com>
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
@@ -22,21 +21,41 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex from 'vuex'
-import polls from './polls'
-import poll from './currentPoll'
-import locale from './locale'
+import moment from 'moment'
 
-Vue.use(Vuex)
-
-const debug = process.env.NODE_ENV !== 'production'
-
-export default new Vuex.Store({
-	modules: {
-		polls,
-		poll,
-		locale
+const getters = {
+	longDateFormat() {
+		return moment.localeData().longDateFormat('L')
 	},
-	strict: debug
-})
+
+	dateTimeFormat() {
+		return moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
+	},
+
+	languageCode() {
+		return OC.getLanguage()
+	},
+
+	languageCodeShort() {
+		return OC.getLanguage().split('-')[0]
+	},
+
+	localeCode() {
+		try {
+			return OC.getLocale()
+		} catch (e) {
+			if (e instanceof TypeError) {
+				return OC.getLanguage()
+			} else {
+				/* eslint-disable-next-line no-console */
+				console.log(e)
+			}
+		}
+	},
+
+	localeData(getters) {
+		return moment.localeData(moment.locale(getters.localeCode))
+	}
+}
+
+export default { getters }

@@ -104,7 +104,7 @@ export default {
 <style lang="scss">
 .user-row {
     display: flex;
-    flex-grow: 0;
+    flex-grow: 1;
     align-items: center;
     margin-left: 0;
     margin-top: 0;

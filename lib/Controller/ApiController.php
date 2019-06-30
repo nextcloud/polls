@@ -432,6 +432,11 @@ class ApiController extends Controller {
 
 			$data = [
 				'id' => $event['id'],
+				// 'meta' => {
+				// 	'grantedAs' => $this->grantAccessAs($event, $shares),
+				// 	'mode' => $mode,
+				// 	'event' => $event,
+				// },
 				'result' => $result,
 				'grantedAs' => $this->grantAccessAs($event, $shares),
 				'mode' => $mode,

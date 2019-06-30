@@ -39,25 +39,9 @@
 			</router-link>
 		</div>
 
-		<transition-group
-			v-if="!noPolls"
-			name="list"
-			tag="div"
-			class="table"
-		>
-			<poll-list-item
-				key="0"
-				:header="true"
-			/>
-			<li
-				is="poll-list-item"
-				v-for="(poll, index) in pollList"
-				:key="poll.id"
-				:poll="poll"
-				@deletePoll="removePoll(index, poll.event)"
-				@editPoll="editPoll(index, poll.event, 'edit')"
-				@clonePoll="editPoll(index, poll.event, 'clone')"
-			/>
+		<transition-group v-if="!noPolls" name="list" tag="div" class="table" >
+			<poll-list-item key="0" :header="true" />
+			<li is="poll-list-item" v-for="(poll, index) in pollList" :key="poll.id" :poll="poll" @deletePoll="removePoll(index, poll.event)" @editPoll="editPoll(index, poll.event, 'edit')" @clonePoll="editPoll(index, poll.event, 'clone')" />
 		</transition-group>
 		<loading-overlay v-if="loading" />
 		<modal-dialog />
@@ -65,8 +49,8 @@
 </template>
 
 <script>
-import pollListItem from '../components/pollListItem';
-import { mapState }from 'vuex';
+import pollListItem from '../components/pollListItem'
+// import { mapState } from 'vuex'
 
 export default {
 	name: 'List',
@@ -106,15 +90,15 @@ export default {
 		refreshPolls() {
 			this.loading = true
 			this.$store.dispatch('loadPolls')
-			.then((response) => {
-				this.loading = false
-			})
-			.catch((error) => {
-				/* eslint-disable-next-line no-console */
-				this.loading = false
-				console.log('remove poll: ', error.response)
-				OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, {'type':'error'}))
-			})
+				.then((response) => {
+					this.loading = false
+				})
+				.catch((error) => {
+					this.loading = false
+					/* eslint-disable-next-line no-console */
+					console.log('remove poll: ', error.response)
+					OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, { 'type': 'error' }))
+				})
 
 		},
 
@@ -138,20 +122,20 @@ export default {
 					this.loading = true
 					this.$store.dispatch({
 						'type': 'deletePollPromise',
-					 	'event': event
+						'event': event
 					})
-					.then((response) => {
-						this.loading = false
-						this.refreshPolls()
-						OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
+						.then((response) => {
+							this.loading = false
+							this.refreshPolls()
+							OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
 
-					})
-					.catch((error) => {
-						/* eslint-disable-next-line no-console */
-						this.loading = false
-						console.log('remove poll: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title, {'type':'error'}))
-					})
+						})
+						.catch((error) => {
+							this.loading = false
+							/* eslint-disable-next-line no-console */
+							console.log('remove poll: ', error.response)
+							OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title, { 'type': 'error' }))
+						})
 				}
 			}
 
