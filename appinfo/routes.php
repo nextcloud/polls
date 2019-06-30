@@ -29,6 +29,7 @@ return [
 		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
 		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
 		['name' => 'page#clone_poll', 'url' => '/clone/{hash}', 'verb' => 'GET'],
+		['name' => 'page#vote_poll', 'url' => '/vote/{hash}', 'verb' => 'GET'],
 
 		['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
 		['name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'],
@@ -41,6 +42,7 @@ return [
 		['name' => 'api#get_options', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_votes', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_comments', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'api#get_participants', 'url' => '/get/participants/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_event', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],

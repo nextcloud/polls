@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div id="app-content">
+	<app-content>
 		<controls>
 			<router-link :to="{ name: 'create'}" class="button">
 				<span class="symbol icon-add" />
@@ -39,35 +39,18 @@
 			</router-link>
 		</div>
 
-		<transition-group
-			v-if="!noPolls"
-			name="list"
-			tag="div"
-			class="table"
-		>
-			<poll-list-item
-				key="0"
-				:header="true"
-			/>
-			<li
-				is="poll-list-item"
-				v-for="(poll, index) in polls"
-				:key="poll.id"
-				:poll="poll"
-				@deletePoll="removePoll(index, poll.event)"
-				@editPoll="editPoll(index, poll.event, 'edit')"
-				@clonePoll="editPoll(index, poll.event, 'clone')"
-			/>
+		<transition-group v-if="!noPolls" name="list" tag="div" class="table" >
+			<poll-list-item key="0" :header="true" />
+			<li is="poll-list-item" v-for="(poll, index) in pollList" :key="poll.id" :poll="poll" @deletePoll="removePoll(index, poll.event)" @editPoll="editPoll(index, poll.event, 'edit')" @clonePoll="editPoll(index, poll.event, 'clone')" />
 		</transition-group>
 		<loading-overlay v-if="loading" />
 		<modal-dialog />
-	</div>
+	</app-content>
 </template>
 
 <script>
-// import moment from 'moment'
-// import lodash from 'lodash'
 import pollListItem from '../components/pollListItem'
+// import { mapState } from 'vuex'
 
 export default {
 	name: 'List',
@@ -79,29 +62,21 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			loading: true,
-			polls: []
+			loading: true
+		}
+	},
+
+	computed: {
+		pollList() {
+			return this.$store.state.polls.list
 		}
 	},
 
 	created() {
-		this.indexPage = OC.generateUrl('apps/polls/')
-		this.loadPolls()
+		this.refreshPolls()
 	},
 
 	methods: {
-		loadPolls() {
-			this.loading = true
-			this.$http.get(OC.generateUrl('apps/polls/get/polls'))
-				.then((response) => {
-					this.polls = response.data
-					this.loading = false
-				}, (error) => {
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
-					this.loading = false
-				})
-		},
 
 		editPoll(index, event, name) {
 			this.$router.push({
@@ -110,6 +85,21 @@ export default {
 					hash: event.id
 				}
 			})
+		},
+
+		refreshPolls() {
+			this.loading = true
+			this.$store.dispatch('loadPolls')
+				.then((response) => {
+					this.loading = false
+				})
+				.catch((error) => {
+					this.loading = false
+					/* eslint-disable-next-line no-console */
+					console.log('remove poll: ', error.response)
+					OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, { 'type': 'error' }))
+				})
+
 		},
 
 		clonePoll(index, event, name) {
@@ -127,21 +117,30 @@ export default {
 				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
 				buttonHideText: t('polls', 'No, keep poll.'),
 				buttonConfirmText: t('polls', 'Yes, delete poll.'),
+				// Call store action here
 				onConfirm: () => {
-					// this.deletePoll(index, event)
-					this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event)
+					this.loading = true
+					this.$store.dispatch({
+						'type': 'deletePollPromise',
+						'event': event
+					})
 						.then((response) => {
-							this.polls.splice(index, 1)
+							this.loading = false
+							this.refreshPolls()
 							OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
-						}, (error) => {
-							OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title))
+
+						})
+						.catch((error) => {
+							this.loading = false
 							/* eslint-disable-next-line no-console */
-							console.log(error.response)
-						}
-						)
+							console.log('remove poll: ', error.response)
+							OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title, { 'type': 'error' }))
+						})
 				}
 			}
+
 			this.$modal.show(params)
+
 		}
 
 	}

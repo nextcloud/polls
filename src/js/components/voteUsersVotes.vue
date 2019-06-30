@@ -20,26 +20,50 @@
   -
   -->
 
+<!-- 							<vote-users-votes :vote="poll.votes" :participant="participant">
+ -->
+
 <template>
-	<div class="close flex-row">
-		<a id="closeDetails" :title="closeDetailLabel" :alt="closeDetailLabelAlt"
-			class="close icon-close has-tooltip-bottom" href="#" @:click="hideSidebar"
-		/>
-	</div>
+	<ul>
+		<li v-for="vote in filteredVotes" :key="vote.id">
+			{{ vote.answer }}
+		</li>
+	</ul>
 </template>
 
 <script>
+
 export default {
-	data() {
-		return {
-			closeDetailLabel: t('Close details'),
-			closeDetailLabelAlt: t('Close')
+	name: 'VoteUsersVotes',
+
+	props: {
+		votes: {
+			type: Array,
+			default: undefined
+		},
+		participant: {
+			type: String,
+			default: ''
+		},
+		pollType: {
+			type: String,
+			default: undefined
 		}
 	},
-	methods: {
-		hideSidebar() {
-			OC.Apps.hideAppSidebar()
+
+	computed: {
+		filteredVotes() {
+			return this.votes.filter(function(vote) {
+				return this.partitipant === vote.userId
+			})
+			// var newArray = this.votes.filter(function (vote) {
+			// 	return vote.userId === this.participant
+			// })
 		}
 	}
 }
 </script>
+
+<style lang="scss">
+
+</style>

@@ -28,6 +28,7 @@ import Router from 'vue-router'
 // Dynamic loading
 const Create = () => import('./views/Create')
 const List = () => import('./views/List')
+const Vote = () => import('./views/Vote')
 
 Vue.use(Router)
 
@@ -43,6 +44,14 @@ export default new Router({
 			},
 			props: false,
 			name: 'list'
+		},
+		{
+			path: '/:index(index.php/)?apps/polls/vote/:hash',
+			components: {
+				default: Vote
+			},
+			props: true,
+			name: 'vote'
 		},
 		{
 			path: '/:index(index.php/)?apps/polls/edit/:hash',

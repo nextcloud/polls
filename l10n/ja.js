@@ -72,7 +72,6 @@ OC.L10N.register(
     "Close" : "閉じる",
     "Expires on %s" : "%s に有効期限切れ",
     "Invitation access" : "招待",
-    "Anononymous poll" : "匿名の投票",
     "Click to get link" : "クリックしてリンクを取得",
     "Edit Poll" : "投票を編集",
     "Poll expired" : "投票有効期限切れ",

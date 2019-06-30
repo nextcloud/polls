@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "关闭",
     "Expires on %s" : "在%s过期",
     "Invitation access" : "邀请权限",
-    "Anononymous poll" : "匿名投票",
     "Click to get link" : "点击以获取链接",
     "Edit Poll" : "编辑投票",
     "Poll expired" : "投票已过期",

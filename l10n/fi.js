@@ -87,7 +87,6 @@ OC.L10N.register(
     "Close" : "Sulje",
     "Expires on %s" : "Vanhenee %s",
     "Invitation access" : "Kutsupääsy",
-    "Anononymous poll" : "Anonyymi kysely",
     "Click to get link" : "Napsauta saadaksesi linkin",
     "Edit Poll" : "Muokkaa kyselyä",
     "Poll expired" : "Äänestys päättyi",

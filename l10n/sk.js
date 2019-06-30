@@ -30,7 +30,6 @@ OC.L10N.register(
     "Vote!" : "Hlasujte!",
     "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
     "Close" : "Zatvoriť",
-    "Anononymous poll" : "Anonymná anketa",
     "Click to get link" : "Kliknite na získanie odkazu",
     "Edit Poll" : "Upraviť anketu",
     "Poll expired" : "Anketa vypršala",
