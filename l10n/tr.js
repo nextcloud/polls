@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Kapat",
     "Expires on %s" : "%s zamanında sona erecek",
     "Invitation access" : "Çağrı erişimi",
-    "Anononymous poll" : "İsimsiz anket",
     "Click to get link" : "Bağlantıyı almak için tıklayın",
     "Edit Poll" : "Anketi Düzenle",
     "Poll expired" : "Anketin süresi dolmuş",

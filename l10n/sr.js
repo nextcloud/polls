@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Затвори",
     "Expires on %s" : "Истиче на %s",
     "Invitation access" : "Приступна позивница",
-    "Anononymous poll" : "Анонимно гласање",
     "Click to get link" : "Кликните да узмете везу",
     "Edit Poll" : "Измени гласање",
     "Poll expired" : "Гласање завршено",

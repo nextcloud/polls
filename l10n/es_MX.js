@@ -41,7 +41,6 @@ OC.L10N.register(
     "Close" : "Cerrar",
     "Expires on %s" : "Expira el %s",
     "Invitation access" : "Acceso por inivtación",
-    "Anononymous poll" : "Encuesta anónima",
     "Click to get link" : "Haz click para obtener una liga",
     "Edit Poll" : "Editar encuesta",
     "Poll expired" : "La encuesta expiró",

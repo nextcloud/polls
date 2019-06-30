@@ -40,7 +40,6 @@ OC.L10N.register(
     "Close" : "Lukk",
     "Expires on %s" : "Utløper den %s",
     "Invitation access" : "Invitasjonstilgang",
-    "Anononymous poll" : "Anonym avstemning",
     "Click to get link" : "Klikk for å hente lenke",
     "Edit Poll" : "Rediger avstemning",
     "Poll expired" : "Avstemning utløpt",

@@ -39,7 +39,6 @@ OC.L10N.register(
     "Close" : "დახურვა",
     "Expires on %s" : "უქმდება %s-ში",
     "Invitation access" : "მოწვევის წვდომა",
-    "Anononymous poll" : "ანონიმური გამოკითხვა",
     "Click to get link" : "მიიღეთ ბმული",
     "Edit Poll" : "გამოკითხვის ცვლილება",
     "Poll expired" : "გამოკთხვას ვადა გაუვიდა",

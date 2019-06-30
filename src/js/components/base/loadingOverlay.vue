@@ -4,6 +4,12 @@
 	</div>
 </template>
 
+<script>
+export default {
+	name: 'LoadingOverlay'
+}
+</script>
+
 <style lang="scss">
 .loading-overlay {
     position: absolute;
