@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Pechar",
     "Expires on %s" : "Caduca o %s",
     "Invitation access" : "Acceso por convite",
-    "Anononymous poll" : "Enquisa anónima",
     "Click to get link" : "Prema para obter unha ligazón",
     "Edit Poll" : "Editar a enquisa",
     "Poll expired" : "Enquisa expirada",

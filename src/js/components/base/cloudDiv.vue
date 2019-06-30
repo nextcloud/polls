@@ -52,6 +52,8 @@
 import moment from 'moment'
 
 export default {
+	name: 'CloudDiv',
+
 	props: {
 		options: {
 			type: Object,

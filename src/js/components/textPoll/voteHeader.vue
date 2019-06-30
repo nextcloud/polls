@@ -21,32 +21,37 @@
   -->
 
 <template>
-	<li>
-		<div>{{ option.timestamp | localFullDate }}</div>
-		<div>
-			<a class="icon-delete" @click="$emit('remove')" />
-		</div>
-	</li>
+	<div>
+		{{ option.text }}
+	</div>
 </template>
 
 <script>
-import moment from 'moment'
 
 export default {
-	filters: {
-		localFullDate(timestamp) {
-			if (!timestamp) return ''
-			if (!moment(timestamp).isValid()) return 'Invalid Date'
-			if (timestamp < 999999999999) timestamp = timestamp * 1000
-			return moment(timestamp).format('llll')
-		}
-	},
+	name: 'VoteTextPoll',
+
 	props: {
 		option: {
 			type: Object,
 			default: undefined
+		},
+		pollType: {
+			type: String,
+			default: undefined
+		}
+	},
+
+	data() {
+		return {
+			openedMenu: false,
+			hostName: this.$route.query.page
 		}
 
 	}
 }
 </script>
+
+<style lang="scss">
+
+</style>

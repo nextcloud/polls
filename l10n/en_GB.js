@@ -41,7 +41,6 @@ OC.L10N.register(
     "Close" : "Close",
     "Expires on %s" : "Expires on %s",
     "Invitation access" : "Invitation access",
-    "Anononymous poll" : "Anonymous poll",
     "Click to get link" : "Click to get link",
     "Edit Poll" : "Edit Poll",
     "Poll expired" : "Poll expired",
