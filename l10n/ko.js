@@ -39,7 +39,6 @@ OC.L10N.register(
     "Close" : "닫기",
     "Expires on %s" : "%s에 만료됨",
     "Invitation access" : "초대장 접근",
-    "Anononymous poll" : "익명 투표",
     "Click to get link" : "눌러서 링크 가져오기",
     "Edit Poll" : "투표 편집",
     "Poll expired" : "투표 만료됨",

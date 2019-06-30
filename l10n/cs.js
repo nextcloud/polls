@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Zavřít",
     "Expires on %s" : "Platnost skončí %s",
     "Invitation access" : "Přístup k pozvánce",
-    "Anononymous poll" : "Anonymní anketa",
     "Click to get link" : "Klikněte pro získání odkazu",
     "Edit Poll" : "Upravit fond",
     "Poll expired" : "Anketa je už uzavřena",
