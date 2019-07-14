@@ -23,13 +23,6 @@
 <template>
 	<app-content>
 		<controls :intitle="event.title">
-			<template slot="after">
-				<button :disabled="writingPoll" class="button btn primary" @click="writePoll()">
-					<span>{{ saveButtonTitle }}</span>
-					<span v-if="writingPoll" class="icon-loading-small" />
-				</button>
-				<button class="button symbol icon-settings" @click="switchSidebar" />
-			</template>
 		</controls>
 
 		<div class="workbench">

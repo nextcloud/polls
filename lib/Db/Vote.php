@@ -56,6 +56,7 @@ class Vote extends Model {
 
 	public function read() {
 		return [
+			'pollId' => $this->getPollId(),
 			'id' => $this->getId(),
 			'userId' => $this->getUserId(),
 			'voteOptionId' => $this->getVoteOptionId(),

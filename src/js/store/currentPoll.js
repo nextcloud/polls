@@ -248,9 +248,11 @@ const actions = {
 	},
 
 	writePollPromise({ commit }) {
+		console.log('writePollPromise ', state.mode, state.event.id)
 		if (state.mode !== 'vote') {
+			console.log('state.mode != vote')
 
-			return axios.post(OC.generateUrl('apps/polls/write/poll'), state.event.id)
+			return axios.post(OC.generateUrl('apps/polls/write/poll'), { event: state.event, voteOptions: state.voteOptions, shares: state.shares, mode: state.mode })
 				.then((response) => {
 					commit('setPollProperty', { 'property': 'mode', 'value': 'edit' })
 					commit('setPollProperty', { 'property': 'id', 'value': response.data.id })
