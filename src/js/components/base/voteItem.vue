@@ -21,132 +21,135 @@
   -->
 
 <template>
-	<li :id="'voteid_' + option.id" :class="iconClass" :data-value="option.voteOptionText" />
+	<li v-if="edit" :class="iconClass + activeClass" @click="changeVote(option)" />
+	<li v-else :class="iconClass" />
 </template>
 
 <script>
+	export default {
+		name: 'DatePollVoteItem',
 
-export default {
-	name: 'DatePollVoteItem',
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined
+		props: {
+			option: {
+				type: Object,
+				default: undefined,
+			},
+			pollType: {
+				type: String,
+				default: undefined,
+			},
+			edit: {
+				type: Boolean,
+				default: false,
+			},
 		},
-		pollType: {
-			type: String,
-			default: undefined
-		}
-	},
 
-	data() {
-		return {
-			openedMenu: false,
-			hostName: this.$route.query.page
-		}
-
-	},
-
-	computed: {
-		iconClass() {
-			if (this.option.voteAnswer === 'yes') {
-				return 'flex-column poll-cell yes icon-yes'
-			} else if (this.option.voteAnswer === 'maybe') {
-				return 'flex-column poll-cell maybe icon-maybe'
-			} else if (this.option.voteAnswer === 'no') {
-				return 'flex-column poll-cell no icon-no'
-			} else {
-				return 'flex-column poll-cell'
-			}
-		}
+		computed: {
+			activeClass() {
+				if (this.edit) {
+					return 'active '
+				}
+			},
+			iconClass() {
+				if (this.option.voteAnswer === 'yes') {
+					return 'flex-column poll-cell yes icon-yes '
+				} else if (this.option.voteAnswer === 'maybe') {
+					return 'flex-column poll-cell maybe icon-maybe '
+				} else if (this.option.voteAnswer === 'no') {
+					return 'flex-column poll-cell no icon-no '
+				} else {
+					return 'flex-column poll-cell '
+				}
+			},
+		},
+		methods: {
+			changeVote(payload) {
+				this.$emit('voteClick')
+			},
+		},
 	}
-}
 </script>
 
 <style lang="scss">
+	$bg-no: #ffede9;
+	$bg-maybe: #fcf7e1;
+	$bg-unvoted: #fff4c8;
+	$bg-yes: #ebf5d6;
 
-$bg-no: #ffede9;
-$bg-maybe: #fcf7e1;
-$bg-unvoted: #fff4c8;
-$bg-yes: #ebf5d6;
+	$fg-no: #f45573;
+	$fg-maybe: #f0db98;
+	$fg-unvoted: #f0db98;
+	$fg-yes: #49bc49;
 
-$fg-no: #f45573;
-$fg-maybe: #f0db98;
-$fg-unvoted: #f0db98;
-$fg-yes: #49bc49;
+	.poll-cell {
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 32px;
+		height: 43px;
+		display: flex;
+		flex-grow: 1;
+		width: 85px;
+		// min-width: 85px;
+		margin: 2px;
+		align-items: center;
+		background-color: var(--color-background-dark);
+		color: var(--color-main-text);
+		background-image: var(--icon-close-000);
 
-.poll-cell {
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: 32px;
-	height: 43px;
-	display: flex;
-	flex-grow: 1;
-	width: 85px;
-	// min-width: 85px;
-	margin: 2px;
-	align-items: center;
-	background-color: var(--color-background-dark);
-	color: var(--color-main-text);
-	background-image: var(--icon-close-000);
+		&.yes {
+			background-color: $bg-yes;
+			color: $fg-yes;
+			background-image: var(--icon-checkmark-49bc49);
+		}
 
-	&.yes {
-		background-color: $bg-yes;
-		color: $fg-yes;
-		background-image: var(--icon-checkmark-49bc49);
-	}
-
-	&.no {
-		background-color: $bg-no;
-		color: $fg-no;
-		background-image: var(--icon-close-f45573);
-	}
-
-	&.maybe {
-		background-color: $bg-maybe;
-		color: $fg-maybe;
-		background-image: var(--icon-polls-maybe-vote-variant-f0db98);
-	}
-
-	&.unvoted {
-		background-color: $bg-no;
-		color: $fg-no;
-		&:before {
-			content: attr(data-unvoted);
+		&.no {
+			background-color: $bg-no;
 			color: $fg-no;
-			font-size: 11px;
-			font-weight: bold;
-			line-height: 25px;
+			background-image: var(--icon-close-f45573);
 		}
-	}
 
-	&.active {
-
-		cursor: pointer;
-		border: 2px solid;
-		border-radius: var(--border-radius);
-		box-sizing: border-box;
-		width: 30px;
-		// min-width: 30px;
-		height: 30px;
-		background-size: 20px;
-		margin: auto !important;
-		background-color: var(--color-main-background);
-		// color: var(--color-primary);
-		flex-grow: 0 !important;
-		// box-shadow: 2px 2px 2px gray;
-		&.icon-no {
-			background-image: initial;
-		}
-		&.unvoted {
+		&.maybe {
 			background-color: $bg-maybe;
 			color: $fg-maybe;
+			background-image: var(--icon-polls-maybe-vote-variant-f0db98);
 		}
-		&:active {
-			box-shadow: inherit;
+
+		&.unvoted {
+			background-color: $bg-no;
+			color: $fg-no;
+			&:before {
+				content: attr(data-unvoted);
+				color: $fg-no;
+				font-size: 11px;
+				font-weight: bold;
+				line-height: 25px;
+			}
+		}
+
+		&.active {
+			cursor: pointer;
+			border: 2px solid;
+			border-radius: var(--border-radius);
+			box-sizing: border-box;
+			width: 30px;
+			// min-width: 30px;
+			height: 30px;
+			background-size: 20px;
+			margin: 9px auto !important;
+			background-color: var(--color-main-background);
+			// color: var(--color-primary);
+			flex-grow: 0 !important;
+			// box-shadow: 2px 2px 2px gray;
+			&.icon-no {
+				background-image: initial;
+			}
+			&.unvoted {
+				background-color: $bg-maybe;
+				color: $fg-maybe;
+			}
+			&:active {
+				box-shadow: inherit;
+			}
 		}
 	}
-}
-
 </style>

@@ -50,6 +50,7 @@ const defaultPoll = () => {
 		participants: [],
 		result: 'new',
 		shares: [],
+		currentUser: '',
 		voteOptions: [],
 		votes: []
 	}
@@ -191,14 +192,26 @@ const getters = {
 				}
 			})
 
-			votesList.push(
-				{
-					name: participant,
-					votes: templist
-				}
-			)
+			votesList.push({
+				name: participant,
+				votes: templist
+			})
+
 		})
+
 		return votesList
+	},
+
+	myVotes(state, getters) {
+		return getters.participantsVotes.filter(vote => vote.name === state.currentUser)
+	},
+
+	otherVotes(state, getters) {
+		return getters.participantsVotes.filter(vote => vote.name !== state.currentUser)
+	},
+
+	otherParticipants(state) {
+		return state.participants.filter(participant => participant !== state.currentUser)
 	}
 
 }
@@ -223,6 +236,7 @@ const actions = {
 			axios.get(OC.generateUrl('apps/polls/get/poll/' + payload.hash))
 				.then((response) => {
 					commit('setPoll', { 'poll': response.data })
+					commit('setPollProperty', {'property': 'currentUser', 'value': OC.getCurrentUser().uid})
 					switch (payload.mode) {
 					case 'edit':
 						commit('setPollProperty', { 'property': 'mode', 'value': payload.mode })
@@ -245,6 +259,9 @@ const actions = {
 					console.log(error)
 				})
 		}
+	},
+
+	writeVotePromise({ commit }) {
 	},
 
 	writePollPromise({ commit }) {
