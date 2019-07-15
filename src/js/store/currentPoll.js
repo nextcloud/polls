@@ -100,7 +100,6 @@ const mutations = {
 
 	// TODO: Find a better solution than this
 	changeVote(state, payload) {
-		console.log(payload)
 		state.votes.forEach(function(vote){
 			if (vote.id === payload.payload.id && vote.userId === payload.payload.userId && vote.voteOptionText === payload.payload.voteOptionText) {
 				vote.voteAnswer = payload.switchTo
