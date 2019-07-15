@@ -36,8 +36,7 @@
 			<div class="wordwrap description">
 				<h2>
 					{{ event.title }}
-					<span v-if="event.expired"
-					      class="error"> {{ t('poll', 'Expired') }} </span>
+					<span v-if="event.expired" class="error"> {{ t('poll', 'Expired') }} </span>
 				</h2>
 				<h3> {{ event.description }} </h3>
 			</div>
@@ -177,7 +176,16 @@
 
 		methods: {
 			cycleVote(payload) {
-				console.log(payload.id)
+				var switchTo = 'yes'
+
+				console.log('is ', payload.voteAnswer)
+				if (payload.voteAnswer === 'yes') {
+					switchTo = 'no'
+				} else if (payload.voteAnswer === 'no' && this.event.allowMaybe) {
+					switchTo = 'maybe'
+				}
+				console.log('changed to ', switchTo)
+				// state.vote(payload)
 			},
 		},
 	}
