@@ -178,14 +178,12 @@
 			cycleVote(payload) {
 				var switchTo = 'yes'
 
-				console.log('is ', payload.voteAnswer)
 				if (payload.voteAnswer === 'yes') {
 					switchTo = 'no'
 				} else if (payload.voteAnswer === 'no' && this.event.allowMaybe) {
 					switchTo = 'maybe'
 				}
-				console.log('changed to ', switchTo)
-				// state.vote(payload)
+				this.$store.commit('changeVote', {payload, switchTo})
 			},
 		},
 	}
