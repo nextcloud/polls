@@ -86,6 +86,14 @@ const mutations = {
 	addText(state, payload) {
 		state.voteOptions.push({
 			id: 0,
+			timestamp: 0,
+			text: payload
+		})
+	},
+
+	addComment(state, payload) {
+		state.comments.push({
+			id: 0,
 			text: payload,
 			timestamp: 0
 		})
@@ -239,6 +247,16 @@ const actions = {
 	// 	this.shares.splice(this.shares.indexOf(item), 1)
 	},
 
+	loadComments({ commit }) {
+		axios.get(OC.generateUrl('apps/polls/get/comments/' + this.state.poll.id))
+		.then((response) => {
+			commit('setPollProperty', {'property': 'comments', 'value': response.data})
+		}, (error) => {
+		/* eslint-disable-next-line no-console */
+			console.log(error)
+		})
+	},
+
 	loadPoll({ commit }, payload) {
 		commit({ type: 'resetPoll' })
 		if (payload.mode !== 'create') {
@@ -271,11 +289,31 @@ const actions = {
 		}
 	},
 
+	writeCommentPromise({ commit }, payload) {
+		if (state.currentUser !== '') {
+			console.log({ pollId: state.event.id, currentUser: state.currentUser, commentContent: payload })
+			return axios.post(OC.generateUrl('apps/polls/write/comment'), { pollId: state.event.id, currentUser: state.currentUser, commentContent: payload })
+				.then((response) => {
+					console.log(state.votes)
+				}, (error) => {
+					/* eslint-disable-next-line no-console */
+					console.log(error.response)
+				})
+		}
+	},
+
 	writeVotePromise({ commit }) {
+		if (state.mode === 'vote' && state.currentUser !== '') {
+			return axios.post(OC.generateUrl('apps/polls/write/vote'), { pollId: state.event.id, votes: state.votes, mode: state.mode, currentUser: state.currentUser })
+				.then((response) => {
+				}, (error) => {
+					/* eslint-disable-next-line no-console */
+					console.log(error.response)
+				})
+		}
 	},
 
 	writePollPromise({ commit }) {
-		console.log('writePollPromise ', state.mode, state.event.id)
 		if (state.mode !== 'vote') {
 			console.log('state.mode != vote')
 

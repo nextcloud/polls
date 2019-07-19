@@ -199,6 +199,12 @@ export default {
 				icon: 'icon-confirm',
 				text: t('polls', 'Clone poll'),
 				action: this.clonePoll
+			},
+			{
+				key: 'votePoll',
+				icon: 'icon-checkmark',
+				text: t('polls', 'vote (alpha)'),
+				action: this.votePoll
 			}]
 
 			if (this.poll.event.owner === OC.getCurrentUser().uid) {
@@ -260,6 +266,11 @@ export default {
 
 		deletePoll() {
 			this.$emit('deletePoll')
+			this.hideMenu()
+		},
+
+		votePoll() {
+			this.$emit('votePoll')
 			this.hideMenu()
 		},
 

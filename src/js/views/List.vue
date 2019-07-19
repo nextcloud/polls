@@ -26,8 +26,8 @@
 			<router-link :to="{ name: 'create'}" class="button">
 				<span class="symbol icon-add" />
 				<span class="hidden-visually">
-					{{ t('polls', 'New') }}
-				</span>
+							{{ t('polls', 'New') }}
+						</span>
 			</router-link>
 		</controls>
 
@@ -46,8 +46,9 @@
 			    :key="poll.id"
 			    :poll="poll"
 			    @deletePoll="removePoll(index, poll.event)"
-			    @editPoll="editPoll(index, poll.event, 'edit')"
-			    @clonePoll="editPoll(index, poll.event, 'clone')" />
+			    @votePoll="callPoll(index, poll.event, 'vote')"
+			    @editPoll="callPoll(index, poll.event, 'edit')"
+			    @clonePoll="callPoll(index, poll.event, 'clone')" />
 		</transition-group>
 		<loading-overlay v-if="loading" />
 		<modal-dialog />
@@ -83,7 +84,7 @@
 		},
 
 		methods: {
-			editPoll(index, event, name) {
+			callPoll(index, event, name) {
 				this.$router.push({
 					name: name,
 					params: {
@@ -97,23 +98,15 @@
 				this.$store
 					.dispatch('loadPolls')
 					.then(response => {
+						console.log('refresh poll: ', response)
 						this.loading = false
 					})
 					.catch(error => {
 						this.loading = false
 						/* eslint-disable-next-line no-console */
-						console.log('remove poll: ', error.response)
+						console.log('refresh poll: ', error.response)
 						OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, { type: 'error' }))
 					})
-			},
-
-			clonePoll(index, event, name) {
-				this.$router.push({
-					name: name,
-					params: {
-						hash: event.id,
-					},
-				})
 			},
 
 			removePoll(index, event) {
@@ -152,10 +145,14 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+	#app-content {
+		flex-direction: column;
+	}
+
 	.table {
 		width: 100%;
-		margin-top: 45px;
+		// margin-top: 45px;
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;

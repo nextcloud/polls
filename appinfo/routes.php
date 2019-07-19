@@ -37,7 +37,11 @@ return [
 		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
 		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
 
+		['name' => 'api#write_vote', 'url' => '/write/vote', 'verb' => 'POST'],
 		['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
+		['name' => 'api#write_comment', 'url' => '/write/comment', 'verb' => 'POST'],
+
+		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
 		['name' => 'api#get_poll', 'url' => '/get/poll/{pollIdOrHash}', 'verb' => 'GET'],
 		['name' => 'api#get_options', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_votes', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
@@ -45,8 +49,8 @@ return [
 		['name' => 'api#get_participants', 'url' => '/get/participants/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_event', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
+
 		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],
-		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
 		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']

@@ -56,7 +56,7 @@ export default {
 
 .controls {
     display: flex;
-	position: fixed;
+	// position: fixed;
     border-bottom: 1px solid var(--color-border);
     background: var(--color-main-background);
     width: 100%;

@@ -22,16 +22,16 @@
 
 <template>
 	<app-content>
-		<controls :intitle="event.title">
-			<template slot="after">
-				<button :disabled="writingPoll" class="button btn primary" @click="writePoll(poll.mode)">
-					<span>{{ saveButtonTitle }}</span>
-					<span v-if="writingPoll" class="icon-loading-small" />
-				</button>
-			</template>
-		</controls>
 
 		<div class="main-container">
+			<controls :intitle="event.title">
+				<template slot="after">
+					<button :disabled="writingPoll" class="button btn primary" @click="writeVote()">
+						<span>{{ saveButtonTitle }}</span>
+						<span v-if="writingPoll" class="icon-loading-small" />
+					</button>
+				</template>
+			</controls>
 
 			<div class="wordwrap description">
 				<h2>
@@ -75,6 +75,7 @@
 		<app-sidebar :title="t('polls', 'Details')">
 
 			<app-sidebar-tab :name="t('polls', 'Comments')" icon="icon-comment">
+				<add-comment/>
 				<comments-tab/>
 			</app-sidebar-tab>
 
@@ -99,12 +100,14 @@
 	import InformationTab from '../components/tabs/information'
 	import ConfigurationTab from '../components/tabs/configuration'
 	import CommentsTab from '../components/tabs/comments'
+	import AddComment from '../components/comments/addComment'
 	import VoteItem from '../components/base/voteItem'
-	import { mapState, mapGetters } from 'vuex'
+	import { mapState, mapGetters, mapActions } from 'vuex'
 
 	export default {
 		name: 'Vote',
 		components: {
+			AddComment,
 			DatePollVoteHeader,
 			TextPollVoteHeader,
 			InformationTab,
@@ -159,6 +162,8 @@
 					return t('polls', 'Writing poll')
 				} else if (this.poll.mode === 'edit') {
 					return t('polls', 'Update poll')
+				} else if (this.poll.mode === 'vote') {
+					return t('polls', 'Vote!')
 				} else {
 					return t('polls', 'Create new poll')
 				}
@@ -185,6 +190,27 @@
 				}
 				this.$store.commit('changeVote', {payload, switchTo})
 			},
+
+			writeVote() {
+				if (this.poll.currentUser.length < 4 ) {
+					OC.Notification.showTemporary(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'))
+				} else {
+					this.writingVote = true
+					this.$store
+						.dispatch('writeVotePromise')
+						.then(response => {
+							this.writingVote = false
+							OC.Notification.showTemporary(t('polls', 'Vote successfully saved', 1, this.event.title))
+						})
+						.catch(error => {
+							this.writingVote = false
+							/* eslint-disable-next-line no-console */
+							console.log('Error while saving vote - Error: ', error.response)
+							OC.Notification.showTemporary(t('polls', 'Error while saving vote',  { type: 'error' }))
+						})
+				}
+			}
+
 		},
 	}
 </script>
@@ -196,7 +222,7 @@
 		flex: 1;
 		flex-wrap: nowrap;
 		overflow-x: hidden;
-		margin-top: 45px;
+		// margin-top: 45px;
 		padding: 8px;
 
 		.workbench {

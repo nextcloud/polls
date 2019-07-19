@@ -55,7 +55,7 @@ class Comment extends Model {
 			'pollId' => $this->getPollId(),
 			'id' => $this->getId(),
 			'userId' => $this->getUserId(),
-			'date' => $this->getDt() . ' UTC',
+			'date' => $this->getDt(),
 			'comment' => $this->getComment()
 		];
 

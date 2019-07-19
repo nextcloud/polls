@@ -20,9 +20,6 @@
   -
   -->
 
-<!-- 							<vote-users-votes :vote="poll.votes" :participant="participant">
- -->
-
 <template>
 	<ul>
 		<li v-for="vote in filteredVotes" :key="vote.id">
@@ -56,9 +53,6 @@ export default {
 			return this.votes.filter(function(vote) {
 				return this.partitipant === vote.userId
 			})
-			// var newArray = this.votes.filter(function (vote) {
-			// 	return vote.userId === this.participant
-			// })
 		}
 	}
 }

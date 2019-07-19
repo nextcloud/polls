@@ -59,9 +59,5 @@ export default {
 	name: 'CommentsList',
 
 	components: {
-		// CommentsItem
 	},
-
-	data() {
-	}
 }
