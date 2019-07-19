@@ -22,8 +22,8 @@
 
 <template>
 	<div>
-		<ul name="comments">
-			<li v-for="(comment) in comments" :key="comment.id">
+		<ul v-if="countComments">
+			<li v-for="(comment) in sortedComments" :key="comment.id">
 				<div class="comment-item">
 					<user-div :user-id="comment.userId" />
 					<div class="date">
@@ -36,48 +36,60 @@
 			</li>
 
 		</ul>
+		<div v-else class="emptycontent">
+			<div class="icon-comment"></div>
+			<p> {{ t('polls', 'No comments yet. Be the first.') }}</p>
+		</div>
 	</div>
 </template>
 
 <script>
-import moment from 'moment'
-import { mapState } from 'vuex'
+	import moment from 'moment'
+	import { mapState, mapGetters } from 'vuex'
 
-export default {
-	name: 'CommentsTab',
-	computed: {
-		...mapState({
-			comments: state => state.poll.comments,
-		})
-	},
-	methods: {
-		realtiveDate(date) {
-			return t('core', moment.utc(date).fromNow())
-		}
+	export default {
+		name: 'CommentsTab',
+		// mounted() {
+		// 	this.$store.dispatch('loadComments')
+		// },
+
+		computed: {
+			...mapState({
+				comments: state => state.poll.comments,
+			}),
+			...mapGetters([
+				'countComments',
+				'sortedComments'
+			])
+		},
+
+		methods: {
+			realtiveDate(date) {
+				return t('core', moment.utc(date).fromNow())
+			},
+		},
 	}
-}
 </script>
 
 <style scoped lang="scss">
+	ul {
+		& > li {
+			margin-bottom: 30px;
+			& > .comment-item {
+				display: flex;
+				align-items: center;
 
-ul {
-	&> li {
-		margin-bottom: 30px;
-		&> .comment-item {
-			display: flex;
-			align-items: center;
-
-			&> .date {
-				right: 0;
-				top: 5px;
-				opacity: 0.5;
+				& > .date {
+					right: 0;
+					top: 5px;
+					opacity: 0.5;
+				}
+			}
+			& > .message {
+				margin-left: 44px;
+				flex-grow: 1;
+				flex-shrink: 1;
 			}
 		}
-		&> .message {
-			margin-left: 44px;
-			flex-grow: 1;
-			flex-shrink: 1;
-		}
 	}
-}
 </style>

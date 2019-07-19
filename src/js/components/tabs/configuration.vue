@@ -22,7 +22,6 @@
 
 <template>
 	<div>
-
 		<div class="configBox">
 			<label class="title icon-checkmark">
 				{{ t('polls', 'Poll type') }}

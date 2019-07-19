@@ -41,5 +41,14 @@ export default {
 #app-content {
     width: 100%;
     display: flex;
+	&>.main-container {
+		flex-grow: 1
+	}
+
+
+	input.hasTimepicker {
+        width: 75px;
+    }
+
 }
 </style>

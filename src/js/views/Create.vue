@@ -22,46 +22,48 @@
 
 <template>
 	<app-content>
-		<controls :intitle="event.title">
-		</controls>
+		<div class="main-container">
 
-		<div class="workbench">
-			<div>
-				<h2>{{ t('polls', 'Poll description') }}</h2>
+			<controls :intitle="event.title" />
 
-				<label>{{ t('polls', 'Title') }}</label>
-				<input id="pollTitle" v-model="eventTitle" :class="{ error: titleEmpty }" type="text" >
+			<div class="workbench">
+				<div>
+					<h2>{{ t('polls', 'Poll description') }}</h2>
 
-				<label>{{ t('polls', 'Description') }}</label>
-				<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
-			</div>
+					<label>{{ t('polls', 'Title') }}</label>
+					<input id="pollTitle" v-model="eventTitle" :class="{ error: titleEmpty }" type="text" >
 
-			<div>
-				<h2>{{ t('polls', 'Vote options') }}</h2>
-
-				<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%" confirm @change="addNewPollDate($event)" />
-				<button v-show="event.type === 'datePoll'" id="shiftDates" class="icon-history" @click="shiftDatesDlg()" > {{ t('polls', 'Shift dates') }} </button>
-
-				<modal-dialog>
-					<div>
-						<div class="selectUnit">
-							<input id="moveStep" v-model="move.step">
-							<Multiselect id="unit" v-model="move.unit" :options="move.units" />
-						</div>
-					</div>
-				</modal-dialog>
-
-				<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list" tag="ul" class="poll-table" >
-					<date-poll-item v-for="(option, index) in sortedDates" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
-				</transitionGroup>
-
-				<div v-show="event.type === 'textPoll'" id="poll-item-selector-text">
-					<input v-model="newPollText" :placeholder=" t('polls', 'Add option') " @keyup.enter="addNewPollText(newPollText)" >
+					<label>{{ t('polls', 'Description') }}</label>
+					<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
 				</div>
 
-				<transitionGroup v-show="event.type === 'textPoll'" id="text-poll-list" name="list" tag="ul" class="poll-table" >
-					<text-poll-item v-for="(option, index) in voteOptions" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
-				</transitionGroup>
+				<div>
+					<h2>{{ t('polls', 'Vote options') }}</h2>
+
+					<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%" confirm @change="addNewPollDate($event)" />
+					<button v-show="event.type === 'datePoll'" id="shiftDates" class="icon-history" @click="shiftDatesDlg()" > {{ t('polls', 'Shift dates') }} </button>
+
+					<modal-dialog>
+						<div>
+							<div class="selectUnit">
+								<input id="moveStep" v-model="move.step">
+								<Multiselect id="unit" v-model="move.unit" :options="move.units" />
+							</div>
+						</div>
+					</modal-dialog>
+
+					<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list" tag="ul" class="poll-table" >
+						<date-poll-item v-for="(option, index) in sortedDates" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
+					</transitionGroup>
+
+					<div v-show="event.type === 'textPoll'" id="poll-item-selector-text">
+						<input v-model="newPollText" :placeholder=" t('polls', 'Add option') " @keyup.enter="addNewPollText(newPollText)" >
+					</div>
+
+					<transitionGroup v-show="event.type === 'textPoll'" id="text-poll-list" name="list" tag="ul" class="poll-table" >
+						<text-poll-item v-for="(option, index) in voteOptions" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
+					</transitionGroup>
+				</div>
 			</div>
 		</div>
 
@@ -320,9 +322,9 @@ export default {
 
 <style lang="scss" scoped>
 #app-content {
-    input.hasTimepicker {
-        width: 75px;
-    }
+    // input.hasTimepicker {
+    //     width: 75px;
+    // }
 }
 
 #body-user button.btn.primary.warning {

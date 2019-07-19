@@ -22,34 +22,36 @@
 
 <template>
 	<app-content>
-		<controls>
-			<router-link :to="{ name: 'create'}" class="button">
-				<span class="symbol icon-add" />
-				<span class="hidden-visually">
-							{{ t('polls', 'New') }}
-						</span>
-			</router-link>
-		</controls>
+		<div class="main-container">
+			<controls>
+				<router-link :to="{ name: 'create'}" class="button">
+					<span class="symbol icon-add" />
+					<span class="hidden-visually">
+								{{ t('polls', 'New') }}
+							</span>
+				</router-link>
+			</controls>
 
-		<div v-if="noPolls" class="">
-			<div class="icon-polls" />
-			<h2> {{ t('No existing polls.') }} </h2>
-			<router-link :to="{ name: 'create'}" class="button new">
-				<span>{{ t('polls', 'Click here to add a poll') }}</span>
-			</router-link>
+			<div v-if="noPolls" class="">
+				<div class="icon-polls" />
+				<h2> {{ t('No existing polls.') }} </h2>
+				<router-link :to="{ name: 'create'}" class="button new">
+					<span>{{ t('polls', 'Click here to add a poll') }}</span>
+				</router-link>
+			</div>
+
+			<transition-group v-if="!noPolls" name="list" tag="div" class="table">
+				<poll-list-item key="0" :header="true" />
+				<li is="poll-list-item"
+				    v-for="(poll, index) in pollList"
+				    :key="poll.id"
+				    :poll="poll"
+				    @deletePoll="removePoll(index, poll.event)"
+				    @votePoll="callPoll(index, poll.event, 'vote')"
+				    @editPoll="callPoll(index, poll.event, 'edit')"
+				    @clonePoll="callPoll(index, poll.event, 'clone')" />
+			</transition-group>
 		</div>
-
-		<transition-group v-if="!noPolls" name="list" tag="div" class="table">
-			<poll-list-item key="0" :header="true" />
-			<li is="poll-list-item"
-			    v-for="(poll, index) in pollList"
-			    :key="poll.id"
-			    :poll="poll"
-			    @deletePoll="removePoll(index, poll.event)"
-			    @votePoll="callPoll(index, poll.event, 'vote')"
-			    @editPoll="callPoll(index, poll.event, 'edit')"
-			    @clonePoll="callPoll(index, poll.event, 'clone')" />
-		</transition-group>
 		<loading-overlay v-if="loading" />
 		<modal-dialog />
 	</app-content>
@@ -147,7 +149,7 @@
 
 <style lang="scss" scoped>
 	#app-content {
-		flex-direction: column;
+		// flex-direction: column;
 	}
 
 	.table {

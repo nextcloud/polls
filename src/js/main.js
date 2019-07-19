@@ -30,7 +30,7 @@ import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab } from 'nextcloud-vue'
+import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab, AppNavigation } from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
 import Controls from './components/base/controls'
@@ -56,6 +56,7 @@ Vue.prototype.OCA = OCA
 Vue.component('AppContent', AppContent)
 Vue.component('AppSidebar', AppSidebar)
 Vue.component('AppSidebarTab', AppSidebarTab)
+Vue.component('AppNavigation', AppNavigation)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
 Vue.component('Controls', Controls)

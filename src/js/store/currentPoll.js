@@ -134,6 +134,10 @@ const getters = {
 		return sortBy(state.voteOptions, 'timestamp')
 	},
 
+	sortedComments(state) {
+		return sortBy(state.comments, 'date').reverse()
+	},
+
 	timeSpanExpiration(state) {
 		if (state.event.expiration) {
 			return moment(state.event.expirationDate).fromNow()

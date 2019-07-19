@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .controls {
     display: flex;
@@ -62,6 +62,7 @@ export default {
     width: 100%;
     height: 45px;
     z-index: 1001;
+	// position: fixed;
 
 	.action {
 		order: 999;

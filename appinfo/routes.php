@@ -39,12 +39,12 @@ return [
 
 		['name' => 'api#write_vote', 'url' => '/write/vote', 'verb' => 'POST'],
 		['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
-		['name' => 'api#write_comment', 'url' => '/write/comment', 'verb' => 'POST'],
+		['name' => 'comments#read', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
+		['name' => 'comments#write', 'url' => '/write/comment', 'verb' => 'POST'],
 
 		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
 		['name' => 'api#get_poll', 'url' => '/get/poll/{pollIdOrHash}', 'verb' => 'GET'],
 		['name' => 'api#get_options', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#get_votes', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_comments', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_participants', 'url' => '/get/participants/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
