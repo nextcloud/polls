@@ -22,11 +22,11 @@
 
 /* global Vue, oc_userconfig */
 <template>
-	<div :class="type" class="user-row">
+	<div :class="type" class="user-row" :class="{fixedWidth: fixedWidth}">
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<Avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
+		<Avatar :user="userId"  :display-name="computedDisplayName" :is-no-user="isNoUser" />
 		<div v-if="!hideNames" class="user-name">
 			{{ computedDisplayName }}
 		</div>
@@ -44,6 +44,10 @@ export default {
 	},
 
 	props: {
+		fixedWidth: {
+			type: Boolean,
+			default: false
+		},
 		hideNames: {
 			type: Boolean,
 			default: false
@@ -55,10 +59,6 @@ export default {
 		displayName: {
 			type: String,
 			default: ''
-		},
-		size: {
-			type: Number,
-			default: 32
 		},
 		type: {
 			type: String,
@@ -104,29 +104,32 @@ export default {
 <style lang="scss">
 .user-row {
     display: flex;
-    flex-grow: 1;
+    flex: 1;
     align-items: center;
     margin-left: 0;
     margin-top: 0;
-
+		&.fixedWidth {
+			width: 170px;
+			flex: 0 0 auto;
+		}
     > div {
         margin: 2px 4px;
     }
 
     .description {
         opacity: 0.7;
-        flex-grow: 0;
+        flex: 0;
     }
 
     .avatar {
         height: 32px;
         width: 32px;
-        flex-grow: 0;
+        flex: 0;
     }
 
     .user-name {
         opacity: 0.5;
-        flex-grow: 1;
+        flex: 1;
     }
 }
 </style>

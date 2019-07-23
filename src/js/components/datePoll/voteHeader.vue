@@ -111,8 +111,7 @@ export default {
 .date-box {
 	display: flex;
 	flex-direction: column;
-	flex-grow: 0;
-	flex-shrink: 0;
+	flex: 0 0;
 	padding: 0 2px;
 	align-items: center;
 	.month, .dow {

@@ -22,6 +22,7 @@
 
 <template>
 	<div>
+		<add-comment/>
 		<ul v-if="countComments">
 			<li v-for="(comment) in sortedComments" :key="comment.id">
 				<div class="comment-item">
@@ -45,14 +46,15 @@
 
 <script>
 	import moment from 'moment'
+	import AddComment from '../comments/addComment'
 	import { mapState, mapGetters } from 'vuex'
 
 	export default {
 		name: 'CommentsTab',
-		// mounted() {
-		// 	this.$store.dispatch('loadComments')
-		// },
-
+		components: {
+			AddComment,
+		},
+		
 		computed: {
 			...mapState({
 				comments: state => state.poll.comments,
@@ -87,8 +89,7 @@
 			}
 			& > .message {
 				margin-left: 44px;
-				flex-grow: 1;
-				flex-shrink: 1;
+				flex: 1 1;
 			}
 		}
 	}

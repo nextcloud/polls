@@ -21,13 +21,13 @@
   -->
 
 <template>
-	<li v-if="edit" :class="iconClass + activeClass" @click="changeVote(option)" />
-	<li v-else :class="iconClass" />
+	<li v-if="edit" class="poll-cell active" :class="iconClass" @click="changeVote(option)" />
+	<li v-else class="poll-cell" :class="iconClass" />
 </template>
 
 <script>
 	export default {
-		name: 'DatePollVoteItem',
+		name: 'VoteItem',
 
 		props: {
 			option: {
@@ -45,20 +45,15 @@
 		},
 
 		computed: {
-			activeClass() {
-				if (this.edit) {
-					return 'active '
-				}
-			},
 			iconClass() {
 				if (this.option.voteAnswer === 'yes') {
-					return 'flex-column poll-cell yes icon-yes '
+					return 'yes icon-yes '
 				} else if (this.option.voteAnswer === 'maybe') {
-					return 'flex-column poll-cell maybe icon-maybe '
+					return 'maybe icon-maybe '
 				} else if (this.option.voteAnswer === 'no') {
-					return 'flex-column poll-cell no icon-no '
+					return 'no icon-no '
 				} else {
-					return 'flex-column poll-cell '
+					return ''
 				}
 			},
 		},
@@ -87,7 +82,7 @@
 		background-size: 32px;
 		height: 43px;
 		display: flex;
-		flex-grow: 1;
+		flex: 1;
 		width: 85px;
 		// min-width: 85px;
 		margin: 2px;
@@ -138,7 +133,7 @@
 			margin: 9px auto !important;
 			background-color: var(--color-main-background);
 			// color: var(--color-primary);
-			flex-grow: 0 !important;
+			flex: 0 auto !important;
 			// box-shadow: 2px 2px 2px gray;
 			&.icon-no {
 				background-image: initial;

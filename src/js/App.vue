@@ -42,13 +42,26 @@ export default {
     width: 100%;
     display: flex;
 	&>.main-container {
-		flex-grow: 1
+		flex: 1;
+		padding: 0 8px;
 	}
-
 
 	input.hasTimepicker {
         width: 75px;
     }
 
+	.label {
+		border: solid 1px;
+		border-radius: var(--border-radius);
+		padding: 1px 4px;
+		margin: 0 4px;
+		font-size: 60%;
+		text-align: center;
+		&.error {
+			border-color: var(--color-error);
+			background-color: var(--color-error);
+			color: var(--color-primary-text);
+		}
+	}
 }
 </style>

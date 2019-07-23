@@ -41,19 +41,10 @@
 					<h2>{{ t('polls', 'Vote options') }}</h2>
 
 					<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%" confirm @change="addNewPollDate($event)" />
-					<button v-show="event.type === 'datePoll'" id="shiftDates" class="icon-history" @click="shiftDatesDlg()" > {{ t('polls', 'Shift dates') }} </button>
-
-					<modal-dialog>
-						<div>
-							<div class="selectUnit">
-								<input id="moveStep" v-model="move.step">
-								<Multiselect id="unit" v-model="move.unit" :options="move.units" />
-							</div>
-						</div>
-					</modal-dialog>
+					<shift-dates />
 
 					<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list" tag="ul" class="poll-table" >
-						<date-poll-item v-for="(option, index) in sortedDates" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
+						<date-poll-item v-for="(option, index) in sortedVoteOptions" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
 					</transitionGroup>
 
 					<div v-show="event.type === 'textPoll'" id="poll-item-selector-text">
@@ -97,12 +88,13 @@
 </template>
 
 <script>
-import { Multiselect } from 'nextcloud-vue'
+// import { Multiselect } from 'nextcloud-vue'
 import DatePollItem from '../components/datePoll/createItem'
 import TextPollItem from '../components/textPoll/createItem'
 import InformationTab from '../components/tabs/information'
 import ConfigurationTab from '../components/tabs/configuration'
 import CommentsTab from '../components/tabs/comments'
+import ShiftDates from '../components/shiftDates'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
@@ -114,16 +106,17 @@ export default {
 		InformationTab,
 		ConfigurationTab,
 		CommentsTab,
-		Multiselect
+		ShiftDates
+		// Multiselect
 	},
 
 	data() {
 		return {
-			move: {
-				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
-			},
+			// move: {
+			// 	step: 1,
+			// 	unit: 'week',
+			// 	units: ['minute', 'hour', 'day', 'week', 'month', 'year']
+			// },
 			newPollDate: '',
 			newPollTime: '',
 			newPollText: '',
@@ -161,7 +154,7 @@ export default {
 			'accessType',
 			'adminMode',
 			'countParticipants',
-			'sortedDates',
+			'sortedVoteOptions',
 			'longDateFormat',
 			'dateTimeFormat',
 			'languageCode',
@@ -259,7 +252,7 @@ export default {
 			'setEventProperty',
 			'setPollProperty',
 			'addDate',
-			'shiftDates',
+			// 'shiftDates',
 			'setLocale'
 		]),
 
@@ -284,20 +277,6 @@ export default {
 			this.$store.commit('setEventProperty', { 'property': 'description', 'value': e.target.value })
 		},
 
-		shiftDatesDlg() {
-			const params = {
-				title: t('polls', 'Shift all date options'),
-				text: t('polls', 'Shift all dates for '),
-				buttonHideText: t('polls', 'Cancel'),
-				buttonConfirmText: t('polls', 'Apply'),
-				onConfirm: () => {
-					this.shiftDates(this.move)
-				}
-			}
-
-			this.$modal.show(params)
-
-		},
 
 		switchSidebar() {
 			this.sidebar = !this.sidebar
@@ -337,7 +316,7 @@ export default {
 .polls-content {
     display: flex;
     padding-top: 45px;
-    flex-grow: 1;
+    flex: 1;
 }
 
 input[type="text"] {
@@ -348,7 +327,8 @@ input[type="text"] {
 .workbench {
     margin-top: 45px;
     display: flex;
-    flex-grow: 1;
+	justify-content: center;
+    flex: 1;
     flex-wrap: wrap;
     overflow-x: hidden;
 
@@ -357,7 +337,7 @@ input[type="text"] {
         max-width: 540px;
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
+        flex: 1;
         padding: 8px;
     }
 }
@@ -412,20 +392,19 @@ textarea {
 
         > div {
             display: flex;
-            flex-grow: 1;
+            flex: 1;
             font-size: 1.2em;
             opacity: 0.7;
             white-space: normal;
             padding-right: 4px;
             &.avatar {
-                flex-grow: 0;
+                flex: 0;
             }
         }
 
         > div:nth-last-child(1) {
             justify-content: center;
-            flex-grow: 0;
-            flex-shrink: 0;
+            flex: 0 0;
         }
     }
 }
@@ -440,14 +419,6 @@ button {
 .tab {
     display: flex;
     flex-wrap: wrap;
-}
-.selectUnit {
-	display: flex;
-	align-items: center;
-	flex-wrap: nowrap;
-	> label {
-		padding-right: 4px;
-	}
 }
 
 #shiftDates {

@@ -81,7 +81,7 @@
 
 	.message {
 		margin-left: 40px;
-		flex-grow: 1;
+		flex: 1;
 		&:empty:before {
 			content: attr(data-placeholder);
 			color: grey;

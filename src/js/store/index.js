@@ -31,12 +31,11 @@ import locale from './locale'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
-
 export default new Vuex.Store({
 	modules: {
 		polls,
 		poll,
 		locale
 	},
-	strict: debug
+	strict: process.env.NODE_ENV !== 'production'
 })

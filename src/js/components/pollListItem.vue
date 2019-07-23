@@ -362,7 +362,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 	display: flex;
 	align-items: center;
 	position: relative;
-	flex-grow: 0;
+	flex: 0;
 	div {
 	}
 }
@@ -408,7 +408,7 @@ $mediabreak-3: $group-1-width + $owner-width + max($group-2-1-width, $group-2-2-
 }
 
 .group-1, .group-1-1 {
-	flex-grow: 1;
+	flex: 1;
 }
 
 .group-1-1 {

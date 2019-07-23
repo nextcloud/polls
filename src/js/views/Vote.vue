@@ -26,56 +26,42 @@
 		<div class="main-container">
 			<controls :intitle="event.title">
 				<template slot="after">
-					<button :disabled="writingPoll" class="button btn primary" @click="writeVote()">
-						<span>{{ saveButtonTitle }}</span>
-						<span v-if="writingPoll" class="icon-loading-small" />
-					</button>
-				</template>
+						<button :disabled="writingPoll" class="button btn primary" @click="writeVote()">
+							<span>{{ saveButtonTitle }}</span>
+							<span v-if="writingPoll" class="icon-loading-small" />
+						</button>
+					</template>
 			</controls>
 
-			<div class="wordwrap description">
-				<h2>
-					{{ event.title }}
-					<span v-if="event.expired" class="error"> {{ t('poll', 'Expired') }} </span>
-				</h2>
+			<div v-if="poll.mode === 'vote'">
+				<h2><span v-if="event.expired" class="label error">{{ t('poll', 'Expired') }}</span>{{ event.title }}</h2>
 				<h3> {{ event.description }} </h3>
 			</div>
 
-			<div class="workbench">
-
-				<ul name="participants" class="participants">
-					<user-div :key="'currentUser_' + poll.currentUser" tag="li" :user-id="poll.currentUser" />
-					<user-div v-for="(participant) in otherParticipants" :key="participant" tag="li" :user-id="participant" />
-				</ul>
-
-				<div class="vote-table">
-					<transition-group v-if="event.type === 'datePoll'" name="voteOptions" tag="div" class="header">
-						<date-poll-vote-header v-for="(option) in voteOptions" :key="option.text" :option="option" :poll-type="event.type" />
-					</transition-group>
-
-					<transition-group v-if="event.type === 'textPoll'" name="voteOptions" tag="div" class="header">
-						<text-poll-vote-header v-for="(option) in voteOptions" :key="option.text" :option="option" :poll-type="event.type" />
-					</transition-group>
-
-					<transition-group name="votes" tag="div" class="votes">
-						<div v-for="(participant) in myVotes" :key="participant.name">
-							<vote-item v-for="vote in participant.votes" :key="vote.id" class="poll-cell" :option="vote" :poll-type="event.type" :edit="true"
-							           @voteClick="cycleVote(vote)" />
-						</div>
-						<div v-for="(participant) in otherVotes" :key="participant.name">
-							<vote-item v-for="vote in participant.votes" :key="vote.id" class="poll-cell" :option="vote" :poll-type="event.type" />
-						</div>
-					</transition-group>
-				</div>
-
+			<div v-if="poll.mode === 'edit'" class="editDescription">
+				<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
+				<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
+				<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%" confirm @change="addNewPollDate($event)"
+				/>
 			</div>
+
+			<vote-table />
+
+			<button v-if="(!currentUserParticipated && poll.mode === 'vote' && !poll.expired)"class="button btn primary" @click="addMe()">
+				<span>{{ t('polls', 'Add me') }}</span>
+				<span v-if="writingPoll" class="icon-loading-small" />
+			</button>
 
 		</div>
 
 		<app-sidebar :title="t('polls', 'Details')">
+			<template slot="primary-actions">
+					<button v-if="allowEdit" class="button btn primary" v-bind:class="{ warning: adminMode }" @click="toggleEdit()">
+						<span>{{ editButtonTitle }}</span>
+					</button>
+				</template>
 
 			<app-sidebar-tab :name="t('polls', 'Comments')" icon="icon-comment">
-				<add-comment/>
 				<comments-tab/>
 			</app-sidebar-tab>
 
@@ -89,31 +75,24 @@
 
 		</app-sidebar>
 
-		<!-- <loading-overlay v-if="loadingPoll" /> -->
 	</app-content>
 </template>
 
 <script>
 	import moment from 'moment'
-	import DatePollVoteHeader from '../components/datePoll/voteHeader'
-	import TextPollVoteHeader from '../components/textPoll/voteHeader'
 	import InformationTab from '../components/tabs/information'
 	import ConfigurationTab from '../components/tabs/configuration'
 	import CommentsTab from '../components/tabs/comments'
-	import AddComment from '../components/comments/addComment'
-	import VoteItem from '../components/base/voteItem'
-	import { mapState, mapGetters, mapActions } from 'vuex'
+	import VoteTable from '../components/voteTable'
+	import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
 	export default {
 		name: 'Vote',
 		components: {
-			AddComment,
-			DatePollVoteHeader,
-			TextPollVoteHeader,
 			InformationTab,
 			ConfigurationTab,
 			CommentsTab,
-			VoteItem,
+			VoteTable
 		},
 
 		data() {
@@ -126,31 +105,55 @@
 			...mapState({
 				poll: state => state.poll,
 				event: state => state.poll.event,
-				comments: state => state.poll.comments,
-				participants: state => state.poll.participants,
 				shares: state => state.poll.shares,
-				votes: state => state.poll.votes,
-				voteOptions: state => state.poll.voteOptions,
 			}),
 
+			eventTitle: {
+				get() {
+					return this.event.title
+				},
+				set(value) {
+					this.$store.commit('setEventProperty', { property: 'title', value: value })
+				},
+			},
+
 			...mapGetters([
-				'accessType',
+				// 'accessType',
 				'adminMode',
-				'countComments',
-				'optionsVotes',
-				'participantsVotes',
-				'otherVotes',
-				'otherParticipants',
-				'myVotes',
-				'timeSpanCreated',
-				'timeSpanExpiration',
-				'languageCode',
 				'languageCodeShort',
 				'localeCode',
+				'currentUserParticipated',
+				// 'sortedVoteOptions',
+				'timeSpanCreated',
+				'timeSpanExpiration',
 			]),
 
-			countCommentsHint: function() {
-				return n('polls', 'There is %n comment', 'There are %n comments', this.countComments)
+			optionDatePicker() {
+				return {
+					editable: false,
+					minuteStep: 1,
+					type: 'datetime',
+					format: this.dateTimeFormat,
+					lang: this.languageCodeShort,
+					placeholder: t('polls', 'Click to add a date'),
+					timePickerOptions: {
+						start: '00:00',
+						step: '00:30',
+						end: '23:30',
+					},
+				}
+			},
+
+			allowEdit() {
+				return this.event.owner === OC.currentUser || OC.isUserAdmin
+			},
+
+			editButtonTitle() {
+				if (this.poll.mode === 'vote') {
+					return t('polls', 'Edit mode')
+				} else if (this.poll.mode === 'edit') {
+					return t('poll', 'Vote mode')
+				}
 			},
 
 			title: function() {
@@ -180,20 +183,32 @@
 		},
 
 		methods: {
-			cycleVote(payload) {
-				var switchTo = 'yes'
+			...mapMutations({
+				addNewPollDate: 'addDate',
+				addNewPollText: 'addText',
+			}),
 
-				if (payload.voteAnswer === 'yes') {
-					switchTo = 'no'
-				} else if (payload.voteAnswer === 'no' && this.event.allowMaybe) {
-					switchTo = 'maybe'
+			...mapActions([
+				'addMe'
+			]),
+
+			updateDescription(e) {
+				this.$store.commit('setEventProperty', { property: 'description', value: e.target.value })
+			},
+
+			toggleEdit() {
+				if (this.poll.mode === 'vote') {
+					this.$store.commit('setPollProperty', { property: 'mode', value: 'edit' })
+				} else if (this.poll.mode === 'edit') {
+					this.$store.commit('setPollProperty', { property: 'mode', value: 'vote' })
 				}
-				this.$store.commit('changeVote', {payload, switchTo})
 			},
 
 			writeVote() {
-				if (this.poll.currentUser.length < 4 ) {
-					OC.Notification.showTemporary(t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).'))
+				if (this.poll.currentUser.length < 4) {
+					OC.Notification.showTemporary(
+						t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).')
+					)
 				} else {
 					this.writingVote = true
 					this.$store
@@ -206,73 +221,36 @@
 							this.writingVote = false
 							/* eslint-disable-next-line no-console */
 							console.log('Error while saving vote - Error: ', error.response)
-							OC.Notification.showTemporary(t('polls', 'Error while saving vote',  { type: 'error' }))
+							OC.Notification.showTemporary(t('polls', 'Error while saving vote', { type: 'error' }))
 						})
 				}
-			}
-
+			},
 		},
 	}
 </script>
 
 <style lang="scss" scoped>
+
 	.main-container {
 		display: flex;
 		flex-direction: column;
 		flex: 1;
 		flex-wrap: nowrap;
 		overflow-x: hidden;
-		// margin-top: 45px;
 		padding: 8px;
 
-		.workbench {
+		.editDescription {
+			min-width: 245px;
+			max-width: 540px;
 			display: flex;
-			flex-direction: row;
-			flex-grow: 0;
-			overflow-x: auto;
-			padding-bottom: 10px;
-			// min-height: 280px;
-
-			.participants {
-				display: flex;
-				flex-direction: column;
-				flex: 1 0;
-				margin-top: 149px;
-				border-top: 1px solid var(--color-border-dark);
-				& > div {
-					display: flex;
-					flex-direction: row;
-					flex-grow: 1;
-					border-bottom: 1px solid var(--color-border-dark);
-					height: 44px;
-					padding: 0 17px;
-					order: 2;
-				}
-			}
-			.vote-table {
-				display: flex;
-				flex: 5;
-				flex-direction: column;
-				justify-content: flex-start;
-
-				.header {
-					display: flex;
-					flex-direction: row;
-					height: 150px;
-					align-items: center;
-					border-bottom: 1px solid var(--color-border-dark);
-					& > div {
-						flex: 1;
-					}
-				}
-				.votes {
-					& > div {
-						display: flex;
-						flex-direction: row;
-						border-bottom: 1px solid var(--color-border-dark);
-					}
-				}
+			flex-direction: column;
+			flex: 0;
+			padding: 8px;
+			& > * {
+				width: auto;
+				flex: 1 1 auto;
 			}
 		}
 	}
+
 </style>

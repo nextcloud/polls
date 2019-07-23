@@ -69,7 +69,8 @@
 				{{ t('polls', 'Expires') }}
 			</label>
 
-			<DatePicker v-show="event.expiration" v-model="eventExpirationDate" v-bind="expirationDatePicker" :disabled="protect" :time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" style="width:170px" />
+			<date-picker v-show="event.expiration" v-model="eventExpirationDate" v-bind="expirationDatePicker" :disabled="protect" :time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" style="width:170px" />
+
 		</div>
 
 		<div class="configBox">
@@ -99,15 +100,25 @@
 				<span>{{ t('polls', 'Only shared') }}</span>
 			</label>
 		</div>
+
+		<div class="configBox">
+			<shift-dates v-if="!protect && event.type === 'datePoll'" />
+		</div>
 	</div>
 
 </template>
 
 <script>
+import ShiftDates from '../shiftDates'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
 	name: 'ConfigurationTab',
+
+	components: {
+		ShiftDates
+	},
+
 	data() {
 		return {
 			// protect: false,

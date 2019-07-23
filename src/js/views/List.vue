@@ -157,7 +157,7 @@
 		// margin-top: 45px;
 		display: flex;
 		flex-direction: column;
-		flex-grow: 1;
+		flex: 1;
 		flex-wrap: nowrap;
 	}
 

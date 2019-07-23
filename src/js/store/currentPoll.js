@@ -83,6 +83,22 @@ const mutations = {
 		})
 	},
 
+	addParticipant(state, payload) {
+			var fakeVoteId=6541315463
+			state.participants.push(payload.userId)
+			state.voteOptions.forEach(function(option) {
+				state.votes.push({
+					id: ++fakeVoteId,
+					pollId: state.event.id,
+					userId: payload.userId,
+					voteAnswer: 'unvoted',
+					voteOptionText: option.text,
+					voteOptionId: option.id
+				}
+			)
+		})
+	},
+
 	addText(state, payload) {
 		state.voteOptions.push({
 			id: 0,
@@ -126,12 +142,14 @@ const getters = {
 		return Math.max.apply(Math, state.votes.map(function(o) { return o.id }))
 	},
 
-	timeSpanCreated(state) {
-		return moment(state.event.created).fromNow()
+	currentUserParticipated(state) {
+		return (state.votes.filter(function(vote) {
+			return vote.userId === state.currentUser
+		}).length > 0)
 	},
 
-	sortedDates(state) {
-		return sortBy(state.voteOptions, 'timestamp')
+	timeSpanCreated(state) {
+		return moment(state.event.created).fromNow()
 	},
 
 	sortedComments(state) {
@@ -144,22 +162,6 @@ const getters = {
 		} else {
 			return t('polls', 'never')
 		}
-	},
-
-	optionsVotes() {
-		var votesList = []
-
-		state.voteOptions.forEach(function(option) {
-			votesList.push(
-				{
-					option: option.id,
-					votes: state.votes.filter(obj => {
-						return obj.voteOptionText === option.text
-					})
-				}
-			)
-		})
-		return votesList
 	},
 
 	countParticipants(state) {
@@ -188,23 +190,21 @@ const getters = {
 		}
 	},
 
-	participantsVotes(state) {
+	allVotes(state) {
 		var votesList = []
-		var templist = []
 		var foundVote = []
 		var fakeVoteId = 78946456
 
 		state.participants.forEach(function(participant) {
-			templist = []
 			state.voteOptions.forEach(function(voteOption) {
-				foundVote = state.votes.filter(obj => {
-					return obj.userId === participant && obj.voteOptionText === voteOption.text
+				foundVote = state.votes.filter(vote => {
+					return vote.userId === participant && vote.voteOptionText === voteOption.text
 				})
 
 				if (foundVote.length > 0) {
-					templist.push(foundVote[0])
+					votesList.push(foundVote[0])
 				} else {
-					templist.push({
+					votesList.push({
 						id: ++fakeVoteId,
 						userId: participant,
 						voteAnswer: 'unvoted',
@@ -213,28 +213,27 @@ const getters = {
 					})
 				}
 			})
-
-			votesList.push({
-				name: participant,
-				votes: templist
-			})
-
 		})
-
-		return votesList
+		if (state.event.type === 'datePoll') {
+			return sortBy(votesList, 'voteOptionText')
+		} else {
+			return votesList
+		}
 	},
 
-	myVotes(state, getters) {
-		return getters.participantsVotes.filter(vote => vote.name === state.currentUser)
+	usersVotes: (state, getters) => (userId) => {
+		return getters.allVotes.filter(vote => {
+			return vote.userId === userId
+		})
 	},
 
-	otherVotes(state, getters) {
-		return getters.participantsVotes.filter(vote => vote.name !== state.currentUser)
+	sortedVoteOptions(state) {
+		if (state.event.type === 'datePoll') {
+			return sortBy(state.voteOptions, 'timestamp')
+		} else {
+			return state.voteOptions
+		}
 	},
-
-	otherParticipants(state) {
-		return state.participants.filter(participant => participant !== state.currentUser)
-	}
 
 }
 
@@ -251,8 +250,14 @@ const actions = {
 	// 	this.shares.splice(this.shares.indexOf(item), 1)
 	},
 
+	addMe({commit}) {
+		if (!getters.currentUserParticipated && !state.event.expired) {
+			commit('addParticipant', {'userId': state.currentUser})
+		}
+	},
+
 	loadComments({ commit }) {
-		axios.get(OC.generateUrl('apps/polls/get/comments/' + this.state.poll.id))
+		axios.get(OC.generateUrl('apps/polls/get/comments/' + state.id))
 		.then((response) => {
 			commit('setPollProperty', {'property': 'comments', 'value': response.data})
 		}, (error) => {
@@ -295,10 +300,8 @@ const actions = {
 
 	writeCommentPromise({ commit }, payload) {
 		if (state.currentUser !== '') {
-			console.log({ pollId: state.event.id, currentUser: state.currentUser, commentContent: payload })
 			return axios.post(OC.generateUrl('apps/polls/write/comment'), { pollId: state.event.id, currentUser: state.currentUser, commentContent: payload })
 				.then((response) => {
-					console.log(state.votes)
 				}, (error) => {
 					/* eslint-disable-next-line no-console */
 					console.log(error.response)
@@ -308,8 +311,13 @@ const actions = {
 
 	writeVotePromise({ commit }) {
 		if (state.mode === 'vote' && state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/write/vote'), { pollId: state.event.id, votes: state.votes, mode: state.mode, currentUser: state.currentUser })
+			var usersVotes = state.votes.filter(vote => {
+				return vote.userId === state.currentUser
+			})
+
+			return axios.post(OC.generateUrl('apps/polls/write/vote'), { pollId: state.event.id, votes: usersVotes, mode: state.mode, currentUser: state.currentUser })
 				.then((response) => {
+
 				}, (error) => {
 					/* eslint-disable-next-line no-console */
 					console.log(error.response)
@@ -319,7 +327,6 @@ const actions = {
 
 	writePollPromise({ commit }) {
 		if (state.mode !== 'vote') {
-			console.log('state.mode != vote')
 
 			return axios.post(OC.generateUrl('apps/polls/write/poll'), { event: state.event, voteOptions: state.voteOptions, shares: state.shares, mode: state.mode })
 				.then((response) => {

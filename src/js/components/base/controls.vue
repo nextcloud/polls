@@ -87,17 +87,9 @@ export default {
 	}
 
     .breadcrumb {
-		flex-grow: 1;
+		flex: 1;
         overflow: hidden;
         min-width: 35px;
-        // div.crumb:last-child {
-        //     flex-shrink: 1;
-        //     overflow: hidden;
-        //     > span {
-        //         flex-shrink: 1;
-        //         text-overflow: ellipsis;
-        //     }
-        // }
     }
 }
 </style>
