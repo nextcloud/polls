@@ -26,11 +26,15 @@
 			<label class="title icon-checkmark">
 				{{ t('polls', 'Poll type') }}
 			</label>
-			<input id="datePoll" v-model="eventType" value="datePoll" :disabled="protect" type="radio" class="radio" >
+			<input id="datePoll" v-model="eventType" value="datePoll"
+				:disabled="protect" type="radio" class="radio"
+			>
 			<label for="datePoll">
 				{{ t('polls', 'Event schedule') }}
 			</label>
-			<input id="textPoll" v-model="eventType" value="textPoll" :disabled="protect" type="radio" class="radio" >
+			<input id="textPoll" v-model="eventType" value="textPoll"
+				:disabled="protect" type="radio" class="radio"
+			>
 			<label for="textPoll">
 				{{ t('polls', 'Text based') }}
 			</label>
@@ -69,8 +73,9 @@
 				{{ t('polls', 'Expires') }}
 			</label>
 
-			<date-picker v-show="event.expiration" v-model="eventExpirationDate" v-bind="expirationDatePicker" :disabled="protect" :time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" style="width:170px" />
-
+			<date-picker v-show="event.expiration" v-model="eventExpirationDate" v-bind="expirationDatePicker"
+				:disabled="protect" :time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }" style="width:170px"
+			/>
 		</div>
 
 		<div class="configBox">
@@ -84,17 +89,23 @@
 				<div class="title icon-group" />
 				<span>{{ t('polls', 'Registered users only') }}</span>
 			</label>
-			<input id="hidden" v-model="eventAccess" :disabled="protect" type="radio" value="hidden" class="radio" >
+			<input id="hidden" v-model="eventAccess" :disabled="protect"
+				type="radio" value="hidden" class="radio"
+			>
 			<label for="hidden" class="title">
 				<div class="title icon-category-security" />
 				<span>{{ t('polls', 'hidden') }}</span>
 			</label>
-			<input id="public" v-model="eventAccess" :disabled="protect" type="radio" value="public" class="radio" >
+			<input id="public" v-model="eventAccess" :disabled="protect"
+				type="radio" value="public" class="radio"
+			>
 			<label for="public" class="title">
 				<div class="title icon-link" />
 				<span>{{ t('polls', 'Public access') }}</span>
 			</label>
-			<input id="select" v-model="eventAccess" :disabled="protect" type="radio" value="select" class="radio" >
+			<input id="select" v-model="eventAccess" :disabled="protect"
+				type="radio" value="select" class="radio"
+			>
 			<label for="select" class="title">
 				<div class="title icon-shared" />
 				<span>{{ t('polls', 'Only shared') }}</span>
@@ -105,7 +116,6 @@
 			<shift-dates v-if="!protect && event.type === 'datePoll'" />
 		</div>
 	</div>
-
 </template>
 
 <script>
@@ -234,9 +244,8 @@ export default {
 	methods: {
 		...mapMutations([
 			'setEventProperty',
-			'setPollProperty',
-		]),
-
+			'setPollProperty'
+		])
 
 	}
 }

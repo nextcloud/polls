@@ -1,26 +1,34 @@
+/*
+ * @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+ *
+ * @author René Gieling <github@dartcafe.de>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 /* jshint esversion: 6 */
-// we need our modal component
 import ModalDialog from './modalDialog.vue'
 
 const Modal = {
-	// every plugin for Vue.js needs install method
-	// this method will run after Vue.use(<your-plugin-here>) is executed
 	install(Vue, options) {
-		// We must create new Eventbus
-		// which is just another Vue instance that will be listening for and emiting events from our main instance
-		// this EventBus will be available as Modal.EventBus
 		this.EventBus = new Vue()
-
-		// making our modal component global
 		Vue.component('modal-dialog', ModalDialog)
-
-		// exposing global $modal object with method show()
-		// method show() takes object params as argument
-		// inside this object we can have modal title, text, styles... and also our callback confirm function
 		Vue.prototype.$modal = {
 			show(params) {
-				// if we use this.$modal.show(params) inside our original Vue instance
-				// we will emit 'show' event with parameters 'params'
 				Modal.EventBus.$emit('show', params)
 			}
 		}

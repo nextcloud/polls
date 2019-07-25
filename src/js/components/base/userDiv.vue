@@ -22,11 +22,11 @@
 
 /* global Vue, oc_userconfig */
 <template>
-	<div :class="type" class="user-row" :class="{fixedWidth: fixedWidth}">
+	<div class="user-row" :class="[{fixedWidth: fixedWidth}, type]">
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<Avatar :user="userId"  :display-name="computedDisplayName" :is-no-user="isNoUser" />
+		<Avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
 		<div v-if="!hideNames" class="user-name">
 			{{ computedDisplayName }}
 		</div>

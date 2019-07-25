@@ -23,7 +23,6 @@
 <template>
 	<app-content>
 		<div class="main-container">
-
 			<controls :intitle="event.title" />
 
 			<div class="workbench">
@@ -31,7 +30,9 @@
 					<h2>{{ t('polls', 'Poll description') }}</h2>
 
 					<label>{{ t('polls', 'Title') }}</label>
-					<input id="pollTitle" v-model="eventTitle" :class="{ error: titleEmpty }" type="text" >
+					<input id="pollTitle" v-model="eventTitle" :class="{ error: titleEmpty }"
+						type="text"
+					>
 
 					<label>{{ t('polls', 'Description') }}</label>
 					<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
@@ -40,19 +41,29 @@
 				<div>
 					<h2>{{ t('polls', 'Vote options') }}</h2>
 
-					<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%" confirm @change="addNewPollDate($event)" />
+					<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%"
+						confirm @change="addNewPollDate($event)"
+					/>
 					<shift-dates />
 
-					<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list" tag="ul" class="poll-table" >
-						<date-poll-item v-for="(option, index) in sortedVoteOptions" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
+					<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list"
+						tag="ul" class="poll-table"
+					>
+						<date-poll-item v-for="(option, index) in sortedVoteOptions" :key="option.id" :option="option"
+							@remove="voteOptions.splice(index, 1)"
+						/>
 					</transitionGroup>
 
 					<div v-show="event.type === 'textPoll'" id="poll-item-selector-text">
-						<input v-model="newPollText" :placeholder=" t('polls', 'Add option') " @keyup.enter="addNewPollText(newPollText)" >
+						<input v-model="newPollText" :placeholder=" t('polls', 'Add option') " @keyup.enter="addNewPollText(newPollText)">
 					</div>
 
-					<transitionGroup v-show="event.type === 'textPoll'" id="text-poll-list" name="list" tag="ul" class="poll-table" >
-						<text-poll-item v-for="(option, index) in voteOptions" :key="option.id" :option="option" @remove="voteOptions.splice(index, 1)" />
+					<transitionGroup v-show="event.type === 'textPoll'" id="text-poll-list" name="list"
+						tag="ul" class="poll-table"
+					>
+						<text-poll-item v-for="(option, index) in voteOptions" :key="option.id" :option="option"
+							@remove="voteOptions.splice(index, 1)"
+						/>
 					</transitionGroup>
 				</div>
 			</div>
@@ -60,28 +71,29 @@
 
 		<app-sidebar :title="t('polls', 'Settings')">
 			<template slot="primary-actions">
-				<button :disabled="writingPoll" class="button btn primary" v-bind:class="{ warning: adminMode }" @click="writePoll()">
+				<button :disabled="writingPoll" class="button btn primary" :class="{ warning: adminMode }"
+					@click="writePoll()"
+				>
 					<span>{{ saveButtonTitle }}</span>
 					<span v-if="writingPoll" class="icon-loading-small" />
 				</button>
 			</template>
 
 			<app-sidebar-tab :name="t('polls', 'Configuration')" icon="icon-settings">
-				<configuration-tab/>
+				<configuration-tab />
 			</app-sidebar-tab>
 
 			<app-sidebar-tab :name="t('polls', 'Information')" icon="icon-info">
-				<information-tab/>
+				<information-tab />
 			</app-sidebar-tab>
 
 			<app-sidebar-tab :name="t('polls', 'Comments')" icon="icon-comment">
-				<comments-tab/>
+				<comments-tab />
 			</app-sidebar-tab>
 
 			<app-sidebar-tab :name="t('polls', 'Invitations')" icon="icon-share">
 				<div />
 			</app-sidebar-tab>
-
 		</app-sidebar>
 		<loading-overlay v-if="loading" />
 	</app-content>
@@ -162,7 +174,6 @@ export default {
 			'localeCode'
 		]),
 
-
 		// Local computed
 		voteUrl() {
 			return OC.generateUrl('apps/polls/poll/') + this.event.hash
@@ -180,7 +191,6 @@ export default {
 
 			}
 		},
-
 
 		saveButtonTitle() {
 			if (this.writingPoll) {
@@ -276,7 +286,6 @@ export default {
 		updateDescription(e) {
 			this.$store.commit('setEventProperty', { 'property': 'description', 'value': e.target.value })
 		},
-
 
 		switchSidebar() {
 			this.sidebar = !this.sidebar

@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<add-comment/>
+		<add-comment />
 		<ul v-if="countComments">
 			<li v-for="(comment) in sortedComments" :key="comment.id">
 				<div class="comment-item">
@@ -32,45 +32,44 @@
 					</div>
 				</div>
 				<div class="message wordwrap comment-content">
-					{{ comment.comment}}
+					{{ comment.comment }}
 				</div>
 			</li>
-
 		</ul>
 		<div v-else class="emptycontent">
-			<div class="icon-comment"></div>
+			<div class="icon-comment" />
 			<p> {{ t('polls', 'No comments yet. Be the first.') }}</p>
 		</div>
 	</div>
 </template>
 
 <script>
-	import moment from 'moment'
-	import AddComment from '../comments/addComment'
-	import { mapState, mapGetters } from 'vuex'
+import moment from 'moment'
+import AddComment from '../comments/addComment'
+import { mapState, mapGetters } from 'vuex'
 
-	export default {
-		name: 'CommentsTab',
-		components: {
-			AddComment,
-		},
-		
-		computed: {
-			...mapState({
-				comments: state => state.poll.comments,
-			}),
-			...mapGetters([
-				'countComments',
-				'sortedComments'
-			])
-		},
+export default {
+	name: 'CommentsTab',
+	components: {
+		AddComment
+	},
 
-		methods: {
-			realtiveDate(date) {
-				return t('core', moment.utc(date).fromNow())
-			},
-		},
+	computed: {
+		...mapState({
+			comments: state => state.poll.comments
+		}),
+		...mapGetters([
+			'countComments',
+			'sortedComments'
+		])
+	},
+
+	methods: {
+		realtiveDate(date) {
+			return t('core', moment.utc(date).fromNow())
+		}
 	}
+}
 </script>
 
 <style scoped lang="scss">

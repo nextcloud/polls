@@ -22,15 +22,14 @@
 
 <template>
 	<app-content>
-
 		<div class="main-container">
 			<controls :intitle="event.title">
 				<template slot="after">
-						<button :disabled="writingPoll" class="button btn primary" @click="writeVote()">
-							<span>{{ saveButtonTitle }}</span>
-							<span v-if="writingPoll" class="icon-loading-small" />
-						</button>
-					</template>
+					<button :disabled="writingPoll" class="button btn primary" @click="writeVote()">
+						<span>{{ saveButtonTitle }}</span>
+						<span v-if="writingPoll" class="icon-loading-small" />
+					</button>
+				</template>
 			</controls>
 
 			<div v-if="poll.mode === 'vote'">
@@ -41,192 +40,200 @@
 			<div v-if="poll.mode === 'edit'" class="editDescription">
 				<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
 				<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
-				<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%" confirm @change="addNewPollDate($event)"
+				<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%"
+					confirm @change="addNewPollDate($event)"
 				/>
 			</div>
 
 			<vote-table />
-
-			<button v-if="(!currentUserParticipated && poll.mode === 'vote' && !poll.expired)"class="button btn primary" @click="addMe()">
+			<notification />
+			<button v-if="(!currentUserParticipated && poll.mode === 'vote' && !poll.expired)" class="button btn primary" @click="addMe()">
 				<span>{{ t('polls', 'Add me') }}</span>
 				<span v-if="writingPoll" class="icon-loading-small" />
 			</button>
-
 		</div>
 
 		<app-sidebar :title="t('polls', 'Details')">
 			<template slot="primary-actions">
-					<button v-if="allowEdit" class="button btn primary" v-bind:class="{ warning: adminMode }" @click="toggleEdit()">
-						<span>{{ editButtonTitle }}</span>
-					</button>
-				</template>
+				<button v-if="allowEdit" class="button btn primary" :class="{ warning: adminMode }"
+					@click="toggleEdit()"
+				>
+					<span>{{ editButtonTitle }}</span>
+				</button>
+			</template>
 
 			<app-sidebar-tab :name="t('polls', 'Comments')" icon="icon-comment">
-				<comments-tab/>
+				<comments-tab />
 			</app-sidebar-tab>
 
 			<app-sidebar-tab :name="t('polls', 'Information')" icon="icon-info">
-				<information-tab/>
+				<information-tab />
 			</app-sidebar-tab>
 
 			<app-sidebar-tab :name="t('polls', 'Configuration')" icon="icon-settings">
-				<configuration-tab/>
+				<configuration-tab />
 			</app-sidebar-tab>
-
 		</app-sidebar>
-
 	</app-content>
 </template>
 
 <script>
-	import moment from 'moment'
-	import InformationTab from '../components/tabs/information'
-	import ConfigurationTab from '../components/tabs/configuration'
-	import CommentsTab from '../components/tabs/comments'
-	import VoteTable from '../components/voteTable'
-	import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import moment from 'moment'
+import Notification from '../components/base/notification'
+import InformationTab from '../components/tabs/information'
+import ConfigurationTab from '../components/tabs/configuration'
+import CommentsTab from '../components/tabs/comments'
+import VoteTable from '../components/voteTable'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
-	export default {
-		name: 'Vote',
-		components: {
-			InformationTab,
-			ConfigurationTab,
-			CommentsTab,
-			VoteTable
+export default {
+	name: 'Vote',
+	components: {
+		Notification,
+		InformationTab,
+		ConfigurationTab,
+		CommentsTab,
+		VoteTable
+	},
+
+	data() {
+		return {
+			writingPoll: false
+		}
+	},
+
+	computed: {
+		...mapState({
+			poll: state => state.poll,
+			event: state => state.poll.event,
+			shares: state => state.poll.shares
+		}),
+
+		loggedIn() {
+			return (OC.currentUser !== '')
 		},
 
-		data() {
-			return {
-				writingPoll: false,
+		eventTitle: {
+			get() {
+				return this.event.title
+			},
+			set(value) {
+				this.$store.commit('setEventProperty', { property: 'title', value: value })
 			}
 		},
 
-		computed: {
-			...mapState({
-				poll: state => state.poll,
-				event: state => state.poll.event,
-				shares: state => state.poll.shares,
-			}),
+		...mapGetters([
+			// 'accessType',
+			'adminMode',
+			'languageCodeShort',
+			'localeCode',
+			'currentUserParticipated',
+			// 'sortedVoteOptions',
+			'timeSpanCreated',
+			'timeSpanExpiration'
+		]),
 
-			eventTitle: {
-				get() {
-					return this.event.title
-				},
-				set(value) {
-					this.$store.commit('setEventProperty', { property: 'title', value: value })
-				},
-			},
-
-			...mapGetters([
-				// 'accessType',
-				'adminMode',
-				'languageCodeShort',
-				'localeCode',
-				'currentUserParticipated',
-				// 'sortedVoteOptions',
-				'timeSpanCreated',
-				'timeSpanExpiration',
-			]),
-
-			optionDatePicker() {
-				return {
-					editable: false,
-					minuteStep: 1,
-					type: 'datetime',
-					format: this.dateTimeFormat,
-					lang: this.languageCodeShort,
-					placeholder: t('polls', 'Click to add a date'),
-					timePickerOptions: {
-						start: '00:00',
-						step: '00:30',
-						end: '23:30',
-					},
+		optionDatePicker() {
+			return {
+				editable: false,
+				minuteStep: 1,
+				type: 'datetime',
+				format: this.dateTimeFormat,
+				lang: this.languageCodeShort,
+				placeholder: t('polls', 'Click to add a date'),
+				timePickerOptions: {
+					start: '00:00',
+					step: '00:30',
+					end: '23:30'
 				}
-			},
-
-			allowEdit() {
-				return this.event.owner === OC.currentUser || OC.isUserAdmin
-			},
-
-			editButtonTitle() {
-				if (this.poll.mode === 'vote') {
-					return t('polls', 'Edit mode')
-				} else if (this.poll.mode === 'edit') {
-					return t('poll', 'Vote mode')
-				}
-			},
-
-			title: function() {
-				return t('polls', 'Polls') + ' - ' + this.event.title
-			},
-
-			saveButtonTitle: function() {
-				if (this.writingPoll) {
-					return t('polls', 'Writing poll')
-				} else if (this.poll.mode === 'edit') {
-					return t('polls', 'Update poll')
-				} else if (this.poll.mode === 'vote') {
-					return t('polls', 'Vote!')
-				} else {
-					return t('polls', 'Create new poll')
-				}
-			},
+			}
 		},
 
-		created() {
-			moment.locale(this.localeString)
-			this.$store.dispatch({
-				type: 'loadPoll',
-				hash: this.$route.params.hash,
-				mode: 'vote',
-			})
+		allowEdit() {
+			return this.event.owner === OC.currentUser || OC.isUserAdmin
 		},
 
-		methods: {
-			...mapMutations({
-				addNewPollDate: 'addDate',
-				addNewPollText: 'addText',
-			}),
-
-			...mapActions([
-				'addMe'
-			]),
-
-			updateDescription(e) {
-				this.$store.commit('setEventProperty', { property: 'description', value: e.target.value })
-			},
-
-			toggleEdit() {
-				if (this.poll.mode === 'vote') {
-					this.$store.commit('setPollProperty', { property: 'mode', value: 'edit' })
-				} else if (this.poll.mode === 'edit') {
-					this.$store.commit('setPollProperty', { property: 'mode', value: 'vote' })
-				}
-			},
-
-			writeVote() {
-				if (this.poll.currentUser.length < 4) {
-					OC.Notification.showTemporary(
-						t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).')
-					)
-				} else {
-					this.writingVote = true
-					this.$store
-						.dispatch('writeVotePromise')
-						.then(response => {
-							this.writingVote = false
-							OC.Notification.showTemporary(t('polls', 'Vote successfully saved', 1, this.event.title))
-						})
-						.catch(error => {
-							this.writingVote = false
-							/* eslint-disable-next-line no-console */
-							console.log('Error while saving vote - Error: ', error.response)
-							OC.Notification.showTemporary(t('polls', 'Error while saving vote', { type: 'error' }))
-						})
-				}
-			},
+		editButtonTitle() {
+			if (this.poll.mode === 'vote') {
+				return t('polls', 'Edit mode')
+			} else if (this.poll.mode === 'edit') {
+				return t('poll', 'Vote mode')
+			} else {
+				return 'Oops'
+			}
 		},
+
+		title: function() {
+			return t('polls', 'Polls') + ' - ' + this.event.title
+		},
+
+		saveButtonTitle: function() {
+			if (this.writingPoll) {
+				return t('polls', 'Writing poll')
+			} else if (this.poll.mode === 'edit') {
+				return t('polls', 'Update poll')
+			} else if (this.poll.mode === 'vote') {
+				return t('polls', 'Vote!')
+			} else {
+				return t('polls', 'Create new poll')
+			}
+		}
+	},
+
+	created() {
+		moment.locale(this.localeString)
+		this.$store.dispatch({
+			type: 'loadPoll',
+			hash: this.$route.params.hash,
+			mode: 'vote'
+		})
+	},
+
+	methods: {
+		...mapMutations({
+			addNewPollDate: 'addDate',
+			addNewPollText: 'addText'
+		}),
+
+		...mapActions([
+			'addMe'
+		]),
+
+		updateDescription(e) {
+			this.$store.commit('setEventProperty', { property: 'description', value: e.target.value })
+		},
+
+		toggleEdit() {
+			if (this.poll.mode === 'vote') {
+				this.$store.commit('setPollProperty', { property: 'mode', value: 'edit' })
+			} else if (this.poll.mode === 'edit') {
+				this.$store.commit('setPollProperty', { property: 'mode', value: 'vote' })
+			}
+		},
+
+		writeVote() {
+			if (this.poll.currentUser.length < 4) {
+				OC.Notification.showTemporary(
+					t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).')
+				)
+			} else {
+				this.writingVote = true
+				this.$store
+					.dispatch('writeVotePromise')
+					.then(response => {
+						this.writingVote = false
+						OC.Notification.showTemporary(t('polls', 'Vote successfully saved', 1, this.event.title))
+					})
+					.catch(error => {
+						this.writingVote = false
+						/* eslint-disable-next-line no-console */
+						console.log('Error while saving vote - Error: ', error.response)
+						OC.Notification.showTemporary(t('polls', 'Error while saving vote', { type: 'error' }))
+					})
+			}
+		}
 	}
+}
 </script>
 
 <style lang="scss" scoped>

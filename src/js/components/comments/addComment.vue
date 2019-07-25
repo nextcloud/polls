@@ -24,50 +24,52 @@
 	<div class="newCommentRow comment new-comment">
 		<user-div :user-id="currentUser" />
 
-		<form class="addComment" name="send_comment" action="/index.php/apps/polls/insert/comment" method="POST">
-			<input v-model="comment" class="message" data-placeholder="New Comment ..." />
+		<form class="addComment" name="send_comment" action="/index.php/apps/polls/insert/comment"
+			method="POST"
+		>
+			<input v-model="comment" class="message" data-placeholder="New Comment ...">
 			<input v-show="!loading" class="submitComment icon-confirm" @click="writeComment">
-			<span v-show="loading" class="icon-loading-small" style="float:right;"></span>
+			<span v-show="loading" class="icon-loading-small" style="float:right;" />
 		</form>
 	</div>
 </template>
 
 <script>
-	export default {
-		name: 'AddComment',
-		data() {
-			return {
-				comment: '',
-				loading: false,
-			}
-		},
+export default {
+	name: 'AddComment',
+	data() {
+		return {
+			comment: '',
+			loading: false
+		}
+	},
 
-		computed: {
-			currentUser() {
-				return this.$store.state.poll.currentUser
-			},
-		},
+	computed: {
+		currentUser() {
+			return this.$store.state.poll.currentUser
+		}
+	},
 
-		methods: {
-			writeComment() {
-				this.loading = true
-				this.$store
-					.dispatch('writeCommentPromise', this.comment)
-					.then(response => {
-						this.$store.dispatch('loadComments')
-						this.loading = false
-					})
-					.catch(error => {
-						this.writingVote = false
-						/* eslint-disable-next-line no-console */
-						console.log('Error while saving comment - Error: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error while saving comment', { type: 'error' }))
-					})
+	methods: {
+		writeComment() {
+			this.loading = true
+			this.$store
+				.dispatch('writeCommentPromise', this.comment)
+				.then(response => {
+					this.$store.dispatch('loadComments')
+					this.loading = false
+				})
+				.catch(error => {
+					this.writingVote = false
+					/* eslint-disable-next-line no-console */
+					console.log('Error while saving comment - Error: ', error.response)
+					OC.Notification.showTemporary(t('polls', 'Error while saving comment', { type: 'error' }))
+				})
 
-				this.loading = false
-			},
+			this.loading = false
 		}
 	}
+}
 </script>
 
 <style lang="scss" scoped>

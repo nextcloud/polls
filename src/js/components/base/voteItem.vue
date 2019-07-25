@@ -21,48 +21,50 @@
   -->
 
 <template>
-	<li v-if="edit" class="poll-cell active" :class="iconClass" @click="changeVote(option)" />
+	<li v-if="edit" class="poll-cell active" :class="iconClass"
+		@click="changeVote(option)"
+	/>
 	<li v-else class="poll-cell" :class="iconClass" />
 </template>
 
 <script>
-	export default {
-		name: 'VoteItem',
+export default {
+	name: 'VoteItem',
 
-		props: {
-			option: {
-				type: Object,
-				default: undefined,
-			},
-			pollType: {
-				type: String,
-				default: undefined,
-			},
-			edit: {
-				type: Boolean,
-				default: false,
-			},
+	props: {
+		option: {
+			type: Object,
+			default: undefined
 		},
+		pollType: {
+			type: String,
+			default: undefined
+		},
+		edit: {
+			type: Boolean,
+			default: false
+		}
+	},
 
-		computed: {
-			iconClass() {
-				if (this.option.voteAnswer === 'yes') {
-					return 'yes icon-yes '
-				} else if (this.option.voteAnswer === 'maybe') {
-					return 'maybe icon-maybe '
-				} else if (this.option.voteAnswer === 'no') {
-					return 'no icon-no '
-				} else {
-					return ''
-				}
-			},
-		},
-		methods: {
-			changeVote(payload) {
-				this.$emit('voteClick')
-			},
-		},
+	computed: {
+		iconClass() {
+			if (this.option.voteAnswer === 'yes') {
+				return 'yes icon-yes '
+			} else if (this.option.voteAnswer === 'maybe') {
+				return 'maybe icon-maybe '
+			} else if (this.option.voteAnswer === 'no') {
+				return 'no icon-no '
+			} else {
+				return ''
+			}
+		}
+	},
+	methods: {
+		changeVote(payload) {
+			this.$emit('voteClick')
+		}
 	}
+}
 </script>
 
 <style lang="scss">

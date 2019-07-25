@@ -84,17 +84,17 @@ const mutations = {
 	},
 
 	addParticipant(state, payload) {
-			var fakeVoteId=6541315463
-			state.participants.push(payload.userId)
-			state.voteOptions.forEach(function(option) {
-				state.votes.push({
-					id: ++fakeVoteId,
-					pollId: state.event.id,
-					userId: payload.userId,
-					voteAnswer: 'unvoted',
-					voteOptionText: option.text,
-					voteOptionId: option.id
-				}
+		var fakeVoteId = 6541315463
+		state.participants.push(payload.userId)
+		state.voteOptions.forEach(function(option) {
+			state.votes.push({
+				id: ++fakeVoteId,
+				pollId: state.event.id,
+				userId: payload.userId,
+				voteAnswer: 'unvoted',
+				voteOptionText: option.text,
+				voteOptionId: option.id
+			}
 			)
 		})
 	},
@@ -124,7 +124,7 @@ const mutations = {
 
 	// TODO: Find a better solution than this
 	changeVote(state, payload) {
-		state.votes.forEach(function(vote){
+		state.votes.forEach(function(vote) {
 			if (vote.id === payload.payload.id && vote.userId === payload.payload.userId && vote.voteOptionText === payload.payload.voteOptionText) {
 				vote.voteAnswer = payload.switchTo
 				vote.voteOptionId = payload.payload.id
@@ -233,7 +233,7 @@ const getters = {
 		} else {
 			return state.voteOptions
 		}
-	},
+	}
 
 }
 
@@ -250,20 +250,20 @@ const actions = {
 	// 	this.shares.splice(this.shares.indexOf(item), 1)
 	},
 
-	addMe({commit}) {
+	addMe({ commit }) {
 		if (!getters.currentUserParticipated && !state.event.expired) {
-			commit('addParticipant', {'userId': state.currentUser})
+			commit('addParticipant', { 'userId': state.currentUser })
 		}
 	},
 
 	loadComments({ commit }) {
 		axios.get(OC.generateUrl('apps/polls/get/comments/' + state.id))
-		.then((response) => {
-			commit('setPollProperty', {'property': 'comments', 'value': response.data})
-		}, (error) => {
-		/* eslint-disable-next-line no-console */
-			console.log(error)
-		})
+			.then((response) => {
+				commit('setPollProperty', { 'property': 'comments', 'value': response.data })
+			}, (error) => {
+				/* eslint-disable-next-line no-console */
+				console.log(error)
+			})
 	},
 
 	loadPoll({ commit }, payload) {
@@ -273,7 +273,7 @@ const actions = {
 			axios.get(OC.generateUrl('apps/polls/get/poll/' + payload.hash))
 				.then((response) => {
 					commit('setPoll', { 'poll': response.data })
-					commit('setPollProperty', {'property': 'currentUser', 'value': OC.getCurrentUser().uid})
+					commit('setPollProperty', { 'property': 'currentUser', 'value': OC.getCurrentUser().uid })
 					switch (payload.mode) {
 					case 'edit':
 						commit('setPollProperty', { 'property': 'mode', 'value': payload.mode })
