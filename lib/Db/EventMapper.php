@@ -71,7 +71,11 @@ class EventMapper extends QBMapper {
                $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_STR))
            );
 
-        return $this->findEntity($qb);
+		try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException $e) {
+			return $e;
+		}
 	}
 
 	/**

@@ -28,6 +28,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Db\DoesNotExistException;
 
+use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -40,8 +41,9 @@ use OCA\Polls\Db\NotificationMapper;
 
 
 
-class SupscriptionController extends Controller {
+class NotificationController extends Controller {
 
+	private $logger;
 	private $userManager;
 	private $eventMapper;
 	private $notificationMapper;
@@ -49,6 +51,7 @@ class SupscriptionController extends Controller {
 	/**
 	 * PageController constructor.
 	 * @param string $appName
+	 * @param ILogger $logger
 	 * @param IRequest $request
 	 * @param IUserManager $userManager
 	 * @param string $userId
@@ -57,6 +60,7 @@ class SupscriptionController extends Controller {
 	 */
 	public function __construct(
 		$appName,
+		ILogger $logger,
 		IRequest $request,
 		IUserManager $userManager,
 		$userId,
@@ -64,6 +68,7 @@ class SupscriptionController extends Controller {
 		NotificationMapper $commentMapper
 	) {
 		parent::__construct($appName, $request);
+		$this->logger = $logger;
 		$this->userId = $userId;
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
@@ -77,10 +82,15 @@ class SupscriptionController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param String $pollIdOrHash poll id or hash
-	 * @return Array
+	 * @return DataResponse
 	 */
-	public function getNotification($pollIdOrHash) {
-
+	public function get($pollIdOrHash) {
+		// return new DataResponse(array(
+		// 	'action' => 'query',
+		// 	'$pollIdOrHash' => $pollIdOrHash,
+		// 	'$currentUser' => $currentUser
+		// ), Http::STATUS_OK);
+		//
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			$currentUser = '';
 		} else {
@@ -90,15 +100,46 @@ class SupscriptionController extends Controller {
 		$data = array();
 
 		try {
-
 			if (is_numeric($pollIdOrHash)) {
-				$pollId = $this->eventMapper->find(intval($pollIdOrHash))->id;
+				$pollId = $this->eventMapper->find(intval($pollIdOrHash));
 				$result = 'foundById';
 			} else {
-				$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
+				$pollId = $this->eventMapper->findByHash($pollIdOrHash);
 				$result = 'foundByHash';
 			}
-			return = $this->notificationMapper->findByUserAndPoll($pollId, $currentUser);
+
+			$notification = $this->notificationMapper->findByUserAndPoll($pollId, $currentUser);
+
+			return new DataResponse(array(
+				'id' => $notification->getId(),
+				'pollID' => $notification->getPollId(),
+				'userId' => $notification->getUserId()
+			), Http::STATUS_OK);
+
+		} catch (\Exception $e) {
+			// TODO: handle multple results as one result
+			$this->logger->logException($e, ['app' => 'polls']);
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+
+	/**
+	 * @param int $pollId
+	 */
+	public function set($pollId, $subscribed) {
+		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		if ($subscribed) {
+			$notification = new Notification();
+			$notification->setPollId($pollId);
+			$notification->setUserId($currentUser);
+			// TODO: Revove this and add proper handlicg of multiple finds
+			// NOTE: This is a fix to correct multiple db entries 
+			$this->notificationMapper->unsubscribe($pollId, $currentUser);
+			$this->notificationMapper->insert($notification);
+			return true;
+		} else {
+			$this->notificationMapper->unsubscribe($pollId, $currentUser);
+			return false;
 		}
 	}
 

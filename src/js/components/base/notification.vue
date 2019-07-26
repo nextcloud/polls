@@ -10,9 +10,23 @@
 	export default {
 		name: 'Notication',
 
+		// mounted() {
+		// 	console.log(this.event.id)
+		// 	this.$store.dispatch('getSubscription', this.event.id)
+		// },
+
+		watch: {
+			event: function() {
+				console.log('watch event.id', this.event.id)
+				this.$store.dispatch('getSubscription', this.event.id)
+
+			}
+		},
+
 		computed: {
 			...mapState({
-				notification: state => state.notification
+				notification: state => state.notification,
+				event: state => state.poll.event
 			}),
 
 			loggedIn() {
@@ -25,6 +39,7 @@
 				},
 				set(value) {
 					this.$store.commit('setNotification', value)
+					this.$store.dispatch('writeSubscriptionPromise', {pollId: this.event.id})
 				},
 			},
 		},

@@ -515,9 +515,9 @@ class ApiController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
-	 * @param int $pollId
-	 * @param string $currentUser
-	 * @param string $commentContent
+	 * @param Int $pollId
+	 * @param String $currentUser
+	 * @param String $commentContent
 	 * @return DataResponse
 	 */
 	public function writeComment($pollId, $currentUser, $commentContent) {

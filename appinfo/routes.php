@@ -39,6 +39,8 @@ return [
 
 		['name' => 'api#write_vote', 'url' => '/write/vote', 'verb' => 'POST'],
 		['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
+		['name' => 'notification#get', 'url' => '/get/notification/{pollIdOrHash}', 'verb' => 'GET'],
+		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],
 		['name' => 'comments#read', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
 		['name' => 'comments#write', 'url' => '/write/comment', 'verb' => 'POST'],
 

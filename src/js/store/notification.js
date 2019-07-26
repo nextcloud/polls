@@ -45,18 +45,24 @@ const mutations = {
 
 const actions = {
 	getSubscription({ commit }, payload) {
+		console.log(payload)
 		axios.get(OC.generateUrl('apps/polls/get/notification/' + payload))
 			.then((response) => {
-				commit('setNotification', response.data)
+				// console.log(response.data)
+				commit('setNotification', true)
 			}, (error) => {
 				/* eslint-disable-next-line no-console */
-				console.log(error)
+				console.log(error.response)
+				commit('setNotification', false)
 			})
 	},
 
 	writeSubscriptionPromise({ commit }, payload) {
+		console.log(state.currentUser)
+		console.log(state)
+		console.log(payload)
 		if (state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/write/notification'), { pollId: payload.pollId , notification: state.subscribed})
+			return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed})
 				.then((response) => {
 				}, (error) => {
 					/* eslint-disable-next-line no-console */
