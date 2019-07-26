@@ -46,8 +46,7 @@ const actions = {
 				// console.log(response.data)
 				commit('setNotification', true)
 			}, (error) => {
-				/* eslint-disable-next-line no-console */
-				console.log(error.response)
+				// NOTE: No unique result found, switch to fals silently
 				commit('setNotification', false)
 			})
 	},
