@@ -45,7 +45,6 @@ const mutations = {
 
 const actions = {
 	getSubscription({ commit }, payload) {
-		console.log(payload)
 		axios.get(OC.generateUrl('apps/polls/get/notification/' + payload))
 			.then((response) => {
 				// console.log(response.data)
@@ -58,9 +57,6 @@ const actions = {
 	},
 
 	writeSubscriptionPromise({ commit }, payload) {
-		console.log(state.currentUser)
-		console.log(state)
-		console.log(payload)
 		if (state.currentUser !== '') {
 			return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed})
 				.then((response) => {

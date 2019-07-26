@@ -10,16 +10,9 @@
 	export default {
 		name: 'Notication',
 
-		// mounted() {
-		// 	console.log(this.event.id)
-		// 	this.$store.dispatch('getSubscription', this.event.id)
-		// },
-
 		watch: {
 			event: function() {
-				console.log('watch event.id', this.event.id)
 				this.$store.dispatch('getSubscription', this.event.id)
-
 			}
 		},
 
