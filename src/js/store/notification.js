@@ -37,10 +37,6 @@ const mutations = {
 		state.subscribed = payload
 	},
 
-	// changeNotification(state) {
-	// 	state.subscribed = !state.subscribed
-	// },
-
 }
 
 const actions = {
