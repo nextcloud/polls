@@ -29,6 +29,8 @@
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
+				:mode="poll.mode"
+				@remove="removeVoteOption(option)"
 			/>
 		</transition-group>
 
@@ -88,6 +90,10 @@ export default {
 	},
 
 	methods: {
+		removeVoteOption(payload) {
+			this.$store.commit('removeVoteOption', payload)
+		},
+
 		cycleVote(payload) {
 			var switchTo = 'yes'
 

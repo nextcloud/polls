@@ -27,6 +27,7 @@ import moment from 'moment'
 
 const defaultPoll = () => {
 	return {
+		votechanged: false,
 		comments: [],
 		event: {
 			id: 0,
@@ -125,14 +126,17 @@ const mutations = {
 	// TODO: Find a better solution than this
 	changeVote(state, payload) {
 		state.votes.forEach(function(vote) {
-			if (vote.id === payload.payload.id && vote.userId === payload.payload.userId && vote.voteOptionText === payload.payload.voteOptionText) {
+			if (vote === payload.payload) {
 				vote.voteAnswer = payload.switchTo
 				vote.voteOptionId = payload.payload.id
+				state.votechanged = true
 			}
 		})
 	},
 
-	removeDate(state, payload) {
+	removeVoteOption(state, payload) {
+		state.voteOptions.splice(state.voteOptions.findIndex(function(voteOption) {
+			return voteOption === payload}), 1)
 	}
 
 }
@@ -143,9 +147,9 @@ const getters = {
 	},
 
 	currentUserParticipated(state) {
-		return (state.votes.filter(function(vote) {
+		return (state.votes.findIndex(function(vote) {
 			return vote.userId === state.currentUser
-		}).length > 0)
+		}) > 0)
 	},
 
 	timeSpanCreated(state) {
@@ -250,8 +254,9 @@ const actions = {
 	// 	this.shares.splice(this.shares.indexOf(item), 1)
 	},
 
-	addMe({ commit }) {
+	addMe({ commit, getters }) {
 		if (!getters.currentUserParticipated && !state.event.expired) {
+			console.log('entered')
 			commit('addParticipant', { 'userId': state.currentUser })
 		}
 	},

@@ -49,7 +49,6 @@
 					:key="poll.id"
 					:poll="poll"
 					@deletePoll="removePoll(index, poll.event)"
-					@votePoll="callPoll(index, poll.event, 'vote')"
 					@editPoll="callPoll(index, poll.event, 'edit')"
 					@clonePoll="callPoll(index, poll.event, 'clone')"
 				/>

@@ -44,7 +44,6 @@
 					<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%"
 						confirm @change="addNewPollDate($event)"
 					/>
-					<shift-dates />
 
 					<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list"
 						tag="ul" class="poll-table"

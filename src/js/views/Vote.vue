@@ -40,9 +40,6 @@
 			<div v-if="poll.mode === 'edit'" class="editDescription">
 				<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
 				<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
-				<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%"
-					confirm @change="addNewPollDate($event)"
-				/>
 			</div>
 
 			<vote-table />
@@ -109,6 +106,15 @@ export default {
 			shares: state => state.poll.shares
 		}),
 
+		...mapGetters([
+			'adminMode',
+			'languageCodeShort',
+			'localeCode',
+			'currentUserParticipated',
+			'timeSpanCreated',
+			'timeSpanExpiration'
+		]),
+
 		loggedIn() {
 			return (OC.currentUser !== '')
 		},
@@ -119,33 +125,6 @@ export default {
 			},
 			set(value) {
 				this.$store.commit('setEventProperty', { property: 'title', value: value })
-			}
-		},
-
-		...mapGetters([
-			// 'accessType',
-			'adminMode',
-			'languageCodeShort',
-			'localeCode',
-			'currentUserParticipated',
-			// 'sortedVoteOptions',
-			'timeSpanCreated',
-			'timeSpanExpiration'
-		]),
-
-		optionDatePicker() {
-			return {
-				editable: false,
-				minuteStep: 1,
-				type: 'datetime',
-				format: this.dateTimeFormat,
-				lang: this.languageCodeShort,
-				placeholder: t('polls', 'Click to add a date'),
-				timePickerOptions: {
-					start: '00:00',
-					step: '00:30',
-					end: '23:30'
-				}
 			}
 		},
 
@@ -191,7 +170,6 @@ export default {
 
 	methods: {
 		...mapMutations({
-			addNewPollDate: 'addDate',
 			addNewPollText: 'addText'
 		}),
 

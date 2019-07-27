@@ -37,6 +37,7 @@
 		<div class="time">
 			{{ time }}
 		</div>
+		<a v-if="mode === 'edit'" class="icon-delete" @click="$emit('remove')" />
 	</div>
 </template>
 
@@ -54,6 +55,10 @@ export default {
 		pollType: {
 			type: String,
 			default: undefined
+		},
+		mode: {
+			type: String,
+			default: 'vote'
 		}
 	},
 

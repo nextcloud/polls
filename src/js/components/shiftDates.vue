@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div>
-		<button class="icon-history" @click="shiftDatesDlg()">
+		<button class="shift-dates icon-history" @click="shiftDatesDlg()">
 			{{ t('polls', 'Shift dates') }}
 		</button>
 
@@ -77,6 +77,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.shift-dates {
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	min-width: 16px;
+	min-height: 16px;
+	padding: 10px;
+	padding-left: 34px;
+	text-align: left;
+	margin: 0;
+}
 	.selectUnit {
 		display: flex;
 		align-items: center;

@@ -85,12 +85,7 @@ class NotificationController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get($pollIdOrHash) {
-		// return new DataResponse(array(
-		// 	'action' => 'query',
-		// 	'$pollIdOrHash' => $pollIdOrHash,
-		// 	'$currentUser' => $currentUser
-		// ), Http::STATUS_OK);
-		//
+
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			$currentUser = '';
 		} else {
@@ -101,23 +96,27 @@ class NotificationController extends Controller {
 
 		try {
 			if (is_numeric($pollIdOrHash)) {
-				$pollId = $this->eventMapper->find(intval($pollIdOrHash));
+				$event = $this->eventMapper->find($pollIdOrHash);
 				$result = 'foundById';
 			} else {
-				$pollId = $this->eventMapper->findByHash($pollIdOrHash);
+				$event = $this->eventMapper->findByHash($pollIdOrHash);
 				$result = 'foundByHash';
 			}
 
-			$notification = $this->notificationMapper->findByUserAndPoll($pollId, $currentUser);
+			$notification = $this->notificationMapper->findByUserAndPoll($event->getId(), $currentUser);
 
-			return new DataResponse(array(
-				'id' => $notification->getId(),
-				'pollID' => $notification->getPollId(),
-				'userId' => $notification->getUserId()
-			), Http::STATUS_OK);
+			if (count($notification) > 0) {
+				return new DataResponse(array(
+					'id' => $notification[0]->getId(),
+					'pollID' => $notification[0]->getPollId(),
+					'userId' => $notification[0]->getUserId()
+				), Http::STATUS_OK);
+
+			} else {
+				return new DataResponse('No notificatiopn found', Http::STATUS_NOT_FOUND);
+			}
 
 		} catch (\Exception $e) {
-			// TODO: handle multple results as one result
 			$this->logger->logException($e, ['app' => 'polls']);
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
@@ -132,9 +131,6 @@ class NotificationController extends Controller {
 			$notification = new Notification();
 			$notification->setPollId($pollId);
 			$notification->setUserId($currentUser);
-			// TODO: Revove this and add proper handlicg of multiple finds
-			// NOTE: This is a fix to correct multiple db entries 
-			$this->notificationMapper->unsubscribe($pollId, $currentUser);
 			$this->notificationMapper->insert($notification);
 			return true;
 		} else {

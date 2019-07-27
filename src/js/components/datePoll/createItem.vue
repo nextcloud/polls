@@ -52,3 +52,20 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+	li > div {
+		display: flex;
+		flex-grow: 1;
+		font-size: 1.2em;
+		opacity: 0.7;
+		white-space: normal;
+		padding-right: 4px;
+	}
+
+	li > div:nth-last-child(1) {
+		justify-content: center;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+</style>

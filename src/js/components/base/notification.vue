@@ -8,22 +8,22 @@
 <script>
 	import { mapState } from 'vuex'
 	export default {
-		name: 'Notication',
+		name: 'Notification',
 
 		watch: {
 			event: function() {
 				this.$store.dispatch('getSubscription', this.event.id)
-			}
+			},
 		},
 
 		computed: {
 			...mapState({
 				notification: state => state.notification,
-				event: state => state.poll.event
+				event: state => state.poll.event,
 			}),
 
 			loggedIn() {
-				return (!OC.currentUser !== '')
+				return !OC.currentUser !== ''
 			},
 
 			subscribe: {
@@ -32,7 +32,7 @@
 				},
 				set(value) {
 					this.$store.commit('setNotification', value)
-					this.$store.dispatch('writeSubscriptionPromise', {pollId: this.event.id})
+					this.$store.dispatch('writeSubscriptionPromise', { pollId: this.event.id })
 				},
 			},
 		},
@@ -40,4 +40,7 @@
 </script>
 
 <style lang="css" scoped>
+	.notification {
+		padding: 24px;
+	}
 </style>
