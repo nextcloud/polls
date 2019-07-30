@@ -150,7 +150,7 @@
 </template>
 
 <script>
-	import ShiftDates from '../shiftDates'
+	import ShiftDates from '../datesShift'
 	import { mapState, mapMutations, mapGetters } from 'vuex'
 
 	export default {
@@ -174,7 +174,7 @@
 		computed: {
 			...mapState({
 				poll: state => state.poll,
-				event: state => state.poll.event,
+				event: state => state.event,
 			}),
 
 			...mapGetters(['languageCodeShort']),
@@ -185,7 +185,7 @@
 					return this.event.type
 				},
 				set(value) {
-					this.$store.commit('setEventProperty', { property: 'type', value: value })
+					this.$store.commit('eventSetProperty', { property: 'type', value: value })
 				},
 			},
 
@@ -194,7 +194,7 @@
 					return this.event.access
 				},
 				set(value) {
-					this.$store.commit('setEventProperty', { property: 'access', value: value })
+					this.$store.commit('eventSetProperty', { property: 'access', value: value })
 				},
 			},
 
@@ -203,7 +203,7 @@
 					return this.event.expiration
 				},
 				set(value) {
-					this.$store.commit('setEventProperty', { property: 'expiration', value: value })
+					this.$store.commit('eventSetProperty', { property: 'expiration', value: value })
 				},
 			},
 
@@ -212,7 +212,7 @@
 					return this.event.fullAnonymous
 				},
 				set(value) {
-					this.$store.commit('setEventProperty', { property: 'fullAnonymous', value: value })
+					this.$store.commit('eventSetProperty', { property: 'fullAnonymous', value: value })
 				},
 			},
 
@@ -221,7 +221,7 @@
 					return this.event.isAnonymous
 				},
 				set(value) {
-					this.$store.commit('setEventProperty', { property: 'isAnonymous', value: value })
+					this.$store.commit('eventSetProperty', { property: 'isAnonymous', value: value })
 				},
 			},
 
@@ -230,16 +230,16 @@
 					return this.event.allowMaybe
 				},
 				set(value) {
-					this.$store.commit('setEventProperty', { property: 'allowMaybe', value: value })
+					this.$store.commit('eventSetProperty', { property: 'allowMaybe', value: value })
 				},
 			},
 
 			eventExpirationDate: {
 				get() {
-					return this.$store.state.poll.event.expirationDate
+					return this.$store.state.event.expirationDate
 				},
 				set(value) {
-					this.$store.commit('setEventProperty', { property: 'expirationDate', value: value })
+					this.$store.commit('eventSetProperty', { property: 'expirationDate', value: value })
 				},
 			},
 
@@ -290,10 +290,10 @@
 			},
 		},
 		methods: {
-			...mapMutations(['setEventProperty', 'setPollProperty']),
+			...mapMutations(['eventSetProperty', 'pollSetProperty']),
 			...mapMutations({
-				addNewPollDate: 'addDate',
-				addNewPollText: 'addText',
+				addNewPollDate: 'dateAdd',
+				addNewPollText: 'textAdd',
 			}),
 		},
 	}

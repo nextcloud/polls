@@ -26,7 +26,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import polls from './polls'
 import poll from './currentPoll'
-import notification from './notification'
+import comments from './modules/comments'
+import event from './modules/event'
+import notification from './modules/notification'
+import votes2 from './modules/votes'
+import options from './modules/options'
 import locale from './locale'
 
 Vue.use(Vuex)
@@ -36,8 +40,12 @@ export default new Vuex.Store({
 	modules: {
 		polls,
 		poll,
+		comments,
+		event,
 		notification,
-		locale
+		locale,
+		votes2,
+		options
 	},
 	strict: process.env.NODE_ENV !== 'production'
 })

@@ -26,11 +26,17 @@ namespace OCA\Polls\AppInfo;
 use OCA\Polls\Controller\PageController;
 use OCA\Polls\Controller\ApiController;
 use OCA\Polls\Controller\CommentsController;
+use OCA\Polls\Controller\EventController;
+use OCA\Polls\Controller\NotificationController;
+use OCA\Polls\Controller\OptionController;
+use OCA\Polls\Controller\VotesController;
+use OCA\Polls\Controller\ShareController;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\NotificationMapper;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\ShareMapper;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 

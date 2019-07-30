@@ -48,8 +48,8 @@
 					<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list"
 						tag="ul" class="poll-table"
 					>
-						<date-poll-item v-for="(option, index) in sortedVoteOptions" :key="option.id" :option="option"
-							@remove="voteOptions.splice(index, 1)"
+						<date-poll-item v-for="(option, index) in sortedOptions" :key="option.id" :option="option"
+							@remove="options.splice(index, 1)"
 						/>
 					</transitionGroup>
 
@@ -60,8 +60,8 @@
 					<transitionGroup v-show="event.type === 'textPoll'" id="text-poll-list" name="list"
 						tag="ul" class="poll-table"
 					>
-						<text-poll-item v-for="(option, index) in voteOptions" :key="option.id" :option="option"
-							@remove="voteOptions.splice(index, 1)"
+						<text-poll-item v-for="(option, index) in options" :key="option.id" :option="option"
+							@remove="options.splice(index, 1)"
 						/>
 					</transitionGroup>
 				</div>
@@ -105,7 +105,7 @@ import TextPollItem from '../components/textPoll/createItem'
 import InformationTab from '../components/tabs/information'
 import ConfigurationTab from '../components/tabs/configuration'
 import CommentsTab from '../components/tabs/comments'
-import ShiftDates from '../components/shiftDates'
+import ShiftDates from '../components/datesShift'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
@@ -144,11 +144,9 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			comments: state => state.poll.comments,
-			event: state => state.poll.event,
-			participants: state => state.poll.participants,
+			event: state => state.event,
 			shares: state => state.poll.shares,
-			votes: state => state.poll.votes,
-			voteOptions: state => state.poll.voteOptions
+			options: state => state.options
 		}),
 
 		// Add bindings
@@ -157,21 +155,25 @@ export default {
 				return this.event.title
 			},
 			set(value) {
-				this.$store.commit('setEventProperty', { 'property': 'title', 'value': value })
+				this.$store.commit('eventSetProperty', { 'property': 'title', 'value': value })
 			}
 		},
 
 		...mapGetters([
 			'accessType',
-			'adminMode',
-			'countParticipants',
-			'sortedVoteOptions',
+			// 'countParticipants',
+			'sortedOptions',
 			'longDateFormat',
 			'dateTimeFormat',
 			'languageCode',
 			'languageCodeShort',
 			'localeCode'
 		]),
+
+		adminMode() {
+			return (this.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
+		},
+
 
 		// Local computed
 		voteUrl() {
@@ -258,16 +260,15 @@ export default {
 
 	methods: {
 		...mapMutations([
-			'setEventProperty',
-			'setPollProperty',
-			'addDate',
-			// 'shiftDates',
+			'eventSetProperty',
+			'dateAdd',
+			// 'datesShift',
 			'setLocale'
 		]),
 
 		...mapMutations({
-			addNewPollDate: 'addDate',
-			addNewPollText: 'addText'
+			addNewPollDate: 'dateAdd',
+			addNewPollText: 'textAdd'
 		}),
 
 		...mapActions([
@@ -279,11 +280,11 @@ export default {
 		]),
 
 		// updateTitle(e) {
-		// 	this.$store.commit('setEventProperty', { 'property': 'title', 'value': e.target.value })
+		// 	this.$store.commit('eventSetProperty', { 'property': 'title', 'value': e.target.value })
 		// },
 
 		updateDescription(e) {
-			this.$store.commit('setEventProperty', { 'property': 'description', 'value': e.target.value })
+			this.$store.commit('eventSetProperty', { 'property': 'description', 'value': e.target.value })
 		},
 
 		switchSidebar() {
@@ -429,7 +430,7 @@ button {
     flex-wrap: wrap;
 }
 
-#shiftDates {
+#datesShift {
 	background-repeat: no-repeat;
 	background-position: 10px center;
 	min-width: 16px;

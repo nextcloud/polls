@@ -46,7 +46,7 @@ export default {
 	name: 'InformationTab',
 	computed:	{
 		...mapState({
-			event: state => state.poll.event
+			event: state => state.event
 		}),
 
 		...mapGetters([

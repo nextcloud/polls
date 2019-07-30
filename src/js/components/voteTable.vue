@@ -25,26 +25,40 @@
 		<transition-group v-if="event.type === 'datePoll'" name="voteOptions" tag="div"
 			class="header"
 		>
-			<date-poll-vote-header v-for="(option) in sortedVoteOptions"
+			<date-poll-vote-header v-for="(option) in sortedOptions"
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
-				@remove="removeVoteOption(option)"
+				@remove="optionRemove(option)"
 			/>
 		</transition-group>
 
 		<transition-group v-if="event.type === 'textPoll'" name="voteOptions" tag="div"
 			class="header"
 		>
-			<text-poll-vote-header v-for="(option) in sortedVoteOptions"
+			<text-poll-vote-header v-for="(option) in sortedOptions"
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
 			/>
 		</transition-group>
-		<ul name="participants" class="participants">
-			<div v-for="(participant) in poll.participants" :key="participant" :class="{currentUser: (participant === poll.currentUser) }">
+
+		<ul class="participants">
+
+			<div v-if="(!currentUserParticipated && poll.mode === 'vote' && !event.expired)">
+				<div class="user-row fixedWidth user">
+					<button class="button btn primary" @click="addMe()">
+						<span>{{ t('polls', 'Add me') }}</span>
+						<span v-if="writingPoll" class="icon-loading-small" />
+					</button>
+				</div>
+				<div class="vote-row">
+					No votes until now
+				</div>
+			</div>
+
+			<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === poll.currentUser) }">
 				<user-div :key="participant"
 					:class="{currentUser: (participant === poll.currentUser) }"
 					:user-id="participant"
@@ -68,7 +82,7 @@
 import VoteItem from '../components/base/voteItem'
 import DatePollVoteHeader from '../components/datePoll/voteHeader'
 import TextPollVoteHeader from '../components/textPoll/voteHeader'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
 	name: 'VoteTable',
@@ -81,18 +95,30 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			event: state => state.poll.event,
-			participants: state => state.poll.participants,
-			voteOptions: state => state.poll.voteOptions
+			event: state => state.event,
+			voteOptions: state => state.options
 		}),
 
-		...mapGetters(['sortedVoteOptions', 'usersVotes'])
+		...mapGetters([
+			'sortedOptions',
+			'currentUserParticipated',
+			'usersVotes',
+			'participants'
+		])
 	},
 
 	methods: {
-		removeVoteOption(payload) {
-			this.$store.commit('removeVoteOption', payload)
-		},
+		...mapActions([
+			'addMe',
+		]),
+
+		...mapMutations([
+			'optionRemove'
+		]),
+
+		// optionRemove(payload) {
+		// 	this.$store.commit('optionRemove', payload)
+		// },
 
 		cycleVote(payload) {
 			var switchTo = 'yes'
@@ -102,7 +128,7 @@ export default {
 			} else if (payload.voteAnswer === 'no' && this.event.allowMaybe) {
 				switchTo = 'maybe'
 			}
-			this.$store.commit('changeVote', { payload, switchTo })
+			this.$store.commit('voteChange', { payload, switchTo })
 		}
 	}
 }

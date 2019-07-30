@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<add-comment />
-		<ul v-if="countComments">
+		<transition-group name="fade" class="comments" v-if="countComments" tag="ul">
 			<li v-for="(comment) in sortedComments" :key="comment.id">
 				<div class="comment-item">
 					<user-div :user-id="comment.userId" />
@@ -35,7 +35,7 @@
 					{{ comment.comment }}
 				</div>
 			</li>
-		</ul>
+		</transition-group>
 		<div v-else class="emptycontent">
 			<div class="icon-comment" />
 			<p> {{ t('polls', 'No comments yet. Be the first.') }}</p>
@@ -45,7 +45,7 @@
 
 <script>
 import moment from 'moment'
-import AddComment from '../comments/addComment'
+import AddComment from '../comments/commentAdd'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -56,7 +56,7 @@ export default {
 
 	computed: {
 		...mapState({
-			comments: state => state.poll.comments
+			comments: state => state.comments
 		}),
 		...mapGetters([
 			'countComments',
@@ -73,6 +73,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+	.fade-enter-active, .fade-leave-active {
+		transition: all .5s;
+	}
+	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+		height: 0;
+		overflow: hidden;
+		opacity: 0;
+	}
+
 	ul {
 		& > li {
 			margin-bottom: 30px;

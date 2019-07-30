@@ -22,7 +22,7 @@
 
 <template>
 	<li v-if="edit" class="poll-cell active" :class="iconClass"
-		@click="changeVote(option)"
+		@click="voteClick(option)"
 	/>
 	<li v-else class="poll-cell" :class="iconClass" />
 </template>
@@ -60,7 +60,7 @@ export default {
 		}
 	},
 	methods: {
-		changeVote(payload) {
+		voteClick(payload) {
 			this.$emit('voteClick')
 		}
 	}

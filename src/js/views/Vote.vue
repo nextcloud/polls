@@ -25,7 +25,7 @@
 		<div class="main-container">
 			<controls :intitle="event.title">
 				<template slot="after">
-					<button :disabled="writingPoll" class="button btn primary" @click="writeVote()">
+					<button :disabled="writingPoll" class="button btn primary" @click="write()">
 						<span>{{ saveButtonTitle }}</span>
 						<span v-if="writingPoll" class="icon-loading-small" />
 					</button>
@@ -44,10 +44,6 @@
 
 			<vote-table />
 			<notification />
-			<button v-if="(!currentUserParticipated && poll.mode === 'vote' && !poll.expired)" class="button btn primary" @click="addMe()">
-				<span>{{ t('polls', 'Add me') }}</span>
-				<span v-if="writingPoll" class="icon-loading-small" />
-			</button>
 		</div>
 
 		<app-sidebar :title="t('polls', 'Details')">
@@ -102,7 +98,7 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			event: state => state.poll.event,
+			event: state => state.event,
 			shares: state => state.poll.shares
 		}),
 
@@ -110,26 +106,29 @@ export default {
 			'adminMode',
 			'languageCodeShort',
 			'localeCode',
-			'currentUserParticipated',
 			'timeSpanCreated',
 			'timeSpanExpiration'
 		]),
-
-		loggedIn() {
-			return (OC.currentUser !== '')
-		},
 
 		eventTitle: {
 			get() {
 				return this.event.title
 			},
 			set(value) {
-				this.$store.commit('setEventProperty', { property: 'title', value: value })
+				this.$store.commit('eventSetProperty', { property: 'title', value: value })
 			}
 		},
 
+		loggedIn() {
+			return (OC.getCurrentUser() !== '')
+		},
+
+		adminMode() {
+			return (this.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
+		},
+
 		allowEdit() {
-			return this.event.owner === OC.currentUser || OC.isUserAdmin
+			return this.event.owner === OC.getCurrentUser() || this.adminMode
 		},
 
 		editButtonTitle() {
@@ -144,6 +143,9 @@ export default {
 
 		title: function() {
 			return t('polls', 'Polls') + ' - ' + this.event.title
+		},
+		titleEmpty() {
+			return (this.event.title.trim().length === 0)
 		},
 
 		saveButtonTitle: function() {
@@ -166,26 +168,47 @@ export default {
 			hash: this.$route.params.hash,
 			mode: 'vote'
 		})
+		.then(() => {
+			this.$store.dispatch({ type: 'loadEvent', pollId: this.poll.id, mode: 'vote' })
+			this.$store.dispatch({ type: 'loadOptions', pollId: this.poll.id, })
+			this.$store.dispatch({ type: 'loadVotes', pollId: this.poll.id, mode: 'vote', currentUser: this.poll.currentUser })
+			this.$store.dispatch({ type: 'loadComments', pollId: this.poll.id })
+		})
 	},
 
 	methods: {
 		...mapMutations({
-			addNewPollText: 'addText'
+			addNewPollText: 'textAdd'
 		}),
 
 		...mapActions([
-			'addMe'
+			'addMe',
+			'writePollPromise'
 		]),
 
 		updateDescription(e) {
-			this.$store.commit('setEventProperty', { property: 'description', value: e.target.value })
+			this.$store.commit('eventSetProperty', { property: 'description', value: e.target.value })
 		},
 
 		toggleEdit() {
 			if (this.poll.mode === 'vote') {
-				this.$store.commit('setPollProperty', { property: 'mode', value: 'edit' })
+				this.$store.commit('pollSetProperty', { property: 'mode', value: 'edit' })
 			} else if (this.poll.mode === 'edit') {
-				this.$store.commit('setPollProperty', { property: 'mode', value: 'vote' })
+				this.$store.commit('pollSetProperty', { property: 'mode', value: 'vote' })
+			}
+		},
+
+		writePoll() {
+			if (this.titleEmpty) {
+				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'))
+			} else {
+				this.writingPoll = true
+				this.writeEventPromise()
+				this.writeOptionsPromise()
+				this.writingPoll = false
+				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title))
+				// this.writingPoll = false
+				// OC.Notification.showTemporary(t('polls', 'Error on saving poll, see console'))
 			}
 		},
 
@@ -209,6 +232,15 @@ export default {
 						OC.Notification.showTemporary(t('polls', 'Error while saving vote', { type: 'error' }))
 					})
 			}
+		},
+
+		write() {
+			if (this.poll.mode === 'edit') {
+				this.writePoll()
+			} else if (this.poll.mode === 'vote') {
+				this.writeVote()
+			}
+
 		}
 	}
 }

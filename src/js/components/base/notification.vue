@@ -1,12 +1,12 @@
 <template lang="html">
-	<div v-if="loggedIn" class="notification">
+	<div v-if="loggedIn && currentUserParticipated" class="notification">
 		<input id="subscribe" v-model="subscribe" type="checkbox" class="checkbox" />
 		<label for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
 	</div>
 </template>
 
 <script>
-	import { mapState } from 'vuex'
+	import { mapState, mapGetters } from 'vuex'
 	export default {
 		name: 'Notification',
 
@@ -19,8 +19,12 @@
 		computed: {
 			...mapState({
 				notification: state => state.notification,
-				event: state => state.poll.event,
+				event: state => state.event,
 			}),
+
+			...mapGetters([
+				'currentUserParticipated',
+			]),
 
 			loggedIn() {
 				return !OC.currentUser !== ''

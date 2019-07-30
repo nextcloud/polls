@@ -58,7 +58,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['shiftDates']),
+		...mapMutations(['datesShift']),
 
 		shiftDatesDlg() {
 			const params = {
@@ -67,7 +67,7 @@ export default {
 				buttonHideText: t('polls', 'Cancel'),
 				buttonConfirmText: t('polls', 'Apply'),
 				onConfirm: () => {
-					this.shiftDates(this.move)
+					this.datesShift(this.move)
 				}
 			}
 			this.$modal.show(params)

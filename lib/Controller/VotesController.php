@@ -36,17 +36,17 @@ use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Comment;
-use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
 
 
 
-class CommentsController extends Controller {
+class VotesController extends Controller {
 
 	private $groupManager;
 	private $userManager;
 	private $eventMapper;
-	private $commentMapper;
+	private $voteMapper;
 
 	/**
 	 * PageController constructor.
@@ -56,7 +56,7 @@ class CommentsController extends Controller {
 	 * @param IUserManager $userManager
 	 * @param string $userId
 	 * @param EventMapper $eventMapper
-	 * @param CommentMapper $commentMapper
+	 * @param VoteMapper $voteMapper
 	 */
 	public function __construct(
 		$appName,
@@ -65,14 +65,14 @@ class CommentsController extends Controller {
 		IUserManager $userManager,
 		$userId,
 		EventMapper $eventMapper,
-		CommentMapper $commentMapper
+		VoteMapper $voteMapper
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
-		$this->commentMapper = $commentMapper;
+		$this->voteMapper = $voteMapper;
 	}
 
 	/**
@@ -93,8 +93,8 @@ class CommentsController extends Controller {
 			}
 		}
 
-		$comments = $this->commentMapper->findByPoll($pollId);
-		foreach ($comments as $element) {
+		$votes = $this->voteMapper->findByPoll($pollId);
+		foreach ($votes as $element) {
 			if (!array_key_exists($element->getUserId(), $anonList)) {
 				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
 			}
@@ -112,7 +112,6 @@ class CommentsController extends Controller {
 	private function anonymize($array, $pollId, $anomizeField = 'userId') {
 		$anonList = $this->anonMapper($pollId);
 		$votes = $this->voteMapper->findByPoll($pollId);
-		$comments = $this->commentMapper->findByPoll($pollId);
 		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		$i = 0;
 
@@ -133,41 +132,40 @@ class CommentsController extends Controller {
 	 * @param Integer $pollId
 	 * @return Array
 	 */
-	public function read($pollId) {
+	public function get($pollId) {
 		$commentsList = array();
+		$votesList = array();
 
 		try {
 			$event = $this->eventMapper->find($pollId)->read();
-			$comments = $this->commentMapper->findByPoll($pollId);
+			$votes = $this->voteMapper->findByPoll($pollId);
 		} catch (DoesNotExistException $e) {
 			// return silently
 		} finally {
-			foreach ($comments as $comment) {
-				$commentsList[] = $comment->read();
+			foreach ($votes as $vote) {
+				$votesList[] = $vote->read();
 			}
 
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 			if (($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $currentUser))) {
-				return $this->anonymize($commentsList, $pollId);
+				return $this->anonymize($votesList, $pollId);
 			} else {
-				return $commentsList;
+				return $votesList;
 			}
 		}
 
 	}
 
 	/**
-	 * write
-	 * Write a new coimment to the db
+	 * WriteVote (update/create)
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param int $pollId
-	 * @param string $currentUser
-	 * @param string $commentContent
+	 * @param Array $event
+	 * @param Array $votes
+	 * @param String $mode
+	 * @param String $currentUser
 	 * @return DataResponse
 	 */
-	public function write($pollId, $currentUser, $commentContent) {
+	public function write($pollId, $votes, $currentUser) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
@@ -175,13 +173,21 @@ class CommentsController extends Controller {
 			$AdminAccess = $this->groupManager->isAdmin($currentUser);
 		}
 
-		$comment = new Comment();
-		$comment->setPollId($pollId);
-		$comment->setUserId($currentUser);
-		$comment->setComment($commentContent);
-		$comment->setDt(date('Y-m-d H:i:s'));
-		$this->commentMapper->insert($comment);
-		return new DataResponse(array('result' => 'saved'), Http::STATUS_OK);
+		$this->voteMapper->deleteByPollAndUser($pollId, $currentUser);
 
+		foreach ($votes as $vote) {
+			if ($vote['userId'] == $currentUser && $vote['pollId'] == $pollId) {
+				$newVote = new Vote();
+
+				$newVote->setPollId($pollId);
+				$newVote->setUserId($currentUser);
+				$newVote->setVoteOptionText($vote['voteOptionText']);
+				$newVote->setVoteAnswer($vote['voteAnswer']);
+
+				$this->voteMapper->insert($newVote);
+			}
+		}
+
+		return new DataResponse(array('result' => 'saved'), Http::STATUS_OK);
 	}
 }
