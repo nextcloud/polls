@@ -21,47 +21,28 @@
   -->
 
 <template>
-	<div id="app-polls">
-		<router-view />
+	<div class="close flex-row">
+		<a id="closeDetails" :title="closeDetailLabel" :alt="closeDetailLabelAlt"
+			class="close icon-close has-tooltip-bottom" href="#" @:click="hideSidebar"
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'App'
-}
-</script>
+	name: 'SideBarClose',
 
-<style  lang="scss">
-#app-polls {
-	width: 100%;
-	display: flex;
-}
+	data() {
+		return {
+			closeDetailLabel: t('Close details'),
+			closeDetailLabelAlt: t('Close')
+		}
+	},
 
-#app-content {
-    width: 100%;
-    display: flex;
-	&>.main-container {
-		flex: 1;
-		padding: 0 8px;
-	}
-
-	input.hasTimepicker {
-        width: 75px;
-    }
-
-	.label {
-		border: solid 1px;
-		border-radius: var(--border-radius);
-		padding: 1px 4px;
-		margin: 0 4px;
-		font-size: 60%;
-		text-align: center;
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text);
+	methods: {
+		hideSidebar() {
+			OC.Apps.hideAppSidebar()
 		}
 	}
 }
-</style>
+</script>

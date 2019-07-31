@@ -37,10 +37,10 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Comment extends Model {
+class Share extends Model {
 	protected $userId;
-	protected $dt;
-	protected $comment;
+	protected $hash;
+	protected $type;
 	protected $pollId;
 
 	/**
@@ -52,11 +52,11 @@ class Comment extends Model {
 
 	public function read() {
 		return [
-			'pollId' => $this->getPollId(),
 			'id' => $this->getId(),
+			'pollId' => $this->getPollId(),
 			'userId' => $this->getUserId(),
-			'date' => $this->getDt(),
-			'comment' => $this->getComment()
+			'hash' => $this->getHash(),
+			'type' => $this->getType()
 		];
 
 	}

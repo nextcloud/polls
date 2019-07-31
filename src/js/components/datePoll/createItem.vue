@@ -21,47 +21,51 @@
   -->
 
 <template>
-	<div id="app-polls">
-		<router-view />
-	</div>
+	<li>
+		<div>{{ option.timestamp | localFullDate }}</div>
+		<div>
+			<a class="icon-delete" @click="$emit('remove')" />
+		</div>
+	</li>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
-	name: 'App'
-}
-</script>
+	name: 'DatePollItem',
 
-<style  lang="scss">
-#app-polls {
-	width: 100%;
-	display: flex;
-}
+	filters: {
+		localFullDate(timestamp) {
+			if (!timestamp) return ''
+			if (!moment(timestamp).isValid()) return 'Invalid Date'
+			if (timestamp < 999999999999) timestamp = timestamp * 1000
+			return moment(timestamp).format('llll')
+		}
+	},
 
-#app-content {
-    width: 100%;
-    display: flex;
-	&>.main-container {
-		flex: 1;
-		padding: 0 8px;
-	}
-
-	input.hasTimepicker {
-        width: 75px;
-    }
-
-	.label {
-		border: solid 1px;
-		border-radius: var(--border-radius);
-		padding: 1px 4px;
-		margin: 0 4px;
-		font-size: 60%;
-		text-align: center;
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text);
+	props: {
+		option: {
+			type: Object,
+			default: undefined
 		}
 	}
 }
+</script>
+
+<style lang="scss" scoped>
+	li > div {
+		display: flex;
+		flex-grow: 1;
+		font-size: 1.2em;
+		opacity: 0.7;
+		white-space: normal;
+		padding-right: 4px;
+	}
+
+	li > div:nth-last-child(1) {
+		justify-content: center;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
 </style>

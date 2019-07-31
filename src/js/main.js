@@ -22,30 +22,45 @@
  */
 
 import Vue from 'vue'
-import router from './router'
 import axios from 'nextcloud-axios'
+
 import App from './App.vue'
+import store from './store'
+import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu, Tooltip } from 'nextcloud-vue'
+import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab, AppNavigation } from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
-import Controls from './components/_base-Controls'
-import UserDiv from './components/_base-UserDiv'
-import SideBar from './components/_base-SideBar'
-import SideBarClose from './components/sideBarClose'
-import ShareDiv from './components/shareDiv'
-import LoadingOverlay from './components/_base-LoadingOverlay'
+import Controls from './components/base/controls'
+import UserDiv from './components/base/userDiv'
+import ShareDiv from './components/base/shareDiv'
+import LoadingOverlay from './components/base/loadingOverlay'
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
-Vue.component('Controls', Controls)
+Vue.config.performance = process.env.NODE_ENV !== 'production'
+
+/* eslint-disable-next-line camelcase, no-undef */
+__webpack_nonce__ = btoa(OC.requestToken)
+/* eslint-disable-next-line camelcase, no-undef */
+__webpack_public_path__ = OC.linkTo('polls', 'js/')
+
+Vue.prototype.t = t
+Vue.prototype.n = n
+Vue.prototype.$http = axios
+Vue.prototype.OC = OC
+Vue.prototype.OCA = OCA
+
+Vue.component('AppContent', AppContent)
+Vue.component('AppSidebar', AppSidebar)
+Vue.component('AppSidebarTab', AppSidebarTab)
+Vue.component('AppNavigation', AppNavigation)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('DatePicker', DatetimePicker)
+Vue.component('Controls', Controls)
 Vue.component('UserDiv', UserDiv)
-Vue.component('SideBar', SideBar)
-Vue.component('SideBarClose', SideBarClose)
 Vue.component('ShareDiv', ShareDiv)
 Vue.component('LoadingOverlay', LoadingOverlay)
 
@@ -55,24 +70,10 @@ Vue.use(vClickOutside)
 Vue.use(VueClipboard)
 Vue.use(Modal)
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.$http = axios
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
-
-// CSP config for webpack dynamic chunk loading
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken)
-
-// Correct the root of the app for chunk loading
-// OC.linkTo matches the apps folders
-// eslint-disable-next-line
-__webpack_public_path__ = OC.linkTo('polls', 'js/')
-
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#app-polls',
 	router: router,
+	store: store,
 	render: h => h(App)
 })

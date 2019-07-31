@@ -28,8 +28,8 @@
 					Home
 				</router-link>
 			</div>
-			<div v-show="intitle ===''" class="crumb svg last">
-				<span v-text="intitle" />
+			<div v-show="intitle !==''" class="crumb svg last">
+				<span v-tooltip.auto="intitle" v-text="intitle" />
 			</div>
 			<div class="action">
 				<slot />
@@ -41,31 +41,28 @@
 
 <script>
 export default {
+	name: 'Controls',
 
 	props: {
 		intitle: {
 			type: String,
-			default: undefined
-		}
-	},
-	data() {
-		return {
-			imagePath: OC.imagePath('core', 'places/home.svg')
+			default: ''
 		}
 	}
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .controls {
     display: flex;
-	position: fixed;
+	// position: fixed;
     border-bottom: 1px solid var(--color-border);
     background: var(--color-main-background);
     width: 100%;
     height: 45px;
     z-index: 1001;
+	// position: fixed;
 
 	.action {
 		order: 999;
@@ -90,17 +87,9 @@ export default {
 	}
 
     .breadcrumb {
-		flex-grow: 1;
+		flex: 1;
         overflow: hidden;
         min-width: 35px;
-        // div.crumb:last-child {
-        //     flex-shrink: 1;
-        //     overflow: hidden;
-        //     > span {
-        //         flex-shrink: 1;
-        //         text-overflow: ellipsis;
-        //     }
-        // }
     }
 }
 </style>

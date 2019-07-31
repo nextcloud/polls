@@ -48,11 +48,25 @@ class Option extends Model {
 		$this->addType('timestamp', 'integer');
 	}
 
+	/**
+	 * Temporary correction to fix timestamp = 0 in date polls
+	 */
+	private function getTimestampTemp() {
+		if ($this->getTimestamp() > 0) {
+			return $this->getTimestamp();
+		} else if (strtotime($this->getPollOptionText())) {
+			return strtotime($this->getPollOptionText());
+		} else {
+			return 0;
+		}
+	}
+
 	public function read() {
 		return [
+			'pollId' => $this->getPollId(),
 			'id' => $this->getId(),
 			'text' => htmlspecialchars_decode($this->getPollOptionText()),
-			'timestamp' => $this->getTimestamp()
+			'timestamp' => $this->getTimestampTemp()
 		];
 	}
 }

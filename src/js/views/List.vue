@@ -21,53 +21,47 @@
   -->
 
 <template>
-	<div id="app-content">
-		<controls>
-			<router-link :to="{ name: 'create'}" class="button">
-				<span class="symbol icon-add" />
-				<span class="hidden-visually">
-					{{ t('polls', 'New') }}
-				</span>
-			</router-link>
-		</controls>
+	<app-content>
+		<div class="main-container">
+			<controls>
+				<router-link :to="{ name: 'create'}" class="button">
+					<span class="symbol icon-add" />
+					<span class="hidden-visually">
+						{{ t('polls', 'New') }}
+					</span>
+				</router-link>
+			</controls>
 
-		<div v-if="noPolls" class="">
-			<div class="icon-polls" />
-			<h2> {{ t('No existing polls.') }} </h2>
-			<router-link :to="{ name: 'create'}" class="button new">
-				<span>{{ t('polls', 'Click here to add a poll') }}</span>
-			</router-link>
+			<div v-if="noPolls" class="">
+				<div class="icon-polls" />
+				<h2> {{ t('No existing polls.') }} </h2>
+				<router-link :to="{ name: 'create'}" class="button new">
+					<span>{{ t('polls', 'Click here to add a poll') }}</span>
+				</router-link>
+			</div>
+
+			<transition-group v-if="!noPolls" name="list" tag="div"
+				class="table"
+			>
+				<poll-list-item key="0" :header="true" />
+				<li is="poll-list-item"
+					v-for="(poll, index) in pollList"
+					:key="poll.id"
+					:poll="poll"
+					@deletePoll="removePoll(index, poll.event)"
+					@editPoll="callPoll(index, poll.event, 'edit')"
+					@clonePoll="callPoll(index, poll.event, 'clone')"
+				/>
+			</transition-group>
 		</div>
-
-		<transition-group
-			v-if="!noPolls"
-			name="list"
-			tag="div"
-			class="table"
-		>
-			<poll-list-item
-				key="0"
-				:header="true"
-			/>
-			<li
-				is="poll-list-item"
-				v-for="(poll, index) in polls"
-				:key="poll.id"
-				:poll="poll"
-				@deletePoll="removePoll(index, poll.event)"
-				@editPoll="editPoll(index, poll.event, 'edit')"
-				@clonePoll="editPoll(index, poll.event, 'clone')"
-			/>
-		</transition-group>
 		<loading-overlay v-if="loading" />
 		<modal-dialog />
-	</div>
+	</app-content>
 </template>
 
 <script>
-// import moment from 'moment'
-// import lodash from 'lodash'
 import pollListItem from '../components/pollListItem'
+// import { mapState } from 'vuex'
 
 export default {
 	name: 'List',
@@ -79,46 +73,43 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			loading: true,
-			polls: []
+			loading: true
+		}
+	},
+
+	computed: {
+		pollList() {
+			return this.$store.state.polls.list
 		}
 	},
 
 	created() {
-		this.indexPage = OC.generateUrl('apps/polls/')
-		this.loadPolls()
+		this.refreshPolls()
 	},
 
 	methods: {
-		loadPolls() {
+		callPoll(index, event, name) {
+			this.$router.push({
+				name: name,
+				params: {
+					hash: event.id
+				}
+			})
+		},
+
+		refreshPolls() {
 			this.loading = true
-			this.$http.get(OC.generateUrl('apps/polls/get/polls'))
-				.then((response) => {
-					this.polls = response.data
-					this.loading = false
-				}, (error) => {
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
+			this.$store
+				.dispatch('loadPolls')
+				.then(response => {
 					this.loading = false
 				})
-		},
-
-		editPoll(index, event, name) {
-			this.$router.push({
-				name: name,
-				params: {
-					hash: event.id
-				}
-			})
-		},
-
-		clonePoll(index, event, name) {
-			this.$router.push({
-				name: name,
-				params: {
-					hash: event.id
-				}
-			})
+				.catch(error => {
+					this.loading = false
+					/* eslint-disable-next-line no-console */
+					console.log('refresh poll: ', error.response)
+					OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, { type: 'error' }))
+				})
 		},
 
 		removePoll(index, event) {
@@ -127,44 +118,55 @@ export default {
 				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
 				buttonHideText: t('polls', 'No, keep poll.'),
 				buttonConfirmText: t('polls', 'Yes, delete poll.'),
+				// Call store action here
 				onConfirm: () => {
-					// this.deletePoll(index, event)
-					this.$http.post(OC.generateUrl('apps/polls/remove/poll'), event)
-						.then((response) => {
-							this.polls.splice(index, 1)
+					this.loading = true
+					this.$store
+						.dispatch({
+							type: 'deletePollPromise',
+							event: event
+						})
+						.then(response => {
+							this.loading = false
+							this.refreshPolls()
 							OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title))
-						}, (error) => {
-							OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title))
+						})
+						.catch(error => {
+							this.loading = false
 							/* eslint-disable-next-line no-console */
-							console.log(error.response)
-						}
-						)
+							console.log('remove poll: ', error.response)
+							OC.Notification.showTemporary(
+								t('polls', 'Error while deleting Poll "%n"', 1, event.title, { type: 'error' })
+							)
+						})
 				}
 			}
+
 			this.$modal.show(params)
 		}
-
 	}
 }
 </script>
 
-<style lang="scss">
-
-.table {
-	width: 100%;
-	margin-top: 45px;
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	flex-wrap: nowrap;
-}
-
-#emptycontent {
-	.icon-polls {
-		background-color: black;
-		-webkit-mask: url('./img/app.svg') no-repeat 50% 50%;
-		mask: url('./img/app.svg') no-repeat 50% 50%;
+<style lang="scss" scoped>
+	#app-content {
+		// flex-direction: column;
 	}
-}
 
+	.table {
+		width: 100%;
+		// margin-top: 45px;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		flex-wrap: nowrap;
+	}
+
+	#emptycontent {
+		.icon-polls {
+			background-color: black;
+			-webkit-mask: url('./img/app.svg') no-repeat 50% 50%;
+			mask: url('./img/app.svg') no-repeat 50% 50%;
+		}
+	}
 </style>

@@ -30,6 +30,10 @@ use OCP\AppFramework\Db\QBMapper;
 
 class NotificationMapper extends QBMapper {
 
+	/**
+	 * NotificationMapper constructor.
+	 * @param IDBConnection $db
+	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_notif', '\OCA\Polls\Db\Notification');
 	}
@@ -76,16 +80,20 @@ class NotificationMapper extends QBMapper {
 		 return $this->findEntities($qb);
 	}
 
+
 	/**
 	 * @param int $pollId
 	 */
-	 public function deleteByPoll($pollId) {
+	 public function unsubscribe($pollId, $currentUser) {
  		$qb = $this->db->getQueryBuilder();
 
  		$qb->delete($this->getTableName())
  		->where(
  			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
- 		);
+ 		)
+        ->andWhere(
+        	$qb->expr()->eq('user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR))
+        );
 
  		$qb->execute();
  	}

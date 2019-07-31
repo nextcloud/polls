@@ -45,6 +45,12 @@ use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Notification;
 use OCA\Polls\Db\NotificationMapper;
 
+use OCA\Polls\Controller\CommentController;
+use OCA\Polls\Controller\EventController;
+use OCA\Polls\Controller\NotificationController;
+use OCA\Polls\Controller\OptionController;
+use OCA\Polls\Controller\VotesController;
+
 
 
 class ApiController extends Controller {
@@ -55,6 +61,11 @@ class ApiController extends Controller {
 	private $optionMapper;
 	private $voteMapper;
 	private $commentMapper;
+	private $commentController;
+	private $eventController;
+	private $notificationController;
+	private $optionController;
+	private $votesController;
 
 	/**
 	 * PageController constructor.
@@ -67,6 +78,11 @@ class ApiController extends Controller {
 	 * @param OptionMapper $optionMapper
 	 * @param VoteMapper $voteMapper
 	 * @param CommentMapper $commentMapper
+	 * @param CommentController $commentController
+	 * @param EventController $eventController
+	 * @param NotificationController $notificationController
+	 * @param OptionController $optionController
+	 * @param VotesController $votesController
 	 */
 	public function __construct(
 		$appName,
@@ -77,7 +93,12 @@ class ApiController extends Controller {
 		EventMapper $eventMapper,
 		OptionMapper $optionMapper,
 		VoteMapper $voteMapper,
-		CommentMapper $commentMapper
+		CommentMapper $commentMapper,
+		CommentController $commentController,
+		EventController $eventController,
+		NotificationController $notificationController,
+		OptionController $optionController,
+		VotesController $votesController
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
@@ -87,6 +108,11 @@ class ApiController extends Controller {
 		$this->optionMapper = $optionMapper;
 		$this->voteMapper = $voteMapper;
 		$this->commentMapper = $commentMapper;
+		$this->commentController = $commentController;
+		$this->eventController = $eventController;
+		$this->notificationController = $notificationController;
+		$this->optionController = $optionController;
+		$this->votesController = $votesController;
 	}
 
 	/**
@@ -191,21 +217,48 @@ class ApiController extends Controller {
 		return $grantAccessAs;
 	}
 
+	// /**
+	//  * Read all options of a poll based on the poll id
+	//  * @NoAdminRequired
+	//  * @NoCSRFRequired
+	//  * @param Integer $pollId
+	//  * @return Array
+	//  */
+	// public function getOptions($pollId) {
+	// 	$returnList = array();
+	// 	$voteOptions = $this->optionMapper->findByPoll($pollId);
+	// 	foreach ($voteOptions as $element) {
+	// 		$returnList[] = $element->read();
+	// 	}
+	//
+	// 	return $returnList;
+	// }
+
 	/**
-	 * Read all options of a poll based on the poll id
+	 * Read all votes of a poll based on the poll id
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param Integer $pollId
 	 * @return Array
 	 */
-	public function getOptions($pollId) {
-		$optionList = array();
-		$options = $this->optionMapper->findByPoll($pollId);
-		foreach ($options as $optionElement) {
-			$optionList[] = $optionElement->read();
+	private function anonMapper($pollId) {
+		$anonList = array();
+		$votes = $this->voteMapper->findByPoll($pollId);
+		$i = 0;
+
+		foreach ($votes as $element) {
+			if (!array_key_exists($element->getUserId(), $anonList)) {
+				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i ;
+			}
 		}
 
-		return $optionList;
+		$comments = $this->commentMapper->findByPoll($pollId);
+		foreach ($comments as $element) {
+			if (!array_key_exists($element->getUserId(), $anonList)) {
+				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
+			}
+		}
+		return $anonList;
 	}
 
 	/**
@@ -215,54 +268,123 @@ class ApiController extends Controller {
 	 * @param Integer $pollId
 	 * @return Array
 	 */
-	public function getVotes($pollId) {
-		$votesList = array();
+	private function anonymize($array, $pollId, $anomizeField = 'userId') {
+		$anonList = $this->anonMapper($pollId);
 		$votes = $this->voteMapper->findByPoll($pollId);
-
-		foreach ($votes as $voteElement) {
-			$votesList[] = $voteElement->read();
-		}
-
-		return $votesList;
-	}
-
-	/**
-	 * Read all comments of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
-	public function getComments($pollId) {
-		$commentsList = array();
 		$comments = $this->commentMapper->findByPoll($pollId);
+		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		$i = 0;
 
-		foreach ($comments as $commentElement) {
-			$commentsList[] = $commentElement->read();
+		for ($i = 0; $i < count($array); ++$i) {
+			if ($array[$i][$anomizeField] !== \OC::$server->getUserSession()->getUser()->getUID()) {
+				$array[$i][$anomizeField] = $anonList[$array[$i][$anomizeField]];
+			}
 		}
 
-		return $commentsList;
+		return $array;
 	}
 
+	// /**
+	// * Read all votes of a poll based on the poll id
+	// * @NoAdminRequired
+	// * @NoCSRFRequired
+	// * @param Integer $pollId
+	// * @return Array
+	// */
+	// public function getVotes($pollId, $anonymize = true) {
+	// 	$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+	// 	$votes = $this->voteMapper->findByPoll($pollId);
+	// 	$anonMapper = $this->anonMapper($pollId);
+	// 	$votesList = array();
+	//
+	//
+	// 	foreach ($votes as $vote) {
+	// 		$votesList[] = $vote->read();
+	// 	}
+	//
+	// 	if ($anonymize) {
+	// 		return $this->anonymize($votesList, $pollId);
+	// 	} else {
+	// 		return $votesList;
+	// 	}
+	//
+	// }
+
 	/**
-	 * Read an entire poll based on poll id
+	 * Read all votes of a poll based on the poll id
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param Integer $pollId
 	 * @return Array
 	 */
-	public function getEvent($pollId) {
+	 public function getParticipants($pollId, $anonymize = true) {
+ 		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+ 		$votes = $this->voteMapper->findByPoll($pollId);
+ 		$anonMapper = $this->anonMapper($pollId);
+ 		$participants = array();
 
-		$data = array();
-		try {
-			$data = $this->eventMapper->find($pollId)->read();
-		} catch (DoesNotExistException $e) {
-			// return silently
-		} finally {
-			return $data;
-		}
+ 		foreach ($votes as $vote) {
 
-	}
+ 			if ($anonymize && $currentUser !== $vote->getUserId()) {
+ 				$setName = $anonMapper[$vote->getUserId()];
+ 			} else {
+ 				$setName = $vote->getUserId();
+ 			}
+
+ 			if (!in_array($setName, $participants)) {
+ 				$participants[] = $setName;
+ 			}
+ 		}
+
+ 		return $participants;
+ 	}
+
+	// /**
+	//  * Read all comments of a poll based on the poll id
+	//  * @NoAdminRequired
+	//  * @NoCSRFRequired
+	//  * @param Integer $pollId
+	//  * @return Array
+	//  */
+	// public function getComments($pollId) {
+	// 	$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+	//
+	// 	$comments = $this->commentMapper->findByPoll($pollId);
+	// 	$event = $this->getEvent($pollId);
+	// 	$commentsList = array();
+	//
+	//
+	// 	foreach ($comments as $comment) {
+	// 		$commentsList[] = $comment->read();
+	// 	}
+	//
+	// 	if (($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $currentUser))) {
+	// 		return $this->anonymize($commentsList, $pollId);
+	// 	} else {
+	// 		return $commentsList;
+	// 	}
+	//
+	// }
+
+	// /**
+	//  * Read an entire poll based on poll id
+	//  * @NoAdminRequired
+	//  * @NoCSRFRequired
+	//  * @param Integer $pollId
+	//  * @return Array
+	//  */
+	// public function getEvent($pollId) {
+	//
+	// 	$data = array();
+	// 	try {
+	// 		$data = $this->eventMapper->find($pollId)->read();
+	// 	} catch (DoesNotExistException $e) {
+	// 		// return silently
+	// 	} finally {
+	// 		return $data;
+	// 	}
+	//
+	// }
 
 	/**
 	 * Read all shares (users and groups with access) of a poll based on the poll id
@@ -305,6 +427,8 @@ class ApiController extends Controller {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
 
+
+
 		$data = array();
 
 		try {
@@ -317,8 +441,19 @@ class ApiController extends Controller {
 				$result = 'foundByHash';
 			}
 
-			$event = $this->getEvent($pollId);
-			$shares = $this->getShares($event['id']);
+			$event = $this->eventController->get($pollIdOrHash);
+			// $event = $this->getEvent($pollId);
+			$anonymize = ($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $currentUser));
+			// $anonymize = true;
+			// Anonymize shares, if anonimize is configured and
+			// user is not owner and not admin
+			if ($anonymize
+				&& $event['owner'] !== $currentUser
+				&& !$this->groupManager->isAdmin($currentUser)) {
+				$shares = array();
+			} else {
+				$shares = $this->getShares($event['id']);
+			}
 
 			if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
 				$mode = 'create';
@@ -332,14 +467,13 @@ class ApiController extends Controller {
 				'grantedAs' => $this->grantAccessAs($event, $shares),
 				'mode' => $mode,
 				'event' => $event,
-				'comments' => $this->getComments($event['id']),
-				'votes' => $this->getVotes($event['id']),
+				'comments' => $this->commentController->get($event['id']),
+				'votes' => $this->votesController->get($event['id']),
+				'participants' => $this->getParticipants($event['id'], $anonymize),
 				'shares' => $shares,
-				'options' => [
-					'pollDates' => [],
-					'pollTexts' => $this->getOptions($event['id'])
-				]
+				'voteOptions' => $this->optionController->get($event['id'])
 			];
+
 		} catch (DoesNotExistException $e) {
 				$data['poll'] = ['result' => 'notFound'];
 		} finally {
@@ -383,10 +517,16 @@ class ApiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function removePoll($id) {
-		$pollToDelete = $this->eventMapper->find($id);
+		try {
+			$pollToDelete = $this->eventMapper->find($id);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
 		if ($this->userId !== $pollToDelete->getOwner() && !$this->groupManager->isAdmin($this->userId)) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
+
 		$this->commentMapper->deleteByPoll($id);
 		$this->voteMapper->deleteByPoll($id);
 		$this->optionMapper->deleteByPoll($id);
@@ -399,6 +539,85 @@ class ApiController extends Controller {
 	}
 
 
+	// /**
+	//  * writeComment
+	//  * @NoAdminRequired
+	//  * @NoCSRFRequired
+	//  * @PublicPage
+	//  * @param Int $pollId
+	//  * @param String $currentUser
+	//  * @param String $commentContent
+	//  * @return DataResponse
+	//  */
+	// public function writeComment($pollId, $currentUser, $commentContent) {
+	// 	if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+	// 		return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+	// 	} else {
+	// 		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+	// 		$AdminAccess = $this->groupManager->isAdmin($currentUser);
+	// 	}
+	//
+	// 	$comment = new Comment();
+	// 	$comment->setPollId($pollId);
+	// 	$comment->setUserId($currentUser);
+	// 	$comment->setComment($commentContent);
+	// 	$comment->setDt(date('Y-m-d H:i:s'));
+	// 	$this->commentMapper->insert($comment);
+	// 	$this->sendNotifications($pollId, $userId);
+	// 	$timeStamp = time();
+	// 	$displayName = $userId;
+	// 	$user = $this->userMgr->get($userId);
+	// 	if ($user !== null) {
+	// 		$displayName = $user->getDisplayName();
+	// 	}
+	// 	return new JSONResponse(array(
+	// 		'userId' => $userId,
+	// 		'displayName' => $displayName,
+	// 		'timeStamp' => $timeStamp * 100,
+	// 		'date' => date('Y-m-d H:i:s', $timeStamp),
+	// 		'relativeNow' => $this->trans->t('just now'),
+	// 		'comment' => $commentBox
+	// 	));
+	// 	return new DataResponse(array('result' => 'saved'), Http::STATUS_OK);
+	//
+	// }
+	//
+	//
+	// /**
+	//  * WriteVote (update/create)
+	//  * @NoAdminRequired
+	//  * @param Array $event
+	//  * @param Array $votes
+	//  * @param String $mode
+	//  * @param String $currentUser
+	//  * @return DataResponse
+	//  */
+	// public function writeVote($pollId, $votes, $mode, $currentUser) {
+	// 	if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+	// 		return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+	// 	} else {
+	// 		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+	// 		$AdminAccess = $this->groupManager->isAdmin($currentUser);
+	// 	}
+	//
+	// 	$this->voteMapper->deleteByPollAndUser($pollId, $currentUser);
+	//
+	// 	foreach ($votes as $vote) {
+	// 		if ($vote['userId'] == $currentUser && $vote['pollId'] == $pollId) {
+	// 			$newVote = new Vote();
+	//
+	// 			$newVote->setPollId($pollId);
+	// 			$newVote->setUserId($currentUser);
+	// 			$newVote->setVoteOptionText($vote['voteOptionText']);
+	// 			$newVote->setVoteAnswer($vote['voteAnswer']);
+	//
+	// 			$this->voteMapper->insert($newVote);
+	// 		}
+	// 	}
+	//
+	// 	return new DataResponse(array('result' => 'saved'), Http::STATUS_OK);
+	// }
+
 	/**
 	 * Write poll (create/update)
 	 * @NoAdminRequired
@@ -408,7 +627,7 @@ class ApiController extends Controller {
 	 * @param String $mode
 	 * @return DataResponse
 	 */
-	public function writePoll($event, $options, $shares, $mode) {
+	public function writePoll($event, $voteOptions, $shares, $mode) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
@@ -485,25 +704,14 @@ class ApiController extends Controller {
 		}
 
 		// Update options
-		if ($event['type'] === 'datePoll') {
-			foreach ($options['pollDates'] as $optionElement) {
-				$newOption = new Option();
+		foreach ($voteOptions as $optionElement) {
+			$newOption = new Option();
 
-				$newOption->setPollId($newEvent->getId());
-				$newOption->setPollOptionText(date('Y-m-d H:i:s', $optionElement['timestamp']));
-				$newOption->setTimestamp($optionElement['timestamp']);
+			$newOption->setPollId($newEvent->getId());
+			$newOption->setpollOptionText(trim(htmlspecialchars($optionElement['text'])));
+			$newOption->setTimestamp($optionElement['timestamp']);
 
-				$this->optionMapper->insert($newOption);
-			}
-		} elseif ($event['type'] === "textPoll") {
-			foreach ($options['pollTexts'] as $optionElement) {
-				$newOption = new Option();
-
-				$newOption->setPollId($newEvent->getId());
-				$newOption->setpollOptionText(trim(htmlspecialchars($optionElement['text'])));
-
-				$this->optionMapper->insert($newOption);
-			}
+			$this->optionMapper->insert($newOption);
 		}
 
 		return new DataResponse(array(

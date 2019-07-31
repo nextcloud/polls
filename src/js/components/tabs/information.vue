@@ -21,32 +21,45 @@
   -->
 
 <template>
-	<li>
-		<div>{{ option.timestamp | localFullDate }}</div>
-		<div>
-			<a class="icon-delete" @click="$emit('remove')" />
-		</div>
-	</li>
+	<div>
+		<user-div :user-id="event.owner" :description="t('polls', 'Owner')" />
+		<h3> {{ t('polls', 'Title') }} </h3>
+		<div>{{ event.title }}</div>
+		<h3> {{ t('polls', 'Description') }} </h3>
+		<div>{{ event.description }}</div>
+		<h3> {{ t('polls', 'Access') }} </h3>
+		<div>{{ event.access }}</div>
+		<div>{{ event.hash }}</div>
+		<div>{{ accessType }}</div>
+		<h3> {{ t('polls', 'Created') }} </h3>
+		<div>{{ timeSpanCreated }}</div>
+		<h3> {{ t('polls', 'Expires') }} </h3>
+		<div>{{ timeSpanExpiration }}</div>
+		<div>{{ countCommentsHint }}</div>
+	</div>
 </template>
 
 <script>
-import moment from 'moment'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-	filters: {
-		localFullDate(timestamp) {
-			if (!timestamp) return ''
-			if (!moment(timestamp).isValid()) return 'Invalid Date'
-			if (timestamp < 999999999999) timestamp = timestamp * 1000
-			return moment(timestamp).format('llll')
-		}
-	},
-	props: {
-		option: {
-			type: Object,
-			default: undefined
-		}
+	name: 'InformationTab',
+	computed:	{
+		...mapState({
+			event: state => state.event
+		}),
 
+		...mapGetters([
+			'accessType',
+			'countComments',
+			'timeSpanCreated',
+			'timeSpanExpiration'
+		]),
+
+		countCommentsHint: function() {
+			return n('polls', 'There is %n comment', 'There are %n comments', this.countComments)
+		}
 	}
 }
+
 </script>

@@ -4,7 +4,7 @@
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -28,67 +28,45 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
-class EventMapper extends QBMapper {
+class ShareMapper extends QBMapper {
 
 	/**
-	 * EventMapper constructor.
+	 * CommentMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
+		parent::__construct($db, 'polls_shares', '\OCA\Polls\Db\Share');
 	}
 
 	/**
-	 * @param Integer $id
+	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Event
+	 * @return Share[]
 	 */
-	public function find($id) {
-		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-           );
-
-        return $this->findEntity($qb);
-	}
-
-	/**
-	 * @param String $hash
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Event
-	 */
 	public function findByHash($hash) {
 		$qb = $this->db->getQueryBuilder();
 
         $qb->select('*')
            ->from($this->getTableName())
            ->where(
-               $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_STR))
+               $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_INT))
            );
 
-		try {
-			return $this->findEntity($qb);
-		} catch (DoesNotExistException $e) {
-			return $e;
-		}
+        return $this->findEntity($qb);
 	}
 
 	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Event[]
+	 * @param int $pollId
 	 */
-	public function findAll() {
+	public function deleteByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName());
+        $qb->delete($this->getTableName())
+           ->where(
+               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+           );
 
-        return $this->findEntities($qb);
+	   $qb->execute();
 	}
-
 }

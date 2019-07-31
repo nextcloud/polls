@@ -21,47 +21,39 @@
   -->
 
 <template>
-	<div id="app-polls">
-		<router-view />
+	<div class="loading-overlay">
+		<span class="icon-loading" />
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'App'
+	name: 'LoadingOverlay'
 }
 </script>
 
-<style  lang="scss">
-#app-polls {
-	width: 100%;
-	display: flex;
-}
-
-#app-content {
+<style lang="scss">
+.loading-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
-    display: flex;
-	&>.main-container {
-		flex: 1;
-		padding: 0 8px;
-	}
-
-	input.hasTimepicker {
-        width: 75px;
+    height: 100%;
+    background: #fff;
+    opacity: 0.9;
+    z-index: 1001;
+    .icon-loading {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -35px;
+        margin-top: -10px;
+        &::after {
+            border: 10px solid var(--color-loading-light);
+            border-top-color: var(--color-primary-element);
+            height: 70px;
+            width: 70px;
+        }
     }
-
-	.label {
-		border: solid 1px;
-		border-radius: var(--border-radius);
-		padding: 1px 4px;
-		margin: 0 4px;
-		font-size: 60%;
-		text-align: center;
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text);
-		}
-	}
 }
 </style>

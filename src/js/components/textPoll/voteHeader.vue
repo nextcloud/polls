@@ -21,25 +21,37 @@
   -->
 
 <template>
-	<div class="close flex-row">
-		<a id="closeDetails" :title="closeDetailLabel" :alt="closeDetailLabelAlt"
-			class="close icon-close has-tooltip-bottom" href="#" @:click="hideSidebar"
-		/>
+	<div>
+		{{ option.text }}
 	</div>
 </template>
 
 <script>
+
 export default {
-	data() {
-		return {
-			closeDetailLabel: t('Close details'),
-			closeDetailLabelAlt: t('Close')
+	name: 'VoteTextPoll',
+
+	props: {
+		option: {
+			type: Object,
+			default: undefined
+		},
+		pollType: {
+			type: String,
+			default: undefined
 		}
 	},
-	methods: {
-		hideSidebar() {
-			OC.Apps.hideAppSidebar()
+
+	data() {
+		return {
+			openedMenu: false,
+			hostName: this.$route.query.page
 		}
+
 	}
 }
 </script>
+
+<style lang="scss">
+
+</style>
