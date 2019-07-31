@@ -22,6 +22,8 @@
  */
 
 import axios from 'nextcloud-axios'
+import sortBy from 'lodash/sortBy'
+
 
 const defaultVotes = () => {
 	return {
@@ -56,6 +58,37 @@ const mutations = {
 }
 
 const getters = {
+	allVotes: (state, getters, rootState) => {
+		var votesList = []
+		var foundVote = []
+		var fakeVoteId = 78946456
+
+		getters.participants.forEach(function(participant) {
+			rootState.options.list.forEach(function(voteOption) {
+				foundVote = state.list.filter(vote => {
+					return vote.userId === participant && vote.voteOptionText === voteOption.text
+				})
+
+				if (foundVote.length > 0) {
+					votesList.push(foundVote[0])
+				} else {
+					votesList.push({
+						id: ++fakeVoteId,
+						userId: participant,
+						voteAnswer: 'unvoted',
+						voteOptionText: voteOption.text,
+						voteOptionId: voteOption.id
+					})
+				}
+			})
+		})
+		if (rootState.event.type === 'datePoll') {
+			return sortBy(votesList, 'voteOptionText')
+		} else {
+			return votesList
+		}
+	},
+
 	lastVoteId: state => {
 		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))
 	},
@@ -80,7 +113,7 @@ const getters = {
 	},
 
 	usersVotes: (state, getters) => (userId) => {
-		return state.list.filter(vote => {
+		return getters.allVotes.filter(vote => {
 			return vote.userId === userId
 		})
 	},

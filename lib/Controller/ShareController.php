@@ -64,8 +64,8 @@ class ShareController extends Controller {
 
 
 	/**
-	 * get
-	 * Read all comments of a poll based on the poll id and return list as array
+	 * getByHash
+	 * Get pollId by hash
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param String $hash

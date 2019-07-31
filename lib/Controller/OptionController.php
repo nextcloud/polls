@@ -39,8 +39,6 @@ use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 
-
-
 class OptionController extends Controller {
 
 	private $groupManager;
