@@ -101,7 +101,6 @@ OC.L10N.register(
     "Close" : "Fermi",
     "Expires on %s" : "Senvalidiĝas je %s",
     "Invitation access" : "Aliro per invito",
-    "Anononymous poll" : "Enketo sennoma",
     "Click to get link" : "Alklaku por havi ligilon",
     "Edit Poll" : "Modifi enketon",
     "Poll expired" : "Enketo senvalidiĝis",
