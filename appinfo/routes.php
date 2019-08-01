@@ -46,8 +46,8 @@ return [
 		['name' => 'comment#get', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
 		['name' => 'comment#write', 'url' => '/write/comment', 'verb' => 'POST'],
 
-		['name' => 'votes#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
-		['name' => 'votes#write', 'url' => '/write/votes/', 'verb' => 'POST'],
+		['name' => 'vote#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
+		['name' => 'vote#write', 'url' => '/write/votes/', 'verb' => 'POST'],
 
 		['name' => 'option#get', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#write', 'url' => '/write/options/', 'verb' => 'POST'],

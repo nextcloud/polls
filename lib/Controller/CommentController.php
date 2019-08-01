@@ -135,9 +135,9 @@ class CommentController extends Controller {
 	public function get($pollId) {
 		$commentsList = array();
 
+		$event = $this->eventMapper->find($pollId)->read();
+		$comments = $this->commentMapper->findByPoll($pollId);
 		try {
-			$event = $this->eventMapper->find($pollId)->read();
-			$comments = $this->commentMapper->findByPoll($pollId);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		} finally {

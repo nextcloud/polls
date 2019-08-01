@@ -41,7 +41,7 @@ use OCA\Polls\Db\VoteMapper;
 
 
 
-class VotesController extends Controller {
+class VoteController extends Controller {
 
 	private $groupManager;
 	private $userManager;
