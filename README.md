@@ -5,6 +5,8 @@
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/nextcloud/polls.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextcloud/polls)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](LICENSE)
 
+## This branch is in alpha state, do not use for production needs
+
 This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / jQuery.
 It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
 
