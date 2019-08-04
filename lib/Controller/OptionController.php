@@ -27,6 +27,7 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\UniqueConstraintViolationException;
 
 use OCP\IGroupManager;
 use OCP\IRequest;
@@ -99,6 +100,60 @@ class OptionController extends Controller {
 	 * @param String $mode
 	 * @return DataResponse
 	 */
+	public function add($pollId, $option) {
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+			$AdminAccess = $this->groupManager->isAdmin($currentUser);
+		}
+
+		$newOption = new Option();
+
+		$newOption->setPollId($pollId);
+		$newOption->setpollOptionText(trim(htmlspecialchars($option['text'])));
+		$newOption->setTimestamp($option['timestamp']);
+
+		// TODO: catch triying to add existing options
+		// UniqueConstraintViolationException is not chatchable
+		$this->optionMapper->insert($newOption);
+
+		return $this->get($pollId);
+
+	}
+
+	/**
+	 * Write poll (create/update)
+	 * @NoAdminRequired
+	 * @param Array $event
+	 * @param Array $options
+	 * @param Array  $shares
+	 * @param String $mode
+	 * @return DataResponse
+	 */
+	public function remove($optionId) {
+		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		} else {
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+			$AdminAccess = $this->groupManager->isAdmin($currentUser);
+		}
+
+		$this->optionMapper->remove($optionId);
+
+		return $this->get($pollId);
+
+	}
+
+	/**
+	 * Write poll (create/update)
+	 * @NoAdminRequired
+	 * @param Array $event
+	 * @param Array $options
+	 * @param Array  $shares
+	 * @param String $mode
+	 * @return DataResponse
+	 */
 	public function write($pollId, $options) {
 		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
@@ -107,7 +162,9 @@ class OptionController extends Controller {
 			$AdminAccess = $this->groupManager->isAdmin($currentUser);
 		}
 
-		foreach ($ptions as $option) {
+		$this->optionMapper->deleteByPoll($pollId);
+
+		foreach ($options as $option) {
 			$newOption = new Option();
 
 			$newOption->setPollId($pollId);
@@ -117,6 +174,7 @@ class OptionController extends Controller {
 			$this->optionMapper->insert($newOption);
 		}
 
-		return new DataResponse($options, Http::STATUS_OK);
+		return $this->get($pollId);
 
-	}}
+	}
+}

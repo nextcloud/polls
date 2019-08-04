@@ -25,7 +25,7 @@
 		<div class="main-container">
 			<controls :intitle="event.title">
 				<template slot="after">
-					<button :disabled="writingPoll" class="button btn primary" @click="write()">
+					<button v-if="poll.mode === 'edit'" :disabled="writingPoll" class="button btn primary" @click="write()">
 						<span>{{ saveButtonTitle }}</span>
 						<span v-if="writingPoll" class="icon-loading-small" />
 					</button>
@@ -33,7 +33,13 @@
 			</controls>
 
 			<div v-if="poll.mode === 'vote'">
-				<h2><span v-if="event.expired" class="label error">{{ t('poll', 'Expired') }}</span>{{ event.title }}</h2>
+				<h2>
+					<span v-if="event.expired" class="label error">{{ t('poll', 'Expired') }}</span>
+					{{ event.title }}
+					<transition name="fade">
+						<span v-if="voteSaved" class="label success">Vote saved</span>
+					</transition>
+				</h2>
 				<h3> {{ event.description }} </h3>
 			</div>
 
@@ -42,7 +48,7 @@
 				<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
 			</div>
 
-			<vote-table />
+			<vote-table @voteSaved="indicateVoteSaved()" />
 			<notification />
 		</div>
 
@@ -91,7 +97,9 @@ export default {
 
 	data() {
 		return {
-			writingPoll: false
+			writingPoll: false,
+			voteSaved: false,
+			delay: 50
 		}
 	},
 
@@ -161,18 +169,15 @@ export default {
 		}
 	},
 
-	created() {
+	mounted() {
 		moment.locale(this.localeString)
-		this.$store.dispatch({
-			type: 'loadPoll',
-			hash: this.$route.params.hash,
-			mode: 'vote'
-		})
+		this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.hash, mode: 'vote' })
 		.then(() => {
-			this.$store.dispatch({ type: 'loadEvent', pollId: this.poll.id, mode: 'vote' })
-			this.$store.dispatch({ type: 'loadOptions', pollId: this.poll.id, })
-			this.$store.dispatch({ type: 'loadVotes', pollId: this.poll.id, mode: 'vote', currentUser: this.poll.currentUser })
-			this.$store.dispatch({ type: 'loadComments', pollId: this.poll.id })
+			this.$store.dispatch({
+				type: 'loadPoll',
+				hash: this.$route.params.hash,
+				mode: 'vote'
+			})
 		})
 	},
 
@@ -183,7 +188,8 @@ export default {
 
 		...mapActions([
 			'addMe',
-			'writePollPromise'
+			'writeOptionsPromise',
+			'writeEventPromise'
 		]),
 
 		updateDescription(e) {
@@ -198,6 +204,15 @@ export default {
 			}
 		},
 
+		timer() {
+			this.voteSaved = false
+		},
+
+		indicateVoteSaved()  {
+			this.voteSaved = true
+			window.setTimeout(this.timer,this.delay)
+		},
+
 		writePoll() {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'))
@@ -207,38 +222,12 @@ export default {
 				this.writeOptionsPromise()
 				this.writingPoll = false
 				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title))
-				// this.writingPoll = false
-				// OC.Notification.showTemporary(t('polls', 'Error on saving poll, see console'))
-			}
-		},
-
-		writeVote() {
-			if (this.poll.currentUser.length < 4) {
-				OC.Notification.showTemporary(
-					t('polls', 'You are not registered.\nPlease enter your name to vote\n(at least 3 characters).')
-				)
-			} else {
-				this.writingVote = true
-				this.$store
-					.dispatch('writeVotePromise')
-					.then(response => {
-						this.writingVote = false
-						OC.Notification.showTemporary(t('polls', 'Vote successfully saved', 1, this.event.title))
-					})
-					.catch(error => {
-						this.writingVote = false
-						/* eslint-disable-next-line no-console */
-						console.log('Error while saving vote - Error: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error while saving vote', { type: 'error' }))
-					})
 			}
 		},
 
 		write() {
 			if (this.poll.mode === 'edit') {
 				this.writePoll()
-			} else if (this.poll.mode === 'vote') {
-				this.writeVote()
 			}
 
 		}

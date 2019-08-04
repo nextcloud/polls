@@ -2,7 +2,6 @@
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -27,10 +26,7 @@ import sortBy from 'lodash/sortBy'
 
 const defaultVotes = () => {
 	return {
-		currentUser: '',
-		list: [],
-		pollId: 0,
-		voteChanged: false
+		list: []
 	}
 }
 
@@ -45,71 +41,42 @@ const mutations = {
 		Object.assign(state, defaultVotes())
 	},
 
-	// TODO: Find a better solution than this
-	voteChange(state, payload) {
-		state.list.forEach(function(vote) {
-			if (vote === payload.payload) {
-				vote.voteAnswer = payload.switchTo
-				vote.voteOptionId = payload.payload.id
-				state.votechanged = true
-			}
-		})
+	voteSet(state, payload) {
+		var index = state.list.findIndex(vote =>
+			vote.pollId === payload.pollId &&
+			vote.userId === payload.newVote.userId &&
+			vote.voteOptionText === payload.option.text)
+			var obj = state.list[index]
+		if (index > -1 ) {
+			state.list[index] = Object.assign(state.list[index], payload.newVote)
+		} else {
+			state.list.push(payload.newVote)
+		}
 	}
 }
 
 const getters = {
-	allVotes: (state, getters, rootState) => {
-		var votesList = []
-		var foundVote = []
-		var fakeVoteId = 78946456
-
-		getters.participants.forEach(function(participant) {
-			rootState.options.list.forEach(function(voteOption) {
-				foundVote = state.list.filter(vote => {
-					return vote.userId === participant && vote.voteOptionText === voteOption.text
-				})
-
-				if (foundVote.length > 0) {
-					votesList.push(foundVote[0])
-				} else {
-					votesList.push({
-						id: ++fakeVoteId,
-						userId: participant,
-						voteAnswer: 'unvoted',
-						voteOptionText: voteOption.text,
-						voteOptionId: voteOption.id
-					})
-				}
-			})
-		})
-		if (rootState.event.type === 'datePoll') {
-			return sortBy(votesList, 'voteOptionText')
-		} else {
-			return votesList
-		}
-	},
-
 	lastVoteId: state => {
 		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))
 	},
 
-	participants: state => {
+	participants: (state, getters, rootState) => {
 		var list = []
-
 		state.list.forEach(function(vote) {
 			if (!list.includes(vote.userId)) {
 				list.push(vote.userId)
 			}
 		})
+
+		if (!list.includes(rootState.poll.currentUser)) {
+			list.push(rootState.poll.currentUser)
+		}
+
 		return list
 	},
 
 	countParticipants: (state, getters) => {
 		return getters.participants.length
-	},
-
-	currentUserParticipated: (state, getters) => {
-		return getters.participants.includes(state.currentUser)
 	},
 
 	usersVotes: (state, getters) => (userId) => {
@@ -118,18 +85,28 @@ const getters = {
 		})
 	},
 
+	getAnswer: (state, getters, rootState) => (payload) => {
+		var pollId = rootState.event.id
+		var index = state.list.findIndex(vote =>
+			vote.pollId === rootState.event.id &&
+			vote.userId === payload.userId &&
+			vote.voteOptionText === payload.option.text)
+		if (index > -1 ) {
+			return state.list[index].voteAnswer
+		} else {
+			return 'unvoted'
+		}
+	}
+
 }
 
 const actions = {
 
-	loadVotes({ commit }, payload) {
-		commit({ type: 'votesReset' })
+	loadVotes({ commit, rootState }, payload) {
 		axios.get(OC.generateUrl('apps/polls/get/votes/' + payload.pollId))
 			.then((response) => {
 				commit('votesSet', {
 					'list': response.data,
-					'currentUser': payload.currentUser ,
-					'pollId': payload.pollId
 				})
 			}, (error) => {
 				commit({ type: 'votesReset' })
@@ -138,21 +115,21 @@ const actions = {
 			})
 	},
 
-	writeVotesPromise({ commit }, payload) {
-		return
-		return axios.post(OC.generateUrl('apps/polls/write/vote'), { pollId: state.pollId, votes: payload.votes, currentUser: state.currentUser })
+	voteChange({ commit, rootState }, payload) {
+		return axios.post(OC.generateUrl('apps/polls/set/vote'), {
+			pollId: rootState.event.id,
+			option: payload.option,
+			userId: payload.userId,
+			setTo: payload.switchTo
+		})
 		.then((response) => {
-			commit('votesSet', {
-				'list': response.data,
-				'currentUser': payload.currentUser ,
-				'pollId': payload.pollId
-			})
-
+			commit('voteSet', {option: payload.option , pollId: rootState.event.id, newVote: response.data})
+			return response.data
 		}, (error) => {
 			/* eslint-disable-next-line no-console */
 			console.log(error.response)
 		})
-	},
+	}
 
 }
 

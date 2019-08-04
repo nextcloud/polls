@@ -27,8 +27,7 @@ import sortBy from 'lodash/sortBy'
 
 const defaultComments = () => {
 	return {
-		list: [],
-		pollId: 0
+		list: []
 	}
 }
 
@@ -61,14 +60,13 @@ const getters = {
 }
 
 const actions = {
-	loadComments({ commit }, payload) {
+	loadComments({ commit, rootState }, payload) {
 		commit({ type: 'commentsReset' })
 		axios
 			.get(OC.generateUrl('apps/polls/get/comments/' + payload.pollId))
 			.then((response) => {
 				commit('commentsSet', {
-					'list': response.data,
-					'pollId': payload.pollId
+					'list': response.data
 				})
 			}, (error) => {
 				commit({ type: 'commentsReset' })
@@ -77,9 +75,9 @@ const actions = {
 			})
 	},
 
-	writeCommentPromise({ commit }, payload) {
+	writeCommentPromise({ commit, rootState }, payload) {
 		return axios
-			.post(OC.generateUrl('apps/polls/write/comment'), { pollId: state.pollId, message: payload })
+			.post(OC.generateUrl('apps/polls/write/comment'), { pollId: rootState.event.id, message: payload })
 			.then((response) => {
 				commit('commentAdd', response.data)
 			}, (error) => {

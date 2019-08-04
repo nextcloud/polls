@@ -1,5 +1,5 @@
 <template lang="html">
-	<div v-if="loggedIn && currentUserParticipated" class="notification">
+	<div v-if="loggedIn" class="notification">
 		<input id="subscribe" v-model="subscribe" type="checkbox" class="checkbox" />
 		<label for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
 	</div>
@@ -21,10 +21,6 @@
 				notification: state => state.notification,
 				event: state => state.event,
 			}),
-
-			...mapGetters([
-				'currentUserParticipated',
-			]),
 
 			loggedIn() {
 				return !OC.currentUser !== ''

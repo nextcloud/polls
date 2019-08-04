@@ -2,7 +2,6 @@
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -27,8 +26,7 @@ import moment from 'moment'
 
 const defaultOptions = () => {
 	return {
-		list: [],
-		pollId: 0
+		list: []
 	}
 }
 
@@ -39,25 +37,12 @@ const mutations = {
 		Object.assign(state, payload)
 	},
 
-
 	optionsReset(state) {
 		Object.assign(state, defaultOptions())
 	},
 
-	dateAdd(state, payload) {
-		state.list.push({
-			id: 0,
-			timestamp: moment(payload).unix(),
-			text: moment.utc(payload).format('YYYY-MM-DD HH:mm:ss')
-		})
-	},
-
-	textAdd(state, payload) {
-		state.list.push({
-			id: 0,
-			timestamp: 0,
-			text: payload
-		})
+	optionAdd(state, payload) {
+		state.list.push(payload)
 	},
 
 	datesShift(state, payload) {
@@ -66,11 +51,6 @@ const mutations = {
 			option.timestamp = moment.utc(option.text).unix()
 		})
 	},
-
-	optionRemove(state, payload) {
-		state.list.splice(state.list.findIndex(function(voteOption) {
-			return voteOption === payload}), 1)
-	}
 
 }
 
@@ -87,28 +67,70 @@ const getters = {
 
 const actions = {
 
-	loadOptions({ commit }, payload) {
-		commit({ type: 'optionsReset' })
-			return axios.get(OC.generateUrl('apps/polls/get/options/' + payload.pollId))
-			.then((response) => {
-				commit('optionsSet', { 'list': response.data, 'pollId': payload.pollId })
-			}, (error) => {
-				commit('optionsSet', { 'list': [], 'pollId': 0 })
-			/* eslint-disable-next-line no-console */
-				console.log(error)
-			})
+	loadOptions({ commit, rootState }, payload) {
+		console.log('loadOptions', rootState.event.id)
+		return axios.get(OC.generateUrl('apps/polls/get/options/' + payload.pollId))
+		.then((response) => {
+			commit('optionsSet', { 'list': response.data })
+		}, (error) => {
+			commit({ type: 'optionsReset' })
+		/* eslint-disable-next-line no-console */
+			console.log(error)
+		})
 	},
 
-	writeOptionsPromise({ commit }, payload) {
-		return
+	addOption({commit, getters, dispatch, rootState}, payload) {
+		var newOption = {}
+
+		newOption.id = getters.lastOptionId + 1
+		newOption.pollId = rootState.event.id
+
+		if (rootState.event.type === 'datePoll') {
+			newOption.timestamp = moment(payload.option).unix()
+			newOption.text = moment.utc(payload.option).format('YYYY-MM-DD HH:mm:ss')
+
+		} else if (rootState.event.type === 'textPoll') {
+			newOption.timestamp = 0
+			newOption.text = payload.option
+		}
+
 		if (state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/write/options'), { pollId: payload.pollId, options: state.list })
-				.then((response) => {
-					commit('optionsSet', { 'list': response.data, 'pollId': payload.pollId })
-				}, (error) => {
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
-				})
+
+			return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: newOption })
+			.then((response) => {
+				commit('optionsSet', { 'list': response.data })
+			}, (error) => {
+				/* eslint-disable-next-line no-console */
+				console.log(error.response)
+			})
+		}
+	},
+
+	removeOption({commit, getters, dispatch, rootState}, optionId) {
+		if (state.currentUser !== '') {
+			return axios.post(OC.generateUrl('apps/polls/add/option'), { optionId: optionId })
+			.then((response) => {
+				commit('optionsSet', { 'list': response.data })
+			}, (error) => {
+				/* eslint-disable-next-line no-console */
+				console.log(error.response)
+			})
+		}
+
+		commit('addOption', newOption)
+		dispatch('writeOptionsPromise')
+
+	},
+
+	writeOptionsPromise({ commit, getters, rootState }, payload) {
+		if (state.currentUser !== '') {
+			return axios.post(OC.generateUrl('apps/polls/write/options'), { pollId: rootState.event.id, options: state.list })
+			.then((response) => {
+				commit('optionsSet', { 'list': response.data })
+			}, (error) => {
+				/* eslint-disable-next-line no-console */
+				console.log(error.response)
+			})
 		}
 	}
 }

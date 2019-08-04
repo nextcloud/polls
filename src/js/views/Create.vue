@@ -359,21 +359,6 @@ textarea {
     }
 }
 
-/* Transitions for inserting and removing list items */
-.list-enter-active,
-.list-leave-active {
-    transition: all 0.5s ease;
-}
-
-.list-enter,
-.list-leave-to {
-    opacity: 0;
-}
-
-.list-move {
-    transition: transform 0.5s;
-}
-/*  */
 
 #poll-item-selector-text {
     > input {

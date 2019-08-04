@@ -50,93 +50,96 @@ const mutations = {
 
 	pollSetProperty(state, payload) {
 		state[payload.property] = payload.value
-	},
+	}
 
-	participantAdd(state, payload) {
-		var fakeVoteId = 6541315463
-		// state.participants.push(payload.userId)
-		state.voteOptions.forEach(function(option) {
-			state.votes.push({
-				id: ++fakeVoteId,
-				pollId: state.event.id,
-				userId: payload.userId,
-				voteAnswer: 'unvoted',
-				voteOptionText: option.text,
-				voteOptionId: option.id
-			}
-			)
-		})
-	},
+	// participantAdd(state, payload) {
+	// 	var fakeVoteId = 6541315463
+	// 	// state.participants.push(payload.userId)
+	// 	state.voteOptions.forEach(function(option) {
+	// 		state.votes.push({
+	// 			id: ++fakeVoteId,
+	// 			pollId: state.event.id,
+	// 			userId: payload.userId,
+	// 			voteAnswer: 'unvoted',
+	// 			voteOptionText: option.text,
+	// 			voteOptionId: option.id
+	// 		})
+	// 	})
+	// },
 
 
 }
 
 const actions = {
-	addShare({ commit }, payload) {
-	// 	this.poll.shares.push(item)
+	addShare({
+		commit
+	}, payload) {
+		// 	this.poll.shares.push(item)
 	},
 
 	updateShares({ commit }, payload) {
-	// 	this.poll.shares = share.slice(0)
+		// 	this.poll.shares = share.slice(0)
 	},
 
 	removeShare({ commit }, payload) {
-	// 	this.shares.splice(this.shares.indexOf(item), 1)
+		// 	this.shares.splice(this.shares.indexOf(item), 1)
 	},
 
-	addMe({ commit, getters }) {
-		if (!getters.currentUserParticipated && !state.event.expired) {
-			commit('participantAdd', { 'userId': state.currentUser })
-		}
+	loadPoll({ commit, rootState }, payload) {
+		commit('pollSetProperty', {
+			'property': 'mode',
+			'value': payload.mode
+		}),
+		commit('pollSetProperty', {
+			'property': 'currentUser',
+			'value': OC.getCurrentUser().uid
+		}),
+		commit('pollSetProperty', {
+			'property': 'grantedAs',
+			'value': 'owner'
+		}),
+		commit('pollSetProperty', {
+			'property': 'id',
+			'value': rootState.event.id
+		}),
+		commit('pollSetProperty', {
+			'property': 'result',
+			'value': 'foundById'
+		})
+
 	},
 
-	loadPoll({ commit }, payload) {
-		commit({ type: 'pollReset' })
-		if (payload.mode !== 'create') {
-
-			return axios.get(OC.generateUrl('apps/polls/get/poll/' + payload.hash))
-				.then((response) => {
-					commit('pollSet', { 'poll': response.data })
-					commit('pollSetProperty', { 'property': 'currentUser', 'value': OC.getCurrentUser().uid })
-					switch (payload.mode) {
-					case 'edit':
-						commit('pollSetProperty', { 'property': 'mode', 'value': payload.mode })
-						break
-					case 'vote':
-						commit('pollSetProperty', { 'property': 'mode', 'value': payload.mode })
-						break
-					case 'clone':
-						commit('pollSetProperty', { 'property': 'mode', 'value': 'create' })
-						commit('pollSetProperty', { 'property': 'comments', 'value': [] })
-						commit('pollSetProperty', { 'property': 'shares', 'value': [] })
-						// commit('pollSetProperty', { 'property': 'participants', 'value': [] })
-						commit('pollSetProperty', { 'property': 'votes', 'value': [] })
-						break
-					}
-
-				}, (error) => {
-				/* eslint-disable-next-line no-console */
-					console.log(error)
-				})
-		}
-	},
-
-	writePollPromise({ commit }) {
-		return
-		if (state.mode !== 'vote') {
-
-			return axios.post(OC.generateUrl('apps/polls/write/poll'), { event: state.event, voteOptions: state.voteOptions, shares: state.shares, mode: state.mode })
-				.then((response) => {
-					commit('pollSetProperty', { 'property': 'mode', 'value': 'edit' })
-					commit('pollSetProperty', { 'property': 'id', 'value': response.data.id })
-				// window.location.href = OC.generateUrl('apps/polls/edit/' + this.event.hash)
-				}, (error) => {
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
-				})
-
-		}
-	}
+	// writePollPromise({ commit }) {
+	// 	return
+	// 	if (state.mode !== 'vote') {
+	//
+	// 		return axios.post(OC.generateUrl('apps/polls/write/poll'), {
+	// 				event: state.event,
+	// 				voteOptions: state.voteOptions,
+	// 				shares: state.shares,
+	// 				mode: state.mode
+	// 			})
+	// 			.then((response) => {
+	// 				commit('pollSetProperty', {
+	// 					'property': 'mode',
+	// 					'value': 'edit'
+	// 				})
+	// 				commit('pollSetProperty', {
+	// 					'property': 'id',
+	// 					'value': response.data.id
+	// 				})
+	// 				// window.location.href = OC.generateUrl('apps/polls/edit/' + this.event.hash)
+	// 			}, (error) => {
+	// 				/* eslint-disable-next-line no-console */
+	// 				console.log(error.response)
+	// 			})
+	//
+	// 	}
+	// }
 }
 
-export default { state, mutations, actions }
+export default {
+	state,
+	mutations,
+	actions
+}

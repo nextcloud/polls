@@ -37,7 +37,7 @@ return [
 		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
 		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
 
-		['name' => 'api#write_vote', 'url' => '/write/vote', 'verb' => 'POST'],
+		// ['name' => 'api#write_vote', 'url' => '/write/vote', 'verb' => 'POST'],
 		['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
 
 		['name' => 'notification#get', 'url' => '/get/notification/{pollIdOrHash}', 'verb' => 'GET'],
@@ -47,10 +47,13 @@ return [
 		['name' => 'comment#write', 'url' => '/write/comment', 'verb' => 'POST'],
 
 		['name' => 'vote#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
-		['name' => 'vote#write', 'url' => '/write/votes/', 'verb' => 'POST'],
+		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
+		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
 
 		['name' => 'option#get', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#write', 'url' => '/write/options/', 'verb' => 'POST'],
+		['name' => 'option#add', 'url' => '/add/option/', 'verb' => 'POST'],
+		['name' => 'option#remove', 'url' => '/remove/option/', 'verb' => 'POST'],
 
 		['name' => 'event#get', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
 		['name' => 'event#write', 'url' => '/write/event/', 'verb' => 'POST'],

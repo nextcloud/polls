@@ -143,7 +143,7 @@
 		</div>
 
 		<div class="configBox" v-if="!protect && event.type === 'datePoll'">
-			<date-picker v-bind="optionDatePicker" style="width:100%" confirm @change="addNewPollDate($event)" />
+			<date-picker v-bind="optionDatePicker" style="width:100%" confirm @change="addOption($event)" />
 			<shift-dates />
 		</div>
 	</div>
@@ -151,7 +151,7 @@
 
 <script>
 	import ShiftDates from '../datesShift'
-	import { mapState, mapMutations, mapGetters } from 'vuex'
+	import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 
 	export default {
 		name: 'ConfigurationTab',
@@ -290,11 +290,12 @@
 			},
 		},
 		methods: {
+
 			...mapMutations(['eventSetProperty', 'pollSetProperty']),
-			...mapMutations({
-				addNewPollDate: 'dateAdd',
-				addNewPollText: 'textAdd',
-			}),
+
+			addOption(option) {
+				this.$store.dispatch({type: 'addOption', option: option})
+			}
 		},
 	}
 </script>

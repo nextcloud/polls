@@ -33,6 +33,29 @@ export default {
 </script>
 
 <style  lang="scss">
+
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter,
+.list-leave-to {
+    opacity: 0;
+}
+
+.list-move {
+    transition: transform 0.5s;
+}
+
+.fade-leave-active {
+  transition: opacity 2.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 #app-polls {
 	width: 100%;
 	display: flex;
@@ -60,6 +83,11 @@ export default {
 		&.error {
 			border-color: var(--color-error);
 			background-color: var(--color-error);
+			color: var(--color-primary-text);
+		}
+		&.success {
+			border-color: var(--color-success);
+			background-color: var(--color-success);
 			color: var(--color-primary-text);
 		}
 	}

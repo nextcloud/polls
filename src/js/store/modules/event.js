@@ -100,7 +100,6 @@ const actions = {
 			return axios.get(OC.generateUrl('apps/polls/get/event/' + payload.pollId))
 				.then((response) => {
 					commit('eventSet', { 'event': response.data })
-
 				}, (error) => {
 				/* eslint-disable-next-line no-console */
 					console.log(error)
@@ -108,13 +107,11 @@ const actions = {
 		}
 	},
 
-	writeEventPromise({ commit }, payload) {
-		return
-		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state.event, mode: payload.mode })
+	writeEventPromise({ commit, rootState }, payload) {
+		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state, mode: rootState.poll.mode })
 		.then((response) => {
 			commit('eventSet', { 'event': response.data })
 		}, (error) => {
-			state.hash = ''
 			/* eslint-disable-next-line no-console */
 			console.log(error.response)
 		})

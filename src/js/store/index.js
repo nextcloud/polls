@@ -29,7 +29,7 @@ import poll from './currentPoll'
 import comments from './modules/comments'
 import event from './modules/event'
 import notification from './modules/notification'
-import votes2 from './modules/votes'
+import votes from './modules/votes'
 import options from './modules/options'
 import locale from './locale'
 
@@ -37,6 +37,7 @@ Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
+
 	modules: {
 		polls,
 		poll,
@@ -44,8 +45,11 @@ export default new Vuex.Store({
 		event,
 		notification,
 		locale,
-		votes2,
+		votes,
 		options
+	},
+	state: {
+		currentUser: ''
 	},
 	strict: process.env.NODE_ENV !== 'production'
 })

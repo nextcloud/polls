@@ -157,7 +157,48 @@ class VoteController extends Controller {
 	}
 
 	/**
-	 * WriteVote (update/create)
+	 * set (update/create)
+	 * @NoAdminRequired
+	 * @param Any $pollId
+	 * @param Array $option
+	 * @param String $userId
+	 * @param String $setTo
+	 * @return DataResponse
+	 */
+	public function set($pollId, $option, $userId, $setTo) {
+		$vote = new Vote();
+
+		try {
+			$vote = $this->voteMapper->findSingleVote($pollId, $option['text'], $userId);
+			$vote->setVoteAnswer($setTo);
+			$this->voteMapper->update($vote);
+
+		} catch (DoesNotExistException $e) {
+			// Vote does not exist, insert as new Vote
+			$vote = new Vote();
+
+			$vote->setPollId($pollId);
+			$vote->setUserId($userId);
+			$vote->setVoteOptionText($option['text']);
+			$vote->setVoteOptionId($option['id']);
+			$vote->setVoteAnswer($setTo);
+
+			$this->voteMapper->insert($vote);
+		} finally {
+			return new DataResponse(array(
+				'id' => $vote->getId(),
+				'pollId' => $vote->getPollId(),
+				'userId' => $vote->getUserId(),
+				'voteAnswer' => $vote->getVoteAnswer(),
+				'voteOptionId' => $vote->getVoteOptionId(),
+				'voteOptionText' => $vote->getVoteOptionText()
+			), Http::STATUS_OK);
+
+		}
+	}
+
+	/**
+	 * write (update/create)
 	 * @NoAdminRequired
 	 * @param Array $event
 	 * @param Array $votes
@@ -188,6 +229,6 @@ class VoteController extends Controller {
 			}
 		}
 
-		return new DataResponse(array('result' => 'saved'), Http::STATUS_OK);
+		return $this->get($pollId);
 	}
 }

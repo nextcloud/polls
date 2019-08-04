@@ -22,10 +22,16 @@
 
 <template lang="html">
 	<div class="vote-table">
-		<transition-group v-if="event.type === 'datePoll'" name="voteOptions" tag="div"
-			class="header"
-		>
-			<date-poll-vote-header v-for="(option) in sortedOptions"
+		<transition-group name="list" tag="div" class="header" >
+			<date-poll-vote-header v-if="event.type === 'datePoll'" v-for="(option) in sortedOptions"
+				:key="option.text"
+				:option="option"
+				:poll-type="event.type"
+				:mode="poll.mode"
+				@remove="optionRemove(option)"
+			/>
+
+			<text-poll-vote-header v-if="event.type === 'textPoll'" v-for="(option) in sortedOptions"
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
@@ -34,29 +40,7 @@
 			/>
 		</transition-group>
 
-		<transition-group v-if="event.type === 'textPoll'" name="voteOptions" tag="div"
-			class="header"
-		>
-			<text-poll-vote-header v-for="(option) in sortedOptions"
-				:key="option.text"
-				:option="option"
-				:poll-type="event.type"
-			/>
-		</transition-group>
-
 		<ul class="participants">
-
-			<div v-if="(!currentUserParticipated && poll.mode === 'vote' && !event.expired)">
-				<div class="user-row fixedWidth user">
-					<button class="button btn primary" @click="addMe()">
-						<span>{{ t('polls', 'Add me') }}</span>
-						<span v-if="writingPoll" class="icon-loading-small" />
-					</button>
-				</div>
-				<div class="vote-row">
-					No votes until now
-				</div>
-			</div>
 
 			<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === poll.currentUser) }">
 				<user-div :key="participant"
@@ -65,16 +49,16 @@
 					:fixed-width="true"
 				/>
 				<div class="vote-row">
-					<vote-item v-for="vote in usersVotes(participant)"
-						:key="vote.id"
-						:option="vote"
-						:edit="poll.currentUser === participant"
+					<vote-item v-for="(option) in sortedOptions"
+						:key="option.id"
+						:user-id="participant"
+						:option="option"
 						:poll-type="event.type"
-						@voteClick="cycleVote(vote)"
+						@voteSaved="voteSaved(vote)"
 					/>
 				</div>
 			</div>
-		</ul>
+		</div>
 	</div>
 </template>
 
@@ -101,34 +85,27 @@ export default {
 
 		...mapGetters([
 			'sortedOptions',
-			'currentUserParticipated',
 			'usersVotes',
 			'participants'
 		])
 	},
 
-	methods: {
-		...mapActions([
-			'addMe',
-		]),
+	mounted() {
+		this.loadTable()
+	},
 
+	methods: {
 		...mapMutations([
 			'optionRemove'
 		]),
 
-		// optionRemove(payload) {
-		// 	this.$store.commit('optionRemove', payload)
-		// },
+		loadTable() {
+			this.$store.dispatch({ type: 'loadOptions', pollId: this.$route.params.hash, })
+			this.$store.dispatch({ type: 'loadVotes', pollId: this.$route.params.hash, mode: 'vote', currentUser: this.poll.currentUser })
+		},
 
-		cycleVote(payload) {
-			var switchTo = 'yes'
-
-			if (payload.voteAnswer === 'yes') {
-				switchTo = 'no'
-			} else if (payload.voteAnswer === 'no' && this.event.allowMaybe) {
-				switchTo = 'maybe'
-			}
-			this.$store.commit('voteChange', { payload, switchTo })
+		voteSaved() {
+			this.$emit('voteSaved')
 		}
 	}
 }

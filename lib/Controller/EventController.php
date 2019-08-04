@@ -152,7 +152,7 @@ class EventController extends Controller {
 
 		if ($mode === 'edit') {
 			// Edit existing poll
-			$oldPoll = $this->eventMapper->findById($event['id']);
+			$oldPoll = $this->eventMapper->find($event['id']);
 
 			// Check if current user is allowed to edit existing poll
 			if ($oldPoll->getOwner() !== $currentUser && !$AdminAccess) {
@@ -179,11 +179,6 @@ class EventController extends Controller {
 			));
 			$newEvent = $this->eventMapper->insert($newEvent);
 		}
-
-		return new DataResponse(array(
-			'id' => $newEvent->getId(),
-			'hash' => $newEvent->getHash()
-		), Http::STATUS_OK);
-
+		return $this->get($newEvent->getId());
 	}
 }

@@ -59,6 +59,20 @@ class OptionMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 */
+	public function removeOption($optionId) {
+		$qb = $this->db->getQueryBuilder();
+
+        $qb->delete($this->getTableName())
+           ->where(
+               $qb->expr()->eq('id', $qb->createNamedParameter($optionId, IQueryBuilder::PARAM_INT))
+           );
+
+	   $qb->execute();
+	}
+
+	/**
+	 * @param int $pollId
+	 */
 	public function deleteByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
