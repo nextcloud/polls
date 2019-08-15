@@ -27,7 +27,6 @@
 	<li v-else class="poll-cell" :class="iconClass" />
 </template>
 
-
 <script>
 import { mapState, mapGetters } from 'vuex'
 
@@ -46,7 +45,7 @@ export default {
 		userId: {
 			type: String,
 			default: ''
-		},
+		}
 	},
 
 	data() {
@@ -73,13 +72,13 @@ export default {
 
 		iconClass() {
 
-			if (this.getAnswer({option: this.option, userId: this.userId}) === 'yes') {
+			if (this.getAnswer({ option: this.option, userId: this.userId }) === 'yes') {
 				this.nextStatus = 'no'
 				return 'yes icon-yes '
-			} else if (this.getAnswer({option: this.option, userId: this.userId}) === 'maybe') {
+			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'maybe') {
 				this.nextStatus = 'yes'
 				return 'maybe icon-maybe '
-			} else if (this.getAnswer({option: this.option, userId: this.userId}) === 'no') {
+			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'no') {
 				if (this.event.allowMaybe) {
 					this.nextStatus = 'maybe'
 				} else {
@@ -96,9 +95,9 @@ export default {
 
 		voteClick() {
 			this.$store.dispatch('voteChange', { option: this.option, userId: this.userId, switchTo: this.nextStatus })
-			.then(response => {
-				this.$emit('voteSaved')
-			})
+				.then(response => {
+					this.$emit('voteSaved')
+				})
 
 		}
 	}

@@ -25,7 +25,7 @@ import axios from 'nextcloud-axios'
 
 const defaultNotification = () => {
 	return {
-		subscribed: false,
+		subscribed: false
 	}
 }
 
@@ -35,29 +35,28 @@ const mutations = {
 
 	setNotification(state, payload) {
 		state.subscribed = payload
-	},
+	}
 
 }
 
 const actions = {
 	getSubscription({ commit }, payload) {
-		axios.get(OC.generateUrl('apps/polls/get/notification/' + payload))
+		axios.get(OC.generateUrl('apps/polls/get/notification/' + payload.pollId))
 			.then((response) => {
-				// console.log(response.data)
 				commit('setNotification', true)
 			}, (error) => {
-				// NOTE: No unique result found, switch to fals silently
+				// NOTE: No unique result found, switch to false silently
 				commit('setNotification', false)
 			})
 	},
 
 	writeSubscriptionPromise({ commit }, payload) {
 		if (state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed})
+			return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed })
 				.then((response) => {
 				}, (error) => {
 					/* eslint-disable-next-line no-console */
-					console.log(error.response)
+					console.error(error.response)
 				})
 		}
 	}

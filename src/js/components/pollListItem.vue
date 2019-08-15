@@ -22,9 +22,7 @@
 
 <template>
 	<div v-if="header" class="wrapper group-master table-row table-header">
-
 		<div class="wrapper group-1">
-
 			<div class="wrapper group-1-1">
 				<div class="name">
 					{{ t('polls', 'Title') }}
@@ -55,13 +53,11 @@
 					{{ t('polls', 'Expires') }}
 				</div>
 			</div>
-
 		</div>
 	</div>
 
 	<div v-else class="wrapper table-row table-body group-master">
 		<div class="wrapper group-1">
-
 			<div v-tooltip.auto="pollType" class="thumbnail" :class="[poll.event.type, {expired : poll.event.expired}]">
 				{{ pollType }}
 			</div>
@@ -92,7 +88,6 @@
 		</div>
 
 		<div class="wrapper group-2">
-
 			<div class="wrapper group-2-1">
 				<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.event.access">
 					{{ accessType }}
@@ -111,189 +106,188 @@
 					{{ timeSpanExpiration }}
 				</div>
 			</div>
-
 		</div>
 	</div>
 </template>
 
 <script>
-	import moment from 'moment'
+import moment from 'moment'
 
-	export default {
-		name: 'PollListItem',
+export default {
+	name: 'PollListItem',
 
-		props: {
-			header: {
-				type: Boolean,
-				default: false,
-			},
-			poll: {
-				type: Object,
-				default: undefined,
-			},
+	props: {
+		header: {
+			type: Boolean,
+			default: false
 		},
+		poll: {
+			type: Object,
+			default: undefined
+		}
+	},
 
-		data() {
-			return {
-				openedMenu: false,
-				hostName: this.$route.query.page,
+	data() {
+		return {
+			openedMenu: false,
+			hostName: this.$route.query.page
+		}
+	},
+
+	computed: {
+		accessType() {
+			if (this.poll.event.access === 'public') {
+				return t('polls', 'Public access')
+			} else if (this.poll.event.access === 'select') {
+				return t('polls', 'Only shared')
+			} else if (this.poll.event.access === 'registered') {
+				return t('polls', 'Registered users only')
+			} else if (this.poll.event.access === 'hidden') {
+				return t('polls', 'Hidden poll')
+			} else {
+				return ''
 			}
 		},
 
-		computed: {
-			accessType() {
-				if (this.poll.event.access === 'public') {
-					return t('polls', 'Public access')
-				} else if (this.poll.event.access === 'select') {
-					return t('polls', 'Only shared')
-				} else if (this.poll.event.access === 'registered') {
-					return t('polls', 'Registered users only')
-				} else if (this.poll.event.access === 'hidden') {
-					return t('polls', 'Hidden poll')
-				} else {
-					return ''
-				}
-			},
-
-			pollType() {
-				if (this.poll.event.type === 'textPoll') {
-					// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
-					return t('polls', 'Text poll')
-				} else {
-					// TRANSLATORS This means that this is the type of the poll. Another type is a 'text poll'.
-					return t('polls', 'Date poll')
-				}
-			},
-
-			timeSpanCreated() {
-				return moment(this.poll.event.created).fromNow()
-			},
-
-			timeSpanExpiration() {
-				if (this.poll.event.expiration) {
-					return moment(this.poll.event.expirationDate).fromNow()
-				} else {
-					return t('polls', 'never')
-				}
-			},
-			participants() {
-				return this.poll.votes
-					.map(item => item.userId)
-					.filter((value, index, self) => self.indexOf(value) === index)
-			},
-			countvotes() {
-				return this.participants.length
-			},
-			countComments() {
-				if (this.poll.comments.length > 999) {
-					return '999+'
-				}
-				return this.poll.comments.length
-			},
-			countCommentsHint() {
-				return n('polls', 'There is %n comment', 'There are %n comments', this.poll.comments.length)
-			},
-			countShares() {
-				return this.poll.shares.length
-			},
-			votedBycurrentUser() {
-				return this.participants.indexOf(OC.getCurrentUser().uid) > -1
-			},
-			voteUrl() {
-				return OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
-			},
-
-			menuItems() {
-				let items = [
-					{
-						key: 'copyLink',
-						icon: 'icon-clippy',
-						text: t('polls', 'Copy Link'),
-						action: this.copyLink,
-					},
-					{
-						key: 'clonePoll',
-						icon: 'icon-confirm',
-						text: t('polls', 'Clone poll'),
-						action: this.clonePoll,
-					},
-				]
-
-				if (this.poll.event.owner === OC.getCurrentUser().uid) {
-					items.push({
-						key: 'deletePoll',
-						icon: 'icon-rename',
-						text: t('polls', 'Edit poll'),
-						action: this.editPoll,
-					})
-					items.push({
-						key: 'deletePoll',
-						icon: 'icon-delete',
-						text: t('polls', 'Delete poll'),
-						action: this.deletePoll,
-					})
-				} else if (OC.isUserAdmin()) {
-					items.push({
-						key: 'editPoll',
-						icon: 'icon-rename',
-						text: t('polls', 'Edit poll as admin'),
-						action: this.editPoll,
-					})
-					items.push({
-						key: 'deletePoll',
-						icon: 'icon-delete',
-						text: t('polls', 'Delete poll as admin'),
-						action: this.deletePoll,
-					})
-				}
-
-				return items
-			},
+		pollType() {
+			if (this.poll.event.type === 'textPoll') {
+				// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
+				return t('polls', 'Text poll')
+			} else {
+				// TRANSLATORS This means that this is the type of the poll. Another type is a 'text poll'.
+				return t('polls', 'Date poll')
+			}
 		},
 
-		methods: {
-			toggleMenu() {
-				this.openedMenu = !this.openedMenu
-			},
-
-			hideMenu() {
-				this.openedMenu = false
-			},
-
-			copyLink() {
-				// this.$emit('copyLink')
-				this.$copyText(window.location.origin + this.voteUrl).then(
-					function(e) {
-						OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
-					},
-					function(e) {
-						OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
-					}
-				)
-				this.hideMenu()
-			},
-
-			deletePoll() {
-				this.$emit('deletePoll')
-				this.hideMenu()
-			},
-
-			votePoll() {
-				this.$emit('votePoll')
-				this.hideMenu()
-			},
-
-			editPoll() {
-				this.$emit('editPoll')
-				this.hideMenu()
-			},
-
-			clonePoll() {
-				this.$emit('clonePoll')
-				this.hideMenu()
-			},
+		timeSpanCreated() {
+			return moment(this.poll.event.created).fromNow()
 		},
+
+		timeSpanExpiration() {
+			if (this.poll.event.expiration) {
+				return moment(this.poll.event.expirationDate).fromNow()
+			} else {
+				return t('polls', 'never')
+			}
+		},
+		participants() {
+			return this.poll.votes
+				.map(item => item.userId)
+				.filter((value, index, self) => self.indexOf(value) === index)
+		},
+		countvotes() {
+			return this.participants.length
+		},
+		countComments() {
+			if (this.poll.comments.length > 999) {
+				return '999+'
+			}
+			return this.poll.comments.length
+		},
+		countCommentsHint() {
+			return n('polls', 'There is %n comment', 'There are %n comments', this.poll.comments.length)
+		},
+		countShares() {
+			return this.poll.shares.length
+		},
+		votedBycurrentUser() {
+			return this.participants.indexOf(OC.getCurrentUser().uid) > -1
+		},
+		voteUrl() {
+			return OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
+		},
+
+		menuItems() {
+			let items = [
+				{
+					key: 'copyLink',
+					icon: 'icon-clippy',
+					text: t('polls', 'Copy Link'),
+					action: this.copyLink
+				},
+				{
+					key: 'clonePoll',
+					icon: 'icon-confirm',
+					text: t('polls', 'Clone poll'),
+					action: this.clonePoll
+				}
+			]
+
+			if (this.poll.event.owner === OC.getCurrentUser().uid) {
+				items.push({
+					key: 'deletePoll',
+					icon: 'icon-rename',
+					text: t('polls', 'Edit poll'),
+					action: this.editPoll
+				})
+				items.push({
+					key: 'deletePoll',
+					icon: 'icon-delete',
+					text: t('polls', 'Delete poll'),
+					action: this.deletePoll
+				})
+			} else if (OC.isUserAdmin()) {
+				items.push({
+					key: 'editPoll',
+					icon: 'icon-rename',
+					text: t('polls', 'Edit poll as admin'),
+					action: this.editPoll
+				})
+				items.push({
+					key: 'deletePoll',
+					icon: 'icon-delete',
+					text: t('polls', 'Delete poll as admin'),
+					action: this.deletePoll
+				})
+			}
+
+			return items
+		}
+	},
+
+	methods: {
+		toggleMenu() {
+			this.openedMenu = !this.openedMenu
+		},
+
+		hideMenu() {
+			this.openedMenu = false
+		},
+
+		copyLink() {
+			// this.$emit('copyLink')
+			this.$copyText(window.location.origin + this.voteUrl).then(
+				function(e) {
+					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
+				},
+				function(e) {
+					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
+				}
+			)
+			this.hideMenu()
+		},
+
+		deletePoll() {
+			this.$emit('deletePoll')
+			this.hideMenu()
+		},
+
+		votePoll() {
+			this.$emit('votePoll')
+			this.hideMenu()
+		},
+
+		editPoll() {
+			this.$emit('editPoll')
+			this.hideMenu()
+		},
+
+		clonePoll() {
+			this.$emit('clonePoll')
+			this.hideMenu()
+		}
 	}
+}
 </script>
 <style lang="scss">
 	$row-padding: 15px;

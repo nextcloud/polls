@@ -33,37 +33,37 @@
 </template>
 
 <script>
-	export default {
-		name: 'AddComment',
-		data() {
-			return {
-				comment: ''
-			}
-		},
+export default {
+	name: 'AddComment',
+	data() {
+		return {
+			comment: ''
+		}
+	},
 
-		computed: {
-			currentUser() {
-				return this.$store.state.poll.currentUser
-			},
-		},
+	computed: {
+		currentUser() {
+			return this.$store.state.poll.currentUser
+		}
+	},
 
-		methods: {
-			writeComment() {
-				this.$store
-					.dispatch('writeCommentPromise', this.comment)
-					.then(response => {
-						OC.Notification.showTemporary(t('polls', 'Your comment was added'))
-					})
-					.catch(error => {
-						this.writingVote = false
-						/* eslint-disable-next-line no-console */
-						console.log('Error while saving comment - Error: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error while saving comment', { type: 'error' }))
-					})
+	methods: {
+		writeComment() {
+			this.$store
+				.dispatch('writeCommentPromise', this.comment)
+				.then(response => {
+					OC.Notification.showTemporary(t('polls', 'Your comment was added'))
+				})
+				.catch(error => {
+					this.writingVote = false
+					/* eslint-disable-next-line no-console */
+					console.log('Error while saving comment - Error: ', error.response)
+					OC.Notification.showTemporary(t('polls', 'Error while saving comment', { type: 'error' }))
+				})
 
-			},
-		},
+		}
 	}
+}
 </script>
 
 <style lang="scss" scoped>

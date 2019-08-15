@@ -24,7 +24,6 @@
 import axios from 'nextcloud-axios'
 import sortBy from 'lodash/sortBy'
 
-
 const defaultComments = () => {
 	return {
 		list: []

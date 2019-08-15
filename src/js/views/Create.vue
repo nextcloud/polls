@@ -174,7 +174,6 @@ export default {
 			return (this.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
 		},
 
-
 		// Local computed
 		voteUrl() {
 			return OC.generateUrl('apps/polls/poll/') + this.event.hash
@@ -358,7 +357,6 @@ textarea {
         box-shadow: 1px 0 var(--border-radius) var(--color-box-shadow);
     }
 }
-
 
 #poll-item-selector-text {
     > input {

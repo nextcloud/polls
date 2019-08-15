@@ -21,10 +21,6 @@
  *
  */
 
-import axios from 'nextcloud-axios'
-import sortBy from 'lodash/sortBy'
-import moment from 'moment'
-
 const defaultPoll = () => {
 	return {
 		// votechanged: false,
@@ -33,7 +29,7 @@ const defaultPoll = () => {
 		mode: 'create',
 		result: 'new',
 		shares: [],
-		currentUser: '',
+		currentUser: ''
 	}
 }
 
@@ -67,7 +63,6 @@ const mutations = {
 	// 	})
 	// },
 
-
 }
 
 const actions = {
@@ -89,25 +84,25 @@ const actions = {
 		commit('pollSetProperty', {
 			'property': 'mode',
 			'value': payload.mode
-		}),
+		})
 		commit('pollSetProperty', {
 			'property': 'currentUser',
 			'value': OC.getCurrentUser().uid
-		}),
+		})
 		commit('pollSetProperty', {
 			'property': 'grantedAs',
 			'value': 'owner'
-		}),
+		})
 		commit('pollSetProperty', {
 			'property': 'id',
 			'value': rootState.event.id
-		}),
+		})
 		commit('pollSetProperty', {
 			'property': 'result',
 			'value': 'foundById'
 		})
 
-	},
+	}
 
 	// writePollPromise({ commit }) {
 	// 	return

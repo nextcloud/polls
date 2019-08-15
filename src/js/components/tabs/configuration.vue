@@ -24,280 +24,293 @@
 	<div>
 		<div class="configBox">
 			<label class="title icon-checkmark">
-					{{ t('polls', 'Poll type') }}
-				</label>
+				{{ t('polls', 'Poll type') }}
+			</label>
 			<input id="datePoll"
-			       v-model="eventType"
-			       value="datePoll"
-			       :disabled="protect"
-			       type="radio"
-			       class="radio">
+				v-model="eventType"
+				value="datePoll"
+				:disabled="protect"
+				type="radio"
+				class="radio"
+			>
 			<label for="datePoll">
-					{{ t('polls', 'Event schedule') }}
-				</label>
+				{{ t('polls', 'Event schedule') }}
+			</label>
 			<input id="textPoll"
-			       v-model="eventType"
-			       value="textPoll"
-			       :disabled="protect"
-			       type="radio"
-			       class="radio">
+				v-model="eventType"
+				value="textPoll"
+				:disabled="protect"
+				type="radio"
+				class="radio"
+			>
 			<label for="textPoll">
-					{{ t('polls', 'Text based') }}
-				</label>
+				{{ t('polls', 'Text based') }}
+			</label>
 		</div>
 
 		<div class="configBox">
 			<label class="title icon-category-customization">
-					{{ t('polls', 'Poll configurations') }}
-				</label>
+				{{ t('polls', 'Poll configurations') }}
+			</label>
 
 			<input id="allowMaybe"
-			       v-model="eventAllowMaybe"
-			       :disabled="protect"
-			       type="checkbox"
-			       class="checkbox">
+				v-model="eventAllowMaybe"
+				:disabled="protect"
+				type="checkbox"
+				class="checkbox"
+			>
 			<label for="allowMaybe" class="title">
-					{{ t('polls', 'Allow "maybe" vote') }}
-				</label>
+				{{ t('polls', 'Allow "maybe" vote') }}
+			</label>
 
 			<input id="anonymous"
-			       v-model="eventIsAnonymous"
-			       :disabled="protect"
-			       type="checkbox"
-			       class="checkbox">
+				v-model="eventIsAnonymous"
+				:disabled="protect"
+				type="checkbox"
+				class="checkbox"
+			>
 			<label for="anonymous" class="title">
-					{{ t('polls', 'Anonymous poll') }}
-				</label>
+				{{ t('polls', 'Anonymous poll') }}
+			</label>
 
 			<input v-show="event.isAnonymous"
-			       id="trueAnonymous"
-			       v-model="eventFullAnonymous"
-			       :disabled="protect"
-			       type="checkbox"
-			       class="checkbox">
+				id="trueAnonymous"
+				v-model="eventFullAnonymous"
+				:disabled="protect"
+				type="checkbox"
+				class="checkbox"
+			>
 			<label v-show="event.isAnonymous" class="title" for="trueAnonymous">
-					{{ t('polls', 'Hide user names for admin') }}
-				</label>
+				{{ t('polls', 'Hide user names for admin') }}
+			</label>
 
 			<input id="expiration"
-			       v-model="eventExpiration"
-			       :disabled="protect"
-			       type="checkbox"
-			       class="checkbox">
+				v-model="eventExpiration"
+				:disabled="protect"
+				type="checkbox"
+				class="checkbox"
+			>
 			<label class="title" for="expiration">
-					{{ t('polls', 'Expires') }}
-				</label>
+				{{ t('polls', 'Expires') }}
+			</label>
 
 			<date-picker v-show="event.expiration"
-			             v-model="eventExpirationDate"
-			             v-bind="expirationDatePicker"
-			             :disabled="protect"
-			             :time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }"
-			             style="width:170px" />
+				v-model="eventExpirationDate"
+				v-bind="expirationDatePicker"
+				:disabled="protect"
+				:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }"
+				style="width:170px"
+			/>
 		</div>
 
 		<div class="configBox">
 			<label class="title icon-category-auth">
-					{{ t('polls', 'Access') }}
-				</label>
+				{{ t('polls', 'Access') }}
+			</label>
 			<input id="private"
-			       v-model="eventAccess"
-			       :disabled="protect"
-			       type="radio"
-			       value="registered"
-			       class="radio">
+				v-model="eventAccess"
+				:disabled="protect"
+				type="radio"
+				value="registered"
+				class="radio"
+			>
 			<label for="private" class="title">
-					<div class="title icon-group" />
-					<span>{{ t('polls', 'Registered users only') }}</span>
-				</label>
+				<div class="title icon-group" />
+				<span>{{ t('polls', 'Registered users only') }}</span>
+			</label>
 			<input id="hidden"
-			       v-model="eventAccess"
-			       :disabled="protect"
-			       type="radio"
-			       value="hidden"
-			       class="radio">
+				v-model="eventAccess"
+				:disabled="protect"
+				type="radio"
+				value="hidden"
+				class="radio"
+			>
 			<label for="hidden" class="title">
-					<div class="title icon-category-security" />
-					<span>{{ t('polls', 'hidden') }}</span>
-				</label>
+				<div class="title icon-category-security" />
+				<span>{{ t('polls', 'hidden') }}</span>
+			</label>
 			<input id="public"
-			       v-model="eventAccess"
-			       :disabled="protect"
-			       type="radio"
-			       value="public"
-			       class="radio">
+				v-model="eventAccess"
+				:disabled="protect"
+				type="radio"
+				value="public"
+				class="radio"
+			>
 			<label for="public" class="title">
-					<div class="title icon-link" />
-					<span>{{ t('polls', 'Public access') }}</span>
-				</label>
+				<div class="title icon-link" />
+				<span>{{ t('polls', 'Public access') }}</span>
+			</label>
 			<input id="select"
-			       v-model="eventAccess"
-			       :disabled="protect"
-			       type="radio"
-			       value="select"
-			       class="radio">
+				v-model="eventAccess"
+				:disabled="protect"
+				type="radio"
+				value="select"
+				class="radio"
+			>
 			<label for="select" class="title">
-					<div class="title icon-shared" />
-					<span>{{ t('polls', 'Only shared') }}</span>
-				</label>
+				<div class="title icon-shared" />
+				<span>{{ t('polls', 'Only shared') }}</span>
+			</label>
 		</div>
 
-		<div class="configBox" v-if="!protect && event.type === 'datePoll'">
-			<date-picker v-bind="optionDatePicker" style="width:100%" confirm @change="addOption($event)" />
+		<div v-if="!protect && event.type === 'datePoll'" class="configBox">
+			<date-picker v-bind="optionDatePicker" style="width:100%" confirm
+				@change="addOption($event)"
+			/>
 			<shift-dates />
 		</div>
 	</div>
 </template>
 
 <script>
-	import ShiftDates from '../datesShift'
-	import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
+import ShiftDates from '../datesShift'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 
-	export default {
-		name: 'ConfigurationTab',
+export default {
+	name: 'ConfigurationTab',
 
-		components: {
-			ShiftDates,
+	components: {
+		ShiftDates
+	},
+
+	data() {
+		return {
+			// protect: false,
+			nextPollDateId: 1,
+			nextPollTextId: 1,
+			writingPoll: false,
+			sidebar: false,
+			titleEmpty: false
+		}
+	},
+
+	computed: {
+		...mapState({
+			poll: state => state.poll,
+			event: state => state.event
+		}),
+
+		...mapGetters(['languageCodeShort']),
+
+		// Add bindings
+		eventType: {
+			get() {
+				return this.event.type
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { property: 'type', value: value })
+			}
 		},
 
-		data() {
+		eventAccess: {
+			get() {
+				return this.event.access
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { property: 'access', value: value })
+			}
+		},
+
+		eventExpiration: {
+			get() {
+				return this.event.expiration
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { property: 'expiration', value: value })
+			}
+		},
+
+		eventFullAnonymous: {
+			get() {
+				return this.event.fullAnonymous
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { property: 'fullAnonymous', value: value })
+			}
+		},
+
+		eventIsAnonymous: {
+			get() {
+				return this.event.isAnonymous
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { property: 'isAnonymous', value: value })
+			}
+		},
+
+		eventAllowMaybe: {
+			get() {
+				return this.event.allowMaybe
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { property: 'allowMaybe', value: value })
+			}
+		},
+
+		eventExpirationDate: {
+			get() {
+				return this.$store.state.event.expirationDate
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { property: 'expirationDate', value: value })
+			}
+		},
+
+		expirationDatePicker() {
 			return {
-				// protect: false,
-				nextPollDateId: 1,
-				nextPollTextId: 1,
-				writingPoll: false,
-				sidebar: false,
-				titleEmpty: false,
+				editable: true,
+				minuteStep: 1,
+				type: 'datetime',
+				format: this.dateTimeFormat,
+				lang: this.langShort,
+				placeholder: t('polls', 'Expiration date'),
+				timePickerOptions: {
+					start: '00:00',
+					step: '00:30',
+					end: '23:30'
+				}
 			}
 		},
 
-		computed: {
-			...mapState({
-				poll: state => state.poll,
-				event: state => state.event,
-			}),
-
-			...mapGetters(['languageCodeShort']),
-
-			// Add bindings
-			eventType: {
-				get() {
-					return this.event.type
-				},
-				set(value) {
-					this.$store.commit('eventSetProperty', { property: 'type', value: value })
-				},
-			},
-
-			eventAccess: {
-				get() {
-					return this.event.access
-				},
-				set(value) {
-					this.$store.commit('eventSetProperty', { property: 'access', value: value })
-				},
-			},
-
-			eventExpiration: {
-				get() {
-					return this.event.expiration
-				},
-				set(value) {
-					this.$store.commit('eventSetProperty', { property: 'expiration', value: value })
-				},
-			},
-
-			eventFullAnonymous: {
-				get() {
-					return this.event.fullAnonymous
-				},
-				set(value) {
-					this.$store.commit('eventSetProperty', { property: 'fullAnonymous', value: value })
-				},
-			},
-
-			eventIsAnonymous: {
-				get() {
-					return this.event.isAnonymous
-				},
-				set(value) {
-					this.$store.commit('eventSetProperty', { property: 'isAnonymous', value: value })
-				},
-			},
-
-			eventAllowMaybe: {
-				get() {
-					return this.event.allowMaybe
-				},
-				set(value) {
-					this.$store.commit('eventSetProperty', { property: 'allowMaybe', value: value })
-				},
-			},
-
-			eventExpirationDate: {
-				get() {
-					return this.$store.state.event.expirationDate
-				},
-				set(value) {
-					this.$store.commit('eventSetProperty', { property: 'expirationDate', value: value })
-				},
-			},
-
-			expirationDatePicker() {
-				return {
-					editable: true,
-					minuteStep: 1,
-					type: 'datetime',
-					format: this.dateTimeFormat,
-					lang: this.langShort,
-					placeholder: t('polls', 'Expiration date'),
-					timePickerOptions: {
-						start: '00:00',
-						step: '00:30',
-						end: '23:30',
-					},
+		optionDatePicker() {
+			return {
+				editable: false,
+				minuteStep: 1,
+				type: 'datetime',
+				format: this.dateTimeFormat,
+				lang: this.languageCodeShort,
+				placeholder: t('polls', 'Click to add a date'),
+				timePickerOptions: {
+					start: '00:00',
+					step: '00:30',
+					end: '23:30'
 				}
-			},
-
-			optionDatePicker() {
-				return {
-					editable: false,
-					minuteStep: 1,
-					type: 'datetime',
-					format: this.dateTimeFormat,
-					lang: this.languageCodeShort,
-					placeholder: t('polls', 'Click to add a date'),
-					timePickerOptions: {
-						start: '00:00',
-						step: '00:30',
-						end: '23:30',
-					},
-				}
-			},
-
-			protect: function() {
-				return this.poll.mode === 'vote'
-			},
-
-			saveButtonTitle: function() {
-				if (this.writingPoll) {
-					return t('polls', 'Writing poll')
-				} else if (this.poll.mode === 'edit') {
-					return t('polls', 'Update poll')
-				} else {
-					return t('polls', 'Create new poll')
-				}
-			},
-		},
-		methods: {
-
-			...mapMutations(['eventSetProperty', 'pollSetProperty']),
-
-			addOption(option) {
-				this.$store.dispatch({type: 'addOption', option: option})
 			}
 		},
+
+		protect: function() {
+			return this.poll.mode === 'vote'
+		},
+
+		saveButtonTitle: function() {
+			if (this.writingPoll) {
+				return t('polls', 'Writing poll')
+			} else if (this.poll.mode === 'edit') {
+				return t('polls', 'Update poll')
+			} else {
+				return t('polls', 'Create new poll')
+			}
+		}
+	},
+	methods: {
+
+		...mapMutations(['eventSetProperty', 'pollSetProperty']),
+
+		addOption(option) {
+			this.$store.dispatch({ type: 'addOption', option: option })
+		}
 	}
+}
 </script>
 
 <style lang="scss">

@@ -23,106 +23,50 @@
 
 namespace OCA\Polls\Controller;
 
+use Exeption;
+use OCP\AppFramework\Db\DoesNotExistException;
+
+
+use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IGroupManager;
-use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
-
+use OCA\Polls\Service\AnonymizeService;
 
 
 class CommentController extends Controller {
 
+	private $mapper;
+	private $userId;
+
 	private $groupManager;
-	private $userManager;
 	private $eventMapper;
-	private $commentMapper;
+	private $anonymizer;
 
-	/**
-	 * PageController constructor.
-	 * @param string $appName
-	 * @param IGroupManager $groupManager
-	 * @param IRequest $request
-	 * @param IUserManager $userManager
-	 * @param string $userId
-	 * @param EventMapper $eventMapper
-	 * @param CommentMapper $commentMapper
-	 */
 	public function __construct(
-		$appName,
-		IGroupManager $groupManager,
+		string $AppName,
 		IRequest $request,
-		IUserManager $userManager,
-		$userId,
+		CommentMapper $mapper,
+		$UserId,
+		IGroupManager $groupManager,
 		EventMapper $eventMapper,
-		CommentMapper $commentMapper
+		AnonymizeService $anonymizer
 	) {
-		parent::__construct($appName, $request);
-		$this->userId = $userId;
+		parent::__construct($AppName, $request);
+		$this->mapper = $mapper;
+		$this->userId = $UserId;
 		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
-		$this->commentMapper = $commentMapper;
+		$this->anonymizer = $anonymizer;
 	}
 
-	/**
-	 * Read all votes of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
-	private function anonMapper($pollId) {
-		$anonList = array();
-		$comments = $this->commentMapper->findByPoll($pollId);
-		$i = 0;
-
-		foreach ($comments as $element) {
-			if (!array_key_exists($element->getUserId(), $anonList)) {
-				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i ;
-			}
-		}
-
-		$comments = $this->commentMapper->findByPoll($pollId);
-		foreach ($comments as $element) {
-			if (!array_key_exists($element->getUserId(), $anonList)) {
-				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
-			}
-		}
-		return $anonList;
-	}
-
-	/**
-	 * Read all votes of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
-	private function anonymize($array, $pollId, $anomizeField = 'userId') {
-		$anonList = $this->anonMapper($pollId);
-		$comments = $this->commentMapper->findByPoll($pollId);
-		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		$i = 0;
-
-		for ($i = 0; $i < count($array); ++$i) {
-			if ($array[$i][$anomizeField] !== \OC::$server->getUserSession()->getUser()->getUID()) {
-				$array[$i][$anomizeField] = $anonList[$array[$i][$anomizeField]];
-			}
-		}
-
-		return $array;
-	}
 
 	/**
 	 * get
@@ -135,9 +79,9 @@ class CommentController extends Controller {
 	public function get($pollId) {
 		$commentsList = array();
 
-		$event = $this->eventMapper->find($pollId)->read();
-		$comments = $this->commentMapper->findByPoll($pollId);
 		try {
+			$event = $this->eventMapper->find($pollId)->read();
+			$comments = $this->mapper->findByPoll($pollId);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		} finally {
@@ -145,9 +89,8 @@ class CommentController extends Controller {
 				$commentsList[] = $comment->read();
 			}
 
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			if (($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $currentUser))) {
-				$commentsList = $this->anonymize($commentsList, $pollId);
+			if (($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $this->userId))) {
+				$commentsList = $this->anonymizer->getAnonymizedList($commentsList, $pollId);
 			}
 			return new DataResponse($commentsList, Http::STATUS_OK);
 		}
@@ -165,29 +108,28 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($pollId, $message) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+		if ($this->userId === '') {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			$AdminAccess = $this->groupManager->isAdmin($currentUser);
+			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
 		$time = date('Y-m-d H:i:s');
 		$comment = new Comment();
 		$comment->setPollId($pollId);
-		$comment->setUserId($currentUser);
+		$comment->setUserId($this->userId);
 		$comment->setComment($message);
 		$comment->setDt($time);
 
 		try {
-			$id = $this->commentMapper->insert($comment)->getId();
+			$id = $this->mapper->insert($comment)->getId();
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		} finally {
 			return new DataResponse(array(
 				'id' => $id,
 				'pollId' => $pollId,
-				'userId' => $currentUser,
+				'userId' => $this->userId,
 				'comment' => $message,
 				'date' => $time
 			), Http::STATUS_OK);

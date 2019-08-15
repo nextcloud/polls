@@ -23,15 +23,16 @@
 
 namespace OCA\Polls\Controller;
 
+use Exeption;
+use OCP\AppFramework\Db\DoesNotExistException;
+
+use OCP\IRequest;
+use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IGroupManager;
-use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
@@ -41,41 +42,28 @@ use OCA\Polls\Db\EventMapper;
 
 class EventController extends Controller {
 
-	private $groupManager;
-	private $userManager;
-	private $eventMapper;
+	private $mapper;
+	private $userId;
+	private $logger;
 
-	/**
-	 * PageController constructor.
-	 * @param string $appName
-	 * @param IGroupManager $groupManager
-	 * @param IRequest $request
-	 * @param IUserManager $userManager
-	 * @param string $userId
-	 * @param EventMapper $eventMapper
-	 */
+
+	private $groupManager;
+
 	public function __construct(
-		$appName,
-		IGroupManager $groupManager,
+		string $AppName,
 		IRequest $request,
-		IUserManager $userManager,
-		$userId,
-		EventMapper $eventMapper
+		ILogger $logger,
+		EventMapper $mapper,
+		$UserId,
+		IGroupManager $groupManager
 	) {
-		parent::__construct($appName, $request);
-		$this->userId = $userId;
+		parent::__construct($AppName, $request);
+		$this->mapper = $mapper;
+		$this->userId = $UserId;
+		$this->logger = $logger;
 		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
-		$this->eventMapper = $eventMapper;
 	}
 
-	/**
-	 * Read all options of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
 	 /**
  	 * Read an entire poll based on poll id
  	 * @NoAdminRequired
@@ -86,10 +74,13 @@ class EventController extends Controller {
  	public function get($pollId) {
 
  		$data = array();
+
  		try {
- 			$data = $this->eventMapper->find($pollId)->read();
+ 			$data = $this->mapper->find($pollId)->read();
  		} catch (DoesNotExistException $e) {
- 			// return silently
+			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
+			$this->logger->debug($e, ['app' => 'polls']);
+			$data['poll'] = ['result' => 'notFound'];
  		} finally {
  			return $data;
  		}
@@ -106,23 +97,23 @@ class EventController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($event, $mode) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+		if ($this->userId === '') {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			$AdminAccess = $this->groupManager->isAdmin($currentUser);
+			$adminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
-		$newEvent = new Event();
+
+		$NewEvent = new Event();
 
 		// Set the configuration options entered by the user
-		$newEvent->setTitle($event['title']);
-		$newEvent->setDescription($event['description']);
+		$NewEvent->setTitle($event['title']);
+		$NewEvent->setDescription($event['description']);
 
-		$newEvent->setType($event['type']);
-		$newEvent->setIsAnonymous($event['isAnonymous']);
-		$newEvent->setFullAnonymous($event['fullAnonymous']);
-		$newEvent->setAllowMaybe($event['allowMaybe']);
+		$NewEvent->setType($event['type']);
+		$NewEvent->setIsAnonymous($event['isAnonymous']);
+		$NewEvent->setFullAnonymous($event['fullAnonymous']);
+		$NewEvent->setAllowMaybe($event['allowMaybe']);
 
 		if ($event['access'] === 'select') {
 			$shareAccess = '';
@@ -133,52 +124,58 @@ class EventController extends Controller {
 					$shareAccess = $shareAccess . 'group_' . $shareElement['id'] . ';';
 				}
 			}
-			$newEvent->setAccess(rtrim($shareAccess, ';'));
+			$NewEvent->setAccess(rtrim($shareAccess, ';'));
 		} else {
-			$newEvent->setAccess($event['access']);
+			$NewEvent->setAccess($event['access']);
 		}
 
 		if ($event['expiration']) {
-			$newEvent->setExpire(date('Y-m-d H:i:s', strtotime($event['expirationDate'])));
+			$NewEvent->setExpire(date('Y-m-d H:i:s', strtotime($event['expirationDate'])));
 		} else {
-			$newEvent->setExpire(null);
+			$NewEvent->setExpire(null);
 		}
 
 		if ($event['type'] === 'datePoll') {
-			$newEvent->setType(0);
+			$NewEvent->setType(0);
 		} elseif ($event['type'] === 'textPoll') {
-			$newEvent->setType(1);
+			$NewEvent->setType(1);
 		}
 
 		if ($mode === 'edit') {
 			// Edit existing poll
-			$oldPoll = $this->eventMapper->find($event['id']);
+			$oldEvent = $this->mapper->find($event['id']);
 
 			// Check if current user is allowed to edit existing poll
-			if ($oldPoll->getOwner() !== $currentUser && !$AdminAccess) {
+			if ($oldEvent->getOwner() !== $this->userId && !$adminAccess) {
 				// If current user is not owner of existing poll deny access
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
 
 			// else take owner, hash and id of existing poll
-			$newEvent->setOwner($oldPoll->getOwner());
-			$newEvent->setHash($oldPoll->getHash());
-			$newEvent->setId($oldPoll->getId());
-			$this->eventMapper->update($newEvent);
+			$NewEvent->setOwner($oldEvent->getOwner());
+			$NewEvent->setHash($oldEvent->getHash());
+			$NewEvent->setId($oldEvent->getId());
+			try {
+				$this->mapper->update($NewEvent);
+				$this->logger->debug('updating', ['app' => 'polls']);
+
+			} catch (Exeption $e) {
+				$this->logger->alert('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
+			}
 
 		} elseif ($mode === 'create') {
 			// Create new poll
 			// Define current user as owner, set new creation date and create a new hash
-			$newEvent->setOwner($currentUser);
-			$newEvent->setCreated(date('Y-m-d H:i:s'));
-			$newEvent->setHash(\OC::$server->getSecureRandom()->generate(
+			$NewEvent->setOwner($this->userId);
+			$NewEvent->setCreated(date('Y-m-d H:i:s'));
+			$NewEvent->setHash(\OC::$server->getSecureRandom()->generate(
 				16,
 				ISecureRandom::CHAR_DIGITS .
 				ISecureRandom::CHAR_LOWER .
 				ISecureRandom::CHAR_UPPER
 			));
-			$newEvent = $this->eventMapper->insert($newEvent);
+			$NewEvent = $this->mapper->insert($NewEvent);
 		}
-		return $this->get($newEvent->getId());
+		return $this->get($NewEvent->getId());
 	}
 }

@@ -23,16 +23,16 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use Exeption;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\UniqueConstraintViolationException;
 
-use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserManager;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
+
+use OCP\IGroupManager;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
@@ -42,36 +42,25 @@ use OCA\Polls\Db\OptionMapper;
 
 class OptionController extends Controller {
 
-	private $groupManager;
-	private $userManager;
-	private $eventMapper;
-	private $optionMapper;
+	private $mapper;
+	private $userId;
 
-	/**
-	 * PageController constructor.
-	 * @param string $appName
-	 * @param IGroupManager $groupManager
-	 * @param IRequest $request
-	 * @param IUserManager $userManager
-	 * @param string $userId
-	 * @param EventMapper $eventMapper
-	 * @param OptionMapper $optionMapper
-	 */
+	private $groupManager;
+	private $eventMapper;
+
 	public function __construct(
-		$appName,
-		IGroupManager $groupManager,
+		string $AppName,
 		IRequest $request,
-		IUserManager $userManager,
-		$userId,
-		EventMapper $eventMapper,
-		OptionMapper $optionMapper
+		OptionMapper $mapper,
+		$UserId,
+		IGroupManager $groupManager,
+		EventMapper $eventMapper
 	) {
-		parent::__construct($appName, $request);
-		$this->userId = $userId;
+		parent::__construct($AppName, $request);
+		$this->mapper = $mapper;
+		$this->userId = $UserId;
 		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
-		$this->optionMapper = $optionMapper;
 	}
 
 	/**
@@ -83,9 +72,10 @@ class OptionController extends Controller {
 	 */
 	public function get($pollId) {
 		$returnList = array();
-		$options = $this->optionMapper->findByPoll($pollId);
-		foreach ($options as $option) {
-			$returnList[] = $option->read();
+		$options = $this->mapper->findByPoll($pollId);
+
+		foreach ($options as $Option) {
+			$returnList[] = $Option->read();
 		}
 
 		return $returnList;
@@ -101,22 +91,22 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function add($pollId, $option) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+
+		if ($this->userId === '') {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			$AdminAccess = $this->groupManager->isAdmin($currentUser);
+			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
-		$newOption = new Option();
+		$NewOption = new Option();
 
-		$newOption->setPollId($pollId);
-		$newOption->setpollOptionText(trim(htmlspecialchars($option['text'])));
-		$newOption->setTimestamp($option['timestamp']);
+		$NewOption->setPollId($pollId);
+		$NewOption->setpollOptionText(trim(htmlspecialchars($option['text'])));
+		$NewOption->setTimestamp($option['timestamp']);
 
 		// TODO: catch triying to add existing options
 		// UniqueConstraintViolationException is not chatchable
-		$this->optionMapper->insert($newOption);
+		$this->mapper->insert($NewOption);
 
 		return $this->get($pollId);
 
@@ -132,14 +122,13 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function remove($optionId) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+		if ($this->userId === '') {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			$AdminAccess = $this->groupManager->isAdmin($currentUser);
+			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
-		$this->optionMapper->remove($optionId);
+		$this->mapper->remove($optionId);
 
 		return $this->get($pollId);
 
@@ -155,23 +144,22 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($pollId, $options) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+		if ($this->userId === '') {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			$AdminAccess = $this->groupManager->isAdmin($currentUser);
+			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
-		$this->optionMapper->deleteByPoll($pollId);
+		$this->mapper->deleteByPoll($pollId);
 
 		foreach ($options as $option) {
-			$newOption = new Option();
+			$NewOption = new Option();
 
-			$newOption->setPollId($pollId);
-			$newOption->setpollOptionText(trim(htmlspecialchars($option['text'])));
-			$newOption->setTimestamp($option['timestamp']);
+			$NewOption->setPollId($pollId);
+			$NewOption->setpollOptionText(trim(htmlspecialchars($option['text'])));
+			$NewOption->setTimestamp($option['timestamp']);
 
-			$this->optionMapper->insert($newOption);
+			$this->mapper->insert($NewOption);
 		}
 
 		return $this->get($pollId);

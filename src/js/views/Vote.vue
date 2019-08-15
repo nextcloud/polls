@@ -25,7 +25,9 @@
 		<div class="main-container">
 			<controls :intitle="event.title">
 				<template slot="after">
-					<button v-if="poll.mode === 'edit'" :disabled="writingPoll" class="button btn primary" @click="write()">
+					<button v-if="poll.mode === 'edit'" :disabled="writingPoll" class="button btn primary"
+						@click="write()"
+					>
 						<span>{{ saveButtonTitle }}</span>
 						<span v-if="writingPoll" class="icon-loading-small" />
 					</button>
@@ -49,7 +51,7 @@
 			</div>
 
 			<vote-table @voteSaved="indicateVoteSaved()" />
-			<notification />
+			<notification v-if="loggedIn" />
 		</div>
 
 		<app-sidebar :title="t('polls', 'Details')">
@@ -172,13 +174,13 @@ export default {
 	mounted() {
 		moment.locale(this.localeString)
 		this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.hash, mode: 'vote' })
-		.then(() => {
-			this.$store.dispatch({
-				type: 'loadPoll',
-				hash: this.$route.params.hash,
-				mode: 'vote'
+			.then(() => {
+				this.$store.dispatch({
+					type: 'loadPoll',
+					hash: this.$route.params.hash,
+					mode: 'vote'
+				})
 			})
-		})
 	},
 
 	methods: {
@@ -208,9 +210,9 @@ export default {
 			this.voteSaved = false
 		},
 
-		indicateVoteSaved()  {
+		indicateVoteSaved() {
 			this.voteSaved = true
-			window.setTimeout(this.timer,this.delay)
+			window.setTimeout(this.timer, this.delay)
 		},
 
 		writePoll() {

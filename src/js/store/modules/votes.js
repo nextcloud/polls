@@ -21,8 +21,6 @@
  */
 
 import axios from 'nextcloud-axios'
-import sortBy from 'lodash/sortBy'
-
 
 const defaultVotes = () => {
 	return {
@@ -43,11 +41,10 @@ const mutations = {
 
 	voteSet(state, payload) {
 		var index = state.list.findIndex(vote =>
-			vote.pollId === payload.pollId &&
-			vote.userId === payload.newVote.userId &&
-			vote.voteOptionText === payload.option.text)
-			var obj = state.list[index]
-		if (index > -1 ) {
+			vote.pollId === payload.pollId
+			&& vote.userId === payload.newVote.userId
+			&& vote.voteOptionText === payload.option.text)
+		if (index > -1) {
 			state.list[index] = Object.assign(state.list[index], payload.newVote)
 		} else {
 			state.list.push(payload.newVote)
@@ -86,12 +83,11 @@ const getters = {
 	},
 
 	getAnswer: (state, getters, rootState) => (payload) => {
-		var pollId = rootState.event.id
 		var index = state.list.findIndex(vote =>
-			vote.pollId === rootState.event.id &&
-			vote.userId === payload.userId &&
-			vote.voteOptionText === payload.option.text)
-		if (index > -1 ) {
+			vote.pollId === rootState.event.id
+			&& vote.userId === payload.userId
+			&& vote.voteOptionText === payload.option.text)
+		if (index > -1) {
 			return state.list[index].voteAnswer
 		} else {
 			return 'unvoted'
@@ -106,11 +102,11 @@ const actions = {
 		axios.get(OC.generateUrl('apps/polls/get/votes/' + payload.pollId))
 			.then((response) => {
 				commit('votesSet', {
-					'list': response.data,
+					'list': response.data
 				})
 			}, (error) => {
 				commit({ type: 'votesReset' })
-			/* eslint-disable-next-line no-console */
+				/* eslint-disable-next-line no-console */
 				console.log(error)
 			})
 	},
@@ -122,13 +118,13 @@ const actions = {
 			userId: payload.userId,
 			setTo: payload.switchTo
 		})
-		.then((response) => {
-			commit('voteSet', {option: payload.option , pollId: rootState.event.id, newVote: response.data})
-			return response.data
-		}, (error) => {
+			.then((response) => {
+				commit('voteSet', { option: payload.option, pollId: rootState.event.id, newVote: response.data })
+				return response.data
+			}, (error) => {
 			/* eslint-disable-next-line no-console */
-			console.log(error.response)
-		})
+				console.log(error.response)
+			})
 	}
 
 }

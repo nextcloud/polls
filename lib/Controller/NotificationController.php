@@ -23,101 +23,81 @@
 
 namespace OCA\Polls\Controller;
 
+use Exeption;
+use OCP\AppFramework\Db\DoesNotExistException;
+
+use OCP\IRequest;
+use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Db\DoesNotExistException;
 
-use OCP\ILogger;
-use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\Security\ISecureRandom;
+
+
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Notification;
 use OCA\Polls\Db\NotificationMapper;
 
-
-
 class NotificationController extends Controller {
 
+	private $mapper;
+	private $userId;
 	private $logger;
-	private $userManager;
-	private $eventMapper;
-	private $notificationMapper;
 
-	/**
-	 * PageController constructor.
-	 * @param string $appName
-	 * @param ILogger $logger
-	 * @param IRequest $request
-	 * @param IUserManager $userManager
-	 * @param string $userId
-	 * @param EventMapper $eventMapper
-	 * @param NotificationMapper $commentMapper
-	 */
+	private $eventMapper;
+
+
 	public function __construct(
-		$appName,
-		ILogger $logger,
+		string $AppName,
 		IRequest $request,
-		IUserManager $userManager,
-		$userId,
-		EventMapper $eventMapper,
-		NotificationMapper $commentMapper
+		ILogger $logger,
+		NotificationMapper $mapper,
+		$UserId,
+		EventMapper $eventMapper
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($AppName, $request);
+		$this->mapper = $mapper;
+		$this->userId = $UserId;
 		$this->logger = $logger;
-		$this->userId = $userId;
-		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
-		$this->notificationMapper = $commentMapper;
 	}
 
 
 
 	/**
-	 * Read an entire poll based on the poll id or hash
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param String $pollIdOrHash poll id or hash
+	 * @param Integer $pollId
 	 * @return DataResponse
 	 */
-	public function get($pollIdOrHash) {
+	public function get(Int $pollId) {
 
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$currentUser = '';
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		if ($this->userId === '') {
+			return new DataResponse('No notification found', Http::STATUS_NOT_FOUND);
 		}
 
-		$data = array();
-
 		try {
-			if (is_numeric($pollIdOrHash)) {
-				$event = $this->eventMapper->find($pollIdOrHash);
-				$result = 'foundById';
-			} else {
-				$event = $this->eventMapper->findByHash($pollIdOrHash);
-				$result = 'foundByHash';
-			}
-
-			$notification = $this->notificationMapper->findByUserAndPoll($event->getId(), $currentUser);
+			$notification = $this->mapper->findByUserAndPoll($pollId, $this->userId);
 
 			if (count($notification) > 0) {
 				return new DataResponse(array(
 					'id' => $notification[0]->getId(),
-					'pollID' => $notification[0]->getPollId(),
+					'pollId' => $notification[0]->getPollId(),
 					'userId' => $notification[0]->getUserId()
 				), Http::STATUS_OK);
-
 			} else {
-				return new DataResponse('No notificatiopn found', Http::STATUS_NOT_FOUND);
+				$this->logger->debug('no notication for user ' . $this->userId . ' and event ' . $pollId, ['app' => 'polls']);
+				return new DataResponse(array(
+					'id' => 0,
+					'pollId' => $pollId,
+					'userId' => $this->userId
+				), Http::STATUS_NOT_FOUND);
 			}
 
-		} catch (\Exception $e) {
-			$this->logger->logException($e, ['app' => 'polls']);
+		} catch (DoesNotExistException $e) {
+			$this->logger->debug($e, ['app' => 'polls']);
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 	}
@@ -126,15 +106,14 @@ class NotificationController extends Controller {
 	 * @param int $pollId
 	 */
 	public function set($pollId, $subscribed) {
-		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		if ($subscribed) {
 			$notification = new Notification();
 			$notification->setPollId($pollId);
-			$notification->setUserId($currentUser);
-			$this->notificationMapper->insert($notification);
+			$notification->setUserId($this->userId);
+			$this->mapper->insert($notification);
 			return true;
 		} else {
-			$this->notificationMapper->unsubscribe($pollId, $currentUser);
+			$this->mapper->unsubscribe($pollId, $this->userId);
 			return false;
 		}
 	}

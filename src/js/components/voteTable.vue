@@ -22,16 +22,22 @@
 
 <template lang="html">
 	<div class="vote-table">
-		<transition-group name="list" tag="div" class="header" >
-			<date-poll-vote-header v-if="event.type === 'datePoll'" v-for="(option) in sortedOptions"
+		<transition-group v-if="event.type === 'datePoll'" name="list" tag="div"
+			class="header"
+		>
+			<date-poll-vote-header v-for="(option) in sortedOptions"
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
 				@remove="optionRemove(option)"
 			/>
+		</transition-group>
 
-			<text-poll-vote-header v-if="event.type === 'textPoll'" v-for="(option) in sortedOptions"
+		<transition-group v-if="event.type === 'textPoll'" name="list" tag="div"
+			class="header"
+		>
+			<text-poll-vote-header v-for="(option) in sortedOptions"
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
@@ -41,7 +47,6 @@
 		</transition-group>
 
 		<ul class="participants">
-
 			<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === poll.currentUser) }">
 				<user-div :key="participant"
 					:class="{currentUser: (participant === poll.currentUser) }"
@@ -58,7 +63,7 @@
 					/>
 				</div>
 			</div>
-		</div>
+		</ul>
 	</div>
 </template>
 
@@ -66,7 +71,7 @@
 import VoteItem from '../components/base/voteItem'
 import DatePollVoteHeader from '../components/datePoll/voteHeader'
 import TextPollVoteHeader from '../components/textPoll/voteHeader'
-import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
 	name: 'VoteTable',
@@ -100,7 +105,7 @@ export default {
 		]),
 
 		loadTable() {
-			this.$store.dispatch({ type: 'loadOptions', pollId: this.$route.params.hash, })
+			this.$store.dispatch({ type: 'loadOptions', pollId: this.$route.params.hash })
 			this.$store.dispatch({ type: 'loadVotes', pollId: this.$route.params.hash, mode: 'vote', currentUser: this.poll.currentUser })
 		},
 

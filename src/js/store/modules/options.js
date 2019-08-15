@@ -50,7 +50,7 @@ const mutations = {
 			option.text = moment(option.text).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
 			option.timestamp = moment.utc(option.text).unix()
 		})
-	},
+	}
 
 }
 
@@ -68,18 +68,17 @@ const getters = {
 const actions = {
 
 	loadOptions({ commit, rootState }, payload) {
-		console.log('loadOptions', rootState.event.id)
 		return axios.get(OC.generateUrl('apps/polls/get/options/' + payload.pollId))
-		.then((response) => {
-			commit('optionsSet', { 'list': response.data })
-		}, (error) => {
-			commit({ type: 'optionsReset' })
-		/* eslint-disable-next-line no-console */
-			console.log(error)
-		})
+			.then((response) => {
+				commit('optionsSet', { 'list': response.data })
+			}, (error) => {
+				commit({ type: 'optionsReset' })
+				/* eslint-disable-next-line no-console */
+				console.error(error)
+			})
 	},
 
-	addOption({commit, getters, dispatch, rootState}, payload) {
+	addOption({ commit, getters, dispatch, rootState }, payload) {
 		var newOption = {}
 
 		newOption.id = getters.lastOptionId + 1
@@ -97,24 +96,24 @@ const actions = {
 		if (state.currentUser !== '') {
 
 			return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: newOption })
-			.then((response) => {
-				commit('optionsSet', { 'list': response.data })
-			}, (error) => {
+				.then((response) => {
+					commit('optionsSet', { 'list': response.data })
+				}, (error) => {
 				/* eslint-disable-next-line no-console */
-				console.log(error.response)
-			})
+					console.error(error.response)
+				})
 		}
 	},
 
-	removeOption({commit, getters, dispatch, rootState}, optionId) {
+	removeOption({ commit, getters, dispatch, rootState }, optionId) {
 		if (state.currentUser !== '') {
 			return axios.post(OC.generateUrl('apps/polls/add/option'), { optionId: optionId })
-			.then((response) => {
-				commit('optionsSet', { 'list': response.data })
-			}, (error) => {
+				.then((response) => {
+					commit('optionsSet', { 'list': response.data })
+				}, (error) => {
 				/* eslint-disable-next-line no-console */
-				console.log(error.response)
-			})
+					console.error(error.response)
+				})
 		}
 
 		commit('addOption', newOption)
@@ -125,12 +124,12 @@ const actions = {
 	writeOptionsPromise({ commit, getters, rootState }, payload) {
 		if (state.currentUser !== '') {
 			return axios.post(OC.generateUrl('apps/polls/write/options'), { pollId: rootState.event.id, options: state.list })
-			.then((response) => {
-				commit('optionsSet', { 'list': response.data })
-			}, (error) => {
+				.then((response) => {
+					commit('optionsSet', { 'list': response.data })
+				}, (error) => {
 				/* eslint-disable-next-line no-console */
-				console.log(error.response)
-			})
+					console.error(error.response)
+				})
 		}
 	}
 }

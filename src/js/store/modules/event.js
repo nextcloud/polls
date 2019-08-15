@@ -22,7 +22,6 @@
  */
 
 import axios from 'nextcloud-axios'
-import sortBy from 'lodash/sortBy'
 import moment from 'moment'
 
 const defaultEvent = () => {
@@ -109,12 +108,12 @@ const actions = {
 
 	writeEventPromise({ commit, rootState }, payload) {
 		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state, mode: rootState.poll.mode })
-		.then((response) => {
-			commit('eventSet', { 'event': response.data })
-		}, (error) => {
+			.then((response) => {
+				commit('eventSet', { 'event': response.data })
+			}, (error) => {
 			/* eslint-disable-next-line no-console */
-			console.log(error.response)
-		})
+				console.log(error.response)
+			})
 
 	}
 }
