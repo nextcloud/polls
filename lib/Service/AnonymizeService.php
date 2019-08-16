@@ -24,20 +24,15 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
-
-use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 
 class AnonymizeService {
 
 	private $mapper;
-	// private $userId;
-	//
-	// private $pollId;
-	// private $anomizeField;
 
-	public function __construct(VoteMapper $mapper) {
+	public function __construct(
+		VoteMapper $mapper
+	) {
 		$this->mapper = $mapper;
 	}
 
@@ -65,23 +60,31 @@ class AnonymizeService {
 	 * Anonymizes the participants of a poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Array $array
-	 * @param String $anomizeField
-	 * @return Array
+	 * @param Array $array Input list which schould be anonymized
+	 * @param String $anomizeField - The field, which carries the user name, which is to anonymize
+	 * @return Array Returns the original array with anonymized user names
 	 */
 	public function getAnonymizedList($array, $pollId, $anomizeField = 'userId') {
+		// get mapping for the complete poll
 		$anonList = $this->anonMapper($pollId);
-		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+		// initialize counter
 		$i = 0;
 
+
 		for ($i = 0; $i < count($array); ++$i) {
-			if ($array[$i][$anomizeField] !== $currentUser) {
-				$array[$i][$anomizeField] = $anonList[$array[$i][$anomizeField]];
+			// skip current user
+			if ($array[$i][$anomizeField] !== \OC::$server->getUserSession()->getUser()->getUID()) {
+				// Check, if searched user name is in mapping array
+				if (isset($anonList[$array[$i][$anomizeField]])) {
+					//replace original user name
+					$array[$i][$anomizeField] =  $anonList[$array[$i][$anomizeField]];
+				} else {
+					// User name is not in mapping array, set static text
+					$array[$i][$anomizeField] = 'Unknown user';
+				}
 			}
 		}
 
 		return $array;
 	}
-
-
 }
