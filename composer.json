@@ -13,6 +13,11 @@
 			"name": "René Gieling"
 		}
 	],
+	"config": {
+      "platform": {
+        "php": "7.2.0"
+      }
+    },
 	"require-dev": {
 		"christophwurst/nextcloud": "^16.0",
 		"phpunit/phpunit": "^8.2",
