@@ -23,8 +23,9 @@
 
 namespace OCA\Polls\Controller;
 
-use Exeption;
+use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 
 use OCP\IRequest;
 use OCP\ILogger;
@@ -77,7 +78,7 @@ class NotificationController extends Controller {
 	 */
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		$UserId,
 		NotificationMapper $mapper,
 		IRequest $request,
@@ -91,7 +92,7 @@ class NotificationController extends Controller {
 		IMailer $mailer
 
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->logger = $logger;
@@ -106,46 +107,30 @@ class NotificationController extends Controller {
 
 	}
 
-
-
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param Integer $pollId
 	 * @return DataResponse
 	 */
-	public function get(Int $pollId) {
+	public function get($pollId) {
 
-		if ($this->userId === '') {
-			return new DataResponse('No notification found', Http::STATUS_NOT_FOUND);
+		if (!\OC::$server->getUserSession()->isLoggedIn()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
 		try {
 			$notification = $this->mapper->findByUserAndPoll($pollId, $this->userId);
-
-			if (count($notification) > 0) {
-				return new DataResponse(array(
-					'id' => $notification[0]->getId(),
-					'pollId' => $notification[0]->getPollId(),
-					'userId' => $notification[0]->getUserId()
-				), Http::STATUS_OK);
-			} else {
-				$this->logger->debug('no notication for user ' . $this->userId . ' and event ' . $pollId, ['app' => 'polls']);
-				return new DataResponse(array(
-					'id' => 0,
-					'pollId' => $pollId,
-					'userId' => $this->userId
-				), Http::STATUS_NOT_FOUND);
-			}
-
+		} catch (MultipleObjectsReturnedException $e) {
+			// should not happen, but who knows
 		} catch (DoesNotExistException $e) {
-			$this->logger->debug($e, ['app' => 'polls']);
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
+		return new DataResponse(null, Http::STATUS_OK);
 	}
 
 	/**
-	 * @param int $pollId
+	* @NoAdminRequired
+	 * @param Integer $pollId
 	 */
 	public function set($pollId, $subscribed) {
 		if ($subscribed) {
@@ -210,7 +195,7 @@ class NotificationController extends Controller {
 			$emailTemplate->addBodyButton(
 				htmlspecialchars($trans->t('Go to poll')),
 				$url,
-				false
+				/** @scrutinizer ignore-type */ false
 			);
 
 			$emailTemplate->addFooter();

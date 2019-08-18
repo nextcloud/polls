@@ -28,6 +28,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCP\IGroupManager;
+use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IConfig;
@@ -35,24 +36,30 @@ use OCP\IRequest;
 
 class SystemController extends Controller {
 
+	private $userId;
 	private $systemConfig;
+	private $groupManager;
+	private $userManager;
 
 	/**
 	 * PageController constructor.
 	 * @param String $appName
+	 * @param $UserId
 	 * @param IConfig $systemConfig
 	 * @param IRequest $request
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 */
 	public function __construct(
-		$appName,
-		IGroupManager $groupManager,
-		IUserManager $userManager,
+		string $appName,
+		$UserId,
+		IRequest $request,
 		IConfig $systemConfig,
-		IRequest $request
+		IGroupManager $groupManager,
+		IUserManager $userManager
 	) {
 		parent::__construct($appName, $request);
+		$this->userId = $UserId;
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
@@ -77,7 +84,6 @@ class SystemController extends Controller {
 	 */
 	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
-		$data = array();
 		if ($getGroups) {
 			$groups = $this->groupManager->search($query);
 			foreach ($groups as $group) {
@@ -114,8 +120,9 @@ class SystemController extends Controller {
 			}
 		}
 
-		$data['siteusers'] = $list;
-		return new DataResponse($data, Http::STATUS_OK);
+		return new DataResponse([
+			'siteusers' => $list
+		], Http::STATUS_OK);
 	}
 
 	/**
@@ -124,12 +131,13 @@ class SystemController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getSystem() {
-		$userId = \OC::$server->getUserSession()->getUser()->getUID();
+		$data = array();
+
 		$data['system'] = [
 			'versionArray' => \OCP\Util::getVersion(),
 			'version' => implode('.', \OCP\Util::getVersion()),
 			'vendor' => $this->getVendor(),
-			'language' => $this->systemConfig->getUserValue($userId, 'core', 'lang')
+			'language' => $this->systemConfig->getUserValue($this->$userId, 'core', 'lang')
 		];
 
 		return new DataResponse($data, Http::STATUS_OK);

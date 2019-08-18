@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
-use Exeption;
+use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 
@@ -61,7 +61,7 @@ class CommentController extends Controller {
 	 */
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		$UserId,
 		IRequest $request,
 		CommentMapper $mapper,
@@ -69,7 +69,7 @@ class CommentController extends Controller {
 		EventMapper $eventMapper,
 		AnonymizeService $anonymizer
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
@@ -87,7 +87,6 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
-		$commentsList = array();
 
 		try {
 			$event = $this->eventMapper->find($pollId)->read();
@@ -115,10 +114,8 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($pollId, $message) {
-		if ($this->userId === '') {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		} else {
-			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
 		$time = date('Y-m-d H:i:s');

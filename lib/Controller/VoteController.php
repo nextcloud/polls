@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
-use Exeption;
+use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 
@@ -52,7 +52,7 @@ class VoteController extends Controller {
 
 	/**
 	 * VoteController constructor.
-	 * @param string $AppName
+	 * @param string $appName
 	 * @param $UserId
 	 * @param IRequest $request
 	 * @param VoteMapper $mapper
@@ -61,7 +61,7 @@ class VoteController extends Controller {
 	 * @param AnonymizeService $anonymizer
 	 */
 	public function __construct(
-		string $AppName,
+		string $appName,
 		$UserId,
 		IRequest $request,
 		ILogger $logger,
@@ -70,7 +70,7 @@ class VoteController extends Controller {
 		EventMapper $eventMapper,
 		AnonymizeService $anonymizer
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->logger = $logger;
@@ -109,7 +109,6 @@ class VoteController extends Controller {
 	 * @return DataResponse
 	 */
 	public function set($pollId, $option, $userId, $setTo) {
-		$vote = new Vote();
 
 		try {
 			$vote = $this->mapper->findSingleVote($pollId, $option['text'], $userId);

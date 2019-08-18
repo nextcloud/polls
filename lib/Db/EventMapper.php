@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use \OCP\AppFramework\Db\DoesNotExistException;
 
 class EventMapper extends QBMapper {
 

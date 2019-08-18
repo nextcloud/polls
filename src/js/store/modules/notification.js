@@ -44,9 +44,8 @@ const actions = {
 		axios.get(OC.generateUrl('apps/polls/get/notification/' + payload.pollId))
 			.then((response) => {
 				commit('setNotification', true)
-			}, (error) => {
-				// NOTE: No unique result found, switch to false silently
-				console.error(error.response)
+			})
+			.catch(() => {
 				commit('setNotification', false)
 			})
 	},
@@ -55,6 +54,7 @@ const actions = {
 		if (state.currentUser !== '') {
 			return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed })
 				.then((response) => {
+					console.error(response.data)
 				}, (error) => {
 					console.error(error.response)
 				})

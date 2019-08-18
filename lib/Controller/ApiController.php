@@ -56,6 +56,7 @@ use OCA\Polls\Service\EventService;
 
 class ApiController extends Controller {
 
+	private $userId;
 	private $groupManager;
 	private $userManager;
 	private $eventMapper;
@@ -72,7 +73,7 @@ class ApiController extends Controller {
 	/**
 	 * PageController constructor.
 	 * @param string $appName
-	 * @param string $userId
+	 * @param $UserId
 	 * @param IGroupManager $groupManager
 	 * @param IRequest $request
 	 * @param IUserManager $userManager
@@ -89,7 +90,7 @@ class ApiController extends Controller {
 	 */
 	public function __construct(
 		$appName,
-		$userId,
+		$UserId,
 		IGroupManager $groupManager,
 		IRequest $request,
 		IUserManager $userManager,
@@ -105,7 +106,7 @@ class ApiController extends Controller {
 		EventService $eventService
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
+		$this->userId = $UserId;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 		$this->eventMapper = $eventMapper;
@@ -193,7 +194,7 @@ class ApiController extends Controller {
 	 */
 
 	public function getPolls() {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
@@ -256,7 +257,7 @@ class ApiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function writePoll($event, $voteOptions, $shares, $mode) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();

@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
-use Exeption;
+use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
@@ -33,6 +33,8 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCP\IGroupManager;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
@@ -47,6 +49,8 @@ class EventController extends Controller {
 	private $mapper;
 	private $logger;
 	private $groupManager;
+	private $userManager;
+	private $eventService;
 
 	/**
 	 * CommentController constructor.
@@ -56,23 +60,26 @@ class EventController extends Controller {
 	 * @param ILogger $logger
 	 * @param EventMapper $mapper
 	 * @param IGroupManager $groupManager
+	 * @param IUserManager $userManager
 	 * @param EventService $eventService
 	 */
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		$UserId,
 		IRequest $request,
 		ILogger $logger,
 		EventMapper $mapper,
 		IGroupManager $groupManager,
+		IUserManager $userManager,
 		EventService $eventService
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
+		$this->userManager = $userManager;
 		$this->eventService = $eventService;
 	}
 
@@ -84,7 +91,7 @@ class EventController extends Controller {
 	 */
 
 	public function list() {
-		if ($this->userId === '') {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
@@ -110,6 +117,7 @@ class EventController extends Controller {
  	 * @return Array
  	 */
  	public function get($pollId) {
+		$data = array();
 
  		try {
  			$event = $this->mapper->find($pollId);
@@ -129,7 +137,7 @@ class EventController extends Controller {
 		if (!strpos('|public|hidden|registered', $accessType)) {
 			$accessType = 'select';
 		}
-		if ($event->getExpire() === null) {
+		if ($event->getExpire() == null) {
 			$expired = false;
 			$expiration = false;
 		} else {
@@ -144,7 +152,7 @@ class EventController extends Controller {
 			'title' => $event->getTitle(),
 			'description' => $event->getDescription(),
 			'owner' => $event->getOwner(),
-			'ownerDisplayName' => \OC_User::getDisplayName($event->getOwner()),
+			'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
 			'created' => $event->getCreated(),
 			'access' => $accessType,
 			'expiration' => $expiration,
@@ -166,7 +174,7 @@ class EventController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($event, $mode) {
-		if ($this->userId === '') {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
 			$adminAccess = $this->groupManager->isAdmin($this->userId);

@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
-use Exeption;
+use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 
@@ -44,19 +44,19 @@ class ShareController extends Controller {
 
 	/**
 	 * ShareController constructor.
-	 * @param string $AppName
+	 * @param string $appName
 	 * @param string $userId
 	 * @param IRequest $request
 	 * @param IUserManager $userManager
 	 * @param ShareMapper $mapper
 	 */
 	public function __construct(
-		$AppName,
-		$UserId
+		$appName,
+		$UserId,
 		IRequest $request,
-		ShareMapper $mapper,
+		ShareMapper $mapper
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 	}
@@ -92,7 +92,7 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function generateHash($pollId, $type, $userId) {
-		if ($this->userId === '') {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 

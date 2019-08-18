@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
-use Exeption;
+use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\UniqueConstraintViolationException;
 
@@ -50,7 +50,7 @@ class OptionController extends Controller {
 
 	/**
 	 * OptionController constructor.
-	 * @param string $AppName
+	 * @param string $appName
 	 * @param $UserId
 	 * @param IRequest $request
 	 * @param OptionMapper $mapper
@@ -58,14 +58,14 @@ class OptionController extends Controller {
 	 * @param EventMapper $eventMapper
 	 */
 	public function __construct(
-		string $AppName,
+		string $appName,
 		$UserId,
 		IRequest $request,
 		OptionMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
@@ -73,11 +73,11 @@ class OptionController extends Controller {
 	}
 
 
-	private function getTimestampTemp() {
-		if ($this->getTimestamp() > 0) {
-			return $this->getTimestamp();
-		} else if (strtotime($this->getPollOptionText())) {
-			return strtotime($this->getPollOptionText());
+	private function getTimestampTemp($Option) {
+		if ($Option->getTimestamp() > 0) {
+			return $Option->getTimestamp();
+		} else if (strtotime($Option->getPollOptionText())) {
+			return strtotime($Option->getPollOptionText());
 		} else {
 			return 0;
 		}
@@ -91,7 +91,6 @@ class OptionController extends Controller {
 	 * @return Array Array of Option objects
 	 */
 	public function list($pollId) {
-		$returnList = array();
 		$options = $this->mapper->findByPoll($pollId);
 
 		foreach ($options as &$Option) {
@@ -115,7 +114,7 @@ class OptionController extends Controller {
 	 */
 	public function add($pollId, $option) {
 
-		if ($this->userId === '') {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
 			$AdminAccess = $this->groupManager->isAdmin($this->userId);
@@ -136,9 +135,9 @@ class OptionController extends Controller {
 		}
 
 		// Lazy: return all options of this poll
-		return new DataResponse($this->get($pollId), Http::STATUS_OK);
+		return new DataResponse($this->mapper->get($pollId), Http::STATUS_OK);
 		// TODO: Return added option
-		return new DataResponse($NewOption, Http::STATUS_OK);
+		// return new DataResponse($NewOption, Http::STATUS_OK);
 
 	}
 
@@ -149,7 +148,7 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function remove($optionId) {
-		if ($this->userId === '') {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
 			$AdminAccess = $this->groupManager->isAdmin($this->userId);
@@ -178,7 +177,7 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($pollId, $options) {
-		if ($this->userId === '') {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
 			$AdminAccess = $this->groupManager->isAdmin($this->userId);
