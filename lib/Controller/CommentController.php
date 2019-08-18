@@ -43,25 +43,35 @@ use OCA\Polls\Service\AnonymizeService;
 
 class CommentController extends Controller {
 
-	private $mapper;
 	private $userId;
+	private $mapper;
 
 	private $groupManager;
 	private $eventMapper;
 	private $anonymizer;
 
+	/**
+	 * CommentController constructor.
+	 * @param string $appName
+	 * @param $UserId
+	 * @param CommentMapper $mapper
+	 * @param IGroupManager $groupManager
+	 * @param EventMapper $eventMapper
+	 * @param AnonymizeService $anonymizer
+	 */
+
 	public function __construct(
 		string $AppName,
+		$UserId,
 		IRequest $request,
 		CommentMapper $mapper,
-		$UserId,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
 		AnonymizeService $anonymizer
 	) {
 		parent::__construct($AppName, $request);
-		$this->mapper = $mapper;
 		$this->userId = $UserId;
+		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->anonymizer = $anonymizer;
@@ -82,18 +92,15 @@ class CommentController extends Controller {
 		try {
 			$event = $this->eventMapper->find($pollId)->read();
 			$comments = $this->mapper->findByPoll($pollId);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(null, Http::STATUS_NOT_FOUND);
-		} finally {
-			foreach ($comments as $comment) {
-				$commentsList[] = $comment->read();
+			if (($event->fullAnonymous || ($event->isAnonymous && $event->owner !== $this->userId))) {
+				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId);
 			}
 
-			if (($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $this->userId))) {
-				$commentsList = $this->anonymizer->getAnonymizedList($commentsList, $pollId);
-			}
-			return new DataResponse($commentsList, Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
+
+		return new DataResponse((array) $comments, Http::STATUS_OK);
 
 	}
 
@@ -122,18 +129,12 @@ class CommentController extends Controller {
 		$comment->setDt($time);
 
 		try {
-			$id = $this->mapper->insert($comment)->getId();
+			$comment = $this->mapper->insert($comment);
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
-		} finally {
-			return new DataResponse(array(
-				'id' => $id,
-				'pollId' => $pollId,
-				'userId' => $this->userId,
-				'comment' => $message,
-				'date' => $time
-			), Http::STATUS_OK);
 		}
+
+		return new DataResponse($comment, Http::STATUS_OK);
 
 	}
 }

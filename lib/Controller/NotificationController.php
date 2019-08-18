@@ -28,12 +28,17 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
 use OCP\ILogger;
+use OCP\IConfig;
+use OCP\IUser;
+use OCP\IUserManager;
+use OCP\IL10N;
+use OCP\L10N\IFactory;
+use OCP\IURLGenerator;
+use OCP\Mail\IMailer;
+
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-
-
-
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
@@ -42,26 +47,63 @@ use OCA\Polls\Db\NotificationMapper;
 
 class NotificationController extends Controller {
 
-	private $mapper;
 	private $userId;
+	private $mapper;
 	private $logger;
 
 	private $eventMapper;
 
+	private $config;
+	private $urlGenerator;
+	private $userMgr;
+	private $trans;
+	private $transFactory;
+	private $mailer;
+
+	/**
+	 * NotificationController constructor.
+	 * @param string $appName
+	 * @param $UserId
+	 * @param NotificationMapper $mapper
+	 * @param IRequest $request
+	 * @param ILogger $logger
+	 * @param EventMapper $eventMapper
+	 * @param IConfig $config
+	 * @param IUserManager $userMgr
+	 * @param IL10N $trans
+	 * @param IFactory $transFactory
+	 * @param IURLGenerator $urlGenerator
+	 * @param IMailer $mailer
+	 */
 
 	public function __construct(
 		string $AppName,
+		$UserId,
+		NotificationMapper $mapper,
 		IRequest $request,
 		ILogger $logger,
-		NotificationMapper $mapper,
-		$UserId,
-		EventMapper $eventMapper
+		EventMapper $eventMapper,
+		IConfig $config,
+		IURLGenerator $urlGenerator,
+		IUserManager $userMgr,
+		IL10N $trans,
+		IFactory $transFactory,
+		IMailer $mailer
+
 	) {
 		parent::__construct($AppName, $request);
-		$this->mapper = $mapper;
 		$this->userId = $UserId;
+		$this->mapper = $mapper;
 		$this->logger = $logger;
 		$this->eventMapper = $eventMapper;
+
+		$this->config = $config;
+		$this->userMgr = $userMgr;
+		$this->trans = $trans;
+		$this->transFactory = $transFactory;
+		$this->urlGenerator = $urlGenerator;
+		$this->mailer = $mailer;
+
 	}
 
 
@@ -115,6 +157,71 @@ class NotificationController extends Controller {
 		} else {
 			$this->mapper->unsubscribe($pollId, $this->userId);
 			return false;
+		}
+	}
+
+	/**
+	 * @param int $pollId
+	 * @param string $from
+	 */
+	private function sendNotifications($pollId, $from) {
+		$poll = $this->eventMapper->find($pollId);
+		$notifications = $this->mapper->findAllByPoll($pollId);
+		foreach ($notifications as $notification) {
+			if ($from === $notification->getUserId()) {
+				continue;
+			}
+			$recUser = $this->userMgr->get($notification->getUserId());
+			if (!$recUser instanceof IUser) {
+				continue;
+			}
+			$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
+			if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				continue;
+			}
+			$url = $this->urlGenerator->getAbsoluteURL(
+				$this->urlGenerator->linkToRoute('polls.page.vote',
+					array('hash' => $poll->getHash()))
+			);
+
+			$sendUser = $this->userMgr->get($from);
+			$sender = $from;
+			if ($sendUser instanceof IUser) {
+				$sender = $sendUser->getDisplayName();
+			}
+
+			$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
+			$trans = $this->transFactory->get('polls', $lang);
+			$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
+				'user' => $sender,
+				'title' => $poll->getTitle(),
+				'link' => $url,
+			]);
+			$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
+			$emailTemplate->addHeader();
+			$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
+
+			$emailTemplate->addBodyText(str_replace(
+				['{user}', '{title}'],
+				[$sender, $poll->getTitle()],
+				$trans->t('{user} participated in the poll "{title}"')
+			));
+
+			$emailTemplate->addBodyButton(
+				htmlspecialchars($trans->t('Go to poll')),
+				$url,
+				false
+			);
+
+			$emailTemplate->addFooter();
+			try {
+				$message = $this->mailer->createMessage();
+				$message->setTo([$email => $recUser->getDisplayName()]);
+				$message->useTemplate($emailTemplate);
+				$this->mailer->send($message);
+			} catch (\Exception $e) {
+				$this->logger->logException($e, ['app' => 'polls']);
+			}
 		}
 	}
 

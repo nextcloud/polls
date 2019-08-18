@@ -1,8 +1,7 @@
 <template lang="html">
 	<div class="notification">
 		<input id="subscribe" v-model="subscribe" type="checkbox"
-			class="checkbox"
-		>
+			class="checkbox">
 		<label for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
 	</div>
 </template>

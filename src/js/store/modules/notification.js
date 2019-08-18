@@ -46,6 +46,7 @@ const actions = {
 				commit('setNotification', true)
 			}, (error) => {
 				// NOTE: No unique result found, switch to false silently
+				console.error(error.response)
 				commit('setNotification', false)
 			})
 	},
@@ -55,7 +56,6 @@ const actions = {
 			return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed })
 				.then((response) => {
 				}, (error) => {
-					/* eslint-disable-next-line no-console */
 					console.error(error.response)
 				})
 		}

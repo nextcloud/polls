@@ -23,14 +23,15 @@
 
 namespace OCA\Polls\Controller;
 
+use Exeption;
+use OCP\AppFramework\Db\DoesNotExistException;
+
+
+use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Db\DoesNotExistException;
 
-use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Share;
@@ -38,28 +39,26 @@ use OCA\Polls\Db\ShareMapper;
 
 class ShareController extends Controller {
 
-	private $userManager;
-	private $shareMapper;
+	private $mapper;
+	private $userId;
 
 	/**
 	 * ShareController constructor.
-	 * @param string $appName
+	 * @param string $AppName
+	 * @param string $userId
 	 * @param IRequest $request
 	 * @param IUserManager $userManager
-	 * @param string $userId
-	 * @param ShareMapper $shareMapper
+	 * @param ShareMapper $mapper
 	 */
 	public function __construct(
-		$appName,
+		$AppName,
+		$UserId
 		IRequest $request,
-		IUserManager $userManager,
-		$userId,
-		ShareMapper $shareMapper
+		ShareMapper $mapper,
 	) {
-		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->userManager = $userManager;
-		$this->shareMapper = $shareMapper;
+		parent::__construct($AppName, $request);
+		$this->userId = $UserId;
+		$this->mapper = $mapper;
 	}
 
 
@@ -73,7 +72,7 @@ class ShareController extends Controller {
 	 */
 	public function getByHash($hash) {
 		try {
-			$share = $this->shareMapper->findByHash($hash)->read();
+			$share = $this->mapper->findByHash($hash);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		} finally {
@@ -93,11 +92,8 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function generateHash($pollId, $type, $userId) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
+		if ($this->userId === '') {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-			$AdminAccess = $this->groupManager->isAdmin($currentUser);
 		}
 
 		$share = new Share();
@@ -112,7 +108,7 @@ class ShareController extends Controller {
 		));
 
 		try {
-			$id = $this->commentMapper->insert($share)->getId();
+			$id = $this->mapper->insert($share)->getId();
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		} finally {

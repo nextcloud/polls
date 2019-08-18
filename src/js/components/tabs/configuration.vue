@@ -31,8 +31,7 @@
 				value="datePoll"
 				:disabled="protect"
 				type="radio"
-				class="radio"
-			>
+				class="radio">
 			<label for="datePoll">
 				{{ t('polls', 'Event schedule') }}
 			</label>
@@ -41,8 +40,7 @@
 				value="textPoll"
 				:disabled="protect"
 				type="radio"
-				class="radio"
-			>
+				class="radio">
 			<label for="textPoll">
 				{{ t('polls', 'Text based') }}
 			</label>
@@ -57,8 +55,7 @@
 				v-model="eventAllowMaybe"
 				:disabled="protect"
 				type="checkbox"
-				class="checkbox"
-			>
+				class="checkbox">
 			<label for="allowMaybe" class="title">
 				{{ t('polls', 'Allow "maybe" vote') }}
 			</label>
@@ -67,8 +64,7 @@
 				v-model="eventIsAnonymous"
 				:disabled="protect"
 				type="checkbox"
-				class="checkbox"
-			>
+				class="checkbox">
 			<label for="anonymous" class="title">
 				{{ t('polls', 'Anonymous poll') }}
 			</label>
@@ -78,8 +74,7 @@
 				v-model="eventFullAnonymous"
 				:disabled="protect"
 				type="checkbox"
-				class="checkbox"
-			>
+				class="checkbox">
 			<label v-show="event.isAnonymous" class="title" for="trueAnonymous">
 				{{ t('polls', 'Hide user names for admin') }}
 			</label>
@@ -88,8 +83,7 @@
 				v-model="eventExpiration"
 				:disabled="protect"
 				type="checkbox"
-				class="checkbox"
-			>
+				class="checkbox">
 			<label class="title" for="expiration">
 				{{ t('polls', 'Expires') }}
 			</label>
@@ -99,8 +93,7 @@
 				v-bind="expirationDatePicker"
 				:disabled="protect"
 				:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }"
-				style="width:170px"
-			/>
+				style="width:170px" />
 		</div>
 
 		<div class="configBox">
@@ -112,8 +105,7 @@
 				:disabled="protect"
 				type="radio"
 				value="registered"
-				class="radio"
-			>
+				class="radio">
 			<label for="private" class="title">
 				<div class="title icon-group" />
 				<span>{{ t('polls', 'Registered users only') }}</span>
@@ -123,8 +115,7 @@
 				:disabled="protect"
 				type="radio"
 				value="hidden"
-				class="radio"
-			>
+				class="radio">
 			<label for="hidden" class="title">
 				<div class="title icon-category-security" />
 				<span>{{ t('polls', 'hidden') }}</span>
@@ -134,8 +125,7 @@
 				:disabled="protect"
 				type="radio"
 				value="public"
-				class="radio"
-			>
+				class="radio">
 			<label for="public" class="title">
 				<div class="title icon-link" />
 				<span>{{ t('polls', 'Public access') }}</span>
@@ -145,8 +135,7 @@
 				:disabled="protect"
 				type="radio"
 				value="select"
-				class="radio"
-			>
+				class="radio">
 			<label for="select" class="title">
 				<div class="title icon-shared" />
 				<span>{{ t('polls', 'Only shared') }}</span>
@@ -155,8 +144,7 @@
 
 		<div v-if="!protect && event.type === 'datePoll'" class="configBox">
 			<date-picker v-bind="optionDatePicker" style="width:100%" confirm
-				@change="addOption($event)"
-			/>
+				@change="addOption($event)" />
 			<shift-dates />
 		</div>
 	</div>

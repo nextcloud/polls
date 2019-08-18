@@ -37,7 +37,7 @@ class AnonymizeService {
 	}
 
 	/**
-	 * Create a mapping list based on the partcipants of a poll
+	 * Create a mapping list with unique Anonymous strings based on the partcipants of a poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @return Array
@@ -61,30 +61,26 @@ class AnonymizeService {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param Array $array Input list which schould be anonymized
-	 * @param String $anomizeField - The field, which carries the user name, which is to anonymize
 	 * @return Array Returns the original array with anonymized user names
 	 */
-	public function getAnonymizedList($array, $pollId, $anomizeField = 'userId') {
+	public function getAnonymizedList($array, $pollId) {
 		// get mapping for the complete poll
 		$anonList = $this->anonMapper($pollId);
-		// initialize counter
-		$i = 0;
-
-
-		for ($i = 0; $i < count($array); ++$i) {
+		foreach ($array as &$element) {
 			// skip current user
-			if ($array[$i][$anomizeField] !== \OC::$server->getUserSession()->getUser()->getUID()) {
+			if ($element->getUserId() !== \OC::$server->getUserSession()->getUser()->getUID()) {
+				// throw new \Exception( json_encode($element->getUserId()) );
 				// Check, if searched user name is in mapping array
-				if (isset($anonList[$array[$i][$anomizeField]])) {
+				if (isset($anonList[$element->getUserId()])) {
 					//replace original user name
-					$array[$i][$anomizeField] =  $anonList[$array[$i][$anomizeField]];
+					$element->setUserId($anonList[$element->getUserId()]);
 				} else {
 					// User name is not in mapping array, set static text
-					$array[$i][$anomizeField] = 'Unknown user';
+					$element->setUserId('Unknown user');
 				}
 			}
 		}
 
-		return $array;
+		return (object) $array;
 	}
 }

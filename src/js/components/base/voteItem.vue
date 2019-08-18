@@ -22,8 +22,7 @@
 
 <template>
 	<li v-if="edit" class="poll-cell active" :class="iconClass"
-		@click="voteClick()"
-	/>
+		@click="voteClick()" />
 	<li v-else class="poll-cell" :class="iconClass" />
 </template>
 
@@ -48,12 +47,6 @@ export default {
 		}
 	},
 
-	data() {
-		return {
-			nextStatus: 'yes'
-		}
-	},
-
 	computed: {
 		...mapState({
 			poll: state => state.poll,
@@ -67,30 +60,38 @@ export default {
 		]),
 
 		edit() {
-			return this.poll.currentUser === this.userId
+			return OC.currentUser === this.userId
+		},
+
+		nextStatus() {
+			var next = 'yes'
+			if (this.getAnswer({ option: this.option, userId: this.userId }) === 'yes') {
+				next = 'no'
+			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'maybe') {
+				next = 'yes'
+			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'no') {
+				if (this.event.allowMaybe) {
+					next = 'maybe'
+				} else {
+					next = 'yes'
+				}
+			}
+			return next
 		},
 
 		iconClass() {
-
 			if (this.getAnswer({ option: this.option, userId: this.userId }) === 'yes') {
-				this.nextStatus = 'no'
 				return 'yes icon-yes '
 			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'maybe') {
-				this.nextStatus = 'yes'
 				return 'maybe icon-maybe '
 			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'no') {
-				if (this.event.allowMaybe) {
-					this.nextStatus = 'maybe'
-				} else {
-					this.nextStatus = 'yes'
-				}
 				return 'no icon-no '
 			} else {
 				return ''
 			}
 		}
-
 	},
+
 	methods: {
 
 		voteClick() {

@@ -47,8 +47,7 @@ const getters = {
 			if (e instanceof TypeError) {
 				return OC.getLanguage()
 			} else {
-				/* eslint-disable-next-line no-console */
-				console.log(e)
+				console.error(e)
 			}
 		}
 	},

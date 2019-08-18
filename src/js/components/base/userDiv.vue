@@ -26,7 +26,7 @@
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<Avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
+		<avatar :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
 		<div v-if="!hideNames" class="user-name">
 			{{ computedDisplayName }}
 		</div>

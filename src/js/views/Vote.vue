@@ -26,8 +26,7 @@
 			<controls :intitle="event.title">
 				<template slot="after">
 					<button v-if="poll.mode === 'edit'" :disabled="writingPoll" class="button btn primary"
-						@click="write()"
-					>
+						@click="write()">
 						<span>{{ saveButtonTitle }}</span>
 						<span v-if="writingPoll" class="icon-loading-small" />
 					</button>
@@ -57,8 +56,7 @@
 		<app-sidebar :title="t('polls', 'Details')">
 			<template slot="primary-actions">
 				<button v-if="allowEdit" class="button btn primary" :class="{ warning: adminMode }"
-					@click="toggleEdit()"
-				>
+					@click="toggleEdit()">
 					<span>{{ editButtonTitle }}</span>
 				</button>
 			</template>

@@ -51,6 +51,7 @@ use OCA\Polls\Controller\NotificationController;
 use OCA\Polls\Controller\OptionController;
 use OCA\Polls\Controller\VoteController;
 
+use OCA\Polls\Service\EventService;
 
 
 class ApiController extends Controller {
@@ -58,6 +59,7 @@ class ApiController extends Controller {
 	private $groupManager;
 	private $userManager;
 	private $eventMapper;
+	private $eventService;
 	private $optionMapper;
 	private $voteMapper;
 	private $commentMapper;
@@ -70,10 +72,10 @@ class ApiController extends Controller {
 	/**
 	 * PageController constructor.
 	 * @param string $appName
+	 * @param string $userId
 	 * @param IGroupManager $groupManager
 	 * @param IRequest $request
 	 * @param IUserManager $userManager
-	 * @param string $userId
 	 * @param EventMapper $eventMapper
 	 * @param OptionMapper $optionMapper
 	 * @param VoteMapper $voteMapper
@@ -83,13 +85,14 @@ class ApiController extends Controller {
 	 * @param NotificationController $notificationController
 	 * @param OptionController $optionController
 	 * @param VoteController $voteController
+	 * @param EventService $eventService
 	 */
 	public function __construct(
 		$appName,
+		$userId,
 		IGroupManager $groupManager,
 		IRequest $request,
 		IUserManager $userManager,
-		$userId,
 		EventMapper $eventMapper,
 		OptionMapper $optionMapper,
 		VoteMapper $voteMapper,
@@ -98,7 +101,8 @@ class ApiController extends Controller {
 		EventController $eventController,
 		NotificationController $notificationController,
 		OptionController $optionController,
-		VoteController $voteController
+		VoteController $voteController,
+		EventService $eventService
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
@@ -113,6 +117,7 @@ class ApiController extends Controller {
 		$this->notificationController = $notificationController;
 		$this->optionController = $optionController;
 		$this->voteController = $voteController;
+		$this->eventService = $eventService;
 	}
 
 	/**
@@ -154,149 +159,6 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Check if current user is in the access list
-	 * @param Array $accessList
-	 * @return Boolean
-	 */
-	private function checkUserAccess($accessList) {
-		foreach ($accessList as $accessItem ) {
-			if ($accessItem['type'] === 'user' && $accessItem['id'] === \OC::$server->getUserSession()->getUser()->getUID()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check If current user is member of a group in the access list
-	 * @param Array $accessList
-	 * @return Boolean
-	 */
-	private function checkGroupAccess($accessList) {
-		foreach ($accessList as $accessItem ) {
-			if ($accessItem['type'] === 'group' && $this->groupManager->isInGroup(\OC::$server->getUserSession()->getUser()->getUID(),$accessItem['id'])) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Set the access right of the current user for the poll
-	 * @param Array $event
-	 * @param Array $shares
-	 * @return String
-	 */
-	private function grantAccessAs($event, $shares) {
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$currentUser = '';
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		}
-
-		$grantAccessAs = 'none';
-
-		if ($event['owner'] === $currentUser) {
-			$grantAccessAs = 'owner';
-		} elseif ($event['access'] === 'public') {
-			$grantAccessAs = 'public';
-		} elseif ($event['access'] === 'registered' && \OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$grantAccessAs = 'registered';
-		} elseif ($event['access'] === 'hidden' && ($event['owner'] === \OC::$server->getUserSession()->getUser())) {
-			$grantAccessAs = 'hidden';
-		} elseif ($this->checkUserAccess($shares)) {
-			$grantAccessAs = 'userInvitation';
-		} elseif ($this->checkGroupAccess($shares)) {
-			$grantAccessAs = 'groupInvitation';
-		} elseif ($this->groupManager->isAdmin($currentUser)) {
-			$grantAccessAs = 'admin';
-		}
-
-		return $grantAccessAs;
-	}
-
-	/**
-	 * Read all votes of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
-	private function anonMapper($pollId) {
-		$anonList = array();
-		$votes = $this->voteMapper->findByPoll($pollId);
-		$i = 0;
-
-		foreach ($votes as $element) {
-			if (!array_key_exists($element->getUserId(), $anonList)) {
-				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i ;
-			}
-		}
-
-		$comments = $this->commentMapper->findByPoll($pollId);
-		foreach ($comments as $element) {
-			if (!array_key_exists($element->getUserId(), $anonList)) {
-				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
-			}
-		}
-		return $anonList;
-	}
-
-	/**
-	 * Read all votes of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
-	private function anonymize($array, $pollId, $anomizeField = 'userId') {
-		$anonList = $this->anonMapper($pollId);
-		$votes = $this->voteMapper->findByPoll($pollId);
-		$comments = $this->commentMapper->findByPoll($pollId);
-		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		$i = 0;
-
-		for ($i = 0; $i < count($array); ++$i) {
-			if ($array[$i][$anomizeField] !== \OC::$server->getUserSession()->getUser()->getUID()) {
-				$array[$i][$anomizeField] = $anonList[$array[$i][$anomizeField]];
-			}
-		}
-
-		return $array;
-	}
-
-	/**
-	 * Read all votes of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
-	 public function getParticipants($pollId, $anonymize = true) {
- 		$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
- 		$votes = $this->voteMapper->findByPoll($pollId);
- 		$anonMapper = $this->anonMapper($pollId);
- 		$participants = array();
-
- 		foreach ($votes as $vote) {
-
- 			if ($anonymize && $currentUser !== $vote->getUserId()) {
- 				$setName = $anonMapper[$vote->getUserId()];
- 			} else {
- 				$setName = $vote->getUserId();
- 			}
-
- 			if (!in_array($setName, $participants)) {
- 				$participants[] = $setName;
- 			}
- 		}
-
- 		return $participants;
- 	}
-
-	/**
 	 * Read all shares (users and groups with access) of a poll based on the poll id
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -323,78 +185,10 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Read an entire poll based on the poll id or hash
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param String $pollIdOrHash poll id or hash
-	 * @return Array
-	 */
-	public function getPoll($pollIdOrHash) {
-
-		if (!\OC::$server->getUserSession()->getUser() instanceof IUser) {
-			$currentUser = '';
-		} else {
-			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
-		}
-
-
-
-		$data = array();
-
-		try {
-
-			if (is_numeric($pollIdOrHash)) {
-				$pollId = $this->eventMapper->find(intval($pollIdOrHash))->id;
-				$result = 'foundById';
-			} else {
-				$pollId = $this->eventMapper->findByHash($pollIdOrHash)->id;
-				$result = 'foundByHash';
-			}
-
-			$event = $this->eventController->get($pollIdOrHash);
-			// $event = $this->getEvent($pollId);
-			$anonymize = ($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $currentUser));
-			// $anonymize = true;
-			// Anonymize shares, if anonimize is configured and
-			// user is not owner and not admin
-			if ($anonymize
-				&& $event['owner'] !== $currentUser
-				&& !$this->groupManager->isAdmin($currentUser)) {
-				$shares = array();
-			} else {
-				$shares = $this->getShares($event['id']);
-			}
-
-			if ($event['owner'] !== $currentUser && !$this->groupManager->isAdmin($currentUser)) {
-				$mode = 'create';
-			} else {
-				$mode = 'edit';
-			}
-
-			$data = [
-				'id' => $event['id'],
-				'result' => $result,
-				'grantedAs' => $this->grantAccessAs($event, $shares),
-				'mode' => $mode,
-				'event' => $event,
-				'comments' => $this->commentController->get($event['id']),
-				'votes' => $this->voteController->get($event['id']),
-				'participants' => $this->getParticipants($event['id'], $anonymize),
-				'shares' => $shares,
-				'voteOptions' => $this->optionController->get($event['id'])
-			];
-
-		} catch (DoesNotExistException $e) {
-				$data['poll'] = ['result' => 'notFound'];
-		} finally {
-			return $data;
-		}
-	}
-
-	/**
 	 * Get all polls
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @deprecated 1.0
 	 * @return DataResponse
 	 */
 
@@ -408,17 +202,21 @@ class ApiController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
+		$polls = array();
 
-		$eventsList = array();
-
-		foreach ($events as $eventElement) {
-			$event = $this->getPoll($eventElement->id);
-			if ($event['grantedAs'] !== 'none') {
-				$eventsList[] = $event;
+		foreach ($events as &$event) {
+			if ($this->eventService->grantAccessAs($event->id) !== "none") {
+				$polls[] = (object) [
+					 'id' => $event->id,
+					 'event' => $this->eventMapper->find($event->id)->read(),
+					 'options' => $this->optionMapper->findByPoll($event->id),
+					 'votes' => $this->voteMapper->findByPoll($event->id),
+					 'comments' => $this->commentMapper->findByPoll($event->id)
+				 ];
 			}
 		}
 
-		return new DataResponse($eventsList, Http::STATUS_OK);
+		return new DataResponse($polls, Http::STATUS_OK);
 	}
 
 	/**

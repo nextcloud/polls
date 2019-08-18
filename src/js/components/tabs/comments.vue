@@ -24,8 +24,7 @@
 	<div>
 		<add-comment />
 		<transition-group v-if="countComments" name="fade" class="comments"
-			tag="ul"
-		>
+			tag="ul">
 			<li v-for="(comment) in sortedComments" :key="comment.id">
 				<div class="comment-item">
 					<user-div :user-id="comment.userId" />

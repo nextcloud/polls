@@ -94,7 +94,7 @@ class Event extends Model {
 			$expiration = true;
 		}
 
-		return [
+		return (object) [
 			'id' => $this->getId(),
 			'hash' => $this->getHash(),
 			'type' => $pollType,

@@ -24,6 +24,8 @@
 
 namespace OCA\Polls\Db;
 
+use JsonSerializable;
+
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -32,14 +34,15 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Notification extends Model {
-	protected $userId;
+class Notification extends Entity implements JsonSerializable {
 	protected $pollId;
+	protected $userId;
 
-	/**
-	 * Notification constructor.
-	 */
-	public function __construct() {
-		$this->addType('pollId', 'integer');
-	}
+	public function jsonSerialize() {
+        return [
+            'id' => $this->id,
+            'pollId' => $this->pollId,
+            'userId' => $this->userId,
+        ];
+    }
 }

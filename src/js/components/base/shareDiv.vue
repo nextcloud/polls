@@ -24,7 +24,7 @@
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
 
-		<Multiselect id="ajax"
+		<multiselect id="ajax"
 			v-model="shares"
 			:options="users"
 			:multiple="true"
@@ -41,20 +41,18 @@
 			label="displayName"
 			track-by="user"
 			@search-change="loadUsersAsync"
-			@close="updateShares"
-		>
+			@close="updateShares">
 			<template slot="selection" slot-scope="{ values, search, isOpen }">
 				<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
 					{{ values.length }} users selected
 				</span>
 			</template>
-		</Multiselect>
+		</multiselect>
 
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(item, index) in sortedShares" :key="item.displayName" :data-index="index">
 				<UserDiv :user-id="item.user" :display-name="item.displayName" :type="item.type"
-					:hide-names="hideNames"
-				/>
+					:hide-names="hideNames" />
 				<div class="options">
 					<a class="icon icon-delete svg delete-poll" @click="removeShare(index, item)" />
 				</div>
@@ -134,8 +132,7 @@ export default {
 					this.users = response.data.siteusers
 					this.isLoading = false
 				}, (error) => {
-					/* eslint-disable-next-line no-console */
-					console.log(error.response)
+					console.error(error.response)
 				})
 		},
 

@@ -25,6 +25,8 @@
 
 namespace OCA\Polls\Db;
 
+use JsonSerializable;
+
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -35,38 +37,57 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getTimestamp()
  * @method void setTimestamp(integer $value)
  */
-class Option extends Model {
+class Option extends Entity implements JsonSerializable {
 	protected $pollId;
 	protected $pollOptionText;
 	protected $timestamp;
 
-	/**
-	 * Option constructor.
-	 */
-	public function __construct() {
-		$this->addType('pollId', 'integer');
-		$this->addType('timestamp', 'integer');
-	}
+	public function jsonSerialize() {
 
-	/**
-	 * Temporary correction to fix timestamp = 0 in date polls
-	 */
-	private function getTimestampTemp() {
-		if ($this->getTimestamp() > 0) {
-			return $this->getTimestamp();
-		} else if (strtotime($this->getPollOptionText())) {
-			return strtotime($this->getPollOptionText());
-		} else {
-			return 0;
-		}
-	}
-
-	public function read() {
-		return [
-			'pollId' => $this->getPollId(),
-			'id' => $this->getId(),
-			'text' => htmlspecialchars_decode($this->getPollOptionText()),
-			'timestamp' => $this->getTimestampTemp()
-		];
-	}
+        return [
+            'id' => $this->id,
+            'pollId' => $this->pollId,
+            'pollOptionText' => $this->pollOptionText,
+            'timestamp' => $this->timestamp
+        ];
+    }
+	//
+	// /**
+	//  * Option constructor.
+	//  */
+	// public function __construct() {
+	// 	$this->addType('pollId', 'integer');
+	// 	$this->addType('timestamp', 'integer');
+	// }
+	//
+	// /**
+	//  * Make shure, timestamp and Text are filled correctly
+	//  * @NoAdminRequired
+	//  * @deprecated 1.0
+	//  * @return Timestamp
+	//  */
+	// private function getTimestampTemp() {
+	// 	if ($this->getTimestamp() > 0) {
+	// 		return $this->getTimestamp();
+	// 	} else if (strtotime($this->getPollOptionText())) {
+	// 		return strtotime($this->getPollOptionText());
+	// 	} else {
+	// 		return 0;
+	// 	}
+	// }
+	//
+	// /**
+	//  * Return Option object with all properties
+	//  * @NoAdminRequired
+	//  * @deprecated 1.0 Moved to OptionController
+	//  * @return Array
+	//  */
+	// public function read() {
+	// 	return [
+	// 		'id' => $this->getId(),
+	// 		'pollId' => $this->getPollId(),
+	// 		'text' => htmlspecialchars_decode($this->getPollOptionText()),
+	// 		'timestamp' => $this->getTimestampTemp()
+	// 	];
+	// }
 }

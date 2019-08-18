@@ -30,7 +30,7 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<Multiselect v-model="move.unit" :options="move.units" />
+					<multiselect v-model="move.unit" :options="move.units" />
 				</div>
 			</div>
 		</modal-dialog>

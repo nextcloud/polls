@@ -57,8 +57,7 @@ const actions = {
 			.then((response) => {
 				commit('setPolls', { list: response.data })
 			}, (error) => {
-			/* eslint-disable-next-line no-console */
-				console.log(error.response)
+				console.error(error.response)
 			})
 	},
 

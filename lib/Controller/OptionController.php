@@ -42,52 +42,75 @@ use OCA\Polls\Db\OptionMapper;
 
 class OptionController extends Controller {
 
-	private $mapper;
 	private $userId;
+	private $mapper;
 
 	private $groupManager;
 	private $eventMapper;
 
+	/**
+	 * OptionController constructor.
+	 * @param string $AppName
+	 * @param $UserId
+	 * @param IRequest $request
+	 * @param OptionMapper $mapper
+	 * @param IGroupManager $groupManager
+	 * @param EventMapper $eventMapper
+	 */
 	public function __construct(
 		string $AppName,
+		$UserId,
 		IRequest $request,
 		OptionMapper $mapper,
-		$UserId,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper
 	) {
 		parent::__construct($AppName, $request);
-		$this->mapper = $mapper;
 		$this->userId = $UserId;
+		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 	}
 
-	/**
-	 * Read all options of a poll based on the poll id
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
-	 */
-	public function get($pollId) {
-		$returnList = array();
-		$options = $this->mapper->findByPoll($pollId);
 
-		foreach ($options as $Option) {
-			$returnList[] = $Option->read();
+	private function getTimestampTemp() {
+		if ($this->getTimestamp() > 0) {
+			return $this->getTimestamp();
+		} else if (strtotime($this->getPollOptionText())) {
+			return strtotime($this->getPollOptionText());
+		} else {
+			return 0;
 		}
-
-		return $returnList;
 	}
 
 	/**
-	 * Write poll (create/update)
+	 * Get all options of given poll
 	 * @NoAdminRequired
-	 * @param Array $event
-	 * @param Array $options
-	 * @param Array  $shares
-	 * @param String $mode
+	 * @NoCSRFRequired
+	 * @param Integer $pollId
+	 * @return Array Array of Option objects
+	 */
+	public function list($pollId) {
+		$returnList = array();
+		$options = $this->mapper->findByPoll($pollId);
+
+		foreach ($options as &$Option) {
+			$Option = (object) [
+				'id' => $Option->getId(),
+				'pollId' => $Option->getPollId(),
+				'text' => htmlspecialchars_decode($Option->getPollOptionText()),
+				'timestamp' => $Option->getTimestamp()
+			];
+		}
+
+		return new DataResponse($options, Http::STATUS_OK);
+	}
+
+	/**
+	 * Add a new Option to poll
+	 * @NoAdminRequired
+	 * @param Integer $pollId
+	 * @param Array $option
 	 * @return DataResponse
 	 */
 	public function add($pollId, $option) {
@@ -101,24 +124,28 @@ class OptionController extends Controller {
 		$NewOption = new Option();
 
 		$NewOption->setPollId($pollId);
-		$NewOption->setpollOptionText(trim(htmlspecialchars($option['text'])));
+		$NewOption->setPollOptionText(trim(htmlspecialchars($option['text'])));
 		$NewOption->setTimestamp($option['timestamp']);
 
 		// TODO: catch triying to add existing options
 		// UniqueConstraintViolationException is not chatchable
-		$this->mapper->insert($NewOption);
+		try {
+			$this->mapper->insert($NewOption);
+		} catch (Exeption $e){
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
 
-		return $this->get($pollId);
+		// Lazy: return all options of this poll
+		return new DataResponse($this->get($pollId), Http::STATUS_OK);
+		// TODO: Return added option
+		return new DataResponse($NewOption, Http::STATUS_OK);
 
 	}
 
 	/**
-	 * Write poll (create/update)
+	 * Remove a single option
 	 * @NoAdminRequired
-	 * @param Array $event
-	 * @param Array $options
-	 * @param Array  $shares
-	 * @param String $mode
+	 * @param Array $optionId
 	 * @return DataResponse
 	 */
 	public function remove($optionId) {
@@ -128,9 +155,16 @@ class OptionController extends Controller {
 			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
-		$this->mapper->remove($optionId);
+		try {
+			$this->mapper->remove($optionId);
+		} catch (Exeption $e){
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
 
-		return $this->get($pollId);
+		return new DataResponse(array(
+			'action' => 'deleted',
+			'optionId' => $optionId
+		), Http::STATUS_OK);
 
 	}
 
@@ -162,7 +196,7 @@ class OptionController extends Controller {
 			$this->mapper->insert($NewOption);
 		}
 
-		return $this->get($pollId);
+		return $this->list($pollId);
 
 	}
 }

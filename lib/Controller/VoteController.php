@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 
 use OCP\IRequest;
+use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -42,75 +43,66 @@ use OCA\Polls\Service\AnonymizeService;
 
 class VoteController extends Controller {
 
-	private $mapper;
 	private $userId;
-
+	private $mapper;
+	private $logger;
 	private $groupManager;
 	private $eventMapper;
 	private $anonymizer;
 
 	/**
-	 * PageController constructor.
+	 * VoteController constructor.
 	 * @param string $AppName
-	 * @param IGroupManager $groupManager
+	 * @param $UserId
 	 * @param IRequest $request
-	 * @param IUserManager $userManager
-	 * @param string $userId
-	 * @param EventMapper $eventMapper
 	 * @param VoteMapper $mapper
+	 * @param IGroupManager $groupManager
+	 * @param EventMapper $eventMapper
+	 * @param AnonymizeService $anonymizer
 	 */
 	public function __construct(
 		string $AppName,
-		IRequest $request,
-		VoteMapper $mapper,
 		$UserId,
+		IRequest $request,
+		ILogger $logger,
+		VoteMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
 		AnonymizeService $anonymizer
 	) {
 		parent::__construct($AppName, $request);
-		$this->mapper = $mapper;
 		$this->userId = $UserId;
+		$this->mapper = $mapper;
+		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->anonymizer = $anonymizer;
 	}
 
 	/**
-	 * read
-	 * Read all comments of a poll based on the poll id
+	 * Get all votes of given poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param Integer $pollId
-	 * @return Array
+	 * @return DataResponse
 	 */
 	public function get($pollId) {
-		$commentsList = array();
-		$votesList = array();
+		$event = $this->eventMapper->find($pollId)->read();
 
-		try {
-			$event = $this->eventMapper->find($pollId)->read();
+		if (($event->fullAnonymous || ($event->isAnonymous && $event->owner !== $this->userId))) {
+			$votes = $this->anonymizer->getAnonymizedList($this->mapper->findByPoll($pollId), $pollId);
+		} else {
 			$votes = $this->mapper->findByPoll($pollId);
-		} catch (DoesNotExistException $e) {
-			// return silently
-		} finally {
-			foreach ($votes as $vote) {
-				$votesList[] = $vote->read();
-			}
-
-			if (($event['fullAnonymous'] || ($event['isAnonymous'] && $event['owner'] !== $this->userId))) {
-				return $this->anonymizer->getAnonymizedList($votesList, $pollId);
-			} else {
-				return $votesList;
-			}
 		}
+
+		return new DataResponse((array)$votes, Http::STATUS_OK);
 
 	}
 
 	/**
-	 * set (update/create)
+	 * Set vote
 	 * @NoAdminRequired
-	 * @param Any $pollId
+	 * @param Integer $pollId
 	 * @param Array $option
 	 * @param String $userId
 	 * @param String $setTo
@@ -135,50 +127,10 @@ class VoteController extends Controller {
 			$vote->setVoteAnswer($setTo);
 
 			$this->mapper->insert($vote);
+
 		} finally {
-			return new DataResponse(array(
-				'id' => $vote->getId(),
-				'pollId' => $vote->getPollId(),
-				'userId' => $vote->getUserId(),
-				'voteAnswer' => $vote->getVoteAnswer(),
-				'voteOptionId' => $vote->getVoteOptionId(),
-				'voteOptionText' => $vote->getVoteOptionText()
-			), Http::STATUS_OK);
-
+			return new DataResponse($vote, Http::STATUS_OK);
 		}
 	}
 
-	/**
-	 * write (update/create)
-	 * @NoAdminRequired
-	 * @param Array $event
-	 * @param Array $votes
-	 * @param String $mode
-	 * @param String $currentUser
-	 * @return DataResponse
-	 */
-	public function write($pollId, $votes, $currentUser) {
-		if ($this->userId === '') {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		} else {
-			$AdminAccess = $this->groupManager->isAdmin($this->userId);
-		}
-
-		$this->mapper->deleteByPollAndUser($pollId, $this->userId);
-
-		foreach ($votes as $vote) {
-			if ($vote['userId'] == $this->userId && $vote['pollId'] == $pollId) {
-				$NewVote = new Vote();
-
-				$NewVote->setPollId($pollId);
-				$NewVote->setUserId($this->userId);
-				$NewVote->setVoteOptionText($vote['voteOptionText']);
-				$NewVote->setVoteAnswer($vote['voteAnswer']);
-
-				$this->mapper->insert($NewVote);
-			}
-		}
-
-		return $this->get($pollId);
-	}
 }

@@ -41,8 +41,7 @@
 			</div>
 
 			<transition-group v-if="!noPolls" name="list" tag="div"
-				class="table"
-			>
+				class="table">
 				<poll-list-item key="0" :header="true" />
 				<li is="poll-list-item"
 					v-for="(poll, index) in pollList"
@@ -50,8 +49,7 @@
 					:poll="poll"
 					@deletePoll="removePoll(index, poll.event)"
 					@editPoll="callPoll(index, poll.event, 'edit')"
-					@clonePoll="callPoll(index, poll.event, 'clone')"
-				/>
+					@clonePoll="callPoll(index, poll.event, 'clone')" />
 			</transition-group>
 		</div>
 		<loading-overlay v-if="loading" />
@@ -106,8 +104,7 @@ export default {
 				})
 				.catch(error => {
 					this.loading = false
-					/* eslint-disable-next-line no-console */
-					console.log('refresh poll: ', error.response)
+					console.error('refresh poll: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, { type: 'error' }))
 				})
 		},
@@ -133,8 +130,7 @@ export default {
 						})
 						.catch(error => {
 							this.loading = false
-							/* eslint-disable-next-line no-console */
-							console.log('remove poll: ', error.response)
+							console.error('remove poll: ', error.response)
 							OC.Notification.showTemporary(
 								t('polls', 'Error while deleting Poll "%n"', 1, event.title, { type: 'error' })
 							)

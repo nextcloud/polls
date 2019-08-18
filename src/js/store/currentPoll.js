@@ -47,22 +47,6 @@ const mutations = {
 	pollSetProperty(state, payload) {
 		state[payload.property] = payload.value
 	}
-
-	// participantAdd(state, payload) {
-	// 	var fakeVoteId = 6541315463
-	// 	// state.participants.push(payload.userId)
-	// 	state.voteOptions.forEach(function(option) {
-	// 		state.votes.push({
-	// 			id: ++fakeVoteId,
-	// 			pollId: state.event.id,
-	// 			userId: payload.userId,
-	// 			voteAnswer: 'unvoted',
-	// 			voteOptionText: option.text,
-	// 			voteOptionId: option.id
-	// 		})
-	// 	})
-	// },
-
 }
 
 const actions = {
@@ -125,8 +109,7 @@ const actions = {
 	// 				})
 	// 				// window.location.href = OC.generateUrl('apps/polls/edit/' + this.event.hash)
 	// 			}, (error) => {
-	// 				/* eslint-disable-next-line no-console */
-	// 				console.log(error.response)
+	// 				console.error(error.response)
 	// 			})
 	//
 	// 	}

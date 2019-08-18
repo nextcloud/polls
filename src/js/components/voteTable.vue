@@ -23,44 +23,38 @@
 <template lang="html">
 	<div class="vote-table">
 		<transition-group v-if="event.type === 'datePoll'" name="list" tag="div"
-			class="header"
-		>
+			class="header">
 			<date-poll-vote-header v-for="(option) in sortedOptions"
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
-				@remove="optionRemove(option)"
-			/>
+				@remove="optionRemove(option)" />
 		</transition-group>
 
 		<transition-group v-if="event.type === 'textPoll'" name="list" tag="div"
-			class="header"
-		>
+			class="header">
 			<text-poll-vote-header v-for="(option) in sortedOptions"
 				:key="option.text"
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
-				@remove="optionRemove(option)"
-			/>
+				@remove="optionRemove(option)" />
 		</transition-group>
 
 		<ul class="participants">
-			<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === poll.currentUser) }">
+			<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === currentUser) }">
 				<user-div :key="participant"
-					:class="{currentUser: (participant === poll.currentUser) }"
+					:class="{currentUser: (participant === currentUser) }"
 					:user-id="participant"
-					:fixed-width="true"
-				/>
+					:fixed-width="true" />
 				<div class="vote-row">
 					<vote-item v-for="(option) in sortedOptions"
 						:key="option.id"
 						:user-id="participant"
 						:option="option"
 						:poll-type="event.type"
-						@voteSaved="voteSaved(vote)"
-					/>
+						@voteSaved="voteSaved(vote)" />
 				</div>
 			</div>
 		</ul>
@@ -84,15 +78,19 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			event: state => state.event,
-			voteOptions: state => state.options
+			event: state => state.event
 		}),
 
 		...mapGetters([
 			'sortedOptions',
 			'usersVotes',
 			'participants'
-		])
+		]),
+		
+		currentUser(){
+			return OC.currentUser
+		}
+
 	},
 
 	mounted() {

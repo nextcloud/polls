@@ -37,31 +37,69 @@ use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Service\EventService;
 
 
 
 class EventController extends Controller {
 
-	private $mapper;
 	private $userId;
+	private $mapper;
 	private $logger;
-
-
 	private $groupManager;
+
+	/**
+	 * CommentController constructor.
+	 * @param string $appName
+	 * @param $UserId
+	 * @param IRequest $request
+	 * @param ILogger $logger
+	 * @param EventMapper $mapper
+	 * @param IGroupManager $groupManager
+	 * @param EventService $eventService
+	 */
 
 	public function __construct(
 		string $AppName,
+		$UserId,
 		IRequest $request,
 		ILogger $logger,
 		EventMapper $mapper,
-		$UserId,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		EventService $eventService
 	) {
 		parent::__construct($AppName, $request);
-		$this->mapper = $mapper;
 		$this->userId = $UserId;
+		$this->mapper = $mapper;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
+		$this->eventService = $eventService;
+	}
+
+	/**
+	 * Get all polls
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return DataResponse
+	 */
+
+	public function list() {
+		if ($this->userId === '') {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+		try {
+			$events = $this->mapper->findAll();
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		foreach ($events as &$event) {
+			$event = $this->get($event->id);
+		}
+
+		return new DataResponse($events, Http::STATUS_OK);
+
 	}
 
 	 /**
@@ -73,18 +111,49 @@ class EventController extends Controller {
  	 */
  	public function get($pollId) {
 
- 		$data = array();
-
  		try {
- 			$data = $this->mapper->find($pollId)->read();
+ 			$event = $this->mapper->find($pollId);
  		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
 			$this->logger->debug($e, ['app' => 'polls']);
 			$data['poll'] = ['result' => 'notFound'];
- 		} finally {
- 			return $data;
  		}
 
+		if ($event->getType() == 0) {
+			$pollType = 'datePoll';
+		} else {
+			$pollType = 'textPoll';
+		}
+
+		$accessType = $event->getAccess();
+		if (!strpos('|public|hidden|registered', $accessType)) {
+			$accessType = 'select';
+		}
+		if ($event->getExpire() === null) {
+			$expired = false;
+			$expiration = false;
+		} else {
+			$expired = time() > strtotime($event->getExpire());
+			$expiration = true;
+		}
+
+		return (object) [
+			'id' => $event->getId(),
+			'hash' => $event->getHash(),
+			'type' => $pollType,
+			'title' => $event->getTitle(),
+			'description' => $event->getDescription(),
+			'owner' => $event->getOwner(),
+			'ownerDisplayName' => \OC_User::getDisplayName($event->getOwner()),
+			'created' => $event->getCreated(),
+			'access' => $accessType,
+			'expiration' => $expiration,
+			'expired' => $expired,
+			'expirationDate' => $event->getExpire(),
+			'isAnonymous' => $event->getIsAnonymous(),
+			'fullAnonymous' => $event->getFullAnonymous(),
+			'allowMaybe' => $event->getAllowMaybe()
+		];
  	}
 
 	/**
@@ -116,15 +185,15 @@ class EventController extends Controller {
 		$NewEvent->setAllowMaybe($event['allowMaybe']);
 
 		if ($event['access'] === 'select') {
-			$shareAccess = '';
-			foreach ($shares as $shareElement) {
-				if ($shareElement['type'] === 'user') {
-					$shareAccess = $shareAccess . 'user_' . $shareElement['id'] . ';';
-				} elseif ($shareElement['type'] === 'group') {
-					$shareAccess = $shareAccess . 'group_' . $shareElement['id'] . ';';
-				}
-			}
-			$NewEvent->setAccess(rtrim($shareAccess, ';'));
+			// $shareAccess = '';
+			// foreach ($shares as $shareElement) {
+			// 	if ($shareElement['type'] === 'user') {
+			// 		$shareAccess = $shareAccess . 'user_' . $shareElement['id'] . ';';
+			// 	} elseif ($shareElement['type'] === 'group') {
+			// 		$shareAccess = $shareAccess . 'group_' . $shareElement['id'] . ';';
+			// 	}
+			// }
+			// $NewEvent->setAccess(rtrim($shareAccess, ';'));
 		} else {
 			$NewEvent->setAccess($event['access']);
 		}
@@ -160,7 +229,7 @@ class EventController extends Controller {
 				$this->logger->debug('updating', ['app' => 'polls']);
 
 			} catch (Exeption $e) {
-				$this->logger->alert('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
+				$this->logger->alert('Poll ' . $oldEvent['id'] . ' not found!', ['app' => 'polls']);
 			}
 
 		} elseif ($mode === 'create') {

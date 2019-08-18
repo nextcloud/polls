@@ -73,7 +73,6 @@ const actions = {
 				commit('optionsSet', { 'list': response.data })
 			}, (error) => {
 				commit({ type: 'optionsReset' })
-				/* eslint-disable-next-line no-console */
 				console.error(error)
 			})
 	},
@@ -99,7 +98,6 @@ const actions = {
 				.then((response) => {
 					commit('optionsSet', { 'list': response.data })
 				}, (error) => {
-				/* eslint-disable-next-line no-console */
 					console.error(error.response)
 				})
 		}
@@ -107,18 +105,13 @@ const actions = {
 
 	removeOption({ commit, getters, dispatch, rootState }, optionId) {
 		if (state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/add/option'), { optionId: optionId })
+			return axios.post(OC.generateUrl('apps/polls/remove/option'), { optionId: optionId })
 				.then((response) => {
 					commit('optionsSet', { 'list': response.data })
 				}, (error) => {
-				/* eslint-disable-next-line no-console */
 					console.error(error.response)
 				})
 		}
-
-		commit('addOption', newOption)
-		dispatch('writeOptionsPromise')
-
 	},
 
 	writeOptionsPromise({ commit, getters, rootState }, payload) {
@@ -127,7 +120,6 @@ const actions = {
 				.then((response) => {
 					commit('optionsSet', { 'list': response.data })
 				}, (error) => {
-				/* eslint-disable-next-line no-console */
 					console.error(error.response)
 				})
 		}

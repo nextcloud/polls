@@ -41,13 +41,13 @@ const mutations = {
 
 	voteSet(state, payload) {
 		var index = state.list.findIndex(vote =>
-			vote.pollId === payload.pollId
-			&& vote.userId === payload.newVote.userId
-			&& vote.voteOptionText === payload.option.text)
+			vote.pollId == payload.pollId
+			&& vote.userId == payload.vote.userId
+			&& vote.voteOptionText == payload.option.text)
 		if (index > -1) {
-			state.list[index] = Object.assign(state.list[index], payload.newVote)
+			state.list[index] = Object.assign(state.list[index], payload.vote)
 		} else {
-			state.list.push(payload.newVote)
+			state.list.push(payload.vote)
 		}
 	}
 }
@@ -84,9 +84,9 @@ const getters = {
 
 	getAnswer: (state, getters, rootState) => (payload) => {
 		var index = state.list.findIndex(vote =>
-			vote.pollId === rootState.event.id
-			&& vote.userId === payload.userId
-			&& vote.voteOptionText === payload.option.text)
+			vote.pollId == rootState.event.id
+			&& vote.userId == payload.userId
+			&& vote.voteOptionText == payload.option.text)
 		if (index > -1) {
 			return state.list[index].voteAnswer
 		} else {
@@ -106,8 +106,7 @@ const actions = {
 				})
 			}, (error) => {
 				commit({ type: 'votesReset' })
-				/* eslint-disable-next-line no-console */
-				console.log(error)
+				console.error(error)
 			})
 	},
 
@@ -119,11 +118,10 @@ const actions = {
 			setTo: payload.switchTo
 		})
 			.then((response) => {
-				commit('voteSet', { option: payload.option, pollId: rootState.event.id, newVote: response.data })
+				commit('voteSet', { option: payload.option, pollId: rootState.event.id, vote: response.data })
 				return response.data
 			}, (error) => {
-			/* eslint-disable-next-line no-console */
-				console.log(error.response)
+				console.error(error.response)
 			})
 	}
 

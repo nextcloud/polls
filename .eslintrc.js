@@ -50,9 +50,16 @@ module.exports = {
 		// es6 import/export and require
 		'node/no-unpublished-require': ['off'],
 		'node/no-unsupported-features/es-syntax': ['off'],
+		// kebab case components for vuejs
+		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
 		// space before self-closing elements
 		'vue/html-closing-bracket-spacing': 'error',
 		// code spacing with attributes
+		// newline before closing bracket
+		'vue/html-closing-bracket-newline': ["error", {
+			"singleline": "never",
+			"multiline": "never"
+		}],
 		'vue/max-attributes-per-line': [
 			'error',
 			{

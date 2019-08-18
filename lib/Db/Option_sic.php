@@ -25,37 +25,57 @@
 
 namespace OCA\Polls\Db;
 
-use JsonSerializable;
-
 use OCP\AppFramework\Db\Entity;
 
 /**
  * @method integer getPollId()
  * @method void setPollId(integer $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
- * @method integer getVoteOptionId()
- * @method void setVoteOptionId(integer $value)
- * @method string getVoteOptionText()
- * @method void setVoteOptionText(string $value)
- * @method string getVoteAnswer()
- * @method void setVoteAnswer(string $value)
+ * @method string getPollOptionText()
+ * @method void setPollOptionText(string $value)
+ * @method integer getTimestamp()
+ * @method void setTimestamp(integer $value)
  */
-class Vote extends Entity implements JsonSerializable {
+class Option extends Model {
 	protected $pollId;
-	protected $userId;
-	protected $voteOptionId;
-	protected $voteOptionText;
-	protected $voteAnswer;
+	protected $pollOptionText;
+	protected $timestamp;
 
-	public function jsonSerialize() {
-        return [
-            'id' => $this->id,
-            'pollId' => $this->pollId,
-            'userId' => $this->userId,
-            'voteOptionId' => $this->voteOptionId,
-            'voteOptionText' => $this->voteOptionText,
-            'voteAnswer' => $this->voteAnswer
-        ];
-    }
+	/**
+	 * Option constructor.
+	 */
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+		$this->addType('timestamp', 'integer');
+	}
+
+	/**
+	 * Make shure, timestamp and Text are filled correctly
+	 * @NoAdminRequired
+	 * @deprecated 1.0
+	 * @return Timestamp
+	 */
+	private function getTimestampTemp() {
+		if ($this->getTimestamp() > 0) {
+			return $this->getTimestamp();
+		} else if (strtotime($this->getPollOptionText())) {
+			return strtotime($this->getPollOptionText());
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * Return Option object with all properties
+	 * @NoAdminRequired
+	 * @deprecated 1.0 Moved to OptionController
+	 * @return Array
+	 */
+	public function read() {
+		return [
+			'id' => $this->getId(),
+			'pollId' => $this->getPollId(),
+			'text' => htmlspecialchars_decode($this->getPollOptionText()),
+			'timestamp' => $this->getTimestampTemp()
+		];
+	}
 }

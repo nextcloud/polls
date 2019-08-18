@@ -35,7 +35,9 @@ import locale from './locale'
 
 Vue.use(Vuex)
 
+/* eslint-disable-next-line no-unused-vars */
 const debug = process.env.NODE_ENV !== 'production'
+
 export default new Vuex.Store({
 
 	modules: {

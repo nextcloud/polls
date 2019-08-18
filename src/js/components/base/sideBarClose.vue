@@ -23,8 +23,7 @@
 <template>
 	<div class="close flex-row">
 		<a id="closeDetails" :title="closeDetailLabel" :alt="closeDetailLabelAlt"
-			class="close icon-close has-tooltip-bottom" href="#" @:click="hideSidebar"
-		/>
+			class="close icon-close has-tooltip-bottom" href="#" @:click="hideSidebar" />
 	</div>
 </template>
 

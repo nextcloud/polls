@@ -100,8 +100,7 @@ const actions = {
 				.then((response) => {
 					commit('eventSet', { 'event': response.data })
 				}, (error) => {
-				/* eslint-disable-next-line no-console */
-					console.log(error)
+					console.error(error)
 				})
 		}
 	},
@@ -111,8 +110,7 @@ const actions = {
 			.then((response) => {
 				commit('eventSet', { 'event': response.data })
 			}, (error) => {
-			/* eslint-disable-next-line no-console */
-				console.log(error.response)
+				console.error(error.response)
 			})
 
 	}

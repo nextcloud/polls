@@ -2,8 +2,6 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- * @author Kai Schröer <git@schroeer.co>
  * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
@@ -25,6 +23,8 @@
 
 namespace OCA\Polls\Db;
 
+use JsonSerializable;
+
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -37,27 +37,20 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Share extends Model {
+class Share extends Entity implements JsonSerializable {
+	protected $pollId;
 	protected $userId;
 	protected $hash;
 	protected $type;
-	protected $pollId;
 
-	/**
-	 * Comment constructor.
-	 */
-	public function __construct() {
-		$this->addType('pollId', 'integer');
-	}
-
-	public function read() {
-		return [
-			'id' => $this->getId(),
-			'pollId' => $this->getPollId(),
-			'userId' => $this->getUserId(),
-			'hash' => $this->getHash(),
-			'type' => $this->getType()
-		];
+	public function jsonSerialize() {
+        return [
+            'id' => $this->id,
+            'pollId' => $this->pollId,
+            'userId' => $this->userId,
+            'hash' => $this->hash,
+            'type' => $this->type
+        ];
 
 	}
 }

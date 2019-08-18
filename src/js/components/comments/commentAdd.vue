@@ -56,8 +56,7 @@ export default {
 				})
 				.catch(error => {
 					this.writingVote = false
-					/* eslint-disable-next-line no-console */
-					console.log('Error while saving comment - Error: ', error.response)
+					console.error('Error while saving comment - Error: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error while saving comment', { type: 'error' }))
 				})
 

@@ -31,8 +31,7 @@
 
 					<label>{{ t('polls', 'Title') }}</label>
 					<input id="pollTitle" v-model="eventTitle" :class="{ error: titleEmpty }"
-						type="text"
-					>
+						type="text">
 
 					<label>{{ t('polls', 'Description') }}</label>
 					<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
@@ -42,15 +41,12 @@
 					<h2>{{ t('polls', 'Vote options') }}</h2>
 
 					<date-picker v-show="event.type === 'datePoll'" v-bind="optionDatePicker" style="width:100%"
-						confirm @change="addNewPollDate($event)"
-					/>
+						confirm @change="addNewPollDate($event)" />
 
 					<transitionGroup v-show="event.type === 'datePoll'" id="date-poll-list" name="list"
-						tag="ul" class="poll-table"
-					>
+						tag="ul" class="poll-table">
 						<date-poll-item v-for="(option, index) in sortedOptions" :key="option.id" :option="option"
-							@remove="options.splice(index, 1)"
-						/>
+							@remove="options.splice(index, 1)" />
 					</transitionGroup>
 
 					<div v-show="event.type === 'textPoll'" id="poll-item-selector-text">
@@ -58,11 +54,9 @@
 					</div>
 
 					<transitionGroup v-show="event.type === 'textPoll'" id="text-poll-list" name="list"
-						tag="ul" class="poll-table"
-					>
+						tag="ul" class="poll-table">
 						<text-poll-item v-for="(option, index) in options" :key="option.id" :option="option"
-							@remove="options.splice(index, 1)"
-						/>
+							@remove="options.splice(index, 1)" />
 					</transitionGroup>
 				</div>
 			</div>
@@ -71,8 +65,7 @@
 		<app-sidebar :title="t('polls', 'Settings')">
 			<template slot="primary-actions">
 				<button :disabled="writingPoll" class="button btn primary" :class="{ warning: adminMode }"
-					@click="writePoll()"
-				>
+					@click="writePoll()">
 					<span>{{ saveButtonTitle }}</span>
 					<span v-if="writingPoll" class="icon-loading-small" />
 				</button>
@@ -105,7 +98,7 @@ import TextPollItem from '../components/textPoll/createItem'
 import InformationTab from '../components/tabs/information'
 import ConfigurationTab from '../components/tabs/configuration'
 import CommentsTab from '../components/tabs/comments'
-import ShiftDates from '../components/datesShift'
+// import ShiftDates from '../components/datesShift'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
@@ -116,8 +109,8 @@ export default {
 		TextPollItem,
 		InformationTab,
 		ConfigurationTab,
-		CommentsTab,
-		ShiftDates
+		CommentsTab
+		// ShiftDates
 		// Multiselect
 	},
 
