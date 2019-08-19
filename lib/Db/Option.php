@@ -80,7 +80,7 @@ class Option extends Entity implements JsonSerializable {
 	//  * Return Option object with all properties
 	//  * @NoAdminRequired
 	//  * @deprecated 1.0 Moved to OptionController
-	//  * @return Array
+	//  * @return array
 	//  */
 	// public function read() {
 	// 	return [

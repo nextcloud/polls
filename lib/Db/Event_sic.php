@@ -25,8 +25,6 @@
 
 namespace OCA\Polls\Db;
 
-use JsonSerializable;
-
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -53,7 +51,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
  */
-class Event extends Entity implements JsonSerializable {
+class Event extends Model {
 	protected $type;
 	protected $title;
 	protected $description;
@@ -66,20 +64,52 @@ class Event extends Entity implements JsonSerializable {
 	protected $fullAnonymous;
 	protected $allowMaybe;
 
-	public function jsonSerialize() {
-		return [
-			'id' => $this->id,
-			'type' => $this->type,
-			'title' => $this->title,
-			'description' => $this->description,
-			'owner' => $this->owner,
-			'created' => $this->created,
-			'access' => $this->access,
-			'expire' => $this->expire,
-			'hash' => $this->hash,
-			'isAnonymous' => $this->isAnonymous,
-			'fullAnonymous' => $this->fullAnonymous,
-			'allowMaybe' => $this->allowMaybe
+	/**
+	 * Event constructor.
+	 */
+	public function __construct() {
+		$this->addType('type', 'integer');
+		$this->addType('isAnonymous', 'integer');
+		$this->addType('fullAnonymous', 'integer');
+		$this->addType('allowMaybe', 'integer');
+	}
+
+	public function read() {
+
+		if ($this->getType() == 0) {
+			$pollType = 'datePoll';
+		} else {
+			$pollType = 'textPoll';
+		}
+
+		$accessType = $this->getAccess();
+		if (!strpos('|public|hidden|registered', $accessType)) {
+			$accessType = 'select';
+		}
+		if ($this->getExpire() === null) {
+			$expired = false;
+			$expiration = false;
+		} else {
+			$expired = time() > strtotime($this->getExpire());
+			$expiration = true;
+		}
+
+		return (object) [
+			'id' => $this->getId(),
+			'hash' => $this->getHash(),
+			'type' => $pollType,
+			'title' => $this->getTitle(),
+			'description' => $this->getDescription(),
+			'owner' => $this->getOwner(),
+			'ownerDisplayName' => \OC_User::getDisplayName($this->getOwner()),
+			'created' => $this->getCreated(),
+			'access' => $accessType,
+			'expiration' => $expiration,
+			'expired' => $expired,
+			'expirationDate' => $this->getExpire(),
+			'isAnonymous' => $this->getIsAnonymous(),
+			'fullAnonymous' => $this->getFullAnonymous(),
+			'allowMaybe' => $this->getAllowMaybe()
 		];
 	}
 }

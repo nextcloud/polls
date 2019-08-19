@@ -41,7 +41,7 @@ class CommentMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Comment[]
+	 * @return array
 	 */
 
 	public function findByPoll($pollId) {

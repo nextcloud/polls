@@ -41,7 +41,7 @@ class VoteMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Comment[]
+	 * @return array
 	 */
 
 	public function findByPoll($pollId) {
@@ -59,7 +59,7 @@ class VoteMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Comment[]
+	 * @return Vote
 	 */
 
 	public function findSingleVote($pollId, $optionText, $userId) {
@@ -82,9 +82,9 @@ class VoteMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Array
+	 * @return array
 	 */
-	public function findParticipantsByPoll($pollId, $limit = null, $offset = null) {
+	public function findParticipantsByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('user_id')

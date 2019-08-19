@@ -28,7 +28,6 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCP\IGroupManager;
-use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IConfig;
@@ -43,7 +42,7 @@ class SystemController extends Controller {
 
 	/**
 	 * PageController constructor.
-	 * @param String $appName
+	 * @param string $appName
 	 * @param $UserId
 	 * @param IConfig $systemConfig
 	 * @param IRequest $request

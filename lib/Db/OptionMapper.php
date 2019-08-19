@@ -41,7 +41,7 @@ class OptionMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Option[]
+	 * @return array
 	 */
 
 	public function findByPoll($pollId) {
@@ -59,7 +59,7 @@ class OptionMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 */
-	public function removeOption($optionId) {
+	public function remove($optionId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

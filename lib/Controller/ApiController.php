@@ -125,7 +125,7 @@ class ApiController extends Controller {
 	 * Transforms a string with user and group names to an array
 	 * of nextcloud users and groups
 	 * @param string $item
-	 * @return Array
+	 * @return array
 	 */
 	private function convertAccessList($item) {
 		$split = array();
@@ -163,8 +163,8 @@ class ApiController extends Controller {
 	 * Read all shares (users and groups with access) of a poll based on the poll id
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array
+	 * @param integer $pollId
+	 * @return array
 	 */
 	public function getShares($pollId) {
 
@@ -209,7 +209,7 @@ class ApiController extends Controller {
 			if ($this->eventService->grantAccessAs($event->id) !== "none") {
 				$polls[] = (object) [
 					 'id' => $event->id,
-					 'event' => $this->eventMapper->find($event->id)->read(),
+					 'event' => $this->eventMapper->find($event->id),
 					 'options' => $this->optionMapper->findByPoll($event->id),
 					 'votes' => $this->voteMapper->findByPoll($event->id),
 					 'comments' => $this->commentMapper->findByPoll($event->id)
@@ -253,7 +253,7 @@ class ApiController extends Controller {
 	 * @param Array $event
 	 * @param Array $options
 	 * @param Array  $shares
-	 * @param String $mode
+	 * @param string $mode
 	 * @return DataResponse
 	 */
 	public function writePoll($event, $voteOptions, $shares, $mode) {

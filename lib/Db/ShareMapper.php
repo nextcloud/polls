@@ -39,9 +39,9 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
+	 * @param string $hash
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Share[]
+	 * @return array
 	 */
 
 	public function findByHash($hash) {

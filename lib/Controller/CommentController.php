@@ -83,15 +83,15 @@ class CommentController extends Controller {
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Integer $pollId
+	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
 
 		try {
-			$event = $this->eventMapper->find($pollId)->read();
+			$event = $this->eventMapper->find($pollId);
 			$comments = $this->mapper->findByPoll($pollId);
-			if (($event->fullAnonymous || ($event->isAnonymous && $event->owner !== $this->userId))) {
+			if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->owner !== $this->userId))) {
 				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId);
 			}
 

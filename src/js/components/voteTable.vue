@@ -25,7 +25,7 @@
 		<transition-group v-if="event.type === 'datePoll'" name="list" tag="div"
 			class="header">
 			<date-poll-vote-header v-for="(option) in sortedOptions"
-				:key="option.text"
+				:key="option.id"
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
@@ -35,7 +35,7 @@
 		<transition-group v-if="event.type === 'textPoll'" name="list" tag="div"
 			class="header">
 			<text-poll-vote-header v-for="(option) in sortedOptions"
-				:key="option.text"
+				:key="option.id"
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
@@ -86,8 +86,8 @@ export default {
 			'usersVotes',
 			'participants'
 		]),
-		
-		currentUser(){
+
+		currentUser() {
 			return OC.currentUser
 		}
 

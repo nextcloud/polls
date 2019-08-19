@@ -42,7 +42,7 @@ const mutations = {
 	},
 
 	optionAdd(state, payload) {
-		state.list.push(payload)
+		state.list.push(payload.option)
 	},
 
 	datesShift(state, payload) {
@@ -92,15 +92,15 @@ const actions = {
 			newOption.text = payload.option
 		}
 
-		if (state.currentUser !== '') {
 
-			return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: newOption })
-				.then((response) => {
-					commit('optionsSet', { 'list': response.data })
-				}, (error) => {
-					console.error(error.response)
-				})
-		}
+		return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: newOption })
+			.then((response) => {
+				console.error(response.data)
+				commit('optionAdd', { 'option': response.data })
+				// commit('optionsSet', { 'list': response.data })
+			}, (error) => {
+				console.error(error.response)
+			})
 	},
 
 	removeOption({ commit, getters, dispatch, rootState }, optionId) {

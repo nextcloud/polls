@@ -83,13 +83,13 @@ class VoteController extends Controller {
 	 * Get all votes of given poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Integer $pollId
+	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
-		$event = $this->eventMapper->find($pollId)->read();
+		$event = $this->eventMapper->find($pollId);
 
-		if (($event->fullAnonymous || ($event->isAnonymous && $event->owner !== $this->userId))) {
+		if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->owner !== $this->userId))) {
 			$votes = $this->anonymizer->getAnonymizedList($this->mapper->findByPoll($pollId), $pollId);
 		} else {
 			$votes = $this->mapper->findByPoll($pollId);
@@ -102,10 +102,10 @@ class VoteController extends Controller {
 	/**
 	 * Set vote
 	 * @NoAdminRequired
-	 * @param Integer $pollId
+	 * @param integer $pollId
 	 * @param Array $option
-	 * @param String $userId
-	 * @param String $setTo
+	 * @param string $userId
+	 * @param string $setTo
 	 * @return DataResponse
 	 */
 	public function set($pollId, $option, $userId, $setTo) {

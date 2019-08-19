@@ -40,7 +40,7 @@ class AnonymizeService {
 	 * Create a mapping list with unique Anonymous strings based on the partcipants of a poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @return Array
+	 * @return array
 	 */
 	private function anonMapper($pollId) {
 		$anonList = array();
@@ -61,7 +61,7 @@ class AnonymizeService {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param Array $array Input list which schould be anonymized
-	 * @return Array Returns the original array with anonymized user names
+	 * @return array Returns the original array with anonymized user names
 	 */
 	public function getAnonymizedList($array, $pollId) {
 		// get mapping for the complete poll

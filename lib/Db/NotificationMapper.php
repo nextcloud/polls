@@ -42,7 +42,7 @@ class NotificationMapper extends QBMapper {
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Notification[]
+	 * @return array
 	 */
 
 	 public function findAllByPoll($pollId) {

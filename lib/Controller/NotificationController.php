@@ -109,7 +109,7 @@ class NotificationController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @param Integer $pollId
+	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
@@ -119,7 +119,7 @@ class NotificationController extends Controller {
 		}
 
 		try {
-			$notification = $this->mapper->findByUserAndPoll($pollId, $this->userId);
+			$this->mapper->findByUserAndPoll($pollId, $this->userId);
 		} catch (MultipleObjectsReturnedException $e) {
 			// should not happen, but who knows
 		} catch (DoesNotExistException $e) {
@@ -130,7 +130,7 @@ class NotificationController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @param Integer $pollId
+	 * @param integer $pollId
 	 */
 	public function set($pollId, $subscribed) {
 		if ($subscribed) {

@@ -101,10 +101,6 @@ class EventController extends Controller {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		foreach ($events as &$event) {
-			$event = $this->get($event->id);
-		}
-
 		return new DataResponse($events, Http::STATUS_OK);
 
 	}
@@ -113,8 +109,8 @@ class EventController extends Controller {
 	  * Read an entire poll based on poll id
 	  * @NoAdminRequired
 	  * @NoCSRFRequired
-	  * @param Integer $pollId
-	  * @return Array
+	  * @param integer $pollId
+	  * @return array
 	  */
  	public function get($pollId) {
 		$data = array();
@@ -170,7 +166,7 @@ class EventController extends Controller {
 	 * @param Array $event
 	 * @param Array $options
 	 * @param Array  $shares
-	 * @param String $mode
+	 * @param string $mode
 	 * @return DataResponse
 	 */
 	public function write($event, $mode) {
@@ -236,7 +232,7 @@ class EventController extends Controller {
 				$this->mapper->update($NewEvent);
 				$this->logger->debug('updating', ['app' => 'polls']);
 
-			} catch (Exeption $e) {
+			} catch (Exception $e) {
 				$this->logger->alert('Poll ' . $oldEvent['id'] . ' not found!', ['app' => 'polls']);
 			}
 

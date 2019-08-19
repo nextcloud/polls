@@ -25,7 +25,6 @@ namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\UniqueConstraintViolationException;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -73,32 +72,33 @@ class OptionController extends Controller {
 	}
 
 
-	private function getTimestampTemp($Option) {
-		if ($Option->getTimestamp() > 0) {
-			return $Option->getTimestamp();
-		} else if (strtotime($Option->getPollOptionText())) {
-			return strtotime($Option->getPollOptionText());
-		} else {
-			return 0;
-		}
-	}
-
 	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Integer $pollId
-	 * @return Array Array of Option objects
+	 * @param integer $pollId
+	 * @return array Array of Option objects
 	 */
 	public function list($pollId) {
 		$options = $this->mapper->findByPoll($pollId);
 
 		foreach ($options as &$Option) {
+			// Fix for empty timestamps on date polls
+			// generate timestamp from pollOptionText
+			if ($Option->getTimestamp() > 0) {
+				$ts = $Option->getTimestamp();
+			} else if (strtotime($Option->getPollOptionText())) {
+				$ts = strtotime($Option->getPollOptionText());
+			} else {
+				$ts = 0;
+			}
+
+
 			$Option = (object) [
 				'id' => $Option->getId(),
 				'pollId' => $Option->getPollId(),
 				'text' => htmlspecialchars_decode($Option->getPollOptionText()),
-				'timestamp' => $Option->getTimestamp()
+				'timestamp' => $ts
 			];
 		}
 
@@ -108,16 +108,18 @@ class OptionController extends Controller {
 	/**
 	 * Add a new Option to poll
 	 * @NoAdminRequired
-	 * @param Integer $pollId
+	 * @param integer $pollId
 	 * @param Array $option
 	 * @return DataResponse
 	 */
 	public function add($pollId, $option) {
 
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
+		$Event = $this->eventMapper->find($pollId);
+
+		if (!\OC::$server->getUserSession()->isLoggedIn()
+			|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
+		) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		} else {
-			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
 		$NewOption = new Option();
@@ -127,17 +129,13 @@ class OptionController extends Controller {
 		$NewOption->setTimestamp($option['timestamp']);
 
 		// TODO: catch triying to add existing options
-		// UniqueConstraintViolationException is not chatchable
 		try {
 			$this->mapper->insert($NewOption);
-		} catch (Exeption $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		// Lazy: return all options of this poll
-		return new DataResponse($this->mapper->get($pollId), Http::STATUS_OK);
-		// TODO: Return added option
-		// return new DataResponse($NewOption, Http::STATUS_OK);
+		return new DataResponse($NewOption, Http::STATUS_OK);
 
 	}
 
@@ -148,15 +146,17 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function remove($optionId) {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
+		$Event = $this->eventMapper->find($pollId);
+
+		if (!\OC::$server->getUserSession()->isLoggedIn()
+			|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
+		) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		} else {
-			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
 		try {
 			$this->mapper->remove($optionId);
-		} catch (Exeption $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
@@ -173,14 +173,16 @@ class OptionController extends Controller {
 	 * @param Array $event
 	 * @param Array $options
 	 * @param Array  $shares
-	 * @param String $mode
+	 * @param string $mode
 	 * @return DataResponse
 	 */
 	public function write($pollId, $options) {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
+		$Event = $this->eventMapper->find($pollId);
+
+		if (!\OC::$server->getUserSession()->isLoggedIn()
+			|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
+		) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		} else {
-			$AdminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
 		$this->mapper->deleteByPoll($pollId);

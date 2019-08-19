@@ -47,7 +47,6 @@ class ShareController extends Controller {
 	 * @param string $appName
 	 * @param string $userId
 	 * @param IRequest $request
-	 * @param IUserManager $userManager
 	 * @param ShareMapper $mapper
 	 */
 	public function __construct(
@@ -67,7 +66,7 @@ class ShareController extends Controller {
 	 * Get pollId by hash
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param String $hash
+	 * @param string $hash
 	 * @return DataResponse
 	 */
 	public function getByHash($hash) {
@@ -112,13 +111,7 @@ class ShareController extends Controller {
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		} finally {
-			return new DataResponse(array(
-				'id' => $id,
-				'pollId' => $pollId,
-				'userId' => $userId,
-				'type' => $type,
-				'hash' => $hash
-			), Http::STATUS_OK);
+			return new DataResponse($share, Http::STATUS_OK);
 		}
 	}
 }

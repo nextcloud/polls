@@ -28,14 +28,14 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method string getUserId()
- * @method void setUserId(string $value)
- * @method string getDt()
- * @method void setDt(string $value)
- * @method string getComment()
- * @method void setComment(string $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
+ * @method string getUserId()
+ * @method void setUserId(string $value)
+ * @method string gethash()
+ * @method void setHash(string $value)
+ * @method string getType()
+ * @method void setType(string $value)
  */
 class Share extends Entity implements JsonSerializable {
 	protected $pollId;

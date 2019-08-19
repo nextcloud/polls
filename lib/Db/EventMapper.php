@@ -40,7 +40,7 @@ class EventMapper extends QBMapper {
 	}
 
 	/**
-	 * @param Integer $id
+	 * @param int $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
@@ -58,7 +58,7 @@ class EventMapper extends QBMapper {
 	}
 
 	/**
-	 * @param String $hash
+	 * @param string $hash
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
@@ -81,7 +81,7 @@ class EventMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Event[]
+	 * @return array
 	 */
 	public function findAll() {
 		$qb = $this->db->getQueryBuilder();
