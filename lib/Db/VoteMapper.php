@@ -47,13 +47,13 @@ class VoteMapper extends QBMapper {
 	public function findByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntities($qb);
+		return $this->findEntities($qb);
 	}
 
 	/**
@@ -65,18 +65,18 @@ class VoteMapper extends QBMapper {
 	public function findSingleVote($pollId, $optionText, $userId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
+		$qb->select('*')
+		   ->from($this->getTableName())
 		   ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           )
-           ->andWhere(
-               $qb->expr()->eq('vote_option_text', $qb->createNamedParameter($optionText, IQueryBuilder::PARAM_STR))
-           )
-           ->andWhere(
-               $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
-           );
-        return $this->findEntity($qb);
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   )
+		   ->andWhere(
+			   $qb->expr()->eq('vote_option_text', $qb->createNamedParameter($optionText, IQueryBuilder::PARAM_STR))
+		   )
+		   ->andWhere(
+			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   );
+		return $this->findEntity($qb);
 	}
 
 	/**
@@ -87,13 +87,13 @@ class VoteMapper extends QBMapper {
 	public function findParticipantsByPoll($pollId, $limit = null, $offset = null) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('user_id')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('user_id')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntities($qb);
+		return $this->findEntities($qb);
 	}
 
 	/**
@@ -103,20 +103,20 @@ class VoteMapper extends QBMapper {
 	 public function deleteByPollAndUser($pollId, $userId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->delete($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           )
-           ->andWhere(
-               $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
-           );
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   )
+		   ->andWhere(
+			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   );
 
 	   $qb->execute();
 	}
 
 	/**
-	* @param int $pollId
-	*/
+	 * @param int $pollId
+	 */
 	public function deleteByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 

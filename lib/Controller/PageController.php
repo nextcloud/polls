@@ -54,27 +54,27 @@ class PageController extends Controller {
 	}
 
 	/**
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	*/
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
 	public function index() {
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	*/
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
 	public function createPoll() {
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	*/
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
 	public function clonePoll() {
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);

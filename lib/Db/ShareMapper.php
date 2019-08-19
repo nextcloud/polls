@@ -47,13 +47,13 @@ class ShareMapper extends QBMapper {
 	public function findByHash($hash) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntity($qb);
+		return $this->findEntity($qb);
 	}
 
 	/**
@@ -62,10 +62,10 @@ class ShareMapper extends QBMapper {
 	public function deleteByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->delete($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
 	   $qb->execute();
 	}

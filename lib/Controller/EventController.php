@@ -110,12 +110,12 @@ class EventController extends Controller {
 	}
 
 	 /**
- 	 * Read an entire poll based on poll id
- 	 * @NoAdminRequired
- 	 * @NoCSRFRequired
- 	 * @param Integer $pollId
- 	 * @return Array
- 	 */
+	  * Read an entire poll based on poll id
+	  * @NoAdminRequired
+	  * @NoCSRFRequired
+	  * @param Integer $pollId
+	  * @return Array
+	  */
  	public function get($pollId) {
 		$data = array();
 

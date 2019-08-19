@@ -129,7 +129,7 @@ class NotificationController extends Controller {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @param Integer $pollId
 	 */
 	public function set($pollId, $subscribed) {

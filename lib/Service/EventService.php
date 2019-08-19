@@ -49,7 +49,7 @@ class EventService {
 	 * @return Boolean
 	 */
 	public function checkUserAccess($accessList) {
-		foreach ($accessList as $accessItem ) {
+		foreach ($accessList as $accessItem) {
 			if ($accessItem['type'] === 'user' && $accessItem['id'] === \OC::$server->getUserSession()->getUser()->getUID()) {
 				return true;
 			}
@@ -64,8 +64,8 @@ class EventService {
 	 * @return Boolean
 	 */
 	public function checkGroupAccess($accessList) {
-		foreach ($accessList as $accessItem ) {
-			if ($accessItem['type'] === 'group' && $this->groupManager->isInGroup(\OC::$server->getUserSession()->getUser()->getUID(),$accessItem['id'])) {
+		foreach ($accessList as $accessItem) {
+			if ($accessItem['type'] === 'group' && $this->groupManager->isInGroup(\OC::$server->getUserSession()->getUser()->getUID(), $accessItem['id'])) {
 				return true;
 			}
 		}

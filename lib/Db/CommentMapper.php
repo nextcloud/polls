@@ -47,13 +47,13 @@ class CommentMapper extends QBMapper {
 	public function findByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntities($qb);
+		return $this->findEntities($qb);
 	}
 
 	/**
@@ -62,10 +62,10 @@ class CommentMapper extends QBMapper {
 	public function deleteByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->delete($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
 	   $qb->execute();
 	}

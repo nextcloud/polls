@@ -130,7 +130,7 @@ class OptionController extends Controller {
 		// UniqueConstraintViolationException is not chatchable
 		try {
 			$this->mapper->insert($NewOption);
-		} catch (Exeption $e){
+		} catch (Exeption $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
@@ -156,7 +156,7 @@ class OptionController extends Controller {
 
 		try {
 			$this->mapper->remove($optionId);
-		} catch (Exeption $e){
+		} catch (Exeption $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 

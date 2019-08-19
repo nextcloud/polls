@@ -44,13 +44,13 @@ class Share extends Entity implements JsonSerializable {
 	protected $type;
 
 	public function jsonSerialize() {
-        return [
-            'id' => $this->id,
-            'pollId' => $this->pollId,
-            'userId' => $this->userId,
-            'hash' => $this->hash,
-            'type' => $this->type
-        ];
+		return [
+			'id' => $this->id,
+			'pollId' => $this->pollId,
+			'userId' => $this->userId,
+			'hash' => $this->hash,
+			'type' => $this->type
+		];
 
 	}
 }
