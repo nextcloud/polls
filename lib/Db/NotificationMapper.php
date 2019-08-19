@@ -73,9 +73,9 @@ class NotificationMapper extends QBMapper {
 			->where(
 				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			)
-	        ->andWhere(
-	        	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
-	        );
+			->andWhere(
+				$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+			);
 
 		 return $this->findEntity($qb);
 	}
@@ -91,9 +91,9 @@ class NotificationMapper extends QBMapper {
  		->where(
  			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
  		)
-        ->andWhere(
-        	$qb->expr()->eq('user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR))
-        );
+		->andWhere(
+			$qb->expr()->eq('user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR))
+		);
 
  		$qb->execute();
  	}

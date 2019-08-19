@@ -95,7 +95,7 @@ class VoteController extends Controller {
 			$votes = $this->mapper->findByPoll($pollId);
 		}
 
-		return new DataResponse((array)$votes, Http::STATUS_OK);
+		return new DataResponse((array) $votes, Http::STATUS_OK);
 
 	}
 

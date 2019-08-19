@@ -44,13 +44,13 @@ class Option extends Entity implements JsonSerializable {
 
 	public function jsonSerialize() {
 
-        return [
-            'id' => $this->id,
-            'pollId' => $this->pollId,
-            'pollOptionText' => $this->pollOptionText,
-            'timestamp' => $this->timestamp
-        ];
-    }
+		return [
+			'id' => $this->id,
+			'pollId' => $this->pollId,
+			'pollOptionText' => $this->pollOptionText,
+			'timestamp' => $this->timestamp
+		];
+	}
 	//
 	// /**
 	//  * Option constructor.

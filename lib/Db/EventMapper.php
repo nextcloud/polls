@@ -48,13 +48,13 @@ class EventMapper extends QBMapper {
 	public function find($id) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntity($qb);
+		return $this->findEntity($qb);
 	}
 
 	/**
@@ -66,11 +66,11 @@ class EventMapper extends QBMapper {
 	public function findByHash($hash) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_STR))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_STR))
+		   );
 
 		try {
 			return $this->findEntity($qb);
@@ -86,10 +86,10 @@ class EventMapper extends QBMapper {
 	public function findAll() {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName());
+		$qb->select('*')
+		   ->from($this->getTableName());
 
-        return $this->findEntities($qb);
+		return $this->findEntities($qb);
 	}
 
 }

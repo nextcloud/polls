@@ -39,10 +39,10 @@ class Notification extends Entity implements JsonSerializable {
 	protected $userId;
 
 	public function jsonSerialize() {
-        return [
-            'id' => $this->id,
-            'pollId' => $this->pollId,
-            'userId' => $this->userId,
-        ];
-    }
+		return [
+			'id' => $this->id,
+			'pollId' => $this->pollId,
+			'userId' => $this->userId,
+		];
+	}
 }
