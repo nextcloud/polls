@@ -30,6 +30,7 @@ OC.L10N.register(
     "Only shared" : "Vain jaettu",
     "Registered users only" : "Vain rekisteröityneet käyttäjät",
     "Hidden poll" : "Piilotettu kysely",
+    "Text poll" : "Tekstikysely",
     "never" : "ei koskaan",
     "Copy Link" : "Kopioi linkki",
     "Clone poll" : "Kloonaa kysely",
