@@ -21,9 +21,7 @@
   -->
 
 <template>
-	<li v-if="edit" class="poll-cell active" :class="iconClass"
-		@click="voteClick()" />
-	<li v-else class="poll-cell" :class="iconClass" />
+	<li class="poll-cell" :class="[iconClass, activeClass]" @click="voteClick()" />
 </template>
 
 <script>
@@ -37,13 +35,15 @@ export default {
 			type: Object,
 			default: undefined
 		},
-		pollType: {
-			type: String,
-			default: undefined
-		},
 		userId: {
 			type: String,
 			default: ''
+		},
+	},
+
+	data() {
+		return {
+			answerSequence: []
 		}
 	},
 
@@ -54,22 +54,29 @@ export default {
 			votes: state => state.votes
 		}),
 
-		...mapGetters([
-			'usersVotes',
-			'getAnswer'
-		]),
+		currentUser() {
+			return OC.getCurrentUser().uid
+		},
 
-		edit() {
-			return OC.currentUser === this.userId
+		getAnswer() {
+			var index = this.votes.list.findIndex(vote =>
+				vote.pollId == this.option.pollId
+				&& vote.userId == this.userId
+				&& vote.voteOptionText == this.option.text)
+				if (index > -1) {
+					return this.votes.list[index].voteAnswer
+				} else {
+					return 'unvoted'
+				}
 		},
 
 		nextStatus() {
 			var next = 'yes'
-			if (this.getAnswer({ option: this.option, userId: this.userId }) === 'yes') {
+			if (this.getAnswer === 'yes') {
 				next = 'no'
-			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'maybe') {
+			} else if (this.getAnswer === 'maybe') {
 				next = 'yes'
-			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'no') {
+			} else if (this.getAnswer === 'no') {
 				if (this.event.allowMaybe) {
 					next = 'maybe'
 				} else {
@@ -79,27 +86,35 @@ export default {
 			return next
 		},
 
+		activeClass() {
+			if (this.currentUser === this.userId && this.poll.mode == "vote") {
+				return 'active'
+			}
+		},
+
 		iconClass() {
-			if (this.getAnswer({ option: this.option, userId: this.userId }) === 'yes') {
-				return 'yes icon-yes '
-			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'maybe') {
-				return 'maybe icon-maybe '
-			} else if (this.getAnswer({ option: this.option, userId: this.userId }) === 'no') {
-				return 'no icon-no '
+			if (this.getAnswer === 'yes') {
+				return 'yes icon-yes'
+			} else if (this.getAnswer === 'maybe') {
+				return 'maybe icon-maybe'
+			} else if (this.getAnswer === 'no') {
+				return 'no icon-no'
 			} else {
 				return ''
 			}
-		}
+		},
+
 	},
 
 	methods: {
 
 		voteClick() {
-			this.$store.dispatch('voteChange', { option: this.option, userId: this.userId, switchTo: this.nextStatus })
-				.then(response => {
-					this.$emit('voteSaved')
-				})
-
+			if (this.currentUser === this.userId &&this.poll.mode == "vote") {
+				this.$store.dispatch('voteChange', { option: this.option, userId: this.userId, switchTo: this.nextStatus })
+					.then(response => {
+						this.$emit('voteSaved')
+					})
+			}
 		}
 	}
 }

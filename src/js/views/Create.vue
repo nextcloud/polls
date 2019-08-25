@@ -243,8 +243,9 @@ export default {
 
 	created() {
 		this.loadPoll({
-			hash: this.$route.params.hash,
-			mode: this.$route.name
+			pollId: this.$route.params.hash,
+			mode: this.$route.name,
+			currentUser: OC.getCurrentUser().uid
 		})
 
 		this.sidebar = (window.innerWidth > 1024)

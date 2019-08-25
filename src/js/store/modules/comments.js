@@ -59,7 +59,7 @@ const getters = {
 }
 
 const actions = {
-	loadComments({ commit, rootState }, payload) {
+	loadPoll({ commit, rootState }, payload) {
 		commit({ type: 'commentsReset' })
 		axios
 			.get(OC.generateUrl('apps/polls/get/comments/' + payload.pollId))

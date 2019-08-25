@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 
 use OCP\IRequest;
+use \OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -39,6 +40,7 @@ use OCA\Polls\Db\ShareMapper;
 
 class ShareController extends Controller {
 
+    private $logger;
 	private $mapper;
 	private $userId;
 
@@ -53,9 +55,11 @@ class ShareController extends Controller {
 		$appName,
 		$UserId,
 		IRequest $request,
+		ILogger $logger,
 		ShareMapper $mapper
 	) {
 		parent::__construct($appName, $request);
+        $this->logger = $logger;
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 	}
@@ -71,11 +75,11 @@ class ShareController extends Controller {
 	 */
 	public function getByHash($hash) {
 		try {
-			$share = $this->mapper->findByHash($hash);
+			$Share = $this->mapper->findByHash($hash);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		} finally {
-			return new DataResponse($share, Http::STATUS_OK);
+			return new DataResponse($Share, Http::STATUS_OK);
 		}
 	}
 
@@ -95,11 +99,11 @@ class ShareController extends Controller {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
-		$share = new Share();
-		$share->setPollId($pollId);
-		$share->setUserId($userId);
-		$share->setType($type);
-		$share->setHash(\OC::$server->getSecureRandom()->generate(
+		$Share = new Share();
+		$Share->setPollId($pollId);
+		$Share->setUserId($userId);
+		$Share->setType($type);
+		$Share->setHash(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
@@ -107,11 +111,12 @@ class ShareController extends Controller {
 		));
 
 		try {
-			$id = $this->mapper->insert($share)->getId();
+			$this->logger->error(json_encode($Share));
+			$this->mapper->insert($Share);
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		} finally {
-			return new DataResponse($share, Http::STATUS_OK);
+			return new DataResponse($Share, Http::STATUS_OK);
 		}
 	}
 }

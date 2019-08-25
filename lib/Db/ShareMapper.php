@@ -35,7 +35,7 @@ class ShareMapper extends QBMapper {
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_shares', '\OCA\Polls\Db\Share');
+		parent::__construct($db, 'polls_share', '\OCA\Polls\Db\Share');
 	}
 
 	/**

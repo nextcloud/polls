@@ -65,17 +65,9 @@ export default {
 		])
 	},
 
-	mounted() {
-		this.loadComments()
-	},
-
 	methods: {
 		realtiveDate(date) {
 			return t('core', moment.utc(date).fromNow())
-		},
-
-		loadComments() {
-			this.$store.dispatch({ type: 'loadComments', pollId: this.$route.params.hash })
 		}
 
 	}

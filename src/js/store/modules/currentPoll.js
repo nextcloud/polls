@@ -23,13 +23,10 @@
 
 const defaultPoll = () => {
 	return {
-		// votechanged: false,
-		grantedAs: 'owner',
 		id: 0,
 		mode: 'create',
 		result: 'new',
-		shares: [],
-		currentUser: ''
+		shares: []
 	}
 }
 
@@ -46,6 +43,12 @@ const mutations = {
 
 	pollSetProperty(state, payload) {
 		state[payload.property] = payload.value
+	}
+}
+
+const getters = {
+	currentUser: state => {
+		return OC.getCurrentUser().uid
 	}
 }
 
@@ -70,54 +73,16 @@ const actions = {
 			'value': payload.mode
 		})
 		commit('pollSetProperty', {
-			'property': 'currentUser',
-			'value': OC.getCurrentUser().uid
-		})
-		commit('pollSetProperty', {
-			'property': 'grantedAs',
-			'value': 'owner'
-		})
-		commit('pollSetProperty', {
 			'property': 'id',
-			'value': rootState.event.id
-		})
-		commit('pollSetProperty', {
-			'property': 'result',
-			'value': 'foundById'
+			'value': payload.pollId
 		})
 
 	}
-
-	// writePollPromise({ commit }) {
-	// 	return
-	// 	if (state.mode !== 'vote') {
-	//
-	// 		return axios.post(OC.generateUrl('apps/polls/write/poll'), {
-	// 				event: state.event,
-	// 				voteOptions: state.voteOptions,
-	// 				shares: state.shares,
-	// 				mode: state.mode
-	// 			})
-	// 			.then((response) => {
-	// 				commit('pollSetProperty', {
-	// 					'property': 'mode',
-	// 					'value': 'edit'
-	// 				})
-	// 				commit('pollSetProperty', {
-	// 					'property': 'id',
-	// 					'value': response.data.id
-	// 				})
-	// 				// window.location.href = OC.generateUrl('apps/polls/edit/' + this.event.hash)
-	// 			}, (error) => {
-	// 				console.error(error.response)
-	// 			})
-	//
-	// 	}
-	// }
 }
 
 export default {
 	state,
 	mutations,
+	getters,
 	actions
 }

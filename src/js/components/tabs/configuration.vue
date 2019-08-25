@@ -186,7 +186,7 @@ export default {
 				return this.event.type
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'type', value: value })
+				this.$store.commit('eventSetProperty', { 'type': value })
 			}
 		},
 
@@ -195,7 +195,7 @@ export default {
 				return this.event.access
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'access', value: value })
+				this.$store.commit('eventSetProperty', { 'access': value })
 			}
 		},
 
@@ -204,7 +204,7 @@ export default {
 				return this.event.expiration
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'expiration', value: value })
+				this.$store.commit('eventSetProperty', { 'expiration': value })
 			}
 		},
 
@@ -213,7 +213,7 @@ export default {
 				return this.event.fullAnonymous
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'fullAnonymous', value: value })
+				this.$store.commit('eventSetProperty', { 'fullAnonymous': value })
 			}
 		},
 
@@ -222,7 +222,7 @@ export default {
 				return this.event.isAnonymous
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'isAnonymous', value: value })
+				this.$store.commit('eventSetProperty', { 'isAnonymous': value })
 			}
 		},
 
@@ -231,7 +231,7 @@ export default {
 				return this.event.allowMaybe
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'allowMaybe', value: value })
+				this.$store.commit('eventSetProperty', { 'allowMaybe': value })
 			}
 		},
 
@@ -240,7 +240,7 @@ export default {
 				return this.$store.state.event.expirationDate
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'expirationDate', value: value })
+				this.$store.commit('eventSetProperty', { 'expirationDate': value })
 			}
 		},
 

@@ -38,7 +38,7 @@ const getters = {
 		return state.list.length
 	},
 	myPolls: (state) => {
-		return state.list.filter(poll => (poll.event.owner === OC.currentUser))
+		return state.list.filter(poll => (poll.event.owner === OC.getCurrentUser().uid))
 	},
 	invitationPolls: (state) => {
 		return state.list.filter(poll => (poll.grantedAs === 'userInvitation'))

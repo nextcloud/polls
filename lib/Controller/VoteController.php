@@ -89,7 +89,7 @@ class VoteController extends Controller {
 	public function get($pollId) {
 		$event = $this->eventMapper->find($pollId);
 
-		if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->owner !== $this->userId))) {
+		if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->getOwner() !== $this->userId))) {
 			$votes = $this->anonymizer->getAnonymizedList($this->mapper->findByPoll($pollId), $pollId);
 		} else {
 			$votes = $this->mapper->findByPoll($pollId);

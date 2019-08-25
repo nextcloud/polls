@@ -55,7 +55,8 @@ const mutations = {
 	},
 
 	eventSetProperty(state, payload) {
-		state[payload.property] = payload.value
+		Object.assign(state, payload)
+		// state[payload.property] = payload.value
 	}
 
 }

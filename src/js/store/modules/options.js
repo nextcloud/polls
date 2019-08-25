@@ -41,6 +41,12 @@ const mutations = {
 		Object.assign(state, defaultOptions())
 	},
 
+	optionRemove(state, payload) {
+		state.list = state.list.filter((option) => {
+			return option.id !== payload.option.id
+		})
+	},
+
 	optionAdd(state, payload) {
 		state.list.push(payload.option)
 	},
@@ -67,7 +73,7 @@ const getters = {
 
 const actions = {
 
-	loadOptions({ commit, rootState }, payload) {
+	loadPoll({ commit, rootState }, payload) {
 		return axios.get(OC.generateUrl('apps/polls/get/options/' + payload.pollId))
 			.then((response) => {
 				commit('optionsSet', { 'list': response.data })
@@ -78,24 +84,23 @@ const actions = {
 	},
 
 	addOption({ commit, getters, dispatch, rootState }, payload) {
-		var newOption = {}
+		var option = {}
 
-		newOption.id = getters.lastOptionId + 1
-		newOption.pollId = rootState.event.id
+		option.id = getters.lastOptionId + 1
+		option.pollId = rootState.event.id
 
 		if (rootState.event.type === 'datePoll') {
-			newOption.timestamp = moment(payload.option).unix()
-			newOption.text = moment.utc(payload.option).format('YYYY-MM-DD HH:mm:ss')
+			option.timestamp = moment(payload.option).unix()
+			option.text = moment.utc(payload.option).format('YYYY-MM-DD HH:mm:ss')
 
 		} else if (rootState.event.type === 'textPoll') {
-			newOption.timestamp = 0
-			newOption.text = payload.option
+			option.timestamp = 0
+			option.text = payload.option
 		}
 
 
-		return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: newOption })
+		return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: option })
 			.then((response) => {
-				console.error(response.data)
 				commit('optionAdd', { 'option': response.data })
 				// commit('optionsSet', { 'list': response.data })
 			}, (error) => {
@@ -103,26 +108,22 @@ const actions = {
 			})
 	},
 
-	removeOption({ commit, getters, dispatch, rootState }, optionId) {
-		if (state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/remove/option'), { optionId: optionId })
-				.then((response) => {
-					commit('optionsSet', { 'list': response.data })
-				}, (error) => {
-					console.error(error.response)
-				})
-		}
+	removeOption({ commit, getters, dispatch, rootState }, option) {
+		return axios.post(OC.generateUrl('apps/polls/remove/option'), { option: option })
+			.then((response) => {
+				commit('optionRemove', { 'option': option })
+			}, (error) => {
+				console.error(error.response)
+			})
 	},
 
 	writeOptionsPromise({ commit, getters, rootState }, payload) {
-		if (state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/write/options'), { pollId: rootState.event.id, options: state.list })
-				.then((response) => {
-					commit('optionsSet', { 'list': response.data })
-				}, (error) => {
-					console.error(error.response)
-				})
-		}
+		return axios.post(OC.generateUrl('apps/polls/write/options'), { pollId: rootState.event.id, options: state.list })
+			.then((response) => {
+				commit('optionsSet', { 'list': response.data })
+			}, (error) => {
+				console.error(error.response)
+			})
 	}
 }
 

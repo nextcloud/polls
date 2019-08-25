@@ -109,7 +109,7 @@ class OptionController extends Controller {
 	 * Add a new Option to poll
 	 * @NoAdminRequired
 	 * @param integer $pollId
-	 * @param Array $option
+	 * @param Option $option
 	 * @return DataResponse
 	 */
 	public function add($pollId, $option) {
@@ -142,11 +142,12 @@ class OptionController extends Controller {
 	/**
 	 * Remove a single option
 	 * @NoAdminRequired
-	 * @param Array $optionId
+	 * @param Option $optionId
 	 * @return DataResponse
 	 */
-	public function remove($optionId) {
-		$Event = $this->eventMapper->find($pollId);
+	public function remove($option) {
+		// throw new \Exception( gettype($option) );
+		$Event = $this->eventMapper->find($option['pollId']);
 
 		if (!\OC::$server->getUserSession()->isLoggedIn()
 			|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
@@ -155,7 +156,7 @@ class OptionController extends Controller {
 		}
 
 		try {
-			$this->mapper->remove($optionId);
+			$this->mapper->remove($option['id']);
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}

@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
+use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;

@@ -154,9 +154,9 @@ class EventController extends Controller {
 			'expiration' => $expiration,
 			'expired' => $expired,
 			'expirationDate' => $event->getExpire(),
-			'isAnonymous' => $event->getIsAnonymous(),
-			'fullAnonymous' => $event->getFullAnonymous(),
-			'allowMaybe' => $event->getAllowMaybe()
+			'isAnonymous' => boolval($event->getIsAnonymous()),
+			'fullAnonymous' => boolval($event->getFullAnonymous()),
+			'allowMaybe' => boolval($event->getAllowMaybe())
 		];
  	}
 
@@ -170,12 +170,13 @@ class EventController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($event, $mode) {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
+		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		} else {
 			$adminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
+		$this->logger->alert(json_encode($event));
 
 		$NewEvent = new Event();
 
@@ -184,9 +185,9 @@ class EventController extends Controller {
 		$NewEvent->setDescription($event['description']);
 
 		$NewEvent->setType($event['type']);
-		$NewEvent->setIsAnonymous($event['isAnonymous']);
-		$NewEvent->setFullAnonymous($event['fullAnonymous']);
-		$NewEvent->setAllowMaybe($event['allowMaybe']);
+		$NewEvent->setIsAnonymous(intval($event['isAnonymous']));
+		$NewEvent->setFullAnonymous(intval($event['fullAnonymous']));
+		$NewEvent->setAllowMaybe(intval($event['allowMaybe']));
 
 		if ($event['access'] === 'select') {
 			// $shareAccess = '';

@@ -26,6 +26,7 @@ return [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		// ['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
 
+		['name' => 'PublicAPI#get', 'url' => '/api/{token}', 'verb' => 'GET' ],
 		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
 		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
 		['name' => 'page#clone_poll', 'url' => '/clone/{hash}', 'verb' => 'GET'],
@@ -38,7 +39,7 @@ return [
 		// ['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
 
 		// ['name' => 'api#write_vote', 'url' => '/write/vote', 'verb' => 'POST'],
-		['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
+		// ['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
 
 		['name' => 'notification#get', 'url' => '/get/notification/{pollId}', 'verb' => 'GET'],
 		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],

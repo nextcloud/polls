@@ -91,7 +91,7 @@ class CommentController extends Controller {
 		try {
 			$event = $this->eventMapper->find($pollId);
 			$comments = $this->mapper->findByPoll($pollId);
-			if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->owner !== $this->userId))) {
+			if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->getOwner() !== $this->userId))) {
 				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId);
 			}
 
@@ -114,7 +114,7 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($pollId, $message) {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
+		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 

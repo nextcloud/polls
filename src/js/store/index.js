@@ -24,14 +24,14 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import polls from './polls'
-import poll from './currentPoll'
+import polls from './modules/polls'
+import poll from './modules/currentPoll'
 import comments from './modules/comments'
 import event from './modules/event'
 import notification from './modules/notification'
 import votes from './modules/votes'
 import options from './modules/options'
-import locale from './locale'
+import locale from './modules/locale'
 
 Vue.use(Vuex)
 

@@ -43,7 +43,7 @@ export default {
 
 	computed: {
 		currentUser() {
-			return this.$store.state.poll.currentUser
+			return OC.getCurrentUser().uid
 		}
 	},
 

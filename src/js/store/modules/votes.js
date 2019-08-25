@@ -24,6 +24,8 @@ import axios from 'nextcloud-axios'
 
 const defaultVotes = () => {
 	return {
+		currentUser: OC.getCurrentUser().uid,
+		answerSequence: ['no', 'maybe', 'yes'],
 		list: []
 	}
 }
@@ -53,11 +55,15 @@ const mutations = {
 }
 
 const getters = {
+	// answerSequence(state) {
+	// 	return state.answerSequence
+	// },
+
 	lastVoteId: state => {
 		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))
 	},
 
-	participants: (state, getters, rootState) => {
+	participants: (state) => {
 		var list = []
 		state.list.forEach(function(vote) {
 			if (!list.includes(vote.userId)) {
@@ -65,8 +71,8 @@ const getters = {
 			}
 		})
 
-		if (!list.includes(rootState.poll.currentUser)) {
-			list.push(rootState.poll.currentUser)
+		if (!list.includes(state.currentUser)) {
+			list.push(state.currentUser)
 		}
 
 		return list
@@ -74,31 +80,13 @@ const getters = {
 
 	countParticipants: (state, getters) => {
 		return getters.participants.length
-	},
-
-	usersVotes: (state, getters) => (userId) => {
-		return getters.allVotes.filter(vote => {
-			return vote.userId === userId
-		})
-	},
-
-	getAnswer: (state, getters, rootState) => (payload) => {
-		var index = state.list.findIndex(vote =>
-			vote.pollId == rootState.event.id
-			&& vote.userId == payload.userId
-			&& vote.voteOptionText == payload.option.text)
-		if (index > -1) {
-			return state.list[index].voteAnswer
-		} else {
-			return 'unvoted'
-		}
 	}
 
 }
 
 const actions = {
 
-	loadVotes({ commit, rootState }, payload) {
+	loadPoll({ commit, rootState }, payload) {
 		axios.get(OC.generateUrl('apps/polls/get/votes/' + payload.pollId))
 			.then((response) => {
 				commit('votesSet', {

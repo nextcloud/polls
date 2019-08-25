@@ -50,44 +50,6 @@ class Option extends Entity implements JsonSerializable {
 			'pollOptionText' => $this->pollOptionText,
 			'timestamp' => $this->timestamp
 		];
+
 	}
-	//
-	// /**
-	//  * Option constructor.
-	//  */
-	// public function __construct() {
-	// 	$this->addType('pollId', 'integer');
-	// 	$this->addType('timestamp', 'integer');
-	// }
-	//
-	// /**
-	//  * Make shure, timestamp and Text are filled correctly
-	//  * @NoAdminRequired
-	//  * @deprecated 1.0
-	//  * @return Timestamp
-	//  */
-	// private function getTimestampTemp() {
-	// 	if ($this->getTimestamp() > 0) {
-	// 		return $this->getTimestamp();
-	// 	} else if (strtotime($this->getPollOptionText())) {
-	// 		return strtotime($this->getPollOptionText());
-	// 	} else {
-	// 		return 0;
-	// 	}
-	// }
-	//
-	// /**
-	//  * Return Option object with all properties
-	//  * @NoAdminRequired
-	//  * @deprecated 1.0 Moved to OptionController
-	//  * @return array
-	//  */
-	// public function read() {
-	// 	return [
-	// 		'id' => $this->getId(),
-	// 		'pollId' => $this->getPollId(),
-	// 		'text' => htmlspecialchars_decode($this->getPollOptionText()),
-	// 		'timestamp' => $this->getTimestampTemp()
-	// 	];
-	// }
 }

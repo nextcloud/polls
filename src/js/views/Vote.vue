@@ -175,7 +175,7 @@ export default {
 			.then(() => {
 				this.$store.dispatch({
 					type: 'loadPoll',
-					hash: this.$route.params.hash,
+					pollId: this.$route.params.hash,
 					mode: 'vote'
 				})
 			})

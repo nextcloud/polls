@@ -29,7 +29,7 @@
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
-				@remove="optionRemove(option)" />
+				@remove="removeOption(option)" />
 		</transition-group>
 
 		<transition-group v-if="event.type === 'textPoll'" name="list" tag="div"
@@ -39,7 +39,7 @@
 				:option="option"
 				:poll-type="event.type"
 				:mode="poll.mode"
-				@remove="optionRemove(option)" />
+				@remove="removeOption(option)" />
 		</transition-group>
 
 		<ul class="participants">
@@ -48,14 +48,13 @@
 					:class="{currentUser: (participant === currentUser) }"
 					:user-id="participant"
 					:fixed-width="true" />
-				<div class="vote-row">
+				<transition-group name="list" tag="ul" class="vote-row">
 					<vote-item v-for="(option) in sortedOptions"
 						:key="option.id"
 						:user-id="participant"
 						:option="option"
-						:poll-type="event.type"
 						@voteSaved="voteSaved(vote)" />
-				</div>
+				</transition-group>
 			</div>
 		</ul>
 	</div>
@@ -65,7 +64,7 @@
 import VoteItem from '../components/base/voteItem'
 import DatePollVoteHeader from '../components/datePoll/voteHeader'
 import TextPollVoteHeader from '../components/textPoll/voteHeader'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'VoteTable',
@@ -83,29 +82,19 @@ export default {
 
 		...mapGetters([
 			'sortedOptions',
-			'usersVotes',
 			'participants'
 		]),
 
 		currentUser() {
-			return OC.currentUser
+			return OC.getCurrentUser().uid
 		}
 
 	},
 
-	mounted() {
-		this.loadTable()
-	},
-
 	methods: {
-		...mapMutations([
-			'optionRemove'
+		...mapActions([
+			'removeOption'
 		]),
-
-		loadTable() {
-			this.$store.dispatch({ type: 'loadOptions', pollId: this.$route.params.hash })
-			this.$store.dispatch({ type: 'loadVotes', pollId: this.$route.params.hash, mode: 'vote', currentUser: this.poll.currentUser })
-		},
 
 		voteSaved() {
 			this.$emit('voteSaved')

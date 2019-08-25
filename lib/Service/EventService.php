@@ -31,7 +31,7 @@ use OCA\Polls\Db\ShareMapper;
 class EventService {
 	private $mapper;
 	private $shareMapper;
-	private $groupMapper;
+	private $groupManager;
 
 	public function __construct(
 		EventMapper $mapper,

@@ -136,7 +136,7 @@ class SystemController extends Controller {
 			'versionArray' => \OCP\Util::getVersion(),
 			'version' => implode('.', \OCP\Util::getVersion()),
 			'vendor' => $this->getVendor(),
-			'language' => $this->systemConfig->getUserValue($this->$userId, 'core', 'lang')
+			'language' => $this->systemConfig->getUserValue($this->userId, 'core', 'lang')
 		];
 
 		return new DataResponse($data, Http::STATUS_OK);

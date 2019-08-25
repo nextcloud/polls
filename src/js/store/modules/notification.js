@@ -51,14 +51,12 @@ const actions = {
 	},
 
 	writeSubscriptionPromise({ commit }, payload) {
-		if (state.currentUser !== '') {
-			return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed })
-				.then((response) => {
-					console.error(response.data)
-				}, (error) => {
-					console.error(error.response)
-				})
-		}
+		return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed })
+			.then((response) => {
+				console.error(response.data)
+			}, (error) => {
+				console.error(error.response)
+			})
 	}
 }
 
