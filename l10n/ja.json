@@ -14,7 +14,7 @@
     "Go to poll" : "投票へ移動",
     "just now" : "たった今",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "アクセス制限の可能なdoodle/dudleに似た投票アプリ。",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Googleフォームに似た投票アプリ。アクセスを制限することができます（メンバー、特定のグループ/ユーザー、および一般）。",
+    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "アクセス制限の可能なdoodle/dudleに似た投票アプリ（メンバー、特定のグループ/ユーザー、および一般）。",
     "Expired" : "有効期限切れ",
     "Expires %n" : "%n で期限が切れます",
     "Expires never" : "有効期限なし",
