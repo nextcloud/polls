@@ -64,7 +64,7 @@
 
 			<div v-if="votedBycurrentUser" class="symbol icon-voted" />
 
-			<router-link :to="{name: 'vote', params: {hash: poll.id}}" class="wrapper group-1-1">
+			<router-link :to="{name: 'vote', params: {id: poll.id}}" class="wrapper group-1-1">
 				<div class="name">
 					{{ poll.event.title }}
 				</div>
@@ -194,7 +194,7 @@ export default {
 			return this.participants.indexOf(OC.getCurrentUser().uid) > -1
 		},
 		voteUrl() {
-			return OC.generateUrl('apps/polls/poll/') + this.poll.event.hash
+			return OC.generateUrl('apps/polls/poll/') + this.poll.event.id
 		},
 
 		menuItems() {

@@ -46,7 +46,7 @@
 
 <script>
 import moment from 'moment'
-import AddComment from '../comments/commentAdd'
+import AddComment from './commentAdd'
 import { mapState, mapGetters } from 'vuex'
 
 export default {

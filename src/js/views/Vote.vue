@@ -78,11 +78,11 @@
 
 <script>
 import moment from 'moment'
-import Notification from '../components/base/notification'
-import InformationTab from '../components/tabs/information'
-import ConfigurationTab from '../components/tabs/configuration'
-import CommentsTab from '../components/tabs/comments'
-import VoteTable from '../components/voteTable'
+import Notification from '../components/notification/notification'
+import InformationTab from '../components/settings/informationTab'
+import ConfigurationTab from '../components/settings/configurationTab'
+import CommentsTab from '../components/comments/commentsTab'
+import VoteTable from '../components/vote/voteTable'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
@@ -171,11 +171,11 @@ export default {
 
 	mounted() {
 		moment.locale(this.localeString)
-		this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.hash, mode: 'vote' })
+		this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id, mode: 'vote' })
 			.then(() => {
 				this.$store.dispatch({
 					type: 'loadPoll',
-					pollId: this.$route.params.hash,
+					pollId: this.$route.params.id,
 					mode: 'vote'
 				})
 			})

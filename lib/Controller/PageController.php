@@ -32,6 +32,7 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\IURLGenerator;
 
 class PageController extends Controller {
@@ -74,36 +75,23 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @return TemplateResponse
 	 */
-	public function clonePoll() {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
+	public function votePoll() {
+		return new TemplateResponse('polls', 'polls.tmpl', [
+			'urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
+	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param string $hash
-	 * @return TemplateResponse
+	 * @return PublicTemplateResponse
 	 */
-	public function editPoll($hash) {
-		return new TemplateResponse('polls', 'polls.tmpl', [
-			'urlGenerator' => $this->urlGenerator,
- 			'hash' => $hash
-		]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $hash
-	 * @return TemplateResponse
-	 */
-	public function votePoll($hash) {
-		return new TemplateResponse('polls', 'polls.tmpl', [
-			'urlGenerator' => $this->urlGenerator,
- 			'hash' => $hash
-		]);
+	public function votePublic($token) {
+		return new PublicTemplateResponse('polls', 'polls.tmpl', [
+			'urlGenerator' => $this->urlGenerator]);
 	}
 
 

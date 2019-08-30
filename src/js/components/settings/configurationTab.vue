@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import ShiftDates from '../datesShift'
+import ShiftDates from '../create/datesShift'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 
 export default {

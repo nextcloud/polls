@@ -93,11 +93,11 @@
 
 <script>
 // import { Multiselect } from 'nextcloud-vue'
-import DatePollItem from '../components/datePoll/createItem'
-import TextPollItem from '../components/textPoll/createItem'
-import InformationTab from '../components/tabs/information'
-import ConfigurationTab from '../components/tabs/configuration'
-import CommentsTab from '../components/tabs/comments'
+import DatePollItem from '../components/create/createDateItem'
+import TextPollItem from '../components/create/createTextItem'
+import InformationTab from '../components/settings/informationTab'
+import ConfigurationTab from '../components/settings/configurationTab'
+import CommentsTab from '../components/comments/commentsTab'
 // import ShiftDates from '../components/datesShift'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
@@ -168,10 +168,6 @@ export default {
 		},
 
 		// Local computed
-		voteUrl() {
-			return OC.generateUrl('apps/polls/poll/') + this.event.hash
-		},
-
 		titleEmpty() {
 			return (this.event.title.trim().length === 0)
 		},
@@ -243,7 +239,7 @@ export default {
 
 	created() {
 		this.loadPoll({
-			pollId: this.$route.params.hash,
+			pollId: this.$route.params.id,
 			mode: this.$route.name,
 			currentUser: OC.getCurrentUser().uid
 		})

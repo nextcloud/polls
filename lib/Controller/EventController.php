@@ -143,7 +143,6 @@ class EventController extends Controller {
 
 		return (object) [
 			'id' => $event->getId(),
-			'hash' => $event->getHash(),
 			'type' => $pollType,
 			'title' => $event->getTitle(),
 			'description' => $event->getDescription(),
@@ -225,9 +224,8 @@ class EventController extends Controller {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
 
-			// else take owner, hash and id of existing poll
+			// else take owner, and id of existing poll
 			$NewEvent->setOwner($oldEvent->getOwner());
-			$NewEvent->setHash($oldEvent->getHash());
 			$NewEvent->setId($oldEvent->getId());
 			try {
 				$this->mapper->update($NewEvent);
@@ -239,15 +237,9 @@ class EventController extends Controller {
 
 		} elseif ($mode === 'create') {
 			// Create new poll
-			// Define current user as owner, set new creation date and create a new hash
+			// Define current user as owner, set new creation date
 			$NewEvent->setOwner($this->userId);
 			$NewEvent->setCreated(date('Y-m-d H:i:s'));
-			$NewEvent->setHash(\OC::$server->getSecureRandom()->generate(
-				16,
-				ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
-			));
 			$NewEvent = $this->mapper->insert($NewEvent);
 		}
 		return $this->get($NewEvent->getId());

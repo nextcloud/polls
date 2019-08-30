@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import pollListItem from '../components/pollListItem'
+import pollListItem from '../components/list/pollListItem'
 // import { mapState } from 'vuex'
 
 export default {
@@ -90,7 +90,7 @@ export default {
 			this.$router.push({
 				name: name,
 				params: {
-					hash: event.id
+					id: event.id
 				}
 			})
 		},

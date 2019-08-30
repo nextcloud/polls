@@ -24,13 +24,10 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		// ['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
 
-		['name' => 'PublicAPI#get', 'url' => '/api/{token}', 'verb' => 'GET' ],
 		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
-		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
-		['name' => 'page#clone_poll', 'url' => '/clone/{hash}', 'verb' => 'GET'],
-		['name' => 'page#vote_poll', 'url' => '/vote/{hash}', 'verb' => 'GET'],
+		['name' => 'page#vote_poll', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
+		['name' => 'page#vote_public', 'url' => '/s/{pollId}', 'verb' => 'GET'],
 
 		// ['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
 		// ['name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'],
@@ -60,11 +57,11 @@ return [
 		['name' => 'event#get', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
 		['name' => 'event#write', 'url' => '/write/event/', 'verb' => 'POST'],
 
-		['name' => 'share#getByHash', 'url' => '/get/share/{hash}', 'verb' => 'GET'],
+		['name' => 'share#getByToken', 'url' => '/get/share/{token}', 'verb' => 'GET'],
 		['name' => 'share#generateHash', 'url' => '/generate/share/', 'verb' => 'POST'],
 
 		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
-		['name' => 'api#get_poll', 'url' => '/get/poll/{pollIdOrHash}', 'verb' => 'GET'],
+		['name' => 'api#get_poll', 'url' => '/get/poll/{pollId}', 'verb' => 'GET'],
 
 		// ['name' => 'api#get_participants', 'url' => '/get/participants/{pollId}', 'verb' => 'GET'],
 		// ['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],

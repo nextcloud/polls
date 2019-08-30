@@ -58,28 +58,6 @@ class EventMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $hash
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Event
-	 */
-	public function findByHash($hash) {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-			   $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_STR))
-		   );
-
-		try {
-			return $this->findEntity($qb);
-		} catch (DoesNotExistException $e) {
-			return $e;
-		}
-	}
-
-	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return array
 	 */

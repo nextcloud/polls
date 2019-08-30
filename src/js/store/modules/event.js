@@ -27,7 +27,6 @@ import moment from 'moment'
 const defaultEvent = () => {
 	return {
 		id: 0,
-		hash: '',
 		type: 'datePoll',
 		title: '',
 		description: '',

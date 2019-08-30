@@ -29,7 +29,7 @@ export default {
 	},
 
 	mounted() {
-		this.$store.dispatch('getSubscription', { pollId: this.$route.params.hash })
+		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
 	}
 
 }

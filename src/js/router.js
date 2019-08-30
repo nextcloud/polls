@@ -46,7 +46,7 @@ export default new Router({
 			name: 'list'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/vote/:hash',
+			path: '/:index(index.php/)?apps/polls/vote/:id',
 			components: {
 				default: Vote
 			},
@@ -54,7 +54,7 @@ export default new Router({
 			name: 'vote'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/edit/:hash',
+			path: '/:index(index.php/)?apps/polls/edit/:id',
 			components: {
 				default: Create
 			},
@@ -62,7 +62,7 @@ export default new Router({
 			name: 'edit'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/clone/:hash',
+			path: '/:index(index.php/)?apps/polls/clone/:id',
 			components: {
 				default: Create
 			},

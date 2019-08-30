@@ -61,9 +61,9 @@
 </template>
 
 <script>
-import VoteItem from '../components/base/voteItem'
-import DatePollVoteHeader from '../components/datePoll/voteHeader'
-import TextPollVoteHeader from '../components/textPoll/voteHeader'
+import VoteItem from './voteItem'
+import DatePollVoteHeader from './voteDateHeader'
+import TextPollVoteHeader from './voteTextHeader'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {

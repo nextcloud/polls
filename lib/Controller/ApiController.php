@@ -303,7 +303,7 @@ class ApiController extends Controller {
 
 		if ($mode === 'edit') {
 			// Edit existing poll
-			$oldPoll = $this->eventMapper->findByHash($event['hash']);
+			$oldPoll = $this->eventMapper->find($event['id']);
 
 			// Check if current user is allowed to edit existing poll
 			if ($oldPoll->getOwner() !== $currentUser && !$AdminAccess) {
@@ -311,24 +311,17 @@ class ApiController extends Controller {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
 
-			// else take owner, hash and id of existing poll
+			// else take owner, id of existing poll
 			$newEvent->setOwner($oldPoll->getOwner());
-			$newEvent->setHash($oldPoll->getHash());
 			$newEvent->setId($oldPoll->getId());
 			$this->eventMapper->update($newEvent);
 			$this->optionMapper->deleteByPoll($newEvent->getId());
 
 		} elseif ($mode === 'create') {
 			// Create new poll
-			// Define current user as owner, set new creation date and create a new hash
+			// Define current user as owner, set new creation date
 			$newEvent->setOwner($currentUser);
 			$newEvent->setCreated(date('Y-m-d H:i:s'));
-			$newEvent->setHash(\OC::$server->getSecureRandom()->generate(
-				16,
-				ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
-			));
 			$newEvent = $this->eventMapper->insert($newEvent);
 		}
 
@@ -344,8 +337,7 @@ class ApiController extends Controller {
 		}
 
 		return new DataResponse(array(
-			'id' => $newEvent->getId(),
-			'hash' => $newEvent->getHash()
+			'id' => $newEvent->getId()
 		), Http::STATUS_OK);
 
 	}

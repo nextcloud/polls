@@ -33,9 +33,9 @@ import VueClipboard from 'vue-clipboard2'
 import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab, AppNavigation } from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
+import ShareDiv from './components/share/shareDiv'
 import Controls from './components/base/controls'
 import UserDiv from './components/base/userDiv'
-import ShareDiv from './components/base/shareDiv'
 import LoadingOverlay from './components/base/loadingOverlay'
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
