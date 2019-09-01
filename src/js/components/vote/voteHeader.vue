@@ -44,10 +44,10 @@
 
 		<div class="counter">
 			<div class="yes">
-				<span>{{yesVotes}}</span>
+				<span> {{ yesVotes }} </span>
 			</div>
 			<div v-if="event.allowMaybe" class="maybe">
-				<span>{{maybeVotes}}</span>
+				<span> {{ maybeVotes }} </span>
 			</div>
 		</div>
 	</div>
@@ -196,7 +196,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .header-box {
 	flex-direction: column;
@@ -239,6 +239,8 @@ export default {
 	flex: 1 0;
 	padding: 0 2px;
 	align-items: center;
+	justify-content: center;
+
 	.month, .dow {
 		font-size: 1.2em;
 		color: var(--color-text-lighter);
@@ -248,4 +250,23 @@ export default {
 		margin: 5px 0 5px 0;
 	}
 }
+
+@media (max-width: (480px) ) {
+	.header-box {
+		padding: 15px 4px;
+		flex-direction: row;
+		justify-content: space-around;
+		.date-box {
+			padding: 0 20px 0 4px;
+			align-content: center;
+		}
+		.counter {
+			flex-direction: column;
+			& > * {
+				margin: 4px 1px;
+			}
+		}
+	}
+}
+
 </style>

@@ -120,7 +120,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	$bg-no: #ffede9;
 	$bg-maybe: #fcf7e1;
 	$bg-unvoted: #fff4c8;
@@ -204,5 +204,26 @@ export default {
 				box-shadow: inherit;
 			}
 		}
+
 	}
+
+	@media (max-width: (480px) ) {
+		.poll-cell {
+
+			&.active {
+				width: 60%;
+				background-size: 80%;
+				margin: 30px auto !important;
+				flex: 1 1 !important;
+				border-radius: 25%;
+			}
+
+			&:after {
+				content: "";
+				display: block;
+				padding-bottom: 100%;
+			}
+		}
+	}
+
 </style>

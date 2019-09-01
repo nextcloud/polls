@@ -237,6 +237,11 @@ export default {
 
 <style lang="scss" scoped>
 
+	#app-sidebar {
+		display: none;
+	}
+
+
 	.main-container {
 		display: flex;
 		flex-direction: column;

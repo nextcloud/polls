@@ -142,4 +142,40 @@ export default {
 			flex: 1 1 auto;
 		}
 	}
+
+	@media (max-width: (480px) ) {
+
+		.vote-table {
+			flex-direction: row;
+			flex: 1 0;
+			min-width: 300px;
+
+			.header {
+				height: initial;
+				padding-left: initial;
+				flex: 1 1;
+				flex-direction: column;
+				justify-content: space-around;
+				align-items: stretch;
+
+			}
+
+			.vote-row {
+				flex-direction: column;
+				justify-content: space-around;
+				align-items: center;
+			}
+
+			.participants > div {
+  				display: none;
+				&.currentUser {
+					display: flex;
+					> .user-row.currentUser {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+
 </style>
