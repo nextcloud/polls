@@ -24,7 +24,7 @@
 	<div class="vote-table">
 		<transition-group v-if="event.type === 'datePoll'" name="list" tag="div"
 			class="header">
-			<date-poll-vote-header v-for="(option) in sortedOptions"
+			<vote-header v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="event.type"
@@ -34,7 +34,7 @@
 
 		<transition-group v-if="event.type === 'textPoll'" name="list" tag="div"
 			class="header">
-			<text-poll-vote-header v-for="(option) in sortedOptions"
+			<vote-header v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="event.type"
@@ -62,15 +62,13 @@
 
 <script>
 import VoteItem from './voteItem'
-import DatePollVoteHeader from './voteDateHeader'
-import TextPollVoteHeader from './voteTextHeader'
+import VoteHeader from './voteHeader'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'VoteTable',
 	components: {
-		DatePollVoteHeader,
-		TextPollVoteHeader,
+		VoteHeader,
 		VoteItem
 	},
 
