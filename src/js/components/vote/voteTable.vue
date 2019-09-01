@@ -138,7 +138,7 @@ export default {
 		}
 
 		.vote-row {
-			justify-content: space-between;
+			justify-content: space-around;
 			flex: 1 1 auto;
 		}
 	}
@@ -153,7 +153,7 @@ export default {
 			.header {
 				height: initial;
 				padding-left: initial;
-				flex: 1 1;
+				flex: 3 1;
 				flex-direction: column;
 				justify-content: space-around;
 				align-items: stretch;
@@ -162,7 +162,7 @@ export default {
 
 			.vote-row {
 				flex-direction: column;
-				justify-content: space-around;
+				justify-content: space-between;
 				align-items: center;
 			}
 

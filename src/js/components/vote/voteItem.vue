@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<li class="poll-cell" :class="[iconClass, activeClass]" @click="voteClick()" />
+	<li class="vote-item" :class="[iconClass, activeClass]" @click="voteClick()" />
 </template>
 
 <script>
@@ -131,7 +131,7 @@ export default {
 	$fg-unvoted: #f0db98;
 	$fg-yes: #49bc49;
 
-	.poll-cell {
+	.vote-item {
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: 32px;
@@ -183,15 +183,11 @@ export default {
 			cursor: pointer;
 			border: 2px solid;
 			border-radius: var(--border-radius);
-			box-sizing: border-box;
-			width: 30px;
-			// min-width: 30px;
-			height: 30px;
-			background-size: 20px;
-			margin: 9px auto !important;
+			width: 3vw;
+			height: 3vw;
+			background-size: 90%;
 			background-color: var(--color-main-background);
-			// color: var(--color-primary);
-			flex: 0 auto !important;
+			flex: 0 auto;
 			// box-shadow: 2px 2px 2px gray;
 			&.icon-no {
 				background-image: initial;
@@ -208,20 +204,11 @@ export default {
 	}
 
 	@media (max-width: (480px) ) {
-		.poll-cell {
+		.vote-item {
 
 			&.active {
-				width: 60%;
-				background-size: 80%;
-				margin: 30px auto !important;
-				flex: 1 1 !important;
-				border-radius: 25%;
-			}
-
-			&:after {
-				content: "";
-				display: block;
-				padding-bottom: 100%;
+				width: 10vw;
+				height: 10vw;
 			}
 		}
 	}

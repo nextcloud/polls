@@ -30,6 +30,10 @@
 						<span>{{ saveButtonTitle }}</span>
 						<span v-if="writingPoll" class="icon-loading-small" />
 					</button>
+					<button v-if="!sideBarOpen" class="button btn"
+						@click="toggleSideBar()">
+						<span>{{ sideBarButtonTitle }}</span>
+					</button>
 				</template>
 			</controls>
 
@@ -53,7 +57,7 @@
 			<notification v-if="loggedIn" />
 		</div>
 
-		<app-sidebar :title="t('polls', 'Details')">
+		<app-sidebar v-if='sideBarOpen' @close="toggleSideBar" :title="t('polls', 'Details')">
 			<template slot="primary-actions">
 				<button v-if="allowEdit" class="button btn primary" :class="{ warning: adminMode }"
 					@click="toggleEdit()">
@@ -99,7 +103,8 @@ export default {
 		return {
 			writingPoll: false,
 			voteSaved: false,
-			delay: 50
+			delay: 50,
+			sideBarOpen: false
 		}
 	},
 
@@ -137,6 +142,10 @@ export default {
 
 		allowEdit() {
 			return this.event.owner === OC.getCurrentUser() || this.adminMode
+		},
+
+		sideBarButtonTitle() {
+			return (t('polls', 'Open Sidebar'))
 		},
 
 		editButtonTitle() {
@@ -191,7 +200,9 @@ export default {
 			'writeOptionsPromise',
 			'writeEventPromise'
 		]),
-
+		toggleSideBar() {
+			this.sideBarOpen = !this.sideBarOpen
+		},
 		updateDescription(e) {
 			this.$store.commit('eventSetProperty', { property: 'description', value: e.target.value })
 		},
@@ -236,12 +247,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-	#app-sidebar {
-		display: none;
-	}
-
-
 	.main-container {
 		display: flex;
 		flex-direction: column;
