@@ -28,16 +28,13 @@
 
 		<div v-if="datePoll" v-tooltip.auto="localFullDate" class="date-box">
 			<div class="month">
-				{{ month }}
+				{{ monthY }}
 			</div>
 			<div class="day">
 				{{ day }}
 			</div>
 			<div class="dow">
 				{{ dow }}
-			</div>
-			<div class="year">
-				{{ year }}
 			</div>
 			<div class="time">
 				{{ time }}
@@ -160,6 +157,10 @@ export default {
 			return moment(this.option.timestamp * 1000).format('MMM')
 		},
 
+		monthY() {
+			return this.month + " '" + moment(this.option.timestamp * 1000).format('YY')
+		},
+
 		year() {
 			return moment(this.option.timestamp * 1000).format('YYYY')
 		},
@@ -208,7 +209,7 @@ export default {
 .counter {
 	flex: 1 1;
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: center;
 	font-size: 18px;
 
 	&> * {
@@ -216,8 +217,9 @@ export default {
 		padding-left: 23px;
 		background-repeat: no-repeat;
 		background-size: contain;
-
+		margin-right: 8px;
 	}
+
 	.yes {
 		color: #49bc49;
 		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Im0yLjM1IDcuMyA0IDRsNy4zLTcuMyIgc3Ryb2tlPSIjNDliYzQ5IiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4K);
