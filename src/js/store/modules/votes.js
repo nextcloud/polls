@@ -21,6 +21,7 @@
  */
 
 import axios from 'nextcloud-axios'
+import orderBy from 'lodash/orderBy'
 
 const defaultVotes = () => {
 	return {
@@ -80,7 +81,29 @@ const getters = {
 
 	countParticipants: (state, getters) => {
 		return getters.participants.length
+	},
+
+	votesRank: (state, getters, rootGetters) => {
+		var rank = []
+		rootGetters.options.list.forEach(function(option) {
+			var countYes = state.list.filter(vote => vote.voteOptionText === option.text && vote.voteAnswer === 'yes').length
+			var countMaybe = state.list.filter(vote => vote.voteOptionText === option.text && vote.voteAnswer === 'maybe').length
+			var countNo = state.list.filter(vote => vote.voteOptionText === option.text && vote.voteAnswer === 'no').length
+			rank.push({
+				'rank': 0,
+				'text': option.text,
+				'yes': countYes,
+				'no': countNo,
+				'maybe': countMaybe
+			})
+		})
+		return orderBy(rank, ['yes', 'maybe'], ['desc', 'desc'])
+	},
+
+	winnerCombo: (state, getters) => {
+		return getters.votesRank[0]
 	}
+
 
 }
 

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="header-box">
+	<div class="header-box" :class=" { winner: isWinner }">
 		<div v-if="textpoll">
 			{{ option.text }}
 		</div>
@@ -58,7 +58,7 @@
 
 <script>
 import moment from 'moment'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'VoteHeader',
@@ -91,24 +91,49 @@ export default {
 			event: state => state.event,
 			votes: state => state.votes.list
 		}),
+		...mapGetters([
+			'votesRank',
+			'winnerCombo'
+		]),
 
-		votesList() {
-			return this.votes
+		votesranked() {
+			var text = this.option.text
+			return this.votesRank.find(rank => {
+				return rank.text === text;
+			})
 		},
 
 		yesVotes() {
 			var text = this.option.text
-			return this.votes.filter(vote => vote.voteOptionText === text && vote.voteAnswer === 'yes').length
+			return this.votesRank.find(rank => {
+				return rank.text === text;
+			}).yes
 		},
 
 		noVotes() {
 			var text = this.option.text
-			return this.votes.filter(vote => vote.voteOptionText === text && vote.voteAnswer === 'no').length
+			return this.votesRank.find(rank => {
+				return rank.text === text;
+			}).no
 		},
 
 		maybeVotes() {
 			var text = this.option.text
-			return this.votes.filter(vote => vote.voteOptionText === text && vote.voteAnswer === 'maybe').length
+			return this.votesRank.find(rank => {
+				return rank.text === text;
+			}).maybe
+		},
+
+		isWinner() {
+			var text = this.option.text
+			return (
+				this.winnerCombo.yes === this.votesRank.find(rank => {
+					return rank.text === text;
+				}).yes
+				&& this.winnerCombo.maybe === this.votesRank.find(rank => {
+					return rank.text === text;
+				}).maybe
+			)
 		},
 
 		datePoll() {
@@ -174,7 +199,12 @@ export default {
 
 .header-box {
 	flex-direction: column;
+	&.winner {
+		font-weight: bold;
+		color: #49bc49;
+	}
 }
+
 .counter {
 	flex: 1 1;
 	display: flex;

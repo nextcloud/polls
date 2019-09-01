@@ -86,7 +86,6 @@ export default {
 		currentUser() {
 			return OC.getCurrentUser().uid
 		}
-
 	},
 
 	methods: {
