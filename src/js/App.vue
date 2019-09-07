@@ -22,14 +22,22 @@
 
 <template>
 	<div id="app-polls">
+		<navigation />
 		<router-view />
 	</div>
 </template>
 
 <script>
+import Navigation from './components/navigation/navigation'
+
 export default {
-	name: 'App'
+	name: 'App',
+	components: {
+		Navigation
+	}
+
 }
+
 </script>
 
 <style  lang="scss">
@@ -57,16 +65,12 @@ export default {
 
 #app-polls {
 	width: 100%;
-	display: flex;
+	// display: flex;
 }
 
 #app-content {
-    width: 100%;
     display: flex;
-	&>.main-container {
-		flex: 1;
-		padding: 0 8px;
-	}
+	width: auto;
 
 	input.hasTimepicker {
         width: 75px;

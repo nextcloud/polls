@@ -36,7 +36,6 @@
 					</button>
 				</template>
 			</controls>
-
 			<div v-if="poll.mode === 'vote'">
 				<h2>
 					<span v-if="event.expired" class="label error">{{ t('poll', 'Expired') }}</span>
@@ -53,11 +52,11 @@
 				<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
 			</div>
 
-			<vote-table @voteSaved="indicateVoteSaved()" />
+			<vote-table v-show="!loading" @voteSaved="indicateVoteSaved()" />
 			<notification v-if="loggedIn" />
 		</div>
 
-		<app-sidebar v-if='sideBarOpen' @close="toggleSideBar" :title="t('polls', 'Details')">
+		<app-sidebar v-if="sideBarOpen" :title="t('polls', 'Details')" @close="toggleSideBar">
 			<template slot="primary-actions">
 				<button v-if="allowEdit" class="button btn primary" :class="{ warning: adminMode }"
 					@click="toggleEdit()">
@@ -77,26 +76,32 @@
 				<configuration-tab />
 			</app-sidebar-tab>
 		</app-sidebar>
+		<loading-overlay v-if="loading" />
 	</app-content>
 </template>
 
 <script>
 import moment from 'moment'
+import Controls from '../components/base/controls'
 import Notification from '../components/notification/notification'
 import InformationTab from '../components/settings/informationTab'
 import ConfigurationTab from '../components/settings/configurationTab'
 import CommentsTab from '../components/comments/commentsTab'
 import VoteTable from '../components/vote/voteTable'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
 
 export default {
 	name: 'Vote',
 	components: {
 		Notification,
+		Controls,
 		InformationTab,
 		ConfigurationTab,
 		CommentsTab,
-		VoteTable
+		VoteTable,
+		AppSidebar,
+		AppSidebarTab
 	},
 
 	data() {
@@ -104,7 +109,8 @@ export default {
 			writingPoll: false,
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: false
+			sideBarOpen: false,
+			loading: false
 		}
 	},
 
@@ -122,6 +128,10 @@ export default {
 			'timeSpanCreated',
 			'timeSpanExpiration'
 		]),
+
+		pollList() {
+			return this.$store.state.polls.list
+		},
 
 		eventTitle: {
 			get() {
@@ -178,16 +188,14 @@ export default {
 		}
 	},
 
+	watch: {
+		'$route'(to, from) {
+			this.refreshPoll()
+		}
+	},
+
 	mounted() {
-		moment.locale(this.localeString)
-		this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id, mode: 'vote' })
-			.then(() => {
-				this.$store.dispatch({
-					type: 'loadPoll',
-					pollId: this.$route.params.id,
-					mode: 'vote'
-				})
-			})
+		this.refreshPoll()
 	},
 
 	methods: {
@@ -200,9 +208,28 @@ export default {
 			'writeOptionsPromise',
 			'writeEventPromise'
 		]),
+
 		toggleSideBar() {
 			this.sideBarOpen = !this.sideBarOpen
 		},
+
+		refreshPoll() {
+			this.loading = true
+			moment.locale(this.localeString)
+			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id, mode: 'vote' })
+				.then(() => {
+					this.$store.dispatch({
+						type: 'loadPoll',
+						pollId: this.$route.params.id,
+						mode: 'vote'
+					})
+						.then(() => {
+							this.loading = false
+						})
+				})
+
+		},
+
 		updateDescription(e) {
 			this.$store.commit('eventSetProperty', { property: 'description', value: e.target.value })
 		},
@@ -248,12 +275,14 @@ export default {
 
 <style lang="scss" scoped>
 	.main-container {
-		display: flex;
+		flex: 1;
+		margin: 0 8px;
+		// display: flex;
 		flex-direction: column;
 		flex: 1;
 		flex-wrap: nowrap;
-		overflow-x: hidden;
-		padding: 8px;
+		overflow-x: scroll;
+		// padding: 8px;
 
 		.editDescription {
 			min-width: 245px;

@@ -98,7 +98,6 @@ const actions = {
 			option.text = payload.option
 		}
 
-
 		return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: option })
 			.then((response) => {
 				commit('optionAdd', { 'option': response.data })

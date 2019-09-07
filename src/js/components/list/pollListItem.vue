@@ -289,7 +289,8 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped>
 	$row-padding: 15px;
 	$table-padding: 4px;
 

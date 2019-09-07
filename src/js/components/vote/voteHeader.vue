@@ -96,48 +96,47 @@ export default {
 		votesranked() {
 			var text = this.option.text
 			return this.votesRank.find(rank => {
-				return rank.text === text;
+				return rank.text === text
 			})
 		},
 
 		yesVotes() {
 			var text = this.option.text
 			return this.votesRank.find(rank => {
-				return rank.text === text;
+				return rank.text === text
 			}).yes
 		},
 
 		noVotes() {
 			var text = this.option.text
 			return this.votesRank.find(rank => {
-				return rank.text === text;
+				return rank.text === text
 			}).no
 		},
 
 		maybeVotes() {
 			var text = this.option.text
 			return this.votesRank.find(rank => {
-				return rank.text === text;
+				return rank.text === text
 			}).maybe
 		},
 
 		isWinner() {
 			var text = this.option.text
-			console.debug(text)
 			return (
-				 this.votesRank.find(rank => {
+				this.votesRank.find(rank => {
 					return rank.text === text
 				}).yes === this.winnerCombo.yes
 
 				&& (this.votesRank.find(rank => {
-						return rank.text === text
-					}).yes + this.votesRank.find(rank => {
-							return rank.text === text
-					}).maybe > 0)
+					return rank.text === text
+				}).yes + this.votesRank.find(rank => {
+					return rank.text === text
+				}).maybe > 0)
 
 				&& this.winnerCombo.maybe === this.votesRank.find(rank => {
-						return rank.text === text
-					}).maybe
+					return rank.text === text
+				}).maybe
 			)
 		},
 

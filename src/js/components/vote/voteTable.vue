@@ -22,129 +22,135 @@
 
 <template lang="html">
 	<div class="vote-table">
-		<transition-group v-if="event.type === 'datePoll'" name="list" tag="div"
-			class="header">
-			<vote-header v-for="(option) in sortedOptions"
-				:key="option.id"
-				:option="option"
-				:poll-type="event.type"
-				:mode="poll.mode"
-				@remove="removeOption(option)" />
-		</transition-group>
 
-		<transition-group v-if="event.type === 'textPoll'" name="list" tag="div"
-			class="header">
+		<div v-if="event.type === 'datePoll'" class="header">
+			<div class="sticky" />
 			<vote-header v-for="(option) in sortedOptions"
-				:key="option.id"
-				:option="option"
-				:poll-type="event.type"
-				:mode="poll.mode"
-				@remove="removeOption(option)" />
-		</transition-group>
+			             :key="option.id"
+			             :option="option"
+			             :poll-type="event.type"
+			             :mode="poll.mode"
+			             @remove="removeOption(option)" />
+		</div>
 
-		<ul class="participants">
-			<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === currentUser) }">
-				<user-div :key="participant"
-					:class="{currentUser: (participant === currentUser) }"
-					:user-id="participant"
-					:fixed-width="true" />
-				<transition-group name="list" tag="ul" class="vote-row">
-					<vote-item v-for="(option) in sortedOptions"
-						:key="option.id"
-						:user-id="participant"
-						:option="option"
-						@voteSaved="voteSaved(vote)" />
-				</transition-group>
-			</div>
-		</ul>
+		<div v-if="event.type === 'textPoll'" class="header">
+			<div class="sticky" />
+			<vote-header v-for="(option) in sortedOptions"
+			             :key="option.id"
+			             :option="option"
+			             :poll-type="event.type"
+			             :mode="poll.mode"
+			             @remove="removeOption(option)" />
+		</div>
+
+		<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === currentUser) }">
+			<user-div :key="participant"
+			          class="sticky"
+			          :class="{currentUser: (participant === currentUser) }"
+			          :user-id="participant" />
+			<vote-item v-for="(option) in sortedOptions"
+			           :key="option.id"
+			           :user-id="participant"
+			           :option="option"
+			           @voteSaved="voteSaved(vote)" />
+		</div>
 	</div>
 </template>
 
 <script>
-import VoteItem from './voteItem'
-import VoteHeader from './voteHeader'
-import { mapState, mapGetters, mapActions } from 'vuex'
+	import VoteItem from './voteItem'
+	import VoteHeader from './voteHeader'
+	import { mapState, mapGetters, mapActions } from 'vuex'
 
-export default {
-	name: 'VoteTable',
-	components: {
-		VoteHeader,
-		VoteItem
-	},
+	export default {
+		name: 'VoteTable',
+		components: {
+			VoteHeader,
+			VoteItem,
+		},
 
-	computed: {
-		...mapState({
-			poll: state => state.poll,
-			event: state => state.event
-		}),
+		computed: {
+			...mapState({
+				poll: state => state.poll,
+				event: state => state.event,
+			}),
 
-		...mapGetters([
-			'sortedOptions',
-			'participants'
-		]),
+			...mapGetters(['sortedOptions', 'participants']),
 
-		currentUser() {
-			return OC.getCurrentUser().uid
-		}
-	},
+			currentUser() {
+				return OC.getCurrentUser().uid
+			},
+		},
 
-	methods: {
-		...mapActions([
-			'removeOption'
-		]),
+		methods: {
+			...mapActions(['removeOption']),
 
-		voteSaved() {
-			this.$emit('voteSaved')
-		}
+			voteSaved() {
+				this.$emit('voteSaved')
+			},
+		},
 	}
-}
 </script>
 
 <style lang="scss" scoped>
-	* {
-		display: flex;
+	.user-row.sticky,
+	.header > .sticky {
+		position: sticky;
+		left: 0;
+		background-color: var(--color-main-background);
+		width: 170px;
+		flex: 0 0 auto;
 	}
 
+	.header {
+		height: 150px;
+	}
+	.user {
+		height: 44px;
+		padding: 0 17px;
+	}
 	.vote-table {
+		display: flex;
 		flex: 0;
 		flex-direction: column;
 		justify-content: flex-start;
+		overflow: scroll;
 
-		.participants {
-			flex-direction: column;
-			flex: 1 0;
-
-			& > div {
-				flex: 1;
-				order: 2;
-				border-bottom: 1px solid var(--color-border-dark);
-				height: 44px;
-				padding: 0 17px;
-				&.currentUser {
-					order: 1;
-				}
-			}
-		}
-
-		.header {
-			height: 150px;
-			padding-left: 187px;
-			padding-right: 17px;
-			align-items: center;
+		& > div {
+			display: flex;
+			flex: 1;
 			border-bottom: 1px solid var(--color-border-dark);
+			order: 3;
+			justify-content: space-between;
 			& > div {
+				width: 84px;
+				min-width: 84px;
 				flex: 1;
+				margin: 2px;
+			}
+
+			& > .vote-header {
+				flex: 1;
+			}
+
+			&.header {
+				order: 1;
+			}
+
+			&.currentUser {
+				order: 2;
 			}
 		}
 
 		.vote-row {
+			display: flex;
 			justify-content: space-around;
-			flex: 1 1 auto;
+			flex: 1;
+			align-items: center;
 		}
 	}
 
-	@media (max-width: (480px) ) {
-
+	@media (max-width: (480px)) {
 		.vote-table {
 			flex-direction: row;
 			flex: 1 0;
@@ -157,17 +163,14 @@ export default {
 				flex-direction: column;
 				justify-content: space-around;
 				align-items: stretch;
-
 			}
 
 			.vote-row {
 				flex-direction: column;
-				justify-content: space-between;
-				align-items: center;
 			}
 
 			.participants > div {
-  				display: none;
+				display: none;
 				&.currentUser {
 					display: flex;
 					> .user-row.currentUser {
@@ -177,5 +180,4 @@ export default {
 			}
 		}
 	}
-
 </style>

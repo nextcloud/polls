@@ -104,7 +104,6 @@ const getters = {
 		return getters.votesRank[0]
 	}
 
-
 }
 
 const actions = {

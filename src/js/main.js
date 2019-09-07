@@ -30,22 +30,20 @@ import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu, Tooltip, AppContent, AppSidebar, AppSidebarTab, AppNavigation } from 'nextcloud-vue'
+import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from 'nextcloud-vue'
 
 import Modal from './plugins/plugin.js'
-import ShareDiv from './components/share/shareDiv'
-import Controls from './components/base/controls'
 import UserDiv from './components/base/userDiv'
 import LoadingOverlay from './components/base/loadingOverlay'
-
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devTools = process.env.NODE_ENV !== 'production'
-Vue.config.performance = process.env.NODE_ENV !== 'production'
 
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_nonce__ = btoa(OC.requestToken)
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_public_path__ = OC.linkTo('polls', 'js/')
+
+Vue.config.debug = process.env.NODE_ENV !== 'production'
+Vue.config.devTools = process.env.NODE_ENV !== 'production'
+Vue.config.performance = process.env.NODE_ENV !== 'production'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
@@ -53,15 +51,10 @@ Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-Vue.component('AppContent', AppContent)
-Vue.component('AppSidebar', AppSidebar)
-Vue.component('AppSidebarTab', AppSidebarTab)
-Vue.component('AppNavigation', AppNavigation)
 Vue.component('PopoverMenu', PopoverMenu)
+Vue.component('AppContent', AppContent)
 Vue.component('DatePicker', DatetimePicker)
-Vue.component('Controls', Controls)
 Vue.component('UserDiv', UserDiv)
-Vue.component('ShareDiv', ShareDiv)
 Vue.component('LoadingOverlay', LoadingOverlay)
 
 Vue.directive('tooltip', Tooltip)

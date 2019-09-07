@@ -22,11 +22,12 @@
 
 /* global Vue, oc_userconfig */
 <template>
-	<div class="user-row" :class="[{fixedWidth: fixedWidth}, type]">
+	<div class="user-row" :class="type">
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<avatar :disableMenu="true" :user="userId" :display-name="computedDisplayName" :is-no-user="isNoUser" />
+		<avatar :disable-menu="true" :user="userId" :display-name="computedDisplayName"
+			:is-no-user="isNoUser" />
 		<div v-if="!hideNames" class="user-name">
 			{{ computedDisplayName }}
 		</div>
@@ -44,10 +45,6 @@ export default {
 	},
 
 	props: {
-		fixedWidth: {
-			type: Boolean,
-			default: false
-		},
 		hideNames: {
 			type: Boolean,
 			default: false
@@ -108,10 +105,7 @@ export default {
     align-items: center;
     margin-left: 0;
     margin-top: 0;
-		&.fixedWidth {
-			width: 170px;
-			flex: 0 0 auto;
-		}
+
     > div {
         margin: 2px 4px;
     }
