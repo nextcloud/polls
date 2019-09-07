@@ -58,13 +58,14 @@
 </template>
 
 <script>
+import Controls from '../components/base/controls'
 import pollListItem from '../components/list/pollListItem'
-// import { mapState } from 'vuex'
 
 export default {
 	name: 'List',
 
 	components: {
+		Controls,
 		pollListItem
 	},
 
@@ -148,7 +149,9 @@ export default {
 	#app-content {
 		// flex-direction: column;
 	}
-
+	.main-container {
+		flex: 1;
+	}
 	.table {
 		width: 100%;
 		// margin-top: 45px;
