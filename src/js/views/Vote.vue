@@ -151,7 +151,7 @@ export default {
 		},
 
 		allowEdit() {
-			return this.event.owner === OC.getCurrentUser() || this.adminMode
+			return (this.event.owner === OC.getCurrentUser().uid || this.adminMode)
 		},
 
 		sideBarButtonTitle() {
@@ -253,13 +253,13 @@ export default {
 
 		writePoll() {
 			if (this.titleEmpty) {
-				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'))
+				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
 				this.writingPoll = true
 				this.writeEventPromise()
 				this.writeOptionsPromise()
 				this.writingPoll = false
-				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title))
+				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
 			}
 		},
 

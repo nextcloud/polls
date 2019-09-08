@@ -56,6 +56,7 @@ return [
 		['name' => 'event#list', 'url' => '/get/events', 'verb' => 'GET'],
 		['name' => 'event#get', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
 		['name' => 'event#write', 'url' => '/write/event/', 'verb' => 'POST'],
+		['name' => 'event#add', 'url' => '/add/event/', 'verb' => 'POST'],
 
 		['name' => 'share#getByToken', 'url' => '/get/share/{token}', 'verb' => 'GET'],
 		['name' => 'share#generateHash', 'url' => '/generate/share/', 'verb' => 'POST'],

@@ -95,14 +95,32 @@ const actions = {
 	loadEvent({ commit }, payload) {
 		commit({ type: 'eventReset' })
 		if (payload.mode !== 'create') {
-
 			return axios.get(OC.generateUrl('apps/polls/get/event/' + payload.pollId))
 				.then((response) => {
 					commit('eventSet', { 'event': response.data })
 				}, (error) => {
-					console.error(error)
+					console.error('writeEventPromise - error:', error)
 				})
 		}
+	},
+
+	addEventPromise({ commit }, payload) {
+		return axios.post(OC.generateUrl('apps/polls/add/event'), { event: payload.event })
+			.then((response) => {
+				return response.data
+			}, (error) => {
+				console.error('addEventPromise - error:', error.response)
+			})
+
+	},
+
+	deleteEventPromise({ commit }, payload) {
+		return axios.post(OC.generateUrl('apps/polls/delete/event'), { event: payload.id })
+			.then(() => {
+			}, (error) => {
+				console.error('deleteEventPromise - error:', error.response)
+			})
+
 	},
 
 	writeEventPromise({ commit, rootState }, payload) {
@@ -110,7 +128,7 @@ const actions = {
 			.then((response) => {
 				commit('eventSet', { 'event': response.data })
 			}, (error) => {
-				console.error(error.response)
+				console.error('writeEventPromise - error:', error.response)
 			})
 
 	}

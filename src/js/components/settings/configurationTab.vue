@@ -23,30 +23,6 @@
 <template>
 	<div>
 		<div class="configBox">
-			<label class="title icon-checkmark">
-				{{ t('polls', 'Poll type') }}
-			</label>
-			<input id="datePoll"
-				v-model="eventType"
-				value="datePoll"
-				:disabled="protect"
-				type="radio"
-				class="radio">
-			<label for="datePoll">
-				{{ t('polls', 'Event schedule') }}
-			</label>
-			<input id="textPoll"
-				v-model="eventType"
-				value="textPoll"
-				:disabled="protect"
-				type="radio"
-				class="radio">
-			<label for="textPoll">
-				{{ t('polls', 'Text based') }}
-			</label>
-		</div>
-
-		<div class="configBox">
 			<label class="title icon-category-customization">
 				{{ t('polls', 'Poll configurations') }}
 			</label>
@@ -181,15 +157,6 @@ export default {
 		...mapGetters(['languageCodeShort']),
 
 		// Add bindings
-		eventType: {
-			get() {
-				return this.event.type
-			},
-			set(value) {
-				this.$store.commit('eventSetProperty', { 'type': value })
-			}
-		},
-
 		eventAccess: {
 			get() {
 				return this.event.access

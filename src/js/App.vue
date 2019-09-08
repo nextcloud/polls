@@ -22,8 +22,41 @@
 
 <template>
 	<div id="app-polls">
-		<navigation />
+		<navigation @addPoll="addPoll"/>
 		<router-view />
+		<modal-dialog>
+
+			<div class="createDlg">
+				<div>
+					<h2>{{ t('polls', 'Poll description') }}</h2>
+
+					<label>{{ t('polls', 'Title') }}</label>
+					<input id="pollTitle" v-model="event.title" :class="{ error: titleEmpty }"
+						type="text">
+
+					<label>{{ t('polls', 'Description') }}</label>
+					<textarea id="pollDesc" v-model="event.description" />
+
+				</div>
+
+				<div>
+					<div class="configBox">
+						<label class="title icon-checkmark">
+							{{ t('polls', 'Poll type') }}
+						</label>
+						<input id="datePoll" v-model="event.type" value="datePoll" :disabled="protect" type="radio" class="radio">
+						<label for="datePoll">
+							{{ t('polls', 'Event schedule') }}
+						</label>
+						<input id="textPoll" v-model="event.type" value="textPoll" :disabled="protect" type="radio" class="radio">
+						 <label for="textPoll">
+							{{ t('polls', 'Text based') }}
+						</label>
+					</div>
+
+				</div>
+			</div>
+		<modal-dialog>
 	</div>
 </template>
 
@@ -34,13 +67,57 @@ export default {
 	name: 'App',
 	components: {
 		Navigation
+	},
+
+	data() {
+		return {
+			event: {
+				title: '',
+				description: '',
+				type: 'datePoll',
+				allowMaybe: false,
+				isAnonymous: false,
+				trueAnonymous: false,
+				expiration: false,
+				expirationDate: '',
+				access: 'hidden'
+			}
+		}
+	},
+
+	methods: {
+		addPoll() {
+			const params = {
+				title: t('polls', 'Create new poll'),
+				text: t('polls', 'This poll will be created as a hidden poll. Change of this type and more options can be set after the poll creation.'),
+				buttonHideText: t('polls', 'Cancel'),
+				buttonConfirmText: t('polls', 'Publish'),
+				onConfirm: () => {
+					this.$store
+						.dispatch('addEventPromise', { event: this.event })
+						.then((response) => {
+							OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.event.title), { type: 'success' })
+							this.$store.dispatch('loadPolls')
+						}, (error) => {
+							OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.event.title), { type: 'error' })
+						})
+				}
+			}
+			this.$modaldlg.show(params)
+		}
+
 	}
+
 
 }
 
 </script>
 
 <style  lang="scss">
+
+.createDlg {
+	display: flex;
+}
 
 .list-enter-active,
 .list-leave-active {

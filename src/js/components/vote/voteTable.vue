@@ -23,18 +23,13 @@
 <template lang="html">
 	<div class="vote-table">
 
-		<div v-if="event.type === 'datePoll'" class="header">
+		<div class="header">
 			<div class="sticky" />
-			<vote-header v-for="(option) in sortedOptions"
-			             :key="option.id"
-			             :option="option"
-			             :poll-type="event.type"
-			             :mode="poll.mode"
-			             @remove="removeOption(option)" />
-		</div>
 
-		<div v-if="event.type === 'textPoll'" class="header">
-			<div class="sticky" />
+			<div v-if="noOptions" class="noOptions">
+				<h2> {{ t('polls', 'there are no vote Options')}} </h2>
+			</div>
+
 			<vote-header v-for="(option) in sortedOptions"
 			             :key="option.id"
 			             :option="option"
@@ -80,6 +75,9 @@
 			currentUser() {
 				return OC.getCurrentUser().uid
 			},
+			noOptions() {
+				return (this.sortedOptions.length === 0)
+			}
 		},
 
 		methods: {

@@ -1,6 +1,28 @@
-<template lang="html">
+<!--
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  -
+  - @author René Gieling <github@dartcafe.de>
+  -
+  - @license GNU AGPL version 3 or any later version
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Affero General Public License as
+  - published by the Free Software Foundation, either version 3 of the
+  - License, or (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+  <template lang="html">
 	<app-navigation>
-		<app-navigation-new :text="t('polls', 'New')" />
+		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="$emit('addPoll')"/>
 		<app-content-details
 			v-for="(poll) in pollList"
 			:key="poll.id">
@@ -10,6 +32,7 @@
 				:class="eventIcon(poll.event.type)">
 				<div class="name">
 					{{ poll.event.title }}
+					<span v-if="poll.event.expired" class="label error">{{ t('poll', 'Expired') }}</span>
 				</div>
 				<div class="description">
 					{{ poll.event.description }}
@@ -61,7 +84,7 @@ export default {
 				.catch(error => {
 					this.loading = false
 					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title, { type: 'error' }))
+					OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title), { type: 'error' })
 				})
 
 		}

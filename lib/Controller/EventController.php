@@ -159,6 +159,9 @@ class EventController extends Controller {
 		];
  	}
 
+
+
+
 	/**
 	 * Write poll (create/update)
 	 * @NoAdminRequired
@@ -168,6 +171,47 @@ class EventController extends Controller {
 	 * @param string $mode
 	 * @return DataResponse
 	 */
+	public function add($event) {
+		if (!\OC::$server->getUserSession()->isLoggedIn()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+		$NewEvent = new Event();
+
+		// Set the configuration options entered by the user
+		$NewEvent->setTitle($event['title']);
+		$NewEvent->setDescription($event['description']);
+
+		if ($event['type'] === 'datePoll') {
+			$NewEvent->setType(0);
+		} elseif ($event['type'] === 'textPoll') {
+			$NewEvent->setType(1);
+		}
+
+		$NewEvent->setAccess('hidden');
+
+		$NewEvent->setIsAnonymous(0);
+		$NewEvent->setFullAnonymous(0);
+		$NewEvent->setAllowMaybe(0);
+
+		$NewEvent->setOwner($this->userId);
+		$NewEvent->setCreated(date('Y-m-d H:i:s'));
+		$NewEvent = $this->mapper->insert($NewEvent);
+
+		return new DataResponse($this->get($NewEvent->getId()), Http::STATUS_OK);
+
+	}
+
+	/**
+	 * Write poll (create/update)
+	 * @NoAdminRequired
+	 * @param Array $event
+	 * @param Array $options
+	 * @param Array  $shares
+	 * @param string $mode
+	 * @return DataResponse
+	 */
+
 	public function write($event, $mode) {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
@@ -183,7 +227,6 @@ class EventController extends Controller {
 		$NewEvent->setTitle($event['title']);
 		$NewEvent->setDescription($event['description']);
 
-		$NewEvent->setType($event['type']);
 		$NewEvent->setIsAnonymous(intval($event['isAnonymous']));
 		$NewEvent->setFullAnonymous(intval($event['fullAnonymous']));
 		$NewEvent->setAllowMaybe(intval($event['allowMaybe']));
@@ -242,6 +285,6 @@ class EventController extends Controller {
 			$NewEvent->setCreated(date('Y-m-d H:i:s'));
 			$NewEvent = $this->mapper->insert($NewEvent);
 		}
-		return $this->get($NewEvent->getId());
+		return new DataResponse($this->get($NewEvent->getId()), Http::STATUS_OK);
 	}
 }

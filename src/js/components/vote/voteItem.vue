@@ -117,7 +117,7 @@ export default {
 		voteClick() {
 			if (this.currentUser === this.userId && this.poll.mode == 'vote') {
 				this.$store.dispatch('voteChange', { option: this.option, userId: this.userId, switchTo: this.nextStatus })
-					.then(response => {
+					.then(() => {
 						this.$emit('voteSaved')
 					})
 			}
