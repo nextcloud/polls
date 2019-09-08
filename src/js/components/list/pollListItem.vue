@@ -258,10 +258,10 @@ export default {
 			// this.$emit('copyLink')
 			this.$copyText(window.location.origin + this.voteUrl).then(
 				function(e) {
-					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'))
+					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
 				},
 				function(e) {
-					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'))
+					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'), { type: 'error' })
 				}
 			)
 			this.hideMenu()

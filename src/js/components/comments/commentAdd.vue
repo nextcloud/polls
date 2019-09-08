@@ -52,12 +52,12 @@ export default {
 			this.$store
 				.dispatch('writeCommentPromise', this.comment)
 				.then(response => {
-					OC.Notification.showTemporary(t('polls', 'Your comment was added'))
+					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
 				})
 				.catch(error => {
 					this.writingVote = false
 					console.error('Error while saving comment - Error: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error while saving comment', { type: 'error' }))
+					OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })
 				})
 
 		}

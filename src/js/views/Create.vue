@@ -282,14 +282,14 @@ export default {
 
 		writePoll() {
 			if (this.titleEmpty) {
-				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'))
+				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'error' })
 			} else {
 				this.writingPoll = true
 				this.writePollPromise()
 				this.writingPoll = false
-				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title))
+				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
 				// this.writingPoll = false
-				// OC.Notification.showTemporary(t('polls', 'Error on saving poll, see console'))
+				// OC.Notification.showTemporary(t('polls', 'Error on saving poll, see console'), { type: 'error' })
 			}
 		}
 	}
