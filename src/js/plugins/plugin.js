@@ -23,16 +23,16 @@
 /* jshint esversion: 6 */
 import ModalDialog from './modalDialog.vue'
 
-const Modal = {
+const ModalDlg = {
 	install(Vue, options) {
 		this.EventBus = new Vue()
 		Vue.component('modal-dialog', ModalDialog)
-		Vue.prototype.$modal = {
+		Vue.prototype.$modaldlg = {
 			show(params) {
-				Modal.EventBus.$emit('show', params)
+				ModalDlg.EventBus.$emit('show', params)
 			}
 		}
 	}
 }
 
-export default Modal
+export default ModalDlg

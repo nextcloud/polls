@@ -43,7 +43,7 @@
 <script>
 // we must import our Modal plugin instance
 // because it contains reference to our Eventbus
-import Modal from './plugin.js'
+import ModalDlg from './plugin.js'
 
 export default {
 	data() {
@@ -59,7 +59,7 @@ export default {
 	beforeMount() {
 		// here we need to listen for emited events
 		// we declared those events inside our plugin
-		Modal.EventBus.$on('show', (params) => {
+		ModalDlg.EventBus.$on('show', (params) => {
 			this.show(params)
 		})
 	},

@@ -139,7 +139,7 @@ export default {
 				}
 			}
 
-			this.$modal.show(params)
+			this.$modaldlg.show(params)
 		}
 	}
 }

@@ -32,7 +32,7 @@ import VueClipboard from 'vue-clipboard2'
 
 import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from 'nextcloud-vue'
 
-import Modal from './plugins/plugin.js'
+import ModalDlg from './plugins/plugin.js'
 import UserDiv from './components/base/userDiv'
 import LoadingOverlay from './components/base/loadingOverlay'
 
@@ -61,7 +61,7 @@ Vue.directive('tooltip', Tooltip)
 
 Vue.use(vClickOutside)
 Vue.use(VueClipboard)
-Vue.use(Modal)
+Vue.use(ModalDlg)
 
 /* eslint-disable-next-line no-new */
 new Vue({

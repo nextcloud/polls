@@ -70,7 +70,7 @@ export default {
 					this.datesShift(this.move)
 				}
 			}
-			this.$modal.show(params)
+			this.$modaldlg.show(params)
 		}
 	}
 }
