@@ -56,7 +56,7 @@
 
 				</div>
 			</div>
-		<modal-dialog>
+		</modal-dialog>
 	</div>
 </template>
 
