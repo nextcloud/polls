@@ -73,7 +73,7 @@ class NotificationMapper extends QBMapper {
 	        	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 	        );
 
-		 return $this->findEntities($qb);
+		 return $this->findEntity($qb);
 	}
 
 	/**

@@ -8,7 +8,7 @@ OC.L10N.register(
     "Press ⌘-C to copy." : "Druk ⌘-C om te kopiëren.",
     "Press Ctrl-C to copy." : "Druk op Ctrl-C om te kopiëren.",
     "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "Je bent niet geregistreerd\nGeef je naam in om te stemmen\n(tenminste 3 tekens).",
-    "Please add some text to your comment before submitting it." : "Gelieve wat tekst aan de reactie toe te voegen voordat je hem plaatst.",
+    "Please add some text to your comment before submitting it." : "Graag wat tekst aan de reactie toevoegen voordat je hem plaatst.",
     "An error occurred, your comment was not posted." : "Je opmerking is niet geplaatst vanwege een probleem.",
     "Polls" : "Peilingen",
     "Polls App - New Activity" : "Peilingen  App - Nieuwe Activiteit",
