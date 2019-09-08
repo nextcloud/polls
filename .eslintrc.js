@@ -27,6 +27,10 @@ module.exports = {
 	],
 	plugins: ['vue', 'node'],
 	rules: {
+		"node/no-missing-import": ["error", {
+            "allowModules": [],
+            "tryExtensions": [".js", ".vue"]
+        }],
 		// space before function ()
 		'space-before-function-paren': ['error', 'never'],
 		// curly braces always space

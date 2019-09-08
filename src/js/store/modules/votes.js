@@ -44,9 +44,9 @@ const mutations = {
 
 	voteSet(state, payload) {
 		var index = state.list.findIndex(vote =>
-			vote.pollId == payload.pollId
-			&& vote.userId == payload.vote.userId
-			&& vote.voteOptionText == payload.option.text)
+			parseInt(vote.pollId) === payload.pollId
+			&& vote.userId === payload.vote.userId
+			&& vote.voteOptionText === payload.option.text)
 		if (index > -1) {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
 		} else {

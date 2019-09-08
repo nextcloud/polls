@@ -24,7 +24,7 @@
 import Vue from 'vue'
 import axios from 'nextcloud-axios'
 
-import App from './App.vue'
+import App from './App'
 import store from './store'
 import router from './router'
 import vClickOutside from 'v-click-outside'

@@ -21,7 +21,7 @@
  */
 
 /* jshint esversion: 6 */
-import ModalDialog from './modalDialog.vue'
+import ModalDialog from './modalDialog'
 
 const ModalDlg = {
 	install(Vue, options) {

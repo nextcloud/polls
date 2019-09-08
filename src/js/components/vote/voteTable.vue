@@ -22,72 +22,71 @@
 
 <template lang="html">
 	<div class="vote-table">
-
 		<div class="header">
 			<div class="sticky" />
 
 			<div v-if="noOptions" class="noOptions">
-				<h2> {{ t('polls', 'there are no vote Options')}} </h2>
+				<h2> {{ t('polls', 'there are no vote Options') }} </h2>
 			</div>
 
 			<vote-header v-for="(option) in sortedOptions"
-			             :key="option.id"
-			             :option="option"
-			             :poll-type="event.type"
-			             :mode="poll.mode"
-			             @remove="removeOption(option)" />
+				:key="option.id"
+				:option="option"
+				:poll-type="event.type"
+				:mode="poll.mode"
+				@remove="removeOption(option)" />
 		</div>
 
 		<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === currentUser) }">
 			<user-div :key="participant"
-			          class="sticky"
-			          :class="{currentUser: (participant === currentUser) }"
-			          :user-id="participant" />
+				class="sticky"
+				:class="{currentUser: (participant === currentUser) }"
+				:user-id="participant" />
 			<vote-item v-for="(option) in sortedOptions"
-			           :key="option.id"
-			           :user-id="participant"
-			           :option="option"
-			           @voteSaved="voteSaved(vote)" />
+				:key="option.id"
+				:user-id="participant"
+				:option="option"
+				@voteSaved="voteSaved(vote)" />
 		</div>
 	</div>
 </template>
 
 <script>
-	import VoteItem from './voteItem'
-	import VoteHeader from './voteHeader'
-	import { mapState, mapGetters, mapActions } from 'vuex'
+import VoteItem from './voteItem'
+import VoteHeader from './voteHeader'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
-	export default {
-		name: 'VoteTable',
-		components: {
-			VoteHeader,
-			VoteItem,
+export default {
+	name: 'VoteTable',
+	components: {
+		VoteHeader,
+		VoteItem
+	},
+
+	computed: {
+		...mapState({
+			poll: state => state.poll,
+			event: state => state.event
+		}),
+
+		...mapGetters(['sortedOptions', 'participants']),
+
+		currentUser() {
+			return OC.getCurrentUser().uid
 		},
+		noOptions() {
+			return (this.sortedOptions.length === 0)
+		}
+	},
 
-		computed: {
-			...mapState({
-				poll: state => state.poll,
-				event: state => state.event,
-			}),
+	methods: {
+		...mapActions(['removeOption']),
 
-			...mapGetters(['sortedOptions', 'participants']),
-
-			currentUser() {
-				return OC.getCurrentUser().uid
-			},
-			noOptions() {
-				return (this.sortedOptions.length === 0)
-			}
-		},
-
-		methods: {
-			...mapActions(['removeOption']),
-
-			voteSaved() {
-				this.$emit('voteSaved')
-			},
-		},
+		voteSaved() {
+			this.$emit('voteSaved')
+		}
 	}
+}
 </script>
 
 <style lang="scss" scoped>

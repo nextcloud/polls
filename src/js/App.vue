@@ -22,10 +22,9 @@
 
 <template>
 	<div id="app-polls">
-		<navigation @addPoll="addPoll"/>
+		<navigation @addPoll="addPoll" />
 		<router-view />
 		<modal-dialog>
-
 			<div class="createDlg">
 				<div>
 					<h2>{{ t('polls', 'Poll description') }}</h2>
@@ -36,7 +35,6 @@
 
 					<label>{{ t('polls', 'Description') }}</label>
 					<textarea id="pollDesc" v-model="event.description" />
-
 				</div>
 
 				<div>
@@ -44,16 +42,17 @@
 						<label class="title icon-checkmark">
 							{{ t('polls', 'Poll type') }}
 						</label>
-						<input id="datePoll" v-model="event.type" value="datePoll" :disabled="protect" type="radio" class="radio">
+						<input id="datePoll" v-model="event.type" value="datePoll"
+							:disabled="protect" type="radio" class="radio">
 						<label for="datePoll">
 							{{ t('polls', 'Event schedule') }}
 						</label>
-						<input id="textPoll" v-model="event.type" value="textPoll" :disabled="protect" type="radio" class="radio">
-						 <label for="textPoll">
+						<input id="textPoll" v-model="event.type" value="textPoll"
+							:disabled="protect" type="radio" class="radio">
+						<label for="textPoll">
 							{{ t('polls', 'Text based') }}
 						</label>
 					</div>
-
 				</div>
 			</div>
 		</modal-dialog>
@@ -98,7 +97,8 @@ export default {
 						.then((response) => {
 							OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.event.title), { type: 'success' })
 							this.$store.dispatch('loadPolls')
-						}, (error) => {
+						})
+						.catch(() => {
 							OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.event.title), { type: 'error' })
 						})
 				}
@@ -107,7 +107,6 @@ export default {
 		}
 
 	}
-
 
 }
 

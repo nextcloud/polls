@@ -22,9 +22,7 @@
 
 <template>
 	<div class="vote-item" :class="[iconClass, activeClass]" @click="voteClick()">
-		<div class="icon" @click="voteClick()">
-
-		</div>
+		<div class="icon" @click="voteClick()" />
 	</div>
 </template>
 
@@ -63,10 +61,11 @@ export default {
 		},
 
 		getAnswer() {
-			var index = this.votes.list.findIndex(vote =>
-				vote.pollId == this.option.pollId
-				&& vote.userId == this.userId
-				&& vote.voteOptionText == this.option.text)
+			var index = this.votes.list.findIndex(vote => {
+				return (vote.pollId === this.option.pollId
+					&& vote.userId === this.userId
+					&& vote.voteOptionText === this.option.text)
+			})
 			if (index > -1) {
 				return this.votes.list[index].voteAnswer
 			} else {
@@ -91,7 +90,7 @@ export default {
 		},
 
 		activeClass() {
-			if (this.currentUser === this.userId && this.poll.mode == 'vote') {
+			if (this.currentUser === this.userId && this.poll.mode === 'vote') {
 				return 'active'
 			} else {
 				return ''
@@ -115,7 +114,7 @@ export default {
 	methods: {
 
 		voteClick() {
-			if (this.currentUser === this.userId && this.poll.mode == 'vote') {
+			if (this.currentUser === this.userId && this.poll.mode === 'vote') {
 				this.$store.dispatch('voteChange', { option: this.option, userId: this.userId, switchTo: this.nextStatus })
 					.then(() => {
 						this.$emit('voteSaved')

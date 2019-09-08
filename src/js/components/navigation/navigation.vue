@@ -20,9 +20,9 @@
   -
   -->
 
-  <template lang="html">
+<template lang="html">
 	<app-navigation>
-		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="$emit('addPoll')"/>
+		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="$emit('addPoll')" />
 		<app-content-details
 			v-for="(poll) in pollList"
 			:key="poll.id">
