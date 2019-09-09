@@ -54,6 +54,13 @@ export default {
 
 <style lang="scss" scoped>
 
+@media (max-width: (1024px) ) {
+
+	#app-navigation + #app-content .controls {
+		padding-left: 44px;
+	}
+}
+
 .controls {
     display: flex;
 	// position: fixed;

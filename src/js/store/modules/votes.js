@@ -56,9 +56,6 @@ const mutations = {
 }
 
 const getters = {
-	// answerSequence(state) {
-	// 	return state.answerSequence
-	// },
 
 	lastVoteId: state => {
 		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))

@@ -266,6 +266,7 @@ export default {
 @media (max-width: (480px) ) {
 	.vote-header {
 		padding: 4px 0;
+		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 		border-top: 1px solid var(--color-border-dark);
@@ -276,7 +277,7 @@ export default {
 		}
 		.counter {
 			flex-direction: column;
-			align-items: end;
+			align-items: baseline;
 			& > * {
 				margin: 4px 1px;
 			}

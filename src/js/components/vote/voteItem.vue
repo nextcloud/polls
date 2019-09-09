@@ -221,7 +221,7 @@ export default {
 
 	@media (max-width: (480px) ) {
 		.vote-item {
-
+			border-top: 1px solid var(--color-border-dark);
 			&.active {
 				width: 10vw;
 				height: 10vw;

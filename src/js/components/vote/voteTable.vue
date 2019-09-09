@@ -37,10 +37,10 @@
 				@remove="removeOption(option)" />
 		</div>
 
-		<div v-for="(participant) in participants" :key="participant" :class="{currentUser: (participant === currentUser) }">
+		<div v-for="(participant) in participants" :key="participant" :class="{currentuser: (participant === currentUser) }">
 			<user-div :key="participant"
 				class="sticky"
-				:class="{currentUser: (participant === currentUser) }"
+				:class="{currentuser: (participant === currentUser) }"
 				:user-id="participant" />
 			<vote-item v-for="(option) in sortedOptions"
 				:key="option.id"
@@ -134,7 +134,7 @@ export default {
 				order: 1;
 			}
 
-			&.currentUser {
+			&.currentuser {
 				order: 2;
 			}
 		}
@@ -149,29 +149,46 @@ export default {
 
 	@media (max-width: (480px)) {
 		.vote-table {
-			flex-direction: row;
 			flex: 1 0;
+			flex-direction: row;
 			min-width: 300px;
 
-			.header {
+			&> div {
+				display: none;
+				&> div {
+					width: unset;
+					margin: 0;
+
+				}
+				// &.currentuser {
+				// 	display: flex;
+				// 	> .user-row.currentuser {
+				// 		display: none;
+				// 	}
+				// }
+			}
+
+			&> .currentuser {
+				display: flex;
+				flex-direction: column;
+				&> .user-row {
+					display: none;
+				}
+			}
+
+			&> .header, {
 				height: initial;
 				padding-left: initial;
-				flex: 3 1;
+				display: flex;
 				flex-direction: column;
+				flex: 3 1;
 				justify-content: space-around;
 				align-items: stretch;
-			}
-
-			.vote-row {
-				flex-direction: column;
-			}
-
-			.participants > div {
-				display: none;
-				&.currentUser {
+				&> .vote-header {
 					display: flex;
-					> .user-row.currentUser {
-						display: none;
+					flex-direction: row;
+					&> .counter {
+						align-items: baseline;
 					}
 				}
 			}

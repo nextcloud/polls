@@ -276,7 +276,7 @@ export default {
 <style lang="scss" scoped>
 	.main-container {
 		flex: 1;
-		margin: 0 8px;
+		margin: 0;
 		// display: flex;
 		flex-direction: column;
 		flex: 1;
