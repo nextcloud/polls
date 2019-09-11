@@ -35,7 +35,9 @@
 				<slot />
 			</div>
 		</div>
-		<slot name="after" class="after" />
+		<div class="after">
+			<slot name="after"/>
+		</div>
 	</div>
 </template>
 
@@ -70,7 +72,18 @@ export default {
     height: 45px;
     z-index: 1001;
 	// position: fixed;
-
+	.after {
+		display: flex;
+		.icon {
+			width: 44px;
+			height: 44px;
+			border-radius: 22px;
+			&:hover {
+				opacity: 1;
+				background-color: var(--color-background-darker)
+			}
+		}
+	}
 	.action {
 		order: 999;
 	}

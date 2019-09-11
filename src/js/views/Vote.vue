@@ -30,10 +30,8 @@
 						<span>{{ saveButtonTitle }}</span>
 						<span v-if="writingPoll" class="icon-loading-small" />
 					</button>
-					<button v-if="!sideBarOpen" class="button btn"
-						@click="toggleSideBar()">
-						<span>{{ sideBarButtonTitle }}</span>
-					</button>
+
+					<a v-if="!sideBarOpen" @click="toggleSideBar()" href="#" class="icon icon-settings active" :title="sideBarButtonTitle"></a>
 				</template>
 			</controls>
 			<div v-if="poll.mode === 'vote'">

@@ -23,14 +23,14 @@
 <template>
 	<app-content>
 		<div class="main-container">
-			<controls>
+			<!-- <controls>
 				<router-link :to="{ name: 'create'}" class="button">
 					<span class="symbol icon-add" />
 					<span class="hidden-visually">
 						{{ t('polls', 'New') }}
 					</span>
 				</router-link>
-			</controls>
+			</controls> -->
 
 			<div v-if="noPolls" class="">
 				<div class="icon-polls" />
