@@ -58,4 +58,4 @@ Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduc
 to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together
 we can strengthen and support each other.
 
-For more information please review the [guidelines for contributing](https://github.com/nextcloud/server/blob/master/CONTRIBUTING.md) to this repository.
+For more information please review the [guidelines for contributing](https://github.com/nextcloud/server/blob/master/.github/CONTRIBUTING.md) to this repository.
