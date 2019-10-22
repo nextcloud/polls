@@ -52,6 +52,7 @@ OC.L10N.register(
     "Poll type" : "Kyselyn tyyppi",
     "Poll configurations" : "Kyselyn asetukset",
     "Allow \"maybe\" vote" : "Salli \"ehkä\"-ääni",
+    "Hide user names for admin" : "Piilota käyttäjänimet ylläpitäjältä",
     "hidden" : "piilotettu",
     "Name of user or group" : "Käyttäjän tai ryhmän nimi",
     "Create new poll" : "Luo uusi kysely",
