@@ -107,7 +107,7 @@ const actions = {
 	addEventPromise({ commit }, payload) {
 		return axios.post(OC.generateUrl('apps/polls/add/event'), { event: payload.event })
 			.then((response) => {
-				return response.data
+				return response
 			}, (error) => {
 				console.error('addEventPromise - error:', error.response)
 			})

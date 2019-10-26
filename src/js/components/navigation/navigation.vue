@@ -22,7 +22,8 @@
 
 <template lang="html">
 	<app-navigation>
-		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="$emit('addPoll')" />
+		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<create-dlg v-show="createDlg" @closeCreate="closeCreate()"/>
 		<app-content-details
 			v-for="(poll) in pollList"
 			:key="poll.id">
@@ -45,13 +46,21 @@
 <script>
 
 import { AppNavigation, AppNavigationNew, AppContentDetails } from 'nextcloud-vue'
+import createDlg from '../modals/createDlg'
 
 export default {
 	name: 'Navigation',
 	components: {
 		AppNavigation,
 		AppNavigationNew,
-		AppContentDetails
+		AppContentDetails,
+		createDlg
+	},
+
+	data() {
+		return {
+			createDlg: false
+		}
 	},
 
 	computed: {
@@ -65,6 +74,14 @@ export default {
 	},
 
 	methods: {
+		closeCreate() {
+			this.createDlg = false
+		},
+
+		toggleCreateDlg() {
+			this.createDlg = !this.createDlg
+		},
+
 		eventIcon(type) {
 			if (type === '0') {
 				return 'datePoll'

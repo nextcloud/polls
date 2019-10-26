@@ -30,9 +30,9 @@ import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from 'nextcloud-vue'
+import { Modal, PopoverMenu, Tooltip, DatetimePicker, AppContent } from 'nextcloud-vue'
 
-import ModalDlg from './plugins/plugin.js'
+// import ModalDlg from './plugins/plugin.js'
 import UserDiv from './components/base/userDiv'
 import LoadingOverlay from './components/base/loadingOverlay'
 
@@ -51,6 +51,7 @@ Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
+Vue.component('Modal', Modal)
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('AppContent', AppContent)
 Vue.component('DatePicker', DatetimePicker)
@@ -61,7 +62,7 @@ Vue.directive('tooltip', Tooltip)
 
 Vue.use(vClickOutside)
 Vue.use(VueClipboard)
-Vue.use(ModalDlg)
+// Vue.use(ModalDlg)
 
 /* eslint-disable-next-line no-new */
 new Vue({

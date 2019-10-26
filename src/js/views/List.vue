@@ -23,14 +23,6 @@
 <template>
 	<app-content>
 		<div class="main-container">
-			<!-- <controls>
-				<router-link :to="{ name: 'create'}" class="button">
-					<span class="symbol icon-add" />
-					<span class="hidden-visually">
-						{{ t('polls', 'New') }}
-					</span>
-				</router-link>
-			</controls> -->
 
 			<div v-if="noPolls" class="">
 				<div class="icon-polls" />
@@ -53,7 +45,7 @@
 			</transition-group>
 		</div>
 		<loading-overlay v-if="loading" />
-		<modal-dialog />
+		<!-- <modal-dialog /> -->
 	</app-content>
 </template>
 
@@ -110,35 +102,35 @@ export default {
 				})
 		},
 
-		removePoll(index, event) {
-			const params = {
-				title: t('polls', 'Delete poll'),
-				text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
-				buttonHideText: t('polls', 'No, keep poll.'),
-				buttonConfirmText: t('polls', 'Yes, delete poll.'),
-				// Call store action here
-				onConfirm: () => {
-					this.loading = true
-					this.$store
-						.dispatch({
-							type: 'deletePollPromise',
-							event: event
-						})
-						.then(response => {
-							this.loading = false
-							this.refreshPolls()
-							OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title), { type: 'success' })
-						})
-						.catch(error => {
-							this.loading = false
-							console.error('remove poll: ', error.response)
-							OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title), { type: 'error' })
-						})
-				}
-			}
-
-			this.$modaldlg.show(params)
-		}
+		// removePoll(index, event) {
+		// 	const params = {
+		// 		title: t('polls', 'Delete poll'),
+		// 		text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
+		// 		buttonHideText: t('polls', 'No, keep poll.'),
+		// 		buttonConfirmText: t('polls', 'Yes, delete poll.'),
+		// 		// Call store action here
+		// 		onConfirm: () => {
+		// 			this.loading = true
+		// 			this.$store
+		// 				.dispatch({
+		// 					type: 'deletePollPromise',
+		// 					event: event
+		// 				})
+		// 				.then(response => {
+		// 					this.loading = false
+		// 					this.refreshPolls()
+		// 					OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title), { type: 'success' })
+		// 				})
+		// 				.catch(error => {
+		// 					this.loading = false
+		// 					console.error('remove poll: ', error.response)
+		// 					OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title), { type: 'error' })
+		// 				})
+		// 		}
+		// 	}
+		//
+		// 	this.$modaldlg.show(params)
+		// }
 	}
 }
 </script>

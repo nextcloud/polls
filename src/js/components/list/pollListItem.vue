@@ -214,12 +214,12 @@ export default {
 			]
 
 			if (this.poll.event.owner === OC.getCurrentUser().uid) {
-				items.push({
-					key: 'deletePoll',
-					icon: 'icon-rename',
-					text: t('polls', 'Edit poll'),
-					action: this.editPoll
-				})
+				// items.push({
+				// 	key: 'editPoll',
+				// 	icon: 'icon-rename',
+				// 	text: t('polls', 'Edit poll'),
+				// 	action: this.editPoll
+				// })
 				items.push({
 					key: 'deletePoll',
 					icon: 'icon-delete',
@@ -227,12 +227,12 @@ export default {
 					action: this.deletePoll
 				})
 			} else if (OC.isUserAdmin()) {
-				items.push({
-					key: 'editPoll',
-					icon: 'icon-rename',
-					text: t('polls', 'Edit poll as admin'),
-					action: this.editPoll
-				})
+				// items.push({
+				// 	key: 'editPoll',
+				// 	icon: 'icon-rename',
+				// 	text: t('polls', 'Edit poll as admin'),
+				// 	action: this.editPoll
+				// })
 				items.push({
 					key: 'deletePoll',
 					icon: 'icon-delete',

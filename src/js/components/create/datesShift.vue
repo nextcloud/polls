@@ -26,14 +26,14 @@
 			{{ t('polls', 'Shift dates') }}
 		</button>
 
-		<modal-dialog>
+		<modal>
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
 					<multiselect v-model="move.unit" :options="move.units" />
 				</div>
 			</div>
-		</modal-dialog>
+		</modal>
 	</div>
 </template>
 
@@ -70,7 +70,7 @@ export default {
 					this.datesShift(this.move)
 				}
 			}
-			this.$modaldlg.show(params)
+			// this.$modaldlg.show(params)
 		}
 	}
 }
