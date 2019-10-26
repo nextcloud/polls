@@ -67,7 +67,7 @@
 <script>
 // import moment from 'moment'
 // import lodash from 'lodash'
-import pollListItem from '../components/pollListItem'
+import pollListItem from '../components/pollListItem.vue'
 
 export default {
 	name: 'List',
