@@ -23,8 +23,8 @@
 <template lang="html">
 	<div class="createDlg" class="create-dialog">
 		<h2>{{ t('polls', 'Create new poll') }}</h2>
-		<input id="pollTitle" v-model="event.title" :class="{ error: titleEmpty }"
-				type="text" :placeholder="t('polls', 'Enter Title')">
+		<input id="pollTitle" v-model="event.title" type="text" :placeholder="t('polls', 'Enter Title')">
+
 		<div class="configBox">
 			<label class="title icon-checkmark">
 				{{ t('polls', 'Poll type') }}
@@ -41,7 +41,7 @@
 			</label>
 		</div>
 
-		<div class="modal-buttons">
+		<div class="create-buttons">
 			<button class="button" @click="cancel">
 				{{ t('polls', 'Cancel') }}
 			</button>
@@ -49,6 +49,7 @@
 				{{ t('polls', 'Publish') }}
 			</button>
 		</div>
+
 	</div>
 </template>
 
@@ -93,11 +94,11 @@ export default {
 					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.event.title), { type: 'success' })
 					this.$store.dispatch('loadPolls')
 					this.$router.push({ name: 'vote', params: { id: response.data.id } })
+					this.cancel()
 				})
 				.catch(() => {
 					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.event.title), { type: 'error' })
 				})
-			this.cancel()
 		}
 	}
 
