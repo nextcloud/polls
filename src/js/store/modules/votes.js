@@ -26,7 +26,6 @@ import orderBy from 'lodash/orderBy'
 const defaultVotes = () => {
 	return {
 		currentUser: OC.getCurrentUser().uid,
-		answerSequence: ['no', 'maybe', 'yes'],
 		list: []
 	}
 }
@@ -46,7 +45,7 @@ const mutations = {
 		var index = state.list.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
-			&& vote.voteOptionText === payload.option.text)
+			&& vote.voteOptionText === payload.option.pollOptionText)
 		if (index > -1) {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
 		} else {
@@ -59,6 +58,13 @@ const getters = {
 
 	lastVoteId: state => {
 		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))
+	},
+	answerSequence: (state, getters, rootState) => {
+		if (rootState.event.allowMaybe) {
+			return ['no', 'maybe', 'yes']
+		} else {
+			return ['no', 'yes']
+		}
 	},
 
 	participants: (state) => {
@@ -83,12 +89,12 @@ const getters = {
 	votesRank: (state, getters, rootGetters) => {
 		var rank = []
 		rootGetters.options.list.forEach(function(option) {
-			var countYes = state.list.filter(vote => vote.voteOptionText === option.text && vote.voteAnswer === 'yes').length
-			var countMaybe = state.list.filter(vote => vote.voteOptionText === option.text && vote.voteAnswer === 'maybe').length
-			var countNo = state.list.filter(vote => vote.voteOptionText === option.text && vote.voteAnswer === 'no').length
+			var countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
+			var countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
+			var countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
 			rank.push({
 				'rank': 0,
-				'text': option.text,
+				'pollOptionText': option.pollOptionText,
 				'yes': countYes,
 				'no': countNo,
 				'maybe': countMaybe
@@ -125,6 +131,7 @@ const actions = {
 			setTo: payload.switchTo
 		})
 			.then((response) => {
+				console.debug(response.data)
 				commit('voteSet', { option: payload.option, pollId: rootState.event.id, vote: response.data })
 				return response.data
 			}, (error) => {

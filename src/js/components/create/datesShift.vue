@@ -26,14 +26,14 @@
 			{{ t('polls', 'Shift dates') }}
 		</button>
 
-		<modal>
+		<!-- <modal>
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
 					<multiselect v-model="move.unit" :options="move.units" />
 				</div>
 			</div>
-		</modal>
+		</modal> -->
 	</div>
 </template>
 

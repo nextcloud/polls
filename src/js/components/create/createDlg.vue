@@ -93,7 +93,7 @@ export default {
 				.then((response) => {
 					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.event.title), { type: 'success' })
 					this.$store.dispatch('loadPolls')
-					this.$router.push({ name: 'vote', params: { id: response.data.id } })
+					this.$router.push({ name: 'edit', params: { id: response.data.id } })
 					this.cancel()
 				})
 				.catch(() => {

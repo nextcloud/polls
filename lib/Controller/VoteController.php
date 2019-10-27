@@ -111,7 +111,7 @@ class VoteController extends Controller {
 	public function set($pollId, $option, $userId, $setTo) {
 
 		try {
-			$vote = $this->mapper->findSingleVote($pollId, $option['text'], $userId);
+			$vote = $this->mapper->findSingleVote($pollId, $option['pollOptionText'], $userId);
 			$vote->setVoteAnswer($setTo);
 			$this->mapper->update($vote);
 
@@ -121,7 +121,7 @@ class VoteController extends Controller {
 
 			$vote->setPollId($pollId);
 			$vote->setUserId($userId);
-			$vote->setVoteOptionText($option['text']);
+			$vote->setVoteOptionText($option['pollOptionText']);
 			$vote->setVoteOptionId($option['id']);
 			$vote->setVoteAnswer($setTo);
 

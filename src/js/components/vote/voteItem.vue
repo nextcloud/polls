@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[iconClass, activeClass]" @click="voteClick()">
+	<div class="vote-item" :class="[iconClass, activeClass]" >
 		<div class="icon" @click="voteClick()" />
 	</div>
 </template>
@@ -43,12 +43,6 @@ export default {
 		}
 	},
 
-	data() {
-		return {
-			answerSequence: []
-		}
-	},
-
 	computed: {
 		...mapState({
 			poll: state => state.poll,
@@ -64,7 +58,7 @@ export default {
 			var index = this.votes.list.findIndex(vote => {
 				return (vote.pollId === this.option.pollId
 					&& vote.userId === this.userId
-					&& vote.voteOptionText === this.option.text)
+					&& vote.voteOptionText === this.option.pollOptionText)
 			})
 			if (index > -1) {
 				return this.votes.list[index].voteAnswer
@@ -90,7 +84,7 @@ export default {
 		},
 
 		activeClass() {
-			if (this.currentUser === this.userId && this.poll.mode === 'vote') {
+			if (this.currentUser === this.userId && !this.event.expired) {
 				return 'active'
 			} else {
 				return ''
@@ -114,8 +108,13 @@ export default {
 	methods: {
 
 		voteClick() {
-			if (this.currentUser === this.userId && this.poll.mode === 'vote') {
-				this.$store.dispatch('voteChange', { option: this.option, userId: this.userId, switchTo: this.nextStatus })
+			if (this.currentUser === this.userId && !this.event.expired) {
+				this.$store
+					.dispatch('voteChange', {
+						option: this.option,
+						userId: this.userId,
+						switchTo: this.nextStatus
+					})
 					.then(() => {
 						this.$emit('voteSaved')
 					})

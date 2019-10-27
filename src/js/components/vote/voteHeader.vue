@@ -23,7 +23,7 @@
 <template>
 	<div class="vote-header" :class=" { winner: isWinner }">
 		<div v-if="textPoll" class="text-box">
-			{{ option.text }}
+			{{ option.pollOptionText }}
 		</div>
 
 		<div v-if="datePoll" v-tooltip.auto="localFullDate" class="date-box">
@@ -94,48 +94,48 @@ export default {
 		]),
 
 		votesranked() {
-			var text = this.option.text
+			var pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
-				return rank.text === text
+				return rank.pollOptionText === pollOptionText
 			})
 		},
 
 		yesVotes() {
-			var text = this.option.text
+			var pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
-				return rank.text === text
+				return rank.pollOptionText === pollOptionText
 			}).yes
 		},
 
 		noVotes() {
-			var text = this.option.text
+			var pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
-				return rank.text === text
+				return rank.pollOptionText === pollOptionText
 			}).no
 		},
 
 		maybeVotes() {
-			var text = this.option.text
+			var pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
-				return rank.text === text
+				return rank.pollOptionText === pollOptionText
 			}).maybe
 		},
 
 		isWinner() {
-			var text = this.option.text
+			var pollOptionText = this.option.pollOptionText
 			return (
 				this.votesRank.find(rank => {
-					return rank.text === text
+					return rank.pollOptionText === pollOptionText
 				}).yes === this.winnerCombo.yes
 
 				&& (this.votesRank.find(rank => {
-					return rank.text === text
+					return rank.pollOptionText === pollOptionText
 				}).yes + this.votesRank.find(rank => {
-					return rank.text === text
+					return rank.pollOptionText === pollOptionText
 				}).maybe > 0)
 
 				&& this.winnerCombo.maybe === this.votesRank.find(rank => {
-					return rank.text === text
+					return rank.pollOptionText === pollOptionText
 				}).maybe
 			)
 		},
@@ -177,27 +177,27 @@ export default {
 		},
 
 		localFullDateT() {
-			return moment(this.option.text).format('llll')
+			return moment(this.option.pollOptionText).format('llll')
 		},
 
 		dayT() {
-			return moment(this.option.text).format('Do')
+			return moment(this.option.pollOptionText).format('Do')
 		},
 
 		dowT() {
-			return moment(this.option.text).format('ddd')
+			return moment(this.option.pollOptionText).format('ddd')
 		},
 
 		monthT() {
-			return moment(this.option.text).format('MMM')
+			return moment(this.option.pollOptionText).format('MMM')
 		},
 
 		yearT() {
-			return moment(this.option.text).format('YYYY')
+			return moment(this.option.pollOptionText).format('YYYY')
 		},
 
 		timeT() {
-			return moment(this.option.text).format('LT')
+			return moment(this.option.pollOptionText).format('LT')
 		}
 	}
 }

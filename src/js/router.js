@@ -56,25 +56,25 @@ export default new Router({
 		{
 			path: '/:index(index.php/)?apps/polls/edit/:id',
 			components: {
-				default: Create
+				default: Vote
 			},
 			props: true,
 			name: 'edit'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/clone/:id',
+			path: '/:index(index.php/)?apps/polls/vote/:id',
 			components: {
-				default: Create
+				default: Vote
 			},
 			props: true,
 			name: 'clone'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/new',
+			path: '/:index(index.php/)?apps/polls/vote/:id',
 			components: {
-				default: Create
+				default: Vote
 			},
-			props: false,
+			props: true,
 			name: 'create'
 		}
 	]

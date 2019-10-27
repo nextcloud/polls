@@ -97,7 +97,7 @@ class OptionController extends Controller {
 			$Option = (object) [
 				'id' => $Option->getId(),
 				'pollId' => $Option->getPollId(),
-				'text' => htmlspecialchars_decode($Option->getPollOptionText()),
+				'pollOptionText' => htmlspecialchars_decode($Option->getPollOptionText()),
 				'timestamp' => $ts
 			];
 		}
@@ -125,7 +125,7 @@ class OptionController extends Controller {
 		$NewOption = new Option();
 
 		$NewOption->setPollId($pollId);
-		$NewOption->setPollOptionText(trim(htmlspecialchars($option['text'])));
+		$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 		$NewOption->setTimestamp($option['timestamp']);
 
 		// TODO: catch triying to add existing options
@@ -192,7 +192,7 @@ class OptionController extends Controller {
 			$NewOption = new Option();
 
 			$NewOption->setPollId($pollId);
-			$NewOption->setpollOptionText(trim(htmlspecialchars($option['text'])));
+			$NewOption->setpollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$NewOption->setTimestamp($option['timestamp']);
 
 			$this->mapper->insert($NewOption);

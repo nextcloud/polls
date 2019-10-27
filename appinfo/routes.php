@@ -27,6 +27,7 @@ return [
 
 		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
 		['name' => 'page#vote_poll', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
+		['name' => 'page#edit_poll', 'url' => '/edit/{pollId}', 'verb' => 'GET'],
 		['name' => 'page#vote_public', 'url' => '/s/{pollId}', 'verb' => 'GET'],
 
 		// ['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],

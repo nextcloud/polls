@@ -53,8 +53,8 @@ const mutations = {
 
 	datesShift(state, payload) {
 		state.list.forEach(function(option) {
-			option.text = moment(option.text).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
-			option.timestamp = moment.utc(option.text).unix()
+			option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
+			option.timestamp = moment.utc(option.pollOptionText).unix()
 		})
 	}
 
@@ -91,15 +91,19 @@ const actions = {
 
 		if (rootState.event.type === 'datePoll') {
 			option.timestamp = moment(payload.option).unix()
-			option.text = moment.utc(payload.option).format('YYYY-MM-DD HH:mm:ss')
+			option.pollOptionText = moment.utc(payload.option).format('YYYY-MM-DD HH:mm:ss')
 
 		} else if (rootState.event.type === 'textPoll') {
 			option.timestamp = 0
-			option.text = payload.option
+			option.pollOptionText = payload.option
 		}
+
+		console.log('before', option)
 
 		return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: option })
 			.then((response) => {
+				console.log('after', option)
+				console.log('response', response.data)
 				commit('optionAdd', { 'option': response.data })
 				// commit('optionsSet', { 'list': response.data })
 			}, (error) => {

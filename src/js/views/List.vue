@@ -129,7 +129,6 @@ export default {
 		// 		}
 		// 	}
 		//
-		// 	this.$modaldlg.show(params)
 		// }
 	}
 }

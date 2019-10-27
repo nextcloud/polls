@@ -22,6 +22,26 @@
 
 <template>
 	<div>
+		<button v-if="poll.mode === 'edit'" :disabled="writingPoll" class="button btn primary"
+			@click="write()">
+			<span>{{ saveButtonTitle }}</span>
+			<span v-if="writingPoll" class="icon-loading-small" />
+		</button>
+
+		<div v-if="poll.mode === 'edit'" class="configBox">
+			<label class="icon-sound title">
+				{{ t('polls', 'Title')}}
+			</label>
+			<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
+		</div>
+
+		<div v-if="poll.mode === 'edit'" class="configBox">
+			<label class="icon-edit title">
+				{{ t('polls', 'Description')}}
+			</label>
+			<textarea v-if="poll.mode === 'edit'" :value="event.description" @input="updateDescription" />
+		</div>
+
 		<div class="configBox">
 			<label class="title icon-category-customization">
 				{{ t('polls', 'Poll configurations') }}
@@ -119,6 +139,9 @@
 		</div>
 
 		<div v-if="!protect && event.type === 'datePoll'" class="configBox">
+			<label class="title icon-calendar">
+				{{ t('polls', 'Add a date option') }}
+			</label>
 			<date-picker v-bind="optionDatePicker" style="width:100%" confirm
 				@change="addOption($event)" />
 			<shift-dates />
@@ -128,7 +151,7 @@
 
 <script>
 import ShiftDates from '../create/datesShift'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default {
 	name: 'ConfigurationTab',
@@ -154,9 +177,18 @@ export default {
 			event: state => state.event
 		}),
 
-		...mapGetters(['languageCodeShort']),
+		...mapGetters([ 'languageCodeShort' ]),
 
 		// Add bindings
+		eventTitle: {
+			get() {
+				return this.event.title
+			},
+			set(value) {
+				this.$store.commit('eventSetProperty', { 'title': value })
+			}
+		},
+
 		eventAccess: {
 			get() {
 				return this.event.access
@@ -259,10 +291,39 @@ export default {
 	},
 	methods: {
 
-		...mapMutations(['eventSetProperty', 'pollSetProperty']),
+		...mapMutations([ 'eventSetProperty', 'pollSetProperty' ]),
+		...mapActions([
+			'writeOptionsPromise',
+			'writeEventPromise'
+		]),
+
+
+
+		updateDescription(e) {
+			this.$store.commit('eventSetProperty', { 'description': e.target.value })
+		},
 
 		addOption(option) {
 			this.$store.dispatch({ type: 'addOption', option: option })
+		},
+
+		writePoll() {
+			if (this.titleEmpty) {
+				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
+			} else {
+				this.writingPoll = true
+				this.writeEventPromise()
+				this.writeOptionsPromise()
+				this.writingPoll = false
+				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
+			}
+		},
+
+		write() {
+			if (this.poll.mode === 'edit') {
+				this.writePoll()
+			}
+
 		}
 	}
 }
@@ -276,6 +337,20 @@ export default {
 		& > * {
 			padding-left: 21px;
 		}
+
+		& > input {
+			margin-left: 24px;
+			width: auto;
+
+		}
+
+		& > textarea {
+			margin-left: 24px;
+			width: auto;
+			padding: 7px 6px;
+		}
+
+
 		& > .title {
 			display: flex;
 			background-position: 0 2px;

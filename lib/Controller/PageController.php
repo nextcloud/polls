@@ -83,6 +83,16 @@ class PageController extends Controller {
 	}
 
 	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return TemplateResponse
+	 */
+	public function editPoll() {
+		return new TemplateResponse('polls', 'polls.tmpl', [
+			'urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired

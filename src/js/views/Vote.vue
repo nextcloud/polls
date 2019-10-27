@@ -23,38 +23,33 @@
 <template>
 	<app-content>
 		<div class="main-container">
+
 			<controls :intitle="event.title">
 				<template slot="after">
-					<button v-if="poll.mode === 'edit'" :disabled="writingPoll" class="button btn primary"
-						@click="write()">
-						<span>{{ saveButtonTitle }}</span>
-						<span v-if="writingPoll" class="icon-loading-small" />
-					</button>
-
 					<a v-if="!sideBarOpen" @click="toggleSideBar()" href="#" class="icon icon-settings active" :title="sideBarButtonTitle"></a>
 				</template>
 			</controls>
-			<div v-if="poll.mode === 'vote'">
+
+			<div>
 				<h2>
-					<span v-if="event.expired" class="label error">{{ t('poll', 'Expired') }}</span>
 					{{ event.title }}
+					<span v-if="event.expired" class="label error">{{ t('polls', 'Expired') }}</span>
+					<span v-if="!event.expired && event.expiration" class="label success">{{ t('polls', 'Votes are possible until %n', 1, event.expirationDate) }}</span>
+					<span v-if="!event.expiration" class="label success">{{ t('polls', 'No expiration date set') }}</span>
 					<transition name="fade">
 						<span v-if="voteSaved" class="label success">Vote saved</span>
 					</transition>
 				</h2>
-				<h3> {{ event.description }} </h3>
-			</div>
-
-			<div v-if="poll.mode === 'edit'" class="editDescription">
-				<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
-				<textarea id="pollDesc" :value="event.description" @input="updateDescription" />
+				<h3>
+					{{ event.description }}
+				</h3>
 			</div>
 
 			<vote-table v-show="!loading" @voteSaved="indicateVoteSaved()" />
 			<notification v-if="loggedIn" />
 		</div>
 
-		<app-sidebar v-if="sideBarOpen" :title="t('polls', 'Details')" @close="toggleSideBar">
+		<app-sidebar v-if="sideBarOpen" :active="initialTab" :title="t('polls', 'Details')" @close="toggleSideBar">
 			<template slot="primary-actions">
 				<button v-if="allowEdit" class="button btn primary" :class="{ warning: adminMode }"
 					@click="toggleEdit()">
@@ -108,7 +103,8 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			sideBarOpen: false,
-			loading: false
+			loading: false,
+			initialTab: 'comments'
 		}
 	},
 
@@ -129,15 +125,6 @@ export default {
 
 		pollList() {
 			return this.$store.state.polls.list
-		},
-
-		eventTitle: {
-			get() {
-				return this.event.title
-			},
-			set(value) {
-				this.$store.commit('eventSetProperty', { property: 'title', value: value })
-			}
 		},
 
 		loggedIn() {
@@ -211,32 +198,37 @@ export default {
 			this.sideBarOpen = !this.sideBarOpen
 		},
 
+		openInEditMode() {
+			this.initialTab='configuration'
+			this.sideBarOpen = true
+			this.$store.commit('pollSetProperty', { 'mode': 'edit' })
+		},
+
 		refreshPoll() {
 			this.loading = true
 			moment.locale(this.localeString)
-			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id, mode: 'vote' })
+			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id, mode: this.$route.name })
 				.then(() => {
 					this.$store.dispatch({
 						type: 'loadPoll',
 						pollId: this.$route.params.id,
-						mode: 'vote'
+						mode: this.$route.name
 					})
 						.then(() => {
 							this.loading = false
+							if (this.$route.name === 'edit') {
+								this.openInEditMode()
+							}
 						})
 				})
 
 		},
 
-		updateDescription(e) {
-			this.$store.commit('eventSetProperty', { property: 'description', value: e.target.value })
-		},
-
 		toggleEdit() {
 			if (this.poll.mode === 'vote') {
-				this.$store.commit('pollSetProperty', { property: 'mode', value: 'edit' })
+				this.$store.commit('pollSetProperty', { 'mode': 'edit' })
 			} else if (this.poll.mode === 'edit') {
-				this.$store.commit('pollSetProperty', { property: 'mode', value: 'vote' })
+				this.$store.commit('pollSetProperty', { 'mode': 'vote' })
 			}
 		},
 
@@ -247,25 +239,6 @@ export default {
 		indicateVoteSaved() {
 			this.voteSaved = true
 			window.setTimeout(this.timer, this.delay)
-		},
-
-		writePoll() {
-			if (this.titleEmpty) {
-				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
-			} else {
-				this.writingPoll = true
-				this.writeEventPromise()
-				this.writeOptionsPromise()
-				this.writingPoll = false
-				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
-			}
-		},
-
-		write() {
-			if (this.poll.mode === 'edit') {
-				this.writePoll()
-			}
-
 		}
 	}
 }
@@ -275,25 +248,10 @@ export default {
 	.main-container {
 		flex: 1;
 		margin: 0;
-		// display: flex;
 		flex-direction: column;
 		flex: 1;
 		flex-wrap: nowrap;
 		overflow-x: scroll;
-		// padding: 8px;
-
-		.editDescription {
-			min-width: 245px;
-			max-width: 540px;
-			display: flex;
-			flex-direction: column;
-			flex: 0;
-			padding: 8px;
-			& > * {
-				width: auto;
-				flex: 1 1 auto;
-			}
-		}
 	}
 
 </style>

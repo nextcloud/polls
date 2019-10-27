@@ -42,7 +42,7 @@ const mutations = {
 	},
 
 	pollSetProperty(state, payload) {
-		state[payload.property] = payload.value
+		Object.assign(state, payload)
 	}
 }
 
@@ -68,14 +68,8 @@ const actions = {
 	},
 
 	loadPoll({ commit, rootState }, payload) {
-		commit('pollSetProperty', {
-			'property': 'mode',
-			'value': payload.mode
-		})
-		commit('pollSetProperty', {
-			'property': 'id',
-			'value': payload.pollId
-		})
+		commit('pollSetProperty', {'mode': payload.mode })
+		commit('pollSetProperty', {'id': payload.pollId })
 
 	}
 }

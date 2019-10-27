@@ -46,7 +46,7 @@
 <script>
 
 import { AppNavigation, AppNavigationNew, AppContentDetails } from 'nextcloud-vue'
-import createDlg from '../modals/createDlg'
+import createDlg from '../create/createDlg'
 
 export default {
 	name: 'Navigation',
