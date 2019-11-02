@@ -112,7 +112,7 @@ class OptionController extends Controller {
 	 * @param Option $option
 	 * @return DataResponse
 	 */
-	public function add($pollId, $option) {
+	public function set($pollId, $option) {
 
 		$Event = $this->eventMapper->find($pollId);
 

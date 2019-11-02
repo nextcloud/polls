@@ -47,7 +47,7 @@ const mutations = {
 		})
 	},
 
-	optionAdd(state, payload) {
+	setOption(state, payload) {
 		state.list.push(payload.option)
 	},
 
@@ -83,7 +83,7 @@ const actions = {
 			})
 	},
 
-	addOption({ commit, getters, dispatch, rootState }, payload) {
+	setOptionAsync({ commit, getters, dispatch, rootState }, payload) {
 		var option = {}
 
 		option.id = getters.lastOptionId + 1
@@ -98,34 +98,21 @@ const actions = {
 			option.pollOptionText = payload.option
 		}
 
-		console.log('before', option)
-
-		return axios.post(OC.generateUrl('apps/polls/add/option'), { pollId: rootState.event.id, option: option })
+		return axios.post(OC.generateUrl('apps/polls/set/option'), { pollId: rootState.event.id, option: option })
 			.then((response) => {
-				console.log('after', option)
-				console.log('response', response.data)
-				commit('optionAdd', { 'option': response.data })
+				commit('setOption', { 'option': response.data })
 				// commit('optionsSet', { 'list': response.data })
 			}, (error) => {
-				console.error(error.response)
+				console.error(error.response.data)
 			})
 	},
 
-	removeOption({ commit, getters, dispatch, rootState }, option) {
-		return axios.post(OC.generateUrl('apps/polls/remove/option'), { option: option })
+	removeOptionAsync({ commit, getters, dispatch, rootState }, payload) {
+		return axios.post(OC.generateUrl('apps/polls/remove/option'), { option: payload.option })
 			.then((response) => {
-				commit('optionRemove', { 'option': option })
+				commit('optionRemove', { 'option': payload.option })
 			}, (error) => {
-				console.error(error.response)
-			})
-	},
-
-	writeOptionsPromise({ commit, getters, rootState }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/write/options'), { pollId: rootState.event.id, options: state.list })
-			.then((response) => {
-				commit('optionsSet', { 'list': response.data })
-			}, (error) => {
-				console.error(error.response)
+				console.error(error.response.data)
 			})
 	}
 }

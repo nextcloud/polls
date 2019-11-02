@@ -33,15 +33,15 @@ const defaultVotes = () => {
 const state = defaultVotes()
 
 const mutations = {
-	votesSet(state, payload) {
-		Object.assign(state, payload)
-	},
-
-	votesReset(state) {
+	resetVotes(state) {
 		Object.assign(state, defaultVotes())
 	},
 
-	voteSet(state, payload) {
+	setVotes(state, payload) {
+		Object.assign(state, payload)
+	},
+
+	setVote(state, payload) {
 		var index = state.list.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
@@ -59,11 +59,12 @@ const getters = {
 	lastVoteId: state => {
 		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))
 	},
+
 	answerSequence: (state, getters, rootState) => {
 		if (rootState.event.allowMaybe) {
-			return ['no', 'maybe', 'yes']
+			return ['no', 'maybe', 'yes', 'no']
 		} else {
-			return ['no', 'yes']
+			return ['no', 'yes', 'no']
 		}
 	},
 
@@ -105,6 +106,22 @@ const getters = {
 
 	winnerCombo: (state, getters) => {
 		return getters.votesRank[0]
+	},
+
+	getVote: (state, getters) => (payload) => {
+		return state.list.find(vote => {
+			return (vote.userId === payload.userId
+				&& vote.voteOptionText === payload.option.pollOptionText)
+		})
+	},
+
+	getNextAnswer: (state, getters) => (payload) => {
+		try {
+			return getters.answerSequence[getters.answerSequence.indexOf(getters.getVote(payload).voteAnswer) + 1]
+		} catch (e) {
+			return getters.answerSequence[1]
+		}
+
 	}
 
 }
@@ -114,25 +131,25 @@ const actions = {
 	loadPoll({ commit, rootState }, payload) {
 		axios.get(OC.generateUrl('apps/polls/get/votes/' + payload.pollId))
 			.then((response) => {
-				commit('votesSet', {
+				commit('setVotes', {
 					'list': response.data
 				})
 			}, (error) => {
-				commit({ type: 'votesReset' })
+				commit({ type: 'resetVotes' })
 				console.error(error)
 			})
 	},
 
-	voteChange({ commit, rootState }, payload) {
+	setVoteAsync({ commit, getters, rootState }, payload) {
+
 		return axios.post(OC.generateUrl('apps/polls/set/vote'), {
 			pollId: rootState.event.id,
 			option: payload.option,
 			userId: payload.userId,
-			setTo: payload.switchTo
+			setTo: payload.setTo
 		})
 			.then((response) => {
-				console.debug(response.data)
-				commit('voteSet', { option: payload.option, pollId: rootState.event.id, vote: response.data })
+				commit('setVote', { option: payload.option, pollId: rootState.event.id, vote: response.data })
 				return response.data
 			}, (error) => {
 				console.error(error.response)

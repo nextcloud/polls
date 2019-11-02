@@ -49,10 +49,10 @@ return [
 		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
 		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
 
+		['name' => 'option#set', 'url' => '/set/option/', 'verb' => 'POST'],
+		['name' => 'option#remove', 'url' => '/remove/option/', 'verb' => 'POST'],
 		['name' => 'option#list', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#write', 'url' => '/write/options/', 'verb' => 'POST'],
-		['name' => 'option#add', 'url' => '/add/option/', 'verb' => 'POST'],
-		['name' => 'option#remove', 'url' => '/remove/option/', 'verb' => 'POST'],
 
 		['name' => 'event#list', 'url' => '/get/events', 'verb' => 'GET'],
 		['name' => 'event#get', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],

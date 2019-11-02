@@ -188,11 +188,10 @@ export default {
 			addNewPollText: 'textAdd'
 		}),
 
-		...mapActions([
-			'addMe',
-			'writeOptionsPromise',
-			'writeEventPromise'
-		]),
+		// ...mapActions([
+		// 	'addMe',
+		// 	'writeEventPromise'
+		// ]),
 
 		toggleSideBar() {
 			this.sideBarOpen = !this.sideBarOpen

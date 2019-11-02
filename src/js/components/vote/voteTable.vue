@@ -46,7 +46,7 @@
 				:key="option.id"
 				:user-id="participant"
 				:option="option"
-				@voteSaved="voteSaved(vote)" />
+				@voteClick="setVote(option, participant)" />
 		</div>
 	</div>
 </template>
@@ -69,7 +69,10 @@ export default {
 			event: state => state.event
 		}),
 
-		...mapGetters(['sortedOptions', 'participants']),
+		...mapGetters([
+			'sortedOptions',
+			'participants'
+		]),
 
 		currentUser() {
 			return OC.getCurrentUser().uid
@@ -80,10 +83,24 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['removeOption']),
+		setVote(option, participant) {
+			var nextAnswer = this.$store.getters.getNextAnswer({
+				option: option,
+				userId: participant
+			})
+			this.$store
+				.dispatch('setVoteAsync', {
+					option: option,
+					userId: participant,
+					setTo: nextAnswer
+				})
+				.then(() => {
+					this.$emit('voteSaved')
+				})
+		},
 
-		voteSaved() {
-			this.$emit('voteSaved')
+		removeOption(option) {
+			this.$store.dispatch({ type: 'removeOptionAsync', option: option })
 		}
 	}
 }
@@ -119,6 +136,8 @@ export default {
 			border-bottom: 1px solid var(--color-border-dark);
 			order: 3;
 			justify-content: space-between;
+			width: max-content;
+
 			& > div {
 				width: 84px;
 				min-width: 84px;

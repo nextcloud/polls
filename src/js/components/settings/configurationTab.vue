@@ -143,7 +143,7 @@
 				{{ t('polls', 'Add a date option') }}
 			</label>
 			<date-picker v-bind="optionDatePicker" style="width:100%" confirm
-				@change="addOption($event)" />
+				@change="setOption($event)" />
 			<shift-dates />
 		</div>
 	</div>
@@ -293,7 +293,6 @@ export default {
 
 		...mapMutations([ 'eventSetProperty', 'pollSetProperty' ]),
 		...mapActions([
-			'writeOptionsPromise',
 			'writeEventPromise'
 		]),
 
@@ -303,8 +302,8 @@ export default {
 			this.$store.commit('eventSetProperty', { 'description': e.target.value })
 		},
 
-		addOption(option) {
-			this.$store.dispatch({ type: 'addOption', option: option })
+		setOption(option) {
+			this.$store.dispatch({ type: 'setOptionAsync', option: option })
 		},
 
 		writePoll() {
@@ -313,7 +312,6 @@ export default {
 			} else {
 				this.writingPoll = true
 				this.writeEventPromise()
-				this.writeOptionsPromise()
 				this.writingPoll = false
 				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
 			}

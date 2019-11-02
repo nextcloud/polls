@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[iconClass, activeClass]" >
-		<div class="icon" @click="voteClick()" />
+	<div class="vote-item" :class="[getAnswer, activeClass]" >
+		<div class="icon" @click="$emit('voteClick')" />
 	</div>
 </template>
 
@@ -45,83 +45,31 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
 			event: state => state.event,
-			votes: state => state.votes
 		}),
 
-		currentUser() {
-			return OC.getCurrentUser().uid
-		},
-
 		getAnswer() {
-			var index = this.votes.list.findIndex(vote => {
-				return (vote.pollId === this.option.pollId
-					&& vote.userId === this.userId
-					&& vote.voteOptionText === this.option.pollOptionText)
-			})
-			if (index > -1) {
-				return this.votes.list[index].voteAnswer
-			} else {
-				return 'unvoted'
-			}
-		},
-
-		nextStatus() {
-			var next = 'yes'
-			if (this.getAnswer === 'yes') {
-				next = 'no'
-			} else if (this.getAnswer === 'maybe') {
-				next = 'yes'
-			} else if (this.getAnswer === 'no') {
-				if (this.event.allowMaybe) {
-					next = 'maybe'
-				} else {
-					next = 'yes'
-				}
-			}
-			return next
-		},
-
-		activeClass() {
-			if (this.currentUser === this.userId && !this.event.expired) {
-				return 'active'
-			} else {
+			try {
+				return this.$store.getters.getVote({
+					option: this.option,
+					userId: this.userId
+				}).voteAnswer
+			} catch (e) {
 				return ''
 			}
 		},
 
-		iconClass() {
-			if (this.getAnswer === 'yes') {
-				return 'yes icon-yes'
-			} else if (this.getAnswer === 'maybe') {
-				return 'maybe icon-maybe'
-			} else if (this.getAnswer === 'no') {
-				return 'no icon-no'
+		activeClass() {
+			if (OC.getCurrentUser().uid === this.userId && !this.event.expired) {
+				return 'active'
 			} else {
 				return ''
 			}
 		}
 
 	},
-
-	methods: {
-
-		voteClick() {
-			if (this.currentUser === this.userId && !this.event.expired) {
-				this.$store
-					.dispatch('voteChange', {
-						option: this.option,
-						userId: this.userId,
-						switchTo: this.nextStatus
-					})
-					.then(() => {
-						this.$emit('voteSaved')
-					})
-			}
-		}
-	}
 }
+
 </script>
 
 <style lang="scss" scoped>
