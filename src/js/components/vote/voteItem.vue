@@ -87,8 +87,7 @@ export default {
 		height: 43px;
 		display: flex;
 		flex: 1;
-		width: 84px;
-		// min-width: 85px;
+		width: 85px;
 		align-items: center;
 		background-color: var(--color-background-dark);
 		color: var(--color-main-text);
@@ -133,31 +132,12 @@ export default {
 			}
 		}
 
-		&.unvoted {
-			background-color: $bg-no;
-			color: $fg-no;
-			&:before {
-				content: attr(data-unvoted);
-				color: $fg-no;
-				font-size: 11px;
-				font-weight: bold;
-				line-height: 25px;
-			}
-		}
-
 		&.active {
 			background-color: var(--color-main-background);
 			> .icon {
 				cursor: pointer;
 				border: 2px solid;
 				border-radius: var(--border-radius);
-			}
-			// &.icon-no {
-			// 	background-image: initial;
-			// }
-			&.unvoted {
-				background-color: $bg-maybe;
-				color: $fg-maybe;
 			}
 			&:active {
 				box-shadow: inherit;

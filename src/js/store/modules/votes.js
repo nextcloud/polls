@@ -56,10 +56,6 @@ const mutations = {
 
 const getters = {
 
-	lastVoteId: state => {
-		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))
-	},
-
 	answerSequence: (state, getters, rootState) => {
 		if (rootState.event.allowMaybe) {
 			return ['no', 'maybe', 'yes', 'no']
@@ -81,10 +77,6 @@ const getters = {
 		}
 
 		return list
-	},
-
-	countParticipants: (state, getters) => {
-		return getters.participants.length
 	},
 
 	votesRank: (state, getters, rootGetters) => {

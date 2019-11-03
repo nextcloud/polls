@@ -108,27 +108,31 @@ class OptionController extends Controller {
 	/**
 	 * Add a new Option to poll
 	 * @NoAdminRequired
-	 * @param integer $pollId
 	 * @param Option $option
 	 * @return DataResponse
 	 */
-	public function set($pollId, $option) {
+	public function add($option) {
 
-		$Event = $this->eventMapper->find($pollId);
+		try {
+			$Event = $this->eventMapper->find($option['pollId']);
 
-		if (!\OC::$server->getUserSession()->isLoggedIn()
-			|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
-		) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			if (!\OC::$server->getUserSession()->isLoggedIn()
+				|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
+			) {
+				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			}
+
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
+
 
 		$NewOption = new Option();
 
-		$NewOption->setPollId($pollId);
+		$NewOption->setPollId($option['pollId']);
 		$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 		$NewOption->setTimestamp($option['timestamp']);
 
-		// TODO: catch triying to add existing options
 		try {
 			$this->mapper->insert($NewOption);
 		} catch (Exception $e) {
@@ -140,19 +144,52 @@ class OptionController extends Controller {
 	}
 
 	/**
+	 * Update poll option
+	 * @NoAdminRequired
+	 * @param Option $option
+	 * @return DataResponse
+	 */
+	public function update($option) {
+
+		try {
+			$updateOption = $this->mapper->find($option['id']);
+			$Event = $this->eventMapper->find($updateOption->getPollId());
+
+			if (!\OC::$server->getUserSession()->isLoggedIn()
+				&& (!$this->groupManager->isAdmin($this->userId) || ($Event->getOwner() === $this->userId))
+			) {
+				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			}
+
+			$updateOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
+			$updateOption->setTimestamp($option['timestamp']);
+			$this->mapper->update($updateOption);
+
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse($updateOption, Http::STATUS_OK);
+	}
+
+	/**
 	 * Remove a single option
 	 * @NoAdminRequired
-	 * @param Option $optionId
+	 * @param Option $option
 	 * @return DataResponse
 	 */
 	public function remove($option) {
 		// throw new \Exception( gettype($option) );
-		$Event = $this->eventMapper->find($option['pollId']);
+		try {
+			$Event = $this->eventMapper->find($option['pollId']);
 
-		if (!\OC::$server->getUserSession()->isLoggedIn()
-			|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
-		) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			if (!\OC::$server->getUserSession()->isLoggedIn()
+				|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
+			) {
+				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			}
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
 		try {
@@ -163,42 +200,42 @@ class OptionController extends Controller {
 
 		return new DataResponse(array(
 			'action' => 'deleted',
-			'optionId' => $optionId
+			'optionId' => $option['id']
 		), Http::STATUS_OK);
 
 	}
 
-	/**
-	 * Write poll (create/update)
-	 * @NoAdminRequired
-	 * @param Array $event
-	 * @param Array $options
-	 * @param Array  $shares
-	 * @param string $mode
-	 * @return DataResponse
-	 */
-	public function write($pollId, $options) {
-		$Event = $this->eventMapper->find($pollId);
-
-		if (!\OC::$server->getUserSession()->isLoggedIn()
-			|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
-		) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		$this->mapper->deleteByPoll($pollId);
-
-		foreach ($options as $option) {
-			$NewOption = new Option();
-
-			$NewOption->setPollId($pollId);
-			$NewOption->setpollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-			$NewOption->setTimestamp($option['timestamp']);
-
-			$this->mapper->insert($NewOption);
-		}
-
-		return $this->list($pollId);
-
-	}
+	// /**
+	//  * Write poll (create/update)
+	//  * @NoAdminRequired
+	//  * @param Array $event
+	//  * @param Array $options
+	//  * @param Array  $shares
+	//  * @param string $mode
+	//  * @return DataResponse
+	//  */
+	// public function write($pollId, $options) {
+	// 	$Event = $this->eventMapper->find($pollId);
+	//
+	// 	if (!\OC::$server->getUserSession()->isLoggedIn()
+	// 		|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
+	// 	) {
+	// 		return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+	// 	}
+	//
+	// 	$this->mapper->deleteByPoll($pollId);
+	//
+	// 	foreach ($options as $option) {
+	// 		$NewOption = new Option();
+	//
+	// 		$NewOption->setPollId($pollId);
+	// 		$NewOption->setpollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
+	// 		$NewOption->setTimestamp($option['timestamp']);
+	//
+	// 		$this->mapper->insert($NewOption);
+	// 	}
+	//
+	// 	return $this->list($pollId);
+	//
+	// }
 }

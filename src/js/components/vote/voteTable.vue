@@ -100,7 +100,7 @@ export default {
 		},
 
 		removeOption(option) {
-			this.$store.dispatch({ type: 'removeOptionAsync', option: option })
+			this.$store.dispatch('removeOptionAsync', { option: option })
 		}
 	}
 }
@@ -136,7 +136,7 @@ export default {
 			border-bottom: 1px solid var(--color-border-dark);
 			order: 3;
 			justify-content: space-between;
-			width: max-content;
+			min-width: max-content;
 
 			& > div {
 				width: 84px;

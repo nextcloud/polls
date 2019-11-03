@@ -42,8 +42,8 @@
 		"moment": "^2.23.0",
 		"nextcloud-axios": "^0.2.0",
 		"nextcloud-vue": "^0.12.7",
-		"sass": "^1.23.1",
-		"stylelint-scss": "^3.12.0",
+		"sass": "^1.23.3",
+		"stylelint-scss": "^3.12.1",
 		"v-click-outside": "^2.1.4",
 		"v-tooltip": "^3.0.0-alpha.11",
 		"vue": "^2.6.10",
@@ -84,11 +84,11 @@
 		"sass-loader": "^8.0.0",
 		"stylelint": "^10.1.0",
 		"stylelint-config-recommended-scss": "^3.3.0",
-		"vue-loader": "^15.7.1",
+		"vue-loader": "^15.7.2",
 		"vue-style-loader": "^4.1.1",
 		"vue-template-compiler": "^2.6.10",
 		"webpack": "^4.41.2",
-		"webpack-cli": "^3.3.9",
+		"webpack-cli": "^3.3.10",
 		"webpack-merge": "^4.1.5"
 	}
 }

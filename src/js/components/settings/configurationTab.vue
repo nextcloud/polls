@@ -22,24 +22,26 @@
 
 <template>
 	<div>
-		<button v-if="poll.mode === 'edit'" :disabled="writingPoll" class="button btn primary"
-			@click="write()">
-			<span>{{ saveButtonTitle }}</span>
-			<span v-if="writingPoll" class="icon-loading-small" />
-		</button>
+		<div class="configBox">
+			<button v-if="allowEdit" :disabled="writingPoll" class="button btn primary"
+				@click="write()">
+				<span>{{ saveButtonTitle }}</span>
+				<span v-if="writingPoll" class="icon-loading-small" />
+			</button>
+		<div>
 
-		<div v-if="poll.mode === 'edit'" class="configBox">
+		<div v-if="allowEdit" class="configBox">
 			<label class="icon-sound title">
 				{{ t('polls', 'Title')}}
 			</label>
 			<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
 
-		<div v-if="poll.mode === 'edit'" class="configBox">
+		<div v-if="allowEdit" class="configBox">
 			<label class="icon-edit title">
 				{{ t('polls', 'Description')}}
 			</label>
-			<textarea v-if="poll.mode === 'edit'" :value="event.description" @input="updateDescription" />
+			<textarea v-if="allowEdit" :value="event.description" @input="updateDescription" />
 		</div>
 
 		<div class="configBox">
@@ -56,8 +58,7 @@
 				{{ t('polls', 'Allow "maybe" vote') }}
 			</label>
 
-			<input id="anonymous"
-				v-model="eventIsAnonymous"
+			<input id="anonymous" v-model="eventIsAnonymous"
 				:disabled="protect"
 				type="checkbox"
 				class="checkbox">
@@ -138,19 +139,13 @@
 			</label>
 		</div>
 
-		<div v-if="!protect && event.type === 'datePoll'" class="configBox">
-			<label class="title icon-calendar">
-				{{ t('polls', 'Add a date option') }}
-			</label>
-			<date-picker v-bind="optionDatePicker" style="width:100%" confirm
-				@change="setOption($event)" />
-			<shift-dates />
-		</div>
 	</div>
 </template>
 
 <script>
 import ShiftDates from '../create/datesShift'
+import throttle from 'lodash/throttle'
+import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -162,9 +157,6 @@ export default {
 
 	data() {
 		return {
-			// protect: false,
-			nextPollDateId: 1,
-			nextPollTextId: 1,
 			writingPoll: false,
 			sidebar: false,
 			titleEmpty: false
@@ -177,7 +169,11 @@ export default {
 			event: state => state.event
 		}),
 
-		...mapGetters([ 'languageCodeShort' ]),
+		...mapGetters([
+			'languageCodeShort',
+			'adminMode',
+			'allowEdit'
+		]),
 
 		// Add bindings
 		eventTitle: {
@@ -282,7 +278,7 @@ export default {
 		saveButtonTitle: function() {
 			if (this.writingPoll) {
 				return t('polls', 'Writing poll')
-			} else if (this.poll.mode === 'edit') {
+			} else if (this.allowEdit) {
 				return t('polls', 'Update poll')
 			} else {
 				return t('polls', 'Create new poll')
@@ -296,15 +292,9 @@ export default {
 			'writeEventPromise'
 		]),
 
-
-
-		updateDescription(e) {
+		updateDescription: debounce(function(e) {
 			this.$store.commit('eventSetProperty', { 'description': e.target.value })
-		},
-
-		setOption(option) {
-			this.$store.dispatch({ type: 'setOptionAsync', option: option })
-		},
+		},1000),
 
 		writePoll() {
 			if (this.titleEmpty) {
@@ -318,7 +308,7 @@ export default {
 		},
 
 		write() {
-			if (this.poll.mode === 'edit') {
+			if (this.allowEdit) {
 				this.writePoll()
 			}
 

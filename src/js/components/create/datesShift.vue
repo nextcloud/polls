@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div>
-		<button class="shift-dates icon-history" @click="shiftDatesDlg()">
+		<button class="shift-dates icon-history btn primary" @click="shiftDatesDlg()">
 			{{ t('polls', 'Shift dates') }}
 		</button>
 

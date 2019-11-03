@@ -55,7 +55,6 @@ const mutations = {
 
 	eventSetProperty(state, payload) {
 		Object.assign(state, payload)
-		// state[payload.property] = payload.value
 	}
 
 }
@@ -86,7 +85,17 @@ const getters = {
 		} else {
 			return ''
 		}
+	},
+
+	adminMode: state => {
+		return (state.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
+	},
+
+	allowEdit: (state, getters) => {
+		return (state.owner === OC.getCurrentUser().uid || getters.adminMode)
 	}
+
+
 
 }
 
@@ -123,7 +132,7 @@ const actions = {
 
 	},
 
-	writeEventPromise({ commit, rootState }, payload) {
+	writeEventPromise({ commit, rootState }) {
 		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state, mode: rootState.poll.mode })
 			.then((response) => {
 				commit('eventSet', { 'event': response.data })

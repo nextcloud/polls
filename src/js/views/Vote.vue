@@ -65,7 +65,11 @@
 				<information-tab />
 			</app-sidebar-tab>
 
-			<app-sidebar-tab :name="t('polls', 'Configuration')" icon="icon-settings">
+			<app-sidebar-tab v-if="allowEdit && event.type === 'datePoll'" :name="t('polls', 'Edit date options')" icon="icon-calendar">
+				<date-options-tab />
+			</app-sidebar-tab>
+
+			<app-sidebar-tab v-if="allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
 				<configuration-tab />
 			</app-sidebar-tab>
 		</app-sidebar>
@@ -79,6 +83,7 @@ import Controls from '../components/base/controls'
 import Notification from '../components/notification/notification'
 import InformationTab from '../components/settings/informationTab'
 import ConfigurationTab from '../components/settings/configurationTab'
+import DateOptionsTab from '../components/settings/dateOptionsTab'
 import CommentsTab from '../components/comments/commentsTab'
 import VoteTable from '../components/vote/voteTable'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
@@ -92,6 +97,7 @@ export default {
 		InformationTab,
 		ConfigurationTab,
 		CommentsTab,
+		DateOptionsTab,
 		VoteTable,
 		AppSidebar,
 		AppSidebarTab
@@ -117,6 +123,7 @@ export default {
 
 		...mapGetters([
 			'adminMode',
+			'allowEdit',
 			'languageCodeShort',
 			'localeCode',
 			'timeSpanCreated',
@@ -129,14 +136,6 @@ export default {
 
 		loggedIn() {
 			return (OC.getCurrentUser() !== '')
-		},
-
-		adminMode() {
-			return (this.event.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
-		},
-
-		allowEdit() {
-			return (this.event.owner === OC.getCurrentUser().uid || this.adminMode)
 		},
 
 		sideBarButtonTitle() {

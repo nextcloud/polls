@@ -25,19 +25,8 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 
-		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
 		['name' => 'page#vote_poll', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
-		['name' => 'page#edit_poll', 'url' => '/edit/{pollId}', 'verb' => 'GET'],
 		['name' => 'page#vote_public', 'url' => '/s/{pollId}', 'verb' => 'GET'],
-
-		// ['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
-		// ['name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'],
-		// ['name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'],
-		// ['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
-		// ['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
-
-		// ['name' => 'api#write_vote', 'url' => '/write/vote', 'verb' => 'POST'],
-		// ['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
 
 		['name' => 'notification#get', 'url' => '/get/notification/{pollId}', 'verb' => 'GET'],
 		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],
@@ -49,10 +38,11 @@ return [
 		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
 		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
 
-		['name' => 'option#set', 'url' => '/set/option/', 'verb' => 'POST'],
-		['name' => 'option#remove', 'url' => '/remove/option/', 'verb' => 'POST'],
 		['name' => 'option#list', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
-		['name' => 'option#write', 'url' => '/write/options/', 'verb' => 'POST'],
+
+		['name' => 'option#add', 'url' => '/add/option/', 'verb' => 'POST'],
+		['name' => 'option#update', 'url' => '/update/option/', 'verb' => 'POST'],
+		['name' => 'option#remove', 'url' => '/remove/option/', 'verb' => 'POST'],
 
 		['name' => 'event#list', 'url' => '/get/events', 'verb' => 'GET'],
 		['name' => 'event#get', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
@@ -64,10 +54,6 @@ return [
 
 		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
 		['name' => 'api#get_poll', 'url' => '/get/poll/{pollId}', 'verb' => 'GET'],
-
-		// ['name' => 'api#get_participants', 'url' => '/get/participants/{pollId}', 'verb' => 'GET'],
-		// ['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
-
 		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],

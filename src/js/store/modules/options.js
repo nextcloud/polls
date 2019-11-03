@@ -42,27 +42,27 @@ const mutations = {
 	},
 
 	optionRemove(state, payload) {
-		state.list = state.list.filter((option) => {
+		state.list = state.list.filter(option => {
 			return option.id !== payload.option.id
 		})
 	},
 
 	setOption(state, payload) {
-		state.list.push(payload.option)
-	},
-
-	datesShift(state, payload) {
-		state.list.forEach(function(option) {
-			option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
-			option.timestamp = moment.utc(option.pollOptionText).unix()
+		var index = state.list.findIndex((option) => {
+			return option.id === payload.option.id
 		})
-	}
 
+		if (index < 0) {
+			state.list.push(payload.option)
+		} else {
+			state.list.splice(index, 1, payload.option)
+		}
+	}
 }
 
 const getters = {
 	lastOptionId: state => {
-		return Math.max.apply(Math, state.list.map(function(o) { return o.id }))
+		return Math.max.apply(Math, state.list.map(function(option) { return option.id }))
 	},
 
 	sortedOptions: state => {
@@ -83,25 +83,34 @@ const actions = {
 			})
 	},
 
-	setOptionAsync({ commit, getters, dispatch, rootState }, payload) {
+	updateOptionAsync({ commit, getters, dispatch, rootState }, payload) {
+		return axios.post(OC.generateUrl('apps/polls/update/option'), { option: payload.option })
+			.then((response) => {
+				commit('setOption', { 'option': payload.option })
+				// commit('optionsSet', { 'list': response.data })
+			}, (error) => {
+				console.error(error.response.data)
+			})
+	},
+
+	addOptionAsync({ commit, getters, dispatch, rootState }, payload) {
 		var option = {}
 
-		option.id = getters.lastOptionId + 1
+		option.id = 0
 		option.pollId = rootState.event.id
 
 		if (rootState.event.type === 'datePoll') {
-			option.timestamp = moment(payload.option).unix()
-			option.pollOptionText = moment.utc(payload.option).format('YYYY-MM-DD HH:mm:ss')
+			option.timestamp = moment(payload.pollOptionText).unix()
+			option.pollOptionText = moment.utc(payload.pollOptionText).format('YYYY-MM-DD HH:mm:ss')
 
 		} else if (rootState.event.type === 'textPoll') {
 			option.timestamp = 0
-			option.pollOptionText = payload.option
+			option.pollOptionText = payload.pollOptionText
 		}
 
-		return axios.post(OC.generateUrl('apps/polls/set/option'), { pollId: rootState.event.id, option: option })
+		return axios.post(OC.generateUrl('apps/polls/add/option'), { option: option })
 			.then((response) => {
 				commit('setOption', { 'option': response.data })
-				// commit('optionsSet', { 'list': response.data })
 			}, (error) => {
 				console.error(error.response.data)
 			})

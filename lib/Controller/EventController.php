@@ -257,8 +257,8 @@ class EventController extends Controller {
 			$NewEvent->setType(1);
 		}
 
-		if ($mode === 'edit') {
-			// Edit existing poll
+		try {
+			// Find existing poll
 			$oldEvent = $this->mapper->find($event['id']);
 
 			// Check if current user is allowed to edit existing poll
@@ -272,19 +272,24 @@ class EventController extends Controller {
 			$NewEvent->setId($oldEvent->getId());
 			try {
 				$this->mapper->update($NewEvent);
-				$this->logger->debug('updating', ['app' => 'polls']);
 
 			} catch (Exception $e) {
 				$this->logger->alert('Poll ' . $oldEvent['id'] . ' not found!', ['app' => 'polls']);
 			}
 
-		} elseif ($mode === 'create') {
+		} catch (Exception $e) {
+
 			// Create new poll
 			// Define current user as owner, set new creation date
 			$NewEvent->setOwner($this->userId);
 			$NewEvent->setCreated(date('Y-m-d H:i:s'));
 			$NewEvent = $this->mapper->insert($NewEvent);
+
+		} finally {
+
+			return new DataResponse($this->get($NewEvent->getId()), Http::STATUS_OK);
+
 		}
-		return new DataResponse($this->get($NewEvent->getId()), Http::STATUS_OK);
+
 	}
 }
