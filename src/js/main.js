@@ -30,7 +30,7 @@ import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from 'nextcloud-vue'
+import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from '@nextcloud/vue'
 
 import UserDiv from './components/base/userDiv'
 import LoadingOverlay from './components/base/loadingOverlay'

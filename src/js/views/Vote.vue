@@ -87,7 +87,7 @@ import DateOptionsTab from '../components/settings/dateOptionsTab'
 import CommentsTab from '../components/comments/commentsTab'
 import VoteTable from '../components/vote/voteTable'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
-import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
+import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 export default {
 	name: 'Vote',

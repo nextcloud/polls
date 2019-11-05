@@ -41,7 +41,8 @@
 			<label class="icon-edit title">
 				{{ t('polls', 'Description')}}
 			</label>
-			<textarea v-if="allowEdit" :value="event.description" @input="updateDescription" />
+			<textarea v-model="eventDescription" />
+			<!-- <textarea v-if="allowEdit" :value="event.description" @input="updateDescription" /> -->
 		</div>
 
 		<div class="configBox">
@@ -51,7 +52,7 @@
 
 			<input id="allowMaybe"
 				v-model="eventAllowMaybe"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="checkbox"
 				class="checkbox">
 			<label for="allowMaybe" class="title">
@@ -59,7 +60,7 @@
 			</label>
 
 			<input id="anonymous" v-model="eventIsAnonymous"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="checkbox"
 				class="checkbox">
 			<label for="anonymous" class="title">
@@ -69,7 +70,7 @@
 			<input v-show="event.isAnonymous"
 				id="trueAnonymous"
 				v-model="eventFullAnonymous"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="checkbox"
 				class="checkbox">
 			<label v-show="event.isAnonymous" class="title" for="trueAnonymous">
@@ -78,7 +79,7 @@
 
 			<input id="expiration"
 				v-model="eventExpiration"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="checkbox"
 				class="checkbox">
 			<label class="title" for="expiration">
@@ -88,7 +89,7 @@
 			<date-picker v-show="event.expiration"
 				v-model="eventExpirationDate"
 				v-bind="expirationDatePicker"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }"
 				style="width:170px" />
 		</div>
@@ -99,7 +100,7 @@
 			</label>
 			<input id="private"
 				v-model="eventAccess"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="radio"
 				value="registered"
 				class="radio">
@@ -109,7 +110,7 @@
 			</label>
 			<input id="hidden"
 				v-model="eventAccess"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="radio"
 				value="hidden"
 				class="radio">
@@ -119,7 +120,7 @@
 			</label>
 			<input id="public"
 				v-model="eventAccess"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="radio"
 				value="public"
 				class="radio">
@@ -129,7 +130,7 @@
 			</label>
 			<input id="select"
 				v-model="eventAccess"
-				:disabled="protect"
+				:disabled="!allowEdit"
 				type="radio"
 				value="select"
 				class="radio">
@@ -176,12 +177,21 @@ export default {
 		]),
 
 		// Add bindings
+		eventDescription: {
+			get() {
+				return this.event.description
+			},
+			set(value) {
+				this.writeValue({ 'description': value })
+			}
+		},
+
 		eventTitle: {
 			get() {
 				return this.event.title
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { 'title': value })
+				this.writeValue({ 'title': value })
 			}
 		},
 
@@ -190,7 +200,7 @@ export default {
 				return this.event.access
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { 'access': value })
+				this.writeValue({ 'access': value })
 			}
 		},
 
@@ -199,7 +209,7 @@ export default {
 				return this.event.expiration
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { 'expiration': value })
+				this.writeValue({ 'expiration': value })
 			}
 		},
 
@@ -208,7 +218,7 @@ export default {
 				return this.event.fullAnonymous
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { 'fullAnonymous': value })
+				this.writeValue({ 'fullAnonymous': value })
 			}
 		},
 
@@ -217,7 +227,7 @@ export default {
 				return this.event.isAnonymous
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { 'isAnonymous': value })
+				this.writeValue({ 'isAnonymous': value })
 			}
 		},
 
@@ -226,7 +236,7 @@ export default {
 				return this.event.allowMaybe
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { 'allowMaybe': value })
+				this.writeValue({ 'allowMaybe': value })
 			}
 		},
 
@@ -235,7 +245,7 @@ export default {
 				return this.$store.state.event.expirationDate
 			},
 			set(value) {
-				this.$store.commit('eventSetProperty', { 'expirationDate': value })
+				this.writeValue({ 'expirationDate': value })
 			}
 		},
 
@@ -292,20 +302,26 @@ export default {
 			'writeEventPromise'
 		]),
 
-		updateDescription: debounce(function(e) {
-			this.$store.commit('eventSetProperty', { 'description': e.target.value })
-		},1000),
+		writeValue: debounce(function(e) {
+			this.$store.commit('eventSetProperty', e)
+			this.writingPoll = true
+			this.writePoll()
+		}, 500),
 
-		writePoll() {
+		// updateDescription: debounce(function(e) {
+		// 	this.$store.commit('eventSetProperty', { 'description': e.target.value })
+		// 	this.writePoll()
+		// }, 1000),
+
+		writePoll: debounce(function() {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
-				this.writingPoll = true
 				this.writeEventPromise()
 				this.writingPoll = false
 				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
 			}
-		},
+		}, 3000),
 
 		write() {
 			if (this.allowEdit) {

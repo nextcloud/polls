@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { Multiselect } from 'nextcloud-vue'
+import { Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 
 export default {

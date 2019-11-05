@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { Multiselect } from 'nextcloud-vue'
+import { Multiselect } from '@nextcloud/vue'
 import { mapMutations } from 'vuex'
 
 export default {

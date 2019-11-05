@@ -92,7 +92,7 @@
 </template>
 
 <script>
-// import { Multiselect } from 'nextcloud-vue'
+// import { Multiselect } from '@nextcloud/vue'
 import DatePollItem from '../components/create/createDateItem'
 import TextPollItem from '../components/create/createTextItem'
 import InformationTab from '../components/settings/informationTab'
