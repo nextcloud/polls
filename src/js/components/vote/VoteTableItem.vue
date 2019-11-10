@@ -30,7 +30,7 @@
 import { mapState } from 'vuex'
 
 export default {
-	name: 'VoteItem',
+	name: 'VoteTableItem',
 
 	props: {
 		option: {

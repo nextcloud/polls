@@ -49,8 +49,10 @@ return [
 		['name' => 'event#write', 'url' => '/write/event/', 'verb' => 'POST'],
 		['name' => 'event#add', 'url' => '/add/event/', 'verb' => 'POST'],
 
-		['name' => 'share#getByToken', 'url' => '/get/share/{token}', 'verb' => 'GET'],
-		['name' => 'share#generateHash', 'url' => '/generate/share/', 'verb' => 'POST'],
+		['name' => 'share#get', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
+		['name' => 'share#write', 'url' => '/write/share', 'verb' => 'POST'],
+		['name' => 'share#remove', 'url' => '/remove/share', 'verb' => 'POST'],
+		['name' => 'share#getByHash', 'url' => '/get/share/{hash}', 'verb' => 'GET'],
 
 		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
 		['name' => 'api#get_poll', 'url' => '/get/poll/{pollId}', 'verb' => 'GET'],

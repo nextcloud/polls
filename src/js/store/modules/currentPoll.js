@@ -24,9 +24,7 @@
 const defaultPoll = () => {
 	return {
 		id: 0,
-		mode: 'create',
-		result: 'new',
-		shares: []
+		mode: 'create'
 	}
 }
 
@@ -53,20 +51,6 @@ const getters = {
 }
 
 const actions = {
-	addShare({
-		commit
-	}, payload) {
-		// 	this.poll.shares.push(item)
-	},
-
-	updateShares({ commit }, payload) {
-		// 	this.poll.shares = share.slice(0)
-	},
-
-	removeShare({ commit }, payload) {
-		// 	this.shares.splice(this.shares.indexOf(item), 1)
-	},
-
 	loadPoll({ commit, rootState }, payload) {
 		commit('pollSetProperty', {'mode': payload.mode })
 		commit('pollSetProperty', {'id': payload.pollId })

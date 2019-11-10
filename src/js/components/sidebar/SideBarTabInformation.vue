@@ -21,22 +21,36 @@
   -->
 
 <template>
-	<li>
-		<div>{{ option.pollOptionText }}</div>
-		<div>
-			<a class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
-		</div>
-	</li>
+	<div>
+		<user-div :user-id="event.owner" :description="t('polls', 'Owner')" />
+		<div>{{ accessType }}</div>
+		<h3> {{ t('polls', 'Created') }} </h3>
+		<div>{{ timeSpanCreated }}</div>
+		<h3> {{ t('polls', 'Expires') }} </h3>
+		<div>{{ timeSpanExpiration }}</div>
+		<div>{{ countCommentsHint }}</div>
+	</div>
 </template>
 
 <script>
-export default {
-	name: 'DatePollItem',
+import { mapState, mapGetters } from 'vuex'
 
-	props: {
-		option: {
-			type: Object,
-			default: undefined
+export default {
+	name: 'SideBarTabInformationTab',
+	computed:	{
+		...mapState({
+			event: state => state.event
+		}),
+
+		...mapGetters([
+			'accessType',
+			'countComments',
+			'timeSpanCreated',
+			'timeSpanExpiration'
+		]),
+
+		countCommentsHint: function() {
+			return n('polls', 'There is %n comment', 'There are %n comments', this.countComments)
 		}
 	}
 }

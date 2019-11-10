@@ -26,8 +26,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Dynamic loading
-const Create = () => import('./views/Create')
-const List = () => import('./views/List')
+const List = () => import('./views/PollList')
 const Vote = () => import('./views/Vote')
 
 Vue.use(Router)

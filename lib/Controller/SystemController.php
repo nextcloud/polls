@@ -78,6 +78,7 @@ class SystemController extends Controller {
 
 	/**
 	 * Get a list of NC users and groups
+	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @return DataResponse
 	 */

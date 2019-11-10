@@ -75,7 +75,7 @@ class OptionMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
+	 * @param int $optionId
 	 */
 	public function remove($optionId) {
 		$qb = $this->db->getQueryBuilder();

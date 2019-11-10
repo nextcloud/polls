@@ -39,6 +39,24 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
+	 * @param int $pollId
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return array
+	 */
+
+	public function findByPoll($pollId) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
+
+		return $this->findEntities($qb);
+	}
+
+	/**
 	 * @param string $hash
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return array
@@ -69,4 +87,19 @@ class ShareMapper extends QBMapper {
 
 	   $qb->execute();
 	}
+
+	/**
+	 * @param int $shareId
+	 */
+	public function remove($shareId) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
+		   );
+
+	   $qb->execute();
+	}
+
 }

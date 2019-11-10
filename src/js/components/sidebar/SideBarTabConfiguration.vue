@@ -23,12 +23,13 @@
 <template>
 	<div>
 		<div class="configBox">
-			<button v-if="allowEdit" :disabled="writingPoll" class="button btn primary"
-				@click="write()">
-				<span>{{ saveButtonTitle }}</span>
-				<span v-if="writingPoll" class="icon-loading-small" />
-			</button>
-		<div>
+			<label v-if="writingPoll" class="icon-loading-small title">
+				{{ t('polls', 'Saving')}}
+			</label>
+			<label v-else class="icon-checkmark title">
+				{{ t('polls', 'Saved')}}
+			</label>
+		</div>
 
 		<div v-if="allowEdit" class="configBox">
 			<label class="icon-sound title">
@@ -36,6 +37,7 @@
 			</label>
 			<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
+
 
 		<div v-if="allowEdit" class="configBox">
 			<label class="icon-edit title">
@@ -144,17 +146,11 @@
 </template>
 
 <script>
-import ShiftDates from '../create/datesShift'
-import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default {
-	name: 'ConfigurationTab',
-
-	components: {
-		ShiftDates
-	},
+	name: 'SideBarTab',
 
 	data() {
 		return {

@@ -24,16 +24,32 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\VoteMapper;
+use OCP\ILogger;
+use OCP\IGroupManager;
+use OCA\Polls\Db\EventMapper;
 
 class AccessService {
 
+	private $groupManager;
 	private $eventMapper;
+	private $logger;
 
+	/**
+	 * PageController constructor.
+	 * @param string $appName
+	 * @param $UserId
+	 * @param IRequest $request
+	 * @param IGroupManager $groupManager
+	 * @param IUserManager $userManager
+	 */
 	public function __construct(
 		EventMapper $eventMapper,
+		ILogger $logger,
+		IGroupManager $groupManager
 
 	) {
+		$this->logger = $logger;
+		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 	}
 
@@ -45,8 +61,8 @@ class AccessService {
 	 * @param Array $userId
 	 * @return String
 	 */
-	public function getAccessLevel($pollId, $userId = '') {
-		if ($userId = '' && \OC::$server->getUserSession()->isLoggedIn()) {
+	private function getAccessLevel($pollId, $userId = '') {
+		if ($userId === '' && \OC::$server->getUserSession()->isLoggedIn()) {
 			$userId = \OC::$server->getUserSession()->getUser()->getUID();
 		}
 
@@ -67,6 +83,37 @@ class AccessService {
 		}
 
 		return $accessLevel;
+	}
+
+	/**
+	 * Check, if user has edit right in this event
+	 * @NoAdminRequired
+	 * @param Array $pollId
+	 * @return String
+	 */
+	public function userHasEditRights($pollId) {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			$event = $this->eventMapper->find($pollId);
+			return ($event->getOwner() === \OC::$server->getUserSession()->getUser()->getUID()
+				 || $this->groupManager->isAdmin(\OC::$server->getUserSession()->getUser()->getUID()));
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Check, if user is the poll owner
+	 * @NoAdminRequired
+	 * @param Array $pollId
+	 * @return String
+	 */
+	public function userIsOwner($pollId) {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			$event = $this->eventMapper->find($pollId);
+			return ($event->getOwner() === \OC::$server->getUserSession()->getUser()->getUID());
+		} else {
+			return false;
+		}
 	}
 
 }

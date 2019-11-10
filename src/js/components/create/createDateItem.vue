@@ -38,8 +38,8 @@ export default {
 	filters: {
 		localFullDate(timestamp) {
 			if (!timestamp) return ''
-			if (!moment(timestamp).isValid()) return 'Invalid Date'
 			if (timestamp < 999999999999) timestamp = timestamp * 1000
+			if (!moment(timestamp).isValid()) return 'Invalid Date'
 			return moment(timestamp).format('llll')
 		}
 	},

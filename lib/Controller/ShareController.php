@@ -35,6 +35,10 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCP\Security\ISecureRandom;
 
+use OCA\Polls\Db\Event;
+
+use OCA\Polls\Service\AccessService;
+use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 
@@ -44,26 +48,94 @@ class ShareController extends Controller {
 	private $mapper;
 	private $userId;
 
+	private $eventMapper;
+	private $accessService;
+
 	/**
 	 * ShareController constructor.
 	 * @param string $appName
 	 * @param string $userId
 	 * @param IRequest $request
+	 * @param EventMapper $eventMapper
 	 * @param ShareMapper $mapper
+	 * @param AccessService $accessService
 	 */
 	public function __construct(
-		$appName,
+		string $appName,
 		$UserId,
 		IRequest $request,
 		ILogger $logger,
-		ShareMapper $mapper
+		ShareMapper $mapper,
+		EventMapper $eventMapper,
+		AccessService $accessService
 	) {
 		parent::__construct($appName, $request);
         $this->logger = $logger;
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
+		$this->eventMapper = $eventMapper;
+		$this->accessService = $accessService;
 	}
 
+	/**
+	 * get
+	 * Read all shares of a poll based on the poll id and return list as array
+	 * @NoAdminRequired
+	 * @param integer $pollId
+	 * @return DataResponse
+	 */
+	public function get($pollId) {
+		if ($this->accessService->userHasEditRights($pollId)) {
+			try {
+				$event = $this->eventMapper->find($pollId);
+				$shares = $this->mapper->findByPoll($pollId);
+			} catch (DoesNotExistException $e) {
+				return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			}
+
+			return new DataResponse((array) $shares, Http::STATUS_OK);
+		} else {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+	}
+
+	/**
+	 * write
+	 * Write a new share to the db and returns the new share as array
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @param int $pollId
+	 * @param string $message
+	 * @return DataResponse
+	 */
+	public function write($pollId, $share) {
+		if (!$this->accessService->userHasEditRights($pollId)) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+		$newShare = new Share();
+		$newShare->setType($share['type']);
+		$newShare->setPollId($share['pollId']);
+		$newShare->setUserId($share['userId']);
+		$newShare->setUserEmail($share['userEmail']);
+		$newShare->setHash(\OC::$server->getSecureRandom()->generate(
+			16,
+			ISecureRandom::CHAR_DIGITS .
+			ISecureRandom::CHAR_LOWER .
+			ISecureRandom::CHAR_UPPER
+		));
+
+		try {
+			$newShare = $this->mapper->insert($newShare);
+		} catch (\Exception $e) {
+			return new DataResponse($e, Http::STATUS_CONFLICT);
+		}
+
+		return new DataResponse($newShare, Http::STATUS_OK);
+
+	}
 
 	/**
 	 * getByHash
@@ -75,48 +147,38 @@ class ShareController extends Controller {
 	 */
 	public function getByHash($hash) {
 		try {
-			$Share = $this->mapper->findByHash($hash);
+			$share = $this->mapper->findByHash($hash);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		} finally {
-			return new DataResponse($Share, Http::STATUS_OK);
+			return new DataResponse($share, Http::STATUS_OK);
 		}
 	}
 
-	/**
-	 * generateHash
-	 * Generate a new Hash and save to shares db
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @return DataResponse
-	 */
-	public function generateHash($pollId, $type, $userId) {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
+	public function remove($share) {
+		try {
+			$Event = $this->eventMapper->find($share['pollId']);
 
-		$Share = new Share();
-		$Share->setPollId($pollId);
-		$Share->setUserId($userId);
-		$Share->setType($type);
-		$Share->setHash(\OC::$server->getSecureRandom()->generate(
-			16,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		));
+			if (!$this->accessService->userHasEditRights($share['pollId'])) {
+				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			}
+
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
 
 		try {
-			$this->logger->error(json_encode($Share));
-			$this->mapper->insert($Share);
-		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
-		} finally {
-			return new DataResponse($Share, Http::STATUS_OK);
+			$this->mapper->remove($share['id']);
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
+
+		return new DataResponse(array(
+			'action' => 'deleted',
+			'shareId' => $share['id']
+		), Http::STATUS_OK);
+
 	}
+
+
 }

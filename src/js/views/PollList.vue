@@ -34,8 +34,8 @@
 
 			<transition-group v-if="!noPolls" name="list" tag="div"
 				class="table">
-				<poll-list-item key="0" :header="true" />
-				<li is="poll-list-item"
+				<PollListItem key="0" :header="true" />
+				<li is="PollListItem"
 					v-for="(poll, index) in pollList"
 					:key="poll.id"
 					:poll="poll"
@@ -50,15 +50,13 @@
 </template>
 
 <script>
-import Controls from '../components/base/controls'
-import pollListItem from '../components/list/pollListItem'
+import PollListItem from '../components/PollList/PollListItem'
 
 export default {
-	name: 'List',
+	name: 'PollList',
 
 	components: {
-		Controls,
-		pollListItem
+		PollListItem
 	},
 
 	data() {

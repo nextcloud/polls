@@ -29,20 +29,19 @@
 				<h2> {{ t('polls', 'there are no vote Options') }} </h2>
 			</div>
 
-			<vote-header v-for="(option) in sortedOptions"
+			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="event.type"
-				:mode="poll.mode"
-				@remove="removeOption(option)" />
+				:mode="poll.mode" />
 		</div>
 
 		<div v-for="(participant) in participants" :key="participant" :class="{currentuser: (participant === currentUser) }">
-			<user-div :key="participant"
+			<UserDiv :key="participant"
 				class="sticky"
 				:class="{currentuser: (participant === currentUser) }"
 				:user-id="participant" />
-			<vote-item v-for="(option) in sortedOptions"
+			<VoteTableItem v-for="(option) in sortedOptions"
 				:key="option.id"
 				:user-id="participant"
 				:option="option"
@@ -52,15 +51,15 @@
 </template>
 
 <script>
-import VoteItem from './voteItem'
-import VoteHeader from './voteHeader'
+import VoteTableItem from './VoteTableItem'
+import VoteTableHeader from './VoteTableHeader'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'VoteTable',
 	components: {
-		VoteHeader,
-		VoteItem
+		VoteTableHeader,
+		VoteTableItem
 	},
 
 	computed: {
@@ -97,10 +96,6 @@ export default {
 				.then(() => {
 					this.$emit('voteSaved')
 				})
-		},
-
-		removeOption(option) {
-			this.$store.dispatch('removeOptionAsync', { option: option })
 		}
 	}
 }

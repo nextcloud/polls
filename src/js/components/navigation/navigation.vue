@@ -21,40 +21,103 @@
   -->
 
 <template lang="html">
-	<app-navigation>
-		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
-		<create-dlg v-show="createDlg" @closeCreate="closeCreate()"/>
-		<app-content-details
-			v-for="(poll) in pollList"
-			:key="poll.id">
-			<router-link
-				:to="{name: 'vote', params: {id: poll.id}}"
-				class="thumbnail"
-				:class="eventIcon(poll.event.type)">
-				<div class="name">
-					{{ poll.event.title }}
-					<span v-if="poll.event.expired" class="label error">{{ t('poll', 'Expired') }}</span>
-				</div>
-				<div class="description">
-					{{ poll.event.description }}
-				</div>
+	<AppNavigation>
+		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<CreateDlg v-show="createDlg" @closeCreate="closeCreate()"/>
+		<ul>
+			<AppNavigationItem title="All polls"
+				:allow-collapse="true"
+				icon="icon-folder"
+				:open="true">
+				<ul>
+					<AppNavigationItem
+						v-for="(poll) in pollList"
+						:title="poll.event.title"
+						:icon="eventIcon(poll.event.type)"
+						:key="poll.id"
+						:to="{name: 'vote', params: {id: poll.id}}">
+					</AppNavigationItem>
+				</ul>
+			</AppNavigationItem>
+
+		</ul>
+		<ul>
+			<AppNavigationItem title="My polls"
+				:allow-collapse="true"
+				icon="icon-folder"
+				:open="false">
+				<ul>
+					<AppNavigationItem
+						v-for="(poll) in myPolls"
+						:title="poll.event.title"
+						:icon="eventIcon(poll.event.type)"
+						:key="poll.id"
+						:to="{name: 'vote', params: {id: poll.id}}">
+					</AppNavigationItem>
+				</ul>
+			</AppNavigationItem>
+
+		</ul>
+
+		<ul>
+			<AppNavigationItem title="Public polls"
+				:allow-collapse="true"
+				icon="icon-folder"
+				:open="false">
+				<ul>
+					<AppNavigationItem
+						v-for="(poll) in publicPolls"
+						:title="poll.event.title"
+						:icon="eventIcon(poll.event.type)"
+						:key="poll.id"
+						:to="{name: 'vote', params: {id: poll.id}}">
+					</AppNavigationItem>
+				</ul>
+			</AppNavigationItem>
+
+		</ul>
+
+		<ul>
+			<AppNavigationItem title="Hidden polls"
+				:allow-collapse="true"
+				icon="icon-folder"
+				:open="false">
+				<ul>
+					<AppNavigationItem
+						v-for="(poll) in hiddenPolls"
+						:title="poll.event.title"
+						:icon="eventIcon(poll.event.type)"
+						:key="poll.id"
+						:to="{name: 'vote', params: {id: poll.id}}">
+					</AppNavigationItem>
+				</ul>
+			</AppNavigationItem>
+
+		</ul>
+
+		<AppNavigation-settings>
+			<router-link :to="{ name: 'list'}">
+				List
 			</router-link>
-		</app-content-details>
-	</app-navigation>
+		</AppNavigation-settings>
+	</AppNavigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppContentDetails } from '@nextcloud/vue'
-import createDlg from '../create/createDlg'
+import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings, ActionButton } from '@nextcloud/vue'
+import { mapGetters } from 'vuex'
+import CreateDlg from '../create/createDlg'
 
 export default {
 	name: 'Navigation',
 	components: {
 		AppNavigation,
 		AppNavigationNew,
-		AppContentDetails,
-		createDlg
+		AppNavigationItem,
+		AppNavigationSettings,
+		ActionButton,
+		CreateDlg
 	},
 
 	data() {
@@ -64,6 +127,13 @@ export default {
 	},
 
 	computed: {
+
+		...mapGetters([
+			'myPolls',
+			'publicPolls',
+			'hiddenPolls'
+		]),
+
 		pollList() {
 			return this.$store.state.polls.list
 		}
@@ -84,9 +154,9 @@ export default {
 
 		eventIcon(type) {
 			if (type === '0') {
-				return 'datePoll'
+				return 'icon-calendar'
 			} else {
-				return 'textPoll'
+				return 'icon-toggle-filelist'
 			}
 		},
 
@@ -109,60 +179,60 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-.name,
-.description {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-.description {
-	opacity: 0.5;
-}
-
-.app-content-details {
-	padding: 4px 0 4px 0;
-}
-
-a.active, a:hover {
-	box-shadow: var(--color-primary-element) 4px 0px inset;
-	opacity: 1;
-}
-
-.thumbnail {
-	background-size: 16px 16px;
-	background-position: 14px center;
-	background-repeat: no-repeat;
-	display: block;
-	justify-content: space-between;
-	// line-height: 44px;
-	min-height: 44px;
-	padding: 0 12px 0 44px;
-	overflow: hidden;
-	box-sizing: border-box;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	color: var(--color-main-text);
-	opacity: 0.57;
-	// flex: 1 1 0px;
-	// z-index: 100;
-
-	&.datePoll {
-		background-image: var(--icon-calendar-000);
-		// mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
-		// -webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
-		// mask-size: 16px;
-	}
-	&.textPoll {
-		background-image: var(--icon-organization-000);
-		// mask-image: var(--icon-organization-000) no-repeat 50% 50%;
-		// -webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
-		// mask-size: 16px;
-	}
-	&.expired {
-		background-color: var(--color-background-darker);
-	}
-}
-
-</style>
+// <style lang="scss" scoped>
+//
+// .name,
+// .description {
+// 	overflow: hidden;
+// 	white-space: nowrap;
+// 	text-overflow: ellipsis;
+// }
+// .description {
+// 	opacity: 0.5;
+// }
+//
+// .app-content-details {
+// 	padding: 4px 0 4px 0;
+// }
+//
+// a.active, a:hover {
+// 	box-shadow: var(--color-primary-element) 4px 0px inset;
+// 	opacity: 1;
+// }
+//
+// .thumbnail {
+// 	background-size: 16px 16px;
+// 	background-position: 14px center;
+// 	background-repeat: no-repeat;
+// 	display: block;
+// 	justify-content: space-between;
+// 	// line-height: 44px;
+// 	min-height: 44px;
+// 	padding: 0 12px 0 44px;
+// 	overflow: hidden;
+// 	box-sizing: border-box;
+// 	white-space: nowrap;
+// 	text-overflow: ellipsis;
+// 	color: var(--color-main-text);
+// 	opacity: 0.57;
+// 	// flex: 1 1 0px;
+// 	// z-index: 100;
+//
+// 	&.datePoll {
+// 		background-image: var(--icon-calendar-000);
+// 		// mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
+// 		// -webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
+// 		// mask-size: 16px;
+// 	}
+// 	&.textPoll {
+// 		background-image: var(--icon-organization-000);
+// 		// mask-image: var(--icon-organization-000) no-repeat 50% 50%;
+// 		// -webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
+// 		// mask-size: 16px;
+// 	}
+// 	&.expired {
+// 		background-color: var(--color-background-darker);
+// 	}
+// }
+//
+// </style>

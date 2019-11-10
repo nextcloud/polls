@@ -28,23 +28,22 @@ use OCA\Polls\Db\VoteMapper;
 
 class AnonymizeService {
 
-	private $mapper;
+	private $voteMapper;
 
 	public function __construct(
-		VoteMapper $mapper
+		VoteMapper $voteMapper
 	) {
-		$this->mapper = $mapper;
+		$this->voteMapper = $voteMapper;
 	}
 
 	/**
 	 * Create a mapping list with unique Anonymous strings based on the partcipants of a poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @return array
 	 */
 	private function anonMapper($pollId) {
 		$anonList = array();
-		$votes = $this->mapper->findByPoll($pollId);
+		$votes = $this->voteMapper->findByPoll($pollId);
 		$i = 0;
 
 		foreach ($votes as $element) {
@@ -59,7 +58,6 @@ class AnonymizeService {
 	/**
 	 * Anonymizes the participants of a poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param Array $array Input list which schould be anonymized
 	 * @return array Returns the original array with anonymized user names
 	 */

@@ -35,8 +35,8 @@
 		"test:coverage": "jest --coverage"
 	},
 	"dependencies": {
-		"@babel/runtime": "^7.6.3",
-		"@nextcloud/vue": "^1.1.0",
+		"@babel/runtime": "^7.7.2",
+		"@nextcloud/vue": "^1.2.0",
 		"acorn": "^7.1.0",
 		"acorn-jsx": "^5.1.0",
 		"babel-plugin-transform-async-to-generator": "^6.24.1",
@@ -49,7 +49,7 @@
 		"nextcloud-axios": "^0.2.0",
 		"sass": "^1.23.3",
 		"stylelint-scss": "^3.12.1",
-		"v-click-outside": "^2.1.4",
+		"v-click-outside": "^2.1.5",
 		"v-tooltip": "^3.0.0-alpha.11",
 		"vue": "^2.6.10",
 		"vue-click-outside": "^1.0.7",
@@ -66,9 +66,9 @@
 		"node": ">=10.0.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.6.4",
+		"@babel/core": "^7.7.2",
 		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
-		"@babel/preset-env": "^7.6.3",
+		"@babel/preset-env": "^7.7.1",
 		"babel-eslint": "^10.0.2",
 		"babel-loader": "^8.0.6",
 		"css-loader": "^3.2.0",

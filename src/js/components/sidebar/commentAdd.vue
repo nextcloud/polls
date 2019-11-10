@@ -49,8 +49,7 @@ export default {
 
 	methods: {
 		writeComment() {
-			this.$store
-				.dispatch('writeCommentPromise', this.comment)
+			this.$store.dispatch('writeCommentPromise', this.comment)
 				.then(response => {
 					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
 				})

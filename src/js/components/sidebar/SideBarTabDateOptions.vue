@@ -37,7 +37,7 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<multiselect v-model="move.unit" :options="move.units" />
+					<Multiselect v-model="move.unit" :options="move.units" />
 				</div>
 			</div>
 			<div>
@@ -46,23 +46,36 @@
 				</button>
 			</div>
 		</div>
+
+		<ul class="configBox poll-table">
+			<label class="title icon-calendar">
+				{{ t('polls', 'Available Options') }}
+			</label>
+			<DatePollItem v-for="(option, index) in sortedOptions"
+				:key="option.id"
+				:option="option"
+				@remove="removeOption(option)" />
+		</ul>
+
 	</div>
 </template>
 
 <script>
 import { Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
+import DatePollItem from '../create/createDateItem'
 
 export default {
-	name: 'DateOptionsTab',
+	name: 'SideBarTabDateOptions',
 
 	components: {
-		Multiselect
+		Multiselect,
+		DatePollItem
+
 	},
 
 	data() {
 		return {
-			nextPollDateId: 1,
 			move: {
 				step: 1,
 				unit: 'week',
@@ -76,7 +89,7 @@ export default {
 			options: state => state.options
 		}),
 
-		...mapGetters([ 'languageCodeShort' ]),
+		...mapGetters([ 'languageCodeShort', 'sortedOptions' ]),
 
 		optionDatePicker() {
 			return {
@@ -109,6 +122,10 @@ export default {
 				option.timestamp = moment.utc(option.pollOptionText).unix()
 				store.dispatch('updateOptionAsync', { option: option })
 			})
+		},
+
+		removeOption(option) {
+			this.$store.dispatch('removeOptionAsync', { option: option })
 		}
 
 	}
@@ -148,6 +165,10 @@ export default {
 			& > span {
 				padding-left: 4px;
 			}
+		}
+		&.poll-table > li {
+			border-bottom-color: rgb(72, 72, 72);
+			margin-left: 18px;
 		}
 	}
 </style>

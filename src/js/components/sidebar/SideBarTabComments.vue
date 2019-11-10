@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<add-comment />
+		<CommentAdd />
 		<transition-group v-if="countComments" name="fade" class="comments"
 			tag="ul">
 			<li v-for="(comment) in sortedComments" :key="comment.id">
@@ -46,13 +46,13 @@
 
 <script>
 import moment from 'moment'
-import AddComment from './commentAdd'
+import CommentAdd from './commentAdd'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'CommentsTab',
+	name: 'SideBarTabComments',
 	components: {
-		AddComment
+		CommentAdd
 	},
 
 	computed: {

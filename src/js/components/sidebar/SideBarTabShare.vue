@@ -23,11 +23,9 @@
 <template>
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
-
 		<Multiselect id="ajax"
-			v-model="shares"
 			:options="users"
-			:multiple="true"
+			:multiple="false"
 			:user-select="true"
 			:tag-width="80"
 			:clear-on-select="false"
@@ -40,8 +38,8 @@
 			:placeholder="placeholder"
 			label="displayName"
 			track-by="user"
-			@search-change="loadUsersAsync"
-			@close="updateShares">
+			@select="addShare"
+			@search-change="loadUsersAsync">
 			<template slot="selection" slot-scope="{ values, search, isOpen }">
 				<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
 					{{ values.length }} users selected
@@ -49,12 +47,28 @@
 			</template>
 		</Multiselect>
 
+		<h3>{{ t('polls','Invitations') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
-			<li v-for="(item, index) in sortedShares" :key="item.displayName" :data-index="index">
-				<UserDiv :user-id="item.user" :display-name="item.displayName" :type="item.type"
-					:hide-names="hideNames" />
+			<li v-for="(share) in invitationShares" :key="share.id">
+				<UserDiv :user-id="share.userId"/>
 				<div class="options">
-					<a class="icon icon-delete svg delete-poll" @click="removeShare(index, item)" />
+					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
+				</div>
+			</li>
+		</TransitionGroup>
+
+		<h3>{{ t('polls','Public shares') }}</h3>
+		<TransitionGroup :css="false" tag="ul" class="shared-list">
+			<li v-for="(share) in publicShares" :key="share.id">
+				<div class="user-row user">
+					<div class="avatar icon-public" />
+					<div class="user-name">
+						{{t('polls', 'Share Link')}}
+					</div>
+				</div>
+				<div class="options">
+					<a class="icon icon-clippy" />
+					<a class="icon icon-delete" @click="removeShare(share)" />
 				</div>
 			</li>
 		</TransitionGroup>
@@ -62,38 +76,22 @@
 </template>
 
 <script>
-import { Multiselect } from '@nextcloud/vue'
+import { Multiselect, Avatar } from '@nextcloud/vue'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'ShareDiv',
+	name: 'SideBarTabShare',
 
 	components: {
-		Multiselect
-	},
-
-	props: {
-		placeholder: {
-			type: String,
-			default: ''
-		},
-
-		activeShares: {
-			type: Array,
-			default: function() {
-				return []
-			}
-		},
-
-		hideNames: {
-			type: Boolean,
-			default: false
-		}
+		Multiselect,
+		Avatar
 	},
 
 	data() {
 		return {
-			shares: [],
 			users: [],
+			invitations: [],
+			invitation: {},
 			isLoading: false,
 			siteUsersListOptions: {
 				getUsers: true,
@@ -104,26 +102,15 @@ export default {
 	},
 
 	computed: {
-		sortedShares() {
-			return this.shares.slice(0).sort(this.sortByDisplayname)
-		}
-	},
-
-	watch: {
-		activeShares(value) {
-			this.shares = value.slice(0)
-		}
+		...mapGetters([
+			'countShares',
+			'sortedShares',
+			'invitationShares',
+			'publicShares'
+		]),
 	},
 
 	methods: {
-		removeShare(index, item) {
-			this.$emit('remove-share', item)
-		},
-
-		updateShares() {
-			this.$emit('update-shares', this.shares)
-		},
-
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
@@ -136,12 +123,28 @@ export default {
 				})
 		},
 
-		sortByDisplayname(a, b) {
-			if (a.displayName.toLowerCase() < b.displayName.toLowerCase()) return -1
-			if (a.displayName.toLowerCase() > b.displayName.toLowerCase()) return 1
-			return 0
-		}
+		removeShare(share) {
+			this.$store.dispatch('removeShareAsync', { share: share })
+		},
 
+		addShare(payload) {
+			this.$store.dispatch('writeSharePromise', {
+					'share': {
+						'type' : payload.type,
+						'userId' : payload.user,
+						'pollId' : '0',
+						'userEmail' : '',
+						'hash' : ''
+					}
+				})
+				// .then(response => {
+					// OC.Notification.showTemporary(t('polls', 'You added %n.', 1, payload.user), { type: 'success' })
+				// })
+				.catch(error => {
+					console.error('Error while adding share comment - Error: ', error)
+					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })
+				})
+		}
 	}
 }
 </script>
@@ -150,19 +153,28 @@ export default {
 	.shared-list {
 		display: flex;
 		flex-wrap: wrap;
+		flex-direction: column;
 		justify-content: flex-start;
 		padding-top: 8px;
 
 		> li {
 			display: flex;
+			align-items: stretch;
+			margin: 4px 0;
 		}
 	}
 
 	.options {
 		display: flex;
-		position: relative;
-		top: -12px;
-		left: -13px;
+
+		.icon:not(.hidden) {
+			padding: 14px;
+			height: 44px;
+			width: 44px;
+			opacity: .5;
+			display: block;
+			cursor: pointer;
+		}
 	}
 
 	.multiselect {

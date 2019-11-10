@@ -24,6 +24,7 @@
 	<div class="vote-header" :class=" { winner: isWinner }">
 		<div v-if="textPoll" class="text-box">
 			{{ option.pollOptionText }}
+			<a v-if="mode === 'edit'" class="icon-delete" @click="$emit('remove')" />
 		</div>
 
 		<div v-if="datePoll" v-tooltip.auto="localFullDate" class="date-box">
@@ -39,7 +40,6 @@
 			<div class="time">
 				{{ time }}
 			</div>
-			<a v-if="mode === 'edit'" class="icon-delete" @click="$emit('remove')" />
 		</div>
 
 		<div class="counter">
@@ -58,7 +58,7 @@ import moment from 'moment'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'VoteHeader',
+	name: 'VoteTableHeader',
 
 	props: {
 		option: {
@@ -206,6 +206,7 @@ export default {
 <style lang="scss" scoped>
 
 .vote-header {
+	display: flex;
 	flex-direction: column;
 	&.winner {
 		font-weight: bold;
@@ -214,10 +215,12 @@ export default {
 }
 
 .counter {
-	flex: 1 1;
+	flex: 0;
 	display: flex;
 	justify-content: center;
 	font-size: 18px;
+	height: 88px;
+	padding: 14px 4px;
 
 	&> * {
 		background-position: 0px 2px;
@@ -242,7 +245,11 @@ export default {
 }
 
 .text-box {
+	flex: 1 0;
+	height: 44px;
 	align-self: center;
+	font-size: 1.4em;
+	padding-top: 14px;
 }
 
 .date-box {
