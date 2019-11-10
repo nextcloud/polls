@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[getAnswer, activeClass]" >
+	<div class="vote-item" :class="[getAnswer, activeClass]">
 		<div class="icon" @click="$emit('voteClick')" />
 	</div>
 </template>
@@ -45,7 +45,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			event: state => state.event
 		}),
 
 		getAnswer() {
@@ -67,7 +67,7 @@ export default {
 			}
 		}
 
-	},
+	}
 }
 
 </script>

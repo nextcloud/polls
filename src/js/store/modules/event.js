@@ -95,8 +95,6 @@ const getters = {
 		return (state.owner === OC.getCurrentUser().uid || getters.adminMode)
 	}
 
-
-
 }
 
 const actions = {

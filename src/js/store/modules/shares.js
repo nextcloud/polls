@@ -22,7 +22,6 @@
  */
 
 import axios from 'nextcloud-axios'
-import sortBy from 'lodash/sortBy'
 
 const defaultComments = () => {
 	return {
@@ -59,16 +58,16 @@ const getters = {
 	},
 
 	invitationShares: state => {
-		var invitationTypes = ["user", "group"]
+		var invitationTypes = ['user', 'group']
 		return state.list.filter(function(share) {
-  			return invitationTypes.includes(share.type);
+			return invitationTypes.includes(share.type)
 		})
 	},
 
 	publicShares: state => {
-		var invitationTypes = ["public"]
+		var invitationTypes = ['public']
 		return state.list.filter(function(share) {
-  			return invitationTypes.includes(share.type);
+			return invitationTypes.includes(share.type)
 		})
 	},
 
@@ -95,7 +94,7 @@ const actions = {
 	writeSharePromise({ commit, rootState }, payload) {
 		payload.share.pollId = rootState.event.id
 		return axios
-			.post(OC.generateUrl('apps/polls/write/share'), { pollId: rootState.event.id, share: payload.share})
+			.post(OC.generateUrl('apps/polls/write/share'), { pollId: rootState.event.id, share: payload.share })
 			.then((response) => {
 				commit('shareAdd', response.data)
 			}, (error) => {

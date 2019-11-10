@@ -21,91 +21,83 @@
   -->
 
 <template lang="html">
-	<AppNavigation>
-		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
-		<CreateDlg v-show="createDlg" @closeCreate="closeCreate()"/>
+	<app-navigation>
+		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<create-dlg v-show="createDlg" @closeCreate="closeCreate()" />
 		<ul>
-			<AppNavigationItem title="All polls"
+			<app-navigation-item title="All polls"
 				:allow-collapse="true"
 				icon="icon-folder"
 				:open="true">
 				<ul>
-					<AppNavigationItem
+					<app-navigation-item
 						v-for="(poll) in pollList"
+						:key="poll.id"
 						:title="poll.event.title"
 						:icon="eventIcon(poll.event.type)"
-						:key="poll.id"
-						:to="{name: 'vote', params: {id: poll.id}}">
-					</AppNavigationItem>
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
-			</AppNavigationItem>
-
+			</app-navigation-item>
 		</ul>
 		<ul>
-			<AppNavigationItem title="My polls"
+			<app-navigation-item title="My polls"
 				:allow-collapse="true"
 				icon="icon-folder"
 				:open="false">
 				<ul>
-					<AppNavigationItem
+					<app-navigation-item
 						v-for="(poll) in myPolls"
+						:key="poll.id"
 						:title="poll.event.title"
 						:icon="eventIcon(poll.event.type)"
-						:key="poll.id"
-						:to="{name: 'vote', params: {id: poll.id}}">
-					</AppNavigationItem>
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
-			</AppNavigationItem>
-
+			</app-navigation-item>
 		</ul>
 
 		<ul>
-			<AppNavigationItem title="Public polls"
+			<app-navigation-item title="Public polls"
 				:allow-collapse="true"
 				icon="icon-folder"
 				:open="false">
 				<ul>
-					<AppNavigationItem
+					<app-navigation-item
 						v-for="(poll) in publicPolls"
+						:key="poll.id"
 						:title="poll.event.title"
 						:icon="eventIcon(poll.event.type)"
-						:key="poll.id"
-						:to="{name: 'vote', params: {id: poll.id}}">
-					</AppNavigationItem>
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
-			</AppNavigationItem>
-
+			</app-navigation-item>
 		</ul>
 
 		<ul>
-			<AppNavigationItem title="Hidden polls"
+			<app-navigation-item title="Hidden polls"
 				:allow-collapse="true"
 				icon="icon-folder"
 				:open="false">
 				<ul>
-					<AppNavigationItem
+					<app-navigation-item
 						v-for="(poll) in hiddenPolls"
+						:key="poll.id"
 						:title="poll.event.title"
 						:icon="eventIcon(poll.event.type)"
-						:key="poll.id"
-						:to="{name: 'vote', params: {id: poll.id}}">
-					</AppNavigationItem>
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
-			</AppNavigationItem>
-
+			</app-navigation-item>
 		</ul>
 
-		<AppNavigation-settings>
+		<app-navigation-settings>
 			<router-link :to="{ name: 'list'}">
 				List
 			</router-link>
-		</AppNavigation-settings>
-	</AppNavigation>
+		</app-navigation-settings>
+	</app-navigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings, ActionButton } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../create/createDlg'
 
@@ -116,7 +108,6 @@ export default {
 		AppNavigationNew,
 		AppNavigationItem,
 		AppNavigationSettings,
-		ActionButton,
 		CreateDlg
 	},
 

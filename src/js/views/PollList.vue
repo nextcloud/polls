@@ -23,7 +23,6 @@
 <template>
 	<app-content>
 		<div class="main-container">
-
 			<div v-if="noPolls" class="">
 				<div class="icon-polls" />
 				<h2> {{ t('No existing polls.') }} </h2>
@@ -34,7 +33,7 @@
 
 			<transition-group v-if="!noPolls" name="list" tag="div"
 				class="table">
-				<PollListItem key="0" :header="true" />
+				<poll-list-item key="0" :header="true" />
 				<li is="PollListItem"
 					v-for="(poll, index) in pollList"
 					:key="poll.id"
@@ -98,7 +97,7 @@ export default {
 					console.error('refresh poll: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error loading polls"', 1, event.title), { type: 'error' })
 				})
-		},
+		}
 
 		// removePoll(index, event) {
 		// 	const params = {

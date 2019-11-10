@@ -22,7 +22,7 @@
 
 <template>
 	<div id="app-polls">
-		<navigation/>
+		<navigation />
 		<router-view />
 	</div>
 </template>
@@ -34,7 +34,7 @@ export default {
 	name: 'App',
 	components: {
 		Navigation
-	},
+	}
 }
 
 </script>

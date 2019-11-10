@@ -33,16 +33,17 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<TextPollItem v-for="(option, index) in sortedOptions"
-				:key="option.id"
-				:option="option"
+			<text-poll-item v-for="(option) in sortedOptions" :key="option.id" :option="option"
 				@remove="removeOption(option)" />
 		</ul>
 	</div>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import {
+	mapGetters,
+	mapState
+} from 'vuex'
 import TextPollItem from '../create/TextPollItem'
 export default {
 	name: 'SideBarTabTextOptions',
@@ -62,20 +63,24 @@ export default {
 			options: state => state.options
 		}),
 
-		...mapGetters([ 'languageCodeShort', 'sortedOptions' ]),
+		...mapGetters(['languageCodeShort', 'sortedOptions'])
 	},
 
 	methods: {
 
 		addOption(pollOptionText) {
 			if (pollOptionText !== '') {
-				this.$store.dispatch('addOptionAsync', { pollOptionText: pollOptionText })
+				this.$store.dispatch('addOptionAsync', {
+					pollOptionText: pollOptionText
+				})
 				this.newPollText = ''
 			}
 		},
 
 		removeOption(option) {
-			this.$store.dispatch('removeOptionAsync', { option: option })
+			this.$store.dispatch('removeOptionAsync', {
+				option: option
+			})
 		}
 
 	}
@@ -84,81 +89,79 @@ export default {
 </script>
 
 <style lang="scss">
-	.configBox {
-		display: flex;
-		flex-direction: column;
-		padding: 8px;
-		& > * {
-			padding-left: 21px;
-		}
+.configBox {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    & > * {
+        padding-left: 21px;
+    }
 
-		& > input {
-			margin-left: 24px;
-			width: auto;
+    & > input {
+        margin-left: 24px;
+        width: auto;
 
-		}
+    }
 
-		& > textarea {
-			margin-left: 24px;
-			width: auto;
-			padding: 7px 6px;
-		}
+    & > textarea {
+        margin-left: 24px;
+        width: auto;
+        padding: 7px 6px;
+    }
 
+    & > .title {
+        display: flex;
+        background-position: 0 2px;
+        padding-left: 24px;
+        opacity: 0.7;
+        font-weight: bold;
+        margin-bottom: 4px;
+        & > span {
+            padding-left: 4px;
+        }
+    }
 
-		& > .title {
-			display: flex;
-			background-position: 0 2px;
-			padding-left: 24px;
-			opacity: 0.7;
-			font-weight: bold;
-			margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
-		}
+    &.poll-table > li {
+        border-bottom-color: rgb(72, 72, 72);
+        margin-left: 18px;
+    }
 
-		&.poll-table > li {
-			border-bottom-color: rgb(72, 72, 72);
-			margin-left: 18px;
-		}
+}
 
-	}
+.poll-table {
+    > li {
+        display: flex;
+        align-items: center;
+        padding-left: 8px;
+        padding-right: 8px;
+        line-height: 2em;
+        min-height: 4em;
+        border-bottom: 1px solid var(--color-border);
+        overflow: hidden;
+        white-space: nowrap;
 
-	.poll-table {
-	    > li {
-	        display: flex;
-	        align-items: center;
-	        padding-left: 8px;
-	        padding-right: 8px;
-	        line-height: 2em;
-	        min-height: 4em;
-	        border-bottom: 1px solid var(--color-border);
-	        overflow: hidden;
-	        white-space: nowrap;
+        &:active,
+        &:hover {
+            transition: var(--background-dark) 0.3s ease;
+            background-color: var(--color-background-dark); //$hover-color;
+        }
 
-	        &:active,
-	        &:hover {
-	            transition: var(--background-dark) 0.3s ease;
-	            background-color: var(--color-background-dark); //$hover-color;
-	        }
+        > div {
+            display: flex;
+            flex: 1;
+            font-size: 1.2em;
+            opacity: 0.7;
+            white-space: normal;
+            padding-right: 4px;
+            &.avatar {
+                flex: 0;
+            }
+        }
 
-	        > div {
-	            display: flex;
-	            flex: 1;
-	            font-size: 1.2em;
-	            opacity: 0.7;
-	            white-space: normal;
-	            padding-right: 4px;
-	            &.avatar {
-	                flex: 0;
-	            }
-	        }
-
-	        > div:nth-last-child(1) {
-	            justify-content: center;
-	            flex: 0 0;
-	        }
-	    }
-	}
-
+        > div:nth-last-child(1) {
+            justify-content: center;
+            flex: 0 0;
+        }
+    }
+}
 </style>

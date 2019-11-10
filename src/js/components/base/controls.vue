@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		<div class="after">
-			<slot name="after"/>
+			<slot name="after" />
 		</div>
 	</div>
 </template>

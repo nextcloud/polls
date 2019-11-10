@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<CommentAdd />
+		<comment-add />
 		<transition-group v-if="countComments" name="fade" class="comments"
 			tag="ul">
 			<li v-for="(comment) in sortedComments" :key="comment.id">

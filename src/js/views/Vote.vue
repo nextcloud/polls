@@ -23,7 +23,8 @@
 <template>
 	<AppContent>
 		<div class="main-container">
-			<a v-if="!sideBarOpen" @click="toggleSideBar()" href="#" class="icon icon-settings active" :title="sideBarButtonTitle"></a>
+			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
+				:title="sideBarButtonTitle" @click="toggleSideBar()" />
 
 			<div>
 				<h2>
@@ -40,59 +41,56 @@
 				</h3>
 			</div>
 
-			<VoteTable v-show="!loading" @voteSaved="indicateVoteSaved()" />
-			<Notification v-if="loggedIn" />
+			<vote-table v-show="!loading" @voteSaved="indicateVoteSaved()" />
+			<notification v-if="loggedIn" />
 		</div>
 
-		<AppSidebar v-if="sideBarOpen" :active="initialTab" :title="t('polls', 'Details')" @close="toggleSideBar">
+		<app-sidebar v-if="sideBarOpen" :active="initialTab" :title="t('polls', 'Details')"
+			@close="toggleSideBar">
 			<template slot="primary-actions">
 				<UserDiv :user-id="event.owner" :description="t('polls', 'Owner')" />
 			</template>
 
-			<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-				<SideBarTabComments />
-			</AppSidebarTab>
+			<app-sidebar-tab :name="t('polls', 'Comments')" icon="icon-comment">
+				<side-bar-tab-comments />
+			</app-sidebar-tab>
 
-			<AppSidebarTab v-if="allowEdit && event.type === 'datePoll'" :name="t('polls', 'Date options')" icon="icon-calendar">
-				<SideBarTabDateOptions />
-			</AppSidebarTab>
+			<app-sidebar-tab v-if="allowEdit && event.type === 'datePoll'" :name="t('polls', 'Date options')" icon="icon-calendar">
+				<side-bar-tab-date-options />
+			</app-sidebar-tab>
 
-			<AppSidebarTab v-if="allowEdit && event.type === 'textPoll'" :name="t('polls', 'Text options')" icon="icon-toggle-filelist">
-				<SideBarTabTextOptions />
-			</AppSidebarTab>
+			<app-sidebar-tab v-if="allowEdit && event.type === 'textPoll'" :name="t('polls', 'Text options')" icon="icon-toggle-filelist">
+				<side-bar-tab-text-options />
+			</app-sidebar-tab>
 
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
-				<SideBarTabConfiguration />
-			</AppSidebarTab>
+			<app-sidebar-tab v-if="allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
+				<side-bar-tab-configuration />
+			</app-sidebar-tab>
 
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Shares')" icon="icon-share">
-				<SideBarTabShare />
-			</AppSidebarTab>
-		</AppSidebar>
+			<app-sidebar-tab v-if="allowEdit" :name="t('polls', 'Shares')" icon="icon-share">
+				<side-bar-tab-share />
+			</app-sidebar-tab>
+		</app-sidebar>
 		<LoadingOverlay v-if="loading" />
 	</AppContent>
 </template>
 
 <script>
 import moment from 'moment'
-import Controls from '../components/base/controls'
 import Notification from '../components/notification/notification'
 import VoteTable from '../components/Vote/VoteTable'
-import SideBarTabInformation from '../components/SideBar/SideBarTabInformation'
 import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration'
 import SideBarTabDateOptions from '../components/SideBar/SideBarTabDateOptions'
 import SideBarTabTextOptions from '../components/SideBar/SideBarTabTextOptions'
 import SideBarTabComments from '../components/SideBar/SideBarTabComments'
 import SideBarTabShare from '../components/SideBar/SideBarTabShare'
-import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 export default {
 	name: 'Vote',
 	components: {
 		Notification,
-		Controls,
-		SideBarTabInformation,
 		SideBarTabConfiguration,
 		SideBarTabComments,
 		SideBarTabDateOptions,
@@ -194,7 +192,7 @@ export default {
 		},
 
 		openConfigurationTab() {
-			this.initialTab='configuration'
+			this.initialTab = 'configuration'
 			this.sideBarOpen = true
 			this.$store.commit('pollSetProperty', { 'mode': 'edit' })
 		},

@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
-		<Multiselect id="ajax"
+		<multiselect id="ajax"
 			:options="users"
 			:multiple="false"
 			:user-select="true"
@@ -45,12 +45,12 @@
 					{{ values.length }} users selected
 				</span>
 			</template>
-		</Multiselect>
+		</multiselect>
 
 		<h3>{{ t('polls','Invitations') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
-				<UserDiv :user-id="share.userId"/>
+				<UserDiv :user-id="share.userId" />
 				<div class="options">
 					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
 				</div>
@@ -63,7 +63,7 @@
 				<div class="user-row user">
 					<div class="avatar icon-public" />
 					<div class="user-name">
-						{{t('polls', 'Share Link')}}
+						{{ t('polls', 'Share Link') }}
 					</div>
 				</div>
 				<div class="options">
@@ -76,15 +76,14 @@
 </template>
 
 <script>
-import { Multiselect, Avatar } from '@nextcloud/vue'
-import { mapState, mapGetters } from 'vuex'
+import { Multiselect } from '@nextcloud/vue'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
-		Multiselect,
-		Avatar
+		Multiselect
 	},
 
 	data() {
@@ -107,7 +106,7 @@ export default {
 			'sortedShares',
 			'invitationShares',
 			'publicShares'
-		]),
+		])
 	},
 
 	methods: {
@@ -129,16 +128,16 @@ export default {
 
 		addShare(payload) {
 			this.$store.dispatch('writeSharePromise', {
-					'share': {
-						'type' : payload.type,
-						'userId' : payload.user,
-						'pollId' : '0',
-						'userEmail' : '',
-						'hash' : ''
-					}
-				})
+				'share': {
+					'type': payload.type,
+					'userId': payload.user,
+					'pollId': '0',
+					'userEmail': '',
+					'hash': ''
+				}
+			})
 				// .then(response => {
-					// OC.Notification.showTemporary(t('polls', 'You added %n.', 1, payload.user), { type: 'success' })
+			// OC.Notification.showTemporary(t('polls', 'You added %n.', 1, payload.user), { type: 'success' })
 				// })
 				.catch(error => {
 					console.error('Error while adding share comment - Error: ', error)

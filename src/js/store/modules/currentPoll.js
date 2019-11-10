@@ -52,8 +52,8 @@ const getters = {
 
 const actions = {
 	loadPoll({ commit, rootState }, payload) {
-		commit('pollSetProperty', {'mode': payload.mode })
-		commit('pollSetProperty', {'id': payload.pollId })
+		commit('pollSetProperty', { 'mode': payload.mode })
+		commit('pollSetProperty', { 'id': payload.pollId })
 
 	}
 }

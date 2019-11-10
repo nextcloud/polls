@@ -21,9 +21,10 @@
   -->
 
 <template lang="html">
-	<div class="createDlg" class="create-dialog">
+	<div class="create-dialog">
 		<h2>{{ t('polls', 'Create new poll') }}</h2>
-		<input id="pollTitle" v-model="event.title" type="text" :placeholder="t('polls', 'Enter Title')">
+		<input id="pollTitle" v-model="event.title" type="text"
+			:placeholder="t('polls', 'Enter Title')">
 
 		<div class="configBox">
 			<label class="title icon-checkmark">
@@ -45,22 +46,21 @@
 			<button class="button" @click="cancel">
 				{{ t('polls', 'Cancel') }}
 			</button>
-			<button :disabled="titleEmpty" class="button primary" @click="confirm" >
+			<button :disabled="titleEmpty" class="button primary" @click="confirm">
 				{{ t('polls', 'Publish') }}
 			</button>
 		</div>
-
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'createDlg',
+	name: 'CreateDlg',
 
 	data() {
 		return {
 			event: {
-				title: '' ,
+				title: '',
 				description: '',
 				type: 'datePoll',
 				allowMaybe: false,

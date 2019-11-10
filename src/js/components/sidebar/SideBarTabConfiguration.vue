@@ -24,24 +24,23 @@
 	<div>
 		<div class="configBox">
 			<label v-if="writingPoll" class="icon-loading-small title">
-				{{ t('polls', 'Saving')}}
+				{{ t('polls', 'Saving') }}
 			</label>
 			<label v-else class="icon-checkmark title">
-				{{ t('polls', 'Saved')}}
+				{{ t('polls', 'Saved') }}
 			</label>
 		</div>
 
 		<div v-if="allowEdit" class="configBox">
 			<label class="icon-sound title">
-				{{ t('polls', 'Title')}}
+				{{ t('polls', 'Title') }}
 			</label>
 			<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
 
-
 		<div v-if="allowEdit" class="configBox">
 			<label class="icon-edit title">
-				{{ t('polls', 'Description')}}
+				{{ t('polls', 'Description') }}
 			</label>
 			<textarea v-model="eventDescription" />
 			<!-- <textarea v-if="allowEdit" :value="event.description" @input="updateDescription" /> -->
@@ -141,7 +140,6 @@
 				<span>{{ t('polls', 'Only shared') }}</span>
 			</label>
 		</div>
-
 	</div>
 </template>
 
@@ -349,7 +347,6 @@ export default {
 			width: auto;
 			padding: 7px 6px;
 		}
-
 
 		& > .title {
 			display: flex;

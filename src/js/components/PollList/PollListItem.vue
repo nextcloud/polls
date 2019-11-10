@@ -52,8 +52,12 @@
 		<!-- <div v-if="votedBycurrentUser" class="symbol icon-voted" /> -->
 
 		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="title">
-			<div class="name"> {{ poll.event.title }} </div>
-			<div class="description"> {{ poll.event.description }} </div>
+			<div class="name">
+				{{ poll.event.title }}
+			</div>
+			<div class="description">
+				{{ poll.event.description }}
+			</div>
 		</router-link>
 
 		<!-- <div v-if="countComments" v-tooltip.auto="countCommentsHint" class="app-navigation-entry-utils-counter highlighted">
@@ -78,8 +82,12 @@
 		</div>
 
 		<div class="dates">
-			<div class="created "> {{ timeSpanCreated }} </div>
-			<div class="expiry" :class="{ expired : poll.event.expired }"> {{ timeSpanExpiration }} </div>
+			<div class="created ">
+				{{ timeSpanCreated }}
+			</div>
+			<div class="expiry" :class="{ expired : poll.event.expired }">
+				{{ timeSpanExpiration }}
+			</div>
 		</div>
 	</div>
 </template>
@@ -118,7 +126,7 @@ export default {
 				return this.poll.event.access
 			} else if (this.poll.event.access === 'hidden') {
 				return this.poll.event.access
-			} else  {
+			} else {
 				return 'select'
 			}
 		},
@@ -363,7 +371,6 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-
 
 	.created, .expiry {
 		width: 100px;

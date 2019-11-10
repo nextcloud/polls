@@ -37,7 +37,7 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<Multiselect v-model="move.unit" :options="move.units" />
+					<multiselect v-model="move.unit" :options="move.units" />
 				</div>
 			</div>
 			<div>
@@ -51,17 +51,17 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<DatePollItem v-for="(option, index) in sortedOptions"
+			<date-poll-item v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
 				@remove="removeOption(option)" />
 		</ul>
-
 	</div>
 </template>
 
 <script>
 import { Multiselect } from '@nextcloud/vue'
+import moment from 'moment'
 import { mapGetters, mapState } from 'vuex'
 import DatePollItem from '../create/createDateItem'
 
@@ -116,7 +116,7 @@ export default {
 
 		shiftDates(payload) {
 			var store = this.$store
-			this.options.list.forEach( function(existingOption) {
+			this.options.list.forEach(function(existingOption) {
 				var option = Object.assign({}, existingOption)
 				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
@@ -153,7 +153,6 @@ export default {
 			width: auto;
 			padding: 7px 6px;
 		}
-
 
 		& > .title {
 			display: flex;
