@@ -28,6 +28,8 @@
 		</div>
 		<avatar :disable-menu="true" :user="userId" :display-name="computedDisplayName"
 			:is-no-user="isNoUser" />
+		<div class="avatar" :class="iconClass" />
+
 		<div v-if="!hideNames" class="user-name">
 			{{ computedDisplayName }}
 		</div>
@@ -64,6 +66,10 @@ export default {
 		description: {
 			type: String,
 			default: ''
+		},
+		icon: {
+			type: Boolean,
+			default: false
 		}
 
 	},
@@ -78,6 +84,14 @@ export default {
 		isNoUser() {
 			return this.type !== 'user'
 		},
+		iconClass() {
+			if (this.icon) {
+				return 'icon-' + this.type
+			} else {
+				return 'icon-user'
+			}
+		},
+
 		computedDisplayName() {
 			var value = this.displayName
 

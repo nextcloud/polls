@@ -22,7 +22,16 @@
 
 <template>
 	<div>
-		<h2> {{ t('polls', 'Share with') }}</h2>
+		<h3>{{ t('polls','Invitations') }}</h3>
+		<TransitionGroup :css="false" tag="ul" class="shared-list">
+			<li v-for="(share) in invitationShares" :key="share.id">
+				<UserDiv :user-id="share.userId" :type="share.type" :icon="true" />
+				<div class="options">
+					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
+				</div>
+			</li>
+		</TransitionGroup>
+
 		<multiselect id="ajax"
 			:options="users"
 			:multiple="false"
@@ -47,16 +56,6 @@
 			</template>
 		</multiselect>
 
-		<h3>{{ t('polls','Invitations') }}</h3>
-		<TransitionGroup :css="false" tag="ul" class="shared-list">
-			<li v-for="(share) in invitationShares" :key="share.id">
-				<UserDiv :user-id="share.userId" />
-				<div class="options">
-					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
-				</div>
-			</li>
-		</TransitionGroup>
-
 		<h3>{{ t('polls','Public shares') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in publicShares" :key="share.id">
@@ -67,11 +66,17 @@
 					</div>
 				</div>
 				<div class="options">
-					<a class="icon icon-clippy" />
+					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.hash } )" />
 					<a class="icon icon-delete" @click="removeShare(share)" />
 				</div>
 			</li>
 		</TransitionGroup>
+		<div class="user-row user" @click="addShare({type: 'public', user: ''})">
+			<div class="avatar icon-add" />
+			<div class="user-name">
+				{{ t('polls', 'Add a public link') }}
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -120,6 +125,17 @@ export default {
 				}, (error) => {
 					console.error(error.response)
 				})
+		},
+
+		copyLink(payload) {
+			this.$copyText(window.location.origin + payload.url).then(
+				function(e) {
+					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
+				},
+				function(e) {
+					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
+				}
+			)
 		},
 
 		removeShare(share) {

@@ -250,6 +250,7 @@ export default {
 	align-self: center;
 	font-size: 1.4em;
 	padding-top: 14px;
+	hyphens: auto;
 }
 
 .date-box {

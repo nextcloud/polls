@@ -58,7 +58,7 @@ const getters = {
 	},
 
 	invitationShares: state => {
-		var invitationTypes = ['user', 'group']
+		var invitationTypes = ['user', 'group', 'mail', 'external']
 		return state.list.filter(function(share) {
 			return invitationTypes.includes(share.type)
 		})

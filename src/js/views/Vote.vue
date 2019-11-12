@@ -78,7 +78,7 @@
 <script>
 import moment from 'moment'
 import Notification from '../components/notification/notification'
-import VoteTable from '../components/Vote/VoteTable'
+import VoteTable from '../components/VoteTable/VoteTable'
 import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration'
 import SideBarTabDateOptions from '../components/SideBar/SideBarTabDateOptions'
 import SideBarTabTextOptions from '../components/SideBar/SideBarTabTextOptions'

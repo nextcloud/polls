@@ -22,7 +22,7 @@
 
 <template>
 	<div class="vote-item" :class="[getAnswer, activeClass]">
-		<div class="icon" @click="$emit('voteClick')" />
+		<div class="icon" @click="voteClick()" />
 	</div>
 </template>
 
@@ -64,6 +64,15 @@ export default {
 				return 'active'
 			} else {
 				return ''
+			}
+		}
+
+	},
+
+	methods: {
+		voteClick() {
+			if (this.activeClass === 'active') {
+				this.$emit('voteClick')
 			}
 		}
 

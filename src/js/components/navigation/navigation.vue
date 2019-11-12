@@ -25,9 +25,11 @@
 		<app-navigation-new :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<create-dlg v-show="createDlg" @closeCreate="closeCreate()" />
 		<ul>
-			<app-navigation-item title="All polls"
+			<app-navigation-item
+				:title="t('polls', 'All polls')"
 				:allow-collapse="true"
 				icon="icon-folder"
+				:to="{ name: 'list'}"
 				:open="true">
 				<ul>
 					<app-navigation-item
@@ -38,9 +40,8 @@
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</app-navigation-item>
-		</ul>
-		<ul>
-			<app-navigation-item title="My polls"
+			<app-navigation-item
+				:title="t('polls', 'My polls')"
 				:allow-collapse="true"
 				icon="icon-folder"
 				:open="false">
@@ -53,10 +54,8 @@
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</app-navigation-item>
-		</ul>
-
-		<ul>
-			<app-navigation-item title="Public polls"
+			<app-navigation-item
+				:title="t('polls', 'Public polls')"
 				:allow-collapse="true"
 				icon="icon-folder"
 				:open="false">
@@ -69,10 +68,8 @@
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</app-navigation-item>
-		</ul>
-
-		<ul>
-			<app-navigation-item title="Hidden polls"
+			<app-navigation-item
+				:title="t('polls', 'Hidden polls')"
 				:allow-collapse="true"
 				icon="icon-folder"
 				:open="false">
