@@ -96,7 +96,7 @@ OC.L10N.register(
     "Say maybe to all" : "Odpovědět na všechno možná",
     "This poll was updated since your last visit. Please check your votes." : "Tato anketa byla od minulé návštěvy změněna. Zkontrolujte své hlasy.",
     "Vote!" : "Hlasovat!",
-    "Receive notification email on activity" : "Dostávat emailem oznámení o aktivitě",
+    "Receive notification email on activity" : "Dostávat e-mailem oznámení o aktivitě",
     "Close details" : "Zavřít podrobnosti",
     "Close" : "Zavřít",
     "Expires on %s" : "Platnost skončí %s",
