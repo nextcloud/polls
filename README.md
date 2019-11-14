@@ -31,7 +31,7 @@ Vote and comment
 
 Edit poll on the vote page as owner or an admin
 ![Edit poll](screenshots/edit-poll.png)
-![New poll](screenshots/edit-poll.png)
+![Edit options](screenshots/edit-options.png)
 
 Add shared links to your poll
 ![Share poll](screenshots/edit-shares.png)
