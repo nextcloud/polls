@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - tbd 
+
+ - huge update of polls
+ - completely rewritten as a vue app
+ - vote, edit poll in one page
+ - instant persisting of votes and configuration
+ - changed sharing
+
+## [0.10.4] - 2019-11-27
+
+  - Nextcloud 17
+
 ## [0.10.2] - 2019-03-13
 
   - #532 - cannot share poll (only share option)
