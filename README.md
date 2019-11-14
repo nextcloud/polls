@@ -7,11 +7,11 @@
 
 ## This branch is in alpha state, do not use for production needs
 
-This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / jQuery.
+This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
 It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
 
 **Note**: ownCloud is **no longer** supported! Last (confirmed) working version is 0.8.1 and is released in the oC marketplace.
-**Note**: IE11 users will face some CSS problems (see #541). Please change to a compatible browser (Firefox, Chrome, Edge, etc.)
+**Note**: IE11 users will face some CSS problems (see #541). Please change to a compatible browser (Firefox, Chrome, Edge, etc.). Or better: don't even try this browser
 
 ### Features
 - :bar_chart: Create / edit polls (datetimes _and_ texts)
@@ -23,26 +23,30 @@ It is a rework of the already existing [polls app](https://github.com/raduvatav/
 - https://github.com/nextcloud/polls/issues
 
 ### Screenshots
-Overview of all polls
-![Overview](https://github.com/nextcloud/polls/blob/master/screenshots/overview.png)
+Create a new poll from the navigation bar and get an overview of your polls
+![Overview](screenshots/overview.png)
 
-The vote page
-![Vote](https://github.com/nextcloud/polls/blob/master/screenshots/vote.png)
+Vote and comment
+![Vote](screenshots/vote.png)
 
-Creating a new poll
-![New poll](https://github.com/nextcloud/polls/blob/master/screenshots/edit-poll.png)
+Edit poll on the vote page as owner or an admin
+![Edit poll](screenshots/edit-poll.png)
+![New poll](screenshots/edit-poll.png)
+
+Add shared links to your poll
+![Share poll](screenshots/edit-shares.png)
 
 View the vote page on mobiles
-![Vote mobile portrait](https://github.com/nextcloud/polls/blob/master/screenshots/vote-mobile-portrait.png)
+![Vote mobile portrait](screenshots/vote-mobile-portrait.png)
 
 Turn phone to landscape to see details
-![Vote mobile landscape](https://github.com/nextcloud/polls/blob/master/screenshots/vote-mobile-landscape.png)
+![Vote mobile landscape](screenshots/vote-mobile-landscape.png)
 
 ## Installation / Update
 This app is supposed to work on Nextcloud version 13+.
 
 ### Install latest release
-You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls) or a legacy version from the [ownCloud marketplace](https://marketplace.owncloud.com/apps/polls).
+You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls).
 
 ### Install from git
 If you want to run the latest development version from git source, you need to clone the repo to your apps folder:
