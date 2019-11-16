@@ -88,7 +88,7 @@ export default {
 			if (this.icon) {
 				return 'icon-' + this.type
 			} else {
-				return 'icon-user'
+				return ''
 			}
 		},
 

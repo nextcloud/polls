@@ -38,6 +38,8 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Model\Acl;
+
 use OCA\Polls\Service\AnonymizeService;
 
 
@@ -49,6 +51,7 @@ class CommentController extends Controller {
 	private $groupManager;
 	private $eventMapper;
 	private $anonymizer;
+	private $acl;
 
 	/**
 	 * CommentController constructor.
@@ -58,6 +61,7 @@ class CommentController extends Controller {
 	 * @param IGroupManager $groupManager
 	 * @param EventMapper $eventMapper
 	 * @param AnonymizeService $anonymizer
+	 * @param Acl $acl
 	 */
 
 	public function __construct(
@@ -67,7 +71,8 @@ class CommentController extends Controller {
 		CommentMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
-		AnonymizeService $anonymizer
+		AnonymizeService $anonymizer,
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
@@ -75,6 +80,7 @@ class CommentController extends Controller {
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->anonymizer = $anonymizer;
+		$this->acl = $acl;
 	}
 
 
@@ -91,7 +97,8 @@ class CommentController extends Controller {
 		try {
 			$event = $this->eventMapper->find($pollId);
 			$comments = $this->mapper->findByPoll($pollId);
-			if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->getOwner() !== $this->userId))) {
+			// if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->getOwner() !== $this->userId))) {
+			if (!$this->acl->setAcl($event)['allowSeeUsernames']) {
 				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId);
 			}
 
@@ -127,6 +134,29 @@ class CommentController extends Controller {
 
 		try {
 			$comment = $this->mapper->insert($comment);
+		} catch (\Exception $e) {
+			return new DataResponse($e, Http::STATUS_CONFLICT);
+		}
+
+		return new DataResponse($comment, Http::STATUS_OK);
+
+	}
+
+	/**
+	 * delete
+	 * Delete Comment
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param string $message
+	 * @return DataResponse
+	 */
+	public function delete($comment, $userId) {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+		try {
+			$comment = $this->mapper->delete($comment['id']);
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}

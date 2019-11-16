@@ -37,7 +37,7 @@ use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Event;
 
-use OCA\Polls\Service\AccessService;
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
@@ -45,11 +45,11 @@ use OCA\Polls\Db\ShareMapper;
 class ShareController extends Controller {
 
     private $logger;
+    private $acl;
 	private $mapper;
 	private $userId;
 
 	private $eventMapper;
-	private $accessService;
 
 	/**
 	 * ShareController constructor.
@@ -58,23 +58,23 @@ class ShareController extends Controller {
 	 * @param IRequest $request
 	 * @param EventMapper $eventMapper
 	 * @param ShareMapper $mapper
-	 * @param AccessService $accessService
+	 * @param Acl $acl
 	 */
 	public function __construct(
 		string $appName,
-		$UserId,
+		$userId,
 		IRequest $request,
 		ILogger $logger,
 		ShareMapper $mapper,
 		EventMapper $eventMapper,
-		AccessService $accessService
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
         $this->logger = $logger;
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->mapper = $mapper;
 		$this->eventMapper = $eventMapper;
-		$this->accessService = $accessService;
+		$this->acl = $acl;
 	}
 
 	/**
@@ -85,7 +85,8 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
-		if ($this->accessService->userHasEditRights($pollId)) {
+		// $this->acl->setPollId($pollId)
+		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
 			try {
 				$event = $this->eventMapper->find($pollId);
 				$shares = $this->mapper->findByPoll($pollId);
@@ -111,7 +112,8 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($pollId, $share) {
-		if (!$this->accessService->userHasEditRights($pollId)) {
+		$this->acl->setPollId($pollId);
+		if (!$this->acl->getAllowEdit()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
@@ -120,7 +122,7 @@ class ShareController extends Controller {
 		$newShare->setPollId($share['pollId']);
 		$newShare->setUserId($share['userId']);
 		$newShare->setUserEmail($share['userEmail']);
-		$newShare->setHash(\OC::$server->getSecureRandom()->generate(
+		$newShare->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
@@ -138,16 +140,16 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * getByHash
-	 * Get pollId by hash
+	 * getByToken
+	 * Get pollId by token
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param string $hash
+	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function getByHash($hash) {
+	public function getByToken($token) {
 		try {
-			$share = $this->mapper->findByHash($hash);
+			$share = $this->mapper->findByToken($token);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		} finally {
@@ -157,28 +159,19 @@ class ShareController extends Controller {
 
 	public function remove($share) {
 		try {
-			$Event = $this->eventMapper->find($share['pollId']);
+			if ($this->acl->setPollId($share['pollId'])->getAllowEdit()) {
+				$this->mapper->remove($share['id']);
 
-			if (!$this->accessService->userHasEditRights($share['pollId'])) {
+				return new DataResponse(array(
+					'action' => 'deleted',
+					'shareId' => $share['id']
+				), Http::STATUS_OK);
+			} else {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
 
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
-		try {
-			$this->mapper->remove($share['id']);
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
-		return new DataResponse(array(
-			'action' => 'deleted',
-			'shareId' => $share['id']
-		), Http::STATUS_OK);
-
 	}
-
-
 }

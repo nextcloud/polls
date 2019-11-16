@@ -120,7 +120,7 @@ class EventController extends Controller {
  		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
 			$this->logger->debug($e, ['app' => 'polls']);
-			$data['poll'] = ['result' => 'notFound'];
+			return new DataResponse(null, Http::STATUS_NOT_FOUND);
  		}
 
 		if ($event->getType() == 0) {
@@ -140,23 +140,24 @@ class EventController extends Controller {
 			$expired = time() > strtotime($event->getExpire());
 			$expiration = true;
 		}
+		return new DataResponse((object) [
+				'id' => $event->getId(),
+				'type' => $pollType,
+				'title' => $event->getTitle(),
+				'description' => $event->getDescription(),
+				'owner' => $event->getOwner(),
+				'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
+				'created' => $event->getCreated(),
+				'access' => $accessType,
+				'expiration' => $expiration,
+				'expired' => $expired,
+				'expirationDate' => $event->getExpire(),
+				'isAnonymous' => boolval($event->getIsAnonymous()),
+				'fullAnonymous' => boolval($event->getFullAnonymous()),
+				'allowMaybe' => boolval($event->getAllowMaybe())
+			],
+			Http::STATUS_OK);
 
-		return (object) [
-			'id' => $event->getId(),
-			'type' => $pollType,
-			'title' => $event->getTitle(),
-			'description' => $event->getDescription(),
-			'owner' => $event->getOwner(),
-			'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
-			'created' => $event->getCreated(),
-			'access' => $accessType,
-			'expiration' => $expiration,
-			'expired' => $expired,
-			'expirationDate' => $event->getExpire(),
-			'isAnonymous' => boolval($event->getIsAnonymous()),
-			'fullAnonymous' => boolval($event->getFullAnonymous()),
-			'allowMaybe' => boolval($event->getAllowMaybe())
-		];
  	}
 
 

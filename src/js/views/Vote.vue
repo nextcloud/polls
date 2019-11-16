@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent>
-		<div class="main-container">
+		<div v-if="event.id > 0" class="main-container">
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="sideBarButtonTitle" @click="toggleSideBar()" />
 
@@ -208,9 +208,17 @@ export default {
 		},
 
 		refreshPoll() {
+			let pollId = 0
 			this.loading = true
 			moment.locale(this.localeString)
-			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id, mode: this.$route.name })
+
+			if (this.$route.name === 'publicVote') {
+				pollId = this.$route.params.token
+			} else {
+				pollId = this.$route.params.id
+			}
+
+			this.$store.dispatch({ type: 'loadEvent', pollId: pollId })
 				.then(() => {
 					this.$store.dispatch({
 						type: 'loadPoll',
@@ -223,6 +231,9 @@ export default {
 								this.openInEditMode()
 							}
 						})
+				})
+				.catch(() => {
+					this.loading = false
 				})
 
 		},

@@ -69,4 +69,18 @@ class CommentMapper extends QBMapper {
 
 	   $qb->execute();
 	}
+
+	/**
+	 * @param int $id
+	 */
+	public function deleteComment($id) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   );
+
+	   $qb->execute();
+	}
 }

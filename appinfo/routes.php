@@ -52,11 +52,13 @@ return [
 		['name' => 'share#get', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/write/share', 'verb' => 'POST'],
 		['name' => 'share#remove', 'url' => '/remove/share', 'verb' => 'POST'],
-		['name' => 'share#getByHash', 'url' => '/get/share/{hash}', 'verb' => 'GET'],
+		['name' => 'share#getByToken', 'url' => '/get/share/{token}', 'verb' => 'GET'],
 
 		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
 		['name' => 'api#get_poll', 'url' => '/get/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],
+		['name' => 'api#getAclByToken', 'url' => '/get/aclbytoken/{token}', 'verb' => 'GET'],
+		['name' => 'api#getAclById', 'url' => '/get/aclbyid/{id}', 'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
 		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']

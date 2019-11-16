@@ -29,7 +29,7 @@ use OCP\AppFramework\Db\Entity;
 
 /**
  * @method string gethash()
- * @method void setHash(string $value)
+ * @method void setToken(string $value)
  * @method string getType()
  * @method void setType(string $value)
  * @method integer getPollId()
@@ -40,7 +40,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserEmail(string $value)
  */
 class Share extends Entity implements JsonSerializable {
-	protected $hash;
+	protected $token;
 	protected $type;
 	protected $pollId;
 	protected $userId;
@@ -50,7 +50,7 @@ class Share extends Entity implements JsonSerializable {
 
 		return [
 			'id' => $this->id,
-			'hash' => $this->hash,
+			'token' => $this->token,
 			'type' => $this->type,
 			'pollId' => $this->pollId,
 			'userId' => $this->userId,

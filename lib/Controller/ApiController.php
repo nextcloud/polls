@@ -34,6 +34,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Option;
@@ -69,6 +70,7 @@ class ApiController extends Controller {
 	private $notificationController;
 	private $optionController;
 	private $voteController;
+	private $acl;
 
 	/**
 	 * PageController constructor.
@@ -87,6 +89,7 @@ class ApiController extends Controller {
 	 * @param OptionController $optionController
 	 * @param VoteController $voteController
 	 * @param EventService $eventService
+	 * @param Acl $acl
 	 */
 	public function __construct(
 		$appName,
@@ -103,7 +106,8 @@ class ApiController extends Controller {
 		NotificationController $notificationController,
 		OptionController $optionController,
 		VoteController $voteController,
-		EventService $eventService
+		EventService $eventService,
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
@@ -119,6 +123,7 @@ class ApiController extends Controller {
 		$this->optionController = $optionController;
 		$this->voteController = $voteController;
 		$this->eventService = $eventService;
+		$this->acl = $acl;
 	}
 
 	/**
@@ -152,11 +157,39 @@ class ApiController extends Controller {
 				'desc' => 'group',
 				'icon' => 'icon-group',
 				'displayName' => $group->getDisplayName(),
-				'avatarURL' => '',
+				'avatarURL' => ''
 			];
 		}
 
 		return($split);
+	}
+
+
+	/**
+	 * Read all shares (users and groups with access) of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param integer $pollId
+	 * @return array
+	 */
+	public function getAclByToken($token) {
+		$acl = $this->acl->setToken($token);
+		return new DataResponse($acl, Http::STATUS_OK);
+
+	}
+
+	/**
+	 * Read all shares (users and groups with access) of a poll based on the poll id
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param integer $pollId
+	 * @return array
+	 */
+	public function getAclById($id) {
+		$acl = $this->acl->setPollId($id);
+		// $acl = $this->acl->setUserId('dartcafe');
+		return new DataResponse($acl, Http::STATUS_OK);
 	}
 
 	/**

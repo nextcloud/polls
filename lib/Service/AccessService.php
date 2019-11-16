@@ -30,15 +30,14 @@ use OCA\Polls\Db\EventMapper;
 
 class AccessService {
 
+	private $logger;
 	private $groupManager;
 	private $eventMapper;
-	private $logger;
 
 	/**
 	 * PageController constructor.
 	 * @param string $appName
 	 * @param $UserId
-	 * @param IRequest $request
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 */

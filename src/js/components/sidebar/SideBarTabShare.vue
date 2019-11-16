@@ -66,7 +66,7 @@
 					</div>
 				</div>
 				<div class="options">
-					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.hash } )" />
+					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
 					<a class="icon icon-delete" @click="removeShare(share)" />
 				</div>
 			</li>
@@ -149,7 +149,7 @@ export default {
 					'userId': payload.user,
 					'pollId': '0',
 					'userEmail': '',
-					'hash': ''
+					'token': ''
 				}
 			})
 				// .then(response => {

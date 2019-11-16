@@ -1,0 +1,333 @@
+<?php
+/**
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ *
+ * @author René Gieling <github@dartcafe.de>
+*
+ * @license GNU AGPL version 3 or any later version
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+namespace OCA\Polls\Model;
+
+use JsonSerializable;
+use Exception;
+use OCP\AppFramework\Db\DoesNotExistException;
+
+use OCP\ILogger;
+use OCP\IGroupManager;
+use OCA\Polls\Db\Event;
+use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\ShareMapper;
+
+/**
+ * Class Acl
+ *
+ * @package OCA\Polls\Model\Acl
+ */
+class Acl implements JsonSerializable {
+
+	private $logger;
+	private $groupManager;
+	private $eventMapper;
+	private $shareMapper;
+
+	/** @var string */
+	private $userId = '';
+
+	/** @var int */
+	private $pollId = 0;
+
+	/** @var string */
+	private $token = '';
+
+	/** @var bool */
+	private $foundByToken = false;
+
+	/** @var Event */
+	private $event;
+
+
+	/**
+	 * Acl constructor.
+	 * @param $pollIdOrToken
+	 * @param IGroupManager $groupManager
+	 * @param IUserManager $userManager
+	 * @param ShareMapper $shareMapper
+	 * @param EventMapper $eventMapper
+	 * @param Event $eventMapper
+	 *
+	 */
+	public function __construct(
+		ILogger $logger,
+		IGroupManager $groupManager,
+		EventMapper $eventMapper,
+		ShareMapper $shareMapper,
+		Event $event
+	) {
+		$this->logger = $logger;
+		$this->groupManager = $groupManager;
+		$this->eventMapper = $eventMapper;
+		$this->shareMapper = $shareMapper;
+		$this->event = $event;
+		// self::getAcl($pollIdOrToken);
+
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getUserId(): string {
+		if ($this->userId === '') {
+			return \OC::$server->getUserSession()->getUser()->getUID();
+		} else {
+			return $this->userId;
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function setUserId(string $userId): Acl {
+		$this->userId = $userId;
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPollId(): int {
+		return $this->pollId;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function setPollId(int $pollId): Acl {
+		$this->pollId = $pollId;
+		$this->event = $this->eventMapper->find($this->pollId);
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getToken(): string {
+		return $this->token;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function setToken(string $token): Acl {
+		try {
+			$share = $this->shareMapper->findByToken($token);
+			$this->foundByToken = true;
+			$this->setPollId($share->getPollId());
+			$this->setUserId($share->getUserId());
+			$this->token = $token;
+
+		} catch (DoesNotExistException $e) {
+			$this->setPollId(0);
+			$this->setUserId('');
+		}
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsOwner(): bool {
+		return ($this->event->getOwner() === \OC::$server->getUserSession()->getUser()->getUID());
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsAdmin(): bool {
+		return $this->groupManager->isAdmin(\OC::$server->getUserSession()->getUser()->getUID());
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowView(): bool {
+		if ($this->pollId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowVote(): bool {
+		if ($this->pollId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowComment(): bool {
+		return $this->getAllowVote();
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowEdit(): bool {
+		return ($this->getIsOwner() || $this->getIsAdmin());
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowSeeUsernames(): bool {
+		return !(($this->event->getIsAnonymous() && !$this->getIsOwner()) || $this->event->getFullAnonymous());;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowSeeAllVotes(): bool {
+		// TODO: preparation for polls without displaying other votes
+		if ($this->pollId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getFoundByToken(): bool {
+		return $this->foundByToken;
+	}
+
+	/**
+	* @return string
+	*/
+	public function getAccessLevel(): string {
+		if ($this->getIsOwner()) {
+			return 'owner';
+		} elseif ($this->event->getAccess() === 'public') {
+			return 'public';
+		} elseif ($this->event->getAccess() === 'registered' && \OC::$server->getUserSession()->isLoggedIn()) {
+			return 'registered';
+		} elseif ($this->event->getAccess() === 'hidden' && ($this->getisOwner() === \OC::$server->getUserSession()->getUser())) {
+			return 'hidden';
+		} elseif ($this->getIsAdmin()) {
+			return 'admin';
+		} else {
+			return 'none';
+		}
+	}
+
+	// public function setAcl(Event $event) {
+	//
+	// 	return	[
+	// 		'userId'            => $this->getUserId(),
+	// 		'pollId'            => $this->getPollId(),
+	// 		'token'             => $this->getToken(),
+	// 		'isOwner'           => $this->getIsOwner(),
+	// 		'isAdmin'           => $this->getIsAdmin(),
+	// 		'allowView'         => $this->getAllowView(),
+	// 		'allowVote'         => $this->getAllowVote(),
+	// 		'allowComment'      => $this->getAllowComment(),
+	// 		'allowEdit'         => $this->getAllowEdit(),
+	// 		'allowSeeUsernames' => $this->getAllowSeeUsernames(),
+	// 		'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
+	// 		'foundByToken'       => $this->getFoundByToken(),
+	// 		'event' => $this->event
+	// 	];
+	//
+	// }
+
+	// /**
+	//  * @param mixed $pollIdOrToken
+	//  */
+	// public function getAcl($pollIdOrToken) {
+	//
+	// 	// Try, if parameter is a valid token and set userId and pollId from share
+	// 	try {
+	//
+	// 		$share = $this->shareMapper->findByToken($pollIdOrToken);
+	// 		$this->foundByToken = true;
+	// 		$this->pollId = $share->getPollId();
+	// 		$this->userId = $share->getUserId();
+	// 		$this->token = $pollIdOrToken;
+	//
+	// 	} catch (DoesNotExistException $e) {
+	// 		// no share found, assume parameter is a pollId
+	// 		$this->pollId = $pollIdOrToken;
+	// 		// the user must be logged in,  set current user
+	// 		$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
+	// 	}
+	//
+	// 	try {
+	// 		// Load Event details with pollId
+	// 		$event = $this->eventMapper->find($this->pollId);
+	// 		return $this->setAcl($event);
+	// 	} catch (DoesNotExistException $e) {
+	// 		$this->pollId = 0;
+	// 	}
+	//
+	// 	return	[
+	// 		'userId'            => $this->getUserId(),
+	// 		'pollId'            => $this->getPollId(),
+	// 		'token'             => $this->getToken(),
+	// 		'isOwner'           => $this->getIsOwner(),
+	// 		'isAdmin'           => $this->getIsAdmin(),
+	// 		'allowView'         => $this->getAllowView(),
+	// 		'allowVote'         => $this->getAllowVote(),
+	// 		'allowComment'      => $this->getAllowComment(),
+	// 		'allowEdit'         => $this->getAllowEdit(),
+	// 		'allowSeeUsernames' => $this->getAllowSeeUsernames(),
+	// 		'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
+	// 		'foundByToken'       => $this->getFoundByToken()
+	// 	];
+	// }
+
+	/**
+	 * @return array
+	 */
+	public function jsonSerialize(): array {
+		return	[
+			'userId'            => $this->getUserId(),
+			'pollId'            => $this->getPollId(),
+			'token'             => $this->getToken(),
+			'isOwner'           => $this->getIsOwner(),
+			'isAdmin'           => $this->getIsAdmin(),
+			'allowView'         => $this->getAllowView(),
+			'allowVote'         => $this->getAllowVote(),
+			'allowComment'      => $this->getAllowComment(),
+			'allowEdit'         => $this->getAllowEdit(),
+			'allowSeeUsernames' => $this->getAllowSeeUsernames(),
+			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
+			'foundByToken'      => $this->getFoundByToken(),
+			'accessLevel'       => $this->getAccessLevel()
+		];
+	}
+}

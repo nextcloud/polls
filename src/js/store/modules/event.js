@@ -100,15 +100,17 @@ const getters = {
 const actions = {
 
 	loadEvent({ commit }, payload) {
-		commit({ type: 'eventReset' })
-		if (payload.mode !== 'create') {
-			return axios.get(OC.generateUrl('apps/polls/get/event/' + payload.pollId))
-				.then((response) => {
-					commit('eventSet', { 'event': response.data })
-				}, (error) => {
-					console.error('writeEventPromise - error:', error)
-				})
-		}
+		return axios.get(OC.generateUrl('apps/polls/get/event/' + payload.pollId))
+			.then((response) => {
+				commit('eventSet', { 'event': response.data })
+				return response
+			}, (error) => {
+				commit({ type: 'eventReset' })
+				if (!error.response.status === '404') {
+					console.error('loadEvent - error:', error)
+				}
+				throw error
+			})
 	},
 
 	addEventPromise({ commit }, payload) {
@@ -117,15 +119,18 @@ const actions = {
 				return response
 			}, (error) => {
 				console.error('addEventPromise - error:', error.response)
+				throw error
 			})
 
 	},
 
 	deleteEventPromise({ commit }, payload) {
 		return axios.post(OC.generateUrl('apps/polls/delete/event'), { event: payload.id })
-			.then(() => {
+			.then((response) => {
+				return response
 			}, (error) => {
 				console.error('deleteEventPromise - error:', error.response)
+				throw error
 			})
 
 	},
@@ -136,6 +141,7 @@ const actions = {
 				commit('eventSet', { 'event': response.data })
 			}, (error) => {
 				console.error('writeEventPromise - error:', error.response)
+				throw error
 			})
 
 	}

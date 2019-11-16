@@ -75,6 +75,14 @@ export default new Router({
 			},
 			props: true,
 			name: 'create'
+		},
+		{
+			path: '/:index(index.php/)?apps/polls/s/:token',
+			components: {
+				default: Vote
+			},
+			props: true,
+			name: 'publicVote'
 		}
 	]
 })
