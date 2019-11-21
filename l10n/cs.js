@@ -2,7 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Do you really want to delete this new poll?" : "Opravdu chcete tuto novou anketu smazat?",
-    "Copied!" : "Zkopírováno!",
+    "Copied!" : "Zkopírováno",
     "Copy" : "Zkopírovat",
     "Not supported!" : "Nepodporováno!",
     "Press ⌘-C to copy." : "Zkopírujete stisknutím ⌘-C.",
@@ -28,7 +28,7 @@ OC.L10N.register(
     "Access" : "Přístup",
     "Owner" : "Vlastník",
     "Created" : "Vytvořeno",
-    "Expires" : "Platnost vyprší",
+    "Expires" : "Platnost skončí",
     "Public access" : "Veřejný přístup",
     "Only shared" : "Pouze sdílené",
     "Registered users only" : "Pouze registrovaní uživatelé",
