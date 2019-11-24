@@ -52,6 +52,7 @@ OC.L10N.register(
     "Allow \"maybe\" vote" : "Leisti \"Galbūt\" balsą",
     "hidden" : "Paslėpta",
     "Create new poll" : "Sukurti naują apklausą",
+    "Writing poll" : "Įrašoma apklausa",
     "Update poll" : "Atnaujinti apklausą",
     "Expiration date" : "Galiojimo pabaigos data",
     "Click to add a date" : "Spustelėkite, norėdami pridėti datą",
