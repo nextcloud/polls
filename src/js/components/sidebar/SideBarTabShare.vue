@@ -32,7 +32,7 @@
 			</li>
 		</TransitionGroup>
 
-		<multiselect id="ajax"
+		<Multiselect id="ajax"
 			:options="users"
 			:multiple="false"
 			:user-select="true"
@@ -54,7 +54,7 @@
 					{{ values.length }} users selected
 				</span>
 			</template>
-		</multiselect>
+		</Multiselect>
 
 		<h3>{{ t('polls','Public shares') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">

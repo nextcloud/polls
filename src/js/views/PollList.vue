@@ -33,7 +33,7 @@
 
 			<transition-group v-if="!noPolls" name="list" tag="div"
 				class="table">
-				<poll-list-item key="0" :header="true" />
+				<PollListItem key="0" :header="true" />
 				<li is="PollListItem"
 					v-for="(poll, index) in pollList"
 					:key="poll.id"

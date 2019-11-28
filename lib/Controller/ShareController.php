@@ -84,7 +84,7 @@ class ShareController extends Controller {
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function get($pollId) {
+	public function getShares($pollId) {
 		// $this->acl->setPollId($pollId)
 		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
 			try {
@@ -144,10 +144,11 @@ class ShareController extends Controller {
 	 * Get pollId by token
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function getByToken($token) {
+	public function get($token) {
 		try {
 			$share = $this->mapper->findByToken($token);
 		} catch (DoesNotExistException $e) {

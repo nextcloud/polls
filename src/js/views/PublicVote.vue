@@ -54,22 +54,6 @@
 			<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
 				<SideBarTabComments />
 			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit && event.type === 'datePoll'" :name="t('polls', 'Date options')" icon="icon-calendar">
-				<SideBarTabDateOptions />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit && event.type === 'textPoll'" :name="t('polls', 'Text options')" icon="icon-toggle-filelist">
-				<SideBarTabTextOptions />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
-				<SideBarTabConfiguration />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Shares')" icon="icon-share">
-				<SideBarTabShare />
-			</AppSidebarTab>
 		</AppSidebar>
 		<LoadingOverlay v-if="loading" />
 	</AppContent>
@@ -78,11 +62,7 @@
 <script>
 import Notification from '../components/notification/notification'
 import VoteTable from '../components/VoteTable/VoteTable'
-import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration'
-import SideBarTabDateOptions from '../components/SideBar/SideBarTabDateOptions'
-import SideBarTabTextOptions from '../components/SideBar/SideBarTabTextOptions'
 import SideBarTabComments from '../components/SideBar/SideBarTabComments'
-import SideBarTabShare from '../components/SideBar/SideBarTabShare'
 import { mapState, mapGetters } from 'vuex'
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
@@ -90,11 +70,7 @@ export default {
 	name: 'Vote',
 	components: {
 		Notification,
-		SideBarTabConfiguration,
 		SideBarTabComments,
-		SideBarTabDateOptions,
-		SideBarTabTextOptions,
-		SideBarTabShare,
 		VoteTable,
 		AppSidebar,
 		AppSidebarTab
@@ -146,23 +122,20 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.loading = true
-			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id })
+			this.loading = false
+			this.$store.dispatch('getShareAsync', { token: this.$route.params.token })
 				.then((response) => {
-					this.$store.dispatch({
-						type: 'loadPoll',
-						pollId: this.$route.params.id,
-						mode: this.$route.name
-					})
-						.then(() => {
-							if (this.$route.name === 'edit') {
-								this.openInEditMode()
-							}
+					this.$store.dispatch('loadEvent', { pollId: response.share.pollId, token: this.$route.params.token })
+						.then((response) => {
+							this.$store.dispatch('loadPoll', { pollId: response.data.id, token: this.$route.params.token })
+								.then(() => {
+									this.loading = false
+								})
+						})
+						.catch((error) => {
+							console.error(error)
 							this.loading = false
 						})
-				})
-				.catch(() => {
-					this.loading = false
 				})
 		},
 

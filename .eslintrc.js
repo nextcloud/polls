@@ -55,7 +55,10 @@ module.exports = {
 		'node/no-unpublished-require': ['off'],
 		'node/no-unsupported-features/es-syntax': ['off'],
 		// kebab case components for vuejs
-		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
+		'vue/component-name-in-template-casing': ['error', 'PascalCase' , {
+		    "registeredComponentsOnly": true,
+		    "ignores": []
+		  }],
 		// space before self-closing elements
 		'vue/html-closing-bracket-spacing': 'error',
 		// code spacing with attributes

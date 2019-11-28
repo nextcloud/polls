@@ -92,8 +92,8 @@ class Acl implements JsonSerializable {
 	/**
 	 * @return string
 	 */
-	public function getUserId(): string {
-		if ($this->userId === '') {
+	 public function getUserId(): string {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return \OC::$server->getUserSession()->getUser()->getUID();
 		} else {
 			return $this->userId;
@@ -154,14 +154,22 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getIsOwner(): bool {
-		return ($this->event->getOwner() === \OC::$server->getUserSession()->getUser()->getUID());
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return ($this->event->getOwner() === \OC::$server->getUserSession()->getUser()->getUID());
+		} else {
+			return false;
+		}
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function getIsAdmin(): bool {
-		return $this->groupManager->isAdmin(\OC::$server->getUserSession()->getUser()->getUID());
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return $this->groupManager->isAdmin(\OC::$server->getUserSession()->getUser()->getUID());
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -236,7 +244,7 @@ class Acl implements JsonSerializable {
 			return 'public';
 		} elseif ($this->event->getAccess() === 'registered' && \OC::$server->getUserSession()->isLoggedIn()) {
 			return 'registered';
-		} elseif ($this->event->getAccess() === 'hidden' && ($this->getisOwner() === \OC::$server->getUserSession()->getUser())) {
+		} elseif ($this->event->getAccess() === 'hidden' && $this->getisOwner()) {
 			return 'hidden';
 		} elseif ($this->getIsAdmin()) {
 			return 'admin';
@@ -244,71 +252,6 @@ class Acl implements JsonSerializable {
 			return 'none';
 		}
 	}
-
-	// public function setAcl(Event $event) {
-	//
-	// 	return	[
-	// 		'userId'            => $this->getUserId(),
-	// 		'pollId'            => $this->getPollId(),
-	// 		'token'             => $this->getToken(),
-	// 		'isOwner'           => $this->getIsOwner(),
-	// 		'isAdmin'           => $this->getIsAdmin(),
-	// 		'allowView'         => $this->getAllowView(),
-	// 		'allowVote'         => $this->getAllowVote(),
-	// 		'allowComment'      => $this->getAllowComment(),
-	// 		'allowEdit'         => $this->getAllowEdit(),
-	// 		'allowSeeUsernames' => $this->getAllowSeeUsernames(),
-	// 		'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
-	// 		'foundByToken'       => $this->getFoundByToken(),
-	// 		'event' => $this->event
-	// 	];
-	//
-	// }
-
-	// /**
-	//  * @param mixed $pollIdOrToken
-	//  */
-	// public function getAcl($pollIdOrToken) {
-	//
-	// 	// Try, if parameter is a valid token and set userId and pollId from share
-	// 	try {
-	//
-	// 		$share = $this->shareMapper->findByToken($pollIdOrToken);
-	// 		$this->foundByToken = true;
-	// 		$this->pollId = $share->getPollId();
-	// 		$this->userId = $share->getUserId();
-	// 		$this->token = $pollIdOrToken;
-	//
-	// 	} catch (DoesNotExistException $e) {
-	// 		// no share found, assume parameter is a pollId
-	// 		$this->pollId = $pollIdOrToken;
-	// 		// the user must be logged in,  set current user
-	// 		$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
-	// 	}
-	//
-	// 	try {
-	// 		// Load Event details with pollId
-	// 		$event = $this->eventMapper->find($this->pollId);
-	// 		return $this->setAcl($event);
-	// 	} catch (DoesNotExistException $e) {
-	// 		$this->pollId = 0;
-	// 	}
-	//
-	// 	return	[
-	// 		'userId'            => $this->getUserId(),
-	// 		'pollId'            => $this->getPollId(),
-	// 		'token'             => $this->getToken(),
-	// 		'isOwner'           => $this->getIsOwner(),
-	// 		'isAdmin'           => $this->getIsAdmin(),
-	// 		'allowView'         => $this->getAllowView(),
-	// 		'allowVote'         => $this->getAllowVote(),
-	// 		'allowComment'      => $this->getAllowComment(),
-	// 		'allowEdit'         => $this->getAllowEdit(),
-	// 		'allowSeeUsernames' => $this->getAllowSeeUsernames(),
-	// 		'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
-	// 		'foundByToken'       => $this->getFoundByToken()
-	// 	];
-	// }
 
 	/**
 	 * @return array

@@ -24,7 +24,7 @@
 	<div>
 		<h2> {{ t('polls', 'Share with') }}</h2>
 
-		<multiselect id="ajax"
+		<Multiselect id="ajax"
 			v-model="shares"
 			:options="users"
 			:multiple="true"
@@ -47,7 +47,7 @@
 					{{ values.length }} users selected
 				</span>
 			</template>
-		</multiselect>
+		</Multiselect>
 
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(item, index) in sortedShares" :key="item.displayName" :data-index="index">

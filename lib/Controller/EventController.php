@@ -91,27 +91,26 @@ class EventController extends Controller {
 	 */
 
 	public function list() {
+		$events = [];
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			try {
+				$events = $this->mapper->findAll();
+			} catch (DoesNotExistException $e) {
+				$events = [];
+				// return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			}
 		}
-
-		try {
-			$events = $this->mapper->findAll();
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
 		return new DataResponse($events, Http::STATUS_OK);
-
 	}
 
-	 /**
-	  * Read an entire poll based on poll id
-	  * @NoAdminRequired
-	  * @NoCSRFRequired
-	  * @param integer $pollId
-	  * @return array
-	  */
+	/**
+	 * Read an entire poll based on poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @param integer $pollId
+	 * @return array
+	 */
  	public function get($pollId) {
 		$data = array();
 
@@ -119,7 +118,6 @@ class EventController extends Controller {
  			$event = $this->mapper->find($pollId);
  		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
-			$this->logger->debug($e, ['app' => 'polls']);
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
  		}
 
@@ -220,8 +218,6 @@ class EventController extends Controller {
 			$adminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
-		$this->logger->alert(json_encode($event));
-
 		$NewEvent = new Event();
 
 		// Set the configuration options entered by the user
@@ -233,15 +229,6 @@ class EventController extends Controller {
 		$NewEvent->setAllowMaybe(intval($event['allowMaybe']));
 
 		if ($event['access'] === 'select') {
-			// $shareAccess = '';
-			// foreach ($shares as $shareElement) {
-			// 	if ($shareElement['type'] === 'user') {
-			// 		$shareAccess = $shareAccess . 'user_' . $shareElement['id'] . ';';
-			// 	} elseif ($shareElement['type'] === 'group') {
-			// 		$shareAccess = $shareAccess . 'group_' . $shareElement['id'] . ';';
-			// 	}
-			// }
-			// $NewEvent->setAccess(rtrim($shareAccess, ';'));
 		} else {
 			$NewEvent->setAccess($event['access']);
 		}
@@ -276,6 +263,7 @@ class EventController extends Controller {
 
 			} catch (Exception $e) {
 				$this->logger->alert('Poll ' . $oldEvent['id'] . ' not found!', ['app' => 'polls']);
+				return new DataResponse(null, Http::STATUS_NOT_FOUND);
 			}
 
 		} catch (Exception $e) {

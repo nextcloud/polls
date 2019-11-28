@@ -15,7 +15,7 @@ class PublicAPIController extends PublicShareController {
         }
 
         protected function isPasswordProtected(): bool {
-                return false;
+            return false;
         }
 
         public function get() {

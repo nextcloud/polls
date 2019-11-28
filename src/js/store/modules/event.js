@@ -100,14 +100,14 @@ const getters = {
 const actions = {
 
 	loadEvent({ commit }, payload) {
+		commit('eventReset')
 		return axios.get(OC.generateUrl('apps/polls/get/event/' + payload.pollId))
 			.then((response) => {
 				commit('eventSet', { 'event': response.data })
 				return response
 			}, (error) => {
-				commit({ type: 'eventReset' })
-				if (!error.response.status === '404') {
-					console.error('loadEvent - error:', error)
+				if (error.response.status !== '404') {
+					console.error('Error loading event', { 'error': error.response }, { 'payload': payload })
 				}
 				throw error
 			})
@@ -118,7 +118,7 @@ const actions = {
 			.then((response) => {
 				return response
 			}, (error) => {
-				console.error('addEventPromise - error:', error.response)
+				console.error('Error adding event', { 'error': error.response }, { 'payload': payload })
 				throw error
 			})
 
@@ -129,7 +129,7 @@ const actions = {
 			.then((response) => {
 				return response
 			}, (error) => {
-				console.error('deleteEventPromise - error:', error.response)
+				console.error('Error deleting event', { 'error': error.response }, { 'payload': payload })
 				throw error
 			})
 
@@ -140,7 +140,7 @@ const actions = {
 			.then((response) => {
 				commit('eventSet', { 'event': response.data })
 			}, (error) => {
-				console.error('writeEventPromise - error:', error.response)
+				console.error('Error writing event:', { 'error': error.response }, { 'state': state })
 				throw error
 			})
 

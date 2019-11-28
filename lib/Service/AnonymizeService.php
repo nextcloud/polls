@@ -61,13 +61,12 @@ class AnonymizeService {
 	 * @param Array $array Input list which schould be anonymized
 	 * @return array Returns the original array with anonymized user names
 	 */
-	public function getAnonymizedList($array, $pollId) {
+	public function getAnonymizedList($array, $pollId, $userId) {
 		// get mapping for the complete poll
 		$anonList = $this->anonMapper($pollId);
 		foreach ($array as &$element) {
 			// skip current user
-			if ($element->getUserId() !== \OC::$server->getUserSession()->getUser()->getUID()) {
-				// throw new \Exception( json_encode($element->getUserId()) );
+			if ($element->getUserId() !== $userId) {
 				// Check, if searched user name is in mapping array
 				if (isset($anonList[$element->getUserId()])) {
 					//replace original user name

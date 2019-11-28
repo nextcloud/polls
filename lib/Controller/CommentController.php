@@ -38,9 +38,9 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Service\AnonymizeService;
 use OCA\Polls\Model\Acl;
 
-use OCA\Polls\Service\AnonymizeService;
 
 
 class CommentController extends Controller {
@@ -88,18 +88,41 @@ class CommentController extends Controller {
 	 * get
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
 
 		try {
-			$event = $this->eventMapper->find($pollId);
 			$comments = $this->mapper->findByPoll($pollId);
-			// if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->getOwner() !== $this->userId))) {
-			if (!$this->acl->setAcl($event)['allowSeeUsernames']) {
-				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId);
+			if (!$this->acl->setPollId($pollId)->getAllowSeeUsernames()) {
+				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId, \OC::$server->getUserSession()->getUser()->getUID());
+			}
+
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse((array) $comments, Http::STATUS_OK);
+
+	}
+
+	/**
+	 * get
+	 * Read all comments of a poll based on the poll id and return list as array
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @param integer $pollId
+	 * @return DataResponse
+	 */
+	public function getByToken($token) {
+		$this->acl->setToken($token);
+
+		try {
+			$comments = $this->mapper->findByPoll($this->acl->getPollId());
+			if (!$this->acl->getAllowSeeUsernames()) {
+				$comments = $this->anonymizer->getAnonymizedList($comments, $this->acl->getPollId(), $this->acl->getUserId());
 			}
 
 		} catch (DoesNotExistException $e) {

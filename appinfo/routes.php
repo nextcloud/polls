@@ -27,14 +27,17 @@ return [
 
 		['name' => 'page#vote_poll', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
 		['name' => 'page#vote_public', 'url' => '/s/{pollId}', 'verb' => 'GET'],
+		['name' => 'PublicAPI#get', 'url' => '/api/{token}', 'verb' => 'GET' ],
 
 		['name' => 'notification#get', 'url' => '/get/notification/{pollId}', 'verb' => 'GET'],
 		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],
 
 		['name' => 'comment#get', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'comment#getByToken', 'url' => '/get/commentsbytoken/{token}', 'verb' => 'GET'],
 		['name' => 'comment#write', 'url' => '/write/comment', 'verb' => 'POST'],
 
 		['name' => 'vote#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
+		['name' => 'vote#getByToken', 'url' => '/get/votesbytoken/{token}', 'verb' => 'GET'],
 		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
 		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
 
@@ -49,16 +52,13 @@ return [
 		['name' => 'event#write', 'url' => '/write/event/', 'verb' => 'POST'],
 		['name' => 'event#add', 'url' => '/add/event/', 'verb' => 'POST'],
 
-		['name' => 'share#get', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
+		['name' => 'share#getShares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/write/share', 'verb' => 'POST'],
 		['name' => 'share#remove', 'url' => '/remove/share', 'verb' => 'POST'],
-		['name' => 'share#getByToken', 'url' => '/get/share/{token}', 'verb' => 'GET'],
+		['name' => 'share#get', 'url' => '/get/share/{token}', 'verb' => 'GET'],
 
-		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
-		['name' => 'api#get_poll', 'url' => '/get/poll/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],
-		['name' => 'api#getAclByToken', 'url' => '/get/aclbytoken/{token}', 'verb' => 'GET'],
-		['name' => 'api#getAclById', 'url' => '/get/aclbyid/{id}', 'verb' => 'GET'],
+		['name' => 'acl#getByToken', 'url' => '/get/aclbytoken/{token}', 'verb' => 'GET'],
+		['name' => 'acl#get', 'url' => '/get/acl/{id}', 'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
 		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']
