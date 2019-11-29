@@ -66,7 +66,7 @@ class CommentController extends Controller {
 
 	public function __construct(
 		string $appName,
-		$UserId,
+		$userId,
 		IRequest $request,
 		CommentMapper $mapper,
 		IGroupManager $groupManager,
@@ -75,7 +75,7 @@ class CommentController extends Controller {
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
@@ -92,44 +92,47 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
+		$this->acl->setPollId($pollId);
 
 		try {
-			$comments = $this->mapper->findByPoll($pollId);
-			if (!$this->acl->setPollId($pollId)->getAllowSeeUsernames()) {
-				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId, \OC::$server->getUserSession()->getUser()->getUID());
+
+			if (!$this->acl->getAllowSeeUsernames()) {
+				$this->anonymizer->set($pollId, \OC::$server->getUserSession()->getUser()->getUID());
+				return new DataResponse((array) $this->anonymizer->getComments(), Http::STATUS_OK);
+			} else {
+				$comments = $this->mapper->findByPoll($pollId);
+				return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
 			}
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse((array) $comments, Http::STATUS_OK);
-
 	}
 
 	/**
-	 * get
-	 * Read all comments of a poll based on the poll id and return list as array
+	 * getByToken
+	 * Read all comments of a poll based on a share token and return list as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
-	 * @param integer $pollId
+	 * @param string $token
 	 * @return DataResponse
 	 */
 	public function getByToken($token) {
 		$this->acl->setToken($token);
 
 		try {
-			$comments = $this->mapper->findByPoll($this->acl->getPollId());
 			if (!$this->acl->getAllowSeeUsernames()) {
-				$comments = $this->anonymizer->getAnonymizedList($comments, $this->acl->getPollId(), $this->acl->getUserId());
+				$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
+				return new DataResponse((array) $this->anonymizer->getComments(), Http::STATUS_OK);
+			} else {
+				return new DataResponse((array) $this->mapper->findByPoll($this->acl->getPollId()), Http::STATUS_OK);
 			}
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
-		return new DataResponse((array) $comments, Http::STATUS_OK);
 
 	}
 

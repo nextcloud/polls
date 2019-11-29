@@ -86,6 +86,7 @@ class VoteController extends Controller {
 
 	/**
 	 * Get all votes of given poll
+	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @param integer $pollId
 	 * @return DataResponse
@@ -94,38 +95,42 @@ class VoteController extends Controller {
 		$this->acl->setPollId($pollId);
 
 		try {
-			$votes = $this->mapper->findByPoll($pollId);
 			if (!$this->acl->getAllowSeeUsernames()) {
-				$votes = $this->anonymizer->getAnonymizedList($votes, $pollId, \OC::$server->getUserSession()->getUser()->getUID());
+				$this->anonymizer->set($pollId, \OC::$server->getUserSession()->getUser()->getUID());
+				return new DataResponse((array) $this->anonymizer->getVotes(), Http::STATUS_OK);
+			} else {
+				return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
 			}
+
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse((array) $votes, Http::STATUS_OK);
 	}
 
 	/**
-	 * Get all votes of given poll
+	* getByToken
+	* Read all votes of a poll based on a share token and return list as array
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param string $token
 	 * @return DataResponse
 	 */
 	public function getByToken($token) {
 		$this->acl->setToken($token);
 
 		try {
-			$votes = $this->mapper->findByPoll($this->acl->getPollId());
 			if (!$this->acl->getAllowSeeUsernames()) {
-				$votes = $this->anonymizer->getAnonymizedList($this->mapper->findByPoll($this->acl->getPollId()), $this->acl->getPollId(), $this->acl->getUserId());
+				$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
+				return new DataResponse((array) $this->anonymizer->getVotes(), Http::STATUS_OK);
+			} else {
+				return new DataResponse((array) $this->mapper->findByPoll($this->acl->getPollId()), Http::STATUS_OK);
 			}
+
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
-		return new DataResponse((array) $votes, Http::STATUS_OK);
 
 	}
 
