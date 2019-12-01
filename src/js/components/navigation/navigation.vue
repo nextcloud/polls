@@ -151,7 +151,6 @@ export default {
 		},
 
 		refreshPolls() {
-			console.log('route', this.$route.name)
 			if (this.$route.name !== 'publicVote') {
 
 				this.loading = true

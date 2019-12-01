@@ -77,11 +77,11 @@ const getters = {
 	accessType: state => {
 		if (state.acl.accessLevel === 'public') {
 			return t('polls', 'Public access')
-		} else if (state.acl.accessLevel  === 'select') {
+		} else if (state.acl.accessLevel === 'select') {
 			return t('polls', 'Only shared')
-		} else if (state.acl.accessLevel  === 'registered') {
+		} else if (state.acl.accessLevel === 'registered') {
 			return t('polls', 'Registered users only')
-		} else if (state.acl.accessLevel  === 'hidden') {
+		} else if (state.acl.accessLevel === 'hidden') {
 			return t('polls', 'Hidden poll')
 		} else {
 			return state.acl.accessLevel

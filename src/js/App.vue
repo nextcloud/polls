@@ -42,15 +42,15 @@ export default {
 		}
 	},
 
-	watch: {
-		'$route'(to, from) {
-			this.loadNavigation = (this.$route.name !== 'publicVote')
-		}
-	},
-
 	computed: {
 		isPublic() {
 			return (this.$route.name === 'publicVote')
+		}
+	},
+
+	watch: {
+		'$route'(to, from) {
+			this.loadNavigation = (this.$route.name !== 'publicVote')
 		}
 	}
 }

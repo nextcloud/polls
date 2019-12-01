@@ -47,11 +47,11 @@
 				</label>
 
 				<form>
-					<input v-model="userName" :class="{ error: !isValidName }" type="text" :placeholder="t('polls', 'Choose your username')">
+					<input v-model="userName" :class="{ error: !isValidName }" type="text"
+						:placeholder="t('polls', 'Choose your username')">
 					<input v-show="!checkingUserName" class="icon-confirm" @click="writeUserName">
 					<span v-show="checkingUserName" class="icon-loading-small" style="float:right;" />
 					<span v-show="!checkingUserName">{{ token }} </span>
-
 				</form>
 			</div>
 
@@ -142,23 +142,23 @@ export default {
 			this.loading = false
 			// this.$store.dispatch('getShareAsync', { token: this.$route.params.token })
 			// 	.then((response) => {
-					this.$store.dispatch('loadEvent', { token: this.$route.params.token })
-						.then((response) => {
-							this.$store.dispatch('loadPoll', { token: this.$route.params.token })
-								.then(() => {
-									this.loading = false
-								})
-						})
-						.catch((error) => {
-							console.error(error)
+			this.$store.dispatch('loadEvent', { token: this.$route.params.token })
+				.then((response) => {
+					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
+						.then(() => {
 							this.loading = false
 						})
+				})
+				.catch((error) => {
+					console.error(error)
+					this.loading = false
+				})
 				// })
 		},
 
 		writeUserName() {
 			this.checkingUsername = true
-			this.$store.dispatch('addShareFromUser', {token: this.$route.params.token, userName: this.userName})
+			this.$store.dispatch('addShareFromUser', { token: this.$route.params.token, userName: this.userName })
 				.then((response) => {
 					this.token = response.data.token
 				})

@@ -64,8 +64,8 @@ export default {
 		},
 
 		isActive() {
-				return (this.isValidUser && this.event.acl.userId === this.userId && !this.event.expired)
-		},
+			return (this.isValidUser && this.event.acl.userId === this.userId && !this.event.expired)
+		}
 
 	},
 

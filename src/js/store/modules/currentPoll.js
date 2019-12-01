@@ -44,7 +44,6 @@ const mutations = {
 	}
 }
 
-
 const actions = {
 	loadPoll({ commit, rootState }, payload) {
 		commit('pollSetProperty', { 'mode': payload.mode })

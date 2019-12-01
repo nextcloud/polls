@@ -22,7 +22,6 @@
 
 <template lang="html">
 	<div class="vote-table">
-
 		<div class="header">
 			<div class="sticky" />
 
