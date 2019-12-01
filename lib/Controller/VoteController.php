@@ -92,11 +92,15 @@ class VoteController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
-		$this->acl->setPollId($pollId);
 
 		try {
+
+			if (!$this->acl->getFoundByToken()) {
+				$this->acl->setPollId($pollId);
+			}
+
 			if (!$this->acl->getAllowSeeUsernames()) {
-				$this->anonymizer->set($pollId, \OC::$server->getUserSession()->getUser()->getUID());
+				$this->anonymizer->set($pollId, $this->acl->getUserId());
 				return new DataResponse((array) $this->anonymizer->getVotes(), Http::STATUS_OK);
 			} else {
 				return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
@@ -109,8 +113,8 @@ class VoteController extends Controller {
 	}
 
 	/**
-	* getByToken
-	* Read all votes of a poll based on a share token and return list as array
+	 * getByToken
+	 * Read all votes of a poll based on a share token and return list as array
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @NoCSRFRequired
@@ -118,19 +122,14 @@ class VoteController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getByToken($token) {
-		$this->acl->setToken($token);
 
 		try {
-			if (!$this->acl->getAllowSeeUsernames()) {
-				$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
-				return new DataResponse((array) $this->anonymizer->getVotes(), Http::STATUS_OK);
-			} else {
-				return new DataResponse((array) $this->mapper->findByPoll($this->acl->getPollId()), Http::STATUS_OK);
-			}
-
+			$this->acl->setToken($token);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
+
+		return $this->get($this->acl->getPollId());
 
 	}
 

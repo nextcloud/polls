@@ -40,6 +40,7 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Service\EventService;
+use OCA\Polls\Model\Acl;
 
 
 
@@ -51,6 +52,7 @@ class EventController extends Controller {
 	private $groupManager;
 	private $userManager;
 	private $eventService;
+	private $acl;
 
 	/**
 	 * CommentController constructor.
@@ -62,25 +64,28 @@ class EventController extends Controller {
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 * @param EventService $eventService
+	 * @param Acl $acl
 	 */
 
 	public function __construct(
 		string $appName,
-		$UserId,
+		$userId,
 		IRequest $request,
 		ILogger $logger,
 		EventMapper $mapper,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
-		EventService $eventService
+		EventService $eventService,
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->mapper = $mapper;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 		$this->eventService = $eventService;
+		$this->acl = $acl;
 	}
 
 	/**
@@ -116,6 +121,9 @@ class EventController extends Controller {
 
  		try {
  			$event = $this->mapper->find($pollId);
+			if (!$this->acl->getFoundByToken()) {
+				$this->acl->setPollId($pollId);
+			}
  		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
 			return new DataResponse(null, Http::STATUS_NOT_FOUND);
@@ -152,12 +160,32 @@ class EventController extends Controller {
 				'expirationDate' => $event->getExpire(),
 				'isAnonymous' => boolval($event->getIsAnonymous()),
 				'fullAnonymous' => boolval($event->getFullAnonymous()),
-				'allowMaybe' => boolval($event->getAllowMaybe())
+				'allowMaybe' => boolval($event->getAllowMaybe()),
+				'acl' => $this->acl
 			],
 			Http::STATUS_OK);
 
  	}
 
+	/**
+	 * getByToken
+	 * Read all options of a poll based on a share token and return list as array
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function getByToken($token) {
+
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+		return $this->get($this->acl->getPollId());
+
+	}
 
 
 

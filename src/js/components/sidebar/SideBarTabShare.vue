@@ -25,8 +25,9 @@
 		<h3>{{ t('polls','Invitations') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
-				<UserDiv :user-id="share.userId" :type="share.type" :icon="true" />
+				<UserDiv :user-id="resolveShareUser(share)" :type="share.type" :icon="true" />
 				<div class="options">
+					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
 					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
 				</div>
 			</li>
@@ -136,6 +137,17 @@ export default {
 					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
 				}
 			)
+		},
+
+		resolveShareUser(share) {
+			if (share.userId !== '' && share.userId !== null) {
+				return share.userId
+			} else if (share.type === 'mail') {
+				return share.userEmail
+			} else {
+				return t('polls', 'Unknown user')
+			}
+
 		},
 
 		removeShare(share) {

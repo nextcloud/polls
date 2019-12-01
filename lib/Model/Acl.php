@@ -41,14 +41,6 @@ use OCA\Polls\Db\ShareMapper;
  */
 class Acl implements JsonSerializable {
 
-	private $logger;
-	private $groupManager;
-	private $eventMapper;
-	private $shareMapper;
-
-	/** @var string */
-	private $userId = '';
-
 	/** @var int */
 	private $pollId = 0;
 
@@ -59,7 +51,7 @@ class Acl implements JsonSerializable {
 	private $foundByToken = false;
 
 	/** @var Event */
-	private $event;
+	// private $event;
 
 
 	/**
@@ -73,37 +65,34 @@ class Acl implements JsonSerializable {
 	 *
 	 */
 	public function __construct(
+		string $appName,
+		$userId,
 		ILogger $logger,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
 		ShareMapper $shareMapper,
 		Event $event
 	) {
+		$this->userId = $userId;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->shareMapper = $shareMapper;
 		$this->event = $event;
-		// self::getAcl($pollIdOrToken);
-
 	}
 
 
 	/**
 	 * @return string
 	 */
-	 public function getUserId(): string {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return \OC::$server->getUserSession()->getUser()->getUID();
-		} else {
-			return $this->userId;
-		}
+	 public function getUserId() {
+		return $this->userId;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function setUserId(string $userId): Acl {
+	public function setUserId($userId): Acl {
 		$this->userId = $userId;
 		return $this;
 	}
@@ -137,15 +126,24 @@ class Acl implements JsonSerializable {
 	 */
 	public function setToken(string $token): Acl {
 		try {
+
+			$this->token = $token;
 			$share = $this->shareMapper->findByToken($token);
 			$this->foundByToken = true;
 			$this->setPollId($share->getPollId());
-			$this->setUserId($share->getUserId());
-			$this->token = $token;
+
+			if ($share->getType() === 'public') {
+				$this->setUserId($this->userId);
+			} else if ($share->getType() === 'group' && !\OC::$server->getUserSession()->isLoggedIn() ) {
+				$this->logger->warning('unauthorized user accessed group share');
+				throw new DoesNotExistException('unauthorizes access');
+			}
 
 		} catch (DoesNotExistException $e) {
 			$this->setPollId(0);
-			$this->setUserId('');
+			$this->setUserId(null);
+			$this->token = '';
+			$this->foundByToken = false;
 		}
 		return $this;
 	}
@@ -155,7 +153,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function getIsOwner(): bool {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return ($this->event->getOwner() === \OC::$server->getUserSession()->getUser()->getUID());
+			return ($this->event->getOwner() === $this->userId);
 		} else {
 			return false;
 		}
@@ -166,7 +164,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function getIsAdmin(): bool {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return $this->groupManager->isAdmin(\OC::$server->getUserSession()->getUser()->getUID());
+			return $this->groupManager->isAdmin($this->userId);
 		} else {
 			return false;
 		}
@@ -242,7 +240,7 @@ class Acl implements JsonSerializable {
 			return 'owner';
 		} elseif ($this->event->getAccess() === 'public') {
 			return 'public';
-		} elseif ($this->event->getAccess() === 'registered' && \OC::$server->getUserSession()->isLoggedIn()) {
+		} elseif ($this->event->getAccess() === 'registered' && \OC::$server->getUserSession()->getUser()->getUID() === $this->userId) {
 			return 'registered';
 		} elseif ($this->event->getAccess() === 'hidden' && $this->getisOwner()) {
 			return 'hidden';

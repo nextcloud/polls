@@ -25,7 +25,6 @@ import orderBy from 'lodash/orderBy'
 
 const defaultVotes = () => {
 	return {
-		currentUser: OC.getCurrentUser().uid,
 		list: []
 	}
 }
@@ -64,7 +63,7 @@ const getters = {
 		}
 	},
 
-	participants: (state) => {
+	participants: (state, getters, rootState) => {
 		let list = []
 		state.list.forEach(function(vote) {
 			if (!list.includes(vote.userId)) {
@@ -72,8 +71,8 @@ const getters = {
 			}
 		})
 
-		if (!list.includes(state.currentUser)) {
-			list.push(state.currentUser)
+		if (!list.includes(rootState.event.acl.userId) && rootState.event.acl.userId !== null) {
+			list.push(rootState.event.acl.userId)
 		}
 
 		return list
@@ -122,12 +121,12 @@ const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		let endPoint = ''
+		let endPoint = 'apps/polls/get/votes/'
 
 		if (payload.token !== undefined) {
-			endPoint = 'apps/polls/get/votesbytoken/' + payload.token
+			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId !== undefined) {
-			endPoint = 'apps/polls/get/votes/' + payload.pollId
+			endPoint = endPoint.concat(payload.pollId)
 		} else {
 			return
 		}

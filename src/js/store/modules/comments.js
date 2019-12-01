@@ -59,14 +59,15 @@ const getters = {
 }
 
 const actions = {
+
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		let endPoint = ''
+		let endPoint = 'apps/polls/get/comments/'
 
 		if (payload.token !== undefined) {
-			endPoint = 'apps/polls/get/commentsbytoken/' + payload.token
+			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId !== undefined) {
-			endPoint = 'apps/polls/get/comments/' + payload.pollId
+			endPoint = endPoint.concat(payload.pollId)
 		} else {
 			return
 		}

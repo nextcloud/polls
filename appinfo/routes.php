@@ -33,27 +33,30 @@ return [
 		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],
 
 		['name' => 'comment#get', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
-		['name' => 'comment#getByToken', 'url' => '/get/commentsbytoken/{token}', 'verb' => 'GET'],
+		['name' => 'comment#test', 'url' => '/get/test/{pollId}', 'verb' => 'GET'],
 		['name' => 'comment#write', 'url' => '/write/comment', 'verb' => 'POST'],
+		['name' => 'comment#getByToken', 'url' => '/get/comments/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'vote#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
-		['name' => 'vote#getByToken', 'url' => '/get/votesbytoken/{token}', 'verb' => 'GET'],
 		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
 		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
+		['name' => 'vote#getByToken', 'url' => '/get/votes/s/{token}', 'verb' => 'GET'],
 
-		['name' => 'option#list', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
-
+		['name' => 'option#get', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/add/option/', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/update/option/', 'verb' => 'POST'],
 		['name' => 'option#remove', 'url' => '/remove/option/', 'verb' => 'POST'],
+		['name' => 'option#getByToken', 'url' => '/get/options/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'event#list', 'url' => '/get/events', 'verb' => 'GET'],
 		['name' => 'event#get', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
 		['name' => 'event#write', 'url' => '/write/event/', 'verb' => 'POST'],
 		['name' => 'event#add', 'url' => '/add/event/', 'verb' => 'POST'],
+		['name' => 'event#getByToken', 'url' => '/get/event/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'share#getShares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/write/share', 'verb' => 'POST'],
+		['name' => 'share#writeFromUser', 'url' => '/write/share/s', 'verb' => 'POST'],
 		['name' => 'share#remove', 'url' => '/remove/share', 'verb' => 'POST'],
 		['name' => 'share#get', 'url' => '/get/share/{token}', 'verb' => 'GET'],
 
@@ -61,6 +64,7 @@ return [
 		['name' => 'acl#get', 'url' => '/get/acl/{id}', 'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
-		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']
+		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET'],
+		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST']
 	]
 ];

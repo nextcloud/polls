@@ -38,14 +38,15 @@ const defaultEvent = () => {
 		isAnonymous: false,
 		fullAnonymous: false,
 		allowMaybe: false,
-		owner: undefined
+		owner: undefined,
+		acl: {}
 	}
 }
 
 const state = defaultEvent()
 
 const mutations = {
-	eventSet(state, payload) {
+	setEvent(state, payload) {
 		Object.assign(state, payload.event)
 	},
 
@@ -53,7 +54,7 @@ const mutations = {
 		Object.assign(state, defaultEvent())
 	},
 
-	eventSetProperty(state, payload) {
+	setEventProperty(state, payload) {
 		Object.assign(state, payload)
 	}
 
@@ -74,25 +75,25 @@ const getters = {
 	},
 
 	accessType: state => {
-		if (state.access === 'public') {
+		if (state.acl.accessLevel === 'public') {
 			return t('polls', 'Public access')
-		} else if (state.access === 'select') {
+		} else if (state.acl.accessLevel  === 'select') {
 			return t('polls', 'Only shared')
-		} else if (state.access === 'registered') {
+		} else if (state.acl.accessLevel  === 'registered') {
 			return t('polls', 'Registered users only')
-		} else if (state.access === 'hidden') {
+		} else if (state.acl.accessLevel  === 'hidden') {
 			return t('polls', 'Hidden poll')
 		} else {
-			return ''
+			return state.acl.accessLevel
 		}
 	},
 
 	adminMode: state => {
-		return (state.owner !== OC.getCurrentUser().uid && OC.isUserAdmin())
+		return (!state.acl.isOwner && state.acl.isAdmin)
 	},
 
 	allowEdit: (state, getters) => {
-		return (state.owner === OC.getCurrentUser().uid || getters.adminMode)
+		return (state.acl.allowEdit)
 	}
 
 }
@@ -101,10 +102,20 @@ const actions = {
 
 	loadEvent({ commit }, payload) {
 		commit('eventReset')
-		return axios.get(OC.generateUrl('apps/polls/get/event/' + payload.pollId))
+		let endPoint = 'apps/polls/get/event/'
+
+		if (payload.token !== undefined) {
+			endPoint = endPoint.concat('s/', payload.token)
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('eventSet', { 'event': response.data })
-				return response
+				commit('setEvent', { 'event': response.data })
+				// return response
 			}, (error) => {
 				if (error.response.status !== '404') {
 					console.error('Error loading event', { 'error': error.response }, { 'payload': payload })
@@ -138,7 +149,7 @@ const actions = {
 	writeEventPromise({ commit, rootState }) {
 		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state, mode: rootState.poll.mode })
 			.then((response) => {
-				commit('eventSet', { 'event': response.data })
+				commit('setEvent', { 'event': response.data })
 			}, (error) => {
 				console.error('Error writing event:', { 'error': error.response }, { 'state': state })
 				throw error

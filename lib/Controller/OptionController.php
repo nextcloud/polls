@@ -38,6 +38,7 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Model\Acl;
 
 class OptionController extends Controller {
 
@@ -46,6 +47,7 @@ class OptionController extends Controller {
 
 	private $groupManager;
 	private $eventMapper;
+	private $acl;
 
 	/**
 	 * OptionController constructor.
@@ -55,55 +57,89 @@ class OptionController extends Controller {
 	 * @param OptionMapper $mapper
 	 * @param IGroupManager $groupManager
 	 * @param EventMapper $eventMapper
+	 * @param Acl $acl
 	 */
+
 	public function __construct(
 		string $appName,
 		$UserId,
 		IRequest $request,
 		OptionMapper $mapper,
 		IGroupManager $groupManager,
-		EventMapper $eventMapper
+		EventMapper $eventMapper,
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
+		$this->acl = $acl;
 	}
 
 
 	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @param integer $pollId
 	 * @return array Array of Option objects
 	 */
-	public function list($pollId) {
-		$options = $this->mapper->findByPoll($pollId);
+	public function get($pollId) {
 
-		foreach ($options as &$Option) {
-			// Fix for empty timestamps on date polls
-			// generate timestamp from pollOptionText
-			if ($Option->getTimestamp() > 0) {
-				$ts = $Option->getTimestamp();
-			} else if (strtotime($Option->getPollOptionText())) {
-				$ts = strtotime($Option->getPollOptionText());
-			} else {
-				$ts = 0;
+		try {
+
+			if (!$this->acl->getFoundByToken()) {
+				$this->acl->setPollId($pollId);
 			}
 
+			$options = $this->mapper->findByPoll($pollId);
 
-			$Option = (object) [
-				'id' => $Option->getId(),
-				'pollId' => $Option->getPollId(),
-				'pollOptionText' => htmlspecialchars_decode($Option->getPollOptionText()),
-				'timestamp' => $ts
-			];
+			foreach ($options as &$Option) {
+				// Fix for empty timestamps on date polls
+				// generate timestamp from pollOptionText
+				if ($Option->getTimestamp() > 0) {
+					$ts = $Option->getTimestamp();
+				} else if (strtotime($Option->getPollOptionText())) {
+					$ts = strtotime($Option->getPollOptionText());
+				} else {
+					$ts = 0;
+				}
+
+
+				$Option = (object) [
+					'id' => $Option->getId(),
+					'pollId' => $Option->getPollId(),
+					'pollOptionText' => htmlspecialchars_decode($Option->getPollOptionText()),
+					'timestamp' => $ts
+				];
+			}
+			return new DataResponse($options, Http::STATUS_OK);
+
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+
+
+	/**
+	 * getByToken
+	 * Read all options of a poll based on a share token and return list as array
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function getByToken($token) {
+
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse($options, Http::STATUS_OK);
+		return $this->get($this->acl->getPollId());
+
 	}
 
 	/**
@@ -206,37 +242,4 @@ class OptionController extends Controller {
 
 	}
 
-	// /**
-	//  * Write poll (create/update)
-	//  * @NoAdminRequired
-	//  * @param Array $event
-	//  * @param Array $options
-	//  * @param Array  $shares
-	//  * @param string $mode
-	//  * @return DataResponse
-	//  */
-	// public function write($pollId, $options) {
-	// 	$Event = $this->eventMapper->find($pollId);
-	//
-	// 	if (!\OC::$server->getUserSession()->isLoggedIn()
-	// 		|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
-	// 	) {
-	// 		return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-	// 	}
-	//
-	// 	$this->mapper->deleteByPoll($pollId);
-	//
-	// 	foreach ($options as $option) {
-	// 		$NewOption = new Option();
-	//
-	// 		$NewOption->setPollId($pollId);
-	// 		$NewOption->setpollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-	// 		$NewOption->setTimestamp($option['timestamp']);
-	//
-	// 		$this->mapper->insert($NewOption);
-	// 	}
-	//
-	// 	return $this->list($pollId);
-	//
-	// }
 }

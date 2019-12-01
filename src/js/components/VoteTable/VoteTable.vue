@@ -22,6 +22,7 @@
 
 <template lang="html">
 	<div class="vote-table">
+
 		<div class="header">
 			<div class="sticky" />
 
@@ -74,8 +75,9 @@ export default {
 		]),
 
 		currentUser() {
-			return OC.getCurrentUser().uid
+			return this.event.acl.userId
 		},
+
 		noOptions() {
 			return (this.sortedOptions.length === 0)
 		}

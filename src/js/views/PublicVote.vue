@@ -24,7 +24,7 @@
 	<AppContent>
 		<div v-if="event.id > 0" class="main-container">
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
-				:title="sideBarButtonTitle" @click="toggleSideBar()" />
+				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 
 			<div>
 				<h2>
@@ -39,6 +39,20 @@
 				<h3>
 					{{ event.description }}
 				</h3>
+			</div>
+
+			<div v-if="!isValidUser">
+				<label>
+					{{ t('polls', 'To participate in this poll, you have to provide a username with at least 3 letters.') }}
+				</label>
+
+				<form>
+					<input v-model="userName" :class="{ error: !isValidName }" type="text" :placeholder="t('polls', 'Choose your username')">
+					<input v-show="!checkingUserName" class="icon-confirm" @click="writeUserName">
+					<span v-show="checkingUserName" class="icon-loading-small" style="float:right;" />
+					<span v-show="!checkingUserName">{{ token }} </span>
+
+				</form>
 			</div>
 
 			<VoteTable v-show="!loading" @voteSaved="indicateVoteSaved()" />
@@ -82,6 +96,8 @@ export default {
 			delay: 50,
 			sideBarOpen: false,
 			loading: false,
+			checkingUserName: false,
+			token: '',
 			initialTab: 'comments'
 		}
 	},
@@ -97,15 +113,16 @@ export default {
 			'allowEdit'
 		]),
 
-		sideBarButtonTitle() {
-			return (t('polls', 'Open Sidebar'))
-		},
-
-		title: function() {
+		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.event.title
 		},
-		titleEmpty() {
-			return (this.event.title.trim().length === 0)
+
+		isValidUser() {
+			return (this.event.acl.userId !== '' && this.event.acl.userId !== null)
+		},
+
+		isValidName() {
+			return false
 		}
 
 	},
@@ -123,11 +140,11 @@ export default {
 	methods: {
 		loadPoll() {
 			this.loading = false
-			this.$store.dispatch('getShareAsync', { token: this.$route.params.token })
-				.then((response) => {
-					this.$store.dispatch('loadEvent', { pollId: response.share.pollId, token: this.$route.params.token })
+			// this.$store.dispatch('getShareAsync', { token: this.$route.params.token })
+			// 	.then((response) => {
+					this.$store.dispatch('loadEvent', { token: this.$route.params.token })
 						.then((response) => {
-							this.$store.dispatch('loadPoll', { pollId: response.data.id, token: this.$route.params.token })
+							this.$store.dispatch('loadPoll', { token: this.$route.params.token })
 								.then(() => {
 									this.loading = false
 								})
@@ -136,7 +153,16 @@ export default {
 							console.error(error)
 							this.loading = false
 						})
+				// })
+		},
+
+		writeUserName() {
+			this.checkingUsername = true
+			this.$store.dispatch('addShareFromUser', {token: this.$route.params.token, userName: this.userName})
+				.then((response) => {
+					this.token = response.data.token
 				})
+
 		},
 
 		toggleSideBar() {

@@ -74,7 +74,17 @@ const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		return axios.get(OC.generateUrl('apps/polls/get/options/' + payload.pollId))
+		let endPoint = 'apps/polls/get/options/'
+
+		if (payload.token !== undefined) {
+			endPoint = endPoint.concat('s/', payload.token)
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				commit('optionsSet', { 'list': response.data })
 			}, (error) => {

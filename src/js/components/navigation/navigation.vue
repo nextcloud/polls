@@ -151,19 +151,21 @@ export default {
 		},
 
 		refreshPolls() {
-			this.loading = true
+			console.log('route', this.$route.name)
+			if (this.$route.name !== 'publicVote') {
 
-			this.$store
-				.dispatch('loadPolls')
-				.then(response => {
-					this.loading = false
-				})
-				.catch(error => {
-					this.loading = false
-					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
-				})
-
+				this.loading = true
+				this.$store
+					.dispatch('loadPolls')
+					.then(response => {
+						this.loading = false
+					})
+					.catch(error => {
+						this.loading = false
+						console.error('refresh poll: ', error.response)
+						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+					})
+			}
 		}
 	}
 }

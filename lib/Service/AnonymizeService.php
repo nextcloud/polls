@@ -81,10 +81,17 @@ class AnonymizeService {
 		$this->pollId = $pollId;
 		$this->userId = $userId;
 		$votes = $this->voteMapper->findByPoll($pollId);
+		$comments = $this->commentMapper->findByPoll($pollId);
 		$i = 0;
 
 		foreach ($votes as $element) {
-			if (!array_key_exists($element->getUserId(), $this->anonList)) {
+			if (!array_key_exists($element->getUserId(), $this->anonList) && $element->getUserId() !== $userId) {
+				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
+			}
+		}
+
+		foreach ($comments as $element) {
+			if (!array_key_exists($element->getUserId(), $this->anonList) && $element->getUserId() !== $userId) {
 				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
 			}
 		}

@@ -79,7 +79,17 @@ const getters = {
 const actions = {
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		return axios.get(OC.generateUrl('apps/polls/get/shares/' + payload.pollId))
+		let endPoint = 'apps/polls/get/shares/'
+
+		if (payload.token !== undefined) {
+			return
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				commit('sharesSet', {
 					'list': response.data
@@ -98,6 +108,17 @@ const actions = {
 				console.error('Error loading share', { 'error': error.response }, { 'payload': payload })
 				throw error
 			})
+	},
+
+
+	addShareFromUser({commit}, payload) {
+		return axios.post(OC.generateUrl('apps/polls/write/share/s'), { token: payload.token, userName: payload.userName })
+		.then((response) => {
+		}, (error) => {
+			console.error('Error writing share', { 'error': error.response }, { 'payload': payload })
+			throw error
+		})
+
 	},
 
 	writeSharePromise({ commit, rootState }, payload) {

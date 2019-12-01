@@ -84,6 +84,11 @@ export default {
 		isNoUser() {
 			return this.type !== 'user'
 		},
+
+		isValidUser() {
+			return (this.userId !== '' && this.userId !== null)
+		},
+
 		iconClass() {
 			if (this.icon) {
 				return 'icon-' + this.type

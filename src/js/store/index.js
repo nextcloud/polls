@@ -51,8 +51,5 @@ export default new Vuex.Store({
 		shares
 	},
 
-	state: {
-		currentUser: ''
-	},
 	strict: process.env.NODE_ENV !== 'production'
 })

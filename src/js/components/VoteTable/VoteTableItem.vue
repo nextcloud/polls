@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[getAnswer, activeClass]">
+	<div class="vote-item" :class="[answer, { active: isActive}]">
 		<div class="icon" @click="voteClick()" />
 	</div>
 </template>
@@ -48,7 +48,7 @@ export default {
 			event: state => state.event
 		}),
 
-		getAnswer() {
+		answer() {
 			try {
 				return this.$store.getters.getVote({
 					option: this.option,
@@ -59,13 +59,13 @@ export default {
 			}
 		},
 
-		activeClass() {
-			if (OC.getCurrentUser().uid === this.userId && !this.event.expired) {
-				return 'active'
-			} else {
-				return ''
-			}
-		}
+		isValidUser() {
+			return (this.userId !== '' && this.userId !== null)
+		},
+
+		isActive() {
+				return (this.isValidUser && this.event.acl.userId === this.userId && !this.event.expired)
+		},
 
 	},
 

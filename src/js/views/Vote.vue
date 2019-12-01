@@ -24,7 +24,7 @@
 	<AppContent>
 		<div v-if="event.id > 0" class="main-container">
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
-				:title="sideBarButtonTitle" @click="toggleSideBar()" />
+				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 
 			<div>
 				<h2>
@@ -106,7 +106,8 @@ export default {
 			delay: 50,
 			sideBarOpen: false,
 			loading: false,
-			initialTab: 'comments'
+			initialTab: 'comments',
+			newName: ''
 		}
 	},
 
@@ -121,15 +122,8 @@ export default {
 			'allowEdit'
 		]),
 
-		sideBarButtonTitle() {
-			return (t('polls', 'Open Sidebar'))
-		},
-
-		title: function() {
+		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.event.title
-		},
-		titleEmpty() {
-			return (this.event.title.trim().length === 0)
 		}
 
 	},

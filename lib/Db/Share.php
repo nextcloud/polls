@@ -28,12 +28,14 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method string gethash()
+ * @method string getId()
+ * @method void setId(int $value)
+ * @method string getToken()
  * @method void setToken(string $value)
  * @method string getType()
  * @method void setType(string $value)
  * @method integer getPollId()
- * @method void setPollId(integer $value)
+ * @method void setPollId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getUserEmail()
