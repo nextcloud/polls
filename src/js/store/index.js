@@ -24,7 +24,6 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import polls from './modules/polls'
 import poll from './modules/currentPoll'
 import comments from './modules/comments'
 import event from './modules/event'
@@ -42,7 +41,6 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
 
 	modules: {
-		polls,
 		poll,
 		comments,
 		event,
@@ -53,8 +51,5 @@ export default new Vuex.Store({
 		shares
 	},
 
-	state: {
-		currentUser: ''
-	},
 	strict: process.env.NODE_ENV !== 'production'
 })

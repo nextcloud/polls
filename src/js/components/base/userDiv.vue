@@ -26,7 +26,7 @@
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<avatar :disable-menu="true" :user="userId" :display-name="computedDisplayName"
+		<Avatar :disable-menu="true" :user="userId" :display-name="computedDisplayName"
 			:is-no-user="isNoUser" />
 		<div class="avatar" :class="iconClass" />
 
@@ -84,16 +84,21 @@ export default {
 		isNoUser() {
 			return this.type !== 'user'
 		},
+
+		isValidUser() {
+			return (this.userId !== '' && this.userId !== null)
+		},
+
 		iconClass() {
 			if (this.icon) {
 				return 'icon-' + this.type
 			} else {
-				return 'icon-user'
+				return ''
 			}
 		},
 
 		computedDisplayName() {
-			var value = this.displayName
+			let value = this.displayName
 
 			if (this.userId === OC.getCurrentUser().uid) {
 				value = OC.getCurrentUser().displayName

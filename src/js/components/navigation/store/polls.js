@@ -38,22 +38,19 @@ const getters = {
 		return state.list.length
 	},
 	myPolls: (state) => {
-		return state.list.filter(poll => (poll.event.owner === OC.getCurrentUser().uid))
-	},
-	invitationPolls: (state) => {
-		return state.list.filter(poll => (poll.grantedAs === 'userInvitation'))
+		return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid))
 	},
 	publicPolls: (state) => {
-		return state.list.filter(poll => (poll.event.access === 'public'))
+		return state.list.filter(poll => (poll.access === 'public'))
 	},
 	hiddenPolls: (state) => {
-		return state.list.filter(poll => (poll.event.access === 'hidden'))
+		return state.list.filter(poll => (poll.access === 'hidden'))
 	}
 }
 
 const actions = {
 	loadPolls({ commit }) {
-		return axios.get(OC.generateUrl('apps/polls/get/polls'))
+		return axios.get(OC.generateUrl('apps/polls/get/events'))
 			.then((response) => {
 				commit('setPolls', { list: response.data })
 			}, (error) => {

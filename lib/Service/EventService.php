@@ -46,7 +46,7 @@ class EventService {
 	/**
 	 * Check if current user is in the access list
 	 * @param Array $accessList
-	 * @return Boolean
+	 * @return bool
 	 */
 	public function checkUserAccess($accessList) {
 		foreach ($accessList as $accessItem) {
@@ -61,7 +61,7 @@ class EventService {
 	/**
 	 * Check If current user is member of a group in the access list
 	 * @param Array $accessList
-	 * @return Boolean
+	 * @return bool
 	 */
 	public function checkGroupAccess($accessList) {
 		foreach ($accessList as $accessItem) {

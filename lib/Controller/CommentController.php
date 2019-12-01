@@ -39,6 +39,8 @@ use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Service\AnonymizeService;
+use OCA\Polls\Model\Acl;
+
 
 
 class CommentController extends Controller {
@@ -49,6 +51,7 @@ class CommentController extends Controller {
 	private $groupManager;
 	private $eventMapper;
 	private $anonymizer;
+	private $acl;
 
 	/**
 	 * CommentController constructor.
@@ -58,23 +61,26 @@ class CommentController extends Controller {
 	 * @param IGroupManager $groupManager
 	 * @param EventMapper $eventMapper
 	 * @param AnonymizeService $anonymizer
+	 * @param Acl $acl
 	 */
 
 	public function __construct(
 		string $appName,
-		$UserId,
+		$userId,
 		IRequest $request,
 		CommentMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
-		AnonymizeService $anonymizer
+		AnonymizeService $anonymizer,
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->anonymizer = $anonymizer;
+		$this->acl = $acl;
 	}
 
 
@@ -82,24 +88,48 @@ class CommentController extends Controller {
 	 * get
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
 
 		try {
-			$event = $this->eventMapper->find($pollId);
-			$comments = $this->mapper->findByPoll($pollId);
-			if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->getOwner() !== $this->userId))) {
-				$comments = $this->anonymizer->getAnonymizedList($comments, $pollId);
+			if (!$this->acl->getFoundByToken()) {
+				$this->acl->setPollId($pollId);
+			}
+
+			if (!$this->acl->getAllowSeeUsernames()) {
+				$this->anonymizer->set($pollId, $this->acl->getUserId());
+				return new DataResponse((array) $this->anonymizer->getComments(), Http::STATUS_OK);
+			} else {
+				$comments = $this->mapper->findByPoll($pollId);
+				return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
 			}
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse((array) $comments, Http::STATUS_OK);
+	}
+
+	/**
+	 * getByToken
+	 * Read all comments of a poll based on a share token and return list as array
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function getByToken($token) {
+
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return $this->get($this->acl->getPollId());
 
 	}
 
@@ -127,6 +157,29 @@ class CommentController extends Controller {
 
 		try {
 			$comment = $this->mapper->insert($comment);
+		} catch (\Exception $e) {
+			return new DataResponse($e, Http::STATUS_CONFLICT);
+		}
+
+		return new DataResponse($comment, Http::STATUS_OK);
+
+	}
+
+	/**
+	 * delete
+	 * Delete Comment
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param string $message
+	 * @return DataResponse
+	 */
+	public function delete($comment, $userId) {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+		try {
+			$comment = $this->mapper->delete($comment['id']);
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}

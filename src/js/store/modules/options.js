@@ -37,7 +37,7 @@ const mutations = {
 		Object.assign(state, payload)
 	},
 
-	optionsReset(state) {
+	reset(state) {
 		Object.assign(state, defaultOptions())
 	},
 
@@ -48,7 +48,7 @@ const mutations = {
 	},
 
 	setOption(state, payload) {
-		var index = state.list.findIndex((option) => {
+		let index = state.list.findIndex((option) => {
 			return option.id === payload.option.id
 		})
 
@@ -68,18 +68,28 @@ const getters = {
 	sortedOptions: state => {
 		return sortBy(state.list, 'timestamp')
 	}
-
 }
 
 const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
-		return axios.get(OC.generateUrl('apps/polls/get/options/' + payload.pollId))
+		commit('reset')
+		let endPoint = 'apps/polls/get/options/'
+
+		if (payload.token !== undefined) {
+			endPoint = endPoint.concat('s/', payload.token)
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				commit('optionsSet', { 'list': response.data })
 			}, (error) => {
-				commit({ type: 'optionsReset' })
-				console.error(error)
+				console.error('Error loading options', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	},
 
@@ -87,14 +97,14 @@ const actions = {
 		return axios.post(OC.generateUrl('apps/polls/update/option'), { option: payload.option })
 			.then((response) => {
 				commit('setOption', { 'option': payload.option })
-				// commit('optionsSet', { 'list': response.data })
 			}, (error) => {
-				console.error(error.response.data)
+				console.error('Error updating option', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	},
 
 	addOptionAsync({ commit, getters, dispatch, rootState }, payload) {
-		var option = {}
+		let option = {}
 
 		option.id = 0
 		option.pollId = rootState.event.id
@@ -112,7 +122,8 @@ const actions = {
 			.then((response) => {
 				commit('setOption', { 'option': response.data })
 			}, (error) => {
-				console.error(error.response.data)
+				console.error('Error adding option', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	},
 
@@ -121,7 +132,8 @@ const actions = {
 			.then((response) => {
 				commit('optionRemove', { 'option': payload.option })
 			}, (error) => {
-				console.error(error.response.data)
+				console.error('Error removing option', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	}
 }

@@ -32,6 +32,11 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IConfig;
 use OCP\IRequest;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
+
 
 class SystemController extends Controller {
 
@@ -55,9 +60,13 @@ class SystemController extends Controller {
 		IRequest $request,
 		IConfig $systemConfig,
 		IGroupManager $groupManager,
-		IUserManager $userManager
+		IUserManager $userManager,
+		VoteMapper $voteMapper,
+		ShareMapper $shareMapper
 	) {
 		parent::__construct($appName, $request);
+		$this->voteMapper = $voteMapper;
+		$this->shareMapper = $shareMapper;
 		$this->userId = $UserId;
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
@@ -124,6 +133,69 @@ class SystemController extends Controller {
 			'siteusers' => $list
 		], Http::STATUS_OK);
 	}
+
+	/**
+	 * Get a list of NC users and groups
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @return Bool
+	 */
+	public function validatePublicUsername($pollId, $userName) {
+		$list = array();
+
+		$groups = $this->groupManager->search('');
+		foreach ($groups as $group) {
+			$list[] = [
+				'id' => $group->getGID(),
+				'user' => $group->getGID(),
+				'type' => 'group',
+				'displayName' => $group->getGID(),
+			];
+		}
+
+		$users = $this->userManager->searchDisplayName('');
+		foreach ($users as $user) {
+			$list[] = [
+				'id' => $user->getUID(),
+				'user' => $user->getUID(),
+				'type' => 'user',
+				'displayName' => $user->getDisplayName(),
+			];
+		}
+
+		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
+		foreach ($votes as $vote) {
+			if ($vote->getUserId() !== '' && $vote->getUserId() !== null ) {
+				$list[] = [
+					'id' => $vote->getUserId(),
+					'user' => $vote->getUserId(),
+					'type' => 'participant',
+					'displayName' => $vote->getUserId(),
+				];
+			}
+		}
+
+		$shares = $this->shareMapper->findByPoll($pollId);
+		foreach ($shares as $share) {
+			if ($share->getUserId() !== '' && $share->getUserId() !== null ) {
+				$list[] = [
+					'id' => $share->getUserId(),
+					'user' => $share->getUserId(),
+					'type' => 'share',
+					'displayName' => $share->getUserId(),
+				];
+			}
+		}
+
+		foreach ($list as $element) {
+			if ($userName === $element['id'] || $userName === $element['displayName']) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 
 	/**
 	 * Get some system informations

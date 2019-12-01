@@ -25,14 +25,15 @@
 		<h3>{{ t('polls','Invitations') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
-				<UserDiv :user-id="share.userId" :type="share.type" :icon="true" />
+				<UserDiv :user-id="resolveShareUser(share)" :type="share.type" :icon="true" />
 				<div class="options">
+					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
 					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
 				</div>
 			</li>
 		</TransitionGroup>
 
-		<multiselect id="ajax"
+		<Multiselect id="ajax"
 			:options="users"
 			:multiple="false"
 			:user-select="true"
@@ -54,7 +55,7 @@
 					{{ values.length }} users selected
 				</span>
 			</template>
-		</multiselect>
+		</Multiselect>
 
 		<h3>{{ t('polls','Public shares') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
@@ -66,7 +67,7 @@
 					</div>
 				</div>
 				<div class="options">
-					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.hash } )" />
+					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
 					<a class="icon icon-delete" @click="removeShare(share)" />
 				</div>
 			</li>
@@ -138,6 +139,17 @@ export default {
 			)
 		},
 
+		resolveShareUser(share) {
+			if (share.userId !== '' && share.userId !== null) {
+				return share.userId
+			} else if (share.type === 'mail') {
+				return share.userEmail
+			} else {
+				return t('polls', 'Unknown user')
+			}
+
+		},
+
 		removeShare(share) {
 			this.$store.dispatch('removeShareAsync', { share: share })
 		},
@@ -149,7 +161,7 @@ export default {
 					'userId': payload.user,
 					'pollId': '0',
 					'userEmail': '',
-					'hash': ''
+					'token': ''
 				}
 			})
 				// .then(response => {

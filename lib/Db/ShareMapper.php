@@ -57,18 +57,18 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $hash
+	 * @param string $token
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return array
 	 */
 
-	public function findByHash($hash) {
+	public function findByToken($token) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_INT))
+			   $qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntity($qb);

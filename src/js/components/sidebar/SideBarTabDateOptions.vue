@@ -26,7 +26,7 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Add a date option') }}
 			</label>
-			<date-picker v-bind="optionDatePicker" style="width:100%" confirm
+			<DatePicker v-bind="optionDatePicker" style="width:100%" confirm
 				@change="addOption($event)" />
 		</div>
 
@@ -37,7 +37,7 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<multiselect v-model="move.unit" :options="move.units" />
+					<Multiselect v-model="move.unit" :options="move.units" />
 				</div>
 			</div>
 			<div>
@@ -51,7 +51,7 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<date-poll-item v-for="(option) in sortedOptions"
+			<DatePollItem v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
 				@remove="removeOption(option)" />
@@ -115,9 +115,9 @@ export default {
 		},
 
 		shiftDates(payload) {
-			var store = this.$store
+			let store = this.$store
 			this.options.list.forEach(function(existingOption) {
-				var option = Object.assign({}, existingOption)
+				let option = Object.assign({}, existingOption)
 				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
 				store.dispatch('updateOptionAsync', { option: option })

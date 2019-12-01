@@ -291,19 +291,19 @@ export default {
 	},
 	methods: {
 
-		...mapMutations([ 'eventSetProperty', 'pollSetProperty' ]),
+		...mapMutations([ 'setEventProperty', 'pollSetProperty' ]),
 		...mapActions([
 			'writeEventPromise'
 		]),
 
 		writeValue: debounce(function(e) {
-			this.$store.commit('eventSetProperty', e)
+			this.$store.commit('setEventProperty', e)
 			this.writingPoll = true
 			this.writePoll()
 		}, 500),
 
 		// updateDescription: debounce(function(e) {
-		// 	this.$store.commit('eventSetProperty', { 'description': e.target.value })
+		// 	this.$store.commit('setEventProperty', { 'description': e.target.value })
 		// 	this.writePoll()
 		// }, 1000),
 

@@ -29,7 +29,7 @@
 				<h2> {{ t('polls', 'there are no vote Options') }} </h2>
 			</div>
 
-			<vote-table-header v-for="(option) in sortedOptions"
+			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="event.type"
@@ -41,7 +41,7 @@
 				class="sticky"
 				:class="{currentuser: (participant === currentUser) }"
 				:user-id="participant" />
-			<vote-table-item v-for="(option) in sortedOptions"
+			<VoteTableItem v-for="(option) in sortedOptions"
 				:key="option.id"
 				:user-id="participant"
 				:option="option"
@@ -74,8 +74,9 @@ export default {
 		]),
 
 		currentUser() {
-			return OC.getCurrentUser().uid
+			return this.event.acl.userId
 		},
+
 		noOptions() {
 			return (this.sortedOptions.length === 0)
 		}
@@ -83,7 +84,7 @@ export default {
 
 	methods: {
 		setVote(option, participant) {
-			var nextAnswer = this.$store.getters.getNextAnswer({
+			let nextAnswer = this.$store.getters.getNextAnswer({
 				option: option,
 				userId: participant
 			})

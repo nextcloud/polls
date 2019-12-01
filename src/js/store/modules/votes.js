@@ -25,7 +25,6 @@ import orderBy from 'lodash/orderBy'
 
 const defaultVotes = () => {
 	return {
-		currentUser: OC.getCurrentUser().uid,
 		list: []
 	}
 }
@@ -33,7 +32,7 @@ const defaultVotes = () => {
 const state = defaultVotes()
 
 const mutations = {
-	resetVotes(state) {
+	reset(state) {
 		Object.assign(state, defaultVotes())
 	},
 
@@ -42,7 +41,7 @@ const mutations = {
 	},
 
 	setVote(state, payload) {
-		var index = state.list.findIndex(vote =>
+		let index = state.list.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
 			&& vote.voteOptionText === payload.option.pollOptionText)
@@ -64,27 +63,27 @@ const getters = {
 		}
 	},
 
-	participants: (state) => {
-		var list = []
+	participants: (state, getters, rootState) => {
+		let list = []
 		state.list.forEach(function(vote) {
 			if (!list.includes(vote.userId)) {
 				list.push(vote.userId)
 			}
 		})
 
-		if (!list.includes(state.currentUser)) {
-			list.push(state.currentUser)
+		if (!list.includes(rootState.event.acl.userId) && rootState.event.acl.userId !== null) {
+			list.push(rootState.event.acl.userId)
 		}
 
 		return list
 	},
 
 	votesRank: (state, getters, rootGetters) => {
-		var rank = []
+		let rank = []
 		rootGetters.options.list.forEach(function(option) {
-			var countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
-			var countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
-			var countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
+			let countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
+			let countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
+			let countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
 			rank.push({
 				'rank': 0,
 				'pollOptionText': option.pollOptionText,
@@ -121,19 +120,27 @@ const getters = {
 const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
-		axios.get(OC.generateUrl('apps/polls/get/votes/' + payload.pollId))
+		commit('reset')
+		let endPoint = 'apps/polls/get/votes/'
+
+		if (payload.token !== undefined) {
+			endPoint = endPoint.concat('s/', payload.token)
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setVotes', {
-					'list': response.data
-				})
+				commit('setVotes', { 'list': response.data })
 			}, (error) => {
-				commit({ type: 'resetVotes' })
-				console.error(error)
+				console.error('Error loading votes', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	},
 
 	setVoteAsync({ commit, getters, rootState }, payload) {
-
 		return axios.post(OC.generateUrl('apps/polls/set/vote'), {
 			pollId: rootState.event.id,
 			option: payload.option,
@@ -144,7 +151,8 @@ const actions = {
 				commit('setVote', { option: payload.option, pollId: rootState.event.id, vote: response.data })
 				return response.data
 			}, (error) => {
-				console.error(error.response)
+				console.error('Error setting vote', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	}
 

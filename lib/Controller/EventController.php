@@ -40,6 +40,7 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Service\EventService;
+use OCA\Polls\Model\Acl;
 
 
 
@@ -51,6 +52,7 @@ class EventController extends Controller {
 	private $groupManager;
 	private $userManager;
 	private $eventService;
+	private $acl;
 
 	/**
 	 * CommentController constructor.
@@ -62,25 +64,28 @@ class EventController extends Controller {
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 * @param EventService $eventService
+	 * @param Acl $acl
 	 */
 
 	public function __construct(
 		string $appName,
-		$UserId,
+		$userId,
 		IRequest $request,
 		ILogger $logger,
 		EventMapper $mapper,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
-		EventService $eventService
+		EventService $eventService,
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->mapper = $mapper;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 		$this->eventService = $eventService;
+		$this->acl = $acl;
 	}
 
 	/**
@@ -91,36 +96,37 @@ class EventController extends Controller {
 	 */
 
 	public function list() {
+		$events = [];
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			try {
+				$events = $this->mapper->findAll();
+			} catch (DoesNotExistException $e) {
+				$events = [];
+				// return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			}
 		}
-
-		try {
-			$events = $this->mapper->findAll();
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
 		return new DataResponse($events, Http::STATUS_OK);
-
 	}
 
-	 /**
-	  * Read an entire poll based on poll id
-	  * @NoAdminRequired
-	  * @NoCSRFRequired
-	  * @param integer $pollId
-	  * @return array
-	  */
+	/**
+	 * Read an entire poll based on poll id
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @param integer $pollId
+	 * @return array
+	 */
  	public function get($pollId) {
 		$data = array();
 
  		try {
  			$event = $this->mapper->find($pollId);
+			if (!$this->acl->getFoundByToken()) {
+				$this->acl->setPollId($pollId);
+			}
  		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
-			$this->logger->debug($e, ['app' => 'polls']);
-			$data['poll'] = ['result' => 'notFound'];
+			return new DataResponse(null, Http::STATUS_NOT_FOUND);
  		}
 
 		if ($event->getType() == 0) {
@@ -140,25 +146,46 @@ class EventController extends Controller {
 			$expired = time() > strtotime($event->getExpire());
 			$expiration = true;
 		}
+		return new DataResponse((object) [
+				'id' => $event->getId(),
+				'type' => $pollType,
+				'title' => $event->getTitle(),
+				'description' => $event->getDescription(),
+				'owner' => $event->getOwner(),
+				'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
+				'created' => $event->getCreated(),
+				'access' => $accessType,
+				'expiration' => $expiration,
+				'expired' => $expired,
+				'expirationDate' => $event->getExpire(),
+				'isAnonymous' => boolval($event->getIsAnonymous()),
+				'fullAnonymous' => boolval($event->getFullAnonymous()),
+				'allowMaybe' => boolval($event->getAllowMaybe()),
+				'acl' => $this->acl
+			],
+			Http::STATUS_OK);
 
-		return (object) [
-			'id' => $event->getId(),
-			'type' => $pollType,
-			'title' => $event->getTitle(),
-			'description' => $event->getDescription(),
-			'owner' => $event->getOwner(),
-			'ownerDisplayName' => $this->userManager->get($event->getOwner())->getDisplayName(),
-			'created' => $event->getCreated(),
-			'access' => $accessType,
-			'expiration' => $expiration,
-			'expired' => $expired,
-			'expirationDate' => $event->getExpire(),
-			'isAnonymous' => boolval($event->getIsAnonymous()),
-			'fullAnonymous' => boolval($event->getFullAnonymous()),
-			'allowMaybe' => boolval($event->getAllowMaybe())
-		];
  	}
 
+	/**
+	 * getByToken
+	 * Read all options of a poll based on a share token and return list as array
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function getByToken($token) {
+
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+		return $this->get($this->acl->getPollId());
+
+	}
 
 
 
@@ -219,8 +246,6 @@ class EventController extends Controller {
 			$adminAccess = $this->groupManager->isAdmin($this->userId);
 		}
 
-		$this->logger->alert(json_encode($event));
-
 		$NewEvent = new Event();
 
 		// Set the configuration options entered by the user
@@ -232,15 +257,6 @@ class EventController extends Controller {
 		$NewEvent->setAllowMaybe(intval($event['allowMaybe']));
 
 		if ($event['access'] === 'select') {
-			// $shareAccess = '';
-			// foreach ($shares as $shareElement) {
-			// 	if ($shareElement['type'] === 'user') {
-			// 		$shareAccess = $shareAccess . 'user_' . $shareElement['id'] . ';';
-			// 	} elseif ($shareElement['type'] === 'group') {
-			// 		$shareAccess = $shareAccess . 'group_' . $shareElement['id'] . ';';
-			// 	}
-			// }
-			// $NewEvent->setAccess(rtrim($shareAccess, ';'));
 		} else {
 			$NewEvent->setAccess($event['access']);
 		}
@@ -275,6 +291,7 @@ class EventController extends Controller {
 
 			} catch (Exception $e) {
 				$this->logger->alert('Poll ' . $oldEvent['id'] . ' not found!', ['app' => 'polls']);
+				return new DataResponse(null, Http::STATUS_NOT_FOUND);
 			}
 
 		} catch (Exception $e) {

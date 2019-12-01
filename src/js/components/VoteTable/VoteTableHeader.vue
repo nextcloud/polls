@@ -94,35 +94,35 @@ export default {
 		]),
 
 		votesranked() {
-			var pollOptionText = this.option.pollOptionText
+			let pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			})
 		},
 
 		yesVotes() {
-			var pollOptionText = this.option.pollOptionText
+			let pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			}).yes
 		},
 
 		noVotes() {
-			var pollOptionText = this.option.pollOptionText
+			let pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			}).no
 		},
 
 		maybeVotes() {
-			var pollOptionText = this.option.pollOptionText
+			let pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			}).maybe
 		},
 
 		isWinner() {
-			var pollOptionText = this.option.pollOptionText
+			let pollOptionText = this.option.pollOptionText
 			return (
 				this.votesRank.find(rank => {
 					return rank.pollOptionText === pollOptionText

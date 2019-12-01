@@ -41,6 +41,20 @@
 				</h3>
 			</div>
 
+			<div v-if="!isValidUser">
+				<label>
+					{{ t('polls', 'To participate in this poll, you have to provide a username with at least 3 letters.') }}
+				</label>
+
+				<form>
+					<input v-model="userName" :class="{ error: !isValidName }" type="text"
+						:placeholder="t('polls', 'Choose your username')">
+					<input v-show="!checkingUserName" class="icon-confirm" @click="writeUserName">
+					<span v-show="checkingUserName" class="icon-loading-small" style="float:right;" />
+					<span v-show="!checkingUserName">{{ token }} </span>
+				</form>
+			</div>
+
 			<VoteTable v-show="!loading" @voteSaved="indicateVoteSaved()" />
 			<Notification />
 		</div>
@@ -54,22 +68,6 @@
 			<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
 				<SideBarTabComments />
 			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit && event.type === 'datePoll'" :name="t('polls', 'Date options')" icon="icon-calendar">
-				<SideBarTabDateOptions />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit && event.type === 'textPoll'" :name="t('polls', 'Text options')" icon="icon-toggle-filelist">
-				<SideBarTabTextOptions />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
-				<SideBarTabConfiguration />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Shares')" icon="icon-share">
-				<SideBarTabShare />
-			</AppSidebarTab>
 		</AppSidebar>
 		<LoadingOverlay v-if="loading" />
 	</AppContent>
@@ -78,11 +76,7 @@
 <script>
 import Notification from '../components/notification/notification'
 import VoteTable from '../components/VoteTable/VoteTable'
-import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration'
-import SideBarTabDateOptions from '../components/SideBar/SideBarTabDateOptions'
-import SideBarTabTextOptions from '../components/SideBar/SideBarTabTextOptions'
 import SideBarTabComments from '../components/SideBar/SideBarTabComments'
-import SideBarTabShare from '../components/SideBar/SideBarTabShare'
 import { mapState, mapGetters } from 'vuex'
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
@@ -90,11 +84,7 @@ export default {
 	name: 'Vote',
 	components: {
 		Notification,
-		SideBarTabConfiguration,
 		SideBarTabComments,
-		SideBarTabDateOptions,
-		SideBarTabTextOptions,
-		SideBarTabShare,
 		VoteTable,
 		AppSidebar,
 		AppSidebarTab
@@ -106,8 +96,9 @@ export default {
 			delay: 50,
 			sideBarOpen: false,
 			loading: false,
-			initialTab: 'comments',
-			newName: ''
+			checkingUserName: false,
+			token: '',
+			initialTab: 'comments'
 		}
 	},
 
@@ -124,6 +115,14 @@ export default {
 
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.event.title
+		},
+
+		isValidUser() {
+			return (this.event.acl.userId !== '' && this.event.acl.userId !== null)
+		},
+
+		isValidName() {
+			return false
 		}
 
 	},
@@ -140,24 +139,30 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.loading = true
-			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id })
+			this.loading = false
+			// this.$store.dispatch('getShareAsync', { token: this.$route.params.token })
+			// 	.then((response) => {
+			this.$store.dispatch('loadEvent', { token: this.$route.params.token })
 				.then((response) => {
-					this.$store.dispatch({
-						type: 'loadPoll',
-						pollId: this.$route.params.id,
-						mode: this.$route.name
-					})
+					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
 						.then(() => {
-							if (this.$route.name === 'edit') {
-								this.openInEditMode()
-							}
 							this.loading = false
 						})
 				})
-				.catch(() => {
+				.catch((error) => {
+					console.error(error)
 					this.loading = false
 				})
+				// })
+		},
+
+		writeUserName() {
+			this.checkingUsername = true
+			this.$store.dispatch('addShareFromUser', { token: this.$route.params.token, userName: this.userName })
+				.then((response) => {
+					this.token = response.data.token
+				})
+
 		},
 
 		toggleSideBar() {

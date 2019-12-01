@@ -28,6 +28,7 @@ import Router from 'vue-router'
 // Dynamic loading
 const List = () => import('./views/PollList')
 const Vote = () => import('./views/Vote')
+const PublicVote = () => import('./views/PublicVote')
 
 Vue.use(Router)
 
@@ -75,6 +76,14 @@ export default new Router({
 			},
 			props: true,
 			name: 'create'
+		},
+		{
+			path: '/:index(index.php/)?apps/polls/s/:token',
+			components: {
+				default: PublicVote
+			},
+			props: true,
+			name: 'publicVote'
 		}
 	]
 })

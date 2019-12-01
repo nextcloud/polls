@@ -42,7 +42,7 @@ const mutations = {
 		})
 	},
 
-	sharesReset(state) {
+	reset(state) {
 		Object.assign(state, defaultComments())
 	},
 
@@ -58,14 +58,14 @@ const getters = {
 	},
 
 	invitationShares: state => {
-		var invitationTypes = ['user', 'group', 'mail', 'external']
+		let invitationTypes = ['user', 'group', 'mail', 'external']
 		return state.list.filter(function(share) {
 			return invitationTypes.includes(share.type)
 		})
 	},
 
 	publicShares: state => {
-		var invitationTypes = ['public']
+		let invitationTypes = ['public']
 		return state.list.filter(function(share) {
 			return invitationTypes.includes(share.type)
 		})
@@ -78,27 +78,56 @@ const getters = {
 
 const actions = {
 	loadPoll({ commit, rootState }, payload) {
-		commit({ type: 'sharesReset' })
-		axios
-			.get(OC.generateUrl('apps/polls/get/shares/' + payload.pollId))
+		commit('reset')
+		let endPoint = 'apps/polls/get/shares/'
+
+		if (payload.token !== undefined) {
+			return
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				commit('sharesSet', {
 					'list': response.data
 				})
 			}, (error) => {
-				commit({ type: 'sharesReset' })
-				console.error(error)
+				console.error('Error loading shares', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
+	},
+
+	getShareAsync({ commit }, payload) {
+		return axios.get(OC.generateUrl('apps/polls/get/share/' + payload.token))
+			.then((response) => {
+				return { 'share': response.data }
+			}, (error) => {
+				console.error('Error loading share', { 'error': error.response }, { 'payload': payload })
+				throw error
+			})
+	},
+
+	addShareFromUser({ commit }, payload) {
+		return axios.post(OC.generateUrl('apps/polls/write/share/s'), { token: payload.token, userName: payload.userName })
+			.then((response) => {
+			}, (error) => {
+				console.error('Error writing share', { 'error': error.response }, { 'payload': payload })
+				throw error
+			})
+
 	},
 
 	writeSharePromise({ commit, rootState }, payload) {
 		payload.share.pollId = rootState.event.id
-		return axios
-			.post(OC.generateUrl('apps/polls/write/share'), { pollId: rootState.event.id, share: payload.share })
+		return axios.post(OC.generateUrl('apps/polls/write/share'), { pollId: rootState.event.id, share: payload.share })
 			.then((response) => {
 				commit('shareAdd', response.data)
 			}, (error) => {
-				console.error('writeSharePromise error', error)
+				console.error('Error writing share', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	},
 
@@ -107,7 +136,8 @@ const actions = {
 			.then((response) => {
 				commit('shareRemove', { 'share': payload.share })
 			}, (error) => {
-				console.error(error)
+				console.error('Error removing share', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	}
 

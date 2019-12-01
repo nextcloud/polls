@@ -40,6 +40,7 @@ use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Service\AnonymizeService;
+use OCA\Polls\Model\Acl;
 
 class VoteController extends Controller {
 
@@ -49,6 +50,7 @@ class VoteController extends Controller {
 	private $groupManager;
 	private $eventMapper;
 	private $anonymizer;
+	private $acl;
 
 	/**
 	 * VoteController constructor.
@@ -59,6 +61,7 @@ class VoteController extends Controller {
 	 * @param IGroupManager $groupManager
 	 * @param EventMapper $eventMapper
 	 * @param AnonymizeService $anonymizer
+	 * @param Acl $acl
 	 */
 	public function __construct(
 		string $appName,
@@ -68,7 +71,8 @@ class VoteController extends Controller {
 		VoteMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
-		AnonymizeService $anonymizer
+		AnonymizeService $anonymizer,
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
@@ -77,25 +81,55 @@ class VoteController extends Controller {
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->anonymizer = $anonymizer;
+		$this->acl = $acl;
 	}
 
 	/**
 	 * Get all votes of given poll
+	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
-		$event = $this->eventMapper->find($pollId);
 
-		if (($event->getFullAnonymous() || ($event->getIsAnonymous() && $event->getOwner() !== $this->userId))) {
-			$votes = $this->anonymizer->getAnonymizedList($this->mapper->findByPoll($pollId), $pollId);
-		} else {
-			$votes = $this->mapper->findByPoll($pollId);
+		try {
+
+			if (!$this->acl->getFoundByToken()) {
+				$this->acl->setPollId($pollId);
+			}
+
+			if (!$this->acl->getAllowSeeUsernames()) {
+				$this->anonymizer->set($pollId, $this->acl->getUserId());
+				return new DataResponse((array) $this->anonymizer->getVotes(), Http::STATUS_OK);
+			} else {
+				return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
+			}
+
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		return new DataResponse((array) $votes, Http::STATUS_OK);
+	}
+
+	/**
+	 * getByToken
+	 * Read all votes of a poll based on a share token and return list as array
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function getByToken($token) {
+
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return $this->get($this->acl->getPollId());
 
 	}
 

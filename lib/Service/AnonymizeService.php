@@ -24,54 +24,41 @@
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Comment;
+use OCA\Polls\Db\CommentMapper;
 
 class AnonymizeService {
 
 	private $voteMapper;
+	private $anonList = array();
+	private $userId;
+	private $pollId;
 
 	public function __construct(
-		VoteMapper $voteMapper
+		VoteMapper $voteMapper,
+		CommentMapper $commentMapper
 	) {
 		$this->voteMapper = $voteMapper;
+		$this->commentMapper = $commentMapper;
 	}
 
 	/**
-	 * Create a mapping list with unique Anonymous strings based on the partcipants of a poll
-	 * @NoAdminRequired
-	 * @return array
-	 */
-	private function anonMapper($pollId) {
-		$anonList = array();
-		$votes = $this->voteMapper->findByPoll($pollId);
-		$i = 0;
-
-		foreach ($votes as $element) {
-			if (!array_key_exists($element->getUserId(), $anonList)) {
-				$anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
-			}
-		}
-
-		return $anonList;
-	}
-
-	/**
-	 * Anonymizes the participants of a poll
-	 * @NoAdminRequired
-	 * @param Array $array Input list which schould be anonymized
-	 * @return array Returns the original array with anonymized user names
-	 */
-	public function getAnonymizedList($array, $pollId) {
+	* Anonymizes the participants of a poll
+	* @NoAdminRequired
+	* @param Array $array Input list which should be anonymized must be a collection of Vote or Comment
+	* @return array Returns the original array with anonymized user names
+	*/
+	private function anonymize($array) {
 		// get mapping for the complete poll
-		$anonList = $this->anonMapper($pollId);
 		foreach ($array as &$element) {
 			// skip current user
-			if ($element->getUserId() !== \OC::$server->getUserSession()->getUser()->getUID()) {
-				// throw new \Exception( json_encode($element->getUserId()) );
+			if ($element->getUserId() !== $this->userId) {
 				// Check, if searched user name is in mapping array
-				if (isset($anonList[$element->getUserId()])) {
+				if (isset($this->anonList[$element->getUserId()])) {
 					//replace original user name
-					$element->setUserId($anonList[$element->getUserId()]);
+					$element->setUserId($this->anonList[$element->getUserId()]);
 				} else {
 					// User name is not in mapping array, set static text
 					$element->setUserId('Unknown user');
@@ -79,6 +66,56 @@ class AnonymizeService {
 			}
 		}
 
-		return (object) $array;
+		return $array;
 	}
+
+	/**
+	* Initialize anonymizer with pollId and userId
+	* Creates a mapping list with unique Anonymous strings based on the partcipants of a poll
+	* @NoAdminRequired
+	* @param integer $pollId
+	* @param string $userId - usernames, which will not be anonymized
+	*/
+
+	public function set($pollId, $userId) {
+		$this->pollId = $pollId;
+		$this->userId = $userId;
+		$votes = $this->voteMapper->findByPoll($pollId);
+		$comments = $this->commentMapper->findByPoll($pollId);
+		$i = 0;
+
+		foreach ($votes as $element) {
+			if (!array_key_exists($element->getUserId(), $this->anonList) && $element->getUserId() !== $userId) {
+				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
+			}
+		}
+
+		foreach ($comments as $element) {
+			if (!array_key_exists($element->getUserId(), $this->anonList) && $element->getUserId() !== $userId) {
+				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
+			}
+		}
+		return;
+	}
+
+	/**
+	 * Anonymizes the comments of a poll
+	 * @NoAdminRequired
+	 * @return object Returns anonymized comments
+	 */
+	public function getComments() {
+		// get mapping for the complete poll
+		return (object) $this->anonymize($this->commentMapper->findByPoll($this->pollId));
+	}
+
+	/**
+	 * Anonymizes the participants of a poll
+	 * @NoAdminRequired
+	 * @return array Returns anonymized votes
+	 */
+	public function getVotes() {
+		return (object) $this->anonymize($this->voteMapper->findByPoll($this->pollId));
+	}
+
+
 }

@@ -71,7 +71,7 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('hash', Type::STRING, [
+			$table->addColumn('token', Type::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
@@ -108,18 +108,18 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 		$schema = $schemaClosure();
 
 		if ($schema->hasTable('polls_share')) {
-			$this->copyHashes();
+			$this->copyTokens();
 		}
 	}
 
 	/**
 	 * Copy date options
 	 */
-	protected function copyHashes() {
+	protected function copyTokens() {
 		$insert = $this->connection->getQueryBuilder();
 		$insert->insert('polls_share')
 			->values([
-				'hash' => $insert->createParameter('hash'),
+				'token' => $insert->createParameter('token'),
 				'type' => $insert->createParameter('type'),
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
@@ -132,7 +132,7 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 		while ($row = $result->fetch()) {
 			if ($row['access'] == 'public') {
 				$insert
-				->setParameter('hash', $row['hash'])
+				->setParameter('token', $row['hash'])
 				->setParameter('type', $row['access'])
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)

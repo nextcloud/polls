@@ -96,7 +96,7 @@ class PageController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param string $hash
+	 * @param string $token
 	 * @return PublicTemplateResponse
 	 */
 	public function votePublic($token) {

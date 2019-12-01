@@ -44,12 +44,6 @@ const mutations = {
 	}
 }
 
-const getters = {
-	currentUser: state => {
-		return OC.getCurrentUser().uid
-	}
-}
-
 const actions = {
 	loadPoll({ commit, rootState }, payload) {
 		commit('pollSetProperty', { 'mode': payload.mode })
@@ -61,6 +55,5 @@ const actions = {
 export default {
 	state,
 	mutations,
-	getters,
 	actions
 }

@@ -34,15 +34,15 @@ const state = defaultComments()
 
 const mutations = {
 
-	commentsSet(state, payload) {
+	setComments(state, payload) {
 		Object.assign(state, payload)
 	},
 
-	commentsReset(state) {
+	reset(state) {
 		Object.assign(state, defaultComments())
 	},
 
-	commentAdd(state, payload) {
+	addComment(state, payload) {
 		state.list.push(payload)
 	}
 
@@ -59,27 +59,35 @@ const getters = {
 }
 
 const actions = {
+
 	loadPoll({ commit, rootState }, payload) {
-		commit({ type: 'commentsReset' })
-		axios
-			.get(OC.generateUrl('apps/polls/get/comments/' + payload.pollId))
+		commit('reset')
+		let endPoint = 'apps/polls/get/comments/'
+
+		if (payload.token !== undefined) {
+			endPoint = endPoint.concat('s/', payload.token)
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('commentsSet', {
-					'list': response.data
-				})
+				commit('setComments', { 'list': response.data })
 			}, (error) => {
-				commit({ type: 'commentsReset' })
-				console.error(error)
+				console.error('Error loading comments', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	},
 
 	writeCommentPromise({ commit, rootState }, payload) {
-		return axios
-			.post(OC.generateUrl('apps/polls/write/comment'), { pollId: rootState.event.id, message: payload })
+		return axios.post(OC.generateUrl('apps/polls/write/comment'), { pollId: rootState.event.id, message: payload })
 			.then((response) => {
-				commit('commentAdd', response.data)
+				commit('addComment', response.data)
 			}, (error) => {
-				console.error('writeCommentPromise error', error)
+				console.error('Error writing comment', { 'error': error.response }, { 'payload': payload })
+				throw error
 			})
 	}
 }
