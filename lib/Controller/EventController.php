@@ -120,13 +120,15 @@ class EventController extends Controller {
 		$data = array();
 
  		try {
- 			$event = $this->mapper->find($pollId);
 			if (!$this->acl->getFoundByToken()) {
 				$this->acl->setPollId($pollId);
 			}
- 		} catch (DoesNotExistException $e) {
+
+			$event = $this->mapper->find($pollId);
+
+		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
-			return new DataResponse(null, Http::STATUS_NOT_FOUND);
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
  		}
 
 		if ($event->getType() == 0) {
@@ -146,6 +148,7 @@ class EventController extends Controller {
 			$expired = time() > strtotime($event->getExpire());
 			$expiration = true;
 		}
+
 		return new DataResponse((object) [
 				'id' => $event->getId(),
 				'type' => $pollType,

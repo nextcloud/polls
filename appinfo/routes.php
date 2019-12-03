@@ -37,10 +37,11 @@ return [
 		['name' => 'comment#write', 'url' => '/write/comment', 'verb' => 'POST'],
 		['name' => 'comment#getByToken', 'url' => '/get/comments/s/{token}', 'verb' => 'GET'],
 
-		['name' => 'vote#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
-		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
-		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
 		['name' => 'vote#getByToken', 'url' => '/get/votes/s/{token}', 'verb' => 'GET'],
+		['name' => 'vote#setByToken', 'url' => '/set/vote/s/', 'verb' => 'POST'],
+		['name' => 'vote#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
+		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
+		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
 
 		['name' => 'option#get', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/add/option/', 'verb' => 'POST'],

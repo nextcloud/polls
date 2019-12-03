@@ -71,7 +71,7 @@ export default {
 
 	methods: {
 		voteClick() {
-			if (this.activeClass === 'active') {
+			if (this.isActive) {
 				this.$emit('voteClick')
 			}
 		}

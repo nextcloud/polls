@@ -56,7 +56,7 @@
 			</div>
 
 			<VoteTable v-show="!loading" @voteSaved="indicateVoteSaved()" />
-			<Notification />
+			<!-- <Notification /> -->
 		</div>
 
 		<AppSidebar v-if="sideBarOpen" :active="initialTab" :title="t('polls', 'Details')"
@@ -98,6 +98,7 @@ export default {
 			loading: false,
 			checkingUserName: false,
 			token: '',
+			userName: '',
 			initialTab: 'comments'
 		}
 	},

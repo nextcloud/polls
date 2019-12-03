@@ -122,7 +122,6 @@ const actions = {
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
 		let endPoint = 'apps/polls/get/votes/'
-
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId !== undefined) {
@@ -141,8 +140,16 @@ const actions = {
 	},
 
 	setVoteAsync({ commit, getters, rootState }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/set/vote'), {
+
+		let endPoint = 'apps/polls/set/vote/'
+
+		if (rootState.event.acl.foundByToken) {
+			endPoint = endPoint.concat('s/')
+		}
+
+		return axios.post(OC.generateUrl(endPoint), {
 			pollId: rootState.event.id,
+			token: rootState.event.acl.token,
 			option: payload.option,
 			userId: payload.userId,
 			setTo: payload.setTo

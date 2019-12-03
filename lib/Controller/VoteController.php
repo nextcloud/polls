@@ -39,6 +39,8 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Service\AnonymizeService;
 use OCA\Polls\Model\Acl;
 
@@ -71,6 +73,7 @@ class VoteController extends Controller {
 		VoteMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
+		ShareMapper $shareMapper,
 		AnonymizeService $anonymizer,
 		Acl $acl
 	) {
@@ -80,6 +83,7 @@ class VoteController extends Controller {
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
+		$this->shareMapper = $shareMapper;
 		$this->anonymizer = $anonymizer;
 		$this->acl = $acl;
 	}
@@ -113,28 +117,7 @@ class VoteController extends Controller {
 	}
 
 	/**
-	 * getByToken
-	 * Read all votes of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-
-		try {
-			$this->acl->setToken($token);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
-		return $this->get($this->acl->getPollId());
-
-	}
-
-	/**
-	 * Set vote
+	 * set
 	 * @NoAdminRequired
 	 * @param integer $pollId
 	 * @param Array $option
@@ -164,6 +147,52 @@ class VoteController extends Controller {
 		} finally {
 			return new DataResponse($vote, Http::STATUS_OK);
 		}
+	}
+
+	/**
+	 * Public functions
+	*/
+
+	/**
+	 * getByToken
+	 * Read all votes of a poll based on a share token and return list as array
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function getByToken($token) {
+
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return $this->get($this->acl->getPollId());
+
+	}
+
+	/**
+	 * setByToken
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param Array $option
+	 * @param string $setTo
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function setByToken($option, $setTo, $token) {
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return $this->set($this->acl->getPollId(), $option, $this->acl->getUserId(), $setTo);
+
 	}
 
 }

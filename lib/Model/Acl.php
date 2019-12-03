@@ -28,7 +28,6 @@ use JsonSerializable;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
-use OCP\ILogger;
 use OCP\IGroupManager;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
@@ -67,14 +66,12 @@ class Acl implements JsonSerializable {
 	public function __construct(
 		string $appName,
 		$userId,
-		ILogger $logger,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
 		ShareMapper $shareMapper,
 		Event $event
 	) {
 		$this->userId = $userId;
-		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->shareMapper = $shareMapper;
@@ -83,6 +80,7 @@ class Acl implements JsonSerializable {
 
 
 	/**
+	* @NoAdminRequired
 	 * @return string
 	 */
 	 public function getUserId() {
@@ -90,6 +88,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
+	* @NoAdminRequired
 	 * @return string
 	 */
 	public function setUserId($userId): Acl {
@@ -98,6 +97,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
+	* @NoAdminRequired
 	 * @return int
 	 */
 	public function getPollId(): int {
@@ -105,6 +105,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
+	* @NoAdminRequired
 	 * @return int
 	 */
 	public function setPollId(int $pollId): Acl {
@@ -115,6 +116,100 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getIsOwner(): bool {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return ($this->event->getOwner() === $this->userId);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getIsAdmin(): bool {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return $this->groupManager->isAdmin($this->userId);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getAllowView(): bool {
+		if ($this->pollId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getAllowVote(): bool {
+		if ($this->pollId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getAllowComment(): bool {
+		return $this->getAllowVote();
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getAllowEdit(): bool {
+		return ($this->getIsOwner() || $this->getIsAdmin());
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getAllowSeeUsernames(): bool {
+		return !(($this->event->getIsAnonymous() && !$this->getIsOwner()) || $this->event->getFullAnonymous());;
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getAllowSeeAllVotes(): bool {
+		// TODO: preparation for polls without displaying other votes
+		if ($this->pollId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	* @NoAdminRequired
+	 * @return bool
+	 */
+	public function getFoundByToken(): bool {
+		return $this->foundByToken;
+	}
+
+	/**
+	* @NoAdminRequired
 	 * @return string
 	 */
 	public function getToken(): string {
@@ -132,12 +227,16 @@ class Acl implements JsonSerializable {
 			$this->foundByToken = true;
 			$this->setPollId($share->getPollId());
 
-			if ($share->getType() === 'public') {
+			if (($share->getType() === 'group' || $share->getType() === 'user')  && !\OC::$server->getUserSession()->isLoggedIn()) {
+				// User must be logged in for shareType user and group
+				throw DoesNotExistException;
+			} else if (($share->getType() === 'group' || $share->getType() === 'public') && \OC::$server->getUserSession()->isLoggedIn()) {
+				// Use user name of authorized user shareType public and group if user is logged in
 				$this->setUserId($this->userId);
-			} else if ($share->getType() === 'group' && !\OC::$server->getUserSession()->isLoggedIn() ) {
-				$this->logger->warning('unauthorized user accessed group share');
-				throw new DoesNotExistException('unauthorizes access');
+			} else {
+				$this->setUserId($share->getUserId());
 			}
+
 
 		} catch (DoesNotExistException $e) {
 			$this->setPollId(0);
@@ -149,90 +248,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function getIsOwner(): bool {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return ($this->event->getOwner() === $this->userId);
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getIsAdmin(): bool {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return $this->groupManager->isAdmin($this->userId);
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getAllowView(): bool {
-		if ($this->pollId) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getAllowVote(): bool {
-		if ($this->pollId) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getAllowComment(): bool {
-		return $this->getAllowVote();
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getAllowEdit(): bool {
-		return ($this->getIsOwner() || $this->getIsAdmin());
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getAllowSeeUsernames(): bool {
-		return !(($this->event->getIsAnonymous() && !$this->getIsOwner()) || $this->event->getFullAnonymous());;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getAllowSeeAllVotes(): bool {
-		// TODO: preparation for polls without displaying other votes
-		if ($this->pollId) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getFoundByToken(): bool {
-		return $this->foundByToken;
-	}
-
-	/**
+	* @NoAdminRequired
 	* @return string
 	*/
 	public function getAccessLevel(): string {
