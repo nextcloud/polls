@@ -36,6 +36,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
+use OCP\ILogger;
 
 
 class SystemController extends Controller {
@@ -44,6 +45,7 @@ class SystemController extends Controller {
 	private $systemConfig;
 	private $groupManager;
 	private $userManager;
+	private $logger;
 
 	/**
 	 * PageController constructor.
@@ -58,6 +60,7 @@ class SystemController extends Controller {
 		string $appName,
 		$UserId,
 		IRequest $request,
+		ILogger $logger,
 		IConfig $systemConfig,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
@@ -67,6 +70,7 @@ class SystemController extends Controller {
 		parent::__construct($appName, $request);
 		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
+		$this->logger = $logger;
 		$this->userId = $UserId;
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
@@ -138,7 +142,8 @@ class SystemController extends Controller {
 	 * Get a list of NC users and groups
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
-	 * @return Bool
+	 * @PublicPage
+	 * @return DataResponse
 	 */
 	public function validatePublicUsername($pollId, $userName) {
 		$list = array();
@@ -188,12 +193,17 @@ class SystemController extends Controller {
 		}
 
 		foreach ($list as $element) {
-			if ($userName === $element['id'] || $userName === $element['displayName']) {
-				return false;
+			if (strtolower(trim($userName)) === strtolower(trim($element['id'])) || strtolower(trim($userName)) === strtolower(trim($element['displayName']))) {
+				return new DataResponse([
+					'result' => false
+				], Http::STATUS_FORBIDDEN);
 			}
 		}
 
-		return true;
+		return new DataResponse([
+			'result' => true,
+			'list' => $list
+		], Http::STATUS_OK);
 	}
 
 

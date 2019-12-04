@@ -176,7 +176,7 @@ export default {
 				return this.event.description
 			},
 			set(value) {
-				this.writeValue({ 'description': value })
+				this.writeValueDebounced({ 'description': value })
 			}
 		},
 
@@ -185,7 +185,7 @@ export default {
 				return this.event.title
 			},
 			set(value) {
-				this.writeValue({ 'title': value })
+				this.writeValueDebounced({ 'title': value })
 			}
 		},
 
@@ -296,18 +296,17 @@ export default {
 			'writeEventPromise'
 		]),
 
-		writeValue: debounce(function(e) {
+		writeValueDebounced: debounce(function(e) {
+			this.writeValue(e)
+		}, 1500),
+
+		writeValue(e) {
 			this.$store.commit('setEventProperty', e)
 			this.writingPoll = true
 			this.writePoll()
-		}, 500),
+		},
 
-		// updateDescription: debounce(function(e) {
-		// 	this.$store.commit('setEventProperty', { 'description': e.target.value })
-		// 	this.writePoll()
-		// }, 1000),
-
-		writePoll: debounce(function() {
+		writePoll() {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
@@ -315,7 +314,7 @@ export default {
 				this.writingPoll = false
 				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
 			}
-		}, 3000),
+		},
 
 		write() {
 			if (this.allowEdit) {

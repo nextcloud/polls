@@ -113,6 +113,7 @@ const actions = {
 	addShareFromUser({ commit }, payload) {
 		return axios.post(OC.generateUrl('apps/polls/write/share/s'), { token: payload.token, userName: payload.userName })
 			.then((response) => {
+				return { 'token': response.data.token }
 			}, (error) => {
 				console.error('Error writing share', { 'error': error.response }, { 'payload': payload })
 				throw error

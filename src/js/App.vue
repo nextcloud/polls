@@ -89,9 +89,31 @@ export default {
     display: flex;
 	width: auto;
 
-	input.hasTimepicker {
-        width: 75px;
-    }
+	input {
+		&.hasTimepicker {
+			width: 75px;
+		}
+		&.error {
+			border-color: var(--color-error);
+			background-color: #f9c5c5;
+			background-image: var(--icon-error-e9322d);
+			background-repeat: no-repeat;
+			background-position: right;
+		}
+		&.success, &.icon-confirn.success {
+			border-color: var(--color-success);
+			background-color: #d6fdda !important;
+			&.icon-confirm {
+				border-color: var(--color-success) !important;
+				border-left-color: transparent !important;
+			}
+		}
+
+		&.icon {
+			flex: 0;
+			padding: 0 17px;
+		}
+	}
 
 	.label {
 		border: solid 1px;
