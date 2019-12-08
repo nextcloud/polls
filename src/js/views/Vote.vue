@@ -25,79 +25,30 @@
 		<div v-if="event.id > 0" class="main-container">
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
-
-			<div>
-				<h2>
-					{{ event.title }}
-					<span v-if="event.expired" class="label error">{{ t('polls', 'Expired') }}</span>
-					<span v-if="!event.expired && event.expiration" class="label success">{{ t('polls', 'Votes are possible until %n', 1, event.expirationDate) }}</span>
-					<span v-if="!event.expiration" class="label success">{{ t('polls', 'No expiration date set') }}</span>
-					<transition name="fade">
-						<span v-if="voteSaved" class="label success">Vote saved</span>
-					</transition>
-				</h2>
-				<h3>
-					{{ event.description }}
-				</h3>
-			</div>
-
-			<VoteTable v-show="!loading" @voteSaved="indicateVoteSaved()" />
+			<VoteHeader />
+			<VoteTable />
 			<Notification />
 		</div>
 
-		<AppSidebar v-if="sideBarOpen" :active="initialTab" :title="t('polls', 'Details')"
-			@close="toggleSideBar">
-			<template slot="primary-actions">
-				<UserDiv :user-id="event.owner" :description="t('polls', 'Owner')" />
-			</template>
-
-			<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-				<SideBarTabComments />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit && event.type === 'datePoll'" :name="t('polls', 'Date options')" icon="icon-calendar">
-				<SideBarTabDateOptions />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit && event.type === 'textPoll'" :name="t('polls', 'Text options')" icon="icon-toggle-filelist">
-				<SideBarTabTextOptions />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
-				<SideBarTabConfiguration />
-			</AppSidebarTab>
-
-			<AppSidebarTab v-if="allowEdit" :name="t('polls', 'Shares')" icon="icon-share">
-				<SideBarTabShare />
-			</AppSidebarTab>
-		</AppSidebar>
+		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="loading" />
 	</AppContent>
 </template>
 
 <script>
 import Notification from '../components/notification/notification'
+import VoteHeader from '../components/VoteTable/VoteHeader'
 import VoteTable from '../components/VoteTable/VoteTable'
-import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration'
-import SideBarTabDateOptions from '../components/SideBar/SideBarTabDateOptions'
-import SideBarTabTextOptions from '../components/SideBar/SideBarTabTextOptions'
-import SideBarTabComments from '../components/SideBar/SideBarTabComments'
-import SideBarTabShare from '../components/SideBar/SideBarTabShare'
+import SideBar from '../components/SideBar/SideBar'
 import { mapState, mapGetters } from 'vuex'
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 export default {
 	name: 'Vote',
 	components: {
 		Notification,
-		SideBarTabConfiguration,
-		SideBarTabComments,
-		SideBarTabDateOptions,
-		SideBarTabTextOptions,
-		SideBarTabShare,
+		VoteHeader,
 		VoteTable,
-		AppSidebar,
-		AppSidebarTab
+		SideBar
 	},
 
 	data() {
@@ -113,17 +64,23 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
 			event: state => state.event,
-			shares: state => state.poll.shares
+			shares: state => state.shares,
+			acl: state => state.acl
 		}),
 
 		...mapGetters([
-			'allowEdit'
+			'isExpirationSet',
+			'expired',
+			'timeSpanExpiration'
 		]),
 
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.event.title
+		},
+
+		votePossible() {
+			return this.acl.allowVote && !this.expired
 		}
 
 	},
@@ -178,23 +135,6 @@ export default {
 			}
 			this.sideBarOpen = true
 			this.$store.commit('pollSetProperty', { 'mode': 'edit' })
-		},
-
-		toggleEdit() {
-			if (this.poll.mode === 'vote') {
-				this.$store.commit('pollSetProperty', { 'mode': 'edit' })
-			} else if (this.poll.mode === 'edit') {
-				this.$store.commit('pollSetProperty', { 'mode': 'vote' })
-			}
-		},
-
-		timer() {
-			this.voteSaved = false
-		},
-
-		indicateVoteSaved() {
-			this.voteSaved = true
-			window.setTimeout(this.timer, this.delay)
 		}
 	}
 }

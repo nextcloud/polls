@@ -45,7 +45,7 @@
 	</div>
 
 	<div v-else class="pollListItem poll">
-		<div v-tooltip.auto="pollType" class="thumbnail" :class="[pType, {expired : poll.event.expired}]">
+		<div v-tooltip.auto="pollType" class="thumbnail" :class="[pType, {expired : poll.expired}]">
 			{{ pollType }}
 		</div>
 
@@ -53,10 +53,10 @@
 
 		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="title">
 			<div class="name">
-				{{ poll.event.title }}
+				{{ poll.title }}
 			</div>
 			<div class="description">
-				{{ poll.event.description }}
+				{{ poll.description }}
 			</div>
 		</router-link>
 
@@ -78,14 +78,14 @@
 		</div>
 
 		<div class="owner">
-			<user-div :user-id="poll.event.owner" :display-name="poll.event.ownerDisplayName" />
+			<user-div :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
 
 		<div class="dates">
 			<div class="created ">
 				{{ timeSpanCreated }}
 			</div>
-			<div class="expiry" :class="{ expired : poll.event.expired }">
+			<div class="expiry" :class="{ expired : poll.expired }">
 				{{ timeSpanExpiration }}
 			</div>
 		</div>
@@ -120,14 +120,24 @@ export default {
 
 		// TODO: dity hack
 		aType() {
-			if (this.poll.event.access === 'public') {
-				return this.poll.event.access
-			} else if (this.poll.event.access === 'registered') {
-				return this.poll.event.access
-			} else if (this.poll.event.access === 'hidden') {
-				return this.poll.event.access
+			if (this.poll.access === 'public') {
+				return this.poll.access
+			} else if (this.poll.access === 'registered') {
+				return this.poll.access
+			} else if (this.poll.access === 'hidden') {
+				return this.poll.access
 			} else {
 				return 'select'
+			}
+		},
+
+		expired() {
+			if (this.poll.expire === null) {
+				return false
+			} else if (Date.parse(this.poll.expire) < Date.now()) {
+				return false
+			} else {
+				return true
 			}
 		},
 
@@ -147,7 +157,7 @@ export default {
 
 		// TODO: dity hack
 		pType() {
-			if (this.poll.event.type === '1') {
+			if (this.poll.type === '1') {
 				// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
 				return t('polls', 'textPoll')
 			} else {
@@ -168,41 +178,19 @@ export default {
 		},
 
 		timeSpanCreated() {
-			return moment(this.poll.event.created).fromNow()
+			return moment(this.poll.created).fromNow()
 		},
 
 		timeSpanExpiration() {
-			if (this.poll.event.expiration) {
-				return moment(this.poll.event.expirationDate).fromNow()
+			if (this.poll.expire) {
+				return moment(this.poll.expire).fromNow()
 			} else {
 				return t('polls', 'never')
 			}
 		},
-		participants() {
-			return this.poll.votes
-				.map(item => item.userId)
-				.filter((value, index, self) => self.indexOf(value) === index)
-		},
-		countvotes() {
-			return this.participants.length
-		},
-		countComments() {
-			if (this.poll.comments.length > 999) {
-				return '999+'
-			}
-			return this.poll.comments.length
-		},
-		countCommentsHint() {
-			return n('polls', 'There is %n comment', 'There are %n comments', this.poll.comments.length)
-		},
-		countShares() {
-			return this.poll.shares.length
-		},
-		votedBycurrentUser() {
-			return this.participants.indexOf(OC.getCurrentUser().uid) > -1
-		},
+
 		voteUrl() {
-			return OC.generateUrl('apps/polls/poll/') + this.poll.event.id
+			return OC.generateUrl('apps/polls/poll/') + this.poll.id
 		},
 
 		menuItems() {
@@ -221,7 +209,7 @@ export default {
 				}
 			]
 
-			if (this.poll.event.owner === OC.getCurrentUser().uid) {
+			if (this.poll.owner === OC.getCurrentUser().uid) {
 				// items.push({
 				// 	key: 'editPoll',
 				// 	icon: 'icon-rename',

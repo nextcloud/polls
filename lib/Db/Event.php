@@ -50,6 +50,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setFullAnonymous(integer $value)
  * @method integer getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
+ * @method integer getData()
+ * @method void setData(integer $value)
  */
 class Event extends Entity implements JsonSerializable {
 	protected $type;
@@ -63,6 +65,10 @@ class Event extends Entity implements JsonSerializable {
 	protected $isAnonymous;
 	protected $fullAnonymous;
 	protected $allowMaybe;
+	protected $showResults;
+	protected $voteLimit;
+	protected $deleted;
+	protected $deleteDate;
 
 	public function jsonSerialize() {
 		return [
@@ -74,9 +80,13 @@ class Event extends Entity implements JsonSerializable {
 			'created' => $this->created,
 			'access' => $this->access,
 			'expire' => $this->expire,
-			'isAnonymous' => $this->isAnonymous,
-			'fullAnonymous' => $this->fullAnonymous,
-			'allowMaybe' => $this->allowMaybe
+			'isAnonymous' => boolval($this->isAnonymous),
+			'fullAnonymous' => boolval($this->fullAnonymous),
+			'allowMaybe' => boolval($this->allowMaybe),
+			'voteLimit' => $this->showResults,
+			'showResults' => $this->showResults,
+			'deleted' => boolval($this->deleted),
+			'deleteDate' => $this->deleteDate
 		];
 	}
 }

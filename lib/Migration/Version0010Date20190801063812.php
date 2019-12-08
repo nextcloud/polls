@@ -32,6 +32,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Security\ISecureRandom;
 
 /**
  * Installation class for the polls app.
@@ -65,6 +66,33 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
+		if ($schema->hasTable('polls_events')) {
+			$table = $schema->getTable('polls_events');
+			if (!$table->hasColumn('deleted')) {
+				$table->addColumn('deleted', Type::BOOLEAN, [
+					'notnull' => false,
+					'default' => 0
+				]);
+			}
+			if (!$table->hasColumn('delete_date')) {
+				$table->addColumn('delete_date', Type::DATETIME, [
+					'notnull' => true
+				]);
+			}
+			if (!$table->hasColumn('vote_limit')) {
+				$table->addColumn('vote_limit', Type::INTEGER, [
+					'notnull' => false,
+					'default' => 0
+				]);
+			}
+			if (!$table->hasColumn('show_results')) {
+				$table->addColumn('show_results', Type::STRING, [
+					'notnull' => true,
+					'lenght' => 64
+				]);
+			}
+
+		}
 		if (!$schema->hasTable('polls_share')) {
 			$table = $schema->createTable('polls_share');
 			$table->addColumn('id', Type::INTEGER, [
@@ -79,9 +107,8 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 128,
 			]);
-			$table->addColumn('poll_id', Type::STRING, [
-				'notnull' => true,
-				'length' => 128,
+			$table->addColumn('poll_id', Type::INTEGER, [
+				'notnull' => true
 			]);
 			$table->addColumn('user_id', Type::STRING, [
 				'notnull' => false,
@@ -109,11 +136,12 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 
 		if ($schema->hasTable('polls_share')) {
 			$this->copyTokens();
+			// $this->copyInvitationTokens();
 		}
 	}
 
 	/**
-	 * Copy date options
+	 * Copy public tokens
 	 */
 	protected function copyTokens() {
 		$insert = $this->connection->getQueryBuilder();
@@ -123,23 +151,67 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 				'type' => $insert->createParameter('type'),
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
-				'user_email' => $insert->createParameter('user_email'),
+				'user_email' => $insert->createParameter('user_email')
 			]);
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
 			->from('polls_events');
 		$result = $query->execute();
+
 		while ($row = $result->fetch()) {
 			if ($row['access'] == 'public') {
+				// copy the hash to a public share
 				$insert
 				->setParameter('token', $row['hash'])
-				->setParameter('type', $row['access'])
+				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
 				->setParameter('user_email', null);
 				$insert->execute();
+			} elseif ($row['access'] == 'hidden') {
+				// copy the hash to a public share
+				// poll stays hidden for registered users
+				$insert
+				->setParameter('token', $row['hash'])
+				->setParameter('type', 'public')
+				->setParameter('poll_id', $row['id'])
+				->setParameter('user_id', null)
+				->setParameter('user_email', null);
+				$insert->execute();
+			} elseif ($row['access'] == 'registered') {
+				// copy the hash to a public share
+				// to keep the hash
+				$insert
+				->setParameter('token', $row['hash'])
+				->setParameter('type', 'public')
+				->setParameter('poll_id', $row['id'])
+				->setParameter('user_id', null)
+				->setParameter('user_email', null);
+			} else {
+				// create a personal share for invitated users
+
+				// explode the access entry to single access strings
+				$users = explode(';', $row['access']);
+				foreach ($users as $value) {
+					// separate 'user' and 'group' from user names and create
+					// a share for every entry
+					$parts = explode('_', $value);
+					$insert
+					->setParameter('token', \OC::$server->getSecureRandom()->generate(
+						16,
+						ISecureRandom::CHAR_DIGITS .
+						ISecureRandom::CHAR_LOWER .
+						ISecureRandom::CHAR_UPPER
+					))
+					->setParameter('type', $parts[0])
+					->setParameter('poll_id', $row['id'])
+					->setParameter('user_id', $parts[1])
+					->setParameter('user_email', null);
+					$insert->execute();
+				}
 			}
 		}
 		$result->closeCursor();
 	}
+
 }

@@ -30,16 +30,17 @@ const defaultEvent = () => {
 		type: 'datePoll',
 		title: '',
 		description: '',
+		owner: undefined,
 		created: '',
 		access: 'public',
-		expiration: false,
-		expirationDate: '',
-		expired: false,
+		expire: null,
 		isAnonymous: false,
 		fullAnonymous: false,
 		allowMaybe: false,
-		owner: undefined,
-		acl: {}
+		voteLimit: null,
+		showResults: true,
+		deleted: false,
+		deleteDate: null
 	}
 }
 
@@ -50,7 +51,7 @@ const mutations = {
 		Object.assign(state, payload.event)
 	},
 
-	eventReset(state) {
+	resetEvent(state) {
 		Object.assign(state, defaultEvent())
 	},
 
@@ -66,34 +67,38 @@ const getters = {
 		return moment(state.created).fromNow()
 	},
 
-	timeSpanExpiration: state => {
-		if (state.expiration) {
-			return moment(state.expirationDate).fromNow()
+	isExpirationSet: state => {
+		return Boolean(moment(state.expire).unix())
+	},
+
+	expired: (state, getters) => {
+		return (getters.isExpirationSet && moment(state.expire).diff() < 0)
+	},
+
+	timeSpanExpiration: (state, getters) => {
+		if (getters.expired) {
+			return moment(state.expire).fromNow()
 		} else {
 			return t('polls', 'never')
 		}
 	},
 
-	accessType: state => {
-		if (state.acl.accessLevel === 'public') {
+	accessType: (state, getters, rootState) => {
+		if (rootState.acl.accessLevel === 'public') {
 			return t('polls', 'Public access')
-		} else if (state.acl.accessLevel === 'select') {
+		} else if (rootState.acl.accessLevel === 'select') {
 			return t('polls', 'Only shared')
-		} else if (state.acl.accessLevel === 'registered') {
+		} else if (rootState.acl.accessLevel === 'registered') {
 			return t('polls', 'Registered users only')
-		} else if (state.acl.accessLevel === 'hidden') {
+		} else if (rootState.acl.accessLevel === 'hidden') {
 			return t('polls', 'Hidden poll')
 		} else {
-			return state.acl.accessLevel
+			return rootState.acl.accessLevel
 		}
 	},
 
-	adminMode: state => {
-		return (!state.acl.isOwner && state.acl.isAdmin)
-	},
-
-	allowEdit: (state, getters) => {
-		return (state.acl.allowEdit)
+	allowEdit: (state, getters, rootState) => {
+		return (rootState.acl.allowEdit)
 	}
 
 }
@@ -101,7 +106,7 @@ const getters = {
 const actions = {
 
 	loadEvent({ commit }, payload) {
-		commit('eventReset')
+		commit('resetEvent')
 		let endPoint = 'apps/polls/get/event/'
 
 		if (payload.token !== undefined) {
@@ -115,24 +120,12 @@ const actions = {
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				commit('setEvent', { 'event': response.data })
-				// return response
 			}, (error) => {
 				if (error.response.status !== '404') {
 					console.error('Error loading event', { 'error': error.response }, { 'payload': payload })
 				}
 				throw error
 			})
-	},
-
-	addEventPromise({ commit }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/add/event'), { event: payload.event })
-			.then((response) => {
-				return response
-			}, (error) => {
-				console.error('Error adding event', { 'error': error.response }, { 'payload': payload })
-				throw error
-			})
-
 	},
 
 	deleteEventPromise({ commit }, payload) {
@@ -147,9 +140,10 @@ const actions = {
 	},
 
 	writeEventPromise({ commit, rootState }) {
-		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state, mode: rootState.poll.mode })
+		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state })
 			.then((response) => {
 				commit('setEvent', { 'event': response.data })
+				return response.event
 			}, (error) => {
 				console.error('Error writing event:', { 'error': error.response }, { 'state': state })
 				throw error
@@ -158,4 +152,4 @@ const actions = {
 	}
 }
 
-export default { state, mutations, getters, actions }
+export default { state, mutations, getters, actions, defaultEvent }

@@ -23,53 +23,60 @@
 
 import axios from 'nextcloud-axios'
 
-const state = {
-	list: []
+const defaultAcl = () => {
+	return {
+		userId: null,
+		pollId: null,
+		token: null,
+		isOwner: false,
+		isAdmin: false,
+		allowView: false,
+		allowVote: false,
+		allowComment: false,
+		allowEdit: false,
+		allowSeeUsernames: false,
+		allowSeeAllVotes: false,
+		foundByToken: false,
+		accessLevel: ''
+	}
 }
+
+const state = defaultAcl()
 
 const mutations = {
-	setPolls(state, { list }) {
-		state.list = list
-	}
-}
 
-const getters = {
-	countPolls: (state) => {
-		return state.list.length
+	setAcl(state, payload) {
+		Object.assign(state, payload.acl)
 	},
-	allPolls: (state) => {
-		return state.list.filter(poll => (!poll.deleted))
-	},
-	myPolls: (state) => {
-		return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid))
-	},
-	publicPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'public'))
-	},
-	hiddenPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'hidden'))
-	},
-	deletedPolls: (state) => {
-		return state.list.filter(poll => (poll.deleted))
+
+	reset(state) {
+		Object.assign(state, defaultAcl())
 	}
+
 }
 
 const actions = {
-	loadPolls({ commit }) {
-		return axios.get(OC.generateUrl('apps/polls/get/events'))
-			.then((response) => {
-				commit('setPolls', { list: response.data })
-			}, (error) => {
-				console.error(error.response)
-			})
-	},
 
-	deletePollPromise(context, payload) {
-		return axios.post(
-			OC.generateUrl('apps/polls/remove/poll'),
-			payload.event
-		)
+	loadPoll({ commit, rootState }, payload) {
+		commit('reset')
+		let endPoint = 'apps/polls/get/acl/'
+
+		if (payload.token !== undefined) {
+			endPoint = endPoint.concat('s/', payload.token)
+		} else if (payload.pollId !== undefined) {
+			endPoint = endPoint.concat(payload.pollId)
+		} else {
+			return
+		}
+
+		return axios.get(OC.generateUrl(endPoint))
+			.then((response) => {
+				commit('setAcl', { 'acl': response.data })
+			}, (error) => {
+				console.error('Error loading comments', { 'error': error.response }, { 'payload': payload })
+				throw error
+			})
 	}
 }
 
-export default { state, mutations, getters, actions }
+export default { state, mutations, actions }

@@ -45,7 +45,8 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event
+			event: state => state.event,
+			acl: state => state.acl
 		}),
 
 		answer() {
@@ -64,7 +65,7 @@ export default {
 		},
 
 		isActive() {
-			return (this.isValidUser && this.event.acl.userId === this.userId && !this.event.expired)
+			return (this.isValidUser && this.acl.userId === this.userId && !this.event.expired)
 		}
 
 	},

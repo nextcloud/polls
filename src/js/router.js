@@ -38,11 +38,11 @@ export default new Router({
 	linkActiveClass: 'active',
 	routes: [
 		{
-			path: '/:index(index.php/)?apps/polls/',
+			path: '/:index(index.php/)?apps/polls/:type?',
 			components: {
 				default: List
 			},
-			props: false,
+			props: true,
 			name: 'list'
 		},
 		{
@@ -52,14 +52,6 @@ export default new Router({
 			},
 			props: true,
 			name: 'vote'
-		},
-		{
-			path: '/:index(index.php/)?apps/polls/edit/:id',
-			components: {
-				default: Vote
-			},
-			props: true,
-			name: 'edit'
 		},
 		{
 			path: '/:index(index.php/)?apps/polls/vote/:id',

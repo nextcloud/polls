@@ -38,9 +38,9 @@
 					v-for="(poll, index) in pollList"
 					:key="poll.id"
 					:poll="poll"
-					@deletePoll="removePoll(index, poll.event)"
-					@editPoll="callPoll(index, poll.event, 'edit')"
-					@clonePoll="callPoll(index, poll.event, 'clone')" />
+					@deletePoll="removePoll(index, poll)"
+					@editPoll="callPoll(index, poll, 'edit')"
+					@clonePoll="callPoll(index, poll, 'clone')" />
 			</transition-group>
 		</div>
 		<loading-overlay v-if="loading" />
@@ -50,7 +50,7 @@
 
 <script>
 import PollListItem from '../components/PollList/PollListItem'
-
+import { mapGetters } from 'vuex'
 export default {
 	name: 'PollList',
 
@@ -61,13 +61,37 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			loading: true
+			loading: true,
+			pollList: this.$store.state.polls.list
 		}
 	},
 
 	computed: {
-		pollList() {
-			return this.$store.state.polls.list
+		...mapGetters([
+			'myPolls',
+			'publicPolls',
+			'hiddenPolls',
+			'deletedPolls'
+		])
+
+		// pollList() {
+		// 	return this.$store.state.polls.list
+		// }
+	},
+
+	watch: {
+		$route(to, from) {
+			if (this.$route.params.type === 'all') {
+				this.pollList = this.$store.state.polls.list
+			} else if (this.$route.params.type === 'my') {
+				this.pollList = this.myPolls
+			} else if (this.$route.params.type === 'public') {
+				this.pollList = this.publicPolls
+			} else if (this.$route.params.type === 'hidden') {
+				this.pollList = this.hiddenPolls
+			} else if (this.$route.params.type === 'deleted') {
+				this.pollList = this.deletedPolls
+			}
 		}
 	},
 

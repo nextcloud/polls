@@ -29,7 +29,9 @@ use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IGroupManager;
+use OCP\ILogger;
 use OCA\Polls\Db\Event;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\ShareMapper;
 
@@ -42,6 +44,10 @@ class Acl implements JsonSerializable {
 
 	/** @var int */
 	private $pollId = 0;
+	private $logger;
+
+	/** @var array */
+	private $shares = [];
 
 	/** @var string */
 	private $token = '';
@@ -66,6 +72,7 @@ class Acl implements JsonSerializable {
 	public function __construct(
 		string $appName,
 		$userId,
+		ILogger $logger,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
 		ShareMapper $shareMapper,
@@ -76,11 +83,12 @@ class Acl implements JsonSerializable {
 		$this->eventMapper = $eventMapper;
 		$this->shareMapper = $shareMapper;
 		$this->event = $event;
+		$this->logger = $logger;
 	}
 
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return string
 	 */
 	 public function getUserId() {
@@ -88,7 +96,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return string
 	 */
 	public function setUserId($userId): Acl {
@@ -97,7 +105,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return int
 	 */
 	public function getPollId(): int {
@@ -105,18 +113,19 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return int
 	 */
 	public function setPollId(int $pollId): Acl {
 		$this->pollId = $pollId;
 		$this->event = $this->eventMapper->find($this->pollId);
+		$this->shares = $this->shareMapper->findByPoll($this->pollId);
 
 		return $this;
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getIsOwner(): bool {
@@ -128,7 +137,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getIsAdmin(): bool {
@@ -140,23 +149,58 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowView(): bool {
-		if ($this->pollId) {
-			return true;
-		} else {
-			return false;
-		}
+		return (
+			   $this->getIsOwner()
+			|| $this->getIsAdmin()
+			|| ($this->getGroupShare() && !$this->event->getDeleted())
+			|| ($this->getPersonalShare() && !$this->event->getDeleted())
+			|| $this->event->getAccess() !== 'hidden'
+			);
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
+	 * @return bool
+	 */
+	public function getGroupShare(): bool {
+		return count(
+			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
+				if ($item->getType() === 'group' && $this->groupManager->isInGroup($this->getUserId(),$item->getUserId())) {
+					return true;
+				}
+			})
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
+	public function getPersonalShare(): bool {
+
+		return count(
+			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
+				if ($item->getType() === 'user' && $item->getUserId() === $this->getUserId()) {
+					return true;
+				}
+			})
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowVote(): bool {
-		if ($this->pollId) {
+		// $this->logger->error('Expiration: ' . $this->event->getExpire());
+		// $this->logger->error('Expiration time: ' . strtotime($this->event->getExpire()));
+		// $this->logger->error('low: ' . time());
+		// $this->logger->error('compare: ' . (strtotime($this->event->getExpire()) > time()));
+		if ($this->getAllowView() && strtotime($this->event->getExpire()) > time()) {
 			return true;
 		} else {
 			return false;
@@ -164,7 +208,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowComment(): bool {
@@ -172,7 +216,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowEdit(): bool {
@@ -180,7 +224,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowSeeUsernames(): bool {
@@ -188,7 +232,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowSeeAllVotes(): bool {
@@ -201,7 +245,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getFoundByToken(): bool {
@@ -209,7 +253,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
+	 * @NoAdminRequired
 	 * @return string
 	 */
 	public function getToken(): string {
@@ -217,6 +261,7 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @return string
 	 */
 	public function setToken(string $token): Acl {
@@ -248,8 +293,8 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
-	* @return string
+	 * @NoAdminRequired
+	 * @return string
 	*/
 	public function getAccessLevel(): string {
 		if ($this->getIsOwner()) {
@@ -283,6 +328,8 @@ class Acl implements JsonSerializable {
 			'allowEdit'         => $this->getAllowEdit(),
 			'allowSeeUsernames' => $this->getAllowSeeUsernames(),
 			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
+			'groupShare'        => $this->getGroupShare(),
+			'personalShare'     => $this->getPersonalShare(),
 			'foundByToken'      => $this->getFoundByToken(),
 			'accessLevel'       => $this->getAccessLevel()
 		];

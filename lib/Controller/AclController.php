@@ -66,6 +66,7 @@ class AclController extends Controller {
 	/**
 	 * Read acl with share token
 	 * @NoAdminRequired
+	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return array

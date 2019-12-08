@@ -23,19 +23,19 @@
 <template lang="html">
 	<div class="create-dialog">
 		<h2>{{ t('polls', 'Create new poll') }}</h2>
-		<input id="pollTitle" v-model="event.title" type="text"
+		<input id="pollTitle" v-model="title" type="text"
 			:placeholder="t('polls', 'Enter Title')">
 
 		<div class="configBox">
 			<label class="title icon-checkmark">
 				{{ t('polls', 'Poll type') }}
 			</label>
-			<input id="datePoll" v-model="event.type" value="datePoll"
+			<input id="datePoll" v-model="type" value="datePoll"
 				:disabled="protect" type="radio" class="radio">
 			<label for="datePoll">
 				{{ t('polls', 'Event schedule') }}
 			</label>
-			<input id="textPoll" v-model="event.type" value="textPoll"
+			<input id="textPoll" v-model="type" value="textPoll"
 				:disabled="protect" type="radio" class="radio">
 			<label for="textPoll">
 				{{ t('polls', 'Text based') }}
@@ -54,47 +54,48 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
 	name: 'CreateDlg',
 
 	data() {
 		return {
-			event: {
-				title: '',
-				description: '',
-				type: 'datePoll',
-				allowMaybe: false,
-				isAnonymous: false,
-				trueAnonymous: false,
-				expiration: false,
-				expirationDate: '',
-				access: 'hidden'
-
-			}
+			id: 0,
+			type: 'datePoll',
+			title: ''
 		}
 	},
 
 	computed: {
+		...mapState({
+			event: state => state.event
+		}),
+
 		titleEmpty() {
-			return this.event.title === ''
+			return this.title === ''
 		}
 	},
 
 	methods: {
+		...mapMutations([ 'setEventProperty', 'resetEvent', 'reset' ]),
+
 		cancel() {
-			this.event.title = ''
-			this.event.type = 'datePoll'
+			this.title = ''
+			this.type = 'datePoll'
 			this.$emit('closeCreate')
 		},
 
 		confirm() {
-			this.$store
-				.dispatch('addEventPromise', { event: this.event })
+			this.resetEvent()
+			this.reset()
+			this.setEventProperty({ 'id': 0 })
+			this.setEventProperty({ 'title': this.title })
+			this.setEventProperty({ 'type': this.type })
+			this.$store.dispatch('writeEventPromise')
 				.then((response) => {
-					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.event.title), { type: 'success' })
-					this.$store.dispatch('loadPolls')
-					this.$router.push({ name: 'edit', params: { id: response.data.id } })
 					this.cancel()
+					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.event.title), { type: 'success' })
+					this.$router.push({ name: 'vote', params: { id: this.event.id } })
 				})
 				.catch(() => {
 					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.event.title), { type: 'error' })

@@ -24,7 +24,6 @@
 	<div class="vote-header" :class=" { winner: isWinner }">
 		<div v-if="textPoll" class="text-box">
 			{{ option.pollOptionText }}
-			<a v-if="mode === 'edit'" class="icon-delete" @click="$emit('remove')" />
 		</div>
 
 		<div v-if="datePoll" v-tooltip.auto="localFullDate" class="date-box">
@@ -68,10 +67,6 @@ export default {
 		pollType: {
 			type: String,
 			default: undefined
-		},
-		mode: {
-			type: String,
-			default: 'vote'
 		}
 	},
 

@@ -24,7 +24,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import poll from './modules/currentPoll'
+import acl from './modules/acl'
 import comments from './modules/comments'
 import event from './modules/event'
 import notification from './modules/notification'
@@ -41,7 +41,7 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
 
 	modules: {
-		poll,
+		acl,
 		comments,
 		event,
 		notification,

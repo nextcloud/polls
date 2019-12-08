@@ -32,8 +32,7 @@
 			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
-				:poll-type="event.type"
-				:mode="poll.mode" />
+				:poll-type="event.type" />
 		</div>
 
 		<div v-for="(participant) in participants" :key="participant" :class="{currentuser: (participant === currentUser) }">
@@ -64,8 +63,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			event: state => state.event
+			event: state => state.event,
+			acl: state => state.acl
 		}),
 
 		...mapGetters([
@@ -74,7 +73,7 @@ export default {
 		]),
 
 		currentUser() {
-			return this.event.acl.userId
+			return this.acl.userId
 		},
 
 		noOptions() {
@@ -95,7 +94,7 @@ export default {
 					setTo: nextAnswer
 				})
 				.then(() => {
-					this.$emit('voteSaved')
+					// this.$emit('voteSaved')
 				})
 		}
 	}

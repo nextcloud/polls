@@ -21,25 +21,57 @@
   -->
 
 <template>
-	<div class="polls-sidebar">
-		<slot />
+	<div class="voteHeader">
+		<h2>
+			{{ event.title }}
+			<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, timeSpanExpiration) }}</span>
+			<span v-if="!expired && isExpirationSet" class="label success">{{ t('polls', 'Place your votes until %n', 1, event.expire) }}</span>
+			<span v-if="!isExpirationSet" class="label success">{{ t('polls', 'No expiration date set') }}</span>
+		</h2>
+		<h3>
+			{{ event.description }}
+		</h3>
 	</div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 export default {
-	name: 'SideBar'
+	name: 'VoteHeader',
+
+	data() {
+		return {
+			voteSaved: false,
+			delay: 50,
+			newName: ''
+		}
+	},
+
+	computed: {
+		...mapState({
+			event: state => state.event
+		}),
+
+		...mapGetters([
+			'isExpirationSet',
+			'expired',
+			'timeSpanExpiration'
+		])
+
+	},
+
+	methods: {
+		indicateVoteSaved() {
+			this.voteSaved = true
+			window.setTimeout(this.timer, this.delay)
+		}
+	}
 }
 </script>
 
-<style lang="scss">
-.polls-sidebar {
-    min-width: 300px;
-    border-left: 1px solid var(--color-border);
-    z-index: 500;
-    > ul,
-    > div {
-        padding: 8px;
-    }
-}
+<style lang="scss" scoped>
+	.voteHeader {
+		margin: 8px 24px;
+	}
 </style>

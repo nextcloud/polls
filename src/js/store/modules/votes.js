@@ -71,8 +71,8 @@ const getters = {
 			}
 		})
 
-		if (!list.includes(rootState.event.acl.userId) && rootState.event.acl.userId !== null) {
-			list.push(rootState.event.acl.userId)
+		if (!list.includes(rootState.acl.userId) && rootState.acl.userId !== null) {
+			list.push(rootState.acl.userId)
 		}
 
 		return list
@@ -143,13 +143,13 @@ const actions = {
 
 		let endPoint = 'apps/polls/set/vote/'
 
-		if (rootState.event.acl.foundByToken) {
+		if (rootState.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(OC.generateUrl(endPoint), {
 			pollId: rootState.event.id,
-			token: rootState.event.acl.token,
+			token: rootState.acl.token,
 			option: payload.option,
 			userId: payload.userId,
 			setTo: payload.setTo

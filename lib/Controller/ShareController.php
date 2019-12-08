@@ -110,7 +110,7 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getShares($pollId) {
-		// $this->acl->setPollId($pollId)
+
 		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
 			try {
 				$event = $this->eventMapper->find($pollId);

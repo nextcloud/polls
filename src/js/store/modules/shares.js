@@ -23,30 +23,30 @@
 
 import axios from 'nextcloud-axios'
 
-const defaultComments = () => {
+const defaultShares = () => {
 	return {
 		list: []
 	}
 }
 
-const state = defaultComments()
+const state = defaultShares()
 
 const mutations = {
-	sharesSet(state, payload) {
+	setShares(state, payload) {
 		Object.assign(state, payload)
 	},
 
-	shareRemove(state, payload) {
+	removeShare(state, payload) {
 		state.list = state.list.filter(share => {
 			return share.id !== payload.share.id
 		})
 	},
 
 	reset(state) {
-		Object.assign(state, defaultComments())
+		Object.assign(state, defaultShares())
 	},
 
-	shareAdd(state, payload) {
+	addShare(state, payload) {
 		state.list.push(payload)
 	}
 
@@ -79,6 +79,12 @@ const getters = {
 const actions = {
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
+		// console.log(rootState.acl)
+		// if (!rootState.acl.allowEdit) {
+		// 	console.log('rootState.acl.allowEdit', rootState.acl.allowEdit)
+		// 	return
+		// }
+		// console.log('number 1')
 		let endPoint = 'apps/polls/get/shares/'
 
 		if (payload.token !== undefined) {
@@ -91,7 +97,7 @@ const actions = {
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('sharesSet', {
+				commit('setShares', {
 					'list': response.data
 				})
 			}, (error) => {
@@ -125,7 +131,7 @@ const actions = {
 		payload.share.pollId = rootState.event.id
 		return axios.post(OC.generateUrl('apps/polls/write/share'), { pollId: rootState.event.id, share: payload.share })
 			.then((response) => {
-				commit('shareAdd', response.data)
+				commit('addShare', response.data)
 			}, (error) => {
 				console.error('Error writing share', { 'error': error.response }, { 'payload': payload })
 				throw error
@@ -135,7 +141,7 @@ const actions = {
 	removeShareAsync({ commit, getters, dispatch, rootState }, payload) {
 		return axios.post(OC.generateUrl('apps/polls/remove/share'), { share: payload.share })
 			.then((response) => {
-				commit('shareRemove', { 'share': payload.share })
+				commit('removeShare', { 'share': payload.share })
 			}, (error) => {
 				console.error('Error removing share', { 'error': error.response }, { 'payload': payload })
 				throw error

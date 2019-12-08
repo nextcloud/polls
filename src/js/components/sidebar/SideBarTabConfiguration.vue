@@ -31,19 +31,19 @@
 			</label>
 		</div>
 
-		<div v-if="allowEdit" class="configBox">
+		<div v-if="acl.allowEdit" class="configBox">
 			<label class="icon-sound title">
 				{{ t('polls', 'Title') }}
 			</label>
 			<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
 
-		<div v-if="allowEdit" class="configBox">
+		<div v-if="acl.allowEdit" class="configBox">
 			<label class="icon-edit title">
 				{{ t('polls', 'Description') }}
 			</label>
 			<textarea v-model="eventDescription" />
-			<!-- <textarea v-if="allowEdit" :value="event.description" @input="updateDescription" /> -->
+			<!-- <textarea v-if="acl.allowEdit" :value="event.description" @input="updateDescription" /> -->
 		</div>
 
 		<div class="configBox">
@@ -53,7 +53,7 @@
 
 			<input id="allowMaybe"
 				v-model="eventAllowMaybe"
-				:disabled="!allowEdit"
+				:disabled="!acl.allowEdit"
 				type="checkbox"
 				class="checkbox">
 			<label for="allowMaybe" class="title">
@@ -61,7 +61,7 @@
 			</label>
 
 			<input id="anonymous" v-model="eventIsAnonymous"
-				:disabled="!allowEdit"
+				:disabled="!acl.allowEdit"
 				type="checkbox"
 				class="checkbox">
 			<label for="anonymous" class="title">
@@ -71,7 +71,7 @@
 			<input v-show="event.isAnonymous"
 				id="trueAnonymous"
 				v-model="eventFullAnonymous"
-				:disabled="!allowEdit"
+				:disabled="!acl.allowEdit"
 				type="checkbox"
 				class="checkbox">
 			<label v-show="event.isAnonymous" class="title" for="trueAnonymous">
@@ -80,17 +80,17 @@
 
 			<input id="expiration"
 				v-model="eventExpiration"
-				:disabled="!allowEdit"
+				:disabled="!acl.allowEdit"
 				type="checkbox"
 				class="checkbox">
-			<label class="title" for="expiration">
+			<label class="title" for="expirtion">
 				{{ t('polls', 'Expires') }}
 			</label>
 
-			<date-picker v-show="event.expiration"
-				v-model="eventExpirationDate"
+			<date-picker v-show="event.expire"
+				v-model="eventExpiration"
 				v-bind="expirationDatePicker"
-				:disabled="!allowEdit"
+				:disabled="!acl.allowEdit"
 				:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }"
 				style="width:170px" />
 		</div>
@@ -99,47 +99,33 @@
 			<label class="title icon-category-auth">
 				{{ t('polls', 'Access') }}
 			</label>
-			<input id="private"
-				v-model="eventAccess"
-				:disabled="!allowEdit"
-				type="radio"
-				value="registered"
-				class="radio">
-			<label for="private" class="title">
-				<div class="title icon-group" />
-				<span>{{ t('polls', 'Registered users only') }}</span>
-			</label>
+
 			<input id="hidden"
 				v-model="eventAccess"
-				:disabled="!allowEdit"
+				:disabled="!acl.allowEdit"
 				type="radio"
 				value="hidden"
 				class="radio">
 			<label for="hidden" class="title">
 				<div class="title icon-category-security" />
-				<span>{{ t('polls', 'hidden') }}</span>
+				<span>{{ t('polls', 'Hidden to other users') }}</span>
 			</label>
+
 			<input id="public"
 				v-model="eventAccess"
-				:disabled="!allowEdit"
+				:disabled="!acl.allowEdit"
 				type="radio"
 				value="public"
 				class="radio">
 			<label for="public" class="title">
 				<div class="title icon-link" />
-				<span>{{ t('polls', 'Public access') }}</span>
-			</label>
-			<input id="select"
-				v-model="eventAccess"
-				:disabled="!allowEdit"
-				type="radio"
-				value="select"
-				class="radio">
-			<label for="select" class="title">
-				<div class="title icon-shared" />
-				<span>{{ t('polls', 'Only shared') }}</span>
+				<span>{{ t('polls', 'Visible to other users') }}</span>
 			</label>
 		</div>
+
+		<button class="button btn primary" @click="$emit('deletePoll')">
+			<span>{{ t('polls', 'Delete this poll') }}</span>
+		</button>
 	</div>
 </template>
 
@@ -160,14 +146,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			event: state => state.event
+			event: state => state.event,
+			acl: state => state.acl
 		}),
 
 		...mapGetters([
-			'languageCodeShort',
-			'adminMode',
-			'allowEdit'
+			'languageCodeShort'
 		]),
 
 		// Add bindings
@@ -200,10 +184,10 @@ export default {
 
 		eventExpiration: {
 			get() {
-				return this.event.expiration
+				return this.event.expire
 			},
 			set(value) {
-				this.writeValue({ 'expiration': value })
+				this.writeValue({ 'expire': value })
 			}
 		},
 
@@ -234,14 +218,14 @@ export default {
 			}
 		},
 
-		eventExpirationDate: {
-			get() {
-				return this.$store.state.event.expirationDate
-			},
-			set(value) {
-				this.writeValue({ 'expirationDate': value })
-			}
-		},
+		// eventExpiration: {
+		// 	get() {
+		// 		return this.$store.state.event.expiration
+		// 	},
+		// 	set(value) {
+		// 		this.writeValue({ 'expiration': value })
+		// 	}
+		// },
 
 		expirationDatePicker() {
 			return {
@@ -282,7 +266,7 @@ export default {
 		saveButtonTitle: function() {
 			if (this.writingPoll) {
 				return t('polls', 'Writing poll')
-			} else if (this.allowEdit) {
+			} else if (this.acl.allowEdit) {
 				return t('polls', 'Update poll')
 			} else {
 				return t('polls', 'Create new poll')
@@ -291,10 +275,8 @@ export default {
 	},
 	methods: {
 
-		...mapMutations([ 'setEventProperty', 'pollSetProperty' ]),
-		...mapActions([
-			'writeEventPromise'
-		]),
+		...mapMutations([ 'setEventProperty' ]),
+		...mapActions([ 'writeEventPromise' ]),
 
 		writeValueDebounced: debounce(function(e) {
 			this.writeValue(e)
@@ -317,7 +299,7 @@ export default {
 		},
 
 		write() {
-			if (this.allowEdit) {
+			if (this.acl.allowEdit) {
 				this.writePoll()
 			}
 

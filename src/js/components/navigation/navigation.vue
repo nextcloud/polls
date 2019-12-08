@@ -29,11 +29,11 @@
 				:title="t('polls', 'All polls')"
 				:allow-collapse="true"
 				icon="icon-folder"
-				:to="{ name: 'list'}"
+				:to="{ name: 'list', params: {type: 'all'}}"
 				:open="true">
 				<ul>
 					<AppNavigationItem
-						v-for="(poll) in pollList"
+						v-for="(poll) in allPolls"
 						:key="poll.id"
 						:title="poll.title"
 						:icon="eventIcon(poll.type)"
@@ -43,7 +43,8 @@
 			<AppNavigationItem
 				:title="t('polls', 'My polls')"
 				:allow-collapse="true"
-				icon="icon-folder"
+				icon="icon-user"
+				:to="{ name: 'list', params: {type: 'my'}}"
 				:open="false">
 				<ul>
 					<AppNavigationItem
@@ -57,7 +58,8 @@
 			<AppNavigationItem
 				:title="t('polls', 'Public polls')"
 				:allow-collapse="true"
-				icon="icon-folder"
+				icon="icon-link"
+				:to="{ name: 'list', params: {type: 'public'}}"
 				:open="false">
 				<ul>
 					<AppNavigationItem
@@ -71,11 +73,27 @@
 			<AppNavigationItem
 				:title="t('polls', 'Hidden polls')"
 				:allow-collapse="true"
-				icon="icon-folder"
+				icon="icon-password"
+				:to="{ name: 'list', params: {type: 'hidden'}}"
 				:open="false">
 				<ul>
 					<AppNavigationItem
 						v-for="(poll) in hiddenPolls"
+						:key="poll.id"
+						:title="poll.title"
+						:icon="eventIcon(poll.type)"
+						:to="{name: 'vote', params: {id: poll.id}}" />
+				</ul>
+			</AppNavigationItem>
+			<AppNavigationItem
+				:title="t('polls', 'Deleted polls')"
+				:allow-collapse="true"
+				icon="icon-delete"
+				:to="{ name: 'list', params: {type: 'deleted'}}"
+				:open="false">
+				<ul>
+					<AppNavigationItem
+						v-for="(poll) in deletedPolls"
 						:key="poll.id"
 						:title="poll.title"
 						:icon="eventIcon(poll.type)"
@@ -118,9 +136,11 @@ export default {
 	computed: {
 
 		...mapGetters([
+			'allPolls',
 			'myPolls',
 			'publicPolls',
-			'hiddenPolls'
+			'hiddenPolls',
+			'deletedPolls'
 		]),
 
 		pollList() {
