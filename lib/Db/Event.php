@@ -25,6 +25,8 @@
 
 namespace OCA\Polls\Db;
 
+use JsonSerializable;
+
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -42,74 +44,49 @@ use OCP\AppFramework\Db\Entity;
  * @method void setAccess(string $value)
  * @method string getExpire()
  * @method void setExpire(string $value)
- * @method string getHash()
- * @method void setHash(string $value)
  * @method integer getIsAnonymous()
  * @method void setIsAnonymous(integer $value)
  * @method integer getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
  * @method integer getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
+ * @method integer getData()
+ * @method void setData(integer $value)
  */
-class Event extends Model {
+class Event extends Entity implements JsonSerializable {
 	protected $type;
 	protected $title;
 	protected $description;
 	protected $owner;
 	protected $created;
 	protected $access;
-	protected $expire;
 	protected $hash;
+	protected $expire;
 	protected $isAnonymous;
 	protected $fullAnonymous;
 	protected $allowMaybe;
+	protected $showResults;
+	protected $voteLimit;
+	protected $deleted;
+	protected $deleteDate;
 
-	/**
-	 * Event constructor.
-	 */
-	public function __construct() {
-		$this->addType('type', 'integer');
-		$this->addType('isAnonymous', 'integer');
-		$this->addType('fullAnonymous', 'integer');
-		$this->addType('allowMaybe', 'integer');
-	}
-
-	public function read() {
-
-		if ($this->getType() == 0) {
-			$pollType = 'datePoll';
-		} else {
-			$pollType = 'textPoll';
-		}
-
-		$accessType = $this->getAccess();
-		if (!strpos('|public|hidden|registered', $accessType)) {
-			$accessType = 'select';
-		}
-		if ($this->getExpire() === null) {
-			$expired = false;
-			$expiration = false;
-		} else {
-			$expired = time() > strtotime($this->getExpire());
-			$expiration = true;
-		}
-
+	public function jsonSerialize() {
 		return [
-			'id' => $this->getId(),
-			'hash' => $this->getHash(),
-			'type' => $pollType,
-			'title' => $this->getTitle(),
-			'description' => $this->getDescription(),
-			'owner' => $this->getOwner(),
-			'ownerDisplayName' => \OC_User::getDisplayName($this->getOwner()),
-			'created' => $this->getCreated(),
-			'access' => $accessType,
-			'expiration' => $expiration,
-			'expired' => $expired,
-			'expirationDate' => $this->getExpire(),
-			'isAnonymous' => $this->getIsAnonymous(),
-			'fullAnonymous' => $this->getFullAnonymous(),
-			'allowMaybe' => $this->getAllowMaybe()
+			'id' => $this->id,
+			'type' => $this->type,
+			'title' => $this->title,
+			'description' => $this->description,
+			'owner' => $this->owner,
+			'created' => $this->created,
+			'access' => $this->access,
+			'expire' => $this->expire,
+			'isAnonymous' => boolval($this->isAnonymous),
+			'fullAnonymous' => boolval($this->fullAnonymous),
+			'allowMaybe' => boolval($this->allowMaybe),
+			'voteLimit' => $this->showResults,
+			'showResults' => $this->showResults,
+			'deleted' => boolval($this->deleted),
+			'deleteDate' => $this->deleteDate
 		];
 	}
 }

@@ -41,19 +41,19 @@ class CommentMapper extends QBMapper {
 	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Comment[]
+	 * @return array
 	 */
 
 	public function findByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntities($qb);
+		return $this->findEntities($qb);
 	}
 
 	/**
@@ -62,10 +62,24 @@ class CommentMapper extends QBMapper {
 	public function deleteByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->delete($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
+
+	   $qb->execute();
+	}
+
+	/**
+	 * @param int $id
+	 */
+	public function deleteComment($id) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   );
 
 	   $qb->execute();
 	}

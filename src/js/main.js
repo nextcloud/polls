@@ -22,38 +22,27 @@
  */
 
 import Vue from 'vue'
-import router from './router'
 import axios from 'nextcloud-axios'
-import App from './App.vue'
+
+import App from './App'
+import store from './store'
+import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 
-import { DatetimePicker, PopoverMenu, Tooltip } from 'nextcloud-vue'
+import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from '@nextcloud/vue'
 
-import Modal from './plugins/plugin.js'
-import Controls from './components/_base-Controls.vue'
-import UserDiv from './components/_base-UserDiv.vue'
-import SideBar from './components/_base-SideBar.vue'
-import SideBarClose from './components/sideBarClose.vue'
-import ShareDiv from './components/shareDiv.vue'
-import LoadingOverlay from './components/_base-LoadingOverlay.vue'
+import UserDiv from './components/base/userDiv'
+import LoadingOverlay from './components/base/loadingOverlay'
+
+/* eslint-disable-next-line camelcase, no-undef */
+__webpack_nonce__ = btoa(OC.requestToken)
+/* eslint-disable-next-line camelcase, no-undef */
+__webpack_public_path__ = OC.linkTo('polls', 'js/')
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
-Vue.component('Controls', Controls)
-Vue.component('PopoverMenu', PopoverMenu)
-Vue.component('DatePicker', DatetimePicker)
-Vue.component('UserDiv', UserDiv)
-Vue.component('SideBar', SideBar)
-Vue.component('SideBarClose', SideBarClose)
-Vue.component('ShareDiv', ShareDiv)
-Vue.component('LoadingOverlay', LoadingOverlay)
-
-Vue.directive('tooltip', Tooltip)
-
-Vue.use(vClickOutside)
-Vue.use(VueClipboard)
-Vue.use(Modal)
+Vue.config.performance = process.env.NODE_ENV !== 'production'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
@@ -61,18 +50,21 @@ Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-// CSP config for webpack dynamic chunk loading
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken)
+Vue.component('PopoverMenu', PopoverMenu)
+Vue.component('AppContent', AppContent)
+Vue.component('DatePicker', DatetimePicker)
+Vue.component('UserDiv', UserDiv)
+Vue.component('LoadingOverlay', LoadingOverlay)
 
-// Correct the root of the app for chunk loading
-// OC.linkTo matches the apps folders
-// eslint-disable-next-line
-__webpack_public_path__ = OC.linkTo('polls', 'js/')
+Vue.directive('tooltip', Tooltip)
+
+Vue.use(vClickOutside)
+Vue.use(VueClipboard)
 
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#app-polls',
 	router: router,
+	store: store,
 	render: h => h(App)
 })

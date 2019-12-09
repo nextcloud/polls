@@ -1,0 +1,115 @@
+<!--
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  -
+  - @author René Gieling <github@dartcafe.de>
+  -
+  - @license GNU AGPL version 3 or any later version
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Affero General Public License as
+  - published by the Free Software Foundation, either version 3 of the
+  - License, or (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<template>
+	<div class="controls">
+		<div class="breadcrumb">
+			<div class="crumb svg crumbhome">
+				<router-link :to="{ name: 'list'}" class="icon-home">
+					Home
+				</router-link>
+			</div>
+			<div v-show="intitle !==''" class="crumb svg last">
+				<span v-tooltip.auto="intitle" v-text="intitle" />
+			</div>
+			<div class="action">
+				<slot />
+			</div>
+		</div>
+		<div class="after">
+			<slot name="after" />
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+	name: 'Controls',
+
+	props: {
+		intitle: {
+			type: String,
+			default: ''
+		}
+	}
+}
+</script>
+
+<style lang="scss" scoped>
+
+@media (max-width: (1024px) ) {
+
+	#app-navigation + #app-content .controls {
+		padding-left: 44px;
+	}
+}
+
+.controls {
+    display: flex;
+	// position: fixed;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-main-background);
+    width: 100%;
+    height: 45px;
+    z-index: 1001;
+	// position: fixed;
+	.after {
+		display: flex;
+		.icon {
+			width: 44px;
+			height: 44px;
+			border-radius: 22px;
+			&:hover {
+				opacity: 1;
+				background-color: var(--color-background-darker)
+			}
+		}
+	}
+	.action {
+		order: 999;
+	}
+
+	.button, button {
+		box-sizing: border-box;
+		display: inline-block;
+		display: flex;
+		height: 36px;
+		padding: 9px;
+		align-items: center;
+		justify-content: center;
+		margin-left: 7px;
+		&.symbol {
+			width: 36px;
+		}
+		&.primary {
+			background: var(--color-primary);
+			color: var(--color-primary-text);
+		}
+	}
+
+    .breadcrumb {
+		flex: 1;
+        overflow: hidden;
+        min-width: 35px;
+    }
+}
+</style>

@@ -39,21 +39,53 @@ class OptionMapper extends QBMapper {
 	}
 
 	/**
+	 * @param int $id
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return array
+	 */
+
+	public function find($id) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   );
+
+		return $this->findEntity($qb);
+	}
+
+	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Option[]
+	 * @return array
 	 */
 
 	public function findByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntities($qb);
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @param int $optionId
+	 */
+	public function remove($optionId) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($optionId, IQueryBuilder::PARAM_INT))
+		   );
+
+	   $qb->execute();
 	}
 
 	/**
@@ -62,10 +94,10 @@ class OptionMapper extends QBMapper {
 	public function deleteByPoll($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->delete($this->getTableName())
-           ->where(
-               $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-           );
+		$qb->delete($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   );
 
 	   $qb->execute();
 	}

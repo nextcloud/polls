@@ -26,8 +26,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Dynamic loading
-const Create = () => import('./views/Create')
-const List = () => import('./views/List')
+const List = () => import('./views/PollList')
+const Vote = () => import('./views/Vote')
+const PublicVote = () => import('./views/PublicVote')
 
 Vue.use(Router)
 
@@ -37,36 +38,44 @@ export default new Router({
 	linkActiveClass: 'active',
 	routes: [
 		{
-			path: '/:index(index.php/)?apps/polls/',
+			path: '/:index(index.php/)?apps/polls/:type?',
 			components: {
 				default: List
 			},
-			props: false,
+			props: true,
 			name: 'list'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/edit/:hash',
+			path: '/:index(index.php/)?apps/polls/vote/:id',
 			components: {
-				default: Create
+				default: Vote
 			},
 			props: true,
-			name: 'edit'
+			name: 'vote'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/clone/:hash',
+			path: '/:index(index.php/)?apps/polls/vote/:id',
 			components: {
-				default: Create
+				default: Vote
 			},
 			props: true,
 			name: 'clone'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/new',
+			path: '/:index(index.php/)?apps/polls/vote/:id',
 			components: {
-				default: Create
+				default: Vote
 			},
-			props: false,
+			props: true,
 			name: 'create'
+		},
+		{
+			path: '/:index(index.php/)?apps/polls/s/:token',
+			components: {
+				default: PublicVote
+			},
+			props: true,
+			name: 'publicVote'
 		}
 	]
 })

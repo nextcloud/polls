@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;

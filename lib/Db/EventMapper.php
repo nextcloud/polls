@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use \OCP\AppFramework\Db\DoesNotExistException;
 
 class EventMapper extends QBMapper {
 
@@ -39,7 +40,7 @@ class EventMapper extends QBMapper {
 	}
 
 	/**
-	 * @param Integer $id
+	 * @param int $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Event
@@ -47,44 +48,27 @@ class EventMapper extends QBMapper {
 	public function find($id) {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-           );
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   );
 
-        return $this->findEntity($qb);
-	}
-
-	/**
-	 * @param String $hash
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Event
-	 */
-	public function findByHash($hash) {
-		$qb = $this->db->getQueryBuilder();
-
-        $qb->select('*')
-           ->from($this->getTableName())
-           ->where(
-               $qb->expr()->eq('hash', $qb->createNamedParameter($hash, IQueryBuilder::PARAM_STR))
-           );
-
-        return $this->findEntity($qb);
+		return $this->findEntity($qb);
 	}
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Event[]
+	 * @return array
 	 */
 	public function findAll() {
 		$qb = $this->db->getQueryBuilder();
 
-        $qb->select('*')
-           ->from($this->getTableName());
+		$qb->select('*')
+		   ->from($this->getTableName())
+;
 
-        return $this->findEntities($qb);
+		return $this->findEntities($qb);
 	}
 
 }

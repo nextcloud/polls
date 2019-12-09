@@ -32,27 +32,46 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IConfig;
 use OCP\IRequest;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
+use OCP\ILogger;
+
 
 class SystemController extends Controller {
 
+	private $userId;
 	private $systemConfig;
+	private $groupManager;
+	private $userManager;
+	private $logger;
 
 	/**
 	 * PageController constructor.
-	 * @param String $appName
+	 * @param string $appName
+	 * @param $UserId
 	 * @param IConfig $systemConfig
 	 * @param IRequest $request
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 */
 	public function __construct(
-		$appName,
+		string $appName,
+		$UserId,
+		IRequest $request,
+		ILogger $logger,
+		IConfig $systemConfig,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
-		IConfig $systemConfig,
-		IRequest $request
+		VoteMapper $voteMapper,
+		ShareMapper $shareMapper
 	) {
 		parent::__construct($appName, $request);
+		$this->voteMapper = $voteMapper;
+		$this->shareMapper = $shareMapper;
+		$this->logger = $logger;
+		$this->userId = $UserId;
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
@@ -72,12 +91,12 @@ class SystemController extends Controller {
 
 	/**
 	 * Get a list of NC users and groups
+	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @return DataResponse
 	 */
 	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
-		$data = array();
 		if ($getGroups) {
 			$groups = $this->groupManager->search($query);
 			foreach ($groups as $group) {
@@ -114,9 +133,79 @@ class SystemController extends Controller {
 			}
 		}
 
-		$data['siteusers'] = $list;
-		return new DataResponse($data, Http::STATUS_OK);
+		return new DataResponse([
+			'siteusers' => $list
+		], Http::STATUS_OK);
 	}
+
+	/**
+	 * Get a list of NC users and groups
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @return DataResponse
+	 */
+	public function validatePublicUsername($pollId, $userName) {
+		$list = array();
+
+		$groups = $this->groupManager->search('');
+		foreach ($groups as $group) {
+			$list[] = [
+				'id' => $group->getGID(),
+				'user' => $group->getGID(),
+				'type' => 'group',
+				'displayName' => $group->getGID(),
+			];
+		}
+
+		$users = $this->userManager->searchDisplayName('');
+		foreach ($users as $user) {
+			$list[] = [
+				'id' => $user->getUID(),
+				'user' => $user->getUID(),
+				'type' => 'user',
+				'displayName' => $user->getDisplayName(),
+			];
+		}
+
+		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
+		foreach ($votes as $vote) {
+			if ($vote->getUserId() !== '' && $vote->getUserId() !== null ) {
+				$list[] = [
+					'id' => $vote->getUserId(),
+					'user' => $vote->getUserId(),
+					'type' => 'participant',
+					'displayName' => $vote->getUserId(),
+				];
+			}
+		}
+
+		$shares = $this->shareMapper->findByPoll($pollId);
+		foreach ($shares as $share) {
+			if ($share->getUserId() !== '' && $share->getUserId() !== null ) {
+				$list[] = [
+					'id' => $share->getUserId(),
+					'user' => $share->getUserId(),
+					'type' => 'share',
+					'displayName' => $share->getUserId(),
+				];
+			}
+		}
+
+		foreach ($list as $element) {
+			if (strtolower(trim($userName)) === strtolower(trim($element['id'])) || strtolower(trim($userName)) === strtolower(trim($element['displayName']))) {
+				return new DataResponse([
+					'result' => false
+				], Http::STATUS_FORBIDDEN);
+			}
+		}
+
+		return new DataResponse([
+			'result' => true,
+			'list' => $list
+		], Http::STATUS_OK);
+	}
+
 
 	/**
 	 * Get some system informations
@@ -124,12 +213,13 @@ class SystemController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getSystem() {
-		$userId = \OC::$server->getUserSession()->getUser()->getUID();
+		$data = array();
+
 		$data['system'] = [
 			'versionArray' => \OCP\Util::getVersion(),
 			'version' => implode('.', \OCP\Util::getVersion()),
 			'vendor' => $this->getVendor(),
-			'language' => $this->systemConfig->getUserValue($userId, 'core', 'lang')
+			'language' => $this->systemConfig->getUserValue($this->userId, 'core', 'lang')
 		];
 
 		return new DataResponse($data, Http::STATUS_OK);

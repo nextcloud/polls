@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
+// use Doctrine\DBAL\Exception\TableNotFoundException;
+// use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -71,7 +71,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('hash', Type::STRING, [
+			$table->addColumn('token', Type::STRING, [
 				'notnull' => false,
 				'length' => 64,
 			]);

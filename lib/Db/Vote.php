@@ -25,6 +25,8 @@
 
 namespace OCA\Polls\Db;
 
+use JsonSerializable;
+
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -39,29 +41,21 @@ use OCP\AppFramework\Db\Entity;
  * @method string getVoteAnswer()
  * @method void setVoteAnswer(string $value)
  */
-class Vote extends Model {
+class Vote extends Entity implements JsonSerializable {
 	protected $pollId;
 	protected $userId;
 	protected $voteOptionId;
 	protected $voteOptionText;
 	protected $voteAnswer;
 
-	/**
-	 * Options constructor.
-	 */
-	public function __construct() {
-		$this->addType('pollId', 'integer');
-		$this->addType('voteOptionId', 'integer');
-	}
-
-	public function read() {
+	public function jsonSerialize() {
 		return [
-			'id' => $this->getId(),
-			'userId' => $this->getUserId(),
-			'voteOptionId' => $this->getVoteOptionId(),
-			'voteOptionText' => htmlspecialchars_decode($this->getVoteOptionText()),
-			'voteAnswer' => $this->getVoteAnswer()
+			'id' => $this->id,
+			'pollId' => $this->pollId,
+			'userId' => $this->userId,
+			'voteOptionId' => $this->voteOptionId,
+			'voteOptionText' => $this->voteOptionText,
+			'voteAnswer' => $this->voteAnswer
 		];
 	}
-
 }

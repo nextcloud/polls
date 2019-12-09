@@ -24,29 +24,44 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'page#goto_poll', 'url' => '/poll/{hash}', 'verb' => 'GET'],
+		['name' => 'page#vote_poll', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
+		['name' => 'page#vote_public', 'url' => '/s/{pollId}', 'verb' => 'GET'],
 
-		['name' => 'page#create_poll', 'url' => '/new', 'verb' => 'GET'],
-		['name' => 'page#edit_poll', 'url' => '/edit/{hash}', 'verb' => 'GET'],
-		['name' => 'page#clone_poll', 'url' => '/clone/{hash}', 'verb' => 'GET'],
+		['name' => 'notification#get', 'url' => '/get/notification/{pollId}', 'verb' => 'GET'],
+		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],
 
-		['name' => 'page#delete_poll', 'url' => '/delete', 'verb' => 'POST'],
-		['name' => 'page#insert_vote', 'url' => '/insert/vote', 'verb' => 'POST'],
-		['name' => 'page#insert_comment', 'url' => '/insert/comment', 'verb' => 'POST'],
-		['name' => 'page#search', 'url' => '/search', 'verb' => 'POST'],
-		['name' => 'page#get_display_name', 'url' => '/get/displayname', 'verb' => 'POST'],
+		['name' => 'comment#get', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'comment#write', 'url' => '/write/comment', 'verb' => 'POST'],
+		['name' => 'comment#getByToken', 'url' => '/get/comments/s/{token}', 'verb' => 'GET'],
 
-		['name' => 'api#write_poll', 'url' => '/write/poll', 'verb' => 'POST'],
-		['name' => 'api#get_poll', 'url' => '/get/poll/{pollIdOrHash}', 'verb' => 'GET'],
-		['name' => 'api#get_options', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#get_votes', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#get_comments', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#get_shares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#get_event', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
-		['name' => 'api#remove_poll', 'url' => '/remove/poll', 'verb' => 'POST'],
-		['name' => 'api#get_polls', 'url' => '/get/polls', 'verb' => 'GET'],
+		['name' => 'vote#getByToken', 'url' => '/get/votes/s/{token}', 'verb' => 'GET'],
+		['name' => 'vote#setByToken', 'url' => '/set/vote/s/', 'verb' => 'POST'],
+		['name' => 'vote#get', 'url' => '/get/votes/{pollId}', 'verb' => 'GET'],
+		['name' => 'vote#set', 'url' => '/set/vote/', 'verb' => 'POST'],
+		['name' => 'vote#write', 'url' => '/write/vote/', 'verb' => 'POST'],
+
+		['name' => 'option#get', 'url' => '/get/options/{pollId}', 'verb' => 'GET'],
+		['name' => 'option#add', 'url' => '/add/option/', 'verb' => 'POST'],
+		['name' => 'option#update', 'url' => '/update/option/', 'verb' => 'POST'],
+		['name' => 'option#remove', 'url' => '/remove/option/', 'verb' => 'POST'],
+		['name' => 'option#getByToken', 'url' => '/get/options/s/{token}', 'verb' => 'GET'],
+
+		['name' => 'event#list', 'url' => '/get/events', 'verb' => 'GET'],
+		['name' => 'event#get', 'url' => '/get/event/{pollId}', 'verb' => 'GET'],
+		['name' => 'event#write', 'url' => '/write/event', 'verb' => 'POST'],
+		['name' => 'event#getByToken', 'url' => '/get/event/s/{token}', 'verb' => 'GET'],
+
+		['name' => 'share#getShares', 'url' => '/get/shares/{pollId}', 'verb' => 'GET'],
+		['name' => 'share#write', 'url' => '/write/share', 'verb' => 'POST'],
+		['name' => 'share#writeFromUser', 'url' => '/write/share/s', 'verb' => 'POST'],
+		['name' => 'share#remove', 'url' => '/remove/share', 'verb' => 'POST'],
+		['name' => 'share#get', 'url' => '/get/share/{token}', 'verb' => 'GET'],
+
+		['name' => 'acl#getByToken', 'url' => '/get/acl/s/{token}', 'verb' => 'GET'],
+		['name' => 'acl#get', 'url' => '/get/acl/{id}', 'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/get/siteusers', 'verb' => 'POST'],
-		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET']
+		['name' => 'system#get_system', 'url' => '/get/system', 'verb' => 'GET'],
+		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST']
 	]
 ];

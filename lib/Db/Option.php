@@ -25,6 +25,8 @@
 
 namespace OCA\Polls\Db;
 
+use JsonSerializable;
+
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -35,24 +37,19 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getTimestamp()
  * @method void setTimestamp(integer $value)
  */
-class Option extends Model {
+class Option extends Entity implements JsonSerializable {
 	protected $pollId;
 	protected $pollOptionText;
 	protected $timestamp;
 
-	/**
-	 * Option constructor.
-	 */
-	public function __construct() {
-		$this->addType('pollId', 'integer');
-		$this->addType('timestamp', 'integer');
-	}
+	public function jsonSerialize() {
 
-	public function read() {
 		return [
-			'id' => $this->getId(),
-			'text' => htmlspecialchars_decode($this->getPollOptionText()),
-			'timestamp' => $this->getTimestamp()
+			'id' => $this->id,
+			'pollId' => $this->pollId,
+			'pollOptionText' => $this->pollOptionText,
+			'timestamp' => $this->timestamp
 		];
+
 	}
 }

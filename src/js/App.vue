@@ -22,24 +22,116 @@
 
 <template>
 	<div id="app-polls">
+		<Navigation v-if="loadNavigation" />
 		<router-view />
 	</div>
 </template>
 
 <script>
+import Navigation from './components/navigation/navigation'
+
 export default {
-	name: 'App'
+	name: 'App',
+	components: {
+		Navigation
+	},
+
+	data() {
+		return {
+			loadNavigation: false
+		}
+	},
+
+	computed: {
+		isPublic() {
+			return (this.$route.name === 'publicVote')
+		}
+	},
+
+	watch: {
+		'$route'(to, from) {
+			this.loadNavigation = (this.$route.name !== 'publicVote')
+		}
+	}
 }
+
 </script>
 
 <style  lang="scss">
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter,
+.list-leave-to {
+    opacity: 0;
+}
+
+.list-move {
+    transition: transform 0.5s;
+}
+
+.fade-leave-active {
+  transition: opacity 2.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 #app-polls {
 	width: 100%;
-	display: flex;
+	// display: flex;
 }
 
 #app-content {
-    width: 100%;
     display: flex;
+	width: auto;
+
+	input {
+		&.hasTimepicker {
+			width: 75px;
+		}
+		&.error {
+			border-color: var(--color-error);
+			background-color: #f9c5c5;
+			background-image: var(--icon-error-e9322d);
+			background-repeat: no-repeat;
+			background-position: right;
+		}
+		&.success, &.icon-confirn.success {
+			border-color: var(--color-success);
+			background-color: #d6fdda !important;
+			&.icon-confirm {
+				border-color: var(--color-success) !important;
+				border-left-color: transparent !important;
+			}
+		}
+
+		&.icon {
+			flex: 0;
+			padding: 0 17px;
+		}
+	}
+
+	.label {
+		border: solid 1px;
+		border-radius: var(--border-radius);
+		padding: 1px 4px;
+		margin: 0 4px;
+		font-size: 60%;
+		text-align: center;
+		&.error {
+			border-color: var(--color-error);
+			background-color: var(--color-error);
+			color: var(--color-primary-text);
+		}
+		&.success {
+			border-color: var(--color-success);
+			background-color: var(--color-success);
+			color: var(--color-primary-text);
+		}
+	}
 }
 </style>
