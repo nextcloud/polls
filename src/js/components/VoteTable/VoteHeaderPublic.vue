@@ -54,7 +54,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 import { mapState } from 'vuex'
 
 export default {

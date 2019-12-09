@@ -21,7 +21,7 @@
  *
  */
 
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 import moment from 'moment'
 
 const defaultEvent = () => {

@@ -22,7 +22,7 @@
  */
 
 import Vue from 'vue'
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 
 import App from './App'
 import store from './store'

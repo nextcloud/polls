@@ -20,7 +20,7 @@
  *
  */
 
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 import orderBy from 'lodash/orderBy'
 
 const defaultVotes = () => {
