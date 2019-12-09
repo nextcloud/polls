@@ -56,14 +56,19 @@ class Acl implements JsonSerializable {
 	private $foundByToken = false;
 
 	/** @var Event */
-	// private $event;
+	private $userId;
+	private $groupManager;
+	private $eventMapper;
+	private $shareMapper;
+	private $event;
 
 
 	/**
 	 * Acl constructor.
-	 * @param $pollIdOrToken
+	 * @param string $appName
+	 * @param string $userId
 	 * @param IGroupManager $groupManager
-	 * @param IUserManager $userManager
+	 * @param IGroupManager $groupManager
 	 * @param ShareMapper $shareMapper
 	 * @param EventMapper $eventMapper
 	 * @param Event $eventMapper

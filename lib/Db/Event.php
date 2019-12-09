@@ -50,8 +50,14 @@ use OCP\AppFramework\Db\Entity;
  * @method void setFullAnonymous(integer $value)
  * @method integer getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
- * @method integer getData()
- * @method void setData(integer $value)
+ * @method integer getShowResults()
+ * @method void setShowResults(integer $value)
+ * @method integer getVoteLimit()
+ * @method void setVoteLimit(integer $value)
+ * @method integer getDeleted()
+ * @method void setDeleted(integer $value)
+ * @method integer getDeletedDate()
+ * @method void setDeletedDate(integer $value)
  */
 class Event extends Entity implements JsonSerializable {
 	protected $type;

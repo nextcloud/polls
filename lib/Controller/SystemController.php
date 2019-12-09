@@ -42,19 +42,25 @@ use OCP\ILogger;
 class SystemController extends Controller {
 
 	private $userId;
+	private $request;
+	private $logger;
 	private $systemConfig;
 	private $groupManager;
 	private $userManager;
-	private $logger;
+	private $voteMapper;
+	private $shareMapper;
 
 	/**
 	 * PageController constructor.
 	 * @param string $appName
-	 * @param $UserId
-	 * @param IConfig $systemConfig
+	 * @param $userId
 	 * @param IRequest $request
+	 * @param ILogger $logger
+	 * @param IConfig $systemConfig
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
+	 * @param VoteMapper $voteMapper
+	 * @param ShareMapper $shareMapper
 	 */
 	public function __construct(
 		string $appName,

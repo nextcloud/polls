@@ -52,16 +52,18 @@ class ShareController extends Controller {
 	private $userId;
 
 	private $eventMapper;
+	private $systemController;
 
 	/**
 	 * ShareController constructor.
 	 * @param string $appName
 	 * @param string $userId
 	 * @param IRequest $request
-	 * @param EventMapper $eventMapper
+	 * @param ILogger $logger
 	 * @param ShareMapper $mapper
-	 * @param Acl $acl
+	 * @param EventMapper $eventMapper
 	 * @param SystemController $systemController
+	 * @param Acl $acl
 	 */
 	public function __construct(
 		string $appName,

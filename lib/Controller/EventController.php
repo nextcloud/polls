@@ -44,19 +44,19 @@ use OCA\Polls\Model\Acl;
 
 class EventController extends Controller {
 
-	// private $userId;
-	// private $mapper;
-	// private $logger;
-	// private $groupManager;
-	// private $userManager;
-	// private $eventService;
-	// private $acl;
-	// private $event;
+	private $userId;
+	private $mapper;
+	private $logger;
+	private $groupManager;
+	private $userManager;
+	private $eventService;
+	private $event;
+	private $acl;
 
 	/**
 	 * CommentController constructor.
 	 * @param string $appName
-	 * @param $UserId
+	 * @param $userId
 	 * @param IRequest $request
 	 * @param ILogger $logger
 	 * @param EventMapper $mapper

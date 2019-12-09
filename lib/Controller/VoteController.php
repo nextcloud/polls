@@ -47,21 +47,24 @@ use OCA\Polls\Model\Acl;
 class VoteController extends Controller {
 
 	private $userId;
-	private $mapper;
 	private $logger;
+	private $mapper;
 	private $groupManager;
 	private $eventMapper;
+	private $shareMapper;
 	private $anonymizer;
 	private $acl;
 
 	/**
 	 * VoteController constructor.
 	 * @param string $appName
-	 * @param $UserId
+	 * @param $userId
 	 * @param IRequest $request
+	 * @param ILogger $logger
 	 * @param VoteMapper $mapper
 	 * @param IGroupManager $groupManager
 	 * @param EventMapper $eventMapper
+	 * @param ShareMapper $shareMapper
 	 * @param AnonymizeService $anonymizer
 	 * @param Acl $acl
 	 */
