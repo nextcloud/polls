@@ -145,15 +145,9 @@ class EventController extends Controller {
 		}
 
 		// TODO: add migration for this
-		if ($this->event->getAccess() === 'public') {
-			$accessType = 'public';
-		} else if ($this->event->getAccess() === 'hidden') {
-			$accessType = 'hidden';
-		} else if ($this->event->getAccess() === 'registered') {
-			$accessType = 'public';
+		if ($this->event->getAccess() === 'public' || $this->event->getAccess() === 'registered') {
 			$this->event->setAccess('public');
 		} else {
-			$accessType = 'hidden';
 			$this->event->setAccess('hidden');
 		}
 

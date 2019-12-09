@@ -115,7 +115,6 @@ class ShareController extends Controller {
 
 		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
 			try {
-				$event = $this->eventMapper->find($pollId);
 				$shares = $this->mapper->findByPoll($pollId);
 			} catch (DoesNotExistException $e) {
 				return new DataResponse($e, Http::STATUS_NOT_FOUND);

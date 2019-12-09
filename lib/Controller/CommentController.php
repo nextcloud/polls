@@ -102,7 +102,6 @@ class CommentController extends Controller {
 				$this->anonymizer->set($pollId, $this->acl->getUserId());
 				return new DataResponse((array) $this->anonymizer->getComments(), Http::STATUS_OK);
 			} else {
-				$comments = $this->mapper->findByPoll($pollId);
 				return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
 			}
 

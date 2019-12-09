@@ -56,8 +56,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setVoteLimit(integer $value)
  * @method integer getDeleted()
  * @method void setDeleted(integer $value)
- * @method integer getDeletedDate()
- * @method void setDeletedDate(integer $value)
+ * @method integer getDeleteDate()
+ * @method void setDeleteDate(integer $value)
  */
 class Event extends Entity implements JsonSerializable {
 	protected $type;

@@ -42,7 +42,6 @@ use OCP\ILogger;
 class SystemController extends Controller {
 
 	private $userId;
-	private $request;
 	private $logger;
 	private $systemConfig;
 	private $groupManager;
