@@ -70,7 +70,7 @@
     "Shift all date options" : "Cambia todas as opcións de data",
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
-    "Title must not be empty!" : "O título non pode estar baleiro!",
+    "Title must not be empty!" : "O título non debe estar baleiro!",
     "%n successfully saved" : "%n foi gardada satisfactoriamente",
     "Error on saving poll, see console" : "Produciuse un erro ao gardar a enquisa, vexa a consola",
     "Clone of %n" : "Clonar de %n",

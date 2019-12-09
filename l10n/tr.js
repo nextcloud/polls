@@ -106,7 +106,7 @@ OC.L10N.register(
     "Poll expired" : "Anketin süresi dolmuş",
     "Comments" : "Yorumlar",
     "Login or ..." : "Oturum açın ya da ...",
-    "New comment …" : "Yorum ekle ...",
+    "New comment …" : "Yorum ekle …",
     "No comments yet. Be the first." : "Henüz bir yorum yapılmamış. İlk yorum yapan siz olun."
 },
 "nplurals=2; plural=(n > 1);");
