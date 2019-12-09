@@ -10,6 +10,7 @@ OC.L10N.register(
     "Expires" : "Beidzas",
     "Your name here" : "Tavs vārds šeit",
     "Vote!" : "Balsot!",
+    "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "Close" : "Aizvērt",
     "Comments" : "Komentāri"
 },

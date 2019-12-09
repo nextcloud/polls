@@ -8,6 +8,7 @@ OC.L10N.register(
     "Copy Link" : "انسخ الرابط",
     "Edit poll" : "تعديل استطلاع الرأي",
     "Delete poll" : "احذف استطلاع الرأي",
+    "Error, while copying link to clipboard" : "خطأ أثناء نسخ الرابط إلى الحافظة",
     "Poll description" : "وصف استطلاع الرأي",
     "Description" : "الوصف",
     "Vote options" : "خيارات التصويت",

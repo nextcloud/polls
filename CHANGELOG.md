@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.0.0] - tbd 
+## [1.0.0] - tbd
 
  - huge update of polls
  - completely rewritten as a vue app
