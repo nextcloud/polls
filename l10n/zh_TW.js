@@ -1,26 +1,18 @@
 OC.L10N.register(
     "polls",
     {
-    "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "您並非註冊使用者。\n請輸入您的名稱來進行投票。(至少3個字母)",
-    "Please add some text to your comment before submitting it." : "在送出之前，請加入一些您的文字意見。",
     "Polls" : "調查",
     "Title" : "標題",
     "Access" : "存取",
     "Created" : "已新增",
     "Expires" : "投票期限",
-    "Description" : "調查內容描述",
     "Create new poll" : "新增一項調查",
+    "Receive notification email on activity" : "接收E-mail活動通知",
+    "Comments" : "意見",
+    "No comments yet. Be the first." : "尚未有人發表意見，您是第一個發言者。",
+    "Description" : "調查內容描述",
     "Update poll" : "更新調查活動內容",
     "Access denied" : "存取被拒絕",
-    "You are not allowed to view this poll or the poll does not exist." : "您並不允許瀏覽此調查項目，或者此調查並不存在。",
-    "No description provided." : "未提供描述",
-    "The poll expired on %s. Voting is disabled, but you can still comment." : "此調查活動已經在%s到期，票選已經結束，但是你仍可以送出意見。",
-    "Your name here" : "此處輸入您的名稱",
-    "Vote!" : "送出投票!",
-    "Receive notification email on activity" : "接收E-mail活動通知",
-    "Click to get link" : "點此取得連結",
-    "Poll expired" : "此調查活動已過期。",
-    "Comments" : "意見",
-    "No comments yet. Be the first." : "尚未有人發表意見，您是第一個發言者。"
+    "You are not allowed to view this poll or the poll does not exist." : "您並不允許瀏覽此調查項目，或者此調查並不存在。"
 },
 "nplurals=1; plural=0;");

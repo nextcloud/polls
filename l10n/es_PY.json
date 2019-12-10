@@ -1,24 +1,16 @@
 { "translations": {
-    "You are not registered.\nPlease enter your name to vote\n(at least 3 characters)." : "No estás registrado.\nPor favor ingresa tu nombre para votar\n(al menos 3 caracteres).",
-    "Please add some text to your comment before submitting it." : "Por favor agrega algo de texto a tu comentario antes de enviarlo. ",
     "Polls" : "Encuestas",
     "Title" : "Título",
     "Access" : "Acceso",
     "Created" : "Creado",
     "Expires" : "Expira",
-    "Description" : "Descripción",
     "Create new poll" : "Crear nueva encuesta",
+    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
+    "Comments" : "Comentarios",
+    "No comments yet. Be the first." : "No hay comentarios todavia. Se el primero.",
+    "Description" : "Descripción",
     "Update poll" : "Actualizar encuesta",
     "Access denied" : "Acceso denegado",
-    "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. ",
-    "No description provided." : "No se proporcionó una descripción. ",
-    "The poll expired on %s. Voting is disabled, but you can still comment." : "La encuesta expiró el %s. La votación esta deshabilitada pero aún puedes comentar. ",
-    "Your name here" : "Tu nombre aquí",
-    "Vote!" : "¡Vota!",
-    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
-    "Click to get link" : "Haz click para obtener una liga",
-    "Poll expired" : "La encuesta expiró",
-    "Comments" : "Comentarios",
-    "No comments yet. Be the first." : "No hay comentarios todavia. Se el primero."
+    "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. "
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
