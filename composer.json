@@ -19,9 +19,9 @@
       }
     },
 	"autoload-dev": {
-		"classmap": [
-			"tests/Unit/UnitTestCase.php"
-		]
+		"psr-4": {
+			"OCA\\Polls\\Tests\\": "tests/"
+		}
 	},
 	"require-dev": {
 		"christophwurst/nextcloud": "^17.0",
