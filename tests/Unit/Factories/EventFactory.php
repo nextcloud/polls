@@ -42,5 +42,6 @@ $fm->define('OCA\Polls\Db\Event')->setDefinitions([
 	},
 	'token' => Faker::regexify('[A-Za-z0-9]{16}'),
 	'isAnonymous' => 0,
-	'fullAnonymous' => 0
 ]);
+	'fullAnonymous' => 0,
+	'showResults' => true,
