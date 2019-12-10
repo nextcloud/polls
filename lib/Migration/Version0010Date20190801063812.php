@@ -76,7 +76,7 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 			}
 			if (!$table->hasColumn('delete_date')) {
 				$table->addColumn('delete_date', Type::DATETIME, [
-					'notnull' => true
+					'notnull' => false
 				]);
 			}
 			if (!$table->hasColumn('vote_limit')) {
