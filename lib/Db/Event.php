@@ -92,7 +92,7 @@ class Event extends Entity implements JsonSerializable {
 			'fullAnonymous' => boolval($this->fullAnonymous),
 			'allowMaybe' => boolval($this->allowMaybe),
 			'voteLimit' => $this->voteLimit,
-			'showResults' => $this->showResults,
+			'showResults' => boolval($this->showResults),
 			'deleted' => boolval($this->deleted),
 			'deleteDate' => $this->deleteDate
 		];

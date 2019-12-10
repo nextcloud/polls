@@ -86,9 +86,9 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 				]);
 			}
 			if (!$table->hasColumn('show_results')) {
-				$table->addColumn('show_results', Type::STRING, [
+				$table->addColumn('show_results', Type::BOOLEAN, [
 					'notnull' => true,
-					'lenght' => 64
+					'default' => 0
 				]);
 			}
 
