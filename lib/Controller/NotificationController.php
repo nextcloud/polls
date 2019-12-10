@@ -166,7 +166,7 @@ class NotificationController extends Controller {
 			}
 			$url = $this->urlGenerator->getAbsoluteURL(
 				$this->urlGenerator->linkToRoute('polls.page.vote',
-					array('hash' => $poll->getHash()))
+					array('token' => $poll->getToken()))
 			);
 
 			$sendUser = $this->userMgr->get($from);

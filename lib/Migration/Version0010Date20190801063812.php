@@ -160,29 +160,29 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 
 		while ($row = $result->fetch()) {
 			if ($row['access'] == 'public') {
-				// copy the hash to a public share
+				// copy the token to a public share
 				$insert
-				->setParameter('token', $row['hash'])
+				->setParameter('token', $row['token'])
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
 				->setParameter('user_email', null);
 				$insert->execute();
 			} elseif ($row['access'] == 'hidden') {
-				// copy the hash to a public share
+				// copy the token to a public share
 				// poll stays hidden for registered users
 				$insert
-				->setParameter('token', $row['hash'])
+				->setParameter('token', $row['token'])
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
 				->setParameter('user_email', null);
 				$insert->execute();
 			} elseif ($row['access'] == 'registered') {
-				// copy the hash to a public share
-				// to keep the hash
+				// copy the token to a public share
+				// to keep the token
 				$insert
-				->setParameter('token', $row['hash'])
+				->setParameter('token', $row['token'])
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
