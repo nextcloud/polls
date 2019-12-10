@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -37,7 +37,7 @@ class PageControllerTest extends UnitTestCase {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setUp() {
+	protected function setUp(): void {
 		$avatarManager = $this->getMockBuilder('OCP\IAvatarManager')
 			->disableOriginalConstructor()
 			->getMock();

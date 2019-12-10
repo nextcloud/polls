@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -24,7 +24,7 @@
 namespace OCA\Polls\Tests\Unit;
 
 use League\FactoryMuffin\FactoryMuffin;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase as PHPUnit_Framework_TestCase;
 
 abstract class UnitTestCase extends PHPUnit_Framework_TestCase {
 
@@ -34,7 +34,7 @@ abstract class UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->fm = new FactoryMuffin();
 		$this->fm->loadFactories(__DIR__ . '/Factories');

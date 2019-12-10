@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -39,7 +39,7 @@ class EventMapperTest extends UnitTestCase {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->eventMapper = new EventMapper($this->con);
