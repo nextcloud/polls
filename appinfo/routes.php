@@ -25,7 +25,7 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#vote_poll', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
-		['name' => 'page#vote_public', 'url' => '/s/{pollId}', 'verb' => 'GET'],
+		['name' => 'page#vote_public', 'url' => '/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'notification#get', 'url' => '/get/notification/{pollId}', 'verb' => 'GET'],
 		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],
