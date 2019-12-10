@@ -12,8 +12,8 @@
 
 app_name=polls
 
-project_dir=$(CURDIR)
-build_dir=$(CURDIR)/build
+project_dir=.
+build_dir=./build
 build_tools_dir=$(build_dir)/tools
 build_source_dir=$(build_dir)/source
 appstore_build_dir=$(build_dir)/artifacts/appstore

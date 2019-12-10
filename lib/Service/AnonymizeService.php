@@ -32,6 +32,7 @@ use OCA\Polls\Db\CommentMapper;
 class AnonymizeService {
 
 	private $voteMapper;
+	private $commentMapper;
 	private $anonList = array();
 	private $userId;
 	private $pollId;
