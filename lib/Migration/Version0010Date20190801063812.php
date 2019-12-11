@@ -76,7 +76,7 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 			}
 			if (!$table->hasColumn('delete_date')) {
 				$table->addColumn('delete_date', Type::DATETIME, [
-					'notnull' => true
+					'notnull' => false
 				]);
 			}
 			if (!$table->hasColumn('vote_limit')) {
@@ -88,7 +88,8 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 			if (!$table->hasColumn('show_results')) {
 				$table->addColumn('show_results', Type::STRING, [
 					'notnull' => true,
-					'lenght' => 64
+					'length' => 64,
+					'default' => 'always'
 				]);
 			}
 

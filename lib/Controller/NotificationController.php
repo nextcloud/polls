@@ -231,10 +231,9 @@ class NotificationController extends Controller {
 		$event = $this->eventMapper->find($share->getPollId());
 
 		if ($share->getType() === 'user') {
-			$user = $this->userMgr->get($share->getUserId());
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
-				'displayName' => $user->getDisplayName(),
+				'displayName' => $this->userMgr->get($share->getUserId())->getDisplayName(),
 				'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
 				'eMail' => $this->userMgr->get($share->getUserId())->getEMailAddress(),
 				'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
