@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Polls" : "გამოკითხვები",
     "Polls App - New Activity" : "Polls აპლიკაცია - ახალი აქტივობა",
+    "Create new poll" : "ახალი გამოკითხვის შექმნა",
+    "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "Title" : "სათაური",
     "Access" : "წვდომა",
     "Owner" : "მფლობელი",
@@ -10,8 +12,6 @@ OC.L10N.register(
     "Expires" : "უქმდება",
     "Copy Link" : "ბმულის კოპირება",
     "Delete poll" : "გამოკითხვის გაუქმება",
-    "Create new poll" : "ახალი გამოკითხვის შექმნა",
-    "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "Comments" : "კომენტარები",
     "No comments yet. Be the first." : "კომენტარები ჯერ არაა. იყავით პირველი.",
     "Description" : "აღწერილობა",

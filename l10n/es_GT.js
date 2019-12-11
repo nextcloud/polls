@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Polls" : "Encuestas",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
+    "Create new poll" : "Crear nueva encuesta",
+    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Title" : "Título",
     "Access" : "Acceso",
     "Owner" : "Propietario",
@@ -10,8 +12,6 @@ OC.L10N.register(
     "Expires" : "Expira",
     "Copy Link" : "Copiar Liga",
     "Delete poll" : "Borrar encuesta",
-    "Create new poll" : "Crear nueva encuesta",
-    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Comments" : "Comentarios",
     "No comments yet. Be the first." : "No hay comentarios todavia. Se el primero.",
     "Description" : "Descripción",

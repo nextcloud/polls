@@ -1,11 +1,11 @@
 { "translations": {
     "Polls" : "調查",
+    "Create new poll" : "新增一項調查",
+    "Receive notification email on activity" : "接收E-mail活動通知",
     "Title" : "標題",
     "Access" : "存取",
     "Created" : "已新增",
     "Expires" : "投票期限",
-    "Create new poll" : "新增一項調查",
-    "Receive notification email on activity" : "接收E-mail活動通知",
     "Comments" : "意見",
     "No comments yet. Be the first." : "尚未有人發表意見，您是第一個發言者。",
     "Description" : "調查內容描述",

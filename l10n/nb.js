@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Polls" : "Avstemninger",
     "Polls App - New Activity" : "Avstemningsapp - Ny aktivitet",
+    "Create new poll" : "Opprett ny avstemning",
+    "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "Title" : "Tittel",
     "Access" : "Tilgang",
     "Owner" : "Eier",
@@ -10,8 +12,6 @@ OC.L10N.register(
     "Expires" : "Utløper",
     "Copy Link" : "Kopier lenke",
     "Delete poll" : "Slett avstemning",
-    "Create new poll" : "Opprett ny avstemning",
-    "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "Comments" : "Kommentarer",
     "No comments yet. Be the first." : "Ingen kommentarer enda. Vær først.",
     "Description" : "Beskrivelse",

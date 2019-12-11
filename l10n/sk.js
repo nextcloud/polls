@@ -2,6 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Ankety",
+    "Create new poll" : "Vytvoriť novú anketu",
+    "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
     "Title" : "Názov",
     "Access" : "Prístup",
     "Owner" : "Vlastník",
@@ -9,8 +11,6 @@ OC.L10N.register(
     "Expires" : "Vyprší",
     "Copy Link" : "Kopírovať odkaz",
     "Delete poll" : "Zmazať anketu",
-    "Create new poll" : "Vytvoriť novú anketu",
-    "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
     "Comments" : "Komentáre",
     "No comments yet. Be the first." : "Zatiaľ žiadne komentáre. Buďte prvý.",
     "Description" : "Popis",

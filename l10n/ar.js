@@ -3,11 +3,11 @@ OC.L10N.register(
     {
     "Polls" : "استطلاعات الرأي",
     "Go to poll" : "الانتقال إلى استطلاع الرأي",
+    "Cancel" : "الغاء",
     "Copy Link" : "انسخ الرابط",
     "Edit poll" : "تعديل استطلاع الرأي",
     "Delete poll" : "احذف استطلاع الرأي",
     "Error, while copying link to clipboard" : "خطأ أثناء نسخ الرابط إلى الحافظة",
-    "Cancel" : "الغاء",
     "Description" : "الوصف",
     "Anonymous poll" : "استطلاع رأي مجهول",
     "Expiration date" : "تاريخ إنتهاء الصلاحية",

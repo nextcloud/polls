@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Polls" : "Küsitlused",
     "Polls App - New Activity" : "Küsitluste rakendus - uus tegevus",
+    "Create new poll" : "Loo uus küsitlus",
+    "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "Title" : "Pealkiri",
     "Access" : "Ligipääs",
     "Owner" : "Omanik",
@@ -10,8 +12,6 @@ OC.L10N.register(
     "Expires" : "Aegub",
     "Copy Link" : "Kopeeri link",
     "Delete poll" : "Kustuta küsitlus",
-    "Create new poll" : "Loo uus küsitlus",
-    "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "Comments" : "Kommentaarid",
     "No comments yet. Be the first." : "Kommentaare veel pole. Ole esimene.",
     "Description" : "Kirjeldus",
