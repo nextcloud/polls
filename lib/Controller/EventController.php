@@ -164,7 +164,7 @@ class EventController extends Controller {
 			'fullAnonymous' => boolval($this->event->getFullAnonymous()),
 			'allowMaybe' => boolval($this->event->getAllowMaybe()),
 			'voteLimit' => $this->event->getVoteLimit(),
-			'showResults' =>$this->event->getShowResults(),
+			'showResults' => $this->event->getShowResults(),
 			'deleted' => boolval($this->event->getDeleted()),
 			'deleteDate' => $this->event->getDeleteDate()
 		],

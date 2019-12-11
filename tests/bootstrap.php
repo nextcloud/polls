@@ -31,8 +31,5 @@ require_once __DIR__ . '/../vendor/autoload.php';
 \OC::$loader->addValidRoot(OC::$SERVERROOT . '/tests');
 \OC_App::loadApp('polls');
 
-if (!class_exists('PHPUnit_Framework_TestCase')) {
-	require_once 'PHPUnit/Autoload.php';
-}
 
 \OC_Hook::clear();

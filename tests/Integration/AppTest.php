@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -30,7 +30,7 @@ class AppTest extends TestCase {
 
 	private $container;
 
-	public function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$app = new App('polls');
 		$this->container = $app->getContainer();

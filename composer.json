@@ -18,6 +18,11 @@
         "php": "7.2.0"
       }
     },
+	"autoload-dev": {
+		"psr-4": {
+			"OCA\\Polls\\Tests\\": "tests/"
+		}
+	},
 	"require-dev": {
 		"christophwurst/nextcloud": "^17.0",
 		"phpunit/phpunit": "^8.2",

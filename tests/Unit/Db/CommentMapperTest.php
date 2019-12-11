@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -43,7 +43,7 @@ class CommentMapperTest extends UnitTestCase {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->commentMapper = new CommentMapper($this->con);
