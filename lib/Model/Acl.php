@@ -279,7 +279,10 @@ class Acl implements JsonSerializable {
 
 			if (($share->getType() === 'group' || $share->getType() === 'user')  && !\OC::$server->getUserSession()->isLoggedIn()) {
 				// User must be logged in for shareType user and group
-				throw DoesNotExistException;
+				$this->setPollId(0);
+				$this->setUserId(null);
+				$this->token = '';
+				$this->foundByToken = false;
 			} else if (($share->getType() === 'group' || $share->getType() === 'public') && \OC::$server->getUserSession()->isLoggedIn()) {
 				// Use user name of authorized user shareType public and group if user is logged in
 				$this->setUserId($this->userId);
