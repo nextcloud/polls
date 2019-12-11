@@ -76,7 +76,7 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 			}
 			if (!$table->hasColumn('delete_date')) {
 				$table->addColumn('delete_date', Type::DATETIME, [
-					'notnull' => false
+					'notnull' => true
 				]);
 			}
 			if (!$table->hasColumn('vote_limit')) {
@@ -86,9 +86,9 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 				]);
 			}
 			if (!$table->hasColumn('show_results')) {
-				$table->addColumn('show_results', Type::BOOLEAN, [
+				$table->addColumn('show_results', Type::STRING, [
 					'notnull' => true,
-					'default' => 0
+					'lenght' => 64
 				]);
 			}
 
@@ -160,29 +160,29 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 
 		while ($row = $result->fetch()) {
 			if ($row['access'] == 'public') {
-				// copy the token to a public share
+				// copy the hash to a public share
 				$insert
-				->setParameter('token', $row['token'])
+				->setParameter('token', $row['hash'])
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
 				->setParameter('user_email', null);
 				$insert->execute();
 			} elseif ($row['access'] == 'hidden') {
-				// copy the token to a public share
+				// copy the hash to a public share
 				// poll stays hidden for registered users
 				$insert
-				->setParameter('token', $row['token'])
+				->setParameter('token', $row['hash'])
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
 				->setParameter('user_email', null);
 				$insert->execute();
 			} elseif ($row['access'] == 'registered') {
-				// copy the token to a public share
-				// to keep the token
+				// copy the hash to a public share
+				// to keep the hash
 				$insert
-				->setParameter('token', $row['token'])
+				->setParameter('token', $row['hash'])
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)

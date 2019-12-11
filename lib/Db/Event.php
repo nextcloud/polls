@@ -42,8 +42,6 @@ use OCP\AppFramework\Db\Entity;
  * @method void setCreated(string $value)
  * @method string getAccess()
  * @method void setAccess(string $value)
- * @method string getToken()
- * @method void setToken(string $value)
  * @method string getExpire()
  * @method void setExpire(string $value)
  * @method integer getIsAnonymous()
@@ -68,7 +66,7 @@ class Event extends Entity implements JsonSerializable {
 	protected $owner;
 	protected $created;
 	protected $access;
-	protected $token;
+	protected $hash;
 	protected $expire;
 	protected $isAnonymous;
 	protected $fullAnonymous;
@@ -92,7 +90,7 @@ class Event extends Entity implements JsonSerializable {
 			'fullAnonymous' => boolval($this->fullAnonymous),
 			'allowMaybe' => boolval($this->allowMaybe),
 			'voteLimit' => $this->voteLimit,
-			'showResults' => boolval($this->showResults),
+			'showResults' => $this->showResults,
 			'deleted' => boolval($this->deleted),
 			'deleteDate' => $this->deleteDate
 		];

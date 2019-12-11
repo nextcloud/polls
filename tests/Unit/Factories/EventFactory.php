@@ -40,8 +40,11 @@ $fm->define('OCA\Polls\Db\Event')->setDefinitions([
 		$date = new DateTime('tomorrow');
 		return $date->format('Y-m-d H:i:s');
 	},
-	'token' => Faker::regexify('[A-Za-z0-9]{16}'),
 	'isAnonymous' => 0,
 	'fullAnonymous' => 0,
-	'showResults' => true,
+	'showResults' => 'always',
+	'delete_date' => function() {
+		$date = new DateTime('+1 month');
+		return $date->format('Y-m-d H:i:s');
+	},
 ]);
