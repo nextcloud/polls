@@ -88,7 +88,8 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 			if (!$table->hasColumn('show_results')) {
 				$table->addColumn('show_results', Type::STRING, [
 					'notnull' => true,
-					'lenght' => 64
+					'lenght' => 64,
+					'default' => 'always'
 				]);
 			}
 
