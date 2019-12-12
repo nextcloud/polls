@@ -44,6 +44,7 @@ class Acl implements JsonSerializable {
 
 	/** @var int */
 	private $pollId = 0;
+	/** @var ILogger */
 	private $logger;
 
 	/** @var array */
@@ -55,11 +56,19 @@ class Acl implements JsonSerializable {
 	/** @var bool */
 	private $foundByToken = false;
 
-	/** @var Event */
+	/** @var string */
 	private $userId;
+
+	/** @var IGroupManager */
 	private $groupManager;
+
+	/** @var EventMapper */
 	private $eventMapper;
+
+	/** @var ShareMapper */
 	private $shareMapper;
+
+	/** @var Event */
 	private $event;
 
 
@@ -67,10 +76,10 @@ class Acl implements JsonSerializable {
 	 * Acl constructor.
 	 * @param string $appName
 	 * @param string $userId
+	 * @param ILogger $logger
 	 * @param IGroupManager $groupManager
-	 * @param IGroupManager $groupManager
-	 * @param ShareMapper $shareMapper
 	 * @param EventMapper $eventMapper
+	 * @param ShareMapper $shareMapper
 	 * @param Event $eventMapper
 	 *
 	 */
@@ -84,11 +93,11 @@ class Acl implements JsonSerializable {
 		Event $event
 	) {
 		$this->userId = $userId;
+		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->shareMapper = $shareMapper;
 		$this->event = $event;
-		$this->logger = $logger;
 	}
 
 
@@ -201,10 +210,6 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowVote(): bool {
-		// $this->logger->error('Expiration: ' . $this->event->getExpire());
-		// $this->logger->error('Expiration time: ' . strtotime($this->event->getExpire()));
-		// $this->logger->error('low: ' . time());
-		// $this->logger->error('compare: ' . (strtotime($this->event->getExpire()) > time()));
 		if ($this->getAllowView() && strtotime($this->event->getExpire()) > time()) {
 			return true;
 		} else {

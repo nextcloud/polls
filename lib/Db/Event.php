@@ -66,15 +66,15 @@ class Event extends Entity implements JsonSerializable {
 	protected $owner;
 	protected $created;
 	protected $access;
-	protected $hash;
 	protected $expire;
 	protected $isAnonymous;
 	protected $fullAnonymous;
 	protected $allowMaybe;
-	protected $showResults;
 	protected $voteLimit;
+	protected $showResults;
 	protected $deleted;
 	protected $deleteDate;
+	protected $hash;
 
 	public function jsonSerialize() {
 		return [
