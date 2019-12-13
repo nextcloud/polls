@@ -30,9 +30,10 @@ return [
 		['name' => 'notification#get', 'url' => '/get/notification/{pollId}', 'verb' => 'GET'],
 		['name' => 'notification#set', 'url' => '/set/notification/', 'verb' => 'POST'],
 
-		['name' => 'comment#get', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
-		['name' => 'comment#write', 'url' => '/write/comment', 'verb' => 'POST'],
 		['name' => 'comment#getByToken', 'url' => '/get/comments/s/{token}', 'verb' => 'GET'],
+		['name' => 'comment#writeByToken', 'url' => '/write/comment/s/', 'verb' => 'POST'],
+		['name' => 'comment#get', 'url' => '/get/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'comment#write', 'url' => '/write/comment/', 'verb' => 'POST'],
 
 		['name' => 'vote#getByToken', 'url' => '/get/votes/s/{token}', 'verb' => 'GET'],
 		['name' => 'vote#setByToken', 'url' => '/set/vote/s/', 'verb' => 'POST'],

@@ -157,6 +157,27 @@ class VoteController extends Controller {
 	*/
 
 	/**
+	* setByToken
+	* @NoAdminRequired
+	* @PublicPage
+	* @NoCSRFRequired
+	* @param Array $option
+	* @param string $setTo
+	* @param string $token
+	* @return DataResponse
+	*/
+	public function setByToken($option, $setTo, $token) {
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return $this->set($this->acl->getPollId(), $option, $this->acl->getUserId(), $setTo);
+
+	}
+
+	/**
 	 * getByToken
 	 * Read all votes of a poll based on a share token and return list as array
 	 * @NoAdminRequired
@@ -174,27 +195,6 @@ class VoteController extends Controller {
 		}
 
 		return $this->get($this->acl->getPollId());
-
-	}
-
-	/**
-	 * setByToken
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param Array $option
-	 * @param string $setTo
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function setByToken($option, $setTo, $token) {
-		try {
-			$this->acl->setToken($token);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
-		return $this->set($this->acl->getPollId(), $option, $this->acl->getUserId(), $setTo);
 
 	}
 

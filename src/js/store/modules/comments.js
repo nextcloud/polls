@@ -81,10 +81,23 @@ const actions = {
 			})
 	},
 
-	writeCommentPromise({ commit, rootState }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/write/comment'), { pollId: rootState.event.id, message: payload })
+	setCommentAsync({ commit, rootState }, payload) {
+		let endPoint = 'apps/polls/write/comment/'
+
+		if (rootState.acl.foundByToken) {
+			endPoint = endPoint.concat('s/')
+		}
+
+		return axios.post(OC.generateUrl(endPoint), {
+			pollId: rootState.event.id,
+			token: rootState.acl.token,
+			message: payload.message,
+			userId: rootState.acl.userId
+		})
 			.then((response) => {
+				console.log(response)
 				commit('addComment', response.data)
+				return response.data
 			}, (error) => {
 				console.error('Error writing comment', { 'error': error.response }, { 'payload': payload })
 				throw error

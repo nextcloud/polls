@@ -83,15 +83,14 @@ export default {
 
 	methods: {
 		setVote(option, participant) {
-			let nextAnswer = this.$store.getters.getNextAnswer({
-				option: option,
-				userId: participant
-			})
 			this.$store
 				.dispatch('setVoteAsync', {
 					option: option,
 					userId: participant,
-					setTo: nextAnswer
+					setTo: this.$store.getters.getNextAnswer({
+						option: option,
+						userId: participant
+					})
 				})
 				.then(() => {
 					// this.$emit('voteSaved')
