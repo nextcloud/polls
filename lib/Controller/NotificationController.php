@@ -74,14 +74,14 @@ class NotificationController extends Controller {
 	 * @param NotificationMapper $mapper
 	 * @param IRequest $request
 	 * @param ILogger $logger
-	 * @param EventMapper $eventMapper
 	 * @param ShareMapper $shareMapper
+	 * @param EventMapper $eventMapper
 	 * @param IConfig $config
+	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userMgr
 	 * @param IGroupManager $groupMgr
 	 * @param IL10N $trans
 	 * @param IFactory $transFactory
-	 * @param IURLGenerator $urlGenerator
 	 * @param IMailer $mailer
 	 */
 
@@ -231,6 +231,7 @@ class NotificationController extends Controller {
 		$event = $this->eventMapper->find($share->getPollId());
 
 		if ($share->getType() === 'user') {
+
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
 				'displayName' => $this->userMgr->get($share->getUserId())->getDisplayName(),
@@ -240,19 +241,24 @@ class NotificationController extends Controller {
 			);
 
 		} elseif ($share->getType() === 'external' || $share->getType() === 'mail') {
+
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
 				'displayName' => $share->getUserId(),
-				'language' => $this->config->getUserValue($share->getOwner(), 'core', 'lang'),
+				'language' => $this->config->getUserValue($event->getOwner(), 'core', 'lang'),
 				'eMail' => $share->getUserEmail(),
 				'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_public', array('token' => $share->getToken())))
 			);
+
 		} elseif ($share->getType() === 'group') {
+
 			$groupMembers = array_keys($this->groupMgr->displayNamesInGroup($share->getUserId()));
+
 			foreach ($groupMembers as $member) {
 				if ($event->getOwner() === $member) {
 					continue;
 				}
+
 				$recipients[] = array(
 					'userId' => $member,
 					'displayName' => $this->userMgr->get($member)->getDisplayName(),
@@ -260,6 +266,7 @@ class NotificationController extends Controller {
 					'eMail' => $this->userMgr->get($member)->getEMailAddress(),
 					'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
 				);
+
 			}
 		}
 
@@ -282,6 +289,7 @@ class NotificationController extends Controller {
 				'title' => $event->getTitle(),
 				'link' => $recipient['link']
 			]);
+
 			$emailTemplate->setSubject($trans->t('Poll invitation "%s"', $event->getTitle()));
 			$emailTemplate->addHeader();
 			$emailTemplate->addHeading($trans->t('Poll invitation "%s"', $event->getTitle()), false);
@@ -294,19 +302,22 @@ class NotificationController extends Controller {
 
 				$emailTemplate->addBodyButton(
 					htmlspecialchars($trans->t('Go to poll')),
-					$recipient['link'],
-					/** @scrutinizer ignore-type */ false
+					$recipient['link']
 				);
 
 			$emailTemplate->addFooter();
 
 			try {
+
 				$message = $this->mailer->createMessage();
 				$message->setTo([$recipient['eMail'] => $recipient['displayName']]);
 				$message->useTemplate($emailTemplate);
 				$this->mailer->send($message);
+
 			} catch (\Exception $e) {
+
 				$this->logger->logException($e, ['app' => 'polls']);
+
 			}
 		}
 	}

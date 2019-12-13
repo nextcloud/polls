@@ -100,7 +100,7 @@ class SystemController extends Controller {
 	 * @NoAdminRequired
 	 * @return DataResponse
 	 */
-	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $skipGroups = array(), $skipUsers = array()) {
+	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
 		if ($getGroups) {
 			$groups = $this->groupManager->search($query);
@@ -138,6 +138,60 @@ class SystemController extends Controller {
 			}
 		}
 
+		$cm = \OC::$server->getContactsManager();
+
+
+		if ($getContacts && $cm->isEnabled()) {
+			$result = $cm->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES'));
+			$receivers = array();
+
+			// $this->logger->error(json_encode($result));
+			foreach ($result as $r) {
+				$group = '';
+				$org = '';
+
+				if (!array_key_exists('isLocalSystemBook',$r)) {
+
+					if (array_key_exists('CATEGORIES',$r)) {
+						$group = ' (Groups: ' . $r['CATEGORIES'] . ')';
+					}
+
+					if (array_key_exists('ORG',$r)) {
+						$org = ' ('. $r['ORG'] . ')' ;
+					}
+
+					$list[] = [
+						'id' => $r['EMAIL'],
+						'user' => $r['FN'] . $org,
+						'type' => 'mail',
+						'desc' => $r['EMAIL'][0] . $group,
+						'icon' => 'icon-mail',
+						'displayName' => $r['FN'] . ' ' . $org,
+						'avatarURL' => $r['PHOTO'],
+						'lastLogin' => '',
+						'cloudId' => ''
+					];
+				}
+			//
+			// 	if (!is_array($email)) {
+			// 		$email = array($email);
+			// 	}
+			//
+			// // loop through all email addresses of this contact
+			// 	foreach ($email as $e) {
+			// 		$displayName = $fn . ' <$e>';
+			// 		$list[] = array(
+			// 			'id' => $id,
+			// 			'label' => $displayName,
+			// 			'value' => $displayName);
+			// 	}
+			}
+
+		}
+
+
+
+
 		return new DataResponse([
 			'siteusers' => $list
 		], Http::STATUS_OK);
@@ -145,6 +199,56 @@ class SystemController extends Controller {
 
 	/**
 	 * Get a list of NC users and groups
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @return DataResponse
+	 */
+
+	public static function getContact($term) {
+		$cm = \OC::$server->getContactsManager();
+		// The API is not active -> nothing to do
+		if (!$cm->isEnabled()) {
+			return array();
+		}
+
+		$result = $cm->search($term, array('FN', 'EMAIL'));
+		$receivers = array();
+
+		foreach ($result as $r) {
+			$id = $r['id'];
+			$fn = $r['FN'];
+			$email = $r['EMAIL'];
+
+			if (!is_array($email)) {
+				$email = array($email);
+			}
+
+		// loop through all email addresses of this contact
+			foreach ($email as $e) {
+				$displayName = $fn . ' <$e>';
+				$receivers[] = array(
+					'id' => $id,
+					'label' => $displayName,
+					'value' => $displayName);
+			}
+		}
+
+		return $receivers;
+	}
+
+
+
+
+
+
+
+
+
+	/**
+	 * Validate it the user name is reservrd
+	 * return false, if this username already exists as a user or as
+	 * a participant of the poll
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @PublicPage
