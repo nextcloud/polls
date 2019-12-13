@@ -25,7 +25,11 @@
 		<h3>{{ t('polls','Invitations') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
-				<UserDiv :user-id="resolveShareUser(share)" :type="share.type" :icon="true" />
+				<UserDiv
+					:user-id="resolveShareUser(share)"
+					:display-name="shareDisplayName(share)"
+					:type="share.type"
+					:icon="true" />
 				<div class="options">
 					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
 					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
@@ -40,7 +44,7 @@
 			:tag-width="80"
 			:clear-on-select="false"
 			:preserve-search="true"
-			:options-limit="20"
+			:options-limit="30"
 			:loading="isLoading"
 			:internal-search="false"
 			:searchable="true"
@@ -101,6 +105,7 @@ export default {
 			siteUsersListOptions: {
 				getUsers: true,
 				getGroups: true,
+				getContacts: true,
 				query: ''
 			}
 		}
@@ -113,6 +118,7 @@ export default {
 			'invitationShares',
 			'publicShares'
 		])
+
 	},
 
 	methods: {
@@ -140,6 +146,7 @@ export default {
 		},
 
 		resolveShareUser(share) {
+
 			if (share.userId !== '' && share.userId !== null) {
 				return share.userId
 			} else if (share.type === 'mail') {
@@ -148,6 +155,29 @@ export default {
 				return t('polls', 'Unknown user')
 			}
 
+		},
+
+		shareDisplayName(share) {
+			let displayName = ''
+
+			if (share.type === 'user' || share.type === 'contact' || share.type === 'external') {
+				displayName = share.userId
+				if (share.userEmail) {
+					displayName = displayName + ' (' + share.userEmail + ')'
+				}
+			} else if (share.type === 'mail') {
+				displayName = share.userEmail
+				if (share.userId) {
+					displayName = share.userId + ' (' + displayName + ')'
+				}
+			} else if (share.type === 'group') {
+				displayName = share.userId + ' (' + t('polls', 'Group') + ')'
+			} else if (share.type === 'public') {
+				displayName = t('polls', 'Public share')
+			} else {
+				displayName = t('polls', 'Unknown user')
+			}
+			return displayName
 		},
 
 		removeShare(share) {
@@ -160,7 +190,7 @@ export default {
 					'type': payload.type,
 					'userId': payload.user,
 					'pollId': '0',
-					'userEmail': '',
+					'userEmail': payload.emailAddress,
 					'token': ''
 				}
 			})
