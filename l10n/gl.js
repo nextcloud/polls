@@ -5,6 +5,8 @@ OC.L10N.register(
     "Polls App - New Activity" : "Aplicación de enquisas – Actividade nova",
     "{user} participated in the poll \"{title}\"" : "{user} participou na enquisa «{title}»",
     "Go to poll" : "Ir á enquisa",
+    "Poll invitation \"%s\"" : "Convite á enquisa «%s»",
+    "{user} invited you to take part in the poll \"{title}\"" : "{user} convidouno a participar na enquisa «{title}»",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Unha aplicación de enquisas, semellante a doodle/dudle, coa posibilidade de restrinxir o acceso.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Unha aplicación de enquisas, semellante a doodle/dudle, coa posibilidade de restrinxir o acceso (membros, determinados grupos/usuarios, agochados e públicos).",
     "Group" : "Grupo",

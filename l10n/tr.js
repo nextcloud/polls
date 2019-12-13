@@ -5,6 +5,8 @@ OC.L10N.register(
     "Polls App - New Activity" : "Anketler Uygulaması - Yeni İşlem",
     "{user} participated in the poll \"{title}\"" : "{user} kullanıcısı \"{title}\" anketine katıldı",
     "Go to poll" : "Ankete git",
+    "Poll invitation \"%s\"" : "\"%s\" anketine çağrı",
+    "{user} invited you to take part in the poll \"{title}\"" : "{user} kullanıcısı sizi \"{title}\" anketine katılmaya çağırdı",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Doodle/Dudle benzeri, erişim kısıtlama özelliği bulunan bir anket uygulamasıdır.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Doodle/Dudle benzeri, erişim kısıtlama özelliği (üyeler, belirli grup ve kullanıcılar, gizli ve herkese açık gibi) bulunan bir anket uygulamasıdır.",
     "Group" : "Grup",

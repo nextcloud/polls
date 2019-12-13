@@ -3,6 +3,8 @@
     "Polls App - New Activity" : "Aplikacja Sondy - Nowa aktywność",
     "{user} participated in the poll \"{title}\"" : "{user} wziął udział w sondzie \"{title}\"",
     "Go to poll" : "Idź do sondy",
+    "Poll invitation \"%s\"" : "Zaproszenie do sondy \"%s\"",
+    "{user} invited you to take part in the poll \"{title}\"" : "{user} zaprosił Cię do wzięcia udziału w sondzie \"{title}\"",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikacja sondażowa przypominająca doodle/dudle z możliwością ograniczania dostępu.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikacja sondażowa przypominająca doodle/dudle z możliwością ograniczania dostępu (członkowie, określone grupy/użytkownicy, ukryte i publiczne).",
     "Group" : "Grupa",
