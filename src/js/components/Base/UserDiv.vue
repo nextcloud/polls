@@ -26,7 +26,7 @@
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<Avatar :disable-menu="true" :user="userId" :display-name="computedDisplayName"
+		<Avatar :disable-menu="true" :user="userId" :isGuest="!Boolean(OC.currentUser)" :display-name="computedDisplayName"
 			:is-no-user="isNoUser" />
 		<div class="avatar" :class="iconClass" />
 
@@ -86,11 +86,14 @@ export default {
 		},
 
 		isValidUser() {
-			return (this.userId !== '' && this.userId !== null)
+			return (this.userId)
 		},
 
 		iconClass() {
 			if (this.icon) {
+				if (this.type === 'contact') {
+					return 'icon-mail'
+				}
 				return 'icon-' + this.type
 			} else {
 				return ''
@@ -100,21 +103,21 @@ export default {
 		computedDisplayName() {
 			let value = this.displayName
 
-			if (this.userId === OC.getCurrentUser().uid) {
-				value = OC.getCurrentUser().displayName
-			} else {
-				if (!this.displayName) {
+			if (!this.displayName) {
+				if (this.type === 'user') {
+					value = this.userId
+				} else if (this.type === 'group') {
+					value = value + ' (' + t('polls', 'Group') + ')'
+				} else {
 					value = this.userId
 				}
 			}
-			if (this.type === 'group') {
-				value = value + ' (' + t('polls', 'Group') + ')'
-			}
 			return value
-		}
 
+		}
 	}
 }
+
 </script>
 
 <style lang="scss">

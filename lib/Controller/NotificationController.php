@@ -229,6 +229,7 @@ class NotificationController extends Controller {
 		$recipients = [];
 		$share = $this->shareMapper->findByToken($token);
 		$event = $this->eventMapper->find($share->getPollId());
+		$contactsManager = \OC::$server->getContactsManager();
 
 		if ($share->getType() === 'user') {
 
@@ -239,6 +240,22 @@ class NotificationController extends Controller {
 				'eMail' => $this->userMgr->get($share->getUserId())->getEMailAddress(),
 				'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
 			);
+
+		} elseif ($share->getType() === 'contact') {
+			$contacts = $contactsManager->search($share->getUserId(), array('UID'));
+			if (is_array($contacts)) {
+				$contact = $contact[0];
+
+				$recipients[] = array(
+					'userId' => $share->getUserId(),
+					'displayName' => $contact['FN'],
+					'language' => $this->config->getUserValue($event->getOwner(), 'core', 'lang'),
+					'eMail' => $contact['EMAIL'][0],
+					'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
+				);
+			} else {
+				return;
+			}
 
 		} elseif ($share->getType() === 'external' || $share->getType() === 'mail') {
 
