@@ -250,7 +250,7 @@ class EventController extends Controller {
 			} else {
 				$this->mapper->insert($this->event);
 			}
-			$this->event = get($this->event->getId());
+			$this->event = $this->get($this->event->getId());
 			return new DataResponse($this->event, Http::STATUS_OK);
 		}
 	}

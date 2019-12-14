@@ -260,10 +260,6 @@ export default {
 			}
 		},
 
-		protect: function() {
-			return this.poll.mode === 'vote'
-		},
-
 		saveButtonTitle: function() {
 			if (this.writingPoll) {
 				return t('polls', 'Writing poll')
@@ -287,7 +283,6 @@ export default {
 			this.$store.commit('setEventProperty', e)
 			this.writingPoll = true
 			this.writePoll()
-			this.$root.$emit('updatePolls')
 		},
 
 		switchDeleted() {
@@ -299,9 +294,12 @@ export default {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
-				this.writeEventPromise()
+				this.$store.dispatch('writeEventPromise')
+					.then(() => {
+						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
+						this.$root.$emit('updatePolls')
+					})
 				this.writingPoll = false
-				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
 			}
 		},
 

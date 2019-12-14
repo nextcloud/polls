@@ -106,7 +106,6 @@ const getters = {
 const actions = {
 
 	loadEvent({ commit }, payload) {
-		commit('resetEvent')
 		let endPoint = 'apps/polls/event/get/'
 
 		if (payload.token !== undefined) {
