@@ -37,7 +37,7 @@
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
-			<SideBarTabConfiguration @deletePoll="$emit('deletePoll')" />
+			<SideBarTabConfiguration />
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'Shares')" icon="icon-share">

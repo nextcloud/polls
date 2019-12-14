@@ -207,12 +207,12 @@ class EventController extends Controller {
 			$this->acl->setPollId($this->event->getId());
 
 			if (!$this->acl->getAllowEdit()) {
-				$this->logger->alert('Unauthorized delete attempt from user ' . $this->userId);
-				return new DataResponse('Unauthorized delete attempt.', Http::STATUS_UNAUTHORIZED);
+				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
+				return new DataResponse('Unauthorized write attempt.', Http::STATUS_UNAUTHORIZED);
 			}
-
 		} catch (Exception $e) {
 			$this->event = new Event();
+			$this->acl->setPollId(0);
 
 			// $this->event->setType($event['type']);
 			if ($event['type'] === 'datePoll') {
@@ -225,7 +225,6 @@ class EventController extends Controller {
 
 			$this->event->setOwner($this->userId);
 			$this->event->setCreated(date('Y-m-d H:i:s',time()));
-			$this->logger->error(date('Y-m-d H:i:s',time()));
 		} finally {
 
 			$this->event->setTitle($event['title']);
@@ -246,8 +245,12 @@ class EventController extends Controller {
 			$this->event->setVoteLimit(intval($event['voteLimit']));
 			$this->event->setShowResults($event['showResults']);
 
-			$this->mapper->insertOrUpdate($this->event);
-
+			if ($this->acl->getPollId() > 0) {
+				$this->mapper->update($this->event);
+			} else {
+				$this->mapper->insert($this->event);
+			}
+			$this->event = get($this->event->getId());
 			return new DataResponse($this->event, Http::STATUS_OK);
 		}
 	}

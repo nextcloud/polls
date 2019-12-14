@@ -123,8 +123,9 @@
 			</label>
 		</div>
 
-		<button class="button btn primary" @click="$emit('deletePoll')">
-			<span>{{ t('polls', 'Delete this poll') }}</span>
+		<button class="button btn primary" @click="switchDeleted()">
+			<span v-if="event.deleted">{{ t('polls', 'Restore poll') }}</span>
+			<span v-else>{{ t('polls', 'Delete poll') }}</span>
 		</button>
 	</div>
 </template>
@@ -286,6 +287,12 @@ export default {
 			this.$store.commit('setEventProperty', e)
 			this.writingPoll = true
 			this.writePoll()
+			this.$root.$emit('updatePolls')
+		},
+
+		switchDeleted() {
+			this.writeValue({ 'deleted': !this.event.deleted })
+
 		},
 
 		writePoll() {
