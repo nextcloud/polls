@@ -216,7 +216,6 @@ class EventController extends Controller {
 					$this->event->setDeleteDate(date('Y-m-d'));
 				} else {
 					$this->event->setDeleteDate('0');
-					// '0000.00.00 00:00:00';
 				}
 			}
 			$this->event->setDeleted($event['deleted']);
@@ -224,7 +223,6 @@ class EventController extends Controller {
 			$this->event = new Event();
 			$this->acl->setPollId(0);
 
-			// $this->event->setType($event['type']);
 			if ($event['type'] === 'datePoll') {
 				$this->event->setType(0);
 			} elseif ($event['type'] === 'textPoll') {

@@ -158,7 +158,6 @@ class SystemController extends Controller {
 
 		if ($getContacts && $contactsManager->isEnabled()) {
 			$contacts = $contactsManager->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES'));
-			$receivers = array();
 
 			// $this->logger->error(json_encode($contacts));
 			foreach ($contacts as $contact) {

@@ -26,7 +26,7 @@
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			<VoteHeader />
-			<VoteTable />
+			<VoteTable v-show="!loading" />
 			<Notification />
 		</div>
 
@@ -91,11 +91,10 @@ export default {
 		},
 
 		'event.id'(to, from) {
-			console.log('changed poll id from', from, 'to', to)
-			this.$store.dispatch({
-				type: 'loadPoll',
-				pollId: this.$route.params.id
-			})
+			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+				.then(() => {
+					this.loading = false
+				})
 		}
 	},
 
@@ -105,21 +104,8 @@ export default {
 
 	methods: {
 		loadPoll() {
-			// this.loading = true
+			this.loading = true
 			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id })
-				.then((response) => {
-					console.log('poll has changed')
-					// this.$store.dispatch({
-					// 	type: 'loadPoll',
-					// 	pollId: this.$route.params.id
-					// })
-					// 	.then(() => {
-					// 		if (this.$route.name === 'edit') {
-					// 			this.openInEditMode()
-					// 		}
-					// 		this.loading = false
-					// 	})
-				})
 				.catch(() => {
 					this.loading = false
 				})
