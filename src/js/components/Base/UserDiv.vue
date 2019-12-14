@@ -29,6 +29,7 @@
 		<Avatar :disable-menu="true" :user="userId"
 			:is-guest="!Boolean(OC.currentUser)"
 			:display-name="computedDisplayName"
+
 			:is-no-user="isNoUser" />
 		<div class="avatar" :class="iconClass" />
 

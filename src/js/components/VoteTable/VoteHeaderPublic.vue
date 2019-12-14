@@ -126,7 +126,7 @@ export default {
 					.catch(() => {
 						this.checkingUserName = false
 						this.isValidName = false
-						this.invalidUserNameMessage = t('polls', 'This user name can not be choosed.')
+						this.invalidUserNameMessage = t('polls', 'This user name can not be chosen.')
 						return false
 					})
 			} else {
@@ -146,7 +146,7 @@ export default {
 						this.$router.replace({ name: 'publicVote', params: { 'token': response.token } })
 					})
 					.catch(() => {
-						OC.Notification.showTemporary(t('polls', 'Error saving user name"', 1, event.title), { type: 'error' })
+						OC.Notification.showTemporary(t('polls', 'Error saving user name', 1, event.title), { type: 'error' })
 					})
 			}
 		}

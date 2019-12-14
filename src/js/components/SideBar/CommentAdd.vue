@@ -43,13 +43,14 @@ export default {
 
 	computed: {
 		currentUser() {
-			return OC.getCurrentUser().uid
+			return this.$store.state.acl.userId
+			// return OC.getCurrentUser().uid
 		}
 	},
 
 	methods: {
 		writeComment() {
-			this.$store.dispatch('writeCommentPromise', this.comment)
+			this.$store.dispatch('setCommentAsync', { message: this.comment })
 				.then(response => {
 					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
 				})
