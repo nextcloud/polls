@@ -98,6 +98,12 @@ class SystemController extends Controller {
 	 * Get a list of NC users and groups
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
+	 * @param string $query
+	 * @param bool $getGroups - search in groups
+	 * @param bool $getUsers - search in site users
+	 * @param bool $getContacts - search in contacs
+	 * @param array $skipGroups - group names to skip in return array
+	 * @param array $skipUsers - user names to skip in return array
 	 * @return DataResponse
 	 */
 	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $skipGroups = array(), $skipUsers = array()) {
@@ -109,11 +115,17 @@ class SystemController extends Controller {
 					$list[] = [
 						'id' => $group->getGID(),
 						'user' => $group->getGID(),
-						'type' => 'group',
-						'desc' => 'group',
-						'icon' => 'icon-group',
+						'organisation' => '',
 						'displayName' => $group->getGID(),
-						'avatarURL' => ''
+						'emailAddress' => '',
+						'desc' => 'Group',
+						'type' => 'group',
+						'icon' => 'icon-group',
+						'avatarURL' => '',
+						'avatar' => '',
+						'lastLogin' => '',
+						'cloudId' => ''
+
 					];
 				}
 			}
@@ -126,11 +138,14 @@ class SystemController extends Controller {
 					$list[] = [
 						'id' => $user->getUID(),
 						'user' => $user->getUID(),
-						'type' => 'user',
-						'desc' => 'user',
-						'icon' => 'icon-user',
 						'displayName' => $user->getDisplayName(),
+						'organisation' => '',
+						'emailAddress' => $user->getEMailAddress(),
+						'desc' => 'User',
+						'type' => 'user',
+						'icon' => 'icon-user',
 						'avatarURL' => '',
+						'avatar' => '',
 						'lastLogin' => $user->getLastLogin(),
 						'cloudId' => $user->getCloudId()
 					];
@@ -138,112 +153,55 @@ class SystemController extends Controller {
 			}
 		}
 
-		$cm = \OC::$server->getContactsManager();
+		$contactsManager = \OC::$server->getContactsManager();
 
 
-		if ($getContacts && $cm->isEnabled()) {
-			$result = $cm->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES'));
+		if ($getContacts && $contactsManager->isEnabled()) {
+			$contacts = $contactsManager->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES'));
 			$receivers = array();
 
-			// $this->logger->error(json_encode($result));
-			foreach ($result as $r) {
+			// $this->logger->error(json_encode($contacts));
+			foreach ($contacts as $contact) {
 				$group = '';
 				$org = '';
 
-				if (!array_key_exists('isLocalSystemBook',$r)) {
+				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 
-					if (array_key_exists('CATEGORIES',$r)) {
-						$group = ' (Groups: ' . $r['CATEGORIES'] . ')';
+					$emailAdresses = $contact['EMAIL'];
+
+					if (!is_array($emailAdresses)) {
+						$emailAdresses = array($emailAdresses);
+					} else {
+						// take the first eMail address for now
+						$emailAdresses = array($emailAdresses[0]);
 					}
 
-					if (array_key_exists('ORG',$r)) {
-						$org = ' ('. $r['ORG'] . ')' ;
+					foreach ($emailAdresses as $emailAddress) {
+						$list[] = [
+							'id' => $contact['UID'],
+							'user' => $contact['FN'],
+							'displayName' => $contact['FN'],
+							'organisation' => $contact['ORG'],
+							'emailAddress' => $emailAddress,
+							'desc' => 'Contact',
+							'type' => 'contact',
+							'icon' => 'icon-mail',
+							'avatarURL' => '',
+							'avatar' => $contact['PHOTO'],
+							'lastLogin' => '',
+							'cloudId' => ''
+						];
 					}
 
-					$list[] = [
-						'id' => $r['EMAIL'],
-						'user' => $r['FN'] . $org,
-						'type' => 'mail',
-						'desc' => $r['EMAIL'][0] . $group,
-						'icon' => 'icon-mail',
-						'displayName' => $r['FN'] . ' ' . $org,
-						'avatarURL' => $r['PHOTO'],
-						'lastLogin' => '',
-						'cloudId' => ''
-					];
 				}
-			//
-			// 	if (!is_array($email)) {
-			// 		$email = array($email);
-			// 	}
-			//
-			// // loop through all email addresses of this contact
-			// 	foreach ($email as $e) {
-			// 		$displayName = $fn . ' <$e>';
-			// 		$list[] = array(
-			// 			'id' => $id,
-			// 			'label' => $displayName,
-			// 			'value' => $displayName);
-			// 	}
 			}
 
 		}
-
-
-
 
 		return new DataResponse([
 			'siteusers' => $list
 		], Http::STATUS_OK);
 	}
-
-	/**
-	 * Get a list of NC users and groups
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @return DataResponse
-	 */
-
-	public static function getContact($term) {
-		$cm = \OC::$server->getContactsManager();
-		// The API is not active -> nothing to do
-		if (!$cm->isEnabled()) {
-			return array();
-		}
-
-		$result = $cm->search($term, array('FN', 'EMAIL'));
-		$receivers = array();
-
-		foreach ($result as $r) {
-			$id = $r['id'];
-			$fn = $r['FN'];
-			$email = $r['EMAIL'];
-
-			if (!is_array($email)) {
-				$email = array($email);
-			}
-
-		// loop through all email addresses of this contact
-			foreach ($email as $e) {
-				$displayName = $fn . ' <$e>';
-				$receivers[] = array(
-					'id' => $id,
-					'label' => $displayName,
-					'value' => $displayName);
-			}
-		}
-
-		return $receivers;
-	}
-
-
-
-
-
-
-
-
 
 	/**
 	 * Validate it the user name is reservrd

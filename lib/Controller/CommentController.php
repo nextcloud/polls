@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 
 use OCP\IRequest;
+use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -47,6 +48,7 @@ class CommentController extends Controller {
 
 	private $userId;
 	private $mapper;
+	private $logger;
 
 	private $groupManager;
 	private $eventMapper;
@@ -68,6 +70,7 @@ class CommentController extends Controller {
 		string $appName,
 		$userId,
 		IRequest $request,
+		ILogger $logger,
 		CommentMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
@@ -77,6 +80,7 @@ class CommentController extends Controller {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->mapper = $mapper;
+		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
 		$this->anonymizer = $anonymizer;
@@ -137,25 +141,30 @@ class CommentController extends Controller {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
 	 * @return DataResponse
 	 */
-	public function write($pollId, $message) {
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
+	public function write($pollId, $userId, $message) {
+		if (!\OC::$server->getUserSession()->isLoggedIn() && !$this->acl->getFoundByToken()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
-		$time = date('Y-m-d H:i:s');
+		$this->logger->error($pollId);
+		$this->logger->error($userId);
+		$this->logger->error($message);
+
 		$comment = new Comment();
 		$comment->setPollId($pollId);
-		$comment->setUserId($this->userId);
+		$comment->setUserId($userId);
 		$comment->setComment($message);
-		$comment->setDt($time);
+		$comment->setDt(date('Y-m-d H:i:s'));
+
+		$this->logger->error(json_encode($comment));
 
 		try {
 			$comment = $this->mapper->insert($comment);
+			$this->logger->error(json_encode($comment));
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}
@@ -163,6 +172,32 @@ class CommentController extends Controller {
 		return new DataResponse($comment, Http::STATUS_OK);
 
 	}
+
+	/**
+	 * writeByToken
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param Array $option
+	 * @param string $setTo
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function writeByToken($token, $message) {
+
+		$this->logger->error($message);
+		$this->logger->error($token);
+
+		try {
+			$this->acl->setToken($token);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+		return $this->write($this->acl->getPollId(), $this->acl->getUserId(), $message);
+
+	}
+
 
 	/**
 	 * delete
