@@ -141,7 +141,7 @@ const actions = {
 
 	setVoteAsync({ commit, getters, rootState }, payload) {
 
-		let endPoint = 'apps/polls/set/vote/'
+		let endPoint = 'apps/polls/vote/set/'
 
 		if (rootState.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')

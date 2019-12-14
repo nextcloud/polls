@@ -210,6 +210,16 @@ class EventController extends Controller {
 				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
 				return new DataResponse('Unauthorized write attempt.', Http::STATUS_UNAUTHORIZED);
 			}
+
+			if ($this->event->getDeleted() !== $event['deleted']) {
+				if ($event['deleted']) {
+					$this->event->setDeleteDate(date('Y-m-d'));
+				} else {
+					$this->event->setDeleteDate('0');
+					// '0000.00.00 00:00:00';
+				}
+			}
+			$this->event->setDeleted($event['deleted']);
 		} catch (Exception $e) {
 			$this->event = new Event();
 			$this->acl->setPollId(0);
@@ -240,7 +250,6 @@ class EventController extends Controller {
 			$this->event->setIsAnonymous(intval($event['isAnonymous']));
 			$this->event->setFullAnonymous(intval($event['fullAnonymous']));
 			$this->event->setAllowMaybe(intval($event['allowMaybe']));
-			$this->event->setDeleted($event['deleted']);
 			// $this->event->setDeleteDate(time());
 			$this->event->setVoteLimit(intval($event['voteLimit']));
 			$this->event->setShowResults($event['showResults']);

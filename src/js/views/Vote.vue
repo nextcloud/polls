@@ -88,6 +88,14 @@ export default {
 	watch: {
 		'$route'(to, from) {
 			this.loadPoll()
+		},
+
+		'event.id'(to, from) {
+			console.log('changed poll id from', from, 'to', to)
+			this.$store.dispatch({
+				type: 'loadPoll',
+				pollId: this.$route.params.id
+			})
 		}
 	},
 
@@ -97,20 +105,20 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.loading = true
+			// this.loading = true
 			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id })
 				.then((response) => {
-					this.$store.dispatch({
-						type: 'loadPoll',
-						pollId: this.$route.params.id,
-						mode: this.$route.name
-					})
-						.then(() => {
-							if (this.$route.name === 'edit') {
-								this.openInEditMode()
-							}
-							this.loading = false
-						})
+					console.log('poll has changed')
+					// this.$store.dispatch({
+					// 	type: 'loadPoll',
+					// 	pollId: this.$route.params.id
+					// })
+					// 	.then(() => {
+					// 		if (this.$route.name === 'edit') {
+					// 			this.openInEditMode()
+					// 		}
+					// 		this.loading = false
+					// 	})
 				})
 				.catch(() => {
 					this.loading = false
@@ -124,7 +132,6 @@ export default {
 		openConfigurationTab() {
 			this.initialTab = 'configuration'
 			this.sideBarOpen = true
-			this.$store.commit('pollSetProperty', { 'mode': 'edit' })
 		},
 
 		openOptionsTab() {
@@ -134,7 +141,6 @@ export default {
 				this.initialTab = 'text-options'
 			}
 			this.sideBarOpen = true
-			this.$store.commit('pollSetProperty', { 'mode': 'edit' })
 		}
 	}
 }
