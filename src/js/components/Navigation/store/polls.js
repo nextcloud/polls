@@ -41,13 +41,13 @@ const getters = {
 		return state.list.filter(poll => (!poll.deleted))
 	},
 	myPolls: (state) => {
-		return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid))
+		return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
 	},
 	publicPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'public'))
+		return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
 	},
 	hiddenPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'hidden'))
+		return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
 	},
 	deletedPolls: (state) => {
 		return state.list.filter(poll => (poll.deleted))

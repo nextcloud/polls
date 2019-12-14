@@ -148,6 +148,22 @@ export default {
 		}
 	},
 
+	mounted() {
+		this.$root.$on('updatePolls', function() {
+			this.loading = true
+			this.$store
+				.dispatch('loadPolls')
+				.then(response => {
+					this.loading = false
+				})
+				.catch(error => {
+					this.loading = false
+					console.error('refresh poll: ', error.response)
+					OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+				})
+		})
+	},
+
 	created() {
 		this.$store.registerModule('polls', state)
 		this.refreshPolls()

@@ -123,8 +123,9 @@
 			</label>
 		</div>
 
-		<button class="button btn primary" @click="$emit('deletePoll')">
-			<span>{{ t('polls', 'Delete this poll') }}</span>
+		<button class="button btn primary" @click="switchDeleted()">
+			<span v-if="event.deleted">{{ t('polls', 'Restore poll') }}</span>
+			<span v-else>{{ t('polls', 'Delete poll') }}</span>
 		</button>
 	</div>
 </template>
@@ -259,10 +260,6 @@ export default {
 			}
 		},
 
-		protect: function() {
-			return this.poll.mode === 'vote'
-		},
-
 		saveButtonTitle: function() {
 			if (this.writingPoll) {
 				return t('polls', 'Writing poll')
@@ -288,13 +285,21 @@ export default {
 			this.writePoll()
 		},
 
+		switchDeleted() {
+			this.writeValue({ 'deleted': !this.event.deleted })
+
+		},
+
 		writePoll() {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
-				this.writeEventPromise()
+				this.$store.dispatch('writeEventPromise')
+					.then(() => {
+						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
+						this.$root.$emit('updatePolls')
+					})
 				this.writingPoll = false
-				OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
 			}
 		},
 

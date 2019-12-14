@@ -26,7 +26,7 @@
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			<VoteHeader />
-			<VoteTable />
+			<VoteTable v-show="!loading" />
 			<Notification />
 		</div>
 
@@ -88,6 +88,13 @@ export default {
 	watch: {
 		'$route'(to, from) {
 			this.loadPoll()
+		},
+
+		'event.id'(to, from) {
+			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+				.then(() => {
+					this.loading = false
+				})
 		}
 	},
 
@@ -99,19 +106,6 @@ export default {
 		loadPoll() {
 			this.loading = true
 			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id })
-				.then((response) => {
-					this.$store.dispatch({
-						type: 'loadPoll',
-						pollId: this.$route.params.id,
-						mode: this.$route.name
-					})
-						.then(() => {
-							if (this.$route.name === 'edit') {
-								this.openInEditMode()
-							}
-							this.loading = false
-						})
-				})
 				.catch(() => {
 					this.loading = false
 				})
@@ -124,7 +118,6 @@ export default {
 		openConfigurationTab() {
 			this.initialTab = 'configuration'
 			this.sideBarOpen = true
-			this.$store.commit('pollSetProperty', { 'mode': 'edit' })
 		},
 
 		openOptionsTab() {
@@ -134,7 +127,6 @@ export default {
 				this.initialTab = 'text-options'
 			}
 			this.sideBarOpen = true
-			this.$store.commit('pollSetProperty', { 'mode': 'edit' })
 		}
 	}
 }
