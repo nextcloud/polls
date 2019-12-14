@@ -95,7 +95,6 @@ const actions = {
 			userId: rootState.acl.userId
 		})
 			.then((response) => {
-				console.log(response)
 				commit('addComment', response.data)
 				return response.data
 			}, (error) => {
