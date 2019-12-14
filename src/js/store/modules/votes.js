@@ -121,7 +121,7 @@ const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		let endPoint = 'apps/polls/get/votes/'
+		let endPoint = 'apps/polls/votes/get/'
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId !== undefined) {

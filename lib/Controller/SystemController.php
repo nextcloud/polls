@@ -272,23 +272,23 @@ class SystemController extends Controller {
 			'list' => $list
 		], Http::STATUS_OK);
 	}
-
-
-	/**
-	 * Get some system informations
-	 * @NoAdminRequired
-	 * @return DataResponse
-	 */
-	public function getSystem() {
-		$data = array();
-
-		$data['system'] = [
-			'versionArray' => \OCP\Util::getVersion(),
-			'version' => implode('.', \OCP\Util::getVersion()),
-			'vendor' => $this->getVendor(),
-			'language' => $this->systemConfig->getUserValue($this->userId, 'core', 'lang')
-		];
-
-		return new DataResponse($data, Http::STATUS_OK);
-	}
+	//
+	//
+	// /**
+	//  * Get some system informations
+	//  * @NoAdminRequired
+	//  * @return DataResponse
+	//  */
+	// public function getSystem() {
+	// 	$data = array();
+	//
+	// 	$data['system'] = [
+	// 		'versionArray' => \OCP\Util::getVersion(),
+	// 		'version' => implode('.', \OCP\Util::getVersion()),
+	// 		'vendor' => $this->getVendor(),
+	// 		'language' => $this->systemConfig->getUserValue($this->userId, 'core', 'lang')
+	// 	];
+	//
+	// 	return new DataResponse($data, Http::STATUS_OK);
+	// }
 }

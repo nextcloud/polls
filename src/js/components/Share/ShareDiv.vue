@@ -127,7 +127,7 @@ export default {
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
-			this.$http.post(OC.generateUrl('apps/polls/get/siteusers'), this.siteUsersListOptions)
+			this.$http.post(OC.generateUrl('apps/polls/siteusers/get/'), this.siteUsersListOptions)
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false

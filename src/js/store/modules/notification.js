@@ -41,7 +41,7 @@ const mutations = {
 
 const actions = {
 	getSubscription({ commit }, payload) {
-		axios.get(OC.generateUrl('apps/polls/get/notification/' + payload.pollId))
+		axios.get(OC.generateUrl('apps/polls/notification/get/' + payload.pollId))
 			.then((response) => {
 				commit('setNotification', true)
 			})
@@ -51,7 +51,7 @@ const actions = {
 	},
 
 	writeSubscriptionPromise({ commit }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/set/notification'), { pollId: payload.pollId, subscribed: state.subscribed })
+		return axios.post(OC.generateUrl('apps/polls/notification/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
 			.then((response) => {
 			}, (error) => {
 				console.error(error.response)

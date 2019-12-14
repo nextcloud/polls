@@ -74,7 +74,7 @@ const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		let endPoint = 'apps/polls/get/options/'
+		let endPoint = 'apps/polls/options/get/'
 
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
@@ -94,7 +94,9 @@ const actions = {
 	},
 
 	updateOptionAsync({ commit, getters, dispatch, rootState }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/update/option'), { option: payload.option })
+		let endPoint = 'apps/polls/option/update'
+
+		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
 			.then((response) => {
 				commit('setOption', { 'option': payload.option })
 			}, (error) => {
@@ -104,6 +106,7 @@ const actions = {
 	},
 
 	addOptionAsync({ commit, getters, dispatch, rootState }, payload) {
+		let endPoint = 'apps/polls/option/add/'
 		let option = {}
 
 		option.id = 0
@@ -118,7 +121,7 @@ const actions = {
 			option.pollOptionText = payload.pollOptionText
 		}
 
-		return axios.post(OC.generateUrl('apps/polls/add/option'), { option: option })
+		return axios.post(OC.generateUrl(endPoint), { option: option })
 			.then((response) => {
 				commit('setOption', { 'option': response.data })
 			}, (error) => {
@@ -128,7 +131,9 @@ const actions = {
 	},
 
 	removeOptionAsync({ commit, getters, dispatch, rootState }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/remove/option'), { option: payload.option })
+		let endPoint = 'apps/polls/option/remove/'
+
+		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
 			.then((response) => {
 				commit('optionRemove', { 'option': payload.option })
 			}, (error) => {
