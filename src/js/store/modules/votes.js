@@ -121,7 +121,7 @@ const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		let endPoint = 'apps/polls/get/votes/'
+		let endPoint = 'apps/polls/votes/get/'
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId !== undefined) {
@@ -141,7 +141,7 @@ const actions = {
 
 	setVoteAsync({ commit, getters, rootState }, payload) {
 
-		let endPoint = 'apps/polls/set/vote/'
+		let endPoint = 'apps/polls/vote/set/'
 
 		if (rootState.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')

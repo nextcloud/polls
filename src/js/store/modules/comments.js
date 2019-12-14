@@ -62,7 +62,7 @@ const actions = {
 
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		let endPoint = 'apps/polls/get/comments/'
+		let endPoint = 'apps/polls/comments/get/'
 
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
@@ -82,7 +82,7 @@ const actions = {
 	},
 
 	setCommentAsync({ commit, rootState }, payload) {
-		let endPoint = 'apps/polls/write/comment/'
+		let endPoint = 'apps/polls/comment/write/'
 
 		if (rootState.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
@@ -95,7 +95,6 @@ const actions = {
 			userId: rootState.acl.userId
 		})
 			.then((response) => {
-				console.log(response)
 				commit('addComment', response.data)
 				return response.data
 			}, (error) => {

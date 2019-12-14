@@ -107,7 +107,7 @@ const actions = {
 
 	loadEvent({ commit }, payload) {
 		commit('resetEvent')
-		let endPoint = 'apps/polls/get/event/'
+		let endPoint = 'apps/polls/event/get/'
 
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
@@ -129,7 +129,9 @@ const actions = {
 	},
 
 	deleteEventPromise({ commit }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/delete/event'), { event: payload.id })
+		let endPoint = 'apps/polls/event/delete/'
+
+		return axios.post(OC.generateUrl(endPoint), { event: payload.id })
 			.then((response) => {
 				return response
 			}, (error) => {
@@ -140,7 +142,9 @@ const actions = {
 	},
 
 	writeEventPromise({ commit, rootState }) {
-		return axios.post(OC.generateUrl('apps/polls/write/event'), { event: state })
+		let endPoint = 'apps/polls/event/write/'
+
+		return axios.post(OC.generateUrl(endPoint), { event: state })
 			.then((response) => {
 				commit('setEvent', { 'event': response.data })
 				return response.event

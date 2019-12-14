@@ -79,13 +79,8 @@ const getters = {
 const actions = {
 	loadPoll({ commit, rootState }, payload) {
 		commit('reset')
-		// console.log(rootState.acl)
-		// if (!rootState.acl.allowEdit) {
-		// 	console.log('rootState.acl.allowEdit', rootState.acl.allowEdit)
-		// 	return
-		// }
-		// console.log('number 1')
-		let endPoint = 'apps/polls/get/shares/'
+
+		let endPoint = 'apps/polls/shares/get/'
 
 		if (payload.token !== undefined) {
 			return
@@ -107,7 +102,10 @@ const actions = {
 	},
 
 	getShareAsync({ commit }, payload) {
-		return axios.get(OC.generateUrl('apps/polls/get/share/' + payload.token))
+
+		let endPoint = 'apps/polls/share/get/'
+
+		return axios.get(OC.generateUrl(endPoint + payload.token))
 			.then((response) => {
 				return { 'share': response.data }
 			}, (error) => {
@@ -117,7 +115,9 @@ const actions = {
 	},
 
 	addShareFromUser({ commit }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/write/share/s'), { token: payload.token, userName: payload.userName })
+		let endPoint = 'apps/polls/share/write/s/'
+
+		return axios.post(OC.generateUrl(endPoint), { token: payload.token, userName: payload.userName })
 			.then((response) => {
 				return { 'token': response.data.token }
 			}, (error) => {
@@ -128,8 +128,9 @@ const actions = {
 	},
 
 	writeSharePromise({ commit, rootState }, payload) {
+		let endPoint = 'apps/polls/share/write/'
 		payload.share.pollId = rootState.event.id
-		return axios.post(OC.generateUrl('apps/polls/write/share'), { pollId: rootState.event.id, share: payload.share })
+		return axios.post(OC.generateUrl(endPoint), { pollId: rootState.event.id, share: payload.share })
 			.then((response) => {
 				commit('addShare', response.data)
 			}, (error) => {
@@ -139,7 +140,8 @@ const actions = {
 	},
 
 	removeShareAsync({ commit, getters, dispatch, rootState }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/remove/share'), { share: payload.share })
+		let endPoint = 'apps/polls/share/remove/'
+		return axios.post(OC.generateUrl(endPoint), { share: payload.share })
 			.then((response) => {
 				commit('removeShare', { 'share': payload.share })
 			}, (error) => {

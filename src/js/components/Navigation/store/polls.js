@@ -56,7 +56,9 @@ const getters = {
 
 const actions = {
 	loadPolls({ commit }) {
-		return axios.get(OC.generateUrl('apps/polls/get/events'))
+		let endPoint = 'apps/polls/events/get/'
+
+		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				commit('setPolls', { list: response.data })
 			}, (error) => {
@@ -65,8 +67,10 @@ const actions = {
 	},
 
 	deletePollPromise(context, payload) {
+		let endPoint = 'apps/polls/remove/poll'
+
 		return axios.post(
-			OC.generateUrl('apps/polls/remove/poll'),
+			OC.generateUrl(endPoint),
 			payload.event
 		)
 	}
