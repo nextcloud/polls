@@ -26,7 +26,10 @@
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<Avatar :disable-menu="true" :user="userId" :isGuest="!Boolean(OC.currentUser)" :display-name="computedDisplayName"
+		<Avatar :disable-menu="true" :user="userId"
+			:is-guest="!Boolean(OC.currentUser)"
+			:display-name="computedDisplayName"
+
 			:is-no-user="isNoUser" />
 		<div class="avatar" :class="iconClass" />
 
