@@ -68,7 +68,6 @@ OC.L10N.register(
     "Hide user names for admin" : "Nascondi i nomi utente degli amministratori",
     "Hidden to other users" : "Nascosto agli altri utenti",
     "Visible to other users" : "Visibile agli altri utenti",
-    "Delete this poll" : "Elimina questo sondaggio",
     "Expiration date" : "Data di scadenza",
     "Click to add a date" : "Fai clic per aggiungere una data",
     "Writing poll" : "Scrittura del sondaggio",

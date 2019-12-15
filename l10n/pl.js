@@ -68,7 +68,6 @@ OC.L10N.register(
     "Hide user names for admin" : "Ukryj nazwy użytkowników dla administratora",
     "Hidden to other users" : "Ukryta przed innymi użytkownikami",
     "Visible to other users" : "Widoczna dla innych użytkowników",
-    "Delete this poll" : "Usuń tę sondę",
     "Expiration date" : "Data wygaśnięcia",
     "Click to add a date" : "Kliknij, aby dodać datę",
     "Writing poll" : "Pisanie sondy",

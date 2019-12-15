@@ -68,7 +68,6 @@ OC.L10N.register(
     "Hide user names for admin" : "Απόκρυψη ονομάτος χρηστών για τον διαχειριστή",
     "Hidden to other users" : "Απόκρυψη στους άλλους χρήστες",
     "Visible to other users" : "Εμφάνιση στους άλλους χρήστες",
-    "Delete this poll" : "Διαγραφή δημοσκόπησης",
     "Expiration date" : "Ημερομηνία λήξης",
     "Click to add a date" : "Κάντε κλικ για να προσθέσετε ημερομηνία",
     "Writing poll" : "Εγγραφή δημοσκόπησης",
