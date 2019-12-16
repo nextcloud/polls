@@ -22,7 +22,6 @@
 
 import axios from '@nextcloud/axios'
 import sortBy from 'lodash/sortBy'
-import moment from 'moment'
 
 const defaultOptions = () => {
 	return {

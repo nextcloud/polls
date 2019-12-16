@@ -29,7 +29,7 @@
 				<div class="comment-item">
 					<user-div :user-id="comment.userId" />
 					<div class="date">
-						{{ realtiveDate(comment.date) }}
+						{{ moment(comment.dt).fromNow() }}
 					</div>
 				</div>
 				<div class="message wordwrap comment-content">
@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 import CommentAdd from './CommentAdd'
 import { mapState, mapGetters } from 'vuex'
 
@@ -63,13 +62,6 @@ export default {
 			'countComments',
 			'sortedComments'
 		])
-	},
-
-	methods: {
-		realtiveDate(date) {
-			return t('core', moment.utc(date).fromNow())
-		}
-
 	}
 }
 </script>

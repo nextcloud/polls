@@ -21,8 +21,6 @@
  *
  */
 
-import moment from 'moment'
-
 const getters = {
 	longDateFormat() {
 		return moment.localeData().longDateFormat('L')

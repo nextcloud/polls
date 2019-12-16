@@ -22,7 +22,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import moment from 'moment'
 
 const defaultEvent = () => {
 	return {
@@ -76,7 +75,7 @@ const getters = {
 	},
 
 	timeSpanExpiration: (state, getters) => {
-		if (getters.expired) {
+		if (getters.expire) {
 			return moment(state.expire).fromNow()
 		} else {
 			return t('polls', 'never')

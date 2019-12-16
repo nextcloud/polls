@@ -29,6 +29,7 @@ import store from './store'
 import router from './router'
 import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
+import moment from 'moment'
 
 import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from '@nextcloud/vue'
 
@@ -49,6 +50,10 @@ Vue.prototype.n = n
 Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
+
+moment.locale(OC.getLocale())
+
+Vue.prototype.moment = moment
 
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('AppContent', AppContent)

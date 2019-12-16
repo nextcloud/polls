@@ -31,7 +31,6 @@ import notification from './modules/notification'
 import votes from './modules/votes'
 import options from './modules/options'
 import shares from './modules/shares'
-import locale from './modules/locale'
 
 Vue.use(Vuex)
 
@@ -45,7 +44,6 @@ export default new Vuex.Store({
 		comments,
 		event,
 		notification,
-		locale,
 		votes,
 		options,
 		shares

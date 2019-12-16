@@ -91,7 +91,6 @@
 				v-model="eventExpiration"
 				v-bind="expirationDatePicker"
 				:disabled="!acl.allowEdit"
-				:time-picker-options="{ start: '00:00', step: '00:05', end: '23:55' }"
 				style="width:170px" />
 		</div>
 
@@ -132,7 +131,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
 	name: 'SideBarTab',
@@ -150,10 +149,6 @@ export default {
 			event: state => state.event,
 			acl: state => state.acl
 		}),
-
-		...mapGetters([
-			'languageCodeShort'
-		]),
 
 		// Add bindings
 		eventDescription: {
@@ -228,33 +223,43 @@ export default {
 		// 	}
 		// },
 
+		langPicker() {
+			return {
+				formatLocale: {
+					months: moment.months(),
+					monthsShort: moment.monthsShort(),
+					weekdays: moment.weekdays(),
+					weekdaysMin: moment.weekdaysMin(),
+					firstDayOfWeek: moment.localeData()._week.dow
+				}
+			}
+		},
+
 		expirationDatePicker() {
 			return {
 				editable: true,
 				minuteStep: 1,
 				type: 'datetime',
-				format: this.dateTimeFormat,
-				lang: this.langShort,
+				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+
+				// TODO: use this for version 2.x
+				lang: OC.getLanguage().split('-')[0],
+				firstDayOfWeek: moment.localeData()._week.dow,
+
+				// TODO: use this from version 3.x on
+				// lang: {
+				// 	formatLocale: {
+				//		firstDayOfWeek: moment.localeData()._week.dow,
+				// 		months: moment.months(),
+				// 		monthsShort: moment.monthsShort(),
+				// 		weekdays: moment.weekdays(),
+				// 		weekdaysMin: moment.weekdaysMin()
+				// 	}
+				// },
 				placeholder: t('polls', 'Expiration date'),
 				timePickerOptions: {
 					start: '00:00',
-					step: '00:30',
-					end: '23:30'
-				}
-			}
-		},
-
-		optionDatePicker() {
-			return {
-				editable: false,
-				minuteStep: 1,
-				type: 'datetime',
-				format: this.dateTimeFormat,
-				lang: this.languageCodeShort,
-				placeholder: t('polls', 'Click to add a date'),
-				timePickerOptions: {
-					start: '00:00',
-					step: '00:30',
+					step: '01:00',
 					end: '23:30'
 				}
 			}
