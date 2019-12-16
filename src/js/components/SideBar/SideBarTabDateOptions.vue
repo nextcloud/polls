@@ -61,7 +61,6 @@
 
 <script>
 import { Multiselect } from '@nextcloud/vue'
-import moment from 'moment'
 import { mapGetters, mapState } from 'vuex'
 import DatePollItem from '../Create/CreateDateItem'
 

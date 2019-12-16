@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 
 export default {
 	name: 'DatePollItem',
@@ -50,6 +49,7 @@ export default {
 			default: undefined
 		}
 	}
+
 }
 </script>
 

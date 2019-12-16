@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 import CommentAdd from './CommentAdd'
 import { mapState, mapGetters } from 'vuex'
 
