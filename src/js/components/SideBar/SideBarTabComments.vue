@@ -29,7 +29,7 @@
 				<div class="comment-item">
 					<user-div :user-id="comment.userId" />
 					<div class="date">
-						{{ realtiveDate(comment.date) }}
+						{{ moment(comment.dt).fromNow() }}
 					</div>
 				</div>
 				<div class="message wordwrap comment-content">
@@ -62,13 +62,6 @@ export default {
 			'countComments',
 			'sortedComments'
 		])
-	},
-
-	methods: {
-		realtiveDate(date) {
-			return t('core', moment.utc(date).fromNow())
-		}
-
 	}
 }
 </script>

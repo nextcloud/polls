@@ -26,7 +26,10 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Add a date option') }}
 			</label>
-			<DatePicker v-bind="optionDatePicker" style="width:100%" confirm
+			<DatePicker v-model="lastOption"
+				v-bind="optionDatePicker"
+				style="width:100%"
+				confirm
 				@change="addOption($event)" />
 		</div>
 
@@ -70,11 +73,11 @@ export default {
 	components: {
 		Multiselect,
 		DatePollItem
-
 	},
 
 	data() {
 		return {
+			lastOption: '',
 			move: {
 				step: 1,
 				unit: 'week',
@@ -95,8 +98,22 @@ export default {
 				editable: false,
 				minuteStep: 1,
 				type: 'datetime',
-				format: this.dateTimeFormat,
-				lang: this.languageCodeShort,
+				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+
+				// TODO: use this for version 2.x
+				lang: OC.getLanguage().split('-')[0],
+				firstDayOfWeek: moment.localeData()._week.dow,
+
+				// TODO: use this from version 3.x on
+				// lang: {
+				// 	formatLocale: {
+				//		firstDayOfWeek: moment.localeData()._week.dow,
+				// 		months: moment.months(),
+				// 		monthsShort: moment.monthsShort(),
+				// 		weekdays: moment.weekdays(),
+				// 		weekdaysMin: moment.weekdaysMin()
+				// 	}
+				// },
 				placeholder: t('polls', 'Click to add a date'),
 				timePickerOptions: {
 					start: '00:00',
