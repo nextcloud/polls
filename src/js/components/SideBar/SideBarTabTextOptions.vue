@@ -60,7 +60,7 @@ export default {
 			options: state => state.options
 		}),
 
-		...mapGetters(['languageCodeShort', 'sortedOptions'])
+		...mapGetters(['sortedOptions'])
 	},
 
 	methods: {

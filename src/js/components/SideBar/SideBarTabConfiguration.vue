@@ -87,7 +87,7 @@
 				{{ t('polls', 'Expires') }}
 			</label>
 
-			<date-picker v-show="event.expire"
+			<DatePicker v-show="event.expire"
 				v-model="eventExpiration"
 				v-bind="expirationDatePicker"
 				:disabled="!acl.allowEdit"

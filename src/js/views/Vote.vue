@@ -70,9 +70,7 @@ export default {
 		}),
 
 		...mapGetters([
-			'isExpirationSet',
-			'expired',
-			'timeSpanExpiration'
+			'expired'
 		]),
 
 		windowTitle: function() {
