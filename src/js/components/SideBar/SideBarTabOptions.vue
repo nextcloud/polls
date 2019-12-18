@@ -22,37 +22,41 @@
 
 <template>
 	<div>
-		<user-div :user-id="event.owner" :description="t('polls', 'Owner')" />
-		<div>{{ accessType }}</div>
-		<h3> {{ t('polls', 'Created') }} </h3>
-		<div>{{ timeSpanCreated }}</div>
-		<h3> {{ t('polls', 'Expires') }} </h3>
-		<div>{{ timeSpanExpiration }}</div>
-		<div>{{ countCommentsHint }}</div>
+		<SideBarTabDateOptions v-if="acl.allowEdit && event.type === 'datePoll'" />
+		<SideBarTabTextOptions v-if="acl.allowEdit && event.type === 'textPoll'" />
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
+import SideBarTabDateOptions from './SideBarTabDateOptions'
+import SideBarTabTextOptions from './SideBarTabTextOptions'
 
 export default {
-	name: 'SideBarTabInformationTab',
-	computed:	{
-		...mapState({
-			event: state => state.event
-		}),
+	name: 'SideBarTabOptions',
 
-		...mapGetters([
-			'accessType',
-			'countComments',
-			'timeSpanCreated',
-			'timeSpanExpiration'
-		]),
+	components: {
+		SideBarTabDateOptions,
+		SideBarTabTextOptions
+	},
 
-		countCommentsHint: function() {
-			return n('polls', 'There is %n comment', 'There are %n comments', this.countComments)
+	data() {
+		return {
+			lastOption: '',
+			move: {
+				step: 1,
+				unit: 'week',
+				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
+			}
 		}
+	},
+
+	computed: {
+		...mapState({
+			event: state => state.event,
+			acl: state => state.acl
+		})
+
 	}
 }
-
 </script>

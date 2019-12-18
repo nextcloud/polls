@@ -28,12 +28,8 @@
 			<SideBarTabComments />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit && event.type === 'datePoll'" :name="t('polls', 'Date options')" icon="icon-calendar">
-			<SideBarTabDateOptions />
-		</AppSidebarTab>
-
-		<AppSidebarTab v-if="acl.allowEdit && event.type === 'textPoll'" :name="t('polls', 'Text options')" icon="icon-toggle-filelist">
-			<SideBarTabTextOptions />
+		<AppSidebarTab :name="t('polls', 'options')" icon="icon-toggle-filelist">
+			<SideBarTabOptions />
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
@@ -50,8 +46,7 @@
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 import SideBarTabConfiguration from './SideBarTabConfiguration'
-import SideBarTabDateOptions from './SideBarTabDateOptions'
-import SideBarTabTextOptions from './SideBarTabTextOptions'
+import SideBarTabOptions from './SideBarTabOptions'
 import SideBarTabComments from './SideBarTabComments'
 import SideBarTabShare from './SideBarTabShare'
 import { mapState } from 'vuex'
@@ -61,8 +56,7 @@ export default {
 	components: {
 		SideBarTabConfiguration,
 		SideBarTabComments,
-		SideBarTabDateOptions,
-		SideBarTabTextOptions,
+		SideBarTabOptions,
 		SideBarTabShare,
 		AppSidebar,
 		AppSidebarTab
