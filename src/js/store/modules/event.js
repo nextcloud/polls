@@ -33,6 +33,7 @@ const defaultEvent = () => {
 		created: '',
 		access: 'public',
 		expire: null,
+		expiration: false,
 		isAnonymous: false,
 		fullAnonymous: false,
 		allowMaybe: false,
@@ -66,12 +67,8 @@ const getters = {
 		return moment(state.created).fromNow()
 	},
 
-	isExpirationSet: state => {
-		return Boolean(moment(state.expire).unix())
-	},
-
 	expired: (state, getters) => {
-		return (getters.isExpirationSet && moment(state.expire).diff() < 0)
+		return (state.expiration && moment(state.expire).diff() < 0)
 	},
 
 	timeSpanExpiration: (state, getters) => {
