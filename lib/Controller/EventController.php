@@ -160,6 +160,7 @@ class EventController extends Controller {
 			'created' => $this->event->getCreated(),
 			'access' => $this->event->getAccess(),
 			'expire' => $this->event->getExpire(),
+			'expiration' => $this->event->getExpiration(),
 			'isAnonymous' => boolval($this->event->getIsAnonymous()),
 			'fullAnonymous' => boolval($this->event->getFullAnonymous()),
 			'allowMaybe' => boolval($this->event->getAllowMaybe()),
@@ -239,12 +240,8 @@ class EventController extends Controller {
 			$this->event->setDescription($event['description']);
 
 			$this->event->setAccess($event['access']);
-			// $this->event->setExpire($event['expire']);
-			if ($event['expire']) {
-				$this->event->setExpire(date('Y-m-d H:i:s', strtotime($event['expire'])));
-			} else {
-				$this->event->setExpire(null);
-			}
+			$this->event->setExpiration($event['expiration']);
+			$this->event->setExpire(date('Y-m-d H:i:s', strtotime($event['expire'])));
 			$this->event->setIsAnonymous(intval($event['isAnonymous']));
 			$this->event->setFullAnonymous(intval($event['fullAnonymous']));
 			$this->event->setAllowMaybe(intval($event['allowMaybe']));

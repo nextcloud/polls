@@ -63,20 +63,8 @@ const mutations = {
 
 const getters = {
 
-	timeSpanCreated: state => {
-		return moment(state.created).fromNow()
-	},
-
 	expired: (state, getters) => {
 		return (state.expiration && moment(state.expire).diff() < 0)
-	},
-
-	timeSpanExpiration: (state, getters) => {
-		if (getters.expire) {
-			return moment(state.expire).fromNow()
-		} else {
-			return t('polls', 'never')
-		}
 	},
 
 	accessType: (state, getters, rootState) => {

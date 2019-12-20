@@ -25,7 +25,7 @@ import axios from '@nextcloud/axios'
 
 const defaultAcl = () => {
 	return {
-		userId: null,
+		userId: OC.getCurrentUser().uid,
 		pollId: null,
 		token: null,
 		isOwner: false,
