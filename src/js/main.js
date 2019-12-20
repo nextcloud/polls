@@ -45,15 +45,14 @@ Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
 Vue.config.performance = process.env.NODE_ENV !== 'production'
 
+moment.locale(OC.getLocale())
+
+Vue.prototype.moment = moment
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
-
-moment.locale(OC.getLocale())
-
-Vue.prototype.moment = moment
 
 Vue.component('PopoverMenu', PopoverMenu)
 Vue.component('AppContent', AppContent)

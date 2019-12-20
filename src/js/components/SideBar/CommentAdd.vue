@@ -44,7 +44,6 @@ export default {
 	computed: {
 		currentUser() {
 			return this.$store.state.acl.userId
-			// return OC.getCurrentUser().uid
 		}
 	},
 

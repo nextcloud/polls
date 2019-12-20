@@ -176,12 +176,12 @@ export default {
 		},
 
 		timeSpanCreated() {
-			return moment(this.poll.created).fromNow()
+			return moment.utc(this.poll.created).fromNow()
 		},
 
 		timeSpanExpiration() {
 			if (this.poll.expire) {
-				return moment(this.poll.expire).fromNow()
+				return moment.utc(this.poll.expire).fromNow()
 			} else {
 				return t('polls', 'never')
 			}

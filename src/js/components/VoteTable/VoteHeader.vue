@@ -24,9 +24,8 @@
 	<div class="voteHeader">
 		<h2>
 			{{ event.title }}
-			<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, timeSpanExpiration) }}</span>
-			<span v-if="!expired && isExpirationSet" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment(event.expire).format('LLLL')) }}</span>
-			<!-- <span v-if="!isExpirationSet" class="label success">{{ t('polls', 'No expiration date set') }}</span> -->
+			<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment(event.expire).format('LLLL')) }}</span>
+			<span v-if="!expired && event.expiration" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment(event.expire).format('LLLL')) }}</span>
 			<span v-if="event.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
 		</h2>
 		<h3>
@@ -55,9 +54,7 @@ export default {
 		}),
 
 		...mapGetters([
-			'isExpirationSet',
-			'expired',
-			'timeSpanExpiration'
+			'expired'
 		])
 
 	},

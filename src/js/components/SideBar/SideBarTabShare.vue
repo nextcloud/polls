@@ -113,8 +113,6 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'countShares',
-			'sortedShares',
 			'invitationShares',
 			'publicShares'
 		])

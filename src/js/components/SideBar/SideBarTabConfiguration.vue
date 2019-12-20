@@ -23,103 +23,53 @@
 <template>
 	<div>
 		<div class="configBox">
-			<label v-if="writingPoll" class="icon-loading-small title">
-				{{ t('polls', 'Saving') }}
-			</label>
-			<label v-else class="icon-checkmark title">
-				{{ t('polls', 'Saved') }}
-			</label>
+			<label v-if="writingPoll" class="icon-loading-small title"> {{ t('polls', 'Saving') }} </label>
+			<label v-else class="icon-checkmark title"> {{ t('polls', 'Saved') }} </label>
 		</div>
 
 		<div v-if="acl.allowEdit" class="configBox">
-			<label class="icon-sound title">
-				{{ t('polls', 'Title') }}
-			</label>
+			<label class="icon-sound title"> {{ t('polls', 'Title') }} </label>
 			<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
 
 		<div v-if="acl.allowEdit" class="configBox">
-			<label class="icon-edit title">
-				{{ t('polls', 'Description') }}
-			</label>
+			<label class="icon-edit title"> {{ t('polls', 'Description') }} </label>
 			<textarea v-model="eventDescription" />
-			<!-- <textarea v-if="acl.allowEdit" :value="event.description" @input="updateDescription" /> -->
 		</div>
 
 		<div class="configBox">
-			<label class="title icon-category-customization">
-				{{ t('polls', 'Poll configurations') }}
-			</label>
+			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
 
-			<input id="allowMaybe"
-				v-model="eventAllowMaybe"
-				:disabled="!acl.allowEdit"
-				type="checkbox"
-				class="checkbox">
-			<label for="allowMaybe" class="title">
-				{{ t('polls', 'Allow "maybe" vote') }}
-			</label>
+			<input id="allowMaybe" v-model="eventAllowMaybe"
+				type="checkbox" class="checkbox">
+			<label for="allowMaybe" class="title"> {{ t('polls', 'Allow "maybe" vote') }} </label>
 
 			<input id="anonymous" v-model="eventIsAnonymous"
-				:disabled="!acl.allowEdit"
-				type="checkbox"
-				class="checkbox">
-			<label for="anonymous" class="title">
-				{{ t('polls', 'Anonymous poll') }}
-			</label>
+				type="checkbox" class="checkbox">
+			<label for="anonymous" class="title"> {{ t('polls', 'Anonymous poll') }} </label>
 
-			<input v-show="event.isAnonymous"
-				id="trueAnonymous"
-				v-model="eventFullAnonymous"
-				:disabled="!acl.allowEdit"
-				type="checkbox"
-				class="checkbox">
-			<label v-show="event.isAnonymous" class="title" for="trueAnonymous">
-				{{ t('polls', 'Hide user names for admin') }}
-			</label>
+			<input v-show="event.isAnonymous" id="trueAnonymous" v-model="eventFullAnonymous"
+				type="checkbox" class="checkbox">
+			<label v-show="event.isAnonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
 
-			<input id="expiration"
-				v-model="eventExpiration"
-				:disabled="!acl.allowEdit"
-				type="checkbox"
-				class="checkbox">
-			<label class="title" for="expirtion">
-				{{ t('polls', 'Expires') }}
-			</label>
+			<input id="expiration" v-model="eventExpiration"
+				type="checkbox" class="checkbox">
+			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
 
-			<date-picker v-show="event.expire"
-				v-model="eventExpiration"
-				v-bind="expirationDatePicker"
-				:disabled="!acl.allowEdit"
-				style="width:170px" />
+			<DatePicker v-show="eventExpiration"
+				v-model="eventExpire" v-bind="expirationDatePicker" style="width:170px" />
 		</div>
 
 		<div class="configBox">
-			<label class="title icon-category-auth">
-				{{ t('polls', 'Access') }}
-			</label>
+			<label class="title icon-category-auth"> {{ t('polls', 'Access') }} </label>
 
-			<input id="hidden"
-				v-model="eventAccess"
-				:disabled="!acl.allowEdit"
-				type="radio"
-				value="hidden"
-				class="radio">
-			<label for="hidden" class="title">
-				<div class="title icon-category-security" />
-				<span>{{ t('polls', 'Hidden to other users') }}</span>
-			</label>
+			<input id="hidden" v-model="eventAccess" value="hidden"
+				type="radio" class="radio">
+			<label for="hidden" class="title">{{ t('polls', 'Hidden to other users') }} </label>
 
-			<input id="public"
-				v-model="eventAccess"
-				:disabled="!acl.allowEdit"
-				type="radio"
-				value="public"
-				class="radio">
-			<label for="public" class="title">
-				<div class="title icon-link" />
-				<span>{{ t('polls', 'Visible to other users') }}</span>
-			</label>
+			<input id="public" v-model="eventAccess" value="public"
+				type="radio" class="radio">
+			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
 		<button class="button btn primary" @click="switchDeleted()">
@@ -178,12 +128,21 @@ export default {
 			}
 		},
 
-		eventExpiration: {
+		eventExpire: {
 			get() {
-				return this.event.expire
+				return moment.utc(this.event.expire)
 			},
 			set(value) {
-				this.writeValue({ 'expire': value })
+				this.writeValue({ 'expire': moment(value).utc().format() })
+			}
+		},
+
+		eventExpiration: {
+			get() {
+				return this.event.expiration
+			},
+			set(value) {
+				this.writeValue({ 'expiration': value })
 			}
 		},
 
