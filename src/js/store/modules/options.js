@@ -113,7 +113,7 @@ const actions = {
 
 		if (rootState.event.type === 'datePoll') {
 			option.timestamp = moment(payload.pollOptionText).unix()
-			option.pollOptionText = moment.utc(payload.pollOptionText).format('YYYY-MM-DD HH:mm:ss')
+			option.pollOptionText = moment.utc(payload.pollOptionText).format()
 
 		} else if (rootState.event.type === 'textPoll') {
 			option.timestamp = 0

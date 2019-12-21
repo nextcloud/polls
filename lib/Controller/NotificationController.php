@@ -157,70 +157,70 @@ class NotificationController extends Controller {
 		}
 	}
 
-	/**
-	 * @param int $pollId
-	 * @param string $from
-	 */
-	private function sendNotifications($pollId, $from) {
-		$poll = $this->eventMapper->find($pollId);
-		$notifications = $this->mapper->findAllByPoll($pollId);
-		foreach ($notifications as $notification) {
-			if ($from === $notification->getUserId()) {
-				continue;
-			}
-			$recUser = $this->userMgr->get($notification->getUserId());
-			if (!$recUser instanceof IUser) {
-				continue;
-			}
-			$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
-			if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				continue;
-			}
-			$url = $this->urlGenerator->getAbsoluteURL(
-				$this->urlGenerator->linkToRoute('polls.page.vote',
-					array('hash' => $poll->getHash()))
-			);
-
-			$sendUser = $this->userMgr->get($from);
-			$sender = $from;
-			if ($sendUser instanceof IUser) {
-				$sender = $sendUser->getDisplayName();
-			}
-
-			$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
-			$trans = $this->transFactory->get('polls', $lang);
-			$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
-				'user' => $sender,
-				'title' => $poll->getTitle(),
-				'link' => $url,
-			]);
-			$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
-			$emailTemplate->addHeader();
-			$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
-
-			$emailTemplate->addBodyText(str_replace(
-				['{user}', '{title}'],
-				[$sender, $poll->getTitle()],
-				$trans->t('{user} participated in the poll "{title}"')
-			));
-
-			$emailTemplate->addBodyButton(
-				htmlspecialchars($trans->t('Go to poll')),
-				$url,
-				/** @scrutinizer ignore-type */ false
-			);
-
-			$emailTemplate->addFooter();
-			try {
-				$message = $this->mailer->createMessage();
-				$message->setTo([$email => $recUser->getDisplayName()]);
-				$message->useTemplate($emailTemplate);
-				$this->mailer->send($message);
-			} catch (\Exception $e) {
-				$this->logger->logException($e, ['app' => 'polls']);
-			}
-		}
-	}
+	// /**
+	//  * @param int $pollId
+	//  * @param string $from
+	//  */
+	// private function sendNotifications($pollId, $from) {
+	// 	$poll = $this->eventMapper->find($pollId);
+	// 	$notifications = $this->mapper->findAllByPoll($pollId);
+	// 	foreach ($notifications as $notification) {
+	// 		if ($from === $notification->getUserId()) {
+	// 			continue;
+	// 		}
+	// 		$recUser = $this->userMgr->get($notification->getUserId());
+	// 		if (!$recUser instanceof IUser) {
+	// 			continue;
+	// 		}
+	// 		$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
+	// 		if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+	// 			continue;
+	// 		}
+	// 		$url = $this->urlGenerator->getAbsoluteURL(
+	// 			$this->urlGenerator->linkToRoute('polls.page.vote',
+	// 				array('hash' => $poll->getHash()))
+	// 		);
+	//
+	// 		$sendUser = $this->userMgr->get($from);
+	// 		$sender = $from;
+	// 		if ($sendUser instanceof IUser) {
+	// 			$sender = $sendUser->getDisplayName();
+	// 		}
+	//
+	// 		$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
+	// 		$trans = $this->transFactory->get('polls', $lang);
+	// 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
+	// 			'user' => $sender,
+	// 			'title' => $poll->getTitle(),
+	// 			'link' => $url,
+	// 		]);
+	// 		$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
+	// 		$emailTemplate->addHeader();
+	// 		$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
+	//
+	// 		$emailTemplate->addBodyText(str_replace(
+	// 			['{user}', '{title}'],
+	// 			[$sender, $poll->getTitle()],
+	// 			$trans->t('{user} participated in the poll "{title}"')
+	// 		));
+	//
+	// 		$emailTemplate->addBodyButton(
+	// 			htmlspecialchars($trans->t('Go to poll')),
+	// 			$url,
+	// 			/** @scrutinizer ignore-type */ false
+	// 		);
+	//
+	// 		$emailTemplate->addFooter();
+	// 		try {
+	// 			$message = $this->mailer->createMessage();
+	// 			$message->setTo([$email => $recUser->getDisplayName()]);
+	// 			$message->useTemplate($emailTemplate);
+	// 			$this->mailer->send($message);
+	// 		} catch (\Exception $e) {
+	// 			$this->logger->logException($e, ['app' => 'polls']);
+	// 		}
+	// 	}
+	// }
 
 	/**
 	 * @param string $token

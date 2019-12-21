@@ -207,7 +207,7 @@ class CommentController extends Controller {
 	 * @param string $message
 	 * @return DataResponse
 	 */
-	public function delete($comment, $userId) {
+	public function delete($comment) {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}

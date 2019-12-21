@@ -130,10 +130,10 @@ export default {
 
 		eventExpire: {
 			get() {
-				return moment.utc(this.event.expire)
+				return moment.utc(this.event.expire).local()
 			},
 			set(value) {
-				this.writeValue({ 'expire': moment(value).utc().format() })
+				this.writeValue({ 'expire': moment.local(value).utc().format() })
 			}
 		},
 

@@ -59,7 +59,7 @@ class ShareMapper extends QBMapper {
 	/**
 	 * @param string $token
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Share
 	 */
 
 	public function findByToken($token) {

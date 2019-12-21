@@ -41,7 +41,7 @@ class OptionMapper extends QBMapper {
 	/**
 	 * @param int $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Option
 	 */
 
 	public function find($id) {

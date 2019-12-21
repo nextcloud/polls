@@ -209,7 +209,7 @@ class EventController extends Controller {
 
 			if (!$this->acl->getAllowEdit()) {
 				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
-				return new DataResponse('Unauthorized write attempt.', Http::STATUS_UNAUTHORIZED);
+				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
 			}
 
 			if ($this->event->getDeleted() !== $event['deleted']) {
