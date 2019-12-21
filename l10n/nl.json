@@ -48,7 +48,6 @@
     "%n successfully saved" : "%n succesvol opgeslagen",
     "Shift all date options" : "Verschuif alle datums opties",
     "Click to add a date" : "Klik om een datum in te stellen",
-    "_There is %n comment_::_There are %n comments_" : ["Er is %n reactie","Er zijn %n reacties"],
     "Click here to add a poll" : "Klik hier om een peiling toe te voegen",
     "Do you want to delete \"%n\"?" : "Wil je \"%n\" echt verwijderen?",
     "No, keep poll." : "Nee, bewaar de peiling",

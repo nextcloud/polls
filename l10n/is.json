@@ -48,7 +48,6 @@
     "%n successfully saved" : "Tókst að vista %n",
     "Shift all date options" : "Hliðra öllum valkostum dagsetninga",
     "Click to add a date" : "Smelltu til að bæta við dagsetningu",
-    "_There is %n comment_::_There are %n comments_" : ["Það er %n athugasemd","Það eru %n athugasemdir"],
     "Click here to add a poll" : "Smelltu hér til að bæta við könnun",
     "Do you want to delete \"%n\"?" : "Viltu eyða \"%n\"?",
     "No, keep poll." : "Nei, halda könnun.",

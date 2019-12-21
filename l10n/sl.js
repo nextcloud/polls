@@ -50,7 +50,6 @@ OC.L10N.register(
     "%n successfully saved" : "Anketa %s je uspešno shranjena",
     "Shift all date options" : "Možnosti za premikanje datumov",
     "Click to add a date" : "Kliknite za dodajanje datuma",
-    "_There is %n comment_::_There are %n comments_" : ["Objavljena je %n opomba","Objavljeni sta %n opombi","Objavljene so %n opombe","Objavljenih je %n opomb"],
     "Click here to add a poll" : "Kliknite za dodajanje nove ankete",
     "Do you want to delete \"%n\"?" : "Ali res želite izbrisati anketo » %n «",
     "No, keep poll." : "Ne, ohrani anketo",

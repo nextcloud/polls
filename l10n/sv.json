@@ -48,7 +48,6 @@
     "%n successfully saved" : "%n sparades",
     "Shift all date options" : "Skjut på alla datumalternativ",
     "Click to add a date" : "Klicka för att lägga till ett datum",
-    "_There is %n comment_::_There are %n comments_" : ["Det finns %n kommentar","Det finns %n kommentarer"],
     "Click here to add a poll" : "Klicka för att lägga till omröstning",
     "Do you want to delete \"%n\"?" : "Vill du ta bort \"%n\"?",
     "No, keep poll." : "Nej, behåll omröstningen.",

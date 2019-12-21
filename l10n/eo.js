@@ -50,7 +50,6 @@ OC.L10N.register(
     "%n successfully saved" : "%n sukcese konservita",
     "Shift all date options" : "Movi ĉiujn datajn opciojn",
     "Click to add a date" : "Alklaku por aldoni daton",
-    "_There is %n comment_::_There are %n comments_" : ["Estas %n komento","Estas %n komentoj"],
     "Click here to add a poll" : "Alklaku ĉi tie por aldoni enketon",
     "Do you want to delete \"%n\"?" : "Ĉu vi volas forigi „%n“?",
     "No, keep poll." : "Ne, teni enketon.",

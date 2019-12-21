@@ -50,7 +50,6 @@ OC.L10N.register(
     "%n successfully saved" : "S'ha desat %n correctament",
     "Shift all date options" : "Desplaça totes les opcions de dates",
     "Click to add a date" : "Feu clic per afegir una data",
-    "_There is %n comment_::_There are %n comments_" : ["Hi ha %n comentari","Hi ha %n comentaris"],
     "Click here to add a poll" : "Feu clic aquí per afegir una nova enquesta",
     "Do you want to delete \"%n\"?" : "Esteu segurs que voleu suprimir \"%n\"?",
     "No, keep poll." : "No, manté l'enquesta.",

@@ -42,7 +42,6 @@ OC.L10N.register(
     "Title must not be empty!" : "Nimi ei voi olla tyhjä!",
     "%n successfully saved" : "%n tallennettu onnistuneesti",
     "Click to add a date" : "Napsauta lisätäksesi päivän",
-    "_There is %n comment_::_There are %n comments_" : ["%n kommentti","%n kommenttia"],
     "Click here to add a poll" : "Napsauta tästä lisätäksesi kyselyn",
     "Do you want to delete \"%n\"?" : "Haluatko että \"%n\" poistetaan?",
     "No, keep poll." : "Ei, säilytä kysely",

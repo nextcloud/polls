@@ -50,7 +50,6 @@ OC.L10N.register(
     "%n successfully saved" : "%nを保存しました",
     "Shift all date options" : "全ての日付オプションを移動",
     "Click to add a date" : "クリックして日付を追加",
-    "_There is %n comment_::_There are %n comments_" : ["%n件のコメント"],
     "Click here to add a poll" : "クリックして投票を追加",
     "Do you want to delete \"%n\"?" : "%nを削除しますか？",
     "No, keep poll." : "いいえ、投票を残します",
