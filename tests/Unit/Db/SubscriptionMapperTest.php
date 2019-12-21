@@ -25,18 +25,18 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Notification;
-use OCA\Polls\Db\NotificationMapper;
+use OCA\Polls\Db\Subscription;
+use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class NotificationMapperTest extends UnitTestCase {
+class SubscriptionMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var NotificationMapper */
-	private $notificationMapper;
+	/** @var SubscriptionMapper */
+	private $subscriptionMapper;
 	/** @var EventMapper */
 	private $eventMapper;
 
@@ -46,52 +46,52 @@ class NotificationMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->notificationMapper = new NotificationMapper($this->con);
+		$this->subscriptionMapper = new SubscriptionMapper($this->con);
 		$this->eventMapper = new EventMapper($this->con);
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 *
-	 * @return Notification
+	 * @return Subscription
 	 */
 	public function testCreate() {
 		/** @var Event $event */
 		$event = $this->fm->instance('OCA\Polls\Db\Event');
 		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
 
-		/** @var Notification $notification */
-		$notification = $this->fm->instance('OCA\Polls\Db\Notification');
-		$notification->setPollId($event->getId());
-		$this->assertInstanceOf(Notification::class, $this->notificationMapper->insert($notification));
+		/** @var Subscription $subscription */
+		$subscription = $this->fm->instance('OCA\Polls\Db\Subscription');
+		$subscription->setPollId($event->getId());
+		$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->insert($subscription));
 
-		return $notification;
+		return $subscription;
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Notification $notification
-	 * @return Notification
+	 * @param Subscription $subscription
+	 * @return Subscription
 	 */
-	public function testUpdate(Notification $notification) {
+	public function testUpdate(Subscription $subscription) {
 		$newUserId = Faker::firstNameMale();
-		$notification->setUserId($newUserId());
-		$this->notificationMapper->update($notification);
+		$subscription->setUserId($newUserId());
+		$this->subscriptionMapper->update($subscription);
 
-		return $notification;
+		return $subscription;
 	}
 
 	/**
 	 * Delete the previously created entries from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Notification $notification
+	 * @param Subscription $subscription
 	 */
-	public function testDelete(Notification $notification) {
-		$event = $this->eventMapper->find($notification->getPollId());
-		$this->notificationMapper->delete($notification);
+	public function testDelete(Subscription $subscription) {
+		$event = $this->eventMapper->find($subscription->getPollId());
+		$this->subscriptionMapper->delete($subscription);
 		$this->eventMapper->delete($event);
 	}
 }
