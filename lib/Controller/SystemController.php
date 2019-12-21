@@ -83,19 +83,7 @@ class SystemController extends Controller {
 	}
 
 	/**
-	 * Get the endor  name of the installation ('ownCloud' or 'Nextcloud')
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	private function getVendor() {
-		require \OC::$SERVERROOT . '/version.php';
-
-		/** @var string $vendor */
-		return (string) $vendor;
-	}
-
-	/**
-	 * Get a list of NC users and groups
+	 * Get a list of NC users, groups and contacts
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @param string $query
@@ -161,9 +149,6 @@ class SystemController extends Controller {
 
 			// $this->logger->error(json_encode($contacts));
 			foreach ($contacts as $contact) {
-				$group = '';
-				$org = '';
-
 				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 
 					$emailAdresses = $contact['EMAIL'];

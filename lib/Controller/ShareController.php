@@ -190,7 +190,7 @@ class ShareController extends Controller {
 		}
 
 		if (!$this->systemController->validatePublicUsername($userShare->getPollId(), $userName)) {
-			return new DataResponse('invalid userName', Http::STATUS_CONFLICT);
+			return new DataResponse(['message' => 'invalid userName'], Http::STATUS_CONFLICT);
 		}
 
 		if ($userShare->getType() === 'mail') {

@@ -59,7 +59,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getDeleted()
  * @method void setDeleted(integer $value)
  * @method integer getDeleteDate()
- * @method void setDeleteDate(integer $value)
+ * @method void setDeleteDate(string $value)
  */
 class Event extends Entity implements JsonSerializable {
 	protected $type;

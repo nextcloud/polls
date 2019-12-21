@@ -84,7 +84,6 @@ class Acl implements JsonSerializable {
 	 *
 	 */
 	public function __construct(
-		string $appName,
 		$userId,
 		ILogger $logger,
 		IGroupManager $groupManager,
