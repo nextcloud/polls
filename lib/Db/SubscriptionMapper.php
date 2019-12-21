@@ -28,14 +28,14 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
-class NotificationMapper extends QBMapper {
+class SubscriptionMapper extends QBMapper {
 
 	/**
 	 * NotificationMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_notif', '\OCA\Polls\Db\Notification');
+		parent::__construct($db, 'polls_notif', '\OCA\Polls\Db\Subscription');
 	}
 
 	/**

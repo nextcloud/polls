@@ -29,7 +29,7 @@
 			<VoteHeader />
 			<VoteHeaderPublic />
 			<VoteTable />
-			<Notification />
+			<Subscription />
 		</div>
 
 		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
@@ -41,14 +41,14 @@
 import VoteHeader from '../components/VoteTable/VoteHeader'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import VoteTable from '../components/VoteTable/VoteTable'
-import Notification from '../components/Notification/Notification'
+import Subscription from '../components/Subscription/Subscription'
 import SideBar from '../components/SideBar/SideBar'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'Vote',
 	components: {
-		Notification,
+		Subscription,
 		VoteHeader,
 		VoteHeaderPublic,
 		VoteTable,

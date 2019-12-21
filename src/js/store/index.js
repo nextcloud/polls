@@ -27,7 +27,7 @@ import Vuex from 'vuex'
 import acl from './modules/acl'
 import comments from './modules/comments'
 import event from './modules/event'
-import notification from './modules/notification'
+import subscription from './modules/subscription'
 import votes from './modules/votes'
 import options from './modules/options'
 import shares from './modules/shares'
@@ -43,7 +43,7 @@ export default new Vuex.Store({
 		acl,
 		comments,
 		event,
-		notification,
+		subscription,
 		votes,
 		options,
 		shares

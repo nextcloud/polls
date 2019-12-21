@@ -47,10 +47,10 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\Notification;
-use OCA\Polls\Db\NotificationMapper;
+use OCA\Polls\Db\Subscription;
+use OCA\Polls\Db\SubscriptionMapper;
 
-class NotificationController extends Controller {
+class SubscriptionController extends Controller {
 
 	private $userId;
 	private $mapper;
@@ -68,10 +68,10 @@ class NotificationController extends Controller {
 	private $mailer;
 
 	/**
-	 * NotificationController constructor.
+	 * SubscriptionController constructor.
 	 * @param string $appName
 	 * @param $UserId
-	 * @param NotificationMapper $mapper
+	 * @param SubscriptionMapper $mapper
 	 * @param IRequest $request
 	 * @param ILogger $logger
 	 * @param ShareMapper $shareMapper
@@ -88,7 +88,7 @@ class NotificationController extends Controller {
 	public function __construct(
 		string $appName,
 		$UserId,
-		NotificationMapper $mapper,
+		SubscriptionMapper $mapper,
 		IRequest $request,
 		ILogger $logger,
 		ShareMapper $shareMapper,
@@ -146,81 +146,16 @@ class NotificationController extends Controller {
 	 */
 	public function set($pollId, $subscribed) {
 		if ($subscribed) {
-			$notification = new Notification();
-			$notification->setPollId($pollId);
-			$notification->setUserId($this->userId);
-			$this->mapper->insert($notification);
+			$subscription = new Subscription();
+			$subscription->setPollId($pollId);
+			$subscription->setUserId($this->userId);
+			$this->mapper->insert($subscription);
 			return true;
 		} else {
 			$this->mapper->unsubscribe($pollId, $this->userId);
 			return false;
 		}
 	}
-
-	// /**
-	//  * @param int $pollId
-	//  * @param string $from
-	//  */
-	// private function sendNotifications($pollId, $from) {
-	// 	$poll = $this->eventMapper->find($pollId);
-	// 	$notifications = $this->mapper->findAllByPoll($pollId);
-	// 	foreach ($notifications as $notification) {
-	// 		if ($from === $notification->getUserId()) {
-	// 			continue;
-	// 		}
-	// 		$recUser = $this->userMgr->get($notification->getUserId());
-	// 		if (!$recUser instanceof IUser) {
-	// 			continue;
-	// 		}
-	// 		$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
-	// 		if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-	// 			continue;
-	// 		}
-	// 		$url = $this->urlGenerator->getAbsoluteURL(
-	// 			$this->urlGenerator->linkToRoute('polls.page.vote',
-	// 				array('hash' => $poll->getHash()))
-	// 		);
-	//
-	// 		$sendUser = $this->userMgr->get($from);
-	// 		$sender = $from;
-	// 		if ($sendUser instanceof IUser) {
-	// 			$sender = $sendUser->getDisplayName();
-	// 		}
-	//
-	// 		$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
-	// 		$trans = $this->transFactory->get('polls', $lang);
-	// 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
-	// 			'user' => $sender,
-	// 			'title' => $poll->getTitle(),
-	// 			'link' => $url,
-	// 		]);
-	// 		$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
-	// 		$emailTemplate->addHeader();
-	// 		$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
-	//
-	// 		$emailTemplate->addBodyText(str_replace(
-	// 			['{user}', '{title}'],
-	// 			[$sender, $poll->getTitle()],
-	// 			$trans->t('{user} participated in the poll "{title}"')
-	// 		));
-	//
-	// 		$emailTemplate->addBodyButton(
-	// 			htmlspecialchars($trans->t('Go to poll')),
-	// 			$url,
-	// 			/** @scrutinizer ignore-type */ false
-	// 		);
-	//
-	// 		$emailTemplate->addFooter();
-	// 		try {
-	// 			$message = $this->mailer->createMessage();
-	// 			$message->setTo([$email => $recUser->getDisplayName()]);
-	// 			$message->useTemplate($emailTemplate);
-	// 			$this->mailer->send($message);
-	// 		} catch (\Exception $e) {
-	// 			$this->logger->logException($e, ['app' => 'polls']);
-	// 		}
-	// 	}
-	// }
 
 	/**
 	 * @param string $token
@@ -244,7 +179,7 @@ class NotificationController extends Controller {
 		} elseif ($share->getType() === 'contact') {
 			$contacts = $contactsManager->search($share->getUserId(), array('UID'));
 			if (is_array($contacts)) {
-				$contact = $contact[0];
+				$contact = $contacts[0];
 
 				$recipients[] = array(
 					'userId' => $share->getUserId(),

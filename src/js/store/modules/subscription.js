@@ -23,17 +23,17 @@
 
 import axios from '@nextcloud/axios'
 
-const defaultNotification = () => {
+const defaultSubscription = () => {
 	return {
 		subscribed: false
 	}
 }
 
-const state = defaultNotification()
+const state = defaultSubscription()
 
 const mutations = {
 
-	setNotification(state, payload) {
+	setSubscription(state, payload) {
 		state.subscribed = payload
 	}
 
@@ -41,17 +41,17 @@ const mutations = {
 
 const actions = {
 	getSubscription({ commit }, payload) {
-		axios.get(OC.generateUrl('apps/polls/notification/get/' + payload.pollId))
+		axios.get(OC.generateUrl('apps/polls/subscription/get/' + payload.pollId))
 			.then((response) => {
-				commit('setNotification', true)
+				commit('setSubscription', true)
 			})
 			.catch(() => {
-				commit('setNotification', false)
+				commit('setSubscription', false)
 			})
 	},
 
 	writeSubscriptionPromise({ commit }, payload) {
-		return axios.post(OC.generateUrl('apps/polls/notification/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
+		return axios.post(OC.generateUrl('apps/polls/subscription/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
 			.then((response) => {
 			}, (error) => {
 				console.error(error.response)

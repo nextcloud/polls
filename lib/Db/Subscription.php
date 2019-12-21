@@ -34,7 +34,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getPollId()
  * @method void setPollId(integer $value)
  */
-class Notification extends Entity implements JsonSerializable {
+class Subscription extends Entity implements JsonSerializable {
 	protected $pollId;
 	protected $userId;
 
