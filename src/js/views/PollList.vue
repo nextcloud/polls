@@ -35,7 +35,7 @@
 				class="table">
 				<PollListItem key="0" :header="true" />
 				<li is="PollListItem"
-					v-for="(poll, index) in pollList"
+					v-for="(poll, index) in filteredList"
 					:key="poll.id"
 					:poll="poll"
 					@deletePoll="removePoll(index, poll)"
@@ -61,8 +61,7 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			loading: true,
-			pollList: this.$store.state.polls.list
+			loading: true
 		}
 	},
 
@@ -72,30 +71,25 @@ export default {
 			'publicPolls',
 			'hiddenPolls',
 			'deletedPolls'
-		])
+		]),
 
-		// pollList() {
-		// 	return this.$store.state.polls.list
-		// }
-	},
-
-	watch: {
-		$route(to, from) {
-			if (this.$route.params.type === 'all') {
-				this.pollList = this.$store.state.polls.list
-			} else if (this.$route.params.type === 'my') {
-				this.pollList = this.myPolls
+		filteredList() {
+			if (this.$route.params.type === 'my') {
+				return this.myPolls
 			} else if (this.$route.params.type === 'public') {
-				this.pollList = this.publicPolls
+				return this.publicPolls
 			} else if (this.$route.params.type === 'hidden') {
-				this.pollList = this.hiddenPolls
+				return this.hiddenPolls
 			} else if (this.$route.params.type === 'deleted') {
-				this.pollList = this.deletedPolls
+				return this.deletedPolls
+			} else {
+				return this.$store.state.polls.list
 			}
 		}
+
 	},
 
-	created() {
+	mounted() {
 		this.refreshPolls()
 	},
 

@@ -38,10 +38,20 @@ export default new Router({
 	linkActiveClass: 'active',
 	routes: [
 		{
-			path: '/:index(index.php/)?apps/polls/:type?',
+			path: '/:index(index.php/)?apps/polls',
+			redirect: {
+				name: 'list',
+				params: {
+					type: 'all'
+				}
+			}
+		},
+		{
+			path: '/:index(index.php/)?apps/polls/list/:type?',
 			components: {
 				default: List
 			},
+			alias: '/:index(index.php/)?apps/polls/',
 			props: true,
 			name: 'list'
 		},
