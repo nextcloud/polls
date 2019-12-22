@@ -38,6 +38,9 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Notice;
+use OCA\Polls\Db\NoticeMapper;
+use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
 class OptionController extends Controller {
@@ -47,6 +50,8 @@ class OptionController extends Controller {
 
 	private $groupManager;
 	private $eventMapper;
+	private $noticeMapper;
+	private $logService;
 	private $acl;
 
 	/**
@@ -57,6 +62,8 @@ class OptionController extends Controller {
 	 * @param OptionMapper $mapper
 	 * @param IGroupManager $groupManager
 	 * @param EventMapper $eventMapper
+	 * @param NoticeMapper $noticeMapper
+	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
 
@@ -67,6 +74,8 @@ class OptionController extends Controller {
 		OptionMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
+		NoticeMapper $noticeMapper,
+		LogService $logService,
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
@@ -74,6 +83,8 @@ class OptionController extends Controller {
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
+		$this->noticeMapper = $noticeMapper;
+		$this->logService = $logService;
 		$this->acl = $acl;
 	}
 
@@ -152,31 +163,24 @@ class OptionController extends Controller {
 
 		try {
 			$Event = $this->eventMapper->find($option['pollId']);
+			$this->acl->setPollId($option['pollId']);
 
-			if (!\OC::$server->getUserSession()->isLoggedIn()
-				|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
-			) {
+			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
+			$NewOption = new Option();
 
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+			$NewOption->setPollId($option['pollId']);
+			$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
+			$NewOption->setTimestamp($option['timestamp']);
 
-
-		$NewOption = new Option();
-
-		$NewOption->setPollId($option['pollId']);
-		$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-		$NewOption->setTimestamp($option['timestamp']);
-
-		try {
 			$this->mapper->insert($NewOption);
+			$this->logService->setLog($option['pollId'], 'addOption');
+			return new DataResponse($NewOption, Http::STATUS_OK);
+
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
-		return new DataResponse($NewOption, Http::STATUS_OK);
 
 	}
 
@@ -190,23 +194,22 @@ class OptionController extends Controller {
 
 		try {
 			$updateOption = $this->mapper->find($option['id']);
-			$Event = $this->eventMapper->find($updateOption->getPollId());
 
-			if (!\OC::$server->getUserSession()->isLoggedIn()
-				&& (!$this->groupManager->isAdmin($this->userId) || ($Event->getOwner() === $this->userId))
-			) {
+			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
 
 			$updateOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$updateOption->setTimestamp($option['timestamp']);
+
 			$this->mapper->update($updateOption);
+			$this->logService->setLog($option['pollId'], 'updateOption');
+
+			return new DataResponse($updateOption, Http::STATUS_OK);
 
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
-		return new DataResponse($updateOption, Http::STATUS_OK);
 	}
 
 	/**
@@ -218,27 +221,22 @@ class OptionController extends Controller {
 	public function remove($option) {
 		// throw new \Exception( gettype($option) );
 		try {
-			$Event = $this->eventMapper->find($option['pollId']);
 
-			if (!\OC::$server->getUserSession()->isLoggedIn()
-				|| (!$this->groupManager->isAdmin($this->userId) && ($Event->getOwner() !== $this->userId))
-			) {
+			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
 
-		try {
 			$this->mapper->remove($option['id']);
+			$this->logService->setLog($option['pollId'], 'deleteOption');
+
+			return new DataResponse(array(
+				'action' => 'deleted',
+				'optionId' => $option['id']
+			), Http::STATUS_OK);
+
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
-		return new DataResponse(array(
-			'action' => 'deleted',
-			'optionId' => $option['id']
-		), Http::STATUS_OK);
 
 	}
 

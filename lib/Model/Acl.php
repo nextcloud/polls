@@ -209,7 +209,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowVote(): bool {
-		if ($this->getAllowView() && strtotime($this->event->getExpire()) > time()) {
+		if ($this->getAllowView() && !$this->event->getDeleted() && strtotime($this->event->getExpire()) > time()) {
 			return true;
 		} else {
 			return false;

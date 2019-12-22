@@ -42,6 +42,7 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Service\AnonymizeService;
+use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
 class VoteController extends Controller {
@@ -53,6 +54,7 @@ class VoteController extends Controller {
 	private $eventMapper;
 	private $shareMapper;
 	private $anonymizer;
+	private $logService;
 	private $acl;
 
 	/**
@@ -66,6 +68,7 @@ class VoteController extends Controller {
 	 * @param EventMapper $eventMapper
 	 * @param ShareMapper $shareMapper
 	 * @param AnonymizeService $anonymizer
+	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
 	public function __construct(
@@ -78,6 +81,7 @@ class VoteController extends Controller {
 		EventMapper $eventMapper,
 		ShareMapper $shareMapper,
 		AnonymizeService $anonymizer,
+		LogService $logService,
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
@@ -88,6 +92,7 @@ class VoteController extends Controller {
 		$this->eventMapper = $eventMapper;
 		$this->shareMapper = $shareMapper;
 		$this->anonymizer = $anonymizer;
+		$this->logService = $logService;
 		$this->acl = $acl;
 	}
 
@@ -146,6 +151,7 @@ class VoteController extends Controller {
 			$vote->setVoteAnswer($setTo);
 
 			$this->mapper->insert($vote);
+			$this->logService->setLog($option['pollId'], 'setVote', $userId);
 
 		} finally {
 			return new DataResponse($vote, Http::STATUS_OK);

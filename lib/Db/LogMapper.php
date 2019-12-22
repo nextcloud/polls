@@ -28,14 +28,14 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
-class NoticeMapper extends QBMapper {
+class LogMapper extends QBMapper {
 
 	/**
-	 * NoticeMapper constructor.
+	 * LogMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_notice', '\OCA\Polls\Db\Notice');
+		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}
 
 	/**
@@ -44,13 +44,13 @@ class NoticeMapper extends QBMapper {
 	 * @return array
 	 */
 
-	 public function findAllByPoll($pollId) {
+	 public function findByProcessed($switch = false) {
 		 $qb = $this->db->getQueryBuilder();
 
 		  $qb->select('*')
 			 ->from($this->getTableName())
 			 ->where(
-				 $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+				 $qb->expr()->eq('processed', $qb->createNamedParameter($switch, IQueryBuilder::PARAM_BOOL))
 			 );
 
 		  return $this->findEntities($qb);

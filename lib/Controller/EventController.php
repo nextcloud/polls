@@ -40,6 +40,7 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Service\EventService;
+use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
 class EventController extends Controller {
@@ -51,6 +52,7 @@ class EventController extends Controller {
 	private $userManager;
 	private $eventService;
 	private $event;
+	private $logService;
 	private $acl;
 
 	/**
@@ -63,6 +65,7 @@ class EventController extends Controller {
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 * @param EventService $eventService
+	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
 
@@ -76,6 +79,7 @@ class EventController extends Controller {
 		IGroupManager $groupManager,
 		IUserManager $userManager,
 		EventService $eventService,
+		LogService $logService,
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
@@ -86,6 +90,7 @@ class EventController extends Controller {
 		$this->userManager = $userManager;
 		$this->eventService = $eventService;
 		$this->event = $event;
+		$this->logService = $logService;
 		$this->acl = $acl;
 	}
 
@@ -215,8 +220,10 @@ class EventController extends Controller {
 			if ($this->event->getDeleted() !== $event['deleted']) {
 				if ($event['deleted']) {
 					$this->event->setDeleteDate(date('Y-m-d'));
+					$this->logService->setLog($option['pollId'], 'deletePoll');
 				} else {
 					$this->event->setDeleteDate('0');
+					$this->logService->setLog($option['pollId'], 'restorePoll');
 				}
 			}
 			$this->event->setDeleted($event['deleted']);
@@ -251,8 +258,10 @@ class EventController extends Controller {
 
 			if ($this->acl->getPollId() > 0) {
 				$this->mapper->update($this->event);
+				$this->logService->setLog($option['pollId'], 'updatePoll');
 			} else {
 				$this->mapper->insert($this->event);
+				$this->logService->setLog($option['pollId'], 'addPoll');
 			}
 			$this->event = $this->get($this->event->getId());
 			return new DataResponse($this->event, Http::STATUS_OK);
