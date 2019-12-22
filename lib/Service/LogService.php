@@ -54,21 +54,21 @@ class LogService  {
 	* @param $message message text if $messageId is === 'custom'
 	*/
 	public function setLog($pollId, $messageId, $userId = null, $message = null) {
-
-		$this->logItem->setCreated(date('Y-m-d H:i:s',time()));
-		$this->logItem->setPollId($pollId);
-		$this->logItem->setMessageId($messageId);
+		$logItem = new Log();
+		$logItem->setPollId($pollId);
+		$logItem->setCreated(date('Y-m-d H:i:s',time()));
+		$logItem->setMessageId($messageId);
 
 		if ($userId) {
-			$this->logItem->setUserId($userId);
+			$logItem->setUserId($userId);
 		} else {
-			$this->logItem->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
+			$logItem->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
 		}
 
 		if ($messageId === 'custom') {
-			$this->logItem->setMessage($message) ;
+			$logItem->setMessage($message) ;
 		}
-		$this->mapper->insert($this->logItem);
+		$this->mapper->insert($logItem);
 	}
 
 }

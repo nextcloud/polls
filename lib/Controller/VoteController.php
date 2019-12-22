@@ -151,9 +151,9 @@ class VoteController extends Controller {
 			$vote->setVoteAnswer($setTo);
 
 			$this->mapper->insert($vote);
-			$this->logService->setLog($option['pollId'], 'setVote', $userId);
 
 		} finally {
+			$this->logService->setLog($vote->getPollId(), 'setVote', $vote->getUserId());
 			return new DataResponse($vote, Http::STATUS_OK);
 		}
 	}

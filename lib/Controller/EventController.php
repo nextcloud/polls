@@ -217,14 +217,17 @@ class EventController extends Controller {
 				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
 			}
 
-			if ($this->event->getDeleted() !== $event['deleted']) {
+			$logMessageId = 'updatePoll';
+
+			if (boolval($this->event->getDeleted()) !== boolval($event['deleted'])) {
 				if ($event['deleted']) {
+					$logMessageId = 'deletePoll';
 					$this->event->setDeleteDate(date('Y-m-d'));
-					$this->logService->setLog($option['pollId'], 'deletePoll');
 				} else {
+					$logMessageId = 'restorePoll';
 					$this->event->setDeleteDate('0');
-					$this->logService->setLog($option['pollId'], 'restorePoll');
 				}
+				$this->event->setDeleted($event['deleted']);
 			}
 			$this->event->setDeleted($event['deleted']);
 		} catch (Exception $e) {
@@ -252,16 +255,15 @@ class EventController extends Controller {
 			$this->event->setIsAnonymous(intval($event['isAnonymous']));
 			$this->event->setFullAnonymous(intval($event['fullAnonymous']));
 			$this->event->setAllowMaybe(intval($event['allowMaybe']));
-			// $this->event->setDeleteDate(time());
 			$this->event->setVoteLimit(intval($event['voteLimit']));
 			$this->event->setShowResults($event['showResults']);
 
 			if ($this->acl->getPollId() > 0) {
 				$this->mapper->update($this->event);
-				$this->logService->setLog($option['pollId'], 'updatePoll');
+				$this->logService->setLog($this->event->getId(), $logMessageId);
 			} else {
 				$this->mapper->insert($this->event);
-				$this->logService->setLog($option['pollId'], 'addPoll');
+				$this->logService->setLog($this->event->getId(), 'addPoll');
 			}
 			$this->event = $this->get($this->event->getId());
 			return new DataResponse($this->event, Http::STATUS_OK);
