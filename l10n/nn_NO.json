@@ -1,0 +1,17 @@
+{ "translations": {
+    "Group" : "Gruppe",
+    "Cancel" : "Avbryt",
+    "Title" : "Tittel",
+    "Owner" : "Owner",
+    "Created" : "Lagd",
+    "never" : "aldri",
+    "Details" : "Detaljar",
+    "Comments" : "Kommentarar",
+    "Configuration" : "Innstillingar",
+    "Shares" : "Delingar",
+    "Saved" : "Lagra",
+    "Description" : "Skildring",
+    "Expiration date" : "Utløpsdato",
+    "Deleted" : "Sletta"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

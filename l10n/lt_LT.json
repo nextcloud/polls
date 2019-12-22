@@ -1,9 +1,7 @@
 { "translations": {
     "Polls" : "Apklausos",
-    "Polls App - New Activity" : "Apklausų programėlė - Nauja veikla",
-    "{user} participated in the poll \"{title}\"" : "{user} dalyvavo apklausoje, pavadinimu \"{title}\"",
-    "Go to poll" : "Pereiti į apklausą",
     "{user} invited you to take part in the poll \"{title}\"" : "{user} pakvietė jus dalyvauti apklausoje, pavadinimu \"{title}\"",
+    "Go to poll" : "Pereiti į apklausą",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Apklausų programėlė, panaši į doodle/dudle, su galimybe apriboti prieigą.",
     "Group" : "Grupė",
     "Create new poll" : "Sukurti naują apklausą",

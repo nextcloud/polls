@@ -1,0 +1,27 @@
+OC.L10N.register(
+    "polls",
+    {
+    "Polls" : "Sondazhe",
+    "Group" : "Grup",
+    "Create new poll" : "Krijo sondazh të ri",
+    "Cancel" : "Anullo",
+    "Title" : "Titulli",
+    "Owner" : "Zotëruesi",
+    "Created" : "U krijua",
+    "Public access" : "Akses publik",
+    "never" : "asnjëherë",
+    "Copy Link" : "Kopjoje Lidhjen",
+    "Delete poll" : "Fshij sondazhin",
+    "Details" : "Detajet",
+    "Comments" : "Komentet",
+    "Configuration" : "Formësim",
+    "Shares" : "Shpërndarje",
+    "Saving" : "Duke u ruajtur!",
+    "Saved" : "Ruajtur",
+    "Description" : "Përshkrim",
+    "Expiration date" : "Datë skadimi",
+    "Share Link" : "Ndani Lidhjen",
+    "Unknown user" : "Përdorues i panjohur",
+    "Deleted" : "E fshirë"
+},
+"nplurals=2; plural=(n != 1);");

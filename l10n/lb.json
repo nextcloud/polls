@@ -1,0 +1,15 @@
+{ "translations": {
+    "Group" : "Grupp",
+    "Cancel" : "Ofbriechen",
+    "Title" : "Titel",
+    "Owner" : "Owner",
+    "never" : "Ni",
+    "Details" : "Detailer",
+    "Comments" : "Kommentarer",
+    "Saving" : "Speicheren...",
+    "Saved" : "Gespäichert",
+    "Description" : "Beschreiwung",
+    "Expiration date" : "Verfallsdatum",
+    "Deleted" : "Geläscht"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

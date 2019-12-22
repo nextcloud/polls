@@ -1,10 +1,8 @@
 { "translations": {
     "Polls" : "Гласања",
-    "Polls App - New Activity" : "Апликација Гласања - Нова активност",
-    "{user} participated in the poll \"{title}\"" : "{user} је учествовао у гласању „{title}“",
-    "Go to poll" : "Иди на гласање",
     "Poll invitation \"%s\"" : "Позив на гласање „%s“",
     "{user} invited you to take part in the poll \"{title}\"" : "{user} Вас је позвао да учествујете у гласању „{title}“",
+    "Go to poll" : "Иди на гласање",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа (чланова, група/корисника, скривено и јавно),",
     "Group" : "Група",

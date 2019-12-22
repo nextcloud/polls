@@ -1,0 +1,16 @@
+{ "translations": {
+    "Group" : "গোষ্ঠীসমূহ",
+    "Cancel" : "বাতির",
+    "Title" : "শিরোনাম",
+    "Owner" : "Owner",
+    "never" : "কখনোই নয়",
+    "Details" : "বিসতারিত",
+    "Configuration" : "কনফিগারেসন",
+    "Shares" : "ভাগাভাগি",
+    "Saved" : "সংরক্ষণ করা হলো",
+    "Description" : "বিবরণ",
+    "Expiration date" : "মেয়াদোত্তীর্ণ হওয়ার তারিখ",
+    "Unknown user" : "অপরিচিত ব্যবহারকারী",
+    "Deleted" : "মুছে ফেলা"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

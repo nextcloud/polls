@@ -1,0 +1,14 @@
+{ "translations": {
+    "Group" : "Խումբ",
+    "Cancel" : "ընդհատել",
+    "Title" : "Վերնագիր",
+    "Owner" : "Owner",
+    "never" : "երբեք",
+    "Details" : "Մանրամասներ",
+    "Comments" : "Կարծիքներ",
+    "Saved" : "Պահված",
+    "Description" : "Նկարագրություն",
+    "Expiration date" : "Վավերականության ժամկետ",
+    "Deleted" : "Ջնջված"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
