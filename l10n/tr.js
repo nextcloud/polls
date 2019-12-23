@@ -52,6 +52,7 @@ OC.L10N.register(
     "Error while saving comment" : "Yorum kaydedilirken sorun çıktı",
     "Details" : "Ayrıntılar",
     "Comments" : "Yorumlar",
+    "options" : "seçenekler",
     "Configuration" : "Yapılandırma",
     "Shares" : "Paylaşımlar",
     "No comments yet. Be the first." : "Henüz bir yorum yapılmamış. İlk yorum yapan siz olun.",
