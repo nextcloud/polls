@@ -38,22 +38,22 @@ class LogMapper extends QBMapper {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}
 
-	/**
-	 * @param int $pollId
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
-	 */
 
-	 public function findByProcessed($switch = false) {
-		 $qb = $this->db->getQueryBuilder();
+	public function isSameLogWrittenRecently($pollId, $messageId) {
+		$qb = $this->db->getQueryBuilder();
 
-		  $qb->select('*')
-			 ->from($this->getTableName())
-			 ->where(
-				 $qb->expr()->eq('processed', $qb->createNamedParameter($switch, IQueryBuilder::PARAM_BOOL))
-			 );
+		$qb->select('*')
+			->from($this->getTableName())
+			->where(
+				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+			)
+			->andWhere(
+				$qb->expr()->eq('message_id', $qb->createNamedParameter($messageId, IQueryBuilder::PARAM_STR))
+			)
+			->andWhere('created >:compare');
+		$qb->setParameter('compare', time()-300);
+		return (count($this->findEntities($qb)) > 0);
 
-		  return $this->findEntities($qb);
-	 }
+	}
 
 }

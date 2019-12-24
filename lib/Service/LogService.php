@@ -56,7 +56,7 @@ class LogService  {
 	public function setLog($pollId, $messageId, $userId = null, $message = null) {
 		$logItem = new Log();
 		$logItem->setPollId($pollId);
-		$logItem->setCreated(date('Y-m-d H:i:s',time()));
+		$logItem->setCreated(time());
 		$logItem->setMessageId($messageId);
 
 		if ($userId) {
@@ -65,8 +65,18 @@ class LogService  {
 			$logItem->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
 		}
 
+		$this->logger->alert(time());
+
 		if ($messageId === 'custom') {
 			$logItem->setMessage($message) ;
+		} elseif (
+			   $messageId !== 'deletePoll'
+			&& $messageId !== 'restorePoll'
+			&& $this->mapper->isSameLogWrittenRecently($pollId, $messageId)
+		) {
+			// do not log same log entry for 5 minutes
+			// except delete and restore poll
+			return;
 		}
 		$this->mapper->insert($logItem);
 	}

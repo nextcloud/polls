@@ -34,17 +34,18 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getCreated()
  * @method void setCreated(integer $value)
  * @method integer getUserId()
- * @method void setUserId(integer $value)
- * @method integer getDisplayName()
- * @method void setDisplayName(integer $value)
- * @method integer getMessageId()
- * @method void setMessageId(integer $value)
+ * @method void setUserId(string $value)
+ * @method string getDisplayName()
+ * @method void setDisplayName(string $value)
+ * @method string getMessageId()
+ * @method void setMessageId(string $value)
  * @method string getMessage()
  * @method void setMessage(string $value)
  */
 class Log extends Entity implements JsonSerializable {
-	protected $pollId;
 	protected $created;
+	protected $processed;
+	protected $pollId;
 	protected $userId;
 	protected $displayName;
 	protected $messageId;
@@ -54,6 +55,7 @@ class Log extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'created' => $this->created,
+			'processed' => $this->processed,
 			'pollId' => $this->pollId,
 			'userId' => $this->userId,
 			'displayName' => $this->displayName,

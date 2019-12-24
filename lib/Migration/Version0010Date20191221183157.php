@@ -109,15 +109,15 @@ class Version0010Date20191221183157 extends SimpleMigrationStep {
 				'autoincrement' => true,
 				'notnull' => true
 			]);
-			$table->addColumn('created', Type::DATETIME, [
-				'notnull' => true
-			]);
-			$table->addColumn('processed', Type::BOOLEAN, [
+			$table->addColumn('created', Type::INTEGER, [
 				'notnull' => true,
-				'default' => false
+				'length' => 11,
+				'default' => 0
 			]);
-			$table->addColumn('processed_date', Type::DATETIME, [
-				'notnull' => true
+			$table->addColumn('processed', Type::INTEGER, [
+				'notnull' => true,
+				'length' => 11,
+				'default' => 0
 			]);
 			$table->addColumn('poll_id', Type::INTEGER, [
 				'notnull' => true
