@@ -52,6 +52,7 @@ OC.L10N.register(
     "Error while saving comment" : "Erro ao salvar o comentário",
     "Details" : "Detalhes",
     "Comments" : "Comentários",
+    "options" : "opções",
     "Configuration" : "Configuração",
     "Shares" : "Compartilhamentos",
     "No comments yet. Be the first." : "Sem comentários ainda. Seja o primeiro.",
