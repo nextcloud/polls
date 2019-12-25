@@ -21,176 +21,79 @@
  *
  */
 
-namespace OCA\Polls\Controller;
+namespace OCA\Polls\Service;
 
-use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-
-use OCP\IRequest;
-use OCP\ILogger;
+use OCP\IUser;
+use OCP\IUserManager;
+use OCP\IGroupManager;
 use OCP\IConfig;
+use OCP\IURLGenerator;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
-use OCP\IURLGenerator;
 use OCP\Mail\IMailer;
+use OCP\ILogger;
 
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Event;
+use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\LogMapper;
 
-use OCA\Polls\Db\Notice;
-use OCA\Polls\Db\NoticeMapper;
+class MailService  {
 
-class NoticeController extends Controller {
-
-	private $userId;
-	private $mapper;
-	private $logger;
-
+	private $userManager;
+	private $groupManager;
 	private $config;
 	private $urlGenerator;
 	private $trans;
 	private $transFactory;
 	private $mailer;
+	private $logger;
+
+	private $shareMapper;
+	private $eventMapper;
+	private $logMapper;
 
 	/**
-	 * NoticeController constructor.
-	 * @param string $appName
-	 * @param $UserId
-	 * @param NoticeMapper $mapper
-	 * @param IRequest $request
-	 * @param ILogger $logger
+	 * MailService constructor.
+	 * @param IUserManager $userManager
+	 * @param IGroupManager $groupManager
 	 * @param IConfig $config
 	 * @param IURLGenerator $urlGenerator
 	 * @param IL10N $trans
 	 * @param IFactory $transFactory
 	 * @param IMailer $mailer
+	 * @param ILogger $logger
+	 * @param ShareMapper $shareMapper
+	 * @param EventMapper $eventMapper
+	 * @param LogMapper $logMapper
 	 */
 
 	public function __construct(
-		string $appName,
-		$UserId,
-		NoticeMapper $mapper,
-		IRequest $request,
-		ILogger $logger,
+		IUserManager $userManager,
+		IGroupManager $groupManager,
 		IConfig $config,
 		IURLGenerator $urlGenerator,
 		IL10N $trans,
 		IFactory $transFactory,
-		IMailer $mailer
-
+		IMailer $mailer,
+		ILogger $logger,
+		ShareMapper $shareMapper,
+		EventMapper $eventMapper,
+		LogMapper $logMapper
 	) {
-		parent::__construct($appName, $request);
-		$this->userId = $UserId;
-		$this->mapper = $mapper;
-		$this->logger = $logger;
-
 		$this->config = $config;
+		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
+		$this->urlGenerator = $urlGenerator;
 		$this->trans = $trans;
 		$this->transFactory = $transFactory;
-		$this->urlGenerator = $urlGenerator;
 		$this->mailer = $mailer;
-
+		$this->logger = $logger;
+		$this->shareMapper = $shareMapper;
+		$this->eventMapper = $eventMapper;
+		$this->logMapper = $logMapper;
 	}
-
-	/**
-	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return DataResponse
-	 */
-	public function get($pollId) {
-
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		try {
-			$this->mapper->findByUserAndPoll($pollId, $this->userId);
-		} catch (MultipleObjectsReturnedException $e) {
-			// should not happen, but who knows
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(null, Http::STATUS_NOT_FOUND);
-		}
-		return new DataResponse(null, Http::STATUS_OK);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @param integer $pollId
-	 */
-	public function set(Notice $notice) {
-		$notice->setPollId($pollId);
-		$notice->setMessage($message);
-		return true;
-	}
-
-	public function logEvent($pollId, $messageId)
-
-	// /**
-	//  * @param int $pollId
-	//  * @param string $from
-	//  */
-	// private function sendNotifications($pollId, $from) {
-	// 	$poll = $this->eventMapper->find($pollId);
-	// 	$notifications = $this->mapper->findAllByPoll($pollId);
-	// 	foreach ($notifications as $notification) {
-	// 		if ($from === $notification->getUserId()) {
-	// 			continue;
-	// 		}
-	// 		$recUser = $this->userMgr->get($notification->getUserId());
-	// 		if (!$recUser instanceof IUser) {
-	// 			continue;
-	// 		}
-	// 		$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
-	// 		if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-	// 			continue;
-	// 		}
-	// 		$url = $this->urlGenerator->getAbsoluteURL(
-	// 			$this->urlGenerator->linkToRoute('polls.page.vote',
-	// 				array('hash' => $poll->getHash()))
-	// 		);
-	//
-	// 		$sendUser = $this->userMgr->get($from);
-	// 		$sender = $from;
-	// 		if ($sendUser instanceof IUser) {
-	// 			$sender = $sendUser->getDisplayName();
-	// 		}
-	//
-	// 		$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
-	// 		$trans = $this->transFactory->get('polls', $lang);
-	// 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
-	// 			'user' => $sender,
-	// 			'title' => $poll->getTitle(),
-	// 			'link' => $url,
-	// 		]);
-	// 		$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
-	// 		$emailTemplate->addHeader();
-	// 		$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
-	//
-	// 		$emailTemplate->addBodyText(str_replace(
-	// 			['{user}', '{title}'],
-	// 			[$sender, $poll->getTitle()],
-	// 			$trans->t('{user} participated in the poll "{title}"')
-	// 		));
-	//
-	// 		$emailTemplate->addBodyButton(
-	// 			htmlspecialchars($trans->t('Go to poll')),
-	// 			$url,
-	// 			/** @scrutinizer ignore-type */ false
-	// 		);
-	//
-	// 		$emailTemplate->addFooter();
-	// 		try {
-	// 			$message = $this->mailer->createMessage();
-	// 			$message->setTo([$email => $recUser->getDisplayName()]);
-	// 			$message->useTemplate($emailTemplate);
-	// 			$this->mailer->send($message);
-	// 		} catch (\Exception $e) {
-	// 			$this->logger->logException($e, ['app' => 'polls']);
-	// 		}
-	// 	}
-	// }
 
 	/**
 	 * @param string $token
@@ -205,9 +108,9 @@ class NoticeController extends Controller {
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
-				'displayName' => $this->userMgr->get($share->getUserId())->getDisplayName(),
+				'displayName' => $this->userManager->get($share->getUserId())->getDisplayName(),
 				'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
-				'eMail' => $this->userMgr->get($share->getUserId())->getEMailAddress(),
+				'eMail' => $this->userManager->get($share->getUserId())->getEMailAddress(),
 				'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
 			);
 
@@ -239,7 +142,7 @@ class NoticeController extends Controller {
 
 		} elseif ($share->getType() === 'group') {
 
-			$groupMembers = array_keys($this->groupMgr->displayNamesInGroup($share->getUserId()));
+			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
 
 			foreach ($groupMembers as $member) {
 				if ($event->getOwner() === $member) {
@@ -248,16 +151,16 @@ class NoticeController extends Controller {
 
 				$recipients[] = array(
 					'userId' => $member,
-					'displayName' => $this->userMgr->get($member)->getDisplayName(),
+					'displayName' => $this->userManager->get($member)->getDisplayName(),
 					'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
-					'eMail' => $this->userMgr->get($member)->getEMailAddress(),
+					'eMail' => $this->userManager->get($member)->getEMailAddress(),
 					'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
 				);
 
 			}
 		}
 
-		$sendUser = $this->userMgr->get($event->getOwner());
+		$sendUser = $this->userManager->get($event->getOwner());
 		$sender = $event->getOwner();
 		if ($sendUser instanceof IUser) {
 			$sender = $sendUser->getDisplayName();
@@ -309,4 +212,72 @@ class NoticeController extends Controller {
 		}
 	}
 
+	/**
+	 * @param int $pollId
+	 * @param string $from
+	 */
+	public function sendNotice() {
+		$this->logger->debug('sendNotice test');
+	}
+
+	private function sendNotifications($pollId, $from) {
+		$poll = $this->eventMapper->find($pollId);
+		$notifications = $this->mapper->findAllByPoll($pollId);
+		foreach ($notifications as $notification) {
+			if ($from === $notification->getUserId()) {
+				continue;
+			}
+			$recUser = $this->userManager->get($notification->getUserId());
+			if (!$recUser instanceof IUser) {
+				continue;
+			}
+			$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
+			if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				continue;
+			}
+			$url = $this->urlGenerator->getAbsoluteURL(
+				$this->urlGenerator->linkToRoute('polls.page.vote',
+					array('hash' => $poll->getHash()))
+			);
+
+			$sendUser = $this->userManager->get($from);
+			$sender = $from;
+			if ($sendUser instanceof IUser) {
+				$sender = $sendUser->getDisplayName();
+			}
+
+			$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
+			$trans = $this->transFactory->get('polls', $lang);
+			$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
+				'user' => $sender,
+				'title' => $poll->getTitle(),
+				'link' => $url,
+			]);
+			$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
+			$emailTemplate->addHeader();
+			$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
+
+			$emailTemplate->addBodyText(str_replace(
+				['{user}', '{title}'],
+				[$sender, $poll->getTitle()],
+				$trans->t('{user} participated in the poll "{title}"')
+			));
+
+			$emailTemplate->addBodyButton(
+				htmlspecialchars($trans->t('Go to poll')),
+				$url,
+				/** @scrutinizer ignore-type */ false
+			);
+
+			$emailTemplate->addFooter();
+			try {
+				$message = $this->mailer->createMessage();
+				$message->setTo([$email => $recUser->getDisplayName()]);
+				$message->useTemplate($emailTemplate);
+				$this->mailer->send($message);
+			} catch (\Exception $e) {
+				$this->logger->logException($e, ['app' => 'polls']);
+			}
+		}
+	}
 }

@@ -41,7 +41,7 @@ use OCA\Polls\Model\Acl;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Controller\SubscriptionController;
+use OCA\Polls\Service\MailService;
 // TODO: Change to Service
 use OCA\Polls\Controller\SystemController;
 
@@ -54,7 +54,7 @@ class ShareController extends Controller {
 
 	private $eventMapper;
 	private $systemController;
-	private $subscriptionController;
+	private $mailService;
 
 	/**
 	 * ShareController constructor.
@@ -65,7 +65,7 @@ class ShareController extends Controller {
 	 * @param ShareMapper $mapper
 	 * @param EventMapper $eventMapper
 	 * @param SystemController $systemController
-	 * @param SubscriptionController $subscriptionController
+	 * @param MailService $mailService
 	 * @param Acl $acl
 	 */
 	public function __construct(
@@ -76,7 +76,7 @@ class ShareController extends Controller {
 		ShareMapper $mapper,
 		EventMapper $eventMapper,
 		SystemController $systemController,
-		SubscriptionController $subscriptionController,
+		MailService $mailService,
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
@@ -85,7 +85,7 @@ class ShareController extends Controller {
 		$this->mapper = $mapper;
 		$this->eventMapper = $eventMapper;
 		$this->systemController = $systemController;
-		$this->subscriptionController = $subscriptionController;
+		$this->mailService = $mailService;
 		$this->acl = $acl;
 	}
 
@@ -165,7 +165,7 @@ class ShareController extends Controller {
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}
-		$this->subscriptionController->sendInvitationMail($newShare->getToken());
+		$this->mailService->sendInvitationMail($newShare->getToken());
 		return new DataResponse($newShare, Http::STATUS_OK);
 
 	}
