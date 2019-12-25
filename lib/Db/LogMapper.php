@@ -38,22 +38,32 @@ class LogMapper extends QBMapper {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}
 
-
-	public function isSameLogWrittenRecently($pollId, $messageId) {
+	public function findByPollId($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
 			->from($this->getTableName())
 			->where(
-				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-			)
-			->andWhere(
-				$qb->expr()->eq('message_id', $qb->createNamedParameter($messageId, IQueryBuilder::PARAM_STR))
-			)
-			->andWhere('created >:compare');
-		$qb->setParameter('compare', time()-300);
-		return (count($this->findEntities($qb)) > 0);
+ 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+ 		   );
+
+		return $this->findEntities($qb);
 
 	}
+
+	public function getLastRecord($pollId) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults( 1 )
+		    ->orderBy('id', 'DESC');
+
+		return $this->findEntity($qb);
+
+	}
+
+
 
 }

@@ -23,6 +23,9 @@
 
 namespace OCA\Polls\Service;
 
+use Exception;
+use OCP\AppFramework\Db\DoesNotExistException;
+
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
 
@@ -45,40 +48,53 @@ class LogService  {
 		$this->logItem = $logItem;
 	}
 
+
 	/**
-	* Log poll events
+	* Prevent repetition of the same log event
+	* @NoAdminRequired
+	* @return Bool
+	*/
+	public function isRepetition() {
+		try {
+			$lastRecord = $this->mapper->getLastRecord($this->logItem->getPollId());
+			return ( intval($lastRecord->getPollId()) === intval($this->logItem->getPollId())
+				&& $lastRecord->getUserId() === $this->logItem->getUserId()
+				&& $lastRecord->getMessageId() === $this->logItem->getMessageId()
+				&& $lastRecord->getMessage() === $this->logItem->getMessage()
+			);
+		} catch (DoesNotExistException $e) {
+			return false;
+		}
+	}
+
+	/**
+	* Log poll activity
 	* @NoAdminRequired
 	* @param $pollId related pollId
 	* @param $messageId identifier for message notice
 	* @param $userId (optional)
 	* @param $message message text if $messageId is === 'custom'
+	* @return Log
 	*/
 	public function setLog($pollId, $messageId, $userId = null, $message = null) {
-		$logItem = new Log();
-		$logItem->setPollId($pollId);
-		$logItem->setCreated(time());
-		$logItem->setMessageId($messageId);
+		$this->logItem = new Log();
+		$this->logItem->setPollId($pollId);
+		$this->logItem->setCreated(time());
+		$this->logItem->setMessageId($messageId);
+		$this->logItem->setMessage($message);
 
 		if ($userId) {
-			$logItem->setUserId($userId);
+			$this->logItem->setUserId($userId);
 		} else {
-			$logItem->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
+			$this->logItem->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
 		}
 
-		$this->logger->alert(time());
 
-		if ($messageId === 'custom') {
-			$logItem->setMessage($message) ;
-		} elseif (
-			   $messageId !== 'deletePoll'
-			&& $messageId !== 'restorePoll'
-			&& $this->mapper->isSameLogWrittenRecently($pollId, $messageId)
-		) {
-			// do not log same log entry for 5 minutes
-			// except delete and restore poll
-			return;
+		if ($this->isRepetition()) {
+			return null;
+		} else {
+			return $this->mapper->insert($this->logItem);
 		}
-		$this->mapper->insert($logItem);
 	}
 
 }
