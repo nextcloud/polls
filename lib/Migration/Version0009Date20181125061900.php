@@ -71,7 +71,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('token', Type::STRING, [
+			$table->addColumn('hash', Type::STRING, [
 				'notnull' => false,
 				'length' => 64,
 			]);
