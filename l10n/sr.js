@@ -52,6 +52,7 @@ OC.L10N.register(
     "Error while saving comment" : "Грешка приликом чувања коментара",
     "Details" : "Детаљи",
     "Comments" : "Коментари",
+    "options" : "опције",
     "Configuration" : "Конфигурација",
     "Shares" : "Дељења",
     "No comments yet. Be the first." : "Још нема коментара. Будите први.",
