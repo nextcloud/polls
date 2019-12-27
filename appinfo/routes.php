@@ -28,8 +28,8 @@ return [
 		['name' => 'page#polls', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
 		['name' => 'page#vote_public', 'url' => '/s/{token}', 'verb' => 'GET'],
 
-		['name' => 'notification#get', 'url' => '/notification/get/{pollId}', 'verb' => 'GET'],
-		['name' => 'notification#set', 'url' => '/notification/set/', 'verb' => 'POST'],
+		['name' => 'subscription#get', 'url' => '/subscription/get/{pollId}', 'verb' => 'GET'],
+		['name' => 'subscription#set', 'url' => '/subscription/set/', 'verb' => 'POST'],
 
 		['name' => 'comment#getByToken', 'url' => '/comments/get/s/{token}', 'verb' => 'GET'],
 		['name' => 'comment#writeByToken', 'url' => '/comment/write/s/', 'verb' => 'POST'],

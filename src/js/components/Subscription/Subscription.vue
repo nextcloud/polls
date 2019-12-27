@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<div class="notification">
+	<div class="subscription">
 		<input id="subscribe" v-model="subscribe" type="checkbox"
 			class="checkbox">
 		<label for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
@@ -31,20 +31,20 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-	name: 'Notification',
+	name: 'Subscription',
 
 	computed: {
 		...mapState({
-			notification: state => state.notification,
+			subscription: state => state.subscription,
 			event: state => state.event
 		}),
 
 		subscribe: {
 			get() {
-				return this.notification.subscribed
+				return this.subscription.subscribed
 			},
 			set(value) {
-				this.$store.commit('setNotification', value)
+				this.$store.commit('setSubscription', value)
 				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.event.id })
 			}
 		}
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-	.notification {
+	.subscription {
 		padding: 24px;
 	}
 </style>

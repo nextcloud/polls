@@ -27,47 +27,33 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
-use \OCP\AppFramework\Db\DoesNotExistException;
 
-class EventMapper extends QBMapper {
+class NoticeMapper extends QBMapper {
 
 	/**
-	 * EventMapper constructor.
+	 * NoticeMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
+		parent::__construct($db, 'polls_notice', '\OCA\Polls\Db\Notice');
 	}
 
 	/**
-	 * @param int $id
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Event
-	 */
-	public function find($id) {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-		   );
-
-		return $this->findEntity($qb);
-	}
-
-	/**
+	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return array
 	 */
-	public function findAll() {
-		$qb = $this->db->getQueryBuilder();
 
-		$qb->select('*')
-		   ->from($this->getTableName());
+	 public function findAllByPoll($pollId) {
+		 $qb = $this->db->getQueryBuilder();
 
-		return $this->findEntities($qb);
-	}
+		  $qb->select('*')
+			 ->from($this->getTableName())
+			 ->where(
+				 $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+			 );
+
+		  return $this->findEntities($qb);
+	 }
 
 }

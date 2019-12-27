@@ -27,47 +27,66 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
-use \OCP\AppFramework\Db\DoesNotExistException;
 
-class EventMapper extends QBMapper {
+class LogMapper extends QBMapper {
 
 	/**
-	 * EventMapper constructor.
+	 * LogMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
+		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}
 
-	/**
-	 * @param int $id
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Event
-	 */
-	public function find($id) {
+	public function findByPollId($pollId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-		   );
-
-		return $this->findEntity($qb);
-	}
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
-	 */
-	public function findAll() {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName());
+			->from($this->getTableName())
+			->where(
+ 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+ 		   );
 
 		return $this->findEntities($qb);
+
 	}
+
+	public function findUnprocessed() {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+			->from($this->getTableName())
+			->where(
+ 			   $qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+ 		   );
+
+		return $this->findEntities($qb);
+
+	}
+
+	public function findUnprocessedPolls() {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->selectDistinct('poll_id')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		return $this->findEntities($qb);
+
+	}
+
+	public function getLastRecord($pollId) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults( 1 )
+		    ->orderBy('id', 'DESC');
+
+		return $this->findEntity($qb);
+
+	}
+
+
 
 }

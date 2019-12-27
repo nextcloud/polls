@@ -29,20 +29,40 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method string getUserId()
- * @method void setUserId(string $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
+ * @method integer getChannel()
+ * @method void setChannel(integer $value)
+ * @method integer getUserId()
+ * @method void setUserId(integer $value)
+ * @method integer getUserEmail()
+ * @method void setUserEmail(integer $value)
+ * @method integer getDisplayName()
+ * @method void setDisplayName(integer $value)
+ * @method integer getMessageId()
+ * @method void setMessageId(integer $value)
+ * @method string getMessage()
+ * @method void setMessage(string $value)
  */
-class Notification extends Entity implements JsonSerializable {
+class Notice extends Entity implements JsonSerializable {
 	protected $pollId;
+	protected $channel;
 	protected $userId;
+	protected $userEmail;
+	protected $displayName;
+	protected $messageId;
+	protected $message;
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
 			'pollId' => $this->pollId,
+			'channel' => $this->channel,
 			'userId' => $this->userId,
+			'userEmail' => $this->userEmail,
+			'displayName' => $this->displayName,
+			'message_id' => $this->messageId,
+			'message' => $this->message
 		];
 	}
 }

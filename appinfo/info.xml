@@ -25,4 +25,7 @@
     <dependencies>
         <nextcloud min-version="14" max-version="18" />
     </dependencies>
+	<background-jobs>
+		<job>OCA\Polls\Cron\NotificationCron</job>
+	</background-jobs>
 </info>

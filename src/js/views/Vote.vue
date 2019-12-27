@@ -27,7 +27,7 @@
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			<VoteHeader />
 			<VoteTable v-show="!loading" />
-			<Notification />
+			<Subscription />
 		</div>
 
 		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import Notification from '../components/Notification/Notification'
+import Subscription from '../components/Subscription/Subscription'
 import VoteHeader from '../components/VoteTable/VoteHeader'
 import VoteTable from '../components/VoteTable/VoteTable'
 import SideBar from '../components/SideBar/SideBar'
@@ -45,7 +45,7 @@ import { mapState, mapGetters } from 'vuex'
 export default {
 	name: 'Vote',
 	components: {
-		Notification,
+		Subscription,
 		VoteHeader,
 		VoteTable,
 		SideBar
