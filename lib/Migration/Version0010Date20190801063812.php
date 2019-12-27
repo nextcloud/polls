@@ -68,6 +68,12 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 
 		if ($schema->hasTable('polls_events')) {
 			$table = $schema->getTable('polls_events');
+			if (!$table->hasColumn('expiration')) {
+				$table->addColumn('expiration', Type::BOOLEAN, [
+					'notnull' => true,
+					'default' => 0
+				]);
+			}
 			if (!$table->hasColumn('deleted')) {
 				$table->addColumn('deleted', Type::BOOLEAN, [
 					'notnull' => false,
@@ -173,10 +179,26 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
+		if ($schema->hasTable('polls_events')) {
+			$this->setExpiration();
+		}
+
 		if ($schema->hasTable('polls_share')) {
 			$this->copyTokens();
 			// $this->copyInvitationTokens();
 		}
+	}
+
+	/**
+	 * Set expiration if expire is filled
+	 */
+	protected function setExpiration() {
+
+		$update = $this->connection->getQueryBuilder();
+		$update->update('polls_events')
+			->set('expiration', $update->createNamedParameter(true))
+			->where('expire IS NOT NULL');
+		$result = $update->execute();
 	}
 
 	/**
