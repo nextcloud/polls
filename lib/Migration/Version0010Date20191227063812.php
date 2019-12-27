@@ -38,7 +38,7 @@ use OCP\Security\ISecureRandom;
  * Installation class for the polls app.
  * Initial db creation
  */
-class Version0010Date20190801063812 extends SimpleMigrationStep {
+class Version0010Date20191227063812 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
