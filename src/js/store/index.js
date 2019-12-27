@@ -26,7 +26,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import acl from './modules/acl'
 import comments from './modules/comments'
-import event from './modules/event'
+import poll from './modules/poll'
 import subscription from './modules/subscription'
 import votes from './modules/votes'
 import options from './modules/options'
@@ -42,7 +42,7 @@ export default new Vuex.Store({
 	modules: {
 		acl,
 		comments,
-		event,
+		poll,
 		subscription,
 		votes,
 		options,

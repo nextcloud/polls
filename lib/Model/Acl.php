@@ -30,9 +30,9 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IGroupManager;
 use OCP\ILogger;
-use OCA\Polls\Db\Event;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 
 /**
@@ -62,14 +62,14 @@ class Acl implements JsonSerializable {
 	/** @var IGroupManager */
 	private $groupManager;
 
-	/** @var EventMapper */
-	private $eventMapper;
+	/** @var PollMapper */
+	private $pollMapper;
 
 	/** @var ShareMapper */
 	private $shareMapper;
 
-	/** @var Event */
-	private $event;
+	/** @var Poll */
+	private $poll;
 
 
 	/**
@@ -78,25 +78,25 @@ class Acl implements JsonSerializable {
 	 * @param string $userId
 	 * @param ILogger $logger
 	 * @param IGroupManager $groupManager
-	 * @param EventMapper $eventMapper
+	 * @param PollMapper $pollMapper
 	 * @param ShareMapper $shareMapper
-	 * @param Event $eventMapper
+	 * @param Poll $pollMapper
 	 *
 	 */
 	public function __construct(
 		$userId,
 		ILogger $logger,
 		IGroupManager $groupManager,
-		EventMapper $eventMapper,
+		PollMapper $pollMapper,
 		ShareMapper $shareMapper,
-		Event $event
+		Poll $poll
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
-		$this->eventMapper = $eventMapper;
+		$this->pollMapper = $pollMapper;
 		$this->shareMapper = $shareMapper;
-		$this->event = $event;
+		$this->poll = $poll;
 	}
 
 
@@ -131,7 +131,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function setPollId(int $pollId): Acl {
 		$this->pollId = $pollId;
-		$this->event = $this->eventMapper->find($this->pollId);
+		$this->poll = $this->pollMapper->find($this->pollId);
 		$this->shares = $this->shareMapper->findByPoll($this->pollId);
 
 		return $this;
@@ -143,7 +143,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function getIsOwner(): bool {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return ($this->event->getOwner() === $this->userId);
+			return ($this->poll->getOwner() === $this->userId);
 		} else {
 			return false;
 		}
@@ -169,9 +169,9 @@ class Acl implements JsonSerializable {
 		return (
 			   $this->getIsOwner()
 			|| $this->getIsAdmin()
-			|| ($this->getGroupShare() && !$this->event->getDeleted())
-			|| ($this->getPersonalShare() && !$this->event->getDeleted())
-			|| $this->event->getAccess() !== 'hidden'
+			|| ($this->getGroupShare() && !$this->poll->getDeleted())
+			|| ($this->getPersonalShare() && !$this->poll->getDeleted())
+			|| $this->poll->getAccess() !== 'hidden'
 			);
 	}
 
@@ -209,7 +209,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowVote(): bool {
-		if ($this->getAllowView() && !$this->event->getDeleted() && strtotime($this->event->getExpire()) > time()) {
+		if ($this->getAllowView() && !$this->poll->getDeleted() && strtotime($this->poll->getExpire()) > time()) {
 			return true;
 		} else {
 			return false;
@@ -237,7 +237,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowSeeUsernames(): bool {
-		return !(($this->event->getIsAnonymous() && !$this->getIsOwner()) || $this->event->getFullAnonymous());;
+		return !(($this->poll->getIsAnonymous() && !$this->getIsOwner()) || $this->poll->getFullAnonymous());;
 	}
 
 	/**
@@ -311,11 +311,11 @@ class Acl implements JsonSerializable {
 	public function getAccessLevel(): string {
 		if ($this->getIsOwner()) {
 			return 'owner';
-		} elseif ($this->event->getAccess() === 'public') {
+		} elseif ($this->poll->getAccess() === 'public') {
 			return 'public';
-		} elseif ($this->event->getAccess() === 'registered' && \OC::$server->getUserSession()->getUser()->getUID() === $this->userId) {
+		} elseif ($this->poll->getAccess() === 'registered' && \OC::$server->getUserSession()->getUser()->getUID() === $this->userId) {
 			return 'registered';
-		} elseif ($this->event->getAccess() === 'hidden' && $this->getisOwner()) {
+		} elseif ($this->poll->getAccess() === 'hidden' && $this->getisOwner()) {
 			return 'hidden';
 		} elseif ($this->getIsAdmin()) {
 			return 'admin';

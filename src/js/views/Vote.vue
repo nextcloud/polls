@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent>
-		<div v-if="event.id > 0" class="main-container">
+		<div v-if="poll.id > 0" class="main-container">
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			<VoteHeader />
@@ -64,7 +64,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			shares: state => state.shares,
 			acl: state => state.acl
 		}),
@@ -74,7 +74,7 @@ export default {
 		]),
 
 		windowTitle: function() {
-			return t('polls', 'Polls') + ' - ' + this.event.title
+			return t('polls', 'Polls') + ' - ' + this.poll.title
 		},
 
 		votePossible() {
@@ -88,7 +88,7 @@ export default {
 			this.loadPoll()
 		},
 
-		'event.id'(to, from) {
+		'poll.id'(to, from) {
 			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
 				.then(() => {
 					this.loading = false
@@ -103,7 +103,7 @@ export default {
 	methods: {
 		loadPoll() {
 			this.loading = true
-			this.$store.dispatch({ type: 'loadEvent', pollId: this.$route.params.id })
+			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
 				.catch(() => {
 					this.loading = false
 				})
@@ -119,9 +119,9 @@ export default {
 		},
 
 		openOptionsTab() {
-			if (this.event.type === 'datePoll') {
+			if (this.poll.type === 'datePoll') {
 				this.initialTab = 'date-options'
-			} else if (this.event.type === 'textPoll') {
+			} else if (this.poll.type === 'textPoll') {
 				this.initialTab = 'text-options'
 			}
 			this.sideBarOpen = true

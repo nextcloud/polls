@@ -61,7 +61,7 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getDeleteDate()
  * @method void setDeleteDate(string $value)
  */
-class Event extends Entity implements JsonSerializable {
+class Poll extends Entity implements JsonSerializable {
 	protected $type;
 	protected $title;
 	protected $description;

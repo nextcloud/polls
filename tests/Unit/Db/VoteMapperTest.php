@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
@@ -37,8 +37,8 @@ class VoteMapperTest extends UnitTestCase {
 	private $con;
 	/** @var VoteMapper */
 	private $voteMapper;
-	/** @var EventMapper */
-	private $eventMapper;
+	/** @var PollMapper */
+	private $pollMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -47,7 +47,7 @@ class VoteMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->voteMapper = new VoteMapper($this->con);
-		$this->eventMapper = new EventMapper($this->con);
+		$this->pollMapper = new PollMapper($this->con);
 	}
 
 	/**
@@ -56,14 +56,14 @@ class VoteMapperTest extends UnitTestCase {
 	 * @return Vote
 	 */
 	public function testCreate() {
-		/** @var Event $event */
-		$event = $this->fm->instance('OCA\Polls\Db\Event');
-		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+		/** @var Poll $poll */
+		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
+		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
 
 
 		/** @var Vote $vote */
 		$vote = $this->fm->instance('OCA\Polls\Db\Vote');
-		$vote->setPollId($event->getId());
+		$vote->setPollId($poll->getId());
 		$vote->setVoteOptionId(1);
 		$this->assertInstanceOf(Vote::class, $this->voteMapper->insert($vote));
 
@@ -92,8 +92,8 @@ class VoteMapperTest extends UnitTestCase {
 	 * @param Vote $vote
 	 */
 	public function testDelete(Vote $vote) {
-		$event = $this->eventMapper->find($vote->getPollId());
+		$poll = $this->pollMapper->find($vote->getPollId());
 		$this->voteMapper->delete($vote);
-		$this->eventMapper->delete($event);
+		$this->pollMapper->delete($poll);
 	}
 }

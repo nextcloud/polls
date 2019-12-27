@@ -56,7 +56,7 @@ const mutations = {
 const getters = {
 
 	answerSequence: (state, getters, rootState) => {
-		if (rootState.event.allowMaybe) {
+		if (rootState.poll.allowMaybe) {
 			return ['no', 'maybe', 'yes', 'no']
 		} else {
 			return ['no', 'yes', 'no']
@@ -148,14 +148,14 @@ const actions = {
 		}
 
 		return axios.post(OC.generateUrl(endPoint), {
-			pollId: rootState.event.id,
+			pollId: rootState.poll.id,
 			token: rootState.acl.token,
 			option: payload.option,
 			userId: payload.userId,
 			setTo: payload.setTo
 		})
 			.then((response) => {
-				commit('setVote', { option: payload.option, pollId: rootState.event.id, vote: response.data })
+				commit('setVote', { option: payload.option, pollId: rootState.poll.id, vote: response.data })
 				return response.data
 			}, (error) => {
 				console.error('Error setting vote', { 'error': error.response }, { 'payload': payload })

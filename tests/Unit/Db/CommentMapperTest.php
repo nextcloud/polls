@@ -25,8 +25,8 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
@@ -37,8 +37,8 @@ class CommentMapperTest extends UnitTestCase {
 	private $con;
 	/** @var CommentMapper */
 	private $commentMapper;
-	/** @var EventMapper */
-	private $eventMapper;
+	/** @var PollMapper */
+	private $pollMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -47,7 +47,7 @@ class CommentMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->commentMapper = new CommentMapper($this->con);
-		$this->eventMapper = new EventMapper($this->con);
+		$this->pollMapper = new PollMapper($this->con);
 	}
 
 	/**
@@ -56,13 +56,13 @@ class CommentMapperTest extends UnitTestCase {
 	 * @return Comment
 	 */
 	public function testCreate() {
-		/** @var Event $event */
-		$event = $this->fm->instance('OCA\Polls\Db\Event');
-		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+		/** @var Poll $poll */
+		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
+		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
 
 		/** @var Comment $comment */
 		$comment = $this->fm->instance('OCA\Polls\Db\Comment');
-		$comment->setPollId($event->getId());
+		$comment->setPollId($poll->getId());
 		$this->assertInstanceOf(Comment::class, $this->commentMapper->insert($comment));
 
 		return $comment;
@@ -90,8 +90,8 @@ class CommentMapperTest extends UnitTestCase {
 	 * @param Comment $comment
 	 */
 	public function testDelete(Comment $comment) {
-		$event = $this->eventMapper->find($comment->getPollId());
+		$poll = $this->pollMapper->find($comment->getPollId());
 		$this->commentMapper->delete($comment);
-		$this->eventMapper->delete($event);
+		$this->pollMapper->delete($poll);
 	}
 }

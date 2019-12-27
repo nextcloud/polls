@@ -32,7 +32,7 @@
 			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
-				:poll-type="event.type" />
+				:poll-type="poll.type" />
 		</div>
 
 		<div v-for="(participant) in participants" :key="participant" :class="{currentuser: (participant === currentUser) }">
@@ -63,7 +63,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			acl: state => state.acl
 		}),
 

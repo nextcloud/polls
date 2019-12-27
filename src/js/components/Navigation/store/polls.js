@@ -56,7 +56,7 @@ const getters = {
 
 const actions = {
 	loadPolls({ commit }) {
-		let endPoint = 'apps/polls/events/get/'
+		let endPoint = 'apps/polls/polls/get/'
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
@@ -71,7 +71,7 @@ const actions = {
 
 		return axios.post(
 			OC.generateUrl(endPoint),
-			payload.event
+			payload.poll
 		)
 	}
 }

@@ -22,7 +22,7 @@
 
 <template>
 	<AppSidebar :active="initialTab" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="event.owner" :description="t('polls', 'Owner')" />
+		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
 
 		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
 			<SideBarTabComments />
@@ -70,7 +70,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			acl: state => state.acl
 		})
 	}

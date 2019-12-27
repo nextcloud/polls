@@ -89,7 +89,7 @@ const actions = {
 		}
 
 		return axios.post(OC.generateUrl(endPoint), {
-			pollId: rootState.event.id,
+			pollId: rootState.poll.id,
 			token: rootState.acl.token,
 			message: payload.message,
 			userId: rootState.acl.userId

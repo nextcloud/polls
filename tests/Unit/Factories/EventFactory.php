@@ -24,9 +24,9 @@
 use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
- * General factory for the event model.
+ * General factory for the poll model.
  */
-$fm->define('OCA\Polls\Db\Event')->setDefinitions([
+$fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'type' => 0,
 	'title' => Faker::sentence(10),
 	'description' => Faker::text(255),

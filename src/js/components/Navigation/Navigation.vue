@@ -36,7 +36,7 @@
 						v-for="(poll) in allPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -51,7 +51,7 @@
 						v-for="(poll) in myPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -66,7 +66,7 @@
 						v-for="(poll) in publicPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -81,7 +81,7 @@
 						v-for="(poll) in hiddenPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -96,7 +96,7 @@
 						v-for="(poll) in deletedPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -178,7 +178,7 @@ export default {
 			this.createDlg = !this.createDlg
 		},
 
-		eventIcon(type) {
+		pollIcon(type) {
 			if (type === '0') {
 				return 'icon-calendar'
 			} else {

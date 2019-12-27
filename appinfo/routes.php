@@ -48,10 +48,10 @@ return [
 		['name' => 'option#remove', 'url' => '/option/remove/', 'verb' => 'POST'],
 		['name' => 'option#getByToken', 'url' => '/options/get/s/{token}', 'verb' => 'GET'],
 
-		['name' => 'event#list', 'url' => '/events/get/', 'verb' => 'GET'],
-		['name' => 'event#get', 'url' => '/event/get/{pollId}', 'verb' => 'GET'],
-		['name' => 'event#write', 'url' => '/event/write/', 'verb' => 'POST'],
-		['name' => 'event#getByToken', 'url' => '/event/get/s/{token}', 'verb' => 'GET'],
+		['name' => 'poll#list', 'url' => '/polls/get/', 'verb' => 'GET'],
+		['name' => 'poll#get', 'url' => '/poll/get/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#write', 'url' => '/poll/write/', 'verb' => 'POST'],
+		['name' => 'poll#getByToken', 'url' => '/poll/get/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/share/write/', 'verb' => 'POST'],

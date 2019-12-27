@@ -29,51 +29,51 @@
 
 		<div v-if="acl.allowEdit" class="configBox">
 			<label class="icon-sound title"> {{ t('polls', 'Title') }} </label>
-			<input v-model="eventTitle" :class="{ error: titleEmpty }" type="text">
+			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
 
 		<div v-if="acl.allowEdit" class="configBox">
 			<label class="icon-edit title"> {{ t('polls', 'Description') }} </label>
-			<textarea v-model="eventDescription" />
+			<textarea v-model="pollDescription" />
 		</div>
 
 		<div class="configBox">
 			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
 
-			<input id="allowMaybe" v-model="eventAllowMaybe"
+			<input id="allowMaybe" v-model="pollAllowMaybe"
 				type="checkbox" class="checkbox">
 			<label for="allowMaybe" class="title"> {{ t('polls', 'Allow "maybe" vote') }} </label>
 
-			<input id="anonymous" v-model="eventIsAnonymous"
+			<input id="anonymous" v-model="pollIsAnonymous"
 				type="checkbox" class="checkbox">
 			<label for="anonymous" class="title"> {{ t('polls', 'Anonymous poll') }} </label>
 
-			<input v-show="event.isAnonymous" id="trueAnonymous" v-model="eventFullAnonymous"
+			<input v-show="poll.isAnonymous" id="trueAnonymous" v-model="pollFullAnonymous"
 				type="checkbox" class="checkbox">
-			<label v-show="event.isAnonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
+			<label v-show="poll.isAnonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
 
-			<input id="expiration" v-model="eventExpiration"
+			<input id="expiration" v-model="pollExpiration"
 				type="checkbox" class="checkbox">
 			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
 
-			<DatePicker v-show="eventExpiration"
-				v-model="eventExpire" v-bind="expirationDatePicker" style="width:170px" />
+			<DatePicker v-show="pollExpiration"
+				v-model="pollExpire" v-bind="expirationDatePicker" style="width:170px" />
 		</div>
 
 		<div class="configBox">
 			<label class="title icon-category-auth"> {{ t('polls', 'Access') }} </label>
 
-			<input id="hidden" v-model="eventAccess" value="hidden"
+			<input id="hidden" v-model="pollAccess" value="hidden"
 				type="radio" class="radio">
 			<label for="hidden" class="title">{{ t('polls', 'Hidden to other users') }} </label>
 
-			<input id="public" v-model="eventAccess" value="public"
+			<input id="public" v-model="pollAccess" value="public"
 				type="radio" class="radio">
 			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
 		<button class="button btn primary" @click="switchDeleted()">
-			<span v-if="event.deleted">{{ t('polls', 'Restore poll') }}</span>
+			<span v-if="poll.deleted">{{ t('polls', 'Restore poll') }}</span>
 			<span v-else>{{ t('polls', 'Delete poll') }}</span>
 		</button>
 	</div>
@@ -96,86 +96,86 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			acl: state => state.acl
 		}),
 
 		// Add bindings
-		eventDescription: {
+		pollDescription: {
 			get() {
-				return this.event.description
+				return this.poll.description
 			},
 			set(value) {
 				this.writeValueDebounced({ 'description': value })
 			}
 		},
 
-		eventTitle: {
+		pollTitle: {
 			get() {
-				return this.event.title
+				return this.poll.title
 			},
 			set(value) {
 				this.writeValueDebounced({ 'title': value })
 			}
 		},
 
-		eventAccess: {
+		pollAccess: {
 			get() {
-				return this.event.access
+				return this.poll.access
 			},
 			set(value) {
 				this.writeValue({ 'access': value })
 			}
 		},
 
-		eventExpire: {
+		pollExpire: {
 			get() {
-				return moment.utc(this.event.expire).local()
+				return moment.utc(this.poll.expire).local()
 			},
 			set(value) {
 				this.writeValue({ 'expire': moment.local(value).utc().format() })
 			}
 		},
 
-		eventExpiration: {
+		pollExpiration: {
 			get() {
-				return this.event.expiration
+				return this.poll.expiration
 			},
 			set(value) {
 				this.writeValue({ 'expiration': value })
 			}
 		},
 
-		eventFullAnonymous: {
+		pollFullAnonymous: {
 			get() {
-				return this.event.fullAnonymous
+				return this.poll.fullAnonymous
 			},
 			set(value) {
 				this.writeValue({ 'fullAnonymous': value })
 			}
 		},
 
-		eventIsAnonymous: {
+		pollIsAnonymous: {
 			get() {
-				return this.event.isAnonymous
+				return this.poll.isAnonymous
 			},
 			set(value) {
 				this.writeValue({ 'isAnonymous': value })
 			}
 		},
 
-		eventAllowMaybe: {
+		pollAllowMaybe: {
 			get() {
-				return this.event.allowMaybe
+				return this.poll.allowMaybe
 			},
 			set(value) {
 				this.writeValue({ 'allowMaybe': value })
 			}
 		},
 
-		// eventExpiration: {
+		// pollExpiration: {
 		// 	get() {
-		// 		return this.$store.state.event.expiration
+		// 		return this.$store.state.poll.expiration
 		// 	},
 		// 	set(value) {
 		// 		this.writeValue({ 'expiration': value })
@@ -236,21 +236,21 @@ export default {
 	},
 	methods: {
 
-		...mapMutations([ 'setEventProperty' ]),
-		...mapActions([ 'writeEventPromise' ]),
+		...mapMutations([ 'setPollProperty' ]),
+		...mapActions([ 'writePollPromise' ]),
 
 		writeValueDebounced: debounce(function(e) {
 			this.writeValue(e)
 		}, 1500),
 
 		writeValue(e) {
-			this.$store.commit('setEventProperty', e)
+			this.$store.commit('setPollProperty', e)
 			this.writingPoll = true
 			this.writePoll()
 		},
 
 		switchDeleted() {
-			this.writeValue({ 'deleted': !this.event.deleted })
+			this.writeValue({ 'deleted': !this.poll.deleted })
 
 		},
 
@@ -258,9 +258,9 @@ export default {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
-				this.$store.dispatch('writeEventPromise')
+				this.$store.dispatch('writePollPromise')
 					.then(() => {
-						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.event.title), { type: 'success' })
+						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.poll.title), { type: 'success' })
 						this.$root.$emit('updatePolls')
 					})
 				this.writingPoll = false

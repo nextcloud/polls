@@ -34,8 +34,8 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\IGroupManager;
 use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Notice;
@@ -49,7 +49,7 @@ class OptionController extends Controller {
 	private $mapper;
 
 	private $groupManager;
-	private $eventMapper;
+	private $pollMapper;
 	private $noticeMapper;
 	private $logService;
 	private $acl;
@@ -61,7 +61,7 @@ class OptionController extends Controller {
 	 * @param IRequest $request
 	 * @param OptionMapper $mapper
 	 * @param IGroupManager $groupManager
-	 * @param EventMapper $eventMapper
+	 * @param PollMapper $pollMapper
 	 * @param NoticeMapper $noticeMapper
 	 * @param LogService $logService
 	 * @param Acl $acl
@@ -73,7 +73,7 @@ class OptionController extends Controller {
 		IRequest $request,
 		OptionMapper $mapper,
 		IGroupManager $groupManager,
-		EventMapper $eventMapper,
+		PollMapper $pollMapper,
 		NoticeMapper $noticeMapper,
 		LogService $logService,
 		Acl $acl
@@ -82,7 +82,7 @@ class OptionController extends Controller {
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
-		$this->eventMapper = $eventMapper;
+		$this->pollMapper = $pollMapper;
 		$this->noticeMapper = $noticeMapper;
 		$this->logService = $logService;
 		$this->acl = $acl;
@@ -161,7 +161,7 @@ class OptionController extends Controller {
 	public function add($option) {
 
 		try {
-			$Event = $this->eventMapper->find($option['pollId']);
+			$Poll = $this->pollMapper->find($option['pollId']);
 			$this->acl->setPollId($option['pollId']);
 
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {

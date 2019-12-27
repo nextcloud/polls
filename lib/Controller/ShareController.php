@@ -35,10 +35,10 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Db\Event;
+use OCA\Polls\Db\Poll;
 
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Service\MailService;
@@ -52,7 +52,7 @@ class ShareController extends Controller {
 	private $mapper;
 	private $userId;
 
-	private $eventMapper;
+	private $pollMapper;
 	private $systemController;
 	private $mailService;
 
@@ -63,7 +63,7 @@ class ShareController extends Controller {
 	 * @param IRequest $request
 	 * @param ILogger $logger
 	 * @param ShareMapper $mapper
-	 * @param EventMapper $eventMapper
+	 * @param PollMapper $pollMapper
 	 * @param SystemController $systemController
 	 * @param MailService $mailService
 	 * @param Acl $acl
@@ -74,7 +74,7 @@ class ShareController extends Controller {
 		IRequest $request,
 		ILogger $logger,
 		ShareMapper $mapper,
-		EventMapper $eventMapper,
+		PollMapper $pollMapper,
 		SystemController $systemController,
 		MailService $mailService,
 		Acl $acl
@@ -83,7 +83,7 @@ class ShareController extends Controller {
         $this->logger = $logger;
 		$this->userId = $userId;
 		$this->mapper = $mapper;
-		$this->eventMapper = $eventMapper;
+		$this->pollMapper = $pollMapper;
 		$this->systemController = $systemController;
 		$this->mailService = $mailService;
 		$this->acl = $acl;

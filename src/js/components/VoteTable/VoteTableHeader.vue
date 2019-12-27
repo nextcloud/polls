@@ -45,7 +45,7 @@
 			<div class="yes">
 				<span> {{ yesVotes }} </span>
 			</div>
-			<div v-if="event.allowMaybe" class="maybe">
+			<div v-if="poll.allowMaybe" class="maybe">
 				<span> {{ maybeVotes }} </span>
 			</div>
 		</div>
@@ -79,7 +79,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			votes: state => state.votes.list
 		}),
 		...mapGetters([
@@ -135,11 +135,11 @@ export default {
 		},
 
 		datePoll() {
-			return (this.event.type === 'datePoll')
+			return (this.poll.type === 'datePoll')
 		},
 
 		textPoll() {
-			return (this.event.type === 'textPoll')
+			return (this.poll.type === 'textPoll')
 		},
 
 		localFullDate() {

@@ -30,7 +30,7 @@
 				v-bind="optionDatePicker"
 				style="width:100%"
 				confirm
-				@change="addOption($event)" />
+				@change="addOption($poll)" />
 		</div>
 
 		<div class="configBox">
