@@ -31,7 +31,7 @@ use OCP\AppFramework\Db\Entity;
 
 /**
  * @method integer getType()
- * @method void setType(integer $value)
+ * @method void setType(string $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
  * @method string getDescription()
@@ -39,27 +39,27 @@ use OCP\AppFramework\Db\Entity;
  * @method string getOwner()
  * @method void setOwner(string $value)
  * @method string getCreated()
- * @method void setCreated(string $value)
+ * @method void setCreated(integer $value)
+ * @method string getExpire()
+ * @method void setExpire(integer $value)
+ * @method integer getDeleted()
+ * @method void setDeleted(integer $value)
  * @method string getAccess()
  * @method void setAccess(string $value)
- * @method string getExpire()
- * @method void setExpire(string $value)
- * @method string getExpiration()
- * @method void setExpiration(string $value)
- * @method integer getIsAnonymous()
- * @method void setIsAnonymous(integer $value)
+ * @method integer getAnonymous()
+ * @method void setAnonymous(integer $value)
  * @method integer getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
  * @method integer getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
- * @method integer getShowResults()
- * @method void setShowResults(integer $value)
+ * @method integer getOptions()
+ * @method void setOptions(string $value)
+ * @method integer getSettings()
+ * @method void setSettings(string $value)
  * @method integer getVoteLimit()
  * @method void setVoteLimit(integer $value)
- * @method integer getDeleted()
- * @method void setDeleted(integer $value)
- * @method integer getDeleteDate()
- * @method void setDeleteDate(string $value)
+ * @method integer getShowResults()
+ * @method void setShowResults(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
 	protected $type;
@@ -67,17 +67,16 @@ class Poll extends Entity implements JsonSerializable {
 	protected $description;
 	protected $owner;
 	protected $created;
-	protected $access;
-	protected $expiration;
 	protected $expire;
-	protected $isAnonymous;
+	protected $deleted;
+	protected $access;
+	protected $Anonymous;
 	protected $fullAnonymous;
 	protected $allowMaybe;
+	protected $options;
+	protected $settings;
 	protected $voteLimit;
 	protected $showResults;
-	protected $deleted;
-	protected $deleteDate;
-	protected $hash;
 
 	public function jsonSerialize() {
 		return [
@@ -87,16 +86,16 @@ class Poll extends Entity implements JsonSerializable {
 			'description' => $this->description,
 			'owner' => $this->owner,
 			'created' => $this->created,
-			'access' => $this->access,
 			'expire' => $this->expire,
-			'expiration' => $this->expiration,
-			'isAnonymous' => boolval($this->isAnonymous),
-			'fullAnonymous' => boolval($this->fullAnonymous),
-			'allowMaybe' => boolval($this->allowMaybe),
+			'deleted' => $this->deleted,
+			'access' => $this->access,
+			'Anonymous' => $this->Anonymous,
+			'fullAnonymous' => $this->fullAnonymous,
+			'allowMaybe' => $this->allowMaybe,
+			'options' => $this->options,
+			'settings' => $this->settings,
 			'voteLimit' => $this->voteLimit,
-			'showResults' => $this->showResults,
-			'deleted' => boolval($this->deleted),
-			'deleteDate' => $this->deleteDate
+			'showResults' => $this->showResults
 		];
 	}
 }
