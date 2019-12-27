@@ -38,8 +38,6 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\Notice;
-use OCA\Polls\Db\NoticeMapper;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
@@ -50,7 +48,6 @@ class OptionController extends Controller {
 
 	private $groupManager;
 	private $eventMapper;
-	private $noticeMapper;
 	private $logService;
 	private $acl;
 
@@ -62,7 +59,6 @@ class OptionController extends Controller {
 	 * @param OptionMapper $mapper
 	 * @param IGroupManager $groupManager
 	 * @param EventMapper $eventMapper
-	 * @param NoticeMapper $noticeMapper
 	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
@@ -74,7 +70,6 @@ class OptionController extends Controller {
 		OptionMapper $mapper,
 		IGroupManager $groupManager,
 		EventMapper $eventMapper,
-		NoticeMapper $noticeMapper,
 		LogService $logService,
 		Acl $acl
 	) {
@@ -83,7 +78,6 @@ class OptionController extends Controller {
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
 		$this->eventMapper = $eventMapper;
-		$this->noticeMapper = $noticeMapper;
 		$this->logService = $logService;
 		$this->acl = $acl;
 	}

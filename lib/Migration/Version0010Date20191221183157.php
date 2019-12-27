@@ -66,43 +66,6 @@ class Version0010Date20191221183157 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable('polls_notice')) {
-			$table = $schema->createTable('polls_notice');
-			$table->addColumn('id', Type::INTEGER, [
-				'autoincrement' => true,
-				'notnull' => true,
-			]);
-			$table->addColumn('poll_id', Type::INTEGER, [
-				'notnull' => true
-			]);
-			$table->addColumn('channel', Type::STRING, [
-				'notnull' => false,
-				'length' => 64
-			]);
-			$table->addColumn('user_id', Type::STRING, [
-				'notnull' => false,
-				'length' => 1024
-			]);
-			$table->addColumn('user_email', Type::STRING, [
-				'notnull' => false,
-				'length' => 1024
-			]);
-			$table->addColumn('display_name', Type::STRING, [
-				'notnull' => false,
-				'length' => 64
-			]);
-			$table->addColumn('message_id', Type::STRING, [
-				'notnull' => false,
-				'length' => 64
-			]);
-			$table->addColumn('message', Type::STRING, [
-				'notnull' => false,
-				'length' => 1024
-			]);
-
-			$table->setPrimaryKey(['id']);
-		}
-
 		if (!$schema->hasTable('polls_log')) {
 			$table = $schema->createTable('polls_log');
 			$table->addColumn('id', Type::INTEGER, [
