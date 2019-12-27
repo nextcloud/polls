@@ -41,6 +41,7 @@ use OCA\Polls\Db\Event;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Service\EventService;
 use OCA\Polls\Service\LogService;
+use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
 
 class EventController extends Controller {
@@ -53,6 +54,7 @@ class EventController extends Controller {
 	private $eventService;
 	private $event;
 	private $logService;
+	private $MailService;
 	private $acl;
 
 	/**
@@ -66,6 +68,7 @@ class EventController extends Controller {
 	 * @param IUserManager $userManager
 	 * @param EventService $eventService
 	 * @param LogService $logService
+	 * @param MailService $mailService
 	 * @param Acl $acl
 	 */
 
@@ -80,6 +83,7 @@ class EventController extends Controller {
 		IUserManager $userManager,
 		EventService $eventService,
 		LogService $logService,
+		MailService $mailService,
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
@@ -91,6 +95,7 @@ class EventController extends Controller {
 		$this->eventService = $eventService;
 		$this->event = $event;
 		$this->logService = $logService;
+		$this->mailService = $mailService;
 		$this->acl = $acl;
 	}
 
@@ -103,6 +108,8 @@ class EventController extends Controller {
 
 	public function list() {
 		$events = [];
+		// TODO: Remove this, because it's just for easy testing purposes
+		// $this->mailService->sendNotifications();
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			try {
 
@@ -113,12 +120,11 @@ class EventController extends Controller {
 						return false;
 					}
     			});
+				return new DataResponse($events, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
 				$events = [];
-				// return new DataResponse($e, Http::STATUS_NOT_FOUND);
 			}
 		}
-		return new DataResponse($events, Http::STATUS_OK);
 	}
 
 	/**
@@ -138,44 +144,43 @@ class EventController extends Controller {
 
 			$this->event = $this->mapper->find($pollId);
 
+			if ($this->event->getType() == 0) {
+				$pollType = 'datePoll';
+			} else {
+				$pollType = 'textPoll';
+			}
+
+			// TODO: add migration for this
+			if ($this->event->getAccess() === 'public' || $this->event->getAccess() === 'registered') {
+				$this->event->setAccess('public');
+			} else {
+				$this->event->setAccess('hidden');
+			}
+
+			return new DataResponse((object) [
+				'id' => $this->event->getId(),
+				'type' => $pollType,
+				'title' => $this->event->getTitle(),
+				'description' => $this->event->getDescription(),
+				'owner' => $this->event->getOwner(),
+				'created' => $this->event->getCreated(),
+				'access' => $this->event->getAccess(),
+				'expire' => $this->event->getExpire(),
+				'expiration' => $this->event->getExpiration(),
+				'isAnonymous' => boolval($this->event->getIsAnonymous()),
+				'fullAnonymous' => boolval($this->event->getFullAnonymous()),
+				'allowMaybe' => boolval($this->event->getAllowMaybe()),
+				'voteLimit' => $this->event->getVoteLimit(),
+				'showResults' => $this->event->getShowResults(),
+				'deleted' => boolval($this->event->getDeleted()),
+				'deleteDate' => $this->event->getDeleteDate()
+			],
+			Http::STATUS_OK);
+
 		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
  		}
-
-		if ($this->event->getType() == 0) {
-			$pollType = 'datePoll';
-		} else {
-			$pollType = 'textPoll';
-		}
-
-		// TODO: add migration for this
-		if ($this->event->getAccess() === 'public' || $this->event->getAccess() === 'registered') {
-			$this->event->setAccess('public');
-		} else {
-			$this->event->setAccess('hidden');
-		}
-
-		return new DataResponse((object) [
-			'id' => $this->event->getId(),
-			'type' => $pollType,
-			'title' => $this->event->getTitle(),
-			'description' => $this->event->getDescription(),
-			'owner' => $this->event->getOwner(),
-			'created' => $this->event->getCreated(),
-			'access' => $this->event->getAccess(),
-			'expire' => $this->event->getExpire(),
-			'expiration' => $this->event->getExpiration(),
-			'isAnonymous' => boolval($this->event->getIsAnonymous()),
-			'fullAnonymous' => boolval($this->event->getFullAnonymous()),
-			'allowMaybe' => boolval($this->event->getAllowMaybe()),
-			'voteLimit' => $this->event->getVoteLimit(),
-			'showResults' => $this->event->getShowResults(),
-			'deleted' => boolval($this->event->getDeleted()),
-			'deleteDate' => $this->event->getDeleteDate()
-		],
-		Http::STATUS_OK);
-
  	}
 
 	/**
@@ -191,10 +196,10 @@ class EventController extends Controller {
 
 		try {
 			$this->acl->setToken($token);
+			return $this->get($this->acl->getPollId());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-		return $this->get($this->acl->getPollId());
 
 	}
 
@@ -230,6 +235,7 @@ class EventController extends Controller {
 				$this->event->setDeleted($event['deleted']);
 			}
 			$this->event->setDeleted($event['deleted']);
+
 		} catch (Exception $e) {
 			$this->event = new Event();
 			$this->acl->setPollId(0);
@@ -244,8 +250,8 @@ class EventController extends Controller {
 
 			$this->event->setOwner($this->userId);
 			$this->event->setCreated(date('Y-m-d H:i:s',time()));
-		} finally {
 
+		} finally {
 			$this->event->setTitle($event['title']);
 			$this->event->setDescription($event['description']);
 

@@ -51,6 +51,29 @@ class LogMapper extends QBMapper {
 
 	}
 
+	public function findUnprocessed() {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+			->from($this->getTableName())
+			->where(
+ 			   $qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+ 		   );
+
+		return $this->findEntities($qb);
+
+	}
+
+	public function findUnprocessedPolls() {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->selectDistinct('poll_id')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		return $this->findEntities($qb);
+
+	}
+
 	public function getLastRecord($pollId) {
 		$qb = $this->db->getQueryBuilder();
 

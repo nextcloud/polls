@@ -65,8 +65,7 @@ class EventMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-;
+		   ->from($this->getTableName());
 
 		return $this->findEntities($qb);
 	}

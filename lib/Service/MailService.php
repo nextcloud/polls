@@ -33,6 +33,8 @@ use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
 use OCP\ILogger;
 
+use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\EventMapper;
 use OCA\Polls\Db\Event;
 use OCA\Polls\Db\ShareMapper;
@@ -51,6 +53,7 @@ class MailService  {
 	private $logger;
 
 	private $shareMapper;
+	private $subscriptionMapper;
 	private $eventMapper;
 	private $logMapper;
 
@@ -64,6 +67,7 @@ class MailService  {
 	 * @param IFactory $transFactory
 	 * @param IMailer $mailer
 	 * @param ILogger $logger
+	 * @param SubscriptionMapper $subscriptionMapper
 	 * @param ShareMapper $shareMapper
 	 * @param EventMapper $eventMapper
 	 * @param LogMapper $logMapper
@@ -79,6 +83,7 @@ class MailService  {
 		IMailer $mailer,
 		ILogger $logger,
 		ShareMapper $shareMapper,
+		SubscriptionMapper $subscriptionMapper,
 		EventMapper $eventMapper,
 		LogMapper $logMapper
 	) {
@@ -91,27 +96,67 @@ class MailService  {
 		$this->mailer = $mailer;
 		$this->logger = $logger;
 		$this->shareMapper = $shareMapper;
+		$this->subscriptionMapper = $subscriptionMapper;
 		$this->eventMapper = $eventMapper;
 		$this->logMapper = $logMapper;
 	}
 
+
 	/**
-	 * @param string $token
+	 * sendMail - Send eMail and evaluate recipient's mail address
+	 * and displayname if $toUserId is a site user
+	 * @param IEmailTemplate $emailTemplate
+	 * @param String $toUserId
+	 * @param String $toEmail
+	 * @param String $toDisplayName
+	 * @return Bool
 	 */
-	public function sendInvitationMail($token) {
+
+	private function sendMail($emailTemplate, $toUserId = '', $toEmail = '', $toDisplayName = '') {
+
+		if ($this->userManager->get($toUserId) instanceof IUser && !$toEmail) {
+			$toEmail = \OC::$server->getConfig()->getUserValue($toUserId, 'settings', 'email');
+			$toDisplayName = $this->userManager->get($toUserId)->getDisplayName();
+		}
+
+		if (!$toEmail || !filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
+       		throw new Exception( 'Invalid email address (' . $toEmail .')' );
+		}
+
+		try {
+			$message = $this->mailer->createMessage();
+			$message->setTo([$toEmail => $toDisplayName]);
+			$message->useTemplate($emailTemplate);
+			$this->mailer->send($message);
+		} catch (\Exception $e) {
+			$this->logger->logException($e, ['app' => 'polls']);
+			throw $e;
+		}
+
+	}
+
+	/**
+	 * @param Share $share
+	 * @param String $defaultLang
+	 * @param String $skipUser
+	 * @return Array $recipients
+	 */
+	private function getRecipientsByShare($share, $defaultLang = 'en', $skipUser = null) {
 		$recipients = [];
-		$share = $this->shareMapper->findByToken($token);
-		$event = $this->eventMapper->find($share->getPollId());
 		$contactsManager = \OC::$server->getContactsManager();
 
 		if ($share->getType() === 'user') {
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
-				'displayName' => $this->userManager->get($share->getUserId())->getDisplayName(),
+				'email' => null,
+				'displayName' => null,
 				'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
-				'eMail' => $this->userManager->get($share->getUserId())->getEMailAddress(),
-				'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
+				'link' => $this->urlGenerator->getAbsoluteURL(
+					$this->urlGenerator->linkToRoute(
+						'polls.page.polls', array('pollId' => $share->getPollId())
+					)
+				)
 			);
 
 		} elseif ($share->getType() === 'contact') {
@@ -121,10 +166,14 @@ class MailService  {
 
 				$recipients[] = array(
 					'userId' => $share->getUserId(),
+					'email' => $contact['EMAIL'][0],
 					'displayName' => $contact['FN'],
-					'language' => $this->config->getUserValue($event->getOwner(), 'core', 'lang'),
-					'eMail' => $contact['EMAIL'][0],
-					'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
+					'language' => $defaultLang,
+					'link' => $this->urlGenerator->getAbsoluteURL(
+						$this->urlGenerator->linkToRoute(
+							'polls.page.polls', array('pollId' => $share->getPollId())
+						)
+					)
 				);
 			} else {
 				return;
@@ -134,10 +183,14 @@ class MailService  {
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
+				'email' => $share->getUserEmail(),
 				'displayName' => $share->getUserId(),
-				'language' => $this->config->getUserValue($event->getOwner(), 'core', 'lang'),
-				'eMail' => $share->getUserEmail(),
-				'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_public', array('token' => $share->getToken())))
+				'language' => $defaultLang,
+				'link' => $this->urlGenerator->getAbsoluteURL(
+					$this->urlGenerator->linkToRoute(
+						'polls.page.vote_public', array('token' => $share->getToken())
+					)
+				)
 			);
 
 		} elseif ($share->getType() === 'group') {
@@ -145,37 +198,49 @@ class MailService  {
 			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
 
 			foreach ($groupMembers as $member) {
-				if ($event->getOwner() === $member) {
+				if ($skipUser === $member) {
 					continue;
 				}
 
 				$recipients[] = array(
 					'userId' => $member,
-					'displayName' => $this->userManager->get($member)->getDisplayName(),
+					'email' => null,
+					'displayName' => null,
 					'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
-					'eMail' => $this->userManager->get($member)->getEMailAddress(),
-					'link' => $this->urlGenerator->getAbsoluteURL($this->urlGenerator->linkToRoute('polls.page.vote_poll', array('pollId' => $share->getpollId())))
+					'link' => $this->urlGenerator->getAbsoluteURL(
+						$this->urlGenerator->linkToRoute(
+							'polls.page.polls', array('pollId' => $share->getPollId())
+						)
+					)
 				);
 
 			}
 		}
 
-		$sendUser = $this->userManager->get($event->getOwner());
-		$sender = $event->getOwner();
-		if ($sendUser instanceof IUser) {
-			$sender = $sendUser->getDisplayName();
-		}
+		return $recipients;
+	}
+
+	/**
+	 * @param string $token
+	 */
+	public function sendInvitationMail($token) {
+		$share = $this->shareMapper->findByToken($token);
+		$event = $this->eventMapper->find($share->getPollId());
+		$owner = $this->userManager->get($event->getOwner());
+
+		$recipients = $this->getRecipientsByShare(
+			$this->shareMapper->findByToken($token),
+			$this->config->getUserValue($event->getOwner(), 'core', 'lang'),
+			$event->getOwner()
+		);
+		$this->logger->debug(json_encode($recipients));
 
 		foreach ($recipients as $recipient) {
-
-			if ($recipient['eMail'] === null || !filter_var($recipient['eMail'], FILTER_VALIDATE_EMAIL)) {
-				continue;
-			}
 
 			$trans = $this->transFactory->get('polls', $recipient['language']);
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
-				'user' => $sender,
+				'owner' => $owner->getDisplayName(),
 				'title' => $event->getTitle(),
 				'link' => $recipient['link']
 			]);
@@ -185,30 +250,30 @@ class MailService  {
 			$emailTemplate->addHeading($trans->t('Poll invitation "%s"', $event->getTitle()), false);
 
 			$emailTemplate->addBodyText(str_replace(
-				['{user}', '{title}'],
-				[$sender, $event->getTitle()],
-				$trans->t('{user} invited you to take part in the poll "{title}"' )
+				['{owner}', '{title}'],
+				[$owner->getDisplayName(), $event->getTitle()],
+				$trans->t('{owner} invited you to take part in the poll "{title}"' )
 			));
 
-				$emailTemplate->addBodyButton(
-					htmlspecialchars($trans->t('Go to poll')),
-					$recipient['link']
-				);
+			$emailTemplate->addBodyButton(
+				htmlspecialchars($trans->t('Go to poll')),
+				$recipient['link']
+			);
 
-			$emailTemplate->addFooter();
+			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner.' ));
 
 			try {
-
-				$message = $this->mailer->createMessage();
-				$message->setTo([$recipient['eMail'] => $recipient['displayName']]);
-				$message->useTemplate($emailTemplate);
-				$this->mailer->send($message);
-
-			} catch (\Exception $e) {
-
-				$this->logger->logException($e, ['app' => 'polls']);
-
+				$this->sendMail(
+					$emailTemplate,
+					$recipient['userId'],
+					$recipient['email'],
+					$recipient['displayName']
+				);
+			} catch (Exeption $e) {
+				// todo alert Owner
+				// Invitation to $recipient['userId'] could not be sent
 			}
+
 		}
 	}
 
@@ -220,63 +285,96 @@ class MailService  {
 		$this->logger->debug('sendNotice test');
 	}
 
-	private function sendNotifications($pollId, $from) {
-		$poll = $this->eventMapper->find($pollId);
-		$notifications = $this->mapper->findAllByPoll($pollId);
-		foreach ($notifications as $notification) {
-			if ($from === $notification->getUserId()) {
+	public function sendNotifications() {
+		$subscriptions = [];
+		$log = $this->logMapper->findUnprocessedPolls();
+
+		foreach ($log as $logItem) {
+			$subscriptions = array_merge($subscriptions, $this->subscriptionMapper->findAllByPoll($logItem->getPollId()));
+		}
+
+		$log = $this->logMapper->findUnprocessed();
+
+		foreach ($subscriptions as $subscription) {
+
+			if ($this->userManager->get($subscription->getUserId()) instanceof IUser) {
+				$lang = $this->config->getUserValue($subscription->getUserId(), 'core', 'lang');
+			} else {
 				continue;
 			}
-			$recUser = $this->userManager->get($notification->getUserId());
-			if (!$recUser instanceof IUser) {
-				continue;
-			}
-			$email = \OC::$server->getConfig()->getUserValue($notification->getUserId(), 'settings', 'email');
-			if ($email === null || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				continue;
-			}
+
+			$event = $this->eventMapper->find($subscription->getPollId());
+			$trans = $this->transFactory->get('polls', $lang);
+
 			$url = $this->urlGenerator->getAbsoluteURL(
-				$this->urlGenerator->linkToRoute('polls.page.vote',
-					array('hash' => $poll->getHash()))
+				$this->urlGenerator->linkToRoute(
+					'polls.page.polls',
+					array('pollId' => $subscription->getPollId())
+				)
 			);
 
-			$sendUser = $this->userManager->get($from);
-			$sender = $from;
-			if ($sendUser instanceof IUser) {
-				$sender = $sendUser->getDisplayName();
-			}
-
-			$lang = $this->config->getUserValue($notification->getUserId(), 'core', 'lang');
-			$trans = $this->transFactory->get('polls', $lang);
-			$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
-				'user' => $sender,
-				'title' => $poll->getTitle(),
-				'link' => $url,
+			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
+				'title' => $event->getTitle(),
+				'link' => $url
 			]);
 			$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
 			$emailTemplate->addHeader();
 			$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
-
 			$emailTemplate->addBodyText(str_replace(
-				['{user}', '{title}'],
-				[$sender, $poll->getTitle()],
-				$trans->t('{user} participated in the poll "{title}"')
+				['{title}'],
+				[$event->getTitle()],
+				$trans->t('"{title}" had recent activity: ')
 			));
+
+			foreach ($log as $logItem) {
+				if ($logItem->getPollId() === $subscription->getPollId()) {
+					if ($logItem->getMessage()) {
+						$emailTemplate->addBodyText($logItem->getMessage());
+					} elseif ($logItem->getMessageId() === 'setVote') {
+						$emailTemplate->addBodyText($trans->t(
+							'- %s voted.',
+							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+					);
+					} elseif ($logItem->getMessageId() === 'updatePoll') {
+						$emailTemplate->addBodyText($trans->t(
+							'- %s updated the poll configuration. Please check your votes.',
+							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+						);
+					} elseif ($logItem->getMessageId() === 'deletePoll') {
+						$emailTemplate->addBodyText($trans->t(
+							'- %s deleted the poll.',
+							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+						);
+					} elseif ($logItem->getMessageId() === 'restorePoll') {
+						$emailTemplate->addBodyText($trans->t(
+							'- %s restored the poll.',
+							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+						);
+					} elseif ($logItem->getMessageId() === 'expirePoll') {
+						$emailTemplate->addBodyText($trans->t(
+							'- The poll expired.',
+							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+						);
+					}
+
+				}
+
+				$logItem->setProcessed(time());
+				$this->logMapper->update($logItem);
+			}
 
 			$emailTemplate->addBodyButton(
 				htmlspecialchars($trans->t('Go to poll')),
 				$url,
 				/** @scrutinizer ignore-type */ false
 			);
+			$emailTemplate->addFooter($trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.' ));
 
-			$emailTemplate->addFooter();
 			try {
-				$message = $this->mailer->createMessage();
-				$message->setTo([$email => $recUser->getDisplayName()]);
-				$message->useTemplate($emailTemplate);
-				$this->mailer->send($message);
-			} catch (\Exception $e) {
-				$this->logger->logException($e, ['app' => 'polls']);
+				$this->sendMail( $emailTemplate, $subscription->getUserId());
+			} catch (Exeption $e) {
+				// todo alert Owner
+				// Notification to $subscription->getUserId() could not be sent
 			}
 		}
 	}

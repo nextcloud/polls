@@ -39,6 +39,20 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return array
+	 */
+	public function findAll() {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName());
+
+		return $this->findEntities($qb);
+	}
+
+
+	/**
 	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return array
