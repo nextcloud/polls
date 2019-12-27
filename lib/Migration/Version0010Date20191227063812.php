@@ -38,7 +38,7 @@ use OCP\Security\ISecureRandom;
  * Installation class for the polls app.
  * Initial db creation
  */
-class Version0010Date20190801063812 extends SimpleMigrationStep {
+class Version0010Date20191227063812 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
@@ -68,6 +68,12 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 
 		if ($schema->hasTable('polls_events')) {
 			$table = $schema->getTable('polls_events');
+			if (!$table->hasColumn('expiration')) {
+				$table->addColumn('expiration', Type::BOOLEAN, [
+					'notnull' => true,
+					'default' => 0
+				]);
+			}
 			if (!$table->hasColumn('deleted')) {
 				$table->addColumn('deleted', Type::BOOLEAN, [
 					'notnull' => false,
@@ -122,6 +128,44 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 			$table->setPrimaryKey(['id']);
 		}
 
+		if (!$schema->hasTable('polls_log')) {
+			$table = $schema->createTable('polls_log');
+			$table->addColumn('id', Type::INTEGER, [
+				'autoincrement' => true,
+				'notnull' => true
+			]);
+			$table->addColumn('created', Type::INTEGER, [
+				'notnull' => true,
+				'length' => 11,
+				'default' => 0
+			]);
+			$table->addColumn('processed', Type::INTEGER, [
+				'notnull' => true,
+				'length' => 11,
+				'default' => 0
+			]);
+			$table->addColumn('poll_id', Type::INTEGER, [
+				'notnull' => true
+			]);
+			$table->addColumn('user_id', Type::STRING, [
+				'notnull' => false,
+				'length' => 1024
+			]);
+			$table->addColumn('display_name', Type::STRING, [
+				'notnull' => false,
+				'length' => 64
+			]);
+			$table->addColumn('message_id', Type::STRING, [
+				'notnull' => false,
+				'length' => 64
+			]);
+			$table->addColumn('message', Type::STRING, [
+				'notnull' => false,
+				'length' => 1024
+			]);
+			$table->setPrimaryKey(['id']);
+		}
+
 		return $schema;
 	}
 
@@ -135,10 +179,26 @@ class Version0010Date20190801063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
+		if ($schema->hasTable('polls_events')) {
+			$this->setExpiration();
+		}
+
 		if ($schema->hasTable('polls_share')) {
 			$this->copyTokens();
 			// $this->copyInvitationTokens();
 		}
+	}
+
+	/**
+	 * Set expiration if expire is filled
+	 */
+	protected function setExpiration() {
+
+		$update = $this->connection->getQueryBuilder();
+		$update->update('polls_events')
+			->set('expiration', $update->createNamedParameter(true))
+			->where('expire IS NOT NULL');
+		$result = $update->execute();
 	}
 
 	/**
