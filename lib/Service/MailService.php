@@ -277,14 +277,6 @@ class MailService  {
 		}
 	}
 
-	/**
-	 * @param int $pollId
-	 * @param string $from
-	 */
-	public function sendNotice() {
-		$this->logger->debug('sendNotice test');
-	}
-
 	public function sendNotifications() {
 		$subscriptions = [];
 		$log = $this->logMapper->findUnprocessedPolls();
