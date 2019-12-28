@@ -44,13 +44,13 @@
 				type="checkbox" class="checkbox">
 			<label for="allowMaybe" class="title"> {{ t('polls', 'Allow "maybe" vote') }} </label>
 
-			<input id="anonymous" v-model="pollIsAnonymous"
+			<input id="anonymous" v-model="pollAnonymous"
 				type="checkbox" class="checkbox">
 			<label for="anonymous" class="title"> {{ t('polls', 'Anonymous poll') }} </label>
 
-			<input v-show="poll.isAnonymous" id="trueAnonymous" v-model="pollFullAnonymous"
+			<input v-show="poll.anonymous" id="trueAnonymous" v-model="pollFullAnonymous"
 				type="checkbox" class="checkbox">
-			<label v-show="poll.isAnonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
+			<label v-show="poll.anonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
 
 			<input id="expiration" v-model="pollExpiration"
 				type="checkbox" class="checkbox">
@@ -90,7 +90,8 @@ export default {
 		return {
 			writingPoll: false,
 			sidebar: false,
-			titleEmpty: false
+			titleEmpty: false,
+			setExpiration: false
 		}
 	},
 
@@ -139,28 +140,33 @@ export default {
 
 		pollExpiration: {
 			get() {
-				return this.poll.expiration
+				return this.poll.expire
 			},
 			set(value) {
-				this.writeValue({ 'expiration': value })
+				if (value) {
+					this.writeValue({ 'expire': Date() })
+				} else {
+					this.writeValue({ 'expire': 0 })
+
+				}
 			}
 		},
 
 		pollFullAnonymous: {
 			get() {
-				return this.poll.fullAnonymous
+				return (this.poll.anonymous === 3)
 			},
 			set(value) {
-				this.writeValue({ 'fullAnonymous': value })
+				this.writeValue({ 'anonymous': 3 })
 			}
 		},
 
-		pollIsAnonymous: {
+		pollAnonymous: {
 			get() {
-				return this.poll.isAnonymous
+				return (this.poll.anonymous > 0)
 			},
 			set(value) {
-				this.writeValue({ 'isAnonymous': value })
+				this.writeValue({ 'anonymous': value })
 			}
 		},
 
@@ -170,17 +176,11 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ 'allowMaybe': value })
+				if (value) {
+					this.writeValue({ 'options': ['yes', 'no', 'maybe'] })
+				}
 			}
 		},
-
-		// pollExpiration: {
-		// 	get() {
-		// 		return this.$store.state.poll.expiration
-		// 	},
-		// 	set(value) {
-		// 		this.writeValue({ 'expiration': value })
-		// 	}
-		// },
 
 		langPicker() {
 			return {

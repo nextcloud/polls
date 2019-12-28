@@ -103,6 +103,7 @@ class PollController extends Controller {
 	 * Get all polls
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 * @return DataResponse
 	 */
 
@@ -143,38 +144,41 @@ class PollController extends Controller {
 			}
 
 			$this->poll = $this->mapper->find($pollId);
-
-			if ($this->poll->getType() == 0) {
-				$pollType = 'datePoll';
-			} else {
-				$pollType = 'textPoll';
-			}
+			$this->logger->alert(json_encode($this->poll));
+			// if ($this->poll->getType() == 0) {
+			// 	$pollType = 'datePoll';
+			// } else {
+			// 	$pollType = 'textPoll';
+			// }
 
 			// TODO: add migration for this
-			if ($this->poll->getAccess() === 'public' || $this->poll->getAccess() === 'registered') {
-				$this->poll->setAccess('public');
-			} else {
-				$this->poll->setAccess('hidden');
-			}
+			// if ($this->poll->getAccess() === 'public' || $this->poll->getAccess() === 'registered') {
+			// 	$this->poll->setAccess('public');
+			// } else {
+			// 	$this->poll->setAccess('hidden');
+			// }
 
-			return new DataResponse((object) [
-				'id' => $this->poll->getId(),
-				'type' => $pollType,
-				'title' => $this->poll->getTitle(),
-				'description' => $this->poll->getDescription(),
-				'owner' => $this->poll->getOwner(),
-				'created' => $this->poll->getCreated(),
-				'access' => $this->poll->getAccess(),
-				'expire' => $this->poll->getExpire(),
-				'expiration' => $this->poll->getExpiration(),
-				'isAnonymous' => boolval($this->poll->getIsAnonymous()),
-				'fullAnonymous' => boolval($this->poll->getFullAnonymous()),
-				'allowMaybe' => boolval($this->poll->getAllowMaybe()),
-				'voteLimit' => $this->poll->getVoteLimit(),
-				'showResults' => $this->poll->getShowResults(),
-				'deleted' => boolval($this->poll->getDeleted()),
-				'deleteDate' => $this->poll->getDeleteDate()
-			],
+			return new DataResponse((object)
+				$this->poll
+				// [
+				// 'id' => $this->poll->getId(),
+				// 'type' => $pollType,
+				// 'title' => $this->poll->getTitle(),
+				// 'description' => $this->poll->getDescription(),
+				// 'owner' => $this->poll->getOwner(),
+				// 'created' => $this->poll->getCreated(),
+				// 'access' => $this->poll->getAccess(),
+				// 'expire' => $this->poll->getExpire(),
+				// 'expiration' => $this->poll->getExpiration(),
+				// 'isAnonymous' => boolval($this->poll->getIsAnonymous()),
+				// 'fullAnonymous' => boolval($this->poll->getFullAnonymous()),
+				// 'allowMaybe' => boolval($this->poll->getAllowMaybe()),
+				// 'voteLimit' => $this->poll->getVoteLimit(),
+				// 'showResults' => $this->poll->getShowResults(),
+				// 'deleted' => boolval($this->poll->getDeleted()),
+				// 'deleteDate' => $this->poll->getDeleteDate()
+			// ]
+			,
 			Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {

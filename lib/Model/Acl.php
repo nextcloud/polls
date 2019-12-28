@@ -208,8 +208,23 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return bool
 	 */
+	public function getExpired(): bool {
+		return (
+			   $this->poll->getExpire() > 0
+			&& $this->poll->getExpire() > time()
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
 	public function getAllowVote(): bool {
-		if ($this->getAllowView() && !$this->poll->getDeleted() && strtotime($this->poll->getExpire()) > time()) {
+		if (
+			   $this->getAllowView() 
+			&& !$this->getExpired()
+			&& !$this->poll->getDeleted()
+		) {
 			return true;
 		} else {
 			return false;
@@ -237,7 +252,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowSeeUsernames(): bool {
-		return !(($this->poll->getIsAnonymous() && !$this->getIsOwner()) || $this->poll->getFullAnonymous());;
+		return !(($this->poll->getAnonymous() && !$this->getIsOwner()) || $this->poll->getFullAnonymous());;
 	}
 
 	/**

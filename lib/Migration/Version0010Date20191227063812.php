@@ -66,6 +66,17 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
+		if ($schema->hasTable('polls_comments')) {
+			$table = $schema->getTable('polls_comments');
+			if (!$table->hasColumn('timestamp')) {
+				$table->addColumn('timestamp', Type::INTEGER, [
+					'length' => 11,
+					'notnull' => true,
+					'default' => 0
+				]);
+			}
+		}
+
 		if (!$schema->hasTable('polls_polls')) {
 			$table = $schema->createTable('polls_polls');
 			$table->addColumn('id', Type::INTEGER, [

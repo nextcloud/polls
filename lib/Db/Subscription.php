@@ -29,20 +29,26 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method string getUserId()
- * @method void setUserId(string $value)
+ * @method integer getId()
+ * @method void setId(integer $value)
  * @method integer getPollId()
  * @method void setPollId(integer $value)
+ * @method string getUserId()
+ * @method void setUserId(string $value)
  */
 class Subscription extends Entity implements JsonSerializable {
+
+	/** @var int $pollId */
 	protected $pollId;
+
+	/** @var string $userId */
 	protected $userId;
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'pollId' => $this->pollId,
-			'userId' => $this->userId,
+			'id' => intval($this->id),
+			'pollId' => intval($this->pollId),
+			'userId' => $this->userId
 		];
 	}
 }

@@ -132,6 +132,7 @@ const actions = {
 
 		axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
+				console.log(response.data)
 				commit('setVotes', { 'list': response.data })
 			}, (error) => {
 				console.error('Error loading votes', { 'error': error.response }, { 'payload': payload })

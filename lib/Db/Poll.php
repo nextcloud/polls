@@ -59,42 +59,72 @@ use OCP\AppFramework\Db\Entity;
  * @method integer getVoteLimit()
  * @method void setVoteLimit(integer $value)
  * @method integer getShowResults()
- * @method void setShowResults(integer $value)
+ * @method void setShowResults(string $value)
  */
 class Poll extends Entity implements JsonSerializable {
+
+	/** @var string $type */
 	protected $type;
+
+	/** @var string $title */
 	protected $title;
+
+	/** @var string $description */
 	protected $description;
+
+	/** @var string $owner */
 	protected $owner;
+
+	/** @var int $created */
 	protected $created;
+
+	/** @var int $expire */
 	protected $expire;
+
+	/** @var int $deleted */
 	protected $deleted;
+
+	/** @var string $access */
 	protected $access;
-	protected $Anonymous;
+
+	/** @var int $anonymous */
+	protected $anonymous;
+
+	/** @var int $fullAnonymous */
 	protected $fullAnonymous;
+
+	/** @var int $allowMaybe */
 	protected $allowMaybe;
+
+	/** @var string $options */
 	protected $options;
+
+	/** @var string $settings*/
 	protected $settings;
+
+	/** @var int $voteLimit*/
 	protected $voteLimit;
+
+	/** @var string $showResults */
 	protected $showResults;
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
+			'id' => intval($this->id),
 			'type' => $this->type,
 			'title' => $this->title,
 			'description' => $this->description,
 			'owner' => $this->owner,
-			'created' => $this->created,
-			'expire' => $this->expire,
-			'deleted' => $this->deleted,
+			'created' => intval($this->created),
+			'expire' => intval($this->expire),
+			'deleted' => intval($this->deleted),
 			'access' => $this->access,
-			'Anonymous' => $this->Anonymous,
-			'fullAnonymous' => $this->fullAnonymous,
-			'allowMaybe' => $this->allowMaybe,
+			'anonymous' => intval($this->anonymous),
+			'fullAnonymous' => intval($this->fullAnonymous),
+			'allowMaybe' => intval($this->allowMaybe),
 			'options' => $this->options,
 			'settings' => $this->settings,
-			'voteLimit' => $this->voteLimit,
+			'voteLimit' => intval($this->voteLimit),
 			'showResults' => $this->showResults
 		];
 	}

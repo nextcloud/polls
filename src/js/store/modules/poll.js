@@ -29,18 +29,16 @@ const defaultPoll = () => {
 		type: 'datePoll',
 		title: '',
 		description: '',
-		owner: undefined,
-		created: '',
+		owner: '',
+		created: 0,
+		expire: 0,
+		deleted: 0,
 		access: 'public',
-		expire: null,
-		expiration: false,
-		isAnonymous: false,
-		fullAnonymous: false,
-		allowMaybe: false,
-		voteLimit: null,
-		showResults: true,
-		deleted: false,
-		deleteDate: null
+		anonymous: 0,
+		fullAnonymous: 0,
+		allowMaybe: 0,
+		voteLimit: 0,
+		showResults: 'always'
 	}
 }
 
@@ -64,16 +62,12 @@ const mutations = {
 const getters = {
 
 	expired: (state, getters) => {
-		return (state.expiration && moment(state.expire).diff() < 0)
+		return (state.expire > 0 && moment(state.expire).diff() < 0)
 	},
 
 	accessType: (state, getters, rootState) => {
 		if (rootState.acl.accessLevel === 'public') {
 			return t('polls', 'Public access')
-		} else if (rootState.acl.accessLevel === 'select') {
-			return t('polls', 'Only shared')
-		} else if (rootState.acl.accessLevel === 'registered') {
-			return t('polls', 'Registered users only')
 		} else if (rootState.acl.accessLevel === 'hidden') {
 			return t('polls', 'Hidden poll')
 		} else {
@@ -99,9 +93,10 @@ const actions = {
 		} else {
 			return
 		}
-
+		console.log('load poll')
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
+				console.log(response.data)
 				commit('setPoll', { 'poll': response.data })
 			}, (error) => {
 				if (error.response.status !== '404') {
@@ -129,6 +124,7 @@ const actions = {
 
 		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
+				console.log(response.data);
 				commit('setPoll', { 'poll': response.data })
 				return response.poll
 			}, (error) => {

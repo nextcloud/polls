@@ -97,28 +97,7 @@ class OptionController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 
-			$options = $this->mapper->findByPoll($pollId);
-
-			foreach ($options as &$Option) {
-				// Fix for empty timestamps on date polls
-				// generate timestamp from pollOptionText
-				if ($Option->getTimestamp() > 0) {
-					$ts = $Option->getTimestamp();
-				} else if (strtotime($Option->getPollOptionText())) {
-					$ts = strtotime($Option->getPollOptionText());
-				} else {
-					$ts = 0;
-				}
-
-
-				$Option = (object) [
-					'id' => $Option->getId(),
-					'pollId' => $Option->getPollId(),
-					'pollOptionText' => htmlspecialchars_decode($Option->getPollOptionText()),
-					'timestamp' => $ts
-				];
-			}
-			return new DataResponse($options, Http::STATUS_OK);
+			return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
@@ -140,6 +119,7 @@ class OptionController extends Controller {
 		try {
 			$this->acl->setToken($token);
 			return $this->get($this->acl->getPollId());
+			return new DataResponse((array) $this->get($this->acl->getPollId()), Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);

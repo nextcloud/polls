@@ -42,18 +42,28 @@ use OCP\AppFramework\Db\Entity;
  * @method void setVoteAnswer(string $value)
  */
 class Vote extends Entity implements JsonSerializable {
+
+	/** @var int $pollId */
 	protected $pollId;
+
+	/** @var string $userId */
 	protected $userId;
+
+	/** @var int $voteOptionId */
 	protected $voteOptionId;
+
+	/** @var string $voteOptionText */
 	protected $voteOptionText;
+
+	/** @var string $voteAnswer */
 	protected $voteAnswer;
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'pollId' => $this->pollId,
+			'id' => intval($this->id),
+			'pollId' => intval($this->pollId),
 			'userId' => $this->userId,
-			'voteOptionId' => $this->voteOptionId,
+			'voteOptionId' => intval($this->voteOptionId),
 			'voteOptionText' => $this->voteOptionText,
 			'voteAnswer' => $this->voteAnswer
 		];

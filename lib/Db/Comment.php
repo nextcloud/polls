@@ -30,27 +30,52 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
+ * @method integer getId()
+ * @method void setId(integer $value)
+ * @method integer getPollId()
+ * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getDt()
  * @method void setDt(string $value)
  * @method string getComment()
  * @method void setComment(string $value)
- * @method integer getPollId()
- * @method void setPollId(integer $value)
  */
 class Comment extends Entity implements JsonSerializable {
+
+	/** @var int $pollId */
 	protected $pollId;
+
+	/** @var string $userId */
 	protected $userId;
+
+	/** @var string $dt */
 	protected $dt;
+
+	/** @var int $timestamp */
+	protected $timestamp;
+
+	/** @var string $comment */
 	protected $comment;
 
 	public function jsonSerialize() {
+
+		// too lazy for a migration
+		// use timestamp if is set,
+		// otherwise use dt and convert to timestamp
+
+		if (intval($this->timestamp) > 0) {
+			$timestamp = $this->timestamp;
+		} else {
+			$timestamp = strtotime($this->dt);
+		}
+
 		return [
-			'id' => $this->id,
-			'pollId' => $this->pollId,
+			'id' => intval($this->id),
+			'pollId' => intval($this->pollId),
 			'userId' => $this->userId,
 			'dt' => $this->dt,
+			'timestamp' => intval($timestamp),
 			'comment' => $this->comment
 		];
 	}
