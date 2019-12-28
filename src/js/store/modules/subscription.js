@@ -43,7 +43,6 @@ const actions = {
 	getSubscription({ commit }, payload) {
 		axios.get(OC.generateUrl('apps/polls/subscription/get/' + payload.pollId))
 			.then((response) => {
-				console.log(response.data)
 				commit('setSubscription', true)
 			})
 			.catch(() => {

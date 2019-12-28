@@ -144,7 +144,6 @@ class PollController extends Controller {
 			}
 
 			$this->poll = $this->mapper->find($pollId);
-			$this->logger->alert(json_encode($this->poll));
 			// if ($this->poll->getType() == 0) {
 			// 	$pollType = 'datePoll';
 			// } else {
@@ -160,24 +159,6 @@ class PollController extends Controller {
 
 			return new DataResponse((object)
 				$this->poll
-				// [
-				// 'id' => $this->poll->getId(),
-				// 'type' => $pollType,
-				// 'title' => $this->poll->getTitle(),
-				// 'description' => $this->poll->getDescription(),
-				// 'owner' => $this->poll->getOwner(),
-				// 'created' => $this->poll->getCreated(),
-				// 'access' => $this->poll->getAccess(),
-				// 'expire' => $this->poll->getExpire(),
-				// 'expiration' => $this->poll->getExpiration(),
-				// 'isAnonymous' => boolval($this->poll->getIsAnonymous()),
-				// 'fullAnonymous' => boolval($this->poll->getFullAnonymous()),
-				// 'allowMaybe' => boolval($this->poll->getAllowMaybe()),
-				// 'voteLimit' => $this->poll->getVoteLimit(),
-				// 'showResults' => $this->poll->getShowResults(),
-				// 'deleted' => boolval($this->poll->getDeleted()),
-				// 'deleteDate' => $this->poll->getDeleteDate()
-			// ]
 			,
 			Http::STATUS_OK);
 
@@ -228,45 +209,28 @@ class PollController extends Controller {
 
 			$logMessageId = 'updatePoll';
 
-			if (boolval($this->poll->getDeleted()) !== boolval($poll['deleted'])) {
-				if ($poll['deleted']) {
-					$logMessageId = 'deletePoll';
-					$this->poll->setDeleteDate(date('Y-m-d'));
-				} else {
-					$logMessageId = 'restorePoll';
-					$this->poll->setDeleteDate('0');
-				}
-				$this->poll->setDeleted($poll['deleted']);
-			}
-			$this->poll->setDeleted($poll['deleted']);
-
 		} catch (Exception $e) {
 			$this->poll = new Poll();
 			$this->acl->setPollId(0);
 
-			if ($poll['type'] === 'datePoll') {
-				$this->poll->setType(0);
-			} elseif ($poll['type'] === 'textPoll') {
-				$this->poll->setType(1);
-			} else {
-				$this->poll->setType($poll['type']);
-			}
-
+			$this->poll->setType($poll['type']);
 			$this->poll->setOwner($this->userId);
-			$this->poll->setCreated(date('Y-m-d H:i:s',time()));
+			$this->poll->setCreated(time());
 
 		} finally {
 			$this->poll->setTitle($poll['title']);
 			$this->poll->setDescription($poll['description']);
-
 			$this->poll->setAccess($poll['access']);
-			$this->poll->setExpiration($poll['expiration']);
-			$this->poll->setExpire(date('Y-m-d H:i:s', strtotime($poll['expire'])));
-			$this->poll->setIsAnonymous(intval($poll['isAnonymous']));
+			$this->poll->setExpire($poll['expire']);
+			$this->poll->setAnonymous(intval($poll['anonymous']));
 			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']));
 			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
 			$this->poll->setVoteLimit(intval($poll['voteLimit']));
+			$this->poll->setSettings(json_encode($poll));
+			$this->poll->setOptions($poll['options']);
 			$this->poll->setShowResults($poll['showResults']);
+			$this->poll->setDeleted($poll['deleted']);
+			$this->poll->setAdminAccess($poll['adminAccess']);
 
 			if ($this->acl->getPollId() > 0) {
 				$this->mapper->update($this->poll);

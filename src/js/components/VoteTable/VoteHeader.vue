@@ -24,8 +24,8 @@
 	<div class="voteHeader">
 		<h2>
 			{{ poll.title }}
-			<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment.utc(poll.expire).local().format('LLLL')) }}</span>
-			<span v-if="!expired && poll.expiration" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.utc(poll.expire).local().format('LLLL')) }}</span>
+			<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+			<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
 			<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
 		</h2>
 		<h3>

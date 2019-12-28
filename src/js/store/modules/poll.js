@@ -38,7 +38,8 @@ const defaultPoll = () => {
 		fullAnonymous: 0,
 		allowMaybe: 0,
 		voteLimit: 0,
-		showResults: 'always'
+		showResults: 'always',
+		adminAccess: 0
 	}
 }
 
@@ -62,7 +63,7 @@ const mutations = {
 const getters = {
 
 	expired: (state, getters) => {
-		return (state.expire > 0 && moment(state.expire).diff() < 0)
+		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
 	accessType: (state, getters, rootState) => {
@@ -93,10 +94,8 @@ const actions = {
 		} else {
 			return
 		}
-		console.log('load poll')
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				console.log(response.data)
 				commit('setPoll', { 'poll': response.data })
 			}, (error) => {
 				if (error.response.status !== '404') {
@@ -124,7 +123,6 @@ const actions = {
 
 		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
-				console.log(response.data);
 				commit('setPoll', { 'poll': response.data })
 				return response.poll
 			}, (error) => {

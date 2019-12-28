@@ -92,7 +92,6 @@ const actions = {
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				console.log(response.data)
 				commit('setShares', { 'list': response.data })
 			}, (error) => {
 				console.error('Error loading shares', { 'error': error.response }, { 'payload': payload })

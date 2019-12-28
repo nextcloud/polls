@@ -74,7 +74,6 @@ const actions = {
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				console.log(response.data)
 				commit('setComments', { 'list': response.data })
 			}, (error) => {
 				console.error('Error loading comments', { 'error': error.response }, { 'payload': payload })

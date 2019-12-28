@@ -152,6 +152,11 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => 'always'
 			]);
+			$table->addColumn('admin_access', Type::INTEGER, [
+				'length' => 8,
+				'notnull' => true,
+				'default' => 0
+			]);
 
 			$table->setPrimaryKey(['id']);
 		}

@@ -131,10 +131,11 @@ export default {
 
 		pollExpire: {
 			get() {
-				return moment.utc(this.poll.expire).local()
+				return moment.unix(this.poll.expire)
 			},
 			set(value) {
-				this.writeValue({ 'expire': moment.local(value).utc().format() })
+
+				this.writeValue({ 'expire': moment(value).unix() })
 			}
 		},
 
@@ -144,7 +145,7 @@ export default {
 			},
 			set(value) {
 				if (value) {
-					this.writeValue({ 'expire': Date() })
+					this.writeValue({ 'expire': moment().unix() })
 				} else {
 					this.writeValue({ 'expire': 0 })
 
@@ -154,10 +155,10 @@ export default {
 
 		pollFullAnonymous: {
 			get() {
-				return (this.poll.anonymous === 3)
+				return (this.poll.Fullanonymous > 0)
 			},
 			set(value) {
-				this.writeValue({ 'anonymous': 3 })
+				this.writeValue({ 'fullAnonymous': value })
 			}
 		},
 
@@ -250,7 +251,11 @@ export default {
 		},
 
 		switchDeleted() {
-			this.writeValue({ 'deleted': !this.poll.deleted })
+			if (this.poll.deleted) {
+				this.writeValue({ 'deleted': 0 })
+			} else {
+				this.writeValue({ 'deleted': moment.utc().unix() })
+			}
 
 		},
 

@@ -155,7 +155,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function getIsAdmin(): bool {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return $this->groupManager->isAdmin($this->userId);
+			return ($this->groupManager->isAdmin($this->userId) && $this->poll->getAdminAccess());
 		} else {
 			return false;
 		}
@@ -221,7 +221,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function getAllowVote(): bool {
 		if (
-			   $this->getAllowView() 
+			   $this->getAllowView()
 			&& !$this->getExpired()
 			&& !$this->poll->getDeleted()
 		) {

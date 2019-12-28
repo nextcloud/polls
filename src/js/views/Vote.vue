@@ -89,7 +89,6 @@ export default {
 		},
 
 		'poll.id'(to, from) {
-			console.log('pollId changed')
 			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
 				.then(() => {
 					this.loading = false

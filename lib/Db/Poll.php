@@ -60,6 +60,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setVoteLimit(integer $value)
  * @method integer getShowResults()
  * @method void setShowResults(string $value)
+ * @method integer getAdminAccess()
+ * @method void setAdminAccess(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
 
@@ -108,6 +110,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var string $showResults */
 	protected $showResults;
 
+	/** @var int $adminAccess*/
+	protected $adminAccess;
+
 	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
@@ -125,7 +130,8 @@ class Poll extends Entity implements JsonSerializable {
 			'options' => $this->options,
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
-			'showResults' => $this->showResults
+			'showResults' => $this->showResults,
+			'adminAccess' => $this->adminAccess
 		];
 	}
 }
