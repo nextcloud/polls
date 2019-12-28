@@ -100,7 +100,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('deleted', Type::BOOLEAN, [
+			$table->addColumn('deleted', Type::INTEGER, [
 				'length' => 11,
 				'notnull' => true,
 				'default' => 0
