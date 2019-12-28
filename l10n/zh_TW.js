@@ -7,7 +7,6 @@ OC.L10N.register(
     "Event schedule" : "活動安排類",
     "Text based" : "文字敘述類",
     "Cancel" : "取消",
-    "Receive notification email on activity" : "接收E-mail活動通知",
     "Title" : "標題",
     "Access" : "存取",
     "Owner" : "擁有者",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "Update poll" : "更新調查活動內容",
     "Share Link" : "分享連結",
     "Unknown user" : "未知的使用者",
+    "Receive notification email on activity" : "接收E-mail活動通知",
     "Deleted" : "已刪除",
     "Access denied" : "存取被拒絕",
     "You are not allowed to view this poll or the poll does not exist." : "您並不允許瀏覽此調查項目，或者此調查並不存在。"

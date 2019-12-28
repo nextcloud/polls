@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Encuestas",
+    "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una aplicación de encuestas, similar a doodle/dudle con la opción de restringir el acceso.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una aplicación de encuestas, similar a doodle/dudle con la opción de restringir el acceso (solo miembros, grupos/usuarios, oculto o público).",
     "Group" : "Grupo",
@@ -9,7 +10,6 @@ OC.L10N.register(
     "Event schedule" : "Calendarización del evento",
     "Text based" : "Base texto",
     "Cancel" : "Cancelar",
-    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Title" : "Título",
     "Access" : "Acceso",
     "Owner" : "Propietario",
@@ -34,6 +34,7 @@ OC.L10N.register(
     "Update poll" : "Actualizar encuesta",
     "Share Link" : "Compartir Liga",
     "Unknown user" : "Ususario desconocido",
+    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Deleted" : "Eliminado",
     "Access denied" : "Acceso denegado",
     "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. ",

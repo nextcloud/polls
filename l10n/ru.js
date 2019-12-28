@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Опросы",
     "Go to poll" : "Перейти к опросу",
+    "Polls App - New Activity" : "Приложение опросов  — Новые события",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Приложение опросов, похожее на doodle / dudle с возможностью ограничения доступа.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Приложение опросов, похожее на doodle / dudle с возможностью ограничения доступа (участники, определенные группы и/или пользователи, скрытые и публичные).",
     "Group" : "Группа",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Event schedule" : "Планирование события",
     "Text based" : "Текстовые описания",
     "Cancel" : "Отменить",
-    "Receive notification email on activity" : "Получать уведомление при изменении",
     "Title" : "Название",
     "Access" : "Доступ",
     "Owner" : "Владелец",
@@ -54,6 +54,7 @@ OC.L10N.register(
     "Click to add a date" : "Нажмите, чтобы добавить дату",
     "Share Link" : "Поделиться ссылкой",
     "Unknown user" : "Неизвестный пользователь",
+    "Receive notification email on activity" : "Получать уведомление при изменении",
     "Deleted" : "Удалено",
     "Click here to add a poll" : "Нажмите, чтобы добавить опрос",
     "Do you want to delete \"%n\"?" : "Удалить «%n»?",

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Enketilo",
     "Go to poll" : "Iri al enketo",
+    "Polls App - New Activity" : "Enketilo-aplikaĵo — Nova aktivaĵo",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Enketa aplikaĵo, samspeca kiel „Doodle“ aŭ „Dudle“, kun limigeblo de aliro.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Enketa aplikaĵo, samspeca kiel „Doodle“ aŭ „Dudle“, kun limigeblo de aliro (membroj, certaj grupoj aŭ uzantoj, kaŝita aŭ publika).",
     "Group" : "Grupo",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Event schedule" : "Plani okazaĵon",
     "Text based" : "Uzi tekstajn elektojn",
     "Cancel" : "Nuligi",
-    "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
     "Title" : "Titolo",
     "Access" : "Aliro",
     "Owner" : "Posedanto",
@@ -53,6 +53,7 @@ OC.L10N.register(
     "Shift all date options" : "Movi ĉiujn datajn opciojn",
     "Click to add a date" : "Alklaku por aldoni daton",
     "Unknown user" : "Nekonata uzanto",
+    "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
     "Deleted" : "Forigita",
     "Click here to add a poll" : "Alklaku ĉi tie por aldoni enketon",
     "Do you want to delete \"%n\"?" : "Ĉu vi volas forigi „%n“?",

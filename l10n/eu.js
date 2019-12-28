@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Inkestak",
     "Go to poll" : "Joan inkestara",
+    "Polls App - New Activity" : "Inkestak aplikazioa - Jarduera berria",
     "Group" : "Taldea",
     "Create new poll" : "Sortu inkesta berria",
     "Enter Title" : "Sartu izenburua",

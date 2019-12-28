@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Kannanir",
     "Go to poll" : "Fara á könnun",
+    "Polls App - New Activity" : "Kannanaforrit - Ný virkni",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Skoðanakannanaforrit sem svipar til doodle/dudle, með möguleika á aðgangstakmörkunum.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Skoðanakannanaforrit sem svipar til doodle/dudle, með möguleika á aðgangstakmörkunum (einungis meðlimir, ákveðnir hópar/notendur, falið eða opinbert).",
     "Group" : "Hópur",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Event schedule" : "Áætlun atburðar",
     "Text based" : "Texti",
     "Cancel" : "Hætta við",
-    "Receive notification email on activity" : "Fá tilkynningu í tölvupósti við virkni",
     "Title" : "Titill",
     "Access" : "Aðgangur",
     "Owner" : "Eigandi",
@@ -54,6 +54,7 @@ OC.L10N.register(
     "Click to add a date" : "Smelltu til að bæta við dagsetningu",
     "Share Link" : "Deila tengli",
     "Unknown user" : "Óþekktur notandi",
+    "Receive notification email on activity" : "Fá tilkynningu í tölvupósti við virkni",
     "Deleted" : "Eytt",
     "Click here to add a poll" : "Smelltu hér til að bæta við könnun",
     "Do you want to delete \"%n\"?" : "Viltu eyða \"%n\"?",

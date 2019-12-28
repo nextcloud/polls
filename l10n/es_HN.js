@@ -7,7 +7,6 @@ OC.L10N.register(
     "Event schedule" : "Calendarización del evento",
     "Text based" : "Base texto",
     "Cancel" : "Cancelar",
-    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Title" : "Título",
     "Access" : "Acceso",
     "Owner" : "Dueño",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "Update poll" : "Actualizar encuesta",
     "Share Link" : "Compartir Liga",
     "Unknown user" : "Ususario desconocido",
+    "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Deleted" : "Borrado",
     "Access denied" : "Acceso denegado",
     "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. "

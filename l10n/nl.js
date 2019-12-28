@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Peilingen",
     "Go to poll" : "Ga naar peiling",
+    "Polls App - New Activity" : "Peilingen  App - Nieuwe Activiteit",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Een peilingenapp, net als doodle/dudle met de mogelijkheid om toegang te beperken.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Een peilingenapp, zoals doodle/dudle met de mogelijkheid om toegang te beperken (leden, bepaalde groepen/gebruikers, verborgen en openbaar).",
     "Group" : "Groep",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Event schedule" : "Afsprakenrooster",
     "Text based" : "Tekst gebaseerd",
     "Cancel" : "Annuleren",
-    "Receive notification email on activity" : "Ontvang email melding bij activiteit",
     "Title" : "Titel",
     "Access" : "Toegang",
     "Owner" : "Eigenaar",
@@ -55,6 +55,7 @@ OC.L10N.register(
     "Click to add a date" : "Klik om een datum in te stellen",
     "Share Link" : "Delen link",
     "Unknown user" : "Onbekende gebruiker",
+    "Receive notification email on activity" : "Ontvang email melding bij activiteit",
     "Deleted" : "Verwijderd",
     "Click here to add a poll" : "Klik hier om een peiling toe te voegen",
     "Do you want to delete \"%n\"?" : "Wil je \"%n\" echt verwijderen?",

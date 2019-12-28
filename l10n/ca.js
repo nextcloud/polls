@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Enquestes",
     "Go to poll" : "Vés a l'enquesta",
+    "Polls App - New Activity" : "Aplicació d'Enquestes - Nova Activitat",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés (membres, certs grups/usuaris, ocults i públics).",
     "Group" : "Grup",
@@ -14,7 +15,6 @@ OC.L10N.register(
     "Publish" : "Publica",
     "My polls" : "Les meves enquestes",
     "Public polls" : "Enquestes públiques",
-    "Receive notification email on activity" : "Rep correu electrònic de notificació quan hi hagi activitat",
     "Title" : "Títol",
     "Access" : "Accés",
     "Owner" : "Propietari",
@@ -57,6 +57,7 @@ OC.L10N.register(
     "Click to add a date" : "Feu clic per afegir una data",
     "Share Link" : "Comparteix l'enllaç",
     "Unknown user" : "Usuari desconegut",
+    "Receive notification email on activity" : "Rep correu electrònic de notificació quan hi hagi activitat",
     "Deleted" : "Suprimit",
     "Click here to add a poll" : "Feu clic aquí per afegir una nova enquesta",
     "Do you want to delete \"%n\"?" : "Esteu segurs que voleu suprimir \"%n\"?",

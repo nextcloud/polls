@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Omröstningar",
     "Go to poll" : "Gå till omröstningen",
+    "Polls App - New Activity" : "Omröstningsapp - Ny aktivitet",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "En omröstningsapp, liknande doodle/dudle, med möjighet att begränsa deltagande.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "En omröstningsapp, liknande doodle/dudle, med möjighet att begränsa deltagande (medlemmar, vissa grupper/användare, dold eller publik).",
     "Group" : "Grupp",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Event schedule" : "Händelseschema",
     "Text based" : "Textbaserad",
     "Cancel" : "Avbryt",
-    "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
     "Title" : "Titel",
     "Access" : "Åtkomst",
     "Owner" : "Ägare",
@@ -54,6 +54,7 @@ OC.L10N.register(
     "Click to add a date" : "Klicka för att lägga till ett datum",
     "Share Link" : "Dela länk",
     "Unknown user" : "Okänd användare",
+    "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
     "Deleted" : "Borttagen",
     "Click here to add a poll" : "Klicka för att lägga till omröstning",
     "Do you want to delete \"%n\"?" : "Vill du ta bort \"%n\"?",

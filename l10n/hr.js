@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Ankete",
     "Go to poll" : "Idi u anketu",
+    "Polls App - New Activity" : "Aplikacija za ankete – nova aktivnost",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikacija za ankete, nalik aplikaciji doodle/dudle s mogućnošću ograničavanja pristupa.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikacija za ankete, nalik aplikaciji doodle/dudle s mogućnošću ograničavanja pristupa (članovi, određene grupe/korisnici, skriveno, javno).",
     "Group" : "Grupa",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Event schedule" : "Raspored događaja",
     "Text based" : "Temeljeno na tekstu",
     "Cancel" : "Odustani",
-    "Receive notification email on activity" : "Primaj obavijesti o aktivnostima e-poštom",
     "Title" : "Naslov",
     "Access" : "Pristup",
     "Owner" : "Vlasnik",
@@ -54,6 +54,7 @@ OC.L10N.register(
     "Click to add a date" : "Klikni za dodavanje datuma",
     "Share Link" : "Dijeli poveznicu",
     "Unknown user" : "Nepoznat korisnik",
+    "Receive notification email on activity" : "Primaj obavijesti o aktivnostima e-poštom",
     "Deleted" : "Izbrisano",
     "Click here to add a poll" : "Klikni ovdje za dodavanje ankete",
     "Do you want to delete \"%n\"?" : "Želite li izbrisati „%n”?",

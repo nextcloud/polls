@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Enquestes",
+    "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
     "Group" : "Group",
     "Cancel" : "Encaboxar",
     "Title" : "Títulu",

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "投票",
     "Go to poll" : "投票へ移動",
+    "Polls App - New Activity" : "投票アプリ - 新機能",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "アクセス制限の可能なdoodle/dudleに似た投票アプリ。",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "アクセス制限の可能なdoodle/dudleに似た投票アプリ（メンバー、特定のグループ/ユーザー、および一般）。",
     "Group" : "グループ",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Event schedule" : "イベントスケジュール",
     "Text based" : "テキストベースの",
     "Cancel" : "キャンセル",
-    "Receive notification email on activity" : "アクティビティに関して通知メールを受け取る",
     "Title" : "タイトル",
     "Access" : "アクセス",
     "Owner" : "オーナー",
@@ -54,6 +54,7 @@ OC.L10N.register(
     "Click to add a date" : "クリックして日付を追加",
     "Share Link" : "共有リンク",
     "Unknown user" : "不明なユーザー",
+    "Receive notification email on activity" : "アクティビティに関して通知メールを受け取る",
     "Deleted" : "削除済み",
     "Click here to add a poll" : "クリックして投票を追加",
     "Do you want to delete \"%n\"?" : "%nを削除しますか？",

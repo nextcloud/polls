@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "סקרים",
+    "Polls App - New Activity" : "יישומון סקרים - פעילות חדשה",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "יישומון סקרים, בדומה ל־doodle/dudle אם האפשרות להגבלת גישה.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "יישומון סקרים, דומה ל־doodle/dudle עם אפשרות להגבלת גישה (חברים, קבוצות/משתמשים מסוימים, הסתרה או חשיפה).",
     "Group" : "קבוצה",
@@ -9,7 +10,6 @@ OC.L10N.register(
     "Event schedule" : "לו״ז אירועים",
     "Text based" : "על בסיס טקסט",
     "Cancel" : "ביטול",
-    "Receive notification email on activity" : "קבלת הודעות בדוא״ל כשיש פעילות",
     "Title" : "כותרת",
     "Access" : "גישה",
     "Owner" : "בעלות",
@@ -34,6 +34,7 @@ OC.L10N.register(
     "Update poll" : "עדכון סקר",
     "Share Link" : "שיתוף קישור",
     "Unknown user" : "משתמש לא ידוע",
+    "Receive notification email on activity" : "קבלת הודעות בדוא״ל כשיש פעילות",
     "Deleted" : "נמחק",
     "Access denied" : "הגישה נדחתה",
     "You are not allowed to view this poll or the poll does not exist." : "אסור לך לצפות בסקר זה או שהסקר אינו קיים.",
