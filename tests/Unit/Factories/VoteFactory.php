@@ -27,9 +27,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  * General factory for the vote model.
  */
 $fm->define('OCA\Polls\Db\Vote')->setDefinitions([
-	'pollId' => 1,
-	'userId' => Faker::firstNameMale(),
-	'voteOptionId' => 1,
 	'voteOptionText' => Faker::text(255),
+	'userId' => Faker::firstNameMale(),
 	'voteAnswer' => 'yes'
 ]);
