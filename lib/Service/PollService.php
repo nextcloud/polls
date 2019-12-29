@@ -25,16 +25,16 @@ namespace OCA\Polls\Service;
 
 use OCP\IGroupManager;
 
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 
-class EventService {
+class PollService {
 	private $mapper;
 	private $shareMapper;
 	private $groupManager;
 
 	public function __construct(
-		EventMapper $mapper,
+		PollMapper $mapper,
 		ShareMapper $shareMapper,
 		IGroupManager $groupManager
 	) {
@@ -75,7 +75,7 @@ class EventService {
 
 	/**
 	 * Set the access right of the current user for the poll
-	 * @param Array $event
+	 * @param Array $poll
 	 * @param Array $shares
 	 * @return String
 	 */
@@ -84,17 +84,17 @@ class EventService {
 			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
 		}
 
-		$event = $this->mapper->find($pollId);
+		$poll = $this->mapper->find($pollId);
 
 		$grantAccessAs = 'none';
 
-		if ($event->getOwner() === $currentUser) {
+		if ($poll->getOwner() === $currentUser) {
 			$grantAccessAs = 'owner';
-		} elseif ($event->getAccess() === 'public') {
+		} elseif ($poll->getAccess() === 'public') {
 			$grantAccessAs = 'public';
-		} elseif ($event->getAccess() === 'registered' && \OC::$server->getUserSession()->isLoggedIn()) {
+		} elseif ($poll->getAccess() === 'registered' && \OC::$server->getUserSession()->isLoggedIn()) {
 			$grantAccessAs = 'registered';
-		} elseif ($event->getAccess() === 'hidden' && ($event->getowner() === \OC::$server->getUserSession()->getUser())) {
+		} elseif ($poll->getAccess() === 'hidden' && ($poll->getowner() === \OC::$server->getUserSession()->getUser())) {
 			$grantAccessAs = 'hidden';
 		// } elseif ($this->checkUserAccess($shares)) {
 		// 	$grantAccessAs = 'userInvitation';

@@ -92,9 +92,7 @@ const actions = {
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setShares', {
-					'list': response.data
-				})
+				commit('setShares', { 'list': response.data })
 			}, (error) => {
 				console.error('Error loading shares', { 'error': error.response }, { 'payload': payload })
 				throw error
@@ -129,8 +127,8 @@ const actions = {
 
 	writeSharePromise({ commit, rootState }, payload) {
 		let endPoint = 'apps/polls/share/write/'
-		payload.share.pollId = rootState.event.id
-		return axios.post(OC.generateUrl(endPoint), { pollId: rootState.event.id, share: payload.share })
+		payload.share.pollId = rootState.poll.id
+		return axios.post(OC.generateUrl(endPoint), { pollId: rootState.poll.id, share: payload.share })
 			.then((response) => {
 				commit('addShare', response.data)
 			}, (error) => {

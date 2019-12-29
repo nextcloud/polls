@@ -34,8 +34,8 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\IGroupManager;
 use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Service\LogService;
@@ -47,7 +47,7 @@ class OptionController extends Controller {
 	private $mapper;
 
 	private $groupManager;
-	private $eventMapper;
+	private $pollMapper;
 	private $logService;
 	private $acl;
 
@@ -58,7 +58,7 @@ class OptionController extends Controller {
 	 * @param IRequest $request
 	 * @param OptionMapper $mapper
 	 * @param IGroupManager $groupManager
-	 * @param EventMapper $eventMapper
+	 * @param PollMapper $pollMapper
 	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
@@ -69,7 +69,7 @@ class OptionController extends Controller {
 		IRequest $request,
 		OptionMapper $mapper,
 		IGroupManager $groupManager,
-		EventMapper $eventMapper,
+		PollMapper $pollMapper,
 		LogService $logService,
 		Acl $acl
 	) {
@@ -77,7 +77,7 @@ class OptionController extends Controller {
 		$this->userId = $UserId;
 		$this->mapper = $mapper;
 		$this->groupManager = $groupManager;
-		$this->eventMapper = $eventMapper;
+		$this->pollMapper = $pollMapper;
 		$this->logService = $logService;
 		$this->acl = $acl;
 	}
@@ -97,28 +97,7 @@ class OptionController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 
-			$options = $this->mapper->findByPoll($pollId);
-
-			foreach ($options as &$Option) {
-				// Fix for empty timestamps on date polls
-				// generate timestamp from pollOptionText
-				if ($Option->getTimestamp() > 0) {
-					$ts = $Option->getTimestamp();
-				} else if (strtotime($Option->getPollOptionText())) {
-					$ts = strtotime($Option->getPollOptionText());
-				} else {
-					$ts = 0;
-				}
-
-
-				$Option = (object) [
-					'id' => $Option->getId(),
-					'pollId' => $Option->getPollId(),
-					'pollOptionText' => htmlspecialchars_decode($Option->getPollOptionText()),
-					'timestamp' => $ts
-				];
-			}
-			return new DataResponse($options, Http::STATUS_OK);
+			return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
@@ -140,6 +119,7 @@ class OptionController extends Controller {
 		try {
 			$this->acl->setToken($token);
 			return $this->get($this->acl->getPollId());
+			return new DataResponse((array) $this->get($this->acl->getPollId()), Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
@@ -155,7 +135,7 @@ class OptionController extends Controller {
 	public function add($option) {
 
 		try {
-			$Event = $this->eventMapper->find($option['pollId']);
+			$Poll = $this->pollMapper->find($option['pollId']);
 			$this->acl->setPollId($option['pollId']);
 
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {

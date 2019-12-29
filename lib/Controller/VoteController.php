@@ -35,8 +35,8 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCP\IGroupManager;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Share;
@@ -51,7 +51,7 @@ class VoteController extends Controller {
 	private $logger;
 	private $mapper;
 	private $groupManager;
-	private $eventMapper;
+	private $pollMapper;
 	private $shareMapper;
 	private $anonymizer;
 	private $logService;
@@ -65,7 +65,7 @@ class VoteController extends Controller {
 	 * @param ILogger $logger
 	 * @param VoteMapper $mapper
 	 * @param IGroupManager $groupManager
-	 * @param EventMapper $eventMapper
+	 * @param PollMapper $pollMapper
 	 * @param ShareMapper $shareMapper
 	 * @param AnonymizeService $anonymizer
 	 * @param LogService $logService
@@ -78,7 +78,7 @@ class VoteController extends Controller {
 		ILogger $logger,
 		VoteMapper $mapper,
 		IGroupManager $groupManager,
-		EventMapper $eventMapper,
+		PollMapper $pollMapper,
 		ShareMapper $shareMapper,
 		AnonymizeService $anonymizer,
 		LogService $logService,
@@ -89,7 +89,7 @@ class VoteController extends Controller {
 		$this->mapper = $mapper;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
-		$this->eventMapper = $eventMapper;
+		$this->pollMapper = $pollMapper;
 		$this->shareMapper = $shareMapper;
 		$this->anonymizer = $anonymizer;
 		$this->logService = $logService;

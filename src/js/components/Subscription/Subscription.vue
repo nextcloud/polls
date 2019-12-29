@@ -36,7 +36,7 @@ export default {
 	computed: {
 		...mapState({
 			subscription: state => state.subscription,
-			event: state => state.event
+			poll: state => state.poll
 		}),
 
 		subscribe: {
@@ -45,7 +45,7 @@ export default {
 			},
 			set(value) {
 				this.$store.commit('setSubscription', value)
-				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.event.id })
+				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.poll.id })
 			}
 		}
 	},

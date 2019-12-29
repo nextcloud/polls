@@ -33,6 +33,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollId(integer $value)
  * @method integer getCreated()
  * @method void setCreated(integer $value)
+ * @method integer getProcessed()
+ * @method void setProcessed(integer $value)
  * @method integer getUserId()
  * @method void setUserId(string $value)
  * @method string getDisplayName()
@@ -43,20 +45,34 @@ use OCP\AppFramework\Db\Entity;
  * @method void setMessage(string $value)
  */
 class Log extends Entity implements JsonSerializable {
-	protected $created;
-	protected $processed;
+
+	/** @var int $pollId */
 	protected $pollId;
+
+	/** @var int $created */
+	protected $created;
+
+	/** @var int $processed */
+	protected $processed;
+
+	/** @var string $userId */
 	protected $userId;
+
+	/** @var string $displayName */
 	protected $displayName;
+
+	/** @var string $messageId */
 	protected $messageId;
+
+	/** @var string $message */
 	protected $message;
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'created' => $this->created,
-			'processed' => $this->processed,
-			'pollId' => $this->pollId,
+			'id' => intval($this->id),
+			'pollId' => intval($this->pollId),
+			'created' => intval($this->created),
+			'processed' => intval($this->processed),
 			'userId' => $this->userId,
 			'displayName' => $this->displayName,
 			'message_id' => $this->messageId,

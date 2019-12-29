@@ -23,18 +23,18 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class EventMapperTest extends UnitTestCase {
+class PollMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var EventMapper */
-	private $eventMapper;
+	/** @var PollMapper */
+	private $pollMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -42,46 +42,46 @@ class EventMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->eventMapper = new EventMapper($this->con);
+		$this->pollMapper = new PollMapper($this->con);
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 *
-	 * @return Event
+	 * @return Poll
 	 */
 	public function testCreate() {
-		/** @var Event $event */
-		$event = $this->fm->instance('OCA\Polls\Db\Event');
-		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+		/** @var Poll $poll */
+		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
+		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
 
-		return $event;
+		return $poll;
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Event $event
-	 * @return Event
+	 * @param Poll $poll
+	 * @return Poll
 	 */
-	public function testUpdate(Event $event) {
+	public function testUpdate(Poll $poll) {
 		$newTitle = Faker::sentence(10);
 		$newDescription = Faker::paragraph();
-		$event->setTitle($newTitle());
-		$event->setDescription($newDescription());
-		$this->eventMapper->update($event);
+		$poll->setTitle($newTitle());
+		$poll->setDescription($newDescription());
+		$this->pollMapper->update($poll);
 
-		return $event;
+		return $poll;
 	}
 
 	/**
 	 * Delete the previously created entry from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Event $event
+	 * @param Poll $poll
 	 */
-	public function testDelete(Event $event) {
-		$this->eventMapper->delete($event);
+	public function testDelete(Poll $poll) {
+		$this->pollMapper->delete($poll);
 	}
 }

@@ -109,13 +109,13 @@ const actions = {
 		let option = {}
 
 		option.id = 0
-		option.pollId = rootState.event.id
+		option.pollId = rootState.poll.id
 
-		if (rootState.event.type === 'datePoll') {
+		if (rootState.poll.type === 'datePoll') {
 			option.timestamp = moment(payload.pollOptionText).unix()
 			option.pollOptionText = moment.utc(payload.pollOptionText).format()
 
-		} else if (rootState.event.type === 'textPoll') {
+		} else if (rootState.poll.type === 'textPoll') {
 			option.timestamp = 0
 			option.pollOptionText = payload.pollOptionText
 		}

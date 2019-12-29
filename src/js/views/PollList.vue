@@ -94,11 +94,11 @@ export default {
 	},
 
 	methods: {
-		callPoll(index, event, name) {
+		callPoll(index, poll, name) {
 			this.$router.push({
 				name: name,
 				params: {
-					id: event.id
+					id: poll.id
 				}
 			})
 		},
@@ -113,14 +113,14 @@ export default {
 				.catch(error => {
 					this.loading = false
 					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, event.title), { type: 'error' })
+					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, this.poll.title), { type: 'error' })
 				})
 		}
 
-		// removePoll(index, event) {
+		// removePoll(index, poll) {
 		// 	const params = {
 		// 		title: t('polls', 'Delete poll'),
-		// 		text: t('polls', 'Do you want to delete "%n"?', 1, event.title),
+		// 		text: t('polls', 'Do you want to delete "%n"?', 1, poll.title),
 		// 		buttonHideText: t('polls', 'No, keep poll.'),
 		// 		buttonConfirmText: t('polls', 'Yes, delete poll.'),
 		// 		// Call store action here
@@ -129,17 +129,17 @@ export default {
 		// 			this.$store
 		// 				.dispatch({
 		// 					type: 'deletePollPromise',
-		// 					event: event
+		// 					poll: poll
 		// 				})
 		// 				.then(response => {
 		// 					this.loading = false
 		// 					this.refreshPolls()
-		// 					OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, event.title), { type: 'success' })
+		// 					OC.Notification.showTemporary(t('polls', 'Poll "%n" deleted', 1, poll.title), { type: 'success' })
 		// 				})
 		// 				.catch(error => {
 		// 					this.loading = false
 		// 					console.error('remove poll: ', error.response)
-		// 					OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, event.title), { type: 'error' })
+		// 					OC.Notification.showTemporary(t('polls', 'Error while deleting Poll "%n"', 1, poll.title), { type: 'error' })
 		// 				})
 		// 		}
 		// 	}

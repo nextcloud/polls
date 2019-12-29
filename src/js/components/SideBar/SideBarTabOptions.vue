@@ -22,8 +22,8 @@
 
 <template>
 	<div>
-		<SideBarTabDateOptions v-if="acl.allowEdit && event.type === 'datePoll'" />
-		<SideBarTabTextOptions v-if="acl.allowEdit && event.type === 'textPoll'" />
+		<SideBarTabDateOptions v-if="acl.allowEdit && poll.type === 'datePoll'" />
+		<SideBarTabTextOptions v-if="acl.allowEdit && poll.type === 'textPoll'" />
 	</div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			acl: state => state.acl
 		})
 

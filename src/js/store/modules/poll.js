@@ -23,39 +23,40 @@
 
 import axios from '@nextcloud/axios'
 
-const defaultEvent = () => {
+const defaultPoll = () => {
 	return {
 		id: 0,
 		type: 'datePoll',
 		title: '',
 		description: '',
-		owner: undefined,
-		created: '',
-		access: 'public',
-		expire: null,
-		expiration: false,
-		isAnonymous: false,
-		fullAnonymous: false,
-		allowMaybe: false,
-		voteLimit: null,
-		showResults: true,
-		deleted: false,
-		deleteDate: null
+		owner: '',
+		created: 0,
+		expire: 0,
+		deleted: 0,
+		access: 'hidden',
+		anonymous: 0,
+		fullAnonymous: 0,
+		allowMaybe: 0,
+		voteLimit: 0,
+		showResults: 'always',
+		adminAccess: 0,
+		settings: '',
+		options: ''
 	}
 }
 
-const state = defaultEvent()
+const state = defaultPoll()
 
 const mutations = {
-	setEvent(state, payload) {
-		Object.assign(state, payload.event)
+	setPoll(state, payload) {
+		Object.assign(state, payload.poll)
 	},
 
-	resetEvent(state) {
-		Object.assign(state, defaultEvent())
+	resetPoll(state) {
+		Object.assign(state, defaultPoll())
 	},
 
-	setEventProperty(state, payload) {
+	setPollProperty(state, payload) {
 		Object.assign(state, payload)
 	}
 
@@ -64,16 +65,12 @@ const mutations = {
 const getters = {
 
 	expired: (state, getters) => {
-		return (state.expiration && moment(state.expire).diff() < 0)
+		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
 	accessType: (state, getters, rootState) => {
 		if (rootState.acl.accessLevel === 'public') {
 			return t('polls', 'Public access')
-		} else if (rootState.acl.accessLevel === 'select') {
-			return t('polls', 'Only shared')
-		} else if (rootState.acl.accessLevel === 'registered') {
-			return t('polls', 'Registered users only')
 		} else if (rootState.acl.accessLevel === 'hidden') {
 			return t('polls', 'Hidden poll')
 		} else {
@@ -89,8 +86,8 @@ const getters = {
 
 const actions = {
 
-	loadEvent({ commit }, payload) {
-		let endPoint = 'apps/polls/event/get/'
+	loadPollMain({ commit }, payload) {
+		let endPoint = 'apps/polls/poll/get/'
 
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
@@ -99,44 +96,43 @@ const actions = {
 		} else {
 			return
 		}
-
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setEvent', { 'event': response.data })
+				commit('setPoll', { 'poll': response.data })
 			}, (error) => {
 				if (error.response.status !== '404') {
-					console.error('Error loading event', { 'error': error.response }, { 'payload': payload })
+					console.error('Error loading poll', { 'error': error.response }, { 'payload': payload })
 				}
 				throw error
 			})
 	},
 
-	deleteEventPromise({ commit }, payload) {
-		let endPoint = 'apps/polls/event/delete/'
+	deletePollPromise({ commit }, payload) {
+		let endPoint = 'apps/polls/poll/delete/'
 
-		return axios.post(OC.generateUrl(endPoint), { event: payload.id })
+		return axios.post(OC.generateUrl(endPoint), { poll: payload.id })
 			.then((response) => {
 				return response
 			}, (error) => {
-				console.error('Error deleting event', { 'error': error.response }, { 'payload': payload })
+				console.error('Error deleting poll', { 'error': error.response }, { 'payload': payload })
 				throw error
 			})
 
 	},
 
-	writeEventPromise({ commit, rootState }) {
-		let endPoint = 'apps/polls/event/write/'
+	writePollPromise({ commit, rootState }) {
+		let endPoint = 'apps/polls/poll/write/'
 
-		return axios.post(OC.generateUrl(endPoint), { event: state })
+		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
-				commit('setEvent', { 'event': response.data })
-				return response.event
+				commit('setPoll', { 'poll': response.data })
+				return response.poll
 			}, (error) => {
-				console.error('Error writing event:', { 'error': error.response }, { 'state': state })
+				console.error('Error writing poll:', { 'error': error.response }, { 'state': state })
 				throw error
 			})
 
 	}
 }
 
-export default { state, mutations, getters, actions, defaultEvent }
+export default { state, mutations, getters, actions, defaultPoll }

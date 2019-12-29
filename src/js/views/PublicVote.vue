@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent>
-		<div v-if="event.id > 0" class="main-container">
+		<div v-if="poll.id > 0" class="main-container">
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 
@@ -66,12 +66,12 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			acl: state => state.acl
 		}),
 
 		windowTitle: function() {
-			return t('polls', 'Polls') + ' - ' + this.event.title
+			return t('polls', 'Polls') + ' - ' + this.poll.title
 		}
 
 	},
@@ -89,7 +89,7 @@ export default {
 	methods: {
 		loadPoll() {
 			this.loading = false
-			this.$store.dispatch('loadEvent', { token: this.$route.params.token })
+			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
 				.then((response) => {
 					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
 						.then(() => {

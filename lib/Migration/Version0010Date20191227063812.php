@@ -66,40 +66,101 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_events')) {
-			$table = $schema->getTable('polls_events');
-			if (!$table->hasColumn('expiration')) {
-				$table->addColumn('expiration', Type::BOOLEAN, [
+		if ($schema->hasTable('polls_comments')) {
+			$table = $schema->getTable('polls_comments');
+			if (!$table->hasColumn('timestamp')) {
+				$table->addColumn('timestamp', Type::INTEGER, [
+					'length' => 11,
 					'notnull' => true,
 					'default' => 0
 				]);
 			}
-			if (!$table->hasColumn('deleted')) {
-				$table->addColumn('deleted', Type::BOOLEAN, [
-					'notnull' => false,
-					'default' => 0
-				]);
-			}
-			if (!$table->hasColumn('delete_date')) {
-				$table->addColumn('delete_date', Type::DATETIME, [
-					'notnull' => false
-				]);
-			}
-			if (!$table->hasColumn('vote_limit')) {
-				$table->addColumn('vote_limit', Type::INTEGER, [
-					'notnull' => false,
-					'default' => 0
-				]);
-			}
-			if (!$table->hasColumn('show_results')) {
-				$table->addColumn('show_results', Type::STRING, [
-					'notnull' => true,
-					'length' => 64,
-					'default' => 'always'
-				]);
-			}
-
 		}
+
+		if (!$schema->hasTable('polls_polls')) {
+			$table = $schema->createTable('polls_polls');
+			$table->addColumn('id', Type::INTEGER, [
+				'autoincrement' => true,
+				'length' => 11,
+				'notnull' => true
+			]);
+			$table->addColumn('type', Type::STRING, [
+				'length' => 64,
+				'notnull' => true,
+				'default' => 'datePoll'
+			]);
+			$table->addColumn('title', Type::STRING, [
+				'length' => 128,
+				'notnull' => true
+			]);
+			$table->addColumn('description', Type::STRING, [
+				'length' => 1024,
+				'notnull' => true
+			]);
+			$table->addColumn('owner', Type::STRING, [
+				'length' => 64,
+				'notnull' => true
+			]);
+			$table->addColumn('created', Type::INTEGER, [
+				'length' => 11,
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->addColumn('expire', Type::INTEGER, [
+				'length' => 11,
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->addColumn('deleted', Type::INTEGER, [
+				'length' => 11,
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->addColumn('access', Type::STRING, [
+				'notnull' => true,
+				'length' => 1024,
+				'default' => 'hidden'
+			]);
+			$table->addColumn('anonymous', Type::INTEGER, [
+				'length' => 8,
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->addColumn('full_anonymous', Type::INTEGER, [
+				'notnull' => true,
+				'default' => 0,
+			]);
+			$table->addColumn('allow_maybe', Type::INTEGER, [
+				'notnull' => true,
+				'default' => 1
+			]);
+			$table->addColumn('options', Type::TEXT, [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('settings', Type::TEXT, [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('vote_limit', Type::INTEGER, [
+				'length' => 11,
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->addColumn('show_results', Type::STRING, [
+				'length' => 64,
+				'notnull' => true,
+				'default' => 'always'
+			]);
+			$table->addColumn('admin_access', Type::INTEGER, [
+				'length' => 8,
+				'notnull' => true,
+				'default' => 0
+			]);
+
+			$table->setPrimaryKey(['id']);
+		}
+
 		if (!$schema->hasTable('polls_share')) {
 			$table = $schema->createTable('polls_share');
 			$table->addColumn('id', Type::INTEGER, [
@@ -112,18 +173,22 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('type', Type::STRING, [
 				'notnull' => true,
-				'length' => 128,
+				'length' => 64
 			]);
 			$table->addColumn('poll_id', Type::INTEGER, [
 				'notnull' => true
 			]);
 			$table->addColumn('user_id', Type::STRING, [
 				'notnull' => false,
-				'length' => 64,
+				'length' => 64
 			]);
 			$table->addColumn('user_email', Type::STRING, [
 				'notnull' => false,
-				'length' => 254,
+				'length' => 254
+			]);
+			$table->addColumn('user', Type::TEXT, [
+				'notnull' => true,
+				'default' => ''
 			]);
 			$table->setPrimaryKey(['id']);
 		}
@@ -179,26 +244,86 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_events')) {
-			$this->setExpiration();
+		if ($schema->hasTable('polls_polls')) {
+			$this->migrateEvents();
 		}
 
 		if ($schema->hasTable('polls_share')) {
 			$this->copyTokens();
-			// $this->copyInvitationTokens();
+		}
+	}
+
+
+	private function resolveAccess($access) {
+		if ($access === 'public') {
+			return 'public';
+		} else {
+			return 'hidden';
+		}
+	}
+
+	private function resolveOptions($maybe) {
+		if ($maybe) {
+			return json_encode(['yes', 'no', 'maybe']);
+		} else {
+			return json_encode(['yes', 'no']);
+		}
+	}
+
+	private function resolveType($type) {
+		if ($type) {
+			return 'textPoll';
+		} else {
+			return 'datePoll';
 		}
 	}
 
 	/**
-	 * Set expiration if expire is filled
-	 */
-	protected function setExpiration() {
+	* Copy public tokens
+	*/
+	protected function migrateEvents() {
+		$insert = $this->connection->getQueryBuilder();
+		$insert
+			->insert('polls_polls')
+			->values([
+				'id' => $insert->createParameter('id'),
+				'type' => $insert->createParameter('type'),
+				'title' => $insert->createParameter('title'),
+				'description' => $insert->createParameter('description'),
+				'owner' => $insert->createParameter('owner'),
+				'created' => $insert->createParameter('created'),
+				'expire' => $insert->createParameter('expire'),
+				'deleted' => $insert->createParameter('deleted'),
+				'access' => $insert->createParameter('access'),
+				'anonymous' => $insert->createParameter('anonymous'),
+				'full_anonymous' => $insert->createParameter('full_anonymous'),
+				'allow_maybe' => $insert->createParameter('allow_maybe'),
+				'options' => $insert->createParameter('options'),
+			]);
+		$query = $this->connection->getQueryBuilder();
+		$query->select('*')->from('polls_events');
+		$result = $query->execute();
 
-		$update = $this->connection->getQueryBuilder();
-		$update->update('polls_events')
-			->set('expiration', $update->createNamedParameter(true))
-			->where('expire IS NOT NULL');
-		$result = $update->execute();
+		while ($row = $result->fetch()) {
+			$insert
+			->setParameter('id', $row['id'])
+			->setParameter('type', $this->resolveType($row['type']))
+			->setParameter('title', $row['title'])
+			->setParameter('description', $row['description'])
+			->setParameter('owner', $row['owner'])
+			->setParameter('created', intval(strtotime($row['created'])))
+			->setParameter('expire', intval(strtotime($row['expire'])))
+			->setParameter('deleted', intval(strtotime($row['deleted'])))
+			->setParameter('access', $this->resolveAccess($row['access']))
+			->setParameter('anonymous', intval( $row['full_anonymous'] ) * 2 + intval($row['is_anonymous']))
+			->setParameter('full_anonymous', $row['full_anonymous'])
+			->setParameter('allow_maybe', $row['allow_maybe'])
+			->setParameter('options', $this->resolveOptions($row['allow_maybe']));
+			$insert->execute();
+
+		}
+
+		$result->closeCursor();
 	}
 
 	/**

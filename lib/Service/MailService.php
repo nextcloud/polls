@@ -35,8 +35,8 @@ use OCP\ILogger;
 
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\Subscription;
-use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Db\Event;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
@@ -54,7 +54,7 @@ class MailService  {
 
 	private $shareMapper;
 	private $subscriptionMapper;
-	private $eventMapper;
+	private $pollMapper;
 	private $logMapper;
 
 	/**
@@ -69,7 +69,7 @@ class MailService  {
 	 * @param ILogger $logger
 	 * @param SubscriptionMapper $subscriptionMapper
 	 * @param ShareMapper $shareMapper
-	 * @param EventMapper $eventMapper
+	 * @param PollMapper $pollMapper
 	 * @param LogMapper $logMapper
 	 */
 
@@ -84,7 +84,7 @@ class MailService  {
 		ILogger $logger,
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
-		EventMapper $eventMapper,
+		PollMapper $pollMapper,
 		LogMapper $logMapper
 	) {
 		$this->config = $config;
@@ -97,7 +97,7 @@ class MailService  {
 		$this->logger = $logger;
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
-		$this->eventMapper = $eventMapper;
+		$this->pollMapper = $pollMapper;
 		$this->logMapper = $logMapper;
 	}
 
@@ -225,13 +225,13 @@ class MailService  {
 	 */
 	public function sendInvitationMail($token) {
 		$share = $this->shareMapper->findByToken($token);
-		$event = $this->eventMapper->find($share->getPollId());
-		$owner = $this->userManager->get($event->getOwner());
+		$poll = $this->pollMapper->find($share->getPollId());
+		$owner = $this->userManager->get($poll->getOwner());
 
 		$recipients = $this->getRecipientsByShare(
 			$this->shareMapper->findByToken($token),
-			$this->config->getUserValue($event->getOwner(), 'core', 'lang'),
-			$event->getOwner()
+			$this->config->getUserValue($poll->getOwner(), 'core', 'lang'),
+			$poll->getOwner()
 		);
 		$this->logger->debug(json_encode($recipients));
 
@@ -241,17 +241,17 @@ class MailService  {
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
 				'owner' => $owner->getDisplayName(),
-				'title' => $event->getTitle(),
+				'title' => $poll->getTitle(),
 				'link' => $recipient['link']
 			]);
 
-			$emailTemplate->setSubject($trans->t('Poll invitation "%s"', $event->getTitle()));
+			$emailTemplate->setSubject($trans->t('Poll invitation "%s"', $poll->getTitle()));
 			$emailTemplate->addHeader();
-			$emailTemplate->addHeading($trans->t('Poll invitation "%s"', $event->getTitle()), false);
+			$emailTemplate->addHeading($trans->t('Poll invitation "%s"', $poll->getTitle()), false);
 
 			$emailTemplate->addBodyText(str_replace(
 				['{owner}', '{title}'],
-				[$owner->getDisplayName(), $event->getTitle()],
+				[$owner->getDisplayName(), $poll->getTitle()],
 				$trans->t('{owner} invited you to take part in the poll "{title}"' )
 			));
 
@@ -295,7 +295,7 @@ class MailService  {
 				continue;
 			}
 
-			$event = $this->eventMapper->find($subscription->getPollId());
+			$poll = $this->pollMapper->find($subscription->getPollId());
 			$trans = $this->transFactory->get('polls', $lang);
 
 			$url = $this->urlGenerator->getAbsoluteURL(
@@ -306,7 +306,7 @@ class MailService  {
 			);
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
-				'title' => $event->getTitle(),
+				'title' => $poll->getTitle(),
 				'link' => $url
 			]);
 			$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
@@ -314,7 +314,7 @@ class MailService  {
 			$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
 			$emailTemplate->addBodyText(str_replace(
 				['{title}'],
-				[$event->getTitle()],
+				[$poll->getTitle()],
 				$trans->t('"{title}" had recent activity: ')
 			));
 

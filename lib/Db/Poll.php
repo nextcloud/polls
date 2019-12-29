@@ -31,7 +31,7 @@ use OCP\AppFramework\Db\Entity;
 
 /**
  * @method integer getType()
- * @method void setType(integer $value)
+ * @method void setType(string $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
  * @method string getDescription()
@@ -39,64 +39,99 @@ use OCP\AppFramework\Db\Entity;
  * @method string getOwner()
  * @method void setOwner(string $value)
  * @method string getCreated()
- * @method void setCreated(string $value)
+ * @method void setCreated(integer $value)
+ * @method string getExpire()
+ * @method void setExpire(integer $value)
+ * @method integer getDeleted()
+ * @method void setDeleted(integer $value)
  * @method string getAccess()
  * @method void setAccess(string $value)
- * @method string getExpire()
- * @method void setExpire(string $value)
- * @method string getExpiration()
- * @method void setExpiration(string $value)
- * @method integer getIsAnonymous()
- * @method void setIsAnonymous(integer $value)
+ * @method integer getAnonymous()
+ * @method void setAnonymous(integer $value)
  * @method integer getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
  * @method integer getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
- * @method integer getShowResults()
- * @method void setShowResults(integer $value)
+ * @method integer getOptions()
+ * @method void setOptions(string $value)
+ * @method integer getSettings()
+ * @method void setSettings(string $value)
  * @method integer getVoteLimit()
  * @method void setVoteLimit(integer $value)
- * @method integer getDeleted()
- * @method void setDeleted(integer $value)
- * @method integer getDeleteDate()
- * @method void setDeleteDate(string $value)
+ * @method integer getShowResults()
+ * @method void setShowResults(string $value)
+ * @method integer getAdminAccess()
+ * @method void setAdminAccess(integer $value)
  */
-class Event extends Entity implements JsonSerializable {
+class Poll extends Entity implements JsonSerializable {
+
+	/** @var string $type */
 	protected $type;
+
+	/** @var string $title */
 	protected $title;
+
+	/** @var string $description */
 	protected $description;
+
+	/** @var string $owner */
 	protected $owner;
+
+	/** @var int $created */
 	protected $created;
-	protected $access;
-	protected $expiration;
+
+	/** @var int $expire */
 	protected $expire;
-	protected $isAnonymous;
-	protected $fullAnonymous;
-	protected $allowMaybe;
-	protected $voteLimit;
-	protected $showResults;
+
+	/** @var int $deleted */
 	protected $deleted;
-	protected $deleteDate;
-	protected $hash;
+
+	/** @var string $access */
+	protected $access;
+
+	/** @var int $anonymous */
+	protected $anonymous;
+
+	/** @var int $fullAnonymous */
+	protected $fullAnonymous;
+
+	/** @var int $allowMaybe */
+	protected $allowMaybe;
+
+	/** @var string $options */
+	protected $options;
+
+	/** @var string $settings*/
+	protected $settings;
+
+	/** @var int $voteLimit*/
+	protected $voteLimit;
+
+	/** @var string $showResults */
+	protected $showResults;
+
+	/** @var int $adminAccess*/
+	protected $adminAccess;
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
+			'id' => intval($this->id),
 			'type' => $this->type,
 			'title' => $this->title,
 			'description' => $this->description,
 			'owner' => $this->owner,
-			'created' => $this->created,
+			'created' => intval($this->created),
+			'expire' => intval($this->expire),
+			'deleted' => intval($this->deleted),
 			'access' => $this->access,
-			'expire' => $this->expire,
-			'expiration' => $this->expiration,
-			'isAnonymous' => boolval($this->isAnonymous),
-			'fullAnonymous' => boolval($this->fullAnonymous),
-			'allowMaybe' => boolval($this->allowMaybe),
-			'voteLimit' => $this->voteLimit,
+			'anonymous' => intval($this->anonymous),
+			'fullAnonymous' => intval($this->fullAnonymous),
+			'allowMaybe' => intval($this->allowMaybe),
+			'options' => $this->options,
+			'settings' => $this->settings,
+			'voteLimit' => intval($this->voteLimit),
 			'showResults' => $this->showResults,
-			'deleted' => boolval($this->deleted),
-			'deleteDate' => $this->deleteDate
+			'adminAccess' => $this->adminAccess
 		];
 	}
 }

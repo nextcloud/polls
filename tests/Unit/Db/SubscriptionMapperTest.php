@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
@@ -37,8 +37,8 @@ class SubscriptionMapperTest extends UnitTestCase {
 	private $con;
 	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
-	/** @var EventMapper */
-	private $eventMapper;
+	/** @var PollMapper */
+	private $pollMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -47,7 +47,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->subscriptionMapper = new SubscriptionMapper($this->con);
-		$this->eventMapper = new EventMapper($this->con);
+		$this->pollMapper = new PollMapper($this->con);
 	}
 
 	/**
@@ -56,13 +56,13 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 * @return Subscription
 	 */
 	public function testCreate() {
-		/** @var Event $event */
-		$event = $this->fm->instance('OCA\Polls\Db\Event');
-		$this->assertInstanceOf(Event::class, $this->eventMapper->insert($event));
+		/** @var Poll $poll */
+		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
+		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
 
 		/** @var Subscription $subscription */
 		$subscription = $this->fm->instance('OCA\Polls\Db\Subscription');
-		$subscription->setPollId($event->getId());
+		$subscription->setPollId($poll->getId());
 		$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->insert($subscription));
 
 		return $subscription;
@@ -90,8 +90,8 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 * @param Subscription $subscription
 	 */
 	public function testDelete(Subscription $subscription) {
-		$event = $this->eventMapper->find($subscription->getPollId());
+		$poll = $this->pollMapper->find($subscription->getPollId());
 		$this->subscriptionMapper->delete($subscription);
-		$this->eventMapper->delete($event);
+		$this->pollMapper->delete($poll);
 	}
 }

@@ -29,21 +29,21 @@ use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 use \OCP\AppFramework\Db\DoesNotExistException;
 
-class EventMapper extends QBMapper {
+class PollMapper extends QBMapper {
 
 	/**
-	 * EventMapper constructor.
+	 * PollMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_events', '\OCA\Polls\Db\Event');
+		parent::__construct($db, 'polls_polls', '\OCA\Polls\Db\Poll');
 	}
 
 	/**
 	 * @param int $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Event
+	 * @return Poll
 	 */
 	public function find($id) {
 		$qb = $this->db->getQueryBuilder();

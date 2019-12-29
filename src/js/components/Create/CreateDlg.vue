@@ -33,7 +33,7 @@
 			<input id="datePoll" v-model="type" value="datePoll"
 				:disabled="protect" type="radio" class="radio">
 			<label for="datePoll">
-				{{ t('polls', 'Event schedule') }}
+				{{ t('polls', 'Poll schedule') }}
 			</label>
 			<input id="textPoll" v-model="type" value="textPoll"
 				:disabled="protect" type="radio" class="radio">
@@ -47,7 +47,7 @@
 				{{ t('polls', 'Cancel') }}
 			</button>
 			<button :disabled="titleEmpty" class="button primary" @click="confirm">
-				{{ t('polls', 'Publish') }}
+				{{ t('polls', 'Apply') }}
 			</button>
 		</div>
 	</div>
@@ -68,7 +68,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event
+			poll: state => state.poll
 		}),
 
 		titleEmpty() {
@@ -77,7 +77,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([ 'setEventProperty', 'resetEvent', 'reset' ]),
+		...mapMutations([ 'setPollProperty', 'resetPoll', 'reset' ]),
 
 		cancel() {
 			this.title = ''
@@ -86,19 +86,19 @@ export default {
 		},
 
 		confirm() {
-			this.resetEvent()
+			this.resetPoll()
 			this.reset()
-			this.setEventProperty({ 'id': 0 })
-			this.setEventProperty({ 'title': this.title })
-			this.setEventProperty({ 'type': this.type })
-			this.$store.dispatch('writeEventPromise')
+			this.setPollProperty({ 'id': 0 })
+			this.setPollProperty({ 'title': this.title })
+			this.setPollProperty({ 'type': this.type })
+			this.$store.dispatch('writePollPromise')
 				.then((response) => {
 					this.cancel()
-					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.event.title), { type: 'success' })
-					this.$router.push({ name: 'vote', params: { id: this.event.id } })
+					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.poll.title), { type: 'success' })
+					this.$router.push({ name: 'vote', params: { id: this.poll.id } })
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.event.title), { type: 'error' })
+					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.poll.title), { type: 'error' })
 				})
 		}
 	}

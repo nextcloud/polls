@@ -37,22 +37,22 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
-use OCA\Polls\Service\EventService;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
 
-class EventController extends Controller {
+class PollController extends Controller {
 
 	private $userId;
 	private $mapper;
 	private $logger;
 	private $groupManager;
 	private $userManager;
-	private $eventService;
-	private $event;
+	private $pollService;
+	private $poll;
 	private $logService;
 	private $MailService;
 	private $acl;
@@ -63,10 +63,10 @@ class EventController extends Controller {
 	 * @param $userId
 	 * @param IRequest $request
 	 * @param ILogger $logger
-	 * @param EventMapper $mapper
+	 * @param PollMapper $mapper
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
-	 * @param EventService $eventService
+	 * @param PollService $pollService
 	 * @param LogService $logService
 	 * @param MailService $mailService
 	 * @param Acl $acl
@@ -77,11 +77,11 @@ class EventController extends Controller {
 		$userId,
 		IRequest $request,
 		ILogger $logger,
-		EventMapper $mapper,
-		Event $event,
+		PollMapper $mapper,
+		Poll $poll,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
-		EventService $eventService,
+		PollService $pollService,
 		LogService $logService,
 		MailService $mailService,
 		Acl $acl
@@ -92,8 +92,8 @@ class EventController extends Controller {
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
-		$this->eventService = $eventService;
-		$this->event = $event;
+		$this->pollService = $pollService;
+		$this->poll = $poll;
 		$this->logService = $logService;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
@@ -103,26 +103,22 @@ class EventController extends Controller {
 	 * Get all polls
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 * @return DataResponse
 	 */
 
 	public function list() {
-		$events = [];
+		$polls = [];
 		// TODO: Remove this, because it's just for easy testing purposes
 		// $this->mailService->sendNotifications();
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			try {
-
-				$events = array_filter($this->mapper->findAll(), function($item) {
-					if ($this->acl->setPollId($item->getId())->getAllowView()) {
-						return true;
-					} else {
-						return false;
-					}
-    			});
-				return new DataResponse($events, Http::STATUS_OK);
+				$polls = array_values(array_filter($this->mapper->findAll(), function($item) {
+					return $this->acl->setPollId($item->getId())->getAllowView();
+    			}));
+				return new DataResponse($polls, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
-				$events = [];
+				$polls = [];
 			}
 		}
 	}
@@ -142,39 +138,23 @@ class EventController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 
-			$this->event = $this->mapper->find($pollId);
-
-			if ($this->event->getType() == 0) {
-				$pollType = 'datePoll';
-			} else {
-				$pollType = 'textPoll';
-			}
+			$this->poll = $this->mapper->find($pollId);
+			// if ($this->poll->getType() == 0) {
+			// 	$pollType = 'datePoll';
+			// } else {
+			// 	$pollType = 'textPoll';
+			// }
 
 			// TODO: add migration for this
-			if ($this->event->getAccess() === 'public' || $this->event->getAccess() === 'registered') {
-				$this->event->setAccess('public');
-			} else {
-				$this->event->setAccess('hidden');
-			}
+			// if ($this->poll->getAccess() === 'public' || $this->poll->getAccess() === 'registered') {
+			// 	$this->poll->setAccess('public');
+			// } else {
+			// 	$this->poll->setAccess('hidden');
+			// }
 
-			return new DataResponse((object) [
-				'id' => $this->event->getId(),
-				'type' => $pollType,
-				'title' => $this->event->getTitle(),
-				'description' => $this->event->getDescription(),
-				'owner' => $this->event->getOwner(),
-				'created' => $this->event->getCreated(),
-				'access' => $this->event->getAccess(),
-				'expire' => $this->event->getExpire(),
-				'expiration' => $this->event->getExpiration(),
-				'isAnonymous' => boolval($this->event->getIsAnonymous()),
-				'fullAnonymous' => boolval($this->event->getFullAnonymous()),
-				'allowMaybe' => boolval($this->event->getAllowMaybe()),
-				'voteLimit' => $this->event->getVoteLimit(),
-				'showResults' => $this->event->getShowResults(),
-				'deleted' => boolval($this->event->getDeleted()),
-				'deleteDate' => $this->event->getDeleteDate()
-			],
+			return new DataResponse((object)
+				$this->poll
+			,
 			Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
@@ -206,16 +186,16 @@ class EventController extends Controller {
 	/**
 	 * Write poll (create/update)
 	 * @NoAdminRequired
-	 * @param Array $event
+	 * @param Array $poll
 	 * @return DataResponse
 	 */
 
-	public function write($event) {
+	public function write($poll) {
 
 		try {
 			// Find existing poll
-			$this->event = $this->mapper->find($event['id']);
-			$this->acl->setPollId($this->event->getId());
+			$this->poll = $this->mapper->find($poll['id']);
+			$this->acl->setPollId($this->poll->getId());
 
 			if (!$this->acl->getAllowEdit()) {
 				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
@@ -224,55 +204,37 @@ class EventController extends Controller {
 
 			$logMessageId = 'updatePoll';
 
-			if (boolval($this->event->getDeleted()) !== boolval($event['deleted'])) {
-				if ($event['deleted']) {
-					$logMessageId = 'deletePoll';
-					$this->event->setDeleteDate(date('Y-m-d'));
-				} else {
-					$logMessageId = 'restorePoll';
-					$this->event->setDeleteDate('0');
-				}
-				$this->event->setDeleted($event['deleted']);
-			}
-			$this->event->setDeleted($event['deleted']);
-
 		} catch (Exception $e) {
-			$this->event = new Event();
+
+			$this->poll = new Poll();
+
+			$this->poll->setType($poll['type']);
+			$this->poll->setOwner($this->userId);
+			$this->poll->setCreated(time());
 			$this->acl->setPollId(0);
-
-			if ($event['type'] === 'datePoll') {
-				$this->event->setType(0);
-			} elseif ($event['type'] === 'textPoll') {
-				$this->event->setType(1);
-			} else {
-				$this->event->setType($event['type']);
-			}
-
-			$this->event->setOwner($this->userId);
-			$this->event->setCreated(date('Y-m-d H:i:s',time()));
-
 		} finally {
-			$this->event->setTitle($event['title']);
-			$this->event->setDescription($event['description']);
-
-			$this->event->setAccess($event['access']);
-			$this->event->setExpiration($event['expiration']);
-			$this->event->setExpire(date('Y-m-d H:i:s', strtotime($event['expire'])));
-			$this->event->setIsAnonymous(intval($event['isAnonymous']));
-			$this->event->setFullAnonymous(intval($event['fullAnonymous']));
-			$this->event->setAllowMaybe(intval($event['allowMaybe']));
-			$this->event->setVoteLimit(intval($event['voteLimit']));
-			$this->event->setShowResults($event['showResults']);
+			$this->poll->setTitle($poll['title']);
+			$this->poll->setDescription($poll['description']);
+			$this->poll->setAccess($poll['access']);
+			$this->poll->setExpire($poll['expire']);
+			$this->poll->setAnonymous(intval($poll['anonymous']));
+			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']));
+			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
+			$this->poll->setVoteLimit(intval($poll['voteLimit']));
+			$this->poll->setSettings(json_encode($poll));
+			$this->poll->setOptions($poll['options']);
+			$this->poll->setShowResults($poll['showResults']);
+			$this->poll->setDeleted($poll['deleted']);
+			$this->poll->setAdminAccess($poll['adminAccess']);
 
 			if ($this->acl->getPollId() > 0) {
-				$this->mapper->update($this->event);
-				$this->logService->setLog($this->event->getId(), $logMessageId);
+				$this->mapper->update($this->poll);
+				$this->logService->setLog($this->poll->getId(), $logMessageId);
 			} else {
-				$this->mapper->insert($this->event);
-				$this->logService->setLog($this->event->getId(), 'addPoll');
+				$this->mapper->insert($this->poll);
+				$this->logService->setLog($this->poll->getId(), 'addPoll');
 			}
-			$this->event = $this->get($this->event->getId());
-			return new DataResponse($this->event, Http::STATUS_OK);
+			return new DataResponse($this->poll, Http::STATUS_OK);
 		}
 	}
 }

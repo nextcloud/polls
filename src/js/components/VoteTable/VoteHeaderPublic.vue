@@ -73,7 +73,7 @@ export default {
 
 	computed: {
 		...mapState({
-			event: state => state.event,
+			poll: state => state.poll,
 			acl: state => state.acl
 		}),
 
@@ -116,7 +116,7 @@ export default {
 		validatePublicUsername:	debounce(function() {
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
-				return axios.post(OC.generateUrl('apps/polls/check/username'), { pollId: this.event.id, userName: this.userName, token: this.$route.params.token })
+				return axios.post(OC.generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
 					.then((response) => {
 						this.checkingUserName = false
 						this.isValidName = true
@@ -146,7 +146,7 @@ export default {
 						this.$router.replace({ name: 'publicVote', params: { 'token': response.token } })
 					})
 					.catch(() => {
-						OC.Notification.showTemporary(t('polls', 'Error saving user name', 1, event.title), { type: 'error' })
+						OC.Notification.showTemporary(t('polls', 'Error saving user name', 1, this.poll.title), { type: 'error' })
 					})
 			}
 		}

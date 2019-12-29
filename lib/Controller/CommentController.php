@@ -35,8 +35,8 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCP\IGroupManager;
 
-use OCA\Polls\Db\Event;
-use OCA\Polls\Db\EventMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Service\AnonymizeService;
@@ -51,7 +51,7 @@ class CommentController extends Controller {
 	private $logger;
 
 	private $groupManager;
-	private $eventMapper;
+	private $pollMapper;
 	private $anonymizer;
 	private $acl;
 
@@ -61,7 +61,7 @@ class CommentController extends Controller {
 	 * @param $UserId
 	 * @param CommentMapper $mapper
 	 * @param IGroupManager $groupManager
-	 * @param EventMapper $eventMapper
+	 * @param PollMapper $pollMapper
 	 * @param AnonymizeService $anonymizer
 	 * @param Acl $acl
 	 */
@@ -73,7 +73,7 @@ class CommentController extends Controller {
 		ILogger $logger,
 		CommentMapper $mapper,
 		IGroupManager $groupManager,
-		EventMapper $eventMapper,
+		PollMapper $pollMapper,
 		AnonymizeService $anonymizer,
 		Acl $acl
 	) {
@@ -82,7 +82,7 @@ class CommentController extends Controller {
 		$this->mapper = $mapper;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
-		$this->eventMapper = $eventMapper;
+		$this->pollMapper = $pollMapper;
 		$this->anonymizer = $anonymizer;
 		$this->acl = $acl;
 	}

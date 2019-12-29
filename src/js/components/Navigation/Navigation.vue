@@ -36,7 +36,7 @@
 						v-for="(poll) in allPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -51,7 +51,7 @@
 						v-for="(poll) in myPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -66,7 +66,7 @@
 						v-for="(poll) in publicPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -81,7 +81,7 @@
 						v-for="(poll) in hiddenPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
@@ -96,26 +96,19 @@
 						v-for="(poll) in deletedPolls"
 						:key="poll.id"
 						:title="poll.title"
-						:icon="eventIcon(poll.type)"
+						:icon="pollIcon(poll.type)"
 						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
 		</ul>
-
-		<AppNavigationSettings>
-			<router-link :to="{ name: 'list'}">
-				List
-			</router-link>
-		</AppNavigationSettings>
 	</AppNavigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
-import state from './store/polls.js'
 
 export default {
 	name: 'Navigation',
@@ -123,7 +116,6 @@ export default {
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
-		AppNavigationSettings,
 		CreateDlg
 	},
 
@@ -134,7 +126,6 @@ export default {
 	},
 
 	computed: {
-
 		...mapGetters([
 			'allPolls',
 			'myPolls',
@@ -165,7 +156,6 @@ export default {
 	},
 
 	created() {
-		this.$store.registerModule('polls', state)
 		this.refreshPolls()
 	},
 
@@ -178,7 +168,7 @@ export default {
 			this.createDlg = !this.createDlg
 		},
 
-		eventIcon(type) {
+		pollIcon(type) {
 			if (type === '0') {
 				return 'icon-calendar'
 			} else {
