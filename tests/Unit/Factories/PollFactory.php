@@ -33,15 +33,15 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'owner' => Faker::firstNameMale(),
 	'created' => function() {
 		$date = new DateTime('today');
-		return strtotime($date);
+		return $date->getTimestamp();
 	},
 	'expire' => function() {
 		$date = new DateTime('tomorrow');
-		return strtotime($date);
+		return $date->getTimestamp();
 	},
 	'deleted' => function() {
 		$date = new DateTime('+1 month');
-		return strtotime($date);
+		return $date->getTimestamp();
 	},
 	'access' => 'public',
 	'anonymous' => 0,

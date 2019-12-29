@@ -47,7 +47,7 @@
 				{{ t('polls', 'Cancel') }}
 			</button>
 			<button :disabled="titleEmpty" class="button primary" @click="confirm">
-				{{ t('polls', 'Publish') }}
+				{{ t('polls', 'Apply') }}
 			</button>
 		</div>
 	</div>

@@ -39,7 +39,9 @@ const defaultPoll = () => {
 		allowMaybe: 0,
 		voteLimit: 0,
 		showResults: 'always',
-		adminAccess: 0
+		adminAccess: 0,
+		settings: '',
+		options: ''
 	}
 }
 

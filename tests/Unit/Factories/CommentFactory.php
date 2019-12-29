@@ -34,7 +34,7 @@ $fm->define('OCA\Polls\Db\Comment')->setDefinitions([
 	},
 	'timestamp' => function() {
 		$date = new DateTime('today');
-		return strtotime($date);
+		return $date->getTimestamp();
 	},
 	'comment' => Faker::text(255)
 ]);
