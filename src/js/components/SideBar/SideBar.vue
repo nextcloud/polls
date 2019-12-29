@@ -21,14 +21,14 @@
   -->
 
 <template>
-	<AppSidebar :active="initialTab" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
+	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
 		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
 
 		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
 			<SideBarTabComments />
 		</AppSidebarTab>
 
-		<AppSidebarTab :name="t('polls', 'options')" icon="icon-toggle-filelist">
+		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'options')" icon="icon-toggle-filelist">
 			<SideBarTabOptions />
 		</AppSidebarTab>
 
@@ -60,12 +60,6 @@ export default {
 		SideBarTabShare,
 		AppSidebar,
 		AppSidebarTab
-	},
-
-	data() {
-		return {
-			initialTab: 'comments'
-		}
 	},
 
 	computed: {

@@ -113,14 +113,9 @@ class PollController extends Controller {
 		// $this->mailService->sendNotifications();
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			try {
-
-				$polls = array_filter($this->mapper->findAll(), function($item) {
-					if ($this->acl->setPollId($item->getId())->getAllowView()) {
-						return true;
-					} else {
-						return false;
-					}
-    			});
+				$polls = array_values(array_filter($this->mapper->findAll(), function($item) {
+					return $this->acl->setPollId($item->getId())->getAllowView();
+    			}));
 				return new DataResponse($polls, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
 				$polls = [];
@@ -210,13 +205,13 @@ class PollController extends Controller {
 			$logMessageId = 'updatePoll';
 
 		} catch (Exception $e) {
+
 			$this->poll = new Poll();
-			$this->acl->setPollId(0);
 
 			$this->poll->setType($poll['type']);
 			$this->poll->setOwner($this->userId);
 			$this->poll->setCreated(time());
-
+			$this->acl->setPollId(0);
 		} finally {
 			$this->poll->setTitle($poll['title']);
 			$this->poll->setDescription($poll['description']);
@@ -239,7 +234,6 @@ class PollController extends Controller {
 				$this->mapper->insert($this->poll);
 				$this->logService->setLog($this->poll->getId(), 'addPoll');
 			}
-			$this->poll = $this->get($this->poll->getId());
 			return new DataResponse($this->poll, Http::STATUS_OK);
 		}
 	}

@@ -101,21 +101,14 @@
 				</ul>
 			</AppNavigationItem>
 		</ul>
-
-		<AppNavigationSettings>
-			<router-link :to="{ name: 'list'}">
-				List
-			</router-link>
-		</AppNavigationSettings>
 	</AppNavigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
-import state from './store/polls.js'
 
 export default {
 	name: 'Navigation',
@@ -123,7 +116,6 @@ export default {
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
-		AppNavigationSettings,
 		CreateDlg
 	},
 
@@ -134,7 +126,6 @@ export default {
 	},
 
 	computed: {
-
 		...mapGetters([
 			'allPolls',
 			'myPolls',
@@ -165,7 +156,6 @@ export default {
 	},
 
 	created() {
-		this.$store.registerModule('polls', state)
 		this.refreshPolls()
 	},
 

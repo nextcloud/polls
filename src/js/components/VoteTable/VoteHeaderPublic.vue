@@ -146,7 +146,7 @@ export default {
 						this.$router.replace({ name: 'publicVote', params: { 'token': response.token } })
 					})
 					.catch(() => {
-						OC.Notification.showTemporary(t('polls', 'Error saving user name', 1, poll.title), { type: 'error' })
+						OC.Notification.showTemporary(t('polls', 'Error saving user name', 1, this.poll.title), { type: 'error' })
 					})
 			}
 		}

@@ -26,18 +26,18 @@
 			{{ option.pollOptionText }}
 		</div>
 
-		<div v-if="datePoll" v-tooltip.auto="localFullDate" class="date-box">
+		<div v-if="datePoll" v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="date-box">
 			<div class="month">
-				{{ monthY }}
+				{{ moment.unix(option.timestamp).format('MMM') + " '" + moment.unix(option.timestamp).format('YY') }}
 			</div>
 			<div class="day">
-				{{ day }}
+				{{ moment.unix(option.timestamp).format('Do') }}
 			</div>
 			<div class="dow">
-				{{ dow }}
+				{{ moment.unix(option.timestamp).format('ddd') }}
 			</div>
 			<div class="time">
-				{{ time }}
+				{{ moment.unix(option.timestamp).format('LT') }}
 			</div>
 		</div>
 
@@ -140,58 +140,6 @@ export default {
 
 		textPoll() {
 			return (this.poll.type === 'textPoll')
-		},
-
-		localFullDate() {
-			return moment(this.option.timestamp * 1000).format('llll')
-		},
-
-		day() {
-			return moment(this.option.timestamp * 1000).format('Do')
-		},
-
-		dow() {
-			return moment(this.option.timestamp * 1000).format('ddd')
-		},
-
-		month() {
-			return moment(this.option.timestamp * 1000).format('MMM')
-		},
-
-		monthY() {
-			return this.month + " '" + moment(this.option.timestamp * 1000).format('YY')
-		},
-
-		year() {
-			return moment(this.option.timestamp * 1000).format('YYYY')
-		},
-
-		time() {
-			return moment(this.option.timestamp * 1000).format('LT')
-		},
-
-		localFullDateT() {
-			return moment(this.option.pollOptionText).format('llll')
-		},
-
-		dayT() {
-			return moment(this.option.pollOptionText).format('Do')
-		},
-
-		dowT() {
-			return moment(this.option.pollOptionText).format('ddd')
-		},
-
-		monthT() {
-			return moment(this.option.pollOptionText).format('MMM')
-		},
-
-		yearT() {
-			return moment(this.option.pollOptionText).format('YYYY')
-		},
-
-		timeT() {
-			return moment(this.option.pollOptionText).format('LT')
 		}
 	}
 }

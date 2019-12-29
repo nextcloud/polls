@@ -89,7 +89,7 @@ export default {
 	methods: {
 		loadPoll() {
 			this.loading = false
-			this.$store.dispatch('loadPoll', { token: this.$route.params.token })
+			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
 				.then((response) => {
 					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
 						.then(() => {

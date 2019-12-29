@@ -33,7 +33,7 @@ const defaultPoll = () => {
 		created: 0,
 		expire: 0,
 		deleted: 0,
-		access: 'public',
+		access: 'hidden',
 		anonymous: 0,
 		fullAnonymous: 0,
 		allowMaybe: 0,
@@ -86,7 +86,7 @@ const getters = {
 
 const actions = {
 
-	loadPoll({ commit }, payload) {
+	loadPollMain({ commit }, payload) {
 		let endPoint = 'apps/polls/poll/get/'
 
 		if (payload.token !== undefined) {

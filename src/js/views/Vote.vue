@@ -80,7 +80,6 @@ export default {
 		votePossible() {
 			return this.acl.allowVote && !this.expired
 		}
-
 	},
 
 	watch: {
@@ -91,6 +90,9 @@ export default {
 		'poll.id'(to, from) {
 			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
 				.then(() => {
+					if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+						this.sideBarOpen = true
+					}
 					this.loading = false
 				})
 		}
@@ -103,7 +105,7 @@ export default {
 	methods: {
 		loadPoll() {
 			this.loading = false
-			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
 				.catch(() => {
 					this.loading = false
 				})
@@ -111,20 +113,6 @@ export default {
 
 		toggleSideBar() {
 			this.sideBarOpen = !this.sideBarOpen
-		},
-
-		openConfigurationTab() {
-			this.initialTab = 'configuration'
-			this.sideBarOpen = true
-		},
-
-		openOptionsTab() {
-			if (this.poll.type === 'datePoll') {
-				this.initialTab = 'date-options'
-			} else if (this.poll.type === 'textPoll') {
-				this.initialTab = 'text-options'
-			}
-			this.sideBarOpen = true
 		}
 	}
 }

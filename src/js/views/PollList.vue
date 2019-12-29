@@ -113,7 +113,7 @@ export default {
 				.catch(error => {
 					this.loading = false
 					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, poll.title), { type: 'error' })
+					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, this.poll.title), { type: 'error' })
 				})
 		}
 

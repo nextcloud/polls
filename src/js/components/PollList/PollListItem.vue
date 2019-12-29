@@ -130,24 +130,14 @@ export default {
 		},
 
 		expired() {
-			if (this.poll.expire === null) {
-				return false
-			} else if (Date.parse(this.poll.expire) < Date.now()) {
-				return false
-			} else {
-				return true
-			}
+			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 
 		accessType() {
 			if (this.aType === 'public') {
-				return t('polls', 'Public access')
-			} else if (this.aType === 'registered') {
-				return t('polls', 'Registered users only')
+				return t('polls', 'Visible')
 			} else if (this.aType === 'hidden') {
-				return t('polls', 'Hidden poll')
-			} else if (this.aType === 'select') {
-				return t('polls', 'Only shared')
+				return t('polls', 'Hidden')
 			} else {
 				return ''
 			}
@@ -166,22 +156,24 @@ export default {
 		},
 
 		pollType() {
-			if (this.pType === 'textPoll') {
+			if (this.poll.type === 'textPoll') {
 				// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
 				return t('polls', 'Text poll')
-			} else {
+			} else if (this.poll.type === 'datePoll') {
 				// TRANSLATORS This means that this is the type of the poll. Another type is a 'text poll'.
 				return t('polls', 'Date poll')
+			} else {
+				return t('polls', 'Unknown')
 			}
 		},
 
 		timeSpanCreated() {
-			return moment.utc(this.poll.created).fromNow()
+			return moment.unix(this.poll.created).fromNow()
 		},
 
 		timeSpanExpiration() {
 			if (this.poll.expire) {
-				return moment.utc(this.poll.expire).fromNow()
+				return moment.unix(this.poll.expire).fromNow()
 			} else {
 				return t('polls', 'never')
 			}
@@ -194,12 +186,6 @@ export default {
 		menuItems() {
 			let items = [
 				{
-					key: 'copyLink',
-					icon: 'icon-clippy',
-					text: t('polls', 'Copy Link'),
-					action: this.copyLink
-				},
-				{
 					key: 'clonePoll',
 					icon: 'icon-confirm',
 					text: t('polls', 'Clone poll'),
@@ -208,12 +194,6 @@ export default {
 			]
 
 			if (this.poll.owner === OC.getCurrentUser().uid) {
-				// items.push({
-				// 	key: 'editPoll',
-				// 	icon: 'icon-rename',
-				// 	text: t('polls', 'Edit poll'),
-				// 	action: this.editPoll
-				// })
 				items.push({
 					key: 'deletePoll',
 					icon: 'icon-delete',
@@ -221,12 +201,6 @@ export default {
 					action: this.deletePoll
 				})
 			} else if (OC.isUserAdmin()) {
-				// items.push({
-				// 	key: 'editPoll',
-				// 	icon: 'icon-rename',
-				// 	text: t('polls', 'Edit poll as admin'),
-				// 	action: this.editPoll
-				// })
 				items.push({
 					key: 'deletePoll',
 					icon: 'icon-delete',
