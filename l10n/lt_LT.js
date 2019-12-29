@@ -2,8 +2,11 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Apklausos",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} pakvietė jus dalyvauti apklausoje, pavadinimu \"{title}\"",
     "Go to poll" : "Pereiti į apklausą",
     "Polls App - New Activity" : "Apklausų programėlė - Nauja veikla",
+    "- The poll expired." : "- Pasibaigė apklausos galiojimas.",
+    "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Šis el. laiškas yra išsiųstas jums, nes esate užsiprenumeravę šios apklausos pranešimus. Norėdami atsisakyti prenumeratos, apsilankykite apklausoje ir pašalinkite prenumeratą.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Apklausų programėlė, panaši į doodle/dudle, su galimybe apriboti prieigą.",
     "Group" : "Grupė",
     "Create new poll" : "Sukurti naują apklausą",
