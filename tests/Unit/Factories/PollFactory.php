@@ -27,24 +27,29 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  * General factory for the poll model.
  */
 $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
-	'type' => 0,
+	'type' => 'textPoll',
 	'title' => Faker::sentence(10),
 	'description' => Faker::text(255),
 	'owner' => Faker::firstNameMale(),
 	'created' => function() {
 		$date = new DateTime('today');
-		return $date->format('Y-m-d H:i:s');
+		return $date;
 	},
-	'access' => 'registered',
 	'expire' => function() {
 		$date = new DateTime('tomorrow');
-		return $date->format('Y-m-d H:i:s');
+		return $date;
 	},
-	'isAnonymous' => 0,
-	'fullAnonymous' => 0,
-	'showResults' => 'always',
-	'delete_date' => function() {
+	'deleted' => function() {
 		$date = new DateTime('+1 month');
-		return $date->format('Y-m-d H:i:s');
+		return $date;
 	},
+	'access' => 'public',
+	'anonymous' => 0,
+	'fullAnonymous' => 0,
+	'allowMaybe' => 1,
+	'options' => '["yes","no","maybe"]',
+	'settings' => '{"someJSON":0}',
+	'voteLimit' => 0,
+	'showResults' => 'always',
+	'adminAccess' => 0
 ]);

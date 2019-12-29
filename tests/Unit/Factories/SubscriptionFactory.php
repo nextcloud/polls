@@ -27,5 +27,6 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  * General factory for the Subscription model.
  */
 $fm->define('OCA\Polls\Db\Subscription')->setDefinitions([
+	'pollId' => 1,
 	'userId' => Faker::firstNameMale()
 ]);
