@@ -113,6 +113,7 @@ export default {
 				}
 			)
 		},
+
 		validatePublicUsername:	debounce(function() {
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
