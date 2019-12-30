@@ -41,7 +41,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import TextPollItem from '../Create/TextPollItem'
+import TextPollItem from '../Base/TextPollItem'
 export default {
 	name: 'SideBarTabTextOptions',
 

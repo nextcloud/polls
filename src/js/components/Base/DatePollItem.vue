@@ -22,7 +22,7 @@
 
 <template>
 	<li>
-		<div>{{ option.timestamp | localFullDate }}</div>
+		<div>{{ moment.unix(option.timestamp).format('LLLL') }}</div>
 		<div>
 			<a class="icon-delete" @click="$emit('remove')" />
 		</div>
@@ -33,15 +33,6 @@
 
 export default {
 	name: 'DatePollItem',
-
-	filters: {
-		localFullDate(timestamp) {
-			if (!timestamp) return ''
-			if (timestamp < 999999999999) timestamp = timestamp * 1000
-			if (!moment(timestamp).isValid()) return 'Invalid Date'
-			return moment(timestamp).format('llll')
-		}
-	},
 
 	props: {
 		option: {
