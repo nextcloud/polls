@@ -38,73 +38,73 @@ class PageControllerTest extends UnitTestCase {
 	 * {@inheritDoc}
 	 */
 	protected function setUp(): void {
-		$avatarManager = $this->getMockBuilder('OCP\IAvatarManager')
-			->disableOriginalConstructor()
-			->getMock();
-		$config = $this->getMockBuilder('OCP\IConfig')
-			->disableOriginalConstructor()
-			->getMock();
-		$groupManager = $this->getMockBuilder('OCP\IGroupManager')
-			->disableOriginalConstructor()
-			->getMock();
-		$l10n = $this->getMockBuilder('OCP\IL10N')
-			->disableOriginalConstructor()
-			->getMock();
-		$logger = $this->getMockBuilder('OCP\ILogger')
-			->disableOriginalConstructor()
-			->getMock();
+		// $avatarManager = $this->getMockBuilder('OCP\IAvatarManager')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $config = $this->getMockBuilder('OCP\IConfig')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $groupManager = $this->getMockBuilder('OCP\IGroupManager')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $l10n = $this->getMockBuilder('OCP\IL10N')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $logger = $this->getMockBuilder('OCP\ILogger')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
 		$request = $this->getMockBuilder('OCP\IRequest')
 			->disableOriginalConstructor()
 			->getMock();
 		$urlGenerator = $this->getMockBuilder('OCP\IURLGenerator')
 			->disableOriginalConstructor()
 			->getMock();
-		$user = $this->getMockBuilder('OCP\IUser')
-			->disableOriginalConstructor()
-			->getMock();
-		$userManager = $this->getMockBuilder('OCP\IUserManager')
-			->disableOriginalConstructor()
-			->getMock();
-		$transFactory = $this->getMockBuilder('OCP\L10N\IFactory')
-			->disableOriginalConstructor()
-			->getMock();
-		$mailer = $this->getMockBuilder('OCP\Mail\IMailer')
-			->disableOriginalConstructor()
-			->getMock();
-		$commentMapper = $this->getMockBuilder('OCA\Polls\Db\CommentMapper')
-			->disableOriginalConstructor()
-			->getMock();
-		$optionMapper = $this->getMockBuilder('OCA\Polls\Db\OptionMapper')
-			->disableOriginalConstructor()
-			->getMock();
-		$pollMapper = $this->getMockBuilder('OCA\Polls\Db\PollMapper')
-			->disableOriginalConstructor()
-			->getMock();
-		$subscriptionMapper = $this->getMockBuilder('OCA\Polls\Db\SubscriptionMapper')
-			->disableOriginalConstructor()
-			->getMock();
-		$voteMapper = $this->getMockBuilder('OCA\Polls\Db\VoteMapper')
-			->disableOriginalConstructor()
-			->getMock();
+		// $user = $this->getMockBuilder('OCP\IUser')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $userManager = $this->getMockBuilder('OCP\IUserManager')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $transFactory = $this->getMockBuilder('OCP\L10N\IFactory')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $mailer = $this->getMockBuilder('OCP\Mail\IMailer')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $commentMapper = $this->getMockBuilder('OCA\Polls\Db\CommentMapper')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $optionMapper = $this->getMockBuilder('OCA\Polls\Db\OptionMapper')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $pollMapper = $this->getMockBuilder('OCA\Polls\Db\PollMapper')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $subscriptionMapper = $this->getMockBuilder('OCA\Polls\Db\SubscriptionMapper')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
+		// $voteMapper = $this->getMockBuilder('OCA\Polls\Db\VoteMapper')
+		// 	->disableOriginalConstructor()
+		// 	->getMock();
 
 		$this->controller = new PageController(
 			'polls',
 			$request,
-			$urlGenerator,
-			$userManager,
-			$groupManager,
-			$avatarManager,
-			$logger,
-			$l10n,
-			$transFactory,
-			$config,
-			$this->userId,
-			$commentMapper,
-			$optionMapper,
-			$pollMapper,
-			$subscriptionMapper,
-			$voteMapper,
-			$mailer
+			$urlGenerator
+			// $userManager,
+			// $groupManager,
+			// $avatarManager,
+			// $logger,
+			// $l10n,
+			// $transFactory,
+			// $config,
+			// $this->userId,
+			// $commentMapper,
+			// $optionMapper,
+			// $pollMapper,
+			// $subscriptionMapper,
+			// $voteMapper,
+			// $mailer
 		);
 	}
 

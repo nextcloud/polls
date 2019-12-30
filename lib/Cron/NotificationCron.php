@@ -23,8 +23,10 @@
 
 namespace OCA\Polls\Cron;
 
+use Exception;
+
 use OCP\ILogger;
-use OC\BackgroundJob\TimedJob;
+use OCP\BackgroundJob\TimedJob;
 
 use OCA\Polls\Service\MailService;
 
@@ -48,13 +50,10 @@ class NotificationCron extends TimedJob {
 	/**
 	* run
 	* @param string $token
-	* @return null
 	*/
     protected function run($arguments) {
         if ($this->mailService->sendNotifications()) {
         	$this->logger->debug('Notifications sent');
-        } else {
-			$this->logger->alert('error while sending notifications');
         }
     }
 

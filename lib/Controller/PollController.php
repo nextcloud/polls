@@ -178,10 +178,7 @@ class PollController extends Controller {
 				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
 			}
 
-			$logMessageId = 'updatePoll';
-
 		} catch (Exception $e) {
-			$logMessageId = 'addPoll';
 			$this->poll = new Poll();
 
 			$this->poll->setType($poll['type']);
@@ -204,7 +201,7 @@ class PollController extends Controller {
 
 			if ($this->poll->getId() > 0) {
 				$this->mapper->update($this->poll);
-				$this->logService->setLog($this->poll->getId(), $logMessageId);
+				$this->logService->setLog($this->poll->getId(), 'updatePoll');
 			} else {
 				$this->mapper->insert($this->poll);
 				$this->logService->setLog($this->poll->getId(), 'addPoll');

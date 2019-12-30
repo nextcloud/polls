@@ -88,7 +88,7 @@ class PageController extends Controller {
 	 * @param string $token
 	 * @return PublicTemplateResponse
 	 */
-	public function votePublic($token) {
+	public function votePublic(/** @scrutinizer ignore-unused */ $token) {
 		return new PublicTemplateResponse('polls', 'polls.tmpl', [
 			'urlGenerator' => $this->urlGenerator]);
 	}
