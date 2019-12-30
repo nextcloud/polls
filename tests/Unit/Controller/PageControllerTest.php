@@ -32,8 +32,6 @@ class PageControllerTest extends UnitTestCase {
 	/** @var PageController */
 	private $controller;
 
-	private $userId = 'john';
-
 	/**
 	 * {@inheritDoc}
 	 */
