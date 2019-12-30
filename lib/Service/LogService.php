@@ -50,10 +50,10 @@ class LogService  {
 
 
 	/**
-	* Prevent repetition of the same log event
-	* @NoAdminRequired
-	* @return Bool
-	*/
+	 * Prevent repetition of the same log event
+	 * @NoAdminRequired
+	 * @return Bool
+	 */
 	public function isRepetition() {
 		try {
 			$lastRecord = $this->mapper->getLastRecord($this->logItem->getPollId());
@@ -68,14 +68,14 @@ class LogService  {
 	}
 
 	/**
-	* Log poll activity
-	* @NoAdminRequired
-	* @param $pollId
-	* @param $messageId
-	* @param $userId
-	* @param $message
-	* @return Log
-	*/
+	 * Log poll activity
+	 * @NoAdminRequired
+	 * @param $pollId
+	 * @param $messageId
+	 * @param $userId
+	 * @param $message
+	 * @return Log
+	 */
 	public function setLog($pollId, $messageId, $userId = null, $message = null) {
 		$this->logItem = new Log();
 		$this->logItem->setPollId($pollId);

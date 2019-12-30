@@ -31,31 +31,31 @@ use OCA\Polls\Service\MailService;
 class NotificationCron extends TimedJob {
 
 	/** @var MailService*/
-    private $mailService;
+	private $mailService;
 	private $logger;
 
 	/** @param MailService $mailService
-	*/
-    public function __construct(
+	 */
+	public function __construct(
 		ILogger $logger,
 		MailService $mailService
 	) {
 		$this->logger = $logger;
 		$this->setInterval(60);
 		$this->mailService = $mailService;
-    }
+	}
 
 	/**
-	* run
-	* @param string $token
-	* @return null
-	*/
-    protected function run($arguments) {
-        if ($this->mailService->sendNotifications()) {
-        	$this->logger->debug('Notifications sent');
-        } else {
+	 * run
+	 * @param string $token
+	 * @return null
+	 */
+	protected function run($arguments) {
+		if ($this->mailService->sendNotifications()) {
+			$this->logger->debug('Notifications sent');
+		} else {
 			$this->logger->alert('error while sending notifications');
-        }
-    }
+		}
+	}
 
 }
