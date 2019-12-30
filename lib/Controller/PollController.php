@@ -95,7 +95,7 @@ class PollController extends Controller {
 	}
 
 	/**
-	 * Get all polls
+	 * list
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
@@ -110,13 +110,13 @@ class PollController extends Controller {
     			}));
 				return new DataResponse($polls, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
-				$polls = [];
+				return new DataResponse($e, Http::STATUS_NOT_FOUND);
 			}
 		}
 	}
 
 	/**
-	 * Read an entire poll based on poll id
+	 * get
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
@@ -131,23 +131,8 @@ class PollController extends Controller {
 			}
 
 			$this->poll = $this->mapper->find($pollId);
-			// if ($this->poll->getType() == 0) {
-			// 	$pollType = 'datePoll';
-			// } else {
-			// 	$pollType = 'textPoll';
-			// }
 
-			// TODO: add migration for this
-			// if ($this->poll->getAccess() === 'public' || $this->poll->getAccess() === 'registered') {
-			// 	$this->poll->setAccess('public');
-			// } else {
-			// 	$this->poll->setAccess('hidden');
-			// }
-
-			return new DataResponse((object)
-				$this->poll
-			,
-			Http::STATUS_OK);
+			return new DataResponse($this->poll, Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
@@ -168,7 +153,7 @@ class PollController extends Controller {
 
 		try {
 			$this->acl->setToken($token);
-			return $this->get($this->acl->getPollId());
+			return new DataResponse($this->get($this->acl->getPollId()), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
@@ -176,7 +161,7 @@ class PollController extends Controller {
 	}
 
 	/**
-	 * Write poll (create/update)
+	 * write
 	 * @NoAdminRequired
 	 * @param Array $poll
 	 * @return DataResponse
