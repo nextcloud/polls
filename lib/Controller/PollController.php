@@ -188,7 +188,6 @@ class PollController extends Controller {
 			// Find existing poll
 			$this->poll = $this->mapper->find($poll['id']);
 			$this->acl->setPollId($this->poll->getId());
-
 			if (!$this->acl->getAllowEdit()) {
 				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
 				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
@@ -197,14 +196,12 @@ class PollController extends Controller {
 			$logMessageId = 'updatePoll';
 
 		} catch (Exception $e) {
-
-			$logMessageId = 'createPoll';
+			$logMessageId = 'addPoll';
 			$this->poll = new Poll();
 
 			$this->poll->setType($poll['type']);
 			$this->poll->setOwner($this->userId);
 			$this->poll->setCreated(time());
-			$this->acl->setPollId(0);
 		} finally {
 			$this->poll->setTitle($poll['title']);
 			$this->poll->setDescription($poll['description']);
@@ -214,13 +211,13 @@ class PollController extends Controller {
 			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']));
 			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
 			$this->poll->setVoteLimit(intval($poll['voteLimit']));
-			$this->poll->setSettings(json_encode($poll));
-			$this->poll->setOptions($poll['options']);
+			$this->poll->setSettings('');
+			$this->poll->setOptions('');
 			$this->poll->setShowResults($poll['showResults']);
 			$this->poll->setDeleted($poll['deleted']);
 			$this->poll->setAdminAccess($poll['adminAccess']);
 
-			if ($this->acl->getPollId() > 0) {
+			if ($this->poll->getId() > 0) {
 				$this->mapper->update($this->poll);
 				$this->logService->setLog($this->poll->getId(), $logMessageId);
 			} else {
