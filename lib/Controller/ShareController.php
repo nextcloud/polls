@@ -47,8 +47,8 @@ use OCA\Polls\Controller\SystemController;
 
 class ShareController extends Controller {
 
-    private $logger;
-    private $acl;
+	private $logger;
+	private $acl;
 	private $mapper;
 	private $userId;
 
@@ -80,7 +80,7 @@ class ShareController extends Controller {
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
-        $this->logger = $logger;
+		$this->logger = $logger;
 		$this->userId = $userId;
 		$this->mapper = $mapper;
 		$this->pollMapper = $pollMapper;
@@ -90,14 +90,14 @@ class ShareController extends Controller {
 	}
 
 	/**
-	* getByToken
-	* Get pollId by token
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @PublicPage
-	* @param string $token
-	* @return DataResponse
-	*/
+	 * getByToken
+	 * Get pollId by token
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 * @param string $token
+	 * @return DataResponse
+	 */
 	public function get($token) {
 		try {
 			$share = $this->mapper->findByToken($token);

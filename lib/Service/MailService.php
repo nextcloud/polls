@@ -44,7 +44,7 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
 
-class MailService  {
+class MailService {
 
 	private $userManager;
 	private $groupManager;
@@ -123,7 +123,7 @@ class MailService  {
 		}
 
 		if (!$toEmail || !filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-       		throw new Exception( 'Invalid email address (' . $toEmail .')' );
+	   		throw new Exception( 'Invalid email address (' . $toEmail .')' );
 		}
 
 		try {
