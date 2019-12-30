@@ -3,9 +3,12 @@ OC.L10N.register(
     {
     "Group" : "Gruppo",
     "Cancel" : "Cancellar",
+    "Apply" : "Applicar",
     "Title" : "Titulo",
     "Owner" : "Owner",
-    "Public access" : "Accesso public",
+    "Visible" : "Visibile",
+    "Hidden" : "Occultate",
+    "Unknown" : "Incognite",
     "never" : "nunquam",
     "Details" : "Detalios",
     "Comments" : "Commentarios",
@@ -16,6 +19,7 @@ OC.L10N.register(
     "Description" : "Description",
     "Expiration date" : "Data de expiration",
     "Unknown user" : "Usator incognite",
-    "Deleted" : "Delite"
+    "Deleted" : "Delite",
+    "Public access" : "Accesso public"
 },
 "nplurals=2; plural=(n != 1);");

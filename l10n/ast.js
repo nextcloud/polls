@@ -5,10 +5,13 @@ OC.L10N.register(
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
     "Group" : "Group",
     "Cancel" : "Encaboxar",
+    "Apply" : "Aplicar",
     "Title" : "Títulu",
     "Owner" : "Owner",
     "Created" : "Creóse",
-    "Public access" : "Accesu públicu",
+    "Visible" : "Visible",
+    "Hidden" : "Anubríu",
+    "Unknown" : "Desconozse",
     "never" : "never",
     "Details" : "Detalles",
     "Comments" : "Comentarios",
@@ -19,6 +22,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Expiration date" : "Data de caducidá",
     "Unknown user" : "Usuariu desconocíu",
-    "Deleted" : "Desanicióse"
+    "Deleted" : "Desanicióse",
+    "Public access" : "Accesu públicu"
 },
 "nplurals=2; plural=(n != 1);");

@@ -3,11 +3,14 @@ OC.L10N.register(
     {
     "Group" : "Grupa",
     "Cancel" : "Atcelt",
+    "Apply" : "Apstiprināt",
     "Title" : "Nosaukums",
     "Owner" : "Īpašnieks",
     "Created" : "Izveidots",
     "Expires" : "Beidzas",
-    "Public access" : "Publiska piekļuve",
+    "Visible" : "Redzams",
+    "Hidden" : "Paslēpts",
+    "Unknown" : "Nezināms",
     "never" : "nekad",
     "Details" : "Detaļas",
     "Comments" : "Komentāri",
@@ -19,6 +22,7 @@ OC.L10N.register(
     "Expiration date" : "Termiņa datums",
     "Unknown user" : "Nezināms lietotājs",
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
-    "Deleted" : "Dzēstie"
+    "Deleted" : "Dzēstie",
+    "Public access" : "Publiska piekļuve"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

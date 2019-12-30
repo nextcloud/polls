@@ -6,7 +6,9 @@ OC.L10N.register(
     "Title" : "Titel",
     "Owner" : "Eienaar",
     "Created" : "Geskep",
-    "Public access" : "Openbare toegang",
+    "Visible" : "Sigbaar",
+    "Hidden" : "Versteek",
+    "Unknown" : "Onbekend",
     "never" : "nooit",
     "Details" : "Besonderhede",
     "Comments" : "Kommentare",
@@ -15,6 +17,7 @@ OC.L10N.register(
     "Description" : "Beskrywing",
     "Expiration date" : "Vervaldatum",
     "Unknown user" : "Onbekende gebruiker",
-    "Deleted" : "Geskrap"
+    "Deleted" : "Geskrap",
+    "Public access" : "Openbare toegang"
 },
 "nplurals=2; plural=(n != 1);");

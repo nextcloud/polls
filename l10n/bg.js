@@ -3,12 +3,14 @@ OC.L10N.register(
     {
     "Group" : "Група",
     "Cancel" : "Отказ",
+    "Apply" : "Приложи",
     "Title" : "Име",
     "Owner" : "Създател",
     "Created" : "Създаден",
-    "Public access" : "Публичен достъп",
+    "Visible" : "Видимо",
+    "Hidden" : "Скрито",
+    "Unknown" : "Непознат",
     "never" : "никога",
-    "Copy Link" : "Копирай връзката",
     "Share with" : "Сподели с",
     "Details" : "Подробности",
     "Comments" : "Коментари",
@@ -21,6 +23,7 @@ OC.L10N.register(
     "Expiration date" : "Валидност",
     "Share Link" : "Сподели връзката",
     "Unknown user" : "Непознат потребител",
-    "Deleted" : "Изтрито"
+    "Deleted" : "Изтрито",
+    "Public access" : "Публичен достъп"
 },
 "nplurals=2; plural=(n != 1);");

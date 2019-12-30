@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Otkaži",
     "Title" : "Naslov",
     "Owner" : "Vlasnik",
+    "Unknown" : "Nepoznato",
     "never" : "nikad",
     "Comments" : "Komentari",
     "Saved" : "Spremljeno",

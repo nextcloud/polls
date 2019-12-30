@@ -3,8 +3,12 @@ OC.L10N.register(
     {
     "Group" : "Група",
     "Cancel" : "Откажи",
+    "Apply" : "Примени",
     "Title" : "Наслов",
     "Owner" : "Сопственик",
+    "Visible" : "Видлив",
+    "Hidden" : "Сокриен",
+    "Unknown" : "Непознат",
     "never" : "никогаш",
     "Details" : "Детали",
     "Comments" : "Коментари",

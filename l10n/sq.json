@@ -3,12 +3,14 @@
     "Group" : "Grup",
     "Create new poll" : "Krijo sondazh të ri",
     "Cancel" : "Anullo",
+    "Apply" : "Apliko",
     "Title" : "Titulli",
     "Owner" : "Zotëruesi",
     "Created" : "U krijua",
-    "Public access" : "Akses publik",
+    "Visible" : "I dukshëm",
+    "Hidden" : "I fshehur",
+    "Unknown" : "I/E panjohur",
     "never" : "asnjëherë",
-    "Copy Link" : "Kopjoje Lidhjen",
     "Delete poll" : "Fshij sondazhin",
     "Details" : "Detajet",
     "Comments" : "Komentet",
@@ -20,6 +22,7 @@
     "Expiration date" : "Datë skadimi",
     "Share Link" : "Ndani Lidhjen",
     "Unknown user" : "Përdorues i panjohur",
-    "Deleted" : "E fshirë"
+    "Deleted" : "E fshirë",
+    "Public access" : "Akses publik"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

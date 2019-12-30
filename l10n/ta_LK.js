@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "இரத்து செய்க",
     "Title" : "தலைப்பு",
     "Owner" : "Owner",
+    "Unknown" : "தெரியாத",
     "never" : "ஒருபோதும்",
     "Details" : "விவரங்கள்",
     "Configuration" : "தகவமைப்பு",

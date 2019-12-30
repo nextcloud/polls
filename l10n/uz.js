@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Cancel" : "Bekor qilish",
+    "Unknown" : "Noma'lum",
     "never" : "hech qachon",
     "Comments" : "Fikrlar",
     "Saving" : "Saqlanmoqda",

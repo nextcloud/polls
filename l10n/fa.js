@@ -7,9 +7,7 @@ OC.L10N.register(
     "Access" : "دسترسی",
     "Owner" : "Owner",
     "Created" : "ایجاد شده",
-    "Public access" : "دسترسی عمومی",
     "never" : "never",
-    "Copy Link" : "رونوشت از پیوند",
     "Details" : "جزئیات",
     "Comments" : "نظرات",
     "Configuration" : "تنظیمات",
@@ -20,6 +18,7 @@ OC.L10N.register(
     "Expiration date" : "تاریخ انقضا",
     "Share Link" : "هم‌رسانی پیوند",
     "Unknown user" : "کاربر نامعلوم",
-    "Deleted" : "حذف شده"
+    "Deleted" : "حذف شده",
+    "Public access" : "دسترسی عمومی"
 },
 "nplurals=2; plural=(n > 1);");

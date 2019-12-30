@@ -3,10 +3,12 @@ OC.L10N.register(
     {
     "Group" : "Бүлэг",
     "Cancel" : "болиулах",
+    "Apply" : "хэрэглэх",
     "Title" : "Цол/Албан тушаал",
     "Owner" : "Эзэмшигч",
     "Created" : "Үүсгэсэн",
-    "Public access" : "Нийтийн хандах эрх",
+    "Hidden" : "Далд",
+    "Unknown" : "Үл танигдах зүйл",
     "never" : "хэзээ ч үгүй",
     "Details" : "Дэлгэрэнгүй",
     "Comments" : "Сэтгэгдлүүд",
@@ -15,6 +17,7 @@ OC.L10N.register(
     "Saved" : "Хадгалах",
     "Description" : "Тодорхойлолт",
     "Unknown user" : "  хэрэглэгч",
-    "Deleted" : "Устгагдсан"
+    "Deleted" : "Устгагдсан",
+    "Public access" : "Нийтийн хандах эрх"
 },
 "nplurals=2; plural=(n != 1);");

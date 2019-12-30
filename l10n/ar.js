@@ -8,10 +8,9 @@ OC.L10N.register(
     "Title" : "العنوان",
     "Access" : "النفاذ",
     "Owner" : "المالك",
-    "Public access" : "النفاذ إليه مُصرّح للعامة",
+    "Hidden" : "مخفي",
+    "Unknown" : "مجهول",
     "never" : "بتاتاً",
-    "Copy Link" : "انسخ الرابط",
-    "Edit poll" : "تعديل استطلاع الرأي",
     "Delete poll" : "احذف استطلاع الرأي",
     "Error, while copying link to clipboard" : "خطأ أثناء نسخ الرابط إلى الحافظة",
     "Share with" : "شارك مع",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Unknown user" : "مستخدم غير معروف",
     "Deleted" : "تم حذفه",
     "Click here to add a poll" : "اضغط هنا لإضافة استطلاع رأي",
-    "Yes, delete poll." : "نعم، احذف استطلاع الرأي."
+    "Yes, delete poll." : "نعم، احذف استطلاع الرأي.",
+    "Public access" : "النفاذ إليه مُصرّح للعامة"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

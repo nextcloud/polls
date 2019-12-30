@@ -3,16 +3,16 @@ OC.L10N.register(
     {
     "Group" : "Grupo",
     "Cancel" : "Cancelar",
+    "Apply" : "Aplicar",
     "Title" : "Título ",
     "Access" : "Acesso",
     "Owner" : "Proprietário",
     "Created" : "Criado",
     "Expires" : "Expira",
-    "Public access" : "Acesso público",
-    "Registered users only" : "Apenas para utilizadores registados",
-    "Only shared" : "Apenas partilhado",
+    "Visible" : "Visível",
+    "Hidden" : "Escondido",
+    "Unknown" : "Desconhecido",
     "never" : "nunca",
-    "Copy Link" : "Copiar hiperligação",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Error, while copying link to clipboard" : "Erro quando tentava copiar a ligação para a área de transferência",
     "Share with" : "Partilhar com",
@@ -27,6 +27,7 @@ OC.L10N.register(
     "Share Link" : "Partilhar hiperligação",
     "Unknown user" : "Utilizador desconhecido",
     "Deleted" : "Eliminado",
+    "Public access" : "Acesso público",
     "Access denied" : "Acesso proibido"
 },
 "nplurals=2; plural=(n != 1);");

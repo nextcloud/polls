@@ -7,7 +7,6 @@ OC.L10N.register(
     "Owner" : "Owner",
     "Created" : "Dibuat",
     "never" : "tidak pernah.",
-    "Copy Link" : "Salin Tautan",
     "Details" : "Detil",
     "Comments" : "Komentar",
     "Configuration" : "Konfigurasi",

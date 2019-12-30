@@ -1,8 +1,12 @@
 { "translations": {
     "Group" : "群組",
     "Cancel" : "取消",
+    "Apply" : "套用",
     "Title" : "標題",
     "Owner" : "Owner",
+    "Visible" : "可見",
+    "Hidden" : "隠藏",
+    "Unknown" : "未知",
     "never" : "永不",
     "Shares" : "分享",
     "Saving" : "儲存中",

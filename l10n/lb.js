@@ -3,8 +3,12 @@ OC.L10N.register(
     {
     "Group" : "Grupp",
     "Cancel" : "Ofbriechen",
+    "Apply" : "Uwenden",
     "Title" : "Titel",
     "Owner" : "Owner",
+    "Visible" : "Visibel",
+    "Hidden" : "Verstoppt",
+    "Unknown" : "Onbekannt",
     "never" : "Ni",
     "Details" : "Detailer",
     "Comments" : "Kommentarer",

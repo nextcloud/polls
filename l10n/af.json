@@ -4,7 +4,9 @@
     "Title" : "Titel",
     "Owner" : "Eienaar",
     "Created" : "Geskep",
-    "Public access" : "Openbare toegang",
+    "Visible" : "Sigbaar",
+    "Hidden" : "Versteek",
+    "Unknown" : "Onbekend",
     "never" : "nooit",
     "Details" : "Besonderhede",
     "Comments" : "Kommentare",
@@ -13,6 +15,7 @@
     "Description" : "Beskrywing",
     "Expiration date" : "Vervaldatum",
     "Unknown user" : "Onbekende gebruiker",
-    "Deleted" : "Geskrap"
+    "Deleted" : "Geskrap",
+    "Public access" : "Openbare toegang"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

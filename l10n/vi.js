@@ -3,10 +3,12 @@ OC.L10N.register(
     {
     "Group" : "N",
     "Cancel" : "Hủy bỏ",
+    "Apply" : "Áp dụng",
     "Title" : "Tên",
     "Owner" : "Chủ",
     "Created" : "Đã tạo",
-    "Public access" : "Truy cập công khai",
+    "Hidden" : "Ẩn",
+    "Unknown" : "Không xác định",
     "never" : "không thay đổi",
     "Details" : "Thông tin",
     "Comments" : "Các bình luận",
@@ -16,6 +18,7 @@ OC.L10N.register(
     "Description" : "Mô tả",
     "Expiration date" : "Ngày kết thúc",
     "Unknown user" : "Người dùng không tồn tại",
-    "Deleted" : "Đã xóa"
+    "Deleted" : "Đã xóa",
+    "Public access" : "Truy cập công khai"
 },
 "nplurals=1; plural=0;");

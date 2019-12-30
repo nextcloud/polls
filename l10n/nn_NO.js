@@ -3,9 +3,11 @@ OC.L10N.register(
     {
     "Group" : "Gruppe",
     "Cancel" : "Avbryt",
+    "Apply" : "Anvend",
     "Title" : "Tittel",
     "Owner" : "Owner",
     "Created" : "Lagd",
+    "Unknown" : "Ukjend",
     "never" : "aldri",
     "Details" : "Detaljar",
     "Comments" : "Kommentarar",

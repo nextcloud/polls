@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "අවලංගු කරන්න",
     "Title" : "මාතෘකාව",
     "Owner" : "Owner",
+    "Unknown" : "නොදනී",
     "never" : "කවදාවත්",
     "Comments" : "අදහස්",
     "Configuration" : "වින්‍යාසය",
