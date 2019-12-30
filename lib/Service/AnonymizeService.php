@@ -46,11 +46,11 @@ class AnonymizeService {
 	}
 
 	/**
-	* Anonymizes the participants of a poll
-	* @NoAdminRequired
-	* @param Array $array Input list which should be anonymized must be a collection of Vote or Comment
-	* @return array Returns the original array with anonymized user names
-	*/
+	 * Anonymizes the participants of a poll
+	 * @NoAdminRequired
+	 * @param Array $array Input list which should be anonymized must be a collection of Vote or Comment
+	 * @return array Returns the original array with anonymized user names
+	 */
 	private function anonymize($array) {
 		// get mapping for the complete poll
 		foreach ($array as &$element) {
@@ -71,12 +71,12 @@ class AnonymizeService {
 	}
 
 	/**
-	* Initialize anonymizer with pollId and userId
-	* Creates a mapping list with unique Anonymous strings based on the partcipants of a poll
-	* @NoAdminRequired
-	* @param integer $pollId
-	* @param string $userId - usernames, which will not be anonymized
-	*/
+	 * Initialize anonymizer with pollId and userId
+	 * Creates a mapping list with unique Anonymous strings based on the partcipants of a poll
+	 * @NoAdminRequired
+	 * @param integer $pollId
+	 * @param string $userId - usernames, which will not be anonymized
+	 */
 
 	public function set($pollId, $userId) {
 		$this->pollId = $pollId;

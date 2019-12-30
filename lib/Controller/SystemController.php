@@ -221,7 +221,7 @@ class SystemController extends Controller {
 
 		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
 		foreach ($votes as $vote) {
-			if ($vote->getUserId() !== '' && $vote->getUserId() !== null ) {
+			if ($vote->getUserId() !== '' && $vote->getUserId() !== null) {
 				$list[] = [
 					'id' => $vote->getUserId(),
 					'user' => $vote->getUserId(),
@@ -233,7 +233,7 @@ class SystemController extends Controller {
 
 		$shares = $this->shareMapper->findByPoll($pollId);
 		foreach ($shares as $share) {
-			if ($share->getUserId() !== '' && $share->getUserId() !== null ) {
+			if ($share->getUserId() !== '' && $share->getUserId() !== null) {
 				$list[] = [
 					'id' => $share->getUserId(),
 					'user' => $share->getUserId(),

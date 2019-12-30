@@ -52,11 +52,11 @@ class AclController extends Controller {
 	}
 
 	/**
-	* Read acl with poll id for current user
-	* @NoAdminRequired
-	* @param integer $pollId
-	* @return array
-	*/
+	 * Read acl with poll id for current user
+	 * @NoAdminRequired
+	 * @param integer $pollId
+	 * @return array
+	 */
 	public function get($id) {
 		$acl = $this->acl->setPollId($id);
 		// $acl = $this->acl->setUserId('dartcafe');
