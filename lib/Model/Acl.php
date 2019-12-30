@@ -211,7 +211,7 @@ class Acl implements JsonSerializable {
 	public function getExpired(): bool {
 		return (
 			   $this->poll->getExpire() > 0
-			&& $this->poll->getExpire() > time()
+			&& $this->poll->getExpire() < time()
 		);
 	}
 
