@@ -39,7 +39,6 @@ use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
@@ -51,7 +50,6 @@ class PollController extends Controller {
 	private $logger;
 	private $groupManager;
 	private $userManager;
-	private $pollService;
 	private $poll;
 	private $logService;
 	private $mailService;
@@ -66,7 +64,6 @@ class PollController extends Controller {
 	 * @param PollMapper $mapper
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
-	 * @param PollService $pollService
 	 * @param LogService $logService
 	 * @param MailService $mailService
 	 * @param Acl $acl
@@ -81,7 +78,6 @@ class PollController extends Controller {
 		Poll $poll,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
-		PollService $pollService,
 		LogService $logService,
 		MailService $mailService,
 		Acl $acl
@@ -92,7 +88,6 @@ class PollController extends Controller {
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
-		$this->pollService = $pollService;
 		$this->poll = $poll;
 		$this->logService = $logService;
 		$this->mailService = $mailService;
