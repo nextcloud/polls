@@ -54,7 +54,7 @@ class PollController extends Controller {
 	private $pollService;
 	private $poll;
 	private $logService;
-	private $MailService;
+	private $mailService;
 	private $acl;
 
 	/**
@@ -108,9 +108,6 @@ class PollController extends Controller {
 	 */
 
 	public function list() {
-		$polls = [];
-		// TODO: Remove this, because it's just for easy testing purposes
-		// $this->mailService->sendNotifications();
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			try {
 				$polls = array_values(array_filter($this->mapper->findAll(), function($item) {
@@ -206,6 +203,7 @@ class PollController extends Controller {
 
 		} catch (Exception $e) {
 
+			$logMessageId = 'createPoll';
 			$this->poll = new Poll();
 
 			$this->poll->setType($poll['type']);
