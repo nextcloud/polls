@@ -107,7 +107,7 @@ class PollController extends Controller {
 			try {
 				$polls = array_values(array_filter($this->mapper->findAll(), function($item) {
 					return $this->acl->setPollId($item->getId())->getAllowView();
-    			}));
+				}));
 				return new DataResponse($polls, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
 				return new DataResponse($e, Http::STATUS_NOT_FOUND);
