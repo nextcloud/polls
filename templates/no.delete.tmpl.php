@@ -27,9 +27,9 @@
 <div id="emptycontent" class="">
 	<div class="icon-polls"></div>
 	<h1>
-		<?php p($l->t('Access denied')); ?>
+		<?php /** @scrutinizer ignore-call */ p($l->t('Access denied')); ?>
 	</h1>
 	<h2>
-		<?php p($l->t('You are either not allowed to delete this poll or it doesn\'t exist.')); ?>
+		<?php /** @scrutinizer ignore-call */ p($l->t('You are either not allowed to delete this poll or it doesn\'t exist.')); ?>
 	</h2>
 </div>

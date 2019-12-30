@@ -39,7 +39,6 @@ use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
@@ -51,10 +50,9 @@ class PollController extends Controller {
 	private $logger;
 	private $groupManager;
 	private $userManager;
-	private $pollService;
 	private $poll;
 	private $logService;
-	private $MailService;
+	private $mailService;
 	private $acl;
 
 	/**
@@ -66,7 +64,6 @@ class PollController extends Controller {
 	 * @param PollMapper $mapper
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
-	 * @param PollService $pollService
 	 * @param LogService $logService
 	 * @param MailService $mailService
 	 * @param Acl $acl
@@ -81,7 +78,6 @@ class PollController extends Controller {
 		Poll $poll,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
-		PollService $pollService,
 		LogService $logService,
 		MailService $mailService,
 		Acl $acl
@@ -92,7 +88,6 @@ class PollController extends Controller {
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
-		$this->pollService = $pollService;
 		$this->poll = $poll;
 		$this->logService = $logService;
 		$this->mailService = $mailService;
@@ -100,7 +95,7 @@ class PollController extends Controller {
 	}
 
 	/**
-	 * Get all polls
+	 * list
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
@@ -108,9 +103,6 @@ class PollController extends Controller {
 	 */
 
 	public function list() {
-		$polls = [];
-		// TODO: Remove this, because it's just for easy testing purposes
-		// $this->mailService->sendNotifications();
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			try {
 				$polls = array_values(array_filter($this->mapper->findAll(), function($item) {
@@ -118,13 +110,13 @@ class PollController extends Controller {
     			}));
 				return new DataResponse($polls, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
-				$polls = [];
+				return new DataResponse($e, Http::STATUS_NOT_FOUND);
 			}
 		}
 	}
 
 	/**
-	 * Read an entire poll based on poll id
+	 * get
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
@@ -139,23 +131,8 @@ class PollController extends Controller {
 			}
 
 			$this->poll = $this->mapper->find($pollId);
-			// if ($this->poll->getType() == 0) {
-			// 	$pollType = 'datePoll';
-			// } else {
-			// 	$pollType = 'textPoll';
-			// }
 
-			// TODO: add migration for this
-			// if ($this->poll->getAccess() === 'public' || $this->poll->getAccess() === 'registered') {
-			// 	$this->poll->setAccess('public');
-			// } else {
-			// 	$this->poll->setAccess('hidden');
-			// }
-
-			return new DataResponse((object)
-				$this->poll
-			,
-			Http::STATUS_OK);
+			return new DataResponse($this->poll, Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
@@ -176,7 +153,7 @@ class PollController extends Controller {
 
 		try {
 			$this->acl->setToken($token);
-			return $this->get($this->acl->getPollId());
+			return new DataResponse($this->get($this->acl->getPollId()), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
@@ -184,7 +161,7 @@ class PollController extends Controller {
 	}
 
 	/**
-	 * Write poll (create/update)
+	 * write
 	 * @NoAdminRequired
 	 * @param Array $poll
 	 * @return DataResponse
@@ -196,7 +173,6 @@ class PollController extends Controller {
 			// Find existing poll
 			$this->poll = $this->mapper->find($poll['id']);
 			$this->acl->setPollId($this->poll->getId());
-
 			if (!$this->acl->getAllowEdit()) {
 				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
 				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
@@ -205,13 +181,12 @@ class PollController extends Controller {
 			$logMessageId = 'updatePoll';
 
 		} catch (Exception $e) {
-
+			$logMessageId = 'addPoll';
 			$this->poll = new Poll();
 
 			$this->poll->setType($poll['type']);
 			$this->poll->setOwner($this->userId);
 			$this->poll->setCreated(time());
-			$this->acl->setPollId(0);
 		} finally {
 			$this->poll->setTitle($poll['title']);
 			$this->poll->setDescription($poll['description']);
@@ -221,13 +196,13 @@ class PollController extends Controller {
 			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']));
 			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
 			$this->poll->setVoteLimit(intval($poll['voteLimit']));
-			$this->poll->setSettings(json_encode($poll));
-			$this->poll->setOptions($poll['options']);
+			$this->poll->setSettings('');
+			$this->poll->setOptions('');
 			$this->poll->setShowResults($poll['showResults']);
 			$this->poll->setDeleted($poll['deleted']);
 			$this->poll->setAdminAccess($poll['adminAccess']);
 
-			if ($this->acl->getPollId() > 0) {
+			if ($this->poll->getId() > 0) {
 				$this->mapper->update($this->poll);
 				$this->logService->setLog($this->poll->getId(), $logMessageId);
 			} else {

@@ -46,13 +46,9 @@ class NotificationCron extends TimedJob {
     }
 
 	/**
-	* getByToken
-	* Get pollId by token
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @PublicPage
+	* run
 	* @param string $token
-	* @return DataResponse
+	* @return null
 	*/
     protected function run($arguments) {
         if ($this->mailService->sendNotifications()) {

@@ -78,7 +78,7 @@ class SubscriptionMapper extends QBMapper {
 	 * @param string $userId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Notification
+	 * @return Subscription
 	 */
 	public function findByUserAndPoll($pollId, $userId) {
 		$qb = $this->db->getQueryBuilder();

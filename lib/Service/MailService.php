@@ -23,6 +23,8 @@
 
 namespace OCA\Polls\Service;
 
+use Exception;
+
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -31,6 +33,7 @@ use OCP\IURLGenerator;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
+use OCP\Mail\IEMailTemplate;
 use OCP\ILogger;
 
 use OCA\Polls\Db\SubscriptionMapper;

@@ -65,7 +65,7 @@ export default {
 		},
 
 		isActive() {
-			return (this.isValidUser && this.acl.userId === this.userId && !this.poll.expired)
+			return (this.isValidUser && this.acl.userId === this.userId && this.acl.allowVote)
 		}
 
 	},

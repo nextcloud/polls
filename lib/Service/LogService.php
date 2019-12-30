@@ -70,10 +70,10 @@ class LogService  {
 	/**
 	* Log poll activity
 	* @NoAdminRequired
-	* @param $pollId related pollId
-	* @param $messageId identifier for message notice
-	* @param $userId (optional)
-	* @param $message message text if $messageId is === 'custom'
+	* @param $pollId
+	* @param $messageId
+	* @param $userId
+	* @param $message
 	* @return Log
 	*/
 	public function setLog($pollId, $messageId, $userId = null, $message = null) {

@@ -84,6 +84,8 @@ const actions = {
 
 		if (payload.token !== undefined) {
 			return
+		} else if (!rootState.acl.allowEdit) {
+			return
 		} else if (payload.pollId !== undefined) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {

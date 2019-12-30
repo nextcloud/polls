@@ -122,7 +122,6 @@ const actions = {
 
 	writePollPromise({ commit, rootState }) {
 		let endPoint = 'apps/polls/poll/write/'
-
 		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
 				commit('setPoll', { 'poll': response.data })
