@@ -22,11 +22,11 @@
 
 <template>
 	<div class="vote-header" :class=" { winner: isWinner }">
-		<div v-if="textPoll" class="text-box">
+		<div v-if="poll.type === 'textPoll'" class="text-box">
 			{{ option.pollOptionText }}
 		</div>
 
-		<div v-if="datePoll" v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="date-box">
+		<div v-if="poll.type === 'datePoll'" v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="date-box">
 			<div class="month">
 				{{ moment.unix(option.timestamp).format('MMM') + " '" + moment.unix(option.timestamp).format('YY') }}
 			</div>
@@ -87,25 +87,11 @@ export default {
 			'winnerCombo'
 		]),
 
-		votesranked() {
-			let pollOptionText = this.option.pollOptionText
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			})
-		},
-
 		yesVotes() {
 			let pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			}).yes
-		},
-
-		noVotes() {
-			let pollOptionText = this.option.pollOptionText
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			}).no
 		},
 
 		maybeVotes() {
@@ -132,17 +118,10 @@ export default {
 					return rank.pollOptionText === pollOptionText
 				}).maybe
 			)
-		},
-
-		datePoll() {
-			return (this.poll.type === 'datePoll')
-		},
-
-		textPoll() {
-			return (this.poll.type === 'textPoll')
 		}
 	}
 }
+
 </script>
 
 <style lang="scss" scoped>

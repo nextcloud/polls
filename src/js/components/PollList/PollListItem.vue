@@ -45,7 +45,7 @@
 	</div>
 
 	<div v-else class="pollListItem poll">
-		<div v-tooltip.auto="pollType" class="thumbnail" :class="[pType, {expired : poll.expired}]">
+		<div v-tooltip.auto="pollType" class="thumbnail" :class="[poll.type, {expired : expired}]">
 			{{ pollType }}
 		</div>
 
@@ -73,7 +73,7 @@
 			</div>
 		</div>
 
-		<div v-tooltip.auto="accessType" class="thumbnail access" :class="aType">
+		<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.access">
 			{{ accessType }}
 		</div>
 
@@ -83,7 +83,7 @@
 
 		<div class="dates">
 			<div class="created ">
-				{{ timeSpanCreated }}
+				{{ moment.unix(poll.created).fromNow() }}
 			</div>
 			<div class="expiry" :class="{ expired : poll.expired }">
 				{{ timeSpanExpiration }}
@@ -116,59 +116,25 @@ export default {
 
 	computed: {
 
-		// TODO: dity hack
-		aType() {
-			if (this.poll.access === 'public') {
-				return this.poll.access
-			} else if (this.poll.access === 'registered') {
-				return this.poll.access
-			} else if (this.poll.access === 'hidden') {
-				return this.poll.access
-			} else {
-				return 'select'
-			}
-		},
-
 		expired() {
 			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 
 		accessType() {
-			if (this.aType === 'public') {
-				return t('polls', 'Visible')
-			} else if (this.aType === 'hidden') {
-				return t('polls', 'Hidden')
+			if (this.poll.access === 'public') {
+				return t('polls', 'Visible to other users')
 			} else {
-				return ''
+				return t('polls', 'Hidden to other users')
 			}
-		},
-
-		// TODO: dity hack
-		pType() {
-			if (this.poll.type === '1') {
-				// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
-				return t('polls', 'textPoll')
-			} else {
-				// TRANSLATORS This means that this is the type of the poll. Another type is a 'text poll'.
-				return t('polls', 'datePoll')
-			}
-
 		},
 
 		pollType() {
 			if (this.poll.type === 'textPoll') {
 				// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
-				return t('polls', 'Text poll')
-			} else if (this.poll.type === 'datePoll') {
-				// TRANSLATORS This means that this is the type of the poll. Another type is a 'text poll'.
-				return t('polls', 'Date poll')
+				return t('polls', 'Poll type')
 			} else {
-				return t('polls', 'Unknown')
+				return t('polls', 'Poll schedule')
 			}
-		},
-
-		timeSpanCreated() {
-			return moment.unix(this.poll.created).fromNow()
 		},
 
 		timeSpanExpiration() {
@@ -177,10 +143,6 @@ export default {
 			} else {
 				return t('polls', 'never')
 			}
-		},
-
-		voteUrl() {
-			return OC.generateUrl('apps/polls/poll/') + this.poll.id
 		},
 
 		menuItems() {
@@ -222,31 +184,8 @@ export default {
 			this.openedMenu = false
 		},
 
-		copyLink() {
-			// this.$emit('copyLink')
-			this.$copyText(window.location.origin + this.voteUrl).then(
-				function(e) {
-					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
-				},
-				function(e) {
-					OC.Notification.showTemporary(t('polls', 'Error, while copying link to clipboard'), { type: 'error' })
-				}
-			)
-			this.hideMenu()
-		},
-
 		deletePoll() {
 			this.$emit('deletePoll')
-			this.hideMenu()
-		},
-
-		votePoll() {
-			this.$emit('votePoll')
-			this.hideMenu()
-		},
-
-		editPoll() {
-			this.$emit('editPoll')
 			this.hideMenu()
 		},
 

@@ -57,14 +57,8 @@ export default {
 			'expired'
 		])
 
-	},
-
-	methods: {
-		indicateVoteSaved() {
-			this.voteSaved = true
-			window.setTimeout(this.timer, this.delay)
-		}
 	}
+
 }
 </script>
 

@@ -65,7 +65,7 @@
 <script>
 import { Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
-import DatePollItem from '../Create/CreateDateItem'
+import DatePollItem from '../Base/DatePollItem'
 
 export default {
 	name: 'SideBarTabDateOptions',
