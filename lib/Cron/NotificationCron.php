@@ -51,9 +51,9 @@ class NotificationCron extends TimedJob {
 	 * run
 	 * @param string $token
 	 */
-    protected function run($arguments) {
-        if ($this->mailService->sendNotifications()) {
-        	$this->logger->debug('Notifications sent');
-        }
-    }
+	protected function run($arguments) {
+		if ($this->mailService->sendNotifications()) {
+			$this->logger->debug('Notifications sent');
+		}
+	}
 }
