@@ -30,7 +30,8 @@
 			<Subscription />
 		</div>
 
-		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
+		<SideBar v-if="sideBarOpen && acl.allowEdit" @closeSideBar="toggleSideBar" />
+		<SideBarOnlyComments v-if="sideBarOpen && !acl.allowEdit" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="loading" />
 	</AppContent>
 </template>
@@ -40,6 +41,7 @@ import Subscription from '../components/Subscription/Subscription'
 import VoteHeader from '../components/VoteTable/VoteHeader'
 import VoteTable from '../components/VoteTable/VoteTable'
 import SideBar from '../components/SideBar/SideBar'
+import SideBarOnlyComments from '../components/SideBar/SideBarOnlyComments'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -48,6 +50,7 @@ export default {
 		Subscription,
 		VoteHeader,
 		VoteTable,
+		SideBarOnlyComments,
 		SideBar
 	},
 
