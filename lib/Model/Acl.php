@@ -182,7 +182,7 @@ class Acl implements JsonSerializable {
 	public function getGroupShare(): bool {
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
-				if ($item->getType() === 'group' && $this->groupManager->isInGroup($this->getUserId(),$item->getUserId())) {
+				if ($item->getType() === 'group' && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId())) {
 					return true;
 				}
 			})
@@ -252,7 +252,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowSeeUsernames(): bool {
-		return !(($this->poll->getAnonymous() && !$this->getIsOwner()) || $this->poll->getFullAnonymous());;
+		return !(($this->poll->getAnonymous() && !$this->getIsOwner()) || $this->poll->getFullAnonymous()); ;
 	}
 
 	/**
@@ -296,7 +296,7 @@ class Acl implements JsonSerializable {
 			$this->foundByToken = true;
 			$this->setPollId($share->getPollId());
 
-			if (($share->getType() === 'group' || $share->getType() === 'user')  && !\OC::$server->getUserSession()->isLoggedIn()) {
+			if (($share->getType() === 'group' || $share->getType() === 'user') && !\OC::$server->getUserSession()->isLoggedIn()) {
 				// User must be logged in for shareType user and group
 				$this->setPollId(0);
 				$this->setUserId(null);
@@ -322,7 +322,7 @@ class Acl implements JsonSerializable {
 	/**
 	 * @NoAdminRequired
 	 * @return string
-	*/
+	 */
 	public function getAccessLevel(): string {
 		if ($this->getIsOwner()) {
 			return 'owner';

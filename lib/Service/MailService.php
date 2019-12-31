@@ -44,7 +44,7 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
 
-class MailService  {
+class MailService {
 
 	private $userManager;
 	private $groupManager;
@@ -123,7 +123,7 @@ class MailService  {
 		}
 
 		if (!$toEmail || !filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-       		throw new Exception( 'Invalid email address (' . $toEmail .')' );
+	   		throw new Exception('Invalid email address (' . $toEmail . ')');
 		}
 
 		try {
@@ -255,7 +255,7 @@ class MailService  {
 			$emailTemplate->addBodyText(str_replace(
 				['{owner}', '{title}'],
 				[$owner->getDisplayName(), $poll->getTitle()],
-				$trans->t('{owner} invited you to take part in the poll "{title}"' )
+				$trans->t('{owner} invited you to take part in the poll "{title}"')
 			));
 
 			$emailTemplate->addBodyButton(
@@ -263,7 +263,7 @@ class MailService  {
 				$recipient['link']
 			);
 
-			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner.' ));
+			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner.'));
 
 			try {
 				$this->sendMail(
@@ -328,27 +328,27 @@ class MailService  {
 					} elseif ($logItem->getMessageId() === 'setVote') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s voted.',
-							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 					);
 					} elseif ($logItem->getMessageId() === 'updatePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s updated the poll configuration. Please check your votes.',
-							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					} elseif ($logItem->getMessageId() === 'deletePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s deleted the poll.',
-							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					} elseif ($logItem->getMessageId() === 'restorePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s restored the poll.',
-							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					} elseif ($logItem->getMessageId() === 'expirePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- The poll expired.',
-							array( $this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					}
 
@@ -363,10 +363,10 @@ class MailService  {
 				$url,
 				/** @scrutinizer ignore-type */ false
 			);
-			$emailTemplate->addFooter($trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.' ));
+			$emailTemplate->addFooter($trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
 
 			try {
-				$this->sendMail( $emailTemplate, $subscription->getUserId());
+				$this->sendMail($emailTemplate, $subscription->getUserId());
 			} catch (Exeption $e) {
 				// todo alert Owner
 				// Notification to $subscription->getUserId() could not be sent

@@ -277,8 +277,8 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 	}
 
 	/**
-	* Copy public tokens
-	*/
+	 * Copy public tokens
+	 */
 	protected function migrateEvents() {
 		$insert = $this->connection->getQueryBuilder();
 		$insert
@@ -313,7 +313,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 			->setParameter('expire', intval(strtotime($row['expire'])))
 			->setParameter('deleted', intval(strtotime($row['deleted'])))
 			->setParameter('access', $this->resolveAccess($row['access']))
-			->setParameter('anonymous', intval( $row['full_anonymous'] ) * 2 + intval($row['is_anonymous']))
+			->setParameter('anonymous', intval($row['full_anonymous']) * 2 + intval($row['is_anonymous']))
 			->setParameter('full_anonymous', $row['full_anonymous'])
 			->setParameter('allow_maybe', $row['allow_maybe'])
 			->setParameter('options', $this->resolveOptions($row['allow_maybe']));

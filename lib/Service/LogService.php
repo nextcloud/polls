@@ -29,7 +29,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
 
-class LogService  {
+class LogService {
 
 	private $mapper;
 	private $logItem;
@@ -57,7 +57,7 @@ class LogService  {
 	public function isRepetition() {
 		try {
 			$lastRecord = $this->mapper->getLastRecord($this->logItem->getPollId());
-			return ( intval($lastRecord->getPollId()) === intval($this->logItem->getPollId())
+			return (intval($lastRecord->getPollId()) === intval($this->logItem->getPollId())
 				&& $lastRecord->getUserId() === $this->logItem->getUserId()
 				&& $lastRecord->getMessageId() === $this->logItem->getMessageId()
 				&& $lastRecord->getMessage() === $this->logItem->getMessage()

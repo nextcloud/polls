@@ -80,8 +80,8 @@ class LogMapper extends QBMapper {
 		$qb->select('*')
 			->from($this->getTableName())
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->setMaxResults( 1 )
-		    ->orderBy('id', 'DESC');
+			->setMaxResults(1)
+			->orderBy('id', 'DESC');
 
 		return $this->findEntity($qb);
 

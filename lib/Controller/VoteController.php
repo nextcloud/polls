@@ -160,18 +160,18 @@ class VoteController extends Controller {
 
 	/**
 	 * Public functions
-	*/
+	 */
 
 	/**
-	* setByToken
-	* @NoAdminRequired
-	* @PublicPage
-	* @NoCSRFRequired
-	* @param Array $option
-	* @param string $setTo
-	* @param string $token
-	* @return DataResponse
-	*/
+	 * setByToken
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param Array $option
+	 * @param string $setTo
+	 * @param string $token
+	 * @return DataResponse
+	 */
 	public function setByToken($option, $setTo, $token) {
 		try {
 			$this->acl->setToken($token);

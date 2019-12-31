@@ -97,7 +97,7 @@ class OptionController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 
-			return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
+			return new DataResponse($this->mapper->findByPoll($pollId), Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
@@ -118,8 +118,7 @@ class OptionController extends Controller {
 
 		try {
 			$this->acl->setToken($token);
-			return $this->get($this->acl->getPollId());
-			return new DataResponse((array) $this->get($this->acl->getPollId()), Http::STATUS_OK);
+			return new DataResponse($this->get($this->acl->getPollId()), Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
@@ -135,7 +134,6 @@ class OptionController extends Controller {
 	public function add($option) {
 
 		try {
-			$Poll = $this->pollMapper->find($option['pollId']);
 			$this->acl->setPollId($option['pollId']);
 
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
