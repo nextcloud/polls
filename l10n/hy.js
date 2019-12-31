@@ -5,7 +5,6 @@ OC.L10N.register(
     "Cancel" : "ընդհատել",
     "Title" : "Վերնագիր",
     "Owner" : "Owner",
-    "Unknown" : "Անհայտ",
     "never" : "երբեք",
     "Details" : "Մանրամասներ",
     "Comments" : "Կարծիքներ",

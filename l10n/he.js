@@ -9,6 +9,7 @@ OC.L10N.register(
     "Create new poll" : "יצירת סקר חדש",
     "Text based" : "על בסיס טקסט",
     "Cancel" : "ביטול",
+    "Apply" : "החלה",
     "Title" : "כותרת",
     "Access" : "גישה",
     "Owner" : "בעלות",

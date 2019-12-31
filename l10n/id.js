@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group" : "Grup",
     "Cancel" : "Membatalkan",
+    "Apply" : "Terapkan",
     "Title" : "Judul",
     "Owner" : "Owner",
     "Created" : "Dibuat",

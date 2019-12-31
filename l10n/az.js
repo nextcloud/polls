@@ -5,8 +5,6 @@ OC.L10N.register(
     "Cancel" : "Dayandır",
     "Title" : "Başlıq",
     "Owner" : "Owner",
-    "Visible" : "Görünən",
-    "Hidden" : "Gizli",
     "never" : "heç vaxt",
     "Details" : "Detallar",
     "Configuration" : "Konfiqurasiya",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Create new poll" : "Crear nueva encuesta",
     "Text based" : "Base texto",
     "Cancel" : "Cancelar",
+    "Apply" : "Aplicar",
     "Title" : "Título",
     "Access" : "Acceso",
     "Owner" : "Propietario",

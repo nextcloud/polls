@@ -6,6 +6,7 @@ OC.L10N.register(
     "Create new poll" : "Vytvoriť novú anketu",
     "Text based" : "založené na texte",
     "Cancel" : "Zrušiť",
+    "Apply" : "Aplikovať",
     "Title" : "Názov",
     "Access" : "Prístup",
     "Owner" : "Vlastník",

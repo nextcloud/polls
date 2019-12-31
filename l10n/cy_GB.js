@@ -5,7 +5,6 @@ OC.L10N.register(
     "Cancel" : "Diddymu",
     "Title" : "Teitl",
     "Owner" : "Owner",
-    "Unknown" : "Anhysbys",
     "never" : "byth",
     "Details" : "Manylion",
     "Saved" : "Wedi'u cadw",

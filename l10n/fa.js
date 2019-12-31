@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group" : "گروه",
     "Cancel" : "لغو",
+    "Apply" : "اعمال",
     "Title" : "عنوان",
     "Access" : "دسترسی",
     "Owner" : "Owner",

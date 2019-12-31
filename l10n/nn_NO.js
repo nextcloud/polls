@@ -7,7 +7,6 @@ OC.L10N.register(
     "Title" : "Tittel",
     "Owner" : "Owner",
     "Created" : "Lagd",
-    "Unknown" : "Ukjend",
     "never" : "aldri",
     "Details" : "Detaljar",
     "Comments" : "Kommentarar",

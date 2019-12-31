@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group" : "Group",
     "Cancel" : "បោះបង់",
+    "Apply" : "អនុវត្ត",
     "Title" : "ចំណងជើង",
     "Owner" : "Owner",
     "never" : "មិនដែរ",

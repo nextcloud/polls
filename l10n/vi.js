@@ -7,8 +7,6 @@ OC.L10N.register(
     "Title" : "Tên",
     "Owner" : "Chủ",
     "Created" : "Đã tạo",
-    "Hidden" : "Ẩn",
-    "Unknown" : "Không xác định",
     "never" : "không thay đổi",
     "Details" : "Thông tin",
     "Comments" : "Các bình luận",
