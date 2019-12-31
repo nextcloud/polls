@@ -272,7 +272,7 @@ class MailService {
 					$recipient['email'],
 					$recipient['displayName']
 				);
-			} catch (Exeption $e) {
+			} catch (Exception $e) {
 				// todo alert Owner
 				// Invitation to $recipient['userId'] could not be sent
 			}
