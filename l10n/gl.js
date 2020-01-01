@@ -20,6 +20,7 @@ OC.L10N.register(
     "Create new poll" : "Crear unha enquisa nova",
     "Enter Title" : "Insira o título",
     "Poll type" : "Tipo de enquisa",
+    "Poll schedule" : "Programación de enquisas",
     "Text based" : "Baseado en texto",
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
