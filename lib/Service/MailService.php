@@ -367,7 +367,7 @@ class MailService {
 
 			try {
 				$this->sendMail($emailTemplate, $subscription->getUserId());
-			} catch (Exeption $e) {
+			} catch (Exception $e) {
 				// todo alert Owner
 				// Notification to $subscription->getUserId() could not be sent
 			}
