@@ -31,12 +31,12 @@
 				{{ t('polls', 'Poll type') }}
 			</label>
 			<input id="datePoll" v-model="type" value="datePoll"
-				:disabled="protect" type="radio" class="radio">
+				type="radio" class="radio">
 			<label for="datePoll">
 				{{ t('polls', 'Poll schedule') }}
 			</label>
 			<input id="textPoll" v-model="type" value="textPoll"
-				:disabled="protect" type="radio" class="radio">
+				type="radio" class="radio">
 			<label for="textPoll">
 				{{ t('polls', 'Text based') }}
 			</label>
