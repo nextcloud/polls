@@ -13,7 +13,7 @@ OC.L10N.register(
     "- %s deleted the poll." : "- %s hat die Umfrage gelöscht.",
     "- %s restored the poll." : "- %s hat die Umfrage wiederhergestellt.",
     "- The poll expired." : "- Umfrage abgelaufen.",
-    "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Sie erhalten diese E-Mail, da Sie Benachrichtigungen zu dieser Umfrage aboniert haben. Um das Abonnenment zu beenden, besuchen Sie die Umfrage und beenden Sie Ihr Abonnement.",
+    "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Sie erhalten diese E-Mail, da Sie Benachrichtigungen zu dieser Umfrage abonniert haben. Um sich abzumelden, besuchen Sie die Umfrage und beenden Sie Ihr Abonnement.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Eine Umfragen App ähnlich wie doodle/dudle, mit der Möglichkeit Zugriffe zu beschränken.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Eine Umfrage-App ähnlich wie Doodle/Dudle, mit der Möglichkeit Zugriffe zu beschränken (versteckt/öffentlich oder bestimmte Gruppen/Benutzer/Mitglieder).",
     "Group" : "Gruppe",

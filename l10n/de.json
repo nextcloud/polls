@@ -11,7 +11,7 @@
     "- %s deleted the poll." : "- %s hat die Umfrage gelöscht.",
     "- %s restored the poll." : "- %s hat die Umfrage wiederhergestellt.",
     "- The poll expired." : "- Umfrage abgelaufen.",
-    "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Du erhältst diese E-Mail, da Du Benachrichtigungen zu dieser Umfrage aboniert hast. Um das Abonnenment zu beenden, besuche die Umfrage und beende Dein Abonnement.",
+    "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Du erhältst diese E-Mail, da Du Benachrichtigungen zu dieser Umfrage abonniert hast. Um sich abzumelden, besuche die Umfrage und beende Dein Abonnement.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Eine Umfrage-App ähnlich wie Doodle/Dudle, mit der Möglichkeit Zugriffe zu beschränken.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Eine Umfrage-App ähnlich wie Doodle/Dudle, mit der Möglichkeit Zugriffe zu beschränken (versteckt/öffentlich oder bestimmte Gruppen/Benutzer/Mitglieder).",
     "Group" : "Gruppe",
