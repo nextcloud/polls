@@ -2,8 +2,6 @@
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author John Molakvoæ <skjnldsv@protonmail.com>
- * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -22,16 +20,18 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex from 'vuex'
-import modules from './modules'
+import camelCase from 'lodash/camelCase'
+const requireModule = require.context('.', false, /\.js$/)
+const modules = {}
 
-Vue.use(Vuex)
-
-/* eslint-disable-next-line no-unused-vars */
-const debug = process.env.NODE_ENV !== 'production'
-
-export default new Vuex.Store({
-	modules,
-	strict: process.env.NODE_ENV !== 'production'
+requireModule.keys().forEach(fileName => {
+	if (fileName === './index.js') return
+	const moduleName = camelCase(
+		fileName.replace(/(\.\/|\.js)/g, '')
+	)
+	modules[moduleName] = {
+		namespaced: false,
+		...requireModule(fileName).default
+	}
 })
+export default modules
