@@ -109,13 +109,16 @@ export default {
 		width: 170px;
 		flex: 0 0 auto;
 	}
+
 	.header {
 		height: 150px;
 	}
+
 	.user {
 		height: 44px;
 		padding: 0 17px;
 	}
+
 	.vote-table {
 		display: flex;
 		flex: 0;

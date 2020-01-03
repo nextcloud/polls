@@ -84,7 +84,7 @@ import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
-	name: 'SideBarTab',
+	name: 'SideBarTabConfiguration',
 
 	data() {
 		return {
@@ -107,7 +107,7 @@ export default {
 				return this.poll.description
 			},
 			set(value) {
-				this.writeValueDebounced({ 'description': value })
+				this.writeValueDebounced({ description: value })
 			}
 		},
 
@@ -116,7 +116,7 @@ export default {
 				return this.poll.title
 			},
 			set(value) {
-				this.writeValueDebounced({ 'title': value })
+				this.writeValueDebounced({ title: value })
 			}
 		},
 
@@ -125,7 +125,7 @@ export default {
 				return this.poll.access
 			},
 			set(value) {
-				this.writeValue({ 'access': value })
+				this.writeValue({ access: value })
 			}
 		},
 
@@ -135,7 +135,7 @@ export default {
 			},
 			set(value) {
 
-				this.writeValue({ 'expire': moment(value).unix() })
+				this.writeValue({ expire: moment(value).unix() })
 			}
 		},
 
@@ -145,9 +145,9 @@ export default {
 			},
 			set(value) {
 				if (value) {
-					this.writeValue({ 'expire': moment().unix() })
+					this.writeValue({ expire: moment().unix() })
 				} else {
-					this.writeValue({ 'expire': 0 })
+					this.writeValue({ expire: 0 })
 
 				}
 			}
@@ -158,7 +158,7 @@ export default {
 				return (this.poll.Fullanonymous > 0)
 			},
 			set(value) {
-				this.writeValue({ 'fullAnonymous': value })
+				this.writeValue({ fullAnonymous: value })
 			}
 		},
 
@@ -167,7 +167,7 @@ export default {
 				return (this.poll.anonymous > 0)
 			},
 			set(value) {
-				this.writeValue({ 'anonymous': value })
+				this.writeValue({ anonymous: value })
 			}
 		},
 
@@ -176,9 +176,9 @@ export default {
 				return this.poll.allowMaybe
 			},
 			set(value) {
-				this.writeValue({ 'allowMaybe': value })
+				this.writeValue({ allowMaybe: value })
 				if (value) {
-					this.writeValue({ 'options': ['yes', 'no', 'maybe'] })
+					this.writeValue({ options: ['yes', 'no', 'maybe'] })
 				}
 			}
 		},
@@ -237,8 +237,8 @@ export default {
 	},
 	methods: {
 
-		...mapMutations([ 'setPollProperty' ]),
-		...mapActions([ 'writePollPromise' ]),
+		...mapMutations(['setPollProperty']),
+		...mapActions(['writePollPromise']),
 
 		writeValueDebounced: debounce(function(e) {
 			this.writeValue(e)
@@ -252,9 +252,9 @@ export default {
 
 		switchDeleted() {
 			if (this.poll.deleted) {
-				this.writeValue({ 'deleted': 0 })
+				this.writeValue({ deleted: 0 })
 			} else {
-				this.writeValue({ 'deleted': moment.utc().unix() })
+				this.writeValue({ deleted: moment.utc().unix() })
 			}
 
 		},

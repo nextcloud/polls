@@ -24,14 +24,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import acl from './modules/acl'
-import comments from './modules/comments'
-import poll from './modules/poll'
-import polls from './modules/polls'
-import subscription from './modules/subscription'
-import votes from './modules/votes'
-import options from './modules/options'
-import shares from './modules/shares'
+import modules from './modules'
 
 Vue.use(Vuex)
 
@@ -39,17 +32,6 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
-
-	modules: {
-		acl,
-		comments,
-		poll,
-		polls,
-		subscription,
-		votes,
-		options,
-		shares
-	},
-
+	modules,
 	strict: process.env.NODE_ENV !== 'production'
 })

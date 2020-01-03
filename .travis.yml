@@ -17,7 +17,7 @@ addons:
 
 env:
   global:
-    - CORE_BRANCH=stable14
+    - CORE_BRANCH=stable17
     - APP_NAME=polls
   matrix:
     - DB=mysql

@@ -49,7 +49,7 @@ const mutations = {
 		Object.assign(state, payload.acl)
 	},
 
-	reset(state) {
+	resetAcl(state) {
 		Object.assign(state, defaultAcl())
 	}
 
@@ -57,8 +57,7 @@ const mutations = {
 
 const actions = {
 
-	loadPoll({ commit, rootState }, payload) {
-		commit('reset')
+	loadAcl(context, payload) {
 		let endPoint = 'apps/polls/acl/get/'
 
 		if (payload.token !== undefined) {
@@ -66,14 +65,15 @@ const actions = {
 		} else if (payload.pollId !== undefined) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
+			context.commit('resetAcl')
 			return
 		}
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setAcl', { 'acl': response.data })
+				context.commit('setAcl', { acl: response.data })
 			}, (error) => {
-				console.error('Error loading comments', { 'error': error.response }, { 'payload': payload })
+				console.error('Error loading comments', { error: error.response }, { payload: payload })
 				throw error
 			})
 	}

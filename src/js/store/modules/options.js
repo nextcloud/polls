@@ -47,7 +47,7 @@ const mutations = {
 	},
 
 	setOption(state, payload) {
-		let index = state.list.findIndex((option) => {
+		const index = state.list.findIndex((option) => {
 			return option.id === payload.option.id
 		})
 
@@ -61,7 +61,9 @@ const mutations = {
 
 const getters = {
 	lastOptionId: state => {
-		return Math.max.apply(Math, state.list.map(function(option) { return option.id }))
+		return Math.max.apply(Math, state.list.map(function(option) {
+			return option.id
+		}))
 	},
 
 	sortedOptions: state => {
@@ -71,8 +73,7 @@ const getters = {
 
 const actions = {
 
-	loadPoll({ commit, rootState }, payload) {
-		commit('reset')
+	loadPoll(context, payload) {
 		let endPoint = 'apps/polls/options/get/'
 
 		if (payload.token !== undefined) {
@@ -80,63 +81,65 @@ const actions = {
 		} else if (payload.pollId !== undefined) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
+			context.commit('reset')
 			return
 		}
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('optionsSet', { 'list': response.data })
+				context.commit('optionsSet', { list: response.data })
 			}, (error) => {
-				console.error('Error loading options', { 'error': error.response }, { 'payload': payload })
+				context.commit('reset')
+				console.error('Error loading options', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	updateOptionAsync({ commit, getters, dispatch, rootState }, payload) {
-		let endPoint = 'apps/polls/option/update'
+	updateOptionAsync(context, payload) {
+		const endPoint = 'apps/polls/option/update'
 
 		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
-			.then((response) => {
-				commit('setOption', { 'option': payload.option })
+			.then(() => {
+				context.commit('setOption', { option: payload.option })
 			}, (error) => {
-				console.error('Error updating option', { 'error': error.response }, { 'payload': payload })
+				console.error('Error updating option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	addOptionAsync({ commit, getters, dispatch, rootState }, payload) {
-		let endPoint = 'apps/polls/option/add/'
-		let option = {}
+	addOptionAsync(context, payload) {
+		const endPoint = 'apps/polls/option/add/'
+		const option = {}
 
 		option.id = 0
-		option.pollId = rootState.poll.id
+		option.pollId = context.rootState.poll.id
 
-		if (rootState.poll.type === 'datePoll') {
+		if (context.rootState.poll.type === 'datePoll') {
 			option.timestamp = moment(payload.pollOptionText).unix()
 			option.pollOptionText = moment.utc(payload.pollOptionText).format()
 
-		} else if (rootState.poll.type === 'textPoll') {
+		} else if (context.rootState.poll.type === 'textPoll') {
 			option.timestamp = 0
 			option.pollOptionText = payload.pollOptionText
 		}
 
 		return axios.post(OC.generateUrl(endPoint), { option: option })
 			.then((response) => {
-				commit('setOption', { 'option': response.data })
+				context.commit('setOption', { option: response.data })
 			}, (error) => {
-				console.error('Error adding option', { 'error': error.response }, { 'payload': payload })
+				console.error('Error adding option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	removeOptionAsync({ commit, getters, dispatch, rootState }, payload) {
-		let endPoint = 'apps/polls/option/remove/'
+	removeOptionAsync(context, payload) {
+		const endPoint = 'apps/polls/option/remove/'
 
 		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
-			.then((response) => {
-				commit('optionRemove', { 'option': payload.option })
+			.then(() => {
+				context.commit('optionRemove', { option: payload.option })
 			}, (error) => {
-				console.error('Error removing option', { 'error': error.response }, { 'payload': payload })
+				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	}

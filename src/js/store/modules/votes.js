@@ -41,7 +41,7 @@ const mutations = {
 	},
 
 	setVote(state, payload) {
-		let index = state.list.findIndex(vote =>
+		const index = state.list.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
 			&& vote.voteOptionText === payload.option.pollOptionText)
@@ -64,7 +64,7 @@ const getters = {
 	},
 
 	participants: (state, getters, rootState) => {
-		let list = []
+		const list = []
 		state.list.forEach(function(vote) {
 			if (!list.includes(vote.userId)) {
 				list.push(vote.userId)
@@ -79,17 +79,17 @@ const getters = {
 	},
 
 	votesRank: (state, getters, rootGetters) => {
-		let rank = []
+		const rank = []
 		rootGetters.options.list.forEach(function(option) {
-			let countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
-			let countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
-			let countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
+			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
+			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
+			const countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
 			rank.push({
-				'rank': 0,
-				'pollOptionText': option.pollOptionText,
-				'yes': countYes,
-				'no': countNo,
-				'maybe': countMaybe
+				rank: 0,
+				pollOptionText: option.pollOptionText,
+				yes: countYes,
+				no: countNo,
+				maybe: countMaybe
 			})
 		})
 		return orderBy(rank, ['yes', 'maybe'], ['desc', 'desc'])
@@ -99,7 +99,7 @@ const getters = {
 		return getters.votesRank[0]
 	},
 
-	getVote: (state, getters) => (payload) => {
+	getVote: (state) => (payload) => {
 		return state.list.find(vote => {
 			return (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText)
@@ -119,46 +119,46 @@ const getters = {
 
 const actions = {
 
-	loadPoll({ commit, rootState }, payload) {
-		commit('reset')
+	loadPoll(context, payload) {
 		let endPoint = 'apps/polls/votes/get/'
 		if (payload.token !== undefined) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId !== undefined) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
+			context.commit('reset')
 			return
 		}
 
 		axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setVotes', { 'list': response.data })
+				context.commit('setVotes', { list: response.data })
 			}, (error) => {
-				console.error('Error loading votes', { 'error': error.response }, { 'payload': payload })
+				console.error('Error loading votes', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	setVoteAsync({ commit, getters, rootState }, payload) {
+	setVoteAsync(context, payload) {
 
 		let endPoint = 'apps/polls/vote/set/'
 
-		if (rootState.acl.foundByToken) {
+		if (context.rootState.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(OC.generateUrl(endPoint), {
-			pollId: rootState.poll.id,
-			token: rootState.acl.token,
+			pollId: context.rootState.poll.id,
+			token: context.rootState.acl.token,
 			option: payload.option,
 			userId: payload.userId,
 			setTo: payload.setTo
 		})
 			.then((response) => {
-				commit('setVote', { option: payload.option, pollId: rootState.poll.id, vote: response.data })
+				context.commit('setVote', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
 				return response.data
 			}, (error) => {
-				console.error('Error setting vote', { 'error': error.response }, { 'payload': payload })
+				console.error('Error setting vote', { error: error.response }, { payload: payload })
 				throw error
 			})
 	}

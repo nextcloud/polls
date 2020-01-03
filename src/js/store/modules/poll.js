@@ -64,7 +64,7 @@ const mutations = {
 
 const getters = {
 
-	expired: (state, getters) => {
+	expired: (state) => {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
@@ -86,7 +86,7 @@ const getters = {
 
 const actions = {
 
-	loadPollMain({ commit }, payload) {
+	loadPollMain(context, payload) {
 		let endPoint = 'apps/polls/poll/get/'
 
 		if (payload.token !== undefined) {
@@ -94,40 +94,41 @@ const actions = {
 		} else if (payload.pollId !== undefined) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
+			context.commit('resetPoll')
 			return
 		}
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setPoll', { 'poll': response.data })
+				context.commit('setPoll', { poll: response.data })
 			}, (error) => {
 				if (error.response.status !== '404') {
-					console.error('Error loading poll', { 'error': error.response }, { 'payload': payload })
+					console.error('Error loading poll', { error: error.response }, { payload: payload })
 				}
 				throw error
 			})
 	},
 
-	deletePollPromise({ commit }, payload) {
-		let endPoint = 'apps/polls/poll/delete/'
+	deletePollPromise(context, payload) {
+		const endPoint = 'apps/polls/poll/delete/'
 
 		return axios.post(OC.generateUrl(endPoint), { poll: payload.id })
 			.then((response) => {
 				return response
 			}, (error) => {
-				console.error('Error deleting poll', { 'error': error.response }, { 'payload': payload })
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
 				throw error
 			})
 
 	},
 
-	writePollPromise({ commit, rootState }) {
-		let endPoint = 'apps/polls/poll/write/'
+	writePollPromise(context) {
+		const endPoint = 'apps/polls/poll/write/'
 		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
-				commit('setPoll', { 'poll': response.data })
+				context.commit('setPoll', { poll: response.data })
 				return response.poll
 			}, (error) => {
-				console.error('Error writing poll:', { 'error': error.response }, { 'state': state })
+				console.error('Error writing poll:', { error: error.response }, { state: state })
 				throw error
 			})
 

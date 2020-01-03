@@ -2,7 +2,6 @@
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,42 +20,18 @@
  *
  */
 
-import axios from '@nextcloud/axios'
+import camelCase from 'lodash/camelCase'
+const requireModule = require.context('.', false, /\.js$/)
+const modules = {}
 
-const defaultSubscription = () => {
-	return {
-		subscribed: false
+requireModule.keys().forEach(fileName => {
+	if (fileName === './index.js') return
+	const moduleName = camelCase(
+		fileName.replace(/(\.\/|\.js)/g, '')
+	)
+	modules[moduleName] = {
+		namespaced: false,
+		...requireModule(fileName).default
 	}
-}
-
-const state = defaultSubscription()
-
-const mutations = {
-
-	setSubscription(state, payload) {
-		state.subscribed = payload
-	}
-
-}
-
-const actions = {
-	getSubscription(context, payload) {
-		axios.get(OC.generateUrl('apps/polls/subscription/get/' + payload.pollId))
-			.then(() => {
-				context.commit('setSubscription', true)
-			})
-			.catch(() => {
-				context.commit('setSubscription', false)
-			})
-	},
-
-	writeSubscriptionPromise(context, payload) {
-		return axios.post(OC.generateUrl('apps/polls/subscription/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
-			.then(() => {
-			}, (error) => {
-				console.error(error.response)
-			})
-	}
-}
-
-export default { state, mutations, actions }
+})
+export default modules

@@ -34,7 +34,7 @@
 
 <script>
 export default {
-	name: 'AddComment',
+	name: 'CommentAdd',
 	data() {
 		return {
 			comment: ''
@@ -50,7 +50,7 @@ export default {
 	methods: {
 		writeComment() {
 			this.$store.dispatch('setCommentAsync', { message: this.comment })
-				.then(response => {
+				.then(() => {
 					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
 				})
 				.catch(error => {
@@ -81,6 +81,7 @@ export default {
 			color: grey;
 		}
 	}
+
 	.submitComment {
 		align-self: last baseline;
 		width: 30px;

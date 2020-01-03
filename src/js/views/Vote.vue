@@ -86,17 +86,20 @@ export default {
 	},
 
 	watch: {
-		'$route'(to, from) {
+		$route() {
 			this.loadPoll()
 		},
 
-		'poll.id'(to, from) {
-			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+		'poll.id': function() {
+			this.$store.dispatch({ type: 'loadAcl', pollId: this.$route.params.id })
 				.then(() => {
-					if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-						this.sideBarOpen = true
-					}
-					this.loading = false
+					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+						.then(() => {
+							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+								this.sideBarOpen = true
+							}
+							this.loading = false
+						})
 				})
 		}
 	},
@@ -126,7 +129,6 @@ export default {
 		flex: 1;
 		margin: 0;
 		flex-direction: column;
-		flex: 1;
 		flex-wrap: nowrap;
 		overflow-x: scroll;
 		h1, h2, h3, h4 {
