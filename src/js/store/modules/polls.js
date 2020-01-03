@@ -55,19 +55,19 @@ const getters = {
 }
 
 const actions = {
-	loadPolls({ commit }) {
-		let endPoint = 'apps/polls/polls/get/'
+	loadPolls(context) {
+		const endPoint = 'apps/polls/polls/get/'
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setPolls', { list: response.data })
+				context.commit('setPolls', { list: response.data })
 			}, (error) => {
 				console.error(error.response)
 			})
 	},
 
 	deletePollPromise(context, payload) {
-		let endPoint = 'apps/polls/remove/poll'
+		const endPoint = 'apps/polls/remove/poll'
 
 		return axios.post(
 			OC.generateUrl(endPoint),

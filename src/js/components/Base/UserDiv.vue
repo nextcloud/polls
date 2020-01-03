@@ -125,30 +125,30 @@ export default {
 
 <style lang="scss">
 .user-row {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    margin-left: 0;
-    margin-top: 0;
+	display: flex;
+	flex: 1;
+	align-items: center;
+	margin-left: 0;
+	margin-top: 0;
 
-    > div {
-        margin: 2px 4px;
-    }
+	> div {
+		margin: 2px 4px;
+	}
 
-    .description {
-        opacity: 0.7;
-        flex: 0;
-    }
+	.description {
+		opacity: 0.7;
+		flex: 0;
+	}
 
-    .avatar {
-        height: 32px;
-        width: 32px;
-        flex: 0;
-    }
+	.avatar {
+		height: 32px;
+		width: 32px;
+		flex: 0;
+	}
 
-    .user-name {
-        opacity: 0.5;
-        flex: 1;
-    }
+	.user-name {
+		opacity: 0.5;
+		flex: 1;
+	}
 }
 </style>

@@ -144,7 +144,7 @@ export default {
 			this.loading = true
 			this.$store
 				.dispatch('loadPolls')
-				.then(response => {
+				.then(() => {
 					this.loading = false
 				})
 				.catch(error => {
@@ -182,7 +182,7 @@ export default {
 				this.loading = true
 				this.$store
 					.dispatch('loadPolls')
-					.then(response => {
+					.then(() => {
 						this.loading = false
 					})
 					.catch(error => {

@@ -60,8 +60,7 @@ const getters = {
 
 const actions = {
 
-	loadPoll({ commit, rootState }, payload) {
-		commit('reset')
+	loadPoll(context, payload) {
 		let endPoint = 'apps/polls/comments/get/'
 
 		if (payload.token !== undefined) {
@@ -69,36 +68,37 @@ const actions = {
 		} else if (payload.pollId !== undefined) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
+			context.commit('reset')
 			return
 		}
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				commit('setComments', { 'list': response.data })
+				context.commit('setComments', { list: response.data })
 			}, (error) => {
-				console.error('Error loading comments', { 'error': error.response }, { 'payload': payload })
+				console.error('Error loading comments', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	setCommentAsync({ commit, rootState }, payload) {
+	setCommentAsync(context, payload) {
 		let endPoint = 'apps/polls/comment/write/'
 
-		if (rootState.acl.foundByToken) {
+		if (context.rootState.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(OC.generateUrl(endPoint), {
-			pollId: rootState.poll.id,
-			token: rootState.acl.token,
+			pollId: context.rootState.poll.id,
+			token: context.rootState.acl.token,
 			message: payload.message,
-			userId: rootState.acl.userId
+			userId: context.rootState.acl.userId
 		})
 			.then((response) => {
-				commit('addComment', response.data)
+				context.commit('addComment', response.data)
 				return response.data
 			}, (error) => {
-				console.error('Error writing comment', { 'error': error.response }, { 'payload': payload })
+				console.error('Error writing comment', { error: error.response }, { payload: payload })
 				throw error
 			})
 	}

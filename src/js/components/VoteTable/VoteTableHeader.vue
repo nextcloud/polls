@@ -88,21 +88,21 @@ export default {
 		]),
 
 		yesVotes() {
-			let pollOptionText = this.option.pollOptionText
+			const pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			}).yes
 		},
 
 		maybeVotes() {
-			let pollOptionText = this.option.pollOptionText
+			const pollOptionText = this.option.pollOptionText
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			}).maybe
 		},
 
 		isWinner() {
-			let pollOptionText = this.option.pollOptionText
+			const pollOptionText = this.option.pollOptionText
 			return (
 				this.votesRank.find(rank => {
 					return rank.pollOptionText === pollOptionText

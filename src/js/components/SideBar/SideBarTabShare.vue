@@ -67,7 +67,7 @@
 				<div class="user-row user">
 					<div class="avatar icon-public" />
 					<div class="user-name">
-						{{ t('polls', 'Share Link') }}
+						{{ t('polls', 'Public link (' + share.token + ')') }}
 					</div>
 				</div>
 				<div class="options">
@@ -134,10 +134,10 @@ export default {
 
 		copyLink(payload) {
 			this.$copyText(window.location.origin + payload.url).then(
-				function(e) {
+				function() {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
 				},
-				function(e) {
+				function() {
 					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
 				}
 			)
@@ -184,12 +184,12 @@ export default {
 
 		addShare(payload) {
 			this.$store.dispatch('writeSharePromise', {
-				'share': {
-					'type': payload.type,
-					'userId': payload.user,
-					'pollId': '0',
-					'userEmail': payload.emailAddress,
-					'token': ''
+				share: {
+					type: payload.type,
+					userId: payload.user,
+					pollId: '0',
+					userEmail: payload.emailAddress,
+					token: ''
 				}
 			})
 				// .then(response => {

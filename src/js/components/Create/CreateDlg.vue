@@ -77,7 +77,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([ 'setPollProperty', 'resetPoll', 'reset' ]),
+		...mapMutations(['setPollProperty', 'resetPoll', 'reset']),
 
 		cancel() {
 			this.title = ''
@@ -88,11 +88,11 @@ export default {
 		confirm() {
 			this.resetPoll()
 			this.reset()
-			this.setPollProperty({ 'id': 0 })
-			this.setPollProperty({ 'title': this.title })
-			this.setPollProperty({ 'type': this.type })
+			this.setPollProperty({ id: 0 })
+			this.setPollProperty({ title: this.title })
+			this.setPollProperty({ type: this.type })
 			this.$store.dispatch('writePollPromise')
-				.then((response) => {
+				.then(() => {
 					this.cancel()
 					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.poll.title), { type: 'success' })
 					this.$router.push({ name: 'vote', params: { id: this.poll.id } })

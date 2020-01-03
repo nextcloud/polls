@@ -49,7 +49,7 @@ export default {
 	},
 
 	watch: {
-		'$route'(to, from) {
+		$route() {
 			this.loadNavigation = (this.$route.name !== 'publicVote')
 		}
 	}
@@ -61,23 +61,24 @@ export default {
 
 .list-enter-active,
 .list-leave-active {
-    transition: all 0.5s ease;
+	transition: all 0.5s ease;
 }
 
 .list-enter,
 .list-leave-to {
-    opacity: 0;
+	opacity: 0;
 }
 
 .list-move {
-    transition: transform 0.5s;
+	transition: transform 0.5s;
 }
 
 .fade-leave-active {
-  transition: opacity 2.5s;
+	transition: opacity 2.5s;
 }
+
 .fade-enter, .fade-leave-to {
-  opacity: 0;
+	opacity: 0;
 }
 
 #app-polls {
@@ -86,7 +87,7 @@ export default {
 }
 
 #app-content {
-    display: flex;
+	display: flex;
 	width: auto;
 
 	input {

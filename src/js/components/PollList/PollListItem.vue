@@ -49,8 +49,6 @@
 			{{ pollType }}
 		</div>
 
-		<!-- <div v-if="votedBycurrentUser" class="symbol icon-voted" /> -->
-
 		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="title">
 			<div class="name">
 				{{ poll.title }}
@@ -59,10 +57,6 @@
 				{{ poll.description }}
 			</div>
 		</router-link>
-
-		<!-- <div v-if="countComments" v-tooltip.auto="countCommentsHint" class="app-navigation-entry-utils-counter highlighted">
-			<span>{{ countComments }}</span>
-		</div> -->
 
 		<div class="actions">
 			<div class="toggleUserActions">
@@ -146,7 +140,7 @@ export default {
 		},
 
 		menuItems() {
-			let items = [
+			const items = [
 				{
 					key: 'clonePoll',
 					icon: 'icon-confirm',
@@ -215,10 +209,6 @@ export default {
 	}
 }
 
-.thumbnail {
-	flex: 0 0 auto;
-}
-
 .icon-more {
 	right: 14px;
 	opacity: 0.3;
@@ -245,15 +235,8 @@ export default {
 	}
 }
 
-.thumbnail.access, .owner {
-	flex: 0 0 auto;
-}
-
-.thumbnail.access {
-	width: 75px;
-}
-
 .owner {
+	flex: 0 0 auto;
 	width: 130px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -280,122 +263,64 @@ export default {
 	}
 }
 
-	.thumbnail {
-		width: 44px;
-		height: 44px;
-		padding-right: 4px;
-		font-size: 0;
-		background-color: var(--color-text-light);
-		&.datePoll {
-			mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
-			-webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
+.thumbnail {
+	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	padding-right: 4px;
+	font-size: 0;
+	background-color: var(--color-text-light);
+	&.datePoll {
+		mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
+		-webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
+		mask-size: 16px;
+	}
+	&.textPoll {
+		mask-image: var(--icon-organization-000) no-repeat 50% 50%;
+		-webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
+		mask-size: 16px;
+	}
+	&.expired {
+		background-color: var(--color-background-darker);
+	}
+	&.access {
+		display: inherit;
+		&.hidden {
+			mask-image: var(--icon-password-000) no-repeat 50% 50%;
+			-webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
 			mask-size: 16px;
 		}
-		&.textPoll {
-			mask-image: var(--icon-organization-000) no-repeat 50% 50%;
-			-webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
+		&.public {
+			mask-image: var(--icon-link-000) no-repeat 50% 50%;
+			-webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
 			mask-size: 16px;
 		}
-		&.expired {
-			background-color: var(--color-background-darker);
-		}
-		&.access {
-			display: inherit;
-			&.hidden {
-				mask-image: var(--icon-password-000) no-repeat 50% 50%;
-				-webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
-				mask-size: 16px;
-			}
-			&.public {
-				mask-image: var(--icon-link-000) no-repeat 50% 50%;
-				-webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
-				mask-size: 16px;
-			}
-			&.select {
-				mask-image: var(--icon-share-000) no-repeat 50% 50%;
-				-webkit-mask: var(--icon-share-000) no-repeat 50% 50%;
-				mask-size: 16px;
-			}
-			&.registered {
-				mask-image: var(--icon-group-000) no-repeat 50% 50%;
-				-webkit-mask: var(--icon-group-000) no-repeat 50% 50%;
-				mask-size: 16px;
-			}
-		}
 	}
+}
 
-	.icon-voted {
-		background-image: var(--icon-checkmark-fff);
+@media all and (max-width: (740px)) {
+	.dates {
+		flex-direction: column;
 	}
+}
 
-	.comment-badge {
-		position: absolute;
-		top: 0;
-		width: 26px;
-		line-height: 26px;
-		text-align: center;
-		font-size: 0.7rem;
-		color: white;
-		background-image: var(--icon-comment-49bc49);
-		background-repeat: no-repeat;
-		background-size: 26px;
-		z-index: 1;
+@media all and (max-width: (620px)) {
+	.owner {
+		display: none;
 	}
+}
 
-	.app-navigation-entry-utils-counter {
-		padding-right: 0 !important;
-		overflow: hidden;
-		text-align: right;
-		font-size: 9pt;
-		line-height: 44px;
-		padding: 0 12px;
-		// min-width: 25px;
-		&.highlighted {
-			padding: 0;
-			text-align: center;
-			span {
-				padding: 2px 5px;
-				border-radius: 10px;
-				background-color: var(--color-primary);
-				color: var(--color-primary-text);
-			}
-		}
+@media all and (max-width: (490px)) {
+	.dates {
+		display: none;
 	}
+}
 
-	.symbol.icon-voted {
-		position: absolute;
-		left: 11px;
-		top: 16px;
-		background-size: 0;
-		min-width: 8px;
-		min-height: 8px;
-		background-color: var(--color-success);
-		border-radius: 50%;
+@media all and (max-width: (380px)) {
+	.thumbnail.access, .access {
+		width: 140px;
+		display: none;
 	}
-
-	@media all and (max-width: (740px)) {
-		.dates {
-			flex-direction: column;
-		}
-	}
-
-	@media all and (max-width: (620px)) {
-		.owner {
-			display: none;
-		}
-	}
-
-	@media all and (max-width: (490px)) {
-		.dates {
-			display: none;
-		}
-	}
-
-	@media all and (max-width: (380px)) {
-		.thumbnail.access, .access {
-			width: 140px;
-			display: none;
-		}
-	}
+}
 
 </style>

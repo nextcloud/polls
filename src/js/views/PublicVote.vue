@@ -77,7 +77,7 @@ export default {
 	},
 
 	watch: {
-		'$route'(to, from) {
+		$route() {
 			this.loadPoll()
 		}
 	},
@@ -90,7 +90,7 @@ export default {
 		loadPoll() {
 			this.loading = false
 			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
-				.then((response) => {
+				.then(() => {
 					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
 						.then(() => {
 							this.loading = false
@@ -115,7 +115,6 @@ export default {
 		flex: 1;
 		margin: 0;
 		flex-direction: column;
-		flex: 1;
 		flex-wrap: nowrap;
 		overflow-x: scroll;
 		h1, h2, h3, h4 {

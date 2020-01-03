@@ -105,10 +105,10 @@ export default {
 	methods: {
 		copyLink(payload) {
 			this.$copyText(window.location.origin + payload.url).then(
-				function(e) {
+				function() {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
 				},
-				function(e) {
+				function() {
 					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
 				}
 			)
@@ -118,7 +118,7 @@ export default {
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
 				return axios.post(OC.generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
-					.then((response) => {
+					.then(() => {
 						this.checkingUserName = false
 						this.isValidName = true
 						this.invalidUserNameMessage = 'User name is OK.'
@@ -144,7 +144,7 @@ export default {
 					.then((response) => {
 						this.token = response.token
 						this.redirecting = true
-						this.$router.replace({ name: 'publicVote', params: { 'token': response.token } })
+						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
 					})
 					.catch(() => {
 						OC.Notification.showTemporary(t('polls', 'Error saving user name', 1, this.poll.title), { type: 'error' })
@@ -178,7 +178,6 @@ export default {
 		& > label {
 			margin-right: 12px;
 		}
-
 		margin: 0 12px 12px 24px;
 		border:2px solid var(--color-border-dark);
 		font-size: 1.2em;
@@ -204,7 +203,7 @@ export default {
 			top: 0px;
 		}
 
-		input[type="text"] + .icon-confirm, input[type="text"] + .icon-loading-small {
+		input[type='text'] + .icon-confirm, input[type='text'] + .icon-loading-small {
 			flex: 0;
 			margin-left: -8px !important;
 			border-left-color: transparent !important;
