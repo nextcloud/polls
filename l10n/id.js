@@ -16,7 +16,6 @@ OC.L10N.register(
     "Saved" : "Disimpan",
     "Description" : "Deskrisi",
     "Expiration date" : "Tanggal kadaluarsa",
-    "Share Link" : "Bagikan Tautan",
     "Unknown user" : "Pengguna tidak dikenal",
     "Deleted" : "Dihapus"
 },

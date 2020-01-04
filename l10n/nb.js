@@ -26,7 +26,6 @@ OC.L10N.register(
     "Hide user names for admin" : "Skjul brukernavn for administratorer",
     "Expiration date" : "Utløpsdato",
     "Update poll" : "Oppdater avstemning",
-    "Share Link" : "Del lenke",
     "Unknown user" : "Ukjent bruker",
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "Deleted" : "Slettet",

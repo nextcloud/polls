@@ -19,7 +19,6 @@ OC.L10N.register(
     "Saved" : "Ruajtur",
     "Description" : "Përshkrim",
     "Expiration date" : "Datë skadimi",
-    "Share Link" : "Ndani Lidhjen",
     "Unknown user" : "Përdorues i panjohur",
     "Deleted" : "E fshirë",
     "Public access" : "Akses publik"
