@@ -26,6 +26,7 @@
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			<VoteHeader />
+			<VoteList v-show="!loading" />
 			<VoteTable v-show="!loading" />
 			<Subscription />
 		</div>
@@ -40,6 +41,7 @@
 import Subscription from '../components/Subscription/Subscription'
 import VoteHeader from '../components/VoteTable/VoteHeader'
 import VoteTable from '../components/VoteTable/VoteTable'
+import VoteList from '../components/VoteTable/VoteList'
 import SideBar from '../components/SideBar/SideBar'
 import SideBarOnlyComments from '../components/SideBar/SideBarOnlyComments'
 import { mapState, mapGetters } from 'vuex'
@@ -50,6 +52,7 @@ export default {
 		Subscription,
 		VoteHeader,
 		VoteTable,
+		VoteList,
 		SideBarOnlyComments,
 		SideBar
 	},
@@ -112,6 +115,8 @@ export default {
 		loadPoll() {
 			this.loading = false
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
+				.then(() => {
+				})
 				.catch(() => {
 					this.loading = false
 				})

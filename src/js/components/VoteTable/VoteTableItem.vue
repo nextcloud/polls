@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, { active: isActive}]">
+	<div class="vote-table-item" :class="[answer, { active: isActive}]">
 		<div class="icon" @click="voteClick()" />
 	</div>
 </template>
@@ -82,7 +82,7 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	$bg-no: #ffede9;
 	$bg-maybe: #fcf7e1;
 	$bg-unvoted: #fff4c8;
@@ -93,10 +93,9 @@ export default {
 	$fg-unvoted: #f0db98;
 	$fg-yes: #49bc49;
 
-	.vote-item {
+	.vote-table-item {
 		height: 43px;
 		display: flex;
-		flex: 1;
 		width: 85px;
 		align-items: center;
 		background-color: var(--color-background-dark);
@@ -156,7 +155,7 @@ export default {
 	}
 
 	@media (max-width: (480px) ) {
-		.vote-item {
+		.vote-table-item {
 			border-top: 1px solid var(--color-border-dark);
 			&.active {
 				width: 10vw;

@@ -60,7 +60,8 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			sideBarOpen: false,
-			initialTab: 'comments'
+			initialTab: 'comments',
+			loading: false
 		}
 	},
 

@@ -31,7 +31,7 @@ import vClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 import moment from 'moment'
 
-import { PopoverMenu, Tooltip, DatetimePicker, AppContent } from '@nextcloud/vue'
+import { PopoverMenu, Tooltip, DatetimePicker, AppContent, UserBubble } from '@nextcloud/vue'
 
 import UserDiv from './components/Base/UserDiv'
 import LoadingOverlay from './components/Base/LoadingOverlay'
@@ -59,6 +59,7 @@ Vue.component('AppContent', AppContent)
 Vue.component('DatePicker', DatetimePicker)
 Vue.component('UserDiv', UserDiv)
 Vue.component('LoadingOverlay', LoadingOverlay)
+Vue.component('UserBubble', UserBubble)
 
 Vue.directive('tooltip', Tooltip)
 

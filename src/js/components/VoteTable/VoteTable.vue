@@ -160,6 +160,9 @@ export default {
 			flex: 1;
 			align-items: center;
 		}
+		.vote-table-item {
+			flex: 1;
+		}
 	}
 
 	@media (max-width: (480px)) {

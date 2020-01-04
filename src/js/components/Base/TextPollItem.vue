@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<li>
+	<li class="poll-item text">
 		<div>{{ option.pollOptionText }}</div>
 		<div>
 			<a class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
