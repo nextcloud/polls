@@ -175,7 +175,7 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * write
+	 * createPersonalShare
 	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -184,7 +184,7 @@ class ShareController extends Controller {
 	 * @param string $message
 	 * @return DataResponse
 	 */
-	public function writeFromUser($token, $userName) {
+	public function createPersonalShare($token, $userName) {
 
 		try {
 			$userShare = $this->mapper->findByToken($token);

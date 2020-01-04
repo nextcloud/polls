@@ -26,7 +26,6 @@ OC.L10N.register(
     "Hide user names for admin" : "Kasutajanimede peitmine administraatori eest",
     "Expiration date" : "Aegumise kuupäev",
     "Update poll" : "Uuenda küsitlust",
-    "Share Link" : "Jaga linki",
     "Unknown user" : "Tundmatu kasutaja",
     "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "Deleted" : "Kustutatud",

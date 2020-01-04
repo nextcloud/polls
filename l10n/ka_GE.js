@@ -26,7 +26,6 @@ OC.L10N.register(
     "Hide user names for admin" : "ადმინისტრატორებისთვის სახელების დამალვა",
     "Expiration date" : "გაუქმების თარიღი",
     "Update poll" : "გამოკითხვის განახლება",
-    "Share Link" : "ბმულის გაზიარება",
     "Unknown user" : "ამოუცნობი მომხმარებელი",
     "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "Deleted" : "გაუქმდა",

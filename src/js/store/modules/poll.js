@@ -88,9 +88,9 @@ const actions = {
 
 	loadPollMain(context, payload) {
 		let endPoint = 'apps/polls/poll/get/'
-		if (payload.token !== undefined) {
+		if (payload.token) {
 			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId !== undefined) {
+		} else if (payload.pollId) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
 			context.commit('resetPoll')

@@ -102,6 +102,7 @@ export default {
 			invitations: [],
 			invitation: {},
 			isLoading: false,
+			placeholder: t('polls', 'Enter a name to start the search'),
 			siteUsersListOptions: {
 				getUsers: true,
 				getGroups: true,

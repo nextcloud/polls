@@ -25,7 +25,6 @@ OC.L10N.register(
     "Hide user names for admin" : "Skryť používateľské mená pre správcu",
     "Expiration date" : "Dátum expirácie",
     "Update poll" : "Aktualizovať anketu",
-    "Share Link" : "Sprístupniť odkaz",
     "Unknown user" : "Neznámy používateľ",
     "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
     "Deleted" : "Zmazané",

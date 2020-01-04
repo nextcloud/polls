@@ -19,7 +19,6 @@ OC.L10N.register(
     "Saved" : "Guardado",
     "Description" : "Descrição",
     "Expiration date" : "Data de expiração",
-    "Share Link" : "Partilhar hiperligação",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Unknown user" : "Utilizador desconhecido",
     "Deleted" : "Eliminado",

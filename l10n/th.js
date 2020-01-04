@@ -15,7 +15,6 @@ OC.L10N.register(
     "Saved" : "บันทึกแล้ว",
     "Description" : "รายละเอียด",
     "Expiration date" : "วันที่หมดอายุ",
-    "Share Link" : "แชร์ลิงค์",
     "Unknown user" : "ไม่รู้จักผู้ใช้",
     "Deleted" : "ลบแล้ว"
 },

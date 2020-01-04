@@ -24,9 +24,9 @@
 	<div class="newCommentRow comment new-comment">
 		<user-div :user-id="currentUser" />
 
-		<form class="commentAdd" name="send_comment">
+		<form class="commentAdd" name="send-comment">
 			<input v-model="comment" class="message" data-placeholder="New Comment ...">
-			<input v-show="!isLoading" class="submitComment icon-confirm" @click="writeComment">
+			<input v-show="!isLoading" class="submit-comment icon-confirm" @click="writeComment">
 			<span v-show="isLoading" class="icon-loading-small" style="float:right;" />
 		</form>
 	</div>
@@ -55,6 +55,7 @@ export default {
 				.then(() => {
 					this.isLoading = false
 					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
+					this.isLoading = false
 				})
 				.catch(error => {
 					this.isLoading = false
@@ -85,7 +86,7 @@ export default {
 		}
 	}
 
-	.submitComment {
+	.submit-comment {
 		align-self: last baseline;
 		width: 30px;
 		margin: 0;

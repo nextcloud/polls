@@ -24,7 +24,6 @@ OC.L10N.register(
     "Hide user names for admin" : "對管理者隱藏記名",
     "Expiration date" : "到期日",
     "Update poll" : "更新調查活動內容",
-    "Share Link" : "分享連結",
     "Unknown user" : "未知的使用者",
     "Receive notification email on activity" : "接收E-mail活動通知",
     "Deleted" : "已刪除",
