@@ -24,10 +24,10 @@
 	<div class="newCommentRow comment new-comment">
 		<user-div :user-id="currentUser" />
 
-		<form class="commentAdd" name="send_comment">
+		<form class="commentAdd" name="send-comment">
 			<input v-model="comment" class="message" data-placeholder="New Comment ...">
-			<input v-show="!loading" class="submitComment icon-confirm" @click="writeComment">
-			<span v-show="loading" class="icon-loading-small" style="float:right;" />
+			<input v-show="!isLoading" class="submit-comment icon-confirm" @click="writeComment">
+			<span v-show="isLoading" class="icon-loading-small" style="float:right;" />
 		</form>
 	</div>
 </template>
@@ -37,7 +37,8 @@ export default {
 	name: 'CommentAdd',
 	data() {
 		return {
-			comment: ''
+			comment: '',
+			isLoading: false
 		}
 	},
 
@@ -49,12 +50,14 @@ export default {
 
 	methods: {
 		writeComment() {
+			this.isLoading = true
 			this.$store.dispatch('setCommentAsync', { message: this.comment })
 				.then(() => {
 					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
+					this.isLoading = false
 				})
 				.catch(error => {
-					this.writingVote = false
+					this.isLoading = false
 					console.error('Error while saving comment - Error: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })
 				})
@@ -82,7 +85,7 @@ export default {
 		}
 	}
 
-	.submitComment {
+	.submit-comment {
 		align-self: last baseline;
 		width: 30px;
 		margin: 0;
