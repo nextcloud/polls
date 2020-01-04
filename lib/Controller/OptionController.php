@@ -118,7 +118,7 @@ class OptionController extends Controller {
 
 		try {
 			$this->acl->setToken($token);
-			return new DataResponse($this->get($this->acl->getPollId()), Http::STATUS_OK);
+			return $this->get($this->acl->getPollId());
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);

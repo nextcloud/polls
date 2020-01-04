@@ -197,7 +197,7 @@ class Acl implements JsonSerializable {
 
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
-				if ($item->getType() === 'user' && $item->getUserId() === $this->getUserId()) {
+				if (($item->getType() === 'user' || $item->getType() === 'external') && $item->getUserId() === $this->getUserId()) {
 					return true;
 				}
 			})

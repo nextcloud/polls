@@ -29,7 +29,6 @@
 			<VoteHeader />
 			<VoteHeaderPublic />
 			<VoteTable />
-			<Subscription />
 		</div>
 
 		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
@@ -41,14 +40,12 @@
 import VoteHeader from '../components/VoteTable/VoteHeader'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import VoteTable from '../components/VoteTable/VoteTable'
-import Subscription from '../components/Subscription/Subscription'
 import SideBar from '../components/SideBar/SideBar'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'Vote',
 	components: {
-		Subscription,
 		VoteHeader,
 		VoteHeaderPublic,
 		VoteTable,
@@ -60,6 +57,7 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			sideBarOpen: false,
+			loading: false,
 			initialTab: 'comments'
 		}
 	},
@@ -91,14 +89,17 @@ export default {
 			this.loading = false
 			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
 				.then(() => {
-					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
+					this.$store.dispatch({ type: 'loadAcl', token: this.$route.params.token })
 						.then(() => {
+							this.$store.dispatch('loadPoll', { token: this.$route.params.token })
+								.then(() => {
+									this.loading = false
+								})
+						})
+						.catch((error) => {
+							console.error(error)
 							this.loading = false
 						})
-				})
-				.catch((error) => {
-					console.error(error)
-					this.loading = false
 				})
 		},
 

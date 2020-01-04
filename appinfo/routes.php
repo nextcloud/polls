@@ -55,7 +55,7 @@ return [
 
 		['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/share/write/', 'verb' => 'POST'],
-		['name' => 'share#writeFromUser', 'url' => '/share/write/s', 'verb' => 'POST'],
+		['name' => 'share#createPersonalShare', 'url' => '/share/create/s/', 'verb' => 'POST'],
 		['name' => 'share#remove', 'url' => '/share/remove/', 'verb' => 'POST'],
 		['name' => 'share#get', 'url' => '/share/get/{token}', 'verb' => 'GET'],
 

@@ -140,7 +140,7 @@ export default {
 
 		writeUserName() {
 			if (this.validatePublicUsername()) {
-				this.$store.dispatch('addShareFromUser', { token: this.$route.params.token, userName: this.userName })
+				this.$store.dispatch('createPersonalShare', { token: this.$route.params.token, userName: this.userName })
 					.then((response) => {
 						this.token = response.token
 						this.redirecting = true
