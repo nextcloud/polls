@@ -59,10 +59,9 @@ const actions = {
 
 	loadAcl(context, payload) {
 		let endPoint = 'apps/polls/acl/get/'
-
-		if (payload.token !== undefined) {
+		if (payload.token) {
 			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId !== undefined) {
+		} else if (payload.pollId) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
 			context.commit('resetAcl')
@@ -73,7 +72,7 @@ const actions = {
 			.then((response) => {
 				context.commit('setAcl', { acl: response.data })
 			}, (error) => {
-				console.error('Error loading comments', { error: error.response }, { payload: payload })
+				console.error('Error loading acl', { error: error.response }, { payload: payload })
 				throw error
 			})
 	}

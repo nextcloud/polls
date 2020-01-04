@@ -110,8 +110,8 @@ const actions = {
 			})
 	},
 
-	addShareFromUser(context, payload) {
-		const endPoint = 'apps/polls/share/write/s/'
+	createPersonalShare(context, payload) {
+		const endPoint = 'apps/polls/share/create/s/'
 
 		return axios.post(OC.generateUrl(endPoint), { token: payload.token, userName: payload.userName })
 			.then((response) => {
@@ -123,23 +123,23 @@ const actions = {
 
 	},
 
-	writeSharePromise({ commit, rootState }, payload) {
+	writeSharePromise(context, payload) {
 		const endPoint = 'apps/polls/share/write/'
-		payload.share.pollId = rootState.poll.id
-		return axios.post(OC.generateUrl(endPoint), { pollId: rootState.poll.id, share: payload.share })
+		payload.share.pollId = context.rootState.poll.id
+		return axios.post(OC.generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
-				commit('addShare', response.data)
+				context.commit('addShare', response.data)
 			}, (error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	removeShareAsync({ commit }, payload) {
+	removeShareAsync(context, payload) {
 		const endPoint = 'apps/polls/share/remove/'
 		return axios.post(OC.generateUrl(endPoint), { share: payload.share })
 			.then(() => {
-				commit('removeShare', { share: payload.share })
+				context.commit('removeShare', { share: payload.share })
 			}, (error) => {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
 				throw error

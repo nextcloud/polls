@@ -98,7 +98,6 @@ class PollController extends Controller {
 	 * list
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @return DataResponse
 	 */
 
@@ -119,7 +118,6 @@ class PollController extends Controller {
 	 * get
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @param integer $pollId
 	 * @return array
 	 */
@@ -129,7 +127,7 @@ class PollController extends Controller {
 			if (!$this->acl->getFoundByToken()) {
 				$this->acl->setPollId($pollId);
 			}
-
+			$this->logger->alert(json_encode($this->acl));
 			$this->poll = $this->mapper->find($pollId);
 
 			return new DataResponse($this->poll, Http::STATUS_OK);
@@ -152,8 +150,8 @@ class PollController extends Controller {
 	public function getByToken($token) {
 
 		try {
-			$this->acl->setToken($token);
-			return new DataResponse($this->get($this->acl->getPollId()), Http::STATUS_OK);
+			return $this->get($this->acl->setToken($token)->getPollId());
+			// return new DataResponse($this->poll, Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
