@@ -17,7 +17,6 @@ OC.L10N.register(
     "Saved" : "ذخیره شد",
     "Description" : "توضیحات",
     "Expiration date" : "تاریخ انقضا",
-    "Share Link" : "هم‌رسانی پیوند",
     "Unknown user" : "کاربر نامعلوم",
     "Deleted" : "حذف شده",
     "Public access" : "دسترسی عمومی"

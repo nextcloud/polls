@@ -26,7 +26,6 @@ OC.L10N.register(
     "Hide user names for admin" : "관리자에게 사용자 이름 숨기기",
     "Expiration date" : "만료 일자",
     "Update poll" : "투표 업데이트",
-    "Share Link" : "링크 공유",
     "Unknown user" : "알 수 없는 사용자",
     "Receive notification email on activity" : "활동 이메일 알림 받기",
     "Deleted" : "삭제함",

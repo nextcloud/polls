@@ -23,7 +23,6 @@ OC.L10N.register(
     "Unknown user" : "مستخدم غير معروف",
     "Deleted" : "تم حذفه",
     "Click here to add a poll" : "اضغط هنا لإضافة استطلاع رأي",
-    "Yes, delete poll." : "نعم، احذف استطلاع الرأي.",
     "Public access" : "النفاذ إليه مُصرّح للعامة"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

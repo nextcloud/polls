@@ -18,7 +18,6 @@ OC.L10N.register(
     "Saved" : "Запазено",
     "Description" : "Описание",
     "Expiration date" : "Валидност",
-    "Share Link" : "Сподели връзката",
     "Unknown user" : "Непознат потребител",
     "Deleted" : "Изтрито",
     "Public access" : "Публичен достъп"

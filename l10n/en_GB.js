@@ -28,7 +28,6 @@ OC.L10N.register(
     "Hide user names for admin" : "Hide user names for admin",
     "Expiration date" : "Expiration date",
     "Update poll" : "Update poll",
-    "Share Link" : "Share Link",
     "Unknown user" : "Unknown user",
     "Receive notification email on activity" : "Receive notification email on activity",
     "Deleted" : "Deleted",
