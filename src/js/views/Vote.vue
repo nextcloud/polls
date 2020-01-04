@@ -26,14 +26,13 @@
 			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			<VoteHeader />
-			<VoteList v-show="!loading" />
-			<VoteTable v-show="!loading" />
+			<VoteList v-show="!isLoading" />
 			<Subscription />
 		</div>
 
 		<SideBar v-if="sideBarOpen && acl.allowEdit" @closeSideBar="toggleSideBar" />
 		<SideBarOnlyComments v-if="sideBarOpen && !acl.allowEdit" @closeSideBar="toggleSideBar" />
-		<LoadingOverlay v-if="loading" />
+		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
@@ -62,7 +61,7 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			sideBarOpen: false,
-			loading: false,
+			isLoading: false,
 			initialTab: 'comments',
 			newName: ''
 		}
@@ -101,7 +100,7 @@ export default {
 							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
 								this.sideBarOpen = true
 							}
-							this.loading = false
+							this.isLoading = false
 						})
 				})
 		}
@@ -113,12 +112,12 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.loading = false
+			this.isLoading = false
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
 				.then(() => {
 				})
 				.catch(() => {
-					this.loading = false
+					this.isLoading = false
 				})
 		},
 

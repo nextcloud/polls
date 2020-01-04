@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<div class="">
+	<div class="vote-list">
 		<div class="poll-information">
 			<h3>
 				<UserBubble :user="poll.owner" :display-name="poll.owner" />
@@ -41,15 +41,15 @@
 				<TextPollItem :option="option" />
 
 				<div class="counter">
-					<div class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
+					<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
 						<span> {{ yesVotes(option.pollOptionText) }} </span>
 					</div>
 
-					<div class="maybe" :style="{flex: maybeVotes(option.pollOptionText) }">
+					<div v-if="maybeVotes(option.pollOptionText)" class="maybe" :style="{flex: maybeVotes(option.pollOptionText) }">
 						<span> {{ maybeVotes(option.pollOptionText) }} </span>
 					</div>
 
-					<div class="no" :style="{flex: noVotes(option.pollOptionText) }">
+					<div v-if="noVotes(option.pollOptionText)" class="no" :style="{flex: noVotes(option.pollOptionText) }">
 						<span> {{ noVotes(option.pollOptionText) }} </span>
 					</div>
 				</div>
@@ -70,11 +70,14 @@
 		<div v-else>
 			<h2>{{ t('polls','Participants names are hidden, because this is an anoymous poll') }} </h2>
 		</div>
+		<h2>{{ t('polls','Comments') }} </h2>
+		<SideBarTabComments />
 	</div>
 </template>
 
 <script>
 import TextPollItem from '../Base/TextPollItem'
+import SideBarTabComments from '../SideBar/SideBarTabComments'
 import VoteTableItem from './VoteTableItem'
 import { mapState, mapGetters } from 'vuex'
 
@@ -82,6 +85,7 @@ export default {
 	name: 'VoteTable',
 	components: {
 		TextPollItem,
+		SideBarTabComments,
 		VoteTableItem
 	},
 
@@ -145,6 +149,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.vote-list {
+		margin: 8px 24px;
+	}
 	.user-row.sticky,
 	.header > .sticky {
 		position: sticky;
