@@ -21,63 +21,34 @@
   -->
 
 <template lang="html">
-	<div class="vote-list">
-		<div class="poll-information">
-			<h3>
-				<UserBubble :user="poll.owner" :display-name="poll.owner" />
-				{{ t('polls', ' started this poll on %n. ', 1, moment.unix(poll.created).format('LLLL')) }}
-				<span v-if="expired">{{ t('polls', 'Voting is no more possible, because this poll expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-				<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ',1, moment.unix(poll.expire).format('LLLL')) }}</span>
-				<span v-if="poll.anonymous">{{ t('polls', 'The names of other participnts is hidden, as this is a anonymous poll. ') }}</span>
-			</h3>
-		</div>
-		<ul class="vote-table">
-			<li v-for="(option) in sortedOptions" :key="option.id" class="vote-row">
-				<VoteTableItem
-					v-if="acl.allowVote"
-					:user-id="acl.userId"
-					:option="option"
-					@voteClick="setVote(option, acl.userId)" />
-				<TextPollItem :option="option" />
+	<ul class="vote-list">
+		<li v-for="(option) in sortedOptions" :key="option.id" class="vote-row">
+			<VoteTableItem
+				v-if="acl.allowVote"
+				:user-id="acl.userId"
+				:option="option"
+				@voteClick="setVote(option, acl.userId)" />
+			<TextPollItem :option="option" />
 
-				<div class="counter">
-					<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
-						<span> {{ yesVotes(option.pollOptionText) }} </span>
-					</div>
-
-					<div v-if="maybeVotes(option.pollOptionText)" class="maybe" :style="{flex: maybeVotes(option.pollOptionText) }">
-						<span> {{ maybeVotes(option.pollOptionText) }} </span>
-					</div>
-
-					<div v-if="noVotes(option.pollOptionText)" class="no" :style="{flex: noVotes(option.pollOptionText) }">
-						<span> {{ noVotes(option.pollOptionText) }} </span>
-					</div>
+			<div class="counter">
+				<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
+					<span> {{ yesVotes(option.pollOptionText) }} </span>
 				</div>
-			</li>
-		</ul>
 
-		<div v-if="acl.allowSeeUsernames">
-			<h2>{{ t('polls','Participants of this poll so far') }}</h2>
-			<div class="participants">
-				<userDiv v-for="(participant) in participants"
-					:key="participant"
-					:hide-names="true"
-					:user-id="participant"
-					type="user" />
+				<div v-if="maybeVotes(option.pollOptionText)" class="maybe" :style="{flex: maybeVotes(option.pollOptionText) }">
+					<span> {{ maybeVotes(option.pollOptionText) }} </span>
+				</div>
+
+				<div v-if="noVotes(option.pollOptionText)" class="no" :style="{flex: noVotes(option.pollOptionText) }">
+					<span> {{ noVotes(option.pollOptionText) }} </span>
+				</div>
 			</div>
-		</div>
-
-		<div v-else>
-			<h2>{{ t('polls','Participants names are hidden, because this is an anoymous poll') }} </h2>
-		</div>
-		<h2>{{ t('polls','Comments') }} </h2>
-		<SideBarTabComments />
-	</div>
+		</li>
+	</ul>
 </template>
 
 <script>
 import TextPollItem from '../Base/TextPollItem'
-import SideBarTabComments from '../SideBar/SideBarTabComments'
 import VoteTableItem from './VoteTableItem'
 import { mapState, mapGetters } from 'vuex'
 
@@ -85,7 +56,6 @@ export default {
 	name: 'VoteTable',
 	components: {
 		TextPollItem,
-		SideBarTabComments,
 		VoteTableItem
 	},
 
@@ -149,26 +119,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.vote-list {
-		margin: 8px 24px;
-	}
-	.user-row.sticky,
-	.header > .sticky {
-		position: sticky;
-		left: 0;
-		background-color: var(--color-main-background);
-		width: 170px;
-		flex: 0 0 auto;
-	}
-
-	.header {
-		height: 150px;
-	}
-
-	.user {
-		height: 44px;
-		padding: 0 17px;
-	}
 
 	.poll-item {
 		flex: 3;
@@ -176,17 +126,6 @@ export default {
 
 	.vote-item {
 		flex: 0;
-	}
-	.participants {
-		display: flex;
-		justify-content: flex-start;
-		.user-row {
-			display: block;
-			flex: 0;
-		}
-		.user {
-			padding: 0;
-		}
 	}
 	.counter {
 		display: flex;
@@ -211,7 +150,8 @@ export default {
 			background-color: #f45573;
 		}
 	}
-	.vote-table {
+	.vote-list {
+		margin: 8px 0;
 		display: flex;
 		flex: 0;
 		flex-direction: column;
@@ -243,79 +183,6 @@ export default {
 				line-height: 2em;
 				min-height: 4em;
 				overflow: hidden;
-			}
-		}
-	}
-
-	.vote-rowh {
-		> li {
-			display: flex;
-			align-items: center;
-			padding-left: 8px;
-			padding-right: 8px;
-			line-height: 2em;
-			min-height: 4em;
-			border-bottom: 1px solid var(--color-border);
-			overflow: hidden;
-			white-space: nowrap;
-
-			> div {
-				display: flex;
-				flex: 1;
-				font-size: 1.2em;
-				opacity: 0.7;
-				white-space: normal;
-				padding-right: 4px;
-				&.avatar {
-					flex: 0;
-				}
-			}
-
-			> div:nth-last-child(1) {
-				justify-content: center;
-				flex: 0 0;
-			}
-		}
-	}
-
-	@media (max-width: (480px)) {
-		.vote-table {
-			flex: 1 0;
-			flex-direction: row;
-			min-width: 300px;
-
-			&> div {
-				display: none;
-				&> div {
-					width: unset;
-					margin: 0;
-
-				}
-			}
-
-			&> .currentuser {
-				display: flex;
-				flex-direction: column;
-				&> .user-row {
-					display: none;
-				}
-			}
-
-			&> .header, {
-				height: initial;
-				padding-left: initial;
-				display: flex;
-				flex-direction: column;
-				flex: 3 1;
-				justify-content: space-around;
-				align-items: stretch;
-				&> .vote-header {
-					display: flex;
-					flex-direction: row;
-					&> .counter {
-						align-items: baseline;
-					}
-				}
 			}
 		}
 	}

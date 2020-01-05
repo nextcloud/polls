@@ -28,9 +28,7 @@
 			<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
 			<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
 		</h2>
-		<h3>
-			{{ poll.description }}
-		</h3>
+		<h3 style="white-space: break-spaces;">{{ poll.description }}</h3>
 	</div>
 </template>
 
@@ -64,6 +62,6 @@ export default {
 
 <style lang="scss" scoped>
 	.voteHeader {
-		margin: 8px 24px;
+		margin: 8px 0;
 	}
 </style>

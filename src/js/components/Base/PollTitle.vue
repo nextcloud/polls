@@ -21,59 +21,36 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
-
-		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<Comments />
-		</AppSidebarTab>
-	</AppSidebar>
+	<h2 class="poll-title">
+		{{ poll.title }}
+		<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+	</h2>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
-
-import Comments from '../Comments/Comments'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'SideBarOnlyComments',
-	components: {
-		Comments,
-		AppSidebar,
-		AppSidebarTab
-	},
+	name: 'PollTitle',
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.acl
-		})
+			poll: state => state.poll
+		}),
+
+		...mapGetters([
+			'expired'
+		])
+
 	}
 
 }
-
 </script>
 
-<style scoped lang="scss">
-
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
-
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
-			}
-			& > .message {
-				margin-left: 44px;
-				flex: 1 1;
-			}
-		}
+<style lang="scss" scoped>
+	.pollTitle {
+		margin: 8px 0;
 	}
 </style>

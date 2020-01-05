@@ -22,6 +22,7 @@
 
 <template>
 	<div>
+		<h2>{{ t('polls','Comments') }} </h2>
 		<CommentAdd />
 		<transition-group v-if="countComments" name="fade" class="comments"
 			tag="ul">
@@ -49,7 +50,7 @@ import CommentAdd from './CommentAdd'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'SideBarTabComments',
+	name: 'Comments',
 	components: {
 		CommentAdd
 	},

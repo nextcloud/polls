@@ -21,59 +21,66 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
+	<div class="participants-list">
+		<div v-if="acl.allowSeeUsernames">
+			<h2>{{ t('polls','Participants') }}</h2>
+			<div class="participants">
+				<userDiv v-for="(participant) in participants"
+					:key="participant"
+					:hide-names="true"
+					:user-id="participant"
+					type="user" />
+			</div>
+		</div>
 
-		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<Comments />
-		</AppSidebarTab>
-	</AppSidebar>
+		<div v-else>
+			<h2>{{ t('polls','Participants names are hidden, because this is an anoymous poll') }} </h2>
+		</div>
+	</div>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
-
-import Comments from '../Comments/Comments'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'SideBarOnlyComments',
-	components: {
-		Comments,
-		AppSidebar,
-		AppSidebarTab
+	name: 'ParticipantsList',
+
+	data() {
+		return {
+			voteSaved: false,
+			delay: 50,
+			newName: ''
+		}
 	},
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
 			acl: state => state.acl
-		})
+		}),
+
+		...mapGetters([
+			'participants'
+		])
+
 	}
 
 }
-
 </script>
 
-<style scoped lang="scss">
-
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
-
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
-			}
-			& > .message {
-				margin-left: 44px;
-				flex: 1 1;
-			}
+<style lang="scss" scoped>
+	.participants-list {
+		margin: 8px 0;
+	}
+	.participants {
+		display: flex;
+		justify-content: flex-start;
+		.user-row {
+			display: block;
+			flex: 0;
+		}
+		.user {
+			padding: 0;
 		}
 	}
+
 </style>
