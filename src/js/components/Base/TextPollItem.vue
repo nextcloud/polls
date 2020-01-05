@@ -24,12 +24,14 @@
 	<li class="poll-item text">
 		<div>{{ option.pollOptionText }}</div>
 		<div>
-			<a class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
+			<a v-if="acl.allowEdit" class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
 		</div>
 	</li>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	name: 'TextPollItem',
 
@@ -38,7 +40,12 @@ export default {
 			type: Object,
 			default: undefined
 		}
+	},
+
+	computed: {
+		...mapState({
+			acl: state => state.acl
+		})
 	}
 }
-
 </script>

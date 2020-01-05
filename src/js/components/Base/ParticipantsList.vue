@@ -71,6 +71,7 @@ export default {
 	.participants-list {
 		margin: 8px 0;
 	}
+
 	.participants {
 		display: flex;
 		justify-content: flex-start;

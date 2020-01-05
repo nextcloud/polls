@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<h2>{{ t('polls','Comments') }} </h2>
-		<CommentAdd />
+		<CommentAdd v-if="acl.allowComment" />
 		<transition-group v-if="countComments" name="fade" class="comments"
 			tag="ul">
 			<li v-for="(comment) in sortedComments" :key="comment.id">
@@ -57,7 +57,8 @@ export default {
 
 	computed: {
 		...mapState({
-			comments: state => state.comments
+			comments: state => state.comments,
+			acl: state => state.acl
 		}),
 		...mapGetters([
 			'countComments',

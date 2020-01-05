@@ -21,6 +21,7 @@
   -->
 
 <template>
+	<!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
 	<h3 class="poll-description">{{ poll.description }}</h3>
 </template>
 

@@ -44,15 +44,15 @@
 </template>
 
 <script>
+import Comments from '../components/Comments/Comments'
 import Subscription from '../components/Subscription/Subscription'
-import VoteTable from '../components/VoteTable/VoteTable'
-import VoteList from '../components/VoteTable/VoteList'
-import SideBar from '../components/SideBar/SideBar'
 import ParticipantsList from '../components/Base/ParticipantsList'
-import PollTitle from '../components/Base/PollTitle'
 import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
-import Comments from '../components/Comments/Comments'
+import PollTitle from '../components/Base/PollTitle'
+import SideBar from '../components/SideBar/SideBar'
+import VoteList from '../components/VoteTable/VoteList'
+import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState } from 'vuex'
 
 export default {
@@ -77,7 +77,7 @@ export default {
 			isLoading: false,
 			initialTab: 'comments',
 			newName: '',
-			tableMode: false
+			tableMode: true
 		}
 	},
 
