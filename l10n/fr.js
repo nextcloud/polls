@@ -71,6 +71,7 @@ OC.L10N.register(
     "Click to add a date" : "Cliquer pour ajouter une date",
     "Invitations" : "Invitations",
     "Public shares" : "Partages publics",
+    "Public link (" : "Lien public (",
     "Add a public link" : "Ajouter un lien public",
     "Link copied to clipboard" : "Lien copié dans le presse-papier",
     "Error while copying link to clipboard" : "Erreur lors de la copie du lien dans le presse-papier",

@@ -73,6 +73,7 @@ OC.L10N.register(
     "Click to add a date" : "クリックして日付を追加",
     "Invitations" : "招待",
     "Public shares" : "公開共有",
+    "Public link (" : "公開リンク (",
     "Add a public link" : "公開リンクを追加",
     "Link copied to clipboard" : "クリップボードにリンクをコピーしました",
     "Error while copying link to clipboard" : "クリップボードへのリンクのコピー中にエラーが発生しました",

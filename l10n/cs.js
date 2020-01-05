@@ -73,6 +73,7 @@ OC.L10N.register(
     "Click to add a date" : "Datum přidáte kliknutím",
     "Invitations" : "Poznvání",
     "Public shares" : "Veřejná sdílení",
+    "Public link (" : "Veřejný odkaz (",
     "Add a public link" : "Přidat veřejný odkaz",
     "Link copied to clipboard" : "Odkaz zkopírován do schánky",
     "Error while copying link to clipboard" : "Chyba při kopírování odkazu do schránky",
