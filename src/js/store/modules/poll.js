@@ -88,7 +88,6 @@ const actions = {
 
 	loadPollMain(context, payload) {
 		let endPoint = 'apps/polls/poll/get/'
-
 		if (payload.token) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId) {

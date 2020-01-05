@@ -22,10 +22,8 @@
 
 <template>
 	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
-
 		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<SideBarTabComments />
+			<Comments />
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'options')" icon="icon-toggle-filelist">
@@ -47,7 +45,7 @@ import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 import SideBarTabConfiguration from './SideBarTabConfiguration'
 import SideBarTabOptions from './SideBarTabOptions'
-import SideBarTabComments from './SideBarTabComments'
+import Comments from '../Comments/Comments'
 import SideBarTabShare from './SideBarTabShare'
 import { mapState } from 'vuex'
 
@@ -55,7 +53,7 @@ export default {
 	name: 'SideBar',
 	components: {
 		SideBarTabConfiguration,
-		SideBarTabComments,
+		Comments,
 		SideBarTabOptions,
 		SideBarTabShare,
 		AppSidebar,

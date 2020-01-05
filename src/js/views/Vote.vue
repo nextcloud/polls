@@ -23,34 +23,49 @@
 <template>
 	<AppContent>
 		<div v-if="poll.id > 0" class="main-container">
-			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
+			<a v-if="!sideBarOpen && acl.allowEdit" href="#" class="icon icon-settings active"
 				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
-			<VoteHeader />
-			<VoteTable v-show="!loading" />
+			<PollTitle />
+			<PollInformation />
+			<PollDescription />
+			<button class="button btn primary" @click="tableMode = !tableMode">
+				<span>{{ t('polls', 'Switch view') }}</span>
+			</button>
+			<VoteList v-show="!isLoading && !tableMode" />
+			<VoteTable v-show="!isLoading && tableMode" />
 			<Subscription />
+			<ParticipantsList />
+			<Comments />
 		</div>
 
 		<SideBar v-if="sideBarOpen && acl.allowEdit" @closeSideBar="toggleSideBar" />
-		<SideBarOnlyComments v-if="sideBarOpen && !acl.allowEdit" @closeSideBar="toggleSideBar" />
-		<LoadingOverlay v-if="loading" />
+		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
+import Comments from '../components/Comments/Comments'
 import Subscription from '../components/Subscription/Subscription'
-import VoteHeader from '../components/VoteTable/VoteHeader'
-import VoteTable from '../components/VoteTable/VoteTable'
+import ParticipantsList from '../components/Base/ParticipantsList'
+import PollDescription from '../components/Base/PollDescription'
+import PollInformation from '../components/Base/PollInformation'
+import PollTitle from '../components/Base/PollTitle'
 import SideBar from '../components/SideBar/SideBar'
-import SideBarOnlyComments from '../components/SideBar/SideBarOnlyComments'
-import { mapState, mapGetters } from 'vuex'
+import VoteList from '../components/VoteTable/VoteList'
+import VoteTable from '../components/VoteTable/VoteTable'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'Vote',
 	components: {
+		ParticipantsList,
+		PollInformation,
+		PollTitle,
+		PollDescription,
 		Subscription,
-		VoteHeader,
 		VoteTable,
-		SideBarOnlyComments,
+		VoteList,
+		Comments,
 		SideBar
 	},
 
@@ -59,30 +74,23 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			sideBarOpen: false,
-			loading: false,
+			isLoading: false,
 			initialTab: 'comments',
-			newName: ''
+			newName: '',
+			tableMode: true
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			shares: state => state.shares,
 			acl: state => state.acl
 		}),
 
-		...mapGetters([
-			'expired'
-		]),
-
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
-		},
-
-		votePossible() {
-			return this.acl.allowVote && !this.expired
 		}
+
 	},
 
 	watch: {
@@ -98,7 +106,7 @@ export default {
 							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
 								this.sideBarOpen = true
 							}
-							this.loading = false
+							this.isLoading = false
 						})
 				})
 		}
@@ -110,10 +118,12 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.loading = false
+			this.isLoading = false
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
+				.then(() => {
+				})
 				.catch(() => {
-					this.loading = false
+					this.isLoading = false
 				})
 		},
 
@@ -127,13 +137,11 @@ export default {
 <style lang="scss" scoped>
 	.main-container {
 		flex: 1;
+		padding: 0 24px;
 		margin: 0;
 		flex-direction: column;
 		flex-wrap: nowrap;
 		overflow-x: scroll;
-		h1, h2, h3, h4 {
-			margin-left: 24px;
-		}
 	}
 
 	.icon.icon-settings.active {

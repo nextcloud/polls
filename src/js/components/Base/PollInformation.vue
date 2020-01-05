@@ -21,59 +21,32 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
-
-		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<Comments />
-		</AppSidebarTab>
-	</AppSidebar>
+	<div class="poll-information">
+		<UserBubble :user="poll.owner" :display-name="poll.owner" />
+		{{ t('polls', ' started this poll on %n. ', 1, moment.unix(poll.created).format('LLLL')) }}
+		<span v-if="expired">{{ t('polls', 'Voting is no more possible, because this poll expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ',1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		<span v-if="poll.anonymous">{{ t('polls', 'The names of other participants is hidden, as this is a anonymous poll. ') }}</span>
+		<span>{{ t('polls', '%n voters participated in this poll until now.', 1, participants.length) }}</span>
+	</div>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
-
-import Comments from '../Comments/Comments'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'SideBarOnlyComments',
-	components: {
-		Comments,
-		AppSidebar,
-		AppSidebarTab
-	},
+	name: 'PollInformation',
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.acl
-		})
-	}
+			acl: state => state.acl,
+			poll: state => state.poll
+		}),
 
+		...mapGetters([
+			'participants',
+			'expired'
+		])
+	}
 }
-
 </script>
-
-<style scoped lang="scss">
-
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
-
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
-			}
-			& > .message {
-				margin-left: 44px;
-				flex: 1 1;
-			}
-		}
-	}
-</style>

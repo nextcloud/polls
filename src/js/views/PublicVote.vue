@@ -23,33 +23,45 @@
 <template>
 	<AppContent>
 		<div v-if="poll.id > 0" class="main-container">
-			<a v-if="!sideBarOpen" href="#" class="icon icon-settings active"
-				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
-
-			<VoteHeader />
+			<PollTitle />
+			<PollInformation />
+			<PollDescription />
 			<VoteHeaderPublic />
-			<VoteTable />
+			<button class="button btn primary" @click="tableMode = !tableMode">
+				<span>{{ t('polls', 'Switch view') }}</span>
+			</button>
+			<VoteList v-show="!isLoading && !tableMode" />
+			<VoteTable v-show="!isLoading && tableMode" />
+			<ParticipantsList />
+			<Comments />
 		</div>
 
-		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
-		<LoadingOverlay v-if="loading" />
+		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
-import VoteHeader from '../components/VoteTable/VoteHeader'
+import Comments from '../components/Comments/Comments'
+import ParticipantsList from '../components/Base/ParticipantsList'
+import PollDescription from '../components/Base/PollDescription'
+import PollInformation from '../components/Base/PollInformation'
+import PollTitle from '../components/Base/PollTitle'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
+import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
-import SideBar from '../components/SideBar/SideBar'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'Vote',
 	components: {
-		VoteHeader,
+		ParticipantsList,
+		PollInformation,
+		PollTitle,
+		PollDescription,
 		VoteHeaderPublic,
+		Comments,
 		VoteTable,
-		SideBar
+		VoteList
 	},
 
 	data() {
@@ -57,15 +69,15 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			sideBarOpen: false,
-			loading: false,
-			initialTab: 'comments'
+			isLoading: false,
+			initialTab: 'comments',
+			tableMode: true
 		}
 	},
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.acl
+			poll: state => state.poll
 		}),
 
 		windowTitle: function() {
@@ -86,19 +98,19 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.loading = false
+			this.isLoading = false
 			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
 				.then(() => {
 					this.$store.dispatch({ type: 'loadAcl', token: this.$route.params.token })
 						.then(() => {
 							this.$store.dispatch('loadPoll', { token: this.$route.params.token })
 								.then(() => {
-									this.loading = false
+									this.isLoading = false
 								})
 						})
 						.catch((error) => {
 							console.error(error)
-							this.loading = false
+							this.isLoading = false
 						})
 				})
 		},
@@ -112,23 +124,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.main-container {
-		flex: 1;
-		margin: 0;
-		flex-direction: column;
-		flex-wrap: nowrap;
-		overflow-x: scroll;
-		h1, h2, h3, h4 {
-			margin-left: 24px;
-		}
-	}
+.main-container {
+	flex: 1;
+	padding: 0 24px;
+	margin: 0;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	overflow-x: scroll;
+}
 
-	.icon.icon-settings.active {
-		display: block;
-		width: 44px;
-		height: 44px;
-		right: 0;
-		position: absolute;
-	}
+.icon.icon-settings.active {
+	display: block;
+	width: 44px;
+	height: 44px;
+	right: 0;
+	position: absolute;
+}
 
 </style>

@@ -53,6 +53,7 @@ export default {
 			this.isLoading = true
 			this.$store.dispatch('setCommentAsync', { message: this.comment })
 				.then(() => {
+					this.isLoading = false
 					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
 					this.isLoading = false
 				})

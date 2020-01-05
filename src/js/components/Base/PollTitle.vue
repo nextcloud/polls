@@ -21,32 +21,19 @@
   -->
 
 <template>
-	<div class="voteHeader">
-		<h2>
-			{{ poll.title }}
-			<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-			<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-			<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
-		</h2>
-		<h3>
-			{{ poll.description }}
-		</h3>
-	</div>
+	<h2 class="poll-title">
+		{{ poll.title }}
+		<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+	</h2>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'VoteHeader',
-
-	data() {
-		return {
-			voteSaved: false,
-			delay: 50,
-			newName: ''
-		}
-	},
+	name: 'PollTitle',
 
 	computed: {
 		...mapState({
@@ -63,7 +50,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.voteHeader {
-		margin: 8px 24px;
+	.pollTitle {
+		margin: 8px 0;
 	}
 </style>

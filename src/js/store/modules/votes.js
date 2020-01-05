@@ -79,7 +79,7 @@ const getters = {
 	},
 
 	votesRank: (state, getters, rootGetters) => {
-		const rank = []
+		let rank = []
 		rootGetters.options.list.forEach(function(option) {
 			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
 			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
@@ -92,7 +92,15 @@ const getters = {
 				maybe: countMaybe
 			})
 		})
-		return orderBy(rank, ['yes', 'maybe'], ['desc', 'desc'])
+		rank = orderBy(rank, ['yes', 'maybe'], ['desc', 'desc'])
+		for (var i = 0; i < rank.length; i++) {
+			if (i > 0 && rank[i].yes === rank[i - 1].yes && rank[i].maybe === rank[i - 1].maybe) {
+				rank[i].rank = rank[i - 1].rank
+			} else {
+				rank[i].rank = i + 1
+			}
+		}
+		return rank
 	},
 
 	winnerCombo: (state, getters) => {

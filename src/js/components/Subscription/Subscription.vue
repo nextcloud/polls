@@ -59,6 +59,6 @@ export default {
 
 <style lang="css" scoped>
 	.subscription {
-		padding: 24px;
+		margin: 8px 0;
 	}
 </style>

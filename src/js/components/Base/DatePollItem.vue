@@ -21,15 +21,16 @@
   -->
 
 <template>
-	<li>
+	<li class="poll-item date">
 		<div>{{ moment.unix(option.timestamp).format('LLLL') }}</div>
 		<div>
-			<a class="icon-delete" @click="$emit('remove')" />
+			<a v-if="acl.allowEdit" class="icon-delete" @click="$emit('remove')" />
 		</div>
 	</li>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
 	name: 'DatePollItem',
@@ -39,24 +40,12 @@ export default {
 			type: Object,
 			default: undefined
 		}
-	}
+	},
 
+	computed: {
+		...mapState({
+			acl: state => state.acl
+		})
+	}
 }
 </script>
-
-<style lang="scss" scoped>
-	li > div {
-		display: flex;
-		flex-grow: 1;
-		font-size: 1.2em;
-		opacity: 0.7;
-		white-space: normal;
-		padding-right: 4px;
-	}
-
-	li > div:nth-last-child(1) {
-		justify-content: center;
-		flex-grow: 0;
-		flex-shrink: 0;
-	}
-</style>

@@ -21,59 +21,29 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
-
-		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<Comments />
-		</AppSidebarTab>
-	</AppSidebar>
+	<!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
+	<h3 class="poll-description">{{ poll.description }}</h3>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
-
-import Comments from '../Comments/Comments'
 import { mapState } from 'vuex'
 
 export default {
-	name: 'SideBarOnlyComments',
-	components: {
-		Comments,
-		AppSidebar,
-		AppSidebarTab
-	},
+	name: 'PollDescription',
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.acl
+			poll: state => state.poll
 		})
+
 	}
 
 }
-
 </script>
 
-<style scoped lang="scss">
-
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
-
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
-			}
-			& > .message {
-				margin-left: 44px;
-				flex: 1 1;
-			}
-		}
+<style lang="scss" scoped>
+	.poll-description {
+		white-space: break-spaces;
+		margin: 8px 0;
 	}
 </style>

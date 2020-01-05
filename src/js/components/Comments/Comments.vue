@@ -21,38 +21,51 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
-
-		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<Comments />
-		</AppSidebarTab>
-	</AppSidebar>
+	<div>
+		<h2>{{ t('polls','Comments') }} </h2>
+		<CommentAdd v-if="acl.allowComment" />
+		<transition-group v-if="countComments" name="fade" class="comments"
+			tag="ul">
+			<li v-for="(comment) in sortedComments" :key="comment.id">
+				<div class="comment-item">
+					<user-div :user-id="comment.userId" />
+					<div class="date">
+						{{ moment(comment.dt).fromNow() }}
+					</div>
+				</div>
+				<div class="message wordwrap comment-content">
+					{{ comment.comment }}
+				</div>
+			</li>
+		</transition-group>
+		<div v-else class="emptycontent">
+			<div class="icon-comment" />
+			<p> {{ t('polls', 'No comments yet. Be the first.') }}</p>
+		</div>
+	</div>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
-
-import Comments from '../Comments/Comments'
-import { mapState } from 'vuex'
+import CommentAdd from './CommentAdd'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'SideBarOnlyComments',
+	name: 'Comments',
 	components: {
-		Comments,
-		AppSidebar,
-		AppSidebarTab
+		CommentAdd
 	},
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
+			comments: state => state.comments,
 			acl: state => state.acl
-		})
+		}),
+		...mapGetters([
+			'countComments',
+			'sortedComments'
+		])
 	}
-
 }
-
 </script>
 
 <style scoped lang="scss">
