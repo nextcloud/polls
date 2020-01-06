@@ -23,6 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
+use DateTime;
+use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -36,7 +38,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
-use OCP\ILogger;
+use OCA\Polls\Service\CalendarService;
 
 
 class SystemController extends Controller {
@@ -48,6 +50,7 @@ class SystemController extends Controller {
 	private $userManager;
 	private $voteMapper;
 	private $shareMapper;
+	private $calendarService;
 
 	/**
 	 * PageController constructor.
@@ -60,6 +63,7 @@ class SystemController extends Controller {
 	 * @param IUserManager $userManager
 	 * @param VoteMapper $voteMapper
 	 * @param ShareMapper $shareMapper
+	 * @param CalendarService $calendarService,
 	 */
 	public function __construct(
 		string $appName,
@@ -70,7 +74,8 @@ class SystemController extends Controller {
 		IGroupManager $groupManager,
 		IUserManager $userManager,
 		VoteMapper $voteMapper,
-		ShareMapper $shareMapper
+		ShareMapper $shareMapper,
+		CalendarService $calendarService
 	) {
 		parent::__construct($appName, $request);
 		$this->voteMapper = $voteMapper;
@@ -80,6 +85,23 @@ class SystemController extends Controller {
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
+		$this->calendarService = $calendarService;
+	}
+
+
+	// TODO: Just for test purposes, remove after test!
+	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @return DataResponse
+	 */
+	public function getCalendars() {
+		$calendars = $this->calendarService->getCalendarsTest('2020-02-05 09:00:00', '2020-02-05 10:01:00');
+		return new DataResponse([
+			$calendars
+		], Http::STATUS_OK);
+
 	}
 
 	/**
