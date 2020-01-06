@@ -25,7 +25,8 @@ import sortBy from 'lodash/sortBy'
 
 const defaultOptions = () => {
 	return {
-		list: []
+		list: [],
+		events: []
 	}
 }
 
@@ -38,6 +39,14 @@ const mutations = {
 
 	reset(state) {
 		Object.assign(state, defaultOptions())
+	},
+
+	resetEvents(state) {
+		state.events = []
+	},
+
+	addEvent(state, payload) {
+		state.events.push(payload)
 	},
 
 	optionRemove(state, payload) {
@@ -88,11 +97,26 @@ const actions = {
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				context.commit('optionsSet', { list: response.data })
+				context.dispatch('loadEvents')
 			}, (error) => {
 				context.commit('reset')
 				console.error('Error loading options', { error: error.response }, { payload: payload })
 				throw error
 			})
+	},
+
+	loadEvents(context) {
+		context.commit('resetEvents')
+		context.state.list.forEach(function(item) {
+			axios.get(OC.generateUrl('apps/polls/calendars/get/'))
+				.then((response) => {
+					console.log(response)
+					context.commit('addEvent', {
+						option: item,
+						event: response.data
+					})
+				})
+		})
 	},
 
 	updateOptionAsync(context, payload) {

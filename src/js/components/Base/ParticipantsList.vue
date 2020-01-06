@@ -23,7 +23,7 @@
 <template>
 	<div class="participants-list">
 		<div v-if="acl.allowSeeUsernames">
-			<h2>{{ t('polls','Participants') }}</h2>
+			<h2>{{ t('polls','%n Participants ', 1, participants.length) }}</h2>
 			<div class="participants">
 				<userDiv v-for="(participant) in participants"
 					:key="participant"
