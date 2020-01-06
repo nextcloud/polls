@@ -1,7 +1,10 @@
 OC.L10N.register(
     "polls",
     {
+    "Participants" : "Participantes",
+    "Deleted" : "Borrado",
     "Group" : "Grupo",
+    "Comments" : "Comentarios",
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
     "Title" : "Título",
@@ -9,7 +12,6 @@ OC.L10N.register(
     "Created" : "Creado",
     "never" : "nunca",
     "Details" : "Detalles",
-    "Comments" : "Comentarios",
     "Configuration" : "Configuración",
     "Shares" : "Shares",
     "Saving" : "Guardando",
@@ -17,7 +19,6 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Expiration date" : "Fecha de expiración",
     "Unknown user" : "Ususario desconocido",
-    "Deleted" : "Borrado",
     "Public access" : "Acceso público"
 },
 "nplurals=2; plural=(n != 1);");

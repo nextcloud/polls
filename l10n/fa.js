@@ -1,7 +1,9 @@
 OC.L10N.register(
     "polls",
     {
+    "Deleted" : "حذف شده",
     "Group" : "گروه",
+    "Comments" : "نظرات",
     "Cancel" : "لغو",
     "Apply" : "اعمال",
     "Title" : "عنوان",
@@ -10,7 +12,6 @@ OC.L10N.register(
     "Created" : "ایجاد شده",
     "never" : "never",
     "Details" : "جزئیات",
-    "Comments" : "نظرات",
     "Configuration" : "تنظیمات",
     "Shares" : "اشتراک گذاری ها",
     "Saving" : "درحال ذخیره",
@@ -18,7 +19,6 @@ OC.L10N.register(
     "Description" : "توضیحات",
     "Expiration date" : "تاریخ انقضا",
     "Unknown user" : "کاربر نامعلوم",
-    "Deleted" : "حذف شده",
     "Public access" : "دسترسی عمومی"
 },
 "nplurals=2; plural=(n > 1);");

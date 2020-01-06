@@ -3,7 +3,10 @@ OC.L10N.register(
     {
     "Polls" : "استطلاعات الرأي",
     "Go to poll" : "الانتقال إلى استطلاع الرأي",
+    "Participants" : "المشارِكون",
+    "Deleted" : "تم حذفه",
     "Group" : "الفريق",
+    "Comments" : "تعليقات",
     "Cancel" : "الغاء",
     "Title" : "العنوان",
     "Access" : "النفاذ",
@@ -12,7 +15,6 @@ OC.L10N.register(
     "Delete poll" : "احذف استطلاع الرأي",
     "Share with" : "شارك مع",
     "Details" : "التفاصيل",
-    "Comments" : "تعليقات",
     "Configuration" : "إعداد",
     "Shares" : "التي قمتَ بمشاركتها",
     "Saving" : "جاري الحفظ ...",
@@ -21,7 +23,6 @@ OC.L10N.register(
     "Anonymous poll" : "استطلاع رأي مجهول",
     "Expiration date" : "تاريخ إنتهاء الصلاحية",
     "Unknown user" : "مستخدم غير معروف",
-    "Deleted" : "تم حذفه",
     "Click here to add a poll" : "اضغط هنا لإضافة استطلاع رأي",
     "Public access" : "النفاذ إليه مُصرّح للعامة"
 },

@@ -1,11 +1,11 @@
 { "translations": {
+    "Deleted" : "ئۆچۈرۈلدى",
     "Group" : "Group",
     "Cancel" : "ۋاز كەچ",
     "Title" : "ماۋزۇ",
     "Owner" : "Owner",
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
-    "Description" : "چۈشەندۈرۈش",
-    "Deleted" : "ئۆچۈرۈلدى"
+    "Description" : "چۈشەندۈرۈش"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -1,12 +1,13 @@
 { "translations": {
+    "Deleted" : "Delite",
     "Group" : "Gruppo",
+    "Comments" : "Commentarios",
     "Cancel" : "Cancellar",
     "Apply" : "Applicar",
     "Title" : "Titulo",
     "Owner" : "Owner",
     "never" : "nunquam",
     "Details" : "Detalios",
-    "Comments" : "Commentarios",
     "Configuration" : "Configuration",
     "Shares" : "Compartimentos",
     "Saving" : "Salveguardante",
@@ -14,7 +15,6 @@
     "Description" : "Description",
     "Expiration date" : "Data de expiration",
     "Unknown user" : "Usator incognite",
-    "Deleted" : "Delite",
     "Public access" : "Accesso public"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

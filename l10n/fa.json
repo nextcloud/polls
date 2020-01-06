@@ -1,5 +1,7 @@
 { "translations": {
+    "Deleted" : "حذف شده",
     "Group" : "گروه",
+    "Comments" : "نظرات",
     "Cancel" : "لغو",
     "Apply" : "اعمال",
     "Title" : "عنوان",
@@ -8,7 +10,6 @@
     "Created" : "ایجاد شده",
     "never" : "never",
     "Details" : "جزئیات",
-    "Comments" : "نظرات",
     "Configuration" : "تنظیمات",
     "Shares" : "اشتراک گذاری ها",
     "Saving" : "درحال ذخیره",
@@ -16,7 +17,6 @@
     "Description" : "توضیحات",
     "Expiration date" : "تاریخ انقضا",
     "Unknown user" : "کاربر نامعلوم",
-    "Deleted" : "حذف شده",
     "Public access" : "دسترسی عمومی"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

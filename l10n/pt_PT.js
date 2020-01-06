@@ -1,7 +1,10 @@
 OC.L10N.register(
     "polls",
     {
+    "Participants" : "Participantes",
+    "Deleted" : "Eliminado",
     "Group" : "Grupo",
+    "Comments" : "Comentários",
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
     "Title" : "Título ",
@@ -12,7 +15,6 @@ OC.L10N.register(
     "never" : "nunca",
     "Share with" : "Partilhar com",
     "Details" : "Detalhes",
-    "Comments" : "Comentários",
     "Configuration" : "Configuração",
     "Shares" : "Partilhas",
     "Saving" : "A guardar",
@@ -21,7 +23,6 @@ OC.L10N.register(
     "Expiration date" : "Data de expiração",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Unknown user" : "Utilizador desconhecido",
-    "Deleted" : "Eliminado",
     "Public access" : "Acesso público",
     "Access denied" : "Acesso proibido"
 },

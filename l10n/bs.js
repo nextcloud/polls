@@ -2,11 +2,11 @@ OC.L10N.register(
     "polls",
     {
     "Group" : "Grupa",
+    "Comments" : "Komentari",
     "Cancel" : "Otkaži",
     "Title" : "Naslov",
     "Owner" : "Vlasnik",
     "never" : "nikad",
-    "Comments" : "Komentari",
     "Saved" : "Spremljeno",
     "Description" : "Opis",
     "Expiration date" : "Datum isteka"

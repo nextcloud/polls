@@ -1,5 +1,8 @@
 { "translations": {
+    "Participants" : "Participantes",
+    "Deleted" : "Borrado",
     "Group" : "Grupo",
+    "Comments" : "Comentarios",
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
     "Title" : "Título",
@@ -7,7 +10,6 @@
     "Created" : "Creado",
     "never" : "nunca",
     "Details" : "Detalles",
-    "Comments" : "Comentarios",
     "Configuration" : "Configuración",
     "Shares" : "Shares",
     "Saving" : "Guardando",
@@ -15,7 +17,6 @@
     "Description" : "Descripción",
     "Expiration date" : "Fecha de expiración",
     "Unknown user" : "Ususario desconocido",
-    "Deleted" : "Borrado",
     "Public access" : "Acceso público"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

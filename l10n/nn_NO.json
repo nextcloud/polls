@@ -1,5 +1,7 @@
 { "translations": {
+    "Deleted" : "Sletta",
     "Group" : "Gruppe",
+    "Comments" : "Kommentarar",
     "Cancel" : "Avbryt",
     "Apply" : "Anvend",
     "Title" : "Tittel",
@@ -7,12 +9,10 @@
     "Created" : "Lagd",
     "never" : "aldri",
     "Details" : "Detaljar",
-    "Comments" : "Kommentarar",
     "Configuration" : "Innstillingar",
     "Shares" : "Delingar",
     "Saved" : "Lagra",
     "Description" : "Skildring",
-    "Expiration date" : "Utløpsdato",
-    "Deleted" : "Sletta"
+    "Expiration date" : "Utløpsdato"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

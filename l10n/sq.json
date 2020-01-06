@@ -1,6 +1,8 @@
 { "translations": {
     "Polls" : "Sondazhe",
+    "Deleted" : "E fshirë",
     "Group" : "Grup",
+    "Comments" : "Komentet",
     "Create new poll" : "Krijo sondazh të ri",
     "Cancel" : "Anullo",
     "Apply" : "Apliko",
@@ -10,7 +12,6 @@
     "never" : "asnjëherë",
     "Delete poll" : "Fshij sondazhin",
     "Details" : "Detajet",
-    "Comments" : "Komentet",
     "Configuration" : "Formësim",
     "Shares" : "Shpërndarje",
     "Saving" : "Duke u ruajtur!",
@@ -18,7 +19,6 @@
     "Description" : "Përshkrim",
     "Expiration date" : "Datë skadimi",
     "Unknown user" : "Përdorues i panjohur",
-    "Deleted" : "E fshirë",
     "Public access" : "Akses publik"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -1,5 +1,7 @@
 { "translations": {
+    "Deleted" : "Dihapus",
     "Group" : "Grup",
+    "Comments" : "Komentar",
     "Cancel" : "Membatalkan",
     "Apply" : "Terapkan",
     "Title" : "Judul",
@@ -7,14 +9,12 @@
     "Created" : "Dibuat",
     "never" : "tidak pernah.",
     "Details" : "Detil",
-    "Comments" : "Komentar",
     "Configuration" : "Konfigurasi",
     "Shares" : "Dibagikan",
     "Saving" : "Menyimpan",
     "Saved" : "Disimpan",
     "Description" : "Deskrisi",
     "Expiration date" : "Tanggal kadaluarsa",
-    "Unknown user" : "Pengguna tidak dikenal",
-    "Deleted" : "Dihapus"
+    "Unknown user" : "Pengguna tidak dikenal"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

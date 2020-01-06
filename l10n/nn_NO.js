@@ -1,7 +1,9 @@
 OC.L10N.register(
     "polls",
     {
+    "Deleted" : "Sletta",
     "Group" : "Gruppe",
+    "Comments" : "Kommentarar",
     "Cancel" : "Avbryt",
     "Apply" : "Anvend",
     "Title" : "Tittel",
@@ -9,12 +11,10 @@ OC.L10N.register(
     "Created" : "Lagd",
     "never" : "aldri",
     "Details" : "Detaljar",
-    "Comments" : "Kommentarar",
     "Configuration" : "Innstillingar",
     "Shares" : "Delingar",
     "Saved" : "Lagra",
     "Description" : "Skildring",
-    "Expiration date" : "Utløpsdato",
-    "Deleted" : "Sletta"
+    "Expiration date" : "Utløpsdato"
 },
 "nplurals=2; plural=(n != 1);");

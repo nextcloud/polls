@@ -1,5 +1,7 @@
 { "translations": {
+    "Deleted" : "Устгагдсан",
     "Group" : "Бүлэг",
+    "Comments" : "Сэтгэгдлүүд",
     "Cancel" : "болиулах",
     "Apply" : "хэрэглэх",
     "Title" : "Цол/Албан тушаал",
@@ -7,13 +9,11 @@
     "Created" : "Үүсгэсэн",
     "never" : "хэзээ ч үгүй",
     "Details" : "Дэлгэрэнгүй",
-    "Comments" : "Сэтгэгдлүүд",
     "Shares" : "Түгээлтүүд",
     "Saving" : "хадгаламж",
     "Saved" : "Хадгалах",
     "Description" : "Тодорхойлолт",
     "Unknown user" : "  хэрэглэгч",
-    "Deleted" : "Устгагдсан",
     "Public access" : "Нийтийн хандах эрх"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

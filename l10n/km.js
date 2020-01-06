@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Deleted" : "បាន​លុប",
     "Group" : "Group",
     "Cancel" : "បោះបង់",
     "Apply" : "អនុវត្ត",
@@ -13,7 +14,6 @@ OC.L10N.register(
     "Saved" : "បាន​រក្សាទុក",
     "Description" : "ការ​អធិប្បាយ",
     "Expiration date" : "ពេល​ផុត​កំណត់",
-    "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
-    "Deleted" : "បាន​លុប"
+    "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់"
 },
 "nplurals=1; plural=0;");

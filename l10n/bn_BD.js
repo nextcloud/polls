@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Deleted" : "মুছে ফেলা",
     "Group" : "গোষ্ঠীসমূহ",
     "Cancel" : "বাতির",
     "Title" : "শিরোনাম",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Saved" : "সংরক্ষণ করা হলো",
     "Description" : "বিবরণ",
     "Expiration date" : "মেয়াদোত্তীর্ণ হওয়ার তারিখ",
-    "Unknown user" : "অপরিচিত ব্যবহারকারী",
-    "Deleted" : "মুছে ফেলা"
+    "Unknown user" : "অপরিচিত ব্যবহারকারী"
 },
 "nplurals=2; plural=(n != 1);");

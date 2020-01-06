@@ -2,11 +2,11 @@ OC.L10N.register(
     "polls",
     {
     "Group" : "Group",
+    "Comments" : "අදහස්",
     "Cancel" : "අවලංගු කරන්න",
     "Title" : "මාතෘකාව",
     "Owner" : "Owner",
     "never" : "කවදාවත්",
-    "Comments" : "අදහස්",
     "Configuration" : "වින්‍යාසය",
     "Description" : "විස්තරය",
     "Expiration date" : "කල් ඉකුත් විමේ දිනය",
