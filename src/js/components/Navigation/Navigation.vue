@@ -29,7 +29,7 @@
 				:title="t('polls', 'All polls')"
 				:allow-collapse="true"
 				icon="icon-folder"
-				:to="{ name: 'list', params: {type: 'all'}}"
+				:to="{ name: 'list', params: {type: 'all', title: t('polls', 'All polls')}}"
 				:open="true">
 				<ul>
 					<AppNavigationItem
@@ -44,7 +44,7 @@
 				:title="t('polls', 'My polls')"
 				:allow-collapse="true"
 				icon="icon-user"
-				:to="{ name: 'list', params: {type: 'my'}}"
+				:to="{ name: 'list', params: {type: 'my', title: t('polls', 'My polls')}}"
 				:open="false">
 				<ul>
 					<AppNavigationItem
@@ -59,7 +59,7 @@
 				:title="t('polls', 'Public polls')"
 				:allow-collapse="true"
 				icon="icon-link"
-				:to="{ name: 'list', params: {type: 'public'}}"
+				:to="{ name: 'list', params: {type: 'public', title: t('polls', 'Public polls')}}"
 				:open="false">
 				<ul>
 					<AppNavigationItem
@@ -74,7 +74,7 @@
 				:title="t('polls', 'Hidden polls')"
 				:allow-collapse="true"
 				icon="icon-password"
-				:to="{ name: 'list', params: {type: 'hidden'}}"
+				:to="{ name: 'list', params: {type: 'hidden', title: t('polls', 'Hidden polls')}}"
 				:open="false">
 				<ul>
 					<AppNavigationItem
@@ -89,7 +89,7 @@
 				:title="t('polls', 'Deleted polls')"
 				:allow-collapse="true"
 				icon="icon-delete"
-				:to="{ name: 'list', params: {type: 'deleted'}}"
+				:to="{ name: 'list', params: {type: 'deleted', title: t('polls', 'Deleted polls')}}"
 				:open="false">
 				<ul>
 					<AppNavigationItem

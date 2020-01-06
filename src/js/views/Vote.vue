@@ -85,17 +85,16 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.acl
-		}),
-
-		windowTitle: function() {
-			return t('polls', 'Polls') + ' - ' + this.poll.title
-		}
-
+		})
 	},
 
 	watch: {
 		$route() {
 			this.loadPoll()
+		},
+
+		'poll.title': function() {
+			document.title = t('polls', 'Polls') + ' - ' + this.poll.title
 		},
 
 		'poll.id': function() {
