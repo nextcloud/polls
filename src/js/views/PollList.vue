@@ -90,6 +90,12 @@ export default {
 
 	},
 
+	watch: {
+		$route() {
+			document.title = t('polls', 'Polls') + ' - ' + this.$route.params.title
+		}
+	},
+
 	mounted() {
 		this.refreshPolls()
 	},
