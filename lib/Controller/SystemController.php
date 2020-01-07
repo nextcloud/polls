@@ -98,17 +98,19 @@ class SystemController extends Controller {
 	 * @NoAdminRequired
 	 * @return DataResponse
 	 */
-	public function getConflictingEvents($option) {
-		$from = new DateTime($option['pollOptionText']);
-		$to = new DateTime($option['pollOptionText']);
-		$from->sub(new DateInterval('PT2H'));
-		$to->add(new DateInterval('PT3H'));
-		$this->logger->info('date: ' . json_encode($option['pollOptionText']));
-		$this->logger->info('from: ' . json_encode($from));
-		$this->logger->info('to: ' . json_encode($to));
+	public function findCalendarEvents($from, $to = null) {
 
+		if (!$to) {
+			$to = new DateTime($from);
+			$to = $to->add(new DateInterval('PT1H'));
+		} elseif (!$from instanceof DateTime) {
+			$to = new DateTime($to);
+		}
 
-		$events = $this->calendarService->getEvents($from, $to);
+		if (!$from instanceof DateTime) {
+			$from = new DateTime($from);
+		}
+		$events = array_values($this->calendarService->getEvents($from, $to));
 		return new DataResponse($events, Http::STATUS_OK);
 
 	}
