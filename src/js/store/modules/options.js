@@ -46,7 +46,7 @@ const mutations = {
 	},
 
 	addEvents(state, payload) {
-		state.events.concat(payload.event)
+		state.events.push(payload.event)
 	},
 
 	optionRemove(state, payload) {
@@ -97,7 +97,10 @@ const actions = {
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
 				context.commit('optionsSet', { list: response.data })
-				context.dispatch('loadEvents')
+				if (context.rootState.poll.type === 'datePoll') {
+					context.commit('resetEvents')
+					context.dispatch('loadEvents')
+				}
 			}, (error) => {
 				context.commit('reset')
 				console.error('Error loading options', { error: error.response }, { payload: payload })
@@ -108,12 +111,9 @@ const actions = {
 	loadEvents(context) {
 		context.commit('resetEvents')
 		context.state.list.forEach(function(item) {
-			axios.post(OC.generateUrl('apps/polls/events/list/'), { option: item })
+			axios.post(OC.generateUrl('apps/polls/events/list/'), { from: item.pollOptionText })
 				.then((response) => {
-					console.log(response.data)
-					context.commit('addEvents', {
-						event: response.data
-					})
+					context.commit('addEvents', { event: { option: item, events: response.data } })
 				})
 		})
 	},
