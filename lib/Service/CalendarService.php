@@ -48,18 +48,26 @@ class CalendarService {
 	 * @return Array
 	 */
 	public function getEvents($from, $to) {
-		$events= [];
+		$events = [];
 
 		foreach ($this->calendars as $calendar) {
-			$found = $calendar->search('' ,['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
-			if (count($found) > 0) {
-				$events[] = [
-					'name'  => $calendar->getDisplayName(),
+			$foundEvents = $calendar->search('' ,['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
+			foreach ($foundEvents as $event) {
+				array_push($events, [
+					'relatedFrom' => $from->getTimestamp(),
+					'relatedTo' => $to->getTimestamp(),
+					'name' => $calendar->getDisplayName(),
 					'key' => $calendar->getKey(),
 					'displayColor' => $calendar->getDisplayColor(),
 					'permissions' => $calendar->getPermissions(),
-					'events' => $calendar->search('' ,['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]])
-				];
+					'eventId' => $event['id'],
+					'UID' => $event['objects'][0]['UID'][0],
+					'summary' => isset($event['objects'][0]['SUMMARY'][0])? $event['objects'][0]['SUMMARY'][0] : '',
+					'description' => isset($event['objects'][0]['DESCRIPTION'][0])? $event['objects'][0]['DESCRIPTION'][0] : '',
+					'location' => isset($event['objects'][0]['LOCATION'][0]) ? $event['objects'][0]['LOCATION'][0] : '',
+					'eventFrom' => isset($event['objects'][0]['DTSTART'][0]) ? $event['objects'][0]['DTSTART'][0]->getTimestamp() : 0,
+					'eventTo' => isset($event['objects'][0]['DTEND'][0] ) ? $event['objects'][0]['DTEND'][0]->getTimestamp() : 0
+				]);
 			}
 		}
 		return $events;
@@ -74,6 +82,22 @@ class CalendarService {
 		return $this->calendars;
 	}
 
+
+	/**
+	 * Get a list of NC users, groups and contacts
+	 * @NoAdminRequired
+	 * @return Array
+	 */
+	public function getEventsAround($from) {
+		$from = new DateTime($from);
+		$to = new DateTime($from);
+		$this->$logger->info('from: ' . json_encode($from->sub(new DateInterval('P2H'))));
+		$this->$logger->info('to: ' . json_encode($to->sub(new DateInterval('P2H'))));
+		return $this->getEvents(
+			$from->sub(new DateInterval('P2H')),
+			$to->add(new DateInterval('P3H'))
+		);
+	}
 
 	/**
 	 * Get a list of NC users, groups and contacts
