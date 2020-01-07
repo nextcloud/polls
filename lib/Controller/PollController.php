@@ -127,7 +127,6 @@ class PollController extends Controller {
 			if (!$this->acl->getFoundByToken()) {
 				$this->acl->setPollId($pollId);
 			}
-			$this->logger->alert(json_encode($this->acl));
 			$this->poll = $this->mapper->find($pollId);
 
 			return new DataResponse($this->poll, Http::STATUS_OK);

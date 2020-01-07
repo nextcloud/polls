@@ -116,10 +116,8 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getShares($pollId) {
-		$this->logger->alert('enter');
 		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
 			try {
-				$this->logger->alert('try loading shares');
 				$shares = $this->mapper->findByPoll($pollId);
 				return new DataResponse((array) $shares, Http::STATUS_OK);
 
