@@ -45,8 +45,8 @@ const mutations = {
 		state.events = []
 	},
 
-	addEvent(state, payload) {
-		state.events.push(payload)
+	addEvents(state, payload) {
+		state.events.concat(payload.event)
 	},
 
 	optionRemove(state, payload) {
@@ -108,11 +108,10 @@ const actions = {
 	loadEvents(context) {
 		context.commit('resetEvents')
 		context.state.list.forEach(function(item) {
-			axios.get(OC.generateUrl('apps/polls/calendars/get/'))
+			axios.post(OC.generateUrl('apps/polls/events/list/'), { option: item })
 				.then((response) => {
-					console.log(response)
-					context.commit('addEvent', {
-						option: item,
+					console.log(response.data)
+					context.commit('addEvents', {
 						event: response.data
 					})
 				})
