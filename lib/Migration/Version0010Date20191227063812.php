@@ -315,7 +315,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 			->setParameter('owner', $row['owner'])
 			->setParameter('created', intval(strtotime($row['created'])))
 			->setParameter('expire', intval(strtotime($row['expire'])))
-			->setParameter('deleted', intval(strtotime($row['deleted'])))
+			->setParameter('deleted', 0)
 			->setParameter('access', $this->resolveAccess($row['access']))
 			->setParameter('anonymous', intval($row['full_anonymous']) * 2 + intval($row['is_anonymous']))
 			->setParameter('full_anonymous', $row['full_anonymous'])
