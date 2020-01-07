@@ -85,6 +85,8 @@ class OptionController extends Controller {
 
 	/**
 	 * Get all options of given poll
+	 * @PublicPage
+	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @param integer $pollId
 	 * @return array Array of Option objects

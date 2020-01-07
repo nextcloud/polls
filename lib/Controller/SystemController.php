@@ -24,6 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use DateTime;
+use DateInterval;
 use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -34,6 +35,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IConfig;
 use OCP\IRequest;
+use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Vote;
@@ -96,11 +98,18 @@ class SystemController extends Controller {
 	 * @NoAdminRequired
 	 * @return DataResponse
 	 */
-	public function getCalendars() {
-		$calendars = $this->calendarService->getCalendarsTest('2020-02-05 09:00:00', '2020-02-05 10:01:00');
-		return new DataResponse([
-			$calendars
-		], Http::STATUS_OK);
+	public function getConflictingEvents($option) {
+		$from = new DateTime($option['pollOptionText']);
+		$to = new DateTime($option['pollOptionText']);
+		$from->sub(new DateInterval('PT2H'));
+		$to->add(new DateInterval('PT3H'));
+		$this->logger->info('date: ' . json_encode($option['pollOptionText']));
+		$this->logger->info('from: ' . json_encode($from));
+		$this->logger->info('to: ' . json_encode($to));
+
+
+		$events = $this->calendarService->getEvents($from, $to);
+		return new DataResponse($events, Http::STATUS_OK);
 
 	}
 
