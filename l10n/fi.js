@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Kyselyt",
     "Go to poll" : "Siirry kyselyyn",
+    "Participants" : "Osallistujat",
     "Deleted" : "Poistettu",
     "Group" : "Ryhmä",
     "Comments" : "Kommentit",
