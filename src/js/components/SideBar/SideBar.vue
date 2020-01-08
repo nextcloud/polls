@@ -104,24 +104,4 @@ export default {
 		}
 	}
 }
-
-// ul {
-// 	& > li {
-// 		margin-bottom: 30px;
-// 		& > .comment-item {
-// 			display: flex;
-// 			align-items: center;
-//
-// 			& > .date {
-// 				right: 0;
-// 				top: 5px;
-// 				opacity: 0.5;
-// 			}
-// 		}
-// 		& > .message {
-// 			margin-left: 44px;
-// 			flex: 1 1;
-// 		}
-// 	}
-// }
 </style>

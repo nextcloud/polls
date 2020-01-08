@@ -20,7 +20,6 @@
   -
   -->
 
-/* global Vue, oc_userconfig */
 <template>
 	<div class="user-row" :class="type">
 		<div v-if="description" class="description">

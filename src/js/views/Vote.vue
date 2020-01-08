@@ -99,15 +99,12 @@ export default {
 		},
 
 		'poll.id': function() {
-			this.$store.dispatch({ type: 'loadAcl', pollId: this.$route.params.id })
+			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
 				.then(() => {
-					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
-						.then(() => {
-							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-								this.sideBarOpen = true
-							}
-							this.isLoading = false
-						})
+					if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+						this.sideBarOpen = true
+					}
+					this.isLoading = false
 				})
 		}
 	},
