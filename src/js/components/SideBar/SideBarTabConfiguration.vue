@@ -22,22 +22,22 @@
 
 <template>
 	<div>
-		<div class="configBox">
+		<div class="config-box">
 			<label v-if="writingPoll" class="icon-loading-small title"> {{ t('polls', 'Saving') }} </label>
 			<label v-else class="icon-checkmark title"> {{ t('polls', 'Saved') }} </label>
 		</div>
 
-		<div v-if="acl.allowEdit" class="configBox">
+		<div v-if="acl.allowEdit" class="config-box">
 			<label class="icon-sound title"> {{ t('polls', 'Title') }} </label>
 			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
 
-		<div v-if="acl.allowEdit" class="configBox">
+		<div v-if="acl.allowEdit" class="config-box">
 			<label class="icon-edit title"> {{ t('polls', 'Description') }} </label>
 			<textarea v-model="pollDescription" />
 		</div>
 
-		<div class="configBox">
+		<div class="config-box">
 			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
 
 			<input id="allowMaybe" v-model="pollAllowMaybe"
@@ -60,7 +60,7 @@
 				v-model="pollExpire" v-bind="expirationDatePicker" style="width:170px" />
 		</div>
 
-		<div class="configBox">
+		<div class="config-box">
 			<label class="title icon-category-auth"> {{ t('polls', 'Access') }} </label>
 
 			<input id="hidden" v-model="pollAccess" value="hidden"
@@ -281,38 +281,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="scss">
-	.configBox {
-		display: flex;
-		flex-direction: column;
-		padding: 8px;
-		& > * {
-			padding-left: 21px;
-		}
-
-		& > input {
-			margin-left: 24px;
-			width: auto;
-
-		}
-
-		& > textarea {
-			margin-left: 24px;
-			width: auto;
-			padding: 7px 6px;
-		}
-
-		& > .title {
-			display: flex;
-			background-position: 0 2px;
-			padding-left: 24px;
-			opacity: 0.7;
-			font-weight: bold;
-			margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
-		}
-	}
-</style>

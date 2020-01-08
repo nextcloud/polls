@@ -129,7 +129,10 @@ class PollController extends Controller {
 			}
 			$this->poll = $this->mapper->find($pollId);
 
-			return new DataResponse($this->poll, Http::STATUS_OK);
+			return new DataResponse([
+				'poll' => $this->poll,
+				'acl' => $this->acl
+			], Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
@@ -150,7 +153,6 @@ class PollController extends Controller {
 
 		try {
 			return $this->get($this->acl->setToken($token)->getPollId());
-			// return new DataResponse($this->poll, Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
@@ -203,7 +205,11 @@ class PollController extends Controller {
 				$this->mapper->insert($this->poll);
 				$this->logService->setLog($this->poll->getId(), 'addPoll');
 			}
-			return new DataResponse($this->poll, Http::STATUS_OK);
+			$this->acl->setPollId($this->poll->getId());
+			return new DataResponse([
+				'poll' => $this->poll,
+				'acl' => $this->acl
+			], Http::STATUS_OK);
 		}
 	}
 }

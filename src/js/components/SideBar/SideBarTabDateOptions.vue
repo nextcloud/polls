@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<div class="configBox">
+		<div class="config-box">
 			<label class="title icon-calendar">
 				{{ t('polls', 'Add a date option') }}
 			</label>
@@ -33,7 +33,7 @@
 				@change="addOption(lastOption)" />
 		</div>
 
-		<div class="configBox">
+		<div class="config-box">
 			<label class="title icon-history">
 				{{ t('polls', 'Shift all date options') }}
 			</label>
@@ -50,7 +50,7 @@
 			</div>
 		</div>
 
-		<ul class="configBox poll-table">
+		<ul class="config-box poll-table">
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style lang="scss">
-	.configBox {
+	.config-box {
 		display: flex;
 		flex-direction: column;
 		padding: 8px;

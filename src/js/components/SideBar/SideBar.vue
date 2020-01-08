@@ -71,25 +71,37 @@ export default {
 
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+.config-box {
+	display: flex;
+	flex-direction: column;
+	padding: 8px;
+	& > * {
+		padding-left: 21px;
+	}
 
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
+	& > input {
+		margin-left: 24px;
+		width: auto;
 
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
-			}
-			& > .message {
-				margin-left: 44px;
-				flex: 1 1;
-			}
+	}
+
+	& > textarea {
+		margin-left: 24px;
+		width: auto;
+		padding: 7px 6px;
+	}
+
+	& > .title {
+		display: flex;
+		background-position: 0 2px;
+		padding-left: 24px;
+		opacity: 0.7;
+		font-weight: bold;
+		margin-bottom: 4px;
+		& > span {
+			padding-left: 4px;
 		}
 	}
+}
 </style>

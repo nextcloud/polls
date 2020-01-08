@@ -42,6 +42,7 @@ const defaultAcl = () => {
 }
 
 const state = defaultAcl()
+const namespaced = true
 
 const mutations = {
 
@@ -78,4 +79,4 @@ const actions = {
 	}
 }
 
-export default { state, mutations, actions }
+export default { namespaced, state, mutations, actions }

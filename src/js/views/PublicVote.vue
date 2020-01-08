@@ -101,17 +101,14 @@ export default {
 			this.isLoading = false
 			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
 				.then(() => {
-					this.$store.dispatch({ type: 'loadAcl', token: this.$route.params.token })
+					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
 						.then(() => {
-							this.$store.dispatch('loadPoll', { token: this.$route.params.token })
-								.then(() => {
-									this.isLoading = false
-								})
-						})
-						.catch((error) => {
-							console.error(error)
 							this.isLoading = false
 						})
+				})
+				.catch((error) => {
+					console.error(error)
+					this.isLoading = false
 				})
 		},
 

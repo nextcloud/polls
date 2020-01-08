@@ -98,7 +98,8 @@ const actions = {
 		}
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data })
+				context.commit('setPoll', { poll: response.data.poll })
+				context.commit('acl/setAcl', { acl: response.data.acl })
 			}, (error) => {
 				if (error.response.status !== '404') {
 					console.error('Error loading poll', { error: error.response }, { payload: payload })
@@ -124,8 +125,9 @@ const actions = {
 		const endPoint = 'apps/polls/poll/write/'
 		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data })
-				return response.poll
+				context.commit('setPoll', { poll: response.data.poll })
+				context.commit('acl/setAcl', { acl: response.data.acl })
+				return response.data.poll
 			}, (error) => {
 				console.error('Error writing poll:', { error: error.response }, { state: state })
 				throw error

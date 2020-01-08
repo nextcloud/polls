@@ -30,7 +30,7 @@
 				<div class="comment-item">
 					<user-div :user-id="comment.userId" />
 					<div class="date">
-						{{ moment(comment.dt).fromNow() }}
+						{{ moment.utc(comment.dt).fromNow() }}
 					</div>
 				</div>
 				<div class="message wordwrap comment-content">
