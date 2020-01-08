@@ -22,14 +22,14 @@
 
 <template>
 	<div>
-		<div class="configBox">
+		<div class="config-box">
 			<label class="title icon-toggle-filelist">
 				{{ t('polls', 'Add a new text option') }}
 			</label>
 			<input v-model="newPollText" :placeholder=" t('polls', 'Enter option text and press Enter') " @keyup.enter="addOption(newPollText)">
 		</div>
 
-		<ul class="configBox poll-table">
+		<ul class="config-box poll-table">
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
@@ -86,37 +86,7 @@ export default {
 </script>
 
 <style lang="scss">
-.configBox {
-	display: flex;
-	flex-direction: column;
-	padding: 8px;
-	& > * {
-		padding-left: 21px;
-	}
-
-	& > input {
-		margin-left: 24px;
-		width: auto;
-
-	}
-
-	& > textarea {
-		margin-left: 24px;
-		width: auto;
-		padding: 7px 6px;
-	}
-
-	& > .title {
-		display: flex;
-		background-position: 0 2px;
-		padding-left: 24px;
-		opacity: 0.7;
-		font-weight: bold;
-		margin-bottom: 4px;
-		& > span {
-			padding-left: 4px;
-		}
-	}
+.config-box {
 
 	&.poll-table > li {
 		border-bottom-color: rgb(72, 72, 72);

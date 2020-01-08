@@ -26,7 +26,7 @@
 		<input id="pollTitle" v-model="title" type="text"
 			:placeholder="t('polls', 'Enter Title')">
 
-		<div class="configBox">
+		<div class="config-box">
 			<label class="title icon-checkmark">
 				{{ t('polls', 'Poll type') }}
 			</label>

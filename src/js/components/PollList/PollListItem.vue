@@ -58,14 +58,14 @@
 			</div>
 		</router-link>
 
-		<div class="actions">
+		<!-- <div class="actions">
 			<div class="toggleUserActions">
 				<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
 				<div class="popovermenu" :class="{ 'open': openedMenu }">
 					<popover-menu :menu="menuItems" />
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 		<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.access">
 			{{ accessType }}
