@@ -19,7 +19,7 @@
     "devel": true,
     "jquery": true,
     "jasmine": true,
-	"laxbreak": true, 
+	"laxbreak": true,
     "globals": {
           "jQuery": true,
           "ICAL": true,

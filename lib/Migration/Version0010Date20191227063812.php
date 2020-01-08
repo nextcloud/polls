@@ -297,6 +297,10 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				'full_anonymous' => $insert->createParameter('full_anonymous'),
 				'allow_maybe' => $insert->createParameter('allow_maybe'),
 				'options' => $insert->createParameter('options'),
+				'settings' => $insert->createParameter('settings'),
+				'vote_limit' => $insert->createParameter('vote_limit'),
+				'show_results' => $insert->createParameter('show_results'),
+				'admin_access' => $insert->createParameter('admin_access')
 			]);
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')->from('polls_events');
@@ -311,12 +315,16 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 			->setParameter('owner', $row['owner'])
 			->setParameter('created', intval(strtotime($row['created'])))
 			->setParameter('expire', intval(strtotime($row['expire'])))
-			->setParameter('deleted', intval(strtotime($row['deleted'])))
+			->setParameter('deleted', 0)
 			->setParameter('access', $this->resolveAccess($row['access']))
 			->setParameter('anonymous', intval($row['full_anonymous']) * 2 + intval($row['is_anonymous']))
 			->setParameter('full_anonymous', $row['full_anonymous'])
 			->setParameter('allow_maybe', $row['allow_maybe'])
-			->setParameter('options', $this->resolveOptions($row['allow_maybe']));
+			->setParameter('options', $this->resolveOptions($row['allow_maybe']))
+			->setParameter('settings', '')
+			->setParameter('vote_limit', 0)
+			->setParameter('show_results', 'always')
+			->setParameter('admin_access', 0);
 			$insert->execute();
 
 		}
