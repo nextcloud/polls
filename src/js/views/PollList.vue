@@ -67,6 +67,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'allPolls',
 			'myPolls',
 			'publicPolls',
 			'hiddenPolls',
@@ -83,7 +84,7 @@ export default {
 			} else if (this.$route.params.type === 'deleted') {
 				return this.deletedPolls
 			} else {
-				return this.$store.state.polls.list
+				return this.allPolls
 			}
 		}
 

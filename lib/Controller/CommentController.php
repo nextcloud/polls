@@ -150,21 +150,15 @@ class CommentController extends Controller {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
-		$this->logger->error($pollId);
-		$this->logger->error($userId);
-		$this->logger->error($message);
-
 		$comment = new Comment();
 		$comment->setPollId($pollId);
 		$comment->setUserId($userId);
 		$comment->setComment($message);
 		$comment->setDt(date('Y-m-d H:i:s'));
 
-		$this->logger->error(json_encode($comment));
 
 		try {
 			$comment = $this->mapper->insert($comment);
-			$this->logger->error(json_encode($comment));
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}
@@ -184,9 +178,6 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function writeByToken($token, $message) {
-
-		$this->logger->error($message);
-		$this->logger->error($token);
 
 		try {
 			$this->acl->setToken($token);

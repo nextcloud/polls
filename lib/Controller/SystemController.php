@@ -147,7 +147,6 @@ class SystemController extends Controller {
 		if ($getContacts && $contactsManager->isEnabled()) {
 			$contacts = $contactsManager->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES'));
 
-			// $this->logger->error(json_encode($contacts));
 			foreach ($contacts as $contact) {
 				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 

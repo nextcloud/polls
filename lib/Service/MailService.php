@@ -236,7 +236,6 @@ class MailService {
 			$this->config->getUserValue($poll->getOwner(), 'core', 'lang'),
 			$poll->getOwner()
 		);
-		$this->logger->debug(json_encode($recipients));
 
 		foreach ($recipients as $recipient) {
 
