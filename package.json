@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@babel/runtime": "^7.7.7",
 		"@nextcloud/axios": "^1.1.0",
+		"@nextcloud/router": "^1.0.0",
 		"@nextcloud/vue": "^1.2.3",
 		"acorn": "^7.1.0",
 		"acorn-jsx": "^5.1.0",

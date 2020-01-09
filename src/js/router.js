@@ -24,6 +24,7 @@
  */
 import Vue from 'vue'
 import Router from 'vue-router'
+import { generateUrl } from '@nextcloud/router'
 
 // Dynamic loading
 const List = () => import('./views/PollList')
@@ -34,11 +35,11 @@ Vue.use(Router)
 
 export default new Router({
 	mode: 'history',
-	base: OC.generateUrl(''),
+	base: generateUrl('/apps/polls'),
 	linkActiveClass: 'active',
 	routes: [
 		{
-			path: '/:index(index.php/)?apps/polls',
+			path: '/',
 			redirect: {
 				name: 'list',
 				params: {
@@ -47,16 +48,15 @@ export default new Router({
 			}
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/list/:type?',
+			path: '/list/:type?',
 			components: {
 				default: List
 			},
-			alias: '/:index(index.php/)?apps/polls/',
 			props: true,
 			name: 'list'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/vote/:id',
+			path: '/vote/:id',
 			components: {
 				default: Vote
 			},
@@ -64,23 +64,7 @@ export default new Router({
 			name: 'vote'
 		},
 		{
-			path: '/:index(index.php/)?apps/polls/vote/:id',
-			components: {
-				default: Vote
-			},
-			props: true,
-			name: 'clone'
-		},
-		{
-			path: '/:index(index.php/)?apps/polls/vote/:id',
-			components: {
-				default: Vote
-			},
-			props: true,
-			name: 'create'
-		},
-		{
-			path: '/:index(index.php/)?apps/polls/s/:token',
+			path: '/s/:token',
 			components: {
 				default: PublicVote
 			},
