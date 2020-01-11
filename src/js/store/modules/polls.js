@@ -56,7 +56,7 @@ const getters = {
 
 const actions = {
 	loadPolls(context) {
-		const endPoint = 'apps/polls/polls/get/'
+		const endPoint = 'apps/polls/poll/list/'
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
@@ -73,7 +73,19 @@ const actions = {
 			OC.generateUrl(endPoint),
 			payload.poll
 		)
+	},
+
+	clonePoll(context, payload) {
+		const endPoint = 'apps/polls/poll/clone/' + payload.pollId
+		return axios.get(OC.generateUrl(endPoint))
+			.then((response) => {
+				return response.data
+			}, (error) => {
+				console.error(error.response)
+			})
+
 	}
+
 }
 
 export default { state, mutations, getters, actions }

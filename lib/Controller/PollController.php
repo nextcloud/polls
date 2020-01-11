@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
 use OCP\ILogger;
+use OCP\IL10N;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -39,6 +40,8 @@ use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
@@ -46,7 +49,8 @@ use OCA\Polls\Model\Acl;
 class PollController extends Controller {
 
 	private $userId;
-	private $mapper;
+	private $pollMapper;
+	private $trans;
 	private $logger;
 	private $groupManager;
 	private $userManager;
@@ -61,7 +65,9 @@ class PollController extends Controller {
 	 * @param $userId
 	 * @param IRequest $request
 	 * @param ILogger $logger
-	 * @param PollMapper $mapper
+	 * @param IL10N $trans
+	 * @param PollMapper $pollMapper
+	 * @param OptionsMapper $optionMapper
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 * @param LogService $logService
@@ -74,7 +80,9 @@ class PollController extends Controller {
 		$userId,
 		IRequest $request,
 		ILogger $logger,
-		PollMapper $mapper,
+		IL10N $trans,
+		PollMapper $pollMapper,
+		OptionMapper $optionMapper,
 		Poll $poll,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
@@ -84,7 +92,9 @@ class PollController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
-		$this->mapper = $mapper;
+		$this->trans = $trans;
+		$this->pollMapper = $pollMapper;
+		$this->optionMapper = $optionMapper;
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
@@ -104,7 +114,7 @@ class PollController extends Controller {
 	public function list() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			try {
-				$polls = array_values(array_filter($this->mapper->findAll(), function($item) {
+				$polls = array_values(array_filter($this->pollMapper->findAll(), function($item) {
 					return $this->acl->setPollId($item->getId())->getAllowView();
 				}));
 				return new DataResponse($polls, Http::STATUS_OK);
@@ -127,7 +137,7 @@ class PollController extends Controller {
 			if (!$this->acl->getFoundByToken()) {
 				$this->acl->setPollId($pollId);
 			}
-			$this->poll = $this->mapper->find($pollId);
+			$this->poll = $this->pollMapper->find($pollId);
 
 			return new DataResponse([
 				'poll' => $this->poll,
@@ -170,7 +180,7 @@ class PollController extends Controller {
 
 		try {
 			// Find existing poll
-			$this->poll = $this->mapper->find($poll['id']);
+			$this->poll = $this->pollMapper->find($poll['id']);
 			$this->acl->setPollId($this->poll->getId());
 			if (!$this->acl->getAllowEdit()) {
 				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
@@ -199,10 +209,10 @@ class PollController extends Controller {
 			$this->poll->setAdminAccess($poll['adminAccess']);
 
 			if ($this->poll->getId() > 0) {
-				$this->mapper->update($this->poll);
+				$this->pollMapper->update($this->poll);
 				$this->logService->setLog($this->poll->getId(), 'updatePoll');
 			} else {
-				$this->mapper->insert($this->poll);
+				$this->pollMapper->insert($this->poll);
 				$this->logService->setLog($this->poll->getId(), 'addPoll');
 			}
 			$this->acl->setPollId($this->poll->getId());
@@ -212,4 +222,51 @@ class PollController extends Controller {
 			], Http::STATUS_OK);
 		}
 	}
+
+	/**
+	 * clone
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param integer $pollId
+	 * @return DataResponse
+	 */
+	public function clone($pollId) {
+		$this->poll = $this->pollMapper->find($pollId);
+
+		$clonePoll = new Poll();
+		$clonePoll->setOwner($this->userId);
+		$clonePoll->setCreated(time());
+		$clonePoll->setTitle('Clone of ' . $this->poll->getTitle());
+
+		$clonePoll->setType($this->poll->getType());
+		$clonePoll->setDescription($this->poll->getDescription());
+		$clonePoll->setAccess($this->poll->getAccess());
+		$clonePoll->setExpire($this->poll->getExpire());
+		$clonePoll->setAnonymous(intval($this->poll->getAnonymous()));
+		$clonePoll->setFullAnonymous(intval($this->poll->getFullAnonymous()));
+		$clonePoll->setAllowMaybe(intval($this->poll->getAllowMaybe()));
+		$clonePoll->setVoteLimit(intval($this->poll->getVoteLimit()));
+		$clonePoll->setSettings('');
+		$clonePoll->setOptions('');
+		$clonePoll->setShowResults($this->poll->getShowResults());
+		$clonePoll->setDeleted(0);
+		$clonePoll->setAdminAccess($this->poll->getAdminAccess());
+
+		$this->pollMapper->insert($clonePoll);
+		$this->logService->setLog($clonePoll->getId(), 'addPoll');
+
+		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
+			$newOption = new Option();
+			$newOption->setPollId($clonePoll->getId());
+			$newOption->setPollOptionText($option->getPollOptionText());
+			$newOption->setTimestamp($option->getTimestamp());
+
+			$this->optionMapper->insert($newOption);
+		}
+		return new DataResponse([
+			'pollId' => $clonePoll->getId()
+		], Http::STATUS_OK);
+
+	}
+
 }

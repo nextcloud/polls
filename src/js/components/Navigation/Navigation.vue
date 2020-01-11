@@ -25,79 +25,52 @@
 		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" @closeCreate="closeCreate()" />
 		<ul>
-			<AppNavigationItem
-				:title="t('polls', 'All polls')"
-				:allow-collapse="true"
-				icon="icon-folder"
-				:to="{ name: 'list', params: {type: 'all'}}"
-				:open="true">
+			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
+				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
 				<ul>
-					<AppNavigationItem
-						v-for="(poll) in allPolls"
-						:key="poll.id"
-						:title="poll.title"
-						:icon="pollIcon(poll.type)"
-						:to="{name: 'vote', params: {id: poll.id}}" />
+					<AppNavigationItem v-for="(poll) in allPolls" :key="poll.id"
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
+						<template slot="actions">
+							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
+								{{ t('polls', 'Clone Poll') }}
+							</ActionButton>
+							<ActionButton icon="icon-delete" @click="alert('Delete Poll')">
+								{{ t('polls', 'Delete Poll') }}
+							</ActionButton>
+						</template>
+					</AppNavigationItem>
 				</ul>
 			</AppNavigationItem>
-			<AppNavigationItem
-				:title="t('polls', 'My polls')"
-				:allow-collapse="true"
-				icon="icon-user"
-				:to="{ name: 'list', params: {type: 'my'}}"
-				:open="false">
+
+			<AppNavigationItem :title="t('polls', 'My polls')" :allow-collapse="true"
+				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
 				<ul>
-					<AppNavigationItem
-						v-for="(poll) in myPolls"
-						:key="poll.id"
-						:title="poll.title"
-						:icon="pollIcon(poll.type)"
-						:to="{name: 'vote', params: {id: poll.id}}" />
+					<AppNavigationItem v-for="(poll) in myPolls" :key="poll.id"
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
-			<AppNavigationItem
-				:title="t('polls', 'Public polls')"
-				:allow-collapse="true"
-				icon="icon-link"
-				:to="{ name: 'list', params: {type: 'public'}}"
-				:open="false">
+
+			<AppNavigationItem :title="t('polls', 'Public polls')" :allow-collapse="true"
+				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
 				<ul>
-					<AppNavigationItem
-						v-for="(poll) in publicPolls"
-						:key="poll.id"
-						:title="poll.title"
-						:icon="pollIcon(poll.type)"
-						:to="{name: 'vote', params: {id: poll.id}}" />
+					<AppNavigationItem v-for="(poll) in publicPolls" :key="poll.id"
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
-			<AppNavigationItem
-				:title="t('polls', 'Hidden polls')"
-				:allow-collapse="true"
-				icon="icon-password"
-				:to="{ name: 'list', params: {type: 'hidden'}}"
-				:open="false">
+
+			<AppNavigationItem :title="t('polls', 'Hidden polls')" :allow-collapse="true"
+				icon="icon-password" :to="{ name: 'list', params: {type: 'hidden'}}" :open="false">
 				<ul>
-					<AppNavigationItem
-						v-for="(poll) in hiddenPolls"
-						:key="poll.id"
-						:title="poll.title"
-						:icon="pollIcon(poll.type)"
-						:to="{name: 'vote', params: {id: poll.id}}" />
+					<AppNavigationItem v-for="(poll) in hiddenPolls" :key="poll.id"
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
-			<AppNavigationItem
-				:title="t('polls', 'Deleted polls')"
-				:allow-collapse="true"
-				icon="icon-delete"
-				:to="{ name: 'list', params: {type: 'deleted'}}"
-				:open="false">
+
+			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true"
+				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
 				<ul>
-					<AppNavigationItem
-						v-for="(poll) in deletedPolls"
-						:key="poll.id"
-						:title="poll.title"
-						:icon="pollIcon(poll.type)"
-						:to="{name: 'vote', params: {id: poll.id}}" />
+					<AppNavigationItem v-for="(poll) in deletedPolls" :key="poll.id"
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
 		</ul>
@@ -106,13 +79,14 @@
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem, ActionButton } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
 
 export default {
 	name: 'Navigation',
 	components: {
+		ActionButton,
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
@@ -162,6 +136,15 @@ export default {
 	methods: {
 		closeCreate() {
 			this.createDlg = false
+		},
+
+		clonePoll(pollId) {
+			this.$store
+				.dispatch('clonePoll', { pollId: pollId })
+				.then((response) => {
+					this.$router.push({ name: 'vote', params: { id: response.pollId } })
+				})
+
 		},
 
 		toggleCreateDlg() {
