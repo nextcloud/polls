@@ -236,7 +236,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowComment(): bool {
-		return $this->getAllowVote();
+		return !$this->poll->getDeleted() && boolval($this->userId);
 	}
 
 	/**
