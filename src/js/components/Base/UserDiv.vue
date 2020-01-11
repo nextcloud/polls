@@ -148,6 +148,8 @@ export default {
 	.user-name {
 		opacity: 0.5;
 		flex: 1;
-	}
+		overflow: auto;
+		text-overflow: ellipsis;
+		}
 }
 </style>
