@@ -39,7 +39,7 @@ OC.L10N.register(
     "Add new Poll" : "Ajouter un nouveau sondage",
     "All polls" : "Tous les sondages",
     "My polls" : "Mes sondages",
-    "Public polls" : "Sondages publiques",
+    "Public polls" : "Sondages publics",
     "Hidden polls" : "Sondages masqués",
     "Deleted polls" : "Sondages supprimés",
     "Error loading polls" : "Erreur lors du chargement des sondages",

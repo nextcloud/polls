@@ -163,7 +163,7 @@ class MailService {
 			);
 
 		} elseif ($share->getType() === 'contact') {
-			$contacts = $contactsManager->search($share->getUserId(), array('UID'));
+			$contacts = $contactsManager->search($share->getUserId(), array('FN'));
 			if (is_array($contacts)) {
 				$contact = $contacts[0];
 
