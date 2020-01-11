@@ -23,6 +23,7 @@
 <template>
 	<div>
 		<h3>{{ t('polls','Invitations') }}</h3>
+		<span>{{ t('polls','Invited users will get informed immediately via eMail!') }} </span>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
 				<UserDiv
@@ -184,18 +185,23 @@ export default {
 		},
 
 		addShare(payload) {
-			this.$store.dispatch('writeSharePromise', {
-				share: {
-					type: payload.type,
-					userId: payload.user,
-					pollId: '0',
-					userEmail: payload.emailAddress,
-					token: ''
-				}
-			})
-				// .then(response => {
-			// OC.Notification.showTemporary(t('polls', 'You added %n.', 1, payload.user), { type: 'success' })
-				// })
+			this.$store
+				.dispatch('writeSharePromise', {
+					share: {
+						type: payload.type,
+						userId: payload.user,
+						pollId: '0',
+						userEmail: payload.emailAddress,
+						token: ''
+					}
+				})
+				.then((response) => {
+					if (response) {
+						OC.Notification.showTemporary(t('polls', 'Invitation mail sent to %n.', 1, payload.user), { type: 'success' })
+					} else {
+						OC.Notification.showTemporary(t('polls', 'Error while sending invitation mail sent to %n.', 1, payload.user), { type: 'error' })
+					}
+				})
 				.catch(error => {
 					console.error('Error while adding share comment - Error: ', error)
 					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })
