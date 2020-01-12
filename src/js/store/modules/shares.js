@@ -128,7 +128,8 @@ const actions = {
 		payload.share.pollId = context.rootState.poll.id
 		return axios.post(OC.generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
-				context.commit('addShare', response.data)
+				context.commit('addShare', response.data.share)
+				return response.data.mailSent
 			}, (error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
