@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div>
+	<div class="comments">
 		<h2>{{ t('polls','Comments') }} </h2>
 		<CommentAdd v-if="acl.allowComment" />
 		<transition-group v-if="countComments" name="fade" class="comments"
@@ -69,24 +69,32 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.comments {
+	margin: 8px 0;
+	padding-right: 12px;
+}
 
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
+#emptycontent, .emptycontent {
+	margin-top: 0;
+}
 
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
-			}
-			& > .message {
-				margin-left: 44px;
-				flex: 1 1;
+ul {
+	& > li {
+		margin-bottom: 30px;
+		& > .comment-item {
+			display: flex;
+			align-items: center;
+
+			& > .date {
+				right: 0;
+				top: 5px;
+				opacity: 0.5;
 			}
 		}
+		& > .message {
+			margin-left: 44px;
+			flex: 1 1;
+		}
 	}
+}
 </style>

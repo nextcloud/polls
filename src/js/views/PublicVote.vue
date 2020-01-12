@@ -23,17 +23,22 @@
 <template>
 	<AppContent>
 		<div v-if="poll.id > 0" class="main-container">
+			<div class="header-actions">
+				<button class="button btn primary" @click="tableMode = !tableMode">
+					<span>{{ t('polls', 'Switch view') }}</span>
+				</button>
+			</div>
 			<PollTitle />
 			<PollInformation />
-			<PollDescription />
 			<VoteHeaderPublic />
-			<button class="button btn primary" @click="tableMode = !tableMode">
-				<span>{{ t('polls', 'Switch view') }}</span>
-			</button>
+			<PollDescription />
 			<VoteList v-show="!isLoading && !tableMode" />
 			<VoteTable v-show="!isLoading && tableMode" />
-			<ParticipantsList />
-			<Comments />
+
+			<div class="additional">
+				<ParticipantsList v-if="acl.allowSeeUsernames" />
+				<Comments />
+			</div>
 		</div>
 
 		<LoadingOverlay v-if="isLoading" />
@@ -121,13 +126,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.additional {
+	display: flex;
+	flex-wrap: wrap;
+	.participants {
+		flex: 1;
+	}
+	.comments {
+		flex: 3;
+	}
+}
+
 .main-container {
+	position: relative;
 	flex: 1;
-	padding: 0 24px;
+	padding: 8px 24px;
 	margin: 0;
 	flex-direction: column;
 	flex-wrap: nowrap;
 	overflow-x: scroll;
+}
+
+.header-actions {
+	right: 0;
+	position: absolute;
+	display: flex;
 }
 
 .icon.icon-settings.active {
