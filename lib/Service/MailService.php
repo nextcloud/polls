@@ -285,7 +285,6 @@ class MailService {
 	}
 
 	public function sendNotifications() {
-		$this->logger->alert('start work');
 		$subscriptions = [];
 		$log = $this->logMapper->findUnprocessedPolls();
 
