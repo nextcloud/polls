@@ -163,11 +163,11 @@ class ShareController extends Controller {
 
 		try {
 			$newShare = $this->mapper->insert($newShare);
-			$sentMail = $this->mailService->sendInvitationMail($newShare->getToken());
+			$sendResult = $this->mailService->sendInvitationMail($newShare->getToken());
 
 			return new DataResponse([
 				'share' => $newShare,
-				'mailSent' => $sentMail
+				'sendResult' => $sendResult
 			], Http::STATUS_OK);
 
 		} catch (\Exception $e) {

@@ -112,7 +112,7 @@ class MailService {
 	 * @param String $toUserId
 	 * @param String $toEmail
 	 * @param String $toDisplayName
-	 * @return Bool
+	 * @return String
 	 */
 
 	private function sendMail($emailTemplate, $toUserId = '', $toEmail = '', $toDisplayName = '') {
@@ -131,6 +131,9 @@ class MailService {
 			$message->setTo([$toEmail => $toDisplayName]);
 			$message->useTemplate($emailTemplate);
 			$this->mailer->send($message);
+
+			return null;
+
 		} catch (\Exception $e) {
 			$this->logger->logException($e, ['app' => 'polls']);
 			throw $e;
@@ -152,7 +155,7 @@ class MailService {
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
-				'email' => null,
+				'eMailAddress' => null,
 				'displayName' => null,
 				'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
 				'link' => $this->urlGenerator->getAbsoluteURL(
@@ -169,7 +172,7 @@ class MailService {
 
 				$recipients[] = array(
 					'userId' => $share->getUserId(),
-					'email' => $contact['EMAIL'][0],
+					'eMailAddress' => $contact['EMAIL'][0],
 					'displayName' => $contact['FN'],
 					'language' => $defaultLang,
 					'link' => $this->urlGenerator->getAbsoluteURL(
@@ -186,7 +189,7 @@ class MailService {
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
-				'email' => $share->getUserEmail(),
+				'eMailAddress' => $share->getUserEmail(),
 				'displayName' => $share->getUserId(),
 				'language' => $defaultLang,
 				'link' => $this->urlGenerator->getAbsoluteURL(
@@ -207,7 +210,7 @@ class MailService {
 
 				$recipients[] = array(
 					'userId' => $member,
-					'email' => null,
+					'eMailAddress' => null,
 					'displayName' => null,
 					'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
 					'link' => $this->urlGenerator->getAbsoluteURL(
@@ -227,18 +230,19 @@ class MailService {
 	 * @param string $token
 	 */
 	public function sendInvitationMail($token) {
+
 		$share = $this->shareMapper->findByToken($token);
 		$poll = $this->pollMapper->find($share->getPollId());
 		$owner = $this->userManager->get($poll->getOwner());
+		$sentMails = [];
+		$abortedMails = [];
 
 		$recipients = $this->getRecipientsByShare(
 			$this->shareMapper->findByToken($token),
 			$this->config->getUserValue($poll->getOwner(), 'core', 'lang'),
 			$poll->getOwner()
 		);
-
 		foreach ($recipients as $recipient) {
-
 			$trans = $this->transFactory->get('polls', $recipient['language']);
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
@@ -268,15 +272,16 @@ class MailService {
 				$this->sendMail(
 					$emailTemplate,
 					$recipient['userId'],
-					$recipient['email'],
+					$recipient['eMailAddress'],
 					$recipient['displayName']
 				);
-				return true;
+				$sentMails[] = $recipient;
 			} catch (Exception $e) {
-				return false;
+				$abortedMails[] = $recipient;
+				$this->logger->alert('Error sending Mail to ' . json_encode($recipient));
 			}
-
 		}
+		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
 	}
 
 	public function sendNotifications() {
@@ -367,8 +372,8 @@ class MailService {
 			try {
 				$this->sendMail($emailTemplate, $subscription->getUserId());
 			} catch (Exception $e) {
-				// todo alert Owner
-				// Notification to $subscription->getUserId() could not be sent
+				$this->logger->alert('Error sending Mail to ' . $subscription->getUserId());
+				// TODO: alert Owner
 			}
 		}
 	}
