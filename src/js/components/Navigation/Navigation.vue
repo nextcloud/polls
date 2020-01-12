@@ -28,85 +28,40 @@
 			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
 				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
 				<ul>
-					<AppNavigationItem v-for="(poll) in allPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
-						<template slot="actions">
-							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
-								{{ t('polls', 'Clone poll') }}
-							</ActionButton>
-							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
-								{{ t('polls', 'Delete poll') }}
-							</ActionButton>
-						</template>
-					</AppNavigationItem>
+					<PollNavigationItems v-for="(poll) in allPolls" :key="poll.id" :poll="poll"
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
 			<AppNavigationItem :title="t('polls', 'My polls')" :allow-collapse="true"
 				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
 				<ul>
-					<AppNavigationItem v-for="(poll) in myPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
-						<template slot="actions">
-							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
-								{{ t('polls', 'Clone poll') }}
-							</ActionButton>
-							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
-								{{ t('polls', 'Delete poll') }}
-							</ActionButton>
-						</template>
-					</AppNavigationItem>
+					<PollNavigationItems v-for="(poll) in myPolls" :key="poll.id" :poll="poll"
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
 			<AppNavigationItem :title="t('polls', 'Public polls')" :allow-collapse="true"
 				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
 				<ul>
-					<AppNavigationItem v-for="(poll) in publicPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
-						<template slot="actions">
-							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
-								{{ t('polls', 'Clone poll') }}
-							</ActionButton>
-							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
-								{{ t('polls', 'Delete poll') }}
-							</ActionButton>
-						</template>
-					</AppNavigationItem>
+					<PollNavigationItems v-for="(poll) in publicPolls" :key="poll.id" :poll="poll"
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
 			<AppNavigationItem :title="t('polls', 'Hidden polls')" :allow-collapse="true"
 				icon="icon-password" :to="{ name: 'list', params: {type: 'hidden'}}" :open="false">
 				<ul>
-					<AppNavigationItem v-for="(poll) in hiddenPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
-						<template slot="actions">
-							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
-								{{ t('polls', 'Clone poll') }}
-							</ActionButton>
-							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
-								{{ t('polls', 'Delete poll') }}
-							</ActionButton>
-						</template>
-					</AppNavigationItem>
+					<PollNavigationItems v-for="(poll) in hiddenPolls" :key="poll.id" :poll="poll"
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
 			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true"
 				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
 				<ul>
-					<AppNavigationItem v-for="(poll) in deletedPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
-						<template slot="actions">
-							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
-								{{ t('polls', 'Clone poll') }}
-							</ActionButton>
-							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-history" @click="switchDeleted(poll.id)">
-								{{ t('polls', 'Restore poll') }}
-							</ActionButton>
-						</template>
-					</AppNavigationItem>
+					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 		</ul>
@@ -115,18 +70,19 @@
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem, ActionButton } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
+import PollNavigationItems from './PollNavigationItems'
 
 export default {
 	name: 'Navigation',
 	components: {
-		ActionButton,
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
-		CreateDlg
+		CreateDlg,
+		PollNavigationItems
 	},
 
 	data() {
@@ -183,6 +139,13 @@ export default {
 				})
 
 		},
+		pollIcon(pollType) {
+			if (pollType === 'datePoll') {
+				return 'icon-calendar'
+			} else {
+				return 'icon-toggle-filelist'
+			}
+		},
 
 		switchDeleted(pollId) {
 			this.$store
@@ -195,14 +158,6 @@ export default {
 
 		toggleCreateDlg() {
 			this.createDlg = !this.createDlg
-		},
-
-		pollIcon(type) {
-			if (type === '0') {
-				return 'icon-calendar'
-			} else {
-				return 'icon-toggle-filelist'
-			}
 		},
 
 		refreshPolls() {
