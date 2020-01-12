@@ -195,13 +195,6 @@ export default {
 						token: ''
 					}
 				})
-				.then((response) => {
-					if (response) {
-						OC.Notification.showTemporary(t('polls', 'Invitation mail sent to %n.', 1, payload.user), { type: 'success' })
-					} else {
-						OC.Notification.showTemporary(t('polls', 'Error while sending invitation mail sent to %n.', 1, payload.user), { type: 'error' })
-					}
-				})
 				.catch(error => {
 					console.error('Error while adding share comment - Error: ', error)
 					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })

@@ -25,8 +25,8 @@
 		<user-div :user-id="currentUser" />
 
 		<form class="commentAdd" name="send-comment" @submit="writeComment">
-			<input v-model="comment" class="message" data-placeholder="New Comment ..."/>
-			<button v-show="!isLoading" type="submit" class="submit-comment icon-confirm"></button>
+			<input v-model="comment" class="message" data-placeholder="New Comment ...">
+			<button v-show="!isLoading" type="submit" class="submit-comment icon-confirm" />
 			<span v-show="isLoading" class="icon-loading-small" style="float:right;" />
 		</form>
 	</div>

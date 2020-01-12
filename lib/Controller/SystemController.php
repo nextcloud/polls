@@ -38,7 +38,6 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCP\ILogger;
 
-
 class SystemController extends Controller {
 
 	private $userId;
@@ -48,6 +47,7 @@ class SystemController extends Controller {
 	private $userManager;
 	private $voteMapper;
 	private $shareMapper;
+
 
 	/**
 	 * PageController constructor.
@@ -170,7 +170,7 @@ class SystemController extends Controller {
 							'type' => 'contact',
 							'icon' => 'icon-mail',
 							'avatarURL' => '',
-							'avatar' => isset($contact['PHOTO']) ? $contact['PHOTO'] : '', 
+							'avatar' => isset($contact['PHOTO']) ? $contact['PHOTO'] : '',
 							'lastLogin' => '',
 							'cloudId' => ''
 						];

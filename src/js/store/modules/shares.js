@@ -129,7 +129,34 @@ const actions = {
 		return axios.post(OC.generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
 				context.commit('addShare', response.data.share)
-				return response.data.mailSent
+
+				if (response.data.sendResult.sentMails.length > 0) {
+					const sendList = response.data.sendResult.sentMails.map(element => {
+
+						if (element.displayName) {
+							return element.displayName
+						} else if (element.userId) {
+							return element.userId
+						} else if (element.eMailAddress) {
+							return element.eMailAddress
+						}
+					})
+					OC.Notification.showTemporary(t('polls', 'Invitation mail sent to %n.', 1, sendList.join(', ')), { type: 'success' })
+				}
+
+				if (response.data.sendResult.abortedMails.length > 0) {
+					const errorList = response.data.sendResult.abortedMails.map(element => {
+						if (element.displayName) {
+							return element.displayName
+						} else if (element.userId) {
+							return element.userId
+						} else if (element.eMailAddress) {
+							return element.eMailAddress
+						}
+					})
+					OC.Notification.showTemporary(t('polls', 'Error sending invitation mail to %n.', 1, errorList.join(', ')), { type: 'error' })
+				}
+				return response.data
 			}, (error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
