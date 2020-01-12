@@ -108,19 +108,6 @@ const actions = {
 			})
 	},
 
-	deletePollPromise(context, payload) {
-		const endPoint = 'apps/polls/poll/delete/'
-
-		return axios.post(OC.generateUrl(endPoint), { poll: payload.id })
-			.then((response) => {
-				return response
-			}, (error) => {
-				console.error('Error deleting poll', { error: error.response }, { payload: payload })
-				throw error
-			})
-
-	},
-
 	writePollPromise(context) {
 		const endPoint = 'apps/polls/poll/write/'
 		return axios.post(OC.generateUrl(endPoint), { poll: state })

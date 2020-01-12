@@ -58,14 +58,14 @@
 			</div>
 		</router-link>
 
-		<!-- <div class="actions">
+		<div class="actions">
 			<div class="toggleUserActions">
 				<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
 				<div class="popovermenu" :class="{ 'open': openedMenu }">
 					<popover-menu :menu="menuItems" />
 				</div>
 			</div>
-		</div> -->
+		</div>
 
 		<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.access">
 			{{ accessType }}
@@ -143,25 +143,27 @@ export default {
 			const items = [
 				{
 					key: 'clonePoll',
-					icon: 'icon-confirm',
+					icon: 'icon-add',
 					text: t('polls', 'Clone poll'),
 					action: this.clonePoll
 				}
 			]
 
-			if (this.poll.owner === OC.getCurrentUser().uid) {
+			if (this.poll.owner === OC.getCurrentUser().uid && !this.poll.deleted) {
 				items.push({
-					key: 'deletePoll',
+					key: 'switchDeleted',
 					icon: 'icon-delete',
 					text: t('polls', 'Delete poll'),
-					action: this.deletePoll
+					action: this.switchDeleted
 				})
-			} else if (OC.isUserAdmin()) {
+			}
+
+			if (this.poll.deleted) {
 				items.push({
-					key: 'deletePoll',
-					icon: 'icon-delete',
-					text: t('polls', 'Delete poll as admin'),
-					action: this.deletePoll
+					key: 'switchDeleted',
+					icon: 'icon-history',
+					text: t('polls', 'Restore poll'),
+					action: this.switchDeleted
 				})
 			}
 
@@ -174,17 +176,27 @@ export default {
 			this.openedMenu = !this.openedMenu
 		},
 
+		refreshPolls() {
+			this.$store.dispatch('loadPolls')
+		},
+
 		hideMenu() {
 			this.openedMenu = false
 		},
 
-		deletePoll() {
-			this.$emit('deletePoll')
+		switchDeleted() {
+			this.$store.dispatch('switchDeleted', { pollId: this.poll.id })
+				.then((response) => {
+					this.refreshPolls()
+				})
 			this.hideMenu()
 		},
 
 		clonePoll() {
-			this.$emit('clonePoll')
+			this.$store.dispatch('clonePoll', { pollId: this.poll.id })
+				.then((response) => {
+					this.refreshPolls()
+				})
 			this.hideMenu()
 		}
 	}
