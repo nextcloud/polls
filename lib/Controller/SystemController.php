@@ -37,9 +37,6 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCP\ILogger;
-// TODO: remove
-use OCA\Polls\Service\MailService;
-
 
 class SystemController extends Controller {
 
@@ -50,8 +47,6 @@ class SystemController extends Controller {
 	private $userManager;
 	private $voteMapper;
 	private $shareMapper;
-	// TODO: remove
-	private $mailService;
 
 
 	/**
@@ -75,9 +70,7 @@ class SystemController extends Controller {
 		IGroupManager $groupManager,
 		IUserManager $userManager,
 		VoteMapper $voteMapper,
-		ShareMapper $shareMapper,
-		// TODO: remove
-		MailService $mailService
+		ShareMapper $shareMapper
 	) {
 		parent::__construct($appName, $request);
 		$this->voteMapper = $voteMapper;
@@ -87,24 +80,8 @@ class SystemController extends Controller {
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
-		// TODO: remove
-		$this->mailService = $mailService;
 	}
 
-	/**
-	 * sendNotification
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function sendNotification() {
-		if ($this->mailService->sendNotifications()) {
-			$this->logger->alert('Notifications sent');
-		}
-		return new DataResponse([
-			'sendNotifications' => 'ran'
-		], Http::STATUS_OK);
-
-	}
 	/**
 	 * Get a list of NC users, groups and contacts
 	 * @NoCSRFRequired
