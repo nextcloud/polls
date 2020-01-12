@@ -150,6 +150,6 @@ export default {
 		flex: 1;
 		overflow: auto;
 		text-overflow: ellipsis;
-		}
+	}
 }
 </style>

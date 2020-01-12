@@ -23,19 +23,28 @@
 <template>
 	<AppContent>
 		<div v-if="poll.id > 0" class="main-container">
-			<a v-if="!sideBarOpen && acl.allowEdit" href="#" class="icon icon-settings active"
-				:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
+			<div class="header-actions">
+				<button class="button btn primary" @click="tableMode = !tableMode">
+					<span>{{ t('polls', 'Switch view') }}</span>
+				</button>
+				<a v-if="acl.allowEdit" href="#" class="icon icon-settings active"
+					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
+			</div>
 			<PollTitle />
 			<PollInformation />
 			<PollDescription />
-			<button class="button btn primary" @click="tableMode = !tableMode">
-				<span>{{ t('polls', 'Switch view') }}</span>
-			</button>
-			<VoteList v-show="!isLoading && !tableMode" />
-			<VoteTable v-show="!isLoading && tableMode" />
+			<VoteList v-show="!isLoading && !tableMode && options.list.length" />
+			<VoteTable v-show="!isLoading && tableMode && options.list.length" />
+			<div v-if="!options.list.length" class="emptycontent">
+				<div class="icon-toggle-filelist" />
+				<p> {{ t('polls', 'There are no vote Options, add some.') }}</p>
+			</div>
+
 			<Subscription />
-			<ParticipantsList />
-			<Comments />
+			<div class="additional">
+				<ParticipantsList v-if="acl.allowSeeUsernames" />
+				<Comments />
+			</div>
 		</div>
 
 		<SideBar v-if="sideBarOpen && acl.allowEdit" @closeSideBar="toggleSideBar" />
@@ -84,7 +93,8 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
+			options: state => state.options
 		}),
 
 		windowTitle: function() {
@@ -132,21 +142,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.main-container {
-		flex: 1;
-		padding: 0 24px;
-		margin: 0;
-		flex-direction: column;
-		flex-wrap: nowrap;
-		overflow-x: scroll;
-	}
+#emptycontent, .emptycontent {
+	margin: 44px 0;
+}
 
-	.icon.icon-settings.active {
-		display: block;
-		width: 44px;
-		height: 44px;
-		right: 0;
-		position: absolute;
+.additional {
+	display: flex;
+	flex-wrap: wrap;
+	.participants {
+		flex: 1;
 	}
+	.comments {
+		flex: 3;
+	}
+}
+
+.main-container {
+	position: relative;
+	flex: 1;
+	padding: 8px 24px;
+	margin: 0;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	overflow-x: scroll;
+}
+
+.header-actions {
+	right: 0;
+	position: absolute;
+	display: flex;
+}
+
+.icon.icon-settings.active {
+	display: block;
+	width: 44px;
+	height: 44px;
+}
 
 </style>

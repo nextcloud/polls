@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<div class="newCommentRow comment new-comment">
+	<div class="comment">
 		<user-div :user-id="currentUser" />
 
 		<form class="commentAdd" name="send-comment">

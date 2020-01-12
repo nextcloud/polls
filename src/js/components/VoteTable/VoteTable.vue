@@ -25,10 +25,6 @@
 		<div class="header">
 			<div class="sticky" />
 
-			<div v-if="noOptions" class="noOptions">
-				<h2> {{ t('polls', 'there are no vote Options') }} </h2>
-			</div>
-
 			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
@@ -74,10 +70,6 @@ export default {
 
 		currentUser() {
 			return this.acl.userId
-		},
-
-		noOptions() {
-			return (this.sortedOptions.length === 0)
 		}
 	},
 
@@ -120,6 +112,7 @@ export default {
 	}
 
 	.vote-table {
+		margin: 44px 0;
 		display: flex;
 		flex: 0;
 		flex-direction: column;
