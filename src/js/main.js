@@ -27,7 +27,8 @@ import axios from '@nextcloud/axios'
 import App from './App'
 import store from './store'
 import router from './router'
-import vClickOutside from 'v-click-outside'
+import { linkTo } from '@nextcloud/router'
+import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 import moment from 'moment'
 
@@ -39,11 +40,10 @@ import LoadingOverlay from './components/Base/LoadingOverlay'
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_nonce__ = btoa(OC.requestToken)
 /* eslint-disable-next-line camelcase, no-undef */
-__webpack_public_path__ = OC.linkTo('polls', 'js/')
+__webpack_public_path__ = linkTo('polls', 'js/')
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
-Vue.config.performance = process.env.NODE_ENV !== 'production'
 
 moment.locale(OC.getLocale())
 
@@ -63,7 +63,7 @@ Vue.component('UserBubble', UserBubble)
 
 Vue.directive('tooltip', Tooltip)
 
-Vue.use(vClickOutside)
+Vue.use(ClickOutside)
 Vue.use(VueClipboard)
 
 /* eslint-disable-next-line no-new */
