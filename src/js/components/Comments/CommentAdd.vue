@@ -60,7 +60,7 @@ export default {
 					this.comment = ''
 					this.isLoading = false
 				})
-				.catch(error => {
+				.catch((error) => {
 					this.isLoading = false
 					console.error('Error while saving comment - Error: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })

@@ -32,10 +32,10 @@
 						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
 						<template slot="actions">
 							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
-								{{ t('polls', 'Clone Poll') }}
+								{{ t('polls', 'Clone poll') }}
 							</ActionButton>
-							<ActionButton icon="icon-delete" @click="alert('Delete Poll')">
-								{{ t('polls', 'Delete Poll') }}
+							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
+								{{ t('polls', 'Delete poll') }}
 							</ActionButton>
 						</template>
 					</AppNavigationItem>
@@ -46,7 +46,16 @@
 				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
 				<ul>
 					<AppNavigationItem v-for="(poll) in myPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
+						<template slot="actions">
+							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
+								{{ t('polls', 'Clone poll') }}
+							</ActionButton>
+							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
+								{{ t('polls', 'Delete poll') }}
+							</ActionButton>
+						</template>
+					</AppNavigationItem>
 				</ul>
 			</AppNavigationItem>
 
@@ -54,7 +63,16 @@
 				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
 				<ul>
 					<AppNavigationItem v-for="(poll) in publicPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
+						<template slot="actions">
+							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
+								{{ t('polls', 'Clone poll') }}
+							</ActionButton>
+							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
+								{{ t('polls', 'Delete poll') }}
+							</ActionButton>
+						</template>
+					</AppNavigationItem>
 				</ul>
 			</AppNavigationItem>
 
@@ -62,7 +80,16 @@
 				icon="icon-password" :to="{ name: 'list', params: {type: 'hidden'}}" :open="false">
 				<ul>
 					<AppNavigationItem v-for="(poll) in hiddenPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
+						<template slot="actions">
+							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
+								{{ t('polls', 'Clone poll') }}
+							</ActionButton>
+							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-delete" @click="switchDeleted(poll.id)">
+								{{ t('polls', 'Delete poll') }}
+							</ActionButton>
+						</template>
+					</AppNavigationItem>
 				</ul>
 			</AppNavigationItem>
 
@@ -70,7 +97,16 @@
 				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
 				<ul>
 					<AppNavigationItem v-for="(poll) in deletedPolls" :key="poll.id"
-						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}" />
+						:title="poll.title" :icon="pollIcon(poll.type)" :to="{name: 'vote', params: {id: poll.id}}">
+						<template slot="actions">
+							<ActionButton icon="icon-add" @click="clonePoll(poll.id)">
+								{{ t('polls', 'Clone poll') }}
+							</ActionButton>
+							<ActionButton v-if="poll.owner === OC.getCurrentUser().uid" icon="icon-history" @click="switchDeleted(poll.id)">
+								{{ t('polls', 'Restore poll') }}
+							</ActionButton>
+						</template>
+					</AppNavigationItem>
 				</ul>
 			</AppNavigationItem>
 		</ul>
@@ -121,7 +157,7 @@ export default {
 				.then(() => {
 					this.loading = false
 				})
-				.catch(error => {
+				.catch((error) => {
 					this.loading = false
 					console.error('refresh poll: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
@@ -142,7 +178,17 @@ export default {
 			this.$store
 				.dispatch('clonePoll', { pollId: pollId })
 				.then((response) => {
+					this.refreshPolls()
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
+				})
+
+		},
+
+		switchDeleted(pollId) {
+			this.$store
+				.dispatch('switchDeleted', { pollId: pollId })
+				.then((response) => {
+					this.refreshPolls()
 				})
 
 		},

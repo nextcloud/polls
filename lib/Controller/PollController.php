@@ -170,6 +170,42 @@ class PollController extends Controller {
 	}
 
 	/**
+	 * delete
+	 * @NoAdminRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function delete($pollId) {
+
+		try {
+			// Find existing poll
+			$this->poll = $this->pollMapper->find($pollId);
+			$this->acl->setPollId($this->poll->getId());
+
+			if (!$this->acl->getAllowEdit()) {
+				$this->logger->alert('Unauthorized delete attempt from user ' . $this->userId);
+				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
+			}
+
+			if ($this->poll->getDeleted()) {
+				$this->poll->setDeleted(0);
+			} else {
+				$this->poll->setDeleted(time());
+			}
+
+			$this->pollMapper->update($this->poll);
+			$this->logService->setLog($this->poll->getId(), 'deletePoll');
+			return new DataResponse([
+				'deleted' => $pollId
+			], Http::STATUS_OK);
+
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+
+	/**
 	 * write
 	 * @NoAdminRequired
 	 * @param Array $poll
@@ -199,7 +235,7 @@ class PollController extends Controller {
 			$this->poll->setAccess($poll['access']);
 			$this->poll->setExpire($poll['expire']);
 			$this->poll->setAnonymous(intval($poll['anonymous']));
-			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']));
+			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']) * $this->poll->getAnonymous());
 			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
 			$this->poll->setVoteLimit(intval($poll['voteLimit']));
 			$this->poll->setSettings('');
@@ -226,7 +262,6 @@ class PollController extends Controller {
 	/**
 	 * clone
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
@@ -237,19 +272,19 @@ class PollController extends Controller {
 		$clonePoll->setOwner($this->userId);
 		$clonePoll->setCreated(time());
 		$clonePoll->setTitle('Clone of ' . $this->poll->getTitle());
+		$clonePoll->setDeleted(0);
 
 		$clonePoll->setType($this->poll->getType());
 		$clonePoll->setDescription($this->poll->getDescription());
 		$clonePoll->setAccess($this->poll->getAccess());
 		$clonePoll->setExpire($this->poll->getExpire());
 		$clonePoll->setAnonymous(intval($this->poll->getAnonymous()));
-		$clonePoll->setFullAnonymous(intval($this->poll->getFullAnonymous()));
+		$clonePoll->setFullAnonymous(intval($this->poll->getFullAnonymous())  * $clonePoll->getAnonymous());
 		$clonePoll->setAllowMaybe(intval($this->poll->getAllowMaybe()));
 		$clonePoll->setVoteLimit(intval($this->poll->getVoteLimit()));
 		$clonePoll->setSettings('');
 		$clonePoll->setOptions('');
 		$clonePoll->setShowResults($this->poll->getShowResults());
-		$clonePoll->setDeleted(0);
 		$clonePoll->setAdminAccess($this->poll->getAdminAccess());
 
 		$this->pollMapper->insert($clonePoll);

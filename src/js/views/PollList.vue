@@ -111,7 +111,7 @@ export default {
 				.then(() => {
 					this.loading = false
 				})
-				.catch(error => {
+				.catch((error) => {
 					this.loading = false
 					console.error('refresh poll: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, this.poll.title), { type: 'error' })

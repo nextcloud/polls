@@ -50,6 +50,7 @@ return [
 
 		['name' => 'poll#list', 'url' => '/poll/list/', 'verb' => 'GET'],
 		['name' => 'poll#get', 'url' => '/poll/get/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#delete', 'url' => '/poll/delete/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#write', 'url' => '/poll/write/', 'verb' => 'POST'],
 		['name' => 'poll#clone', 'url' => '/poll/clone/{pollId}', 'verb' => 'get'],
 		['name' => 'poll#getByToken', 'url' => '/poll/get/s/{token}', 'verb' => 'GET'],

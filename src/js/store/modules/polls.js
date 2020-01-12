@@ -62,26 +62,30 @@ const actions = {
 			.then((response) => {
 				context.commit('setPolls', { list: response.data })
 			}, (error) => {
-				console.error(error.response)
+				OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+				console.error('Error loading polls', { error: error.response })
 			})
 	},
 
-	deletePollPromise(context, payload) {
-		const endPoint = 'apps/polls/remove/poll'
-
-		return axios.post(
-			OC.generateUrl(endPoint),
-			payload.poll
-		)
+	switchDeleted(context, payload) {
+		const endPoint = 'apps/polls/poll/delete/'
+		return axios.get(OC.generateUrl(endPoint + payload.pollId))
+			.then((response) => {
+				return response
+			}, (error) => {
+				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
 	},
 
 	clonePoll(context, payload) {
-		const endPoint = 'apps/polls/poll/clone/' + payload.pollId
-		return axios.get(OC.generateUrl(endPoint))
+		const endPoint = 'apps/polls/poll/clone/'
+		return axios.get(OC.generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response.data
 			}, (error) => {
-				console.error(error.response)
+				OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
+				console.error('Error cloning poll', { error: error.response }, { payload: payload })
 			})
 
 	}
