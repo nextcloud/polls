@@ -285,6 +285,7 @@ class MailService {
 	}
 
 	public function sendNotifications() {
+		$this->logger->alert('start work');
 		$subscriptions = [];
 		$log = $this->logMapper->findUnprocessedPolls();
 
@@ -332,27 +333,32 @@ class MailService {
 					} elseif ($logItem->getMessageId() === 'setVote') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s voted.',
-							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
-					);
+							array($logItem->getUserId()))
+							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
+						);
 					} elseif ($logItem->getMessageId() === 'updatePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s updated the poll configuration. Please check your votes.',
-							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($logItem->getUserId()))
+							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					} elseif ($logItem->getMessageId() === 'deletePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s deleted the poll.',
-							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($logItem->getUserId()))
+							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					} elseif ($logItem->getMessageId() === 'restorePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s restored the poll.',
-							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($logItem->getUserId()))
+							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					} elseif ($logItem->getMessageId() === 'expirePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- The poll expired.',
-							array($this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($logItem->getUserId()))
+							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
 						);
 					}
 

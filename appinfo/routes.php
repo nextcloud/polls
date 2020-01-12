@@ -65,6 +65,7 @@ return [
 		['name' => 'acl#get', 'url' => '/acl/get/{id}', 'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get/', 'verb' => 'POST'],
-		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST']
+		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
+		['name' => 'system#sendNotification', 'url' => '/send/notification/', 'verb' => 'get']
 	]
 ];
