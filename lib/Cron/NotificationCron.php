@@ -23,27 +23,20 @@
 
 namespace OCA\Polls\Cron;
 
-use Exception;
-
-use OCP\ILogger;
-use OCP\BackgroundJob\TimedJob;
-
+use OC\BackgroundJob\TimedJob;
 use OCA\Polls\Service\MailService;
 
 class NotificationCron extends TimedJob {
 
 	/** @var MailService*/
 	private $mailService;
-	private $logger;
 
 	/** @param MailService $mailService
 	 */
 	public function __construct(
-		ILogger $logger,
 		MailService $mailService
 	) {
-		$this->logger = $logger;
-		$this->setInterval(60);
+		$this->setInterval(5);
 		$this->mailService = $mailService;
 	}
 
@@ -52,8 +45,6 @@ class NotificationCron extends TimedJob {
 	 * @param string $token
 	 */
 	protected function run($arguments) {
-		if ($this->mailService->sendNotifications()) {
-			$this->logger->debug('Notifications sent');
-		}
+		$this->mailService->sendNotifications();
 	}
 }
