@@ -106,18 +106,6 @@ export default {
 	watch: {
 		$route() {
 			this.loadPoll()
-		},
-
-		'poll.id': function() {
-			this.$store.dispatch({ type: 'getSubscription', pollId: this.$route.params.id })
-
-			this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
-				.then(() => {
-					if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-						this.sideBarOpen = true
-					}
-					this.isLoading = false
-				})
 		}
 	},
 
@@ -130,8 +118,16 @@ export default {
 			this.isLoading = false
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
 				.then(() => {
+					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+						.then(() => {
+							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+								this.sideBarOpen = true
+							}
+							this.isLoading = false
+						})
 				})
-				.catch(() => {
+				.catch((error) => {
+					console.error(error)
 					this.isLoading = false
 				})
 		},
