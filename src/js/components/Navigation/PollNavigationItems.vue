@@ -59,7 +59,7 @@ export default {
 	computed: {
 		pollIcon() {
 			if (this.poll.type === 'datePoll') {
-				return 'icon-calendar'
+				return 'icon-calendar-000'
 			} else {
 				return 'icon-toggle-filelist'
 			}
@@ -67,3 +67,9 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss">
+.icon-calendar-000 {
+	background-image: var(--icon-calendar-000);
+}
+</style>
