@@ -50,6 +50,7 @@ class PollController extends Controller {
 
 	private $userId;
 	private $pollMapper;
+	private $optionMapper;
 	private $trans;
 	private $logger;
 	private $groupManager;
@@ -67,7 +68,7 @@ class PollController extends Controller {
 	 * @param ILogger $logger
 	 * @param IL10N $trans
 	 * @param PollMapper $pollMapper
-	 * @param OptionsMapper $optionMapper
+	 * @param OptionMapper $optionMapper
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
 	 * @param LogService $logService
