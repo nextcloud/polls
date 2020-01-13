@@ -25,9 +25,9 @@
 		<UserBubble :user="poll.owner" :display-name="poll.owner" />
 		{{ t('polls', ' started this poll on %n. ', 1, moment.unix(poll.created).format('LLLL')) }}
 		<span v-if="expired">{{ t('polls', 'Voting is no more possible, because this poll expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ',1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
 		<span v-if="poll.anonymous">{{ t('polls', 'The names of other participants is hidden, as this is a anonymous poll. ') }}</span>
-		<span>{{ t('polls', '%n voters participated in this poll until now.', 1, participants.length) }}</span>
+		<span>{{ n('polls', '%n person participated in this poll until now.', '%n persons participated in this poll until now.', participants.length) }}</span>
 	</div>
 </template>
 
