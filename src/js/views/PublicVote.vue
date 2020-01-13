@@ -82,7 +82,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll
+			poll: state => state.poll,
+			acl: state => state.acl
 		}),
 
 		windowTitle: function() {
