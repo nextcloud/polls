@@ -17,7 +17,6 @@ OC.L10N.register(
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Un'applicazione di sondaggi, simile a doodle/dudle con la possibilità di limitare l'accesso.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Un'applicazione di sondaggi, simile a doodle/dudle con la possibilità di limitare l'accesso (membri, determinati gruppi/utenti, nascosti e pubblici).",
     "Participants" : "Partecipanti",
-    "The names of other participants is hidden, as this is a anonymous poll. " : "I nomi degli altri partecipanti sono nascosti, poiché questo è un sondaggio anonimo.",
     "%n voters participated in this poll until now." : "%n votanti hanno partecipato a questo sondaggio finora.",
     "Deleted" : "Eliminato",
     "Group" : "Gruppo",
