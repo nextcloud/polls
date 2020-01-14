@@ -137,14 +137,6 @@ export default {
 					this.refreshPolls()
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
-
-		},
-		pollIcon(pollType) {
-			if (pollType === 'datePoll') {
-				return 'icon-calendar'
-			} else {
-				return 'icon-toggle-filelist'
-			}
 		},
 
 		switchDeleted(pollId) {
