@@ -27,7 +27,7 @@
 				<button class="button btn primary" @click="tableMode = !tableMode">
 					<span>{{ t('polls', 'Switch view') }}</span>
 				</button>
-				<a v-if="acl.allowEdit" href="#" class="icon icon-settings active"
+				<a href="#" class="icon icon-settings active"
 					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			</div>
 			<PollTitle />
@@ -43,22 +43,23 @@
 			<Subscription />
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
-				<Comments />
+				<!-- <Comments /> -->
 			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen && acl.allowEdit" @closeSideBar="toggleSideBar" />
+		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
-import Comments from '../components/Comments/Comments'
+// import Comments from '../components/Comments/Comments'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
 import PollTitle from '../components/Base/PollTitle'
+import LoadingOverlay from '../components/Base/LoadingOverlay'
 import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
@@ -67,15 +68,16 @@ import { mapState } from 'vuex'
 export default {
 	name: 'Vote',
 	components: {
+		Subscription,
 		ParticipantsList,
+		PollDescription,
 		PollInformation,
 		PollTitle,
-		PollDescription,
-		Subscription,
+		LoadingOverlay,
+		// Comments,
+		SideBar,
 		VoteTable,
-		VoteList,
-		Comments,
-		SideBar
+		VoteList
 	},
 
 	data() {

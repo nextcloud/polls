@@ -27,6 +27,8 @@
 				<button class="button btn primary" @click="tableMode = !tableMode">
 					<span>{{ t('polls', 'Switch view') }}</span>
 				</button>
+				<a href="#" class="icon icon-settings active"
+					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			</div>
 			<PollTitle />
 			<PollInformation />
@@ -37,21 +39,24 @@
 
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
-				<Comments />
+				<!-- <Comments /> -->
 			</div>
 		</div>
 
+		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
-import Comments from '../components/Comments/Comments'
+// import Comments from '../components/Comments/Comments'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
 import PollTitle from '../components/Base/PollTitle'
+import LoadingOverlay from '../components/Base/LoadingOverlay'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
+import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState } from 'vuex'
@@ -60,11 +65,13 @@ export default {
 	name: 'Vote',
 	components: {
 		ParticipantsList,
+		PollDescription,
 		PollInformation,
 		PollTitle,
-		PollDescription,
+		LoadingOverlay,
 		VoteHeaderPublic,
-		Comments,
+		// Comments,
+		SideBar,
 		VoteTable,
 		VoteList
 	},

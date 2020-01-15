@@ -42,7 +42,7 @@
 		</div>
 		<div v-if="displayLink" class="personal-link">
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
-			<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl($route.path) } )" />
+			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
 	</div>
 </template>
@@ -73,7 +73,12 @@ export default {
 		}),
 
 		personalLink() {
-			return location.protocol.concat('//', window.location.hostname, OC.generateUrl(this.$route.path))
+			return window.location.origin.concat(
+				this.$router.resolve({
+					name: 'publicVote',
+					params: { token: this.$route.params.token }
+				}).href
+			)
 		},
 
 		displayLink() {
@@ -98,8 +103,8 @@ export default {
 	},
 
 	methods: {
-		copyLink(payload) {
-			this.$copyText(window.location.origin + payload.url).then(
+		copyLink() {
+			this.$copyText(this.personalLink).then(
 				function() {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
 				},
