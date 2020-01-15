@@ -26,11 +26,11 @@
 			{{ option.pollOptionText }}
 		</div>
 
-		<div v-if="poll.type === 'datePoll'" v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="date-box">
+		<div v-if="poll.type === 'datePoll'" class="date-box">
 			<div class="month">
 				{{ moment.unix(option.timestamp).format('MMM') + " '" + moment.unix(option.timestamp).format('YY') }}
 			</div>
-			<div class="day">
+			<div v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="day">
 				{{ moment.unix(option.timestamp).format('Do') }}
 			</div>
 			<div class="dow">
@@ -39,6 +39,7 @@
 			<div class="time">
 				{{ moment.unix(option.timestamp).format('LT') }}
 			</div>
+			<div v-if="calendarEvent !== undefined" v-tooltip.auto="{content: eventTooltip, classes: 'tt-left' }" class="conflict icon icon-error" />
 		</div>
 
 		<div class="counter">
@@ -60,6 +61,10 @@ export default {
 
 	props: {
 		option: {
+			type: Object,
+			default: undefined
+		},
+		calendarEvent: {
 			type: Object,
 			default: undefined
 		},
@@ -86,6 +91,24 @@ export default {
 			'votesRank',
 			'winnerCombo'
 		]),
+
+		eventTooltip() {
+			let tooltip = ''
+			if (this.calendarEvent !== undefined) {
+				tooltip = t('polls', 'Found calendar events:')
+				this.calendarEvent.events.forEach(event => {
+					tooltip = tooltip.concat(
+						'\n',
+						moment.unix(event.eventFrom).format('LT'),
+						' - ',
+						moment.unix(event.eventTo).format('LT'),
+						': ',
+						event.summary
+					)
+				})
+			}
+			return tooltip
+		},
 
 		yesVotes() {
 			const pollOptionText = this.option.pollOptionText
@@ -135,6 +158,18 @@ export default {
 	}
 }
 
+.tt-left {
+	text-align: left;
+}
+.conflict {
+	font-style: normal;
+	font-weight: 400;
+	width: 44px;
+	height: 44px;
+	background-size: 28px;
+	background-color: var(--color-warning);
+	border-radius: 50%;
+}
 .counter {
 	flex: 0;
 	display: flex;
@@ -180,7 +215,7 @@ export default {
 	flex: 1 0;
 	padding: 0 2px;
 	align-items: center;
-	justify-content: center;
+	justify-content: start;
 
 	.month, .dow {
 		font-size: 1.2em;

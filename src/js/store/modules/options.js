@@ -98,7 +98,6 @@ const actions = {
 			.then((response) => {
 				context.commit('optionsSet', { list: response.data })
 				if (context.rootState.poll.type === 'datePoll') {
-					context.commit('resetEvents')
 					context.dispatch('loadEvents')
 				}
 			}, (error) => {
@@ -113,7 +112,14 @@ const actions = {
 		context.state.list.forEach(function(item) {
 			axios.post(OC.generateUrl('apps/polls/events/list/'), { from: item.pollOptionText })
 				.then((response) => {
-					context.commit('addEvents', { event: { option: item, events: response.data } })
+					if (response.data.length) {
+						context.commit('addEvents', {
+							event: {
+								timestamp: item.timestamp,
+								events: response.data
+							}
+						})
+					}
 				})
 		})
 	},

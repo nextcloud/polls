@@ -66,7 +66,8 @@ class CalendarService {
 					'description' => isset($event['objects'][0]['DESCRIPTION'][0])? $event['objects'][0]['DESCRIPTION'][0] : '',
 					'location' => isset($event['objects'][0]['LOCATION'][0]) ? $event['objects'][0]['LOCATION'][0] : '',
 					'eventFrom' => isset($event['objects'][0]['DTSTART'][0]) ? $event['objects'][0]['DTSTART'][0]->getTimestamp() : 0,
-					'eventTo' => isset($event['objects'][0]['DTEND'][0] ) ? $event['objects'][0]['DTEND'][0]->getTimestamp() : 0
+					'eventTo' => isset($event['objects'][0]['DTEND'][0] ) ? $event['objects'][0]['DTEND'][0]->getTimestamp() : 0,
+					'calDav' => $event
 				]);
 			}
 		}
