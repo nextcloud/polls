@@ -33,6 +33,7 @@ OC.L10N.register(
     "Cancel" : "Atsisakyti",
     "Apply" : "Taikyti",
     "Poll \"%n\" added" : "Pridėta apklausa \"%n\"",
+    "Voting is no more possible, because this poll expired since %n." : "Balsavimas nebeįmanomas, nes ši apklausa nuo %n nebegalioja.",
     "Error while creating Poll \"%n\"" : "Klaida kuriant apklausą \"%n\"",
     " started this poll on %n. " : " pradėjo šią apklausą %n. ",
     "Add new Poll" : "Pridėti naują apklausą",

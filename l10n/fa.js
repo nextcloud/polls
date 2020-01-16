@@ -10,7 +10,9 @@ OC.L10N.register(
     "Access" : "دسترسی",
     "Owner" : "Owner",
     "Created" : "ایجاد شده",
+    "Expires" : "منقضی می شود",
     "never" : "never",
+    "Share with" : "به اشتراک گذاشتن با",
     "Details" : "جزئیات",
     "Configuration" : "تنظیمات",
     "Shares" : "اشتراک گذاری ها",
@@ -18,7 +20,12 @@ OC.L10N.register(
     "Saved" : "ذخیره شد",
     "Description" : "توضیحات",
     "Expiration date" : "تاریخ انقضا",
+    "Title must not be empty!" : "عنوان نباید خالی باشد!",
+    "%n successfully saved" : "%nبا موفقیت ذخیره شد",
+    "Click to add a date" : "برای افزودن تاریخ کلیک کنید",
+    "Link copied to clipboard" : "پیوند در کلیپ بورد کپی شد",
     "Unknown user" : "کاربر نامعلوم",
-    "Public access" : "دسترسی عمومی"
+    "Public access" : "دسترسی عمومی",
+    "Access denied" : "دسترسی رد شد"
 },
 "nplurals=2; plural=(n > 1);");
