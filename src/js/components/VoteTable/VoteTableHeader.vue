@@ -26,11 +26,11 @@
 			{{ option.pollOptionText }}
 		</div>
 
-		<div v-if="poll.type === 'datePoll'" class="date-box">
+		<div v-if="poll.type === 'datePoll'" v-tooltip.auto="{content: tooltip}" class="date-box">
 			<div class="month">
 				{{ moment.unix(option.timestamp).format('MMM') + " '" + moment.unix(option.timestamp).format('YY') }}
 			</div>
-			<div v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="day">
+			<div class="day">
 				{{ moment.unix(option.timestamp).format('Do') }}
 			</div>
 			<div class="dow">
@@ -39,7 +39,7 @@
 			<div class="time">
 				{{ moment.unix(option.timestamp).format('LT') }}
 			</div>
-			<div v-if="calendarEvent !== undefined" v-tooltip.auto="{content: eventTooltip, classes: 'tt-left' }" class="conflict icon icon-error" />
+			<div v-if="calendarEvent !== undefined" class="conflict icon icon-error" />
 		</div>
 
 		<div class="counter">
@@ -92,10 +92,10 @@ export default {
 			'winnerCombo'
 		]),
 
-		eventTooltip() {
-			let tooltip = ''
+		tooltip() {
+			let tooltip = moment.unix(this.option.timestamp).format('llll')
 			if (this.calendarEvent !== undefined) {
-				tooltip = t('polls', 'Found calendar events:')
+				tooltip = tooltip.concat(t('polls', '\n\nFound calendar events:'))
 				this.calendarEvent.events.forEach(event => {
 					tooltip = tooltip.concat(
 						'\n',
@@ -157,16 +157,12 @@ export default {
 		color: #49bc49;
 	}
 }
-
-.tt-left {
-	text-align: left;
-}
 .conflict {
 	font-style: normal;
 	font-weight: 400;
-	width: 44px;
-	height: 44px;
-	background-size: 28px;
+	width: 32px;
+	height: 32px;
+	// background-size: 28px;
 	background-color: var(--color-warning);
 	border-radius: 50%;
 }
