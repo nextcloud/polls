@@ -30,7 +30,7 @@
 			<div class="month">
 				{{ moment.unix(option.timestamp).format('MMM') + " '" + moment.unix(option.timestamp).format('YY') }}
 			</div>
-			<div class="day">
+			<div v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="day">
 				{{ moment.unix(option.timestamp).format('Do') }}
 			</div>
 			<div class="dow">
