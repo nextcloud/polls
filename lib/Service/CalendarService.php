@@ -41,7 +41,7 @@ class CalendarService {
 	}
 
 	/**
-	 * Get a list of NC users, groups and contacts
+	 * getEvents - get events from the user's calendars inside given timespan
 	 * @NoAdminRequired
 	 * @param DateTime $from
 	 * @param DateTime $to
@@ -75,7 +75,7 @@ class CalendarService {
 	}
 
 	/**
-	 * Get a list of NC users, groups and contacts
+	 * Get user's calendars
 	 * @NoAdminRequired
 	 * @return Array
 	 */
@@ -85,27 +85,18 @@ class CalendarService {
 
 
 	/**
-	 * Get a list of NC users, groups and contacts
+	 * Get events from the user's calendar which are 2 hours before and 3 hours after the timestamp
 	 * @NoAdminRequired
+	 * @param DateTime $from
 	 * @return Array
 	 */
 	public function getEventsAround($from) {
 		$from = new DateTime($from);
 		$to = new DateTime($from);
-		$this->$logger->info('from: ' . json_encode($from->sub(new DateInterval('P2H'))));
-		$this->$logger->info('to: ' . json_encode($to->sub(new DateInterval('P2H'))));
 		return $this->getEvents(
 			$from->sub(new DateInterval('P2H')),
 			$to->add(new DateInterval('P3H'))
 		);
 	}
 
-	/**
-	 * Get a list of NC users, groups and contacts
-	 * @NoAdminRequired
-	 * @return Array
-	 */
-	public function getCalendarsTest($from, $to) {
-		return $this->getEvents(new DateTime($from),new DateTime($to));
-	}
 }

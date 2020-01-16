@@ -91,11 +91,11 @@ class SystemController extends Controller {
 	}
 
 
-	// TODO: Just for test purposes, remove after test!
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
+	 * findCalendarEvents
 	 * @NoAdminRequired
+	 * @param string $from
+	 * @param string $to
 	 * @return DataResponse
 	 */
 	public function findCalendarEvents($from, $to = null) {
