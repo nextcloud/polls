@@ -30,7 +30,7 @@
 			<div class="month">
 				{{ moment.unix(option.timestamp).format('MMM') + " '" + moment.unix(option.timestamp).format('YY') }}
 			</div>
-			<div v-tooltip.auto="moment.unix(option.timestamp).format('llll')" class="day">
+			<div class="day">
 				{{ moment.unix(option.timestamp).format('Do') }}
 			</div>
 			<div class="dow">
@@ -39,7 +39,7 @@
 			<div class="time">
 				{{ moment.unix(option.timestamp).format('LT') }}
 			</div>
-			<div v-if="calendarEvent !== undefined" class="conflict icon icon-error" />
+			<div v-if="calendarEvent !== undefined" class="conflict icon icon-calendar" />
 		</div>
 
 		<div class="counter">

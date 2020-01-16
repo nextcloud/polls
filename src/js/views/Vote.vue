@@ -117,7 +117,7 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.isLoading = false
+			this.isLoading = true
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
 				.then(() => {
 					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
