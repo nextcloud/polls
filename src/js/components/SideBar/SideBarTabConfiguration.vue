@@ -101,6 +101,15 @@ export default {
 			acl: state => state.acl
 		}),
 
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			} else {
+				return moment.localeData()._week.dow
+			}
+		},
+
 		// Add bindings
 		pollDescription: {
 			get() {
@@ -183,18 +192,6 @@ export default {
 			}
 		},
 
-		langPicker() {
-			return {
-				formatLocale: {
-					months: moment.months(),
-					monthsShort: moment.monthsShort(),
-					weekdays: moment.weekdays(),
-					weekdaysMin: moment.weekdaysMin(),
-					firstDayOfWeek: moment.localeData()._week.dow
-				}
-			}
-		},
-
 		expirationDatePicker() {
 			return {
 				editable: true,
@@ -204,12 +201,12 @@ export default {
 
 				// TODO: use this for version 2.x
 				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: moment.localeData()._week.dow,
+				firstDayOfWeek: this.firstDOW,
 
 				// TODO: use this from version 3.x on
 				// lang: {
 				// 	formatLocale: {
-				//		firstDayOfWeek: moment.localeData()._week.dow,
+				//		firstDayOfWeek: this.firstDOW,
 				// 		months: moment.months(),
 				// 		monthsShort: moment.monthsShort(),
 				// 		weekdays: moment.weekdays(),
