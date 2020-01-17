@@ -62,7 +62,7 @@
 			<div class="toggleUserActions">
 				<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
 				<div class="popovermenu" :class="{ 'open': openedMenu }">
-					<popover-menu :menu="menuItems" />
+					<PopoverMenu :menu="menuItems" />
 				</div>
 			</div>
 		</div>
@@ -87,8 +87,14 @@
 </template>
 
 <script>
+import { PopoverMenu } from '@nextcloud/vue'
+
 export default {
 	name: 'PollListItem',
+
+	components: {
+		PopoverMenu
+	},
 
 	props: {
 		header: {

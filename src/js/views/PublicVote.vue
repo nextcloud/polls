@@ -50,6 +50,7 @@
 
 <script>
 // import Comments from '../components/Comments/Comments'
+import { AppContent } from '@nextcloud/vue'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
@@ -64,6 +65,7 @@ import { mapState } from 'vuex'
 export default {
 	name: 'Vote',
 	components: {
+		AppContent,
 		ParticipantsList,
 		PollDescription,
 		PollInformation,

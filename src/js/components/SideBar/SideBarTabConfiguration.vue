@@ -56,7 +56,7 @@
 				type="checkbox" class="checkbox">
 			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
 
-			<DatePicker v-show="pollExpiration"
+			<DatetimePicker v-show="pollExpiration"
 				v-model="pollExpire" v-bind="expirationDatePicker" style="width:170px" />
 		</div>
 
@@ -82,9 +82,14 @@
 <script>
 import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import { DatetimePicker } from '@nextcloud/vue'
 
 export default {
 	name: 'SideBarTabConfiguration',
+
+	components: {
+		DatetimePicker
+	},
 
 	data() {
 		return {
