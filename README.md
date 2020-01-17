@@ -36,7 +36,7 @@ Add shared links to your poll
 View the vote page on mobiles (Turn phone to landscape to see th full table)
 ![Vote mobile portrait](screenshots/mobile-portrait.png)
 
-Only the owner can edit the poll. Granting access to admin users will be availabele in the next version.
+Only the owner can edit the poll. Granting access to admin users will be available in the next version.
 
 ## Installation / Update
 This app is supposed to work on Nextcloud version 16+.
