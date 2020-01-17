@@ -88,7 +88,7 @@ export default {
 			isLoading: false,
 			initialTab: 'comments',
 			newName: '',
-			tableMode: false
+			tableMode: true
 		}
 	},
 
