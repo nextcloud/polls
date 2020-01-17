@@ -33,9 +33,14 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { UserBubble } from '@nextcloud/vue'
 
 export default {
 	name: 'PollInformation',
+
+	components: {
+		UserBubble
+	},
 
 	computed: {
 		...mapState({

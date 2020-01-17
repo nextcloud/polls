@@ -26,7 +26,7 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Add a date option') }}
 			</label>
-			<DatePicker v-model="lastOption"
+			<DatetimePicker v-model="lastOption"
 				v-bind="optionDatePicker"
 				style="width:100%"
 				confirm
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { Multiselect } from '@nextcloud/vue'
+import { DatetimePicker, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import DatePollItem from '../Base/DatePollItem'
 
@@ -72,7 +72,8 @@ export default {
 
 	components: {
 		Multiselect,
-		DatePollItem
+		DatePollItem,
+		DatetimePicker
 	},
 
 	data() {
