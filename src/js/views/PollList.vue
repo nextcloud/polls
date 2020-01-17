@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<app-content>
+	<AppContent>
 		<div class="main-container">
 			<div v-if="noPolls" class="">
 				<div class="icon-polls" />
@@ -45,16 +45,18 @@
 		</div>
 		<loading-overlay v-if="loading" />
 		<!-- <modal-dialog /> -->
-	</app-content>
+	</AppContent>
 </template>
 
 <script>
+import { AppContent } from '@nextcloud/vue'
 import PollListItem from '../components/PollList/PollListItem'
 import { mapGetters } from 'vuex'
 export default {
 	name: 'PollList',
 
 	components: {
+		AppContent,
 		PollListItem
 	},
 
