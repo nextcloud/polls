@@ -110,7 +110,7 @@ const actions = {
 	loadEvents(context) {
 		context.commit('resetEvents')
 		context.state.list.forEach(function(item) {
-			axios.post(OC.generateUrl('apps/polls/events/list/'), { from: item.pollOptionText })
+			axios.post(OC.generateUrl('apps/polls/events/list/'), { from: item.timestamp })
 				.then((response) => {
 					if (response.data.length) {
 						context.commit('addEvents', {

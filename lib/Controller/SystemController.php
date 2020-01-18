@@ -94,23 +94,33 @@ class SystemController extends Controller {
 	/**
 	 * findCalendarEvents
 	 * @NoAdminRequired
-	 * @param string $from
-	 * @param string $to
+	 * @param integer $from
+	 * @param integer $to
 	 * @return DataResponse
 	 */
 	public function findCalendarEvents($from, $to = null) {
 
-		if (!$to) {
-			$to = new DateTime($from);
-			$to = $to->add(new DateInterval('PT1H'));
-		} elseif (!$from instanceof DateTime) {
-			$to = new DateTime($to);
+		if (is_int($from)) {
+			$searchFrom = new DateTime();
+			$searchFrom = $searchFrom->setTimestamp($from);
+		} else {
+			$searchFrom = new DateTime($from);
 		}
 
-		if (!$from instanceof DateTime) {
-			$from = new DateTime($from);
+
+		if (!$to) {
+			$searchTo = clone $searchFrom;
+			$searchTo = $searchTo->add(new DateInterval('PT1H'));
+
+		} else if (is_int($to)) {
+				$searchTo = new DateTime();
+				$searchTo = $searchTo->setTimestamp($to);
+		} else {
+			$searchTo = new DateTime($to);
 		}
-		$events = array_values($this->calendarService->getEvents($from, $to));
+
+		// $this->logger->alert('search from ' . $searchFrom->format('Y-m-d H:i') . ' to ' . $searchTo->format('Y-m-d H:i'));
+		$events = array_values($this->calendarService->getEvents($searchFrom, $searchTo));
 		return new DataResponse($events, Http::STATUS_OK);
 
 	}
