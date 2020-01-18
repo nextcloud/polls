@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent>
-		<div v-if="poll.id > 0" class="main-container">
+		<div v-if="poll.id > 0" v-show="!isLoading" class="main-container">
 			<div class="header-actions">
 				<button class="button btn primary" @click="tableMode = !tableMode">
 					<span>{{ t('polls', 'Switch view') }}</span>
@@ -33,8 +33,8 @@
 			<PollTitle />
 			<PollInformation />
 			<PollDescription />
-			<VoteList v-show="!isLoading && !tableMode && options.list.length" />
-			<VoteTable v-show="!isLoading && tableMode && options.list.length" />
+			<VoteList v-show="!tableMode && options.list.length" />
+			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
 				<p> {{ t('polls', 'There are no vote options, add some.') }}</p>
@@ -119,7 +119,7 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.isLoading = false
+			this.isLoading = true
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
 				.then(() => {
 					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
