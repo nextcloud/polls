@@ -119,7 +119,6 @@ class SystemController extends Controller {
 			$searchTo = new DateTime($to);
 		}
 
-		// $this->logger->alert('search from ' . $searchFrom->format('Y-m-d H:i') . ' to ' . $searchTo->format('Y-m-d H:i'));
 		$events = array_values($this->calendarService->getEvents($searchFrom, $searchTo));
 		return new DataResponse($events, Http::STATUS_OK);
 
