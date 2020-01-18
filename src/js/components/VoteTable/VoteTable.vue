@@ -27,9 +27,7 @@
 
 			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
-				:option="option"
-				:calendar-event="$store.state.options.events.find(event => event.timestamp === option.timestamp)"
-				:poll-type="poll.type" />
+				:option="option" />
 		</div>
 
 		<div v-for="(participant) in participants" :key="participant" :class="{currentuser: (participant === currentUser) }">

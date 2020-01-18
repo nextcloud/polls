@@ -63,14 +63,6 @@ export default {
 		option: {
 			type: Object,
 			default: undefined
-		},
-		calendarEvent: {
-			type: Object,
-			default: undefined
-		},
-		pollType: {
-			type: String,
-			default: undefined
 		}
 	},
 
@@ -85,12 +77,22 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			votes: state => state.votes.list
+			votes: state => state.votes.list,
+			events: state => state.options.events
 		}),
+
+		pollType() {
+			return this.poll.type
+		},
+
 		...mapGetters([
 			'votesRank',
 			'winnerCombo'
 		]),
+
+		calendarEvent() {
+			return this.events.find(event => event.timestamp === this.option.timestamp)
+		},
 
 		tooltip() {
 			let tooltip = moment.unix(this.option.timestamp).format('llll')
