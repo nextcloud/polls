@@ -48,7 +48,7 @@ OC.L10N.register(
     "Deleted polls" : "Smazané fondy",
     "Error loading polls" : "Chyba při načítání anket",
     "Clone poll" : "Klonovat anketu",
-    "Delete poll" : "Smazat fond",
+    "Delete poll" : "Smazat anketu",
     "Restore poll" : "Obnovit anketu",
     "Title" : "Název",
     "Access" : "Přístup",
