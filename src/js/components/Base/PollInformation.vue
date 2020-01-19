@@ -23,7 +23,7 @@
 <template>
 	<div class="poll-information">
 		<UserBubble :user="poll.owner" :display-name="poll.owner" />
-		{{ t('polls', ' started this poll on %n. ', 1, moment.unix(poll.created).format('LLLL')) }}
+		{{ t('polls', 'started this poll on %n. ', 1, moment.unix(poll.created).format('LLLL')) }}
 		<span v-if="expired">{{ t('polls', 'Voting is no more possible, because this poll expired since %n.', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
 		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
 		<span v-if="poll.anonymous">{{ t('polls', 'The names of other participants are hidden, as this is an anonymous poll. ') }}</span>
@@ -33,9 +33,14 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { UserBubble } from '@nextcloud/vue'
 
 export default {
 	name: 'PollInformation',
+
+	components: {
+		UserBubble
+	},
 
 	computed: {
 		...mapState({

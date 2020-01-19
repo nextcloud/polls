@@ -5,18 +5,15 @@
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/nextcloud/polls.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextcloud/polls)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](LICENSE)
 
-## This branch is in alpha state, do not use for production needs
-
 This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
-It is a rework of the already existing [polls app](https://github.com/raduvatav/polls) written by @raduvatav.
 
 **Note**: ownCloud is **no longer** supported! Last (confirmed) working version is 0.8.1 and is released in the oC marketplace.
 **Note**: IE11 users will face some CSS problems (see #541). Please change to a compatible browser (Firefox, Chrome, Edge, etc.). Or better: don't even try this browser
 
 ### Features
-- :bar_chart: Create / edit polls (datetimes _and_ texts)
+- :bar_chart: Create / edit polls (datetimes and texts)
 - :date: Set expiration date
-- :lock: Restrict access (only logged in users, certain groups / users, hidden and public)
+- :lock: Restrict access (all site users or invited users only)
 - :speech_balloon: Comments
 
 ### Bugs
@@ -27,23 +24,22 @@ Create a new poll from the navigation bar and get an overview of your polls
 ![Overview](screenshots/overview.png)
 
 Vote and comment
-![Vote](screenshots/vote.png)
+![Vote](screenshots/comment.png)
 
-Edit poll on the vote page as owner or an admin
-![Edit poll](screenshots/edit-poll.png)
-![Edit options](screenshots/edit-options.png)
+Edit poll on the vote page
+![Edit poll](screenshots/configurations.png)
+![Edit options](screenshots/options.png)
 
 Add shared links to your poll
-![Share poll](screenshots/edit-shares.png)
+![Share poll](screenshots/shares.png)
 
-View the vote page on mobiles
-![Vote mobile portrait](screenshots/vote-mobile-portrait.png)
+View the vote page on mobiles (Turn phone to landscape to see th full table)
+![Vote mobile portrait](screenshots/mobile-portrait.png)
 
-Turn phone to landscape to see details
-![Vote mobile landscape](screenshots/vote-mobile-landscape.png)
+Only the owner can edit the poll. Granting access to admin users will be available in the next version.
 
 ## Installation / Update
-This app is supposed to work on Nextcloud version 13+.
+This app is supposed to work on Nextcloud version 16+.
 
 ### Install latest release
 You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls).

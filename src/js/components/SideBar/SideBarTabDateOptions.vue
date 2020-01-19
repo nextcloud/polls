@@ -26,7 +26,7 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Add a date option') }}
 			</label>
-			<DatePicker v-model="lastOption"
+			<DatetimePicker v-model="lastOption"
 				v-bind="optionDatePicker"
 				style="width:100%"
 				confirm
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { Multiselect } from '@nextcloud/vue'
+import { DatetimePicker, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import DatePollItem from '../Base/DatePollItem'
 
@@ -72,7 +72,8 @@ export default {
 
 	components: {
 		Multiselect,
-		DatePollItem
+		DatePollItem,
+		DatetimePicker
 	},
 
 	data() {
@@ -93,6 +94,15 @@ export default {
 
 		...mapGetters(['sortedOptions']),
 
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			} else {
+				return moment.localeData()._week.dow
+			}
+		},
+
 		optionDatePicker() {
 			return {
 				editable: false,
@@ -102,12 +112,12 @@ export default {
 
 				// TODO: use this for version 2.x
 				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: moment.localeData()._week.dow,
+				firstDayOfWeek: this.firstDOW,
 
 				// TODO: use this from version 3.x on
 				// lang: {
 				// 	formatLocale: {
-				//		firstDayOfWeek: moment.localeData()._week.dow,
+				//		firstDayOfWeek: this.firstDOW,
 				// 		months: moment.months(),
 				// 		monthsShort: moment.monthsShort(),
 				// 		weekdays: moment.weekdays(),

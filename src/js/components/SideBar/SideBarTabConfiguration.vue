@@ -56,7 +56,7 @@
 				type="checkbox" class="checkbox">
 			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
 
-			<DatePicker v-show="pollExpiration"
+			<DatetimePicker v-show="pollExpiration"
 				v-model="pollExpire" v-bind="expirationDatePicker" style="width:170px" />
 		</div>
 
@@ -82,9 +82,14 @@
 <script>
 import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import { DatetimePicker } from '@nextcloud/vue'
 
 export default {
 	name: 'SideBarTabConfiguration',
+
+	components: {
+		DatetimePicker
+	},
 
 	data() {
 		return {
@@ -100,6 +105,15 @@ export default {
 			poll: state => state.poll,
 			acl: state => state.acl
 		}),
+
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			} else {
+				return moment.localeData()._week.dow
+			}
+		},
 
 		// Add bindings
 		pollDescription: {
@@ -183,18 +197,6 @@ export default {
 			}
 		},
 
-		langPicker() {
-			return {
-				formatLocale: {
-					months: moment.months(),
-					monthsShort: moment.monthsShort(),
-					weekdays: moment.weekdays(),
-					weekdaysMin: moment.weekdaysMin(),
-					firstDayOfWeek: moment.localeData()._week.dow
-				}
-			}
-		},
-
 		expirationDatePicker() {
 			return {
 				editable: true,
@@ -204,12 +206,12 @@ export default {
 
 				// TODO: use this for version 2.x
 				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: moment.localeData()._week.dow,
+				firstDayOfWeek: this.firstDOW,
 
 				// TODO: use this from version 3.x on
 				// lang: {
 				// 	formatLocale: {
-				//		firstDayOfWeek: moment.localeData()._week.dow,
+				//		firstDayOfWeek: this.firstDOW,
 				// 		months: moment.months(),
 				// 		monthsShort: moment.monthsShort(),
 				// 		weekdays: moment.weekdays(),

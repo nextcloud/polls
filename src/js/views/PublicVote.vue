@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent>
-		<div v-if="poll.id > 0" class="main-container">
+		<div v-if="poll.id > 0" v-show="!isLoading" class="main-container">
 			<div class="header-actions">
 				<button class="button btn primary" @click="tableMode = !tableMode">
 					<span>{{ t('polls', 'Switch view') }}</span>
@@ -34,8 +34,8 @@
 			<PollInformation />
 			<VoteHeaderPublic />
 			<PollDescription />
-			<VoteList v-show="!isLoading && !tableMode" />
-			<VoteTable v-show="!isLoading && tableMode" />
+			<VoteList v-show="!tableMode" />
+			<VoteTable v-show="tableMode" />
 
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
@@ -50,6 +50,7 @@
 
 <script>
 // import Comments from '../components/Comments/Comments'
+import { AppContent } from '@nextcloud/vue'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
@@ -64,6 +65,7 @@ import { mapState } from 'vuex'
 export default {
 	name: 'Vote',
 	components: {
+		AppContent,
 		ParticipantsList,
 		PollDescription,
 		PollInformation,
@@ -111,7 +113,7 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.isLoading = false
+			this.isLoading = true
 			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
 				.then(() => {
 					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
@@ -165,8 +167,6 @@ export default {
 	display: block;
 	width: 44px;
 	height: 44px;
-	right: 0;
-	position: absolute;
 }
 
 </style>
