@@ -25,43 +25,79 @@
 		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" @closeCreate="closeCreate()" />
 		<ul>
-			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
-				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
+			<AppNavigationItem
+				:title="t('polls', 'All polls')"
+				:allow-collapse="true"
+				icon="icon-folder"
+				:to="{ name: 'list', params: {type: 'all', title: t('polls', 'All polls')}}"
+				:open="true">
 				<ul>
-					<PollNavigationItems v-for="(poll) in allPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+					<AppNavigationItem
+						v-for="(poll) in allPolls"
+						:key="poll.id"
+						:title="poll.title"
+						:icon="pollIcon(poll.type)"
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'My polls')" :allow-collapse="true"
-				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
+			<AppNavigationItem
+				:title="t('polls', 'My polls')"
+				:allow-collapse="true"
+				icon="icon-user"
+				:to="{ name: 'list', params: {type: 'my', title: t('polls', 'My polls')}}"
+				:open="false">
 				<ul>
-					<PollNavigationItems v-for="(poll) in myPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+					<AppNavigationItem
+						v-for="(poll) in myPolls"
+						:key="poll.id"
+						:title="poll.title"
+						:icon="pollIcon(poll.type)"
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Public polls')" :allow-collapse="true"
-				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
+			<AppNavigationItem
+				:title="t('polls', 'Public polls')"
+				:allow-collapse="true"
+				icon="icon-link"
+				:to="{ name: 'list', params: {type: 'public', title: t('polls', 'Public polls')}}"
+				:open="false">
 				<ul>
-					<PollNavigationItems v-for="(poll) in publicPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+					<AppNavigationItem
+						v-for="(poll) in publicPolls"
+						:key="poll.id"
+						:title="poll.title"
+						:icon="pollIcon(poll.type)"
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Hidden polls')" :allow-collapse="true"
-				icon="icon-password" :to="{ name: 'list', params: {type: 'hidden'}}" :open="false">
+			<AppNavigationItem
+				:title="t('polls', 'Hidden polls')"
+				:allow-collapse="true"
+				icon="icon-password"
+				:to="{ name: 'list', params: {type: 'hidden', title: t('polls', 'Hidden polls')}}"
+				:open="false">
 				<ul>
-					<PollNavigationItems v-for="(poll) in hiddenPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+					<AppNavigationItem
+						v-for="(poll) in hiddenPolls"
+						:key="poll.id"
+						:title="poll.title"
+						:icon="pollIcon(poll.type)"
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true"
-				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
+			<AppNavigationItem
+				:title="t('polls', 'Deleted polls')"
+				:allow-collapse="true"
+				icon="icon-delete"
+				:to="{ name: 'list', params: {type: 'deleted', title: t('polls', 'Deleted polls')}}"
+				:open="false">
 				<ul>
-					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+					<AppNavigationItem
+						v-for="(poll) in deletedPolls"
+						:key="poll.id"
+						:title="poll.title"
+						:icon="pollIcon(poll.type)"
+						:to="{name: 'vote', params: {id: poll.id}}" />
 				</ul>
 			</AppNavigationItem>
 		</ul>
@@ -73,7 +109,6 @@
 import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
-import PollNavigationItems from './PollNavigationItems'
 
 export default {
 	name: 'Navigation',
@@ -81,8 +116,7 @@ export default {
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
-		CreateDlg,
-		PollNavigationItems
+		CreateDlg
 	},
 
 	data() {
@@ -113,7 +147,7 @@ export default {
 				.then(() => {
 					this.loading = false
 				})
-				.catch((error) => {
+				.catch(error => {
 					this.loading = false
 					console.error('refresh poll: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
@@ -130,26 +164,16 @@ export default {
 			this.createDlg = false
 		},
 
-		clonePoll(pollId) {
-			this.$store
-				.dispatch('clonePoll', { pollId: pollId })
-				.then((response) => {
-					this.refreshPolls()
-					this.$router.push({ name: 'vote', params: { id: response.pollId } })
-				})
-		},
-
-		switchDeleted(pollId) {
-			this.$store
-				.dispatch('switchDeleted', { pollId: pollId })
-				.then((response) => {
-					this.refreshPolls()
-				})
-
-		},
-
 		toggleCreateDlg() {
 			this.createDlg = !this.createDlg
+		},
+
+		pollIcon(type) {
+			if (type === '0') {
+				return 'icon-calendar'
+			} else {
+				return 'icon-toggle-filelist'
+			}
 		},
 
 		refreshPolls() {
@@ -171,38 +195,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="scss">
-	.config-box {
-		display: flex;
-		flex-direction: column;
-		padding: 8px;
-		& > * {
-			padding-left: 21px;
-		}
-
-		& > input {
-			margin-left: 24px;
-			width: auto;
-
-		}
-
-		& > textarea {
-			margin-left: 24px;
-			width: auto;
-			padding: 7px 6px;
-		}
-
-		& > .title {
-			display: flex;
-			background-position: 0 2px;
-			padding-left: 24px;
-			opacity: 0.7;
-			font-weight: bold;
-			margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
-		}
-	}
-</style>
