@@ -242,11 +242,13 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_polls')) {
+		if ($schema->hasTable('polls_polls') &&
+			$schema->hasTable('polls_events')) {
 			$this->migrateEvents();
 		}
 
-		if ($schema->hasTable('polls_share')) {
+		if ($schema->hasTable('polls_share') &&
+			$schema->hasTable('polls_events')) {
 			$this->copyTokens();
 		}
 	}
