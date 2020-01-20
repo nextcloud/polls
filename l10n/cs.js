@@ -39,7 +39,6 @@ OC.L10N.register(
     "Poll \"%n\" added" : "Anketa „%n“ přidána",
     "Voting is no more possible, because this poll expired since %n." : "Hlasovat už není možné, protože platnost této ankety skončila %n.",
     "Error while creating Poll \"%n\"" : "Chyba při vytváření ankety „%n“",
-    " started this poll on %n. " : "spustil(a) tuto anketu %n.",
     "Add new Poll" : "Přidat novou anketu",
     "All polls" : "Všechny ankety",
     "My polls" : "Moje ankety",

@@ -39,7 +39,6 @@ OC.L10N.register(
     "Poll \"%n\" added" : "Enquete \"%n\" adicionada",
     "Voting is no more possible, because this poll expired since %n." : "Não é mais possível votar pois esta enquete expirou em %n.",
     "Error while creating Poll \"%n\"" : "Erro ao criar a Enquete \"%n\"",
-    " started this poll on %n. " : "iniciou esta enquete em %n. ",
     "Add new Poll" : "Adicionar nova Enquete",
     "All polls" : "Todas as enquetes",
     "My polls" : "Minhas enquetes",

@@ -37,7 +37,6 @@
     "Poll \"%n\" added" : "Peiling \"%n\" toegevoegd",
     "Voting is no more possible, because this poll expired since %n." : "Stemmen is niet meer mogelijk omdat deze peiling is verlopen sinds %n.",
     "Error while creating Poll \"%n\"" : "Fout bij creëren Peiling \"%n\"",
-    " started this poll on %n. " : " startte deze peiling om %n. ",
     "Add new Poll" : "Toevoegen nieuwe peiling",
     "All polls" : "Alle peiliingen",
     "My polls" : "Mijn peilingen",

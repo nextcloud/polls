@@ -37,7 +37,6 @@
     "Poll \"%n\" added" : "Dodano sondę \"%n\"",
     "Voting is no more possible, because this poll expired since %n." : "Głosowanie nie jest już możliwe, ponieważ sonda od %n wygasła.",
     "Error while creating Poll \"%n\"" : "Błąd podczas tworzenia sondy \"%n\"",
-    " started this poll on %n. " : " rozpoczął tę sondę w %n. ",
     "Add new Poll" : "Dodaj nową sondę",
     "All polls" : "Wszystkie sondy",
     "My polls" : "Moje sondy",

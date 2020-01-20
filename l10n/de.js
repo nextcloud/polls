@@ -39,7 +39,6 @@ OC.L10N.register(
     "Poll \"%n\" added" : "Umfrage \"%n\" hinzugefügt",
     "Voting is no more possible, because this poll expired since %n." : "Abstimmen ist nicht mehr möglich, denn diese Umfrage ist seit %n beendet.",
     "Error while creating Poll \"%n\"" : "Fehler beim Erstellen der Umfrage \"%n\"",
-    " started this poll on %n. " : "hat diese Umfrage am %n gestartet",
     "Add new Poll" : "Neue Umfrage hinzufügen",
     "All polls" : "Alle Umfragen",
     "My polls" : "Meine Umfragen",

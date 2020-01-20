@@ -37,7 +37,6 @@
     "Poll \"%n\" added" : "Encuesta \"%n\" añadida",
     "Voting is no more possible, because this poll expired since %n." : "No es posible votar porque esta encuesta terminó desde: %n.",
     "Error while creating Poll \"%n\"" : "Error al crear la Encuesta \"%n\"",
-    " started this poll on %n. " : "empezó esta encuesta el: %n.",
     "Add new Poll" : "Añadir nueva Encuesta",
     "All polls" : "Todas las encuestas",
     "My polls" : "Mis encuestas",

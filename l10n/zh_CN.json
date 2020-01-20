@@ -37,7 +37,6 @@
     "Poll \"%n\" added" : "添加了投票 “%n”",
     "Voting is no more possible, because this poll expired since %n." : "无法再进行投票，因为该投票已经于 %n 过期。",
     "Error while creating Poll \"%n\"" : "创建投票 “%n” 时出错",
-    " started this poll on %n. " : "此次投票开始于 %n。",
     "Add new Poll" : "添加新的投票",
     "All polls" : "所有投票",
     "My polls" : "我的投票",

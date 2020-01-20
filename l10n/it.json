@@ -37,7 +37,6 @@
     "Poll \"%n\" added" : "Sondaggio \"%n\" aggiunto",
     "Voting is no more possible, because this poll expired since %n." : "Non è più possibile votare, poiché questo sondaggio è scaduto dal %n.",
     "Error while creating Poll \"%n\"" : "Errore durante la creazione del sondaggio \"%n\"",
-    " started this poll on %n. " : "ha avviato questo sondaggio su %n.",
     "Add new Poll" : "Aggiungi nuovo sondaggio",
     "All polls" : "Tutti i sondaggi",
     "My polls" : "I miei sondaggi",
