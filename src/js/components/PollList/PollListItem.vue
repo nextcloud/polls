@@ -22,23 +22,23 @@
 
 <template>
 	<div v-if="header" class="pollListItem header">
-		<div class="title">
+		<div class="title" @click="$emit('sortList', {sort: 'title', reverse: !reverse})">
 			{{ t('polls', 'Title') }}
 		</div>
 
-		<div class="access">
+		<div class="access" @click="$emit('sortList', {sort: 'access', reverse: !reverse})">
 			{{ t('polls', 'Access') }}
 		</div>
 
-		<div class="owner">
+		<div class="owner" @click="$emit('sortList', {sort: 'owner', reverse: !reverse})">
 			{{ t('polls', 'Owner') }}
 		</div>
 
 		<div class="dates">
-			<div class="created">
+			<div class="created" @click="$emit('sortList', {sort: 'created', reverse: !reverse})">
 				{{ t('polls', 'Created') }}
 			</div>
-			<div class="expiry">
+			<div class="expiry" @click="$emit('sortList', {sort: 'expire', reverse: !reverse})">
 				{{ t('polls', 'Expires') }}
 			</div>
 		</div>
@@ -104,6 +104,14 @@ export default {
 		poll: {
 			type: Object,
 			default: undefined
+		},
+		sort: {
+			type: String,
+			default: 'created'
+		},
+		reverse: {
+			type: Boolean,
+			default: true
 		}
 	},
 
