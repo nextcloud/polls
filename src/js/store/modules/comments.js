@@ -22,7 +22,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import sortBy from 'lodash/sortBy'
 
 const defaultComments = () => {
 	return {
@@ -49,10 +48,6 @@ const mutations = {
 }
 
 const getters = {
-	sortedComments: state => {
-		return sortBy(state.list, 'date').reverse()
-	},
-
 	countComments: state => {
 		return state.list.length
 	}
