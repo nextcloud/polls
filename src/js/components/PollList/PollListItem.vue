@@ -22,25 +22,29 @@
 
 <template>
 	<div v-if="header" class="pollListItem header">
-		<div class="title" @click="$emit('sortList', {sort: 'title', reverse: !reverse})">
+		<div class="title" @click="$emit('sortList', {sort: 'title'})">
 			{{ t('polls', 'Title') }}
+			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="access" @click="$emit('sortList', {sort: 'access', reverse: !reverse})">
+		<div class="access" @click="$emit('sortList', {sort: 'access'})">
 			{{ t('polls', 'Access') }}
+			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="owner" @click="$emit('sortList', {sort: 'owner', reverse: !reverse})">
+		<div class="owner" @click="$emit('sortList', {sort: 'owner'})">
 			{{ t('polls', 'Owner') }}
+			<span :class="['sort-indicator', { 'hidden': sort !== 'owner'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="dates">
-			<div class="created" @click="$emit('sortList', {sort: 'created', reverse: !reverse})">
-				{{ t('polls', 'Created') }}
-			</div>
-			<div class="expiry" @click="$emit('sortList', {sort: 'expire', reverse: !reverse})">
-				{{ t('polls', 'Expires') }}
-			</div>
+		<div class="created" @click="$emit('sortList', {sort: 'created'})">
+			{{ t('polls', 'Created') }}
+			<span :class="['sort-indicator', { 'hidden': sort !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+		</div>
+
+		<div class="expiry" @click="$emit('sortList', {sort: 'expire'})">
+			{{ t('polls', 'Expires') }}
+			<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 	</div>
 
@@ -75,13 +79,11 @@
 			<user-div :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
 
-		<div class="dates">
-			<div class="created ">
-				{{ moment.unix(poll.created).fromNow() }}
-			</div>
-			<div class="expiry" :class="{ expired : poll.expired }">
-				{{ timeSpanExpiration }}
-			</div>
+		<div class="created ">
+			{{ moment.unix(poll.created).fromNow() }}
+		</div>
+		<div class="expiry" :class="{ expired : poll.expired }">
+			{{ timeSpanExpiration }}
 		</div>
 	</div>
 </template>
@@ -220,19 +222,6 @@ export default {
 <style lang="scss" scoped>
 
 .pollListItem {
-	display: flex;
-	flex: 1;
-	padding-left: 8px;
-	&.header {
-		opacity: 0.5;
-		flex: auto;
-		height: 4em;
-		align-items: center;
-		margin-left: 44px;
-	}
-	&> div {
-		padding-right: 8px;
-	}
 }
 
 .icon-more {
@@ -243,46 +232,77 @@ export default {
 	width: 44px;
 }
 
-.title {
+.pollListItem {
 	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	width: 210px;
-	flex: 1 1 auto;
-	.name,
-	.description {
+	flex: 1;
+	border-bottom: 1px solid var(--color-border-dark);
+	padding: 4px 8px;
+
+	&> div {
+		padding-right: 8px;
+	}
+
+	&.header {
+		opacity: 0.5;
+		flex: auto;
+		height: 4em;
+		align-items: center;
+		padding-left: 44px;
+
+		&> div {
+			cursor: pointer;
+			display: flex;
+			&:hover {
+				.sort-indicator.hidden {
+					visibility: visible;
+					display: block;
+				}
+			}
+		}
+	}
+
+	&.poll {
+		.title {
+			flex-direction: column;
+			& > * {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+
+	.title {
+		display: flex;
+		align-items: stretch;
+		width: 210px;
+		flex: 1 0 auto;
+
+		.description {
+			opacity: 0.5;
+		}
+	}
+
+	.owner {
+		flex: 0 0 auto;
+		width: 130px;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
 
-	.description {
-		opacity: 0.5;
+	.actions {
+		width: 44px;
+		align-items: center;
+		position: relative;
 	}
-}
-
-.owner {
-	flex: 0 0 auto;
-	width: 130px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.actions {
-	width: 44px;
-	align-items: center;
-	position: relative;
-}
-
-.dates {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
 
 	.created, .expiry {
-		width: 100px;
-		flex: 1 1;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		width: 110px;
+		flex: 0 1 auto;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -321,31 +341,6 @@ export default {
 			-webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
 			mask-size: 16px;
 		}
-	}
-}
-
-@media all and (max-width: (740px)) {
-	.dates {
-		flex-direction: column;
-	}
-}
-
-@media all and (max-width: (620px)) {
-	.owner {
-		display: none;
-	}
-}
-
-@media all and (max-width: (490px)) {
-	.dates {
-		display: none;
-	}
-}
-
-@media all and (max-width: (380px)) {
-	.thumbnail.access, .access {
-		width: 140px;
-		display: none;
 	}
 }
 

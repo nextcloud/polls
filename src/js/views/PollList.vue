@@ -108,8 +108,12 @@ export default {
 
 	methods: {
 		setSort(payload) {
-			this.sort = payload.sort
-			this.reverse = payload.reverse
+			if (this.sort === payload.sort) {
+				this.reverse = !this.reverse
+			} else {
+				this.sort = payload.sort
+				this.reverse = true
+			}
 		},
 
 		callPoll(index, poll, name) {
