@@ -26,12 +26,12 @@
 			<Comments />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit" order="1" :name="t('polls', 'options')"
+		<AppSidebarTab v-if="acl.allowEdit" order="2" :name="t('polls', 'options')"
 			icon="icon-toggle-filelist">
 			<SideBarTabOptions />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit" order="2" :name="t('polls', 'Configuration')"
+		<AppSidebarTab v-if="acl.allowEdit" order="1" :name="t('polls', 'Configuration')"
 			icon="icon-settings">
 			<SideBarTabConfiguration />
 		</AppSidebarTab>
