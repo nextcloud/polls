@@ -62,14 +62,19 @@
 			</div>
 		</router-link>
 
-		<div class="actions">
-			<div class="toggleUserActions">
-				<div v-click-outside="hideMenu" class="icon-more" @click="toggleMenu" />
-				<div class="popovermenu" :class="{ 'open': openedMenu }">
-					<PopoverMenu :menu="menuItems" />
-				</div>
-			</div>
-		</div>
+		<Actions>
+			<ActionButton icon="icon-add" @click="clonePoll()">
+				{{ t('polls', 'Clone poll') }}
+			</ActionButton>
+
+			<ActionButton v-if="poll.owner === OC.getCurrentUser().uid && !poll.deleted" icon="icon-delete" @click="switchDeleted()">
+				{{ t('polls', 'Delete poll') }}
+			</ActionButton>
+
+			<ActionButton v-if="poll.owner === OC.getCurrentUser().uid && poll.deleted" icon="icon-history" @click="switchDeleted()">
+				{{ t('polls', 'Restore poll') }}
+			</ActionButton>
+		</Actions>
 
 		<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.access">
 			{{ accessType }}
@@ -89,13 +94,14 @@
 </template>
 
 <script>
-import { PopoverMenu } from '@nextcloud/vue'
+import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'PollListItem',
 
 	components: {
-		PopoverMenu
+		Actions,
+		ActionButton
 	},
 
 	props: {
@@ -153,37 +159,6 @@ export default {
 			} else {
 				return t('polls', 'never')
 			}
-		},
-
-		menuItems() {
-			const items = [
-				{
-					key: 'clonePoll',
-					icon: 'icon-add',
-					text: t('polls', 'Clone poll'),
-					action: this.clonePoll
-				}
-			]
-
-			if (this.poll.owner === OC.getCurrentUser().uid && !this.poll.deleted) {
-				items.push({
-					key: 'switchDeleted',
-					icon: 'icon-delete',
-					text: t('polls', 'Delete poll'),
-					action: this.switchDeleted
-				})
-			}
-
-			if (this.poll.deleted) {
-				items.push({
-					key: 'switchDeleted',
-					icon: 'icon-history',
-					text: t('polls', 'Restore poll'),
-					action: this.switchDeleted
-				})
-			}
-
-			return items
 		}
 	},
 
