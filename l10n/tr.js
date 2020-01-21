@@ -39,6 +39,7 @@ OC.L10N.register(
     "Poll \"%n\" added" : "\"%n\" anketi eklendi",
     "Voting is no more possible, because this poll expired since %n." : "Anket süresi %n zamanında dolduğundan artık oy verilemez.",
     "Error while creating Poll \"%n\"" : "\"%n\" anketi eklenirken sorun çıktı",
+    "started this poll on %n. " : "bu ankete %n zamanında başladı.",
     "Add new Poll" : "Anket ekle",
     "All polls" : "Tüm anketler",
     "My polls" : "Anketlerim",

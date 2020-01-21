@@ -37,6 +37,7 @@
     "Poll \"%n\" added" : "Foi engadida a enquisa «%n»",
     "Voting is no more possible, because this poll expired since %n." : "Xa non é posíbel votar, esta enquisa caducou o %n.",
     "Error while creating Poll \"%n\"" : "Produciuse un erro ao crear a enquisa «%n»",
+    "started this poll on %n. " : "esta enquisa comezou o %n.",
     "Add new Poll" : "Engadir unha nova enquisa",
     "All polls" : "Todas as enquisas",
     "My polls" : "As miñas enquisas",

@@ -17,6 +17,7 @@ OC.L10N.register(
     "Participants" : "Dalyviai",
     "No description provided" : "Nepateikta jokio aprašo",
     "The names of other participants are hidden, as this is an anonymous poll. " : "Kitų dalyvių vardai yra paslėpti, nes tai yra anoniminė apklausa.",
+    "_%n person participated in this poll until now._::_%n persons participated in this poll until now._" : ["Iki šiol, šioje apklausoje dalyvavo %n žmogus.","Iki šiol, šioje apklausoje dalyvavo %n žmonės.","Iki šiol, šioje apklausoje dalyvavo %n žmonių.","Iki šiol, šioje apklausoje dalyvavo %n žmogus."],
     "Deleted" : "Ištrinta",
     "Group" : "Grupė",
     "Place your votes until %n" : "Balsuokite iki %n",
