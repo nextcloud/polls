@@ -37,7 +37,7 @@
 			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
-				<p> {{ t('polls', 'There are no vote options, add some.') }}</p>
+				<p> {{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}</p>
 			</div>
 
 			<Subscription />
