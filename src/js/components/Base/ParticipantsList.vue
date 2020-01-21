@@ -22,9 +22,14 @@
 
 <template>
 	<div class="participants-list">
-		<h2>{{ t('polls','Participants') }}</h2>
-		<div class="participants">
-			<userDiv v-for="(participant) in participants"
+		<h2 v-if="participantsVoted.length">
+			{{ t('polls','Participants') }}
+		</h2>
+		<h2 v-else>
+			{{ t('polls','No Participants until now') }}
+		</h2>
+		<div v-if="participantsVoted.length" class="participants">
+			<userDiv v-for="(participant) in participantsVoted"
 				:key="participant"
 				:hide-names="true"
 				:user-id="participant"
@@ -53,7 +58,7 @@ export default {
 		}),
 
 		...mapGetters([
-			'participants'
+			'participantsVoted'
 		])
 
 	}

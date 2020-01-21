@@ -63,6 +63,10 @@ const getters = {
 		}
 	},
 
+	participantsVoted: (state, getters) => {
+		return [...new Set(state.list.map(item => item.userId))]
+	},
+
 	participants: (state, getters, rootState) => {
 		const list = []
 		state.list.forEach(function(vote) {
@@ -71,7 +75,7 @@ const getters = {
 			}
 		})
 
-		if (!list.includes(rootState.acl.userId) && rootState.acl.userId !== null) {
+		if (!list.includes(rootState.acl.userId) && rootState.acl.userId && rootState.acl.allowVote) {
 			list.push(rootState.acl.userId)
 		}
 
