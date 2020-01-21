@@ -23,7 +23,7 @@
 <template lang="html">
 	<AppNavigation>
 		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
-		<CreateDlg v-show="createDlg" @closeCreate="closeCreate()" />
+		<CreateDlg v-show="createDlg" ref="createDlg" @closeCreate="closeCreate()" />
 		<ul>
 			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
 				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
@@ -130,6 +130,13 @@ export default {
 			this.createDlg = false
 		},
 
+		toggleCreateDlg() {
+			this.createDlg = !this.createDlg
+			if (this.createDlg) {
+				this.$refs.createDlg.setFocus()
+			}
+		},
+
 		clonePoll(pollId) {
 			this.$store
 				.dispatch('clonePoll', { pollId: pollId })
@@ -146,10 +153,6 @@ export default {
 					this.refreshPolls()
 				})
 
-		},
-
-		toggleCreateDlg() {
-			this.createDlg = !this.createDlg
 		},
 
 		refreshPolls() {

@@ -70,7 +70,7 @@ export default {
 
 		...mapGetters([
 			'sortedOptions',
-			'participants',
+			'participantsVoted',
 			'votesRank',
 			'expired'
 		]),
@@ -100,7 +100,7 @@ export default {
 		},
 
 		noVotes(pollOptionText) {
-			return this.participants.length - this.maybeVotes(pollOptionText) - this.yesVotes(pollOptionText)
+			return this.participantsVoted.length - this.maybeVotes(pollOptionText) - this.yesVotes(pollOptionText)
 		},
 
 		setVote(option, participant) {
