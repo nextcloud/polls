@@ -153,7 +153,7 @@ class ShareController extends Controller {
 		$newShare->setType($share['type']);
 		$newShare->setPollId($share['pollId']);
 		$newShare->setUserId($share['userId']);
-		$newShare->setUserEmail($share['userEmail']);
+		$newShare->setUserEmail(isset($share['userEmail']) ? $share['userEmail'] : '' ,);
 		$newShare->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
