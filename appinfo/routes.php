@@ -24,9 +24,9 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'page#list', 'url' => '/list/{pollId}', 'verb' => 'GET'],
-		['name' => 'page#polls', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
-		['name' => 'page#vote_public', 'url' => '/s/{token}', 'verb' => 'GET'],
+		['name' => 'page#list', 'url' => '/list/{id}', 'verb' => 'GET'],
+		['name' => 'page#polls', 'url' => '/vote/{id}', 'verb' => 'GET'],
+		['name' => 'page#vote_public', 'url' => '/{command}/{token}', 'verb' => 'GET'],
 
 		['name' => 'subscription#get', 'url' => '/subscription/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'subscription#set', 'url' => '/subscription/set/', 'verb' => 'POST'],
