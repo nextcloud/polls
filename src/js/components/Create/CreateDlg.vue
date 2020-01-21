@@ -23,8 +23,8 @@
 <template lang="html">
 	<div class="create-dialog">
 		<h2>{{ t('polls', 'Create new poll') }}</h2>
-		<input id="pollTitle" v-model="title" type="text"
-			:placeholder="t('polls', 'Enter Title')">
+		<input id="pollTitle" ref="pollTitle" v-model="title"
+			type="text" :placeholder="t('polls', 'Enter Title')" @keyup.enter="confirm">
 
 		<div class="config-box">
 			<label class="title icon-checkmark">
@@ -101,6 +101,12 @@ export default {
 				.catch(() => {
 					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.poll.title), { type: 'error' })
 				})
+		},
+
+		setFocus() {
+			this.$nextTick(() => {
+				this.$refs.pollTitle.focus()
+			})
 		}
 	}
 
