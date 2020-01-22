@@ -1,11 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.1.2] - tbd
+## [1.1.3] - tbd
 
- - appstore release (no changes to 1.1.1)
+ - appstore release (no changes to 1.1.2)
 
-## [1.1.1] - 2020-01-22 (pre-release)
+## [1.1.2] - 2020-01-22 (pre-release)
 
  - autoFocus poll title in creation dialog (#757)
  - only count current user, if he actually voted (#759)
