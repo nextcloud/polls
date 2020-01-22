@@ -77,7 +77,7 @@
 				</div>
 			</li>
 		</TransitionGroup>
-		<div class="user-row user" @click="addShare({type: 'public', user: ''})">
+		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
 			<div class="avatar icon-add" />
 			<div class="user-name">
 				{{ t('polls', 'Add a public link') }}
