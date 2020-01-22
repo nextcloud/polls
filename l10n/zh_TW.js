@@ -19,6 +19,7 @@ OC.L10N.register(
     "never" : "從未",
     "Details" : "詳細資料",
     "Configuration" : "設定",
+    "Options" : "設定",
     "Shares" : "分享",
     "Saving" : "儲存中...",
     "Saved" : "已儲存",

@@ -23,6 +23,7 @@ OC.L10N.register(
     "never" : "מעולם לא",
     "Details" : "פרטים",
     "Configuration" : "הגדרות",
+    "Options" : "אפשרויות",
     "Shares" : "שיתופים",
     "Saving" : "שמירה",
     "Saved" : "נשמר",

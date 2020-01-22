@@ -13,6 +13,7 @@ OC.L10N.register(
     "never" : "никогаш",
     "Details" : "Детали",
     "Configuration" : "Конфигурација",
+    "Options" : "Опции",
     "Shares" : "Споделувања",
     "Saved" : "Зачувано",
     "Description" : "Опис",
