@@ -29,6 +29,7 @@ OC.L10N.register(
     "Share with" : "Comparteix amb",
     "Details" : "Detalls",
     "Configuration" : "Configuració",
+    "Options" : "Opcions",
     "Shares" : "Compartits",
     "Saving" : "S'està desant",
     "Saved" : "S'ha desat",
