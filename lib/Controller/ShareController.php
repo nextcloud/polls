@@ -154,7 +154,6 @@ class ShareController extends Controller {
 		$newShare->setPollId($share['pollId']);
 		$newShare->setUserId($share['userId']);
 		$newShare->setUserEmail(isset($share['userEmail']) ? $share['userEmail'] : '');
-		$newShare->setUser('');
 		$newShare->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
@@ -198,14 +197,12 @@ class ShareController extends Controller {
 			if ($userShare->getType() === 'mail') {
 				$userShare->setType('external');
 				$userShare->setUserId($userName);
-				$newShare->setUser('');
 			} elseif ($userShare->getType() === 'public') {
 
 				$userShare->setType('external');
 				$userShare->setPollId(intval($userShare->getPollId()));
 				$userShare->setUserId($userName);
 				$userShare->setUserEmail('');
-				$userShare->setUser('');
 				$userShare->setToken(\OC::$server->getSecureRandom()->generate(
 					16,
 					ISecureRandom::CHAR_DIGITS .
