@@ -196,7 +196,6 @@ class ShareController extends Controller {
 			}
 
 			if ($userShare->getType() === 'mail') {
-
 				$userShare->setType('external');
 				$userShare->setUserId($userName);
 				$newShare->setUser('');
@@ -218,14 +217,18 @@ class ShareController extends Controller {
 				return new DataResponse(['message'=> 'Wrong share type: ' . $userShare->getType()], Http::STATUS_FORBIDDEN);
 			}
 
+
 			try {
 				if ($token === $userShare->getToken()) {
+					$this->logger->debug('Update share: '. json_encode($userShare));
 					$userShare = $this->mapper->update($userShare);
 				} else {
+					$this->logger->debug('Create share: '. json_encode($userShare));
 					$userShare = $this->mapper->insert($userShare);
 				}
 
 			} catch (\Exception $e) {
+				$this->logger->debug('Exception: '. json_encode($e));
 				return new DataResponse($e, Http::STATUS_CONFLICT);
 			}
 
