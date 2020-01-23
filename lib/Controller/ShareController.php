@@ -199,12 +199,14 @@ class ShareController extends Controller {
 
 				$userShare->setType('external');
 				$userShare->setUserId($userName);
-
+				$newShare->setUser('');
 			} elseif ($userShare->getType() === 'public') {
 
 				$userShare->setType('external');
 				$userShare->setPollId(intval($userShare->getPollId()));
 				$userShare->setUserId($userName);
+				$userShare->setUserEmail('');
+				$userShare->setUser('');
 				$userShare->setToken(\OC::$server->getSecureRandom()->generate(
 					16,
 					ISecureRandom::CHAR_DIGITS .
