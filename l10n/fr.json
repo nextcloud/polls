@@ -15,6 +15,7 @@
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Une application de sondages, similaire à Doodle, avec la possibilité de restreindre l'accès.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Une application de sondages, similaire à Doodle, avec la possibilité de restreindre l'accès (membres, certains groupes/utilisateurs, caché et public).",
     "Participants" : "Participants",
+    "No Participants until now" : "Aucun participant pour l'instant",
     "No description provided" : "Aucune description fournie",
     "The names of other participants are hidden, as this is an anonymous poll. " : "Le nom des participants est masqué car ce sondage est anonyme.",
     "_%n person participated in this poll until now._::_%n persons participated in this poll until now._" : ["%n personne a répondu a ce sondage.","%n personnes ont répondu à ce sondage."],
