@@ -177,7 +177,7 @@ class MailService {
 					'language' => $defaultLang,
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
-							'polls.page.polls', array('id' => $share->getPollId())
+							'polls.page.vote_public', array('token' => $share->getToken())
 						)
 					)
 				);
