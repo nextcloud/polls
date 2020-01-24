@@ -104,6 +104,7 @@ OC.L10N.register(
     "Error saving user name" : "Erreur à l’enregistrement du nom d'utilisateur",
     "Switch view" : "Changer de vue",
     "Open Sidebar" : "Ouvrir la barre latérale",
+    "There are no vote options, add some in the options section of the right side bar." : "Il n'y a pas d'options de vote, ajoutez-en dans la section des options de la barre de droite.",
     "Public access" : "Accès public",
     "Hidden poll" : "Sondage masqué",
     "Error deleting poll." : "Erreur de suppression du sondage.",
