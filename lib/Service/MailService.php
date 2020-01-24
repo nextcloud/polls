@@ -152,20 +152,26 @@ class MailService {
 		$contactsManager = \OC::$server->getContactsManager();
 
 		if ($share->getType() === 'user') {
+			$this->logger->debug('User share ' . json_encode($share));
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
 				'eMailAddress' => null,
 				'displayName' => null,
-				'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
+				'language' => $this->config->getUserValue(
+					$share->getUserId(),
+					'core', 'lang'
+				),
 				'link' => $this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->linkToRoute(
-						'polls.page.polls', array('id' => $share->getPollId())
+						'polls.page.polls',
+						array('id' => $share->getPollId())
 					)
 				)
 			);
 
 		} elseif ($share->getType() === 'contact') {
+			$this->logger->debug('Contact share ' . json_encode($share));
 			$contacts = $contactsManager->search($share->getUserId(), array('FN'));
 			if (is_array($contacts)) {
 				$contact = $contacts[0];
@@ -177,7 +183,8 @@ class MailService {
 					'language' => $defaultLang,
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
-							'polls.page.vote_public', array('token' => $share->getToken())
+							'polls.page.vote_public',
+							array('token' => $share->getToken())
 						)
 					)
 				);
@@ -186,6 +193,7 @@ class MailService {
 			}
 
 		} elseif ($share->getType() === 'external' || $share->getType() === 'mail') {
+			$this->logger->debug('External share ' . json_encode($share));
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
@@ -194,19 +202,24 @@ class MailService {
 				'language' => $defaultLang,
 				'link' => $this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->linkToRoute(
-						'polls.page.vote_public', array('token' => $share->getToken())
+						'polls.page.vote_public',
+						array('token' => $share->getToken())
 					)
 				)
 			);
 
 		} elseif ($share->getType() === 'group') {
+			$this->logger->debug('Group share ' . json_encode($share));
 
 			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
+			$this->logger->debug('Members are ' . json_encode($groupMembers));
 
 			foreach ($groupMembers as $member) {
 				if ($skipUser === $member) {
+					$this->logger->debug('skip ' . $skipUser);
 					continue;
 				}
+				$this->logger->debug('add ' . $member);
 
 				$recipients[] = array(
 					'userId' => $member,
@@ -215,13 +228,14 @@ class MailService {
 					'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
-							'polls.page.polls', array('id' => $share->getPollId())
+							'polls.page.polls', ['id' => $share->getPollId()]
 						)
 					)
 				);
 
 			}
 		}
+		$this->logger->debug('Recipients: ' . json_encode($recipients));
 
 		return $recipients;
 	}
@@ -236,14 +250,18 @@ class MailService {
 		$owner = $this->userManager->get($poll->getOwner());
 		$sentMails = [];
 		$abortedMails = [];
-
+		$this->logger->debug('Search users for token ' . $token);
 		$recipients = $this->getRecipientsByShare(
 			$this->shareMapper->findByToken($token),
 			$this->config->getUserValue($poll->getOwner(), 'core', 'lang'),
 			$poll->getOwner()
 		);
+
+		$this->logger->debug('Found these recipients: ' . json_encode($recipients));
 		foreach ($recipients as $recipient) {
 			$trans = $this->transFactory->get('polls', $recipient['language']);
+
+			$this->logger->debug('Build eMailTemplate for  ' . $recipient['userId']);
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
 				'owner' => $owner->getDisplayName(),
@@ -269,6 +287,8 @@ class MailService {
 			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner.'));
 
 			try {
+				$this->logger->debug('Send Mail to ' . $recipient['eMailAddress']);
+
 				$this->sendMail(
 					$emailTemplate,
 					$recipient['userId'],

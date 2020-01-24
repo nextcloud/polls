@@ -163,7 +163,9 @@ class ShareController extends Controller {
 
 		try {
 			$newShare = $this->mapper->insert($newShare);
+			$this->$logger->debug('Share inserted, sending out invitation mail now.');
 			$sendResult = $this->mailService->sendInvitationMail($newShare->getToken());
+			$this->$logger->debug('Sending result ' . json_encode($sendResult));
 
 			return new DataResponse([
 				'share' => $newShare,
