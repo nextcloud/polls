@@ -6,7 +6,7 @@
     "This email is sent to you, because you are invited to vote in this poll by the poll owner." : "Elektronsko sporočilo ste prejeli, ker ste bili povabljeni k izpolnjevanju ankete.",
     "Polls App - New Activity" : "Program Ankete – nova dejavnost",
     "\"{title}\" had recent activity: " : "Na anketi » {title} « je zaznana dejavnost: ",
-    "- %s voted." : "– %s izpolni ankete.",
+    "- %s voted." : "– %s izpolni anketo",
     "- %s updated the poll configuration. Please check your votes." : "– %s posodobi nastavitve ankete. Preverite glasovanje.",
     "- %s deleted the poll." : "– %s izbriše anketo.",
     "- %s restored the poll." : "– %s obnovi anketo.",
