@@ -287,7 +287,7 @@ class MailService {
 			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner.'));
 
 			try {
-				$this->logger->debug('Send Mail to ' . $recipient['eMailAddress']);
+				$this->logger->debug('Send Mail to ' . $recipient);
 
 				$this->sendMail(
 					$emailTemplate,
