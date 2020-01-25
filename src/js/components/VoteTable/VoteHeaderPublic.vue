@@ -25,7 +25,7 @@
 		<div v-if="!isValidUser" class="getUsername">
 			<form v-if="!redirecting">
 				<input v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }" type="text"
-					:placeholder="t('polls', 'Enter a valid username with at least 3 Characters')">
+					:placeholder="t('polls', 'Enter a valid username with at least 3 Characters')" @keyup.enter="writeUserName">
 				<input v-show="isValidName && !checkingUserName" class="icon-confirm" :class="{ error: !isValidName, success: isValidName }"
 					@click="writeUserName">
 				<span v-show="checkingUserName" class="icon-loading-small" />
