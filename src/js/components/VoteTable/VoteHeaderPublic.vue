@@ -37,8 +37,8 @@
 					:placeholder="t('polls', 'Enter your name')" @keyup.enter="writeUserName">
 				<div>
 					<span v-show="checkingUserName" class="icon-loading-small">Checking user name... </span>
-					<span v-show="!checkingUserName && userName.length < 3">User name is not valid. Please enter at least 3 characters.</span>
-					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">This username is not valid, i.e. because it is already in use.</span>
+					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'User name is not valid. Please enter at least 3 characters.') }}</span>
+					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
 				</div>
 				<button class="button btn primary" :disabled="!isValidName || checkingUserName" @click="writeUserName">
 					<span>{{ t('polls', 'OK') }}</span>
