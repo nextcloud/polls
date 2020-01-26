@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
  - internal optimizations
  - in public poll ask for username in a modal
- - #779 Allow site user to vote in hidden poll via public link
+ - Allow site user to vote in hidden poll via public link (#779)
 
 ## [1.1.6] - tbd
 
