@@ -46,7 +46,6 @@ const mutations = {
 	},
 
 	removeComment(state, payload) {
-		console.log('removeComment', payload)
 		state.list = state.list.filter(comment => {
 			return comment.id !== payload.comment.id
 		})
