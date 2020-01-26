@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.1.6] - tbd
+## [1.1.6] - 2020-01-26
 
  - autoFocus poll title in creation dialog (#757)
  - only count current user, if he actually voted (#759)
