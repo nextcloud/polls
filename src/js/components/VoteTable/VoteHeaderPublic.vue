@@ -33,7 +33,7 @@
 
 				<p>{{ t('polls', 'To participate, you need to enter a valid username with at least 3 characters. ') }}</p>
 
-				<input v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }" type="text"
+				<input v-model="userName" ref="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }" type="text"
 					:placeholder="t('polls', 'Enter your name')" @keyup.enter="writeUserName">
 				<div>
 					<span v-show="checkingUserName" class="icon-loading-small">Checking user name... </span>
@@ -111,7 +111,17 @@ export default {
 		}
 	},
 
+	mounted() {
+		this.setFocus()
+	},
+
 	methods: {
+		setFocus() {
+			this.$nextTick(() => {
+				this.$refs.userName.focus()
+			})
+		},
+
 		showModal() {
 			this.modal = true
 		},
