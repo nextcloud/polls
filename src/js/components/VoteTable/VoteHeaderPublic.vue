@@ -22,38 +22,44 @@
 
 <template>
 	<div class="voteHeader">
-		<div v-if="!isValidUser" class="getUsername">
-			<form v-if="!redirecting">
-				<input v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }" type="text"
-					:placeholder="t('polls', 'Enter a valid username with at least 3 Characters')">
-				<input v-show="isValidName && !checkingUserName" class="icon-confirm" :class="{ error: !isValidName, success: isValidName }"
-					@click="writeUserName">
-				<span v-show="checkingUserName" class="icon-loading-small" />
-			</form>
-			<div v-else>
-				<span>{{ t('polls', 'You will be redirected to your personal share.') }}</span>
-				<span>
-					{{ t('polls', 'If you are not redirected to your poll click this link:') }}
-					<router-link :to="{ name: 'publicVote', params: { token: token }}">
-						Link
-					</router-link>
-				</span>
-			</div>
-		</div>
-		<div v-if="displayLink" class="personal-link">
+		<div v-show="displayLink" class="personal-link">
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
+		<Modal v-show="!isValidUser" class="modal"
+			:can-close="false">
+			<div class="modal__content">
+				<h2>{{ t('polls', 'Enter your name!') }}</h2>
+
+				<p>{{ t('polls', 'To participate, you need to enter a valid username with at least 3 characters. ') }}</p>
+
+				<input v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }" type="text"
+					:placeholder="t('polls', 'Enter your name')" @keyup.enter="writeUserName">
+				<div>
+					<span v-show="checkingUserName" class="icon-loading-small">Checking user name... </span>
+					<span v-show="!checkingUserName && userName.length < 3">User name is not valid. Please enter at least 3 characters.</span>
+					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">This username is not valid, i.e. because it is already in use.</span>
+				</div>
+				<button class="button btn primary" :disabled="!isValidName || checkingUserName" @click="writeUserName">
+					<span>{{ t('polls', 'OK') }}</span>
+				</button>
+			</div>
+		</Modal>
 	</div>
 </template>
 
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
+import { Modal } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'VoteHeaderPublic',
+
+	components: {
+		Modal
+	},
 
 	data() {
 		return {
@@ -62,7 +68,8 @@ export default {
 			checkingUserName: false,
 			redirecting: false,
 			isValidName: false,
-			newName: ''
+			newName: '',
+			modal: false
 		}
 	},
 
@@ -93,16 +100,24 @@ export default {
 
 	watch: {
 		userName: function() {
+			this.isValidName = false
 			if (this.userName.length > 2) {
+				this.checkingUserName = true
 				this.isValidName = this.validatePublicUsername()
 			} else {
 				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your user name!')
-				this.isValidName = false
+				this.checkingUserName = false
 			}
 		}
 	},
 
 	methods: {
+		showModal() {
+			this.modal = true
+		},
+		closeModal() {
+			this.modal = false
+		},
 		copyLink() {
 			this.$copyText(this.personalLink).then(
 				function() {
@@ -158,6 +173,14 @@ export default {
 <style lang="scss" scoped>
 	.voteHeader {
 		margin: 8px 24px;
+	}
+	.modal__content {
+		padding: 14px;
+		display: flex;
+		flex-direction: column;
+		input {
+			width: 100%;
+		}
 	}
 
 	.personal-link {
