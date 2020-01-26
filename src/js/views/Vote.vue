@@ -45,7 +45,6 @@
 			<Subscription />
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
-				<!-- <Comments /> -->
 			</div>
 		</div>
 
@@ -55,7 +54,6 @@
 </template>
 
 <script>
-// import Comments from '../components/Comments/Comments'
 import { AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
@@ -78,7 +76,6 @@ export default {
 		PollInformation,
 		PollTitle,
 		LoadingOverlay,
-		// Comments,
 		SideBar,
 		VoteTable,
 		VoteList

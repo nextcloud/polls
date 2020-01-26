@@ -36,6 +36,8 @@ return [
 		['name' => 'comment#writeByToken', 'url' => '/comment/write/s/', 'verb' => 'POST'],
 		['name' => 'comment#get', 'url' => '/comments/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'comment#write', 'url' => '/comment/write/', 'verb' => 'POST'],
+		['name' => 'comment#delete', 'url' => '/comment/delete/', 'verb' => 'POST'],
+		['name' => 'comment#deleteByToken', 'url' => '/comment/delete/s/', 'verb' => 'POST'],
 
 		['name' => 'vote#getByToken', 'url' => '/votes/get/s/{token}', 'verb' => 'GET'],
 		['name' => 'vote#setByToken', 'url' => '/vote/set/s/', 'verb' => 'POST'],

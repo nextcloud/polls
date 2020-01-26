@@ -43,8 +43,14 @@ const mutations = {
 
 	addComment(state, payload) {
 		state.list.push(payload)
-	}
+	},
 
+	removeComment(state, payload) {
+		console.log('removeComment', payload)
+		state.list = state.list.filter(comment => {
+			return comment.id !== payload.comment.id
+		})
+	}
 }
 
 const getters = {
@@ -74,6 +80,28 @@ const actions = {
 				console.error('Error loading comments', { error: error.response }, { payload: payload })
 				throw error
 			})
+	},
+
+	deleteComment(context, payload) {
+		let endPoint = 'apps/polls/comment/delete/'
+
+		if (context.rootState.acl.foundByToken) {
+			endPoint = endPoint.concat('s/')
+		}
+
+		return axios.post(OC.generateUrl(endPoint), {
+			token: context.rootState.acl.token,
+			comment: payload.comment
+		})
+			.then((response) => {
+				console.error('removed', response.data)
+				context.commit('removeComment', { comment: response.data.comment })
+				return response.data
+			}, (error) => {
+				console.error('Error deleting comment', { error: error.response }, { payload: payload })
+				throw error
+			})
+
 	},
 
 	setCommentAsync(context, payload) {
