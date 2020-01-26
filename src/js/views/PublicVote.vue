@@ -32,7 +32,7 @@
 			</div>
 			<PollTitle />
 			<PollInformation />
-			<VoteHeaderPublic />
+			<VoteHeaderPublic v-if="!acl.loggedIn" />
 			<PollDescription />
 			<VoteList v-show="!tableMode" />
 			<VoteTable v-show="tableMode" />
