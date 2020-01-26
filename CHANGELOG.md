@@ -1,11 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.1.3] - tbd
-
- - appstore release (no changes to 1.1.2)
-
-## [1.1.2] - 2020-01-22 (pre-release)
+## [1.1.6] - tbd
 
  - autoFocus poll title in creation dialog (#757)
  - only count current user, if he actually voted (#759)
@@ -15,6 +11,8 @@ All notable changes to this project will be documented in this file.
  - updated design according to file lists
  - Sorting polls in poll list, default creation date desc (#559 and #717)
  - updated dependencies
+ - 12-hour clock bug bug (#780)
+
 
 ## [1.0.0] - 2020-01-20
 
