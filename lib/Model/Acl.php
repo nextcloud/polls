@@ -44,6 +44,7 @@ class Acl implements JsonSerializable {
 
 	/** @var int */
 	private $pollId = 0;
+
 	/** @var ILogger */
 	private $logger;
 
@@ -115,6 +116,14 @@ class Acl implements JsonSerializable {
 	public function setUserId($userId): Acl {
 		$this->userId = $userId;
 		return $this;
+	}
+
+	/**
+	* @NoAdminRequired
+	* @return string
+	*/
+	public function getLoggedIn() {
+		return \OC::$server->getUserSession()->isLoggedIn();
 	}
 
 	/**
@@ -221,9 +230,10 @@ class Acl implements JsonSerializable {
 	 */
 	public function getAllowVote(): bool {
 		if (
-			   $this->getAllowView()
+			   ($this->getAllowView() || $this->getFoundByToken())
 			&& !$this->getExpired()
 			&& !$this->poll->getDeleted()
+
 		) {
 			return true;
 		} else {
@@ -345,6 +355,7 @@ class Acl implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return	[
 			'userId'            => $this->getUserId(),
+			'loggedIn'			=> $this->getLoggedIn(),
 			'pollId'            => $this->getPollId(),
 			'token'             => $this->getToken(),
 			'isOwner'           => $this->getIsOwner(),
