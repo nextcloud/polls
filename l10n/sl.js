@@ -61,6 +61,7 @@ OC.L10N.register(
     "Share with" : "Pošlji na",
     "Details" : "Podrobnosti",
     "Configuration" : "Nastavitve",
+    "Options" : "Možnosti",
     "Shares" : "Souporaba",
     "Saving" : "Shranjujem",
     "Saved" : "Shranjeno",
