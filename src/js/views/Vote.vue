@@ -131,18 +131,23 @@ export default {
 		loadPoll() {
 			this.isLoading = true
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
-				.then(() => {
-					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
-						.then(() => {
-							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-								this.openConfiguration()
-							}
-							this.isLoading = false
-						})
+				.then((response) => {
+					if (response.status === 200) {
+						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+							.then(() => {
+								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+									this.openConfiguration()
+								}
+								this.isLoading = false
+							})
+					} else {
+						this.$router.replace({ name: 'notfound' })
+					}
 				})
 				.catch((error) => {
 					console.error(error)
 					this.isLoading = false
+					this.$router.replace({ name: 'notfound' })
 				})
 		},
 

@@ -139,7 +139,9 @@ class PollController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 			$this->poll = $this->pollMapper->find($pollId);
-
+			if (!$this->acl->getAllowView()) {
+				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			}
 			return new DataResponse([
 				'poll' => $this->poll,
 				'acl' => $this->acl
@@ -147,7 +149,7 @@ class PollController extends Controller {
 
 		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse(null, Http::STATUS_NOT_FOUND);
  		}
  	}
 

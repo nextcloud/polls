@@ -30,6 +30,7 @@ import { generateUrl } from '@nextcloud/router'
 const List = () => import('./views/PollList')
 const Vote = () => import('./views/Vote')
 const PublicVote = () => import('./views/PublicVote')
+const NotFound = () => import('./views/NotFound')
 
 Vue.use(Router)
 
@@ -54,6 +55,13 @@ export default new Router({
 			},
 			props: true,
 			name: 'list'
+		},
+		{
+			path: '/not-found',
+			components: {
+				default: NotFound
+			},
+			name: 'notfound'
 		},
 		{
 			path: '/vote/:id',
