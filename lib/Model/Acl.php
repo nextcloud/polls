@@ -177,10 +177,11 @@ class Acl implements JsonSerializable {
 	public function getAllowView(): bool {
 		return (
 			   $this->getIsOwner()
-			|| $this->getIsAdmin()
+			|| ($this->getIsAdmin() && $this->poll->getAdminAccess())
 			|| ($this->getGroupShare() && !$this->poll->getDeleted())
 			|| ($this->getPersonalShare() && !$this->poll->getDeleted())
-			|| $this->poll->getAccess() !== 'hidden'
+			|| ($this->getPublicShare() && !$this->poll->getDeleted())
+			|| ($this->poll->getAccess() !== 'hidden' && !$this->getPublicShare())
 			);
 	}
 
@@ -217,6 +218,21 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return bool
 	 */
+	public function getPublicShare(): bool {
+
+		return count(
+			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
+				if ($item->getType() === 'public' && $item->getToken() === $this->getToken()) {
+					return true;
+				}
+			})
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
 	public function getExpired(): bool {
 		return (
 			   $this->poll->getExpire() > 0
@@ -233,6 +249,7 @@ class Acl implements JsonSerializable {
 			   ($this->getAllowView() || $this->getFoundByToken())
 			&& !$this->getExpired()
 			&& !$this->poll->getDeleted()
+			&& $this->userId
 
 		) {
 			return true;
@@ -368,6 +385,7 @@ class Acl implements JsonSerializable {
 			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
 			'groupShare'        => $this->getGroupShare(),
 			'personalShare'     => $this->getPersonalShare(),
+			'publicShare'     	=> $this->getPublicShare(),
 			'foundByToken'      => $this->getFoundByToken(),
 			'accessLevel'       => $this->getAccessLevel()
 		];
