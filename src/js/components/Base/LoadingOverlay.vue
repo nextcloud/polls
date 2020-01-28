@@ -34,14 +34,14 @@ export default {
 
 <style lang="scss">
 .loading-overlay {
-	position: absolute;
+	position: fixed;
 	left: 0;
 	top: 0;
 	width: 100%;
 	height: 100%;
 	background: #fff;
 	opacity: 0.9;
-	z-index: 1001;
+	z-index: 9999;
 	.icon-loading {
 		position: fixed;
 		left: 50%;

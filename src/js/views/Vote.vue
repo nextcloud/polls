@@ -38,10 +38,10 @@
 			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
-				<button v-if="acl.getAllowEdit" @click="openOptions">
+				<button v-if="acl.allowEdit" @click="openOptions">
 					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
 				</button>
-				<div v-if="!acl.getAllowEdit">
+				<div v-if="!acl.allowEdit">
 					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen" :active="activeTab" @closeSideBar="toggleSideBar" />
+		<SideBar v-if="sideBarOpen && !isLoading" :active="activeTab" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -92,10 +92,10 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			sideBarOpen: true,
-			isLoading: false,
+			isLoading: true,
 			initialTab: 'comments',
 			tableMode: true,
-			activeTab: t('polls', 'Comments').toLowerCase()
+			activeTab: 'comments'
 		}
 	},
 
@@ -125,12 +125,12 @@ export default {
 	methods: {
 		openOptions() {
 			this.sideBarOpen = true
-			this.activeTab = t('polls', 'Options').toLowerCase()
+			this.activeTab = 'options'
 		},
 
 		openConfiguration() {
 			this.sideBarOpen = true
-			this.activeTab = t('polls', 'Configuration').toLowerCase()
+			this.activeTab = 'configuration'
 		},
 
 		loadPoll() {
