@@ -33,6 +33,7 @@ use OCP\ILogger;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
 
 /**
@@ -80,6 +81,7 @@ class Acl implements JsonSerializable {
 	 * @param ILogger $logger
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
+	 * @param VoteMapper $voteMapper
 	 * @param ShareMapper $shareMapper
 	 * @param Poll $pollMapper
 	 *
@@ -89,6 +91,7 @@ class Acl implements JsonSerializable {
 		ILogger $logger,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
+		VoteMapper $voteMapper,
 		ShareMapper $shareMapper,
 		Poll $poll
 	) {
@@ -96,6 +99,7 @@ class Acl implements JsonSerializable {
 		$this->logger = $logger;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
+		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
 		$this->poll = $poll;
 	}
@@ -177,11 +181,13 @@ class Acl implements JsonSerializable {
 	public function getAllowView(): bool {
 		return (
 			   $this->getIsOwner()
+		    || $this->getUserHasVoted()
 			|| ($this->getIsAdmin() && $this->poll->getAdminAccess())
 			|| ($this->getGroupShare() && !$this->poll->getDeleted())
 			|| ($this->getPersonalShare() && !$this->poll->getDeleted())
 			|| ($this->getPublicShare() && !$this->poll->getDeleted())
 			|| ($this->poll->getAccess() !== 'hidden' && !$this->getPublicShare())
+
 			);
 	}
 
@@ -196,6 +202,17 @@ class Acl implements JsonSerializable {
 					return true;
 				}
 			})
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
+	public function getUserHasVoted(): bool {
+		$this->logger->alert($this->getPollId() . ' ' . $this->getUserId() . ' ' . json_encode($this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())));
+		return count(
+			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
 		);
 	}
 
@@ -383,6 +400,7 @@ class Acl implements JsonSerializable {
 			'allowEdit'         => $this->getAllowEdit(),
 			'allowSeeUsernames' => $this->getAllowSeeUsernames(),
 			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
+			'userHasVoted'		=> $this->getUserHasVoted(),
 			'groupShare'        => $this->getGroupShare(),
 			'personalShare'     => $this->getPersonalShare(),
 			'publicShare'     	=> $this->getPublicShare(),
