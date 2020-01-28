@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent>
-		<div v-if="poll.id > 0" v-show="!isLoading" class="main-container">
+		<div class="main-container">
 			<div class="header-actions">
 				<button class="button btn primary" @click="tableMode = !tableMode">
 					<span>{{ t('polls', 'Switch view') }}</span>
@@ -52,7 +52,7 @@
 			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen && !isLoading" :active="activeTab" @closeSideBar="toggleSideBar" />
+		<SideBar v-if="sideBarOpen" :active="activeTab" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -91,7 +91,7 @@ export default {
 		return {
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: true,
+			sideBarOpen: (window.innerWidth > 920),
 			isLoading: true,
 			initialTab: 'comments',
 			tableMode: true,
