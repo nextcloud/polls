@@ -27,12 +27,12 @@
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.owner === OC.getCurrentUser().uid && !poll.deleted" icon="icon-delete" @click="$emit('switchDeleted')">
-				{{ t('polls', 'Delete poll') }}
+			<ActionButton v-if="poll.allowEdit && !poll.deleted" icon="icon-delete" @click="$emit('switchDeleted')">
+				{{ (poll.isAdmin) ? t('polls', 'Delete poll as admin') : t('polls', 'Delete poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.owner === OC.getCurrentUser().uid && poll.deleted" icon="icon-history" @click="$emit('switchDeleted')">
-				{{ t('polls', 'Restore poll') }}
+			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-history" @click="$emit('switchDeleted')">
+				{{ (poll.isAdmin) ? t('polls', 'Restore poll as admin') : t('polls', 'Restore poll') }}
 			</ActionButton>
 		</template>
 	</AppNavigationItem>
