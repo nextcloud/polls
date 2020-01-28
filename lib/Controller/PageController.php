@@ -71,8 +71,14 @@ class PageController extends Controller {
 	 * @return PublicTemplateResponse
 	 */
 	public function votePublic() {
-		return new PublicTemplateResponse('polls', 'polls.tmpl', [
-			'urlGenerator' => $this->urlGenerator]);
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return new TemplateResponse('polls', 'polls.tmpl', [
+				'urlGenerator' => $this->urlGenerator]);
+		} else {
+			return new PublicTemplateResponse('polls', 'polls.tmpl', [
+				'urlGenerator' => $this->urlGenerator]);
+		}
+
 	}
 
 }

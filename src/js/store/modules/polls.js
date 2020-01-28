@@ -51,6 +51,9 @@ const getters = {
 	},
 	deletedPolls: (state) => {
 		return state.list.filter(poll => (poll.deleted))
+	},
+	participatedPolls: (state) => {
+		return state.list.filter(poll => (poll.userHasVoted))
 	}
 }
 
