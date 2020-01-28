@@ -6,10 +6,18 @@ All notable changes to this project will be documented in this file.
  - internal optimizations
  - in public poll ask for username in a modal
  - Allow site user to vote in hidden poll via public link (#779)
+ - New option: Alloy admins to edit poll
+ - Prevent deleted poll from beeing called via public link (#773)
+ - Present error page, when poll cannot be accessed (#772)
+ - Allow site user to access hidden poll, when called via public link (#779)
+ - Give permant access to votes, the user voted in
+ - New filter: participated - Polls, where the user participated in
+ - delete comments (#193)
+ - Enter user name in public shared polls in a modal
+ - fixed routing error in NC16 (#787)
 
-## [1.1.6] - tbd
+## [1.1.6] - 2020-01-26
 
- - appstore release (no changes to 1.1.2)
  - autoFocus poll title in creation dialog (#757)
  - only count current user, if he actually voted (#759)
  - redirect old public polls routes to new route (#761)
