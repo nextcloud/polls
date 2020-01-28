@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
  - delete comments (#193)
  - Enter user name in public shared polls in a modal
  - fixed routing error in NC16 (#787)
+ - load subscription on route change (#788)
 
 ## [1.1.6] - 2020-01-26
 

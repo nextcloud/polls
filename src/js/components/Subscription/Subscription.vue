@@ -49,7 +49,7 @@ export default {
 			}
 		}
 	},
-	
+
 	watch: {
 		$route() {
 			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
