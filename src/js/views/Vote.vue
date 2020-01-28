@@ -32,17 +32,21 @@
 			</div>
 			<PollTitle />
 			<PollInformation />
+			<VoteHeaderPublic v-if="!OC.currentUser" />
 			<PollDescription />
 			<VoteList v-show="!tableMode && options.list.length" />
 			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
-				<button @click="openOptions">
+				<button v-if="acl.getAllowEdit" @click="openOptions">
 					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
 				</button>
+				<div v-if="!acl.getAllowEdit">
+					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
+				</div>
 			</div>
 
-			<Subscription />
+			<Subscription v-if="OC.currentUser" />
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
 			</div>
@@ -61,6 +65,7 @@ import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
 import PollTitle from '../components/Base/PollTitle'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
+import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
@@ -76,6 +81,7 @@ export default {
 		PollInformation,
 		PollTitle,
 		LoadingOverlay,
+		VoteHeaderPublic,
 		SideBar,
 		VoteTable,
 		VoteList
@@ -85,10 +91,9 @@ export default {
 		return {
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: false,
+			sideBarOpen: true,
 			isLoading: false,
 			initialTab: 'comments',
-			newName: '',
 			tableMode: true,
 			activeTab: t('polls', 'Comments').toLowerCase()
 		}
@@ -130,10 +135,10 @@ export default {
 
 		loadPoll() {
 			this.isLoading = true
-			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
+			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
 					if (response.status === 200) {
-						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
+						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
 							.then(() => {
 								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
 									this.openConfiguration()

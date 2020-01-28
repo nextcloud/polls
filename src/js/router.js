@@ -29,7 +29,6 @@ import { generateUrl } from '@nextcloud/router'
 // Dynamic loading
 const List = () => import('./views/PollList')
 const Vote = () => import('./views/Vote')
-const PublicVote = () => import('./views/PublicVote')
 const NotFound = () => import('./views/NotFound')
 
 Vue.use(Router)
@@ -78,7 +77,7 @@ export default new Router({
 		{
 			path: '/s/:token',
 			components: {
-				default: PublicVote
+				default: Vote
 			},
 			props: true,
 			name: 'publicVote'
