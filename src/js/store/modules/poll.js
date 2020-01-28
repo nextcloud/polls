@@ -100,9 +100,11 @@ const actions = {
 			.then((response) => {
 				context.commit('setPoll', { poll: response.data.poll })
 				context.commit('acl/setAcl', { acl: response.data.acl })
+				return response
 			}, (error) => {
-				if (error.response.status !== '404') {
-					console.error('Error loading poll', { error: error.response }, { payload: payload })
+				if (error.response.status !== '404' && error.response.status !== '401') {
+					console.debug('Error loading poll', { error: error.response }, { payload: payload })
+					return error.response
 				}
 				throw error
 			})

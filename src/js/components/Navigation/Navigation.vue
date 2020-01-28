@@ -41,6 +41,14 @@
 				</ul>
 			</AppNavigationItem>
 
+			<AppNavigationItem :title="t('polls', 'Participated')" :allow-collapse="true"
+				icon="icon-user" :to="{ name: 'list', params: {type: 'participated'}}" :open="false">
+				<ul>
+					<PollNavigationItems v-for="(poll) in participatedPolls" :key="poll.id" :poll="poll"
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+				</ul>
+			</AppNavigationItem>
+
 			<AppNavigationItem :title="t('polls', 'Public polls')" :allow-collapse="true"
 				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
 				<ul>
@@ -97,6 +105,7 @@ export default {
 			'myPolls',
 			'publicPolls',
 			'hiddenPolls',
+			'participatedPolls',
 			'deletedPolls'
 		]),
 
