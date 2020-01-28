@@ -22,6 +22,10 @@
 
 <template>
 	<div>
+		<div v-if="acl.isAdmin" class="config-box">
+			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
+		</div>
+
 		<SideBarTabDateOptions v-if="acl.allowEdit && poll.type === 'datePoll'" />
 		<SideBarTabTextOptions v-if="acl.allowEdit && poll.type === 'textPoll'" />
 	</div>

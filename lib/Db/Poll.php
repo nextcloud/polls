@@ -131,7 +131,7 @@ class Poll extends Entity implements JsonSerializable {
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
 			'showResults' => $this->showResults,
-			'adminAccess' => $this->adminAccess
+			'adminAccess' => intVal($this->adminAccess)
 		];
 	}
 }

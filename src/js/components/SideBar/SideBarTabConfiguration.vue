@@ -22,9 +22,8 @@
 
 <template>
 	<div>
-		<div class="config-box">
-			<label v-if="writingPoll" class="icon-loading-small title"> {{ t('polls', 'Saving') }} </label>
-			<label v-else class="icon-checkmark title"> {{ t('polls', 'Saved') }} </label>
+		<div v-if="acl.isAdmin" class="config-box">
+			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
 		</div>
 
 		<div v-if="acl.allowEdit" class="config-box">
@@ -39,6 +38,10 @@
 
 		<div class="config-box">
 			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
+
+			<input v-if="!acl.isAdmin" id="adminAccess" v-model="pollAdminAccess"
+				type="checkbox" class="checkbox">
+			<label v-if="!acl.isAdmin" for="adminAccess" class="title"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
 
 			<input id="allowMaybe" v-model="pollAllowMaybe"
 				type="checkbox" class="checkbox">
@@ -182,6 +185,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ anonymous: value })
+			}
+		},
+
+		pollAdminAccess: {
+			get() {
+				return (this.poll.adminAccess > 0)
+			},
+			set(value) {
+				this.writeValue({ adminAccess: value })
 			}
 		},
 
