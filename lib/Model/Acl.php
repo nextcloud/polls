@@ -181,14 +181,15 @@ class Acl implements JsonSerializable {
 	public function getAllowView(): bool {
 		return (
 			   $this->getIsOwner()
-		    || $this->getUserHasVoted()
 			|| ($this->getIsAdmin() && $this->poll->getAdminAccess())
-			|| ($this->getGroupShare() && !$this->poll->getDeleted())
-			|| ($this->getPersonalShare() && !$this->poll->getDeleted())
-			|| ($this->getPublicShare() && !$this->poll->getDeleted())
-			|| ($this->poll->getAccess() !== 'hidden' && !$this->getPublicShare())
-
-			);
+			|| !$this->poll->getDeleted() && (
+				   $this->getUserHasVoted()
+				|| $this->getGroupShare()
+				|| $this->getPersonalShare()
+				|| $this->getPublicShare()
+				|| ($this->poll->getAccess() !== 'hidden' && !$this->getPublicShare())
+			)
+		);
 	}
 
 	/**
