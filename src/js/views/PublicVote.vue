@@ -32,7 +32,7 @@
 			</div>
 			<PollTitle />
 			<PollInformation />
-			<VoteHeaderPublic v-if="!acl.loggedIn" />
+			<VoteHeaderPublic v-if="!OC.currentUser" />
 			<PollDescription />
 			<VoteList v-show="!tableMode" />
 			<VoteTable v-show="tableMode" />
@@ -115,15 +115,20 @@ export default {
 		loadPoll() {
 			this.isLoading = true
 			this.$store.dispatch('loadPollMain', { token: this.$route.params.token })
-				.then(() => {
-					this.$store.dispatch('loadPoll', { token: this.$route.params.token })
-						.then(() => {
-							this.isLoading = false
-						})
+				.then((response) => {
+					if (response.status === 200) {
+						this.$store.dispatch('loadPoll', { token: this.$route.params.token })
+							.then(() => {
+								this.isLoading = false
+							})
+					} else {
+						this.$router.replace({ name: 'notfound' })
+					}
 				})
 				.catch((error) => {
 					console.error(error)
 					this.isLoading = false
+					this.$router.replace({ name: 'notfound' })
 				})
 		},
 

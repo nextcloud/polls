@@ -210,7 +210,6 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getUserHasVoted(): bool {
-		$this->logger->alert($this->getPollId() . ' ' . $this->getUserId() . ' ' . json_encode($this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())));
 		return count(
 			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
 		);
