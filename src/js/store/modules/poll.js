@@ -87,7 +87,7 @@ const getters = {
 const actions = {
 
 	loadPollMain(context, payload) {
-		let endPoint = 'apps/polls/poll/get/'
+		let endPoint = 'apps/polls/polls/get/'
 		if (payload.token) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId) {
@@ -111,7 +111,7 @@ const actions = {
 	},
 
 	writePollPromise(context) {
-		const endPoint = 'apps/polls/poll/write/'
+		const endPoint = 'apps/polls/polls/write/'
 		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
 				context.commit('setPoll', { poll: response.data.poll })

@@ -59,7 +59,7 @@ const getters = {
 
 const actions = {
 	loadPolls(context) {
-		const endPoint = 'apps/polls/poll/list/'
+		const endPoint = 'apps/polls/polls/list/'
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
@@ -71,7 +71,7 @@ const actions = {
 	},
 
 	switchDeleted(context, payload) {
-		const endPoint = 'apps/polls/poll/delete/'
+		const endPoint = 'apps/polls/polls/delete/'
 		return axios.get(OC.generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response
@@ -82,7 +82,7 @@ const actions = {
 	},
 
 	clonePoll(context, payload) {
-		const endPoint = 'apps/polls/poll/clone/'
+		const endPoint = 'apps/polls/polls/clone/'
 		return axios.get(OC.generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response.data

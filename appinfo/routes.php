@@ -52,12 +52,12 @@ return [
 		['name' => 'option#remove', 'url' => '/option/remove/', 'verb' => 'POST'],
 		['name' => 'option#getByToken', 'url' => '/options/get/s/{token}', 'verb' => 'GET'],
 
-		['name' => 'poll#list', 'url' => '/poll/list/', 'verb' => 'GET'],
-		['name' => 'poll#get', 'url' => '/poll/get/{pollId}', 'verb' => 'GET'],
-		['name' => 'poll#delete', 'url' => '/poll/delete/{pollId}', 'verb' => 'GET'],
-		['name' => 'poll#write', 'url' => '/poll/write/', 'verb' => 'POST'],
-		['name' => 'poll#clone', 'url' => '/poll/clone/{pollId}', 'verb' => 'get'],
-		['name' => 'poll#getByToken', 'url' => '/poll/get/s/{token}', 'verb' => 'GET'],
+		['name' => 'poll#list', 'url' => '/polls/list/', 'verb' => 'GET'],
+		['name' => 'poll#get', 'url' => '/polls/get/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#delete', 'url' => '/polls/delete/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#write', 'url' => '/polls/write/', 'verb' => 'POST'],
+		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'get'],
+		['name' => 'poll#getByToken', 'url' => '/polls/get/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/share/write/', 'verb' => 'POST'],
