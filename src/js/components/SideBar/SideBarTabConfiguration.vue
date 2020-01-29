@@ -203,9 +203,6 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ allowMaybe: value })
-				if (value) {
-					this.writeValue({ options: ['yes', 'no', 'maybe'] })
-				}
 			}
 		},
 
