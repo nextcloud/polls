@@ -142,11 +142,14 @@ class CommentController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param int $pollId
+	 * @param string $userId
 	 * @param string $message
 	 * @return DataResponse
 	 */
 	public function write($pollId, $userId, $message) {
+		$this->logger->alert('write');
 		if (!\OC::$server->getUserSession()->isLoggedIn() && !$this->acl->getFoundByToken()) {
+			$this->logger->alert('not allowed ' . json_encode(\OC::$server->getUserSession()->isLoggedIn()));
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
@@ -155,7 +158,6 @@ class CommentController extends Controller {
 		}
 
 		if ($this->acl->getAllowComment()) {
-			// code...
 			$comment = new Comment();
 			$comment->setPollId($pollId);
 			$comment->setUserId($userId);
@@ -166,13 +168,16 @@ class CommentController extends Controller {
 			try {
 				$comment = $this->mapper->insert($comment);
 			} catch (\Exception $e) {
+				$this->logger->alert('conflict ' . json_encode($e));
 				return new DataResponse($e, Http::STATUS_CONFLICT);
 			}
 		} else {
+			$this->logger->alert('unauthorized ');
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
 
+		$this->logger->alert('ok '. json_encode($comment));
 		return new DataResponse($comment, Http::STATUS_OK);
 
 	}
