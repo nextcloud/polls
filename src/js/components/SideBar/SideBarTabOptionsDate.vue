@@ -68,7 +68,7 @@ import { mapGetters, mapState } from 'vuex'
 import PollItemDate from '../Base/PollItemDate'
 
 export default {
-	name: 'SideBarTabDateOptions',
+	name: 'SideBarTabOptionsDate',
 
 	components: {
 		Multiselect,

@@ -43,7 +43,7 @@
 import { mapGetters, mapState } from 'vuex'
 import PollItemText from '../Base/PollItemText'
 export default {
-	name: 'SideBarTabTextOptions',
+	name: 'SideBarTabOptionsText',
 
 	components: {
 		PollItemText
