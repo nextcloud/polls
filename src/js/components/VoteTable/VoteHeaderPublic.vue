@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="voteHeader">
+	<div v-if="poll.id" class="voteHeader">
 		<div v-show="displayLink" class="personal-link">
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
