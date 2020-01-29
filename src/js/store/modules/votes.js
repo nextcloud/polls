@@ -64,21 +64,42 @@ const getters = {
 	},
 
 	participantsVoted: (state, getters) => {
-		return [...new Set(state.list.map(item => item.userId))]
+		// return [...new Set(state.list.map(item => item.userId))]
+		const list = []
+		const map = new Map()
+		for (const item of state.list) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				list.push({
+					userId: item.userId,
+					displayName: item.displayName
+				})
+			}
+		}
+		return list
 	},
 
 	participants: (state, getters, rootState) => {
 		const list = []
-		state.list.forEach(function(vote) {
-			if (!list.includes(vote.userId)) {
-				list.push(vote.userId)
+		const map = new Map()
+		for (const item of state.list) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				list.push({
+					userId: item.userId,
+					displayName: item.displayName,
+					voted: true
+				})
 			}
-		})
-
-		if (!list.includes(rootState.acl.userId) && rootState.acl.userId && rootState.acl.allowVote) {
-			list.push(rootState.acl.userId)
 		}
 
+		if (!map.has(rootState.acl.userId) && rootState.acl.userId && rootState.acl.allowVote) {
+			list.push({
+				userId: rootState.acl.userId,
+				displayName: rootState.acl.displayName,
+				voted: false
+			})
+		}
 		return list
 	},
 
@@ -152,7 +173,6 @@ const actions = {
 	},
 
 	setVoteAsync(context, payload) {
-
 		let endPoint = 'apps/polls/vote/set/'
 
 		if (context.rootState.acl.foundByToken) {

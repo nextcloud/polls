@@ -22,13 +22,15 @@
 
 <template lang="html">
 	<div class="comment">
-		<user-div :user-id="currentUser" />
+		<user-div :user-id="currentUser" :display-name="$store.state.acl.DisplayName" />
 
-		<form class="commentAdd" name="send-comment" @submit="writeComment">
-			<input v-model="comment" class="message" data-placeholder="New Comment ...">
-			<button v-show="!isLoading" type="submit" class="submit-comment icon-confirm" />
+		<div class="commentAdd" name="send-comment" @submit="writeComment">
+			<input v-model="comment" class="message" data-placeholder="New Comment ..."
+				@keyup.enter="writeComment">
+			<button v-show="!isLoading" class="submit-comment icon-confirm"
+				@click="writeComment" />
 			<span v-show="isLoading" class="icon-loading-small" style="float:right;" />
-		</form>
+		</div>
 	</div>
 </template>
 

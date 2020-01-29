@@ -169,7 +169,9 @@ export default {
 		shareDisplayName(share) {
 			let displayName = ''
 
-			if (share.type === 'user' || share.type === 'contact' || share.type === 'external') {
+			if (share.type === 'user') {
+				displayName = share.displayName
+			} else if (share.type === 'contact' || share.type === 'external') {
 				displayName = share.userId
 				if (share.userEmail) {
 					displayName = displayName + ' (' + share.userEmail + ')'

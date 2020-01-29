@@ -30,6 +30,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IGroupManager;
 use OCP\ILogger;
+use OCP\IUser;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\PollMapper;
@@ -111,6 +112,20 @@ class Acl implements JsonSerializable {
 	 */
 	 public function getUserId() {
 		return $this->userId;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return string
+	 */
+	public function getDisplayName() {
+		$this->userManager = \OC::$server->getUserManager();
+
+		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
+			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+		} else {
+			return $this->userId;
+		}
 	}
 
 	/**
@@ -389,6 +404,7 @@ class Acl implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return	[
 			'userId'            => $this->getUserId(),
+			'displayName'       => $this->getDisplayName(),
 			'loggedIn'			=> $this->getLoggedIn(),
 			'pollId'            => $this->getPollId(),
 			'token'             => $this->getToken(),

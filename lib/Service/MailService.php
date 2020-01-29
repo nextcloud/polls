@@ -164,7 +164,7 @@ class MailService {
 				),
 				'link' => $this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->linkToRoute(
-						'polls.page.polls',
+						'polls.page.indexvote',
 						array('id' => $share->getPollId())
 					)
 				)
@@ -183,7 +183,7 @@ class MailService {
 					'language' => $defaultLang,
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
-							'polls.page.vote_public',
+							'polls.page.vote_publicpublic',
 							array('token' => $share->getToken())
 						)
 					)
@@ -202,7 +202,7 @@ class MailService {
 				'language' => $defaultLang,
 				'link' => $this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->linkToRoute(
-						'polls.page.vote_public',
+						'polls.page.vote_publicpublic',
 						array('token' => $share->getToken())
 					)
 				)
@@ -228,7 +228,7 @@ class MailService {
 					'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
-							'polls.page.polls', ['id' => $share->getPollId()]
+							'polls.page.indexvote', ['id' => $share->getPollId()]
 						)
 					)
 				);
@@ -327,7 +327,7 @@ class MailService {
 
 			$url = $this->urlGenerator->getAbsoluteURL(
 				$this->urlGenerator->linkToRoute(
-					'polls.page.polls',
+					'polls.page.indexvote',
 					array('id' => $subscription->getPollId())
 				)
 			);
