@@ -93,7 +93,6 @@ const actions = {
 			comment: payload.comment
 		})
 			.then((response) => {
-				console.error('removed', response.data)
 				context.commit('removeComment', { comment: response.data.comment })
 				return response.data
 			}, (error) => {
