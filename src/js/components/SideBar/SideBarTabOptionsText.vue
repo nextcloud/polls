@@ -26,7 +26,9 @@
 			<label class="title icon-toggle-filelist">
 				{{ t('polls', 'Add a new text option') }}
 			</label>
-			<input v-model="newPollText" :placeholder=" t('polls', 'Enter option text and press Enter') " @keyup.enter="addOption(newPollText)">
+
+			<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
+				@input="addOption()" />
 		</div>
 
 		<ul class="config-box poll-table">
@@ -42,10 +44,13 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import PollItemText from '../Base/PollItemText'
+import InputDiv from '../Base/InputDiv'
+
 export default {
 	name: 'SideBarTabOptionsText',
 
 	components: {
+		InputDiv,
 		PollItemText
 	},
 
@@ -65,12 +70,14 @@ export default {
 
 	methods: {
 
-		addOption(pollOptionText) {
-			if (pollOptionText !== '') {
+		addOption() {
+			if (this.newPollText) {
 				this.$store.dispatch('addOptionAsync', {
-					pollOptionText: pollOptionText
+					pollOptionText: this.newPollText
 				})
-				this.newPollText = ''
+					.then(() => {
+						this.newPollText = ''
+					})
 			}
 		},
 
@@ -86,49 +93,68 @@ export default {
 </script>
 
 <style lang="scss">
-.config-box {
+	.config-box {
 
-	&.poll-table > li {
-		border-bottom-color: rgb(72, 72, 72);
-		margin-left: 18px;
-	}
-
-}
-
-.poll-table {
-	> li {
-		display: flex;
-		align-items: center;
-		padding-left: 8px;
-		padding-right: 8px;
-		line-height: 2em;
-		min-height: 4em;
-		border-bottom: 1px solid var(--color-border);
-		overflow: hidden;
-		white-space: nowrap;
-
-		&:active,
-		&:hover {
-			transition: var(--background-dark) 0.3s ease;
-			background-color: var(--color-background-dark); //$hover-color;
+		&.poll-table > li {
+			border-bottom-color: rgb(72, 72, 72);
+			margin-left: 18px;
 		}
 
-		> div {
+	}
+	.optionAdd {
+		display: flex;
+	}
+
+	.newOption {
+		margin-left: 40px;
+		flex: 1;
+		&:empty:before {
+			color: grey;
+		}
+	}
+
+	.submit-option {
+		width: 30px;
+		background-color: transparent;
+		border: none;
+		opacity: 0.3;
+		cursor: pointer;
+	}
+
+	.poll-table {
+		> li {
 			display: flex;
-			flex: 1;
-			font-size: 1.2em;
-			opacity: 0.7;
-			white-space: normal;
-			padding-right: 4px;
-			&.avatar {
-				flex: 0;
+			align-items: center;
+			padding-left: 8px;
+			padding-right: 8px;
+			line-height: 2em;
+			min-height: 4em;
+			border-bottom: 1px solid var(--color-border);
+			overflow: hidden;
+			white-space: nowrap;
+
+			&:active,
+			&:hover {
+				transition: var(--background-dark) 0.3s ease;
+				background-color: var(--color-background-dark); //$hover-color;
+			}
+
+			> div {
+				display: flex;
+				flex: 1;
+				font-size: 1.2em;
+				opacity: 0.7;
+				white-space: normal;
+				padding-right: 4px;
+				&.avatar {
+					flex: 0;
+				}
+			}
+
+			> div:nth-last-child(1) {
+				justify-content: center;
+				flex: 0 0;
 			}
 		}
-
-		> div:nth-last-child(1) {
-			justify-content: center;
-			flex: 0 0;
-		}
 	}
-}
 </style>

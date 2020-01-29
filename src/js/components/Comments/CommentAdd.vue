@@ -22,21 +22,23 @@
 
 <template lang="html">
 	<div class="comment">
-		<user-div :user-id="currentUser" :display-name="$store.state.acl.DisplayName" />
-
-		<div class="commentAdd" name="send-comment" @submit="writeComment">
-			<input v-model="comment" class="message" data-placeholder="New Comment ..."
-				@keyup.enter="writeComment">
-			<button v-show="!isLoading" class="submit-comment icon-confirm"
-				@click="writeComment" />
-			<span v-show="isLoading" class="icon-loading-small" style="float:right;" />
-		</div>
+		<UserDiv :user-id="acl.userId" :focus="true" :display-name="acl.DisplayName" />
+		<InputDiv v-model="comment" class="addComment" :placeholder="t('polls', 'New Comment ...')"
+			@input="writeComment()" />
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import InputDiv from '../Base/InputDiv'
+
 export default {
 	name: 'CommentAdd',
+
+	components: {
+		InputDiv
+	},
+
 	data() {
 		return {
 			comment: '',
@@ -45,6 +47,10 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			acl: state => state.acl
+		}),
+
 		currentUser() {
 			return this.$store.state.acl.userId
 		}
@@ -52,19 +58,20 @@ export default {
 
 	methods: {
 		writeComment() {
-			this.isLoading = true
-			this.$store.dispatch('setCommentAsync', { message: this.comment })
-				.then(() => {
-					this.isLoading = false
-					OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
-					this.comment = ''
-					this.isLoading = false
-				})
-				.catch((error) => {
-					this.isLoading = false
-					console.error('Error while saving comment - Error: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })
-				})
+			if (this.comment) {
+				this.isLoading = true
+				this.$store.dispatch('setCommentAsync', { message: this.comment })
+					.then(() => {
+						this.isLoading = false
+						OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
+						this.comment = ''
+					})
+					.catch((error) => {
+						this.isLoading = false
+						console.error('Error while saving comment - Error: ', error.response)
+						OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })
+					})
+			}
 
 		}
 	}
@@ -74,27 +81,9 @@ export default {
 <style lang="scss" scoped>
 	.comment {
 		margin-bottom: 30px;
-	}
-
-	.commentAdd {
-		display: flex;
-	}
-
-	.message {
-		margin-left: 40px;
-		flex: 1;
-		&:empty:before {
-			content: attr(data-placeholder);
-			color: grey;
+		.addComment {
+			margin-left: 40px;
 		}
-	}
-
-	.submit-comment {
-		width: 30px;
-		background-color: transparent;
-		border: none;
-		opacity: 0.3;
-		cursor: pointer;
 	}
 
 	.icon-loading-small {
