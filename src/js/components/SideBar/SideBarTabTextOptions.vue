@@ -33,7 +33,7 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<TextPollItem v-for="(option) in sortedOptions" :key="option.id" :option="option"
+			<PollItemText v-for="(option) in sortedOptions" :key="option.id" :option="option"
 				@remove="removeOption(option)" />
 		</ul>
 	</div>
@@ -41,12 +41,12 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import TextPollItem from '../Base/TextPollItem'
+import PollItemText from '../Base/PollItemText'
 export default {
 	name: 'SideBarTabTextOptions',
 
 	components: {
-		TextPollItem
+		PollItemText
 	},
 
 	data() {

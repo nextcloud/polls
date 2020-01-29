@@ -21,10 +21,10 @@
   -->
 
 <template>
-	<li class="poll-item text">
-		<div>{{ option.pollOptionText }}</div>
+	<li class="poll-item date">
+		<div>{{ moment.unix(option.timestamp).format('LLLL') }}</div>
 		<div>
-			<a v-if="acl.allowEdit" class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
+			<a v-if="acl.allowEdit" class="icon-delete" @click="$emit('remove')" />
 		</div>
 	</li>
 </template>
@@ -33,7 +33,7 @@
 import { mapState } from 'vuex'
 
 export default {
-	name: 'TextPollItem',
+	name: 'PollItemDate',
 
 	props: {
 		option: {
