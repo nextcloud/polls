@@ -260,7 +260,7 @@ export default {
 
 	.owner {
 		flex: 0 0 auto;
-		width: 130px;
+		width: 230px;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
