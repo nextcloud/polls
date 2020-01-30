@@ -26,16 +26,14 @@
 			<div v-if="noPolls" class="">
 				<div class="icon-polls" />
 				<h2> {{ t('No existing polls.') }} </h2>
-				<router-link :to="{ name: 'create'}" class="button new">
-					<span>{{ t('polls', 'Click here to add a poll') }}</span>
-				</router-link>
 			</div>
 
 			<transition-group v-if="!noPolls" name="list" tag="div"
 				class="table">
-				<PollListItem key="0" :header="true" />
+				<PollListItem key="0" :header="true"
+					:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
 				<li is="PollListItem"
-					v-for="(poll, index) in filteredList"
+					v-for="(poll, index) in sortedList"
 					:key="poll.id"
 					:poll="poll"
 					@deletePoll="removePoll(index, poll)"
@@ -43,7 +41,7 @@
 					@clonePoll="callPoll(index, poll, 'clone')" />
 			</transition-group>
 		</div>
-		<loading-overlay v-if="loading" />
+		<LoadingOverlay v-if="isLoading" />
 		<!-- <modal-dialog /> -->
 	</AppContent>
 </template>
@@ -52,6 +50,8 @@
 import { AppContent } from '@nextcloud/vue'
 import PollListItem from '../components/PollList/PollListItem'
 import { mapGetters } from 'vuex'
+import sortBy from 'lodash/sortBy'
+
 export default {
 	name: 'PollList',
 
@@ -63,7 +63,9 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			loading: true
+			isLoading: true,
+			sort: 'created',
+			reverse: true
 		}
 	},
 
@@ -88,6 +90,14 @@ export default {
 			} else {
 				return this.allPolls
 			}
+		},
+
+		sortedList() {
+			if (this.reverse) {
+				return sortBy(this.filteredList, this.sort).reverse()
+			} else {
+				return sortBy(this.filteredList, this.sort)
+			}
 		}
 
 	},
@@ -97,6 +107,15 @@ export default {
 	},
 
 	methods: {
+		setSort(payload) {
+			if (this.sort === payload.sort) {
+				this.reverse = !this.reverse
+			} else {
+				this.sort = payload.sort
+				this.reverse = true
+			}
+		},
+
 		callPoll(index, poll, name) {
 			this.$router.push({
 				name: name,
@@ -107,14 +126,14 @@ export default {
 		},
 
 		refreshPolls() {
-			this.loading = true
+			this.isLoading = true
 			this.$store
 				.dispatch('loadPolls')
 				.then(() => {
-					this.loading = false
+					this.isLoading = false
 				})
 				.catch((error) => {
-					this.loading = false
+					this.isLoading = false
 					console.error('refresh poll: ', error.response)
 					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, this.poll.title), { type: 'error' })
 				})

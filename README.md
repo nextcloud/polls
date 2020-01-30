@@ -24,10 +24,10 @@ Create a new poll from the navigation bar and get an overview of your polls
 ![Overview](screenshots/overview.png)
 
 Vote and comment
-![Vote](screenshots/comment.png)
+![Vote](screenshots/vote.png)
 
-Edit poll on the vote page
-![Edit poll](screenshots/configurations.png)
+Edit poll inside the vote page
+![Edit poll](screenshots/edit-poll.png)
 ![Edit options](screenshots/options.png)
 
 Add shared links to your poll

@@ -37,7 +37,9 @@
 			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
-				<p> {{ t('polls', 'There are no vote options, add some.') }}</p>
+				<button @click="openOptions">
+					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
+				</button>
 			</div>
 
 			<Subscription />
@@ -47,7 +49,7 @@
 			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
+		<SideBar v-if="sideBarOpen" :active="activeTab" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -90,7 +92,8 @@ export default {
 			isLoading: false,
 			initialTab: 'comments',
 			newName: '',
-			tableMode: true
+			tableMode: true,
+			activeTab: t('polls', 'Comments').toLowerCase()
 		}
 	},
 
@@ -118,6 +121,16 @@ export default {
 	},
 
 	methods: {
+		openOptions() {
+			this.sideBarOpen = true
+			this.activeTab = t('polls', 'Options').toLowerCase()
+		},
+
+		openConfiguration() {
+			this.sideBarOpen = true
+			this.activeTab = t('polls', 'Configuration').toLowerCase()
+		},
+
 		loadPoll() {
 			this.isLoading = true
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
@@ -125,7 +138,7 @@ export default {
 					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
 						.then(() => {
 							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-								this.sideBarOpen = true
+								this.openConfiguration()
 							}
 							this.isLoading = false
 						})

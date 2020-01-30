@@ -45,7 +45,6 @@ OC.L10N.register(
     "Link copied to clipboard" : "Länken kopierades till urklipp",
     "Unknown user" : "Okänd användare",
     "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
-    "Click here to add a poll" : "Klicka för att lägga till omröstning",
     "Public access" : "Publik åtkomst",
     "Hidden poll" : "Dold omröstning",
     "Access denied" : "Tillgång nekades",

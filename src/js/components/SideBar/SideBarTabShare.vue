@@ -77,7 +77,7 @@
 				</div>
 			</li>
 		</TransitionGroup>
-		<div class="user-row user" @click="addShare({type: 'public', user: ''})">
+		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
 			<div class="avatar icon-add" />
 			<div class="user-name">
 				{{ t('polls', 'Add a public link') }}
@@ -196,7 +196,7 @@ export default {
 					}
 				})
 				.catch(error => {
-					console.error('Error while adding share comment - Error: ', error)
+					console.error('Error while adding share - Error: ', error)
 					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })
 				})
 		}

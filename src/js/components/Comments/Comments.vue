@@ -26,7 +26,7 @@
 		<CommentAdd v-if="acl.allowComment" />
 		<transition-group v-if="countComments" name="fade" class="comments"
 			tag="ul">
-			<li v-for="(comment) in sortedComments" :key="comment.id">
+			<li v-for="(comment) in sortedList" :key="comment.id">
 				<div class="comment-item">
 					<user-div :user-id="comment.userId" />
 					<div class="date">
@@ -48,11 +48,18 @@
 <script>
 import CommentAdd from './CommentAdd'
 import { mapState, mapGetters } from 'vuex'
+import sortBy from 'lodash/sortBy'
 
 export default {
 	name: 'Comments',
 	components: {
 		CommentAdd
+	},
+	data() {
+		return {
+			sort: 'timestamp',
+			reverse: true
+		}
 	},
 
 	computed: {
@@ -60,10 +67,19 @@ export default {
 			comments: state => state.comments,
 			acl: state => state.acl
 		}),
+
 		...mapGetters([
-			'countComments',
-			'sortedComments'
-		])
+			'countComments'
+		]),
+
+		sortedList() {
+			if (this.reverse) {
+				return sortBy(this.comments.list, this.sort).reverse()
+			} else {
+				return sortBy(this.comments.list, this.sort)
+			}
+		}
+
 	}
 }
 </script>

@@ -1,7 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.0.0] - tbd
+## [1.1.6] - 2020-01-26
+
+ - autoFocus poll title in creation dialog (#757)
+ - only count current user, if he actually voted (#759)
+ - redirect old public polls routes to new route (#761)
+ - Avoid error on creating share (#763)
+ - changing popovermenu to Actions (#594 and #754 )
+ - updated design according to file lists
+ - Sorting polls in poll list, default creation date desc (#559 and #717)
+ - updated dependencies
+ - 12-hour clock bug bug (#780)
+
+
+## [1.0.0] - 2020-01-20
 
  - huge update of polls
  - completely rewritten as a vue app

@@ -40,8 +40,6 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserId(string $value)
  * @method string getUserEmail()
  * @method void setUserEmail(string $value)
- * @method string getUser()
- * @method void setUser(string $value)
  */
 class Share extends Entity implements JsonSerializable {
 
@@ -60,9 +58,6 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $userEmail */
 	protected $userEmail;
 
-	/** @var string $user */
-	protected $user;
-
 	public function jsonSerialize() {
 
 		return [
@@ -71,8 +66,7 @@ class Share extends Entity implements JsonSerializable {
 			'type' => $this->type,
 			'pollId' => intval($this->pollId),
 			'userId' => $this->userId,
-			'userEmail' => $this->userEmail,
-			'user' => $this->user
+			'userEmail' => $this->userEmail
 		];
 
 	}
