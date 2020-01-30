@@ -21,9 +21,10 @@
   -->
 
 <template>
-	<li class="poll-item text">
-		<div v-if="draggable" class="icon-menu handle" />
-
+	<li class="poll-item text" :class="{ draggable: draggable }">
+		<IconBase v-if="draggable" icon-name="handle" class="handle">
+			<IconHandle />
+		</IconBase>
 		<div v-if="showOrder" class="order">
 			{{ option.order }}
 		</div>
@@ -43,13 +44,17 @@
 <script>
 import { mapState } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
+import IconBase from '../Icons/IconBase.vue'
+import IconHandle from '../Icons/IconHandle.vue'
 
 export default {
 	name: 'PollItemText',
 
 	components: {
 		Actions,
-		ActionButton
+		ActionButton,
+		IconBase,
+		IconHandle
 	},
 
 	props: {
@@ -89,7 +94,12 @@ export default {
 		min-height: 4em;
 		overflow: hidden;
 		white-space: nowrap;
-
+		&.draggable {
+			// border: 1px solid var(--color-border);
+			// border-radius: var(--border-radius);
+			// margin-top: 8px;
+			// margin-bottom: 8px;
+		}
 		&:active,
 		&:hover {
 			transition: var(--background-dark) 0.3s ease;
@@ -115,7 +125,6 @@ export default {
 		}
 
 		.handle {
-			flex: 0 0;
 			margin-right: 8px;
 		}
 
