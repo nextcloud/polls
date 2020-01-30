@@ -57,6 +57,7 @@
 			<PollItemDate v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
+				:show-actions="true"
 				@remove="removeOption(option)" />
 		</ul>
 	</div>

@@ -35,14 +35,23 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<PollItemText v-for="(option) in sortedOptions" :key="option.id" :option="option"
-				@remove="removeOption(option)" />
+			<draggable v-model="sortOptions">
+				<transition-group>
+					<PollItemText v-for="(option) in sortOptions"
+						:key="option.id"
+						:option="option"
+						:show-actions="true"
+						:draggable="true"
+						@remove="removeOption(option)" />
+				</transition-group>
+			</draggable>
 		</ul>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import draggable from 'vuedraggable'
 import PollItemText from '../Base/PollItemText'
 import InputDiv from '../Base/InputDiv'
 
@@ -50,6 +59,7 @@ export default {
 	name: 'SideBarTabOptionsText',
 
 	components: {
+		draggable,
 		InputDiv,
 		PollItemText
 	},
@@ -65,10 +75,24 @@ export default {
 			options: state => state.options
 		}),
 
-		...mapGetters(['sortedOptions'])
+		...mapGetters(['sortedOptions']),
+
+		sortOptions: {
+			get() {
+				return this.sortedOptions
+			},
+			set(value) {
+				this.writeOptions(value)
+			}
+		}
+
 	},
 
 	methods: {
+		writeOptions(value) {
+			this.$store.commit('reorderOptions', value)
+			this.$store.dispatch('updateOptions')
+		},
 
 		addOption() {
 			if (this.newPollText) {
@@ -86,7 +110,6 @@ export default {
 				option: option
 			})
 		}
-
 	}
 
 }
@@ -95,12 +118,11 @@ export default {
 <style lang="scss">
 	.config-box {
 
-		&.poll-table > li {
-			border-bottom-color: rgb(72, 72, 72);
-			margin-left: 18px;
+		&.poll-table .poll-item {
+			border-bottom: 1px solid var(--color-border);
 		}
-
 	}
+
 	.optionAdd {
 		display: flex;
 	}
@@ -122,39 +144,7 @@ export default {
 	}
 
 	.poll-table {
-		> li {
-			display: flex;
-			align-items: center;
-			padding-left: 8px;
-			padding-right: 8px;
-			line-height: 2em;
-			min-height: 4em;
-			border-bottom: 1px solid var(--color-border);
-			overflow: hidden;
-			white-space: nowrap;
-
-			&:active,
-			&:hover {
-				transition: var(--background-dark) 0.3s ease;
-				background-color: var(--color-background-dark); //$hover-color;
-			}
-
-			> div {
-				display: flex;
-				flex: 1;
-				font-size: 1.2em;
-				opacity: 0.7;
-				white-space: normal;
-				padding-right: 4px;
-				&.avatar {
-					flex: 0;
-				}
-			}
-
-			> div:nth-last-child(1) {
-				justify-content: center;
-				flex: 0 0;
-			}
+		&.poll-item {
 		}
 	}
 </style>
