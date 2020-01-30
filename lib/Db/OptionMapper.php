@@ -69,7 +69,8 @@ class OptionMapper extends QBMapper {
 		   ->from($this->getTableName())
 		   ->where(
 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		   );
+		   )
+		   ->orderBy('order', 'ASC');;
 
 		return $this->findEntities($qb);
 	}
