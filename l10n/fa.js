@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Participants" : "شركت كنندگان",
     "Deleted" : "حذف شده",
     "Group" : "گروه",
     "Comments" : "نظرات",

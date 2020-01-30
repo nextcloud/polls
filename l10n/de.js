@@ -104,7 +104,7 @@ OC.L10N.register(
     "Error saving user name" : "Fehler beim Speichern des Benutzernamens",
     "Switch view" : "Ansicht wechseln",
     "Open Sidebar" : "Seitenleiste öffnen",
-    "There are no vote options, add some in the options section of the right side bar." : "Keine Abstimmungsmöglchkeit vorhanden, füge welche hinzu.",
+    "There are no vote options, add some in the options section of the right side bar." : "Keine Abstimmungsmöglichkeit vorhanden, füge welche hinzu.",
     "Public access" : "Öffentlicher Zugriff",
     "Hidden poll" : "Versteckte Umfrage",
     "Error deleting poll." : "Fehler beim Löschen der Umfrage.",
