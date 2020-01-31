@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
  - internal optimizations
  - in public poll ask for username in a modal
  - Allow site user to vote in hidden poll via public link (#779)
- - New option: Alloy admins to edit poll
+ - New option: Allow admins to edit poll
  - Prevent deleted poll from beeing called via public link (#773)
  - Present error page, when poll cannot be accessed (#772)
  - Allow site user to access hidden poll, when called via public link (#779)
@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
  - fixed routing error in NC16 (#787)
  - load subscription on route change (#788)
  - show displayNames instead of userID (#715)
+ - reorder vote options in text polls (#529)
 
 ## [1.1.6] - 2020-01-26
 
