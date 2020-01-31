@@ -50,6 +50,12 @@ export default {
 		}
 	},
 
+	watch: {
+		$route() {
+			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
+		}
+	},
+
 	mounted() {
 		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
 	}

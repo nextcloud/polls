@@ -33,7 +33,7 @@
 			<input id="datePoll" v-model="type" value="datePoll"
 				type="radio" class="radio">
 			<label for="datePoll">
-				{{ t('polls', 'Poll schedule') }}
+				{{ t('polls', 'Date poll') }}
 			</label>
 			<input id="textPoll" v-model="type" value="textPoll"
 				type="radio" class="radio">

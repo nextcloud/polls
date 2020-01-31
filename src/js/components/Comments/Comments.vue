@@ -28,16 +28,23 @@
 			tag="ul">
 			<li v-for="(comment) in sortedList" :key="comment.id">
 				<div class="comment-item">
-					<user-div :user-id="comment.userId" />
+					<user-div :user-id="comment.userId" :display-name="comment.displayName" />
+					<Actions v-if="comment.userId === acl.userId">
+						<ActionButton icon="icon-delete" @click="deleteComment(comment)">
+							{{ t('polls', 'Delete comment') }}
+						</ActionButton>
+					</Actions>
 					<div class="date">
 						{{ moment.utc(comment.dt).fromNow() }}
 					</div>
 				</div>
+
 				<div class="message wordwrap comment-content">
 					{{ comment.comment }}
 				</div>
 			</li>
 		</transition-group>
+
 		<div v-else class="emptycontent">
 			<div class="icon-comment" />
 			<p> {{ t('polls', 'No comments yet. Be the first.') }}</p>
@@ -47,12 +54,15 @@
 
 <script>
 import CommentAdd from './CommentAdd'
-import { mapState, mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
+import { Actions, ActionButton } from '@nextcloud/vue'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'Comments',
 	components: {
+		Actions,
+		ActionButton,
 		CommentAdd
 	},
 	data() {
@@ -80,6 +90,18 @@ export default {
 			}
 		}
 
+	},
+
+	methods: {
+		deleteComment(comment) {
+			this.$store.dispatch({ type: 'deleteComment', comment: comment })
+				.then(() => {
+					OC.Notification.showTemporary(t('polls', 'Comment deleted'), { type: 'success' })
+				}, (error) => {
+					OC.Notification.showTemporary(t('polls', 'Error while deleting Comment'), { type: 'error' })
+					console.error(error.response)
+				})
+		}
 	}
 }
 </script>
@@ -108,7 +130,7 @@ ul {
 			}
 		}
 		& > .message {
-			margin-left: 44px;
+			margin-left: 53px;
 			flex: 1 1;
 		}
 	}

@@ -20,32 +20,51 @@
   -
   -->
 
-<template>
-	<li class="poll-item date">
-		<div>{{ moment.unix(option.timestamp).format('LLLL') }}</div>
-		<div>
-			<a v-if="acl.allowEdit" class="icon-delete" @click="$emit('remove')" />
-		</div>
-	</li>
+<template lang="html">
+	<div class="input-div">
+		<input ref="input" :value="value" class="input"
+			:placeholder="placeholder"
+			@keyup.enter="$emit('input', $event.target.value)">
+		<button class="submit icon-confirm"
+			@click="$emit('input', $refs.input.value)" />
+	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-	name: 'DatePollItem',
-
+	name: 'InputDiv',
 	props: {
-		option: {
-			type: Object,
-			default: undefined
+		value: {
+			type: String,
+			required: true
+		},
+		placeholder: {
+			type: String,
+			default: ''
 		}
-	},
-
-	computed: {
-		...mapState({
-			acl: state => state.acl
-		})
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+
+	.input-div {
+		display: flex;
+	}
+
+	.input {
+		flex: 1;
+		&:empty:before {
+			color: grey;
+		}
+	}
+
+	.submit {
+		width: 30px;
+		background-color: transparent;
+		border: none;
+		opacity: 0.3;
+		cursor: pointer;
+	}
+
+</style>

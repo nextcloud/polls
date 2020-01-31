@@ -38,6 +38,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollOptionText(string $value)
  * @method integer getTimestamp()
  * @method void setTimestamp(integer $value)
+ * @method integer getOrder()
+ * @method void setOrder(integer $value)
  */
 class Option extends Entity implements JsonSerializable {
 
@@ -49,6 +51,9 @@ class Option extends Entity implements JsonSerializable {
 
 	/** @var int $timestamp */
 	protected $timestamp;
+
+	/** @var int $order */
+	protected $order;
 
 	public function jsonSerialize() {
 		if (intval($this->timestamp) > 0) {
@@ -63,7 +68,8 @@ class Option extends Entity implements JsonSerializable {
 			'id' => intval($this->id),
 			'pollId' => intval($this->pollId),
 			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
-			'timestamp' => intval($timestamp)
+			'timestamp' => intval($timestamp),
+			'order' => intval($this->order)
 		];
 
 	}

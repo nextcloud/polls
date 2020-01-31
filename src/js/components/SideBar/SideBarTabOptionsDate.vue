@@ -54,9 +54,10 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<DatePollItem v-for="(option) in sortedOptions"
+			<PollItemDate v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
+				:show-actions="true"
 				@remove="removeOption(option)" />
 		</ul>
 	</div>
@@ -65,14 +66,14 @@
 <script>
 import { DatetimePicker, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
-import DatePollItem from '../Base/DatePollItem'
+import PollItemDate from '../Base/PollItemDate'
 
 export default {
-	name: 'SideBarTabDateOptions',
+	name: 'SideBarTabOptionsDate',
 
 	components: {
 		Multiselect,
-		DatePollItem,
+		PollItemDate,
 		DatetimePicker
 	},
 

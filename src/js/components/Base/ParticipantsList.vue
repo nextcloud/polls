@@ -30,9 +30,10 @@
 		</h2>
 		<div v-if="participantsVoted.length" class="participants">
 			<userDiv v-for="(participant) in participantsVoted"
-				:key="participant"
+				:key="participant.userId"
 				:hide-names="true"
-				:user-id="participant"
+				:user-id="participant.userId"
+				:display-name="participant.displayName"
 				type="user" />
 		</div>
 	</div>

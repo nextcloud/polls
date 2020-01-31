@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - tbd
+
+ - internal optimizations
+ - in public poll ask for username in a modal
+ - Allow site user to vote in hidden poll via public link (#779)
+ - New option: Allow admins to edit poll
+ - Prevent deleted poll from beeing called via public link (#773)
+ - Present error page, when poll cannot be accessed (#772)
+ - Allow site user to access hidden poll, when called via public link (#779)
+ - Give permant access to votes, the user voted in
+ - New filter: participated - Polls, where the user participated in
+ - delete comments (#193)
+ - Enter user name in public shared polls in a modal
+ - fixed routing error in NC16 (#787)
+ - load subscription on route change (#788)
+ - show displayNames instead of userID (#715)
+ - reorder vote options in text polls (#529)
+
 ## [1.1.6] - 2020-01-26
 
  - autoFocus poll title in creation dialog (#757)
@@ -12,7 +30,6 @@ All notable changes to this project will be documented in this file.
  - Sorting polls in poll list, default creation date desc (#559 and #717)
  - updated dependencies
  - 12-hour clock bug bug (#780)
-
 
 ## [1.0.0] - 2020-01-20
 

@@ -55,7 +55,7 @@ lint-fix:
 .PHONY: clean
 clean:
 	rm -rf $(build_dir)
-	rm -rf js/
+	rm -rf js/*
 	mkdir -p js
 clean-dev: clean
 	rm -rf node_modules

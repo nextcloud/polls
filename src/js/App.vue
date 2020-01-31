@@ -22,7 +22,7 @@
 
 <template>
 	<div id="app-polls">
-		<Navigation v-if="loadNavigation" />
+		<Navigation v-if="OC.currentUser" />
 		<router-view />
 	</div>
 </template>
@@ -34,25 +34,8 @@ export default {
 	name: 'App',
 	components: {
 		Navigation
-	},
-
-	data() {
-		return {
-			loadNavigation: false
-		}
-	},
-
-	computed: {
-		isPublic() {
-			return (this.$route.name === 'publicVote')
-		}
-	},
-
-	watch: {
-		$route() {
-			this.loadNavigation = (this.$route.name !== 'publicVote')
-		}
 	}
+
 }
 
 </script>
