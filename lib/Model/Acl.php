@@ -28,6 +28,7 @@ use JsonSerializable;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
+use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IUser;
@@ -62,11 +63,17 @@ class Acl implements JsonSerializable {
 	/** @var string */
 	private $userId;
 
+	/** @var IUserManager */
+	private $userManager;
+
 	/** @var IGroupManager */
 	private $groupManager;
 
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var VoteMapper */
+	private $voteMapper;
 
 	/** @var ShareMapper */
 	private $shareMapper;
@@ -80,6 +87,7 @@ class Acl implements JsonSerializable {
 	 * @param string $appName
 	 * @param string $userId
 	 * @param ILogger $logger
+	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
 	 * @param VoteMapper $voteMapper
@@ -90,6 +98,7 @@ class Acl implements JsonSerializable {
 	public function __construct(
 		$userId,
 		ILogger $logger,
+		IUserManager $userManager,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
 		VoteMapper $voteMapper,
@@ -98,6 +107,7 @@ class Acl implements JsonSerializable {
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
+		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
 		$this->voteMapper = $voteMapper;
@@ -119,10 +129,10 @@ class Acl implements JsonSerializable {
 	 * @return string
 	 */
 	public function getDisplayName() {
-		$this->userManager = \OC::$server->getUserManager();
+		// $this->userManager = \OC::$server->getUserManager();
 
-		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+		if ($this->userManager->get($this->userId) instanceof IUser) {
+			return $this->userManager->get($this->userId)->getDisplayName();
 		} else {
 			return $this->userId;
 		}
@@ -138,9 +148,9 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	* @NoAdminRequired
-	* @return string
-	*/
+	 * @NoAdminRequired
+	 * @return string
+	 */
 	public function getLoggedIn() {
 		return \OC::$server->getUserSession()->isLoggedIn();
 	}
