@@ -22,23 +22,46 @@
 
 <template>
 	<li class="poll-item date">
-		<div>{{ moment.unix(option.timestamp).format('LLLL') }}</div>
-		<div>
-			<a v-if="acl.allowEdit" class="icon-delete" @click="$emit('remove')" />
+		<div class="pollOption">
+			{{ moment.unix(option.timestamp).format('LLLL') }}
 		</div>
+
+		<Actions v-if="acl.allowEdit && showActions" class="action">
+			<ActionButton icon="icon-delete" @click="$emit('remove')">
+				{{ t('polls', 'Delete option') }}
+			</ActionButton>
+		</Actions>
 	</li>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'PollItemDate',
 
+	components: {
+		Actions,
+		ActionButton
+	},
+
 	props: {
 		option: {
 			type: Object,
-			default: undefined
+			required: true
+		},
+		showOrder: {
+			type: Boolean,
+			default: false
+		},
+		draggable: {
+			type: Boolean,
+			default: false
+		},
+		showActions: {
+			type: Boolean,
+			default: false
 		}
 	},
 
@@ -49,3 +72,39 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss">
+	.poll-item {
+		display: flex;
+		align-items: center;
+		padding-left: 8px;
+		padding-right: 8px;
+		line-height: 2em;
+		min-height: 4em;
+		overflow: hidden;
+		white-space: nowrap;
+
+		&:active,
+		&:hover {
+			transition: var(--background-dark) 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
+
+		> div {
+			display: flex;
+			flex: 1;
+			font-size: 1.2em;
+			opacity: 0.7;
+			white-space: normal;
+			padding-right: 4px;
+			&.avatar {
+				flex: 0;
+			}
+		}
+
+		.action {
+			justify-content: center;
+			flex: 0 0;
+		}
+	}
+</style>

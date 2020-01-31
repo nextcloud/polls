@@ -21,24 +21,58 @@
   -->
 
 <template>
-	<li class="poll-item text">
-		<div>{{ option.pollOptionText }}</div>
-		<div>
-			<a v-if="acl.allowEdit" class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
+	<li class="poll-item text" :class="{ draggable: draggable }">
+		<IconBase v-if="draggable" icon-name="handle" class="handle">
+			<IconHandle />
+		</IconBase>
+		<div v-if="showOrder" class="order">
+			{{ option.order }}
 		</div>
+
+		<div class="pollOption">
+			{{ option.pollOptionText }}
+		</div>
+
+		<Actions v-if="acl.allowEdit && showActions" class="action">
+			<ActionButton icon="icon-delete" @click="$emit('remove')">
+				{{ t('polls', 'Delete option') }}
+			</ActionButton>
+		</Actions>
 	</li>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { Actions, ActionButton } from '@nextcloud/vue'
+import IconBase from '../Icons/IconBase.vue'
+import IconHandle from '../Icons/IconHandle.vue'
 
 export default {
 	name: 'PollItemText',
 
+	components: {
+		Actions,
+		ActionButton,
+		IconBase,
+		IconHandle
+	},
+
 	props: {
 		option: {
 			type: Object,
-			default: undefined
+			required: true
+		},
+		showOrder: {
+			type: Boolean,
+			default: false
+		},
+		draggable: {
+			type: Boolean,
+			default: false
+		},
+		showActions: {
+			type: Boolean,
+			default: false
 		}
 	},
 
@@ -49,3 +83,54 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss">
+	.poll-item {
+		display: flex;
+		align-items: center;
+		padding-left: 8px;
+		padding-right: 8px;
+		line-height: 2em;
+		min-height: 4em;
+		overflow: hidden;
+		white-space: nowrap;
+		&.draggable {
+			// border: 1px solid var(--color-border);
+			// border-radius: var(--border-radius);
+			// margin-top: 8px;
+			// margin-bottom: 8px;
+		}
+		&:active,
+		&:hover {
+			transition: var(--background-dark) 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
+
+		> div {
+			display: flex;
+			flex: 1;
+			font-size: 1.2em;
+			opacity: 0.7;
+			white-space: normal;
+			padding-right: 4px;
+			&.avatar {
+				flex: 0;
+			}
+		}
+
+		.order {
+			flex: 0 0;
+			justify-content: flex-end;
+			padding-right: 8px;
+		}
+
+		.handle {
+			margin-right: 8px;
+		}
+
+		.action {
+			justify-content: center;
+			flex: 0 0;
+		}
+	}
+</style>
