@@ -209,7 +209,7 @@ class ShareController extends Controller {
 				$userShare->setPollId($publicShare->getPollId());
 				$userShare->setUserId($userName);
 				$userShare->setUserEmail('');
-				$this->logger->debug('Create share: '. json_encode($userShare));
+				$this->logger->debug('Create share: ' . json_encode($userShare));
 				$userShare = $this->mapper->insert($userShare);
 				return new DataResponse($userShare, Http::STATUS_OK);
 

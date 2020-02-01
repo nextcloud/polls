@@ -177,7 +177,7 @@ class CommentController extends Controller {
 		}
 
 
-		$this->logger->alert('ok '. json_encode($comment));
+		$this->logger->alert('ok ' . json_encode($comment));
 		return new DataResponse($comment, Http::STATUS_OK);
 
 	}
@@ -224,7 +224,7 @@ class CommentController extends Controller {
 		}
 
 		try {
-			if ( $comment['userId'] === $this->acl->getUserId() ) {
+			if ($comment['userId'] === $this->acl->getUserId()) {
 					$comment = $this->mapper->find($comment['id']);
 					$comment = $this->mapper->delete($comment);
 			}

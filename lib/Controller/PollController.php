@@ -114,13 +114,14 @@ class PollController extends Controller {
 
 	public function list() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
+
+			$pollList = [];
+
 			try {
-				// $polls = array_values(array_filter($this->pollMapper->findAll(), function($item) {
-				// 	return $this->acl->setPollId($item->getId())->getAllowView();
-				// }));
 
 				$polls = $this->pollMapper->findAll();
 
+				// TODO: Not the elegant way. Improvement neccessary
 				foreach ($polls as $poll) {
 					$combinedPoll = (object) array_merge(
         				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->setPollId($poll->getId()))));

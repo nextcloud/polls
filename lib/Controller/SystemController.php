@@ -164,7 +164,7 @@ class SystemController extends Controller {
 							'id' => $contact['UID'],
 							'user' => $contact['FN'],
 							'displayName' => $contact['FN'],
-							'organisation' => isset($contact['ORG']) ? $contact['ORG'] : '' ,
+							'organisation' => isset($contact['ORG']) ? $contact['ORG'] : '',
 							'emailAddress' => $emailAddress,
 							'desc' => 'Contact',
 							'type' => 'contact',
