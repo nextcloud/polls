@@ -7,8 +7,8 @@
     "Owner" : "Owner",
     "never" : "երբեք",
     "Details" : "Մանրամասներ",
-    "Saved" : "Պահված",
     "Description" : "Նկարագրություն",
-    "Expiration date" : "Վավերականության ժամկետ"
+    "Expiration date" : "Վավերականության ժամկետ",
+    "OK" : "Լավ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

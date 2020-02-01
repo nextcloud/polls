@@ -3,6 +3,7 @@
     "Deleted" : "حذف شده",
     "Group" : "گروه",
     "Comments" : "نظرات",
+    "Delete comment" : "حذف توضیح",
     "Cancel" : "لغو",
     "Apply" : "اعمال",
     "Title" : "عنوان",
@@ -15,8 +16,6 @@
     "Details" : "جزئیات",
     "Configuration" : "تنظیمات",
     "Shares" : "اشتراک گذاری ها",
-    "Saving" : "درحال ذخیره",
-    "Saved" : "ذخیره شد",
     "Description" : "توضیحات",
     "Expiration date" : "تاریخ انقضا",
     "Title must not be empty!" : "عنوان نباید خالی باشد!",
@@ -24,6 +23,7 @@
     "Click to add a date" : "برای افزودن تاریخ کلیک کنید",
     "Link copied to clipboard" : "پیوند در کلیپ بورد کپی شد",
     "Unknown user" : "کاربر نامعلوم",
+    "OK" : "تایید",
     "Public access" : "دسترسی عمومی",
     "Access denied" : "دسترسی رد شد"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

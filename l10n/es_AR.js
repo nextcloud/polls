@@ -5,6 +5,7 @@ OC.L10N.register(
     "Deleted" : "Borrado",
     "Group" : "Grupo",
     "Comments" : "Comentarios",
+    "Delete comment" : "Borrar comentario",
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
     "Title" : "Título",
@@ -14,11 +15,10 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Configuration" : "Configuración",
     "Shares" : "Shares",
-    "Saving" : "Guardando",
-    "Saved" : "Guardado",
     "Description" : "Descripción",
     "Expiration date" : "Fecha de expiración",
     "Unknown user" : "Ususario desconocido",
+    "OK" : "OK",
     "Public access" : "Acceso público"
 },
 "nplurals=2; plural=(n != 1);");

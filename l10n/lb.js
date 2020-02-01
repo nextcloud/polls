@@ -10,8 +10,6 @@ OC.L10N.register(
     "Owner" : "Owner",
     "never" : "Ni",
     "Details" : "Detailer",
-    "Saving" : "Speicheren...",
-    "Saved" : "Gespäichert",
     "Description" : "Beschreiwung",
     "Expiration date" : "Verfallsdatum"
 },

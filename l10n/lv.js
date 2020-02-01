@@ -5,6 +5,7 @@ OC.L10N.register(
     "Deleted" : "Dzēstie",
     "Group" : "Grupa",
     "Comments" : "Komentāri",
+    "Delete comment" : "Dzēst komentāru",
     "Cancel" : "Atcelt",
     "Apply" : "Apstiprināt",
     "Title" : "Nosaukums",
@@ -15,12 +16,11 @@ OC.L10N.register(
     "Details" : "Detaļas",
     "Configuration" : "Konfigurācija",
     "Shares" : "Koplietots",
-    "Saving" : "Saglabā",
-    "Saved" : "Saglabāts",
     "Description" : "Apraksts",
     "Expiration date" : "Termiņa datums",
     "Unknown user" : "Nezināms lietotājs",
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
+    "OK" : "Labi",
     "Public access" : "Publiska piekļuve"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

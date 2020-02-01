@@ -22,8 +22,6 @@ OC.L10N.register(
     "Details" : "Detaljer",
     "Configuration" : "Oppsett",
     "Shares" : "Delinger",
-    "Saving" : "Lagrer",
-    "Saved" : "Lagret",
     "Description" : "Beskrivelse",
     "Hide user names for admin" : "Skjul brukernavn for administratorer",
     "Expiration date" : "Utløpsdato",

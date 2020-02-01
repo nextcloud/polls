@@ -2,6 +2,7 @@
     "Deleted" : "Dihapus",
     "Group" : "Grup",
     "Comments" : "Komentar",
+    "Delete comment" : "Hapus komentar",
     "Cancel" : "Membatalkan",
     "Apply" : "Terapkan",
     "Title" : "Judul",
@@ -11,10 +12,9 @@
     "Details" : "Detil",
     "Configuration" : "Konfigurasi",
     "Shares" : "Dibagikan",
-    "Saving" : "Menyimpan",
-    "Saved" : "Disimpan",
     "Description" : "Deskrisi",
     "Expiration date" : "Tanggal kadaluarsa",
-    "Unknown user" : "Pengguna tidak dikenal"
+    "Unknown user" : "Pengguna tidak dikenal",
+    "OK" : "OK"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

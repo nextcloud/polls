@@ -5,6 +5,7 @@ OC.L10N.register(
     "Deleted" : "E fshirë",
     "Group" : "Grup",
     "Comments" : "Komentet",
+    "Delete comment" : "Fshi komentin",
     "Create new poll" : "Krijo sondazh të ri",
     "Cancel" : "Anullo",
     "Apply" : "Apliko",
@@ -16,11 +17,10 @@ OC.L10N.register(
     "Details" : "Detajet",
     "Configuration" : "Formësim",
     "Shares" : "Shpërndarje",
-    "Saving" : "Duke u ruajtur!",
-    "Saved" : "Ruajtur",
     "Description" : "Përshkrim",
     "Expiration date" : "Datë skadimi",
     "Unknown user" : "Përdorues i panjohur",
+    "OK" : "OK",
     "Public access" : "Akses publik"
 },
 "nplurals=2; plural=(n != 1);");

@@ -2,6 +2,7 @@
     "Deleted" : "Sletta",
     "Group" : "Gruppe",
     "Comments" : "Kommentarar",
+    "Delete comment" : "Slett kommentar",
     "Cancel" : "Avbryt",
     "Apply" : "Anvend",
     "Title" : "Tittel",
@@ -11,8 +12,8 @@
     "Details" : "Detaljar",
     "Configuration" : "Innstillingar",
     "Shares" : "Delingar",
-    "Saved" : "Lagra",
     "Description" : "Skildring",
-    "Expiration date" : "Utløpsdato"
+    "Expiration date" : "Utløpsdato",
+    "OK" : "OK"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

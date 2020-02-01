@@ -22,8 +22,6 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Configuration" : "Configuración",
     "Shares" : "Elementos compartidos",
-    "Saving" : "Guardando",
-    "Saved" : "Guardado",
     "Description" : "Descripción",
     "Hide user names for admin" : "Ocultar los nombres de usuario de admin",
     "Expiration date" : "Fecha de expiración",

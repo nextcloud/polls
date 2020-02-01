@@ -5,6 +5,7 @@ OC.L10N.register(
     "Deleted" : "Đã xóa",
     "Group" : "N",
     "Comments" : "Các bình luận",
+    "Delete comment" : " Xóa bình luận",
     "Cancel" : "Hủy bỏ",
     "Apply" : "Áp dụng",
     "Title" : "Tên",
@@ -14,10 +15,10 @@ OC.L10N.register(
     "Details" : "Thông tin",
     "Configuration" : "Cấu hình",
     "Shares" : "Chia sẻ",
-    "Saved" : "Đã lưu",
     "Description" : "Mô tả",
     "Expiration date" : "Ngày kết thúc",
     "Unknown user" : "Người dùng không tồn tại",
+    "OK" : "OK",
     "Public access" : "Truy cập công khai"
 },
 "nplurals=1; plural=0;");

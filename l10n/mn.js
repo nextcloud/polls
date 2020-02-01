@@ -12,8 +12,6 @@ OC.L10N.register(
     "never" : "хэзээ ч үгүй",
     "Details" : "Дэлгэрэнгүй",
     "Shares" : "Түгээлтүүд",
-    "Saving" : "хадгаламж",
-    "Saved" : "Хадгалах",
     "Description" : "Тодорхойлолт",
     "Unknown user" : "  хэрэглэгч",
     "Public access" : "Нийтийн хандах эрх"

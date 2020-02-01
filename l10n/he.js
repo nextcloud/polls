@@ -25,8 +25,6 @@ OC.L10N.register(
     "Configuration" : "הגדרות",
     "Options" : "אפשרויות",
     "Shares" : "שיתופים",
-    "Saving" : "שמירה",
-    "Saved" : "נשמר",
     "Description" : "תיאור",
     "Hide user names for admin" : "הסתרת שמות משתמשים למנהלים",
     "Expiration date" : "תאריך תפוגה",

@@ -15,8 +15,6 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Configuration" : "Configuración",
     "Shares" : "Comparticiones",
-    "Saving" : "Guardando",
-    "Saved" : "Guardáu",
     "Description" : "Descripción",
     "Expiration date" : "Data de caducidá",
     "Unknown user" : "Usuariu desconocíu",

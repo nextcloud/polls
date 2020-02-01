@@ -29,8 +29,6 @@ OC.L10N.register(
     "Configuration" : "Uppsetning",
     "Options" : "Valkostir",
     "Shares" : "Sameignir",
-    "Saving" : "Vista",
-    "Saved" : "Vistað",
     "Description" : "Lýsing",
     "Poll configurations" : "Uppsetningar kannana",
     "Allow \"maybe\" vote" : "Leyfa \"kannski\"-atkvæði",

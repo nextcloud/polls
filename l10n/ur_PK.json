@@ -6,6 +6,7 @@
     "Owner" : "Owner",
     "never" : "never",
     "Description" : "تصریح",
-    "Expiration date" : "تاریخ معیاد"
+    "Expiration date" : "تاریخ معیاد",
+    "OK" : "اوکے"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
