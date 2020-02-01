@@ -23,7 +23,7 @@
 <template lang="html">
 	<div class="comment">
 		<UserDiv :user-id="acl.userId" :focus="true" :display-name="acl.DisplayName" />
-		<InputDiv v-model="comment" class="addComment" :placeholder="t('polls', 'New Comment ...')"
+		<InputDiv v-model="comment" class="addComment" :placeholder="t('polls', 'New comment …')"
 			@input="writeComment()" />
 	</div>
 </template>
