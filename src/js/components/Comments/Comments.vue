@@ -98,7 +98,7 @@ export default {
 				.then(() => {
 					OC.Notification.showTemporary(t('polls', 'Comment deleted'), { type: 'success' })
 				}, (error) => {
-					OC.Notification.showTemporary(t('polls', 'Error while deleting Comment'), { type: 'error' })
+					OC.Notification.showTemporary(t('polls', 'Error while deleting the comment'), { type: 'error' })
 					console.error(error.response)
 				})
 		}
