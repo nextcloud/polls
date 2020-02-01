@@ -37,8 +37,8 @@
 					type="text"
 					:placeholder="t('polls', 'Enter your name')" @keyup.enter="writeUserName">
 				<div>
-					<span v-show="checkingUserName" class="icon-loading-small">Checking user name... </span>
-					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'User name is not valid. Please enter at least 3 characters.') }}</span>
+					<span v-show="checkingUserName" class="icon-loading-small">Checking username …</span>
+					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
 					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
 				</div>
 				<button class="button btn primary" :disabled="!isValidName || checkingUserName" @click="writeUserName">
@@ -106,7 +106,7 @@ export default {
 				this.checkingUserName = true
 				this.isValidName = this.validatePublicUsername()
 			} else {
-				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your user name!')
+				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your username!')
 				this.checkingUserName = false
 			}
 		}
@@ -147,19 +147,19 @@ export default {
 					.then(() => {
 						this.checkingUserName = false
 						this.isValidName = true
-						this.invalidUserNameMessage = 'User name is OK.'
+						this.invalidUserNameMessage = 'Username is OK.'
 						return true
 					})
 					.catch(() => {
 						this.checkingUserName = false
 						this.isValidName = false
-						this.invalidUserNameMessage = t('polls', 'This user name can not be chosen.')
+						this.invalidUserNameMessage = t('polls', 'This username can not be chosen.')
 						return false
 					})
 			} else {
 				this.checkingUserName = false
 				this.isValidName = false
-				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your user name!')
+				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your username!')
 				return false
 			}
 		}, 500),
@@ -173,7 +173,7 @@ export default {
 						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
 					})
 					.catch(() => {
-						OC.Notification.showTemporary(t('polls', 'Error saving user name', 1, this.poll.title), { type: 'error' })
+						OC.Notification.showTemporary(t('polls', 'Error saving username', 1, this.poll.title), { type: 'error' })
 					})
 			}
 		}
