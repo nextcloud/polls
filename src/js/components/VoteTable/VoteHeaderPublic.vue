@@ -26,7 +26,7 @@
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
-		<Modal v-show="!isValidUser" class="modal"
+		<Modal v-show="!isValidUser &!expired" class="modal"
 			:can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
@@ -53,7 +53,7 @@
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
 import { Modal } from '@nextcloud/vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'VoteHeaderPublic',
@@ -79,6 +79,10 @@ export default {
 			poll: state => state.poll,
 			acl: state => state.acl
 		}),
+
+		...mapGetters([
+			'expired'
+		]),
 
 		personalLink() {
 			return window.location.origin.concat(
