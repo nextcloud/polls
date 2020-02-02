@@ -12,6 +12,7 @@ OC.L10N.register(
     "Shares" : "ভাগাভাগি",
     "Description" : "বিবরণ",
     "Expiration date" : "মেয়াদোত্তীর্ণ হওয়ার তারিখ",
-    "Unknown user" : "অপরিচিত ব্যবহারকারী"
+    "Unknown user" : "অপরিচিত ব্যবহারকারী",
+    "OK" : "তথাস্তু"
 },
 "nplurals=2; plural=(n != 1);");

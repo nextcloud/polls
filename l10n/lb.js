@@ -4,6 +4,7 @@ OC.L10N.register(
     "Deleted" : "Geläscht",
     "Group" : "Grupp",
     "Comments" : "Kommentarer",
+    "Delete comment" : "Kommentar läschen",
     "Cancel" : "Ofbriechen",
     "Apply" : "Uwenden",
     "Title" : "Titel",
@@ -11,6 +12,7 @@ OC.L10N.register(
     "never" : "Ni",
     "Details" : "Detailer",
     "Description" : "Beschreiwung",
-    "Expiration date" : "Verfallsdatum"
+    "Expiration date" : "Verfallsdatum",
+    "OK" : "OK"
 },
 "nplurals=2; plural=(n != 1);");

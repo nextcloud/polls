@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deleted" : "Geskrap",
     "Group" : "Groep",
+    "New comment …" : "Nuwe kommentaar…",
     "Comments" : "Kommentare",
     "Delete comment" : "Skrap kommentaar",
     "Cancel" : "Kanselleer",

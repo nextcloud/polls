@@ -4,6 +4,7 @@ OC.L10N.register(
     "Polls" : "Sondazhe",
     "Deleted" : "E fshirë",
     "Group" : "Grup",
+    "New comment …" : "Koment i ri ...",
     "Comments" : "Komentet",
     "Delete comment" : "Fshi komentin",
     "Create new poll" : "Krijo sondazh të ri",

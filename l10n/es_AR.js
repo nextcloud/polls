@@ -4,6 +4,7 @@ OC.L10N.register(
     "Participants" : "Participantes",
     "Deleted" : "Borrado",
     "Group" : "Grupo",
+    "New comment …" : "Nuevo comentario ...",
     "Comments" : "Comentarios",
     "Delete comment" : "Borrar comentario",
     "Cancel" : "Cancelar",

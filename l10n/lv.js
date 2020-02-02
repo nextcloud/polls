@@ -4,6 +4,7 @@ OC.L10N.register(
     "Participants" : "Dalībnieki",
     "Deleted" : "Dzēstie",
     "Group" : "Grupa",
+    "New comment …" : "Jauns komentārs...",
     "Comments" : "Komentāri",
     "Delete comment" : "Dzēst komentāru",
     "Cancel" : "Atcelt",

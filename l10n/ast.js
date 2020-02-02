@@ -5,7 +5,9 @@ OC.L10N.register(
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
     "Deleted" : "Desanicióse",
     "Group" : "Group",
+    "New comment …" : "Comentariu nuevu...",
     "Comments" : "Comentarios",
+    "Delete comment" : "Desaniciar comentariu",
     "Cancel" : "Encaboxar",
     "Apply" : "Aplicar",
     "Title" : "Títulu",
@@ -18,6 +20,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Expiration date" : "Data de caducidá",
     "Unknown user" : "Usuariu desconocíu",
+    "OK" : "Aceutar",
     "Public access" : "Accesu públicu"
 },
 "nplurals=2; plural=(n != 1);");

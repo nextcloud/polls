@@ -5,6 +5,7 @@ OC.L10N.register(
     "Participants" : "Účastníci",
     "Deleted" : "Zmazané",
     "Group" : "Skupina",
+    "New comment …" : "Nový komentár …",
     "Comments" : "Komentáre",
     "Delete comment" : "Vymazať komentár",
     "No comments yet. Be the first." : "Zatiaľ žiadne komentáre. Buďte prvý.",

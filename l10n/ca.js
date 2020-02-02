@@ -9,6 +9,7 @@ OC.L10N.register(
     "Participants" : "Participants",
     "Deleted" : "Suprimit",
     "Group" : "Grup",
+    "New comment …" : "Crea un comentari",
     "Comments" : "Comentaris",
     "Delete comment" : "Esborrar comentari",
     "No comments yet. Be the first." : "Cap comentari encara. Sigueu el primer.",

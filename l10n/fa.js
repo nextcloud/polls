@@ -4,6 +4,7 @@ OC.L10N.register(
     "Participants" : "شركت كنندگان",
     "Deleted" : "حذف شده",
     "Group" : "گروه",
+    "New comment …" : "توضیح جدید ...",
     "Comments" : "نظرات",
     "Delete comment" : "حذف توضیح",
     "Cancel" : "لغو",

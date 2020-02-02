@@ -8,6 +8,7 @@ OC.L10N.register(
     "Participants" : "Participants",
     "Deleted" : "Deleted",
     "Group" : "Group",
+    "New comment …" : "New comment …",
     "Comments" : "Comments",
     "Delete comment" : "Delete comment",
     "No comments yet. Be the first." : "No comments yet. Be the first.",

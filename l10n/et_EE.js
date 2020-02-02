@@ -5,6 +5,7 @@ OC.L10N.register(
     "Polls App - New Activity" : "Küsitluste rakendus - uus tegevus",
     "Deleted" : "Kustutatud",
     "Group" : "Grupp",
+    "New comment …" : "Uus kommentaar ...",
     "Comments" : "Kommentaarid",
     "Delete comment" : "Kustuta kommentaar",
     "No comments yet. Be the first." : "Kommentaare veel pole. Ole esimene.",

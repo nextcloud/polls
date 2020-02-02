@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Group" : "Grupa",
+    "New comment …" : "Novi komentar",
     "Comments" : "Komentari",
     "Delete comment" : "Izbriši komentar",
     "Cancel" : "Otkaži",

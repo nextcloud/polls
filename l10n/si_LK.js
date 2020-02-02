@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Group" : "Group",
+    "New comment …" : "නව ප්රතිචාරයක් ...",
     "Comments" : "අදහස්",
     "Delete comment" : "ප්රතිචාරය මකන්න",
     "Cancel" : "අවලංගු කරන්න",

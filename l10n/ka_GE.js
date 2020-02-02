@@ -6,6 +6,7 @@ OC.L10N.register(
     "Participants" : "მონაწილეები",
     "Deleted" : "გაუქმდა",
     "Group" : "ჯგუფი",
+    "New comment …" : "ახალი კომენტარი ...",
     "Comments" : "კომენტარები",
     "Delete comment" : "კომენტარის გაუქმება",
     "No comments yet. Be the first." : "კომენტარები ჯერ არაა. იყავით პირველი.",

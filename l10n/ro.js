@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deleted" : "Șters",
     "Group" : "Grup",
+    "New comment …" : "Comentariu nou...",
     "Comments" : "Comentarii",
     "Delete comment" : "Șterge comentariu",
     "Cancel" : "Anulează",

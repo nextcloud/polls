@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deleted" : "ลบแล้ว",
     "Group" : "กลุ่ม",
+    "New comment …" : "ความคิดเห็นใหม่...",
     "Comments" : "ความคิดเห็น",
     "Delete comment" : "ลบความคิดเห็น",
     "Cancel" : "ยกเลิก",

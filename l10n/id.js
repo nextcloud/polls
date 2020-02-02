@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deleted" : "Dihapus",
     "Group" : "Grup",
+    "New comment …" : "Komentar baru ...",
     "Comments" : "Komentar",
     "Delete comment" : "Hapus komentar",
     "Cancel" : "Membatalkan",

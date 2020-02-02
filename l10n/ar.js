@@ -6,6 +6,7 @@ OC.L10N.register(
     "Participants" : "المشارِكون",
     "Deleted" : "تم حذفه",
     "Group" : "الفريق",
+    "New comment …" : "تعليق جديد ...",
     "Comments" : "تعليقات",
     "Delete comment" : "حذف التعليق",
     "Cancel" : "الغاء",

@@ -4,6 +4,7 @@ OC.L10N.register(
     "Participants" : "Người tham gia",
     "Deleted" : "Đã xóa",
     "Group" : "N",
+    "New comment …" : "Bình luận mới ...",
     "Comments" : "Các bình luận",
     "Delete comment" : " Xóa bình luận",
     "Cancel" : "Hủy bỏ",

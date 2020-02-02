@@ -6,6 +6,7 @@ OC.L10N.register(
     "Participants" : "Deltagere",
     "Deleted" : "Slettet",
     "Group" : "Gruppe",
+    "New comment …" : "Ny kommentar…",
     "Comments" : "Kommentarer",
     "Delete comment" : "Slet kommentar",
     "No comments yet. Be the first." : "Ingen kommentarer endnu. Vær den første.",

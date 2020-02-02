@@ -7,6 +7,7 @@ OC.L10N.register(
     "Participants" : "Résztvevők",
     "Deleted" : "Törölve",
     "Group" : "Csoport",
+    "New comment …" : "Új hozzászólás…",
     "Comments" : "Hozzászólások",
     "Delete comment" : "Hozzászólás törlése",
     "No comments yet. Be the first." : "Még nincsenek hozzászólások. Legyél az első.",

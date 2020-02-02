@@ -5,6 +5,7 @@ OC.L10N.register(
     "Participants" : "Participantes",
     "Deleted" : "Borrado",
     "Group" : "Grupo",
+    "New comment …" : "Comentario nuevo ...",
     "Comments" : "Comentarios",
     "Delete comment" : "Borrar comentario",
     "No comments yet. Be the first." : "No hay comentarios todavia. Se el primero.",

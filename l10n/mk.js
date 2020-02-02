@@ -4,6 +4,7 @@ OC.L10N.register(
     "Participants" : "Учесници",
     "Deleted" : "Избришана",
     "Group" : "Група",
+    "New comment …" : "Нов коментар ...",
     "Comments" : "Коментари",
     "Delete comment" : "Избриши коментар",
     "No comments yet. Be the first." : "Сеуште нема коментари. Напишете го првиот коментар.",

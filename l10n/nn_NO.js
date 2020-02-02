@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deleted" : "Sletta",
     "Group" : "Gruppe",
+    "New comment …" : "Ny kommentar...",
     "Comments" : "Kommentarar",
     "Delete comment" : "Slett kommentar",
     "Cancel" : "Avbryt",

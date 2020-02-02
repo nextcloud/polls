@@ -8,6 +8,7 @@ OC.L10N.register(
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Enketa aplikaĵo, samspeca kiel „Doodle“ aŭ „Dudle“, kun limigeblo de aliro (membroj, certaj grupoj aŭ uzantoj, kaŝita aŭ publika).",
     "Deleted" : "Forigita",
     "Group" : "Grupo",
+    "New comment …" : "Nova komento...",
     "Comments" : "Komentoj",
     "Delete comment" : "Forigi komenton",
     "No comments yet. Be the first." : "Neniu komento. Estu la unua.",
