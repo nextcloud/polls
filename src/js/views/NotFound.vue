@@ -25,9 +25,13 @@
 		<div id="emptycontent">
 			<div id="emptycontent-icon" class="icon-search" />
 			<h2>{{ t('polls', 'The poll does not exist') }}</h2>
-			<p class="emptycontent-additional">
+
+			<p v-if="OC.currentUser" class="emptycontent-additional">
 				{{ t('polls', 'Enter a poll or start a new one.') }}
 			</p>
+			<button v-else @click="gotoLogin()">
+				{{ t('polls', 'Goto Nextcloud') }}
+			</button>
 		</div>
 	</AppContent>
 </template>
@@ -39,6 +43,12 @@ export default {
 	name: 'NotFound',
 	components: {
 		AppContent
+	},
+
+	methods: {
+		gotoLogin() {
+			window.location.replace(OC.generateUrl('/'))
+		}
 	}
 }
 </script>
