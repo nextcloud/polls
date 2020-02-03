@@ -6,6 +6,7 @@ OC.L10N.register(
     "Participants" : "참가자",
     "Deleted" : "삭제함",
     "Group" : "그룹",
+    "New comment …" : "새 댓글…",
     "Comments" : "댓글",
     "Delete comment" : "댓글 삭제",
     "No comments yet. Be the first." : "아직 댓글이 없습니다. 첫 댓글을 남겨 보십시오.",

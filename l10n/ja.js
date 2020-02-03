@@ -20,6 +20,7 @@ OC.L10N.register(
     "Deleted" : "削除済み",
     "Group" : "グループ",
     "Place your votes until %n" : "%nまでに投票してください",
+    "New comment …" : "あたらしいコメント",
     "Your comment was added" : "コメントが追加されました",
     "Expired since %n" : "%nに終了しました",
     "Error while saving comment" : "コメントの保存中にエラーが発生しました",

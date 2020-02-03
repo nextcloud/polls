@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deleted" : "Delite",
     "Group" : "Gruppo",
+    "New comment …" : "Nove commentario...",
     "Comments" : "Commentarios",
     "Delete comment" : "Deler commentario",
     "Cancel" : "Cancellar",

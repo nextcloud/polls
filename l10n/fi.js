@@ -6,6 +6,7 @@ OC.L10N.register(
     "Participants" : "Osallistujat",
     "Deleted" : "Poistettu",
     "Group" : "Ryhmä",
+    "New comment …" : "Uusi kommentti…",
     "Comments" : "Kommentit",
     "Delete comment" : "Poista kommentti",
     "No comments yet. Be the first." : "Ei vielä kommentteja. Ole ensimmäinen.",

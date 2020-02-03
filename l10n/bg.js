@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deleted" : "Изтрито",
     "Group" : "Група",
+    "New comment …" : "Нов коментар...",
     "Comments" : "Коментари",
     "Delete comment" : "Изтрий коментар",
     "No comments yet. Be the first." : "Все още няма коментари.",

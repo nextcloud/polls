@@ -9,6 +9,7 @@ OC.L10N.register(
     "Participants" : "Участники",
     "Deleted" : "Удалено",
     "Group" : "Группа",
+    "New comment …" : "Новый комментарий…",
     "Comments" : "Комментарии",
     "Delete comment" : "Удалить комментарий",
     "No comments yet. Be the first." : "Тут нет комментариев, будьте первым.",
