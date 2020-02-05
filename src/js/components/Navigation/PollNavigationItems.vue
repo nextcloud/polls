@@ -34,6 +34,10 @@
 			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-history" @click="$emit('switchDeleted')">
 				{{ (poll.isAdmin) ? t('polls', 'Restore poll as admin') : t('polls', 'Restore poll') }}
 			</ActionButton>
+
+			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger" @click="$emit('deleteFinally')">
+				{{ (poll.isAdmin) ? t('polls', 'Delete poll irrevocably as admin') : t('polls', 'Delete poll irrevocably') }}
+			</ActionButton>
 		</template>
 	</AppNavigationItem>
 </template>

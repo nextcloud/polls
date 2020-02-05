@@ -79,6 +79,9 @@
 			<span v-if="poll.deleted">{{ t('polls', 'Restore poll') }}</span>
 			<span v-else>{{ t('polls', 'Delete poll') }}</span>
 		</button>
+		<button v-if="poll.deleted" class="button btn error" @click="deleteFinally()">
+			{{ t('polls', 'Delete poll irrevocably') }}
+		</button>
 	</div>
 </template>
 
@@ -268,6 +271,16 @@ export default {
 				this.writeValue({ deleted: moment.utc().unix() })
 			}
 
+		},
+
+		deleteFinally() {
+			if(!this.poll.deleted) return;
+
+            this.$store
+				.dispatch('deleteFinally', { pollId: this.poll.id })
+				.then((response) => {
+					this.$root.$emit('updatePolls')
+				})
 		},
 
 		writePoll() {

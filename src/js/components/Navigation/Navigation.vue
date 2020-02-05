@@ -29,7 +29,8 @@
 				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
 				<ul>
 					<PollNavigationItems v-for="(poll) in allPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
+                        @deleteFinally="deleteFinally(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -37,7 +38,8 @@
 				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in myPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
+                        @deleteFinally="deleteFinally(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -45,7 +47,8 @@
 				icon="icon-user" :to="{ name: 'list', params: {type: 'participated'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in participatedPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
+                        @deleteFinally="deleteFinally(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -53,7 +56,8 @@
 				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in publicPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
+                        @deleteFinally="deleteFinally(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -61,7 +65,8 @@
 				icon="icon-password" :to="{ name: 'list', params: {type: 'hidden'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in hiddenPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
+                        @deleteFinally="deleteFinally(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -69,7 +74,8 @@
 				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
+                        @deleteFinally="deleteFinally(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 		</ul>
@@ -158,6 +164,15 @@ export default {
 		switchDeleted(pollId) {
 			this.$store
 				.dispatch('switchDeleted', { pollId: pollId })
+				.then((response) => {
+					this.refreshPolls()
+				})
+
+		},
+
+		deleteFinally(pollId) {
+			this.$store
+				.dispatch('deleteFinally', { pollId: pollId })
 				.then((response) => {
 					this.refreshPolls()
 				})

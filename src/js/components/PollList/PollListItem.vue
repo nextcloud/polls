@@ -74,6 +74,10 @@
 			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-history" @click="switchDeleted()">
 				{{ (poll.isAdmin) ? t('polls', 'Restore poll as admin') : t('polls', 'Restore poll') }}
 			</ActionButton>
+
+			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger" @click="deleteFinally()">
+				{{ (poll.isAdmin) ? t('polls', 'Delete poll irrevocably as admin') : t('polls', 'Delete poll irrevocably') }}
+			</ActionButton>
 		</Actions>
 
 		<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.access">
@@ -177,6 +181,14 @@ export default {
 
 		switchDeleted() {
 			this.$store.dispatch('switchDeleted', { pollId: this.poll.id })
+				.then((response) => {
+					this.refreshPolls()
+				})
+			this.hideMenu()
+		},
+
+		deleteFinally() {
+			this.$store.dispatch('deleteFinally', { pollId: this.poll.id })
 				.then((response) => {
 					this.refreshPolls()
 				})
