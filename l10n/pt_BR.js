@@ -118,6 +118,7 @@ OC.L10N.register(
     "Error saving username" : "Erro ao salvar o nome de usuário",
     "The poll does not exist" : "A enquete não existe",
     "Enter a poll or start a new one." : "Digite uma enquete ou inicie uma nova.",
+    "Goto Nextcloud" : "Ir ao Nextcloud",
     "Switch view" : "Alternar visualização",
     "Open Sidebar" : "Abrir Barra Lateral",
     "There are no vote options, add some in the options section of the right side bar." : "Não há opções de voto, adicione algumas na seção de opções da barra lateral direita.",

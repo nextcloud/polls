@@ -118,6 +118,7 @@ OC.L10N.register(
     "Error saving username" : "Klaida įrašant naudotojo vardą",
     "The poll does not exist" : "Apklausos nėra",
     "Enter a poll or start a new one." : "Įveskite apklausą arba pradėkite naują.",
+    "Goto Nextcloud" : "Eiti į Nextcloud",
     "Switch view" : "Perjungti rodinį",
     "Open Sidebar" : "Atverti šoninę juostą",
     "There are no vote options, add some in the options section of the right side bar." : "Nėra jokių balsavimo variantų. Pridėkite juos dešinės šoninės juostos parinkčių sekcijoje.",
