@@ -25,6 +25,7 @@
 		<IconBase v-if="draggable" icon-name="handle" class="handle">
 			<IconHandle />
 		</IconBase>
+
 		<div v-if="showOrder" class="order">
 			{{ option.order }}
 		</div>
@@ -32,18 +33,11 @@
 		<div class="pollOption">
 			{{ option.pollOptionText }}
 		</div>
-
-		<Actions v-if="acl.allowEdit && showActions" class="action">
-			<ActionButton icon="icon-delete" @click="$emit('remove')">
-				{{ t('polls', 'Delete option') }}
-			</ActionButton>
-		</Actions>
+		<slot name="actions" />
 	</li>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
 import IconBase from '../Icons/IconBase.vue'
 import IconHandle from '../Icons/IconHandle.vue'
 
@@ -51,8 +45,6 @@ export default {
 	name: 'PollItemText',
 
 	components: {
-		Actions,
-		ActionButton,
 		IconBase,
 		IconHandle
 	},
@@ -62,24 +54,16 @@ export default {
 			type: Object,
 			required: true
 		},
+
 		showOrder: {
 			type: Boolean,
 			default: false
 		},
+
 		draggable: {
 			type: Boolean,
 			default: false
-		},
-		showActions: {
-			type: Boolean,
-			default: false
 		}
-	},
-
-	computed: {
-		...mapState({
-			acl: state => state.acl
-		})
 	}
 }
 </script>
@@ -94,12 +78,6 @@ export default {
 		min-height: 4em;
 		overflow: hidden;
 		white-space: nowrap;
-		&.draggable {
-			// border: 1px solid var(--color-border);
-			// border-radius: var(--border-radius);
-			// margin-top: 8px;
-			// margin-bottom: 8px;
-		}
 		&:active,
 		&:hover {
 			transition: var(--background-dark) 0.3s ease;

@@ -25,25 +25,16 @@
 		<div class="pollOption">
 			{{ moment.unix(option.timestamp).format('LLLL') }}
 		</div>
-
-		<Actions v-if="acl.allowEdit && showActions" class="action">
-			<ActionButton icon="icon-delete" @click="$emit('remove')">
-				{{ t('polls', 'Delete option') }}
-			</ActionButton>
-		</Actions>
+		<slot name="actions" />
 	</li>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'PollItemDate',
 
 	components: {
-		Actions,
-		ActionButton
 	},
 
 	props: {
@@ -58,17 +49,7 @@ export default {
 		draggable: {
 			type: Boolean,
 			default: false
-		},
-		showActions: {
-			type: Boolean,
-			default: false
 		}
-	},
-
-	computed: {
-		...mapState({
-			acl: state => state.acl
-		})
 	}
 }
 </script>

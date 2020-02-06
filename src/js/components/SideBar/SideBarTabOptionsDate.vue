@@ -56,15 +56,21 @@
 			</label>
 			<PollItemDate v-for="(option) in sortedOptions"
 				:key="option.id"
-				:option="option"
-				:show-actions="true"
-				@remove="removeOption(option)" />
+				:option="option">
+				<template v-slot:actions>
+					<Actions v-if="acl.allowEdit" class="action">
+						<ActionButton icon="icon-delete" @click="removeOption(option)">
+							{{ t('polls', 'Delete option') }}
+						</ActionButton>
+					</Actions>
+				</template>
+			</PollItemDate>
 		</ul>
 	</div>
 </template>
 
 <script>
-import { DatetimePicker, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, DatetimePicker, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import PollItemDate from '../Base/PollItemDate'
 
@@ -72,6 +78,8 @@ export default {
 	name: 'SideBarTabOptionsDate',
 
 	components: {
+		Actions,
+		ActionButton,
 		Multiselect,
 		PollItemDate,
 		DatetimePicker
@@ -90,7 +98,8 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options
+			options: state => state.options,
+			acl: state => state.acl
 		}),
 
 		...mapGetters(['sortedOptions']),
