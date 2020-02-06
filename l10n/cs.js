@@ -105,7 +105,7 @@ OC.L10N.register(
     "Unknown user" : "Neznámý uživatel",
     "Public share" : "Veřejné sdílení",
     "Error while adding share" : "Chyba při přidávání sdílení",
-    "Receive notification email on activity" : "Dostávat e-mailem oznámení o aktivitě",
+    "Receive notification email on activity" : "Dostávat e-mailem upozornění na aktivitu",
     "Your personal link to this poll: %n" : "Váš osobní odkaz na tuto anketu: %n",
     "Enter your name!" : "Zadejte své jméno!",
     "To participate, you need to enter a valid username with at least 3 characters. " : "Abyste se mohli zúčastnit, je třeba zadat platné uživatelské jméno (tvořené alespoň třemi znaky).",
