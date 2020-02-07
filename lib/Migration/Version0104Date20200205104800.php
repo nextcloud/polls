@@ -81,12 +81,13 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
         // check for orphaned entries in all tables referencing
         // the main polls table
         foreach($this->childTables as $tbl) {
+            $child = "$prefix$tbl";
             $query = "DELETE
-                FROM $prefix$tbl child
+                FROM $child
                 WHERE NOT EXISTS (
                     SELECT NULL
                     FROM {$prefix}polls_polls polls
-                    WHERE polls.id = child.poll_id
+                    WHERE polls.id = {$child}.poll_id
                 )";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
