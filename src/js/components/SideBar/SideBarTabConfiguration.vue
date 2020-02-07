@@ -279,7 +279,7 @@ export default {
             this.$store
 				.dispatch('deletePermanently', { pollId: this.poll.id })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+                    this.$router.push({name: 'list', params: {type: 'deleted'}})
 				})
 		},
 

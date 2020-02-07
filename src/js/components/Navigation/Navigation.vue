@@ -174,6 +174,11 @@ export default {
 			this.$store
 				.dispatch('deletePermanently', { pollId: pollId })
 				.then((response) => {
+                    // if we permanently delete current selected poll,
+                    // reload deleted polls route
+                    if(this.$route.params.id && this.$route.params.id == pollId) {
+                        this.$router.push({name: 'list', params: {type: 'deleted'}})
+                    }
 					this.refreshPolls()
 				})
 
