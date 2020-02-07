@@ -42,6 +42,16 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 	/** @var IConfig */
 	protected $config;
 
+    /** @var array */
+    protected $childTables = [
+        'polls_comments',
+        'polls_log',
+        'polls_notif',
+        'polls_options',
+        'polls_share',
+        'polls_votes',
+    ];
+
 	/**
 	 * @param IDBConnection $connection
 	 * @param IConfig $config
@@ -51,6 +61,38 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 		$this->config = $config;
 	}
 
+
+    /**
+     * @param IOutput $output
+     * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+     * @param array $options
+     * @return null
+     * @since 13.0.0
+     */
+    public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+        // delete all orphaned entries by selecting all rows
+        // those poll_ids are not present in the polls table
+        //
+        // we have to use a raw query, because NOT EXISTS is not
+        // part of doctrine's expression builder
+        //
+        // get table prefix, as we are running a raw query
+        $prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
+        // check for orphaned entries in all tables referencing
+        // the main polls table
+        foreach($this->childTables as $tbl) {
+            $query = "DELETE
+                FROM $prefix$tbl child
+                WHERE NOT EXISTS (
+                    SELECT NULL
+                    FROM {$prefix}polls_polls polls
+                    WHERE polls.id = child.poll_id
+                )";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+        }
+    }
+
 	/**
 	 * @param IOutput $output
 	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -59,20 +101,12 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 	 * @since 13.0.0
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+        // add an on delete fk contraint to all tables referencing the main polls table
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-        $tables = [
-            'polls_comments',
-            'polls_log',
-            'polls_notif',
-            'polls_options',
-            'polls_share',
-            'polls_votes',
-        ];
-
         $eventTable = $schema->getTable('polls_polls');
-        foreach($tables as $tbl) {
+        foreach($this->childTables as $tbl) {
             $table = $schema->getTable($tbl);
 
             $table->addForeignKeyConstraint($eventTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);
