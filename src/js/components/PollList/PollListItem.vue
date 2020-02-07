@@ -75,8 +75,8 @@
 				{{ (poll.isAdmin) ? t('polls', 'Restore poll as admin') : t('polls', 'Restore poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger" @click="deleteFinally()">
-				{{ (poll.isAdmin) ? t('polls', 'Delete poll irrevocably as admin') : t('polls', 'Delete poll irrevocably') }}
+			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger" @click="deletePermanently()">
+				{{ (poll.isAdmin) ? t('polls', 'Delete poll permanently as admin') : t('polls', 'Delete poll permanently') }}
 			</ActionButton>
 		</Actions>
 
@@ -187,8 +187,8 @@ export default {
 			this.hideMenu()
 		},
 
-		deleteFinally() {
-			this.$store.dispatch('deleteFinally', { pollId: this.poll.id })
+		deletePermanently() {
+			this.$store.dispatch('deletePermanently', { pollId: this.poll.id })
 				.then((response) => {
 					this.refreshPolls()
 				})

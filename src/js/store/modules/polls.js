@@ -81,8 +81,8 @@ const actions = {
 			})
 	},
 
-	deleteFinally(context, payload) {
-		const endPoint = 'apps/polls/polls/delete/irrevocably/'
+	deletePermanently(context, payload) {
+		const endPoint = 'apps/polls/polls/delete/permanent/'
 		return axios.get(OC.generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response

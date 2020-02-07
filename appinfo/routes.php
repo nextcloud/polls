@@ -55,7 +55,7 @@ return [
 		['name' => 'poll#list', 'url' => '/polls/list/', 'verb' => 'GET'],
 		['name' => 'poll#get', 'url' => '/polls/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#delete', 'url' => '/polls/delete/{pollId}', 'verb' => 'GET'],
-		['name' => 'poll#deleteFinally', 'url' => '/polls/delete/irrevocably/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#deletePermanently', 'url' => '/polls/delete/permanent/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#write', 'url' => '/polls/write/', 'verb' => 'POST'],
 		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'get'],
 		['name' => 'poll#getByToken', 'url' => '/polls/get/s/{token}', 'verb' => 'GET'],
