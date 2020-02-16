@@ -31,19 +31,16 @@ If applicable, add screenshots to help explain your problem.
 ### Information about your Instance of Nextcloud/ownCloud
 **Nextcloud or ownCloud?**
 
-**Which Version?**
-
 **Nextcloud/ownCloud version:** (see Nextcloud admin page)
 
 **List of activated apps:**
-
 ```
 If you have access to your command line run e.g.:
 sudo -u www-data php occ app:list
 from within your Nextcloud installation folder
 ```
-**Nextcloud configuration:**
 
+**Nextcloud configuration:**
 ```
 If you have access to your command line run e.g.:
 sudo -u www-data php occ config:list system
@@ -69,7 +66,6 @@ You can use the Issue Template application to prefill most of the required infor
 **PHP version:**
 
 **Signing status:**
-
 ```
 Login as admin user into your Nextcloud and access
 http://example.com/index.php/settings/integrity/failed
