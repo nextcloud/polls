@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.3.0] - tbd
+## [1.3.0] - 2020-02-16
 
  - internal optimizations
  - in public poll ask for username in a modal
