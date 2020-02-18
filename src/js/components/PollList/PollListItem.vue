@@ -58,7 +58,7 @@
 				{{ poll.title }}
 			</div>
 			<div class="description">
-				{{ poll.description }}
+				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</router-link>
 
