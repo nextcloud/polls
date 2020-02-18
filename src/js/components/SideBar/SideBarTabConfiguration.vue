@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin" class="config-box">
+		<div v-if="acl.isAdmin && !acl.isOwner" class="config-box">
 			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
 		</div>
 
@@ -39,9 +39,9 @@
 		<div class="config-box">
 			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
 
-			<input v-if="!acl.isAdmin" id="adminAccess" v-model="pollAdminAccess"
+			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
 				type="checkbox" class="checkbox">
-			<label v-if="!acl.isAdmin" for="adminAccess" class="title"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
+			<label v-if="acl.isOwner" for="adminAccess" class="title"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
 
 			<input id="allowMaybe" v-model="pollAllowMaybe"
 				type="checkbox" class="checkbox">
@@ -50,10 +50,6 @@
 			<input id="anonymous" v-model="pollAnonymous"
 				type="checkbox" class="checkbox">
 			<label for="anonymous" class="title"> {{ t('polls', 'Anonymous poll') }} </label>
-
-			<input v-show="poll.anonymous" id="trueAnonymous" v-model="pollFullAnonymous"
-				type="checkbox" class="checkbox">
-			<label v-show="poll.anonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
 
 			<input id="expiration" v-model="pollExpiration"
 				type="checkbox" class="checkbox">
@@ -167,15 +163,6 @@ export default {
 					this.writeValue({ expire: 0 })
 
 				}
-			}
-		},
-
-		pollFullAnonymous: {
-			get() {
-				return (this.poll.Fullanonymous > 0)
-			},
-			set(value) {
-				this.writeValue({ fullAnonymous: value })
 			}
 		},
 
