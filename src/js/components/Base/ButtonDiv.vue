@@ -21,8 +21,8 @@
   -->
 
 <template lang="html">
-	<div :class="['button', icon, { primary: primary } ]" @click="$emit('click')">
-		<span>{{ title }}</span>
+	<div :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
+		{{ title }}
 	</div>
 </template>
 
@@ -42,14 +42,25 @@ export default {
 			type: Boolean,
 			default: false
 		}
+	},
+
+	computed: {
+		withIcon() {
+			return Boolean(this.icon)
+		}
 	}
 }
 </script>
 
 <style lang="scss" scoped>
 	.button {
-		padding: 10px;
-		padding-left: 34px;
-		background-position: 12px center;
+		display: inline-flex;
+
+		&.withIcon {
+			padding-left: 34px;
+			background-position: 12px center;
+		}
+
 	}
+
 </style>
