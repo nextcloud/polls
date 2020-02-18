@@ -90,7 +90,7 @@ export default {
 			lastOption: '',
 			move: {
 				step: 1,
-				unit: 'week',
+				unit: 'Week',
 				units: [
 					{ name: t('polls', 'Minute'), value: 'minute' },
 					{ name: t('polls', 'Hour'), value: 'hour' },
