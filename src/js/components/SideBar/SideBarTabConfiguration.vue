@@ -75,10 +75,7 @@
 			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
-		<button class="button btn primary" @click="switchDeleted()">
-			<span v-if="poll.deleted">{{ t('polls', 'Restore poll') }}</span>
-			<span v-else>{{ t('polls', 'Delete poll') }}</span>
-		</button>
+		<ButtonDiv :primary="true" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')" @click="switchDeleted()" />
 	</div>
 </template>
 

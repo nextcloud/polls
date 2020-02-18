@@ -89,13 +89,11 @@
 <script>
 import { Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
-import ButtonDiv from '../Base/ButtonDiv'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
-		ButtonDiv,
 		Multiselect
 	},
 

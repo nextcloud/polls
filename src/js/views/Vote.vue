@@ -24,9 +24,7 @@
 	<AppContent>
 		<div class="main-container">
 			<div class="header-actions">
-				<button class="button btn primary" @click="tableMode = !tableMode">
-					<span>{{ t('polls', 'Switch view') }}</span>
-				</button>
+				<ButtonDiv :primary="true" :title="t('polls', 'Switch view')" @click="tableMode = !tableMode" />
 				<a href="#" class="icon icon-settings active"
 					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			</div>
