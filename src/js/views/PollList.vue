@@ -75,6 +75,7 @@ export default {
 			'myPolls',
 			'publicPolls',
 			'hiddenPolls',
+			'participatedPolls',
 			'deletedPolls'
 		]),
 
@@ -87,6 +88,8 @@ export default {
 				return this.hiddenPolls
 			} else if (this.$route.params.type === 'deleted') {
 				return this.deletedPolls
+			} else if (this.$route.params.type === 'participated') {
+				return this.participatedPolls
 			} else {
 				return this.allPolls
 			}

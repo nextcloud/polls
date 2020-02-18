@@ -164,7 +164,7 @@ class MailService {
 				),
 				'link' => $this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->linkToRoute(
-						'polls.page.polls',
+						'polls.page.indexvote',
 						array('id' => $share->getPollId())
 					)
 				)
@@ -183,7 +183,7 @@ class MailService {
 					'language' => $defaultLang,
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
-							'polls.page.vote_public',
+							'polls.page.vote_publicpublic',
 							array('token' => $share->getToken())
 						)
 					)
@@ -202,7 +202,7 @@ class MailService {
 				'language' => $defaultLang,
 				'link' => $this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->linkToRoute(
-						'polls.page.vote_public',
+						'polls.page.vote_publicpublic',
 						array('token' => $share->getToken())
 					)
 				)
@@ -228,7 +228,7 @@ class MailService {
 					'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
-							'polls.page.polls', ['id' => $share->getPollId()]
+							'polls.page.indexvote', ['id' => $share->getPollId()]
 						)
 					)
 				);
@@ -327,7 +327,7 @@ class MailService {
 
 			$url = $this->urlGenerator->getAbsoluteURL(
 				$this->urlGenerator->linkToRoute(
-					'polls.page.polls',
+					'polls.page.indexvote',
 					array('id' => $subscription->getPollId())
 				)
 			);
@@ -347,40 +347,63 @@ class MailService {
 
 			foreach ($log as $logItem) {
 				if ($logItem->getPollId() === $subscription->getPollId()) {
+
+					if ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
+						$displayUser = $this->userManager->get($logItem->getUserId())->getDisplayName();
+					} else {
+						$displayUser = $logItem->getUserId();
+					}
+
 					if ($logItem->getMessage()) {
 						$emailTemplate->addBodyText($logItem->getMessage());
+
 					} elseif ($logItem->getMessageId() === 'setVote') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s voted.',
-							array($logItem->getUserId()))
-							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
-						);
+							array($displayUser)
+						));
+
 					} elseif ($logItem->getMessageId() === 'updatePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s updated the poll configuration. Please check your votes.',
-							array($logItem->getUserId()))
-							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
-						);
+							array($displayUser)
+						));
+
 					} elseif ($logItem->getMessageId() === 'deletePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s deleted the poll.',
-							array($logItem->getUserId()))
-							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
-						);
+							array($displayUser)
+						));
+
 					} elseif ($logItem->getMessageId() === 'restorePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s restored the poll.',
-							array($logItem->getUserId()))
-							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
-						);
+							array($displayUser)
+						));
+
 					} elseif ($logItem->getMessageId() === 'expirePoll') {
 						$emailTemplate->addBodyText($trans->t(
 							'- The poll expired.',
-							array($logItem->getUserId()))
-							// array($this->userManager->get($logItem->getUserId())->getDisplayName()))
+							array($displayUser)
+						));
+
+					} elseif ($logItem->getMessageId() === 'addOption') {
+						$emailTemplate->addBodyText($trans->t(
+							'- %s added a vote option.',
+							array($displayUser)
+						));
+
+					} elseif ($logItem->getMessageId() === 'deleteOption') {
+						$emailTemplate->addBodyText($trans->t(
+							'- %s removed a vote option.',
+							array($displayUser)
+						));
+
+					} else {
+						$emailTemplate->addBodyText(
+							$logItem->getMessageId() . " (" . $displayUser . ")"
 						);
 					}
-
 				}
 
 				$logItem->setProcessed(time());

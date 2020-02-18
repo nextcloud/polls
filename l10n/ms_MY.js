@@ -8,6 +8,7 @@ OC.L10N.register(
     "Owner" : "Owner",
     "never" : "jangan",
     "Shares" : "Kongsi",
-    "Description" : "Keterangan"
+    "Description" : "Keterangan",
+    "OK" : "OK"
 },
 "nplurals=1; plural=0;");

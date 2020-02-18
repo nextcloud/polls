@@ -6,7 +6,7 @@ OC.L10N.register(
     "Title" : "ಶೀರ್ಷಿಕೆ",
     "Owner" : "Owner",
     "never" : "﻿ಎಂದಿಗೂ",
-    "Saved" : "﻿ಉಳಿಸಿದ",
-    "Expiration date" : "ಮುಕ್ತಾಯ ದಿನಾಂಕ"
+    "Expiration date" : "ಮುಕ್ತಾಯ ದಿನಾಂಕ",
+    "OK" : "ಸರಿ"
 },
 "nplurals=2; plural=(n > 1);");

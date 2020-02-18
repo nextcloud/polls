@@ -41,7 +41,7 @@ export default {
 	height: 100%;
 	background: #fff;
 	opacity: 0.9;
-	z-index: 1001;
+	z-index: 9999;
 	.icon-loading {
 		position: fixed;
 		left: 50%;

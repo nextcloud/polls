@@ -22,22 +22,26 @@
 
 <template>
 	<div>
-		<SideBarTabDateOptions v-if="acl.allowEdit && poll.type === 'datePoll'" />
-		<SideBarTabTextOptions v-if="acl.allowEdit && poll.type === 'textPoll'" />
+		<div v-if="acl.isAdmin" class="config-box">
+			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
+		</div>
+
+		<SideBarTabOptionsDate v-if="acl.allowEdit && poll.type === 'datePoll'" />
+		<SideBarTabOptionsText v-if="acl.allowEdit && poll.type === 'textPoll'" />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import SideBarTabDateOptions from './SideBarTabDateOptions'
-import SideBarTabTextOptions from './SideBarTabTextOptions'
+import SideBarTabOptionsDate from './SideBarTabOptionsDate'
+import SideBarTabOptionsText from './SideBarTabOptionsText'
 
 export default {
 	name: 'SideBarTabOptions',
 
 	components: {
-		SideBarTabDateOptions,
-		SideBarTabTextOptions
+		SideBarTabOptionsDate,
+		SideBarTabOptionsText
 	},
 
 	data() {

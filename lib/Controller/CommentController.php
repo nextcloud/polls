@@ -142,27 +142,42 @@ class CommentController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param int $pollId
+	 * @param string $userId
 	 * @param string $message
 	 * @return DataResponse
 	 */
 	public function write($pollId, $userId, $message) {
+		$this->logger->alert('write');
 		if (!\OC::$server->getUserSession()->isLoggedIn() && !$this->acl->getFoundByToken()) {
+			$this->logger->alert('not allowed ' . json_encode(\OC::$server->getUserSession()->isLoggedIn()));
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
-		$comment = new Comment();
-		$comment->setPollId($pollId);
-		$comment->setUserId($userId);
-		$comment->setComment($message);
-		$comment->setDt(date('Y-m-d H:i:s'));
-
-
-		try {
-			$comment = $this->mapper->insert($comment);
-		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
+		if (!$this->acl->getFoundByToken()) {
+			$this->acl->setPollId($pollId);
 		}
 
+		if ($this->acl->getAllowComment()) {
+			$comment = new Comment();
+			$comment->setPollId($pollId);
+			$comment->setUserId($userId);
+			$comment->setComment($message);
+			$comment->setDt(date('Y-m-d H:i:s'));
+
+
+			try {
+				$comment = $this->mapper->insert($comment);
+			} catch (\Exception $e) {
+				$this->logger->alert('conflict ' . json_encode($e));
+				return new DataResponse($e, Http::STATUS_CONFLICT);
+			}
+		} else {
+			$this->logger->alert('unauthorized ');
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+
+		$this->logger->alert('ok ' . json_encode($comment));
 		return new DataResponse($comment, Http::STATUS_OK);
 
 	}
@@ -181,11 +196,12 @@ class CommentController extends Controller {
 
 		try {
 			$this->acl->setToken($token);
+			return $this->write($this->acl->getPollId(), $this->acl->getUserId(), $message);
+
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
 
-		return $this->write($this->acl->getPollId(), $this->acl->getUserId(), $message);
 
 	}
 
@@ -199,17 +215,49 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($comment) {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
+		if (!\OC::$server->getUserSession()->isLoggedIn() && !$this->acl->getFoundByToken()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
+		if (!$this->acl->getFoundByToken()) {
+			$this->acl->setPollId($comment['pollId']);
+		}
+
 		try {
-			$comment = $this->mapper->delete($comment['id']);
+			if ($comment['userId'] === $this->acl->getUserId()) {
+					$comment = $this->mapper->find($comment['id']);
+					$comment = $this->mapper->delete($comment);
+			}
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}
 
-		return new DataResponse($comment, Http::STATUS_OK);
+		return new DataResponse(['comment' => $comment], Http::STATUS_OK);
 
 	}
+
+	/**
+	 * writeByToken
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param Array $option
+	 * @param string $setTo
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function deleteByToken($token, $comment) {
+
+		try {
+			$this->acl->setToken($token);
+			return $this->delete($comment);
+
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+
+
+
+	}
+
 }

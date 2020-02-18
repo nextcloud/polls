@@ -3,7 +3,9 @@ OC.L10N.register(
     {
     "Deleted" : "Sletta",
     "Group" : "Gruppe",
+    "New comment …" : "Ny kommentar...",
     "Comments" : "Kommentarar",
+    "Delete comment" : "Slett kommentar",
     "Cancel" : "Avbryt",
     "Apply" : "Anvend",
     "Title" : "Tittel",
@@ -13,8 +15,8 @@ OC.L10N.register(
     "Details" : "Detaljar",
     "Configuration" : "Innstillingar",
     "Shares" : "Delingar",
-    "Saved" : "Lagra",
     "Description" : "Skildring",
-    "Expiration date" : "Utløpsdato"
+    "Expiration date" : "Utløpsdato",
+    "OK" : "OK"
 },
 "nplurals=2; plural=(n != 1);");

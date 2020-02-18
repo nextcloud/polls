@@ -22,7 +22,12 @@
 
 <template>
 	<div>
+		<div v-if="acl.isAdmin" class="config-box">
+			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
+		</div>
+
 		<h3>{{ t('polls','Invitations') }}</h3>
+
 		<span>{{ t('polls','Invited users will get informed immediately via eMail!') }} </span>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
@@ -88,7 +93,7 @@
 
 <script>
 import { Multiselect } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'SideBarTabShare',
@@ -114,6 +119,10 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			acl: state => state.acl
+		}),
+
 		...mapGetters([
 			'invitationShares',
 			'publicShares'
@@ -160,7 +169,9 @@ export default {
 		shareDisplayName(share) {
 			let displayName = ''
 
-			if (share.type === 'user' || share.type === 'contact' || share.type === 'external') {
+			if (share.type === 'user') {
+				displayName = share.displayName
+			} else if (share.type === 'contact' || share.type === 'external') {
 				displayName = share.userId
 				if (share.userEmail) {
 					displayName = displayName + ' (' + share.userEmail + ')'

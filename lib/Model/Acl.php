@@ -28,11 +28,14 @@ use JsonSerializable;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
+use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\ILogger;
+use OCP\IUser;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
 
 /**
@@ -44,6 +47,7 @@ class Acl implements JsonSerializable {
 
 	/** @var int */
 	private $pollId = 0;
+
 	/** @var ILogger */
 	private $logger;
 
@@ -59,11 +63,17 @@ class Acl implements JsonSerializable {
 	/** @var string */
 	private $userId;
 
+	/** @var IUserManager */
+	private $userManager;
+
 	/** @var IGroupManager */
 	private $groupManager;
 
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var VoteMapper */
+	private $voteMapper;
 
 	/** @var ShareMapper */
 	private $shareMapper;
@@ -77,8 +87,10 @@ class Acl implements JsonSerializable {
 	 * @param string $appName
 	 * @param string $userId
 	 * @param ILogger $logger
+	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
+	 * @param VoteMapper $voteMapper
 	 * @param ShareMapper $shareMapper
 	 * @param Poll $pollMapper
 	 *
@@ -86,15 +98,19 @@ class Acl implements JsonSerializable {
 	public function __construct(
 		$userId,
 		ILogger $logger,
+		IUserManager $userManager,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
+		VoteMapper $voteMapper,
 		ShareMapper $shareMapper,
 		Poll $poll
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
+		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
+		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
 		$this->poll = $poll;
 	}
@@ -112,9 +128,31 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return string
 	 */
+	public function getDisplayName() {
+		// $this->userManager = \OC::$server->getUserManager();
+
+		if ($this->userManager->get($this->userId) instanceof IUser) {
+			return $this->userManager->get($this->userId)->getDisplayName();
+		} else {
+			return $this->userId;
+		}
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return string
+	 */
 	public function setUserId($userId): Acl {
 		$this->userId = $userId;
 		return $this;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return string
+	 */
+	public function getLoggedIn() {
+		return \OC::$server->getUserSession()->isLoggedIn();
 	}
 
 	/**
@@ -168,11 +206,15 @@ class Acl implements JsonSerializable {
 	public function getAllowView(): bool {
 		return (
 			   $this->getIsOwner()
-			|| $this->getIsAdmin()
-			|| ($this->getGroupShare() && !$this->poll->getDeleted())
-			|| ($this->getPersonalShare() && !$this->poll->getDeleted())
-			|| $this->poll->getAccess() !== 'hidden'
-			);
+			|| ($this->getIsAdmin() && $this->poll->getAdminAccess())
+			|| !$this->poll->getDeleted() && (
+				   $this->getUserHasVoted()
+				|| $this->getGroupShare()
+				|| $this->getPersonalShare()
+				|| $this->getPublicShare()
+				|| ($this->poll->getAccess() !== 'hidden' && !$this->getPublicShare())
+			)
+		);
 	}
 
 	/**
@@ -193,11 +235,36 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return bool
 	 */
+	public function getUserHasVoted(): bool {
+		return count(
+			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
 	public function getPersonalShare(): bool {
 
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
 				if (($item->getType() === 'user' || $item->getType() === 'external') && $item->getUserId() === $this->getUserId()) {
+					return true;
+				}
+			})
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
+	public function getPublicShare(): bool {
+
+		return count(
+			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
+				if ($item->getType() === 'public' && $item->getToken() === $this->getToken()) {
 					return true;
 				}
 			})
@@ -221,9 +288,11 @@ class Acl implements JsonSerializable {
 	 */
 	public function getAllowVote(): bool {
 		if (
-			   $this->getAllowView()
+			   ($this->getAllowView() || $this->getFoundByToken())
 			&& !$this->getExpired()
 			&& !$this->poll->getDeleted()
+			&& $this->userId
+
 		) {
 			return true;
 		} else {
@@ -345,6 +414,8 @@ class Acl implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return	[
 			'userId'            => $this->getUserId(),
+			'displayName'       => $this->getDisplayName(),
+			'loggedIn'			=> $this->getLoggedIn(),
 			'pollId'            => $this->getPollId(),
 			'token'             => $this->getToken(),
 			'isOwner'           => $this->getIsOwner(),
@@ -355,8 +426,10 @@ class Acl implements JsonSerializable {
 			'allowEdit'         => $this->getAllowEdit(),
 			'allowSeeUsernames' => $this->getAllowSeeUsernames(),
 			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
+			'userHasVoted'		=> $this->getUserHasVoted(),
 			'groupShare'        => $this->getGroupShare(),
 			'personalShare'     => $this->getPersonalShare(),
+			'publicShare'     	=> $this->getPublicShare(),
 			'foundByToken'      => $this->getFoundByToken(),
 			'accessLevel'       => $this->getAccessLevel()
 		];

@@ -2,7 +2,9 @@
     "Polls" : "Sondazhe",
     "Deleted" : "E fshirë",
     "Group" : "Grup",
+    "New comment …" : "Koment i ri ...",
     "Comments" : "Komentet",
+    "Delete comment" : "Fshi komentin",
     "Create new poll" : "Krijo sondazh të ri",
     "Cancel" : "Anullo",
     "Apply" : "Apliko",
@@ -14,11 +16,10 @@
     "Details" : "Detajet",
     "Configuration" : "Formësim",
     "Shares" : "Shpërndarje",
-    "Saving" : "Duke u ruajtur!",
-    "Saved" : "Ruajtur",
     "Description" : "Përshkrim",
     "Expiration date" : "Datë skadimi",
     "Unknown user" : "Përdorues i panjohur",
+    "OK" : "OK",
     "Public access" : "Akses publik"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

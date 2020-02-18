@@ -25,6 +25,7 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -66,8 +67,17 @@ class Share extends Entity implements JsonSerializable {
 			'type' => $this->type,
 			'pollId' => intval($this->pollId),
 			'userId' => $this->userId,
-			'userEmail' => $this->userEmail
+			'userEmail' => $this->userEmail,
+			'displayName' => $this->getDisplayName()
 		];
+	}
 
+	private function getDisplayName() {
+
+		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
+			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+		} else {
+			return $this->userId;
+		}
 	}
 }

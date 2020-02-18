@@ -137,8 +137,6 @@ class ShareController extends Controller {
 	 * write
 	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
 	 * @return DataResponse
@@ -182,7 +180,6 @@ class ShareController extends Controller {
 	 * createPersonalShare
 	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
@@ -209,7 +206,7 @@ class ShareController extends Controller {
 				$userShare->setPollId($publicShare->getPollId());
 				$userShare->setUserId($userName);
 				$userShare->setUserEmail('');
-				$this->logger->debug('Create share: '. json_encode($userShare));
+				$this->logger->debug('Create share: ' . json_encode($userShare));
 				$userShare = $this->mapper->insert($userShare);
 				return new DataResponse($userShare, Http::STATUS_OK);
 
@@ -222,6 +219,13 @@ class ShareController extends Controller {
 		}
 	}
 
+	/**
+	 * remove
+	 * remove share
+	 * @NoAdminRequired
+	 * @param Share $share
+	 * @return DataResponse
+	 */
 
 	public function remove($share) {
 		try {

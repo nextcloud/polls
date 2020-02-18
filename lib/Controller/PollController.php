@@ -114,15 +114,30 @@ class PollController extends Controller {
 
 	public function list() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
+
+			$pollList = [];
+
 			try {
-				$polls = array_values(array_filter($this->pollMapper->findAll(), function($item) {
-					return $this->acl->setPollId($item->getId())->getAllowView();
-				}));
-				return new DataResponse($polls, Http::STATUS_OK);
+
+				$polls = $this->pollMapper->findAll();
+
+				// TODO: Not the elegant way. Improvement neccessary
+				foreach ($polls as $poll) {
+					$combinedPoll = (object) array_merge(
+        				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->setPollId($poll->getId()))));
+					if ($combinedPoll->allowView) {
+						$pollList[] = $combinedPoll;
+					}
+				}
+
+				return new DataResponse($pollList, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
 				return new DataResponse($e, Http::STATUS_NOT_FOUND);
 			}
+		} else {
+			return new DataResponse([], Http::STATUS_OK);
 		}
+
 	}
 
 	/**
@@ -139,7 +154,9 @@ class PollController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 			$this->poll = $this->pollMapper->find($pollId);
-
+			if (!$this->acl->getAllowView()) {
+				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			}
 			return new DataResponse([
 				'poll' => $this->poll,
 				'acl' => $this->acl
@@ -147,7 +164,7 @@ class PollController extends Controller {
 
 		} catch (DoesNotExistException $e) {
 			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse(null, Http::STATUS_NOT_FOUND);
  		}
  	}
 

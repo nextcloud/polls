@@ -31,16 +31,17 @@
 				:poll-type="poll.type" />
 		</div>
 
-		<div v-for="(participant) in participants" :key="participant" :class="{currentuser: (participant === currentUser) }">
-			<UserDiv :key="participant"
+		<div v-for="(participant) in participants" :key="participant.userId" :class="{currentuser: (participant.userId === currentUser) }">
+			<UserDiv :key="participant.userId"
 				class="sticky"
-				:class="{currentuser: (participant === currentUser) }"
-				:user-id="participant" />
+				:class="{currentuser: (participant.userId === currentUser) }"
+				:user-id="participant.userId"
+				:display-name="participant.displayName" />
 			<VoteTableItem v-for="(option) in sortedOptions"
 				:key="option.id"
-				:user-id="participant"
+				:user-id="participant.userId"
 				:option="option"
-				@voteClick="setVote(option, participant)" />
+				@voteClick="setVote(option, participant.userId)" />
 		</div>
 	</div>
 </template>
@@ -74,14 +75,14 @@ export default {
 	},
 
 	methods: {
-		setVote(option, participant) {
+		setVote(option, userId) {
 			this.$store
 				.dispatch('setVoteAsync', {
 					option: option,
-					userId: participant,
+					userId: userId,
 					setTo: this.$store.getters.getNextAnswer({
 						option: option,
-						userId: participant
+						userId: userId
 					})
 				})
 				.then(() => {

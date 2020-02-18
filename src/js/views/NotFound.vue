@@ -21,31 +21,34 @@
   -->
 
 <template>
-	<li class="poll-item date">
-		<div>{{ moment.unix(option.timestamp).format('LLLL') }}</div>
-		<div>
-			<a v-if="acl.allowEdit" class="icon-delete" @click="$emit('remove')" />
+	<AppContent>
+		<div id="emptycontent">
+			<div id="emptycontent-icon" class="icon-search" />
+			<h2>{{ t('polls', 'The poll does not exist') }}</h2>
+
+			<p v-if="OC.currentUser" class="emptycontent-additional">
+				{{ t('polls', 'Enter a poll or start a new one.') }}
+			</p>
+			<button v-else @click="gotoLogin()">
+				{{ t('polls', 'Goto Nextcloud') }}
+			</button>
 		</div>
-	</li>
+	</AppContent>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { AppContent } from '@nextcloud/vue'
 
 export default {
-	name: 'DatePollItem',
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined
-		}
+	name: 'NotFound',
+	components: {
+		AppContent
 	},
 
-	computed: {
-		...mapState({
-			acl: state => state.acl
-		})
+	methods: {
+		gotoLogin() {
+			window.location.replace(OC.generateUrl('/'))
+		}
 	}
 }
 </script>

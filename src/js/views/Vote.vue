@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent>
-		<div v-if="poll.id > 0" v-show="!isLoading" class="main-container">
+		<div class="main-container">
 			<div class="header-actions">
 				<button class="button btn primary" @click="tableMode = !tableMode">
 					<span>{{ t('polls', 'Switch view') }}</span>
@@ -32,20 +32,23 @@
 			</div>
 			<PollTitle />
 			<PollInformation />
+			<VoteHeaderPublic v-if="!OC.currentUser" />
 			<PollDescription />
 			<VoteList v-show="!tableMode && options.list.length" />
 			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
-				<button @click="openOptions">
+				<button v-if="acl.allowEdit" @click="openOptions">
 					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
 				</button>
+				<div v-if="!acl.allowEdit">
+					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
+				</div>
 			</div>
 
-			<Subscription />
+			<Subscription v-if="OC.currentUser" />
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
-				<!-- <Comments /> -->
 			</div>
 		</div>
 
@@ -55,7 +58,6 @@
 </template>
 
 <script>
-// import Comments from '../components/Comments/Comments'
 import { AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
@@ -63,6 +65,7 @@ import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
 import PollTitle from '../components/Base/PollTitle'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
+import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
@@ -78,7 +81,7 @@ export default {
 		PollInformation,
 		PollTitle,
 		LoadingOverlay,
-		// Comments,
+		VoteHeaderPublic,
 		SideBar,
 		VoteTable,
 		VoteList
@@ -88,12 +91,11 @@ export default {
 		return {
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: false,
-			isLoading: false,
+			sideBarOpen: (window.innerWidth > 920),
+			isLoading: true,
 			initialTab: 'comments',
-			newName: '',
 			tableMode: true,
-			activeTab: t('polls', 'Comments').toLowerCase()
+			activeTab: 'comments'
 		}
 	},
 
@@ -123,29 +125,34 @@ export default {
 	methods: {
 		openOptions() {
 			this.sideBarOpen = true
-			this.activeTab = t('polls', 'Options').toLowerCase()
+			this.activeTab = 'options'
 		},
 
 		openConfiguration() {
 			this.sideBarOpen = true
-			this.activeTab = t('polls', 'Configuration').toLowerCase()
+			this.activeTab = 'configuration'
 		},
 
 		loadPoll() {
 			this.isLoading = true
-			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
-				.then(() => {
-					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
-						.then(() => {
-							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-								this.openConfiguration()
-							}
-							this.isLoading = false
-						})
+			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
+				.then((response) => {
+					if (response.status === 200) {
+						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
+							.then(() => {
+								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+									this.openConfiguration()
+								}
+								this.isLoading = false
+							})
+					} else {
+						this.$router.replace({ name: 'notfound' })
+					}
 				})
 				.catch((error) => {
 					console.error(error)
 					this.isLoading = false
+					this.$router.replace({ name: 'notfound' })
 				})
 		},
 

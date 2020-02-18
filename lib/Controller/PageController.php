@@ -64,24 +64,6 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function polls() {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function list() {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -89,21 +71,14 @@ class PageController extends Controller {
 	 * @return PublicTemplateResponse
 	 */
 	public function votePublic() {
-		return new PublicTemplateResponse('polls', 'polls.tmpl', [
-			'urlGenerator' => $this->urlGenerator]);
-	}
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return new TemplateResponse('polls', 'polls.tmpl', [
+				'urlGenerator' => $this->urlGenerator]);
+		} else {
+			return new PublicTemplateResponse('polls', 'polls.tmpl', [
+				'urlGenerator' => $this->urlGenerator]);
+		}
 
-	/**
-	 * @PublicPage
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return PublicTemplateResponse
-	 */
-	public function oldVotePublic() {
-		return new PublicTemplateResponse('polls', 'polls.tmpl', [
-			'urlGenerator' => $this->urlGenerator]);
 	}
-
 
 }

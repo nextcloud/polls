@@ -1,6 +1,8 @@
 { "translations": {
     "Group" : "Group",
+    "New comment …" : "නව ප්රතිචාරයක් ...",
     "Comments" : "අදහස්",
+    "Delete comment" : "ප්රතිචාරය මකන්න",
     "Cancel" : "අවලංගු කරන්න",
     "Title" : "මාතෘකාව",
     "Owner" : "Owner",
@@ -8,6 +10,7 @@
     "Configuration" : "වින්‍යාසය",
     "Description" : "විස්තරය",
     "Expiration date" : "කල් ඉකුත් විමේ දිනය",
-    "Unknown user" : "හදුනානොගත් සේවාදායකයා"
+    "Unknown user" : "හදුනානොගත් සේවාදායකයා",
+    "OK" : "හරි"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
