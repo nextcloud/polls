@@ -40,7 +40,11 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<Multiselect v-model="move.unit" :options="move.units" label="name" track-by="name" />
+					<Multiselect
+						v-model="move.unit"
+						:options="move.units"
+						label="name"
+						track-by="name" />
 				</div>
 			</div>
 			<div>
@@ -90,7 +94,7 @@ export default {
 			lastOption: '',
 			move: {
 				step: 1,
-				unit: 'Week',
+				unit: { name: t('polls', 'Week'), value: 'week' },
 				units: [
 					{ name: t('polls', 'Minute'), value: 'minute' },
 					{ name: t('polls', 'Hour'), value: 'hour' },
