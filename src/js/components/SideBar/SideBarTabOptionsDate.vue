@@ -44,7 +44,7 @@
 						v-model="move.unit"
 						:options="move.units"
 						label="name"
-						track-by="name" />
+						track-by="value" />
 				</div>
 			</div>
 			<div>
