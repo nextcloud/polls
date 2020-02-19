@@ -66,7 +66,7 @@ OC.L10N.register(
     "Created" : "Erstellt",
     "Expires" : "Ablaufdatum",
     "Visible to other users" : "Sichtbar für andere Nutzer",
-    "Hidden to other users" : "Verborgen für ander Nutzer",
+    "Hidden to other users" : "Verborgen für andere Nutzer",
     "Poll schedule" : "Umfrage-Zeitplan",
     "never" : "nie",
     "Share with" : "Teilen mit…",
