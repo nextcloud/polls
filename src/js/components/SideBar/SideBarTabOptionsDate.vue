@@ -40,7 +40,11 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<Multiselect v-model="move.unit" :options="move.units" />
+					<Multiselect
+						v-model="move.unit"
+						:options="move.units"
+						label="name"
+						track-by="value" />
 				</div>
 			</div>
 			<div>
@@ -90,8 +94,15 @@ export default {
 			lastOption: '',
 			move: {
 				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
+				unit: { name: t('polls', 'Week'), value: 'week' },
+				units: [
+					{ name: t('polls', 'Minute'), value: 'minute' },
+					{ name: t('polls', 'Hour'), value: 'hour' },
+					{ name: t('polls', 'Day'), value: 'day' },
+					{ name: t('polls', 'Week'), value: 'week' },
+					{ name: t('polls', 'Month'), value: 'month' },
+					{ name: t('polls', 'Year'), value: 'year' }
+				]
 			}
 		}
 	},
@@ -154,7 +165,7 @@ export default {
 			const store = this.$store
 			this.options.list.forEach(function(existingOption) {
 				const option = Object.assign({}, existingOption)
-				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
+				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
 				store.dispatch('updateOptionAsync', { option: option })
 			})
