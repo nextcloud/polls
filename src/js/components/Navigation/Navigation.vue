@@ -65,7 +65,7 @@
 				</ul>
 			</AppNavigationItem>
 
-			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true"
+			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true" :pinned="true"
 				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
