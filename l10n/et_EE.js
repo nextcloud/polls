@@ -24,7 +24,6 @@ OC.L10N.register(
     "Configuration" : "Seadistamine",
     "Shares" : "Jagamisi",
     "Description" : "Kirjeldus",
-    "Hide user names for admin" : "Kasutajanimede peitmine administraatori eest",
     "Expiration date" : "Aegumise kuupäev",
     "Update poll" : "Uuenda küsitlust",
     "Unknown user" : "Tundmatu kasutaja",

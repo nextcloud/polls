@@ -28,7 +28,6 @@ OC.L10N.register(
     "Options" : "אפשרויות",
     "Shares" : "שיתופים",
     "Description" : "תיאור",
-    "Hide user names for admin" : "הסתרת שמות משתמשים למנהלים",
     "Expiration date" : "תאריך תפוגה",
     "Update poll" : "עדכון סקר",
     "Unknown user" : "משתמש לא ידוע",

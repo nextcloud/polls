@@ -24,7 +24,6 @@ OC.L10N.register(
     "Options" : "設定",
     "Shares" : "分享",
     "Description" : "調查內容描述",
-    "Hide user names for admin" : "對管理者隱藏記名",
     "Expiration date" : "到期日",
     "Update poll" : "更新調查活動內容",
     "Unknown user" : "未知的使用者",

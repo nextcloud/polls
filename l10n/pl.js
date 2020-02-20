@@ -80,7 +80,6 @@ OC.L10N.register(
     "Allow admins to edit this poll" : "Pozwól administratorom edytować tę sondę",
     "Allow \"maybe\" vote" : "Zezwalaj głosować na \"może\"",
     "Anonymous poll" : "Anonimowa sonda",
-    "Hide user names for admin" : "Ukryj nazwy użytkowników dla administratora",
     "Expiration date" : "Data wygaśnięcia",
     "Writing poll" : "Pisanie sondy",
     "Update poll" : "Aktualizuj sondę",

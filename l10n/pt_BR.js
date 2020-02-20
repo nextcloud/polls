@@ -80,7 +80,6 @@ OC.L10N.register(
     "Allow admins to edit this poll" : "Permitir que administradores editem esta enquete",
     "Allow \"maybe\" vote" : "Permitir o voto \"talvez\"",
     "Anonymous poll" : "Enquete anônima",
-    "Hide user names for admin" : "Esconder nomes de usuários para administrador",
     "Expiration date" : "Data de expiração",
     "Writing poll" : "Gravando enquete",
     "Update poll" : "Atualizar pesquisa",

@@ -80,7 +80,6 @@ OC.L10N.register(
     "Allow admins to edit this poll" : "Leisti administratoriams taisyti šią apklausą",
     "Allow \"maybe\" vote" : "Leisti \"Galbūt\" balsą",
     "Anonymous poll" : "Anoniminė apklausa",
-    "Hide user names for admin" : "Nerodyti administratoriams naudotojų vardus",
     "Expiration date" : "Galiojimo pabaigos data",
     "Writing poll" : "Įrašoma apklausa",
     "Update poll" : "Atnaujinti apklausą",

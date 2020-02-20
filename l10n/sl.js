@@ -72,7 +72,6 @@ OC.L10N.register(
     "Poll configurations" : "Nastavitve ankete",
     "Allow \"maybe\" vote" : "Dovoli izbiro » Mogoče «",
     "Anonymous poll" : "Anonimna anketa",
-    "Hide user names for admin" : "Skrij imena uporabnikov",
     "Expiration date" : "Datum preteka",
     "Writing poll" : "Zapisovanje ankete",
     "Update poll" : "Posodobi anketo",

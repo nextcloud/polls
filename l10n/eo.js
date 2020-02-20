@@ -35,7 +35,6 @@ OC.L10N.register(
     "Poll configurations" : "Enketa agordo",
     "Allow \"maybe\" vote" : "Permesi respondi per „Eble“",
     "Anonymous poll" : "Enketo sennoma",
-    "Hide user names for admin" : "Kaŝi uzantnomojn al administranto",
     "Expiration date" : "Limdato",
     "Writing poll" : "Redakti enketon",
     "Update poll" : "Ĝisdatigi enketon",

@@ -16,6 +16,9 @@ OC.L10N.register(
     "Shares" : "Compartimentos",
     "Description" : "Description",
     "Expiration date" : "Data de expiration",
+    "Week" : "Septimana",
+    "Day" : "Die",
+    "Month" : "Mense",
     "Unknown user" : "Usator incognite",
     "OK" : "Ok",
     "Public access" : "Accesso public"

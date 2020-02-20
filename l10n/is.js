@@ -37,7 +37,6 @@ OC.L10N.register(
     "Poll configurations" : "Uppsetningar kannana",
     "Allow \"maybe\" vote" : "Leyfa \"kannski\"-atkvæði",
     "Anonymous poll" : "Nafnlaus könnun",
-    "Hide user names for admin" : "Fela notendanöfn fyrir kerfisstjórum",
     "Expiration date" : "Gildir til",
     "Writing poll" : "Skrifa könnun",
     "Update poll" : "Uppfæra könnun",

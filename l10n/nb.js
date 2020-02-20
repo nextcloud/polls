@@ -25,7 +25,6 @@ OC.L10N.register(
     "Configuration" : "Oppsett",
     "Shares" : "Delinger",
     "Description" : "Beskrivelse",
-    "Hide user names for admin" : "Skjul brukernavn for administratorer",
     "Expiration date" : "Utløpsdato",
     "Update poll" : "Oppdater avstemning",
     "Unknown user" : "Ukjent bruker",

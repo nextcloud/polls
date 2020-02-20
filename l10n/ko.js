@@ -25,7 +25,6 @@ OC.L10N.register(
     "Configuration" : "설정",
     "Shares" : "공유",
     "Description" : "설명",
-    "Hide user names for admin" : "관리자에게 사용자 이름 숨기기",
     "Expiration date" : "만료 일자",
     "Update poll" : "투표 업데이트",
     "Unknown user" : "알 수 없는 사용자",

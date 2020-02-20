@@ -16,6 +16,10 @@ OC.L10N.register(
     "Shares" : "Спільний доступ",
     "Description" : "Опис",
     "Expiration date" : "Термін дії",
+    "Week" : "Тиждень",
+    "Hour" : "Годин",
+    "Day" : "День",
+    "Month" : "Місяць",
     "Unknown user" : "Невідомий користувач",
     "OK" : "OK",
     "Public access" : "Публічний доступ"

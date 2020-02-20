@@ -33,7 +33,6 @@ OC.L10N.register(
     "Poll configurations" : "Kyselyn asetukset",
     "Allow \"maybe\" vote" : "Salli \"ehkä\"-ääni",
     "Anonymous poll" : "Anonyymi kysely",
-    "Hide user names for admin" : "Piilota käyttäjänimet ylläpitäjältä",
     "Expiration date" : "Vanhenemispäivä",
     "Update poll" : "Päivitä kysely",
     "Title must not be empty!" : "Nimi ei voi olla tyhjä!",

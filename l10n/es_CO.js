@@ -25,7 +25,6 @@ OC.L10N.register(
     "Configuration" : "Configuración",
     "Shares" : "Elementos compartidos",
     "Description" : "Descripción",
-    "Hide user names for admin" : "Ocultar los nombres de usuario de admin",
     "Expiration date" : "Fecha de expiración",
     "Update poll" : "Actualizar encuesta",
     "Unknown user" : "Ususario desconocido",

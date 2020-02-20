@@ -25,7 +25,6 @@ OC.L10N.register(
     "Configuration" : "კონფიგურაცია",
     "Shares" : "გაზიარებები",
     "Description" : "აღწერილობა",
-    "Hide user names for admin" : "ადმინისტრატორებისთვის სახელების დამალვა",
     "Expiration date" : "გაუქმების თარიღი",
     "Update poll" : "გამოკითხვის განახლება",
     "Unknown user" : "ამოუცნობი მომხმარებელი",

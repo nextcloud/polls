@@ -80,7 +80,6 @@ OC.L10N.register(
     "Allow admins to edit this poll" : "Yöneticiler bu anketi düzenleyebilsin",
     "Allow \"maybe\" vote" : "\"Belki\" oyu verilebilsin",
     "Anonymous poll" : "Anonim anket",
-    "Hide user names for admin" : "Yönetici için kullanıcı adları gizlensin",
     "Expiration date" : "Sona erme tarihi",
     "Writing poll" : "Yazma anketi",
     "Update poll" : "Anketi güncelle",

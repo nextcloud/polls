@@ -24,7 +24,6 @@ OC.L10N.register(
     "Configuration" : "Nastavenia",
     "Shares" : "Sprístupnené položky",
     "Description" : "Popis",
-    "Hide user names for admin" : "Skryť používateľské mená pre správcu",
     "Expiration date" : "Dátum expirácie",
     "Update poll" : "Aktualizovať anketu",
     "Unknown user" : "Neznámy používateľ",

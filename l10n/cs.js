@@ -80,7 +80,6 @@ OC.L10N.register(
     "Allow admins to edit this poll" : "Umožnit správcům upravovat tuto anketu",
     "Allow \"maybe\" vote" : "Umožnit hlasovat „možná“",
     "Anonymous poll" : "Anonymní anketa",
-    "Hide user names for admin" : "Skrýt správcům uživatelská jména",
     "Expiration date" : "Datum skončení platnosti",
     "Writing poll" : "Anketa se zapisuje",
     "Update poll" : "Aktualizovat anketu",

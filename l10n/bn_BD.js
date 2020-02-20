@@ -12,6 +12,10 @@ OC.L10N.register(
     "Shares" : "ভাগাভাগি",
     "Description" : "বিবরণ",
     "Expiration date" : "মেয়াদোত্তীর্ণ হওয়ার তারিখ",
+    "Week" : "সপ্তাহ",
+    "Hour" : "ঘন্টা",
+    "Day" : "দিবস",
+    "Month" : "মাস",
     "Unknown user" : "অপরিচিত ব্যবহারকারী",
     "OK" : "তথাস্তু"
 },
