@@ -17,6 +17,10 @@ OC.L10N.register(
     "Shares" : "Dibagikan",
     "Description" : "Deskrisi",
     "Expiration date" : "Tanggal kadaluarsa",
+    "Week" : "Minggu",
+    "Hour" : "Jam",
+    "Day" : "Hari",
+    "Month" : "Bulan",
     "Unknown user" : "Pengguna tidak dikenal",
     "OK" : "OK"
 },

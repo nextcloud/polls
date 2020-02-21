@@ -91,6 +91,7 @@ OC.L10N.register(
     "Available Options" : "Verfügbare Optionen",
     "Delete option" : "Option löschen",
     "Week" : "Woche",
+    "Minute" : "Minute",
     "Hour" : "Stunde",
     "Day" : "Tag",
     "Month" : "Monat",
