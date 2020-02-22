@@ -41,8 +41,10 @@
 					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
 					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
 				</div>
-				<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
-					@click="writeUserName" />
+				<div class="modal__buttons">
+					<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
+						@click="writeUserName" />
+				</div>
 			</div>
 		</Modal>
 	</div>
@@ -194,6 +196,14 @@ export default {
 		flex-direction: column;
 		input {
 			width: 100%;
+		}
+	}
+	.modal__buttons {
+		display: flex;
+		justify-content: end;
+		.button {
+			margin-left: 10px;
+			margin-right: 0;
 		}
 	}
 

@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 	.button {
-		display: inline-flex;
+		display: inline-block;
 
 		&.withIcon {
 			padding-left: 34px;

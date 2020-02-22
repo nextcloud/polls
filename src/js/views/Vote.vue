@@ -24,7 +24,11 @@
 	<AppContent>
 		<div class="main-container">
 			<div class="header-actions">
-				<ButtonDiv :primary="true" :title="t('polls', 'Switch view')" @click="tableMode = !tableMode" />
+				<ButtonDiv
+					:primary="true"
+					:icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'"
+					:title="t('polls', 'Switch view')"
+					@click="tableMode = !tableMode" />
 				<a href="#" class="icon icon-settings active"
 					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
 			</div>
