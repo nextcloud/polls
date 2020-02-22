@@ -112,11 +112,11 @@ export default {
 				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your username!')
 				this.checkingUserName = false
 			}
-		}
-	},
+		},
 
-	mounted() {
-		this.setFocus()
+		'poll.id': function(newValue) {
+			this.setFocus()
+		}
 	},
 
 	methods: {
