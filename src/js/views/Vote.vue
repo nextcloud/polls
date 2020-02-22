@@ -35,7 +35,7 @@
 					</ActionButton>
 				</Actions>
 			</div>
-			<PollTitle />
+			<PollTitle class="poll-title" />
 			<PollInformation />
 			<VoteHeaderPublic v-if="!OC.currentUser" />
 			<PollDescription />
@@ -198,6 +198,7 @@ export default {
 
 .header-actions {
 	right: 0;
+	top: 0;
 	position: absolute;
 	display: flex;
 }
@@ -207,5 +208,10 @@ export default {
 	width: 44px;
 	height: 44px;
 }
-
+@media (max-width: (1024px)) {
+	.poll-title {
+		padding-left: 14px;
+		padding-right: 90px;
+	}
+}
 </style>
