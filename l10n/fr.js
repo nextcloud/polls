@@ -90,7 +90,7 @@ OC.L10N.register(
     "Shift" : "Décaler",
     "Available Options" : "Options disponibles",
     "Delete option" : "Supprimer cette option",
-    "Week" : "Cette semaine",
+    "Week" : "Semaine",
     "Minute" : "Minute",
     "Hour" : "Heure",
     "Day" : "Jour",

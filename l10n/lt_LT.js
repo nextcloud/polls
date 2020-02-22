@@ -91,6 +91,7 @@ OC.L10N.register(
     "Available Options" : "Prieinami variantai",
     "Delete option" : "Ištrinti variantą",
     "Week" : "Savaitė",
+    "Minute" : "Minutė",
     "Hour" : "Valanda",
     "Day" : "Diena",
     "Month" : "Mėnuo",
