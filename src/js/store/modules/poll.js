@@ -68,6 +68,16 @@ const getters = {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
+	accessType: (state) => {
+		if (state.access === 'public') {
+			return t('polls', 'Public access')
+		} else if (state.access === 'hidden') {
+			return t('polls', 'Hidden poll')
+		} else {
+			return state.access
+		}
+	},
+
 	allowEdit: (state, getters, rootState) => {
 		return (rootState.acl.allowEdit)
 	}
