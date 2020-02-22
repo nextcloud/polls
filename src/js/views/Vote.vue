@@ -24,13 +24,16 @@
 	<AppContent>
 		<div class="main-container">
 			<div class="header-actions">
-				<ButtonDiv
-					:primary="true"
-					:icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'"
-					:title="t('polls', 'Switch view')"
-					@click="tableMode = !tableMode" />
-				<a href="#" class="icon icon-settings active"
-					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
+				<Actions>
+					<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
+						{{ t('polls', 'Switch view') }}
+					</ActionButton>
+				</Actions>
+				<Actions>
+					<ActionButton icon="icon-settings" @click="toggleSideBar()">
+						{{ t('polls', 'Toggle Sidebar') }}
+					</ActionButton>
+				</Actions>
 			</div>
 			<PollTitle />
 			<PollInformation />
@@ -60,7 +63,7 @@
 </template>
 
 <script>
-import { AppContent } from '@nextcloud/vue'
+import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollDescription from '../components/Base/PollDescription'
@@ -76,6 +79,8 @@ import { mapState } from 'vuex'
 export default {
 	name: 'Vote',
 	components: {
+		Actions,
+		ActionButton,
 		AppContent,
 		Subscription,
 		ParticipantsList,
