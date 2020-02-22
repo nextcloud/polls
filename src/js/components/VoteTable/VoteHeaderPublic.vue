@@ -193,6 +193,7 @@ export default {
 		padding: 14px;
 		display: flex;
 		flex-direction: column;
+		color: var(--color-main-text);
 		input {
 			width: 100%;
 		}

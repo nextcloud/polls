@@ -66,7 +66,7 @@ export default {
 
 #app-polls {
 	width: 100%;
-	// display: flex;
+	color: var(--color-primary-text)
 }
 
 #app-content {
