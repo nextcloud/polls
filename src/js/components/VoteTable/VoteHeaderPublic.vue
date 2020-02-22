@@ -41,9 +41,8 @@
 					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
 					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
 				</div>
-				<button class="button btn primary" :disabled="!isValidName || checkingUserName" @click="writeUserName">
-					<span>{{ t('polls', 'OK') }}</span>
-				</button>
+				<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
+					@click="writeUserName" />
 			</div>
 		</Modal>
 	</div>
@@ -113,11 +112,11 @@ export default {
 				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your username!')
 				this.checkingUserName = false
 			}
-		}
-	},
+		},
 
-	mounted() {
-		this.setFocus()
+		'poll.id': function(newValue) {
+			this.setFocus()
+		}
 	},
 
 	methods: {

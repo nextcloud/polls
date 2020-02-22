@@ -48,9 +48,7 @@
 				</div>
 			</div>
 			<div>
-				<button class="button btn primary" @click="shiftDates(move)">
-					<span>{{ t('polls', 'Shift') }}</span>
-				</button>
+				<ButtonDiv primary="true" :title="t('polls', 'Shift')" @click="shiftDates(move)" />
 			</div>
 		</div>
 

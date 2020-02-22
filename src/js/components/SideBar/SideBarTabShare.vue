@@ -82,12 +82,7 @@
 				</div>
 			</li>
 		</TransitionGroup>
-		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
-			<div class="avatar icon-add" />
-			<div class="user-name">
-				{{ t('polls', 'Add a public link') }}
-			</div>
-		</div>
+		<ButtonDiv icon="icon-add" :title="t('polls', 'Add a public link')" @click="addShare({type: 'public' })" />
 	</div>
 </template>
 
@@ -216,6 +211,10 @@ export default {
 </script>
 
 <style lang="scss">
+	.add * {
+		cursor: pointer;
+	}
+
 	.shared-list {
 		display: flex;
 		flex-wrap: wrap;
