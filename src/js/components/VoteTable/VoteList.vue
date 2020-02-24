@@ -165,7 +165,7 @@ export default {
 			text-align: right;
 			margin: 2px;
 			align-self: center;
-			width: 40px;
+			width: 25px;
 		}
 	}
 
