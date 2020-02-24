@@ -72,8 +72,29 @@ const getters = {
 		}))
 	},
 
-	sortedOptions: state => {
-		return orderBy(state.list, 'order')
+	sortedOptions: (state, getters, rootGetters) => {
+		let rankedOptions = []
+		state.list.forEach((option) => {
+			rankedOptions.push({
+				rank: 0,
+				yes: rootGetters.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
+				no: rootGetters.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
+				maybe: rootGetters.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
+				...option
+			})
+		})
+
+		rankedOptions = orderBy(rankedOptions, ['yes', 'maybe'], ['desc', 'desc'])
+
+		for (var i = 0; i < rankedOptions.length; i++) {
+			if (i > 0 && rankedOptions[i].yes === rankedOptions[i - 1].yes && rankedOptions[i].maybe === rankedOptions[i - 1].maybe) {
+				rankedOptions[i].rank = rankedOptions[i - 1].rank
+			} else {
+				rankedOptions[i].rank = i + 1
+			}
+		}
+
+		return orderBy(rankedOptions, 'order')
 	}
 }
 

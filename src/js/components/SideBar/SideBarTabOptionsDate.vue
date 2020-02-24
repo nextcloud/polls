@@ -48,7 +48,7 @@
 				</div>
 			</div>
 			<div>
-				<ButtonDiv primary="true" :title="t('polls', 'Shift')" @click="shiftDates(move)" />
+				<ButtonDiv :primary="true" :title="t('polls', 'Shift')" @click="shiftDates(move)" />
 			</div>
 		</div>
 

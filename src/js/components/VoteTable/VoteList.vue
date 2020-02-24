@@ -21,46 +21,60 @@
   -->
 
 <template lang="html">
-	<ul class="vote-list">
-		<li v-for="(option) in sortedOptions" :key="option.id" class="vote-row">
-			<VoteTableItem
-				v-if="acl.allowVote"
-				:user-id="acl.userId"
-				:option="option"
-				@voteClick="setVote(option, acl.userId)" />
-			<PollItemText v-if="poll.type === 'textPoll'" :option="option" />
-			<PollItemDate v-if="poll.type === 'datePoll'" :option="option" />
-
-			<div class="counter">
-				<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
-					<span> {{ yesVotes(option.pollOptionText) }} </span>
+	<div class="vote-list">
+		<ButtonDiv :title="ranked ? t('polls', 'Original order') : t('polls', 'Order by current rank')" @click="ranked = !ranked" />
+		<ul>
+			<li v-for="(option) in rankedList" :key="option.id" class="vote-row">
+				<div v-if="expired" class="rank" :style="style(option)">
+					<span> {{ option.rank }}. </span>
 				</div>
+				<VoteTableItem
+					v-if="acl.allowVote && !expired"
+					:user-id="acl.userId"
+					:option="option"
+					@voteClick="setVote(option, acl.userId)" />
+				<PollItemText v-if="poll.type === 'textPoll'" :option="option" />
+				<PollItemDate v-if="poll.type === 'datePoll'" :option="option" />
 
-				<div v-if="maybeVotes(option.pollOptionText)" class="maybe" :style="{flex: maybeVotes(option.pollOptionText) }">
-					<span> {{ maybeVotes(option.pollOptionText) }} </span>
-				</div>
+				<div class="counter">
+					<div v-if="option.yes" class="yes" :style="{ flex: option.yes }">
+						<span> {{ option.yes }} </span>
+					</div>
 
-				<div v-if="noVotes(option.pollOptionText)" class="no" :style="{flex: noVotes(option.pollOptionText) }">
-					<span> {{ noVotes(option.pollOptionText) }} </span>
+					<div v-if="option.maybe" class="maybe" :style="{flex: option.maybe }">
+						<span> {{ option.maybe }} </span>
+					</div>
+
+					<div v-if="noCalculated(option)" class="no" :style="{flex: noCalculated(option) }">
+						<span> {{ noCalculated(option) }} </span>
+					</div>
 				</div>
-			</div>
-		</li>
-	</ul>
+			</li>
+		</ul>
+	</div>
 </template>
 
 <script>
+import ButtonDiv from '../Base/ButtonDiv'
 import PollItemText from '../Base/PollItemText'
 import PollItemDate from '../Base/PollItemDate'
 import VoteTableItem from './VoteTableItem'
+import orderBy from 'lodash/orderBy'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'VoteTable',
+
 	components: {
+		ButtonDiv,
 		PollItemDate,
 		PollItemText,
 		VoteTableItem
 	},
+
+	data: () => ({
+		ranked: false
+	}),
 
 	computed: {
 		...mapState({
@@ -71,36 +85,41 @@ export default {
 		...mapGetters([
 			'sortedOptions',
 			'participantsVoted',
-			'votesRank',
 			'expired'
 		]),
 
-		currentUser() {
-			return this.acl.userId
+		noOptions() {
+			return this.sortedOptions.length === 0
 		},
 
-		noOptions() {
-			return (this.sortedOptions.length === 0)
-		}
+		rankedList() {
+			return orderBy(this.sortedOptions, this.ranked ? 'rank' : 'order', 'asc')
+		},
 
+		highestRank() {
+			return Math.max.apply(Math, this.sortedOptions.map(function(option) {
+				return option.rank
+			}))
+		}
+	},
+
+	mounted() {
+		this.ranked = this.expired
 	},
 
 	methods: {
-
-		yesVotes(pollOptionText) {
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			}).yes
+		noCalculated(option) {
+			return this.participantsVoted.length - option.yes - option.maybe
 		},
 
-		maybeVotes(pollOptionText) {
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			}).maybe
-		},
-
-		noVotes(pollOptionText) {
-			return this.participantsVoted.length - this.maybeVotes(pollOptionText) - this.yesVotes(pollOptionText)
+		style(option) {
+			const count = this.highestRank
+			const hue = 126 * (count - option.rank) / (count - 1)
+			let style = 'background-color: hsl(' + hue + ', 91%, 92%);'
+			if (option.rank === 1) {
+				style = style.concat('color: #49bc49;font-weight: bold;')
+			}
+			return style
 		},
 
 		setVote(option, participant) {
@@ -131,6 +150,19 @@ export default {
 		flex: 0;
 	}
 
+	.rank {
+		display: flex;
+		font-size: 1.2em;
+		align-self: stretch;
+		padding: 0 8px 0 4px;
+		> * {
+			text-align: right;
+			margin: 2px;
+			align-self: center;
+			width: 40px;
+		}
+	}
+
 	.counter {
 		display: flex;
 		width: 80px;
@@ -155,7 +187,7 @@ export default {
 		}
 	}
 
-	.vote-list {
+	.vote-list ul {
 		margin: 44px 0;
 		display: flex;
 		flex: 0;
@@ -169,6 +201,14 @@ export default {
 			flex: 1;
 			align-items: center;
 			border-bottom: 1px solid var(--color-border);
+
+			&:first-child .rank{
+				border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+			}
+
+			&:last-child .rank{
+				border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+			}
 
 			&:active,
 			&:hover {
