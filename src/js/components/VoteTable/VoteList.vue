@@ -103,6 +103,12 @@ export default {
 		}
 	},
 
+	watch: {
+		'poll.id': function(newValue) {
+			this.ranked = this.expired
+		}
+	},
+
 	mounted() {
 		this.ranked = this.expired
 	},

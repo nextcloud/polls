@@ -101,7 +101,7 @@ export default {
 			sideBarOpen: (window.innerWidth > 920),
 			isLoading: true,
 			initialTab: 'comments',
-			tableMode: !this.expired,
+			tableMode: true,
 			activeTab: 'comments'
 		}
 	},
@@ -126,7 +126,6 @@ export default {
 	watch: {
 		$route() {
 			this.loadPoll()
-			this.tableMode = !this.expired
 		}
 	},
 
@@ -155,6 +154,7 @@ export default {
 								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
 									this.openConfiguration()
 								}
+								this.tableMode = !this.expired
 								this.isLoading = false
 							})
 					} else {
