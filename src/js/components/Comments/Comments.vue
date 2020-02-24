@@ -54,7 +54,7 @@
 
 <script>
 import CommentAdd from './CommentAdd'
-import sortBy from 'lodash/sortBy'
+import orderBy from 'lodash/orderBy'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
@@ -83,11 +83,7 @@ export default {
 		]),
 
 		sortedList() {
-			if (this.reverse) {
-				return sortBy(this.comments.list, this.sort).reverse()
-			} else {
-				return sortBy(this.comments.list, this.sort)
-			}
+			return orderBy(this.comments.list, this.sort, this.reverse ? 'desc' : 'asc')
 		}
 
 	},
