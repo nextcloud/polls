@@ -91,6 +91,7 @@ OC.L10N.register(
     "Available Options" : "Διαθέσιμες Επιλογές",
     "Delete option" : "Επιλογή διαγραφής",
     "Week" : "Εβδομάδα",
+    "Minute" : "Λεπτά",
     "Hour" : "Ώρα",
     "Day" : "Ημέρα",
     "Month" : "Μήνας",

@@ -44,7 +44,7 @@ OC.L10N.register(
     "Date poll" : "Datum der Umfrage",
     "Text based" : "Textbasiert",
     "Cancel" : "Abbrechen",
-    "Apply" : "Übernehmen",
+    "Apply" : "Anwenden",
     "Poll \"%n\" added" : "Umfrage \"%n\" hinzugefügt",
     "Error while creating Poll \"%n\"" : "Fehler beim Erstellen der Umfrage \"%n\"",
     "Add new Poll" : "Neue Umfrage hinzufügen",
