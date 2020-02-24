@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-header" :class=" { winner: isWinner }">
+	<div class="vote-header" :class=" { winner: option.rank === 1 }">
 		<div v-if="poll.type === 'textPoll'" class="text-box">
 			{{ option.pollOptionText }}
 		</div>
@@ -43,17 +43,17 @@
 
 		<div class="counter">
 			<div class="yes">
-				<span> {{ yesVotes }} </span>
+				<span> {{ option.yes }} </span>
 			</div>
 			<div v-if="poll.allowMaybe" class="maybe">
-				<span> {{ maybeVotes }} </span>
+				<span> {{ option.maybe }} </span>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'VoteTableHeader',
@@ -61,10 +61,6 @@ export default {
 	props: {
 		option: {
 			type: Object,
-			default: undefined
-		},
-		pollType: {
-			type: String,
 			default: undefined
 		}
 	},
@@ -74,51 +70,12 @@ export default {
 			openedMenu: false,
 			hostName: this.$route.query.page
 		}
-
 	},
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			votes: state => state.votes.list
-		}),
-		...mapGetters([
-			'votesRank',
-			'winnerCombo'
-		]),
-
-		yesVotes() {
-			const pollOptionText = this.option.pollOptionText
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			}).yes
-		},
-
-		maybeVotes() {
-			const pollOptionText = this.option.pollOptionText
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			}).maybe
-		},
-
-		isWinner() {
-			const pollOptionText = this.option.pollOptionText
-			return (
-				this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).yes === this.winnerCombo.yes
-
-				&& (this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).yes + this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).maybe > 0)
-
-				&& this.winnerCombo.maybe === this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).maybe
-			)
-		}
+			poll: state => state.poll
+		})
 	}
 }
 

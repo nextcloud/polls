@@ -21,7 +21,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import orderBy from 'lodash/orderBy'
 
 const defaultVotes = () => {
 	return {
@@ -64,28 +63,27 @@ const getters = {
 	},
 
 	participantsVoted: (state, getters) => {
-		// return [...new Set(state.list.map(item => item.userId))]
-		const list = []
+		const participantsVoted = []
 		const map = new Map()
 		for (const item of state.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
-				list.push({
+				participantsVoted.push({
 					userId: item.userId,
 					displayName: item.displayName
 				})
 			}
 		}
-		return list
+		return participantsVoted
 	},
 
 	participants: (state, getters, rootState) => {
-		const list = []
+		const participants = []
 		const map = new Map()
 		for (const item of state.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
-				list.push({
+				participants.push({
 					userId: item.userId,
 					displayName: item.displayName,
 					voted: true
@@ -94,42 +92,13 @@ const getters = {
 		}
 
 		if (!map.has(rootState.acl.userId) && rootState.acl.userId && rootState.acl.allowVote) {
-			list.push({
+			participants.push({
 				userId: rootState.acl.userId,
 				displayName: rootState.acl.displayName,
 				voted: false
 			})
 		}
-		return list
-	},
-
-	votesRank: (state, getters, rootGetters) => {
-		let rank = []
-		rootGetters.options.list.forEach(function(option) {
-			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
-			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
-			const countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
-			rank.push({
-				rank: 0,
-				pollOptionText: option.pollOptionText,
-				yes: countYes,
-				no: countNo,
-				maybe: countMaybe
-			})
-		})
-		rank = orderBy(rank, ['yes', 'maybe'], ['desc', 'desc'])
-		for (var i = 0; i < rank.length; i++) {
-			if (i > 0 && rank[i].yes === rank[i - 1].yes && rank[i].maybe === rank[i - 1].maybe) {
-				rank[i].rank = rank[i - 1].rank
-			} else {
-				rank[i].rank = i + 1
-			}
-		}
-		return rank
-	},
-
-	winnerCombo: (state, getters) => {
-		return getters.votesRank[0]
+		return participants
 	},
 
 	getVote: (state) => (payload) => {
