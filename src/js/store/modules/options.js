@@ -21,7 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import sortBy from 'lodash/sortBy'
+import orderBy from 'lodash/orderBy'
 
 const defaultOptions = () => {
 	return {
@@ -73,7 +73,7 @@ const getters = {
 	},
 
 	sortedOptions: state => {
-		return sortBy(state.list, 'order')
+		return orderBy(state.list, 'order')
 	}
 }
 

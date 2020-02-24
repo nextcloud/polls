@@ -50,7 +50,7 @@
 import { AppContent } from '@nextcloud/vue'
 import PollListItem from '../components/PollList/PollListItem'
 import { mapGetters } from 'vuex'
-import sortBy from 'lodash/sortBy'
+import orderBy from 'lodash/orderBy'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
 
 export default {
@@ -98,11 +98,7 @@ export default {
 		},
 
 		sortedList() {
-			if (this.reverse) {
-				return sortBy(this.filteredList, this.sort).reverse()
-			} else {
-				return sortBy(this.filteredList, this.sort)
-			}
+			return orderBy(this.filteredList, this.sort, this.reverse ? 'desc' : 'asc')
 		}
 
 	},
