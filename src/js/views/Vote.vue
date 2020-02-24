@@ -74,7 +74,7 @@ import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'Vote',
@@ -101,7 +101,7 @@ export default {
 			sideBarOpen: (window.innerWidth > 920),
 			isLoading: true,
 			initialTab: 'comments',
-			tableMode: true,
+			tableMode: !this.expired,
 			activeTab: 'comments'
 		}
 	},
@@ -113,6 +113,10 @@ export default {
 			options: state => state.options
 		}),
 
+		...mapGetters([
+			'expired'
+		]),
+
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
 		}
@@ -122,6 +126,7 @@ export default {
 	watch: {
 		$route() {
 			this.loadPoll()
+			this.tableMode = !this.expired
 		}
 	},
 
