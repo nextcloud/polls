@@ -91,6 +91,7 @@ OC.L10N.register(
     "Available Options" : "Доступные варианты",
     "Delete option" : "Удалить вариант",
     "Week" : "На неделе",
+    "Minute" : "Минута",
     "Hour" : "Час",
     "Day" : "День",
     "Month" : "Месяц",
