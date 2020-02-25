@@ -115,14 +115,14 @@ export default {
 	.vote-table {
 		margin: 44px 0;
 		display: flex;
-		flex: 0;
+		flex: 0 1 auto;
 		flex-direction: column;
 		justify-content: flex-start;
 		overflow: scroll;
 
 		& > div {
 			display: flex;
-			flex: 1;
+			flex: 0;
 			border-bottom: 1px solid var(--color-border-dark);
 			order: 3;
 			justify-content: space-between;
@@ -199,6 +199,7 @@ export default {
 				&> .vote-header {
 					display: flex;
 					flex-direction: row;
+					align-items: center;
 					&> .counter {
 						align-items: baseline;
 					}
