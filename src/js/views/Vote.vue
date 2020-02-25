@@ -192,6 +192,8 @@ export default {
 }
 
 .main-container {
+	display: flex;
+	justify-content: flex-start;
 	position: relative;
 	flex: 1;
 	padding: 8px 24px;
