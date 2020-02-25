@@ -26,7 +26,7 @@
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
-		<Modal v-show="!isValidUser &!expired" class="modal"
+		<Modal v-show="!isValidUser &!expired & modal" class="modal"
 			:can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
@@ -42,6 +42,8 @@
 					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
 				</div>
 				<div class="modal__buttons">
+					<ButtonDiv :title="t('polls', 'Cancel')"
+						@click="closeModal" />
 					<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
 						@click="writeUserName" />
 				</div>
@@ -71,7 +73,7 @@ export default {
 			redirecting: false,
 			isValidName: false,
 			newName: '',
-			modal: false
+			modal: true
 		}
 	},
 
