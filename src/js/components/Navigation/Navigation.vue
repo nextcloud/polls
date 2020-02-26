@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<AppNavigation>
-		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @closeCreate="closeCreate()" />
 		<ul>
 			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
