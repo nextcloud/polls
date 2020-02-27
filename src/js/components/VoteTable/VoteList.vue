@@ -63,7 +63,7 @@ import orderBy from 'lodash/orderBy'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'VoteTable',
+	name: 'VoteList',
 
 	components: {
 		ButtonDiv,

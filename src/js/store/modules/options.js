@@ -86,7 +86,7 @@ const getters = {
 
 		rankedOptions = orderBy(rankedOptions, ['yes', 'maybe'], ['desc', 'desc'])
 
-		for (var i = 0; i < rankedOptions.length; i++) {
+		for (let i = 0; i < rankedOptions.length; i++) {
 			if (i > 0 && rankedOptions[i].yes === rankedOptions[i - 1].yes && rankedOptions[i].maybe === rankedOptions[i - 1].maybe) {
 				rankedOptions[i].rank = rankedOptions[i - 1].rank
 			} else {
