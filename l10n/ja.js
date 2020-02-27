@@ -92,7 +92,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "アクティビティに関して通知メールを受け取る",
     "Your personal link to this poll: %n" : "この投票への個人用リンク：%n",
     "OK" : "OK",
-    "Open Sidebar" : "サイドバーを開く",
     "Public access" : "パブリックアクセス",
     "Hidden poll" : "非公開投票",
     "Access denied" : "アクセス拒否",

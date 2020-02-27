@@ -125,7 +125,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Wybierz sondę lub rozpocznij nową.",
     "Goto Nextcloud" : "Przejdź do Nextcloud",
     "Switch view" : "Przełącz widok",
-    "Open Sidebar" : "Otwórz pasek boczny",
     "There are no vote options, add some in the options section of the right side bar." : "Brak opcji głosowania, dodaj jakąś w sekcji opcji na prawym pasku bocznym.",
     "There are no vote options. Maybe the owner did not provide some until now." : "Brak opcji głosowania. Być może właściciel nie ustawił do tej pory.",
     "Public access" : "Dostęp publiczny",

@@ -125,7 +125,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Пройдите опрос или создайте новый",
     "Goto Nextcloud" : "Перейти в Nextcloud",
     "Switch view" : "Переключить вид",
-    "Open Sidebar" : "Открыть боковую панель",
     "There are no vote options, add some in the options section of the right side bar." : "Пока нет ни одного варианта голосования, добавьте их в боковой панели справа.",
     "There are no vote options. Maybe the owner did not provide some until now." : "Пока нет ни одного варианта для голосования, возможно, организатор опроса их ещё не добавил.",
     "Public access" : "Общедоступный",

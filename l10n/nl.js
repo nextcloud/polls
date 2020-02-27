@@ -119,7 +119,6 @@ OC.L10N.register(
     "The poll does not exist" : "De peiling bestaat niet",
     "Goto Nextcloud" : "Ga naar Nextcloud",
     "Switch view" : "Omschakelen weergave",
-    "Open Sidebar" : "Openen Zijbalk",
     "There are no vote options, add some in the options section of the right side bar." : "Er zijn geen peilingsopties, voeg een paar toe in de opties sectie in de rechter zijbalk.",
     "Public access" : "Openbare toegang",
     "Hidden poll" : "Verborgen peiling",

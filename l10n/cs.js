@@ -125,7 +125,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Vstupte do ankety nebo uspořádajte novou.",
     "Goto Nextcloud" : "Přejít do Nextcloud",
     "Switch view" : "Přepnout pohled",
-    "Open Sidebar" : "Otevřít postranní panel",
     "There are no vote options, add some in the options section of the right side bar." : "Nejsou zde žádné možnosti volby – přidejte nějaké v sekci voleb v postranním panelu napravo.",
     "There are no vote options. Maybe the owner did not provide some until now." : "Nejsou zde žádné možnosti volby. Vlastník nejspíš doposud žádné neposkytl.",
     "Public access" : "Veřejný přístup",

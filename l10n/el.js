@@ -125,7 +125,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Συμμετέχετε σε δημοσκόπηση ή ξεκινήστε μια νέα!",
     "Goto Nextcloud" : "Μετάβαση στο Nextcloud",
     "Switch view" : "Αλλαγή εμφάνισης",
-    "Open Sidebar" : "Άνοιγμα πλευρικής στήλης",
     "There are no vote options, add some in the options section of the right side bar." : "Δεν υπάρχουν επιλογές ψηφοφορίας, προσθέστε μερικές απο τις ρυθμίσεις πλευρικής μπάρας.",
     "There are no vote options. Maybe the owner did not provide some until now." : "Δεν υπάρχουν επιλογές ψηφοφορίας. Ίσως ο κάτοχος δεν καθόρισε ακόμη.",
     "Public access" : "Δημόσια πρόσβαση",

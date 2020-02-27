@@ -125,7 +125,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Įveskite apklausą arba pradėkite naują.",
     "Goto Nextcloud" : "Eiti į Nextcloud",
     "Switch view" : "Perjungti rodinį",
-    "Open Sidebar" : "Atverti šoninę juostą",
     "There are no vote options, add some in the options section of the right side bar." : "Nėra jokių balsavimo variantų. Pridėkite juos dešinės šoninės juostos parinkčių sekcijoje.",
     "There are no vote options. Maybe the owner did not provide some until now." : "Nėra jokių balsavimo variantų. Galbūt, savininkas iki šiol jų nepateikė.",
     "Public access" : "Viešoji prieiga",

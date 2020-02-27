@@ -124,7 +124,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Bir anket yazın ya da yeni bir anket oluşturun.",
     "Goto Nextcloud" : "Nextcloud Üzerine Git",
     "Switch view" : "Görünümü değiştir",
-    "Open Sidebar" : "Yan Çubuğu Aç",
     "There are no vote options, add some in the options section of the right side bar." : "Herhangi bir oy verme seçeneği yok. Sağ yan çubuktaki seçenekler bölümünden bazı oy verme seçenekleri ekleyin.",
     "There are no vote options. Maybe the owner did not provide some until now." : "Henüz bir oy verme seçeneği yok. Anket sahibi henüz bir seçenek sunmamış olabilir.",
     "Public access" : "Herkese açık erişim",
