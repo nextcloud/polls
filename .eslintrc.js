@@ -20,6 +20,7 @@ module.exports = {
 		ecmaVersion: 6,
 	},
 	extends: [
+		'plugin:@nextcloud/recommended',
 		'eslint:recommended',
 		'plugin:node/recommended',
 		'plugin:vue/essential',
@@ -31,6 +32,8 @@ module.exports = {
 		'node',
 	],
 	rules: {
+		"@nextcloud/no-deprecations": "warn",
+		"@nextcloud/no-removed-apis": "error",
 		'node/no-missing-import': ['error', {
             'allowModules': [],
             'tryExtensions': ['.js', '.vue']
