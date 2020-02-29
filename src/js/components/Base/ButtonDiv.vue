@@ -20,32 +20,47 @@
   -
   -->
 
-<template>
-	<li class="poll-item text">
-		<div>{{ option.pollOptionText }}</div>
-		<div>
-			<a v-if="acl.allowEdit" class="icon icon-delete svg delete-poll" @click="$emit('remove')" />
-		</div>
-	</li>
+<template lang="html">
+	<div :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
+		{{ title }}
+	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-	name: 'TextPollItem',
-
+	name: 'ButtonDiv',
 	props: {
-		option: {
-			type: Object,
-			default: undefined
+		title: {
+			type: String,
+			default: ''
+		},
+		icon: {
+			type: String,
+			default: ''
+		},
+		primary: {
+			type: Boolean,
+			default: false
 		}
 	},
 
 	computed: {
-		...mapState({
-			acl: state => state.acl
-		})
+		withIcon() {
+			return Boolean(this.icon)
+		}
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+	.button {
+		display: inline-block;
+
+		&.withIcon {
+			padding-left: 34px;
+			background-position: 12px center;
+		}
+
+	}
+
+</style>

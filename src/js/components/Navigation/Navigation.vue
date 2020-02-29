@@ -22,8 +22,8 @@
 
 <template lang="html">
 	<AppNavigation>
-		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
-		<CreateDlg v-show="createDlg" @closeCreate="closeCreate()" />
+		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<CreateDlg v-show="createDlg" ref="createDlg" @closeCreate="closeCreate()" />
 		<ul>
 			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
 				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
@@ -37,6 +37,14 @@
 				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in myPolls" :key="poll.id" :poll="poll"
+						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+				</ul>
+			</AppNavigationItem>
+
+			<AppNavigationItem :title="t('polls', 'Participated')" :allow-collapse="true"
+				icon="icon-user" :to="{ name: 'list', params: {type: 'participated'}}" :open="false">
+				<ul>
+					<PollNavigationItems v-for="(poll) in participatedPolls" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
 				</ul>
 			</AppNavigationItem>
@@ -57,7 +65,7 @@
 				</ul>
 			</AppNavigationItem>
 
-			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true"
+			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true" :pinned="true"
 				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
@@ -97,6 +105,7 @@ export default {
 			'myPolls',
 			'publicPolls',
 			'hiddenPolls',
+			'participatedPolls',
 			'deletedPolls'
 		]),
 
@@ -130,6 +139,13 @@ export default {
 			this.createDlg = false
 		},
 
+		toggleCreateDlg() {
+			this.createDlg = !this.createDlg
+			if (this.createDlg) {
+				this.$refs.createDlg.setFocus()
+			}
+		},
+
 		clonePoll(pollId) {
 			this.$store
 				.dispatch('clonePoll', { pollId: pollId })
@@ -146,10 +162,6 @@ export default {
 					this.refreshPolls()
 				})
 
-		},
-
-		toggleCreateDlg() {
-			this.createDlg = !this.createDlg
 		},
 
 		refreshPolls() {

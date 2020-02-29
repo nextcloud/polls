@@ -55,6 +55,12 @@ const mutations = {
 		})
 	},
 
+	reorderOptions(state, payload) {
+		payload.forEach((item, i) => {
+			item.order = i + 1
+		})
+	},
+
 	setOption(state, payload) {
 		const index = state.list.findIndex((option) => {
 			return option.id === payload.option.id
@@ -76,7 +82,7 @@ const getters = {
 	},
 
 	sortedOptions: state => {
-		return sortBy(state.list, 'timestamp')
+		return sortBy(state.list, 'order')
 	}
 }
 
@@ -124,6 +130,12 @@ const actions = {
 		})
 	},
 
+	updateOptions(context) {
+		context.state.list.forEach((item, i) => {
+			context.dispatch('updateOptionAsync', { option: item })
+		})
+	},
+
 	updateOptionAsync(context, payload) {
 		const endPoint = 'apps/polls/option/update'
 
@@ -145,10 +157,12 @@ const actions = {
 
 		if (context.rootState.poll.type === 'datePoll') {
 			option.timestamp = moment(payload.pollOptionText).unix()
-			option.pollOptionText = moment.utc(payload.pollOptionText).format('YYYY-MM-DD hh:mm:ss')
+			option.order = option.timestamp
+			option.pollOptionText = moment.utc(payload.pollOptionText).format('YYYY-MM-DD HH:mm:ss')
 
 		} else if (context.rootState.poll.type === 'textPoll') {
 			option.timestamp = 0
+			option.order = state.list.length + 1
 			option.pollOptionText = payload.pollOptionText
 		}
 

@@ -21,21 +21,26 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<Comments />
-		</AppSidebarTab>
-
-		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'options')" icon="icon-toggle-filelist">
-			<SideBarTabOptions />
-		</AppSidebarTab>
-
-		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'Configuration')" icon="icon-settings">
+	<AppSidebar ref="sideBar" :active="active" :title="t('polls', 'Details')"
+		@close="$emit('closeSideBar')">
+		<AppSidebarTab v-if="acl.allowEdit" :id="'configuration'" :order="1"
+			:name="t('polls', 'Configuration')" icon="icon-settings">
 			<SideBarTabConfiguration />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit" :name="t('polls', 'Shares')" icon="icon-share">
+		<AppSidebarTab v-if="acl.allowEdit" :id="'options'" :order="2"
+			:name="t('polls', 'Options')" icon="icon-toggle-filelist">
+			<SideBarTabOptions />
+		</AppSidebarTab>
+
+		<AppSidebarTab v-if="acl.allowEdit" :id="'shares'" :order="3"
+			:name="t('polls', 'Shares')" icon="icon-share">
 			<SideBarTabShare />
+		</AppSidebarTab>
+
+		<AppSidebarTab :id="'comments'" :order="4" :name="t('polls', 'Comments')"
+			icon="icon-comment">
+			<Comments />
 		</AppSidebarTab>
 	</AppSidebar>
 </template>
@@ -51,6 +56,7 @@ import { mapState } from 'vuex'
 
 export default {
 	name: 'SideBar',
+
 	components: {
 		SideBarTabConfiguration,
 		Comments,
@@ -58,6 +64,13 @@ export default {
 		SideBarTabShare,
 		AppSidebar,
 		AppSidebarTab
+	},
+
+	props: {
+		active: {
+			type: String,
+			default: t('polls', 'Comments').toLowerCase()
+		}
 	},
 
 	computed: {

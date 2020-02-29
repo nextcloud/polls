@@ -22,44 +22,55 @@
 
 <template>
 	<AppContent>
-		<div v-if="poll.id > 0" class="main-container">
+		<div class="main-container">
 			<div class="header-actions">
-				<button class="button btn primary" @click="tableMode = !tableMode">
-					<span>{{ t('polls', 'Switch view') }}</span>
-				</button>
-				<a href="#" class="icon icon-settings active"
-					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
+				<Actions>
+					<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
+						{{ t('polls', 'Switch view') }}
+					</ActionButton>
+				</Actions>
+				<Actions>
+					<ActionButton icon="icon-settings" @click="toggleSideBar()">
+						{{ t('polls', 'Toggle Sidebar') }}
+					</ActionButton>
+				</Actions>
 			</div>
-			<PollTitle />
+			<PollTitle class="poll-title" />
 			<PollInformation />
+			<VoteHeaderPublic v-if="!OC.currentUser" />
 			<PollDescription />
-			<VoteList v-show="!isLoading && !tableMode && options.list.length" />
-			<VoteTable v-show="!isLoading && tableMode && options.list.length" />
+			<VoteList v-show="!tableMode && options.list.length" />
+			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
-				<p> {{ t('polls', 'There are no vote options, add some.') }}</p>
+				<button v-if="acl.allowEdit" @click="openOptions">
+					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
+				</button>
+				<div v-if="!acl.allowEdit">
+					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
+				</div>
 			</div>
 
-			<Subscription />
+			<Subscription v-if="OC.currentUser" />
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
-				<!-- <Comments /> -->
 			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen" @closeSideBar="toggleSideBar" />
+		<SideBar v-if="sideBarOpen" :active="activeTab" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
-// import Comments from '../components/Comments/Comments'
+import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
 import PollTitle from '../components/Base/PollTitle'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
+import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
@@ -68,13 +79,16 @@ import { mapState } from 'vuex'
 export default {
 	name: 'Vote',
 	components: {
+		Actions,
+		ActionButton,
+		AppContent,
 		Subscription,
 		ParticipantsList,
 		PollDescription,
 		PollInformation,
 		PollTitle,
 		LoadingOverlay,
-		// Comments,
+		VoteHeaderPublic,
 		SideBar,
 		VoteTable,
 		VoteList
@@ -84,11 +98,11 @@ export default {
 		return {
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: false,
-			isLoading: false,
+			sideBarOpen: (window.innerWidth > 920),
+			isLoading: true,
 			initialTab: 'comments',
-			newName: '',
-			tableMode: false
+			tableMode: true,
+			activeTab: 'comments'
 		}
 	},
 
@@ -116,21 +130,36 @@ export default {
 	},
 
 	methods: {
+		openOptions() {
+			this.sideBarOpen = true
+			this.activeTab = 'options'
+		},
+
+		openConfiguration() {
+			this.sideBarOpen = true
+			this.activeTab = 'configuration'
+		},
+
 		loadPoll() {
 			this.isLoading = true
-			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id })
-				.then(() => {
-					this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id })
-						.then(() => {
-							if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-								this.sideBarOpen = true
-							}
-							this.isLoading = false
-						})
+			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
+				.then((response) => {
+					if (response.status === 200) {
+						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
+							.then(() => {
+								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+									this.openConfiguration()
+								}
+								this.isLoading = false
+							})
+					} else {
+						this.$router.replace({ name: 'notfound' })
+					}
 				})
 				.catch((error) => {
 					console.error(error)
 					this.isLoading = false
+					this.$router.replace({ name: 'notfound' })
 				})
 		},
 
@@ -169,6 +198,7 @@ export default {
 
 .header-actions {
 	right: 0;
+	top: 0;
 	position: absolute;
 	display: flex;
 }
@@ -178,5 +208,10 @@ export default {
 	width: 44px;
 	height: 44px;
 }
-
+@media (max-width: (1024px)) {
+	.poll-title {
+		padding-left: 14px;
+		padding-right: 90px;
+	}
+}
 </style>

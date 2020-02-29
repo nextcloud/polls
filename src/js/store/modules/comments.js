@@ -22,7 +22,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import sortBy from 'lodash/sortBy'
 
 const defaultComments = () => {
 	return {
@@ -44,15 +43,16 @@ const mutations = {
 
 	addComment(state, payload) {
 		state.list.push(payload)
-	}
+	},
 
+	removeComment(state, payload) {
+		state.list = state.list.filter(comment => {
+			return comment.id !== payload.comment.id
+		})
+	}
 }
 
 const getters = {
-	sortedComments: state => {
-		return sortBy(state.list, 'date').reverse()
-	},
-
 	countComments: state => {
 		return state.list.length
 	}
@@ -79,6 +79,27 @@ const actions = {
 				console.error('Error loading comments', { error: error.response }, { payload: payload })
 				throw error
 			})
+	},
+
+	deleteComment(context, payload) {
+		let endPoint = 'apps/polls/comment/delete/'
+
+		if (context.rootState.acl.foundByToken) {
+			endPoint = endPoint.concat('s/')
+		}
+
+		return axios.post(OC.generateUrl(endPoint), {
+			token: context.rootState.acl.token,
+			comment: payload.comment
+		})
+			.then((response) => {
+				context.commit('removeComment', { comment: response.data.comment })
+				return response.data
+			}, (error) => {
+				console.error('Error deleting comment', { error: error.response }, { payload: payload })
+				throw error
+			})
+
 	},
 
 	setCommentAsync(context, payload) {

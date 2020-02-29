@@ -26,7 +26,7 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-
+use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -65,7 +65,17 @@ class Vote extends Entity implements JsonSerializable {
 			'userId' => $this->userId,
 			'voteOptionId' => intval($this->voteOptionId),
 			'voteOptionText' => $this->voteOptionText,
-			'voteAnswer' => $this->voteAnswer
+			'voteAnswer' => $this->voteAnswer,
+			'displayName' => $this->getDisplayName()
 		];
+	}
+
+	private function getDisplayName() {
+
+		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
+			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+		} else {
+			return $this->userId;
+		}
 	}
 }

@@ -22,7 +22,12 @@
 
 <template>
 	<div>
+		<div v-if="acl.isAdmin" class="config-box">
+			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
+		</div>
+
 		<h3>{{ t('polls','Invitations') }}</h3>
+
 		<span>{{ t('polls','Invited users will get informed immediately via eMail!') }} </span>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
@@ -31,10 +36,14 @@
 					:display-name="shareDisplayName(share)"
 					:type="share.type"
 					:icon="true" />
-				<div class="options">
-					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
-					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
-				</div>
+				<Actions>
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+						{{ t('polls', 'Copy link to clipboard') }}
+					</ActionButton>
+					<ActionButton icon="icon-delete" @click="removeShare(share)">
+						{{ t('polls', 'Remove share') }}
+					</ActionButton>
+				</Actions>
 			</li>
 		</TransitionGroup>
 
@@ -71,13 +80,21 @@
 						{{ t('polls', 'Public link (' + share.token + ')') }}
 					</div>
 				</div>
-				<div class="options">
+				<Actions>
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+						{{ t('polls', 'Copy link to clipboard') }}
+					</ActionButton>
+					<ActionButton icon="icon-delete" @click="removeShare(share)">
+						{{ t('polls', 'Remove share') }}
+					</ActionButton>
+				</Actions>
+				<!-- <div class="options">
 					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
 					<a class="icon icon-delete" @click="removeShare(share)" />
-				</div>
+				</div> -->
 			</li>
 		</TransitionGroup>
-		<div class="user-row user" @click="addShare({type: 'public', user: ''})">
+		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
 			<div class="avatar icon-add" />
 			<div class="user-name">
 				{{ t('polls', 'Add a public link') }}
@@ -87,13 +104,15 @@
 </template>
 
 <script>
-import { Multiselect } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
+import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
+		Actions,
+		ActionButton,
 		Multiselect
 	},
 
@@ -114,6 +133,10 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			acl: state => state.acl
+		}),
+
 		...mapGetters([
 			'invitationShares',
 			'publicShares'
@@ -160,7 +183,9 @@ export default {
 		shareDisplayName(share) {
 			let displayName = ''
 
-			if (share.type === 'user' || share.type === 'contact' || share.type === 'external') {
+			if (share.type === 'user') {
+				displayName = share.displayName
+			} else if (share.type === 'contact' || share.type === 'external') {
 				displayName = share.userId
 				if (share.userEmail) {
 					displayName = displayName + ' (' + share.userEmail + ')'
@@ -196,7 +221,7 @@ export default {
 					}
 				})
 				.catch(error => {
-					console.error('Error while adding share comment - Error: ', error)
+					console.error('Error while adding share - Error: ', error)
 					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })
 				})
 		}

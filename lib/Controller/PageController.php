@@ -64,34 +64,21 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function polls() {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function list() {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param string $token
 	 * @return PublicTemplateResponse
 	 */
-	public function votePublic(/** @scrutinizer ignore-unused */ $token) {
-		return new PublicTemplateResponse('polls', 'polls.tmpl', [
-			'urlGenerator' => $this->urlGenerator]);
-	}
+	public function votePublic() {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return new TemplateResponse('polls', 'polls.tmpl', [
+				'urlGenerator' => $this->urlGenerator]);
+		} else {
+			return new PublicTemplateResponse('polls', 'polls.tmpl', [
+				'urlGenerator' => $this->urlGenerator]);
+		}
 
+	}
 
 }

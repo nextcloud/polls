@@ -1,18 +1,23 @@
 { "translations": {
     "Deleted" : "Geskrap",
     "Group" : "Groep",
+    "New comment …" : "Nuwe kommentaar…",
     "Comments" : "Kommentare",
+    "Delete comment" : "Skrap kommentaar",
     "Cancel" : "Kanselleer",
     "Title" : "Titel",
     "Owner" : "Eienaar",
     "Created" : "Geskep",
     "never" : "nooit",
     "Details" : "Besonderhede",
-    "Saving" : "Stoor tans",
-    "Saved" : "Bewaar",
     "Description" : "Beskrywing",
     "Expiration date" : "Vervaldatum",
+    "Week" : "Week",
+    "Hour" : "Uur",
+    "Day" : "Dag",
+    "Month" : "Maand",
     "Unknown user" : "Onbekende gebruiker",
+    "OK" : "Goed",
     "Public access" : "Openbare toegang"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

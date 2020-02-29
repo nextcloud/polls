@@ -35,7 +35,6 @@ const defaultPoll = () => {
 		deleted: 0,
 		access: 'hidden',
 		anonymous: 0,
-		fullAnonymous: 0,
 		allowMaybe: 0,
 		voteLimit: 0,
 		showResults: 'always',
@@ -87,7 +86,7 @@ const getters = {
 const actions = {
 
 	loadPollMain(context, payload) {
-		let endPoint = 'apps/polls/poll/get/'
+		let endPoint = 'apps/polls/polls/get/'
 		if (payload.token) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId) {
@@ -100,16 +99,18 @@ const actions = {
 			.then((response) => {
 				context.commit('setPoll', { poll: response.data.poll })
 				context.commit('acl/setAcl', { acl: response.data.acl })
+				return response
 			}, (error) => {
-				if (error.response.status !== '404') {
-					console.error('Error loading poll', { error: error.response }, { payload: payload })
+				if (error.response.status !== '404' && error.response.status !== '401') {
+					console.debug('Error loading poll', { error: error.response }, { payload: payload })
+					return error.response
 				}
 				throw error
 			})
 	},
 
 	writePollPromise(context) {
-		const endPoint = 'apps/polls/poll/write/'
+		const endPoint = 'apps/polls/polls/write/'
 		return axios.post(OC.generateUrl(endPoint), { poll: state })
 			.then((response) => {
 				context.commit('setPoll', { poll: response.data.poll })

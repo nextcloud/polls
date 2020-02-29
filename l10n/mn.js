@@ -3,7 +3,9 @@ OC.L10N.register(
     {
     "Deleted" : "Устгагдсан",
     "Group" : "Бүлэг",
+    "New comment …" : "Шинэ сэтгэгдэл...",
     "Comments" : "Сэтгэгдлүүд",
+    "Delete comment" : "Сэтгэгдэл устгах",
     "Cancel" : "болиулах",
     "Apply" : "хэрэглэх",
     "Title" : "Цол/Албан тушаал",
@@ -12,10 +14,12 @@ OC.L10N.register(
     "never" : "хэзээ ч үгүй",
     "Details" : "Дэлгэрэнгүй",
     "Shares" : "Түгээлтүүд",
-    "Saving" : "хадгаламж",
-    "Saved" : "Хадгалах",
     "Description" : "Тодорхойлолт",
+    "Week" : "Долоо хоног",
+    "Day" : "Өдөр",
+    "Month" : "Сар",
     "Unknown user" : "  хэрэглэгч",
+    "OK" : "ок",
     "Public access" : "Нийтийн хандах эрх"
 },
 "nplurals=2; plural=(n != 1);");

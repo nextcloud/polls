@@ -8,9 +8,11 @@ OC.L10N.register(
     "Owner" : "Owner",
     "never" : "永不",
     "Shares" : "分享",
-    "Saving" : "儲存中",
-    "Saved" : "已儲存",
     "Description" : "描述",
-    "Expiration date" : "分享期限"
+    "Expiration date" : "分享期限",
+    "Week" : "星期",
+    "Day" : "日",
+    "Month" : "月",
+    "OK" : "確定"
 },
 "nplurals=1; plural=0;");

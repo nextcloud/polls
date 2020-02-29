@@ -55,9 +55,8 @@ lint-fix:
 .PHONY: clean
 clean:
 	rm -rf $(build_dir)
-	rm -f js/polls.js
-	rm -f js/polls.js.map
-
+	rm -rf js/*
+	mkdir -p js
 clean-dev: clean
 	rm -rf node_modules
 	rm -rf ./vendor

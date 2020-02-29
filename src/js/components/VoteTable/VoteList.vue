@@ -28,8 +28,8 @@
 				:user-id="acl.userId"
 				:option="option"
 				@voteClick="setVote(option, acl.userId)" />
-			<TextPollItem v-if="poll.type === 'textPoll'" :option="option" />
-			<DatePollItem v-if="poll.type === 'datePoll'" :option="option" />
+			<PollItemText v-if="poll.type === 'textPoll'" :option="option" />
+			<PollItemDate v-if="poll.type === 'datePoll'" :option="option" />
 
 			<div class="counter">
 				<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
@@ -49,16 +49,16 @@
 </template>
 
 <script>
-import TextPollItem from '../Base/TextPollItem'
-import DatePollItem from '../Base/DatePollItem'
+import PollItemText from '../Base/PollItemText'
+import PollItemDate from '../Base/PollItemDate'
 import VoteTableItem from './VoteTableItem'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'VoteTable',
 	components: {
-		DatePollItem,
-		TextPollItem,
+		PollItemDate,
+		PollItemText,
 		VoteTableItem
 	},
 
@@ -70,7 +70,7 @@ export default {
 
 		...mapGetters([
 			'sortedOptions',
-			'participants',
+			'participantsVoted',
 			'votesRank',
 			'expired'
 		]),
@@ -100,7 +100,7 @@ export default {
 		},
 
 		noVotes(pollOptionText) {
-			return this.participants.length - this.maybeVotes(pollOptionText) - this.yesVotes(pollOptionText)
+			return this.participantsVoted.length - this.maybeVotes(pollOptionText) - this.yesVotes(pollOptionText)
 		},
 
 		setVote(option, participant) {

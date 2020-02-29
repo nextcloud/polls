@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -125,13 +126,22 @@ class Poll extends Entity implements JsonSerializable {
 			'deleted' => intval($this->deleted),
 			'access' => $this->access,
 			'anonymous' => intval($this->anonymous),
-			'fullAnonymous' => intval($this->fullAnonymous),
 			'allowMaybe' => intval($this->allowMaybe),
 			'options' => $this->options,
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
 			'showResults' => $this->showResults,
-			'adminAccess' => $this->adminAccess
+			'adminAccess' => intVal($this->adminAccess),
+			'ownerDisplayName' => $this->getDisplayName()
 		];
+	}
+
+	private function getDisplayName() {
+
+		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {
+			return \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
+		} else {
+			return $this->owner;
+		}
 	}
 }

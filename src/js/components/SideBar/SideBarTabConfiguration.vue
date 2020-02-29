@@ -22,9 +22,8 @@
 
 <template>
 	<div>
-		<div class="config-box">
-			<label v-if="writingPoll" class="icon-loading-small title"> {{ t('polls', 'Saving') }} </label>
-			<label v-else class="icon-checkmark title"> {{ t('polls', 'Saved') }} </label>
+		<div v-if="acl.isAdmin && !acl.isOwner" class="config-box">
+			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
 		</div>
 
 		<div v-if="acl.allowEdit" class="config-box">
@@ -40,6 +39,10 @@
 		<div class="config-box">
 			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
 
+			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
+				type="checkbox" class="checkbox">
+			<label v-if="acl.isOwner" for="adminAccess" class="title"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
+
 			<input id="allowMaybe" v-model="pollAllowMaybe"
 				type="checkbox" class="checkbox">
 			<label for="allowMaybe" class="title"> {{ t('polls', 'Allow "maybe" vote') }} </label>
@@ -48,16 +51,12 @@
 				type="checkbox" class="checkbox">
 			<label for="anonymous" class="title"> {{ t('polls', 'Anonymous poll') }} </label>
 
-			<input v-show="poll.anonymous" id="trueAnonymous" v-model="pollFullAnonymous"
-				type="checkbox" class="checkbox">
-			<label v-show="poll.anonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
-
 			<input id="expiration" v-model="pollExpiration"
 				type="checkbox" class="checkbox">
 			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
 
-			<DatePicker v-show="pollExpiration"
-				v-model="pollExpire" v-bind="expirationDatePicker" style="width:170px" />
+			<DatetimePicker v-show="pollExpiration"
+				v-model="pollExpire" v-bind="expirationDatePicker" style="width:100%" />
 		</div>
 
 		<div class="config-box">
@@ -72,19 +71,22 @@
 			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
-		<button class="button btn primary" @click="switchDeleted()">
-			<span v-if="poll.deleted">{{ t('polls', 'Restore poll') }}</span>
-			<span v-else>{{ t('polls', 'Delete poll') }}</span>
-		</button>
+		<ButtonDiv icon="icon-delete" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
+			@click="switchDeleted()" />
 	</div>
 </template>
 
 <script>
 import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import { DatetimePicker } from '@nextcloud/vue'
 
 export default {
 	name: 'SideBarTabConfiguration',
+
+	components: {
+		DatetimePicker
+	},
 
 	data() {
 		return {
@@ -100,6 +102,15 @@ export default {
 			poll: state => state.poll,
 			acl: state => state.acl
 		}),
+
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			} else {
+				return moment.localeData()._week.dow
+			}
+		},
 
 		// Add bindings
 		pollDescription: {
@@ -153,15 +164,6 @@ export default {
 			}
 		},
 
-		pollFullAnonymous: {
-			get() {
-				return (this.poll.Fullanonymous > 0)
-			},
-			set(value) {
-				this.writeValue({ fullAnonymous: value })
-			}
-		},
-
 		pollAnonymous: {
 			get() {
 				return (this.poll.anonymous > 0)
@@ -171,27 +173,21 @@ export default {
 			}
 		},
 
+		pollAdminAccess: {
+			get() {
+				return (this.poll.adminAccess > 0)
+			},
+			set(value) {
+				this.writeValue({ adminAccess: value })
+			}
+		},
+
 		pollAllowMaybe: {
 			get() {
 				return this.poll.allowMaybe
 			},
 			set(value) {
 				this.writeValue({ allowMaybe: value })
-				if (value) {
-					this.writeValue({ options: ['yes', 'no', 'maybe'] })
-				}
-			}
-		},
-
-		langPicker() {
-			return {
-				formatLocale: {
-					months: moment.months(),
-					monthsShort: moment.monthsShort(),
-					weekdays: moment.weekdays(),
-					weekdaysMin: moment.weekdaysMin(),
-					firstDayOfWeek: moment.localeData()._week.dow
-				}
 			}
 		},
 
@@ -204,12 +200,12 @@ export default {
 
 				// TODO: use this for version 2.x
 				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: moment.localeData()._week.dow,
+				firstDayOfWeek: this.firstDOW,
 
 				// TODO: use this from version 3.x on
 				// lang: {
 				// 	formatLocale: {
-				//		firstDayOfWeek: moment.localeData()._week.dow,
+				//		firstDayOfWeek: this.firstDOW,
 				// 		months: moment.months(),
 				// 		monthsShort: moment.monthsShort(),
 				// 		weekdays: moment.weekdays(),

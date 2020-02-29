@@ -32,9 +32,10 @@ import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 import moment from 'moment'
 
-import { PopoverMenu, Tooltip, DatetimePicker, AppContent, UserBubble } from '@nextcloud/vue'
+import { Tooltip } from '@nextcloud/vue'
 
 import UserDiv from './components/Base/UserDiv'
+import ButtonDiv from './components/Base/ButtonDiv'
 import LoadingOverlay from './components/Base/LoadingOverlay'
 
 /* eslint-disable-next-line camelcase, no-undef */
@@ -54,13 +55,9 @@ Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-Vue.component('PopoverMenu', PopoverMenu)
-Vue.component('AppContent', AppContent)
-Vue.component('DatePicker', DatetimePicker)
 Vue.component('UserDiv', UserDiv)
+Vue.component('ButtonDiv', ButtonDiv)
 Vue.component('LoadingOverlay', LoadingOverlay)
-Vue.component('UserBubble', UserBubble)
-
 Vue.directive('tooltip', Tooltip)
 
 Vue.use(ClickOutside)

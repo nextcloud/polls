@@ -146,6 +146,7 @@ class OptionController extends Controller {
 			$NewOption->setPollId($option['pollId']);
 			$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$NewOption->setTimestamp($option['timestamp']);
+			$NewOption->setOrder($option['order']);
 
 			$this->mapper->insert($NewOption);
 			$this->logService->setLog($option['pollId'], 'addOption');
@@ -174,6 +175,7 @@ class OptionController extends Controller {
 
 			$updateOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$updateOption->setTimestamp($option['timestamp']);
+			$updateOption->setOrder($option['order']);
 
 			$this->mapper->update($updateOption);
 			$this->logService->setLog($option['pollId'], 'updateOption');

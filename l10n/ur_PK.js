@@ -8,6 +8,9 @@ OC.L10N.register(
     "Owner" : "Owner",
     "never" : "never",
     "Description" : "تصریح",
-    "Expiration date" : "تاریخ معیاد"
+    "Expiration date" : "تاریخ معیاد",
+    "Week" : "ہفتہ",
+    "Month" : "ماہ",
+    "OK" : "اوکے"
 },
 "nplurals=2; plural=(n != 1);");

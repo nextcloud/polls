@@ -9,6 +9,9 @@ OC.L10N.register(
     "Details" : "விவரங்கள்",
     "Configuration" : "தகவமைப்பு",
     "Description" : "விவரிப்பு",
-    "Expiration date" : "காலவதியாகும் திகதி"
+    "Expiration date" : "காலவதியாகும் திகதி",
+    "Week" : "வாரம்",
+    "Month" : "மாதம்",
+    "OK" : "சரி "
 },
 "nplurals=2; plural=(n != 1);");

@@ -51,12 +51,15 @@ const getters = {
 	},
 	deletedPolls: (state) => {
 		return state.list.filter(poll => (poll.deleted))
+	},
+	participatedPolls: (state) => {
+		return state.list.filter(poll => (poll.userHasVoted))
 	}
 }
 
 const actions = {
 	loadPolls(context) {
-		const endPoint = 'apps/polls/poll/list/'
+		const endPoint = 'apps/polls/polls/list/'
 
 		return axios.get(OC.generateUrl(endPoint))
 			.then((response) => {
@@ -68,7 +71,7 @@ const actions = {
 	},
 
 	switchDeleted(context, payload) {
-		const endPoint = 'apps/polls/poll/delete/'
+		const endPoint = 'apps/polls/polls/delete/'
 		return axios.get(OC.generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response
@@ -79,7 +82,7 @@ const actions = {
 	},
 
 	clonePoll(context, payload) {
-		const endPoint = 'apps/polls/poll/clone/'
+		const endPoint = 'apps/polls/polls/clone/'
 		return axios.get(OC.generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response.data

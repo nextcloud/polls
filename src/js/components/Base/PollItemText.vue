@@ -21,96 +21,67 @@
   -->
 
 <template>
-	<div>
-		<div class="config-box">
-			<label class="title icon-toggle-filelist">
-				{{ t('polls', 'Add a new text option') }}
-			</label>
-			<input v-model="newPollText" :placeholder=" t('polls', 'Enter option text and press Enter') " @keyup.enter="addOption(newPollText)">
+	<li class="poll-item text" :class="{ draggable: draggable }">
+		<IconBase v-if="draggable" icon-name="handle" class="handle">
+			<IconHandle />
+		</IconBase>
+
+		<div v-if="showOrder" class="order">
+			{{ option.order }}
 		</div>
 
-		<ul class="config-box poll-table">
-			<label class="title icon-calendar">
-				{{ t('polls', 'Available Options') }}
-			</label>
-			<TextPollItem v-for="(option) in sortedOptions" :key="option.id" :option="option"
-				@remove="removeOption(option)" />
-		</ul>
-	</div>
+		<div class="pollOption">
+			{{ option.pollOptionText }}
+		</div>
+		<slot name="actions" />
+	</li>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import TextPollItem from '../Base/TextPollItem'
+import IconBase from '../Icons/IconBase.vue'
+import IconHandle from '../Icons/IconHandle.vue'
+
 export default {
-	name: 'SideBarTabTextOptions',
+	name: 'PollItemText',
 
 	components: {
-		TextPollItem
+		IconBase,
+		IconHandle
 	},
 
-	data() {
-		return {
-			newPollText: ''
-		}
-	},
-
-	computed: {
-		...mapState({
-			options: state => state.options
-		}),
-
-		...mapGetters(['sortedOptions'])
-	},
-
-	methods: {
-
-		addOption(pollOptionText) {
-			if (pollOptionText !== '') {
-				this.$store.dispatch('addOptionAsync', {
-					pollOptionText: pollOptionText
-				})
-				this.newPollText = ''
-			}
+	props: {
+		option: {
+			type: Object,
+			required: true
 		},
 
-		removeOption(option) {
-			this.$store.dispatch('removeOptionAsync', {
-				option: option
-			})
+		showOrder: {
+			type: Boolean,
+			default: false
+		},
+
+		draggable: {
+			type: Boolean,
+			default: false
 		}
-
 	}
-
 }
 </script>
 
 <style lang="scss">
-.config-box {
-
-	&.poll-table > li {
-		border-bottom-color: rgb(72, 72, 72);
-		margin-left: 18px;
-	}
-
-}
-
-.poll-table {
-	> li {
+	.poll-item {
 		display: flex;
 		align-items: center;
 		padding-left: 8px;
 		padding-right: 8px;
 		line-height: 2em;
 		min-height: 4em;
-		border-bottom: 1px solid var(--color-border);
 		overflow: hidden;
 		white-space: nowrap;
-
 		&:active,
 		&:hover {
 			transition: var(--background-dark) 0.3s ease;
-			background-color: var(--color-background-dark); //$hover-color;
+			background-color: var(--color-background-dark);
 		}
 
 		> div {
@@ -125,10 +96,19 @@ export default {
 			}
 		}
 
-		> div:nth-last-child(1) {
+		.order {
+			flex: 0 0;
+			justify-content: flex-end;
+			padding-right: 8px;
+		}
+
+		.handle {
+			margin-right: 8px;
+		}
+
+		.action {
 			justify-content: center;
 			flex: 0 0;
 		}
 	}
-}
 </style>

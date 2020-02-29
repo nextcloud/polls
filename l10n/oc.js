@@ -8,8 +8,11 @@ OC.L10N.register(
     "Owner" : "Owner",
     "never" : "pas jamai",
     "Details" : "Detalhs",
-    "Saved" : "Enregistrat",
     "Description" : "Descripcion",
-    "Expiration date" : "Data d'expiracion"
+    "Expiration date" : "Data d'expiracion",
+    "Week" : "Aquesta setmana",
+    "Day" : "Jorn",
+    "Month" : "Mes",
+    "OK" : "D'acòrdi"
 },
 "nplurals=2; plural=(n > 1);");

@@ -1,7 +1,37 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.0.0] - tbd
+## [1.3.0] - 2020-02-16
+
+ - internal optimizations
+ - in public poll ask for username in a modal
+ - Allow site user to vote in hidden poll via public link (#779)
+ - New option: Allow admins to edit poll
+ - Prevent deleted poll from beeing called via public link (#773)
+ - Present error page, when poll cannot be accessed (#772)
+ - Allow site user to access hidden poll, when called via public link (#779)
+ - Give permant access to votes, the user voted in
+ - New filter: participated - Polls, where the user participated in
+ - delete comments (#193)
+ - Enter user name in public shared polls in a modal
+ - fixed routing error in NC16 (#787)
+ - load subscription on route change (#788)
+ - show displayNames instead of userID (#715)
+ - reorder vote options in text polls (#529)
+
+## [1.1.6] - 2020-01-26
+
+ - autoFocus poll title in creation dialog (#757)
+ - only count current user, if he actually voted (#759)
+ - redirect old public polls routes to new route (#761)
+ - Avoid error on creating share (#763)
+ - changing popovermenu to Actions (#594 and #754 )
+ - updated design according to file lists
+ - Sorting polls in poll list, default creation date desc (#559 and #717)
+ - updated dependencies
+ - 12-hour clock bug bug (#780)
+
+## [1.0.0] - 2020-01-20
 
  - huge update of polls
  - completely rewritten as a vue app

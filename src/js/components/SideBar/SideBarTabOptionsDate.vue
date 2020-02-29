@@ -26,7 +26,7 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Add a date option') }}
 			</label>
-			<DatePicker v-model="lastOption"
+			<DatetimePicker v-model="lastOption"
 				v-bind="optionDatePicker"
 				style="width:100%"
 				confirm
@@ -40,13 +40,16 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<Multiselect v-model="move.unit" :options="move.units" />
+					<Multiselect
+						v-model="move.unit"
+						:options="move.units"
+						label="name"
+						track-by="value" />
 				</div>
 			</div>
 			<div>
-				<button class="button btn primary" @click="shiftDates(move)">
-					<span>{{ t('polls', 'Shift') }}</span>
-				</button>
+				<ButtonDiv icon="icon-history" :title="t('polls', 'Shift')"
+					@click="shiftDates(move)" />
 			</div>
 		</div>
 
@@ -54,25 +57,35 @@
 			<label class="title icon-calendar">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<DatePollItem v-for="(option) in sortedOptions"
+			<PollItemDate v-for="(option) in sortedOptions"
 				:key="option.id"
-				:option="option"
-				@remove="removeOption(option)" />
+				:option="option">
+				<template v-slot:actions>
+					<Actions v-if="acl.allowEdit" class="action">
+						<ActionButton icon="icon-delete" @click="removeOption(option)">
+							{{ t('polls', 'Delete option') }}
+						</ActionButton>
+					</Actions>
+				</template>
+			</PollItemDate>
 		</ul>
 	</div>
 </template>
 
 <script>
-import { Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, DatetimePicker, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
-import DatePollItem from '../Base/DatePollItem'
+import PollItemDate from '../Base/PollItemDate'
 
 export default {
-	name: 'SideBarTabDateOptions',
+	name: 'SideBarTabOptionsDate',
 
 	components: {
+		Actions,
+		ActionButton,
 		Multiselect,
-		DatePollItem
+		PollItemDate,
+		DatetimePicker
 	},
 
 	data() {
@@ -80,18 +93,35 @@ export default {
 			lastOption: '',
 			move: {
 				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
+				unit: { name: t('polls', 'Week'), value: 'week' },
+				units: [
+					{ name: t('polls', 'Minute'), value: 'minute' },
+					{ name: t('polls', 'Hour'), value: 'hour' },
+					{ name: t('polls', 'Day'), value: 'day' },
+					{ name: t('polls', 'Week'), value: 'week' },
+					{ name: t('polls', 'Month'), value: 'month' },
+					{ name: t('polls', 'Year'), value: 'year' }
+				]
 			}
 		}
 	},
 
 	computed: {
 		...mapState({
-			options: state => state.options
+			options: state => state.options,
+			acl: state => state.acl
 		}),
 
 		...mapGetters(['sortedOptions']),
+
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			} else {
+				return moment.localeData()._week.dow
+			}
+		},
 
 		optionDatePicker() {
 			return {
@@ -102,12 +132,12 @@ export default {
 
 				// TODO: use this for version 2.x
 				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: moment.localeData()._week.dow,
+				firstDayOfWeek: this.firstDOW,
 
 				// TODO: use this from version 3.x on
 				// lang: {
 				// 	formatLocale: {
-				//		firstDayOfWeek: moment.localeData()._week.dow,
+				//		firstDayOfWeek: this.firstDOW,
 				// 		months: moment.months(),
 				// 		monthsShort: moment.monthsShort(),
 				// 		weekdays: moment.weekdays(),
@@ -134,7 +164,7 @@ export default {
 			const store = this.$store
 			this.options.list.forEach(function(existingOption) {
 				const option = Object.assign({}, existingOption)
-				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
+				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
 				store.dispatch('updateOptionAsync', { option: option })
 			})

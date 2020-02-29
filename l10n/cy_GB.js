@@ -8,9 +8,12 @@ OC.L10N.register(
     "Owner" : "Owner",
     "never" : "byth",
     "Details" : "Manylion",
-    "Saved" : "Wedi'u cadw",
     "Description" : "Disgrifiad",
     "Expiration date" : "Dyddiad dod i ben",
+    "Week" : "Wythnos",
+    "Day" : "Diwrnod",
+    "Month" : "Mis",
+    "OK" : "Iawn",
     "Public access" : "Mynediad cyhoeddus"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

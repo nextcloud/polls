@@ -27,13 +27,13 @@
 		</div>
 		<Avatar :disable-menu="true" :user="userId"
 			:is-guest="!Boolean(OC.currentUser)"
-			:display-name="computedDisplayName"
+			:display-name="displayName"
 
 			:is-no-user="isNoUser" />
 		<div class="avatar" :class="iconClass" />
 
 		<div v-if="!hideNames" class="user-name">
-			{{ computedDisplayName }}
+			{{ displayName }}
 		</div>
 	</div>
 </template>
@@ -100,23 +100,23 @@ export default {
 			} else {
 				return ''
 			}
-		},
-
-		computedDisplayName() {
-			let value = this.displayName
-
-			if (!this.displayName) {
-				if (this.type === 'user') {
-					value = this.userId
-				} else if (this.type === 'group') {
-					value = value + ' (' + t('polls', 'Group') + ')'
-				} else {
-					value = this.userId
-				}
-			}
-			return value
-
 		}
+
+		// computedDisplayName() {
+		// 	let value = this.displayName
+		//
+		// 	if (!this.displayName) {
+		// 		if (this.type === 'user') {
+		// 			value = this.userId
+		// 		} else if (this.type === 'group') {
+		// 			value = value + ' (' + t('polls', 'Group') + ')'
+		// 		} else {
+		// 			value = this.userId
+		// 		}
+		// 	}
+		// 	return value
+
+		// }
 	}
 }
 

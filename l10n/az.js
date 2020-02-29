@@ -10,8 +10,11 @@ OC.L10N.register(
     "Details" : "Detallar",
     "Configuration" : "Konfiqurasiya",
     "Shares" : "Yayımlanmalar",
-    "Saved" : "Saxlanıldı",
     "Description" : "Açıqlanma",
-    "Unknown user" : "Istifadəçi tanınmır "
+    "Week" : "Həftə",
+    "Day" : "Gün",
+    "Month" : "Ay",
+    "Unknown user" : "Istifadəçi tanınmır ",
+    "OK" : "Oldu"
 },
 "nplurals=2; plural=(n != 1);");

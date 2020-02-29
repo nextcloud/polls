@@ -9,8 +9,11 @@ OC.L10N.register(
     "Owner" : "Owner",
     "never" : "երբեք",
     "Details" : "Մանրամասներ",
-    "Saved" : "Պահված",
     "Description" : "Նկարագրություն",
-    "Expiration date" : "Վավերականության ժամկետ"
+    "Expiration date" : "Վավերականության ժամկետ",
+    "Week" : "Շաբաթ",
+    "Day" : "Օր",
+    "Month" : "Ամիս",
+    "OK" : "Լավ"
 },
 "nplurals=2; plural=(n != 1);");

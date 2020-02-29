@@ -4,15 +4,19 @@ OC.L10N.register(
     "Deleted" : "Geläscht",
     "Group" : "Grupp",
     "Comments" : "Kommentarer",
+    "Delete comment" : "Kommentar läschen",
     "Cancel" : "Ofbriechen",
     "Apply" : "Uwenden",
     "Title" : "Titel",
     "Owner" : "Owner",
     "never" : "Ni",
     "Details" : "Detailer",
-    "Saving" : "Speicheren...",
-    "Saved" : "Gespäichert",
     "Description" : "Beschreiwung",
-    "Expiration date" : "Verfallsdatum"
+    "Expiration date" : "Verfallsdatum",
+    "Week" : "Woch",
+    "Hour" : "Stonn",
+    "Day" : "Dag",
+    "Month" : "Mount",
+    "OK" : "OK"
 },
 "nplurals=2; plural=(n != 1);");

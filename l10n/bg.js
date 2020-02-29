@@ -3,7 +3,9 @@ OC.L10N.register(
     {
     "Deleted" : "Изтрито",
     "Group" : "Група",
+    "New comment …" : "Нов коментар...",
     "Comments" : "Коментари",
+    "Delete comment" : "Изтрий коментар",
     "No comments yet. Be the first." : "Все още няма коментари.",
     "Cancel" : "Отказ",
     "Apply" : "Приложи",
@@ -15,11 +17,14 @@ OC.L10N.register(
     "Details" : "Подробности",
     "Configuration" : "Настройки",
     "Shares" : "Споделени",
-    "Saving" : "Запазване",
-    "Saved" : "Запазено",
     "Description" : "Описание",
     "Expiration date" : "Валидност",
+    "Week" : "Седмица",
+    "Hour" : "Час",
+    "Day" : "Ден",
+    "Month" : "Месец",
     "Unknown user" : "Непознат потребител",
+    "OK" : "ОК",
     "Public access" : "Публичен достъп"
 },
 "nplurals=2; plural=(n != 1);");

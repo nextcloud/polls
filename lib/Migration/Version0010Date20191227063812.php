@@ -242,11 +242,13 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_polls')) {
+		if ($schema->hasTable('polls_polls') &&
+			$schema->hasTable('polls_events')) {
 			$this->migrateEvents();
 		}
 
-		if ($schema->hasTable('polls_share')) {
+		if ($schema->hasTable('polls_share') &&
+			$schema->hasTable('polls_events')) {
 			$this->copyTokens();
 		}
 	}
@@ -343,7 +345,8 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				'type' => $insert->createParameter('type'),
 				'poll_id' => $insert->createParameter('poll_id'),
 				'user_id' => $insert->createParameter('user_id'),
-				'user_email' => $insert->createParameter('user_email')
+				'user_email' => $insert->createParameter('user_email'),
+				'user' => $insert->createParameter('user')
 			]);
 		$query = $this->connection->getQueryBuilder();
 		$query->select('*')
@@ -358,7 +361,8 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
-				->setParameter('user_email', null);
+				->setParameter('user_email', null)
+				->setParameter('user', '');
 				$insert->execute();
 			} elseif ($row['access'] == 'hidden') {
 				// copy the hash to a public share
@@ -368,7 +372,8 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
-				->setParameter('user_email', null);
+				->setParameter('user_email', null)
+				->setParameter('user', '');
 				$insert->execute();
 			} elseif ($row['access'] == 'registered') {
 				// copy the hash to a public share
@@ -378,7 +383,8 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('type', 'public')
 				->setParameter('poll_id', $row['id'])
 				->setParameter('user_id', null)
-				->setParameter('user_email', null);
+				->setParameter('user_email', null)
+				->setParameter('user', '');
 			} else {
 				// create a personal share for invitated users
 
@@ -398,7 +404,8 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 					->setParameter('type', $parts[0])
 					->setParameter('poll_id', $row['id'])
 					->setParameter('user_id', $parts[1])
-					->setParameter('user_email', null);
+					->setParameter('user_email', null)
+					->setParameter('user', '');
 					$insert->execute();
 				}
 			}

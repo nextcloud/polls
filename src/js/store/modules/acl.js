@@ -37,6 +37,7 @@ const defaultAcl = () => {
 		allowSeeUsernames: false,
 		allowSeeAllVotes: false,
 		foundByToken: false,
+		loggedIn: false,
 		accessLevel: ''
 	}
 }

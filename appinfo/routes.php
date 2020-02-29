@@ -24,9 +24,11 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'page#list', 'url' => '/list/{pollId}', 'verb' => 'GET'],
-		['name' => 'page#polls', 'url' => '/vote/{pollId}', 'verb' => 'GET'],
-		['name' => 'page#vote_public', 'url' => '/s/{token}', 'verb' => 'GET'],
+		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],
+		['name' => 'page#index', 'url' => '/list/{id}', 'verb' => 'GET', 'postfix' => 'list'],
+		['name' => 'page#index', 'url' => '/vote/{id}', 'verb' => 'GET', 'postfix' => 'vote'],
+		['name' => 'page#vote_public', 'url' => '/s/{token}', 'verb' => 'GET', 'postfix' => 'public'],
+		['name' => 'page#vote_public', 'url' => '/poll/{token}', 'verb' => 'GET', 'postfix' => 'oldpublic'],
 
 		['name' => 'subscription#get', 'url' => '/subscription/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'subscription#set', 'url' => '/subscription/set/', 'verb' => 'POST'],
@@ -35,6 +37,8 @@ return [
 		['name' => 'comment#writeByToken', 'url' => '/comment/write/s/', 'verb' => 'POST'],
 		['name' => 'comment#get', 'url' => '/comments/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'comment#write', 'url' => '/comment/write/', 'verb' => 'POST'],
+		['name' => 'comment#delete', 'url' => '/comment/delete/', 'verb' => 'POST'],
+		['name' => 'comment#deleteByToken', 'url' => '/comment/delete/s/', 'verb' => 'POST'],
 
 		['name' => 'vote#getByToken', 'url' => '/votes/get/s/{token}', 'verb' => 'GET'],
 		['name' => 'vote#setByToken', 'url' => '/vote/set/s/', 'verb' => 'POST'],
@@ -48,12 +52,12 @@ return [
 		['name' => 'option#remove', 'url' => '/option/remove/', 'verb' => 'POST'],
 		['name' => 'option#getByToken', 'url' => '/options/get/s/{token}', 'verb' => 'GET'],
 
-		['name' => 'poll#list', 'url' => '/poll/list/', 'verb' => 'GET'],
-		['name' => 'poll#get', 'url' => '/poll/get/{pollId}', 'verb' => 'GET'],
-		['name' => 'poll#delete', 'url' => '/poll/delete/{pollId}', 'verb' => 'GET'],
-		['name' => 'poll#write', 'url' => '/poll/write/', 'verb' => 'POST'],
-		['name' => 'poll#clone', 'url' => '/poll/clone/{pollId}', 'verb' => 'get'],
-		['name' => 'poll#getByToken', 'url' => '/poll/get/s/{token}', 'verb' => 'GET'],
+		['name' => 'poll#list', 'url' => '/polls/list/', 'verb' => 'GET'],
+		['name' => 'poll#get', 'url' => '/polls/get/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#delete', 'url' => '/polls/delete/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#write', 'url' => '/polls/write/', 'verb' => 'POST'],
+		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'get'],
+		['name' => 'poll#getByToken', 'url' => '/polls/get/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/share/write/', 'verb' => 'POST'],

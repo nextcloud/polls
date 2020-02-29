@@ -21,59 +21,71 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :title="t('polls', 'Details')" @close="$emit('closeSideBar')">
-		<UserDiv slot="primary-actions" :user-id="poll.owner" :description="t('polls', 'Owner')" />
-
-		<AppSidebarTab :name="t('polls', 'Comments')" icon="icon-comment">
-			<Comments />
-		</AppSidebarTab>
-	</AppSidebar>
+	<li class="poll-item date">
+		<div class="pollOption">
+			{{ moment.unix(option.timestamp).format('LLLL') }}
+		</div>
+		<slot name="actions" />
+	</li>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
-
-import Comments from '../Comments/Comments'
-import { mapState } from 'vuex'
 
 export default {
-	name: 'SideBarOnlyComments',
+	name: 'PollItemDate',
+
 	components: {
-		Comments,
-		AppSidebar,
-		AppSidebarTab
 	},
 
-	computed: {
-		...mapState({
-			poll: state => state.poll,
-			acl: state => state.acl
-		})
+	props: {
+		option: {
+			type: Object,
+			required: true
+		},
+		showOrder: {
+			type: Boolean,
+			default: false
+		},
+		draggable: {
+			type: Boolean,
+			default: false
+		}
 	}
-
 }
-
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+	.poll-item {
+		display: flex;
+		align-items: center;
+		padding-left: 8px;
+		padding-right: 8px;
+		line-height: 2em;
+		min-height: 4em;
+		overflow: hidden;
+		white-space: nowrap;
 
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
+		&:active,
+		&:hover {
+			transition: var(--background-dark) 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
 
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
+		> div {
+			display: flex;
+			flex: 1;
+			font-size: 1.2em;
+			opacity: 0.7;
+			white-space: normal;
+			padding-right: 4px;
+			&.avatar {
+				flex: 0;
 			}
-			& > .message {
-				margin-left: 44px;
-				flex: 1 1;
-			}
+		}
+
+		.action {
+			justify-content: center;
+			flex: 0 0;
 		}
 	}
 </style>

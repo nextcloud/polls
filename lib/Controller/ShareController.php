@@ -137,8 +137,6 @@ class ShareController extends Controller {
 	 * write
 	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
 	 * @return DataResponse
@@ -153,7 +151,7 @@ class ShareController extends Controller {
 		$newShare->setType($share['type']);
 		$newShare->setPollId($share['pollId']);
 		$newShare->setUserId($share['userId']);
-		$newShare->setUserEmail($share['userEmail']);
+		$newShare->setUserEmail(isset($share['userEmail']) ? $share['userEmail'] : '');
 		$newShare->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
@@ -163,7 +161,9 @@ class ShareController extends Controller {
 
 		try {
 			$newShare = $this->mapper->insert($newShare);
+			// $this->logger->debug('Share inserted, sending out invitation mail now.');
 			$sendResult = $this->mailService->sendInvitationMail($newShare->getToken());
+			// $this->logger->debug('Sending result ' . json_encode($sendResult));
 
 			return new DataResponse([
 				'share' => $newShare,
@@ -180,7 +180,6 @@ class ShareController extends Controller {
 	 * createPersonalShare
 	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
@@ -189,52 +188,44 @@ class ShareController extends Controller {
 	public function createPersonalShare($token, $userName) {
 
 		try {
-			$userShare = $this->mapper->findByToken($token);
-			if (!$this->systemController->validatePublicUsername($userShare->getPollId(), $userName)) {
+			$publicShare = $this->mapper->findByToken($token);
+			if (!$this->systemController->validatePublicUsername($publicShare->getPollId(), $userName)) {
 				return new DataResponse(['message' => 'invalid userName'], Http::STATUS_CONFLICT);
 			}
 
-			if ($userShare->getType() === 'mail') {
+			if ($publicShare->getType() === 'public') {
 
-				$userShare->setType('external');
-				$userShare->setUserId($userName);
-
-			} elseif ($userShare->getType() === 'public') {
-
-				$userShare->setType('external');
-				$userShare->setPollId(intval($userShare->getPollId()));
-				$userShare->setUserId($userName);
+				$userShare = new Share();
 				$userShare->setToken(\OC::$server->getSecureRandom()->generate(
 					16,
 					ISecureRandom::CHAR_DIGITS .
 					ISecureRandom::CHAR_LOWER .
 					ISecureRandom::CHAR_UPPER
 				));
+				$userShare->setType('external');
+				$userShare->setPollId($publicShare->getPollId());
+				$userShare->setUserId($userName);
+				$userShare->setUserEmail('');
+				$this->logger->debug('Create share: ' . json_encode($userShare));
+				$userShare = $this->mapper->insert($userShare);
+				return new DataResponse($userShare, Http::STATUS_OK);
 
 			} else {
 				return new DataResponse(['message'=> 'Wrong share type: ' . $userShare->getType()], Http::STATUS_FORBIDDEN);
 			}
 
-			try {
-				if ($token === $userShare->getToken()) {
-					$userShare = $this->mapper->update($userShare);
-				} else {
-					$userShare = $this->mapper->insert($userShare);
-				}
-
-			} catch (\Exception $e) {
-				return new DataResponse($e, Http::STATUS_CONFLICT);
-			}
-
-			return new DataResponse($userShare, Http::STATUS_OK);
-
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
-
 	}
 
+	/**
+	 * remove
+	 * remove share
+	 * @NoAdminRequired
+	 * @param Share $share
+	 * @return DataResponse
+	 */
 
 	public function remove($share) {
 		try {
