@@ -81,7 +81,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Примај обавештења о активностима преко е-поште",
     "Your personal link to this poll: %n" : "Ваша лична веза за ово гласање: %n",
     "OK" : "У реду",
-    "Open Sidebar" : "Отвори бочну траку",
     "Public access" : "Јавни приступ",
     "Hidden poll" : "Сакривено гласање",
     "Access denied" : "Забрањен приступ",

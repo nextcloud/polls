@@ -123,7 +123,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "یک نظرسنجی وارد کنید یا یک مورد جدید را شروع کنید.",
     "Goto Nextcloud" : "برو نکست کلود",
     "Switch view" : "تغییر نمایش",
-    "Open Sidebar" : "نوار کناری را باز کنید",
     "There are no vote options, add some in the options section of the right side bar." : "گزینه های رای گیری وجود ندارد ، برخی از آنها را در بخش گزینه های نوار سمت راست افزودن.",
     "There are no vote options. Maybe the owner did not provide some until now." : "گزینه های رأی وجود ندارد. شاید تاکنون مالک برخی از آنها را تهیه نکرده است.",
     "Public access" : "دسترسی عمومی",

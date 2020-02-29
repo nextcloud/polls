@@ -69,7 +69,6 @@ OC.L10N.register(
     "Unknown user" : "Erabiltzaile ezezaguna",
     "Public share" : "Partekatze publikoa",
     "OK" : "Ados",
-    "Open Sidebar" : "Ireki albo-barra",
     "Public access" : "Sarbide publikoa",
     "Hidden poll" : "Ezkutuko inkesta",
     "Access denied" : "Sarbidea ukatua"

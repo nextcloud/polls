@@ -98,7 +98,6 @@ OC.L10N.register(
     "Your personal link to this poll: %n" : "Vaša osobna poveznica na ovu anketu: %n",
     "OK" : "U redu",
     "Switch view" : "Promijeni prikaz",
-    "Open Sidebar" : "Otvori bočnu traku",
     "Public access" : "Javni pristup",
     "Hidden poll" : "Skrivena anketa",
     "Error deleting poll." : "Pogreška pri brisanju ankete.",

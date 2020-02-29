@@ -24,11 +24,18 @@
 	<AppContent>
 		<div class="main-container">
 			<div class="header-actions">
-				<ButtonDiv :primary="true" :title="t('polls', 'Switch view')" @click="tableMode = !tableMode" />
-				<a href="#" class="icon icon-settings active"
-					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
+				<Actions>
+					<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
+						{{ t('polls', 'Switch view') }}
+					</ActionButton>
+				</Actions>
+				<Actions>
+					<ActionButton icon="icon-settings" @click="toggleSideBar()">
+						{{ t('polls', 'Toggle Sidebar') }}
+					</ActionButton>
+				</Actions>
 			</div>
-			<PollTitle />
+			<PollTitle class="poll-title" />
 			<PollInformation />
 			<VoteHeaderPublic v-if="!OC.currentUser" />
 			<PollDescription />
@@ -56,7 +63,7 @@
 </template>
 
 <script>
-import { AppContent } from '@nextcloud/vue'
+import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollDescription from '../components/Base/PollDescription'
@@ -72,6 +79,8 @@ import { mapState, mapGetters } from 'vuex'
 export default {
 	name: 'Vote',
 	components: {
+		Actions,
+		ActionButton,
 		AppContent,
 		Subscription,
 		ParticipantsList,
@@ -196,6 +205,7 @@ export default {
 
 .header-actions {
 	right: 0;
+	top: 0;
 	position: absolute;
 	display: flex;
 }
@@ -205,5 +215,10 @@ export default {
 	width: 44px;
 	height: 44px;
 }
-
+@media (max-width: (1024px)) {
+	.poll-title {
+		padding-left: 14px;
+		padding-right: 90px;
+	}
+}
 </style>

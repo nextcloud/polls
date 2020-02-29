@@ -71,7 +71,8 @@
 			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
-		<ButtonDiv :primary="true" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')" @click="switchDeleted()" />
+		<ButtonDiv icon="icon-delete" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
+			@click="switchDeleted()" />
 	</div>
 </template>
 
