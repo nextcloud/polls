@@ -22,9 +22,7 @@
 
 <template>
 	<!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-	<h3 v-if="poll.description" class="poll-description">{{ poll.description }}</h3>
-	<!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-	<h3 v-else class="poll-description">{{ t('polls', 'No description provided') }}</h3>
+	<h3 class="poll-description">{{ poll.description ? poll.description : t('polls', 'No description provided') }}</h3>
 </template>
 
 <script>

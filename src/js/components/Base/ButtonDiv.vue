@@ -20,72 +20,47 @@
   -
   -->
 
-<template>
-	<li class="poll-item date">
-		<div class="pollOption">
-			{{ moment.unix(option.timestamp).format('LLLL') }}
-		</div>
-		<slot name="actions" />
-	</li>
+<template lang="html">
+	<div :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
+		{{ title }}
+	</div>
 </template>
 
 <script>
-
 export default {
-	name: 'PollItemDate',
-
-	components: {
+	name: 'ButtonDiv',
+	props: {
+		title: {
+			type: String,
+			default: ''
+		},
+		icon: {
+			type: String,
+			default: ''
+		},
+		primary: {
+			type: Boolean,
+			default: false
+		}
 	},
 
-	props: {
-		option: {
-			type: Object,
-			required: true
-		},
-		showOrder: {
-			type: Boolean,
-			default: false
-		},
-		draggable: {
-			type: Boolean,
-			default: false
+	computed: {
+		withIcon() {
+			return Boolean(this.icon)
 		}
 	}
 }
 </script>
 
-<style lang="scss">
-	.poll-item {
-		display: flex;
-		align-items: center;
-		padding-left: 8px;
-		padding-right: 8px;
-		line-height: 2em;
-		min-height: 4em;
-		overflow: hidden;
-		white-space: nowrap;
+<style lang="scss" scoped>
+	.button {
+		display: inline-block;
 
-		&:active,
-		&:hover {
-			transition: var(--background-dark) 0.3s ease;
-			background-color: var(--color-background-dark);
+		&.withIcon {
+			padding-left: 34px;
+			background-position: 12px center;
 		}
 
-		> div {
-			display: flex;
-			flex: 1;
-			font-size: 1.2em;
-			opacity: 0.7;
-			white-space: normal;
-			padding-right: 4px;
-			&.avatar {
-				flex: 0;
-			}
-		}
-
-		.action {
-			justify-content: center;
-			flex: 0 0;
-		}
 	}
+
 </style>

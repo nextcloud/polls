@@ -40,9 +40,15 @@
 					<PollItemText v-for="(option) in sortOptions"
 						:key="option.id"
 						:option="option"
-						:show-actions="true"
-						:draggable="true"
-						@remove="removeOption(option)" />
+						:draggable="true">
+						<template v-slot:actions>
+							<Actions v-if="acl.allowEdit" class="action">
+								<ActionButton icon="icon-delete" @click="removeOption(option)">
+									{{ t('polls', 'Delete option') }}
+								</ActionButton>
+							</Actions>
+						</template>
+					</PollItemText>
 				</transition-group>
 			</draggable>
 		</ul>
@@ -51,6 +57,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import PollItemText from '../Base/PollItemText'
 import InputDiv from '../Base/InputDiv'
@@ -59,6 +66,8 @@ export default {
 	name: 'SideBarTabOptionsText',
 
 	components: {
+		Actions,
+		ActionButton,
 		draggable,
 		InputDiv,
 		PollItemText
@@ -72,7 +81,8 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options
+			options: state => state.options,
+			acl: state => state.acl
 		}),
 
 		...mapGetters(['sortedOptions']),
@@ -116,6 +126,28 @@ export default {
 </script>
 
 <style lang="scss">
+
+	.draggable {
+		* {
+			cursor: move;
+			cursor: grab;
+			&:active {
+				cursor: grabbing;
+				cursor: -moz-grabbing;
+				cursor: -webkit-grabbing;
+			}
+		}
+
+		.handle {
+			visibility: hidden;
+		}
+
+		&:hover > .handle {
+			visibility: visible;
+		}
+
+	}
+
 	.config-box {
 
 		&.poll-table .poll-item {

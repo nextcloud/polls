@@ -13,6 +13,10 @@ OC.L10N.register(
     "Details" : "Detailer",
     "Description" : "Beschreiwung",
     "Expiration date" : "Verfallsdatum",
+    "Week" : "Woch",
+    "Hour" : "Stonn",
+    "Day" : "Dag",
+    "Month" : "Mount",
     "OK" : "OK"
 },
 "nplurals=2; plural=(n != 1);");

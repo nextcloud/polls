@@ -10,6 +10,9 @@ OC.L10N.register(
     "Details" : "Manylion",
     "Description" : "Disgrifiad",
     "Expiration date" : "Dyddiad dod i ben",
+    "Week" : "Wythnos",
+    "Day" : "Diwrnod",
+    "Month" : "Mis",
     "OK" : "Iawn",
     "Public access" : "Mynediad cyhoeddus"
 },

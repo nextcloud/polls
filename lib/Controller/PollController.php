@@ -285,7 +285,7 @@ class PollController extends Controller {
 			$this->poll->setAccess($poll['access']);
 			$this->poll->setExpire($poll['expire']);
 			$this->poll->setAnonymous(intval($poll['anonymous']));
-			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']) * $this->poll->getAnonymous());
+			$this->poll->setFullAnonymous(0);
 			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
 			$this->poll->setVoteLimit(intval($poll['voteLimit']));
 			$this->poll->setSettings('');
@@ -329,7 +329,7 @@ class PollController extends Controller {
 		$clonePoll->setAccess($this->poll->getAccess());
 		$clonePoll->setExpire($this->poll->getExpire());
 		$clonePoll->setAnonymous(intval($this->poll->getAnonymous()));
-		$clonePoll->setFullAnonymous(intval($this->poll->getFullAnonymous())  * $clonePoll->getAnonymous());
+		$clonePoll->setFullAnonymous(0);
 		$clonePoll->setAllowMaybe(intval($this->poll->getAllowMaybe()));
 		$clonePoll->setVoteLimit(intval($this->poll->getVoteLimit()));
 		$clonePoll->setSettings('');

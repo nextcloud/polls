@@ -9,6 +9,8 @@ OC.L10N.register(
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
     "Description" : "چۈشەندۈرۈش",
+    "Week" : "ھەپتە",
+    "Month" : "ئاي",
     "OK" : "جەزملە"
 },
 "nplurals=1; plural=0;");

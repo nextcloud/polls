@@ -18,6 +18,9 @@ OC.L10N.register(
     "Shares" : "Chia sẻ",
     "Description" : "Mô tả",
     "Expiration date" : "Ngày kết thúc",
+    "Week" : "Tuần",
+    "Day" : "Ngày",
+    "Month" : "Tháng",
     "Unknown user" : "Người dùng không tồn tại",
     "OK" : "OK",
     "Public access" : "Truy cập công khai"

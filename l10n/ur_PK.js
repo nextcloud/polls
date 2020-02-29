@@ -9,6 +9,8 @@ OC.L10N.register(
     "never" : "never",
     "Description" : "تصریح",
     "Expiration date" : "تاریخ معیاد",
+    "Week" : "ہفتہ",
+    "Month" : "ماہ",
     "OK" : "اوکے"
 },
 "nplurals=2; plural=(n != 1);");

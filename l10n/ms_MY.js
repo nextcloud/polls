@@ -9,6 +9,9 @@ OC.L10N.register(
     "never" : "jangan",
     "Shares" : "Kongsi",
     "Description" : "Keterangan",
+    "Week" : "Minggu",
+    "Day" : "Hari",
+    "Month" : "Bulan",
     "OK" : "OK"
 },
 "nplurals=1; plural=0;");

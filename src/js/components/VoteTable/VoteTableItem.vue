@@ -98,13 +98,14 @@ export default {
 		display: flex;
 		width: 85px;
 		align-items: center;
-		background-color: var(--color-background-dark);
-		color: var(--color-main-text);
+		// background-color: var(--color-background-dark);
+		background-color: $bg-no;
+		color: $fg-no;
 		> .icon {
 			margin: auto;
 			background-position: center;
 			background-repeat: no-repeat;
-			background-image: var(--icon-close-000);
+			// background-image: var(--icon-close-000);
 			min-width: 40px;
 			min-height: 40px;
 			width: 40px;
@@ -126,7 +127,7 @@ export default {
 			background-color: $bg-no;
 			color: $fg-no;
 			// background-image: var(--icon-close-f45573);
-			> .icon {
+			&.active > .icon {
 				background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiIgdmVyc2lvbj0iMS4xIiB2aWV3Ym94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Im0xNCAxMi4zLTEuNyAxLjctNC4zLTQuMy00LjMgNC4zLTEuNy0xLjcgNC4zLTQuMy00LjMtNC4zIDEuNy0xLjcgNC4zIDQuMyA0LjMtNC4zIDEuNyAxLjctNC4zIDQuM3oiIGZpbGw9IiNmNDU1NzMiLz48L3N2Zz4K);
 			}
 		}

@@ -40,13 +40,16 @@
 			<div>
 				<div class="selectUnit">
 					<input v-model="move.step">
-					<Multiselect v-model="move.unit" :options="move.units" />
+					<Multiselect
+						v-model="move.unit"
+						:options="move.units"
+						label="name"
+						track-by="value" />
 				</div>
 			</div>
 			<div>
-				<button class="button btn primary" @click="shiftDates(move)">
-					<span>{{ t('polls', 'Shift') }}</span>
-				</button>
+				<ButtonDiv icon="icon-history" :title="t('polls', 'Shift')"
+					@click="shiftDates(move)" />
 			</div>
 		</div>
 
@@ -56,15 +59,21 @@
 			</label>
 			<PollItemDate v-for="(option) in sortedOptions"
 				:key="option.id"
-				:option="option"
-				:show-actions="true"
-				@remove="removeOption(option)" />
+				:option="option">
+				<template v-slot:actions>
+					<Actions v-if="acl.allowEdit" class="action">
+						<ActionButton icon="icon-delete" @click="removeOption(option)">
+							{{ t('polls', 'Delete option') }}
+						</ActionButton>
+					</Actions>
+				</template>
+			</PollItemDate>
 		</ul>
 	</div>
 </template>
 
 <script>
-import { DatetimePicker, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, DatetimePicker, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import PollItemDate from '../Base/PollItemDate'
 
@@ -72,6 +81,8 @@ export default {
 	name: 'SideBarTabOptionsDate',
 
 	components: {
+		Actions,
+		ActionButton,
 		Multiselect,
 		PollItemDate,
 		DatetimePicker
@@ -82,15 +93,23 @@ export default {
 			lastOption: '',
 			move: {
 				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
+				unit: { name: t('polls', 'Week'), value: 'week' },
+				units: [
+					{ name: t('polls', 'Minute'), value: 'minute' },
+					{ name: t('polls', 'Hour'), value: 'hour' },
+					{ name: t('polls', 'Day'), value: 'day' },
+					{ name: t('polls', 'Week'), value: 'week' },
+					{ name: t('polls', 'Month'), value: 'month' },
+					{ name: t('polls', 'Year'), value: 'year' }
+				]
 			}
 		}
 	},
 
 	computed: {
 		...mapState({
-			options: state => state.options
+			options: state => state.options,
+			acl: state => state.acl
 		}),
 
 		...mapGetters(['sortedOptions']),
@@ -145,7 +164,7 @@ export default {
 			const store = this.$store
 			this.options.list.forEach(function(existingOption) {
 				const option = Object.assign({}, existingOption)
-				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
+				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
 				store.dispatch('updateOptionAsync', { option: option })
 			})

@@ -35,6 +35,7 @@ import moment from 'moment'
 import { Tooltip } from '@nextcloud/vue'
 
 import UserDiv from './components/Base/UserDiv'
+import ButtonDiv from './components/Base/ButtonDiv'
 import LoadingOverlay from './components/Base/LoadingOverlay'
 
 /* eslint-disable-next-line camelcase, no-undef */
@@ -55,6 +56,7 @@ Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
 Vue.component('UserDiv', UserDiv)
+Vue.component('ButtonDiv', ButtonDiv)
 Vue.component('LoadingOverlay', LoadingOverlay)
 Vue.directive('tooltip', Tooltip)
 
