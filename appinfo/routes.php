@@ -45,6 +45,7 @@ return [
 		['name' => 'vote#get', 'url' => '/votes/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'vote#set', 'url' => '/vote/set/', 'verb' => 'POST'],
 		['name' => 'vote#write', 'url' => '/vote/write/', 'verb' => 'POST'],
+		['name' => 'vote#delete', 'url' => '/votes/delete/', 'verb' => 'POST'],
 
 		['name' => 'option#get', 'url' => '/options/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/option/add/', 'verb' => 'POST'],
