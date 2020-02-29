@@ -144,7 +144,7 @@ export default {
 		position: sticky;
 		left: 0;
 		background-color: var(--color-main-background);
-		width: 170px;
+		width: 230px;
 		flex: 0 0 auto;
 	}
 
