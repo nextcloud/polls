@@ -19,6 +19,10 @@ OC.L10N.register(
     "Shares" : "Comparticiones",
     "Description" : "Descripción",
     "Expiration date" : "Data de caducidá",
+    "Week" : "Selmana",
+    "Hour" : "Hora",
+    "Day" : "Día",
+    "Month" : "Mes",
     "Unknown user" : "Usuariu desconocíu",
     "OK" : "Aceutar",
     "Public access" : "Accesu públicu"

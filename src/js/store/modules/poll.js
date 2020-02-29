@@ -35,7 +35,6 @@ const defaultPoll = () => {
 		deleted: 0,
 		access: 'hidden',
 		anonymous: 0,
-		fullAnonymous: 0,
 		allowMaybe: 0,
 		voteLimit: 0,
 		showResults: 'always',

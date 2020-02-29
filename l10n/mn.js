@@ -15,6 +15,9 @@ OC.L10N.register(
     "Details" : "Дэлгэрэнгүй",
     "Shares" : "Түгээлтүүд",
     "Description" : "Тодорхойлолт",
+    "Week" : "Долоо хоног",
+    "Day" : "Өдөр",
+    "Month" : "Сар",
     "Unknown user" : "  хэрэглэгч",
     "OK" : "ок",
     "Public access" : "Нийтийн хандах эрх"

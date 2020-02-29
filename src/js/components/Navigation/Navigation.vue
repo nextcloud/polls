@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<AppNavigation>
-		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @closeCreate="closeCreate()" />
 		<ul>
 			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
@@ -65,7 +65,7 @@
 				</ul>
 			</AppNavigationItem>
 
-			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true"
+			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true" :pinned="true"
 				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"

@@ -17,6 +17,9 @@ OC.L10N.register(
     "Shares" : "Delingar",
     "Description" : "Skildring",
     "Expiration date" : "Utløpsdato",
+    "Week" : "Veke",
+    "Day" : "Dag",
+    "Month" : "Månad",
     "OK" : "OK"
 },
 "nplurals=2; plural=(n != 1);");

@@ -11,6 +11,9 @@ OC.L10N.register(
     "Configuration" : "Konfiqurasiya",
     "Shares" : "Yayımlanmalar",
     "Description" : "Açıqlanma",
+    "Week" : "Həftə",
+    "Day" : "Gün",
+    "Month" : "Ay",
     "Unknown user" : "Istifadəçi tanınmır ",
     "OK" : "Oldu"
 },

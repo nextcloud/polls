@@ -36,10 +36,14 @@
 					:display-name="shareDisplayName(share)"
 					:type="share.type"
 					:icon="true" />
-				<div class="options">
-					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
-					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
-				</div>
+				<Actions>
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+						{{ t('polls', 'Copy link to clipboard') }}
+					</ActionButton>
+					<ActionButton icon="icon-delete" @click="removeShare(share)">
+						{{ t('polls', 'Remove share') }}
+					</ActionButton>
+				</Actions>
 			</li>
 		</TransitionGroup>
 
@@ -76,10 +80,18 @@
 						{{ t('polls', 'Public link (' + share.token + ')') }}
 					</div>
 				</div>
-				<div class="options">
+				<Actions>
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+						{{ t('polls', 'Copy link to clipboard') }}
+					</ActionButton>
+					<ActionButton icon="icon-delete" @click="removeShare(share)">
+						{{ t('polls', 'Remove share') }}
+					</ActionButton>
+				</Actions>
+				<!-- <div class="options">
 					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
 					<a class="icon icon-delete" @click="removeShare(share)" />
-				</div>
+				</div> -->
 			</li>
 		</TransitionGroup>
 		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
@@ -92,13 +104,15 @@
 </template>
 
 <script>
-import { Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
+		Actions,
+		ActionButton,
 		Multiselect
 	},
 

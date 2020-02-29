@@ -20,30 +20,47 @@
   -
   -->
 
-<template>
-	<!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-	<h3 class="poll-description">{{ poll.description ? poll.description : t('polls', 'No description provided') }}</h3>
+<template lang="html">
+	<div :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
+		{{ title }}
+	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-	name: 'PollDescription',
+	name: 'ButtonDiv',
+	props: {
+		title: {
+			type: String,
+			default: ''
+		},
+		icon: {
+			type: String,
+			default: ''
+		},
+		primary: {
+			type: Boolean,
+			default: false
+		}
+	},
 
 	computed: {
-		...mapState({
-			poll: state => state.poll
-		})
-
+		withIcon() {
+			return Boolean(this.icon)
+		}
 	}
-
 }
 </script>
 
 <style lang="scss" scoped>
-	.poll-description {
-		white-space: break-spaces;
-		margin: 8px 0;
+	.button {
+		display: inline-block;
+
+		&.withIcon {
+			padding-left: 34px;
+			background-position: 12px center;
+		}
+
 	}
+
 </style>

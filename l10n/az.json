@@ -9,6 +9,9 @@
     "Configuration" : "Konfiqurasiya",
     "Shares" : "Yayımlanmalar",
     "Description" : "Açıqlanma",
+    "Week" : "Həftə",
+    "Day" : "Gün",
+    "Month" : "Ay",
     "Unknown user" : "Istifadəçi tanınmır ",
     "OK" : "Oldu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

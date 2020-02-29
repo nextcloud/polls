@@ -13,6 +13,9 @@ OC.L10N.register(
     "Shares" : "ចែក​រំលែក",
     "Description" : "ការ​អធិប្បាយ",
     "Expiration date" : "ពេល​ផុត​កំណត់",
+    "Week" : "សប្ដាហ៍",
+    "Day" : "ថ្ងៃ",
+    "Month" : "ខែ",
     "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
     "OK" : "ព្រម"
 },

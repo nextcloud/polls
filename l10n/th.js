@@ -16,6 +16,9 @@ OC.L10N.register(
     "Shares" : "แชร์",
     "Description" : "รายละเอียด",
     "Expiration date" : "วันที่หมดอายุ",
+    "Week" : "สัปดาห์",
+    "Day" : "วัน",
+    "Month" : "เดือน",
     "Unknown user" : "ไม่รู้จักผู้ใช้",
     "OK" : "ตกลง"
 },
