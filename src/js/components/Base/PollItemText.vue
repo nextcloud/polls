@@ -76,7 +76,7 @@ export default {
 		padding-right: 8px;
 		line-height: 2em;
 		min-height: 4em;
-		overflow: hidden;
+		overflow: visible;
 		white-space: nowrap;
 		&:active,
 		&:hover {
@@ -88,7 +88,7 @@ export default {
 			display: flex;
 			flex: 1;
 			font-size: 1.2em;
-			opacity: 0.7;
+			opacity: 1;
 			white-space: normal;
 			padding-right: 4px;
 			&.avatar {
