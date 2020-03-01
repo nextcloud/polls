@@ -43,7 +43,7 @@
 				</div>
 
 				<div class="modal__buttons">
-					<a :href="loginLink" class="modal_buttons__link"> {{ t('polls', 'You have an account? Login here.') }} </a>
+					<a :href="loginLink" class="modal__buttons__link"> {{ t('polls', 'You have an account? Login here.') }} </a>
 					<div class="modal__buttons__spacer" />
 					<ButtonDiv :title="t('polls', 'Cancel')"
 						@click="closeModal" />
@@ -244,7 +244,7 @@ export default {
 		}
 	}
 
-	.modal_buttons__login-link {
+	.modal__buttons__link {
 		text-decoration: underline;
 	}
 
