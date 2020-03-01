@@ -39,17 +39,17 @@
 			</label>
 			<div>
 				<div class="selectUnit">
-					<input v-model="move.step">
+					<input v-model="shift.step">
 					<Multiselect
-						v-model="move.unit"
-						:options="move.units"
+						v-model="shift.unit"
+						:options="dateUnits"
 						label="name"
 						track-by="value" />
 				</div>
 			</div>
 			<div>
 				<ButtonDiv icon="icon-history" :title="t('polls', 'Shift')"
-					@click="shiftDates(move)" />
+					@click="shiftDates(shift)" />
 			</div>
 		</div>
 
@@ -65,15 +65,44 @@
 						<ActionButton icon="icon-delete" @click="removeOption(option)">
 							{{ t('polls', 'Delete option') }}
 						</ActionButton>
+						<ActionButton icon="icon-add" @click="cloneOptionModal(option)">
+							{{ t('polls', 'Clone option') }}
+						</ActionButton>
 					</Actions>
 				</template>
 			</PollItemDate>
 		</ul>
+		<Modal v-if="modal" :can-close="false">
+			<div class="modal__content">
+				<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
+
+				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: moment.unix(sequence.baseOption.timestamp).format('LLLL')}) }}</p>
+				<div>
+					<label class="title"> {{ t('polls', 'Step width: ') }} </label>
+					<input v-model="sequence.step">
+					<label class="title"> {{ t('polls', 'Step unit: ') }} </label>
+					<Multiselect
+						v-model="sequence.unit"
+						:options="dateUnits"
+						label="name"
+						track-by="value" />
+					<label class="title"> {{ t('polls', 'Number of items to create: ') }} </label>
+					<input v-model="sequence.amount">
+				</div>
+
+				<div class="modal__buttons">
+					<ButtonDiv :title="t('polls', 'Cancel')"
+						@click="closeModal" />
+					<ButtonDiv :primary="true" :title="t('polls', 'CreateSequence')"
+						@click="createSequence" />
+				</div>
+			</div>
+		</Modal>
 	</div>
 </template>
 
 <script>
-import { Actions, ActionButton, DatetimePicker, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import PollItemDate from '../Base/PollItemDate'
 
@@ -83,25 +112,33 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		DatetimePicker,
+		Modal,
 		Multiselect,
-		PollItemDate,
-		DatetimePicker
+		PollItemDate
 	},
 
 	data() {
 		return {
 			lastOption: '',
-			move: {
-				step: 1,
+			modal: false,
+			sequence: {
+				baseOption: {},
 				unit: { name: t('polls', 'Week'), value: 'week' },
-				units: [
-					{ name: t('polls', 'Minute'), value: 'minute' },
-					{ name: t('polls', 'Hour'), value: 'hour' },
-					{ name: t('polls', 'Day'), value: 'day' },
-					{ name: t('polls', 'Week'), value: 'week' },
-					{ name: t('polls', 'Month'), value: 'month' },
-					{ name: t('polls', 'Year'), value: 'year' }
-				]
+				step: 1,
+				amount: 1
+			},
+			dateUnits: [
+				{ name: t('polls', 'Minute'), value: 'minute' },
+				{ name: t('polls', 'Hour'), value: 'hour' },
+				{ name: t('polls', 'Day'), value: 'day' },
+				{ name: t('polls', 'Week'), value: 'week' },
+				{ name: t('polls', 'Month'), value: 'month' },
+				{ name: t('polls', 'Year'), value: 'year' }
+			],
+			shift: {
+				step: 1,
+				unit: { name: t('polls', 'Week'), value: 'week' }
 			}
 		}
 	},
@@ -126,7 +163,6 @@ export default {
 		optionDatePicker() {
 			return {
 				editable: false,
-				minuteStep: 1,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
 
@@ -170,6 +206,28 @@ export default {
 			})
 		},
 
+		closeModal() {
+			this.modal = false
+		},
+
+		createSequence() {
+			for (var i = 0; i < this.sequence.amount; i++) {
+				this.$store.dispatch('addOptionAsync', {
+					pollOptionText: moment.unix(this.sequence.baseOption.timestamp).add(
+						this.sequence.step * (i + 1),
+						this.sequence.unit.value
+					).format('YYYY-MM-DD HH:mm:ss')
+				})
+			}
+			this.modal = false
+			this.sequence.baseOption = {}
+		},
+
+		cloneOptionModal(option) {
+			this.modal = true
+			this.sequence.baseOption = option
+		},
+
 		removeOption(option) {
 			this.$store.dispatch('removeOptionAsync', { option: option })
 		}
@@ -180,6 +238,25 @@ export default {
 </script>
 
 <style lang="scss">
+	.modal__content {
+		padding: 14px;
+		display: flex;
+		flex-direction: column;
+		color: var(--color-main-text);
+		input {
+			width: 100%;
+		}
+	}
+
+	.modal__buttons {
+		display: flex;
+		justify-content: end;
+		.button {
+			margin-left: 10px;
+			margin-right: 0;
+		}
+	}
+
 	.config-box {
 		display: flex;
 		flex-direction: column;
