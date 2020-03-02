@@ -21,26 +21,29 @@
   -->
 
 <template>
-	<div v-if="poll.id" class="voteHeader">
-		<div v-show="displayLink" class="personal-link">
+	<div v-if="poll.id" class="vote__header">
+		<div v-show="displayLink" class="vote__header__personal-link">
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
 		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
-
-				<p>{{ t('polls', 'To participate, you need to enter a valid username with at least 3 characters. ') }}</p>
+				<p>{{ t('polls', 'To participate, you need to enter a valid username with at least 3 characters.') }}</p>
 
 				<input ref="userName" v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }"
 					type="text"
 					:placeholder="t('polls', 'Enter your name')" @keyup.enter="writeUserName">
+
 				<div>
 					<span v-show="checkingUserName" class="icon-loading-small">Checking username …</span>
 					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
 					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
 				</div>
+
 				<div class="modal__buttons">
+					<a :href="loginLink" class="modal__buttons__link"> {{ t('polls', 'You have an account? Login here.') }} </a>
+					<div class="modal__buttons__spacer" />
 					<ButtonDiv :title="t('polls', 'Cancel')"
 						@click="closeModal" />
 					<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
@@ -85,6 +88,14 @@ export default {
 		...mapGetters([
 			'expired'
 		]),
+
+		loginLink() {
+			const redirectUrl = this.$router.resolve({
+				name: 'publicVote',
+				params: { token: this.$route.params.token }
+			}).href
+			return OC.generateUrl('login?redirect_url=' + redirectUrl)
+		},
 
 		personalLink() {
 			return window.location.origin.concat(
@@ -188,38 +199,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.voteHeader {
+	.vote__header {
 		margin: 8px 24px;
 	}
 
-	.modal__content {
-		padding: 14px;
-		display: flex;
-		flex-direction: column;
-		color: var(--color-main-text);
-		input {
-			width: 100%;
-		}
-	}
-	.modal__buttons {
-		display: flex;
-		justify-content: end;
-		.button {
-			margin-left: 10px;
-			margin-right: 0;
-		}
-	}
-
-	.modal__buttons {
-		display: flex;
-		justify-content: end;
-		.button {
-			margin-left: 10px;
-			margin-right: 0;
-		}
-	}
-
-	.personal-link {
+	.vote__header__personal-link {
 		display: flex;
 		padding: 4px 12px;
 		margin: 0 12px 0 24px;
@@ -233,48 +217,32 @@ export default {
 		}
 	}
 
-	.getUsername {
-		& > label {
-			margin-right: 12px;
-		}
-		margin: 0 12px 12px 24px;
-		border:2px solid var(--color-border-dark);
-		font-size: 1.2em;
-		padding: 0 12px 0 12px;
+	.modal__content {
+		padding: 14px;
 		display: flex;
-		align-items: center;
-		border-radius: var(--border-radius);
-		background-color: var(--color-background-dark);
-		flex-wrap: wrap;
-
-		form, div {
-			flex: 1;
-			display: flex;
-
-		}
+		flex-direction: column;
+		color: var(--color-main-text);
 		input {
-			flex: 1;
+			width: 100%;
 		}
+	}
 
-		.icon-loading-small {
-			position: relative;
-			right: 24px;
-			top: 0px;
-		}
+	.modal__buttons__spacer {
+		flex: 1;
+	}
 
-		input[type='text'] + .icon-confirm, input[type='text'] + .icon-loading-small {
-			flex: 0;
-			margin-left: -8px !important;
-			border-left-color: transparent !important;
-			border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
-			background-clip: padding-box;
-			opacity: 1;
-			height: 34px;
-			width: 34px;
-			padding: 7px 20px;
-			cursor: pointer;
+	.modal__buttons {
+		display: flex;
+		justify-content: end;
+		align-items: center;
+		.button {
+			margin-left: 10px;
 			margin-right: 0;
 		}
+	}
+
+	.modal__buttons__link {
+		text-decoration: underline;
 	}
 
 </style>
