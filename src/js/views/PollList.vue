@@ -51,12 +51,14 @@ import { AppContent } from '@nextcloud/vue'
 import PollListItem from '../components/PollList/PollListItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
+import LoadingOverlay from '../components/Base/LoadingOverlay'
 
 export default {
 	name: 'PollList',
 
 	components: {
 		AppContent,
+		LoadingOverlay,
 		PollListItem
 	},
 
