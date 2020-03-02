@@ -71,8 +71,10 @@
 			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
-		<ButtonDiv icon="icon-delete" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
+		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
 			@click="switchDeleted()" />
+		<ButtonDiv v-if="poll.deleted" icon="icon-delete" class="error" :title="t('polls', 'Delete poll permanently')"
+      @click="deletePermanently()" />
 	</div>
 </template>
 
@@ -253,6 +255,16 @@ export default {
 				this.writeValue({ deleted: moment.utc().unix() })
 			}
 
+		},
+
+		deletePermanently() {
+			if(!this.poll.deleted) return;
+
+            this.$store
+				.dispatch('deletePermanently', { pollId: this.poll.id })
+				.then((response) => {
+                    this.$router.push({name: 'list', params: {type: 'deleted'}})
+				})
 		},
 
 		writePoll() {

@@ -81,6 +81,18 @@ const actions = {
 			})
 	},
 
+	deletePermanently(context, payload) {
+		const endPoint = 'apps/polls/polls/delete/permanent/'
+		return axios.get(OC.generateUrl(endPoint + payload.pollId))
+			.then((response) => {
+                OC.Notification.showTemporary(t('polls', 'Deleted poll permanently.'), { type: 'success' })
+				return response
+			}, (error) => {
+				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
+	},
+
 	clonePoll(context, payload) {
 		const endPoint = 'apps/polls/polls/clone/'
 		return axios.get(OC.generateUrl(endPoint + payload.pollId))

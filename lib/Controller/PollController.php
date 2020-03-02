@@ -224,6 +224,38 @@ class PollController extends Controller {
 	}
 
 	/**
+	 * deletePermanently
+	 * @NoAdminRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function deletePermanently($pollId) {
+
+		try {
+			// Find existing poll
+			$this->poll = $this->pollMapper->find($pollId);
+			$this->acl->setPollId($this->poll->getId());
+
+			if (!$this->acl->getAllowEdit()) {
+				$this->logger->alert('Unauthorized delete attempt from user ' . $this->userId);
+				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
+			}
+
+			if (!$this->poll->getDeleted()) {
+                $this->logger->alert('user ' . $this->userId . ' trying to permanently delete active poll');
+                return new DataResponse(['message' => 'Permanent deletion of active poll.'], Http::STATUS_CONFLICT);
+			}
+
+			$this->pollMapper->delete($this->poll);
+			return new DataResponse([], Http::STATUS_OK);
+
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+
+	/**
 	 * write
 	 * @NoAdminRequired
 	 * @param Array $poll
