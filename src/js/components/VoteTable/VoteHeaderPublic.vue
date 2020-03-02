@@ -92,10 +92,10 @@ export default {
 
 		loginLink() {
 			const redirectUrl = this.$router.resolve({
-                            name: 'publicVote',
-	                    params: { token: this.$route.params.token }
-                        }).href;
-			return OC.generateUrl('login?redirect_url=' + redirectUrl);
+				name: 'publicVote',
+				params: { token: this.$route.params.token }
+			}).href
+			return OC.generateUrl('login?redirect_url=' + redirectUrl)
 		},
 
 		personalLink() {
