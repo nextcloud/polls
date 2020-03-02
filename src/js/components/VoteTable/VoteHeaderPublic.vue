@@ -91,13 +91,11 @@ export default {
 		]),
 
 		loginLink() {
-			return window.location.origin.concat(
-				'/index.php/login?redirect_url=',
-				this.$router.resolve({
-					name: 'publicVote',
-					params: { token: this.$route.params.token }
-				}).href
-			)
+			const redirectUrl = this.$router.resolve({
+                            name: 'publicVote',
+	                    params: { token: this.$route.params.token }
+                        }).href;
+			return OC.generateUrl('login?redirect_url=' + redirectUrl);
 		},
 
 		personalLink() {
