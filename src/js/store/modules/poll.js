@@ -67,13 +67,13 @@ const getters = {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
-	accessType: (state, getters, rootState) => {
-		if (rootState.acl.accessLevel === 'public') {
+	accessType: (state) => {
+		if (state.access === 'public') {
 			return t('polls', 'Public access')
-		} else if (rootState.acl.accessLevel === 'hidden') {
+		} else if (state.access === 'hidden') {
 			return t('polls', 'Hidden poll')
 		} else {
-			return rootState.acl.accessLevel
+			return state.access
 		}
 	},
 

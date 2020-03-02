@@ -36,7 +36,6 @@ import { Tooltip } from '@nextcloud/vue'
 
 import UserDiv from './components/Base/UserDiv'
 import ButtonDiv from './components/Base/ButtonDiv'
-import LoadingOverlay from './components/Base/LoadingOverlay'
 
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_nonce__ = btoa(OC.requestToken)
@@ -57,7 +56,6 @@ Vue.prototype.OCA = OCA
 
 Vue.component('UserDiv', UserDiv)
 Vue.component('ButtonDiv', ButtonDiv)
-Vue.component('LoadingOverlay', LoadingOverlay)
 Vue.directive('tooltip', Tooltip)
 
 Vue.use(ClickOutside)

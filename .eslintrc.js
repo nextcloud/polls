@@ -3,9 +3,8 @@ module.exports = {
 	env: {
 		browser: true,
 		es6: true,
-        'nextcloud/nextcloud': true,
 		node: true,
-		jest: true
+		jest: true,
 	},
 	globals: {
 		t: true,
@@ -14,32 +13,32 @@ module.exports = {
 		OCA: true,
 		Vue: true,
 		VueRouter: true,
-		moment:true
+		moment:true,
 	},
 	parserOptions: {
 		parser: 'babel-eslint',
-		ecmaVersion: 6
+		ecmaVersion: 6,
 	},
 	extends: [
+		'plugin:@nextcloud/recommended',
 		'eslint:recommended',
-        'plugin:nextcloud/recommended',
 		'plugin:node/recommended',
 		'plugin:vue/essential',
 		'plugin:vue/recommended',
-		'standard'
+		'standard',
 	],
 	plugins: [
 		'vue',
 		'node',
-		'nextcloud'
 	],
 	rules: {
+		"@nextcloud/no-deprecations": "warn",
+		"@nextcloud/no-removed-apis": "error",
 		'node/no-missing-import': ['error', {
             'allowModules': [],
             'tryExtensions': ['.js', '.vue']
         }],
-	    'nextcloud/no-deprecations': 'warn',
-	    'nextcloud/no-removed-apis': 'error',
+		// 'comma-dangle': ['error', 'always-multiline'],
 		// space before function ()
 		'space-before-function-paren': ['error', 'never'],
 		// curly braces always space

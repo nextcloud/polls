@@ -389,26 +389,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @return string
-	 */
-	public function getAccessLevel(): string {
-		if ($this->getIsOwner()) {
-			return 'owner';
-		} elseif ($this->poll->getAccess() === 'public') {
-			return 'public';
-		} elseif ($this->poll->getAccess() === 'registered' && \OC::$server->getUserSession()->getUser()->getUID() === $this->userId) {
-			return 'registered';
-		} elseif ($this->poll->getAccess() === 'hidden' && $this->getisOwner()) {
-			return 'hidden';
-		} elseif ($this->getIsAdmin()) {
-			return 'admin';
-		} else {
-			return 'none';
-		}
-	}
-
-	/**
 	 * @return array
 	 */
 	public function jsonSerialize(): array {
@@ -430,8 +410,7 @@ class Acl implements JsonSerializable {
 			'groupShare'        => $this->getGroupShare(),
 			'personalShare'     => $this->getPersonalShare(),
 			'publicShare'     	=> $this->getPublicShare(),
-			'foundByToken'      => $this->getFoundByToken(),
-			'accessLevel'       => $this->getAccessLevel()
+			'foundByToken'      => $this->getFoundByToken()
 		];
 	}
 }
