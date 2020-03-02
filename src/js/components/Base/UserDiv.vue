@@ -25,7 +25,7 @@
 		<div v-if="description" class="description">
 			{{ description }}
 		</div>
-		<Avatar :disable-menu="true" :user="userId"
+		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
 			:is-guest="!Boolean(OC.currentUser)"
 			:display-name="displayName"
 
@@ -35,6 +35,7 @@
 		<div v-if="!hideNames" class="user-name">
 			{{ displayName }}
 		</div>
+		<slot />
 	</div>
 </template>
 
@@ -52,6 +53,14 @@ export default {
 		hideNames: {
 			type: Boolean,
 			default: false
+		},
+		disableMenu: {
+			type: Boolean,
+			default: false
+		},
+		menuPosition: {
+			type: String,
+			default: 'left'
 		},
 		userId: {
 			type: String,

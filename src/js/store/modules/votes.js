@@ -40,6 +40,10 @@ const mutations = {
 		Object.assign(state, payload)
 	},
 
+	deleteVotes(state, payload) {
+		state.list = state.list.filter(vote => vote.userId !== payload.userId)
+	},
+
 	setVote(state, payload) {
 		const index = state.list.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
@@ -168,6 +172,22 @@ const actions = {
 				context.commit('setVotes', { list: response.data })
 			}, (error) => {
 				console.error('Error loading votes', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
+	deleteVotes(context, payload) {
+		const endPoint = 'apps/polls/votes/delete/'
+		return axios.post(OC.generateUrl(endPoint), {
+			pollId: context.rootState.poll.id,
+			voteId: 0,
+			userId: payload.userId
+		})
+			.then(() => {
+				context.commit('deleteVotes', payload)
+				OC.Notification.showTemporary(t('polls', 'User {userId} removed', payload), { type: 'success' })
+			}, (error) => {
+				console.error('Error deleting votes', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},

@@ -26,8 +26,7 @@
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
-		<Modal v-show="!isValidUser &!expired & modal" class="modal"
-			:can-close="false">
+		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
 				<p>{{ t('polls', 'To participate, you need to enter a valid username with at least 3 characters.') }}</p>
