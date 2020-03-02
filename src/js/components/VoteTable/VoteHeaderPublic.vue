@@ -26,8 +26,7 @@
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
-		<Modal v-show="!isValidUser &!expired & modal" class="modal"
-			:can-close="false">
+		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
 
@@ -192,6 +191,7 @@ export default {
 	.voteHeader {
 		margin: 8px 24px;
 	}
+
 	.modal__content {
 		padding: 14px;
 		display: flex;
@@ -201,6 +201,15 @@ export default {
 			width: 100%;
 		}
 	}
+	.modal__buttons {
+		display: flex;
+		justify-content: end;
+		.button {
+			margin-left: 10px;
+			margin-right: 0;
+		}
+	}
+
 	.modal__buttons {
 		display: flex;
 		justify-content: end;
