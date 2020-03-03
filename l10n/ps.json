@@ -6,6 +6,8 @@
     "Details" : "معلومات",
     "Shares" : "شريک شوي",
     "Expiration date" : "د پای نېټه",
-    "OK" : "سمه ده"
+    "OK" : "سمه ده",
+    "No" : "نه",
+    "Yes" : "هو"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

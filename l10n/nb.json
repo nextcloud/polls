@@ -32,6 +32,8 @@
     "Unknown user" : "Ukjent bruker",
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "OK" : "OK",
+    "No" : "Nei",
+    "Yes" : "Ja",
     "Public access" : "Offentlig tilgang",
     "Access denied" : "Tilgang nektet",
     "You are not allowed to view this poll or the poll does not exist." : "Du har ikke tilgang til å se denne avstemningen, eller så finnes den ikke.",

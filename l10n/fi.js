@@ -24,7 +24,6 @@ OC.L10N.register(
     "Created" : "Luonut",
     "Expires" : "Vanhenee",
     "never" : "ei koskaan",
-    "Share with" : "Jaa",
     "Details" : "Tiedot",
     "Configuration" : "Asetukset",
     "Options" : "Valinnat",

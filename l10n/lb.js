@@ -17,6 +17,8 @@ OC.L10N.register(
     "Hour" : "Stonn",
     "Day" : "Dag",
     "Month" : "Mount",
-    "OK" : "OK"
+    "OK" : "OK",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

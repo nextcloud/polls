@@ -37,6 +37,8 @@ OC.L10N.register(
     "Unknown user" : "משתמש לא ידוע",
     "Receive notification email on activity" : "קבלת הודעות בדוא״ל כשיש פעילות",
     "OK" : "אישור",
+    "No" : "לא",
+    "Yes" : "כן",
     "Public access" : "גישה ציבורית",
     "Access denied" : "הגישה נדחתה",
     "You are not allowed to view this poll or the poll does not exist." : "אסור לך לצפות בסקר זה או שהסקר אינו קיים.",

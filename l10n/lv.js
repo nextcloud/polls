@@ -26,6 +26,8 @@ OC.L10N.register(
     "Unknown user" : "Nezināms lietotājs",
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "OK" : "Labi",
+    "No" : "Nē",
+    "Yes" : "Jā",
     "Public access" : "Publiska piekļuve"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

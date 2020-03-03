@@ -36,6 +36,8 @@ OC.L10N.register(
     "Unknown user" : "Unknown user",
     "Receive notification email on activity" : "Receive notification email on activity",
     "OK" : "OK",
+    "No" : "No",
+    "Yes" : "Yes",
     "Public access" : "Public access",
     "Access denied" : "Access denied",
     "You are not allowed to view this poll or the poll does not exist." : "You are not allowed to view this poll or the poll does not exist.",

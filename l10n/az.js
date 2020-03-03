@@ -15,6 +15,8 @@ OC.L10N.register(
     "Day" : "Gün",
     "Month" : "Ay",
     "Unknown user" : "Istifadəçi tanınmır ",
-    "OK" : "Oldu"
+    "OK" : "Oldu",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

@@ -30,7 +30,6 @@ OC.L10N.register(
     "Created" : "Creat",
     "Expires" : "Caduca",
     "never" : "mai",
-    "Share with" : "Comparteix amb",
     "Details" : "Detalls",
     "Configuration" : "Configuració",
     "Options" : "Opcions",

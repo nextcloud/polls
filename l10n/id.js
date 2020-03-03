@@ -22,6 +22,8 @@ OC.L10N.register(
     "Day" : "Hari",
     "Month" : "Bulan",
     "Unknown user" : "Pengguna tidak dikenal",
-    "OK" : "OK"
+    "OK" : "OK",
+    "No" : "Tidak",
+    "Yes" : "Ya"
 },
 "nplurals=1; plural=0;");

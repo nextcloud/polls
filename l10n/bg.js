@@ -13,7 +13,6 @@ OC.L10N.register(
     "Owner" : "Създател",
     "Created" : "Създаден",
     "never" : "никога",
-    "Share with" : "Сподели с",
     "Details" : "Подробности",
     "Configuration" : "Настройки",
     "Shares" : "Споделени",

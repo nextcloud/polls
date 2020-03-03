@@ -13,6 +13,8 @@ OC.L10N.register(
     "Week" : "星期",
     "Day" : "日",
     "Month" : "月",
-    "OK" : "確定"
+    "OK" : "確定",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=1; plural=0;");

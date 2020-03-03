@@ -20,6 +20,8 @@ OC.L10N.register(
     "Day" : "วัน",
     "Month" : "เดือน",
     "Unknown user" : "ไม่รู้จักผู้ใช้",
-    "OK" : "ตกลง"
+    "OK" : "ตกลง",
+    "No" : "ไม่ใช่",
+    "Yes" : "ใช่"
 },
 "nplurals=1; plural=0;");

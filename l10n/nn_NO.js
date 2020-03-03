@@ -20,6 +20,8 @@ OC.L10N.register(
     "Week" : "Veke",
     "Day" : "Dag",
     "Month" : "Månad",
-    "OK" : "OK"
+    "OK" : "OK",
+    "No" : "Nei",
+    "Yes" : "Ja"
 },
 "nplurals=2; plural=(n != 1);");

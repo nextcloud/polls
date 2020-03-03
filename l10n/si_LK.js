@@ -15,6 +15,8 @@ OC.L10N.register(
     "Week" : "සතිය",
     "Month" : "මාසය",
     "Unknown user" : "හදුනානොගත් සේවාදායකයා",
-    "OK" : "හරි"
+    "OK" : "හරි",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

@@ -41,7 +41,6 @@ OC.L10N.register(
     "Visible to other users" : "Beste erabiltzaileentzat ikusgai",
     "Hidden to other users" : "Beste erabiltzaileei ezkutatuta",
     "never" : "inoiz ez",
-    "Share with" : "Partekatu honekin",
     "Details" : "Xehetasunak",
     "Configuration" : "Konfigurazioa",
     "Options" : "Aukerak",
@@ -69,6 +68,8 @@ OC.L10N.register(
     "Unknown user" : "Erabiltzaile ezezaguna",
     "Public share" : "Partekatze publikoa",
     "OK" : "Ados",
+    "No" : "Ez",
+    "Yes" : "Bai",
     "Public access" : "Sarbide publikoa",
     "Hidden poll" : "Ezkutuko inkesta",
     "Access denied" : "Sarbidea ukatua"

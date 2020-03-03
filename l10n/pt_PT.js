@@ -15,7 +15,6 @@ OC.L10N.register(
     "Created" : "Criado",
     "Expires" : "Expira",
     "never" : "nunca",
-    "Share with" : "Partilhar com",
     "Details" : "Detalhes",
     "Configuration" : "Configuração",
     "Shares" : "Partilhas",

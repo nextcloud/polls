@@ -21,6 +21,8 @@ OC.L10N.register(
     "Month" : "Mense",
     "Unknown user" : "Usator incognite",
     "OK" : "Ok",
+    "No" : "No",
+    "Yes" : "Si",
     "Public access" : "Accesso public"
 },
 "nplurals=2; plural=(n != 1);");

@@ -12,6 +12,8 @@ OC.L10N.register(
     "Week" : "Minggu",
     "Day" : "Hari",
     "Month" : "Bulan",
-    "OK" : "OK"
+    "OK" : "OK",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=1; plural=0;");

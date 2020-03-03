@@ -32,6 +32,8 @@
     "Unknown user" : "ამოუცნობი მომხმარებელი",
     "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "OK" : "კარგი",
+    "No" : "არა",
+    "Yes" : "კი",
     "Public access" : "ღია წვდომა",
     "Access denied" : "წვდომა არაა დაშვებული",
     "You are not allowed to view this poll or the poll does not exist." : "ამ გამოკითხვის ჩვენების უფლებები არ გაქვთ, ან ის არ არსებობს.",

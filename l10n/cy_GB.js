@@ -14,6 +14,8 @@ OC.L10N.register(
     "Day" : "Diwrnod",
     "Month" : "Mis",
     "OK" : "Iawn",
+    "No" : "No",
+    "Yes" : "Iawn",
     "Public access" : "Mynediad cyhoeddus"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

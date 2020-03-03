@@ -32,6 +32,8 @@ OC.L10N.register(
     "Unknown user" : "Ususario desconocido",
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "OK" : "OK",
+    "No" : "No",
+    "Yes" : "Sí",
     "Public access" : "Acceso público",
     "Access denied" : "Acceso denegado",
     "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. "

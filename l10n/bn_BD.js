@@ -17,6 +17,8 @@ OC.L10N.register(
     "Day" : "দিবস",
     "Month" : "মাস",
     "Unknown user" : "অপরিচিত ব্যবহারকারী",
-    "OK" : "তথাস্তু"
+    "OK" : "তথাস্তু",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

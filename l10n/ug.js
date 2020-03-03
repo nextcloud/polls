@@ -11,6 +11,8 @@ OC.L10N.register(
     "Description" : "چۈشەندۈرۈش",
     "Week" : "ھەپتە",
     "Month" : "ئاي",
-    "OK" : "جەزملە"
+    "OK" : "جەزملە",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=1; plural=0;");

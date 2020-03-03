@@ -22,6 +22,8 @@
     "Month" : "Mes",
     "Unknown user" : "Ususario desconocido",
     "OK" : "OK",
+    "No" : "No",
+    "Yes" : "Si",
     "Public access" : "Acceso público"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

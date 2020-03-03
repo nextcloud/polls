@@ -46,7 +46,6 @@ OC.L10N.register(
     "Visible to other users" : "Видљиво другим корисницима",
     "Hidden to other users" : "Сакривено другим корисницима",
     "never" : "никад",
-    "Share with" : "Подели са",
     "Details" : "Детаљи",
     "Configuration" : "Конфигурација",
     "Shares" : "Дељења",

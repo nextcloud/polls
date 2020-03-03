@@ -17,6 +17,8 @@ OC.L10N.register(
     "Day" : "ថ្ងៃ",
     "Month" : "ខែ",
     "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
-    "OK" : "ព្រម"
+    "OK" : "ព្រម",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=1; plural=0;");

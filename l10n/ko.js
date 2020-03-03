@@ -34,6 +34,8 @@ OC.L10N.register(
     "Unknown user" : "알 수 없는 사용자",
     "Receive notification email on activity" : "활동 이메일 알림 받기",
     "OK" : "확인",
+    "No" : "아니요",
+    "Yes" : "예",
     "Public access" : "공개 접근",
     "Access denied" : "접근이 거부됨",
     "You are not allowed to view this poll or the poll does not exist." : "이 투표를 볼 수 없거나 투표가 존재하지 않습니다.",

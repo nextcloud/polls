@@ -11,6 +11,8 @@ OC.L10N.register(
     "Expiration date" : "تاریخ معیاد",
     "Week" : "ہفتہ",
     "Month" : "ماہ",
-    "OK" : "اوکے"
+    "OK" : "اوکے",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

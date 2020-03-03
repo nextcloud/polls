@@ -12,6 +12,8 @@ OC.L10N.register(
     "Expiration date" : "காலவதியாகும் திகதி",
     "Week" : "வாரம்",
     "Month" : "மாதம்",
-    "OK" : "சரி "
+    "OK" : "சரி ",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

@@ -20,6 +20,8 @@ OC.L10N.register(
     "Month" : "Сар",
     "Unknown user" : "  хэрэглэгч",
     "OK" : "ок",
+    "No" : "Үгүй",
+    "Yes" : "Тийм",
     "Public access" : "Нийтийн хандах эрх"
 },
 "nplurals=2; plural=(n != 1);");
