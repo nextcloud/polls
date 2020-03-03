@@ -78,23 +78,21 @@
 
 				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: moment.unix(sequence.baseOption.timestamp).format('LLLL')}) }}</p>
 				<div>
-					<label class="title"> {{ t('polls', 'Step width: ') }} </label>
+					<h3> {{ t('polls', 'Step width: ') }} </h3>
 					<input v-model="sequence.step">
-					<label class="title"> {{ t('polls', 'Step unit: ') }} </label>
+					<h3> {{ t('polls', 'Step unit: ') }} </h3>
 					<Multiselect
 						v-model="sequence.unit"
 						:options="dateUnits"
 						label="name"
 						track-by="value" />
-					<label class="title"> {{ t('polls', 'Number of items to create: ') }} </label>
+					<h3> {{ t('polls', 'Number of items to create: ') }} </h3>
 					<input v-model="sequence.amount">
 				</div>
 
 				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'Cancel')"
-						@click="closeModal" />
-					<ButtonDiv :primary="true" :title="t('polls', 'CreateSequence')"
-						@click="createSequence" />
+					<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
+					<ButtonDiv :primary="true" :title="t('polls', 'OK')" @click="createSequence" />
 				</div>
 			</div>
 		</Modal>
