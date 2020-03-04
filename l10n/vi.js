@@ -23,6 +23,8 @@ OC.L10N.register(
     "Month" : "Tháng",
     "Unknown user" : "Người dùng không tồn tại",
     "OK" : "OK",
+    "No" : "Không",
+    "Yes" : "Đồng ý",
     "Public access" : "Truy cập công khai"
 },
 "nplurals=1; plural=0;");

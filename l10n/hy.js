@@ -14,6 +14,8 @@ OC.L10N.register(
     "Week" : "Շաբաթ",
     "Day" : "Օր",
     "Month" : "Ամիս",
-    "OK" : "Լավ"
+    "OK" : "Լավ",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

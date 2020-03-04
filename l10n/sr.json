@@ -78,6 +78,8 @@
     "Receive notification email on activity" : "Примај обавештења о активностима преко е-поште",
     "Your personal link to this poll: %n" : "Ваша лична веза за ово гласање: %n",
     "OK" : "У реду",
+    "No" : "Не",
+    "Yes" : "Да",
     "Public access" : "Јавни приступ",
     "Hidden poll" : "Сакривено гласање",
     "Access denied" : "Забрањен приступ",

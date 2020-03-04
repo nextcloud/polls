@@ -25,6 +25,8 @@ OC.L10N.register(
     "Month" : "Mes",
     "Unknown user" : "Usuariu desconocíu",
     "OK" : "Aceutar",
+    "No" : "Non",
+    "Yes" : "Sí",
     "Public access" : "Accesu públicu"
 },
 "nplurals=2; plural=(n != 1);");

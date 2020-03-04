@@ -22,6 +22,8 @@
     "Month" : "Месец",
     "Unknown user" : "Непознат потребител",
     "OK" : "ОК",
+    "No" : "Не",
+    "Yes" : "Да",
     "Public access" : "Публичен достъп"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -20,6 +20,8 @@ OC.L10N.register(
     "Month" : "Maand",
     "Unknown user" : "Onbekende gebruiker",
     "OK" : "Goed",
+    "No" : "Nee",
+    "Yes" : "Ja",
     "Public access" : "Openbare toegang"
 },
 "nplurals=2; plural=(n != 1);");

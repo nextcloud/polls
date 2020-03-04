@@ -33,6 +33,8 @@ OC.L10N.register(
     "Unknown user" : "Neznámy používateľ",
     "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
     "OK" : "OK",
+    "No" : "Nie",
+    "Yes" : "Áno",
     "Public access" : "Verejný prístup",
     "Access denied" : "Prístup zamietnutý",
     "You are not allowed to view this poll or the poll does not exist." : "Nemáte oprávnenie na prezeranie tejto ankety alebo už anketa neexistuje.",

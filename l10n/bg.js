@@ -24,6 +24,8 @@ OC.L10N.register(
     "Month" : "Месец",
     "Unknown user" : "Непознат потребител",
     "OK" : "ОК",
+    "No" : "Не",
+    "Yes" : "Да",
     "Public access" : "Публичен достъп"
 },
 "nplurals=2; plural=(n != 1);");

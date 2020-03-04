@@ -117,6 +117,8 @@
     "Please use at least 3 characters for your username!" : "请使用至少 3 个字符作为您的用户名！",
     "This username can not be chosen." : "无法选择此用户名。",
     "Error saving username" : "保存用户名时出错",
+    "No" : "否",
+    "Yes" : "是",
     "The poll does not exist" : "该投票不存在",
     "Enter a poll or start a new one." : "输入投票或开始一个新的投票。",
     "Goto Nextcloud" : "前往 Nextcloud",

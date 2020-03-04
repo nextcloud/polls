@@ -33,6 +33,8 @@ OC.L10N.register(
     "Unknown user" : "Tundmatu kasutaja",
     "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "OK" : "OK",
+    "No" : "Ei",
+    "Yes" : "Jah",
     "Public access" : "Avalik ligipääs",
     "Access denied" : "Ligipääs keelatud",
     "You are not allowed to view this poll or the poll does not exist." : "Sul pole lubatud seda küsitlust vaadata või seda küsitlust pole olemas.",

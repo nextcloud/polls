@@ -121,6 +121,8 @@ OC.L10N.register(
     "Please use at least 3 characters for your username!" : "Παρακαλώ χρησιμοποιήστε τουλάχιστον 3 χαρακτήρες για όνομα χρήστη!",
     "This username can not be chosen." : "Δεν μπορείτε να επιλέξετε αυτό το όνομα χρήστη.",
     "Error saving username" : "Σφάλμα αποθήκευσης ονόματος χρήστη",
+    "No" : "Όχι",
+    "Yes" : "Ναι",
     "The poll does not exist" : "Η δημοσκόπηση δεν υπάρχει",
     "Enter a poll or start a new one." : "Συμμετέχετε σε δημοσκόπηση ή ξεκινήστε μια νέα!",
     "Goto Nextcloud" : "Μετάβαση στο Nextcloud",

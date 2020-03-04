@@ -27,6 +27,8 @@ OC.L10N.register(
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Unknown user" : "Utilizador desconhecido",
     "OK" : "OK",
+    "No" : "Não",
+    "Yes" : "Sim",
     "Public access" : "Acesso público",
     "Access denied" : "Acesso proibido"
 },

@@ -117,6 +117,8 @@ OC.L10N.register(
     "Please use at least 3 characters for your username!" : "لطفاً حداقل 3 کاراکتر برای نام کاربری خود استفاده کنید!",
     "This username can not be chosen." : "این نام کاربری قابل انتخاب نیست.",
     "Error saving username" : "خطا در ذخیره نام کاربری",
+    "No" : "نه",
+    "Yes" : "بله",
     "The poll does not exist" : "نظرسنجی وجود ندارد",
     "Enter a poll or start a new one." : "یک نظرسنجی وارد کنید یا یک مورد جدید را شروع کنید.",
     "Goto Nextcloud" : "برو نکست کلود",

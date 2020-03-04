@@ -53,6 +53,8 @@ OC.L10N.register(
     "Unknown user" : "Usuari desconegut",
     "Receive notification email on activity" : "Rep correu electrònic de notificació quan hi hagi activitat",
     "OK" : "D'acord",
+    "No" : "No",
+    "Yes" : "Sí",
     "Public access" : "Accés públic",
     "Hidden poll" : "Amaga l'enquesta",
     "Access denied" : "Accés denegat",

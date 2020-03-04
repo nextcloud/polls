@@ -45,6 +45,8 @@ OC.L10N.register(
     "Unknown user" : "Tuntematon käyttäjä",
     "Receive notification email on activity" : "Vastaanota sähköposti-ilmoituksia toimista",
     "OK" : "OK",
+    "No" : "Ei",
+    "Yes" : "Kyllä",
     "Public access" : "Avoin pääsy",
     "Hidden poll" : "Piilotettu kysely",
     "Access denied" : "Ei käyttöoikeutta",

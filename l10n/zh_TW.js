@@ -95,6 +95,8 @@ OC.L10N.register(
     "Please use at least 3 characters for your username!" : "請輸入至少3個字作為您的用戶名！",
     "This username can not be chosen." : "無法選擇該用戶名",
     "Error saving username" : "保存使用者名稱時出錯",
+    "No" : "否",
+    "Yes" : "是",
     "The poll does not exist" : "投票不存在",
     "Goto Nextcloud" : "前往Nextcloud",
     "Switch view" : "切換檢視模式",

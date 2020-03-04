@@ -26,6 +26,8 @@ OC.L10N.register(
     "Month" : "Muaj",
     "Unknown user" : "Përdorues i panjohur",
     "OK" : "OK",
+    "No" : "Jo",
+    "Yes" : "Yes",
     "Public access" : "Akses publik"
 },
 "nplurals=2; plural=(n != 1);");
