@@ -30,7 +30,7 @@
 				<ul>
 					<PollNavigationItems v-for="(poll) in allPolls" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-                        @deletePermanently="deletePermanently(poll.id)" />
+						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -39,7 +39,7 @@
 				<ul>
 					<PollNavigationItems v-for="(poll) in myPolls" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-                        @deletePermanently="deletePermanently(poll.id)" />
+						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -48,7 +48,7 @@
 				<ul>
 					<PollNavigationItems v-for="(poll) in participatedPolls" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-                        @deletePermanently="deletePermanently(poll.id)" />
+						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -57,7 +57,7 @@
 				<ul>
 					<PollNavigationItems v-for="(poll) in publicPolls" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-                        @deletePermanently="deletePermanently(poll.id)" />
+						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -66,7 +66,7 @@
 				<ul>
 					<PollNavigationItems v-for="(poll) in hiddenPolls" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-                        @deletePermanently="deletePermanently(poll.id)" />
+						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 
@@ -75,7 +75,7 @@
 				<ul>
 					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-                        @deletePermanently="deletePermanently(poll.id)" />
+						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 		</ul>
@@ -174,11 +174,11 @@ export default {
 			this.$store
 				.dispatch('deletePermanently', { pollId: pollId })
 				.then((response) => {
-                    // if we permanently delete current selected poll,
-                    // reload deleted polls route
-                    if(this.$route.params.id && this.$route.params.id == pollId) {
-                        this.$router.push({name: 'list', params: {type: 'deleted'}})
-                    }
+					// if we permanently delete current selected poll,
+					// reload deleted polls route
+					if (this.$route.params.id && this.$route.params.id === pollId) {
+						this.$router.push({ name: 'list', params: { type: 'deleted' } })
+					}
 					this.refreshPolls()
 				})
 

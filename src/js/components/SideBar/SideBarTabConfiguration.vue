@@ -73,8 +73,9 @@
 
 		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
 			@click="switchDeleted()" />
-		<ButtonDiv v-if="poll.deleted" icon="icon-delete" class="error" :title="t('polls', 'Delete poll permanently')"
-      @click="deletePermanently()" />
+		<ButtonDiv v-if="poll.deleted" icon="icon-delete" class="error"
+			:title="t('polls', 'Delete poll permanently')"
+			@click="deletePermanently()" />
 	</div>
 </template>
 
@@ -258,12 +259,12 @@ export default {
 		},
 
 		deletePermanently() {
-			if(!this.poll.deleted) return;
+			if (!this.poll.deleted) return
 
-            this.$store
+			this.$store
 				.dispatch('deletePermanently', { pollId: this.poll.id })
 				.then((response) => {
-                    this.$router.push({name: 'list', params: {type: 'deleted'}})
+					this.$router.push({ name: 'list', params: { type: 'deleted' } })
 				})
 		},
 
