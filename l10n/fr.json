@@ -114,7 +114,7 @@
     "Receive notification email on activity" : "Recevoir une notification par courriel en cas d'activité",
     "Your personal link to this poll: %n" : "Votre lien personnel pour ce sondage : %n",
     "Enter your name!" : "Saisissez votre nom",
-    "To participate, you need to enter a valid username with at least 3 characters." : "Pour participer, vous devez saisir un nom d'utilisateur valide de 3 caractères minimum.",
+    "To participate, you need to enter a valid username with at least 3 characters." : "Pour participer, vous devez saisir un nom d'utilisateur valide de 3 caractères minimum. ",
     "Enter your name" : "Saisissez votre nom",
     "Username is not valid. Please enter at least 3 characters." : "Le nom d'utilisateur n'est pas valide. Veuillez saisir au moins 3 caractères.",
     "This username is not valid, i.e. because it is already in use." : "Ce nom d'utilisateur est déjà utilisé.",
