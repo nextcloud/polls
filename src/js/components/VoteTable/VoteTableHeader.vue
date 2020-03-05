@@ -41,6 +41,17 @@
 			</div>
 		</div>
 
+		<div v-if="acl.allowEdit && poll.type === 'datePoll'" class="new-event">
+			<a class="button"
+				:class="{
+					primary: isWinner,
+					'icon-calendar': isWinner,
+					'icon-calendar-000': !isWinner
+				}"
+				:title="t('polls', 'Add a calendar event')"
+				:href="newCalendarEventLink(option)" />
+		</div>
+
 		<div class="counter">
 			<div class="yes">
 				<span> {{ yesVotes }} </span>
@@ -54,6 +65,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import VoteCalendarLink from './VoteCalendarLink'
 
 export default {
 	name: 'VoteTableHeader',
@@ -80,7 +92,8 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			votes: state => state.votes.list
+			votes: state => state.votes.list,
+			acl: state => state.acl
 		}),
 		...mapGetters([
 			'votesRank',
@@ -119,6 +132,12 @@ export default {
 				}).maybe
 			)
 		}
+	},
+
+	methods: {
+		newCalendarEventLink(option) {
+			return VoteCalendarLink.methods.newEvent(option)
+		}
 	}
 }
 
@@ -132,6 +151,16 @@ export default {
 	&.winner {
 		font-weight: bold;
 		color: #49bc49;
+	}
+
+	.new-event {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+
+		.button {
+			padding: 15px;
+		}
 	}
 }
 

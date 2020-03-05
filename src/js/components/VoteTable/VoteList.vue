@@ -31,6 +31,12 @@
 			<PollItemText v-if="poll.type === 'textPoll'" :option="option" />
 			<PollItemDate v-if="poll.type === 'datePoll'" :option="option" />
 
+			<div v-if="acl.allowEdit && poll.type === 'datePoll'" class="new-event">
+				<a class="button icon-calendar-000"
+					:title="t('polls', 'Add a calendar event')"
+					:href="newCalendarEventLink(option)" />
+			</div>
+
 			<div class="counter">
 				<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
 					<span> {{ yesVotes(option.pollOptionText) }} </span>
@@ -51,6 +57,7 @@
 <script>
 import PollItemText from '../Base/PollItemText'
 import PollItemDate from '../Base/PollItemDate'
+import VoteCalendarLink from './VoteCalendarLink'
 import VoteTableItem from './VoteTableItem'
 import { mapState, mapGetters } from 'vuex'
 
@@ -116,6 +123,10 @@ export default {
 				.then(() => {
 					// this.$emit('voteSaved')
 				})
+		},
+
+		newCalendarEventLink(option) {
+			return VoteCalendarLink.methods.newEvent(option)
 		}
 	}
 }
@@ -178,6 +189,14 @@ export default {
 
 			.vote-table-item {
 				flex: 0;
+			}
+
+			.new-event {
+				display: flex;
+
+				.button {
+					padding: 15px;
+				}
 			}
 
 			> li {
