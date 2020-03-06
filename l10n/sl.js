@@ -112,8 +112,8 @@ OC.L10N.register(
     "Invitation mail sent to %n." : "Poslano je vabilo za %n.",
     "Error sending invitation mail to %n." : "Prišlo je do napake med pošiljanjem vabila za %n.",
     "Access denied" : "Dostop je zavrnjen",
-    "You are not allowed to view this poll or the poll does not exist." : "Za ogled te ankete nimate ustreznih dovoljen, ali pa anketa ne obstaja.",
-    "You are not allowed to edit this poll or the poll does not exist." : "Za urejanje te ankete nimate ustreznih dovoljen, ali pa anketa ne obstaja.",
-    "You are either not allowed to delete this poll or it doesn't exist." : "Za brisanje te ankete nimate ustreznih dovoljen, ali pa anketa ne obstaja."
+    "You are not allowed to view this poll or the poll does not exist." : "Za ogled te ankete nimate ustreznih dovoljenj, ali pa anketa ne obstaja.",
+    "You are not allowed to edit this poll or the poll does not exist." : "Za urejanje te ankete nimate ustreznih dovoljenj, ali pa anketa ne obstaja.",
+    "You are either not allowed to delete this poll or it doesn't exist." : "Za brisanje te ankete nimate ustreznih dovoljenj, ali pa anketa ne obstaja."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
