@@ -42,7 +42,7 @@
 				</div>
 
 				<div class="modal__buttons">
-					<a :href="loginLink" class="modal__buttons__link"> {{ t('polls', 'You have an account? Login here.') }} </a>
+					<a :href="loginLink" class="modal__buttons__link"> {{ t('polls', 'You have an account? Log in here.') }} </a>
 					<div class="modal__buttons__spacer" />
 					<ButtonDiv :title="t('polls', 'Cancel')"
 						@click="closeModal" />
