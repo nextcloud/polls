@@ -120,7 +120,6 @@ OC.L10N.register(
     "Enter your name" : "Zadejte své jméno",
     "Username is not valid. Please enter at least 3 characters." : "Uživatelské jméno není platné. Zadejte alespoň tři znaky.",
     "This username is not valid, i.e. because it is already in use." : "Toto uživatelské jméno už bylo použito někým jiným – zvolte si prosím jiné.",
-    "You have an account? Login here." : "Máte uživatelský účet? Přihlaste se zde.",
     "OK" : "OK",
     "Please use at least 3 characters for your username!" : "Pro své uživatelské jméno použijte alespoň tři znaky!",
     "This username can not be chosen." : "Toto uživatelské jméno nemůže být zvoleno.",

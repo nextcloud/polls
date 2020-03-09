@@ -120,7 +120,6 @@ OC.L10N.register(
     "Enter your name" : "Digite seu nome",
     "Username is not valid. Please enter at least 3 characters." : "Nome de usuário inválido. Digite pelo menos 3 caracteres.",
     "This username is not valid, i.e. because it is already in use." : "O nome do usuário é inválido pois já está em uso.",
-    "You have an account? Login here." : "Tem uma conta? Faça login aqui.",
     "OK" : "OK",
     "Please use at least 3 characters for your username!" : "Use pelo menos 3 caracteres para o seu nome de usuário!",
     "This username can not be chosen." : "Este nome de usuário não pode ser escolhido.",

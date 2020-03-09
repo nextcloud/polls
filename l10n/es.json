@@ -118,7 +118,6 @@
     "Enter your name" : "Escriba su nombre",
     "Username is not valid. Please enter at least 3 characters." : "El nombre de usuario no es válido. Por favor, escriba al menos 3 caracteres.",
     "This username is not valid, i.e. because it is already in use." : "El nombre de usuario no es válido. Por ejemplo, ese nombre ya está en uso.",
-    "You have an account? Login here." : "¿Tienes una cuenta?  Inicia sesión aquí.",
     "OK" : "OK",
     "Please use at least 3 characters for your username!" : "¡Por favor, use al menos 3 caracteres para su nombre de usuario!",
     "This username can not be chosen." : "No puede ser elegir este nombre de usuario.",

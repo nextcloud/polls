@@ -120,7 +120,6 @@ OC.L10N.register(
     "Enter your name" : "Įveskite savo vardą",
     "Username is not valid. Please enter at least 3 characters." : "Naudotojo vardas neteisingas. Įveskite bent 3 simbolius.",
     "This username is not valid, i.e. because it is already in use." : "Šis naudotojo vardas yra neteisingas, t. y. nes jis jau yra naudojamas.",
-    "You have an account? Login here." : "Turite paskyrą? Prisijunkite čia.",
     "OK" : "Gerai",
     "Please use at least 3 characters for your username!" : "Naudokite bent 3 savo naudotojo vardo simbolius!",
     "This username can not be chosen." : "Šis naudotojo vardas negali būti pasirinktas.",

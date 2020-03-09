@@ -120,7 +120,6 @@ OC.L10N.register(
     "Enter your name" : "Προσθέστε το όνομά σας",
     "Username is not valid. Please enter at least 3 characters." : "Το όνομα χρήστη δεν είναι έγκυρο. Παρακαλώ εισάγετε τουλάχιστον 3 χαρακτήρες.",
     "This username is not valid, i.e. because it is already in use." : "Το όνομα χρήστη δεν είναι έγκυρο, π.χ. επειδή είναι σε χρήση.",
-    "You have an account? Login here." : "Έχετε λογαριασμό; Συνδεθείτε εδώ.",
     "OK" : "Εντάξει",
     "Please use at least 3 characters for your username!" : "Παρακαλώ χρησιμοποιήστε τουλάχιστον 3 χαρακτήρες για όνομα χρήστη!",
     "This username can not be chosen." : "Δεν μπορείτε να επιλέξετε αυτό το όνομα χρήστη.",
