@@ -114,13 +114,13 @@ class PollController extends Controller {
 
 	public function list() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-
+			$startTime = time();
 			$pollList = [];
 
 			try {
 
 				$polls = $this->pollMapper->findAll();
-
+				$loadPollsTime = time();
 				// TODO: Not the elegant way. Improvement neccessary
 				foreach ($polls as $poll) {
 					$combinedPoll = (object) array_merge(
@@ -129,6 +129,10 @@ class PollController extends Controller {
 						$pollList[] = $combinedPoll;
 					}
 				}
+				$buildPollsListTime = time();
+				$this->logger->debug('Start: ' . date('r', $startTime));
+				$this->logger->debug('Read polls: ' . date('r', $loadPollsTime));
+				$this->logger->debug('Build polls list: ' . date('r', $buildPollsListTime));
 
 				return new DataResponse($pollList, Http::STATUS_OK);
 			} catch (DoesNotExistException $e) {
