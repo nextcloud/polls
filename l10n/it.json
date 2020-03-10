@@ -118,6 +118,7 @@
     "Enter your name" : "Digita il tuo nome",
     "Username is not valid. Please enter at least 3 characters." : "Il nome utente non è valido. Digita almeno 3 caratteri.",
     "This username is not valid, i.e. because it is already in use." : "Questo nome utente non è valido poiché è già in uso.",
+    "You have an account? Log in here." : "Hai un account? Accedi qui.",
     "OK" : "OK",
     "Please use at least 3 characters for your username!" : "Utilizza almeno 3 caratteri per il tuo nome utente!",
     "This username can not be chosen." : "Questo nome utente non può essere scelto.",

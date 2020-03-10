@@ -120,6 +120,7 @@ OC.L10N.register(
     "Enter your name" : "Adınızı yazın",
     "Username is not valid. Please enter at least 3 characters." : "Kullanıcı adı geçersiz. En az 3 karakter yazın.",
     "This username is not valid, i.e. because it is already in use." : "Bu kullanıcı adı geçersiz. Zaten kullanılıyor olabilir.",
+    "You have an account? Log in here." : "Zaten bir hesabınız varsa buradan oturum açın.",
     "OK" : "Tamam",
     "Please use at least 3 characters for your username!" : "Lütfen kullanıcı adınız için en az 3 karakter yazın!",
     "This username can not be chosen." : "Bu kullanıcı adı seçilemez.",
