@@ -31,6 +31,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\ILogger;
+use OCP\App\IAppManager;
 use OCP\IUser;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
@@ -50,6 +51,9 @@ class Acl implements JsonSerializable {
 
 	/** @var ILogger */
 	private $logger;
+
+	/** @var IAppManager */
+	private $appManager;
 
 	/** @var array */
 	private $shares = [];
@@ -87,6 +91,7 @@ class Acl implements JsonSerializable {
 	 * @param string $appName
 	 * @param string $userId
 	 * @param ILogger $logger
+	 * @param IAppManager $appManager
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
@@ -98,6 +103,7 @@ class Acl implements JsonSerializable {
 	public function __construct(
 		$userId,
 		ILogger $logger,
+		IAppManager $appManager,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
@@ -107,6 +113,7 @@ class Acl implements JsonSerializable {
 	) {
 		$this->userId = $userId;
 		$this->logger = $logger;
+		$this->appManager = $appManager;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
@@ -320,6 +327,18 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return bool
 	 */
+	public function getAllowAddEvent(): bool {
+		return (
+			   $this->getAllowEdit()
+			&& $this->poll->getType() === 'datePoll'
+			&& $this->appManager->isEnabledForUser('calendar')
+		);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
 	public function getAllowSeeUsernames(): bool {
 		return !($this->poll->getAnonymous() && !$this->getIsOwner()); ;
 	}
@@ -403,6 +422,7 @@ class Acl implements JsonSerializable {
 			'allowView'         => $this->getAllowView(),
 			'allowVote'         => $this->getAllowVote(),
 			'allowComment'      => $this->getAllowComment(),
+			'allowAddEvent'     => $this->getAllowAddEvent(),
 			'allowEdit'         => $this->getAllowEdit(),
 			'allowSeeUsernames' => $this->getAllowSeeUsernames(),
 			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
