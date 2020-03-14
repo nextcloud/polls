@@ -65,6 +65,9 @@
 						<ActionButton icon="icon-delete" @click="removeOption(option)">
 							{{ t('polls', 'Delete option') }}
 						</ActionButton>
+					</Actions>
+
+					<Actions v-if="acl.allowEdit" class="action">
 						<ActionButton icon="icon-add" @click="cloneOptionModal(option)">
 							{{ t('polls', 'Clone option') }}
 						</ActionButton>
