@@ -93,7 +93,7 @@ export default {
 			this.setPollProperty({ type: this.type })
 			this.$store.dispatch('writePollPromise')
 				.then(() => {
-					this.$store.dispatch('loadPolls')
+					this.$root.$emit('updatePolls')
 					this.cancel()
 					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.poll.title), { type: 'success' })
 					this.$router.push({ name: 'vote', params: { id: this.poll.id } })

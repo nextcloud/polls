@@ -172,10 +172,6 @@ export default {
 			this.openedMenu = !this.openedMenu
 		},
 
-		refreshPolls() {
-			this.$store.dispatch('loadPolls')
-		},
-
 		hideMenu() {
 			this.openedMenu = false
 		},
@@ -183,7 +179,7 @@ export default {
 		switchDeleted() {
 			this.$store.dispatch('switchDeleted', { pollId: this.poll.id })
 				.then((response) => {
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 				})
 			this.hideMenu()
 		},
@@ -191,7 +187,7 @@ export default {
 		deletePermanently() {
 			this.$store.dispatch('deletePermanently', { pollId: this.poll.id })
 				.then((response) => {
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 				})
 			this.hideMenu()
 		},
@@ -199,7 +195,7 @@ export default {
 		clonePoll() {
 			this.$store.dispatch('clonePoll', { pollId: this.poll.id })
 				.then((response) => {
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 				})
 			this.hideMenu()
 		}
