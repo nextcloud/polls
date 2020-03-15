@@ -113,7 +113,7 @@ OC.L10N.register(
     "Unknown user" : "Utente sconosciuto",
     "Public share" : "Condivisione pubblica",
     "Error while adding share" : "Errore durante l'aggiunta della condivisione",
-    "Receive notification email on activity" : "Ricevi un email di notifica sull'attività",
+    "Receive notification email on activity" : "Ricevi un'email di notifica sull'attività",
     "Your personal link to this poll: %n" : "Il tuo collegamento personale a questo sondaggio: %n",
     "Enter your name!" : "Digita il tuo nome",
     "To participate, you need to enter a valid username with at least 3 characters." : "Per partecipare, devi inserire un nome utente valido con almeno 3 caratteri.",
