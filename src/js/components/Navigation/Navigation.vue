@@ -101,7 +101,9 @@ export default {
 
 	data() {
 		return {
-			createDlg: false
+			createDlg: false,
+			reloadInterval: 30000,
+			reloadTimer: 0
 		}
 	},
 
@@ -120,9 +122,24 @@ export default {
 		}
 	},
 
+	created() {
+		this.timedReload()
+	},
+
+	beforeDestroy() {
+		clearInterval(this.reloadTimer)
+	},
+
 	methods: {
 		closeCreate() {
 			this.createDlg = false
+		},
+
+		timedReload() {
+			// reload poll list periodically
+			this.reloadTimer = setInterval(() => {
+				this.$root.$emit('updatePolls')
+			}, this.reloadInterval)
 		},
 
 		toggleCreateDlg() {

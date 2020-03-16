@@ -125,7 +125,7 @@ export default {
 		}
 	},
 
-	mounted() {
+	created() {
 		this.loadPoll()
 	},
 

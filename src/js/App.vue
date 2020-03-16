@@ -37,20 +37,28 @@ export default {
 	},
 
 	created() {
-		this.$root.$on('updatePolls', function() {
-			this.$store
-				.dispatch('loadPolls')
-				.then(() => {
-				})
-				.catch((error) => {
-					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
-				})
-		})
+		if (OC.currentUser) {
+			this.updatePolls()
+			this.$root.$on('updatePolls', () => {
+				this.updatePolls()
+			})
+		}
 	},
 
-	mounted() {
-		this.$root.$emit('updatePolls')
+	methods: {
+		updatePolls() {
+			if (OC.currentUser) {
+
+				this.$store
+					.dispatch('loadPolls')
+					.then(() => {
+					})
+					.catch((error) => {
+						console.error('refresh poll: ', error.response)
+						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+					})
+			}
+		}
 	}
 }
 
