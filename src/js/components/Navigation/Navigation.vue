@@ -127,7 +127,7 @@ export default {
 	},
 
 	beforeDestroy() {
-		clearInterval(this.reloadTimer)
+		window.clearInterval(this.reloadTimer)
 	},
 
 	methods: {
@@ -137,7 +137,7 @@ export default {
 
 		timedReload() {
 			// reload poll list periodically
-			this.reloadTimer = setInterval(() => {
+			this.reloadTimer = window.setInterval(() => {
 				this.$root.$emit('updatePolls')
 			}, this.reloadInterval)
 		},
