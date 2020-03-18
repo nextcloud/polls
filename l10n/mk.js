@@ -1,10 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Анкети",
+    "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Participants" : "Учесници",
     "Deleted" : "Избришана",
     "Group" : "Група",
     "New comment …" : "Нов коментар ...",
+    "Your comment was added" : "Вашиот коментар е додаден",
     "Comments" : "Коментари",
     "Delete comment" : "Избриши коментар",
     "No comments yet. Be the first." : "Сеуште нема коментари. Напишете го првиот коментар.",
