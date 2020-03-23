@@ -347,8 +347,9 @@ class MailService {
 
 			foreach ($log as $logItem) {
 				if ($logItem->getPollId() === $subscription->getPollId()) {
-
-					if ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
+					if ($poll->anonymous) {
+						$displayUser = "A user";
+					} elseif ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
 						$displayUser = $this->userManager->get($logItem->getUserId())->getDisplayName();
 					} else {
 						$displayUser = $logItem->getUserId();
