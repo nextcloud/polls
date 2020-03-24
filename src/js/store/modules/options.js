@@ -127,7 +127,11 @@ const actions = {
 		option.pollId = context.rootState.poll.id
 
 		if (context.rootState.poll.type === 'datePoll') {
-			option.timestamp = moment(payload.pollOptionText).unix()
+			if (payload.timestamp) {
+				option.timestamp = payload.timestamp
+			} else {
+				option.timestamp = moment(payload.pollOptionText).unix()
+			}
 			option.order = option.timestamp
 			option.pollOptionText = moment.utc(payload.pollOptionText).format('YYYY-MM-DD HH:mm:ss')
 
