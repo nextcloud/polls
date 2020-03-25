@@ -22,12 +22,12 @@ OC.L10N.register(
     "Shares" : "Споделувања",
     "Description" : "Опис",
     "Expiration date" : "Рок на траење",
+    "OK" : "Добро",
     "Week" : "Недела",
     "Day" : "Ден",
     "Month" : "Месец",
     "Year" : "Година",
     "Unknown user" : "Непознат корисник",
-    "OK" : "Добро",
     "No" : "Не",
     "Yes" : "Да"
 },

@@ -10,10 +10,10 @@ OC.L10N.register(
     "Shares" : "分享",
     "Description" : "描述",
     "Expiration date" : "分享期限",
+    "OK" : "確定",
     "Week" : "星期",
     "Day" : "日",
     "Month" : "月",
-    "OK" : "確定",
     "No" : "No",
     "Yes" : "Yes"
 },

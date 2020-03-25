@@ -11,10 +11,10 @@ OC.L10N.register(
     "Details" : "Մանրամասներ",
     "Description" : "Նկարագրություն",
     "Expiration date" : "Վավերականության ժամկետ",
+    "OK" : "Լավ",
     "Week" : "Շաբաթ",
     "Day" : "Օր",
     "Month" : "Ամիս",
-    "OK" : "Լավ",
     "No" : "No",
     "Yes" : "Yes"
 },

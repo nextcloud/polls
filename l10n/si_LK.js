@@ -12,10 +12,10 @@ OC.L10N.register(
     "Configuration" : "වින්‍යාසය",
     "Description" : "විස්තරය",
     "Expiration date" : "කල් ඉකුත් විමේ දිනය",
+    "OK" : "හරි",
     "Week" : "සතිය",
     "Month" : "මාසය",
     "Unknown user" : "හදුනානොගත් සේවාදායකයා",
-    "OK" : "හරි",
     "No" : "No",
     "Yes" : "Yes"
 },

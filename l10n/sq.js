@@ -20,12 +20,12 @@ OC.L10N.register(
     "Shares" : "Shpërndarje",
     "Description" : "Përshkrim",
     "Expiration date" : "Datë skadimi",
+    "OK" : "OK",
     "Week" : "Javë",
     "Hour" : "Orë",
     "Day" : "Ditë",
     "Month" : "Muaj",
     "Unknown user" : "Përdorues i panjohur",
-    "OK" : "OK",
     "No" : "Jo",
     "Yes" : "Yes",
     "Public access" : "Akses publik"

@@ -20,12 +20,12 @@
     "Shares" : "Споделувања",
     "Description" : "Опис",
     "Expiration date" : "Рок на траење",
+    "OK" : "Добро",
     "Week" : "Недела",
     "Day" : "Ден",
     "Month" : "Месец",
     "Year" : "Година",
     "Unknown user" : "Непознат корисник",
-    "OK" : "Добро",
     "No" : "Не",
     "Yes" : "Да"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"

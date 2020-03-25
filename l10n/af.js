@@ -14,12 +14,12 @@ OC.L10N.register(
     "Details" : "Besonderhede",
     "Description" : "Beskrywing",
     "Expiration date" : "Vervaldatum",
+    "OK" : "Goed",
     "Week" : "Week",
     "Hour" : "Uur",
     "Day" : "Dag",
     "Month" : "Maand",
     "Unknown user" : "Onbekende gebruiker",
-    "OK" : "Goed",
     "No" : "Nee",
     "Yes" : "Ja",
     "Public access" : "Openbare toegang"

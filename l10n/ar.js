@@ -22,12 +22,12 @@ OC.L10N.register(
     "Description" : "الوصف",
     "Anonymous poll" : "استطلاع رأي مجهول",
     "Expiration date" : "تاريخ إنتهاء الصلاحية",
+    "OK" : "موافق",
     "Week" : "أسبوع",
     "Hour" : "الساعة",
     "Day" : "يوم",
     "Month" : "شهر",
     "Unknown user" : "مستخدم غير معروف",
-    "OK" : "موافق",
     "No" : "لا",
     "Yes" : "نعم",
     "Public access" : "النفاذ إليه مُصرّح للعامة"

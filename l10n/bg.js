@@ -18,12 +18,12 @@ OC.L10N.register(
     "Shares" : "Споделени",
     "Description" : "Описание",
     "Expiration date" : "Валидност",
+    "OK" : "ОК",
     "Week" : "Седмица",
     "Hour" : "Час",
     "Day" : "Ден",
     "Month" : "Месец",
     "Unknown user" : "Непознат потребител",
-    "OK" : "ОК",
     "No" : "Не",
     "Yes" : "Да",
     "Public access" : "Публичен достъп"

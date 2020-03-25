@@ -11,11 +11,11 @@
     "Details" : "Detailer",
     "Description" : "Beschreiwung",
     "Expiration date" : "Verfallsdatum",
+    "OK" : "OK",
     "Week" : "Woch",
     "Hour" : "Stonn",
     "Day" : "Dag",
     "Month" : "Mount",
-    "OK" : "OK",
     "No" : "No",
     "Yes" : "Yes"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

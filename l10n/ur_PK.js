@@ -9,9 +9,9 @@ OC.L10N.register(
     "never" : "never",
     "Description" : "تصریح",
     "Expiration date" : "تاریخ معیاد",
+    "OK" : "اوکے",
     "Week" : "ہفتہ",
     "Month" : "ماہ",
-    "OK" : "اوکے",
     "No" : "No",
     "Yes" : "Yes"
 },

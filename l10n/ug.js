@@ -9,9 +9,9 @@ OC.L10N.register(
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
     "Description" : "چۈشەندۈرۈش",
+    "OK" : "جەزملە",
     "Week" : "ھەپتە",
     "Month" : "ئاي",
-    "OK" : "جەزملە",
     "No" : "No",
     "Yes" : "Yes"
 },

@@ -17,10 +17,10 @@ OC.L10N.register(
     "Shares" : "Delingar",
     "Description" : "Skildring",
     "Expiration date" : "Utløpsdato",
+    "OK" : "OK",
     "Week" : "Veke",
     "Day" : "Dag",
     "Month" : "Månad",
-    "OK" : "OK",
     "No" : "Nei",
     "Yes" : "Ja"
 },

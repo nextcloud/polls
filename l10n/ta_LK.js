@@ -10,9 +10,9 @@ OC.L10N.register(
     "Configuration" : "தகவமைப்பு",
     "Description" : "விவரிப்பு",
     "Expiration date" : "காலவதியாகும் திகதி",
+    "OK" : "சரி ",
     "Week" : "வாரம்",
     "Month" : "மாதம்",
-    "OK" : "சரி ",
     "No" : "No",
     "Yes" : "Yes"
 },

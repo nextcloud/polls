@@ -10,10 +10,10 @@ OC.L10N.register(
     "Details" : "Detalhs",
     "Description" : "Descripcion",
     "Expiration date" : "Data d'expiracion",
+    "OK" : "D'acòrdi",
     "Week" : "Aquesta setmana",
     "Day" : "Jorn",
     "Month" : "Mes",
-    "OK" : "D'acòrdi",
     "No" : "No",
     "Yes" : "Yes"
 },

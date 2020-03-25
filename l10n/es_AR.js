@@ -18,12 +18,12 @@ OC.L10N.register(
     "Shares" : "Shares",
     "Description" : "Descripción",
     "Expiration date" : "Fecha de expiración",
+    "OK" : "OK",
     "Week" : "Semana",
     "Hour" : "Hora",
     "Day" : "Día",
     "Month" : "Mes",
     "Unknown user" : "Ususario desconocido",
-    "OK" : "OK",
     "No" : "No",
     "Yes" : "Si",
     "Public access" : "Acceso público"

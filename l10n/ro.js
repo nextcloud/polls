@@ -16,11 +16,11 @@ OC.L10N.register(
     "Shares" : "Partajări",
     "Description" : "Descriere",
     "Expiration date" : "Data expirării",
+    "OK" : "OK",
     "Week" : "Săptămâna",
     "Day" : "Zi",
     "Month" : "Luna",
     "Unknown user" : "Utilizator necunoscut",
-    "OK" : "OK",
     "No" : "Nu",
     "Yes" : "a",
     "Public access" : "Access public"

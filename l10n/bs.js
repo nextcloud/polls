@@ -11,10 +11,10 @@ OC.L10N.register(
     "never" : "nikad",
     "Description" : "Opis",
     "Expiration date" : "Datum isteka",
+    "OK" : "OK",
     "Week" : "Sedmica",
     "Day" : "Dan",
     "Month" : "Mjesec",
-    "OK" : "OK",
     "No" : "No",
     "Yes" : "Yes"
 },

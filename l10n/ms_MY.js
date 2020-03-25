@@ -9,10 +9,10 @@ OC.L10N.register(
     "never" : "jangan",
     "Shares" : "Kongsi",
     "Description" : "Keterangan",
+    "OK" : "OK",
     "Week" : "Minggu",
     "Day" : "Hari",
     "Month" : "Bulan",
-    "OK" : "OK",
     "No" : "No",
     "Yes" : "Yes"
 },

@@ -6,8 +6,8 @@ OC.L10N.register(
     "Delete comment" : "Fikrni o'chirib tashlash",
     "Cancel" : "Bekor qilish",
     "never" : "hech qachon",
-    "Unknown user" : "Noma'lum foydalanuvchi",
     "OK" : "OK",
+    "Unknown user" : "Noma'lum foydalanuvchi",
     "No" : "Yo'q",
     "Yes" : "Ha"
 },
