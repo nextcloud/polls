@@ -63,6 +63,7 @@ OC.L10N.register(
     "Click to add a date" : "Egin klik data bat gehitzeko",
     "Add a new text option" : "Gehitu testuzko beste aukera bat",
     "Invitations" : "Gonbidapenak",
+    "Remove share" : "Kendu partekatzea",
     "Public shares" : "Partekatze publikoak",
     "Add a public link" : "Gehitu esteka publikoa",
     "Link copied to clipboard" : "Arbelara kopiatutako esteka",
