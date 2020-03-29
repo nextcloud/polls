@@ -104,28 +104,14 @@ export default {
 			if (this.icon) {
 				if (this.type === 'contact') {
 					return 'icon-mail'
+				} else if (this.type === 'email') {
+					return 'icon-mail'
 				}
 				return 'icon-' + this.type
 			} else {
 				return ''
 			}
 		}
-
-		// computedDisplayName() {
-		// 	let value = this.displayName
-		//
-		// 	if (!this.displayName) {
-		// 		if (this.type === 'user') {
-		// 			value = this.userId
-		// 		} else if (this.type === 'group') {
-		// 			value = value + ' (' + t('polls', 'Group') + ')'
-		// 		} else {
-		// 			value = this.userId
-		// 		}
-		// 	}
-		// 	return value
-
-		// }
 	}
 }
 

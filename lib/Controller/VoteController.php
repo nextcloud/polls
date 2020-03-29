@@ -135,7 +135,6 @@ class VoteController extends Controller {
 	 */
 	public function set($pollId, $option, $userId, $setTo) {
 
-		$this->logger->alert('Deleting vote no. ' . $option);
 		try {
 			$vote = $this->mapper->findSingleVote($pollId, $option['pollOptionText'], $userId);
 			$vote->setVoteAnswer($setTo);
