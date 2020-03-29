@@ -50,7 +50,9 @@
 			</h3>
 
 			<VoteList v-show="!tableMode && options.list.length" />
+
 			<VoteTable v-show="tableMode && options.list.length" />
+
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
 				<button v-if="acl.allowEdit" @click="openOptions">
@@ -62,6 +64,7 @@
 			</div>
 
 			<Subscription v-if="OC.currentUser" />
+
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
 			</div>

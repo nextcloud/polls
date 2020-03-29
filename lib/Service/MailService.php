@@ -170,6 +170,22 @@ class MailService {
 				)
 			);
 
+		} elseif ($share->getType() === 'email') {
+			// $this->logger->debug('User share ' . json_encode($share));
+
+			$recipients[] = array(
+				'userId' => $share->getUserEmail(),
+				'eMailAddress' => $share->getUserEmail(),
+				'displayName' => $share->getUserEmail(),
+				'language' => $defaultLang,
+				'link' => $this->urlGenerator->getAbsoluteURL(
+					$this->urlGenerator->linkToRoute(
+						'polls.page.vote_publicpublic',
+						array('token' => $share->getToken())
+					)
+				)
+			);
+
 		} elseif ($share->getType() === 'contact') {
 			// $this->logger->debug('Contact share ' . json_encode($share));
 			$contacts = $contactsManager->search($share->getUserId(), array('FN'));
@@ -192,7 +208,7 @@ class MailService {
 				return;
 			}
 
-		} elseif ($share->getType() === 'external' || $share->getType() === 'mail') {
+		} elseif ($share->getType() === 'external' || $share->getType() === 'email') {
 			// $this->logger->debug('External share ' . json_encode($share));
 
 			$recipients[] = array(
@@ -250,18 +266,16 @@ class MailService {
 		$owner = $this->userManager->get($poll->getOwner());
 		$sentMails = [];
 		$abortedMails = [];
-		// $this->logger->debug('Search users for token ' . $token);
+
 		$recipients = $this->getRecipientsByShare(
 			$this->shareMapper->findByToken($token),
 			$this->config->getUserValue($poll->getOwner(), 'core', 'lang'),
 			$poll->getOwner()
 		);
 
-		// $this->logger->debug('Found these recipients: ' . json_encode($recipients));
 		foreach ($recipients as $recipient) {
 			$trans = $this->transFactory->get('polls', $recipient['language']);
 
-			// $this->logger->debug('Build eMailTemplate for  ' . $recipient['userId']);
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
 				'owner' => $owner->getDisplayName(),
@@ -284,7 +298,10 @@ class MailService {
 				$recipient['link']
 			);
 
-			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner.'));
+			$emailTemplate->addBodyText( $trans->t('This link gives you personal access to the poll named above. </br> Press the button above or copy the following link and add it in your browser\'s location bar: ') );
+			$emailTemplate->addBodyText( $recipient['link'] );
+
+			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
 
 			try {
 				// $this->logger->debug('Send Mail to ' . $recipient);

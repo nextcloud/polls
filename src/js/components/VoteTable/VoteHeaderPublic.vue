@@ -185,9 +185,14 @@ export default {
 			if (this.validatePublicUsername()) {
 				this.$store.dispatch('createPersonalShare', { token: this.$route.params.token, userName: this.userName })
 					.then((response) => {
-						this.token = response.token
-						this.redirecting = true
-						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
+						if (this.$route.params.token === response.token) {
+							this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
+							// this.$router.go(0)
+						} else {
+							this.token = response.token
+							this.redirecting = true
+							this.$router.replace({ name: 'publicVote', params: { token: this.token } })
+						}
 					})
 					.catch(() => {
 						OC.Notification.showTemporary(t('polls', 'Error saving username', 1, this.poll.title), { type: 'error' })

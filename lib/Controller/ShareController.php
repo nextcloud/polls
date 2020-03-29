@@ -210,6 +210,14 @@ class ShareController extends Controller {
 				$userShare = $this->mapper->insert($userShare);
 				return new DataResponse($userShare, Http::STATUS_OK);
 
+			} elseif ($publicShare->getType() === 'email') {
+
+				$publicShare->setType('external');
+				$publicShare->setUserId($userName);
+				$this->mapper->update($publicShare);
+				$this->logger->alert(json_encode($publicShare));
+				return new DataResponse($publicShare, Http::STATUS_OK);
+
 			} else {
 				return new DataResponse(['message'=> 'Wrong share type: ' . $userShare->getType()], Http::STATUS_FORBIDDEN);
 			}
