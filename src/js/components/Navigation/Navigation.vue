@@ -60,15 +60,15 @@ export default {
 			createDlg: false,
 			pollCategories: [
 				{
-					id: 'my',
-					title: t('polls', 'My polls'),
-					icon: 'icon-user',
-					pinned: false
-				},
-				{
 					id: 'relevant',
 					title: t('polls', 'Relevant'),
 					icon: 'icon-details',
+					pinned: false
+				},
+				{
+					id: 'my',
+					title: t('polls', 'My polls'),
+					icon: 'icon-user',
 					pinned: false
 				},
 				{
