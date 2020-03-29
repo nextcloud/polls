@@ -41,6 +41,24 @@ export default {
 </script>
 
 <style  lang="scss">
+.main-container {
+	position: relative;
+	flex: 1;
+	padding: 8px 24px;
+	margin: 0;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	overflow-x: scroll;
+}
+
+.title {
+	margin: 8px 0;
+}
+
+.description {
+	white-space: break-spaces;
+	margin: 8px 0;
+}
 
 .list-enter-active,
 .list-leave-active {

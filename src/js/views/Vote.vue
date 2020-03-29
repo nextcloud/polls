@@ -35,10 +35,20 @@
 					</ActionButton>
 				</Actions>
 			</div>
-			<PollTitle class="poll-title" />
+			<h2 class="title">
+				{{ poll.title }}
+				<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+				<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+			</h2>
 			<PollInformation />
+
 			<VoteHeaderPublic v-if="!OC.currentUser" />
-			<PollDescription />
+
+			<h3 class="description">
+				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+			</h3>
+
 			<VoteList v-show="!tableMode && options.list.length" />
 			<VoteTable v-show="tableMode && options.list.length" />
 			<div v-if="!options.list.length" class="emptycontent">
@@ -66,15 +76,13 @@
 import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
-import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
-import PollTitle from '../components/Base/PollTitle'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'Vote',
@@ -84,9 +92,7 @@ export default {
 		AppContent,
 		Subscription,
 		ParticipantsList,
-		PollDescription,
 		PollInformation,
-		PollTitle,
 		LoadingOverlay,
 		VoteHeaderPublic,
 		SideBar,
@@ -112,6 +118,10 @@ export default {
 			acl: state => state.acl,
 			options: state => state.options
 		}),
+
+		...mapGetters([
+			'expired'
+		]),
 
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
@@ -184,16 +194,6 @@ export default {
 	.comments {
 		flex: 3;
 	}
-}
-
-.main-container {
-	position: relative;
-	flex: 1;
-	padding: 8px 24px;
-	margin: 0;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	overflow-x: scroll;
 }
 
 .header-actions {

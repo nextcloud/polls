@@ -22,7 +22,7 @@
 
 <template>
 	<div v-if="header" class="pollListItem header">
-		<div class="title" @click="$emit('sortList', {sort: 'title'})">
+		<div class="poll-title" @click="$emit('sortList', {sort: 'title'})">
 			{{ t('polls', 'Title') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
@@ -53,11 +53,11 @@
 			{{ pollType }}
 		</div>
 
-		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="title">
-			<div class="name">
+		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="poll-title">
+			<div class="poll-name">
 				{{ poll.title }}
 			</div>
-			<div class="description">
+			<div class="poll-description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</router-link>
@@ -209,9 +209,6 @@ export default {
 
 <style lang="scss" scoped>
 
-.pollListItem {
-}
-
 .icon-more {
 	right: 14px;
 	opacity: 0.3;
@@ -250,7 +247,7 @@ export default {
 	}
 
 	&.poll {
-		.title {
+		.poll-title {
 			flex-direction: column;
 			& > * {
 				white-space: nowrap;
@@ -260,13 +257,13 @@ export default {
 		}
 	}
 
-	.title {
+	.poll-title {
 		display: flex;
 		align-items: stretch;
 		width: 210px;
 		flex: 1 0 auto;
 
-		.description {
+		.poll-description {
 			opacity: 0.5;
 		}
 	}
