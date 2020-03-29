@@ -37,32 +37,6 @@ const getters = {
 	countPolls: (state) => {
 		return state.list.length
 	},
-	// allPolls: (state) => {
-	// 	return state.list.filter(poll => (!poll.deleted))
-	// },
-	// myPolls: (state) => {
-	// 	return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
-	// },
-	// relevantPolls: (state) => {
-	// 	return state.list.filter(poll => ((
-	// 		poll.userHasVoted
-	// 		|| poll.isOwner
-	// 		|| (poll.allowView && poll.access !== 'public')
-	// 	) && !poll.deleted
-	// 	))
-	// },
-	// publicPolls: (state) => {
-	// 	return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
-	// },
-	// hiddenPolls: (state) => {
-	// 	return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
-	// },
-	// deletedPolls: (state) => {
-	// 	return state.list.filter(poll => (poll.deleted))
-	// },
-	// participatedPolls: (state) => {
-	// 	return state.list.filter(poll => (poll.userHasVoted))
-	// },
 
 	filteredPolls: (state) => (filterId) => {
 		if (filterId === 'all') {
