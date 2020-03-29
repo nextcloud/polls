@@ -28,7 +28,7 @@
 
 		<h3>{{ t('polls','Invitations') }}</h3>
 
-		<span>{{ t('polls','Invited users will get informed immediately via eMail!') }} </span>
+		<span>{{ t('polls','Invited users will get informed immediately via email!') }} </span>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
 				<UserDiv
@@ -127,6 +127,7 @@ export default {
 				getUsers: true,
 				getGroups: true,
 				getContacts: true,
+				getMail: true,
 				query: ''
 			}
 		}
@@ -141,7 +142,6 @@ export default {
 			'invitationShares',
 			'publicShares'
 		])
-
 	},
 
 	methods: {
@@ -172,7 +172,7 @@ export default {
 
 			if (share.userId !== '' && share.userId !== null) {
 				return share.userId
-			} else if (share.type === 'mail') {
+			} else if (share.type === 'email') {
 				return share.userEmail
 			} else {
 				return t('polls', 'Unknown user')
@@ -190,7 +190,7 @@ export default {
 				if (share.userEmail) {
 					displayName = displayName + ' (' + share.userEmail + ')'
 				}
-			} else if (share.type === 'mail') {
+			} else if (share.type === 'email') {
 				displayName = share.userEmail
 				if (share.userId) {
 					displayName = share.userId + ' (' + displayName + ')'

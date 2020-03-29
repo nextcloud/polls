@@ -170,6 +170,22 @@ class MailService {
 				)
 			);
 
+		} elseif ($share->getType() === 'email') {
+			// $this->logger->debug('User share ' . json_encode($share));
+
+			$recipients[] = array(
+				'userId' => $share->getUserEmail(),
+				'eMailAddress' => $share->getUserEmail(),
+				'displayName' => $share->getUserEmail(),
+				'language' => $defaultLang,
+				'link' => $this->urlGenerator->getAbsoluteURL(
+					$this->urlGenerator->linkToRoute(
+						'polls.page.vote_publicpublic',
+						array('token' => $share->getToken())
+					)
+				)
+			);
+
 		} elseif ($share->getType() === 'contact') {
 			// $this->logger->debug('Contact share ' . json_encode($share));
 			$contacts = $contactsManager->search($share->getUserId(), array('FN'));
@@ -192,7 +208,7 @@ class MailService {
 				return;
 			}
 
-		} elseif ($share->getType() === 'external' || $share->getType() === 'mail') {
+		} elseif ($share->getType() === 'external' || $share->getType() === 'email') {
 			// $this->logger->debug('External share ' . json_encode($share));
 
 			$recipients[] = array(

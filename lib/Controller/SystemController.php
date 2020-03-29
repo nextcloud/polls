@@ -83,6 +83,16 @@ class SystemController extends Controller {
 	}
 
 	/**
+	 * Validate string as email address
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @return Boolval
+	 */
+	 private function isValidEmail($email) {
+		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? FALSE : TRUE;
+	 }
+
+	/**
 	 * Get a list of NC users, groups and contacts
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
@@ -94,8 +104,28 @@ class SystemController extends Controller {
 	 * @param array $skipUsers - user names to skip in return array
 	 * @return DataResponse
 	 */
-	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $skipGroups = array(), $skipUsers = array()) {
+	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $getMail = false, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
+		// if (filter_var($query, FILTER_VALIDATE_EMAIL)) {
+		if ($this->isValidEmail($query)) {
+			$list[] = [
+				'id' => '',
+				'user' => '',
+				'organisation' => '',
+				'displayName' => '',
+				'emailAddress' => $query,
+				'desc' => $query,
+				'type' => 'email',
+				'icon' => 'icon-mail',
+				'avatarURL' => '',
+				'avatar' => '',
+				'lastLogin' => '',
+				'cloudId' => ''
+
+			];
+		}
+
+
 		if ($getGroups) {
 			$groups = $this->groupManager->search($query);
 			foreach ($groups as $group) {

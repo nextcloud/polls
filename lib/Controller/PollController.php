@@ -178,7 +178,6 @@ class PollController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getByToken($token) {
-
 		try {
 			return $this->get($this->acl->setToken($token)->getPollId());
 		} catch (DoesNotExistException $e) {
