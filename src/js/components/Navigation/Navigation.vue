@@ -25,55 +25,11 @@
 		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @closeCreate="closeCreate()" />
 		<ul>
-			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
-				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
+			<AppNavigationItem v-for="(pollCategory) in pollCategories" :key="pollCategory.id"
+				:title="pollCategory.title" :allow-collapse="true" :pinned="pollCategory.pinned"
+				:icon="pollCategory.icon" :to="{ name: 'list', params: {type: pollCategory.id}}" :open="false">
 				<ul>
-					<PollNavigationItems v-for="(poll) in allPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-						@deletePermanently="deletePermanently(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'My polls')" :allow-collapse="true"
-				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in myPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-						@deletePermanently="deletePermanently(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Participated')" :allow-collapse="true"
-				icon="icon-user" :to="{ name: 'list', params: {type: 'participated'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in participatedPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-						@deletePermanently="deletePermanently(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Public polls')" :allow-collapse="true"
-				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in publicPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-						@deletePermanently="deletePermanently(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Hidden polls')" :allow-collapse="true"
-				icon="icon-password" :to="{ name: 'list', params: {type: 'hidden'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in hiddenPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
-						@deletePermanently="deletePermanently(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true" :pinned="true"
-				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
+					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)" :key="poll.id" :poll="poll"
 						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
 						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
@@ -101,19 +57,44 @@ export default {
 
 	data() {
 		return {
-			createDlg: false
+			createDlg: false,
+			pollCategories: [
+				{
+					id: 'my',
+					title: t('polls', 'My polls'),
+					icon: 'icon-user',
+					pinned: false
+				},
+				{
+					id: 'relevant',
+					title: t('polls', 'Relevant'),
+					icon: 'icon-details',
+					pinned: false
+				},
+				{
+					id: 'public',
+					title: t('polls', 'Public polls'),
+					icon: 'icon-link',
+					pinned: false
+				},
+				{
+					id: 'all',
+					title: t('polls', 'All polls'),
+					icon: 'icon-folder',
+					pinned: false
+				},
+				{
+					id: 'deleted',
+					title: t('polls', 'Deleted Polls'),
+					icon: 'icon-delete',
+					pinned: true
+				}
+			]
 		}
 	},
 
 	computed: {
-		...mapGetters([
-			'allPolls',
-			'myPolls',
-			'publicPolls',
-			'hiddenPolls',
-			'participatedPolls',
-			'deletedPolls'
-		]),
+		...mapGetters(['filteredPolls']),
 
 		pollList() {
 			return this.$store.state.polls.list
@@ -203,38 +184,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="scss">
-	.config-box {
-		display: flex;
-		flex-direction: column;
-		padding: 8px;
-		& > * {
-			padding-left: 21px;
-		}
-
-		& > input {
-			margin-left: 24px;
-			width: auto;
-
-		}
-
-		& > textarea {
-			margin-left: 24px;
-			width: auto;
-			padding: 7px 6px;
-		}
-
-		& > .title {
-			display: flex;
-			background-position: 0 2px;
-			padding-left: 24px;
-			opacity: 0.7;
-			font-weight: bold;
-			margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
-		}
-	}
-</style>
