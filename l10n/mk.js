@@ -5,7 +5,6 @@ OC.L10N.register(
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Participants" : "Учесници",
     "Deleted" : "Избришана",
-    "Group" : "Група",
     "New comment …" : "Нов коментар ...",
     "Your comment was added" : "Вашиот коментар е додаден",
     "Comments" : "Коментари",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Month" : "Месец",
     "Year" : "Година",
     "Unknown user" : "Непознат корисник",
+    "Group" : "Група",
     "No" : "Не",
     "Yes" : "Да"
 },

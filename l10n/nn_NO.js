@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Sletta",
-    "Group" : "Gruppe",
     "New comment …" : "Ny kommentar...",
     "Comments" : "Kommentarar",
     "Delete comment" : "Slett kommentar",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "Week" : "Veke",
     "Day" : "Dag",
     "Month" : "Månad",
+    "Group" : "Gruppe",
     "No" : "Nei",
     "Yes" : "Ja"
 },

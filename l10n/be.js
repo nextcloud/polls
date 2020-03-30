@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
-    "Group" : "Group",
     "Cancel" : "Cancel",
     "Title" : "Title",
     "Owner" : "Owner",
     "never" : "never",
     "OK" : "OK",
+    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes"
 },

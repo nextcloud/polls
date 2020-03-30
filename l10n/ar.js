@@ -5,7 +5,6 @@ OC.L10N.register(
     "Go to poll" : "الانتقال إلى استطلاع الرأي",
     "Participants" : "المشارِكون",
     "Deleted" : "تم حذفه",
-    "Group" : "الفريق",
     "New comment …" : "تعليق جديد ...",
     "Comments" : "تعليقات",
     "Delete comment" : "حذف التعليق",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Day" : "يوم",
     "Month" : "شهر",
     "Unknown user" : "مستخدم غير معروف",
+    "Group" : "الفريق",
     "No" : "لا",
     "Yes" : "نعم",
     "Public access" : "النفاذ إليه مُصرّح للعامة"

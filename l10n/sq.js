@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Polls" : "Sondazhe",
     "Deleted" : "E fshirë",
-    "Group" : "Grup",
     "New comment …" : "Koment i ri ...",
     "Comments" : "Komentet",
     "Delete comment" : "Fshi komentin",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Day" : "Ditë",
     "Month" : "Muaj",
     "Unknown user" : "Përdorues i panjohur",
+    "Group" : "Grup",
     "No" : "Jo",
     "Yes" : "Yes",
     "Public access" : "Akses publik"

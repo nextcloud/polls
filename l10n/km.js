@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "បាន​លុប",
-    "Group" : "Group",
     "Cancel" : "បោះបង់",
     "Apply" : "អនុវត្ត",
     "Title" : "ចំណងជើង",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "Day" : "ថ្ងៃ",
     "Month" : "ខែ",
     "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
+    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes"
 },

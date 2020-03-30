@@ -1,6 +1,5 @@
 { "translations": {
     "Deleted" : "Dihapus",
-    "Group" : "Grup",
     "New comment …" : "Komentar baru ...",
     "Comments" : "Komentar",
     "Delete comment" : "Hapus komentar",
@@ -21,6 +20,7 @@
     "Day" : "Hari",
     "Month" : "Bulan",
     "Unknown user" : "Pengguna tidak dikenal",
+    "Group" : "Grup",
     "No" : "Tidak",
     "Yes" : "Ya"
 },"pluralForm" :"nplurals=1; plural=0;"

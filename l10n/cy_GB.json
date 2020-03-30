@@ -1,6 +1,5 @@
 { "translations": {
     "Deleted" : "Wedi dileu",
-    "Group" : "Grŵp",
     "Cancel" : "Diddymu",
     "Title" : "Teitl",
     "Owner" : "Owner",
@@ -12,6 +11,7 @@
     "Week" : "Wythnos",
     "Day" : "Diwrnod",
     "Month" : "Mis",
+    "Group" : "Grŵp",
     "No" : "No",
     "Yes" : "Iawn",
     "Public access" : "Mynediad cyhoeddus"

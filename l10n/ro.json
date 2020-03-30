@@ -1,6 +1,5 @@
 { "translations": {
     "Deleted" : "Șters",
-    "Group" : "Grup",
     "New comment …" : "Comentariu nou...",
     "Comments" : "Comentarii",
     "Delete comment" : "Șterge comentariu",
@@ -19,6 +18,7 @@
     "Day" : "Zi",
     "Month" : "Luna",
     "Unknown user" : "Utilizator necunoscut",
+    "Group" : "Grup",
     "No" : "Nu",
     "Yes" : "a",
     "Public access" : "Access public"

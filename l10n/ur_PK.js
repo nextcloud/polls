@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "حذف شدہ ",
-    "Group" : "Group",
     "Cancel" : "منسوخ کریں",
     "Title" : "عنوان",
     "Owner" : "Owner",
@@ -12,6 +11,7 @@ OC.L10N.register(
     "OK" : "اوکے",
     "Week" : "ہفتہ",
     "Month" : "ماہ",
+    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes"
 },

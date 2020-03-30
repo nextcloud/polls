@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Вилучено",
-    "Group" : "Група",
     "New comment …" : "Новий коментар...",
     "Comments" : "Коментарі",
     "Delete comment" : "Видалити комент",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Day" : "День",
     "Month" : "Місяць",
     "Unknown user" : "Невідомий користувач",
+    "Group" : "Група",
     "No" : "Ні",
     "Yes" : "Так",
     "Public access" : "Публічний доступ"

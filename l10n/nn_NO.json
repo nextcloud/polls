@@ -1,6 +1,5 @@
 { "translations": {
     "Deleted" : "Sletta",
-    "Group" : "Gruppe",
     "New comment …" : "Ny kommentar...",
     "Comments" : "Kommentarar",
     "Delete comment" : "Slett kommentar",
@@ -19,6 +18,7 @@
     "Week" : "Veke",
     "Day" : "Dag",
     "Month" : "Månad",
+    "Group" : "Gruppe",
     "No" : "Nei",
     "Yes" : "Ja"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

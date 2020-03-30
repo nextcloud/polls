@@ -4,7 +4,6 @@ OC.L10N.register(
     "Polls" : "Enquestes",
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
     "Deleted" : "Desanicióse",
-    "Group" : "Group",
     "New comment …" : "Comentariu nuevu...",
     "Comments" : "Comentarios",
     "Delete comment" : "Desaniciar comentariu",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Day" : "Día",
     "Month" : "Mes",
     "Unknown user" : "Usuariu desconocíu",
+    "Group" : "Group",
     "No" : "Non",
     "Yes" : "Sí",
     "Public access" : "Accesu públicu"

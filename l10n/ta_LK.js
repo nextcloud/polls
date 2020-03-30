@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Group" : "Group",
     "Cancel" : "இரத்து செய்க",
     "Title" : "தலைப்பு",
     "Owner" : "Owner",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "OK" : "சரி ",
     "Week" : "வாரம்",
     "Month" : "மாதம்",
+    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes"
 },

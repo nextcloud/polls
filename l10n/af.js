@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Geskrap",
-    "Group" : "Groep",
     "New comment …" : "Nuwe kommentaar…",
     "Comments" : "Kommentare",
     "Delete comment" : "Skrap kommentaar",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "Day" : "Dag",
     "Month" : "Maand",
     "Unknown user" : "Onbekende gebruiker",
+    "Group" : "Groep",
     "No" : "Nee",
     "Yes" : "Ja",
     "Public access" : "Openbare toegang"

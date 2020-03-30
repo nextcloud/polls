@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Participants" : "Učesnici",
     "Deleted" : "Obrisano",
-    "Group" : "Group",
     "Cancel" : "Cancel",
     "Title" : "Naslov",
     "Owner" : "Owner",
@@ -12,6 +11,7 @@ OC.L10N.register(
     "Description" : "Opis",
     "Expiration date" : "Datum isteka",
     "OK" : "U redu",
+    "Group" : "Group",
     "No" : "Ne",
     "Yes" : "Da"
 },

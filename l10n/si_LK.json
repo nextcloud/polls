@@ -1,5 +1,4 @@
 { "translations": {
-    "Group" : "Group",
     "New comment …" : "නව ප්රතිචාරයක් ...",
     "Comments" : "අදහස්",
     "Delete comment" : "ප්රතිචාරය මකන්න",
@@ -14,6 +13,7 @@
     "Week" : "සතිය",
     "Month" : "මාසය",
     "Unknown user" : "හදුනානොගත් සේවාදායකයා",
+    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -1,6 +1,5 @@
 { "translations": {
     "Deleted" : "Ջնջված",
-    "Group" : "Խումբ",
     "Comments" : "Կարծիքներ",
     "Cancel" : "ընդհատել",
     "Title" : "Վերնագիր",
@@ -13,6 +12,7 @@
     "Week" : "Շաբաթ",
     "Day" : "Օր",
     "Month" : "Ամիս",
+    "Group" : "Խումբ",
     "No" : "No",
     "Yes" : "Yes"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

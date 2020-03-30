@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Participants" : "Người tham gia",
     "Deleted" : "Đã xóa",
-    "Group" : "N",
     "New comment …" : "Bình luận mới ...",
     "Comments" : "Các bình luận",
     "Delete comment" : " Xóa bình luận",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "Day" : "Ngày",
     "Month" : "Tháng",
     "Unknown user" : "Người dùng không tồn tại",
+    "Group" : "N",
     "No" : "Không",
     "Yes" : "Đồng ý",
     "Public access" : "Truy cập công khai"
