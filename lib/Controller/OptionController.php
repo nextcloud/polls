@@ -40,6 +40,7 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
+use OCP\ILogger;
 
 class OptionController extends Controller {
 
@@ -50,6 +51,7 @@ class OptionController extends Controller {
 	private $pollMapper;
 	private $logService;
 	private $acl;
+	private $logger;
 
 	/**
 	 * OptionController constructor.
@@ -71,7 +73,8 @@ class OptionController extends Controller {
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
 		LogService $logService,
-		Acl $acl
+		Acl $acl,
+		ILogger $logger
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
@@ -80,7 +83,8 @@ class OptionController extends Controller {
 		$this->pollMapper = $pollMapper;
 		$this->logService = $logService;
 		$this->acl = $acl;
-	}
+		$this->logger = $logger;
+}
 
 
 	/**
@@ -134,17 +138,23 @@ class OptionController extends Controller {
 	public function add($option) {
 
 		try {
-			$this->acl->setPollId($option['pollId']);
-
+			// $this->acl->setPollId($option['pollId']);
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
+			$this->logger->alert(json_encode($this->acl));
+
 			$NewOption = new Option();
 
 			$NewOption->setPollId($option['pollId']);
 			$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$NewOption->setTimestamp($option['timestamp']);
-			$NewOption->setOrder($option['order']);
+
+			if ($option['timestamp'] === 0) {
+				$NewOption->setOrder($option['order']);
+			} else {
+				$NewOption->setOrder($option['timestamp']);
+			}
 
 			$this->mapper->insert($NewOption);
 			$this->logService->setLog($option['pollId'], 'addOption');
@@ -173,7 +183,12 @@ class OptionController extends Controller {
 
 			$updateOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$updateOption->setTimestamp($option['timestamp']);
-			$updateOption->setOrder($option['order']);
+
+			if ($option['timestamp'] === 0) {
+				$NewOption->setOrder($option['order']);
+			} else {
+				$NewOption->setOrder($option['timestamp']);
+			}
 
 			$this->mapper->update($updateOption);
 			$this->logService->setLog($option['pollId'], 'updateOption');
