@@ -40,7 +40,6 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
-use OCP\ILogger;
 
 class OptionController extends Controller {
 
@@ -51,7 +50,6 @@ class OptionController extends Controller {
 	private $pollMapper;
 	private $logService;
 	private $acl;
-	private $logger;
 
 	/**
 	 * OptionController constructor.
@@ -73,8 +71,7 @@ class OptionController extends Controller {
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
 		LogService $logService,
-		Acl $acl,
-		ILogger $logger
+		Acl $acl
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
@@ -83,8 +80,7 @@ class OptionController extends Controller {
 		$this->pollMapper = $pollMapper;
 		$this->logService = $logService;
 		$this->acl = $acl;
-		$this->logger = $logger;
-}
+	}
 
 
 	/**
@@ -138,11 +134,10 @@ class OptionController extends Controller {
 	public function add($option) {
 
 		try {
-			// $this->acl->setPollId($option['pollId']);
+
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
-			$this->logger->alert(json_encode($this->acl));
 
 			$NewOption = new Option();
 
