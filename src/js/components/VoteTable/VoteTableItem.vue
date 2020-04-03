@@ -106,10 +106,10 @@ export default {
 			background-position: center;
 			background-repeat: no-repeat;
 			// background-image: var(--icon-close-000);
-			min-width: 40px;
-			min-height: 40px;
-			width: 40px;
-			height: 40px;
+			min-width: 30px;
+			min-height: 30px;
+			width: 30px;
+			height: 30px;
 			background-size: 90%;
 			flex: 0 0 auto;
 		}
