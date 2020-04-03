@@ -143,6 +143,7 @@ export default {
 	.user-name {
 		opacity: 0.5;
 		flex: 1;
+		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
