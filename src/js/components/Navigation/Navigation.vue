@@ -58,6 +58,7 @@ export default {
 	data() {
 		return {
 			createDlg: false,
+			reloadInterval: 30000,
 			pollCategories: [
 				{
 					id: 'relevant',
