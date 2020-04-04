@@ -22,7 +22,7 @@
 
 <template>
 	<div v-if="header" class="pollListItem header">
-		<div class="title" @click="$emit('sortList', {sort: 'title'})">
+		<div class="poll-title" @click="$emit('sortList', {sort: 'title'})">
 			{{ t('polls', 'Title') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
@@ -48,16 +48,16 @@
 		</div>
 	</div>
 
-	<div v-else class="pollListItem poll">
-		<div v-tooltip.auto="pollType" class="thumbnail" :class="[poll.type, {expired : expired}]">
+	<div v-else class="pollListItem poll" :class="{ expired: isExpired }">
+		<div v-tooltip.auto="pollType" class="icon" :class="[poll.type]">
 			{{ pollType }}
 		</div>
 
-		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="title">
-			<div class="name">
+		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="poll-title">
+			<div class="poll-name">
 				{{ poll.title }}
 			</div>
-			<div class="description">
+			<div class="poll-description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</router-link>
@@ -81,7 +81,7 @@
 			</ActionButton>
 		</Actions>
 
-		<div v-tooltip.auto="accessType" class="thumbnail access" :class="poll.access">
+		<div v-tooltip.auto="accessType" class="icon" :class="'access-' + poll.access">
 			{{ accessType }}
 		</div>
 
@@ -92,7 +92,7 @@
 		<div class="created ">
 			{{ moment.unix(poll.created).fromNow() }}
 		</div>
-		<div class="expiry" :class="{ expired : poll.expired }">
+		<div class="expiry">
 			{{ timeSpanExpiration }}
 		</div>
 	</div>
@@ -136,8 +136,7 @@ export default {
 	},
 
 	computed: {
-
-		expired() {
+		isExpired() {
 			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 
@@ -151,10 +150,10 @@ export default {
 
 		pollType() {
 			if (this.poll.type === 'textPoll') {
-				// TRANSLATORS This means that this is the type of the poll. Another type is a 'date poll'.
-				return t('polls', 'Poll type')
+				// TRANSLATORS This means that this is the type of the poll. Another type is a 'Date poll'.
+				return t('polls', 'Text based')
 			} else {
-				return t('polls', 'Poll schedule')
+				return t('polls', 'Date poll')
 			}
 		},
 
@@ -205,9 +204,6 @@ export default {
 
 <style lang="scss" scoped>
 
-.pollListItem {
-}
-
 .icon-more {
 	right: 14px;
 	opacity: 0.3;
@@ -231,7 +227,7 @@ export default {
 		flex: auto;
 		height: 4em;
 		align-items: center;
-		padding-left: 44px;
+		padding-left: 52px;
 
 		&> div {
 			cursor: pointer;
@@ -246,7 +242,7 @@ export default {
 	}
 
 	&.poll {
-		.title {
+		.poll-title {
 			flex-direction: column;
 			& > * {
 				white-space: nowrap;
@@ -254,15 +250,18 @@ export default {
 				text-overflow: ellipsis;
 			}
 		}
+		&.expired {
+			opacity: 0.3;
+		}
 	}
 
-	.title {
+	.poll-title {
 		display: flex;
 		align-items: stretch;
 		width: 210px;
 		flex: 1 0 auto;
 
-		.description {
+		.poll-description {
 			opacity: 0.5;
 		}
 	}
@@ -293,38 +292,39 @@ export default {
 	}
 }
 
-.thumbnail {
-	flex: 0 0 auto;
+.icon {
+	flex: 0 0 44px;
 	width: 44px;
 	height: 44px;
 	padding-right: 4px;
 	font-size: 0;
-	background-color: var(--color-text-light);
+	// background-size: 16px 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	// background-color: var(--color-text-light);
 	&.datePoll {
-		mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
-		-webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
-		mask-size: 16px;
+		background-image: var(--icon-calendar-000)
+		// mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
+		// -webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
+		// mask-size: 16px;
 	}
 	&.textPoll {
-		mask-image: var(--icon-organization-000) no-repeat 50% 50%;
-		-webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
-		mask-size: 16px;
+		background-image: var(--icon-organization-000)
+		// mask-image: var(--icon-organization-000) no-repeat 50% 50%;
+		// -webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
+		// mask-size: 16px;
 	}
-	&.expired {
-		background-color: var(--color-background-darker);
+	&.access-hidden {
+		background-image: var(--icon-password-000)
+		// mask-image: var(--icon-password-000) no-repeat 50% 50%;
+		// -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
+		// mask-size: 16px;
 	}
-	&.access {
-		display: inherit;
-		&.hidden {
-			mask-image: var(--icon-password-000) no-repeat 50% 50%;
-			-webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
-			mask-size: 16px;
-		}
-		&.public {
-			mask-image: var(--icon-link-000) no-repeat 50% 50%;
-			-webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
-			mask-size: 16px;
-		}
+	&.access-public {
+		background-image: var(--icon-link-000)
+		// mask-image: var(--icon-link-000) no-repeat 50% 50%;
+		// -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
+		// mask-size: 16px;
 	}
 }
 

@@ -37,23 +37,34 @@ const getters = {
 	countPolls: (state) => {
 		return state.list.length
 	},
-	allPolls: (state) => {
-		return state.list.filter(poll => (!poll.deleted))
-	},
-	myPolls: (state) => {
-		return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
-	},
-	publicPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
-	},
-	hiddenPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
-	},
-	deletedPolls: (state) => {
-		return state.list.filter(poll => (poll.deleted))
-	},
-	participatedPolls: (state) => {
-		return state.list.filter(poll => (poll.userHasVoted))
+
+	filteredPolls: (state) => (filterId) => {
+		if (filterId === 'all') {
+			return state.list.filter(poll => (!poll.deleted))
+		} else if (filterId === 'my') {
+			return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
+		} else if (filterId === 'relevant') {
+			return state.list.filter(poll => ((
+				poll.userHasVoted
+				|| poll.isOwner
+				|| (poll.allowView && poll.access !== 'public')
+			)
+			&& !poll.deleted
+			&& !(poll.expire > 0 && moment.unix(poll.expire).diff() < 0)
+			))
+		} else if (filterId === 'public') {
+			return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
+		} else if (filterId === 'hidden') {
+			return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
+		} else if (filterId === 'deleted') {
+			return state.list.filter(poll => (poll.deleted))
+		} else if (filterId === 'participated') {
+			return state.list.filter(poll => (poll.userHasVoted))
+		} else if (filterId === 'expired') {
+			return state.list.filter(poll => (
+				poll.expire > 0 && moment.unix(poll.expire).diff() < 0
+			))
+		}
 	}
 }
 
