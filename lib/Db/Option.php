@@ -69,8 +69,21 @@ class Option extends Entity implements JsonSerializable {
 			'pollId' => intval($this->pollId),
 			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
 			'timestamp' => intval($timestamp),
-			'order' => intval($this->order)
+			'order' => $this->setOrder(intval($this->timestamp), intval($this->order))
 		];
 
+	}
+
+	/**
+	 * Temporary fix
+	 * Make sure, order is eqal to timestamp in date polls
+	 */
+	 // TODO: remove by time
+	private function setOrder($timestamp, $order) {
+		if ($timestamp === 0) {
+			return $order;
+		} else {
+			return $timestamp;
+		}
 	}
 }
