@@ -22,9 +22,6 @@
 
 <template>
 	<div class="user-row" :class="type">
-		<div v-if="description" class="description">
-			{{ description }}
-		</div>
 		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
 			:is-guest="!Boolean(OC.currentUser)"
 			:display-name="displayName"
@@ -73,10 +70,6 @@ export default {
 		type: {
 			type: String,
 			default: 'user'
-		},
-		description: {
-			type: String,
-			default: ''
 		},
 		icon: {
 			type: Boolean,
