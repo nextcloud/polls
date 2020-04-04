@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Ջնջված",
-    "Group" : "Խումբ",
     "Comments" : "Կարծիքներ",
     "Cancel" : "ընդհատել",
     "Title" : "Վերնագիր",
@@ -15,6 +14,7 @@ OC.L10N.register(
     "Week" : "Շաբաթ",
     "Day" : "Օր",
     "Month" : "Ամիս",
+    "Group" : "Խումբ",
     "No" : "No",
     "Yes" : "Yes"
 },

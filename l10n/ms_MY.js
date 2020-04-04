@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Dipadam",
-    "Group" : "Group",
     "Cancel" : "Batal",
     "Title" : "Judul",
     "Owner" : "Owner",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "Week" : "Minggu",
     "Day" : "Hari",
     "Month" : "Bulan",
+    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes"
 },

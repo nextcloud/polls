@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Group" : "Grupa",
     "New comment …" : "Novi komentar",
     "Comments" : "Komentari",
     "Delete comment" : "Izbriši komentar",
@@ -15,6 +14,7 @@ OC.L10N.register(
     "Week" : "Sedmica",
     "Day" : "Dan",
     "Month" : "Mjesec",
+    "Group" : "Grupa",
     "No" : "No",
     "Yes" : "Yes"
 },

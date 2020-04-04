@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Participants" : "Participantes",
     "Deleted" : "Eliminado",
-    "Group" : "Grupo",
     "New comment …" : "Novo comentário…",
     "Comments" : "Comentários",
     "Delete comment" : "Eliminar comentário",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Month" : "Mês",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Unknown user" : "Utilizador desconhecido",
+    "Group" : "Grupo",
     "No" : "Não",
     "Yes" : "Sim",
     "Public access" : "Acesso público",

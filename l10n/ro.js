@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Șters",
-    "Group" : "Grup",
     "New comment …" : "Comentariu nou...",
     "Comments" : "Comentarii",
     "Delete comment" : "Șterge comentariu",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "Day" : "Zi",
     "Month" : "Luna",
     "Unknown user" : "Utilizator necunoscut",
+    "Group" : "Grup",
     "No" : "Nu",
     "Yes" : "a",
     "Public access" : "Access public"

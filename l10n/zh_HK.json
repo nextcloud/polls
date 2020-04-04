@@ -1,5 +1,4 @@
 { "translations": {
-    "Group" : "群組",
     "Cancel" : "取消",
     "Apply" : "套用",
     "Title" : "標題",
@@ -12,6 +11,7 @@
     "Week" : "星期",
     "Day" : "日",
     "Month" : "月",
+    "Group" : "群組",
     "No" : "No",
     "Yes" : "Yes"
 },"pluralForm" :"nplurals=1; plural=0;"

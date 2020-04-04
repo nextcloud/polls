@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Participants" : "Participantes",
     "Deleted" : "Borrado",
-    "Group" : "Grupo",
     "New comment …" : "Nuevo comentario ...",
     "Comments" : "Comentarios",
     "Delete comment" : "Borrar comentario",
@@ -24,6 +23,7 @@ OC.L10N.register(
     "Day" : "Día",
     "Month" : "Mes",
     "Unknown user" : "Ususario desconocido",
+    "Group" : "Grupo",
     "No" : "No",
     "Yes" : "Si",
     "Public access" : "Acceso público"

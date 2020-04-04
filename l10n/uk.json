@@ -1,6 +1,5 @@
 { "translations": {
     "Deleted" : "Вилучено",
-    "Group" : "Група",
     "New comment …" : "Новий коментар...",
     "Comments" : "Коментарі",
     "Delete comment" : "Видалити комент",
@@ -20,6 +19,7 @@
     "Day" : "День",
     "Month" : "Місяць",
     "Unknown user" : "Невідомий користувач",
+    "Group" : "Група",
     "No" : "Ні",
     "Yes" : "Так",
     "Public access" : "Публічний доступ"

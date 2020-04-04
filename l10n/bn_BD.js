@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "মুছে ফেলা",
-    "Group" : "গোষ্ঠীসমূহ",
     "Cancel" : "বাতির",
     "Title" : "শিরোনাম",
     "Owner" : "Owner",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "Day" : "দিবস",
     "Month" : "মাস",
     "Unknown user" : "অপরিচিত ব্যবহারকারী",
+    "Group" : "গোষ্ঠীসমূহ",
     "No" : "No",
     "Yes" : "Yes"
 },

@@ -48,7 +48,6 @@
 			</transition-group>
 		</div>
 		<LoadingOverlay v-if="isLoading" />
-		<!-- <modal-dialog /> -->
 	</AppContent>
 </template>
 
@@ -71,7 +70,7 @@ export default {
 	data() {
 		return {
 			noPolls: false,
-			isLoading: true,
+			isLoading: false,
 			sort: 'created',
 			reverse: true
 		}
@@ -130,10 +129,6 @@ export default {
 
 	},
 
-	mounted() {
-		this.refreshPolls()
-	},
-
 	methods: {
 		setSort(payload) {
 			if (this.sort === payload.sort) {
@@ -151,20 +146,6 @@ export default {
 					id: poll.id
 				}
 			})
-		},
-
-		refreshPolls() {
-			this.isLoading = true
-			this.$store
-				.dispatch('loadPolls')
-				.then(() => {
-					this.isLoading = false
-				})
-				.catch((error) => {
-					this.isLoading = false
-					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, this.poll.title), { type: 'error' })
-				})
 		}
 	}
 }

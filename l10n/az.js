@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Silinib",
-    "Group" : "Qrup",
     "Cancel" : "Dayandır",
     "Title" : "Başlıq",
     "Owner" : "Owner",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Day" : "Gün",
     "Month" : "Ay",
     "Unknown user" : "Istifadəçi tanınmır ",
+    "Group" : "Qrup",
     "No" : "No",
     "Yes" : "Yes"
 },

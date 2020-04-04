@@ -1,7 +1,6 @@
 { "translations": {
     "Participants" : "Participantes",
     "Deleted" : "Borrado",
-    "Group" : "Grupo",
     "New comment …" : "Nuevo comentario ...",
     "Comments" : "Comentarios",
     "Delete comment" : "Borrar comentario",
@@ -22,6 +21,7 @@
     "Day" : "Día",
     "Month" : "Mes",
     "Unknown user" : "Ususario desconocido",
+    "Group" : "Grupo",
     "No" : "No",
     "Yes" : "Si",
     "Public access" : "Acceso público"

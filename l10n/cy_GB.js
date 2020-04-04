@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Wedi dileu",
-    "Group" : "Grŵp",
     "Cancel" : "Diddymu",
     "Title" : "Teitl",
     "Owner" : "Owner",
@@ -14,6 +13,7 @@ OC.L10N.register(
     "Week" : "Wythnos",
     "Day" : "Diwrnod",
     "Month" : "Mis",
+    "Group" : "Grŵp",
     "No" : "No",
     "Yes" : "Iawn",
     "Public access" : "Mynediad cyhoeddus"

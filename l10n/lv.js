@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Participants" : "Dalībnieki",
     "Deleted" : "Dzēstie",
-    "Group" : "Grupa",
     "New comment …" : "Jauns komentārs...",
     "Comments" : "Komentāri",
     "Delete comment" : "Dzēst komentāru",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Day" : "Diena",
     "Month" : "Mēnesis",
     "Unknown user" : "Nezināms lietotājs",
+    "Group" : "Grupa",
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "No" : "Nē",
     "Yes" : "Jā",

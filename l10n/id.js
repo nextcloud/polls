@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Dihapus",
-    "Group" : "Grup",
     "New comment …" : "Komentar baru ...",
     "Comments" : "Komentar",
     "Delete comment" : "Hapus komentar",
@@ -23,6 +22,7 @@ OC.L10N.register(
     "Day" : "Hari",
     "Month" : "Bulan",
     "Unknown user" : "Pengguna tidak dikenal",
+    "Group" : "Grup",
     "No" : "Tidak",
     "Yes" : "Ya"
 },

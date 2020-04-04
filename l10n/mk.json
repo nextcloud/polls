@@ -3,7 +3,6 @@
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Participants" : "Учесници",
     "Deleted" : "Избришана",
-    "Group" : "Група",
     "New comment …" : "Нов коментар ...",
     "Your comment was added" : "Вашиот коментар е додаден",
     "Comments" : "Коментари",
@@ -26,6 +25,7 @@
     "Month" : "Месец",
     "Year" : "Година",
     "Unknown user" : "Непознат корисник",
+    "Group" : "Група",
     "No" : "Не",
     "Yes" : "Да"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"

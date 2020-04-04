@@ -56,7 +56,7 @@ export default {
 		}
 	},
 
-	mounted() {
+	created() {
 		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
 	}
 

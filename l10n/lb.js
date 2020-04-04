@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Deleted" : "Geläscht",
-    "Group" : "Grupp",
     "Comments" : "Kommentarer",
     "Delete comment" : "Kommentar läschen",
     "Cancel" : "Ofbriechen",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "Hour" : "Stonn",
     "Day" : "Dag",
     "Month" : "Mount",
+    "Group" : "Grupp",
     "No" : "No",
     "Yes" : "Yes"
 },

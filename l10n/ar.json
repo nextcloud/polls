@@ -3,7 +3,6 @@
     "Go to poll" : "الانتقال إلى استطلاع الرأي",
     "Participants" : "المشارِكون",
     "Deleted" : "تم حذفه",
-    "Group" : "الفريق",
     "New comment …" : "تعليق جديد ...",
     "Comments" : "تعليقات",
     "Delete comment" : "حذف التعليق",
@@ -26,6 +25,7 @@
     "Day" : "يوم",
     "Month" : "شهر",
     "Unknown user" : "مستخدم غير معروف",
+    "Group" : "الفريق",
     "No" : "لا",
     "Yes" : "نعم",
     "Public access" : "النفاذ إليه مُصرّح للعامة"
