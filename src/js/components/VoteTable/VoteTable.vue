@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<div class="vote-table">
+	<div class="vote-table" :class="{ 'owner-access': acl.allowEdit }">
 		<div class="vote-table__header">
 			<div class="vote-table__user-column" />
 
@@ -146,6 +146,14 @@ export default {
 		background-color: var(--color-main-background);
 		width: 230px;
 		flex: 0 0 auto;
+		.owner-access {
+			width: 280px;
+		}
+	}
+
+	.owner-access .user-row.vote-table__user-column,
+	.owner-access .vote-table__header > .vote-table__user-column {
+			width: 280px;
 	}
 
 	.modal__content {
