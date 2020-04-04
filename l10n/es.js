@@ -92,6 +92,7 @@ OC.L10N.register(
     "Available Options" : "Opciones disponibles",
     "Delete option" : "Eliminar opción",
     "Clone option" : "Clonar opción",
+    "Clone to option sequence" : "Clonar a secuencia de opciones",
     "Step width: " : "Anchura del paso:",
     "Step unit: " : "Unidad del paso:",
     "Number of items to create: " : "Número de ítems que crear:",
