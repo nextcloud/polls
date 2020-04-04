@@ -44,7 +44,7 @@ use OCA\Polls\Model\Acl;
 class OptionController extends Controller {
 
 	private $userId;
-	private $mapper;
+	private $optionMapper;
 
 	private $groupManager;
 	private $pollMapper;
@@ -56,7 +56,7 @@ class OptionController extends Controller {
 	 * @param string $appName
 	 * @param $UserId
 	 * @param IRequest $request
-	 * @param OptionMapper $mapper
+	 * @param OptionMapper $optionMapper
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
 	 * @param LogService $logService
@@ -67,7 +67,7 @@ class OptionController extends Controller {
 		string $appName,
 		$UserId,
 		IRequest $request,
-		OptionMapper $mapper,
+		OptionMapper $optionMapper,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
 		LogService $logService,
@@ -75,7 +75,7 @@ class OptionController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
-		$this->mapper = $mapper;
+		$this->optionMapper = $optionMapper;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
 		$this->logService = $logService;
@@ -97,7 +97,7 @@ class OptionController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 
-			return new DataResponse($this->mapper->findByPoll($pollId), Http::STATUS_OK);
+			return new DataResponse($this->optionMapper->findByPoll($pollId), Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
@@ -151,7 +151,7 @@ class OptionController extends Controller {
 				$NewOption->setOrder($option['timestamp']);
 			}
 
-			$this->mapper->insert($NewOption);
+			$this->optionMapper->insert($NewOption);
 			$this->logService->setLog($option['pollId'], 'addOption');
 			return new DataResponse($NewOption, Http::STATUS_OK);
 
@@ -170,7 +170,7 @@ class OptionController extends Controller {
 	public function update($option) {
 
 		try {
-			$updateOption = $this->mapper->find($option['id']);
+			$updateOption = $this->optionMapper->find($option['id']);
 
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
@@ -185,7 +185,7 @@ class OptionController extends Controller {
 				$NewOption->setOrder($option['timestamp']);
 			}
 
-			$this->mapper->update($updateOption);
+			$this->optionMapper->update($updateOption);
 			$this->logService->setLog($option['pollId'], 'updateOption');
 
 			return new DataResponse($updateOption, Http::STATUS_OK);
@@ -202,14 +202,13 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function remove($option) {
-		// throw new \Exception( gettype($option) );
 		try {
 
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
 
-			$this->mapper->remove($option['id']);
+			$this->optionMapper->remove($option['id']);
 			$this->logService->setLog($option['pollId'], 'deleteOption');
 
 			return new DataResponse(array(
