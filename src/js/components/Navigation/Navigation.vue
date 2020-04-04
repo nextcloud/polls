@@ -84,8 +84,14 @@ export default {
 					pinned: false
 				},
 				{
+					id: 'expired',
+					title: t('polls', 'Expired polls'),
+					icon: 'icon-delete',
+					pinned: false
+				},
+				{
 					id: 'deleted',
-					title: t('polls', 'Deleted Polls'),
+					title: t('polls', 'Deleted polls'),
 					icon: 'icon-delete',
 					pinned: true
 				}

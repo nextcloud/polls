@@ -48,7 +48,9 @@ const getters = {
 				poll.userHasVoted
 				|| poll.isOwner
 				|| (poll.allowView && poll.access !== 'public')
-			) && !poll.deleted
+			)
+			&& !poll.deleted
+			&& !(poll.expire > 0 && moment.unix(poll.expire).diff() < 0)
 			))
 		} else if (filterId === 'public') {
 			return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
@@ -58,6 +60,10 @@ const getters = {
 			return state.list.filter(poll => (poll.deleted))
 		} else if (filterId === 'participated') {
 			return state.list.filter(poll => (poll.userHasVoted))
+		} else if (filterId === 'expired') {
+			return state.list.filter(poll => (
+				poll.expire > 0 && moment.unix(poll.expire).diff() < 0
+			))
 		}
 	}
 }
