@@ -114,13 +114,11 @@ class PollController extends Controller {
 
 	public function list() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-
 			$pollList = [];
 
 			try {
 
 				$polls = $this->pollMapper->findAll();
-
 				// TODO: Not the elegant way. Improvement neccessary
 				foreach ($polls as $poll) {
 					$combinedPoll = (object) array_merge(

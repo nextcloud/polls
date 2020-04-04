@@ -101,7 +101,9 @@ export default {
 
 	data() {
 		return {
-			createDlg: false
+			createDlg: false,
+			reloadInterval: 30000,
+			reloadTimer: 0
 		}
 	},
 
@@ -120,29 +122,24 @@ export default {
 		}
 	},
 
-	mounted() {
-		this.$root.$on('updatePolls', function() {
-			this.loading = true
-			this.$store
-				.dispatch('loadPolls')
-				.then(() => {
-					this.loading = false
-				})
-				.catch((error) => {
-					this.loading = false
-					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
-				})
-		})
+	created() {
+		this.timedReload()
 	},
 
-	created() {
-		this.refreshPolls()
+	beforeDestroy() {
+		window.clearInterval(this.reloadTimer)
 	},
 
 	methods: {
 		closeCreate() {
 			this.createDlg = false
+		},
+
+		timedReload() {
+			// reload poll list periodically
+			this.reloadTimer = window.setInterval(() => {
+				this.$root.$emit('updatePolls')
+			}, this.reloadInterval)
 		},
 
 		toggleCreateDlg() {
@@ -156,7 +153,7 @@ export default {
 			this.$store
 				.dispatch('clonePoll', { pollId: pollId })
 				.then((response) => {
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
 		},
@@ -165,7 +162,7 @@ export default {
 			this.$store
 				.dispatch('switchDeleted', { pollId: pollId })
 				.then((response) => {
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 				})
 
 		},
@@ -179,26 +176,9 @@ export default {
 					if (this.$route.params.id && this.$route.params.id === pollId) {
 						this.$router.push({ name: 'list', params: { type: 'deleted' } })
 					}
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 				})
 
-		},
-
-		refreshPolls() {
-			if (this.$route.name !== 'publicVote') {
-
-				this.loading = true
-				this.$store
-					.dispatch('loadPolls')
-					.then(() => {
-						this.loading = false
-					})
-					.catch(error => {
-						this.loading = false
-						console.error('refresh poll: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
-					})
-			}
 		}
 	}
 }

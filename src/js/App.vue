@@ -34,8 +34,32 @@ export default {
 	name: 'App',
 	components: {
 		Navigation
-	}
+	},
 
+	created() {
+		if (OC.currentUser) {
+			this.updatePolls()
+			this.$root.$on('updatePolls', () => {
+				this.updatePolls()
+			})
+		}
+	},
+
+	methods: {
+		updatePolls() {
+			if (OC.currentUser) {
+
+				this.$store
+					.dispatch('loadPolls')
+					.then(() => {
+					})
+					.catch((error) => {
+						console.error('refresh poll: ', error.response)
+						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+					})
+			}
+		}
+	}
 }
 
 </script>
