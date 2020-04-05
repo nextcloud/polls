@@ -156,7 +156,7 @@ export default {
 	}
 
 	.vote-list {
-		margin: 44px 0;
+		// margin: 44px 0;
 		display: flex;
 		flex: 0;
 		flex-direction: column;

@@ -184,12 +184,13 @@ export default {
 	}
 
 	.vote-table {
-		margin: 44px 0;
+		// margin: 44px 0;
 		display: flex;
 		flex: 0;
 		flex-direction: column;
 		justify-content: flex-start;
 		overflow: scroll;
+		padding-bottom: 10px;
 
 		& > div {
 			display: flex;
