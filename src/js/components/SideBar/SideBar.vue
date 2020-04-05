@@ -84,37 +84,23 @@ export default {
 
 </script>
 
-<style lang="scss">
-.config-box {
-	display: flex;
-	flex-direction: column;
-	padding: 8px;
-	& > * {
-		padding-left: 21px;
-	}
-
-	& > input {
-		margin-left: 24px;
-		width: auto;
-
-	}
-
-	& > textarea {
-		margin-left: 24px;
-		width: auto;
-		padding: 7px 6px;
-	}
-
-	& > .title {
+<style lang="scss" scoped>
+	.modal__content {
+		padding: 14px;
 		display: flex;
-		background-position: 0 2px;
-		padding-left: 24px;
-		opacity: 0.7;
-		font-weight: bold;
-		margin-bottom: 4px;
-		& > span {
-			padding-left: 4px;
+		flex-direction: column;
+		color: var(--color-main-text);
+		input {
+			width: 100%;
 		}
 	}
-}
+
+	.modal__buttons {
+		display: flex;
+		justify-content: end;
+		.button {
+			margin-left: 10px;
+			margin-right: 0;
+		}
+	}
 </style>

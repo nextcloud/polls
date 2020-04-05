@@ -160,4 +160,38 @@ export default {
 		}
 	}
 }
+
+.config-box {
+	display: flex;
+	flex-direction: column;
+	padding: 8px;
+	& > * {
+		padding-left: 21px;
+	}
+
+	& > input {
+		margin-left: 24px;
+		width: auto;
+
+	}
+
+	& > textarea {
+		margin-left: 24px;
+		width: auto;
+		padding: 7px 6px;
+	}
+
+	& > .title {
+		display: flex;
+		background-position: 0 2px;
+		padding-left: 24px;
+		opacity: 0.7;
+		font-weight: bold;
+		margin-bottom: 4px;
+		& > span {
+			padding-left: 4px;
+		}
+	}
+}
+
 </style>
