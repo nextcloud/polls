@@ -13,7 +13,15 @@ All notable changes to this project will be documented in this file.
  - Button style #848
  - Remove Participants from vote #736
  - Add login link in public votes #857
-
+ - fix date sorting #877
+ - overwork navigation filters #865
+ - added filter for expired polls #878
+ - share poll via email #822
+ - fix notification mail contains user names in anonymous polls #871
+ - fix double loading of poll list #870
+ - allow creating of option sequences for date polls #649
+ - permanently delete polls #823
+ - fix some design / UX improvements #841, #848, #884
 
 ## [1.3.0] - 2020-02-16
 
