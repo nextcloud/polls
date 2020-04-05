@@ -125,7 +125,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 	.draggable {
 		* {
@@ -137,11 +137,9 @@ export default {
 				cursor: -webkit-grabbing;
 			}
 		}
-
 		.handle {
 			visibility: hidden;
 		}
-
 		&:hover > .handle {
 			visibility: visible;
 		}
@@ -149,7 +147,6 @@ export default {
 	}
 
 	.config-box {
-
 		&.poll-table .poll-item {
 			border-bottom: 1px solid var(--color-border);
 		}
@@ -175,8 +172,4 @@ export default {
 		cursor: pointer;
 	}
 
-	.poll-table {
-		&.poll-item {
-		}
-	}
 </style>
