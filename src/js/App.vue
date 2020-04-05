@@ -84,6 +84,36 @@ export default {
 	margin: 8px 0;
 }
 
+.poll-item {
+	display: flex;
+	align-items: center;
+	padding-left: 8px;
+	padding-right: 8px;
+	line-height: 2em;
+	min-height: 4em;
+	overflow: visible;
+	white-space: nowrap;
+
+	&:active,
+	&:hover {
+		transition: var(--background-dark) 0.3s ease;
+		background-color: var(--color-background-dark);
+	}
+
+	> div {
+		display: flex;
+		flex: 1;
+		font-size: 1.2em;
+		opacity: 1;
+		white-space: normal;
+		padding-right: 4px;
+		&.avatar {
+			flex: 0;
+		}
+	}
+
+}
+
 .list-enter-active,
 .list-leave-active {
 	transition: all 0.5s ease;
@@ -160,4 +190,38 @@ export default {
 		}
 	}
 }
+
+.config-box {
+	display: flex;
+	flex-direction: column;
+	padding: 8px;
+	& > * {
+		padding-left: 21px;
+	}
+
+	& > input {
+		margin-left: 24px;
+		width: auto;
+
+	}
+
+	& > textarea {
+		margin-left: 24px;
+		width: auto;
+		padding: 7px 6px;
+	}
+
+	& > .title {
+		display: flex;
+		background-position: 0 2px;
+		padding-left: 24px;
+		opacity: 0.7;
+		font-weight: bold;
+		margin-bottom: 4px;
+		& > span {
+			padding-left: 4px;
+		}
+	}
+}
+
 </style>

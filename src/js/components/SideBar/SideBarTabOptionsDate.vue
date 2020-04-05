@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<div class="config-box">
-			<label class="title icon-calendar">
+			<label class="title icon-add">
 				{{ t('polls', 'Add a date option') }}
 			</label>
 			<DatetimePicker v-model="lastOption"
@@ -53,28 +53,30 @@
 			</div>
 		</div>
 
-		<ul class="config-box poll-table">
-			<label class="title icon-calendar">
+		<div class="config-box">
+			<label class="title icon-calendar-000">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<PollItemDate v-for="(option) in sortedOptions"
-				:key="option.id"
-				:option="option">
-				<template v-slot:actions>
-					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton icon="icon-delete" @click="removeOption(option)">
-							{{ t('polls', 'Delete option') }}
-						</ActionButton>
-					</Actions>
+			<ul class="">
+				<PollItemDate v-for="(option) in sortedOptions"
+					:key="option.id"
+					:option="option">
+					<template v-slot:actions>
+						<Actions v-if="acl.allowEdit" class="action">
+							<ActionButton icon="icon-delete" @click="removeOption(option)">
+								{{ t('polls', 'Delete option') }}
+							</ActionButton>
+						</Actions>
 
-					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton icon="icon-add" @click="cloneOptionModal(option)">
-							{{ t('polls', 'Clone option') }}
-						</ActionButton>
-					</Actions>
-				</template>
-			</PollItemDate>
-		</ul>
+						<Actions v-if="acl.allowEdit" class="action">
+							<ActionButton icon="icon-add" @click="cloneOptionModal(option)">
+								{{ t('polls', 'Clone option') }}
+							</ActionButton>
+						</Actions>
+					</template>
+				</PollItemDate>
+			</ul>
+		</div>
 		<Modal v-if="modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
@@ -237,61 +239,14 @@ export default {
 
 }
 </script>
-
-<style lang="scss">
-	.modal__content {
-		padding: 14px;
+<style lang="scss" scoped>
+	.selectUnit {
 		display: flex;
-		flex-direction: column;
-		color: var(--color-main-text);
 		input {
-			width: 100%;
+			width: 90px;
 		}
-	}
-
-	.modal__buttons {
-		display: flex;
-		justify-content: end;
-		.button {
-			margin-left: 10px;
-			margin-right: 0;
-		}
-	}
-
-	.config-box {
-		display: flex;
-		flex-direction: column;
-		padding: 8px;
-		& > * {
-			padding-left: 21px;
-		}
-
-		& > input {
-			margin-left: 24px;
-			width: auto;
-
-		}
-
-		& > textarea {
-			margin-left: 24px;
-			width: auto;
-			padding: 7px 6px;
-		}
-
-		& > .title {
-			display: flex;
-			background-position: 0 2px;
-			padding-left: 24px;
-			opacity: 0.7;
-			font-weight: bold;
-			margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
-		}
-		&.poll-table > li {
-			border-bottom-color: rgb(72, 72, 72);
-			margin-left: 18px;
+		.multiselect {
+			margin-top: 3px;
 		}
 	}
 </style>

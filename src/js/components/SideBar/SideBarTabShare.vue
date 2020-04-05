@@ -40,6 +40,8 @@
 					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
+				</Actions>
+				<Actions>
 					<ActionButton icon="icon-delete" @click="removeShare(share)">
 						{{ t('polls', 'Remove share') }}
 					</ActionButton>
@@ -84,14 +86,12 @@
 					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
+				</Actions>
+				<Actions>
 					<ActionButton icon="icon-delete" @click="removeShare(share)">
 						{{ t('polls', 'Remove share') }}
 					</ActionButton>
 				</Actions>
-				<!-- <div class="options">
-					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
-					<a class="icon icon-delete" @click="removeShare(share)" />
-				</div> -->
 			</li>
 		</TransitionGroup>
 		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
@@ -241,19 +241,6 @@ export default {
 			display: flex;
 			align-items: stretch;
 			margin: 4px 0;
-		}
-	}
-
-	.options {
-		display: flex;
-
-		.icon:not(.hidden) {
-			padding: 14px;
-			height: 44px;
-			width: 44px;
-			opacity: .5;
-			display: block;
-			cursor: pointer;
 		}
 	}
 

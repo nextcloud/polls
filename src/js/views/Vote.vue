@@ -200,10 +200,8 @@ export default {
 }
 
 .header-actions {
-	right: 0;
-	top: 0;
-	position: absolute;
 	display: flex;
+	float: right;
 }
 
 .icon.icon-settings.active {
@@ -212,9 +210,8 @@ export default {
 	height: 44px;
 }
 @media (max-width: (1024px)) {
-	.poll-title {
+	.title {
 		padding-left: 14px;
-		padding-right: 90px;
 	}
 }
 </style>

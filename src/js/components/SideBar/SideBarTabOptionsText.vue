@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<div class="config-box">
-			<label class="title icon-toggle-filelist">
+			<label class="title icon-add">
 				{{ t('polls', 'Add a new text option') }}
 			</label>
 
@@ -32,7 +32,7 @@
 		</div>
 
 		<ul class="config-box poll-table">
-			<label class="title icon-calendar">
+			<label class="title icon-toggle-filelist">
 				{{ t('polls', 'Available Options') }}
 			</label>
 			<draggable v-model="sortOptions">
@@ -125,23 +125,17 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
-	.draggable {
-		* {
-			cursor: move;
-			cursor: grab;
-			&:active {
-				cursor: grabbing;
-				cursor: -moz-grabbing;
-				cursor: -webkit-grabbing;
-			}
+<style lang="scss" scoped>
+	.draggable, .draggable .pollOption  {
+		cursor: grab;
+		&:active {
+			cursor: grabbing;
+			cursor: -moz-grabbing;
+			cursor: -webkit-grabbing;
 		}
-
 		.handle {
 			visibility: hidden;
 		}
-
 		&:hover > .handle {
 			visibility: visible;
 		}
@@ -149,7 +143,6 @@ export default {
 	}
 
 	.config-box {
-
 		&.poll-table .poll-item {
 			border-bottom: 1px solid var(--color-border);
 		}
@@ -175,8 +168,4 @@ export default {
 		cursor: pointer;
 	}
 
-	.poll-table {
-		&.poll-item {
-		}
-	}
 </style>
