@@ -29,8 +29,12 @@
 				:title="pollCategory.title" :allow-collapse="true" :pinned="pollCategory.pinned"
 				:icon="pollCategory.icon" :to="{ name: 'list', params: {type: pollCategory.id}}" :open="false">
 				<ul>
-					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)"
+					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
+						:key="poll.id"
+						:poll="poll"
+						:class="{ expired: (poll.expire > 0 && moment.unix(poll.expire).diff() < 0) }"
+						@switchDeleted="switchDeleted(poll.id)"
+						@clonePoll="clonePoll(poll.id)"
 						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
@@ -170,3 +174,9 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+	.expired {
+		opacity: 0.3;
+	}
+</style>
