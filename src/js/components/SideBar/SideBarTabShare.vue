@@ -40,6 +40,8 @@
 					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
+				</Actions>
+				<Actions>
 					<ActionButton icon="icon-delete" @click="removeShare(share)">
 						{{ t('polls', 'Remove share') }}
 					</ActionButton>
@@ -84,6 +86,8 @@
 					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
+				</Actions>
+				<Actions>
 					<ActionButton icon="icon-delete" @click="removeShare(share)">
 						{{ t('polls', 'Remove share') }}
 					</ActionButton>
