@@ -1,6 +1,5 @@
 { "translations": {
     "Participants" : "Participantes",
-    "Deleted" : "Eliminado",
     "New comment …" : "Novo comentário…",
     "Comments" : "Comentários",
     "Delete comment" : "Eliminar comentário",
@@ -27,6 +26,7 @@
     "Group" : "Grupo",
     "No" : "Não",
     "Yes" : "Sim",
+    "Deleted" : "Eliminado",
     "Public access" : "Acesso público",
     "Access denied" : "Acesso proibido"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

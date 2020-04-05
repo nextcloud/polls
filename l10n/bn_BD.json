@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "মুছে ফেলা",
     "Cancel" : "বাতির",
     "Title" : "শিরোনাম",
     "Owner" : "Owner",
@@ -17,6 +16,7 @@
     "Unknown user" : "অপরিচিত ব্যবহারকারী",
     "Group" : "গোষ্ঠীসমূহ",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "মুছে ফেলা"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

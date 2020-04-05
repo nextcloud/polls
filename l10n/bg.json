@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "Изтрито",
     "New comment …" : "Нов коментар...",
     "Comments" : "Коментари",
     "Delete comment" : "Изтрий коментар",
@@ -24,6 +23,7 @@
     "Group" : "Група",
     "No" : "Не",
     "Yes" : "Да",
+    "Deleted" : "Изтрито",
     "Public access" : "Публичен достъп"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Polls" : "Encuestas",
     "Participants" : "Participantes",
-    "Deleted" : "Borrado",
     "New comment …" : "Comentario nuevo ...",
     "Comments" : "Comentarios",
     "Delete comment" : "Borrar comentario",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "No" : "No",
     "Yes" : "Sí",
+    "Deleted" : "Borrado",
     "Public access" : "Acceso público",
     "Access denied" : "Acceso denegado",
     "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. "

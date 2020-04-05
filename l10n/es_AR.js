@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Participants" : "Participantes",
-    "Deleted" : "Borrado",
     "New comment …" : "Nuevo comentario ...",
     "Comments" : "Comentarios",
     "Delete comment" : "Borrar comentario",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Group" : "Grupo",
     "No" : "No",
     "Yes" : "Si",
+    "Deleted" : "Borrado",
     "Public access" : "Acceso público"
 },
 "nplurals=2; plural=(n != 1);");

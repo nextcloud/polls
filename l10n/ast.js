@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Polls" : "Enquestes",
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
-    "Deleted" : "Desanicióse",
     "New comment …" : "Comentariu nuevu...",
     "Comments" : "Comentarios",
     "Delete comment" : "Desaniciar comentariu",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Group" : "Group",
     "No" : "Non",
     "Yes" : "Sí",
+    "Deleted" : "Desanicióse",
     "Public access" : "Accesu públicu"
 },
 "nplurals=2; plural=(n != 1);");

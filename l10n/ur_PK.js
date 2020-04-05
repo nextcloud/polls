@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "حذف شدہ ",
     "Cancel" : "منسوخ کریں",
     "Title" : "عنوان",
     "Owner" : "Owner",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "Month" : "ماہ",
     "Group" : "Group",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "حذف شدہ "
 },
 "nplurals=2; plural=(n != 1);");

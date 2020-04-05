@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Polls" : "Küsitlused",
     "Polls App - New Activity" : "Küsitluste rakendus - uus tegevus",
-    "Deleted" : "Kustutatud",
     "New comment …" : "Uus kommentaar ...",
     "Comments" : "Kommentaarid",
     "Delete comment" : "Kustuta kommentaar",
@@ -35,6 +34,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "No" : "Ei",
     "Yes" : "Jah",
+    "Deleted" : "Kustutatud",
     "Public access" : "Avalik ligipääs",
     "Access denied" : "Ligipääs keelatud",
     "You are not allowed to view this poll or the poll does not exist." : "Sul pole lubatud seda küsitlust vaadata või seda küsitlust pole olemas.",

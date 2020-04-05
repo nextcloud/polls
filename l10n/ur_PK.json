@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "حذف شدہ ",
     "Cancel" : "منسوخ کریں",
     "Title" : "عنوان",
     "Owner" : "Owner",
@@ -11,6 +10,7 @@
     "Month" : "ماہ",
     "Group" : "Group",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "حذف شدہ "
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

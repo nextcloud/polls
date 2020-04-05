@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "Устгагдсан",
     "New comment …" : "Шинэ сэтгэгдэл...",
     "Comments" : "Сэтгэгдлүүд",
     "Delete comment" : "Сэтгэгдэл устгах",
@@ -20,6 +19,7 @@
     "Group" : "Бүлэг",
     "No" : "Үгүй",
     "Yes" : "Тийм",
+    "Deleted" : "Устгагдсан",
     "Public access" : "Нийтийн хандах эрх"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

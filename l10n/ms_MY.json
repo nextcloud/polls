@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "Dipadam",
     "Cancel" : "Batal",
     "Title" : "Judul",
     "Owner" : "Owner",
@@ -12,6 +11,7 @@
     "Month" : "Bulan",
     "Group" : "Group",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "Dipadam"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

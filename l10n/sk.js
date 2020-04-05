@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Polls" : "Ankety",
     "Participants" : "Účastníci",
-    "Deleted" : "Zmazané",
     "New comment …" : "Nový komentár …",
     "Comments" : "Komentáre",
     "Delete comment" : "Vymazať komentár",
@@ -35,6 +34,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
     "No" : "Nie",
     "Yes" : "Áno",
+    "Deleted" : "Zmazané",
     "Public access" : "Verejný prístup",
     "Access denied" : "Prístup zamietnutý",
     "You are not allowed to view this poll or the poll does not exist." : "Nemáte oprávnenie na prezeranie tejto ankety alebo už anketa neexistuje.",

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Dipadam",
     "Cancel" : "Batal",
     "Title" : "Judul",
     "Owner" : "Owner",
@@ -14,6 +13,7 @@ OC.L10N.register(
     "Month" : "Bulan",
     "Group" : "Group",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "Dipadam"
 },
 "nplurals=1; plural=0;");

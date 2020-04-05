@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "Silinib",
     "Cancel" : "Dayandır",
     "Title" : "Başlıq",
     "Owner" : "Owner",
@@ -15,6 +14,7 @@
     "Unknown user" : "Istifadəçi tanınmır ",
     "Group" : "Qrup",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "Silinib"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

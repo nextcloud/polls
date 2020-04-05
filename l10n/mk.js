@@ -4,7 +4,6 @@ OC.L10N.register(
     "Polls" : "Анкети",
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Participants" : "Учесници",
-    "Deleted" : "Избришана",
     "New comment …" : "Нов коментар ...",
     "Your comment was added" : "Вашиот коментар е додаден",
     "Comments" : "Коментари",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Unknown user" : "Непознат корисник",
     "Group" : "Група",
     "No" : "Не",
-    "Yes" : "Да"
+    "Yes" : "Да",
+    "Deleted" : "Избришана"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

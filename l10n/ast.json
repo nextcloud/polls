@@ -1,7 +1,6 @@
 { "translations": {
     "Polls" : "Enquestes",
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
-    "Deleted" : "Desanicióse",
     "New comment …" : "Comentariu nuevu...",
     "Comments" : "Comentarios",
     "Delete comment" : "Desaniciar comentariu",
@@ -25,6 +24,7 @@
     "Group" : "Group",
     "No" : "Non",
     "Yes" : "Sí",
+    "Deleted" : "Desanicióse",
     "Public access" : "Accesu públicu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

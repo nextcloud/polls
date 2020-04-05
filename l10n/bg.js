@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Изтрито",
     "New comment …" : "Нов коментар...",
     "Comments" : "Коментари",
     "Delete comment" : "Изтрий коментар",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Group" : "Група",
     "No" : "Не",
     "Yes" : "Да",
+    "Deleted" : "Изтрито",
     "Public access" : "Публичен достъп"
 },
 "nplurals=2; plural=(n != 1);");

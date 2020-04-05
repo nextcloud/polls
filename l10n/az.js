@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Silinib",
     "Cancel" : "Dayandır",
     "Title" : "Başlıq",
     "Owner" : "Owner",
@@ -17,6 +16,7 @@ OC.L10N.register(
     "Unknown user" : "Istifadəçi tanınmır ",
     "Group" : "Qrup",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "Silinib"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "Dihapus",
     "New comment …" : "Komentar baru ...",
     "Comments" : "Komentar",
     "Delete comment" : "Hapus komentar",
@@ -22,6 +21,7 @@
     "Unknown user" : "Pengguna tidak dikenal",
     "Group" : "Grup",
     "No" : "Tidak",
-    "Yes" : "Ya"
+    "Yes" : "Ya",
+    "Deleted" : "Dihapus"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -4,7 +4,6 @@ OC.L10N.register(
     "Polls" : "استطلاعات الرأي",
     "Go to poll" : "الانتقال إلى استطلاع الرأي",
     "Participants" : "المشارِكون",
-    "Deleted" : "تم حذفه",
     "New comment …" : "تعليق جديد ...",
     "Comments" : "تعليقات",
     "Delete comment" : "حذف التعليق",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "Group" : "الفريق",
     "No" : "لا",
     "Yes" : "نعم",
+    "Deleted" : "تم حذفه",
     "Public access" : "النفاذ إليه مُصرّح للعامة"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

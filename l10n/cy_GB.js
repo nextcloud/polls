@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Wedi dileu",
     "Cancel" : "Diddymu",
     "Title" : "Teitl",
     "Owner" : "Owner",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Group" : "Grŵp",
     "No" : "No",
     "Yes" : "Iawn",
+    "Deleted" : "Wedi dileu",
     "Public access" : "Mynediad cyhoeddus"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

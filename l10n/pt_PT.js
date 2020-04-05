@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Participants" : "Participantes",
-    "Deleted" : "Eliminado",
     "New comment …" : "Novo comentário…",
     "Comments" : "Comentários",
     "Delete comment" : "Eliminar comentário",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Group" : "Grupo",
     "No" : "Não",
     "Yes" : "Sim",
+    "Deleted" : "Eliminado",
     "Public access" : "Acesso público",
     "Access denied" : "Acesso proibido"
 },

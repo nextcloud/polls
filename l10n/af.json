@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "Geskrap",
     "New comment …" : "Nuwe kommentaar…",
     "Comments" : "Kommentare",
     "Delete comment" : "Skrap kommentaar",
@@ -20,6 +19,7 @@
     "Group" : "Groep",
     "No" : "Nee",
     "Yes" : "Ja",
+    "Deleted" : "Geskrap",
     "Public access" : "Openbare toegang"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

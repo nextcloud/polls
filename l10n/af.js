@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Geskrap",
     "New comment …" : "Nuwe kommentaar…",
     "Comments" : "Kommentare",
     "Delete comment" : "Skrap kommentaar",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Group" : "Groep",
     "No" : "Nee",
     "Yes" : "Ja",
+    "Deleted" : "Geskrap",
     "Public access" : "Openbare toegang"
 },
 "nplurals=2; plural=(n != 1);");

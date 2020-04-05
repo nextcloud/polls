@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Participants" : "Người tham gia",
-    "Deleted" : "Đã xóa",
     "New comment …" : "Bình luận mới ...",
     "Comments" : "Các bình luận",
     "Delete comment" : " Xóa bình luận",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Group" : "N",
     "No" : "Không",
     "Yes" : "Đồng ý",
+    "Deleted" : "Đã xóa",
     "Public access" : "Truy cập công khai"
 },
 "nplurals=1; plural=0;");

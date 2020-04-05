@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Sletta",
     "New comment …" : "Ny kommentar...",
     "Comments" : "Kommentarar",
     "Delete comment" : "Slett kommentar",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Month" : "Månad",
     "Group" : "Gruppe",
     "No" : "Nei",
-    "Yes" : "Ja"
+    "Yes" : "Ja",
+    "Deleted" : "Sletta"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Geläscht",
     "Comments" : "Kommentarer",
     "Delete comment" : "Kommentar läschen",
     "Cancel" : "Ofbriechen",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "Month" : "Mount",
     "Group" : "Grupp",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "Geläscht"
 },
 "nplurals=2; plural=(n != 1);");

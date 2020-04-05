@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Ջնջված",
     "Comments" : "Կարծիքներ",
     "Cancel" : "ընդհատել",
     "Title" : "Վերնագիր",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Month" : "Ամիս",
     "Group" : "Խումբ",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "Ջնջված"
 },
 "nplurals=2; plural=(n != 1);");

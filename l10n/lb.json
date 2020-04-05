@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "Geläscht",
     "Comments" : "Kommentarer",
     "Delete comment" : "Kommentar läschen",
     "Cancel" : "Ofbriechen",
@@ -17,6 +16,7 @@
     "Month" : "Mount",
     "Group" : "Grupp",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "Geläscht"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

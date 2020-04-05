@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Sondazhe",
-    "Deleted" : "E fshirë",
     "New comment …" : "Koment i ri ...",
     "Comments" : "Komentet",
     "Delete comment" : "Fshi komentin",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Group" : "Grup",
     "No" : "Jo",
     "Yes" : "Yes",
+    "Deleted" : "E fshirë",
     "Public access" : "Akses publik"
 },
 "nplurals=2; plural=(n != 1);");

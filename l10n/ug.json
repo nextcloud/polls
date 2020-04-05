@@ -1,5 +1,4 @@
 { "translations": {
-    "Deleted" : "ئۆچۈرۈلدى",
     "Cancel" : "ۋاز كەچ",
     "Title" : "ماۋزۇ",
     "Owner" : "Owner",
@@ -11,6 +10,7 @@
     "Month" : "ئاي",
     "Group" : "Group",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Deleted" : "ئۆچۈرۈلدى"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
