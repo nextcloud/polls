@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<div class="config-box">
-			<label class="title icon-toggle-filelist">
+			<label class="title icon-add">
 				{{ t('polls', 'Add a new text option') }}
 			</label>
 
@@ -32,7 +32,7 @@
 		</div>
 
 		<ul class="config-box poll-table">
-			<label class="title icon-calendar">
+			<label class="title icon-toggle-filelist">
 				{{ t('polls', 'Available Options') }}
 			</label>
 			<draggable v-model="sortOptions">
@@ -126,16 +126,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-	.draggable {
-		* {
-			cursor: move;
-			cursor: grab;
-			&:active {
-				cursor: grabbing;
-				cursor: -moz-grabbing;
-				cursor: -webkit-grabbing;
-			}
+	.draggable, .draggable .pollOption  {
+		cursor: grab;
+		&:active {
+			cursor: grabbing;
+			cursor: -moz-grabbing;
+			cursor: -webkit-grabbing;
 		}
 		.handle {
 			visibility: hidden;

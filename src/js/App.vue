@@ -84,6 +84,36 @@ export default {
 	margin: 8px 0;
 }
 
+.poll-item {
+	display: flex;
+	align-items: center;
+	padding-left: 8px;
+	padding-right: 8px;
+	line-height: 2em;
+	min-height: 4em;
+	overflow: visible;
+	white-space: nowrap;
+
+	&:active,
+	&:hover {
+		transition: var(--background-dark) 0.3s ease;
+		background-color: var(--color-background-dark);
+	}
+
+	> div {
+		display: flex;
+		flex: 1;
+		font-size: 1.2em;
+		opacity: 1;
+		white-space: normal;
+		padding-right: 4px;
+		&.avatar {
+			flex: 0;
+		}
+	}
+
+}
+
 .list-enter-active,
 .list-leave-active {
 	transition: all 0.5s ease;
