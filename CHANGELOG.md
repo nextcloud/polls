@@ -1,6 +1,28 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - tbd
+ - Delete a poll completly #801
+ - Alignment in poll list #828
+ - Anonymous poll not saved #829
+ - wrong z-index on datepicker #830
+ - Missing translations for Shift all date options #809
+ - Pinned navigationItem "Deleted polls" #843
+ - changed vote icons #844
+ - Autofocus and cursor pointer #827
+ - Button style #848
+ - Remove Participants from vote #736
+ - Add login link in public votes #857
+ - fix date sorting #877
+ - overwork navigation filters #865
+ - added filter for expired polls #878
+ - share poll via email #822
+ - fix notification mail contains user names in anonymous polls #871
+ - fix double loading of poll list #870
+ - allow creating of option sequences for date polls #649
+ - permanently delete polls #823
+ - fix some design / UX improvements #841, #848, #884
+
 ## [1.3.0] - 2020-02-16
 
  - internal optimizations
