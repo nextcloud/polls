@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
+use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
@@ -59,13 +60,14 @@ class Version0104Date20200314074611 extends SimpleMigrationStep {
 	 * @since 13.0.0
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		// get table prefix, as we are running a raw query
-        $prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
-        // check for orphaned entries in all tables referencing
-        // the main polls table
-        $query = "ALTER TABLE {$prefix}polls_polls
-				CHANGE description description TEXT;";
-        $stmt = $this->connection->prepare($query);
-        $stmt->execute();
+		$schema = $schemaClosure();
+		$table = $schema->getTable('polls_polls');
+		$table->changeColumn('description', [
+			'type' => Type::getType(Type::TEXT),
+			'notnull' => true,
+			'default' => ''
+		]);
+
+		return $schema;
 	}
 }
