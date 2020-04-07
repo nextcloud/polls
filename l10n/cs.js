@@ -138,7 +138,7 @@ OC.L10N.register(
     "Relevant polls" : "Relevantní ankety",
     "Hidden polls" : "Skryté ankety",
     "My deleted polls" : "Mé smazané ankety",
-    "Participated by me" : "Zůčastnil(a) sem se",
+    "Participated by me" : "Zúčastnil(a) jsem se",
     "This are your polls (where you are the owner)." : "Toto jsou vaše ankety (kterých jste vlastníci)",
     "This are all polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls." : "Toto jsou všechny ankety, které s vámi souvisí nebo jsou pro vás důležité, protože jste účastníky nebo vlastníky, nebo jste přizváni. Ankety, kterým už skončila platnost, se zde nezobrazují.",
     "A complete list with all public polls on this site, regardless who is the owner." : "Úplný seznam všech veřejných anket na této instanci, bez ohledu, kdo je vlastník.",
