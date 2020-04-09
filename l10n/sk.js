@@ -29,6 +29,7 @@ OC.L10N.register(
     "Hour" : "Hodina",
     "Day" : "Deň",
     "Month" : "Mesiac",
+    "Remove share" : "Odstrániť zdieľanie",
     "Unknown user" : "Neznámy používateľ",
     "Group" : "Skupina",
     "Receive notification email on activity" : "Pri aktivite prijímať oznámenia e-mailom",
