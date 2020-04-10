@@ -71,6 +71,22 @@
 			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
+		<div class="config-box">
+			<label class="title icon-category-auth"> {{ t('polls', 'Result display') }} </label>
+
+			<input id="always" v-model="pollShowResults" value="always"
+				type="radio" class="radio">
+			<label for="always" class="title">{{ t('polls', 'Always show results') }} </label>
+
+			<input id="expired" v-model="pollShowResults" value="expired"
+				type="radio" class="radio">
+			<label for="expired" class="title">{{ t('polls', 'Hide results until poll is expired') }} </label>
+
+			<input id="never" v-model="pollShowResults" value="never"
+				type="radio" class="radio">
+			<label for="never" class="title">{{ t('polls', 'Never show results') }} </label>
+		</div>
+
 		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
 			@click="switchDeleted()" />
 		<ButtonDiv v-if="poll.deleted" icon="icon-delete" class="error"
@@ -140,6 +156,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ access: value })
+			}
+		},
+
+		pollShowResults: {
+			get() {
+				return this.poll.showResults
+			},
+			set(value) {
+				this.writeValue({ showResults: value })
 			}
 		},
 

@@ -320,6 +320,23 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return bool
 	 */
+	public function getAllowSeeResults(): bool {
+		if ($this->poll->getShowResults() === 'always' || $this->getIsOwner()) {
+		// if ($this->poll->getShowResults() === 'always') {
+			return true;
+		} elseif ($this->poll->getShowResults() === 'never') {
+			return false;
+		} elseif ($this->poll->getShowResults() === 'expired') {
+			return $this->getExpired();
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
 	public function getAllowSeeUsernames(): bool {
 		return !($this->poll->getAnonymous() && !$this->getIsOwner()); ;
 	}
@@ -404,6 +421,7 @@ class Acl implements JsonSerializable {
 			'allowVote'         => $this->getAllowVote(),
 			'allowComment'      => $this->getAllowComment(),
 			'allowEdit'         => $this->getAllowEdit(),
+			'allowSeeResults'   => $this->getAllowSeeResults(),
 			'allowSeeUsernames' => $this->getAllowSeeUsernames(),
 			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
 			'userHasVoted'		=> $this->getUserHasVoted(),
