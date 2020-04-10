@@ -293,12 +293,14 @@ class MailService {
 				$trans->t('{owner} invited you to take part in the poll "{title}"')
 			));
 
+			$emailTemplate->addBodyText($poll->getDescription());
+
 			$emailTemplate->addBodyButton(
 				htmlspecialchars($trans->t('Go to poll')),
 				$recipient['link']
 			);
 
-			$emailTemplate->addBodyText( $trans->t('This link gives you personal access to the poll named above. </br> Press the button above or copy the following link and add it in your browser\'s location bar: ') );
+			$emailTemplate->addBodyText( $trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar: ') );
 			$emailTemplate->addBodyText( $recipient['link'] );
 
 			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
