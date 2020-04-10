@@ -165,6 +165,7 @@ export default {
 								}
 								this.isLoading = false
 							})
+						window.document.title = this.windowTitle
 					} else {
 						this.$router.replace({ name: 'notfound' })
 					}
