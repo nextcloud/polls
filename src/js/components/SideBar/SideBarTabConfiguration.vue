@@ -72,7 +72,7 @@
 		</div>
 
 		<div class="config-box">
-			<label class="title icon-category-auth"> {{ t('polls', 'Result display') }} </label>
+			<label class="title icon-screen"> {{ t('polls', 'Result display') }} </label>
 
 			<input id="always" v-model="pollShowResults" value="always"
 				type="radio" class="radio">
