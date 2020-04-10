@@ -127,8 +127,8 @@ export default {
 <style lang="scss" scoped>
 
 .vote-table-header {
-	display: flex;
-	flex-direction: column;
+	// display: flex;
+	// flex-direction: column;
 	&.winner {
 		font-weight: bold;
 		color: #49bc49;
@@ -140,7 +140,7 @@ export default {
 	display: flex;
 	justify-content: center;
 	font-size: 18px;
-	height: 88px;
+	// height: 88px;
 	padding: 14px 4px;
 
 	&> * {
@@ -149,6 +149,7 @@ export default {
 		background-repeat: no-repeat;
 		background-size: contain;
 		margin-right: 8px;
+		// min-height: 24px;
 	}
 
 	.yes {
@@ -175,12 +176,13 @@ export default {
 }
 
 .date-box {
-	display: flex;
-	flex-direction: column;
-	flex: 1 0;
+	// display: flex;
+	// flex-direction: column;
+	// flex: 1 0;
 	padding: 0 2px;
 	align-items: center;
 	justify-content: center;
+	text-align: center;
 
 	.month, .dow {
 		font-size: 1.1em;
