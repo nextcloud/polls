@@ -136,11 +136,9 @@ export default {
 }
 
 .counter {
-	// flex: 0;
 	display: flex;
 	justify-content: center;
 	font-size: 1.1em;
-	// height: 88px;
 	padding: 14px 4px;
 
 	&> * {
@@ -149,7 +147,6 @@ export default {
 		background-repeat: no-repeat;
 		background-size: contain;
 		margin-right: 8px;
-		// min-height: 24px;
 	}
 
 	.yes {
@@ -168,7 +165,6 @@ export default {
 
 .text-box {
 	flex: 1;
-	// height: 44px;
 	align-self: center;
 	font-size: 1.2em;
 	padding-top: 14px;
@@ -176,9 +172,6 @@ export default {
 }
 
 .date-box {
-	// display: flex;
-	// flex-direction: column;
-	// flex: 1 0;
 	padding: 0 2px;
 	align-items: center;
 	justify-content: center;

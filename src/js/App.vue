@@ -240,7 +240,7 @@ export default {
 
 .modal__buttons {
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 	align-items: center;
 	.button {
 		margin-left: 10px;

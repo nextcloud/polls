@@ -83,24 +83,3 @@ export default {
 }
 
 </script>
-
-<!-- // <style lang="scss" scoped>
-	.modal__content {
-		padding: 14px;
-		display: flex;
-		flex-direction: column;
-		color: var(--color-main-text);
-		input {
-			width: 100%;
-		}
-	}
-
-	.modal__buttons {
-		display: flex;
-		justify-content: end;
-		.button {
-			margin-left: 10px;
-			margin-right: 0;
-		}
-	}
-</style> -->
