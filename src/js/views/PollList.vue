@@ -119,6 +119,10 @@ export default {
 			}
 		},
 
+		windowTitle() {
+			return t('polls', 'Polls') + ' - ' + this.title
+		},
+
 		sortedList() {
 			if (this.reverse) {
 				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
@@ -127,6 +131,16 @@ export default {
 			}
 		}
 
+	},
+
+	watch: {
+		$route() {
+			window.document.title = t('polls', 'Polls') + ' - ' + this.title
+		}
+	},
+
+	created() {
+		window.document.title = t('polls', 'Polls') + ' - ' + this.title
 	},
 
 	methods: {
