@@ -1,7 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - tbd
+## [1.4.1] - tbd
+ - add description to invitation mail #895
+ - fixed safari bugs #770
+ - added configuraton to hide the poll result #265
+ - poll title to window title #318
+ - updated timepicker and changed layout #889, #826
+  
+## [1.4.0] beta1
  - Delete a poll completly #801
  - Alignment in poll list #828
  - Anonymous poll not saved #829
@@ -21,7 +28,7 @@ All notable changes to this project will be documented in this file.
  - fix double loading of poll list #870
  - allow creating of option sequences for date polls #649
  - permanently delete polls #823
- - fix some design / UX improvements #841, #848, #884
+ - fix some design / UX improvements #841, #848, #884,
 
 ## [1.3.0] - 2020-02-16
 
