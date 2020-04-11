@@ -130,9 +130,6 @@ export default {
 						userId: userId
 					})
 				})
-				.then(() => {
-					// this.$emit('voteSaved')
-				})
 		}
 	}
 }
@@ -156,35 +153,12 @@ export default {
 			width: 280px;
 	}
 
-	.modal__content {
-		padding: 14px;
-		display: flex;
-		flex-direction: column;
-		color: var(--color-main-text);
-		input {
-			width: 100%;
-		}
-	}
-	.modal__buttons {
-		display: flex;
-		justify-content: end;
-		.button {
-			margin-left: 10px;
-			margin-right: 0;
-		}
-	}
-
-	.vote-table__header {
-		// height: 150px;
-	}
-
 	.user {
 		height: 44px;
 		padding: 0 17px;
 	}
 
 	.vote-table {
-		// margin: 44px 0;
 		display: flex;
 		flex: 0;
 		flex-direction: column;

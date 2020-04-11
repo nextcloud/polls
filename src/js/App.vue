@@ -224,4 +224,32 @@ export default {
 	}
 }
 
+.modal__content {
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	color: var(--color-main-text);
+	input {
+		width: 100%;
+	}
+}
+
+.modal__buttons__spacer {
+	flex: 1;
+}
+
+.modal__buttons {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	.button {
+		margin-left: 10px;
+		margin-right: 0;
+	}
+}
+
+.modal__buttons__link {
+	text-decoration: underline;
+}
+
 </style>

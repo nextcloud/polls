@@ -166,9 +166,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	#app-content {
-		// flex-direction: column;
-	}
 
 	.main-container {
 		flex: 1;
@@ -176,7 +173,6 @@ export default {
 
 	.table {
 		width: 100%;
-		// margin-top: 45px;
 		display: flex;
 		flex-direction: column;
 		flex: 1;

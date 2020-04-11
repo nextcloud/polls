@@ -29,7 +29,7 @@
 		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
-				<p>{{ t('polls', 'To participate, you need to enter a valid username with at least 3 characters.') }}</p>
+				<p>{{ t('polls', 'To participate, enter a username with at least 3 characters.') }}</p>
 
 				<input ref="userName" v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }"
 					type="text"
@@ -187,7 +187,6 @@ export default {
 					.then((response) => {
 						if (this.$route.params.token === response.token) {
 							this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
-							// this.$router.go(0)
 						} else {
 							this.token = response.token
 							this.redirecting = true
@@ -221,33 +220,4 @@ export default {
 			margin: 0 12px;
 		}
 	}
-
-	.modal__content {
-		padding: 14px;
-		display: flex;
-		flex-direction: column;
-		color: var(--color-main-text);
-		input {
-			width: 100%;
-		}
-	}
-
-	.modal__buttons__spacer {
-		flex: 1;
-	}
-
-	.modal__buttons {
-		display: flex;
-		justify-content: end;
-		align-items: center;
-		.button {
-			margin-left: 10px;
-			margin-right: 0;
-		}
-	}
-
-	.modal__buttons__link {
-		text-decoration: underline;
-	}
-
 </style>

@@ -68,7 +68,6 @@ const getters = {
 	},
 
 	participantsVoted: (state, getters) => {
-		// return [...new Set(state.list.map(item => item.userId))]
 		const list = []
 		const map = new Map()
 		for (const item of state.list) {
