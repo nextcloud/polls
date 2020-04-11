@@ -84,7 +84,7 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<!-- // <style lang="scss" scoped>
 	.modal__content {
 		padding: 14px;
 		display: flex;
@@ -103,4 +103,4 @@ export default {
 			margin-right: 0;
 		}
 	}
-</style>
+</style> -->

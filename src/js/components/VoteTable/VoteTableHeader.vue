@@ -127,8 +127,8 @@ export default {
 <style lang="scss" scoped>
 
 .vote-table-header {
-	// display: flex;
-	// flex-direction: column;
+	display: flex;
+	flex-direction: column;
 	&.winner {
 		font-weight: bold;
 		color: #49bc49;
@@ -136,7 +136,7 @@ export default {
 }
 
 .counter {
-	flex: 0;
+	// flex: 0;
 	display: flex;
 	justify-content: center;
 	font-size: 1.1em;
@@ -167,8 +167,8 @@ export default {
 }
 
 .text-box {
-	flex: 1 0;
-	height: 44px;
+	flex: 1;
+	// height: 44px;
 	align-self: center;
 	font-size: 1.2em;
 	padding-top: 14px;

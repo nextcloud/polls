@@ -142,12 +142,6 @@ export default {
 
 	}
 
-	.config-box {
-		&.poll-table .poll-item {
-			border-bottom: 1px solid var(--color-border);
-		}
-	}
-
 	.optionAdd {
 		display: flex;
 	}

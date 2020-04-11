@@ -53,7 +53,7 @@
 			</div>
 		</div>
 
-		<div class="config-box">
+		<div class="config-box poll-table">
 			<label class="title icon-calendar-000">
 				{{ t('polls', 'Available Options') }}
 			</label>
