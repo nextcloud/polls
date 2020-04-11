@@ -175,7 +175,7 @@ export default {
 	}
 
 	.vote-table__header {
-		height: 150px;
+		// height: 150px;
 	}
 
 	.user {
@@ -190,7 +190,7 @@ export default {
 		flex-direction: column;
 		justify-content: flex-start;
 		overflow: scroll;
-		padding-bottom: 10px;
+		padding: 10px 0;
 
 		& > div {
 			display: flex;

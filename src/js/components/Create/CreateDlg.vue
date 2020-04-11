@@ -115,8 +115,8 @@ export default {
 
 <style lang="css" scoped>
 .create-dialog {
-	display: flex;
-	flex-direction: column;
+	/* display: flex; */
+	/* flex-direction: column; */
 	background-color: var(--color-main-background);
 	padding: 20px;
 }
