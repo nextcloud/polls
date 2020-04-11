@@ -49,7 +49,7 @@
 	</div>
 
 	<div v-else class="pollListItem poll" :class="{ expired: isExpired }">
-		<div v-tooltip.auto="pollType" class="icon" :class="[poll.type]">
+		<div v-tooltip.auto="pollType" class="icon type-icon" :class="[poll.type]">
 			{{ pollType }}
 		</div>
 
@@ -251,7 +251,12 @@ export default {
 			}
 		}
 		&.expired {
-			opacity: 0.3;
+			.type-icon, .poll-title {
+				opacity: 0.6;
+			}
+			.expiry {
+				color: var(--color-error);
+			}
 		}
 	}
 

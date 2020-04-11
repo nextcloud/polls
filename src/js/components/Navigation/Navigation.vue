@@ -175,8 +175,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.expired {
-		opacity: 0.3;
+		.app-navigation-entry-icon, .app-navigation-entry__title {
+			opacity: 0.6;
+		}
 	}
 </style>

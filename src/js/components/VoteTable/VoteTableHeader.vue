@@ -139,7 +139,7 @@ export default {
 	flex: 0;
 	display: flex;
 	justify-content: center;
-	font-size: 18px;
+	font-size: 1.1em;
 	// height: 88px;
 	padding: 14px 4px;
 
