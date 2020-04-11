@@ -166,28 +166,19 @@ export default {
 		optionDatePicker() {
 			return {
 				editable: false,
+				minuteStep: 1,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-
-				// TODO: use this for version 2.x
-				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: this.firstDOW,
-
-				// TODO: use this from version 3.x on
-				// lang: {
-				// 	formatLocale: {
-				//		firstDayOfWeek: this.firstDOW,
-				// 		months: moment.months(),
-				// 		monthsShort: moment.monthsShort(),
-				// 		weekdays: moment.weekdays(),
-				// 		weekdaysMin: moment.weekdaysMin()
-				// 	}
-				// },
 				placeholder: t('polls', 'Click to add a date'),
-				timePickerOptions: {
-					start: '00:00',
-					step: '00:30',
-					end: '23:30'
+				confirm: true,
+				lang: {
+					formatLocale: {
+						firstDayOfWeek: this.firstDOW,
+						months: moment.months(),
+						monthsShort: moment.monthsShort(),
+						weekdays: moment.weekdays(),
+						weekdaysMin: moment.weekdaysMin()
+					}
 				}
 			}
 		}

@@ -106,15 +106,6 @@ export default {
 			acl: state => state.acl
 		}),
 
-		firstDOW() {
-			// vue2-datepicker needs 7 for sunday
-			if (moment.localeData()._week.dow === 0) {
-				return 7
-			} else {
-				return moment.localeData()._week.dow
-			}
-		},
-
 		// Add bindings
 		pollDescription: {
 			get() {
@@ -145,7 +136,7 @@ export default {
 
 		pollExpire: {
 			get() {
-				return moment.unix(this.poll.expire)
+				return moment.unix(this.poll.expire)._d
 			},
 			set(value) {
 
@@ -194,32 +185,31 @@ export default {
 			}
 		},
 
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			} else {
+				return moment.localeData()._week.dow
+			}
+		},
+
 		expirationDatePicker() {
 			return {
 				editable: true,
 				minuteStep: 1,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-
-				// TODO: use this for version 2.x
-				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: this.firstDOW,
-
-				// TODO: use this from version 3.x on
-				// lang: {
-				// 	formatLocale: {
-				//		firstDayOfWeek: this.firstDOW,
-				// 		months: moment.months(),
-				// 		monthsShort: moment.monthsShort(),
-				// 		weekdays: moment.weekdays(),
-				// 		weekdaysMin: moment.weekdaysMin()
-				// 	}
-				// },
 				placeholder: t('polls', 'Expiration date'),
-				timePickerOptions: {
-					start: '00:00',
-					step: '01:00',
-					end: '23:30'
+				confirm: true,
+				lang: {
+					formatLocale: {
+						firstDayOfWeek: this.firstDOW,
+						months: moment.months(),
+						monthsShort: moment.monthsShort(),
+						weekdays: moment.weekdays(),
+						weekdaysMin: moment.weekdaysMin()
+					}
 				}
 			}
 		},
