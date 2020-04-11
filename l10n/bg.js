@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Participants" : "Участници",
     "New comment …" : "Нов коментар...",
     "Comments" : "Коментари",
     "Delete comment" : "Изтрий коментар",

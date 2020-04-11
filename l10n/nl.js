@@ -139,6 +139,7 @@ OC.L10N.register(
     "Hidden polls" : "Verborgen peilingen",
     "My deleted polls" : "Mijn verwijderde peilingen",
     "Participated by me" : "Deelgenomen door mij",
+    "This are your polls (where you are the owner)." : "Dit zijn jouw peilingen (waarvan jij de eigenaar bent).",
     "This are all polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls." : "Dit zijn alle peilingen die relevant of belangrijk voor je zijn, omdat je deelnemer of eigenaar bent of waarvoor je bent uitgenodigd. Geen verlopen polls.",
     "A complete list with all public polls on this site, regardless who is the owner." : "Een volledige lijst met alle openbare peilingen op deze site, ongeacht wie de eigenaar is.",
     "These are all hidden polls, to which you have access." : "Dit zijn verborgen peilingen waar je bij kunt.",
