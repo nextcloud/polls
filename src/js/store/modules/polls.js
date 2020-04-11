@@ -62,7 +62,7 @@ const getters = {
 			return state.list.filter(poll => (poll.userHasVoted))
 		} else if (filterId === 'expired') {
 			return state.list.filter(poll => (
-				poll.expire > 0 && moment.unix(poll.expire).diff() < 0
+				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
 			))
 		}
 	}
