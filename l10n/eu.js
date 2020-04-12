@@ -5,7 +5,6 @@ OC.L10N.register(
     "Poll invitation \"%s\"" : "Inkestara gonbidapena \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} jabeak \"{title}\" inkestan parte hartzera gonbidatu zaitu",
     "Go to poll" : "Joan inkestara",
-    "This link gives you personal access to the poll named above. </br> Press the button above or copy the following link and add it in your browser's location bar: " : "Esteka honek goian izendatutako inkestara sarbide pertsonala ematen dizu. </br> Sakatu goiko botoia edo kopiatu ondorengo esteka eta erabili zure nabigatzailearen kokaleku-barran:",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Inkestaren honen jabeak bozkatzera gonbidatu zaituelako jaso duzu posta elektroniko hau. Gutxienez zure izena edo helbide elektronikoa gordetzen da inkesta honetan. Inkesta honetatik atera nahi baduzu, jarri gunearen administratzailearekin edo inkesta hasi duenarekin (mezu hau bidali dizuna).",
     "Polls App - New Activity" : "Inkestak aplikazioa - Jarduera berria",
     "\"{title}\" had recent activity: " : "\"{title}\" inkestan aktibitatea egon da azkenaldian: ",

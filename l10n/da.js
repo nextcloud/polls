@@ -44,6 +44,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Modtag notifikationsemail om aktivitet",
     "No" : "Nej",
     "Yes" : "Ja",
+    "Expired" : "Udløbet",
     "Deleted" : "Slettet",
     "Public access" : "Offentligt tilgængelig",
     "Hidden poll" : "Skjult afstemning",

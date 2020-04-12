@@ -35,6 +35,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "No" : "No",
     "Yes" : "Sí",
+    "Expired" : "Expirado",
     "Deleted" : "Borrado",
     "Public access" : "Acceso público",
     "Access denied" : "Acceso denegado",

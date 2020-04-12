@@ -35,6 +35,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "No" : "არა",
     "Yes" : "კი",
+    "Expired" : "გაუქმდა",
     "Deleted" : "გაუქმდა",
     "Public access" : "ღია წვდომა",
     "Access denied" : "წვდომა არაა დაშვებული",

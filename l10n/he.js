@@ -38,6 +38,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "קבלת הודעות בדוא״ל כשיש פעילות",
     "No" : "לא",
     "Yes" : "כן",
+    "Expired" : "פג",
     "Deleted" : "נמחק",
     "Public access" : "גישה ציבורית",
     "Access denied" : "הגישה נדחתה",

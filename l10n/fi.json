@@ -104,6 +104,7 @@
     "The poll does not exist" : "Kyselyä ei ole olemassa",
     "Enter a poll or start a new one." : "Kirjoita kysely tai aloita uusi kysely.",
     "Hidden polls" : "Piilotetut kyselyt",
+    "Expired" : "Vanhentunut",
     "Deleted" : "Poistettu",
     "Public access" : "Avoin pääsy",
     "Hidden poll" : "Piilotettu kysely",

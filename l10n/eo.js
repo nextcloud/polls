@@ -50,6 +50,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
     "No" : "No",
     "Yes" : "Yes",
+    "Expired" : "Senvalidiĝis",
     "Deleted" : "Forigita",
     "Public access" : "Publika aliro",
     "Hidden poll" : "Kaŝita enketo",

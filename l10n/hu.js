@@ -49,6 +49,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Értesítés küldése az aktivitásról",
     "No" : "Nem",
     "Yes" : "Igen",
+    "Expired" : "Lejárt",
     "Deleted" : "Törölve",
     "Public access" : "Nyilvános hozzáférés",
     "Hidden poll" : "Rejtett szavazás",

@@ -54,6 +54,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Rep correu electrònic de notificació quan hi hagi activitat",
     "No" : "No",
     "Yes" : "Sí",
+    "Expired" : "Caducat",
     "Deleted" : "Suprimit",
     "Public access" : "Accés públic",
     "Hidden poll" : "Amaga l'enquesta",

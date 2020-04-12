@@ -28,6 +28,7 @@ OC.L10N.register(
     "Group" : "Grupo",
     "No" : "Não",
     "Yes" : "Sim",
+    "Expired" : "Expirado",
     "Deleted" : "Eliminado",
     "Public access" : "Acesso público",
     "Access denied" : "Acesso proibido"

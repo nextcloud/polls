@@ -35,6 +35,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "No" : "Nei",
     "Yes" : "Ja",
+    "Expired" : "Utløpt",
     "Deleted" : "Slettet",
     "Public access" : "Offentlig tilgang",
     "Access denied" : "Tilgang nektet",
