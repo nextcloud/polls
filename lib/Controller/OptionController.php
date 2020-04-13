@@ -180,9 +180,9 @@ class OptionController extends Controller {
 			$updateOption->setTimestamp($option['timestamp']);
 
 			if ($option['timestamp'] === 0) {
-				$NewOption->setOrder($option['order']);
+				$updateOption->setOrder($option['order']);
 			} else {
-				$NewOption->setOrder($option['timestamp']);
+				$updateOption->setOrder($option['timestamp']);
 			}
 
 			$this->optionMapper->update($updateOption);
