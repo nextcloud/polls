@@ -68,6 +68,7 @@ OC.L10N.register(
     "No" : "No",
     "Yes" : "Sí",
     "Hidden polls" : "Encuestas ocultas",
+    "Expired" : "Expirado",
     "Deleted" : "Borrado",
     "Place your votes until %n" : "Puede votar hasta %n",
     "Public access" : "Acceso público",

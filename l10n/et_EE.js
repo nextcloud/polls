@@ -34,6 +34,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "No" : "Ei",
     "Yes" : "Jah",
+    "Expired" : "Aegunud",
     "Deleted" : "Kustutatud",
     "Public access" : "Avalik ligipääs",
     "Access denied" : "Ligipääs keelatud",

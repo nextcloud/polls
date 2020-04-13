@@ -89,6 +89,7 @@ OC.L10N.register(
     "No" : "Ez",
     "Yes" : "Bai",
     "Hidden polls" : "Ezkutatutako inkestak",
+    "Expired" : "Iraungita",
     "Deleted" : "Ezabatuta",
     "Place your votes until %n" : "Bozkatu %narte",
     "Public access" : "Sarbide publikoa",
