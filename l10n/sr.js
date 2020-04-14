@@ -25,7 +25,6 @@ OC.L10N.register(
     "The names of other participants are hidden, as this is an anonymous poll. " : "Имена учесника су скривена, ово је анонимно гласање.",
     "Results are hidden. " : "Резултати су сакривени.",
     "They will be revealed after the poll is expired. " : "Биће откривени када гласање истекне.",
-    "_%n person participated in this poll until now._::_%n persons participated in this poll until now. _" : ["До сада је гласала %n особа.","До сада је гласало %n особе.","До сада је гласало %n особа."],
     "New comment …" : "Нови коментар…",
     "Your comment was added" : "Ваш коментар је додат",
     "You can place your vote until %n. " : "Можете гласати до %n. ",

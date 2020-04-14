@@ -22,7 +22,6 @@
     "The names of other participants are hidden, as this is an anonymous poll. " : "Le nom des participants est masqué car ce sondage est anonyme.",
     "Results are hidden. " : "Les résultats sont masqués.",
     "They will be revealed after the poll is expired. " : "Ils seront connus dès que le sondage aura expiré.",
-    "_%n person participated in this poll until now._::_%n persons participated in this poll until now. _" : ["A ce jour %n personne a répondu à ce sondage.","A ce jour %n personnes ont répondu à ce sondage."],
     "New comment …" : "Nouveau commentaire…",
     "Your comment was added" : "Votre commentaire a été ajouté",
     "You can place your vote until %n. " : "Vous pouvez répondre au sondage jusqu'au %n.",

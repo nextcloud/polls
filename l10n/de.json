@@ -23,7 +23,6 @@
     "The names of other participants are hidden, as this is an anonymous poll. " : "Die Namen anderer Teilnehmer sind versteckt, weil dies eine anonyme Umfrage ist.",
     "Results are hidden. " : "Ergebnisse sind verborgen.",
     "They will be revealed after the poll is expired. " : "Sie werden nach Ablauf der Abstimmung bekannt gegeben.",
-    "_%n person participated in this poll until now._::_%n persons participated in this poll until now. _" : ["%n Person hat bis jetzt an der Umfrage teilgenommen.","%n Personen haben bis jetzt an der Umfrage teilgenommen."],
     "New comment …" : "Neuer Kommentar ...",
     "Your comment was added" : "Dein Kommentar wurde hinzugefügt",
     "You can place your vote until %n. " : "Du kannst bis %n abstimmen.",

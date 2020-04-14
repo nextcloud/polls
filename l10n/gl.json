@@ -23,7 +23,6 @@
     "The names of other participants are hidden, as this is an anonymous poll. " : "Os nomes dos outros participantes están agochados, xa que se trata dunha enquisa anónima.",
     "Results are hidden. " : "Os resultados están agochados.",
     "They will be revealed after the poll is expired. " : "Amosaránse unha vez que caduque a enquisa.",
-    "_%n person participated in this poll until now._::_%n persons participated in this poll until now. _" : ["Ata o de agora, participou %n persoa nesta enquisa.","Ata o de agora, participaron %n persoas nesta enquisa."],
     "New comment …" : "Comentario novo…",
     "Your comment was added" : "Foi engadido o seu comentario",
     "You can place your vote until %n. " : "Pode poñer o seu voto ata o %n.",

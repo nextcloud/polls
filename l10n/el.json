@@ -23,7 +23,6 @@
     "The names of other participants are hidden, as this is an anonymous poll. " : "Τα ονόματα συμμετεχόντων αποκρύπτονται, καθώς πρόκειται για ανώνυμη δημοσκόπηση.",
     "Results are hidden. " : "Κρυφά αποτελέσματα.",
     "They will be revealed after the poll is expired. " : "Θα εμφανιστούν μετά τη λήξη της δημοσκόπησης.",
-    "_%n person participated in this poll until now._::_%n persons participated in this poll until now. _" : ["%n άτομα συμμετείχαν στη δημοσκόπηση μέχρι τώρα.","%n άτομα συμμετείχαν στη δημοσκόπηση μέχρι τώρα."],
     "New comment …" : "Νέο σχόλιο …",
     "Your comment was added" : "Το σχόλιο καταχωρήθηκε",
     "You can place your vote until %n. " : "Μπορείτε να ψηφίσετε έως %n.",
