@@ -25,6 +25,7 @@ OC.L10N.register(
     "The names of other participants are hidden, as this is an anonymous poll. " : "Jména ostatních účastníků jsou skryta, protože toto je anonymní anketa.",
     "Results are hidden. " : "Výsledky jsou skryté.",
     "They will be revealed after the poll is expired. " : "Budou odhaleny až po skončení ankety.",
+    "_%n person participated in this poll until now. _::_%n persons participated in this poll until now. _" : ["Této ankety se doposud zúčastnila %n osoba","Této ankety se doposud zúčastnily %n osoby","Této ankety se doposud zúčastnilo %n osob","Této ankety se doposud zúčastnily %n osoby"],
     "New comment …" : "Nový komentář…",
     "Your comment was added" : "Váš komentář byl přidán",
     "You can place your vote until %n. " : "Hlasovat můžete až do %n.",

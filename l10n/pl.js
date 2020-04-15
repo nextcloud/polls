@@ -25,6 +25,7 @@ OC.L10N.register(
     "The names of other participants are hidden, as this is an anonymous poll. " : "Nazwy innych uczestników są ukryte, ponieważ jest to anonimowa sonda.",
     "Results are hidden. " : "Wyniki są ukryte. ",
     "They will be revealed after the poll is expired. " : "Zostaną ujawnione po wygaśnięciu ankiety. ",
+    "_%n person participated in this poll until now. _::_%n persons participated in this poll until now. _" : ["Do tej pory w sondzie uczestniczyła %n osoba. ","Do tej pory w sondzie uczestniczyły %n osoby. ","Do tej pory w sondzie uczestniczyło %n osób. ","Do tej pory w sondzie uczestniczyło %n osób. "],
     "New comment …" : "Nowy komentarz…",
     "Your comment was added" : "Twój komentarz został dodany",
     "You can place your vote until %n. " : "Możesz oddać swój głos do %n.",
