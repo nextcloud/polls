@@ -182,7 +182,7 @@ export default {
 		}, 500),
 
 		writeUserName() {
-			if (this.validatePublicUsername()) {
+			if (this.isValidName) {
 				this.$store.dispatch('createPersonalShare', { token: this.$route.params.token, userName: this.userName })
 					.then((response) => {
 						if (this.$route.params.token === response.token) {
