@@ -1,7 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.4.2] - tbd
+## [1.4.3] - tbd
+
+## [1.4.2] beta3
+ - fix #909
+ - fix #910
+
 ## [1.4.1] beta2
  - add description to invitation mail #895
  - fixed safari bugs #770
