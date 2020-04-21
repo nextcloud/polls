@@ -179,6 +179,7 @@ class ShareController extends Controller {
 	/**
 	 * createPersonalShare
 	 * Write a new share to the db and returns the new share as array
+	 * or
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @param int $pollId
@@ -189,8 +190,13 @@ class ShareController extends Controller {
 
 		try {
 			$publicShare = $this->mapper->findByToken($token);
-			if (!$this->systemController->validatePublicUsername($publicShare->getPollId(), $userName)) {
-				return new DataResponse(['message' => 'invalid userName'], Http::STATUS_CONFLICT);
+
+			// Return of validatePublicUsername is a DataResponse
+			$checkUsername = $this->systemController->validatePublicUsername($publicShare->getPollId(), $userName, $token);
+
+			// if status is not 200, return DataResponse from validatePublicUsername
+			if ($checkUsername->getStatus() !== 200) {
+				return $checkUsername;
 			}
 
 			if ($publicShare->getType() === 'public') {
@@ -223,7 +229,8 @@ class ShareController extends Controller {
 			}
 
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			// return forbidden in all not catched error cases
+			return new DataResponse($e, Http::STATUS_FORBIDDEN);
 		}
 	}
 
