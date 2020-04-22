@@ -21,9 +21,9 @@
   -->
 
 <template lang="html">
-	<div :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
+	<Component :is="tag" :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
 		{{ title }}
-	</div>
+	</Component>
 </template>
 
 <script>
@@ -41,6 +41,10 @@ export default {
 		primary: {
 			type: Boolean,
 			default: false
+		},
+		tag: {
+			type: String,
+			default: 'button'
 		}
 	},
 

@@ -202,7 +202,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.vote__header {
 		margin: 8px 24px;
 	}

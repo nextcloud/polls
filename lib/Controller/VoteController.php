@@ -112,7 +112,7 @@ class VoteController extends Controller {
 			}
 
 			if (!$this->acl->getAllowSeeResults()) {
-				return new DataResponse((array) $this->mapper->findByPollAndUser($pollId, $this->userId), Http::STATUS_OK);
+				return new DataResponse((array) $this->mapper->findByPollAndUser($pollId, $this->acl->getUserId()), Http::STATUS_OK);
 			} elseif (!$this->acl->getAllowSeeUsernames()) {
 				$this->anonymizer->set($pollId, $this->acl->getUserId());
 				return new DataResponse((array) $this->anonymizer->getVotes(), Http::STATUS_OK);
