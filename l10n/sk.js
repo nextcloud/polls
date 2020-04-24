@@ -20,6 +20,7 @@ OC.L10N.register(
     "never" : "nikdy",
     "Details" : "Podrobnosti",
     "Configuration" : "Nastavenia",
+    "Options" : "Možnosti",
     "Shares" : "Sprístupnené položky",
     "Description" : "Popis",
     "Expiration date" : "Dátum expirácie",

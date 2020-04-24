@@ -5,6 +5,7 @@ OC.L10N.register(
     "Poll invitation \"%s\"" : "Invitation au sondage \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} vous invite à participer au sondage \"{title}\"",
     "Go to poll" : "Accéder au sondage",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar: " : "Ce lien vous donne un accès personnel au sondage ci-dessus. Veuillez cliquer sur le bouton ci-dessus ou copier le lien suivant et le coller dans la barre d'adresse de votre navigateur :",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Ce courriel vous a été envoyé, car vous avez été invité à participer à ce sondage par son créateur. A minima, seul votre nom ou votre courriel sera enregistré dans ce sondage. Si vous voulez que vos données soient supprimées de ce sondage, veuillez contacter l'administrateur de ce site ou l'initiateur de ce sondage, en vous référent au nom de l'expéditeur de ce message.",
     "Polls App - New Activity" : "Application de sondages - Nouvelle activité",
     "\"{title}\" had recent activity: " : "Activité récente pour \"{title}\" :",
