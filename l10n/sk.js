@@ -32,6 +32,7 @@ OC.L10N.register(
     "Hour" : "Hodina",
     "Day" : "Deň",
     "Month" : "Mesiac",
+    "Year" : "Rok",
     "Click to add a date" : "Dátum pridáte kliknutím",
     "Remove share" : "Odstrániť zdieľanie",
     "Link copied to clipboard" : "Odkaz bol skopírovaný do schránky",
