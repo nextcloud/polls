@@ -31,16 +31,17 @@
 				@input="addOption()" />
 		</div>
 
-		<ul class="config-box poll-table">
+		<div class="config-box poll-table">
 			<label class="title icon-toggle-filelist">
 				{{ t('polls', 'Available Options') }}
 			</label>
 			<draggable v-model="sortOptions">
 				<transition-group>
-					<PollItemText v-for="(option) in sortOptions"
+					<OptionItem v-for="(option) in sortOptions"
 						:key="option.id"
 						:option="option"
-						:draggable="true">
+						:draggable="true"
+						type="textPoll">
 						<template v-slot:actions>
 							<Actions v-if="acl.allowEdit" class="action">
 								<ActionButton icon="icon-delete" @click="removeOption(option)">
@@ -48,10 +49,10 @@
 								</ActionButton>
 							</Actions>
 						</template>
-					</PollItemText>
+					</OptionItem>
 				</transition-group>
 			</draggable>
-		</ul>
+		</div>
 	</div>
 </template>
 
@@ -59,7 +60,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
-import PollItemText from '../Base/PollItemText'
+import OptionItem from '../Base/OptionItem'
 import InputDiv from '../Base/InputDiv'
 
 export default {
@@ -70,7 +71,7 @@ export default {
 		ActionButton,
 		draggable,
 		InputDiv,
-		PollItemText
+		OptionItem
 	},
 
 	data() {
@@ -126,22 +127,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.draggable, .draggable .pollOption  {
-		cursor: grab;
-		&:active {
-			cursor: grabbing;
-			cursor: -moz-grabbing;
-			cursor: -webkit-grabbing;
-		}
-		.handle {
-			visibility: hidden;
-		}
-		&:hover > .handle {
-			visibility: visible;
-		}
-
-	}
-
 	.optionAdd {
 		display: flex;
 	}

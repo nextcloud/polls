@@ -28,8 +28,7 @@
 				:user-id="acl.userId"
 				:option="option"
 				@voteClick="setVote(option, acl.userId)" />
-			<PollItemText v-if="poll.type === 'textPoll'" :option="option" />
-			<PollItemDate v-if="poll.type === 'datePoll'" :option="option" />
+			<OptionItem :option="option" :type="poll.type" />
 
 			<div class="counter">
 				<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
@@ -49,16 +48,14 @@
 </template>
 
 <script>
-import PollItemText from '../Base/PollItemText'
-import PollItemDate from '../Base/PollItemDate'
+import OptionItem from '../Base/OptionItem'
 import VoteTableItem from './VoteTableItem'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'VoteTable',
 	components: {
-		PollItemDate,
-		PollItemText,
+		OptionItem,
 		VoteTableItem
 	},
 
@@ -120,7 +117,7 @@ export default {
 
 <style lang="scss" scoped>
 
-	.poll-item {
+	.option-item {
 		flex: 3;
 	}
 
@@ -140,7 +137,7 @@ export default {
 		}
 
 		.yes {
-			background-color: #ebf5d6;
+			background-color: var(--color-polls-foreground-yes);
 		}
 
 		.maybe {

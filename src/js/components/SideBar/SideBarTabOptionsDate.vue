@@ -57,10 +57,12 @@
 			<label class="title icon-calendar-000">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<ul class="">
-				<PollItemDate v-for="(option) in sortedOptions"
+			<transition-group is="ul">
+				<OptionItem v-for="(option) in sortedOptions"
 					:key="option.id"
-					:option="option">
+					:option="option"
+					type="datePoll"
+					tag="li">
 					<template v-slot:actions>
 						<Actions v-if="acl.allowEdit" class="action">
 							<ActionButton icon="icon-delete" @click="removeOption(option)">
@@ -74,8 +76,8 @@
 							</ActionButton>
 						</Actions>
 					</template>
-				</PollItemDate>
-			</ul>
+				</OptionItem>
+			</transition-group>
 		</div>
 		<Modal v-if="modal" :can-close="false">
 			<div class="modal__content">
@@ -107,7 +109,7 @@
 <script>
 import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
-import PollItemDate from '../Base/PollItemDate'
+import OptionItem from '../Base/OptionItem'
 
 export default {
 	name: 'SideBarTabOptionsDate',
@@ -118,7 +120,7 @@ export default {
 		DatetimePicker,
 		Modal,
 		Multiselect,
-		PollItemDate
+		OptionItem
 	},
 
 	data() {
