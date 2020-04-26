@@ -22,9 +22,7 @@
 
 <template>
 	<Component :is="tag" class="option-item" :class="{ draggable: draggable }">
-		<IconBase v-if="draggable" icon-name="handle" class="option-item__handle">
-			<IconHandle />
-		</IconBase>
+		<div v-if="draggable" class="option-item__handle icon icon-handle" />
 
 		<div v-if="showOrder" class="option-item__order">
 			{{ option.order }}
@@ -60,16 +58,8 @@
 </template>
 
 <script>
-import IconBase from '../Icons/IconBase.vue'
-import IconHandle from '../Icons/IconHandle.vue'
-
 export default {
 	name: 'OptionItem',
-
-	components: {
-		IconBase,
-		IconHandle
-	},
 
 	props: {
 		draggable: {
@@ -122,13 +112,9 @@ export default {
 	[class*="option-item__option"] {
 		display: flex;
 		flex: 1;
-		// font-size: 1.2em;
 		opacity: 1;
 		white-space: normal;
 		padding-right: 4px;
-		// &.avatar {
-		// 	flex: 0;
-		// }
 	}
 
 	.draggable, .draggable [class*="option-item__option"]  {

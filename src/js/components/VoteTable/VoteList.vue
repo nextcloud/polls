@@ -40,7 +40,8 @@
 				</div>
 
 				<div v-if="noVotes(option.pollOptionText)" class="no" :style="{flex: noVotes(option.pollOptionText) }">
-					<span> {{ noVotes(option.pollOptionText) }} </span>
+					<!-- <span> {{ noVotes(option.pollOptionText) }} </span> -->
+					<span />
 				</div>
 			</div>
 		</li>
@@ -141,11 +142,11 @@ export default {
 		}
 
 		.maybe {
-			background-color: #f0db98;
+			background-color: var(--color-polls-foreground-maybe); //#f0db98
 		}
 
 		.no {
-			background-color: #f45573;
+			// background-color: var(--color-polls-foreground-no); //#f45573
 		}
 	}
 
