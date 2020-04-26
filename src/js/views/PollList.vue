@@ -101,9 +101,9 @@ export default {
 
 		description() {
 			if (this.$route.params.type === 'my') {
-				return t('polls', 'This are your polls (where you are the owner).')
+				return t('polls', 'These are your polls (where you are the owner).')
 			} else if (this.$route.params.type === 'relevant') {
-				return t('polls', 'This are all polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
+				return t('polls', 'These are all polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
 			} else if (this.$route.params.type === 'public') {
 				return t('polls', 'A complete list with all public polls on this site, regardless who is the owner.')
 			} else if (this.$route.params.type === 'hidden') {
