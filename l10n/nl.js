@@ -25,6 +25,7 @@ OC.L10N.register(
     "The names of other participants are hidden, as this is an anonymous poll. " : "Namen van andere stemmers zijn verborgen, dit is een anonieme peiling.",
     "Results are hidden. " : "Resultaten zijn verborgen.",
     "They will be revealed after the poll is expired. " : "Deze zullen bekend gemaakt worden nadat de peiling afgelopen is.",
+    "_%n person participated in this poll until now. _::_%n persons participated in this poll until now. _" : ["%n persoon nam tot nog toe deel aan deze peiling. ","%n personen namen tot nog toe deel aan deze peiling."],
     "New comment …" : "Nieuwe reactie ...",
     "Your comment was added" : "Je reactie werd toegevoegd",
     "You can place your vote until %n. " : "Je kunt nu stemmen tot %n. ",
