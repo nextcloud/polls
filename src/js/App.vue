@@ -24,24 +24,37 @@
 	<fragment>
 		<Navigation v-if="OC.currentUser" />
 		<router-view />
+		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" @closeSideBar="toggleSideBar" />
 	</fragment>
 </template>
 
 <script>
 import Navigation from './components/Navigation/Navigation'
+import SideBar from './components/SideBar/SideBar'
 
 export default {
 	name: 'App',
 	components: {
-		Navigation
+		Navigation,
+		SideBar
+	},
+
+	data() {
+		return {
+			sideBarOpen: (window.innerWidth > 920),
+			initialTab: 'comments',
+			activeTab: 'comments'
+		}
 	},
 
 	created() {
+		this.$root.$on('toggleSideBar', () => { this.toggleSideBar() })
+		this.$root.$on('openSideBar', () => { this.sideBarOpen = true })
+		this.$root.$on('closeSideBar', () => { this.sideBarOpen = false })
+
 		if (OC.currentUser) {
 			this.updatePolls()
-			this.$root.$on('updatePolls', () => {
-				this.updatePolls()
-			})
+			this.$root.$on('updatePolls', () => { this.updatePolls() })
 		}
 	},
 
@@ -49,15 +62,18 @@ export default {
 		updatePolls() {
 			if (OC.currentUser) {
 
-				this.$store
-					.dispatch('loadPolls')
+				this.$store.dispatch('loadPolls')
 					.then(() => {
 					})
 					.catch((error) => {
 						console.error('refresh poll: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+						OC.Notification.showTemporary(t('polls', 'Error loading poll list'), { type: 'error' })
 					})
 			}
+		},
+
+		toggleSideBar() {
+			this.sideBarOpen = !this.sideBarOpen
 		}
 	}
 }
@@ -155,14 +171,10 @@ export default {
 	opacity: 0;
 }
 
-#app-polls {
-	width: 100%;
-	color: var(--color-main-text)
-}
-
 #app-content {
 	display: flex;
 	width: auto;
+	overflow: hidden;
 
 	input {
 		&.hasTimepicker {

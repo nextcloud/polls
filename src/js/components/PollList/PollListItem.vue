@@ -48,7 +48,8 @@
 		</div>
 	</div>
 
-	<div v-else class="pollListItem poll" :class="{ expired: isExpired }">
+	<div v-else class="pollListItem poll" :class="{ expired: isExpired, active: (poll.id === $store.state.poll.id) }"
+		@click="loadPoll()">
 		<div v-tooltip.auto="pollType" class="icon type-icon" :class="[poll.type]">
 			{{ pollType }}
 		</div>
@@ -167,6 +168,19 @@ export default {
 	},
 
 	methods: {
+		loadPoll() {
+			this.$store.dispatch({ type: 'loadPollMain', pollId: this.poll.id })
+				.then((response) => {
+					this.$store.dispatch({ type: 'loadPoll', pollId: this.poll.id })
+					this.$root.$emit('openSideBar')
+				})
+				.catch((error) => {
+					console.error(error)
+					OC.Notification.showTemporary(t('polls', 'Error loading poll'), { type: 'error' })
+				})
+
+		},
+
 		toggleMenu() {
 			this.openedMenu = !this.openedMenu
 		},
@@ -217,7 +231,6 @@ export default {
 	flex: 1;
 	border-bottom: 1px solid var(--color-border-dark);
 	padding: 4px 8px;
-
 	&> div {
 		padding-right: 8px;
 	}
@@ -242,6 +255,12 @@ export default {
 	}
 
 	&.poll {
+		&.active {
+			background-color: var(--color-primary-light);
+		}
+		&:hover {
+			background-color: var(--color-background-hover);
+		}
 		.poll-title {
 			flex-direction: column;
 			& > * {

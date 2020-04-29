@@ -30,7 +30,7 @@
 					</ActionButton>
 				</Actions>
 				<Actions>
-					<ActionButton icon="icon-settings" @click="toggleSideBar()">
+					<ActionButton icon="icon-settings" @click="$root.$emit('toggleSideBar')">
 						{{ t('polls', 'Toggle Sidebar') }}
 					</ActionButton>
 				</Actions>
@@ -70,7 +70,6 @@
 			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen" :active="activeTab" @closeSideBar="toggleSideBar" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -82,7 +81,6 @@ import ParticipantsList from '../components/Base/ParticipantsList'
 import PollInformation from '../components/Base/PollInformation'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
-import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState, mapGetters } from 'vuex'
@@ -98,7 +96,6 @@ export default {
 		PollInformation,
 		LoadingOverlay,
 		VoteHeaderPublic,
-		SideBar,
 		VoteTable,
 		VoteList
 	},
@@ -107,11 +104,8 @@ export default {
 		return {
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: (window.innerWidth > 920),
 			isLoading: true,
-			initialTab: 'comments',
-			tableMode: true,
-			activeTab: 'comments'
+			tableMode: true
 		}
 	},
 
@@ -175,10 +169,6 @@ export default {
 					this.isLoading = false
 					this.$router.replace({ name: 'notfound' })
 				})
-		},
-
-		toggleSideBar() {
-			this.sideBarOpen = !this.sideBarOpen
 		}
 	}
 }
