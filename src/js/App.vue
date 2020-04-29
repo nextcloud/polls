@@ -21,10 +21,10 @@
   -->
 
 <template>
-	<div id="app-polls">
+	<fragment>
 		<Navigation v-if="OC.currentUser" />
 		<router-view />
-	</div>
+	</fragment>
 </template>
 
 <script>
@@ -85,12 +85,8 @@ export default {
 }
 
 .main-container {
-	position: relative;
 	flex: 1;
 	padding: 8px 24px;
-	margin: 0;
-	flex-direction: column;
-	flex-wrap: nowrap;
 	overflow-x: scroll;
 }
 

@@ -31,7 +31,7 @@ import { linkTo } from '@nextcloud/router'
 import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 import moment from 'moment'
-
+import Fragment from 'vue-fragment'
 import { Tooltip } from '@nextcloud/vue'
 
 import UserDiv from './components/Base/UserDiv'
@@ -58,6 +58,7 @@ Vue.component('UserDiv', UserDiv)
 Vue.component('ButtonDiv', ButtonDiv)
 Vue.directive('tooltip', Tooltip)
 
+Vue.use(Fragment.Plugin)
 Vue.use(ClickOutside)
 Vue.use(VueClipboard)
 
