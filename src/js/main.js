@@ -64,7 +64,7 @@ Vue.use(VueClipboard)
 
 /* eslint-disable-next-line no-new */
 new Vue({
-	el: '#app-polls',
+	el: '#content',
 	router: router,
 	store: store,
 	render: h => h(App)

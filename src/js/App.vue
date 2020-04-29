@@ -21,21 +21,23 @@
   -->
 
 <template>
-	<fragment>
+	<Content app-name="polls">
 		<Navigation v-if="OC.currentUser" />
 		<router-view />
 		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" @closeSideBar="toggleSideBar" />
-	</fragment>
+	</Content>
 </template>
 
 <script>
 import Navigation from './components/Navigation/Navigation'
+import { Content } from '@nextcloud/vue'
 import SideBar from './components/SideBar/SideBar'
 
 export default {
 	name: 'App',
 	components: {
 		Navigation,
+		Content,
 		SideBar
 	},
 
