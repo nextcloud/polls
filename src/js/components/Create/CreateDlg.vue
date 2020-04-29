@@ -38,7 +38,7 @@
 			<input id="textPoll" v-model="type" value="textPoll"
 				type="radio" class="radio">
 			<label for="textPoll">
-				{{ t('polls', 'Text based') }}
+				{{ t('polls', 'Text poll') }}
 			</label>
 		</div>
 

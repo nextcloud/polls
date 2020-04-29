@@ -21,79 +21,84 @@
   -->
 
 <template>
-	<div v-if="header" class="pollListItem header">
-		<div class="poll-title" @click="$emit('sortList', {sort: 'title'})">
+	<div v-if="header" class="poll-list__header">
+		<div class="item__title" @click="$emit('sortList', {sort: 'title'})">
 			{{ t('polls', 'Title') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="access" @click="$emit('sortList', {sort: 'access'})">
+		<div class="item__access" @click="$emit('sortList', {sort: 'access'})">
 			{{ t('polls', 'Access') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="owner" @click="$emit('sortList', {sort: 'owner'})">
+		<div class="item__owner" @click="$emit('sortList', {sort: 'owner'})">
 			{{ t('polls', 'Owner') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'owner'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="created" @click="$emit('sortList', {sort: 'created'})">
+		<div class="item__created" @click="$emit('sortList', {sort: 'created'})">
 			{{ t('polls', 'Created') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="expiry" @click="$emit('sortList', {sort: 'expire'})">
+		<div class="item__expiry" @click="$emit('sortList', {sort: 'expire'})">
 			{{ t('polls', 'Expires') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 	</div>
 
-	<div v-else class="pollListItem poll" :class="{ expired: isExpired, active: (poll.id === $store.state.poll.id) }"
-		@click="loadPoll()">
-		<div v-tooltip.auto="pollType" class="icon type-icon" :class="[poll.type]">
-			{{ pollType }}
-		</div>
-
-		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="poll-title">
-			<div class="poll-name">
+	<div v-else class="poll-list__item" :class="{ expired: isExpired, active: (poll.id === $store.state.poll.id) }">
+		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
+		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="item__title">
+			<div class="item__title__title">
 				{{ poll.title }}
 			</div>
-			<div class="poll-description">
+			<div class="item__title__description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</router-link>
 
-		<Actions>
-			<ActionButton icon="icon-add" @click="clonePoll()">
+		<Actions :force-menu="true">
+			<ActionButton icon="icon-add"
+				:close-after-click="true"
+				@click="clonePoll()">
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && !poll.deleted" icon="icon-delete" @click="switchDeleted()">
-				{{ (poll.isAdmin) ? t('polls', 'Delete poll as admin') : t('polls', 'Delete poll') }}
+			<ActionButton v-if="poll.allowEdit && !poll.deleted"
+				icon="icon-delete"
+				:close-after-click="true"
+				@click="switchDeleted()">
+				{{ t('polls', 'Delete poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-history" @click="switchDeleted()">
-				{{ (poll.isAdmin) ? t('polls', 'Restore poll as admin') : t('polls', 'Restore poll') }}
+			<ActionButton v-if="poll.allowEdit && poll.deleted"
+				icon="icon-history"
+				:close-after-click="true"
+				@click="switchDeleted()">
+				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger"
+			<ActionButton v-if="poll.allowEdit && poll.deleted"
+				icon="icon-delete"
+				class="danger"
+				:close-after-click="true"
 				@click="deletePermanently()">
-				{{ (poll.isAdmin) ? t('polls', 'Delete poll permanently as admin') : t('polls', 'Delete poll permanently') }}
+				{{ t('polls', 'Delete poll permanently') }}
 			</ActionButton>
 		</Actions>
 
-		<div v-tooltip.auto="accessType" class="icon" :class="'access-' + poll.access">
-			{{ accessType }}
-		</div>
+		<div v-tooltip.auto="accessType" :class="'item__access--' + poll.access" @click="loadPoll()" />
 
-		<div class="owner">
+		<div class="item__owner" @click="loadPoll()">
 			<user-div :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
 
-		<div class="created ">
+		<div class="item__created" @click="loadPoll()">
 			{{ moment.unix(poll.created).fromNow() }}
 		</div>
-		<div class="expiry">
+		<div class="item__expiry" @click="loadPoll()">
 			{{ timeSpanExpiration }}
 		</div>
 	</div>
@@ -131,12 +136,12 @@ export default {
 
 	data() {
 		return {
-			openedMenu: false,
-			hostName: this.$route.query.page
+			openedMenu: false
 		}
 	},
 
 	computed: {
+
 		isExpired() {
 			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
@@ -152,7 +157,7 @@ export default {
 		pollType() {
 			if (this.poll.type === 'textPoll') {
 				// TRANSLATORS This means that this is the type of the poll. Another type is a 'Date poll'.
-				return t('polls', 'Text based')
+				return t('polls', 'Text poll')
 			} else {
 				return t('polls', 'Date poll')
 			}
@@ -218,137 +223,115 @@ export default {
 
 <style lang="scss" scoped>
 
-.icon-more {
-	right: 14px;
-	opacity: 0.3;
-	cursor: pointer;
-	height: 44px;
-	width: 44px;
+[class^='item__'] {
+	padding-right: 8px;
+	display: flex;
+	align-items: center;
+	flex: 0 0 auto;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
-.pollListItem {
+.item__title {
+	display: flex;
+	align-items: stretch;
+	width: 210px;
+	flex: 1 0 auto;
+}
+
+.item__title__description {
+	opacity: 0.5;
+}
+
+.item__access {
+	width: 80px;
+}
+.item__owner {
+	width: 230px;
+}
+
+.item__created, .item__expiry {
+	width: 110px;
+}
+
+[class^='poll-list__'] {
 	display: flex;
 	flex: 1;
 	border-bottom: 1px solid var(--color-border-dark);
 	padding: 4px 8px;
+}
+
+.poll-list__header {
+	opacity: 0.5;
+	flex: auto;
+	height: 4em;
+	align-items: center;
+	padding-left: 52px;
+
 	&> div {
-		padding-right: 8px;
-	}
-
-	&.header {
-		opacity: 0.5;
-		flex: auto;
-		height: 4em;
-		align-items: center;
-		padding-left: 52px;
-
-		&> div {
-			cursor: pointer;
-			display: flex;
-			&:hover {
-				.sort-indicator.hidden {
-					visibility: visible;
-					display: block;
-				}
-			}
-		}
-	}
-
-	&.poll {
-		&.active {
-			background-color: var(--color-primary-light);
-		}
+		cursor: pointer;
+		display: flex;
 		&:hover {
-			background-color: var(--color-background-hover);
-		}
-		.poll-title {
-			flex-direction: column;
-			& > * {
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
+			.sort-indicator.hidden {
+				visibility: visible;
+				display: block;
 			}
 		}
-		&.expired {
-			.type-icon, .poll-title {
-				opacity: 0.6;
-			}
-			.expiry {
-				color: var(--color-error);
-			}
-		}
-	}
-
-	.poll-title {
-		display: flex;
-		align-items: stretch;
-		width: 210px;
-		flex: 1 0 auto;
-
-		.poll-description {
-			opacity: 0.5;
-		}
-	}
-
-	.owner {
-		flex: 0 0 auto;
-		width: 230px;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-
-	.actions {
-		width: 44px;
-		align-items: center;
-		position: relative;
-	}
-
-	.created, .expiry {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		width: 110px;
-		flex: 0 1 auto;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
 	}
 }
 
-.icon {
-	flex: 0 0 44px;
+[class^='item__type']{
 	width: 44px;
-	height: 44px;
-	padding-right: 4px;
-	font-size: 0;
-	// background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
-	// background-color: var(--color-text-light);
-	&.datePoll {
-		background-image: var(--icon-calendar-000)
-		// mask-image: var(--icon-calendar-000) no-repeat 50% 50%;
-		// -webkit-mask: var(--icon-calendar-000) no-repeat 50% 50%;
-		// mask-size: 16px;
+	min-width: 16px;
+	min-height: 16px;
+}
+
+.item__type--textPoll {
+	background-image: var(--icon-toggle-filelist-000);
+}
+.item__type--datePoll {
+	background-image: var(--icon-calendar-000);
+}
+
+[class^='item__access'] {
+	width: 44px;
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 16px;
+	min-height: 16px;
+}
+
+.item__access--public {
+	background-image: var(--icon-timezone-000);
+}
+
+.item__access--hidden {
+	background-image: var(--icon-password-000);
+}
+
+.poll-list__item {
+	&.active {
+		background-color: var(--color-primary-light);
 	}
-	&.textPoll {
-		background-image: var(--icon-organization-000)
-		// mask-image: var(--icon-organization-000) no-repeat 50% 50%;
-		// -webkit-mask: var(--icon-organization-000) no-repeat 50% 50%;
-		// mask-size: 16px;
+	&:hover {
+		background-color: var(--color-background-hover);
 	}
-	&.access-hidden {
-		background-image: var(--icon-password-000)
-		// mask-image: var(--icon-password-000) no-repeat 50% 50%;
-		// -webkit-mask: var(--icon-password-000) no-repeat 50% 50%;
-		// mask-size: 16px;
+	.item__title {
+		flex-direction: column;
+		& > * {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
-	&.access-public {
-		background-image: var(--icon-link-000)
-		// mask-image: var(--icon-link-000) no-repeat 50% 50%;
-		// -webkit-mask: var(--icon-link-000) no-repeat 50% 50%;
-		// mask-size: 16px;
+
+	&.expired {
+		.item__expiry {
+			color: var(--color-error);
+		}
 	}
 }
 

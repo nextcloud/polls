@@ -101,15 +101,15 @@ export default {
 
 		description() {
 			if (this.$route.params.type === 'my') {
-				return t('polls', 'This are your polls (where you are the owner).')
+				return t('polls', 'Your polls (where you are the owner).')
 			} else if (this.$route.params.type === 'relevant') {
-				return t('polls', 'This are all polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
+				return t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
 			} else if (this.$route.params.type === 'public') {
 				return t('polls', 'A complete list with all public polls on this site, regardless who is the owner.')
 			} else if (this.$route.params.type === 'hidden') {
-				return t('polls', 'These are all hidden polls, to which you have access.')
+				return t('polls', 'All hidden polls, to which you have access.')
 			} else if (this.$route.params.type === 'deleted') {
-				return t('polls', 'This is simply the trash bin.')
+				return t('polls', 'The trash bin.')
 			} else if (this.$route.params.type === 'participated') {
 				return t('polls', 'All polls, where you placed a vote.')
 			} else if (this.$route.params.type === 'expired') {

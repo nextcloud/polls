@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin" class="config-box">
+		<div v-if="!acl.isOwner" class="config-box">
 			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
 		</div>
 

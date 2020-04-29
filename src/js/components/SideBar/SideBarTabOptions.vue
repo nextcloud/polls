@@ -22,12 +22,12 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin" class="config-box">
+		<div v-if="!acl.isOwner" class="config-box">
 			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
 		</div>
 
-		<SideBarTabOptionsDate v-if="acl.allowEdit && poll.type === 'datePoll'" />
-		<SideBarTabOptionsText v-if="acl.allowEdit && poll.type === 'textPoll'" />
+		<SideBarTabOptionsDate v-if="poll.type === 'datePoll'" />
+		<SideBarTabOptionsText v-if="poll.type === 'textPoll'" />
 	</div>
 </template>
 
@@ -64,10 +64,3 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
-	.config-box {
-		&.poll-table .poll-item {
-			border-bottom: 1px solid var(--color-border);
-		}
-	}
-</style>

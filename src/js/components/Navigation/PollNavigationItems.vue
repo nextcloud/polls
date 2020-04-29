@@ -28,16 +28,16 @@
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && !poll.deleted" icon="icon-delete" @click="$emit('switchDeleted')">
-				{{ (poll.isAdmin) ? t('polls', 'Delete poll as admin') : t('polls', 'Delete poll') }}
+				{{ t('polls', 'Delete poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-history" @click="$emit('switchDeleted')">
-				{{ (poll.isAdmin) ? t('polls', 'Restore poll as admin') : t('polls', 'Restore poll') }}
+				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger"
 				@click="$emit('deletePermanently')">
-				{{ (poll.isAdmin) ? t('polls', 'Delete poll permanently as admin') : t('polls', 'Delete poll permanently') }}
+				{{ t('polls', 'Delete poll permanently') }}
 			</ActionButton>
 		</template>
 	</AppNavigationItem>

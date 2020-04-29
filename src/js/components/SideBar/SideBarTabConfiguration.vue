@@ -22,16 +22,16 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin && !acl.isOwner" class="config-box">
+		<div v-if="!acl.isOwner" class="config-box">
 			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
 		</div>
 
-		<div v-if="acl.allowEdit" class="config-box">
+		<div class="config-box">
 			<label class="icon-sound title"> {{ t('polls', 'Title') }} </label>
 			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text">
 		</div>
 
-		<div v-if="acl.allowEdit" class="config-box">
+		<div class="config-box">
 			<label class="icon-edit title"> {{ t('polls', 'Description') }} </label>
 			<textarea v-model="pollDescription" />
 		</div>

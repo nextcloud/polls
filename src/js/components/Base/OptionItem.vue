@@ -109,7 +109,7 @@ export default {
 
 	}
 
-	[class*="option-item__option"] {
+	[class*='option-item__option'] {
 		display: flex;
 		flex: 1;
 		opacity: 1;
@@ -117,7 +117,7 @@ export default {
 		padding-right: 4px;
 	}
 
-	.draggable, .draggable [class*="option-item__option"]  {
+	.draggable, .draggable [class*='option-item__option']  {
 		cursor: grab;
 		&:active {
 			cursor: grabbing;

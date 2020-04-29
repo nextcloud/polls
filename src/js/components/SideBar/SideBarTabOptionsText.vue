@@ -31,7 +31,7 @@
 				@input="addOption()" />
 		</div>
 
-		<div class="config-box poll-table">
+		<div class="config-box">
 			<label class="title icon-toggle-filelist">
 				{{ t('polls', 'Available Options') }}
 			</label>
@@ -127,6 +127,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.option-item {
+		border-bottom: 1px solid var(--color-border);
+	}
+
 	.optionAdd {
 		display: flex;
 	}

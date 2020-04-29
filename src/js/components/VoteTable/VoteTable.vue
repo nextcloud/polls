@@ -150,7 +150,7 @@ export default {
 
 	.owner-access .user-row.vote-table__user-column,
 	.owner-access .vote-table__header > .vote-table__user-column {
-			width: 280px;
+		width: 280px;
 	}
 
 	.user {
