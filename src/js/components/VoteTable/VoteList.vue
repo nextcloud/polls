@@ -23,7 +23,7 @@
 <template lang="html">
 	<ul class="vote-list">
 		<li v-for="(option) in sortedOptions" :key="option.id" class="vote-row">
-			<VoteTableItem
+			<VoteItem
 				v-if="acl.allowVote"
 				:user-id="acl.userId"
 				:option="option"
@@ -50,14 +50,14 @@
 
 <script>
 import OptionItem from '../Base/OptionItem'
-import VoteTableItem from './VoteTableItem'
+import VoteItem from './VoteItem'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'VoteTable',
 	components: {
 		OptionItem,
-		VoteTableItem
+		VoteItem
 	},
 
 	computed: {
@@ -170,7 +170,7 @@ export default {
 				background-color: var(--color-background-dark); //$hover-color;
 			}
 
-			.vote-table-item {
+			.vote-item {
 				flex: 0;
 			}
 

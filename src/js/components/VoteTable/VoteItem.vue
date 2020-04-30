@@ -21,8 +21,9 @@
   -->
 
 <template>
-	<div class="vote-table-item" :class="[answer, { active: isActive}]">
-		<div class="icon" @click="voteClick()" />
+	<div class="vote-item" :class="[answer, { active: isActive}]">
+		<div v-if="isActive" class="icon" @click="voteClick()" />
+		<div v-else class="icon" />
 	</div>
 </template>
 
@@ -30,7 +31,7 @@
 import { mapState } from 'vuex'
 
 export default {
-	name: 'VoteTableItem',
+	name: 'VoteItem',
 
 	props: {
 		option: {
@@ -84,7 +85,7 @@ export default {
 
 <style lang="scss">
 
-	.vote-table-item {
+	.vote-item {
 		height: 43px;
 		display: flex;
 		width: 85px;
@@ -142,7 +143,7 @@ export default {
 	}
 
 	@media (max-width: (480px) ) {
-		.vote-table-item {
+		.vote-item {
 			border-top: 1px solid var(--color-border-dark);
 			&.active {
 				width: 10vw;

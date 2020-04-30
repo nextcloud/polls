@@ -46,7 +46,7 @@
 				</Actions>
 			</UserDiv>
 
-			<VoteTableItem v-for="(option) in sortedOptions"
+			<VoteItem v-for="(option) in sortedOptions"
 				:key="option.id"
 				:user-id="participant.userId"
 				:option="option"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import VoteTableItem from './VoteTableItem'
+import VoteItem from './VoteItem'
 import VoteTableHeader from './VoteTableHeader'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
@@ -80,7 +80,7 @@ export default {
 		ActionButton,
 		Modal,
 		VoteTableHeader,
-		VoteTableItem
+		VoteItem
 	},
 
 	data() {
@@ -200,7 +200,7 @@ export default {
 			flex: 1;
 			align-items: center;
 		}
-		.vote-table-item {
+		.vote-item {
 			flex: 1;
 		}
 	}
