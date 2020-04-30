@@ -27,6 +27,8 @@
 			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
+		<div class="icon-spacer" />
+
 		<div class="item__access" @click="$emit('sortList', {sort: 'access'})">
 			{{ t('polls', 'Access') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
@@ -233,11 +235,16 @@ export default {
 	text-overflow: ellipsis;
 }
 
+.icon-spacer {
+	width: 44px;
+	min-width: 44px;
+}
 .item__title {
 	display: flex;
+	flex-direction: column;
+	flex: 1 0 auto;
 	align-items: stretch;
 	width: 210px;
-	flex: 1 0 auto;
 }
 
 .item__title__description {
@@ -253,6 +260,12 @@ export default {
 
 .item__created, .item__expiry {
 	width: 110px;
+}
+
+.expired {
+	.item__expiry {
+		color: var(--color-error);
+	}
 }
 
 [class^='poll-list__'] {
@@ -318,20 +331,6 @@ export default {
 	}
 	&:hover {
 		background-color: var(--color-background-hover);
-	}
-	.item__title {
-		flex-direction: column;
-		& > * {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-	}
-
-	&.expired {
-		.item__expiry {
-			color: var(--color-error);
-		}
 	}
 }
 
