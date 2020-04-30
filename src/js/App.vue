@@ -24,7 +24,7 @@
 	<Content app-name="polls">
 		<Navigation v-if="OC.currentUser" />
 		<router-view />
-		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" @closeSideBar="toggleSideBar" />
+		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
 	</Content>
 </template>
 
@@ -50,9 +50,22 @@ export default {
 	},
 
 	created() {
-		this.$root.$on('toggleSideBar', () => { this.toggleSideBar() })
-		this.$root.$on('openSideBar', () => { this.sideBarOpen = true })
-		this.$root.$on('closeSideBar', () => { this.sideBarOpen = false })
+		this.$root.$on('toggle-sidebar', (payload) => {
+
+			if (payload === undefined) {
+				this.sideBarOpen = !this.sideBarOpen
+			} else {
+				if (payload.activeTab !== undefined) {
+					this.activeTab = payload.activeTab
+				}
+				if (payload.open !== undefined) {
+					this.sideBarOpen = payload.open
+				} else {
+					this.sideBarOpen = !this.sideBarOpen
+				}
+			}
+
+		})
 
 		if (OC.currentUser) {
 			this.updatePolls()
@@ -72,10 +85,6 @@ export default {
 						OC.Notification.showTemporary(t('polls', 'Error loading poll list'), { type: 'error' })
 					})
 			}
-		},
-
-		toggleSideBar() {
-			this.sideBarOpen = !this.sideBarOpen
 		}
 	}
 }

@@ -149,7 +149,7 @@ export default {
 			if (!this.filteredPolls(this.$route.params.type).find(poll => {
 				return poll.id === this.$store.state.poll.id
 			})) {
-				this.$root.$emit('closeSideBar')
+				this.$root.$emit('toggle-sidebar', { open: false })
 			}
 
 		},

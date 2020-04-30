@@ -179,7 +179,7 @@ export default {
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.poll.id })
 				.then((response) => {
 					this.$store.dispatch({ type: 'loadPoll', pollId: this.poll.id })
-					this.$root.$emit('openSideBar')
+					this.$root.$emit('toggle-sidebar', { open: true })
 				})
 				.catch((error) => {
 					console.error(error)

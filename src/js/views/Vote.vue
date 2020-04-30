@@ -30,7 +30,7 @@
 					</ActionButton>
 				</Actions>
 				<Actions>
-					<ActionButton icon="icon-settings" @click="$root.$emit('toggleSideBar')">
+					<ActionButton icon="icon-settings" @click="$root.$emit('toggle-sidebar')">
 						{{ t('polls', 'Toggle Sidebar') }}
 					</ActionButton>
 				</Actions>
@@ -134,17 +134,16 @@ export default {
 
 	created() {
 		this.loadPoll()
+		this.$root.$emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 	},
 
 	methods: {
 		openOptions() {
-			this.sideBarOpen = true
-			this.activeTab = 'options'
+			this.$root.$emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
 
 		openConfiguration() {
-			this.sideBarOpen = true
-			this.activeTab = 'configuration'
+			this.$root.$emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
 		},
 
 		loadPoll() {
