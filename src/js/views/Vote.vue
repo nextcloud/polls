@@ -137,6 +137,10 @@ export default {
 		this.$root.$emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 	},
 
+	beforeDestroy() {
+		this.$store.commit({ type: 'resetPoll' })
+	},
+
 	methods: {
 		openOptions() {
 			this.$root.$emit('toggle-sidebar', { open: true, activeTab: 'options' })

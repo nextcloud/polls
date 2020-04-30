@@ -185,8 +185,9 @@ export default {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		flex: 1;
 		flex-wrap: nowrap;
+		overflow: scroll;
+		padding-bottom: 14px;
 	}
 
 	#emptycontent {

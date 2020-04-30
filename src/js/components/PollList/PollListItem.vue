@@ -22,31 +22,33 @@
 
 <template>
 	<div v-if="header" class="poll-list__header">
-		<div class="item__title" @click="$emit('sortList', {sort: 'title'})">
+		<div class="item__title sortable" @click="$emit('sortList', {sort: 'title'})">
 			{{ t('polls', 'Title') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="icon-spacer" />
+		<div class="item__icon-spacer" />
 
-		<div class="item__access" @click="$emit('sortList', {sort: 'access'})">
+		<div class="item__access sortable" @click="$emit('sortList', {sort: 'access'})">
 			{{ t('polls', 'Access') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="item__owner" @click="$emit('sortList', {sort: 'owner'})">
+		<div class="item__owner sortable" @click="$emit('sortList', {sort: 'owner'})">
 			{{ t('polls', 'Owner') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'owner'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="item__created" @click="$emit('sortList', {sort: 'created'})">
-			{{ t('polls', 'Created') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
-		</div>
+		<div class="wrapper">
+			<div class="item__created sortable" @click="$emit('sortList', {sort: 'created'})">
+				{{ t('polls', 'Created') }}
+				<span :class="['sort-indicator', { 'hidden': sort !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			</div>
 
-		<div class="item__expiry" @click="$emit('sortList', {sort: 'expire'})">
-			{{ t('polls', 'Expires') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<div class="item__expiry sortable" @click="$emit('sortList', {sort: 'expire'})">
+				{{ t('polls', 'Expires') }}
+				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			</div>
 		</div>
 	</div>
 
@@ -96,12 +98,13 @@
 		<div class="item__owner" @click="loadPoll()">
 			<user-div :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
-
-		<div class="item__created" @click="loadPoll()">
-			{{ moment.unix(poll.created).fromNow() }}
-		</div>
-		<div class="item__expiry" @click="loadPoll()">
-			{{ timeSpanExpiration }}
+		<div class="wrapper" @click="loadPoll()">
+			<div class="item__created">
+				{{ moment.unix(poll.created).fromNow() }}
+			</div>
+			<div class="item__expiry">
+				{{ timeSpanExpiration }}
+			</div>
 		</div>
 	</div>
 </template>
@@ -235,7 +238,7 @@ export default {
 	text-overflow: ellipsis;
 }
 
-.icon-spacer {
+.item__icon-spacer {
 	width: 44px;
 	min-width: 44px;
 }
@@ -256,6 +259,13 @@ export default {
 }
 .item__owner {
 	width: 230px;
+}
+
+.wrapper {
+	width: 240px;
+	display: flex;
+	flex: 0 1 auto;
+	flex-wrap: wrap;
 }
 
 .item__created, .item__expiry {
@@ -282,19 +292,19 @@ export default {
 	align-items: center;
 	padding-left: 52px;
 
-	&> div {
-		cursor: pointer;
-		display: flex;
-		&:hover {
-			.sort-indicator.hidden {
-				visibility: visible;
-				display: block;
-			}
+}
+
+.sortable {
+	cursor: pointer;
+	&:hover {
+		.sort-indicator.hidden {
+			visibility: visible;
+			display: block;
 		}
 	}
 }
 
-[class^='item__type']{
+[class^='item__type'] {
 	width: 44px;
 	background-repeat: no-repeat;
 	background-position: center;
