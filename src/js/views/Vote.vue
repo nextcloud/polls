@@ -22,54 +22,51 @@
 
 <template>
 	<AppContent>
-		<div class="main-container">
-			<div class="header-actions">
-				<Actions>
-					<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
-						{{ t('polls', 'Switch view') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-settings" @click="$root.$emit('toggle-sidebar')">
-						{{ t('polls', 'Toggle Sidebar') }}
-					</ActionButton>
-				</Actions>
-			</div>
-			<h2 class="title">
-				{{ poll.title }}
-				<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
-				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-				<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
-			</h2>
-			<PollInformation />
+		<div class="header-actions">
+			<Actions>
+				<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
+					{{ t('polls', 'Switch view') }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton icon="icon-settings" @click="$root.$emit('toggle-sidebar')">
+					{{ t('polls', 'Toggle Sidebar') }}
+				</ActionButton>
+			</Actions>
+		</div>
+		<h2 class="title">
+			{{ poll.title }}
+			<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
+			<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+			<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+		</h2>
+		<PollInformation />
 
-			<VoteHeaderPublic v-if="!OC.currentUser" />
+		<VoteHeaderPublic v-if="!OC.currentUser" />
 
-			<h3 class="description">
-				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
-			</h3>
+		<h3 class="description">
+			{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+		</h3>
 
-			<VoteList v-show="!tableMode && options.list.length" />
+		<VoteList v-show="!tableMode && options.list.length" />
 
-			<VoteTable v-show="tableMode && options.list.length" />
+		<VoteTable v-show="tableMode && options.list.length" />
 
-			<div v-if="!options.list.length" class="emptycontent">
-				<div class="icon-toggle-filelist" />
-				<button v-if="acl.allowEdit" @click="openOptions">
-					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
-				</button>
-				<div v-if="!acl.allowEdit">
-					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
-				</div>
-			</div>
-
-			<Subscription v-if="OC.currentUser" />
-
-			<div class="additional">
-				<ParticipantsList v-if="acl.allowSeeUsernames" />
+		<div v-if="!options.list.length" class="emptycontent">
+			<div class="icon-toggle-filelist" />
+			<button v-if="acl.allowEdit" @click="openOptions">
+				{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
+			</button>
+			<div v-if="!acl.allowEdit">
+				{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
 			</div>
 		</div>
 
+		<Subscription v-if="OC.currentUser" />
+
+		<div class="additional">
+			<ParticipantsList v-if="acl.allowSeeUsernames" />
+		</div>
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>

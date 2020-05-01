@@ -111,11 +111,10 @@ export default {
 	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
 }
 
-.main-container {
-	flex: 1;
-	padding: 8px 24px;
-	overflow-x: scroll;
-}
+// .main-container {
+// 	flex: 1;
+// 	overflow-x: scroll;
+// }
 
 .title {
 	margin: 8px 0;
@@ -128,36 +127,6 @@ export default {
 
 .icon-handle {
 	background-image: var(--icon-polls-handle);
-}
-
-.poll-item {
-	display: flex;
-	align-items: center;
-	padding-left: 8px;
-	padding-right: 8px;
-	line-height: 2em;
-	min-height: 4em;
-	overflow: visible;
-	white-space: nowrap;
-
-	&:active,
-	&:hover {
-		transition: var(--background-dark) 0.3s ease;
-		background-color: var(--color-background-dark);
-	}
-
-	> div {
-		display: flex;
-		flex: 1;
-		font-size: 1.2em;
-		opacity: 1;
-		white-space: normal;
-		padding-right: 4px;
-		&.avatar {
-			flex: 0;
-		}
-	}
-
 }
 
 .list-enter-active,

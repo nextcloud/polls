@@ -22,38 +22,36 @@
 
 <template>
 	<AppContent>
-		<div class="main-container">
-			<div v-if="noPolls">
-				<div class="icon-polls" />
-				<h2> {{ t('No existing polls.') }} </h2>
-			</div>
-			<h2 v-if="!noPolls" class="title">
-				{{ title }}
-			</h2>
-			<h3 v-if="!noPolls" class="description">
-				{{ description }}
-			</h3>
-
-			<transition-group v-if="!noPolls" name="list" tag="div"
-				class="table">
-				<PollListItem key="0" :header="true"
-					:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
-				<li is="PollListItem"
-					v-for="(poll, index) in sortedList"
-					:key="poll.id"
-					:poll="poll"
-					@deletePoll="removePoll(index, poll)"
-					@editPoll="callPoll(index, poll, 'edit')"
-					@clonePoll="callPoll(index, poll, 'clone')" />
-			</transition-group>
+		<div v-if="noPolls">
+			<div class="icon-polls" />
+			<h2> {{ t('No existing polls.') }} </h2>
 		</div>
+		<h2 v-if="!noPolls" class="title">
+			{{ title }}
+		</h2>
+		<h3 v-if="!noPolls" class="description">
+			{{ description }}
+		</h3>
+
+		<transition-group v-if="!noPolls" name="list" tag="div"
+			class="table">
+			<PollItem key="0" :header="true"
+				:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
+			<li is="PollItem"
+				v-for="(poll, index) in sortedList"
+				:key="poll.id"
+				:poll="poll"
+				@deletePoll="removePoll(index, poll)"
+				@editPoll="callPoll(index, poll, 'edit')"
+				@clonePoll="callPoll(index, poll, 'clone')" />
+		</transition-group>
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
 import { AppContent } from '@nextcloud/vue'
-import PollListItem from '../components/PollList/PollListItem'
+import PollItem from '../components/PollList/PollItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
@@ -64,7 +62,7 @@ export default {
 	components: {
 		AppContent,
 		LoadingOverlay,
-		PollListItem
+		PollItem
 	},
 
 	data() {

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div v-if="header" class="poll-list__header">
+	<div v-if="header" class="poll-item__header">
 		<div class="item__title sortable" @click="$emit('sortList', {sort: 'title'})">
 			{{ t('polls', 'Title') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
@@ -52,7 +52,7 @@
 		</div>
 	</div>
 
-	<div v-else class="poll-list__item" :class="{ expired: isExpired, active: (poll.id === $store.state.poll.id) }">
+	<div v-else class="poll-item__item" :class="{ expired: isExpired, active: (poll.id === $store.state.poll.id) }">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
 		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="item__title">
 			<div class="item__title__title">
@@ -113,7 +113,7 @@
 import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
-	name: 'PollListItem',
+	name: 'PollItem',
 
 	components: {
 		Actions,
@@ -278,14 +278,14 @@ export default {
 	}
 }
 
-[class^='poll-list__'] {
+[class^='poll-item__'] {
 	display: flex;
 	flex: 1;
 	border-bottom: 1px solid var(--color-border-dark);
 	padding: 4px 8px;
 }
 
-.poll-list__header {
+.poll-item__header {
 	opacity: 0.5;
 	flex: auto;
 	height: 4em;
@@ -335,7 +335,7 @@ export default {
 	background-image: var(--icon-password-000);
 }
 
-.poll-list__item {
+.poll-item__item {
 	&.active {
 		background-color: var(--color-primary-light);
 	}
