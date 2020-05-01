@@ -26,6 +26,7 @@
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
+
 		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
@@ -37,8 +38,9 @@
 
 				<div>
 					<span v-show="checkingUserName" class="icon-loading-small">Checking username …</span>
-					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
-					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
+					<span v-show="!checkingUserName && userName.length < 3" class="error">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
+					<span v-show="!checkingUserName && userName.length > 2 && !isValidName" class="error">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
+					<span v-show="!checkingUserName && userName.length > 2 && isValidName" class="error">{{ t('polls', 'Valid username.') }}</span>
 				</div>
 
 				<div class="modal__buttons">
@@ -212,7 +214,7 @@ export default {
 		padding: 4px 12px;
 		margin: 0 12px 0 24px;
 		border: 2px solid var(--color-success);
-		background-color: #d6fdda !important;
+		background-color: var(--color-background-success) !important;
 		border-radius: var(--border-radius);
 		font-size: 1.2em;
 		opacity: 0.8;

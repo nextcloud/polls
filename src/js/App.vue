@@ -93,6 +93,8 @@ export default {
 
 <style  lang="scss">
 :root {
+	--color-background-error: #f9c5c5;
+	--color-background-success: #d6fdda;
 	--color-polls-foreground-yes: #49bc49;
 	--color-polls-foreground-no: #f45573;
 	--color-polls-foreground-maybe: #ffc107;
@@ -152,62 +154,59 @@ export default {
 }
 
 #app-content {
-	display: flex;
-	width: auto;
+	padding: 8px 24px;
 	overflow: hidden;
+}
 
-	input {
-		&.hasTimepicker {
-			width: 75px;
-		}
-		&.error {
-			border-color: var(--color-error);
-			background-color: #f9c5c5;
-			background-image: var(--icon-error-e9322d);
-			background-repeat: no-repeat;
-			background-position: right;
-		}
-		&.success, &.icon-confirn.success {
-			border-color: var(--color-success);
-			background-color: #d6fdda !important;
-			&.icon-confirm {
-				border-color: var(--color-success) !important;
-				border-left-color: transparent !important;
-			}
-		}
+input {
+	background-repeat: no-repeat;
+	background-position: 98%;
 
-		&.icon {
-			flex: 0;
-			padding: 0 17px;
-		}
+	&.error {
+		border-color: var(--color-error);
+		background-color: var(--color-background-error);
+		background-image: var(--icon-polls-no);
 	}
 
-	.label {
-		border: solid 1px;
-		border-radius: var(--border-radius);
-		padding: 1px 4px;
-		margin: 0 4px;
-		font-size: 60%;
-		text-align: center;
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text);
-		}
-		&.success {
-			border-color: var(--color-success);
-			background-color: var(--color-success);
-			color: var(--color-primary-text);
-		}
+	&.success, &.icon-confirm.success {
+		border-color: var(--color-success);
+		background-image: var(--icon-polls-yes);
+		background-color: var(--color-background-success) !important;
+	}
+
+	&.icon {
+		flex: 0;
+		padding: 0 17px;
+	}
+}
+
+.label {
+	border: solid 1px;
+	border-radius: var(--border-radius);
+	padding: 1px 4px;
+	margin: 0 4px;
+	font-size: 60%;
+	text-align: center;
+
+	&.error {
+		border-color: var(--color-error);
+		background-color: var(--color-error);
+		color: var(--color-primary-text);
+	}
+
+	&.success {
+		border-color: var(--color-success);
+		background-color: var(--color-success);
+		color: var(--color-primary-text);
 	}
 }
 
 .config-box {
 	display: flex;
 	flex-direction: column;
-	padding: 8px;
+	// padding: 8px;
 	& > * {
-		padding-left: 21px;
+		margin-left: 21px;
 	}
 
 	& > input {
@@ -217,18 +216,20 @@ export default {
 	}
 
 	& > textarea {
-		margin-left: 24px;
+		// margin-left: 24px;
 		width: auto;
 		padding: 7px 6px;
 	}
 
 	& > .title {
 		display: flex;
-		background-position: 0 2px;
-		padding-left: 24px;
+		background-position: 0 4px;
+		// padding-left: 24px;
 		opacity: 0.7;
 		font-weight: bold;
 		margin-bottom: 4px;
+		margin-left: 0;
+		padding-left: 24px;
 		& > span {
 			padding-left: 4px;
 		}

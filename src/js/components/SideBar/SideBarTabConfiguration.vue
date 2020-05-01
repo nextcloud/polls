@@ -56,7 +56,7 @@
 			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
 
 			<DatetimePicker v-show="pollExpiration"
-				v-model="pollExpire" v-bind="expirationDatePicker" style="width:100%" />
+				v-model="pollExpire" v-bind="expirationDatePicker" />
 		</div>
 
 		<div class="config-box">

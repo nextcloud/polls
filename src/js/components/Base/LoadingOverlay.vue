@@ -39,7 +39,7 @@ export default {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background: #fff;
+	background: var(--color-main-background);
 	opacity: 0.9;
 	z-index: 9999;
 	.icon-loading {

@@ -28,8 +28,8 @@
 			</label>
 			<DatetimePicker v-model="lastOption"
 				v-bind="optionDatePicker"
-				style="width:100%"
 				confirm
+				style="width: inherit;"
 				@change="addOption(lastOption)" />
 		</div>
 
@@ -45,11 +45,10 @@
 						:options="dateUnits"
 						label="name"
 						track-by="value" />
+					<ButtonDiv icon="icon-history"
+						:title="t('polls', 'Shift')"
+						@click="shiftDates(shift)" />
 				</div>
-			</div>
-			<div>
-				<ButtonDiv icon="icon-history" :title="t('polls', 'Shift')"
-					@click="shiftDates(shift)" />
 			</div>
 		</div>
 
@@ -239,11 +238,15 @@ export default {
 
 	.selectUnit {
 		display: flex;
+		align-items: center;
 		input {
-			width: 90px;
+			margin: 0 4px;
+			width: 40px;
 		}
 		.multiselect {
-			margin-top: 3px;
+			margin: 0 8px;
+			width: unset !important;
+			flex: 1;
 		}
 	}
 </style>

@@ -31,17 +31,17 @@
 			<OptionItem :option="option" :type="poll.type" />
 
 			<div class="counter">
-				<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
-					<span> {{ yesVotes(option.pollOptionText) }} </span>
+				<div v-if="noVotes(option.pollOptionText)" class="no" :style="{flex: noVotes(option.pollOptionText) }">
+					<!-- <span> {{ noVotes(option.pollOptionText) }} </span> -->
+					<span />
 				</div>
 
 				<div v-if="maybeVotes(option.pollOptionText)" class="maybe" :style="{flex: maybeVotes(option.pollOptionText) }">
 					<span> {{ maybeVotes(option.pollOptionText) }} </span>
 				</div>
 
-				<div v-if="noVotes(option.pollOptionText)" class="no" :style="{flex: noVotes(option.pollOptionText) }">
-					<!-- <span> {{ noVotes(option.pollOptionText) }} </span> -->
-					<span />
+				<div v-if="yesVotes(option.pollOptionText)" class="yes" :style="{ flex: yesVotes(option.pollOptionText) }">
+					<span> {{ yesVotes(option.pollOptionText) }} </span>
 				</div>
 			</div>
 		</li>
@@ -142,12 +142,9 @@ export default {
 		}
 
 		.maybe {
-			background-color: var(--color-polls-foreground-maybe); //#f0db98
+			background-color: var(--color-polls-foreground-maybe);
 		}
 
-		.no {
-			// background-color: var(--color-polls-foreground-no); //#f45573
-		}
 	}
 
 	.vote-list {
