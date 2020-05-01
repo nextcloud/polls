@@ -129,7 +129,7 @@ export default {
 		DatetimePicker,
 		Modal,
 		Multiselect,
-		OptionItem
+		OptionItem,
 	},
 
 	data() {
@@ -140,7 +140,7 @@ export default {
 				baseOption: {},
 				unit: { name: t('polls', 'Week'), value: 'week' },
 				step: 1,
-				amount: 1
+				amount: 1,
 			},
 			dateUnits: [
 				{ name: t('polls', 'Minute'), value: 'minute' },
@@ -148,19 +148,19 @@ export default {
 				{ name: t('polls', 'Day'), value: 'day' },
 				{ name: t('polls', 'Week'), value: 'week' },
 				{ name: t('polls', 'Month'), value: 'month' },
-				{ name: t('polls', 'Year'), value: 'year' }
+				{ name: t('polls', 'Year'), value: 'year' },
 			],
 			shift: {
 				step: 1,
-				unit: { name: t('polls', 'Week'), value: 'week' }
-			}
+				unit: { name: t('polls', 'Week'), value: 'week' },
+			},
 		}
 	},
 
 	computed: {
 		...mapState({
 			options: state => state.options,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters(['sortedOptions']),
@@ -188,11 +188,11 @@ export default {
 						months: moment.months(),
 						monthsShort: moment.monthsShort(),
 						weekdays: moment.weekdays(),
-						weekdaysMin: moment.weekdaysMin()
-					}
-				}
+						weekdaysMin: moment.weekdaysMin(),
+					},
+				},
 			}
-		}
+		},
 	},
 
 	methods: {
@@ -221,7 +221,7 @@ export default {
 					pollOptionText: moment.unix(this.sequence.baseOption.timestamp).add(
 						this.sequence.step * (i + 1),
 						this.sequence.unit.value
-					).format('YYYY-MM-DD HH:mm:ss')
+					).format('YYYY-MM-DD HH:mm:ss'),
 				})
 			}
 			this.modal = false
@@ -235,9 +235,9 @@ export default {
 
 		removeOption(option) {
 			this.$store.dispatch('removeOptionAsync', { option: option })
-		}
+		},
 
-	}
+	},
 
 }
 </script>

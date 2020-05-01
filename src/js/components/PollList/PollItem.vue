@@ -117,31 +117,31 @@ export default {
 
 	components: {
 		Actions,
-		ActionButton
+		ActionButton,
 	},
 
 	props: {
 		header: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		poll: {
 			type: Object,
-			default: undefined
+			default: undefined,
 		},
 		sort: {
 			type: String,
-			default: 'created'
+			default: 'created',
 		},
 		reverse: {
 			type: Boolean,
-			default: true
-		}
+			default: true,
+		},
 	},
 
 	data() {
 		return {
-			openedMenu: false
+			openedMenu: false,
 		}
 	},
 
@@ -174,7 +174,7 @@ export default {
 			} else {
 				return t('polls', 'never')
 			}
-		}
+		},
 	},
 
 	methods: {
@@ -221,8 +221,8 @@ export default {
 					this.$root.$emit('updatePolls')
 				})
 			this.hideMenu()
-		}
-	}
+		},
+	},
 }
 </script>
 

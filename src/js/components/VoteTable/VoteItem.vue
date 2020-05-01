@@ -36,25 +36,25 @@ export default {
 	props: {
 		option: {
 			type: Object,
-			default: undefined
+			default: undefined,
 		},
 		userId: {
 			type: String,
-			default: ''
-		}
+			default: '',
+		},
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		answer() {
 			try {
 				return this.$store.getters.getVote({
 					option: this.option,
-					userId: this.userId
+					userId: this.userId,
 				}).voteAnswer
 			} catch (e) {
 				return ''
@@ -67,7 +67,7 @@ export default {
 
 		isActive() {
 			return (this.isValidUser && this.acl.userId === this.userId && this.acl.allowVote)
-		}
+		},
 
 	},
 
@@ -76,9 +76,9 @@ export default {
 			if (this.isActive) {
 				this.$emit('voteClick')
 			}
-		}
+		},
 
-	}
+	},
 }
 
 </script>

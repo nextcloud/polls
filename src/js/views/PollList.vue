@@ -62,7 +62,7 @@ export default {
 	components: {
 		AppContent,
 		LoadingOverlay,
-		PollItem
+		PollItem,
 	},
 
 	data() {
@@ -70,7 +70,7 @@ export default {
 			noPolls: false,
 			isLoading: false,
 			sort: 'created',
-			reverse: true
+			reverse: true,
 		}
 	},
 
@@ -127,14 +127,14 @@ export default {
 			} else {
 				return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 			}
-		}
+		},
 
 	},
 
 	watch: {
 		$route() {
 			this.refreshView()
-		}
+		},
 	},
 
 	mounted() {
@@ -165,11 +165,11 @@ export default {
 			this.$router.push({
 				name: name,
 				params: {
-					id: poll.id
-				}
+					id: poll.id,
+				},
 			})
-		}
-	}
+		},
+	},
 }
 </script>
 

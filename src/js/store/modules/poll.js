@@ -40,7 +40,7 @@ const defaultPoll = () => {
 		showResults: 'always',
 		adminAccess: 0,
 		settings: '',
-		options: ''
+		options: '',
 	}
 }
 
@@ -57,7 +57,7 @@ const mutations = {
 
 	setPollProperty(state, payload) {
 		Object.assign(state, payload)
-	}
+	},
 
 }
 
@@ -79,7 +79,7 @@ const getters = {
 
 	allowEdit: (state, getters, rootState) => {
 		return (rootState.acl.allowEdit)
-	}
+	},
 
 }
 
@@ -121,7 +121,7 @@ const actions = {
 				throw error
 			})
 
-	}
+	},
 }
 
 export default { state, mutations, getters, actions, defaultPoll }

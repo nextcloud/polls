@@ -51,14 +51,14 @@ export default {
 	name: 'PollNavigationItems',
 	components: {
 		ActionButton,
-		AppNavigationItem
+		AppNavigationItem,
 	},
 
 	props: {
 		poll: {
 			type: Object,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 
 	computed: {
@@ -68,8 +68,8 @@ export default {
 			} else {
 				return 'icon-toggle-filelist'
 			}
-		}
-	}
+		},
+	},
 }
 </script>
 

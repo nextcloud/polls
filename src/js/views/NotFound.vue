@@ -42,13 +42,13 @@ import { AppContent } from '@nextcloud/vue'
 export default {
 	name: 'NotFound',
 	components: {
-		AppContent
+		AppContent,
 	},
 
 	methods: {
 		gotoLogin() {
 			window.location.replace(OC.generateUrl('/'))
-		}
-	}
+		},
+	},
 }
 </script>

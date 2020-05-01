@@ -66,7 +66,7 @@ export default {
 	name: 'VoteHeaderPublic',
 
 	components: {
-		Modal
+		Modal,
 	},
 
 	data() {
@@ -77,24 +77,24 @@ export default {
 			redirecting: false,
 			isValidName: false,
 			newName: '',
-			modal: true
+			modal: true,
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
-			'expired'
+			'expired',
 		]),
 
 		loginLink() {
 			const redirectUrl = this.$router.resolve({
 				name: 'publicVote',
-				params: { token: this.$route.params.token }
+				params: { token: this.$route.params.token },
 			}).href
 			return OC.generateUrl('login?redirect_url=' + redirectUrl)
 		},
@@ -103,7 +103,7 @@ export default {
 			return window.location.origin.concat(
 				this.$router.resolve({
 					name: 'publicVote',
-					params: { token: this.$route.params.token }
+					params: { token: this.$route.params.token },
 				}).href
 			)
 		},
@@ -114,7 +114,7 @@ export default {
 
 		isValidUser() {
 			return (this.acl.userId !== '' && this.acl.userId !== null)
-		}
+		},
 
 	},
 
@@ -132,7 +132,7 @@ export default {
 
 		'poll.id': function(newValue) {
 			this.setFocus()
-		}
+		},
 	},
 
 	methods: {
@@ -199,8 +199,8 @@ export default {
 						OC.Notification.showTemporary(t('polls', 'Error saving username', 1, this.poll.title), { type: 'error' })
 					})
 			}
-		}
-	}
+		},
+	},
 }
 </script>
 

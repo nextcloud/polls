@@ -113,7 +113,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		Multiselect
+		Multiselect,
 	},
 
 	data() {
@@ -128,20 +128,20 @@ export default {
 				getGroups: true,
 				getContacts: true,
 				getMail: true,
-				query: ''
-			}
+				query: '',
+			},
 		}
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
 			'invitationShares',
-			'publicShares'
-		])
+			'publicShares',
+		]),
 	},
 
 	methods: {
@@ -217,15 +217,15 @@ export default {
 						userId: payload.user,
 						pollId: '0',
 						userEmail: payload.emailAddress,
-						token: ''
-					}
+						token: '',
+					},
 				})
 				.catch(error => {
 					console.error('Error while adding share - Error: ', error)
 					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })
 				})
-		}
-	}
+		},
+	},
 }
 </script>
 

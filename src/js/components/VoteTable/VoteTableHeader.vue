@@ -43,28 +43,28 @@ export default {
 	name: 'VoteTableHeader',
 
 	components: {
-		OptionItem
+		OptionItem,
 	},
 
 	props: {
 		option: {
 			type: Object,
-			default: undefined
+			default: undefined,
 		},
 		pollType: {
 			type: String,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			votes: state => state.votes.list
+			votes: state => state.votes.list,
 		}),
 		...mapGetters([
 			'votesRank',
-			'winnerCombo'
+			'winnerCombo',
 		]),
 
 		yesVotes() {
@@ -98,8 +98,8 @@ export default {
 					return rank.pollOptionText === pollOptionText
 				}).maybe
 			)
-		}
-	}
+		},
+	},
 }
 
 </script>

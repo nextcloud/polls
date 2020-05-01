@@ -49,20 +49,20 @@ export default {
 		return {
 			voteSaved: false,
 			delay: 50,
-			newName: ''
+			newName: '',
 		}
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
-			'participantsVoted'
-		])
+			'participantsVoted',
+		]),
 
-	}
+	},
 
 }
 </script>

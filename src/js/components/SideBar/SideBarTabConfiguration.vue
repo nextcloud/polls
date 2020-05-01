@@ -104,7 +104,7 @@ export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
-		DatetimePicker
+		DatetimePicker,
 	},
 
 	data() {
@@ -112,14 +112,14 @@ export default {
 			writingPoll: false,
 			sidebar: false,
 			titleEmpty: false,
-			setExpiration: false
+			setExpiration: false,
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		// Add bindings
@@ -129,7 +129,7 @@ export default {
 			},
 			set(value) {
 				this.writeValueDebounced({ description: value })
-			}
+			},
 		},
 
 		pollTitle: {
@@ -138,7 +138,7 @@ export default {
 			},
 			set(value) {
 				this.writeValueDebounced({ title: value })
-			}
+			},
 		},
 
 		pollAccess: {
@@ -147,7 +147,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ access: value })
-			}
+			},
 		},
 
 		pollShowResults: {
@@ -156,7 +156,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ showResults: value })
-			}
+			},
 		},
 
 		pollExpire: {
@@ -166,7 +166,7 @@ export default {
 			set(value) {
 
 				this.writeValue({ expire: moment(value).unix() })
-			}
+			},
 		},
 
 		pollExpiration: {
@@ -180,7 +180,7 @@ export default {
 					this.writeValue({ expire: 0 })
 
 				}
-			}
+			},
 		},
 
 		pollAnonymous: {
@@ -189,7 +189,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ anonymous: value })
-			}
+			},
 		},
 
 		pollAdminAccess: {
@@ -198,7 +198,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ adminAccess: value })
-			}
+			},
 		},
 
 		pollAllowMaybe: {
@@ -207,7 +207,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ allowMaybe: value })
-			}
+			},
 		},
 
 		firstDOW() {
@@ -233,9 +233,9 @@ export default {
 						months: moment.months(),
 						monthsShort: moment.monthsShort(),
 						weekdays: moment.weekdays(),
-						weekdaysMin: moment.weekdaysMin()
-					}
-				}
+						weekdaysMin: moment.weekdaysMin(),
+					},
+				},
 			}
 		},
 
@@ -247,7 +247,7 @@ export default {
 			} else {
 				return t('polls', 'Create new poll')
 			}
-		}
+		},
 	},
 	methods: {
 
@@ -301,7 +301,7 @@ export default {
 				this.writePoll()
 			}
 
-		}
-	}
+		},
+	},
 }
 </script>

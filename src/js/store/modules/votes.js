@@ -25,7 +25,7 @@ import orderBy from 'lodash/orderBy'
 
 const defaultVotes = () => {
 	return {
-		list: []
+		list: [],
 	}
 }
 
@@ -54,7 +54,7 @@ const mutations = {
 		} else {
 			state.list.push(payload.vote)
 		}
-	}
+	},
 }
 
 const getters = {
@@ -75,7 +75,7 @@ const getters = {
 				map.set(item.userId, true)
 				list.push({
 					userId: item.userId,
-					displayName: item.displayName
+					displayName: item.displayName,
 				})
 			}
 		}
@@ -91,7 +91,7 @@ const getters = {
 				list.push({
 					userId: item.userId,
 					displayName: item.displayName,
-					voted: true
+					voted: true,
 				})
 			}
 		}
@@ -100,7 +100,7 @@ const getters = {
 			list.push({
 				userId: rootState.acl.userId,
 				displayName: rootState.acl.displayName,
-				voted: false
+				voted: false,
 			})
 		}
 		return list
@@ -117,7 +117,7 @@ const getters = {
 				pollOptionText: option.pollOptionText,
 				yes: countYes,
 				no: countNo,
-				maybe: countMaybe
+				maybe: countMaybe,
 			})
 		})
 		rank = orderBy(rank, ['yes', 'maybe'], ['desc', 'desc'])
@@ -149,7 +149,7 @@ const getters = {
 			return getters.answerSequence[1]
 		}
 
-	}
+	},
 
 }
 
@@ -180,7 +180,7 @@ const actions = {
 		return axios.post(OC.generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			voteId: 0,
-			userId: payload.userId
+			userId: payload.userId,
 		})
 			.then(() => {
 				context.commit('deleteVotes', payload)
@@ -203,7 +203,7 @@ const actions = {
 			token: context.rootState.acl.token,
 			option: payload.option,
 			userId: payload.userId,
-			setTo: payload.setTo
+			setTo: payload.setTo,
 		})
 			.then((response) => {
 				context.commit('setVote', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
@@ -212,7 +212,7 @@ const actions = {
 				console.error('Error setting vote', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 
 }
 

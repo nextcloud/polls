@@ -28,7 +28,7 @@
 
 <script>
 export default {
-	name: 'LoadingOverlay'
+	name: 'LoadingOverlay',
 }
 </script>
 

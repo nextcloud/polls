@@ -94,7 +94,7 @@ export default {
 		LoadingOverlay,
 		VoteHeaderPublic,
 		VoteTable,
-		VoteList
+		VoteList,
 	},
 
 	data() {
@@ -102,7 +102,7 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			isLoading: true,
-			tableMode: true
+			tableMode: true,
 		}
 	},
 
@@ -110,23 +110,23 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.acl,
-			options: state => state.options
+			options: state => state.options,
 		}),
 
 		...mapGetters([
-			'expired'
+			'expired',
 		]),
 
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
-		}
+		},
 
 	},
 
 	watch: {
 		$route() {
 			this.loadPoll()
-		}
+		},
 	},
 
 	created() {
@@ -169,8 +169,8 @@ export default {
 					this.isLoading = false
 					this.$router.replace({ name: 'notfound' })
 				})
-		}
-	}
+		},
+	},
 }
 </script>
 

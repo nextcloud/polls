@@ -25,7 +25,7 @@ import axios from '@nextcloud/axios'
 
 const defaultShares = () => {
 	return {
-		list: []
+		list: [],
 	}
 }
 
@@ -48,7 +48,7 @@ const mutations = {
 
 	addShare(state, payload) {
 		state.list.push(payload)
-	}
+	},
 
 }
 
@@ -73,7 +73,7 @@ const getters = {
 
 	countShares: state => {
 		return state.list.length
-	}
+	},
 }
 
 const actions = {
@@ -172,7 +172,7 @@ const actions = {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 
 }
 

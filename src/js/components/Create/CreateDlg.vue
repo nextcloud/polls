@@ -62,18 +62,18 @@ export default {
 		return {
 			id: 0,
 			type: 'datePoll',
-			title: ''
+			title: '',
 		}
 	},
 
 	computed: {
 		...mapState({
-			poll: state => state.poll
+			poll: state => state.poll,
 		}),
 
 		titleEmpty() {
 			return this.title === ''
-		}
+		},
 	},
 
 	methods: {
@@ -107,8 +107,8 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.pollTitle.focus()
 			})
-		}
-	}
+		},
+	},
 
 }
 </script>

@@ -38,7 +38,7 @@ const defaultAcl = () => {
 		allowSeeAllVotes: false,
 		foundByToken: false,
 		loggedIn: false,
-		accessLevel: ''
+		accessLevel: '',
 	}
 }
 
@@ -53,7 +53,7 @@ const mutations = {
 
 	resetAcl(state) {
 		Object.assign(state, defaultAcl())
-	}
+	},
 
 }
 
@@ -77,7 +77,7 @@ const actions = {
 				console.error('Error loading acl', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 }
 
 export default { namespaced, state, mutations, actions }

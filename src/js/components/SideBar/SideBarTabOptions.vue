@@ -41,7 +41,7 @@ export default {
 
 	components: {
 		SideBarTabOptionsDate,
-		SideBarTabOptionsText
+		SideBarTabOptionsText,
 	},
 
 	data() {
@@ -50,17 +50,17 @@ export default {
 			move: {
 				step: 1,
 				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
-			}
+				units: ['minute', 'hour', 'day', 'week', 'month', 'year'],
+			},
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
-		})
+			acl: state => state.acl,
+		}),
 
-	}
+	},
 }
 </script>

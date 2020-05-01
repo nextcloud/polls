@@ -25,7 +25,7 @@ import axios from '@nextcloud/axios'
 
 const defaultSubscription = () => {
 	return {
-		subscribed: false
+		subscribed: false,
 	}
 }
 
@@ -35,7 +35,7 @@ const mutations = {
 
 	setSubscription(state, payload) {
 		state.subscribed = payload
-	}
+	},
 
 }
 
@@ -56,7 +56,7 @@ const actions = {
 			}, (error) => {
 				console.error(error.response)
 			})
-	}
+	},
 }
 
 export default { state, mutations, actions }

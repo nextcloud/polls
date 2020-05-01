@@ -25,7 +25,7 @@ import axios from '@nextcloud/axios'
 
 const defaultComments = () => {
 	return {
-		list: []
+		list: [],
 	}
 }
 
@@ -49,13 +49,13 @@ const mutations = {
 		state.list = state.list.filter(comment => {
 			return comment.id !== payload.comment.id
 		})
-	}
+	},
 }
 
 const getters = {
 	countComments: state => {
 		return state.list.length
-	}
+	},
 }
 
 const actions = {
@@ -90,7 +90,7 @@ const actions = {
 
 		return axios.post(OC.generateUrl(endPoint), {
 			token: context.rootState.acl.token,
-			comment: payload.comment
+			comment: payload.comment,
 		})
 			.then((response) => {
 				context.commit('removeComment', { comment: response.data.comment })
@@ -113,7 +113,7 @@ const actions = {
 			pollId: context.rootState.poll.id,
 			token: context.rootState.acl.token,
 			message: payload.message,
-			userId: context.rootState.acl.userId
+			userId: context.rootState.acl.userId,
 		})
 			.then((response) => {
 				context.commit('addComment', response.data)
@@ -122,7 +122,7 @@ const actions = {
 				console.error('Error writing comment', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 }
 
 export default { state, mutations, actions, getters }

@@ -36,24 +36,24 @@ export default {
 	name: 'CommentAdd',
 
 	components: {
-		InputDiv
+		InputDiv,
 	},
 
 	data() {
 		return {
 			comment: '',
-			isLoading: false
+			isLoading: false,
 		}
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		currentUser() {
 			return this.$store.state.acl.userId
-		}
+		},
 	},
 
 	methods: {
@@ -73,8 +73,8 @@ export default {
 					})
 			}
 
-		}
-	}
+		},
+	},
 }
 </script>
 

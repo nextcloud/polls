@@ -64,29 +64,29 @@ export default {
 	props: {
 		draggable: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		option: {
 			type: Object,
-			required: true
+			required: true,
 		},
 		showOrder: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		tag: {
 			type: String,
-			default: 'div'
+			default: 'div',
 		},
 		type: {
 			type: String,
-			required: true
+			required: true,
 		},
 		display: {
 			type: String,
-			default: 'textBox'
-		}
-	}
+			default: 'textBox',
+		},
+	},
 }
 </script>
 

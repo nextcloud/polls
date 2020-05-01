@@ -43,44 +43,44 @@ export default {
 	name: 'UserDiv',
 
 	components: {
-		Avatar
+		Avatar,
 	},
 
 	props: {
 		hideNames: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		disableMenu: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		menuPosition: {
 			type: String,
-			default: 'left'
+			default: 'left',
 		},
 		userId: {
 			type: String,
-			default: undefined
+			default: undefined,
 		},
 		displayName: {
 			type: String,
-			default: ''
+			default: '',
 		},
 		type: {
 			type: String,
-			default: 'user'
+			default: 'user',
 		},
 		icon: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 
 	},
 
 	data() {
 		return {
-			nothidden: false
+			nothidden: false,
 		}
 	},
 
@@ -104,8 +104,8 @@ export default {
 			} else {
 				return ''
 			}
-		}
-	}
+		},
+	},
 }
 
 </script>

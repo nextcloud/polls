@@ -63,22 +63,22 @@ export default {
 		SideBarTabOptions,
 		SideBarTabShare,
 		AppSidebar,
-		AppSidebarTab
+		AppSidebarTab,
 	},
 
 	props: {
 		active: {
 			type: String,
-			default: t('polls', 'Comments').toLowerCase()
-		}
+			default: t('polls', 'Comments').toLowerCase(),
+		},
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
-		})
-	}
+			acl: state => state.acl,
+		}),
+	},
 
 }
 

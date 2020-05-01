@@ -38,14 +38,14 @@ export default {
 	components: {
 		Navigation,
 		Content,
-		SideBar
+		SideBar,
 	},
 
 	data() {
 		return {
 			sideBarOpen: (window.innerWidth > 920),
 			initialTab: 'comments',
-			activeTab: 'comments'
+			activeTab: 'comments',
 		}
 	},
 
@@ -85,8 +85,8 @@ export default {
 						OC.Notification.showTemporary(t('polls', 'Error loading poll list'), { type: 'error' })
 					})
 			}
-		}
-	}
+		},
+	},
 }
 
 </script>

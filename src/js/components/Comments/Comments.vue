@@ -63,23 +63,23 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		CommentAdd
+		CommentAdd,
 	},
 	data() {
 		return {
 			sort: 'timestamp',
-			reverse: true
+			reverse: true,
 		}
 	},
 
 	computed: {
 		...mapState({
 			comments: state => state.comments,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
-			'countComments'
+			'countComments',
 		]),
 
 		sortedList() {
@@ -88,7 +88,7 @@ export default {
 			} else {
 				return sortBy(this.comments.list, this.sort)
 			}
-		}
+		},
 
 	},
 
@@ -101,8 +101,8 @@ export default {
 					OC.Notification.showTemporary(t('polls', 'Error while deleting the comment'), { type: 'error' })
 					console.error(error.response)
 				})
-		}
-	}
+		},
+	},
 }
 </script>
 

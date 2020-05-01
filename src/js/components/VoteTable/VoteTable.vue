@@ -80,36 +80,36 @@ export default {
 		ActionButton,
 		Modal,
 		VoteTableHeader,
-		VoteItem
+		VoteItem,
 	},
 
 	data() {
 		return {
 			modal: false,
-			userToRemove: ''
+			userToRemove: '',
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
 			'sortedOptions',
-			'participants'
+			'participants',
 		]),
 
 		currentUser() {
 			return this.acl.userId
-		}
+		},
 	},
 
 	methods: {
 		removeUser() {
 			this.$store.dispatch('deleteVotes', {
-				userId: this.userToRemove
+				userId: this.userToRemove,
 			})
 			this.modal = false
 			this.userToRemove = ''
@@ -127,11 +127,11 @@ export default {
 					userId: userId,
 					setTo: this.$store.getters.getNextAnswer({
 						option: option,
-						userId: userId
-					})
+						userId: userId,
+					}),
 				})
-		}
-	}
+		},
+	},
 }
 </script>
 

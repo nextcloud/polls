@@ -40,19 +40,19 @@ export default {
 	name: 'PollInformation',
 
 	components: {
-		UserBubble
+		UserBubble,
 	},
 
 	computed: {
 		...mapState({
 			acl: state => state.acl,
-			poll: state => state.poll
+			poll: state => state.poll,
 		}),
 
 		...mapGetters([
 			'participantsVoted',
-			'expired'
-		])
-	}
+			'expired',
+		]),
+	},
 }
 </script>

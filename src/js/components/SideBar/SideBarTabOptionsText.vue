@@ -71,19 +71,19 @@ export default {
 		ActionButton,
 		draggable,
 		InputDiv,
-		OptionItem
+		OptionItem,
 	},
 
 	data() {
 		return {
-			newPollText: ''
+			newPollText: '',
 		}
 	},
 
 	computed: {
 		...mapState({
 			options: state => state.options,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters(['sortedOptions']),
@@ -94,8 +94,8 @@ export default {
 			},
 			set(value) {
 				this.writeOptions(value)
-			}
-		}
+			},
+		},
 
 	},
 
@@ -108,7 +108,7 @@ export default {
 		addOption() {
 			if (this.newPollText) {
 				this.$store.dispatch('addOptionAsync', {
-					pollOptionText: this.newPollText
+					pollOptionText: this.newPollText,
 				})
 					.then(() => {
 						this.newPollText = ''
@@ -118,10 +118,10 @@ export default {
 
 		removeOption(option) {
 			this.$store.dispatch('removeOptionAsync', {
-				option: option
+				option: option,
 			})
-		}
-	}
+		},
+	},
 
 }
 </script>

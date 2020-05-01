@@ -31,7 +31,7 @@ requireModule.keys().forEach(fileName => {
 	)
 	modules[moduleName] = {
 		namespaced: false,
-		...requireModule(fileName).default
+		...requireModule(fileName).default,
 	}
 })
 export default modules

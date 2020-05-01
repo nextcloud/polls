@@ -57,20 +57,20 @@ export default {
 	name: 'VoteTable',
 	components: {
 		OptionItem,
-		VoteItem
+		VoteItem,
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
 			'sortedOptions',
 			'participantsVoted',
 			'votesRank',
-			'expired'
+			'expired',
 		]),
 
 		currentUser() {
@@ -79,7 +79,7 @@ export default {
 
 		noOptions() {
 			return (this.sortedOptions.length === 0)
-		}
+		},
 
 	},
 
@@ -108,11 +108,11 @@ export default {
 					userId: participant,
 					setTo: this.$store.getters.getNextAnswer({
 						option: option,
-						userId: participant
-					})
+						userId: participant,
+					}),
 				})
-		}
-	}
+		},
+	},
 }
 </script>
 

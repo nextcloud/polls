@@ -24,13 +24,13 @@
 import axios from '@nextcloud/axios'
 
 const state = {
-	list: []
+	list: [],
 }
 
 const mutations = {
 	setPolls(state, { list }) {
 		state.list = list
-	}
+	},
 }
 
 const getters = {
@@ -65,7 +65,7 @@ const getters = {
 				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
 			))
 		}
-	}
+	},
 }
 
 const actions = {
@@ -114,7 +114,7 @@ const actions = {
 				console.error('Error cloning poll', { error: error.response }, { payload: payload })
 			})
 
-	}
+	},
 
 }
 

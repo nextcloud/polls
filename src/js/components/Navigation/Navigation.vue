@@ -56,7 +56,7 @@ export default {
 		AppNavigationNew,
 		AppNavigationItem,
 		CreateDlg,
-		PollNavigationItems
+		PollNavigationItems,
 	},
 
 	data() {
@@ -68,39 +68,39 @@ export default {
 					id: 'relevant',
 					title: t('polls', 'Relevant'),
 					icon: 'icon-details',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'my',
 					title: t('polls', 'My polls'),
 					icon: 'icon-user',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'public',
 					title: t('polls', 'Public polls'),
 					icon: 'icon-link',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'all',
 					title: t('polls', 'All polls'),
 					icon: 'icon-folder',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'expired',
 					title: t('polls', 'Expired polls'),
 					icon: 'icon-delete',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'deleted',
 					title: t('polls', 'Deleted polls'),
 					icon: 'icon-delete',
-					pinned: true
-				}
-			]
+					pinned: true,
+				},
+			],
 
 		}
 	},
@@ -110,7 +110,7 @@ export default {
 
 		pollList() {
 			return this.$store.state.polls.list
-		}
+		},
 	},
 
 	created() {
@@ -170,8 +170,8 @@ export default {
 					this.$root.$emit('updatePolls')
 				})
 
-		}
-	}
+		},
+	},
 }
 </script>
 

@@ -25,7 +25,7 @@ import sortBy from 'lodash/sortBy'
 
 const defaultOptions = () => {
 	return {
-		list: []
+		list: [],
 	}
 }
 
@@ -62,7 +62,7 @@ const mutations = {
 		} else {
 			state.list.splice(index, 1, payload.option)
 		}
-	}
+	},
 }
 
 const getters = {
@@ -74,7 +74,7 @@ const getters = {
 
 	sortedOptions: state => {
 		return sortBy(state.list, 'order')
-	}
+	},
 }
 
 const actions = {
@@ -160,7 +160,7 @@ const actions = {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 }
 
 export default { state, mutations, getters, actions }
