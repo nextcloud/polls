@@ -23,7 +23,7 @@
 <template>
 	<div class="participants-list">
 		<h2 v-if="participantsVoted.length">
-			{{ t('polls','Participants') }}
+			{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
 		</h2>
 		<h2 v-else>
 			{{ t('polls','No Participants until now') }}
