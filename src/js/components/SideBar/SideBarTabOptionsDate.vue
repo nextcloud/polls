@@ -39,7 +39,17 @@
 			</label>
 			<div>
 				<div class="selectUnit">
+					<Actions>
+						<ActionButton icon="icon-play-previous" @click="shift.step--">
+							{{ t('polls', 'Decrease unit') }}
+						</ActionButton>
+					</Actions>
 					<input v-model="shift.step">
+					<Actions>
+						<ActionButton icon="icon-play-next" @click="shift.step++">
+							{{ t('polls', 'Increase unit') }}
+						</ActionButton>
+					</Actions>
 					<Multiselect
 						v-model="shift.unit"
 						:options="dateUnits"
