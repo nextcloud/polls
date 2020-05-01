@@ -153,8 +153,8 @@ export default {
 	opacity: 0;
 }
 
-#app-content {
-	padding: 8px 24px;
+.app-content {
+	padding: 8px 24px 8px 36px;
 	overflow: hidden;
 }
 
