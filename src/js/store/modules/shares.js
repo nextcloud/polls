@@ -22,6 +22,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultShares = () => {
 	return {
@@ -88,7 +89,7 @@ const actions = {
 			return
 		}
 
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('setShares', { list: response.data })
 			}, (error) => {
@@ -101,7 +102,7 @@ const actions = {
 
 		const endPoint = 'apps/polls/share/get/'
 
-		return axios.get(OC.generateUrl(endPoint + payload.token))
+		return axios.get(generateUrl(endPoint + payload.token))
 			.then((response) => {
 				return { share: response.data }
 			}, (error) => {
@@ -113,7 +114,7 @@ const actions = {
 	createPersonalShare(context, payload) {
 		const endPoint = 'apps/polls/share/create/s/'
 
-		return axios.post(OC.generateUrl(endPoint), { token: payload.token, userName: payload.userName })
+		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
 			.then((response) => {
 				return { token: response.data.token }
 			}, (error) => {
@@ -126,7 +127,7 @@ const actions = {
 	writeSharePromise(context, payload) {
 		const endPoint = 'apps/polls/share/write/'
 		payload.share.pollId = context.rootState.poll.id
-		return axios.post(OC.generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
+		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
 				context.commit('addShare', response.data.share)
 
@@ -165,7 +166,7 @@ const actions = {
 
 	removeShareAsync(context, payload) {
 		const endPoint = 'apps/polls/share/remove/'
-		return axios.post(OC.generateUrl(endPoint), { share: payload.share })
+		return axios.post(generateUrl(endPoint), { share: payload.share })
 			.then(() => {
 				context.commit('removeShare', { share: payload.share })
 			}, (error) => {

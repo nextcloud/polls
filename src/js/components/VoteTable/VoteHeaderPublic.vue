@@ -59,6 +59,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
@@ -96,7 +97,7 @@ export default {
 				name: 'publicVote',
 				params: { token: this.$route.params.token },
 			}).href
-			return OC.generateUrl('login?redirect_url=' + redirectUrl)
+			return generateUrl('login?redirect_url=' + redirectUrl)
 		},
 
 		personalLink() {
@@ -162,7 +163,7 @@ export default {
 		validatePublicUsername:	debounce(function() {
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
-				return axios.post(OC.generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
+				return axios.post(generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
 					.then(() => {
 						this.checkingUserName = false
 						this.isValidName = true

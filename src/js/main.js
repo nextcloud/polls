@@ -32,7 +32,7 @@ import VueClipboard from 'vue-clipboard2'
 import moment from 'moment'
 import Fragment from 'vue-fragment'
 import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
-import { generateFilePath } from '@nextcloud/router'
+import { generateFilePath, generateUrl } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
 import UserDiv from './components/Base/UserDiv'
@@ -57,6 +57,7 @@ Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 Vue.prototype.getCurrentUser = getCurrentUser
+Vue.prototype.generateUrl = generateUrl
 
 Vue.component('UserDiv', UserDiv)
 Vue.component('ButtonDiv', ButtonDiv)

@@ -22,6 +22,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultComments = () => {
 	return {
@@ -72,7 +73,7 @@ const actions = {
 			return
 		}
 
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('setComments', { list: response.data })
 			}, (error) => {
@@ -88,7 +89,7 @@ const actions = {
 			endPoint = endPoint.concat('s/')
 		}
 
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			token: context.rootState.acl.token,
 			comment: payload.comment,
 		})
@@ -109,7 +110,7 @@ const actions = {
 			endPoint = endPoint.concat('s/')
 		}
 
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			token: context.rootState.acl.token,
 			message: payload.message,

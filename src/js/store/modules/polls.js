@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
 
 const state = {
 	list: [],
@@ -73,7 +74,7 @@ const actions = {
 	loadPolls(context) {
 		const endPoint = 'apps/polls/polls/list/'
 
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('setPolls', { list: response.data })
 			}, (error) => {
@@ -84,7 +85,7 @@ const actions = {
 
 	switchDeleted(context, payload) {
 		const endPoint = 'apps/polls/polls/delete/'
-		return axios.get(OC.generateUrl(endPoint + payload.pollId))
+		return axios.get(generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response
 			}, (error) => {
@@ -95,7 +96,7 @@ const actions = {
 
 	deletePermanently(context, payload) {
 		const endPoint = 'apps/polls/polls/delete/permanent/'
-		return axios.get(OC.generateUrl(endPoint + payload.pollId))
+		return axios.get(generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				OC.Notification.showTemporary(t('polls', 'Deleted poll permanently.'), { type: 'success' })
 				return response
@@ -107,7 +108,7 @@ const actions = {
 
 	clonePoll(context, payload) {
 		const endPoint = 'apps/polls/polls/clone/'
-		return axios.get(OC.generateUrl(endPoint + payload.pollId))
+		return axios.get(generateUrl(endPoint + payload.pollId))
 			.then((response) => {
 				return response.data
 			}, (error) => {

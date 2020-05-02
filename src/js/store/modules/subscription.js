@@ -22,6 +22,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultSubscription = () => {
 	return {
@@ -41,7 +42,7 @@ const mutations = {
 
 const actions = {
 	getSubscription(context, payload) {
-		axios.get(OC.generateUrl('apps/polls/subscription/get/' + payload.pollId))
+		axios.get(generateUrl('apps/polls/subscription/get/' + payload.pollId))
 			.then(() => {
 				context.commit('setSubscription', true)
 			})
@@ -51,7 +52,7 @@ const actions = {
 	},
 
 	writeSubscriptionPromise(context, payload) {
-		return axios.post(OC.generateUrl('apps/polls/subscription/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
+		return axios.post(generateUrl('apps/polls/subscription/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
 			.then(() => {
 			}, (error) => {
 				console.error(error.response)

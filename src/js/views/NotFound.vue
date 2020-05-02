@@ -38,6 +38,7 @@
 
 <script>
 import { AppContent } from '@nextcloud/vue'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'NotFound',
@@ -47,7 +48,7 @@ export default {
 
 	methods: {
 		gotoLogin() {
-			window.location.replace(OC.generateUrl('/'))
+			window.location.replace(generateUrl('/'))
 		},
 	},
 }

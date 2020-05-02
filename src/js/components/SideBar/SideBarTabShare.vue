@@ -37,7 +37,7 @@
 					:type="share.type"
 					:icon="true" />
 				<Actions>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: generateUrl('apps/polls/s/') + share.token })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
 				</Actions>
@@ -83,7 +83,7 @@
 					</div>
 				</div>
 				<Actions>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: generateUrl('apps/polls/s/') + share.token })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
 				</Actions>
@@ -106,6 +106,7 @@
 <script>
 import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'SideBarTabShare',
@@ -148,7 +149,7 @@ export default {
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
-			this.$http.post(OC.generateUrl('apps/polls/siteusers/get/'), this.siteUsersListOptions)
+			this.$http.post(generateUrl('apps/polls/siteusers/get/'), this.siteUsersListOptions)
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false

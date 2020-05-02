@@ -22,6 +22,7 @@
 
 import axios from '@nextcloud/axios'
 import orderBy from 'lodash/orderBy'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultVotes = () => {
 	return {
@@ -166,7 +167,7 @@ const actions = {
 			return
 		}
 
-		axios.get(OC.generateUrl(endPoint))
+		axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('setVotes', { list: response.data })
 			}, (error) => {
@@ -177,7 +178,7 @@ const actions = {
 
 	deleteVotes(context, payload) {
 		const endPoint = 'apps/polls/votes/delete/'
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			voteId: 0,
 			userId: payload.userId,
@@ -198,7 +199,7 @@ const actions = {
 			endPoint = endPoint.concat('s/')
 		}
 
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			token: context.rootState.acl.token,
 			option: payload.option,

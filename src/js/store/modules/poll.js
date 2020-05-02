@@ -22,6 +22,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultPoll = () => {
 	return {
@@ -95,7 +96,7 @@ const actions = {
 			context.commit('resetPoll')
 			return
 		}
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('setPoll', { poll: response.data.poll })
 				context.commit('acl/setAcl', { acl: response.data.acl })
@@ -111,7 +112,7 @@ const actions = {
 
 	writePollPromise(context) {
 		const endPoint = 'apps/polls/polls/write/'
-		return axios.post(OC.generateUrl(endPoint), { poll: state })
+		return axios.post(generateUrl(endPoint), { poll: state })
 			.then((response) => {
 				context.commit('setPoll', { poll: response.data.poll })
 				context.commit('acl/setAcl', { acl: response.data.acl })

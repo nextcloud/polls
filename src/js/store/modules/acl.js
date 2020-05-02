@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultAcl = () => {
 	return {
@@ -71,7 +72,7 @@ const actions = {
 			return
 		}
 
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('setAcl', { acl: response.data })
 			}, (error) => {

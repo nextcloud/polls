@@ -22,6 +22,7 @@
 
 import axios from '@nextcloud/axios'
 import sortBy from 'lodash/sortBy'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
 	return {
@@ -91,7 +92,7 @@ const actions = {
 			return
 		}
 
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('optionsSet', { list: response.data })
 			}, (error) => {
@@ -110,7 +111,7 @@ const actions = {
 	updateOptionAsync(context, payload) {
 		const endPoint = 'apps/polls/option/update'
 
-		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
+		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
 				context.commit('setOption', { option: payload.option })
 			}, (error) => {
@@ -141,7 +142,7 @@ const actions = {
 			option.pollOptionText = payload.pollOptionText
 		}
 
-		return axios.post(OC.generateUrl(endPoint), { option: option })
+		return axios.post(generateUrl(endPoint), { option: option })
 			.then((response) => {
 				context.commit('setOption', { option: response.data })
 			}, (error) => {
@@ -153,7 +154,7 @@ const actions = {
 	removeOptionAsync(context, payload) {
 		const endPoint = 'apps/polls/option/remove/'
 
-		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
+		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
 				context.commit('optionRemove', { option: payload.option })
 			}, (error) => {
