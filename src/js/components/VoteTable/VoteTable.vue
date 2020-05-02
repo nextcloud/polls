@@ -31,11 +31,11 @@
 				:poll-type="poll.type" />
 		</div>
 
-		<div v-for="(participant) in participants" :key="participant.userId" :class="{currentuser: (participant.userId === currentUser) }">
+		<div v-for="(participant) in participants" :key="participant.userId" :class="{currentuser: (participant.userId === acl.userId) }">
 			<UserDiv :key="participant.userId"
 				class="vote-table__user-column"
 				:disable-menu="true"
-				:class="{currentuser: (participant.userId === currentUser) }"
+				:class="{currentuser: (participant.userId === acl.userId) }"
 				:user-id="participant.userId"
 				:display-name="participant.displayName">
 				<Actions v-if="acl.allowEdit" class="action">
@@ -100,10 +100,6 @@ export default {
 			'sortedOptions',
 			'participants',
 		]),
-
-		currentUser() {
-			return this.acl.userId
-		},
 	},
 
 	methods: {

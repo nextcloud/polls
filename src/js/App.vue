@@ -22,7 +22,7 @@
 
 <template>
 	<Content app-name="polls">
-		<Navigation v-if="OC.currentUser" />
+		<Navigation v-if="getCurrentUser" />
 		<router-view />
 		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
 	</Content>
@@ -32,6 +32,7 @@
 import Navigation from './components/Navigation/Navigation'
 import { Content } from '@nextcloud/vue'
 import SideBar from './components/SideBar/SideBar'
+import { getCurrentUser } from '@nextcloud/auth'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
@@ -66,7 +67,7 @@ export default {
 
 		})
 
-		if (OC.currentUser) {
+		if (getCurrentUser) {
 			this.updatePolls()
 			subscribe('update-polls', () => {
 				this.updatePolls()
@@ -81,7 +82,7 @@ export default {
 
 	methods: {
 		updatePolls() {
-			if (OC.currentUser) {
+			if (getCurrentUser) {
 
 				this.$store.dispatch('loadPolls')
 					.then(() => {

@@ -73,10 +73,6 @@ export default {
 			'expired',
 		]),
 
-		currentUser() {
-			return this.acl.userId
-		},
-
 		noOptions() {
 			return (this.sortedOptions.length === 0)
 		},

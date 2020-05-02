@@ -22,6 +22,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { getCurrentUser } from '@nextcloud/auth'
 
 const state = {
 	list: [],
@@ -42,7 +43,7 @@ const getters = {
 		if (filterId === 'all') {
 			return state.list.filter(poll => (!poll.deleted))
 		} else if (filterId === 'my') {
-			return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
+			return state.list.filter(poll => (poll.owner === getCurrentUser && !poll.deleted))
 		} else if (filterId === 'relevant') {
 			return state.list.filter(poll => ((
 				poll.userHasVoted

@@ -23,7 +23,7 @@
 <template>
 	<div class="user-row" :class="type">
 		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
-			:is-guest="!Boolean(OC.currentUser)"
+			:is-guest="!Boolean(getCurrentUser)"
 			:display-name="displayName"
 
 			:is-no-user="isNoUser" />

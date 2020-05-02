@@ -42,7 +42,7 @@
 		</h2>
 		<PollInformation />
 
-		<VoteHeaderPublic v-if="!OC.currentUser" />
+		<VoteHeaderPublic v-if="getCurrentUser" />
 
 		<h3 class="description">
 			{{ poll.description ? poll.description : t('polls', 'No description provided') }}
@@ -62,7 +62,7 @@
 			</div>
 		</div>
 
-		<Subscription v-if="OC.currentUser" />
+		<Subscription v-if="getCurrentUser" />
 
 		<div class="additional">
 			<ParticipantsList v-if="acl.allowSeeUsernames" />

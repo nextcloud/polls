@@ -22,10 +22,11 @@
  */
 
 import axios from '@nextcloud/axios'
+import { getCurrentUser } from '@nextcloud/auth'
 
 const defaultAcl = () => {
 	return {
-		userId: OC.getCurrentUser().uid,
+		userId: getCurrentUser,
 		pollId: null,
 		token: null,
 		isOwner: false,

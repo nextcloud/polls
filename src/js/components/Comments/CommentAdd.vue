@@ -51,9 +51,6 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		currentUser() {
-			return this.$store.state.acl.userId
-		},
 	},
 
 	methods: {
