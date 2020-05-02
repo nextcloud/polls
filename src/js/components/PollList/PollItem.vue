@@ -100,10 +100,10 @@
 		</div>
 		<div class="wrapper" @click="loadPoll()">
 			<div class="item__created">
-				{{ moment.unix(poll.created).fromNow() }}
+				{{ timeCreatedRelative }}
 			</div>
 			<div class="item__expiry">
-				{{ timeSpanExpiration }}
+				{{ timeExpirationRelative }}
 			</div>
 		</div>
 	</div>
@@ -112,6 +112,7 @@
 <script>
 import { Actions, ActionButton } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'PollItem',
@@ -169,12 +170,15 @@ export default {
 			}
 		},
 
-		timeSpanExpiration() {
+		timeExpirationRelative() {
 			if (this.poll.expire) {
 				return moment.unix(this.poll.expire).fromNow()
 			} else {
 				return t('polls', 'never')
 			}
+		},
+		timeCreatedRelative() {
+			return moment.unix(this.poll.created).fromNow()
 		},
 	},
 

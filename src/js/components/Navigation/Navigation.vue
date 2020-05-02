@@ -32,7 +32,6 @@
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
-						:class="{ expired: (poll.expire > 0 && moment.unix(poll.expire).diff() < 0) }"
 						@switchDeleted="switchDeleted(poll.id)"
 						@clonePoll="clonePoll(poll.id)"
 						@deletePermanently="deletePermanently(poll.id)" />

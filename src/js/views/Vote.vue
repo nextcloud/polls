@@ -37,7 +37,7 @@
 		<h2 class="title">
 			{{ poll.title }}
 			<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
-			<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+			<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, dateExpiryString) }}</span>
 			<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
 		</h2>
 		<PollInformation />
@@ -82,6 +82,7 @@ import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState, mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'Vote',
@@ -122,6 +123,9 @@ export default {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
 		},
 
+		dateExpiryString() {
+			return moment.unix(this.poll.expire).format('LLLL')
+		},
 	},
 
 	watch: {

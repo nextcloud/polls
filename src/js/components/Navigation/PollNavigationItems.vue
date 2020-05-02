@@ -21,7 +21,10 @@
   -->
 
 <template lang="html">
-	<AppNavigationItem :title="poll.title" :icon="pollIcon" :to="{name: 'vote', params: {id: poll.id}}">
+	<AppNavigationItem :title="poll.title"
+		:icon="pollIcon"
+		:to="{name: 'vote', params: {id: poll.id}}"
+		:class="{ expired: expired }">
 		<template slot="actions">
 			<ActionButton icon="icon-add" @click="$emit('clonePoll')">
 				{{ t('polls', 'Clone poll') }}
@@ -46,6 +49,7 @@
 <script>
 
 import { ActionButton, AppNavigationItem } from '@nextcloud/vue'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'PollNavigationItems',
@@ -68,6 +72,9 @@ export default {
 			} else {
 				return 'icon-toggle-filelist'
 			}
+		},
+		expired() {
+			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 	},
 }

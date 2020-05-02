@@ -92,7 +92,7 @@
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
 
-				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: moment.unix(sequence.baseOption.timestamp).format('LLLL')}) }}</p>
+				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
 				<div>
 					<h3> {{ t('polls', 'Step width: ') }} </h3>
 					<input v-model="sequence.step">
@@ -116,9 +116,10 @@
 </template>
 
 <script>
-import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import OptionItem from '../Base/OptionItem'
+import moment from '@nextcloud/moment'
+import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
 
 export default {
 	name: 'SideBarTabOptionsDate',
@@ -172,6 +173,10 @@ export default {
 			} else {
 				return moment.localeData()._week.dow
 			}
+		},
+
+		dateBaseOptionString() {
+			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')
 		},
 
 		optionDatePicker() {

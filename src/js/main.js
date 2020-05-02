@@ -29,7 +29,6 @@ import store from './store'
 import router from './router'
 import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
-import moment from 'moment'
 import Fragment from 'vue-fragment'
 import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
 import { generateFilePath, generateUrl } from '@nextcloud/router'
@@ -48,9 +47,6 @@ __webpack_public_path__ = generateFilePath('polls', '', 'js/')
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
 
-moment.locale(OC.getLocale())
-
-Vue.prototype.moment = moment
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.$http = axios

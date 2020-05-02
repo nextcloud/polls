@@ -33,23 +33,23 @@
 		</div>
 
 		<div v-if="type==='datePoll' && display === 'textBox'" class="option-item__option--date">
-			{{ moment.unix(option.timestamp).format('llll') }}
+			{{ dateLocalFormat }}
 		</div>
 
 		<div v-if="type === 'datePoll' && display === 'dateBox'"
-			v-tooltip.auto="moment.unix(option.timestamp).format('llll')"
+			v-tooltip.auto="dateLocalFormat"
 			class="option-item__option--datebox">
 			<div class="month">
-				{{ moment.unix(option.timestamp).format('MMM') + " '" + moment.unix(option.timestamp).format('YY') }}
+				{{ dateBoxMonth }}
 			</div>
 			<div class="day">
-				{{ moment.unix(option.timestamp).format('Do') }}
+				{{ dateBoxDay }}
 			</div>
 			<div class="dow">
-				{{ moment.unix(option.timestamp).format('ddd') }}
+				{{ dateBoxDow }}
 			</div>
 			<div class="time">
-				{{ moment.unix(option.timestamp).format('LT') }}
+				{{ dateBoxTime }}
 			</div>
 		</div>
 
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import moment from '@nextcloud/moment'
 export default {
 	name: 'OptionItem',
 
@@ -85,6 +86,23 @@ export default {
 		display: {
 			type: String,
 			default: 'textBox',
+		},
+	},
+	computed: {
+		dateLocalFormat() {
+			return moment.unix(this.option.timestamp).format('llll')
+		},
+		dateBoxMonth() {
+			return moment.unix(this.option.timestamp).format('MMM') + " '" + moment.unix(this.option.timestamp).format('YY')
+		},
+		dateBoxDay() {
+			return moment.unix(this.option.timestamp).format('Do')
+		},
+		dateBoxDow() {
+			return moment.unix(this.option.timestamp).format('ddd')
+		},
+		dateBoxTime() {
+			return moment.unix(this.option.timestamp).format('LT')
 		},
 	},
 }

@@ -23,9 +23,9 @@
 <template>
 	<div class="poll-information">
 		<UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
-		{{ t('polls', 'started this poll on %n. ', 1, moment.unix(poll.created).format('LLLL')) }}
-		<span v-if="expired">{{ t('polls', 'Voting is no more possible, because this poll expired since %n. ', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+		{{ t('polls', 'started this poll on %n. ', 1, dateCreatedString) }}
+		<span v-if="expired">{{ t('polls', 'Voting is no more possible, because this poll expired since %n. ', 1, dateExpiryString) }}</span>
+		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ', 1, dateExpiryString) }}</span>
 		<span v-if="poll.anonymous">{{ t('polls', 'The names of other participants are hidden, as this is an anonymous poll. ') }}</span>
 		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden. ') }}</span>
 		<span v-if="!acl.allowSeeResults && poll.showResults === 'expired'">{{ t('polls', 'They will be revealed after the poll is expired. ') }}</span>
@@ -34,6 +34,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import moment from '@nextcloud/moment'
 import { UserBubble } from '@nextcloud/vue'
 
 export default {
@@ -53,6 +54,12 @@ export default {
 			'participantsVoted',
 			'expired',
 		]),
+		dateCreatedString() {
+			return moment.unix(this.poll.created).format('LLLL')
+		},
+		dateExpiryString() {
+			return moment.unix(this.poll.expire).format('LLLL')
+		},
 	},
 }
 </script>

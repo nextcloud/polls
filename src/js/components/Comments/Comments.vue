@@ -35,7 +35,7 @@
 						</ActionButton>
 					</Actions>
 					<div class="date">
-						{{ moment.utc(comment.dt).fromNow() }}
+						{{ dateCommentedRelative(comment.dt) }}
 					</div>
 				</div>
 
@@ -55,6 +55,7 @@
 <script>
 import CommentAdd from './CommentAdd'
 import sortBy from 'lodash/sortBy'
+import moment from '@nextcloud/moment'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
@@ -101,6 +102,9 @@ export default {
 					OC.Notification.showTemporary(t('polls', 'Error while deleting the comment'), { type: 'error' })
 					console.error(error.response)
 				})
+		},
+		dateCommentedRelative(date) {
+			return moment.utc(date).fromNow()
 		},
 	},
 }

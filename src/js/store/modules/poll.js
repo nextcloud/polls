@@ -22,6 +22,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultPoll = () => {

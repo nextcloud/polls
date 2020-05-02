@@ -98,8 +98,9 @@
 <script>
 import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { DatetimePicker } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
+import moment from '@nextcloud/moment'
+import { DatetimePicker } from '@nextcloud/vue'
 
 export default {
 	name: 'SideBarTabConfiguration',
