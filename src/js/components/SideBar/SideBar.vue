@@ -22,7 +22,7 @@
 
 <template>
 	<AppSidebar ref="sideBar" :active="active" :title="t('polls', 'Details')"
-		@close="$root.$emit('toggle-sidebar', { open: false })">
+		@close="emit('toggle-sidebar', { open: false })">
 		<AppSidebarTab v-if="acl.allowEdit" :id="'configuration'" :order="1"
 			:name="t('polls', 'Configuration')" icon="icon-settings">
 			<SideBarTabConfiguration />

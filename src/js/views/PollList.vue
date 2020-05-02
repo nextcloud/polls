@@ -55,6 +55,7 @@ import PollItem from '../components/PollList/PollItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'PollList',
@@ -147,7 +148,7 @@ export default {
 			if (!this.filteredPolls(this.$route.params.type).find(poll => {
 				return poll.id === this.$store.state.poll.id
 			})) {
-				this.$root.$emit('toggle-sidebar', { open: false })
+				emit('toggle-sidebar', { open: false })
 			}
 
 		},

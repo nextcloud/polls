@@ -48,6 +48,7 @@ import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/v
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Navigation',
@@ -129,7 +130,7 @@ export default {
 		timedReload() {
 			// reload poll list periodically
 			this.reloadTimer = window.setInterval(() => {
-				this.$root.$emit('updatePolls')
+				emit('update-polls')
 			}, this.reloadInterval)
 		},
 
@@ -144,7 +145,7 @@ export default {
 			this.$store
 				.dispatch('clonePoll', { pollId: pollId })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
 		},
@@ -153,7 +154,7 @@ export default {
 			this.$store
 				.dispatch('switchDeleted', { pollId: pollId })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 				})
 
 		},
@@ -167,7 +168,7 @@ export default {
 					if (this.$route.params.id && this.$route.params.id === pollId) {
 						this.$router.push({ name: 'list', params: { type: 'deleted' } })
 					}
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 				})
 
 		},

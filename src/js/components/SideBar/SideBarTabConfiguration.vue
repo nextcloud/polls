@@ -99,6 +99,7 @@
 import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { DatetimePicker } from '@nextcloud/vue'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'SideBarTabConfiguration',
@@ -290,7 +291,7 @@ export default {
 				this.$store.dispatch('writePollPromise')
 					.then(() => {
 						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.poll.title), { type: 'success' })
-						this.$root.$emit('updatePolls')
+						emit('update-polls')
 					})
 				this.writingPoll = false
 			}

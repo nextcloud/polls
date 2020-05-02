@@ -111,6 +111,7 @@
 
 <script>
 import { Actions, ActionButton } from '@nextcloud/vue'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'PollItem',
@@ -182,7 +183,7 @@ export default {
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.poll.id })
 				.then((response) => {
 					this.$store.dispatch({ type: 'loadPoll', pollId: this.poll.id })
-					this.$root.$emit('toggle-sidebar', { open: true })
+					emit('toggle-sidebar', { open: true })
 				})
 				.catch((error) => {
 					console.error(error)
@@ -202,7 +203,7 @@ export default {
 		switchDeleted() {
 			this.$store.dispatch('switchDeleted', { pollId: this.poll.id })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 				})
 			this.hideMenu()
 		},
@@ -210,7 +211,7 @@ export default {
 		deletePermanently() {
 			this.$store.dispatch('deletePermanently', { pollId: this.poll.id })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 				})
 			this.hideMenu()
 		},
@@ -218,7 +219,7 @@ export default {
 		clonePoll() {
 			this.$store.dispatch('clonePoll', { pollId: this.poll.id })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 				})
 			this.hideMenu()
 		},

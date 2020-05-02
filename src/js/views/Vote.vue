@@ -29,7 +29,7 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton icon="icon-settings" @click="$root.$emit('toggle-sidebar')">
+				<ActionButton icon="icon-settings" @click="emit('toggle-sidebar')">
 					{{ t('polls', 'Toggle Sidebar') }}
 				</ActionButton>
 			</Actions>
@@ -81,6 +81,7 @@ import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState, mapGetters } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Vote',
@@ -131,7 +132,7 @@ export default {
 
 	created() {
 		this.loadPoll()
-		this.$root.$emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+		emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 	},
 
 	beforeDestroy() {
@@ -140,11 +141,11 @@ export default {
 
 	methods: {
 		openOptions() {
-			this.$root.$emit('toggle-sidebar', { open: true, activeTab: 'options' })
+			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
 
 		openConfiguration() {
-			this.$root.$emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
+			emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
 		},
 
 		loadPoll() {

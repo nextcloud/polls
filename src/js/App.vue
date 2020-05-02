@@ -32,6 +32,7 @@
 import Navigation from './components/Navigation/Navigation'
 import { Content } from '@nextcloud/vue'
 import SideBar from './components/SideBar/SideBar'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'App',
@@ -44,14 +45,12 @@ export default {
 	data() {
 		return {
 			sideBarOpen: (window.innerWidth > 920),
-			initialTab: 'comments',
 			activeTab: 'comments',
 		}
 	},
 
 	created() {
-		this.$root.$on('toggle-sidebar', (payload) => {
-
+		subscribe('toggle-sidebar', (payload) => {
 			if (payload === undefined) {
 				this.sideBarOpen = !this.sideBarOpen
 			} else {
@@ -69,8 +68,15 @@ export default {
 
 		if (OC.currentUser) {
 			this.updatePolls()
-			this.$root.$on('updatePolls', () => { this.updatePolls() })
+			subscribe('update-polls', () => {
+				this.updatePolls()
+			})
 		}
+	},
+
+	beforeDestroy() {
+		unsubscribe('update-polls')
+		unsubscribe('toggle-sidebar')
 	},
 
 	methods: {

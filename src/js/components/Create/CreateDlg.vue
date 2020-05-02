@@ -55,6 +55,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 export default {
 	name: 'CreateDlg',
 
@@ -93,7 +94,7 @@ export default {
 			this.setPollProperty({ type: this.type })
 			this.$store.dispatch('writePollPromise')
 				.then(() => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 					this.cancel()
 					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.poll.title), { type: 'success' })
 					this.$router.push({ name: 'vote', params: { id: this.poll.id } })
