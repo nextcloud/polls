@@ -120,11 +120,6 @@ export default {
 	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
 }
 
-// .main-container {
-// 	flex: 1;
-// 	overflow-x: scroll;
-// }
-
 .title {
 	margin: 8px 0;
 }
