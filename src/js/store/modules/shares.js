@@ -26,7 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultShares = () => {
 	return {
-		list: [],
+		shares: [],
 	}
 }
 
@@ -38,7 +38,7 @@ const mutations = {
 	},
 
 	removeShare(state, payload) {
-		state.list = state.list.filter(share => {
+		state.shares = state.shares.filter(share => {
 			return share.id !== payload.share.id
 		})
 	},
@@ -48,32 +48,32 @@ const mutations = {
 	},
 
 	addShare(state, payload) {
-		state.list.push(payload)
+		state.shares.push(payload)
 	},
 
 }
 
 const getters = {
 	sortedShares: state => {
-		return state.list
+		return state.shares
 	},
 
 	invitationShares: state => {
 		const invitationTypes = ['user', 'group', 'email', 'external', 'contact']
-		return state.list.filter(function(share) {
+		return state.shares.filter(function(share) {
 			return invitationTypes.includes(share.type)
 		})
 	},
 
 	publicShares: state => {
 		const invitationTypes = ['public']
-		return state.list.filter(function(share) {
+		return state.shares.filter(function(share) {
 			return invitationTypes.includes(share.type)
 		})
 	},
 
 	countShares: state => {
-		return state.list.length
+		return state.shares.length
 	},
 }
 
@@ -91,7 +91,7 @@ const actions = {
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setShares', { list: response.data })
+				context.commit('setShares', { shares: response.data })
 			}, (error) => {
 				console.error('Error loading shares', { error: error.response }, { payload: payload })
 				throw error

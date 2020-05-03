@@ -48,11 +48,11 @@
 			{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 		</h3>
 
-		<VoteList v-show="!tableMode && options.list.length" />
+		<VoteList v-show="!tableMode && options.length" />
 
-		<VoteTable v-show="tableMode && options.list.length" />
+		<VoteTable v-show="tableMode && options.length" />
 
-		<div v-if="!options.list.length" class="emptycontent">
+		<div v-if="!options.length" class="emptycontent">
 			<div class="icon-toggle-filelist" />
 			<button v-if="acl.allowEdit" @click="openOptions">
 				{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
@@ -112,7 +112,7 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.acl,
-			options: state => state.options,
+			options: state => state.options.options,
 		}),
 
 		...mapGetters([

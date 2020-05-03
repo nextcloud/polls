@@ -27,14 +27,14 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
 	return {
-		list: [],
+		options: [],
 	}
 }
 
 const state = defaultOptions()
 
 const mutations = {
-	optionsSet(state, payload) {
+	setOptions(state, payload) {
 		Object.assign(state, payload)
 	},
 
@@ -43,7 +43,7 @@ const mutations = {
 	},
 
 	optionRemove(state, payload) {
-		state.list = state.list.filter(option => {
+		state.options = state.options.filter(option => {
 			return option.id !== payload.option.id
 		})
 	},
@@ -55,27 +55,27 @@ const mutations = {
 	},
 
 	setOption(state, payload) {
-		const index = state.list.findIndex((option) => {
+		const index = state.options.findIndex((option) => {
 			return option.id === payload.option.id
 		})
 
 		if (index < 0) {
-			state.list.push(payload.option)
+			state.options.push(payload.option)
 		} else {
-			state.list.splice(index, 1, payload.option)
+			state.options.splice(index, 1, payload.option)
 		}
 	},
 }
 
 const getters = {
 	lastOptionId: state => {
-		return Math.max.apply(Math, state.list.map(function(option) {
+		return Math.max.apply(Math, state.options.map(function(option) {
 			return option.id
 		}))
 	},
 
 	sortedOptions: state => {
-		return sortBy(state.list, 'order')
+		return sortBy(state.options, 'order')
 	},
 }
 
@@ -95,7 +95,7 @@ const actions = {
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('optionsSet', { list: response.data })
+				context.commit('setOptions', { options: response.data })
 			}, (error) => {
 				context.commit('reset')
 				console.error('Error loading options', { error: error.response }, { payload: payload })
@@ -104,7 +104,7 @@ const actions = {
 	},
 
 	updateOptions(context) {
-		context.state.list.forEach((item, i) => {
+		context.state.options.forEach((item, i) => {
 			context.dispatch('updateOptionAsync', { option: item })
 		})
 	},
@@ -139,7 +139,7 @@ const actions = {
 
 		} else if (context.rootState.poll.type === 'textPoll') {
 			option.timestamp = 0
-			option.order = state.list.length + 1
+			option.order = state.options.length + 1
 			option.pollOptionText = payload.pollOptionText
 		}
 

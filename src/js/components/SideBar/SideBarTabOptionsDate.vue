@@ -160,7 +160,7 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options,
+			options: state => state.options.options,
 			acl: state => state.acl,
 		}),
 
@@ -208,7 +208,7 @@ export default {
 
 		shiftDates(payload) {
 			const store = this.$store
-			this.options.list.forEach(function(existingOption) {
+			this.options.forEach(function(existingOption) {
 				const option = Object.assign({}, existingOption)
 				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()

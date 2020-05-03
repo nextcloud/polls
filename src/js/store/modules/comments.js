@@ -26,7 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultComments = () => {
 	return {
-		list: [],
+		comments: [],
 	}
 }
 
@@ -43,11 +43,11 @@ const mutations = {
 	},
 
 	addComment(state, payload) {
-		state.list.push(payload)
+		state.comments.push(payload)
 	},
 
 	removeComment(state, payload) {
-		state.list = state.list.filter(comment => {
+		state.comments = state.comments.filter(comment => {
 			return comment.id !== payload.comment.id
 		})
 	},
@@ -55,7 +55,7 @@ const mutations = {
 
 const getters = {
 	countComments: state => {
-		return state.list.length
+		return state.comments.length
 	},
 }
 
@@ -75,7 +75,7 @@ const actions = {
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setComments', { list: response.data })
+				context.commit('setComments', { comments: response.data })
 			}, (error) => {
 				console.error('Error loading comments', { error: error.response }, { payload: payload })
 				throw error

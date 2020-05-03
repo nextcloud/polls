@@ -75,7 +75,7 @@ export default {
 
 	computed: {
 		...mapState({
-			comments: state => state.comments,
+			comments: state => state.comments.comments,
 			acl: state => state.acl,
 		}),
 
@@ -85,9 +85,9 @@ export default {
 
 		sortedList() {
 			if (this.reverse) {
-				return sortBy(this.comments.list, this.sort).reverse()
+				return sortBy(this.comments, this.sort).reverse()
 			} else {
-				return sortBy(this.comments.list, this.sort)
+				return sortBy(this.comments, this.sort)
 			}
 		},
 

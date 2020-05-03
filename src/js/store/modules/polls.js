@@ -27,27 +27,27 @@ import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
 const state = {
-	list: [],
+	polls: [],
 }
 
 const mutations = {
-	setPolls(state, { list }) {
-		state.list = list
+	setPolls(state, payload) {
+		Object.assign(state, payload)
 	},
 }
 
 const getters = {
 	countPolls: (state) => {
-		return state.list.length
+		return state.polls.length
 	},
 
 	filteredPolls: (state) => (filterId) => {
 		if (filterId === 'all') {
-			return state.list.filter(poll => (!poll.deleted))
+			return state.polls.filter(poll => (!poll.deleted))
 		} else if (filterId === 'my') {
-			return state.list.filter(poll => (poll.owner === getCurrentUser && !poll.deleted))
+			return state.polls.filter(poll => (poll.owner === getCurrentUser && !poll.deleted))
 		} else if (filterId === 'relevant') {
-			return state.list.filter(poll => ((
+			return state.polls.filter(poll => ((
 				poll.userHasVoted
 				|| poll.isOwner
 				|| (poll.allowView && poll.access !== 'public')
@@ -56,15 +56,15 @@ const getters = {
 			&& !(poll.expire > 0 && moment.unix(poll.expire).diff() < 0)
 			))
 		} else if (filterId === 'public') {
-			return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
+			return state.polls.filter(poll => (poll.access === 'public' && !poll.deleted))
 		} else if (filterId === 'hidden') {
-			return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
+			return state.polls.filter(poll => (poll.access === 'hidden' && !poll.deleted))
 		} else if (filterId === 'deleted') {
-			return state.list.filter(poll => (poll.deleted))
+			return state.polls.filter(poll => (poll.deleted))
 		} else if (filterId === 'participated') {
-			return state.list.filter(poll => (poll.userHasVoted))
+			return state.polls.filter(poll => (poll.userHasVoted))
 		} else if (filterId === 'expired') {
-			return state.list.filter(poll => (
+			return state.polls.filter(poll => (
 				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
 			))
 		}
@@ -77,7 +77,7 @@ const actions = {
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPolls', { list: response.data })
+				context.commit('setPolls', { polls: response.data })
 			}, (error) => {
 				OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
 				console.error('Error loading polls', { error: error.response })

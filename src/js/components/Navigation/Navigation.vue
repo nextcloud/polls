@@ -109,7 +109,7 @@ export default {
 		...mapGetters(['filteredPolls']),
 
 		pollList() {
-			return this.$store.state.polls.list
+			return this.$store.state.polls.polls
 		},
 	},
 
