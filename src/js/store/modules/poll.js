@@ -101,6 +101,10 @@ const actions = {
 			.then((response) => {
 				context.commit('setPoll', { poll: response.data.poll })
 				context.commit('acl/setAcl', { acl: response.data.acl })
+				context.commit('setOptions', { options: response.data.options }, { root: true })
+				context.commit('setComments', { comments: response.data.comments }, { root: true })
+				context.commit('setVotes', { votes: response.data.votes }, { root: true })
+				context.commit('setShares', { shares: response.data.shares }, { root: true })
 				return response
 			}, (error) => {
 				if (error.response.status !== '404' && error.response.status !== '401') {

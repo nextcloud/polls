@@ -157,13 +157,14 @@ export default {
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
 					if (response.status === 200) {
-						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
-							.then(() => {
-								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-									this.openConfiguration()
-								}
-								this.isLoading = false
-							})
+						// this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
+						// 	.then(() => {
+						// 		if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
+						// 			this.openConfiguration()
+						// 		}
+						// 		this.isLoading = false
+						// 	})
+						this.isLoading = false
 						window.document.title = this.windowTitle
 					} else {
 						this.$router.replace({ name: 'notfound' })
