@@ -1,21 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.4.3] - tbd
-
-## [1.4.2] beta3
+## [1.4.3] - 2020-05-03
  - fix #909
  - fix #910
-
-## [1.4.1] beta2
  - add description to invitation mail #895
  - fixed safari bugs #770
  - added configuraton to hide the poll result #265
  - poll title to window title #318
  - updated timepicker and changed layout #889, #826
  - NC 19 compatibility
-
-## [1.4.0] beta1
  - Delete a poll completly #801
  - Alignment in poll list #828
  - Anonymous poll not saved #829
