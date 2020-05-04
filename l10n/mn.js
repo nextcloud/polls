@@ -1,8 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Устгагдсан",
-    "Group" : "Бүлэг",
     "New comment …" : "Шинэ сэтгэгдэл...",
     "Comments" : "Сэтгэгдлүүд",
     "Delete comment" : "Сэтгэгдэл устгах",
@@ -15,8 +13,15 @@ OC.L10N.register(
     "Details" : "Дэлгэрэнгүй",
     "Shares" : "Түгээлтүүд",
     "Description" : "Тодорхойлолт",
-    "Unknown user" : "  хэрэглэгч",
     "OK" : "ок",
+    "Week" : "Долоо хоног",
+    "Day" : "Өдөр",
+    "Month" : "Сар",
+    "Unknown user" : "  хэрэглэгч",
+    "Group" : "Бүлэг",
+    "No" : "Үгүй",
+    "Yes" : "Тийм",
+    "Deleted" : "Устгагдсан",
     "Public access" : "Нийтийн хандах эрх"
 },
 "nplurals=2; plural=(n != 1);");

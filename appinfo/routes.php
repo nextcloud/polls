@@ -45,6 +45,7 @@ return [
 		['name' => 'vote#get', 'url' => '/votes/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'vote#set', 'url' => '/vote/set/', 'verb' => 'POST'],
 		['name' => 'vote#write', 'url' => '/vote/write/', 'verb' => 'POST'],
+		['name' => 'vote#delete', 'url' => '/votes/delete/', 'verb' => 'POST'],
 
 		['name' => 'option#get', 'url' => '/options/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/option/add/', 'verb' => 'POST'],
@@ -55,6 +56,7 @@ return [
 		['name' => 'poll#list', 'url' => '/polls/list/', 'verb' => 'GET'],
 		['name' => 'poll#get', 'url' => '/polls/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#delete', 'url' => '/polls/delete/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#deletePermanently', 'url' => '/polls/delete/permanent/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#write', 'url' => '/polls/write/', 'verb' => 'POST'],
 		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'get'],
 		['name' => 'poll#getByToken', 'url' => '/polls/get/s/{token}', 'verb' => 'GET'],

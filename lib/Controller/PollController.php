@@ -114,13 +114,11 @@ class PollController extends Controller {
 
 	public function list() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
-
 			$pollList = [];
 
 			try {
 
 				$polls = $this->pollMapper->findAll();
-
 				// TODO: Not the elegant way. Improvement neccessary
 				foreach ($polls as $poll) {
 					$combinedPoll = (object) array_merge(
@@ -178,7 +176,6 @@ class PollController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getByToken($token) {
-
 		try {
 			return $this->get($this->acl->setToken($token)->getPollId());
 		} catch (DoesNotExistException $e) {
@@ -224,6 +221,38 @@ class PollController extends Controller {
 	}
 
 	/**
+	 * deletePermanently
+	 * @NoAdminRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function deletePermanently($pollId) {
+
+		try {
+			// Find existing poll
+			$this->poll = $this->pollMapper->find($pollId);
+			$this->acl->setPollId($this->poll->getId());
+
+			if (!$this->acl->getAllowEdit()) {
+				$this->logger->alert('Unauthorized delete attempt from user ' . $this->userId);
+				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
+			}
+
+			if (!$this->poll->getDeleted()) {
+                $this->logger->alert('user ' . $this->userId . ' trying to permanently delete active poll');
+                return new DataResponse(['message' => 'Permanent deletion of active poll.'], Http::STATUS_CONFLICT);
+			}
+
+			$this->pollMapper->delete($this->poll);
+			return new DataResponse([], Http::STATUS_OK);
+
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+
+	/**
 	 * write
 	 * @NoAdminRequired
 	 * @param Array $poll
@@ -253,7 +282,7 @@ class PollController extends Controller {
 			$this->poll->setAccess($poll['access']);
 			$this->poll->setExpire($poll['expire']);
 			$this->poll->setAnonymous(intval($poll['anonymous']));
-			$this->poll->setFullAnonymous(intval($poll['fullAnonymous']) * $this->poll->getAnonymous());
+			$this->poll->setFullAnonymous(0);
 			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
 			$this->poll->setVoteLimit(intval($poll['voteLimit']));
 			$this->poll->setSettings('');
@@ -297,7 +326,7 @@ class PollController extends Controller {
 		$clonePoll->setAccess($this->poll->getAccess());
 		$clonePoll->setExpire($this->poll->getExpire());
 		$clonePoll->setAnonymous(intval($this->poll->getAnonymous()));
-		$clonePoll->setFullAnonymous(intval($this->poll->getFullAnonymous())  * $clonePoll->getAnonymous());
+		$clonePoll->setFullAnonymous(0);
 		$clonePoll->setAllowMaybe(intval($this->poll->getAllowMaybe()));
 		$clonePoll->setVoteLimit(intval($this->poll->getVoteLimit()));
 		$clonePoll->setSettings('');

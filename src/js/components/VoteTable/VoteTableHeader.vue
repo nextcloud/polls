@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-header" :class=" { winner: isWinner }">
+	<div class="vote-table-header" :class=" { winner: isWinner }">
 		<div v-if="poll.type === 'textPoll'" class="text-box">
 			{{ option.pollOptionText }}
 		</div>
@@ -126,7 +126,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.vote-header {
+.vote-table-header {
 	display: flex;
 	flex-direction: column;
 	&.winner {
@@ -136,11 +136,9 @@ export default {
 }
 
 .counter {
-	flex: 0;
 	display: flex;
 	justify-content: center;
-	font-size: 18px;
-	height: 88px;
+	font-size: 1.1em;
 	padding: 14px 4px;
 
 	&> * {
@@ -166,34 +164,31 @@ export default {
 }
 
 .text-box {
-	flex: 1 0;
-	height: 44px;
+	flex: 1;
 	align-self: center;
-	font-size: 1.4em;
+	font-size: 1.2em;
 	padding-top: 14px;
 	hyphens: auto;
 }
 
 .date-box {
-	display: flex;
-	flex-direction: column;
-	flex: 1 0;
 	padding: 0 2px;
 	align-items: center;
 	justify-content: center;
+	text-align: center;
 
 	.month, .dow {
-		font-size: 1.2em;
+		font-size: 1.1em;
 		color: var(--color-text-lighter);
 	}
 	.day {
-		font-size: 1.8em;
+		font-size: 1.4em;
 		margin: 5px 0 5px 0;
 	}
 }
 
 @media (max-width: (480px) ) {
-	.vote-header {
+	.vote-table-header {
 		padding: 4px 0;
 		display: flex;
 		flex-direction: row;

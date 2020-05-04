@@ -1,5 +1,4 @@
 { "translations": {
-    "Group" : "Grop",
     "Cancel" : "Anullar",
     "Apply" : "Aplicar",
     "Title" : "Títol",
@@ -8,6 +7,12 @@
     "Details" : "Detalhs",
     "Description" : "Descripcion",
     "Expiration date" : "Data d'expiracion",
-    "OK" : "D'acòrdi"
+    "OK" : "D'acòrdi",
+    "Week" : "Aquesta setmana",
+    "Day" : "Jorn",
+    "Month" : "Mes",
+    "Group" : "Grop",
+    "No" : "No",
+    "Yes" : "Yes"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

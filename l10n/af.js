@@ -1,8 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Geskrap",
-    "Group" : "Groep",
     "New comment …" : "Nuwe kommentaar…",
     "Comments" : "Kommentare",
     "Delete comment" : "Skrap kommentaar",
@@ -14,8 +12,16 @@ OC.L10N.register(
     "Details" : "Besonderhede",
     "Description" : "Beskrywing",
     "Expiration date" : "Vervaldatum",
-    "Unknown user" : "Onbekende gebruiker",
     "OK" : "Goed",
+    "Week" : "Week",
+    "Hour" : "Uur",
+    "Day" : "Dag",
+    "Month" : "Maand",
+    "Unknown user" : "Onbekende gebruiker",
+    "Group" : "Groep",
+    "No" : "Nee",
+    "Yes" : "Ja",
+    "Deleted" : "Geskrap",
     "Public access" : "Openbare toegang"
 },
 "nplurals=2; plural=(n != 1);");

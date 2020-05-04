@@ -22,10 +22,7 @@
 
 <template>
 	<div class="user-row" :class="type">
-		<div v-if="description" class="description">
-			{{ description }}
-		</div>
-		<Avatar :disable-menu="true" :user="userId"
+		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
 			:is-guest="!Boolean(OC.currentUser)"
 			:display-name="displayName"
 
@@ -35,6 +32,7 @@
 		<div v-if="!hideNames" class="user-name">
 			{{ displayName }}
 		</div>
+		<slot />
 	</div>
 </template>
 
@@ -53,6 +51,14 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		disableMenu: {
+			type: Boolean,
+			default: false
+		},
+		menuPosition: {
+			type: String,
+			default: 'left'
+		},
 		userId: {
 			type: String,
 			default: undefined
@@ -64,10 +70,6 @@ export default {
 		type: {
 			type: String,
 			default: 'user'
-		},
-		description: {
-			type: String,
-			default: ''
 		},
 		icon: {
 			type: Boolean,
@@ -95,28 +97,14 @@ export default {
 			if (this.icon) {
 				if (this.type === 'contact') {
 					return 'icon-mail'
+				} else if (this.type === 'email') {
+					return 'icon-mail'
 				}
 				return 'icon-' + this.type
 			} else {
 				return ''
 			}
 		}
-
-		// computedDisplayName() {
-		// 	let value = this.displayName
-		//
-		// 	if (!this.displayName) {
-		// 		if (this.type === 'user') {
-		// 			value = this.userId
-		// 		} else if (this.type === 'group') {
-		// 			value = value + ' (' + t('polls', 'Group') + ')'
-		// 		} else {
-		// 			value = this.userId
-		// 		}
-		// 	}
-		// 	return value
-
-		// }
 	}
 }
 
@@ -148,6 +136,7 @@ export default {
 	.user-name {
 		opacity: 0.5;
 		flex: 1;
+		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}

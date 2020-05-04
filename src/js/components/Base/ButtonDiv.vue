@@ -20,37 +20,51 @@
   -
   -->
 
-<template>
-	<h2 class="poll-title">
-		{{ poll.title }}
-		<span v-if="expired" class="label error">{{ t('polls', 'Expired since %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-		<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-		<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
-	</h2>
+<template lang="html">
+	<Component :is="tag" :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
+		{{ title }}
+	</Component>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-
 export default {
-	name: 'PollTitle',
+	name: 'ButtonDiv',
+	props: {
+		title: {
+			type: String,
+			default: ''
+		},
+		icon: {
+			type: String,
+			default: ''
+		},
+		primary: {
+			type: Boolean,
+			default: false
+		},
+		tag: {
+			type: String,
+			default: 'button'
+		}
+	},
 
 	computed: {
-		...mapState({
-			poll: state => state.poll
-		}),
-
-		...mapGetters([
-			'expired'
-		])
-
+		withIcon() {
+			return Boolean(this.icon)
+		}
 	}
-
 }
 </script>
 
 <style lang="scss" scoped>
-	.pollTitle {
-		margin: 8px 0;
+	.button {
+		display: inline-block;
+
+		&.withIcon {
+			padding-left: 34px;
+			background-position: 12px center;
+		}
+
 	}
+
 </style>

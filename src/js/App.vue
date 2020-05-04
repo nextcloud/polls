@@ -34,13 +34,85 @@ export default {
 	name: 'App',
 	components: {
 		Navigation
-	}
+	},
 
+	created() {
+		if (OC.currentUser) {
+			this.updatePolls()
+			this.$root.$on('updatePolls', () => {
+				this.updatePolls()
+			})
+		}
+	},
+
+	methods: {
+		updatePolls() {
+			if (OC.currentUser) {
+
+				this.$store
+					.dispatch('loadPolls')
+					.then(() => {
+					})
+					.catch((error) => {
+						console.error('refresh poll: ', error.response)
+						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+					})
+			}
+		}
+	}
 }
 
 </script>
 
 <style  lang="scss">
+.main-container {
+	position: relative;
+	flex: 1;
+	padding: 8px 24px;
+	margin: 0;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	overflow-x: scroll;
+}
+
+.title {
+	margin: 8px 0;
+}
+
+.description {
+	white-space: break-spaces;
+	margin: 8px 0;
+}
+
+.poll-item {
+	display: flex;
+	align-items: center;
+	padding-left: 8px;
+	padding-right: 8px;
+	line-height: 2em;
+	min-height: 4em;
+	overflow: visible;
+	white-space: nowrap;
+
+	&:active,
+	&:hover {
+		transition: var(--background-dark) 0.3s ease;
+		background-color: var(--color-background-dark);
+	}
+
+	> div {
+		display: flex;
+		flex: 1;
+		font-size: 1.2em;
+		opacity: 1;
+		white-space: normal;
+		padding-right: 4px;
+		&.avatar {
+			flex: 0;
+		}
+	}
+
+}
 
 .list-enter-active,
 .list-leave-active {
@@ -66,7 +138,7 @@ export default {
 
 #app-polls {
 	width: 100%;
-	// display: flex;
+	color: var(--color-main-text)
 }
 
 #app-content {
@@ -118,4 +190,66 @@ export default {
 		}
 	}
 }
+
+.config-box {
+	display: flex;
+	flex-direction: column;
+	padding: 8px;
+	& > * {
+		padding-left: 21px;
+	}
+
+	& > input {
+		margin-left: 24px;
+		width: auto;
+
+	}
+
+	& > textarea {
+		margin-left: 24px;
+		width: auto;
+		padding: 7px 6px;
+	}
+
+	& > .title {
+		display: flex;
+		background-position: 0 2px;
+		padding-left: 24px;
+		opacity: 0.7;
+		font-weight: bold;
+		margin-bottom: 4px;
+		& > span {
+			padding-left: 4px;
+		}
+	}
+}
+
+.modal__content {
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	color: var(--color-main-text);
+	input {
+		width: 100%;
+	}
+}
+
+.modal__buttons__spacer {
+	flex: 1;
+}
+
+.modal__buttons {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	.button {
+		margin-left: 10px;
+		margin-right: 0;
+	}
+}
+
+.modal__buttons__link {
+	text-decoration: underline;
+}
+
 </style>

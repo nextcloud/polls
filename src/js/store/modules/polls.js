@@ -37,23 +37,34 @@ const getters = {
 	countPolls: (state) => {
 		return state.list.length
 	},
-	allPolls: (state) => {
-		return state.list.filter(poll => (!poll.deleted))
-	},
-	myPolls: (state) => {
-		return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
-	},
-	publicPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
-	},
-	hiddenPolls: (state) => {
-		return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
-	},
-	deletedPolls: (state) => {
-		return state.list.filter(poll => (poll.deleted))
-	},
-	participatedPolls: (state) => {
-		return state.list.filter(poll => (poll.userHasVoted))
+
+	filteredPolls: (state) => (filterId) => {
+		if (filterId === 'all') {
+			return state.list.filter(poll => (!poll.deleted))
+		} else if (filterId === 'my') {
+			return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
+		} else if (filterId === 'relevant') {
+			return state.list.filter(poll => ((
+				poll.userHasVoted
+				|| poll.isOwner
+				|| (poll.allowView && poll.access !== 'public')
+			)
+			&& !poll.deleted
+			&& !(poll.expire > 0 && moment.unix(poll.expire).diff() < 0)
+			))
+		} else if (filterId === 'public') {
+			return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
+		} else if (filterId === 'hidden') {
+			return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
+		} else if (filterId === 'deleted') {
+			return state.list.filter(poll => (poll.deleted))
+		} else if (filterId === 'participated') {
+			return state.list.filter(poll => (poll.userHasVoted))
+		} else if (filterId === 'expired') {
+			return state.list.filter(poll => (
+				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
+			))
+		}
 	}
 }
 
@@ -74,6 +85,18 @@ const actions = {
 		const endPoint = 'apps/polls/polls/delete/'
 		return axios.get(OC.generateUrl(endPoint + payload.pollId))
 			.then((response) => {
+				return response
+			}, (error) => {
+				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
+	},
+
+	deletePermanently(context, payload) {
+		const endPoint = 'apps/polls/polls/delete/permanent/'
+		return axios.get(OC.generateUrl(endPoint + payload.pollId))
+			.then((response) => {
+				OC.Notification.showTemporary(t('polls', 'Deleted poll permanently.'), { type: 'success' })
 				return response
 			}, (error) => {
 				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })

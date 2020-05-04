@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin" class="config-box">
+		<div v-if="acl.isAdmin && !acl.isOwner" class="config-box">
 			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
 		</div>
 
@@ -39,9 +39,9 @@
 		<div class="config-box">
 			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
 
-			<input v-if="!acl.isAdmin" id="adminAccess" v-model="pollAdminAccess"
+			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
 				type="checkbox" class="checkbox">
-			<label v-if="!acl.isAdmin" for="adminAccess" class="title"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
+			<label v-if="acl.isOwner" for="adminAccess" class="title"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
 
 			<input id="allowMaybe" v-model="pollAllowMaybe"
 				type="checkbox" class="checkbox">
@@ -51,16 +51,12 @@
 				type="checkbox" class="checkbox">
 			<label for="anonymous" class="title"> {{ t('polls', 'Anonymous poll') }} </label>
 
-			<input v-show="poll.anonymous" id="trueAnonymous" v-model="pollFullAnonymous"
-				type="checkbox" class="checkbox">
-			<label v-show="poll.anonymous" class="title" for="trueAnonymous"> {{ t('polls', 'Hide user names for admin') }} </label>
-
 			<input id="expiration" v-model="pollExpiration"
 				type="checkbox" class="checkbox">
 			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
 
 			<DatetimePicker v-show="pollExpiration"
-				v-model="pollExpire" v-bind="expirationDatePicker" style="width:170px" />
+				v-model="pollExpire" v-bind="expirationDatePicker" style="width:100%" />
 		</div>
 
 		<div class="config-box">
@@ -75,10 +71,27 @@
 			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
 		</div>
 
-		<button class="button btn primary" @click="switchDeleted()">
-			<span v-if="poll.deleted">{{ t('polls', 'Restore poll') }}</span>
-			<span v-else>{{ t('polls', 'Delete poll') }}</span>
-		</button>
+		<div class="config-box">
+			<label class="title icon-screen"> {{ t('polls', 'Result display') }} </label>
+
+			<input id="always" v-model="pollShowResults" value="always"
+				type="radio" class="radio">
+			<label for="always" class="title">{{ t('polls', 'Always show results') }} </label>
+
+			<input id="expired" v-model="pollShowResults" value="expired"
+				type="radio" class="radio">
+			<label for="expired" class="title">{{ t('polls', 'Hide results until poll is expired') }} </label>
+
+			<input id="never" v-model="pollShowResults" value="never"
+				type="radio" class="radio">
+			<label for="never" class="title">{{ t('polls', 'Never show results') }} </label>
+		</div>
+
+		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
+			@click="switchDeleted()" />
+		<ButtonDiv v-if="poll.deleted" icon="icon-delete" class="error"
+			:title="t('polls', 'Delete poll permanently')"
+			@click="deletePermanently()" />
 	</div>
 </template>
 
@@ -109,15 +122,6 @@ export default {
 			acl: state => state.acl
 		}),
 
-		firstDOW() {
-			// vue2-datepicker needs 7 for sunday
-			if (moment.localeData()._week.dow === 0) {
-				return 7
-			} else {
-				return moment.localeData()._week.dow
-			}
-		},
-
 		// Add bindings
 		pollDescription: {
 			get() {
@@ -146,9 +150,18 @@ export default {
 			}
 		},
 
+		pollShowResults: {
+			get() {
+				return this.poll.showResults
+			},
+			set(value) {
+				this.writeValue({ showResults: value })
+			}
+		},
+
 		pollExpire: {
 			get() {
-				return moment.unix(this.poll.expire)
+				return moment.unix(this.poll.expire)._d
 			},
 			set(value) {
 
@@ -167,15 +180,6 @@ export default {
 					this.writeValue({ expire: 0 })
 
 				}
-			}
-		},
-
-		pollFullAnonymous: {
-			get() {
-				return (this.poll.Fullanonymous > 0)
-			},
-			set(value) {
-				this.writeValue({ fullAnonymous: value })
 			}
 		},
 
@@ -206,32 +210,31 @@ export default {
 			}
 		},
 
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			} else {
+				return moment.localeData()._week.dow
+			}
+		},
+
 		expirationDatePicker() {
 			return {
 				editable: true,
 				minuteStep: 1,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-
-				// TODO: use this for version 2.x
-				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: this.firstDOW,
-
-				// TODO: use this from version 3.x on
-				// lang: {
-				// 	formatLocale: {
-				//		firstDayOfWeek: this.firstDOW,
-				// 		months: moment.months(),
-				// 		monthsShort: moment.monthsShort(),
-				// 		weekdays: moment.weekdays(),
-				// 		weekdaysMin: moment.weekdaysMin()
-				// 	}
-				// },
 				placeholder: t('polls', 'Expiration date'),
-				timePickerOptions: {
-					start: '00:00',
-					step: '01:00',
-					end: '23:30'
+				confirm: true,
+				lang: {
+					formatLocale: {
+						firstDayOfWeek: this.firstDOW,
+						months: moment.months(),
+						monthsShort: moment.monthsShort(),
+						weekdays: moment.weekdays(),
+						weekdaysMin: moment.weekdaysMin()
+					}
 				}
 			}
 		},
@@ -268,6 +271,16 @@ export default {
 				this.writeValue({ deleted: moment.utc().unix() })
 			}
 
+		},
+
+		deletePermanently() {
+			if (!this.poll.deleted) return
+
+			this.$store
+				.dispatch('deletePermanently', { pollId: this.poll.id })
+				.then((response) => {
+					this.$router.push({ name: 'list', params: { type: 'deleted' } })
+				})
 		},
 
 		writePoll() {

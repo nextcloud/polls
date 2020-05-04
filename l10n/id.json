@@ -1,6 +1,4 @@
 { "translations": {
-    "Deleted" : "Dihapus",
-    "Group" : "Grup",
     "New comment …" : "Komentar baru ...",
     "Comments" : "Komentar",
     "Delete comment" : "Hapus komentar",
@@ -15,7 +13,15 @@
     "Shares" : "Dibagikan",
     "Description" : "Deskrisi",
     "Expiration date" : "Tanggal kadaluarsa",
+    "OK" : "OK",
+    "Week" : "Minggu",
+    "Hour" : "Jam",
+    "Day" : "Hari",
+    "Month" : "Bulan",
     "Unknown user" : "Pengguna tidak dikenal",
-    "OK" : "OK"
+    "Group" : "Grup",
+    "No" : "Tidak",
+    "Yes" : "Ya",
+    "Deleted" : "Dihapus"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

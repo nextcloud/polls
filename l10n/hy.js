@@ -1,8 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Ջնջված",
-    "Group" : "Խումբ",
     "Comments" : "Կարծիքներ",
     "Cancel" : "ընդհատել",
     "Title" : "Վերնագիր",
@@ -11,6 +9,13 @@ OC.L10N.register(
     "Details" : "Մանրամասներ",
     "Description" : "Նկարագրություն",
     "Expiration date" : "Վավերականության ժամկետ",
-    "OK" : "Լավ"
+    "OK" : "Լավ",
+    "Week" : "Շաբաթ",
+    "Day" : "Օր",
+    "Month" : "Ամիս",
+    "Group" : "Խումբ",
+    "No" : "No",
+    "Yes" : "Yes",
+    "Deleted" : "Ջնջված"
 },
 "nplurals=2; plural=(n != 1);");

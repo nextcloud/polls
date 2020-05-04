@@ -11,12 +11,15 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			// {
-			// 	enforce: 'pre',
-			// 	test: /\.(js|vue)$/,
-			// 	loader: 'eslint-loader',
-			// 	exclude: /node_modules/
-			// },
+			{
+				enforce: 'pre',
+				test: /\.(js|vue)$/,
+				loader: 'eslint-loader',
+				exclude: /node_modules/,
+				options: {
+					quiet: true
+				}
+			},
 			{
 				test: /\.css$/,
 				use: [
@@ -34,7 +37,12 @@ module.exports = {
 			},
 			{
 				test: /\.vue$/,
-				loader: 'vue-loader'
+				loader: 'vue-loader',
+				options: {
+					compilerOptions: {
+						whitespace: 'condense'
+					}
+				}
 			},
 			{
 				test: /\.js$/,

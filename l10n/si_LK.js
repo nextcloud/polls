@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Group" : "Group",
     "New comment …" : "නව ප්රතිචාරයක් ...",
     "Comments" : "අදහස්",
     "Delete comment" : "ප්රතිචාරය මකන්න",
@@ -12,7 +11,12 @@ OC.L10N.register(
     "Configuration" : "වින්‍යාසය",
     "Description" : "විස්තරය",
     "Expiration date" : "කල් ඉකුත් විමේ දිනය",
+    "OK" : "හරි",
+    "Week" : "සතිය",
+    "Month" : "මාසය",
     "Unknown user" : "හදුනානොගත් සේවාදායකයා",
-    "OK" : "හරි"
+    "Group" : "Group",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");

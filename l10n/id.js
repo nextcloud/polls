@@ -1,8 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Dihapus",
-    "Group" : "Grup",
     "New comment …" : "Komentar baru ...",
     "Comments" : "Komentar",
     "Delete comment" : "Hapus komentar",
@@ -17,7 +15,15 @@ OC.L10N.register(
     "Shares" : "Dibagikan",
     "Description" : "Deskrisi",
     "Expiration date" : "Tanggal kadaluarsa",
+    "OK" : "OK",
+    "Week" : "Minggu",
+    "Hour" : "Jam",
+    "Day" : "Hari",
+    "Month" : "Bulan",
     "Unknown user" : "Pengguna tidak dikenal",
-    "OK" : "OK"
+    "Group" : "Grup",
+    "No" : "Tidak",
+    "Yes" : "Ya",
+    "Deleted" : "Dihapus"
 },
 "nplurals=1; plural=0;");

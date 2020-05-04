@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Polls" : "Enquestes",
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
-    "Deleted" : "Desanicióse",
-    "Group" : "Group",
     "New comment …" : "Comentariu nuevu...",
     "Comments" : "Comentarios",
     "Delete comment" : "Desaniciar comentariu",
@@ -19,8 +17,16 @@ OC.L10N.register(
     "Shares" : "Comparticiones",
     "Description" : "Descripción",
     "Expiration date" : "Data de caducidá",
-    "Unknown user" : "Usuariu desconocíu",
     "OK" : "Aceutar",
+    "Week" : "Selmana",
+    "Hour" : "Hora",
+    "Day" : "Día",
+    "Month" : "Mes",
+    "Unknown user" : "Usuariu desconocíu",
+    "Group" : "Group",
+    "No" : "Non",
+    "Yes" : "Sí",
+    "Deleted" : "Desanicióse",
     "Public access" : "Accesu públicu"
 },
 "nplurals=2; plural=(n != 1);");

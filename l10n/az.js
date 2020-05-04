@@ -1,8 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Silinib",
-    "Group" : "Qrup",
     "Cancel" : "Dayandır",
     "Title" : "Başlıq",
     "Owner" : "Owner",
@@ -11,7 +9,14 @@ OC.L10N.register(
     "Configuration" : "Konfiqurasiya",
     "Shares" : "Yayımlanmalar",
     "Description" : "Açıqlanma",
+    "OK" : "Oldu",
+    "Week" : "Həftə",
+    "Day" : "Gün",
+    "Month" : "Ay",
     "Unknown user" : "Istifadəçi tanınmır ",
-    "OK" : "Oldu"
+    "Group" : "Qrup",
+    "No" : "No",
+    "Yes" : "Yes",
+    "Deleted" : "Silinib"
 },
 "nplurals=2; plural=(n != 1);");

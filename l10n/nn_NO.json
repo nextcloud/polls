@@ -1,6 +1,4 @@
 { "translations": {
-    "Deleted" : "Sletta",
-    "Group" : "Gruppe",
     "New comment …" : "Ny kommentar...",
     "Comments" : "Kommentarar",
     "Delete comment" : "Slett kommentar",
@@ -15,6 +13,13 @@
     "Shares" : "Delingar",
     "Description" : "Skildring",
     "Expiration date" : "Utløpsdato",
-    "OK" : "OK"
+    "OK" : "OK",
+    "Week" : "Veke",
+    "Day" : "Dag",
+    "Month" : "Månad",
+    "Group" : "Gruppe",
+    "No" : "Nei",
+    "Yes" : "Ja",
+    "Deleted" : "Sletta"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

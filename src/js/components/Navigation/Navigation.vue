@@ -22,54 +22,20 @@
 
 <template lang="html">
 	<AppNavigation>
-		<AppNavigationNew :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @closeCreate="closeCreate()" />
 		<ul>
-			<AppNavigationItem :title="t('polls', 'All polls')" :allow-collapse="true"
-				icon="icon-folder" :to="{ name: 'list', params: {type: 'all'}}" :open="true">
+			<AppNavigationItem v-for="(pollCategory) in pollCategories" :key="pollCategory.id"
+				:title="pollCategory.title" :allow-collapse="true" :pinned="pollCategory.pinned"
+				:icon="pollCategory.icon" :to="{ name: 'list', params: {type: pollCategory.id}}" :open="false">
 				<ul>
-					<PollNavigationItems v-for="(poll) in allPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'My polls')" :allow-collapse="true"
-				icon="icon-user" :to="{ name: 'list', params: {type: 'my'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in myPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Participated')" :allow-collapse="true"
-				icon="icon-user" :to="{ name: 'list', params: {type: 'participated'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in participatedPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Public polls')" :allow-collapse="true"
-				icon="icon-link" :to="{ name: 'list', params: {type: 'public'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in publicPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Hidden polls')" :allow-collapse="true"
-				icon="icon-password" :to="{ name: 'list', params: {type: 'hidden'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in hiddenPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
-				</ul>
-			</AppNavigationItem>
-
-			<AppNavigationItem :title="t('polls', 'Deleted polls')" :allow-collapse="true"
-				icon="icon-delete" :to="{ name: 'list', params: {type: 'deleted'}}" :open="false">
-				<ul>
-					<PollNavigationItems v-for="(poll) in deletedPolls" :key="poll.id" :poll="poll"
-						@switchDeleted="switchDeleted(poll.id)" @clonePoll="clonePoll(poll.id)" />
+					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
+						:key="poll.id"
+						:poll="poll"
+						:class="{ expired: (poll.expire > 0 && moment.unix(poll.expire).diff() < 0) }"
+						@switchDeleted="switchDeleted(poll.id)"
+						@clonePoll="clonePoll(poll.id)"
+						@deletePermanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 		</ul>
@@ -95,48 +61,76 @@ export default {
 
 	data() {
 		return {
-			createDlg: false
+			createDlg: false,
+			reloadInterval: 30000,
+			pollCategories: [
+				{
+					id: 'relevant',
+					title: t('polls', 'Relevant'),
+					icon: 'icon-details',
+					pinned: false
+				},
+				{
+					id: 'my',
+					title: t('polls', 'My polls'),
+					icon: 'icon-user',
+					pinned: false
+				},
+				{
+					id: 'public',
+					title: t('polls', 'Public polls'),
+					icon: 'icon-link',
+					pinned: false
+				},
+				{
+					id: 'all',
+					title: t('polls', 'All polls'),
+					icon: 'icon-folder',
+					pinned: false
+				},
+				{
+					id: 'expired',
+					title: t('polls', 'Expired polls'),
+					icon: 'icon-delete',
+					pinned: false
+				},
+				{
+					id: 'deleted',
+					title: t('polls', 'Deleted polls'),
+					icon: 'icon-delete',
+					pinned: true
+				}
+			]
+
 		}
 	},
 
 	computed: {
-		...mapGetters([
-			'allPolls',
-			'myPolls',
-			'publicPolls',
-			'hiddenPolls',
-			'participatedPolls',
-			'deletedPolls'
-		]),
+		...mapGetters(['filteredPolls']),
 
 		pollList() {
 			return this.$store.state.polls.list
 		}
 	},
 
-	mounted() {
-		this.$root.$on('updatePolls', function() {
-			this.loading = true
-			this.$store
-				.dispatch('loadPolls')
-				.then(() => {
-					this.loading = false
-				})
-				.catch((error) => {
-					this.loading = false
-					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
-				})
-		})
+	created() {
+		this.timedReload()
 	},
 
-	created() {
-		this.refreshPolls()
+	beforeDestroy() {
+		window.clearInterval(this.reloadTimer)
 	},
 
 	methods: {
 		closeCreate() {
 			this.createDlg = false
+		},
+
+		timedReload() {
+			// reload poll list periodically
+			this.reloadTimer = window.setInterval(() => {
+				this.$root.$emit('updatePolls')
+			}, this.reloadInterval)
 		},
 
 		toggleCreateDlg() {
@@ -150,7 +144,7 @@ export default {
 			this.$store
 				.dispatch('clonePoll', { pollId: pollId })
 				.then((response) => {
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
 		},
@@ -159,62 +153,32 @@ export default {
 			this.$store
 				.dispatch('switchDeleted', { pollId: pollId })
 				.then((response) => {
-					this.refreshPolls()
+					this.$root.$emit('updatePolls')
 				})
 
 		},
 
-		refreshPolls() {
-			if (this.$route.name !== 'publicVote') {
+		deletePermanently(pollId) {
+			this.$store
+				.dispatch('deletePermanently', { pollId: pollId })
+				.then((response) => {
+					// if we permanently delete current selected poll,
+					// reload deleted polls route
+					if (this.$route.params.id && this.$route.params.id === pollId) {
+						this.$router.push({ name: 'list', params: { type: 'deleted' } })
+					}
+					this.$root.$emit('updatePolls')
+				})
 
-				this.loading = true
-				this.$store
-					.dispatch('loadPolls')
-					.then(() => {
-						this.loading = false
-					})
-					.catch(error => {
-						this.loading = false
-						console.error('refresh poll: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
-					})
-			}
 		}
 	}
 }
 </script>
 
 <style lang="scss">
-	.config-box {
-		display: flex;
-		flex-direction: column;
-		padding: 8px;
-		& > * {
-			padding-left: 21px;
-		}
-
-		& > input {
-			margin-left: 24px;
-			width: auto;
-
-		}
-
-		& > textarea {
-			margin-left: 24px;
-			width: auto;
-			padding: 7px 6px;
-		}
-
-		& > .title {
-			display: flex;
-			background-position: 0 2px;
-			padding-left: 24px;
-			opacity: 0.7;
-			font-weight: bold;
-			margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
+	.expired {
+		.app-navigation-entry-icon, .app-navigation-entry__title {
+			opacity: 0.6;
 		}
 	}
 </style>

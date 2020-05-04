@@ -21,9 +21,9 @@
   -->
 
 <template lang="html">
-	<div class="vote-table">
-		<div class="header">
-			<div class="sticky" />
+	<div class="vote-table" :class="{ 'owner-access': acl.allowEdit }">
+		<div class="vote-table__header">
+			<div class="vote-table__user-column" />
 
 			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
@@ -33,16 +33,37 @@
 
 		<div v-for="(participant) in participants" :key="participant.userId" :class="{currentuser: (participant.userId === currentUser) }">
 			<UserDiv :key="participant.userId"
-				class="sticky"
+				class="vote-table__user-column"
+				:disable-menu="true"
 				:class="{currentuser: (participant.userId === currentUser) }"
 				:user-id="participant.userId"
-				:display-name="participant.displayName" />
+				:display-name="participant.displayName">
+				<Actions v-if="acl.allowEdit" class="action">
+					<ActionButton icon="icon-delete"
+						@click="confirmDelete(participant.userId)">
+						{{ t('polls', 'Delete votes') }}
+					</ActionButton>
+				</Actions>
+			</UserDiv>
+
 			<VoteTableItem v-for="(option) in sortedOptions"
 				:key="option.id"
 				:user-id="participant.userId"
 				:option="option"
 				@voteClick="setVote(option, participant.userId)" />
 		</div>
+
+		<Modal v-if="modal">
+			<div class="modal__content">
+				<h2>{{ t('polls', 'Do you want to remove {username} from poll?', { username: userToRemove }) }}</h2>
+				<div class="modal__buttons">
+					<ButtonDiv :title="t('polls', 'No')"
+						@click="modal = false" />
+					<ButtonDiv :primary="true" :title="t('polls', 'Yes')"
+						@click="removeUser()" />
+				</div>
+			</div>
+		</Modal>
 	</div>
 </template>
 
@@ -50,12 +71,23 @@
 import VoteTableItem from './VoteTableItem'
 import VoteTableHeader from './VoteTableHeader'
 import { mapState, mapGetters } from 'vuex'
+import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 
 export default {
 	name: 'VoteTable',
 	components: {
+		Actions,
+		ActionButton,
+		Modal,
 		VoteTableHeader,
 		VoteTableItem
+	},
+
+	data() {
+		return {
+			modal: false,
+			userToRemove: ''
+		}
 	},
 
 	computed: {
@@ -75,6 +107,19 @@ export default {
 	},
 
 	methods: {
+		removeUser() {
+			this.$store.dispatch('deleteVotes', {
+				userId: this.userToRemove
+			})
+			this.modal = false
+			this.userToRemove = ''
+		},
+
+		confirmDelete(userId) {
+			this.userToRemove = userId
+			this.modal = true
+		},
+
 		setVote(option, userId) {
 			this.$store
 				.dispatch('setVoteAsync', {
@@ -85,26 +130,27 @@ export default {
 						userId: userId
 					})
 				})
-				.then(() => {
-					// this.$emit('voteSaved')
-				})
 		}
 	}
 }
 </script>
 
 <style lang="scss" scoped>
-	.user-row.sticky,
-	.header > .sticky {
+	.user-row.vote-table__user-column,
+	.vote-table__header > .vote-table__user-column {
 		position: sticky;
 		left: 0;
 		background-color: var(--color-main-background);
-		width: 170px;
+		width: 230px;
 		flex: 0 0 auto;
+		.owner-access {
+			width: 280px;
+		}
 	}
 
-	.header {
-		height: 150px;
+	.owner-access .user-row.vote-table__user-column,
+	.owner-access .vote-table__header > .vote-table__user-column {
+			width: 280px;
 	}
 
 	.user {
@@ -113,12 +159,12 @@ export default {
 	}
 
 	.vote-table {
-		margin: 44px 0;
 		display: flex;
 		flex: 0;
 		flex-direction: column;
 		justify-content: flex-start;
 		overflow: scroll;
+		padding: 10px 0;
 
 		& > div {
 			display: flex;
@@ -139,7 +185,7 @@ export default {
 				flex: 1;
 			}
 
-			&.header {
+			&.vote-table__header {
 				order: 1;
 			}
 
@@ -172,12 +218,6 @@ export default {
 					margin: 0;
 
 				}
-				// &.currentuser {
-				// 	display: flex;
-				// 	> .user-row.currentuser {
-				// 		display: none;
-				// 	}
-				// }
 			}
 
 			&> .currentuser {
@@ -188,7 +228,7 @@ export default {
 				}
 			}
 
-			&> .header, {
+			&> .vote-table__header, {
 				height: initial;
 				padding-left: initial;
 				display: flex;

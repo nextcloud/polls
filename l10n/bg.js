@@ -1,8 +1,7 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Изтрито",
-    "Group" : "Група",
+    "Participants" : "Участници",
     "New comment …" : "Нов коментар...",
     "Comments" : "Коментари",
     "Delete comment" : "Изтрий коментар",
@@ -13,14 +12,21 @@ OC.L10N.register(
     "Owner" : "Създател",
     "Created" : "Създаден",
     "never" : "никога",
-    "Share with" : "Сподели с",
     "Details" : "Подробности",
     "Configuration" : "Настройки",
     "Shares" : "Споделени",
     "Description" : "Описание",
     "Expiration date" : "Валидност",
-    "Unknown user" : "Непознат потребител",
     "OK" : "ОК",
+    "Week" : "Седмица",
+    "Hour" : "Час",
+    "Day" : "Ден",
+    "Month" : "Месец",
+    "Unknown user" : "Непознат потребител",
+    "Group" : "Група",
+    "No" : "Не",
+    "Yes" : "Да",
+    "Deleted" : "Изтрито",
     "Public access" : "Публичен достъп"
 },
 "nplurals=2; plural=(n != 1);");

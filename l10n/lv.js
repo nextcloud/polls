@@ -2,8 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Participants" : "Dalībnieki",
-    "Deleted" : "Dzēstie",
-    "Group" : "Grupa",
     "New comment …" : "Jauns komentārs...",
     "Comments" : "Komentāri",
     "Delete comment" : "Dzēst komentāru",
@@ -19,9 +17,17 @@ OC.L10N.register(
     "Shares" : "Koplietots",
     "Description" : "Apraksts",
     "Expiration date" : "Termiņa datums",
-    "Unknown user" : "Nezināms lietotājs",
-    "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "OK" : "Labi",
+    "Week" : "Nedēļa",
+    "Hour" : "Stunda",
+    "Day" : "Diena",
+    "Month" : "Mēnesis",
+    "Unknown user" : "Nezināms lietotājs",
+    "Group" : "Grupa",
+    "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
+    "No" : "Nē",
+    "Yes" : "Jā",
+    "Deleted" : "Dzēstie",
     "Public access" : "Publiska piekļuve"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

@@ -28,7 +28,7 @@
 
 		<h3>{{ t('polls','Invitations') }}</h3>
 
-		<span>{{ t('polls','Invited users will get informed immediately via eMail!') }} </span>
+		<span>{{ t('polls','Invited users will get informed immediately via email!') }} </span>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in invitationShares" :key="share.id">
 				<UserDiv
@@ -36,10 +36,16 @@
 					:display-name="shareDisplayName(share)"
 					:type="share.type"
 					:icon="true" />
-				<div class="options">
-					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
-					<a class="icon icon-delete svg delete-poll" @click="removeShare(share)" />
-				</div>
+				<Actions>
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+						{{ t('polls', 'Copy link to clipboard') }}
+					</ActionButton>
+				</Actions>
+				<Actions>
+					<ActionButton icon="icon-delete" @click="removeShare(share)">
+						{{ t('polls', 'Remove share') }}
+					</ActionButton>
+				</Actions>
 			</li>
 		</TransitionGroup>
 
@@ -76,10 +82,16 @@
 						{{ t('polls', 'Public link (' + share.token + ')') }}
 					</div>
 				</div>
-				<div class="options">
-					<a class="icon icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token } )" />
-					<a class="icon icon-delete" @click="removeShare(share)" />
-				</div>
+				<Actions>
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
+						{{ t('polls', 'Copy link to clipboard') }}
+					</ActionButton>
+				</Actions>
+				<Actions>
+					<ActionButton icon="icon-delete" @click="removeShare(share)">
+						{{ t('polls', 'Remove share') }}
+					</ActionButton>
+				</Actions>
 			</li>
 		</TransitionGroup>
 		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
@@ -92,13 +104,15 @@
 </template>
 
 <script>
-import { Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
+		Actions,
+		ActionButton,
 		Multiselect
 	},
 
@@ -113,6 +127,7 @@ export default {
 				getUsers: true,
 				getGroups: true,
 				getContacts: true,
+				getMail: true,
 				query: ''
 			}
 		}
@@ -127,7 +142,6 @@ export default {
 			'invitationShares',
 			'publicShares'
 		])
-
 	},
 
 	methods: {
@@ -158,7 +172,7 @@ export default {
 
 			if (share.userId !== '' && share.userId !== null) {
 				return share.userId
-			} else if (share.type === 'mail') {
+			} else if (share.type === 'email') {
 				return share.userEmail
 			} else {
 				return t('polls', 'Unknown user')
@@ -176,7 +190,7 @@ export default {
 				if (share.userEmail) {
 					displayName = displayName + ' (' + share.userEmail + ')'
 				}
-			} else if (share.type === 'mail') {
+			} else if (share.type === 'email') {
 				displayName = share.userEmail
 				if (share.userId) {
 					displayName = share.userId + ' (' + displayName + ')'
@@ -227,19 +241,6 @@ export default {
 			display: flex;
 			align-items: stretch;
 			margin: 4px 0;
-		}
-	}
-
-	.options {
-		display: flex;
-
-		.icon:not(.hidden) {
-			padding: 14px;
-			height: 44px;
-			width: 44px;
-			opacity: .5;
-			display: block;
-			cursor: pointer;
 		}
 	}
 

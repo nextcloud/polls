@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Group" : "Grupa",
     "New comment …" : "Novi komentar",
     "Comments" : "Komentari",
     "Delete comment" : "Izbriši komentar",
@@ -11,6 +10,12 @@ OC.L10N.register(
     "never" : "nikad",
     "Description" : "Opis",
     "Expiration date" : "Datum isteka",
-    "OK" : "OK"
+    "OK" : "OK",
+    "Week" : "Sedmica",
+    "Day" : "Dan",
+    "Month" : "Mjesec",
+    "Group" : "Grupa",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

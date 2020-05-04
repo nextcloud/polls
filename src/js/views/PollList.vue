@@ -23,10 +23,16 @@
 <template>
 	<AppContent>
 		<div class="main-container">
-			<div v-if="noPolls" class="">
+			<div v-if="noPolls">
 				<div class="icon-polls" />
 				<h2> {{ t('No existing polls.') }} </h2>
 			</div>
+			<h2 v-if="!noPolls" class="title">
+				{{ title }}
+			</h2>
+			<h3 v-if="!noPolls" class="description">
+				{{ description }}
+			</h3>
 
 			<transition-group v-if="!noPolls" name="list" tag="div"
 				class="table">
@@ -42,7 +48,6 @@
 			</transition-group>
 		</div>
 		<LoadingOverlay v-if="isLoading" />
-		<!-- <modal-dialog /> -->
 	</AppContent>
 </template>
 
@@ -51,62 +56,91 @@ import { AppContent } from '@nextcloud/vue'
 import PollListItem from '../components/PollList/PollListItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
+import LoadingOverlay from '../components/Base/LoadingOverlay'
 
 export default {
 	name: 'PollList',
 
 	components: {
 		AppContent,
+		LoadingOverlay,
 		PollListItem
 	},
 
 	data() {
 		return {
 			noPolls: false,
-			isLoading: true,
+			isLoading: false,
 			sort: 'created',
 			reverse: true
 		}
 	},
 
 	computed: {
-		...mapGetters([
-			'allPolls',
-			'myPolls',
-			'publicPolls',
-			'hiddenPolls',
-			'participatedPolls',
-			'deletedPolls'
-		]),
+		...mapGetters(['filteredPolls']),
 
-		filteredList() {
+		title() {
 			if (this.$route.params.type === 'my') {
-				return this.myPolls
+				return t('polls', 'My polls')
+			} else if (this.$route.params.type === 'relevant') {
+				return t('polls', 'Relevant polls')
 			} else if (this.$route.params.type === 'public') {
-				return this.publicPolls
+				return t('polls', 'Public polls')
 			} else if (this.$route.params.type === 'hidden') {
-				return this.hiddenPolls
+				return t('polls', 'Hidden polls')
 			} else if (this.$route.params.type === 'deleted') {
-				return this.deletedPolls
+				return t('polls', 'My deleted polls')
 			} else if (this.$route.params.type === 'participated') {
-				return this.participatedPolls
+				return t('polls', 'Participated by me')
+			} else if (this.$route.params.type === 'expired') {
+				return t('polls', 'Expired polls')
 			} else {
-				return this.allPolls
+				return t('polls', 'All polls')
 			}
+		},
+
+		description() {
+			if (this.$route.params.type === 'my') {
+				return t('polls', 'This are your polls (where you are the owner).')
+			} else if (this.$route.params.type === 'relevant') {
+				return t('polls', 'This are all polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
+			} else if (this.$route.params.type === 'public') {
+				return t('polls', 'A complete list with all public polls on this site, regardless who is the owner.')
+			} else if (this.$route.params.type === 'hidden') {
+				return t('polls', 'These are all hidden polls, to which you have access.')
+			} else if (this.$route.params.type === 'deleted') {
+				return t('polls', 'This is simply the trash bin.')
+			} else if (this.$route.params.type === 'participated') {
+				return t('polls', 'All polls, where you placed a vote.')
+			} else if (this.$route.params.type === 'expired') {
+				return t('polls', 'Polls which reached their expiry date.')
+			} else {
+				return t('polls', 'All polls, where you have access to.')
+			}
+		},
+
+		windowTitle() {
+			return t('polls', 'Polls') + ' - ' + this.title
 		},
 
 		sortedList() {
 			if (this.reverse) {
-				return sortBy(this.filteredList, this.sort).reverse()
+				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
 			} else {
-				return sortBy(this.filteredList, this.sort)
+				return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 			}
 		}
 
 	},
 
-	mounted() {
-		this.refreshPolls()
+	watch: {
+		$route() {
+			window.document.title = t('polls', 'Polls') + ' - ' + this.title
+		}
+	},
+
+	created() {
+		window.document.title = t('polls', 'Polls') + ' - ' + this.title
 	},
 
 	methods: {
@@ -126,29 +160,12 @@ export default {
 					id: poll.id
 				}
 			})
-		},
-
-		refreshPolls() {
-			this.isLoading = true
-			this.$store
-				.dispatch('loadPolls')
-				.then(() => {
-					this.isLoading = false
-				})
-				.catch((error) => {
-					this.isLoading = false
-					console.error('refresh poll: ', error.response)
-					OC.Notification.showTemporary(t('polls', 'Error loading polls', 1, this.poll.title), { type: 'error' })
-				})
 		}
 	}
 }
 </script>
 
 <style lang="scss" scoped>
-	#app-content {
-		// flex-direction: column;
-	}
 
 	.main-container {
 		flex: 1;
@@ -156,7 +173,6 @@ export default {
 
 	.table {
 		width: 100%;
-		// margin-top: 45px;
 		display: flex;
 		flex-direction: column;
 		flex: 1;

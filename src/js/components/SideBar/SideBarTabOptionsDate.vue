@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<div class="config-box">
-			<label class="title icon-calendar">
+			<label class="title icon-add">
 				{{ t('polls', 'Add a date option') }}
 			</label>
 			<DatetimePicker v-model="lastOption"
@@ -39,38 +39,73 @@
 			</label>
 			<div>
 				<div class="selectUnit">
-					<input v-model="move.step">
-					<Multiselect v-model="move.unit" :options="move.units" />
+					<input v-model="shift.step">
+					<Multiselect
+						v-model="shift.unit"
+						:options="dateUnits"
+						label="name"
+						track-by="value" />
 				</div>
 			</div>
 			<div>
-				<button class="button btn primary" @click="shiftDates(move)">
-					<span>{{ t('polls', 'Shift') }}</span>
-				</button>
+				<ButtonDiv icon="icon-history" :title="t('polls', 'Shift')"
+					@click="shiftDates(shift)" />
 			</div>
 		</div>
 
-		<ul class="config-box poll-table">
-			<label class="title icon-calendar">
+		<div class="config-box poll-table">
+			<label class="title icon-calendar-000">
 				{{ t('polls', 'Available Options') }}
 			</label>
-			<PollItemDate v-for="(option) in sortedOptions"
-				:key="option.id"
-				:option="option">
-				<template v-slot:actions>
-					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton icon="icon-delete" @click="removeOption(option)">
-							{{ t('polls', 'Delete option') }}
-						</ActionButton>
-					</Actions>
-				</template>
-			</PollItemDate>
-		</ul>
+			<ul class="">
+				<PollItemDate v-for="(option) in sortedOptions"
+					:key="option.id"
+					:option="option">
+					<template v-slot:actions>
+						<Actions v-if="acl.allowEdit" class="action">
+							<ActionButton icon="icon-delete" @click="removeOption(option)">
+								{{ t('polls', 'Delete option') }}
+							</ActionButton>
+						</Actions>
+
+						<Actions v-if="acl.allowEdit" class="action">
+							<ActionButton icon="icon-add" @click="cloneOptionModal(option)">
+								{{ t('polls', 'Clone option') }}
+							</ActionButton>
+						</Actions>
+					</template>
+				</PollItemDate>
+			</ul>
+		</div>
+		<Modal v-if="modal" :can-close="false">
+			<div class="modal__content">
+				<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
+
+				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: moment.unix(sequence.baseOption.timestamp).format('LLLL')}) }}</p>
+				<div>
+					<h3> {{ t('polls', 'Step width: ') }} </h3>
+					<input v-model="sequence.step">
+					<h3> {{ t('polls', 'Step unit: ') }} </h3>
+					<Multiselect
+						v-model="sequence.unit"
+						:options="dateUnits"
+						label="name"
+						track-by="value" />
+					<h3> {{ t('polls', 'Number of items to create: ') }} </h3>
+					<input v-model="sequence.amount">
+				</div>
+
+				<div class="modal__buttons">
+					<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
+					<ButtonDiv :primary="true" :title="t('polls', 'OK')" @click="createSequence" />
+				</div>
+			</div>
+		</Modal>
 	</div>
 </template>
 
 <script>
-import { Actions, ActionButton, DatetimePicker, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import PollItemDate from '../Base/PollItemDate'
 
@@ -80,18 +115,33 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		DatetimePicker,
+		Modal,
 		Multiselect,
-		PollItemDate,
-		DatetimePicker
+		PollItemDate
 	},
 
 	data() {
 		return {
 			lastOption: '',
-			move: {
+			modal: false,
+			sequence: {
+				baseOption: {},
+				unit: { name: t('polls', 'Week'), value: 'week' },
 				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
+				amount: 1
+			},
+			dateUnits: [
+				{ name: t('polls', 'Minute'), value: 'minute' },
+				{ name: t('polls', 'Hour'), value: 'hour' },
+				{ name: t('polls', 'Day'), value: 'day' },
+				{ name: t('polls', 'Week'), value: 'week' },
+				{ name: t('polls', 'Month'), value: 'month' },
+				{ name: t('polls', 'Year'), value: 'year' }
+			],
+			shift: {
+				step: 1,
+				unit: { name: t('polls', 'Week'), value: 'week' }
 			}
 		}
 	},
@@ -119,26 +169,16 @@ export default {
 				minuteStep: 1,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-
-				// TODO: use this for version 2.x
-				lang: OC.getLanguage().split('-')[0],
-				firstDayOfWeek: this.firstDOW,
-
-				// TODO: use this from version 3.x on
-				// lang: {
-				// 	formatLocale: {
-				//		firstDayOfWeek: this.firstDOW,
-				// 		months: moment.months(),
-				// 		monthsShort: moment.monthsShort(),
-				// 		weekdays: moment.weekdays(),
-				// 		weekdaysMin: moment.weekdaysMin()
-				// 	}
-				// },
 				placeholder: t('polls', 'Click to add a date'),
-				timePickerOptions: {
-					start: '00:00',
-					step: '00:30',
-					end: '23:30'
+				confirm: true,
+				lang: {
+					formatLocale: {
+						firstDayOfWeek: this.firstDOW,
+						months: moment.months(),
+						monthsShort: moment.monthsShort(),
+						weekdays: moment.weekdays(),
+						weekdaysMin: moment.weekdaysMin()
+					}
 				}
 			}
 		}
@@ -154,10 +194,32 @@ export default {
 			const store = this.$store
 			this.options.list.forEach(function(existingOption) {
 				const option = Object.assign({}, existingOption)
-				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit).format('YYYY-MM-DD HH:mm:ss')
+				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
 				store.dispatch('updateOptionAsync', { option: option })
 			})
+		},
+
+		closeModal() {
+			this.modal = false
+		},
+
+		createSequence() {
+			for (var i = 0; i < this.sequence.amount; i++) {
+				this.$store.dispatch('addOptionAsync', {
+					pollOptionText: moment.unix(this.sequence.baseOption.timestamp).add(
+						this.sequence.step * (i + 1),
+						this.sequence.unit.value
+					).format('YYYY-MM-DD HH:mm:ss')
+				})
+			}
+			this.modal = false
+			this.sequence.baseOption = {}
+		},
+
+		cloneOptionModal(option) {
+			this.modal = true
+			this.sequence.baseOption = option
 		},
 
 		removeOption(option) {
@@ -168,42 +230,14 @@ export default {
 
 }
 </script>
-
-<style lang="scss">
-	.config-box {
+<style lang="scss" scoped>
+	.selectUnit {
 		display: flex;
-		flex-direction: column;
-		padding: 8px;
-		& > * {
-			padding-left: 21px;
+		input {
+			width: 90px;
 		}
-
-		& > input {
-			margin-left: 24px;
-			width: auto;
-
-		}
-
-		& > textarea {
-			margin-left: 24px;
-			width: auto;
-			padding: 7px 6px;
-		}
-
-		& > .title {
-			display: flex;
-			background-position: 0 2px;
-			padding-left: 24px;
-			opacity: 0.7;
-			font-weight: bold;
-			margin-bottom: 4px;
-			& > span {
-				padding-left: 4px;
-			}
-		}
-		&.poll-table > li {
-			border-bottom-color: rgb(72, 72, 72);
-			margin-left: 18px;
+		.multiselect {
+			margin-top: 3px;
 		}
 	}
 </style>

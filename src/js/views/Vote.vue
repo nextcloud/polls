@@ -24,18 +24,35 @@
 	<AppContent>
 		<div class="main-container">
 			<div class="header-actions">
-				<button class="button btn primary" @click="tableMode = !tableMode">
-					<span>{{ t('polls', 'Switch view') }}</span>
-				</button>
-				<a href="#" class="icon icon-settings active"
-					:title="t('polls', 'Open Sidebar')" @click="toggleSideBar()" />
+				<Actions>
+					<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
+						{{ t('polls', 'Switch view') }}
+					</ActionButton>
+				</Actions>
+				<Actions>
+					<ActionButton icon="icon-settings" @click="toggleSideBar()">
+						{{ t('polls', 'Toggle Sidebar') }}
+					</ActionButton>
+				</Actions>
 			</div>
-			<PollTitle />
+			<h2 class="title">
+				{{ poll.title }}
+				<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
+				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+				<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+			</h2>
 			<PollInformation />
+
 			<VoteHeaderPublic v-if="!OC.currentUser" />
-			<PollDescription />
+
+			<h3 class="description">
+				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+			</h3>
+
 			<VoteList v-show="!tableMode && options.list.length" />
+
 			<VoteTable v-show="tableMode && options.list.length" />
+
 			<div v-if="!options.list.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
 				<button v-if="acl.allowEdit" @click="openOptions">
@@ -47,6 +64,7 @@
 			</div>
 
 			<Subscription v-if="OC.currentUser" />
+
 			<div class="additional">
 				<ParticipantsList v-if="acl.allowSeeUsernames" />
 			</div>
@@ -58,28 +76,26 @@
 </template>
 
 <script>
-import { AppContent } from '@nextcloud/vue'
+import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import ParticipantsList from '../components/Base/ParticipantsList'
-import PollDescription from '../components/Base/PollDescription'
 import PollInformation from '../components/Base/PollInformation'
-import PollTitle from '../components/Base/PollTitle'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
 import SideBar from '../components/SideBar/SideBar'
 import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'Vote',
 	components: {
+		Actions,
+		ActionButton,
 		AppContent,
 		Subscription,
 		ParticipantsList,
-		PollDescription,
 		PollInformation,
-		PollTitle,
 		LoadingOverlay,
 		VoteHeaderPublic,
 		SideBar,
@@ -106,6 +122,10 @@ export default {
 			options: state => state.options
 		}),
 
+		...mapGetters([
+			'expired'
+		]),
+
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
 		}
@@ -118,7 +138,7 @@ export default {
 		}
 	},
 
-	mounted() {
+	created() {
 		this.loadPoll()
 	},
 
@@ -145,6 +165,7 @@ export default {
 								}
 								this.isLoading = false
 							})
+						window.document.title = this.windowTitle
 					} else {
 						this.$router.replace({ name: 'notfound' })
 					}
@@ -179,20 +200,9 @@ export default {
 	}
 }
 
-.main-container {
-	position: relative;
-	flex: 1;
-	padding: 8px 24px;
-	margin: 0;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	overflow-x: scroll;
-}
-
 .header-actions {
-	right: 0;
-	position: absolute;
 	display: flex;
+	float: right;
 }
 
 .icon.icon-settings.active {
@@ -200,5 +210,9 @@ export default {
 	width: 44px;
 	height: 44px;
 }
-
+@media (max-width: (1024px)) {
+	.title {
+		padding-left: 14px;
+	}
+}
 </style>

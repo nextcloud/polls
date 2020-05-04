@@ -1,8 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Deleted" : "Șters",
-    "Group" : "Grup",
     "New comment …" : "Comentariu nou...",
     "Comments" : "Comentarii",
     "Delete comment" : "Șterge comentariu",
@@ -16,8 +14,15 @@ OC.L10N.register(
     "Shares" : "Partajări",
     "Description" : "Descriere",
     "Expiration date" : "Data expirării",
-    "Unknown user" : "Utilizator necunoscut",
     "OK" : "OK",
+    "Week" : "Săptămâna",
+    "Day" : "Zi",
+    "Month" : "Luna",
+    "Unknown user" : "Utilizator necunoscut",
+    "Group" : "Grup",
+    "No" : "Nu",
+    "Yes" : "a",
+    "Deleted" : "Șters",
     "Public access" : "Access public"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

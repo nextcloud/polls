@@ -48,9 +48,8 @@ class SystemController extends Controller {
 	private $voteMapper;
 	private $shareMapper;
 
-
 	/**
-	 * PageController constructor.
+	 * SystemController constructor.
 	 * @param string $appName
 	 * @param $userId
 	 * @param IRequest $request
@@ -63,7 +62,7 @@ class SystemController extends Controller {
 	 */
 	public function __construct(
 		string $appName,
-		$UserId,
+		$userId,
 		IRequest $request,
 		ILogger $logger,
 		IConfig $systemConfig,
@@ -76,15 +75,24 @@ class SystemController extends Controller {
 		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
 		$this->logger = $logger;
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 	}
 
 	/**
+	 * Validate string as email address
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @return Boolval
+	 */
+	 private function isValidEmail($email) {
+		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? FALSE : TRUE;
+	 }
+
+	/**
 	 * Get a list of NC users, groups and contacts
-	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @param string $query
 	 * @param bool $getGroups - search in groups
@@ -94,8 +102,28 @@ class SystemController extends Controller {
 	 * @param array $skipUsers - user names to skip in return array
 	 * @return DataResponse
 	 */
-	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $skipGroups = array(), $skipUsers = array()) {
+	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $getMail = false, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
+		// if (filter_var($query, FILTER_VALIDATE_EMAIL)) {
+		if ($this->isValidEmail($query)) {
+			$list[] = [
+				'id' => '',
+				'user' => '',
+				'organisation' => '',
+				'displayName' => '',
+				'emailAddress' => $query,
+				'desc' => $query,
+				'type' => 'email',
+				'icon' => 'icon-mail',
+				'avatarURL' => '',
+				'avatar' => '',
+				'lastLogin' => '',
+				'cloudId' => ''
+
+			];
+		}
+
+
 		if ($getGroups) {
 			$groups = $this->groupManager->search($query);
 			foreach ($groups as $group) {
@@ -195,9 +223,21 @@ class SystemController extends Controller {
 	 * @PublicPage
 	 * @return DataResponse
 	 */
-	public function validatePublicUsername($pollId, $userName) {
+	public function validatePublicUsername($pollId, $userName, $token) {
+
+		// return forbidden, if $pollId does not match the share's pollId, force int compare
+		if (intval($this->shareMapper->findByToken($token)->getPollId()) !== intVal($pollId)) {
+			return new DataResponse(['result' => false, 'error' => 'wrong token'], Http::STATUS_FORBIDDEN);
+		}
+
+		// return forbidden, if the length of the userame is lower than 3 characters
+		if (strlen(trim($userName)) < 3) {
+			return new DataResponse(['result' => false, 'error' => 'userName too short'], Http::STATUS_FORBIDDEN);
+		}
+
 		$list = array();
 
+		// get all groups
 		$groups = $this->groupManager->search('');
 		foreach ($groups as $group) {
 			$list[] = [
@@ -208,6 +248,7 @@ class SystemController extends Controller {
 			];
 		}
 
+		// get all users
 		$users = $this->userManager->searchDisplayName('');
 		foreach ($users as $user) {
 			$list[] = [
@@ -218,6 +259,7 @@ class SystemController extends Controller {
 			];
 		}
 
+		// get all participants
 		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
 		foreach ($votes as $vote) {
 			if ($vote->getUserId() !== '' && $vote->getUserId() !== null) {
@@ -230,6 +272,7 @@ class SystemController extends Controller {
 			}
 		}
 
+		// get all shares for this poll
 		$shares = $this->shareMapper->findByPoll($pollId);
 		foreach ($shares as $share) {
 			if ($share->getUserId() !== '' && $share->getUserId() !== null) {
@@ -242,6 +285,8 @@ class SystemController extends Controller {
 			}
 		}
 
+		// check if the username is contained inside the generated list
+		// return forbidden, if list contains requested username
 		foreach ($list as $element) {
 			if (strtolower(trim($userName)) === strtolower(trim($element['id'])) || strtolower(trim($userName)) === strtolower(trim($element['displayName']))) {
 				return new DataResponse([
@@ -250,9 +295,10 @@ class SystemController extends Controller {
 			}
 		}
 
+		// return OK, if username is allowed
 		return new DataResponse([
 			'result' => true,
-			'list' => $list
+			'name' => $userName
 		], Http::STATUS_OK);
 	}
 

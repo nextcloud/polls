@@ -8,6 +8,8 @@ OC.L10N.register(
     "Details" : "معلومات",
     "Shares" : "شريک شوي",
     "Expiration date" : "د پای نېټه",
-    "OK" : "سمه ده"
+    "OK" : "سمه ده",
+    "No" : "نه",
+    "Yes" : "هو"
 },
 "nplurals=2; plural=(n != 1);");

@@ -249,7 +249,7 @@ class Acl implements JsonSerializable {
 
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
-				if (($item->getType() === 'user' || $item->getType() === 'external') && $item->getUserId() === $this->getUserId()) {
+				if (($item->getType() === 'user' || $item->getType() === 'external' || $item->getType() === 'email' || $item->getType() === 'contact') && $item->getUserId() === $this->getUserId()) {
 					return true;
 				}
 			})
@@ -320,8 +320,25 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return bool
 	 */
+	public function getAllowSeeResults(): bool {
+		if ($this->poll->getShowResults() === 'always' || $this->getIsOwner()) {
+		// if ($this->poll->getShowResults() === 'always') {
+			return true;
+		} elseif ($this->poll->getShowResults() === 'never') {
+			return false;
+		} elseif ($this->poll->getShowResults() === 'expired') {
+			return $this->getExpired();
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return bool
+	 */
 	public function getAllowSeeUsernames(): bool {
-		return !(($this->poll->getAnonymous() && !$this->getIsOwner()) || $this->poll->getFullAnonymous()); ;
+		return !($this->poll->getAnonymous() && !$this->getIsOwner()); ;
 	}
 
 	/**
@@ -389,26 +406,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @return string
-	 */
-	public function getAccessLevel(): string {
-		if ($this->getIsOwner()) {
-			return 'owner';
-		} elseif ($this->poll->getAccess() === 'public') {
-			return 'public';
-		} elseif ($this->poll->getAccess() === 'registered' && \OC::$server->getUserSession()->getUser()->getUID() === $this->userId) {
-			return 'registered';
-		} elseif ($this->poll->getAccess() === 'hidden' && $this->getisOwner()) {
-			return 'hidden';
-		} elseif ($this->getIsAdmin()) {
-			return 'admin';
-		} else {
-			return 'none';
-		}
-	}
-
-	/**
 	 * @return array
 	 */
 	public function jsonSerialize(): array {
@@ -424,14 +421,14 @@ class Acl implements JsonSerializable {
 			'allowVote'         => $this->getAllowVote(),
 			'allowComment'      => $this->getAllowComment(),
 			'allowEdit'         => $this->getAllowEdit(),
+			'allowSeeResults'   => $this->getAllowSeeResults(),
 			'allowSeeUsernames' => $this->getAllowSeeUsernames(),
 			'allowSeeAllVotes'  => $this->getAllowSeeAllVotes(),
 			'userHasVoted'		=> $this->getUserHasVoted(),
 			'groupShare'        => $this->getGroupShare(),
 			'personalShare'     => $this->getPersonalShare(),
 			'publicShare'     	=> $this->getPublicShare(),
-			'foundByToken'      => $this->getFoundByToken(),
-			'accessLevel'       => $this->getAccessLevel()
+			'foundByToken'      => $this->getFoundByToken()
 		];
 	}
 }

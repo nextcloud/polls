@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Group" : "Group",
     "Cancel" : "இரத்து செய்க",
     "Title" : "தலைப்பு",
     "Owner" : "Owner",
@@ -10,6 +9,11 @@ OC.L10N.register(
     "Configuration" : "தகவமைப்பு",
     "Description" : "விவரிப்பு",
     "Expiration date" : "காலவதியாகும் திகதி",
-    "OK" : "சரி "
+    "OK" : "சரி ",
+    "Week" : "வாரம்",
+    "Month" : "மாதம்",
+    "Group" : "Group",
+    "No" : "No",
+    "Yes" : "Yes"
 },
 "nplurals=2; plural=(n != 1);");
