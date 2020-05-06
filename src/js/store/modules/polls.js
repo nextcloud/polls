@@ -45,7 +45,7 @@ const getters = {
 		if (filterId === 'all') {
 			return state.polls.filter(poll => (!poll.deleted))
 		} else if (filterId === 'my') {
-			return state.polls.filter(poll => (poll.owner === getCurrentUser && !poll.deleted))
+			return state.polls.filter(poll => (poll.owner === getCurrentUser().uid && !poll.deleted))
 		} else if (filterId === 'relevant') {
 			return state.polls.filter(poll => ((
 				poll.userHasVoted

@@ -23,11 +23,11 @@
 <template>
 	<div class="user-row" :class="type">
 		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
-			:is-guest="!Boolean(getCurrentUser)"
+			:is-guest="!Boolean(getCurrentUser())"
 			:display-name="displayName"
-
 			:is-no-user="isNoUser" />
-		<div class="avatar" :class="iconClass" />
+
+		<div v-if="icon" class="avatar" :class="iconClass" />
 
 		<div v-if="!hideNames" class="user-name">
 			{{ displayName }}
@@ -127,7 +127,7 @@ export default {
 		flex: 0;
 	}
 
-	.avatar {
+	.icon-class {
 		height: 32px;
 		width: 32px;
 		flex: 0;

@@ -10,9 +10,9 @@ module.exports = merge(common, {
 				parallel: true,
 				cache: true,
 				terserOptions: {
-					ecma: 6
-				}
-			})
-		]
-	}
+					ecma: 6,
+				},
+			}),
+		],
+	},
 })

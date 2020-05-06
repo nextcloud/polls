@@ -21,14 +21,13 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, { active: isActive}]">
-		<div v-if="isActive" class="icon" @click="voteClick()" />
+	<div class="vote-item" :class="[answer, { active: isActive && isValidUser}]">
+		<div v-if="isActive" class="icon" @click="$emit('voteClick')" />
 		<div v-else class="icon" />
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 
 export default {
 	name: 'VoteItem',
@@ -42,14 +41,13 @@ export default {
 			type: String,
 			default: '',
 		},
+		isActive: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
-		...mapState({
-			poll: state => state.poll,
-			acl: state => state.acl,
-		}),
-
 		answer() {
 			try {
 				return this.$store.getters.getVote({
@@ -65,19 +63,6 @@ export default {
 			return (this.userId !== '' && this.userId !== null)
 		},
 
-		isActive() {
-			return (this.isValidUser && this.acl.userId === this.userId && this.acl.allowVote)
-		},
-
-	},
-
-	methods: {
-		voteClick() {
-			if (this.isActive) {
-				this.$emit('voteClick')
-			}
-		},
-
 	},
 }
 
@@ -91,8 +76,8 @@ export default {
 		width: 85px;
 		align-items: center;
 		background-color: var(--color-polls-background-no);
-		color: var(--color-polls-foreground-no);
 		> .icon {
+			color: var(--color-polls-foreground-no);
 			margin: auto;
 			background-position: center;
 			background-repeat: no-repeat;
@@ -106,24 +91,25 @@ export default {
 
 		&.yes {
 			background-color: var(--color-polls-background-yes);
-			color: var(--color-polls-foreground-yes);
 			> .icon {
+				color: var(--color-polls-foreground-yes);
 				background-image: var(--icon-polls-yes)
 			}
 		}
 
 		&.no {
 			background-color: var(--color-polls-background-no);
-			color: var(--color-polls-foreground-no);
 			&.active > .icon {
+				color: var(--color-polls-foreground-no);
 				background-image: var(--icon-polls-no)
 			}
 		}
 
 		&.maybe {
 			background-color: var(--color-polls-background-maybe);
-			color: var(--color-polls-foreground-maybe);
 			> .icon {
+				background-size: 80%;
+				color: var(--color-polls-foreground-maybe);
 				background-image: var(--icon-polls-maybe)
 			}
 		}

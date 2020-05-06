@@ -29,7 +29,7 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton icon="icon-settings" @click="emit('toggle-sidebar')">
+				<ActionButton icon="icon-settings" @click="toggleSideBar()">
 					{{ t('polls', 'Toggle Sidebar') }}
 				</ActionButton>
 			</Actions>
@@ -42,7 +42,7 @@
 		</h2>
 		<PollInformation />
 
-		<VoteHeaderPublic v-if="getCurrentUser" />
+		<VoteHeaderPublic v-if="!getCurrentUser()" />
 
 		<h3 class="description">
 			{{ poll.description ? poll.description : t('polls', 'No description provided') }}
@@ -62,11 +62,8 @@
 			</div>
 		</div>
 
-		<Subscription v-if="getCurrentUser" />
-
-		<div class="additional">
-			<ParticipantsList v-if="acl.allowSeeUsernames" />
-		</div>
+		<Subscription v-if="getCurrentUser()" />
+		<ParticipantsList v-if="acl.allowSeeUsernames" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -140,7 +137,7 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.$store.commit({ type: 'resetPoll' })
+		this.$store.dispatch({ type: 'resetPoll' })
 	},
 
 	methods: {
@@ -152,10 +149,15 @@ export default {
 			emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
 		},
 
+		toggleSideBar() {
+			emit('toggle-sidebar')
+		},
+
 		loadPoll() {
 			this.isLoading = true
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
+					console.log('loadPoll', response)
 					if (response.status === 200) {
 						// this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
 						// 	.then(() => {
@@ -183,17 +185,6 @@ export default {
 <style lang="scss" scoped>
 #emptycontent, .emptycontent {
 	margin: 44px 0;
-}
-
-.additional {
-	display: flex;
-	flex-wrap: wrap;
-	.participants {
-		flex: 1;
-	}
-	.comments {
-		flex: 3;
-	}
 }
 
 .header-actions {

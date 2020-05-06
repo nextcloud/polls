@@ -27,6 +27,7 @@
 				v-if="acl.allowVote"
 				:user-id="acl.userId"
 				:option="option"
+				:is-active="acl.allowVote"
 				@voteClick="setVote(option, acl.userId)" />
 			<OptionItem :option="option" :type="poll.type" />
 

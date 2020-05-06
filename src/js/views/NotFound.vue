@@ -26,7 +26,7 @@
 			<div id="emptycontent-icon" class="icon-search" />
 			<h2>{{ t('polls', 'The poll does not exist') }}</h2>
 
-			<p v-if="getCurrentUser" class="emptycontent-additional">
+			<p v-if="getCurrentUser()" class="emptycontent-additional">
 				{{ t('polls', 'Enter a poll or start a new one.') }}
 			</p>
 			<button v-else @click="gotoLogin()">

@@ -22,7 +22,7 @@
 
 <template>
 	<Content app-name="polls">
-		<Navigation v-if="getCurrentUser" />
+		<Navigation v-if="getCurrentUser()" />
 		<router-view />
 		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
 	</Content>
@@ -67,7 +67,7 @@ export default {
 
 		})
 
-		if (getCurrentUser) {
+		if (getCurrentUser()) {
 			this.updatePolls()
 			subscribe('update-polls', () => {
 				this.updatePolls()
@@ -82,7 +82,7 @@ export default {
 
 	methods: {
 		updatePolls() {
-			if (getCurrentUser) {
+			if (getCurrentUser()) {
 
 				this.$store.dispatch('loadPolls')
 					.then(() => {
@@ -206,7 +206,6 @@ input {
 .config-box {
 	display: flex;
 	flex-direction: column;
-	// padding: 8px;
 	& > * {
 		margin-left: 21px;
 	}
@@ -218,7 +217,6 @@ input {
 	}
 
 	& > textarea {
-		// margin-left: 24px;
 		width: auto;
 		padding: 7px 6px;
 	}
@@ -226,7 +224,6 @@ input {
 	& > .title {
 		display: flex;
 		background-position: 0 4px;
-		// padding-left: 24px;
 		opacity: 0.7;
 		font-weight: bold;
 		margin-bottom: 4px;

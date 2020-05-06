@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 export default {
 	name: 'CreateDlg',
@@ -78,7 +78,9 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['setPollProperty', 'resetPoll', 'reset']),
+		...mapMutations(['setPollProperty']),
+
+		...mapActions(['resetPoll']),
 
 		cancel() {
 			this.title = ''
@@ -88,7 +90,6 @@ export default {
 
 		confirm() {
 			this.resetPoll()
-			this.reset()
 			this.setPollProperty({ id: 0 })
 			this.setPollProperty({ title: this.title })
 			this.setPollProperty({ type: this.type })

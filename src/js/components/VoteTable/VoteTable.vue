@@ -50,6 +50,7 @@
 				:key="option.id"
 				:user-id="participant.userId"
 				:option="option"
+				:is-active="acl.userId === participant.userId && acl.allowVote"
 				@voteClick="setVote(option, participant.userId)" />
 		</div>
 

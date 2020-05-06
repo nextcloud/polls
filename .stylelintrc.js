@@ -7,20 +7,20 @@ module.exports = {
 		'rule-empty-line-before': [
 			'always',
 			{
-				ignore: ['after-comment', 'inside-block']
-			}
+				ignore: ['after-comment', 'inside-block'],
+			},
 		],
 		'declaration-empty-line-before': [
 			'never',
 			{
-				ignore: ['after-declaration']
-			}
+				ignore: ['after-declaration'],
+			},
 		],
 		'comment-empty-line-before': null,
 		'selector-type-case': null,
 		'selector-list-comma-newline-after': null,
 		'no-descending-specificity': null,
-		'string-quotes': 'single'
+		'string-quotes': 'single',
 	},
-	plugins: ['stylelint-scss']
+	plugins: ['stylelint-scss'],
 }

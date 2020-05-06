@@ -49,11 +49,11 @@ const defaultPoll = () => {
 const state = defaultPoll()
 
 const mutations = {
-	setPoll(state, payload) {
+	set(state, payload) {
 		Object.assign(state, payload.poll)
 	},
 
-	resetPoll(state) {
+	reset(state) {
 		Object.assign(state, defaultPoll())
 	},
 
@@ -87,6 +87,10 @@ const getters = {
 
 const actions = {
 
+	resetPoll(context) {
+		context.commit('reset')
+	},
+
 	loadPollMain(context, payload) {
 		let endPoint = 'apps/polls/polls/get/'
 		if (payload.token) {
@@ -94,17 +98,12 @@ const actions = {
 		} else if (payload.pollId) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
-			context.commit('resetPoll')
+			context.dispatch('resetPoll')
 			return
 		}
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data.poll })
-				context.commit('acl/setAcl', { acl: response.data.acl })
-				context.commit('setOptions', { options: response.data.options }, { root: true })
-				context.commit('setComments', { comments: response.data.comments }, { root: true })
-				context.commit('setVotes', { votes: response.data.votes }, { root: true })
-				context.commit('setShares', { shares: response.data.shares }, { root: true })
+				context.commit('set', response.data)
 				return response
 			}, (error) => {
 				if (error.response.status !== '404' && error.response.status !== '401') {
@@ -119,8 +118,7 @@ const actions = {
 		const endPoint = 'apps/polls/polls/write/'
 		return axios.post(generateUrl(endPoint), { poll: state })
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data.poll })
-				context.commit('acl/setAcl', { acl: response.data.acl })
+				context.commit('set', response.data)
 				return response.data.poll
 			}, (error) => {
 				console.error('Error writing poll:', { error: error.response }, { state: state })

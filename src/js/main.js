@@ -27,7 +27,6 @@ import store from './store'
 import router from './router'
 import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
-import Fragment from 'vue-fragment'
 import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
 import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
@@ -53,7 +52,6 @@ Vue.component('UserDiv', UserDiv)
 Vue.component('ButtonDiv', ButtonDiv)
 Vue.directive('tooltip', Tooltip)
 
-Vue.use(Fragment.Plugin)
 Vue.use(ClickOutside)
 Vue.use(VueClipboard)
 

@@ -34,15 +34,15 @@ const defaultOptions = () => {
 const state = defaultOptions()
 
 const mutations = {
-	setOptions(state, payload) {
-		Object.assign(state, payload)
+	set(state, payload) {
+		state.options = payload.options
 	},
 
 	reset(state) {
 		Object.assign(state, defaultOptions())
 	},
 
-	optionRemove(state, payload) {
+	removeOption(state, payload) {
 		state.options = state.options.filter(option => {
 			return option.id !== payload.option.id
 		})
@@ -81,28 +81,28 @@ const getters = {
 
 const actions = {
 
-	loadPoll(context, payload) {
-		let endPoint = 'apps/polls/options/get/'
-
-		if (payload.token !== undefined) {
-			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId !== undefined) {
-			endPoint = endPoint.concat(payload.pollId)
-		} else {
-			context.commit('reset')
-			return
-		}
-
-		return axios.get(generateUrl(endPoint))
-			.then((response) => {
-				context.commit('setOptions', { options: response.data })
-			}, (error) => {
-				context.commit('reset')
-				console.error('Error loading options', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
+	// loadPoll(context, payload) {
+	// 	let endPoint = 'apps/polls/options/get/'
+	//
+	// 	if (payload.token !== undefined) {
+	// 		endPoint = endPoint.concat('s/', payload.token)
+	// 	} else if (payload.pollId !== undefined) {
+	// 		endPoint = endPoint.concat(payload.pollId)
+	// 	} else {
+	// 		context.commit('reset')
+	// 		return
+	// 	}
+	//
+	// 	return axios.get(generateUrl(endPoint))
+	// 		.then((response) => {
+	// 			context.commit('set', { options: response.data })
+	// 		}, (error) => {
+	// 			context.commit('reset')
+	// 			console.error('Error loading options', { error: error.response }, { payload: payload })
+	// 			throw error
+	// 		})
+	// },
+	//
 	updateOptions(context) {
 		context.state.options.forEach((item, i) => {
 			context.dispatch('updateOptionAsync', { option: item })
@@ -157,7 +157,7 @@ const actions = {
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
-				context.commit('optionRemove', { option: payload.option })
+				context.commit('removeOption', { option: payload.option })
 			}, (error) => {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error

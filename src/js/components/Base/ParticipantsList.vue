@@ -28,8 +28,8 @@
 		<h2 v-else>
 			{{ t('polls','No Participants until now') }}
 		</h2>
-		<div v-if="participantsVoted.length" class="participants">
-			<userDiv v-for="(participant) in participantsVoted"
+		<div v-if="participantsVoted.length" class="participants-list__list">
+			<UserDiv v-for="(participant) in participantsVoted"
 				:key="participant.userId"
 				:hide-names="true"
 				:user-id="participant.userId"
@@ -40,30 +40,13 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'ParticipantsList',
-
-	data() {
-		return {
-			voteSaved: false,
-			delay: 50,
-			newName: '',
-		}
-	},
-
 	computed: {
-		...mapState({
-			acl: state => state.acl,
-		}),
-
-		...mapGetters([
-			'participantsVoted',
-		]),
-
+		...mapGetters(['participantsVoted']),
 	},
-
 }
 </script>
 
@@ -71,18 +54,14 @@ export default {
 	.participants-list {
 		margin: 8px 0;
 		padding-right: 24px;
-	}
 
-	.participants {
+	}
+	.participants-list__list {
 		display: flex;
 		justify-content: flex-start;
-		.user-row {
-			display: block;
+		flex-wrap: wrap;
+		&> * {
 			flex: 0;
 		}
-		.user {
-			padding: 0;
-		}
 	}
-
 </style>

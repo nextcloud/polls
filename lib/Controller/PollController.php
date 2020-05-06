@@ -159,36 +159,9 @@
 
 	}
 
+
 	/**
 	 * get
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return array
-	 */
- 	public function get_old($pollId, $withChildren = false) {
-
- 		try {
-			if (!$this->acl->getFoundByToken()) {
-				$this->acl->setPollId($pollId);
-			}
-			$this->poll = $this->pollMapper->find($pollId);
-			if (!$this->acl->getAllowView()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-			return new DataResponse([
-				'poll' => $this->poll,
-				'acl' => $this->acl,
-			], Http::STATUS_OK);
-
-		} catch (DoesNotExistException $e) {
-			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
-			return new DataResponse(null, Http::STATUS_NOT_FOUND);
- 		}
- 	}
-
-	/**
-	 * getFullPoll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param integer $pollId
@@ -209,34 +182,34 @@
 
 			$options = $this->optionMapper->findByPoll($pollId);
 
-			if (!$this->acl->getAllowSeeUsernames()) {
-				$this->anonymizer->set($pollId, $this->acl->getUserId());
-				$comments = $this->anonymizer->getComments();
-			} else {
-				$comments =  $this->commentMapper->findByPoll($pollId);
-			}
-
-			if ($this->acl->setPollId($pollId)->getAllowEdit()) {
+			if ($this->acl->getAllowEdit()) {
 				$shares = $this->shareMapper->findByPoll($pollId);
 			} else {
 				$shares = [];
 			}
 
-			if (!$this->acl->getAllowSeeResults()) {
-				$votes = $this->voteMapper->findByPollAndUser($pollId, $this->acl->getUserId());
-			} elseif (!$this->acl->getAllowSeeUsernames()) {
-				$votes = $this->anonymizer->set($pollId, $this->acl->getUserId());
+			if ($this->acl->getAllowSeeUsernames()) {
+				$comments =  $this->commentMapper->findByPoll($pollId);
+
+				if ($this->acl->getAllowSeeResults()) {
+					$votes = $this->voteMapper->findByPoll($pollId);
+				} else {
+					$votes = $this->voteMapper->findByPollAndUser($pollId, $this->acl->getUserId());
+				}
 			} else {
-				$votes = $this->voteMapper->findByPoll($pollId);
+				$this->anonymizer->set($pollId, $this->acl->getUserId());
+				$comments = $this->anonymizer->getComments();
+				$votes = $this->anonymizer->getVotes();
+
 			}
 
 			return new DataResponse([
-				'options' => $this->optionMapper->findByPoll($pollId),
-				'comments' => $comments,
-				'poll' => $this->poll,
 				'acl' => $this->acl,
+				'comments' => $comments,
+				'options' => $this->optionMapper->findByPoll($pollId),
+				'poll' => $this->poll,
 				'shares' => $shares,
-				'votes' => $votes,
+				'votes' => $votes
 			], Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
@@ -375,11 +348,12 @@
 				$this->pollMapper->insert($this->poll);
 				$this->logService->setLog($this->poll->getId(), 'addPoll');
 			}
-			$this->acl->setPollId($this->poll->getId());
-			return new DataResponse([
-				'poll' => $this->poll,
-				'acl' => $this->acl
-			], Http::STATUS_OK);
+			return $this->get($this->poll->getId());
+			// $this->acl->setPollId($this->poll->getId());
+			// return new DataResponse([
+			// 	'poll' => $this->poll,
+			// 	'acl' => $this->acl
+			// ], Http::STATUS_OK);
 		}
 	}
 

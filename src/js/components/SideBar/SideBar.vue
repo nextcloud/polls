@@ -22,7 +22,7 @@
 
 <template>
 	<AppSidebar ref="sideBar" :active="active" :title="t('polls', 'Details')"
-		@close="emit('toggle-sidebar', { open: false })">
+		@close="closeSideBar()">
 		<AppSidebarTab v-if="acl.allowEdit" :id="'configuration'" :order="1"
 			:name="t('polls', 'Configuration')" icon="icon-settings">
 			<SideBarTabConfiguration />
@@ -53,6 +53,7 @@ import SideBarTabOptions from './SideBarTabOptions'
 import Comments from '../Comments/Comments'
 import SideBarTabShare from './SideBarTabShare'
 import { mapState } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'SideBar',
@@ -78,6 +79,11 @@ export default {
 			poll: state => state.poll,
 			acl: state => state.acl,
 		}),
+	},
+	methods: {
+		closeSideBar() {
+			emit('toggle-sidebar', { open: false })
+		},
 	},
 
 }

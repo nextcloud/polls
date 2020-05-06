@@ -34,8 +34,8 @@ const state = defaultComments()
 
 const mutations = {
 
-	setComments(state, payload) {
-		Object.assign(state, payload)
+	set(state, payload) {
+		state.comments = payload.comments
 	},
 
 	reset(state) {
@@ -61,27 +61,27 @@ const getters = {
 
 const actions = {
 
-	loadPoll(context, payload) {
-		let endPoint = 'apps/polls/comments/get/'
-
-		if (payload.token !== undefined) {
-			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId !== undefined) {
-			endPoint = endPoint.concat(payload.pollId)
-		} else {
-			context.commit('reset')
-			return
-		}
-
-		return axios.get(generateUrl(endPoint))
-			.then((response) => {
-				context.commit('setComments', { comments: response.data })
-			}, (error) => {
-				console.error('Error loading comments', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
+	// loadPoll(context, payload) {
+	// 	let endPoint = 'apps/polls/comments/get/'
+	//
+	// 	if (payload.token !== undefined) {
+	// 		endPoint = endPoint.concat('s/', payload.token)
+	// 	} else if (payload.pollId !== undefined) {
+	// 		endPoint = endPoint.concat(payload.pollId)
+	// 	} else {
+	// 		context.commit('reset')
+	// 		return
+	// 	}
+	//
+	// 	return axios.get(generateUrl(endPoint))
+	// 		.then((response) => {
+	// 			context.commit('set', { comments: response.data })
+	// 		}, (error) => {
+	// 			console.error('Error loading comments', { error: error.response }, { payload: payload })
+	// 			throw error
+	// 		})
+	// },
+	//
 	deleteComment(context, payload) {
 		let endPoint = 'apps/polls/comment/delete/'
 
