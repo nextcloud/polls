@@ -78,26 +78,6 @@ const getters = {
 }
 
 const actions = {
-	// loadPoll(context, payload) {
-	//
-	// 	let endPoint = 'apps/polls/shares/get/'
-	//
-	// 	if (payload.pollId && context.rootState.acl.allowEdit) {
-	// 		endPoint = endPoint.concat(payload.pollId)
-	// 	} else {
-	// 		context.commit('reset')
-	// 		return
-	// 	}
-	//
-	// 	return axios.get(generateUrl(endPoint))
-	// 		.then((response) => {
-	// 			context.commit('set', { shares: response.data })
-	// 		}, (error) => {
-	// 			console.error('Error loading shares', { error: error.response }, { payload: payload })
-	// 			throw error
-	// 		})
-	// },
-
 	getShareAsync(context, payload) {
 
 		const endPoint = 'apps/polls/share/get/'

@@ -155,27 +155,6 @@ const getters = {
 }
 
 const actions = {
-	//
-	// loadPoll(context, payload) {
-	// 	let endPoint = 'apps/polls/votes/get/'
-	// 	if (payload.token !== undefined) {
-	// 		endPoint = endPoint.concat('s/', payload.token)
-	// 	} else if (payload.pollId !== undefined) {
-	// 		endPoint = endPoint.concat(payload.pollId)
-	// 	} else {
-	// 		context.commit('reset')
-	// 		return
-	// 	}
-	//
-	// 	axios.get(generateUrl(endPoint))
-	// 		.then((response) => {
-	// 			context.commit('set', { votes: response.data })
-	// 		}, (error) => {
-	// 			console.error('Error loading votes', { error: error.response }, { payload: payload })
-	// 			throw error
-	// 		})
-	// },
-	//
 	deleteVotes(context, payload) {
 		const endPoint = 'apps/polls/votes/delete/'
 		return axios.post(generateUrl(endPoint), {

@@ -134,7 +134,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 				'notnull' => false,
 			]);
 			$table->addColumn('poll_option_text', Type::STRING, [
-				'notnull' => false, // maybe true?
+				'notnull' => false,
 				'length' => 256,
 			]);
 			$table->addColumn('timestamp', Type::INTEGER, [
@@ -163,7 +163,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->addColumn('vote_option_text', Type::STRING, [
-				'notnull' => false, // maybe true?
+				'notnull' => false,
 				'length' => 256,
 			]);
 			$table->addColumn('vote_answer', Type::STRING, [
@@ -244,8 +244,6 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		$insert->insert('polls_options')
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
-				// Decide between one of both
-				// 'poll_date' => $insert->createParameter('poll_date'),
 				'poll_option_text' => $insert->createParameter('poll_option_text'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -255,8 +253,6 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		while ($row = $result->fetch()) {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
-				// Decide between one of both
-				// ->setParameter('poll_date', $row['dt'])
 				->setParameter('poll_option_text', date($row['dt']));
 			$insert->execute();
 		}
@@ -271,8 +267,6 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		$insert->insert('polls_options')
 			->values([
 				'poll_id' => $insert->createParameter('poll_id'),
-				// Decide between one of both
-				// 'poll_text' => $insert->createParameter('poll_text'),
 				'poll_option_text' => $insert->createParameter('poll_option_text'),
 			]);
 		$query = $this->connection->getQueryBuilder();
@@ -282,8 +276,6 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		while ($row = $result->fetch()) {
 			$insert
 				->setParameter('poll_id', $row['poll_id'])
-				// Decide between one of both
-				// ->setParameter('poll_text', $row['text'])
 				->setParameter('poll_option_text', preg_replace("/_\d*$/", "$1", $row['text']));
 			$insert->execute();
 		}

@@ -21,10 +21,6 @@
  *
  */
 
-// import axios from '@nextcloud/axios'
-// import { generateUrl } from '@nextcloud/router'
-// import { getCurrentUser } from '@nextcloud/auth'
-
 const defaultAcl = () => {
 	return {
 		accessLevel: '',
@@ -64,28 +60,5 @@ const mutations = {
 	},
 
 }
-
-// const actions = {
-//
-// 	loadAcl(context, payload) {
-// 		let endPoint = 'apps/polls/acl/get/'
-// 		if (payload.token) {
-// 			endPoint = endPoint.concat('s/', payload.token)
-// 		} else if (payload.pollId) {
-// 			endPoint = endPoint.concat(payload.pollId)
-// 		} else {
-// 			context.commit('reset')
-// 			return
-// 		}
-//
-// 		return axios.get(generateUrl(endPoint))
-// 			.then((response) => {
-// 				context.commit('set', { acl: response.data })
-// 			}, (error) => {
-// 				console.error('Error loading acl', { error: error.response }, { payload: payload })
-// 				throw error
-// 			})
-// 	},
-// }
 
 export default { namespaced, state, mutations }

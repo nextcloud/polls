@@ -60,28 +60,6 @@ const getters = {
 }
 
 const actions = {
-
-	// loadPoll(context, payload) {
-	// 	let endPoint = 'apps/polls/comments/get/'
-	//
-	// 	if (payload.token !== undefined) {
-	// 		endPoint = endPoint.concat('s/', payload.token)
-	// 	} else if (payload.pollId !== undefined) {
-	// 		endPoint = endPoint.concat(payload.pollId)
-	// 	} else {
-	// 		context.commit('reset')
-	// 		return
-	// 	}
-	//
-	// 	return axios.get(generateUrl(endPoint))
-	// 		.then((response) => {
-	// 			context.commit('set', { comments: response.data })
-	// 		}, (error) => {
-	// 			console.error('Error loading comments', { error: error.response }, { payload: payload })
-	// 			throw error
-	// 		})
-	// },
-	//
 	deleteComment(context, payload) {
 		let endPoint = 'apps/polls/comment/delete/'
 
