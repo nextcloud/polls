@@ -42,6 +42,7 @@ OC.L10N.register(
     "never" : "aldrig",
     "Details" : "Detaljer",
     "Configuration" : "Konfiguration",
+    "Options" : "Alternativ",
     "Shares" : "Delat",
     "Description" : "Beskrivning",
     "Poll configurations" : "Omröstningsinställningar",
