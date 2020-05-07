@@ -8,6 +8,7 @@ module.exports = {
 		publicPath: '/js/',
 		filename: 'polls.js',
 		chunkFilename: 'chunks/polls.[name].[contenthash].js',
+		jsonpFunction: 'webpackJsonpOCAPolls',
 	},
 	module: {
 		rules: [
