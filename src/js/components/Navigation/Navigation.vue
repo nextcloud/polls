@@ -85,7 +85,7 @@ export default {
 				{
 					id: 'all',
 					title: t('polls', 'All polls'),
-					icon: 'icon-folder',
+					icon: 'icon-polls',
 					pinned: false,
 				},
 				{
@@ -181,4 +181,5 @@ export default {
 			opacity: 0.6;
 		}
 	}
+
 </style>

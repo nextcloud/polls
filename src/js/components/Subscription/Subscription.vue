@@ -65,6 +65,7 @@ export default {
 
 <style lang="css" scoped>
 	.subscription {
-		margin: 8px 0;
+		padding: 8px;
+		background-color: var(--color-main-background);
 	}
 </style>

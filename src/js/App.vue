@@ -108,6 +108,7 @@ export default {
 	--color-polls-background-yes: #ebf5d6;
 	--color-polls-background-no: #ffede9;
 	--color-polls-background-maybe: #fcf7e1;
+	--icon-polls :url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgdmVyc2lvbj0iMS4xIgogICB4bWw6c3BhY2U9InByZXNlcnZlIgogICBoZWlnaHQ9IjMyIgogICB3aWR0aD0iMzIiCiAgIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDU5NS4yNzUgMzExLjExMSIKICAgeT0iMHB4IgogICB4PSIwcHgiCiAgIHZpZXdCb3g9IjAgMCAzMiAzMiIKICAgaWQ9InN2ZzgiPjxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTE0Ij48cmRmOlJERj48Y2M6V29yawogICAgICAgICByZGY6YWJvdXQ9IiI+PGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+PGRjOnR5cGUKICAgICAgICAgICByZGY6cmVzb3VyY2U9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS9TdGlsbEltYWdlIiAvPjxkYzp0aXRsZT48L2RjOnRpdGxlPjwvY2M6V29yaz48L3JkZjpSREY+PC9tZXRhZGF0YT48ZGVmcwogICAgIGlkPSJkZWZzMTIiIC8+PHJlY3QKICAgICBzdHlsZT0iZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjkzNTQxNDMxIgogICAgIHdpZHRoPSI3IgogICAgIGhlaWdodD0iMjYiCiAgICAgeD0iMyIKICAgICB5PSIyIgogICAgIGlkPSJyZWN0MiIgLz48cmVjdAogICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuOTM1NDE0MzEiCiAgICAgd2lkdGg9IjciCiAgICAgaGVpZ2h0PSIxNiIKICAgICB4PSIxMiIKICAgICB5PSIxMiIKICAgICBpZD0icmVjdDQiIC8+PHJlY3QKICAgICBzdHlsZT0iZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjg5MTg4MjYiCiAgICAgd2lkdGg9IjciCiAgICAgaGVpZ2h0PSIyMCIKICAgICB4PSIyMSIKICAgICB5PSI4IgogICAgIGlkPSJyZWN0NiIgLz48L3N2Zz4=);
 	--icon-polls-yes: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Im0yLjM1IDcuMyA0IDRsNy4zLTcuMyIgc3Ryb2tlPSIjNDliYzQ5IiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4K);
 	--icon-polls-handle: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiI+DQogIDxwYXRoDQogICAgIGQ9Ik0yIDJ2MmgxMnYtMnptMCAzdjJoMTJ2LTJ6bTAgM3YyaDEydi0yem0wIDN2MmgxMnYtMnoiDQogICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIgLz4NCjwvc3ZnPg0K);
 	--icon-polls-no: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiIgdmVyc2lvbj0iMS4xIiB2aWV3Ym94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Im0xNCAxMi4zLTEuNyAxLjctNC4zLTQuMy00LjMgNC4zLTEuNy0xLjcgNC4zLTQuMy00LjMtNC4zIDEuNy0xLjcgNC4zIDQuMyA0LjMtNC4zIDEuNyAxLjctNC4zIDQuM3oiIGZpbGw9IiNmNDU1NzMiLz48L3N2Zz4K);
@@ -118,6 +119,9 @@ export default {
 	--color-polls-foreground-filter-yes: invert(74%) sepia(7%) saturate(3830%) hue-rotate(68deg) brightness(85%) contrast(85%);
 	--color-polls-foreground-filter-no: invert(43%) sepia(100%) saturate(1579%) hue-rotate(318deg) brightness(99%) contrast(94%);
 	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
+}
+.icon-polls {
+	background-image: var(--icon-polls);
 }
 
 .title {
@@ -153,11 +157,6 @@ export default {
 
 .fade-enter, .fade-leave-to {
 	opacity: 0;
-}
-
-.app-content {
-	padding: 8px 24px 8px 36px;
-	overflow: hidden;
 }
 
 input {

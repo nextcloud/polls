@@ -34,19 +34,20 @@
 				</ActionButton>
 			</Actions>
 		</div>
-		<h2 class="title">
-			{{ poll.title }}
-			<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
-			<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, dateExpiryString) }}</span>
-			<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
-		</h2>
-		<PollInformation />
+		<div class="vote__introduction">
+			<h2 class="title">
+				{{ poll.title }}
+				<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
+				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, dateExpiryString) }}</span>
+				<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+			</h2>
+			<PollInformation />
+			<VoteHeaderPublic v-if="!getCurrentUser()" />
 
-		<VoteHeaderPublic v-if="!getCurrentUser()" />
-
-		<h3 class="description">
-			{{ poll.description ? poll.description : t('polls', 'No description provided') }}
-		</h3>
+			<h3 class="description">
+				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+			</h3>
+		</div>
 
 		<VoteList v-show="!tableMode && options.length" />
 
@@ -179,9 +180,18 @@ export default {
 	margin: 44px 0;
 }
 
+.app-content {
+	display: flex;
+	flex-direction: column;
+	padding: 0 8px;
+}
+.vote__introduction {
+	padding: 8px;
+	background-color: var(--color-main-background);
+}
 .header-actions {
 	display: flex;
-	float: right;
+	justify-content: end;
 }
 
 .icon.icon-settings.active {

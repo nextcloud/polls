@@ -76,7 +76,7 @@
 		<h3>{{ t('polls','Public shares') }}</h3>
 		<TransitionGroup :css="false" tag="ul" class="shared-list">
 			<li v-for="(share) in publicShares" :key="share.id">
-				<div class="user-row user">
+				<div class="user-div user">
 					<div class="avatar icon-public" />
 					<div class="user-name">
 						{{ t('polls', 'Public link (' + share.token + ')') }}
@@ -94,7 +94,7 @@
 				</Actions>
 			</li>
 		</TransitionGroup>
-		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
+		<div class="user-div user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
 			<div class="avatar icon-add" />
 			<div class="user-name">
 				{{ t('polls', 'Add a public link') }}

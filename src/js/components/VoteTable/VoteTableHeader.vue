@@ -109,6 +109,7 @@ export default {
 .vote-table-header {
 	display: flex;
 	flex-direction: column;
+	background-color: var(--color-main-background);
 	&.winner {
 		font-weight: bold;
 		color: var(--color-polls-foreground-yes);

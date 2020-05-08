@@ -52,9 +52,8 @@ export default {
 
 <style lang="scss" scoped>
 	.participants-list {
-		margin: 8px 0;
-		padding-right: 24px;
-
+		padding: 8px;
+		background-color: var(--color-main-background);
 	}
 	.participants-list__list {
 		display: flex;

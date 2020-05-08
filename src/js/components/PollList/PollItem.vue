@@ -239,6 +239,7 @@ export default {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+
 }
 
 .item__icon-spacer {
@@ -284,17 +285,17 @@ export default {
 [class^='poll-item__'] {
 	display: flex;
 	flex: 1;
-	border-bottom: 1px solid var(--color-border-dark);
 	padding: 4px 8px;
+	border-bottom: 1px solid var(--color-border-dark);
+	background-color: var(--color-main-background)
 }
 
 .poll-item__header {
-	opacity: 0.5;
+	opacity: 0.7;
 	flex: auto;
 	height: 4em;
 	align-items: center;
 	padding-left: 52px;
-
 }
 
 .sortable {

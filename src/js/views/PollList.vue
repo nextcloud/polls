@@ -21,20 +21,20 @@
   -->
 
 <template>
-	<AppContent>
-		<div v-if="noPolls">
-			<div class="icon-polls" />
-			<h2> {{ t('No existing polls.') }} </h2>
-		</div>
-		<h2 v-if="!noPolls" class="title">
+	<AppContent class="poll-list">
+		<h2 class="title">
 			{{ title }}
 		</h2>
-		<h3 v-if="!noPolls" class="description">
+		<h3 class="description">
 			{{ description }}
 		</h3>
+		<div v-if="noPolls" class="emptycontent">
+			<div class="icon-polls" />
+			<h2> {{ t('polls', 'No existing polls.') }} </h2>
+		</div>
 
-		<transition-group v-if="!noPolls" name="list" tag="div"
-			class="table">
+		<transition-group v-else name="list" tag="div"
+			class="poll-list__list">
 			<PollItem key="0" :header="true"
 				:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
 			<li is="PollItem"
@@ -68,7 +68,6 @@ export default {
 
 	data() {
 		return {
-			noPolls: false,
 			isLoading: false,
 			sort: 'created',
 			reverse: true,
@@ -130,6 +129,10 @@ export default {
 			}
 		},
 
+		noPolls() {
+			return this.sortedList.length < 1
+		},
+
 	},
 
 	watch: {
@@ -175,25 +178,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-	.main-container {
-		flex: 1;
+	.app-content {
+		display: flex;
+		flex-direction: column;
+		padding: 52px 8px 0;
+		&>* {
+			padding: 0 8px;
+		}
 	}
-
-	.table {
+	.poll-list__list {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
 		overflow: scroll;
 		padding-bottom: 14px;
-	}
-
-	#emptycontent {
-		.icon-polls {
-			background-color: black;
-			-webkit-mask: url('./img/app.svg') no-repeat 50% 50%;
-			mask: url('./img/app.svg') no-repeat 50% 50%;
-		}
 	}
 </style>

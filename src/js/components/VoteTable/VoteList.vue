@@ -150,6 +150,7 @@ export default {
 		flex-direction: column;
 		justify-content: flex-start;
 		overflow: scroll;
+		padding-right: 8px;
 
 		.vote-row {
 			display: flex;

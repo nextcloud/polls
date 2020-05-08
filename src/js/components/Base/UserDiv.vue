@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="user-row" :class="type">
+	<div class="user-div" :class="type">
 		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
 			:is-guest="!Boolean(getCurrentUser())"
 			:display-name="displayName"
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style lang="scss">
-.user-row {
+.user-div {
 	display: flex;
 	flex: 1;
 	align-items: center;

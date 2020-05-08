@@ -133,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.user-row.vote-table__user-column,
+	.user-div.vote-table__user-column,
 	.vote-table__header > .vote-table__user-column {
 		position: sticky;
 		left: 0;
@@ -145,7 +145,7 @@ export default {
 		}
 	}
 
-	.owner-access .user-row.vote-table__user-column,
+	.owner-access .user-div.vote-table__user-column,
 	.owner-access .vote-table__header > .vote-table__user-column {
 		width: 280px;
 	}
@@ -157,16 +157,18 @@ export default {
 
 	.vote-table {
 		display: flex;
-		flex: 0;
+		flex: 0 auto;
 		flex-direction: column;
 		justify-content: flex-start;
-		overflow: scroll;
-		padding: 10px 0;
+		overflow-x: scroll;
+		padding-bottom: 12px;
+		background-color: var(--color-main-background);
 
 		& > div {
 			display: flex;
 			flex: 1;
 			border-bottom: 1px solid var(--color-border-dark);
+			background-color: var(--color-main-background);
 			order: 3;
 			justify-content: space-between;
 			min-width: max-content;
@@ -220,7 +222,7 @@ export default {
 			&> .currentuser {
 				display: flex;
 				flex-direction: column;
-				&> .user-row {
+				&> .user-div {
 					display: none;
 				}
 			}
