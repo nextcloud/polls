@@ -22,7 +22,7 @@
 
 <template>
 	<div class="vote-table-header" :class=" { winner: isWinner }">
-		<OptionItem :option="option" :type="poll.type" display="dateBox" />
+		<OptionItem :option="option" :type="poll.type" :display="tableMode ? 'dateBox' : 'textBox'" />
 
 		<div class="counter">
 			<div class="yes">
@@ -30,6 +30,20 @@
 			</div>
 			<div v-if="poll.allowMaybe" class="maybe">
 				<span>{{ maybeVotes }}</span>
+			</div>
+		</div>
+
+		<div class="counter2">
+			<div class="no" :style="{flex: noVotes }">
+				<span />
+			</div>
+
+			<div v-if="maybeVotes && poll.allowMaybe" class="maybe" :style="{flex: maybeVotes }">
+				<span> {{ maybeVotes }} </span>
+			</div>
+
+			<div v-if="yesVotes" class="yes" :style="{ flex: yesVotes }">
+				<span> {{ yesVotes }} </span>
 			</div>
 		</div>
 	</div>
@@ -55,6 +69,10 @@ export default {
 			type: String,
 			default: undefined,
 		},
+		tableMode: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
@@ -65,6 +83,7 @@ export default {
 		...mapGetters([
 			'votesRank',
 			'winnerCombo',
+			'participantsVoted',
 		]),
 
 		yesVotes() {
@@ -79,6 +98,10 @@ export default {
 			return this.votesRank.find(rank => {
 				return rank.pollOptionText === pollOptionText
 			}).maybe
+		},
+
+		noVotes() {
+			return this.participantsVoted.length - this.yesVotes - this.maybeVotes
 		},
 
 		isWinner() {
@@ -104,7 +127,7 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 .vote-table-header {
 	display: flex;
@@ -144,50 +167,29 @@ export default {
 	}
 }
 
-.text-box {
+.counter2 {
+	display: flex;
+	width: 80px;
 	flex: 1;
 	align-self: center;
-	font-size: 1.2em;
-	padding-top: 14px;
-	hyphens: auto;
-}
 
-.date-box {
-	padding: 0 2px;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
+	> * {
+		text-align: center;
+		border-radius: 21px;
+		margin: 2px;
+	}
 
-	.month, .dow {
-		font-size: 1.1em;
-		color: var(--color-text-lighter);
+	.yes {
+		background-color: var(--color-polls-foreground-yes);
 	}
-	.day {
-		font-size: 1.4em;
-		margin: 5px 0 5px 0;
+
+	.maybe {
+		background-color: var(--color-polls-foreground-maybe);
 	}
+
 }
 
 @media (max-width: (480px) ) {
-	.vote-table-header {
-		padding: 4px 0;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-around;
-		border-top: 1px solid var(--color-border-dark);
-
-		.date-box {
-			padding: 0 20px 0 4px;
-			align-content: center;
-		}
-		.counter {
-			flex-direction: column;
-			align-items: baseline;
-			& > * {
-				margin: 4px 1px;
-			}
-		}
-	}
 }
 
 </style>

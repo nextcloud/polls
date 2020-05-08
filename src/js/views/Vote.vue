@@ -49,9 +49,7 @@
 			</h3>
 		</div>
 
-		<VoteList v-show="!tableMode && options.length" />
-
-		<VoteTable v-show="tableMode && options.length" />
+		<VoteTable v-show="options.length" :table-mode="tableMode" />
 
 		<div v-if="!options.length" class="emptycontent">
 			<div class="icon-toggle-filelist" />
@@ -76,7 +74,6 @@ import ParticipantsList from '../components/Base/ParticipantsList'
 import PollInformation from '../components/Base/PollInformation'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
-import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState, mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
@@ -94,7 +91,6 @@ export default {
 		LoadingOverlay,
 		VoteHeaderPublic,
 		VoteTable,
-		VoteList,
 	},
 
 	data() {
@@ -102,7 +98,7 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			isLoading: true,
-			tableMode: true,
+			tableMode: (window.innerWidth > 480),
 		}
 	},
 
@@ -176,7 +172,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#emptycontent, .emptycontent {
+.emptycontent {
 	margin: 44px 0;
 }
 
@@ -198,10 +194,5 @@ export default {
 	display: block;
 	width: 44px;
 	height: 44px;
-}
-@media (max-width: (1024px)) {
-	.title {
-		padding-left: 14px;
-	}
 }
 </style>

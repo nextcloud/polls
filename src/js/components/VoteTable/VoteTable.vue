@@ -21,17 +21,21 @@
   -->
 
 <template lang="html">
-	<div class="vote-table" :class="{ 'owner-access': acl.allowEdit }">
+	<div class="vote-table" :class="{ 'owner-access': acl.allowEdit, 'listMode': !tableMode }">
 		<div class="vote-table__header">
-			<div class="vote-table__user-column" />
+			<div class="user-div" />
 
 			<VoteTableHeader v-for="(option) in sortedOptions"
 				:key="option.id"
 				:option="option"
-				:poll-type="poll.type" />
+				:poll-type="poll.type"
+				:table-mode="tableMode" />
 		</div>
 
-		<div v-for="(participant) in participants" :key="participant.userId" :class="{currentuser: (participant.userId === acl.userId) }">
+		<div v-for="(participant) in participants"
+			:key="participant.userId"
+			:class=" {currentuser: (participant.userId === acl.userId) }"
+			class="vote-table__vote-row">
 			<UserDiv :key="participant.userId"
 				v-bind="participant"
 				class="vote-table__user-column"
@@ -82,6 +86,13 @@ export default {
 		VoteItem,
 	},
 
+	props: {
+		tableMode: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
 	data() {
 		return {
 			modal: false,
@@ -130,117 +141,104 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-	.user-div.vote-table__user-column,
-	.vote-table__header > .vote-table__user-column {
-		position: sticky;
-		left: 0;
-		background-color: var(--color-main-background);
-		width: 230px;
-		flex: 0 0 auto;
-		.owner-access {
-			width: 280px;
-		}
-	}
+<style lang="scss">
 
-	.owner-access .user-div.vote-table__user-column,
-	.owner-access .vote-table__header > .vote-table__user-column {
+.vote-table {
+	display: flex;
+	flex: 0 auto;
+	flex-direction: column;
+	justify-content: flex-start;
+	overflow-x: scroll;
+	padding-bottom: 12px;
+	background-color: var(--color-main-background);
+}
+
+.vote-table__vote-row, .vote-table__header {
+	display: flex;
+	flex: 1;
+	border-bottom: 1px solid var(--color-border-dark);
+	background-color: var(--color-main-background);
+	justify-content: space-between;
+	min-width: max-content;
+}
+
+.vote-table__header {
+	order: 1;
+}
+
+.vote-table__vote-row {
+	order: 3;
+	&.currentuser {
+		order: 2;
+	}
+}
+
+.user-div {
+	position: sticky;
+	left: 0;
+	background-color: var(--color-main-background);
+	width: 230px;
+	flex: 0 auto;
+	.owner-access {
 		width: 280px;
 	}
+}
+.counter {
+	display: flex;
+}
 
-	.user {
-		height: 44px;
-		padding: 0 17px;
+.counter2 {
+	display: none;
+}
+
+.vote-item, .vote-table-header {
+	width: 84px;
+	min-width: 84px;
+	flex: 1;
+	margin: 2px;
+}
+
+.vote-table.listMode {
+	flex: 0 auto;
+	flex-direction: row;
+	min-width: 300px;
+	.vote-item, .vote-table-header {
+		margin: 0;
+		border-top: 1px solid var(--color-border-dark);
 	}
 
-	.vote-table {
+	.counter {
+		display: none;
+	}
+
+	.counter2 {
 		display: flex;
-		flex: 0 auto;
+	}
+
+	.vote-table__vote-row:not(.currentuser), .user-div {
+		display: none;
+	}
+
+	.vote-table__vote-row.currentuser {
+		display: flex;
 		flex-direction: column;
-		justify-content: flex-start;
-		overflow-x: scroll;
-		padding-bottom: 12px;
-		background-color: var(--color-main-background);
-
-		& > div {
-			display: flex;
-			flex: 1;
-			border-bottom: 1px solid var(--color-border-dark);
-			background-color: var(--color-main-background);
-			order: 3;
-			justify-content: space-between;
-			min-width: max-content;
-
-			& > div {
-				width: 84px;
-				min-width: 84px;
-				flex: 1;
-				margin: 2px;
-			}
-
-			& > .vote-header {
-				flex: 1;
-			}
-
-			&.vote-table__header {
-				order: 1;
-			}
-
-			&.currentuser {
-				order: 2;
-			}
-		}
-
-		.vote-row {
-			display: flex;
-			justify-content: space-around;
-			flex: 1;
-			align-items: center;
-		}
-		.vote-item {
-			flex: 1;
-		}
+		order: 0;
+		flex: 0;
 	}
 
-	@media (max-width: (480px)) {
-		.vote-table {
-			flex: 1 0;
-			flex-direction: row;
-			min-width: 300px;
-
-			&> div {
-				display: none;
-				&> div {
-					width: unset;
-					margin: 0;
-
-				}
-			}
-
-			&> .currentuser {
-				display: flex;
-				flex-direction: column;
-				&> .user-div {
-					display: none;
-				}
-			}
-
-			&> .vote-table__header, {
-				height: initial;
-				padding-left: initial;
-				display: flex;
-				flex-direction: column;
-				flex: 3 1;
-				justify-content: space-around;
-				align-items: stretch;
-				&> .vote-header {
-					display: flex;
-					flex-direction: row;
-					&> .counter {
-						align-items: baseline;
-					}
-				}
-			}
-		}
+	.vote-table-header {
+		flex-direction: row;
+		width: unset;
+		min-width: unset;
 	}
+
+	.option-item {
+		flex: 2;
+	}
+
+	.vote-table__header, {
+		flex-direction: column;
+	}
+}
+
 </style>
