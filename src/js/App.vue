@@ -202,38 +202,6 @@ input {
 	}
 }
 
-.config-box {
-	display: flex;
-	flex-direction: column;
-	& > * {
-		margin-left: 21px;
-	}
-
-	& > input {
-		margin-left: 24px;
-		width: auto;
-
-	}
-
-	& > textarea {
-		width: auto;
-		padding: 7px 6px;
-	}
-
-	& > .title {
-		display: flex;
-		background-position: 0 4px;
-		opacity: 0.7;
-		font-weight: bold;
-		margin-bottom: 4px;
-		margin-left: 0;
-		padding-left: 24px;
-		& > span {
-			padding-left: 4px;
-		}
-	}
-}
-
 .modal__content {
 	padding: 14px;
 	display: flex;

@@ -22,10 +22,7 @@
 
 <template>
 	<div>
-		<div v-if="!acl.isOwner" class="config-box">
-			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
-		</div>
-
+		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 		<SideBarTabOptionsDate v-if="poll.type === 'datePoll'" />
 		<SideBarTabOptionsText v-if="poll.type === 'textPoll'" />
 	</div>
@@ -33,6 +30,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import ConfigBox from '../Base/ConfigBox'
 import SideBarTabOptionsDate from './SideBarTabOptionsDate'
 import SideBarTabOptionsText from './SideBarTabOptionsText'
 
@@ -40,6 +38,7 @@ export default {
 	name: 'SideBarTabOptions',
 
 	components: {
+		ConfigBox,
 		SideBarTabOptionsDate,
 		SideBarTabOptionsText,
 	},

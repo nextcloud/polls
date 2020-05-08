@@ -22,21 +22,15 @@
 
 <template>
 	<div>
-		<div class="config-box">
-			<label class="title icon-add">
-				{{ t('polls', 'Add a date option') }}
-			</label>
+		<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
 			<DatetimePicker v-model="lastOption"
 				v-bind="optionDatePicker"
 				confirm
 				style="width: inherit;"
 				@change="addOption(lastOption)" />
-		</div>
+		</ConfigBox>
 
-		<div class="config-box">
-			<label class="title icon-history">
-				{{ t('polls', 'Shift all date options') }}
-			</label>
+		<ConfigBox v-if="options.length" :title="t('polls', 'Shift all date options')" icon-class="icon-history">
 			<div>
 				<div class="selectUnit">
 					<Actions>
@@ -60,12 +54,9 @@
 						@click="shiftDates(shift)" />
 				</div>
 			</div>
-		</div>
+		</ConfigBox>
 
-		<div class="config-box">
-			<label class="title icon-calendar-000">
-				{{ t('polls', 'Available Options') }}
-			</label>
+		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
 			<transition-group is="ul">
 				<OptionItem v-for="(option) in sortedOptions"
 					:key="option.id"
@@ -87,7 +78,13 @@
 					</template>
 				</OptionItem>
 			</transition-group>
+		</ConfigBox>
+
+		<div v-if="!options.length" class="emptycontent">
+			<div class="icon-calendar" />
+			{{ t('polls', 'There are no vote options specified.') }}
 		</div>
+
 		<Modal v-if="modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
@@ -117,6 +114,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import ConfigBox from '../Base/ConfigBox'
 import OptionItem from '../Base/OptionItem'
 import moment from '@nextcloud/moment'
 import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
@@ -127,6 +125,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ConfigBox,
 		DatetimePicker,
 		Modal,
 		Multiselect,
@@ -247,6 +246,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+	.emptycontent {
+		margin-top: 20vh;
+	}
+
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
 	}
@@ -261,6 +264,7 @@ export default {
 		.multiselect {
 			margin: 0 8px;
 			width: unset !important;
+			min-width: 75px;
 			flex: 1;
 		}
 	}

@@ -21,52 +21,60 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
-		{{ title }}
-	</Component>
+	<div class="config-box">
+		<div class="config-box__title" :class="iconClass">
+			{{ title }}
+		</div>
+		<div class="config-box__container">
+			<slot />
+		</div>
+	</div>
 </template>
 
 <script>
 export default {
-	name: 'ButtonDiv',
+	name: 'ConfigBox',
 	props: {
 		title: {
 			type: String,
 			default: '',
 		},
-		icon: {
+		iconClass: {
 			type: String,
 			default: '',
-		},
-		primary: {
-			type: Boolean,
-			default: false,
-		},
-		tag: {
-			type: String,
-			default: 'button',
-		},
-	},
-
-	computed: {
-		withIcon() {
-			return Boolean(this.icon)
 		},
 	},
 }
 </script>
 
-<style lang="scss" scoped>
-	.button {
-		display: inline-block;
-		overflow: hidden;
-		text-overflow: ellipsis;
+<style lang="scss">
+.config-box {
+	margin: 8px 0;
+	// 	display: flex;
+	// 	flex-direction: column;
+}
 
-		&.withIcon {
-			padding-left: 34px;
-			background-position: 12px center;
-		}
+.config-box__title {
+	display: flex;
+	background-position: 0 4px;
+	opacity: 0.7;
+	font-weight: bold;
+	margin: 8px 0 4px 0;
+	padding-left: 24px;
+}
 
+.config-box__container{
+	display: flex;
+	flex-direction: column;
+	padding-left: 24px;
+
+	label {
+		margin: 4px 0;
 	}
+
+	input, textarea {
+		width: auto;
+	}
+}
 
 </style>

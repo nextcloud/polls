@@ -22,19 +22,12 @@
 
 <template>
 	<div>
-		<div class="config-box">
-			<label class="title icon-add">
-				{{ t('polls', 'Add a new text option') }}
-			</label>
-
+		<ConfigBox :title="t('polls', 'Add a new text option')" icon-class="icon-add">
 			<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
 				@input="addOption()" />
-		</div>
+		</ConfigBox>
 
-		<div class="config-box">
-			<label class="title icon-toggle-filelist">
-				{{ t('polls', 'Available Options') }}
-			</label>
+		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
 			<draggable v-model="sortOptions">
 				<transition-group>
 					<OptionItem v-for="(option) in sortOptions"
@@ -52,13 +45,14 @@
 					</OptionItem>
 				</transition-group>
 			</draggable>
-		</div>
+		</ConfigBox>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
+import ConfigBox from '../Base/ConfigBox'
 import draggable from 'vuedraggable'
 import OptionItem from '../Base/OptionItem'
 import InputDiv from '../Base/InputDiv'
@@ -69,6 +63,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ConfigBox,
 		draggable,
 		InputDiv,
 		OptionItem,

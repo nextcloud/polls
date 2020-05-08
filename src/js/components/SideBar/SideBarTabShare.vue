@@ -22,84 +22,83 @@
 
 <template>
 	<div>
-		<div v-if="!acl.isOwner" class="config-box">
-			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
-		</div>
+		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<h3>{{ t('polls','Invitations') }}</h3>
+		<ConfigBox :title="t('polls', 'Invitations')" icon-class="icon-share">
+			<span>{{ t('polls','Invited users will get informed immediately via email!') }} </span>
+			<TransitionGroup :css="false" tag="ul" class="shared-list">
+				<li v-for="(share) in invitationShares" :key="share.id">
+					<UserDiv
+						:user-id="resolveShareUser(share)"
+						:display-name="shareDisplayName(share)"
+						:type="share.type"
+						:icon="true" />
+					<Actions>
+						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
+							{{ t('polls', 'Copy link to clipboard') }}
+						</ActionButton>
+					</Actions>
+					<Actions>
+						<ActionButton icon="icon-delete" @click="removeShare(share)">
+							{{ t('polls', 'Remove share') }}
+						</ActionButton>
+					</Actions>
+				</li>
+			</TransitionGroup>
 
-		<span>{{ t('polls','Invited users will get informed immediately via email!') }} </span>
-		<TransitionGroup :css="false" tag="ul" class="shared-list">
-			<li v-for="(share) in invitationShares" :key="share.id">
-				<UserDiv
-					:user-id="resolveShareUser(share)"
-					:display-name="shareDisplayName(share)"
-					:type="share.type"
-					:icon="true" />
-				<Actions>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
-						{{ t('polls', 'Copy link to clipboard') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-delete" @click="removeShare(share)">
-						{{ t('polls', 'Remove share') }}
-					</ActionButton>
-				</Actions>
-			</li>
-		</TransitionGroup>
+			<Multiselect id="ajax"
+				:options="users"
+				:multiple="false"
+				:user-select="true"
+				:tag-width="80"
+				:clear-on-select="false"
+				:preserve-search="true"
+				:options-limit="30"
+				:loading="isLoading"
+				:internal-search="false"
+				:searchable="true"
+				:preselect-first="true"
+				:placeholder="placeholder"
+				label="displayName"
+				track-by="user"
+				@select="addShare"
+				@search-change="loadUsersAsync">
+				<template slot="selection" slot-scope="{ values, search, isOpen }">
+					<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
+						{{ values.length }} users selected
+					</span>
+				</template>
+			</Multiselect>
+		</ConfigBox>
 
-		<Multiselect id="ajax"
-			:options="users"
-			:multiple="false"
-			:user-select="true"
-			:tag-width="80"
-			:clear-on-select="false"
-			:preserve-search="true"
-			:options-limit="30"
-			:loading="isLoading"
-			:internal-search="false"
-			:searchable="true"
-			:preselect-first="true"
-			:placeholder="placeholder"
-			label="displayName"
-			track-by="user"
-			@select="addShare"
-			@search-change="loadUsersAsync">
-			<template slot="selection" slot-scope="{ values, search, isOpen }">
-				<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
-					{{ values.length }} users selected
-				</span>
-			</template>
-		</Multiselect>
-
-		<h3>{{ t('polls','Public shares') }}</h3>
-		<TransitionGroup :css="false" tag="ul" class="shared-list">
-			<li v-for="(share) in publicShares" :key="share.id">
-				<div class="user-div user">
-					<div class="avatar icon-public" />
-					<div class="user-name">
-						{{ t('polls', 'Public link (' + share.token + ')') }}
+		<ConfigBox :title="t('polls', 'Public shares')" icon-class="icon-public">
+			<TransitionGroup :css="false" tag="ul" class="shared-list">
+				<li v-for="(share) in publicShares" :key="share.id">
+					<div class="user-div user">
+						<div class="avatar icon-public" />
+						<div class="user-name">
+							{{ t('polls', 'Public link (' + share.token + ')') }}
+						</div>
 					</div>
+					<Actions>
+						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
+							{{ t('polls', 'Copy link to clipboard') }}
+						</ActionButton>
+					</Actions>
+					<Actions>
+						<ActionButton icon="icon-delete" @click="removeShare(share)">
+							{{ t('polls', 'Remove share') }}
+						</ActionButton>
+					</Actions>
+				</li>
+			</TransitionGroup>
+			<div class="user-div user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
+				<div class="avatar icon-add" />
+				<div class="user-name">
+					{{ t('polls', 'Add a public link') }}
 				</div>
-				<Actions>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
-						{{ t('polls', 'Copy link to clipboard') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-delete" @click="removeShare(share)">
-						{{ t('polls', 'Remove share') }}
-					</ActionButton>
-				</Actions>
-			</li>
-		</TransitionGroup>
-		<div class="user-div user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
-			<div class="avatar icon-add" />
-			<div class="user-name">
-				{{ t('polls', 'Add a public link') }}
 			</div>
-		</div>
+		</ConfigBox>
 	</div>
 </template>
 
@@ -108,12 +107,15 @@ import axios from '@nextcloud/axios'
 import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
+import ConfigBox from '../Base/ConfigBox'
+
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
 		Actions,
 		ActionButton,
+		ConfigBox,
 		Multiselect,
 	},
 
