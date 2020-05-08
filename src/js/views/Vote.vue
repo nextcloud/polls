@@ -56,7 +56,7 @@
 		<div v-if="!options.length" class="emptycontent">
 			<div class="icon-toggle-filelist" />
 			<button v-if="acl.allowEdit" @click="openOptions">
-				{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
+				{{ t('polls', 'There are no vote options, add some in the options section of the right sidebar.') }}
 			</button>
 			<div v-if="!acl.allowEdit">
 				{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}

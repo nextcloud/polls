@@ -32,13 +32,19 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll type')" icon-class="icon-checkmark">
-			<input id="datePoll" v-model="type" value="datePoll"
-				type="radio" class="radio">
+			<input id="datePoll"
+				v-model="type"
+				value="datePoll"
+				type="radio"
+				class="radio">
 			<label for="datePoll">
 				{{ t('polls', 'Date poll') }}
 			</label>
-			<input id="textPoll" v-model="type" value="textPoll"
-				type="radio" class="radio">
+			<input id="textPoll"
+				v-model="type"
+				value="textPoll"
+				type="radio"
+				class="radio">
 			<label for="textPoll">
 				{{ t('polls', 'Text poll') }}
 			</label>

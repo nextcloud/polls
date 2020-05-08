@@ -24,15 +24,11 @@
 	<div>
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Invitations')" icon-class="icon-share">
-			<span>{{ t('polls','Invited users will get informed immediately via email!') }} </span>
+		<ConfigBox :title="t('polls', 'Invitations')" icon-class="icon-share"
+			:info="t('polls','Invited users will get informed immediately via email!')">
 			<TransitionGroup :css="false" tag="ul" class="shared-list">
 				<li v-for="(share) in invitationShares" :key="share.id">
-					<UserDiv
-						:user-id="resolveShareUser(share)"
-						:display-name="shareDisplayName(share)"
-						:type="share.type"
-						:icon="true" />
+					<UserDiv v-bind="share" :icon="true" />
 					<Actions>
 						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
 							{{ t('polls', 'Copy link to clipboard') }}
@@ -92,6 +88,7 @@
 					</Actions>
 				</li>
 			</TransitionGroup>
+
 			<div class="user-div user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
 				<div class="avatar icon-add" />
 				<div class="user-name">
@@ -122,8 +119,6 @@ export default {
 	data() {
 		return {
 			users: [],
-			invitations: [],
-			invitation: {},
 			isLoading: false,
 			placeholder: t('polls', 'Enter a name to start the search'),
 			siteUsersListOptions: {
@@ -171,45 +166,8 @@ export default {
 			)
 		},
 
-		resolveShareUser(share) {
-
-			if (share.userId !== '' && share.userId !== null) {
-				return share.userId
-			} else if (share.type === 'email') {
-				return share.userEmail
-			} else {
-				return t('polls', 'Unknown user')
-			}
-
-		},
-
 		shareUrl(share) {
 			return generateUrl('apps/polls/s/') + share.token
-		},
-
-		shareDisplayName(share) {
-			let displayName = ''
-
-			if (share.type === 'user') {
-				displayName = share.displayName
-			} else if (share.type === 'contact' || share.type === 'external') {
-				displayName = share.userId
-				if (share.userEmail) {
-					displayName = displayName + ' (' + share.userEmail + ')'
-				}
-			} else if (share.type === 'email') {
-				displayName = share.userEmail
-				if (share.userId) {
-					displayName = share.userId + ' (' + displayName + ')'
-				}
-			} else if (share.type === 'group') {
-				displayName = share.userId + ' (' + t('polls', 'Group') + ')'
-			} else if (share.type === 'public') {
-				displayName = t('polls', 'Public share')
-			} else {
-				displayName = t('polls', 'Unknown user')
-			}
-			return displayName
 		},
 
 		removeShare(share) {

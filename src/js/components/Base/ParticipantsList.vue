@@ -31,9 +31,8 @@
 		<div v-if="participantsVoted.length" class="participants-list__list">
 			<UserDiv v-for="(participant) in participantsVoted"
 				:key="participant.userId"
+				v-bind="participant"
 				:hide-names="true"
-				:user-id="participant.userId"
-				:display-name="participant.displayName"
 				type="user" />
 		</div>
 	</div>

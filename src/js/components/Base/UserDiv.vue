@@ -22,15 +22,17 @@
 
 <template>
 	<div class="user-div" :class="type">
-		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
+		<Avatar :disable-menu="disableMenu"
+			:menu-position="menuPosition"
+			:user="userId"
 			:is-guest="!Boolean(getCurrentUser())"
-			:display-name="displayName"
+			:display-name="resolveDisplayName"
 			:is-no-user="isNoUser" />
 
-		<div v-if="icon" class="avatar" :class="iconClass" />
+		<div v-if="icon" :class="iconClass" />
 
-		<div v-if="!hideNames" class="user-name">
-			{{ displayName }}
+		<div v-if="!hideNames" class="user-div__name">
+			{{ resolveDisplayName }}
 		</div>
 		<slot />
 	</div>
@@ -53,7 +55,7 @@ export default {
 		},
 		disableMenu: {
 			type: Boolean,
-			default: false,
+			default: true,
 		},
 		menuPosition: {
 			type: String,
@@ -67,6 +69,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		userEmail: {
+			type: String,
+			default: '',
+		},
 		type: {
 			type: String,
 			default: 'user',
@@ -75,7 +81,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-
 	},
 
 	data() {
@@ -89,21 +94,44 @@ export default {
 			return this.type !== 'user'
 		},
 
-		isValidUser() {
-			return (this.userId)
-		},
-
 		iconClass() {
 			if (this.icon) {
 				if (this.type === 'contact') {
 					return 'icon-mail'
 				} else if (this.type === 'email') {
 					return 'icon-mail'
+				} else if (this.type === 'external') {
+					return 'icon-share'
 				}
 				return 'icon-' + this.type
 			} else {
 				return ''
 			}
+		},
+
+		resolveDisplayName() {
+			let displayName = ''
+
+			if (this.type === 'user') {
+				displayName = this.displayName
+			} else if (this.type === 'contact' || this.type === 'external') {
+				displayName = this.userId
+				if (this.userEmail) {
+					displayName = displayName + ' (' + this.userEmail + ')'
+				}
+			} else if (this.type === 'email') {
+				displayName = this.userEmail
+				if (this.userId) {
+					displayName = this.userId + ' (' + displayName + ')'
+				}
+			} else if (this.type === 'group') {
+				displayName = this.userId + ' (' + t('polls', 'Group') + ')'
+			} else if (this.type === 'public') {
+				displayName = t('polls', 'Public share')
+			} else {
+				displayName = t('polls', 'Unknown user')
+			}
+			return displayName
 		},
 	},
 }
@@ -121,24 +149,14 @@ export default {
 	> div {
 		margin: 2px 4px;
 	}
+}
 
-	.description {
-		opacity: 0.7;
-		flex: 0;
-	}
-
-	.icon-class {
-		height: 32px;
-		width: 32px;
-		flex: 0;
-	}
-
-	.user-name {
-		opacity: 0.5;
-		flex: 1;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+.user-div__name {
+	opacity: 0.5;
+	flex: 1;
+	width: 50px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 </style>

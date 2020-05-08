@@ -33,11 +33,9 @@
 
 		<div v-for="(participant) in participants" :key="participant.userId" :class="{currentuser: (participant.userId === acl.userId) }">
 			<UserDiv :key="participant.userId"
+				v-bind="participant"
 				class="vote-table__user-column"
-				:disable-menu="true"
-				:class="{currentuser: (participant.userId === acl.userId) }"
-				:user-id="participant.userId"
-				:display-name="participant.displayName">
+				:class="{currentuser: (participant.userId === acl.userId) }">
 				<Actions v-if="acl.allowEdit" class="action">
 					<ActionButton icon="icon-delete"
 						@click="confirmDelete(participant.userId)">

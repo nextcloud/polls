@@ -35,51 +35,74 @@
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
 			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
 				type="checkbox" class="checkbox">
-			<label v-if="acl.isOwner" for="adminAccess"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
+			<label v-if="acl.isOwner" for="adminAccess"> {{ t('polls', 'Allow admins to edit this poll') }}</label>
 
-			<input id="allowMaybe" v-model="pollAllowMaybe"
-				type="checkbox" class="checkbox">
-			<label for="allowMaybe"> {{ t('polls', 'Allow "maybe" vote') }} </label>
+			<input id="allowMaybe"
+				v-model="pollAllowMaybe"
+				type="checkbox"
+				class="checkbox">
+			<label for="allowMaybe"> {{ t('polls', 'Allow "maybe" vote') }}</label>
 
-			<input id="anonymous" v-model="pollAnonymous"
-				type="checkbox" class="checkbox">
-			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }} </label>
+			<input id="anonymous"
+				v-model="pollAnonymous"
+				type="checkbox"
+				class="checkbox">
+			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
 
-			<input id="expiration" v-model="pollExpiration"
-				type="checkbox" class="checkbox">
-			<label for="expiration"> {{ t('polls', 'Expires') }} </label>
+			<input id="expiration"
+				v-model="pollExpiration"
+				type="checkbox"
+				class="checkbox">
+			<label for="expiration"> {{ t('polls', 'Expires') }}</label>
 
-			<DatetimePicker v-show="pollExpiration"
-				v-model="pollExpire" v-bind="expirationDatePicker" />
+			<DatetimePicker v-show="pollExpiration" v-model="pollExpire" v-bind="expirationDatePicker" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
-			<input id="hidden" v-model="pollAccess" value="hidden"
-				type="radio" class="radio">
-			<label for="hidden">{{ t('polls', 'Hidden to other users') }} </label>
+			<input id="hidden"
+				v-model="pollAccess"
+				value="hidden"
+				type="radio"
+				class="radio">
+			<label for="hidden">{{ t('polls', 'Hidden to other users') }}</label>
 
-			<input id="public" v-model="pollAccess" value="public"
-				type="radio" class="radio">
-			<label for="public">{{ t('polls', 'Visible to other users') }} </label>
+			<input id="public"
+				v-model="pollAccess"
+				value="public"
+				type="radio"
+				class="radio">
+			<label for="public">{{ t('polls', 'Visible to other users') }}</label>
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
-			<input id="always" v-model="pollShowResults" value="always"
-				type="radio" class="radio">
-			<label for="always">{{ t('polls', 'Always show results') }} </label>
+			<input id="always"
+				v-model="pollShowResults"
+				value="always"
+				type="radio"
+				class="radio">
+			<label for="always">{{ t('polls', 'Always show results') }}</label>
 
-			<input id="expired" v-model="pollShowResults" value="expired"
-				type="radio" class="radio">
-			<label for="expired">{{ t('polls', 'Hide results until poll is expired') }} </label>
+			<input id="expired"
+				v-model="pollShowResults"
+				value="expired"
+				type="radio"
+				class="radio">
+			<label for="expired">{{ t('polls', 'Hide results until poll is expired') }}</label>
 
-			<input id="never" v-model="pollShowResults" value="never"
-				type="radio" class="radio">
-			<label for="never">{{ t('polls', 'Never show results') }} </label>
+			<input id="never"
+				v-model="pollShowResults"
+				value="never"
+				type="radio"
+				class="radio">
+			<label for="never">{{ t('polls', 'Never show results') }}</label>
 		</ConfigBox>
 
-		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
+		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'"
+			:title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
 			@click="switchDeleted()" />
-		<ButtonDiv v-if="poll.deleted" icon="icon-delete" class="error"
+		<ButtonDiv v-if="poll.deleted"
+			icon="icon-delete"
+			class="error"
 			:title="t('polls', 'Delete poll permanently')"
 			@click="deletePermanently()" />
 	</div>

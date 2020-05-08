@@ -22,8 +22,9 @@
 
 <template lang="html">
 	<div class="config-box">
-		<div class="config-box__title" :class="iconClass">
+		<div v-tooltip.auto="info" class="config-box__title" :class="iconClass">
 			{{ title }}
+			<div v-if="info" class="icon-info" />
 		</div>
 		<div class="config-box__container">
 			<slot />
@@ -43,15 +44,17 @@ export default {
 			type: String,
 			default: '',
 		},
+		info: {
+			type: String,
+			default: '',
+		},
 	},
 }
 </script>
 
 <style lang="scss">
 .config-box {
-	margin: 8px 0;
-	// 	display: flex;
-	// 	flex-direction: column;
+	padding: 8px 0;
 }
 
 .config-box__title {
@@ -61,6 +64,11 @@ export default {
 	font-weight: bold;
 	margin: 8px 0 4px 0;
 	padding-left: 24px;
+
+	.icon-info {
+		opacity: 0.7;
+		width: 32px;
+	}
 }
 
 .config-box__container{

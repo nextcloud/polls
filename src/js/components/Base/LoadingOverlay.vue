@@ -42,12 +42,14 @@ export default {
 	background: var(--color-main-background);
 	opacity: 0.9;
 	z-index: 9999;
+
 	.icon-loading {
 		position: fixed;
 		left: 50%;
 		top: 50%;
 		margin-left: -35px;
 		margin-top: -10px;
+
 		&::after {
 			border: 10px solid var(--color-loading-light);
 			border-top-color: var(--color-primary-element);

@@ -23,8 +23,7 @@
 <template lang="html">
 	<ul class="vote-list">
 		<li v-for="(option) in sortedOptions" :key="option.id" class="vote-row">
-			<VoteItem
-				v-if="acl.allowVote"
+			<VoteItem v-if="acl.allowVote"
 				:user-id="acl.userId"
 				:option="option"
 				:is-active="acl.allowVote"

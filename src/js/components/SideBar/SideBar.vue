@@ -21,24 +21,37 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :active="active" :title="t('polls', 'Details')"
+	<AppSidebar ref="sideBar"
+		:active="active"
+		:title="t('polls', 'Details')"
 		@close="closeSideBar()">
-		<AppSidebarTab v-if="acl.allowEdit" :id="'configuration'" :order="1"
-			:name="t('polls', 'Configuration')" icon="icon-settings">
+		<AppSidebarTab v-if="acl.allowEdit"
+			:id="'configuration'"
+			:order="1"
+			:name="t('polls', 'Configuration')"
+			icon="icon-settings">
 			<SideBarTabConfiguration />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit" :id="'options'" :order="2"
-			:name="t('polls', 'Options')" icon="icon-toggle-filelist">
+		<AppSidebarTab v-if="acl.allowEdit"
+			:id="'options'"
+			:order="2"
+			:name="t('polls', 'Options')"
+			icon="icon-toggle-filelist">
 			<SideBarTabOptions />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit" :id="'shares'" :order="3"
-			:name="t('polls', 'Shares')" icon="icon-share">
+		<AppSidebarTab v-if="acl.allowEdit"
+			:id="'shares'"
+			:order="3"
+			:name="t('polls', 'Shares')"
+			icon="icon-share">
 			<SideBarTabShare />
 		</AppSidebarTab>
 
-		<AppSidebarTab :id="'comments'" :order="4" :name="t('polls', 'Comments')"
+		<AppSidebarTab :id="'comments'"
+			:order="4"
+			:name="t('polls', 'Comments')"
 			icon="icon-comment">
 			<Comments />
 		</AppSidebarTab>

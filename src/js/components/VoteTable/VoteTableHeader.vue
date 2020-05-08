@@ -26,10 +26,10 @@
 
 		<div class="counter">
 			<div class="yes">
-				<span> {{ yesVotes }} </span>
+				<span>{{ yesVotes }}</span>
 			</div>
 			<div v-if="poll.allowMaybe" class="maybe">
-				<span> {{ maybeVotes }} </span>
+				<span>{{ maybeVotes }}</span>
 			</div>
 		</div>
 	</div>

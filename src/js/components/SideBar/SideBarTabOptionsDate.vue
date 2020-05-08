@@ -44,8 +44,7 @@
 							{{ t('polls', 'Increase unit') }}
 						</ActionButton>
 					</Actions>
-					<Multiselect
-						v-model="shift.unit"
+					<Multiselect v-model="shift.unit"
 						:options="dateUnits"
 						label="name"
 						track-by="value" />
@@ -99,7 +98,7 @@
 						:options="dateUnits"
 						label="name"
 						track-by="value" />
-					<h3> {{ t('polls', 'Number of items to create: ') }} </h3>
+					<h3>{{ t('polls', 'Number of items to create: ') }}</h3>
 					<input v-model="sequence.amount">
 				</div>
 
