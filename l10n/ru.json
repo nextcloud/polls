@@ -23,6 +23,7 @@
     "The names of other participants are hidden, as this is an anonymous poll. " : "Это анонимный опрос, имена его участников скрыты.",
     "Results are hidden. " : "Результаты скрыты.",
     "They will be revealed after the poll is expired. " : "Они будут показаны после завершения голосования.",
+    "_%n person participated in this poll until now. _::_%n persons participated in this poll until now. _" : ["На данный момент проголосовал %n участник.","На данный момент проголосовали %n участников.","На данный момент проголосовали %n участников.","На данный момент проголосовали %n участника."],
     "New comment …" : "Текст комментария…",
     "Your comment was added" : "Комментарий добавлен",
     "You can place your vote until %n. " : "Проголосуйте до %n.",
