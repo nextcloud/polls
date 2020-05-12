@@ -115,6 +115,7 @@ OC.L10N.register(
     "Enter your name" : "Sartu zure izena",
     "This username can not be chosen." : "Erabiltzaile-izen hau ezin da aukeratu.",
     "Error saving username" : "Errorea erabiltzaile-izena gordetzean",
+    "Delete votes" : "Ezabatu botuak",
     "No" : "Ez",
     "Yes" : "Bai",
     "Hidden polls" : "Ezkutatutako inkestak",
