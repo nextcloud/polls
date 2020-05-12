@@ -23,28 +23,7 @@
 <template>
 	<div class="vote-table-header" :class=" { winner: isWinner, confirmed: isConfirmed }">
 		<OptionItem :option="option" :type="poll.type" :display="tableMode ? 'dateBox' : 'textBox'" />
-		<div class="counter">
-			<div class="yes">
-				<span>{{ option.yes }}</span>
-			</div>
-			<div v-if="poll.allowMaybe" class="maybe">
-				<span>{{ option.maybe }}</span>
-			</div>
-		</div>
-
-		<div class="counter2">
-			<div class="no" :style="{flex: option.no }">
-				<span />
-			</div>
-
-			<div v-if="option.maybe && poll.allowMaybe" class="maybe" :style="{flex: option.maybe }">
-				<span> {{ option.maybe }} </span>
-			</div>
-
-			<div v-if="option.yes" class="yes" :style="{ flex: option.yes }">
-				<span> {{ option.yes }} </span>
-			</div>
-		</div>
+		<Counter :show-maybe="Boolean(poll.allowMaybe)" :option="option" :bubble-style="!tableMode" />
 		<div v-if="expired && !acl.allowEdit" class="confirmations">
 			{{ confirmations }}
 		</div>
@@ -54,12 +33,14 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import OptionItem from '../Base/OptionItem'
+import Counter from '../Base/Counter'
 
 export default {
 	name: 'VoteTableHeader',
 
 	components: {
 		OptionItem,
+		Counter,
 	},
 
 	props: {
@@ -140,63 +121,6 @@ export default {
 			hyphens: auto;
 		}
 	}
-	.counter {
-		flex: 0;
-	}
-	.counter2 {
-		display: none;
-		flex: 0;
-	}
-}
-
-.counter {
-	display: flex;
-	justify-content: center;
-	font-size: 1.1em;
-	padding: 14px 4px;
-
-	&> * {
-		background-position: 0px 2px;
-		padding-left: 23px;
-		background-repeat: no-repeat;
-		background-size: contain;
-		margin-right: 8px;
-	}
-
-	.yes {
-		color: var(--color-polls-foreground-yes);
-		background-image: var(--icon-polls-yes);
-	}
-	.no {
-		color: var(--color-polls-foreground-no);
-		background-image: var(--icon-polls-no);
-	}
-	.maybe {
-		color: var(--color-polls-foreground-maybe);
-		background-image: var(--icon-polls-maybe);
-	}
-}
-
-.counter2 {
-	display: flex;
-	width: 80px;
-	flex: 1;
-	align-self: center;
-
-	> * {
-		text-align: center;
-		border-radius: 21px;
-		margin: 2px;
-	}
-
-	.yes {
-		background-color: var(--color-polls-foreground-yes);
-	}
-
-	.maybe {
-		background-color: var(--color-polls-foreground-maybe);
-	}
-
 }
 
 .confirmations {

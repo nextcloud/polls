@@ -209,13 +209,6 @@ export default {
 		width: 280px;
 	}
 }
-.counter {
-	display: flex;
-}
-
-.counter2 {
-	display: none;
-}
 
 .vote-item, .vote-table-header, .vote-table-footer {
 	width: 84px;
@@ -238,14 +231,6 @@ export default {
 	.vote-item, .vote-table-header {
 		margin: 0;
 		border-top: 1px solid var(--color-border-dark);
-	}
-
-	.counter {
-		display: none;
-	}
-
-	.counter2 {
-		display: flex;
 	}
 
 	.vote-table__vote-row:not(.currentuser), .user-div {
