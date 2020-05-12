@@ -111,8 +111,6 @@ export default {
 		show() {
 			if (this.type === 'datePoll' && this.display === 'dateBox') {
 				return 'dateBox'
-			} else if (this.type === 'datePoll' && this.display === 'textBox') {
-				return 'dateString'
 			} else {
 				return 'textBox'
 			}
