@@ -22,38 +22,8 @@
 
 <template>
 	<div>
-		<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
-			<DatetimePicker v-model="lastOption"
-				v-bind="optionDatePicker"
-				confirm
-				style="width: inherit;"
-				@change="addOption(lastOption)" />
-		</ConfigBox>
-
-		<ConfigBox v-if="options.length" :title="t('polls', 'Shift all date options')" icon-class="icon-history">
-			<div>
-				<div class="selectUnit">
-					<Actions>
-						<ActionButton icon="icon-play-previous" @click="shift.step--">
-							{{ t('polls', 'Decrease unit') }}
-						</ActionButton>
-					</Actions>
-					<input v-model="shift.step">
-					<Actions>
-						<ActionButton icon="icon-play-next" @click="shift.step++">
-							{{ t('polls', 'Increase unit') }}
-						</ActionButton>
-					</Actions>
-					<Multiselect v-model="shift.unit"
-						:options="dateUnits"
-						label="name"
-						track-by="value" />
-					<ButtonDiv icon="icon-history"
-						:title="t('polls', 'Shift')"
-						@click="shiftDates(shift)" />
-				</div>
-			</div>
-		</ConfigBox>
+		<OptionAddDate v-if="!expired" />
+		<OptionShiftDates v-if="options.length && !expired" />
 
 		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
 			<transition-group is="ul">
@@ -90,39 +60,21 @@
 			{{ t('polls', 'There are no vote options specified.') }}
 		</div>
 
-		<Modal v-if="modal" :can-close="false">
-			<div class="modal__content">
-				<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
-
-				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
-				<div>
-					<h3> {{ t('polls', 'Step width: ') }} </h3>
-					<input v-model="sequence.step">
-					<h3> {{ t('polls', 'Step unit: ') }} </h3>
-					<Multiselect
-						v-model="sequence.unit"
-						:options="dateUnits"
-						label="name"
-						track-by="value" />
-					<h3>{{ t('polls', 'Number of items to create: ') }}</h3>
-					<input v-model="sequence.amount">
-				</div>
-
-				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
-					<ButtonDiv :primary="true" :title="t('polls', 'OK')" @click="createSequence" />
-				</div>
-			</div>
+		<Modal v-if="cloneModal" :can-close="false">
+			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
 		</Modal>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import OptionAddDate from '../Base/OptionAddDate'
+import OptionCloneDate from '../Base/OptionCloneDate'
+import OptionShiftDates from '../Base/OptionShiftDates'
 import ConfigBox from '../Base/ConfigBox'
 import OptionItem from '../Base/OptionItem'
 import moment from '@nextcloud/moment'
-import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 
 export default {
 	name: 'SideBarTabOptionsDate',
@@ -131,16 +83,17 @@ export default {
 		Actions,
 		ActionButton,
 		ConfigBox,
-		DatetimePicker,
+		OptionAddDate,
+		OptionCloneDate,
+		OptionShiftDates,
 		Modal,
-		Multiselect,
 		OptionItem,
 	},
 
 	data() {
 		return {
-			lastOption: '',
-			modal: false,
+			cloneModal: false,
+			optionToClone: {},
 			sequence: {
 				baseOption: {},
 				unit: { name: t('polls', 'Week'), value: 'week' },
@@ -155,10 +108,6 @@ export default {
 				{ name: t('polls', 'Month'), value: 'month' },
 				{ name: t('polls', 'Year'), value: 'year' },
 			],
-			shift: {
-				step: 1,
-				unit: { name: t('polls', 'Week'), value: 'week' },
-			},
 		}
 	},
 
@@ -170,76 +119,19 @@ export default {
 
 		...mapGetters(['sortedOptions', 'expired']),
 
-		firstDOW() {
-			// vue2-datepicker needs 7 for sunday
-			if (moment.localeData()._week.dow === 0) {
-				return 7
-			} else {
-				return moment.localeData()._week.dow
-			}
-		},
-
 		dateBaseOptionString() {
 			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')
-		},
-
-		optionDatePicker() {
-			return {
-				editable: false,
-				minuteStep: 1,
-				type: 'datetime',
-				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				placeholder: t('polls', 'Click to add a date'),
-				confirm: true,
-				lang: {
-					formatLocale: {
-						firstDayOfWeek: this.firstDOW,
-						months: moment.months(),
-						monthsShort: moment.monthsShort(),
-						weekdays: moment.weekdays(),
-						weekdaysMin: moment.weekdaysMin(),
-					},
-				},
-			}
 		},
 	},
 
 	methods: {
-
-		addOption(pollOptionText) {
-			this.$store.dispatch('addOptionAsync', { pollOptionText: pollOptionText })
-		},
-
-		shiftDates(payload) {
-			const store = this.$store
-			this.options.forEach(function(existingOption) {
-				const option = Object.assign({}, existingOption)
-				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
-				option.timestamp = moment.utc(option.pollOptionText).unix()
-				store.dispatch('updateOptionAsync', { option: option })
-			})
-		},
-
 		closeModal() {
-			this.modal = false
-		},
-
-		createSequence() {
-			for (var i = 0; i < this.sequence.amount; i++) {
-				this.$store.dispatch('addOptionAsync', {
-					pollOptionText: moment.unix(this.sequence.baseOption.timestamp).add(
-						this.sequence.step * (i + 1),
-						this.sequence.unit.value
-					).format('YYYY-MM-DD HH:mm:ss'),
-				})
-			}
-			this.modal = false
-			this.sequence.baseOption = {}
+			this.cloneModal = false
 		},
 
 		cloneOptionModal(option) {
-			this.modal = true
-			this.sequence.baseOption = option
+			this.optionToClone = option
+			this.cloneModal = true
 		},
 
 		removeOption(option) {
@@ -262,18 +154,4 @@ export default {
 		border-bottom: 1px solid var(--color-border);
 	}
 
-	.selectUnit {
-		display: flex;
-		align-items: center;
-		input {
-			margin: 0 4px;
-			width: 40px;
-		}
-		.multiselect {
-			margin: 0 8px;
-			width: unset !important;
-			min-width: 75px;
-			flex: 1;
-		}
-	}
 </style>
