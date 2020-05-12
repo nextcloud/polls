@@ -24,8 +24,13 @@
 	<AppContent>
 		<div class="header-actions">
 			<Actions>
-				<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
-					{{ t('polls', 'Switch view') }}
+				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
+					{{ orderCaption }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton :icon="tableMode ? 'icon-phone' : 'icon-desktop'" @click="tableMode = !tableMode">
+					{{ viewCaption }}
 				</ActionButton>
 			</Actions>
 			<Actions>
@@ -49,7 +54,7 @@
 			</h3>
 		</div>
 
-		<VoteTable v-show="options.length" :table-mode="tableMode" />
+		<VoteTable v-show="options.length" :table-mode="tableMode" :ranked="ranked" />
 
 		<div v-if="!options.length" class="emptycontent">
 			<div class="icon-toggle-filelist" />
@@ -99,6 +104,7 @@ export default {
 			delay: 50,
 			isLoading: true,
 			tableMode: (window.innerWidth > 480),
+			ranked: false,
 		}
 	},
 
@@ -119,6 +125,35 @@ export default {
 
 		dateExpiryString() {
 			return moment.unix(this.poll.expire).format('LLLL')
+		},
+		viewCaption() {
+			if (this.tableMode) {
+				return t('polls', 'Switch to mobile view')
+			} else {
+				return t('polls', 'Switch to desktop view')
+			}
+		},
+		orderCaption() {
+			if (this.ranked) {
+				if (this.poll.type === 'datePoll') {
+					return t('polls', 'Date order')
+				} else {
+					return t('polls', 'Original order')
+				}
+			} else {
+				return t('polls', 'Ranked order')
+			}
+		},
+		sortIcon() {
+			if (this.ranked) {
+				if (this.poll.type === 'datePoll') {
+					return 'icon-calendar-000'
+				} else {
+					return 'icon-toggle-filelist'
+				}
+			} else {
+				return 'icon-quota'
+			}
 		},
 	},
 

@@ -21,7 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import sortBy from 'lodash/sortBy'
+import orderBy from 'lodash/orderBy'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
@@ -74,8 +74,38 @@ const getters = {
 		}))
 	},
 
-	sortedOptions: state => {
-		return sortBy(state.options, 'order')
+	sortedOptions: (state, getters, rootState, rootGetters) => {
+		let rankedOptions = []
+		state.options.forEach((option) => {
+			rankedOptions.push({
+				...option,
+				rank: 0,
+				no: 0,
+				yes: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
+				maybe: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
+				realno: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
+				votes: rootGetters.participantsVoted.length,
+			})
+		})
+
+		rankedOptions = orderBy(rankedOptions, ['yes', 'maybe'], ['desc', 'desc'])
+
+		for (let i = 0; i < rankedOptions.length; i++) {
+			rankedOptions[i].no = rankedOptions[i].votes - rankedOptions[i].yes - rankedOptions[i].maybe
+			if (i > 0 && rankedOptions[i].yes === rankedOptions[i - 1].yes && rankedOptions[i].maybe === rankedOptions[i - 1].maybe) {
+				rankedOptions[i].rank = rankedOptions[i - 1].rank
+			} else {
+				rankedOptions[i].rank = i + 1
+			}
+		}
+
+		return orderBy(rankedOptions, 'order')
+	},
+
+	confirmedOptions: state => {
+		return state.options.filter(option => {
+			return option.confirmed > 0
+		})
 	},
 }
 
@@ -90,8 +120,8 @@ const actions = {
 		const endPoint = 'apps/polls/option/update'
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
-			.then(() => {
-				context.commit('setOption', { option: payload.option })
+			.then((response) => {
+				context.commit('setOption', { option: response.data })
 			}, (error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
 				throw error

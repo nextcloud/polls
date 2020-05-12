@@ -41,6 +41,12 @@
 									{{ t('polls', 'Delete option') }}
 								</ActionButton>
 							</Actions>
+							<Actions v-if="acl.allowEdit" class="action">
+								<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+									@click="confirmOption(option)">
+									{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+								</ActionButton>
+							</Actions>
 						</template>
 					</OptionItem>
 				</transition-group>
@@ -81,7 +87,7 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		...mapGetters(['sortedOptions']),
+		...mapGetters(['sortedOptions', 'expired']),
 
 		sortOptions: {
 			get() {
@@ -116,8 +122,11 @@ export default {
 				option: option,
 			})
 		},
-	},
 
+		confirmOption(option) {
+			this.$store.dispatch('updateOptionAsync', { option: { ...option, confirmed: !option.confirmed } })
+		},
+	},
 }
 </script>
 

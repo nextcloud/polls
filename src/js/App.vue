@@ -124,6 +124,18 @@ export default {
 	background-image: var(--icon-polls);
 }
 
+.icon-polls-yes {
+	background-image: var(--icon-polls-yes);
+}
+
+.icon-polls-no {
+	background-image: var(--icon-polls-no);
+}
+
+.icon-polls-maybe {
+	background-image: var(--icon-polls-maybe);
+}
+
 .title {
 	margin: 8px 0;
 }

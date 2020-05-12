@@ -27,6 +27,7 @@ use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
+use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -48,6 +49,7 @@ class OptionController extends Controller {
 
 	private $groupManager;
 	private $pollMapper;
+	private $logger;
 	private $logService;
 	private $acl;
 
@@ -56,6 +58,7 @@ class OptionController extends Controller {
 	 * @param string $appName
 	 * @param $UserId
 	 * @param IRequest $request
+	 * @param ILogger $logger
 	 * @param OptionMapper $optionMapper
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
@@ -70,6 +73,7 @@ class OptionController extends Controller {
 		OptionMapper $optionMapper,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
+		ILogger $logger,
 		LogService $logService,
 		Acl $acl
 	) {
@@ -78,6 +82,7 @@ class OptionController extends Controller {
 		$this->optionMapper = $optionMapper;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
+		$this->logger = $logger;
 		$this->logService = $logService;
 		$this->acl = $acl;
 	}
@@ -170,6 +175,7 @@ class OptionController extends Controller {
 	public function update($option) {
 
 		try {
+			$this->logger->alert(json_encode($option));
 			$updateOption = $this->optionMapper->find($option['id']);
 
 			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
@@ -183,6 +189,16 @@ class OptionController extends Controller {
 				$updateOption->setOrder($option['order']);
 			} else {
 				$updateOption->setOrder($option['timestamp']);
+			}
+
+			if ($option['confirmed']) {
+				// do not update confirmation date, if option is already confirmed
+				if (!$updateOption->setConfirmed()){
+					$updateOption->setConfirmed(time());
+				}
+
+			} else {
+				$updateOption->setConfirmed(0);
 			}
 
 			$this->optionMapper->update($updateOption);

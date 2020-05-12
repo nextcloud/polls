@@ -60,14 +60,14 @@ const getters = {
 
 	invitationShares: state => {
 		const invitationTypes = ['user', 'group', 'email', 'external', 'contact']
-		return state.shares.filter(function(share) {
+		return state.shares.filter(share => {
 			return invitationTypes.includes(share.type)
 		})
 	},
 
 	publicShares: state => {
 		const invitationTypes = ['public']
-		return state.shares.filter(function(share) {
+		return state.shares.filter(share => {
 			return invitationTypes.includes(share.type)
 		})
 	},

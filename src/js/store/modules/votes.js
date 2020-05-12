@@ -132,10 +132,6 @@ const getters = {
 		return votesRank
 	},
 
-	winnerCombo: (state, getters) => {
-		return getters.votesRank[0]
-	},
-
 	getVote: (state) => (payload) => {
 		return state.votes.find(vote => {
 			return (vote.userId === payload.userId

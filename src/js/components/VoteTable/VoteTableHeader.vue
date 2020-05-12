@@ -21,30 +21,32 @@
   -->
 
 <template>
-	<div class="vote-table-header" :class=" { winner: isWinner }">
+	<div class="vote-table-header" :class=" { winner: isWinner, confirmed: isConfirmed }">
 		<OptionItem :option="option" :type="poll.type" :display="tableMode ? 'dateBox' : 'textBox'" />
-
 		<div class="counter">
 			<div class="yes">
-				<span>{{ yesVotes }}</span>
+				<span>{{ option.yes }}</span>
 			</div>
 			<div v-if="poll.allowMaybe" class="maybe">
-				<span>{{ maybeVotes }}</span>
+				<span>{{ option.maybe }}</span>
 			</div>
 		</div>
 
 		<div class="counter2">
-			<div class="no" :style="{flex: noVotes }">
+			<div class="no" :style="{flex: option.no }">
 				<span />
 			</div>
 
-			<div v-if="maybeVotes && poll.allowMaybe" class="maybe" :style="{flex: maybeVotes }">
-				<span> {{ maybeVotes }} </span>
+			<div v-if="option.maybe && poll.allowMaybe" class="maybe" :style="{flex: option.maybe }">
+				<span> {{ option.maybe }} </span>
 			</div>
 
-			<div v-if="yesVotes" class="yes" :style="{ flex: yesVotes }">
-				<span> {{ yesVotes }} </span>
+			<div v-if="option.yes" class="yes" :style="{ flex: option.yes }">
+				<span> {{ option.yes }} </span>
 			</div>
+		</div>
+		<div v-if="expired && !acl.allowEdit" class="confirmations">
+			{{ confirmations }}
 		</div>
 	</div>
 </template>
@@ -79,48 +81,34 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			votes: state => state.votes.votes,
+			acl: state => state.acl,
 		}),
+
 		...mapGetters([
 			'votesRank',
-			'winnerCombo',
 			'participantsVoted',
+			'expired',
+			'confirmedOptions',
 		]),
-
-		yesVotes() {
-			const pollOptionText = this.option.pollOptionText
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			}).yes
-		},
-
-		maybeVotes() {
-			const pollOptionText = this.option.pollOptionText
-			return this.votesRank.find(rank => {
-				return rank.pollOptionText === pollOptionText
-			}).maybe
-		},
-
-		noVotes() {
-			return this.participantsVoted.length - this.yesVotes - this.maybeVotes
-		},
-
 		isWinner() {
-			const pollOptionText = this.option.pollOptionText
-			return (
-				this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).yes === this.winnerCombo.yes
+			// highlight best option until poll is expired and at least one option is confirmed
+			return this.option.rank === 1 && !(this.expired && this.confirmedOptions.length)
+		},
+		isConfirmed() {
+			return this.option.confirmed && this.expired
+		},
+		confirmations() {
+			if (this.isConfirmed) {
+				return t('polls', 'Confirmed')
+			} else {
+				return ' '
+			}
+		},
+	},
 
-				&& (this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).yes + this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).maybe > 0)
-
-				&& this.winnerCombo.maybe === this.votesRank.find(rank => {
-					return rank.pollOptionText === pollOptionText
-				}).maybe
-			)
+	methods: {
+		confirmOption(option) {
+			this.$store.dispatch('updateOptionAsync', { option: { ...option, confirmed: !option.confirmed } })
 		},
 	},
 }
@@ -132,10 +120,32 @@ export default {
 .vote-table-header {
 	display: flex;
 	flex-direction: column;
+	align-items: stretch;
+	justify-content: center;
 	background-color: var(--color-main-background);
 	&.winner {
 		font-weight: bold;
 		color: var(--color-polls-foreground-yes);
+	}
+	&.confirmed {
+		font-weight: bold;
+		border-top: 1px solid var(--color-polls-foreground-yes);
+		border-radius: 10px 10px 0 0;
+		border-bottom: 0;
+		padding: 8px 8px 2px 8px;
+	}
+	.option-item {
+		flex: 1;
+		.option-item__option--text {
+			hyphens: auto;
+		}
+	}
+	.counter {
+		flex: 0;
+	}
+	.counter2 {
+		display: none;
+		flex: 0;
 	}
 }
 
@@ -189,7 +199,13 @@ export default {
 
 }
 
-@media (max-width: (480px) ) {
+.confirmations {
+	text-align: center;
+	height: 2em;
+}
+
+.confirmAction {
+	font-size: 80%;
 }
 
 </style>

@@ -21,24 +21,18 @@
   -->
 
 <template>
-	<Component :is="tag" class="option-item" :class="{ draggable: draggable }">
-		<div v-if="draggable" class="option-item__handle icon icon-handle" />
+	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, confirmed: isConfirmed }">
+		<div v-if="isDraggable" class="option-item__handle icon icon-handle" />
 
-		<div v-if="showOrder" class="option-item__order">
-			{{ option.order }}
+		<div v-if="showRank" class="option-item__rank">
+			{{ option.rank }}
 		</div>
 
-		<div v-if="type==='textPoll'" class="option-item__option--text">
-			{{ option.pollOptionText }}
+		<div v-if="show === 'textBox'" class="option-item__option--text">
+			{{ optionText }}
 		</div>
 
-		<div v-if="type==='datePoll' && display === 'textBox'" class="option-item__option--date">
-			{{ dateLocalFormat }}
-		</div>
-
-		<div v-if="type === 'datePoll' && display === 'dateBox'"
-			v-tooltip.auto="dateLocalFormat"
-			class="option-item__option--datebox">
+		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormat" class="option-item__option--datebox">
 			<div class="month">
 				{{ dateBoxMonth }}
 			</div>
@@ -71,7 +65,7 @@ export default {
 			type: Object,
 			required: true,
 		},
-		showOrder: {
+		showRank: {
 			type: Boolean,
 			default: false,
 		},
@@ -89,6 +83,9 @@ export default {
 		},
 	},
 	computed: {
+		isDraggable() {
+			return this.draggable
+		},
 		dateLocalFormat() {
 			return moment.unix(this.option.timestamp).format('llll')
 		},
@@ -103,6 +100,25 @@ export default {
 		},
 		dateBoxTime() {
 			return moment.unix(this.option.timestamp).format('LT')
+		},
+		optionText() {
+			if (this.type === 'datePoll') {
+				return this.dateLocalFormat
+			} else {
+				return this.option.pollOptionText
+			}
+		},
+		show() {
+			if (this.type === 'datePoll' && this.display === 'dateBox') {
+				return 'dateBox'
+			} else if (this.type === 'datePoll' && this.display === 'textBox') {
+				return 'dateString'
+			} else {
+				return 'textBox'
+			}
+		},
+		isConfirmed() {
+			return this.option.confirmed
 		},
 	},
 }
@@ -151,7 +167,7 @@ export default {
 
 	}
 
-	.option-item__order {
+	.option-item__rank {
 		flex: 0 0;
 		justify-content: flex-end;
 		padding-right: 8px;

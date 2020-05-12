@@ -60,7 +60,9 @@
 				<OptionItem v-for="(option) in sortedOptions"
 					:key="option.id"
 					:option="option"
+					:show-confirmed="true"
 					type="datePoll"
+					display="textBox"
 					tag="li">
 					<template v-slot:actions>
 						<Actions v-if="acl.allowEdit" class="action">
@@ -70,8 +72,12 @@
 						</Actions>
 
 						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton icon="icon-add" @click="cloneOptionModal(option)">
+							<ActionButton v-if="!expired" icon="icon-add" @click="cloneOptionModal(option)">
 								{{ t('polls', 'Clone option') }}
+							</ActionButton>
+							<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+								@click="confirmOption(option)">
+								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 							</ActionButton>
 						</Actions>
 					</template>
@@ -162,7 +168,7 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		...mapGetters(['sortedOptions']),
+		...mapGetters(['sortedOptions', 'expired']),
 
 		firstDOW() {
 			// vue2-datepicker needs 7 for sunday
@@ -240,10 +246,13 @@ export default {
 			this.$store.dispatch('removeOptionAsync', { option: option })
 		},
 
+		confirmOption(option) {
+			this.$store.dispatch('updateOptionAsync', { option: { ...option, confirmed: !option.confirmed } })
+		},
 	},
-
 }
 </script>
+
 <style lang="scss" scoped>
 	.emptycontent {
 		margin-top: 20vh;

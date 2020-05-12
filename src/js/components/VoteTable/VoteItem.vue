@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, { active: isActive && isValidUser}]">
+	<div class="vote-item" :class="[answer, { active: isActive && isValidUser &&!expired, confirmed: isConfirmed }]">
 		<div v-if="isActive" class="icon" @click="$emit('voteClick')" />
 		<div v-else class="icon" />
 	</div>
@@ -29,6 +29,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 export default {
 	name: 'VoteItem',
 
@@ -48,6 +49,10 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'expired',
+		]),
+
 		answer() {
 			try {
 				return this.$store.getters.getVote({
@@ -61,6 +66,10 @@ export default {
 
 		isValidUser() {
 			return (this.userId !== '' && this.userId !== null)
+		},
+
+		isConfirmed() {
+			return this.option.confirmed && this.expired
 		},
 
 	},
@@ -126,6 +135,10 @@ export default {
 			}
 		}
 
+		&.confirmed {
+			padding: 2px 8px;
+			height: 47px;
+		}
 	}
 
 	@media (max-width: (480px) ) {

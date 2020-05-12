@@ -22,10 +22,10 @@
 
 <template lang="html">
 	<div class="vote-table" :class="{ 'owner-access': acl.allowEdit, 'listMode': !tableMode }">
-		<div class="vote-table__header">
+		<div class="vote-table__header-row">
 			<div class="user-div" />
 
-			<VoteTableHeader v-for="(option) in sortedOptions"
+			<VoteTableHeader v-for="(option) in rankedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="poll.type"
@@ -48,12 +48,22 @@
 				</Actions>
 			</UserDiv>
 
-			<VoteItem v-for="(option) in sortedOptions"
+			<VoteItem v-for="(option) in rankedOptions"
 				:key="option.id"
 				:user-id="participant.userId"
 				:option="option"
 				:is-active="acl.userId === participant.userId && acl.allowVote"
 				@voteClick="setVote(option, participant.userId)" />
+		</div>
+
+		<div class="vote-table__footer-row">
+			<div class="user-div" />
+
+			<VoteTableFooter v-for="(option) in rankedOptions"
+				:key="option.id"
+				:option="option"
+				:poll-type="poll.type"
+				:table-mode="tableMode" />
 		</div>
 
 		<Modal v-if="modal">
@@ -71,10 +81,12 @@
 </template>
 
 <script>
-import VoteItem from './VoteItem'
-import VoteTableHeader from './VoteTableHeader'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import orderBy from 'lodash/orderBy'
+import VoteItem from './VoteItem'
+import VoteTableHeader from './VoteTableHeader'
+import VoteTableFooter from './VoteTableFooter'
 
 export default {
 	name: 'VoteTable',
@@ -83,11 +95,16 @@ export default {
 		ActionButton,
 		Modal,
 		VoteTableHeader,
+		VoteTableFooter,
 		VoteItem,
 	},
 
 	props: {
 		tableMode: {
+			type: Boolean,
+			default: false,
+		},
+		ranked: {
 			type: Boolean,
 			default: false,
 		},
@@ -110,6 +127,10 @@ export default {
 			'sortedOptions',
 			'participants',
 		]),
+
+		rankedOptions() {
+			return orderBy(this.sortedOptions, this.ranked ? 'rank' : 'order', 'asc')
+		},
 	},
 
 	methods: {
@@ -141,7 +162,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .vote-table {
 	display: flex;
@@ -153,7 +174,7 @@ export default {
 	background-color: var(--color-main-background);
 }
 
-.vote-table__vote-row, .vote-table__header {
+.vote-table__vote-row, .vote-table__header-row, .vote-table__footer-row {
 	display: flex;
 	flex: 1;
 	border-bottom: 1px solid var(--color-border-dark);
@@ -162,7 +183,7 @@ export default {
 	min-width: max-content;
 }
 
-.vote-table__header {
+.vote-table__header-row {
 	order: 1;
 }
 
@@ -171,6 +192,11 @@ export default {
 	&.currentuser {
 		order: 2;
 	}
+}
+
+.vote-table__footer-row {
+	border-bottom: none;
+	order: 4;
 }
 
 .user-div {
@@ -191,11 +217,18 @@ export default {
 	display: none;
 }
 
-.vote-item, .vote-table-header {
+.vote-item, .vote-table-header, .vote-table-footer {
 	width: 84px;
 	min-width: 84px;
 	flex: 1;
 	margin: 2px;
+	&.confirmed {
+		border-left: 1px solid var(--color-polls-foreground-yes);
+		border-right: 1px solid var(--color-polls-foreground-yes);
+		min-width: 100px;
+		background-color: var(--color-polls-background-yes);
+		margin: 0 8px;
+	}
 }
 
 .vote-table.listMode {
@@ -226,6 +259,10 @@ export default {
 		flex: 0;
 	}
 
+	.vote-table__footer-row {
+		display: none;
+	}
+
 	.vote-table-header {
 		flex-direction: row;
 		width: unset;
@@ -236,7 +273,7 @@ export default {
 		flex: 2;
 	}
 
-	.vote-table__header, {
+	.vote-table__header-row, {
 		flex-direction: column;
 	}
 }
