@@ -52,6 +52,10 @@
 				</transition-group>
 			</draggable>
 		</ConfigBox>
+		<div v-if="!options.length" class="emptycontent">
+			<div class="icon-toggle-filelist" />
+			{{ t('polls', 'There are no vote options specified.') }}
+		</div>
 	</div>
 </template>
 
@@ -153,6 +157,10 @@ export default {
 		border: none;
 		opacity: 0.3;
 		cursor: pointer;
+	}
+
+	.emptycontent {
+		margin-top: 20vh;
 	}
 
 </style>
