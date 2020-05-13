@@ -98,18 +98,15 @@ export default {
 				return this.sortedOptions
 			},
 			set(value) {
-				this.writeOptions(value)
+				// TODO: improve, this is not the elegant way
+				this.$store.commit('reorderOptions', value)
+				this.$store.dispatch('updateOptions')
 			},
 		},
 
 	},
 
 	methods: {
-		writeOptions(value) {
-			this.$store.commit('reorderOptions', value)
-			this.$store.dispatch('updateOptions')
-		},
-
 		addOption() {
 			if (this.newPollText) {
 				this.$store.dispatch('addOptionAsync', {

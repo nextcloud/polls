@@ -52,6 +52,7 @@ const mutations = {
 		payload.forEach((item, i) => {
 			item.order = i + 1
 		})
+		state.options = payload
 	},
 
 	setOption(state, payload) {
