@@ -206,7 +206,7 @@
 			return new DataResponse([
 				'acl' => $this->acl,
 				'comments' => $comments,
-				'options' => $this->optionMapper->findByPoll($pollId),
+				'options' => $options,
 				'poll' => $this->poll,
 				'shares' => $shares,
 				'votes' => $votes

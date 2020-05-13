@@ -92,10 +92,10 @@ class Option extends Entity implements JsonSerializable {
 	 */
 	 // TODO: remove by time
 	private function setOrder($timestamp, $order) {
-		if ($timestamp === 0) {
-			return $order;
-		} else {
+		if ($timestamp) {
 			return $timestamp;
+		} else {
+			return $order;
 		}
 	}
 }
