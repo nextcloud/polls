@@ -73,7 +73,7 @@ OC.L10N.register(
     "Place your votes until %n" : "Rösta fram till %n",
     "Public access" : "Publik åtkomst",
     "Hidden poll" : "Dold omröstning",
-    "Access denied" : "Tillgång nekades",
+    "Access denied" : "Åtkomst nekades",
     "You are not allowed to view this poll or the poll does not exist." : "Du får inte se den här pollen eller så existerar den inte.",
     "You are not allowed to edit this poll or the poll does not exist." : "Du får inte redigera den här pollen eller så existerar den inte.",
     "You are either not allowed to delete this poll or it doesn't exist." : "Antingen får du inte ta bort omröstningen eller så finns den inte."

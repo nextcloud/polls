@@ -118,12 +118,16 @@ OC.L10N.register(
     "Delete votes" : "Ezabatu botuak",
     "No" : "Ez",
     "Yes" : "Bai",
+    "The poll does not exist" : "Inkesta ez da existitzen",
+    "Enter a poll or start a new one." : "Sartu inkesta bat edo hasi berri bat.",
+    "Goto Nextcloud" : "Joan Nextcloudera",
     "Hidden polls" : "Ezkutatutako inkestak",
     "Expired" : "Iraungita",
     "Deleted" : "Ezabatuta",
     "Place your votes until %n" : "Bozkatu %narte",
     "Public access" : "Sarbide publikoa",
     "Hidden poll" : "Ezkutuko inkesta",
+    "Deleted poll permanently." : "Ezabatu inkesta betirako.",
     "Access denied" : "Sarbidea ukatua"
 },
 "nplurals=2; plural=(n != 1);");

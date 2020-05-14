@@ -33,6 +33,7 @@ OC.L10N.register(
     "Hour" : "שעה",
     "Day" : "יום",
     "Month" : "חודש",
+    "Remove share" : "הסרת שיתוף",
     "Unknown user" : "משתמש לא ידוע",
     "Group" : "קבוצה",
     "Receive notification email on activity" : "קבלת הודעות בדוא״ל כשיש פעילות",
