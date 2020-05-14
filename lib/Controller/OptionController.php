@@ -183,7 +183,7 @@ class OptionController extends Controller {
 
 			if ($option['confirmed']) {
 				// do not update confirmation date, if option is already confirmed
-				if (!$updateOption->setConfirmed()){
+				if (!$updateOption->getConfirmed()){
 					$updateOption->setConfirmed(time());
 				}
 

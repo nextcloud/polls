@@ -101,7 +101,7 @@ export default {
 .vote-table-header {
 	display: flex;
 	flex-direction: column;
-	align-items: stretch;
+	align-items: center;
 	justify-content: center;
 	background-color: var(--color-main-background);
 	&.winner {
