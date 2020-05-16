@@ -100,6 +100,8 @@ export default {
 
 <style  lang="scss">
 :root {
+	--polls-vote-rows: 1;
+	--polls-vote-columns: 1;
 	--color-background-error: #f9c5c5;
 	--color-background-success: #d6fdda;
 	--color-polls-foreground-yes: #49bc49;

@@ -21,51 +21,47 @@
   -->
 
 <template lang="html">
-	<div class="vote-table" :class="{ 'owner-access': acl.allowEdit, 'listMode': !tableMode }">
-		<div class="vote-table__header-row">
-			<div class="user-div" />
-
+	<div class="vote-table">
+		<div class="vote-table__header">
 			<VoteTableHeader v-for="(option) in rankedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="poll.type"
 				:table-mode="tableMode" />
 		</div>
-
-		<div v-for="(participant) in participants"
-			:key="participant.userId"
-			:class=" {currentuser: (participant.userId === acl.userId) }"
-			class="vote-table__vote-row">
-			<UserDiv :key="participant.userId"
+		<div class="vote-table__users">
+			<UserDiv v-for="(participant) in participants"
+				:key="participant.userId"
 				v-bind="participant"
 				class="vote-table__user-column"
 				:class="{currentuser: (participant.userId === acl.userId) }">
 				<Actions v-if="acl.allowEdit" class="action">
-					<ActionButton icon="icon-delete"
-						@click="confirmDelete(participant.userId)">
+					<ActionButton icon="icon-delete" @click="confirmDelete(participant.userId)">
 						{{ t('polls', 'Delete votes') }}
 					</ActionButton>
 				</Actions>
 			</UserDiv>
-
-			<VoteItem v-for="(option) in rankedOptions"
-				:key="option.id"
-				:user-id="participant.userId"
-				:option="option"
-				:is-active="acl.userId === participant.userId && acl.allowVote"
-				@voteClick="setVote(option, participant.userId)" />
 		</div>
-
-		<div class="vote-table__footer-row">
-			<div class="user-div" />
-
+		<div class="vote-table__votes">
+			<div v-for="(participant) in participants"
+				:key="participant.userId"
+				:class=" {currentuser: (participant.userId === acl.userId) }"
+				class="vote-table__vote-row">
+				<VoteItem v-for="(option) in rankedOptions"
+					:key="option.id"
+					:user-id="participant.userId"
+					:option="option"
+					:is-active="acl.userId === participant.userId && acl.allowVote"
+					@voteClick="setVote(option, participant.userId)" />
+			</div>
+		</div>
+		<div class="vote-table__footer">
 			<VoteTableFooter v-for="(option) in rankedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="poll.type"
 				:table-mode="tableMode" />
 		</div>
-
 		<Modal v-if="modal">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Do you want to remove {username} from poll?', { username: userToRemove }) }}</h2>
@@ -165,52 +161,55 @@ export default {
 <style lang="scss" scoped>
 
 .vote-table {
-	display: flex;
-	flex: 0 auto;
-	flex-direction: column;
-	justify-content: flex-start;
-	overflow-x: scroll;
-	padding-bottom: 12px;
-	background-color: var(--color-main-background);
+	display: grid;
+	overflow: scroll;
+	grid-template-columns: 250px repeat(var(--polls-vote-columns), 1fr);
+	grid-template-rows: auto repeat(var(--polls-vote-rows), 1fr) 50px;
+	justify-items: stretch;
+	grid-template-areas:
+		". headers"
+		"users vote"
+		". footer" ;
 }
-
-.vote-table__vote-row, .vote-table__header-row, .vote-table__footer-row {
+.vote-table__header {
+	grid-area: headers;
 	display: flex;
-	flex: 1;
+
 	border-bottom: 1px solid var(--color-border-dark);
 	background-color: var(--color-main-background);
-	justify-content: space-between;
-	min-width: max-content;
+	justify-content: space-around;
 }
 
-.vote-table__header-row {
-	order: 1;
+.vote-table__users {
+	grid-area: users;
+	display:flex;
+	flex-direction: column;
+	position: sticky;
+	left: 0;
+	background-color: var(--color-main-background);
 }
 
-.vote-table__vote-row {
+.vote-table__votes {
+	grid-area: vote;
+	display: flex;
+	flex-direction: column;
+}
+
+.vote-table__footer {
+	grid-area: footer;
+	display: flex;
+}
+
+.vote-table__vote-row,  {
+	display: flex;
+	flex: 1;
 	order: 3;
 	&.currentuser {
 		order: 2;
 	}
 }
 
-.vote-table__footer-row {
-	border-bottom: none;
-	order: 4;
-}
-
-.user-div {
-	position: sticky;
-	left: 0;
-	background-color: var(--color-main-background);
-	width: 230px;
-	flex: 0 auto;
-	.owner-access {
-		width: 280px;
-	}
-}
-
-.vote-item, .vote-table-header, .vote-table-footer {
+.vote-item {
 	width: 84px;
 	min-width: 84px;
 	flex: 1;
