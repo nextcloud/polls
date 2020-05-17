@@ -1,6 +1,9 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Опитування",
+    "Go to poll" : "Перейти до опитування",
+    "- %s voted." : "- %s проголосували.",
     "New comment …" : "Новий коментар...",
     "Comments" : "Коментарі",
     "Delete comment" : "Видалити комент",
