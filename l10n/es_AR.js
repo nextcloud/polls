@@ -13,6 +13,7 @@ OC.L10N.register(
     "never" : "nunca",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
+    "Options" : "Opciones",
     "Shares" : "Shares",
     "Description" : "Descripción",
     "Expiration date" : "Fecha de expiración",

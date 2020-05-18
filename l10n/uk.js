@@ -4,6 +4,7 @@ OC.L10N.register(
     "Polls" : "Опитування",
     "Go to poll" : "Перейти до опитування",
     "- %s voted." : "- %s проголосували.",
+    "Participants" : "Учасники",
     "New comment …" : "Новий коментар...",
     "Comments" : "Коментарі",
     "Delete comment" : "Видалити комент",
