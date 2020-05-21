@@ -7,7 +7,7 @@ OC.L10N.register(
     "Participants" : "Учасники",
     "New comment …" : "Новий коментар...",
     "Comments" : "Коментарі",
-    "Delete comment" : "Видалити комент",
+    "Delete comment" : "Вилучити коментар",
     "Cancel" : "Скасувати",
     "Apply" : "Застосувати",
     "Title" : "Назва",

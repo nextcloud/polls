@@ -111,9 +111,11 @@ OC.L10N.register(
     "Public link (" : "Esteka publikoa (",
     "Add a public link" : "Gehitu esteka publikoa",
     "Link copied to clipboard" : "Arbelara kopiatutako esteka",
+    "Error while copying link to clipboard" : "Errorea esteka arbelera kopiatzean",
     "Unknown user" : "Erabiltzaile ezezaguna",
     "Group" : "Taldea",
     "Public share" : "Partekatze publikoa",
+    "Your personal link to this poll: %n" : "Zure esteka pertsonala inkesta honetara: %n",
     "Enter your name!" : "Sartu zure izena!",
     "Enter your name" : "Sartu zure izena",
     "You have an account? Log in here." : "Kontua daukazu? Hasi saioa hemen.",
@@ -136,7 +138,10 @@ OC.L10N.register(
     "Place your votes until %n" : "Bozkatu %narte",
     "Public access" : "Sarbide publikoa",
     "Hidden poll" : "Ezkutuko inkesta",
+    "Error deleting poll." : "Errorea inkesta ezabatzean.",
     "Deleted poll permanently." : "Ezabatu inkesta betirako.",
+    "Error cloning poll." : "Errorea inkesta klonatzean.",
+    "Error sending invitation mail to %n." : "Errorea gonbidapen e-posta %n(e)ri bidaltzerakoan.",
     "Access denied" : "Sarbidea ukatua"
 },
 "nplurals=2; plural=(n != 1);");
