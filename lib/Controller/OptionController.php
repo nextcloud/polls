@@ -149,7 +149,11 @@ class OptionController extends Controller {
 			$NewOption->setPollId($option['pollId']);
 			$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$NewOption->setTimestamp($option['timestamp']);
-			$NewOption->setOrder($option['timestamp'], $option['order']);
+			if ($option['timestamp']) {
+				$NewOption->setOrder($option['timestamp']);
+			} else {
+				$NewOption->setOrder($option['order']);
+			}
 
 			$this->optionMapper->insert($NewOption);
 			$this->logService->setLog($option['pollId'], 'addOption');
@@ -185,8 +189,6 @@ class OptionController extends Controller {
 			} else {
 				$updateOption->setOrder($option['order']);
 			}
-
-
 
 			if ($option['confirmed']) {
 				// do not update confirmation date, if option is already confirmed
