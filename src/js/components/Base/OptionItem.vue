@@ -123,17 +123,6 @@ export default {
 	.option-item {
 		display: flex;
 		align-items: center;
-		// white-space: nowrap;
-		// line-height: 2em;
-		// min-height: 4em;
-		// overflow: visible;
-
-		&:active,
-		&:hover {
-			transition: var(--background-dark) 0.3s ease;
-			background-color: var(--color-background-dark);
-		}
-
 	}
 
 	[class*='option-item__option'] {

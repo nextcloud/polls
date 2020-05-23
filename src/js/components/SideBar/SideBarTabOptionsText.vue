@@ -131,9 +131,11 @@ export default {
 <style lang="scss" scoped>
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
-		// .option-item__option--text {
-		// 	flex: 1;
-		// }
+		&:active,
+		&:hover {
+			transition: var(--background-dark) 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
 	}
 
 	.optionAdd {
