@@ -36,39 +36,37 @@ const defaultSettings = () => {
 }
 
 const state = defaultSettings()
+const namespaced = true
 
 const mutations = {
 	reset(state) {
 		Object.assign(state, defaultSettings())
 	},
 
-	setUserSetting(state, payload) {
+	setPreference(state, payload) {
 		Object.assign(state.user, payload)
 	},
 }
 
-const getters = {
-}
-
 const actions = {
-	getSettings(context) {
+	get(context) {
 		const endPoint = 'apps/polls/preferences/get'
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setUserSetting', JSON.parse(response.data.preferences))
+				context.commit('setPreference', JSON.parse(response.data.preferences))
 			})
 			.catch(() => {
 				context.commit('reset')
 			})
 	},
-	writeSetting(context) {
+	write(context) {
 		const endPoint = 'apps/polls/preferences/write'
-		// context.commit('setUserSetting', { settings: payload })
+		// context.commit('setPreference', { settings: payload })
 
 		return axios.post(generateUrl(endPoint), { settings: context.state.user })
 			.then((response) => {
-				context.commit('setUserSetting', JSON.parse(response.data.preferences))
+				context.commit('setPreference', JSON.parse(response.data.preferences))
 			})
 			.catch((error) => {
 				console.error('Error writing preferences', { error: error.response }, { preferences: state.user })
@@ -78,4 +76,4 @@ const actions = {
 
 }
 
-export default { state, mutations, getters, actions }
+export default { namespaced, state, mutations, actions }

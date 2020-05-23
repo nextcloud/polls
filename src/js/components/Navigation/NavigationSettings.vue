@@ -97,8 +97,8 @@ export default {
 
 	methods: {
 		writeValue(value) {
-			this.$store.commit('setUserSetting', value)
-			this.$store.dispatch('writeSetting')
+			this.$store.commit('settings/setPreference', value)
+			this.$store.dispatch('settings/write')
 		},
 	},
 }

@@ -92,7 +92,7 @@ export default {
 
 		})
 
-		this.$store.dispatch('getSettings')
+		this.$store.dispatch('settings/get')
 		if (getCurrentUser()) {
 			this.updatePolls()
 			subscribe('update-polls', () => {
