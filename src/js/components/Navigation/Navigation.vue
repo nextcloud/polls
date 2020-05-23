@@ -38,15 +38,19 @@
 				</ul>
 			</AppNavigationItem>
 		</ul>
+		<AppNavigationSettings :title="t('core', 'Settings')">
+			<NavigationSettings />
+		</AppNavigationSettings>
 	</AppNavigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
+import NavigationSettings from './NavigationSettings'
 import { emit } from '@nextcloud/event-bus'
 
 export default {
@@ -55,6 +59,8 @@ export default {
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
+		AppNavigationSettings,
+		NavigationSettings,
 		CreateDlg,
 		PollNavigationItems,
 	},
