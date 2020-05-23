@@ -71,9 +71,10 @@
 		<ConfigBox :title="t('polls', 'Public shares')" icon-class="icon-public">
 			<TransitionGroup :css="false" tag="ul" class="shared-list">
 				<li v-for="(share) in publicShares" :key="share.id">
-					<div class="user-item user">
-						<div class="avatar icon-public" />
-						<div class="user-name">
+					<div class="share-item">
+						<Avatar icon-class="icon-public" :is-no-user="true" />
+						<!-- <div class="avatar icon-public" /> -->
+						<div class="share-item__description">
 							{{ t('polls', 'Public link (' + share.token + ')') }}
 						</div>
 					</div>
@@ -90,22 +91,18 @@
 				</li>
 			</TransitionGroup>
 
-			<div class="user-item user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
-				<div class="avatar icon-add" />
-				<div class="user-name">
-					{{ t('polls', 'Add a public link') }}
-				</div>
-			</div>
+			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', user: '', emailAddress: ''})" />
 		</ConfigBox>
 	</div>
 </template>
 
 <script>
 import axios from '@nextcloud/axios'
-import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, Avatar, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import ConfigBox from '../Base/ConfigBox'
+import ButtonDiv from '../Base/ButtonDiv'
 
 export default {
 	name: 'SideBarTabShare',
@@ -113,6 +110,8 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		Avatar,
+		ButtonDiv,
 		ConfigBox,
 		Multiselect,
 	},
@@ -208,6 +207,36 @@ export default {
 			align-items: stretch;
 			margin: 4px 0;
 		}
+	}
+
+	.share-item {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		max-width: 100%;
+
+		//dirty hack: AvatarDiv does not work properly with iconClass
+		.avatardiv {
+			&.avatardiv--unknown {
+				background-color: transparent;
+			}
+
+			.avatar-class-icon {
+				// background-color: var(--color-primary-element-light);
+				min-height: 32px;
+				min-width: 32px;
+			}
+		}
+	}
+
+	.share-item__description {
+		flex: 1;
+		min-width: 50px;
+		color: var(--color-text-maxcontrast);
+		padding-left: 8px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.multiselect {
