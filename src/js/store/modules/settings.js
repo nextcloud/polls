@@ -54,7 +54,7 @@ const actions = {
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPreference', JSON.parse(response.data.preferences))
+				context.commit('setPreference', response.data.preferences)
 			})
 			.catch(() => {
 				context.commit('reset')
@@ -62,11 +62,10 @@ const actions = {
 	},
 	write(context) {
 		const endPoint = 'apps/polls/preferences/write'
-		// context.commit('setPreference', { settings: payload })
 
 		return axios.post(generateUrl(endPoint), { settings: context.state.user })
 			.then((response) => {
-				context.commit('setPreference', JSON.parse(response.data.preferences))
+				context.commit('setPreference', response.data.preferences)
 			})
 			.catch((error) => {
 				console.error('Error writing preferences', { error: error.response }, { preferences: state.user })

@@ -55,7 +55,7 @@ class Preferences extends Entity implements JsonSerializable {
 			'id' => intval($this->id),
 			'userId' => $this->userId,
 			'timestamp' => intval($this->timestamp),
-			'preferences' => $this->preferences,
+			'preferences' => json_decode($this->preferences),
 		];
 	}
 }
