@@ -21,8 +21,9 @@
   -->
 
 <template>
-	<div class="user-div" :class="type">
+	<div class="user-item" :class="type">
 		<Avatar :disable-menu="disableMenu"
+			class="user-item__avatar"
 			:menu-position="menuPosition"
 			:user="userId"
 			:is-guest="!Boolean(getCurrentUser())"
@@ -31,7 +32,7 @@
 
 		<div v-if="icon" :class="iconClass" />
 
-		<div v-if="!hideNames" class="user-div__name">
+		<div v-if="!hideNames" class="user-item__name">
 			{{ resolveDisplayName }}
 		</div>
 		<slot />
@@ -42,11 +43,13 @@
 import { Avatar } from '@nextcloud/vue'
 
 export default {
-	name: 'UserDiv',
+	name: 'UserItem',
 
 	components: {
 		Avatar,
 	},
+
+	inheritAttrs: false,
 
 	props: {
 		hideNames: {
@@ -138,23 +141,23 @@ export default {
 
 </script>
 
-<style lang="scss">
-.user-div {
+<style lang="scss" scoped>
+.user-item {
 	display: flex;
 	flex: 1;
 	align-items: center;
-	margin-left: 0;
-	margin-top: 0;
-
-	> div {
-		margin: 2px 4px;
-	}
+	max-width: 100%;
 }
 
-.user-div__name {
-	opacity: 0.5;
+.user-item__avatar {
+	margin: 2px 4px;
+}
+
+.user-item__name {
 	flex: 1;
-	width: 50px;
+	min-width: 50px;
+	color: var(--color-text-maxcontrast);
+	padding-left: 8px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;

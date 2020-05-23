@@ -39,12 +39,21 @@
 				</ActionButton>
 			</Actions>
 		</div>
-		<div class="vote__introduction">
+		<div class="area__header">
 			<h2 class="title">
 				{{ poll.title }}
-				<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
-				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, dateExpiryString) }}</span>
-				<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+				<Badge v-if="expired"
+					:title="dateExpiryString"
+					icon="icon-calendar"
+					class="error" />
+				<Badge v-if="!expired && poll.expire"
+					:title="dateExpiryString"
+					icon="icon-calendar"
+					class="success" />
+				<Badge v-if="poll.deleted"
+					:title="t('polls', 'Deleted')"
+					icon="icon-delete"
+					class="error" />
 			</h2>
 			<PollInformation />
 			<VoteHeaderPublic v-if="!getCurrentUser()" />
@@ -54,20 +63,23 @@
 			</h3>
 		</div>
 
-		<VoteTable v-show="options.length" :table-mode="tableMode" :ranked="ranked" />
-
-		<div v-if="!options.length" class="emptycontent">
-			<div class="icon-toggle-filelist" />
-			<button v-if="acl.allowEdit" @click="openOptions">
-				{{ t('polls', 'There are no vote options, add some in the options section of the right sidebar.') }}
-			</button>
-			<div v-if="!acl.allowEdit">
-				{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
+		<div class="area__main">
+			<VoteTable v-show="options.length" :table-mode="tableMode" :ranked="ranked" />
+			<div v-if="!options.length" class="emptycontent">
+				<div class="icon-toggle-filelist" />
+				<button v-if="acl.allowEdit" @click="openOptions">
+					{{ t('polls', 'There are no vote options, add some in the options section of the right sidebar.') }}
+				</button>
+				<div v-if="!acl.allowEdit">
+					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
+				</div>
 			</div>
 		</div>
 
-		<Subscription v-if="getCurrentUser()" />
-		<ParticipantsList v-if="acl.allowSeeUsernames" />
+		<div class="area__footer">
+			<Subscription v-if="getCurrentUser()" />
+			<ParticipantsList v-if="acl.allowSeeUsernames" />
+		</div>
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -75,6 +87,7 @@
 <script>
 import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
+import Badge from '../components/Base/Badge'
 import ParticipantsList from '../components/Base/ParticipantsList'
 import PollInformation from '../components/Base/PollInformation'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
@@ -90,6 +103,7 @@ export default {
 		Actions,
 		ActionButton,
 		AppContent,
+		Badge,
 		Subscription,
 		ParticipantsList,
 		PollInformation,
@@ -211,15 +225,6 @@ export default {
 	margin: 44px 0;
 }
 
-.app-content {
-	display: flex;
-	flex-direction: column;
-	padding: 0 8px;
-}
-.vote__introduction {
-	padding: 8px;
-	background-color: var(--color-main-background);
-}
 .header-actions {
 	display: flex;
 	justify-content: end;
@@ -230,4 +235,5 @@ export default {
 	width: 44px;
 	height: 44px;
 }
+
 </style>

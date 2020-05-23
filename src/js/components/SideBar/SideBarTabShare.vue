@@ -26,9 +26,10 @@
 
 		<ConfigBox :title="t('polls', 'Invitations')" icon-class="icon-share"
 			:info="t('polls','Invited users will get informed immediately via email!')">
-			<TransitionGroup :css="false" tag="ul" class="shared-list">
-				<li v-for="(share) in invitationShares" :key="share.id">
-					<UserDiv v-bind="share" :icon="true" />
+			<TransitionGroup :css="false" tag="div" class="shared-list">
+				<UserItem v-for="(share) in invitationShares"
+					:key="share.id" v-bind="share"
+					:icon="true">
 					<Actions>
 						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
 							{{ t('polls', 'Copy link to clipboard') }}
@@ -39,7 +40,7 @@
 							{{ t('polls', 'Remove share') }}
 						</ActionButton>
 					</Actions>
-				</li>
+				</UserItem>
 			</TransitionGroup>
 
 			<Multiselect id="ajax"
@@ -70,7 +71,7 @@
 		<ConfigBox :title="t('polls', 'Public shares')" icon-class="icon-public">
 			<TransitionGroup :css="false" tag="ul" class="shared-list">
 				<li v-for="(share) in publicShares" :key="share.id">
-					<div class="user-div user">
+					<div class="user-item user">
 						<div class="avatar icon-public" />
 						<div class="user-name">
 							{{ t('polls', 'Public link (' + share.token + ')') }}
@@ -89,7 +90,7 @@
 				</li>
 			</TransitionGroup>
 
-			<div class="user-div user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
+			<div class="user-item user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
 				<div class="avatar icon-add" />
 				<div class="user-name">
 					{{ t('polls', 'Add a public link') }}

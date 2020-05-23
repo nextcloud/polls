@@ -91,7 +91,7 @@ export default {
 				{
 					id: 'expired',
 					title: t('polls', 'Expired polls'),
-					icon: 'icon-delete',
+					icon: 'icon-polls-expired',
 					pinned: false,
 				},
 				{

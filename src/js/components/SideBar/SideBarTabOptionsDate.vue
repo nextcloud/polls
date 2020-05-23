@@ -31,7 +31,6 @@
 					:key="option.id"
 					:option="option"
 					:show-confirmed="true"
-					type="datePoll"
 					display="textBox"
 					tag="li">
 					<template v-slot:actions>
@@ -42,7 +41,7 @@
 						</Actions>
 
 						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="!expired" icon="icon-add" @click="cloneOptionModal(option)">
+							<ActionButton v-if="!expired" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 								{{ t('polls', 'Clone option') }}
 							</ActionButton>
 							<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
@@ -152,6 +151,9 @@ export default {
 
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
+		// .option-item__option--text {
+		// 	flex: 1;
+		// }
 	}
 
 </style>

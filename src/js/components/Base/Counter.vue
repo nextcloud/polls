@@ -85,7 +85,7 @@ export default {
 <style lang="scss">
 .counter {
 	display: flex;
-	padding: 14px 4px;
+	padding: 14px 0;
 }
 .counter--icon {
 	display: flex;
@@ -97,7 +97,7 @@ export default {
 		padding-left: 23px;
 		background-repeat: no-repeat;
 		background-size: contain;
-		margin-right: 8px;
+		margin: 4px;
 	}
 
 	.yes {
