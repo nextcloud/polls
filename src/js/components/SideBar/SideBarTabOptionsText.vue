@@ -97,9 +97,7 @@ export default {
 				return this.sortedOptions
 			},
 			set(value) {
-				// TODO: improve, this is not the elegant way
-				this.$store.commit('reorderOptions', value)
-				this.$store.dispatch('updateOptions')
+				this.$store.dispatch('reorderOptions', value)
 			},
 		},
 

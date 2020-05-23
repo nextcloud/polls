@@ -179,7 +179,14 @@ class OptionController extends Controller {
 
 			$updateOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
 			$updateOption->setTimestamp($option['timestamp']);
-			$updateOption->setOrder($option['timestamp'],$option['order']);
+
+			if ($option['timestamp']) {
+				$updateOption->setOrder($option['timestamp']);
+			} else {
+				$updateOption->setOrder($option['order']);
+			}
+
+
 
 			if ($option['confirmed']) {
 				// do not update confirmation date, if option is already confirmed
