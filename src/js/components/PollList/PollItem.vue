@@ -96,7 +96,7 @@
 		<div v-tooltip.auto="accessType" :class="'item__access--' + poll.access" @click="loadPoll()" />
 
 		<div class="item__owner" @click="loadPoll()">
-			<user-div :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
+			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
 		<div class="wrapper" @click="loadPoll()">
 			<div class="item__created">

@@ -21,50 +21,62 @@
   -->
 
 <template lang="html">
-	<div class="subscription">
-		<input id="subscribe" v-model="subscribe" type="checkbox"
-			class="checkbox">
-		<label for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
-	</div>
+	<Component :is="tag" :class="['badge', icon, { withIcon: withIcon } ]">
+		{{ title }}
+	</Component>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
-	name: 'Subscription',
+	name: 'Badge',
+	props: {
+		title: {
+			type: String,
+			default: '',
+		},
+		icon: {
+			type: String,
+			default: '',
+		},
+		tag: {
+			type: String,
+			default: 'span',
+		},
+	},
 
 	computed: {
-		...mapState({
-			subscription: state => state.subscription,
-			poll: state => state.poll,
-		}),
-
-		subscribe: {
-			get() {
-				return this.subscription.subscribed
-			},
-			set(value) {
-				this.$store.commit('setSubscription', value)
-				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.poll.id })
-			},
+		withIcon() {
+			return Boolean(this.icon)
 		},
 	},
-
-	watch: {
-		$route() {
-			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
-		},
-	},
-
-	created() {
-		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
-	},
-
 }
 </script>
 
-<style lang="css" scoped>
-	.subscription {
-		padding: 8px;
+<style lang="scss" scoped>
+	.badge {
+		border: solid 1px;
+		border-radius: var(--border-radius);
+		padding: 1px 4px;
+		margin: 0 4px;
+		font-size: 60%;
+		text-align: center;
+
+		&.withIcon {
+			padding-left: 26px;
+			background-position: 4px center;
+		}
+
+		&.error {
+			border-color: var(--color-error);
+			background-color: var(--color-error);
+			color: var(--color-primary-text);
+		}
+
+		&.success {
+			border-color: var(--color-success);
+			background-color: var(--color-success);
+			color: var(--color-primary-text);
+		}
 	}
+
 </style>

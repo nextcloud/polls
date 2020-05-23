@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, confirmed: isConfirmed }">
+	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable }">
 		<div v-if="isDraggable" class="option-item__handle icon icon-handle" />
 
 		<div v-if="showRank" class="option-item__rank">
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 export default {
 	name: 'OptionItem',
@@ -73,16 +74,15 @@ export default {
 			type: String,
 			default: 'div',
 		},
-		type: {
-			type: String,
-			required: true,
-		},
 		display: {
 			type: String,
 			default: 'textBox',
 		},
 	},
 	computed: {
+		...mapState({
+			poll: state => state.poll,
+		}),
 		isDraggable() {
 			return this.draggable
 		},
@@ -102,36 +102,31 @@ export default {
 			return moment.unix(this.option.timestamp).format('LT')
 		},
 		optionText() {
-			if (this.type === 'datePoll') {
+			if (this.poll.type === 'datePoll') {
 				return this.dateLocalFormat
 			} else {
 				return this.option.pollOptionText
 			}
 		},
 		show() {
-			if (this.type === 'datePoll' && this.display === 'dateBox') {
+			if (this.poll.type === 'datePoll' && this.display === 'dateBox') {
 				return 'dateBox'
 			} else {
 				return 'textBox'
 			}
 		},
-		isConfirmed() {
-			return this.option.confirmed
-		},
 	},
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.option-item {
 		display: flex;
 		align-items: center;
-		padding-left: 8px;
-		padding-right: 8px;
-		line-height: 2em;
-		min-height: 4em;
-		overflow: visible;
-		white-space: nowrap;
+		// white-space: nowrap;
+		// line-height: 2em;
+		// min-height: 4em;
+		// overflow: visible;
 
 		&:active,
 		&:hover {

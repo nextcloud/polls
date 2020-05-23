@@ -26,7 +26,7 @@
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ expired: expired }">
 		<template slot="actions">
-			<ActionButton icon="icon-add" @click="$emit('clonePoll')">
+			<ActionButton icon="icon-polls-clone" @click="$emit('clonePoll')">
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 

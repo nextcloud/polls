@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<div class="vote-table-footer" :class=" { confirmed: isConfirmed }">
-		<div class="footer">
+	<div class="confirmation" :class=" { confirmed: isConfirmed }">
+		<div class="confirmation--text">
 			{{ confirmations }}
 		</div>
 	</div>
@@ -32,16 +32,12 @@
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-	name: 'VoteTableHeader',
+	name: 'Confirmation',
 
 	props: {
 		option: {
 			type: Object,
 			default: undefined,
-		},
-		tableMode: {
-			type: Boolean,
-			default: false,
 		},
 	},
 
@@ -72,29 +68,24 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
-.vote-table-footer {
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
+.confirmation {
+	align-items: center;
 	justify-content: center;
-	background-color: var(--color-main-background);
-	&.winner {
-		font-weight: bold;
-		color: var(--color-polls-foreground-yes);
-	}
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 21px;
+	font-size: 0;
+	align-self: stretch;
+	min-width: 24px;
 	&.confirmed {
-		font-weight: bold;
-		border-bottom: 1px solid var(--color-polls-foreground-yes);
-		border-radius: 0 0 10px 10px;
-		padding: 8px 8px 2px 8px;
+		background-image: var(--icon-polls-confirmed);
 	}
 }
 
-.footer {
+.confirmation--text {
 	text-align: center;
-	height: 2em;
 }
 
 </style>

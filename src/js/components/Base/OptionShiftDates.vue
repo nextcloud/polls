@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Shift all date options')" icon-class="icon-history">
+	<ConfigBox :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
 		<div>
 			<div class="selectUnit">
 				<Actions>

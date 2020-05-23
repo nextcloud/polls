@@ -21,12 +21,13 @@
   -->
 
 <template>
-	<div class="vote-table-header" :class=" { winner: isWinner, confirmed: isConfirmed }">
-		<OptionItem :option="option" :type="poll.type" :display="tableMode ? 'dateBox' : 'textBox'" />
-		<Counter :show-maybe="Boolean(poll.allowMaybe)" :option="option" :bubble-style="!tableMode" />
-		<div v-if="expired && !acl.allowEdit" class="confirmations">
-			{{ confirmations }}
-		</div>
+	<div class="vote-table-header-item"
+		:class=" { winner: isWinner, confirmed: isConfirmed }">
+		<OptionItem :option="option" :display="tableMode ? 'dateBox' : 'textBox'" />
+		<Confirmation v-if="isConfirmed" :option="option" />
+		<Counter v-else :show-maybe="Boolean(poll.allowMaybe)"
+			:option="option"
+			:bubble-style="!tableMode" />
 	</div>
 </template>
 
@@ -34,22 +35,20 @@
 import { mapState, mapGetters } from 'vuex'
 import OptionItem from '../Base/OptionItem'
 import Counter from '../Base/Counter'
+import Confirmation from '../Base/Confirmation'
 
 export default {
-	name: 'VoteTableHeader',
+	name: 'VoteTableHeaderItem',
 
 	components: {
 		OptionItem,
 		Counter,
+		Confirmation,
 	},
 
 	props: {
 		option: {
 			type: Object,
-			default: undefined,
-		},
-		pollType: {
-			type: String,
 			default: undefined,
 		},
 		tableMode: {
@@ -61,35 +60,19 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			votes: state => state.votes.votes,
-			acl: state => state.acl,
 		}),
 
 		...mapGetters([
-			'votesRank',
-			'participantsVoted',
 			'expired',
 			'confirmedOptions',
 		]),
 		isWinner() {
-			// highlight best option until poll is expired and at least one option is confirmed
+			// highlight best option until poll is expired and
+			// at least one option is confirmed
 			return this.option.rank === 1 && !(this.expired && this.confirmedOptions.length)
 		},
 		isConfirmed() {
 			return this.option.confirmed && this.expired
-		},
-		confirmations() {
-			if (this.isConfirmed) {
-				return t('polls', 'Confirmed')
-			} else {
-				return ' '
-			}
-		},
-	},
-
-	methods: {
-		confirmOption(option) {
-			this.$store.dispatch('updateOptionAsync', { option: { ...option, confirmed: !option.confirmed } })
 		},
 	},
 }
@@ -98,28 +81,14 @@ export default {
 
 <style lang="scss">
 
-.vote-table-header {
+.vote-table-header-item {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: var(--color-main-background);
 	&.winner {
 		font-weight: bold;
 		color: var(--color-polls-foreground-yes);
 	}
-	&.confirmed {
-		font-weight: bold;
-		border-top: 1px solid var(--color-polls-foreground-yes);
-		border-radius: 10px 10px 0 0;
-		border-bottom: 0;
-		padding: 8px 8px 2px 8px;
-	}
 	.option-item {
 		flex: 1;
-		.option-item__option--text {
-			hyphens: auto;
-		}
 	}
 }
 

@@ -48,13 +48,6 @@ const mutations = {
 		})
 	},
 
-	reorderOptions(state, payload) {
-		payload.forEach((item, i) => {
-			item.order = i + 1
-		})
-		state.options = payload
-	},
-
 	setOption(state, payload) {
 		const index = state.options.findIndex((option) => {
 			return option.id === payload.option.id
@@ -111,6 +104,13 @@ const getters = {
 }
 
 const actions = {
+	reorderOptions(context, payload) {
+		payload.forEach((item, i) => {
+			item.order = i + 1
+			context.dispatch('updateOptionAsync', { option: item })
+		})
+	},
+
 	updateOptions(context) {
 		context.state.options.forEach((item, i) => {
 			context.dispatch('updateOptionAsync', { option: item })
