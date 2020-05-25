@@ -28,7 +28,7 @@
 			{{ option.rank }}
 		</div>
 
-		<div v-if="show === 'textBox'" class="option-item__option--text">
+		<div v-if="show === 'textBox'" v-tooltip.auto="optionText" class="option-item__option--text">
 			{{ optionText }}
 		</div>
 
@@ -126,11 +126,19 @@ export default {
 	}
 
 	[class*='option-item__option'] {
-		display: flex;
 		flex: 1;
 		opacity: 1;
 		white-space: normal;
 		padding-right: 4px;
+	}
+
+	.option-item__option--datebox {
+		display: flex;
+	}
+
+	.option-item__option--text {
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.draggable, .draggable [class*='option-item__option']  {
@@ -177,4 +185,17 @@ export default {
 		}
 	}
 
+	.mobile {
+		.option-item {
+			flex: 2;
+			order: 1;
+			min-width: 0;
+			.option-item__option--text {
+				hyphens: auto;
+				align-items: center;
+				white-space: nowrap;
+				width: 50px;
+			}
+		}
+	}
 </style>

@@ -44,7 +44,7 @@
 							<ActionButton v-if="!expired" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 								{{ t('polls', 'Clone option') }}
 							</ActionButton>
-							<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+							<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 								@click="confirmOption(option)">
 								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 							</ActionButton>
@@ -74,6 +74,7 @@ import ConfigBox from '../Base/ConfigBox'
 import OptionItem from '../Base/OptionItem'
 import moment from '@nextcloud/moment'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'SideBarTabOptionsDate',
@@ -88,6 +89,11 @@ export default {
 		Modal,
 		OptionItem,
 	},
+
+	mixins: [
+		confirmOption,
+		removeOption,
+	],
 
 	data() {
 		return {
@@ -133,13 +139,6 @@ export default {
 			this.cloneModal = true
 		},
 
-		removeOption(option) {
-			this.$store.dispatch('removeOptionAsync', { option: option })
-		},
-
-		confirmOption(option) {
-			this.$store.dispatch('updateOptionAsync', { option: { ...option, confirmed: !option.confirmed } })
-		},
 	},
 }
 </script>

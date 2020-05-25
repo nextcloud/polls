@@ -57,8 +57,22 @@
 			</div>
 		</div>
 
-		<div v-if="expired" class="vote-table__footer">
-			<div v-for="(option) in rankedOptions" :key="option.id" :class="{'confirmed' : option.confirmed }" />
+		<div v-if="acl.allowEdit && expired" class="vote-table__footer">
+			<div v-for="(option) in rankedOptions" :key="option.id" :class="{'confirmed' : option.confirmed }">
+				<Actions v-if="acl.allowEdit"
+					class="action">
+					<!-- <ActionButton icon="icon-delete" @click="removeOption(option)">
+						{{ t('polls', 'Delete option') }}
+					</ActionButton>
+					<ActionButton v-if="!expired && poll.type==='datePoll'" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+						{{ t('polls', 'Clone option') }}
+					</ActionButton> -->
+					<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+						@click="confirmOption(option)">
+						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+					</ActionButton>
+				</Actions>
+			</div>
 		</div>
 
 		<div class="vote-table__footer-blind fixed" />
@@ -85,6 +99,7 @@ import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import orderBy from 'lodash/orderBy'
 import VoteTableVoteItem from './VoteTableVoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
+import { confirmOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'VoteTable',
@@ -95,6 +110,8 @@ export default {
 		VoteTableHeaderItem,
 		VoteTableVoteItem,
 	},
+
+	mixins: [confirmOption],
 
 	props: {
 		tableMode: {
@@ -178,10 +195,6 @@ export default {
 		display: flex;
 	}
 
-	.vote-table-vote-item {
-		width: 84px;
-	}
-
 	//set default style for confirmed options
 	.vote-table__header,
 	.vote-table__vote-row,
@@ -204,9 +217,9 @@ export default {
 
 // justify styles for mobile view
 .vote-table.mobile {
-	grid-template-columns: auto 1fr auto;
+	grid-template-columns: auto 1fr;
 	grid-template-rows: auto;
-	grid-template-areas: "vote header footer";
+	grid-template-areas: "vote header";
 	justify-items: stretch;
 
 	.vote-table__header {
@@ -246,22 +259,6 @@ export default {
 	}
 
 	.vote-table__header {
-		.option-item {
-			flex: 2;
-			order: 1;
-		}
-
-		.counter {
-			flex: 1;
-			order: 2;
-		}
-
-		.confirmation {
-			order: 0;
-			padding-left: 35px;
-			padding-right: 35px;
-		}
-
 		> div.confirmed {
 			border-left: none !important;
 			border-bottom-left-radius: 0;
@@ -276,6 +273,7 @@ export default {
 			border-bottom-right-radius: 0;
 		}
 	}
+
 }
 
 .vote-table.desktop {
@@ -325,6 +323,11 @@ export default {
 	.vote-table__footer {
 		grid-area: footer;
 		flex-direction: row;
+		> div {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 
 	.vote-table__header,
@@ -349,6 +352,10 @@ export default {
 		&.currentuser {
 			order: 0;
 		}
+	}
+
+	.vote-table-vote-item {
+		width: 84px;
 	}
 
 	// fixed column

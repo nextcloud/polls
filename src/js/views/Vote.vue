@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent>
+	<AppContent :class="{ expired: expired }">
 		<div class="header-actions">
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">

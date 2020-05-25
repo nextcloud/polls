@@ -27,7 +27,8 @@
 		<Confirmation v-if="isConfirmed" :option="option" />
 		<Counter v-else :show-maybe="Boolean(poll.allowMaybe)"
 			:option="option"
-			:bubble-style="!tableMode" />
+			:bubble-style="!tableMode"
+			:show-no="!tableMode" />
 	</div>
 </template>
 
@@ -60,6 +61,7 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
@@ -79,13 +81,15 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .vote-table-header-item {
 	display: flex;
 	&.winner {
-		font-weight: bold;
-		color: var(--color-polls-foreground-yes);
+		.option-item {
+			font-weight: bold;
+			color: var(--color-polls-foreground-yes);
+		}
 	}
 	.option-item {
 		flex: 1;
@@ -97,8 +101,18 @@ export default {
 	height: 2em;
 }
 
-.confirmAction {
-	font-size: 80%;
+.mobile {
+	.counter {
+		flex: 1;
+		order: 2;
+		width: 130px;
+	}
+
+	.confirmation {
+		background-position: left;
+		order: 0;
+		padding: 0 15px;
+	}
 }
 
 </style>

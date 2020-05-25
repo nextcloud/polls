@@ -65,6 +65,7 @@ import ConfigBox from '../Base/ConfigBox'
 import draggable from 'vuedraggable'
 import OptionItem from '../Base/OptionItem'
 import InputDiv from '../Base/InputDiv'
+import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'SideBarTabOptionsText',
@@ -77,6 +78,11 @@ export default {
 		InputDiv,
 		OptionItem,
 	},
+
+	mixins: [
+		confirmOption,
+		removeOption,
+	],
 
 	data() {
 		return {
@@ -113,16 +119,6 @@ export default {
 						this.newPollText = ''
 					})
 			}
-		},
-
-		removeOption(option) {
-			this.$store.dispatch('removeOptionAsync', {
-				option: option,
-			})
-		},
-
-		confirmOption(option) {
-			this.$store.dispatch('updateOptionAsync', { option: { ...option, confirmed: !option.confirmed } })
 		},
 	},
 }

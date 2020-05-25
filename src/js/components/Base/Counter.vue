@@ -85,7 +85,7 @@ export default {
 <style lang="scss">
 .counter {
 	display: flex;
-	padding: 14px 0;
+	// padding: 14px 0;
 }
 .counter--icon {
 	display: flex;
@@ -135,7 +135,8 @@ export default {
 	}
 
 	.no {
-		background-color: var(--color-polls-foreground-no);
+		// background-color: var(--color-polls-foreground-no);
+		background-color: transparent;
 	}
 
 }
