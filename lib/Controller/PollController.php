@@ -143,7 +143,7 @@
 				// TODO: Not the elegant way. Improvement neccessary
 				foreach ($polls as $poll) {
 					$combinedPoll = (object) array_merge(
-        				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->setPollId($poll->getId()))));
+						(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->setPollId($poll->getId()))));
 					if ($combinedPoll->allowView) {
 						$pollList[] = $combinedPoll;
 					}
@@ -189,7 +189,7 @@
 			}
 
 			if ($this->acl->getAllowSeeUsernames()) {
-				$comments =  $this->commentMapper->findByPoll($pollId);
+				$comments = $this->commentMapper->findByPoll($pollId);
 
 				if ($this->acl->getAllowSeeResults()) {
 					$votes = $this->voteMapper->findByPoll($pollId);
@@ -290,8 +290,8 @@
 			}
 
 			if (!$this->poll->getDeleted()) {
-                $this->logger->alert('user ' . $this->userId . ' trying to permanently delete active poll');
-                return new DataResponse(['message' => 'Permanent deletion of active poll.'], Http::STATUS_CONFLICT);
+				$this->logger->alert('user ' . $this->userId . ' trying to permanently delete active poll');
+				return new DataResponse(['message' => 'Permanent deletion of active poll.'], Http::STATUS_CONFLICT);
 			}
 
 			$this->pollMapper->delete($this->poll);
