@@ -43,17 +43,6 @@ export default {
 		SideBarTabOptionsText,
 	},
 
-	data() {
-		return {
-			lastOption: '',
-			move: {
-				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year'],
-			},
-		}
-	},
-
 	computed: {
 		...mapState({
 			poll: state => state.poll,

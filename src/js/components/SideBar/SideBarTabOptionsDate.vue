@@ -75,6 +75,7 @@ import OptionItem from '../Base/OptionItem'
 import moment from '@nextcloud/moment'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
+import { dateUnits } from '../../mixins/dateMixins'
 
 export default {
 	name: 'SideBarTabOptionsDate',
@@ -92,6 +93,7 @@ export default {
 
 	mixins: [
 		confirmOption,
+		dateUnits,
 		removeOption,
 	],
 
@@ -105,14 +107,6 @@ export default {
 				step: 1,
 				amount: 1,
 			},
-			dateUnits: [
-				{ name: t('polls', 'Minute'), value: 'minute' },
-				{ name: t('polls', 'Hour'), value: 'hour' },
-				{ name: t('polls', 'Day'), value: 'day' },
-				{ name: t('polls', 'Week'), value: 'week' },
-				{ name: t('polls', 'Month'), value: 'month' },
-				{ name: t('polls', 'Year'), value: 'year' },
-			],
 		}
 	},
 

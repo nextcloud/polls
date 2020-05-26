@@ -53,6 +53,7 @@ import { mapState } from 'vuex'
 import ConfigBox from '../Base/ConfigBox'
 import moment from '@nextcloud/moment'
 import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import { dateUnits } from '../../mixins/dateMixins'
 
 export default {
 	name: 'OptionAddDate',
@@ -64,6 +65,8 @@ export default {
 		Multiselect,
 	},
 
+	mixins: [dateUnits],
+
 	data() {
 		return {
 			sequence: {
@@ -72,14 +75,6 @@ export default {
 				step: 1,
 				amount: 1,
 			},
-			dateUnits: [
-				{ name: t('polls', 'Minute'), value: 'minute' },
-				{ name: t('polls', 'Hour'), value: 'hour' },
-				{ name: t('polls', 'Day'), value: 'day' },
-				{ name: t('polls', 'Week'), value: 'week' },
-				{ name: t('polls', 'Month'), value: 'month' },
-				{ name: t('polls', 'Year'), value: 'year' },
-			],
 			shift: {
 				step: 1,
 				unit: { name: t('polls', 'Week'), value: 'week' },

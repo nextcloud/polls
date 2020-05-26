@@ -48,6 +48,7 @@
 
 import moment from '@nextcloud/moment'
 import { Multiselect } from '@nextcloud/vue'
+import { dateUnits } from '../../mixins/dateMixins'
 
 export default {
 	name: 'OptionCloneDate',
@@ -55,6 +56,8 @@ export default {
 	components: {
 		Multiselect,
 	},
+
+	mixins: [dateUnits],
 
 	props: {
 		option: {
@@ -65,14 +68,6 @@ export default {
 
 	data() {
 		return {
-			dateUnits: [
-				{ name: t('polls', 'Minute'), value: 'minute' },
-				{ name: t('polls', 'Hour'), value: 'hour' },
-				{ name: t('polls', 'Day'), value: 'day' },
-				{ name: t('polls', 'Week'), value: 'week' },
-				{ name: t('polls', 'Month'), value: 'month' },
-				{ name: t('polls', 'Year'), value: 'year' },
-			],
 			sequence: {
 				unit: { name: t('polls', 'Week'), value: 'week' },
 				step: 1,
@@ -98,7 +93,6 @@ export default {
 				})
 			}
 			this.modal = false
-			// this.sequence.baseOption = {}
 		},
 	},
 }
