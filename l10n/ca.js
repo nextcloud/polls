@@ -14,7 +14,7 @@ OC.L10N.register(
     "Create new poll" : "Crea una nova enquesta",
     "Poll type" : "Tipus d'enquesta",
     "Date poll" : "Enquesta de dates",
-    "Text based" : "Basat en text",
+    "Text based" : "Basada en text",
     "Cancel" : "Cancel·la",
     "Apply" : "Aplica",
     "My polls" : "Les meves enquestes",

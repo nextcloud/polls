@@ -12,6 +12,7 @@ OC.L10N.register(
     "Title" : "العنوان",
     "Access" : "النفاذ",
     "Owner" : "المالك",
+    "Created" : "أُنشئ",
     "never" : "بتاتاً",
     "Details" : "التفاصيل",
     "Configuration" : "إعداد",

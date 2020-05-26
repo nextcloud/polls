@@ -110,11 +110,13 @@ OC.L10N.register(
     "Public shares" : "Partekatze publikoak",
     "Public link (" : "Esteka publikoa (",
     "Add a public link" : "Gehitu esteka publikoa",
+    "Enter a name to start the search" : "Sartu izen bat bilaketa hasteko",
     "Link copied to clipboard" : "Arbelara kopiatutako esteka",
     "Error while copying link to clipboard" : "Errorea esteka arbelera kopiatzean",
     "Unknown user" : "Erabiltzaile ezezaguna",
     "Group" : "Taldea",
     "Public share" : "Partekatze publikoa",
+    "Error while adding share" : "Errorea partekatzea gehitzerakoan",
     "Your personal link to this poll: %n" : "Zure esteka pertsonala inkesta honetara: %n",
     "Enter your name!" : "Sartu zure izena!",
     "Enter your name" : "Sartu zure izena",
@@ -133,6 +135,7 @@ OC.L10N.register(
     "This is simply the trash bin." : "Hau zakarrontzia besterik ez da.",
     "All polls, where you placed a vote." : "Botoa eman duzun inkesta guztiak.",
     "All polls, where you have access to." : "Sarbidea duzun inkesta guztiak.",
+    "Switch view" : "Aldatu bista",
     "Expired" : "Iraungita",
     "Deleted" : "Ezabatuta",
     "Place your votes until %n" : "Bozkatu %narte",
@@ -142,6 +145,8 @@ OC.L10N.register(
     "Deleted poll permanently." : "Ezabatu inkesta betirako.",
     "Error cloning poll." : "Errorea inkesta klonatzean.",
     "Error sending invitation mail to %n." : "Errorea gonbidapen e-posta %n(e)ri bidaltzerakoan.",
-    "Access denied" : "Sarbidea ukatua"
+    "User {userId} removed" : "{userId} erabiltzailea kenduta",
+    "Access denied" : "Sarbidea ukatua",
+    "You are either not allowed to delete this poll or it doesn't exist." : "Ez duzu baimenik inkesta hau ezabatzeko edo ez da existitzen."
 },
 "nplurals=2; plural=(n != 1);");
