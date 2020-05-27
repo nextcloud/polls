@@ -120,6 +120,7 @@ OC.L10N.register(
     "Your personal link to this poll: %n" : "Zure esteka pertsonala inkesta honetara: %n",
     "Enter your name!" : "Sartu zure izena!",
     "Enter your name" : "Sartu zure izena",
+    "This username is not valid, i.e. because it is already in use." : "Erabiltzailea baliogabea da, adib. erabiltzen ari delako dagoeneko.",
     "You have an account? Log in here." : "Kontua daukazu? Hasi saioa hemen.",
     "This username can not be chosen." : "Erabiltzaile-izen hau ezin da aukeratu.",
     "Error saving username" : "Errorea erabiltzaile-izena gordetzean",
