@@ -57,7 +57,7 @@ export default {
 		writeComment() {
 			if (this.comment) {
 				this.isLoading = true
-				this.$store.dispatch('setCommentAsync', { message: this.comment })
+				this.$store.dispatch('poll/comments/add', { message: this.comment })
 					.then(() => {
 						this.isLoading = false
 						OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })

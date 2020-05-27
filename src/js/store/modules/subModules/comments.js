@@ -32,6 +32,8 @@ const defaultComments = () => {
 
 const state = defaultComments()
 
+const namespaced = true
+
 const mutations = {
 
 	set(state, payload) {
@@ -42,11 +44,11 @@ const mutations = {
 		Object.assign(state, defaultComments())
 	},
 
-	addComment(state, payload) {
+	add(state, payload) {
 		state.comments.push(payload)
 	},
 
-	removeComment(state, payload) {
+	delete(state, payload) {
 		state.comments = state.comments.filter(comment => {
 			return comment.id !== payload.comment.id
 		})
@@ -54,13 +56,13 @@ const mutations = {
 }
 
 const getters = {
-	countComments: state => {
+	count: state => {
 		return state.comments.length
 	},
 }
 
 const actions = {
-	deleteComment(context, payload) {
+	delete(context, payload) {
 		let endPoint = 'apps/polls/comment/delete/'
 
 		if (context.rootState.acl.foundByToken) {
@@ -72,7 +74,7 @@ const actions = {
 			comment: payload.comment,
 		})
 			.then((response) => {
-				context.commit('removeComment', { comment: response.data.comment })
+				context.commit('delete', { comment: response.data.comment })
 				return response.data
 			}, (error) => {
 				console.error('Error deleting comment', { error: error.response }, { payload: payload })
@@ -81,7 +83,7 @@ const actions = {
 
 	},
 
-	setCommentAsync(context, payload) {
+	add(context, payload) {
 		let endPoint = 'apps/polls/comment/write/'
 
 		if (context.rootState.acl.foundByToken) {
@@ -95,7 +97,7 @@ const actions = {
 			userId: context.rootState.acl.userId,
 		})
 			.then((response) => {
-				context.commit('addComment', response.data)
+				context.commit('add', response.data)
 				return response.data
 			}, (error) => {
 				console.error('Error writing comment', { error: error.response }, { payload: payload })
@@ -104,4 +106,4 @@ const actions = {
 	},
 }
 
-export default { state, mutations, actions, getters }
+export default { namespaced, state, mutations, actions, getters }
