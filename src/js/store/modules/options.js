@@ -38,6 +38,10 @@ const mutations = {
 		state.options = payload.options
 	},
 
+	setOptions(state, payload) {
+		state.options = payload.options
+	},
+
 	reset(state) {
 		Object.assign(state, defaultOptions())
 	},
@@ -105,10 +109,14 @@ const getters = {
 
 const actions = {
 	reorderOptions(context, payload) {
-		payload.forEach((item, i) => {
-			item.order = i + 1
-			context.dispatch('updateOptionAsync', { option: item })
-		})
+		const endPoint = 'apps/polls/option/reorder'
+		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, options: payload })
+			.then((response) => {
+				context.commit('setOptions', { options: response.data })
+			}, (error) => {
+				console.error('Error reordering option', { error: error.response }, { payload: payload })
+				throw error
+			})
 	},
 
 	updateOptions(context) {

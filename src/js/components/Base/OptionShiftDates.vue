@@ -104,7 +104,7 @@ export default {
 				const option = Object.assign({}, existingOption)
 				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
-				store.dispatch('updateOptionAsync', { option: option })
+				store.dispatch('options/updateSingle', { option: option })
 			})
 		},
 	},

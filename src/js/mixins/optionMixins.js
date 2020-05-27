@@ -1,7 +1,7 @@
 export const confirmOption = {
 	methods: {
 		confirmOption(option) {
-			this.$store.dispatch('updateOptionAsync', { option: { ...option, confirmed: !option.confirmed } })
+			this.$store.dispatch('options/updateSingle', { option: { ...option, confirmed: !option.confirmed } })
 		},
 	},
 }
