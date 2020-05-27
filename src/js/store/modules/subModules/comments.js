@@ -65,12 +65,12 @@ const actions = {
 	delete(context, payload) {
 		let endPoint = 'apps/polls/comment/delete/'
 
-		if (context.rootState.acl.foundByToken) {
+		if (context.rootState.poll.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(generateUrl(endPoint), {
-			token: context.rootState.acl.token,
+			token: context.rootState.poll.acl.token,
 			comment: payload.comment,
 		})
 			.then((response) => {
@@ -86,15 +86,15 @@ const actions = {
 	add(context, payload) {
 		let endPoint = 'apps/polls/comment/write/'
 
-		if (context.rootState.acl.foundByToken) {
+		if (context.rootState.poll.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			token: context.rootState.acl.token,
+			token: context.rootState.poll.acl.token,
 			message: payload.message,
-			userId: context.rootState.acl.userId,
+			userId: context.rootState.poll.acl.userId,
 		})
 			.then((response) => {
 				context.commit('add', response.data)

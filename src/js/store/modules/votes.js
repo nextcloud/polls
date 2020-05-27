@@ -97,10 +97,10 @@ const getters = {
 			}
 		}
 
-		if (!map.has(rootState.acl.userId) && rootState.acl.userId && rootState.acl.allowVote) {
+		if (!map.has(rootState.poll.acl.userId) && rootState.poll.acl.userId && rootState.poll.acl.allowVote) {
 			participants.push({
-				userId: rootState.acl.userId,
-				displayName: rootState.acl.displayName,
+				userId: rootState.poll.acl.userId,
+				displayName: rootState.poll.acl.displayName,
 				voted: false,
 			})
 		}
@@ -170,13 +170,13 @@ const actions = {
 	setVoteAsync(context, payload) {
 		let endPoint = 'apps/polls/vote/set/'
 
-		if (context.rootState.acl.foundByToken) {
+		if (context.rootState.poll.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			token: context.rootState.acl.token,
+			token: context.rootState.poll.acl.token,
 			option: payload.option,
 			userId: payload.userId,
 			setTo: payload.setTo,
