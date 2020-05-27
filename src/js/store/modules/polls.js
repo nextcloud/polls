@@ -30,18 +30,16 @@ const state = {
 	polls: [],
 }
 
+const namespaced = true
+
 const mutations = {
-	setPolls(state, payload) {
+	set(state, payload) {
 		Object.assign(state, payload)
 	},
 }
 
 const getters = {
-	countPolls: (state) => {
-		return state.polls.length
-	},
-
-	filteredPolls: (state) => (filterId) => {
+	filtered: (state) => (filterId) => {
 		if (filterId === 'all') {
 			return state.polls.filter(poll => (!poll.deleted))
 		} else if (filterId === 'my') {
@@ -72,12 +70,12 @@ const getters = {
 }
 
 const actions = {
-	loadPolls(context) {
+	load(context) {
 		const endPoint = 'apps/polls/polls/list/'
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPolls', { polls: response.data })
+				context.commit('set', { polls: response.data })
 			}, (error) => {
 				OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
 				console.error('Error loading polls', { error: error.response })
@@ -95,7 +93,7 @@ const actions = {
 			})
 	},
 
-	deletePermanently(context, payload) {
+	delete(context, payload) {
 		const endPoint = 'apps/polls/polls/delete/permanent/'
 		return axios.get(generateUrl(endPoint + payload.pollId))
 			.then((response) => {
@@ -107,7 +105,7 @@ const actions = {
 			})
 	},
 
-	clonePoll(context, payload) {
+	clone(context, payload) {
 		const endPoint = 'apps/polls/polls/clone/'
 		return axios.get(generateUrl(endPoint + payload.pollId))
 			.then((response) => {
@@ -121,4 +119,4 @@ const actions = {
 
 }
 
-export default { state, mutations, getters, actions }
+export default { namespaced, state, mutations, getters, actions }

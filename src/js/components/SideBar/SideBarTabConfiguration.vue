@@ -293,10 +293,9 @@ export default {
 		deletePermanently() {
 			if (!this.poll.deleted) return
 
-			this.$store
-				.dispatch('deletePermanently', { pollId: this.poll.id })
+			this.$store.dispatch('polls/delete', { pollId: this.poll.id })
 				.then((response) => {
-					this.$router.push({ name: 'list', params: { type: 'deleted' } })
+					emit('update-polls')
 				})
 		},
 

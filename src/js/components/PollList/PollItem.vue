@@ -203,7 +203,7 @@ export default {
 		},
 
 		switchDeleted() {
-			this.$store.dispatch('switchDeleted', { pollId: this.poll.id })
+			this.$store.dispatch('polls/switchDeleted', { pollId: this.poll.id })
 				.then((response) => {
 					emit('update-polls')
 				})
@@ -211,7 +211,7 @@ export default {
 		},
 
 		deletePermanently() {
-			this.$store.dispatch('deletePermanently', { pollId: this.poll.id })
+			this.$store.dispatch('polls/delete', { pollId: this.poll.id })
 				.then((response) => {
 					emit('update-polls')
 				})
@@ -219,7 +219,7 @@ export default {
 		},
 
 		clonePoll() {
-			this.$store.dispatch('clonePoll', { pollId: this.poll.id })
+			this.$store.dispatch('polls/clone', { pollId: this.poll.id })
 				.then((response) => {
 					emit('update-polls')
 				})

@@ -79,7 +79,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters(['filteredPolls']),
+		...mapGetters({
+			filteredPolls: 'polls/filtered',
+		}),
 
 		title() {
 			if (this.$route.params.type === 'my') {
