@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent :class="{ expired: expired }">
+	<AppContent :class="{ expired: isExpired }">
 		<div class="header-actions">
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
@@ -42,11 +42,11 @@
 		<div class="area__header">
 			<h2 class="title">
 				{{ poll.title }}
-				<Badge v-if="expired"
+				<Badge v-if="isExpired"
 					:title="dateExpiryString"
 					icon="icon-calendar"
 					class="error" />
-				<Badge v-if="!expired && poll.expire"
+				<Badge v-if="!isExpired && poll.expire"
 					:title="dateExpiryString"
 					icon="icon-calendar"
 					class="success" />
@@ -129,9 +129,9 @@ export default {
 			options: state => state.options.options,
 		}),
 
-		...mapGetters([
-			'expired',
-		]),
+		...mapGetters({
+			isExpired: 'poll/expired',
+		}),
 
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
@@ -183,7 +183,7 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.$store.dispatch({ type: 'resetPoll' })
+		this.$store.dispatch({ type: 'poll/reset' })
 	},
 
 	methods: {
@@ -201,7 +201,7 @@ export default {
 
 		loadPoll() {
 			this.isLoading = true
-			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
+			this.$store.dispatch({ type: 'poll/load', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
 					if (response.status === 200) {
 						this.isLoading = false

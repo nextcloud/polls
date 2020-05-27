@@ -59,14 +59,16 @@ export default {
 			poll: state => state.poll,
 		}),
 
-		...mapGetters([
-			'participantsVoted',
-			'expired',
-			'confirmedOptions',
-		]),
+		...mapGetters({
+			participantsVoted: 'participantsVoted',
+			expired: 'poll/expired',
+			confirmedOptions: 'confirmedOptions',
+		}),
+
 		dateCreatedString() {
 			return moment.unix(this.poll.created).format('LLLL')
 		},
+
 		dateExpiryString() {
 			return moment.unix(this.poll.expire).format('LLLL')
 		},

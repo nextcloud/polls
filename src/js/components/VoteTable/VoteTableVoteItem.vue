@@ -49,9 +49,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'expired',
-		]),
+		...mapGetters({
+			expired: 'poll/expired',
+		}),
 
 		answer() {
 			try {

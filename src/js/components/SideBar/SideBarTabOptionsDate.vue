@@ -116,7 +116,10 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		...mapGetters(['sortedOptions', 'expired']),
+		...mapGetters({
+			sortedOptions: 'sortedOptions',
+			expired: 'poll/expired',
+		}),
 
 		dateBaseOptionString() {
 			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')

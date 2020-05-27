@@ -96,7 +96,10 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		...mapGetters(['sortedOptions', 'expired']),
+		...mapGetters({
+			sortedOptions: 'sortedOptions',
+			expired: 'poll/expired',
+		}),
 
 		sortOptions: {
 			get() {

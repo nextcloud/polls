@@ -137,11 +137,11 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		...mapGetters([
-			'sortedOptions',
-			'participants',
-			'expired',
-		]),
+		...mapGetters({
+			sortedOptions: 'sortedOptions',
+			participants: 'participants',
+			expired: 'poll/expired',
+		}),
 
 		rankedOptions() {
 			return orderBy(this.sortedOptions, this.ranked ? 'rank' : 'order', 'asc')

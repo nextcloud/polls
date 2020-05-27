@@ -88,9 +88,9 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		...mapGetters([
-			'expired',
-		]),
+		...mapGetters({
+			expired: 'poll/expired',
+		}),
 
 		loginLink() {
 			const redirectUrl = this.$router.resolve({
@@ -189,7 +189,7 @@ export default {
 				this.$store.dispatch('createPersonalShare', { token: this.$route.params.token, userName: this.userName })
 					.then((response) => {
 						if (this.$route.params.token === response.token) {
-							this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
+							this.$store.dispatch({ type: 'poll/load', pollId: this.$route.params.id, token: this.$route.params.token })
 						} else {
 							this.token = response.token
 							this.redirecting = true

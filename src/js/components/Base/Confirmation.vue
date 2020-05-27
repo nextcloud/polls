@@ -47,12 +47,13 @@ export default {
 			votes: state => state.votes.votes,
 		}),
 
-		...mapGetters([
-			'votesRank',
-			'participantsVoted',
-			'expired',
-			'confirmedOptions',
-		]),
+		...mapGetters({
+			votesRank: 'votesRank',
+			participantsVoted: 'participantsVoted',
+			expired: 'poll/expired',
+			confirmedOptions: 'confirmedOptions',
+		}),
+
 		isConfirmed() {
 			return this.option.confirmed && this.expired
 		},

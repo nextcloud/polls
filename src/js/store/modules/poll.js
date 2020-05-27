@@ -48,6 +48,8 @@ const defaultPoll = () => {
 
 const state = defaultPoll()
 
+const namespaced = true
+
 const mutations = {
 	set(state, payload) {
 		Object.assign(state, payload.poll)
@@ -57,7 +59,7 @@ const mutations = {
 		Object.assign(state, defaultPoll())
 	},
 
-	setPollProperty(state, payload) {
+	setProperty(state, payload) {
 		Object.assign(state, payload)
 	},
 
@@ -69,41 +71,46 @@ const getters = {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
-	accessType: (state) => {
-		if (state.access === 'public') {
-			return t('polls', 'Public access')
-		} else if (state.access === 'hidden') {
-			return t('polls', 'Hidden poll')
-		} else {
-			return state.access
-		}
-	},
+	// accessType: (state) => {
+	// 	if (state.access === 'public') {
+	// 		return t('polls', 'Public access')
+	// 	} else if (state.access === 'hidden') {
+	// 		return t('polls', 'Hidden poll')
+	// 	} else {
+	// 		return state.access
+	// 	}
+	// },
 
-	allowEdit: (state, getters, rootState) => {
-		return (rootState.acl.allowEdit)
-	},
+	// allowEdit: (state, getters, rootState) => {
+	// 	return (rootState.acl.allowEdit)
+	// },
 
 }
 
 const actions = {
 
-	resetPoll(context) {
+	reset(context) {
 		context.commit('reset')
 	},
 
-	loadPollMain(context, payload) {
+	load(context, payload) {
 		let endPoint = 'apps/polls/polls/get/'
 		if (payload.token) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
-			context.dispatch('resetPoll')
+			context.commit('reset')
 			return
 		}
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('set', response.data)
+				// context.commit('acl/set', response.data)
+				// context.commit('comments/set', response.data)
+				// context.commit('options/set', response.data)
+				// context.commit('shares/set', response.data)
+				// context.commit('votes/set', response.data)
 				return response
 			}, (error) => {
 				if (error.response.status !== '404' && error.response.status !== '401') {
@@ -114,7 +121,7 @@ const actions = {
 			})
 	},
 
-	writePollPromise(context) {
+	write(context) {
 		const endPoint = 'apps/polls/polls/write/'
 		return axios.post(generateUrl(endPoint), { poll: state })
 			.then((response) => {
@@ -128,4 +135,4 @@ const actions = {
 	},
 }
 
-export default { state, mutations, getters, actions, defaultPoll }
+export default { namespaced, state, mutations, getters, actions }

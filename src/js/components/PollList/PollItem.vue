@@ -183,7 +183,7 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.$store.dispatch({ type: 'loadPollMain', pollId: this.poll.id })
+			this.$store.dispatch({ type: 'poll/load', pollId: this.poll.id })
 				.then((response) => {
 					emit('toggle-sidebar', { open: true })
 				})
