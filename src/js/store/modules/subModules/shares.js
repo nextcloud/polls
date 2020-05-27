@@ -32,12 +32,14 @@ const defaultShares = () => {
 
 const state = defaultShares()
 
+const namespaced = true
+
 const mutations = {
 	set(state, payload) {
 		state.shares = payload.shares
 	},
 
-	removeShare(state, payload) {
+	delete(state, payload) {
 		state.shares = state.shares.filter(share => {
 			return share.id !== payload.share.id
 		})
@@ -47,51 +49,31 @@ const mutations = {
 		Object.assign(state, defaultShares())
 	},
 
-	addShare(state, payload) {
+	add(state, payload) {
 		state.shares.push(payload)
 	},
 
 }
 
 const getters = {
-	sortedShares: state => {
-		return state.shares
-	},
-
-	invitationShares: state => {
+	invitation: state => {
 		const invitationTypes = ['user', 'group', 'email', 'external', 'contact']
 		return state.shares.filter(share => {
 			return invitationTypes.includes(share.type)
 		})
 	},
 
-	publicShares: state => {
+	public: state => {
 		const invitationTypes = ['public']
 		return state.shares.filter(share => {
 			return invitationTypes.includes(share.type)
 		})
 	},
 
-	countShares: state => {
-		return state.shares.length
-	},
 }
 
 const actions = {
-	getShareAsync(context, payload) {
-
-		const endPoint = 'apps/polls/share/get/'
-
-		return axios.get(generateUrl(endPoint + payload.token))
-			.then((response) => {
-				return { share: response.data }
-			}, (error) => {
-				console.error('Error loading share', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
-	createPersonalShare(context, payload) {
+	addPersonal(context, payload) {
 		const endPoint = 'apps/polls/share/create/s/'
 
 		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
@@ -104,12 +86,12 @@ const actions = {
 
 	},
 
-	writeSharePromise(context, payload) {
+	add(context, payload) {
 		const endPoint = 'apps/polls/share/write/'
 		payload.share.pollId = context.rootState.poll.id
 		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
-				context.commit('addShare', response.data.share)
+				context.commit('add', response.data.share)
 
 				if (response.data.sendResult.sentMails.length > 0) {
 					const sendList = response.data.sendResult.sentMails.map(element => {
@@ -144,11 +126,11 @@ const actions = {
 			})
 	},
 
-	removeShareAsync(context, payload) {
+	delete(context, payload) {
 		const endPoint = 'apps/polls/share/remove/'
 		return axios.post(generateUrl(endPoint), { share: payload.share })
 			.then(() => {
-				context.commit('removeShare', { share: payload.share })
+				context.commit('delete', { share: payload.share })
 			}, (error) => {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
 				throw error
@@ -157,4 +139,4 @@ const actions = {
 
 }
 
-export default { state, mutations, actions, getters }
+export default { namespaced, state, mutations, actions, getters }

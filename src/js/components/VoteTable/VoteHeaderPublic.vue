@@ -186,7 +186,7 @@ export default {
 
 		writeUserName() {
 			if (this.isValidName) {
-				this.$store.dispatch('createPersonalShare', { token: this.$route.params.token, userName: this.userName })
+				this.$store.dispatch('poll/share/addPersonal', { token: this.$route.params.token, userName: this.userName })
 					.then((response) => {
 						if (this.$route.params.token === response.token) {
 							this.$store.dispatch({ type: 'poll/load', pollId: this.$route.params.id, token: this.$route.params.token })

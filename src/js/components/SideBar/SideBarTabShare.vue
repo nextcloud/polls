@@ -136,10 +136,10 @@ export default {
 			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters([
-			'invitationShares',
-			'publicShares',
-		]),
+		...mapGetters({
+			invitationShares: 'poll/shares/invitation',
+			publicShares: 'poll/shares/public',
+		}),
 	},
 
 	methods: {
@@ -171,12 +171,12 @@ export default {
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('removeShareAsync', { share: share })
+			this.$store.dispatch('poll/shares/delete', { share: share })
 		},
 
 		addShare(payload) {
 			this.$store
-				.dispatch('writeSharePromise', {
+				.dispatch('poll/shares/add', {
 					share: {
 						type: payload.type,
 						userId: payload.user,
