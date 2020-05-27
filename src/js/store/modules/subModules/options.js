@@ -33,12 +33,10 @@ const defaultOptions = () => {
 
 const state = defaultOptions()
 
+const namespaced = true
+
 const mutations = {
 	set(state, payload) {
-		state.options = payload.options
-	},
-
-	setOptions(state, payload) {
 		state.options = payload.options
 	},
 
@@ -46,13 +44,13 @@ const mutations = {
 		Object.assign(state, defaultOptions())
 	},
 
-	removeOption(state, payload) {
+	delete(state, payload) {
 		state.options = state.options.filter(option => {
 			return option.id !== payload.option.id
 		})
 	},
 
-	setOption(state, payload) {
+	setItem(state, payload) {
 		const index = state.options.findIndex((option) => {
 			return option.id === payload.option.id
 		})
@@ -66,13 +64,7 @@ const mutations = {
 }
 
 const getters = {
-	lastOptionId: state => {
-		return Math.max.apply(Math, state.options.map(function(option) {
-			return option.id
-		}))
-	},
-
-	sortedOptions: (state, getters, rootState, rootGetters) => {
+	sorted: (state, getters, rootState, rootGetters) => {
 		let rankedOptions = []
 		state.options.forEach((option) => {
 			rankedOptions.push({
@@ -100,7 +92,7 @@ const getters = {
 		return orderBy(rankedOptions, 'order')
 	},
 
-	confirmedOptions: state => {
+	confirmed: state => {
 		return state.options.filter(option => {
 			return option.confirmed > 0
 		})
@@ -108,36 +100,30 @@ const getters = {
 }
 
 const actions = {
-	reorderOptions(context, payload) {
+	reorder(context, payload) {
 		const endPoint = 'apps/polls/option/reorder'
 		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, options: payload })
 			.then((response) => {
-				context.commit('setOptions', { options: response.data })
+				context.commit('set', { options: response.data })
 			}, (error) => {
 				console.error('Error reordering option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	updateOptions(context) {
-		context.state.options.forEach((item, i) => {
-			context.dispatch('updateOptionAsync', { option: item })
-		})
-	},
-
-	updateOptionAsync(context, payload) {
+	update(context, payload) {
 		const endPoint = 'apps/polls/option/update'
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then((response) => {
-				context.commit('setOption', { option: response.data })
+				context.commit('setItem', { option: response.data })
 			}, (error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	addOptionAsync(context, payload) {
+	add(context, payload) {
 		const endPoint = 'apps/polls/option/add/'
 		const option = {}
 
@@ -161,19 +147,19 @@ const actions = {
 
 		return axios.post(generateUrl(endPoint), { option: option })
 			.then((response) => {
-				context.commit('setOption', { option: response.data })
+				context.commit('setItem', { option: response.data })
 			}, (error) => {
 				console.error('Error adding option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	removeOptionAsync(context, payload) {
+	delete(context, payload) {
 		const endPoint = 'apps/polls/option/remove/'
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
-				context.commit('removeOption', { option: payload.option })
+				context.commit('delete', { option: payload.option })
 			}, (error) => {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error
@@ -181,4 +167,4 @@ const actions = {
 	},
 }
 
-export default { state, mutations, getters, actions }
+export default { state, mutations, getters, actions, namespaced }

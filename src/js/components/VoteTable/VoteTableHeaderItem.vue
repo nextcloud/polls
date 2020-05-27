@@ -66,7 +66,7 @@ export default {
 
 		...mapGetters({
 			expired: 'poll/expired',
-			confirmedOptions: 'confirmedOptions',
+			confirmedOptions: 'poll/options/confirmed',
 		}),
 
 		isWinner() {

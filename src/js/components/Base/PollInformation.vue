@@ -62,7 +62,7 @@ export default {
 		...mapGetters({
 			participantsVoted: 'participantsVoted',
 			expired: 'poll/expired',
-			confirmedOptions: 'confirmedOptions',
+			confirmedOptions: 'poll/options/confirmed',
 		}),
 
 		dateCreatedString() {

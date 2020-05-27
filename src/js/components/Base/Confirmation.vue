@@ -51,7 +51,7 @@ export default {
 			votesRank: 'votesRank',
 			participantsVoted: 'participantsVoted',
 			expired: 'poll/expired',
-			confirmedOptions: 'confirmedOptions',
+			confirmedOptions: 'poll/options/confirmed',
 		}),
 
 		isConfirmed() {

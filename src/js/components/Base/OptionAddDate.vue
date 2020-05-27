@@ -74,7 +74,7 @@ export default {
 
 	methods: {
 		addOption(pollOptionText) {
-			this.$store.dispatch('addOptionAsync', { pollOptionText: pollOptionText })
+			this.$store.dispatch('poll/options/add', { pollOptionText: pollOptionText })
 		},
 	},
 }

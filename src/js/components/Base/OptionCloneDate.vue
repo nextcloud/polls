@@ -85,7 +85,7 @@ export default {
 	methods: {
 		createSequence() {
 			for (var i = 0; i < this.sequence.amount; i++) {
-				this.$store.dispatch('addOptionAsync', {
+				this.$store.dispatch('poll/options/add', {
 					pollOptionText: moment.unix(this.option.timestamp).add(
 						this.sequence.step * (i + 1),
 						this.sequence.unit.value

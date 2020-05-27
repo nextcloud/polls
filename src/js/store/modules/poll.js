@@ -26,6 +26,7 @@ import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
 import comments from './subModules/comments.js'
+import options from './subModules/options.js'
 
 const defaultPoll = () => {
 	return {
@@ -43,8 +44,6 @@ const defaultPoll = () => {
 		voteLimit: 0,
 		showResults: 'always',
 		adminAccess: 0,
-		settings: '',
-		options: '',
 	}
 }
 
@@ -54,6 +53,7 @@ const namespaced = true
 const modules = {
 	acl: acl,
 	comments: comments,
+	options: options,
 }
 const mutations = {
 	set(state, payload) {
@@ -108,6 +108,7 @@ const actions = {
 			context.commit('reset')
 			context.commit('acl/reset')
 			context.commit('comments/reset')
+			context.commit('options/reset')
 			return
 		}
 		return axios.get(generateUrl(endPoint))
@@ -115,7 +116,7 @@ const actions = {
 				context.commit('set', response.data)
 				context.commit('acl/set', response.data)
 				context.commit('comments/set', response.data)
-				// context.commit('options/set', response.data)
+				context.commit('options/set', response.data)
 				// context.commit('shares/set', response.data)
 				// context.commit('votes/set', response.data)
 				return response

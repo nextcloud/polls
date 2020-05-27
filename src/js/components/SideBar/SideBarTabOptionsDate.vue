@@ -112,12 +112,12 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options.options,
+			options: state => state.poll.options.options,
 			acl: state => state.poll.acl,
 		}),
 
 		...mapGetters({
-			sortedOptions: 'sortedOptions',
+			sortedOptions: 'poll/options/sorted',
 			expired: 'poll/expired',
 		}),
 
