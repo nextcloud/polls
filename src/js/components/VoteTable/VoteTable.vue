@@ -139,7 +139,7 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			participants: 'participants',
+			participants: 'poll/votes/participants',
 			expired: 'poll/expired',
 		}),
 
@@ -150,7 +150,7 @@ export default {
 
 	methods: {
 		removeUser() {
-			this.$store.dispatch('deleteVotes', {
+			this.$store.dispatch('poll/votes/delete', {
 				userId: this.userToRemove,
 			})
 			this.modal = false
@@ -164,10 +164,10 @@ export default {
 
 		setVote(option, userId) {
 			this.$store
-				.dispatch('setVoteAsync', {
+				.dispatch('poll/votes/set', {
 					option: option,
 					userId: userId,
-					setTo: this.$store.getters.getNextAnswer({
+					setTo: this.$store.getters['poll/votes/getNextAnswer']({
 						option: option,
 						userId: userId,
 					}),

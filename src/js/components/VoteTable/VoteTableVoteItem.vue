@@ -55,7 +55,7 @@ export default {
 
 		answer() {
 			try {
-				return this.$store.getters.getVote({
+				return this.$store.getters['poll/votes/getVote']({
 					option: this.option,
 					userId: this.userId,
 				}).voteAnswer

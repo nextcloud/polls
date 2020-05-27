@@ -32,6 +32,8 @@ const defaultVotes = () => {
 
 const state = defaultVotes()
 
+const namespaced = true
+
 const mutations = {
 	set(state, payload) {
 		state.votes = payload.votes
@@ -45,7 +47,7 @@ const mutations = {
 		state.votes = state.votes.filter(vote => vote.userId !== payload.userId)
 	},
 
-	setVote(state, payload) {
+	setItem(state, payload) {
 		const index = state.votes.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
@@ -107,9 +109,9 @@ const getters = {
 		return participants
 	},
 
-	votesRank: (state, getters, rootGetters) => {
+	ranked: (state, getters, rootGetters) => {
 		let votesRank = []
-		rootGetters.options.options.forEach(function(option) {
+		rootGetters['poll/options/options'].forEach(function(option) {
 			const countYes = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
 			const countMaybe = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
 			const countNo = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
@@ -151,7 +153,7 @@ const getters = {
 }
 
 const actions = {
-	deleteVotes(context, payload) {
+	delete(context, payload) {
 		const endPoint = 'apps/polls/votes/delete/'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
@@ -167,7 +169,7 @@ const actions = {
 			})
 	},
 
-	setVoteAsync(context, payload) {
+	set(context, payload) {
 		let endPoint = 'apps/polls/vote/set/'
 
 		if (context.rootState.poll.acl.foundByToken) {
@@ -182,7 +184,7 @@ const actions = {
 			setTo: payload.setTo,
 		})
 			.then((response) => {
-				context.commit('setVote', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
 				return response.data
 			}, (error) => {
 				console.error('Error setting vote', { error: error.response }, { payload: payload })
@@ -192,4 +194,4 @@ const actions = {
 
 }
 
-export default { state, mutations, getters, actions }
+export default { namespaced, state, mutations, getters, actions }

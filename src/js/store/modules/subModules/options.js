@@ -71,10 +71,10 @@ const getters = {
 				...option,
 				rank: 0,
 				no: 0,
-				yes: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
-				maybe: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
-				realno: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
-				votes: rootGetters.participantsVoted.length,
+				yes: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
+				maybe: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
+				realno: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
+				votes: rootGetters['poll/votes/participantsVoted'].length,
 			})
 		})
 

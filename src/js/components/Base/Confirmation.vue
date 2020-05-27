@@ -44,12 +44,12 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			votes: state => state.votes.votes,
+			votes: state => state.poll.votes.votes,
 		}),
 
 		...mapGetters({
-			votesRank: 'votesRank',
-			participantsVoted: 'participantsVoted',
+			votesRank: 'poll/votes/ranked',
+			participantsVoted: 'poll/votes/participantsVoted',
 			expired: 'poll/expired',
 			confirmedOptions: 'poll/options/confirmed',
 		}),
