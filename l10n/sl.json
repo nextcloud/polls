@@ -119,6 +119,7 @@
     "Receive notification email on activity" : "Pošlji obvestilo o dejavnosti na anketi na elektronski naslov",
     "Your personal link to this poll: %n" : "Osebna povezava na anketo: %n",
     "Enter your name!" : "Vpišite ime!",
+    "To participate, enter a username with at least 3 characters." : "Za izpolnjevanje vpišite veljavno uporabniško ime z vsaj tremi znaki.",
     "Enter your name" : "Vpišite ime",
     "Username is not valid. Please enter at least 3 characters." : "Uporabniško ime ni veljavno. Vpisati je treba vsaj tri znake.",
     "This username is not valid, i.e. because it is already in use." : "Uporabniško ime ni veljavno, ker je že v uporabi.",
