@@ -94,6 +94,7 @@ class SystemController extends Controller {
 	/**
 	 * Get a list of NC users, groups and contacts
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param string $query
 	 * @param bool $getGroups - search in groups
 	 * @param bool $getUsers - search in site users
@@ -311,26 +312,4 @@ class SystemController extends Controller {
 			return $this->userId;
 		}
 	}
-
-
-
-	//
-	//
-	// /**
-	//  * Get some system informations
-	//  * @NoAdminRequired
-	//  * @return DataResponse
-	//  */
-	// public function getSystem() {
-	// 	$data = array();
-	//
-	// 	$data['system'] = [
-	// 		'versionArray' => \OCP\Util::getVersion(),
-	// 		'version' => implode('.', \OCP\Util::getVersion()),
-	// 		'vendor' => $this->getVendor(),
-	// 		'language' => $this->systemConfig->getUserValue($this->userId, 'core', 'lang')
-	// 	];
-	//
-	// 	return new DataResponse($data, Http::STATUS_OK);
-	// }
 }

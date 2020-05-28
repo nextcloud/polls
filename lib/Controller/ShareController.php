@@ -112,6 +112,7 @@ class ShareController extends Controller {
 	 * get
 	 * Read all shares of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
@@ -134,9 +135,9 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * write
 	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param int $pollId
 	 * @param string $message
 	 * @return DataResponse
@@ -161,9 +162,7 @@ class ShareController extends Controller {
 
 		try {
 			$newShare = $this->mapper->insert($newShare);
-			// $this->logger->debug('Share inserted, sending out invitation mail now.');
 			$sendResult = $this->mailService->sendInvitationMail($newShare->getToken());
-			// $this->logger->debug('Sending result ' . json_encode($sendResult));
 
 			return new DataResponse([
 				'share' => $newShare,
@@ -179,9 +178,9 @@ class ShareController extends Controller {
 	/**
 	 * createPersonalShare
 	 * Write a new share to the db and returns the new share as array
-	 * or
 	 * @NoAdminRequired
 	 * @PublicPage
+	 * @NoCSRFRequired
 	 * @param int $pollId
 	 * @param string $message
 	 * @return DataResponse
@@ -212,7 +211,6 @@ class ShareController extends Controller {
 				$userShare->setPollId($publicShare->getPollId());
 				$userShare->setUserId($userName);
 				$userShare->setUserEmail('');
-				$this->logger->debug('Create share: ' . json_encode($userShare));
 				$userShare = $this->mapper->insert($userShare);
 				return new DataResponse($userShare, Http::STATUS_OK);
 
@@ -221,7 +219,6 @@ class ShareController extends Controller {
 				$publicShare->setType('external');
 				$publicShare->setUserId($userName);
 				$this->mapper->update($publicShare);
-				$this->logger->alert(json_encode($publicShare));
 				return new DataResponse($publicShare, Http::STATUS_OK);
 
 			} else {
@@ -238,6 +235,7 @@ class ShareController extends Controller {
 	 * remove
 	 * remove share
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Share $share
 	 * @return DataResponse
 	 */

@@ -68,6 +68,7 @@ class SubscriptionController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
@@ -89,6 +90,7 @@ class SubscriptionController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 */
 	public function set($pollId, $subscribed) {

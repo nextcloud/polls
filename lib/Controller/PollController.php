@@ -239,6 +239,7 @@
 	/**
 	 * delete
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Array $poll
 	 * @return DataResponse
 	 */
@@ -273,6 +274,7 @@
 	/**
 	 * deletePermanently
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Array $poll
 	 * @return DataResponse
 	 */
@@ -305,6 +307,7 @@
 	/**
 	 * write
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Array $poll
 	 * @return DataResponse
 	 */
@@ -360,6 +363,7 @@
 	/**
 	 * clone
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */

@@ -121,6 +121,7 @@ class OptionController extends Controller {
 	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return array Array of Option objects
 	 */
@@ -166,6 +167,7 @@ class OptionController extends Controller {
 	/**
 	 * Add a new Option to poll
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
@@ -189,6 +191,7 @@ class OptionController extends Controller {
 	/**
 	 * Update poll option
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
@@ -212,6 +215,7 @@ class OptionController extends Controller {
 	/**
 	 * Remove a single option
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
@@ -239,6 +243,7 @@ class OptionController extends Controller {
 	/**
 	 * Set order by order of the given array
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Array $options
 	 * @return DataResponse
 	 */
