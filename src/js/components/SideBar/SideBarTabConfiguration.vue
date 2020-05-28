@@ -22,89 +22,106 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin && !acl.isOwner" class="config-box">
-			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
-		</div>
+		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<div v-if="acl.allowEdit" class="config-box">
-			<label class="icon-sound title"> {{ t('polls', 'Title') }} </label>
+		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
 			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text">
-		</div>
+		</ConfigBox>
 
-		<div v-if="acl.allowEdit" class="config-box">
-			<label class="icon-edit title"> {{ t('polls', 'Description') }} </label>
+		<ConfigBox :title="t('polls', 'Description')" icon-class="icon-edit">
 			<textarea v-model="pollDescription" />
-		</div>
+		</ConfigBox>
 
-		<div class="config-box">
-			<label class="title icon-category-customization"> {{ t('polls', 'Poll configurations') }} </label>
-
+		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
 			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
 				type="checkbox" class="checkbox">
-			<label v-if="acl.isOwner" for="adminAccess" class="title"> {{ t('polls', 'Allow admins to edit this poll') }} </label>
+			<label v-if="acl.isOwner" for="adminAccess"> {{ t('polls', 'Allow admins to edit this poll') }}</label>
 
-			<input id="allowMaybe" v-model="pollAllowMaybe"
-				type="checkbox" class="checkbox">
-			<label for="allowMaybe" class="title"> {{ t('polls', 'Allow "maybe" vote') }} </label>
+			<input id="allowMaybe"
+				v-model="pollAllowMaybe"
+				type="checkbox"
+				class="checkbox">
+			<label for="allowMaybe"> {{ t('polls', 'Allow "maybe" vote') }}</label>
 
-			<input id="anonymous" v-model="pollAnonymous"
-				type="checkbox" class="checkbox">
-			<label for="anonymous" class="title"> {{ t('polls', 'Anonymous poll') }} </label>
+			<input id="anonymous"
+				v-model="pollAnonymous"
+				type="checkbox"
+				class="checkbox">
+			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
 
-			<input id="expiration" v-model="pollExpiration"
-				type="checkbox" class="checkbox">
-			<label class="title" for="expiration"> {{ t('polls', 'Expires') }} </label>
+			<input id="expiration"
+				v-model="pollExpiration"
+				type="checkbox"
+				class="checkbox">
+			<label for="expiration"> {{ t('polls', 'Expires') }}</label>
 
-			<DatetimePicker v-show="pollExpiration"
-				v-model="pollExpire" v-bind="expirationDatePicker" style="width:100%" />
-		</div>
+			<DatetimePicker v-show="pollExpiration" v-model="pollExpire" v-bind="expirationDatePicker" />
+		</ConfigBox>
 
-		<div class="config-box">
-			<label class="title icon-category-auth"> {{ t('polls', 'Access') }} </label>
+		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
+			<input id="hidden"
+				v-model="pollAccess"
+				value="hidden"
+				type="radio"
+				class="radio">
+			<label for="hidden">{{ t('polls', 'Hidden to other users') }}</label>
 
-			<input id="hidden" v-model="pollAccess" value="hidden"
-				type="radio" class="radio">
-			<label for="hidden" class="title">{{ t('polls', 'Hidden to other users') }} </label>
+			<input id="public"
+				v-model="pollAccess"
+				value="public"
+				type="radio"
+				class="radio">
+			<label for="public">{{ t('polls', 'Visible to other users') }}</label>
+		</ConfigBox>
 
-			<input id="public" v-model="pollAccess" value="public"
-				type="radio" class="radio">
-			<label for="public" class="title">{{ t('polls', 'Visible to other users') }} </label>
-		</div>
+		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
+			<input id="always"
+				v-model="pollShowResults"
+				value="always"
+				type="radio"
+				class="radio">
+			<label for="always">{{ t('polls', 'Always show results') }}</label>
 
-		<div class="config-box">
-			<label class="title icon-screen"> {{ t('polls', 'Result display') }} </label>
+			<input id="expired"
+				v-model="pollShowResults"
+				value="expired"
+				type="radio"
+				class="radio">
+			<label for="expired">{{ t('polls', 'Hide results until poll is expired') }}</label>
 
-			<input id="always" v-model="pollShowResults" value="always"
-				type="radio" class="radio">
-			<label for="always" class="title">{{ t('polls', 'Always show results') }} </label>
+			<input id="never"
+				v-model="pollShowResults"
+				value="never"
+				type="radio"
+				class="radio">
+			<label for="never">{{ t('polls', 'Never show results') }}</label>
+		</ConfigBox>
 
-			<input id="expired" v-model="pollShowResults" value="expired"
-				type="radio" class="radio">
-			<label for="expired" class="title">{{ t('polls', 'Hide results until poll is expired') }} </label>
-
-			<input id="never" v-model="pollShowResults" value="never"
-				type="radio" class="radio">
-			<label for="never" class="title">{{ t('polls', 'Never show results') }} </label>
-		</div>
-
-		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
+		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'"
+			:title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
 			@click="switchDeleted()" />
-		<ButtonDiv v-if="poll.deleted" icon="icon-delete" class="error"
+		<ButtonDiv v-if="poll.deleted"
+			icon="icon-delete"
+			class="error"
 			:title="t('polls', 'Delete poll permanently')"
 			@click="deletePermanently()" />
 	</div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { DatetimePicker } from '@nextcloud/vue'
+import { emit } from '@nextcloud/event-bus'
+import ConfigBox from '../Base/ConfigBox'
+import debounce from 'lodash/debounce'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
-		DatetimePicker
+		DatetimePicker,
+		ConfigBox,
 	},
 
 	data() {
@@ -112,14 +129,14 @@ export default {
 			writingPoll: false,
 			sidebar: false,
 			titleEmpty: false,
-			setExpiration: false
+			setExpiration: false,
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		// Add bindings
@@ -129,7 +146,7 @@ export default {
 			},
 			set(value) {
 				this.writeValueDebounced({ description: value })
-			}
+			},
 		},
 
 		pollTitle: {
@@ -138,7 +155,7 @@ export default {
 			},
 			set(value) {
 				this.writeValueDebounced({ title: value })
-			}
+			},
 		},
 
 		pollAccess: {
@@ -147,7 +164,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ access: value })
-			}
+			},
 		},
 
 		pollShowResults: {
@@ -156,7 +173,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ showResults: value })
-			}
+			},
 		},
 
 		pollExpire: {
@@ -166,7 +183,7 @@ export default {
 			set(value) {
 
 				this.writeValue({ expire: moment(value).unix() })
-			}
+			},
 		},
 
 		pollExpiration: {
@@ -180,7 +197,7 @@ export default {
 					this.writeValue({ expire: 0 })
 
 				}
-			}
+			},
 		},
 
 		pollAnonymous: {
@@ -189,7 +206,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ anonymous: value })
-			}
+			},
 		},
 
 		pollAdminAccess: {
@@ -198,7 +215,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ adminAccess: value })
-			}
+			},
 		},
 
 		pollAllowMaybe: {
@@ -207,7 +224,7 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ allowMaybe: value })
-			}
+			},
 		},
 
 		firstDOW() {
@@ -233,9 +250,9 @@ export default {
 						months: moment.months(),
 						monthsShort: moment.monthsShort(),
 						weekdays: moment.weekdays(),
-						weekdaysMin: moment.weekdaysMin()
-					}
-				}
+						weekdaysMin: moment.weekdaysMin(),
+					},
+				},
 			}
 		},
 
@@ -247,7 +264,7 @@ export default {
 			} else {
 				return t('polls', 'Create new poll')
 			}
-		}
+		},
 	},
 	methods: {
 
@@ -290,7 +307,7 @@ export default {
 				this.$store.dispatch('writePollPromise')
 					.then(() => {
 						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.poll.title), { type: 'success' })
-						this.$root.$emit('updatePolls')
+						emit('update-polls')
 					})
 				this.writingPoll = false
 			}
@@ -301,7 +318,7 @@ export default {
 				this.writePoll()
 			}
 
-		}
-	}
+		},
+	},
 }
 </script>

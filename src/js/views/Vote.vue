@@ -22,55 +22,47 @@
 
 <template>
 	<AppContent>
-		<div class="main-container">
-			<div class="header-actions">
-				<Actions>
-					<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
-						{{ t('polls', 'Switch view') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-settings" @click="toggleSideBar()">
-						{{ t('polls', 'Toggle Sidebar') }}
-					</ActionButton>
-				</Actions>
-			</div>
+		<div class="header-actions">
+			<Actions>
+				<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
+					{{ t('polls', 'Switch view') }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton icon="icon-settings" @click="toggleSideBar()">
+					{{ t('polls', 'Toggle Sidebar') }}
+				</ActionButton>
+			</Actions>
+		</div>
+		<div class="vote__introduction">
 			<h2 class="title">
 				{{ poll.title }}
 				<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
-				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
+				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, dateExpiryString) }}</span>
 				<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
 			</h2>
 			<PollInformation />
-
-			<VoteHeaderPublic v-if="!OC.currentUser" />
+			<VoteHeaderPublic v-if="!getCurrentUser()" />
 
 			<h3 class="description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</h3>
+		</div>
 
-			<VoteList v-show="!tableMode && options.list.length" />
+		<VoteTable v-show="options.length" :table-mode="tableMode" />
 
-			<VoteTable v-show="tableMode && options.list.length" />
-
-			<div v-if="!options.list.length" class="emptycontent">
-				<div class="icon-toggle-filelist" />
-				<button v-if="acl.allowEdit" @click="openOptions">
-					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
-				</button>
-				<div v-if="!acl.allowEdit">
-					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
-				</div>
-			</div>
-
-			<Subscription v-if="OC.currentUser" />
-
-			<div class="additional">
-				<ParticipantsList v-if="acl.allowSeeUsernames" />
+		<div v-if="!options.length" class="emptycontent">
+			<div class="icon-toggle-filelist" />
+			<button v-if="acl.allowEdit" @click="openOptions">
+				{{ t('polls', 'There are no vote options, add some in the options section of the right sidebar.') }}
+			</button>
+			<div v-if="!acl.allowEdit">
+				{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
 			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen" :active="activeTab" @closeSideBar="toggleSideBar" />
+		<Subscription v-if="getCurrentUser()" />
+		<ParticipantsList v-if="acl.allowSeeUsernames" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -82,10 +74,10 @@ import ParticipantsList from '../components/Base/ParticipantsList'
 import PollInformation from '../components/Base/PollInformation'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
 import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
-import SideBar from '../components/SideBar/SideBar'
-import VoteList from '../components/VoteTable/VoteList'
 import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState, mapGetters } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'Vote',
@@ -98,20 +90,15 @@ export default {
 		PollInformation,
 		LoadingOverlay,
 		VoteHeaderPublic,
-		SideBar,
 		VoteTable,
-		VoteList
 	},
 
 	data() {
 		return {
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: (window.innerWidth > 920),
 			isLoading: true,
-			initialTab: 'comments',
-			tableMode: true,
-			activeTab: 'comments'
+			tableMode: (window.innerWidth > 480),
 		}
 	},
 
@@ -119,38 +106,48 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.acl,
-			options: state => state.options
+			options: state => state.options.options,
 		}),
 
 		...mapGetters([
-			'expired'
+			'expired',
 		]),
 
 		windowTitle: function() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
-		}
+		},
 
+		dateExpiryString() {
+			return moment.unix(this.poll.expire).format('LLLL')
+		},
 	},
 
 	watch: {
 		$route() {
 			this.loadPoll()
-		}
+		},
 	},
 
 	created() {
 		this.loadPoll()
+		emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+	},
+
+	beforeDestroy() {
+		this.$store.dispatch({ type: 'resetPoll' })
 	},
 
 	methods: {
 		openOptions() {
-			this.sideBarOpen = true
-			this.activeTab = 'options'
+			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
 
 		openConfiguration() {
-			this.sideBarOpen = true
-			this.activeTab = 'configuration'
+			emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
+		},
+
+		toggleSideBar() {
+			emit('toggle-sidebar')
 		},
 
 		loadPoll() {
@@ -158,13 +155,7 @@ export default {
 			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
 					if (response.status === 200) {
-						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
-							.then(() => {
-								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-									this.openConfiguration()
-								}
-								this.isLoading = false
-							})
+						this.isLoading = false
 						window.document.title = this.windowTitle
 					} else {
 						this.$router.replace({ name: 'notfound' })
@@ -176,43 +167,32 @@ export default {
 					this.$router.replace({ name: 'notfound' })
 				})
 		},
-
-		toggleSideBar() {
-			this.sideBarOpen = !this.sideBarOpen
-		}
-	}
+	},
 }
 </script>
 
 <style lang="scss" scoped>
-#emptycontent, .emptycontent {
+.emptycontent {
 	margin: 44px 0;
 }
 
-.additional {
+.app-content {
 	display: flex;
-	flex-wrap: wrap;
-	.participants {
-		flex: 1;
-	}
-	.comments {
-		flex: 3;
-	}
+	flex-direction: column;
+	padding: 0 8px;
 }
-
+.vote__introduction {
+	padding: 8px;
+	background-color: var(--color-main-background);
+}
 .header-actions {
 	display: flex;
-	float: right;
+	justify-content: end;
 }
 
 .icon.icon-settings.active {
 	display: block;
 	width: 44px;
 	height: 44px;
-}
-@media (max-width: (1024px)) {
-	.title {
-		padding-left: 14px;
-	}
 }
 </style>

@@ -32,33 +32,35 @@ export default {
 	props: {
 		title: {
 			type: String,
-			default: ''
+			default: '',
 		},
 		icon: {
 			type: String,
-			default: ''
+			default: '',
 		},
 		primary: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		tag: {
 			type: String,
-			default: 'button'
-		}
+			default: 'button',
+		},
 	},
 
 	computed: {
 		withIcon() {
 			return Boolean(this.icon)
-		}
-	}
+		},
+	},
 }
 </script>
 
 <style lang="scss" scoped>
 	.button {
 		display: inline-block;
+		overflow: hidden;
+		text-overflow: ellipsis;
 
 		&.withIcon {
 			padding-left: 34px;

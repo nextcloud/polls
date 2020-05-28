@@ -21,63 +21,44 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-
 const defaultAcl = () => {
 	return {
-		userId: OC.getCurrentUser().uid,
-		pollId: null,
-		token: null,
-		isOwner: false,
-		isAdmin: false,
-		allowView: false,
-		allowVote: false,
+		accessLevel: '',
 		allowComment: false,
 		allowEdit: false,
-		allowSeeUsernames: false,
 		allowSeeAllVotes: false,
+		allowSeeResults: false,
+		allowSeeUsernames: false,
+		allowView: false,
+		allowVote: false,
+		displayName: '',
 		foundByToken: false,
+		groupShare: false,
+		isAdmin: false,
+		isOwner: false,
 		loggedIn: false,
-		accessLevel: ''
+		personalShare: false,
+		pollId: null,
+		publicShare: false,
+		token: '',
+		userHasVoted: false,
+		userId: '',
 	}
 }
 
 const state = defaultAcl()
-const namespaced = true
+const namespaced = false
 
 const mutations = {
 
-	setAcl(state, payload) {
+	set(state, payload) {
 		Object.assign(state, payload.acl)
 	},
 
-	resetAcl(state) {
+	reset(state) {
 		Object.assign(state, defaultAcl())
-	}
+	},
 
 }
 
-const actions = {
-
-	loadAcl(context, payload) {
-		let endPoint = 'apps/polls/acl/get/'
-		if (payload.token) {
-			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId) {
-			endPoint = endPoint.concat(payload.pollId)
-		} else {
-			context.commit('resetAcl')
-			return
-		}
-
-		return axios.get(OC.generateUrl(endPoint))
-			.then((response) => {
-				context.commit('setAcl', { acl: response.data })
-			}, (error) => {
-				console.error('Error loading acl', { error: error.response }, { payload: payload })
-				throw error
-			})
-	}
-}
-
-export default { namespaced, state, mutations, actions }
+export default { namespaced, state, mutations }

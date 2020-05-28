@@ -36,7 +36,7 @@ export default {
 	computed: {
 		...mapState({
 			subscription: state => state.subscription,
-			poll: state => state.poll
+			poll: state => state.poll,
 		}),
 
 		subscribe: {
@@ -46,25 +46,26 @@ export default {
 			set(value) {
 				this.$store.commit('setSubscription', value)
 				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.poll.id })
-			}
-		}
+			},
+		},
 	},
 
 	watch: {
 		$route() {
 			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
-		}
+		},
 	},
 
 	created() {
 		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
-	}
+	},
 
 }
 </script>
 
 <style lang="css" scoped>
 	.subscription {
-		margin: 8px 0;
+		padding: 8px;
+		background-color: var(--color-main-background);
 	}
 </style>

@@ -22,45 +22,46 @@
 
 <template>
 	<div>
-		<div class="config-box">
-			<label class="title icon-add">
-				{{ t('polls', 'Add a date option') }}
-			</label>
+		<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
 			<DatetimePicker v-model="lastOption"
 				v-bind="optionDatePicker"
-				style="width:100%"
 				confirm
+				style="width: inherit;"
 				@change="addOption(lastOption)" />
-		</div>
+		</ConfigBox>
 
-		<div class="config-box">
-			<label class="title icon-history">
-				{{ t('polls', 'Shift all date options') }}
-			</label>
+		<ConfigBox v-if="options.length" :title="t('polls', 'Shift all date options')" icon-class="icon-history">
 			<div>
 				<div class="selectUnit">
+					<Actions>
+						<ActionButton icon="icon-play-previous" @click="shift.step--">
+							{{ t('polls', 'Decrease unit') }}
+						</ActionButton>
+					</Actions>
 					<input v-model="shift.step">
-					<Multiselect
-						v-model="shift.unit"
+					<Actions>
+						<ActionButton icon="icon-play-next" @click="shift.step++">
+							{{ t('polls', 'Increase unit') }}
+						</ActionButton>
+					</Actions>
+					<Multiselect v-model="shift.unit"
 						:options="dateUnits"
 						label="name"
 						track-by="value" />
+					<ButtonDiv icon="icon-history"
+						:title="t('polls', 'Shift')"
+						@click="shiftDates(shift)" />
 				</div>
 			</div>
-			<div>
-				<ButtonDiv icon="icon-history" :title="t('polls', 'Shift')"
-					@click="shiftDates(shift)" />
-			</div>
-		</div>
+		</ConfigBox>
 
-		<div class="config-box poll-table">
-			<label class="title icon-calendar-000">
-				{{ t('polls', 'Available Options') }}
-			</label>
-			<ul class="">
-				<PollItemDate v-for="(option) in sortedOptions"
+		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
+			<transition-group is="ul">
+				<OptionItem v-for="(option) in sortedOptions"
 					:key="option.id"
-					:option="option">
+					:option="option"
+					type="datePoll"
+					tag="li">
 					<template v-slot:actions>
 						<Actions v-if="acl.allowEdit" class="action">
 							<ActionButton icon="icon-delete" @click="removeOption(option)">
@@ -74,14 +75,20 @@
 							</ActionButton>
 						</Actions>
 					</template>
-				</PollItemDate>
-			</ul>
+				</OptionItem>
+			</transition-group>
+		</ConfigBox>
+
+		<div v-if="!options.length" class="emptycontent">
+			<div class="icon-calendar" />
+			{{ t('polls', 'There are no vote options specified.') }}
 		</div>
+
 		<Modal v-if="modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
 
-				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: moment.unix(sequence.baseOption.timestamp).format('LLLL')}) }}</p>
+				<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
 				<div>
 					<h3> {{ t('polls', 'Step width: ') }} </h3>
 					<input v-model="sequence.step">
@@ -91,7 +98,7 @@
 						:options="dateUnits"
 						label="name"
 						track-by="value" />
-					<h3> {{ t('polls', 'Number of items to create: ') }} </h3>
+					<h3>{{ t('polls', 'Number of items to create: ') }}</h3>
 					<input v-model="sequence.amount">
 				</div>
 
@@ -105,9 +112,11 @@
 </template>
 
 <script>
-import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
-import PollItemDate from '../Base/PollItemDate'
+import ConfigBox from '../Base/ConfigBox'
+import OptionItem from '../Base/OptionItem'
+import moment from '@nextcloud/moment'
+import { Actions, ActionButton, DatetimePicker, Modal, Multiselect } from '@nextcloud/vue'
 
 export default {
 	name: 'SideBarTabOptionsDate',
@@ -115,10 +124,11 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ConfigBox,
 		DatetimePicker,
 		Modal,
 		Multiselect,
-		PollItemDate
+		OptionItem,
 	},
 
 	data() {
@@ -129,7 +139,7 @@ export default {
 				baseOption: {},
 				unit: { name: t('polls', 'Week'), value: 'week' },
 				step: 1,
-				amount: 1
+				amount: 1,
 			},
 			dateUnits: [
 				{ name: t('polls', 'Minute'), value: 'minute' },
@@ -137,19 +147,19 @@ export default {
 				{ name: t('polls', 'Day'), value: 'day' },
 				{ name: t('polls', 'Week'), value: 'week' },
 				{ name: t('polls', 'Month'), value: 'month' },
-				{ name: t('polls', 'Year'), value: 'year' }
+				{ name: t('polls', 'Year'), value: 'year' },
 			],
 			shift: {
 				step: 1,
-				unit: { name: t('polls', 'Week'), value: 'week' }
-			}
+				unit: { name: t('polls', 'Week'), value: 'week' },
+			},
 		}
 	},
 
 	computed: {
 		...mapState({
-			options: state => state.options,
-			acl: state => state.acl
+			options: state => state.options.options,
+			acl: state => state.acl,
 		}),
 
 		...mapGetters(['sortedOptions']),
@@ -161,6 +171,10 @@ export default {
 			} else {
 				return moment.localeData()._week.dow
 			}
+		},
+
+		dateBaseOptionString() {
+			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')
 		},
 
 		optionDatePicker() {
@@ -177,11 +191,11 @@ export default {
 						months: moment.months(),
 						monthsShort: moment.monthsShort(),
 						weekdays: moment.weekdays(),
-						weekdaysMin: moment.weekdaysMin()
-					}
-				}
+						weekdaysMin: moment.weekdaysMin(),
+					},
+				},
 			}
-		}
+		},
 	},
 
 	methods: {
@@ -192,7 +206,7 @@ export default {
 
 		shiftDates(payload) {
 			const store = this.$store
-			this.options.list.forEach(function(existingOption) {
+			this.options.forEach(function(existingOption) {
 				const option = Object.assign({}, existingOption)
 				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
 				option.timestamp = moment.utc(option.pollOptionText).unix()
@@ -210,7 +224,7 @@ export default {
 					pollOptionText: moment.unix(this.sequence.baseOption.timestamp).add(
 						this.sequence.step * (i + 1),
 						this.sequence.unit.value
-					).format('YYYY-MM-DD HH:mm:ss')
+					).format('YYYY-MM-DD HH:mm:ss'),
 				})
 			}
 			this.modal = false
@@ -224,20 +238,33 @@ export default {
 
 		removeOption(option) {
 			this.$store.dispatch('removeOptionAsync', { option: option })
-		}
+		},
 
-	}
+	},
 
 }
 </script>
 <style lang="scss" scoped>
+	.emptycontent {
+		margin-top: 20vh;
+	}
+
+	.option-item {
+		border-bottom: 1px solid var(--color-border);
+	}
+
 	.selectUnit {
 		display: flex;
+		align-items: center;
 		input {
-			width: 90px;
+			margin: 0 4px;
+			width: 40px;
 		}
 		.multiselect {
-			margin-top: 3px;
+			margin: 0 8px;
+			width: unset !important;
+			min-width: 75px;
+			flex: 1;
 		}
 	}
 </style>

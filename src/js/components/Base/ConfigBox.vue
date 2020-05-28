@@ -20,36 +20,69 @@
   -
   -->
 
-<template>
-	<li class="poll-item date">
-		<div class="pollOption">
-			{{ moment.unix(option.timestamp).format('llll') }}
+<template lang="html">
+	<div class="config-box">
+		<div v-tooltip.auto="info" class="config-box__title" :class="iconClass">
+			{{ title }}
+			<div v-if="info" class="icon-info" />
 		</div>
-		<slot name="actions" />
-	</li>
+		<div class="config-box__container">
+			<slot />
+		</div>
+	</div>
 </template>
 
 <script>
-
 export default {
-	name: 'PollItemDate',
-
-	components: {
-	},
-
+	name: 'ConfigBox',
 	props: {
-		option: {
-			type: Object,
-			required: true
+		title: {
+			type: String,
+			default: '',
 		},
-		showOrder: {
-			type: Boolean,
-			default: false
+		iconClass: {
+			type: String,
+			default: '',
 		},
-		draggable: {
-			type: Boolean,
-			default: false
-		}
-	}
+		info: {
+			type: String,
+			default: '',
+		},
+	},
 }
 </script>
+
+<style lang="scss">
+.config-box {
+	padding: 8px 0;
+}
+
+.config-box__title {
+	display: flex;
+	background-position: 0 4px;
+	opacity: 0.7;
+	font-weight: bold;
+	margin: 8px 0 4px 0;
+	padding-left: 24px;
+
+	.icon-info {
+		opacity: 0.7;
+		width: 32px;
+	}
+}
+
+.config-box__container{
+	display: flex;
+	flex-direction: column;
+	padding-left: 24px;
+
+	label {
+		margin: 4px 0;
+	}
+
+	input, textarea {
+		width: auto;
+	}
+}
+
+</style>

@@ -21,16 +21,18 @@
   -->
 
 <template>
-	<div class="user-row" :class="type">
-		<Avatar :disable-menu="disableMenu" :menu-position="menuPosition" :user="userId"
-			:is-guest="!Boolean(OC.currentUser)"
-			:display-name="displayName"
-
+	<div class="user-div" :class="type">
+		<Avatar :disable-menu="disableMenu"
+			:menu-position="menuPosition"
+			:user="userId"
+			:is-guest="!Boolean(getCurrentUser())"
+			:display-name="resolveDisplayName"
 			:is-no-user="isNoUser" />
-		<div class="avatar" :class="iconClass" />
 
-		<div v-if="!hideNames" class="user-name">
-			{{ displayName }}
+		<div v-if="icon" :class="iconClass" />
+
+		<div v-if="!hideNames" class="user-div__name">
+			{{ resolveDisplayName }}
 		</div>
 		<slot />
 	</div>
@@ -43,44 +45,47 @@ export default {
 	name: 'UserDiv',
 
 	components: {
-		Avatar
+		Avatar,
 	},
 
 	props: {
 		hideNames: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		disableMenu: {
 			type: Boolean,
-			default: false
+			default: true,
 		},
 		menuPosition: {
 			type: String,
-			default: 'left'
+			default: 'left',
 		},
 		userId: {
 			type: String,
-			default: undefined
+			default: undefined,
 		},
 		displayName: {
 			type: String,
-			default: ''
+			default: '',
+		},
+		userEmail: {
+			type: String,
+			default: '',
 		},
 		type: {
 			type: String,
-			default: 'user'
+			default: 'user',
 		},
 		icon: {
 			type: Boolean,
-			default: false
-		}
-
+			default: false,
+		},
 	},
 
 	data() {
 		return {
-			nothidden: false
+			nothidden: false,
 		}
 	},
 
@@ -89,29 +94,52 @@ export default {
 			return this.type !== 'user'
 		},
 
-		isValidUser() {
-			return (this.userId)
-		},
-
 		iconClass() {
 			if (this.icon) {
 				if (this.type === 'contact') {
 					return 'icon-mail'
 				} else if (this.type === 'email') {
 					return 'icon-mail'
+				} else if (this.type === 'external') {
+					return 'icon-share'
 				}
 				return 'icon-' + this.type
 			} else {
 				return ''
 			}
-		}
-	}
+		},
+
+		resolveDisplayName() {
+			let displayName = ''
+
+			if (this.type === 'user') {
+				displayName = this.displayName
+			} else if (this.type === 'contact' || this.type === 'external') {
+				displayName = this.userId
+				if (this.userEmail) {
+					displayName = displayName + ' (' + this.userEmail + ')'
+				}
+			} else if (this.type === 'email') {
+				displayName = this.userEmail
+				if (this.userId) {
+					displayName = this.userId + ' (' + displayName + ')'
+				}
+			} else if (this.type === 'group') {
+				displayName = this.userId + ' (' + t('polls', 'Group') + ')'
+			} else if (this.type === 'public') {
+				displayName = t('polls', 'Public share')
+			} else {
+				displayName = t('polls', 'Unknown user')
+			}
+			return displayName
+		},
+	},
 }
 
 </script>
 
 <style lang="scss">
-.user-row {
+.user-div {
 	display: flex;
 	flex: 1;
 	align-items: center;
@@ -121,24 +149,14 @@ export default {
 	> div {
 		margin: 2px 4px;
 	}
+}
 
-	.description {
-		opacity: 0.7;
-		flex: 0;
-	}
-
-	.avatar {
-		height: 32px;
-		width: 32px;
-		flex: 0;
-	}
-
-	.user-name {
-		opacity: 0.5;
-		flex: 1;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+.user-div__name {
+	opacity: 0.5;
+	flex: 1;
+	width: 50px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 </style>

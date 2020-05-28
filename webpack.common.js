@@ -7,7 +7,8 @@ module.exports = {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
 		filename: 'polls.js',
-		chunkFilename: 'chunks/polls.[name].[contenthash].js'
+		chunkFilename: 'chunks/polls.[name].[contenthash].js',
+		jsonpFunction: 'webpackJsonpOCAPolls',
 	},
 	module: {
 		rules: [
@@ -17,53 +18,53 @@ module.exports = {
 				loader: 'eslint-loader',
 				exclude: /node_modules/,
 				options: {
-					quiet: true
-				}
+					quiet: true,
+				},
 			},
 			{
 				test: /\.css$/,
 				use: [
 					'vue-style-loader',
-					'css-loader'
-				]
+					'css-loader',
+				],
 			},
 			{
 				test: /\.scss$/,
 				use: [
 					'vue-style-loader',
 					'css-loader',
-					'sass-loader'
-				]
+					'sass-loader',
+				],
 			},
 			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
 				options: {
 					compilerOptions: {
-						whitespace: 'condense'
-					}
-				}
+						whitespace: 'condense',
+					},
+				},
 			},
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules/
+				exclude: /node_modules/,
 			},
 			{
 				test: /\.(png|jpg|gif|svg)$/,
 				loader: 'file-loader',
 				options: {
-					name: '[name].[ext]?[hash]'
-				}
-			}
-		]
+					name: '[name].[ext]?[hash]',
+				},
+			},
+		],
 	},
 	plugins: [new VueLoaderPlugin()],
 	resolve: {
 		alias: {
 			vue$: 'vue/dist/vue.esm.js',
-			src: path.resolve(__dirname, 'src/js')
+			src: path.resolve(__dirname, 'src/js'),
 		},
-		extensions: ['*', '.js', '.vue', '.json']
-	}
+		extensions: ['*', '.js', '.vue', '.json'],
+	},
 }

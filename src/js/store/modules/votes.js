@@ -22,39 +22,40 @@
 
 import axios from '@nextcloud/axios'
 import orderBy from 'lodash/orderBy'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultVotes = () => {
 	return {
-		list: []
+		votes: [],
 	}
 }
 
 const state = defaultVotes()
 
 const mutations = {
+	set(state, payload) {
+		state.votes = payload.votes
+	},
+
 	reset(state) {
 		Object.assign(state, defaultVotes())
 	},
 
-	setVotes(state, payload) {
-		Object.assign(state, payload)
-	},
-
 	deleteVotes(state, payload) {
-		state.list = state.list.filter(vote => vote.userId !== payload.userId)
+		state.votes = state.votes.filter(vote => vote.userId !== payload.userId)
 	},
 
 	setVote(state, payload) {
-		const index = state.list.findIndex(vote =>
+		const index = state.votes.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
 			&& vote.voteOptionText === payload.option.pollOptionText)
 		if (index > -1) {
-			state.list[index] = Object.assign(state.list[index], payload.vote)
+			state.votes[index] = Object.assign(state.votes[index], payload.vote)
 		} else {
-			state.list.push(payload.vote)
+			state.votes.push(payload.vote)
 		}
-	}
+	},
 }
 
 const getters = {
@@ -68,67 +69,67 @@ const getters = {
 	},
 
 	participantsVoted: (state, getters) => {
-		const list = []
+		const participantsVoted = []
 		const map = new Map()
-		for (const item of state.list) {
+		for (const item of state.votes) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
-				list.push({
+				participantsVoted.push({
 					userId: item.userId,
-					displayName: item.displayName
+					displayName: item.displayName,
 				})
 			}
 		}
-		return list
+		return participantsVoted
 	},
 
 	participants: (state, getters, rootState) => {
-		const list = []
+		const participants = []
 		const map = new Map()
-		for (const item of state.list) {
+		for (const item of state.votes) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
-				list.push({
+				participants.push({
 					userId: item.userId,
 					displayName: item.displayName,
-					voted: true
+					voted: true,
 				})
 			}
 		}
 
 		if (!map.has(rootState.acl.userId) && rootState.acl.userId && rootState.acl.allowVote) {
-			list.push({
+			participants.push({
 				userId: rootState.acl.userId,
 				displayName: rootState.acl.displayName,
-				voted: false
+				voted: false,
 			})
 		}
-		return list
+		return participants
 	},
 
 	votesRank: (state, getters, rootGetters) => {
-		let rank = []
-		rootGetters.options.list.forEach(function(option) {
-			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
-			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
-			const countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
-			rank.push({
+		let votesRank = []
+		rootGetters.options.options.forEach(function(option) {
+			const countYes = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
+			const countMaybe = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
+			const countNo = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
+			votesRank.push({
 				rank: 0,
 				pollOptionText: option.pollOptionText,
 				yes: countYes,
 				no: countNo,
-				maybe: countMaybe
+				maybe: countMaybe,
 			})
 		})
-		rank = orderBy(rank, ['yes', 'maybe'], ['desc', 'desc'])
-		for (var i = 0; i < rank.length; i++) {
-			if (i > 0 && rank[i].yes === rank[i - 1].yes && rank[i].maybe === rank[i - 1].maybe) {
-				rank[i].rank = rank[i - 1].rank
+		votesRank = orderBy(votesRank, ['yes', 'maybe'], ['desc', 'desc'])
+		for (var i = 0; i < votesRank.length; i++) {
+			if (i > 0 && votesRank[i].yes === votesRank[i - 1].yes && votesRank[i].maybe === votesRank[i - 1].maybe) {
+				votesRank[i].rank = votesRank[i - 1].rank
 			} else {
-				rank[i].rank = i + 1
+				votesRank[i].rank = i + 1
 			}
 		}
-		return rank
+		return votesRank
 	},
 
 	winnerCombo: (state, getters) => {
@@ -136,7 +137,7 @@ const getters = {
 	},
 
 	getVote: (state) => (payload) => {
-		return state.list.find(vote => {
+		return state.votes.find(vote => {
 			return (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})
@@ -149,38 +150,17 @@ const getters = {
 			return getters.answerSequence[1]
 		}
 
-	}
+	},
 
 }
 
 const actions = {
-
-	loadPoll(context, payload) {
-		let endPoint = 'apps/polls/votes/get/'
-		if (payload.token !== undefined) {
-			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId !== undefined) {
-			endPoint = endPoint.concat(payload.pollId)
-		} else {
-			context.commit('reset')
-			return
-		}
-
-		axios.get(OC.generateUrl(endPoint))
-			.then((response) => {
-				context.commit('setVotes', { list: response.data })
-			}, (error) => {
-				console.error('Error loading votes', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
 	deleteVotes(context, payload) {
 		const endPoint = 'apps/polls/votes/delete/'
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			voteId: 0,
-			userId: payload.userId
+			userId: payload.userId,
 		})
 			.then(() => {
 				context.commit('deleteVotes', payload)
@@ -198,12 +178,12 @@ const actions = {
 			endPoint = endPoint.concat('s/')
 		}
 
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			token: context.rootState.acl.token,
 			option: payload.option,
 			userId: payload.userId,
-			setTo: payload.setTo
+			setTo: payload.setTo,
 		})
 			.then((response) => {
 				context.commit('setVote', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
@@ -212,7 +192,7 @@ const actions = {
 				console.error('Error setting vote', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 
 }
 

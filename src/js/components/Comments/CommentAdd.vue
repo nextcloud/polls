@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="comment">
-		<UserDiv :user-id="acl.userId" :focus="true" :display-name="acl.displayName" />
+		<UserDiv v-bind="acl" />
 		<InputDiv v-model="comment" class="addComment" :placeholder="t('polls', 'New comment …')"
 			@input="writeComment()" />
 	</div>
@@ -36,24 +36,21 @@ export default {
 	name: 'CommentAdd',
 
 	components: {
-		InputDiv
+		InputDiv,
 	},
 
 	data() {
 		return {
 			comment: '',
-			isLoading: false
+			isLoading: false,
 		}
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
-		currentUser() {
-			return this.$store.state.acl.userId
-		}
 	},
 
 	methods: {
@@ -73,8 +70,8 @@ export default {
 					})
 			}
 
-		}
-	}
+		},
+	},
 }
 </script>
 

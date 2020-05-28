@@ -106,7 +106,7 @@ class AnonymizeService {
 	 */
 	public function getComments() {
 		// get mapping for the complete poll
-		return (object) $this->anonymize($this->commentMapper->findByPoll($this->pollId));
+		return $this->anonymize($this->commentMapper->findByPoll($this->pollId));
 	}
 
 	/**
@@ -115,7 +115,7 @@ class AnonymizeService {
 	 * @return array Returns anonymized votes
 	 */
 	public function getVotes() {
-		return (object) $this->anonymize($this->voteMapper->findByPoll($this->pollId));
+		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
 	}
 
 

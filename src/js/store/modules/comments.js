@@ -22,10 +22,11 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultComments = () => {
 	return {
-		list: []
+		comments: [],
 	}
 }
 
@@ -33,8 +34,8 @@ const state = defaultComments()
 
 const mutations = {
 
-	setComments(state, payload) {
-		Object.assign(state, payload)
+	set(state, payload) {
+		state.comments = payload.comments
 	},
 
 	reset(state) {
@@ -42,45 +43,23 @@ const mutations = {
 	},
 
 	addComment(state, payload) {
-		state.list.push(payload)
+		state.comments.push(payload)
 	},
 
 	removeComment(state, payload) {
-		state.list = state.list.filter(comment => {
+		state.comments = state.comments.filter(comment => {
 			return comment.id !== payload.comment.id
 		})
-	}
+	},
 }
 
 const getters = {
 	countComments: state => {
-		return state.list.length
-	}
+		return state.comments.length
+	},
 }
 
 const actions = {
-
-	loadPoll(context, payload) {
-		let endPoint = 'apps/polls/comments/get/'
-
-		if (payload.token !== undefined) {
-			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId !== undefined) {
-			endPoint = endPoint.concat(payload.pollId)
-		} else {
-			context.commit('reset')
-			return
-		}
-
-		return axios.get(OC.generateUrl(endPoint))
-			.then((response) => {
-				context.commit('setComments', { list: response.data })
-			}, (error) => {
-				console.error('Error loading comments', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
 	deleteComment(context, payload) {
 		let endPoint = 'apps/polls/comment/delete/'
 
@@ -88,9 +67,9 @@ const actions = {
 			endPoint = endPoint.concat('s/')
 		}
 
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			token: context.rootState.acl.token,
-			comment: payload.comment
+			comment: payload.comment,
 		})
 			.then((response) => {
 				context.commit('removeComment', { comment: response.data.comment })
@@ -109,11 +88,11 @@ const actions = {
 			endPoint = endPoint.concat('s/')
 		}
 
-		return axios.post(OC.generateUrl(endPoint), {
+		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			token: context.rootState.acl.token,
 			message: payload.message,
-			userId: context.rootState.acl.userId
+			userId: context.rootState.acl.userId,
 		})
 			.then((response) => {
 				context.commit('addComment', response.data)
@@ -122,7 +101,7 @@ const actions = {
 				console.error('Error writing comment', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 }
 
 export default { state, mutations, actions, getters }

@@ -26,6 +26,7 @@
 			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
 			<a class="icon icon-clippy" @click="copyLink()" />
 		</div>
+
 		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Enter your name!') }}</h2>
@@ -37,8 +38,9 @@
 
 				<div>
 					<span v-show="checkingUserName" class="icon-loading-small">Checking username …</span>
-					<span v-show="!checkingUserName && userName.length < 3">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
-					<span v-show="!checkingUserName && userName.length > 2 && !isValidName">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
+					<span v-show="!checkingUserName && userName.length < 3" class="error">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
+					<span v-show="!checkingUserName && userName.length > 2 && !isValidName" class="error">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
+					<span v-show="!checkingUserName && userName.length > 2 && isValidName" class="error">{{ t('polls', 'Valid username.') }}</span>
 				</div>
 
 				<div class="modal__buttons">
@@ -57,6 +59,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
@@ -64,7 +67,7 @@ export default {
 	name: 'VoteHeaderPublic',
 
 	components: {
-		Modal
+		Modal,
 	},
 
 	data() {
@@ -75,33 +78,33 @@ export default {
 			redirecting: false,
 			isValidName: false,
 			newName: '',
-			modal: true
+			modal: true,
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters([
-			'expired'
+			'expired',
 		]),
 
 		loginLink() {
 			const redirectUrl = this.$router.resolve({
 				name: 'publicVote',
-				params: { token: this.$route.params.token }
+				params: { token: this.$route.params.token },
 			}).href
-			return OC.generateUrl('login?redirect_url=' + redirectUrl)
+			return generateUrl('login?redirect_url=' + redirectUrl)
 		},
 
 		personalLink() {
 			return window.location.origin.concat(
 				this.$router.resolve({
 					name: 'publicVote',
-					params: { token: this.$route.params.token }
+					params: { token: this.$route.params.token },
 				}).href
 			)
 		},
@@ -112,7 +115,7 @@ export default {
 
 		isValidUser() {
 			return (this.acl.userId !== '' && this.acl.userId !== null)
-		}
+		},
 
 	},
 
@@ -130,7 +133,7 @@ export default {
 
 		'poll.id': function(newValue) {
 			this.setFocus()
-		}
+		},
 	},
 
 	methods: {
@@ -160,7 +163,7 @@ export default {
 		validatePublicUsername:	debounce(function() {
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
-				return axios.post(OC.generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
+				return axios.post(generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
 					.then(() => {
 						this.checkingUserName = false
 						this.isValidName = true
@@ -197,8 +200,8 @@ export default {
 						OC.Notification.showTemporary(t('polls', 'Error saving username', 1, this.poll.title), { type: 'error' })
 					})
 			}
-		}
-	}
+		},
+	},
 }
 </script>
 
@@ -212,7 +215,7 @@ export default {
 		padding: 4px 12px;
 		margin: 0 12px 0 24px;
 		border: 2px solid var(--color-success);
-		background-color: #d6fdda !important;
+		background-color: var(--color-background-success) !important;
 		border-radius: var(--border-radius);
 		font-size: 1.2em;
 		opacity: 0.8;

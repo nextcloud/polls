@@ -8,7 +8,7 @@ module.exports = merge(common, {
 	devServer: {
 		historyApiFallback: true,
 		noInfo: true,
-		overlay: true
+		overlay: true,
 	},
 	optimization: {
 		minimizer: [
@@ -17,9 +17,9 @@ module.exports = merge(common, {
 				cache: true,
 				extractComments: false,
 				terserOptions: {
-					ecma: 6
-				}
-			})
-		]
-	}
+					ecma: 6,
+				},
+			}),
+		],
+	},
 })

@@ -152,7 +152,6 @@ class MailService {
 		$contactsManager = \OC::$server->getContactsManager();
 
 		if ($share->getType() === 'user') {
-			// $this->logger->debug('User share ' . json_encode($share));
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
@@ -171,8 +170,6 @@ class MailService {
 			);
 
 		} elseif ($share->getType() === 'email') {
-			// $this->logger->debug('User share ' . json_encode($share));
-
 			$recipients[] = array(
 				'userId' => $share->getUserEmail(),
 				'eMailAddress' => $share->getUserEmail(),
@@ -187,7 +184,6 @@ class MailService {
 			);
 
 		} elseif ($share->getType() === 'contact') {
-			// $this->logger->debug('Contact share ' . json_encode($share));
 			$contacts = $contactsManager->search($share->getUserId(), array('FN'));
 			if (is_array($contacts)) {
 				$contact = $contacts[0];
@@ -209,8 +205,6 @@ class MailService {
 			}
 
 		} elseif ($share->getType() === 'external' || $share->getType() === 'email') {
-			// $this->logger->debug('External share ' . json_encode($share));
-
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
 				'eMailAddress' => $share->getUserEmail(),
@@ -225,17 +219,13 @@ class MailService {
 			);
 
 		} elseif ($share->getType() === 'group') {
-			// $this->logger->debug('Group share ' . json_encode($share));
 
 			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
-			// $this->logger->debug('Members are ' . json_encode($groupMembers));
 
 			foreach ($groupMembers as $member) {
 				if ($skipUser === $member) {
-					// $this->logger->debug('skip ' . $skipUser);
 					continue;
 				}
-				// $this->logger->debug('add ' . $member);
 
 				$recipients[] = array(
 					'userId' => $member,
@@ -251,8 +241,6 @@ class MailService {
 
 			}
 		}
-		// $this->logger->debug('Recipients: ' . json_encode($recipients));
-
 		return $recipients;
 	}
 
@@ -306,8 +294,6 @@ class MailService {
 			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
 
 			try {
-				// $this->logger->debug('Send Mail to ' . $recipient);
-
 				$this->sendMail(
 					$emailTemplate,
 					$recipient['userId'],
@@ -441,7 +427,6 @@ class MailService {
 				$this->sendMail($emailTemplate, $subscription->getUserId());
 			} catch (Exception $e) {
 				$this->logger->alert('Error sending Mail to ' . $subscription->getUserId());
-				// TODO: alert Owner
 			}
 		}
 	}

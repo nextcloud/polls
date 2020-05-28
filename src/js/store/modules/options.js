@@ -22,26 +22,28 @@
 
 import axios from '@nextcloud/axios'
 import sortBy from 'lodash/sortBy'
+import moment from '@nextcloud/moment'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
 	return {
-		list: []
+		options: [],
 	}
 }
 
 const state = defaultOptions()
 
 const mutations = {
-	optionsSet(state, payload) {
-		Object.assign(state, payload)
+	set(state, payload) {
+		state.options = payload.options
 	},
 
 	reset(state) {
 		Object.assign(state, defaultOptions())
 	},
 
-	optionRemove(state, payload) {
-		state.list = state.list.filter(option => {
+	removeOption(state, payload) {
+		state.options = state.options.filter(option => {
 			return option.id !== payload.option.id
 		})
 	},
@@ -53,56 +55,33 @@ const mutations = {
 	},
 
 	setOption(state, payload) {
-		const index = state.list.findIndex((option) => {
+		const index = state.options.findIndex((option) => {
 			return option.id === payload.option.id
 		})
 
 		if (index < 0) {
-			state.list.push(payload.option)
+			state.options.push(payload.option)
 		} else {
-			state.list.splice(index, 1, payload.option)
+			state.options.splice(index, 1, payload.option)
 		}
-	}
+	},
 }
 
 const getters = {
 	lastOptionId: state => {
-		return Math.max.apply(Math, state.list.map(function(option) {
+		return Math.max.apply(Math, state.options.map(function(option) {
 			return option.id
 		}))
 	},
 
 	sortedOptions: state => {
-		return sortBy(state.list, 'order')
-	}
+		return sortBy(state.options, 'order')
+	},
 }
 
 const actions = {
-
-	loadPoll(context, payload) {
-		let endPoint = 'apps/polls/options/get/'
-
-		if (payload.token !== undefined) {
-			endPoint = endPoint.concat('s/', payload.token)
-		} else if (payload.pollId !== undefined) {
-			endPoint = endPoint.concat(payload.pollId)
-		} else {
-			context.commit('reset')
-			return
-		}
-
-		return axios.get(OC.generateUrl(endPoint))
-			.then((response) => {
-				context.commit('optionsSet', { list: response.data })
-			}, (error) => {
-				context.commit('reset')
-				console.error('Error loading options', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
 	updateOptions(context) {
-		context.state.list.forEach((item, i) => {
+		context.state.options.forEach((item, i) => {
 			context.dispatch('updateOptionAsync', { option: item })
 		})
 	},
@@ -110,7 +89,7 @@ const actions = {
 	updateOptionAsync(context, payload) {
 		const endPoint = 'apps/polls/option/update'
 
-		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
+		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
 				context.commit('setOption', { option: payload.option })
 			}, (error) => {
@@ -137,11 +116,11 @@ const actions = {
 
 		} else if (context.rootState.poll.type === 'textPoll') {
 			option.timestamp = 0
-			option.order = state.list.length + 1
+			option.order = state.options.length + 1
 			option.pollOptionText = payload.pollOptionText
 		}
 
-		return axios.post(OC.generateUrl(endPoint), { option: option })
+		return axios.post(generateUrl(endPoint), { option: option })
 			.then((response) => {
 				context.commit('setOption', { option: response.data })
 			}, (error) => {
@@ -153,14 +132,14 @@ const actions = {
 	removeOptionAsync(context, payload) {
 		const endPoint = 'apps/polls/option/remove/'
 
-		return axios.post(OC.generateUrl(endPoint), { option: payload.option })
+		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
-				context.commit('optionRemove', { option: payload.option })
+				context.commit('removeOption', { option: payload.option })
 			}, (error) => {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error
 			})
-	}
+	},
 }
 
 export default { state, mutations, getters, actions }

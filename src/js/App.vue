@@ -21,58 +21,107 @@
   -->
 
 <template>
-	<div id="app-polls">
-		<Navigation v-if="OC.currentUser" />
+	<Content app-name="polls">
+		<Navigation v-if="getCurrentUser()" />
 		<router-view />
-	</div>
+		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
+	</Content>
 </template>
 
 <script>
 import Navigation from './components/Navigation/Navigation'
+import { Content } from '@nextcloud/vue'
+import SideBar from './components/SideBar/SideBar'
+import { getCurrentUser } from '@nextcloud/auth'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'App',
 	components: {
-		Navigation
+		Navigation,
+		Content,
+		SideBar,
+	},
+
+	data() {
+		return {
+			sideBarOpen: (window.innerWidth > 920),
+			activeTab: 'comments',
+		}
 	},
 
 	created() {
-		if (OC.currentUser) {
+		subscribe('toggle-sidebar', (payload) => {
+			if (payload === undefined) {
+				this.sideBarOpen = !this.sideBarOpen
+			} else {
+				if (payload.activeTab !== undefined) {
+					this.activeTab = payload.activeTab
+				}
+				if (payload.open !== undefined) {
+					this.sideBarOpen = payload.open
+				} else {
+					this.sideBarOpen = !this.sideBarOpen
+				}
+			}
+
+		})
+
+		if (getCurrentUser()) {
 			this.updatePolls()
-			this.$root.$on('updatePolls', () => {
+			subscribe('update-polls', () => {
 				this.updatePolls()
 			})
 		}
 	},
 
+	beforeDestroy() {
+		unsubscribe('update-polls')
+		unsubscribe('toggle-sidebar')
+	},
+
 	methods: {
 		updatePolls() {
-			if (OC.currentUser) {
+			if (getCurrentUser()) {
 
-				this.$store
-					.dispatch('loadPolls')
+				this.$store.dispatch('loadPolls')
 					.then(() => {
 					})
 					.catch((error) => {
 						console.error('refresh poll: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+						OC.Notification.showTemporary(t('polls', 'Error loading poll list'), { type: 'error' })
 					})
 			}
-		}
-	}
+		},
+	},
 }
 
 </script>
 
 <style  lang="scss">
-.main-container {
-	position: relative;
-	flex: 1;
-	padding: 8px 24px;
-	margin: 0;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	overflow-x: scroll;
+:root {
+	--color-background-error: #f9c5c5;
+	--color-background-success: #d6fdda;
+	--color-polls-foreground-yes: #49bc49;
+	--color-polls-foreground-no: #f45573;
+	--color-polls-foreground-maybe: #ffc107;
+	--color-polls-background-yes: #ebf5d6;
+	--color-polls-background-no: #ffede9;
+	--color-polls-background-maybe: #fcf7e1;
+	--icon-polls :url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgdmVyc2lvbj0iMS4xIgogICB4bWw6c3BhY2U9InByZXNlcnZlIgogICBoZWlnaHQ9IjMyIgogICB3aWR0aD0iMzIiCiAgIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDU5NS4yNzUgMzExLjExMSIKICAgeT0iMHB4IgogICB4PSIwcHgiCiAgIHZpZXdCb3g9IjAgMCAzMiAzMiIKICAgaWQ9InN2ZzgiPjxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTE0Ij48cmRmOlJERj48Y2M6V29yawogICAgICAgICByZGY6YWJvdXQ9IiI+PGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+PGRjOnR5cGUKICAgICAgICAgICByZGY6cmVzb3VyY2U9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS9TdGlsbEltYWdlIiAvPjxkYzp0aXRsZT48L2RjOnRpdGxlPjwvY2M6V29yaz48L3JkZjpSREY+PC9tZXRhZGF0YT48ZGVmcwogICAgIGlkPSJkZWZzMTIiIC8+PHJlY3QKICAgICBzdHlsZT0iZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjkzNTQxNDMxIgogICAgIHdpZHRoPSI3IgogICAgIGhlaWdodD0iMjYiCiAgICAgeD0iMyIKICAgICB5PSIyIgogICAgIGlkPSJyZWN0MiIgLz48cmVjdAogICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuOTM1NDE0MzEiCiAgICAgd2lkdGg9IjciCiAgICAgaGVpZ2h0PSIxNiIKICAgICB4PSIxMiIKICAgICB5PSIxMiIKICAgICBpZD0icmVjdDQiIC8+PHJlY3QKICAgICBzdHlsZT0iZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjg5MTg4MjYiCiAgICAgd2lkdGg9IjciCiAgICAgaGVpZ2h0PSIyMCIKICAgICB4PSIyMSIKICAgICB5PSI4IgogICAgIGlkPSJyZWN0NiIgLz48L3N2Zz4=);
+	--icon-polls-yes: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Im0yLjM1IDcuMyA0IDRsNy4zLTcuMyIgc3Ryb2tlPSIjNDliYzQ5IiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4K);
+	--icon-polls-handle: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiI+DQogIDxwYXRoDQogICAgIGQ9Ik0yIDJ2MmgxMnYtMnptMCAzdjJoMTJ2LTJ6bTAgM3YyaDEydi0yem0wIDN2MmgxMnYtMnoiDQogICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIgLz4NCjwvc3ZnPg0K);
+	--icon-polls-no: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTYiIHdpZHRoPSIxNiIgdmVyc2lvbj0iMS4xIiB2aWV3Ym94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Im0xNCAxMi4zLTEuNyAxLjctNC4zLTQuMy00LjMgNC4zLTEuNy0xLjcgNC4zLTQuMy00LjMtNC4zIDEuNy0xLjcgNC4zIDQuMyA0LjMtNC4zIDEuNyAxLjctNC4zIDQuM3oiIGZpbGw9IiNmNDU1NzMiLz48L3N2Zz4K);
+	--icon-polls-maybe: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgaWQ9InN2ZzQiCiAgIHZlcnNpb249IjEuMSIKICAgd2lkdGg9IjE2IgogICBoZWlnaHQ9IjE2IgogICBzb2RpcG9kaTpkb2NuYW1lPSJtYXliZS12b3RlLXZhcmlhbnQuc3ZnIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjkyLjIgKDVjM2U4MGQsIDIwMTctMDgtMDYpIj4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcmNvbG9yPSIjNjY2NjY2IgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgb2JqZWN0dG9sZXJhbmNlPSIxMCIKICAgICBncmlkdG9sZXJhbmNlPSIxMCIKICAgICBndWlkZXRvbGVyYW5jZT0iMTAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iMTAxNyIKICAgICBpZD0ibmFtZWR2aWV3NiIKICAgICBzaG93Z3JpZD0iZmFsc2UiCiAgICAgaW5rc2NhcGU6em9vbT0iMTQuNzUiCiAgICAgaW5rc2NhcGU6Y3g9IjgiCiAgICAgaW5rc2NhcGU6Y3k9IjE0Ljg2NTIwMSIKICAgICBpbmtzY2FwZTp3aW5kb3cteD0iLTgiCiAgICAgaW5rc2NhcGU6d2luZG93LXk9Ii04IgogICAgIGlua3NjYXBlOndpbmRvdy1tYXhpbWl6ZWQ9IjEiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ic3ZnNCI+CiAgICA8aW5rc2NhcGU6Z3JpZAogICAgICAgdHlwZT0ieHlncmlkIgogICAgICAgaWQ9ImdyaWQ4MzYiIC8+CiAgPC9zb2RpcG9kaTpuYW1lZHZpZXc+CiAgPG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhMTAiPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgICAgPGRjOnRpdGxlPjwvZGM6dGl0bGU+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM4IiAvPgogIDx0ZXh0CiAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc2l6ZToxNS4wMDY0OTA3MXB4O2xpbmUtaGVpZ2h0OjEuMjU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjtsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiNmZmMxMDc7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjEuMDIzMTY5NzYiCiAgICAgeD0iLTAuODAzNjg5NDgiCiAgICAgeT0iMTIuNTU5MzEyIgogICAgIGlkPSJ0ZXh0ODE4IgogICAgIHRyYW5zZm9ybT0ic2NhbGUoMS4wOTAxOSwwLjkxNzI3MTMpIj48dHNwYW4KICAgICAgIHNvZGlwb2RpOnJvbGU9ImxpbmUiCiAgICAgICBpZD0idHNwYW44MTYiCiAgICAgICB4PSItMC44MDM2ODk0OCIKICAgICAgIHk9IjEyLjU1OTMxMiIKICAgICAgIHN0eWxlPSJmb250LXNpemU6MTQuNjY2NjY2OThweDtmaWxsOiNmZmMxMDc7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjEuMDIzMTY5NzYiPig8L3RzcGFuPjwvdGV4dD4KICA8dGV4dAogICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXNpemU6NDAuOTI3MTQzMXB4O2xpbmUtaGVpZ2h0OjEuMjU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjtsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiNmZmMxMDc7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjEuMDIzMTc4NDYiCiAgICAgeD0iOS45NjMwNDQyIgogICAgIHk9IjEyLjQ3ODk0NSIKICAgICBpZD0idGV4dDgyOCIKICAgICB0cmFuc2Zvcm09InNjYWxlKDEuMDkwMTk5MywwLjkxNzI2MzQ4KSI+PHRzcGFuCiAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgaWQ9InRzcGFuODI2IgogICAgICAgeD0iOS45NjMwNDQyIgogICAgICAgeT0iMTIuNDc4OTQ1IgogICAgICAgc3R5bGU9ImZvbnQtc2l6ZToxNC42NjY2NjY5OHB4O2ZpbGw6I2ZmYzEwNztmaWxsLW9wYWNpdHk6MTtzdHJva2Utd2lkdGg6MS4wMjMxNzg0NiI+KTwvdHNwYW4+PC90ZXh0PgogIDxwYXRoCiAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICBkPSJtIDExLjkyNCw0LjA2NTk5OTIgLTQuOTMyMDAwMSw0Ljk3IC0yLjgyOCwtMi44MyBMIDIuNzUsNy42MTc5OTkyIDYuOTkxOTk5OSwxMS44NjEgMTMuMzU3LDUuNDk1OTk5MiBsIC0xLjQzMywtMS40MzIgeiIKICAgICBpZD0icGF0aDgxNiIKICAgICBzdHlsZT0iZmlsbDojZmZjMTA3O2ZpbGwtb3BhY2l0eToxIiAvPgo8L3N2Zz4K);
+
+	// filters to colorize background svg from black
+	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
+	--color-polls-foreground-filter-yes: invert(74%) sepia(7%) saturate(3830%) hue-rotate(68deg) brightness(85%) contrast(85%);
+	--color-polls-foreground-filter-no: invert(43%) sepia(100%) saturate(1579%) hue-rotate(318deg) brightness(99%) contrast(94%);
+	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
+}
+.icon-polls {
+	background-image: var(--icon-polls);
 }
 
 .title {
@@ -84,34 +133,8 @@ export default {
 	margin: 8px 0;
 }
 
-.poll-item {
-	display: flex;
-	align-items: center;
-	padding-left: 8px;
-	padding-right: 8px;
-	line-height: 2em;
-	min-height: 4em;
-	overflow: visible;
-	white-space: nowrap;
-
-	&:active,
-	&:hover {
-		transition: var(--background-dark) 0.3s ease;
-		background-color: var(--color-background-dark);
-	}
-
-	> div {
-		display: flex;
-		flex: 1;
-		font-size: 1.2em;
-		opacity: 1;
-		white-space: normal;
-		padding-right: 4px;
-		&.avatar {
-			flex: 0;
-		}
-	}
-
+.icon-handle {
+	background-image: var(--icon-polls-handle);
 }
 
 .list-enter-active,
@@ -136,91 +159,46 @@ export default {
 	opacity: 0;
 }
 
-#app-polls {
-	width: 100%;
-	color: var(--color-main-text)
-}
+input {
+	background-repeat: no-repeat;
+	background-position: 98%;
 
-#app-content {
-	display: flex;
-	width: auto;
-
-	input {
-		&.hasTimepicker {
-			width: 75px;
-		}
-		&.error {
-			border-color: var(--color-error);
-			background-color: #f9c5c5;
-			background-image: var(--icon-error-e9322d);
-			background-repeat: no-repeat;
-			background-position: right;
-		}
-		&.success, &.icon-confirn.success {
-			border-color: var(--color-success);
-			background-color: #d6fdda !important;
-			&.icon-confirm {
-				border-color: var(--color-success) !important;
-				border-left-color: transparent !important;
-			}
-		}
-
-		&.icon {
-			flex: 0;
-			padding: 0 17px;
-		}
+	&.error {
+		border-color: var(--color-error);
+		background-color: var(--color-background-error);
+		background-image: var(--icon-polls-no);
 	}
 
-	.label {
-		border: solid 1px;
-		border-radius: var(--border-radius);
-		padding: 1px 4px;
-		margin: 0 4px;
-		font-size: 60%;
-		text-align: center;
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text);
-		}
-		&.success {
-			border-color: var(--color-success);
-			background-color: var(--color-success);
-			color: var(--color-primary-text);
-		}
+	&.success, &.icon-confirm.success {
+		border-color: var(--color-success);
+		background-image: var(--icon-polls-yes);
+		background-color: var(--color-background-success) !important;
+	}
+
+	&.icon {
+		flex: 0;
+		padding: 0 17px;
 	}
 }
 
-.config-box {
-	display: flex;
-	flex-direction: column;
-	padding: 8px;
-	& > * {
-		padding-left: 21px;
+.label {
+	border: solid 1px;
+	border-radius: var(--border-radius);
+	padding: 1px 4px;
+	margin: 0 4px;
+	font-size: 60%;
+	text-align: center;
+
+	&.error {
+		border-color: var(--color-error);
+		background-color: var(--color-error);
+		color: var(--color-primary-text);
 	}
 
-	& > input {
-		margin-left: 24px;
-		width: auto;
-
-	}
-
-	& > textarea {
-		margin-left: 24px;
-		width: auto;
-		padding: 7px 6px;
-	}
-
-	& > .title {
-		display: flex;
-		background-position: 0 2px;
-		padding-left: 24px;
-		opacity: 0.7;
-		font-weight: bold;
-		margin-bottom: 4px;
-		& > span {
-			padding-left: 4px;
-		}
+	&.success {
+		border-color: var(--color-success);
+		background-color: var(--color-success);
+		color: var(--color-primary-text);
 	}
 }
 

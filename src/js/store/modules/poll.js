@@ -22,6 +22,8 @@
  */
 
 import axios from '@nextcloud/axios'
+import moment from '@nextcloud/moment'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultPoll = () => {
 	return {
@@ -40,24 +42,24 @@ const defaultPoll = () => {
 		showResults: 'always',
 		adminAccess: 0,
 		settings: '',
-		options: ''
+		options: '',
 	}
 }
 
 const state = defaultPoll()
 
 const mutations = {
-	setPoll(state, payload) {
+	set(state, payload) {
 		Object.assign(state, payload.poll)
 	},
 
-	resetPoll(state) {
+	reset(state) {
 		Object.assign(state, defaultPoll())
 	},
 
 	setPollProperty(state, payload) {
 		Object.assign(state, payload)
-	}
+	},
 
 }
 
@@ -79,11 +81,15 @@ const getters = {
 
 	allowEdit: (state, getters, rootState) => {
 		return (rootState.acl.allowEdit)
-	}
+	},
 
 }
 
 const actions = {
+
+	resetPoll(context) {
+		context.commit('reset')
+	},
 
 	loadPollMain(context, payload) {
 		let endPoint = 'apps/polls/polls/get/'
@@ -92,13 +98,12 @@ const actions = {
 		} else if (payload.pollId) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
-			context.commit('resetPoll')
+			context.dispatch('resetPoll')
 			return
 		}
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data.poll })
-				context.commit('acl/setAcl', { acl: response.data.acl })
+				context.commit('set', response.data)
 				return response
 			}, (error) => {
 				if (error.response.status !== '404' && error.response.status !== '401') {
@@ -111,17 +116,16 @@ const actions = {
 
 	writePollPromise(context) {
 		const endPoint = 'apps/polls/polls/write/'
-		return axios.post(OC.generateUrl(endPoint), { poll: state })
+		return axios.post(generateUrl(endPoint), { poll: state })
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data.poll })
-				context.commit('acl/setAcl', { acl: response.data.acl })
+				context.commit('set', response.data)
 				return response.data.poll
 			}, (error) => {
 				console.error('Error writing poll:', { error: error.response }, { state: state })
 				throw error
 			})
 
-	}
+	},
 }
 
 export default { state, mutations, getters, actions, defaultPoll }

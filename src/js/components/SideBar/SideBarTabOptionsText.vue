@@ -22,25 +22,19 @@
 
 <template>
 	<div>
-		<div class="config-box">
-			<label class="title icon-add">
-				{{ t('polls', 'Add a new text option') }}
-			</label>
-
+		<ConfigBox :title="t('polls', 'Add a new text option')" icon-class="icon-add">
 			<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
 				@input="addOption()" />
-		</div>
+		</ConfigBox>
 
-		<ul class="config-box poll-table">
-			<label class="title icon-toggle-filelist">
-				{{ t('polls', 'Available Options') }}
-			</label>
+		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
 			<draggable v-model="sortOptions">
 				<transition-group>
-					<PollItemText v-for="(option) in sortOptions"
+					<OptionItem v-for="(option) in sortOptions"
 						:key="option.id"
 						:option="option"
-						:draggable="true">
+						:draggable="true"
+						type="textPoll">
 						<template v-slot:actions>
 							<Actions v-if="acl.allowEdit" class="action">
 								<ActionButton icon="icon-delete" @click="removeOption(option)">
@@ -48,18 +42,19 @@
 								</ActionButton>
 							</Actions>
 						</template>
-					</PollItemText>
+					</OptionItem>
 				</transition-group>
 			</draggable>
-		</ul>
+		</ConfigBox>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
+import ConfigBox from '../Base/ConfigBox'
 import draggable from 'vuedraggable'
-import PollItemText from '../Base/PollItemText'
+import OptionItem from '../Base/OptionItem'
 import InputDiv from '../Base/InputDiv'
 
 export default {
@@ -68,21 +63,22 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ConfigBox,
 		draggable,
 		InputDiv,
-		PollItemText
+		OptionItem,
 	},
 
 	data() {
 		return {
-			newPollText: ''
+			newPollText: '',
 		}
 	},
 
 	computed: {
 		...mapState({
 			options: state => state.options,
-			acl: state => state.acl
+			acl: state => state.acl,
 		}),
 
 		...mapGetters(['sortedOptions']),
@@ -93,8 +89,8 @@ export default {
 			},
 			set(value) {
 				this.writeOptions(value)
-			}
-		}
+			},
+		},
 
 	},
 
@@ -107,7 +103,7 @@ export default {
 		addOption() {
 			if (this.newPollText) {
 				this.$store.dispatch('addOptionAsync', {
-					pollOptionText: this.newPollText
+					pollOptionText: this.newPollText,
 				})
 					.then(() => {
 						this.newPollText = ''
@@ -117,29 +113,17 @@ export default {
 
 		removeOption(option) {
 			this.$store.dispatch('removeOptionAsync', {
-				option: option
+				option: option,
 			})
-		}
-	}
+		},
+	},
 
 }
 </script>
 
 <style lang="scss" scoped>
-	.draggable, .draggable .pollOption  {
-		cursor: grab;
-		&:active {
-			cursor: grabbing;
-			cursor: -moz-grabbing;
-			cursor: -webkit-grabbing;
-		}
-		.handle {
-			visibility: hidden;
-		}
-		&:hover > .handle {
-			visibility: visible;
-		}
-
+	.option-item {
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.optionAdd {

@@ -32,7 +32,6 @@
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
-						:class="{ expired: (poll.expire > 0 && moment.unix(poll.expire).diff() < 0) }"
 						@switchDeleted="switchDeleted(poll.id)"
 						@clonePoll="clonePoll(poll.id)"
 						@deletePermanently="deletePermanently(poll.id)" />
@@ -48,6 +47,7 @@ import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/v
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Navigation',
@@ -56,7 +56,7 @@ export default {
 		AppNavigationNew,
 		AppNavigationItem,
 		CreateDlg,
-		PollNavigationItems
+		PollNavigationItems,
 	},
 
 	data() {
@@ -68,39 +68,39 @@ export default {
 					id: 'relevant',
 					title: t('polls', 'Relevant'),
 					icon: 'icon-details',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'my',
 					title: t('polls', 'My polls'),
 					icon: 'icon-user',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'public',
 					title: t('polls', 'Public polls'),
 					icon: 'icon-link',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'all',
 					title: t('polls', 'All polls'),
-					icon: 'icon-folder',
-					pinned: false
+					icon: 'icon-polls',
+					pinned: false,
 				},
 				{
 					id: 'expired',
 					title: t('polls', 'Expired polls'),
 					icon: 'icon-delete',
-					pinned: false
+					pinned: false,
 				},
 				{
 					id: 'deleted',
 					title: t('polls', 'Deleted polls'),
 					icon: 'icon-delete',
-					pinned: true
-				}
-			]
+					pinned: true,
+				},
+			],
 
 		}
 	},
@@ -109,8 +109,8 @@ export default {
 		...mapGetters(['filteredPolls']),
 
 		pollList() {
-			return this.$store.state.polls.list
-		}
+			return this.$store.state.polls.polls
+		},
 	},
 
 	created() {
@@ -129,7 +129,7 @@ export default {
 		timedReload() {
 			// reload poll list periodically
 			this.reloadTimer = window.setInterval(() => {
-				this.$root.$emit('updatePolls')
+				emit('update-polls')
 			}, this.reloadInterval)
 		},
 
@@ -144,7 +144,7 @@ export default {
 			this.$store
 				.dispatch('clonePoll', { pollId: pollId })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
 		},
@@ -153,7 +153,7 @@ export default {
 			this.$store
 				.dispatch('switchDeleted', { pollId: pollId })
 				.then((response) => {
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 				})
 
 		},
@@ -167,11 +167,11 @@ export default {
 					if (this.$route.params.id && this.$route.params.id === pollId) {
 						this.$router.push({ name: 'list', params: { type: 'deleted' } })
 					}
-					this.$root.$emit('updatePolls')
+					emit('update-polls')
 				})
 
-		}
-	}
+		},
+	},
 }
 </script>
 
@@ -181,4 +181,5 @@ export default {
 			opacity: 0.6;
 		}
 	}
+
 </style>

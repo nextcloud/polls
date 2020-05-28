@@ -21,42 +21,41 @@
   -->
 
 <template>
-	<AppContent>
-		<div class="main-container">
-			<div v-if="noPolls">
-				<div class="icon-polls" />
-				<h2> {{ t('No existing polls.') }} </h2>
-			</div>
-			<h2 v-if="!noPolls" class="title">
-				{{ title }}
-			</h2>
-			<h3 v-if="!noPolls" class="description">
-				{{ description }}
-			</h3>
-
-			<transition-group v-if="!noPolls" name="list" tag="div"
-				class="table">
-				<PollListItem key="0" :header="true"
-					:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
-				<li is="PollListItem"
-					v-for="(poll, index) in sortedList"
-					:key="poll.id"
-					:poll="poll"
-					@deletePoll="removePoll(index, poll)"
-					@editPoll="callPoll(index, poll, 'edit')"
-					@clonePoll="callPoll(index, poll, 'clone')" />
-			</transition-group>
+	<AppContent class="poll-list">
+		<h2 class="title">
+			{{ title }}
+		</h2>
+		<h3 class="description">
+			{{ description }}
+		</h3>
+		<div v-if="noPolls" class="emptycontent">
+			<div class="icon-polls" />
+			<h2> {{ t('polls', 'No existing polls.') }} </h2>
 		</div>
+
+		<transition-group v-else name="list" tag="div"
+			class="poll-list__list">
+			<PollItem key="0" :header="true"
+				:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
+			<li is="PollItem"
+				v-for="(poll, index) in sortedList"
+				:key="poll.id"
+				:poll="poll"
+				@deletePoll="removePoll(index, poll)"
+				@editPoll="callPoll(index, poll, 'edit')"
+				@clonePoll="callPoll(index, poll, 'clone')" />
+		</transition-group>
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
 import { AppContent } from '@nextcloud/vue'
-import PollListItem from '../components/PollList/PollListItem'
+import PollItem from '../components/PollList/PollItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'PollList',
@@ -64,15 +63,14 @@ export default {
 	components: {
 		AppContent,
 		LoadingOverlay,
-		PollListItem
+		PollItem,
 	},
 
 	data() {
 		return {
-			noPolls: false,
 			isLoading: false,
 			sort: 'created',
-			reverse: true
+			reverse: true,
 		}
 	},
 
@@ -101,15 +99,15 @@ export default {
 
 		description() {
 			if (this.$route.params.type === 'my') {
-				return t('polls', 'This are your polls (where you are the owner).')
+				return t('polls', 'Your polls (where you are the owner).')
 			} else if (this.$route.params.type === 'relevant') {
-				return t('polls', 'This are all polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
+				return t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
 			} else if (this.$route.params.type === 'public') {
 				return t('polls', 'A complete list with all public polls on this site, regardless who is the owner.')
 			} else if (this.$route.params.type === 'hidden') {
-				return t('polls', 'These are all hidden polls, to which you have access.')
+				return t('polls', 'All hidden polls, to which you have access.')
 			} else if (this.$route.params.type === 'deleted') {
-				return t('polls', 'This is simply the trash bin.')
+				return t('polls', 'The trash bin.')
 			} else if (this.$route.params.type === 'participated') {
 				return t('polls', 'All polls, where you placed a vote.')
 			} else if (this.$route.params.type === 'expired') {
@@ -129,21 +127,35 @@ export default {
 			} else {
 				return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 			}
-		}
+		},
+
+		noPolls() {
+			return this.sortedList.length < 1
+		},
 
 	},
 
 	watch: {
 		$route() {
-			window.document.title = t('polls', 'Polls') + ' - ' + this.title
-		}
+			this.refreshView()
+		},
 	},
 
-	created() {
-		window.document.title = t('polls', 'Polls') + ' - ' + this.title
+	mounted() {
+		this.refreshView()
 	},
 
 	methods: {
+		refreshView() {
+			window.document.title = t('polls', 'Polls') + ' - ' + this.title
+			if (!this.filteredPolls(this.$route.params.type).find(poll => {
+				return poll.id === this.$store.state.poll.id
+			})) {
+				emit('toggle-sidebar', { open: false })
+			}
+
+		},
+
 		setSort(payload) {
 			if (this.sort === payload.sort) {
 				this.reverse = !this.reverse
@@ -157,33 +169,29 @@ export default {
 			this.$router.push({
 				name: name,
 				params: {
-					id: poll.id
-				}
+					id: poll.id,
+				},
 			})
-		}
-	}
+		},
+	},
 }
 </script>
 
 <style lang="scss" scoped>
-
-	.main-container {
-		flex: 1;
+	.app-content {
+		display: flex;
+		flex-direction: column;
+		padding: 52px 8px 0;
+		&>* {
+			padding: 0 8px;
+		}
 	}
-
-	.table {
+	.poll-list__list {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		flex: 1;
 		flex-wrap: nowrap;
-	}
-
-	#emptycontent {
-		.icon-polls {
-			background-color: black;
-			-webkit-mask: url('./img/app.svg') no-repeat 50% 50%;
-			mask: url('./img/app.svg') no-repeat 50% 50%;
-		}
+		overflow: scroll;
+		padding-bottom: 14px;
 	}
 </style>

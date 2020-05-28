@@ -129,8 +129,6 @@ class Acl implements JsonSerializable {
 	 * @return string
 	 */
 	public function getDisplayName() {
-		// $this->userManager = \OC::$server->getUserManager();
-
 		if ($this->userManager->get($this->userId) instanceof IUser) {
 			return $this->userManager->get($this->userId)->getDisplayName();
 		} else {
@@ -322,7 +320,6 @@ class Acl implements JsonSerializable {
 	 */
 	public function getAllowSeeResults(): bool {
 		if ($this->poll->getShowResults() === 'always' || $this->getIsOwner()) {
-		// if ($this->poll->getShowResults() === 'always') {
 			return true;
 		} elseif ($this->poll->getShowResults() === 'never') {
 			return false;
