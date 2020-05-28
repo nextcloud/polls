@@ -70,48 +70,9 @@ const getters = {
 		}
 	},
 
-	participantsVoted: (state, getters) => {
-		const participantsVoted = []
-		const map = new Map()
-		for (const item of state.votes) {
-			if (!map.has(item.userId)) {
-				map.set(item.userId, true)
-				participantsVoted.push({
-					userId: item.userId,
-					displayName: item.displayName,
-				})
-			}
-		}
-		return participantsVoted
-	},
-
-	participants: (state, getters, rootState) => {
-		const participants = []
-		const map = new Map()
-		for (const item of state.votes) {
-			if (!map.has(item.userId)) {
-				map.set(item.userId, true)
-				participants.push({
-					userId: item.userId,
-					displayName: item.displayName,
-					voted: true,
-				})
-			}
-		}
-
-		if (!map.has(rootState.poll.acl.userId) && rootState.poll.acl.userId && rootState.poll.acl.allowVote) {
-			participants.push({
-				userId: rootState.poll.acl.userId,
-				displayName: rootState.poll.acl.displayName,
-				voted: false,
-			})
-		}
-		return participants
-	},
-
-	ranked: (state, getters, rootGetters) => {
+	ranked: (state, getters, rootState) => {
 		let votesRank = []
-		rootGetters['poll/options/options'].forEach(function(option) {
+		rootState.poll.options.options.forEach(function(option) {
 			const countYes = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
 			const countMaybe = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
 			const countNo = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length

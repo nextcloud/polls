@@ -49,7 +49,7 @@ export default {
 
 		...mapGetters({
 			votesRank: 'poll/votes/ranked',
-			participantsVoted: 'poll/votes/participantsVoted',
+			participantsVoted: 'poll/participantsVoted',
 			expired: 'poll/expired',
 			confirmedOptions: 'poll/options/confirmed',
 		}),

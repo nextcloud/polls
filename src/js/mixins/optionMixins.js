@@ -7,9 +7,9 @@ export const confirmOption = {
 }
 
 export const removeOption = {
-	removeOption(option) {
-		this.$store.dispatch('poll/options/delete', {
-			option: option,
-		})
+	methods: {
+		removeOption(option) {
+			this.$store.dispatch('poll/options/delete', { option: option })
+		},
 	},
 }

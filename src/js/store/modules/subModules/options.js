@@ -74,7 +74,7 @@ const getters = {
 				yes: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
 				maybe: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
 				realno: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
-				votes: rootGetters['poll/votes/participantsVoted'].length,
+				votes: rootGetters['poll/participantsVoted'].length,
 			})
 		})
 

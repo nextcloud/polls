@@ -139,7 +139,7 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			participants: 'poll/votes/participants',
+			participants: 'poll/participants',
 			expired: 'poll/expired',
 		}),
 

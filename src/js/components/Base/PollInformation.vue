@@ -60,7 +60,7 @@ export default {
 		}),
 
 		...mapGetters({
-			participantsVoted: 'poll/votes/participantsVoted',
+			participantsVoted: 'poll/participantsVoted',
 			expired: 'poll/expired',
 			confirmedOptions: 'poll/options/confirmed',
 		}),

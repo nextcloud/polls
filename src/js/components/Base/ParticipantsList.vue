@@ -45,7 +45,7 @@ export default {
 	name: 'ParticipantsList',
 	computed: {
 		...mapGetters({
-			participantsVoted: 'poll/votes/participantsVoted',
+			participantsVoted: 'poll/participantsVoted',
 		}),
 	},
 }

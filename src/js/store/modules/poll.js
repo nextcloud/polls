@@ -80,20 +80,44 @@ const getters = {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
-	// accessType: (state) => {
-	// 	if (state.access === 'public') {
-	// 		return t('polls', 'Public access')
-	// 	} else if (state.access === 'hidden') {
-	// 		return t('polls', 'Hidden poll')
-	// 	} else {
-	// 		return state.access
-	// 	}
-	// },
+	participants: (state, getters) => {
+		const participants = []
+		const map = new Map()
+		for (const item of state.votes.votes) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				participants.push({
+					userId: item.userId,
+					displayName: item.displayName,
+					voted: true,
+				})
+			}
+		}
 
-	// allowEdit: (state, getters, rootState) => {
-	// 	return (rootState.poll.acl.allowEdit)
-	// },
+		if (!map.has(state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+			participants.push({
+				userId: state.acl.userId,
+				displayName: state.acl.displayName,
+				voted: false,
+			})
+		}
+		return participants
+	},
 
+	participantsVoted: (state, getters) => {
+		const participantsVoted = []
+		const map = new Map()
+		for (const item of state.votes.votes) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				participantsVoted.push({
+					userId: item.userId,
+					displayName: item.displayName,
+				})
+			}
+		}
+		return participantsVoted
+	},
 }
 
 const actions = {
