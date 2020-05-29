@@ -1,11 +1,11 @@
 { "translations": {
-    "Cancel" : "﻿ರದ್ದು",
+    "Group" : "﻿ಗುಂಪು",
     "Title" : "ಶೀರ್ಷಿಕೆ",
+    "Cancel" : "﻿ರದ್ದು",
     "Owner" : "Owner",
     "never" : "﻿ಎಂದಿಗೂ",
     "Expiration date" : "ಮುಕ್ತಾಯ ದಿನಾಂಕ",
     "OK" : "ಸರಿ",
-    "Group" : "﻿ಗುಂಪು",
     "No" : "No",
     "Yes" : "Yes"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

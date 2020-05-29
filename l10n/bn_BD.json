@@ -1,6 +1,8 @@
 { "translations": {
-    "Cancel" : "বাতির",
+    "Group" : "গোষ্ঠীসমূহ",
+    "Unknown user" : "অপরিচিত ব্যবহারকারী",
     "Title" : "শিরোনাম",
+    "Cancel" : "বাতির",
     "Owner" : "Owner",
     "never" : "কখনোই নয়",
     "Details" : "বিসতারিত",
@@ -13,8 +15,6 @@
     "Hour" : "ঘন্টা",
     "Day" : "দিবস",
     "Month" : "মাস",
-    "Unknown user" : "অপরিচিত ব্যবহারকারী",
-    "Group" : "গোষ্ঠীসমূহ",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "মুছে ফেলা"

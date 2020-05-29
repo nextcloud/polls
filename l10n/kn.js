@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
-    "Cancel" : "﻿ರದ್ದು",
+    "Group" : "﻿ಗುಂಪು",
     "Title" : "ಶೀರ್ಷಿಕೆ",
+    "Cancel" : "﻿ರದ್ದು",
     "Owner" : "Owner",
     "never" : "﻿ಎಂದಿಗೂ",
     "Expiration date" : "ಮುಕ್ತಾಯ ದಿನಾಂಕ",
     "OK" : "ಸರಿ",
-    "Group" : "﻿ಗುಂಪು",
     "No" : "No",
     "Yes" : "Yes"
 },

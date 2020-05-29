@@ -1,8 +1,9 @@
 OC.L10N.register(
     "polls",
     {
-    "Cancel" : "ۋاز كەچ",
+    "Group" : "Group",
     "Title" : "ماۋزۇ",
+    "Cancel" : "ۋاز كەچ",
     "Owner" : "Owner",
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
@@ -10,7 +11,6 @@ OC.L10N.register(
     "OK" : "جەزملە",
     "Week" : "ھەپتە",
     "Month" : "ئاي",
-    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "ئۆچۈرۈلدى"

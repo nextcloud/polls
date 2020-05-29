@@ -1,14 +1,15 @@
 OC.L10N.register(
     "polls",
     {
-    "Comments" : "Kommentarer",
+    "Group" : "Grupp",
     "Delete comment" : "Kommentar läschen",
+    "Title" : "Titel",
     "Cancel" : "Ofbriechen",
     "Apply" : "Uwenden",
-    "Title" : "Titel",
     "Owner" : "Owner",
     "never" : "Ni",
     "Details" : "Detailer",
+    "Comments" : "Kommentarer",
     "Description" : "Beschreiwung",
     "Expiration date" : "Verfallsdatum",
     "OK" : "OK",
@@ -16,7 +17,6 @@ OC.L10N.register(
     "Hour" : "Stonn",
     "Day" : "Dag",
     "Month" : "Mount",
-    "Group" : "Grupp",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "Geläscht"

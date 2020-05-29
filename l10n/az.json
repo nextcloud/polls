@@ -1,6 +1,8 @@
 { "translations": {
-    "Cancel" : "Dayandır",
+    "Group" : "Qrup",
+    "Unknown user" : "Istifadəçi tanınmır ",
     "Title" : "Başlıq",
+    "Cancel" : "Dayandır",
     "Owner" : "Owner",
     "never" : "heç vaxt",
     "Details" : "Detallar",
@@ -11,8 +13,6 @@
     "Week" : "Həftə",
     "Day" : "Gün",
     "Month" : "Ay",
-    "Unknown user" : "Istifadəçi tanınmır ",
-    "Group" : "Qrup",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "Silinib"

@@ -1,9 +1,10 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Grop",
+    "Title" : "Títol",
     "Cancel" : "Anullar",
     "Apply" : "Aplicar",
-    "Title" : "Títol",
     "Owner" : "Owner",
     "never" : "pas jamai",
     "Details" : "Detalhs",
@@ -13,7 +14,6 @@ OC.L10N.register(
     "Week" : "Aquesta setmana",
     "Day" : "Jorn",
     "Month" : "Mes",
-    "Group" : "Grop",
     "No" : "No",
     "Yes" : "Yes"
 },

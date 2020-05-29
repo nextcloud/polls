@@ -1,9 +1,10 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "群組",
+    "Title" : "標題",
     "Cancel" : "取消",
     "Apply" : "套用",
-    "Title" : "標題",
     "Owner" : "Owner",
     "never" : "永不",
     "Shares" : "分享",
@@ -13,7 +14,6 @@ OC.L10N.register(
     "Week" : "星期",
     "Day" : "日",
     "Month" : "月",
-    "Group" : "群組",
     "No" : "No",
     "Yes" : "Yes"
 },

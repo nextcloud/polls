@@ -1,6 +1,7 @@
 { "translations": {
-    "Cancel" : "ۋاز كەچ",
+    "Group" : "Group",
     "Title" : "ماۋزۇ",
+    "Cancel" : "ۋاز كەچ",
     "Owner" : "Owner",
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
@@ -8,7 +9,6 @@
     "OK" : "جەزملە",
     "Week" : "ھەپتە",
     "Month" : "ئاي",
-    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "ئۆچۈرۈلدى"

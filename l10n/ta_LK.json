@@ -1,6 +1,7 @@
 { "translations": {
-    "Cancel" : "இரத்து செய்க",
+    "Group" : "Group",
     "Title" : "தலைப்பு",
+    "Cancel" : "இரத்து செய்க",
     "Owner" : "Owner",
     "never" : "ஒருபோதும்",
     "Details" : "விவரங்கள்",
@@ -10,7 +11,6 @@
     "OK" : "சரி ",
     "Week" : "வாரம்",
     "Month" : "மாதம்",
-    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

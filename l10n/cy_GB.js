@@ -1,8 +1,9 @@
 OC.L10N.register(
     "polls",
     {
-    "Cancel" : "Diddymu",
+    "Group" : "Grŵp",
     "Title" : "Teitl",
+    "Cancel" : "Diddymu",
     "Owner" : "Owner",
     "never" : "byth",
     "Details" : "Manylion",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Week" : "Wythnos",
     "Day" : "Diwrnod",
     "Month" : "Mis",
-    "Group" : "Grŵp",
     "No" : "No",
     "Yes" : "Iawn",
     "Deleted" : "Wedi dileu",
