@@ -80,7 +80,7 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 		// check for orphaned entries in all tables referencing
 		// the main polls table
-		foreach($this->childTables as $tbl) {
+		foreach ($this->childTables as $tbl) {
 			$child = "$prefix$tbl";
 			$query = "DELETE
                 FROM $child
@@ -107,7 +107,7 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 		$schema = $schemaClosure();
 
 		$eventTable = $schema->getTable('polls_polls');
-		foreach($this->childTables as $tbl) {
+		foreach ($this->childTables as $tbl) {
 			$table = $schema->getTable($tbl);
 
 			$table->addForeignKeyConstraint($eventTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);

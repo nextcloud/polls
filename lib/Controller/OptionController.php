@@ -248,7 +248,7 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function reorder($pollId, $options) {
-		$i=0;
+		$i = 0;
 
 		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
