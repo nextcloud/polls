@@ -57,16 +57,10 @@
 			</div>
 		</div>
 
-		<div v-if="acl.allowEdit && expired" class="vote-table__footer">
-			<div v-for="(option) in rankedOptions" :key="option.id" :class="{'confirmed' : option.confirmed }">
+		<div v-if="expired" class="vote-table__footer">
+			<div v-for="(option) in rankedOptions" :key="option.id" :class="{ 'confirmed' : option.confirmed }">
 				<Actions v-if="acl.allowEdit"
 					class="action">
-					<!-- <ActionButton icon="icon-delete" @click="removeOption(option)">
-						{{ t('polls', 'Delete option') }}
-					</ActionButton>
-					<ActionButton v-if="!expired && poll.type==='datePoll'" icon="icon-polls-clone" @click="cloneOptionModal(option)">
-						{{ t('polls', 'Clone option') }}
-					</ActionButton> -->
 					<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 						@click="confirmOption(option)">
 						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
