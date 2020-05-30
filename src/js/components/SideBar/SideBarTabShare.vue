@@ -171,7 +171,7 @@ export default {
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('poll/shares/delete', { share: share })
+			this.$store.dispatch('poll/shares/remove', { share: share })
 		},
 
 		addShare(payload) {

@@ -39,18 +39,8 @@ const mutations = {
 		state.list = payload.shares
 	},
 
-	delete(state, payload) {
-		state.list = state.list.filter(share => {
-			return share.id !== payload.share.id
-		})
-	},
-
 	reset(state) {
 		Object.assign(state, defaultShares())
-	},
-
-	add(state, payload) {
-		state.list.push(payload)
 	},
 
 }
@@ -74,11 +64,11 @@ const getters = {
 
 const actions = {
 	add(context, payload) {
-		const endPoint = 'apps/polls/share/write/'
+		const endPoint = 'apps/polls/share/add/'
 		payload.share.pollId = context.rootState.poll.id
 		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
-				context.commit('add', response.data.share)
+				context.commit('set', { shares: response.data.shares })
 
 				if (response.data.sendResult.sentMails.length > 0) {
 					const sendList = response.data.sendResult.sentMails.map(element => {
@@ -113,11 +103,11 @@ const actions = {
 			})
 	},
 
-	delete(context, payload) {
+	remove(context, payload) {
 		const endPoint = 'apps/polls/share/remove/'
 		return axios.post(generateUrl(endPoint), { share: payload.share })
-			.then(() => {
-				context.commit('delete', { share: payload.share })
+			.then((response) => {
+				context.commit('set', { shares: response.data.shares })
 			}, (error) => {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
 				throw error
