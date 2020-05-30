@@ -93,12 +93,12 @@ class ShareController extends Controller {
 
 	/**
 	 * get
-	 * Get pollId by token
+	 * Get share by token
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
 	 * @param string $token
-	 * @return DataResponse
+	 * @return DataResponse Share
 	 */
 	public function get($token) {
 		try {
@@ -112,11 +112,11 @@ class ShareController extends Controller {
 
 	/**
 	 * list
-	 * Read all shares of a poll based on the poll id and return list as array
+	 * Generates array of shares based on $pollId
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param integer $pollId
-	 * @return DataResponse
+	 * @return DataResponse Array of Share
 	 */
 	public function list($pollId) {
 		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
@@ -137,12 +137,13 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * Write a new share to the db and returns the new share as array
+	 * add
+	 * Add a share
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param int $pollId
-	 * @param string $message
-	 * @return DataResponse
+	 * @param Array $share
+	 * @return DataResponse Array of Share
 	 */
 	public function add($pollId, $share) {
 		$this->acl->setPollId($pollId);
@@ -179,56 +180,60 @@ class ShareController extends Controller {
 
 	/**
 	 * createPersonalShare
-	 * Write a new share to the db and returns the new share as array
+	 * Create a new personal share from public share
+	 * or update email share
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $message
-	 * @return DataResponse
+	 * @param string $token
+	 * @param string $userName
+	 * @param string $userEmail
+	 * @return DataResponse Share
 	 */
-	public function createPersonalShare($token, $userName) {
+	public function createPersonalShare($token, $userName, $userEmail = '') {
 
 		try {
-			$publicShare = $this->shareMapper->findByToken($token);
+			$this->share = $this->shareMapper->findByToken($token);
 
 			// Return of validatePublicUsername is a DataResponse
-			$checkUsername = $this->systemController->validatePublicUsername($publicShare->getPollId(), $userName, $token);
+			$checkUsername = $this->systemController->validatePublicUsername($this->share->getPollId(), $userName, $token);
 
 			// if status is not 200, return DataResponse from validatePublicUsername
 			if ($checkUsername->getStatus() !== 200) {
 				return $checkUsername;
 			}
 
-			if ($publicShare->getType() === 'public') {
+			if ($this->share->getType() === 'email') {
 
-				$userShare = new Share();
-				$userShare->setToken(\OC::$server->getSecureRandom()->generate(
+				$this->share->setType('external');
+				$this->share->setUserId($userName);
+				$this->shareMapper->update($this->share);
+
+			} elseif ($this->share->getType() === 'public') {
+
+				$pollId = $this->share->getPollId();
+				$this->share = new Share();
+				$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 					16,
 					ISecureRandom::CHAR_DIGITS .
 					ISecureRandom::CHAR_LOWER .
 					ISecureRandom::CHAR_UPPER
 				));
-				$userShare->setType('external');
-				$userShare->setPollId($publicShare->getPollId());
-				$userShare->setUserId($userName);
-				$userShare->setUserEmail('');
-				$userShare = $this->shareMapper->insert($userShare);
-				return new DataResponse($userShare, Http::STATUS_OK);
-
-			} elseif ($publicShare->getType() === 'email') {
-
-				$publicShare->setType('external');
-				$publicShare->setUserId($userName);
-				$this->shareMapper->update($publicShare);
-				return new DataResponse($publicShare, Http::STATUS_OK);
+				$this->share->setType('external');
+				$this->share->setPollId($pollId);
+				$this->share->setUserId($userName);
+				$this->share->setUserEmail($userEmail);
+				$this->share = $this->shareMapper->insert($this->share);
 
 			} else {
-				return new DataResponse(['message'=> 'Wrong share type: ' . $userShare->getType()], Http::STATUS_FORBIDDEN);
+				return new DataResponse([
+					'message'=> 'Wrong share type: ' . $this->share->getType()
+				], Http::STATUS_FORBIDDEN);
 			}
 
+			return new DataResponse($this->share, Http::STATUS_OK);
+
 		} catch (DoesNotExistException $e) {
-			// return forbidden in all not catched error cases
 			return new DataResponse($e, Http::STATUS_FORBIDDEN);
 		}
 	}
@@ -238,7 +243,7 @@ class ShareController extends Controller {
 	 * remove share
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Share $share
+	 * @param Array $share
 	 * @return DataResponse
 	 */
 
