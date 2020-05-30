@@ -60,6 +60,9 @@ class Acl implements JsonSerializable {
 	/** @var bool */
 	private $foundByToken = false;
 
+	/** @var bool */
+	private $tokenIsValid = false;
+
 	/** @var string */
 	private $userId;
 
@@ -118,6 +121,70 @@ class Acl implements JsonSerializable {
 
 	/**
 	 * @NoAdminRequired
+	 * @return int
+	 */
+	public function setPollId(int $pollId): Acl {
+		try {
+			$this->pollId = $pollId;
+			$this->poll = $this->pollMapper->find($this->pollId);
+			$this->shares = $this->shareMapper->findByPoll($this->pollId);
+		} catch (DoesNotExistException $e) {
+			$this->poll = new Poll();
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return string
+	 */
+	public function setUserId($userId): Acl {
+		$this->userId = $userId;
+		return $this;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @return string
+	 */
+	public function setToken(string $token): Acl {
+		try {
+
+			$this->token = $token;
+			$share = $this->shareMapper->findByToken($token);
+			$this->foundByToken = true;
+			$this->tokenIsValid = true;
+			$this->setPollId($share->getPollId());
+
+			if (($share->getType() === 'group' || $share->getType() === 'user') && !\OC::$server->getUserSession()->isLoggedIn()) {
+				// User must be logged in for shareType user and group
+				$this->setPollId(0);
+				$this->setUserId(null);
+				$this->token = '';
+				$this->foundByToken = false;
+				$this->tokenIsValid = false;
+			} else if (($share->getType() === 'group' || $share->getType() === 'public') && \OC::$server->getUserSession()->isLoggedIn()) {
+				// Use user name of authorized user shareType public and group if user is logged in
+				$this->setUserId($this->userId);
+			} else {
+				$this->setUserId($share->getUserId());
+			}
+
+		} catch (DoesNotExistException $e) {
+			$this->poll = new Poll();
+			$this->userId = null;
+			$this->token = '';
+			$this->foundByToken = false;
+			$this->tokenIsValid = false;
+		}
+
+		return $this;
+
+	}
+
+	/**
+	 * @NoAdminRequired
 	 * @return string
 	 */
 	 public function getUserId() {
@@ -140,15 +207,6 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return string
 	 */
-	public function setUserId($userId): Acl {
-		$this->userId = $userId;
-		return $this;
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @return string
-	 */
 	public function getLoggedIn() {
 		return \OC::$server->getUserSession()->isLoggedIn();
 	}
@@ -159,18 +217,6 @@ class Acl implements JsonSerializable {
 	 */
 	public function getPollId(): int {
 		return $this->pollId;
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @return int
-	 */
-	public function setPollId(int $pollId): Acl {
-		$this->pollId = $pollId;
-		$this->poll = $this->pollMapper->find($this->pollId);
-		$this->shares = $this->shareMapper->findByPoll($this->pollId);
-
-		return $this;
 	}
 
 	/**
@@ -361,45 +407,18 @@ class Acl implements JsonSerializable {
 
 	/**
 	 * @NoAdminRequired
-	 * @return string
+	 * @return bool
 	 */
-	public function getToken(): string {
-		return $this->token;
+	public function getTokenIsValid(): bool {
+		return $this->tokenIsValid;
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @return string
 	 */
-	public function setToken(string $token): Acl {
-		try {
-
-			$this->token = $token;
-			$share = $this->shareMapper->findByToken($token);
-			$this->foundByToken = true;
-			$this->setPollId($share->getPollId());
-
-			if (($share->getType() === 'group' || $share->getType() === 'user') && !\OC::$server->getUserSession()->isLoggedIn()) {
-				// User must be logged in for shareType user and group
-				$this->setPollId(0);
-				$this->setUserId(null);
-				$this->token = '';
-				$this->foundByToken = false;
-			} else if (($share->getType() === 'group' || $share->getType() === 'public') && \OC::$server->getUserSession()->isLoggedIn()) {
-				// Use user name of authorized user shareType public and group if user is logged in
-				$this->setUserId($this->userId);
-			} else {
-				$this->setUserId($share->getUserId());
-			}
-
-
-		} catch (DoesNotExistException $e) {
-			$this->setPollId(0);
-			$this->setUserId(null);
-			$this->token = '';
-			$this->foundByToken = false;
-		}
-		return $this;
+	public function getToken(): string {
+		return $this->token;
 	}
 
 	/**
