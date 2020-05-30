@@ -83,7 +83,7 @@ const getters = {
 	participants: (state, getters) => {
 		const participants = []
 		const map = new Map()
-		for (const item of state.votes.votes) {
+		for (const item of state.votes.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
 				participants.push({
@@ -107,7 +107,7 @@ const getters = {
 	participantsVoted: (state, getters) => {
 		const participantsVoted = []
 		const map = new Map()
-		for (const item of state.votes.votes) {
+		for (const item of state.votes.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
 				participantsVoted.push({

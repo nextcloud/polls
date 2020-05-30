@@ -74,7 +74,7 @@ export default {
 
 	computed: {
 		...mapState({
-			comments: state => state.poll.comments.comments,
+			comments: state => state.poll.comments.list,
 			acl: state => state.poll.acl,
 		}),
 

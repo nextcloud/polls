@@ -26,7 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultVotes = () => {
 	return {
-		votes: [],
+		list: [],
 	}
 }
 
@@ -36,7 +36,7 @@ const namespaced = true
 
 const mutations = {
 	set(state, payload) {
-		state.votes = payload.votes
+		state.list = payload.votes
 	},
 
 	reset(state) {
@@ -44,18 +44,18 @@ const mutations = {
 	},
 
 	deleteVotes(state, payload) {
-		state.votes = state.votes.filter(vote => vote.userId !== payload.userId)
+		state.list = state.list.filter(vote => vote.userId !== payload.userId)
 	},
 
 	setItem(state, payload) {
-		const index = state.votes.findIndex(vote =>
+		const index = state.list.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
 			&& vote.voteOptionText === payload.option.pollOptionText)
 		if (index > -1) {
-			state.votes[index] = Object.assign(state.votes[index], payload.vote)
+			state.list[index] = Object.assign(state.list[index], payload.vote)
 		} else {
-			state.votes.push(payload.vote)
+			state.list.push(payload.vote)
 		}
 	},
 }
@@ -72,10 +72,10 @@ const getters = {
 
 	ranked: (state, getters, rootState) => {
 		let votesRank = []
-		rootState.poll.options.options.forEach(function(option) {
-			const countYes = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
-			const countMaybe = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
-			const countNo = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
+		rootState.poll.options.list.forEach(function(option) {
+			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
+			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
+			const countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
 			votesRank.push({
 				rank: 0,
 				pollOptionText: option.pollOptionText,
@@ -96,7 +96,7 @@ const getters = {
 	},
 
 	getVote: (state) => (payload) => {
-		return state.votes.find(vote => {
+		return state.list.find(vote => {
 			return (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})

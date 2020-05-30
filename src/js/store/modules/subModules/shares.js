@@ -26,7 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultShares = () => {
 	return {
-		shares: [],
+		list: [],
 	}
 }
 
@@ -36,11 +36,11 @@ const namespaced = true
 
 const mutations = {
 	set(state, payload) {
-		state.shares = payload.shares
+		state.list = payload.shares
 	},
 
 	delete(state, payload) {
-		state.shares = state.shares.filter(share => {
+		state.list = state.list.filter(share => {
 			return share.id !== payload.share.id
 		})
 	},
@@ -50,7 +50,7 @@ const mutations = {
 	},
 
 	add(state, payload) {
-		state.shares.push(payload)
+		state.list.push(payload)
 	},
 
 }
@@ -58,14 +58,14 @@ const mutations = {
 const getters = {
 	invitation: state => {
 		const invitationTypes = ['user', 'group', 'email', 'external', 'contact']
-		return state.shares.filter(share => {
+		return state.list.filter(share => {
 			return invitationTypes.includes(share.type)
 		})
 	},
 
 	public: state => {
 		const invitationTypes = ['public']
-		return state.shares.filter(share => {
+		return state.list.filter(share => {
 			return invitationTypes.includes(share.type)
 		})
 	},
@@ -73,19 +73,6 @@ const getters = {
 }
 
 const actions = {
-	addPersonal(context, payload) {
-		const endPoint = 'apps/polls/share/create/s/'
-
-		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
-			.then((response) => {
-				return { token: response.data.token }
-			}, (error) => {
-				console.error('Error writing share', { error: error.response }, { payload: payload })
-				throw error
-			})
-
-	},
-
 	add(context, payload) {
 		const endPoint = 'apps/polls/share/write/'
 		payload.share.pollId = context.rootState.poll.id
@@ -137,6 +124,18 @@ const actions = {
 			})
 	},
 
+	addPersonal(context, payload) {
+		const endPoint = 'apps/polls/share/create/s/'
+
+		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
+			.then((response) => {
+				return { token: response.data.token }
+			}, (error) => {
+				console.error('Error writing share', { error: error.response }, { payload: payload })
+				throw error
+			})
+
+	},
 }
 
 export default { namespaced, state, mutations, actions, getters }

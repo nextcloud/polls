@@ -27,7 +27,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
 	return {
-		options: [],
+		list: [],
 	}
 }
 
@@ -37,7 +37,7 @@ const namespaced = true
 
 const mutations = {
 	set(state, payload) {
-		state.options = payload.options
+		state.list = payload.options
 	},
 
 	reset(state) {
@@ -45,20 +45,20 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.options = state.options.filter(option => {
+		state.list = state.list.filter(option => {
 			return option.id !== payload.option.id
 		})
 	},
 
 	setItem(state, payload) {
-		const index = state.options.findIndex((option) => {
+		const index = state.list.findIndex((option) => {
 			return option.id === payload.option.id
 		})
 
 		if (index < 0) {
-			state.options.push(payload.option)
+			state.list.push(payload.option)
 		} else {
-			state.options.splice(index, 1, payload.option)
+			state.list.splice(index, 1, payload.option)
 		}
 	},
 }
@@ -66,14 +66,14 @@ const mutations = {
 const getters = {
 	sorted: (state, getters, rootState, rootGetters) => {
 		let rankedOptions = []
-		state.options.forEach((option) => {
+		state.list.forEach((option) => {
 			rankedOptions.push({
 				...option,
 				rank: 0,
 				no: 0,
-				yes: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
-				maybe: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
-				realno: rootState.poll.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
+				yes: rootState.poll.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
+				maybe: rootState.poll.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
+				realno: rootState.poll.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
 				votes: rootGetters['poll/participantsVoted'].length,
 			})
 		})
@@ -93,7 +93,7 @@ const getters = {
 	},
 
 	confirmed: state => {
-		return state.options.filter(option => {
+		return state.list.filter(option => {
 			return option.confirmed > 0
 		})
 	},
@@ -141,7 +141,7 @@ const actions = {
 
 		} else if (context.rootState.poll.type === 'textPoll') {
 			option.timestamp = 0
-			option.order = state.options.length + 1
+			option.order = state.list.length + 1
 			option.pollOptionText = payload.pollOptionText
 		}
 

@@ -112,7 +112,7 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.poll.options.options,
+			options: state => state.poll.options.list,
 			acl: state => state.poll.acl,
 		}),
 

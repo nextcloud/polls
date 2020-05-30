@@ -126,7 +126,7 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
-			options: state => state.poll.options.options,
+			options: state => state.poll.options.list,
 		}),
 
 		...mapGetters({

@@ -27,7 +27,7 @@ import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
 const state = {
-	polls: [],
+	list: [],
 }
 
 const namespaced = true
@@ -41,11 +41,11 @@ const mutations = {
 const getters = {
 	filtered: (state) => (filterId) => {
 		if (filterId === 'all') {
-			return state.polls.filter(poll => (!poll.deleted))
+			return state.list.filter(poll => (!poll.deleted))
 		} else if (filterId === 'my') {
-			return state.polls.filter(poll => (poll.owner === getCurrentUser().uid && !poll.deleted))
+			return state.list.filter(poll => (poll.owner === getCurrentUser().uid && !poll.deleted))
 		} else if (filterId === 'relevant') {
-			return state.polls.filter(poll => ((
+			return state.list.filter(poll => ((
 				poll.userHasVoted
 				|| poll.isOwner
 				|| (poll.allowView && poll.access !== 'public')
@@ -54,15 +54,15 @@ const getters = {
 			&& !(poll.expire > 0 && moment.unix(poll.expire).diff() < 0)
 			))
 		} else if (filterId === 'public') {
-			return state.polls.filter(poll => (poll.access === 'public' && !poll.deleted))
+			return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
 		} else if (filterId === 'hidden') {
-			return state.polls.filter(poll => (poll.access === 'hidden' && !poll.deleted))
+			return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
 		} else if (filterId === 'deleted') {
-			return state.polls.filter(poll => (poll.deleted))
+			return state.list.filter(poll => (poll.deleted))
 		} else if (filterId === 'participated') {
-			return state.polls.filter(poll => (poll.userHasVoted))
+			return state.list.filter(poll => (poll.userHasVoted))
 		} else if (filterId === 'expired') {
-			return state.polls.filter(poll => (
+			return state.list.filter(poll => (
 				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
 			))
 		}
@@ -75,7 +75,7 @@ const actions = {
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('set', { polls: response.data })
+				context.commit('set', { list: response.data })
 			}, (error) => {
 				OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
 				console.error('Error loading polls', { error: error.response })

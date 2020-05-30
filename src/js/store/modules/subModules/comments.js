@@ -26,7 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultComments = () => {
 	return {
-		comments: [],
+		list: [],
 	}
 }
 
@@ -37,7 +37,7 @@ const namespaced = true
 const mutations = {
 
 	set(state, payload) {
-		state.comments = payload.comments
+		state.list = payload.comments
 	},
 
 	reset(state) {
@@ -45,11 +45,11 @@ const mutations = {
 	},
 
 	add(state, payload) {
-		state.comments.push(payload)
+		state.list.push(payload)
 	},
 
 	delete(state, payload) {
-		state.comments = state.comments.filter(comment => {
+		state.list = state.list.filter(comment => {
 			return comment.id !== payload.comment.id
 		})
 	},
@@ -57,32 +57,11 @@ const mutations = {
 
 const getters = {
 	count: state => {
-		return state.comments.length
+		return state.list.length
 	},
 }
 
 const actions = {
-	delete(context, payload) {
-		let endPoint = 'apps/polls/comment/delete/'
-
-		if (context.rootState.poll.acl.foundByToken) {
-			endPoint = endPoint.concat('s/')
-		}
-
-		return axios.post(generateUrl(endPoint), {
-			token: context.rootState.poll.acl.token,
-			comment: payload.comment,
-		})
-			.then((response) => {
-				context.commit('delete', { comment: response.data.comment })
-				return response.data
-			}, (error) => {
-				console.error('Error deleting comment', { error: error.response }, { payload: payload })
-				throw error
-			})
-
-	},
-
 	add(context, payload) {
 		let endPoint = 'apps/polls/comment/write/'
 
@@ -101,6 +80,26 @@ const actions = {
 				return response.data
 			}, (error) => {
 				console.error('Error writing comment', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
+	delete(context, payload) {
+		let endPoint = 'apps/polls/comment/delete/'
+
+		if (context.rootState.poll.acl.foundByToken) {
+			endPoint = endPoint.concat('s/')
+		}
+
+		return axios.post(generateUrl(endPoint), {
+			token: context.rootState.poll.acl.token,
+			comment: payload.comment,
+		})
+			.then((response) => {
+				context.commit('delete', { comment: response.data.comment })
+				return response.data
+			}, (error) => {
+				console.error('Error deleting comment', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
