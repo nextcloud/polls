@@ -64,7 +64,7 @@ const getters = {
 
 	answerSequence: (state, getters, rootState) => {
 		if (rootState.poll.allowMaybe) {
-			return ['no', 'maybe', 'yes', 'no']
+			return ['no', 'yes', 'maybe', 'no']
 		} else {
 			return ['no', 'yes', 'no']
 		}
@@ -115,11 +115,13 @@ const getters = {
 
 const actions = {
 	delete(context, payload) {
-		const endPoint = 'apps/polls/votes/delete/'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
-			voteId: 0,
-			userId: payload.userId,
+		const endPoint = 'apps/polls/votes'
+		return axios.delete(generateUrl(endPoint), {
+			data: {
+				pollId: context.rootState.poll.id,
+				voteId: 0,
+				userId: payload.userId,
+			},
 		})
 			.then(() => {
 				context.commit('deleteVotes', payload)
@@ -131,18 +133,13 @@ const actions = {
 	},
 
 	set(context, payload) {
-		let endPoint = 'apps/polls/vote/set/'
+		const endPoint = 'apps/polls/vote'
 
-		if (context.rootState.poll.acl.foundByToken) {
-			endPoint = endPoint.concat('s/')
-		}
-
-		return axios.post(generateUrl(endPoint), {
+		return axios.put(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			token: context.rootState.poll.acl.token,
 			option: payload.option,
-			userId: payload.userId,
 			setTo: payload.setTo,
+			token: context.rootState.poll.acl.token,
 		})
 			.then((response) => {
 				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
