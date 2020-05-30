@@ -33,6 +33,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "활동 이메일 알림 받기",
     "No" : "아니요",
     "Yes" : "예",
+    "No existing polls." : "투표가 없습니다.",
     "Expired" : "만료됨",
     "Deleted" : "삭제함",
     "Public access" : "공개 접근",

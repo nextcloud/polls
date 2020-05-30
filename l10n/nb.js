@@ -33,6 +33,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "No" : "Nei",
     "Yes" : "Ja",
+    "No existing polls." : "Ingen eksisterende avstemninger.",
     "Expired" : "Utløpt",
     "Deleted" : "Slettet",
     "Public access" : "Offentlig tilgang",

@@ -134,6 +134,7 @@ OC.L10N.register(
     "The poll does not exist" : "Anketa neexistuje",
     "Enter a poll or start a new one." : "Zadajte anketu alebo začnite novú.",
     "Goto Nextcloud" : "Prejsť do Nextcloudu",
+    "No existing polls." : "Žiadne existujúce ankety.",
     "Relevant polls" : "Dôležité ankety",
     "Hidden polls" : "Skryté ankety",
     "My deleted polls" : "Moje odstránené ankety",

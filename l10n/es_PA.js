@@ -31,6 +31,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "No" : "No",
     "Yes" : "Sí",
+    "No existing polls." : "No hay encuestas existentes.",
     "Deleted" : "Borrado",
     "Public access" : "Acceso público",
     "Access denied" : "Acceso denegado",

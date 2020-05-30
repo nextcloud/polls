@@ -35,6 +35,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Receive notification email on activity",
     "No" : "No",
     "Yes" : "Yes",
+    "No existing polls." : "No existing polls.",
     "Expired" : "Expired",
     "Deleted" : "Deleted",
     "Public access" : "Public access",

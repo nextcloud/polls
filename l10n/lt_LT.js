@@ -38,6 +38,7 @@ OC.L10N.register(
     "Enter Title" : "Įveskite pavadinimą",
     "Poll type" : "Apklausos tipas",
     "Date poll" : "Datos apklausa",
+    "Text poll" : "Tekstinė apklausa",
     "Cancel" : "Atsisakyti",
     "Apply" : "Taikyti",
     "Poll \"%n\" added" : "Pridėta apklausa \"%n\"",
