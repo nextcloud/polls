@@ -96,7 +96,7 @@ OC.L10N.register(
     "Available Options" : "Verfügbare Optionen",
     "Delete option" : "Option löschen",
     "Clone option" : "Option kopieren",
-    "There are no vote options specified." : "Keine Abstimmungsmöglichkeiten vorhanden.",
+    "There are no vote options specified." : "Keine Abstimmungsoptionen vorhanden.",
     "Clone to option sequence" : "Zur Optionsfolge kopieren",
     "Create a sequence of date options starting with {dateOption}." : "Eine Folge von Datumsoptionen erstellen, beginnend mit {dateOption}.",
     "Step width: " : "Schrittweite:",
