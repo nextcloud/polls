@@ -64,6 +64,7 @@ OC.L10N.register(
     "Visible to other users" : "Beste erabiltzaileentzat ikusgai",
     "Hidden to other users" : "Beste erabiltzaileei ezkutatuta",
     "never" : "inoiz ez",
+    "Error loading poll" : "Errorea inkesta kargatzean",
     "Details" : "Xehetasunak",
     "Configuration" : "Konfigurazioa",
     "Options" : "Aukerak",
