@@ -12,5 +12,5 @@
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "ئۆچۈرۈلدى"
-},"pluralForm" :"nplurals=1; plural=0;"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
