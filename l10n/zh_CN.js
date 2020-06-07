@@ -91,6 +91,8 @@ OC.L10N.register(
     "Clone option" : "复制选项",
     "Clone to option sequence" : "复制到选项序列",
     "Create a sequence of date options starting with {dateOption}." : "创建一个日期序列，开始于 {dateOption}。",
+    "Step width: " : "步长：",
+    "Step unit: " : "步进：",
     "Number of items to create: " : "要创建的项目数量：",
     "OK" : "确认",
     "Week" : "星期",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Title" : "Назва",
     "Cancel" : "Скасувати",
     "Apply" : "Застосувати",
+    "Access" : "Доступ",
     "Owner" : "Власник",
     "never" : "ніколи",
     "Details" : "Деталі",
