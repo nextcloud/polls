@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
+use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
@@ -34,23 +35,13 @@ use OCP\Migration\IOutput;
  * Installation class for the polls app.
  * Initial db creation
  */
-class Version0104Date20200205104800 extends SimpleMigrationStep {
+class Version0105Date20200508211943 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
 
 	/** @var IConfig */
 	protected $config;
-
-	/** @var array */
-	protected $childTables = [
-		'polls_comments',
-		'polls_log',
-		'polls_notif',
-		'polls_options',
-		'polls_share',
-		'polls_votes',
-	];
 
 	/**
 	 * @param IDBConnection $connection
@@ -61,39 +52,6 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 		$this->config = $config;
 	}
 
-
-	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null
-	 * @since 13.0.0
-	 */
-	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		// delete all orphaned entries by selecting all rows
-		// those poll_ids are not present in the polls table
-		//
-		// we have to use a raw query, because NOT EXISTS is not
-		// part of doctrine's expression builder
-		//
-		// get table prefix, as we are running a raw query
-		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
-		// check for orphaned entries in all tables referencing
-		// the main polls table
-		foreach($this->childTables as $tbl) {
-			$child = "$prefix$tbl";
-			$query = "DELETE
-                FROM $child
-                WHERE NOT EXISTS (
-                    SELECT NULL
-                    FROM {$prefix}polls_polls polls
-                    WHERE polls.id = {$child}.poll_id
-                )";
-			$stmt = $this->connection->prepare($query);
-			$stmt->execute();
-		}
-	}
-
 	/**
 	 * @param IOutput $output
 	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -102,15 +60,17 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 	 * @since 13.0.0
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		// add an on delete fk contraint to all tables referencing the main polls table
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-
-		$eventTable = $schema->getTable('polls_polls');
-		foreach($this->childTables as $tbl) {
-			$table = $schema->getTable($tbl);
-
-			$table->addForeignKeyConstraint($eventTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);
+		if ($schema->hasTable('polls_options')) {
+			$table = $schema->getTable('polls_options');
+			if (!$table->hasColumn('confirmed')) {
+				$table->addColumn('confirmed', Type::INTEGER, [
+					'length' => 11,
+					'notnull' => true,
+					'default' => 0
+				]);
+			}
 		}
 
 		return $schema;

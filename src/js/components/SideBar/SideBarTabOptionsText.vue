@@ -33,12 +33,17 @@
 					<OptionItem v-for="(option) in sortOptions"
 						:key="option.id"
 						:option="option"
-						:draggable="true"
-						type="textPoll">
+						:draggable="true">
 						<template v-slot:actions>
 							<Actions v-if="acl.allowEdit" class="action">
 								<ActionButton icon="icon-delete" @click="removeOption(option)">
 									{{ t('polls', 'Delete option') }}
+								</ActionButton>
+							</Actions>
+							<Actions v-if="acl.allowEdit" class="action">
+								<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+									@click="confirmOption(option)">
+									{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 								</ActionButton>
 							</Actions>
 						</template>
@@ -46,6 +51,10 @@
 				</transition-group>
 			</draggable>
 		</ConfigBox>
+		<div v-if="!options.length" class="emptycontent">
+			<div class="icon-toggle-filelist" />
+			{{ t('polls', 'There are no vote options specified.') }}
+		</div>
 	</div>
 </template>
 
@@ -56,6 +65,7 @@ import ConfigBox from '../Base/ConfigBox'
 import draggable from 'vuedraggable'
 import OptionItem from '../Base/OptionItem'
 import InputDiv from '../Base/InputDiv'
+import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'SideBarTabOptionsText',
@@ -69,6 +79,11 @@ export default {
 		OptionItem,
 	},
 
+	mixins: [
+		confirmOption,
+		removeOption,
+	],
+
 	data() {
 		return {
 			newPollText: '',
@@ -81,25 +96,20 @@ export default {
 			acl: state => state.acl,
 		}),
 
-		...mapGetters(['sortedOptions']),
+		...mapGetters(['sortedOptions', 'expired']),
 
 		sortOptions: {
 			get() {
 				return this.sortedOptions
 			},
 			set(value) {
-				this.writeOptions(value)
+				this.$store.dispatch('reorderOptions', value)
 			},
 		},
 
 	},
 
 	methods: {
-		writeOptions(value) {
-			this.$store.commit('reorderOptions', value)
-			this.$store.dispatch('updateOptions')
-		},
-
 		addOption() {
 			if (this.newPollText) {
 				this.$store.dispatch('addOptionAsync', {
@@ -110,20 +120,18 @@ export default {
 					})
 			}
 		},
-
-		removeOption(option) {
-			this.$store.dispatch('removeOptionAsync', {
-				option: option,
-			})
-		},
 	},
-
 }
 </script>
 
 <style lang="scss" scoped>
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
+		&:active,
+		&:hover {
+			transition: var(--background-dark) 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
 	}
 
 	.optionAdd {
@@ -144,6 +152,10 @@ export default {
 		border: none;
 		opacity: 0.3;
 		cursor: pointer;
+	}
+
+	.emptycontent {
+		margin-top: 20vh;
 	}
 
 </style>

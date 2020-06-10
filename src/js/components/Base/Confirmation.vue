@@ -20,51 +20,72 @@
   -
   -->
 
-<template lang="html">
-	<div class="subscription">
-		<input id="subscribe" v-model="subscribe" type="checkbox"
-			class="checkbox">
-		<label for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
+<template>
+	<div class="confirmation" :class=" { confirmed: isConfirmed }">
+		<div class="confirmation--text">
+			{{ confirmations }}
+		</div>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+
 export default {
-	name: 'Subscription',
+	name: 'Confirmation',
+
+	props: {
+		option: {
+			type: Object,
+			default: undefined,
+		},
+	},
 
 	computed: {
 		...mapState({
-			subscription: state => state.subscription,
 			poll: state => state.poll,
+			votes: state => state.votes.votes,
 		}),
 
-		subscribe: {
-			get() {
-				return this.subscription.subscribed
-			},
-			set(value) {
-				this.$store.commit('setSubscription', value)
-				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.poll.id })
-			},
+		...mapGetters([
+			'votesRank',
+			'participantsVoted',
+			'expired',
+			'confirmedOptions',
+		]),
+		isConfirmed() {
+			return this.option.confirmed && this.expired
+		},
+		confirmations() {
+			if (this.isConfirmed) {
+				return t('polls', 'Confirmed')
+			} else {
+				return ' '
+			}
 		},
 	},
-
-	watch: {
-		$route() {
-			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
-		},
-	},
-
-	created() {
-		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
-	},
-
 }
+
 </script>
 
-<style lang="css" scoped>
-	.subscription {
-		padding: 8px;
+<style lang="scss" scoped>
+
+.confirmation {
+	align-items: center;
+	justify-content: center;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 21px;
+	font-size: 0;
+	align-self: stretch;
+	min-width: 24px;
+	&.confirmed {
+		background-image: var(--icon-polls-confirmed);
 	}
+}
+
+.confirmation--text {
+	text-align: center;
+}
+
 </style>

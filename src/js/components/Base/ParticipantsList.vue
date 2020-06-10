@@ -29,7 +29,7 @@
 			{{ t('polls','No Participants until now') }}
 		</h2>
 		<div v-if="participantsVoted.length" class="participants-list__list">
-			<UserDiv v-for="(participant) in participantsVoted"
+			<UserItem v-for="(participant) in participantsVoted"
 				:key="participant.userId"
 				v-bind="participant"
 				:hide-names="true"
@@ -52,7 +52,6 @@ export default {
 <style lang="scss" scoped>
 	.participants-list {
 		padding: 8px;
-		background-color: var(--color-main-background);
 	}
 	.participants-list__list {
 		display: flex;

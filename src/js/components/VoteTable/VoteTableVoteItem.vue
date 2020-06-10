@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, { active: isActive && isValidUser}]">
+	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!expired, confirmed: isConfirmed }]">
 		<div v-if="isActive" class="icon" @click="$emit('voteClick')" />
 		<div v-else class="icon" />
 	</div>
@@ -29,8 +29,9 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 export default {
-	name: 'VoteItem',
+	name: 'VoteTableVoteItem',
 
 	props: {
 		option: {
@@ -48,6 +49,10 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'expired',
+		]),
+
 		answer() {
 			try {
 				return this.$store.getters.getVote({
@@ -63,79 +68,67 @@ export default {
 			return (this.userId !== '' && this.userId !== null)
 		},
 
+		isConfirmed() {
+			return this.option.confirmed && this.expired
+		},
+
 	},
 }
 
 </script>
 
 <style lang="scss">
+.vote-table-vote-item {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--color-polls-background-no);
+	> .icon {
+		color: var(--color-polls-foreground-no);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 90%;
+		width: 30px;
+		height: 30px;
+		flex: 0 0 auto;
+	}
 
-	.vote-item {
-		height: 43px;
-		display: flex;
-		width: 85px;
-		align-items: center;
-		background-color: var(--color-polls-background-no);
+	&.yes {
+		background-color: var(--color-polls-background-yes);
 		> .icon {
+			color: var(--color-polls-foreground-yes);
+			background-image: var(--icon-polls-yes)
+		}
+	}
+
+	&.no {
+		background-color: var(--color-polls-background-no);
+		&.active > .icon {
 			color: var(--color-polls-foreground-no);
-			margin: auto;
-			background-position: center;
-			background-repeat: no-repeat;
-			min-width: 30px;
-			min-height: 30px;
-			width: 30px;
-			height: 30px;
-			background-size: 90%;
-			flex: 0 0 auto;
-		}
-
-		&.yes {
-			background-color: var(--color-polls-background-yes);
-			> .icon {
-				color: var(--color-polls-foreground-yes);
-				background-image: var(--icon-polls-yes)
-			}
-		}
-
-		&.no {
-			background-color: var(--color-polls-background-no);
-			&.active > .icon {
-				color: var(--color-polls-foreground-no);
-				background-image: var(--icon-polls-no)
-			}
-		}
-
-		&.maybe {
-			background-color: var(--color-polls-background-maybe);
-			> .icon {
-				background-size: 80%;
-				color: var(--color-polls-foreground-maybe);
-				background-image: var(--icon-polls-maybe)
-			}
-		}
-
-		&.active {
-			background-color: var(--color-main-background);
-			> .icon {
-				cursor: pointer;
-				border: 2px solid;
-				border-radius: var(--border-radius);
-			}
-			&:active {
-				box-shadow: inherit;
-			}
-		}
-
-	}
-
-	@media (max-width: (480px) ) {
-		.vote-item {
-			border-top: 1px solid var(--color-border-dark);
-			&.active {
-				width: 10vw;
-				height: 10vw;
-			}
+			background-image: var(--icon-polls-no)
 		}
 	}
 
+	&.maybe {
+		background-color: var(--color-polls-background-maybe);
+		> .icon {
+			background-size: 80%;
+			color: var(--color-polls-foreground-maybe);
+			background-image: var(--icon-polls-maybe)
+		}
+	}
+
+	&.active {
+		background-color: var(--color-main-background);
+		> .icon {
+			cursor: pointer;
+			border: 2px solid;
+			border-radius: var(--border-radius);
+		}
+	}
+}
+.vote-table-vote-item.confirmed:not(.yes):not(.maybe) .icon {
+	background-image: var(--icon-polls-no);
+}
 </style>

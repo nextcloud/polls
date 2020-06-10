@@ -40,6 +40,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setTimestamp(integer $value)
  * @method integer getOrder()
  * @method void setOrder(integer $value)
+ * @method integer getConfirmed()
+ * @method void setConfirmed(integer $value)
  */
 class Option extends Entity implements JsonSerializable {
 
@@ -55,6 +57,9 @@ class Option extends Entity implements JsonSerializable {
 	/** @var int $order */
 	protected $order;
 
+	/** @var int $confirmed */
+	protected $confirmed;
+
 	public function jsonSerialize() {
 		if (intval($this->timestamp) > 0) {
 			$timestamp = $this->timestamp;
@@ -69,7 +74,14 @@ class Option extends Entity implements JsonSerializable {
 			'pollId' => intval($this->pollId),
 			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
 			'timestamp' => intval($timestamp),
-			'order' => $this->setOrder(intval($this->timestamp), intval($this->order))
+			'order' => $this->orderCorrection(intval($this->timestamp), intval($this->order)),
+			'confirmed' => intval($this->confirmed),
+			'no' => 0,
+			'yes' => 0,
+			'maybe' => 0,
+			'realno' => 0,
+			'rank' => 0,
+			'votes' => 0,
 		];
 
 	}
@@ -79,11 +91,11 @@ class Option extends Entity implements JsonSerializable {
 	 * Make sure, order is eqal to timestamp in date polls
 	 */
 	 // TODO: remove by time
-	private function setOrder($timestamp, $order) {
-		if ($timestamp === 0) {
-			return $order;
-		} else {
+	private function orderCorrection($timestamp, $order) {
+		if ($timestamp) {
 			return $timestamp;
+		} else {
+			return $order;
 		}
 	}
 }

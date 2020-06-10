@@ -21,40 +21,57 @@
   -->
 
 <template lang="html">
-	<div class="vote-table" :class="{ 'owner-access': acl.allowEdit, 'listMode': !tableMode }">
-		<div class="vote-table__header">
-			<div class="user-div" />
+	<div class="vote-table" :class="tableMode ? 'desktop' : 'mobile'">
+		<div class="vote-table__users fixed">
+			<UserItem v-for="(participant) in participants"
+				:key="participant.userId"
+				v-bind="participant"
+				:class="{currentuser: (participant.userId === acl.userId) }">
+				<Actions v-if="acl.allowEdit" class="action">
+					<ActionButton icon="icon-delete" @click="confirmDelete(participant.userId)">
+						{{ t('polls', 'Delete votes') }}
+					</ActionButton>
+				</Actions>
+			</UserItem>
+		</div>
 
-			<VoteTableHeader v-for="(option) in sortedOptions"
+		<div class="vote-table__header">
+			<VoteTableHeaderItem v-for="(option) in rankedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="poll.type"
 				:table-mode="tableMode" />
 		</div>
 
-		<div v-for="(participant) in participants"
-			:key="participant.userId"
-			:class=" {currentuser: (participant.userId === acl.userId) }"
-			class="vote-table__vote-row">
-			<UserDiv :key="participant.userId"
-				v-bind="participant"
-				class="vote-table__user-column"
-				:class="{currentuser: (participant.userId === acl.userId) }">
-				<Actions v-if="acl.allowEdit" class="action">
-					<ActionButton icon="icon-delete"
-						@click="confirmDelete(participant.userId)">
-						{{ t('polls', 'Delete votes') }}
+		<div class="vote-table__votes">
+			<div v-for="(participant) in participants"
+				:key="participant.userId"
+				:class=" {currentuser: (participant.userId === acl.userId) }"
+				class="vote-table__vote-row">
+				<VoteTableVoteItem v-for="(option) in rankedOptions"
+					:key="option.id"
+					:user-id="participant.userId"
+					:option="option"
+					:is-active="acl.userId === participant.userId && acl.allowVote"
+					@voteClick="setVote(option, participant.userId)" />
+			</div>
+		</div>
+
+		<div v-if="expired" class="vote-table__footer">
+			<div v-for="(option) in rankedOptions" :key="option.id" :class="{ 'confirmed' : option.confirmed }">
+				<Actions v-if="acl.allowEdit"
+					class="action">
+					<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+						@click="confirmOption(option)">
+						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 					</ActionButton>
 				</Actions>
-			</UserDiv>
-
-			<VoteItem v-for="(option) in sortedOptions"
-				:key="option.id"
-				:user-id="participant.userId"
-				:option="option"
-				:is-active="acl.userId === participant.userId && acl.allowVote"
-				@voteClick="setVote(option, participant.userId)" />
+			</div>
 		</div>
+
+		<div class="vote-table__footer-blind fixed" />
+
+		<div class="vote-table__header-blind fixed" />
 
 		<Modal v-if="modal">
 			<div class="modal__content">
@@ -71,10 +88,12 @@
 </template>
 
 <script>
-import VoteItem from './VoteItem'
-import VoteTableHeader from './VoteTableHeader'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import orderBy from 'lodash/orderBy'
+import VoteTableVoteItem from './VoteTableVoteItem'
+import VoteTableHeaderItem from './VoteTableHeaderItem'
+import { confirmOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'VoteTable',
@@ -82,12 +101,18 @@ export default {
 		Actions,
 		ActionButton,
 		Modal,
-		VoteTableHeader,
-		VoteItem,
+		VoteTableHeaderItem,
+		VoteTableVoteItem,
 	},
+
+	mixins: [confirmOption],
 
 	props: {
 		tableMode: {
+			type: Boolean,
+			default: false,
+		},
+		ranked: {
 			type: Boolean,
 			default: false,
 		},
@@ -109,7 +134,12 @@ export default {
 		...mapGetters([
 			'sortedOptions',
 			'participants',
+			'expired',
 		]),
+
+		rankedOptions() {
+			return orderBy(this.sortedOptions, this.ranked ? 'rank' : 'order', 'asc')
+		},
 	},
 
 	methods: {
@@ -143,101 +173,241 @@ export default {
 
 <style lang="scss">
 
+// use grid
 .vote-table {
-	display: flex;
-	flex: 0 auto;
-	flex-direction: column;
-	justify-content: flex-start;
-	overflow-x: scroll;
-	padding-bottom: 12px;
-	background-color: var(--color-main-background);
-}
+	display: grid;
+	overflow: scroll;
 
-.vote-table__vote-row, .vote-table__header {
-	display: flex;
-	flex: 1;
-	border-bottom: 1px solid var(--color-border-dark);
-	background-color: var(--color-main-background);
-	justify-content: space-between;
-	min-width: max-content;
-}
-
-.vote-table__header {
-	order: 1;
-}
-
-.vote-table__vote-row {
-	order: 3;
-	&.currentuser {
-		order: 2;
-	}
-}
-
-.user-div {
-	position: sticky;
-	left: 0;
-	background-color: var(--color-main-background);
-	width: 230px;
-	flex: 0 auto;
-	.owner-access {
-		width: 280px;
-	}
-}
-.counter {
-	display: flex;
-}
-
-.counter2 {
-	display: none;
-}
-
-.vote-item, .vote-table-header {
-	width: 84px;
-	min-width: 84px;
-	flex: 1;
-	margin: 2px;
-}
-
-.vote-table.listMode {
-	flex: 0 auto;
-	flex-direction: row;
-	min-width: 300px;
-	.vote-item, .vote-table-header {
-		margin: 0;
-		border-top: 1px solid var(--color-border-dark);
-	}
-
-	.counter {
-		display: none;
-	}
-
-	.counter2 {
+	// define default flex items
+	.vote-table__users,
+	.vote-table__header,
+	.vote-table__votes,
+	.vote-table__footer,
+	.vote-table__vote-row,
+	.vote-table-header-item,
+	.vote-table-vote-item {
 		display: flex;
 	}
 
-	.vote-table__vote-row:not(.currentuser), .user-div {
-		display: none;
+	//set default style for confirmed options
+	.vote-table__header,
+	.vote-table__vote-row,
+	.vote-table__footer {
+		> div {
+			flex: 1;
+			order: 1;
+			&.confirmed {
+				order: 0;
+				border-radius: 10px;
+				border: 1px solid var(--color-polls-foreground-yes) !important;
+				border-top: 1px solid var(--color-polls-foreground-yes) !important;
+				border-bottom: 1px solid var(--color-polls-foreground-yes) !important;
+				background-color: var(--color-polls-background-yes) !important;
+				padding: 8px 2px;
+			}
+		}
 	}
+}
 
-	.vote-table__vote-row.currentuser {
-		display: flex;
+// justify styles for mobile view
+.vote-table.mobile {
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto;
+	grid-template-areas: "vote header";
+	justify-items: stretch;
+
+	.vote-table__header {
+		grid-area: header;
 		flex-direction: column;
-		order: 0;
-		flex: 0;
 	}
 
-	.vote-table-header {
+	.vote-table__votes {
+		grid-area: vote;
+		.vote-table__vote-row {
+			flex-direction: column;
+		}
+	}
+
+	.vote-table__header-blind,
+	.vote-table__users,
+	.vote-table__vote-row:not(.currentuser),
+	.vote-table__footer-blind,
+	.vote-table__footer {
+		display: none;
+	}
+
+	.vote-table__header,
+	.vote-table__vote-row {
+		> div {
+			padding-left: 12px;
+			padding-right: 12px;
+			border-bottom: 1px solid var(--color-border-dark);
+			min-height: 3em;
+			height: 3em;
+			&.confirmed {
+				margin-top: 8px;
+				margin-bottom: 8px;
+				font-weight: bold;
+			}
+		}
+	}
+
+	.vote-table__header {
+		> div.confirmed {
+			border-left: none !important;
+			border-bottom-left-radius: 0;
+			border-top-left-radius: 0;
+		}
+	}
+
+	.vote-table__vote-row {
+		> div.confirmed {
+			border-right: none !important;
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+
+}
+
+.vote-table.desktop {
+	grid-template-columns: auto repeat(var(--polls-vote-columns), 1fr);
+	grid-template-rows: auto repeat(var(--polls-vote-rows), 1fr) auto;
+	grid-template-areas:
+		"blind1 options"
+		"users vote"
+		"blind2 footer";
+	justify-items: stretch;
+	padding-bottom: 14px; // leave space for the scrollbar!
+
+	.vote-table__header {
+		grid-area: options;
 		flex-direction: row;
-		width: unset;
-		min-width: unset;
+		> div {
+			flex-direction: column;
+			flex: 1;
+			align-items: center;
+		}
+	}
+
+	.vote-table__header-blind {
+		grid-area: blind1;
+	}
+
+	.vote-table__footer-blind {
+		grid-area: blind2;
+	}
+
+	.vote-table__votes {
+		grid-area: vote;
+		flex-direction: column;
+	}
+
+	.vote-table__users {
+		grid-area: users;
+		flex-direction: column;
+		> .user-item {
+			order: 1;
+			&.currentuser {
+				order: 0;
+			}
+		}
+	}
+
+	.vote-table__footer {
+		grid-area: footer;
+		flex-direction: row;
+		> div {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	.vote-table__header,
+	.vote-table__vote-row,
+	.vote-table__footer {
+		> div {
+			max-width: 230px;
+
+			&.confirmed {
+				margin-left: 8px;
+				margin-right: 8px;
+				font-weight: bold;
+			}
+		}
+	}
+
+	// limit width of columns
+	.vote-table__vote-row {
+		flex-direction: row;
+		order: 1;
+		flex: 1;
+		&.currentuser {
+			order: 0;
+		}
+	}
+
+	.vote-table-vote-item {
+		width: 84px;
+	}
+
+	// fixed column
+	.fixed {
+		background-color: var(--color-main-background);
+		position: sticky;
+		left: 0;
+	}
+
+	// Bottom border for table rows
+	.vote-table__users .user-item,
+	.vote-table__header-blind,
+	.vote-table__header > div,
+	.vote-table__vote-row > div {
+		border-bottom: 1px solid var(--color-border-dark);
+	}
+
+	// divergent styles for confirmed optins in table layout
+
+	.vote-table__header {
+			> div.confirmed {
+				border-bottom: none !important;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+	}
+
+	.vote-table__vote-row {
+		> div.confirmed {
+			border-top: none !important;
+			border-bottom: none !important;
+			border-radius: 0;
+		}
+	}
+
+	.vote-table__footer {
+		> div.confirmed {
+			border-top: none !important;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
 	}
 
 	.option-item {
-		flex: 2;
+		.option-item__option--text {
+			hyphens: auto;
+			text-align: center;
+			align-items: center;
+		}
 	}
 
-	.vote-table__header, {
-		flex-direction: column;
+	// some littlehacks
+	.user-item {
+		max-width: 280px;
+	}
+
+	.user-item__name {
+		width: unset;
 	}
 }
 

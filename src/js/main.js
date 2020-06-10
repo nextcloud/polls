@@ -31,7 +31,7 @@ import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
 import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
-import UserDiv from './components/Base/UserDiv'
+import UserItem from './components/Base/UserItem'
 import ButtonDiv from './components/Base/ButtonDiv'
 
 /* eslint-disable-next-line camelcase, no-undef */
@@ -48,7 +48,7 @@ Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 Vue.prototype.getCurrentUser = getCurrentUser
 
-Vue.component('UserDiv', UserDiv)
+Vue.component('UserItem', UserItem)
 Vue.component('ButtonDiv', ButtonDiv)
 Vue.directive('tooltip', Tooltip)
 

@@ -22,29 +22,33 @@
 
 <template>
 	<AppContent class="poll-list">
-		<h2 class="title">
-			{{ title }}
-		</h2>
-		<h3 class="description">
-			{{ description }}
-		</h3>
-		<div v-if="noPolls" class="emptycontent">
-			<div class="icon-polls" />
-			<h2> {{ t('polls', 'No existing polls.') }} </h2>
+		<div class="area__header">
+			<h2 class="title">
+				{{ title }}
+			</h2>
+			<h3 class="description">
+				{{ description }}
+			</h3>
 		</div>
 
-		<transition-group v-else name="list" tag="div"
-			class="poll-list__list">
-			<PollItem key="0" :header="true"
-				:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
-			<li is="PollItem"
-				v-for="(poll, index) in sortedList"
-				:key="poll.id"
-				:poll="poll"
-				@deletePoll="removePoll(index, poll)"
-				@editPoll="callPoll(index, poll, 'edit')"
-				@clonePoll="callPoll(index, poll, 'clone')" />
-		</transition-group>
+		<div class="area__main">
+			<div v-if="noPolls" class="emptycontent">
+				<div class="icon-polls" />
+				<h2> {{ t('polls', 'No existing polls.') }} </h2>
+			</div>
+			<transition-group v-else name="list" tag="div"
+				class="poll-list__list">
+				<PollItem key="0" :header="true"
+					:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
+				<li is="PollItem"
+					v-for="(poll, index) in sortedList"
+					:key="poll.id"
+					:poll="poll"
+					@deletePoll="removePoll(index, poll)"
+					@editPoll="callPoll(index, poll, 'edit')"
+					@clonePoll="callPoll(index, poll, 'clone')" />
+			</transition-group>
+		</div>
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
@@ -178,14 +182,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.app-content {
-		display: flex;
-		flex-direction: column;
-		padding: 52px 8px 0;
-		&>* {
-			padding: 0 8px;
-		}
+	.area__header {
+		margin-top: 52px;
 	}
+
 	.poll-list__list {
 		width: 100%;
 		display: flex;
