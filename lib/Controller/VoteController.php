@@ -100,6 +100,7 @@ class VoteController extends Controller {
 	 * Get all votes of given poll
 	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
@@ -129,6 +130,7 @@ class VoteController extends Controller {
 	/**
 	 * set
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @param Array $option
 	 * @param string $userId
@@ -164,6 +166,7 @@ class VoteController extends Controller {
 	/**
 	 * delete
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $voteId
 	 * @param string $userId
 	 * @param integer $pollId

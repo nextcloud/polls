@@ -128,14 +128,14 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl,
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters([
-			'sortedOptions',
-			'participants',
-			'expired',
-		]),
+		...mapGetters({
+			sortedOptions: 'poll/options/sorted',
+			participants: 'poll/participants',
+			expired: 'poll/expired',
+		}),
 
 		rankedOptions() {
 			return orderBy(this.sortedOptions, this.ranked ? 'rank' : 'order', 'asc')
@@ -144,7 +144,7 @@ export default {
 
 	methods: {
 		removeUser() {
-			this.$store.dispatch('deleteVotes', {
+			this.$store.dispatch('poll/votes/delete', {
 				userId: this.userToRemove,
 			})
 			this.modal = false
@@ -158,10 +158,10 @@ export default {
 
 		setVote(option, userId) {
 			this.$store
-				.dispatch('setVoteAsync', {
+				.dispatch('poll/votes/set', {
 					option: option,
 					userId: userId,
-					setTo: this.$store.getters.getNextAnswer({
+					setTo: this.$store.getters['poll/votes/getNextAnswer']({
 						option: option,
 						userId: userId,
 					}),

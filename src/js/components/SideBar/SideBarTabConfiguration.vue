@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { DatetimePicker } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ConfigBox from '../Base/ConfigBox'
@@ -136,7 +136,7 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl,
+			acl: state => state.poll.acl,
 		}),
 
 		// Add bindings
@@ -268,15 +268,12 @@ export default {
 	},
 	methods: {
 
-		...mapMutations(['setPollProperty']),
-		...mapActions(['writePollPromise']),
-
 		writeValueDebounced: debounce(function(e) {
 			this.writeValue(e)
 		}, 1500),
 
 		writeValue(e) {
-			this.$store.commit('setPollProperty', e)
+			this.$store.commit('poll/setProperty', e)
 			this.writingPoll = true
 			this.writePoll()
 		},
@@ -293,10 +290,9 @@ export default {
 		deletePermanently() {
 			if (!this.poll.deleted) return
 
-			this.$store
-				.dispatch('deletePermanently', { pollId: this.poll.id })
+			this.$store.dispatch('polls/delete', { pollId: this.poll.id })
 				.then((response) => {
-					this.$router.push({ name: 'list', params: { type: 'deleted' } })
+					emit('update-polls')
 				})
 		},
 
@@ -304,7 +300,7 @@ export default {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
-				this.$store.dispatch('writePollPromise')
+				this.$store.dispatch('poll/write')
 					.then(() => {
 						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.poll.title), { type: 'success' })
 						emit('update-polls')

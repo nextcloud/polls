@@ -49,13 +49,13 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'expired',
-		]),
+		...mapGetters({
+			expired: 'poll/expired',
+		}),
 
 		answer() {
 			try {
-				return this.$store.getters.getVote({
+				return this.$store.getters['poll/votes/getVote']({
 					option: this.option,
 					userId: this.userId,
 				}).voteAnswer

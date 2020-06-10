@@ -84,7 +84,7 @@ export default {
 		updatePolls() {
 			if (getCurrentUser()) {
 
-				this.$store.dispatch('loadPolls')
+				this.$store.dispatch('polls/load')
 					.then(() => {
 					})
 					.catch((error) => {

@@ -50,6 +50,7 @@ return [
 		['name' => 'option#get', 'url' => '/options/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/option/add/', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/option/update/', 'verb' => 'POST'],
+		['name' => 'option#reorder', 'url' => '/option/reorder/', 'verb' => 'POST'],
 		['name' => 'option#remove', 'url' => '/option/remove/', 'verb' => 'POST'],
 		['name' => 'option#getByToken', 'url' => '/options/get/s/{token}', 'verb' => 'GET'],
 

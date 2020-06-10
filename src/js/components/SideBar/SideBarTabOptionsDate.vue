@@ -112,11 +112,14 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options.options,
-			acl: state => state.acl,
+			options: state => state.poll.options.list,
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters(['sortedOptions', 'expired']),
+		...mapGetters({
+			sortedOptions: 'poll/options/sorted',
+			expired: 'poll/expired',
+		}),
 
 		dateBaseOptionString() {
 			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')

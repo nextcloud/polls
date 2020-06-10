@@ -61,18 +61,20 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl,
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters([
-			'expired',
-			'confirmedOptions',
-		]),
+		...mapGetters({
+			expired: 'poll/expired',
+			confirmedOptions: 'poll/options/confirmed',
+		}),
+
 		isWinner() {
 			// highlight best option until poll is expired and
 			// at least one option is confirmed
 			return this.option.rank === 1 && !(this.expired && this.confirmedOptions.length)
 		},
+
 		isConfirmed() {
 			return this.option.confirmed && this.expired
 		},

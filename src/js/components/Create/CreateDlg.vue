@@ -92,9 +92,13 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['setPollProperty']),
+		...mapMutations({
+			setPollProperty: 'poll/setProperty',
+		}),
 
-		...mapActions(['resetPoll']),
+		...mapActions({
+			resetPoll: 'poll/reset',
+		}),
 
 		cancel() {
 			this.title = ''
@@ -107,7 +111,7 @@ export default {
 			this.setPollProperty({ id: 0 })
 			this.setPollProperty({ title: this.title })
 			this.setPollProperty({ type: this.type })
-			this.$store.dispatch('writePollPromise')
+			this.$store.dispatch('poll/write')
 				.then(() => {
 					emit('update-polls')
 					this.cancel()

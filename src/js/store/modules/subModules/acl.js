@@ -47,7 +47,8 @@ const defaultAcl = () => {
 }
 
 const state = defaultAcl()
-const namespaced = false
+
+const namespaced = true
 
 const mutations = {
 

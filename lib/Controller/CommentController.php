@@ -92,6 +92,7 @@ class CommentController extends Controller {
 	 * get
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
@@ -137,7 +138,6 @@ class CommentController extends Controller {
 	}
 
 	/**
-	 * write
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -147,7 +147,6 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function write($pollId, $userId, $message) {
-		$this->logger->alert('write');
 		if (!\OC::$server->getUserSession()->isLoggedIn() && !$this->acl->getFoundByToken()) {
 			$this->logger->alert('not allowed ' . json_encode(\OC::$server->getUserSession()->isLoggedIn()));
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
@@ -176,8 +175,6 @@ class CommentController extends Controller {
 			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 		}
 
-
-		$this->logger->alert('ok ' . json_encode($comment));
 		return new DataResponse($comment, Http::STATUS_OK);
 
 	}
@@ -209,6 +206,7 @@ class CommentController extends Controller {
 	/**
 	 * delete
 	 * Delete Comment
+	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @param string $message

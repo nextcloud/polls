@@ -44,7 +44,9 @@ import { mapGetters } from 'vuex'
 export default {
 	name: 'ParticipantsList',
 	computed: {
-		...mapGetters(['participantsVoted']),
+		...mapGetters({
+			participantsVoted: 'poll/participantsVoted',
+		}),
 	},
 }
 </script>

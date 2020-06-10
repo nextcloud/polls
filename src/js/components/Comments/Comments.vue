@@ -74,13 +74,13 @@ export default {
 
 	computed: {
 		...mapState({
-			comments: state => state.comments.comments,
-			acl: state => state.acl,
+			comments: state => state.poll.comments.list,
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters([
-			'countComments',
-		]),
+		...mapGetters({
+			countComments: 'poll/comments/count',
+		}),
 
 		sortedList() {
 			if (this.reverse) {
@@ -94,7 +94,7 @@ export default {
 
 	methods: {
 		deleteComment(comment) {
-			this.$store.dispatch({ type: 'deleteComment', comment: comment })
+			this.$store.dispatch({ type: 'poll/comments/delete', comment: comment })
 				.then(() => {
 					OC.Notification.showTemporary(t('polls', 'Comment deleted'), { type: 'success' })
 				}, (error) => {

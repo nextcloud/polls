@@ -27,58 +27,54 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
 	return {
-		options: [],
+		list: [],
 	}
 }
 
 const state = defaultOptions()
 
+const namespaced = true
+
 const mutations = {
 	set(state, payload) {
-		state.options = payload.options
+		state.list = payload.options
 	},
 
 	reset(state) {
 		Object.assign(state, defaultOptions())
 	},
 
-	removeOption(state, payload) {
-		state.options = state.options.filter(option => {
+	delete(state, payload) {
+		state.list = state.list.filter(option => {
 			return option.id !== payload.option.id
 		})
 	},
 
-	setOption(state, payload) {
-		const index = state.options.findIndex((option) => {
+	setItem(state, payload) {
+		const index = state.list.findIndex((option) => {
 			return option.id === payload.option.id
 		})
 
 		if (index < 0) {
-			state.options.push(payload.option)
+			state.list.push(payload.option)
 		} else {
-			state.options.splice(index, 1, payload.option)
+			state.list.splice(index, 1, payload.option)
 		}
 	},
 }
 
 const getters = {
-	lastOptionId: state => {
-		return Math.max.apply(Math, state.options.map(function(option) {
-			return option.id
-		}))
-	},
-
-	sortedOptions: (state, getters, rootState, rootGetters) => {
+	sorted: (state, getters, rootState, rootGetters) => {
 		let rankedOptions = []
-		state.options.forEach((option) => {
+		state.list.forEach((option) => {
 			rankedOptions.push({
 				...option,
 				rank: 0,
 				no: 0,
-				yes: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
-				maybe: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
-				realno: rootState.votes.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
-				votes: rootGetters.participantsVoted.length,
+				yes: rootState.poll.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
+				maybe: rootState.poll.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
+				realno: rootState.poll.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
+				votes: rootGetters['poll/participantsVoted'].length,
 			})
 		})
 
@@ -96,40 +92,38 @@ const getters = {
 		return orderBy(rankedOptions, 'order')
 	},
 
-	confirmedOptions: state => {
-		return state.options.filter(option => {
+	confirmed: state => {
+		return state.list.filter(option => {
 			return option.confirmed > 0
 		})
 	},
 }
 
 const actions = {
-	reorderOptions(context, payload) {
-		payload.forEach((item, i) => {
-			item.order = i + 1
-			context.dispatch('updateOptionAsync', { option: item })
-		})
+	reorder(context, payload) {
+		const endPoint = 'apps/polls/option/reorder'
+		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, options: payload })
+			.then((response) => {
+				context.commit('set', { options: response.data })
+			}, (error) => {
+				console.error('Error reordering option', { error: error.response }, { payload: payload })
+				throw error
+			})
 	},
 
-	updateOptions(context) {
-		context.state.options.forEach((item, i) => {
-			context.dispatch('updateOptionAsync', { option: item })
-		})
-	},
-
-	updateOptionAsync(context, payload) {
+	update(context, payload) {
 		const endPoint = 'apps/polls/option/update'
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then((response) => {
-				context.commit('setOption', { option: response.data })
+				context.commit('setItem', { option: response.data })
 			}, (error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	addOptionAsync(context, payload) {
+	add(context, payload) {
 		const endPoint = 'apps/polls/option/add/'
 		const option = {}
 
@@ -147,25 +141,25 @@ const actions = {
 
 		} else if (context.rootState.poll.type === 'textPoll') {
 			option.timestamp = 0
-			option.order = state.options.length + 1
+			option.order = state.list.length + 1
 			option.pollOptionText = payload.pollOptionText
 		}
 
 		return axios.post(generateUrl(endPoint), { option: option })
 			.then((response) => {
-				context.commit('setOption', { option: response.data })
+				context.commit('setItem', { option: response.data })
 			}, (error) => {
 				console.error('Error adding option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	removeOptionAsync(context, payload) {
+	delete(context, payload) {
 		const endPoint = 'apps/polls/option/remove/'
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
-				context.commit('removeOption', { option: payload.option })
+				context.commit('delete', { option: payload.option })
 			}, (error) => {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error
@@ -173,4 +167,4 @@ const actions = {
 	},
 }
 
-export default { state, mutations, getters, actions }
+export default { state, mutations, getters, actions, namespaced }

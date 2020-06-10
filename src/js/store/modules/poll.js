@@ -24,6 +24,11 @@
 import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
+import acl from './subModules/acl.js'
+import comments from './subModules/comments.js'
+import options from './subModules/options.js'
+import shares from './subModules/shares.js'
+import votes from './subModules/votes.js'
 
 const defaultPoll = () => {
 	return {
@@ -41,13 +46,19 @@ const defaultPoll = () => {
 		voteLimit: 0,
 		showResults: 'always',
 		adminAccess: 0,
-		settings: '',
-		options: '',
 	}
 }
 
 const state = defaultPoll()
 
+const namespaced = true
+const modules = {
+	acl: acl,
+	comments: comments,
+	options: options,
+	shares: shares,
+	votes: votes,
+}
 const mutations = {
 	set(state, payload) {
 		Object.assign(state, payload.poll)
@@ -57,7 +68,7 @@ const mutations = {
 		Object.assign(state, defaultPoll())
 	},
 
-	setPollProperty(state, payload) {
+	setProperty(state, payload) {
 		Object.assign(state, payload)
 	},
 
@@ -69,41 +80,75 @@ const getters = {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
-	accessType: (state) => {
-		if (state.access === 'public') {
-			return t('polls', 'Public access')
-		} else if (state.access === 'hidden') {
-			return t('polls', 'Hidden poll')
-		} else {
-			return state.access
+	participants: (state, getters) => {
+		const participants = []
+		const map = new Map()
+		for (const item of state.votes.list) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				participants.push({
+					userId: item.userId,
+					displayName: item.displayName,
+					voted: true,
+				})
+			}
 		}
+
+		if (!map.has(state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+			participants.push({
+				userId: state.acl.userId,
+				displayName: state.acl.displayName,
+				voted: false,
+			})
+		}
+		return participants
 	},
 
-	allowEdit: (state, getters, rootState) => {
-		return (rootState.acl.allowEdit)
+	participantsVoted: (state, getters) => {
+		const participantsVoted = []
+		const map = new Map()
+		for (const item of state.votes.list) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				participantsVoted.push({
+					userId: item.userId,
+					displayName: item.displayName,
+				})
+			}
+		}
+		return participantsVoted
 	},
-
 }
 
 const actions = {
 
-	resetPoll(context) {
+	reset(context) {
 		context.commit('reset')
 	},
 
-	loadPollMain(context, payload) {
+	load(context, payload) {
 		let endPoint = 'apps/polls/polls/get/'
 		if (payload.token) {
 			endPoint = endPoint.concat('s/', payload.token)
 		} else if (payload.pollId) {
 			endPoint = endPoint.concat(payload.pollId)
 		} else {
-			context.dispatch('resetPoll')
+			context.commit('reset')
+			context.commit('acl/reset')
+			context.commit('comments/reset')
+			context.commit('options/reset')
+			context.commit('shares/reset')
+			context.commit('votes/reset')
 			return
 		}
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('set', response.data)
+				context.commit('acl/set', response.data)
+				context.commit('comments/set', response.data)
+				context.commit('options/set', response.data)
+				context.commit('shares/set', response.data)
+				context.commit('votes/set', response.data)
 				return response
 			}, (error) => {
 				if (error.response.status !== '404' && error.response.status !== '401') {
@@ -114,7 +159,7 @@ const actions = {
 			})
 	},
 
-	writePollPromise(context) {
+	write(context) {
 		const endPoint = 'apps/polls/polls/write/'
 		return axios.post(generateUrl(endPoint), { poll: state })
 			.then((response) => {
@@ -128,4 +173,4 @@ const actions = {
 	},
 }
 
-export default { state, mutations, getters, actions, defaultPoll }
+export default { namespaced, state, mutations, getters, actions, modules }

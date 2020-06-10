@@ -26,15 +26,17 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultVotes = () => {
 	return {
-		votes: [],
+		list: [],
 	}
 }
 
 const state = defaultVotes()
 
+const namespaced = true
+
 const mutations = {
 	set(state, payload) {
-		state.votes = payload.votes
+		state.list = payload.votes
 	},
 
 	reset(state) {
@@ -42,18 +44,18 @@ const mutations = {
 	},
 
 	deleteVotes(state, payload) {
-		state.votes = state.votes.filter(vote => vote.userId !== payload.userId)
+		state.list = state.list.filter(vote => vote.userId !== payload.userId)
 	},
 
-	setVote(state, payload) {
-		const index = state.votes.findIndex(vote =>
+	setItem(state, payload) {
+		const index = state.list.findIndex(vote =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
 			&& vote.voteOptionText === payload.option.pollOptionText)
 		if (index > -1) {
-			state.votes[index] = Object.assign(state.votes[index], payload.vote)
+			state.list[index] = Object.assign(state.list[index], payload.vote)
 		} else {
-			state.votes.push(payload.vote)
+			state.list.push(payload.vote)
 		}
 	},
 }
@@ -68,51 +70,12 @@ const getters = {
 		}
 	},
 
-	participantsVoted: (state, getters) => {
-		const participantsVoted = []
-		const map = new Map()
-		for (const item of state.votes) {
-			if (!map.has(item.userId)) {
-				map.set(item.userId, true)
-				participantsVoted.push({
-					userId: item.userId,
-					displayName: item.displayName,
-				})
-			}
-		}
-		return participantsVoted
-	},
-
-	participants: (state, getters, rootState) => {
-		const participants = []
-		const map = new Map()
-		for (const item of state.votes) {
-			if (!map.has(item.userId)) {
-				map.set(item.userId, true)
-				participants.push({
-					userId: item.userId,
-					displayName: item.displayName,
-					voted: true,
-				})
-			}
-		}
-
-		if (!map.has(rootState.acl.userId) && rootState.acl.userId && rootState.acl.allowVote) {
-			participants.push({
-				userId: rootState.acl.userId,
-				displayName: rootState.acl.displayName,
-				voted: false,
-			})
-		}
-		return participants
-	},
-
-	votesRank: (state, getters, rootGetters) => {
+	ranked: (state, getters, rootState) => {
 		let votesRank = []
-		rootGetters.options.options.forEach(function(option) {
-			const countYes = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
-			const countMaybe = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
-			const countNo = state.votes.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
+		rootState.poll.options.list.forEach(function(option) {
+			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
+			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
+			const countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
 			votesRank.push({
 				rank: 0,
 				pollOptionText: option.pollOptionText,
@@ -133,7 +96,7 @@ const getters = {
 	},
 
 	getVote: (state) => (payload) => {
-		return state.votes.find(vote => {
+		return state.list.find(vote => {
 			return (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})
@@ -151,7 +114,7 @@ const getters = {
 }
 
 const actions = {
-	deleteVotes(context, payload) {
+	delete(context, payload) {
 		const endPoint = 'apps/polls/votes/delete/'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
@@ -167,22 +130,22 @@ const actions = {
 			})
 	},
 
-	setVoteAsync(context, payload) {
+	set(context, payload) {
 		let endPoint = 'apps/polls/vote/set/'
 
-		if (context.rootState.acl.foundByToken) {
+		if (context.rootState.poll.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			token: context.rootState.acl.token,
+			token: context.rootState.poll.acl.token,
 			option: payload.option,
 			userId: payload.userId,
 			setTo: payload.setTo,
 		})
 			.then((response) => {
-				context.commit('setVote', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
 				return response.data
 			}, (error) => {
 				console.error('Error setting vote', { error: error.response }, { payload: payload })
@@ -192,4 +155,4 @@ const actions = {
 
 }
 
-export default { state, mutations, getters, actions }
+export default { namespaced, state, mutations, getters, actions }

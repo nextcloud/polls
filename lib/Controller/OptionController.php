@@ -46,7 +46,8 @@ class OptionController extends Controller {
 
 	private $userId;
 	private $optionMapper;
-
+	private $options;
+	private $option;
 	private $groupManager;
 	private $pollMapper;
 	private $logger;
@@ -71,6 +72,7 @@ class OptionController extends Controller {
 		$UserId,
 		IRequest $request,
 		OptionMapper $optionMapper,
+		Option $option,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
 		ILogger $logger,
@@ -80,6 +82,7 @@ class OptionController extends Controller {
 		parent::__construct($appName, $request);
 		$this->userId = $UserId;
 		$this->optionMapper = $optionMapper;
+		$this->option = $option;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
 		$this->logger = $logger;
@@ -87,10 +90,38 @@ class OptionController extends Controller {
 		$this->acl = $acl;
 	}
 
+	/**
+	 * Set properties from option array
+	 * @NoAdminRequired
+	 * @param integer $pollId
+	 * @return array Array of Option objects
+	 */
+	private function set($option) {
+
+		$this->option->setPollId($option['pollId']);
+		$this->option->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
+		$this->option->setTimestamp($option['timestamp']);
+
+		if ($option['timestamp']) {
+			$this->option->setOrder($option['timestamp']);
+		} else {
+			$this->option->setOrder($option['order']);
+		}
+
+		if ($option['confirmed']) {
+			// do not update confirmation date, if option is already confirmed
+			if (!$this->option->getConfirmed()) {
+				$this->option->setConfirmed(time());
+			}
+		} else {
+			$this->option->setConfirmed(0);
+		}
+	}
 
 	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return array Array of Option objects
 	 */
@@ -102,8 +133,9 @@ class OptionController extends Controller {
 				$this->acl->setPollId($pollId);
 			}
 
-			return new DataResponse($this->optionMapper->findByPoll($pollId), Http::STATUS_OK);
+			$this->options = $this->optionMapper->findByPoll($pollId);
 
+			return new DataResponse($this->options, Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
@@ -123,7 +155,9 @@ class OptionController extends Controller {
 
 		try {
 			$this->acl->setToken($token);
-			return $this->get($this->acl->getPollId());
+			// return $this->get($this->acl->getPollId());
+			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
+			return new DataResponse($this->options, Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
@@ -133,78 +167,46 @@ class OptionController extends Controller {
 	/**
 	 * Add a new Option to poll
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
 	public function add($option) {
 
+		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
 		try {
-
-			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-
-			$NewOption = new Option();
-
-			$NewOption->setPollId($option['pollId']);
-			$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-			$NewOption->setTimestamp($option['timestamp']);
-			if ($option['timestamp']) {
-				$NewOption->setOrder($option['timestamp']);
-			} else {
-				$NewOption->setOrder($option['order']);
-			}
-
-			$this->optionMapper->insert($NewOption);
+			$this->option = new Option();
+			$this->set($option);
+			$this->optionMapper->insert($this->option);
 			$this->logService->setLog($option['pollId'], 'addOption');
-			return new DataResponse($NewOption, Http::STATUS_OK);
-
+			return new DataResponse($this->option, Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
 	}
 
 	/**
 	 * Update poll option
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
 	public function update($option) {
 
+		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
 		try {
-			$this->logger->alert(json_encode($option));
-			$updateOption = $this->optionMapper->find($option['id']);
-
-			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-
-			$updateOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-			$updateOption->setTimestamp($option['timestamp']);
-
-			if ($option['timestamp']) {
-				$updateOption->setOrder($option['timestamp']);
-			} else {
-				$updateOption->setOrder($option['order']);
-			}
-
-			if ($option['confirmed']) {
-				// do not update confirmation date, if option is already confirmed
-				if (!$updateOption->getConfirmed()) {
-					$updateOption->setConfirmed(time());
-				}
-
-			} else {
-				$updateOption->setConfirmed(0);
-			}
-
-			$this->optionMapper->update($updateOption);
+			$this->option = $this->optionMapper->find($option['id']);
+			$this->set($option);
+			$this->optionMapper->update($this->option);
 			$this->logService->setLog($option['pollId'], 'updateOption');
-
-			return new DataResponse($updateOption, Http::STATUS_OK);
-
+			return new DataResponse($this->option, Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
@@ -213,6 +215,7 @@ class OptionController extends Controller {
 	/**
 	 * Remove a single option
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
@@ -237,4 +240,29 @@ class OptionController extends Controller {
 
 	}
 
+	/**
+	 * Set order by order of the given array
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Array $options
+	 * @return DataResponse
+	 */
+	public function reorder($pollId, $options) {
+		$i = 0;
+
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+		foreach ($options as $option) {
+			$this->option = $this->optionMapper->find($option['id']);
+			if ($pollId === intval($this->option->getPollId())) {
+				$this->option->setOrder(++$i);
+				$this->optionMapper->update($this->option);
+			}
+		}
+
+		return $this->get($pollId);
+
+	}
 }

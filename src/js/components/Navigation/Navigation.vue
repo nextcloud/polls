@@ -106,11 +106,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters(['filteredPolls']),
-
-		pollList() {
-			return this.$store.state.polls.polls
-		},
+		...mapGetters({
+			filteredPolls: 'polls/filtered',
+		}),
 	},
 
 	created() {
@@ -142,7 +140,7 @@ export default {
 
 		clonePoll(pollId) {
 			this.$store
-				.dispatch('clonePoll', { pollId: pollId })
+				.dispatch('polls/clone', { pollId: pollId })
 				.then((response) => {
 					emit('update-polls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
@@ -151,7 +149,7 @@ export default {
 
 		switchDeleted(pollId) {
 			this.$store
-				.dispatch('switchDeleted', { pollId: pollId })
+				.dispatch('polls/switchDeleted', { pollId: pollId })
 				.then((response) => {
 					emit('update-polls')
 				})
@@ -160,7 +158,7 @@ export default {
 
 		deletePermanently(pollId) {
 			this.$store
-				.dispatch('deletePermanently', { pollId: pollId })
+				.dispatch('polls/delete', { pollId: pollId })
 				.then((response) => {
 					// if we permanently delete current selected poll,
 					// reload deleted polls route

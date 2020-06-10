@@ -92,18 +92,21 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options,
-			acl: state => state.acl,
+			options: state => state.poll.options,
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters(['sortedOptions', 'expired']),
+		...mapGetters({
+			sortedOptions: 'poll/options/sorted',
+			expired: 'poll/expired',
+		}),
 
 		sortOptions: {
 			get() {
 				return this.sortedOptions
 			},
 			set(value) {
-				this.$store.dispatch('reorderOptions', value)
+				this.$store.dispatch('poll/options/reorder', value)
 			},
 		},
 
@@ -112,7 +115,7 @@ export default {
 	methods: {
 		addOption() {
 			if (this.newPollText) {
-				this.$store.dispatch('addOptionAsync', {
+				this.$store.dispatch('poll/options/add', {
 					pollOptionText: this.newPollText,
 				})
 					.then(() => {

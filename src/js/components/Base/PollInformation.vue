@@ -55,18 +55,20 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: state => state.acl,
+			acl: state => state.poll.acl,
 			poll: state => state.poll,
 		}),
 
-		...mapGetters([
-			'participantsVoted',
-			'expired',
-			'confirmedOptions',
-		]),
+		...mapGetters({
+			participantsVoted: 'poll/participantsVoted',
+			expired: 'poll/expired',
+			confirmedOptions: 'poll/options/confirmed',
+		}),
+
 		dateCreatedString() {
 			return moment.unix(this.poll.created).format('LLLL')
 		},
+
 		dateExpiryString() {
 			return moment.unix(this.poll.expire).format('LLLL')
 		},

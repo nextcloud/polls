@@ -26,82 +26,83 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultComments = () => {
 	return {
-		comments: [],
+		list: [],
 	}
 }
 
 const state = defaultComments()
 
+const namespaced = true
+
 const mutations = {
 
 	set(state, payload) {
-		state.comments = payload.comments
+		state.list = payload.comments
 	},
 
 	reset(state) {
 		Object.assign(state, defaultComments())
 	},
 
-	addComment(state, payload) {
-		state.comments.push(payload)
+	add(state, payload) {
+		state.list.push(payload)
 	},
 
-	removeComment(state, payload) {
-		state.comments = state.comments.filter(comment => {
+	delete(state, payload) {
+		state.list = state.list.filter(comment => {
 			return comment.id !== payload.comment.id
 		})
 	},
 }
 
 const getters = {
-	countComments: state => {
-		return state.comments.length
+	count: state => {
+		return state.list.length
 	},
 }
 
 const actions = {
-	deleteComment(context, payload) {
-		let endPoint = 'apps/polls/comment/delete/'
-
-		if (context.rootState.acl.foundByToken) {
-			endPoint = endPoint.concat('s/')
-		}
-
-		return axios.post(generateUrl(endPoint), {
-			token: context.rootState.acl.token,
-			comment: payload.comment,
-		})
-			.then((response) => {
-				context.commit('removeComment', { comment: response.data.comment })
-				return response.data
-			}, (error) => {
-				console.error('Error deleting comment', { error: error.response }, { payload: payload })
-				throw error
-			})
-
-	},
-
-	setCommentAsync(context, payload) {
+	add(context, payload) {
 		let endPoint = 'apps/polls/comment/write/'
 
-		if (context.rootState.acl.foundByToken) {
+		if (context.rootState.poll.acl.foundByToken) {
 			endPoint = endPoint.concat('s/')
 		}
 
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			token: context.rootState.acl.token,
+			token: context.rootState.poll.acl.token,
 			message: payload.message,
-			userId: context.rootState.acl.userId,
+			userId: context.rootState.poll.acl.userId,
 		})
 			.then((response) => {
-				context.commit('addComment', response.data)
+				context.commit('add', response.data)
 				return response.data
 			}, (error) => {
 				console.error('Error writing comment', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
+
+	delete(context, payload) {
+		let endPoint = 'apps/polls/comment/delete/'
+
+		if (context.rootState.poll.acl.foundByToken) {
+			endPoint = endPoint.concat('s/')
+		}
+
+		return axios.post(generateUrl(endPoint), {
+			token: context.rootState.poll.acl.token,
+			comment: payload.comment,
+		})
+			.then((response) => {
+				context.commit('delete', { comment: response.data.comment })
+				return response.data
+			}, (error) => {
+				console.error('Error deleting comment', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
 }
 
-export default { state, mutations, actions, getters }
+export default { namespaced, state, mutations, actions, getters }
