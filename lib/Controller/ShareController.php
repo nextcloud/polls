@@ -222,7 +222,7 @@ class ShareController extends Controller {
 				return new DataResponse($publicShare, Http::STATUS_OK);
 
 			} else {
-				return new DataResponse(['message'=> 'Wrong share type: ' . $userShare->getType()], Http::STATUS_FORBIDDEN);
+				return new DataResponse(['message'=> 'Wrong share type: ' . $publicShare->getType()], Http::STATUS_FORBIDDEN);
 			}
 
 		} catch (DoesNotExistException $e) {

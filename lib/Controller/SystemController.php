@@ -85,7 +85,7 @@ class SystemController extends Controller {
 	 * Validate string as email address
 	 * @NoAdminRequired
 	 * @param string $query
-	 * @return Boolval
+	 * @return Boolean
 	 */
 	 private function isValidEmail($email) {
 		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;
@@ -107,7 +107,7 @@ class SystemController extends Controller {
 	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $getMail = false, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
 
-		if ($this->isValidEmail($query)) {
+		if ($getMail && $this->isValidEmail($query)) {
 			$list[] = [
 				'id' => '',
 				'user' => '',
