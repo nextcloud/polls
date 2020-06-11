@@ -1,13 +1,16 @@
 OC.L10N.register(
     "polls",
     {
+    "Confirmed" : "Потвърдено",
+    "Cancel" : "Отказ",
+    "OK" : "ОК",
+    "Week" : "Седмица",
     "Group" : "Група",
     "Unknown user" : "Непознат потребител",
     "New comment …" : "Нов коментар...",
     "Delete comment" : "Изтрий коментар",
     "No comments yet. Be the first." : "Все още няма коментари.",
     "Title" : "Име",
-    "Cancel" : "Отказ",
     "Apply" : "Приложи",
     "Owner" : "Създател",
     "Created" : "Създаден",
@@ -18,14 +21,11 @@ OC.L10N.register(
     "Comments" : "Коментари",
     "Description" : "Описание",
     "Expiration date" : "Валидност",
-    "OK" : "ОК",
-    "Week" : "Седмица",
-    "Hour" : "Час",
-    "Day" : "Ден",
-    "Month" : "Месец",
     "No" : "Не",
     "Yes" : "Да",
     "Deleted" : "Изтрито",
-    "Public access" : "Публичен достъп"
+    "Hour" : "Час",
+    "Day" : "Ден",
+    "Month" : "Месец"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,19 +1,19 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Batal",
+    "OK" : "OK",
+    "Week" : "Minggu",
     "Group" : "Group",
     "Title" : "Judul",
-    "Cancel" : "Batal",
     "Owner" : "Owner",
     "never" : "jangan",
     "Shares" : "Kongsi",
     "Description" : "Keterangan",
-    "OK" : "OK",
-    "Week" : "Minggu",
-    "Day" : "Hari",
-    "Month" : "Bulan",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Dipadam"
+    "Deleted" : "Dipadam",
+    "Day" : "Hari",
+    "Month" : "Bulan"
 },
 "nplurals=1; plural=0;");

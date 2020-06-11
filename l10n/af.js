@@ -1,12 +1,14 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Kanselleer",
+    "OK" : "Goed",
+    "Week" : "Week",
     "Group" : "Groep",
     "Unknown user" : "Onbekende gebruiker",
     "New comment …" : "Nuwe kommentaar…",
     "Delete comment" : "Skrap kommentaar",
     "Title" : "Titel",
-    "Cancel" : "Kanselleer",
     "Owner" : "Eienaar",
     "Created" : "Geskep",
     "never" : "nooit",
@@ -14,14 +16,11 @@ OC.L10N.register(
     "Comments" : "Kommentare",
     "Description" : "Beskrywing",
     "Expiration date" : "Vervaldatum",
-    "OK" : "Goed",
-    "Week" : "Week",
-    "Hour" : "Uur",
-    "Day" : "Dag",
-    "Month" : "Maand",
     "No" : "Nee",
     "Yes" : "Ja",
     "Deleted" : "Geskrap",
-    "Public access" : "Openbare toegang"
+    "Hour" : "Uur",
+    "Day" : "Dag",
+    "Month" : "Maand"
 },
 "nplurals=2; plural=(n != 1);");

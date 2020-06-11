@@ -1,12 +1,14 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Hủy bỏ",
+    "OK" : "OK",
+    "Week" : "Tuần",
     "Group" : "N",
     "Unknown user" : "Người dùng không tồn tại",
     "New comment …" : "Bình luận mới ...",
     "Delete comment" : " Xóa bình luận",
     "Title" : "Tên",
-    "Cancel" : "Hủy bỏ",
     "Apply" : "Áp dụng",
     "Owner" : "Chủ",
     "Created" : "Đã tạo",
@@ -17,13 +19,10 @@ OC.L10N.register(
     "Comments" : "Các bình luận",
     "Description" : "Mô tả",
     "Expiration date" : "Ngày kết thúc",
-    "OK" : "OK",
-    "Week" : "Tuần",
-    "Day" : "Ngày",
-    "Month" : "Tháng",
     "No" : "Không",
     "Yes" : "Đồng ý",
     "Deleted" : "Đã xóa",
-    "Public access" : "Truy cập công khai"
+    "Day" : "Ngày",
+    "Month" : "Tháng"
 },
 "nplurals=1; plural=0;");

@@ -1,22 +1,22 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Dayandır",
+    "OK" : "Oldu",
+    "Week" : "Həftə",
     "Group" : "Qrup",
     "Unknown user" : "Istifadəçi tanınmır ",
     "Title" : "Başlıq",
-    "Cancel" : "Dayandır",
     "Owner" : "Owner",
     "never" : "heç vaxt",
     "Details" : "Detallar",
     "Configuration" : "Konfiqurasiya",
     "Shares" : "Yayımlanmalar",
     "Description" : "Açıqlanma",
-    "OK" : "Oldu",
-    "Week" : "Həftə",
-    "Day" : "Gün",
-    "Month" : "Ay",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Silinib"
+    "Deleted" : "Silinib",
+    "Day" : "Gün",
+    "Month" : "Ay"
 },
 "nplurals=2; plural=(n != 1);");

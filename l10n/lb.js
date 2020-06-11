@@ -1,10 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Ofbriechen",
+    "OK" : "OK",
+    "Week" : "Woch",
     "Group" : "Grupp",
     "Delete comment" : "Kommentar läschen",
     "Title" : "Titel",
-    "Cancel" : "Ofbriechen",
     "Apply" : "Uwenden",
     "Owner" : "Owner",
     "never" : "Ni",
@@ -12,13 +14,11 @@ OC.L10N.register(
     "Comments" : "Kommentarer",
     "Description" : "Beschreiwung",
     "Expiration date" : "Verfallsdatum",
-    "OK" : "OK",
-    "Week" : "Woch",
-    "Hour" : "Stonn",
-    "Day" : "Dag",
-    "Month" : "Mount",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Geläscht"
+    "Deleted" : "Geläscht",
+    "Hour" : "Stonn",
+    "Day" : "Dag",
+    "Month" : "Mount"
 },
 "nplurals=2; plural=(n != 1);");

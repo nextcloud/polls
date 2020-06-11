@@ -1,12 +1,14 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Membatalkan",
+    "OK" : "OK",
+    "Week" : "Minggu",
     "Group" : "Grup",
     "Unknown user" : "Pengguna tidak dikenal",
     "New comment …" : "Komentar baru ...",
     "Delete comment" : "Hapus komentar",
     "Title" : "Judul",
-    "Cancel" : "Membatalkan",
     "Apply" : "Terapkan",
     "Owner" : "Owner",
     "Created" : "Dibuat",
@@ -18,13 +20,11 @@ OC.L10N.register(
     "Comments" : "Komentar",
     "Description" : "Deskrisi",
     "Expiration date" : "Tanggal kadaluarsa",
-    "OK" : "OK",
-    "Week" : "Minggu",
-    "Hour" : "Jam",
-    "Day" : "Hari",
-    "Month" : "Bulan",
     "No" : "Tidak",
     "Yes" : "Ya",
-    "Deleted" : "Dihapus"
+    "Deleted" : "Dihapus",
+    "Hour" : "Jam",
+    "Day" : "Hari",
+    "Month" : "Bulan"
 },
 "nplurals=1; plural=0;");

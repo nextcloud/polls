@@ -1,12 +1,14 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Cancelar",
+    "OK" : "OK",
+    "Week" : "Semana",
     "Group" : "Grupo",
     "Unknown user" : "Ususario desconocido",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
     "Title" : "Título",
-    "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
     "Owner" : "Dueño",
     "Created" : "Creado",
@@ -18,14 +20,11 @@ OC.L10N.register(
     "Comments" : "Comentarios",
     "Description" : "Descripción",
     "Expiration date" : "Fecha de expiración",
-    "OK" : "OK",
-    "Week" : "Semana",
-    "Hour" : "Hora",
-    "Day" : "Día",
-    "Month" : "Mes",
     "No" : "No",
     "Yes" : "Si",
     "Deleted" : "Borrado",
-    "Public access" : "Acceso público"
+    "Hour" : "Hora",
+    "Day" : "Día",
+    "Month" : "Mes"
 },
 "nplurals=2; plural=(n != 1);");

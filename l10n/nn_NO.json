@@ -1,9 +1,11 @@
 { "translations": {
+    "Cancel" : "Avbryt",
+    "OK" : "OK",
+    "Week" : "Veke",
     "Group" : "Gruppe",
     "New comment …" : "Ny kommentar...",
     "Delete comment" : "Slett kommentar",
     "Title" : "Tittel",
-    "Cancel" : "Avbryt",
     "Apply" : "Anvend",
     "Owner" : "Owner",
     "Created" : "Lagd",
@@ -14,12 +16,10 @@
     "Comments" : "Kommentarar",
     "Description" : "Skildring",
     "Expiration date" : "Utløpsdato",
-    "OK" : "OK",
-    "Week" : "Veke",
-    "Day" : "Dag",
-    "Month" : "Månad",
     "No" : "Nei",
     "Yes" : "Ja",
-    "Deleted" : "Sletta"
+    "Deleted" : "Sletta",
+    "Day" : "Dag",
+    "Month" : "Månad"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

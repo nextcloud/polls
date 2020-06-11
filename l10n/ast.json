@@ -1,12 +1,15 @@
 { "translations": {
     "Polls" : "Enquestes",
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
+    "Confirmed" : "Confirmáu",
+    "Cancel" : "Encaboxar",
+    "OK" : "Aceutar",
+    "Week" : "Selmana",
     "Group" : "Group",
     "Unknown user" : "Usuariu desconocíu",
     "New comment …" : "Comentariu nuevu...",
     "Delete comment" : "Desaniciar comentariu",
     "Title" : "Títulu",
-    "Cancel" : "Encaboxar",
     "Apply" : "Aplicar",
     "Owner" : "Owner",
     "Created" : "Creóse",
@@ -17,14 +20,11 @@
     "Comments" : "Comentarios",
     "Description" : "Descripción",
     "Expiration date" : "Data de caducidá",
-    "OK" : "Aceutar",
-    "Week" : "Selmana",
-    "Hour" : "Hora",
-    "Day" : "Día",
-    "Month" : "Mes",
     "No" : "Non",
     "Yes" : "Sí",
     "Deleted" : "Desanicióse",
-    "Public access" : "Accesu públicu"
+    "Hour" : "Hora",
+    "Day" : "Día",
+    "Month" : "Mes"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

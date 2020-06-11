@@ -1,15 +1,15 @@
 OC.L10N.register(
     "polls",
     {
+    "Cancel" : "Cancel",
+    "OK" : "U redu",
     "Group" : "Group",
     "Title" : "Naslov",
-    "Cancel" : "Cancel",
     "Owner" : "Owner",
     "never" : "never",
     "Details" : "Detalji",
     "Description" : "Opis",
     "Expiration date" : "Datum isteka",
-    "OK" : "U redu",
     "No" : "Ne",
     "Yes" : "Da",
     "Deleted" : "Obrisano"

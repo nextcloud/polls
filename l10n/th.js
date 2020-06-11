@@ -1,12 +1,15 @@
 OC.L10N.register(
     "polls",
     {
+    "Confirmed" : "ได้รับการยืนยันแล้ว",
+    "Cancel" : "ยกเลิก",
+    "OK" : "ตกลง",
+    "Week" : "สัปดาห์",
     "Group" : "กลุ่ม",
     "Unknown user" : "ไม่รู้จักผู้ใช้",
     "New comment …" : "ความคิดเห็นใหม่...",
     "Delete comment" : "ลบความคิดเห็น",
     "Title" : "ชื่อเรื่อง",
-    "Cancel" : "ยกเลิก",
     "Apply" : "นำไปใช้",
     "Owner" : "Owner",
     "never" : "ไม่ต้องเลย",
@@ -16,12 +19,10 @@ OC.L10N.register(
     "Comments" : "ความคิดเห็น",
     "Description" : "รายละเอียด",
     "Expiration date" : "วันที่หมดอายุ",
-    "OK" : "ตกลง",
-    "Week" : "สัปดาห์",
-    "Day" : "วัน",
-    "Month" : "เดือน",
     "No" : "ไม่ใช่",
     "Yes" : "ใช่",
-    "Deleted" : "ลบแล้ว"
+    "Deleted" : "ลบแล้ว",
+    "Day" : "วัน",
+    "Month" : "เดือน"
 },
 "nplurals=1; plural=0;");

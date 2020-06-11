@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "Polls" : "Анкети",
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
+    "Cancel" : "Откажи",
+    "OK" : "Добро",
+    "Week" : "Недела",
     "Group" : "Група",
     "Unknown user" : "Непознат корисник",
     "New comment …" : "Нов коментар ...",
@@ -10,7 +13,6 @@ OC.L10N.register(
     "Delete comment" : "Избриши коментар",
     "No comments yet. Be the first." : "Сеуште нема коментари. Напишете го првиот коментар.",
     "Title" : "Наслов",
-    "Cancel" : "Откажи",
     "Apply" : "Примени",
     "Owner" : "Сопственик",
     "never" : "никогаш",
@@ -21,13 +23,11 @@ OC.L10N.register(
     "Comments" : "Коментари",
     "Description" : "Опис",
     "Expiration date" : "Рок на траење",
-    "OK" : "Добро",
-    "Week" : "Недела",
-    "Day" : "Ден",
-    "Month" : "Месец",
-    "Year" : "Година",
     "No" : "Не",
     "Yes" : "Да",
-    "Deleted" : "Избришана"
+    "Deleted" : "Избришана",
+    "Day" : "Ден",
+    "Month" : "Месец",
+    "Year" : "Година"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
