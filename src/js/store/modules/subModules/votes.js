@@ -100,7 +100,6 @@ const actions = {
 		const endPoint = 'apps/polls/votes/delete/'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			voteId: 0,
 			userId: payload.userId,
 		})
 			.then(() => {

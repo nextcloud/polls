@@ -172,27 +172,13 @@ class VoteController extends Controller {
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function delete($voteId = 0, $userId = '', $pollId = 0) {
-		$this->logger->alert('Deleting vote no. ' . $voteId);
-
+	public function delete($userId = '', $pollId = 0) {
 		try {
-			if ($voteId) {
-				$vote = $this->mapper->delete($voteId);
-				$this->logger->alert('Deleting vote no. ' . $voteId);
-				return new DataResponse(null, Http::STATUS_OK);
-			} elseif ($pollId && $userId) {
-				$votes = $this->mapper->deleteByPollAndUser($pollId, $userId);
-				$this->logger->alert('Deleting votes from ' . $userId . ' in poll ' . $pollId);
-				return new DataResponse(null, Http::STATUS_OK);
-			} elseif ($pollId) {
-				$votes = $this->mapper->deleteByPoll($pollId);
-				$this->logger->alert('Deleting all votes in poll ' . $pollId);
-				return new DataResponse(null, Http::STATUS_OK);
-			} else {
-				return DataResponse(null, Http::STATUS_NOT_FOUND);
-			}
+			$this->mapper->deleteByPollAndUser($pollId, $userId);
+			$this->logger->debug('Deleting votes from ' . $userId . ' in poll ' . $pollId);
+			return new DataResponse(null, Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return DataResponse(null, Http::STATUS_NOT_FOUND);
+			return new DataResponse(null, Http::STATUS_NOT_FOUND);
 		}
 	}
 
