@@ -75,6 +75,13 @@ const mutations = {
 }
 
 const getters = {
+	answerSequence: (state) => {
+		if (state.allowMaybe) {
+			return ['no', 'yes', 'maybe']
+		} else {
+			return ['no', 'yes']
+		}
+	},
 
 	expired: (state) => {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
