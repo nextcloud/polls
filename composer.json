@@ -28,8 +28,5 @@
 		"phpunit/phpunit": "^8.2",
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0"
-	},
-	"scripts": {
-        "lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l"
 	}
 }
