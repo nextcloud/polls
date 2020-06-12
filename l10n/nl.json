@@ -18,6 +18,7 @@
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Een peilingenapp, net als doodle/dudle met de mogelijkheid om toegang te beperken.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Een peilingenapp, zoals doodle/dudle met de mogelijkheid om toegang te beperken (leden, bepaalde groepen/gebruikers, verborgen en openbaar).",
     "Error loading poll list" : "Fout bij laden peilingenoverzicht",
+    "Confirmed" : "Bevestigd",
     "Add a date option" : "Voeg een datum optie toe",
     "Click to add a date" : "Klik om een datum in te stellen",
     "Clone to option sequence" : "Klonen naar optie serie",

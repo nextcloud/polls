@@ -16,6 +16,7 @@ OC.L10N.register(
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "יישומון סקרים, בדומה ל־doodle/dudle אם האפשרות להגבלת גישה.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "יישומון סקרים, דומה ל־doodle/dudle עם אפשרות להגבלת גישה (חברים, קבוצות/משתמשים מסוימים, הסתרה או חשיפה).",
     "Error loading poll list" : "שגיאה בטעינת רשימת הסקרים",
+    "Confirmed" : "מאושר",
     "Add a date option" : "הוספת אפשרות תאריך",
     "Click to add a date" : "יש ללחוץ כדי להוסיף תאריך",
     "Clone to option sequence" : "שכפול לרצף אפשרויות",

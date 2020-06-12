@@ -20,6 +20,7 @@ OC.L10N.register(
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Une application de sondages, similaire à Doodle, avec la possibilité de restreindre l'accès.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Une application de sondages, similaire à Doodle, avec la possibilité de restreindre l'accès (membres, certains groupes/utilisateurs, caché et public).",
     "Error loading poll list" : "Erreur lors du chargement de la liste des sondages",
+    "Confirmed" : "Confirmé",
     "Add a date option" : "Ajouter une option de date",
     "Click to add a date" : "Cliquer pour ajouter une date",
     "Clone to option sequence" : "Définir la fréquence de répétition",

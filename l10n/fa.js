@@ -17,6 +17,7 @@ OC.L10N.register(
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "این ایمیل برای شما ارسال شده است ، زیرا در اعلان های این نظرسنجی مشترک هستید. برای امتناع ، از نظرسنجی بازدید کرده و اشتراک خود را حذف کنید.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "یک برنامه نظرسنجی ، شبیه به doodle / dudle با امکان محدود کردن دسترسی.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "برنامه نظرسنجی ، شبیه به doodle / dudle با امکان محدود کردن دسترسی (اعضا ، گروه ها / کاربران خاص ، پنهان و عمومی).",
+    "Confirmed" : "تایید شده",
     "Add a date option" : "گزینه تاریخ را افزودن",
     "Click to add a date" : "برای افزودن تاریخ کلیک کنید",
     "Cancel" : "لغو",

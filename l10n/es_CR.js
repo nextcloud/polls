@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Encuestas",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
+    "Confirmed" : "Confirmado",
     "Cancel" : "Cancelar",
     "OK" : "OK",
     "Week" : "Semana",

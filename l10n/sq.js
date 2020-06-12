@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Sondazhe",
+    "Confirmed" : "E konfirmuar",
     "Cancel" : "Anullo",
     "OK" : "OK",
     "Week" : "Javë",

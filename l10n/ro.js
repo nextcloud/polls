@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Confirmed" : "Confirmat",
     "Cancel" : "Anulează",
     "OK" : "OK",
     "Week" : "Săptămâna",

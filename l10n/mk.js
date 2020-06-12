@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Анкети",
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
+    "Confirmed" : "Потврдено",
     "Cancel" : "Откажи",
     "OK" : "Добро",
     "Week" : "Недела",

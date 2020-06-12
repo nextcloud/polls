@@ -19,6 +19,7 @@ OC.L10N.register(
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Овај мејл Вам је послат пошто сте претплаћени на обавештења за ово гласање. Да се одјавите, посетите гласање и уклоните Вашу претплату.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа (чланова, група/корисника, скривено и јавно),",
+    "Confirmed" : "Потврђен",
     "Add a date option" : "Додај опцију датума",
     "Click to add a date" : "Кликните да додате датум",
     "Clone to option sequence" : "Секвенца клонирања опција",

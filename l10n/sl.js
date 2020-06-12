@@ -20,6 +20,7 @@ OC.L10N.register(
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Nextcloud Polls je program, podoben spletnemu programu Doodle z možnostjo omejevanja dostopa.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Nextcloud Polls je program, podoben spletnemu programu Doodle z možnostjo omejevanja dostopa (za člane, skupine ali uporabnike, skrite ankete in javno zbiranje odziva).",
     "Error loading poll list" : "Prišlo je do napake nalaganja seznama anket",
+    "Confirmed" : "Potrjeno",
     "Add a date option" : "Dodaj možnost datuma",
     "Click to add a date" : "Kliknite za dodajanje datuma",
     "Clone to option sequence" : "Kloniraj v zaporedje možnosti",
