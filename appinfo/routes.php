@@ -33,12 +33,10 @@ return [
 		['name' => 'subscription#get', 'url' => '/subscription/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'subscription#set', 'url' => '/subscription/set/', 'verb' => 'POST'],
 
-		['name' => 'comment#getByToken', 'url' => '/comments/get/s/{token}', 'verb' => 'GET'],
-		['name' => 'comment#writeByToken', 'url' => '/comment/write/s/', 'verb' => 'POST'],
-		['name' => 'comment#get', 'url' => '/comments/get/{pollId}', 'verb' => 'GET'],
-		['name' => 'comment#write', 'url' => '/comment/write/', 'verb' => 'POST'],
-		['name' => 'comment#delete', 'url' => '/comment/delete/', 'verb' => 'POST'],
-		['name' => 'comment#deleteByToken', 'url' => '/comment/delete/s/', 'verb' => 'POST'],
+		['name' => 'comment#getByToken', 'url' => '/comments/s/{token}', 'verb' => 'GET'],
+		['name' => 'comment#get', 'url' => '/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'comment#add', 'url' => '/comment/add', 'verb' => 'POST'],
+		['name' => 'comment#delete', 'url' => '/comment/delete', 'verb' => 'POST'],
 
 		['name' => 'vote#getByToken', 'url' => '/votes/get/s/{token}', 'verb' => 'GET'],
 		['name' => 'vote#setByToken', 'url' => '/vote/set/s/', 'verb' => 'POST'],
@@ -72,6 +70,12 @@ return [
 		['name' => 'acl#get', 'url' => '/acl/get/{id}', 'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get/', 'verb' => 'POST'],
-		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST']
+		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
+
+		// REST-API calls
+		['name' => 'comment_api#get', 'url' => '/api/1.0/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'comment_api#delete', 'url' => '/api/1.0/comments/{commentId}', 'verb' => 'DELETE'],
+		['name' => 'comment_api#add', 'url' => '/api/1.0/comments', 'verb' => 'POST'],
+		['name' => 'comment_api#preflighted_cors', 'url' => '/api/1.0/comments', 'verb' => 'OPTIONS', 'requirements' => array('path' => '.+')],
 	]
 ];

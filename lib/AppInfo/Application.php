@@ -31,7 +31,6 @@ namespace OCA\Polls\AppInfo;
 // use OCA\Polls\Controller\OptionController;
 // use OCA\Polls\Controller\VoteController;
 // use OCA\Polls\Controller\ShareController;
-// use OCA\Polls\Db\CommentMapper;
 // use OCA\Polls\Db\OptionMapper;
 // use OCA\Polls\Db\PollMapper;
 // use OCA\Polls\Db\NotificationMapper;

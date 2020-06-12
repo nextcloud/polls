@@ -27,7 +27,8 @@ use Exception;
 
 use OCP\IRequest;
 use OCP\ILogger;
-use OCP\AppFramework\Controller;
+use OCP\AppFramework\ApiController;
+use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
@@ -35,10 +36,10 @@ use OCA\Polls\Service\CommentService;
 
 
 
-class CommentController extends Controller {
+class CommentApiController extends ApiController {
 
 	/**
-	 * CommentController constructor.
+	 * CommentApiController constructor.
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param CommentService $commentService
@@ -49,7 +50,11 @@ class CommentController extends Controller {
 		IRequest $request,
 		CommentService $commentService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName,
+			$request,
+			'POST, GET, DELETE',
+            'Authorization, Content-Type, Accept',
+            1728000);
 		$this->commentService = $commentService;
 	}
 
@@ -57,17 +62,20 @@ class CommentController extends Controller {
 	 * get
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
+	 * @CORS
+	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function get($pollId) {
-		return new DataResponse($this->commentService->get($pollId), Http::STATUS_OK);
+	public function get($pollId, $token = '') {
+		return new DataResponse($this->commentService->get($pollId, $token), Http::STATUS_OK);
 	}
 
 	/**
 	 * Read all comments of a poll based on a share token and return list as array
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
 	 * @PublicPage
 	 * @param string $token
@@ -80,6 +88,8 @@ class CommentController extends Controller {
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
@@ -90,13 +100,15 @@ class CommentController extends Controller {
 		try {
 			return new DataResponse($this->commentService->add($message, $pollId, $token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
+			return new OCSForbiddenException($e);
 		}
 	}
 
 	/**
 	 * Delete Comment
 	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 * @PublicPage
 	 * @param int $commentId
 	 * @param string $token

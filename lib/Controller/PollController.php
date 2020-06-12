@@ -38,8 +38,6 @@
  use OCP\IUserManager;
  use OCP\Security\ISecureRandom;
 
- use OCA\Polls\Db\Comment;
- use OCA\Polls\Db\CommentMapper;
  use OCA\Polls\Db\Poll;
  use OCA\Polls\Db\PollMapper;
  use OCA\Polls\Db\Option;
@@ -48,15 +46,15 @@
  use OCA\Polls\Db\ShareMapper;
  use OCA\Polls\Db\Vote;
  use OCA\Polls\Db\VoteMapper;
+ use OCA\Polls\Service\AnonymizeService;
+ use OCA\Polls\Service\CommentService;
  use OCA\Polls\Service\LogService;
  use OCA\Polls\Service\MailService;
- use OCA\Polls\Service\AnonymizeService;
  use OCA\Polls\Model\Acl;
 
  class PollController extends Controller {
 
  	private $userId;
- 	private $commentMapper;
  	private $pollMapper;
  	private $optionMapper;
  	private $shareMapper;
@@ -66,13 +64,14 @@
  	private $groupManager;
  	private $userManager;
  	private $poll;
+	private $anonymizer;
  	private $logService;
+ 	private $commentService;
  	private $mailService;
- 	private $anonymizer;
  	private $acl;
 
  	/**
- 	 * CommentController constructor.
+ 	 * PollController constructor.
  	 * @param string $appName
  	 * @param $userId
  	 * @param IRequest $request
@@ -85,6 +84,7 @@
  	 * @param LogService $logService
  	 * @param MailService $mailService
  	 * @param AnonymizeService $anonymizer
+ 	 * @param CommentService $commentService
  	 * @param Acl $acl
  	 */
 
@@ -94,7 +94,6 @@
  		IRequest $request,
  		ILogger $logger,
  		IL10N $trans,
- 		CommentMapper $commentMapper,
  		OptionMapper $optionMapper,
  		PollMapper $pollMapper,
  		ShareMapper $shareMapper,
@@ -104,13 +103,13 @@
  		IUserManager $userManager,
  		LogService $logService,
  		MailService $mailService,
+		CommentService $commentService,
  		AnonymizeService $anonymizer,
  		Acl $acl
  	) {
  		parent::__construct($appName, $request);
  		$this->userId = $userId;
  		$this->trans = $trans;
- 		$this->commentMapper = $commentMapper;
  		$this->pollMapper = $pollMapper;
  		$this->optionMapper = $optionMapper;
  		$this->shareMapper = $shareMapper;
@@ -121,6 +120,7 @@
  		$this->poll = $poll;
  		$this->logService = $logService;
  		$this->mailService = $mailService;
+ 		$this->commentService = $commentService;
  		$this->anonymizer = $anonymizer;
  		$this->acl = $acl;
  	}
@@ -189,7 +189,6 @@
 			}
 
 			if ($this->acl->getAllowSeeUsernames()) {
-				$comments = $this->commentMapper->findByPoll($pollId);
 
 				if ($this->acl->getAllowSeeResults()) {
 					$votes = $this->voteMapper->findByPoll($pollId);
@@ -198,14 +197,13 @@
 				}
 			} else {
 				$this->anonymizer->set($pollId, $this->acl->getUserId());
-				$comments = $this->anonymizer->getComments();
 				$votes = $this->anonymizer->getVotes();
 
 			}
 
 			return new DataResponse([
 				'acl' => $this->acl,
-				'comments' => $comments,
+				'comments' => $this->commentService->get($pollId),
 				'options' => $options,
 				'poll' => $this->poll,
 				'shares' => $shares,

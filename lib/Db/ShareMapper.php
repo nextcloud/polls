@@ -31,7 +31,7 @@ use OCP\AppFramework\Db\QBMapper;
 class ShareMapper extends QBMapper {
 
 	/**
-	 * CommentMapper constructor.
+	 * ShareMapper constructor.
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
