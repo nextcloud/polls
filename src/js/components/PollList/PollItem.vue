@@ -246,6 +246,7 @@ export default {
 	width: 44px;
 	min-width: 44px;
 }
+
 .item__title {
 	display: flex;
 	flex-direction: column;
@@ -261,6 +262,7 @@ export default {
 .item__access {
 	width: 80px;
 }
+
 .item__owner {
 	width: 230px;
 }
@@ -319,6 +321,7 @@ export default {
 .item__type--textPoll {
 	background-image: var(--icon-toggle-filelist-000);
 }
+
 .item__type--datePoll {
 	background-image: var(--icon-calendar-000);
 }

@@ -213,12 +213,18 @@ export default {
 .vote-table.mobile {
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto;
-	grid-template-areas: "vote header";
+	grid-template-areas: 'vote header';
 	justify-items: stretch;
 
 	.vote-table__header {
 		grid-area: header;
 		flex-direction: column;
+
+		> div.confirmed {
+			border-left: none !important;
+			border-bottom-left-radius: 0;
+			border-top-left-radius: 0;
+		}
 	}
 
 	.vote-table__votes {
@@ -252,14 +258,6 @@ export default {
 		}
 	}
 
-	.vote-table__header {
-		> div.confirmed {
-			border-left: none !important;
-			border-bottom-left-radius: 0;
-			border-top-left-radius: 0;
-		}
-	}
-
 	.vote-table__vote-row {
 		> div.confirmed {
 			border-right: none !important;
@@ -274,19 +272,26 @@ export default {
 	grid-template-columns: auto repeat(var(--polls-vote-columns), 1fr);
 	grid-template-rows: auto repeat(var(--polls-vote-rows), 1fr) auto;
 	grid-template-areas:
-		"blind1 options"
-		"users vote"
-		"blind2 footer";
+		'blind1 options'
+		'users vote'
+		'blind2 footer';
 	justify-items: stretch;
 	padding-bottom: 14px; // leave space for the scrollbar!
 
 	.vote-table__header {
 		grid-area: options;
 		flex-direction: row;
+
 		> div {
 			flex-direction: column;
 			flex: 1;
 			align-items: center;
+
+			&.confirmed {
+				border-bottom: none !important;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
 		}
 	}
 
@@ -317,10 +322,17 @@ export default {
 	.vote-table__footer {
 		grid-area: footer;
 		flex-direction: row;
+
 		> div {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
+			&.confirmed {
+				border-top: none !important;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
 		}
 	}
 
@@ -343,8 +355,15 @@ export default {
 		flex-direction: row;
 		order: 1;
 		flex: 1;
+
 		&.currentuser {
 			order: 0;
+		}
+
+		> div.confirmed {
+			border-top: none !important;
+			border-bottom: none !important;
+			border-radius: 0;
 		}
 	}
 
@@ -368,30 +387,6 @@ export default {
 	}
 
 	// divergent styles for confirmed optins in table layout
-
-	.vote-table__header {
-			> div.confirmed {
-				border-bottom: none !important;
-				border-bottom-left-radius: 0;
-				border-bottom-right-radius: 0;
-			}
-	}
-
-	.vote-table__vote-row {
-		> div.confirmed {
-			border-top: none !important;
-			border-bottom: none !important;
-			border-radius: 0;
-		}
-	}
-
-	.vote-table__footer {
-		> div.confirmed {
-			border-top: none !important;
-			border-top-left-radius: 0;
-			border-top-right-radius: 0;
-		}
-	}
 
 	.option-item {
 		.option-item__option--text {
