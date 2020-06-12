@@ -128,6 +128,7 @@ export default {
 		}
 	}
 }
+
 .vote-table-vote-item.confirmed:not(.yes):not(.maybe) .icon {
 	background-image: var(--icon-polls-no);
 }

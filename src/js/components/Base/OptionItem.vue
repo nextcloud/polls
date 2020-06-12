@@ -132,10 +132,6 @@ export default {
 		padding-right: 4px;
 	}
 
-	.option-item__option--datebox {
-		display: flex;
-	}
-
 	.option-item__option--text {
 		overflow: hidden;
 		text-overflow: ellipsis;

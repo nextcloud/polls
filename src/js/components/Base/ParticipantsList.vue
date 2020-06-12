@@ -55,6 +55,7 @@ export default {
 	.participants-list {
 		padding: 8px;
 	}
+
 	.participants-list__list {
 		display: flex;
 		justify-content: flex-start;
