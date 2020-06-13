@@ -21,7 +21,9 @@
  *
  */
 
-namespace OCA\Polls;
+namespace OCA\Polls\Exceptions;
+
+use OCP\AppFramework\Http;
 
 class NotAuthorizedException extends \Exception {
 	/**
@@ -31,4 +33,8 @@ class NotAuthorizedException extends \Exception {
 	public function __construct($e = 'Unauthorized') {
 		parent::__construct($e);
 	}
+	public function getStatus() {
+		return Http::STATUS_FORBIDDEN;
+	}
+
 }

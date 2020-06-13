@@ -31,6 +31,7 @@ use OCP\AppFramework\ApiController;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCA\Polls\Service\CommentService;
 
@@ -69,7 +70,11 @@ class CommentApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function get($pollId, $token = '') {
-		return new DataResponse($this->commentService->get($pollId, $token), Http::STATUS_OK);
+		try {
+			return new DataResponse($this->commentService->get($pollId, $token), Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+		}
 	}
 
 	/**
@@ -82,7 +87,11 @@ class CommentApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function getByToken($token) {
-		return new DataResponse($this->commentService->get(0, $token), Http::STATUS_OK);
+		try {
+			return new DataResponse($this->commentService->get(0, $token), Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+		}
 	}
 
 	/**
@@ -99,8 +108,8 @@ class CommentApiController extends ApiController {
 	public function add($message, $pollId, $token) {
 		try {
 			return new DataResponse($this->commentService->add($message, $pollId, $token), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new OCSForbiddenException($e);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e, Http::STATUS_FORBIDDEN);
 		}
 	}
 
@@ -117,10 +126,9 @@ class CommentApiController extends ApiController {
 	public function delete($commentId, $token) {
 		try {
 			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e, Http::STATUS_FORBIDDEN);
 		}
-
 	}
 
 }

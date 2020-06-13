@@ -37,6 +37,8 @@ use OCA\Polls\Service\CommentService;
 
 class CommentController extends Controller {
 
+	private $commentService;
+
 	/**
 	 * CommentController constructor.
 	 * @param string $appName

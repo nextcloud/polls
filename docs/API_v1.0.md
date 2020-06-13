@@ -34,7 +34,7 @@ This will return all comments from poll no. 2
 ]
 ```
 
-This returns all comments from tzhe poll wich can be called with the token "X3jXHb8WHLMb9MRg"
+This returns all comments from the poll which can be called with the token "X3jXHb8WHLMb9MRg"
 
 
 # Comments

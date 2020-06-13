@@ -136,6 +136,22 @@ class Acl implements JsonSerializable {
 		}
 	}
 
+
+	/**
+	 * @NoAdminRequired
+	 * @return boolean
+	 */
+	public function checkAuthorize($pollId = 0, $token = '') {
+
+		if ($token && !\OC::$server->getUserSession()->isLoggedIn()) {
+			$this->setToken($token);
+		} elseif ($pollId) {
+			$this->setPollId($pollId);
+		}
+
+		return ($this->userId && $this->poll->getId());
+	}
+
 	/**
 	 * @NoAdminRequired
 	 * @return string
