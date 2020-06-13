@@ -59,7 +59,7 @@ OC.L10N.register(
     "Enter Title" : "Titel eingeben",
     "Poll type" : "Umfragetyp",
     "Date poll" : "Datumsumfrage",
-    "Text poll" : "Zustimmungsumfrage",
+    "Text poll" : "Textumfrage",
     "Apply" : "Anwenden",
     "Poll \"%n\" added" : "Umfrage \"%n\" hinzugefügt",
     "Error while creating Poll \"%n\"" : "Fehler beim Erstellen der Umfrage \"%n\"",
