@@ -73,9 +73,9 @@ return [
 		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 
 		// REST-API calls
-		['name' => 'comment_api#get', 'url' => '/api/1.0/comments/{pollId}', 'verb' => 'GET'],
-		['name' => 'comment_api#delete', 'url' => '/api/1.0/comments/{commentId}', 'verb' => 'DELETE'],
-		['name' => 'comment_api#add', 'url' => '/api/1.0/comments', 'verb' => 'POST'],
-		['name' => 'comment_api#preflighted_cors', 'url' => '/api/1.0/comments', 'verb' => 'OPTIONS', 'requirements' => array('path' => '.+')],
+		['name' => 'comment_api#preflighted_cors', 'url' => '/api/v1.0/comments', 'verb' => 'OPTIONS', 'requirements' => array('path' => '.+')],
+		['name' => 'comment_api#get', 'url' => '/api/v1.0/comments/{pollId}', 'verb' => 'GET'],
+		['name' => 'comment_api#add', 'url' => '/api/v1.0/comments', 'verb' => 'POST'],
+		['name' => 'comment_api#delete', 'url' => '/api/v1.0/comments/{commentId}', 'verb' => 'DELETE'],
 	]
 ];
