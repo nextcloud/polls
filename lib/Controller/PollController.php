@@ -48,6 +48,7 @@
  use OCA\Polls\Db\VoteMapper;
  use OCA\Polls\Service\AnonymizeService;
  use OCA\Polls\Service\CommentService;
+ use OCA\Polls\Service\OptionService;
  use OCA\Polls\Service\LogService;
  use OCA\Polls\Service\MailService;
  use OCA\Polls\Model\Acl;
@@ -67,6 +68,7 @@
 	private $anonymizer;
  	private $logService;
  	private $commentService;
+ 	private $optionService;
  	private $mailService;
  	private $acl;
 
@@ -85,6 +87,7 @@
  	 * @param MailService $mailService
  	 * @param AnonymizeService $anonymizer
  	 * @param CommentService $commentService
+ 	 * @param OptionService $optionService
  	 * @param Acl $acl
  	 */
 
@@ -104,6 +107,7 @@
  		LogService $logService,
  		MailService $mailService,
 		CommentService $commentService,
+		OptionService $optionService,
  		AnonymizeService $anonymizer,
  		Acl $acl
  	) {
@@ -121,6 +125,7 @@
  		$this->logService = $logService;
  		$this->mailService = $mailService;
  		$this->commentService = $commentService;
+ 		$this->optionService = $optionService;
  		$this->anonymizer = $anonymizer;
  		$this->acl = $acl;
  	}
@@ -203,8 +208,8 @@
 
 			return new DataResponse([
 				'acl' => $this->acl,
-				'comments' => $this->commentService->get($pollId),
-				'options' => $options,
+				'comments' => $this->commentService->list($pollId),
+				'options' => $this->optionService->list($pollId),
 				'poll' => $this->poll,
 				'shares' => $shares,
 				'votes' => $votes

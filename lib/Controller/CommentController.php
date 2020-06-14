@@ -63,8 +63,8 @@ class CommentController extends Controller {
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function get($pollId) {
-		return new DataResponse($this->commentService->get($pollId), Http::STATUS_OK);
+	public function list($pollId) {
+		return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
 	}
 
 	/**

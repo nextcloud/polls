@@ -24,7 +24,6 @@
 namespace OCA\Polls\Service;
 
 use \Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IGroupManager;
 use OCP\ILogger;
@@ -89,13 +88,10 @@ class CommentService {
 	 * @param string $token
 	 * @return Array
 	 */
-	public function get($pollId = 0, $token = '') {
+	public function list($pollId = 0, $token = '') {
 		$this->logger->debug('call commentService->get(' . $pollId . ', '. $token . ')');
 
 		if (!$this->acl->checkAuthorize($pollId, $token)) {
-			$this->logger->debug('Acl UserId ' . $this->acl->getUserId());
-			$this->logger->debug('Acl PollId ' . $this->acl->getPollId());
-			$this->logger->debug('Unauthorized access');
 			throw new NotAuthorizedException;
 		}
 
@@ -152,8 +148,8 @@ class CommentService {
 	 * @return Comment
 	 */
 	public function delete($commentId, $token = '') {
-		$this->logger->debug('call commentService->delete(' . $commentId . ', "' .$token . '")');
 
+		$this->logger->debug('call commentService->delete(' . $commentId . ', "' .$token . '")');
 		$this->comment = $this->commentMapper->find($commentId);
 		if (!$this->acl->checkAuthorize($this->comment->getPollId(), $token) || $this->comment->getUserId() !== $this->acl->getUserId()) {
 			throw new NotAuthorizedException;
