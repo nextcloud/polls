@@ -24,13 +24,13 @@
 namespace OCA\Polls\Controller;
 
 use Exception;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
-use OCP\ILogger;
 use OCP\AppFramework\ApiController;
-use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCA\Polls\Service\CommentService;
@@ -39,6 +39,7 @@ use OCA\Polls\Service\CommentService;
 
 class CommentApiController extends ApiController {
 
+	private $optionService;
 	/**
 	 * CommentApiController constructor.
 	 * @param string $appName
@@ -74,6 +75,8 @@ class CommentApiController extends ApiController {
 			return new DataResponse($this->commentService->get($pollId, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($pollId, Http::STATUS_NOT_FOUND);
 		}
 	}
 
@@ -125,9 +128,12 @@ class CommentApiController extends ApiController {
 	 */
 	public function delete($commentId, $token) {
 		try {
-			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
+			$this->commentService->delete($commentId, $token);
+			return new DataResponse($commentId, Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+			return new DataResponse($commentId, Http::STATUS_FORBIDDEN);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($commentId, Http::STATUS_NOT_FOUND);
 		}
 	}
 

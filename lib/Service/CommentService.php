@@ -93,21 +93,19 @@ class CommentService {
 		$this->logger->debug('call commentService->get(' . $pollId . ', '. $token . ')');
 
 		if (!$this->acl->checkAuthorize($pollId, $token)) {
+			$this->logger->debug('Acl UserId ' . $this->acl->getUserId());
+			$this->logger->debug('Acl PollId ' . $this->acl->getPollId());
+			$this->logger->debug('Unauthorized access');
 			throw new NotAuthorizedException;
 		}
 
-		try {
-			if (!$this->acl->getAllowSeeUsernames()) {
-				$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
-				return $this->anonymizer->getComments();
-			} else {
-				return $this->commentMapper->findByPoll($this->acl->getPollId());
-			}
-
-		} catch (\Exception $e) {
-			$this->logger->alert('Error reading comments for pollId ' . $pollId . ': '. $e);
-			throw new DoesNotExistException($e);
+		if (!$this->acl->getAllowSeeUsernames()) {
+			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
+			return $this->anonymizer->getComments();
+		} else {
+			return $this->commentMapper->findByPoll($this->acl->getPollId());
 		}
+
 
 	}
 
@@ -156,17 +154,12 @@ class CommentService {
 	public function delete($commentId, $token = '') {
 		$this->logger->debug('call commentService->delete(' . $commentId . ', "' .$token . '")');
 
-		try {
-			$this->comment = $this->commentMapper->find($commentId);
-		} catch (DoesNotExistException $e) {
-			return new DoesNotExistException($e);
-		}
-
+		$this->comment = $this->commentMapper->find($commentId);
 		if (!$this->acl->checkAuthorize($this->comment->getPollId(), $token) || $this->comment->getUserId() !== $this->acl->getUserId()) {
 			throw new NotAuthorizedException;
 		}
-
 		$this->commentMapper->delete($this->comment);
+
 		return $this->comment;
 
 	}

@@ -143,7 +143,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function checkAuthorize($pollId = 0, $token = '') {
 
-		if ($token && !\OC::$server->getUserSession()->isLoggedIn()) {
+		if ($token) {
 			$this->setToken($token);
 		} elseif ($pollId) {
 			$this->setPollId($pollId);
@@ -388,12 +388,14 @@ class Acl implements JsonSerializable {
 	 * @return string
 	 */
 	public function setToken(string $token): Acl {
+		$this->logger->debug('Share PollId' . $token);
 		try {
 
 			$this->token = $token;
 			$share = $this->shareMapper->findByToken($token);
 			$this->foundByToken = true;
 			$this->setPollId($share->getPollId());
+			$this->logger->debug('Share PollId' . $share->getPollId());
 
 			if (($share->getType() === 'group' || $share->getType() === 'user') && !\OC::$server->getUserSession()->isLoggedIn()) {
 				// User must be logged in for shareType user and group

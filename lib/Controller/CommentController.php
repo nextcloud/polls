@@ -107,8 +107,10 @@ class CommentController extends Controller {
 	public function delete($commentId, $token) {
 		try {
 			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_OK);
 		}
 
 	}
