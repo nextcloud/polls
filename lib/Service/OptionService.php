@@ -30,8 +30,6 @@ use OCP\ILogger;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
-use OCP\Security\ISecureRandom;
-
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;

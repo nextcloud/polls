@@ -24,15 +24,15 @@
 namespace OCA\Polls\Controller;
 
 use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCA\Polls\Service\OptionService;
 
@@ -134,8 +134,7 @@ class OptionApiController extends ApiController {
 	 */
 	public function delete($optionId) {
 		try {
-			$this->optionService->delete($optionId);
-			return new DataResponse($optionId, Http::STATUS_OK);
+			return new DataResponse($this->optionService->delete($optionId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
