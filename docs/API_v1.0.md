@@ -66,7 +66,7 @@ Response body contains all options of the poll with {pollId}
 Authorization is missing, use correct username:passwort
 
 ### Return HTTP status 404 - Not found
-optionId not found
+pollId not found
 
 ## Post a new option
 POST `/index.php/apps/polls/api/1.0/option`
@@ -102,3 +102,80 @@ Authorization is missing use correct username:passwort
 
 ### Return HTTP status 404 - Not found
 optionId not found
+
+# Shares
+## List all shares by poll
+GET `/index.php/apps/polls/api/1.0/poll/{pollId}/shares`
+
+### Return HTTP status 200
+Response body contains all shares of the poll with {pollId}
+
+### Return HTTP status 403 - Forbidden
+Authorization is missing, use correct username:passwort
+
+### Return HTTP status 404 - Not found
+pollId not found
+
+## Add a share
+POST `/index.php/apps/polls/api/1.0/share`
+
+Data
+```json
+{
+    "type": "public",
+    "pollId": 1
+}
+```
+
+```json
+{
+    "type": "group",
+    "pollId": 1,
+    "userId": "groupId"
+}
+```
+
+```json
+{
+    "type": "user",
+    "pollId": 1,
+    "userId": "userId"
+}
+```
+
+```json
+{
+    "type": "email",
+    "pollId": 1,
+    "userEmail": "user@foo.com"
+}
+```
+
+```json
+{
+    "type": "contact",
+    "pollId": 1,
+    "userId": "Contacts'name",
+    "userEmail": "user@foo.com"
+}
+```
+
+
+### Return HTTP status 201 - Created
+Comment successfully created
+Response Body contains the option as json
+
+### Return HTTP status 403 - Forbidden
+Authorization is missing use correct username:passwort
+
+## Delete a share
+DELETE `/index.php/apps/polls/api/1.0/share/{token}`
+
+### Return HTTP status 200 - OK
+Response body contains the deleted share
+
+### Return HTTP status 403 - Forbidden
+Authorization is missing use correct username:passwort
+
+### Return HTTP status 404 - Not found
+share not found
