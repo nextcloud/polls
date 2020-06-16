@@ -29,24 +29,23 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IRequest;
 use OCP\ILogger;
 
-use OCP\AppFramework\Controller;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Db\Subscription;
-use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Service\SubscriptionService;
 
-class SubscriptionController extends Controller {
+class SubscriptionApiController extends ApiController {
 
 	private $userId;
-	private $mapper;
+	private $subscriptionService;
 	private $logger;
 
 	/**
 	 * SubscriptionController constructor.
 	 * @param string $appName
 	 * @param $UserId
-	 * @param SubscriptionMapper $mapper
+	 * @param SubscriptionService $subscriptionService
 	 * @param IRequest $request
 	 * @param ILogger $logger
 	 */
@@ -54,19 +53,24 @@ class SubscriptionController extends Controller {
 	public function __construct(
 		string $appName,
 		$userId,
-		SubscriptionMapper $mapper,
+		SubscriptionService $subscriptionService,
 		IRequest $request,
 		ILogger $logger
 
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName,
+			$request,
+			'PUT, GET, DELETE',
+            'Authorization, Content-Type, Accept',
+            1728000);
 		$this->userId = $userId;
-		$this->mapper = $mapper;
+		$this->subscriptionService = $subscriptionService;
 		$this->logger = $logger;
 	}
 
 	/**
 	 * @NoAdminRequired
+	 * CORS
 	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
@@ -83,12 +87,28 @@ class SubscriptionController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 */
-	public function set($pollId, $subscribed) {
+	public function subscribe($pollId) {
 		try {
-			return new DataResponse($this->subscriptionService->set($pollId, $subscribed), Http::STATUS_OK);
+			return $this->subscriptionService->set($pollId, true);
+			return new DataResponse('Subscribed', Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+		}
+	}
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param integer $pollId
+	 */
+	public function unsubscribe($pollId) {
+		try {
+			$this->subscriptionService->set($pollId, false);
+			return new DataResponse('Unsubscribed', Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		}

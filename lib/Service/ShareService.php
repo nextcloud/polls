@@ -31,8 +31,6 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsername;
 
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Service\MailService;
@@ -60,7 +58,6 @@ class ShareService {
 	 * @param ILogger $logger
 	 * @param ShareMapper $shareMapper
 	 * @param Share $share
-	 * @param PollMapper $pollMapper
 	 * @param SystemController $systemController
 	 * @param MailService $mailService
 	 * @param Acl $acl
@@ -71,7 +68,6 @@ class ShareService {
 		ILogger $logger,
 		ShareMapper $shareMapper,
 		Share $share,
-		PollMapper $pollMapper,
 		SystemController $systemController,
 		MailService $mailService,
 		Acl $acl
@@ -80,7 +76,6 @@ class ShareService {
 		$this->userId = $userId;
 		$this->shareMapper = $shareMapper;
 		$this->share = $share;
-		$this->pollMapper = $pollMapper;
 		$this->systemController = $systemController;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
