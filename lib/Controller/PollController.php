@@ -28,29 +28,22 @@
 
  use OCP\IRequest;
  use OCP\ILogger;
- use OCP\IL10N;
  use OCP\AppFramework\Controller;
  use OCP\AppFramework\Http;
  use OCP\AppFramework\Http\DataResponse;
 
- use OCP\IGroupManager;
  use OCP\IUser;
- use OCP\IUserManager;
  use OCP\Security\ISecureRandom;
 
  use OCA\Polls\Db\Poll;
  use OCA\Polls\Db\PollMapper;
  use OCA\Polls\Db\Option;
  use OCA\Polls\Db\OptionMapper;
- use OCA\Polls\Db\Share;
- use OCA\Polls\Db\ShareMapper;
- use OCA\Polls\Db\Vote;
- use OCA\Polls\Db\VoteMapper;
- use OCA\Polls\Service\AnonymizeService;
  use OCA\Polls\Service\CommentService;
  use OCA\Polls\Service\OptionService;
+ use OCA\Polls\Service\ShareService;
+ use OCA\Polls\Service\VoteService;
  use OCA\Polls\Service\LogService;
- use OCA\Polls\Service\MailService;
  use OCA\Polls\Model\Acl;
 
  class PollController extends Controller {
@@ -58,18 +51,13 @@
  	private $userId;
  	private $pollMapper;
  	private $optionMapper;
- 	private $shareMapper;
- 	private $voteMapper;
- 	private $trans;
  	private $logger;
- 	private $groupManager;
- 	private $userManager;
  	private $poll;
-	private $anonymizer;
  	private $logService;
  	private $commentService;
  	private $optionService;
- 	private $mailService;
+ 	private $shareService;
+ 	private $voteService;
  	private $acl;
 
  	/**
@@ -78,16 +66,13 @@
  	 * @param $userId
  	 * @param IRequest $request
  	 * @param ILogger $logger
- 	 * @param IL10N $trans
  	 * @param OptionMapper $optionMapper
  	 * @param PollMapper $pollMapper
- 	 * @param IGroupManager $groupManager
- 	 * @param IUserManager $userManager
  	 * @param LogService $logService
- 	 * @param MailService $mailService
- 	 * @param AnonymizeService $anonymizer
  	 * @param CommentService $commentService
  	 * @param OptionService $optionService
+ 	 * @param ShareService $shareService
+ 	 * @param VoteService $voteService
  	 * @param Acl $acl
  	 */
 
@@ -96,37 +81,27 @@
  		$userId,
  		IRequest $request,
  		ILogger $logger,
- 		IL10N $trans,
  		OptionMapper $optionMapper,
  		PollMapper $pollMapper,
- 		ShareMapper $shareMapper,
- 		VoteMapper $voteMapper,
  		Poll $poll,
- 		IGroupManager $groupManager,
- 		IUserManager $userManager,
  		LogService $logService,
- 		MailService $mailService,
 		CommentService $commentService,
 		OptionService $optionService,
- 		AnonymizeService $anonymizer,
+		ShareService $shareService,
+		VoteService $voteService,
  		Acl $acl
  	) {
  		parent::__construct($appName, $request);
  		$this->userId = $userId;
- 		$this->trans = $trans;
  		$this->pollMapper = $pollMapper;
  		$this->optionMapper = $optionMapper;
- 		$this->shareMapper = $shareMapper;
- 		$this->voteMapper = $voteMapper;
  		$this->logger = $logger;
- 		$this->groupManager = $groupManager;
- 		$this->userManager = $userManager;
  		$this->poll = $poll;
  		$this->logService = $logService;
- 		$this->mailService = $mailService;
  		$this->commentService = $commentService;
  		$this->optionService = $optionService;
- 		$this->anonymizer = $anonymizer;
+ 		$this->shareService = $shareService;
+ 		$this->voteService = $voteService;
  		$this->acl = $acl;
  	}
 
@@ -185,34 +160,13 @@
 				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
 			}
 
-			$options = $this->optionMapper->findByPoll($pollId);
-
-			if ($this->acl->getAllowEdit()) {
-				$shares = $this->shareMapper->findByPoll($pollId);
-			} else {
-				$shares = [];
-			}
-
-			if ($this->acl->getAllowSeeUsernames()) {
-
-				if ($this->acl->getAllowSeeResults()) {
-					$votes = $this->voteMapper->findByPoll($pollId);
-				} else {
-					$votes = $this->voteMapper->findByPollAndUser($pollId, $this->acl->getUserId());
-				}
-			} else {
-				$this->anonymizer->set($pollId, $this->acl->getUserId());
-				$votes = $this->anonymizer->getVotes();
-
-			}
-
 			return new DataResponse([
 				'acl' => $this->acl,
+				'poll' => $this->poll,
 				'comments' => $this->commentService->list($pollId),
 				'options' => $this->optionService->list($pollId),
-				'poll' => $this->poll,
-				'shares' => $shares,
-				'votes' => $votes
+				'shares' => $this->shareService->list($pollId),
+				'votes' => $this->voteService->list($pollId)
 			], Http::STATUS_OK);
 
 		} catch (DoesNotExistException $e) {
@@ -355,11 +309,6 @@
 				$this->logService->setLog($this->poll->getId(), 'addPoll');
 			}
 			return $this->get($this->poll->getId());
-			// $this->acl->setPollId($this->poll->getId());
-			// return new DataResponse([
-			// 	'poll' => $this->poll,
-			// 	'acl' => $this->acl
-			// ], Http::STATUS_OK);
 		}
 	}
 

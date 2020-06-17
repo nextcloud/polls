@@ -73,6 +73,7 @@ return [
 		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 
 		// REST-API calls
+		['name' => 'vote_api#list', 'url' => '/api/v1.0/poll/{pollId}/votes', 'verb' => 'GET'],
 		['name' => 'comment_api#list', 'url' => '/api/v1.0/poll/{pollId}/comments', 'verb' => 'GET'],
 		['name' => 'option_api#list', 'url' => '/api/v1.0/poll/{pollId}/options', 'verb' => 'GET'],
 		['name' => 'share_api#list', 'url' => '/api/v1.0/poll/{pollId}/shares', 'verb' => 'GET'],
@@ -93,5 +94,8 @@ return [
 		['name' => 'subscription_api#get', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'GET'],
 		['name' => 'subscription_api#subscribe', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'PUT'],
 		['name' => 'subscription_api#unsubscribe', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'DELETE'],
+
+		['name' => 'vote_api#set', 'url' => '/api/v1.0/vote', 'verb' => 'POST'],
+		['name' => 'vote_api#delete', 'url' => '/api/v1.0/vote/removeuser', 'verb' => 'POST'],
 	]
 ];

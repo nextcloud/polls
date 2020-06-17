@@ -23,19 +23,20 @@
 
 namespace OCA\Polls\Controller;
 
-// use Exception;
+use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
-use OCP\AppFramework\Controller;
+use OCP\ILogger;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\VoteService;
 
+class VoteApiController extends ApiController {
 
-class VoteController extends Controller {
-
+	private $logger;
 	private $voteService;
 
 	/**
@@ -44,15 +45,20 @@ class VoteController extends Controller {
 	 * @param IRequest $request
 	 * @param ILogger $logger
 	 * @param VoteService $voteService
-
 	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ILogger $logger,
 		VoteService $voteService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName,
+			$request,
+			'PUT, GET, DELETE',
+            'Authorization, Content-Type, Accept',
+            1728000);
 		$this->voteService = $voteService;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -60,10 +66,11 @@ class VoteController extends Controller {
 	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function get($pollId) {
+	public function list($pollId) {
 		try {
 			return new DataResponse($this->voteService->list($pollId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
@@ -77,20 +84,22 @@ class VoteController extends Controller {
 	 * set
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 * @param integer $pollId
 	 * @param Array $option
 	 * @param string $userId
 	 * @param string $setTo
 	 * @return DataResponse
 	 */
-	public function set($pollId, $option, $setTo) {
+	public function set($pollId, $pollOptionText, $setTo) {
 		try {
-			return new DataResponse($this->voteService->set($pollId, $option['pollOptionText'], $setTo), Http::STATUS_OK);
+			return new DataResponse($this->voteService->set($pollId, $pollOptionText, $setTo), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Option not found', Http::STATUS_NOT_FOUND);
 		}
+
 	}
 
 
@@ -98,64 +107,20 @@ class VoteController extends Controller {
 	 * delete
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 * @param integer $voteId
 	 * @param string $userId
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function delete($userId, $pollId) {
+	public function delete($pollId, $userId) {
 		try {
-			return new DataResponse($this->voteService->delete($pollId, $userId), Http::STATUS_OK);
+			return new DataResponse($this->voteService->delete($userId, $pollId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('', Http::STATUS_NOT_FOUND);
 		}
-	}
-
-	/**
-	 * Public functions
-	 */
-
-	/**
-	 * setByToken
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param Array $option
-	 * @param string $setTo
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function setByToken($option, $setTo, $token) {
-		try {
-			return new DataResponse($this->voteService->set(null, $option['pollOptionText'], $setTo, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Option not found', Http::STATUS_NOT_FOUND);
-		}
-
-	}
-
-	/**
-	 * getByToken
-	 * Read all votes of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-		try {
-			return new DataResponse($this->voteService->list(null, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('No votes', Http::STATUS_NOT_FOUND);
-		}
-
 	}
 
 }
