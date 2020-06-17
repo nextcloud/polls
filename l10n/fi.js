@@ -87,7 +87,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Virhe kopioitaessa linkkiä leikepöydälle",
     "Receive notification email on activity" : "Vastaanota sähköposti-ilmoituksia toimista",
     "Your personal link to this poll: %n" : "Henkilökohtainen linkkisi tähän kyselyyn: %n",
-    "Enter your name!" : "Kirjoita nimesi!",
     "Enter your name" : "Kirjoita nimesi",
     "You have an account? Log in here." : "Onko sinulla tili? Kirjaudu sisään tästä.",
     "Delete votes" : "Poista äänet",
