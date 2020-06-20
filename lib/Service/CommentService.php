@@ -113,7 +113,7 @@ class CommentService {
 	 * @param string $token
 	 * @return Comment
 	 */
-	public function add($message, $pollId = 0, $token = '') {
+	public function add($pollId = 0, $message, $token = '') {
 		$this->logger->debug('call commentService->write("' . $message . '", ' .$pollId . ', "' .$token . '")');
 
 		if (!$this->acl->checkAuthorize($pollId, $token)) {

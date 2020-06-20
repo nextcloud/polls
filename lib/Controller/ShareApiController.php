@@ -62,27 +62,7 @@ class ShareApiController extends ApiController {
 	}
 
 	/**
-	 * getByToken
-	 * Get pollId by token
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @CORS
-	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function get($token) {
-		try {
-			return new DataResponse($this->shareService->get($token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Token ' . $token . ' not found', Http::STATUS_NOT_FOUND);
-		}
-	}
-
-	/**
-	 * get
+	 * list
 	 * Read all shares of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @CORS
@@ -93,10 +73,29 @@ class ShareApiController extends ApiController {
 	public function list($pollId) {
 		try {
 			return new DataResponse($this->shareService->list($pollId), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('No shares for poll with id ' . $pollId . ' not found', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
+	}
+
+	/**
+	* get share by token
+	* Get pollId by token
+	* @NoAdminRequired
+	* @NoCSRFRequired
+	* @CORS
+	* @param string $token
+	* @return DataResponse
+	*/
+	public function get($token) {
+		try {
+			return new DataResponse($this->shareService->get($token), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse('Token ' . $token . ' not found', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -106,52 +105,28 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 * @param int $pollId
-	 * @param string $message
+	 * @param string $type
+	 * @param string $userId
+	 * @param string $userEmail
 	 * @return DataResponse
 	 */
 	public function add($pollId, $type, $userId = '', $userEmail = '') {
 		try {
 			return new DataResponse($this->shareService->add($pollId, $type, $userId, $userEmail), Http::STATUS_CREATED);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
-		}
-
-	}
-
-	/**
-	 * createPersonalShare
-	 * Write a new share to the db and returns the new share as array
-	 * @NoAdminRequired
-	 * @CORS
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $message
-	 * @return DataResponse
-	 */
-	public function createPersonalShare($token, $userName) {
-
-		try {
-			return new DataResponse($this->shareService->createPersonalShare($token, $userName), Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (InvalidUsername $e) {
-			return new DataResponse($userName . ' is not valid', Http::STATUS_CONFLICT);
-		} catch (DoesNotExistException $e) {
-			// return forbidden in all not catched error cases
-			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
+
 	}
 
 	/**
-	 * remove
-	 * remove share
+	 * delete share
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param Share $share
+	 * @param string $token
 	 * @return DataResponse
 	 */
 

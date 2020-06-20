@@ -69,7 +69,7 @@ class ShareController extends Controller {
 
 	/**
 	 * getByToken
-	 * Get pollId by token
+	 * Get poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
@@ -109,7 +109,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param int $pollId
-	 * @param string $message
+	 * @param Array $share
 	 * @return DataResponse
 	 */
 	public function write($pollId, $share) {
@@ -135,8 +135,8 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $message
+	 * @param string $token
+	 * @param string $userName
 	 * @return DataResponse
 	 */
 	public function createPersonalShare($token, $userName) {

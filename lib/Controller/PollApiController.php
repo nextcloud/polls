@@ -102,6 +102,50 @@
  	}
 
 	/**
+	 * write
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function add($type, $title) {
+		try {
+			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_CREATED);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		} catch (InvalidPollTypeException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		} catch (EmptyTitleException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
+	}
+
+	/**
+	 * write
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function update($pollId, $poll) {
+		try {
+			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		} catch (InvalidAccessException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		} catch (InvalidShowResultsException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		} catch (EmptyTitleException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
+	}
+
+	/**
 	 * delete
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -139,50 +183,6 @@
 	}
 
 	/**
-	 * write
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Array $poll
-	 * @return DataResponse
-	 */
-
-	public function add($type, $title) {
-		try {
-			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidPollTypeException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (EmptyTitleException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		}
-	}
-
-	/**
-	 * write
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Array $poll
-	 * @return DataResponse
-	 */
-
-	public function update($pollId, $poll) {
-		try {
-			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidAccessException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidShowResultsException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (EmptyTitleException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		}
-	}
-
-	/**
 	 * clone
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -191,7 +191,7 @@
 	 */
 	public function clone($pollId) {
 		try {
-			return new DataResponse($this->pollService->clone($pollId), Http::STATUS_OK);
+			return new DataResponse($this->pollService->clone($pollId), Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -208,9 +208,7 @@
 	 */
 
 	public function enum() {
-		return [
-			'poll' => $this->pollService->getValidEnum()
-		];
+		return new DataResponse($this->pollService->getValidEnum(), Http::STATUS_OK);
 	}
 
 

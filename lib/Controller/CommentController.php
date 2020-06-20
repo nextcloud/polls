@@ -88,9 +88,9 @@ class CommentController extends Controller {
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function add($message, $pollId, $token) {
+	public function add($pollId, $message, $token) {
 		try {
-			return new DataResponse($this->commentService->add($message, $pollId, $token), Http::STATUS_OK);
+			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
 		}

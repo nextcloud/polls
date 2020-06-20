@@ -73,10 +73,10 @@ class VoteApiController extends ApiController {
 	public function list($pollId) {
 		try {
 			return new DataResponse($this->voteService->list($pollId), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('No votes', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -94,33 +94,11 @@ class VoteApiController extends ApiController {
 	public function set($pollId, $pollOptionText, $setTo) {
 		try {
 			return new DataResponse($this->voteService->set($pollId, $pollOptionText, $setTo), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Option not found', Http::STATUS_NOT_FOUND);
-		}
-
-	}
-
-
-	/**
-	 * delete
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @CORS
-	 * @param integer $voteId
-	 * @param string $userId
-	 * @param integer $pollId
-	 * @return DataResponse
-	 */
-	public function delete($pollId, $userId) {
-		try {
-			return new DataResponse($this->voteService->delete($userId, $pollId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('', Http::STATUS_NOT_FOUND);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
-	}
 
+	}
 }

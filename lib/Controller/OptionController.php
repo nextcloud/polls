@@ -59,7 +59,7 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param integer $pollId
-	 * @return array Array of Option objects
+	 * @return DataResponse
 	 */
 	public function list($pollId) {
 		return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
@@ -116,6 +116,7 @@ class OptionController extends Controller {
 	 * Set order by order of the given array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @param integer $pollId
 	 * @param Array $options
 	 * @return DataResponse
 	 */

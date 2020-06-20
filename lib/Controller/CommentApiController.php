@@ -69,37 +69,17 @@ class CommentApiController extends ApiController {
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @CORS
-	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function list($pollId, $token = '') {
+	public function list($pollId) {
 		try {
-			return new DataResponse($this->commentService->list($pollId, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Poll with id ' . $pollId . ' not found', Http::STATUS_NOT_FOUND);
-		}
-	}
-
-	/**
-	 * Read all comments of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-		try {
-			return new DataResponse($this->commentService->get(0, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll with token ' . $token . ' not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -108,19 +88,17 @@ class CommentApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
-	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function add($message, $pollId, $token) {
+	public function add($pollId, $message) {
 		try {
-			return new DataResponse($this->commentService->add($message, $pollId, $token), Http::STATUS_CREATED);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse($this->commentService->add($message, $pollId), Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Poll with id ' . $pollId . ' not found', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -129,19 +107,17 @@ class CommentApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @param int $commentId
-	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function delete($commentId, $token) {
+	public function delete($commentId) {
 		try {
-			$this->commentService->delete($commentId, $token);
+			$this->commentService->delete($commentId);
 			return new DataResponse($commentId, Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Comment does not exist', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 

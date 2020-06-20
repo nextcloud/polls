@@ -78,10 +78,10 @@ class SubscriptionApiController extends ApiController {
 	public function get($pollId) {
 		try {
 			return new DataResponse($this->subscriptionService->get($pollId), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Not subscribed', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -96,7 +96,7 @@ class SubscriptionApiController extends ApiController {
 			return $this->subscriptionService->set($pollId, true);
 			return new DataResponse('Subscribed', Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 	/**
@@ -110,7 +110,7 @@ class SubscriptionApiController extends ApiController {
 			$this->subscriptionService->set($pollId, false);
 			return new DataResponse('Unsubscribed', Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 }

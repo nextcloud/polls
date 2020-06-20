@@ -66,44 +66,27 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 * @param integer $pollId
-	 * @return array Array of Option objects
+	 * @return DataResponse
 	 */
 	public function list($pollId) {
 		try {
 			return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Poll with id ' . $pollId . ' not found', Http::STATUS_NOT_FOUND);
-		}
-	}
-
-
-	/**
-	 * getByToken
-	 * Read all options of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-		try {
-			return new DataResponse($this->optionService->get(0, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll with token ' . $token . ' not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
+
 
 	/**
 	 * Add a new Option to poll
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param Option $option
+	 * @param integer $pollId
+	 * @param string $pollOptionText
+	 * @param integer $timestamp
 	 * @return DataResponse
 	 */
 	public function add($pollId, $pollOptionText = '', $timestamp = 0) {
@@ -115,32 +98,15 @@ class OptionApiController extends ApiController {
 
 		try {
 			return new DataResponse($this->optionService->add($option), Http::STATUS_CREATED);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Poll with id ' . $pollId . ' not found', Http::STATUS_NOT_FOUND);
 		} catch (UniqueConstraintViolationException $e) {
 			return new DataResponse('Option exists', Http::STATUS_CONFLICT);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
-	/**
-	 * Remove a single option
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @param Option $option
-	 * @return DataResponse
-	 */
-	public function delete($optionId) {
-		try {
-			return new DataResponse($this->optionService->delete($optionId), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Option does not exist', Http::STATUS_NOT_FOUND);
-		}
-	}
 
 	/**
 	 * Update poll option
@@ -154,7 +120,25 @@ class OptionApiController extends ApiController {
 		try {
 			return new DataResponse($this->optionService->update($option), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
+	}
+
+	/**
+	 * Remove a single option
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param integer $optionId
+	 * @return DataResponse
+	 */
+	public function delete($optionId) {
+		try {
+			return new DataResponse($this->optionService->delete($optionId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse('Option does not exist', Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 }
