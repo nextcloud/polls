@@ -54,7 +54,8 @@ const actions = {
 	writeSubscriptionPromise(context, payload) {
 		return axios.post(generateUrl('apps/polls/subscription/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
 			.then(() => {
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error(error.response)
 			})
 	},

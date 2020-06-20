@@ -23,44 +23,45 @@
 
  namespace OCA\Polls\Controller;
 
-use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\EmptyTitleException;
-use OCA\Polls\Exceptions\InvalidAccessException;
-use OCA\Polls\Exceptions\InvalidShowResultsException;
-use OCA\Polls\Exceptions\InvalidPollTypeException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+ use Exception;
+ use OCP\AppFramework\Db\DoesNotExistException;
+ use OCA\Polls\Exceptions\EmptyTitleException;
+ use OCA\Polls\Exceptions\InvalidAccessException;
+ use OCA\Polls\Exceptions\InvalidShowResultsException;
+ use OCA\Polls\Exceptions\InvalidPollTypeException;
+ use OCA\Polls\Exceptions\NotAuthorizedException;
 
-use OCP\IRequest;
-use OCP\ILogger;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+ use OCP\IRequest;
+ use OCP\ILogger;
+ use OCP\AppFramework\ApiController;
+ use OCP\AppFramework\Http;
+ use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Service\PollService;
+ use OCA\Polls\Service\PollService;
 
- class PollController extends Controller {
+ class PollApiController extends ApiController {
 
-	 private $logger;
-	 private $pollService;
+ 	private $logger;
+ 	private $pollService;
 
  	/**
  	 * PollController constructor.
  	 * @param string $appName
+ 	 * @param $userId
  	 * @param IRequest $request
  	 * @param ILogger $logger
  	 * @param PollService $pollService
  	 */
 
  	public function __construct(
-		string $appName,
+ 		string $appName,
  		IRequest $request,
  		ILogger $logger,
- 		PollService $pollService
+		PollService $pollService
  	) {
  		parent::__construct($appName, $request);
- 		$this->pollService = $pollService;
  		$this->logger = $logger;
+ 		$this->pollService = $pollService;
  	}
 
 
@@ -68,6 +69,7 @@ use OCA\Polls\Service\PollService;
 	 * list
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 * @return DataResponse
 	 */
 
@@ -89,9 +91,9 @@ use OCA\Polls\Service\PollService;
 	 * @param integer $pollId
 	 * @return array
 	 */
- 	public function get($pollId, $token) {
+ 	public function get($pollId) {
 		try {
-			return new DataResponse($this->pollService->get($pollId, $token), Http::STATUS_OK);
+			return new DataResponse($this->pollService->get($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Not found', Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -133,8 +135,8 @@ use OCA\Polls\Service\PollService;
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
-	}
 
+	}
 
 	/**
 	 * write
@@ -165,34 +167,8 @@ use OCA\Polls\Service\PollService;
 	 */
 
 	public function update($pollId, $poll) {
-		$this->logger->alert(json_encode($poll));
 		try {
 			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidAccessException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidShowResultsException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (EmptyTitleException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		}
-	}
-
-	/**
-	 * write
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @depicated
-	 * @param Array $poll
-	 * @return DataResponse
-	 */
-
-	public function write($poll) {
-		try {
-			return new DataResponse($this->pollService->write($poll), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -222,5 +198,20 @@ use OCA\Polls\Service\PollService;
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
+
+	/**
+	 * enum
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function enum() {
+		return [
+			'poll' => $this->pollService->getValidEnum()
+		];
+	}
+
 
 }

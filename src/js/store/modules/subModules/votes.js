@@ -124,7 +124,8 @@ const actions = {
 			.then(() => {
 				context.commit('deleteVotes', payload)
 				OC.Notification.showTemporary(t('polls', 'User {userId} removed', payload), { type: 'success' })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error deleting votes', { error: error.response }, { payload: payload })
 				throw error
 			})
@@ -147,7 +148,8 @@ const actions = {
 			.then((response) => {
 				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error setting vote', { error: error.response }, { payload: payload })
 				throw error
 			})

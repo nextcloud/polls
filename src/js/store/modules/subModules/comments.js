@@ -72,7 +72,8 @@ const actions = {
 			.then((response) => {
 				context.commit('add', response.data)
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error writing comment', { error: error.response }, { payload: payload })
 				throw error
 			})
@@ -88,7 +89,8 @@ const actions = {
 			.then((response) => {
 				context.commit('delete', { comment: response.data.comment })
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error deleting comment', { error: error.response }, { payload: payload })
 				throw error
 			})

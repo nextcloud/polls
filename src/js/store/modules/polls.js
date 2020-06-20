@@ -76,47 +76,12 @@ const actions = {
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('set', { list: response.data })
-			}, (error) => {
+			})
+			.catch((error) => {
 				OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
 				console.error('Error loading polls', { error: error.response })
 			})
 	},
-
-	switchDeleted(context, payload) {
-		const endPoint = 'apps/polls/polls/delete/'
-		return axios.get(generateUrl(endPoint + payload.pollId))
-			.then((response) => {
-				return response
-			}, (error) => {
-				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
-				console.error('Error deleting poll', { error: error.response }, { payload: payload })
-			})
-	},
-
-	delete(context, payload) {
-		const endPoint = 'apps/polls/polls/delete/permanent/'
-		return axios.get(generateUrl(endPoint + payload.pollId))
-			.then((response) => {
-				OC.Notification.showTemporary(t('polls', 'Deleted poll permanently.'), { type: 'success' })
-				return response
-			}, (error) => {
-				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
-				console.error('Error deleting poll', { error: error.response }, { payload: payload })
-			})
-	},
-
-	clone(context, payload) {
-		const endPoint = 'apps/polls/polls/clone/'
-		return axios.get(generateUrl(endPoint + payload.pollId))
-			.then((response) => {
-				return response.data
-			}, (error) => {
-				OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
-				console.error('Error cloning poll', { error: error.response }, { payload: payload })
-			})
-
-	},
-
 }
 
 export default { namespaced, state, mutations, getters, actions }

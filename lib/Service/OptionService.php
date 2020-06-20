@@ -214,4 +214,21 @@ class OptionService  {
 		return $this->get($pollId);
 
 	}
+
+	/**
+	 * Set order by order of the given array
+	 * @NoAdminRequired
+	 * @param array $options
+	 * @return array Array of Option objects
+	 */
+	public function clone($fromPollId, $toPollId) {
+
+		foreach ($this->optionMapper->findByPoll($fromPollId) as $option) {
+			$option->setPollId($toPollId);
+			$this->optionMapper->insert($option);
+		}
+
+		return $this->optionMapper->findByPoll($toPollId);
+
+	}
 }

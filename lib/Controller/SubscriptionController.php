@@ -28,25 +28,23 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
 use OCP\ILogger;
-
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Db\Subscription;
-use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Service\SubscriptionService;
 
 class SubscriptionController extends Controller {
 
 	private $userId;
-	private $mapper;
+	private $subscriptionService;
 	private $logger;
 
 	/**
 	 * SubscriptionController constructor.
 	 * @param string $appName
 	 * @param $UserId
-	 * @param SubscriptionMapper $mapper
+	 * @param SubscriptionService $subscriptionService
 	 * @param IRequest $request
 	 * @param ILogger $logger
 	 */
@@ -54,14 +52,14 @@ class SubscriptionController extends Controller {
 	public function __construct(
 		string $appName,
 		$userId,
-		SubscriptionMapper $mapper,
+		SubscriptionService $subscriptionService,
 		IRequest $request,
 		ILogger $logger
 
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
-		$this->mapper = $mapper;
+		$this->subscriptionService = $subscriptionService;
 		$this->logger = $logger;
 	}
 

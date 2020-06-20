@@ -275,7 +275,7 @@ export default {
 		writeValue(e) {
 			this.$store.commit('poll/setProperty', e)
 			this.writingPoll = true
-			this.writePoll()
+			this.updatePoll()
 		},
 
 		switchDeleted() {
@@ -290,31 +290,38 @@ export default {
 		deletePermanently() {
 			if (!this.poll.deleted) return
 
-			this.$store.dispatch('polls/delete', { pollId: this.poll.id })
-				.then((response) => {
+			this.$store
+				.dispatch('poll/delete', { pollId: this.poll.id })
+				.then(() => {
 					emit('update-polls')
+				})
+				.catch(() => {
+					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
 				})
 		},
 
-		writePoll() {
+		updatePoll() {
 			if (this.titleEmpty) {
 				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
 			} else {
-				this.$store.dispatch('poll/write')
-					.then(() => {
-						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, this.poll.title), { type: 'success' })
+				this.$store.dispatch('poll/update')
+					.then((response) => {
+						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, response.data.poll.title), { type: 'success' })
 						emit('update-polls')
+					})
+					.catch(() => {
+						OC.Notification.showTemporary(t('polls', 'Error writing poll'), { type: 'error' })
 					})
 				this.writingPoll = false
 			}
 		},
 
-		write() {
-			if (this.acl.allowEdit) {
-				this.writePoll()
-			}
+		// write() {
+		// 	if (this.acl.allowEdit) {
+		// 		this.updatePoll()
+		// 	}
+		// },
 
-		},
 	},
 }
 </script>

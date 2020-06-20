@@ -107,7 +107,8 @@ const actions = {
 					OC.Notification.showTemporary(t('polls', 'Error sending invitation mail to %n.', 1, errorList.join(', ')), { type: 'error' })
 				}
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
 			})
@@ -118,7 +119,8 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { share: payload.share })
 			.then(() => {
 				context.commit('delete', { share: payload.share })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
 				throw error
 			})
@@ -130,7 +132,8 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
 			.then((response) => {
 				return { token: response.data.token }
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
 			})

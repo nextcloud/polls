@@ -150,20 +150,21 @@ export default {
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
-				}, (error) => {
+				})
+				.catch((error) => {
 					console.error(error.response)
 				})
 		},
 
 		copyLink(payload) {
-			this.$copyText(window.location.origin + payload.url).then(
-				function() {
+			this
+				.$copyText(window.location.origin + payload.url)
+				.then(() => {
 					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
-				},
-				function() {
+				})
+				.catch(() => {
 					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
-				}
-			)
+				})
 		},
 
 		shareUrl(share) {

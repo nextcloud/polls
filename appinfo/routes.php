@@ -52,13 +52,15 @@ return [
 		['name' => 'option#remove', 'url' => '/option/remove/', 'verb' => 'POST'],
 		['name' => 'option#getByToken', 'url' => '/options/get/s/{token}', 'verb' => 'GET'],
 
+		['name' => 'poll#get', 'url' => '/polls/get/{pollId}', 'verb' => 'GET', 'postfix' => 'auth'],
+		['name' => 'poll#get', 'url' => '/polls/get/s/{token}', 'verb' => 'GET', 'postfix' => 'public'],
+		['name' => 'poll#add', 'url' => '/polls/add', 'verb' => 'POST'],
+		['name' => 'poll#update', 'url' => '/polls/update/{pollId}', 'verb' => 'PUT'],
+
 		['name' => 'poll#list', 'url' => '/polls/list/', 'verb' => 'GET'],
-		['name' => 'poll#get', 'url' => '/polls/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#delete', 'url' => '/polls/delete/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#deletePermanently', 'url' => '/polls/delete/permanent/{pollId}', 'verb' => 'GET'],
-		['name' => 'poll#write', 'url' => '/polls/write/', 'verb' => 'POST'],
-		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'get'],
-		['name' => 'poll#getByToken', 'url' => '/polls/get/s/{token}', 'verb' => 'GET'],
+		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'GET'],
 
 		['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
 		['name' => 'share#write', 'url' => '/share/write', 'verb' => 'POST'],
@@ -73,6 +75,13 @@ return [
 		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 
 		// REST-API calls
+		['name' => 'poll_api#enum', 'url' => '/api/v1.0/enum', 'verb' => 'GET'],
+		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],
+		['name' => 'poll_api#add', 'url' => '/api/v1.0/poll', 'verb' => 'POST'],
+		['name' => 'poll_api#get', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'DELETE'],
+		['name' => 'poll_api#update', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'PUT'],
+
 		['name' => 'vote_api#list', 'url' => '/api/v1.0/poll/{pollId}/votes', 'verb' => 'GET'],
 		['name' => 'comment_api#list', 'url' => '/api/v1.0/poll/{pollId}/comments', 'verb' => 'GET'],
 		['name' => 'option_api#list', 'url' => '/api/v1.0/poll/{pollId}/options', 'verb' => 'GET'],

@@ -105,7 +105,8 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, options: payload })
 			.then((response) => {
 				context.commit('set', { options: response.data })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error reordering option', { error: error.response }, { payload: payload })
 				throw error
 			})
@@ -117,7 +118,8 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then((response) => {
 				context.commit('setItem', { option: response.data })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
 				throw error
 			})
@@ -148,7 +150,8 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { option: option })
 			.then((response) => {
 				context.commit('setItem', { option: response.data })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error adding option', { error: error.response }, { payload: payload })
 				throw error
 			})
@@ -160,7 +163,8 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
 				context.commit('delete', { option: payload.option })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error
 			})

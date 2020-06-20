@@ -126,12 +126,12 @@ const actions = {
 		context.commit('reset')
 	},
 
-	load(context, payload) {
-		let endPoint = 'apps/polls/polls/get/'
+	get(context, payload) {
+		let endPoint = 'apps/polls/polls/get'
 		if (payload.token) {
-			endPoint = endPoint.concat('s/', payload.token)
+			endPoint = endPoint.concat('/s/', payload.token)
 		} else if (payload.pollId) {
-			endPoint = endPoint.concat(payload.pollId)
+			endPoint = endPoint.concat('/', payload.pollId)
 		} else {
 			context.commit('reset')
 			context.commit('acl/reset')
@@ -159,18 +159,67 @@ const actions = {
 			})
 	},
 
-	write(context) {
-		const endPoint = 'apps/polls/polls/write/'
-		return axios.post(generateUrl(endPoint), { poll: state })
+	add(context, payload) {
+		const endPoint = 'apps/polls/polls/add'
+		return axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
 			.then((response) => {
-				context.commit('set', response.data)
-				return response.data.poll
-			}, (error) => {
+				return response
+			})
+			.catch((error) => {
 				console.error('Error writing poll:', { error: error.response }, { state: state })
 				throw error
 			})
 
 	},
+
+	clone(context, payload) {
+		const endPoint = 'apps/polls/polls/clone'
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+			.then((response) => {
+				return response.data
+			})
+			.catch((error) => {
+				console.error('Error cloning poll', { error: error.response }, { payload: payload })
+			})
+
+	},
+
+	update(context) {
+		const endPoint = 'apps/polls/polls/update'
+		return axios.put(generateUrl(endPoint.concat('/', state.id)), { poll: state })
+			.then((response) => {
+				context.commit('set', { poll: response.data })
+				return response
+			})
+			.catch((error) => {
+				console.error('Error writing poll:', { error: error.response }, { state: state })
+				throw error
+			})
+
+	},
+
+	switchDeleted(context, payload) {
+		const endPoint = 'apps/polls/polls/delete'
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+			.then((response) => {
+				return response
+			})
+			.catch((error) => {
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
+	},
+
+	delete(context, payload) {
+		const endPoint = 'apps/polls/polls/delete'
+		return axios.get(generateUrl(endPoint.concat('/permanent/', payload.pollId)))
+			.then((response) => {
+				return response
+			})
+			.catch((error) => {
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
+	},
+
 }
 
 export default { namespaced, state, mutations, getters, actions, modules }
