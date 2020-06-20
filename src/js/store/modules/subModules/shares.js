@@ -127,7 +127,7 @@ const actions = {
 	},
 
 	addPersonal(context, payload) {
-		const endPoint = 'apps/polls/share/create/s/'
+		const endPoint = 'apps/polls/share/create/s'
 
 		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
 			.then((response) => {

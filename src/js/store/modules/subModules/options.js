@@ -112,21 +112,8 @@ const actions = {
 			})
 	},
 
-	update(context, payload) {
-		const endPoint = 'apps/polls/option/update'
-
-		return axios.post(generateUrl(endPoint), { option: payload.option })
-			.then((response) => {
-				context.commit('setItem', { option: response.data })
-			})
-			.catch((error) => {
-				console.error('Error updating option', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
 	add(context, payload) {
-		const endPoint = 'apps/polls/option/add/'
+		const endPoint = 'apps/polls/option/add'
 		const option = {}
 
 		option.id = 0
@@ -157,8 +144,21 @@ const actions = {
 			})
 	},
 
+	update(context, payload) {
+		const endPoint = 'apps/polls/option/update'
+
+		return axios.post(generateUrl(endPoint), { option: payload.option })
+			.then((response) => {
+				context.commit('setItem', { option: response.data })
+			})
+			.catch((error) => {
+				console.error('Error updating option', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
 	delete(context, payload) {
-		const endPoint = 'apps/polls/option/remove/'
+		const endPoint = 'apps/polls/option/remove'
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {

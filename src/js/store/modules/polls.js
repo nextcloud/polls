@@ -71,7 +71,7 @@ const getters = {
 
 const actions = {
 	load(context) {
-		const endPoint = 'apps/polls/polls/list/'
+		const endPoint = 'apps/polls/polls/list'
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {

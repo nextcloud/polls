@@ -146,7 +146,7 @@ export default {
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
-			axios.post(generateUrl('apps/polls/siteusers/get/'), this.siteUsersListOptions)
+			axios.post(generateUrl('apps/polls/siteusers/get'), this.siteUsersListOptions)
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
