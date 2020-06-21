@@ -43,7 +43,7 @@
 		"@nextcloud/vue": "^2.0.0",
 		"core-js": "^3.6.5",
 		"lodash": "^4.17.15",
-		"moment": "^2.26.0",
+		"moment": "^2.27.0",
 		"v-click-outside": "^3.0.0",
 		"vue": "^2.6.11",
 		"vue-clipboard2": "^0.3.1",
