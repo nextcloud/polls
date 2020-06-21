@@ -26,10 +26,6 @@ namespace OCA\Polls\Service;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
-use OCP\IGroupManager;
-use OCP\ILogger;
-
-
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\OptionMapper;
@@ -39,47 +35,33 @@ use OCA\Polls\Model\Acl;
 
 class VoteService  {
 
-	private $userId;
-	private $logger;
-	private $vote;
 	private $voteMapper;
+	private $vote;
 	private $optionMapper;
-	private $groupManager;
 	private $anonymizer;
 	private $logService;
 	private $acl;
 
 	/**
 	 * VoteController constructor.
-	 * @param string $appName
-	 * @param $userId
-	 * @param ILogger $logger
-	 * @param Vote $vote
 	 * @param VoteMapper $voteMapper
+	 * @param Vote $vote
 	 * @param OptionMapper $optionMapper
-	 * @param IGroupManager $groupManager
 	 * @param AnonymizeService $anonymizer
 	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
 	public function __construct(
-		string $appName,
-		$userId,
-		ILogger $logger,
 		VoteMapper $voteMapper,
-		OptionMapper $optionMapper,
 		Vote $vote,
-		IGroupManager $groupManager,
+		OptionMapper $optionMapper,
 		AnonymizeService $anonymizer,
 		LogService $logService,
 		Acl $acl
 	) {
-		$this->userId = $userId;
-		$this->vote = $vote;
 		$this->voteMapper = $voteMapper;
+		$this->vote = $vote;
 		$this->optionMapper = $optionMapper;
-		$this->logger = $logger;
-		$this->groupManager = $groupManager;
 		$this->anonymizer = $anonymizer;
 		$this->logService = $logService;
 		$this->acl = $acl;
@@ -94,17 +76,17 @@ class VoteService  {
 	 * @return DataResponse
 	 */
 	public function list($pollId = 0, $token = '') {
-		if (!$this->acl->checkAuthorize($pollId, $token) && !$this->acl->getAllowView()) {
+		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
 		if (!$this->acl->getAllowSeeResults()) {
-			return $this->voteMapper->findByPollAndUser($pollId, $this->acl->getUserId());
+			return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
 		} elseif (!$this->acl->getAllowSeeUsernames()) {
-			$this->anonymizer->set($pollId, $this->acl->getUserId());
+			$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
 			return $this->anonymizer->getVotes();
 		} else {
-			return $this->voteMapper->findByPoll($pollId);
+			return $this->voteMapper->findByPoll($this->acl->getpollId());
 		}
 	}
 
@@ -119,14 +101,14 @@ class VoteService  {
 	 */
 	public function set($pollId = 0, $pollOptionText, $setTo, $token = '') {
 
-		if (!$this->acl->checkAuthorize($pollId, $token) && !$this->acl->getAllowVote()) {
+		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowVote()) {
 			throw new NotAuthorizedException;
 		}
-
-		$option = $this->optionMapper->findByPollAndText($pollId, $pollOptionText);
+		
+		$option = $this->optionMapper->findByPollAndText($this->acl->getpollId(), $pollOptionText);
 
 		try {
-			$this->vote = $this->voteMapper->findSingleVote($pollId, $option->getPollOptionText(), $this->acl->getUserId());
+			$this->vote = $this->voteMapper->findSingleVote($this->acl->getpollId(), $option->getPollOptionText(), $this->acl->getUserId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->update($this->vote);
 
@@ -134,7 +116,7 @@ class VoteService  {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();
 
-			$this->vote->setPollId($pollId);
+			$this->vote->setPollId($this->acl->getpollId());
 			$this->vote->setUserId($this->acl->getUserId());
 			$this->vote->setVoteOptionText($option->getPollOptionText());
 			$this->vote->setVoteOptionId($option->getId());
@@ -158,12 +140,11 @@ class VoteService  {
 	 */
 	public function delete($pollId, $userId) {
 
-		if (!$this->acl->checkAuthorize($pollId, $token) && !$this->acl->getAllowEdit()) {
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
 		$votes = $this->voteMapper->deleteByPollAndUser($pollId, $userId);
-		$this->logger->alert('Deleted votes from ' . $userId . ' in poll ' . $pollId);
 	}
 
 }

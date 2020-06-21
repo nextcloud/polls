@@ -23,15 +23,9 @@
 
 namespace OCA\Polls\Service;
 
-use \Exception;
-
-use OCP\IGroupManager;
-use OCP\ILogger;
+use Exception;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
-
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Service\LogService;
@@ -39,45 +33,28 @@ use OCA\Polls\Model\Acl;
 
 class OptionService  {
 
-	private $userId;
 	private $optionMapper;
 	private $options;
 	private $option;
-	private $groupManager;
-	private $pollMapper;
-	private $logger;
 	private $logService;
 	private $acl;
 
 	/**
 	 * OptionController constructor.
-	 * @param string $appName
-	 * @param $userId
-	 * @param ILogger $logger
 	 * @param OptionMapper $optionMapper
-	 * @param IGroupManager $groupManager
-	 * @param PollMapper $pollMapper
+	 * @param Option $option
 	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
 
 	public function __construct(
-		string $appName,
-		$userId,
 		OptionMapper $optionMapper,
 		Option $option,
-		IGroupManager $groupManager,
-		PollMapper $pollMapper,
-		ILogger $logger,
 		LogService $logService,
 		Acl $acl
 	) {
-		$this->userId = $userId;
 		$this->optionMapper = $optionMapper;
 		$this->option = $option;
-		$this->groupManager = $groupManager;
-		$this->pollMapper = $pollMapper;
-		$this->logger = $logger;
 		$this->logService = $logService;
 		$this->acl = $acl;
 	}
@@ -117,13 +94,13 @@ class OptionService  {
 	 * @return array Array of Option objects
 	 */
 	public function list($pollId = 0, $token = '') {
-		$this->logger->debug('call optionService->list(' . $pollId . ', '. $token . ')');
 
-		if (!$this->acl->checkAuthorize($pollId, $token)) {
+		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
 		return $this->optionMapper->findByPoll($pollId);
+
 	}
 
 
@@ -134,15 +111,16 @@ class OptionService  {
 	 * @return Option
 	 */
 	public function add($option) {
-		$this->logger->debug('call optionService->add(' . json_encode($option) . ')');
 
 		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
+
 		$this->option = new Option();
 		$this->set($option);
 		$this->optionMapper->insert($this->option);
 		$this->logService->setLog($option['pollId'], 'addOption');
+
 		return $this->option;
 	}
 
@@ -153,9 +131,8 @@ class OptionService  {
 	 * @return array Array of Option objects
 	 */
 	public function delete($optionId) {
-		$this->logger->debug('call optionService->delete(' . json_encode($optionId) . ')');
-
 		$this->option = $this->optionMapper->find($optionId);
+
 		if (!$this->acl->setPollId($this->option->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
@@ -163,6 +140,7 @@ class OptionService  {
 		$this->optionMapper->delete($this->option);
 
 		return $this->option;
+
 	}
 
 	/**
@@ -172,8 +150,6 @@ class OptionService  {
 	 * @return Option
 	 */
 	public function update($option) {
-		$this->logger->debug('call optionService->update(' . json_encode($option) . ')');
-
 		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
@@ -183,10 +159,12 @@ class OptionService  {
 			$this->set($option);
 			$this->optionMapper->update($this->option);
 			$this->logService->setLog($option['pollId'], 'updateOption');
+
 			return $this->option;
 		} catch (Exception $e) {
 			return new DoesNotExistException($e);
 		}
+
 	}
 
 	/**
@@ -196,7 +174,6 @@ class OptionService  {
 	 * @return array Array of Option objects
 	 */
 	public function reorder($pollId, $options) {
-		$this->logger->debug('call optionService->reorder(' . $pollId . ', ' . json_encode($options) . ')');
 
 		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
@@ -211,7 +188,7 @@ class OptionService  {
 			}
 		}
 
-		return $this->get($pollId);
+		return $this->optionMapper->findByPoll($pollId);
 
 	}
 
@@ -222,6 +199,10 @@ class OptionService  {
 	 * @return array Array of Option objects
 	 */
 	public function clone($fromPollId, $toPollId) {
+
+		if (!$this->acl->setPollId($fromPollId)->getAllowView()) {
+			throw new NotAuthorizedException;
+		}
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $option) {
 			$option->setPollId($toPollId);

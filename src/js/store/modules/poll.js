@@ -166,7 +166,7 @@ const actions = {
 				return response
 			})
 			.catch((error) => {
-				console.error('Error writing poll:', { error: error.response }, { state: state })
+				console.error('Error adding poll:', { error: error.response }, { state: state })
 				throw error
 			})
 
@@ -192,7 +192,7 @@ const actions = {
 				return response
 			})
 			.catch((error) => {
-				console.error('Error writing poll:', { error: error.response }, { state: state })
+				console.error('Error updating poll:', { error: error.response }, { poll: state })
 				throw error
 			})
 

@@ -86,6 +86,7 @@ use OCA\Polls\Service\PollService;
 	 * get
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 * @param integer $pollId
 	 * @return array
 	 */
@@ -165,7 +166,6 @@ use OCA\Polls\Service\PollService;
 	 */
 
 	public function update($pollId, $poll) {
-		$this->logger->alert(json_encode($poll));
 		try {
 			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

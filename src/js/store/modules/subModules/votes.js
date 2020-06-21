@@ -137,7 +137,6 @@ const actions = {
 		if (context.rootState.poll.acl.foundByToken) {
 			endPoint = endPoint.concat('/s')
 		}
-
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			token: context.rootState.poll.acl.token,

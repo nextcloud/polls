@@ -25,7 +25,6 @@ namespace OCA\Polls\Service;
 
 use Exception;
 
-use OCP\ILogger;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
@@ -35,27 +34,18 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
-// TODO: Change to Service
 use OCA\Polls\Controller\SystemController;
 
 class ShareService {
 
-	private $logger;
-	private $acl;
 	private $shareMapper;
 	private $share;
-	private $userId;
-
-	private $pollMapper;
 	private $systemController;
 	private $mailService;
+	private $acl;
 
 	/**
 	 * ShareController constructor.
-	 * @param string $appName
-	 * @param string $userId
-	 * @param IRequest $request
-	 * @param ILogger $logger
 	 * @param ShareMapper $shareMapper
 	 * @param Share $share
 	 * @param SystemController $systemController
@@ -63,17 +53,12 @@ class ShareService {
 	 * @param Acl $acl
 	 */
 	public function __construct(
-		string $appName,
-		$userId,
-		ILogger $logger,
 		ShareMapper $shareMapper,
 		Share $share,
 		SystemController $systemController,
 		MailService $mailService,
 		Acl $acl
 	) {
-		$this->logger = $logger;
-		$this->userId = $userId;
 		$this->shareMapper = $shareMapper;
 		$this->share = $share;
 		$this->systemController = $systemController;
@@ -89,11 +74,12 @@ class ShareService {
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
-		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
-			return $this->shareMapper->findByPoll($pollId);
-		} else {
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
+
+		return $this->shareMapper->findByPoll($pollId);
+
 	}
 
 	/**
@@ -118,8 +104,8 @@ class ShareService {
 	 */
 	 // TODO: Replace with $this->add and separate sending invitations
 	public function write($pollId, $type, $userId, $userEmail = '') {
-		$this->acl->setPollId($pollId);
-		if (!$this->acl->getAllowEdit()) {
+
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -152,8 +138,8 @@ class ShareService {
 	 * @return Array
 	 */
 	public function add($pollId, $type, $userId, $userEmail = '') {
-		$this->acl->setPollId($pollId);
-		if (!$this->acl->getAllowEdit()) {
+
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -182,7 +168,6 @@ class ShareService {
 	 * @return Share
 	 */
 	public function createPersonalShare($token, $userName) {
-
 		$publicShare = $this->shareMapper->findByToken($token);
 
 		// Return of validatePublicUsername is a DataResponse
@@ -194,6 +179,7 @@ class ShareService {
 		}
 
 		if ($publicShare->getType() === 'public') {
+
 
 			$this->share = new Share();
 			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
@@ -231,11 +217,13 @@ class ShareService {
 
 	public function remove($token) {
 		$this->share = $this->shareMapper->findByToken($token);
-		if ($this->acl->setPollId($this->share->getPollId())->getAllowEdit()) {
-			$this->shareMapper->delete($this->share);
-			return $this->share;
-		} else {
+		if (!$this->acl->setPollId($this->share->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
+
+		$this->shareMapper->delete($this->share);
+
+		return $this->share;
+
 	}
 }

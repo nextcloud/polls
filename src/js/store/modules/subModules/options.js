@@ -139,7 +139,7 @@ const actions = {
 				context.commit('setItem', { option: response.data })
 			})
 			.catch((error) => {
-				console.error('Error adding option', { error: error.response }, { payload: payload })
+				console.error('Error adding option', { error: error.response }, { payload: option })
 				throw error
 			})
 	},

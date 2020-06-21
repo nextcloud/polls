@@ -26,6 +26,7 @@ namespace OCA\Polls\Controller;
 // use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
+use OCP\ILogger;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -37,6 +38,7 @@ use OCA\Polls\Service\VoteService;
 class VoteController extends Controller {
 
 	private $voteService;
+	private $logger;
 
 	/**
 	 * VoteController constructor.
@@ -48,10 +50,12 @@ class VoteController extends Controller {
 	 */
 	public function __construct(
 		string $appName,
+		ILogger $logger,
 		IRequest $request,
 		VoteService $voteService
 	) {
 		parent::__construct($appName, $request);
+		$this->logger = $logger;
 		$this->voteService = $voteService;
 	}
 
@@ -129,7 +133,7 @@ class VoteController extends Controller {
 	 */
 	public function setByToken($option, $setTo, $token) {
 		try {
-			return new DataResponse($this->voteService->set(null, $option['pollOptionText'], $setTo, $token), Http::STATUS_OK);
+			return new DataResponse($this->voteService->set(0, $option['pollOptionText'], $setTo, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {

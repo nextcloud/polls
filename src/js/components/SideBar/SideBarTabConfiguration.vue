@@ -306,7 +306,7 @@ export default {
 			} else {
 				this.$store.dispatch('poll/update')
 					.then((response) => {
-						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, response.data.poll.title), { type: 'success' })
+						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, response.data.title), { type: 'success' })
 						emit('update-polls')
 					})
 					.catch(() => {
@@ -315,12 +315,6 @@ export default {
 				this.writingPoll = false
 			}
 		},
-
-		// write() {
-		// 	if (this.acl.allowEdit) {
-		// 		this.updatePoll()
-		// 	}
-		// },
 
 	},
 }
