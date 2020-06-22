@@ -34,7 +34,6 @@ use OCA\Polls\Model\Acl;
 class OptionService  {
 
 	private $optionMapper;
-	private $options;
 	private $option;
 	private $logService;
 	private $acl;
@@ -195,7 +194,8 @@ class OptionService  {
 	/**
 	 * Set order by order of the given array
 	 * @NoAdminRequired
-	 * @param array $options
+	 * @param integer $fromPollId
+	 * @param integer $toPollId
 	 * @return array Array of Option objects
 	 */
 	public function clone($fromPollId, $toPollId) {

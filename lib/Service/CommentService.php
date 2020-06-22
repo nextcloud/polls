@@ -59,6 +59,7 @@ class CommentService {
 		Acl $acl
 	) {
 		$this->commentMapper = $commentMapper;
+		$this->comment = $comment;
 		$this->logger = $logger;
 		$this->anonymizer = $anonymizer;
 		$this->acl = $acl;

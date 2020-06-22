@@ -74,7 +74,7 @@ const getters = {
 
 const actions = {
 	add(context, payload) {
-		const endPoint = 'apps/polls/share/write'
+		const endPoint = 'apps/polls/share/add'
 		payload.share.pollId = context.rootState.poll.id
 		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
@@ -115,7 +115,7 @@ const actions = {
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/share/remove'
+		const endPoint = 'apps/polls/share/delete'
 		return axios.post(generateUrl(endPoint), { share: payload.share })
 			.then(() => {
 				context.commit('delete', { share: payload.share })

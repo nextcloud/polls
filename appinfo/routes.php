@@ -62,11 +62,12 @@ return [
 		['name' => 'poll#deletePermanently', 'url' => '/polls/delete/permanent/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'GET'],
 
-		['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
-		['name' => 'share#write', 'url' => '/share/write', 'verb' => 'POST'],
+		['name' => 'share#add', 'url' => '/share/add', 'verb' => 'POST'],
+		['name' => 'share#delete', 'url' => '/share/delete', 'verb' => 'POST'],
 		['name' => 'share#createPersonalShare', 'url' => '/share/create/s', 'verb' => 'POST'],
-		['name' => 'share#remove', 'url' => '/share/remove', 'verb' => 'POST'],
-		['name' => 'share#get', 'url' => '/share/get/{token}', 'verb' => 'GET'],
+
+		// ['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
+		// ['name' => 'share#get', 'url' => '/share/get/{token}', 'verb' => 'GET'],
 
 		['name' => 'acl#getByToken', 'url' => '/acl/get/s/{token}', 'verb' => 'GET'],
 		['name' => 'acl#get', 'url' => '/acl/get/{id}', 'verb' => 'GET'],
@@ -83,20 +84,25 @@ return [
 		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'DELETE'],
 		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/permanent/{pollId}', 'verb' => 'DELETE'],
 		['name' => 'poll_api#enum', 'url' => '/api/v1.0/poll/enum', 'verb' => 'GET'],
+
 		['name' => 'option_api#list', 'url' => '/api/v1.0/poll/{pollId}/options', 'verb' => 'GET'],
 		['name' => 'option_api#add', 'url' => '/api/v1.0/option', 'verb' => 'POST'],
 		['name' => 'option_api#update', 'url' => '/api/v1.0/option', 'verb' => 'PUT'],
 		['name' => 'option_api#delete', 'url' => '/api/v1.0/option/{optionId}', 'verb' => 'DELETE'],
+
 		['name' => 'comment_api#list', 'url' => '/api/v1.0/poll/{pollId}/comments', 'verb' => 'GET'],
 		['name' => 'comment_api#add', 'url' => '/api/v1.0/comment', 'verb' => 'POST'],
 		['name' => 'comment_api#delete', 'url' => '/api/v1.0/comment/{commentId}', 'verb' => 'DELETE'],
+
 		['name' => 'share_api#list', 'url' => '/api/v1.0/poll/{pollId}/shares', 'verb' => 'GET'],
 		['name' => 'share_api#get', 'url' => '/api/v1.0/share/{token}', 'verb' => 'GET'],
 		['name' => 'share_api#add', 'url' => '/api/v1.0/share', 'verb' => 'POST'],
 		['name' => 'share_api#delete', 'url' => '/api/v1.0/share/{token}', 'verb' => 'DELETE'],
+
 		['name' => 'subscription_api#get', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'GET'],
 		['name' => 'subscription_api#subscribe', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'PUT'],
 		['name' => 'subscription_api#unsubscribe', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'DELETE'],
+
 		['name' => 'vote_api#list', 'url' => '/api/v1.0/poll/{pollId}/votes', 'verb' => 'GET'],
 		['name' => 'vote_api#set', 'url' => '/api/v1.0/vote', 'verb' => 'POST'],
 	]

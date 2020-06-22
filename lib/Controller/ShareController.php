@@ -68,43 +68,6 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * getByToken
-	 * Get poll
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function get($token) {
-		try {
-			return new DataResponse($this->shareService->get($token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Token ' . $token . ' not found', Http::STATUS_NOT_FOUND);
-		}
-	}
-
-	/**
-	 * get
-	 * Read all shares of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return DataResponse
-	 */
-	public function getShares($pollId) {
-		try {
-			return new DataResponse($this->shareService->findByPoll($pollId), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('No shares for poll with id ' . $pollId . ' not found', Http::STATUS_NOT_FOUND);
-		}
-	}
-
-	/**
 	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -112,7 +75,7 @@ class ShareController extends Controller {
 	 * @param Array $share
 	 * @return DataResponse
 	 */
-	public function write($pollId, $share) {
+	public function add($pollId, $share) {
 		try {
 			$return = $this->shareService->write(
 				$pollId,
@@ -122,7 +85,7 @@ class ShareController extends Controller {
 			);
 			return new DataResponse($return, Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}
@@ -144,7 +107,7 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse($this->shareService->createPersonalShare($token, $userName), Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidUsername $e) {
 			return new DataResponse($userName . ' is not valid', Http::STATUS_CONFLICT);
 		} catch (DoesNotExistException $e) {
@@ -162,14 +125,14 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 
-	public function remove($share) {
+	public function delete($share) {
 		try {
 			return new DataResponse(array(
 				'action' => 'deleted',
 				'shareId' => $this->shareService->remove($share['token'])->getId()
 			), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}

@@ -45,7 +45,6 @@ class ShareApiController extends ApiController {
 	 * @param string $appName
 	 * @param string $userId
 	 * @param IRequest $request
-	 * @param ILogger $logger
 	 * @param ShareService $shareService
 	 */
 	public function __construct(
@@ -74,9 +73,9 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->shareService->list($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('No shares for poll with id ' . $pollId . ' not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'No shares for poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -93,9 +92,9 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->shareService->get($token), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Token ' . $token . ' not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Token ' . $token . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -114,9 +113,9 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->shareService->add($pollId, $type, $userId, $userEmail), Http::STATUS_CREATED);
 		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
+			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 
 	}
@@ -134,7 +133,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->shareService->remove($token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}

@@ -45,7 +45,6 @@
  class PollService {
 
 	private $logger;
-	private $userid;
 	private $pollMapper;
  	private $poll;
  	private $logService;
@@ -57,8 +56,6 @@
 
  	/**
  	 * PollController constructor.
- 	 * @param string $appName
- 	 * @param $userId
  	 * @param PollMapper $pollMapper
  	 * @param LogService $logService
  	 * @param CommentService $commentService
@@ -69,8 +66,6 @@
  	 */
 
  	public function __construct(
- 		string $appName,
-		$userId,
 		ILogger $logger,
  		PollMapper $pollMapper,
  		Poll $poll,
@@ -81,7 +76,6 @@
 		VoteService $voteService,
  		Acl $acl
  	) {
-		$this->userId = $userId;
 		$this->logger = $logger;
  		$this->pollMapper = $pollMapper;
  		$this->poll = $poll;
@@ -97,13 +91,15 @@
 	/**
 	 * list
 	 * @NoAdminRequired
-	 * @return DataResponse
+	 * @return array
 	 */
 
 	public function list() {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			throw new NotAuthorizedException;
 		}
+
+		$pollList = [];
 
 		$polls = $this->pollMapper->findAll();
 		// TODO: Not the elegant way. Improvement neccessary
@@ -217,7 +213,7 @@
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param Array $poll
-	 * @return DataResponse
+	 * @return Poll
 	 */
 
 	public function add($type, $title) {
@@ -258,94 +254,12 @@
 		return $this->poll;
 	}
 
-	// /**
-	//  * write
-	//  * @NoAdminRequired
-	//  * @NoCSRFRequired
-	//  * @depricated
-	//  * @param Array $poll
-	//  * @return DataResponse
-	//  */
-	//
-	// public function write($poll, $pollId = null) {
-	//
-	// 	if (!$pollId) {
-	// 		$pollId = $poll['id'];
-	// 	}
-	//
-	// 	// Validate valuess
-	// 	if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
-	// 		throw new InvalidShowResultsException('Invalid value for prop showResults');
-	// 	}
-	//
-	// 	if (isset($poll['access']) && !in_array($poll['access'], $this->getValidShowResults())) {
-	// 		throw new InvalidAccessException('Invalid value for prop access');
-	// 	}
-	//
-	// 	if (isset($poll['title']) && !$poll['title']) {
-	// 		throw new EmptyTitleException('Title must not be empty');
-	// 	}
-	//
-	// 	try {
-	// 		// find pollId
-	// 		$this->poll = $this->pollMapper->find($pollId);
-	// 		$this->logService->setLog($this->poll->getId(), 'updatePoll');
-	//
-	//
-	// 	} catch (DoesNotExistException $e) {
-	// 		// if not found create a new poll
-	//
-	// 		// Validate valuess
-	// 		if (!in_array($poll['type'], $this->getValidPollType())) {
-	// 			throw new InvalidPollTypeException('Invalid poll type');
-	// 		}
-	//
-	// 		if (!$poll['title']) {
-	// 			throw new EmptyTitleException('Title must not be empty');
-	// 		}
-	//
-	//
-	// 		$this->poll = new Poll();
-	// 		$this->poll->setType($poll['type']);
-	// 		$this->poll->setOwner($this->userId);
-	// 		$this->poll->setTitle($poll['title']);
-	// 		$this->poll->setCreated(time());
-	// 		$this->poll = $this->pollMapper->insert($this->poll);
-	//
-	// 		$this->logService->setLog($this->poll->getId(), 'addPoll');
-	// 	}
-	//
-	// 	if (!$this->acl->setPollId($this->poll->getId())->getAllowEdit()) {
-	// 		throw new NotAuthorizedException;
-	// 	}
-	//
-	// 	$this->poll->setTitle(isset($poll['title']) ? $poll['title'] : $this->poll->getTitle());
-	// 	$this->poll->setDescription(isset($poll['description']) ? $poll['description'] : $this->poll->getDescription());
-	// 	$this->poll->setAccess(isset($poll['access']) ? $poll['access'] : $this->poll->getAccess());
-	// 	$this->poll->setExpire(isset($poll['expire']) ? $poll['expire'] : $this->poll->getExpire());
-	// 	$this->poll->setAnonymous(isset($poll['anonymous']) ? $poll['anonymous'] : $this->poll->getAnonymous());
-	// 	$this->poll->setAllowMaybe(isset($poll['allowMaybe']) ? $poll['allowMaybe'] : $this->poll->getAllowMaybe());
-	// 	$this->poll->setVoteLimit(isset($poll['voteLimit']) ? $poll['voteLimit'] : $this->poll->getVoteLimit());
-	// 	$this->poll->setShowResults(isset($poll['showResults']) ? $poll['showResults'] : $this->poll->getShowResults());
-	// 	$this->poll->setDeleted(isset($poll['deleted']) ? $poll['deleted'] : $this->poll->getDeleted());
-	// 	$this->poll->setAdminAccess(isset($poll['adminAccess']) ? $poll['adminAccess'] : $this->poll->getAdminAccess());
-	//
-	// 	$this->poll->setFullAnonymous(0);
-	// 	$this->poll->setVoteLimit(0);
-	// 	$this->poll->setSettings('');
-	// 	$this->poll->setOptions('');
-	//
-	// 	$this->pollMapper->update($this->poll);
-	//
-	// 	return $this->poll;
-	// }
-
 	/**
 	 * update
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param Array $poll
-	 * @return DataResponse
+	 * @return Poll
 	 */
 
 	public function update($pollId, $poll) {
@@ -391,7 +305,7 @@
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param integer $pollId
-	 * @return DataResponse
+	 * @return Poll
 	 */
 	public function clone($pollId) {
 
@@ -408,7 +322,7 @@
 		$this->poll->setId(0);
 
 		$this->poll = $this->pollMapper->insert($this->poll);
-		$this->logService->setLog($clonePoll->getId(), 'addPoll');
+		$this->logService->setLog($this->poll->getId(), 'addPoll');
 
 		$this->optionService->clone($pollId, $this->poll->getId());
 

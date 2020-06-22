@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
 use OCP\ILogger;
@@ -73,9 +74,9 @@ class SubscriptionController extends Controller {
 		try {
 			return new DataResponse($this->subscriptionService->get($pollId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Not subscribed', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Not subscribed'], Http::STATUS_NOT_FOUND);
 		}
 	}
 
@@ -88,7 +89,7 @@ class SubscriptionController extends Controller {
 		try {
 			return new DataResponse($this->subscriptionService->set($pollId, $subscribed), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

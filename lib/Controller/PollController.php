@@ -77,7 +77,7 @@ use OCA\Polls\Service\PollService;
 		} catch (DoesNotExistException $e) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -94,9 +94,9 @@ use OCA\Polls\Service\PollService;
 		try {
 			return new DataResponse($this->pollService->get($pollId, $token), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
  	}
 
@@ -112,9 +112,9 @@ use OCA\Polls\Service\PollService;
 		try {
 			return new DataResponse($this->pollService->delete($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -130,9 +130,9 @@ use OCA\Polls\Service\PollService;
 		try {
 			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -149,11 +149,11 @@ use OCA\Polls\Service\PollService;
 		try {
 			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidPollTypeException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (EmptyTitleException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -169,40 +169,15 @@ use OCA\Polls\Service\PollService;
 		try {
 			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidAccessException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidShowResultsException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (EmptyTitleException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		}
-	}
-
-	/**
-	 * write
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @depicated
-	 * @param Array $poll
-	 * @return DataResponse
-	 */
-
-	public function write($poll) {
-		try {
-			return new DataResponse($this->pollService->write($poll), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidAccessException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidShowResultsException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (EmptyTitleException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -217,9 +192,9 @@ use OCA\Polls\Service\PollService;
 		try {
 			return new DataResponse($this->pollService->clone($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Poll not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 

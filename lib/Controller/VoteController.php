@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 // use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\ILogger;
 use OCP\IRequest;
@@ -71,9 +72,9 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->list($pollId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('No votes', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		}
 	}
 
@@ -91,9 +92,9 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->set($pollId, $option['pollOptionText'], $setTo), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Option not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
 		}
 	}
 
@@ -111,9 +112,9 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->delete($pollId, $userId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => ''], Http::STATUS_NOT_FOUND);
 		}
 	}
 
@@ -135,9 +136,9 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->set(0, $option['pollOptionText'], $setTo, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Option not found', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
 		}
 
 	}
@@ -155,9 +156,9 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->list(null, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse('Unauthorized', Http::STATUS_FORBIDDEN);
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('No votes', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		}
 
 	}

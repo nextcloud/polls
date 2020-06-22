@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
 use OCP\ILogger;
@@ -77,11 +78,12 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function get($pollId) {
 		try {
-			return new DataResponse($this->subscriptionService->get($pollId), Http::STATUS_OK);
+			$this->subscriptionService->get($pollId);
+			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse('Not subscribed', Http::STATUS_NOT_FOUND);
+			return new DataResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -93,10 +95,10 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function subscribe($pollId) {
 		try {
-			return $this->subscriptionService->set($pollId, true);
-			return new DataResponse('Subscribed', Http::STATUS_OK);
+			$this->subscriptionService->set($pollId, true);
+			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 	/**
@@ -108,9 +110,9 @@ class SubscriptionApiController extends ApiController {
 	public function unsubscribe($pollId) {
 		try {
 			$this->subscriptionService->set($pollId, false);
-			return new DataResponse('Unsubscribed', Http::STATUS_OK);
+			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

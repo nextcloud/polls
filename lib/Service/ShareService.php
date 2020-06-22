@@ -71,7 +71,7 @@ class ShareService {
 	 * Read all shares of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @param integer $pollId
-	 * @return DataResponse
+	 * @return array
 	 */
 	public function list($pollId) {
 		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
@@ -87,11 +87,10 @@ class ShareService {
 	 * Get pollId by token
 	 * @NoAdminRequired
 	 * @param string $token
-	 * @return Array
+	 * @return Share
 	 */
 	public function get($token) {
-		$this->share = $this->shareMapper->findByToken($token);
-		return $this->share;
+		return $this->shareMapper->findByToken($token);
 	}
 
 	/**
@@ -100,7 +99,7 @@ class ShareService {
 	 * @depricated
 	 * @param int $pollId
 	 * @param string $share
-	 * @return Array
+	 * @return array
 	 */
 	 // TODO: Replace with $this->add and separate sending invitations
 	public function write($pollId, $type, $userId, $userEmail = '') {
@@ -135,7 +134,7 @@ class ShareService {
 	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @param string $share
-	 * @return Array
+	 * @return array
 	 */
 	public function add($pollId, $type, $userId, $userEmail = '') {
 
@@ -192,15 +191,13 @@ class ShareService {
 			$this->share->setPollId($publicShare->getPollId());
 			$this->share->setUserId($userName);
 			$this->share->setUserEmail('');
-			$this->share = $this->shareMapper->insert($this->share);
-			return $this->share;
+			return $this->shareMapper->insert($this->share);
 
 		} elseif ($publicShare->getType() === 'email') {
 
 			$publicShare->setType('external');
 			$publicShare->setUserId($userName);
-			$this->shareMapper->update($publicShare);
-			return new DataResponse($publicShare, Http::STATUS_OK);
+			return $this->shareMapper->update($publicShare);
 
 		} else {
 			throw new NotAuthorizedException;
