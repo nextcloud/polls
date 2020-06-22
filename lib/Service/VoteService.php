@@ -25,6 +25,7 @@ namespace OCA\Polls\Service;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
@@ -73,7 +74,7 @@ class VoteService  {
 	 * @NoAdminRequired
 	 * @param integer $pollId
 	 * @param string $token
-	 * @return DataResponse
+	 * @return Vote
 	 */
 	public function list($pollId = 0, $token = '') {
 		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
@@ -97,14 +98,14 @@ class VoteService  {
 	 * @param Array $option
 	 * @param string $setTo
 	 * @param string $token
-	 * @return DataResponse
+	 * @return Vote
 	 */
 	public function set($pollId = 0, $pollOptionText, $setTo, $token = '') {
 
 		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowVote()) {
 			throw new NotAuthorizedException;
 		}
-		
+
 		$option = $this->optionMapper->findByPollAndText($this->acl->getpollId(), $pollOptionText);
 
 		try {
@@ -136,7 +137,7 @@ class VoteService  {
 	 * @param integer $voteId
 	 * @param string $userId
 	 * @param integer $pollId
-	 * @return DataResponse
+	 * @return Vote
 	 */
 	public function delete($pollId, $userId) {
 

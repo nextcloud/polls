@@ -35,29 +35,22 @@ use OCA\Polls\Model\Acl;
 
 class SubscriptionService  {
 
-	private $userId;
 	private $acl;
 	private $subscriptionMapper;
 	private $logger;
 
 	/**
 	 * SubscriptionController constructor.
-	 * @param string $appName
-	 * @param $UserId
 	 * @param SubscriptionMapper $subscriptionMapper
-	 * @param IRequest $request
 	 * @param ILogger $logger
 	 * @param Acl $acl
 	 */
 
 	public function __construct(
-		string $appName,
-		$userId,
 		SubscriptionMapper $subscriptionMapper,
 		ILogger $logger,
 		Acl $acl
 	) {
-		$this->userId = $userId;
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->acl = $acl;
 		$this->logger = $logger;
@@ -66,7 +59,7 @@ class SubscriptionService  {
 	/**
 	 * @NoAdminRequired
 	 * @param integer $pollId
-	 * @return DataResponse
+	 * @return array
 	 */
 	public function get($pollId) {
 		if (!$this->acl->setPollId($pollId)->getAllowView()) {
@@ -85,6 +78,7 @@ class SubscriptionService  {
 	/**
 	 * @NoAdminRequired
 	 * @param integer $pollId
+	 * @return array
 	 */
 	public function set($pollId, $subscribed) {
 		if (!$this->acl->setPollId($pollId)->getAllowView()) {
