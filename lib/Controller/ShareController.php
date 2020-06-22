@@ -109,7 +109,7 @@ class ShareController extends Controller {
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidUsername $e) {
-			return new DataResponse($userName . ' is not valid', Http::STATUS_CONFLICT);
+			return new DataResponse(['error' => $userName . ' is not valid'], Http::STATUS_CONFLICT);
 		} catch (DoesNotExistException $e) {
 			// return forbidden in all not catched error cases
 			return new DataResponse($e, Http::STATUS_FORBIDDEN);

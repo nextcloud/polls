@@ -94,23 +94,26 @@ class SubscriptionService  {
 			$subscription = $this->subscriptionMapper->findByUserAndPoll($pollId, $this->acl->getUserId());
 			if (!$subscribed) {
 				$this->subscriptionMapper->delete($subscription);
-				return 'Unsubscribed';
+				return ['status' => 'Unsubscribed from poll ' . $pollId];
 			} else {
 				// subscription already exists, just return the existing subscription
-				return $subscription;
+				return ['status' => 'Subscribed to poll ' . $pollId];
 			}
+
 		} catch (DoesNotExistException $e){
+
 			if ($subscribed) {
 				$subscription = new Subscription();
 				$subscription->setPollId($pollId);
 				$subscription->setUserId($this->acl->getUserId());
 
 				$this->subscriptionMapper->insert($subscription);
-				return $subscription;
+				return ['status' => 'Subscribed to poll ' . $pollId];
 			} else {
 				// subscription is not found, just approve the unsubscription
-				return 'Unsubscribed';
+				return ['status' => 'Unsubscribed from poll ' . $pollId];
 			}
+
 		} catch (MultipleObjectsReturnedException $e) {
 			// Duplicates should not exist but if found, fix it
 			// unsubscribe from all and resubscribe, if requested
@@ -125,7 +128,7 @@ class SubscriptionService  {
 				$this->logger->debug('Added new subscription');
 				return $subscription;
 			} else {
-				return 'Unsubscribed';
+				return ['status' => 'Unsubscribed from poll ' . $pollId];
 			}
 
 		}

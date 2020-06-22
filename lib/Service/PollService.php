@@ -233,7 +233,7 @@
 		$this->poll = new Poll();
 		$this->poll->setType($type);
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userId);
+		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
 		$this->poll->setAccess('hidden');
@@ -316,7 +316,7 @@
 		$this->poll = $this->pollMapper->find($pollId);
 
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userId);
+		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
 		$this->poll->setTitle('Clone of ' . $this->poll->getTitle());
 		$this->poll->setDeleted(0);
 		$this->poll->setId(0);

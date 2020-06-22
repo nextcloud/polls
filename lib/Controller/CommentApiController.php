@@ -109,8 +109,7 @@ class CommentApiController extends ApiController {
 	 */
 	public function delete($commentId) {
 		try {
-			$this->commentService->delete($commentId);
-			return new DataResponse($commentId, Http::STATUS_OK);
+			return new DataResponse($this->commentService->delete($commentId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Comment does not exist'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {

@@ -24,8 +24,9 @@
 namespace OCA\Polls\Service;
 
 use Exception;
-
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
+
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Service\LogService;

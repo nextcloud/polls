@@ -76,7 +76,7 @@ class SubscriptionController extends Controller {
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Not subscribed'], Http::STATUS_NOT_FOUND);
+			return new DataResponse(['status' => 'Not subscribed'], Http::STATUS_NOT_FOUND);
 		}
 	}
 

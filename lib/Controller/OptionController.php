@@ -94,7 +94,7 @@ class OptionController extends Controller {
 	 * Update poll option
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Option $option
+	 * @param array $option
 	 * @return DataResponse
 	 */
 	public function update($option) {
