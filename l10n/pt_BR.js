@@ -125,6 +125,7 @@ OC.L10N.register(
     "Error while adding share" : "Erro ao adicionar compartilhamento",
     "Receive notification email on activity" : "Receber e-mail notificando atividade",
     "Your personal link to this poll: %n" : "Seu link pessoal para esta enquete: %n",
+    "Who are you?" : "Quem é você?",
     "Enter your name" : "Digite seu nome",
     "You have an account? Log in here." : "Já tem uma conta? Logue-se aqui.",
     "Please use at least 3 characters for your username!" : "Use pelo menos 3 caracteres para o seu nome de usuário!",
