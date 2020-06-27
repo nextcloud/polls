@@ -72,7 +72,7 @@ class CommentApiController extends ApiController {
 	 */
 	public function list($pollId) {
 		try {
-			return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
+			return new DataResponse(['comments' => $this->commentService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -91,7 +91,7 @@ class CommentApiController extends ApiController {
 	 */
 	public function add($pollId, $message) {
 		try {
-			return new DataResponse($this->commentService->add($pollId, $message), Http::STATUS_CREATED);
+			return new DataResponse(['comment' => $this->commentService->add($pollId, $message)], Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -109,9 +109,9 @@ class CommentApiController extends ApiController {
 	 */
 	public function delete($commentId) {
 		try {
-			return new DataResponse($this->commentService->delete($commentId), Http::STATUS_OK);
+			return new DataResponse(['comment' => $this->commentService->delete($commentId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Comment does not exist'], Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Comment id ' . $commentId . ' does not exist'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}

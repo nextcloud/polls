@@ -75,7 +75,7 @@
 
 	public function list() {
 		try {
-			return new DataResponse($this->pollService->list(), Http::STATUS_OK);
+			return new DataResponse(['polls' => $this->pollService->list()], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -93,7 +93,7 @@
 	 */
  	public function get($pollId) {
 		try {
-			return new DataResponse($this->pollService->get($pollId), Http::STATUS_OK);
+			return new DataResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -111,7 +111,7 @@
 
 	public function add($type, $title) {
 		try {
-			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_CREATED);
+			return new DataResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidPollTypeException $e) {
@@ -131,7 +131,7 @@
 
 	public function update($pollId, $poll) {
 		try {
-			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
+			return new DataResponse(['poll' => $this->pollService->update($pollId, $poll)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -155,7 +155,7 @@
 
 	public function delete($pollId) {
 		try {
-			return new DataResponse($this->pollService->delete($pollId), Http::STATUS_OK);
+			return new DataResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -173,7 +173,7 @@
 
 	public function deletePermanently($pollId) {
 		try {
-			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
+			return new DataResponse(['poll' => $this->pollService->deletePermanently($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -191,7 +191,7 @@
 	 */
 	public function clone($pollId) {
 		try {
-			return new DataResponse($this->pollService->clone($pollId), Http::STATUS_CREATED);
+			return new DataResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {

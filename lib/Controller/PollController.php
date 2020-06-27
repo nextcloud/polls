@@ -38,11 +38,21 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\PollService;
+use OCA\Polls\Service\CommentService;
+use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\ShareService;
+use OCA\Polls\Service\VoteService;
+use OCA\Polls\Model\Acl;
 
- class PollController extends Controller {
+class PollController extends Controller {
 
-	 private $logger;
-	 private $pollService;
+	private $logger;
+	private $pollService;
+	private $commentService;
+	private $optionService;
+	private $shareService;
+	private $voteService;
+	private $acl;
 
  	/**
  	 * PollController constructor.
@@ -50,18 +60,33 @@ use OCA\Polls\Service\PollService;
  	 * @param IRequest $request
  	 * @param ILogger $logger
  	 * @param PollService $pollService
- 	 */
+	 * @param CommentService $commentService
+  	 * @param OptionService $optionService
+  	 * @param ShareService $shareService
+  	 * @param VoteService $voteService
+  	 * @param Acl $acl
+	 */
 
  	public function __construct(
 		string $appName,
  		IRequest $request,
  		ILogger $logger,
- 		PollService $pollService
- 	) {
+ 		PollService $pollService,
+		CommentService $commentService,
+ 		OptionService $optionService,
+ 		ShareService $shareService,
+ 		VoteService $voteService,
+  		Acl $acl
+	) {
  		parent::__construct($appName, $request);
- 		$this->pollService = $pollService;
- 		$this->logger = $logger;
- 	}
+		$this->logger = $logger;
+		$this->pollService = $pollService;
+		$this->commentService = $commentService;
+  		$this->optionService = $optionService;
+  		$this->shareService = $shareService;
+  		$this->voteService = $voteService;
+  		$this->acl = $acl;
+	}
 
 
 	/**
@@ -92,12 +117,54 @@ use OCA\Polls\Service\PollService;
 	 */
  	public function get($pollId, $token) {
 		try {
-			return new DataResponse($this->pollService->get($pollId, $token), Http::STATUS_OK);
+			if ($token) {
+				$poll = $this->pollService->get(0, $token);
+				$acl = $this->acl->setToken($token);
+			} else {
+				$poll = $this->pollService->get($pollId);
+				$acl = $this->acl->setPollId($pollId);
+			}
+
+			// $this->poll = $this->pollService->get($pollId, $token);
+			// return new DataResponse($this->pollService->get($pollId, $token), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
+
+		try {
+			$comments = $this->commentService->list($pollId, $token);
+		} catch (Exception $e) {
+			$comments = [];
+		}
+
+		try {
+			$options = $this->optionService->list($pollId, $token);
+		} catch (Exception $e) {
+			$options = [];
+		}
+
+		try {
+			$votes = $this->voteService->list($pollId, $token);
+		} catch (Exception $e) {
+			$votes = [];
+		}
+
+		try {
+			$shares = $this->shareService->list($pollId);
+		} catch (Exception $e) {
+			$shares = [];
+		}
+
+		return new DataResponse([
+			'acl' => $acl,
+			'poll' => $poll,
+			'comments' => $comments,
+			'options' => $options,
+			'shares' => $shares,
+			'votes' => $votes
+		], Http::STATUS_OK);
  	}
 
 	/**
@@ -138,10 +205,11 @@ use OCA\Polls\Service\PollService;
 
 
 	/**
-	 * write
+	 * add
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Array $poll
+	 * @param string $type
+	 * @param string $title
 	 * @return DataResponse
 	 */
 
@@ -161,7 +229,8 @@ use OCA\Polls\Service\PollService;
 	 * write
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Array $poll
+	 * @param integer $pollId
+	 * @param array $poll
 	 * @return DataResponse
 	 */
 

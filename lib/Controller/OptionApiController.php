@@ -70,7 +70,7 @@ class OptionApiController extends ApiController {
 	 */
 	public function list($pollId) {
 		try {
-			return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
+			return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -97,7 +97,7 @@ class OptionApiController extends ApiController {
 		];
 
 		try {
-			return new DataResponse($this->optionService->add($option), Http::STATUS_CREATED);
+			return new DataResponse(['option' => $this->optionService->add($option)], Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (UniqueConstraintViolationException $e) {
@@ -118,7 +118,7 @@ class OptionApiController extends ApiController {
 	 */
 	public function update($option) {
 		try {
-			return new DataResponse($this->optionService->update($option), Http::STATUS_OK);
+			return new DataResponse(['option' => $this->optionService->update($option)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
@@ -134,7 +134,7 @@ class OptionApiController extends ApiController {
 	 */
 	public function delete($optionId) {
 		try {
-			return new DataResponse($this->optionService->delete($optionId), Http::STATUS_OK);
+			return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option does not exist'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {

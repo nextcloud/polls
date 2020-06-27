@@ -73,7 +73,7 @@ class VoteApiController extends ApiController {
 	 */
 	public function list($pollId) {
 		try {
-			return new DataResponse($this->voteService->list($pollId), Http::STATUS_OK);
+			return new DataResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -94,7 +94,7 @@ class VoteApiController extends ApiController {
 	 */
 	public function set($pollId, $pollOptionText, $setTo) {
 		try {
-			return new DataResponse($this->voteService->set($pollId, $pollOptionText, $setTo), Http::STATUS_OK);
+			return new DataResponse(['vote' => $this->voteService->set($pollId, $pollOptionText, $setTo)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {

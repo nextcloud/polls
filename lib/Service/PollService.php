@@ -33,12 +33,8 @@
 
  use OCP\ILogger;
 
- use OCA\Polls\Db\Poll;
  use OCA\Polls\Db\PollMapper;
- use OCA\Polls\Service\CommentService;
- use OCA\Polls\Service\OptionService;
- use OCA\Polls\Service\ShareService;
- use OCA\Polls\Service\VoteService;
+ use OCA\Polls\Db\Poll;
  use OCA\Polls\Service\LogService;
  use OCA\Polls\Model\Acl;
 
@@ -48,20 +44,14 @@
 	private $pollMapper;
  	private $poll;
  	private $logService;
- 	private $commentService;
- 	private $optionService;
- 	private $shareService;
- 	private $voteService;
  	private $acl;
 
  	/**
  	 * PollController constructor.
+ 	 * @param ILogger $logger
  	 * @param PollMapper $pollMapper
+ 	 * @param Poll $poll
  	 * @param LogService $logService
- 	 * @param CommentService $commentService
- 	 * @param OptionService $optionService
- 	 * @param ShareService $shareService
- 	 * @param VoteService $voteService
  	 * @param Acl $acl
  	 */
 
@@ -70,20 +60,12 @@
  		PollMapper $pollMapper,
  		Poll $poll,
  		LogService $logService,
-		CommentService $commentService,
-		OptionService $optionService,
-		ShareService $shareService,
-		VoteService $voteService,
  		Acl $acl
  	) {
 		$this->logger = $logger;
  		$this->pollMapper = $pollMapper;
  		$this->poll = $poll;
  		$this->logService = $logService;
- 		$this->commentService = $commentService;
- 		$this->optionService = $optionService;
- 		$this->shareService = $shareService;
- 		$this->voteService = $voteService;
  		$this->acl = $acl;
  	}
 
@@ -120,47 +102,30 @@
 	 * @param integer $pollId
 	 * @return array
 	 */
- 	public function get($pollId = 0, $token = '') {
+ 	public function get($pollId) {
 
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
+		if (!$this->acl->setPollId($pollId)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
-		$this->poll = $this->pollMapper->find($this->acl->getPollId());
+		return $this->pollMapper->find($pollId);
 
-		try {
-			$comments = $this->commentService->list($this->poll->getId(), $token);
-		} catch (Exception $e) {
-			$comments = [];
+ 	}
+
+	/**
+	 * get
+	 * @NoAdminRequired
+	 * @param integer $pollId
+	 * @return array
+	 */
+ 	public function getByToken($token) {
+
+		if (!$this->acl->setToken($token)->getAllowView()) {
+			throw new NotAuthorizedException;
 		}
 
-		try {
-			$options = $this->optionService->list($this->poll->getId(), $token);
-		} catch (Exception $e) {
-			$options = [];
+		return $this->pollMapper->find($this->acl->getPollId());
 
-		}
-
-		try {
-			$votes = $this->voteService->list($this->poll->getId(), $token);
-		} catch (Exception $e) {
-			$votes = [];
-		}
-
-		try {
-			$shares = $this->shareService->list($this->poll->getId());
-		} catch (Exception $e) {
-			$shares = [];
-		}
-
-		return [
-			'acl' => $this->acl,
-			'poll' => $this->poll,
-			'comments' => $comments,
-			'options' => $options,
-			'shares' => $shares,
-			'votes' => $votes
-		];
  	}
 
 	/**
@@ -212,7 +177,8 @@
 	 * write
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Array $poll
+	 * @param string $type
+	 * @param string $title
 	 * @return Poll
 	 */
 
@@ -282,17 +248,7 @@
 		if (isset($poll['title']) && !$poll['title']) {
 			throw new EmptyTitleException('Title must not be empty');
 		}
-
-		$this->poll->setTitle($poll['title'] ? $poll['title'] : $this->poll->getTitle());
-		$this->poll->setDescription(isset($poll['description']) ? $poll['description'] : $this->poll->getDescription());
-		$this->poll->setAccess(isset($poll['access']) ? $poll['access'] : $this->poll->getAccess());
-		$this->poll->setExpire(isset($poll['expire']) ? $poll['expire'] : $this->poll->getExpire());
-		$this->poll->setAnonymous(isset($poll['anonymous']) ? $poll['anonymous'] : $this->poll->getAnonymous());
-		$this->poll->setAllowMaybe(isset($poll['allowMaybe']) ? $poll['allowMaybe'] : $this->poll->getAllowMaybe());
-		$this->poll->setVoteLimit(isset($poll['voteLimit']) ? $poll['voteLimit'] : $this->poll->getVoteLimit());
-		$this->poll->setShowResults(isset($poll['showResults']) ? $poll['showResults'] : $this->poll->getShowResults());
-		$this->poll->setDeleted(isset($poll['deleted']) ? $poll['deleted'] : $this->poll->getDeleted());
-		$this->poll->setAdminAccess(isset($poll['adminAccess']) ? $poll['adminAccess'] : $this->poll->getAdminAccess());
+		$this->poll->deserializeArray($poll);
 
 		$this->pollMapper->update($this->poll);
 		$this->logService->setLog($this->poll->getId(), 'updatePoll');
