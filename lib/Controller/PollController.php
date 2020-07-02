@@ -118,7 +118,7 @@ class PollController extends Controller {
  	public function get($pollId, $token) {
 		try {
 			if ($token) {
-				$poll = $this->pollService->get(0, $token);
+				$poll = $this->pollService->getByToken($token);
 				$acl = $this->acl->setToken($token);
 			} else {
 				$poll = $this->pollService->get($pollId);
@@ -134,25 +134,25 @@ class PollController extends Controller {
 		}
 
 		try {
-			$comments = $this->commentService->list($pollId, $token);
+			$comments = $this->commentService->list($this->acl->getPollId(), $token);
 		} catch (Exception $e) {
 			$comments = [];
 		}
 
 		try {
-			$options = $this->optionService->list($pollId, $token);
+			$options = $this->optionService->list($this->acl->getPollId(), $token);
 		} catch (Exception $e) {
 			$options = [];
 		}
 
 		try {
-			$votes = $this->voteService->list($pollId, $token);
+			$votes = $this->voteService->list($this->acl->getPollId(), $token);
 		} catch (Exception $e) {
 			$votes = [];
 		}
 
 		try {
-			$shares = $this->shareService->list($pollId);
+			$shares = $this->shareService->list($this->acl->getPollId());
 		} catch (Exception $e) {
 			$shares = [];
 		}
