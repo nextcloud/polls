@@ -300,6 +300,8 @@ class MailService {
 					$recipient['eMailAddress'],
 					$recipient['displayName']
 				);
+				$share->setInvitationSent(time());
+				$this->shareMapper->update($share);
 				$sentMails[] = $recipient;
 			} catch (Exception $e) {
 				$abortedMails[] = $recipient;

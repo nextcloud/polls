@@ -101,7 +101,6 @@ class ShareService {
 	 * @param string $share
 	 * @return array
 	 */
-	 // TODO: Replace with $this->add and separate sending invitations
 	public function write($pollId, $type, $userId, $userEmail = '') {
 
 		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
@@ -113,6 +112,7 @@ class ShareService {
 		$this->share->setPollId($pollId);
 		$this->share->setUserId($userId);
 		$this->share->setUserEmail($userEmail);
+		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
@@ -121,6 +121,7 @@ class ShareService {
 		));
 
 		$this->share = $this->shareMapper->insert($this->share);
+		// TODO: Replace with $this->add and separate sending invitations
 		$sendResult = $this->mailService->sendInvitationMail($this->share->getToken());
 
 		return [
@@ -147,6 +148,7 @@ class ShareService {
 		$this->share->setPollId($pollId);
 		$this->share->setUserId($userId);
 		$this->share->setUserEmail($userEmail);
+		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
@@ -191,6 +193,7 @@ class ShareService {
 			$this->share->setPollId($publicShare->getPollId());
 			$this->share->setUserId($userName);
 			$this->share->setUserEmail('');
+			$this->share->setInvitationSent(time());
 			return $this->shareMapper->insert($this->share);
 
 		} elseif ($publicShare->getType() === 'email') {
