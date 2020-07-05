@@ -39,11 +39,13 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\ShareService;
+use OCA\Polls\Service\MailService;
 
 class ShareController extends Controller {
 
 	private $logger;
 	private $shareService;
+	private $mailService;
 	private $userId;
 
 	/**
@@ -52,6 +54,7 @@ class ShareController extends Controller {
 	 * @param string $userId
 	 * @param IRequest $request
 	 * @param ILogger $logger
+	 * @param MailService $mailService
 	 * @param ShareService $shareService
 	 */
 	public function __construct(
@@ -59,12 +62,14 @@ class ShareController extends Controller {
 		$userId,
 		IRequest $request,
 		ILogger $logger,
+		MailService $mailService,
 		ShareService $shareService
 	) {
 		parent::__construct($appName, $request);
 		$this->logger = $logger;
 		$this->userId = $userId;
 		$this->shareService = $shareService;
+		$this->mailService = $mailService;
 	}
 
 	/**
@@ -75,21 +80,14 @@ class ShareController extends Controller {
 	 * @param Array $share
 	 * @return DataResponse
 	 */
-	public function add($pollId, $share) {
-		try {
-			$return = $this->shareService->write(
-				$pollId,
-				$share['type'],
-				$share['userId'],
-				isset($share['userEmail']) ? $share['userEmail'] : ''
-			);
-			return new DataResponse($return, Http::STATUS_CREATED);
+	 public function add($pollId, $type, $userId = '', $userEmail = '') {
+ 		try {
+ 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $userEmail)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}
-
 	}
 
 	/**
@@ -113,6 +111,25 @@ class ShareController extends Controller {
 		} catch (DoesNotExistException $e) {
 			// return forbidden in all not catched error cases
 			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+		}
+	}
+
+	/**
+	 * SendInvitation
+	 * Sent invitation mails for a share
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function sendInvitation($token) {
+		try {
+			$sentResult = $this->mailService->sendInvitationMail($token);
+			$share = $this->shareService->get($token);
+			return new DataResponse(['share' => $share, 'sentResult' => $sentResult], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 

@@ -79,7 +79,6 @@ class ShareService {
 		}
 
 		return $this->shareMapper->findByPoll($pollId);
-
 	}
 
 	/**
@@ -91,43 +90,6 @@ class ShareService {
 	 */
 	public function get($token) {
 		return $this->shareMapper->findByToken($token);
-	}
-
-	/**
-	 * Write a new share to the db and returns the new share as array
-	 * @NoAdminRequired
-	 * @depricated
-	 * @param int $pollId
-	 * @param string $share
-	 * @return array
-	 */
-	public function write($pollId, $type, $userId, $userEmail = '') {
-
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
-
-		$this->share = new Share();
-		$this->share->setType($type);
-		$this->share->setPollId($pollId);
-		$this->share->setUserId($userId);
-		$this->share->setUserEmail($userEmail);
-		$this->share->setInvitationSent(0);
-		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
-			16,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		));
-
-		$this->share = $this->shareMapper->insert($this->share);
-		// TODO: Replace with $this->add and separate sending invitations
-		$sendResult = $this->mailService->sendInvitationMail($this->share->getToken());
-
-		return [
-			'share' => $this->share,
-			'sendResult' => $sendResult
-		];
 	}
 
 	/**
@@ -157,7 +119,6 @@ class ShareService {
 		));
 
 		return $this->shareMapper->insert($this->share);
-
 	}
 
 	/**
@@ -224,6 +185,5 @@ class ShareService {
 		$this->shareMapper->delete($this->share);
 
 		return $this->share;
-
 	}
 }
