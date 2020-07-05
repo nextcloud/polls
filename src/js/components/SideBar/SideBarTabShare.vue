@@ -24,13 +24,18 @@
 	<div>
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Invitations')" icon-class="icon-share"
-			:info="t('polls','Invited users will get informed immediately via email!')">
+		<ConfigBox :title="t('polls', 'Invitations')" icon-class="icon-share">
 			<TransitionGroup :css="false" tag="div" class="shared-list">
 				<UserItem v-for="(share) in invitationShares"
 					:key="share.id" v-bind="share"
 					:icon="true">
 					<Actions>
+						<ActionButton
+							v-if="share.userEmail || share.type === 'group'"
+							icon="icon-confirm"
+							@click="sendInvitation(share)">
+							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
+						</ActionButton>
 						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
 							{{ t('polls', 'Copy link to clipboard') }}
 						</ActionButton>
@@ -93,6 +98,23 @@
 
 			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', user: '', emailAddress: ''})" />
 		</ConfigBox>
+
+		<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
+			<TransitionGroup :css="false" tag="div" class="shared-list">
+				<UserItem v-for="(share) in unsentInvitations"
+					:key="share.id" v-bind="share"
+					:icon="true">
+					<Actions>
+						<ActionButton
+							v-if="share.userEmail || share.type === 'group'"
+							icon="icon-confirm"
+							@click="sendInvitation(share)">
+							{{ t('polls', 'Send invitation mail') }}
+						</ActionButton>
+					</Actions>
+				</UserItem>
+			</TransitionGroup>
+		</ConfigBox>
 	</div>
 </template>
 
@@ -103,6 +125,7 @@ import { mapState, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import ConfigBox from '../Base/ConfigBox'
 import ButtonDiv from '../Base/ButtonDiv'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'SideBarTabShare',
@@ -138,11 +161,25 @@ export default {
 
 		...mapGetters({
 			invitationShares: 'poll/shares/invitation',
+			unsentInvitations: 'poll/shares/unsentInvitations',
 			publicShares: 'poll/shares/public',
 		}),
 	},
 
 	methods: {
+		sendInvitation(share) {
+			this.$store.dispatch('poll/shares/sendInvitation', { share: share })
+				.then((response) => {
+					response.data.sentResult.sentMails.forEach((item) => {
+						showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
+					})
+					response.data.sentResult.abortedMails.forEach((item) => {
+						console.error('Mail could not be sent!', { recipient: item })
+						showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
+					})
+				})
+		},
+
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
@@ -160,10 +197,10 @@ export default {
 			this
 				.$copyText(window.location.origin + payload.url)
 				.then(() => {
-					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
+					showSuccess(t('polls', 'Link copied to clipboard'))
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
+					showError(t('polls', 'Error while copying link to clipboard'))
 				})
 		},
 
@@ -178,17 +215,13 @@ export default {
 		addShare(payload) {
 			this.$store
 				.dispatch('poll/shares/add', {
-					share: {
-						type: payload.type,
-						userId: payload.user,
-						pollId: '0',
-						userEmail: payload.emailAddress,
-						token: '',
-					},
+					type: payload.type,
+					userId: payload.user,
+					userEmail: payload.emailAddress,
 				})
 				.catch(error => {
 					console.error('Error while adding share - Error: ', error)
-					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })
+					showError(t('polls', 'Error while adding share'))
 				})
 		},
 	},

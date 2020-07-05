@@ -53,6 +53,11 @@ const mutations = {
 		state.list.push(payload)
 	},
 
+	update(state, payload) {
+		const foundIndex = state.list.findIndex(share => share.id === payload.share.id)
+		Object.assign(state.list[foundIndex], payload.share)
+	},
+
 }
 
 const getters = {
@@ -60,6 +65,12 @@ const getters = {
 		const invitationTypes = ['user', 'group', 'email', 'external', 'contact']
 		return state.list.filter(share => {
 			return invitationTypes.includes(share.type)
+		})
+	},
+
+	unsentInvitations: state => {
+		return state.list.filter(share => {
+			return share.userEmail && !share.invitationSent
 		})
 	},
 
@@ -75,37 +86,14 @@ const getters = {
 const actions = {
 	add(context, payload) {
 		const endPoint = 'apps/polls/share/add'
-		payload.share.pollId = context.rootState.poll.id
-		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
+		return axios.post(generateUrl(endPoint), {
+			pollId: context.rootState.poll.id,
+			type: payload.type,
+			userId: payload.userId,
+			userEmail: payload.userEmail,
+		})
 			.then((response) => {
 				context.commit('add', response.data.share)
-
-				if (response.data.sendResult.sentMails.length > 0) {
-					const sendList = response.data.sendResult.sentMails.map(element => {
-
-						if (element.displayName) {
-							return element.displayName
-						} else if (element.userId) {
-							return element.userId
-						} else if (element.eMailAddress) {
-							return element.eMailAddress
-						}
-					})
-					OC.Notification.showTemporary(t('polls', 'Invitation mail sent to %n.', 1, sendList.join(', ')), { type: 'success' })
-				}
-
-				if (response.data.sendResult.abortedMails.length > 0) {
-					const errorList = response.data.sendResult.abortedMails.map(element => {
-						if (element.displayName) {
-							return element.displayName
-						} else if (element.userId) {
-							return element.userId
-						} else if (element.eMailAddress) {
-							return element.eMailAddress
-						}
-					})
-					OC.Notification.showTemporary(t('polls', 'Error sending invitation mail to %n.', 1, errorList.join(', ')), { type: 'error' })
-				}
 				return response.data
 			})
 			.catch((error) => {
@@ -122,6 +110,19 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
+	sendInvitation(context, payload) {
+		const endPoint = 'apps/polls/share/send'
+		return axios.post(generateUrl(endPoint.concat('/', payload.share.token)))
+			.then((response) => {
+				context.commit('update', { share: response.data.share })
+				return response
+			})
+			.catch((error) => {
+				console.error('Error sending invitation', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
