@@ -75,4 +75,16 @@ class Version0105Date20200704084037 extends SimpleMigrationStep {
 
 		return $schema;
 	}
+	/**
+	 * @param IOutput $output
+	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 * @param array $options
+	 * @since 13.0.0
+	 */
+	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+		$query = $this->connection->getQueryBuilder();
+		$query->update('polls_share')
+			->set('invitation_sent', 'id');
+		$query->execute();
+	}
 }
