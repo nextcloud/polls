@@ -151,7 +151,7 @@ class SystemController extends Controller {
 		if ($getUsers) {
 			$users = $this->userManager->searchDisplayName($query);
 			foreach ($users as $user) {
-				if (!in_array($user->getUID(), $skipUsers)) {
+				if (!in_array($user->getUID(), $skipUsers) && $user->isEnabled()) {
 					$list[] = [
 						'id' => $user->getUID(),
 						'user' => $user->getUID(),
