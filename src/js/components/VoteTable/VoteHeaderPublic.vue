@@ -189,7 +189,7 @@ export default {
 				this.$store.dispatch('poll/shares/addPersonal', { token: this.$route.params.token, userName: this.userName })
 					.then((response) => {
 						if (this.$route.params.token === response.token) {
-							this.$store.dispatch({ type: 'poll/load', pollId: this.$route.params.id, token: this.$route.params.token })
+							this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
 						} else {
 							this.token = response.token
 							this.redirecting = true

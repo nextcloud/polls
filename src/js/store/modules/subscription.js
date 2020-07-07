@@ -41,8 +41,11 @@ const mutations = {
 }
 
 const actions = {
+
 	getSubscription(context, payload) {
-		axios.get(generateUrl('apps/polls/subscription/get/' + payload.pollId))
+		const endPoint = 'apps/polls/subscription'
+
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
 			.then(() => {
 				context.commit('setSubscription', true)
 			})
@@ -52,9 +55,11 @@ const actions = {
 	},
 
 	writeSubscriptionPromise(context, payload) {
-		return axios.post(generateUrl('apps/polls/subscription/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
+		const endPoint = 'apps/polls/subscription'
+		return axios.post(generateUrl(endPoint), { pollId: payload.pollId, subscribed: state.subscribed })
 			.then(() => {
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error(error.response)
 			})
 	},

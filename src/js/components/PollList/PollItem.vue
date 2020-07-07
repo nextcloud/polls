@@ -183,8 +183,9 @@ export default {
 
 	methods: {
 		loadPoll() {
-			this.$store.dispatch({ type: 'poll/load', pollId: this.poll.id })
-				.then((response) => {
+			this.$store
+				.dispatch({ type: 'poll/get', pollId: this.poll.id })
+				.then(() => {
 					emit('toggle-sidebar', { open: true })
 				})
 				.catch((error) => {
@@ -203,25 +204,37 @@ export default {
 		},
 
 		switchDeleted() {
-			this.$store.dispatch('polls/switchDeleted', { pollId: this.poll.id })
-				.then((response) => {
+			this.$store
+				.dispatch('poll/switchDeleted', { pollId: this.poll.id })
+				.then(() => {
 					emit('update-polls')
+				})
+				.catch(() => {
+					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
 				})
 			this.hideMenu()
 		},
 
 		deletePermanently() {
-			this.$store.dispatch('polls/delete', { pollId: this.poll.id })
-				.then((response) => {
+			this.$store
+				.dispatch('poll/delete', { pollId: this.poll.id })
+				.then(() => {
 					emit('update-polls')
+				})
+				.catch(() => {
+					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
 				})
 			this.hideMenu()
 		},
 
 		clonePoll() {
-			this.$store.dispatch('polls/clone', { pollId: this.poll.id })
-				.then((response) => {
+			this.$store
+				.dispatch('poll/clone', { pollId: this.poll.id })
+				.then(() => {
 					emit('update-polls')
+				})
+				.catch(() => {
+					OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
 				})
 			this.hideMenu()
 		},

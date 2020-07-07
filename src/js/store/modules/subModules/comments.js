@@ -63,42 +63,34 @@ const getters = {
 
 const actions = {
 	add(context, payload) {
-		let endPoint = 'apps/polls/comment/write/'
-
-		if (context.rootState.poll.acl.foundByToken) {
-			endPoint = endPoint.concat('s/')
-		}
-
+		const endPoint = 'apps/polls/comment/add'
 		return axios.post(generateUrl(endPoint), {
+			message: payload.message,
 			pollId: context.rootState.poll.id,
 			token: context.rootState.poll.acl.token,
-			message: payload.message,
-			userId: context.rootState.poll.acl.userId,
 		})
 			.then((response) => {
 				context.commit('add', response.data)
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error writing comment', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
 	delete(context, payload) {
-		let endPoint = 'apps/polls/comment/delete/'
-
-		if (context.rootState.poll.acl.foundByToken) {
-			endPoint = endPoint.concat('s/')
-		}
-
+		const endPoint = 'apps/polls/comment/delete'
+		context.commit('delete', { comment: payload.comment })
 		return axios.post(generateUrl(endPoint), {
 			token: context.rootState.poll.acl.token,
-			comment: payload.comment,
+			commentId: payload.comment.id,
 		})
 			.then((response) => {
 				context.commit('delete', { comment: response.data.comment })
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error deleting comment', { error: error.response }, { payload: payload })
 				throw error
 			})

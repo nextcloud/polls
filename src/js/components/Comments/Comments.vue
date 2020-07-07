@@ -94,10 +94,12 @@ export default {
 
 	methods: {
 		deleteComment(comment) {
-			this.$store.dispatch({ type: 'poll/comments/delete', comment: comment })
+			this.$store
+				.dispatch({ type: 'poll/comments/delete', comment: comment })
 				.then(() => {
 					OC.Notification.showTemporary(t('polls', 'Comment deleted'), { type: 'success' })
-				}, (error) => {
+				})
+				.catch((error) => {
 					OC.Notification.showTemporary(t('polls', 'Error while deleting the comment'), { type: 'error' })
 					console.error(error.response)
 				})

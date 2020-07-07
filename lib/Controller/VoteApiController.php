@@ -29,67 +29,77 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
 use OCP\ILogger;
-use OCP\AppFramework\Controller;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Service\SubscriptionService;
+use OCA\Polls\Service\VoteService;
 
-class SubscriptionController extends Controller {
+class VoteApiController extends ApiController {
 
-	private $userId;
-	private $subscriptionService;
 	private $logger;
+	private $voteService;
 
 	/**
-	 * SubscriptionController constructor.
+	 * VoteController constructor.
 	 * @param string $appName
-	 * @param $UserId
-	 * @param SubscriptionService $subscriptionService
 	 * @param IRequest $request
 	 * @param ILogger $logger
+	 * @param VoteService $voteService
 	 */
-
 	public function __construct(
 		string $appName,
-		$userId,
-		SubscriptionService $subscriptionService,
 		IRequest $request,
-		ILogger $logger
-
+		ILogger $logger,
+		VoteService $voteService
 	) {
-		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->subscriptionService = $subscriptionService;
+		parent::__construct($appName,
+			$request,
+			'PUT, GET, DELETE',
+            'Authorization, Content-Type, Accept',
+            1728000);
+		$this->voteService = $voteService;
 		$this->logger = $logger;
 	}
 
 	/**
+	 * Get all votes of given poll
+	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function get($pollId) {
+	public function list($pollId) {
 		try {
-			return new DataResponse($this->subscriptionService->get($pollId), Http::STATUS_OK);
+			return new DataResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['status' => 'Not subscribed'], Http::STATUS_NOT_FOUND);
 		}
 	}
 
 	/**
+	 * set
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 * @param integer $pollId
+	 * @param Array $option
+	 * @param string $userId
+	 * @param string $setTo
+	 * @return DataResponse
 	 */
-	public function set($pollId, $subscribed) {
+	public function set($pollId, $pollOptionText, $setTo) {
 		try {
-			return new DataResponse($this->subscriptionService->set($pollId, $subscribed), Http::STATUS_OK);
+			return new DataResponse(['vote' => $this->voteService->set($pollId, $pollOptionText, $setTo)], Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
+
 	}
 }

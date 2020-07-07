@@ -26,115 +26,93 @@ namespace OCA\Polls\Controller;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\InvalidUsername;
-
 
 use OCP\IRequest;
 use OCP\ILogger;
-use OCP\AppFramework\Controller;
+
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
+use OCA\Polls\Service\SubscriptionService;
 
+class SubscriptionApiController extends ApiController {
 
-use OCA\Polls\Model\Acl;
-use OCA\Polls\Service\ShareService;
-
-class ShareController extends Controller {
-
-	private $logger;
-	private $shareService;
 	private $userId;
+	private $subscriptionService;
+	private $logger;
 
 	/**
-	 * ShareController constructor.
+	 * SubscriptionController constructor.
 	 * @param string $appName
-	 * @param string $userId
+	 * @param $UserId
+	 * @param SubscriptionService $subscriptionService
 	 * @param IRequest $request
 	 * @param ILogger $logger
-	 * @param ShareService $shareService
 	 */
+
 	public function __construct(
 		string $appName,
 		$userId,
+		SubscriptionService $subscriptionService,
 		IRequest $request,
-		ILogger $logger,
-		ShareService $shareService
+		ILogger $logger
+
 	) {
-		parent::__construct($appName, $request);
-		$this->logger = $logger;
+		parent::__construct($appName,
+			$request,
+			'PUT, GET, DELETE',
+            'Authorization, Content-Type, Accept',
+            1728000);
 		$this->userId = $userId;
-		$this->shareService = $shareService;
+		$this->subscriptionService = $subscriptionService;
+		$this->logger = $logger;
 	}
 
 	/**
-	 * Write a new share to the db and returns the new share as array
 	 * @NoAdminRequired
+	 * CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param Array $share
+	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function add($pollId, $share) {
+	public function get($pollId) {
 		try {
-			$return = $this->shareService->write(
-				$pollId,
-				$share['type'],
-				$share['userId'],
-				isset($share['userEmail']) ? $share['userEmail'] : ''
-			);
-			return new DataResponse($return, Http::STATUS_CREATED);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
-		}
-
-	}
-
-	/**
-	 * createPersonalShare
-	 * Write a new share to the db and returns the new share as array
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @param string $userName
-	 * @return DataResponse
-	 */
-	public function createPersonalShare($token, $userName) {
-
-		try {
-			return new DataResponse($this->shareService->createPersonalShare($token, $userName), Http::STATUS_CREATED);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		} catch (InvalidUsername $e) {
-			return new DataResponse(['error' => $userName . ' is not valid'], Http::STATUS_CONFLICT);
+			$this->subscriptionService->get($pollId);
+			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			// return forbidden in all not catched error cases
-			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+			return new DataResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
 	/**
-	 * remove
-	 * remove share
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
-	 * @param Share $share
-	 * @return DataResponse
+	 * @param integer $pollId
 	 */
-
-	public function delete($share) {
+	public function subscribe($pollId) {
 		try {
-			return new DataResponse(array(
-				'action' => 'deleted',
-				'shareId' => $this->shareService->remove($share['token'])->getId()
-			), Http::STATUS_OK);
+			$this->subscriptionService->set($pollId, true);
+			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param integer $pollId
+	 */
+	public function unsubscribe($pollId) {
+		try {
+			$this->subscriptionService->set($pollId, false);
+			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

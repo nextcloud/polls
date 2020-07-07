@@ -201,14 +201,11 @@ export default {
 
 		loadPoll() {
 			this.isLoading = true
-			this.$store.dispatch({ type: 'poll/load', pollId: this.$route.params.id, token: this.$route.params.token })
+			this.$store
+				.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
-					if (response.status === 200) {
-						this.isLoading = false
-						window.document.title = this.windowTitle
-					} else {
-						this.$router.replace({ name: 'notfound' })
-					}
+					this.isLoading = false
+					window.document.title = this.windowTitle
 				})
 				.catch((error) => {
 					console.error(error)

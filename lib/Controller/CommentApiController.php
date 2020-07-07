@@ -27,8 +27,8 @@ use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
-use OCP\ILogger;
-use OCP\AppFramework\Controller;
+use \OCP\IURLGenerator;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
@@ -38,12 +38,11 @@ use OCA\Polls\Service\CommentService;
 
 
 
-class CommentController extends Controller {
+class CommentApiController extends ApiController {
 
 	private $commentService;
-
 	/**
-	 * CommentController constructor.
+	 * CommentApiController constructor.
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param CommentService $commentService
@@ -54,7 +53,11 @@ class CommentController extends Controller {
 		IRequest $request,
 		CommentService $commentService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName,
+			$request,
+			'POST, GET, DELETE',
+            'Authorization, Content-Type, Accept',
+            1728000);
 		$this->commentService = $commentService;
 	}
 
@@ -62,60 +65,56 @@ class CommentController extends Controller {
 	 * get
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
-		return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
+		try {
+			return new DataResponse(['comments' => $this->commentService->list($pollId)], Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
 	}
 
-	// /**
-	//  * Read all comments of a poll based on a share token and return list as array
-	//  * @NoAdminRequired
-	//  * @NoCSRFRequired
-	//  * @PublicPage
-	//  * @param string $token
-	//  * @return DataResponse
-	//  */
-	// public function getByToken($token) {
-	// 	return new DataResponse($this->commentService->get(0, $token), Http::STATUS_OK);
-	// }
-	//
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
-	 * @PublicPage
+	 * @CORS
+	 * @NoCSRFRequired
 	 * @param int $pollId
 	 * @param string $message
-	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function add($pollId, $message, $token) {
+	public function add($pollId, $message) {
 		try {
-			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
+			return new DataResponse(['comment' => $this->commentService->add($pollId, $message)], Http::STATUS_CREATED);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
 	/**
 	 * Delete Comment
 	 * @NoAdminRequired
-	 * @PublicPage
+	 * @CORS
+	 * @NoCSRFRequired
 	 * @param int $commentId
-	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function delete($commentId, $token) {
+	public function delete($commentId) {
 		try {
-			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+			return new DataResponse(['comment' => $this->commentService->delete($commentId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_OK);
+			return new DataResponse(['error' => 'Comment id ' . $commentId . ' does not exist'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
-
 	}
 
 }
