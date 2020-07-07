@@ -155,8 +155,8 @@ class MailService {
 
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
-				'eMailAddress' => null,
-				'displayName' => null,
+				'eMailAddress' => \OC::$server->getConfig()->getUserValue($share->getUserId(), 'settings', 'email'),
+				'displayName' => $this->userManager->get($share->getUserId())->getDisplayName(),
 				'language' => $this->config->getUserValue(
 					$share->getUserId(),
 					'core', 'lang'
@@ -229,9 +229,9 @@ class MailService {
 
 				$recipients[] = array(
 					'userId' => $member,
-					'eMailAddress' => null,
-					'displayName' => null,
-					'language' => $this->config->getUserValue($share->getUserId(), 'core', 'lang'),
+					'eMailAddress' => \OC::$server->getConfig()->getUserValue($member, 'settings', 'email'),
+					'displayName' => $this->userManager->get($member)->getDisplayName(),
+					'language' => $this->config->getUserValue($member, 'core', 'lang'),
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
 							'polls.page.indexvote', ['id' => $share->getPollId()]
@@ -300,6 +300,8 @@ class MailService {
 					$recipient['eMailAddress'],
 					$recipient['displayName']
 				);
+				$share->setInvitationSent(time());
+				$this->shareMapper->update($share);
 				$sentMails[] = $recipient;
 			} catch (Exception $e) {
 				$abortedMails[] = $recipient;

@@ -65,6 +65,7 @@ return [
 		['name' => 'share#add', 'url' => '/share/add', 'verb' => 'POST'],
 		['name' => 'share#delete', 'url' => '/share/delete', 'verb' => 'POST'],
 		['name' => 'share#createPersonalShare', 'url' => '/share/create/s', 'verb' => 'POST'],
+		['name' => 'share#sendInvitation', 'url' => '/share/send/{token}', 'verb' => 'POST'],
 
 		// ['name' => 'share#getShares', 'url' => '/shares/get/{pollId}', 'verb' => 'GET'],
 		// ['name' => 'share#get', 'url' => '/share/get/{token}', 'verb' => 'GET'],
@@ -98,6 +99,7 @@ return [
 		['name' => 'share_api#get', 'url' => '/api/v1.0/share/{token}', 'verb' => 'GET'],
 		['name' => 'share_api#add', 'url' => '/api/v1.0/share', 'verb' => 'POST'],
 		['name' => 'share_api#delete', 'url' => '/api/v1.0/share/{token}', 'verb' => 'DELETE'],
+		['name' => 'share_api#sendInvitation', 'url' => '/api/v1.0/share/send/{token}', 'verb' => 'POST'],
 
 		['name' => 'subscription_api#get', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'GET'],
 		['name' => 'subscription_api#subscribe', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'PUT'],

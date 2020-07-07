@@ -35,21 +35,25 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\ShareService;
+use OCA\Polls\Service\MailService;
 
 class ShareApiController extends ApiController {
 
 	private $shareService;
+	private $mailService;
 
 	/**
 	 * ShareController constructor.
 	 * @param string $appName
 	 * @param string $userId
 	 * @param IRequest $request
+	 * @param MailService $mailService
 	 * @param ShareService $shareService
 	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		MailService $mailService,
 		ShareService $shareService
 	) {
 		parent::__construct($appName,
@@ -58,6 +62,7 @@ class ShareApiController extends ApiController {
             'Authorization, Content-Type, Accept',
             1728000);
 		$this->shareService = $shareService;
+		$this->mailService = $mailService;
 	}
 
 	/**
@@ -118,6 +123,23 @@ class ShareApiController extends ApiController {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 
+	}
+
+	/**
+	 * SendInvitation
+	 * Sent invitation mails for a share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function sendInvitation($token) {
+		try {
+			return new DataResponse($this->mailService->sendInvitationMail($token), Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
 	}
 
 	/**
