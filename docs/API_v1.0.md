@@ -24,7 +24,7 @@ Example calls:
 | POST      | /api/v1.0/poll/clone/{pollId}        | Clone poll {pollId}          | 201, 403, 404      |
 | PUT       | /api/v1.0/poll/{pollId}              | Update poll                  | 200, 403, 404, 409 |
 | DELETE    | /api/v1.0/poll/{pollId}              | Delete poll logical          | 200, 403, 404      |
-| DELETE    | /api/v1.0/poll/permanent{pollId}     | Delete poll permanently      | 200, 403, 404      |
+| DELETE    | /api/v1.0/poll/permanent/{pollId}    | Delete poll permanently      | 200, 403, 404      |
 | GET       | /api/v1.0/poll/enum                  | Get valid enums              | 200, 403, 404      |
 
 ## Add poll
