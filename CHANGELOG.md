@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - tbd
+ - Stop immediatley sending of invitation mails after adding a share #1007 #935
+ - Fix: Hide usernames in notification mail, if results in poll are hidden #990 #980
+ - Adding a REST-API #966
+ - Exclude disbled users from shares #1008 #997
+ - Exclude mails to disabled users in group invitations #960
+ - Fix with adding empty dates #961 #958
+ - Changed misleading prompt for username in public polls #956 #938
+ - Raised minute step to 5 minutes in datepicker #963 #957
+ - Changed some icons #862
+ - Added the ability to confirm options #939 #136
+ - A lot of refactoring
+
+
+
 ## [1.4.3] - 2020-05-03
  - fix #909
  - fix #910
