@@ -135,6 +135,20 @@ class Poll extends Entity implements JsonSerializable {
 		];
 	}
 
+	public function deserializeArray($array) {
+		$this->setTitle(isset($array['title']) ? $array['title'] : $this->getTitle());
+		$this->setDescription(isset($array['description']) ? $array['description'] : $this->getDescription());
+		$this->setAccess(isset($array['access']) ? $array['access'] : $this->getAccess());
+		$this->setExpire(isset($array['expire']) ? $array['expire'] : $this->getExpire());
+		$this->setAnonymous(isset($array['anonymous']) ? $array['anonymous'] : $this->getAnonymous());
+		$this->setAllowMaybe(isset($array['allowMaybe']) ? $array['allowMaybe'] : $this->getAllowMaybe());
+		$this->setVoteLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getVoteLimit());
+		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
+		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
+		$this->setAdminAccess(isset($array['adminAccess']) ? $array['adminAccess'] : $this->getAdminAccess());
+		return $this;
+	}
+
 	private function getDisplayName() {
 
 		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {

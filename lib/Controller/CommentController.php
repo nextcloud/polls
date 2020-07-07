@@ -26,67 +26,37 @@ namespace OCA\Polls\Controller;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
-
 use OCP\IRequest;
 use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCP\IGroupManager;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Comment;
-use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Service\AnonymizeService;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Service\CommentService;
 
 
 
 class CommentController extends Controller {
 
-	private $userId;
-	private $mapper;
-	private $logger;
-
-	private $groupManager;
-	private $pollMapper;
-	private $anonymizer;
-	private $acl;
+	private $commentService;
 
 	/**
 	 * CommentController constructor.
 	 * @param string $appName
-	 * @param $UserId
-	 * @param CommentMapper $mapper
-	 * @param IGroupManager $groupManager
-	 * @param PollMapper $pollMapper
-	 * @param AnonymizeService $anonymizer
-	 * @param Acl $acl
+	 * @param IRequest $request
+	 * @param CommentService $commentService
 	 */
 
 	public function __construct(
 		string $appName,
-		$userId,
 		IRequest $request,
-		ILogger $logger,
-		CommentMapper $mapper,
-		IGroupManager $groupManager,
-		PollMapper $pollMapper,
-		AnonymizeService $anonymizer,
-		Acl $acl
+		CommentService $commentService
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->mapper = $mapper;
-		$this->logger = $logger;
-		$this->groupManager = $groupManager;
-		$this->pollMapper = $pollMapper;
-		$this->anonymizer = $anonymizer;
-		$this->acl = $acl;
+		$this->commentService = $commentService;
 	}
-
 
 	/**
 	 * get
@@ -96,165 +66,55 @@ class CommentController extends Controller {
 	 * @param integer $pollId
 	 * @return DataResponse
 	 */
-	public function get($pollId) {
-
-		try {
-			if (!$this->acl->getFoundByToken()) {
-				$this->acl->setPollId($pollId);
-			}
-
-			if (!$this->acl->getAllowSeeUsernames()) {
-				$this->anonymizer->set($pollId, $this->acl->getUserId());
-				return new DataResponse((array) $this->anonymizer->getComments(), Http::STATUS_OK);
-			} else {
-				return new DataResponse((array) $this->mapper->findByPoll($pollId), Http::STATUS_OK);
-			}
-
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
+	public function list($pollId) {
+		return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
 	}
 
-	/**
-	 * getByToken
-	 * Read all comments of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-
-		try {
-			$this->acl->setToken($token);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
-		return $this->get($this->acl->getPollId());
-
-	}
-
+	// /**
+	//  * Read all comments of a poll based on a share token and return list as array
+	//  * @NoAdminRequired
+	//  * @NoCSRFRequired
+	//  * @PublicPage
+	//  * @param string $token
+	//  * @return DataResponse
+	//  */
+	// public function getByToken($token) {
+	// 	return new DataResponse($this->commentService->get(0, $token), Http::STATUS_OK);
+	// }
+	//
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $userId
-	 * @param string $message
-	 * @return DataResponse
-	 */
-	public function write($pollId, $userId, $message) {
-		if (!\OC::$server->getUserSession()->isLoggedIn() && !$this->acl->getFoundByToken()) {
-			$this->logger->alert('not allowed ' . json_encode(\OC::$server->getUserSession()->isLoggedIn()));
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		if (!$this->acl->getFoundByToken()) {
-			$this->acl->setPollId($pollId);
-		}
-
-		if ($this->acl->getAllowComment()) {
-			$comment = new Comment();
-			$comment->setPollId($pollId);
-			$comment->setUserId($userId);
-			$comment->setComment($message);
-			$comment->setDt(date('Y-m-d H:i:s'));
-
-
-			try {
-				$comment = $this->mapper->insert($comment);
-			} catch (\Exception $e) {
-				$this->logger->alert('conflict ' . json_encode($e));
-				return new DataResponse($e, Http::STATUS_CONFLICT);
-			}
-		} else {
-			$this->logger->alert('unauthorized ');
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		return new DataResponse($comment, Http::STATUS_OK);
-
-	}
-
-	/**
-	 * writeByToken
-	 * @NoAdminRequired
 	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param Array $option
-	 * @param string $setTo
+	 * @param int $pollId
+	 * @param string $message
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function writeByToken($token, $message) {
-
+	public function add($pollId, $message, $token) {
 		try {
-			$this->acl->setToken($token);
-			return $this->write($this->acl->getPollId(), $this->acl->getUserId(), $message);
-
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
 		}
-
-
 	}
 
-
 	/**
-	 * delete
 	 * Delete Comment
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $message
-	 * @return DataResponse
-	 */
-	public function delete($comment) {
-		if (!\OC::$server->getUserSession()->isLoggedIn() && !$this->acl->getFoundByToken()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		if (!$this->acl->getFoundByToken()) {
-			$this->acl->setPollId($comment['pollId']);
-		}
-
-		try {
-			if ($comment['userId'] === $this->acl->getUserId()) {
-					$comment = $this->mapper->find($comment['id']);
-					$comment = $this->mapper->delete($comment);
-			}
-		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
-		}
-
-		return new DataResponse(['comment' => $comment], Http::STATUS_OK);
-
-	}
-
-	/**
-	 * writeByToken
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param Array $option
-	 * @param string $setTo
+	 * @param int $commentId
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function deleteByToken($token, $comment) {
-
+	public function delete($commentId, $token) {
 		try {
-			$this->acl->setToken($token);
-			return $this->delete($comment);
-
+			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e, Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse($e, Http::STATUS_OK);
 		}
-
-
 
 	}
 

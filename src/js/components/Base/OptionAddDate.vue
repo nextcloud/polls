@@ -54,7 +54,7 @@ export default {
 		optionDatePicker() {
 			return {
 				editable: false,
-				minuteStep: 1,
+				minuteStep: 5,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
 				placeholder: t('polls', 'Click to add a date'),
@@ -74,12 +74,11 @@ export default {
 
 	methods: {
 		addOption(pollOptionText) {
-			this.$store.dispatch('poll/options/add', { pollOptionText: pollOptionText })
+			if (moment(pollOptionText).isValid()) {
+				this.$store.dispatch('poll/options/add', { pollOptionText: pollOptionText })
+			}
 		},
 	},
 }
 
 </script>
-
-<style lang="scss" scoped>
-</style>

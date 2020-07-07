@@ -223,7 +223,7 @@ class MailService {
 			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
 
 			foreach ($groupMembers as $member) {
-				if ($skipUser === $member) {
+				if ($skipUser === $member || !$this->userManager->get($member)->isEnabled() ) {
 					continue;
 				}
 
@@ -352,7 +352,7 @@ class MailService {
 
 			foreach ($log as $logItem) {
 				if ($logItem->getPollId() === $subscription->getPollId()) {
-					if ($poll->getAnonymous()) {
+					if ($poll->getAnonymous() || $poll->getShowResults() !== "always") {
 						$displayUser = "A user";
 					} elseif ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
 						$displayUser = $this->userManager->get($logItem->getUserId())->getDisplayName();

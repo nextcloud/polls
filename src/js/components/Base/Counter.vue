@@ -85,8 +85,8 @@ export default {
 <style lang="scss">
 .counter {
 	display: flex;
-	// padding: 14px 0;
 }
+
 .counter--icon {
 	display: flex;
 	justify-content: center;

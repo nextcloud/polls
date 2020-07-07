@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Avstemninger",
     "Polls App - New Activity" : "Avstemningsapp - Ny aktivitet",
+    "Confirmed" : "Bekreftet",
     "Cancel" : "Avbryt",
     "OK" : "OK",
     "Week" : "Uke",

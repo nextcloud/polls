@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Confirmed" : "Հաստատված",
     "Cancel" : "ընդհատել",
     "OK" : "Լավ",
     "Week" : "Շաբաթ",

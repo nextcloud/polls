@@ -140,32 +140,41 @@ export default {
 
 		clonePoll(pollId) {
 			this.$store
-				.dispatch('polls/clone', { pollId: pollId })
+				.dispatch('poll/clone', { pollId: pollId })
 				.then((response) => {
 					emit('update-polls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
+				})
+				.error(() => {
+					OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
 				})
 		},
 
 		switchDeleted(pollId) {
 			this.$store
-				.dispatch('polls/switchDeleted', { pollId: pollId })
-				.then((response) => {
+				.dispatch('poll/switchDeleted', { pollId: pollId })
+				.then(() => {
 					emit('update-polls')
+				})
+				.catch(() => {
+					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
 				})
 
 		},
 
 		deletePermanently(pollId) {
 			this.$store
-				.dispatch('polls/delete', { pollId: pollId })
-				.then((response) => {
+				.dispatch('poll/delete', { pollId: pollId })
+				.then(() => {
 					// if we permanently delete current selected poll,
 					// reload deleted polls route
 					if (this.$route.params.id && this.$route.params.id === pollId) {
 						this.$router.push({ name: 'list', params: { type: 'deleted' } })
 					}
 					emit('update-polls')
+				})
+				.catch(() => {
+					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
 				})
 
 		},

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Confirmed" : "Confirmat",
     "Cancel" : "Anulează",
     "OK" : "OK",
     "Week" : "Săptămâna",
@@ -10,6 +11,7 @@ OC.L10N.register(
     "Delete comment" : "Șterge comentariu",
     "Title" : "Titlu",
     "Apply" : "Aplică",
+    "Access" : "Acces",
     "Owner" : "Proprietar",
     "never" : "niciodată",
     "Details" : "Detalii",
@@ -22,6 +24,7 @@ OC.L10N.register(
     "Yes" : "a",
     "Deleted" : "Șters",
     "Day" : "Zi",
-    "Month" : "Luna"
+    "Month" : "Luna",
+    "Access denied" : "Acces interzis"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

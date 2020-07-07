@@ -6,6 +6,7 @@ OC.L10N.register(
     "Polls App - New Activity" : "Aplicació d'Enquestes - Nova Activitat",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés (membres, certs grups/usuaris, ocults i públics).",
+    "Confirmed" : "Confirmat",
     "Click to add a date" : "Feu clic per afegir una data",
     "Cancel" : "Cancel·la",
     "OK" : "D'acord",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Confirmed" : "Cadarnhawyd",
     "Cancel" : "Diddymu",
     "OK" : "Iawn",
     "Week" : "Wythnos",

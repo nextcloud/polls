@@ -4,6 +4,7 @@ OC.L10N.register(
     "Polls" : "Szavazások",
     "Go to poll" : "Ugrás a szavazáshoz",
     "Polls App - New Activity" : "Szavazó app - Új aktivitás",
+    "Confirmed" : "Elfogadva",
     "Click to add a date" : "Kattints a dátum hozzáadásához",
     "Cancel" : "Mégsem",
     "OK" : "OK",
