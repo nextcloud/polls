@@ -74,7 +74,7 @@ const getters = {
 
 const actions = {
 	add(context, payload) {
-		const endPoint = 'apps/polls/share/write/'
+		const endPoint = 'apps/polls/share/add'
 		payload.share.pollId = context.rootState.poll.id
 		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, share: payload.share })
 			.then((response) => {
@@ -107,30 +107,33 @@ const actions = {
 					OC.Notification.showTemporary(t('polls', 'Error sending invitation mail to %n.', 1, errorList.join(', ')), { type: 'error' })
 				}
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/share/remove/'
+		const endPoint = 'apps/polls/share/delete'
 		return axios.post(generateUrl(endPoint), { share: payload.share })
 			.then(() => {
 				context.commit('delete', { share: payload.share })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
 	addPersonal(context, payload) {
-		const endPoint = 'apps/polls/share/create/s/'
+		const endPoint = 'apps/polls/share/create/s'
 
 		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
 			.then((response) => {
 				return { token: response.data.token }
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
 			})

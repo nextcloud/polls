@@ -105,26 +105,15 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, options: payload })
 			.then((response) => {
 				context.commit('set', { options: response.data })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error reordering option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	update(context, payload) {
-		const endPoint = 'apps/polls/option/update'
-
-		return axios.post(generateUrl(endPoint), { option: payload.option })
-			.then((response) => {
-				context.commit('setItem', { option: response.data })
-			}, (error) => {
-				console.error('Error updating option', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
 	add(context, payload) {
-		const endPoint = 'apps/polls/option/add/'
+		const endPoint = 'apps/polls/option/add'
 		const option = {}
 
 		option.id = 0
@@ -148,19 +137,34 @@ const actions = {
 		return axios.post(generateUrl(endPoint), { option: option })
 			.then((response) => {
 				context.commit('setItem', { option: response.data })
-			}, (error) => {
-				console.error('Error adding option', { error: error.response }, { payload: payload })
+			})
+			.catch((error) => {
+				console.error('Error adding option', { error: error.response }, { payload: option })
+				throw error
+			})
+	},
+
+	update(context, payload) {
+		const endPoint = 'apps/polls/option/update'
+
+		return axios.post(generateUrl(endPoint), { option: payload.option })
+			.then((response) => {
+				context.commit('setItem', { option: response.data })
+			})
+			.catch((error) => {
+				console.error('Error updating option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/option/remove/'
+		const endPoint = 'apps/polls/option/remove'
 
 		return axios.post(generateUrl(endPoint), { option: payload.option })
 			.then(() => {
 				context.commit('delete', { option: payload.option })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
 				throw error
 			})

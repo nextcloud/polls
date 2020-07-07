@@ -25,6 +25,8 @@ namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\InvalidUsername;
 
 
 use OCP\IRequest;
@@ -33,28 +35,16 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Db\Poll;
 
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Share;
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Service\MailService;
-// TODO: Change to Service
-use OCA\Polls\Controller\SystemController;
+use OCA\Polls\Service\ShareService;
 
 class ShareController extends Controller {
 
 	private $logger;
-	private $acl;
-	private $mapper;
+	private $shareService;
 	private $userId;
-
-	private $pollMapper;
-	private $systemController;
-	private $mailService;
 
 	/**
 	 * ShareController constructor.
@@ -62,76 +52,19 @@ class ShareController extends Controller {
 	 * @param string $userId
 	 * @param IRequest $request
 	 * @param ILogger $logger
-	 * @param ShareMapper $mapper
-	 * @param PollMapper $pollMapper
-	 * @param SystemController $systemController
-	 * @param MailService $mailService
-	 * @param Acl $acl
+	 * @param ShareService $shareService
 	 */
 	public function __construct(
 		string $appName,
 		$userId,
 		IRequest $request,
 		ILogger $logger,
-		ShareMapper $mapper,
-		PollMapper $pollMapper,
-		SystemController $systemController,
-		MailService $mailService,
-		Acl $acl
+		ShareService $shareService
 	) {
 		parent::__construct($appName, $request);
 		$this->logger = $logger;
 		$this->userId = $userId;
-		$this->mapper = $mapper;
-		$this->pollMapper = $pollMapper;
-		$this->systemController = $systemController;
-		$this->mailService = $mailService;
-		$this->acl = $acl;
-	}
-
-	/**
-	 * getByToken
-	 * Get pollId by token
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function get($token) {
-		try {
-			$share = $this->mapper->findByToken($token);
-			return new DataResponse($share, Http::STATUS_OK);
-
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(null, Http::STATUS_NOT_FOUND);
-		}
-	}
-
-	/**
-	 * get
-	 * Read all shares of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return DataResponse
-	 */
-	public function getShares($pollId) {
-		if ($this->acl->setPollId($pollId)->getAllowEdit()) {
-			try {
-				$shares = $this->mapper->findByPoll($pollId);
-				return new DataResponse((array) $shares, Http::STATUS_OK);
-
-			} catch (DoesNotExistException $e) {
-				return new DataResponse($e, Http::STATUS_NOT_FOUND);
-			}
-
-		} else {
-			$this->logger->alert('no access');
-
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
+		$this->shareService = $shareService;
 	}
 
 	/**
@@ -139,36 +72,20 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param int $pollId
-	 * @param string $message
+	 * @param Array $share
 	 * @return DataResponse
 	 */
-	public function write($pollId, $share) {
-		$this->acl->setPollId($pollId);
-		if (!$this->acl->getAllowEdit()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		$newShare = new Share();
-		$newShare->setType($share['type']);
-		$newShare->setPollId($share['pollId']);
-		$newShare->setUserId($share['userId']);
-		$newShare->setUserEmail(isset($share['userEmail']) ? $share['userEmail'] : '');
-		$newShare->setToken(\OC::$server->getSecureRandom()->generate(
-			16,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		));
-
+	public function add($pollId, $share) {
 		try {
-			$newShare = $this->mapper->insert($newShare);
-			$sendResult = $this->mailService->sendInvitationMail($newShare->getToken());
-
-			return new DataResponse([
-				'share' => $newShare,
-				'sendResult' => $sendResult
-			], Http::STATUS_OK);
-
+			$return = $this->shareService->write(
+				$pollId,
+				$share['type'],
+				$share['userId'],
+				isset($share['userEmail']) ? $share['userEmail'] : ''
+			);
+			return new DataResponse($return, Http::STATUS_CREATED);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
 		}
@@ -181,50 +98,18 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $message
+	 * @param string $token
+	 * @param string $userName
 	 * @return DataResponse
 	 */
 	public function createPersonalShare($token, $userName) {
 
 		try {
-			$publicShare = $this->mapper->findByToken($token);
-
-			// Return of validatePublicUsername is a DataResponse
-			$checkUsername = $this->systemController->validatePublicUsername($publicShare->getPollId(), $userName, $token);
-
-			// if status is not 200, return DataResponse from validatePublicUsername
-			if ($checkUsername->getStatus() !== 200) {
-				return $checkUsername;
-			}
-
-			if ($publicShare->getType() === 'public') {
-
-				$userShare = new Share();
-				$userShare->setToken(\OC::$server->getSecureRandom()->generate(
-					16,
-					ISecureRandom::CHAR_DIGITS .
-					ISecureRandom::CHAR_LOWER .
-					ISecureRandom::CHAR_UPPER
-				));
-				$userShare->setType('external');
-				$userShare->setPollId($publicShare->getPollId());
-				$userShare->setUserId($userName);
-				$userShare->setUserEmail('');
-				$userShare = $this->mapper->insert($userShare);
-				return new DataResponse($userShare, Http::STATUS_OK);
-
-			} elseif ($publicShare->getType() === 'email') {
-
-				$publicShare->setType('external');
-				$publicShare->setUserId($userName);
-				$this->mapper->update($publicShare);
-				return new DataResponse($publicShare, Http::STATUS_OK);
-
-			} else {
-				return new DataResponse(['message'=> 'Wrong share type: ' . $publicShare->getType()], Http::STATUS_FORBIDDEN);
-			}
-
+			return new DataResponse($this->shareService->createPersonalShare($token, $userName), Http::STATUS_CREATED);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (InvalidUsername $e) {
+			return new DataResponse(['error' => $userName . ' is not valid'], Http::STATUS_CONFLICT);
 		} catch (DoesNotExistException $e) {
 			// return forbidden in all not catched error cases
 			return new DataResponse($e, Http::STATUS_FORBIDDEN);
@@ -240,19 +125,14 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 
-	public function remove($share) {
+	public function delete($share) {
 		try {
-			if ($this->acl->setPollId($share['pollId'])->getAllowEdit()) {
-				$this->mapper->remove($share['id']);
-
-				return new DataResponse(array(
-					'action' => 'deleted',
-					'shareId' => $share['id']
-				), Http::STATUS_OK);
-			} else {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-
+			return new DataResponse(array(
+				'action' => 'deleted',
+				'shareId' => $this->shareService->remove($share['token'])->getId()
+			), Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (Exception $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}

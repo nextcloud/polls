@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 import ConfigBox from '../Base/ConfigBox'
 
@@ -92,14 +92,6 @@ export default {
 	},
 
 	methods: {
-		...mapMutations({
-			setPollProperty: 'poll/setProperty',
-		}),
-
-		...mapActions({
-			resetPoll: 'poll/reset',
-		}),
-
 		cancel() {
 			this.title = ''
 			this.type = 'datePoll'
@@ -107,19 +99,15 @@ export default {
 		},
 
 		confirm() {
-			this.resetPoll()
-			this.setPollProperty({ id: 0 })
-			this.setPollProperty({ title: this.title })
-			this.setPollProperty({ type: this.type })
-			this.$store.dispatch('poll/write')
-				.then(() => {
+			this.$store.dispatch('poll/add', { title: this.title, type: this.type })
+				.then((response) => {
 					emit('update-polls')
 					this.cancel()
-					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.poll.title), { type: 'success' })
-					this.$router.push({ name: 'vote', params: { id: this.poll.id } })
+					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, response.data.id), { type: 'success' })
+					this.$router.push({ name: 'vote', params: { id: response.data.id } })
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.poll.title), { type: 'error' })
+					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.title), { type: 'error' })
 				})
 		},
 

@@ -115,7 +115,7 @@ const getters = {
 
 const actions = {
 	delete(context, payload) {
-		const endPoint = 'apps/polls/votes/delete/'
+		const endPoint = 'apps/polls/votes/delete'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			voteId: 0,
@@ -124,19 +124,19 @@ const actions = {
 			.then(() => {
 				context.commit('deleteVotes', payload)
 				OC.Notification.showTemporary(t('polls', 'User {userId} removed', payload), { type: 'success' })
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error deleting votes', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
 	set(context, payload) {
-		let endPoint = 'apps/polls/vote/set/'
+		let endPoint = 'apps/polls/vote/set'
 
 		if (context.rootState.poll.acl.foundByToken) {
-			endPoint = endPoint.concat('s/')
+			endPoint = endPoint.concat('/s')
 		}
-
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			token: context.rootState.poll.acl.token,
@@ -147,7 +147,8 @@ const actions = {
 			.then((response) => {
 				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
 				return response.data
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error('Error setting vote', { error: error.response }, { payload: payload })
 				throw error
 			})

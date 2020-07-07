@@ -24,98 +24,34 @@
 namespace OCA\Polls\Controller;
 
 use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\IRequest;
-use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCP\IGroupManager;
-use OCP\Security\ISecureRandom;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Option;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Service\LogService;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Service\OptionService;
 
 class OptionController extends Controller {
 
-	private $userId;
-	private $optionMapper;
-	private $options;
-	private $option;
-	private $groupManager;
-	private $pollMapper;
-	private $logger;
-	private $logService;
-	private $acl;
+	private $optionService;
 
 	/**
 	 * OptionController constructor.
 	 * @param string $appName
-	 * @param $UserId
 	 * @param IRequest $request
-	 * @param ILogger $logger
-	 * @param OptionMapper $optionMapper
-	 * @param IGroupManager $groupManager
-	 * @param PollMapper $pollMapper
-	 * @param LogService $logService
-	 * @param Acl $acl
+	 * @param OptionService $optionService
 	 */
 
 	public function __construct(
 		string $appName,
-		$UserId,
 		IRequest $request,
-		OptionMapper $optionMapper,
-		Option $option,
-		IGroupManager $groupManager,
-		PollMapper $pollMapper,
-		ILogger $logger,
-		LogService $logService,
-		Acl $acl
+		OptionService $optionService
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $UserId;
-		$this->optionMapper = $optionMapper;
-		$this->option = $option;
-		$this->groupManager = $groupManager;
-		$this->pollMapper = $pollMapper;
-		$this->logger = $logger;
-		$this->logService = $logService;
-		$this->acl = $acl;
-	}
-
-	/**
-	 * Set properties from option array
-	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return array Array of Option objects
-	 */
-	private function set($option) {
-
-		$this->option->setPollId($option['pollId']);
-		$this->option->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-		$this->option->setTimestamp($option['timestamp']);
-
-		if ($option['timestamp']) {
-			$this->option->setOrder($option['timestamp']);
-		} else {
-			$this->option->setOrder($option['order']);
-		}
-
-		if ($option['confirmed']) {
-			// do not update confirmation date, if option is already confirmed
-			if (!$this->option->getConfirmed()) {
-				$this->option->setConfirmed(time());
-			}
-		} else {
-			$this->option->setConfirmed(0);
-		}
+		$this->optionService = $optionService;
 	}
 
 	/**
@@ -123,22 +59,10 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param integer $pollId
-	 * @return array Array of Option objects
+	 * @return DataResponse
 	 */
-	public function get($pollId) {
-
-		try {
-
-			if (!$this->acl->getFoundByToken()) {
-				$this->acl->setPollId($pollId);
-			}
-
-			$this->options = $this->optionMapper->findByPoll($pollId);
-
-			return new DataResponse($this->options, Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+	public function list($pollId) {
+		return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
 	}
 
 
@@ -152,64 +76,29 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getByToken($token) {
-
-		try {
-			$this->acl->setToken($token);
-			// return $this->get($this->acl->getPollId());
-			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
-			return new DataResponse($this->options, Http::STATUS_OK);
-
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+		return new DataResponse($this->optionService->list(0, $token), Http::STATUS_OK);
 	}
 
 	/**
 	 * Add a new Option to poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Option $option
+	 * @param array $option
 	 * @return DataResponse
 	 */
 	public function add($option) {
-
-		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		try {
-			$this->option = new Option();
-			$this->set($option);
-			$this->optionMapper->insert($this->option);
-			$this->logService->setLog($option['pollId'], 'addOption');
-			return new DataResponse($this->option, Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+		return new DataResponse($this->optionService->add($option), Http::STATUS_OK);
 	}
 
 	/**
 	 * Update poll option
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param Option $option
+	 * @param array $option
 	 * @return DataResponse
 	 */
 	public function update($option) {
-
-		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		try {
-			$this->option = $this->optionMapper->find($option['id']);
-			$this->set($option);
-			$this->optionMapper->update($this->option);
-			$this->logService->setLog($option['pollId'], 'updateOption');
-			return new DataResponse($this->option, Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+		return new DataResponse($this->optionService->update($option), Http::STATUS_OK);
 	}
 
 	/**
@@ -220,49 +109,18 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function remove($option) {
-		try {
-
-			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-
-			$this->optionMapper->remove($option['id']);
-			$this->logService->setLog($option['pollId'], 'deleteOption');
-
-			return new DataResponse(array(
-				'action' => 'deleted',
-				'optionId' => $option['id']
-			), Http::STATUS_OK);
-
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
+		return new DataResponse($this->optionService->delete($option['id']), Http::STATUS_OK);
 	}
 
 	/**
 	 * Set order by order of the given array
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @param integer $pollId
 	 * @param Array $options
 	 * @return DataResponse
 	 */
 	public function reorder($pollId, $options) {
-		$i = 0;
-
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
-		foreach ($options as $option) {
-			$this->option = $this->optionMapper->find($option['id']);
-			if ($pollId === intval($this->option->getPollId())) {
-				$this->option->setOrder(++$i);
-				$this->optionMapper->update($this->option);
-			}
-		}
-
-		return $this->get($pollId);
-
+		return new DataResponse($this->optionService->reorder($pollId, $options), Http::STATUS_OK);
 	}
 }

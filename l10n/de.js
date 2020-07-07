@@ -126,7 +126,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Erhalte E-Mail Benachrichtigungen bei Aktivitäten",
     "Your personal link to this poll: %n" : "Ihr persönlicher Link zur Umfrage: %n",
     "Who are you?" : "Wer bist Du?",
-    "To participate, tell us how we can call you!" : "Um teilzunehmen, sage uns, wie wir Dich anrufen können!",
+    "To participate, tell us how we can call you!" : "Um teilzunehmen, sage uns wie wir Dich nennen dürfen!",
     "Enter your name" : "Gib Deinen Namen ein",
     "Please use at least 3 characters for your name." : "Bitte mindestens 3 Zeichen für den Namen verwenden.",
     "This name is not valid, i.e. because it is already in use." : "Dieser Name ist nicht gültig, möglicherweise ist er bereits in Verwendung.",

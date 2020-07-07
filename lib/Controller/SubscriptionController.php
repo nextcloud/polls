@@ -25,29 +25,27 @@ namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
 use OCP\ILogger;
-
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Db\Subscription;
-use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Service\SubscriptionService;
 
 class SubscriptionController extends Controller {
 
 	private $userId;
-	private $mapper;
+	private $subscriptionService;
 	private $logger;
 
 	/**
 	 * SubscriptionController constructor.
 	 * @param string $appName
 	 * @param $UserId
-	 * @param SubscriptionMapper $mapper
+	 * @param SubscriptionService $subscriptionService
 	 * @param IRequest $request
 	 * @param ILogger $logger
 	 */
@@ -55,14 +53,14 @@ class SubscriptionController extends Controller {
 	public function __construct(
 		string $appName,
 		$userId,
-		SubscriptionMapper $mapper,
+		SubscriptionService $subscriptionService,
 		IRequest $request,
 		ILogger $logger
 
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
-		$this->mapper = $mapper;
+		$this->subscriptionService = $subscriptionService;
 		$this->logger = $logger;
 	}
 
@@ -73,19 +71,13 @@ class SubscriptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
-
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-		}
-
 		try {
-			$this->mapper->findByUserAndPoll($pollId, $this->userId);
-		} catch (MultipleObjectsReturnedException $e) {
-			// should not happen, but who knows
+			return new DataResponse($this->subscriptionService->get($pollId), Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(null, Http::STATUS_NOT_FOUND);
+			return new DataResponse(['status' => 'Not subscribed'], Http::STATUS_NOT_FOUND);
 		}
-		return new DataResponse(null, Http::STATUS_OK);
 	}
 
 	/**
@@ -94,15 +86,10 @@ class SubscriptionController extends Controller {
 	 * @param integer $pollId
 	 */
 	public function set($pollId, $subscribed) {
-		if ($subscribed) {
-			$subscription = new Subscription();
-			$subscription->setPollId($pollId);
-			$subscription->setUserId($this->userId);
-			$this->mapper->insert($subscription);
-			return true;
-		} else {
-			$this->mapper->unsubscribe($pollId, $this->userId);
-			return false;
+		try {
+			return new DataResponse($this->subscriptionService->set($pollId, $subscribed), Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }
