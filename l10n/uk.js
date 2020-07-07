@@ -16,6 +16,7 @@ OC.L10N.register(
     "Apply" : "Застосувати",
     "Access" : "Доступ",
     "Owner" : "Власник",
+    "Created" : "Створено",
     "never" : "ніколи",
     "Details" : "Деталі",
     "Configuration" : "Налаштування",

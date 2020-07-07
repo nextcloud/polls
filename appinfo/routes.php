@@ -30,8 +30,8 @@ return [
 		['name' => 'page#vote_public', 'url' => '/s/{token}', 'verb' => 'GET', 'postfix' => 'public'],
 		['name' => 'page#vote_public', 'url' => '/poll/{token}', 'verb' => 'GET', 'postfix' => 'oldpublic'],
 
-		['name' => 'subscription#get', 'url' => '/subscription/get/{pollId}', 'verb' => 'GET'],
-		['name' => 'subscription#set', 'url' => '/subscription/set', 'verb' => 'POST'],
+		['name' => 'subscription#get', 'url' => '/subscription/{pollId}', 'verb' => 'GET'],
+		['name' => 'subscription#set', 'url' => '/subscription', 'verb' => 'POST'],
 
 		['name' => 'comment#getByToken', 'url' => '/comments/s/{token}', 'verb' => 'GET'],
 		['name' => 'comment#get', 'url' => '/comments/{pollId}', 'verb' => 'GET'],

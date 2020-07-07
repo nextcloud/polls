@@ -29,8 +29,8 @@
 
 		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
 			<div class="modal__content">
-				<h2>{{ t('polls', 'Enter your name!') }}</h2>
-				<p>{{ t('polls', 'To participate, enter a username with at least 3 characters.') }}</p>
+				<h2>{{ t('polls', 'Who are you?') }}</h2>
+				<p>{{ t('polls', 'To participate, tell us how we can call you!') }}</p>
 
 				<input ref="userName" v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }"
 					type="text"
@@ -38,9 +38,9 @@
 
 				<div>
 					<span v-show="checkingUserName" class="icon-loading-small">Checking username …</span>
-					<span v-show="!checkingUserName && userName.length < 3" class="error">{{ t('polls', 'Username is not valid. Please enter at least 3 characters.') }}</span>
-					<span v-show="!checkingUserName && userName.length > 2 && !isValidName" class="error">{{ t('polls', 'This username is not valid, i.e. because it is already in use.') }}</span>
-					<span v-show="!checkingUserName && userName.length > 2 && isValidName" class="error">{{ t('polls', 'Valid username.') }}</span>
+					<span v-show="!checkingUserName && userName.length < 3" class="error">{{ t('polls', 'Please use at least 3 characters for your name.') }}</span>
+					<span v-show="!checkingUserName && userName.length > 2 && !isValidName" class="error">{{ t('polls', 'This name is not valid, i.e. because it is already in use.') }}</span>
+					<span v-show="!checkingUserName && userName.length > 2 && isValidName" class="error">{{ t('polls', 'OK, we will call you {username}.', {username : userName }) }}</span>
 				</div>
 
 				<div class="modal__buttons">

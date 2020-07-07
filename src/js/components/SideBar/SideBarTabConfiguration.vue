@@ -239,7 +239,7 @@ export default {
 		expirationDatePicker() {
 			return {
 				editable: true,
-				minuteStep: 1,
+				minuteStep: 5,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
 				placeholder: t('polls', 'Expiration date'),

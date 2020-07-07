@@ -59,7 +59,6 @@ OC.L10N.register(
     "%n successfully saved" : "%n sparades",
     "Link copied to clipboard" : "Länken kopierades till urklipp",
     "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
-    "Enter your name!" : "Ange ditt namn!",
     "Enter your name" : "Ange ditt namn",
     "No" : "Nej",
     "Yes" : "Ja",
