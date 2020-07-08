@@ -8,6 +8,7 @@ OC.L10N.register(
     "Details" : "Munudoù",
     "Configuration" : "Stumm",
     "Shares" : "Rannañ",
+    "Description" : "Diskrivadur",
     "Expiration date" : "Deizad termen",
     "Who are you?" : "Piv oc'h c'hwi ?",
     "No" : "Nan",
