@@ -56,8 +56,8 @@ class SubscriptionApiController extends ApiController {
 		parent::__construct($appName,
 			$request,
 			'PUT, GET, DELETE',
-            'Authorization, Content-Type, Accept',
-            1728000);
+			'Authorization, Content-Type, Accept',
+			1728000);
 		$this->subscriptionService = $subscriptionService;
 	}
 

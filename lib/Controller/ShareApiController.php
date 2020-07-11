@@ -155,7 +155,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->mailService->sendInvitationMail($token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		}
 	}
 }

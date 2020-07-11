@@ -136,7 +136,7 @@ class ShareController extends Controller {
 			$share = $this->shareService->get($token);
 			return new DataResponse(['share' => $share, 'sentResult' => $sentResult], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		}
 	}
 }

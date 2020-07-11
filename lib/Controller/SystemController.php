@@ -91,7 +91,7 @@ class SystemController extends Controller {
 	 * Validate string as email address
 	 * @NoAdminRequired
 	 * @param string $query
-	 * @return boolval
+	 * @return bool
 	 */
 	 private function isValidEmail($email) {
 		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;

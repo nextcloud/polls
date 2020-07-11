@@ -77,11 +77,11 @@ class OptionController extends Controller {
 	// }
 
 	/**
-	* Add a new option
-	* @NoAdminRequired
-	* @param array $option
-	* @return DataResponse
-	*/
+	 * Add a new option
+	 * @NoAdminRequired
+	 * @param array $option
+	 * @return DataResponse
+	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
 		return new DataResponse($this->optionService->add($pollId, $timestamp, $pollOptionText), Http::STATUS_OK);
 	}

@@ -45,7 +45,6 @@ class VoteController extends Controller {
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param VoteService $voteService
-
 	 */
 	public function __construct(
 		string $appName,

@@ -32,7 +32,7 @@ use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Model\Acl;
 
-class SubscriptionService  {
+class SubscriptionService {
 
 	/** @var Acl */
 	private $acl;
@@ -92,7 +92,7 @@ class SubscriptionService  {
 				return ['status' => 'Subscribed to poll ' . $pollId];
 			}
 
-		} catch (DoesNotExistException $e){
+		} catch (DoesNotExistException $e) {
 
 			if ($subscribed) {
 				$subscription = new Subscription();

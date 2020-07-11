@@ -108,9 +108,9 @@ class OptionApiController extends ApiController {
 	 * @param array $option
 	 * @return DataResponse
 	 */
-	public function update($optionId, $timestamp = 0 , $pollOptionText = '') {
+	public function update($optionId, $timestamp = 0, $pollOptionText = '') {
 		try {
-			return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $order)], Http::STATUS_OK);
+			return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}

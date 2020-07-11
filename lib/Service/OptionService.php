@@ -35,7 +35,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
-class OptionService  {
+class OptionService {
 
 	/** @var OptionMapper */
 	private $optionMapper;
@@ -112,7 +112,7 @@ class OptionService  {
 	 * @return Option
 	 * @throws NotAuthorizedException
 	 */
-	public function add($pollId, $timestamp = 0 , $pollOptionText = '') {
+	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
 
 		$this->poll = $this->pollMapper->find($pollId);
 		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
@@ -136,7 +136,7 @@ class OptionService  {
 	 * @return Option
 	 * @throws NotAuthorizedException
 	 */
-	public function update($optionId, $timestamp = 0 , $pollOptionText = '', $order = 0) {
+	public function update($optionId, $timestamp = 0, $pollOptionText = '', $order = 0) {
 
 		$this->option = $this->optionMapper->find($optionId);
 		$this->poll = $this->pollMapper->find($this->option->getPollId());
@@ -183,10 +183,10 @@ class OptionService  {
 			throw new NotAuthorizedException;
 		}
 
-		if ($this->option->setConfirmation()) {
-			$this->option->setConfirmation(0);
+		if ($this->option->getConfirmed()) {
+			$this->option->setConfirmed(0);
 		} else {
-			$this->option->setConfirmation(time());
+			$this->option->setConfirmed(time());
 		}
 
 		return $this->optionMapper->update($this->option);
@@ -237,7 +237,7 @@ class OptionService  {
 		}
 
 		if ($this->poll->getType() === 'datePoll') {
-			throw new BadRequestException("Not allowed in date polls", 1);
+			throw new BadRequestException("Not allowed in date polls");
 		}
 
 		$i = 0;
@@ -272,13 +272,13 @@ class OptionService  {
 		}
 
 		if ($this->poll->getType() === 'datePoll') {
-			throw new BadRequestException("Not allowed in date polls", 1);
+			throw new BadRequestException("Not allowed in date polls");
 		}
 
 		if ($newOrder < 1) {
 			$newOrder = 1;
-		} elseif ($newOrder > getHighestOrder($pollId)) {
-			$newOrder = getHighestOrder($pollId);
+		} elseif ($newOrder > $this->getHighestOrder($pollId)) {
+			$newOrder = $this->getHighestOrder($pollId);
 		}
 
 		$oldOrder = $this->option->getOrder();
@@ -324,20 +324,20 @@ class OptionService  {
 	 * @param int $order
 	 * @throws BadRequestException
 	 */
-	private function setOption($timestamp = 0 , $pollOptionText = '', $order = 0) {
+	private function setOption($timestamp = 0, $pollOptionText = '', $order = 0) {
 		if ($this->poll->getType() === 'datePoll') {
 			if ($timestamp) {
 				$this->option->setTimestamp($timestamp);
 				$this->option->setOrder($timestamp);
 				$this->option->setPollOptionText(date('c', $timestamp));
 			} else {
-				throw new BadRequestException("Date poll must have a timestamp", 1);
+				throw new BadRequestException("Date poll must have a timestamp");
 			}
 		} elseif ($this->poll->getType() === 'textPoll') {
 			if ($pollOptionText) {
 				$this->option->setPollOptionText($pollOptionText);
 			} else {
-				throw new BadRequestException("Text poll must have a pollOptionText", 1);
+				throw new BadRequestException("Text poll must have a pollOptionText");
 			}
 
 			if (!$order && !$this->option->getOrder()) {

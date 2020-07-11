@@ -34,7 +34,7 @@ use OCA\Polls\Service\AnonymizeService;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
-class VoteService  {
+class VoteService {
 
 	/** @var VoteMapper */
 	private $voteMapper;
@@ -114,13 +114,12 @@ class VoteService  {
 	public function set($optionId, $setTo, $token = '') {
 
 		$option = $this->optionMapper->find($optionId);
-		$pollId = $option->getPollId();
 
 		if (!$this->acl->setPollIdOrToken($option->getPollId(), $token)->getAllowVote()) {
 			throw new NotAuthorizedException;
 		}
 
-		if (!$option->getPollId() === $this->acl->getPollId()) {
+		if ($option->getPollId() !== $this->acl->getPollId()) {
 			throw new NotAuthorizedException;
 		}
 

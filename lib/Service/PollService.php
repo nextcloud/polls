@@ -208,7 +208,7 @@
 		}
 
 		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
-			throw new InvalidAccessException('Invalid value for prop access '. $poll['access']);
+			throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
 		}
 
 		if (isset($poll['title']) && !$poll['title']) {
