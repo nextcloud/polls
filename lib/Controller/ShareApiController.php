@@ -60,8 +60,8 @@ class ShareApiController extends ApiController {
 		parent::__construct($appName,
 			$request,
 			'POST, PUT, GET, DELETE',
-            'Authorization, Content-Type, Accept',
-            1728000);
+			'Authorization, Content-Type, Accept',
+			1728000);
 		$this->shareService = $shareService;
 		$this->mailService = $mailService;
 	}
@@ -85,13 +85,13 @@ class ShareApiController extends ApiController {
 	}
 
 	/**
-	* Get share by token
-	* @NoAdminRequired
-	* @CORS
-	* @NoCSRFRequired
-	* @param string $token
-	* @return DataResponse
-	*/
+	 * Get share by token
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
 	public function get($token) {
 		try {
 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_OK);

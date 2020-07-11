@@ -67,13 +67,13 @@ class PollController extends Controller {
  	 * PollController constructor.
  	 * @param string $appName
  	 * @param IRequest $request
-	 * @param PollService $pollService
-	 * @param CommentService $commentService
-	 * @param OptionService $optionService
-	 * @param ShareService $shareService
-	 * @param VoteService $voteService
-	 * @param Acl $acl
-	 */
+ 	 * @param PollService $pollService
+ 	 * @param CommentService $commentService
+ 	 * @param OptionService $optionService
+ 	 * @param ShareService $shareService
+ 	 * @param VoteService $voteService
+ 	 * @param Acl $acl
+ 	 */
 
  	public function __construct(
 		string $appName,
