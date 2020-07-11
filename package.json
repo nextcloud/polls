@@ -43,7 +43,7 @@
 		"@nextcloud/router": "^1.1.0",
 		"@nextcloud/vue": "^2.2.1",
 		"core-js": "^3.6.5",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.19",
 		"moment": "^2.27.0",
 		"v-click-outside": "^3.0.0",
 		"vue": "^2.6.11",
