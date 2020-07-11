@@ -32,7 +32,6 @@
  use OCA\Polls\Exceptions\NotAuthorizedException;
 
  use OCP\IRequest;
- use OCP\ILogger;
  use OCP\AppFramework\ApiController;
  use OCP\AppFramework\Http;
  use OCP\AppFramework\Http\DataResponse;
@@ -41,35 +40,32 @@
 
  class PollApiController extends ApiController {
 
- 	private $logger;
+
+ 	 /** @var PollService */
  	private $pollService;
 
  	/**
- 	 * PollController constructor.
+ 	 * PollApiController constructor
  	 * @param string $appName
- 	 * @param $userId
  	 * @param IRequest $request
- 	 * @param ILogger $logger
  	 * @param PollService $pollService
  	 */
 
  	public function __construct(
  		string $appName,
  		IRequest $request,
- 		ILogger $logger,
 		PollService $pollService
  	) {
  		parent::__construct($appName, $request);
- 		$this->logger = $logger;
  		$this->pollService = $pollService;
  	}
 
 
 	/**
-	 * list
+	 * Get list of polls
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @CORS
+	 * @NoCSRFRequired
 	 * @return DataResponse
 	 */
 
@@ -85,11 +81,12 @@
 
 
 	/**
-	 * get
+	 * get poll configuration
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return array
+	 * @param int $pollId
+	 * @return DataResponse
 	 */
  	public function get($pollId) {
 		try {
@@ -102,9 +99,10 @@
  	}
 
 	/**
-	 * write
+	 * Add poll
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @CORS
 	 * @param Array $poll
 	 * @return DataResponse
 	 */
@@ -122,10 +120,12 @@
 	}
 
 	/**
-	 * write
+	 * Update poll configuration
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
-	 * @param Array $poll
+	 * @param int $pollId
+	 * @param array $poll
 	 * @return DataResponse
 	 */
 
@@ -146,14 +146,15 @@
 	}
 
 	/**
-	 * delete
+	 * Switch deleted status (move to deleted polls)
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
-	 * @param Array $poll
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 
-	public function delete($pollId) {
+	public function trash($pollId) {
 		try {
 			return new DataResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
@@ -164,14 +165,15 @@
 	}
 
 	/**
-	 * deletePermanently
+	 * Delete poll
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
-	 * @param Array $poll
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 
-	public function deletePermanently($pollId) {
+	public function delete($pollId) {
 		try {
 			return new DataResponse(['poll' => $this->pollService->deletePermanently($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
@@ -183,10 +185,11 @@
 	}
 
 	/**
-	 * clone
+	 * Clone poll
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 	public function clone($pollId) {
@@ -200,8 +203,9 @@
 	}
 
 	/**
-	 * enum
+	 * Get valid values for configuration options
 	 * @NoAdminRequired
+	 * @CORS
 	 * @NoCSRFRequired
 	 * @param Array $poll
 	 * @return DataResponse

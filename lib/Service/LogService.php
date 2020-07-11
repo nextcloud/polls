@@ -31,36 +31,38 @@ use OCA\Polls\Db\LogMapper;
 
 class LogService {
 
-	private $mapper;
-	private $logItem;
+	/** @var LogMapper */
+	private $logMapper;
+
+	/** @var Log */
+	private $log;
 
 	/**
 	 * LogService constructor.
-	 * @param LogMapper $mapper
-	 * @param Log $logItem
+	 * @param LogMapper $logMapper
+	 * @param Log $log
 	 */
-
 	public function __construct(
-		LogMapper $mapper,
-		Log $logItem
+		LogMapper $logMapper,
+		Log $log
 	) {
-		$this->mapper = $mapper;
-		$this->logItem = $logItem;
+		$this->logMapper = $logMapper;
+		$this->log = $log;
 	}
 
 
 	/**
 	 * Prevent repetition of the same log event
 	 * @NoAdminRequired
-	 * @return Bool
+	 * @return bool
 	 */
 	public function isRepetition() {
 		try {
-			$lastRecord = $this->mapper->getLastRecord($this->logItem->getPollId());
-			return (intval($lastRecord->getPollId()) === intval($this->logItem->getPollId())
-				&& $lastRecord->getUserId() === $this->logItem->getUserId()
-				&& $lastRecord->getMessageId() === $this->logItem->getMessageId()
-				&& $lastRecord->getMessage() === $this->logItem->getMessage()
+			$lastRecord = $this->logMapper->getLastRecord($this->log->getPollId());
+			return (intval($lastRecord->getPollId()) === intval($this->log->getPollId())
+				&& $lastRecord->getUserId() === $this->log->getUserId()
+				&& $lastRecord->getMessageId() === $this->log->getMessageId()
+				&& $lastRecord->getMessage() === $this->log->getMessage()
 			);
 		} catch (DoesNotExistException $e) {
 			return false;
@@ -77,23 +79,23 @@ class LogService {
 	 * @return Log
 	 */
 	public function setLog($pollId, $messageId, $userId = null, $message = null) {
-		$this->logItem = new Log();
-		$this->logItem->setPollId($pollId);
-		$this->logItem->setCreated(time());
-		$this->logItem->setMessageId($messageId);
-		$this->logItem->setMessage($message);
+		$this->log = new Log();
+		$this->log->setPollId($pollId);
+		$this->log->setCreated(time());
+		$this->log->setMessageId($messageId);
+		$this->log->setMessage($message);
 
 		if ($userId) {
-			$this->logItem->setUserId($userId);
+			$this->log->setUserId($userId);
 		} else {
-			$this->logItem->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
+			$this->log->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
 		}
 
 
 		if ($this->isRepetition()) {
 			return null;
 		} else {
-			return $this->mapper->insert($this->logItem);
+			return $this->logMapper->insert($this->log);
 		}
 	}
 

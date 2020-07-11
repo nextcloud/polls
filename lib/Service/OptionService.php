@@ -26,23 +26,41 @@ namespace OCA\Polls\Service;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\BadRequestException;
 
-use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
 class OptionService  {
 
+	/** @var OptionMapper */
 	private $optionMapper;
+
+	/** @var Option */
 	private $option;
+
+	/** @var PollMapper */
+	private $pollMapper;
+
+	/** @var Poll */
+	private $poll;
+
+	/** @var LogService */
 	private $logService;
+
+	/** @var Acl */
 	private $acl;
 
 	/**
 	 * OptionController constructor.
 	 * @param OptionMapper $optionMapper
 	 * @param Option $option
+	 * @param PollMapper $pollMapper
+	 * @param Poll $poll
 	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
@@ -50,48 +68,26 @@ class OptionService  {
 	public function __construct(
 		OptionMapper $optionMapper,
 		Option $option,
+		PollMapper $pollMapper,
+   	 	Poll $poll,
 		LogService $logService,
 		Acl $acl
 	) {
 		$this->optionMapper = $optionMapper;
 		$this->option = $option;
+		$this->pollMapper = $pollMapper;
+		$this->poll = $poll;
 		$this->logService = $logService;
 		$this->acl = $acl;
 	}
 
 	/**
-	 * Set properties from option array
-	 * @NoAdminRequired
-	 * @param Array $option
-	 */
-	private function set($option) {
-
-		$this->option->setPollId($option['pollId']);
-		$this->option->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-		$this->option->setTimestamp($option['timestamp']);
-
-		if ($option['timestamp']) {
-			$this->option->setOrder($option['timestamp']);
-		} else {
-			$this->option->setOrder($option['order']);
-		}
-
-		if ($option['confirmed']) {
-			// do not update confirmation date, if option is already confirmed
-			if (!$this->option->getConfirmed()) {
-				$this->option->setConfirmed(time());
-			}
-		} else {
-			$this->option->setConfirmed(0);
-		}
-	}
-
-	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @param string $token
 	 * @return array Array of Option objects
+	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $token = '') {
 
@@ -99,36 +95,67 @@ class OptionService  {
 			throw new NotAuthorizedException;
 		}
 
-		return $this->optionMapper->findByPoll($pollId);
-
+		try {
+			return $this->optionMapper->findByPoll($pollId);
+		} catch (DoesNotExistException $e) {
+			return [];
+		}
 	}
 
 
 	/**
-	 * Add a new Option to poll
+	 * Add a new option
 	 * @NoAdminRequired
-	 * @param Array $option
+	 * @param int $pollId
+	 * @param int $timestamp
+	 * @param string $pollOptionText
 	 * @return Option
+	 * @throws NotAuthorizedException
 	 */
-	public function add($option) {
+	public function add($pollId, $timestamp = 0 , $pollOptionText = '') {
 
-		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
+		$this->poll = $this->pollMapper->find($pollId);
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
 		$this->option = new Option();
-		$this->set($option);
-		$this->optionMapper->insert($this->option);
-		$this->logService->setLog($option['pollId'], 'addOption');
+		$this->option->setPollId($pollId);
+		$this->setOption($timestamp, $pollOptionText, 0);
 
-		return $this->option;
+		return $this->optionMapper->insert($this->option);
 	}
 
 	/**
-	 * Remove a single option
+	 * Update option
 	 * @NoAdminRequired
-	 * @param Option $option
-	 * @return array Array of Option objects
+	 * @param int $optionId
+	 * @param int $timestamp
+	 * @param string $pollOptionText
+	 * @param int $order
+	 * @return Option
+	 * @throws NotAuthorizedException
+	 */
+	public function update($optionId, $timestamp = 0 , $pollOptionText = '', $order = 0) {
+
+		$this->option = $this->optionMapper->find($optionId);
+		$this->poll = $this->pollMapper->find($this->option->getPollId());
+
+		if (!$this->acl->setPollId($this->option->getPollId())->getAllowEdit()) {
+			throw new NotAuthorizedException;
+		}
+
+		$this->setOption($timestamp, $pollOptionText, $order);
+
+		return $this->optionMapper->update($this->option);
+	}
+
+	/**
+	 * Delete option
+	 * @NoAdminRequired
+	 * @param int $optionId
+	 * @return Option deleted Option
+	 * @throws NotAuthorizedException
 	 */
 	public function delete($optionId) {
 		$this->option = $this->optionMapper->find($optionId);
@@ -140,43 +167,77 @@ class OptionService  {
 		$this->optionMapper->delete($this->option);
 
 		return $this->option;
-
 	}
 
 	/**
-	 * Update poll option
+	 * Switch optoin confirmation
 	 * @NoAdminRequired
-	 * @param array $option
-	 * @return Option
+	 * @param int $optionId
+	 * @return Option confirmed Option
+	 * @throws NotAuthorizedException
 	 */
-	public function update($option) {
-		if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
+	public function confirm($optionId) {
+		$this->option = $this->optionMapper->find($optionId);
+
+		if (!$this->acl->setPollId($this->option->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
-		try {
-			$this->option = $this->optionMapper->find($option['id']);
-			$this->set($option);
-			$this->optionMapper->update($this->option);
-			$this->logService->setLog($option['pollId'], 'updateOption');
-
-			return $this->option;
-		} catch (Exception $e) {
-			return new DoesNotExistException($e);
+		if ($this->option->setConfirmation()) {
+			$this->option->setConfirmation(0);
+		} else {
+			$this->option->setConfirmation(time());
 		}
 
+		return $this->optionMapper->update($this->option);
 	}
 
 	/**
-	 * Set order by order of the given array
+	 * Copy options from $fromPoll to $toPoll
 	 * @NoAdminRequired
-	 * @param array $options
+	 * @param int $fromPollId
+	 * @param int $toPollId
 	 * @return array Array of Option objects
+	 * @throws NotAuthorizedException
+	 */
+	public function clone($fromPollId, $toPollId) {
+
+		if (!$this->acl->setPollId($fromPollId)->getAllowView()) {
+			throw new NotAuthorizedException;
+		}
+
+		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
+			$option = new Option();
+			$option->setPollId($toPollId);
+			$option->setConfirmed(0);
+			$option->setPollOptionText($origin->getPollOptionText());
+			$option->setTimestamp($origin->getTimestamp());
+			$option->setOrder($origin->getOrder());
+			$this->optionMapper->insert($option);
+		}
+
+		return $this->optionMapper->findByPoll($toPollId);
+	}
+
+	/**
+	 * Reorder options with the order specified by $options
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param array $options - Array of options
+	 * @return array Array of Option objects
+	 * @throws NotAuthorizedException
+	 * @throws BadRequestException
 	 */
 	public function reorder($pollId, $options) {
 
+		$this->poll = $this->pollMapper->find($pollId);
+
 		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
+		}
+
+		if ($this->poll->getType() === 'datePoll') {
+			throw new BadRequestException("Not allowed in date polls", 1);
 		}
 
 		$i = 0;
@@ -189,28 +250,116 @@ class OptionService  {
 		}
 
 		return $this->optionMapper->findByPoll($pollId);
-
 	}
 
 	/**
-	 * Set order by order of the given array
+	 * Change order for $optionId and reorder the options
 	 * @NoAdminRequired
-	 * @param integer $fromPollId
-	 * @param integer $toPollId
+	 * @param int $optionId
+	 * @param int $newOrder
 	 * @return array Array of Option objects
+	 * @throws NotAuthorizedException
+	 * @throws BadRequestException
 	 */
-	public function clone($fromPollId, $toPollId) {
+	public function setOrder($optionId, $newOrder) {
 
-		if (!$this->acl->setPollId($fromPollId)->getAllowView()) {
+		$this->option = $this->optionMapper->find($optionId);
+		$pollId = $this->option->getPollId();
+		$this->poll = $this->pollMapper->find($pollId);
+
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
-		foreach ($this->optionMapper->findByPoll($fromPollId) as $option) {
-			$option->setPollId($toPollId);
-			$this->optionMapper->insert($option);
+		if ($this->poll->getType() === 'datePoll') {
+			throw new BadRequestException("Not allowed in date polls", 1);
 		}
 
-		return $this->optionMapper->findByPoll($toPollId);
+		if ($newOrder < 1) {
+			$newOrder = 1;
+		} elseif ($newOrder > getHighestOrder($pollId)) {
+			$newOrder = getHighestOrder($pollId);
+		}
 
+		$oldOrder = $this->option->getOrder();
+
+		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
+			$currentOrder = $option->getOrder();
+			if (
+				   ($currentOrder < $oldOrder && $currentOrder < $newOrder)
+				|| ($currentOrder > $oldOrder && $currentOrder > $newOrder)
+			) {
+
+				continue;
+
+			} elseif ($currentOrder > $oldOrder && $currentOrder <= $newOrder) {
+
+				$option->setOrder($currentOrder - 1);
+				$this->optionMapper->update($option);
+
+			} elseif (
+					   ($currentOrder < $oldOrder && $currentOrder >= $newOrder)
+					|| ($currentOrder < $oldOrder && $currentOrder = $newOrder)
+				) {
+
+				$option->setOrder($currentOrder + 1);
+				$this->optionMapper->update($option);
+
+			} elseif ($currentOrder === $oldOrder) {
+
+				$option->setOrder($newOrder);
+				$this->optionMapper->update($option);
+
+			}
+		}
+
+		return $this->optionMapper->findByPoll($this->option->getPollId());
+	}
+
+	/**
+	 * Set option entities validated
+	 * @NoAdminRequired
+	 * @param int $timestamp
+	 * @param string $pollOptionText
+	 * @param int $order
+	 * @throws BadRequestException
+	 */
+	private function setOption($timestamp = 0 , $pollOptionText = '', $order = 0) {
+		if ($this->poll->getType() === 'datePoll') {
+			if ($timestamp) {
+				$this->option->setTimestamp($timestamp);
+				$this->option->setOrder($timestamp);
+				$this->option->setPollOptionText(date('c', $timestamp));
+			} else {
+				throw new BadRequestException("Date poll must have a timestamp", 1);
+			}
+		} elseif ($this->poll->getType() === 'textPoll') {
+			if ($pollOptionText) {
+				$this->option->setPollOptionText($pollOptionText);
+			} else {
+				throw new BadRequestException("Text poll must have a pollOptionText", 1);
+			}
+
+			if (!$order && !$this->option->getOrder()) {
+				$order = $this->getHighestOrder($this->option->getPollId()) + 1;
+				$this->option->setOrder($order);
+			}
+		}
+	}
+
+	/**
+	 * Get the highest order number in $pollId
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return int Highest order number
+	 */
+	private function getHighestOrder($pollId) {
+		$order = 0;
+		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
+			if ($option->getOrder() > $order) {
+				$order = $option->getOrder();
+			}
+		}
+		return $order;
 	}
 }

@@ -35,13 +35,13 @@ use OCP\AppFramework\Db\Entity;
  * @method void setToken(string $value)
  * @method string getType()
  * @method void setType(string $value)
- * @method integer getPollId()
+ * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getUserEmail()
  * @method void setUserEmail(string $value)
- * @method integer getInvitationSent()
+ * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
  */
 class Share extends Entity implements JsonSerializable {

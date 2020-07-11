@@ -28,7 +28,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
-use OCP\ILogger;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -37,20 +36,18 @@ use OCA\Polls\Service\VoteService;
 
 class VoteApiController extends ApiController {
 
-	private $logger;
+	/** @var VoteService */
 	private $voteService;
 
 	/**
-	 * VoteController constructor.
+	 * VoteAPIController constructor
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param ILogger $logger
 	 * @param VoteService $voteService
 	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ILogger $logger,
 		VoteService $voteService
 	) {
 		parent::__construct($appName,
@@ -59,16 +56,14 @@ class VoteApiController extends ApiController {
             'Authorization, Content-Type, Accept',
             1728000);
 		$this->voteService = $voteService;
-		$this->logger = $logger;
 	}
 
 	/**
-	 * Get all votes of given poll
 	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @CORS
-	 * @param integer $pollId
+	 * @NoCSRFRequired
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
@@ -82,21 +77,19 @@ class VoteApiController extends ApiController {
 	}
 
 	/**
-	 * set
+	 * Set vote answer
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @CORS
-	 * @param integer $pollId
-	 * @param Array $option
-	 * @param string $userId
+	 * @NoCSRFRequired
+	 * @param int $optionId
 	 * @param string $setTo
 	 * @return DataResponse
 	 */
-	public function set($pollId, $pollOptionText, $setTo) {
+	public function set($optionId, $setTo) {
 		try {
-			return new DataResponse(['vote' => $this->voteService->set($pollId, $pollOptionText, $setTo)], Http::STATUS_OK);
+			return new DataResponse(['vote' => $this->voteService->set($optionId, $setTo)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}

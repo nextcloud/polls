@@ -31,10 +31,19 @@ use OCA\Polls\Db\CommentMapper;
 
 class AnonymizeService {
 
+	/** @var VoteMapper */
 	private $voteMapper;
+
+	/** @var CommentMapper */
 	private $commentMapper;
+
+	/** @var array */
 	private $anonList = array();
+
+	/** @var string */
 	private $userId;
+
+	/** @var int */
 	private $pollId;
 
 	public function __construct(
@@ -74,7 +83,7 @@ class AnonymizeService {
 	 * Initialize anonymizer with pollId and userId
 	 * Creates a mapping list with unique Anonymous strings based on the partcipants of a poll
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @param string $userId - usernames, which will not be anonymized
 	 */
 

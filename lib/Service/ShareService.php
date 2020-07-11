@@ -24,54 +24,62 @@
 namespace OCA\Polls\Service;
 
 use Exception;
-
-use OCP\Security\ISecureRandom;
-
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsername;
 
-use OCA\Polls\Db\Share;
+use OCP\Security\ISecureRandom;
+
+use OCA\Polls\Controller\SystemController;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Controller\SystemController;
 
 class ShareService {
 
-	private $shareMapper;
-	private $share;
+	/** @var SystemController */
 	private $systemController;
+
+	/** @var ShareMapper */
+	private $shareMapper;
+
+	/** @var Share */
+	private $share;
+
+	/** @var MailService */
 	private $mailService;
+
+	/** @var Acl */
 	private $acl;
 
 	/**
 	 * ShareController constructor.
+	 * @param SystemController $systemController
 	 * @param ShareMapper $shareMapper
 	 * @param Share $share
-	 * @param SystemController $systemController
 	 * @param MailService $mailService
 	 * @param Acl $acl
 	 */
 	public function __construct(
+		SystemController $systemController,
 		ShareMapper $shareMapper,
 		Share $share,
-		SystemController $systemController,
 		MailService $mailService,
 		Acl $acl
 	) {
+		$this->systemController = $systemController;
 		$this->shareMapper = $shareMapper;
 		$this->share = $share;
-		$this->systemController = $systemController;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
 	}
 
 	/**
-	 * get
 	 * Read all shares of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return array
+	 * @param int $pollId
+	 * @return array array of Share
+	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId) {
 		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
@@ -82,8 +90,7 @@ class ShareService {
 	}
 
 	/**
-	 * getByToken
-	 * Get pollId by token
+	 * Get share by token
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @return Share
@@ -93,11 +100,14 @@ class ShareService {
 	}
 
 	/**
-	 * Write a new share to the db and returns the new share as array
+	 * Add share
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param string $share
-	 * @return array
+	 * @param string $type
+	 * @param string $userId
+	 * @param string $userEmail
+	 * @return Share
+	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId, $type, $userId, $userEmail = '') {
 
@@ -122,14 +132,16 @@ class ShareService {
 	}
 
 	/**
-	 * createPersonalShare
-	 * Write a new share to the db and returns the new share as array
+	 * Create a personal share from a public share
+	 * or update an email share with the username
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @param string $userName
 	 * @return Share
+	 * @throws NotAuthorizedException
+	 * @throws InvalidUsername
 	 */
-	public function createPersonalShare($token, $userName) {
+	public function personal($token, $userName) {
 		$publicShare = $this->shareMapper->findByToken($token);
 
 		// Return of validatePublicUsername is a DataResponse
@@ -141,7 +153,6 @@ class ShareService {
 		}
 
 		if ($publicShare->getType() === 'public') {
-
 
 			$this->share = new Share();
 			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
@@ -169,14 +180,15 @@ class ShareService {
 	}
 
 	/**
-	 * remove
+	 * Delete share
 	 * remove share
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @return Share
+	 * @throws NotAuthorizedException
 	 */
 
-	public function remove($token) {
+	public function delete($token) {
 		$this->share = $this->shareMapper->findByToken($token);
 		if (!$this->acl->setPollId($this->share->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;

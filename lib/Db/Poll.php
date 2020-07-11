@@ -39,29 +39,29 @@ use OCP\AppFramework\Db\Entity;
  * @method void setDescription(string $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
- * @method integer getCreated()
+ * @method int getCreated()
  * @method void setCreated(integer $value)
- * @method integer getExpire()
+ * @method int getExpire()
  * @method void setExpire(integer $value)
- * @method integer getDeleted()
+ * @method int getDeleted()
  * @method void setDeleted(integer $value)
  * @method string getAccess()
  * @method void setAccess(string $value)
- * @method integer getAnonymous()
+ * @method int getAnonymous()
  * @method void setAnonymous(integer $value)
- * @method integer getFullAnonymous()
+ * @method int getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
- * @method integer getAllowMaybe()
+ * @method int getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
  * @method string getOptions()
  * @method void setOptions(string $value)
  * @method string getSettings()
  * @method void setSettings(string $value)
- * @method integer getVoteLimit()
+ * @method int getVoteLimit()
  * @method void setVoteLimit(integer $value)
  * @method string getShowResults()
  * @method void setShowResults(string $value)
- * @method integer getAdminAccess()
+ * @method int getAdminAccess()
  * @method void setAdminAccess(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
@@ -133,20 +133,6 @@ class Poll extends Entity implements JsonSerializable {
 			'adminAccess' => intVal($this->adminAccess),
 			'ownerDisplayName' => $this->getDisplayName()
 		];
-	}
-
-	public function deserializeArray($array) {
-		$this->setTitle(isset($array['title']) ? $array['title'] : $this->getTitle());
-		$this->setDescription(isset($array['description']) ? $array['description'] : $this->getDescription());
-		$this->setAccess(isset($array['access']) ? $array['access'] : $this->getAccess());
-		$this->setExpire(isset($array['expire']) ? $array['expire'] : $this->getExpire());
-		$this->setAnonymous(isset($array['anonymous']) ? $array['anonymous'] : $this->getAnonymous());
-		$this->setAllowMaybe(isset($array['allowMaybe']) ? $array['allowMaybe'] : $this->getAllowMaybe());
-		$this->setVoteLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getVoteLimit());
-		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
-		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
-		$this->setAdminAccess(isset($array['adminAccess']) ? $array['adminAccess'] : $this->getAdminAccess());
-		return $this;
 	}
 
 	private function getDisplayName() {

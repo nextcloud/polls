@@ -27,7 +27,6 @@ use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\ILogger;
 
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
@@ -35,30 +34,29 @@ use OCA\Polls\Model\Acl;
 
 class SubscriptionService  {
 
+	/** @var Acl */
 	private $acl;
+
+	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
-	private $logger;
 
 	/**
 	 * SubscriptionController constructor.
 	 * @param SubscriptionMapper $subscriptionMapper
-	 * @param ILogger $logger
 	 * @param Acl $acl
 	 */
 
 	public function __construct(
 		SubscriptionMapper $subscriptionMapper,
-		ILogger $logger,
 		Acl $acl
 	) {
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->acl = $acl;
-		$this->logger = $logger;
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return array
 	 */
 	public function get($pollId) {
@@ -77,7 +75,7 @@ class SubscriptionService  {
 
 	/**
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return array
 	 */
 	public function set($pollId, $subscribed) {
@@ -111,15 +109,15 @@ class SubscriptionService  {
 		} catch (MultipleObjectsReturnedException $e) {
 			// Duplicates should not exist but if found, fix it
 			// unsubscribe from all and resubscribe, if requested
-			$this->logger->debug('Multiple subscription (dulpicates) found');
+			\OC::$server->getLogger()->debug('Multiple subscription (dulpicates) found');
 			$this->subscriptionMapper->unsubscribe($pollId, $this->acl->getUserId());
-			$this->logger->debug('Unsubscribed all for user ' . $this->acl->getUserId() . 'in poll' . $pollId);
+			\OC::$server->getLogger()->debug('Unsubscribed all for user ' . $this->acl->getUserId() . 'in poll' . $pollId);
 			if ($subscribed) {
 				$subscription = new Subscription();
 				$subscription->setPollId($pollId);
 				$subscription->setUserId($this->acl->getUserId());
 				$this->subscriptionMapper->insert($subscription);
-				$this->logger->debug('Added new subscription');
+				\OC::$server->getLogger()->debug('Added new subscription');
 				return $subscription;
 			} else {
 				return ['status' => 'Unsubscribed from poll ' . $pollId];

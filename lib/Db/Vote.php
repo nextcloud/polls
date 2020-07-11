@@ -30,11 +30,11 @@ use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method integer getPollId()
+ * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method integer getVoteOptionId()
+ * @method int getVoteOptionId()
  * @method void setVoteOptionId(integer $value)
  * @method string getVoteOptionText()
  * @method void setVoteOptionText(string $value)

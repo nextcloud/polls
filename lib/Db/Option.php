@@ -30,17 +30,17 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method integer getId()
+ * @method int getId()
  * @method void setId(integer $value)
- * @method integer getPollId()
+ * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getPollOptionText()
  * @method void setPollOptionText(string $value)
- * @method integer getTimestamp()
+ * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
- * @method integer getOrder()
+ * @method int getOrder()
  * @method void setOrder(integer $value)
- * @method integer getConfirmed()
+ * @method int getConfirmed()
  * @method void setConfirmed(integer $value)
  */
 class Option extends Entity implements JsonSerializable {

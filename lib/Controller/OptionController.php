@@ -26,16 +26,15 @@ namespace OCA\Polls\Controller;
 use Exception;
 
 use OCP\IRequest;
+
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-
-use OCA\Polls\Exceptions\NotAuthorizedException;
-
 use OCA\Polls\Service\OptionService;
 
 class OptionController extends Controller {
 
+	/** @var OptionService */
 	private $optionService;
 
 	/**
@@ -54,69 +53,73 @@ class OptionController extends Controller {
 		$this->optionService = $optionService;
 	}
 
+	// /**
+	//  * Get all options of given poll
+	//  * @NoAdminRequired
+	//  * @param int $pollId
+	//  * @return DataResponse
+	//  */
+	// public function list($pollId) {
+	// 	return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
+	// }
+	//
+	//
+	// /**
+	// * Get all options specified by token
+	// * Read all options of a poll based on a share token and return list as array
+	// * @NoAdminRequired
+	// * @PublicPage
+	// * @param string $token
+	// * @return DataResponse
+	// */
+	// public function listByToken($token) {
+	// 	return new DataResponse($this->optionService->list(0, $token), Http::STATUS_OK);
+	// }
+
 	/**
-	 * Get all options of given poll
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return DataResponse
-	 */
-	public function list($pollId) {
-		return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
+	* Add a new option
+	* @NoAdminRequired
+	* @param array $option
+	* @return DataResponse
+	*/
+	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
+		return new DataResponse($this->optionService->add($pollId, $timestamp, $pollOptionText), Http::STATUS_OK);
 	}
 
-
 	/**
-	 * getByToken
-	 * Read all options of a poll based on a share token and return list as array
+	 * Update option
 	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-		return new DataResponse($this->optionService->list(0, $token), Http::STATUS_OK);
-	}
-
-	/**
-	 * Add a new Option to poll
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param array $option
 	 * @return DataResponse
 	 */
-	public function add($option) {
-		return new DataResponse($this->optionService->add($option), Http::STATUS_OK);
+	public function update($optionId, $timestamp, $pollOptionText) {
+		return new DataResponse($this->optionService->update($optionId, $timestamp, $pollOptionText), Http::STATUS_OK);
 	}
 
 	/**
-	 * Update poll option
+	 * Delete option
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param array $option
-	 * @return DataResponse
-	 */
-	public function update($option) {
-		return new DataResponse($this->optionService->update($option), Http::STATUS_OK);
-	}
-
-	/**
-	 * Remove a single option
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
-	public function remove($option) {
-		return new DataResponse($this->optionService->delete($option['id']), Http::STATUS_OK);
+	public function delete($optionId) {
+		return new DataResponse($this->optionService->delete($optionId), Http::STATUS_OK);
 	}
 
 	/**
-	 * Set order by order of the given array
+	 * Switch option confirmation
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $optionId
+	 * @return DataResponse
+	 */
+	public function confirm($optionId) {
+		return new DataResponse($this->optionService->confirm($optionId), Http::STATUS_OK);
+	}
+
+	/**
+	 * Reorder options
+	 * @NoAdminRequired
+	 * @param int $pollId
 	 * @param Array $options
 	 * @return DataResponse
 	 */
