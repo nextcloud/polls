@@ -102,9 +102,23 @@ const actions = {
 			})
 	},
 
+	addPersonal(context, payload) {
+		const endPoint = 'apps/polls/share/personal'
+
+		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
+			.then((response) => {
+				return { token: response.data.token }
+			})
+			.catch((error) => {
+				console.error('Error writing personal share', { error: error.response }, { payload: payload })
+				throw error
+			})
+
+	},
+
 	delete(context, payload) {
 		const endPoint = 'apps/polls/share/delete'
-		return axios.post(generateUrl(endPoint), { share: payload.share })
+		return axios.delete(generateUrl(endPoint.concat('/', payload.share.token)))
 			.then(() => {
 				context.commit('delete', { share: payload.share })
 			})
@@ -125,20 +139,6 @@ const actions = {
 				console.error('Error sending invitation', { error: error.response }, { payload: payload })
 				throw error
 			})
-	},
-
-	addPersonal(context, payload) {
-		const endPoint = 'apps/polls/share/create/s'
-
-		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
-			.then((response) => {
-				return { token: response.data.token }
-			})
-			.catch((error) => {
-				console.error('Error writing share', { error: error.response }, { payload: payload })
-				throw error
-			})
-
 	},
 }
 

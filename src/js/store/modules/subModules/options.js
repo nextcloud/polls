@@ -22,7 +22,6 @@
 
 import axios from '@nextcloud/axios'
 import orderBy from 'lodash/orderBy'
-import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
@@ -100,54 +99,28 @@ const getters = {
 }
 
 const actions = {
-	reorder(context, payload) {
-		const endPoint = 'apps/polls/option/reorder'
-		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, options: payload })
-			.then((response) => {
-				context.commit('set', { options: response.data })
-			})
-			.catch((error) => {
-				console.error('Error reordering option', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
 	add(context, payload) {
-		const endPoint = 'apps/polls/option/add'
-		const option = {}
-
-		option.id = 0
-		option.pollId = context.rootState.poll.id
-
-		if (context.rootState.poll.type === 'datePoll') {
-			if (payload.timestamp) {
-				option.timestamp = payload.timestamp
-			} else {
-				option.timestamp = moment(payload.pollOptionText).unix()
-			}
-			option.order = option.timestamp
-			option.pollOptionText = moment.utc(payload.pollOptionText).format('YYYY-MM-DD HH:mm:ss')
-
-		} else if (context.rootState.poll.type === 'textPoll') {
-			option.timestamp = 0
-			option.order = state.list.length + 1
-			option.pollOptionText = payload.pollOptionText
-		}
-
-		return axios.post(generateUrl(endPoint), { option: option })
+		const endPoint = 'apps/polls/option'
+		return axios.post(generateUrl(endPoint), {
+			pollId: context.rootState.poll.id,
+			timestamp: payload.timestamp,
+			pollOptionText: payload.pollOptionText,
+		})
 			.then((response) => {
 				context.commit('setItem', { option: response.data })
 			})
 			.catch((error) => {
-				console.error('Error adding option', { error: error.response }, { payload: option })
+				console.error('Error adding option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
 	update(context, payload) {
-		const endPoint = 'apps/polls/option/update'
-
-		return axios.post(generateUrl(endPoint), { option: payload.option })
+		const endPoint = 'apps/polls/option'
+		return axios.put(generateUrl(endPoint.concat('/', payload.option.id)), {
+			timestamp: payload.option.timestamp,
+			pollOptionText: payload.option.timeStamp,
+		})
 			.then((response) => {
 				context.commit('setItem', { option: response.data })
 			})
@@ -158,14 +131,42 @@ const actions = {
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/option/remove'
+		const endPoint = 'apps/polls/option'
 
-		return axios.post(generateUrl(endPoint), { option: payload.option })
+		return axios.delete(generateUrl(endPoint.concat('/', payload.option.id)))
 			.then(() => {
 				context.commit('delete', { option: payload.option })
 			})
 			.catch((error) => {
 				console.error('Error removing option', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
+	confirm(context, payload) {
+		const endPoint = 'apps/polls/option'
+
+		return axios.put(generateUrl(endPoint.concat('/', payload.option.id, '/confirm')))
+			.then(() => {
+				context.commit('delete', { option: payload.option })
+			})
+			.catch((error) => {
+				console.error('Error removing option', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
+	reorder(context, payload) {
+		const endPoint = 'apps/polls/option/reorder'
+		return axios.post(generateUrl(endPoint), {
+			pollId: context.rootState.poll.id,
+			options: payload,
+		})
+			.then((response) => {
+				context.commit('set', { options: response.data })
+			})
+			.catch((error) => {
+				console.error('Error reordering option', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},

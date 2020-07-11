@@ -114,11 +114,31 @@ const getters = {
 }
 
 const actions = {
+	set(context, payload) {
+		let endPoint = 'apps/polls/vote/set'
+
+		if (context.rootState.poll.acl.foundByToken) {
+			endPoint = endPoint.concat('/s')
+		}
+		return axios.post(generateUrl(endPoint), {
+			optionId: payload.option.id,
+			setTo: payload.setTo,
+			token: context.rootState.poll.acl.token,
+		})
+			.then((response) => {
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
+				return response.data
+			})
+			.catch((error) => {
+				console.error('Error setting vote', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
 	delete(context, payload) {
 		const endPoint = 'apps/polls/votes/delete'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			voteId: 0,
 			userId: payload.userId,
 		})
 			.then(() => {
@@ -127,29 +147,6 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error deleting votes', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
-	set(context, payload) {
-		let endPoint = 'apps/polls/vote/set'
-
-		if (context.rootState.poll.acl.foundByToken) {
-			endPoint = endPoint.concat('/s')
-		}
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
-			token: context.rootState.poll.acl.token,
-			option: payload.option,
-			userId: payload.userId,
-			setTo: payload.setTo,
-		})
-			.then((response) => {
-				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
-				return response.data
-			})
-			.catch((error) => {
-				console.error('Error setting vote', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},

@@ -145,7 +145,7 @@ export default {
 					emit('update-polls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
-				.error(() => {
+				.catch(() => {
 					OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
 				})
 		},

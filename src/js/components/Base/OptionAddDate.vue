@@ -75,7 +75,10 @@ export default {
 	methods: {
 		addOption(pollOptionText) {
 			if (moment(pollOptionText).isValid()) {
-				this.$store.dispatch('poll/options/add', { pollOptionText: pollOptionText })
+				this.$store.dispatch('poll/options/add', {
+					pollOptionText: pollOptionText,
+					timestamp: moment(pollOptionText).unix(),
+				})
 			}
 		},
 	},
