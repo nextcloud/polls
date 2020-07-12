@@ -119,7 +119,7 @@ class VoteService {
 			throw new NotAuthorizedException;
 		}
 
-		if ($option->getPollId() !== $this->acl->getPollId()) {
+		if (intval($option->getPollId()) !== $this->acl->getPollId()) {
 			throw new NotAuthorizedException;
 		}
 
