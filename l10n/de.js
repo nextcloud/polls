@@ -117,7 +117,7 @@ OC.L10N.register(
     "Enter option text" : "Optionstext eingeben",
     "Invitations" : "Einladungen",
     "Resend invitation mail" : "Einladungs-E-Mail erneut versenden",
-    "Send invitation mail" : "Einladungs-E-Mail versenden",
+    "Send invitation mail" : "Einladungs-E-Mail senden",
     "Copy link to clipboard" : "Link in die Zwischenablage kopieren",
     "Remove share" : "Freigabe löschen",
     "Public shares" : "Öffentliche Freigaben",
