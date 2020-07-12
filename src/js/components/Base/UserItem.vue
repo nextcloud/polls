@@ -26,7 +26,7 @@
 			class="user-item__avatar"
 			:menu-position="menuPosition"
 			:user="userId"
-			:is-guest="!Boolean(getCurrentUser())"
+			:is-guest="!Boolean(getCurrentUser()) || externalUser"
 			:display-name="resolveDisplayName"
 			:is-no-user="isNoUser" />
 
@@ -81,6 +81,10 @@ export default {
 			default: 'user',
 		},
 		icon: {
+			type: Boolean,
+			default: false,
+		},
+		externalUser: {
 			type: Boolean,
 			default: false,
 		},

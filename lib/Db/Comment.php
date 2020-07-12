@@ -78,16 +78,21 @@ class Comment extends Entity implements JsonSerializable {
 			'dt' => $this->dt,
 			'timestamp' => intval($timestamp),
 			'comment' => $this->comment,
-			'displayName' => $this->getDisplayName()
+			'displayName' => $this->getDisplayName(),
+			'externalUser' => $this->externalUser()
 		];
 	}
 
 	private function getDisplayName() {
-
 		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
 		} else {
 			return $this->userId;
 		}
 	}
+
+	private function externalUser() {
+		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+	}
+
 }

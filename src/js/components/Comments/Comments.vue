@@ -27,7 +27,7 @@
 			tag="ul">
 			<li v-for="(comment) in sortedList" :key="comment.id">
 				<div class="comment-item">
-					<UserItem :user-id="comment.userId" :display-name="comment.displayName" />
+					<UserItem v-bind="comment" />
 					<Actions v-if="comment.userId === acl.userId">
 						<ActionButton icon="icon-delete" @click="deleteComment(comment)">
 							{{ t('polls', 'Delete comment') }}

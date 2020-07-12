@@ -73,8 +73,9 @@ class Share extends Entity implements JsonSerializable {
 			'pollId' => intval($this->pollId),
 			'userId' => $this->userId,
 			'userEmail' => $this->userEmail,
+			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->getDisplayName(),
-			'invitationSent' => intval($this->invitationSent)
+			'externalUser' => $this->externalUser()
 		];
 	}
 
@@ -86,4 +87,9 @@ class Share extends Entity implements JsonSerializable {
 			return $this->userId;
 		}
 	}
+
+	private function externalUser() {
+		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+	}
+
 }
