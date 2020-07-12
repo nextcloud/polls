@@ -49,6 +49,14 @@ const mutations = {
 		})
 	},
 
+	confirm(state, payload) {
+		const index = state.list.findIndex((option) => {
+			return option.id === payload.option.id
+		})
+
+		state.list[index].confirmed = !state.list[index].confirmed
+	},
+
 	setItem(state, payload) {
 		const index = state.list.findIndex((option) => {
 			return option.id === payload.option.id
@@ -99,6 +107,20 @@ const getters = {
 }
 
 const actions = {
+
+	reload(context) {
+		const endPoint = 'apps/polls/polls'
+		console.error('Reloading options')
+		return axios.get(generateUrl(endPoint.concat('/', context.rootState.poll.id, '/options')))
+			.then((response) => {
+				context.commit('set', { options: response.data.options })
+			})
+			.catch((error) => {
+				console.error('Error loding options', { error: error.response }, { pollId: context.rootState.poll.id })
+				throw error
+			})
+	},
+
 	add(context, payload) {
 		const endPoint = 'apps/polls/option'
 		return axios.post(generateUrl(endPoint), {
@@ -107,10 +129,11 @@ const actions = {
 			pollOptionText: payload.pollOptionText,
 		})
 			.then((response) => {
-				context.commit('setItem', { option: response.data })
+				context.commit('setItem', { option: response.data.option })
 			})
 			.catch((error) => {
 				console.error('Error adding option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},
@@ -122,10 +145,11 @@ const actions = {
 			pollOptionText: payload.option.timeStamp,
 		})
 			.then((response) => {
-				context.commit('setItem', { option: response.data })
+				context.commit('setItem', { option: response.data.option })
 			})
 			.catch((error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},
@@ -134,39 +158,43 @@ const actions = {
 		const endPoint = 'apps/polls/option'
 
 		return axios.delete(generateUrl(endPoint.concat('/', payload.option.id)))
-			.then(() => {
-				context.commit('delete', { option: payload.option })
+			.then((response) => {
+				context.commit('delete', { option: response.data.option })
 			})
 			.catch((error) => {
-				console.error('Error removing option', { error: error.response }, { payload: payload })
+				console.error('Error deleting option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},
 
 	confirm(context, payload) {
-		const endPoint = 'apps/polls/option'
+		context.commit('confirm', { option: payload.option })
 
+		const endPoint = 'apps/polls/option'
 		return axios.put(generateUrl(endPoint.concat('/', payload.option.id, '/confirm')))
-			.then(() => {
-				context.commit('delete', { option: payload.option })
+			.then((response) => {
+				context.commit('setItem', { option: response.data.option })
 			})
 			.catch((error) => {
-				console.error('Error removing option', { error: error.response }, { payload: payload })
+				console.error('Error confirming option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},
 
 	reorder(context, payload) {
-		const endPoint = 'apps/polls/option/reorder'
+		const endPoint = 'apps/polls/options/reorder'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			options: payload,
 		})
 			.then((response) => {
-				context.commit('set', { options: response.data })
+				context.commit('set', { options: response.data.options })
 			})
 			.catch((error) => {
 				console.error('Error reordering option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},

@@ -53,16 +53,16 @@ class OptionController extends Controller {
 		$this->optionService = $optionService;
 	}
 
-	// /**
-	//  * Get all options of given poll
-	//  * @NoAdminRequired
-	//  * @param int $pollId
-	//  * @return DataResponse
-	//  */
-	// public function list($pollId) {
-	// 	return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
-	// }
-	//
+	/**
+	 * Get all options of given poll
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return DataResponse
+	 */
+	public function list($pollId) {
+		return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
+	}
+
 	//
 	// /**
 	// * Get all options specified by token
@@ -76,6 +76,9 @@ class OptionController extends Controller {
 	// 	return new DataResponse($this->optionService->list(0, $token), Http::STATUS_OK);
 	// }
 
+
+
+
 	/**
 	 * Add a new option
 	 * @NoAdminRequired
@@ -83,7 +86,7 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
-		return new DataResponse($this->optionService->add($pollId, $timestamp, $pollOptionText), Http::STATUS_OK);
+		return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
 	}
 
 	/**
@@ -93,7 +96,7 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function update($optionId, $timestamp, $pollOptionText) {
-		return new DataResponse($this->optionService->update($optionId, $timestamp, $pollOptionText), Http::STATUS_OK);
+		return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
 	}
 
 	/**
@@ -103,7 +106,7 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($optionId) {
-		return new DataResponse($this->optionService->delete($optionId), Http::STATUS_OK);
+		return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
 	}
 
 	/**
@@ -113,7 +116,7 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function confirm($optionId) {
-		return new DataResponse($this->optionService->confirm($optionId), Http::STATUS_OK);
+		return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
 	}
 
 	/**
@@ -124,6 +127,6 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function reorder($pollId, $options) {
-		return new DataResponse($this->optionService->reorder($pollId, $options), Http::STATUS_OK);
+		return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
 	}
 }

@@ -44,8 +44,8 @@ return [
 		['name' => 'option#update', 'url' => '/option/{optionId}', 'verb' => 'PUT'],
 		['name' => 'option#delete', 'url' => '/option/{optionId}', 'verb' => 'DELETE'],
 		['name' => 'option#confirm', 'url' => '/option/{optionId}/confirm', 'verb' => 'PUT'],
-		['name' => 'option#reorder', 'url' => '/option/reorder', 'verb' => 'POST'],
-		// ['name' => 'option#list',        'url' => '/options/get/{pollId}',      'verb' => 'GET'],
+		['name' => 'option#reorder', 'url' => '/options/reorder', 'verb' => 'POST'],
+		['name' => 'option#list', 'url' => '/polls/{pollId}/options', 'verb' => 'GET'],
 		// ['name' => 'option#listByToken', 'url' => '/options/get/s/{token}',     'verb' => 'GET'],
 
 		['name' => 'vote#set', 'url' => '/vote/set', 'verb' => 'POST'],
