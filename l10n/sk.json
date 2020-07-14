@@ -104,6 +104,7 @@
     "Create new poll" : "Vytvoriť novú anketu",
     "Title must not be empty!" : "Nadpis nemôže byť prázdny!",
     "%n successfully saved" : "%n úspešne uložené",
+    "Error writing poll" : "Pri zapisovaní ankety sa vyskytla chyba",
     "Available Options" : "Možné voľby",
     "Delete option" : "Odstrániť voľbu",
     "Clone option" : "Zdvojiť voľbu",
