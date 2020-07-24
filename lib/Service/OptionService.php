@@ -285,14 +285,7 @@ class OptionService {
 
 		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
 			$currentOrder = $option->getOrder();
-			if (
-				   ($currentOrder < $oldOrder && $currentOrder < $newOrder)
-				|| ($currentOrder > $oldOrder && $currentOrder > $newOrder)
-			) {
-
-				continue;
-
-			} elseif ($currentOrder > $oldOrder && $currentOrder <= $newOrder) {
+			if ($currentOrder > $oldOrder && $currentOrder <= $newOrder) {
 
 				$option->setOrder($currentOrder - 1);
 				$this->optionMapper->update($option);
@@ -310,6 +303,8 @@ class OptionService {
 				$option->setOrder($newOrder);
 				$this->optionMapper->update($option);
 
+			} else {
+				continue;
 			}
 		}
 
