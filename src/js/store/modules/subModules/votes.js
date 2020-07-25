@@ -62,14 +62,6 @@ const mutations = {
 
 const getters = {
 
-	answerSequence: (state, getters, rootState) => {
-		if (rootState.poll.allowMaybe) {
-			return ['no', 'maybe', 'yes', 'no']
-		} else {
-			return ['no', 'yes', 'no']
-		}
-	},
-
 	ranked: (state, getters, rootState) => {
 		let votesRank = []
 		rootState.poll.options.list.forEach(function(option) {
@@ -101,16 +93,6 @@ const getters = {
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})
 	},
-
-	getNextAnswer: (state, getters) => (payload) => {
-		try {
-			return getters.answerSequence[getters.answerSequence.indexOf(getters.getVote(payload).voteAnswer) + 1]
-		} catch (e) {
-			return getters.answerSequence[1]
-		}
-
-	},
-
 }
 
 const actions = {
@@ -118,7 +100,6 @@ const actions = {
 		const endPoint = 'apps/polls/votes/delete'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
-			voteId: 0,
 			userId: payload.userId,
 		})
 			.then(() => {

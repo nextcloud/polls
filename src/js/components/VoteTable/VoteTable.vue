@@ -52,8 +52,7 @@
 					:key="option.id"
 					:user-id="participant.userId"
 					:option="option"
-					:is-active="acl.userId === participant.userId && acl.allowVote"
-					@voteClick="setVote(option, participant.userId)" />
+					:is-active="acl.userId === participant.userId && acl.allowVote" />
 			</div>
 		</div>
 
@@ -154,18 +153,6 @@ export default {
 		confirmDelete(userId) {
 			this.userToRemove = userId
 			this.modal = true
-		},
-
-		setVote(option, userId) {
-			this.$store
-				.dispatch('poll/votes/set', {
-					option: option,
-					userId: userId,
-					setTo: this.$store.getters['poll/votes/getNextAnswer']({
-						option: option,
-						userId: userId,
-					}),
-				})
 		},
 	},
 }
