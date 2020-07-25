@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,29 +21,20 @@
  *
  */
 
-namespace OCA\Polls\Cron;
+namespace OCA\Polls\Exceptions;
 
-use OC\BackgroundJob\TimedJob;
-use OCA\Polls\Service\MailService;
+use OCP\AppFramework\Http;
 
-class NotificationCron extends TimedJob {
-
-	/** @var MailService */
-	private $mailService;
-
-	/** @param MailService $mailService */
-	public function __construct(
-		MailService $mailService
-	) {
-		$this->setInterval(5);
-		$this->mailService = $mailService;
-	}
-
+class BadRequestException extends \Exception {
 	/**
-	 * run
-	 * @param string $token
+	 * NotAuthorizedException Constructor
+	 * @param string $e exception message
 	 */
-	protected function run($arguments) {
-		$this->mailService->sendNotifications();
+	public function __construct($e = 'Not allowed') {
+		parent::__construct($e);
 	}
+	public function getStatus() {
+		return Http::STATUS_BAD_REQUEST;
+	}
+
 }

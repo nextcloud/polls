@@ -34,7 +34,6 @@ use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
 use OCP\Mail\IEMailTemplate;
-use OCP\ILogger;
 
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\Subscription;
@@ -46,18 +45,37 @@ use OCA\Polls\Db\LogMapper;
 
 class MailService {
 
+	/** @var IUserManager */
 	private $userManager;
-	private $groupManager;
-	private $config;
-	private $urlGenerator;
-	private $trans;
-	private $transFactory;
-	private $mailer;
-	private $logger;
 
-	private $shareMapper;
+	/** @var IGroupManager */
+	private $groupManager;
+
+	/** @var IConfig */
+	private $config;
+
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
+	/** @var IL10N */
+	private $trans;
+
+	/** @var IFactory */
+	private $transFactory;
+
+	/** @var IMailer */
+	private $mailer;
+
+	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
+
+	/** @var ShareMapper */
+	private $shareMapper;
+
+	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var LogMapper */
 	private $logMapper;
 
 	/**
@@ -69,7 +87,6 @@ class MailService {
 	 * @param IL10N $trans
 	 * @param IFactory $transFactory
 	 * @param IMailer $mailer
-	 * @param ILogger $logger
 	 * @param SubscriptionMapper $subscriptionMapper
 	 * @param ShareMapper $shareMapper
 	 * @param PollMapper $pollMapper
@@ -84,7 +101,6 @@ class MailService {
 		IL10N $trans,
 		IFactory $transFactory,
 		IMailer $mailer,
-		ILogger $logger,
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
 		PollMapper $pollMapper,
@@ -97,7 +113,6 @@ class MailService {
 		$this->trans = $trans;
 		$this->transFactory = $transFactory;
 		$this->mailer = $mailer;
-		$this->logger = $logger;
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->pollMapper = $pollMapper;
@@ -135,7 +150,7 @@ class MailService {
 			return null;
 
 		} catch (\Exception $e) {
-			$this->logger->logException($e, ['app' => 'polls']);
+			\OC::$server->getLogger()->logException($e, ['app' => 'polls']);
 			throw $e;
 		}
 
@@ -305,7 +320,7 @@ class MailService {
 				$sentMails[] = $recipient;
 			} catch (Exception $e) {
 				$abortedMails[] = $recipient;
-				$this->logger->alert('Error sending Mail to ' . json_encode($recipient));
+				\OC::$server->getLogger()->alert('Error sending Mail to ' . json_encode($recipient));
 			}
 		}
 		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
@@ -428,7 +443,7 @@ class MailService {
 			try {
 				$this->sendMail($emailTemplate, $subscription->getUserId());
 			} catch (Exception $e) {
-				$this->logger->alert('Error sending Mail to ' . $subscription->getUserId());
+				\OC::$server->getLogger()->alert('Error sending Mail to ' . $subscription->getUserId());
 			}
 		}
 	}

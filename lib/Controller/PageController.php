@@ -37,6 +37,7 @@ use OCP\IURLGenerator;
 
 class PageController extends Controller {
 
+	/** @var IURLGenerator */
 	private $urlGenerator;
 
 	/**

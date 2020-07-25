@@ -29,8 +29,7 @@
 			{{ t('polls','No Participants until now') }}
 		</h2>
 		<div v-if="participantsVoted.length" class="participants-list__list">
-			<UserItem v-for="(participant) in participantsVoted"
-				:key="participant.userId"
+			<UserItem v-for="(participant) in participantsVoted" :key="participant.userId"
 				v-bind="participant"
 				:hide-names="true"
 				type="user" />

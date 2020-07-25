@@ -21,7 +21,7 @@
  *
  */
 
- namespace OCA\Polls\Controller;
+namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -32,7 +32,6 @@ use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
-use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -46,31 +45,39 @@ use OCA\Polls\Model\Acl;
 
 class PollController extends Controller {
 
-	private $logger;
+	/** @var PollService */
 	private $pollService;
+
+	/** @var CommentService */
 	private $commentService;
+
+	/** @var OptionService */
 	private $optionService;
+
+	/** @var ShareService */
 	private $shareService;
+
+	/** @var VoteService */
 	private $voteService;
+
+	/** @var Acl */
 	private $acl;
 
  	/**
  	 * PollController constructor.
  	 * @param string $appName
  	 * @param IRequest $request
- 	 * @param ILogger $logger
  	 * @param PollService $pollService
-	 * @param CommentService $commentService
-  	 * @param OptionService $optionService
-  	 * @param ShareService $shareService
-  	 * @param VoteService $voteService
-  	 * @param Acl $acl
-	 */
+ 	 * @param CommentService $commentService
+ 	 * @param OptionService $optionService
+ 	 * @param ShareService $shareService
+ 	 * @param VoteService $voteService
+ 	 * @param Acl $acl
+ 	 */
 
  	public function __construct(
 		string $appName,
  		IRequest $request,
- 		ILogger $logger,
  		PollService $pollService,
 		CommentService $commentService,
  		OptionService $optionService,
@@ -79,7 +86,6 @@ class PollController extends Controller {
   		Acl $acl
 	) {
  		parent::__construct($appName, $request);
-		$this->logger = $logger;
 		$this->pollService = $pollService;
 		$this->commentService = $commentService;
   		$this->optionService = $optionService;
@@ -90,9 +96,8 @@ class PollController extends Controller {
 
 
 	/**
-	 * list
+	 * Get list of polls
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @return DataResponse
 	 */
 
@@ -108,12 +113,12 @@ class PollController extends Controller {
 
 
 	/**
-	 * get
+	 * get complete poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @PublicPage
-	 * @param integer $pollId
-	 * @return array
+	 * @param int $pollId
+	 * @param string $token
+	 * @return DataResponse
 	 */
  	public function get($pollId, $token) {
 		try {
@@ -125,8 +130,6 @@ class PollController extends Controller {
 				$acl = $this->acl->setPollId($pollId);
 			}
 
-			// $this->poll = $this->pollService->get($pollId, $token);
-			// return new DataResponse($this->pollService->get($pollId, $token), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -134,25 +137,25 @@ class PollController extends Controller {
 		}
 
 		try {
-			$comments = $this->commentService->list($this->acl->getPollId(), $token);
+			$comments = $this->commentService->list($poll->getId(), $token);
 		} catch (Exception $e) {
 			$comments = [];
 		}
 
 		try {
-			$options = $this->optionService->list($this->acl->getPollId(), $token);
+			$options = $this->optionService->list($poll->getId(), $token);
 		} catch (Exception $e) {
 			$options = [];
 		}
 
 		try {
-			$votes = $this->voteService->list($this->acl->getPollId(), $token);
+			$votes = $this->voteService->list($poll->getId(), $token);
 		} catch (Exception $e) {
 			$votes = [];
 		}
 
 		try {
-			$shares = $this->shareService->list($this->acl->getPollId());
+			$shares = $this->shareService->list($poll->getId());
 		} catch (Exception $e) {
 			$shares = [];
 		}
@@ -168,46 +171,8 @@ class PollController extends Controller {
  	}
 
 	/**
-	 * delete
+	 * Add poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Array $poll
-	 * @return DataResponse
-	 */
-
-	public function delete($pollId) {
-		try {
-			return new DataResponse($this->pollService->delete($pollId), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * deletePermanently
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Array $poll
-	 * @return DataResponse
-	 */
-
-	public function deletePermanently($pollId) {
-		try {
-			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-
-	/**
-	 * add
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param string $type
 	 * @param string $title
 	 * @return DataResponse
@@ -226,10 +191,9 @@ class PollController extends Controller {
 	}
 
 	/**
-	 * write
+	 * Update poll configuration
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @param array $poll
 	 * @return DataResponse
 	 */
@@ -251,15 +215,51 @@ class PollController extends Controller {
 	}
 
 	/**
-	 * clone
+	 * Switch deleted status (move to deleted polls)
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
+	 * @return DataResponse
+	 */
+
+	public function delete($pollId) {
+		try {
+			return new DataResponse($this->pollService->delete($pollId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * Delete poll
+	 * @NoAdminRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function deletePermanently($pollId) {
+		try {
+			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * Clone poll
+	 * @NoAdminRequired
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 	public function clone($pollId) {
 		try {
-			return new DataResponse($this->pollService->clone($pollId), Http::STATUS_OK);
+			$poll = $this->pollService->clone($pollId);
+			$this->optionService->clone($pollId, $poll->getId());
+
+			return new DataResponse($poll, Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {

@@ -27,7 +27,6 @@ namespace OCA\Polls\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -38,34 +37,28 @@ use OCA\Polls\Service\VoteService;
 
 class VoteController extends Controller {
 
+	/** @var VoteService */
 	private $voteService;
-	private $logger;
 
 	/**
-	 * VoteController constructor.
+	 * VoteController constructor
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param ILogger $logger
 	 * @param VoteService $voteService
-
 	 */
 	public function __construct(
 		string $appName,
-		ILogger $logger,
 		IRequest $request,
 		VoteService $voteService
 	) {
 		parent::__construct($appName, $request);
-		$this->logger = $logger;
 		$this->voteService = $voteService;
 	}
 
 	/**
-	 * Get all votes of given poll
 	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 	public function get($pollId) {
@@ -82,33 +75,28 @@ class VoteController extends Controller {
 	 * set
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @param Array $option
-	 * @param string $userId
+	 * @param int $optionId
 	 * @param string $setTo
 	 * @return DataResponse
 	 */
-	public function set($pollId, $option, $setTo) {
+	public function set($optionId, $setTo) {
 		try {
-			return new DataResponse($this->voteService->set($pollId, $option['pollOptionText'], $setTo), Http::STATUS_OK);
+			return new DataResponse($this->voteService->set($optionId, $setTo), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
 		}
 	}
 
-
 	/**
-	 * delete
+	 * Remove user from poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $voteId
 	 * @param string $userId
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
-	public function delete($userId, $pollId) {
+	public function delete($pollId, $userId) {
 		try {
 			return new DataResponse($this->voteService->delete($pollId, $userId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
@@ -123,18 +111,17 @@ class VoteController extends Controller {
 	 */
 
 	/**
-	 * setByToken
+	 * Set vote with token
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @param Array $option
 	 * @param string $setTo
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function setByToken($option, $setTo, $token) {
+	public function setByToken($optionId, $setTo, $token) {
 		try {
-			return new DataResponse($this->voteService->set(0, $option['pollOptionText'], $setTo, $token), Http::STATUS_OK);
+			return new DataResponse($this->voteService->set($optionId, $setTo, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
@@ -144,11 +131,9 @@ class VoteController extends Controller {
 	}
 
 	/**
-	 * getByToken
 	 * Read all votes of a poll based on a share token and return list as array
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @param string $token
 	 * @return DataResponse
 	 */

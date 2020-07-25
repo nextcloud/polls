@@ -96,6 +96,7 @@ const getters = {
 				participants.push({
 					userId: item.userId,
 					displayName: item.displayName,
+					externalUser: item.externalUser,
 					voted: true,
 				})
 			}
@@ -105,6 +106,7 @@ const getters = {
 			participants.push({
 				userId: state.acl.userId,
 				displayName: state.acl.displayName,
+				externalUser: state.externalUser,
 				voted: false,
 			})
 		}
@@ -120,6 +122,7 @@ const getters = {
 				participantsVoted.push({
 					userId: item.userId,
 					displayName: item.displayName,
+					externalUser: item.externalUser,
 				})
 			}
 		}

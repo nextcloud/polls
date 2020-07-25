@@ -36,16 +36,25 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
-use OCP\ILogger;
 
 class SystemController extends Controller {
 
+	/** @var string */
 	private $userId;
-	private $logger;
+
+	/** @var IConfig */
 	private $systemConfig;
+
+	/** @var IGroupManager */
 	private $groupManager;
+
+	/** @var IUserManager */
 	private $userManager;
+
+	/** @var VoteMapper */
 	private $voteMapper;
+
+	/** @var ShareMapper */
 	private $shareMapper;
 
 	/**
@@ -53,7 +62,6 @@ class SystemController extends Controller {
 	 * @param string $appName
 	 * @param $userId
 	 * @param IRequest $request
-	 * @param ILogger $logger
 	 * @param IConfig $systemConfig
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
@@ -64,7 +72,6 @@ class SystemController extends Controller {
 		string $appName,
 		$userId,
 		IRequest $request,
-		ILogger $logger,
 		IConfig $systemConfig,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
@@ -74,7 +81,6 @@ class SystemController extends Controller {
 		parent::__construct($appName, $request);
 		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
-		$this->logger = $logger;
 		$this->userId = $userId;
 		$this->systemConfig = $systemConfig;
 		$this->groupManager = $groupManager;
@@ -85,7 +91,7 @@ class SystemController extends Controller {
 	 * Validate string as email address
 	 * @NoAdminRequired
 	 * @param string $query
-	 * @return Boolean
+	 * @return bool
 	 */
 	 private function isValidEmail($email) {
 		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;
@@ -202,7 +208,6 @@ class SystemController extends Controller {
 
 				}
 			}
-
 		}
 
 		return new DataResponse([
@@ -298,13 +303,13 @@ class SystemController extends Controller {
 		], Http::STATUS_OK);
 	}
 
-	public function getDisplayName() {
-		$this->userManager = \OC::$server->getUserManager();
-
-		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
-		} else {
-			return $this->userId;
-		}
-	}
+	// public function getDisplayName() {
+	// 	$this->userManager = \OC::$server->getUserManager();
+	//
+	// 	if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
+	// 		return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+	// 	} else {
+	// 		return $this->userId;
+	// 	}
+	// }
 }

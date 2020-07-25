@@ -30,11 +30,11 @@ use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method integer getPollId()
+ * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method integer getVoteOptionId()
+ * @method int getVoteOptionId()
  * @method void setVoteOptionId(integer $value)
  * @method string getVoteOptionText()
  * @method void setVoteOptionText(string $value)
@@ -66,16 +66,20 @@ class Vote extends Entity implements JsonSerializable {
 			'voteOptionId' => intval($this->voteOptionId),
 			'voteOptionText' => $this->voteOptionText,
 			'voteAnswer' => $this->voteAnswer,
-			'displayName' => $this->getDisplayName()
+			'displayName' => $this->getDisplayName(),
+			'externalUser' => $this->externalUser()
 		];
 	}
 
 	private function getDisplayName() {
-
 		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
 		} else {
 			return $this->userId;
 		}
+	}
+
+	private function externalUser() {
+		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
 }

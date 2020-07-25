@@ -110,7 +110,7 @@ export default {
 		},
 
 		displayLink() {
-			return (this.acl.userId !== '' && this.acl.userId !== null && this.acl.foundByToken)
+			return (this.acl.userId !== '' && this.acl.userId !== null && this.acl.token)
 		},
 
 		isValidUser() {
