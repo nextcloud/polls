@@ -41,7 +41,7 @@
 		"@nextcloud/event-bus": "^1.1.4",
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^1.1.0",
-		"@nextcloud/vue": "^2.2.1",
+		"@nextcloud/vue": "^2.3.0",
 		"core-js": "^3.6.5",
 		"lodash": "^4.17.19",
 		"moment": "^2.27.0",
