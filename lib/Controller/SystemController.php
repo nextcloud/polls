@@ -85,7 +85,7 @@ class SystemController extends Controller {
 	 * Validate string as email address
 	 * @NoAdminRequired
 	 * @param string $query
-	 * @return Boolval
+	 * @return Boolean
 	 */
 	 private function isValidEmail($email) {
 		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;
@@ -94,6 +94,7 @@ class SystemController extends Controller {
 	/**
 	 * Get a list of NC users, groups and contacts
 	 * @NoAdminRequired
+	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @param string $query
 	 * @param bool $getGroups - search in groups
@@ -105,8 +106,8 @@ class SystemController extends Controller {
 	 */
 	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $getMail = false, $skipGroups = array(), $skipUsers = array()) {
 		$list = array();
-		// if (filter_var($query, FILTER_VALIDATE_EMAIL)) {
-		if ($this->isValidEmail($query)) {
+
+		if ($getMail && $this->isValidEmail($query)) {
 			$list[] = [
 				'id' => '',
 				'user' => '',
@@ -124,10 +125,8 @@ class SystemController extends Controller {
 			];
 		}
 
-
 		if ($getGroups) {
-			$groups = $this->groupManager->search($query);
-			foreach ($groups as $group) {
+			foreach ($this->groupManager->search($query) as $group) {
 				if (!in_array($group->getGID(), $skipGroups)) {
 					$list[] = [
 						'id' => $group->getGID(),
@@ -170,13 +169,9 @@ class SystemController extends Controller {
 			}
 		}
 
-		$contactsManager = \OC::$server->getContactsManager();
+		if ($getContacts && \OC::$server->getContactsManager()->isEnabled()) {
 
-
-		if ($getContacts && $contactsManager->isEnabled()) {
-			$contacts = $contactsManager->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES'));
-
-			foreach ($contacts as $contact) {
+			foreach (\OC::$server->getContactsManager()->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES')) as $contact) {
 				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 
 					$emailAdresses = $contact['EMAIL'];
@@ -199,9 +194,9 @@ class SystemController extends Controller {
 							'type' => 'contact',
 							'icon' => 'icon-mail',
 							'avatarURL' => '',
-							'avatar' => isset($contact['PHOTO']) ? $contact['PHOTO'] : '',
+							'avatar' => '',
 							'lastLogin' => '',
-							'cloudId' => ''
+							'cloudId' => '',
 						];
 					}
 
