@@ -36,14 +36,14 @@
 	},
 	"dependencies": {
 		"@nextcloud/auth": "^1.3.0",
-		"@nextcloud/axios": "^1.3.1",
+		"@nextcloud/axios": "^1.3.3",
 		"@nextcloud/dialogs": "^1.4.0",
 		"@nextcloud/event-bus": "^1.1.4",
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^1.1.0",
 		"@nextcloud/vue": "^2.2.1",
 		"core-js": "^3.6.5",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.19",
 		"moment": "^2.27.0",
 		"v-click-outside": "^3.0.0",
 		"vue": "^2.6.11",
@@ -62,7 +62,7 @@
 		"node": ">=10.0.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.10.4",
+		"@babel/core": "^7.10.5",
 		"@babel/preset-env": "^7.10.4",
 		"@nextcloud/eslint-plugin": "^1.4.0",
 		"babel-eslint": "^10.0.3",
@@ -83,12 +83,12 @@
 		"stylelint": "^13.6.1",
 		"stylelint-config-recommended-scss": "^4.2.0",
 		"stylelint-scss": "^3.18.0",
-		"terser-webpack-plugin": "^3.0.6",
+		"terser-webpack-plugin": "^3.0.7",
 		"vue-loader": "^15.9.3",
 		"vue-style-loader": "^4.1.2",
 		"vue-template-compiler": "^2.6.11",
 		"webpack": "^4.43.0",
 		"webpack-cli": "^3.3.12",
-		"webpack-merge": "^4.1.5"
+		"webpack-merge": "^5.0.9"
 	}
 }
