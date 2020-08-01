@@ -279,6 +279,7 @@ input {
 	display: flex;
 	flex-direction: column;
 	padding: 0 8px;
+	min-width: 320px;
 }
 
 [class*='area__'] {
@@ -286,6 +287,7 @@ input {
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 	margin: 12px 0;
+	min-width: 320px;
 }
 
 </style>
