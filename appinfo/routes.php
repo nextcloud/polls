@@ -39,6 +39,7 @@ return [
 		['name' => 'poll#delete', 'url' => '/polls/delete/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#deletePermanently', 'url' => '/polls/delete/permanent/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/polls/addresses/{pollId}', 'verb' => 'GET'],
 
 		['name' => 'option#add', 'url' => '/option', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/option/{optionId}', 'verb' => 'PUT'],
@@ -81,6 +82,7 @@ return [
 		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'DELETE'],
 		['name' => 'poll_api#clone', 'url' => '/api/v1.0/poll/{pollId}/clone', 'verb' => 'POST'],
 		['name' => 'poll_api#trash', 'url' => '/api/v1.0/poll/{pollId}/trash', 'verb' => 'POST'],
+		['name' => 'poll_api#getParticipantsEmailAddresses', 'url' => '/api/v1.0/poll/{pollId}/addresses', 'verb' => 'GET'],
 		['name' => 'poll_api#enum', 'url' => '/api/v1.0/enum/poll', 'verb' => 'GET'],
 
 		['name' => 'option_api#list', 'url' => '/api/v1.0/poll/{pollId}/options', 'verb' => 'GET'],

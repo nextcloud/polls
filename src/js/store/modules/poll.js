@@ -230,6 +230,17 @@ const actions = {
 			})
 	},
 
+	getParticipantsEmailAddresses(context, payload) {
+		const endPoint = 'apps/polls/polls/addresses'
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+			.then((response) => {
+				return response
+			})
+			.catch((error) => {
+				console.error('Error retrieving email addresses', { error: error.response }, { payload: payload })
+			})
+	},
+
 }
 
 export default { namespaced, state, mutations, getters, actions, modules }

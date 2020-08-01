@@ -156,6 +156,32 @@ class MailService {
 
 	}
 
+
+	/**
+	 * @param integer $pollId
+	 * @param string $userId
+	 * @return string
+	 */
+	public function resolveEmailAddress($pollId, $userId) {
+		$contactsManager = \OC::$server->getContactsManager();
+
+		if ($this->userManager->get($userId) instanceof IUser) {
+			return \OC::$server->getConfig()->getUserValue($userId, 'settings', 'email');
+		}
+
+		// if $userId is no site user, eval via shares
+		try {
+			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
+			if ($share->getUserEmail()) {
+				return $share->getUserEmail();
+			}
+		} catch (\Exception $e) {
+			// catch silently
+		}
+		return $userId;
+	}
+
+
 	/**
 	 * @param Share $share
 	 * @param String $defaultLang
@@ -219,7 +245,7 @@ class MailService {
 				return;
 			}
 
-		} elseif ($share->getType() === 'external' || $share->getType() === 'email') {
+		} elseif ($share->getType() === 'external') {
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
 				'eMailAddress' => $share->getUserEmail(),
@@ -341,6 +367,7 @@ class MailService {
 			if ($this->userManager->get($subscription->getUserId()) instanceof IUser) {
 				$lang = $this->config->getUserValue($subscription->getUserId(), 'core', 'lang');
 			} else {
+				$lang = $this->config->getUserValue($poll->getOwner(), 'core', 'lang');
 				continue;
 			}
 

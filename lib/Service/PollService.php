@@ -21,23 +21,26 @@
  *
  */
 
- namespace OCA\Polls\Service;
+namespace OCA\Polls\Service;
 
- use Exception;
- use OCP\AppFramework\Db\DoesNotExistException;
- use OCA\Polls\Exceptions\EmptyTitleException;
- use OCA\Polls\Exceptions\InvalidAccessException;
- use OCA\Polls\Exceptions\InvalidShowResultsException;
- use OCA\Polls\Exceptions\InvalidPollTypeException;
- use OCA\Polls\Exceptions\NotAuthorizedException;
+use Exception;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\EmptyTitleException;
+use OCA\Polls\Exceptions\InvalidAccessException;
+use OCA\Polls\Exceptions\InvalidShowResultsException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 
- use OCA\Polls\Db\PollMapper;
- use OCA\Polls\Db\Poll;
- use OCA\Polls\Service\LogService;
- use OCA\Polls\Model\Acl;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Service\LogService;
+use OCA\Polls\Service\MailService;
+use OCA\Polls\Model\Acl;
 
- class PollService {
+class PollService {
 
 	/** @var PollMapper */
 	private $pollMapper;
@@ -45,8 +48,17 @@
 	/** @var Poll */
  	private $poll;
 
+	/** @var VoteMapper */
+	private $voteMapper;
+
+	/** @var Vote */
+	private $vote;
+
 	/** @var LogService */
  	private $logService;
+
+	/** @var MailService */
+ 	private $mailService;
 
 	/** @var Acl */
  	private $acl;
@@ -55,19 +67,28 @@
  	 * PollController constructor.
  	 * @param PollMapper $pollMapper
  	 * @param Poll $poll
+	 * @param VoteMapper $voteMapper
+	 * @param Vote $vote
  	 * @param LogService $logService
+ 	 * @param MailService $mailService
  	 * @param Acl $acl
  	 */
 
  	public function __construct(
  		PollMapper $pollMapper,
  		Poll $poll,
- 		LogService $logService,
+		VoteMapper $voteMapper,
+ 		Vote $vote,
+		LogService $logService,
+		MailService $mailService,
  		Acl $acl
  	) {
  		$this->pollMapper = $pollMapper;
  		$this->poll = $poll;
- 		$this->logService = $logService;
+		$this->voteMapper = $voteMapper;
+ 		$this->vote = $vote;
+		$this->logService = $logService;
+		$this->mailService = $mailService;
  		$this->acl = $acl;
  	}
 
@@ -303,6 +324,27 @@
 
 		return $this->pollMapper->insert($this->poll);
 	}
+
+	/**
+	 * Collect email addresses from particitipants
+	 * @NoAdminRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function getParticipantsEmailAddresses($pollId) {
+		$this->poll = $this->pollMapper->find($pollId);
+		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+			return [];
+		}
+
+		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
+		foreach ($votes as $vote) {
+			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($pollId, $vote->getUserId()) . '>';
+		}
+		return array_unique($list);
+	}
+
 
 	/**
 	 * Get valid values for configuration options
