@@ -26,6 +26,7 @@ namespace OCA\Polls\Service;
 use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsername;
+use OCA\Polls\Exceptions\InvalidShareType;
 
 use OCP\Security\ISecureRandom;
 
@@ -129,6 +130,28 @@ class ShareService {
 		));
 
 		return $this->shareMapper->insert($this->share);
+	}
+
+	/**
+	 * Set emailAddress to personal share
+	 * or update an email share with the username
+	 * @NoAdminRequired
+	 * @param string $token
+	 * @param string $emailAddress
+	 * @return Share
+	 * @throws NotAuthorizedException
+	 */
+	public function setEmailAddress($token, $emailAddress) {
+
+		$this->share = $this->shareMapper->findByToken($token);
+		if ($this->share->getType() === 'external') {
+			// TODO: Simple validate email address
+			$this->share->setUserEmail($emailAddress);
+			// TODO: Send confirmation
+			return $this->shareMapper->update($this->share);
+		} else {
+			throw new InvalidShareType('Email address can only be set in external shares.');
+		}
 	}
 
 	/**

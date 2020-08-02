@@ -27,6 +27,7 @@ use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsername;
+use OCA\Polls\Exceptions\InvalidShareType;
 
 
 use OCP\IRequest;
@@ -77,6 +78,28 @@ class ShareController extends Controller {
  		try {
  			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $userEmail)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (\Exception $e) {
+			return new DataResponse($e, Http::STATUS_CONFLICT);
+		}
+	}
+
+	/**
+	 * Add share
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param int $pollId
+	 * @param string $type
+	 * @param string $userId
+	 * @param string $userEmail
+	 * @return DataResponse
+	 */
+	 public function setEmailAddress($token, $userEmail) {
+ 		try {
+			return new DataResponse(['share' => $this->shareService->setEmailAddress($token, $userEmail)], Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (InvalidShareType $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (\Exception $e) {
 			return new DataResponse($e, Http::STATUS_CONFLICT);
