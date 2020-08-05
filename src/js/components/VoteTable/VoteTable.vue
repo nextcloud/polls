@@ -380,10 +380,13 @@ export default {
 			hyphens: auto;
 			text-align: center;
 			align-items: center;
+			// hack for the hyphens, because hyphenating works different
+			// in different browsers and with different languages.
+			min-width: 160px;
 		}
 	}
 
-	// some littlehacks
+	// some little hacks
 	.user-item {
 		max-width: 280px;
 	}
