@@ -5,6 +5,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Group" : "Stollad",
     "Unknown user" : "Implijer dianv",
+    "Apply" : "Lakaat",
     "never" : "james",
     "Details" : "Munudoù",
     "Configuration" : "Stumm",
