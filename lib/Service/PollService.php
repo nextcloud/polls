@@ -111,7 +111,7 @@ class PollService {
 		// TODO: Not the elegant way. Improvement neccessary
 		foreach ($polls as $poll) {
 			$combinedPoll = (object) array_merge(
-				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->setPollId($poll->getId()))));
+				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->set($poll->getId()))));
 			if ($combinedPoll->allowView) {
 				$pollList[] = $combinedPoll;
 			}
@@ -127,30 +127,14 @@ class PollService {
 	 * @return Poll
 	 * @throws NotAuthorizedException
 	 */
- 	public function get($pollId) {
+ 	public function get($pollId, $token) {
+		$acl = $this->acl->set($pollId, $token);
 
-		if (!$this->acl->setPollId($pollId)->getAllowView()) {
+		if (!$acl->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
-		return $this->pollMapper->find($pollId);
-
- 	}
-
-	/**
-	 * get poll configuration by token
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return Poll
-	 * @throws NotAuthorizedException
-	 */
- 	public function getByToken($token) {
-
-		if (!$this->acl->setToken($token)->getAllowView()) {
-			throw new NotAuthorizedException;
-		}
-
-		return $this->pollMapper->find($this->acl->getPollId());
+		return $this->pollMapper->find($acl->getPollId());
 
  	}
 
@@ -219,7 +203,7 @@ class PollService {
 
 		$this->poll = $this->pollMapper->find($pollId);
 
-		if (!$this->acl->setPollId($this->poll->getId())->getAllowEdit()) {
+		if (!$this->acl->set($this->poll->getId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -255,7 +239,7 @@ class PollService {
 	public function delete($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
 
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -282,7 +266,7 @@ class PollService {
 	public function deletePermanently($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
 
-		if (!$this->acl->setPollId($pollId)->getAllowEdit() || !$this->poll->getDeleted()) {
+		if (!$this->acl->set($pollId)->getAllowEdit() || !$this->poll->getDeleted()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -299,7 +283,7 @@ class PollService {
 	public function clone($pollId) {
 
 		$origin = $this->pollMapper->find($pollId);
-		if (!$this->acl->setPollId($origin->getId())->getAllowView()) {
+		if (!$this->acl->set($origin->getId())->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -334,7 +318,7 @@ class PollService {
 
 	public function getParticipantsEmailAddresses($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			return [];
 		}
 

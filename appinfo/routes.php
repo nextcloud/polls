@@ -60,7 +60,8 @@ return [
 		['name' => 'share#delete', 'url' => '/share/delete/{token}', 'verb' => 'DELETE'],
 		['name' => 'share#sendInvitation', 'url' => '/share/send/{token}', 'verb' => 'POST'],
 
-		['name' => 'subscription#get', 'url' => '/subscription/{pollId}', 'verb' => 'GET'],
+		['name' => 'subscription#get', 'url' => '/subscription/{pollId}', 'verb' => 'GET', 'postfix' => 'auth'],
+		['name' => 'subscription#get', 'url' => '/subscription/s/{token}', 'verb' => 'GET', 'postfix' => 'public'],
 		['name' => 'subscription#set', 'url' => '/subscription', 'verb' => 'POST'],
 
 		['name' => 'comment#add', 'url' => '/comment', 'verb' => 'POST'],

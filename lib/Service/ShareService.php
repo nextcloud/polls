@@ -82,8 +82,12 @@ class ShareService {
 	 * @return array array of Share
 	 * @throws NotAuthorizedException
 	 */
-	public function list($pollId) {
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+	public function list($pollId, $token) {
+		if ($token) {
+			return array($this->get($token));
+		}
+
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -112,7 +116,7 @@ class ShareService {
 	 */
 	public function add($pollId, $type, $userId, $userEmail = '') {
 
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -213,7 +217,7 @@ class ShareService {
 
 	public function delete($token) {
 		$this->share = $this->shareMapper->findByToken($token);
-		if (!$this->acl->setPollId($this->share->getPollId())->getAllowEdit()) {
+		if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 

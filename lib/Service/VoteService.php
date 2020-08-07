@@ -88,7 +88,7 @@ class VoteService {
 	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $token = '') {
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
+		if (!$this->acl->set($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -115,7 +115,7 @@ class VoteService {
 
 		$option = $this->optionMapper->find($optionId);
 
-		if (!$this->acl->setPollIdOrToken($option->getPollId(), $token)->getAllowVote()) {
+		if (!$this->acl->set($option->getPollId(), $token)->getAllowVote()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -156,7 +156,7 @@ class VoteService {
 	 */
 	public function delete($pollId, $userId) {
 
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 

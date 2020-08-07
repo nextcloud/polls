@@ -23,8 +23,22 @@
 <template>
 	<div v-if="poll.id" class="vote__header">
 		<div v-show="displayLink" class="vote__header__personal-link">
-			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
-			<a class="icon icon-clippy" @click="copyLink()" />
+			<ConfigBox :title="t('polls', 'Your personal link to this poll')"
+				icon-class="icon-share"
+				:info="t('polls','Copy this link for reentering the poll at any time and edit your votes.')">
+				<div class="personal-link">
+					{{ personalLink }}
+					<a class="icon icon-clippy" @click="copyLink()" />
+				</div>
+			</ConfigBox>
+			<ConfigBox :title="t('polls', 'Your registered email address')"
+				icon-class="icon-mail"
+				:info="t('polls','Enter your email address, to be able to subscribe to updates of this poll.')">
+				<div class="user-email">
+					{{ userEmail }}
+					<a class="icon icon-rename" />
+				</div>
+			</ConfigBox>
 		</div>
 
 		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
@@ -59,6 +73,8 @@
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
+import ConfigBox from '../Base/ConfigBox'
+import ButtonDiv from '../Base/ButtonDiv'
 import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
@@ -68,6 +84,8 @@ export default {
 
 	components: {
 		Modal,
+		ConfigBox,
+		ButtonDiv,
 	},
 
 	data() {
@@ -91,6 +109,15 @@ export default {
 		...mapGetters({
 			expired: 'poll/expired',
 		}),
+
+		userEmail: {
+			get() {
+				return this.poll.shares.list[0].userEmail
+			},
+			set(value) {
+				// this.writeValueDebounced({ description: value })
+			},
+		},
 
 		loginLink() {
 			const redirectUrl = this.$router.resolve({
@@ -211,7 +238,7 @@ export default {
 	}
 
 	.vote__header__personal-link {
-		display: flex;
+		// display: flex;
 		padding: 4px 12px;
 		margin: 0 12px 0 24px;
 		border: 2px solid var(--color-success);
@@ -222,5 +249,9 @@ export default {
 		.icon {
 			margin: 0 12px;
 		}
+	}
+
+	.personal-link, .user-email {
+		display: flex;
 	}
 </style>

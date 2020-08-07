@@ -45,19 +45,19 @@ export default {
 			},
 			set(value) {
 				this.$store.commit('setSubscription', value)
-				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.poll.id })
+				this.$store.dispatch('writeSubscriptionPromise')
 			},
 		},
 	},
 
 	watch: {
 		$route() {
-			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
+			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
 		},
 	},
 
 	created() {
-		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
+		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
 	},
 
 }

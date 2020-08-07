@@ -56,11 +56,14 @@
 					class="error" />
 			</h2>
 			<PollInformation />
-			<VoteHeaderPublic v-if="!getCurrentUser()" />
 
 			<h3 class="description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</h3>
+		</div>
+
+		<div class="area__public">
+			<VoteHeaderPublic v-if="!getCurrentUser()" />
 		</div>
 
 		<div class="area__main">
@@ -77,7 +80,7 @@
 		</div>
 
 		<div class="area__footer">
-			<Subscription v-if="getCurrentUser()" />
+			<Subscription v-if="getCurrentUser() || (acl.token && poll.shares.list[0].userEmail)" />
 			<ParticipantsList v-if="acl.allowSeeUsernames" />
 		</div>
 		<LoadingOverlay v-if="isLoading" />
