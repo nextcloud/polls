@@ -68,7 +68,7 @@
 		"babel-eslint": "^10.0.3",
 		"babel-loader": "^8.0.6",
 		"cross-env": "^7.0.0",
-		"css-loader": "^3.6.0",
+		"css-loader": "^4.2.1",
 		"eslint": "^7.6.0",
 		"eslint-config-standard": "^14.1.0",
 		"eslint-loader": "^4.0.2",
