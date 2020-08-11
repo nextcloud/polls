@@ -64,7 +64,7 @@ const getters = {
 	invitation: state => {
 		const invitationTypes = ['user', 'group', 'email', 'external', 'contact']
 		return state.list.filter(share => {
-			return invitationTypes.includes(share.type)
+			return invitationTypes.includes(share.type) && share.invitationSent
 		})
 	},
 
@@ -105,7 +105,7 @@ const actions = {
 	addPersonal(context, payload) {
 		const endPoint = 'apps/polls/share/personal'
 
-		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
+		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName, emailAddress: payload.emailAddress })
 			.then((response) => {
 				return { token: response.data.token }
 			})

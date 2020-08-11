@@ -120,6 +120,10 @@ class ShareService {
 			throw new NotAuthorizedException;
 		}
 
+		if ($type === 'contact') {
+			$type = 'external';
+		}
+
 		$this->share = new Share();
 		$this->share->setType($type);
 		$this->share->setPollId($pollId);
@@ -168,19 +172,20 @@ class ShareService {
 	 * @throws NotAuthorizedException
 	 * @throws InvalidUsername
 	 */
-	public function personal($token, $userName) {
-		$publicShare = $this->shareMapper->findByToken($token);
+	public function personal($token, $userName, $emailAddress) {
+		$this->share = $this->shareMapper->findByToken($token);
 
 		// Return of validatePublicUsername is a DataResponse
-		$checkUsername = $this->systemController->validatePublicUsername($publicShare->getPollId(), $userName, $token);
+		$checkUsername = $this->systemController->validatePublicUsername($this->share->getPollId(), $userName, $token);
 
 		// if status is not 200, return DataResponse from validatePublicUsername
 		if ($checkUsername->getStatus() !== 200) {
 			throw new InvalidUsername;
 		}
 
-		if ($publicShare->getType() === 'public') {
+		if ($this->share->getType() === 'public') {
 
+			$pollId = $this->share->getPollId();
 			$this->share = new Share();
 			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 				16,
@@ -189,17 +194,20 @@ class ShareService {
 				ISecureRandom::CHAR_UPPER
 			));
 			$this->share->setType('external');
-			$this->share->setPollId($publicShare->getPollId());
+			$this->share->setPollId($pollId);
 			$this->share->setUserId($userName);
-			$this->share->setUserEmail('');
+			$this->share->setUserEmail($emailAddress);
 			$this->share->setInvitationSent(time());
-			return $this->shareMapper->insert($this->share);
+			$this->shareMapper->insert($this->share);
+			$this->mailService->sendInvitationMail($this->share->getToken());
+			return $this->share;
 
-		} elseif ($publicShare->getType() === 'email') {
+		} elseif ($this->share->getType() === 'email') {
 
-			$publicShare->setType('external');
-			$publicShare->setUserId($userName);
-			return $this->shareMapper->update($publicShare);
+			$this->share->setType('external');
+			$this->share->setUserId($userName);
+			$this->share->setUserEmail($emailAddress);
+			return $this->shareMapper->update($this->share);
 
 		} else {
 			throw new NotAuthorizedException;

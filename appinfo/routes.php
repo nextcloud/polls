@@ -56,6 +56,7 @@ return [
 		// ['name' => 'vote#getByToken', 'url' => '/votes/get/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'share#add', 'url' => '/share/add', 'verb' => 'POST'],
+		['name' => 'share#get', 'url' => '/share/{token}', 'verb' => 'GET'],
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#delete', 'url' => '/share/delete/{token}', 'verb' => 'DELETE'],
 		['name' => 'share#sendInvitation', 'url' => '/share/send/{token}', 'verb' => 'POST'],

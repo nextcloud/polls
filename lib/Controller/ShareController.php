@@ -94,6 +94,26 @@ class ShareController extends Controller {
 	 * @param string $userEmail
 	 * @return DataResponse
 	 */
+	 public function get($token) {
+ 		try {
+ 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_CREATED);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (\Exception $e) {
+			return new DataResponse($e, Http::STATUS_CONFLICT);
+		}
+	}
+
+	/**
+	 * Add share
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param int $pollId
+	 * @param string $type
+	 * @param string $userId
+	 * @param string $userEmail
+	 * @return DataResponse
+	 */
 	 public function setEmailAddress($token, $userEmail) {
  		try {
 			return new DataResponse(['share' => $this->shareService->setEmailAddress($token, $userEmail)], Http::STATUS_OK);
@@ -115,10 +135,10 @@ class ShareController extends Controller {
 	 * @param string $userName
 	 * @return DataResponse
 	 */
-	public function personal($token, $userName) {
+	public function personal($token, $userName, $emailAddress = '') {
 
 		try {
-			return new DataResponse($this->shareService->personal($token, $userName), Http::STATUS_CREATED);
+			return new DataResponse($this->shareService->personal($token, $userName, $emailAddress), Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidUsername $e) {

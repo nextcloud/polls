@@ -62,8 +62,8 @@
 			</h3>
 		</div>
 
-		<div class="area__public">
-			<VoteHeaderPublic v-if="!getCurrentUser()" />
+		<div v-if="$route.name === 'publicVote' && poll.id" class="area__public">
+			<PersonalLink v-if="share.userId" />
 		</div>
 
 		<div class="area__main">
@@ -80,10 +80,14 @@
 		</div>
 
 		<div class="area__footer">
-			<Subscription v-if="getCurrentUser() || (acl.token && poll.shares.list[0].userEmail)" />
+			<Subscription v-if="acl.allowSubscribe" />
 			<ParticipantsList v-if="acl.allowSeeUsernames" />
 		</div>
 		<LoadingOverlay v-if="isLoading" />
+
+		<div v-if="$route.name === 'publicVote' && poll.id">
+			<PublicRegisterModal v-show="!share.userId && !isExpired" />
+		</div>
 	</AppContent>
 </template>
 
@@ -92,11 +96,13 @@ import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import Subscription from '../components/Subscription/Subscription'
 import Badge from '../components/Base/Badge'
 import ParticipantsList from '../components/Base/ParticipantsList'
+import PersonalLink from '../components/Base/PersonalLink'
 import PollInformation from '../components/Base/PollInformation'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
-import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
+import PublicRegisterModal from '../components/Base/PublicRegisterModal'
 import VoteTable from '../components/VoteTable/VoteTable'
 import { mapState, mapGetters } from 'vuex'
+import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 
@@ -107,11 +113,12 @@ export default {
 		ActionButton,
 		AppContent,
 		Badge,
-		Subscription,
-		ParticipantsList,
-		PollInformation,
 		LoadingOverlay,
-		VoteHeaderPublic,
+		ParticipantsList,
+		PersonalLink,
+		PollInformation,
+		PublicRegisterModal,
+		Subscription,
 		VoteTable,
 	},
 
@@ -130,6 +137,7 @@ export default {
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
 			options: state => state.poll.options.list,
+			share: state => state.poll.share,
 		}),
 
 		...mapGetters({
@@ -181,8 +189,19 @@ export default {
 	},
 
 	created() {
-		this.loadPoll()
-		emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+		if (getCurrentUser() && this.$route.params.token) {
+			// reroute to the internal vote page, if the user is logged in
+			this.$store.dispatch('poll/shares/get', { token: this.$route.params.token })
+				.then((response) => {
+					this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
+				})
+				.catch(() => {
+					this.$router.replace({ name: 'notfound' })
+				})
+		} else {
+			this.loadPoll()
+			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+		}
 	},
 
 	beforeDestroy() {
@@ -210,8 +229,7 @@ export default {
 					this.isLoading = false
 					window.document.title = this.windowTitle
 				})
-				.catch((error) => {
-					console.error(error)
+				.catch(() => {
 					this.isLoading = false
 					this.$router.replace({ name: 'notfound' })
 				})
