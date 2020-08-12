@@ -71,7 +71,7 @@ class Vote extends Entity implements JsonSerializable {
 		];
 	}
 
-	private function getDisplayName() {
+	public function getDisplayName() {
 		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
 		} else {

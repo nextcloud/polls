@@ -63,22 +63,6 @@ class OptionController extends Controller {
 		return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
 	}
 
-	//
-	// /**
-	// * Get all options specified by token
-	// * Read all options of a poll based on a share token and return list as array
-	// * @NoAdminRequired
-	// * @PublicPage
-	// * @param string $token
-	// * @return DataResponse
-	// */
-	// public function listByToken($token) {
-	// 	return new DataResponse($this->optionService->list(0, $token), Http::STATUS_OK);
-	// }
-
-
-
-
 	/**
 	 * Add a new option
 	 * @NoAdminRequired

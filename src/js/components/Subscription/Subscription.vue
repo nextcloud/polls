@@ -24,7 +24,8 @@
 	<div class="subscription">
 		<input id="subscribe" v-model="subscribe" type="checkbox"
 			class="checkbox">
-		<label for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
+		<label v-if="share.userEmail" for="subscribe">{{ t('polls', 'Receive notification email on activity to {emailAddress}', {emailAddress: share.userEmail}) }}</label>
+		<label v-else for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
 	</div>
 </template>
 
@@ -37,6 +38,7 @@ export default {
 		...mapState({
 			subscription: state => state.subscription,
 			poll: state => state.poll,
+			share: state => state.poll.share,
 		}),
 
 		subscribe: {
@@ -45,19 +47,19 @@ export default {
 			},
 			set(value) {
 				this.$store.commit('setSubscription', value)
-				this.$store.dispatch('writeSubscriptionPromise', { pollId: this.poll.id })
+				this.$store.dispatch('writeSubscriptionPromise')
 			},
 		},
 	},
 
 	watch: {
 		$route() {
-			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
+			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
 		},
 	},
 
 	created() {
-		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id })
+		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
 	},
 
 }

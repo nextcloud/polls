@@ -62,8 +62,8 @@
 		"node": ">=10.0.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.10.5",
-		"@babel/preset-env": "^7.10.4",
+		"@babel/core": "^7.11.0",
+		"@babel/preset-env": "^7.11.0",
 		"@nextcloud/eslint-plugin": "^1.4.0",
 		"babel-eslint": "^10.0.3",
 		"babel-loader": "^8.0.6",
@@ -83,11 +83,11 @@
 		"stylelint": "^13.6.1",
 		"stylelint-config-recommended-scss": "^4.2.0",
 		"stylelint-scss": "^3.18.0",
-		"terser-webpack-plugin": "^3.0.7",
+		"terser-webpack-plugin": "^3.0.8",
 		"vue-loader": "^15.9.3",
 		"vue-style-loader": "^4.1.2",
 		"vue-template-compiler": "^2.6.11",
-		"webpack": "^4.44.0",
+		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
 		"webpack-merge": "^5.0.9"
 	}

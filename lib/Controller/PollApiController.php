@@ -203,6 +203,25 @@
 	}
 
 	/**
+	 * Collect email addresses from particitipants
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param Array $poll
+	 * @return DataResponse
+	 */
+
+	public function getParticipantsEmailAddresses($pollId) {
+		try {
+			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
 	 * Get valid values for configuration options
 	 * @NoAdminRequired
 	 * @CORS

@@ -39,6 +39,7 @@ return [
 		['name' => 'poll#delete', 'url' => '/polls/delete/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#deletePermanently', 'url' => '/polls/delete/permanent/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/polls/addresses/{pollId}', 'verb' => 'GET'],
 
 		['name' => 'option#add', 'url' => '/option', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/option/{optionId}', 'verb' => 'PUT'],
@@ -55,11 +56,14 @@ return [
 		// ['name' => 'vote#getByToken', 'url' => '/votes/get/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'share#add', 'url' => '/share/add', 'verb' => 'POST'],
+		['name' => 'share#get', 'url' => '/share/{token}', 'verb' => 'GET'],
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#delete', 'url' => '/share/delete/{token}', 'verb' => 'DELETE'],
 		['name' => 'share#sendInvitation', 'url' => '/share/send/{token}', 'verb' => 'POST'],
+		['name' => 'share#resolveContactGroup', 'url' => '/share/resolveContactGroup/{token}', 'verb' => 'POST'],
 
-		['name' => 'subscription#get', 'url' => '/subscription/{pollId}', 'verb' => 'GET'],
+		['name' => 'subscription#get', 'url' => '/subscription/{pollId}', 'verb' => 'GET', 'postfix' => 'auth'],
+		['name' => 'subscription#get', 'url' => '/subscription/s/{token}', 'verb' => 'GET', 'postfix' => 'public'],
 		['name' => 'subscription#set', 'url' => '/subscription', 'verb' => 'POST'],
 
 		['name' => 'comment#add', 'url' => '/comment', 'verb' => 'POST'],
@@ -81,6 +85,7 @@ return [
 		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'DELETE'],
 		['name' => 'poll_api#clone', 'url' => '/api/v1.0/poll/{pollId}/clone', 'verb' => 'POST'],
 		['name' => 'poll_api#trash', 'url' => '/api/v1.0/poll/{pollId}/trash', 'verb' => 'POST'],
+		['name' => 'poll_api#getParticipantsEmailAddresses', 'url' => '/api/v1.0/poll/{pollId}/addresses', 'verb' => 'GET'],
 		['name' => 'poll_api#enum', 'url' => '/api/v1.0/enum/poll', 'verb' => 'GET'],
 
 		['name' => 'option_api#list', 'url' => '/api/v1.0/poll/{pollId}/options', 'verb' => 'GET'],
