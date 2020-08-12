@@ -37,6 +37,7 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\MailService;
+use OCA\Polls\Service\SystemService;
 
 class ShareController extends Controller {
 
@@ -46,22 +47,28 @@ class ShareController extends Controller {
 	/** @var MailService */
 	private $mailService;
 
+	/** @var SystemService */
+	private $systemService;
+
 	/**
 	 * ShareController constructor.
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param MailService $mailService
 	 * @param ShareService $shareService
+	 * @param SystemService $systemService
 	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		MailService $mailService,
-		ShareService $shareService
+		ShareService $shareService,
+		SystemService $systemService
 	) {
 		parent::__construct($appName, $request);
 		$this->shareService = $shareService;
 		$this->mailService = $mailService;
+		$this->systemService = $systemService;
 	}
 
 	/**
@@ -178,6 +185,27 @@ class ShareController extends Controller {
 			$sentResult = $this->mailService->sendInvitationMail($token);
 			$share = $this->shareService->get($token);
 			return new DataResponse(['share' => $share, 'sentResult' => $sentResult], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
+		}
+	}
+
+	/**
+	 * resolve Contact groupe to individual shares
+	 * @NoAdminRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function resolveContactGroup($token) {
+		$shares = [];
+		try {
+			$share = $this->shareService->get($token);
+			\OC::$server->getLogger()->alert('Suche nach Gruppe: ' . $share->getUserId());
+			foreach ($this->systemService->getContactsGroupMembers($share->getUserId()) as $member) {
+				$shares[] = $this->shareService->add($share->getpollId(), 'contact', $member['user'], $member['emailAddress']) ;
+			}
+
+			return new DataResponse(['shares' => $shares], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		}

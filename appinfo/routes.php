@@ -60,6 +60,7 @@ return [
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#delete', 'url' => '/share/delete/{token}', 'verb' => 'DELETE'],
 		['name' => 'share#sendInvitation', 'url' => '/share/send/{token}', 'verb' => 'POST'],
+		['name' => 'share#resolveContactGroup', 'url' => '/share/resolveContactGroup/{token}', 'verb' => 'POST'],
 
 		['name' => 'subscription#get', 'url' => '/subscription/{pollId}', 'verb' => 'GET', 'postfix' => 'auth'],
 		['name' => 'subscription#get', 'url' => '/subscription/s/{token}', 'verb' => 'GET', 'postfix' => 'public'],

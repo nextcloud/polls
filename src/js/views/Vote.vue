@@ -83,11 +83,9 @@
 			<Subscription v-if="acl.allowSubscribe" />
 			<ParticipantsList v-if="acl.allowSeeUsernames" />
 		</div>
-		<LoadingOverlay v-if="isLoading" />
 
-		<div v-if="$route.name === 'publicVote' && poll.id">
-			<PublicRegisterModal v-show="!share.userId && !isExpired" />
-		</div>
+		<PublicRegisterModal v-if="showRegisterModal" />
+		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
@@ -168,6 +166,13 @@ export default {
 			} else {
 				return t('polls', 'Ranked order')
 			}
+		},
+		showRegisterModal() {
+			return (this.$route.name === 'publicVote'
+				&& !this.share.userId
+				&& !this.isExpired
+				&& this.poll.id
+			)
 		},
 		sortIcon() {
 			if (this.ranked) {
