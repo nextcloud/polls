@@ -126,7 +126,7 @@ class SystemService {
 					'id' => $group->getGID(),
 					'user' => $group->getGID(),
 					'organisation' => '',
-					'displayName' => $group->getGID(),
+					'displayName' => $group->getDisplayName(),
 					'emailAddress' => '',
 					'desc' => 'Group',
 					'type' => 'group',
