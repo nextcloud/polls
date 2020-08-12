@@ -306,7 +306,7 @@ export default {
 			} else {
 				this.$store.dispatch('poll/update')
 					.then((response) => {
-						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, response.data.title), { type: 'success' })
+						OC.Notification.showTemporary(t('polls', '"{pollTitle}" successfully saved', 1, { pollTitle: response.data.title }), { type: 'success' })
 						emit('update-polls')
 					})
 					.catch(() => {

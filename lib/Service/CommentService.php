@@ -78,7 +78,7 @@ class CommentService {
 	 */
 	public function list($pollId = 0, $token = '') {
 
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
+		if (!$this->acl->set($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -101,7 +101,7 @@ class CommentService {
 	 */
 	public function add($pollId = 0, $message, $token = '') {
 
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowComment()) {
+		if (!$this->acl->set($pollId, $token)->getAllowComment()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -136,7 +136,7 @@ class CommentService {
 	public function delete($commentId, $token = '') {
 		$this->comment = $this->commentMapper->find($commentId);
 
-		if ($this->acl->setPollIdOrToken($this->comment->getPollId(), $token)->getUserId() !== $this->acl->getUserId()) {
+		if ($this->acl->set($this->comment->getPollId(), $token)->getUserId() !== $this->acl->getUserId()) {
 			throw new NotAuthorizedException;
 		}
 

@@ -109,6 +109,8 @@ export default {
 					return 'icon-mail'
 				} else if (this.type === 'external') {
 					return 'icon-share'
+				} else if (this.type === 'contactGroup') {
+					return 'icon-group'
 				}
 				return 'icon-' + this.type
 			} else {
@@ -133,6 +135,8 @@ export default {
 				}
 			} else if (this.type === 'group') {
 				displayName = this.userId + ' (' + t('polls', 'Group') + ')'
+			} else if (this.type === 'contactGroup') {
+				displayName = this.userId + ' (' + t('polls', 'Contact Group') + ')'
 			} else if (this.type === 'public') {
 				displayName = t('polls', 'Public share')
 			} else {

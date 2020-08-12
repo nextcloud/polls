@@ -286,7 +286,7 @@ input {
 	padding: 8px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
-	margin: 12px 0;
+	margin: 12px 6px;
 	min-width: 320px;
 }
 

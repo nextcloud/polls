@@ -62,15 +62,18 @@ const mutations = {
 
 const getters = {
 	invitation: state => {
-		const invitationTypes = ['user', 'group', 'email', 'external', 'contact']
+		// share types, which will be active, after the user gets his invitation
+		const invitationTypes = ['email', 'external', 'contact']
+		// sharetype which are active without sending an invitation
+		const directShareTypes = ['user', 'group']
 		return state.list.filter(share => {
-			return invitationTypes.includes(share.type)
+			return (invitationTypes.includes(share.type) && share.invitationSent) || directShareTypes.includes(share.type)
 		})
 	},
 
 	unsentInvitations: state => {
 		return state.list.filter(share => {
-			return (share.userEmail || share.type === 'group') && !share.invitationSent
+			return (share.userEmail || share.type === 'group' || share.type === 'contactGroup') && !share.invitationSent
 		})
 	},
 
@@ -105,7 +108,7 @@ const actions = {
 	addPersonal(context, payload) {
 		const endPoint = 'apps/polls/share/personal'
 
-		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName })
+		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName, emailAddress: payload.emailAddress })
 			.then((response) => {
 				return { token: response.data.token }
 			})
@@ -137,6 +140,21 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error sending invitation', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
+	resolveContactGroup(context, payload) {
+		const endPoint = 'apps/polls/share/resolveContactGroup'
+		return axios.post(generateUrl(endPoint.concat('/', payload.share.token)))
+			.then((response) => {
+				response.data.shares.forEach((item) => {
+					context.commit('add', item)
+				})
+				return response
+			})
+			.catch((error) => {
+				console.error('Error exploding group', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},

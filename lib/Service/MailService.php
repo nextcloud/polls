@@ -122,28 +122,28 @@ class MailService {
 
 	/**
 	 * sendMail - Send eMail and evaluate recipient's mail address
-	 * and displayname if $toUserId is a site user
+	 * and displayname if $userId is a site user
 	 * @param IEmailTemplate $emailTemplate
-	 * @param String $toUserId
-	 * @param String $toEmail
-	 * @param String $toDisplayName
+	 * @param String $userId
+	 * @param String $emailAddress, ignored, when $userId is set
+	 * @param String $displayName, ignored, when $userId is set
 	 * @return String
 	 */
 
-	private function sendMail($emailTemplate, $toUserId = '', $toEmail = '', $toDisplayName = '') {
+	private function sendMail($emailTemplate, $userId = '', $emailAddress = '', $displayName = '') {
 
-		if ($this->userManager->get($toUserId) instanceof IUser && !$toEmail) {
-			$toEmail = \OC::$server->getConfig()->getUserValue($toUserId, 'settings', 'email');
-			$toDisplayName = $this->userManager->get($toUserId)->getDisplayName();
+		if ($this->userManager->get($userId) instanceof IUser) {
+			$emailAddress = \OC::$server->getConfig()->getUserValue($userId, 'settings', 'email');
+			$displayName = $this->userManager->get($userId)->getDisplayName();
 		}
 
-		if (!$toEmail || !filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-	   		throw new Exception('Invalid email address (' . $toEmail . ')');
+		if (!$emailAddress || !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+	   		throw new Exception('Invalid email address (' . $emailAddress . ')');
 		}
 
 		try {
 			$message = $this->mailer->createMessage();
-			$message->setTo([$toEmail => $toDisplayName]);
+			$message->setTo([$emailAddress => $displayName]);
 			$message->useTemplate($emailTemplate);
 			$this->mailer->send($message);
 
@@ -155,6 +155,32 @@ class MailService {
 		}
 
 	}
+
+
+	/**
+	 * @param integer $pollId
+	 * @param string $userId
+	 * @return string
+	 */
+	public function resolveEmailAddress($pollId, $userId) {
+		$contactsManager = \OC::$server->getContactsManager();
+
+		if ($this->userManager->get($userId) instanceof IUser) {
+			return \OC::$server->getConfig()->getUserValue($userId, 'settings', 'email');
+		}
+
+		// if $userId is no site user, eval via shares
+		try {
+			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
+			if ($share->getUserEmail()) {
+				return $share->getUserEmail();
+			}
+		} catch (\Exception $e) {
+			// catch silently
+		}
+		return $userId;
+	}
+
 
 	/**
 	 * @param Share $share
@@ -205,8 +231,8 @@ class MailService {
 
 				$recipients[] = array(
 					'userId' => $share->getUserId(),
-					'eMailAddress' => $contact['EMAIL'][0],
-					'displayName' => $contact['FN'],
+					'eMailAddress' => $share->getUserEmail(),
+					'displayName' => $share->getUserId(),
 					'language' => $defaultLang,
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(
@@ -219,7 +245,7 @@ class MailService {
 				return;
 			}
 
-		} elseif ($share->getType() === 'external' || $share->getType() === 'email') {
+		} elseif ($share->getType() === 'external') {
 			$recipients[] = array(
 				'userId' => $share->getUserId(),
 				'eMailAddress' => $share->getUserEmail(),
@@ -337,14 +363,23 @@ class MailService {
 		$log = $this->logMapper->findUnprocessed();
 
 		foreach ($subscriptions as $subscription) {
+			$poll = $this->pollMapper->find($subscription->getPollId());
+			$emailAddress = '';
+			$displayName = '';
 
 			if ($this->userManager->get($subscription->getUserId()) instanceof IUser) {
 				$lang = $this->config->getUserValue($subscription->getUserId(), 'core', 'lang');
 			} else {
-				continue;
+				try {
+					$emailAddress = $this->shareMapper->findByPollAndUser($subscription->getPollId(), $subscription->getUserId())->getUserEmail();
+					$displayName = $subscription->getUserId();
+					$lang = $this->config->getUserValue($poll->getOwner(), 'core', 'lang');
+				} catch (\Exception $e) {
+					continue;
+				}
+
 			}
 
-			$poll = $this->pollMapper->find($subscription->getPollId());
 			$trans = $this->transFactory->get('polls', $lang);
 
 			$url = $this->urlGenerator->getAbsoluteURL(
@@ -441,7 +476,7 @@ class MailService {
 			$emailTemplate->addFooter($trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
 
 			try {
-				$this->sendMail($emailTemplate, $subscription->getUserId());
+				$this->sendMail($emailTemplate, $subscription->getUserId(), $emailAddress, $displayName);
 			} catch (Exception $e) {
 				\OC::$server->getLogger()->alert('Error sending Mail to ' . $subscription->getUserId());
 			}
