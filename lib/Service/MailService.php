@@ -231,8 +231,8 @@ class MailService {
 
 				$recipients[] = array(
 					'userId' => $share->getUserId(),
-					'eMailAddress' => $contact['EMAIL'][0],
-					'displayName' => $contact['FN'],
+					'eMailAddress' => $share->getUserEmail(),
+					'displayName' => $share->getUserId(),
 					'language' => $defaultLang,
 					'link' => $this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->linkToRoute(

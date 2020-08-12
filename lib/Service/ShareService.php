@@ -101,7 +101,9 @@ class ShareService {
 	 * @return Share
 	 */
 	public function get($token) {
-		return $this->shareMapper->findByToken($token);
+		$this->share = $this->shareMapper->findByToken($token);
+
+		return $this->share;
 	}
 
 	/**
@@ -115,13 +117,10 @@ class ShareService {
 	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId, $type, $userId, $userEmail = '') {
+		\OC::$server->getLogger()->alert('==== Start ');
 
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
-		}
-
-		if ($type === 'contact') {
-			$type = 'external';
 		}
 
 		$this->share = new Share();

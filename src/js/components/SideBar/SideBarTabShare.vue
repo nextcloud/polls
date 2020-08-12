@@ -111,6 +111,17 @@
 							@click="sendInvitation(share)">
 							{{ t('polls', 'Send invitation mail') }}
 						</ActionButton>
+						<ActionButton
+							v-if="share.type === 'contactGroup'"
+							icon="icon-toggle-filelist"
+							@click="resolveContactGroup(share)">
+							{{ t('polls', 'Resolve contact group into individual invitations') }}
+						</ActionButton>
+					</Actions>
+					<Actions>
+						<ActionButton icon="icon-delete" @click="removeShare(share)">
+							{{ t('polls', 'Remove invitation') }}
+						</ActionButton>
 					</Actions>
 				</UserItem>
 			</TransitionGroup>
@@ -167,6 +178,13 @@ export default {
 	},
 
 	methods: {
+		resolveContactGroup(share) {
+			this.$store.dispatch('poll/shares/resolveContactGroup', { share: share })
+				.then((response) => {
+					this.$store.dispatch('poll/shares/delete', { share: share })
+				})
+		},
+
 		sendInvitation(share) {
 			this.$store.dispatch('poll/shares/sendInvitation', { share: share })
 				.then((response) => {

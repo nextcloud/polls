@@ -56,7 +56,7 @@ class OptionService {
 	private $acl;
 
 	/**
-	 * OptionController constructor.
+	 * OptionService constructor.
 	 * @param OptionMapper $optionMapper
 	 * @param Option $option
 	 * @param PollMapper $pollMapper
