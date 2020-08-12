@@ -327,7 +327,7 @@ export default {
 	.vote-table__vote-row,
 	.vote-table__footer {
 		> div {
-			max-width: 230px;
+			// max-width: 230px;
 
 			&.confirmed {
 				margin-left: 8px;
