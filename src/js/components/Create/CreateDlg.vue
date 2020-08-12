@@ -103,11 +103,11 @@ export default {
 				.then((response) => {
 					emit('update-polls')
 					this.cancel()
-					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, response.data.id), { type: 'success' })
+					OC.Notification.showTemporary(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.id }), { type: 'success' })
 					this.$router.push({ name: 'vote', params: { id: response.data.id } })
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.title), { type: 'error' })
+					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: this.title }), { type: 'error' })
 				})
 		},
 

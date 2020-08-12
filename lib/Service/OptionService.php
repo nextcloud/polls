@@ -90,13 +90,14 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $token = '') {
+		$acl = $this->acl->set($pollId, $token);
 
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
+		if (!$acl->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
 		try {
-			return $this->optionMapper->findByPoll($pollId);
+			return $this->optionMapper->findByPoll($acl->getPollId());
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
@@ -115,7 +116,7 @@ class OptionService {
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
 
 		$this->poll = $this->pollMapper->find($pollId);
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -141,7 +142,7 @@ class OptionService {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->poll = $this->pollMapper->find($this->option->getPollId());
 
-		if (!$this->acl->setPollId($this->option->getPollId())->getAllowEdit()) {
+		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -160,7 +161,7 @@ class OptionService {
 	public function delete($optionId) {
 		$this->option = $this->optionMapper->find($optionId);
 
-		if (!$this->acl->setPollId($this->option->getPollId())->getAllowEdit()) {
+		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -179,7 +180,7 @@ class OptionService {
 	public function confirm($optionId) {
 		$this->option = $this->optionMapper->find($optionId);
 
-		if (!$this->acl->setPollId($this->option->getPollId())->getAllowEdit()) {
+		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -202,7 +203,7 @@ class OptionService {
 	 */
 	public function clone($fromPollId, $toPollId) {
 
-		if (!$this->acl->setPollId($fromPollId)->getAllowView()) {
+		if (!$this->acl->set($fromPollId)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -232,7 +233,7 @@ class OptionService {
 
 		$this->poll = $this->pollMapper->find($pollId);
 
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -267,7 +268,7 @@ class OptionService {
 		$pollId = $this->option->getPollId();
 		$this->poll = $this->pollMapper->find($pollId);
 
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 

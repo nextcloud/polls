@@ -24,7 +24,7 @@
 	<div>
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Invitations')" icon-class="icon-share">
+		<ConfigBox :title="t('polls', 'Shares')" icon-class="icon-share">
 			<TransitionGroup :css="false" tag="div" class="shared-list">
 				<UserItem v-for="(share) in invitationShares"
 					:key="share.id" v-bind="share"
@@ -80,7 +80,7 @@
 						<Avatar icon-class="icon-public" :is-no-user="true" />
 						<!-- <div class="avatar icon-public" /> -->
 						<div class="share-item__description">
-							{{ t('polls', 'Public link (' + share.token + ')') }}
+							{{ t('polls', 'Public link ({token})', {token: share.token }) }}
 						</div>
 					</div>
 					<Actions>

@@ -21,14 +21,9 @@
   -->
 
 <template>
-	<div v-if="poll.id" class="vote__header">
-		<div v-show="displayLink" class="vote__header__personal-link">
-			{{ t('polls', 'Your personal link to this poll: %n', 1, personalLink) }}
-			<a class="icon icon-clippy" @click="copyLink()" />
-		</div>
-
-		<Modal v-show="!isValidUser &!expired & modal" :can-close="false">
-			<div class="modal__content">
+	<Modal v-show="modal" :can-close="false">
+		<div class="modal__content">
+			<div class="enter__name">
 				<h2>{{ t('polls', 'Who are you?') }}</h2>
 				<p>{{ t('polls', 'To participate, tell us how we can call you!') }}</p>
 
@@ -42,42 +37,50 @@
 					<span v-show="!checkingUserName && userName.length > 2 && !isValidName" class="error">{{ t('polls', 'This name is not valid, i.e. because it is already in use.') }}</span>
 					<span v-show="!checkingUserName && userName.length > 2 && isValidName" class="error">{{ t('polls', 'OK, we will call you {username}.', {username : userName }) }}</span>
 				</div>
-
-				<div class="modal__buttons">
-					<a :href="loginLink" class="modal__buttons__link"> {{ t('polls', 'You have an account? Log in here.') }} </a>
-					<div class="modal__buttons__spacer" />
-					<ButtonDiv :title="t('polls', 'Cancel')"
-						@click="closeModal" />
-					<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
-						@click="writeUserName" />
-				</div>
 			</div>
-		</Modal>
-	</div>
+			<div class="enter__email">
+				<p>{{ t('polls', 'Enter your email address to be able to subscribe to updates and get your personal link via email.') }}</p>
+
+				<input v-model="emailAddress" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }"
+					type="text"
+					:placeholder="t('polls', 'Enter your email address')" @keyup.enter="writeUserName">
+			</div>
+
+			<div class="modal__buttons">
+				<a :href="loginLink" class="modal__buttons__link"> {{ t('polls', 'You have an account? Log in here.') }} </a>
+				<div class="modal__buttons__spacer" />
+				<ButtonDiv :title="t('polls', 'Cancel')"
+					@click="closeModal" />
+				<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
+					@click="writeUserName" />
+			</div>
+		</div>
+	</Modal>
 </template>
 
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
+import ButtonDiv from '../Base/ButtonDiv'
 import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
-	name: 'VoteHeaderPublic',
+	name: 'PublicRegisterModal',
 
 	components: {
 		Modal,
+		ButtonDiv,
 	},
 
 	data() {
 		return {
 			userName: '',
-			token: '',
+			emailAddress: '',
 			checkingUserName: false,
 			redirecting: false,
 			isValidName: false,
-			newName: '',
 			modal: true,
 		}
 	},
@@ -85,11 +88,7 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.poll.acl,
-		}),
-
-		...mapGetters({
-			expired: 'poll/expired',
+			share: state => state.poll.share,
 		}),
 
 		loginLink() {
@@ -99,24 +98,6 @@ export default {
 			}).href
 			return generateUrl('login?redirect_url=' + redirectUrl)
 		},
-
-		personalLink() {
-			return window.location.origin.concat(
-				this.$router.resolve({
-					name: 'publicVote',
-					params: { token: this.$route.params.token },
-				}).href
-			)
-		},
-
-		displayLink() {
-			return (this.acl.userId !== '' && this.acl.userId !== null && this.acl.token)
-		},
-
-		isValidUser() {
-			return (this.acl.userId !== '' && this.acl.userId !== null)
-		},
-
 	},
 
 	watch: {
@@ -124,16 +105,20 @@ export default {
 			this.isValidName = false
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
-				this.isValidName = this.validatePublicUsername()
+				if (this.userName !== this.share.userid) {
+					this.isValidName = this.validatePublicUsername()
+				}
 			} else {
 				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your username!')
 				this.checkingUserName = false
 			}
 		},
+	},
 
-		'poll.id': function(newValue) {
-			this.setFocus()
-		},
+	mounted() {
+		this.userName = this.share.userId
+		this.emailAddress = this.share.userEmail
+		this.setFocus()
 	},
 
 	methods: {
@@ -143,21 +128,8 @@ export default {
 			})
 		},
 
-		showModal() {
-			this.modal = true
-		},
 		closeModal() {
 			this.modal = false
-		},
-		copyLink() {
-			this.$copyText(this.personalLink).then(
-				function() {
-					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
-				},
-				function() {
-					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
-				}
-			)
 		},
 
 		validatePublicUsername:	debounce(function() {
@@ -186,14 +158,15 @@ export default {
 
 		writeUserName() {
 			if (this.isValidName) {
-				this.$store.dispatch('poll/shares/addPersonal', { token: this.$route.params.token, userName: this.userName })
+				this.$store.dispatch('poll/shares/addPersonal', { token: this.$route.params.token, userName: this.userName, emailAddress: this.emailAddress })
 					.then((response) => {
 						if (this.$route.params.token === response.token) {
 							this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
+							this.closeModal()
 						} else {
-							this.token = response.token
 							this.redirecting = true
-							this.$router.replace({ name: 'publicVote', params: { token: this.token } })
+							this.$router.replace({ name: 'publicVote', params: { token: response.token } })
+							this.closeModal()
 						}
 					})
 					.catch(() => {
@@ -206,21 +179,11 @@ export default {
 </script>
 
 <style lang="scss">
-	.vote__header {
-		margin: 8px 24px;
-	}
 
-	.vote__header__personal-link {
-		display: flex;
-		padding: 4px 12px;
-		margin: 0 12px 0 24px;
-		border: 2px solid var(--color-success);
-		background-color: var(--color-background-success) !important;
-		border-radius: var(--border-radius);
-		font-size: 1.2em;
-		opacity: 0.8;
-		.icon {
-			margin: 0 12px;
+	.modal__content {
+		.enter__name, .enter__email {
+			margin-bottom: 12px;
 		}
 	}
+
 </style>

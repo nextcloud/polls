@@ -57,15 +57,16 @@ class SubscriptionController extends Controller {
 
 	/**
 	 * Get subscription status
+	 * @PublicPage
 	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @return DataResponse
 	 * @throws DoesNotExistException
 	 * @throws NotAuthorizedException
 	 */
-	public function get($pollId) {
+	public function get($pollId, $token) {
 		try {
-			return new DataResponse($this->subscriptionService->get($pollId), Http::STATUS_OK);
+			return new DataResponse($this->subscriptionService->get($pollId, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
@@ -75,15 +76,16 @@ class SubscriptionController extends Controller {
 
 	/**
 	 * Switch subscription status
+	 * @PublicPage
 	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @param int $subscribed
 	 * @return DataResponse
 	 * @throws NotAuthorizedException
 	 */
-	public function set($pollId, $subscribed) {
+	public function set($pollId, $token, $subscribed) {
 		try {
-			return new DataResponse($this->subscriptionService->set($pollId, $subscribed), Http::STATUS_OK);
+			return new DataResponse($this->subscriptionService->set($pollId, $token, $subscribed), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
