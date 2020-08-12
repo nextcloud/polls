@@ -49,7 +49,7 @@
 		"vue": "^2.6.11",
 		"vue-clipboard2": "^0.3.1",
 		"vue-fragment": "^1.5.1",
-		"vue-router": "^3.3.4",
+		"vue-router": "^3.4.3",
 		"vuedraggable": "^2.24.0",
 		"vuex": "^3.5.1"
 	},
@@ -62,14 +62,14 @@
 		"node": ">=10.0.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.11.0",
+		"@babel/core": "^7.11.1",
 		"@babel/preset-env": "^7.11.0",
 		"@nextcloud/eslint-plugin": "^1.4.0",
 		"babel-eslint": "^10.0.3",
 		"babel-loader": "^8.0.6",
 		"cross-env": "^7.0.0",
 		"css-loader": "^3.6.0",
-		"eslint": "^7.5.0",
+		"eslint": "^7.6.0",
 		"eslint-config-standard": "^14.1.0",
 		"eslint-loader": "^4.0.2",
 		"eslint-plugin-import": "^2.22.0",
@@ -79,16 +79,16 @@
 		"eslint-plugin-vue": "^6.2.2",
 		"file-loader": "^6.0.0",
 		"node-sass": "^4.14.1",
-		"sass-loader": "^9.0.2",
+		"sass-loader": "^9.0.3",
 		"stylelint": "^13.6.1",
 		"stylelint-config-recommended-scss": "^4.2.0",
 		"stylelint-scss": "^3.18.0",
-		"terser-webpack-plugin": "^3.0.8",
+		"terser-webpack-plugin": "^4.1.0",
 		"vue-loader": "^15.9.3",
 		"vue-style-loader": "^4.1.2",
 		"vue-template-compiler": "^2.6.11",
 		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
-		"webpack-merge": "^5.0.9"
+		"webpack-merge": "^5.1.1"
 	}
 }
