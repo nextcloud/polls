@@ -2,7 +2,7 @@ name: Mark stale issues
 
 on:
   schedule:
-  - cron: "* * * * *"
+  - cron: "30 1 * * *"
 
 jobs:
   stale:
