@@ -48,7 +48,7 @@ OC.L10N.register(
     "Group" : "Gruppe",
     "Public share" : "Öffentliche Freigabe",
     "Unknown user" : "Unbekannter Benutzer",
-    "New comment …" : "Neuer Kommentar ...",
+    "New comment …" : "Neuer Kommentar...",
     "Your comment was added" : "Ihr Kommentar wurde hinzugefügt",
     "Error while saving comment" : "Fehler beim Speichern des Kommentars",
     "Delete comment" : "Kommentar löschen",
