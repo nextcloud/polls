@@ -23,6 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
+use DateTime;
+use DateInterval;
 use Exception;
 
 use OCP\IRequest;
@@ -31,11 +33,16 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\CalendarService;
+
 
 class OptionController extends Controller {
 
 	/** @var OptionService */
 	private $optionService;
+
+	/** @var CalendarService */
+	private $calendarService;
 
 	/**
 	 * OptionController constructor.
@@ -47,10 +54,12 @@ class OptionController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		OptionService $optionService
+		OptionService $optionService,
+		CalendarService $calendarService
 	) {
 		parent::__construct($appName, $request);
 		$this->optionService = $optionService;
+		$this->calendarService = $calendarService;
 	}
 
 	/**
@@ -113,4 +122,48 @@ class OptionController extends Controller {
 	public function reorder($pollId, $options) {
 		return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
 	}
+
+	/**
+	 * findCalendarEvents
+	 * @NoAdminRequired
+	 * @param integer $from
+	 * @param integer $to
+	 * @return DataResponse
+	 */
+	public function findCalendarEvents($optionId) {
+
+		$searchFrom = new DateTime();
+		$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
+		$searchTo = clone $searchFrom;
+		$searchTo = $searchTo->add(new DateInterval('PT3H'));
+
+		\OC::$server->getLogger()->alert('Search events between ' . $searchFrom->format('Y-m-d H:i:s') . ' and ' . $searchTo->format('Y-m-d H:i:s'));
+
+		return new DataResponse(['events' => array_values($this->calendarService->getEvents($searchFrom, $searchTo))], Http::STATUS_OK);
+
+
+		if (is_int($from)) {
+			$searchFrom = new DateTime();
+			$searchFrom = $searchFrom->setTimestamp($from);
+		} else {
+			$searchFrom = new DateTime($from);
+		}
+
+
+		if (!$to) {
+			$searchTo = clone $searchFrom;
+			$searchTo = $searchTo->add(new DateInterval('PT1H'));
+
+		} else if (is_int($to)) {
+				$searchTo = new DateTime();
+				$searchTo = $searchTo->setTimestamp($to);
+		} else {
+			$searchTo = new DateTime($to);
+		}
+
+		$events = array_values($this->calendarService->getEvents($searchFrom, $searchTo));
+		return $events;
+
+	}
+
 }
