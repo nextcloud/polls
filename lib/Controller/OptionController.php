@@ -137,8 +137,6 @@ class OptionController extends Controller {
 		$searchTo = clone $searchFrom;
 		$searchTo = $searchTo->add(new DateInterval('PT3H'));
 
-		\OC::$server->getLogger()->alert('Search events between ' . $searchFrom->format('Y-m-d H:i:s') . ' and ' . $searchTo->format('Y-m-d H:i:s'));
-
 		return new DataResponse(['events' => array_values($this->calendarService->getEvents($searchFrom, $searchTo))], Http::STATUS_OK);
 
 
