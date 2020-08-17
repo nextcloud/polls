@@ -200,7 +200,6 @@ class SystemService {
 	 */
 	public function getContactsGroupMembers($query = '') {
 		$contacts = array();
-		\OC::$server->getLogger()->alert('Suche nach Gruppe: ' . $query);
 		foreach (\OC::$server->getContactsManager()->search($query, array('CATEGORIES')) as $contact) {
 			if (
 				   !array_key_exists('isLocalSystemBook', $contact)
