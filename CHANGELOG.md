@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
  - Changed some icons #862
  - Added the ability to confirm options #939 #136
  - A lot of refactoring
+ - Don't invite disabled users #997
+
 
 ## [1.4.3] - 2020-05-03
  - fix #909
