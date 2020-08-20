@@ -27,6 +27,8 @@ use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\BadRequestException;
+use OCA\Polls\Exceptions\DuplicateEntryException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
@@ -124,7 +126,12 @@ class OptionService {
 		$this->option->setPollId($pollId);
 		$this->setOption($timestamp, $pollOptionText, 0);
 
-		return $this->optionMapper->insert($this->option);
+		try {
+			return $this->optionMapper->insert($this->option);
+		} catch (UniqueConstraintViolationException $e) {
+			throw new DuplicateEntryException('This option already exists');
+		}
+
 	}
 
 	/**

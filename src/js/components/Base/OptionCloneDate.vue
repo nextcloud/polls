@@ -47,6 +47,7 @@
 <script>
 
 import moment from '@nextcloud/moment'
+import { showInfo, showError } from '@nextcloud/dialogs'
 import { Multiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins'
 
@@ -86,13 +87,23 @@ export default {
 		createSequence() {
 			for (var i = 0; i < this.sequence.amount; i++) {
 				this.$store.dispatch('poll/options/add', {
-					pollOptionText: moment.unix(this.option.timestamp).add(
+					timestamp: moment.unix(this.option.timestamp).add(
 						this.sequence.step * (i + 1),
 						this.sequence.unit.value
-					).format('YYYY-MM-DD HH:mm:ss'),
+					).unix(),
 				})
+					.catch((error) => {
+						const dateString = moment.unix(this.option.timestamp).add(
+							this.sequence.step * (i + 1),
+							this.sequence.unit.value).format('LLLL')
+						if (error.response.status === 409) {
+							showInfo(t('polls', 'Option "{dateString}" already exists.', { dateString: dateString }))
+						} else {
+							showError(t('polls', 'Option "{dateString}" could not be added.', { dateString: dateString }))
+						}
+					})
+				this.$emit('close')
 			}
-			this.modal = false
 		},
 	},
 }
