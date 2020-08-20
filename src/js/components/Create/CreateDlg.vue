@@ -63,6 +63,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import ConfigBox from '../Base/ConfigBox'
 
@@ -103,11 +104,11 @@ export default {
 				.then((response) => {
 					emit('update-polls')
 					this.cancel()
-					OC.Notification.showTemporary(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.id }), { type: 'success' })
+					showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.id }))
 					this.$router.push({ name: 'vote', params: { id: response.data.id } })
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: this.title }), { type: 'error' })
+					showError(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: this.title }))
 				})
 		},
 

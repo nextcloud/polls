@@ -80,10 +80,10 @@ export default {
 		copyLink() {
 			this.$copyText(this.personalLink).then(
 				function() {
-					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
+					showSuccess(t('polls', 'Link copied to clipboard'))
 				},
 				function() {
-					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
+					showError(t('polls', 'Error while copying link to clipboard'))
 				}
 			)
 		},

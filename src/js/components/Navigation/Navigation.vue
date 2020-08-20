@@ -43,11 +43,12 @@
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
+import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Navigation',
@@ -146,7 +147,7 @@ export default {
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
+					showError(t('polls', 'Error cloning poll.'))
 				})
 		},
 
@@ -157,7 +158,7 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+					showError(t('polls', 'Error deleting poll.'))
 				})
 
 		},
@@ -174,7 +175,7 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+					showError(t('polls', 'Error deleting poll.'))
 				})
 
 		},

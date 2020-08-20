@@ -87,12 +87,13 @@
 </template>
 
 <script>
+import VoteTableVoteItem from './VoteTableVoteItem'
+import { confirmOption } from '../../mixins/optionMixins'
+import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { mapState, mapGetters } from 'vuex'
+import { showSuccess } from '@nextcloud/dialogs'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import orderBy from 'lodash/orderBy'
-import VoteTableVoteItem from './VoteTableVoteItem'
-import VoteTableHeaderItem from './VoteTableHeaderItem'
-import { confirmOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'VoteTable',
@@ -146,6 +147,9 @@ export default {
 			this.$store.dispatch('poll/votes/delete', {
 				userId: this.userToRemove,
 			})
+				.then(() => {
+					showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove} ))
+				})
 			this.modal = false
 			this.userToRemove = ''
 		},

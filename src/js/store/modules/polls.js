@@ -78,7 +78,6 @@ const actions = {
 				context.commit('set', { list: response.data })
 			})
 			.catch((error) => {
-				OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
 				console.error('Error loading polls', { error: error.response })
 			})
 	},
