@@ -118,4 +118,17 @@ class OptionController extends Controller {
 	public function reorder($pollId, $options) {
 		return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
 	}
+
+	/**
+	 * Reorder options
+	 * @NoAdminRequired
+	 * @param int $optionId
+	 * @param int $step
+	 * @param string $unit
+	 * @param int $amount
+	 * @return DataResponse
+	 */
+	public function sequence($optionId, $step, $unit, $amount) {
+		return new DataResponse(['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)], Http::STATUS_OK);
+	}
 }

@@ -184,9 +184,8 @@ const actions = {
 	},
 
 	reorder(context, payload) {
-		const endPoint = 'apps/polls/options/reorder'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
+		const endPoint = 'apps/polls/polls'
+		return axios.post(generateUrl(endPoint.concat(context.rootState.poll.id, '/options/reorder')), {
 			options: payload,
 		})
 			.then((response) => {
@@ -194,6 +193,23 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error reordering option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
+				throw error
+			})
+	},
+
+	sequence(context, payload) {
+		const endPoint = 'apps/polls/option'
+		return axios.post(generateUrl(endPoint.concat('/', payload.option.id, '/sequence')), {
+			step: payload.sequence.step,
+			unit: payload.sequence.unit.value,
+			amount: payload.sequence.amount,
+		})
+			.then((response) => {
+				context.commit('set', { options: response.data.options })
+			})
+			.catch((error) => {
+				console.error('Error creating sequence', { error: error.response }, { payload: payload })
 				context.dispatch('reload')
 				throw error
 			})

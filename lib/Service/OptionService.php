@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use DateTime;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
@@ -198,6 +199,48 @@ class OptionService {
 		}
 
 		return $this->optionMapper->update($this->option);
+	}
+
+	/**
+	 * Make a sequence of date poll options
+	 * @NoAdminRequired
+	 * @param int $optionId
+	 * @param int $step
+	 * @param string $unit
+	 * @param int $amount
+	 * @return array Array of Option objects
+	 * @throws NotAuthorizedException
+	 */
+	public function sequence($optionId, $step, $unit, $amount) {
+
+		$baseDate = new DateTime;
+		$origin = $this->optionMapper->find($optionId);
+
+		if (!$this->acl->set($origin->getPollId())->getAllowEdit()) {
+			throw new NotAuthorizedException;
+		}
+
+		if ($step === 0) {
+			return $this->optionMapper->findByPoll($origin->getPollId());
+		}
+
+		$baseDate->setTimestamp($origin->getTimestamp());
+
+		for ($i=0; $i < $amount; $i++) {
+
+			$this->option = new Option();
+			$this->option->setPollId($origin->getPollId());
+			$this->option->setConfirmed(0);
+			$this->option->setTimestamp($baseDate->modify($step . ' ' . $unit)->getTimestamp());
+			$this->option->setPollOptionText($baseDate->format('c'));
+			$this->option->setOrder($baseDate->getTimestamp());
+			try {
+				$this->optionMapper->insert($this->option);
+			} catch (UniqueConstraintViolationException $e) {
+				\OC::$server->getLogger()->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $origin->getPollId() . '. Option alredy exists.');
+			}
+		}
+		return $this->optionMapper->findByPoll($origin->getPollId());
 	}
 
 	/**
