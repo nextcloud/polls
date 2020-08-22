@@ -42,7 +42,6 @@ export default {
 	data() {
 		return {
 			comment: '',
-			isLoading: false,
 		}
 	},
 
@@ -56,15 +55,12 @@ export default {
 	methods: {
 		writeComment() {
 			if (this.comment) {
-				this.isLoading = true
 				this.$store.dispatch('poll/comments/add', { message: this.comment })
 					.then(() => {
-						this.isLoading = false
 						OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
 						this.comment = ''
 					})
 					.catch((error) => {
-						this.isLoading = false
 						console.error('Error while saving comment - Error: ', error.response)
 						OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })
 					})
@@ -81,10 +77,5 @@ export default {
 		.addComment {
 			margin-left: 40px;
 		}
-	}
-
-	.icon-loading-small {
-		float: left;
-		margin-top: 10px;
 	}
 </style>

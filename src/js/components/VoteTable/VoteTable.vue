@@ -35,17 +35,19 @@
 			</UserItem>
 		</div>
 
-		<div class="vote-table__header">
+		<transition-group name="list" tag="div" class="vote-table__header">
 			<VoteTableHeaderItem v-for="(option) in rankedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="poll.type"
 				:table-mode="tableMode" />
-		</div>
+		</transition-group>
 
 		<div class="vote-table__votes">
-			<div v-for="(participant) in participants"
+			<transition-group v-for="(participant) in participants"
 				:key="participant.userId"
+				name="list"
+				tag="div"
 				:class=" {currentuser: (participant.userId === acl.userId) }"
 				class="vote-table__vote-row">
 				<VoteTableVoteItem v-for="(option) in rankedOptions"
@@ -53,7 +55,7 @@
 					:user-id="participant.userId"
 					:option="option"
 					:is-active="acl.userId === participant.userId && acl.allowVote" />
-			</div>
+			</transition-group>
 		</div>
 
 		<div v-if="expired" class="vote-table__footer">

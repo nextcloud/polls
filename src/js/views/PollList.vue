@@ -36,7 +36,9 @@
 				<div class="icon-polls" />
 				<h2> {{ t('polls', 'No existing polls.') }} </h2>
 			</div>
-			<transition-group v-else name="list" tag="div"
+			<transition-group v-else
+				name="list"
+				tag="div"
 				class="poll-list__list">
 				<PollItem key="0" :header="true"
 					:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
