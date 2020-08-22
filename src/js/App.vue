@@ -135,6 +135,7 @@ export default {
 	--icon-polls: url('/index.php/svg/polls/app?color=000&v=1');
 	--icon-polls-handle: url('/index.php/svg/polls/handle?color=000&v=1');
 	--icon-polls-mail: url('/index.php/svg/polls/mail?color=000&v=1');
+	--icon-polls-sidebar-toggle: url('/index.php/svg/polls/sidebar-toggle?color=000&v=1');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -181,6 +182,10 @@ export default {
 
 .icon-polls-mail {
 	background-image: var(--icon-polls-mail);
+}
+
+.icon-polls-sidebar-toggle {
+	background-image: var(--icon-polls-sidebar-toggle);
 }
 
 .title {

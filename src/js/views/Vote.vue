@@ -34,7 +34,7 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton icon="icon-settings" @click="toggleSideBar()">
+				<ActionButton icon="icon-polls-sidebar-toggle" @click="toggleSideBar()">
 					{{ t('polls', 'Toggle Sidebar') }}
 				</ActionButton>
 			</Actions>
@@ -238,7 +238,7 @@ export default {
 		},
 
 		toggleView() {
-			emit('transitions-off', { delay: 0.5 })
+			emit('transitions-off', { delay: 500 })
 			this.tableMode = !this.tableMode
 		},
 
