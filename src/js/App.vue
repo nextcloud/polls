@@ -196,8 +196,8 @@ export default {
 	transition: transform 0.5s;
 }
 
-.fade-leave-active {
-	transition: opacity 2.5s;
+.fade-leave-active .fade-enter-active{
+	transition: opacity 0.5s;
 }
 
 .fade-enter, .fade-leave-to {
