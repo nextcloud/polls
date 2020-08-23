@@ -117,7 +117,6 @@ class ShareService {
 	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId, $type, $userId, $userEmail = '') {
-
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}

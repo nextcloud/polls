@@ -98,6 +98,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { showSuccess } from '@nextcloud/dialogs'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import orderBy from 'lodash/orderBy'
 import VoteTableCalendarPeek from './VoteTableCalendarPeek'
@@ -158,6 +159,9 @@ export default {
 			this.$store.dispatch('poll/votes/delete', {
 				userId: this.userToRemove,
 			})
+				.then(() => {
+					showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove} ))
+				})
 			this.modal = false
 			this.userToRemove = ''
 		},

@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.5.0] - tbd
+## [1.5.0 - beta1] - 2020-08-17
  - Drop support for Nextcloud 16
  - Stop immediatley sending of invitation mails after adding a share #1007 #935
  - Fix: Hide usernames in notification mail, if results in poll are hidden #990 #980
@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
  - Changed some icons #862
  - Added the ability to confirm options #939 #136
  - A lot of refactoring
+ - Don't invite disabled users #997
+
 
 ## [1.4.3] - 2020-05-03
  - fix #909
