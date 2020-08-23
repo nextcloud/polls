@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Content app-name="polls">
+	<Content app-name="polls" :class="transitionClass">
 		<Navigation v-if="getCurrentUser()" />
 		<router-view />
 		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
@@ -48,10 +48,24 @@ export default {
 		return {
 			sideBarOpen: (window.innerWidth > 920),
 			activeTab: 'comments',
+			transitionClass: 'transitions-active',
 		}
 	},
 
 	created() {
+		subscribe('transitions-off', (delay) => {
+			this.transitionClass = ''
+			if (delay) {
+				setTimeout(() => {
+					this.transitionClass = 'transitions-active'
+				}, delay)
+			}
+		})
+
+		subscribe('transitions-on', () => {
+			this.transitionClass = 'transitions-active'
+		})
+
 		subscribe('toggle-sidebar', (payload) => {
 			if (payload === undefined) {
 				this.sideBarOpen = !this.sideBarOpen
@@ -119,6 +133,7 @@ export default {
 	--icon-polls: url('/index.php/svg/polls/app?color=000&v=1');
 	--icon-polls-handle: url('/index.php/svg/polls/handle?color=000&v=1');
 	--icon-polls-mail: url('/index.php/svg/polls/mail?color=000&v=1');
+	--icon-polls-sidebar-toggle: url('/index.php/svg/polls/sidebar-toggle?color=000&v=1');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -167,6 +182,10 @@ export default {
 	background-image: var(--icon-polls-mail);
 }
 
+.icon-polls-sidebar-toggle {
+	background-image: var(--icon-polls-sidebar-toggle);
+}
+
 .title {
 	margin: 8px 0;
 }
@@ -180,26 +199,28 @@ export default {
 	background-image: var(--icon-polls-handle);
 }
 
-.list-enter-active,
-.list-leave-active {
-	transition: all 0.5s ease;
-}
+.transitions-active {
+	.list-enter-active,
+	.list-leave-active {
+		transition: all 0.5s ease;
+	}
 
-.list-enter,
-.list-leave-to {
-	opacity: 0;
-}
+	.list-enter,
+	.list-leave-to {
+		opacity: 0;
+	}
 
-.list-move {
-	transition: transform 0.5s;
-}
+	.list-move {
+		transition: transform 0.5s;
+	}
 
-.fade-leave-active {
-	transition: opacity 2.5s;
-}
+	.fade-leave-active .fade-enter-active{
+		transition: opacity 0.5s;
+	}
 
-.fade-enter, .fade-leave-to {
-	opacity: 0;
+	.fade-enter, .fade-leave-to {
+		opacity: 0;
+	}
 }
 
 input {
@@ -277,6 +298,7 @@ input {
 	display: flex;
 	flex-direction: column;
 	padding: 0 8px;
+	min-width: 320px;
 }
 
 [class*='area__'] {
@@ -284,6 +306,7 @@ input {
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 	margin: 12px 6px;
+	min-width: 320px;
 }
 
 </style>
