@@ -82,8 +82,6 @@ class SubscriptionService {
 	 */
 	public function set($pollId, $token, $subscribed) {
 		if (!$this->acl->set($pollId, $token)->getAllowView()) {
-			\OC::$server->getLogger()->alert('Share token: ' . $token);
-			\OC::$server->getLogger()->alert('Share PollId: ' . $pollId);
 			throw new NotAuthorizedException;
 		}
 		try {

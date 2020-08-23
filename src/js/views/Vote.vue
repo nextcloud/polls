@@ -207,7 +207,7 @@ export default {
 	created() {
 		if (getCurrentUser() && this.$route.params.token) {
 			// reroute to the internal vote page, if the user is logged in
-			this.$store.dispatch('poll/shares/get', { token: this.$route.params.token })
+			this.$store.dispatch('poll/share/get', { token: this.$route.params.token })
 				.then((response) => {
 					this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
 				})

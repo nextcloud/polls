@@ -122,11 +122,19 @@ class SystemService {
 		$groups = array();
 		foreach ($this->groupManager->search($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
+				try {
+					// seems to work only from NC19 on
+					$displayName = $group->getDisplayName();
+				} catch (\Exception $e) {
+					// fallback
+					$displayName = $group->getGID();
+				}
+
 				$groups[] = [
 					'id' => $group->getGID(),
 					'user' => $group->getGID(),
 					'organisation' => '',
-					'displayName' => $group->getDisplayName(),
+					'displayName' => $displayName,
 					'emailAddress' => '',
 					'desc' => 'Group',
 					'type' => 'group',
@@ -192,7 +200,6 @@ class SystemService {
 	 */
 	public function getContactsGroupMembers($query = '') {
 		$contacts = array();
-		\OC::$server->getLogger()->alert('Suche nach Gruppe: ' . $query);
 		foreach (\OC::$server->getContactsManager()->search($query, array('CATEGORIES')) as $contact) {
 			if (
 				   !array_key_exists('isLocalSystemBook', $contact)

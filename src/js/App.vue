@@ -30,9 +30,10 @@
 
 <script>
 import Navigation from './components/Navigation/Navigation'
-import { Content } from '@nextcloud/vue'
 import SideBar from './components/SideBar/SideBar'
 import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
+import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
@@ -99,11 +100,8 @@ export default {
 			if (getCurrentUser()) {
 
 				this.$store.dispatch('polls/load')
-					.then(() => {
-					})
-					.catch((error) => {
-						console.error('refresh poll: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error loading poll list'), { type: 'error' })
+					.catch(() => {
+						showError(t('polls', 'Error loading poll list'))
 					})
 			}
 		},

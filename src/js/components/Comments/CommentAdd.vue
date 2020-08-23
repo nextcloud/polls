@@ -30,6 +30,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 import InputDiv from '../Base/InputDiv'
 
 export default {
@@ -57,12 +58,12 @@ export default {
 			if (this.comment) {
 				this.$store.dispatch('poll/comments/add', { message: this.comment })
 					.then(() => {
-						OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
+						showSuccess(t('polls', 'Your comment was added'))
 						this.comment = ''
 					})
 					.catch((error) => {
 						console.error('Error while saving comment - Error: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })
+						showError(t('polls', 'Error while saving comment'))
 					})
 			}
 

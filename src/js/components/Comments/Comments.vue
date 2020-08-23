@@ -55,6 +55,7 @@
 import CommentAdd from './CommentAdd'
 import sortBy from 'lodash/sortBy'
 import moment from '@nextcloud/moment'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
@@ -97,10 +98,10 @@ export default {
 			this.$store
 				.dispatch({ type: 'poll/comments/delete', comment: comment })
 				.then(() => {
-					OC.Notification.showTemporary(t('polls', 'Comment deleted'), { type: 'success' })
+					showSuccess(t('polls', 'Comment deleted'))
 				})
 				.catch((error) => {
-					OC.Notification.showTemporary(t('polls', 'Error while deleting the comment'), { type: 'error' })
+					showError(t('polls', 'Error while deleting the comment'))
 					console.error(error.response)
 				})
 		},

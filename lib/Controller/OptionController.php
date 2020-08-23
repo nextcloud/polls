@@ -24,6 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use Exception;
+use OCA\Polls\Exceptions\DuplicateEntryException;
 
 use OCP\IRequest;
 
@@ -70,7 +71,11 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
-		return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+		try {
+			return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+		} catch (DuplicateEntryException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
 	}
 
 	/**

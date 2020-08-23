@@ -62,6 +62,7 @@
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
 import ButtonDiv from '../Base/ButtonDiv'
+import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
 import { mapState } from 'vuex'
@@ -170,7 +171,7 @@ export default {
 						}
 					})
 					.catch(() => {
-						OC.Notification.showTemporary(t('polls', 'Error saving username', 1, this.poll.title), { type: 'error' })
+						showError(t('polls', 'Error saving username', 1, this.poll.title))
 					})
 			}
 		},

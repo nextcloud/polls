@@ -28,11 +28,11 @@
 			{{ option.rank }}
 		</div>
 
-		<div v-if="show === 'textBox'" v-tooltip.auto="optionText" class="option-item__option--text">
+		<div v-if="show === 'textBox'" v-tooltip.auto="optionTooltip" class="option-item__option--text">
 			{{ optionText }}
 		</div>
 
-		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormat" class="option-item__option--datebox">
+		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
 			<div class="month">
 				{{ dateBoxMonth }}
 			</div>
@@ -83,24 +83,43 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 		}),
+
 		isDraggable() {
 			return this.draggable
 		},
+
 		dateLocalFormat() {
 			return moment.unix(this.option.timestamp).format('llll')
 		},
+
+		dateLocalFormatUTC() {
+			return moment.unix(this.option.timestamp).utc().format('llll').concat(' UTC')
+		},
+
 		dateBoxMonth() {
 			return moment.unix(this.option.timestamp).format('MMM') + " '" + moment.unix(this.option.timestamp).format('YY')
 		},
+
 		dateBoxDay() {
 			return moment.unix(this.option.timestamp).format('Do')
 		},
+
 		dateBoxDow() {
 			return moment.unix(this.option.timestamp).format('ddd')
 		},
+
 		dateBoxTime() {
 			return moment.unix(this.option.timestamp).format('LT')
 		},
+
+		optionTooltip() {
+			if (this.poll.type === 'datePoll') {
+				return this.dateLocalFormatUTC
+			} else {
+				return this.option.pollOptionText
+			}
+		},
+
 		optionText() {
 			if (this.poll.type === 'datePoll') {
 				return this.dateLocalFormat
@@ -108,6 +127,7 @@ export default {
 				return this.option.pollOptionText
 			}
 		},
+
 		show() {
 			if (this.poll.type === 'datePoll' && this.display === 'dateBox') {
 				return 'dateBox'

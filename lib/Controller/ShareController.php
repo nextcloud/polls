@@ -200,7 +200,6 @@ class ShareController extends Controller {
 		$shares = [];
 		try {
 			$share = $this->shareService->get($token);
-			\OC::$server->getLogger()->alert('Suche nach Gruppe: ' . $share->getUserId());
 			foreach ($this->systemService->getContactsGroupMembers($share->getUserId()) as $member) {
 				$shares[] = $this->shareService->add($share->getpollId(), 'contact', $member['user'], $member['emailAddress']) ;
 			}
