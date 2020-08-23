@@ -22,7 +22,7 @@
 
 <template>
 	<div class="calendar-info"
-		:class="conflictLevel(event)"
+		:class="conflictLevel"
 		:style="{ backgroundColor: event.displayColor, color: fontColor }">
 		<div class="calendar-info__time">
 			{{ formatDate(event.eventFrom) }} - {{ formatDate(event.eventTo) }}
@@ -72,6 +72,17 @@ export default {
 			return l > 0.5 ? 'black' : 'white'
 		},
 
+		conflictLevel() {
+			if (this.event.key === 0) {
+				return 'conflict-ignore'
+			} else if (this.event.eventFrom >= this.option.timestamp + 3600) {
+				return 'conflict-no'
+			} else if (this.event.eventTo <= this.option.timestamp) {
+				return 'conflict-no'
+			} else {
+				return 'conflict-yes'
+			}
+		},
 	},
 
 	methods: {
@@ -79,17 +90,6 @@ export default {
 			return moment.unix(timeStamp).format('LT')
 		},
 
-		conflictLevel(event) {
-			if (event.key === 0) {
-				return 'conflict-ignore'
-			} else if (event.eventFrom >= this.option.timestamp + 3600) {
-				return 'conflict-no'
-			} else if (event.eventTo <= this.option.timestamp) {
-				return 'conflict-no'
-			} else {
-				return 'conflict-yes'
-			}
-		},
 	},
 }
 
