@@ -29,12 +29,12 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton :icon="tableMode ? 'icon-phone' : 'icon-desktop'" @click="tableMode = !tableMode">
+				<ActionButton :icon="toggleViewIcon" @click="toggleView()">
 					{{ viewCaption }}
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton icon="icon-settings" @click="toggleSideBar()">
+				<ActionButton icon="icon-polls-sidebar-toggle" @click="toggleSideBar()">
 					{{ t('polls', 'Toggle Sidebar') }}
 				</ActionButton>
 			</Actions>
@@ -167,6 +167,7 @@ export default {
 				return t('polls', 'Ranked order')
 			}
 		},
+
 		showRegisterModal() {
 			return (this.$route.name === 'publicVote'
 				&& !this.share.userId
@@ -174,6 +175,7 @@ export default {
 				&& this.poll.id
 			)
 		},
+
 		sortIcon() {
 			if (this.ranked) {
 				if (this.poll.type === 'datePoll') {
@@ -185,6 +187,15 @@ export default {
 				return 'icon-quota'
 			}
 		},
+
+		toggleViewIcon: function() {
+			if (this.tableMode) {
+				return 'icon-phone'
+			} else {
+				return 'icon-desktop'
+			}
+		},
+
 	},
 
 	watch: {
@@ -224,6 +235,11 @@ export default {
 
 		toggleSideBar() {
 			emit('toggle-sidebar')
+		},
+
+		toggleView() {
+			emit('transitions-off', { delay: 500 })
+			this.tableMode = !this.tableMode
 		},
 
 		loadPoll() {

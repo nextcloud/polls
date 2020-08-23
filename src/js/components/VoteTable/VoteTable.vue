@@ -35,17 +35,19 @@
 			</UserItem>
 		</div>
 
-		<div class="vote-table__header">
+		<transition-group name="list" tag="div" class="vote-table__header">
 			<VoteTableHeaderItem v-for="(option) in rankedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="poll.type"
 				:table-mode="tableMode" />
-		</div>
+		</transition-group>
 
 		<div class="vote-table__votes">
-			<div v-for="(participant) in participants"
+			<transition-group v-for="(participant) in participants"
 				:key="participant.userId"
+				name="list"
+				tag="div"
 				:class=" {currentuser: (participant.userId === acl.userId) }"
 				class="vote-table__vote-row">
 				<VoteTableVoteItem v-for="(option) in rankedOptions"
@@ -53,7 +55,7 @@
 					:user-id="participant.userId"
 					:option="option"
 					:is-active="acl.userId === participant.userId && acl.allowVote" />
-			</div>
+			</transition-group>
 		</div>
 
 		<div v-if="expired" class="vote-table__footer">
@@ -148,7 +150,7 @@ export default {
 				userId: this.userToRemove,
 			})
 				.then(() => {
-					showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove} ))
+					showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove }))
 				})
 			this.modal = false
 			this.userToRemove = ''
@@ -331,7 +333,7 @@ export default {
 	.vote-table__vote-row,
 	.vote-table__footer {
 		> div {
-			max-width: 230px;
+			// max-width: 230px;
 
 			&.confirmed {
 				margin-left: 8px;
@@ -384,10 +386,13 @@ export default {
 			hyphens: auto;
 			text-align: center;
 			align-items: center;
+			// hack for the hyphens, because hyphenating works different
+			// in different browsers and with different languages.
+			min-width: 160px;
 		}
 	}
 
-	// some littlehacks
+	// some little hacks
 	.user-item {
 		max-width: 280px;
 	}
