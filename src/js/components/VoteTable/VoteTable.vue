@@ -150,7 +150,7 @@ export default {
 				userId: this.userToRemove,
 			})
 				.then(() => {
-					showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove} ))
+					showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove }))
 				})
 			this.modal = false
 			this.userToRemove = ''
