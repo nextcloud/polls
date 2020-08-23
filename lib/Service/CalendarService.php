@@ -84,19 +84,4 @@ class CalendarService {
 	}
 
 
-	/**
-	 * Get events from the user's calendar which are 2 hours before and 3 hours after the timestamp
-	 * @NoAdminRequired
-	 * @param DateTime $from
-	 * @return Array
-	 */
-	public function getEventsAround($from) {
-		$from = new DateTime($from);
-		$to = new DateTime($from);
-		return $this->getEvents(
-			$from->sub(new DateInterval('P2H')),
-			$to->add(new DateInterval('P3H'))
-		);
-	}
-
 }
