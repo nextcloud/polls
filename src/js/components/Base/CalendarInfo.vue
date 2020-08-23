@@ -23,7 +23,7 @@
 <template>
 	<div class="calendar-info"
 		:class="conflictLevel(event)"
-		:style="{ backgroundColor: event.displayColor }">
+		:style="{ backgroundColor: event.displayColor, color: fontColor }">
 		<div class="calendar-info__time">
 			{{ formatDate(event.eventFrom) }} - {{ formatDate(event.eventTo) }}
 		</div>
@@ -52,10 +52,33 @@ export default {
 
 	},
 
+	computed: {
+		fontColor() {
+			if (this.event.displayColor === 'transparent') {
+				return 'black'
+			}
+
+			const hex = this.event.displayColor.replace(/#/, '')
+			const r = parseInt(hex.substr(0, 2), 16)
+			const g = parseInt(hex.substr(2, 2), 16)
+			const b = parseInt(hex.substr(4, 2), 16)
+
+			const l = [
+				0.299 * r,
+				0.587 * g,
+				0.114 * b,
+			].reduce((a, b) => a + b) / 255
+
+			return l > 0.5 ? 'black' : 'white'
+		},
+
+	},
+
 	methods: {
 		formatDate(timeStamp) {
 			return moment.unix(timeStamp).format('LT')
 		},
+
 		conflictLevel(event) {
 			if (event.key === 0) {
 				return 'conflict-ignore'

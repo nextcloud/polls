@@ -98,7 +98,7 @@ export default {
 			return {
 				name: 'Polls',
 				key: 0,
-				displayColor: '#fff',
+				displayColor: '#ffffff',
 				permissions: 0,
 				eventId: this.option.id,
 				UID: this.option.id,
