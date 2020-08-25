@@ -5,6 +5,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Group" : "Stollad",
     "Unknown user" : "Implijer dianv",
+    "Delete comment" : "Lemel an displegadenn",
     "Apply" : "Lakaat",
     "Owner" : "Perc'henner",
     "never" : "james",
