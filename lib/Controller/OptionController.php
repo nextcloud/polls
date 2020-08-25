@@ -129,6 +129,18 @@ class OptionController extends Controller {
 	}
 
 	/**
+	 * Reorder options
+	 * @NoAdminRequired
+	 * @param int $optionId
+	 * @param int $step
+	 * @param string $unit
+	 * @param int $amount
+	 * @return DataResponse
+	 */
+	public function sequence($optionId, $step, $unit, $amount) {
+		return new DataResponse(['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)], Http::STATUS_OK);
+	}
+
 	 * findCalendarEvents
 	 * @NoAdminRequired
 	 * @param integer $from
@@ -168,5 +180,4 @@ class OptionController extends Controller {
 		return $events;
 
 	}
-
 }

@@ -184,9 +184,8 @@ const actions = {
 	},
 
 	reorder(context, payload) {
-		const endPoint = 'apps/polls/options/reorder'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
+		const endPoint = 'apps/polls/polls'
+		return axios.post(generateUrl(endPoint.concat(context.rootState.poll.id, '/options/reorder')), {
 			options: payload,
 		})
 			.then((response) => {
@@ -199,6 +198,23 @@ const actions = {
 			})
 	},
 
+	sequence(context, payload) {
+		const endPoint = 'apps/polls/option'
+		return axios.post(generateUrl(endPoint.concat('/', payload.option.id, '/sequence')), {
+			step: payload.sequence.step,
+			unit: payload.sequence.unit.value,
+			amount: payload.sequence.amount,
+		})
+			.then((response) => {
+				context.commit('set', { options: response.data.options })
+			})
+			.catch((error) => {
+				console.error('Error creating sequence', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
+				throw error
+			})
+	},
+
 	getEvents(context, payload) {
 		const endPoint = 'apps/polls/option'
 		return axios.get(generateUrl(endPoint.concat('/', payload.option.id, '/events')))
@@ -206,11 +222,12 @@ const actions = {
 				return response.data
 			})
 			.catch((error) => {
-				console.error('Error reordering option', { error: error.response }, { payload: payload })
+				console.error('Error loading calendar events', { error: error.response }, { payload: payload })
 				context.dispatch('reload')
 				throw error
 			})
 	},
+
 }
 
 export default { state, mutations, getters, actions, namespaced }

@@ -41,12 +41,13 @@ return [
 		['name' => 'poll#clone', 'url' => '/polls/clone/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/polls/addresses/{pollId}', 'verb' => 'GET'],
 
+		['name' => 'option#list', 'url' => '/polls/{pollId}/options', 'verb' => 'GET'],
+		['name' => 'option#reorder', 'url' => '/polls/{pollId}/options/reorder', 'verb' => 'POST'],
 		['name' => 'option#add', 'url' => '/option', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/option/{optionId}', 'verb' => 'PUT'],
 		['name' => 'option#delete', 'url' => '/option/{optionId}', 'verb' => 'DELETE'],
 		['name' => 'option#confirm', 'url' => '/option/{optionId}/confirm', 'verb' => 'PUT'],
-		['name' => 'option#reorder', 'url' => '/options/reorder', 'verb' => 'POST'],
-		['name' => 'option#list', 'url' => '/polls/{pollId}/options', 'verb' => 'GET'],
+		['name' => 'option#sequence', 'url' => '/option/{optionId}/sequence', 'verb' => 'POST'],
 		['name' => 'option#findCalendarEvents', 'url' => '/option/{optionId}/events', 'verb' => 'GET'],
 		// ['name' => 'option#listByToken', 'url' => '/options/get/s/{token}',     'verb' => 'GET'],
 
