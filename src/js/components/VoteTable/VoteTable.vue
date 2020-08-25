@@ -43,6 +43,14 @@
 				:table-mode="tableMode" />
 		</transition-group>
 
+		<div v-if="poll.type === 'datePoll'" class="vote-table__calendar">
+			<VoteTableCalendarPeek
+				v-for="(option) in rankedOptions"
+				:key="option.id"
+				:option="option"
+				:open="false" />
+		</div>
+
 		<div class="vote-table__votes">
 			<transition-group v-for="(participant) in participants"
 				:key="participant.userId"
@@ -72,6 +80,8 @@
 
 		<div class="vote-table__footer-blind fixed" />
 
+		<div class="vote-table__calendar-blind fixed" />
+
 		<div class="vote-table__header-blind fixed" />
 
 		<Modal v-if="modal">
@@ -89,13 +99,14 @@
 </template>
 
 <script>
-import VoteTableVoteItem from './VoteTableVoteItem'
-import { confirmOption } from '../../mixins/optionMixins'
-import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import orderBy from 'lodash/orderBy'
+import VoteTableCalendarPeek from './VoteTableCalendarPeek'
+import VoteTableVoteItem from './VoteTableVoteItem'
+import VoteTableHeaderItem from './VoteTableHeaderItem'
+import { confirmOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'VoteTable',
@@ -103,6 +114,7 @@ export default {
 		Actions,
 		ActionButton,
 		Modal,
+		VoteTableCalendarPeek,
 		VoteTableHeaderItem,
 		VoteTableVoteItem,
 	},
@@ -174,6 +186,7 @@ export default {
 	// define default flex items
 	.vote-table__users,
 	.vote-table__header,
+	.vote-table__calendar,
 	.vote-table__votes,
 	.vote-table__footer,
 	.vote-table__vote-row,
@@ -184,6 +197,7 @@ export default {
 
 	//set default style for confirmed options
 	.vote-table__header,
+	.vote-table__calendar,
 	.vote-table__vote-row,
 	.vote-table__footer {
 		> div {
@@ -206,7 +220,7 @@ export default {
 .vote-table.mobile {
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto;
-	grid-template-areas: 'vote header';
+	grid-template-areas: 'vote calendar header';
 	justify-items: stretch;
 
 	.vote-table__header {
@@ -227,6 +241,23 @@ export default {
 		}
 	}
 
+	.vote-table__calendar {
+		grid-area: calendar;
+		flex-direction: column;
+
+		> div {
+			flex-direction: row;
+			flex: 1;
+			align-items: center;
+
+			&.confirmed {
+				border-bottom: none !important;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+		}
+	}
+
 	.vote-table__header-blind,
 	.vote-table__users,
 	.vote-table__vote-row:not(.currentuser),
@@ -236,6 +267,7 @@ export default {
 	}
 
 	.vote-table__header,
+	.vote-table__calendar,
 	.vote-table__vote-row {
 		> div {
 			padding-left: 12px;
@@ -251,7 +283,8 @@ export default {
 		}
 	}
 
-	.vote-table__vote-row {
+	.vote-table__vote-row,
+	.vote-table__calendar {
 		> div.confirmed {
 			border-right: none !important;
 			border-top-right-radius: 0;
@@ -266,8 +299,9 @@ export default {
 	grid-template-rows: auto repeat(var(--polls-vote-rows), 1fr) auto;
 	grid-template-areas:
 		'blind1 options'
+		'blind2 calendar'
 		'users vote'
-		'blind2 footer';
+		'blind3 footer';
 	justify-items: stretch;
 	padding-bottom: 14px; // leave space for the scrollbar!
 
@@ -288,12 +322,33 @@ export default {
 		}
 	}
 
+	.vote-table__calendar {
+		grid-area: calendar;
+		flex-direction: row;
+
+		> div {
+			flex-direction: column;
+			flex: 1;
+			align-items: center;
+
+			&.confirmed {
+				border-bottom: none !important;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+		}
+	}
+
 	.vote-table__header-blind {
 		grid-area: blind1;
 	}
 
-	.vote-table__footer-blind {
+	.vote-table__calendar-blind {
 		grid-area: blind2;
+	}
+
+	.vote-table__footer-blind {
+		grid-area: blind3;
 	}
 
 	.vote-table__votes {
@@ -331,6 +386,7 @@ export default {
 
 	.vote-table__header,
 	.vote-table__vote-row,
+	.vote-table__calendar,
 	.vote-table__footer {
 		> div {
 			// max-width: 230px;
@@ -344,7 +400,8 @@ export default {
 	}
 
 	// limit width of columns
-	.vote-table__vote-row {
+	.vote-table__vote-row,
+	.vote-table__calendar {
 		flex-direction: row;
 		order: 1;
 		flex: 1;

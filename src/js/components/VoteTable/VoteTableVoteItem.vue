@@ -84,6 +84,11 @@ export default {
 	},
 
 	methods: {
+		getEvents() {
+			this.$store
+				.dispatch('poll/options/getEvents', { option: this.option })
+		},
+
 		setVote() {
 			this.$store
 				.dispatch('poll/votes/set', {

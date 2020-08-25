@@ -47,6 +47,7 @@ return [
 		['name' => 'option#confirm', 'url' => '/option/{optionId}/confirm', 'verb' => 'PUT'],
 		['name' => 'option#reorder', 'url' => '/options/reorder', 'verb' => 'POST'],
 		['name' => 'option#list', 'url' => '/polls/{pollId}/options', 'verb' => 'GET'],
+		['name' => 'option#findCalendarEvents', 'url' => '/option/{optionId}/events', 'verb' => 'GET'],
 		// ['name' => 'option#listByToken', 'url' => '/options/get/s/{token}',     'verb' => 'GET'],
 
 		['name' => 'vote#set', 'url' => '/vote/set', 'verb' => 'POST'],
