@@ -48,6 +48,7 @@ return [
 		['name' => 'option#delete', 'url' => '/option/{optionId}', 'verb' => 'DELETE'],
 		['name' => 'option#confirm', 'url' => '/option/{optionId}/confirm', 'verb' => 'PUT'],
 		['name' => 'option#sequence', 'url' => '/option/{optionId}/sequence', 'verb' => 'POST'],
+		['name' => 'option#findCalendarEvents', 'url' => '/option/{optionId}/events', 'verb' => 'GET'],
 		// ['name' => 'option#listByToken', 'url' => '/options/get/s/{token}',     'verb' => 'GET'],
 
 		['name' => 'vote#set', 'url' => '/vote/set', 'verb' => 'POST'],

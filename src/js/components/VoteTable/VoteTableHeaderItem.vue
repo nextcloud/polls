@@ -27,7 +27,7 @@
 		<Confirmation v-if="isConfirmed" :option="option" />
 		<Counter v-else :show-maybe="Boolean(poll.allowMaybe)"
 			:option="option"
-			:bubble-style="!tableMode"
+			:counter-style="tableMode ? 'iconStyle' : 'barStyle'"
 			:show-no="!tableMode" />
 	</div>
 </template>
@@ -104,10 +104,15 @@ export default {
 }
 
 .mobile {
+	.vote-table-header-item {
+		flex-direction: column;
+		&.confirmed {
+			flex-direction: row;
+		}
+	}
 	.counter {
 		flex: 1;
 		order: 2;
-		width: 130px;
 	}
 
 	.confirmation {

@@ -214,6 +214,20 @@ const actions = {
 				throw error
 			})
 	},
+
+	getEvents(context, payload) {
+		const endPoint = 'apps/polls/option'
+		return axios.get(generateUrl(endPoint.concat('/', payload.option.id, '/events')))
+			.then((response) => {
+				return response.data
+			})
+			.catch((error) => {
+				console.error('Error loading calendar events', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
+				throw error
+			})
+	},
+
 }
 
 export default { state, mutations, getters, actions, namespaced }

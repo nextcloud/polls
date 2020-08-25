@@ -106,6 +106,22 @@ class OptionService {
 		}
 	}
 
+	/**
+	 * Get option
+	 * @NoAdminRequired
+	 * @param int $optionId
+	 * @return Option
+	 * @throws NotAuthorizedException
+	 */
+	public function get($optionId) {
+
+		if (!$this->acl->set($this->optionMapper->find($optionId)->getPollId())->getAllowView()) {
+			throw new NotAuthorizedException;
+		}
+
+		return $this->optionMapper->find($optionId);
+	}
+
 
 	/**
 	 * Add a new option
