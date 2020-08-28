@@ -38,9 +38,11 @@
 				</ul>
 			</AppNavigationItem>
 		</template>
-		<AppNavigationSettings :title="t('core', 'Settings')">
-			<NavigationSettings />
-		</AppNavigationSettings>
+		<template #footer>
+			<AppNavigationSettings :title="t('core', 'Settings')">
+				<NavigationSettings />
+			</AppNavigationSettings>
+		</template>
 	</AppNavigation>
 </template>
 

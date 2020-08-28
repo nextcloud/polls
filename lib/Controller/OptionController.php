@@ -141,6 +141,7 @@ class OptionController extends Controller {
 		return new DataResponse(['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)], Http::STATUS_OK);
 	}
 
+	 /**
 	 * findCalendarEvents
 	 * @NoAdminRequired
 	 * @param integer $from
