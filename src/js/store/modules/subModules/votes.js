@@ -117,7 +117,7 @@ const actions = {
 			})
 	},
 
-	delete(context, payload) {
+	deleteUser(context, payload) {
 		const endPoint = 'apps/polls/votes/delete'
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
@@ -125,7 +125,6 @@ const actions = {
 		})
 			.then(() => {
 				context.commit('deleteVotes', payload)
-				OC.Notification.showTemporary(t('polls', 'User {userId} removed', payload), { type: 'success' })
 			})
 			.catch((error) => {
 				console.error('Error deleting votes', { error: error.response }, { payload: payload })

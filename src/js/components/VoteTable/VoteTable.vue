@@ -158,7 +158,7 @@ export default {
 
 	methods: {
 		removeUser() {
-			this.$store.dispatch('poll/votes/delete', {
+			this.$store.dispatch('poll/votes/deleteUser', {
 				userId: this.userToRemove,
 			})
 				.then(() => {
