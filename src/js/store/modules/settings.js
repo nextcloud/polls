@@ -44,7 +44,9 @@ const mutations = {
 	},
 
 	setPreference(state, payload) {
-		Object.assign(state.user, payload)
+		Object.keys(payload).filter(key => key in state.user).forEach(key => {
+			state.user[key] = payload[key]
+		})
 	},
 }
 
