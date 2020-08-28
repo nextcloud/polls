@@ -55,8 +55,6 @@ import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
 import NavigationSettings from './NavigationSettings'
 import { emit } from '@nextcloud/event-bus'
-import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Navigation',
