@@ -23,7 +23,7 @@
 <template>
 	<div class="calendar-info"
 		:class="conflictLevel"
-		:style="{ backgroundColor: event.displayColor, color: fontColor }">
+		:style="calendarStyle">
 		<div class="calendar-info__time">
 			{{ formatDate(event.eventFrom) }} - {{ formatDate(event.eventTo) }}
 		</div>
@@ -53,6 +53,13 @@ export default {
 	},
 
 	computed: {
+		calendarStyle() {
+			return {
+				backgroundColor: this.event.displayColor,
+				color: this.fontColor,
+			}
+		},
+
 		fontColor() {
 			if (this.event.displayColor === 'transparent') {
 				return 'black'
@@ -75,9 +82,9 @@ export default {
 		conflictLevel() {
 			if (this.event.key === 0) {
 				return 'conflict-ignore'
-			} else if (this.event.eventFrom >= this.option.timestamp + 3600) {
+			} else if (this.event.eventFrom > this.option.timestamp + 3599) {
 				return 'conflict-no'
-			} else if (this.event.eventTo <= this.option.timestamp) {
+			} else if (this.event.eventTo - 1 < this.option.timestamp) {
 				return 'conflict-no'
 			} else {
 				return 'conflict-yes'
@@ -106,6 +113,9 @@ export default {
 
 	&.conflict-ignore {
 		border-left: 4px solid transparent;
+		.calendar-info__summay {
+			font-weight: bold;
+		}
 	}
 
 	&.conflict-no {
@@ -122,5 +132,7 @@ export default {
 	font-size: 80%;
 	flex: 0 auto;
 }
-
+.calendar-info__summay {
+	margin-left: 4px;
+}
 </style>

@@ -142,6 +142,12 @@ export default {
 	margin: 4px auto;
 }
 
+.calendar-grid {
+	padding: 8px;
+	background-color: #fff;
+	border-radius: var(--border-radius);
+}
+
 .vote-table-calendar-peek >div {
 	display: flex;
 	flex-direction: column;
