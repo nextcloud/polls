@@ -218,7 +218,7 @@ export default {
 
 // justify styles for mobile view
 .vote-table.mobile {
-	grid-template-columns: auto 1fr;
+	grid-template-columns: auto auto 1fr;
 	grid-template-rows: auto;
 	grid-template-areas: 'vote calendar header';
 	justify-items: stretch;
