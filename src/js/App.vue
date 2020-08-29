@@ -35,6 +35,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import '@nextcloud/dialogs/styles/toast.scss'
 
 export default {
 	name: 'App',
