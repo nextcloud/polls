@@ -26,7 +26,6 @@
 			class="user-item__avatar"
 			:menu-position="menuPosition"
 			:user="userId"
-			:is-guest="!Boolean(getCurrentUser()) || externalUser"
 			:display-name="resolveDisplayName"
 			:is-no-user="isNoUser" />
 
@@ -98,7 +97,7 @@ export default {
 
 	computed: {
 		isNoUser() {
-			return this.type !== 'user'
+			return this.type !== 'user' || this.externalUser
 		},
 
 		iconClass() {
