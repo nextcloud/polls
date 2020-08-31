@@ -151,7 +151,7 @@ class VoteService {
 	 * @param int $voteId
 	 * @param string $userId
 	 * @param int $pollId
-	 * @return Vote
+	 * @return boolean
 	 * @throws NotAuthorizedException
 	 */
 	public function delete($pollId, $userId) {
@@ -160,7 +160,8 @@ class VoteService {
 			throw new NotAuthorizedException;
 		}
 
-		$votes = $this->voteMapper->deleteByPollAndUser($pollId, $userId);
+		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
+		return true;
 	}
 
 }

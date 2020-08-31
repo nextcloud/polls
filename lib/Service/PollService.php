@@ -313,7 +313,7 @@ class PollService {
 	 * Collect email addresses from particitipants
 	 * @NoAdminRequired
 	 * @param Array $poll
-	 * @return DataResponse
+	 * @return array
 	 */
 
 	public function getParticipantsEmailAddresses($pollId) {

@@ -73,7 +73,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function get($pollId) {
 		try {
-			$this->subscriptionService->get($pollId);
+			$this->subscriptionService->get($pollId, '');
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
@@ -92,7 +92,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function subscribe($pollId) {
 		try {
-			$this->subscriptionService->set($pollId, true);
+			$this->subscriptionService->set($pollId, '', true);
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
@@ -108,7 +108,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function unsubscribe($pollId) {
 		try {
-			$this->subscriptionService->set($pollId, false);
+			$this->subscriptionService->set($pollId, '', false);
 			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());

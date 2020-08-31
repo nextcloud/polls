@@ -76,7 +76,7 @@ class ShareApiController extends ApiController {
 	 */
 	public function list($pollId) {
 		try {
-			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
+			return new DataResponse(['shares' => $this->shareService->list($pollId, '')], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No shares for poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {

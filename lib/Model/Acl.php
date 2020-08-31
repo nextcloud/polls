@@ -141,7 +141,7 @@ class Acl implements JsonSerializable {
 
 			$this->pollId = $this->share->getPollId();
 		} elseif ($pollId) {
-			$this->user = \OC::$server->getUserSession()->getUser()->getUID();
+			$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
 			$this->pollId = $pollId;
 			$this->share = null;
 		}
