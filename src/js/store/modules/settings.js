@@ -27,6 +27,7 @@ const defaultSettings = () => {
 	return {
 		user: {
 			experimental: false,
+			calendarPeek: false,
 			useImage: false,
 			imageUrl: '',
 			glassyNavigation: false,

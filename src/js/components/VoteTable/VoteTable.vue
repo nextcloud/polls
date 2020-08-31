@@ -43,7 +43,7 @@
 				:table-mode="tableMode" />
 		</transition-group>
 
-		<div v-if="poll.type === 'datePoll' && getCurrentUser()" class="vote-table__calendar">
+		<div v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" class="vote-table__calendar">
 			<CalendarPeek
 				v-for="(option) in rankedOptions"
 				:key="option.id"
@@ -113,8 +113,8 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		Modal,
 		CalendarPeek,
+		Modal,
 		VoteTableHeaderItem,
 		VoteTableVoteItem,
 	},
@@ -141,14 +141,15 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
 			acl: state => state.poll.acl,
+			poll: state => state.poll,
+			settings: state => state.settings.user,
 		}),
 
 		...mapGetters({
-			sortedOptions: 'poll/options/sorted',
-			participants: 'poll/participants',
 			expired: 'poll/expired',
+			participants: 'poll/participants',
+			sortedOptions: 'poll/options/sorted',
 		}),
 
 		rankedOptions() {

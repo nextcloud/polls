@@ -22,22 +22,28 @@
 
 <template>
 	<div>
+		<input id="calendarPeek" v-model="calendarPeek"
+			type="checkbox" class="checkbox">
+		<label for="calendarPeek">{{ t('polls', 'Use calendar lookup') }}</label>
+
 		<input id="experimental" v-model="experimental"
 			type="checkbox" class="checkbox">
-		<label for="experimental">{{ t('polls', 'Activate experimental settings.') }}</label>
+		<label for="experimental">{{ t('polls', 'Try experimental styles') }}</label>
 
 		<div v-if="experimental">
-			<input id="useimage" v-model="useImage"
+			<input id="useImage" v-model="useImage"
 				type="checkbox" class="checkbox">
-			<label for="useimage">{{ t('polls', 'Use background image.') }}</label>
+			<label for="useImage">{{ t('polls', 'Use background image') }}</label>
 
-			<!-- <input v-if="bgImage" v-model="imageurl" type="text"> -->
+			<input v-if="useImage" v-model="imageUrl" type="text">
+
 			<input id="glassyNavigation" v-model="glassyNavigation"
 				type="checkbox" class="checkbox">
-			<label for="glassyNavigation">{{ t('polls', 'Glassy navigation.') }}</label>
+			<label for="glassyNavigation">{{ t('polls', 'Glassy navigation') }}</label>
+
 			<input id="glassySidebar" v-model="glassySidebar"
 				type="checkbox" class="checkbox">
-			<label for="glassySidebar">{{ t('polls', 'Glassy sidebar.') }}</label>
+			<label for="glassySidebar">{{ t('polls', 'Glassy sidebar') }}</label>
 		</div>
 	</div>
 </template>
@@ -45,6 +51,7 @@
 <script>
 
 import { mapState } from 'vuex'
+
 export default {
 	name: 'NavigationSettings',
 
@@ -83,6 +90,14 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ glassyNavigation: value })
+			},
+		},
+		calendarPeek: {
+			get() {
+				return this.settings.calendarPeek
+			},
+			set(value) {
+				this.writeValue({ calendarPeek: value })
 			},
 		},
 		glassySidebar: {
