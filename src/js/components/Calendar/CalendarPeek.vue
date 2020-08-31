@@ -21,13 +21,15 @@
   -->
 
 <template>
-	<div class="vote-table-calendar-peek">
+	<div class="calendar-peek">
 		<Popover>
 			<div v-if="events.length" slot="trigger">
-				<div class="conflict icon icon-calendar" />
-				<p>{{ t('polls', 'Conflict') }}</p>
+				<div class="calendar-peek__conflict icon icon-calendar" />
+				<p class="calendar-peek__caption">
+					{{ t('polls', 'Conflict') }}
+				</p>
 			</div>
-			<div class="calendar-grid">
+			<div class="calendar-peek__grid">
 				<CalendarInfo v-for="eventItem in sortedEvents" :key="eventItem.UID"
 					:event="eventItem"
 					:option="option" />
@@ -41,10 +43,10 @@
 import { mapState } from 'vuex'
 import orderBy from 'lodash/orderBy'
 import { Popover } from '@nextcloud/vue'
-import CalendarInfo from '../Base/CalendarInfo'
+import CalendarInfo from '../Calendar/CalendarInfo'
 
 export default {
-	name: 'VoteTableCalendarPeek',
+	name: 'CalendarPeek',
 
 	components: {
 		CalendarInfo,
@@ -131,7 +133,7 @@ export default {
 
 <style lang="scss">
 
-.conflict.icon {
+.calendar-peek__conflict.icon {
 	font-style: normal;
 	font-weight: 400;
 	width: 32px;
@@ -142,13 +144,17 @@ export default {
 	margin: 4px auto;
 }
 
-.calendar-grid {
+.mobile .calendar-peek__caption {
+	display: none;
+}
+
+.calendar-peek__grid {
 	padding: 8px;
 	background-color: #fff;
 	border-radius: var(--border-radius);
 }
 
-.vote-table-calendar-peek >div {
+.calendar-peek >div {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

@@ -111,7 +111,6 @@ export default {
 		}
 	}
 	.counter {
-		flex: 1;
 		order: 2;
 	}
 

@@ -25,6 +25,7 @@
 		<Avatar :disable-menu="disableMenu"
 			class="user-item__avatar"
 			:menu-position="menuPosition"
+			:show-user-status="showUserStatus"
 			:user="userId"
 			:display-name="resolveDisplayName"
 			:is-no-user="isNoUser" />
@@ -40,6 +41,7 @@
 
 <script>
 import { Avatar } from '@nextcloud/vue'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'UserItem',
@@ -98,6 +100,10 @@ export default {
 	computed: {
 		isNoUser() {
 			return this.type !== 'user' || this.externalUser
+		},
+
+		showUserStatus() {
+			return Boolean(getCurrentUser())
 		},
 
 		iconClass() {

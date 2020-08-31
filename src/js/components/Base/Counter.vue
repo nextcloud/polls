@@ -91,7 +91,8 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+
 .counter {
 	display: flex;
 }
@@ -148,12 +149,16 @@ export default {
 	}
 
 }
+.mobile .counter {
+	flex: 0;
+}
 
 .counter--bar {
 	display: flex;
 	width: 100%;
 	flex: 1;
 	height: 4px;
+	margin-bottom: 4px;
 
 	> * {
 		text-align: center;

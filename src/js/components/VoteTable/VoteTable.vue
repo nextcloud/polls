@@ -43,8 +43,8 @@
 				:table-mode="tableMode" />
 		</transition-group>
 
-		<div v-if="poll.type === 'datePoll'" class="vote-table__calendar">
-			<VoteTableCalendarPeek
+		<div v-if="poll.type === 'datePoll' && getCurrentUser()" class="vote-table__calendar">
+			<CalendarPeek
 				v-for="(option) in rankedOptions"
 				:key="option.id"
 				:option="option"
@@ -103,7 +103,7 @@ import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import orderBy from 'lodash/orderBy'
-import VoteTableCalendarPeek from './VoteTableCalendarPeek'
+import CalendarPeek from '../Calendar/CalendarPeek'
 import VoteTableVoteItem from './VoteTableVoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { confirmOption } from '../../mixins/optionMixins'
@@ -114,7 +114,7 @@ export default {
 		Actions,
 		ActionButton,
 		Modal,
-		VoteTableCalendarPeek,
+		CalendarPeek,
 		VoteTableHeaderItem,
 		VoteTableVoteItem,
 	},
