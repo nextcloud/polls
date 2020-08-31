@@ -21,10 +21,12 @@
   -->
 
 <template>
-	<Content app-name="polls" :class="transitionClass">
-		<Navigation v-if="getCurrentUser()" />
+	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
-		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
+		<SideBar v-if="sideBarOpen && $store.state.poll.id"
+			:active="activeTab"
+			:class="{ 'glassy': settings.glassySidebar }" />
 	</Content>
 </template>
 
@@ -35,6 +37,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { mapState } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 
 export default {
@@ -51,6 +54,22 @@ export default {
 			activeTab: 'comments',
 			transitionClass: 'transitions-active',
 		}
+	},
+
+	computed: {
+		...mapState({
+			settings: state => state.settings.user,
+		}),
+		appStyle() {
+			if (this.settings.useImage && this.settings.experimental) {
+				return {
+					backgroundImage: 'url(' + this.settings.imageUrl + ')',
+					backgroundSize: 'cover',
+				}
+			} else {
+				return {}
+			}
+		},
 	},
 
 	created() {
@@ -83,6 +102,7 @@ export default {
 
 		})
 
+		this.$store.dispatch('settings/get')
 		if (getCurrentUser()) {
 			this.updatePolls()
 			subscribe('update-polls', () => {
@@ -302,12 +322,49 @@ input {
 	min-width: 320px;
 }
 
+// experimental colored background in the main area
+
 [class*='area__'] {
 	padding: 8px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 	margin: 12px 6px;
 	min-width: 320px;
+}
+
+.experimental {
+	&.app-polls.bgcolored {
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: var(--color-primary-light);
+			[class*='area__'] {
+				box-shadow: 2px 2px 6px var(--color-box-shadow);
+				margin: 12px;
+			}
+		}
+	}
+
+	// experimental background image
+	&.app-polls.bgimage {
+		.glassy {
+			backdrop-filter: blur(10px);
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: transparent;
+		}
+		[class*='area__'] {
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+			margin: 12px;
+		}
+	}
 }
 
 </style>

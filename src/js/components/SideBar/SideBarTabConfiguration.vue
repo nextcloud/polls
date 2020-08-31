@@ -109,13 +109,13 @@
 </template>
 
 <script>
-import ConfigBox from '../Base/ConfigBox'
 import debounce from 'lodash/debounce'
 import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
+import ConfigBox from '../Base/ConfigBox'
 
 export default {
 	name: 'SideBarTabConfiguration',

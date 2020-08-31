@@ -132,6 +132,7 @@ export default {
 	font-size: 80%;
 	flex: 0 auto;
 }
+
 .calendar-info__summay {
 	margin-left: 4px;
 }
