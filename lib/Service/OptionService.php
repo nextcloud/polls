@@ -242,7 +242,7 @@ class OptionService {
 
 		$baseDate->setTimestamp($origin->getTimestamp());
 
-		for ($i=0; $i < $amount; $i++) {
+		for ($i = 0; $i < $amount; $i++) {
 
 			$this->option = new Option();
 			$this->option->setPollId($origin->getPollId());

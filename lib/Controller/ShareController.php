@@ -201,7 +201,7 @@ class ShareController extends Controller {
 		try {
 			$share = $this->shareService->get($token);
 			foreach ($this->systemService->getContactsGroupMembers($share->getUserId()) as $member) {
-				$shares[] = $this->shareService->add($share->getpollId(), 'contact', $member['user'], $member['emailAddress']) ;
+				$shares[] = $this->shareService->add($share->getpollId(), 'contact', $member['user'], $member['emailAddress']);
 			}
 
 			return new DataResponse(['shares' => $shares], Http::STATUS_OK);

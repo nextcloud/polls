@@ -264,7 +264,7 @@ class MailService {
 			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
 
 			foreach ($groupMembers as $member) {
-				if ($skipUser === $member || !$this->userManager->get($member)->isEnabled() ) {
+				if ($skipUser === $member || !$this->userManager->get($member)->isEnabled()) {
 					continue;
 				}
 
