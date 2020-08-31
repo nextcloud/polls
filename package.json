@@ -46,7 +46,7 @@
 		"lodash": "^4.17.20",
 		"moment": "^2.27.0",
 		"v-click-outside": "^3.0.0",
-		"vue": "^2.6.11",
+		"vue": "^2.6.12",
 		"vue-clipboard2": "^0.3.1",
 		"vue-fragment": "^1.5.1",
 		"vue-router": "^3.4.3",
@@ -86,7 +86,7 @@
 		"terser-webpack-plugin": "^4.1.0",
 		"vue-loader": "^15.9.3",
 		"vue-style-loader": "^4.1.2",
-		"vue-template-compiler": "^2.6.11",
+		"vue-template-compiler": "^2.6.12",
 		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
 		"webpack-merge": "^5.1.2"
