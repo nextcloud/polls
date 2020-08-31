@@ -57,8 +57,8 @@ class CommentApiController extends ApiController {
 		parent::__construct($appName,
 			$request,
 			'POST, GET, DELETE',
-            'Authorization, Content-Type, Accept',
-            1728000);
+			'Authorization, Content-Type, Accept',
+			1728000);
 		$this->commentService = $commentService;
 	}
 

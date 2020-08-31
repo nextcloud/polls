@@ -51,7 +51,7 @@ class CalendarService {
 		$events = [];
 
 		foreach ($this->calendars as $calendar) {
-			$foundEvents = $calendar->search('' ,['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
+			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
 			foreach ($foundEvents as $event) {
 				array_push($events, [
 					'relatedFrom' => $from->getTimestamp(),
@@ -62,11 +62,11 @@ class CalendarService {
 					'permissions' => $calendar->getPermissions(),
 					'eventId' => $event['id'],
 					'UID' => $event['objects'][0]['UID'][0],
-					'summary' => isset($event['objects'][0]['SUMMARY'][0])? $event['objects'][0]['SUMMARY'][0] : '',
-					'description' => isset($event['objects'][0]['DESCRIPTION'][0])? $event['objects'][0]['DESCRIPTION'][0] : '',
+					'summary' => isset($event['objects'][0]['SUMMARY'][0]) ? $event['objects'][0]['SUMMARY'][0] : '',
+					'description' => isset($event['objects'][0]['DESCRIPTION'][0]) ? $event['objects'][0]['DESCRIPTION'][0] : '',
 					'location' => isset($event['objects'][0]['LOCATION'][0]) ? $event['objects'][0]['LOCATION'][0] : '',
 					'eventFrom' => isset($event['objects'][0]['DTSTART'][0]) ? $event['objects'][0]['DTSTART'][0]->getTimestamp() : 0,
-					'eventTo' => isset($event['objects'][0]['DTEND'][0] ) ? $event['objects'][0]['DTEND'][0]->getTimestamp() : 0,
+					'eventTo' => isset($event['objects'][0]['DTEND'][0]) ? $event['objects'][0]['DTEND'][0]->getTimestamp() : 0,
 					'calDav' => $event
 				]);
 			}

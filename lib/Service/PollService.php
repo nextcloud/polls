@@ -67,8 +67,8 @@ class PollService {
  	 * PollController constructor.
  	 * @param PollMapper $pollMapper
  	 * @param Poll $poll
-	 * @param VoteMapper $voteMapper
-	 * @param Vote $vote
+ 	 * @param VoteMapper $voteMapper
+ 	 * @param Vote $vote
  	 * @param LogService $logService
  	 * @param MailService $mailService
  	 * @param Acl $acl

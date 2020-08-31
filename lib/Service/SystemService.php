@@ -82,12 +82,12 @@ class SystemService {
 
 
 	 /**
- 	 * Get a list of users
- 	 * @NoAdminRequired
- 	 * @param string $query
- 	 * @param array $skip - usernames to skip in return array
- 	 * @return Array
- 	 */
+	  * Get a list of users
+	  * @NoAdminRequired
+	  * @param string $query
+	  * @param array $skip - usernames to skip in return array
+	  * @return Array
+	  */
 	 public function getSiteUsers($query = '', $skip = array()) {
 		 $users = array();
 		 foreach ($this->userManager->searchDisplayName($query) as $user) {
@@ -112,12 +112,12 @@ class SystemService {
 	 }
 
 	 /**
- 	 * Get a list of user groups
- 	 * @NoAdminRequired
- 	 * @param string $query
- 	 * @param array $skip - group names to skip in return array
- 	 * @return Array
- 	 */
+	  * Get a list of user groups
+	  * @NoAdminRequired
+	  * @param string $query
+	  * @param array $skip - group names to skip in return array
+	  * @return Array
+	  */
 	 public function getSiteGroups($query = '', $skip = array()) {
 		$groups = array();
 		foreach ($this->groupManager->search($query) as $group) {
@@ -252,7 +252,7 @@ class SystemService {
 				if (strpos($contactGroup, $query) === 0 && !in_array($contactGroup, $foundContacts)) {
 					$foundContacts[] = $contactGroup;
 					$contactGroups[] = [
-						'id' => 'contactgroup_' + $contactGroup,
+						'id' => 'contactgroup_' +$contactGroup,
 						'user' => $contactGroup,
 						'displayName' => $contactGroup,
 						'organisation' => '',
