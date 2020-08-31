@@ -21,10 +21,12 @@
   -->
 
 <template>
-	<Content app-name="polls" :class="transitionClass">
-		<Navigation v-if="getCurrentUser()" />
+	<Content app-name="polls" :class="[transitionClass, { 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
-		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
+		<SideBar v-if="sideBarOpen && $store.state.poll.id"
+			:active="activeTab"
+			:class="{ 'glassy': settings.glassySidebar }" />
 	</Content>
 </template>
 
@@ -35,6 +37,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { mapState } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 
 export default {
@@ -51,6 +54,13 @@ export default {
 			activeTab: 'comments',
 			transitionClass: 'transitions-active',
 		}
+	},
+
+	computed: {
+		...mapState({
+			settings: state => state.settings.user,
+		}),
+
 	},
 
 	created() {
@@ -83,6 +93,7 @@ export default {
 
 		})
 
+		this.$store.dispatch('getSettings')
 		if (getCurrentUser()) {
 			this.updatePolls()
 			subscribe('update-polls', () => {
@@ -303,42 +314,6 @@ input {
 }
 
 // experimental colored background in the main area
-.app-polls.bgcolored {
-	.app-navigation {
-		border-right: 0px;
-		box-shadow: 2px 0 6px var(--color-box-shadow);
-	}
-	.app-content {
-		background-color: var(--color-primary-light);
-		[class*='area__'] {
-			box-shadow: 2px 2px 6px var(--color-box-shadow);
-			margin: 12px;
-		}
-	}
-}
-
-// experimental background image
-.app-polls.bgimage {
-	background: url('https://images.unsplash.com/photo-1589967698280-1e86b3d8c1ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1334&q=80)');
-	background-size: cover;
-	.app-navigation {
-		backdrop-filter: blur(10px);
-		background-color: rgba(255, 255, 255, 0.5);
-		border-right: 0px;
-		box-shadow: 2px 0 6px var(--color-box-shadow);
-	}
-	.app-content {
-		background-color: transparent;
-	}
-	.app-sidebar {
-		backdrop-filter: blur(10px);
-		background-color: rgba(255, 255, 255, 0.5);
-	}
-	[class*='area__'] {
-		box-shadow: 2px 2px 6px var(--color-box-shadow);
-		margin: 12px;
-	}
-}
 
 [class*='area__'] {
 	padding: 8px;
@@ -346,6 +321,43 @@ input {
 	border-radius: var(--border-radius);
 	margin: 12px 6px;
 	min-width: 320px;
+}
+
+.experimental {
+	&.app-polls.bgcolored {
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: var(--color-primary-light);
+			[class*='area__'] {
+				box-shadow: 2px 2px 6px var(--color-box-shadow);
+				margin: 12px;
+			}
+		}
+	}
+
+	// experimental background image
+	&.app-polls.bgimage {
+		background: url('https://images.unsplash.com/photo-1589967698280-1e86b3d8c1ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1334&q=80)');
+		background-size: cover;
+		.glassy {
+			backdrop-filter: blur(10px);
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: transparent;
+		}
+		[class*='area__'] {
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+			margin: 12px;
+		}
+	}
 }
 
 </style>
