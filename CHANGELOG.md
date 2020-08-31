@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.1 - beta2] - 2020-08-17
+ - Lookup calendars for conflict #1056 #747
+ - add user settings
+ - some style fixes
+ - updated dependencies
+ - move cloning of options to backend #1058
+
 ## [1.5.0 - beta1] - 2020-08-17
  - Drop support for Nextcloud 16
  - Stop immediatley sending of invitation mails after adding a share #1007 #935
