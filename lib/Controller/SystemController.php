@@ -53,23 +53,23 @@ class SystemController extends Controller {
 	}
 
 	 /**
- 	 * Get a list of users
- 	 * @NoAdminRequired
- 	 * @param string $query
- 	 * @param array $skipUsers - usernames to skip in return array
-	 * @return DataResponse
- 	 */
+	  * Get a list of users
+	  * @NoAdminRequired
+	  * @param string $query
+	  * @param array $skipUsers - usernames to skip in return array
+	  * @return DataResponse
+	  */
 	 public function getSiteUsers($query = '', $skipUsers = array()) {
 		 return new DataResponse(['users' => $this->systemService->getSiteUsers($query, $skipUsers)], Http::STATUS_OK);
 	 }
 
 	 /**
- 	 * Get a list of user groups
- 	 * @NoAdminRequired
- 	 * @param string $query
- 	 * @param array $skipGroups - group names to skip in return array
-	 * @return DataResponse
- 	 */
+	  * Get a list of user groups
+	  * @NoAdminRequired
+	  * @param string $query
+	  * @param array $skipGroups - group names to skip in return array
+	  * @return DataResponse
+	  */
 	 public function getSiteGroups($query = '', $skipGroups = array()) {
 		 return new DataResponse(['groups' => $this->systemService->getSiteGroups($query, $skipGroups)], Http::STATUS_OK);
 	 }
