@@ -149,6 +149,7 @@ export default {
 	}
 
 }
+
 .mobile .counter {
 	flex: 0;
 }
