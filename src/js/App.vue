@@ -65,6 +65,9 @@ export default {
 				return {
 					backgroundImage: 'url(' + this.settings.imageUrl + ')',
 					backgroundSize: 'cover',
+					backgroundPosition: 'center center',
+					backgroundAttachment: 'fixed',
+					backgroundRepeat: 'no-repeat',
 				}
 			} else {
 				return {}
