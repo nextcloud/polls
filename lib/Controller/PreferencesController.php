@@ -28,7 +28,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 
 use OCP\IRequest;
-use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -42,7 +41,6 @@ class PreferencesController extends Controller {
 
 	private $userId;
 	private $preferencesMapper;
-	private $logger;
 
 	private $groupManager;
 	private $pollMapper;
@@ -60,7 +58,6 @@ class PreferencesController extends Controller {
 		string $appName,
 		$userId,
 		IRequest $request,
-		ILogger $logger,
 		PreferencesMapper $preferencesMapper
 	) {
 		parent::__construct($appName, $request);

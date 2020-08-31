@@ -163,7 +163,6 @@ class MailService {
 	 * @return string
 	 */
 	public function resolveEmailAddress($pollId, $userId) {
-		$contactsManager = \OC::$server->getContactsManager();
 
 		if ($this->userManager->get($userId) instanceof IUser) {
 			return \OC::$server->getConfig()->getUserValue($userId, 'settings', 'email');

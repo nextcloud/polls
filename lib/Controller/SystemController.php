@@ -130,8 +130,7 @@ class SystemController extends Controller {
 	 * @return DataResponse
 	 */
 	public function validatePublicUsername($pollId, $userName, $token) {
-		return new DataResponse(['result' => true, 'name' => $userName], Http::STATUS_OK);
-
+		return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
 	}
 
 }

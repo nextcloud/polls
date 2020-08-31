@@ -156,29 +156,5 @@ class OptionController extends Controller {
 		$searchTo = $searchTo->add(new DateInterval('PT3H'));
 
 		return new DataResponse(['events' => array_values($this->calendarService->getEvents($searchFrom, $searchTo))], Http::STATUS_OK);
-
-
-		if (is_int($from)) {
-			$searchFrom = new DateTime();
-			$searchFrom = $searchFrom->setTimestamp($from);
-		} else {
-			$searchFrom = new DateTime($from);
-		}
-
-
-		if (!$to) {
-			$searchTo = clone $searchFrom;
-			$searchTo = $searchTo->add(new DateInterval('PT1H'));
-
-		} else if (is_int($to)) {
-				$searchTo = new DateTime();
-				$searchTo = $searchTo->setTimestamp($to);
-		} else {
-			$searchTo = new DateTime($to);
-		}
-
-		$events = array_values($this->calendarService->getEvents($searchFrom, $searchTo));
-		return $events;
-
 	}
 }
