@@ -98,7 +98,7 @@ class VoteController extends Controller {
 	 */
 	public function delete($pollId, $userId) {
 		try {
-			return new DataResponse($this->voteService->delete($pollId, $userId), Http::STATUS_OK);
+			return new DataResponse(['deleted' => $this->voteService->delete($pollId, $userId)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {

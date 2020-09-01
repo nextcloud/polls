@@ -161,7 +161,7 @@ class VoteService {
 		}
 
 		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
-		return true;
+		return $userId;
 	}
 
 }
