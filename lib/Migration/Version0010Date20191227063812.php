@@ -354,7 +354,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		$result = $query->execute();
 
 		while ($row = $result->fetch()) {
-			if ($row['access'] == 'public') {
+			if ($row['access'] === 'public') {
 				// copy the hash to a public share
 				$insert
 				->setParameter('token', $row['hash'])
@@ -364,7 +364,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('user_email', null)
 				->setParameter('user', '');
 				$insert->execute();
-			} elseif ($row['access'] == 'hidden') {
+			} elseif ($row['access'] === 'hidden') {
 				// copy the hash to a public share
 				// poll stays hidden for registered users
 				$insert
@@ -375,7 +375,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('user_email', null)
 				->setParameter('user', '');
 				$insert->execute();
-			} elseif ($row['access'] == 'registered') {
+			} elseif ($row['access'] === 'registered') {
 				// copy the hash to a public share
 				// to keep the hash
 				$insert
