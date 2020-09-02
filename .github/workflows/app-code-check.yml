@@ -3,8 +3,6 @@ name: PHP AppCode Check
 on:
   pull_request:
   push:
-    branches:
-      - master
 
 jobs:
   unit-tests:
