@@ -9,11 +9,14 @@ on:
 
 jobs:
   php-cs-fixer:
-    name: php-cs check
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         php-version: [7.4]
+
+    name: php-cs check php ${{ matrix.php-version }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -52,13 +55,13 @@ jobs:
           run: php -f nextcloud/occ app:check-code mail
 
   node:
-    name: eslint
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [12.x]
 
+    name: eslint node${{ matrix.node-versions }}
     steps:
       - uses: actions/checkout@v2
       - name: Use node ${{ matrix.node-version }}
@@ -71,7 +74,6 @@ jobs:
         run: npm run lint
 
   stylelint:
-    name: stylint
     runs-on: ubuntu-latest
 
     strategy:
