@@ -175,6 +175,7 @@ class PollService {
 		$this->poll->setShowResults('always');
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
+		$this->poll->setImportant(0);
 		$this->poll = $this->pollMapper->insert($this->poll);
 
 		$this->logService->setLog($this->poll->getId(), 'addPoll');
@@ -298,6 +299,7 @@ class PollService {
 		$this->poll->setOptions($origin->getOptions());
 		$this->poll->setShowResults($origin->getShowResults());
 		$this->poll->setAdminAccess($origin->getAdminAccess());
+		$this->poll->setImportant($origin->getImportant());
 
 		return $this->pollMapper->insert($this->poll);
 	}

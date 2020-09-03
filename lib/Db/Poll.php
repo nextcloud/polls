@@ -63,6 +63,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setShowResults(string $value)
  * @method int getAdminAccess()
  * @method void setAdminAccess(integer $value)
+ * @method int getImportant()
+ * @method void setImportant(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
 
@@ -114,6 +116,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $adminAccess*/
 	protected $adminAccess;
 
+	/** @var int $important*/
+	protected $important;
+
 	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
@@ -131,7 +136,8 @@ class Poll extends Entity implements JsonSerializable {
 			'voteLimit' => intval($this->voteLimit),
 			'showResults' => $this->showResults,
 			'adminAccess' => intVal($this->adminAccess),
-			'ownerDisplayName' => $this->getDisplayName()
+			'ownerDisplayName' => $this->getDisplayName(),
+			'important' => intVal($this->important)
 		];
 	}
 
@@ -146,6 +152,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
 		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
 		$this->setAdminAccess(isset($array['adminAccess']) ? $array['adminAccess'] : $this->getAdminAccess());
+		$this->setImportant(isset($array['important']) ? $array['important'] : $this->getImportant());
 		return $this;
 	}
 
