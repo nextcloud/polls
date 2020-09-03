@@ -57,8 +57,9 @@
 			</h2>
 			<PollInformation />
 
-			<h3 class="description">
-				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<h3 class="description" v-html="linkifyDescription">
+				{{ poll.description ? linkifyDescription : t('polls', 'No description provided') }}
 			</h3>
 		</div>
 
@@ -90,19 +91,20 @@
 </template>
 
 <script>
-import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
-import Subscription from '../components/Subscription/Subscription'
-import Badge from '../components/Base/Badge'
-import ParticipantsList from '../components/Base/ParticipantsList'
-import PersonalLink from '../components/Base/PersonalLink'
-import PollInformation from '../components/Base/PollInformation'
-import LoadingOverlay from '../components/Base/LoadingOverlay'
-import PublicRegisterModal from '../components/Base/PublicRegisterModal'
-import VoteTable from '../components/VoteTable/VoteTable'
+import linkifyStr from 'linkifyjs/string'
 import { mapState, mapGetters } from 'vuex'
+import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
+import Badge from '../components/Base/Badge'
+import LoadingOverlay from '../components/Base/LoadingOverlay'
+import ParticipantsList from '../components/Base/ParticipantsList'
+import PersonalLink from '../components/Base/PersonalLink'
+import PollInformation from '../components/Base/PollInformation'
+import PublicRegisterModal from '../components/Base/PublicRegisterModal'
+import Subscription from '../components/Subscription/Subscription'
+import VoteTable from '../components/VoteTable/VoteTable'
 
 export default {
 	name: 'Vote',
@@ -142,7 +144,11 @@ export default {
 			isExpired: 'poll/expired',
 		}),
 
-		windowTitle: function() {
+		linkifyDescription() {
+			return linkifyStr(this.poll.description)
+		},
+
+		windowTitle() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
 		},
 
@@ -188,7 +194,7 @@ export default {
 			}
 		},
 
-		toggleViewIcon: function() {
+		toggleViewIcon() {
 			if (this.tableMode) {
 				return 'icon-phone'
 			} else {
