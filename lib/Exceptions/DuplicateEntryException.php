@@ -36,5 +36,4 @@ class DuplicateEntryException extends \Exception {
 	public function getStatus() {
 		return Http::STATUS_CONFLICT;
 	}
-
 }

@@ -23,19 +23,15 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
-use OCP\IURLGenerator;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\CommentService;
-
-
 
 class CommentApiController extends ApiController {
 
@@ -116,5 +112,4 @@ class CommentApiController extends ApiController {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
-
 }

@@ -36,5 +36,4 @@ class BadRequestException extends \Exception {
 	public function getStatus() {
 		return Http::STATUS_BAD_REQUEST;
 	}
-
 }

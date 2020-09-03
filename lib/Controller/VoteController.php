@@ -34,7 +34,6 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\VoteService;
 
-
 class VoteController extends Controller {
 
 	/** @var VoteService */
@@ -127,7 +126,6 @@ class VoteController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
 		}
-
 	}
 
 	/**
@@ -145,7 +143,5 @@ class VoteController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		}
-
 	}
-
 }

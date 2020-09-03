@@ -70,5 +70,4 @@ class PreferencesMapper extends QBMapper {
 	//
 	//    $qb->execute();
 	// }
-
 }

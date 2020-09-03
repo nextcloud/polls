@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -70,7 +69,6 @@ class SubscriptionService {
 			// duplicates are removed in $this->set()
 			return $this->set($pollId, $token, true);
 		}
-
 	}
 
 	/**
@@ -93,9 +91,7 @@ class SubscriptionService {
 				// subscription already exists, just return the existing subscription
 				return ['status' => 'Subscribed to poll ' . $this->acl->getPollId()];
 			}
-
 		} catch (DoesNotExistException $e) {
-
 			if ($subscribed) {
 				$subscription = new Subscription();
 				$subscription->setPollId($this->acl->getPollId());
@@ -107,7 +103,6 @@ class SubscriptionService {
 				// subscription is not found, just approve the unsubscription
 				return ['status' => 'Unsubscribed from poll ' . $this->acl->getPollId()];
 			}
-
 		} catch (MultipleObjectsReturnedException $e) {
 			// Duplicates should not exist but if found, fix it
 			// unsubscribe from all and resubscribe, if requested
@@ -124,8 +119,6 @@ class SubscriptionService {
 			} else {
 				return ['status' => 'Unsubscribed from poll ' . $this->acl->getPollId()];
 			}
-
 		}
-
 	}
 }

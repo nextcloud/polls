@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -52,27 +51,27 @@ class SystemController extends Controller {
 		$this->systemService = $systemService;
 	}
 
-	 /**
-	  * Get a list of users
-	  * @NoAdminRequired
-	  * @param string $query
-	  * @param array $skipUsers - usernames to skip in return array
-	  * @return DataResponse
-	  */
-	 public function getSiteUsers($query = '', $skipUsers = array()) {
-		 return new DataResponse(['users' => $this->systemService->getSiteUsers($query, $skipUsers)], Http::STATUS_OK);
-	 }
+	/**
+	 * Get a list of users
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @param array $skipUsers - usernames to skip in return array
+	 * @return DataResponse
+	 */
+	public function getSiteUsers($query = '', $skipUsers = []) {
+		return new DataResponse(['users' => $this->systemService->getSiteUsers($query, $skipUsers)], Http::STATUS_OK);
+	}
 
-	 /**
-	  * Get a list of user groups
-	  * @NoAdminRequired
-	  * @param string $query
-	  * @param array $skipGroups - group names to skip in return array
-	  * @return DataResponse
-	  */
-	 public function getSiteGroups($query = '', $skipGroups = array()) {
-		 return new DataResponse(['groups' => $this->systemService->getSiteGroups($query, $skipGroups)], Http::STATUS_OK);
-	 }
+	/**
+	 * Get a list of user groups
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @param array $skipGroups - group names to skip in return array
+	 * @return DataResponse
+	 */
+	public function getSiteGroups($query = '', $skipGroups = []) {
+		return new DataResponse(['groups' => $this->systemService->getSiteGroups($query, $skipGroups)], Http::STATUS_OK);
+	}
 
 	/**
 	 * Get a list of contacts
@@ -114,11 +113,11 @@ class SystemController extends Controller {
 		$getContacts = true,
 		$getContactGroups = true,
 		$getMail = false,
-		$skipGroups = array(),
-		$skipUsers = array()
+		$skipGroups = [],
+		$skipUsers = []
 	) {
 		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
-			$query, $getGroups, $getUsers, $getContacts, $getContactGroups, $getMail, $skipGroups, $skipUsers )], Http::STATUS_OK);
+			$query, $getGroups, $getUsers, $getContacts, $getContactGroups, $getMail, $skipGroups, $skipUsers)], Http::STATUS_OK);
 	}
 
 	/**
@@ -132,5 +131,4 @@ class SystemController extends Controller {
 	public function validatePublicUsername($pollId, $userName, $token) {
 		return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
 	}
-
 }

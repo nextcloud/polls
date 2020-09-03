@@ -8,19 +8,70 @@ on:
       - stable*
 
 jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: [7.4]
+
+    name: php-cs
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Set up php
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: ${{ matrix.php-versions }}
+        coverage: none
+    - name: Install dependencies
+      run: composer i
+    - name: Run coding standards check
+      run: composer run cs:check
+
+  app-code-check:
+    runs-on: ubuntu-latest
+
+    strategy:
+        matrix:
+            php-versions: ['7.2', '7.3', '7.4']
+            nextcloud-versions: ['master']
+
+    name: Nextcloud AppCode check
+
+    steps:
+        - name: Set up php ${{ matrix.php-versions }}
+          uses: shivammathur/setup-php@master
+          with:
+              php-version: ${{ matrix.php-versions }}
+              extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip
+              coverage: xdebug
+        - name: Checkout Nextcloud ${{ matrix.nextcloud-versions }}
+          run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-versions }} nextcloud
+        - name: Run tests
+          run: php -f nextcloud/occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database sqlite --database-pass=''
+        - name: Checkout
+          uses: actions/checkout@master
+          with:
+              path: nextcloud/apps/mail
+        - name: Run tests
+          run: php -f nextcloud/occ app:check-code mail
+
   node:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-versions: [12.x]
 
+    name: eslint node ${{ matrix.node-versions }}
     steps:
       - uses: actions/checkout@v2
-      - name: Use node ${{ matrix.node-version }}
+      - name: Use node ${{ matrix.node-versions }}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node-versions }}
       - name: Install dependencies
         run: npm ci
       - name: ESLint
@@ -33,14 +84,14 @@ jobs:
       matrix:
         node-versions: [12.x]
 
-    name: stylelint node${{ matrix.node-versions }}
+    name: stylelint node ${{ matrix.node-versions }}
     steps:
       - uses: actions/checkout@v2
 
       - name: Set up node ${{ matrix.node-versions }}
         uses: actions/setup-node@v1
         with:
-          node-versions: ${{ matrix.node-versions }}
+          node-version: ${{ matrix.node-versions }}
 
       - name: Install dependencies
         run: npm ci

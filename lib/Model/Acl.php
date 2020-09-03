@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,6 @@
 namespace OCA\Polls\Model;
 
 use JsonSerializable;
-use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IUserManager;
@@ -116,7 +114,6 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function set($pollId = 0, $token = ''): Acl {
-
 		if ($token) {
 			\OC::$server->getLogger()->debug('Share token: ' . $token);
 
@@ -155,7 +152,7 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return string
 	 */
-	 public function getUserId() {
+	public function getUserId() {
 		return $this->userId;
 	}
 
@@ -243,7 +240,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function getGroupShare(): bool {
 		return count(
-			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
+			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 				if ($item->getType() === 'group' && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId())) {
 					return true;
 				}
@@ -266,9 +263,8 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getPersonalShare(): bool {
-
 		return count(
-			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
+			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 				if (($item->getType() === 'user' || $item->getType() === 'external' || $item->getType() === 'email' || $item->getType() === 'contact') && $item->getUserId() === $this->getUserId()) {
 					return true;
 				}
@@ -281,9 +277,8 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getPublicShare(): bool {
-
 		return count(
-			array_filter($this->shareMapper->findByPoll($this->getPollId()), function($item) {
+			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 				if ($item->getType() === 'public' && $item->getToken() === $this->getToken()) {
 					return true;
 				}
@@ -344,7 +339,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowSeeResults(): bool {
-		 return $this->poll->getShowResults() === 'always'
+		return $this->poll->getShowResults() === 'always'
 			|| ($this->poll->getShowResults() === 'expired' && $this->getExpired())
 			|| $this->getIsOwner();
 	}

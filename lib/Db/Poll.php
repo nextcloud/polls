@@ -5,7 +5,7 @@
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author Kai Schröer <git@schroeer.co>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -150,7 +150,6 @@ class Poll extends Entity implements JsonSerializable {
 	}
 
 	private function getDisplayName() {
-
 		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
 		} else {

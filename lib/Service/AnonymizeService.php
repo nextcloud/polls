@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ class AnonymizeService {
 	private $commentMapper;
 
 	/** @var array */
-	private $anonList = array();
+	private $anonList = [];
 
 	/** @var string */
 	private $userId;
@@ -126,6 +126,4 @@ class AnonymizeService {
 	public function getVotes() {
 		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
 	}
-
-
 }

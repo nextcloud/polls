@@ -25,7 +25,6 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
-use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -50,7 +49,6 @@ class Preferences extends Entity implements JsonSerializable {
 	protected $preferences;
 
 	public function jsonSerialize() {
-
 		return [
 			'id' => intval($this->id),
 			'userId' => $this->userId,

@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use \Exception;
 use \Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;

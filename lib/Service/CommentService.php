@@ -29,9 +29,6 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Service\AnonymizeService;
-
-
 
 class CommentService {
 
@@ -77,7 +74,6 @@ class CommentService {
 	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $token = '') {
-
 		if (!$this->acl->set($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
@@ -100,7 +96,6 @@ class CommentService {
 	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId = 0, $message, $token = '') {
-
 		if (!$this->acl->set($pollId, $token)->getAllowComment()) {
 			throw new NotAuthorizedException;
 		}
@@ -117,12 +112,10 @@ class CommentService {
 			} else {
 				throw new NotAuthorizedException;
 			}
-
 		} catch (Exception $e) {
 			\OC::$server->getLogger()->alert('Error writing comment for pollId ' . $pollId . ': ' . $e);
 			throw new NotAuthorizedException($e);
 		}
-
 	}
 
 	/**
@@ -142,7 +135,5 @@ class CommentService {
 
 		$this->commentMapper->delete($this->comment);
 		return $this->comment;
-
 	}
-
 }
