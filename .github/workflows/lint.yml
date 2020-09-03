@@ -3,12 +3,56 @@ name: Lint
 on:
   pull_request:
   push:
-    branches:
-      - master
-      - stable*
+    # branches:
+      # - master
+      # - stable*
 
 jobs:
+  php-cs-fixer:
+    name: php-cs check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [7.4]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Set up php
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: ${{ matrix.php-version }}
+        coverage: none
+    - name: Install dependencies
+      run: composer i
+    - name: Run coding standards check
+      run: composer run cs:check
+
+  app-code-check:
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+            nextcloud-versions: ['master']
+    name: Nextcloud ${{ matrix.nextcloud-versions }} app code check
+    steps:
+        - name: Set up php7.4
+          uses: shivammathur/setup-php@master
+          with:
+              php-version: 7.4
+              extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip
+              coverage: xdebug
+        - name: Checkout Nextcloud
+          run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-versions }} nextcloud
+        - name: Run tests
+          run: php -f nextcloud/occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database sqlite --database-pass=''
+        - name: Checkout
+          uses: actions/checkout@master
+          with:
+              path: nextcloud/apps/mail
+        - name: Run tests
+          run: php -f nextcloud/occ app:check-code mail
+
   node:
+    name: eslint
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,6 +71,7 @@ jobs:
         run: npm run lint
 
   stylelint:
+    name: stylint
     runs-on: ubuntu-latest
 
     strategy:
