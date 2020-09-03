@@ -36,5 +36,4 @@ class TooShortException extends \Exception {
 	public function getStatus() {
 		return Http::STATUS_FORBIDDEN;
 	}
-
 }

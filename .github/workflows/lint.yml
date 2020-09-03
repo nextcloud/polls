@@ -3,9 +3,9 @@ name: Lint
 on:
   pull_request:
   push:
-    # branches:
-      # - master
-      # - stable*
+    branches:
+      - master
+      - stable*
 
 jobs:
   php-cs-fixer:

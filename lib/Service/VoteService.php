@@ -23,15 +23,12 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Service\AnonymizeService;
-use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
 class VoteService {
@@ -112,7 +109,6 @@ class VoteService {
 	 * @throws NotAuthorizedException
 	 */
 	public function set($optionId, $setTo, $token = '') {
-
 		$option = $this->optionMapper->find($optionId);
 
 		if (!$this->acl->set($option->getPollId(), $token)->getAllowVote()) {
@@ -127,7 +123,6 @@ class VoteService {
 			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->acl->getUserId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->update($this->vote);
-
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();
@@ -138,7 +133,6 @@ class VoteService {
 			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->insert($this->vote);
-
 		} finally {
 			$this->logService->setLog($this->acl->getPollId(), 'setVote', $this->vote->getUserId());
 			return $this->vote;
@@ -155,7 +149,6 @@ class VoteService {
 	 * @throws NotAuthorizedException
 	 */
 	public function delete($pollId, $userId) {
-
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
@@ -163,5 +156,4 @@ class VoteService {
 		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
 		return $userId;
 	}
-
 }

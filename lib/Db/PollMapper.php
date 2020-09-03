@@ -4,7 +4,7 @@
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,6 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
-use \OCP\AppFramework\Db\DoesNotExistException;
 
 class PollMapper extends QBMapper {
 
@@ -69,5 +68,4 @@ class PollMapper extends QBMapper {
 
 		return $this->findEntities($qb);
 	}
-
 }

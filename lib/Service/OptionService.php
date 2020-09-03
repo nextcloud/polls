@@ -24,7 +24,6 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\BadRequestException;
@@ -35,7 +34,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
 class OptionService {
@@ -72,7 +70,7 @@ class OptionService {
 		OptionMapper $optionMapper,
 		Option $option,
 		PollMapper $pollMapper,
-   	 	Poll $poll,
+		Poll $poll,
 		LogService $logService,
 		Acl $acl
 	) {
@@ -114,7 +112,6 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function get($optionId) {
-
 		if (!$this->acl->set($this->optionMapper->find($optionId)->getPollId())->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
@@ -133,7 +130,6 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
-
 		$this->poll = $this->pollMapper->find($pollId);
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
@@ -148,7 +144,6 @@ class OptionService {
 		} catch (UniqueConstraintViolationException $e) {
 			throw new DuplicateEntryException('This option already exists');
 		}
-
 	}
 
 	/**
@@ -162,7 +157,6 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function update($optionId, $timestamp = 0, $pollOptionText = '', $order = 0) {
-
 		$this->option = $this->optionMapper->find($optionId);
 		$this->poll = $this->pollMapper->find($this->option->getPollId());
 
@@ -228,7 +222,6 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function sequence($optionId, $step, $unit, $amount) {
-
 		$baseDate = new DateTime;
 		$origin = $this->optionMapper->find($optionId);
 
@@ -243,7 +236,6 @@ class OptionService {
 		$baseDate->setTimestamp($origin->getTimestamp());
 
 		for ($i = 0; $i < $amount; $i++) {
-
 			$this->option = new Option();
 			$this->option->setPollId($origin->getPollId());
 			$this->option->setConfirmed(0);
@@ -268,7 +260,6 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function clone($fromPollId, $toPollId) {
-
 		if (!$this->acl->set($fromPollId)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
@@ -296,7 +287,6 @@ class OptionService {
 	 * @throws BadRequestException
 	 */
 	public function reorder($pollId, $options) {
-
 		$this->poll = $this->pollMapper->find($pollId);
 
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
@@ -329,7 +319,6 @@ class OptionService {
 	 * @throws BadRequestException
 	 */
 	public function setOrder($optionId, $newOrder) {
-
 		$this->option = $this->optionMapper->find($optionId);
 		$pollId = $this->option->getPollId();
 		$this->poll = $this->pollMapper->find($pollId);
@@ -353,23 +342,17 @@ class OptionService {
 		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
 			$currentOrder = $option->getOrder();
 			if ($currentOrder > $oldOrder && $currentOrder <= $newOrder) {
-
 				$option->setOrder($currentOrder - 1);
 				$this->optionMapper->update($option);
-
 			} elseif (
 					   ($currentOrder < $oldOrder && $currentOrder >= $newOrder)
 					|| ($currentOrder < $oldOrder && $currentOrder = $newOrder)
 				) {
-
 				$option->setOrder($currentOrder + 1);
 				$this->optionMapper->update($option);
-
 			} elseif ($currentOrder === $oldOrder) {
-
 				$option->setOrder($newOrder);
 				$this->optionMapper->update($option);
-
 			} else {
 				continue;
 			}

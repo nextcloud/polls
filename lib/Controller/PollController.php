@@ -63,35 +63,35 @@ class PollController extends Controller {
 	/** @var Acl */
 	private $acl;
 
- 	/**
- 	 * PollController constructor.
- 	 * @param string $appName
- 	 * @param IRequest $request
- 	 * @param PollService $pollService
- 	 * @param CommentService $commentService
- 	 * @param OptionService $optionService
- 	 * @param ShareService $shareService
- 	 * @param VoteService $voteService
- 	 * @param Acl $acl
- 	 */
+	/**
+	 * PollController constructor.
+	 * @param string $appName
+	 * @param IRequest $request
+	 * @param PollService $pollService
+	 * @param CommentService $commentService
+	 * @param OptionService $optionService
+	 * @param ShareService $shareService
+	 * @param VoteService $voteService
+	 * @param Acl $acl
+	 */
 
- 	public function __construct(
+	public function __construct(
 		string $appName,
- 		IRequest $request,
- 		PollService $pollService,
+		IRequest $request,
+		PollService $pollService,
 		CommentService $commentService,
- 		OptionService $optionService,
- 		ShareService $shareService,
- 		VoteService $voteService,
-  		Acl $acl
+		OptionService $optionService,
+		ShareService $shareService,
+		VoteService $voteService,
+		Acl $acl
 	) {
- 		parent::__construct($appName, $request);
+		parent::__construct($appName, $request);
 		$this->pollService = $pollService;
 		$this->commentService = $commentService;
-  		$this->optionService = $optionService;
-  		$this->shareService = $shareService;
-  		$this->voteService = $voteService;
-  		$this->acl = $acl;
+		$this->optionService = $optionService;
+		$this->shareService = $shareService;
+		$this->voteService = $voteService;
+		$this->acl = $acl;
 	}
 
 
@@ -120,12 +120,10 @@ class PollController extends Controller {
 	 * @param string $token
 	 * @return DataResponse
 	 */
- 	public function get($pollId, $token) {
-
+	public function get($pollId, $token) {
 		try {
 			$acl = $this->acl->set($pollId, $token);
 			$poll = $this->pollService->get($pollId, $token);
-
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -172,7 +170,7 @@ class PollController extends Controller {
 			'shares' => $shares,
 			'votes' => $votes,
 		], Http::STATUS_OK);
- 	}
+	}
 
 	/**
 	 * Add poll
@@ -287,5 +285,4 @@ class PollController extends Controller {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
-
 }

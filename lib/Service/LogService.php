@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCA\Polls\Db\Log;
@@ -98,5 +97,4 @@ class LogService {
 			return $this->logMapper->insert($this->log);
 		}
 	}
-
 }

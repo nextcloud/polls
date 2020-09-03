@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
@@ -36,8 +34,6 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
-use OCA\Polls\Service\LogService;
-use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
 
 class PollService {
@@ -46,7 +42,7 @@ class PollService {
 	private $pollMapper;
 
 	/** @var Poll */
- 	private $poll;
+	private $poll;
 
 	/** @var VoteMapper */
 	private $voteMapper;
@@ -55,42 +51,42 @@ class PollService {
 	private $vote;
 
 	/** @var LogService */
- 	private $logService;
+	private $logService;
 
 	/** @var MailService */
- 	private $mailService;
+	private $mailService;
 
 	/** @var Acl */
- 	private $acl;
+	private $acl;
 
- 	/**
- 	 * PollController constructor.
- 	 * @param PollMapper $pollMapper
- 	 * @param Poll $poll
- 	 * @param VoteMapper $voteMapper
- 	 * @param Vote $vote
- 	 * @param LogService $logService
- 	 * @param MailService $mailService
- 	 * @param Acl $acl
- 	 */
+	/**
+	 * PollController constructor.
+	 * @param PollMapper $pollMapper
+	 * @param Poll $poll
+	 * @param VoteMapper $voteMapper
+	 * @param Vote $vote
+	 * @param LogService $logService
+	 * @param MailService $mailService
+	 * @param Acl $acl
+	 */
 
- 	public function __construct(
- 		PollMapper $pollMapper,
- 		Poll $poll,
+	public function __construct(
+		PollMapper $pollMapper,
+		Poll $poll,
 		VoteMapper $voteMapper,
- 		Vote $vote,
+		Vote $vote,
 		LogService $logService,
 		MailService $mailService,
- 		Acl $acl
- 	) {
- 		$this->pollMapper = $pollMapper;
- 		$this->poll = $poll;
+		Acl $acl
+	) {
+		$this->pollMapper = $pollMapper;
+		$this->poll = $poll;
 		$this->voteMapper = $voteMapper;
- 		$this->vote = $vote;
+		$this->vote = $vote;
 		$this->logService = $logService;
 		$this->mailService = $mailService;
- 		$this->acl = $acl;
- 	}
+		$this->acl = $acl;
+	}
 
 
 	/**
@@ -127,7 +123,7 @@ class PollService {
 	 * @return Poll
 	 * @throws NotAuthorizedException
 	 */
- 	public function get($pollId, $token) {
+	public function get($pollId, $token) {
 		$acl = $this->acl->set($pollId, $token);
 
 		if (!$acl->getAllowView()) {
@@ -135,8 +131,7 @@ class PollService {
 		}
 
 		return $this->pollMapper->find($acl->getPollId());
-
- 	}
+	}
 
 	/**
 	 * Add poll
@@ -200,7 +195,6 @@ class PollService {
 	 */
 
 	public function update($pollId, $poll) {
-
 		$this->poll = $this->pollMapper->find($pollId);
 
 		if (!$this->acl->set($this->poll->getId())->getAllowEdit()) {
@@ -281,7 +275,6 @@ class PollService {
 	 * @throws NotAuthorizedException
 	 */
 	public function clone($pollId) {
-
 		$origin = $this->pollMapper->find($pollId);
 		if (!$this->acl->set($origin->getId())->getAllowView()) {
 			throw new NotAuthorizedException;

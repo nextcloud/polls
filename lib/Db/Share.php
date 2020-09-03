@@ -65,7 +65,6 @@ class Share extends Entity implements JsonSerializable {
 	protected $invitationSent;
 
 	public function jsonSerialize() {
-
 		return [
 			'id' => intval($this->id),
 			'token' => $this->token,
@@ -80,7 +79,6 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	private function getDisplayName() {
-
 		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
 		} else {
@@ -91,5 +89,4 @@ class Share extends Entity implements JsonSerializable {
 	private function externalUser() {
 		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
-
 }

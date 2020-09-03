@@ -94,5 +94,4 @@ class Comment extends Entity implements JsonSerializable {
 	private function externalUser() {
 		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
-
 }

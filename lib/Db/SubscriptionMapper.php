@@ -4,7 +4,7 @@
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -45,14 +45,14 @@ class SubscriptionMapper extends QBMapper {
 	 * @return array
 	 */
 
-	 public function findAll() {
-		 $qb = $this->db->getQueryBuilder();
+	public function findAll() {
+		$qb = $this->db->getQueryBuilder();
 
-		  $qb->select('*')
+		$qb->select('*')
 			 ->from($this->getTableName());
 
-		  return $this->findEntities($qb);
-	 }
+		return $this->findEntities($qb);
+	}
 
 	/**
 	 * @param int $pollId
@@ -61,17 +61,17 @@ class SubscriptionMapper extends QBMapper {
 	 * @return array
 	 */
 
-	 public function findAllByPoll($pollId) {
-		 $qb = $this->db->getQueryBuilder();
+	public function findAllByPoll($pollId) {
+		$qb = $this->db->getQueryBuilder();
 
-		  $qb->select('*')
+		$qb->select('*')
 			 ->from($this->getTableName())
 			 ->where(
 				 $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			 );
 
-		  return $this->findEntities($qb);
-	 }
+		return $this->findEntities($qb);
+	}
 
 	/**
 	 * @param int $pollId
@@ -83,7 +83,7 @@ class SubscriptionMapper extends QBMapper {
 	public function findByUserAndPoll($pollId, $userId) {
 		$qb = $this->db->getQueryBuilder();
 
-		 $qb->select('*')
+		$qb->select('*')
 			->from($this->getTableName())
 			->where(
 				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
@@ -92,25 +92,24 @@ class SubscriptionMapper extends QBMapper {
 				$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 			);
 
-		 return $this->findEntity($qb);
+		return $this->findEntity($qb);
 	}
 
 
 	/**
 	 * @param int $pollId
 	 */
-	 public function unsubscribe($pollId, $currentUser) {
- 		$qb = $this->db->getQueryBuilder();
+	public function unsubscribe($pollId, $currentUser) {
+		$qb = $this->db->getQueryBuilder();
 
- 		$qb->delete($this->getTableName())
- 		->where(
- 			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
- 		)
+		$qb->delete($this->getTableName())
+		->where(
+			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		)
 		->andWhere(
 			$qb->expr()->eq('user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR))
 		);
 
- 		$qb->execute();
- 	}
-
+		$qb->execute();
+	}
 }

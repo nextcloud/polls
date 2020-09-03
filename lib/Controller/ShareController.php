@@ -81,9 +81,9 @@ class ShareController extends Controller {
 	 * @param string $userEmail
 	 * @return DataResponse
 	 */
-	 public function add($pollId, $type, $userId = '', $userEmail = '') {
- 		try {
- 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $userEmail)], Http::STATUS_CREATED);
+	public function add($pollId, $type, $userId = '', $userEmail = '') {
+		try {
+			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $userEmail)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (\Exception $e) {
@@ -101,9 +101,9 @@ class ShareController extends Controller {
 	 * @param string $userEmail
 	 * @return DataResponse
 	 */
-	 public function get($token) {
- 		try {
- 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_CREATED);
+	public function get($token) {
+		try {
+			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (\Exception $e) {
@@ -121,8 +121,8 @@ class ShareController extends Controller {
 	 * @param string $userEmail
 	 * @return DataResponse
 	 */
-	 public function setEmailAddress($token, $userEmail) {
- 		try {
+	public function setEmailAddress($token, $userEmail) {
+		try {
 			return new DataResponse(['share' => $this->shareService->setEmailAddress($token, $userEmail)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
@@ -143,7 +143,6 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function personal($token, $userName, $emailAddress = '') {
-
 		try {
 			return new DataResponse($this->shareService->personal($token, $userName, $emailAddress), Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {

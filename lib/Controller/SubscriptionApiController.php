@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 

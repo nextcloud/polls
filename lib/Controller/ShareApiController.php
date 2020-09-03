@@ -26,7 +26,6 @@ namespace OCA\Polls\Controller;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\InvalidUsername;
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
@@ -121,7 +120,6 @@ class ShareApiController extends ApiController {
 		} catch (Exception $e) {
 			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		}
-
 	}
 
 	/**

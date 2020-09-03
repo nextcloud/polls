@@ -34,8 +34,6 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\CommentService;
 
-
-
 class CommentController extends Controller {
 
 	/** @var CommentService */
@@ -101,7 +99,5 @@ class CommentController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_OK);
 		}
-
 	}
-
 }

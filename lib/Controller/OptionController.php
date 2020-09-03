@@ -25,7 +25,6 @@ namespace OCA\Polls\Controller;
 
 use DateTime;
 use DateInterval;
-use Exception;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 
 use OCP\IRequest;
@@ -35,7 +34,6 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\CalendarService;
-
 
 class OptionController extends Controller {
 
@@ -149,7 +147,6 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function findCalendarEvents($optionId) {
-
 		$searchFrom = new DateTime();
 		$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
 		$searchTo = clone $searchFrom;

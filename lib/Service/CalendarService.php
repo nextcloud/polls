@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -26,10 +26,8 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use OCP\Calendar\IManager as CalendarManager;
-use OCP\Calendar\ICalendar;
 
 class CalendarService {
-
 	private $calendarManager;
 	private $calendars;
 
@@ -82,6 +80,4 @@ class CalendarService {
 	public function getCalendars() {
 		return $this->calendars;
 	}
-
-
 }

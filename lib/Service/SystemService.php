@@ -23,18 +23,14 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\UsernameInvalidException;
 
 use OCP\IGroupManager;
-use OCP\IUser;
 use OCP\IUserManager;
-use OCP\IRequest;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 
 class SystemService {
@@ -76,50 +72,50 @@ class SystemService {
 	 * @param string $query
 	 * @return bool
 	 */
-	 private function isValidEmail($email) {
-		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;
-	 }
+	private function isValidEmail($email) {
+		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;
+	}
 
 
-	 /**
-	  * Get a list of users
-	  * @NoAdminRequired
-	  * @param string $query
-	  * @param array $skip - usernames to skip in return array
-	  * @return Array
-	  */
-	 public function getSiteUsers($query = '', $skip = array()) {
-		 $users = array();
-		 foreach ($this->userManager->searchDisplayName($query) as $user) {
-			 if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
-				 $users[] = [
-					 'id' => $user->getUID(),
-					 'user' => $user->getUID(),
-					 'displayName' => $user->getDisplayName(),
-					 'organisation' => '',
-					 'emailAddress' => $user->getEMailAddress(),
-					 'desc' => 'User',
-					 'type' => 'user',
-					 'icon' => 'icon-user',
-					 'avatarURL' => '',
-					 'avatar' => '',
-					 'lastLogin' => $user->getLastLogin(),
-					 'cloudId' => $user->getCloudId()
-				 ];
-			 }
-		 }
-		 return $users;
-	 }
+	/**
+	 * Get a list of users
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @param array $skip - usernames to skip in return array
+	 * @return Array
+	 */
+	public function getSiteUsers($query = '', $skip = []) {
+		$users = [];
+		foreach ($this->userManager->searchDisplayName($query) as $user) {
+			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
+				$users[] = [
+					'id' => $user->getUID(),
+					'user' => $user->getUID(),
+					'displayName' => $user->getDisplayName(),
+					'organisation' => '',
+					'emailAddress' => $user->getEMailAddress(),
+					'desc' => 'User',
+					'type' => 'user',
+					'icon' => 'icon-user',
+					'avatarURL' => '',
+					'avatar' => '',
+					'lastLogin' => $user->getLastLogin(),
+					'cloudId' => $user->getCloudId()
+				];
+			}
+		}
+		return $users;
+	}
 
-	 /**
-	  * Get a list of user groups
-	  * @NoAdminRequired
-	  * @param string $query
-	  * @param array $skip - group names to skip in return array
-	  * @return Array
-	  */
-	 public function getSiteGroups($query = '', $skip = array()) {
-		$groups = array();
+	/**
+	 * Get a list of user groups
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @param array $skip - group names to skip in return array
+	 * @return Array
+	 */
+	public function getSiteGroups($query = '', $skip = []) {
+		$groups = [];
 		foreach ($this->groupManager->search($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
 				try {
@@ -157,17 +153,16 @@ class SystemService {
 	 * @return Array
 	 */
 	public function getContacts($query = '') {
-		$contacts = array();
-		foreach (\OC::$server->getContactsManager()->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES')) as $contact) {
+		$contacts = [];
+		foreach (\OC::$server->getContactsManager()->search($query, ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) as $contact) {
 			if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
-
 				$emailAdresses = $contact['EMAIL'];
 
 				if (!is_array($emailAdresses)) {
-					$emailAdresses = array($emailAdresses);
+					$emailAdresses = [$emailAdresses];
 				} else {
 					// take the first eMail address for now
-					$emailAdresses = array($emailAdresses[0]);
+					$emailAdresses = [$emailAdresses[0]];
 				}
 
 				foreach ($emailAdresses as $emailAddress) {
@@ -186,7 +181,6 @@ class SystemService {
 						'cloudId' => '',
 					];
 				}
-
 			}
 		}
 		return $contacts;
@@ -199,8 +193,8 @@ class SystemService {
 	 * @return Array
 	 */
 	public function getContactsGroupMembers($query = '') {
-		$contacts = array();
-		foreach (\OC::$server->getContactsManager()->search($query, array('CATEGORIES')) as $contact) {
+		$contacts = [];
+		foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
 			if (
 				   !array_key_exists('isLocalSystemBook', $contact)
 				&& array_key_exists('EMAIL', $contact)
@@ -209,10 +203,10 @@ class SystemService {
 				$emailAdresses = $contact['EMAIL'];
 
 				if (!is_array($emailAdresses)) {
-					$emailAdresses = array($emailAdresses);
+					$emailAdresses = [$emailAdresses];
 				} else {
 					// take the first eMail address for now
-					$emailAdresses = array($emailAdresses[0]);
+					$emailAdresses = [$emailAdresses[0]];
 				}
 
 				foreach ($emailAdresses as $emailAddress) {
@@ -243,11 +237,10 @@ class SystemService {
 	 * @return Array
 	 */
 	public function getContactsGroups($query = '') {
-		$contactGroups = array();
+		$contactGroups = [];
 		$foundContacts = [];
 
-		foreach (\OC::$server->getContactsManager()->search($query, array('CATEGORIES')) as $contact) {
-
+		foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
 			foreach (explode(',', $contact['CATEGORIES']) as $contactGroup) {
 				if (strpos($contactGroup, $query) === 0 && !in_array($contactGroup, $foundContacts)) {
 					$foundContacts[] = $contactGroup;
@@ -291,10 +284,10 @@ class SystemService {
 		$getContacts = true,
 		$getContactGroups = true,
 		$getMail = false,
-		$skipGroups = array(),
-		$skipUsers = array()
+		$skipGroups = [],
+		$skipUsers = []
 	) {
-		$list = array();
+		$list = [];
 
 		if ($getMail && $this->isValidEmail($query)) {
 			$list[] = [
@@ -356,7 +349,7 @@ class SystemService {
 			return new TooShortException('Username must have at least 3 characters');
 		}
 
-		$list = array();
+		$list = [];
 
 		// get all groups
 		$groups = $this->groupManager->search('');
@@ -417,5 +410,4 @@ class SystemService {
 		// return true, if username is allowed
 		return true;
 	}
-
 }

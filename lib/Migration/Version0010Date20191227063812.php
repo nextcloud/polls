@@ -25,7 +25,6 @@ namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
@@ -328,7 +327,6 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 			->setParameter('show_results', 'always')
 			->setParameter('admin_access', 0);
 			$insert->execute();
-
 		}
 
 		$result->closeCursor();
@@ -412,5 +410,4 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		}
 		$result->closeCursor();
 	}
-
 }

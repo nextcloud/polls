@@ -27,10 +27,6 @@ namespace OCA\Polls\Controller;
 use OCP\IRequest;
 
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\IURLGenerator;
@@ -79,7 +75,5 @@ class PageController extends Controller {
 			return new PublicTemplateResponse('polls', 'polls.tmpl', [
 				'urlGenerator' => $this->urlGenerator]);
 		}
-
 	}
-
 }

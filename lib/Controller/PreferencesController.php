@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 
@@ -32,13 +31,11 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCP\IGroupManager;
 
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
 
 class PreferencesController extends Controller {
-
 	private $userId;
 	private $preferencesMapper;
 
@@ -75,13 +72,11 @@ class PreferencesController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get() {
-
 		try {
 			return new DataResponse($this->preferencesMapper->find($this->userId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
-
 	}
 
 	/**
@@ -113,7 +108,6 @@ class PreferencesController extends Controller {
 		}
 
 		return new DataResponse($preferences, Http::STATUS_OK);
-
 	}
 
 	// /**
@@ -138,5 +132,4 @@ class PreferencesController extends Controller {
 	// 	return new DataResponse(['deleted' => $userId], Http::STATUS_OK);
 	//
 	// }
-
 }

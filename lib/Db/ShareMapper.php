@@ -121,7 +121,7 @@ class ShareMapper extends QBMapper {
 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
 
 	/**
@@ -135,7 +135,6 @@ class ShareMapper extends QBMapper {
 			   $qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
-
 }

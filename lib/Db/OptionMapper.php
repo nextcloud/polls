@@ -4,7 +4,7 @@
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -108,7 +108,7 @@ class OptionMapper extends QBMapper {
 			   $qb->expr()->eq('id', $qb->createNamedParameter($optionId, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
 
 	/**
@@ -122,6 +122,6 @@ class OptionMapper extends QBMapper {
 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
 }

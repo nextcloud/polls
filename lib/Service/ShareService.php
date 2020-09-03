@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsername;
 use OCA\Polls\Exceptions\InvalidShareType;
@@ -33,7 +32,6 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Controller\SystemController;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Service\MailService;
 use OCA\Polls\Model\Acl;
 
 class ShareService {
@@ -84,7 +82,7 @@ class ShareService {
 	 */
 	public function list($pollId, $token) {
 		if ($token) {
-			return array($this->get($token));
+			return [$this->get($token)];
 		}
 
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
@@ -147,7 +145,6 @@ class ShareService {
 	 * @throws NotAuthorizedException
 	 */
 	public function setEmailAddress($token, $emailAddress) {
-
 		$this->share = $this->shareMapper->findByToken($token);
 		if ($this->share->getType() === 'external') {
 			// TODO: Simple validate email address
@@ -181,7 +178,6 @@ class ShareService {
 		}
 
 		if ($this->share->getType() === 'public') {
-
 			$pollId = $this->share->getPollId();
 			$this->share = new Share();
 			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
@@ -198,14 +194,11 @@ class ShareService {
 			$this->shareMapper->insert($this->share);
 			$this->mailService->sendInvitationMail($this->share->getToken());
 			return $this->share;
-
 		} elseif ($this->share->getType() === 'email') {
-
 			$this->share->setType('external');
 			$this->share->setUserId($userName);
 			$this->share->setUserEmail($emailAddress);
 			return $this->shareMapper->update($this->share);
-
 		} else {
 			throw new NotAuthorizedException;
 		}
