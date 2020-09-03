@@ -15,7 +15,7 @@ jobs:
       matrix:
         php-versions: [7.4]
 
-    name: php-cs check php ${{ matrix.php-versions }}
+    name: php-cs
 
     steps:
     - name: Checkout
@@ -38,7 +38,7 @@ jobs:
             php-versions: ['7.2', '7.3', '7.4']
             nextcloud-versions: ['master']
 
-    name: Nextcloud ${{ matrix.nextcloud-versions }} app code check
+    name: Nextcloud AppCode check
 
     steps:
         - name: Set up php ${{ matrix.php-versions }}
