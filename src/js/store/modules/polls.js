@@ -46,7 +46,8 @@ const getters = {
 			return state.list.filter(poll => (poll.owner === getCurrentUser().uid && !poll.deleted))
 		} else if (filterId === 'relevant') {
 			return state.list.filter(poll => ((
-				poll.userHasVoted
+				poll.important
+				|| poll.userHasVoted
 				|| poll.isOwner
 				|| (poll.allowView && poll.access !== 'public')
 			)

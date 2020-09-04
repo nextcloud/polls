@@ -72,6 +72,12 @@
 				type="radio"
 				class="radio">
 			<label for="public">{{ t('polls', 'Visible to other users') }}</label>
+
+			<input id="important"
+				v-model="pollImportant"
+				type="checkbox"
+				class="checkbox">
+			<label for="important"> {{ t('polls', 'Relevant for all users') }}</label>
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
@@ -207,6 +213,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ anonymous: value })
+			},
+		},
+
+		pollImportant: {
+			get() {
+				return (this.poll.important > 0)
+			},
+			set(value) {
+				this.writeValue({ important: value })
 			},
 		},
 
