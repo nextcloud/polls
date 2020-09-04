@@ -219,6 +219,11 @@ export default {
 	margin: 8px 0;
 }
 
+.linkified {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
 .icon-handle {
 	background-image: var(--icon-polls-handle);
 }
