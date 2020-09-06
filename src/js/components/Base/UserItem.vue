@@ -176,9 +176,4 @@ export default {
 	text-overflow: ellipsis;
 }
 
-@media (max-width: 576px) {
-	.user-item__name {
-		display: none;
-	}
-}
 </style>

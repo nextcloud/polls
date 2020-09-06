@@ -322,7 +322,7 @@ export default {
 			} else {
 				this.$store.dispatch('poll/update')
 					.then((response) => {
-						showSuccess(t('polls', '"{pollTitle}" successfully saved', 1, { pollTitle: response.data.title }))
+						showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
 						emit('update-polls')
 					})
 					.catch(() => {

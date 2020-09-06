@@ -22,7 +22,7 @@
 
 <template>
 	<div class="vote-table-header-item"
-		:class=" { winner: isWinner, confirmed: isConfirmed }">
+		:class=" { winner: isWinner }">
 		<OptionItem :option="option" :display="tableMode ? 'dateBox' : 'textBox'" />
 		<Confirmation v-if="isConfirmed" :option="option" />
 		<Counter v-else :show-maybe="Boolean(poll.allowMaybe)"

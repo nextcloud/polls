@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!expired, confirmed: isConfirmed }]">
+	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!expired }]">
 		<div v-if="isActive" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 	</div>
@@ -75,10 +75,6 @@ export default {
 
 		isValidUser() {
 			return (this.userId !== '' && this.userId !== null)
-		},
-
-		isConfirmed() {
-			return this.option.confirmed && this.expired
 		},
 
 	},
