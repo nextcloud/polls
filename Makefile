@@ -27,7 +27,7 @@ all: dev-setup appstore
 dev-setup: clean-dev npm-init composer
 
 npm-init:
-	npm install
+	npm ci
 
 # a copy is fetched from the web
 .PHONY: composer
