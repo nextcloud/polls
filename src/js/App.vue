@@ -146,18 +146,18 @@ export default {
 	--color-polls-background-yes: #ebf5d6;
 	--color-polls-background-no: #ffede9;
 	--color-polls-background-maybe: #fcf7e1;
-	--icon-polls-confirmed: url('/index.php/svg/polls/confirmed?color=000&v=1');
-	--icon-polls-unconfirmed: url('/index.php/svg/polls/unconfirmed?color=000&v=1');
-	--icon-polls-clone: url('/index.php/svg/polls/clone?color=000&v=1');
-	--icon-polls-expired: url('/index.php/svg/polls/clock?color=000&v=1');
-	--icon-polls-move: url('/index.php/svg/polls/move?color=000&v=1');
-	--icon-polls-yes: url('/index.php/svg/core/actions/checkmark?color=49bc49&v=1');
-	--icon-polls-no: url('/index.php/svg/core/actions/close?color=f45573&v=1');
-	--icon-polls-maybe: url('/index.php/svg/polls/maybe-vote?color=ffc107&v=1');
-	--icon-polls: url('/index.php/svg/polls/app?color=000&v=1');
-	--icon-polls-handle: url('/index.php/svg/polls/handle?color=000&v=1');
-	--icon-polls-mail: url('/index.php/svg/polls/mail?color=000&v=1');
-	--icon-polls-sidebar-toggle: url('/index.php/svg/polls/sidebar-toggle?color=000&v=1');
+	--icon-polls-confirmed: url('./assets/confirmed.svg');
+	--icon-polls-unconfirmed: url('./assets/unconfirmed.svg');
+	--icon-polls-clone: url('./assets/clone.svg');
+	--icon-polls-expired: url('./assets/clock.svg');
+	--icon-polls-move: url('./assets/move.svg');
+	--icon-polls-yes: url('./assets/yes-vote.svg');
+	--icon-polls-no: url('./assets/no-vote.svg');
+	--icon-polls-maybe: url('./assets/maybe-vote.svg');
+	--icon-polls: url('./assets/polls.svg');
+	--icon-polls-handle: url('./assets/handle.svg');
+	--icon-polls-mail: url('./assets/mail.svg');
+	--icon-polls-sidebar-toggle: url('./assets/sidebar-toggle.svg');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
