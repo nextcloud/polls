@@ -403,6 +403,9 @@ export default {
 	}
 
 	.option-item {
+		.option-item__option--datebox {
+			min-width: 80px;
+		}
 		.option-item__option--text {
 			hyphens: auto;
 			text-align: center;
