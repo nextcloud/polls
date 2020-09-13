@@ -25,24 +25,16 @@ namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-
-
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
 
 class PreferencesController extends Controller {
 	private $userId;
 	private $preferencesMapper;
-
-	private $groupManager;
-	private $pollMapper;
-	private $anonymizer;
-	private $acl;
 
 	/**
 	 * PreferencesController constructor.
@@ -62,13 +54,11 @@ class PreferencesController extends Controller {
 		$this->preferencesMapper = $preferencesMapper;
 	}
 
-
 	/**
 	 * get
 	 * Read all preferences
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param integer $pollId
 	 * @return DataResponse
 	 */
 	public function get() {
@@ -81,12 +71,9 @@ class PreferencesController extends Controller {
 
 	/**
 	 * write
-	 * Write a new comment to the db and returns the new comment as array
+	 * Write wreferences
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $userId
-	 * @param string $message
+	 * @param int $settings
 	 * @return DataResponse
 	 */
 	public function write($settings) {
@@ -109,27 +96,4 @@ class PreferencesController extends Controller {
 
 		return new DataResponse($preferences, Http::STATUS_OK);
 	}
-
-	// /**
-	//  * delete
-	//  * Delete Preferences
-	//  * @NoAdminRequired
-	//  * @param int $pollId
-	//  * @param string $message
-	//  * @return DataResponse
-	//  */
-	// public function delete($userId) {
-	// 	if (!\OC::$server->getUserSession()->isLoggedIn()) {
-	// 		return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-	// 	}
-	//
-	// 	try {
-	// 		$this->preferencesMapper->delete($userId);
-	// 	} catch (\Exception $e) {
-	// 		return new DataResponse($e, Http::STATUS_CONFLICT);
-	// 	}
-	//
-	// 	return new DataResponse(['deleted' => $userId], Http::STATUS_OK);
-	//
-	// }
 }

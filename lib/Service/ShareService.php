@@ -24,20 +24,18 @@
 namespace OCA\Polls\Service;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\InvalidUsername;
 use OCA\Polls\Exceptions\InvalidShareType;
 
 use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Controller\SystemController;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
 
 class ShareService {
 
-	/** @var SystemController */
-	private $systemController;
+	/** @var SystemService */
+	private $systemService;
 
 	/** @var ShareMapper */
 	private $shareMapper;
@@ -53,20 +51,20 @@ class ShareService {
 
 	/**
 	 * ShareController constructor.
-	 * @param SystemController $systemController
+	 * @param SystemService $systemService
 	 * @param ShareMapper $shareMapper
 	 * @param Share $share
 	 * @param MailService $mailService
 	 * @param Acl $acl
 	 */
 	public function __construct(
-		SystemController $systemController,
+		SystemService $systemService,
 		ShareMapper $shareMapper,
 		Share $share,
 		MailService $mailService,
 		Acl $acl
 	) {
-		$this->systemController = $systemController;
+		$this->systemService = $systemService;
 		$this->shareMapper = $shareMapper;
 		$this->share = $share;
 		$this->mailService = $mailService;
@@ -142,12 +140,12 @@ class ShareService {
 	 * @param string $token
 	 * @param string $emailAddress
 	 * @return Share
-	 * @throws NotAuthorizedException
+	 * @throws InvalidShareType
 	 */
 	public function setEmailAddress($token, $emailAddress) {
 		$this->share = $this->shareMapper->findByToken($token);
 		if ($this->share->getType() === 'external') {
-			// TODO: Simple validate email address
+			$this->systemService->validateEmailAddress($emailAddress);
 			$this->share->setUserEmail($emailAddress);
 			// TODO: Send confirmation
 			return $this->shareMapper->update($this->share);
@@ -164,17 +162,14 @@ class ShareService {
 	 * @param string $userName
 	 * @return Share
 	 * @throws NotAuthorizedException
-	 * @throws InvalidUsername
 	 */
-	public function personal($token, $userName, $emailAddress) {
+	public function personal($token, $userName, $emailAddress = '') {
 		$this->share = $this->shareMapper->findByToken($token);
 
-		// Return of validatePublicUsername is a DataResponse
-		$checkUsername = $this->systemController->validatePublicUsername($this->share->getPollId(), $userName, $token);
+		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);
 
-		// if status is not 200, return DataResponse from validatePublicUsername
-		if ($checkUsername->getStatus() !== 200) {
-			throw new InvalidUsername;
+		if ($emailAddress) {
+			$this->systemService->validateEmailAddress($emailAddress);
 		}
 
 		if ($this->share->getType() === 'public') {
@@ -192,7 +187,11 @@ class ShareService {
 			$this->share->setUserEmail($emailAddress);
 			$this->share->setInvitationSent(time());
 			$this->shareMapper->insert($this->share);
-			$this->mailService->sendInvitationMail($this->share->getToken());
+
+			if ($emailAddress) {
+				$this->mailService->sendInvitationMail($this->share->getToken());
+			}
+
 			return $this->share;
 		} elseif ($this->share->getType() === 'email') {
 			$this->share->setType('external');

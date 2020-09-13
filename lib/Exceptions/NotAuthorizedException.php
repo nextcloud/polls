@@ -34,6 +34,6 @@ class NotAuthorizedException extends \Exception {
 		parent::__construct($e);
 	}
 	public function getStatus() {
-		return Http::STATUS_FORBIDDEN;
+		return Http::STATUS_UNAUTHORIZED;
 	}
 }

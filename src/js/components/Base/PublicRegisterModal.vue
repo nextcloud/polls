@@ -27,23 +27,24 @@
 				<h2>{{ t('polls', 'Who are you?') }}</h2>
 				<p>{{ t('polls', 'To participate, tell us how we can call you!') }}</p>
 
-				<input ref="userName" v-model="userName" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }"
+				<input ref="userName" v-model="userName" :class="userNameCheckStatus"
 					type="text"
 					:placeholder="t('polls', 'Enter your name')" @keyup.enter="writeUserName">
 
 				<div>
-					<span v-show="checkingUserName" class="icon-loading-small">Checking username …</span>
-					<span v-show="!checkingUserName && userName.length < 3" class="error">{{ t('polls', 'Please use at least 3 characters for your name.') }}</span>
-					<span v-show="!checkingUserName && userName.length > 2 && !isValidName" class="error">{{ t('polls', 'This name is not valid, i.e. because it is already in use.') }}</span>
-					<span v-show="!checkingUserName && userName.length > 2 && isValidName" class="error">{{ t('polls', 'OK, we will call you {username}.', {username : userName }) }}</span>
+					{{ userNameCheckResult }}
 				</div>
 			</div>
 			<div class="enter__email">
 				<p>{{ t('polls', 'Enter your email address to be able to subscribe to updates and get your personal link via email.') }}</p>
 
-				<input v-model="emailAddress" :class="{ error: (!isValidName && userName.length > 0), success: isValidName }"
+				<input v-model="emailAddress" :class="emailAddressCheckStatus"
 					type="text"
 					:placeholder="t('polls', 'Enter your email address')" @keyup.enter="writeUserName">
+
+				<div>
+					{{ emailAddressCheckResult }}
+				</div>
 			</div>
 
 			<div class="modal__buttons">
@@ -80,8 +81,10 @@ export default {
 			userName: '',
 			emailAddress: '',
 			checkingUserName: false,
+			checkingEmailAddress: false,
 			redirecting: false,
 			isValidName: false,
+			isValidEmailAddress: false,
 			modal: true,
 		}
 	},
@@ -99,19 +102,85 @@ export default {
 			}).href
 			return generateUrl('login?redirect_url=' + redirectUrl)
 		},
+
+		userNameCheckStatus() {
+			if (this.checkingUserName) {
+				return 'checking'
+			} else {
+				if (this.userName.length === 0) {
+					return 'empty'
+				} else if (this.userName.length < 3 || !this.isValidName) {
+					return 'error'
+				} else {
+					return 'success'
+				}
+			}
+		},
+
+		userNameCheckResult() {
+			if (this.checkingUserName) {
+				return t('polls', 'Checking username …')
+			} else {
+				if (this.userName.length < 3) {
+					return t('polls', 'Please use at least 3 characters for your name.')
+				} else if (!this.isValidName) {
+					return t('polls', 'This name is not valid, i.e. because it is already in use.')
+				} else {
+					return t('polls', 'OK, we will call you {username}.', { username: this.userName })
+				}
+			}
+		},
+
+		emailAddressCheckResult() {
+			if (this.checkingEmailAddress) {
+				return t('polls', 'Checking email address …')
+			} else {
+				if (this.emailAddress.length < 1) {
+					return t('polls', 'Vote without email address.')
+				} else if (!this.isValidEmailAddress) {
+					return t('polls', 'This email address is not valid.')
+				} else {
+					return t('polls', 'This email address is valid.')
+				}
+			}
+		},
+
+		emailAddressCheckStatus() {
+			if (this.checkingEmailAddress) {
+				return 'checking'
+			} else {
+				if (this.emailAddress.length === 0) {
+					return ''
+				} else if (!this.isValidEmailAddress) {
+					return 'error'
+				} else {
+					return 'success'
+				}
+			}
+		},
+
 	},
 
 	watch: {
 		userName: function() {
-			this.isValidName = false
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
 				if (this.userName !== this.share.userid) {
-					this.isValidName = this.validatePublicUsername()
+					this.validatePublicUsername()
 				}
 			} else {
-				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your username!')
 				this.checkingUserName = false
+				this.isValidName = false
+			}
+		},
+
+		emailAddress: function() {
+			if (this.emailAddress.length > 0) {
+				this.checkingEmailAddress = true
+				this.validateEmailAddress()
+			} else {
+				this.checkingEmailAddress = false
+				this.isValidEmailAddress = false
 			}
 		},
 	},
@@ -133,32 +202,42 @@ export default {
 			this.modal = false
 		},
 
-		validatePublicUsername:	debounce(function() {
+		validatePublicUsername: debounce(function() {
 			if (this.userName.length > 2) {
-				this.checkingUserName = true
 				return axios.post(generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
 					.then(() => {
 						this.checkingUserName = false
 						this.isValidName = true
-						this.invalidUserNameMessage = 'Username is OK.'
-						return true
 					})
 					.catch(() => {
 						this.checkingUserName = false
 						this.isValidName = false
-						this.invalidUserNameMessage = t('polls', 'This username can not be chosen.')
-						return false
 					})
 			} else {
 				this.checkingUserName = false
 				this.isValidName = false
-				this.invalidUserNameMessage = t('polls', 'Please use at least 3 characters for your username!')
-				return false
+			}
+		}, 500),
+
+		validateEmailAddress: debounce(function() {
+			if (this.emailAddress.length > 0) {
+				return axios.get(generateUrl('apps/polls/check/emailaddress').concat('/', this.emailAddress))
+					.then(() => {
+						this.isValidEmailAddress = true
+						this.checkingEmailAddress = false
+					})
+					.catch(() => {
+						this.isValidEmailAddress = false
+						this.checkingEmailAddress = false
+					})
+			} else {
+				this.isValidEmailAddress = false
+				this.checkingEmailAddress = false
 			}
 		}, 500),
 
 		writeUserName() {
-			if (this.isValidName) {
+			if (this.isValidName && (this.isValidEmailAddress || this.emailAddress.length === 0)) {
 				this.$store.dispatch('poll/shares/addPersonal', { token: this.$route.params.token, userName: this.userName, emailAddress: this.emailAddress })
 					.then((response) => {
 						if (this.$route.params.token === response.token) {

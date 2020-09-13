@@ -25,12 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class UsernameInvalidException extends \Exception {
+class InvalidEmailAddress extends \Exception {
 	/**
-	 * UsernameInvalidException Constructor
+	 * InvalidEmailAddress Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Username not allowed') {
+	public function __construct($e = 'Invalid email address') {
 		parent::__construct($e);
 	}
 	public function getStatus() {

@@ -158,6 +158,7 @@ export default {
 	--icon-polls-handle: url('./assets/handle.svg');
 	--icon-polls-mail: url('./assets/mail.svg');
 	--icon-polls-sidebar-toggle: url('./assets/sidebar-toggle.svg');
+	--icon-polls-loading: url('./assets/loading-small.gif');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -260,12 +261,19 @@ input {
 		border-color: var(--color-error);
 		background-color: var(--color-background-error);
 		background-image: var(--icon-polls-no);
+		color: var(--color-text-maxcontrast);
+	}
+
+	&.checking {
+		border-color: var(--color-warning);
+		background-image: var(--icon-polls-loading);
 	}
 
 	&.success, &.icon-confirm.success {
 		border-color: var(--color-success);
 		background-image: var(--icon-polls-yes);
 		background-color: var(--color-background-success) !important;
+		color: var(--color-text-maxcontrast);
 	}
 
 	&.icon {
