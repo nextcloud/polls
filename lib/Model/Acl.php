@@ -46,9 +46,6 @@ class Acl implements JsonSerializable {
 	/** @var int */
 	private $pollId = 0;
 
-	/** @var array */
-	private $shares = [];
-
 	/** @var string */
 	private $token = '';
 

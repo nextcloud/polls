@@ -318,6 +318,7 @@ class PollService {
 		}
 
 		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
+		$list = [];
 		foreach ($votes as $vote) {
 			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($pollId, $vote->getUserId()) . '>';
 		}

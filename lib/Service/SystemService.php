@@ -317,11 +317,11 @@ class SystemService {
 
 		if (\OC::$server->getContactsManager()->isEnabled()) {
 			if ($getContacts) {
-				$list = array_merge($list, $this->getContacts($query, $skipUsers));
+				$list = array_merge($list, $this->getContacts($query));
 			}
 
 			if ($getContacts) {
-				$list = array_merge($list, $this->getContactsGroups($query, $skipGroups));
+				$list = array_merge($list, $this->getContactsGroups($query));
 			}
 		}
 
