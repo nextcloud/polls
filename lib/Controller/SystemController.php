@@ -129,7 +129,11 @@ class SystemController extends Controller {
 	 * @return DataResponse
 	 */
 	public function validatePublicUsername($pollId, $userName, $token) {
-		return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
+		try {
+			return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
+		} catch (\Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
 	}
 
 	/**
@@ -139,6 +143,10 @@ class SystemController extends Controller {
 	 * @return DataResponse
 	 */
 	public function validateEmailAddress($emailAddress) {
-		return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
+		try {
+			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
+		} catch (\Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
 	}
 }

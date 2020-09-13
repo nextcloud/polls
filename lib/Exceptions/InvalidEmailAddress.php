@@ -34,6 +34,6 @@ class InvalidEmailAddress extends \Exception {
 		parent::__construct($e);
 	}
 	public function getStatus() {
-		return Http::STATUS_CONFLICT;
+		return Http::STATUS_FORBIDDEN;
 	}
 }

@@ -28,7 +28,6 @@ use OCA\Polls\Exceptions\InvalidShareType;
 
 use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Service\SystemService;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
@@ -188,7 +187,11 @@ class ShareService {
 			$this->share->setUserEmail($emailAddress);
 			$this->share->setInvitationSent(time());
 			$this->shareMapper->insert($this->share);
-			$this->mailService->sendInvitationMail($this->share->getToken());
+
+			if ($emailAddress) {
+				$this->mailService->sendInvitationMail($this->share->getToken());
+			}
+
 			return $this->share;
 		} elseif ($this->share->getType() === 'email') {
 			$this->share->setType('external');

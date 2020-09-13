@@ -334,8 +334,6 @@ class SystemService {
 	 * a participant of the poll
 	 * @NoAdminRequired
 	 * @return Boolean
-	 * @throws NotAuthorizedException
-	 * @throws TooShortException
 	 * @throws InvalidEmailAddress
 	 */
 	public function validateEmailAddress($emailAddress) {

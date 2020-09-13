@@ -96,5 +96,4 @@ class PreferencesController extends Controller {
 
 		return new DataResponse($preferences, Http::STATUS_OK);
 	}
-
 }
