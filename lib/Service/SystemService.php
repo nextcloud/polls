@@ -25,7 +25,8 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\TooShortException;
-use OCA\Polls\Exceptions\UsernameInvalidException;
+use OCA\Polls\Exceptions\InvalidUsernameException;
+use OCA\Polls\Exceptions\InvalidEmailAddress;
 
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -69,11 +70,11 @@ class SystemService {
 	/**
 	 * Validate string as email address
 	 * @NoAdminRequired
-	 * @param string $query
+	 * @param string $emailAddress
 	 * @return bool
 	 */
-	private function isValidEmail($email) {
-		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;
+	private function isValidEmail($emailAddress) {
+		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $emailAddress)) ? false : true;
 	}
 
 
@@ -335,7 +336,25 @@ class SystemService {
 	 * @return Boolean
 	 * @throws NotAuthorizedException
 	 * @throws TooShortException
-	 * @throws UsernameInvalidException
+	 * @throws InvalidEmailAddress
+	 */
+	public function validateEmailAddress($emailAddress) {
+		if (!$this->isValidEmail($emailAddress)) {
+			throw new InvalidEmailAddress;
+		}
+		return true;
+	}
+
+
+	/**
+	 * Validate it the user name is reservrd
+	 * return false, if this username already exists as a user or as
+	 * a participant of the poll
+	 * @NoAdminRequired
+	 * @return Boolean
+	 * @throws NotAuthorizedException
+	 * @throws TooShortException
+	 * @throws InvalidUsernameException
 	 */
 	public function validatePublicUsername($pollId, $userName, $token) {
 
@@ -403,7 +422,7 @@ class SystemService {
 		// return forbidden, if list contains requested username
 		foreach ($list as $element) {
 			if (strtolower(trim($userName)) === strtolower(trim($element['id'])) || strtolower(trim($userName)) === strtolower(trim($element['displayName']))) {
-				throw new UsernameInvalidException;
+				throw new InvalidUsernameException;
 			}
 		}
 
