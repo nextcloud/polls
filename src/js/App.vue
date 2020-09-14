@@ -216,7 +216,7 @@ export default {
 }
 
 .description {
-	white-space: break-spaces;
+	white-space: pre-wrap;
 	margin: 8px 0;
 }
 
