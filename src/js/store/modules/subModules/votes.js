@@ -62,14 +62,6 @@ const mutations = {
 
 const getters = {
 
-	answerSequence: (state, getters, rootState) => {
-		if (rootState.poll.allowMaybe) {
-			return ['no', 'maybe', 'yes', 'no']
-		} else {
-			return ['no', 'yes', 'no']
-		}
-	},
-
 	ranked: (state, getters, rootState) => {
 		let votesRank = []
 		rootState.poll.options.list.forEach(function(option) {
@@ -101,48 +93,19 @@ const getters = {
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})
 	},
-
-	getNextAnswer: (state, getters) => (payload) => {
-		try {
-			return getters.answerSequence[getters.answerSequence.indexOf(getters.getVote(payload).voteAnswer) + 1]
-		} catch (e) {
-			return getters.answerSequence[1]
-		}
-
-	},
-
 }
 
 const actions = {
-	delete(context, payload) {
-		const endPoint = 'apps/polls/votes/delete'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
-			voteId: 0,
-			userId: payload.userId,
-		})
-			.then(() => {
-				context.commit('deleteVotes', payload)
-				OC.Notification.showTemporary(t('polls', 'User {userId} removed', payload), { type: 'success' })
-			})
-			.catch((error) => {
-				console.error('Error deleting votes', { error: error.response }, { payload: payload })
-				throw error
-			})
-	},
-
 	set(context, payload) {
 		let endPoint = 'apps/polls/vote/set'
 
-		if (context.rootState.poll.acl.foundByToken) {
+		if (context.rootState.poll.acl.token) {
 			endPoint = endPoint.concat('/s')
 		}
 		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
-			token: context.rootState.poll.acl.token,
-			option: payload.option,
-			userId: payload.userId,
+			optionId: payload.option.id,
 			setTo: payload.setTo,
+			token: context.rootState.poll.acl.token,
 		})
 			.then((response) => {
 				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
@@ -150,6 +113,21 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error setting vote', { error: error.response }, { payload: payload })
+				throw error
+			})
+	},
+
+	deleteUser(context, payload) {
+		const endPoint = 'apps/polls/votes/delete'
+		return axios.post(generateUrl(endPoint), {
+			pollId: context.rootState.poll.id,
+			userId: payload.userId,
+		})
+			.then(() => {
+				context.commit('deleteVotes', payload)
+			})
+			.catch((error) => {
+				console.error('Error deleting votes', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},

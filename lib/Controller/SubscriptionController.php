@@ -23,12 +23,10 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
-use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -37,42 +35,37 @@ use OCA\Polls\Service\SubscriptionService;
 
 class SubscriptionController extends Controller {
 
-	private $userId;
+	/** @var SubscriptionService */
 	private $subscriptionService;
-	private $logger;
 
 	/**
 	 * SubscriptionController constructor.
 	 * @param string $appName
-	 * @param $UserId
 	 * @param SubscriptionService $subscriptionService
 	 * @param IRequest $request
-	 * @param ILogger $logger
 	 */
 
 	public function __construct(
 		string $appName,
-		$userId,
 		SubscriptionService $subscriptionService,
-		IRequest $request,
-		ILogger $logger
-
+		IRequest $request
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
 		$this->subscriptionService = $subscriptionService;
-		$this->logger = $logger;
 	}
 
 	/**
+	 * Get subscription status
+	 * @PublicPage
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return DataResponse
+	 * @throws DoesNotExistException
+	 * @throws NotAuthorizedException
 	 */
-	public function get($pollId) {
+	public function get($pollId, $token) {
 		try {
-			return new DataResponse($this->subscriptionService->get($pollId), Http::STATUS_OK);
+			return new DataResponse($this->subscriptionService->get($pollId, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
@@ -81,13 +74,17 @@ class SubscriptionController extends Controller {
 	}
 
 	/**
+	 * Switch subscription status
+	 * @PublicPage
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
+	 * @param int $subscribed
+	 * @return DataResponse
+	 * @throws NotAuthorizedException
 	 */
-	public function set($pollId, $subscribed) {
+	public function set($pollId, $token, $subscribed) {
 		try {
-			return new DataResponse($this->subscriptionService->set($pollId, $subscribed), Http::STATUS_OK);
+			return new DataResponse($this->subscriptionService->set($pollId, $token, $subscribed), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}

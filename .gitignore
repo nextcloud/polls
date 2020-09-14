@@ -1,5 +1,6 @@
 .DS_Store
 .sass-cache/
+.php_cs.cache
 .project/
 .idea/
 build/

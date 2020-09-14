@@ -22,21 +22,6 @@ module.exports = {
 				},
 			},
 			{
-				test: /\.css$/,
-				use: [
-					'vue-style-loader',
-					'css-loader',
-				],
-			},
-			{
-				test: /\.scss$/,
-				use: [
-					'vue-style-loader',
-					'css-loader',
-					'sass-loader',
-				],
-			},
-			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
 				options: {
@@ -51,8 +36,29 @@ module.exports = {
 				exclude: /node_modules/,
 			},
 			{
+				test: /\.css$/,
+				use: [
+					'vue-style-loader',
+					{
+						loader: 'css-loader',
+						options: { esModule: false },
+					},
+				],
+			},
+			{
+				test: /\.scss$/,
+				use: [
+					'vue-style-loader',
+					{
+						loader: 'css-loader',
+						options: { esModule: false },
+					},
+					'sass-loader',
+				],
+			},
+			{
 				test: /\.(png|jpg|gif|svg)$/,
-				loader: 'file-loader',
+				loader: 'url-loader',
 				options: {
 					name: '[name].[ext]?[hash]',
 				},

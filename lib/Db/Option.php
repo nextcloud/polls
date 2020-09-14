@@ -5,7 +5,7 @@
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author Kai Schröer <git@schroeer.co>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -30,17 +30,17 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method integer getId()
+ * @method int getId()
  * @method void setId(integer $value)
- * @method integer getPollId()
+ * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getPollOptionText()
  * @method void setPollOptionText(string $value)
- * @method integer getTimestamp()
+ * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
- * @method integer getOrder()
+ * @method int getOrder()
  * @method void setOrder(integer $value)
- * @method integer getConfirmed()
+ * @method int getConfirmed()
  * @method void setConfirmed(integer $value)
  */
 class Option extends Entity implements JsonSerializable {
@@ -83,14 +83,13 @@ class Option extends Entity implements JsonSerializable {
 			'rank' => 0,
 			'votes' => 0,
 		];
-
 	}
 
 	/**
 	 * Temporary fix
 	 * Make sure, order is eqal to timestamp in date polls
 	 */
-	 // TODO: remove by time
+	// TODO: remove by time
 	private function orderCorrection($timestamp, $order) {
 		if ($timestamp) {
 			return $timestamp;

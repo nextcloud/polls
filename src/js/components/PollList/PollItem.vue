@@ -110,8 +110,9 @@
 </template>
 
 <script>
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
 export default {
@@ -190,7 +191,7 @@ export default {
 				})
 				.catch((error) => {
 					console.error(error)
-					OC.Notification.showTemporary(t('polls', 'Error loading poll'), { type: 'error' })
+					showError(t('polls', 'Error loading poll'))
 				})
 
 		},
@@ -210,7 +211,7 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+					showError(t('polls', 'Error deleting poll.'))
 				})
 			this.hideMenu()
 		},
@@ -222,7 +223,7 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+					showError(t('polls', 'Error deleting poll.'))
 				})
 			this.hideMenu()
 		},
@@ -234,7 +235,7 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
+					showError(t('polls', 'Error cloning poll.'))
 				})
 			this.hideMenu()
 		},

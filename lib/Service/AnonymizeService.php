@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -31,10 +31,19 @@ use OCA\Polls\Db\CommentMapper;
 
 class AnonymizeService {
 
+	/** @var VoteMapper */
 	private $voteMapper;
+
+	/** @var CommentMapper */
 	private $commentMapper;
-	private $anonList = array();
+
+	/** @var array */
+	private $anonList = [];
+
+	/** @var string */
 	private $userId;
+
+	/** @var int */
 	private $pollId;
 
 	public function __construct(
@@ -74,7 +83,7 @@ class AnonymizeService {
 	 * Initialize anonymizer with pollId and userId
 	 * Creates a mapping list with unique Anonymous strings based on the partcipants of a poll
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @param string $userId - usernames, which will not be anonymized
 	 */
 
@@ -117,6 +126,4 @@ class AnonymizeService {
 	public function getVotes() {
 		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
 	}
-
-
 }

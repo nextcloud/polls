@@ -21,19 +21,24 @@
   -->
 
 <template>
-	<Content app-name="polls">
-		<Navigation v-if="getCurrentUser()" />
+	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
-		<SideBar v-if="sideBarOpen && $store.state.poll.id" :active="activeTab" />
+		<SideBar v-if="sideBarOpen && $store.state.poll.id"
+			:active="activeTab"
+			:class="{ 'glassy': settings.glassySidebar }" />
 	</Content>
 </template>
 
 <script>
 import Navigation from './components/Navigation/Navigation'
-import { Content } from '@nextcloud/vue'
 import SideBar from './components/SideBar/SideBar'
 import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
+import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { mapState } from 'vuex'
+import '@nextcloud/dialogs/styles/toast.scss'
 
 export default {
 	name: 'App',
@@ -47,10 +52,43 @@ export default {
 		return {
 			sideBarOpen: (window.innerWidth > 920),
 			activeTab: 'comments',
+			transitionClass: 'transitions-active',
 		}
 	},
 
+	computed: {
+		...mapState({
+			settings: state => state.settings.user,
+		}),
+		appStyle() {
+			if (this.settings.useImage && this.settings.experimental) {
+				return {
+					backgroundImage: 'url(' + this.settings.imageUrl + ')',
+					backgroundSize: 'cover',
+					backgroundPosition: 'center center',
+					backgroundAttachment: 'fixed',
+					backgroundRepeat: 'no-repeat',
+				}
+			} else {
+				return {}
+			}
+		},
+	},
+
 	created() {
+		subscribe('transitions-off', (delay) => {
+			this.transitionClass = ''
+			if (delay) {
+				setTimeout(() => {
+					this.transitionClass = 'transitions-active'
+				}, delay)
+			}
+		})
+
+		subscribe('transitions-on', () => {
+			this.transitionClass = 'transitions-active'
+		})
+
 		subscribe('toggle-sidebar', (payload) => {
 			if (payload === undefined) {
 				this.sideBarOpen = !this.sideBarOpen
@@ -67,6 +105,7 @@ export default {
 
 		})
 
+		this.$store.dispatch('settings/get')
 		if (getCurrentUser()) {
 			this.updatePolls()
 			subscribe('update-polls', () => {
@@ -85,11 +124,8 @@ export default {
 			if (getCurrentUser()) {
 
 				this.$store.dispatch('polls/load')
-					.then(() => {
-					})
-					.catch((error) => {
-						console.error('refresh poll: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error loading poll list'), { type: 'error' })
+					.catch(() => {
+						showError(t('polls', 'Error loading poll list'))
 					})
 			}
 		},
@@ -110,17 +146,19 @@ export default {
 	--color-polls-background-yes: #ebf5d6;
 	--color-polls-background-no: #ffede9;
 	--color-polls-background-maybe: #fcf7e1;
-	--icon-polls-confirmed: url('/index.php/svg/polls/confirmed?color=000&v=1');
-	--icon-polls-unconfirmed: url('/index.php/svg/polls/unconfirmed?color=000&v=1');
-	--icon-polls-clone: url('/index.php/svg/polls/clone?color=000&v=1');
-	--icon-polls-expired: url('/index.php/svg/polls/clock?color=000&v=1');
-	--icon-polls-move: url('/index.php/svg/polls/move?color=000&v=1');
-	--icon-polls-yes: url('/index.php/svg/core/actions/checkmark?color=49bc49&v=1');
-	--icon-polls-no: url('/index.php/svg/core/actions/close?color=f45573&v=1');
-	--icon-polls-maybe: url('/index.php/svg/polls/maybe-vote?color=ffc107&v=1');
-	--icon-polls: url('/index.php/svg/polls/app?color=000&v=1');
-	--icon-polls-handle: url('/index.php/svg/polls/handle?color=000&v=1');
-	--icon-polls-mail: url('/index.php/svg/polls/mail?color=000&v=1');
+	--icon-polls-confirmed: url('./assets/confirmed.svg');
+	--icon-polls-unconfirmed: url('./assets/unconfirmed.svg');
+	--icon-polls-clone: url('./assets/clone.svg');
+	--icon-polls-expired: url('./assets/clock.svg');
+	--icon-polls-move: url('./assets/move.svg');
+	--icon-polls-yes: url('./assets/yes-vote.svg');
+	--icon-polls-no: url('./assets/no-vote.svg');
+	--icon-polls-maybe: url('./assets/maybe-vote.svg');
+	--icon-polls: url('./assets/polls.svg');
+	--icon-polls-handle: url('./assets/handle.svg');
+	--icon-polls-mail: url('./assets/mail.svg');
+	--icon-polls-sidebar-toggle: url('./assets/sidebar-toggle.svg');
+	--icon-polls-loading: url('./assets/loading-small.gif');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -169,39 +207,50 @@ export default {
 	background-image: var(--icon-polls-mail);
 }
 
+.icon-polls-sidebar-toggle {
+	background-image: var(--icon-polls-sidebar-toggle);
+}
+
 .title {
 	margin: 8px 0;
 }
 
 .description {
-	white-space: break-spaces;
+	white-space: pre-wrap;
 	margin: 8px 0;
+}
+
+.linkified {
+	font-weight: bold;
+	text-decoration: underline;
 }
 
 .icon-handle {
 	background-image: var(--icon-polls-handle);
 }
 
-.list-enter-active,
-.list-leave-active {
-	transition: all 0.5s ease;
-}
+.transitions-active {
+	.list-enter-active,
+	.list-leave-active {
+		transition: all 0.5s ease;
+	}
 
-.list-enter,
-.list-leave-to {
-	opacity: 0;
-}
+	.list-enter,
+	.list-leave-to {
+		opacity: 0;
+	}
 
-.list-move {
-	transition: transform 0.5s;
-}
+	.list-move {
+		transition: transform 0.5s;
+	}
 
-.fade-leave-active {
-	transition: opacity 2.5s;
-}
+	.fade-leave-active .fade-enter-active{
+		transition: opacity 0.5s;
+	}
 
-.fade-enter, .fade-leave-to {
-	opacity: 0;
+	.fade-enter, .fade-leave-to {
+		opacity: 0;
+	}
 }
 
 input {
@@ -212,12 +261,19 @@ input {
 		border-color: var(--color-error);
 		background-color: var(--color-background-error);
 		background-image: var(--icon-polls-no);
+		color: var(--color-text-maxcontrast);
+	}
+
+	&.checking {
+		border-color: var(--color-warning);
+		background-image: var(--icon-polls-loading);
 	}
 
 	&.success, &.icon-confirm.success {
 		border-color: var(--color-success);
 		background-image: var(--icon-polls-yes);
 		background-color: var(--color-background-success) !important;
+		color: var(--color-text-maxcontrast);
 	}
 
 	&.icon {
@@ -279,13 +335,52 @@ input {
 	display: flex;
 	flex-direction: column;
 	padding: 0 8px;
+	min-width: 320px;
 }
+
+// experimental colored background in the main area
 
 [class*='area__'] {
 	padding: 8px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
-	margin: 12px 0;
+	margin: 12px 6px;
+	min-width: 320px;
+}
+
+.experimental {
+	&.app-polls.bgcolored {
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: var(--color-primary-light);
+			[class*='area__'] {
+				box-shadow: 2px 2px 6px var(--color-box-shadow);
+				margin: 12px;
+			}
+		}
+	}
+
+	// experimental background image
+	&.app-polls.bgimage {
+		.glassy {
+			backdrop-filter: blur(10px);
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: transparent;
+		}
+		[class*='area__'] {
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+			margin: 12px;
+		}
+	}
 }
 
 </style>

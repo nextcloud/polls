@@ -24,7 +24,6 @@
 namespace OCA\Polls\AppInfo;
 
 use OCP\AppFramework\App;
-use OCP\IContainer;
 
 class Application extends App {
 
@@ -41,7 +40,7 @@ class Application extends App {
 	 */
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function() use ($container) {
+		$container->query('OCP\INavigationManager')->add(function () use ($container) {
 			$urlGenerator = $container->query('OCP\IURLGenerator');
 			$l10n = $container->query('OCP\IL10N');
 			return [

@@ -23,26 +23,23 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
-use \OCP\IURLGenerator;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
-
 use OCA\Polls\Service\CommentService;
-
-
 
 class CommentApiController extends ApiController {
 
+	/** @var CommentService */
 	private $commentService;
+
 	/**
-	 * CommentApiController constructor.
+	 * CommentApiController constructor
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param CommentService $commentService
@@ -56,18 +53,17 @@ class CommentApiController extends ApiController {
 		parent::__construct($appName,
 			$request,
 			'POST, GET, DELETE',
-            'Authorization, Content-Type, Accept',
-            1728000);
+			'Authorization, Content-Type, Accept',
+			1728000);
 		$this->commentService = $commentService;
 	}
 
 	/**
-	 * get
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
@@ -81,7 +77,7 @@ class CommentApiController extends ApiController {
 	}
 
 	/**
-	 * Write a new comment to the db and returns the new comment as array
+	 * Add comment
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
@@ -100,7 +96,7 @@ class CommentApiController extends ApiController {
 	}
 
 	/**
-	 * Delete Comment
+	 * Delete comment
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
@@ -116,5 +112,4 @@ class CommentApiController extends ApiController {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
-
 }

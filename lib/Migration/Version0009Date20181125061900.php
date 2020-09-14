@@ -25,7 +25,6 @@ namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
@@ -113,7 +112,6 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 			]);
 			$table->setPrimaryKey(['id']);
 		} else {
-
 			$table = $schema->getTable('polls_events');
 			if (!$table->hasColumn('allow_maybe')) {
 				$table->addColumn('allow_maybe', Type::INTEGER, [
@@ -121,7 +119,6 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 					'default' => 1,
 				]);
 			}
-
 		}
 
 		if (!$schema->hasTable('polls_options')) {

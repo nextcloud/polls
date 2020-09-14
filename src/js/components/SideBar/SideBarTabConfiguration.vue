@@ -72,6 +72,12 @@
 				type="radio"
 				class="radio">
 			<label for="public">{{ t('polls', 'Visible to other users') }}</label>
+
+			<input id="important"
+				v-model="pollImportant"
+				type="checkbox"
+				class="checkbox">
+			<label for="important"> {{ t('polls', 'Relevant for all users') }}</label>
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
@@ -109,12 +115,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { DatetimePicker } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import ConfigBox from '../Base/ConfigBox'
 import debounce from 'lodash/debounce'
+import { mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
+import { DatetimePicker } from '@nextcloud/vue'
+import ConfigBox from '../Base/ConfigBox'
 
 export default {
 	name: 'SideBarTabConfiguration',
@@ -209,6 +216,15 @@ export default {
 			},
 		},
 
+		pollImportant: {
+			get() {
+				return (this.poll.important > 0)
+			},
+			set(value) {
+				this.writeValue({ important: value })
+			},
+		},
+
 		pollAdminAccess: {
 			get() {
 				return (this.poll.adminAccess > 0)
@@ -296,21 +312,21 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+					showError(t('polls', 'Error deleting poll.'))
 				})
 		},
 
 		updatePoll() {
 			if (this.titleEmpty) {
-				OC.Notification.showTemporary(t('polls', 'Title must not be empty!'), { type: 'success' })
+				showError(t('polls', 'Title must not be empty!'))
 			} else {
 				this.$store.dispatch('poll/update')
 					.then((response) => {
-						OC.Notification.showTemporary(t('polls', '%n successfully saved', 1, response.data.title), { type: 'success' })
+						showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
 						emit('update-polls')
 					})
 					.catch(() => {
-						OC.Notification.showTemporary(t('polls', 'Error writing poll'), { type: 'error' })
+						showError(t('polls', 'Error writing poll'))
 					})
 				this.writingPoll = false
 			}

@@ -26,8 +26,6 @@ namespace OCA\Polls\Controller;
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\InvalidUsername;
-
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
@@ -39,13 +37,15 @@ use OCA\Polls\Service\MailService;
 
 class ShareApiController extends ApiController {
 
+	/** @var ShareService */
 	private $shareService;
+
+	/** @var MailService */
 	private $mailService;
 
 	/**
-	 * ShareController constructor.
+	 * ShareApiController constructor
 	 * @param string $appName
-	 * @param string $userId
 	 * @param IRequest $request
 	 * @param MailService $mailService
 	 * @param ShareService $shareService
@@ -59,24 +59,23 @@ class ShareApiController extends ApiController {
 		parent::__construct($appName,
 			$request,
 			'POST, PUT, GET, DELETE',
-            'Authorization, Content-Type, Accept',
-            1728000);
+			'Authorization, Content-Type, Accept',
+			1728000);
 		$this->shareService = $shareService;
 		$this->mailService = $mailService;
 	}
 
 	/**
-	 * list
 	 * Read all shares of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
 		try {
-			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
+			return new DataResponse(['shares' => $this->shareService->list($pollId, '')], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No shares for poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -85,14 +84,13 @@ class ShareApiController extends ApiController {
 	}
 
 	/**
-	* get share by token
-	* Get pollId by token
-	* @NoAdminRequired
-	* @NoCSRFRequired
-	* @CORS
-	* @param string $token
-	* @return DataResponse
-	*/
+	 * Get share by token
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
 	public function get($token) {
 		try {
 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_OK);
@@ -104,7 +102,7 @@ class ShareApiController extends ApiController {
 	}
 
 	/**
-	 * Write a new share to the db and returns the new share as array
+	 * Add share
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
@@ -117,16 +115,33 @@ class ShareApiController extends ApiController {
 	public function add($pollId, $type, $userId = '', $userEmail = '') {
 		try {
 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $userEmail)], Http::STATUS_CREATED);
-		} catch (\Exception $e) {
-			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (Exception $e) {
+			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		}
-
 	}
 
 	/**
-	 * SendInvitation
+	 * Delete share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param string $token
+	 * @return DataResponse
+	 */
+
+	public function delete($token) {
+		try {
+			return new DataResponse(['share' => $this->shareService->delete($token)], Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+
+	/**
 	 * Sent invitation mails for a share
 	 * @NoAdminRequired
 	 * @CORS
@@ -138,26 +153,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->mailService->sendInvitationMail($token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * delete share
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
-	 */
-
-	public function delete($token) {
-		try {
-			return new DataResponse(['share' => $this->shareService->remove($token)], Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		}
 	}
 }

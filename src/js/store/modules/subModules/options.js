@@ -22,7 +22,6 @@
 
 import axios from '@nextcloud/axios'
 import orderBy from 'lodash/orderBy'
-import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
@@ -48,6 +47,14 @@ const mutations = {
 		state.list = state.list.filter(option => {
 			return option.id !== payload.option.id
 		})
+	},
+
+	confirm(state, payload) {
+		const index = state.list.findIndex((option) => {
+			return option.id === payload.option.id
+		})
+
+		state.list[index].confirmed = !state.list[index].confirmed
 	},
 
 	setItem(state, payload) {
@@ -100,75 +107,127 @@ const getters = {
 }
 
 const actions = {
-	reorder(context, payload) {
-		const endPoint = 'apps/polls/option/reorder'
-		return axios.post(generateUrl(endPoint), { pollId: context.rootState.poll.id, options: payload })
+
+	reload(context) {
+		const endPoint = 'apps/polls/polls'
+		console.error('Reloading options')
+		return axios.get(generateUrl(endPoint.concat('/', context.rootState.poll.id, '/options')))
 			.then((response) => {
-				context.commit('set', { options: response.data })
+				context.commit('set', { options: response.data.options })
 			})
 			.catch((error) => {
-				console.error('Error reordering option', { error: error.response }, { payload: payload })
+				console.error('Error loding options', { error: error.response }, { pollId: context.rootState.poll.id })
 				throw error
 			})
 	},
 
 	add(context, payload) {
-		const endPoint = 'apps/polls/option/add'
-		const option = {}
-
-		option.id = 0
-		option.pollId = context.rootState.poll.id
-
-		if (context.rootState.poll.type === 'datePoll') {
-			if (payload.timestamp) {
-				option.timestamp = payload.timestamp
-			} else {
-				option.timestamp = moment(payload.pollOptionText).unix()
-			}
-			option.order = option.timestamp
-			option.pollOptionText = moment.utc(payload.pollOptionText).format('YYYY-MM-DD HH:mm:ss')
-
-		} else if (context.rootState.poll.type === 'textPoll') {
-			option.timestamp = 0
-			option.order = state.list.length + 1
-			option.pollOptionText = payload.pollOptionText
-		}
-
-		return axios.post(generateUrl(endPoint), { option: option })
+		const endPoint = 'apps/polls/option'
+		return axios.post(generateUrl(endPoint), {
+			pollId: context.rootState.poll.id,
+			timestamp: payload.timestamp,
+			pollOptionText: payload.pollOptionText,
+		})
 			.then((response) => {
-				context.commit('setItem', { option: response.data })
+				context.commit('setItem', { option: response.data.option })
 			})
 			.catch((error) => {
-				console.error('Error adding option', { error: error.response }, { payload: option })
+				console.error('Error adding option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},
 
 	update(context, payload) {
-		const endPoint = 'apps/polls/option/update'
-
-		return axios.post(generateUrl(endPoint), { option: payload.option })
+		const endPoint = 'apps/polls/option'
+		return axios.put(generateUrl(endPoint.concat('/', payload.option.id)), {
+			timestamp: payload.option.timestamp,
+			pollOptionText: payload.option.timeStamp,
+		})
 			.then((response) => {
-				context.commit('setItem', { option: response.data })
+				context.commit('setItem', { option: response.data.option })
 			})
 			.catch((error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/option/remove'
+		const endPoint = 'apps/polls/option'
 
-		return axios.post(generateUrl(endPoint), { option: payload.option })
-			.then(() => {
-				context.commit('delete', { option: payload.option })
+		return axios.delete(generateUrl(endPoint.concat('/', payload.option.id)))
+			.then((response) => {
+				context.commit('delete', { option: response.data.option })
 			})
 			.catch((error) => {
-				console.error('Error removing option', { error: error.response }, { payload: payload })
+				console.error('Error deleting option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
 				throw error
 			})
 	},
+
+	confirm(context, payload) {
+		context.commit('confirm', { option: payload.option })
+
+		const endPoint = 'apps/polls/option'
+		return axios.put(generateUrl(endPoint.concat('/', payload.option.id, '/confirm')))
+			.then((response) => {
+				context.commit('setItem', { option: response.data.option })
+			})
+			.catch((error) => {
+				console.error('Error confirming option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
+				throw error
+			})
+	},
+
+	reorder(context, payload) {
+		const endPoint = 'apps/polls/polls'
+		return axios.post(generateUrl(endPoint.concat(context.rootState.poll.id, '/options/reorder')), {
+			options: payload,
+		})
+			.then((response) => {
+				context.commit('set', { options: response.data.options })
+			})
+			.catch((error) => {
+				console.error('Error reordering option', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
+				throw error
+			})
+	},
+
+	sequence(context, payload) {
+		const endPoint = 'apps/polls/option'
+		return axios.post(generateUrl(endPoint.concat('/', payload.option.id, '/sequence')), {
+			step: payload.sequence.step,
+			unit: payload.sequence.unit.value,
+			amount: payload.sequence.amount,
+		})
+			.then((response) => {
+				context.commit('set', { options: response.data.options })
+			})
+			.catch((error) => {
+				console.error('Error creating sequence', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
+				throw error
+			})
+	},
+
+	getEvents(context, payload) {
+		const endPoint = 'apps/polls/option'
+		return axios.get(generateUrl(endPoint.concat('/', payload.option.id, '/events')))
+			.then((response) => {
+				return response.data
+			})
+			.catch((error) => {
+				console.error('Error loading calendar events', { error: error.response }, { payload: payload })
+				context.dispatch('reload')
+				throw error
+			})
+	},
+
 }
 
 export default { state, mutations, getters, actions, namespaced }

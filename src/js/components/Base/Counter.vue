@@ -22,7 +22,7 @@
 
 <template>
 	<div class="counter">
-		<div v-if="iconStyle" class="counter--icon">
+		<div v-if="counterStyle === 'iconStyle'" class="counter--icon">
 			<div class="yes">
 				<span>{{ option.yes }}</span>
 			</div>
@@ -34,7 +34,7 @@
 			</div>
 		</div>
 
-		<div v-if="bubbleStyle" class="counter--bubble">
+		<div v-if="counterStyle === 'bubbleStyle'" class="counter--bubble">
 			<div v-if="showNo" class="no" :style="{flex: option.no }">
 				<span />
 			</div>
@@ -45,6 +45,20 @@
 
 			<div v-if="option.yes" class="yes" :style="{ flex: option.yes }">
 				<span> {{ option.yes }} </span>
+			</div>
+		</div>
+
+		<div v-if="counterStyle === 'barStyle'" class="counter--bar">
+			<div v-if="showNo" class="no" :style="{flex: option.no }">
+				<span />
+			</div>
+
+			<div v-if="option.yes" class="yes" :style="{ flex: option.yes }">
+				<span />
+			</div>
+
+			<div v-if="option.maybe && showMaybe" class="maybe" :style="{flex: option.maybe }">
+				<span />
 			</div>
 		</div>
 	</div>
@@ -60,9 +74,9 @@ export default {
 			type: Object,
 			default: undefined,
 		},
-		bubbleStyle: {
-			type: Boolean,
-			default: false,
+		counterStyle: {
+			type: String,
+			default: 'iconStyle',
 		},
 		showMaybe: {
 			type: Boolean,
@@ -73,16 +87,12 @@ export default {
 			default: false,
 		},
 	},
-	computed: {
-		iconStyle() {
-			return !this.bubbleStyle
-		},
-	},
 }
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+
 .counter {
 	display: flex;
 }
@@ -135,8 +145,39 @@ export default {
 	}
 
 	.no {
-		// background-color: var(--color-polls-foreground-no);
 		background-color: transparent;
+	}
+
+}
+
+.mobile .counter {
+	flex: 0;
+}
+
+.counter--bar {
+	display: flex;
+	width: 100%;
+	flex: 1;
+	height: 4px;
+	margin-bottom: 4px;
+
+	> * {
+		text-align: center;
+	}
+
+	.yes {
+		background-color: var(--color-polls-foreground-yes);
+		order: 1;
+	}
+
+	.maybe {
+		background-color: var(--color-polls-foreground-maybe);
+		order: 2;
+	}
+
+	.no {
+		background-color: transparent;
+		order: 3;
 	}
 
 }

@@ -25,8 +25,8 @@
 		<Avatar :disable-menu="disableMenu"
 			class="user-item__avatar"
 			:menu-position="menuPosition"
+			:show-user-status="showUserStatus"
 			:user="userId"
-			:is-guest="!Boolean(getCurrentUser())"
 			:display-name="resolveDisplayName"
 			:is-no-user="isNoUser" />
 
@@ -41,6 +41,7 @@
 
 <script>
 import { Avatar } from '@nextcloud/vue'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'UserItem',
@@ -84,6 +85,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		externalUser: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -94,7 +99,11 @@ export default {
 
 	computed: {
 		isNoUser() {
-			return this.type !== 'user'
+			return this.type !== 'user' || this.externalUser
+		},
+
+		showUserStatus() {
+			return Boolean(getCurrentUser())
 		},
 
 		iconClass() {
@@ -105,6 +114,8 @@ export default {
 					return 'icon-mail'
 				} else if (this.type === 'external') {
 					return 'icon-share'
+				} else if (this.type === 'contactGroup') {
+					return 'icon-group'
 				}
 				return 'icon-' + this.type
 			} else {
@@ -129,6 +140,8 @@ export default {
 				}
 			} else if (this.type === 'group') {
 				displayName = this.userId + ' (' + t('polls', 'Group') + ')'
+			} else if (this.type === 'contactGroup') {
+				displayName = this.userId + ' (' + t('polls', 'Contact Group') + ')'
 			} else if (this.type === 'public') {
 				displayName = t('polls', 'Public share')
 			} else {
@@ -163,9 +176,4 @@ export default {
 	text-overflow: ellipsis;
 }
 
-@media (max-width: 576px) {
-	.user-item__name {
-		display: none;
-	}
-}
 </style>

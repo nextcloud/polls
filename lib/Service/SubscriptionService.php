@@ -23,109 +23,102 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\ILogger;
 
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Model\Acl;
 
-class SubscriptionService  {
+class SubscriptionService {
 
+	/** @var Acl */
 	private $acl;
+
+	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
-	private $logger;
 
 	/**
 	 * SubscriptionController constructor.
 	 * @param SubscriptionMapper $subscriptionMapper
-	 * @param ILogger $logger
 	 * @param Acl $acl
 	 */
 
 	public function __construct(
 		SubscriptionMapper $subscriptionMapper,
-		ILogger $logger,
 		Acl $acl
 	) {
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->acl = $acl;
-		$this->logger = $logger;
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return array
 	 */
-	public function get($pollId) {
-		if (!$this->acl->setPollId($pollId)->getAllowView()) {
+	public function get($pollId, $token) {
+		if (!$this->acl->set($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 		try {
-			return $this->subscriptionMapper->findByUserAndPoll($pollId, $this->acl->getUserId());
+			return $this->subscriptionMapper->findByUserAndPoll($this->acl->getPollId(), $this->acl->getUserId());
 		} catch (MultipleObjectsReturnedException $e) {
 			// subscription should be unique. If duplicates are found resubscribe
 			// duplicates are removed in $this->set()
-			return $this->set($pollId, true);
+			return $this->set($pollId, $token, true);
 		}
-
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
+	 * @param string $token
+	 * @param bool $subscribed
 	 * @return array
 	 */
-	public function set($pollId, $subscribed) {
-		if (!$this->acl->setPollId($pollId)->getAllowView()) {
+	public function set($pollId, $token, $subscribed) {
+		if (!$this->acl->set($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 		try {
-			$subscription = $this->subscriptionMapper->findByUserAndPoll($pollId, $this->acl->getUserId());
+			$subscription = $this->subscriptionMapper->findByUserAndPoll($this->acl->getPollId(), $this->acl->getUserId());
 			if (!$subscribed) {
 				$this->subscriptionMapper->delete($subscription);
-				return ['status' => 'Unsubscribed from poll ' . $pollId];
+				return ['status' => 'Unsubscribed from poll ' . $this->acl->getPollId()];
 			} else {
 				// subscription already exists, just return the existing subscription
-				return ['status' => 'Subscribed to poll ' . $pollId];
+				return ['status' => 'Subscribed to poll ' . $this->acl->getPollId()];
 			}
-
-		} catch (DoesNotExistException $e){
-
+		} catch (DoesNotExistException $e) {
 			if ($subscribed) {
 				$subscription = new Subscription();
-				$subscription->setPollId($pollId);
+				$subscription->setPollId($this->acl->getPollId());
 				$subscription->setUserId($this->acl->getUserId());
 
 				$this->subscriptionMapper->insert($subscription);
-				return ['status' => 'Subscribed to poll ' . $pollId];
+				return ['status' => 'Subscribed to poll ' . $this->acl->getPollId()];
 			} else {
 				// subscription is not found, just approve the unsubscription
-				return ['status' => 'Unsubscribed from poll ' . $pollId];
+				return ['status' => 'Unsubscribed from poll ' . $this->acl->getPollId()];
 			}
-
 		} catch (MultipleObjectsReturnedException $e) {
 			// Duplicates should not exist but if found, fix it
 			// unsubscribe from all and resubscribe, if requested
-			$this->logger->debug('Multiple subscription (dulpicates) found');
-			$this->subscriptionMapper->unsubscribe($pollId, $this->acl->getUserId());
-			$this->logger->debug('Unsubscribed all for user ' . $this->acl->getUserId() . 'in poll' . $pollId);
+			\OC::$server->getLogger()->debug('Multiple subscription (dulpicates) found');
+			$this->subscriptionMapper->unsubscribe($this->acl->getPollId(), $this->acl->getUserId());
+			\OC::$server->getLogger()->debug('Unsubscribed all for user ' . $this->acl->getUserId() . 'in poll' . $pollId);
 			if ($subscribed) {
 				$subscription = new Subscription();
-				$subscription->setPollId($pollId);
+				$subscription->setPollId($this->acl->getPollId());
 				$subscription->setUserId($this->acl->getUserId());
 				$this->subscriptionMapper->insert($subscription);
-				$this->logger->debug('Added new subscription');
+				\OC::$server->getLogger()->debug('Added new subscription');
 				return $subscription;
 			} else {
-				return ['status' => 'Unsubscribed from poll ' . $pollId];
+				return ['status' => 'Unsubscribed from poll ' . $this->acl->getPollId()];
 			}
-
 		}
-
 	}
 }

@@ -23,24 +23,32 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
-use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Service\AnonymizeService;
-use OCA\Polls\Service\LogService;
 use OCA\Polls\Model\Acl;
 
-class VoteService  {
+class VoteService {
 
+	/** @var VoteMapper */
 	private $voteMapper;
+
+	/** @var Vote */
 	private $vote;
+
+	/** @var OptionMapper */
 	private $optionMapper;
+
+	/** @var AnonymizeService */
 	private $anonymizer;
+
+	/** @var LogService */
 	private $logService;
+
+	/** @var Acl */
 	private $acl;
 
 	/**
@@ -69,15 +77,15 @@ class VoteService  {
 	}
 
 	/**
-	 * Get all votes of given poll
 	 * Read all votes of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @param string $token
-	 * @return Vote
+	 * @return array
+	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $token = '') {
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
+		if (!$this->acl->set($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -92,60 +100,60 @@ class VoteService  {
 	}
 
 	/**
-	 * set
+	 * Set vote
 	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @param Array $option
+	 * @param int $optionId
 	 * @param string $setTo
 	 * @param string $token
 	 * @return Vote
+	 * @throws NotAuthorizedException
 	 */
-	public function set($pollId = 0, $pollOptionText, $setTo, $token = '') {
+	public function set($optionId, $setTo, $token = '') {
+		$option = $this->optionMapper->find($optionId);
 
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowVote()) {
+		if (!$this->acl->set($option->getPollId(), $token)->getAllowVote()) {
 			throw new NotAuthorizedException;
 		}
 
-		$option = $this->optionMapper->findByPollAndText($this->acl->getpollId(), $pollOptionText);
+		if (intval($option->getPollId()) !== $this->acl->getPollId()) {
+			throw new NotAuthorizedException;
+		}
 
 		try {
-			$this->vote = $this->voteMapper->findSingleVote($this->acl->getpollId(), $option->getPollOptionText(), $this->acl->getUserId());
+			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->acl->getUserId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->update($this->vote);
-
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();
 
-			$this->vote->setPollId($this->acl->getpollId());
+			$this->vote->setPollId($this->acl->getPollId());
 			$this->vote->setUserId($this->acl->getUserId());
 			$this->vote->setVoteOptionText($option->getPollOptionText());
 			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->insert($this->vote);
-
 		} finally {
-			$this->logService->setLog($this->vote->getPollId(), 'setVote', $this->vote->getUserId());
+			$this->logService->setLog($this->acl->getPollId(), 'setVote', $this->vote->getUserId());
 			return $this->vote;
 		}
 	}
 
 	/**
-	 * delete
+	 * Remove user from poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $voteId
+	 * @param int $voteId
 	 * @param string $userId
-	 * @param integer $pollId
-	 * @return Vote
+	 * @param int $pollId
+	 * @return boolean
+	 * @throws NotAuthorizedException
 	 */
 	public function delete($pollId, $userId) {
-
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
-		$votes = $this->voteMapper->deleteByPollAndUser($pollId, $userId);
+		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
+		return $userId;
 	}
-
 }

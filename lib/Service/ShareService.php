@@ -23,58 +23,67 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
+use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\InvalidShareType;
 
 use OCP\Security\ISecureRandom;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\InvalidUsername;
-
-use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Service\MailService;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Controller\SystemController;
 
 class ShareService {
 
+	/** @var SystemService */
+	private $systemService;
+
+	/** @var ShareMapper */
 	private $shareMapper;
+
+	/** @var Share */
 	private $share;
-	private $systemController;
+
+	/** @var MailService */
 	private $mailService;
+
+	/** @var Acl */
 	private $acl;
 
 	/**
 	 * ShareController constructor.
+	 * @param SystemService $systemService
 	 * @param ShareMapper $shareMapper
 	 * @param Share $share
-	 * @param SystemController $systemController
 	 * @param MailService $mailService
 	 * @param Acl $acl
 	 */
 	public function __construct(
+		SystemService $systemService,
 		ShareMapper $shareMapper,
 		Share $share,
-		SystemController $systemController,
 		MailService $mailService,
 		Acl $acl
 	) {
+		$this->systemService = $systemService;
 		$this->shareMapper = $shareMapper;
 		$this->share = $share;
-		$this->systemController = $systemController;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
 	}
 
 	/**
-	 * get
 	 * Read all shares of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return array
+	 * @param int $pollId
+	 * @return array array of Share
+	 * @throws NotAuthorizedException
 	 */
-	public function list($pollId) {
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+	public function list($pollId, $token) {
+		if ($token) {
+			return [$this->get($token)];
+		}
+
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -82,26 +91,29 @@ class ShareService {
 	}
 
 	/**
-	 * getByToken
-	 * Get pollId by token
+	 * Get share by token
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @return Share
 	 */
 	public function get($token) {
-		return $this->shareMapper->findByToken($token);
+		$this->share = $this->shareMapper->findByToken($token);
+
+		return $this->share;
 	}
 
 	/**
-	 * Write a new share to the db and returns the new share as array
+	 * Add share
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param string $share
-	 * @return array
+	 * @param string $type
+	 * @param string $userId
+	 * @param string $userEmail
+	 * @return Share
+	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId, $type, $userId, $userEmail = '') {
-
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -122,27 +134,46 @@ class ShareService {
 	}
 
 	/**
-	 * createPersonalShare
-	 * Write a new share to the db and returns the new share as array
+	 * Set emailAddress to personal share
+	 * or update an email share with the username
+	 * @NoAdminRequired
+	 * @param string $token
+	 * @param string $emailAddress
+	 * @return Share
+	 * @throws InvalidShareType
+	 */
+	public function setEmailAddress($token, $emailAddress) {
+		$this->share = $this->shareMapper->findByToken($token);
+		if ($this->share->getType() === 'external') {
+			$this->systemService->validateEmailAddress($emailAddress);
+			$this->share->setUserEmail($emailAddress);
+			// TODO: Send confirmation
+			return $this->shareMapper->update($this->share);
+		} else {
+			throw new InvalidShareType('Email address can only be set in external shares.');
+		}
+	}
+
+	/**
+	 * Create a personal share from a public share
+	 * or update an email share with the username
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @param string $userName
 	 * @return Share
+	 * @throws NotAuthorizedException
 	 */
-	public function createPersonalShare($token, $userName) {
-		$publicShare = $this->shareMapper->findByToken($token);
+	public function personal($token, $userName, $emailAddress = '') {
+		$this->share = $this->shareMapper->findByToken($token);
 
-		// Return of validatePublicUsername is a DataResponse
-		$checkUsername = $this->systemController->validatePublicUsername($publicShare->getPollId(), $userName, $token);
+		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);
 
-		// if status is not 200, return DataResponse from validatePublicUsername
-		if ($checkUsername->getStatus() !== 200) {
-			throw new InvalidUsername;
+		if ($emailAddress) {
+			$this->systemService->validateEmailAddress($emailAddress);
 		}
 
-		if ($publicShare->getType() === 'public') {
-
-
+		if ($this->share->getType() === 'public') {
+			$pollId = $this->share->getPollId();
 			$this->share = new Share();
 			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 				16,
@@ -151,34 +182,39 @@ class ShareService {
 				ISecureRandom::CHAR_UPPER
 			));
 			$this->share->setType('external');
-			$this->share->setPollId($publicShare->getPollId());
+			$this->share->setPollId($pollId);
 			$this->share->setUserId($userName);
-			$this->share->setUserEmail('');
+			$this->share->setUserEmail($emailAddress);
 			$this->share->setInvitationSent(time());
-			return $this->shareMapper->insert($this->share);
+			$this->shareMapper->insert($this->share);
 
-		} elseif ($publicShare->getType() === 'email') {
+			if ($emailAddress) {
+				$this->mailService->sendInvitationMail($this->share->getToken());
+			}
 
-			$publicShare->setType('external');
-			$publicShare->setUserId($userName);
-			return $this->shareMapper->update($publicShare);
-
+			return $this->share;
+		} elseif ($this->share->getType() === 'email') {
+			$this->share->setType('external');
+			$this->share->setUserId($userName);
+			$this->share->setUserEmail($emailAddress);
+			return $this->shareMapper->update($this->share);
 		} else {
 			throw new NotAuthorizedException;
 		}
 	}
 
 	/**
-	 * remove
+	 * Delete share
 	 * remove share
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @return Share
+	 * @throws NotAuthorizedException
 	 */
 
-	public function remove($token) {
+	public function delete($token) {
 		$this->share = $this->shareMapper->findByToken($token);
-		if (!$this->acl->setPollId($this->share->getPollId())->getAllowEdit()) {
+		if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 

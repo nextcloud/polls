@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!expired, confirmed: isConfirmed }]">
-		<div v-if="isActive" class="icon" @click="$emit('voteClick')" />
+	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!expired }]">
+		<div v-if="isActive" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 	</div>
 </template>
@@ -51,6 +51,7 @@ export default {
 	computed: {
 		...mapGetters({
 			expired: 'poll/expired',
+			answerSequence: 'poll/answerSequence',
 		}),
 
 		answer() {
@@ -64,14 +65,34 @@ export default {
 			}
 		},
 
+		nextAnswer() {
+			if (this.answerSequence.indexOf(this.answer) < 0) {
+				return this.answerSequence[1]
+			} else {
+				return this.answerSequence[(this.answerSequence.indexOf(this.answer) + 1) % this.answerSequence.length]
+			}
+		},
+
 		isValidUser() {
 			return (this.userId !== '' && this.userId !== null)
 		},
 
-		isConfirmed() {
-			return this.option.confirmed && this.expired
+	},
+
+	methods: {
+		getEvents() {
+			this.$store
+				.dispatch('poll/options/getEvents', { option: this.option })
 		},
 
+		setVote() {
+			this.$store
+				.dispatch('poll/votes/set', {
+					option: this.option,
+					userId: this.userId,
+					setTo: this.nextAnswer,
+				})
+		},
 	},
 }
 

@@ -21,59 +21,79 @@
  *
  */
 
- namespace OCA\Polls\Service;
+namespace OCA\Polls\Service;
 
- use Exception;
- use OCP\AppFramework\Db\DoesNotExistException;
- use OCA\Polls\Exceptions\EmptyTitleException;
- use OCA\Polls\Exceptions\InvalidAccessException;
- use OCA\Polls\Exceptions\InvalidShowResultsException;
- use OCA\Polls\Exceptions\InvalidPollTypeException;
- use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\EmptyTitleException;
+use OCA\Polls\Exceptions\InvalidAccessException;
+use OCA\Polls\Exceptions\InvalidShowResultsException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
- use OCP\ILogger;
 
- use OCA\Polls\Db\PollMapper;
- use OCA\Polls\Db\Poll;
- use OCA\Polls\Service\LogService;
- use OCA\Polls\Model\Acl;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Model\Acl;
 
- class PollService {
+class PollService {
 
-	private $logger;
+	/** @var PollMapper */
 	private $pollMapper;
- 	private $poll;
- 	private $logService;
- 	private $acl;
 
- 	/**
- 	 * PollController constructor.
- 	 * @param ILogger $logger
- 	 * @param PollMapper $pollMapper
- 	 * @param Poll $poll
- 	 * @param LogService $logService
- 	 * @param Acl $acl
- 	 */
+	/** @var Poll */
+	private $poll;
 
- 	public function __construct(
-		ILogger $logger,
- 		PollMapper $pollMapper,
- 		Poll $poll,
- 		LogService $logService,
- 		Acl $acl
- 	) {
-		$this->logger = $logger;
- 		$this->pollMapper = $pollMapper;
- 		$this->poll = $poll;
- 		$this->logService = $logService;
- 		$this->acl = $acl;
- 	}
+	/** @var VoteMapper */
+	private $voteMapper;
+
+	/** @var Vote */
+	private $vote;
+
+	/** @var LogService */
+	private $logService;
+
+	/** @var MailService */
+	private $mailService;
+
+	/** @var Acl */
+	private $acl;
+
+	/**
+	 * PollController constructor.
+	 * @param PollMapper $pollMapper
+	 * @param Poll $poll
+	 * @param VoteMapper $voteMapper
+	 * @param Vote $vote
+	 * @param LogService $logService
+	 * @param MailService $mailService
+	 * @param Acl $acl
+	 */
+
+	public function __construct(
+		PollMapper $pollMapper,
+		Poll $poll,
+		VoteMapper $voteMapper,
+		Vote $vote,
+		LogService $logService,
+		MailService $mailService,
+		Acl $acl
+	) {
+		$this->pollMapper = $pollMapper;
+		$this->poll = $poll;
+		$this->voteMapper = $voteMapper;
+		$this->vote = $vote;
+		$this->logService = $logService;
+		$this->mailService = $mailService;
+		$this->acl = $acl;
+	}
 
 
 	/**
-	 * list
+	 * Get list of polls
 	 * @NoAdminRequired
-	 * @return array
+	 * @return array Array of Poll
+	 * @throws NotAuthorizedException
 	 */
 
 	public function list() {
@@ -87,7 +107,7 @@
 		// TODO: Not the elegant way. Improvement neccessary
 		foreach ($polls as $poll) {
 			$combinedPoll = (object) array_merge(
-				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->setPollId($poll->getId()))));
+				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->set($poll->getId()))));
 			if ($combinedPoll->allowView) {
 				$pollList[] = $combinedPoll;
 			}
@@ -97,89 +117,31 @@
 	}
 
 	/**
-	 * get
+	 * get poll configuration
 	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return array
-	 */
- 	public function get($pollId) {
-
-		if (!$this->acl->setPollId($pollId)->getAllowView()) {
-			throw new NotAuthorizedException;
-		}
-
-		return $this->pollMapper->find($pollId);
-
- 	}
-
-	/**
-	 * get
-	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return array
-	 */
- 	public function getByToken($token) {
-
-		if (!$this->acl->setToken($token)->getAllowView()) {
-			throw new NotAuthorizedException;
-		}
-
-		return $this->pollMapper->find($this->acl->getPollId());
-
- 	}
-
-	/**
-	 * delete
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return Poll
+	 * @throws NotAuthorizedException
 	 */
+	public function get($pollId, $token) {
+		$acl = $this->acl->set($pollId, $token);
 
-	public function delete($pollId) {
-		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->setPollId($pollId)->getAllowEdit()) {
+		if (!$acl->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
-		if ($this->poll->getDeleted()) {
-			$this->poll->setDeleted(0);
-		} else {
-			$this->poll->setDeleted(time());
-		}
-
-		$this->poll = $this->pollMapper->update($this->poll);
-		$this->logService->setLog($this->poll->getId(), 'deletePoll');
-
-		return $this->poll;
+		return $this->pollMapper->find($acl->getPollId());
 	}
 
 	/**
-	 * deletePermanently
+	 * Add poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return Poll
-	 */
-
-	public function deletePermanently($pollId) {
-		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->setPollId($pollId)->getAllowEdit() || !$this->poll->getDeleted()) {
-			throw new NotAuthorizedException;
-		}
-
-		return $this->pollMapper->delete($this->poll);
-	}
-
-	/**
-	 * write
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param string $type
 	 * @param string $title
 	 * @return Poll
+	 * @throws NotAuthorizedException
+	 * @throws InvalidPollTypeException
+	 * @throws EmptyTitleException
 	 */
 
 	public function add($type, $title) {
@@ -213,6 +175,7 @@
 		$this->poll->setShowResults('always');
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
+		$this->poll->setImportant(0);
 		$this->poll = $this->pollMapper->insert($this->poll);
 
 		$this->logService->setLog($this->poll->getId(), 'addPoll');
@@ -221,18 +184,21 @@
 	}
 
 	/**
-	 * update
+	 * Update poll configuration
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param Array $poll
+	 * @param int $pollId
+	 * @param array $poll
 	 * @return Poll
+	 * @throws NotAuthorizedException
+	 * @throws EmptyTitleException
+	 * @throws InvalidShowResultsException
+	 * @throws InvalidAccessException
 	 */
 
 	public function update($pollId, $poll) {
-
 		$this->poll = $this->pollMapper->find($pollId);
 
-		if (!$this->acl->setPollId($this->poll->getId())->getAllowEdit()) {
+		if (!$this->acl->set($this->poll->getId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -242,7 +208,7 @@
 		}
 
 		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
-			throw new InvalidAccessException('Invalid value for prop access '. $poll['access']);
+			throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
 		}
 
 		if (isset($poll['title']) && !$poll['title']) {
@@ -256,36 +222,115 @@
 		return $this->poll;
 	}
 
-	/**
-	 * clone
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return Poll
-	 */
-	public function clone($pollId) {
 
-		if (!$this->acl->setPollId($this->poll->getId())->getAllowView()) {
+	/**
+	 * Switch deleted status (move to deleted polls)
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return Poll
+	 * @throws NotAuthorizedException
+	 */
+
+	public function delete($pollId) {
+		$this->poll = $this->pollMapper->find($pollId);
+
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
-		$this->poll = $this->pollMapper->find($pollId);
+		if ($this->poll->getDeleted()) {
+			$this->poll->setDeleted(0);
+		} else {
+			$this->poll->setDeleted(time());
+		}
 
-		$this->poll->setCreated(time());
-		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
-		$this->poll->setTitle('Clone of ' . $this->poll->getTitle());
-		$this->poll->setDeleted(0);
-		$this->poll->setId(0);
-
-		$this->poll = $this->pollMapper->insert($this->poll);
-		$this->logService->setLog($this->poll->getId(), 'addPoll');
-
-		$this->optionService->clone($pollId, $this->poll->getId());
+		$this->poll = $this->pollMapper->update($this->poll);
+		$this->logService->setLog($this->poll->getId(), 'deletePoll');
 
 		return $this->poll;
-
 	}
 
+	/**
+	 * Delete poll
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return Poll the deleted poll
+	 * @throws NotAuthorizedException
+	 */
+
+	public function deletePermanently($pollId) {
+		$this->poll = $this->pollMapper->find($pollId);
+
+		if (!$this->acl->set($pollId)->getAllowEdit() || !$this->poll->getDeleted()) {
+			throw new NotAuthorizedException;
+		}
+
+		return $this->pollMapper->delete($this->poll);
+	}
+
+	/**
+	 * Clone poll
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return Poll
+	 * @throws NotAuthorizedException
+	 */
+	public function clone($pollId) {
+		$origin = $this->pollMapper->find($pollId);
+		if (!$this->acl->set($origin->getId())->getAllowView()) {
+			throw new NotAuthorizedException;
+		}
+
+		$this->poll = new Poll();
+		$this->poll->setCreated(time());
+		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+		$this->poll->setTitle('Clone of ' . $origin->getTitle());
+		$this->poll->setDeleted(0);
+		$this->poll->setAccess('hidden');
+
+		$this->poll->setType($origin->getType());
+		$this->poll->setDescription($origin->getDescription());
+		$this->poll->setExpire($origin->getExpire());
+		$this->poll->setAnonymous($origin->getAnonymous());
+		$this->poll->setFullAnonymous($origin->getFullAnonymous());
+		$this->poll->setAllowMaybe($origin->getAllowMaybe());
+		$this->poll->setVoteLimit($origin->getVoteLimit());
+		$this->poll->setSettings($origin->getSettings());
+		$this->poll->setOptions($origin->getOptions());
+		$this->poll->setShowResults($origin->getShowResults());
+		$this->poll->setAdminAccess($origin->getAdminAccess());
+		$this->poll->setImportant($origin->getImportant());
+
+		return $this->pollMapper->insert($this->poll);
+	}
+
+	/**
+	 * Collect email addresses from particitipants
+	 * @NoAdminRequired
+	 * @param Array $poll
+	 * @return array
+	 */
+
+	public function getParticipantsEmailAddresses($pollId) {
+		$this->poll = $this->pollMapper->find($pollId);
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
+			return [];
+		}
+
+		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
+		$list = [];
+		foreach ($votes as $vote) {
+			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($pollId, $vote->getUserId()) . '>';
+		}
+		return array_unique($list);
+	}
+
+
+	/**
+	 * Get valid values for configuration options
+	 * @NoAdminRequired
+	 * @return array
+	 */
 	public function getValidEnum() {
 		return [
 			'pollType' => $this->getValidPollType(),
@@ -294,14 +339,29 @@
 		];
 	}
 
+	/**
+	 * Get valid values for pollType
+	 * @NoAdminRequired
+	 * @return array
+	 */
 	private function getValidPollType() {
 		return ['datePoll', 'textPoll'];
 	}
 
+	/**
+	 * Get valid values for access
+	 * @NoAdminRequired
+	 * @return array
+	 */
 	private function getValidAccess() {
 		return ['hidden', 'public'];
 	}
 
+	/**
+	 * Get valid values for showResult
+	 * @NoAdminRequired
+	 * @return array
+	 */
 	private function getValidShowResults() {
 		return ['always', 'expired', 'never'];
 	}

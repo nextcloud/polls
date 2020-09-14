@@ -29,24 +29,54 @@
 			{{ t('polls','No Participants until now') }}
 		</h2>
 		<div v-if="participantsVoted.length" class="participants-list__list">
-			<UserItem v-for="(participant) in participantsVoted"
-				:key="participant.userId"
+			<UserItem v-for="(participant) in participantsVoted" :key="participant.userId"
 				v-bind="participant"
 				:hide-names="true"
 				type="user" />
+			<Actions>
+				<ActionButton v-if="poll.acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
+					{{ t('polls', 'Copy list of email addresses to clipboard') }}
+				</ActionButton>
+			</Actions>
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'ParticipantsList',
+	components: {
+		Actions,
+		ActionButton,
+	},
+
 	computed: {
+		...mapState({
+			poll: state => state.poll,
+		}),
+
 		...mapGetters({
 			participantsVoted: 'poll/participantsVoted',
 		}),
+	},
+
+	methods: {
+		getAddresses() {
+			this.$store.dispatch('poll/getParticipantsEmailAddresses', { pollId: this.poll.id })
+				.then((response) => {
+					this.$copyText(response.data)
+						.then(() => {
+							showSuccess(t('polls', 'Link copied to clipboard'))
+						})
+				})
+				.catch(() => {
+					showError(t('polls', 'Error while copying link to clipboard'))
+				})
+		},
 	},
 }
 </script>

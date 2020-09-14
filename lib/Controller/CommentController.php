@@ -25,25 +25,22 @@ namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
-use OCP\ILogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
-
 use OCA\Polls\Service\CommentService;
-
-
 
 class CommentController extends Controller {
 
+	/** @var CommentService */
 	private $commentService;
 
 	/**
-	 * CommentController constructor.
+	 * CommentController constructor
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param CommentService $commentService
@@ -58,28 +55,15 @@ class CommentController extends Controller {
 		$this->commentService = $commentService;
 	}
 
-	/**
-	 * get
-	 * Read all comments of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return DataResponse
-	 */
-	public function list($pollId) {
-		return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
-	}
-
 	// /**
-	//  * Read all comments of a poll based on a share token and return list as array
+	//  * Read all comments of a poll based on the poll id and return list as array
 	//  * @NoAdminRequired
-	//  * @NoCSRFRequired
-	//  * @PublicPage
+	//  * @param int $pollId
 	//  * @param string $token
 	//  * @return DataResponse
 	//  */
-	// public function getByToken($token) {
-	// 	return new DataResponse($this->commentService->get(0, $token), Http::STATUS_OK);
+	// public function list($pollId) {
+	// 	return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
 	// }
 	//
 	/**
@@ -115,7 +99,5 @@ class CommentController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_OK);
 		}
-
 	}
-
 }

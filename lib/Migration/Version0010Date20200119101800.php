@@ -24,7 +24,6 @@
 namespace OCA\Polls\Migration;
 
 use OCP\DB\ISchemaWrapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
@@ -64,7 +63,6 @@ class Version0010Date20200119101800 extends SimpleMigrationStep {
 
 		if ($schema->hasTable('polls_polls') &&
 			$schema->hasTable('polls_events')) {
-
 			$schema->dropTable('polls_events');
 		}
 

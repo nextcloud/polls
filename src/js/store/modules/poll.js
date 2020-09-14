@@ -28,6 +28,7 @@ import acl from './subModules/acl.js'
 import comments from './subModules/comments.js'
 import options from './subModules/options.js'
 import shares from './subModules/shares.js'
+import share from './subModules/share.js'
 import votes from './subModules/votes.js'
 
 const defaultPoll = () => {
@@ -46,6 +47,7 @@ const defaultPoll = () => {
 		voteLimit: 0,
 		showResults: 'always',
 		adminAccess: 0,
+		important: 0,
 	}
 }
 
@@ -58,7 +60,9 @@ const modules = {
 	options: options,
 	shares: shares,
 	votes: votes,
+	share: share,
 }
+
 const mutations = {
 	set(state, payload) {
 		Object.assign(state, payload.poll)
@@ -75,6 +79,13 @@ const mutations = {
 }
 
 const getters = {
+	answerSequence: (state) => {
+		if (state.allowMaybe) {
+			return ['no', 'yes', 'maybe']
+		} else {
+			return ['no', 'yes']
+		}
+	},
 
 	expired: (state) => {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
@@ -89,6 +100,7 @@ const getters = {
 				participants.push({
 					userId: item.userId,
 					displayName: item.displayName,
+					externalUser: item.externalUser,
 					voted: true,
 				})
 			}
@@ -98,6 +110,7 @@ const getters = {
 			participants.push({
 				userId: state.acl.userId,
 				displayName: state.acl.displayName,
+				externalUser: state.externalUser,
 				voted: false,
 			})
 		}
@@ -113,6 +126,7 @@ const getters = {
 				participantsVoted.push({
 					userId: item.userId,
 					displayName: item.displayName,
+					externalUser: item.externalUser,
 				})
 			}
 		}
@@ -138,6 +152,7 @@ const actions = {
 			context.commit('comments/reset')
 			context.commit('options/reset')
 			context.commit('shares/reset')
+			context.commit('share/reset')
 			context.commit('votes/reset')
 			return
 		}
@@ -148,13 +163,12 @@ const actions = {
 				context.commit('comments/set', response.data)
 				context.commit('options/set', response.data)
 				context.commit('shares/set', response.data)
+				context.commit('share/set', response.data)
 				context.commit('votes/set', response.data)
 				return response
-			}, (error) => {
-				if (error.response.status !== '404' && error.response.status !== '401') {
-					console.debug('Error loading poll', { error: error.response }, { payload: payload })
-					return error.response
-				}
+			})
+			.catch((error) => {
+				console.debug('Error loading poll', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
@@ -217,6 +231,17 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
+	},
+
+	getParticipantsEmailAddresses(context, payload) {
+		const endPoint = 'apps/polls/polls/addresses'
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+			.then((response) => {
+				return response
+			})
+			.catch((error) => {
+				console.error('Error retrieving email addresses', { error: error.response }, { payload: payload })
 			})
 	},
 

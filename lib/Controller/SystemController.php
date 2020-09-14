@@ -26,290 +26,127 @@ namespace OCA\Polls\Controller;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCA\Polls\Service\SystemService;
 
-use OCP\IGroupManager;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\IConfig;
 use OCP\IRequest;
-use OCA\Polls\Db\Share;
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\Vote;
-use OCA\Polls\Db\VoteMapper;
-use OCP\ILogger;
 
 class SystemController extends Controller {
 
-	private $userId;
-	private $logger;
-	private $systemConfig;
-	private $groupManager;
-	private $userManager;
-	private $voteMapper;
-	private $shareMapper;
+	/** @var SystemService */
+	private $systemService;
 
 	/**
 	 * SystemController constructor.
 	 * @param string $appName
-	 * @param $userId
 	 * @param IRequest $request
-	 * @param ILogger $logger
-	 * @param IConfig $systemConfig
-	 * @param IGroupManager $groupManager
-	 * @param IUserManager $userManager
-	 * @param VoteMapper $voteMapper
-	 * @param ShareMapper $shareMapper
+	 * @param SystemService $systemService
 	 */
+
 	public function __construct(
 		string $appName,
-		$userId,
 		IRequest $request,
-		ILogger $logger,
-		IConfig $systemConfig,
-		IGroupManager $groupManager,
-		IUserManager $userManager,
-		VoteMapper $voteMapper,
-		ShareMapper $shareMapper
+		SystemService $systemService
 	) {
 		parent::__construct($appName, $request);
-		$this->voteMapper = $voteMapper;
-		$this->shareMapper = $shareMapper;
-		$this->logger = $logger;
-		$this->userId = $userId;
-		$this->systemConfig = $systemConfig;
-		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
+		$this->systemService = $systemService;
 	}
 
 	/**
-	 * Validate string as email address
+	 * Get a list of users
 	 * @NoAdminRequired
 	 * @param string $query
-	 * @return Boolval
+	 * @param array $skipUsers - usernames to skip in return array
+	 * @return DataResponse
 	 */
-	 private function isValidEmail($email) {
-		 return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $email)) ? false : true;
-	 }
+	public function getSiteUsers($query = '', $skipUsers = []) {
+		return new DataResponse(['users' => $this->systemService->getSiteUsers($query, $skipUsers)], Http::STATUS_OK);
+	}
 
 	/**
-	 * Get a list of NC users, groups and contacts
+	 * Get a list of user groups
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
+	 * @param string $query
+	 * @param array $skipGroups - group names to skip in return array
+	 * @return DataResponse
+	 */
+	public function getSiteGroups($query = '', $skipGroups = []) {
+		return new DataResponse(['groups' => $this->systemService->getSiteGroups($query, $skipGroups)], Http::STATUS_OK);
+	}
+
+	/**
+	 * Get a list of contacts
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @return DataResponse
+	 */
+	public function getContacts($query = '') {
+		return new DataResponse(['contacts' => $this->systemService->getContacts($query)], Http::STATUS_OK);
+	}
+
+	/**
+	 * Get a list of contact groups
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @return DataResponse
+	 */
+	public function getContactsGroups($query = '') {
+		return new DataResponse(['contactGroups' => $this->systemService->getContactsGroups($query)], Http::STATUS_OK);
+	}
+
+
+	/**
+	 * Get a combined list of NC users, groups and contacts
+	 * @NoAdminRequired
 	 * @param string $query
 	 * @param bool $getGroups - search in groups
 	 * @param bool $getUsers - search in site users
 	 * @param bool $getContacts - search in contacs
+	 * @param bool $getContactGroups - search in contacs
 	 * @param array $skipGroups - group names to skip in return array
 	 * @param array $skipUsers - user names to skip in return array
 	 * @return DataResponse
 	 */
-	public function getSiteUsersAndGroups($query = '', $getGroups = true, $getUsers = true, $getContacts = true, $getMail = false, $skipGroups = array(), $skipUsers = array()) {
-		$list = array();
-		// if (filter_var($query, FILTER_VALIDATE_EMAIL)) {
-		if ($this->isValidEmail($query)) {
-			$list[] = [
-				'id' => '',
-				'user' => '',
-				'organisation' => '',
-				'displayName' => '',
-				'emailAddress' => $query,
-				'desc' => $query,
-				'type' => 'email',
-				'icon' => 'icon-mail',
-				'avatarURL' => '',
-				'avatar' => '',
-				'lastLogin' => '',
-				'cloudId' => ''
-
-			];
-		}
-
-
-		if ($getGroups) {
-			$groups = $this->groupManager->search($query);
-			foreach ($groups as $group) {
-				if (!in_array($group->getGID(), $skipGroups)) {
-					$list[] = [
-						'id' => $group->getGID(),
-						'user' => $group->getGID(),
-						'organisation' => '',
-						'displayName' => $group->getGID(),
-						'emailAddress' => '',
-						'desc' => 'Group',
-						'type' => 'group',
-						'icon' => 'icon-group',
-						'avatarURL' => '',
-						'avatar' => '',
-						'lastLogin' => '',
-						'cloudId' => ''
-
-					];
-				}
-			}
-		}
-
-		if ($getUsers) {
-			$users = $this->userManager->searchDisplayName($query);
-			foreach ($users as $user) {
-				if (!in_array($user->getUID(), $skipUsers) && $user->isEnabled()) {
-					$list[] = [
-						'id' => $user->getUID(),
-						'user' => $user->getUID(),
-						'displayName' => $user->getDisplayName(),
-						'organisation' => '',
-						'emailAddress' => $user->getEMailAddress(),
-						'desc' => 'User',
-						'type' => 'user',
-						'icon' => 'icon-user',
-						'avatarURL' => '',
-						'avatar' => '',
-						'lastLogin' => $user->getLastLogin(),
-						'cloudId' => $user->getCloudId()
-					];
-				}
-			}
-		}
-
-		$contactsManager = \OC::$server->getContactsManager();
-
-
-		if ($getContacts && $contactsManager->isEnabled()) {
-			$contacts = $contactsManager->search($query, array('FN', 'EMAIL', 'ORG', 'CATEGORIES'));
-
-			foreach ($contacts as $contact) {
-				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
-
-					$emailAdresses = $contact['EMAIL'];
-
-					if (!is_array($emailAdresses)) {
-						$emailAdresses = array($emailAdresses);
-					} else {
-						// take the first eMail address for now
-						$emailAdresses = array($emailAdresses[0]);
-					}
-
-					foreach ($emailAdresses as $emailAddress) {
-						$list[] = [
-							'id' => $contact['UID'],
-							'user' => $contact['FN'],
-							'displayName' => $contact['FN'],
-							'organisation' => isset($contact['ORG']) ? $contact['ORG'] : '',
-							'emailAddress' => $emailAddress,
-							'desc' => 'Contact',
-							'type' => 'contact',
-							'icon' => 'icon-mail',
-							'avatarURL' => '',
-							'avatar' => isset($contact['PHOTO']) ? $contact['PHOTO'] : '',
-							'lastLogin' => '',
-							'cloudId' => ''
-						];
-					}
-
-				}
-			}
-
-		}
-
-		return new DataResponse([
-			'siteusers' => $list
-		], Http::STATUS_OK);
+	public function getSiteUsersAndGroups(
+		$query = '',
+		$getGroups = true,
+		$getUsers = true,
+		$getContacts = true,
+		$getContactGroups = true,
+		$getMail = false,
+		$skipGroups = [],
+		$skipUsers = []
+	) {
+		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
+			$query, $getGroups, $getUsers, $getContacts, $getContactGroups, $getMail, $skipGroups, $skipUsers)], Http::STATUS_OK);
 	}
 
 	/**
 	 * Validate it the user name is reservrd
 	 * return false, if this username already exists as a user or as
 	 * a participant of the poll
-	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @return DataResponse
 	 */
 	public function validatePublicUsername($pollId, $userName, $token) {
-
-		// return forbidden, if $pollId does not match the share's pollId, force int compare
-		if (intval($this->shareMapper->findByToken($token)->getPollId()) !== intVal($pollId)) {
-			return new DataResponse(['result' => false, 'error' => 'wrong token'], Http::STATUS_FORBIDDEN);
+		try {
+			return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
+		} catch (\Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
-
-		// return forbidden, if the length of the userame is lower than 3 characters
-		if (strlen(trim($userName)) < 3) {
-			return new DataResponse(['result' => false, 'error' => 'userName too short'], Http::STATUS_FORBIDDEN);
-		}
-
-		$list = array();
-
-		// get all groups
-		$groups = $this->groupManager->search('');
-		foreach ($groups as $group) {
-			$list[] = [
-				'id' => $group->getGID(),
-				'user' => $group->getGID(),
-				'type' => 'group',
-				'displayName' => $group->getGID(),
-			];
-		}
-
-		// get all users
-		$users = $this->userManager->searchDisplayName('');
-		foreach ($users as $user) {
-			$list[] = [
-				'id' => $user->getUID(),
-				'user' => $user->getUID(),
-				'type' => 'user',
-				'displayName' => $user->getDisplayName(),
-			];
-		}
-
-		// get all participants
-		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
-		foreach ($votes as $vote) {
-			if ($vote->getUserId() !== '' && $vote->getUserId() !== null) {
-				$list[] = [
-					'id' => $vote->getUserId(),
-					'user' => $vote->getUserId(),
-					'type' => 'participant',
-					'displayName' => $vote->getUserId(),
-				];
-			}
-		}
-
-		// get all shares for this poll
-		$shares = $this->shareMapper->findByPoll($pollId);
-		foreach ($shares as $share) {
-			if ($share->getUserId() !== '' && $share->getUserId() !== null) {
-				$list[] = [
-					'id' => $share->getUserId(),
-					'user' => $share->getUserId(),
-					'type' => 'share',
-					'displayName' => $share->getUserId(),
-				];
-			}
-		}
-
-		// check if the username is contained inside the generated list
-		// return forbidden, if list contains requested username
-		foreach ($list as $element) {
-			if (strtolower(trim($userName)) === strtolower(trim($element['id'])) || strtolower(trim($userName)) === strtolower(trim($element['displayName']))) {
-				return new DataResponse([
-					'result' => false
-				], Http::STATUS_FORBIDDEN);
-			}
-		}
-
-		// return OK, if username is allowed
-		return new DataResponse([
-			'result' => true,
-			'name' => $userName
-		], Http::STATUS_OK);
 	}
 
-	public function getDisplayName() {
-		$this->userManager = \OC::$server->getUserManager();
-
-		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
-		} else {
-			return $this->userId;
+	/**
+	 * Validate email address (simple validation)
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @return DataResponse
+	 */
+	public function validateEmailAddress($emailAddress) {
+		try {
+			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
+		} catch (\Exception $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

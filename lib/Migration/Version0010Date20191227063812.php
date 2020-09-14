@@ -25,7 +25,6 @@ namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
@@ -328,7 +327,6 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 			->setParameter('show_results', 'always')
 			->setParameter('admin_access', 0);
 			$insert->execute();
-
 		}
 
 		$result->closeCursor();
@@ -354,7 +352,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		$result = $query->execute();
 
 		while ($row = $result->fetch()) {
-			if ($row['access'] == 'public') {
+			if ($row['access'] === 'public') {
 				// copy the hash to a public share
 				$insert
 				->setParameter('token', $row['hash'])
@@ -364,7 +362,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('user_email', null)
 				->setParameter('user', '');
 				$insert->execute();
-			} elseif ($row['access'] == 'hidden') {
+			} elseif ($row['access'] === 'hidden') {
 				// copy the hash to a public share
 				// poll stays hidden for registered users
 				$insert
@@ -375,7 +373,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('user_email', null)
 				->setParameter('user', '');
 				$insert->execute();
-			} elseif ($row['access'] == 'registered') {
+			} elseif ($row['access'] === 'registered') {
 				// copy the hash to a public share
 				// to keep the hash
 				$insert
@@ -412,5 +410,4 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		}
 		$result->closeCursor();
 	}
-
 }

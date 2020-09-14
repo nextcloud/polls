@@ -38,15 +38,22 @@
 				</ul>
 			</AppNavigationItem>
 		</template>
+		<template #footer>
+			<AppNavigationSettings :title="t('core', 'Settings')">
+				<NavigationSettings />
+			</AppNavigationSettings>
+		</template>
 	</AppNavigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
+import NavigationSettings from './NavigationSettings'
 import { emit } from '@nextcloud/event-bus'
 
 export default {
@@ -55,6 +62,8 @@ export default {
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
+		AppNavigationSettings,
+		NavigationSettings,
 		CreateDlg,
 		PollNavigationItems,
 	},
@@ -145,8 +154,8 @@ export default {
 					emit('update-polls')
 					this.$router.push({ name: 'vote', params: { id: response.pollId } })
 				})
-				.error(() => {
-					OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
+				.catch(() => {
+					showError(t('polls', 'Error cloning poll.'))
 				})
 		},
 
@@ -157,7 +166,7 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+					showError(t('polls', 'Error deleting poll.'))
 				})
 
 		},
@@ -174,7 +183,7 @@ export default {
 					emit('update-polls')
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
+					showError(t('polls', 'Error deleting poll.'))
 				})
 
 		},

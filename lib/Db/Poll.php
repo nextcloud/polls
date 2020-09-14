@@ -5,7 +5,7 @@
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author Kai Schröer <git@schroeer.co>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -39,30 +39,32 @@ use OCP\AppFramework\Db\Entity;
  * @method void setDescription(string $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
- * @method integer getCreated()
+ * @method int getCreated()
  * @method void setCreated(integer $value)
- * @method integer getExpire()
+ * @method int getExpire()
  * @method void setExpire(integer $value)
- * @method integer getDeleted()
+ * @method int getDeleted()
  * @method void setDeleted(integer $value)
  * @method string getAccess()
  * @method void setAccess(string $value)
- * @method integer getAnonymous()
+ * @method int getAnonymous()
  * @method void setAnonymous(integer $value)
- * @method integer getFullAnonymous()
+ * @method int getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
- * @method integer getAllowMaybe()
+ * @method int getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
  * @method string getOptions()
  * @method void setOptions(string $value)
  * @method string getSettings()
  * @method void setSettings(string $value)
- * @method integer getVoteLimit()
+ * @method int getVoteLimit()
  * @method void setVoteLimit(integer $value)
  * @method string getShowResults()
  * @method void setShowResults(string $value)
- * @method integer getAdminAccess()
+ * @method int getAdminAccess()
  * @method void setAdminAccess(integer $value)
+ * @method int getImportant()
+ * @method void setImportant(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
 
@@ -114,6 +116,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $adminAccess*/
 	protected $adminAccess;
 
+	/** @var int $important*/
+	protected $important;
+
 	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
@@ -131,7 +136,8 @@ class Poll extends Entity implements JsonSerializable {
 			'voteLimit' => intval($this->voteLimit),
 			'showResults' => $this->showResults,
 			'adminAccess' => intVal($this->adminAccess),
-			'ownerDisplayName' => $this->getDisplayName()
+			'ownerDisplayName' => $this->getDisplayName(),
+			'important' => intVal($this->important)
 		];
 	}
 
@@ -146,11 +152,11 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
 		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
 		$this->setAdminAccess(isset($array['adminAccess']) ? $array['adminAccess'] : $this->getAdminAccess());
+		$this->setImportant(isset($array['important']) ? $array['important'] : $this->getImportant());
 		return $this;
 	}
 
 	private function getDisplayName() {
-
 		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
 		} else {

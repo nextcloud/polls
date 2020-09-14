@@ -23,20 +23,25 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
+use DateTime;
+use DateInterval;
+use OCA\Polls\Exceptions\DuplicateEntryException;
 
 use OCP\IRequest;
+
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-
-use OCA\Polls\Exceptions\NotAuthorizedException;
-
 use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\CalendarService;
 
 class OptionController extends Controller {
 
+	/** @var OptionService */
 	private $optionService;
+
+	/** @var CalendarService */
+	private $calendarService;
 
 	/**
 	 * OptionController constructor.
@@ -48,79 +53,105 @@ class OptionController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		OptionService $optionService
+		OptionService $optionService,
+		CalendarService $calendarService
 	) {
 		parent::__construct($appName, $request);
 		$this->optionService = $optionService;
+		$this->calendarService = $calendarService;
 	}
 
 	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
-		return new DataResponse($this->optionService->list($pollId), Http::STATUS_OK);
-	}
-
-
-	/**
-	 * getByToken
-	 * Read all options of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-		return new DataResponse($this->optionService->list(0, $token), Http::STATUS_OK);
+		return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
 	}
 
 	/**
-	 * Add a new Option to poll
+	 * Add a new option
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param array $option
 	 * @return DataResponse
 	 */
-	public function add($option) {
-		return new DataResponse($this->optionService->add($option), Http::STATUS_OK);
+	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
+		try {
+			return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+		} catch (DuplicateEntryException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
 	}
 
 	/**
-	 * Update poll option
+	 * Update option
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param array $option
 	 * @return DataResponse
 	 */
-	public function update($option) {
-		return new DataResponse($this->optionService->update($option), Http::STATUS_OK);
+	public function update($optionId, $timestamp, $pollOptionText) {
+		return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
 	}
 
 	/**
-	 * Remove a single option
+	 * Delete option
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
-	public function remove($option) {
-		return new DataResponse($this->optionService->delete($option['id']), Http::STATUS_OK);
+	public function delete($optionId) {
+		return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
 	}
 
 	/**
-	 * Set order by order of the given array
+	 * Switch option confirmation
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
+	 * @param int $optionId
+	 * @return DataResponse
+	 */
+	public function confirm($optionId) {
+		return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
+	}
+
+	/**
+	 * Reorder options
+	 * @NoAdminRequired
+	 * @param int $pollId
 	 * @param Array $options
 	 * @return DataResponse
 	 */
 	public function reorder($pollId, $options) {
-		return new DataResponse($this->optionService->reorder($pollId, $options), Http::STATUS_OK);
+		return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
+	}
+
+	/**
+	 * Reorder options
+	 * @NoAdminRequired
+	 * @param int $optionId
+	 * @param int $step
+	 * @param string $unit
+	 * @param int $amount
+	 * @return DataResponse
+	 */
+	public function sequence($optionId, $step, $unit, $amount) {
+		return new DataResponse(['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)], Http::STATUS_OK);
+	}
+
+	/**
+	 * findCalendarEvents
+	 * @NoAdminRequired
+	 * @param integer $from
+	 * @param integer $to
+	 * @return DataResponse
+	 */
+	public function findCalendarEvents($optionId) {
+		$searchFrom = new DateTime();
+		$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
+		$searchTo = clone $searchFrom;
+		$searchTo = $searchTo->add(new DateInterval('PT3H'));
+
+		return new DataResponse(['events' => array_values($this->calendarService->getEvents($searchFrom, $searchTo))], Http::STATUS_OK);
 	}
 }

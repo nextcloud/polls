@@ -23,28 +23,29 @@
 
 namespace OCA\Polls\Service;
 
-use \Exception;
-use OCP\ILogger;
-
+use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
+
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Service\AnonymizeService;
-
-
 
 class CommentService {
 
-	private $comment;
+	/** @var CommentMapper */
 	private $commentMapper;
-	private $logger;
+
+	/** @var Comment */
+	private $comment;
+
+	/** @var AnonymizeService */
 	private $anonymizer;
+
+	/** @var Acl */
 	private $acl;
 
 	/**
 	 * CommentService constructor.
-	 * @param ILogger $logger
 	 * @param CommentMapper $commentMapper
 	 * @param Comment $comment
 	 * @param AnonymizeService $anonymizer
@@ -52,7 +53,6 @@ class CommentService {
 	 */
 
 	public function __construct(
-		ILogger $logger,
 		CommentMapper $commentMapper,
 		Comment $comment,
 		AnonymizeService $anonymizer,
@@ -60,22 +60,21 @@ class CommentService {
 	) {
 		$this->commentMapper = $commentMapper;
 		$this->comment = $comment;
-		$this->logger = $logger;
 		$this->anonymizer = $anonymizer;
 		$this->acl = $acl;
 	}
 
 	/**
-	 * get
+	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @NoAdminRequired
-	 * @param integer $pollId
+	 * @param int $pollId
 	 * @param string $token
-	 * @return Array
+	 * @return array
+	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $token = '') {
-
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowView()) {
+		if (!$this->acl->set($pollId, $token)->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -88,16 +87,16 @@ class CommentService {
 	}
 
 	/**
-	 * Write a new comment to the db and returns the new comment as array
+	 * Add comment
 	 * @NoAdminRequired
-	 * @param string $message
 	 * @param int $pollId
+	 * @param string $message
 	 * @param string $token
 	 * @return Comment
+	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId = 0, $message, $token = '') {
-
-		if (!$this->acl->setPollIdOrToken($pollId, $token)->getAllowComment()) {
+		if (!$this->acl->set($pollId, $token)->getAllowComment()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -113,32 +112,28 @@ class CommentService {
 			} else {
 				throw new NotAuthorizedException;
 			}
-
-		} catch (\Exception $e) {
-			$this->logger->alert('Error writing comment for pollId ' . $pollId . ': '. $e);
+		} catch (Exception $e) {
+			\OC::$server->getLogger()->alert('Error writing comment for pollId ' . $pollId . ': ' . $e);
 			throw new NotAuthorizedException($e);
 		}
-
 	}
 
 	/**
-	 * delete
-	 * Delete Comment
+	 * Delete comment
 	 * @NoAdminRequired
 	 * @param int $commentId
 	 * @param string $token
 	 * @return Comment
+	 * @throws NotAuthorizedException
 	 */
 	public function delete($commentId, $token = '') {
 		$this->comment = $this->commentMapper->find($commentId);
 
-		if ($this->acl->setPollIdOrToken($this->comment->getPollId(), $token)->getUserId() !== $this->acl->getUserId()) {
+		if ($this->acl->set($this->comment->getPollId(), $token)->getUserId() !== $this->acl->getUserId()) {
 			throw new NotAuthorizedException;
 		}
 
 		$this->commentMapper->delete($this->comment);
 		return $this->comment;
-
 	}
-
 }

@@ -16,27 +16,34 @@ Example calls:
 ```
 
 # Poll
-| Method    | Endpoint                             | Description                  | Return codes       |
-| --------- | -----------------------------------  | ---------------------------- | ------------------ |
-| GET       | /api/v1.0/polls                      | Get polls list as array      | 200, 403, 404      |
-| GET       | /api/v1.0/poll/{pollId}              | Get poll with {pollId}       | 200, 403, 404      |
-| POST      | /api/v1.0/poll/add                   | Add new poll with payload    | 201, 403, 404      |
-| POST      | /api/v1.0/poll/clone/{pollId}        | Clone poll {pollId}          | 201, 403, 404      |
-| PUT       | /api/v1.0/poll/{pollId}              | Update poll                  | 200, 403, 404, 409 |
-| DELETE    | /api/v1.0/poll/{pollId}              | Delete poll logical          | 200, 403, 404      |
-| DELETE    | /api/v1.0/poll/permanent/{pollId}    | Delete poll permanently      | 200, 403, 404      |
-| GET       | /api/v1.0/poll/enum                  | Get valid enums              | 200, 403, 404      |
+## Default functions
+| Method    | Endpoint                 | Payload | Description            | Return codes       | Return value   |
+| --------- | ------------------------ | ------- | ---------------------- | ------------------ | -------------- |
+| GET       | /api/v1.0/polls          | no      | Get array of polls     | 200, 403, 404      | array          |
+| GET       | /api/v1.0/poll/{pollId}  | no      | Get poll with {pollId} | 200, 403, 404      | requested poll |
+| POST      | /api/v1.0/poll           | yes     | Add new poll           | 201, 403, 404      | added poll     |
+| PUT       | /api/v1.0/poll/{pollId}  | yes     | Update poll            | 200, 403, 404, 409 | updated poll   |
+| DELETE    | /api/v1.0/poll/{pollId}  | no      | Delete poll            | 200, 403, 404      | deleted poll   |
 
-## Add poll
 
+## Special functions
+| Method    | Endpoint                      | Payload | Description                  | Return codes       | Return value   |
+| --------- | ------------------------------| ------- | ---------------------------- | ------------------ | -------------- |
+| POST      | /api/v1.0/poll/{pollId}/clone | no      | Clone poll from {pollId}     | 201, 403, 404      | cloned poll    |
+| POST      | /api/v1.0/poll/{pollId}/trash | no      | Move to/remome from trash    | 200, 403, 404      | updated poll   |
+| GET       | /api/v1.0/enum/poll           | no      | Get valid enums              | 200, 403, 404      | array          |
+
+## Valid payloads
+### Add new poll
 ```json
 {
     "type": "datePoll",
-    "title": "Test"
+    "title": "Poll Title"
 }
 ```
 
-## Update poll
+### Update poll
+send the full or a partial structure
 ```json
 {
     "poll": {
@@ -52,54 +59,50 @@ Example calls:
     }
 }
 ```
-
 ### Keys and values
 | Key     | Type    | description        |
 | ------- | ------- | -------------------|
 | expire  | integer | unix timestamp     |
 | deleted | integer | unix timestamp     |
 
-
-
 # Options
-| Method    | Endpoint                             | Description                  | Return codes       |
-| --------- | -----------------------------------  | ---------------------------- | ------------------ |
-| GET       | /api/v1.0/poll/{pollId}/options      | Get options as array         | 200, 403, 404      |
-| POST      | /api/v1.0/option                     | Add new option with Payload  | 201, 403, 404, 409 |
-| PUT       | /api/v1.0/option                     | Update option with Payload   | 200, 403, 404      |
-| DELETE    | /api/v1.0/option/{optionId}          | Delete option                | 200, 403, 404      |
+## Default functions
+| Method    | Endpoint                        | Payload  | Description       | Return codes       | Return value   |
+| --------- | ------------------------------- | -------  | ----------------- | ------------------ | -------------- |
+| GET       | /api/v1.0/poll/{pollId}/options | no       | Get poll options  | 200, 403, 404      | array          |
+| POST      | /api/v1.0/poll/{pollId}/option  | yes      | Add new option    | 201, 403, 404, 409 | added option   |
+| PUT       | /api/v1.0/option/{optionId}     | yes      | Update option     | 200, 403, 404      | updated option |
+| DELETE    | /api/v1.0/option/{optionId}     | no       | Delete option     | 200, 403, 404      | deleted option |
 
-## add option
+## Special functions (no payloads)
+| Method    | Endpoint                                     | Description                   | Return codes       | Return value     |
+| --------- | -------------------------------------------- | ----------------------------- | ------------------ | ---------------- |
+| PUT       | /api/v1.0/option/{optionId}/confirm          | Confirm/unconfirm option      | 200, 403, 404      | confirmed option |
+| PUT       | /api/v1.0/option/{optionId}/setorder/{order} | Set order (text poll)         | 200, 403, 404      | array            |
+
+## Valid payloads
+### Add/update option (text poll)
+
 ```json
 {
-    "pollId": 139,
-    "pollOptionText": "19-06-2020 17:00:00",
-	"timestamp": 0,
+    "pollOptionText": "Text of new option"
 }
 ```
 
-## Update option
+### Add/update option (date poll)
 ```json
 {
-	"id": 17,
-	"pollId": 1,
-	"pollOptionText": "poll option",
-	"timestamp": 0,
-	"order": 1,
-	"confirmed": 1590762104
-},
+	"timestamp": 1589195823
+}
 ```
 
 ### Keys and values
-| Key            | Type    | description                           |
-| -------------- | ------- | -------------------------------------  |
-| id             | String  | id overrides optionID if used          |
-| pollOptionText | String  | poll text or date option in UTC        |
-| confirmed      | Integer | unix timestamp                         |
-| timestamp      | Integer | unix timestamp for date option         |
-| order          | Integer | position on option order for textpolls |
+| Key            | Type    | description             |
+| -------------- | ------- | ----------------------- |
+| pollOptionText | String  | poll text               |
+| timestamp      | Integer | 10 digit unix timestamp |
 
-* if timestamp is given in a date poll, the poll option text is ignored
+
 
 # Votes
 | Method    | Endpoint                             | Description                  | Return codes       |
@@ -110,8 +113,7 @@ Example calls:
 ## set vote
 ```json
 {
-    "pollId": 1,
-    "pollOptionText": "Saturn",
+    "optionId": 1,
     "setTo" :"yes"
 }
 ```

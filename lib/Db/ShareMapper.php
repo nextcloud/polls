@@ -71,6 +71,28 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
+	 * @param int $pollId
+	 * @param string $userId
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return array
+	 */
+
+	public function findByPollAndUser($pollId, $userId) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   )
+		   ->andWhere(
+			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   );
+
+		return $this->findEntity($qb);
+	}
+
+	/**
 	 * @param string $token
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Share
@@ -99,7 +121,7 @@ class ShareMapper extends QBMapper {
 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
 
 	/**
@@ -113,7 +135,6 @@ class ShareMapper extends QBMapper {
 			   $qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
-
 }
