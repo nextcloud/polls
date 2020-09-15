@@ -35,11 +35,11 @@
 
 		<span v-if="poll.anonymous">{{ t('polls', 'This is an anonymous poll. Except to the poll owner, participants names are hidden.') }} </span>
 
-		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden. ') }}</span>
+		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden.') }}</span>
 
-		<span v-if="!acl.allowSeeResults && poll.showResults === 'expired'">{{ t('polls', 'They will be revealed after the poll is expired. ') }}</span>
+		<span v-if="!acl.allowSeeResults && poll.showResults === 'expired'">{{ t('polls', 'They will be revealed after the poll is expired.') }}</span>
 
-		<span v-if="poll.type === 'datePoll'">{{ t('polls', 'The used time zone is {timeZone}. ', { timeZone: currentTimeZone }) }}</span>
+		<span v-if="poll.type === 'datePoll'">{{ t('polls', 'The used time zone is {timeZone}.', { timeZone: currentTimeZone }) }}</span>
 	</div>
 </template>
 
