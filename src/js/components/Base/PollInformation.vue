@@ -23,7 +23,7 @@
 <template>
 	<div class="poll-information">
 		<UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
-		{{ t('polls', 'started this poll on %n. ', 1, dateCreatedString) }}
+		{{ t('polls', 'started this poll on {dateString}. ', {dateString: dateCreatedString}) }}
 
 		<span v-if="expired && confirmedOptions.length"> {{ t('polls', 'This poll expired on {dateString}. The confirmed options are marked below.', { dateString: dateExpiryString }) }} </span>
 
