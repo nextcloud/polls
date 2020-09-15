@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete comment" : "Kommentar läschen",
     "Title" : "Titel",
     "Apply" : "Uwenden",
+    "Settings" : "Astellungen",
     "Owner" : "Owner",
     "never" : "Ni",
     "Details" : "Detailer",

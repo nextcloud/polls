@@ -6,14 +6,17 @@
     "Cancel" : "Annullér",
     "OK" : "OK",
     "Week" : "Uge",
+    "Link copied to clipboard" : "Link kopieret til udklipsholder",
     "Group" : "Gruppe",
     "Unknown user" : "Ukendt bruger",
+    "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",
     "Delete comment" : "Slet kommentar",
     "No comments yet. Be the first." : "Ingen kommentarer endnu. Vær den første.",
     "Title" : "Titel",
     "Poll type" : "Afstemningstype",
     "Apply" : "Anvend",
+    "Settings" : "Indstillinger",
     "Clone poll" : "Klon afstemning",
     "Delete poll" : "Slet afstemning",
     "Access" : "Adgang",
@@ -32,8 +35,6 @@
     "Update poll" : "Opdatér afstemning",
     "Create new poll" : "Opret ny afstemning",
     "Title must not be empty!" : "Overskriften må ikke være tom!",
-    "%n successfully saved" : "%n blev gemt",
-    "Link copied to clipboard" : "Link kopieret til udklipsholder",
     "Receive notification email on activity" : "Modtag notifikationsemail om aktivitet",
     "No" : "Nej",
     "Yes" : "Ja",
@@ -41,8 +42,6 @@
     "Deleted" : "Slettet",
     "Hour" : "Time",
     "Day" : "Dag",
-    "Month" : "Måned",
-    "Access denied" : "Adgang nægtet",
-    "You are not allowed to view this poll or the poll does not exist." : "Du har ikke tilladelse til at se denne afstemning eller afstemningen eksisterer ikke. "
+    "Month" : "Måned"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

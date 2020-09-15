@@ -8,6 +8,7 @@ OC.L10N.register(
     "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
     "Title" : "ចំណងជើង",
     "Apply" : "អនុវត្ត",
+    "Settings" : "ការកំណត់",
     "Owner" : "Owner",
     "never" : "មិនដែរ",
     "Details" : "ព័ត៌មាន​លម្អិត",

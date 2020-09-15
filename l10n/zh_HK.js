@@ -7,6 +7,7 @@ OC.L10N.register(
     "Group" : "群組",
     "Title" : "標題",
     "Apply" : "套用",
+    "Settings" : "設定",
     "Owner" : "Owner",
     "never" : "永不",
     "Shares" : "分享",

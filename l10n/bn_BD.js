@@ -7,6 +7,7 @@ OC.L10N.register(
     "Group" : "গোষ্ঠীসমূহ",
     "Unknown user" : "অপরিচিত ব্যবহারকারী",
     "Title" : "শিরোনাম",
+    "Settings" : "সেটিংস",
     "Owner" : "Owner",
     "never" : "কখনোই নয়",
     "Details" : "বিসতারিত",

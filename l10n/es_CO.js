@@ -22,9 +22,9 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Semana",
     "No Participants until now" : "No hay participantes por ahora",
-    "The names of other participants are hidden, as this is an anonymous poll. " : "Los nombres de los participantes están ocultos debido a que esta es una encuesta anónima.",
     "Group" : "Grupo",
     "Unknown user" : "Ususario desconocido",
+    "Conflict" : "Conflicto",
     "New comment …" : "Nuevo comentario ...",
     "Your comment was added" : "Tu comentario ha sido agregado",
     "Error while saving comment" : "Error guardando el comentario",
@@ -37,9 +37,8 @@ OC.L10N.register(
     "Poll type" : "Tipo de encuesta",
     "Date poll" : "Encuesta de fechas",
     "Apply" : "Aplicar",
-    "Poll \"%n\" added" : "Encuesta \"%n\" añadida",
-    "Error while creating Poll \"%n\"" : "Error al crear la encuesta \"%n\"",
     "Add new Poll" : "Agregar nueva encuesta",
+    "Settings" : "Configuraciones ",
     "My polls" : "Mis encuestas",
     "Public polls" : "Encuestas públicas",
     "All polls" : "Todas las encuestas",
@@ -67,9 +66,6 @@ OC.L10N.register(
     "Deleted" : "Borrado",
     "Hour" : "Hora",
     "Day" : "Día",
-    "Month" : "Mes",
-    "Access denied" : "Acceso denegado",
-    "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. ",
-    "You are not allowed to edit this poll or the poll does not exist." : "No tienes permitido editar esta encuesta o la encuesta no existe."
+    "Month" : "Mes"
 },
 "nplurals=2; plural=(n != 1);");

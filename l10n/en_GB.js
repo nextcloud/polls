@@ -11,11 +11,13 @@ OC.L10N.register(
     "Week" : "Week",
     "Group" : "Group",
     "Unknown user" : "Unknown user",
+    "Conflict" : "Conflict",
     "New comment …" : "New comment …",
     "Delete comment" : "Delete comment",
     "No comments yet. Be the first." : "No comments yet. Be the first.",
     "Title" : "Title",
     "Apply" : "Apply",
+    "Settings" : "Settings",
     "Delete poll" : "Delete poll",
     "Access" : "Access",
     "Owner" : "Owner",
@@ -37,9 +39,6 @@ OC.L10N.register(
     "Deleted" : "Deleted",
     "Hour" : "Hour",
     "Day" : "Day",
-    "Month" : "Month",
-    "Access denied" : "Access denied",
-    "You are not allowed to view this poll or the poll does not exist." : "You are not allowed to view this poll or the poll does not exist.",
-    "You are not allowed to edit this poll or the poll does not exist." : "You are not allowed to edit this poll or the poll does not exist."
+    "Month" : "Month"
 },
 "nplurals=2; plural=(n != 1);");

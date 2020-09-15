@@ -6,6 +6,7 @@ OC.L10N.register(
     "Week" : "ہفتہ",
     "Group" : "Group",
     "Title" : "عنوان",
+    "Settings" : "سیٹینگز",
     "Owner" : "Owner",
     "never" : "never",
     "Description" : "تصریح",

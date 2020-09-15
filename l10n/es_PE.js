@@ -8,11 +8,13 @@ OC.L10N.register(
     "Week" : "Semana",
     "Group" : "Grupo",
     "Unknown user" : "Ususario desconocido",
+    "Conflict" : "Conflicto",
     "New comment …" : "Comentario nuevo ...",
     "Delete comment" : "Borrar comentario",
     "No comments yet. Be the first." : "No hay comentarios todavia. Se el primero.",
     "Title" : "Título",
     "Apply" : "Aplicar",
+    "Settings" : "Configuraciones ",
     "Access" : "Acceso",
     "Owner" : "Dueño",
     "Created" : "Creado",
@@ -33,8 +35,6 @@ OC.L10N.register(
     "Deleted" : "Borrado",
     "Hour" : "Hora",
     "Day" : "Día",
-    "Month" : "Mes",
-    "Access denied" : "Acceso denegado",
-    "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. "
+    "Month" : "Mes"
 },
 "nplurals=2; plural=(n != 1);");

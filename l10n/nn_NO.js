@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete comment" : "Slett kommentar",
     "Title" : "Tittel",
     "Apply" : "Anvend",
+    "Settings" : "Instillingar",
     "Owner" : "Owner",
     "Created" : "Lagd",
     "never" : "aldri",

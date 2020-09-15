@@ -7,11 +7,13 @@
     "Week" : "주",
     "Group" : "그룹",
     "Unknown user" : "알 수 없는 사용자",
+    "Conflict" : "충돌",
     "New comment …" : "새 댓글…",
     "Delete comment" : "댓글 삭제",
     "No comments yet. Be the first." : "아직 댓글이 없습니다. 첫 댓글을 남겨 보십시오.",
     "Title" : "제목",
     "Apply" : "적용",
+    "Settings" : "설정",
     "Delete poll" : "투표 삭제",
     "Access" : "접근 권한",
     "Owner" : "소유자",
@@ -33,9 +35,6 @@
     "Deleted" : "삭제함",
     "Hour" : "시간",
     "Day" : "일",
-    "Month" : "달",
-    "Access denied" : "접근이 거부됨",
-    "You are not allowed to view this poll or the poll does not exist." : "이 투표를 볼 수 없거나 투표가 존재하지 않습니다.",
-    "You are not allowed to edit this poll or the poll does not exist." : "이 투표를 편집할 수 없거나 투표가 존재하지 않습니다."
+    "Month" : "달"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

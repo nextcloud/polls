@@ -8,6 +8,7 @@ OC.L10N.register(
     "New comment …" : "Novi komentar",
     "Delete comment" : "Izbriši komentar",
     "Title" : "Naslov",
+    "Settings" : "Podešavanje",
     "Owner" : "Vlasnik",
     "never" : "nikad",
     "Comments" : "Komentari",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Week" : "வாரம்",
     "Group" : "Group",
     "Title" : "தலைப்பு",
+    "Settings" : "அமைப்புகள்",
     "Owner" : "Owner",
     "never" : "ஒருபோதும்",
     "Details" : "விவரங்கள்",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Group" : "Qrup",
     "Unknown user" : "Istifadəçi tanınmır ",
     "Title" : "Başlıq",
+    "Settings" : "Quraşdırmalar",
     "Owner" : "Owner",
     "never" : "heç vaxt",
     "Details" : "Detallar",

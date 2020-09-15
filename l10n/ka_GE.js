@@ -35,9 +35,6 @@ OC.L10N.register(
     "Deleted" : "გაუქმდა",
     "Hour" : "საათი",
     "Day" : "დღე",
-    "Month" : "თვე",
-    "Access denied" : "წვდომა არაა დაშვებული",
-    "You are not allowed to view this poll or the poll does not exist." : "ამ გამოკითხვის ჩვენების უფლებები არ გაქვთ, ან ის არ არსებობს.",
-    "You are not allowed to edit this poll or the poll does not exist." : "ამ გამოკითხვის ცვილების უფლება არ გაქვთ, ან გამოკითხვა არ არსებობს."
+    "Month" : "თვე"
 },
 "nplurals=2; plural=(n!=1);");

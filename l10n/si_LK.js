@@ -9,6 +9,7 @@ OC.L10N.register(
     "New comment …" : "නව ප්රතිචාරයක් ...",
     "Delete comment" : "ප්රතිචාරය මකන්න",
     "Title" : "මාතෘකාව",
+    "Settings" : "සැකසුම්",
     "Owner" : "Owner",
     "never" : "කවදාවත්",
     "Configuration" : "වින්‍යාසය",

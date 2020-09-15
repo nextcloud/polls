@@ -6,6 +6,7 @@ OC.L10N.register(
     "Week" : "Minggu",
     "Group" : "Group",
     "Title" : "Judul",
+    "Settings" : "Tetapan",
     "Owner" : "Owner",
     "never" : "jangan",
     "Shares" : "Kongsi",

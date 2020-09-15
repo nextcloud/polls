@@ -9,11 +9,13 @@ OC.L10N.register(
     "Week" : "Uke",
     "Group" : "Gruppe",
     "Unknown user" : "Ukjent bruker",
+    "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",
     "Delete comment" : "Slett kommentar",
     "No comments yet. Be the first." : "Ingen kommentarer enda. Vær først.",
     "Title" : "Tittel",
     "Apply" : "Bruk",
+    "Settings" : "Innstillinger",
     "Delete poll" : "Slett avstemning",
     "Access" : "Tilgang",
     "Owner" : "Eier",
@@ -35,9 +37,6 @@ OC.L10N.register(
     "Deleted" : "Slettet",
     "Hour" : "Time",
     "Day" : "Dag",
-    "Month" : "Måned",
-    "Access denied" : "Tilgang nektet",
-    "You are not allowed to view this poll or the poll does not exist." : "Du har ikke tilgang til å se denne avstemningen, eller så finnes den ikke.",
-    "You are not allowed to edit this poll or the poll does not exist." : "Du har ikke tilgang til å redigere denne avstemningen, eller så finnes den ikke."
+    "Month" : "Måned"
 },
 "nplurals=2; plural=(n != 1);");

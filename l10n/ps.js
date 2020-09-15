@@ -5,6 +5,7 @@ OC.L10N.register(
     "OK" : "سمه ده",
     "New comment …" : "نوې تبصره",
     "Delete comment" : "تبصره ړنګول",
+    "Settings" : "سمونې",
     "Details" : "معلومات",
     "Shares" : "شريک شوي",
     "Comments" : "تبصرې",

@@ -35,9 +35,6 @@ OC.L10N.register(
     "Deleted" : "Borrado",
     "Hour" : "Hora",
     "Day" : "Día",
-    "Month" : "Mes",
-    "Access denied" : "Acceso denegado",
-    "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. ",
-    "You are not allowed to edit this poll or the poll does not exist." : "No tienes permitido editar esta encuesta o la encuesta no existe."
+    "Month" : "Mes"
 },
 "nplurals=2; plural=(n != 1);");

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Group" : "Grop",
     "Title" : "Títol",
     "Apply" : "Aplicar",
+    "Settings" : "Paramètres",
     "Owner" : "Owner",
     "never" : "pas jamai",
     "Details" : "Detalhs",

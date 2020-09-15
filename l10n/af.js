@@ -10,6 +10,7 @@ OC.L10N.register(
     "New comment …" : "Nuwe kommentaar…",
     "Delete comment" : "Skrap kommentaar",
     "Title" : "Titel",
+    "Settings" : "Instellings",
     "Owner" : "Eienaar",
     "Created" : "Geskep",
     "never" : "nooit",

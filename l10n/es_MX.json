@@ -9,11 +9,13 @@
     "Week" : "Semana",
     "Group" : "Grupo",
     "Unknown user" : "Ususario desconocido",
+    "Conflict" : "Conflicto",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
     "No comments yet. Be the first." : "No hay comentarios todavia. Se el primero.",
     "Title" : "Título",
     "Apply" : "Aplicar",
+    "Settings" : "Configuraciones ",
     "Delete poll" : "Borrar encuesta",
     "Access" : "Acceso",
     "Owner" : "Propietario",
@@ -35,9 +37,6 @@
     "Deleted" : "Eliminado",
     "Hour" : "Hora",
     "Day" : "Día",
-    "Month" : "Mes",
-    "Access denied" : "Acceso denegado",
-    "You are not allowed to view this poll or the poll does not exist." : "No tienes permitido ver esta encuesta o bien la encuesta no existe. ",
-    "You are not allowed to edit this poll or the poll does not exist." : "No tienes permitido editar esta encuesta o la encuesta no existe."
+    "Month" : "Mes"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

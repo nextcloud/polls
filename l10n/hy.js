@@ -7,6 +7,7 @@ OC.L10N.register(
     "Week" : "Շաբաթ",
     "Group" : "Խումբ",
     "Title" : "Վերնագիր",
+    "Settings" : "կարգավորումներ",
     "Owner" : "Owner",
     "never" : "երբեք",
     "Details" : "Մանրամասներ",

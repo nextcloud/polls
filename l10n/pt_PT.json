@@ -3,12 +3,15 @@
     "Cancel" : "Cancelar",
     "OK" : "OK",
     "Week" : "Semana",
+    "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Group" : "Grupo",
     "Unknown user" : "Utilizador desconhecido",
+    "Conflict" : "Conflito",
     "New comment …" : "Novo comentário…",
     "Delete comment" : "Eliminar comentário",
     "Title" : "Título ",
     "Apply" : "Aplicar",
+    "Settings" : "Configurações",
     "Access" : "Acesso",
     "Owner" : "Proprietário",
     "Created" : "Criado",
@@ -20,13 +23,11 @@
     "Comments" : "Comentários",
     "Description" : "Descrição",
     "Expiration date" : "Data de expiração",
-    "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "No" : "Não",
     "Yes" : "Sim",
     "Deleted" : "Eliminado",
     "Hour" : "Hora",
     "Day" : "Dia",
-    "Month" : "Mês",
-    "Access denied" : "Acesso proibido"
+    "Month" : "Mês"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

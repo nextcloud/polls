@@ -7,6 +7,7 @@ OC.L10N.register(
     "Week" : "Wythnos",
     "Group" : "Grŵp",
     "Title" : "Teitl",
+    "Settings" : "Gosodiadau",
     "Owner" : "Owner",
     "never" : "byth",
     "Details" : "Manylion",

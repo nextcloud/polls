@@ -6,6 +6,7 @@ OC.L10N.register(
     "Week" : "ھەپتە",
     "Group" : "Group",
     "Title" : "ماۋزۇ",
+    "Settings" : "تەڭشەكلەر",
     "Owner" : "Owner",
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
