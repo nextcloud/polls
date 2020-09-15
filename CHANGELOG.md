@@ -1,7 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.5.1 - beta2] - 2020-08-17
+## [1.5.2 - RC2] - 2020-09-15
+ - fixing Translations
+ - updated dependencies
+ - minor fixes
+
+## [1.5.1 - RC1] - 2020-09-08
  - Lookup calendars for conflict #1056 #747
  - convert URIs in description into clickable links #1067
  - added a poll to force poll appear under relevant polls navigation entry for all users #1072
