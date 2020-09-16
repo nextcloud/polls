@@ -32,6 +32,10 @@ const defaultSettings = () => {
 			imageUrl: '',
 			glassyNavigation: false,
 			glassySidebar: false,
+			defaultView: {
+				textPoll: 'mobile',
+				datePoll: 'desktop',
+			},
 		},
 	}
 }
