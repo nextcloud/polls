@@ -73,7 +73,7 @@ class PreferencesController extends Controller {
 	 * write
 	 * Write wreferences
 	 * @NoAdminRequired
-	 * @param int $settings
+	 * @param array $settings
 	 * @return DataResponse
 	 */
 	public function write($settings) {

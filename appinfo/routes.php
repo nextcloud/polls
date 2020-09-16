@@ -115,9 +115,9 @@ return [
 		['name' => 'comment_api#add', 'url' => '/api/v1.0/comment', 'verb' => 'POST'],
 		['name' => 'comment_api#delete', 'url' => '/api/v1.0/comment/{commentId}', 'verb' => 'DELETE'],
 
-		['name' => 'preferences#write', 'url' => '/preferences/write/', 'verb' => 'POST'],
-		['name' => 'preferences#get', 'url' => '/preferences/get/', 'verb' => 'GET'],
-		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get/', 'verb' => 'POST'],
+		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
+		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],
+		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get', 'verb' => 'POST'],
 		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST']
 	]
 ];
