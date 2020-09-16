@@ -78,7 +78,8 @@ class SubscriptionController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param int $subscribed
+	 * @param string $token
+	 * @param boolean $subscribed
 	 * @return DataResponse
 	 * @throws NotAuthorizedException
 	 */
