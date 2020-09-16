@@ -1,0 +1,13 @@
+{ "translations": {
+    "Cancel" : "Bekor qilish",
+    "OK" : "OK",
+    "Unknown user" : "Noma'lum foydalanuvchi",
+    "New comment …" : "Yangi javob ...",
+    "Delete comment" : "Fikrni o'chirib tashlash",
+    "Settings" : "Sozlamalar",
+    "never" : "hech qachon",
+    "Comments" : "Fikrlar",
+    "No" : "Yo'q",
+    "Yes" : "Ha"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

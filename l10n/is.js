@@ -25,8 +25,6 @@ OC.L10N.register(
     "No Participants until now" : "Engir þátttakendur þar til núna",
     "Link copied to clipboard" : "Tengill afritaður á klippispjald",
     "Error while copying link to clipboard" : "Villa við afritun tengils á klippispjald",
-    "started this poll on %n. " : "hóf þessa könnun þann %n. ",
-    "Results are hidden. " : "Niðurstöður eru faldar. ",
     "Enter your name" : "Settu inn nafnið þitt",
     "You have an account? Log in here." : "Ert þú með aðgang? Skráðu þig inn hér.",
     "Error saving username" : "Villa við að vista notandanafn",

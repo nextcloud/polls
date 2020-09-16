@@ -24,7 +24,6 @@ OC.L10N.register(
     "No Participants until now" : "Ei osallistujia tätä ennen",
     "Link copied to clipboard" : "Linkki kopioitu leikepöydälle",
     "Error while copying link to clipboard" : "Virhe kopioitaessa linkkiä leikepöydälle",
-    "Results are hidden. " : "Tulokset piilotetaan.",
     "Who are you?" : "Kuka olet?",
     "Enter your name" : "Kirjoita nimesi",
     "You have an account? Log in here." : "Onko sinulla tili? Kirjaudu sisään tästä.",

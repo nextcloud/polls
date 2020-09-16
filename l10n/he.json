@@ -33,8 +33,6 @@
     "Link copied to clipboard" : "הקישור הועתק ללוח הגזירים",
     "Error while copying link to clipboard" : "שגיאה בהעתקת קישור ללוח הגזירים",
     "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים","%n משתתפים"],
-    "Results are hidden. " : "התוצאות מוסתרות.",
-    "They will be revealed after the poll is expired. " : "הם ייחשפו לאחר תפוגת תוקף הסקר.",
     "Enter your name" : "נא למלא את שמך",
     "You have an account? Log in here." : "יש לך חשבון? נא להיכנס כאן.",
     "Error saving username" : "שגיאה בשמירת שם המשתמש",

@@ -28,7 +28,6 @@ OC.L10N.register(
     "No Participants until now" : "هیچ مشارکت کننده ای وجود ندارد",
     "Link copied to clipboard" : "پیوند در حافظه موقت کپی شده",
     "Error while copying link to clipboard" : "هنگام کپی کردن پیوند به حافظه موقت خطایی رخ داد",
-    "started this poll on %n. " : "این نظرسنجی را شروع کرد %n. ",
     "Enter your name" : "اسمت را وارد کن",
     "Error saving username" : "خطا در ذخیره نام کاربری",
     "Group" : "گروه",
