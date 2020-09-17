@@ -32,11 +32,13 @@ const defaultSettings = () => {
 			imageUrl: '',
 			glassyNavigation: false,
 			glassySidebar: false,
-			defaultView: {
-				textPoll: 'mobile',
-				datePoll: 'desktop',
-			},
+			defaultViewTextPoll: 'mobile',
+			defaultViewDatePoll: 'desktop',
 		},
+		viewModes: [
+			'mobile',
+			'desktop',
+		],
 	}
 }
 
@@ -79,7 +81,6 @@ const actions = {
 				throw error
 			})
 	},
-
 }
 
 export default { namespaced, state, mutations, actions }

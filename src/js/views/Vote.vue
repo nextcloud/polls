@@ -128,8 +128,8 @@ export default {
 			delay: 50,
 			isLoading: true,
 			ranked: false,
-			manualViewDatePoll: false,
-			manualViewTextPoll: false,
+			manualViewDatePoll: '',
+			manualViewTextPoll: '',
 		}
 	},
 
@@ -148,37 +148,33 @@ export default {
 
 		viewTextPoll() {
 			if (this.manualViewTextPoll) {
-				if (this.settings.user.defaultView.textPoll === 'desktop') {
-					return 'mobile'
-				} else {
-					return 'desktop'
-				}
+				return this.manualViewTextPoll
 			} else {
-				return this.settings.user.defaultView.textPoll
+				if (window.innerWidth > 480) {
+					return this.settings.user.defaultViewTextPoll
+				} else {
+					return 'mobile'
+				}
 			}
 		},
 
 		viewDatePoll() {
 			if (this.manualViewDatePoll) {
-				if (this.settings.user.defaultView.datePoll === 'desktop') {
-					return 'mobile'
-				} else {
-					return 'desktop'
-				}
+				return this.manualViewDatePoll
 			} else {
-				if (window.innerWidth < 481) {
-					return 'mobile'
+				if (window.innerWidth > 480) {
+					return this.settings.user.defaultViewDatePoll
 				} else {
-					return this.settings.user.defaultView.datePoll
+					return 'mobile'
 				}
 			}
 		},
 
 		viewMode() {
-			if (this.poll.type === 'datePoll') {
-				return this.viewDatePoll
-			} else if (this.poll.type === 'textPoll') {
+			if (this.poll.type === 'textPoll') {
 				return this.viewTextPoll
+			} else if (this.poll.type === 'datePoll') {
+				return this.viewDatePoll
 			} else {
 				return 'desktop'
 			}
@@ -275,6 +271,14 @@ export default {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
 
+		getNextViewMode() {
+			if (this.settings.viewModes.indexOf(this.viewMode) < 0) {
+				return this.settings.viewModes[1]
+			} else {
+				return this.settings.viewModes[(this.settings.viewModes.indexOf(this.viewMode) + 1) % this.settings.viewModes.length]
+			}
+		},
+
 		openConfiguration() {
 			emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
 		},
@@ -286,9 +290,17 @@ export default {
 		toggleView() {
 			emit('transitions-off', { delay: 500 })
 			if (this.poll.type === 'datePoll') {
-				this.manualViewDatePoll = !this.manualViewDatePoll
-			} else {
-				this.manualViewTextPoll = !this.manualViewTextPoll
+				if (this.manualViewDatePoll) {
+					this.manualViewDatePoll = ''
+				} else {
+					this.manualViewDatePoll = this.getNextViewMode()
+				}
+			} else if (this.poll.type === 'textPoll') {
+				if (this.manualViewTextPoll) {
+					this.manualViewTextPoll = ''
+				} else {
+					this.manualViewTextPoll = this.getNextViewMode()
+				}
 			}
 		},
 
