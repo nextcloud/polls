@@ -46,7 +46,6 @@
     "Resend invitation mail to {emailAdress}" : "Wyślij ponownie e-mail z zaproszeniem na {emailAdress}",
     "Invitation sent to {emailAddress}" : "Zaproszenie wysłane na {emailAddress}",
     "Error sending invitation to {emailAddress}" : "Błąd podczas wysyłania zaproszenia na {emailAddress}",
-    "started this poll on {dateString}. " : "rozpoczął sondę {dateString}.",
     "This poll expired on {dateString}. The confirmed options are marked below." : "Ta sonda wygasła {dateString}. Zaznaczone opcje są poniżej.",
     "This poll expired on {dateString}, but there are no confirmed options until now." : "Ta sonda wygasa {dateString}. Do tej pory nie ma zatwierdzonych opcji.",
     "You can confirm your favorites now in the options tab in the sidebar." : "Możesz teraz potwierdzić swoje ulubione w zakładce opcji na pasku bocznym.",

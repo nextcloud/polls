@@ -34,6 +34,7 @@
     "Increase unit" : "Unité de croissance",
     "Shift" : "Décaler",
     "No Participants until now" : "Aucun participant pour l'instant",
+    "Copy list of email addresses to clipboard" : "Copier la liste des adresses email vers le presse-papiers",
     "Link copied to clipboard" : "Lien copié dans le presse-papier",
     "Error while copying link to clipboard" : "Erreur lors de la copie du lien dans le presse-papier",
     "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],
