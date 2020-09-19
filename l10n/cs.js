@@ -48,6 +48,7 @@ OC.L10N.register(
     "Resend invitation mail to {emailAdress}" : "Znovu zaslat e-mail s pozvánkou na {emailAdress}",
     "Invitation sent to {emailAddress}" : "Pozvánka odeslána na {emailAddress}",
     "Error sending invitation to {emailAddress}" : "Chyba při odesílání poznánky na {emailAddress}",
+    "started this poll on {dateString}." : "zahájil(a) tuto anketu {dateString}.",
     "This poll expired on {dateString}. The confirmed options are marked below." : "Platnost této ankety skončila {dateString}. Potvrzené možnosti jsou označené níže.",
     "This poll expired on {dateString}, but there are no confirmed options until now." : "Platnost této ankety skončila {dateString}, ale doposud zde nejsou žádné potvrzené volby.",
     "You can confirm your favorites now in the options tab in the sidebar." : "Své oblíbené nyní můžete potvrdit v panelu možností v postranním panelu.",

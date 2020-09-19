@@ -48,6 +48,7 @@ OC.L10N.register(
     "Resend invitation mail to {emailAdress}" : "Volver a enviar el correo de invitación a {emailAddress}",
     "Invitation sent to {emailAddress}" : "Invitación enviada a {emailAddress}",
     "Error sending invitation to {emailAddress}" : "Error al enviar la invitación a {emailAddress}",
+    "started this poll on {dateString}." : "inició esta votación el {dateString}.",
     "This poll expired on {dateString}. The confirmed options are marked below." : "Esta encuesta caduca el {dateString}. Las opciones confirmadas se indican debajo.",
     "This poll expired on {dateString}, but there are no confirmed options until now." : "Esta encuesta caduca el {dateString}, pero de momento no hay opciones confirmadas.",
     "You can confirm your favorites now in the options tab in the sidebar." : "Puede confirmar ahora sus favoritos en las opciones de la barra lateral.",
