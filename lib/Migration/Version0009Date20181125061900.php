@@ -88,14 +88,14 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('created', Types::DATETIME, [
+			$table->addColumn('created', Types::DATETIME_MUTABLE, [
 				'notnull' => false,
 			]);
 			$table->addColumn('access', Types::STRING, [
 				'notnull' => false,
 				'length' => 1024,
 			]);
-			$table->addColumn('expire', Types::DATETIME, [
+			$table->addColumn('expire', Types::DATETIME_MUTABLE, [
 				'notnull' => false,
 			]);
 			$table->addColumn('is_anonymous', Types::INTEGER, [
