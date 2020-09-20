@@ -23,37 +23,44 @@
 <template>
 	<Modal v-show="modal" :can-close="false">
 		<div class="modal__content">
-			<div class="enter__name">
-				<h2>{{ t('polls', 'Who are you?') }}</h2>
-				<p>{{ t('polls', 'To participate, tell us how we can call you!') }}</p>
+			<h2>{{ t('polls', 'Public poll') }}</h2>
 
-				<input ref="userName" v-model="userName" :class="userNameCheckStatus"
-					type="text"
-					:placeholder="t('polls', 'Enter your name')" @keyup.enter="writeUserName">
-
-				<div>
-					{{ userNameCheckResult }}
-				</div>
-			</div>
-			<div class="enter__email">
-				<p>{{ t('polls', 'Enter your email address to be able to subscribe to updates and get your personal link via email.') }}</p>
-
-				<input v-model="emailAddress" :class="emailAddressCheckStatus"
-					type="text"
-					:placeholder="t('polls', 'Enter your email address')" @keyup.enter="writeUserName">
-
-				<div>
-					{{ emailAddressCheckResult }}
-				</div>
+			<div v-show="card === 'front'" class="front-card">
+				<h3> {{ t('polls', 'Are you a user of this site and have a login?') }} </h3>
+				<ButtonDiv :title="t('polls', 'Yes, I have a login')" @click="login()" />
+				<ButtonDiv :title="t('polls', 'No, I have no login')" @click="card = 'back'" />
 			</div>
 
-			<div class="modal__buttons">
-				<a :href="loginLink" class="modal__buttons__link"> {{ t('polls', 'You have an account? Log in here.') }} </a>
-				<div class="modal__buttons__spacer" />
-				<ButtonDiv :title="t('polls', 'Cancel')"
-					@click="closeModal" />
-				<ButtonDiv :primary="true" :disabled="!isValidName || checkingUserName" :title="t('polls', 'OK')"
-					@click="writeUserName" />
+			<div v-show="card === 'back'" class="back-card">
+				<div class="section__username">
+					<h3>{{ t('polls', 'To participate, tell us how we can call you!') }}</h3>
+					<input ref="userName" v-model="userName" :class="userNameCheckStatus"
+						type="text" :placeholder="t('polls', 'Enter your name')" @keyup.enter="submitRegistration">
+					<div>
+						{{ userNameCheckResult }}
+					</div>
+				</div>
+
+				<div class="section__email">
+					<h3>{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}</h3>
+					<input v-model="emailAddress" :class="emailAddressCheckStatus"
+						type="text" :placeholder="t('polls', 'Optional email address')" @keyup.enter="submitRegistration">
+					<div>
+						{{ emailAddressCheckResult }}
+					</div>
+				</div>
+
+				<div class="modal__buttons">
+					<Actions>
+						<ActionButton icon="icon-close" @click="card = 'front'">
+							{{ t('polls', 'Back') }}
+						</ActionButton>
+					</Actions>
+					<div class="modal__buttons__spacer" />
+					<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
+					<ButtonDiv :primary="true" :disabled="disableSubmit" :title="t('polls', 'OK')"
+						@click="submitRegistration" />
+				</div>
 			</div>
 		</div>
 	</Modal>
@@ -65,13 +72,15 @@ import axios from '@nextcloud/axios'
 import ButtonDiv from '../Base/ButtonDiv'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Modal } from '@nextcloud/vue'
+import { Modal, Actions, ActionButton } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'PublicRegisterModal',
 
 	components: {
+		Actions,
+		ActionButton,
 		Modal,
 		ButtonDiv,
 	},
@@ -86,6 +95,7 @@ export default {
 			isValidName: false,
 			isValidEmailAddress: false,
 			modal: true,
+			card: 'front',
 		}
 	},
 
@@ -94,6 +104,10 @@ export default {
 			poll: state => state.poll,
 			share: state => state.poll.share,
 		}),
+
+		disableSubmit() {
+			return !this.isValidName || this.checkingUserName
+		},
 
 		loginLink() {
 			const redirectUrl = this.$router.resolve({
@@ -122,9 +136,9 @@ export default {
 				return t('polls', 'Checking username …')
 			} else {
 				if (this.userName.length < 3) {
-					return t('polls', 'Please use at least 3 characters for your name.')
+					return t('polls', 'Please use at least 3 characters.')
 				} else if (!this.isValidName) {
-					return t('polls', 'This name is not valid, i.e. because it is already in use.')
+					return t('polls', 'This name is not valid.')
 				} else {
 					return t('polls', 'OK, we will call you {username}.', { username: this.userName })
 				}
@@ -136,7 +150,7 @@ export default {
 				return t('polls', 'Checking email address …')
 			} else {
 				if (this.emailAddress.length < 1) {
-					return t('polls', 'Vote without email address.')
+					return t('polls', ' ')
 				} else if (!this.isValidEmailAddress) {
 					return t('polls', 'This email address is not valid.')
 				} else {
@@ -202,6 +216,10 @@ export default {
 			this.modal = false
 		},
 
+		login() {
+			window.location.assign(window.location.protocol + '//' + window.location.host + this.loginLink)
+		},
+
 		validatePublicUsername: debounce(function() {
 			if (this.userName.length > 2) {
 				return axios.post(generateUrl('apps/polls/check/username'), { pollId: this.poll.id, userName: this.userName, token: this.$route.params.token })
@@ -236,7 +254,7 @@ export default {
 			}
 		}, 500),
 
-		writeUserName() {
+		submitRegistration() {
 			if (this.isValidName && (this.isValidEmailAddress || this.emailAddress.length === 0)) {
 				this.$store.dispatch('poll/shares/addPersonal', { token: this.$route.params.token, userName: this.userName, emailAddress: this.emailAddress })
 					.then((response) => {
@@ -258,7 +276,19 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+
+	.front-card, .back-card {
+		display: flex;
+		flex-direction: column;
+		> button {
+			margin: 8px 0;
+		}
+	}
+
+	[class*="section__"] {
+		margin: 4px 0;
+	}
 
 	.modal__content {
 		.enter__name, .enter__email {
@@ -266,4 +296,8 @@ export default {
 		}
 	}
 
+	.description {
+		hyphens: auto;
+		border-top: 1px solid var(--color-border)
+	}
 </style>
