@@ -8,8 +8,7 @@ imports:
   - php
 
 tools:
-  external_code_coverage:
-    timeout: 60
+  external_code_coverage: false
 
 build:
   tests:
