@@ -286,7 +286,7 @@ export default {
 		}
 	}
 
-	[class*="section__"] {
+	[class*='section__'] {
 		margin: 4px 0;
 	}
 
