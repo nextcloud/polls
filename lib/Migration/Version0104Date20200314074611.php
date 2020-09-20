@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
@@ -62,7 +63,7 @@ class Version0104Date20200314074611 extends SimpleMigrationStep {
 		$schema = $schemaClosure();
 		$table = $schema->getTable('polls_polls');
 		$table->changeColumn('description', [
-			'type' => Types::getType(Types::TEXT),
+			'type' => Type::getType(Types::TEXT),
 			'notnull' => true,
 			'default' => ''
 		]);
