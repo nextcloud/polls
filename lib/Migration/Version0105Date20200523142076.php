@@ -64,20 +64,20 @@ class Version0105Date20200523142076 extends SimpleMigrationStep {
 		if (!$schema->hasTable('polls_preferences')) {
 			$table = $schema->createTable('polls_preferences');
 
-			$table->addColumn('id', Type::INTEGER, [
+			$table->addColumn('id', Types::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('user_id', Type::STRING, [
+			$table->addColumn('user_id', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('timestamp', Type::INTEGER, [
+			$table->addColumn('timestamp', Types::INTEGER, [
 				'length' => 11,
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('preferences', Type::TEXT, [
+			$table->addColumn('preferences', Types::TEXT, [
 				'notnull' => true,
 				'default' => '',
 			]);

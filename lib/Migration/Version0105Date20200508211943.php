@@ -64,7 +64,7 @@ class Version0105Date20200508211943 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_options')) {
 			$table = $schema->getTable('polls_options');
 			if (!$table->hasColumn('confirmed')) {
-				$table->addColumn('confirmed', Type::INTEGER, [
+				$table->addColumn('confirmed', Types::INTEGER, [
 					'length' => 11,
 					'notnull' => true,
 					'default' => 0
