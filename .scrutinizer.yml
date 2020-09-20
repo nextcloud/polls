@@ -1,20 +1,16 @@
-build:
-    nodes:
-        analysis:
-            tests:
-                override:
-                    - php-scrutinizer-run
-
 filter:
-    excluded_paths:
-        - 'build/*'
-        - 'l10n/*'
-        - 'tests/'
-        - 'vendor/*'
+  excluded_paths:
+    - 'l10n/*'
+    - 'js/vendor/*'
 
 imports:
-    - javascript
-    - php
+  - javascript
+  - php
 
 tools:
-    external_code_coverage: false
+  external_code_coverage: false
+
+build:
+  tests:
+    override:
+      -  jshint-run --config .jshintrc
