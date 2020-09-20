@@ -48,6 +48,7 @@ OC.L10N.register(
     "Resend invitation mail to {emailAdress}" : "Reenviar convite para {emailAdress}",
     "Invitation sent to {emailAddress}" : "Convite enviado para {emailAddress}",
     "Error sending invitation to {emailAddress}" : "Erro ao enviar convite para {emailAddress}",
+    "started this poll on {dateString}." : "iniciou esta enquete em {dateString}.",
     "This poll expired on {dateString}. The confirmed options are marked below." : "Esta enquete expirou em {dateString}. As opções confirmadas estão marcadas abaixo.",
     "This poll expired on {dateString}, but there are no confirmed options until now." : "Esta enquete expirou em {dateString}, mas não há opções confirmadas até o momento.",
     "You can confirm your favorites now in the options tab in the sidebar." : "Você pode confirmar seus favoritos agora na aba opções da barra lateral.",
