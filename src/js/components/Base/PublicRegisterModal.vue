@@ -52,7 +52,7 @@
 
 				<div class="modal__buttons">
 					<Actions>
-						<ActionButton icon="icon-close" @click="card = 'front'">
+						<ActionButton icon="icon-polls-back" @click="card = 'front'">
 							{{ t('polls', 'Back') }}
 						</ActionButton>
 					</Actions>
