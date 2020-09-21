@@ -1,6 +1,6 @@
-sudo: false
 dist: trusty
 language: php
+os: linux
 
 services:
   - mysql
@@ -20,7 +20,7 @@ env:
   global:
     - CORE_BRANCH=stable19
     - APP_NAME=polls
-  matrix:
+  jobs:
     - DB=mysql
     - DB=pgsql
     - DB=sqlite

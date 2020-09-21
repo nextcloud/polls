@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Types\Types;
+
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -64,7 +64,7 @@ class Version0105Date20200704084037 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_share')) {
 			$table = $schema->getTable('polls_share');
 			if (!$table->hasColumn('invitation_sent')) {
-				$table->addColumn('invitation_sent', Types::INTEGER, [
+				$table->addColumn('invitation_sent', 'integer', [
 					'length' => 11,
 					'notnull' => true,
 					'default' => 0
