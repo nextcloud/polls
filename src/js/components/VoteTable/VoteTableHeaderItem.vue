@@ -84,7 +84,7 @@ export default {
 			}
 		},
 		showNo() {
-			return (this.viewMode === 'desktop')
+			return (this.viewMode === 'mobile')
 		},
 		isWinner() {
 			// highlight best option until poll is expired and
