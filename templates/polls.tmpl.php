@@ -24,4 +24,4 @@
 
 ?>
 
-<?php \OCP\Util::addScript('polls', 'polls'); ?>
+<?php \OCP\Util::addScript('polls', 'polls');

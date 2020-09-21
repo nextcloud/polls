@@ -1,6 +1,6 @@
-sudo: false
-dist: trusty
+dist: xenial
 language: php
+os: linux
 
 services:
   - mysql
@@ -9,6 +9,7 @@ services:
 php:
   - 7.2
   - 7.3
+  - 7.4
 
 addons:
   apt:
@@ -17,9 +18,9 @@ addons:
 
 env:
   global:
-    - CORE_BRANCH=stable17
+    - CORE_BRANCH=stable19
     - APP_NAME=polls
-  matrix:
+  jobs:
     - DB=mysql
     - DB=pgsql
     - DB=sqlite

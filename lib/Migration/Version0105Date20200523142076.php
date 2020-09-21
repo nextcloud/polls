@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -64,20 +63,20 @@ class Version0105Date20200523142076 extends SimpleMigrationStep {
 		if (!$schema->hasTable('polls_preferences')) {
 			$table = $schema->createTable('polls_preferences');
 
-			$table->addColumn('id', Type::INTEGER, [
+			$table->addColumn('id', 'integer', [
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('user_id', Type::STRING, [
+			$table->addColumn('user_id', 'string', [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('timestamp', Type::INTEGER, [
+			$table->addColumn('timestamp', 'integer', [
 				'length' => 11,
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('preferences', Type::TEXT, [
+			$table->addColumn('preferences', 'text', [
 				'notnull' => true,
 				'default' => '',
 			]);
