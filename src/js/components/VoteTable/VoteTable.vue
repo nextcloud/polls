@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<div class="vote-table" :class="[tableMode ? 'desktop' : 'mobile', { expired: expired }]">
+	<div class="vote-table" :class="[viewMode, { expired: expired }]">
 		<div class="vote-table__users fixed">
 			<UserItem v-for="(participant) in participants"
 				:key="participant.userId"
@@ -41,7 +41,7 @@
 				:option="option"
 				:class="{ 'confirmed' : option.confirmed }"
 				:poll-type="poll.type"
-				:table-mode="tableMode" />
+				:view-mode="viewMode" />
 		</transition-group>
 
 		<transition-group v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek"
@@ -133,9 +133,9 @@ export default {
 	mixins: [confirmOption],
 
 	props: {
-		tableMode: {
-			type: Boolean,
-			default: false,
+		viewMode: {
+			type: String,
+			default: 'desktop',
 		},
 		ranked: {
 			type: Boolean,

@@ -26,6 +26,14 @@
 			type="checkbox" class="checkbox">
 		<label for="calendarPeek">{{ t('polls', 'Use calendar lookup') }}</label>
 
+		<input id="defaultViewTextPoll" v-model="defaultViewTextPoll"
+			type="checkbox" class="checkbox">
+		<label for="defaultViewTextPoll">{{ t('polls', 'Text polls default to table view') }}</label>
+
+		<input id="defaultViewDatePoll" v-model="defaultViewDatePoll"
+			type="checkbox" class="checkbox">
+		<label for="defaultViewDatePoll">{{ t('polls', 'Date polls default to table view') }}</label>
+
 		<input id="experimental" v-model="experimental"
 			type="checkbox" class="checkbox">
 		<label for="experimental">{{ t('polls', 'Try experimental styles') }}</label>
@@ -55,11 +63,52 @@ import { mapState } from 'vuex'
 export default {
 	name: 'NavigationSettings',
 
+	data() {
+		return {
+			viewOptions: [
+				'desktop',
+				'mobile',
+			],
+		}
+	},
+
 	computed: {
 		...mapState({
 			settings: state => state.settings.user,
 		}),
 		// Add bindings
+		calendarPeek: {
+			get() {
+				return this.settings.calendarPeek
+			},
+			set(value) {
+				this.writeValue({ calendarPeek: value })
+			},
+		},
+		defaultViewTextPoll: {
+			get() {
+				return (this.settings.defaultViewTextPoll === 'mobile')
+			},
+			set(value) {
+				if (value) {
+					this.writeValue({ defaultViewTextPoll: 'mobile' })
+				} else {
+					this.writeValue({ defaultViewTextPoll: 'desktop' })
+				}
+			},
+		},
+		defaultViewDatePoll: {
+			get() {
+				return (this.settings.defaultViewDatePoll === 'mobile')
+			},
+			set(value) {
+				if (value) {
+					this.writeValue({ defaultViewDatePoll: 'mobile' })
+				} else {
+					this.writeValue({ defaultViewDatePoll: 'desktop' })
+				}
+			},
+		},
 		experimental: {
 			get() {
 				return this.settings.experimental
@@ -90,14 +139,6 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ glassyNavigation: value })
-			},
-		},
-		calendarPeek: {
-			get() {
-				return this.settings.calendarPeek
-			},
-			set(value) {
-				this.writeValue({ calendarPeek: value })
 			},
 		},
 		glassySidebar: {

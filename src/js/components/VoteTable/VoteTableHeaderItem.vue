@@ -23,12 +23,12 @@
 <template>
 	<div class="vote-table-header-item"
 		:class=" { winner: isWinner }">
-		<OptionItem :option="option" :display="tableMode ? 'dateBox' : 'textBox'" />
+		<OptionItem :option="option" :display="optionStyle" />
 		<Confirmation v-if="isConfirmed" :option="option" />
 		<Counter v-else :show-maybe="Boolean(poll.allowMaybe)"
 			:option="option"
-			:counter-style="tableMode ? 'iconStyle' : 'barStyle'"
-			:show-no="!tableMode" />
+			:counter-style="counterStyle"
+			:show-no="showNo" />
 	</div>
 </template>
 
@@ -52,9 +52,9 @@ export default {
 			type: Object,
 			default: undefined,
 		},
-		tableMode: {
-			type: Boolean,
-			default: false,
+		viewMode: {
+			type: String,
+			default: 'desktop',
 		},
 	},
 
@@ -69,6 +69,23 @@ export default {
 			confirmedOptions: 'poll/options/confirmed',
 		}),
 
+		optionStyle() {
+			if (this.viewMode === 'desktop') {
+				return 'dateBox'
+			} else {
+				return 'textBox'
+			}
+		},
+		counterStyle() {
+			if (this.viewMode === 'desktop') {
+				return 'iconStyle'
+			} else {
+				return 'barStyle'
+			}
+		},
+		showNo() {
+			return (this.viewMode === 'desktop')
+		},
 		isWinner() {
 			// highlight best option until poll is expired and
 			// at least one option is confirmed

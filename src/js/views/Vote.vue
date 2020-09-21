@@ -67,8 +67,8 @@
 			<PersonalLink v-if="share.userId" />
 		</div>
 
-		<div class="area__main">
-			<VoteTable v-show="options.length" :table-mode="tableMode" :ranked="ranked" />
+		<div class="area__main" :class="viewMode">
+			<VoteTable v-show="options.length" :view-mode="viewMode" :ranked="ranked" />
 			<div v-if="!options.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
 				<button v-if="acl.allowEdit" @click="openOptions">
@@ -127,8 +127,9 @@ export default {
 			voteSaved: false,
 			delay: 50,
 			isLoading: true,
-			tableMode: (window.innerWidth > 480),
 			ranked: false,
+			manualViewDatePoll: '',
+			manualViewTextPoll: '',
 		}
 	},
 
@@ -138,11 +139,46 @@ export default {
 			acl: state => state.poll.acl,
 			options: state => state.poll.options.list,
 			share: state => state.poll.share,
+			settings: state => state.settings,
 		}),
 
 		...mapGetters({
 			isExpired: 'poll/expired',
 		}),
+
+		viewTextPoll() {
+			if (this.manualViewTextPoll) {
+				return this.manualViewTextPoll
+			} else {
+				if (window.innerWidth > 480) {
+					return this.settings.user.defaultViewTextPoll
+				} else {
+					return 'mobile'
+				}
+			}
+		},
+
+		viewDatePoll() {
+			if (this.manualViewDatePoll) {
+				return this.manualViewDatePoll
+			} else {
+				if (window.innerWidth > 480) {
+					return this.settings.user.defaultViewDatePoll
+				} else {
+					return 'mobile'
+				}
+			}
+		},
+
+		viewMode() {
+			if (this.poll.type === 'textPoll') {
+				return this.viewTextPoll
+			} else if (this.poll.type === 'datePoll') {
+				return this.viewDatePoll
+			} else {
+				return 'desktop'
+			}
+		},
 
 		linkifyDescription() {
 			return linkifyStr(this.poll.description)
@@ -156,7 +192,7 @@ export default {
 			return moment.unix(this.poll.expire).format('LLLL')
 		},
 		viewCaption() {
-			if (this.tableMode) {
+			if (this.viewMode === 'desktop') {
 				return t('polls', 'Switch to mobile view')
 			} else {
 				return t('polls', 'Switch to desktop view')
@@ -195,7 +231,7 @@ export default {
 		},
 
 		toggleViewIcon() {
-			if (this.tableMode) {
+			if (this.viewMode === 'desktop') {
 				return 'icon-phone'
 			} else {
 				return 'icon-desktop'
@@ -235,6 +271,14 @@ export default {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
 
+		getNextViewMode() {
+			if (this.settings.viewModes.indexOf(this.viewMode) < 0) {
+				return this.settings.viewModes[1]
+			} else {
+				return this.settings.viewModes[(this.settings.viewModes.indexOf(this.viewMode) + 1) % this.settings.viewModes.length]
+			}
+		},
+
 		openConfiguration() {
 			emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
 		},
@@ -245,19 +289,34 @@ export default {
 
 		toggleView() {
 			emit('transitions-off', { delay: 500 })
-			this.tableMode = !this.tableMode
+			if (this.poll.type === 'datePoll') {
+				if (this.manualViewDatePoll) {
+					this.manualViewDatePoll = ''
+				} else {
+					this.manualViewDatePoll = this.getNextViewMode()
+				}
+			} else if (this.poll.type === 'textPoll') {
+				if (this.manualViewTextPoll) {
+					this.manualViewTextPoll = ''
+				} else {
+					this.manualViewTextPoll = this.getNextViewMode()
+				}
+			}
 		},
 
 		loadPoll() {
 			this.isLoading = true
+			emit('transitions-off')
 			this.$store
 				.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
 					this.isLoading = false
+					emit('transitions-off', 500)
 					window.document.title = this.windowTitle
 				})
 				.catch(() => {
 					this.isLoading = false
+					emit('transitions-off', 500)
 					this.$router.replace({ name: 'notfound' })
 				})
 		},
