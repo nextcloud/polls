@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.4 - release] - tbd (before 2020-10-03)
+ - adding missing translations
+ - release blocking fixes
+
+## [1.5.3 - RC3] - 2020-09-21
+ - Added setting for defining default view for
+   - text polls, defaults to mobile/list layout and
+   - date polls, defaults to desktop/table layout #744
+ - better UX for site users, which enter a poll via public link and could login #1096
+
 ## [1.5.2 - RC2] - 2020-09-15
  - fixing Translations
  - updated dependencies

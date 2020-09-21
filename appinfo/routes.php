@@ -49,13 +49,10 @@ return [
 		['name' => 'option#confirm', 'url' => '/option/{optionId}/confirm', 'verb' => 'PUT'],
 		['name' => 'option#sequence', 'url' => '/option/{optionId}/sequence', 'verb' => 'POST'],
 		['name' => 'option#findCalendarEvents', 'url' => '/option/{optionId}/events', 'verb' => 'GET'],
-		// ['name' => 'option#listByToken', 'url' => '/options/get/s/{token}',     'verb' => 'GET'],
 
 		['name' => 'vote#set', 'url' => '/vote/set', 'verb' => 'POST'],
 		['name' => 'vote#setByToken', 'url' => '/vote/set/s', 'verb' => 'POST'],
 		['name' => 'vote#delete', 'url' => '/votes/delete', 'verb' => 'POST'],
-		// ['name' => 'vote#get',        'url' => '/votes/get/{pollId}',  'verb' => 'GET'],
-		// ['name' => 'vote#getByToken', 'url' => '/votes/get/s/{token}', 'verb' => 'GET'],
 
 		['name' => 'share#add', 'url' => '/share/add', 'verb' => 'POST'],
 		['name' => 'share#get', 'url' => '/share/{token}', 'verb' => 'GET'],
@@ -70,11 +67,6 @@ return [
 
 		['name' => 'comment#add', 'url' => '/comment', 'verb' => 'POST'],
 		['name' => 'comment#delete', 'url' => '/comment/{commentId}', 'verb' => 'DELETE'],
-		// ['name' => 'comment#list',       'url' => '/comments/{pollId}',   'verb' => 'GET'],
-		// ['name' => 'comment#getByToken', 'url' => '/comments/s/{token}',  'verb' => 'GET'],
-
-		// ['name' => 'acl#getByToken', 'url' => '/acl/get/s/{token}', 'verb' => 'GET'],
-		// ['name' => 'acl#get',        'url' => '/acl/get/{id}',      'verb' => 'GET'],
 
 		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get', 'verb' => 'POST'],
 		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
