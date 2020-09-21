@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Migration;
 
-
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
