@@ -146,6 +146,7 @@ export default {
 	--color-polls-background-yes: #ebf5d6;
 	--color-polls-background-no: #ffede9;
 	--color-polls-background-maybe: #fcf7e1;
+	--icon-polls-back: url('./assets/back.svg');
 	--icon-polls-confirmed: url('./assets/confirmed.svg');
 	--icon-polls-unconfirmed: url('./assets/unconfirmed.svg');
 	--icon-polls-clone: url('./assets/clone.svg');
@@ -169,6 +170,10 @@ export default {
 
 .icon-polls {
 	background-image: var(--icon-polls);
+}
+
+.icon-polls-back {
+	background-image: var(--icon-polls-back);
 }
 
 .icon-polls-confirmed {
