@@ -58,6 +58,7 @@ OC.L10N.register(
     "Update poll" : "Uppdatera omröstning",
     "Create new poll" : "Skapa ny omröstning",
     "Title must not be empty!" : "Titeln får inte vara tom",
+    "Remove share" : "Ta bort delning",
     "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
     "No" : "Nej",
     "Yes" : "Ja",
