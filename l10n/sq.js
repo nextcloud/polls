@@ -6,6 +6,7 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "OK" : "OK",
     "Week" : "Javë",
+    "Back" : "Prapa",
     "Group" : "Grup",
     "Unknown user" : "Përdorues i panjohur",
     "Conflict" : "Përplasje",

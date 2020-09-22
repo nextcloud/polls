@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Diddymu",
     "OK" : "Iawn",
     "Week" : "Wythnos",
+    "Back" : "Nôl",
     "Group" : "Grŵp",
     "Title" : "Teitl",
     "Settings" : "Gosodiadau",

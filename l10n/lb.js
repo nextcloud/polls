@@ -4,6 +4,7 @@ OC.L10N.register(
     "Cancel" : "Ofbriechen",
     "OK" : "OK",
     "Week" : "Woch",
+    "Back" : "Zeréck",
     "Group" : "Grupp",
     "Delete comment" : "Kommentar läschen",
     "Title" : "Titel",

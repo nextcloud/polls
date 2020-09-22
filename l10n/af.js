@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Kanselleer",
     "OK" : "Goed",
     "Week" : "Week",
+    "Back" : "Terug",
     "Group" : "Groep",
     "Unknown user" : "Onbekende gebruiker",
     "New comment …" : "Nuwe kommentaar…",

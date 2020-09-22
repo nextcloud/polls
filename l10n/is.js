@@ -26,7 +26,7 @@ OC.L10N.register(
     "Link copied to clipboard" : "Tengill afritaður á klippispjald",
     "Error while copying link to clipboard" : "Villa við afritun tengils á klippispjald",
     "Enter your name" : "Settu inn nafnið þitt",
-    "You have an account? Log in here." : "Ert þú með aðgang? Skráðu þig inn hér.",
+    "Back" : "Til baka",
     "Error saving username" : "Villa við að vista notandanafn",
     "Group" : "Hópur",
     "Public share" : "Opinber sameign",

@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Cancel" : "Cancel",
     "OK" : "U redu",
+    "Back" : "Nazad",
     "Group" : "Group",
     "Conflict" : "Konflikt",
     "Title" : "Naslov",

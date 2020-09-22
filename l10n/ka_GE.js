@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "უარყოფა",
     "OK" : "კარგი",
     "Week" : "კვირა",
+    "Back" : "უკან",
     "Group" : "ჯგუფი",
     "Unknown user" : "ამოუცნობი მომხმარებელი",
     "Conflict" : "კონფლიქტი",

@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Atcelt",
     "OK" : "Labi",
     "Week" : "Nedēļa",
+    "Back" : "Atpakaļ",
     "Group" : "Grupa",
     "Unknown user" : "Nezināms lietotājs",
     "Conflict" : "Konflikts",

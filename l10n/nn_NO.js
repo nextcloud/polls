@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "OK" : "OK",
     "Week" : "Veke",
+    "Back" : "Tilbake",
     "Group" : "Gruppe",
     "New comment …" : "Ny kommentar...",
     "Delete comment" : "Slett kommentar",

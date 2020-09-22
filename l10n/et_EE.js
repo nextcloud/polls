@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "Loobu",
     "OK" : "OK",
     "Week" : "Nädal",
+    "Back" : "Tagasi",
     "Group" : "Grupp",
     "Unknown user" : "Tundmatu kasutaja",
     "Conflict" : "Konflikt",

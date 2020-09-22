@@ -29,7 +29,7 @@ OC.L10N.register(
     "Link copied to clipboard" : "Nuoroda nukopijuota į iškarpinę",
     "Error while copying link to clipboard" : "Klaida kopijuojant nuorodą į iškarpinę",
     "Enter your name" : "Įveskite savo vardą",
-    "You have an account? Log in here." : "Turite paskyrą? Prisijunkite čia.",
+    "Back" : "Atgal",
     "Error saving username" : "Klaida įrašant naudotojo vardą",
     "Group" : "Grupė",
     "Public share" : "Viešasis viešinys",

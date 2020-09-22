@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "الغاء",
     "OK" : "موافق",
     "Week" : "أسبوع",
+    "Back" : "العودة",
     "Group" : "الفريق",
     "Unknown user" : "مستخدم غير معروف",
     "Conflict" : "تعارُض",

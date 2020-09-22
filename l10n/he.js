@@ -36,7 +36,7 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "שגיאה בהעתקת קישור ללוח הגזירים",
     "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים","%n משתתפים"],
     "Enter your name" : "נא למלא את שמך",
-    "You have an account? Log in here." : "יש לך חשבון? נא להיכנס כאן.",
+    "Back" : "חזרה",
     "Error saving username" : "שגיאה בשמירת שם המשתמש",
     "Group" : "קבוצה",
     "Public share" : "שיתוף ציבורי",

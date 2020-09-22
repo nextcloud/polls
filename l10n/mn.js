@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "болиулах",
     "OK" : "ок",
     "Week" : "Долоо хоног",
+    "Back" : "буцах",
     "Group" : "Бүлэг",
     "Unknown user" : "  хэрэглэгч",
     "Conflict" : "Давхцал",

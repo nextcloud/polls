@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "취소",
     "OK" : "확인",
     "Week" : "주",
+    "Back" : "뒤로",
     "Group" : "그룹",
     "Unknown user" : "알 수 없는 사용자",
     "Conflict" : "충돌",

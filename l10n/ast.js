@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "Encaboxar",
     "OK" : "Aceutar",
     "Week" : "Selmana",
+    "Back" : "Atrás",
     "Group" : "Group",
     "Unknown user" : "Usuariu desconocíu",
     "Conflict" : "Conflictu",

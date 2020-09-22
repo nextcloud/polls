@@ -13,6 +13,7 @@ OC.L10N.register(
     "Week" : "Semajno",
     "Shift all date options" : "Movi ĉiujn datajn opciojn",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",
+    "Back" : "Antaŭen",
     "Group" : "Grupo",
     "Unknown user" : "Nekonata uzanto",
     "Conflict" : "Konflikto",

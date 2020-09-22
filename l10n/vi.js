@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Hủy bỏ",
     "OK" : "OK",
     "Week" : "Tuần",
+    "Back" : "Quay lại",
     "Group" : "N",
     "Unknown user" : "Người dùng không tồn tại",
     "Conflict" : "Xung đột",

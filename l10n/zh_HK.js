@@ -4,6 +4,7 @@ OC.L10N.register(
     "Cancel" : "取消",
     "OK" : "確定",
     "Week" : "星期",
+    "Back" : "返回",
     "Group" : "群組",
     "Title" : "標題",
     "Apply" : "套用",

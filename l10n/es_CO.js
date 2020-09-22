@@ -22,6 +22,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Semana",
     "No Participants until now" : "No hay participantes por ahora",
+    "Back" : "Atrás",
     "Group" : "Grupo",
     "Unknown user" : "Ususario desconocido",
     "Conflict" : "Conflicto",

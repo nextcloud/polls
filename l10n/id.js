@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Membatalkan",
     "OK" : "OK",
     "Week" : "Minggu",
+    "Back" : "Kembali",
     "Group" : "Grup",
     "Unknown user" : "Pengguna tidak dikenal",
     "Conflict" : "Konflik",

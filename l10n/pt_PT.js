@@ -6,6 +6,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Semana",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
+    "Back" : "Anterior",
     "Group" : "Grupo",
     "Unknown user" : "Utilizador desconhecido",
     "Conflict" : "Conflito",

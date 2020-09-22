@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "Откажи",
     "OK" : "Добро",
     "Week" : "Недела",
+    "Back" : "Назад",
     "Group" : "Група",
     "Unknown user" : "Непознат корисник",
     "Conflict" : "Конфликт",

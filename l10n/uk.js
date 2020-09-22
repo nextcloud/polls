@@ -21,6 +21,7 @@ OC.L10N.register(
     "Week" : "Тиждень",
     "No Participants until now" : "Поки що відсутні учасники",
     "_%n Participant_::_%n Participants_" : ["%n учасник","%n учасника","%n учасників","%n учасників"],
+    "Back" : "Назад",
     "Group" : "Група",
     "Public share" : "Спільний ресурс",
     "Unknown user" : "Невідомий користувач",

@@ -9,6 +9,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Uge",
     "Link copied to clipboard" : "Link kopieret til udklipsholder",
+    "Back" : "Tilbage",
     "Group" : "Gruppe",
     "Unknown user" : "Ukendt bruger",
     "Conflict" : "Konflikt",

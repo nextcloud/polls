@@ -17,6 +17,7 @@ OC.L10N.register(
     "Shift all date options" : "Skjut på alla datumalternativ",
     "Link copied to clipboard" : "Länken kopierades till urklipp",
     "Enter your name" : "Ange ditt namn",
+    "Back" : "Tillbaka",
     "Group" : "Grupp",
     "Unknown user" : "Okänd användare",
     "Conflict" : "Konflikt",
