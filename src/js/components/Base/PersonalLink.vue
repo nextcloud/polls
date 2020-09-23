@@ -25,7 +25,7 @@
 		<h2 class="title">
 			{{ t('polls', 'This is a public poll.') }}
 		</h2>
-		<p>{{ t('polls', 'The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments.') }}</p>
+		<p>{{ t('polls', 'The following link is your personal access to this poll. You can reenter this poll at any time, change your vote and leave comments.') }}</p>
 		<p>{{ t('polls', 'Your personal link to this poll: {linkURL}', { linkURL: personalLink} ) }}</p>
 		<ButtonDiv icon="icon-clippy" :title="t('polls','Copy this link to the clipboard')" @click="copyLink()" />
 		<ButtonDiv v-if="share.userEmail"
