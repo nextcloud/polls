@@ -5,6 +5,7 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "OK" : "OK",
     "Week" : "Semana",
+    "Back" : "Atrás",
     "Group" : "Grupo",
     "Unknown user" : "Ususario desconocido",
     "Conflict" : "Conflicto",
