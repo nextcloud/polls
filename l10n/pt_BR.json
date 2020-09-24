@@ -40,7 +40,6 @@
     "Error while copying link to clipboard" : "Erro ao copiar o link para a área de transferência",
     "_%n Participant_::_%n Participants_" : ["%n Participante","%n Participantes"],
     "This is a public poll." : "Esta é uma enquete pública.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "O link a seguir é o seu acesso pessoal a esta enquete. Você pode reentrar nesta enquete a qualquer momento, mudar seu voto e deixar comentários.",
     "Your personal link to this poll: {linkURL}" : "Seu link pessoal para esta enquete: {linkURL}",
     "Copy this link to the clipboard" : "Copiar link para a área de transferência",
     "Resend invitation mail to {emailAdress}" : "Reenviar convite para {emailAdress}",

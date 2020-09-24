@@ -42,7 +42,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Error en copiar l'enllaç al porta-retalls",
     "_%n Participant_::_%n Participants_" : ["%n Participant","%n Participants"],
     "This is a public poll." : "This is a public poll.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "El següent enllaç és el vostre accés personal a aquesta enquesta. Vostè pot tornar a donar a aquesta enquesta en qualsevol moment, canviar el seu vot i deixar comentaris.",
     "Your personal link to this poll: {linkURL}" : "El vostre enllaç personal a aquesta enquesta: {linkURL}",
     "Copy this link to the clipboard" : "Copia l'enllaç al porta-retalls",
     "Resend invitation mail to {emailAdress}" : "Torna a enviar el correu d'invitació a {emailAdress}",

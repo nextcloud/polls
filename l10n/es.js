@@ -42,7 +42,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Error al copiar el enlace al portapapeles",
     "_%n Participant_::_%n Participants_" : ["%n participante","%n participantes"],
     "This is a public poll." : "Esta es una votación pública.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "El enlace siguiente es tu acceso personal a esta votación. Puedes volver a entrar a esta encuesta en cualquier momento, cambiar tu voto y dejar comentarios.",
     "Your personal link to this poll: {linkURL}" : "Tu enlace personal a esta votación: {linkURL}",
     "Copy this link to the clipboard" : "Copiar este enlace al portapapeles",
     "Resend invitation mail to {emailAdress}" : "Volver a enviar el correo de invitación a {emailAddress}",

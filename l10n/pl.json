@@ -40,7 +40,6 @@
     "Error while copying link to clipboard" : "Błąd podczas kopiowania linku do schowka",
     "_%n Participant_::_%n Participants_" : ["%n uczestnik","%n uczestników","%n uczestników","%n uczestników"],
     "This is a public poll." : "To jest sonda publiczna.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "Poniższy link to Twój osobisty dostęp do tej sondy. W każdej chwili możesz ponownie wejść do niej, zmienić swój głos i zostawić komentarze.",
     "Your personal link to this poll: {linkURL}" : "Twój osobisty link do sondy: {linkURL}",
     "Copy this link to the clipboard" : "Kopiuj link do schowka",
     "Resend invitation mail to {emailAdress}" : "Wyślij ponownie e-mail z zaproszeniem na {emailAdress}",

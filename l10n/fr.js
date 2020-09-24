@@ -42,7 +42,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Erreur lors de la copie du lien dans le presse-papier",
     "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],
     "This is a public poll." : "Le sondage est public.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "Le lien suivant est votre accès personnel au sondage. Vous pouvez y accéder de nouveau à tout moment, changer votre vote et laisser des commentaires.",
     "Your personal link to this poll: {linkURL}" : "Votre lien personnel vers ce sondage : {linkURL}",
     "Copy this link to the clipboard" : "Copier ce lien dans le presse-papier",
     "Resend invitation mail to {emailAdress}" : "Renvoyer le mail d'invitation à {emailAdress}",

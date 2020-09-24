@@ -40,7 +40,6 @@
     "Error while copying link to clipboard" : "Fout bij kopiëren link naar klembord",
     "_%n Participant_::_%n Participants_" : ["%n deelnemer","%n deelnemers"],
     "This is a public poll." : "Dit is een publiek toegankelijke peiling",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "De onderstaande link is je persoonlijke toegang tot deze peiling. Je kan steeds terugkomen naar deze peiling, je stem wijzigen en commentaar achterlaten.",
     "Your personal link to this poll: {linkURL}" : "Je persoonlijke link naar deze peiling: {linkURL}",
     "Copy this link to the clipboard" : "Kopiëer deze link naar het klembord",
     "Resend invitation mail to {emailAdress}" : "Verzend de uitnodigingsmail opnieuw naar {emailAdress}",

@@ -42,7 +42,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Bağlantı panoya kopyalanırken sorun çıktı",
     "_%n Participant_::_%n Participants_" : ["%n Katılımcı","%n Katılımcı"],
     "This is a public poll." : "Bu anket herkese açık.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "Aşağıda bu ankete erişebileceğiniz kişisel bağlantıyı görebilirsiniz. Bu anketi istediğiniz zaman yeniden açabilir, oyunuzu değiştirebilir ve yorum yapabilirsiniz.",
     "Your personal link to this poll: {linkURL}" : "Bu ankete erişebileceğiniz kişisel bağlantınız: {linkURL}",
     "Copy this link to the clipboard" : "Bu bağlantıyı panoya kopyala",
     "Resend invitation mail to {emailAdress}" : "Çağrı e-postasını {emailAdress} adresine yeniden gönder",

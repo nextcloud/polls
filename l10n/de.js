@@ -42,7 +42,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Fehler beim Kopieren des Links in die Zwischenablage",
     "_%n Participant_::_%n Participants_" : ["%n Teilnehmer","%n Teilnehmer"],
     "This is a public poll." : "Dies ist eine öffentliche Umfrage.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "Der nachfolgende Link ist Ihr persönlicher Zugriff auf diese Umfrage. Sie können diese Umfrage jederzeit erneut aufrufen, Ihre Stimme ändern und Kommentare hinterlassen.",
     "Your personal link to this poll: {linkURL}" : "Dein persönlicher Link zu dieser Umfrage: {linkURL}",
     "Copy this link to the clipboard" : "Diesen Link in die Zwischenablage kopieren",
     "Resend invitation mail to {emailAdress}" : "Sende die Einladungs-E-Mail erneut an {emailAdress}",

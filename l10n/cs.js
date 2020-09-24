@@ -42,7 +42,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Chyba při kopírování odkazu do schránky",
     "_%n Participant_::_%n Participants_" : ["%n účastník","%n účastníci","%n účastníků","%n účastníci"],
     "This is a public poll." : "Toto je veřejná anketa.",
-    "The following link is your personal access to this poll. You can reenter this this poll at any time, change your vote and leave comments." : "Následující odkaz je vaším osobním přístupem do této ankety. Můžete se sem kdykoli znovu vrátit, změnit své hlasování a zanechat komentáře.",
     "Your personal link to this poll: {linkURL}" : "Váš osobní odkaz na tuto anketu: {linkURL}",
     "Copy this link to the clipboard" : "Zkopírovat tento odkaz do schránky",
     "Resend invitation mail to {emailAdress}" : "Znovu zaslat e-mail s pozvánkou na {emailAdress}",
