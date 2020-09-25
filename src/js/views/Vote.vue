@@ -331,7 +331,7 @@ export default {
 
 .header-actions {
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 }
 
 .icon.icon-settings.active {
