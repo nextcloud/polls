@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Cron;
 
-use OCP\BackgroundJob\TimedJob;
+use OC\BackgroundJob\TimedJob;
 use OCA\Polls\Service\MailService;
 
 class NotificationCron extends TimedJob {
