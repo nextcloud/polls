@@ -40,6 +40,7 @@
     "Error while copying link to clipboard" : "Errore durante la copia del collegamento negli appunti",
     "_%n Participant_::_%n Participants_" : ["%n partecipante","%n partecipanti"],
     "This is a public poll." : "Questo è un sondaggio pubblico.",
+    "The following link is your personal access to this poll. You can reenter this poll at any time, change your vote and leave comments." : "Il seguente collegamento è il tuo accesso personale a questo sondaggio. Puoi accedere a questo sondaggio in qualsiasi momento, modificare il tuo voto e lasciare commenti.",
     "Your personal link to this poll: {linkURL}" : "Il tuo collegamento personale a questo sondaggio: {linkURL}",
     "Copy this link to the clipboard" : "Copia questo collegamento negli appunti",
     "Resend invitation mail to {emailAdress}" : "Nuovo invio del messaggio di invito a {emailAdress}",
