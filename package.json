@@ -45,7 +45,6 @@
 		"core-js": "^3.6.5",
 		"linkifyjs": "^2.1.9",
 		"lodash": "^4.17.20",
-		"moment": "^2.28.0",
 		"v-click-outside": "^3.1.2",
 		"vue": "^2.6.12",
 		"vue-clipboard2": "^0.3.1",
