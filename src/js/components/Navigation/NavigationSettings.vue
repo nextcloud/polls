@@ -28,11 +28,11 @@
 
 		<input id="defaultViewTextPoll" v-model="defaultViewTextPoll"
 			type="checkbox" class="checkbox">
-		<label for="defaultViewTextPoll">{{ t('polls', 'Text polls default to table view') }}</label>
+		<label for="defaultViewTextPoll">{{ t('polls', 'Text polls default to list view') }}</label>
 
 		<input id="defaultViewDatePoll" v-model="defaultViewDatePoll"
 			type="checkbox" class="checkbox">
-		<label for="defaultViewDatePoll">{{ t('polls', 'Date polls default to table view') }}</label>
+		<label for="defaultViewDatePoll">{{ t('polls', 'Date polls default to list view') }}</label>
 
 		<input id="experimental" v-model="experimental"
 			type="checkbox" class="checkbox">
