@@ -30,9 +30,12 @@ use OCA\Polls\Exceptions\InvalidEmailAddress;
 
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use OCA\Polls\Service\CirclesService;
+use OCA\Polls\Service\ContactsService;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Model\User;
 
 class SystemService {
 
@@ -41,6 +44,12 @@ class SystemService {
 
 	/** @var IUserManager */
 	private $userManager;
+
+	/** @var CirclesService */
+	private $circlesService;
+
+	/** @var ContactsService */
+	private $contactsService;
 
 	/** @var VoteMapper */
 	private $voteMapper;
@@ -52,6 +61,8 @@ class SystemService {
 	 * SystemService constructor.
 	 * @param IGroupManager $groupManager
 	 * @param IUserManager $userManager
+	 * @param CirclesService $circlesService,
+	 * @param ContactsService $contactsService,
 	 * @param VoteMapper $voteMapper
 	 * @param ShareMapper $shareMapper
 	 */
@@ -59,11 +70,15 @@ class SystemService {
 		IGroupManager $groupManager,
 		IUserManager $userManager,
 		VoteMapper $voteMapper,
+		CirclesService $circlesService,
+		ContactsService $contactsService,
 		ShareMapper $shareMapper
 	) {
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 		$this->voteMapper = $voteMapper;
+		$this->circlesService = $circlesService;
+		$this->contactsService = $contactsService;
 		$this->shareMapper = $shareMapper;
 	}
 
@@ -83,26 +98,13 @@ class SystemService {
 	 * @NoAdminRequired
 	 * @param string $query
 	 * @param array $skip - usernames to skip in return array
-	 * @return Array
+	 * @return User[]
 	 */
 	public function getSiteUsers($query = '', $skip = []) {
 		$users = [];
 		foreach ($this->userManager->searchDisplayName($query) as $user) {
 			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
-				$users[] = [
-					'id' => $user->getUID(),
-					'user' => $user->getUID(),
-					'displayName' => $user->getDisplayName(),
-					'organisation' => '',
-					'emailAddress' => $user->getEMailAddress(),
-					'desc' => 'User',
-					'type' => 'user',
-					'icon' => 'icon-user',
-					'avatarURL' => '',
-					'avatar' => '',
-					'lastLogin' => $user->getLastLogin(),
-					'cloudId' => $user->getCloudId()
-				];
+				$users[] = new User(User::TYPE_USER, $user->getUID());
 			}
 		}
 		return $users;
@@ -113,158 +115,17 @@ class SystemService {
 	 * @NoAdminRequired
 	 * @param string $query
 	 * @param array $skip - group names to skip in return array
-	 * @return Array
+	 * @return User[]
 	 */
 	public function getSiteGroups($query = '', $skip = []) {
 		$groups = [];
 		foreach ($this->groupManager->search($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
-				try {
-					// seems to work only from NC19 on
-					$displayName = $group->getDisplayName();
-				} catch (\Exception $e) {
-					// fallback
-					$displayName = $group->getGID();
-				}
-
-				$groups[] = [
-					'id' => $group->getGID(),
-					'user' => $group->getGID(),
-					'organisation' => '',
-					'displayName' => $displayName,
-					'emailAddress' => '',
-					'desc' => 'Group',
-					'type' => 'group',
-					'icon' => 'icon-group',
-					'avatarURL' => '',
-					'avatar' => '',
-					'lastLogin' => '',
-					'cloudId' => ''
-
-				];
+				$groups[] = new User(User::TYPE_GROUP, $group->getGID());
 			}
 		}
 		return $groups;
 	}
-
-	/**
-	 * Get a list of contacts
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return Array
-	 */
-	public function getContacts($query = '') {
-		$contacts = [];
-		foreach (\OC::$server->getContactsManager()->search($query, ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) as $contact) {
-			if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
-				$emailAdresses = $contact['EMAIL'];
-
-				if (!is_array($emailAdresses)) {
-					$emailAdresses = [$emailAdresses];
-				} else {
-					// take the first eMail address for now
-					$emailAdresses = [$emailAdresses[0]];
-				}
-
-				foreach ($emailAdresses as $emailAddress) {
-					$contacts[] = [
-						'id' => $contact['UID'],
-						'user' => $contact['FN'],
-						'displayName' => $contact['FN'],
-						'organisation' => isset($contact['ORG']) ? $contact['ORG'] : '',
-						'emailAddress' => $emailAddress,
-						'desc' => 'Contact',
-						'type' => 'contact',
-						'icon' => 'icon-mail',
-						'avatarURL' => '',
-						'avatar' => '',
-						'lastLogin' => '',
-						'cloudId' => '',
-					];
-				}
-			}
-		}
-		return $contacts;
-	}
-
-	/**
-	 * Get a list of contacts
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return Array
-	 */
-	public function getContactsGroupMembers($query = '') {
-		$contacts = [];
-		foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
-			if (
-				   !array_key_exists('isLocalSystemBook', $contact)
-				&& array_key_exists('EMAIL', $contact)
-				&& in_array($query, explode(',', $contact['CATEGORIES']))
-			) {
-				$emailAdresses = $contact['EMAIL'];
-
-				if (!is_array($emailAdresses)) {
-					$emailAdresses = [$emailAdresses];
-				} else {
-					// take the first eMail address for now
-					$emailAdresses = [$emailAdresses[0]];
-				}
-
-				foreach ($emailAdresses as $emailAddress) {
-					$contacts[] = [
-						'id' => $contact['UID'],
-						'user' => $contact['FN'],
-						'displayName' => $contact['FN'],
-						'organisation' => isset($contact['ORG']) ? $contact['ORG'] : '',
-						'emailAddress' => $emailAddress,
-						'desc' => 'Contact',
-						'type' => 'contact',
-						'icon' => 'icon-mail',
-						'avatarURL' => '',
-						'avatar' => '',
-						'lastLogin' => '',
-						'cloudId' => '',
-					];
-				}
-			}
-		}
-		return $contacts;
-	}
-
-	/**
-	 * Get a list of contact groups
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return Array
-	 */
-	public function getContactsGroups($query = '') {
-		$contactGroups = [];
-		$foundContacts = [];
-
-		foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
-			foreach (explode(',', $contact['CATEGORIES']) as $contactGroup) {
-				if (strpos($contactGroup, $query) === 0 && !in_array($contactGroup, $foundContacts)) {
-					$foundContacts[] = $contactGroup;
-					$contactGroups[] = [
-						'id' => 'contactgroup_' +$contactGroup,
-						'user' => $contactGroup,
-						'displayName' => $contactGroup,
-						'organisation' => '',
-						'emailAddress' => '',
-						'desc' => 'Contact Group',
-						'type' => 'contactGroup',
-						'icon' => 'icon-group',
-						'avatarURL' => '',
-						'avatar' => '',
-						'lastLogin' => '',
-						'cloudId' => '',
-					];
-				};
-			}
-		}
-		return $contactGroups;
-	}
-
 
 	/**
 	 * Get a combined list of NC users, groups and contacts
@@ -289,40 +150,27 @@ class SystemService {
 		$skipUsers = []
 	) {
 		$list = [];
+		if ($query !== '') {
+			if ($getMail && $this->isValidEmail($query)) {
+				$list[] = new User(User::TYPE_EMAIL, $query);
+			}
 
-		if ($getMail && $this->isValidEmail($query)) {
-			$list[] = [
-				'id' => '',
-				'user' => '',
-				'organisation' => '',
-				'displayName' => '',
-				'emailAddress' => $query,
-				'desc' => $query,
-				'type' => 'email',
-				'icon' => 'icon-mail',
-				'avatarURL' => '',
-				'avatar' => '',
-				'lastLogin' => '',
-				'cloudId' => ''
+			if ($getGroups) {
+				$list = array_merge($list, $this->getSiteGroups($query, $skipGroups));
+			}
 
-			];
-		}
-		if ($getGroups) {
-			$list = array_merge($list, $this->getSiteGroups($query, $skipGroups));
-		}
-
-		if ($getUsers) {
-			$list = array_merge($list, $this->getSiteUsers($query, $skipUsers));
-		}
-
-		if (\OC::$server->getContactsManager()->isEnabled()) {
-			if ($getContacts) {
-				$list = array_merge($list, $this->getContacts($query));
+			if ($getUsers) {
+				$list = array_merge($list, $this->getSiteUsers($query, $skipUsers));
 			}
 
 			if ($getContacts) {
-				$list = array_merge($list, $this->getContactsGroups($query));
+				$list = array_merge($list, $this->contactsService->getContacts($query));
 			}
+
+			if ($getContacts) {
+				$list = array_merge($list, $this->contactsService->getContactsGroups($query));
+			}
+			$list = array_merge($list, $this->circlesService->getCircles($query));
 		}
 
 		return $list;
@@ -355,6 +203,7 @@ class SystemService {
 	 * @throws InvalidUsernameException
 	 */
 	public function validatePublicUsername($pollId, $userName, $token) {
+		$userName = strtolower(trim($userName));
 
 		// return forbidden, if $pollId does not match the share's pollId, force int compare
 		if (intval($this->shareMapper->findByToken($token)->getPollId()) !== intVal($pollId)) {
@@ -362,68 +211,55 @@ class SystemService {
 		}
 
 		// return forbidden, if the length of the userame is lower than 3 characters
-		if (strlen(trim($userName)) < 3) {
+		if (strlen($userName) < 3) {
 			return new TooShortException('Username must have at least 3 characters');
 		}
-
 		$list = [];
 
 		// get all groups
-		$groups = $this->groupManager->search('');
-		foreach ($groups as $group) {
-			$list[] = [
-				'id' => $group->getGID(),
-				'user' => $group->getGID(),
-				'type' => 'group',
-				'displayName' => $group->getGID(),
-			];
+		foreach ($this->getSiteGroups() as $user) {
+			if (   $userName === strtolower(trim($user->getUserId()))
+				|| $userName === strtolower(trim($user->getDisplayName()))) {
+				throw new InvalidUsernameException;
+			}
+			$list[] = $user;
 		}
 
 		// get all users
-		$users = $this->userManager->searchDisplayName('');
-		foreach ($users as $user) {
-			$list[] = [
-				'id' => $user->getUID(),
-				'user' => $user->getUID(),
-				'type' => 'user',
-				'displayName' => $user->getDisplayName(),
-			];
+		foreach ($this->getSiteUsers() as $user) {
+			if (   $userName === strtolower(trim($user->getUserId()))
+				|| $userName === strtolower(trim($user->getDisplayName()))) {
+				throw new InvalidUsernameException;
+			}
+			$list[] = $user;
 		}
 
 		// get all participants
-		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
-		foreach ($votes as $vote) {
+		foreach ($this->voteMapper->findParticipantsByPoll($pollId) as $vote) {
 			if ($vote->getUserId() !== '' && $vote->getUserId() !== null) {
-				$list[] = [
-					'id' => $vote->getUserId(),
-					'user' => $vote->getUserId(),
-					'type' => 'participant',
-					'displayName' => $vote->getUserId(),
-				];
+				$list[] = new User(User::TYPE_USER, $vote->getUserId());
+				if (   $userName === strtolower(trim(end($list)->getUserId()))
+					|| $userName === strtolower(trim(end($list)->getDisplayName()))) {
+					throw new InvalidUsernameException;
+				}
 			}
 		}
 
 		// get all shares for this poll
-		$shares = $this->shareMapper->findByPoll($pollId);
-		foreach ($shares as $share) {
-			if ($share->getUserId() !== '' && $share->getUserId() !== null) {
-				$list[] = [
-					'id' => $share->getUserId(),
-					'user' => $share->getUserId(),
-					'type' => 'share',
-					'displayName' => $share->getUserId(),
-				];
+		foreach ($this->shareMapper->findByPoll($pollId) as $share) {
+			if (   $share->getUserId() !== ''
+				&& $share->getUserId() !== null
+			    && $share->getType() !== User::TYPE_CIRCLE) {
+				$user = new User($share->getType(), $share->getUserId());
+				\OC::$server->getLogger()->alert(json_encode($user));
+				if (   $userName === strtolower(trim($user->getUserId()))
+					|| $userName === strtolower(trim($share->getDisplayName()))
+					|| $userName === strtolower(trim($user->getDisplayName()))) {
+					throw new InvalidUsernameException;
+				}
+				$list[] = new User($share->getType(), $share->getUserId());
 			}
 		}
-
-		// check if the username is contained inside the generated list
-		// return forbidden, if list contains requested username
-		foreach ($list as $element) {
-			if (strtolower(trim($userName)) === strtolower(trim($element['id'])) || strtolower(trim($userName)) === strtolower(trim($element['displayName']))) {
-				throw new InvalidUsernameException;
-			}
-		}
-
 		// return true, if username is allowed
 		return true;
 	}

@@ -26,11 +26,15 @@ namespace OCA\Polls\Controller;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCA\Polls\Service\ContactsService;
 use OCA\Polls\Service\SystemService;
 
 use OCP\IRequest;
 
 class SystemController extends Controller {
+
+	/** @var ContactsService */
+	private $contactsService;
 
 	/** @var SystemService */
 	private $systemService;
@@ -40,59 +44,19 @@ class SystemController extends Controller {
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param SystemService $systemService
+	 * @param ContactsService $contactsService
 	 */
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ContactsService $contactsService,
 		SystemService $systemService
 	) {
 		parent::__construct($appName, $request);
+		$this->contactsService = $contactsService;
 		$this->systemService = $systemService;
 	}
-
-	/**
-	 * Get a list of users
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param array $skipUsers - usernames to skip in return array
-	 * @return DataResponse
-	 */
-	public function getSiteUsers($query = '', $skipUsers = []) {
-		return new DataResponse(['users' => $this->systemService->getSiteUsers($query, $skipUsers)], Http::STATUS_OK);
-	}
-
-	/**
-	 * Get a list of user groups
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param array $skipGroups - group names to skip in return array
-	 * @return DataResponse
-	 */
-	public function getSiteGroups($query = '', $skipGroups = []) {
-		return new DataResponse(['groups' => $this->systemService->getSiteGroups($query, $skipGroups)], Http::STATUS_OK);
-	}
-
-	/**
-	 * Get a list of contacts
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return DataResponse
-	 */
-	public function getContacts($query = '') {
-		return new DataResponse(['contacts' => $this->systemService->getContacts($query)], Http::STATUS_OK);
-	}
-
-	/**
-	 * Get a list of contact groups
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return DataResponse
-	 */
-	public function getContactsGroups($query = '') {
-		return new DataResponse(['contactGroups' => $this->systemService->getContactsGroups($query)], Http::STATUS_OK);
-	}
-
 
 	/**
 	 * Get a combined list of NC users, groups and contacts

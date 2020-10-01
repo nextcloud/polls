@@ -293,7 +293,7 @@ class OptionService {
 			throw new NotAuthorizedException;
 		}
 
-		if ($this->poll->getType() === 'datePoll') {
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			throw new BadRequestException("Not allowed in date polls");
 		}
 
@@ -327,7 +327,7 @@ class OptionService {
 			throw new NotAuthorizedException;
 		}
 
-		if ($this->poll->getType() === 'datePoll') {
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			throw new BadRequestException("Not allowed in date polls");
 		}
 
@@ -370,7 +370,7 @@ class OptionService {
 	 * @throws BadRequestException
 	 */
 	private function setOption($timestamp = 0, $pollOptionText = '', $order = 0) {
-		if ($this->poll->getType() === 'datePoll') {
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			if ($timestamp) {
 				$this->option->setTimestamp($timestamp);
 				$this->option->setOrder($timestamp);
@@ -378,7 +378,7 @@ class OptionService {
 			} else {
 				throw new BadRequestException("Date poll must have a timestamp");
 			}
-		} elseif ($this->poll->getType() === 'textPoll') {
+		} elseif ($this->poll->getType() === Poll::TYPE_TEXT) {
 			if ($pollOptionText) {
 				$this->option->setPollOptionText($pollOptionText);
 			} else {
