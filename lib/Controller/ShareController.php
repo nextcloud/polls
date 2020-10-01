@@ -35,17 +35,26 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Service\ShareService;
+use OCA\Polls\DB\Share;
+use OCA\Polls\Service\CirclesService;
+use OCA\Polls\Service\ContactsService;
 use OCA\Polls\Service\MailService;
+use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
 
 class ShareController extends Controller {
 
-	/** @var ShareService */
-	private $shareService;
+	/** @var CirclesService */
+	private $circlesService;
+
+	/** @var ContactsService */
+	private $contactsService;
 
 	/** @var MailService */
 	private $mailService;
+
+	/** @var ShareService */
+	private $shareService;
 
 	/** @var SystemService */
 	private $systemService;
@@ -54,6 +63,8 @@ class ShareController extends Controller {
 	 * ShareController constructor.
 	 * @param string $appName
 	 * @param IRequest $request
+	 * @param CirclesService $circlesService
+	 * @param ContactsService $contactsService
 	 * @param MailService $mailService
 	 * @param ShareService $shareService
 	 * @param SystemService $systemService
@@ -61,13 +72,17 @@ class ShareController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		CirclesService $circlesService,
+		ContactsService $contactsService,
 		MailService $mailService,
 		ShareService $shareService,
 		SystemService $systemService
 	) {
 		parent::__construct($appName, $request);
-		$this->shareService = $shareService;
+		$this->circlesService = $circlesService;
+		$this->contactsService = $contactsService;
 		$this->mailService = $mailService;
+		$this->shareService = $shareService;
 		$this->systemService = $systemService;
 	}
 
@@ -81,9 +96,9 @@ class ShareController extends Controller {
 	 * @param string $userEmail
 	 * @return DataResponse
 	 */
-	public function add($pollId, $type, $userId = '', $userEmail = '') {
+	public function add($pollId, $type, $userId = '', $emailAddress = '') {
 		try {
-			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $userEmail)], Http::STATUS_CREATED);
+			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $emailAddress)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (\Exception $e) {
@@ -94,11 +109,7 @@ class ShareController extends Controller {
 	/**
 	 * Get share
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @param string $userEmail
+	 * @param string $token
 	 * @return DataResponse
 	 */
 	public function get($token) {
@@ -191,17 +202,24 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * resolve Contact groupe to individual shares
+	 * resolve contact group to individual shares
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function resolveContactGroup($token) {
+	public function resolveGroup($token) {
 		$shares = [];
 		try {
 			$share = $this->shareService->get($token);
-			foreach ($this->systemService->getContactsGroupMembers($share->getUserId()) as $member) {
-				$shares[] = $this->shareService->add($share->getpollId(), 'contact', $member['user'], $member['emailAddress']);
+			if ($share->getType() === Share::TYPE_CIRCLE) {
+				foreach ($this->circlesService->getCircleMembers($share->getUserId()) as $user) {
+					\OC::$server->getLogger()->alert(json_encode($user));
+					$shares[] = $this->shareService->add($share->getPollId(), $user->getType(), $user->getUserId());
+				}
+			} elseif ($share->getType() === Share::TYPE_CONTACTGROUP) {
+				foreach ($this->contactsService->getContactsGroupMembers($share->getUserId()) as $member) {
+					$shares[] = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $member['user'], $member['emailAddress']);
+				}
 			}
 
 			return new DataResponse(['shares' => $shares], Http::STATUS_OK);

@@ -27,6 +27,7 @@ use JsonSerializable;
 
 use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
+use OCA\Polls\Model\User;
 
 /**
  * @method string getId()
@@ -46,6 +47,15 @@ use OCP\AppFramework\Db\Entity;
  */
 class Share extends Entity implements JsonSerializable {
 
+	const TYPE_USER = User::TYPE_USER;
+	const TYPE_EMAIL = User::TYPE_EMAIL;
+	const TYPE_CIRCLE = User::TYPE_CIRCLE;
+	const TYPE_GROUP = User::TYPE_GROUP;
+	const TYPE_CONTACTGROUP = User::TYPE_CONTACTGROUP;
+	const TYPE_CONTACT = User::TYPE_CONTACT;
+	const TYPE_PUBLIC = 'public';
+	const TYPE_EXTERNAL = 'external';
+
 	/** @var string $token */
 	protected $token;
 
@@ -64,6 +74,9 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $invitationSent */
 	protected $invitationSent;
 
+	/** @var string $displayName */
+	protected $displayName;
+
 	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
@@ -79,11 +92,14 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	private function getDisplayName() {
-		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+		if ($this->type === self::TYPE_EMAIL && !$this->userId) {
+			$user = new User($this->type, $this->userEmail, $this->userEmail, $this->displayName);
+		} elseif ($this->type === self::TYPE_CONTACT && !$this->userId) {
+			$user = new User($this->type, $this->userId, $this->userEmail, $this->displayName);
 		} else {
-			return $this->userId;
+			$user = new User($this->type, $this->userId);
 		}
+		return $user->getDisplayName();
 	}
 
 	private function externalUser() {

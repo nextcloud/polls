@@ -59,7 +59,7 @@ return [
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#delete', 'url' => '/share/delete/{token}', 'verb' => 'DELETE'],
 		['name' => 'share#sendInvitation', 'url' => '/share/send/{token}', 'verb' => 'POST'],
-		['name' => 'share#resolveContactGroup', 'url' => '/share/resolveContactGroup/{token}', 'verb' => 'POST'],
+		['name' => 'share#resolveGroup', 'url' => '/share/resolveGroup/{token}', 'verb' => 'GET'],
 
 		['name' => 'subscription#get', 'url' => '/subscription/{pollId}', 'verb' => 'GET', 'postfix' => 'auth'],
 		['name' => 'subscription#get', 'url' => '/subscription/s/{token}', 'verb' => 'GET', 'postfix' => 'public'],
@@ -71,6 +71,12 @@ return [
 		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get', 'verb' => 'POST'],
 		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'system#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
+
+		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
+		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],
+
+
+		['name' => 'integrations#get_circle_display_name', 'url' => '/circle/{circleId}/name', 'verb' => 'GET'],
 
 		// REST-API calls
 		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],
@@ -107,9 +113,5 @@ return [
 		['name' => 'comment_api#add', 'url' => '/api/v1.0/comment', 'verb' => 'POST'],
 		['name' => 'comment_api#delete', 'url' => '/api/v1.0/comment/{commentId}', 'verb' => 'DELETE'],
 
-		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
-		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],
-		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get', 'verb' => 'POST'],
-		['name' => 'system#validate_public_username', 'url' => '/check/username', 'verb' => 'POST']
 	]
 ];
