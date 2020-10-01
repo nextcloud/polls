@@ -106,8 +106,6 @@ OC.L10N.register(
     "Error cloning poll." : "Errorea inkesta klonatzean.",
     "Error deleting poll." : "Errorea inkesta ezabatzean.",
     "Use calendar lookup" : "Erabili egutegi bilaketa-ikuspegia",
-    "Text polls default to table view" : "Modu lehenetsian, testu inkestak mahai ikuspegian",
-    "Date polls default to table view" : "Modu lehenetsian, data inkestak mahai ikuspegian",
     "Try experimental styles" : "Probatu estilo esperimentalak",
     "Use background image" : "Erabili atzeko planoko irudia",
     "Glassy navigation" : "Nabigazio gardena",

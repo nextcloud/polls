@@ -104,8 +104,6 @@
     "Error cloning poll." : "Anket kopyalanırken sorun çıktı.",
     "Error deleting poll." : "Anket silinirken sorun çıktı.",
     "Use calendar lookup" : "Takvim taranabilsin",
-    "Text polls default to table view" : "Metin anketleri varsayılan olarak tablo görünümünde",
-    "Date polls default to table view" : "Tarih anketleri varsayılan olarak tablo görünümünde",
     "Try experimental styles" : "Deneysel biçemler kullanılsın",
     "Use background image" : "Arka plan görseli kullanılsın",
     "Glassy navigation" : "Glassy gezinme",

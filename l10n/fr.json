@@ -104,8 +104,6 @@
     "Error cloning poll." : "Erreur de duplication du sondage.",
     "Error deleting poll." : "Erreur de suppression du sondage.",
     "Use calendar lookup" : "Utiliser la recherche agenda",
-    "Text polls default to table view" : "Les sondages de texte sont par défaut en vue tableau",
-    "Date polls default to table view" : "Les sondages de date sont affichés par défaut en vue tableau",
     "Try experimental styles" : "Essayer les styles expérimentaux",
     "Use background image" : "Utiliser une image en arrière-plan",
     "Glassy navigation" : "Navigation vitreuse",

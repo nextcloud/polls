@@ -106,8 +106,6 @@ OC.L10N.register(
     "Error cloning poll." : "Błąd podczas klonowania sondy.",
     "Error deleting poll." : "Błąd podczas usuwania sondy.",
     "Use calendar lookup" : "Użyj wyszukiwania kalendarza",
-    "Text polls default to table view" : "Sondy tekstowe są domyślnie wyświetlane w widoku tabeli",
-    "Date polls default to table view" : "Daty sond są domyślnie wyświetlane w widoku tabeli",
     "Try experimental styles" : "Wypróbuj eksperymentalne style",
     "Use background image" : "Użyj obrazu tła",
     "Glassy navigation" : "Szklista nawigacja",

@@ -106,8 +106,6 @@ OC.L10N.register(
     "Error cloning poll." : "Chyba při klonování ankety.",
     "Error deleting poll." : "Chyba při mazání ankety.",
     "Use calendar lookup" : "Použít vyhledání v kalendáři",
-    "Text polls default to table view" : "Textové ankety ve výchozím v tabulkovém pohledu",
-    "Date polls default to table view" : "Datumové ankety ve výchozím stavu v tabulkovém pohledu",
     "Try experimental styles" : "Vyzkoušet experimentální styly",
     "Use background image" : "Použít obrázek na pozadí",
     "Glassy navigation" : "Průhledný navigační panel",

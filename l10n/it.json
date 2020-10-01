@@ -104,8 +104,6 @@
     "Error cloning poll." : "Errore durante la clonazione del sondaggio.",
     "Error deleting poll." : "Errore durante l'eliminazione del sondaggio.",
     "Use calendar lookup" : "Usa la ricerca del calendario",
-    "Text polls default to table view" : "In modo predefinito, i sondaggi di testo sono visualizzati in tabella",
-    "Date polls default to table view" : "In modo predefinito, i sondaggi di date sono visualizzati in tabella",
     "Try experimental styles" : "Prova gli stili sperimentali",
     "Use background image" : "Usa immagini di sfondo",
     "Glassy navigation" : "Navigazione trasparente",
