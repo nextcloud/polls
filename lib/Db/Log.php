@@ -45,15 +45,14 @@ use OCP\AppFramework\Db\Entity;
  * @method void setMessage(string $value)
  */
 class Log extends Entity implements JsonSerializable {
-
-	const MSG_ID_ADDPOLL = 'addPoll';
-	const MSG_ID_UPDATEPOLL = 'updatePoll';
-	const MSG_ID_DELETEPOLL = 'deletePoll';
-	const MSG_ID_RESTOREPOLL = 'restorePoll';
-	const MSG_ID_EXPIREPOLL = 'expirePoll';
-	const MSG_ID_ADDOPTION = 'addOption';
-	const MSG_ID_DELETEOPTION = 'deleteOption';
-	const MSG_ID_SETVOTE = 'setVote';
+	public const MSG_ID_ADDPOLL = 'addPoll';
+	public const MSG_ID_UPDATEPOLL = 'updatePoll';
+	public const MSG_ID_DELETEPOLL = 'deletePoll';
+	public const MSG_ID_RESTOREPOLL = 'restorePoll';
+	public const MSG_ID_EXPIREPOLL = 'expirePoll';
+	public const MSG_ID_ADDOPTION = 'addOption';
+	public const MSG_ID_DELETEOPTION = 'deleteOption';
+	public const MSG_ID_SETVOTE = 'setVote';
 
 	/** @var int $pollId */
 	protected $pollId;
