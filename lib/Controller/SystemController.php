@@ -26,11 +26,15 @@ namespace OCA\Polls\Controller;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCA\Polls\Service\ContactsService;
 use OCA\Polls\Service\SystemService;
 
 use OCP\IRequest;
 
 class SystemController extends Controller {
+
+	/** @var ContactsService */
+	private $contactsService;
 
 	/** @var SystemService */
 	private $systemService;
@@ -40,14 +44,17 @@ class SystemController extends Controller {
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param SystemService $systemService
+	 * @param ContactsService $contactsService
 	 */
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ContactsService $contactsService,
 		SystemService $systemService
 	) {
 		parent::__construct($appName, $request);
+		$this->contactsService = $contactsService;
 		$this->systemService = $systemService;
 	}
 
