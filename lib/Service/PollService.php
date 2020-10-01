@@ -30,6 +30,7 @@ use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 
+use OCA\Polls\Db\Log;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\VoteMapper;
@@ -178,7 +179,7 @@ class PollService {
 		$this->poll->setImportant(0);
 		$this->poll = $this->pollMapper->insert($this->poll);
 
-		$this->logService->setLog($this->poll->getId(), 'addPoll');
+		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_ADDPOLL);
 
 		return $this->poll;
 	}
@@ -217,7 +218,7 @@ class PollService {
 		$this->poll->deserializeArray($poll);
 
 		$this->pollMapper->update($this->poll);
-		$this->logService->setLog($this->poll->getId(), 'updatePoll');
+		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_UPDATEPOLL);
 
 		return $this->poll;
 	}
@@ -245,7 +246,7 @@ class PollService {
 		}
 
 		$this->poll = $this->pollMapper->update($this->poll);
-		$this->logService->setLog($this->poll->getId(), 'deletePoll');
+		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_DELETEPOLL);
 
 		return $this->poll;
 	}
@@ -345,7 +346,7 @@ class PollService {
 	 * @return array
 	 */
 	private function getValidPollType() {
-		return ['datePoll', 'textPoll'];
+		return [Poll::TYPE_DATE, Poll::TYPE_TEXT];
 	}
 
 	/**

@@ -146,6 +146,8 @@ export default {
 	--color-polls-background-yes: #ebf5d6;
 	--color-polls-background-no: #ffede9;
 	--color-polls-background-maybe: #fcf7e1;
+	--icon-polls: url('./assets/polls.svg');
+	--icon-circles: url('./assets/circles.svg');
 	--icon-polls-back: url('./assets/back.svg');
 	--icon-polls-confirmed: url('./assets/confirmed.svg');
 	--icon-polls-unconfirmed: url('./assets/unconfirmed.svg');
@@ -155,7 +157,6 @@ export default {
 	--icon-polls-yes: url('./assets/yes-vote.svg');
 	--icon-polls-no: url('./assets/no-vote.svg');
 	--icon-polls-maybe: url('./assets/maybe-vote.svg');
-	--icon-polls: url('./assets/polls.svg');
 	--icon-polls-handle: url('./assets/handle.svg');
 	--icon-polls-mail: url('./assets/mail.svg');
 	--icon-polls-sidebar-toggle: url('./assets/sidebar-toggle.svg');
@@ -170,6 +171,10 @@ export default {
 
 .icon-polls {
 	background-image: var(--icon-polls);
+}
+
+.icon-circles {
+	background-image: var(--icon-circles);
 }
 
 .icon-polls-back {

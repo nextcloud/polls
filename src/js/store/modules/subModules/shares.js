@@ -73,7 +73,7 @@ const getters = {
 
 	unsentInvitations: state => {
 		return state.list.filter(share => {
-			return (share.userEmail || share.type === 'group' || share.type === 'contactGroup') && !share.invitationSent
+			return (share.userEmail || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent
 		})
 	},
 
@@ -93,7 +93,7 @@ const actions = {
 			pollId: context.rootState.poll.id,
 			type: payload.type,
 			userId: payload.userId,
-			userEmail: payload.userEmail,
+			emailAddress: payload.userEmail,
 		})
 			.then((response) => {
 				context.commit('add', response.data.share)
@@ -144,9 +144,9 @@ const actions = {
 			})
 	},
 
-	resolveContactGroup(context, payload) {
-		const endPoint = 'apps/polls/share/resolveContactGroup'
-		return axios.post(generateUrl(endPoint.concat('/', payload.share.token)))
+	resolveGroup(context, payload) {
+		const endPoint = 'apps/polls/share/resolveGroup'
+		return axios.get(generateUrl(endPoint.concat('/', payload.share.token)))
 			.then((response) => {
 				response.data.shares.forEach((item) => {
 					context.commit('add', item)
