@@ -23,17 +23,17 @@
 
 
 namespace OCA\Polls\Model;
+
 use OCP\IL10N;
 
 class User implements \JsonSerializable {
-
-	const TYPE_USER = 'user';
-	const TYPE_GROUP = 'group';
-	const TYPE_CONTACTGROUP = 'contactGroup';
-	const TYPE_CONTACT = 'contact';
-	const TYPE_EMAIL = 'email';
-	const TYPE_CIRCLE = 'circle';
-	const TYPE_EXTERNAL = 'external';
+	public const TYPE_USER = 'user';
+	public const TYPE_GROUP = 'group';
+	public const TYPE_CONTACTGROUP = 'contactGroup';
+	public const TYPE_CONTACT = 'contact';
+	public const TYPE_EMAIL = 'email';
+	public const TYPE_CIRCLE = 'circle';
+	public const TYPE_EXTERNAL = 'external';
 
 	/** @var IL10N */
 	private $l10n;
@@ -110,7 +110,6 @@ class User implements \JsonSerializable {
 	public function getDisplayName() {
 		if ($this->type === self::TYPE_USER) {
 			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
-
 		} elseif ($this->type === self::TYPE_GROUP) {
 			try {
 				// since NC19
@@ -119,19 +118,14 @@ class User implements \JsonSerializable {
 				// until NC18
 				return $this->userId;
 			}
-
 		} elseif ($this->type === self::TYPE_CONTACTGROUP && $this->contactsEnabled) {
 			return $this->userId;
-
 		} elseif ($this->type === self::TYPE_CIRCLE && $this->circlesEnabled) {
 			return \OCA\Circles\Api\v1\Circles::detailsCircle($this->userId)->getName();
-
 		} elseif ($this->type === self::TYPE_CONTACT && $this->contactsEnabled) {
 			return isset($this->contact['FN']) ? $this->contact['FN'] : '';
-
 		} elseif ($this->displayName) {
 			return $this->displayName;
-
 		} else {
 			return $this->userId;
 		}
@@ -149,13 +143,10 @@ class User implements \JsonSerializable {
 		if ($this->type === self::TYPE_USER) {
 			// Variant: \OC::$server->getConfig()->getUserValue($this->userId, 'settings', 'email'),
 			return \OC::$server->getUserManager()->get($this->userId)->getEMailAddress();
-
 		} elseif ($this->type === self::TYPE_CONTACT && $this->contactsEnabled) {
 			return isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : '';
-
 		} elseif ($this->type === self::TYPE_EMAIL) {
 			return $this->userId;
-
 		} else {
 			return $this->emailAddress;
 		}
@@ -164,10 +155,8 @@ class User implements \JsonSerializable {
 	public function getDesc() {
 		if ($this->type === self::TYPE_USER) {
 			return $this->l10n->t('User');
-
 		} elseif ($this->type === self::TYPE_GROUP) {
 			return $this->l10n->t('Group');
-
 		} elseif ($this->type === self::TYPE_CONTACT && $this->contactsEnabled) {
 			$this->desc = $this->l10n->t('Contact');
 			if (isset($this->contact['ORG'])) {
@@ -187,13 +176,10 @@ class User implements \JsonSerializable {
 			return $this->desc;
 		} elseif ($this->type === self::TYPE_CONTACTGROUP && $this->contactsEnabled) {
 			return $this->l10n->t('Contact group');
-
 		} elseif ($this->type === self::TYPE_CIRCLE && $this->circlesEnabled) {
 			return \OCA\Circles\Api\v1\Circles::detailsCircle($this->userId)->gettypeLongString();
-
 		} elseif ($this->type === self::TYPE_EMAIL) {
 			return $this->l10n->t('External email');
-
 		} else {
 			return '';
 		}
@@ -202,22 +188,16 @@ class User implements \JsonSerializable {
 	public function getIcon() {
 		if ($this->type === self::TYPE_USER) {
 			return 'icon-user';
-
 		} elseif ($this->type === self::TYPE_GROUP) {
 			return 'icon-group';
-
 		} elseif ($this->type === self::TYPE_CONTACT && $this->contactsEnabled) {
 			return 'icon-mail';
-
 		} elseif ($this->type === self::TYPE_EMAIL) {
 			return 'icon-mail';
-
 		} elseif ($this->type === self::TYPE_CONTACTGROUP && $this->contactsEnabled) {
 			return 'icon-group';
-
 		} elseif ($this->type === self::TYPE_CIRCLE && $this->circlesEnabled) {
 			return 'icon-circle';
-
 		} else {
 			return '';
 		}

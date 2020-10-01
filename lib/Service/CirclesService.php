@@ -22,6 +22,7 @@
  */
 
 namespace OCA\Polls\Service;
+
 use OCA\Polls\Model\User;
 use \OCA\Circles\Api\v1\Circles;
 
@@ -107,5 +108,4 @@ class CirclesService {
 		}
 		return $members;
 	}
-
 }
