@@ -31,6 +31,7 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\User;
 
 class ShareService {
 
@@ -98,7 +99,6 @@ class ShareService {
 	 */
 	public function get($token) {
 		$this->share = $this->shareMapper->findByToken($token);
-
 		return $this->share;
 	}
 
@@ -106,22 +106,22 @@ class ShareService {
 	 * Add share
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @param string $userEmail
+	 * @param array $user
 	 * @return Share
 	 * @throws NotAuthorizedException
 	 */
-	public function add($pollId, $type, $userId, $userEmail = '') {
+	public function add($pollId, $type, $userId, $emailAddress = '') {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
+		$user = new User($type, $userId, $emailAddress);
 
 		$this->share = new Share();
-		$this->share->setType($type);
 		$this->share->setPollId($pollId);
-		$this->share->setUserId($userId);
-		$this->share->setUserEmail($userEmail);
+		$this->share->setType($user->getType());
+		$this->share->setUserId($user->getUserId());
+		$this->share->setDisplayName($user->getDisplayName());
+		$this->share->setUserEmail($user->getEmailAddress());
 		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
@@ -144,7 +144,7 @@ class ShareService {
 	 */
 	public function setEmailAddress($token, $emailAddress) {
 		$this->share = $this->shareMapper->findByToken($token);
-		if ($this->share->getType() === 'external') {
+		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validateEmailAddress($emailAddress);
 			$this->share->setUserEmail($emailAddress);
 			// TODO: Send confirmation
@@ -172,7 +172,7 @@ class ShareService {
 			$this->systemService->validateEmailAddress($emailAddress);
 		}
 
-		if ($this->share->getType() === 'public') {
+		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$pollId = $this->share->getPollId();
 			$this->share = new Share();
 			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
@@ -181,7 +181,7 @@ class ShareService {
 				ISecureRandom::CHAR_LOWER .
 				ISecureRandom::CHAR_UPPER
 			));
-			$this->share->setType('external');
+			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setPollId($pollId);
 			$this->share->setUserId($userName);
 			$this->share->setUserEmail($emailAddress);
@@ -193,8 +193,8 @@ class ShareService {
 			}
 
 			return $this->share;
-		} elseif ($this->share->getType() === 'email') {
-			$this->share->setType('external');
+		} elseif ($this->share->getType() === Share::TYPE_EMAIL) {
+			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userName);
 			$this->share->setUserEmail($emailAddress);
 			return $this->shareMapper->update($this->share);

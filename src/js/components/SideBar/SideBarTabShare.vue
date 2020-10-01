@@ -62,7 +62,7 @@
 				:preselect-first="true"
 				:placeholder="placeholder"
 				label="displayName"
-				track-by="user"
+				track-by="userId"
 				@select="addShare"
 				@search-change="loadUsersAsync">
 				<template slot="selection" slot-scope="{ values, isOpen }">
@@ -96,7 +96,7 @@
 				</li>
 			</TransitionGroup>
 
-			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', user: '', emailAddress: ''})" />
+			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', userId: '', emailAddress: ''})" />
 		</ConfigBox>
 
 		<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
@@ -112,10 +112,10 @@
 							{{ t('polls', 'Send invitation mail') }}
 						</ActionButton>
 						<ActionButton
-							v-if="share.type === 'contactGroup'"
+							v-if="share.type === 'contactGroup' || share.type === 'circle'"
 							icon="icon-toggle-filelist"
-							@click="resolveContactGroup(share)">
-							{{ t('polls', 'Resolve contact group into individual invitations') }}
+							@click="resolveGroup(share)">
+							{{ t('polls', 'Resolve into individual invitations') }}
 						</ActionButton>
 					</Actions>
 					<Actions>
@@ -178,8 +178,8 @@ export default {
 	},
 
 	methods: {
-		resolveContactGroup(share) {
-			this.$store.dispatch('poll/shares/resolveContactGroup', { share: share })
+		resolveGroup(share) {
+			this.$store.dispatch('poll/shares/resolveGroup', { share: share })
 				.then((response) => {
 					this.$store.dispatch('poll/shares/delete', { share: share })
 				})
@@ -234,7 +234,7 @@ export default {
 			this.$store
 				.dispatch('poll/shares/add', {
 					type: payload.type,
-					userId: payload.user,
+					userId: payload.userId,
 					userEmail: payload.emailAddress,
 				})
 				.catch(error => {

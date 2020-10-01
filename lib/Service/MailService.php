@@ -40,6 +40,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Service\ContactsService;
 
 class MailService {
 
@@ -76,6 +77,9 @@ class MailService {
 	/** @var LogMapper */
 	private $logMapper;
 
+	/** @var ContactsService */
+	private $contactsService;
+
 	/**
 	 * MailService constructor.
 	 * @param IUserManager $userManager
@@ -89,6 +93,7 @@ class MailService {
 	 * @param ShareMapper $shareMapper
 	 * @param PollMapper $pollMapper
 	 * @param LogMapper $logMapper
+	 * @param ContactsService $contactsService
 	 */
 
 	public function __construct(
@@ -102,7 +107,8 @@ class MailService {
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
 		PollMapper $pollMapper,
-		LogMapper $logMapper
+		LogMapper $logMapper,
+		ContactsService $contactsService
 	) {
 		$this->config = $config;
 		$this->userManager = $userManager;
@@ -115,6 +121,7 @@ class MailService {
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->logMapper = $logMapper;
+		$this->contactsService = $contactsService;
 	}
 
 
@@ -183,78 +190,81 @@ class MailService {
 	 */
 	private function getRecipientsByShare($share, $defaultLang = 'en', $skipUser = null) {
 		$recipients = [];
-		$contactsManager = \OC::$server->getContactsManager();
 
-		if ($share->getType() === 'user') {
+		$tokenLink = $this->urlGenerator->getAbsoluteURL(
+			$this->urlGenerator->linkToRoute(
+				'polls.page.vote_publicpublic',
+				['token' => $share->getToken()]
+			)
+		);
+
+		$internalLink = $this->urlGenerator->getAbsoluteURL(
+			$this->urlGenerator->linkToRoute(
+				'polls.page.indexvote',
+				['id' => $share->getPollId()]
+			)
+		);
+
+		if ($share->getType() === Share::TYPE_USER) {
+			$user = new User(User::TYPE_USER, $share->getUserId());
 			$recipients[] = [
-				'userId' => $share->getUserId(),
-				'eMailAddress' => \OC::$server->getConfig()->getUserValue($share->getUserId(), 'settings', 'email'),
-				'displayName' => $this->userManager->get($share->getUserId())->getDisplayName(),
-				'language' => $this->config->getUserValue(
-					$share->getUserId(),
-					'core', 'lang'
-				),
-				'link' => $this->urlGenerator->linkToRouteAbsolute(
-					'polls.page.indexvote',
-					['id' => $share->getPollId()]
-				)
+				'userId' => $user->getUserId(),
+				'eMailAddress' => $user->getEmailAddress(),
+				'displayName' => $user->getDisplayName(),
+				'language' => $user->getLanguage(),
+				'link' => $internalLink,
 			];
-		} elseif ($share->getType() === 'email') {
+
+		} elseif ($share->getType() === Share::TYPE_EMAIL) {
+			$user = new User(User::TYPE_EMAIL, $share->getUserId());
 			$recipients[] = [
-				'userId' => $share->getUserEmail(),
-				'eMailAddress' => $share->getUserEmail(),
-				'displayName' => $share->getUserEmail(),
+				'userId' => $user->getUserId(),
+				'eMailAddress' => $user->getEmailAddress(),
+				'displayName' => $user->getDisplayName(),
 				'language' => $defaultLang,
-				'link' => $this->urlGenerator->linkToRouteAbsolute(
-					'polls.page.vote_publicpublic',
-					['token' => $share->getToken()]
-				)
+				'link' => $tokenLink,
 			];
-		} elseif ($share->getType() === 'contact') {
-			$contacts = $contactsManager->search($share->getUserId(), ['FN']);
-			if (is_array($contacts)) {
-				$contact = $contacts[0];
+
+		} elseif ($share->getType() === Share::TYPE_CONTACT) {
+			$contacts = $this->contactsService->getContacts($share->getUserId(), ['FN', 'UID']);
+			if (count($contacts)) {
+				$user = $contacts[0];
 
 				$recipients[] = [
-					'userId' => $share->getUserId(),
-					'eMailAddress' => $share->getUserEmail(),
-					'displayName' => $share->getUserId(),
+					'userId' => $user->getUserId(),
+					'eMailAddress' => $user->getEmailAddress(),
+					'displayName' => $user->getDisplayname(),
 					'language' => $defaultLang,
-					'link' => $this->urlGenerator->linkToRouteAbsolute(
-						'polls.page.vote_publicpublic',
-						['token' => $share->getToken()]
-					)
+					'link' => $tokenLink,
 				];
 			} else {
 				return;
 			}
-		} elseif ($share->getType() === 'external') {
+
+		} elseif ($share->getType() === Share::TYPE_EXTERNAL) {
 			$recipients[] = [
 				'userId' => $share->getUserId(),
 				'eMailAddress' => $share->getUserEmail(),
 				'displayName' => $share->getUserId(),
 				'language' => $defaultLang,
-				'link' => $this->urlGenerator->linkToRouteAbsolute(
-					'polls.page.vote_publicpublic',
-					['token' => $share->getToken()]
-				)
+				'link' => $tokenLink,
 			];
-		} elseif ($share->getType() === 'group') {
+
+		} elseif ($share->getType() === Share::TYPE_GROUP) {
 			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
 
-			foreach ($groupMembers as $member) {
-				if ($skipUser === $member || !$this->userManager->get($member)->isEnabled()) {
+			foreach ($groupMembers as $user) {
+				if ($skipUser === $user || !$this->userManager->get($user)->isEnabled()) {
 					continue;
 				}
+				$user = new User(User::TYPE_USER, $user->getUserId());
 
 				$recipients[] = [
-					'userId' => $member,
-					'eMailAddress' => \OC::$server->getConfig()->getUserValue($member, 'settings', 'email'),
-					'displayName' => $this->userManager->get($member)->getDisplayName(),
-					'language' => $this->config->getUserValue($member, 'core', 'lang'),
-					'link' => $this->urlGenerator->linkToRouteAbsolute(
-						'polls.page.indexvote', ['id' => $share->getPollId()]
-					)
+					'userId' => $user->getUserId(),
+					'eMailAddress' => $user->getEmailAddress(),
+					'displayName' => $user->getDisplayName(),
+					'language' => $user->getLanguage(),
+					'link' => $internalLink,
 				];
 			}
 		}
@@ -386,37 +396,37 @@ class MailService {
 
 					if ($logItem->getMessage()) {
 						$emailTemplate->addBodyText($logItem->getMessage());
-					} elseif ($logItem->getMessageId() === 'setVote') {
+					} elseif ($logItem->getMessageId() === Log::MSG_ID_SETVOTE) {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s voted.',
 							[$displayUser]
 						));
-					} elseif ($logItem->getMessageId() === 'updatePoll') {
+					} elseif ($logItem->getMessageId() === Log::MSG_ID_UPDATEPOLL) {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s updated the poll configuration. Please check your votes.',
 							[$displayUser]
 						));
-					} elseif ($logItem->getMessageId() === 'deletePoll') {
+					} elseif ($logItem->getMessageId() === Log::MSG_ID_DELETEPOLL) {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s deleted the poll.',
 							[$displayUser]
 						));
-					} elseif ($logItem->getMessageId() === 'restorePoll') {
+					} elseif ($logItem->getMessageId() === Log::MSG_ID_RESTOREPOLL) {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s restored the poll.',
 							[$displayUser]
 						));
-					} elseif ($logItem->getMessageId() === 'expirePoll') {
+					} elseif ($logItem->getMessageId() === Log::MSG_ID_EXPIREPOLL) {
 						$emailTemplate->addBodyText($trans->t(
 							'- The poll expired.',
 							[$displayUser]
 						));
-					} elseif ($logItem->getMessageId() === 'addOption') {
+					} elseif ($logItem->getMessageId() === Log::MSG_ID_ADDOPTION) {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s added a vote option.',
 							[$displayUser]
 						));
-					} elseif ($logItem->getMessageId() === 'deleteOption') {
+					} elseif ($logItem->getMessageId() === Log::MSG_ID_DELETEOPTION) {
 						$emailTemplate->addBodyText($trans->t(
 							'- %s removed a vote option.',
 							[$displayUser]
