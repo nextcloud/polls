@@ -73,6 +73,9 @@ class Poll extends Entity implements JsonSerializable {
 	const TYPE_DATE = 'datePoll';
 	const TYPE_TEXT = 'textPoll';
 
+	const TYPE_DATE = 'datePoll';
+	const TYPE_TEXT = 'textPoll';
+
 	/** @var string $type */
 	protected $type;
 
