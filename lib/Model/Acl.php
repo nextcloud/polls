@@ -119,14 +119,14 @@ class Acl implements JsonSerializable {
 			$this->share = $this->shareMapper->findByToken($token);
 
 			if (\OC::$server->getUserSession()->isLoggedIn()) {
-				if (   $this->share->getType() !== Share::TYPE_GROUP
+				if ($this->share->getType() !== Share::TYPE_GROUP
 					&& $this->share->getType() !== Share::TYPE_PUBLIC) {
 					throw new NotAuthorizedException;
 				}
 
 				$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
 			} else {
-				if (   $this->share->getType() === Share::TYPE_GROUP
+				if ($this->share->getType() === Share::TYPE_GROUP
 					|| $this->share->getType() === Share::TYPE_USER) {
 					throw new NotAuthorizedException;
 				}
@@ -264,7 +264,7 @@ class Acl implements JsonSerializable {
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 				if (
-					( $item->getType() === Share::TYPE_USER
+					($item->getType() === Share::TYPE_USER
 						|| $item->getType() === Share::TYPE_EXTERNAL
 						|| $item->getType() === Share::TYPE_EMAIL
 						|| $item->getType() === Share::TYPE_CONTACT

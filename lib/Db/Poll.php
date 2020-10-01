@@ -67,9 +67,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setImportant(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
-
-	const TYPE_DATE = 'datePoll';
-	const TYPE_TEXT = 'textPoll';
+	public const TYPE_DATE = 'datePoll';
+	public const TYPE_TEXT = 'textPoll';
 
 	/** @var string $type */
 	protected $type;

@@ -40,7 +40,6 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Service\ContactsService;
 
 class MailService {
 
@@ -214,7 +213,6 @@ class MailService {
 				'language' => $user->getLanguage(),
 				'link' => $internalLink,
 			];
-
 		} elseif ($share->getType() === Share::TYPE_EMAIL) {
 			$user = new User(User::TYPE_EMAIL, $share->getUserId());
 			$recipients[] = [
@@ -224,7 +222,6 @@ class MailService {
 				'language' => $defaultLang,
 				'link' => $tokenLink,
 			];
-
 		} elseif ($share->getType() === Share::TYPE_CONTACT) {
 			$contacts = $this->contactsService->getContacts($share->getUserId(), ['FN', 'UID']);
 			if (count($contacts)) {
@@ -240,7 +237,6 @@ class MailService {
 			} else {
 				return;
 			}
-
 		} elseif ($share->getType() === Share::TYPE_EXTERNAL) {
 			$recipients[] = [
 				'userId' => $share->getUserId(),
@@ -249,7 +245,6 @@ class MailService {
 				'language' => $defaultLang,
 				'link' => $tokenLink,
 			];
-
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
 			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
 

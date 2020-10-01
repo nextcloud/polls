@@ -30,8 +30,6 @@ use OCA\Polls\Exceptions\InvalidEmailAddress;
 
 use OCP\IGroupManager;
 use OCP\IUserManager;
-use OCA\Polls\Service\CirclesService;
-use OCA\Polls\Service\ContactsService;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
@@ -218,7 +216,7 @@ class SystemService {
 
 		// get all groups
 		foreach ($this->getSiteGroups() as $user) {
-			if (   $userName === strtolower(trim($user->getUserId()))
+			if ($userName === strtolower(trim($user->getUserId()))
 				|| $userName === strtolower(trim($user->getDisplayName()))) {
 				throw new InvalidUsernameException;
 			}
@@ -227,7 +225,7 @@ class SystemService {
 
 		// get all users
 		foreach ($this->getSiteUsers() as $user) {
-			if (   $userName === strtolower(trim($user->getUserId()))
+			if ($userName === strtolower(trim($user->getUserId()))
 				|| $userName === strtolower(trim($user->getDisplayName()))) {
 				throw new InvalidUsernameException;
 			}
@@ -238,7 +236,7 @@ class SystemService {
 		foreach ($this->voteMapper->findParticipantsByPoll($pollId) as $vote) {
 			if ($vote->getUserId() !== '' && $vote->getUserId() !== null) {
 				$list[] = new User(User::TYPE_USER, $vote->getUserId());
-				if (   $userName === strtolower(trim(end($list)->getUserId()))
+				if ($userName === strtolower(trim(end($list)->getUserId()))
 					|| $userName === strtolower(trim(end($list)->getDisplayName()))) {
 					throw new InvalidUsernameException;
 				}
@@ -247,12 +245,12 @@ class SystemService {
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($pollId) as $share) {
-			if (   $share->getUserId() !== ''
+			if ($share->getUserId() !== ''
 				&& $share->getUserId() !== null
-			    && $share->getType() !== User::TYPE_CIRCLE) {
+				&& $share->getType() !== User::TYPE_CIRCLE) {
 				$user = new User($share->getType(), $share->getUserId());
 				\OC::$server->getLogger()->alert(json_encode($user));
-				if (   $userName === strtolower(trim($user->getUserId()))
+				if ($userName === strtolower(trim($user->getUserId()))
 					|| $userName === strtolower(trim($share->getDisplayName()))
 					|| $userName === strtolower(trim($user->getDisplayName()))) {
 					throw new InvalidUsernameException;

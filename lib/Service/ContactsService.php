@@ -22,6 +22,7 @@
  */
 
 namespace OCA\Polls\Service;
+
 use OCA\Polls\Model\User;
 
 class ContactsService {
@@ -64,7 +65,7 @@ class ContactsService {
 
 		$contacts = [];
 		foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
-			if ( !array_key_exists('isLocalSystemBook', $contact)
+			if (!array_key_exists('isLocalSystemBook', $contact)
 				&& array_key_exists('EMAIL', $contact)
 				&& in_array($query, explode(',', $contact['CATEGORIES']))
 			) {
@@ -108,5 +109,4 @@ class ContactsService {
 		}
 		return $contactGroups;
 	}
-
 }
