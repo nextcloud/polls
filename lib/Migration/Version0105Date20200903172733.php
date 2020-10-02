@@ -33,7 +33,7 @@ use OCP\Migration\IOutput;
  * Installation class for the polls app.
  * Initial db creation
  */
-class Version0106Date20211001092239 extends SimpleMigrationStep {
+class Version0105Date20200903172733 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
@@ -60,12 +60,13 @@ class Version0106Date20211001092239 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-		if ($schema->hasTable('polls_share')) {
-			$table = $schema->getTable('polls_share');
-			if (!$table->hasColumn('display_name')) {
-				$table->addColumn('display_name', 'string', [
+		if ($schema->hasTable('polls_polls')) {
+			$table = $schema->getTable('polls_polls');
+			if (!$table->hasColumn('important')) {
+				$table->addColumn('important', 'integer', [
+					'length' => 11,
 					'notnull' => true,
-					'length' => 64,
+					'default' => 0
 				]);
 			}
 		}
