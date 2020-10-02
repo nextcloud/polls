@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.5.4 - release] - tbd (before 2020-10-03)
+## [1.5.4 - release] - 2020-10-02
  - adding missing translations
  - release blocking fixes
 
