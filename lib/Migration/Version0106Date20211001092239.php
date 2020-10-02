@@ -64,8 +64,9 @@ class Version0106Date20211001092239 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_share');
 			if (!$table->hasColumn('display_name')) {
 				$table->addColumn('display_name', 'string', [
-					'notnull' => true,
+					'notnull' => false,
 					'length' => 64,
+					'default' => ''
 				]);
 			}
 		}
