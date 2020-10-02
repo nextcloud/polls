@@ -106,6 +106,8 @@ OC.L10N.register(
     "Error cloning poll." : "Errore durante la clonazione del sondaggio.",
     "Error deleting poll." : "Errore durante l'eliminazione del sondaggio.",
     "Use calendar lookup" : "Usa la ricerca del calendario",
+    "Text polls default to list view" : "In modo predefinito, i sondaggi di testo sono visualizzati come elenco",
+    "Date polls default to list view" : "In modo predefinito, i sondaggi di date sono visualizzati come elenco",
     "Try experimental styles" : "Prova gli stili sperimentali",
     "Use background image" : "Usa immagini di sfondo",
     "Glassy navigation" : "Navigazione trasparente",

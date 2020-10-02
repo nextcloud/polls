@@ -106,6 +106,8 @@ OC.L10N.register(
     "Error cloning poll." : "Produciuse un erro ao clonar a  enquisa.",
     "Error deleting poll." : "Produciuse un erro ao eliminar a enquisa.",
     "Use calendar lookup" : "Usar a busca no calendario",
+    "Text polls default to list view" : "As enquisas de texto predeterminan a vista de lista",
+    "Date polls default to list view" : "A data das enquisas de texto predeterminan a vista de lista",
     "Try experimental styles" : "Probar os estilos experimentais",
     "Use background image" : "Usar a imaxe de fondo",
     "Glassy navigation" : "Navegación cristalina",

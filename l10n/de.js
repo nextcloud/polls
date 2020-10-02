@@ -106,6 +106,8 @@ OC.L10N.register(
     "Error cloning poll." : "Fehler beim Klonen der Umfrage.",
     "Error deleting poll." : "Fehler beim Löschen der Umfrage.",
     "Use calendar lookup" : "Kalendersuche verwenden",
+    "Text polls default to list view" : "Standardmäßig Textumfragen als Listenansicht",
+    "Date polls default to list view" : "Standardmäßig Datumsumfragen als Listenansicht",
     "Try experimental styles" : "Probiere experimentelle Stile aus",
     "Use background image" : "Hintergrundbild verwenden",
     "Glassy navigation" : "Navigation mit Glaseffekt",

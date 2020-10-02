@@ -104,6 +104,8 @@
     "Error cloning poll." : "Błąd podczas klonowania sondy.",
     "Error deleting poll." : "Błąd podczas usuwania sondy.",
     "Use calendar lookup" : "Użyj wyszukiwania kalendarza",
+    "Text polls default to list view" : "Sondy tekstowe są domyślnie wyświetlane w widoku listy",
+    "Date polls default to list view" : "Daty sond są domyślnie wyświetlane w widoku listy",
     "Try experimental styles" : "Wypróbuj eksperymentalne style",
     "Use background image" : "Użyj obrazu tła",
     "Glassy navigation" : "Szklista nawigacja",
