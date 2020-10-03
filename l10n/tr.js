@@ -106,6 +106,8 @@ OC.L10N.register(
     "Error cloning poll." : "Anket kopyalanırken sorun çıktı.",
     "Error deleting poll." : "Anket silinirken sorun çıktı.",
     "Use calendar lookup" : "Takvim taranabilsin",
+    "Text polls default to list view" : "Metin anketleri varsayılan olarak liste görünümünde",
+    "Date polls default to list view" : "Tarih anketleri varsayılan olarak liste görünümünde",
     "Try experimental styles" : "Deneysel biçemler kullanılsın",
     "Use background image" : "Arka plan görseli kullanılsın",
     "Glassy navigation" : "Glassy gezinme",
