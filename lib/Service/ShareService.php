@@ -114,23 +114,28 @@ class ShareService {
 	 * @param array $user
 	 * @return Share
 	 * @throws NotAuthorizedException
+	 * @throws InvalidShareType
 	 */
 	public function add($pollId, $type, $userId, $emailAddress = '') {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
-		if ($type === Group::TYPE) {
-			$share = new Group($userId);
-		} elseif ($type === Circle::TYPE) {
-			$share = new Circle($userId);
-		} elseif ($type === Contact::TYPE) {
-			$share = new Contact($userId);
-		} elseif ($type === ContactGroup::TYPE) {
-			$share = new ContactGroup($userId);
-		} elseif ($type === User::TYPE) {
-			$share = new User($userId);
-		} elseif ($type === Email::TYPE) {
-			$share = new Email($userId, $emailAddress);
+
+		switch ($type) {
+			case Group::TYPE:
+				$share = new Group($userId);
+			case Circle::TYPE:
+				$share = new Circle($userId);
+			case Contact::TYPE:
+				$share = new Contact($userId);
+			case ContactGroup::TYPE:
+				$share = new ContactGroup($userId);
+			case User::TYPE:
+				$share = new User($userId);
+			case Email::TYPE:
+				$share = new Email($userId, $emailAddress);
+			default:
+				throw new InvalidShareType('Invalid share type (' . $type . ')');
 		}
 
 		$this->share = new Share();

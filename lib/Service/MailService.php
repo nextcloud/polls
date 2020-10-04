@@ -202,49 +202,9 @@ class MailService {
 			)
 		);
 
-		if ($share->getType() === Share::TYPE_USER) {
-			$user = new User($share->getUserId());
-			$recipients[] = [
-				'userId' => $user->getId(),
-				'eMailAddress' => $user->getEmailAddress(),
-				'displayName' => $user->getDisplayName(),
-				'language' => $user->getLanguage(),
-				'link' => $internalLink,
-			];
-		} elseif ($share->getType() === Share::TYPE_EMAIL) {
-			$user = new Email($share->getUserId());
-
-			$recipients[] = [
-				'userId' => $user->getId(),
-				'eMailAddress' => $user->getEmailAddress(),
-				'displayName' => $user->getDisplayName(),
-				'language' => $defaultLang,
-				'link' => $tokenLink,
-			];
-		} elseif ($share->getType() === Share::TYPE_CONTACT) {
-			$user = new Contact($share->getUserId());
-
-			$recipients[] = [
-				'userId' => $user->getId(),
-				'eMailAddress' => $user->getEmailAddress(),
-				'displayName' => $user->getDisplayname(),
-				'language' => $defaultLang,
-				'link' => $tokenLink,
-			];
-		} elseif ($share->getType() === Share::TYPE_EXTERNAL) {
-			$recipients[] = [
-				'userId' => $share->getUserId(),
-				'eMailAddress' => $share->getUserEmail(),
-				'displayName' => $share->getUserId(),
-				'language' => $defaultLang,
-				'link' => $tokenLink,
-			];
-		} elseif ($share->getType() === Share::TYPE_GROUP) {
-			foreach ((new Group($share->getUserId()))->getMembers() as $user) {
-				if ($skipUser === $user->getId() || !$user->getUserIsDisabled()) {
-					continue;
-				}
-
+		switch ($share->getType()) {
+			case Share::TYPE_USER:
+				$user = new User($share->getUserId());
 				$recipients[] = [
 					'userId' => $user->getId(),
 					'eMailAddress' => $user->getEmailAddress(),
@@ -252,7 +212,48 @@ class MailService {
 					'language' => $user->getLanguage(),
 					'link' => $internalLink,
 				];
-			}
+			case Share::TYPE_EMAIL:
+				$user = new Email($share->getUserId());
+
+				$recipients[] = [
+					'userId' => $user->getId(),
+					'eMailAddress' => $user->getEmailAddress(),
+					'displayName' => $user->getDisplayName(),
+					'language' => $defaultLang,
+					'link' => $tokenLink,
+				];
+			case Share::TYPE_CONTACT:
+				$user = new Contact($share->getUserId());
+
+				$recipients[] = [
+					'userId' => $user->getId(),
+					'eMailAddress' => $user->getEmailAddress(),
+					'displayName' => $user->getDisplayname(),
+					'language' => $defaultLang,
+					'link' => $tokenLink,
+				];
+			case Share::TYPE_EXTERNAL:
+				$recipients[] = [
+					'userId' => $share->getUserId(),
+					'eMailAddress' => $share->getUserEmail(),
+					'displayName' => $share->getUserId(),
+					'language' => $defaultLang,
+					'link' => $tokenLink,
+				];
+			case Share::TYPE_GROUP:
+				foreach ((new Group($share->getUserId()))->getMembers() as $user) {
+					if ($skipUser === $user->getId() || !$user->getUserIsDisabled()) {
+						continue;
+					}
+
+					$recipients[] = [
+						'userId' => $user->getId(),
+						'eMailAddress' => $user->getEmailAddress(),
+						'displayName' => $user->getDisplayName(),
+						'language' => $user->getLanguage(),
+						'link' => $internalLink,
+					];
+				}
 		}
 		return $recipients;
 	}
