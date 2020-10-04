@@ -212,7 +212,7 @@ class MailService {
 					'language' => $user->getLanguage(),
 					'link' => $internalLink,
 				];
-        		break;
+				break;
 			case Share::TYPE_EMAIL:
 				$user = new Email($share->getUserId());
 
