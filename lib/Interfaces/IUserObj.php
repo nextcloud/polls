@@ -63,10 +63,10 @@ interface IUserObj {
 	public function getDisplayName();
 
 	/**
-	 * getDesc
+	 * getDescription
 	 * @return string
 	 */
-	public function getDesc();
+	public function getDescription();
 
 	/**
 	 * getIcon

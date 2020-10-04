@@ -37,23 +37,13 @@ class Email implements \JsonSerializable, IUserObj {
 	private $id;
 
 	/** @var string */
-	private $type;
-
-	/** @var string */
 	private $displayName = '';
-
-	/** @var string */
-	private $desc = '';
 
 	/** @var string */
 	private $emailAddress = '';
 
-	/** @var array */
-	private $contact;
-
 	/**
 	 * User constructor.
-	 * @param $type
 	 * @param $id
 	 * @param $emailAddress
 	 * @param $displayName
@@ -98,7 +88,6 @@ class Email implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get language of user, if type = TYPE_USER
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -123,7 +112,7 @@ class Email implements \JsonSerializable, IUserObj {
 	 * @NoAdminRequired
 	 * @return String
 	 */
-	public function getDesc() {
+	public function getDescription() {
 		return \OC::$server->getL10N('polls')->t('External Email');
 	}
 
@@ -140,7 +129,6 @@ class Email implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get organisation, if type = TYPE_CONTACT
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -173,7 +161,7 @@ class Email implements \JsonSerializable, IUserObj {
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDesc(),
+			'desc' 			=> $this->getDescription(),
 			'icon'			=> $this->getIcon(),
 			'isNoUser'		=> true,
 			'isGuest'		=> true,
