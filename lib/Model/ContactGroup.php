@@ -24,22 +24,16 @@
 
 namespace OCA\Polls\Model;
 
-use OCP\IL10N;
 use OCA\Polls\Interfaces\IUserObj;
 
 class ContactGroup implements \JsonSerializable, IUserObj {
 	public const TYPE = 'contactGroup';
-
-	/** @var IL10N */
-	private $l10n;
 
 	/** @var string */
 	private $id;
 
 	/** @var string */
 	private $displayName = '';
-
-	private $group;
 
 	/**
 	 * Group constructor.
@@ -118,11 +112,11 @@ class ContactGroup implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * getDesc
+	 * getDescription
 	 * @NoAdminRequired
 	 * @return String
 	 */
-	public function getDesc() {
+	public function getDescription() {
 		return \OC::$server->getL10N('polls')->t('Contact group');
 	}
 
@@ -165,8 +159,8 @@ class ContactGroup implements \JsonSerializable, IUserObj {
 	 * @return Array
 	 */
 	public static function search($query = '') {
+		$contactGroups = [];
 		if (\OC::$server->getContactsManager()->isEnabled() && $query) {
-			$contactGroups = [];
 			foreach (self::listRaw($query) as $contactGroup) {
 				$contactGroups[] = new self($contactGroup);
 			}
@@ -177,25 +171,13 @@ class ContactGroup implements \JsonSerializable, IUserObj {
 	/**
 	 * Get a list of contacts group members
 	 * @NoAdminRequired
-	 * @param string $query
 	 * @return Contact[]
 	 */
 	public function getMembers() {
 		if (\OC::$server->getContactsManager()->isEnabled()) {
 			$contacts = [];
 			foreach (\OC::$server->getContactsManager()->search($this->id, ['CATEGORIES']) as $contact) {
-				if (!array_key_exists('isLocalSystemBook', $contact)
-					&& array_key_exists('EMAIL', $contact)
-					&& in_array($query, explode(',', $contact['CATEGORIES']))
-				) {
-					$emailAdresses = $contact['EMAIL'];
-
-					if (!is_array($emailAdresses)) {
-						$emailAdress = $emailAdresses;
-					} else {
-						// take the first eMail address for now
-						$emailAdress = $emailAdresses[0];
-					}
+				if (array_key_exists('EMAIL', $contact)) {
 					$contacts[] = new Contact($contact['UID']);
 				}
 			}
@@ -216,7 +198,7 @@ class ContactGroup implements \JsonSerializable, IUserObj {
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDesc(),
+			'desc' 			=> $this->getDescription(),
 			'icon'			=> $this->getIcon(),
 			'isNoUser'		=> true,
 			'isGuest'		=> true,

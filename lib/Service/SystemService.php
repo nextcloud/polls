@@ -65,7 +65,7 @@ class SystemService {
 	 * @param string $emailAddress
 	 * @return bool
 	 */
-	private function isValidEmail($emailAddress) {
+	private static function isValidEmail($emailAddress) {
 		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $emailAddress)) ? false : true;
 	}
 
@@ -182,7 +182,7 @@ class SystemService {
 
 		// get all users
 		foreach (User::search() as $user) {
-			if ($userName === strtolower(trim($user->getUserId()))
+			if ($userName === strtolower(trim($user->getId()))
 				|| $userName === strtolower(trim($user->getDisplayName()))) {
 				throw new InvalidUsernameException;
 			}
@@ -199,7 +199,7 @@ class SystemService {
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($pollId) as $share) {
-			if ($share->getUserId() && $share->getType() !== User::TYPE_CIRCLE) {
+			if ($share->getUserId() && $share->getType() !== Circle::TYPE) {
 				if ($userName === strtolower(trim($share->getUserId()))
 					|| $userName === strtolower(trim($share->getDisplayName()))) {
 					throw new InvalidUsernameException;

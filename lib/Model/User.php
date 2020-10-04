@@ -24,7 +24,7 @@
 
 namespace OCA\Polls\Model;
 
-use OCP\IL10N;
+use OCP\IUser;
 use OCA\Polls\Interfaces\IUserObj;
 
 class User implements \JsonSerializable, IUserObj {
@@ -37,9 +37,6 @@ class User implements \JsonSerializable, IUserObj {
 	public const TYPE_CIRCLE = 'circle';
 	public const TYPE_EXTERNAL = 'external';
 	public const TYPE_INVALID = 'invalid';
-
-	/** @var IL10N */
-	private $l10n;
 
 	/** @var string */
 	private $id;
@@ -98,7 +95,6 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get language of user, if type = TYPE_USER
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -116,7 +112,6 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get organisation, if type = TYPE_CONTACT
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -138,7 +133,7 @@ class User implements \JsonSerializable, IUserObj {
 	 * @NoAdminRequired
 	 * @return String
 	 */
-	public function getDesc() {
+	public function getDescription() {
 		return \OC::$server->getL10N('polls')->t('User');
 	}
 
@@ -157,7 +152,7 @@ class User implements \JsonSerializable, IUserObj {
 	 * @return String
 	 */
 	public function getUserIsDisabled() {
-		return !\OC::$server->getUserManager()->get($user)->isEnabled();
+		return !\OC::$server->getUserManager()->get($this->id)->isEnabled();
 	}
 
 	/**
@@ -203,7 +198,7 @@ class User implements \JsonSerializable, IUserObj {
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDesc(),
+			'desc' 			=> $this->getDescription(),
 			'icon'			=> $this->getIcon(),
 		];
 	}

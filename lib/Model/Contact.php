@@ -38,20 +38,13 @@ class Contact implements \JsonSerializable, IUserObj {
 	private $id;
 
 	/** @var string */
-	private $type;
-
-	/** @var string */
 	private $displayName = '';
-
-	/** @var string */
-	private $desc = '';
 
 	/** @var array */
 	private $contact;
 
 	/**
 	 * User constructor.
-	 * @param $type
 	 * @param $id
 	 * @param $displayName
 	 */
@@ -94,7 +87,7 @@ class Contact implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get language of user, if type = TYPE_USER
+	 * getLanguage
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -116,13 +109,13 @@ class Contact implements \JsonSerializable, IUserObj {
 	 * @NoAdminRequired
 	 * @return String
 	 */
-	public function getDesc() {
-		$desc = $this->getCategories();
+	public function getDescription() {
+		$description = $this->getCategories();
 		if (isset($this->contact['ORG'])) {
-			array_unshift($desc, $this->getOrganisation());
+			array_unshift($description, $this->getOrganisation());
 		}
-		if (count($desc) > 0) {
-			return implode(", ", $desc);
+		if (count($description) > 0) {
+			return implode(", ", $description);
 		} else {
 			return \OC::$server->getL10N('polls')->t('Contact');
 		}
@@ -138,7 +131,7 @@ class Contact implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get organisation, if type = TYPE_CONTACT
+	 * Get organisation
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -169,7 +162,7 @@ class Contact implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Load contact, if type = TYPE_CONTACT
+	 * Load contact
 	 * @NoAdminRequired
 	 * @return String
 	 * @throws MultipleContactsFound
@@ -251,7 +244,7 @@ class Contact implements \JsonSerializable, IUserObj {
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDesc(),
+			'desc' 			=> $this->getDescription(),
 			'icon'			=> $this->getIcon(),
 			'categories'	=> $this->getCategories(),
 			'isNoUser'		=> true,

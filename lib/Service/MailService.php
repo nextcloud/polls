@@ -40,9 +40,10 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Model\User;
 use OCA\Polls\Model\Contact;
+use OCA\Polls\Model\Email;
 use OCA\Polls\Model\Group;
+use OCA\Polls\Model\User;
 
 class MailService {
 
@@ -204,7 +205,7 @@ class MailService {
 		if ($share->getType() === Share::TYPE_USER) {
 			$user = new User($share->getUserId());
 			$recipients[] = [
-				'userId' => $user->getUserId(),
+				'userId' => $user->getId(),
 				'eMailAddress' => $user->getEmailAddress(),
 				'displayName' => $user->getDisplayName(),
 				'language' => $user->getLanguage(),
@@ -214,7 +215,7 @@ class MailService {
 			$user = new Email($share->getUserId());
 
 			$recipients[] = [
-				'userId' => $user->getUserId(),
+				'userId' => $user->getId(),
 				'eMailAddress' => $user->getEmailAddress(),
 				'displayName' => $user->getDisplayName(),
 				'language' => $defaultLang,
@@ -224,7 +225,7 @@ class MailService {
 			$user = new Contact($share->getUserId());
 
 			$recipients[] = [
-				'userId' => $user->getUserId(),
+				'userId' => $user->getId(),
 				'eMailAddress' => $user->getEmailAddress(),
 				'displayName' => $user->getDisplayname(),
 				'language' => $defaultLang,
@@ -240,7 +241,7 @@ class MailService {
 			];
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
 			foreach ((new Group($share->getUserId()))->getMembers() as $user) {
-				if ($skipUser === $user->getId() || !$user->isUserDisabled()) {
+				if ($skipUser === $user->getId() || !$user->getUserIsDisabled()) {
 					continue;
 				}
 
