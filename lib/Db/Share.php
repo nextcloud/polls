@@ -27,7 +27,6 @@ use JsonSerializable;
 
 use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
-use OCA\Polls\Model\User;
 
 /**
  * @method string getId()
@@ -44,14 +43,16 @@ use OCA\Polls\Model\User;
  * @method void setUserEmail(string $value)
  * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
+ * @method int getDisplayName()
+ * @method void setDisplayName(string $value)
  */
 class Share extends Entity implements JsonSerializable {
-	public const TYPE_USER = User::TYPE_USER;
-	public const TYPE_EMAIL = User::TYPE_EMAIL;
-	public const TYPE_CIRCLE = User::TYPE_CIRCLE;
-	public const TYPE_GROUP = User::TYPE_GROUP;
-	public const TYPE_CONTACTGROUP = User::TYPE_CONTACTGROUP;
-	public const TYPE_CONTACT = User::TYPE_CONTACT;
+	public const TYPE_USER = 'user';
+	public const TYPE_EMAIL = 'email';
+	public const TYPE_CIRCLE = 'circle';
+	public const TYPE_GROUP = 'group';
+	public const TYPE_CONTACTGROUP = 'contactGroup';
+	public const TYPE_CONTACT = 'contact';
 	public const TYPE_PUBLIC = 'public';
 	public const TYPE_EXTERNAL = 'external';
 
@@ -85,20 +86,9 @@ class Share extends Entity implements JsonSerializable {
 			'userId' => $this->userId,
 			'userEmail' => $this->userEmail,
 			'invitationSent' => intval($this->invitationSent),
-			'displayName' => $this->getDisplayName(),
+			'displayName' => $this->displayName,
 			'externalUser' => $this->externalUser()
 		];
-	}
-
-	private function getDisplayName() {
-		if ($this->type === self::TYPE_EMAIL && !$this->userId) {
-			$user = new User($this->type, $this->userEmail, $this->userEmail, $this->displayName);
-		} elseif ($this->type === self::TYPE_CONTACT && !$this->userId) {
-			$user = new User($this->type, $this->userId, $this->userEmail, $this->displayName);
-		} else {
-			$user = new User($this->type, $this->userId);
-		}
-		return $user->getDisplayName();
 	}
 
 	private function externalUser() {

@@ -27,16 +27,8 @@ namespace OCA\Polls\Model;
 use OCP\IL10N;
 use OCA\Polls\Interfaces\IUserObj;
 
-class User implements \JsonSerializable, IUserObj {
-	public const TYPE = 'user';
-	public const TYPE_USER = 'user';
-	public const TYPE_GROUP = 'group';
-	public const TYPE_CONTACTGROUP = 'contactGroup';
-	public const TYPE_CONTACT = 'contact';
-	public const TYPE_EMAIL = 'email';
-	public const TYPE_CIRCLE = 'circle';
-	public const TYPE_EXTERNAL = 'external';
-	public const TYPE_INVALID = 'invalid';
+class Email implements \JsonSerializable, IUserObj {
+	public const TYPE = 'email';
 
 	/** @var IL10N */
 	private $l10n;
@@ -44,8 +36,20 @@ class User implements \JsonSerializable, IUserObj {
 	/** @var string */
 	private $id;
 
-	/** @var IUser */
-	private $user;
+	/** @var string */
+	private $type;
+
+	/** @var string */
+	private $displayName = '';
+
+	/** @var string */
+	private $desc = '';
+
+	/** @var string */
+	private $emailAddress = '';
+
+	/** @var array */
+	private $contact;
 
 	/**
 	 * User constructor.
@@ -55,23 +59,19 @@ class User implements \JsonSerializable, IUserObj {
 	 * @param $displayName
 	 */
 	public function __construct(
-		$id
+		$id,
+		$emailAddress = '',
+		$displayName = ''
 	) {
 		$this->id = $id;
-		$this->load();
+		$this->emailAddress = $emailAddress;
+		$this->displayName = $displayName;
+
+		$this->l10n = \OC::$server->getL10N('polls');
 	}
 
 	/**
-	 * Get userId
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUserId() {
-		return $this->id;
-	}
-
-	/**
-	 * Get userId
+	 * Get id
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -103,7 +103,7 @@ class User implements \JsonSerializable, IUserObj {
 	 * @return String
 	 */
 	public function getLanguage() {
-		return \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
+		return '';
 	}
 
 	/**
@@ -112,7 +112,31 @@ class User implements \JsonSerializable, IUserObj {
 	 * @return String
 	 */
 	public function getDisplayName() {
-		return \OC::$server->getUserManager()->get($this->id)->getDisplayName();
+		if ($this->displayName) {
+			return $this->displayName;
+		}
+		return $this->id;
+	}
+
+	/**
+	 * Get additional description, if available
+	 * @NoAdminRequired
+	 * @return String
+	 */
+	public function getDesc() {
+		return \OC::$server->getL10N('polls')->t('External Email');
+	}
+
+	/**
+	 * Get email address
+	 * @NoAdminRequired
+	 * @return String
+	 */
+	public function getEmailAddress() {
+		if ($this->emailAddress) {
+			return $this->emailAddress;
+		}
+		return $this->id;
 	}
 
 	/**
@@ -125,70 +149,17 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get email address
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getEmailAddress() {
-		return $this->user->getEMailAddress();
-	}
-
-	/**
-	 * Get additional description, if available
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDesc() {
-		return \OC::$server->getL10N('polls')->t('User');
-	}
-
-	/**
 	 * Get icon class
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getIcon() {
-		return 'icon-user';
+		return 'icon-mail';
 	}
 
-	/**
-	 * Get icon class
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUserIsDisabled() {
-		return !\OC::$server->getUserManager()->get($user)->isEnabled();
-	}
-
-	/**
-	 * listRaw
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return Array
-	 */
-	public static function listRaw($query = '') {
-		return \OC::$server->getUserManager()->search($query);
-	}
-
-	/**
-	 * search
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param array $skip - group names to skip in return array
-	 * @return Group[]
-	 */
-	public static function search($query = '', $skip = []) {
-		$users = [];
-		foreach (self::listRaw($query) as $user) {
-			if (!in_array($user->getUID(), $skip)) {
-				$users[] = new Self($user->getUID());
-			}
-		}
-		return $users;
-	}
-
-	private function load() {
-		$this->user = \OC::$server->getUserManager()->get($this->id);
+	// no search right now
+	public static function search($query) {
+		return [];
 	}
 
 	/**
@@ -196,15 +167,16 @@ class User implements \JsonSerializable, IUserObj {
 	 */
 	public function jsonSerialize(): array {
 		return	[
-			'user'          => $this->id,
 			'id'        	=> $this->id,
-			'userId'        => $this->id,
+			'user'          => $this->id,
 			'type'       	=> $this->getType(),
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
 			'desc' 			=> $this->getDesc(),
 			'icon'			=> $this->getIcon(),
+			'isNoUser'		=> true,
+			'isGuest'		=> true,
 		];
 	}
 }

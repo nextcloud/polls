@@ -25,18 +25,13 @@
 namespace OCA\Polls\Model;
 
 use OCP\IL10N;
+use OCA\Circles\Api\v1\Circles;
+
+use OCA\Polls\Exceptions\CirclesNotEnabled;
 use OCA\Polls\Interfaces\IUserObj;
 
-class User implements \JsonSerializable, IUserObj {
-	public const TYPE = 'user';
-	public const TYPE_USER = 'user';
-	public const TYPE_GROUP = 'group';
-	public const TYPE_CONTACTGROUP = 'contactGroup';
-	public const TYPE_CONTACT = 'contact';
-	public const TYPE_EMAIL = 'email';
-	public const TYPE_CIRCLE = 'circle';
-	public const TYPE_EXTERNAL = 'external';
-	public const TYPE_INVALID = 'invalid';
+class Circle implements \JsonSerializable, IUserObj {
+	public const TYPE = 'circle';
 
 	/** @var IL10N */
 	private $l10n;
@@ -44,14 +39,11 @@ class User implements \JsonSerializable, IUserObj {
 	/** @var string */
 	private $id;
 
-	/** @var IUser */
-	private $user;
+	private $circle;
 
 	/**
-	 * User constructor.
-	 * @param $type
+	 * Group constructor.
 	 * @param $id
-	 * @param $emailAddress
 	 * @param $displayName
 	 */
 	public function __construct(
@@ -62,16 +54,7 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get userId
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUserId() {
-		return $this->id;
-	}
-
-	/**
-	 * Get userId
+	 * getId
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -81,6 +64,7 @@ class User implements \JsonSerializable, IUserObj {
 
 	/**
 	 * getUser
+	 * Necessary for the avatar component
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -89,7 +73,7 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get user type
+	 * getType
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -98,25 +82,25 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get language of user, if type = TYPE_USER
+	 * getlanguage
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getLanguage() {
-		return \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
+		return '';
 	}
 
 	/**
-	 * Get displayName
+	 * getDisplayName
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDisplayName() {
-		return \OC::$server->getUserManager()->get($this->id)->getDisplayName();
+		return Circles::detailsCircle($this->id)->getName();
 	}
 
 	/**
-	 * Get organisation, if type = TYPE_CONTACT
+	 * getOrganisation
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -125,39 +109,53 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get email address
+	 * getEmailAddress
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getEmailAddress() {
-		return $this->user->getEMailAddress();
+		return '';
 	}
 
 	/**
-	 * Get additional description, if available
+	 * getDesc
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDesc() {
-		return \OC::$server->getL10N('polls')->t('User');
+		return Circles::detailsCircle($this->id)->gettypeLongString();
 	}
 
 	/**
-	 * Get icon class
+	 * getIcon
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getIcon() {
-		return 'icon-user';
+		return 'icon-circles';
 	}
 
 	/**
-	 * Get icon class
+	 * load
 	 * @NoAdminRequired
-	 * @return String
+	 * @return Array
+	 * @throws CirclesNotEnabled
 	 */
-	public function getUserIsDisabled() {
-		return !\OC::$server->getUserManager()->get($user)->isEnabled();
+	private function load() {
+		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
+			$this->circle = Circles::detailsCircle($this->id);
+		} else {
+			throw new CirclesNotEnabled();
+		}
+	}
+
+	/**
+	 * isEnabled
+	 * @NoAdminRequired
+	 * @return Boolean
+	 */
+	public static function isEnabled() {
+		return \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
 
 	/**
@@ -167,7 +165,12 @@ class User implements \JsonSerializable, IUserObj {
 	 * @return Array
 	 */
 	public static function listRaw($query = '') {
-		return \OC::$server->getUserManager()->search($query);
+		$circles = [];
+		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
+			$circles = Circles::listCircles(\OCA\Circles\Model\Circle::CIRCLES_ALL, $query);
+		}
+
+		return $circles;
 	}
 
 	/**
@@ -175,20 +178,41 @@ class User implements \JsonSerializable, IUserObj {
 	 * @NoAdminRequired
 	 * @param string $query
 	 * @param array $skip - group names to skip in return array
-	 * @return Group[]
+	 * @return Circle[]
 	 */
 	public static function search($query = '', $skip = []) {
-		$users = [];
-		foreach (self::listRaw($query) as $user) {
-			if (!in_array($user->getUID(), $skip)) {
-				$users[] = new Self($user->getUID());
+		$circles = [];
+		foreach (self::listRaw($query) as $circle) {
+			if (!in_array($circle->getUniqueId(), $skip)) {
+				$circles[] = new Self($circle->getUniqueId());
 			}
 		}
-		return $users;
+
+		return $circles;
 	}
 
-	private function load() {
-		$this->user = \OC::$server->getUserManager()->get($this->id);
+	/**
+	 * Get a list of circle members
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @return User[]
+	 */
+	public function getMembers() {
+		$members = [];
+		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
+			foreach (Circles::detailsCircle($this->id)->getMembers() as $circleMember) {
+				if ($circleMember->getType() === Circles::TYPE_USER) {
+					$members[] = new User($circleMember->getUserId());
+				} elseif ($circleMember->getType() === Circles::TYPE_MAIL) {
+					$members[] = new Email($circleMember->getUserId());
+				} elseif ($circleMember->getType() === Circles::TYPE_CONTACT) {
+					$members[] = new Contact($circleMember->getUserId());
+				} else {
+					continue;
+				}
+			}
+		}
+		return $members;
 	}
 
 	/**
@@ -196,15 +220,15 @@ class User implements \JsonSerializable, IUserObj {
 	 */
 	public function jsonSerialize(): array {
 		return	[
-			'user'          => $this->id,
 			'id'        	=> $this->id,
-			'userId'        => $this->id,
+			'user'          => $this->id,
 			'type'       	=> $this->getType(),
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
 			'desc' 			=> $this->getDesc(),
 			'icon'			=> $this->getIcon(),
+			'isNoUser'		=> true,
 		];
 	}
 }

@@ -234,7 +234,7 @@ export default {
 			this.$store
 				.dispatch('poll/shares/add', {
 					type: payload.type,
-					userId: payload.userId,
+					id: payload.id,
 					userEmail: payload.emailAddress,
 				})
 				.catch(error => {

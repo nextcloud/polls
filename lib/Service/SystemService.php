@@ -28,26 +28,17 @@ use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 
-use OCP\IGroupManager;
-use OCP\IUserManager;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Model\Circle;
+use OCA\Polls\Model\Contact;
+use OCA\Polls\Model\ContactGroup;
+use OCA\Polls\Model\Email;
+use OCA\Polls\Model\Group;
 use OCA\Polls\Model\User;
 
 class SystemService {
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var CirclesService */
-	private $circlesService;
-
-	/** @var ContactsService */
-	private $contactsService;
 
 	/** @var VoteMapper */
 	private $voteMapper;
@@ -57,26 +48,14 @@ class SystemService {
 
 	/**
 	 * SystemService constructor.
-	 * @param IGroupManager $groupManager
-	 * @param IUserManager $userManager
-	 * @param CirclesService $circlesService,
-	 * @param ContactsService $contactsService,
 	 * @param VoteMapper $voteMapper
 	 * @param ShareMapper $shareMapper
 	 */
 	public function __construct(
-		IGroupManager $groupManager,
-		IUserManager $userManager,
 		VoteMapper $voteMapper,
-		CirclesService $circlesService,
-		ContactsService $contactsService,
 		ShareMapper $shareMapper
 	) {
-		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
 		$this->voteMapper = $voteMapper;
-		$this->circlesService = $circlesService;
-		$this->contactsService = $contactsService;
 		$this->shareMapper = $shareMapper;
 	}
 
@@ -90,6 +69,19 @@ class SystemService {
 		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $emailAddress)) ? false : true;
 	}
 
+	/**
+	 * Validate email address and throw an exception
+	 * return true, if email address is a valid
+	 * @NoAdminRequired
+	 * @return Boolean
+	 * @throws InvalidEmailAddress
+	 */
+	public static function validateEmailAddress($emailAddress) {
+		if (!self::isValidEmail($emailAddress)) {
+			throw new InvalidEmailAddress;
+		}
+		return true;
+	}
 
 	/**
 	 * Get a list of users
@@ -98,35 +90,18 @@ class SystemService {
 	 * @param array $skip - usernames to skip in return array
 	 * @return User[]
 	 */
-	public function getSiteUsers($query = '', $skip = []) {
+	public static function getSiteUsers($query = '', $skip = []) {
 		$users = [];
-		foreach ($this->userManager->searchDisplayName($query) as $user) {
+		foreach (\OC::$server->getUserManager()->searchDisplayName($query) as $user) {
 			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
-				$users[] = new User(User::TYPE_USER, $user->getUID());
+				$users[] = new User($user->getUID());
 			}
 		}
 		return $users;
 	}
 
 	/**
-	 * Get a list of user groups
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param array $skip - group names to skip in return array
-	 * @return User[]
-	 */
-	public function getSiteGroups($query = '', $skip = []) {
-		$groups = [];
-		foreach ($this->groupManager->search($query) as $group) {
-			if (!in_array($group->getGID(), $skip)) {
-				$groups[] = new User(User::TYPE_GROUP, $group->getGID());
-			}
-		}
-		return $groups;
-	}
-
-	/**
-	 * Get a combined list of NC users, groups and contacts
+	 * Get a combined list of users, groups, circles, contact groups and contacts
 	 * @NoAdminRequired
 	 * @param string $query
 	 * @param bool $getGroups - search in groups
@@ -135,7 +110,7 @@ class SystemService {
 	 * @param bool $getContactGroups - search in contacs
 	 * @param array $skipGroups - group names to skip in return array
 	 * @param array $skipUsers - user names to skip in return array
-	 * @return Array
+	 * @return User[]
 	 */
 	public function getSiteUsersAndGroups(
 		$query = '',
@@ -149,46 +124,30 @@ class SystemService {
 	) {
 		$list = [];
 		if ($query !== '') {
-			if ($getMail && $this->isValidEmail($query)) {
-				$list[] = new User(User::TYPE_EMAIL, $query);
+			if ($getMail && self::isValidEmail($query)) {
+				$list[] = new Email($query);
 			}
 
 			if ($getGroups) {
-				$list = array_merge($list, $this->getSiteGroups($query, $skipGroups));
+				$list = array_merge($list, Group::search($query, $skipGroups));
 			}
 
 			if ($getUsers) {
-				$list = array_merge($list, $this->getSiteUsers($query, $skipUsers));
+				$list = array_merge($list, User::search($query, $skipUsers));
 			}
 
 			if ($getContacts) {
-				$list = array_merge($list, $this->contactsService->getContacts($query));
+				$list = array_merge($list, Contact::search($query));
 			}
 
 			if ($getContacts) {
-				$list = array_merge($list, $this->contactsService->getContactsGroups($query));
+				$list = array_merge($list, ContactGroup::search($query));
 			}
-			$list = array_merge($list, $this->circlesService->getCircles($query));
+			$list = array_merge($list, Circle::search($query));
 		}
 
 		return $list;
 	}
-
-	/**
-	 * Validate it the user name is reservrd
-	 * return false, if this username already exists as a user or as
-	 * a participant of the poll
-	 * @NoAdminRequired
-	 * @return Boolean
-	 * @throws InvalidEmailAddress
-	 */
-	public function validateEmailAddress($emailAddress) {
-		if (!$this->isValidEmail($emailAddress)) {
-			throw new InvalidEmailAddress;
-		}
-		return true;
-	}
-
 
 	/**
 	 * Validate it the user name is reservrd
@@ -212,32 +171,27 @@ class SystemService {
 		if (strlen($userName) < 3) {
 			return new TooShortException('Username must have at least 3 characters');
 		}
-		$list = [];
 
 		// get all groups
-		foreach ($this->getSiteGroups() as $user) {
-			if ($userName === strtolower(trim($user->getUserId()))
-				|| $userName === strtolower(trim($user->getDisplayName()))) {
+		foreach (Group::search() as $group) {
+			if ($userName === strtolower(trim($group->getId()))
+				|| $userName === strtolower(trim($group->getDisplayName()))) {
 				throw new InvalidUsernameException;
 			}
-			$list[] = $user;
 		}
 
 		// get all users
-		foreach ($this->getSiteUsers() as $user) {
+		foreach (User::search() as $user) {
 			if ($userName === strtolower(trim($user->getUserId()))
 				|| $userName === strtolower(trim($user->getDisplayName()))) {
 				throw new InvalidUsernameException;
 			}
-			$list[] = $user;
 		}
 
 		// get all participants
 		foreach ($this->voteMapper->findParticipantsByPoll($pollId) as $vote) {
-			if ($vote->getUserId() !== '' && $vote->getUserId() !== null) {
-				$list[] = new User(User::TYPE_USER, $vote->getUserId());
-				if ($userName === strtolower(trim(end($list)->getUserId()))
-					|| $userName === strtolower(trim(end($list)->getDisplayName()))) {
+			if ($vote->getUserId()) {
+				if ($userName === strtolower(trim($vote->getUserId()))) {
 					throw new InvalidUsernameException;
 				}
 			}
@@ -245,17 +199,11 @@ class SystemService {
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($pollId) as $share) {
-			if ($share->getUserId() !== ''
-				&& $share->getUserId() !== null
-				&& $share->getType() !== User::TYPE_CIRCLE) {
-				$user = new User($share->getType(), $share->getUserId());
-				\OC::$server->getLogger()->alert(json_encode($user));
-				if ($userName === strtolower(trim($user->getUserId()))
-					|| $userName === strtolower(trim($share->getDisplayName()))
-					|| $userName === strtolower(trim($user->getDisplayName()))) {
+			if ($share->getUserId() && $share->getType() !== User::TYPE_CIRCLE) {
+				if ($userName === strtolower(trim($share->getUserId()))
+					|| $userName === strtolower(trim($share->getDisplayName()))) {
 					throw new InvalidUsernameException;
 				}
-				$list[] = new User($share->getType(), $share->getUserId());
 			}
 		}
 		// return true, if username is allowed

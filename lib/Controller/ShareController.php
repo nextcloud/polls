@@ -36,19 +36,13 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\DB\Share;
-use OCA\Polls\Service\CirclesService;
-use OCA\Polls\Service\ContactsService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
+use OCA\Polls\Model\Circle;
+use OCA\Polls\Model\ContactGroup;
 
 class ShareController extends Controller {
-
-	/** @var CirclesService */
-	private $circlesService;
-
-	/** @var ContactsService */
-	private $contactsService;
 
 	/** @var MailService */
 	private $mailService;
@@ -63,8 +57,6 @@ class ShareController extends Controller {
 	 * ShareController constructor.
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param CirclesService $circlesService
-	 * @param ContactsService $contactsService
 	 * @param MailService $mailService
 	 * @param ShareService $shareService
 	 * @param SystemService $systemService
@@ -72,15 +64,11 @@ class ShareController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		CirclesService $circlesService,
-		ContactsService $contactsService,
 		MailService $mailService,
 		ShareService $shareService,
 		SystemService $systemService
 	) {
 		parent::__construct($appName, $request);
-		$this->circlesService = $circlesService;
-		$this->contactsService = $contactsService;
 		$this->mailService = $mailService;
 		$this->shareService = $shareService;
 		$this->systemService = $systemService;
@@ -212,13 +200,12 @@ class ShareController extends Controller {
 		try {
 			$share = $this->shareService->get($token);
 			if ($share->getType() === Share::TYPE_CIRCLE) {
-				foreach ($this->circlesService->getCircleMembers($share->getUserId()) as $user) {
-					\OC::$server->getLogger()->alert(json_encode($user));
-					$shares[] = $this->shareService->add($share->getPollId(), $user->getType(), $user->getUserId());
+				foreach (new Circle($share->getUserId()->getMembers()) as $member) {
+					$shares[] = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
 				}
 			} elseif ($share->getType() === Share::TYPE_CONTACTGROUP) {
-				foreach ($this->contactsService->getContactsGroupMembers($share->getUserId()) as $member) {
-					$shares[] = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $member['user'], $member['emailAddress']);
+				foreach (new ContactGroup($share->getUserId()->getMembers()) as $contact) {
+					$shares[] = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $contact->getId(), $contact->getEmailAddress());
 				}
 			}
 
