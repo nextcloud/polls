@@ -124,16 +124,22 @@ class ShareService {
 		switch ($type) {
 			case Group::TYPE:
 				$share = new Group($userId);
+				break;
 			case Circle::TYPE:
 				$share = new Circle($userId);
+				break;
 			case Contact::TYPE:
 				$share = new Contact($userId);
+				break;
 			case ContactGroup::TYPE:
 				$share = new ContactGroup($userId);
+				break;
 			case User::TYPE:
 				$share = new User($userId);
+				break;
 			case Email::TYPE:
 				$share = new Email($userId, $emailAddress);
+				break;
 			default:
 				throw new InvalidShareType('Invalid share type (' . $type . ')');
 		}
