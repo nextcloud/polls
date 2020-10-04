@@ -92,7 +92,7 @@ const actions = {
 		return axios.post(generateUrl(endPoint), {
 			pollId: context.rootState.poll.id,
 			type: payload.type,
-			userId: payload.userId,
+			userId: payload.id,
 			emailAddress: payload.userEmail,
 		})
 			.then((response) => {

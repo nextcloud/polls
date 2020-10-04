@@ -31,6 +31,11 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\Circle;
+use OCA\Polls\Model\Contact;
+use OCA\Polls\Model\ContactGroup;
+use OCA\Polls\Model\Email;
+use OCA\Polls\Model\Group;
 use OCA\Polls\Model\User;
 
 class ShareService {
@@ -114,14 +119,27 @@ class ShareService {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
-		$user = new User($type, $userId, $emailAddress);
+		if ($type === Group::TYPE) {
+			$share = new Group($userId);
+		} elseif ($type === Circle::TYPE) {
+			$share = new Circle($userId);
+		} elseif ($type === Contact::TYPE) {
+			$share = new Contact($userId);
+		} elseif ($type === ContactGroup::TYPE) {
+			$share = new ContactGroup($userId);
+		} elseif ($type === User::TYPE) {
+			$share = new User($userId);
+		} elseif ($type === Email::TYPE) {
+			$share = new Email($userId);
+		}
+		\OC::$server->getLogger()->alert(json_encode($share));
 
 		$this->share = new Share();
 		$this->share->setPollId($pollId);
-		$this->share->setType($user->getType());
-		$this->share->setUserId($user->getUserId());
-		$this->share->setDisplayName($user->getDisplayName());
-		$this->share->setUserEmail($user->getEmailAddress());
+		$this->share->setType($share->getType());
+		$this->share->setUserId($share->getId());
+		$this->share->setDisplayName($share->getDisplayName());
+		$this->share->setUserEmail($share->getEmailAddress());
 		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,

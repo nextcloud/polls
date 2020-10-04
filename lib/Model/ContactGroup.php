@@ -27,16 +27,8 @@ namespace OCA\Polls\Model;
 use OCP\IL10N;
 use OCA\Polls\Interfaces\IUserObj;
 
-class User implements \JsonSerializable, IUserObj {
-	public const TYPE = 'user';
-	public const TYPE_USER = 'user';
-	public const TYPE_GROUP = 'group';
-	public const TYPE_CONTACTGROUP = 'contactGroup';
-	public const TYPE_CONTACT = 'contact';
-	public const TYPE_EMAIL = 'email';
-	public const TYPE_CIRCLE = 'circle';
-	public const TYPE_EXTERNAL = 'external';
-	public const TYPE_INVALID = 'invalid';
+class ContactGroup implements \JsonSerializable, IUserObj {
+	public const TYPE = 'contactGroup';
 
 	/** @var IL10N */
 	private $l10n;
@@ -44,39 +36,40 @@ class User implements \JsonSerializable, IUserObj {
 	/** @var string */
 	private $id;
 
-	/** @var IUser */
-	private $user;
+	/** @var string */
+	private $displayName = '';
+
+	private $group;
 
 	/**
-	 * User constructor.
-	 * @param $type
+	 * Group constructor.
 	 * @param $id
-	 * @param $emailAddress
 	 * @param $displayName
 	 */
 	public function __construct(
-		$id
+		$id,
+		$displayName = ''
 	) {
 		$this->id = $id;
-		$this->load();
+		$this->displayName = $displayName;
 	}
 
 	/**
-	 * Get userId
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUserId() {
-		return $this->id;
-	}
-
-	/**
-	 * Get userId
+	 * getId
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getId() {
 		return $this->id;
+	}
+
+	/**
+	 * getType
+	 * @NoAdminRequired
+	 * @return String
+	 */
+	public function getType() {
+		return self::TYPE;
 	}
 
 	/**
@@ -89,34 +82,25 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get user type
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getType() {
-		return self::TYPE;
-	}
-
-	/**
-	 * Get language of user, if type = TYPE_USER
+	 * getlanguage
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getLanguage() {
-		return \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
+		return '';
 	}
 
 	/**
-	 * Get displayName
+	 * getDisplayName
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDisplayName() {
-		return \OC::$server->getUserManager()->get($this->id)->getDisplayName();
+		return $this->id;
 	}
 
 	/**
-	 * Get organisation, if type = TYPE_CONTACT
+	 * getOrganisation
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -125,39 +109,30 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get email address
+	 * getEmailAddress
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getEmailAddress() {
-		return $this->user->getEMailAddress();
+		return '';
 	}
 
 	/**
-	 * Get additional description, if available
+	 * getDesc
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDesc() {
-		return \OC::$server->getL10N('polls')->t('User');
+		return \OC::$server->getL10N('polls')->t('Contact group');
 	}
 
 	/**
-	 * Get icon class
+	 * getIcon
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getIcon() {
-		return 'icon-user';
-	}
-
-	/**
-	 * Get icon class
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUserIsDisabled() {
-		return !\OC::$server->getUserManager()->get($user)->isEnabled();
+		return 'icon-group';
 	}
 
 	/**
@@ -167,44 +142,84 @@ class User implements \JsonSerializable, IUserObj {
 	 * @return Array
 	 */
 	public static function listRaw($query = '') {
-		return \OC::$server->getUserManager()->search($query);
+		$contactGroups = [];
+		if (\OC::$server->getContactsManager()->isEnabled()) {
+			// find contact, which are member of the requested Group
+			foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
+				// get all groups from the found contact and explode to array
+				$temp = explode(',', $contact['CATEGORIES']);
+				foreach ($temp as $contactGroup) {
+					if (stripos($contactGroup, $query) === 0) {
+						$contactGroups[] = $contactGroup;
+					}
+				}
+			}
+		}
+		return array_unique($contactGroups);
 	}
 
 	/**
-	 * search
+	 * Get a list of contact groups
 	 * @NoAdminRequired
 	 * @param string $query
-	 * @param array $skip - group names to skip in return array
-	 * @return Group[]
+	 * @return Array
 	 */
-	public static function search($query = '', $skip = []) {
-		$users = [];
-		foreach (self::listRaw($query) as $user) {
-			if (!in_array($user->getUID(), $skip)) {
-				$users[] = new Self($user->getUID());
+	public static function search($query = '') {
+		if (\OC::$server->getContactsManager()->isEnabled() && $query) {
+			$contactGroups = [];
+			foreach (self::listRaw($query) as $contactGroup) {
+				$contactGroups[] = new self($contactGroup);
 			}
 		}
-		return $users;
+		return $contactGroups;
 	}
 
-	private function load() {
-		$this->user = \OC::$server->getUserManager()->get($this->id);
+	/**
+	 * Get a list of contacts group members
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @return Contact[]
+	 */
+	public function getMembers() {
+		if (\OC::$server->getContactsManager()->isEnabled()) {
+			$contacts = [];
+			foreach (\OC::$server->getContactsManager()->search($this->id, ['CATEGORIES']) as $contact) {
+				if (!array_key_exists('isLocalSystemBook', $contact)
+					&& array_key_exists('EMAIL', $contact)
+					&& in_array($query, explode(',', $contact['CATEGORIES']))
+				) {
+					$emailAdresses = $contact['EMAIL'];
+
+					if (!is_array($emailAdresses)) {
+						$emailAdress = $emailAdresses;
+					} else {
+						// take the first eMail address for now
+						$emailAdress = $emailAdresses[0];
+					}
+					$contacts[] = new Contact($contact['UID']);
+				}
+			}
+			return $contacts;
+		}
+		return [];
 	}
+
 
 	/**
 	 * @return array
 	 */
 	public function jsonSerialize(): array {
 		return	[
-			'user'          => $this->id,
 			'id'        	=> $this->id,
-			'userId'        => $this->id,
+			'user'          => $this->id,
 			'type'       	=> $this->getType(),
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
 			'desc' 			=> $this->getDesc(),
 			'icon'			=> $this->getIcon(),
+			'isNoUser'		=> true,
+			'isGuest'		=> true,
 		];
 	}
 }
