@@ -183,7 +183,7 @@ class Contact implements \JsonSerializable, IUserObj {
 				$this->contact = $contacts[0];
 				$this->id = $this->contact['UID'];
 			} elseif (count($contacts) > 1) {
-				throw new MultipleContactsFound('Multiple contacts found for id '. $this->id);
+				throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
 			}
 		} else {
 			throw new ContactsNotEnabled();
