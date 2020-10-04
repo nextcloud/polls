@@ -212,6 +212,7 @@ class MailService {
 					'language' => $user->getLanguage(),
 					'link' => $internalLink,
 				];
+        		break;
 			case Share::TYPE_EMAIL:
 				$user = new Email($share->getUserId());
 
@@ -222,6 +223,7 @@ class MailService {
 					'language' => $defaultLang,
 					'link' => $tokenLink,
 				];
+				break;
 			case Share::TYPE_CONTACT:
 				$user = new Contact($share->getUserId());
 
@@ -232,6 +234,7 @@ class MailService {
 					'language' => $defaultLang,
 					'link' => $tokenLink,
 				];
+				break;
 			case Share::TYPE_EXTERNAL:
 				$recipients[] = [
 					'userId' => $share->getUserId(),
@@ -240,6 +243,7 @@ class MailService {
 					'language' => $defaultLang,
 					'link' => $tokenLink,
 				];
+				break;
 			case Share::TYPE_GROUP:
 				foreach ((new Group($share->getUserId()))->getMembers() as $user) {
 					if ($skipUser === $user->getId() || !$user->getUserIsDisabled()) {
