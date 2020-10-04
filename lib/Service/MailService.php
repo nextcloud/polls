@@ -40,6 +40,9 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Model\User;
+use OCA\Polls\Model\Contact;
+use OCA\Polls\Model\Group;
 
 class MailService {
 
@@ -76,9 +79,6 @@ class MailService {
 	/** @var LogMapper */
 	private $logMapper;
 
-	/** @var ContactsService */
-	private $contactsService;
-
 	/**
 	 * MailService constructor.
 	 * @param IUserManager $userManager
@@ -92,7 +92,6 @@ class MailService {
 	 * @param ShareMapper $shareMapper
 	 * @param PollMapper $pollMapper
 	 * @param LogMapper $logMapper
-	 * @param ContactsService $contactsService
 	 */
 
 	public function __construct(
@@ -106,8 +105,7 @@ class MailService {
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
 		PollMapper $pollMapper,
-		LogMapper $logMapper,
-		ContactsService $contactsService
+		LogMapper $logMapper
 	) {
 		$this->config = $config;
 		$this->userManager = $userManager;
@@ -120,7 +118,6 @@ class MailService {
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->logMapper = $logMapper;
-		$this->contactsService = $contactsService;
 	}
 
 
@@ -205,7 +202,7 @@ class MailService {
 		);
 
 		if ($share->getType() === Share::TYPE_USER) {
-			$user = new User(User::TYPE_USER, $share->getUserId());
+			$user = new User($share->getUserId());
 			$recipients[] = [
 				'userId' => $user->getUserId(),
 				'eMailAddress' => $user->getEmailAddress(),
@@ -214,7 +211,8 @@ class MailService {
 				'link' => $internalLink,
 			];
 		} elseif ($share->getType() === Share::TYPE_EMAIL) {
-			$user = new User(User::TYPE_EMAIL, $share->getUserId());
+			$user = new Email($share->getUserId());
+
 			$recipients[] = [
 				'userId' => $user->getUserId(),
 				'eMailAddress' => $user->getEmailAddress(),
@@ -223,20 +221,15 @@ class MailService {
 				'link' => $tokenLink,
 			];
 		} elseif ($share->getType() === Share::TYPE_CONTACT) {
-			$contacts = $this->contactsService->getContacts($share->getUserId(), ['FN', 'UID']);
-			if (count($contacts)) {
-				$user = $contacts[0];
+			$user = new Contact($share->getUserId());
 
-				$recipients[] = [
-					'userId' => $user->getUserId(),
-					'eMailAddress' => $user->getEmailAddress(),
-					'displayName' => $user->getDisplayname(),
-					'language' => $defaultLang,
-					'link' => $tokenLink,
-				];
-			} else {
-				return;
-			}
+			$recipients[] = [
+				'userId' => $user->getUserId(),
+				'eMailAddress' => $user->getEmailAddress(),
+				'displayName' => $user->getDisplayname(),
+				'language' => $defaultLang,
+				'link' => $tokenLink,
+			];
 		} elseif ($share->getType() === Share::TYPE_EXTERNAL) {
 			$recipients[] = [
 				'userId' => $share->getUserId(),
@@ -246,16 +239,13 @@ class MailService {
 				'link' => $tokenLink,
 			];
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
-			$groupMembers = array_keys($this->groupManager->displayNamesInGroup($share->getUserId()));
-
-			foreach ($groupMembers as $user) {
-				if ($skipUser === $user || !$this->userManager->get($user)->isEnabled()) {
+			foreach ((new Group($share->getUserId()))->getMembers() as $user) {
+				if ($skipUser === $user->getId() || !$user->isUserDisabled()) {
 					continue;
 				}
-				$user = new User(User::TYPE_USER, $user->getUserId());
 
 				$recipients[] = [
-					'userId' => $user->getUserId(),
+					'userId' => $user->getId(),
 					'eMailAddress' => $user->getEmailAddress(),
 					'displayName' => $user->getDisplayName(),
 					'language' => $user->getLanguage(),

@@ -27,16 +27,8 @@ namespace OCA\Polls\Model;
 use OCP\IL10N;
 use OCA\Polls\Interfaces\IUserObj;
 
-class User implements \JsonSerializable, IUserObj {
-	public const TYPE = 'user';
-	public const TYPE_USER = 'user';
-	public const TYPE_GROUP = 'group';
-	public const TYPE_CONTACTGROUP = 'contactGroup';
-	public const TYPE_CONTACT = 'contact';
-	public const TYPE_EMAIL = 'email';
-	public const TYPE_CIRCLE = 'circle';
-	public const TYPE_EXTERNAL = 'external';
-	public const TYPE_INVALID = 'invalid';
+class Group implements \JsonSerializable, IUserObj {
+	public const TYPE = 'group';
 
 	/** @var IL10N */
 	private $l10n;
@@ -44,14 +36,12 @@ class User implements \JsonSerializable, IUserObj {
 	/** @var string */
 	private $id;
 
-	/** @var IUser */
-	private $user;
+	/** @var IGroup */
+	private $group;
 
 	/**
-	 * User constructor.
-	 * @param $type
+	 * Group constructor.
 	 * @param $id
-	 * @param $emailAddress
 	 * @param $displayName
 	 */
 	public function __construct(
@@ -62,16 +52,7 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get userId
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUserId() {
-		return $this->id;
-	}
-
-	/**
-	 * Get userId
+	 * getId
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -89,7 +70,7 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get user type
+	 * getType
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -98,25 +79,31 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get language of user, if type = TYPE_USER
+	 * getlanguage
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getLanguage() {
-		return \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
+		return '';
 	}
 
 	/**
-	 * Get displayName
+	 * getDisplayName
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDisplayName() {
-		return \OC::$server->getUserManager()->get($this->id)->getDisplayName();
+		try {
+			// since NC19
+			return $this->group->getDisplayName();
+		} catch (\Exception $e) {
+			// until NC18
+			return $this->id;
+		}
 	}
 
 	/**
-	 * Get organisation, if type = TYPE_CONTACT
+	 * getOrganisation
 	 * @NoAdminRequired
 	 * @return String
 	 */
@@ -125,39 +112,34 @@ class User implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get email address
+	 * getEmailAddress
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getEmailAddress() {
-		return $this->user->getEMailAddress();
+		return '';
 	}
 
 	/**
-	 * Get additional description, if available
+	 * getDesc
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDesc() {
-		return \OC::$server->getL10N('polls')->t('User');
+		return \OC::$server->getL10N('polls')->t('Group');
 	}
 
 	/**
-	 * Get icon class
+	 * getIcon
 	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getIcon() {
-		return 'icon-user';
+		return 'icon-group';
 	}
 
-	/**
-	 * Get icon class
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUserIsDisabled() {
-		return !\OC::$server->getUserManager()->get($user)->isEnabled();
+	private function load() {
+		$this->group = \OC::$server->getGroupManager()->get($this->id);
 	}
 
 	/**
@@ -167,7 +149,7 @@ class User implements \JsonSerializable, IUserObj {
 	 * @return Array
 	 */
 	public static function listRaw($query = '') {
-		return \OC::$server->getUserManager()->search($query);
+		return \OC::$server->getGroupManager()->search($query);
 	}
 
 	/**
@@ -178,33 +160,45 @@ class User implements \JsonSerializable, IUserObj {
 	 * @return Group[]
 	 */
 	public static function search($query = '', $skip = []) {
-		$users = [];
-		foreach (self::listRaw($query) as $user) {
-			if (!in_array($user->getUID(), $skip)) {
-				$users[] = new Self($user->getUID());
+		$groups = [];
+		foreach (self::listRaw($query) as $group) {
+			if (!in_array($group->getGID(), $skip)) {
+				$groups[] = new Self($group->getGID());
 			}
 		}
-		return $users;
+		return $groups;
 	}
 
-	private function load() {
-		$this->user = \OC::$server->getUserManager()->get($this->id);
+	/**
+	 * Get a list of circle members
+	 * @NoAdminRequired
+	 * @param string $query
+	 * @return User[]
+	 */
+	public function getMembers() {
+		$members = [];
+		foreach (array_keys(\OC::$server->getGroupManager()->displayNamesInGroup($this->id)) as $member) {
+			$members[] = new user($member);
+		}
+		return $members;
 	}
+
+
 
 	/**
 	 * @return array
 	 */
 	public function jsonSerialize(): array {
 		return	[
-			'user'          => $this->id,
 			'id'        	=> $this->id,
-			'userId'        => $this->id,
+			'user'          => $this->id,
 			'type'       	=> $this->getType(),
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
 			'desc' 			=> $this->getDesc(),
 			'icon'			=> $this->getIcon(),
+			'isNoUser'		=> true,
 		];
 	}
 }
