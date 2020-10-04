@@ -24,7 +24,6 @@
 
 namespace OCA\Polls\Model;
 
-use OCP\IL10N;
 use OCA\Circles\Api\v1\Circles;
 
 use OCA\Polls\Exceptions\CirclesNotEnabled;
@@ -32,9 +31,6 @@ use OCA\Polls\Interfaces\IUserObj;
 
 class Circle implements \JsonSerializable, IUserObj {
 	public const TYPE = 'circle';
-
-	/** @var IL10N */
-	private $l10n;
 
 	/** @var string */
 	private $id;
@@ -118,11 +114,11 @@ class Circle implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * getDesc
+	 * getDescription
 	 * @NoAdminRequired
 	 * @return String
 	 */
-	public function getDesc() {
+	public function getDescription() {
 		return Circles::detailsCircle($this->id)->gettypeLongString();
 	}
 
@@ -226,7 +222,7 @@ class Circle implements \JsonSerializable, IUserObj {
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDesc(),
+			'desc' 			=> $this->getDescription(),
 			'icon'			=> $this->getIcon(),
 			'isNoUser'		=> true,
 		];

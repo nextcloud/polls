@@ -130,9 +130,8 @@ class ShareService {
 		} elseif ($type === User::TYPE) {
 			$share = new User($userId);
 		} elseif ($type === Email::TYPE) {
-			$share = new Email($userId);
+			$share = new Email($userId, $emailAddress);
 		}
-		\OC::$server->getLogger()->alert(json_encode($share));
 
 		$this->share = new Share();
 		$this->share->setPollId($pollId);

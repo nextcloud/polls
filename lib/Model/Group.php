@@ -24,14 +24,11 @@
 
 namespace OCA\Polls\Model;
 
-use OCP\IL10N;
+use OCP\IGroup;
 use OCA\Polls\Interfaces\IUserObj;
 
 class Group implements \JsonSerializable, IUserObj {
 	public const TYPE = 'group';
-
-	/** @var IL10N */
-	private $l10n;
 
 	/** @var string */
 	private $id;
@@ -121,11 +118,11 @@ class Group implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * getDesc
+	 * getDescription
 	 * @NoAdminRequired
 	 * @return String
 	 */
-	public function getDesc() {
+	public function getDescription() {
 		return \OC::$server->getL10N('polls')->t('Group');
 	}
 
@@ -196,7 +193,7 @@ class Group implements \JsonSerializable, IUserObj {
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),
 			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDesc(),
+			'desc' 			=> $this->getDescription(),
 			'icon'			=> $this->getIcon(),
 			'isNoUser'		=> true,
 		];
