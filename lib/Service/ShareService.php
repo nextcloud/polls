@@ -123,41 +123,7 @@ class ShareService {
 		}
 
 		$this->share = new Share();
-
-		switch ($type) {
-			case Group::TYPE:
-				$share = new Group($userId);
-				break;
-			case Circle::TYPE:
-				$share = new Circle($userId);
-				break;
-			case Contact::TYPE:
-				$share = new Contact($userId);
-				break;
-			case ContactGroup::TYPE:
-				$share = new ContactGroup($userId);
-				break;
-			case User::TYPE:
-				$share = new User($userId);
-				break;
-			case Email::TYPE:
-				$share = new Email($userId, $emailAddress);
-				break;
-			case UserGroupClass::TYPE_PUBLIC:
-				break;
-			default:
-				throw new InvalidShareType('Invalid share type (' . $type . ')');
-		}
-
 		$this->share->setPollId($pollId);
-		if ($type = UserGroupClass::TYPE_PUBLIC) {
-			$this->share->setType(UserGroupClass::TYPE_PUBLIC);
-		} else {
-			$this->share->setType($share->getType());
-			$this->share->setUserId($share->getId());
-			$this->share->setDisplayName($share->getDisplayName());
-			$this->share->setUserEmail($share->getEmailAddress());
-		}
 		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
@@ -165,6 +131,39 @@ class ShareService {
 			ISecureRandom::CHAR_LOWER .
 			ISecureRandom::CHAR_UPPER
 		));
+
+
+		if ($type === UserGroupClass::TYPE_PUBLIC) {
+			$this->share->setType(UserGroupClass::TYPE_PUBLIC);
+		} else {
+			switch ($type) {
+				case Group::TYPE:
+					$share = new Group($userId);
+					break;
+				case Circle::TYPE:
+					$share = new Circle($userId);
+					break;
+				case Contact::TYPE:
+					$share = new Contact($userId);
+					break;
+				case ContactGroup::TYPE:
+					$share = new ContactGroup($userId);
+					break;
+				case User::TYPE:
+					$share = new User($userId);
+					break;
+				case Email::TYPE:
+					$share = new Email($userId, $emailAddress);
+					break;
+				default:
+					throw new InvalidShareType('Invalid share type (' . $type . ')');
+			}
+
+			$this->share->setType($share->getType());
+			$this->share->setUserId($share->getId());
+			$this->share->setDisplayName($share->getDisplayName());
+			$this->share->setUserEmail($share->getEmailAddress());
+		}
 
 		return $this->shareMapper->insert($this->share);
 	}
