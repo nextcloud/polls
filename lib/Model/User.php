@@ -24,8 +24,7 @@
 
 namespace OCA\Polls\Model;
 
-
-class User extends UserGroupClass  {
+class User extends UserGroupClass {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
 
