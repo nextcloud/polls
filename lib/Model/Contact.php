@@ -23,25 +23,12 @@
 
 namespace OCA\Polls\Model;
 
-use OCP\IL10N;
 use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabled;
-use OCA\Polls\Interfaces\IUserObj;
 
-class Contact implements \JsonSerializable, IUserObj {
+class Contact extends UserGroupClass {
 	public const TYPE = 'contact';
-
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var string */
-	private $id;
-
-	/** @var string */
-	private $displayName = '';
-
-	/** @var array */
-	private $contact;
+	public const ICON = 'icon-mail';
 
 	/**
 	 * User constructor.
@@ -52,127 +39,15 @@ class Contact implements \JsonSerializable, IUserObj {
 		$id,
 		$displayName = ''
 	) {
-		$this->id = $id;
-		$this->displayName = $displayName;
+		parent::__construct($id, self::TYPE, $displayName);
+		$this->icon = self::ICON;
 
-		$this->l10n = \OC::$server->getL10N('polls');
-		$this->load();
-	}
-
-	/**
-	 * Get id
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
-	/**
-	 * getUser
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUser() {
-		return $this->id;
-	}
-
-	/**
-	 * Get user type
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getType() {
-		return self::TYPE;
-	}
-
-	/**
-	 * getLanguage
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getLanguage() {
-		return '';
-	}
-
-	/**
-	 * Get displayName
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDisplayName() {
-		return isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
-	}
-
-	/**
-	 * Get additional description, if available
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDescription() {
-		$description = $this->getCategories();
-		if (isset($this->contact['ORG'])) {
-			array_unshift($description, $this->getOrganisation());
-		}
-		if (count($description) > 0) {
-			return implode(", ", $description);
-		} else {
-			return \OC::$server->getL10N('polls')->t('Contact');
-		}
-	}
-
-	/**
-	 * Get email address
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getEmailAddress() {
-		return isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : '';
-	}
-
-	/**
-	 * Get organisation
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getOrganisation() {
-		return isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
-	}
-
-	/**
-	 * getCategories
-	 * @NoAdminRequired
-	 * @return Array
-	 */
-	public function getCategories() {
-		if (isset($this->contact['CATEGORIES'])) {
-			return explode(',', $this->contact['CATEGORIES']);
-		} else {
-			return [];
-		}
-	}
-
-	/**
-	 * Get icon class
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getIcon() {
-		return 'icon-mail';
-	}
-
-	/**
-	 * Load contact
-	 * @NoAdminRequired
-	 * @return String
-	 * @throws MultipleContactsFound
-	 * @throws ContactsNotEnabled
-	 */
-	private function load() {
-		$this->contact = [];
-		$parts = explode(":", $this->id);
-		$this->id = end($parts);
 		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
+			$this->contact = [];
+
+			$parts = explode(":", $this->id);
+			$this->id = end($parts);
+
 			// Search for UID and FN
 			// Before this implementation contacts where stored with their FN property
 			// From now on, the contact's UID is used as identifier
@@ -182,9 +57,33 @@ class Contact implements \JsonSerializable, IUserObj {
 			if (count($contacts) === 1) {
 				$this->contact = $contacts[0];
 				$this->id = $this->contact['UID'];
+				$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
+				$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
 			} elseif (count($contacts) > 1) {
 				throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
 			}
+
+			$this->organisation = isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
+
+			if (isset($this->contact['CATEGORIES'])) {
+				$this->categories = explode(',', $this->contact['CATEGORIES']);
+			} else {
+				$this->categories = [];
+			}
+
+			$description = $this->categories;
+
+			if (isset($this->contact['ORG'])) {
+				array_unshift($description, $this->organisation);
+			}
+
+			if (count($description) > 0) {
+				$this->description = implode(", ", $description);
+			} else {
+				$this->description = \OC::$server->getL10N('polls')->t('Contact');
+			}
+
+
 		} else {
 			throw new ContactsNotEnabled();
 		}
@@ -230,25 +129,5 @@ class Contact implements \JsonSerializable, IUserObj {
 			$contacts[] = new Self($contact['UID']);
 		}
 		return $contacts;
-	}
-
-
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize(): array {
-		return	[
-			'id'        	=> $this->getId(),
-			'user'          => $this->id,
-			'type'       	=> $this->getType(),
-			'displayName'	=> $this->getDisplayName(),
-			'organisation'	=> $this->getOrganisation(),
-			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDescription(),
-			'icon'			=> $this->getIcon(),
-			'categories'	=> $this->getCategories(),
-			'isNoUser'		=> true,
-			'isGuest'		=> true,
-		];
 	}
 }

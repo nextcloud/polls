@@ -27,11 +27,9 @@ namespace OCA\Polls\Model;
 use OCP\IGroup;
 use OCA\Polls\Interfaces\IUserObj;
 
-class Group implements \JsonSerializable, IUserObj {
+class Group extends UserGroupClass {
 	public const TYPE = 'group';
-
-	/** @var string */
-	private $id;
+	public const ICON = 'icon-group';
 
 	/** @var IGroup */
 	private $group;
@@ -44,99 +42,18 @@ class Group implements \JsonSerializable, IUserObj {
 	public function __construct(
 		$id
 	) {
-		$this->id = $id;
-		$this->load();
-	}
+		parent::__construct($id, self::TYPE);
+		$this->icon = self::ICON;
 
-	/**
-	 * getId
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
-	/**
-	 * getUser
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUser() {
-		return $this->id;
-	}
-
-	/**
-	 * getType
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getType() {
-		return self::TYPE;
-	}
-
-	/**
-	 * getlanguage
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getLanguage() {
-		return '';
-	}
-
-	/**
-	 * getDisplayName
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDisplayName() {
+		$this->group = \OC::$server->getGroupManager()->get($this->id);
+		$this->description = \OC::$server->getL10N('polls')->t('Group');
 		try {
 			// since NC19
-			return $this->group->getDisplayName();
+			$this->displayName = $this->group->getDisplayName();
 		} catch (\Exception $e) {
 			// until NC18
-			return $this->id;
+			$this->displayName = $this->id;
 		}
-	}
-
-	/**
-	 * getOrganisation
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getOrganisation() {
-		return '';
-	}
-
-	/**
-	 * getEmailAddress
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getEmailAddress() {
-		return '';
-	}
-
-	/**
-	 * getDescription
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDescription() {
-		return \OC::$server->getL10N('polls')->t('Group');
-	}
-
-	/**
-	 * getIcon
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getIcon() {
-		return 'icon-group';
-	}
-
-	private function load() {
-		$this->group = \OC::$server->getGroupManager()->get($this->id);
 	}
 
 	/**
@@ -167,7 +84,7 @@ class Group implements \JsonSerializable, IUserObj {
 	}
 
 	/**
-	 * Get a list of circle members
+	 * getMembers
 	 * @NoAdminRequired
 	 * @param string $query
 	 * @return User[]
@@ -175,27 +92,9 @@ class Group implements \JsonSerializable, IUserObj {
 	public function getMembers() {
 		$members = [];
 		foreach (array_keys(\OC::$server->getGroupManager()->displayNamesInGroup($this->id)) as $member) {
-			$members[] = new user($member);
+			$members[] = new User($member);
 		}
 		return $members;
 	}
 
-
-
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize(): array {
-		return	[
-			'id'        	=> $this->id,
-			'user'          => $this->id,
-			'type'       	=> $this->getType(),
-			'displayName'	=> $this->getDisplayName(),
-			'organisation'	=> $this->getOrganisation(),
-			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDescription(),
-			'icon'			=> $this->getIcon(),
-			'isNoUser'		=> true,
-		];
-	}
 }
