@@ -27,144 +27,22 @@ namespace OCA\Polls\Model;
 use OCP\IL10N;
 use OCA\Polls\Interfaces\IUserObj;
 
-class Email implements \JsonSerializable, IUserObj {
+class Email extends UserGroupClass {
 	public const TYPE = 'email';
-
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var string */
-	private $id;
-
-	/** @var string */
-	private $displayName = '';
-
-	/** @var string */
-	private $emailAddress = '';
+	public const ICON = 'icon-mail';
 
 	/**
-	 * User constructor.
+	 * Email constructor.
 	 * @param $id
-	 * @param $emailAddress
 	 * @param $displayName
 	 */
 	public function __construct(
 		$id,
-		$emailAddress = '',
 		$displayName = ''
 	) {
-		$this->id = $id;
-		$this->emailAddress = $emailAddress;
-		$this->displayName = $displayName;
-
-		$this->l10n = \OC::$server->getL10N('polls');
-	}
-
-	/**
-	 * Get id
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
-	/**
-	 * getUser
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUser() {
-		return $this->id;
-	}
-
-	/**
-	 * Get user type
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getType() {
-		return self::TYPE;
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getLanguage() {
-		return '';
-	}
-
-	/**
-	 * Get displayName
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDisplayName() {
-		if ($this->displayName) {
-			return $this->displayName;
-		}
-		return $this->id;
-	}
-
-	/**
-	 * Get additional description, if available
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDescription() {
-		return \OC::$server->getL10N('polls')->t('External Email');
-	}
-
-	/**
-	 * Get email address
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getEmailAddress() {
-		if ($this->emailAddress) {
-			return $this->emailAddress;
-		}
-		return $this->id;
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getOrganisation() {
-		return '';
-	}
-
-	/**
-	 * Get icon class
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getIcon() {
-		return 'icon-mail';
-	}
-
-	// no search right now
-	public static function search($query) {
-		return [];
-	}
-
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize(): array {
-		return	[
-			'id'        	=> $this->id,
-			'user'          => $this->id,
-			'type'       	=> $this->getType(),
-			'displayName'	=> $this->getDisplayName(),
-			'organisation'	=> $this->getOrganisation(),
-			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDescription(),
-			'icon'			=> $this->getIcon(),
-			'isNoUser'		=> true,
-			'isGuest'		=> true,
-		];
+		parent::__construct($id, self::TYPE, $displayName);
+		$this->description = \OC::$server->getL10N('polls')->t('External Email');
+		$this->icon = self::ICON;
+		$this->emailAddress = $id;
 	}
 }

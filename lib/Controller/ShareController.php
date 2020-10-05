@@ -200,11 +200,11 @@ class ShareController extends Controller {
 		try {
 			$share = $this->shareService->get($token);
 			if ($share->getType() === Share::TYPE_CIRCLE) {
-				foreach (new Circle($share->getUserId()->getMembers()) as $member) {
+				foreach ((new Circle($share->getUserId()))->getMembers() as $member) {
 					$shares[] = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
 				}
 			} elseif ($share->getType() === Share::TYPE_CONTACTGROUP) {
-				foreach (new ContactGroup($share->getUserId()->getMembers()) as $contact) {
+				foreach ((new ContactGroup($share->getUserId()))->getMembers() as $contact) {
 					$shares[] = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $contact->getId(), $contact->getEmailAddress());
 				}
 			}

@@ -201,7 +201,6 @@ class MailService {
 				['id' => $share->getPollId()]
 			)
 		);
-
 		switch ($share->getType()) {
 			case Share::TYPE_USER:
 				$user = new User($share->getUserId());
@@ -246,7 +245,7 @@ class MailService {
 				break;
 			case Share::TYPE_GROUP:
 				foreach ((new Group($share->getUserId()))->getMembers() as $user) {
-					if ($skipUser === $user->getId() || !$user->getUserIsDisabled()) {
+					if ($skipUser === $user->getId() || $user->getUserIsDisabled()) {
 						continue;
 					}
 
