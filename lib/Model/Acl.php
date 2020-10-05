@@ -75,7 +75,7 @@ class Acl implements JsonSerializable {
 
 	/**
 	 * Acl constructor.
-	 * @param string $userId
+	 * @param string $UserId
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
@@ -86,7 +86,7 @@ class Acl implements JsonSerializable {
 	 *
 	 */
 	public function __construct(
-		$userId,
+		$UserId,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
@@ -95,7 +95,7 @@ class Acl implements JsonSerializable {
 		Poll $poll,
 		Share $share
 	) {
-		$this->userId = $userId;
+		$this->userId = $UserId;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;

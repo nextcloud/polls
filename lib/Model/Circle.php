@@ -27,13 +27,10 @@ namespace OCA\Polls\Model;
 use OCA\Circles\Api\v1\Circles;
 
 use OCA\Polls\Exceptions\CirclesNotEnabled;
-use OCA\Polls\Interfaces\IUserObj;
 
-class Circle implements \JsonSerializable, IUserObj {
+class Circle extends UserGroupClass {
 	public const TYPE = 'circle';
-
-	/** @var string */
-	private $id;
+	public const ICON = 'icon-circles';
 
 	private $circle;
 
@@ -45,101 +42,13 @@ class Circle implements \JsonSerializable, IUserObj {
 	public function __construct(
 		$id
 	) {
-		$this->id = $id;
-		$this->load();
-	}
-
-	/**
-	 * getId
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
-	/**
-	 * getUser
-	 * Necessary for the avatar component
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUser() {
-		return $this->id;
-	}
-
-	/**
-	 * getType
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getType() {
-		return self::TYPE;
-	}
-
-	/**
-	 * getlanguage
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getLanguage() {
-		return '';
-	}
-
-	/**
-	 * getDisplayName
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDisplayName() {
-		return Circles::detailsCircle($this->id)->getName();
-	}
-
-	/**
-	 * getOrganisation
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getOrganisation() {
-		return '';
-	}
-
-	/**
-	 * getEmailAddress
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getEmailAddress() {
-		return '';
-	}
-
-	/**
-	 * getDescription
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDescription() {
-		return Circles::detailsCircle($this->id)->gettypeLongString();
-	}
-
-	/**
-	 * getIcon
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getIcon() {
-		return 'icon-circles';
-	}
-
-	/**
-	 * load
-	 * @NoAdminRequired
-	 * @return Array
-	 * @throws CirclesNotEnabled
-	 */
-	private function load() {
+		parent::__construct($id, self::TYPE);
 		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
-			$this->circle = Circles::detailsCircle($this->id);
+			$this->icon = self::ICON;
+			$this->circle = Circles::detailsCircle($id);
+			$this->displayName = $this->circle->getName();
+			$this->description = $this->circle->gettypeLongString();
+
 		} else {
 			throw new CirclesNotEnabled();
 		}
@@ -209,22 +118,5 @@ class Circle implements \JsonSerializable, IUserObj {
 			}
 		}
 		return $members;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize(): array {
-		return	[
-			'id'        	=> $this->id,
-			'user'          => $this->id,
-			'type'       	=> $this->getType(),
-			'displayName'	=> $this->getDisplayName(),
-			'organisation'	=> $this->getOrganisation(),
-			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDescription(),
-			'icon'			=> $this->getIcon(),
-			'isNoUser'		=> true,
-		];
 	}
 }

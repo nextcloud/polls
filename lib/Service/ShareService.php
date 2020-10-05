@@ -31,6 +31,7 @@ use OCP\Security\ISecureRandom;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\UserGroupClass;
 use OCA\Polls\Model\Circle;
 use OCA\Polls\Model\Contact;
 use OCA\Polls\Model\ContactGroup;
@@ -116,10 +117,12 @@ class ShareService {
 	 * @throws NotAuthorizedException
 	 * @throws InvalidShareType
 	 */
-	public function add($pollId, $type, $userId, $emailAddress = '') {
+	public function add($pollId, $type, $userId = '', $emailAddress = '') {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
+
+		$this->share = new Share();
 
 		switch ($type) {
 			case Group::TYPE:
@@ -140,16 +143,21 @@ class ShareService {
 			case Email::TYPE:
 				$share = new Email($userId, $emailAddress);
 				break;
+			case UserGroupClass::TYPE_PUBLIC:
+				break;
 			default:
 				throw new InvalidShareType('Invalid share type (' . $type . ')');
 		}
 
-		$this->share = new Share();
 		$this->share->setPollId($pollId);
-		$this->share->setType($share->getType());
-		$this->share->setUserId($share->getId());
-		$this->share->setDisplayName($share->getDisplayName());
-		$this->share->setUserEmail($share->getEmailAddress());
+		if ($type = UserGroupClass::TYPE_PUBLIC) {
+			$this->share->setType(UserGroupClass::TYPE_PUBLIC);
+		} else {
+			$this->share->setType($share->getType());
+			$this->share->setUserId($share->getId());
+			$this->share->setDisplayName($share->getDisplayName());
+			$this->share->setUserEmail($share->getEmailAddress());
+		}
 		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,

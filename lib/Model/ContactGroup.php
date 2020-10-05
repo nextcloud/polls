@@ -24,16 +24,9 @@
 
 namespace OCA\Polls\Model;
 
-use OCA\Polls\Interfaces\IUserObj;
-
-class ContactGroup implements \JsonSerializable, IUserObj {
+class ContactGroup extends UserGroupClass {
 	public const TYPE = 'contactGroup';
-
-	/** @var string */
-	private $id;
-
-	/** @var string */
-	private $displayName = '';
+	public const ICON = 'icon-group';
 
 	/**
 	 * Group constructor.
@@ -44,89 +37,9 @@ class ContactGroup implements \JsonSerializable, IUserObj {
 		$id,
 		$displayName = ''
 	) {
-		$this->id = $id;
-		$this->displayName = $displayName;
-	}
-
-	/**
-	 * getId
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
-	/**
-	 * getType
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getType() {
-		return self::TYPE;
-	}
-
-	/**
-	 * getUser
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getUser() {
-		return $this->id;
-	}
-
-	/**
-	 * getlanguage
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getLanguage() {
-		return '';
-	}
-
-	/**
-	 * getDisplayName
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDisplayName() {
-		return $this->id;
-	}
-
-	/**
-	 * getOrganisation
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getOrganisation() {
-		return '';
-	}
-
-	/**
-	 * getEmailAddress
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getEmailAddress() {
-		return '';
-	}
-
-	/**
-	 * getDescription
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDescription() {
-		return \OC::$server->getL10N('polls')->t('Contact group');
-	}
-
-	/**
-	 * getIcon
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getIcon() {
-		return 'icon-group';
+		parent::__construct($id, self::TYPE, $id);
+		$this->icon = self::ICON;
+		$this->description = \OC::$server->getL10N('polls')->t('Contact group');
 	}
 
 	/**
