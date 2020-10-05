@@ -30,6 +30,9 @@ class Contact extends UserGroupClass {
 	public const TYPE = 'contact';
 	public const ICON = 'icon-mail';
 
+	/** @var Array */
+	private $contact;
+
 	/**
 	 * User constructor.
 	 * @param $id

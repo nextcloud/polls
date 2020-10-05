@@ -28,7 +28,6 @@ class UserGroupClass implements \JsonSerializable {
 	public const TYPE_PUBLIC = 'public';
 	public const TYPE_EXTERNAL = 'external';
 
-	/** @var IL10N */
 	private $l10n;
 
 	/** @var string */
@@ -55,11 +54,11 @@ class UserGroupClass implements \JsonSerializable {
 	/** @var string */
 	protected $icon = '';
 
-	/** @var string */
-	protected $isNoUser = '';
+	/** @var boolean */
+	protected $isNoUser = true;
 
-	/** @var string */
-	protected $categories = '';
+	/** @var string[] */
+	protected $categories = [];
 
 	/**
 	 * User constructor.
@@ -80,7 +79,6 @@ class UserGroupClass implements \JsonSerializable {
 		$this->language = $language;
 		$this->icon = 'icon-share';
 		$this->l10n = \OC::$server->getL10N('polls');
-		$this->isNoUser = true;
 	}
 
 	/**

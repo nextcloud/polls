@@ -28,6 +28,8 @@ class User extends UserGroupClass {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
 
+	private $user;
+
 	/**
 	 * User constructor.
 	 * @param $id
@@ -38,13 +40,12 @@ class User extends UserGroupClass {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
 		$this->isNoUser = false;
+		$this->description = \OC::$server->getL10N('polls')->t('User');
 
 		$this->user = \OC::$server->getUserManager()->get($this->id);
-		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
-
-		$this->displayName = \OC::$server->getUserManager()->get($this->id)->getDisplayName();
-		$this->description = \OC::$server->getL10N('polls')->t('User');
+		$this->displayName = $this->user->getDisplayName();
 		$this->emailAddress = $this->user->getEMailAddress();
+		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
 	}
 
 	/**
