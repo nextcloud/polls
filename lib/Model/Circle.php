@@ -48,7 +48,6 @@ class Circle extends UserGroupClass {
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
 			$this->description = $this->circle->gettypeLongString();
-
 		} else {
 			throw new CirclesNotEnabled();
 		}

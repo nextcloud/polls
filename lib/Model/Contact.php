@@ -82,8 +82,6 @@ class Contact extends UserGroupClass {
 			} else {
 				$this->description = \OC::$server->getL10N('polls')->t('Contact');
 			}
-
-
 		} else {
 			throw new ContactsNotEnabled();
 		}
