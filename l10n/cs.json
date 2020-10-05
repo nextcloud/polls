@@ -104,6 +104,8 @@
     "Error cloning poll." : "Chyba při klonování ankety.",
     "Error deleting poll." : "Chyba při mazání ankety.",
     "Use calendar lookup" : "Použít vyhledání v kalendáři",
+    "Text polls default to list view" : "Textové ankety ve výchozím stavu v pohledu typu seznam",
+    "Date polls default to list view" : "Datumové ankety ve výchozím stavu v pohledu typu seznam",
     "Try experimental styles" : "Vyzkoušet experimentální styly",
     "Use background image" : "Použít obrázek na pozadí",
     "Glassy navigation" : "Průhledný navigační panel",
