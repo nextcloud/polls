@@ -24,9 +24,6 @@
 
 namespace OCA\Polls\Model;
 
-use OCP\IL10N;
-use OCA\Polls\Interfaces\IUserObj;
-
 class Email extends UserGroupClass {
 	public const TYPE = 'email';
 	public const ICON = 'icon-mail';

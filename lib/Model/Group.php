@@ -25,7 +25,6 @@
 namespace OCA\Polls\Model;
 
 use OCP\IGroup;
-use OCA\Polls\Interfaces\IUserObj;
 
 class Group extends UserGroupClass {
 	public const TYPE = 'group';
@@ -96,5 +95,4 @@ class Group extends UserGroupClass {
 		}
 		return $members;
 	}
-
 }
