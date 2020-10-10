@@ -92,6 +92,8 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($commentId, $token) {
+		\OC::$server->getLogger()->alert('CommentId: ' . $commentId);
+		\OC::$server->getLogger()->alert('Token: ' . $token);
 		try {
 			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
