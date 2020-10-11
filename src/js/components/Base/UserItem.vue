@@ -27,13 +27,13 @@
 			:menu-position="menuPosition"
 			:show-user-status="showUserStatus"
 			:user="userId"
-			:display-name="displayName"
+			:display-name="name"
 			:is-no-user="isNoUser" />
 
 		<div v-if="icon" :class="['type-icon', iconClass]" />
 
 		<div v-if="!hideNames" class="user-item__name">
-			{{ displayName }}
+			{{ name }}
 		</div>
 		<slot />
 	</div>
@@ -101,6 +101,14 @@ export default {
 	computed: {
 		isNoUser() {
 			return this.type !== 'user' || this.externalUser
+		},
+
+		name() {
+			if (this.displayName) {
+				return this.displayName
+			} else {
+				return this.userId
+			}
 		},
 
 		showUserStatus() {

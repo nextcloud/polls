@@ -31,15 +31,25 @@ class ContactGroup extends UserGroupClass {
 	/**
 	 * Group constructor.
 	 * @param $id
-	 * @param $displayName
 	 */
 	public function __construct(
-		$id,
-		$displayName = ''
+		$id
 	) {
-		parent::__construct($id, self::TYPE, $id);
+		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
 		$this->description = \OC::$server->getL10N('polls')->t('Contact group');
+	}
+
+	/**
+	 * getDisplayName
+	 * @NoAdminRequired
+	 * @return String
+	 */
+	public function getDisplayName() {
+		if (!$this->displayName) {
+			return $this->id;
+		}
+		return $this->displayName;
 	}
 
 	/**
@@ -99,22 +109,4 @@ class ContactGroup extends UserGroupClass {
 		return [];
 	}
 
-
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize(): array {
-		return	[
-			'id'        	=> $this->id,
-			'user'          => $this->id,
-			'type'       	=> $this->getType(),
-			'displayName'	=> $this->getDisplayName(),
-			'organisation'	=> $this->getOrganisation(),
-			'emailAddress'	=> $this->getEmailAddress(),
-			'desc' 			=> $this->getDescription(),
-			'icon'			=> $this->getIcon(),
-			'isNoUser'		=> true,
-			'isGuest'		=> true,
-		];
-	}
 }

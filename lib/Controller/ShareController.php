@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidShareType;
+use OCA\Polls\Exceptions\ShareAlreadyExists;
 
 
 use OCP\IRequest;
@@ -75,9 +76,24 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * Add share
+	 * List shares
 	 * @NoAdminRequired
 	 * @param int $pollId
+	 * @return DataResponse
+	 */
+	public function list($pollId) {
+		try {
+			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (\Exception $e) {
+			return new DataResponse($e, Http::STATUS_CONFLICT);
+		}
+	}
+
+	/**
+	 * Add share
+	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @param string $type
 	 * @param string $userId
@@ -89,8 +105,8 @@ class ShareController extends Controller {
 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $emailAddress)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
+		} catch (ShareAlreadyExists $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -201,14 +217,24 @@ class ShareController extends Controller {
 			$share = $this->shareService->get($token);
 			if ($share->getType() === Share::TYPE_CIRCLE) {
 				foreach ((new Circle($share->getUserId()))->getMembers() as $member) {
-					$shares[] = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
+					try {
+						$newShare = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
+						$shares[] = $newShare;
+					} catch (ShareAlreadyExists $e) {
+						continue;
+					}
 				}
 			} elseif ($share->getType() === Share::TYPE_CONTACTGROUP) {
 				foreach ((new ContactGroup($share->getUserId()))->getMembers() as $contact) {
-					$shares[] = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $contact->getId(), $contact->getEmailAddress());
+					try {
+						$newShare = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $contact->getId(), $contact->getEmailAddress());
+						$shares[] = $newShare;
+					} catch (ShareAlreadyExists $e) {
+						continue;
+					}
 				}
 			}
-
+			$this->shareService->delete($token);
 			return new DataResponse(['shares' => $shares], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);

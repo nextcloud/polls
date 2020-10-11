@@ -123,10 +123,7 @@ class UserGroupClass implements \JsonSerializable {
 	 * @return String
 	 */
 	public function getDisplayName() {
-		if ($this->displayName) {
-			return $this->displayName;
-		}
-		return $this->id;
+		return $this->displayName;
 	}
 
 	/**
@@ -258,6 +255,37 @@ class UserGroupClass implements \JsonSerializable {
 		return [];
 	}
 
+	public static function getUserGroupChild($type, $id, $displayName = '', $emailAddress = '') {
+		switch ($type) {
+			case Group::TYPE:
+				return new Group($id);
+				break;
+			case Circle::TYPE:
+				return new Circle($id);
+				break;
+			case Contact::TYPE:
+				return new Contact($id);
+				break;
+			case ContactGroup::TYPE:
+				return new ContactGroup($id);
+				break;
+			case User::TYPE:
+				return new User($id);
+				break;
+			case Email::TYPE:
+				return new Email($id);
+				break;
+			case self::TYPE_PUBLIC:
+				return new GenericUser($id,self::TYPE_PUBLIC);
+				break;
+			case self::TYPE_EXTERNAL:
+				return new GenericUser($id, self::TYPE_EXTERNAL, $displayName, $emailAddress);
+				break;
+			default:
+				throw new InvalidShareType('Invalid share type (' . $type . ')');
+			}
+	}
+
 	/**
 	 * @return array
 	 */
@@ -265,6 +293,7 @@ class UserGroupClass implements \JsonSerializable {
 		return	[
 			'id'        	=> $this->getId(),
 			'user'          => $this->getId(),
+			'userId'        => $this->getId(),
 			'type'       	=> $this->getType(),
 			'displayName'	=> $this->getDisplayName(),
 			'organisation'	=> $this->getOrganisation(),

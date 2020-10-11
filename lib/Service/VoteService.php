@@ -26,9 +26,10 @@ namespace OCA\Polls\Service;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
+use OCA\Polls\Db\Log;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Model\Acl;
 
 class VoteService {

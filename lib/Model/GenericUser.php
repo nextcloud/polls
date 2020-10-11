@@ -24,9 +24,10 @@
 
 namespace OCA\Polls\Model;
 
-class Email extends UserGroupClass {
-	public const TYPE = 'email';
-	public const ICON = 'icon-mail';
+class GenericUser extends UserGroupClass {
+	public const TYPE = 'external';
+	public const ICON_DEFAULT = 'icon-share';
+	public const ICON_PUBLIC = 'icon-public';
 
 	/**
 	 * Email constructor.
@@ -34,25 +35,21 @@ class Email extends UserGroupClass {
 	 * @param $displayName
 	 */
 	public function __construct(
-		$id
+		$id,
+		$type = self::TYPE,
+		$displayName = '',
+		$emailAddress = ''
 	) {
-		parent::__construct($id, self::TYPE);
-		$this->description = \OC::$server->getL10N('polls')->t('External Email');
-		$this->icon = self::ICON;
-		$this->emailAddress = $id;
-	}
+		parent::__construct($id, $type);
+		$this->displayName = $displayName;
+		$this->emailAddress = $emailAddress;
 
-	/**
-	 * getDisplayName
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDisplayName() {
-		if (!$this->displayName) {
-			return $this->id;
+		if ($type === UserGroupClass::TYPE_PUBLIC) {
+			$this->icon = self::ICON_PUBLIC;
+			$this->description = \OC::$server->getL10N('polls')->t('Public link');
+		} else {
+			$this->description = \OC::$server->getL10N('polls')->t('External user');
+			$this->icon = self::ICON_DEFAULT;
 		}
-		return $this->displayName;
 	}
-
-
 }

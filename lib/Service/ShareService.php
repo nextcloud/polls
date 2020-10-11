@@ -23,8 +23,11 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareType;
+use OCA\Polls\Exceptions\ShareAlreadyExists;
 
 use OCP\Security\ISecureRandom;
 
@@ -32,12 +35,6 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\Circle;
-use OCA\Polls\Model\Contact;
-use OCA\Polls\Model\ContactGroup;
-use OCA\Polls\Model\Email;
-use OCA\Polls\Model\Group;
-use OCA\Polls\Model\User;
 
 class ShareService {
 
@@ -85,16 +82,12 @@ class ShareService {
 	 * @return array array of Share
 	 * @throws NotAuthorizedException
 	 */
-	public function list($pollId, $token) {
-		if ($token) {
-			return [$this->get($token)];
-		}
-
+	public function list($pollId) {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
-
-		return $this->shareMapper->findByPoll($pollId);
+		$shares = $this->shareMapper->findByPoll($pollId);
+		return $shares;
 	}
 
 	/**
@@ -122,6 +115,18 @@ class ShareService {
 			throw new NotAuthorizedException;
 		}
 
+		if ($type !== UserGroupClass::TYPE_PUBLIC) {
+			try {
+				$this->shareMapper->findByPollAndUser($pollId, $userId);
+				throw new ShareAlreadyExists;
+			} catch (MultipleObjectsReturnedException $e) {
+				throw new ShareAlreadyExists;
+			} catch (DoesNotExistException $e) {
+				// continue
+			}
+		}
+
+
 		$this->share = new Share();
 		$this->share->setPollId($pollId);
 		$this->share->setInvitationSent(0);
@@ -133,37 +138,11 @@ class ShareService {
 		));
 
 
-		if ($type === UserGroupClass::TYPE_PUBLIC) {
-			$this->share->setType(UserGroupClass::TYPE_PUBLIC);
-		} else {
-			switch ($type) {
-				case Group::TYPE:
-					$share = new Group($userId);
-					break;
-				case Circle::TYPE:
-					$share = new Circle($userId);
-					break;
-				case Contact::TYPE:
-					$share = new Contact($userId);
-					break;
-				case ContactGroup::TYPE:
-					$share = new ContactGroup($userId);
-					break;
-				case User::TYPE:
-					$share = new User($userId);
-					break;
-				case Email::TYPE:
-					$share = new Email($userId, $emailAddress);
-					break;
-				default:
-					throw new InvalidShareType('Invalid share type (' . $type . ')');
-			}
-
-			$this->share->setType($share->getType());
-			$this->share->setUserId($share->getId());
-			$this->share->setDisplayName($share->getDisplayName());
-			$this->share->setUserEmail($share->getEmailAddress());
-		}
+		$userGroup = UserGroupClass::getUserGroupChild($type, $userId);
+		$this->share->setType($userGroup->getType());
+		$this->share->setUserId($userGroup->getId());
+		$this->share->setDisplayName($userGroup->getDisplayName());
+		$this->share->setUserEmail($userGroup->getEmailAddress());
 
 		return $this->shareMapper->insert($this->share);
 	}
@@ -219,6 +198,7 @@ class ShareService {
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setPollId($pollId);
 			$this->share->setUserId($userName);
+			$this->share->setDisplayName($userName);
 			$this->share->setUserEmail($emailAddress);
 			$this->share->setInvitationSent(time());
 			$this->shareMapper->insert($this->share);
