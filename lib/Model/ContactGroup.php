@@ -108,5 +108,4 @@ class ContactGroup extends UserGroupClass {
 		}
 		return [];
 	}
-
 }

@@ -53,6 +53,4 @@ class Email extends UserGroupClass {
 		}
 		return $this->displayName;
 	}
-
-
 }
