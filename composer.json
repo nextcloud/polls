@@ -24,7 +24,7 @@
 		}
 	},
 	"require-dev": {
-		"christophwurst/nextcloud": "^19.0",
+		"christophwurst/nextcloud": "^20.0",
 		"phpunit/phpunit": "^8.5",
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
