@@ -40,6 +40,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\Log;
 use OCA\Polls\Model\Contact;
 use OCA\Polls\Model\Email;
 use OCA\Polls\Model\Group;

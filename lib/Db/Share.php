@@ -27,6 +27,7 @@ use JsonSerializable;
 
 use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
+use OCA\Polls\Model\UserGroupClass;
 
 /**
  * @method string getId()
@@ -87,7 +88,8 @@ class Share extends Entity implements JsonSerializable {
 			'userEmail' => $this->userEmail,
 			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->displayName,
-			'externalUser' => $this->externalUser()
+			'externalUser' => $this->externalUser(),
+			'shareeDetail' => UserGroupClass::getUserGroupChild($this->type, $this->userId)
 		];
 	}
 
