@@ -180,9 +180,6 @@ export default {
 	methods: {
 		resolveGroup(share) {
 			this.$store.dispatch('poll/shares/resolveGroup', { share: share })
-				.then((response) => {
-					this.$store.dispatch('poll/shares/delete', { share: share })
-				})
 		},
 
 		sendInvitation(share) {
@@ -233,6 +230,7 @@ export default {
 		addShare(payload) {
 			this.$store
 				.dispatch('poll/shares/add', {
+					share: payload,
 					type: payload.type,
 					id: payload.id,
 					userEmail: payload.emailAddress,

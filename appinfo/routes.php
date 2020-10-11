@@ -54,7 +54,8 @@ return [
 		['name' => 'vote#setByToken', 'url' => '/vote/set/s', 'verb' => 'POST'],
 		['name' => 'vote#delete', 'url' => '/votes/delete', 'verb' => 'POST'],
 
-		['name' => 'share#add', 'url' => '/share/add', 'verb' => 'POST'],
+		['name' => 'share#list', 'url' => '/poll/{pollId}/shares', 'verb' => 'GET'],
+		['name' => 'share#add', 'url' => '/poll/{pollId}/share', 'verb' => 'POST'],
 		['name' => 'share#get', 'url' => '/share/{token}', 'verb' => 'GET'],
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#delete', 'url' => '/share/delete/{token}', 'verb' => 'DELETE'],

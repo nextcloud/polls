@@ -31,42 +31,76 @@ class Contact extends UserGroupClass {
 	public const ICON = 'icon-mail';
 
 	/** @var Array */
-	private $contact;
+	private $contact =[];
 
 	/**
-	 * User constructor.
+	 * Contact constructor.
 	 * @param $id
 	 * @param $displayName
 	 */
 	public function __construct(
-		$id,
-		$displayName = ''
+		$id
 	) {
-		parent::__construct($id, self::TYPE, $displayName);
+		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
+		$this->getContact();
+	}
 
+	/**
+	 * isEnabled
+	 * @NoAdminRequired
+	 * @return Boolean
+	 */
+	public static function isEnabled() {
+		return \OC::$server->getAppManager()->isEnabledForUser('contacts');
+	}
+
+	/**
+	 * resolveContact
+	 * We just need the contact's UID, so make sure, the any prefix is removed
+	 * @NoAdminRequired
+	 */
+	private function resolveContactId() {
+		$parts = explode(":", $this->id);
+		$this->id = end($parts);
+	}
+
+	/**
+	 * loadContact
+	 * @NoAdminRequired
+	 * The contacts app just provides a search, so we have to load the contact
+	 * after searching via the contact's id and use the first contact.
+	 *
+	 * Currently only the contact's first email address is supported
+	 *
+	 * From Version 1.5 on:
+	 * For compatibility reasons, we have to search for the contacts name too.
+	 * Before this implementation contacts where stored with their FN property.
+	 *
+	 * TODO: Remove FN as search range for loading a contact in a polls version
+	 * later than 1.6.
+	 */
+	private function loadContact() {
+		$contacts = self::listRaw($this->id, ['UID', 'FN']);
+
+		if (count($contacts) > 1) {
+			throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
+		}
+
+		$this->contact = $contacts[0];
+	}
+
+	private function getContact() {
 		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
-			$this->contact = [];
+			$this->resolveContactId();
+			$this->loadContact();
 
-			$parts = explode(":", $this->id);
-			$this->id = end($parts);
-
-			// Search for UID and FN
-			// Before this implementation contacts where stored with their FN property
-			// From now on, the contact's UID is used as identifier
-			// TODO: Remove FN as search range for loading a contact in a polls version later than 1.6
-			$contacts = \OC::$server->getContactsManager()->search($this->id, ['UID', 'FN']);
-
-			if (count($contacts) === 1) {
-				$this->contact = $contacts[0];
-				$this->id = $this->contact['UID'];
-				$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
-				$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
-			} elseif (count($contacts) > 1) {
-				throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
-			}
-
+			$this->id = $this->contact['UID'];
+			$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
+			$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
 			$this->organisation = isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
+			$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
+
 
 			if (isset($this->contact['CATEGORIES'])) {
 				$this->categories = explode(',', $this->contact['CATEGORIES']);
@@ -88,20 +122,14 @@ class Contact extends UserGroupClass {
 		} else {
 			throw new ContactsNotEnabled();
 		}
-	}
 
-	/**
-	 * isEnabled
-	 * @NoAdminRequired
-	 * @return Boolean
-	 */
-	public static function isEnabled() {
-		return \OC::$server->getAppManager()->isEnabledForUser('contacts');
 	}
 
 	/**
 	 * listRaw
 	 * @NoAdminRequired
+	 * List all contacts with email adresses
+	 * excluding contacts from localSystemBook
 	 * @param string $query
 	 * @return Array
 	 */

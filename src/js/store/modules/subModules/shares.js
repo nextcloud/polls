@@ -87,21 +87,32 @@ const getters = {
 }
 
 const actions = {
-	add(context, payload) {
-		const endPoint = 'apps/polls/share/add'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
-			type: payload.type,
-			userId: payload.id,
-			emailAddress: payload.userEmail,
-		})
+	list(context) {
+		const endPoint = 'apps/polls/poll/'.concat(context.rootState.poll.id, '/shares')
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('add', response.data.share)
+				context.commit('set', response.data)
+				return response.data
+			})
+			.catch((error) => {
+				console.error('Error loading shares', { error: error.response }, { pollId: context.rootState.poll.id })
+				throw error
+			})
+	},
+
+	add(context, payload) {
+		const endPoint = 'apps/polls/poll/'.concat(context.rootState.poll.id, '/share')
+
+		return axios.post(generateUrl(endPoint), payload.share)
+			.then((response) => {
 				return response.data
 			})
 			.catch((error) => {
 				console.error('Error writing share', { error: error.response }, { payload: payload })
 				throw error
+			})
+			.finally(() => {
+				context.dispatch('list')
 			})
 	},
 
@@ -120,42 +131,52 @@ const actions = {
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/share/delete'
-		return axios.delete(generateUrl(endPoint.concat('/', payload.share.token)))
-			.then(() => {
-				context.commit('delete', { share: payload.share })
+		const endPoint = 'apps/polls/share/delete/'.concat(payload.share.token)
+		context.commit('delete', { share: payload.share })
+
+		return axios.delete(generateUrl(endPoint))
+			.then((response) => {
+				return response
 			})
 			.catch((error) => {
 				console.error('Error removing share', { error: error.response }, { payload: payload })
 				throw error
 			})
+			.finally(() => {
+				context.dispatch('list')
+			})
 	},
 
 	sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share/send'
-		return axios.post(generateUrl(endPoint.concat('/', payload.share.token)))
+		const endPoint = 'apps/polls/share/send/'.concat(payload.share.token)
+
+		return axios.post(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('update', { share: response.data.share })
 				return response
 			})
 			.catch((error) => {
 				console.error('Error sending invitation', { error: error.response }, { payload: payload })
 				throw error
 			})
+			.finally(() => {
+				context.dispatch('list')
+			})
 	},
 
 	resolveGroup(context, payload) {
-		const endPoint = 'apps/polls/share/resolveGroup'
-		return axios.get(generateUrl(endPoint.concat('/', payload.share.token)))
-			.then((response) => {
-				response.data.shares.forEach((item) => {
-					context.commit('add', item)
-				})
-				return response
-			})
+		const endPoint = 'apps/polls/share/resolveGroup/'.concat(payload.share.token)
+
+		return axios.get(generateUrl(endPoint))
+			// .then((response) => {
+			// 	context.commit('delete', { share: payload.share })
+			// 	return response
+			// })
 			.catch((error) => {
 				console.error('Error exploding group', { error: error.response }, { payload: payload })
 				throw error
+			})
+			.finally(() => {
+				context.dispatch('list')
 			})
 	},
 }

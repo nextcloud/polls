@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,38 +21,19 @@
  *
  */
 
+namespace OCA\Polls\Exceptions;
 
-namespace OCA\Polls\Model;
+use OCP\AppFramework\Http;
 
-class Email extends UserGroupClass {
-	public const TYPE = 'email';
-	public const ICON = 'icon-mail';
-
+class ShareAlreadyExists extends \Exception {
 	/**
-	 * Email constructor.
-	 * @param $id
-	 * @param $displayName
+	 * TooShortException Constructor
+	 * @param string $e exception message
 	 */
-	public function __construct(
-		$id
-	) {
-		parent::__construct($id, self::TYPE);
-		$this->description = \OC::$server->getL10N('polls')->t('External Email');
-		$this->icon = self::ICON;
-		$this->emailAddress = $id;
+	public function __construct($e = 'Share already exists') {
+		parent::__construct($e);
 	}
-
-	/**
-	 * getDisplayName
-	 * @NoAdminRequired
-	 * @return String
-	 */
-	public function getDisplayName() {
-		if (!$this->displayName) {
-			return $this->id;
-		}
-		return $this->displayName;
+	public function getStatus() {
+		return Http::STATUS_OK;
 	}
-
-
 }
