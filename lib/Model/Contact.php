@@ -122,7 +122,6 @@ class Contact extends UserGroupClass {
 		} else {
 			throw new ContactsNotEnabled();
 		}
-
 	}
 
 	/**
