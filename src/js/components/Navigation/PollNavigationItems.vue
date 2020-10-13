@@ -26,20 +26,20 @@
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ expired: expired }">
 		<template slot="actions">
-			<ActionButton icon="icon-polls-clone" @click="$emit('clonePoll')">
+			<ActionButton icon="icon-polls-clone" @click="$emit('clone-poll')">
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && !poll.deleted" icon="icon-delete" @click="$emit('switchDeleted')">
+			<ActionButton v-if="poll.allowEdit && !poll.deleted" icon="icon-delete" @click="$emit('switch-deleted')">
 				{{ t('polls', 'Delete poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-history" @click="$emit('switchDeleted')">
+			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-history" @click="$emit('switch-deleted')">
 				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger"
-				@click="$emit('deletePermanently')">
+				@click="$emit('delete-permanently')">
 				{{ t('polls', 'Delete poll permanently') }}
 			</ActionButton>
 		</template>

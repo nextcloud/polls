@@ -33,7 +33,7 @@
 					:show-confirmed="true"
 					display="textBox"
 					tag="li">
-					<template v-slot:actions>
+					<template #actions>
 						<Actions v-if="acl.allowEdit" class="action">
 							<ActionButton icon="icon-delete" @click="removeOption(option)">
 								{{ t('polls', 'Delete option') }}

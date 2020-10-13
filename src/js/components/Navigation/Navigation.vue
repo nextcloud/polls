@@ -23,7 +23,7 @@
 <template lang="html">
 	<AppNavigation>
 		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
-		<CreateDlg v-show="createDlg" ref="createDlg" @closeCreate="closeCreate()" />
+		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
 		<template #list>
 			<AppNavigationItem v-for="(pollCategory) in pollCategories" :key="pollCategory.id"
 				:title="pollCategory.title" :allow-collapse="true" :pinned="pollCategory.pinned"
@@ -32,9 +32,9 @@
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
-						@switchDeleted="switchDeleted(poll.id)"
-						@clonePoll="clonePoll(poll.id)"
-						@deletePermanently="deletePermanently(poll.id)" />
+						@switch-deleted="switchDeleted(poll.id)"
+						@clone-poll="clonePoll(poll.id)"
+						@delete-permanently="deletePermanently(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 		</template>

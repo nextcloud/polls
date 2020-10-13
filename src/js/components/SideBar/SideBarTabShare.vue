@@ -65,7 +65,7 @@
 				track-by="user"
 				@select="addShare"
 				@search-change="loadUsersAsync">
-				<template slot="selection" slot-scope="{ values, search, isOpen }">
+				<template slot="selection" slot-scope="{ values, isOpen }">
 					<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
 						{{ values.length }} users selected
 					</span>

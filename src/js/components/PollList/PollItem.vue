@@ -22,30 +22,30 @@
 
 <template>
 	<div v-if="header" class="poll-item__header">
-		<div class="item__title sortable" @click="$emit('sortList', {sort: 'title'})">
+		<div class="item__title sortable" @click="$emit('sort-list', {sort: 'title'})">
 			{{ t('polls', 'Title') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
 		<div class="item__icon-spacer" />
 
-		<div class="item__access sortable" @click="$emit('sortList', {sort: 'access'})">
+		<div class="item__access sortable" @click="$emit('sort-list', {sort: 'access'})">
 			{{ t('polls', 'Access') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="item__owner sortable" @click="$emit('sortList', {sort: 'owner'})">
+		<div class="item__owner sortable" @click="$emit('sort-list', {sort: 'owner'})">
 			{{ t('polls', 'Owner') }}
 			<span :class="['sort-indicator', { 'hidden': sort !== 'owner'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
 		<div class="wrapper">
-			<div class="item__created sortable" @click="$emit('sortList', {sort: 'created'})">
+			<div class="item__created sortable" @click="$emit('sort-list', {sort: 'created'})">
 				{{ t('polls', 'Created') }}
 				<span :class="['sort-indicator', { 'hidden': sort !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 
-			<div class="item__expiry sortable" @click="$emit('sortList', {sort: 'expire'})">
+			<div class="item__expiry sortable" @click="$emit('sort-list', {sort: 'expire'})">
 				{{ t('polls', 'Expires') }}
 				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>

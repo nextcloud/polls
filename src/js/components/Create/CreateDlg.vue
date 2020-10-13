@@ -96,7 +96,7 @@ export default {
 		cancel() {
 			this.title = ''
 			this.type = 'datePoll'
-			this.$emit('closeCreate')
+			this.$emit('close-create')
 		},
 
 		confirm() {

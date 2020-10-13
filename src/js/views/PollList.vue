@@ -41,14 +41,12 @@
 				tag="div"
 				class="poll-list__list">
 				<PollItem key="0" :header="true"
-					:sort="sort" :reverse="reverse" @sortList="setSort($event)" />
+					:sort="sort" :reverse="reverse" @sort-list="setSort($event)" />
 				<li is="PollItem"
 					v-for="(poll, index) in sortedList"
 					:key="poll.id"
 					:poll="poll"
-					@deletePoll="removePoll(index, poll)"
-					@editPoll="callPoll(index, poll, 'edit')"
-					@clonePoll="callPoll(index, poll, 'clone')" />
+					@clone-poll="callPoll(index, poll, 'clone')" />
 			</transition-group>
 		</div>
 		<LoadingOverlay v-if="isLoading" />
