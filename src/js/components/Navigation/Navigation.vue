@@ -99,8 +99,8 @@ export default {
 				},
 				{
 					id: 'expired',
-					title: t('polls', 'Expired polls'),
-					icon: 'icon-polls-expired',
+					title: t('polls', 'Closed polls'),
+					icon: 'icon-category-security',
 					pinned: false,
 				},
 				{

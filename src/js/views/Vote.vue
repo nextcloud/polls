@@ -44,7 +44,7 @@
 				{{ poll.title }}
 				<Badge v-if="isExpired"
 					:title="dateExpiryString"
-					icon="icon-calendar"
+					icon="icon-polls-closed"
 					class="error" />
 				<Badge v-if="!isExpired && poll.expire"
 					:title="dateExpiryString"

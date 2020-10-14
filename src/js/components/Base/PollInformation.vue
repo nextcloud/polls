@@ -25,9 +25,9 @@
 		<UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
 		{{ t('polls', 'started this poll on {dateString}.', {dateString: dateCreatedString}) }}
 
-		<span v-if="expired && confirmedOptions.length"> {{ t('polls', 'This poll expired on {dateString}. The confirmed options are marked below.', { dateString: dateExpiryString }) }} </span>
+		<span v-if="expired && confirmedOptions.length"> {{ t('polls', 'This poll is closed since {dateString}. The confirmed options are marked below.', { dateString: dateExpiryString }) }} </span>
 
-		<span v-if="expired && !confirmedOptions.length"> {{ t('polls', 'This poll expired on {dateString}, but there are no confirmed options until now.', { dateString: dateExpiryString }) }} </span>
+		<span v-if="expired && !confirmedOptions.length"> {{ t('polls', 'This poll is closed since {dateString}, but there are no confirmed options until now.', { dateString: dateExpiryString }) }} </span>
 
 		<span v-if="expired && !confirmedOptions.length && acl.allowEdit"> {{ t('polls', 'You can confirm your favorites now in the options tab in the sidebar.', { dateString: dateExpiryString }) }} </span>
 

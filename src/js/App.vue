@@ -160,6 +160,8 @@ export default {
 	--icon-polls-mail: url('./assets/mail.svg');
 	--icon-polls-sidebar-toggle: url('./assets/sidebar-toggle.svg');
 	--icon-polls-loading: url('./assets/loading-small.gif');
+	--icon-polls-open: url('./assets/open.svg');
+	--icon-polls-closed: url('./assets/closed.svg');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -210,6 +212,14 @@ export default {
 
 .icon-polls-mail {
 	background-image: var(--icon-polls-mail);
+}
+
+.icon-polls-open {
+	background-image: var(--icon-polls-open);
+}
+
+.icon-polls-closed {
+	background-image: var(--icon-polls-closed);
 }
 
 .icon-polls-sidebar-toggle {
