@@ -34,5 +34,4 @@ class Application19 extends App {
 	public function __construct(array $urlParams = []) {
 		parent::__construct('polls', $urlParams);
 	}
-
 }
