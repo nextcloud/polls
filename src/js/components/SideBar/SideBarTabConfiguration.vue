@@ -67,19 +67,19 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
-			<input id="hidden"
-				v-model="pollAccess"
-				value="hidden"
-				type="radio"
-				class="radio">
-			<label for="hidden">{{ t('polls', 'Hidden to other users') }}</label>
-
 			<input id="public"
 				v-model="pollAccess"
 				value="public"
 				type="radio"
 				class="radio">
-			<label for="public">{{ t('polls', 'Visible to other users') }}</label>
+			<label for="public">{{ t('polls', 'Only invited users') }}</label>
+
+			<input id="hidden"
+				v-model="pollAccess"
+				value="hidden"
+				type="radio"
+				class="radio">
+			<label for="hidden">{{ t('polls', 'All users') }}</label>
 
 			<input id="important"
 				v-model="pollImportant"

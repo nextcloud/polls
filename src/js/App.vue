@@ -162,6 +162,8 @@ export default {
 	--icon-polls-loading: url('./assets/loading-small.gif');
 	--icon-polls-open: url('./assets/open.svg');
 	--icon-polls-closed: url('./assets/closed.svg');
+	--icon-polls-public-poll: url('./assets/visible.svg');
+	--icon-polls-hidden-poll: url('./assets/invisible.svg');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -220,6 +222,14 @@ export default {
 
 .icon-polls-closed {
 	background-image: var(--icon-polls-closed);
+}
+
+.icon-polls-public-poll {
+	background-image: var(--icon-polls-public-poll);
+}
+
+.icon-polls-hidden-poll {
+	background-image: var(--icon-polls-hidden-poll);
 }
 
 .icon-polls-sidebar-toggle {

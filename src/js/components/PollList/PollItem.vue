@@ -156,9 +156,9 @@ export default {
 
 		accessType() {
 			if (this.poll.access === 'public') {
-				return t('polls', 'Visible to other users')
+				return t('polls', 'All users')
 			} else {
-				return t('polls', 'Hidden to other users')
+				return t('polls', 'Only invited users')
 			}
 		},
 
@@ -349,11 +349,11 @@ export default {
 }
 
 .item__access--public {
-	background-image: var(--icon-timezone-000);
+	background-image: var(--icon-polls-public-poll);
 }
 
 .item__access--hidden {
-	background-image: var(--icon-password-000);
+	background-image: var(--icon-polls-hidden-poll);
 }
 
 .poll-item__item {
