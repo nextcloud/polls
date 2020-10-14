@@ -117,7 +117,7 @@ export default {
 			} else if (this.$route.params.type === 'participated') {
 				return t('polls', 'All polls, where you placed a vote.')
 			} else if (this.$route.params.type === 'closed') {
-				return t('polls', 'Polls which reached their expiry date.')
+				return t('polls', 'All closed polls, where voting is disabled.')
 			} else {
 				return t('polls', 'All polls, where you have access to.')
 			}

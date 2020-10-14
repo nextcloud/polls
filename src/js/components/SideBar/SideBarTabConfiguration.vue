@@ -269,7 +269,7 @@ export default {
 				minuteStep: 5,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				placeholder: t('polls', 'Expiration date'),
+				placeholder: t('polls', 'Closing date'),
 				confirm: true,
 				lang: {
 					formatLocale: {
