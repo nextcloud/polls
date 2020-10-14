@@ -21,5 +21,18 @@
  *
  */
 
-$app = new \OCA\Polls\AppInfo\Application();
-$app->registerNavigationEntry();
+namespace OCA\Polls\AppInfo;
+
+use OCP\AppFramework\App;
+
+class Application19 extends App {
+
+	/**
+	 * Application constructor.
+	 * @param array $urlParams
+	 */
+	public function __construct(array $urlParams = []) {
+		parent::__construct('polls', $urlParams);
+	}
+
+}
