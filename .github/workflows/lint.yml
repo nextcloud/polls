@@ -37,7 +37,7 @@ jobs:
     strategy:
         matrix:
             php-versions: ['7.3', '7.4']
-            nextcloud-versions: ['master']
+            nextcloud-versions: ['master', 'stable20', 'stable19','stable18',]
 
     name: Nextcloud AppCode check
 
