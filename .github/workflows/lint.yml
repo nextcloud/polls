@@ -55,9 +55,9 @@ jobs:
         - name: Checkout
           uses: actions/checkout@master
           with:
-              path: nextcloud/apps/mail
+              path: nextcloud/apps/polls
         - name: Run tests
-          run: php -f nextcloud/occ app:check-code mail
+          run: php -f nextcloud/occ app:check-code polls
 
   node:
     runs-on: ubuntu-latest
