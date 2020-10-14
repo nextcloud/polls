@@ -28,4 +28,12 @@
 	<background-jobs>
 		<job>OCA\Polls\Cron\NotificationCron</job>
 	</background-jobs>
+	<navigations>
+        <navigation>
+            <name>Polls</name>
+            <route>polls.page.index</route>
+            <icon>app.svg</icon>
+            <order>77</order>
+        </navigation>
+    </navigations>
 </info>

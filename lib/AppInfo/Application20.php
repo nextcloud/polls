@@ -24,12 +24,24 @@
 namespace OCA\Polls\AppInfo;
 
 use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
-$version = \OC_Util::getVersion()[0];
-if ($version >= 20) {
-	class Application extends Application20 {
+class Application20 extends App implements IBootstrap {
+
+	public const APP_ID = 'polls';
+	/**
+	 * Application constructor.
+	 * @param array $urlParams
+	 */
+	public function __construct(array $urlParams = []) {
+		parent::__construct(self::APP_ID, $urlParams);
 	}
-} else {
-	class Application extends Application19 {
+
+	public function boot(IBootContext $context): void {
+	}
+
+	public function register(IRegistrationContext $context): void {
 	}
 }
