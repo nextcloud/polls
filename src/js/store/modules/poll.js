@@ -87,7 +87,7 @@ const getters = {
 		}
 	},
 
-	expired: (state) => {
+	closed: (state) => {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 

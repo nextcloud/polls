@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!expired }]">
+	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!closed }]">
 		<div v-if="isActive" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 	</div>
@@ -50,7 +50,7 @@ export default {
 
 	computed: {
 		...mapGetters({
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 			answerSequence: 'poll/answerSequence',
 		}),
 

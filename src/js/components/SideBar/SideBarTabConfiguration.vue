@@ -50,20 +50,20 @@
 			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="expired ? 'icon-polls-closed' : 'icon-polls-open'">
+		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
 			<ButtonDiv
-				:icon="expired ? 'icon-polls-open' : 'icon-polls-closed'"
-				:title="expired ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
+				:icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
+				:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
 				@click="switchClosed()" />
 
-			<input v-show="!expired"
+			<input v-show="!closed"
 				id="expiration"
 				v-model="pollExpiration"
 				type="checkbox"
 				class="checkbox">
-			<label v-show="!expired" for="expiration"> {{ t('polls', 'Closing date') }}</label>
+			<label v-show="!closed" for="expiration"> {{ t('polls', 'Closing date') }}</label>
 
-			<DatetimePicker v-show="pollExpiration && !expired" v-model="pollExpire" v-bind="expirationDatePicker" />
+			<DatetimePicker v-show="pollExpiration && !closed" v-model="pollExpire" v-bind="expirationDatePicker" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
@@ -96,12 +96,12 @@
 				class="radio">
 			<label for="always">{{ t('polls', 'Always show results') }}</label>
 
-			<input id="expired"
+			<input id="closed"
 				v-model="pollShowResults"
-				value="expired"
+				value="closed"
 				type="radio"
 				class="radio">
-			<label for="expired">{{ t('polls', 'Hide results until poll is expired') }}</label>
+			<label for="closed">{{ t('polls', 'Hide results until poll is closed') }}</label>
 
 			<input id="never"
 				v-model="pollShowResults"
@@ -155,7 +155,7 @@ export default {
 		}),
 
 		...mapGetters({
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 		}),
 
 		// Add bindings
@@ -306,7 +306,7 @@ export default {
 		},
 
 		switchClosed() {
-			if (this.expired) {
+			if (this.closed) {
 				this.writeValue({ expire: 0 })
 			} else {
 				this.writeValue({ expire: moment.utc().unix() })

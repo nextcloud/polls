@@ -150,7 +150,6 @@ export default {
 	--icon-polls-confirmed: url('./assets/confirmed.svg');
 	--icon-polls-unconfirmed: url('./assets/unconfirmed.svg');
 	--icon-polls-clone: url('./assets/clone.svg');
-	--icon-polls-expired: url('./assets/clock.svg');
 	--icon-polls-move: url('./assets/move.svg');
 	--icon-polls-yes: url('./assets/yes-vote.svg');
 	--icon-polls-no: url('./assets/no-vote.svg');
@@ -184,10 +183,6 @@ export default {
 
 .icon-polls-unconfirmed {
 	background-image: var(--icon-polls-unconfirmed);
-}
-
-.icon-polls-expired {
-	background-image: var(--icon-polls-expired);
 }
 
 .icon-polls-move {

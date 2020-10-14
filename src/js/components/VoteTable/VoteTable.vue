@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<div class="vote-table" :class="[viewMode, { expired: expired }]">
+	<div class="vote-table" :class="[viewMode, { closed: closed }]">
 		<div class="vote-table__users fixed">
 			<UserItem v-for="(participant) in participants"
 				:key="participant.userId"
@@ -72,7 +72,7 @@
 			</transition-group>
 		</div>
 
-		<transition-group v-if="expired"
+		<transition-group v-if="closed"
 			name="list"
 			tag="div"
 			class="vote-table__footer">
@@ -81,7 +81,7 @@
 				:class="{ 'confirmed' : option.confirmed }">
 				<Actions v-if="acl.allowEdit"
 					class="action">
-					<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+					<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 						@click="confirmOption(option)">
 						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 					</ActionButton>
@@ -158,7 +158,7 @@ export default {
 		}),
 
 		...mapGetters({
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 			participants: 'poll/participants',
 			sortedOptions: 'poll/options/sorted',
 		}),
@@ -215,7 +215,7 @@ export default {
 	}
 
 	//set default style for confirmed options
-	&.expired .confirmed {
+	&.closed .confirmed {
 		&.vote-table-header-item,
 		&.calendar-peek,
 		&.vote-table-vote-item,
@@ -279,7 +279,7 @@ export default {
 		height: 3em;
 	}
 
-	&.expired .confirmed {
+	&.closed .confirmed {
 		margin-top: 8px;
 		margin-bottom: 8px;
 		font-weight: bold;
@@ -416,7 +416,7 @@ export default {
 		}
 	}
 
-	&.expired .confirmed {
+	&.closed .confirmed {
 		margin-left: 8px;
 		margin-right: 8px;
 		font-weight: bold;

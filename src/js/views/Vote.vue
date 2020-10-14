@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent :class="{ expired: isExpired }">
+	<AppContent :class="{ closed: closed }">
 		<div class="header-actions">
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
@@ -42,11 +42,11 @@
 		<div class="area__header">
 			<h2 class="title">
 				{{ poll.title }}
-				<Badge v-if="isExpired"
+				<Badge v-if="closed"
 					:title="dateExpiryString"
 					icon="icon-polls-closed"
 					class="error" />
-				<Badge v-if="!isExpired && poll.expire"
+				<Badge v-if="!closed && poll.expire"
 					:title="dateExpiryString"
 					icon="icon-calendar"
 					class="success" />
@@ -143,7 +143,7 @@ export default {
 		}),
 
 		...mapGetters({
-			isExpired: 'poll/expired',
+			closed: 'poll/closed',
 		}),
 
 		viewTextPoll() {
@@ -213,7 +213,7 @@ export default {
 		showRegisterModal() {
 			return (this.$route.name === 'publicVote'
 				&& !this.share.userId
-				&& !this.isExpired
+				&& !this.closed
 				&& this.poll.id
 			)
 		},
