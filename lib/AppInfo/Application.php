@@ -23,8 +23,7 @@
 
 namespace OCA\Polls\AppInfo;
 
-$version = \OC_Util::getVersion()[0];
-if ($version >= 20) {
+if (\OCP\Util::getVersion()[0] >= 20) {
 	class Application extends Application20 {
 	}
 } else {
