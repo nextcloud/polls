@@ -29,7 +29,6 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
 class Application20 extends App implements IBootstrap {
-
 	public const APP_ID = 'polls';
 	/**
 	 * Application constructor.
