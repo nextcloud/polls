@@ -43,6 +43,15 @@ const mutations = {
 		Object.assign(state, defaultOptions())
 	},
 
+	reorder(state, payload) {
+		payload.options.forEach((item, i) => {
+			item.order = i + 1
+			console.log(i)
+		})
+		console.log(payload)
+		state.list = payload.options
+	},
+
 	delete(state, payload) {
 		state.list = state.list.filter(option => {
 			return option.id !== payload.option.id
@@ -185,6 +194,7 @@ const actions = {
 
 	reorder(context, payload) {
 		const endPoint = 'apps/polls/polls'
+		context.commit('reorder', { options: payload })
 		return axios.post(generateUrl(endPoint.concat('/', context.rootState.poll.id, '/options/reorder')), {
 			options: payload,
 		})
