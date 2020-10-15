@@ -64,6 +64,7 @@ const getters = {
 const actions = {
 	add(context, payload) {
 		const endPoint = 'apps/polls/comment'
+
 		return axios.post(generateUrl(endPoint), {
 			message: payload.message,
 			pollId: context.rootState.poll.id,
@@ -80,9 +81,13 @@ const actions = {
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/comment'
+		let endPoint = 'apps/polls/comment'
+		if (context.rootState.poll.acl.token) {
+			endPoint = endPoint.concat('/s/', context.rootState.poll.acl.token)
+		}
 		context.commit('delete', { comment: payload.comment })
-		return axios.delete(generateUrl(endPoint.concat('/', payload.comment.id)), { token: context.rootState.poll.acl.token })
+
+		return axios.delete(generateUrl(endPoint.concat('/', payload.comment.id)))
 			.then((response) => {
 				context.commit('delete', { comment: response.data.comment })
 				return response.data
