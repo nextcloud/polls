@@ -310,6 +310,7 @@ export default {
 				.dispatch('poll/delete', { pollId: this.poll.id })
 				.then(() => {
 					emit('update-polls')
+					this.$router.push({ name: 'list', params: { type: 'relevant' } })
 				})
 				.catch(() => {
 					showError(t('polls', 'Error deleting poll.'))

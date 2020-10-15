@@ -152,7 +152,7 @@ export default {
 				.dispatch('poll/clone', { pollId: pollId })
 				.then((response) => {
 					emit('update-polls')
-					this.$router.push({ name: 'vote', params: { id: response.pollId } })
+					this.$router.push({ name: 'vote', params: { id: response.id } })
 				})
 				.catch(() => {
 					showError(t('polls', 'Error cloning poll.'))
