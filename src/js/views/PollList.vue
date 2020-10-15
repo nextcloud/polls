@@ -32,10 +32,13 @@
 		</div>
 
 		<div class="area__main">
-			<div v-if="noPolls" class="emptycontent">
-				<div class="icon-polls" />
-				<h2> {{ t('polls', 'No existing polls.') }} </h2>
-			</div>
+			<EmptyContent v-if="noPolls" icon="icon-polls">
+				{{ t('polls', 'No polls found for this category') }}
+				<template #desc>
+					{{ t('polls', 'Add one or change category!') }}
+				</template>
+			</EmptyContent>
+
 			<transition-group v-else
 				name="list"
 				tag="div"
@@ -54,7 +57,7 @@
 </template>
 
 <script>
-import { AppContent } from '@nextcloud/vue'
+import { AppContent, EmptyContent } from '@nextcloud/vue'
 import PollItem from '../components/PollList/PollItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
@@ -68,6 +71,7 @@ export default {
 		AppContent,
 		LoadingOverlay,
 		PollItem,
+		EmptyContent,
 	},
 
 	data() {

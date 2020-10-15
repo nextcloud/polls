@@ -69,15 +69,18 @@
 
 		<div class="area__main" :class="viewMode">
 			<VoteTable v-show="options.length" :view-mode="viewMode" :ranked="ranked" />
-			<div v-if="!options.length" class="emptycontent">
-				<div class="icon-toggle-filelist" />
-				<button v-if="acl.allowEdit" @click="openOptions">
-					{{ t('polls', 'There are no vote options, add some in the options section of the right sidebar.') }}
-				</button>
-				<div v-if="!acl.allowEdit">
-					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
-				</div>
-			</div>
+
+			<EmptyContent v-if="!options.length" icon="icon-toggle-filelist">
+				{{ t('polls', 'No vote options available') }}
+				<template #desc>
+					<button v-if="acl.allowEdit" @click="openOptions">
+						{{ t('polls', 'Add some!') }}
+					</button>
+					<div v-if="!acl.allowEdit">
+						{{ t('polls', 'Maybe the owner did not provide some until now.') }}
+					</div>
+				</template>
+			</EmptyContent>
 		</div>
 
 		<div class="area__footer">
@@ -93,7 +96,7 @@
 <script>
 import linkifyStr from 'linkifyjs/string'
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
+import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
@@ -113,6 +116,7 @@ export default {
 		ActionButton,
 		AppContent,
 		Badge,
+		EmptyContent,
 		LoadingOverlay,
 		ParticipantsList,
 		PersonalLink,
@@ -325,10 +329,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.emptycontent {
-	margin: 44px 0;
-}
-
 .header-actions {
 	display: flex;
 	justify-content: flex-end;
