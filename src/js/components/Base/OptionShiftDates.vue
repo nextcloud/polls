@@ -102,8 +102,8 @@ export default {
 			const store = this.$store
 			this.options.forEach(function(existingOption) {
 				const option = Object.assign({}, existingOption)
-				option.pollOptionText = moment(option.pollOptionText).add(payload.step, payload.unit.value).format('YYYY-MM-DD HH:mm:ss')
-				option.timestamp = moment.utc(option.pollOptionText).unix()
+				option.timestamp = moment.unix(option.timestamp).add(payload.step, payload.unit.value).unix()
+				option.pollOptionText = moment.unix(option.timestamp).format('YYYY-MM-DD HH:mm:ss')
 				store.dispatch('poll/options/update', { option: option })
 			})
 		},
