@@ -185,7 +185,7 @@ const actions = {
 
 	reorder(context, payload) {
 		const endPoint = 'apps/polls/polls'
-		return axios.post(generateUrl(endPoint.concat(context.rootState.poll.id, '/options/reorder')), {
+		return axios.post(generateUrl(endPoint.concat('/', context.rootState.poll.id, '/options/reorder')), {
 			options: payload,
 		})
 			.then((response) => {
