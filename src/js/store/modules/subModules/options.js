@@ -46,9 +46,7 @@ const mutations = {
 	reorder(state, payload) {
 		payload.options.forEach((item, i) => {
 			item.order = i + 1
-			console.log(i)
 		})
-		console.log(payload)
 		state.list = payload.options
 	},
 
