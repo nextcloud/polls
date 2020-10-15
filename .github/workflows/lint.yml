@@ -6,7 +6,6 @@ on:
     branches:
       - master
       - stable*
-      - dev*
 
 jobs:
   php-cs-fixer:
@@ -31,35 +30,7 @@ jobs:
     - name: Run coding standards check
       run: composer run cs:check
 
-  app-code-check:
-    runs-on: ubuntu-latest
-
-    strategy:
-        matrix:
-            php-versions: ['7.3', '7.4']
-            nextcloud-versions: ['master', 'stable20', 'stable19','stable18',]
-
-    name: Nextcloud AppCode check
-
-    steps:
-        - name: Set up php ${{ matrix.php-versions }}
-          uses: shivammathur/setup-php@master
-          with:
-              php-version: ${{ matrix.php-versions }}
-              extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip
-              coverage: xdebug
-        - name: Checkout Nextcloud ${{ matrix.nextcloud-versions }}
-          run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-versions }} nextcloud
-        - name: Run tests
-          run: php -f nextcloud/occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database sqlite --database-pass=''
-        - name: Checkout
-          uses: actions/checkout@master
-          with:
-              path: nextcloud/apps/polls
-        - name: Run tests
-          run: php -f nextcloud/occ app:check-code polls
-
-  node:
+  lint:
     runs-on: ubuntu-latest
 
     strategy:
@@ -75,7 +46,7 @@ jobs:
           node-version: ${{ matrix.node-versions }}
       - name: Install dependencies
         run: npm ci
-      - name: ESLint
+      - name: Run Lint
         run: npm run lint
 
   stylelint:
@@ -97,5 +68,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Run stylelint
         run: npm run stylelint
