@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div :open.sync="show">
+	<div>
 		<div class="user_settings">
 			<input id="calendarPeek" v-model="calendarPeek"
 				type="checkbox" class="checkbox">
@@ -117,6 +117,7 @@ export default {
 	.user_settings {
 		padding-top: 16px;
 	}
+
 	.settings_description {
 		padding-top: 8px;
 	}
