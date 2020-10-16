@@ -22,6 +22,7 @@
 
 <template>
 	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+		<SettingsDlg />
 		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
 		<SideBar v-if="sideBarOpen && $store.state.poll.id"
@@ -33,6 +34,7 @@
 <script>
 import Navigation from './components/Navigation/Navigation'
 import SideBar from './components/SideBar/SideBar'
+import SettingsDlg from './components/Settings/SettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
@@ -45,6 +47,7 @@ export default {
 	components: {
 		Navigation,
 		Content,
+		SettingsDlg,
 		SideBar,
 	},
 

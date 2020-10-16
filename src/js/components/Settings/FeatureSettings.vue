@@ -21,37 +21,32 @@
   -->
 
 <template>
-	<div>
-		<input id="calendarPeek" v-model="calendarPeek"
-			type="checkbox" class="checkbox">
-		<label for="calendarPeek">{{ t('polls', 'Use calendar lookup') }}</label>
-
-		<input id="defaultViewTextPoll" v-model="defaultViewTextPoll"
-			type="checkbox" class="checkbox">
-		<label for="defaultViewTextPoll">{{ t('polls', 'Text polls default to list view') }}</label>
-
-		<input id="defaultViewDatePoll" v-model="defaultViewDatePoll"
-			type="checkbox" class="checkbox">
-		<label for="defaultViewDatePoll">{{ t('polls', 'Date polls default to list view') }}</label>
-
-		<input id="experimental" v-model="experimental"
-			type="checkbox" class="checkbox">
-		<label for="experimental">{{ t('polls', 'Try experimental styles') }}</label>
-
-		<div v-if="experimental">
-			<input id="useImage" v-model="useImage"
+	<div :open.sync="show">
+		<div class="user_settings">
+			<input id="calendarPeek" v-model="calendarPeek"
 				type="checkbox" class="checkbox">
-			<label for="useImage">{{ t('polls', 'Use background image') }}</label>
+			<label for="calendarPeek">{{ t('polls', 'Use calendar lookup') }}</label>
+			<div class="settings_description">
+				{{ t('polls', 'Check, if an option in a date poll is conflicting with or near an entry in your calendar.') }}
+			</div>
+		</div>
 
-			<input v-if="useImage" v-model="imageUrl" type="text">
-
-			<input id="glassyNavigation" v-model="glassyNavigation"
+		<div class="user_settings">
+			<input id="defaultViewTextPoll" v-model="defaultViewTextPoll"
 				type="checkbox" class="checkbox">
-			<label for="glassyNavigation">{{ t('polls', 'Glassy navigation') }}</label>
+			<label for="defaultViewTextPoll">{{ t('polls', 'Text polls default to list view') }}</label>
+			<div class="settings_description">
+				{{ t('polls', 'Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view.') }}
+			</div>
+		</div>
 
-			<input id="glassySidebar" v-model="glassySidebar"
+		<div class="user_settings">
+			<input id="defaultViewDatePoll" v-model="defaultViewDatePoll"
 				type="checkbox" class="checkbox">
-			<label for="glassySidebar">{{ t('polls', 'Glassy sidebar') }}</label>
+			<label for="defaultViewDatePoll">{{ t('polls', 'Date polls default to list view') }}</label>
+			<div class="settings_description">
+				{{ t('polls', 'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.') }}
+			</div>
 		</div>
 	</div>
 </template>
@@ -61,15 +56,13 @@
 import { mapState } from 'vuex'
 
 export default {
-	name: 'NavigationSettings',
+	name: 'FeatureSettings',
 
-	data() {
-		return {
-			viewOptions: [
-				'desktop',
-				'mobile',
-			],
-		}
+	props: {
+		show: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
@@ -109,46 +102,6 @@ export default {
 				}
 			},
 		},
-		experimental: {
-			get() {
-				return this.settings.experimental
-			},
-			set(value) {
-				this.writeValue({ experimental: value })
-			},
-		},
-		useImage: {
-			get() {
-				return this.settings.useImage
-			},
-			set(value) {
-				this.writeValue({ useImage: value })
-			},
-		},
-		imageUrl: {
-			get() {
-				return this.settings.imageUrl
-			},
-			set(value) {
-				this.writeValue({ imageUrl: value })
-			},
-		},
-		glassyNavigation: {
-			get() {
-				return this.settings.glassyNavigation
-			},
-			set(value) {
-				this.writeValue({ glassyNavigation: value })
-			},
-		},
-		glassySidebar: {
-			get() {
-				return this.settings.glassySidebar
-			},
-			set(value) {
-				this.writeValue({ glassySidebar: value })
-			},
-		},
 	},
 
 	methods: {
@@ -159,3 +112,12 @@ export default {
 	},
 }
 </script>
+
+<style>
+	.user_settings {
+		padding-top: 16px;
+	}
+	.settings_description {
+		padding-top: 8px;
+	}
+</style>
