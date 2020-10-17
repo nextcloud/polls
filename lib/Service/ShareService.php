@@ -109,7 +109,7 @@ class ShareService {
 				// via normal shared access and return the created share
 				return $this->create(
 					$this->share->getPollId(),
-					UserGroupClass::getUserGroupChild( Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
+					UserGroupClass::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
 					true
 				);
 			}
@@ -142,7 +142,6 @@ class ShareService {
 		$this->share->setUserEmail($userGroup->getEmailAddress());
 
 		return $this->shareMapper->insert($this->share);
-
 	}
 
 	/**
