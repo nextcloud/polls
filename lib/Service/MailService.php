@@ -194,11 +194,9 @@ class MailService {
 					$share->getUserId(),
 					'core', 'lang'
 				),
-				'link' => $this->urlGenerator->getAbsoluteURL(
-					$this->urlGenerator->linkToRoute(
-						'polls.page.indexvote',
-						['id' => $share->getPollId()]
-					)
+				'link' => $this->urlGenerator->linkToRouteAbsolute(
+					'polls.page.indexvote',
+					['id' => $share->getPollId()]
 				)
 			];
 		} elseif ($share->getType() === 'email') {
@@ -207,11 +205,9 @@ class MailService {
 				'eMailAddress' => $share->getUserEmail(),
 				'displayName' => $share->getUserEmail(),
 				'language' => $defaultLang,
-				'link' => $this->urlGenerator->getAbsoluteURL(
-					$this->urlGenerator->linkToRoute(
-						'polls.page.vote_publicpublic',
-						['token' => $share->getToken()]
-					)
+				'link' => $this->urlGenerator->linkToRouteAbsolute(
+					'polls.page.vote_publicpublic',
+					['token' => $share->getToken()]
 				)
 			];
 		} elseif ($share->getType() === 'contact') {
@@ -224,11 +220,9 @@ class MailService {
 					'eMailAddress' => $share->getUserEmail(),
 					'displayName' => $share->getUserId(),
 					'language' => $defaultLang,
-					'link' => $this->urlGenerator->getAbsoluteURL(
-						$this->urlGenerator->linkToRoute(
-							'polls.page.vote_publicpublic',
-							['token' => $share->getToken()]
-						)
+					'link' => $this->urlGenerator->linkToRouteAbsolute(
+						'polls.page.vote_publicpublic',
+						['token' => $share->getToken()]
 					)
 				];
 			} else {
@@ -240,11 +234,9 @@ class MailService {
 				'eMailAddress' => $share->getUserEmail(),
 				'displayName' => $share->getUserId(),
 				'language' => $defaultLang,
-				'link' => $this->urlGenerator->getAbsoluteURL(
-					$this->urlGenerator->linkToRoute(
-						'polls.page.vote_publicpublic',
-						['token' => $share->getToken()]
-					)
+				'link' => $this->urlGenerator->linkToRouteAbsolute(
+					'polls.page.vote_publicpublic',
+					['token' => $share->getToken()]
 				)
 			];
 		} elseif ($share->getType() === 'group') {
@@ -260,10 +252,8 @@ class MailService {
 					'eMailAddress' => \OC::$server->getConfig()->getUserValue($member, 'settings', 'email'),
 					'displayName' => $this->userManager->get($member)->getDisplayName(),
 					'language' => $this->config->getUserValue($member, 'core', 'lang'),
-					'link' => $this->urlGenerator->getAbsoluteURL(
-						$this->urlGenerator->linkToRoute(
-							'polls.page.indexvote', ['id' => $share->getPollId()]
-						)
+					'link' => $this->urlGenerator->linkToRouteAbsolute(
+						'polls.page.indexvote', ['id' => $share->getPollId()]
 					)
 				];
 			}
@@ -366,11 +356,9 @@ class MailService {
 
 			$trans = $this->transFactory->get('polls', $lang);
 
-			$url = $this->urlGenerator->getAbsoluteURL(
-				$this->urlGenerator->linkToRoute(
-					'polls.page.indexvote',
-					['id' => $subscription->getPollId()]
-				)
+			$url = $this->urlGenerator->linkToRouteAbsolute(
+				'polls.page.indexvote',
+				['id' => $subscription->getPollId()]
 			);
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
