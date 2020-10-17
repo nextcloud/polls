@@ -189,18 +189,14 @@ class MailService {
 	private function getRecipientsByShare($share, $defaultLang = 'en', $skipUser = null) {
 		$recipients = [];
 
-		$tokenLink = $this->urlGenerator->getAbsoluteURL(
-			$this->urlGenerator->linkToRoute(
-				'polls.page.vote_publicpublic',
-				['token' => $share->getToken()]
-			)
+		$tokenLink = $this->urlGenerator->linkToRouteAbsolute(
+			'polls.page.vote_publicpublic',
+			['token' => $share->getToken()]
 		);
 
-		$internalLink = $this->urlGenerator->getAbsoluteURL(
-			$this->urlGenerator->linkToRoute(
-				'polls.page.indexvote',
-				['id' => $share->getPollId()]
-			)
+		$internalLink = $this->urlGenerator->linkToRouteAbsolute(
+			'polls.page.indexvote',
+			['id' => $share->getPollId()]
 		);
 		switch ($share->getType()) {
 			case Share::TYPE_USER:
