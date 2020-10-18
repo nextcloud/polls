@@ -243,10 +243,10 @@ class SystemService {
 
 		foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
 			foreach (explode(',', $contact['CATEGORIES']) as $contactGroup) {
-				if (strpos($contactGroup, $query) === 0 && !in_array($contactGroup, $foundContacts)) {
+				if ($query && strpos($contactGroup, $query) === 0 && !in_array($contactGroup, $foundContacts)) {
 					$foundContacts[] = $contactGroup;
 					$contactGroups[] = [
-						'id' => 'contactgroup_' +$contactGroup,
+						'id' => 'contactgroup_' . $contactGroup,
 						'user' => $contactGroup,
 						'displayName' => $contactGroup,
 						'organisation' => '',
