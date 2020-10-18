@@ -118,7 +118,7 @@ const actions = {
 
 	addPersonal(context, payload) {
 		const endPoint = 'apps/polls/share/personal'
-
+		context.dispatch('delete', { share: payload })
 		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName, emailAddress: payload.emailAddress })
 			.then((response) => {
 				return { token: response.data.token }
