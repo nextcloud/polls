@@ -24,7 +24,7 @@
 	<div>
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Shares')" icon-class="icon-share">
+		<ConfigBox :title="t('polls', 'Effective shares')" icon-class="icon-share">
 			<TransitionGroup :css="false" tag="div" class="shared-list">
 				<UserItem v-for="(share) in invitationShares"
 					:key="share.id" v-bind="share"
@@ -74,15 +74,10 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Public shares')" icon-class="icon-public">
-			<TransitionGroup :css="false" tag="ul" class="shared-list">
-				<li v-for="(share) in publicShares" :key="share.id">
-					<div class="share-item">
-						<Avatar icon-class="icon-public" :is-no-user="true" />
-						<!-- <div class="avatar icon-public" /> -->
-						<div class="share-item__description">
-							{{ t('polls', 'Public link ({token})', {token: share.token }) }}
-						</div>
-					</div>
+			<TransitionGroup :css="false" tag="div" class="shared-list">
+				<PublicShareItem v-for="(share) in publicShares"
+					:key="share.id"
+					v-bind="share">
 					<Actions>
 						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
 							{{ t('polls', 'Copy link to clipboard') }}
@@ -93,7 +88,7 @@
 							{{ t('polls', 'Remove share') }}
 						</ActionButton>
 					</Actions>
-				</li>
+				</PublicShareItem>
 			</TransitionGroup>
 
 			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', userId: '', emailAddress: ''})" />
@@ -102,7 +97,8 @@
 		<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
 			<TransitionGroup :css="false" tag="div" class="shared-list">
 				<UserItem v-for="(share) in unsentInvitations"
-					:key="share.id" v-bind="share"
+					:key="share.id"
+					v-bind="share"
 					:icon="true">
 					<Actions>
 						<ActionButton
@@ -131,12 +127,13 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { Actions, ActionButton, Avatar, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import ConfigBox from '../Base/ConfigBox'
 import ButtonDiv from '../Base/ButtonDiv'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import PublicShareItem from '../Base/PublicShareItem'
 
 export default {
 	name: 'SideBarTabShare',
@@ -144,10 +141,10 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		Avatar,
 		ButtonDiv,
 		ConfigBox,
 		Multiselect,
+		PublicShareItem,
 	},
 
 	data() {
