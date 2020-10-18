@@ -84,13 +84,24 @@ class Share extends Entity implements JsonSerializable {
 			'token' => $this->token,
 			'type' => $this->type,
 			'pollId' => intval($this->pollId),
-			'userId' => $this->userId,
+			'userId' => $this->getUserId(),
 			'userEmail' => $this->userEmail,
 			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->displayName,
 			'externalUser' => $this->externalUser(),
-			'shareeDetail' => UserGroupClass::getUserGroupChild($this->type, $this->userId)
+			'shareeDetail' => UserGroupClass::getUserGroupChild($this->type, $this->getUserId())
 		];
+	}
+
+	public function getUserId() {
+		if ($this->type === self::TYPE_CONTACTGROUP) {
+			// contactsgroup had the prefix contactgroup_ until version 1.5
+			// strip it out
+			$parts = explode("contactgroup_", $this->userId);
+			$userId = end($parts);
+			return $userId;
+		}
+		return $this->userId;
 	}
 
 	private function externalUser() {
