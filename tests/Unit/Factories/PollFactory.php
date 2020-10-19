@@ -28,7 +28,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  */
 $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'type' => 'textPoll',
-	'title' => Faker::sentence(10),
+	'title' => Faker::text(124),
 	'description' => Faker::text(255),
 	'owner' => Faker::firstNameMale(),
 	'created' => function() {
