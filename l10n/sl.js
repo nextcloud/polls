@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Polls" : "Ankete",
     "Poll invitation \"%s\"" : "Vabilo k izpolnjevanju ankete »%s«",
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} vas vabi k izpolnjevanju ankete » {title} «",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} vas vabi k izpolnjevanju ankete »{title}«",
     "Go to poll" : "Skoči na anketo",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar: " : "Povezava vam omogoča osebni dostop do omenjene ankete. Pritisnite gumb, ali pa kopirajte povezavo in jo prilepite v spletni brskalnik.",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar: " : "Povezava vam omogoča osebni dostop do omenjene ankete. Pritisnite gumb oziroma kopirajte povezavo in jo prilepite v spletni brskalnik.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Elektronsko sporočilo ste prejeli, ker ste povabljeni k izpolnjevanju ankete. Vaše ime in elektronski naslov sta zabeležena v anketi. Če se želite odstraniti, stopite v stik s skrbnikom ali avtorjem ankete prek elektronske pošte.",
     "Polls App - New Activity" : "Program Ankete – nova dejavnost",
     "\"{title}\" had recent activity: " : "Na anketi » {title} « je zaznana dejavnost: ",
