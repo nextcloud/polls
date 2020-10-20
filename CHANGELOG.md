@@ -1,11 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.0 - release] - tbd
+ - [enhancement] Change wording on hidden an public polls (#1158)
+ - [enhancement] #1168 - Preferences dialog (#1120)
+ - [enhancement] #1156 - Explicitly close poll (#1157)
+ - [enhancement] #1153 - Add share, if logged in user enters hidden poll via public link (#1169)
+ - [enhancement] #204 - Circles integration (#1128)
+ - [refactor] Remove deprecated app.php (#1162)
+
+ See also: https://github.com/nextcloud/polls/milestone/28?closed=1
+
 ## [1.5.5 - release] - 2020-10-20
  - [fix] #1137 - delete comments in public polls
  - [fix] #1161 - Routing after creation of poll was wrong
  - [fix] #1154 - Shifting dates went wrong
  - [fix] #1163 - Reordering text poll options did not work
+ - [fix] #1170 - A non-numeric value encountered
  - [deps] - updated dependencies
 
 ## [1.5.4 - release] - 2020-10-02
