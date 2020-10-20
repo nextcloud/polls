@@ -22,28 +22,29 @@
 
 <template>
 	<AppContent>
-		<div id="emptycontent">
-			<div id="emptycontent-icon" class="icon-search" />
-			<h2>{{ t('polls', 'The poll does not exist') }}</h2>
-
-			<p v-if="getCurrentUser()" class="emptycontent-additional">
-				{{ t('polls', 'Enter a poll or start a new one.') }}
-			</p>
-			<button v-else @click="gotoLogin()">
-				{{ t('polls', 'Goto Nextcloud') }}
-			</button>
-		</div>
+		<EmptyContent icon="icon-search">
+			{{ t('polls', '404 - poll not found') }}
+			<template #desc>
+				<p v-if="getCurrentUser()">
+					{{ t('polls', 'Enter a poll or start a new one.') }}
+				</p>
+				<button v-else @click="gotoLogin()">
+					{{ t('polls', 'Goto Nextcloud') }}
+				</button>
+			</template>
+		</EmptyContent>
 	</AppContent>
 </template>
 
 <script>
-import { AppContent } from '@nextcloud/vue'
+import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'NotFound',
 	components: {
 		AppContent,
+		EmptyContent,
 	},
 
 	methods: {
