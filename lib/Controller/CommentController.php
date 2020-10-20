@@ -55,17 +55,6 @@ class CommentController extends Controller {
 		$this->commentService = $commentService;
 	}
 
-	// /**
-	//  * Read all comments of a poll based on the poll id and return list as array
-	//  * @NoAdminRequired
-	//  * @param int $pollId
-	//  * @param string $token
-	//  * @return DataResponse
-	//  */
-	// public function list($pollId) {
-	// 	return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
-	// }
-	//
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired

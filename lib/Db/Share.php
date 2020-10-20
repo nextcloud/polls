@@ -27,6 +27,7 @@ use JsonSerializable;
 
 use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
+use OCA\Polls\Model\UserGroupClass;
 
 /**
  * @method string getId()
@@ -43,8 +44,18 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserEmail(string $value)
  * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
+ * @method int getDisplayName()
+ * @method void setDisplayName(string $value)
  */
 class Share extends Entity implements JsonSerializable {
+	public const TYPE_USER = 'user';
+	public const TYPE_EMAIL = 'email';
+	public const TYPE_CIRCLE = 'circle';
+	public const TYPE_GROUP = 'group';
+	public const TYPE_CONTACTGROUP = 'contactGroup';
+	public const TYPE_CONTACT = 'contact';
+	public const TYPE_PUBLIC = 'public';
+	public const TYPE_EXTERNAL = 'external';
 
 	/** @var string $token */
 	protected $token;
@@ -64,26 +75,33 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $invitationSent */
 	protected $invitationSent;
 
+	/** @var string $displayName */
+	protected $displayName;
+
 	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
 			'token' => $this->token,
 			'type' => $this->type,
 			'pollId' => intval($this->pollId),
-			'userId' => $this->userId,
+			'userId' => $this->getUserId(),
 			'userEmail' => $this->userEmail,
 			'invitationSent' => intval($this->invitationSent),
-			'displayName' => $this->getDisplayName(),
-			'externalUser' => $this->externalUser()
+			'displayName' => $this->displayName,
+			'externalUser' => $this->externalUser(),
+			'shareeDetail' => UserGroupClass::getUserGroupChild($this->type, $this->getUserId())
 		];
 	}
 
-	private function getDisplayName() {
-		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
-		} else {
-			return $this->userId;
+	public function getUserId() {
+		if ($this->type === self::TYPE_CONTACTGROUP) {
+			// contactsgroup had the prefix contactgroup_ until version 1.5
+			// strip it out
+			$parts = explode("contactgroup_", $this->userId);
+			$userId = end($parts);
+			return $userId;
 		}
+		return $this->userId;
 	}
 
 	private function externalUser() {

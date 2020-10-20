@@ -26,9 +26,10 @@ namespace OCA\Polls\Service;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
+use OCA\Polls\Db\Log;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Model\Acl;
 
 class VoteService {
@@ -134,7 +135,7 @@ class VoteService {
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->insert($this->vote);
 		} finally {
-			$this->logService->setLog($this->acl->getPollId(), 'setVote', $this->vote->getUserId());
+			$this->logService->setLog($this->acl->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
 			return $this->vote;
 		}
 	}

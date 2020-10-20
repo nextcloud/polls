@@ -75,8 +75,7 @@ class Acl implements JsonSerializable {
 
 	/**
 	 * Acl constructor.
-	 * @param string $appName
-	 * @param string $userId
+	 * @param string $UserId
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
@@ -87,7 +86,7 @@ class Acl implements JsonSerializable {
 	 *
 	 */
 	public function __construct(
-		$userId,
+		$UserId,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
@@ -96,7 +95,7 @@ class Acl implements JsonSerializable {
 		Poll $poll,
 		Share $share
 	) {
-		$this->userId = $userId;
+		$this->userId = $UserId;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
@@ -120,13 +119,15 @@ class Acl implements JsonSerializable {
 			$this->share = $this->shareMapper->findByToken($token);
 
 			if (\OC::$server->getUserSession()->isLoggedIn()) {
-				if ($this->share->getType() !== 'group' && $this->share->getType() !== 'public') {
+				if ($this->share->getType() !== Share::TYPE_GROUP
+					&& $this->share->getType() !== Share::TYPE_PUBLIC) {
 					throw new NotAuthorizedException;
 				}
 
 				$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
 			} else {
-				if ($this->share->getType() === 'group' || $this->share->getType() === 'user') {
+				if ($this->share->getType() === Share::TYPE_GROUP
+					|| $this->share->getType() === Share::TYPE_USER) {
 					throw new NotAuthorizedException;
 				}
 
@@ -238,7 +239,7 @@ class Acl implements JsonSerializable {
 	public function getGroupShare(): bool {
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				if ($item->getType() === 'group' && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId())) {
+				if ($item->getType() === Share::TYPE_GROUP && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId())) {
 					return true;
 				}
 			})
@@ -262,7 +263,14 @@ class Acl implements JsonSerializable {
 	public function getPersonalShare(): bool {
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				if (($item->getType() === 'user' || $item->getType() === 'external' || $item->getType() === 'email' || $item->getType() === 'contact') && $item->getUserId() === $this->getUserId()) {
+				if (
+					($item->getType() === Share::TYPE_USER
+						|| $item->getType() === Share::TYPE_EXTERNAL
+						|| $item->getType() === Share::TYPE_EMAIL
+						|| $item->getType() === Share::TYPE_CONTACT
+					)
+					&& $item->getUserId() === $this->getUserId()
+				) {
 					return true;
 				}
 			})
@@ -276,7 +284,7 @@ class Acl implements JsonSerializable {
 	public function getPublicShare(): bool {
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				if ($item->getType() === 'public' && $item->getToken() === $this->getToken()) {
+				if ($item->getType() === Share::TYPE_PUBLIC && $item->getToken() === $this->getToken()) {
 					return true;
 				}
 			})

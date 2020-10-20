@@ -27,21 +27,21 @@
 			:menu-position="menuPosition"
 			:show-user-status="showUserStatus"
 			:user="userId"
-			:display-name="resolveDisplayName"
+			:display-name="name"
 			:is-no-user="isNoUser" />
 
-		<div v-if="icon" :class="iconClass" />
+		<div v-if="icon" :class="['type-icon', iconClass]" />
 
 		<div v-if="!hideNames" class="user-item__name">
-			{{ resolveDisplayName }}
+			{{ name }}
 		</div>
 		<slot />
 	</div>
 </template>
 
 <script>
-import { Avatar } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { Avatar } from '@nextcloud/vue'
 
 export default {
 	name: 'UserItem',
@@ -94,12 +94,21 @@ export default {
 	data() {
 		return {
 			nothidden: false,
+			circleName: '',
 		}
 	},
 
 	computed: {
 		isNoUser() {
 			return this.type !== 'user' || this.externalUser
+		},
+
+		name() {
+			if (this.displayName) {
+				return this.displayName
+			} else {
+				return this.userId
+			}
 		},
 
 		showUserStatus() {
@@ -116,6 +125,8 @@ export default {
 					return 'icon-share'
 				} else if (this.type === 'contactGroup') {
 					return 'icon-group'
+				} else if (this.type === 'circle') {
+					return 'icon-circles'
 				}
 				return 'icon-' + this.type
 			} else {
@@ -123,32 +134,6 @@ export default {
 			}
 		},
 
-		resolveDisplayName() {
-			let displayName = ''
-
-			if (this.type === 'user') {
-				displayName = this.displayName
-			} else if (this.type === 'contact' || this.type === 'external') {
-				displayName = this.userId
-				if (this.userEmail) {
-					displayName = displayName + ' (' + this.userEmail + ')'
-				}
-			} else if (this.type === 'email') {
-				displayName = this.userEmail
-				if (this.userId) {
-					displayName = this.userId + ' (' + displayName + ')'
-				}
-			} else if (this.type === 'group') {
-				displayName = this.userId + ' (' + t('polls', 'Group') + ')'
-			} else if (this.type === 'contactGroup') {
-				displayName = this.userId + ' (' + t('polls', 'Contact Group') + ')'
-			} else if (this.type === 'public') {
-				displayName = t('polls', 'Public share')
-			} else {
-				displayName = t('polls', 'Unknown user')
-			}
-			return displayName
-		},
 	},
 }
 
@@ -164,6 +149,10 @@ export default {
 
 .user-item__avatar {
 	margin: 2px 4px;
+}
+
+.type-icon {
+	background-size: 16px;
 }
 
 .user-item__name {

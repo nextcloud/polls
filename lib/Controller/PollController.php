@@ -154,7 +154,7 @@ class PollController extends Controller {
 				$shares = [];
 			} else {
 				$share = null;
-				$shares = $this->shareService->list($pollId, $token);
+				$shares = $this->shareService->list($pollId);
 			}
 		} catch (Exception $e) {
 			$share = null;

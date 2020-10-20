@@ -23,14 +23,18 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareType;
+use OCA\Polls\Exceptions\ShareAlreadyExists;
 
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\UserGroupClass;
 
 class ShareService {
 
@@ -78,16 +82,12 @@ class ShareService {
 	 * @return array array of Share
 	 * @throws NotAuthorizedException
 	 */
-	public function list($pollId, $token) {
-		if ($token) {
-			return [$this->get($token)];
-		}
-
+	public function list($pollId) {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
-
-		return $this->shareMapper->findByPoll($pollId);
+		$shares = $this->shareMapper->findByPoll($pollId);
+		return $shares;
 	}
 
 	/**
@@ -98,7 +98,6 @@ class ShareService {
 	 */
 	public function get($token) {
 		$this->share = $this->shareMapper->findByToken($token);
-
 		return $this->share;
 	}
 
@@ -106,22 +105,30 @@ class ShareService {
 	 * Add share
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @param string $userEmail
+	 * @param array $user
 	 * @return Share
 	 * @throws NotAuthorizedException
+	 * @throws InvalidShareType
 	 */
-	public function add($pollId, $type, $userId, $userEmail = '') {
+	public function add($pollId, $type, $userId = '', $emailAddress = '') {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
+		if ($type !== UserGroupClass::TYPE_PUBLIC) {
+			try {
+				$this->shareMapper->findByPollAndUser($pollId, $userId);
+				throw new ShareAlreadyExists;
+			} catch (MultipleObjectsReturnedException $e) {
+				throw new ShareAlreadyExists;
+			} catch (DoesNotExistException $e) {
+				// continue
+			}
+		}
+
+
 		$this->share = new Share();
-		$this->share->setType($type);
 		$this->share->setPollId($pollId);
-		$this->share->setUserId($userId);
-		$this->share->setUserEmail($userEmail);
 		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
@@ -129,6 +136,13 @@ class ShareService {
 			ISecureRandom::CHAR_LOWER .
 			ISecureRandom::CHAR_UPPER
 		));
+
+
+		$userGroup = UserGroupClass::getUserGroupChild($type, $userId);
+		$this->share->setType($userGroup->getType());
+		$this->share->setUserId($userGroup->getId());
+		$this->share->setDisplayName($userGroup->getDisplayName());
+		$this->share->setUserEmail($userGroup->getEmailAddress());
 
 		return $this->shareMapper->insert($this->share);
 	}
@@ -144,7 +158,7 @@ class ShareService {
 	 */
 	public function setEmailAddress($token, $emailAddress) {
 		$this->share = $this->shareMapper->findByToken($token);
-		if ($this->share->getType() === 'external') {
+		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validateEmailAddress($emailAddress);
 			$this->share->setUserEmail($emailAddress);
 			// TODO: Send confirmation
@@ -172,7 +186,7 @@ class ShareService {
 			$this->systemService->validateEmailAddress($emailAddress);
 		}
 
-		if ($this->share->getType() === 'public') {
+		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$pollId = $this->share->getPollId();
 			$this->share = new Share();
 			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
@@ -181,9 +195,10 @@ class ShareService {
 				ISecureRandom::CHAR_LOWER .
 				ISecureRandom::CHAR_UPPER
 			));
-			$this->share->setType('external');
+			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setPollId($pollId);
 			$this->share->setUserId($userName);
+			$this->share->setDisplayName($userName);
 			$this->share->setUserEmail($emailAddress);
 			$this->share->setInvitationSent(time());
 			$this->shareMapper->insert($this->share);
@@ -193,8 +208,8 @@ class ShareService {
 			}
 
 			return $this->share;
-		} elseif ($this->share->getType() === 'email') {
-			$this->share->setType('external');
+		} elseif ($this->share->getType() === Share::TYPE_EMAIL) {
+			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userName);
 			$this->share->setUserEmail($emailAddress);
 			return $this->shareMapper->update($this->share);

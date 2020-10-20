@@ -62,7 +62,7 @@ class Comment extends Entity implements JsonSerializable {
 	public function jsonSerialize() {
 
 		// too lazy for a migration
-		// use timestamp if is set,
+		// use timestamp if set,
 		// otherwise use dt and convert to timestamp
 
 		if (intval($this->timestamp) > 0) {
