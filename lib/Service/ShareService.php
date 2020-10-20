@@ -98,7 +98,50 @@ class ShareService {
 	 */
 	public function get($token) {
 		$this->share = $this->shareMapper->findByToken($token);
+
+		// Allow users entering the poll with a public share access
+		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->getUser()->getUID()) {
+
+			// Check if the user has already access
+			if (!$this->acl->set($this->share->getPollId())->getAllowView()) {
+
+				// Create a new share for this user, so he is allowed to access the poll later
+				// via normal shared access and return the created share
+				return $this->create(
+					$this->share->getPollId(),
+					UserGroupClass::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
+					true
+				);
+			}
+		}
 		return $this->share;
+	}
+
+
+	/**
+	 * crate share
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param UserGroupClass $userGroup
+	 * @param bool $skipInvitation
+	 * @return Share
+	 */
+	private function create($pollId, $userGroup, $skipInvitation = fale) {
+		$this->share = new Share();
+		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
+			16,
+			ISecureRandom::CHAR_DIGITS .
+			ISecureRandom::CHAR_LOWER .
+			ISecureRandom::CHAR_UPPER
+		));
+		$this->share->setPollId($pollId);
+		$this->share->setInvitationSent($skipInvitation ? time() : 0);
+		$this->share->setType($userGroup->getType());
+		$this->share->setUserId($userGroup->getId());
+		$this->share->setDisplayName($userGroup->getDisplayName());
+		$this->share->setUserEmail($userGroup->getEmailAddress());
+
+		return $this->shareMapper->insert($this->share);
 	}
 
 	/**
@@ -126,25 +169,27 @@ class ShareService {
 			}
 		}
 
-
-		$this->share = new Share();
-		$this->share->setPollId($pollId);
-		$this->share->setInvitationSent(0);
-		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
-			16,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		));
-
-
 		$userGroup = UserGroupClass::getUserGroupChild($type, $userId);
-		$this->share->setType($userGroup->getType());
-		$this->share->setUserId($userGroup->getId());
-		$this->share->setDisplayName($userGroup->getDisplayName());
-		$this->share->setUserEmail($userGroup->getEmailAddress());
+		return $this->create($pollId, $userGroup) ;
 
-		return $this->shareMapper->insert($this->share);
+		// $this->share = new Share();
+		// $this->share->setPollId($pollId);
+		// $this->share->setInvitationSent(0);
+		// $this->share->setToken(\OC::$server->getSecureRandom()->generate(
+		// 	16,
+		// 	ISecureRandom::CHAR_DIGITS .
+		// 	ISecureRandom::CHAR_LOWER .
+		// 	ISecureRandom::CHAR_UPPER
+		// ));
+		//
+		//
+		// $userGroup = UserGroupClass::getUserGroupChild($type, $userId);
+		// $this->share->setType($userGroup->getType());
+		// $this->share->setUserId($userGroup->getId());
+		// $this->share->setDisplayName($userGroup->getDisplayName());
+		// $this->share->setUserEmail($userGroup->getEmailAddress());
+		//
+		// return $this->shareMapper->insert($this->share);
 	}
 
 	/**
