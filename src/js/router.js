@@ -43,44 +43,44 @@ export default new Router({
 			redirect: {
 				name: 'list',
 				params: {
-					type: 'relevant'
-				}
-			}
+					type: 'relevant',
+				},
+			},
 		},
 		{
 			path: '/list/:type?',
 			components: {
-				default: List
+				default: List,
 			},
 			props: true,
-			name: 'list'
+			name: 'list',
 		},
 		{
 			path: '/not-found',
 			components: {
-				default: NotFound
+				default: NotFound,
 			},
-			name: 'notfound'
+			name: 'notfound',
 		},
 		{
 			path: '/vote/:id',
 			components: {
-				default: Vote
+				default: Vote,
 			},
 			props: true,
-			name: 'vote'
+			name: 'vote',
 		},
 		{
 			path: '/poll/:token',
-			redirect: '/s/:token'
+			redirect: '/s/:token',
 		},
 		{
 			path: '/s/:token',
 			components: {
-				default: Vote
+				default: Vote,
 			},
 			props: true,
-			name: 'publicVote'
-		}
-	]
+			name: 'publicVote',
+		},
+	],
 })

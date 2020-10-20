@@ -1,0 +1,99 @@
+<?php
+/**
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ *
+ * @author René Gieling <github@dartcafe.de>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+namespace OCA\Polls\Controller;
+
+use OCP\AppFramework\Db\DoesNotExistException;
+
+use OCP\IRequest;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
+use OCA\Polls\Db\Preferences;
+use OCA\Polls\Db\PreferencesMapper;
+
+class PreferencesController extends Controller {
+	private $userId;
+	private $preferencesMapper;
+
+	/**
+	 * PreferencesController constructor.
+	 * @param string $appName
+	 * @param $UserId
+	 * @param PreferencesMapper $preferencesMapper
+	 */
+
+	public function __construct(
+		string $appName,
+		$userId,
+		IRequest $request,
+		PreferencesMapper $preferencesMapper
+	) {
+		parent::__construct($appName, $request);
+		$this->userId = $userId;
+		$this->preferencesMapper = $preferencesMapper;
+	}
+
+	/**
+	 * get
+	 * Read all preferences
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return DataResponse
+	 */
+	public function get() {
+		try {
+			return new DataResponse($this->preferencesMapper->find($this->userId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+		}
+	}
+
+	/**
+	 * write
+	 * Write wreferences
+	 * @NoAdminRequired
+	 * @param array $settings
+	 * @return DataResponse
+	 */
+	public function write($settings) {
+		if (!\OC::$server->getUserSession()->isLoggedIn()) {
+			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+		}
+
+		try {
+			$preferences = $this->preferencesMapper->find($this->userId);
+			$preferences->setPreferences(json_encode($settings));
+			$preferences->setTimestamp(time());
+			$preferences = $this->preferencesMapper->update($preferences);
+		} catch (\Exception $e) {
+			$preferences = new Preferences();
+			$preferences->setUserId($this->userId);
+			$preferences->setPreferences(json_encode($settings));
+			$preferences->setTimestamp(time());
+			$preferences = $this->preferencesMapper->insert($preferences);
+		}
+
+		return new DataResponse($preferences, Http::STATUS_OK);
+	}
+}

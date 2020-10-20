@@ -23,9 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
@@ -67,7 +65,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_comments')) {
 			$table = $schema->getTable('polls_comments');
 			if (!$table->hasColumn('timestamp')) {
-				$table->addColumn('timestamp', Type::INTEGER, [
+				$table->addColumn('timestamp', 'integer', [
 					'length' => 11,
 					'notnull' => true,
 					'default' => 0
@@ -77,80 +75,80 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('polls_polls')) {
 			$table = $schema->createTable('polls_polls');
-			$table->addColumn('id', Type::INTEGER, [
+			$table->addColumn('id', 'integer', [
 				'autoincrement' => true,
 				'length' => 11,
 				'notnull' => true
 			]);
-			$table->addColumn('type', Type::STRING, [
+			$table->addColumn('type', 'string', [
 				'length' => 64,
 				'notnull' => true,
 				'default' => 'datePoll'
 			]);
-			$table->addColumn('title', Type::STRING, [
+			$table->addColumn('title', 'string', [
 				'length' => 128,
 				'notnull' => true
 			]);
-			$table->addColumn('description', Type::STRING, [
+			$table->addColumn('description', 'string', [
 				'length' => 1024,
 				'notnull' => true
 			]);
-			$table->addColumn('owner', Type::STRING, [
+			$table->addColumn('owner', 'string', [
 				'length' => 64,
 				'notnull' => true
 			]);
-			$table->addColumn('created', Type::INTEGER, [
+			$table->addColumn('created', 'integer', [
 				'length' => 11,
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('expire', Type::INTEGER, [
+			$table->addColumn('expire', 'integer', [
 				'length' => 11,
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('deleted', Type::INTEGER, [
+			$table->addColumn('deleted', 'integer', [
 				'length' => 11,
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('access', Type::STRING, [
+			$table->addColumn('access', 'string', [
 				'notnull' => true,
 				'length' => 1024,
 				'default' => 'hidden'
 			]);
-			$table->addColumn('anonymous', Type::INTEGER, [
+			$table->addColumn('anonymous', 'integer', [
 				'length' => 8,
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('full_anonymous', Type::INTEGER, [
+			$table->addColumn('full_anonymous', 'integer', [
 				'notnull' => true,
 				'default' => 0,
 			]);
-			$table->addColumn('allow_maybe', Type::INTEGER, [
+			$table->addColumn('allow_maybe', 'integer', [
 				'notnull' => true,
 				'default' => 1
 			]);
-			$table->addColumn('options', Type::TEXT, [
+			$table->addColumn('options', 'text', [
 				'notnull' => true,
 				'default' => ''
 			]);
-			$table->addColumn('settings', Type::TEXT, [
+			$table->addColumn('settings', 'text', [
 				'notnull' => true,
 				'default' => ''
 			]);
-			$table->addColumn('vote_limit', Type::INTEGER, [
+			$table->addColumn('vote_limit', 'integer', [
 				'length' => 11,
 				'notnull' => true,
 				'default' => 0
 			]);
-			$table->addColumn('show_results', Type::STRING, [
+			$table->addColumn('show_results', 'string', [
 				'length' => 64,
 				'notnull' => true,
 				'default' => 'always'
 			]);
-			$table->addColumn('admin_access', Type::INTEGER, [
+			$table->addColumn('admin_access', 'integer', [
 				'length' => 8,
 				'notnull' => true,
 				'default' => 0
@@ -161,30 +159,30 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('polls_share')) {
 			$table = $schema->createTable('polls_share');
-			$table->addColumn('id', Type::INTEGER, [
+			$table->addColumn('id', 'integer', [
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('token', Type::STRING, [
+			$table->addColumn('token', 'string', [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('type', Type::STRING, [
+			$table->addColumn('type', 'string', [
 				'notnull' => true,
 				'length' => 64
 			]);
-			$table->addColumn('poll_id', Type::INTEGER, [
+			$table->addColumn('poll_id', 'integer', [
 				'notnull' => true
 			]);
-			$table->addColumn('user_id', Type::STRING, [
+			$table->addColumn('user_id', 'string', [
 				'notnull' => false,
 				'length' => 64
 			]);
-			$table->addColumn('user_email', Type::STRING, [
+			$table->addColumn('user_email', 'string', [
 				'notnull' => false,
 				'length' => 254
 			]);
-			$table->addColumn('user', Type::TEXT, [
+			$table->addColumn('user', 'text', [
 				'notnull' => true,
 				'default' => ''
 			]);
@@ -193,36 +191,36 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('polls_log')) {
 			$table = $schema->createTable('polls_log');
-			$table->addColumn('id', Type::INTEGER, [
+			$table->addColumn('id', 'integer', [
 				'autoincrement' => true,
 				'notnull' => true
 			]);
-			$table->addColumn('created', Type::INTEGER, [
+			$table->addColumn('created', 'integer', [
 				'notnull' => true,
 				'length' => 11,
 				'default' => 0
 			]);
-			$table->addColumn('processed', Type::INTEGER, [
+			$table->addColumn('processed', 'integer', [
 				'notnull' => true,
 				'length' => 11,
 				'default' => 0
 			]);
-			$table->addColumn('poll_id', Type::INTEGER, [
+			$table->addColumn('poll_id', 'integer', [
 				'notnull' => true
 			]);
-			$table->addColumn('user_id', Type::STRING, [
+			$table->addColumn('user_id', 'string', [
 				'notnull' => false,
 				'length' => 1024
 			]);
-			$table->addColumn('display_name', Type::STRING, [
+			$table->addColumn('display_name', 'string', [
 				'notnull' => false,
 				'length' => 64
 			]);
-			$table->addColumn('message_id', Type::STRING, [
+			$table->addColumn('message_id', 'string', [
 				'notnull' => false,
 				'length' => 64
 			]);
-			$table->addColumn('message', Type::STRING, [
+			$table->addColumn('message', 'string', [
 				'notnull' => false,
 				'length' => 1024
 			]);
@@ -328,7 +326,6 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 			->setParameter('show_results', 'always')
 			->setParameter('admin_access', 0);
 			$insert->execute();
-
 		}
 
 		$result->closeCursor();
@@ -354,7 +351,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		$result = $query->execute();
 
 		while ($row = $result->fetch()) {
-			if ($row['access'] == 'public') {
+			if ($row['access'] === 'public') {
 				// copy the hash to a public share
 				$insert
 				->setParameter('token', $row['hash'])
@@ -364,7 +361,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('user_email', null)
 				->setParameter('user', '');
 				$insert->execute();
-			} elseif ($row['access'] == 'hidden') {
+			} elseif ($row['access'] === 'hidden') {
 				// copy the hash to a public share
 				// poll stays hidden for registered users
 				$insert
@@ -375,7 +372,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				->setParameter('user_email', null)
 				->setParameter('user', '');
 				$insert->execute();
-			} elseif ($row['access'] == 'registered') {
+			} elseif ($row['access'] === 'registered') {
 				// copy the hash to a public share
 				// to keep the hash
 				$insert
@@ -412,5 +409,4 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		}
 		$result->closeCursor();
 	}
-
 }

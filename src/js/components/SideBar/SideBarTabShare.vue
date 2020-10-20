@@ -22,90 +22,121 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin" class="config-box">
-			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
-		</div>
+		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<h3>{{ t('polls','Invitations') }}</h3>
+		<ConfigBox :title="t('polls', 'Shares')" icon-class="icon-share">
+			<TransitionGroup :css="false" tag="div" class="shared-list">
+				<UserItem v-for="(share) in invitationShares"
+					:key="share.id" v-bind="share"
+					:icon="true">
+					<Actions>
+						<ActionButton
+							v-if="share.userEmail || share.type === 'group'"
+							icon="icon-confirm"
+							@click="sendInvitation(share)">
+							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
+						</ActionButton>
+						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
+							{{ t('polls', 'Copy link to clipboard') }}
+						</ActionButton>
+					</Actions>
+					<Actions>
+						<ActionButton icon="icon-delete" @click="removeShare(share)">
+							{{ t('polls', 'Remove share') }}
+						</ActionButton>
+					</Actions>
+				</UserItem>
+			</TransitionGroup>
 
-		<span>{{ t('polls','Invited users will get informed immediately via email!') }} </span>
-		<TransitionGroup :css="false" tag="ul" class="shared-list">
-			<li v-for="(share) in invitationShares" :key="share.id">
-				<UserDiv
-					:user-id="resolveShareUser(share)"
-					:display-name="shareDisplayName(share)"
-					:type="share.type"
-					:icon="true" />
-				<Actions>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
-						{{ t('polls', 'Copy link to clipboard') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-delete" @click="removeShare(share)">
-						{{ t('polls', 'Remove share') }}
-					</ActionButton>
-				</Actions>
-			</li>
-		</TransitionGroup>
+			<Multiselect id="ajax"
+				:options="users"
+				:multiple="false"
+				:user-select="true"
+				:tag-width="80"
+				:clear-on-select="false"
+				:preserve-search="true"
+				:options-limit="30"
+				:loading="isLoading"
+				:internal-search="false"
+				:searchable="true"
+				:preselect-first="true"
+				:placeholder="placeholder"
+				label="displayName"
+				track-by="user"
+				@select="addShare"
+				@search-change="loadUsersAsync">
+				<template slot="selection" slot-scope="{ values, isOpen }">
+					<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
+						{{ values.length }} users selected
+					</span>
+				</template>
+			</Multiselect>
+		</ConfigBox>
 
-		<Multiselect id="ajax"
-			:options="users"
-			:multiple="false"
-			:user-select="true"
-			:tag-width="80"
-			:clear-on-select="false"
-			:preserve-search="true"
-			:options-limit="30"
-			:loading="isLoading"
-			:internal-search="false"
-			:searchable="true"
-			:preselect-first="true"
-			:placeholder="placeholder"
-			label="displayName"
-			track-by="user"
-			@select="addShare"
-			@search-change="loadUsersAsync">
-			<template slot="selection" slot-scope="{ values, search, isOpen }">
-				<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
-					{{ values.length }} users selected
-				</span>
-			</template>
-		</Multiselect>
-
-		<h3>{{ t('polls','Public shares') }}</h3>
-		<TransitionGroup :css="false" tag="ul" class="shared-list">
-			<li v-for="(share) in publicShares" :key="share.id">
-				<div class="user-row user">
-					<div class="avatar icon-public" />
-					<div class="user-name">
-						{{ t('polls', 'Public link (' + share.token + ')') }}
+		<ConfigBox :title="t('polls', 'Public shares')" icon-class="icon-public">
+			<TransitionGroup :css="false" tag="ul" class="shared-list">
+				<li v-for="(share) in publicShares" :key="share.id">
+					<div class="share-item">
+						<Avatar icon-class="icon-public" :is-no-user="true" />
+						<!-- <div class="avatar icon-public" /> -->
+						<div class="share-item__description">
+							{{ t('polls', 'Public link ({token})', {token: share.token }) }}
+						</div>
 					</div>
-				</div>
-				<Actions>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: OC.generateUrl('apps/polls/s/') + share.token })">
-						{{ t('polls', 'Copy link to clipboard') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-delete" @click="removeShare(share)">
-						{{ t('polls', 'Remove share') }}
-					</ActionButton>
-				</Actions>
-			</li>
-		</TransitionGroup>
-		<div class="user-row user" @click="addShare({type: 'public', user: '', emailAddress: ''})">
-			<div class="avatar icon-add" />
-			<div class="user-name">
-				{{ t('polls', 'Add a public link') }}
-			</div>
-		</div>
+					<Actions>
+						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
+							{{ t('polls', 'Copy link to clipboard') }}
+						</ActionButton>
+					</Actions>
+					<Actions>
+						<ActionButton icon="icon-delete" @click="removeShare(share)">
+							{{ t('polls', 'Remove share') }}
+						</ActionButton>
+					</Actions>
+				</li>
+			</TransitionGroup>
+
+			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', user: '', emailAddress: ''})" />
+		</ConfigBox>
+
+		<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
+			<TransitionGroup :css="false" tag="div" class="shared-list">
+				<UserItem v-for="(share) in unsentInvitations"
+					:key="share.id" v-bind="share"
+					:icon="true">
+					<Actions>
+						<ActionButton
+							v-if="share.userEmail || share.type === 'group'"
+							icon="icon-confirm"
+							@click="sendInvitation(share)">
+							{{ t('polls', 'Send invitation mail') }}
+						</ActionButton>
+						<ActionButton
+							v-if="share.type === 'contactGroup'"
+							icon="icon-toggle-filelist"
+							@click="resolveContactGroup(share)">
+							{{ t('polls', 'Resolve contact group into individual invitations') }}
+						</ActionButton>
+					</Actions>
+					<Actions>
+						<ActionButton icon="icon-delete" @click="removeShare(share)">
+							{{ t('polls', 'Remove invitation') }}
+						</ActionButton>
+					</Actions>
+				</UserItem>
+			</TransitionGroup>
+		</ConfigBox>
 	</div>
 </template>
 
 <script>
-import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import axios from '@nextcloud/axios'
+import { Actions, ActionButton, Avatar, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
+import { generateUrl } from '@nextcloud/router'
+import ConfigBox from '../Base/ConfigBox'
+import ButtonDiv from '../Base/ButtonDiv'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'SideBarTabShare',
@@ -113,14 +144,15 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		Multiselect
+		Avatar,
+		ButtonDiv,
+		ConfigBox,
+		Multiselect,
 	},
 
 	data() {
 		return {
 			users: [],
-			invitations: [],
-			invitation: {},
 			isLoading: false,
 			placeholder: t('polls', 'Enter a name to start the search'),
 			siteUsersListOptions: {
@@ -128,104 +160,89 @@ export default {
 				getGroups: true,
 				getContacts: true,
 				getMail: true,
-				query: ''
-			}
+				query: '',
+			},
 		}
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters([
-			'invitationShares',
-			'publicShares'
-		])
+		...mapGetters({
+			invitationShares: 'poll/shares/invitation',
+			unsentInvitations: 'poll/shares/unsentInvitations',
+			publicShares: 'poll/shares/public',
+		}),
 	},
 
 	methods: {
+		resolveContactGroup(share) {
+			this.$store.dispatch('poll/shares/resolveContactGroup', { share: share })
+				.then((response) => {
+					this.$store.dispatch('poll/shares/delete', { share: share })
+				})
+		},
+
+		sendInvitation(share) {
+			this.$store.dispatch('poll/shares/sendInvitation', { share: share })
+				.then((response) => {
+					response.data.sentResult.sentMails.forEach((item) => {
+						showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
+					})
+					response.data.sentResult.abortedMails.forEach((item) => {
+						console.error('Mail could not be sent!', { recipient: item })
+						showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
+					})
+				})
+		},
+
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
-			this.$http.post(OC.generateUrl('apps/polls/siteusers/get/'), this.siteUsersListOptions)
+			axios.post(generateUrl('apps/polls/siteusers/get'), this.siteUsersListOptions)
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
-				}, (error) => {
+				})
+				.catch((error) => {
 					console.error(error.response)
 				})
 		},
 
 		copyLink(payload) {
-			this.$copyText(window.location.origin + payload.url).then(
-				function() {
-					OC.Notification.showTemporary(t('polls', 'Link copied to clipboard'), { type: 'success' })
-				},
-				function() {
-					OC.Notification.showTemporary(t('polls', 'Error while copying link to clipboard'), { type: 'error' })
-				}
-			)
+			this
+				.$copyText(window.location.origin + payload.url)
+				.then(() => {
+					showSuccess(t('polls', 'Link copied to clipboard'))
+				})
+				.catch(() => {
+					showError(t('polls', 'Error while copying link to clipboard'))
+				})
 		},
 
-		resolveShareUser(share) {
-
-			if (share.userId !== '' && share.userId !== null) {
-				return share.userId
-			} else if (share.type === 'email') {
-				return share.userEmail
-			} else {
-				return t('polls', 'Unknown user')
-			}
-
-		},
-
-		shareDisplayName(share) {
-			let displayName = ''
-
-			if (share.type === 'user') {
-				displayName = share.displayName
-			} else if (share.type === 'contact' || share.type === 'external') {
-				displayName = share.userId
-				if (share.userEmail) {
-					displayName = displayName + ' (' + share.userEmail + ')'
-				}
-			} else if (share.type === 'email') {
-				displayName = share.userEmail
-				if (share.userId) {
-					displayName = share.userId + ' (' + displayName + ')'
-				}
-			} else if (share.type === 'group') {
-				displayName = share.userId + ' (' + t('polls', 'Group') + ')'
-			} else if (share.type === 'public') {
-				displayName = t('polls', 'Public share')
-			} else {
-				displayName = t('polls', 'Unknown user')
-			}
-			return displayName
+		shareUrl(share) {
+			return generateUrl('apps/polls/s/') + share.token
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('removeShareAsync', { share: share })
+			this.$store.dispatch('poll/shares/delete', { share: share })
 		},
 
 		addShare(payload) {
 			this.$store
-				.dispatch('writeSharePromise', {
-					share: {
-						type: payload.type,
-						userId: payload.user,
-						pollId: '0',
-						userEmail: payload.emailAddress,
-						token: ''
-					}
+				.dispatch('poll/shares/add', {
+					type: payload.type,
+					userId: payload.user,
+					userEmail: payload.emailAddress,
 				})
 				.catch(error => {
 					console.error('Error while adding share - Error: ', error)
-					OC.Notification.showTemporary(t('polls', 'Error while adding share'), { type: 'error' })
+					showError(t('polls', 'Error while adding share'))
 				})
-		}
-	}
+		},
+	},
 }
 </script>
 
@@ -242,6 +259,36 @@ export default {
 			align-items: stretch;
 			margin: 4px 0;
 		}
+	}
+
+	.share-item {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		max-width: 100%;
+
+		//dirty hack: AvatarDiv does not work properly with iconClass
+		.avatardiv {
+			&.avatardiv--unknown {
+				background-color: transparent;
+			}
+
+			.avatar-class-icon {
+				// background-color: var(--color-primary-element-light);
+				min-height: 32px;
+				min-width: 32px;
+			}
+		}
+	}
+
+	.share-item__description {
+		flex: 1;
+		min-width: 50px;
+		color: var(--color-text-maxcontrast);
+		padding-left: 8px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.multiselect {

@@ -22,39 +22,33 @@
  */
 
 import Vue from 'vue'
-import axios from '@nextcloud/axios'
-
 import App from './App'
 import store from './store'
 import router from './router'
-import { linkTo } from '@nextcloud/router'
 import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
-import moment from 'moment'
-
+import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
+import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
-import UserDiv from './components/Base/UserDiv'
+import UserItem from './components/Base/UserItem'
 import ButtonDiv from './components/Base/ButtonDiv'
 
 /* eslint-disable-next-line camelcase, no-undef */
-__webpack_nonce__ = btoa(OC.requestToken)
+__webpack_nonce__ = btoa(getRequestToken())
 /* eslint-disable-next-line camelcase, no-undef */
-__webpack_public_path__ = linkTo('polls', 'js/')
+__webpack_public_path__ = generateFilePath('polls', '', 'js/')
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
 
-moment.locale(OC.getLocale())
-
-Vue.prototype.moment = moment
 Vue.prototype.t = t
 Vue.prototype.n = n
-Vue.prototype.$http = axios
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
+Vue.prototype.getCurrentUser = getCurrentUser
 
-Vue.component('UserDiv', UserDiv)
+Vue.component('UserItem', UserItem)
 Vue.component('ButtonDiv', ButtonDiv)
 Vue.directive('tooltip', Tooltip)
 
@@ -63,8 +57,8 @@ Vue.use(VueClipboard)
 
 /* eslint-disable-next-line no-new */
 new Vue({
-	el: '#app-polls',
+	el: '#content',
 	router: router,
 	store: store,
-	render: h => h(App)
+	render: h => h(App),
 })

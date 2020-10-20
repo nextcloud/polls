@@ -29,9 +29,9 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method integer getId()
+ * @method int getId()
  * @method void setId(integer $value)
- * @method integer getPollId()
+ * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)

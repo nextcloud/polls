@@ -35,12 +35,14 @@ use OCP\AppFramework\Db\Entity;
  * @method void setToken(string $value)
  * @method string getType()
  * @method void setType(string $value)
- * @method integer getPollId()
+ * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getUserEmail()
  * @method void setUserEmail(string $value)
+ * @method int getInvitationSent()
+ * @method void setInvitationSent(integer $value)
  */
 class Share extends Entity implements JsonSerializable {
 
@@ -59,8 +61,10 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $userEmail */
 	protected $userEmail;
 
-	public function jsonSerialize() {
+	/** @var string $invitationSent */
+	protected $invitationSent;
 
+	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
 			'token' => $this->token,
@@ -68,16 +72,21 @@ class Share extends Entity implements JsonSerializable {
 			'pollId' => intval($this->pollId),
 			'userId' => $this->userId,
 			'userEmail' => $this->userEmail,
-			'displayName' => $this->getDisplayName()
+			'invitationSent' => intval($this->invitationSent),
+			'displayName' => $this->getDisplayName(),
+			'externalUser' => $this->externalUser()
 		];
 	}
 
 	private function getDisplayName() {
-
 		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
 		} else {
 			return $this->userId;
 		}
+	}
+
+	private function externalUser() {
+		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
 }

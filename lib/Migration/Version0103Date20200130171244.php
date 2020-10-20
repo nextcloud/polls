@@ -23,9 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
@@ -65,7 +63,7 @@ class Version0103Date20200130171244 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_options')) {
 			$table = $schema->getTable('polls_options');
 			if (!$table->hasColumn('order')) {
-				$table->addColumn('order', Type::INTEGER, [
+				$table->addColumn('order', 'integer', [
 					'length' => 11,
 					'notnull' => true,
 					'default' => 0

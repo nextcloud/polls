@@ -22,10 +22,11 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 const defaultSubscription = () => {
 	return {
-		subscribed: false
+		subscribed: false,
 	}
 }
 
@@ -35,13 +36,21 @@ const mutations = {
 
 	setSubscription(state, payload) {
 		state.subscribed = payload
-	}
+	},
 
 }
 
 const actions = {
+
 	getSubscription(context, payload) {
-		axios.get(OC.generateUrl('apps/polls/subscription/get/' + payload.pollId))
+		let endPoint = 'apps/polls/subscription'
+		if (payload.token) {
+			endPoint = endPoint.concat('/s/', payload.token)
+		} else if (payload.pollId) {
+			endPoint = endPoint.concat('/', payload.pollId)
+		}
+
+		return axios.get(generateUrl(endPoint))
 			.then(() => {
 				context.commit('setSubscription', true)
 			})
@@ -50,13 +59,19 @@ const actions = {
 			})
 	},
 
-	writeSubscriptionPromise(context, payload) {
-		return axios.post(OC.generateUrl('apps/polls/subscription/set/'), { pollId: payload.pollId, subscribed: state.subscribed })
+	writeSubscriptionPromise(context) {
+		const endPoint = 'apps/polls/subscription'
+		return axios.post(generateUrl(endPoint), {
+			pollId: context.rootState.poll.id,
+			token: context.rootState.poll.acl.token,
+			subscribed: state.subscribed,
+		})
 			.then(() => {
-			}, (error) => {
+			})
+			.catch((error) => {
 				console.error(error.response)
 			})
-	}
+	},
 }
 
 export default { state, mutations, actions }

@@ -1,4 +1,4 @@
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 const TerserPlugin = require('terser-webpack-plugin')
 
@@ -10,9 +10,9 @@ module.exports = merge(common, {
 				parallel: true,
 				cache: true,
 				terserOptions: {
-					ecma: 6
-				}
-			})
-		]
-	}
+					ecma: 6,
+				},
+			}),
+		],
+	},
 })

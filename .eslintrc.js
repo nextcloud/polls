@@ -38,7 +38,7 @@ module.exports = {
             'allowModules': [],
             'tryExtensions': ['.js', '.vue']
         }],
-		// 'comma-dangle': ['error', 'always-multiline'],
+		'comma-dangle': ['error', 'always-multiline'],
 		// space before function ()
 		'space-before-function-paren': ['error', 'never'],
 		// curly braces always space

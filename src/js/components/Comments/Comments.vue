@@ -22,20 +22,19 @@
 
 <template>
 	<div class="comments">
-		<h2>{{ t('polls','Comments') }} </h2>
 		<CommentAdd v-if="acl.allowComment" />
 		<transition-group v-if="countComments" name="fade" class="comments"
 			tag="ul">
 			<li v-for="(comment) in sortedList" :key="comment.id">
 				<div class="comment-item">
-					<user-div :user-id="comment.userId" :display-name="comment.displayName" />
+					<UserItem v-bind="comment" />
 					<Actions v-if="comment.userId === acl.userId">
 						<ActionButton icon="icon-delete" @click="deleteComment(comment)">
 							{{ t('polls', 'Delete comment') }}
 						</ActionButton>
 					</Actions>
 					<div class="date">
-						{{ moment.utc(comment.dt).fromNow() }}
+						{{ dateCommentedRelative(comment.dt) }}
 					</div>
 				</div>
 
@@ -55,6 +54,8 @@
 <script>
 import CommentAdd from './CommentAdd'
 import sortBy from 'lodash/sortBy'
+import moment from '@nextcloud/moment'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
@@ -63,76 +64,76 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		CommentAdd
+		CommentAdd,
 	},
 	data() {
 		return {
 			sort: 'timestamp',
-			reverse: true
+			reverse: true,
 		}
 	},
 
 	computed: {
 		...mapState({
-			comments: state => state.comments,
-			acl: state => state.acl
+			comments: state => state.poll.comments.list,
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters([
-			'countComments'
-		]),
+		...mapGetters({
+			countComments: 'poll/comments/count',
+		}),
 
 		sortedList() {
 			if (this.reverse) {
-				return sortBy(this.comments.list, this.sort).reverse()
+				return sortBy(this.comments, this.sort).reverse()
 			} else {
-				return sortBy(this.comments.list, this.sort)
+				return sortBy(this.comments, this.sort)
 			}
-		}
+		},
 
 	},
 
 	methods: {
 		deleteComment(comment) {
-			this.$store.dispatch({ type: 'deleteComment', comment: comment })
+			this.$store
+				.dispatch({ type: 'poll/comments/delete', comment: comment })
 				.then(() => {
-					OC.Notification.showTemporary(t('polls', 'Comment deleted'), { type: 'success' })
-				}, (error) => {
-					OC.Notification.showTemporary(t('polls', 'Error while deleting the comment'), { type: 'error' })
+					showSuccess(t('polls', 'Comment deleted'))
+				})
+				.catch((error) => {
+					showError(t('polls', 'Error while deleting the comment'))
 					console.error(error.response)
 				})
-		}
-	}
+		},
+		dateCommentedRelative(date) {
+			return moment.utc(date).fromNow()
+		},
+	},
 }
 </script>
 
 <style scoped lang="scss">
-.comments {
-	margin: 8px 0;
-	padding-right: 12px;
-}
+	.emptycontent {
+		margin-top: 20vh;
+	}
 
-#emptycontent, .emptycontent {
-	margin-top: 0;
-}
+	ul {
+		& > li {
+			margin-bottom: 30px;
+			& > .comment-item {
+				display: flex;
+				align-items: center;
 
-ul {
-	& > li {
-		margin-bottom: 30px;
-		& > .comment-item {
-			display: flex;
-			align-items: center;
-
-			& > .date {
-				right: 0;
-				top: 5px;
-				opacity: 0.5;
+				& > .date {
+					right: 0;
+					top: 5px;
+					opacity: 0.5;
+				}
+			}
+			& > .message {
+				margin-left: 53px;
+				flex: 1 1;
 			}
 		}
-		& > .message {
-			margin-left: 53px;
-			flex: 1 1;
-		}
 	}
-}
 </style>

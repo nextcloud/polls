@@ -2,17 +2,18 @@ OC.L10N.register(
     "polls",
     {
     "Cancel" : "ۋاز كەچ",
+    "OK" : "جەزملە",
+    "Week" : "ھەپتە",
+    "Group" : "Group",
     "Title" : "ماۋزۇ",
+    "Settings" : "تەڭشەكلەر",
     "Owner" : "Owner",
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
     "Description" : "چۈشەندۈرۈش",
-    "OK" : "جەزملە",
-    "Week" : "ھەپتە",
-    "Month" : "ئاي",
-    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "ئۆچۈرۈلدى"
+    "Deleted" : "ئۆچۈرۈلدى",
+    "Month" : "ئاي"
 },
-"nplurals=1; plural=0;");
+"nplurals=2; plural=(n != 1);");

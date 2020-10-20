@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="comment">
-		<UserDiv :user-id="acl.userId" :focus="true" :display-name="acl.displayName" />
+		<UserItem v-bind="acl" />
 		<InputDiv v-model="comment" class="addComment" :placeholder="t('polls', 'New comment …')"
 			@input="writeComment()" />
 	</div>
@@ -30,51 +30,45 @@
 
 <script>
 import { mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 import InputDiv from '../Base/InputDiv'
 
 export default {
 	name: 'CommentAdd',
 
 	components: {
-		InputDiv
+		InputDiv,
 	},
 
 	data() {
 		return {
 			comment: '',
-			isLoading: false
 		}
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl
+			acl: state => state.poll.acl,
 		}),
 
-		currentUser() {
-			return this.$store.state.acl.userId
-		}
 	},
 
 	methods: {
 		writeComment() {
 			if (this.comment) {
-				this.isLoading = true
-				this.$store.dispatch('setCommentAsync', { message: this.comment })
+				this.$store.dispatch('poll/comments/add', { message: this.comment })
 					.then(() => {
-						this.isLoading = false
-						OC.Notification.showTemporary(t('polls', 'Your comment was added'), { type: 'success' })
+						showSuccess(t('polls', 'Your comment was added'))
 						this.comment = ''
 					})
 					.catch((error) => {
-						this.isLoading = false
 						console.error('Error while saving comment - Error: ', error.response)
-						OC.Notification.showTemporary(t('polls', 'Error while saving comment'), { type: 'error' })
+						showError(t('polls', 'Error while saving comment'))
 					})
 			}
 
-		}
-	}
+		},
+	},
 }
 </script>
 
@@ -84,10 +78,5 @@ export default {
 		.addComment {
 			margin-left: 40px;
 		}
-	}
-
-	.icon-loading-small {
-		float: left;
-		margin-top: 10px;
 	}
 </style>

@@ -23,22 +23,7 @@
 
 namespace OCA\Polls\AppInfo;
 
-// use OCA\Polls\Controller\PageController;
-// use OCA\Polls\Controller\ApiController;
-// use OCA\Polls\Controller\CommentController;
-// use OCA\Polls\Controller\PollController;
-// use OCA\Polls\Controller\NotificationController;
-// use OCA\Polls\Controller\OptionController;
-// use OCA\Polls\Controller\VoteController;
-// use OCA\Polls\Controller\ShareController;
-// use OCA\Polls\Db\CommentMapper;
-// use OCA\Polls\Db\OptionMapper;
-// use OCA\Polls\Db\PollMapper;
-// use OCA\Polls\Db\NotificationMapper;
-// use OCA\Polls\Db\VoteMapper;
-// use OCA\Polls\Db\ShareMapper;
 use OCP\AppFramework\App;
-use OCP\IContainer;
 
 class Application extends App {
 
@@ -55,7 +40,7 @@ class Application extends App {
 	 */
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function() use ($container) {
+		$container->query('OCP\INavigationManager')->add(function () use ($container) {
 			$urlGenerator = $container->query('OCP\IURLGenerator');
 			$l10n = $container->query('OCP\IL10N');
 			return [

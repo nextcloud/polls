@@ -24,9 +24,15 @@
 		}
 	},
 	"require-dev": {
-		"christophwurst/nextcloud": "^18.0",
-		"phpunit/phpunit": "^8.2",
+		"christophwurst/nextcloud": "^20.0",
+		"phpunit/phpunit": "^8.5",
 		"league/factory-muffin": "^3.0",
-		"league/factory-muffin-faker": "^2.0"
+		"league/factory-muffin-faker": "^2.0",
+		"nextcloud/coding-standard": "^0.3.0",
+		"doctrine/orm": "^2.7"
+	},
+	"scripts": {
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
+		"cs:fix": "php-cs-fixer fix"
 	}
 }

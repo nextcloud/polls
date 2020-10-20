@@ -1,16 +1,17 @@
 { "translations": {
     "Cancel" : "ۋاز كەچ",
+    "OK" : "جەزملە",
+    "Week" : "ھەپتە",
+    "Group" : "Group",
     "Title" : "ماۋزۇ",
+    "Settings" : "تەڭشەكلەر",
     "Owner" : "Owner",
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
     "Description" : "چۈشەندۈرۈش",
-    "OK" : "جەزملە",
-    "Week" : "ھەپتە",
-    "Month" : "ئاي",
-    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "ئۆچۈرۈلدى"
-},"pluralForm" :"nplurals=1; plural=0;"
+    "Deleted" : "ئۆچۈرۈلدى",
+    "Month" : "ئاي"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

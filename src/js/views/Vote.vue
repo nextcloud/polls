@@ -21,71 +21,90 @@
   -->
 
 <template>
-	<AppContent>
-		<div class="main-container">
-			<div class="header-actions">
-				<Actions>
-					<ActionButton :icon="tableMode ? 'icon-toggle-filelist' : 'icon-toggle-pictures'" @click="tableMode = !tableMode">
-						{{ t('polls', 'Switch view') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-settings" @click="toggleSideBar()">
-						{{ t('polls', 'Toggle Sidebar') }}
-					</ActionButton>
-				</Actions>
-			</div>
+	<AppContent :class="{ expired: isExpired }">
+		<div class="header-actions">
+			<Actions>
+				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
+					{{ orderCaption }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton :icon="toggleViewIcon" @click="toggleView()">
+					{{ viewCaption }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton icon="icon-polls-sidebar-toggle" @click="toggleSideBar()">
+					{{ t('polls', 'Toggle Sidebar') }}
+				</ActionButton>
+			</Actions>
+		</div>
+		<div class="area__header">
 			<h2 class="title">
 				{{ poll.title }}
-				<span v-if="expired" class="label error">{{ t('polls', 'Expired') }}</span>
-				<span v-if="!expired && poll.expire" class="label success">{{ t('polls', 'Place your votes until %n', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-				<span v-if="poll.deleted" class="label error">{{ t('polls', 'Deleted') }}</span>
+				<Badge v-if="isExpired"
+					:title="dateExpiryString"
+					icon="icon-calendar"
+					class="error" />
+				<Badge v-if="!isExpired && poll.expire"
+					:title="dateExpiryString"
+					icon="icon-calendar"
+					class="success" />
+				<Badge v-if="poll.deleted"
+					:title="t('polls', 'Deleted')"
+					icon="icon-delete"
+					class="error" />
 			</h2>
 			<PollInformation />
 
-			<VoteHeaderPublic v-if="!OC.currentUser" />
-
-			<h3 class="description">
-				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<h3 class="description" v-html="linkifyDescription">
+				{{ poll.description ? linkifyDescription : t('polls', 'No description provided') }}
 			</h3>
+		</div>
 
-			<VoteList v-show="!tableMode && options.list.length" />
+		<div v-if="$route.name === 'publicVote' && poll.id" class="area__public">
+			<PersonalLink v-if="share.userId" />
+		</div>
 
-			<VoteTable v-show="tableMode && options.list.length" />
-
-			<div v-if="!options.list.length" class="emptycontent">
+		<div class="area__main" :class="viewMode">
+			<VoteTable v-show="options.length" :view-mode="viewMode" :ranked="ranked" />
+			<div v-if="!options.length" class="emptycontent">
 				<div class="icon-toggle-filelist" />
 				<button v-if="acl.allowEdit" @click="openOptions">
-					{{ t('polls', 'There are no vote options, add some in the options section of the right side bar.') }}
+					{{ t('polls', 'There are no vote options, add some in the options section of the right sidebar.') }}
 				</button>
 				<div v-if="!acl.allowEdit">
 					{{ t('polls', 'There are no vote options. Maybe the owner did not provide some until now.') }}
 				</div>
 			</div>
-
-			<Subscription v-if="OC.currentUser" />
-
-			<div class="additional">
-				<ParticipantsList v-if="acl.allowSeeUsernames" />
-			</div>
 		</div>
 
-		<SideBar v-if="sideBarOpen" :active="activeTab" @closeSideBar="toggleSideBar" />
+		<div class="area__footer">
+			<Subscription v-if="acl.allowSubscribe" />
+			<ParticipantsList v-if="acl.allowSeeUsernames" />
+		</div>
+
+		<PublicRegisterModal v-if="showRegisterModal" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
 </template>
 
 <script>
-import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
-import Subscription from '../components/Subscription/Subscription'
-import ParticipantsList from '../components/Base/ParticipantsList'
-import PollInformation from '../components/Base/PollInformation'
-import LoadingOverlay from '../components/Base/LoadingOverlay'
-import VoteHeaderPublic from '../components/VoteTable/VoteHeaderPublic'
-import SideBar from '../components/SideBar/SideBar'
-import VoteList from '../components/VoteTable/VoteList'
-import VoteTable from '../components/VoteTable/VoteTable'
+import linkifyStr from 'linkifyjs/string'
 import { mapState, mapGetters } from 'vuex'
+import { Actions, ActionButton, AppContent } from '@nextcloud/vue'
+import { getCurrentUser } from '@nextcloud/auth'
+import { emit } from '@nextcloud/event-bus'
+import moment from '@nextcloud/moment'
+import Badge from '../components/Base/Badge'
+import LoadingOverlay from '../components/Base/LoadingOverlay'
+import ParticipantsList from '../components/Base/ParticipantsList'
+import PersonalLink from '../components/Base/PersonalLink'
+import PollInformation from '../components/Base/PollInformation'
+import PublicRegisterModal from '../components/Base/PublicRegisterModal'
+import Subscription from '../components/Subscription/Subscription'
+import VoteTable from '../components/VoteTable/VoteTable'
 
 export default {
 	name: 'Vote',
@@ -93,116 +112,226 @@ export default {
 		Actions,
 		ActionButton,
 		AppContent,
-		Subscription,
-		ParticipantsList,
-		PollInformation,
+		Badge,
 		LoadingOverlay,
-		VoteHeaderPublic,
-		SideBar,
+		ParticipantsList,
+		PersonalLink,
+		PollInformation,
+		PublicRegisterModal,
+		Subscription,
 		VoteTable,
-		VoteList
 	},
 
 	data() {
 		return {
 			voteSaved: false,
 			delay: 50,
-			sideBarOpen: (window.innerWidth > 920),
 			isLoading: true,
-			initialTab: 'comments',
-			tableMode: true,
-			activeTab: 'comments'
+			ranked: false,
+			manualViewDatePoll: '',
+			manualViewTextPoll: '',
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl,
-			options: state => state.options
+			acl: state => state.poll.acl,
+			options: state => state.poll.options.list,
+			share: state => state.poll.share,
+			settings: state => state.settings,
 		}),
 
-		...mapGetters([
-			'expired'
-		]),
+		...mapGetters({
+			isExpired: 'poll/expired',
+		}),
 
-		windowTitle: function() {
+		viewTextPoll() {
+			if (this.manualViewTextPoll) {
+				return this.manualViewTextPoll
+			} else {
+				if (window.innerWidth > 480) {
+					return this.settings.user.defaultViewTextPoll
+				} else {
+					return 'mobile'
+				}
+			}
+		},
+
+		viewDatePoll() {
+			if (this.manualViewDatePoll) {
+				return this.manualViewDatePoll
+			} else {
+				if (window.innerWidth > 480) {
+					return this.settings.user.defaultViewDatePoll
+				} else {
+					return 'mobile'
+				}
+			}
+		},
+
+		viewMode() {
+			if (this.poll.type === 'textPoll') {
+				return this.viewTextPoll
+			} else if (this.poll.type === 'datePoll') {
+				return this.viewDatePoll
+			} else {
+				return 'desktop'
+			}
+		},
+
+		linkifyDescription() {
+			return linkifyStr(this.poll.description)
+		},
+
+		windowTitle() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
-		}
+		},
+
+		dateExpiryString() {
+			return moment.unix(this.poll.expire).format('LLLL')
+		},
+		viewCaption() {
+			if (this.viewMode === 'desktop') {
+				return t('polls', 'Switch to mobile view')
+			} else {
+				return t('polls', 'Switch to desktop view')
+			}
+		},
+		orderCaption() {
+			if (this.ranked) {
+				if (this.poll.type === 'datePoll') {
+					return t('polls', 'Date order')
+				} else {
+					return t('polls', 'Original order')
+				}
+			} else {
+				return t('polls', 'Ranked order')
+			}
+		},
+
+		showRegisterModal() {
+			return (this.$route.name === 'publicVote'
+				&& !this.share.userId
+				&& !this.isExpired
+				&& this.poll.id
+			)
+		},
+
+		sortIcon() {
+			if (this.ranked) {
+				if (this.poll.type === 'datePoll') {
+					return 'icon-calendar-000'
+				} else {
+					return 'icon-toggle-filelist'
+				}
+			} else {
+				return 'icon-quota'
+			}
+		},
+
+		toggleViewIcon() {
+			if (this.viewMode === 'desktop') {
+				return 'icon-phone'
+			} else {
+				return 'icon-desktop'
+			}
+		},
 
 	},
 
 	watch: {
 		$route() {
 			this.loadPoll()
-		}
+		},
 	},
 
 	created() {
-		this.loadPoll()
+		if (getCurrentUser() && this.$route.params.token) {
+			// reroute to the internal vote page, if the user is logged in
+			this.$store.dispatch('poll/share/get', { token: this.$route.params.token })
+				.then((response) => {
+					this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
+				})
+				.catch(() => {
+					this.$router.replace({ name: 'notfound' })
+				})
+		} else {
+			this.loadPoll()
+			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+		}
+	},
+
+	beforeDestroy() {
+		this.$store.dispatch({ type: 'poll/reset' })
 	},
 
 	methods: {
 		openOptions() {
-			this.sideBarOpen = true
-			this.activeTab = 'options'
+			emit('toggle-sidebar', { open: true, activeTab: 'options' })
+		},
+
+		getNextViewMode() {
+			if (this.settings.viewModes.indexOf(this.viewMode) < 0) {
+				return this.settings.viewModes[1]
+			} else {
+				return this.settings.viewModes[(this.settings.viewModes.indexOf(this.viewMode) + 1) % this.settings.viewModes.length]
+			}
 		},
 
 		openConfiguration() {
-			this.sideBarOpen = true
-			this.activeTab = 'configuration'
+			emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
+		},
+
+		toggleSideBar() {
+			emit('toggle-sidebar')
+		},
+
+		toggleView() {
+			emit('transitions-off', { delay: 500 })
+			if (this.poll.type === 'datePoll') {
+				if (this.manualViewDatePoll) {
+					this.manualViewDatePoll = ''
+				} else {
+					this.manualViewDatePoll = this.getNextViewMode()
+				}
+			} else if (this.poll.type === 'textPoll') {
+				if (this.manualViewTextPoll) {
+					this.manualViewTextPoll = ''
+				} else {
+					this.manualViewTextPoll = this.getNextViewMode()
+				}
+			}
 		},
 
 		loadPoll() {
 			this.isLoading = true
-			this.$store.dispatch({ type: 'loadPollMain', pollId: this.$route.params.id, token: this.$route.params.token })
+			emit('transitions-off')
+			this.$store
+				.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
 				.then((response) => {
-					if (response.status === 200) {
-						this.$store.dispatch({ type: 'loadPoll', pollId: this.$route.params.id, token: this.$route.params.token })
-							.then(() => {
-								if (this.acl.allowEdit && moment.unix(this.poll.created).diff() > -10000) {
-									this.openConfiguration()
-								}
-								this.isLoading = false
-							})
-						window.document.title = this.windowTitle
-					} else {
-						this.$router.replace({ name: 'notfound' })
-					}
-				})
-				.catch((error) => {
-					console.error(error)
 					this.isLoading = false
+					emit('transitions-off', 500)
+					window.document.title = this.windowTitle
+				})
+				.catch(() => {
+					this.isLoading = false
+					emit('transitions-off', 500)
 					this.$router.replace({ name: 'notfound' })
 				})
 		},
-
-		toggleSideBar() {
-			this.sideBarOpen = !this.sideBarOpen
-		}
-	}
+	},
 }
 </script>
 
 <style lang="scss" scoped>
-#emptycontent, .emptycontent {
+.emptycontent {
 	margin: 44px 0;
-}
-
-.additional {
-	display: flex;
-	flex-wrap: wrap;
-	.participants {
-		flex: 1;
-	}
-	.comments {
-		flex: 3;
-	}
 }
 
 .header-actions {
 	display: flex;
-	float: right;
+	justify-content: flex-end;
 }
 
 .icon.icon-settings.active {
@@ -210,9 +339,5 @@ export default {
 	width: 44px;
 	height: 44px;
 }
-@media (max-width: (1024px)) {
-	.title {
-		padding-left: 14px;
-	}
-}
+
 </style>

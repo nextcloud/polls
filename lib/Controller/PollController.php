@@ -25,330 +25,264 @@ namespace OCA\Polls\Controller;
 
 use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\EmptyTitleException;
+use OCA\Polls\Exceptions\InvalidAccessException;
+use OCA\Polls\Exceptions\InvalidShowResultsException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IRequest;
-use OCP\ILogger;
-use OCP\IL10N;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCP\IGroupManager;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\Security\ISecureRandom;
-
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Option;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Service\LogService;
-use OCA\Polls\Service\MailService;
+use OCA\Polls\Service\PollService;
+use OCA\Polls\Service\CommentService;
+use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\ShareService;
+use OCA\Polls\Service\VoteService;
 use OCA\Polls\Model\Acl;
 
 class PollController extends Controller {
 
-	private $userId;
-	private $pollMapper;
-	private $optionMapper;
-	private $trans;
-	private $logger;
-	private $groupManager;
-	private $userManager;
-	private $poll;
-	private $logService;
-	private $mailService;
+	/** @var PollService */
+	private $pollService;
+
+	/** @var CommentService */
+	private $commentService;
+
+	/** @var OptionService */
+	private $optionService;
+
+	/** @var ShareService */
+	private $shareService;
+
+	/** @var VoteService */
+	private $voteService;
+
+	/** @var Acl */
 	private $acl;
 
 	/**
-	 * CommentController constructor.
+	 * PollController constructor.
 	 * @param string $appName
-	 * @param $userId
 	 * @param IRequest $request
-	 * @param ILogger $logger
-	 * @param IL10N $trans
-	 * @param PollMapper $pollMapper
-	 * @param OptionMapper $optionMapper
-	 * @param IGroupManager $groupManager
-	 * @param IUserManager $userManager
-	 * @param LogService $logService
-	 * @param MailService $mailService
+	 * @param PollService $pollService
+	 * @param CommentService $commentService
+	 * @param OptionService $optionService
+	 * @param ShareService $shareService
+	 * @param VoteService $voteService
 	 * @param Acl $acl
 	 */
 
 	public function __construct(
 		string $appName,
-		$userId,
 		IRequest $request,
-		ILogger $logger,
-		IL10N $trans,
-		PollMapper $pollMapper,
-		OptionMapper $optionMapper,
-		Poll $poll,
-		IGroupManager $groupManager,
-		IUserManager $userManager,
-		LogService $logService,
-		MailService $mailService,
+		PollService $pollService,
+		CommentService $commentService,
+		OptionService $optionService,
+		ShareService $shareService,
+		VoteService $voteService,
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->trans = $trans;
-		$this->pollMapper = $pollMapper;
-		$this->optionMapper = $optionMapper;
-		$this->logger = $logger;
-		$this->groupManager = $groupManager;
-		$this->userManager = $userManager;
-		$this->poll = $poll;
-		$this->logService = $logService;
-		$this->mailService = $mailService;
+		$this->pollService = $pollService;
+		$this->commentService = $commentService;
+		$this->optionService = $optionService;
+		$this->shareService = $shareService;
+		$this->voteService = $voteService;
 		$this->acl = $acl;
 	}
 
+
 	/**
-	 * list
+	 * Get list of polls
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @return DataResponse
 	 */
 
 	public function list() {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			$pollList = [];
-
-			try {
-
-				$polls = $this->pollMapper->findAll();
-				// TODO: Not the elegant way. Improvement neccessary
-				foreach ($polls as $poll) {
-					$combinedPoll = (object) array_merge(
-        				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->setPollId($poll->getId()))));
-					if ($combinedPoll->allowView) {
-						$pollList[] = $combinedPoll;
-					}
-				}
-
-				return new DataResponse($pollList, Http::STATUS_OK);
-			} catch (DoesNotExistException $e) {
-				return new DataResponse($e, Http::STATUS_NOT_FOUND);
-			}
-		} else {
-			return new DataResponse([], Http::STATUS_OK);
+		try {
+			return new DataResponse($this->pollService->list(), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse([], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
-
 	}
 
-	/**
-	 * get
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param integer $pollId
-	 * @return array
-	 */
- 	public function get($pollId) {
-
- 		try {
-			if (!$this->acl->getFoundByToken()) {
-				$this->acl->setPollId($pollId);
-			}
-			$this->poll = $this->pollMapper->find($pollId);
-			if (!$this->acl->getAllowView()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-			return new DataResponse([
-				'poll' => $this->poll,
-				'acl' => $this->acl
-			], Http::STATUS_OK);
-
-		} catch (DoesNotExistException $e) {
-			$this->logger->info('Poll ' . $pollId . ' not found!', ['app' => 'polls']);
-			return new DataResponse(null, Http::STATUS_NOT_FOUND);
- 		}
- 	}
 
 	/**
-	 * getByToken
-	 * Read all options of a poll based on a share token and return list as array
+	 * get complete poll
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @NoCSRFRequired
+	 * @param int $pollId
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function getByToken($token) {
+	public function get($pollId, $token) {
 		try {
-			return $this->get($this->acl->setToken($token)->getPollId());
+			$acl = $this->acl->set($pollId, $token);
+			$poll = $this->pollService->get($pollId, $token);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 
+		try {
+			$comments = $this->commentService->list($pollId, $token);
+		} catch (Exception $e) {
+			$comments = [];
+		}
+
+		try {
+			$options = $this->optionService->list($pollId, $token);
+		} catch (Exception $e) {
+			$options = [];
+		}
+
+		try {
+			$votes = $this->voteService->list($pollId, $token);
+		} catch (Exception $e) {
+			$votes = [];
+		}
+
+		try {
+			if ($token) {
+				$share = $this->shareService->get($token);
+				$shares = [];
+			} else {
+				$share = null;
+				$shares = $this->shareService->list($pollId, $token);
+			}
+		} catch (Exception $e) {
+			$share = null;
+			$shares = [];
+		}
+
+		return new DataResponse([
+			'acl' => $acl,
+			'poll' => $poll,
+			'comments' => $comments,
+			'options' => $options,
+			'share' => $share,
+			'shares' => $shares,
+			'votes' => $votes,
+		], Http::STATUS_OK);
 	}
 
 	/**
-	 * delete
+	 * Add poll
 	 * @NoAdminRequired
-	 * @param Array $poll
+	 * @param string $type
+	 * @param string $title
+	 * @return DataResponse
+	 */
+
+	public function add($type, $title) {
+		try {
+			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_OK);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (InvalidPollTypeException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (EmptyTitleException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * Update poll configuration
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param array $poll
+	 * @return DataResponse
+	 */
+
+	public function update($pollId, $poll) {
+		try {
+			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (InvalidAccessException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (InvalidShowResultsException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (EmptyTitleException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * Switch deleted status (move to deleted polls)
+	 * @NoAdminRequired
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
 
 	public function delete($pollId) {
-
 		try {
-			// Find existing poll
-			$this->poll = $this->pollMapper->find($pollId);
-			$this->acl->setPollId($this->poll->getId());
-
-			if (!$this->acl->getAllowEdit()) {
-				$this->logger->alert('Unauthorized delete attempt from user ' . $this->userId);
-				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
-			}
-
-			if ($this->poll->getDeleted()) {
-				$this->poll->setDeleted(0);
-			} else {
-				$this->poll->setDeleted(time());
-			}
-
-			$this->pollMapper->update($this->poll);
-			$this->logService->setLog($this->poll->getId(), 'deletePoll');
-			return new DataResponse([
-				'deleted' => $pollId
-			], Http::STATUS_OK);
-
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse($this->pollService->delete($pollId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
 	/**
-	 * deletePermanently
+	 * Delete poll
 	 * @NoAdminRequired
 	 * @param Array $poll
 	 * @return DataResponse
 	 */
 
 	public function deletePermanently($pollId) {
-
 		try {
-			// Find existing poll
-			$this->poll = $this->pollMapper->find($pollId);
-			$this->acl->setPollId($this->poll->getId());
-
-			if (!$this->acl->getAllowEdit()) {
-				$this->logger->alert('Unauthorized delete attempt from user ' . $this->userId);
-				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
-			}
-
-			if (!$this->poll->getDeleted()) {
-                $this->logger->alert('user ' . $this->userId . ' trying to permanently delete active poll');
-                return new DataResponse(['message' => 'Permanent deletion of active poll.'], Http::STATUS_CONFLICT);
-			}
-
-			$this->pollMapper->delete($this->poll);
-			return new DataResponse([], Http::STATUS_OK);
-
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
 	/**
-	 * write
+	 * Clone poll
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return DataResponse
+	 */
+	public function clone($pollId) {
+		try {
+			$poll = $this->pollService->clone($pollId);
+			$this->optionService->clone($pollId, $poll->getId());
+
+			return new DataResponse($poll, Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * Collect email addresses from particitipants
 	 * @NoAdminRequired
 	 * @param Array $poll
 	 * @return DataResponse
 	 */
 
-	public function write($poll) {
-
+	public function getParticipantsEmailAddresses($pollId) {
 		try {
-			// Find existing poll
-			$this->poll = $this->pollMapper->find($poll['id']);
-			$this->acl->setPollId($this->poll->getId());
-			if (!$this->acl->getAllowEdit()) {
-				$this->logger->alert('Unauthorized write attempt from user ' . $this->userId);
-				return new DataResponse(['message' => 'Unauthorized write attempt.'], Http::STATUS_UNAUTHORIZED);
-			}
-
-		} catch (Exception $e) {
-			$this->poll = new Poll();
-
-			$this->poll->setType($poll['type']);
-			$this->poll->setOwner($this->userId);
-			$this->poll->setCreated(time());
-		} finally {
-			$this->poll->setTitle($poll['title']);
-			$this->poll->setDescription($poll['description']);
-			$this->poll->setAccess($poll['access']);
-			$this->poll->setExpire($poll['expire']);
-			$this->poll->setAnonymous(intval($poll['anonymous']));
-			$this->poll->setFullAnonymous(0);
-			$this->poll->setAllowMaybe(intval($poll['allowMaybe']));
-			$this->poll->setVoteLimit(intval($poll['voteLimit']));
-			$this->poll->setSettings('');
-			$this->poll->setOptions('');
-			$this->poll->setShowResults($poll['showResults']);
-			$this->poll->setDeleted($poll['deleted']);
-			$this->poll->setAdminAccess($poll['adminAccess']);
-
-			if ($this->poll->getId() > 0) {
-				$this->pollMapper->update($this->poll);
-				$this->logService->setLog($this->poll->getId(), 'updatePoll');
-			} else {
-				$this->pollMapper->insert($this->poll);
-				$this->logService->setLog($this->poll->getId(), 'addPoll');
-			}
-			$this->acl->setPollId($this->poll->getId());
-			return new DataResponse([
-				'poll' => $this->poll,
-				'acl' => $this->acl
-			], Http::STATUS_OK);
+			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (NotAuthorizedException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
-
-	/**
-	 * clone
-	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return DataResponse
-	 */
-	public function clone($pollId) {
-		$this->poll = $this->pollMapper->find($pollId);
-
-		$clonePoll = new Poll();
-		$clonePoll->setOwner($this->userId);
-		$clonePoll->setCreated(time());
-		$clonePoll->setTitle('Clone of ' . $this->poll->getTitle());
-		$clonePoll->setDeleted(0);
-
-		$clonePoll->setType($this->poll->getType());
-		$clonePoll->setDescription($this->poll->getDescription());
-		$clonePoll->setAccess($this->poll->getAccess());
-		$clonePoll->setExpire($this->poll->getExpire());
-		$clonePoll->setAnonymous(intval($this->poll->getAnonymous()));
-		$clonePoll->setFullAnonymous(0);
-		$clonePoll->setAllowMaybe(intval($this->poll->getAllowMaybe()));
-		$clonePoll->setVoteLimit(intval($this->poll->getVoteLimit()));
-		$clonePoll->setSettings('');
-		$clonePoll->setOptions('');
-		$clonePoll->setShowResults($this->poll->getShowResults());
-		$clonePoll->setAdminAccess($this->poll->getAdminAccess());
-
-		$this->pollMapper->insert($clonePoll);
-		$this->logService->setLog($clonePoll->getId(), 'addPoll');
-
-		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
-			$newOption = new Option();
-			$newOption->setPollId($clonePoll->getId());
-			$newOption->setPollOptionText($option->getPollOptionText());
-			$newOption->setTimestamp($option->getTimestamp());
-
-			$this->optionMapper->insert($newOption);
-		}
-		return new DataResponse([
-			'pollId' => $clonePoll->getId()
-		], Http::STATUS_OK);
-
-	}
-
 }

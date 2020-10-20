@@ -1,17 +1,16 @@
 filter:
-  excluded_paths:
-    - 'l10n/*'
-    - 'js/vendor/*'
+      excluded_paths:
+        - 'l10n/*'
+        - 'js/vendor/*'
 
 imports:
-  - javascript
-  - php
+    - javascript
+    - php
 
 tools:
-  external_code_coverage:
-    timeout: 60
+    external_code_coverage: false
 
 build:
-  tests:
-    override:
-      -  jshint-run --config .jshintrc
+    tests:
+        override:
+          -  jshint-run --config .jshintrc

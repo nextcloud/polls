@@ -28,7 +28,7 @@
 
 <script>
 export default {
-	name: 'LoadingOverlay'
+	name: 'LoadingOverlay',
 }
 </script>
 
@@ -39,15 +39,17 @@ export default {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background: #fff;
+	background: var(--color-main-background);
 	opacity: 0.9;
 	z-index: 9999;
+
 	.icon-loading {
 		position: fixed;
 		left: 50%;
 		top: 50%;
 		margin-left: -35px;
 		margin-top: -10px;
+
 		&::after {
 			border: 10px solid var(--color-loading-light);
 			border-top-color: var(--color-primary-element);

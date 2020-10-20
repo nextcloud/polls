@@ -26,7 +26,7 @@
 			<div id="emptycontent-icon" class="icon-search" />
 			<h2>{{ t('polls', 'The poll does not exist') }}</h2>
 
-			<p v-if="OC.currentUser" class="emptycontent-additional">
+			<p v-if="getCurrentUser()" class="emptycontent-additional">
 				{{ t('polls', 'Enter a poll or start a new one.') }}
 			</p>
 			<button v-else @click="gotoLogin()">
@@ -38,17 +38,18 @@
 
 <script>
 import { AppContent } from '@nextcloud/vue'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'NotFound',
 	components: {
-		AppContent
+		AppContent,
 	},
 
 	methods: {
 		gotoLogin() {
-			window.location.replace(OC.generateUrl('/'))
-		}
-	}
+			window.location.replace(generateUrl('/'))
+		},
+	},
 }
 </script>

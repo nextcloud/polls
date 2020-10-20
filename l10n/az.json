@@ -1,20 +1,21 @@
 { "translations": {
     "Cancel" : "Dayandır",
+    "OK" : "Oldu",
+    "Week" : "Həftə",
+    "Group" : "Qrup",
+    "Unknown user" : "Istifadəçi tanınmır ",
     "Title" : "Başlıq",
+    "Settings" : "Quraşdırmalar",
     "Owner" : "Owner",
     "never" : "heç vaxt",
     "Details" : "Detallar",
     "Configuration" : "Konfiqurasiya",
     "Shares" : "Yayımlanmalar",
     "Description" : "Açıqlanma",
-    "OK" : "Oldu",
-    "Week" : "Həftə",
-    "Day" : "Gün",
-    "Month" : "Ay",
-    "Unknown user" : "Istifadəçi tanınmır ",
-    "Group" : "Qrup",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Silinib"
+    "Deleted" : "Silinib",
+    "Day" : "Gün",
+    "Month" : "Ay"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

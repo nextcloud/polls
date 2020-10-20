@@ -22,6 +22,14 @@
  */
 
 import axios from '@nextcloud/axios'
+import moment from '@nextcloud/moment'
+import { generateUrl } from '@nextcloud/router'
+import acl from './subModules/acl.js'
+import comments from './subModules/comments.js'
+import options from './subModules/options.js'
+import shares from './subModules/shares.js'
+import share from './subModules/share.js'
+import votes from './subModules/votes.js'
 
 const defaultPoll = () => {
 	return {
@@ -39,89 +47,204 @@ const defaultPoll = () => {
 		voteLimit: 0,
 		showResults: 'always',
 		adminAccess: 0,
-		settings: '',
-		options: ''
+		important: 0,
 	}
 }
 
 const state = defaultPoll()
 
+const namespaced = true
+const modules = {
+	acl: acl,
+	comments: comments,
+	options: options,
+	shares: shares,
+	votes: votes,
+	share: share,
+}
+
 const mutations = {
-	setPoll(state, payload) {
+	set(state, payload) {
 		Object.assign(state, payload.poll)
 	},
 
-	resetPoll(state) {
+	reset(state) {
 		Object.assign(state, defaultPoll())
 	},
 
-	setPollProperty(state, payload) {
+	setProperty(state, payload) {
 		Object.assign(state, payload)
-	}
+	},
 
 }
 
 const getters = {
+	answerSequence: (state) => {
+		if (state.allowMaybe) {
+			return ['no', 'yes', 'maybe']
+		} else {
+			return ['no', 'yes']
+		}
+	},
 
 	expired: (state) => {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
-	accessType: (state) => {
-		if (state.access === 'public') {
-			return t('polls', 'Public access')
-		} else if (state.access === 'hidden') {
-			return t('polls', 'Hidden poll')
-		} else {
-			return state.access
+	participants: (state, getters) => {
+		const participants = []
+		const map = new Map()
+		for (const item of state.votes.list) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				participants.push({
+					userId: item.userId,
+					displayName: item.displayName,
+					externalUser: item.externalUser,
+					voted: true,
+				})
+			}
 		}
+
+		if (!map.has(state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+			participants.push({
+				userId: state.acl.userId,
+				displayName: state.acl.displayName,
+				externalUser: state.externalUser,
+				voted: false,
+			})
+		}
+		return participants
 	},
 
-	allowEdit: (state, getters, rootState) => {
-		return (rootState.acl.allowEdit)
-	}
-
+	participantsVoted: (state, getters) => {
+		const participantsVoted = []
+		const map = new Map()
+		for (const item of state.votes.list) {
+			if (!map.has(item.userId)) {
+				map.set(item.userId, true)
+				participantsVoted.push({
+					userId: item.userId,
+					displayName: item.displayName,
+					externalUser: item.externalUser,
+				})
+			}
+		}
+		return participantsVoted
+	},
 }
 
 const actions = {
 
-	loadPollMain(context, payload) {
-		let endPoint = 'apps/polls/polls/get/'
+	reset(context) {
+		context.commit('reset')
+	},
+
+	get(context, payload) {
+		let endPoint = 'apps/polls/polls/get'
 		if (payload.token) {
-			endPoint = endPoint.concat('s/', payload.token)
+			endPoint = endPoint.concat('/s/', payload.token)
 		} else if (payload.pollId) {
-			endPoint = endPoint.concat(payload.pollId)
+			endPoint = endPoint.concat('/', payload.pollId)
 		} else {
-			context.commit('resetPoll')
+			context.commit('reset')
+			context.commit('acl/reset')
+			context.commit('comments/reset')
+			context.commit('options/reset')
+			context.commit('shares/reset')
+			context.commit('share/reset')
+			context.commit('votes/reset')
 			return
 		}
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data.poll })
-				context.commit('acl/setAcl', { acl: response.data.acl })
+				context.commit('set', response.data)
+				context.commit('acl/set', response.data)
+				context.commit('comments/set', response.data)
+				context.commit('options/set', response.data)
+				context.commit('shares/set', response.data)
+				context.commit('share/set', response.data)
+				context.commit('votes/set', response.data)
 				return response
-			}, (error) => {
-				if (error.response.status !== '404' && error.response.status !== '401') {
-					console.debug('Error loading poll', { error: error.response }, { payload: payload })
-					return error.response
-				}
+			})
+			.catch((error) => {
+				console.debug('Error loading poll', { error: error.response }, { payload: payload })
 				throw error
 			})
 	},
 
-	writePollPromise(context) {
-		const endPoint = 'apps/polls/polls/write/'
-		return axios.post(OC.generateUrl(endPoint), { poll: state })
+	add(context, payload) {
+		const endPoint = 'apps/polls/polls/add'
+		return axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
 			.then((response) => {
-				context.commit('setPoll', { poll: response.data.poll })
-				context.commit('acl/setAcl', { acl: response.data.acl })
-				return response.data.poll
-			}, (error) => {
-				console.error('Error writing poll:', { error: error.response }, { state: state })
+				return response
+			})
+			.catch((error) => {
+				console.error('Error adding poll:', { error: error.response }, { state: state })
 				throw error
 			})
 
-	}
+	},
+
+	clone(context, payload) {
+		const endPoint = 'apps/polls/polls/clone'
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+			.then((response) => {
+				return response.data
+			})
+			.catch((error) => {
+				console.error('Error cloning poll', { error: error.response }, { payload: payload })
+			})
+
+	},
+
+	update(context) {
+		const endPoint = 'apps/polls/polls/update'
+		return axios.put(generateUrl(endPoint.concat('/', state.id)), { poll: state })
+			.then((response) => {
+				context.commit('set', { poll: response.data })
+				return response
+			})
+			.catch((error) => {
+				console.error('Error updating poll:', { error: error.response }, { poll: state })
+				throw error
+			})
+
+	},
+
+	switchDeleted(context, payload) {
+		const endPoint = 'apps/polls/polls/delete'
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+			.then((response) => {
+				return response
+			})
+			.catch((error) => {
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
+	},
+
+	delete(context, payload) {
+		const endPoint = 'apps/polls/polls/delete'
+		return axios.get(generateUrl(endPoint.concat('/permanent/', payload.pollId)))
+			.then((response) => {
+				return response
+			})
+			.catch((error) => {
+				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+			})
+	},
+
+	getParticipantsEmailAddresses(context, payload) {
+		const endPoint = 'apps/polls/polls/addresses'
+		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+			.then((response) => {
+				return response
+			})
+			.catch((error) => {
+				console.error('Error retrieving email addresses', { error: error.response }, { payload: payload })
+			})
+	},
+
 }
 
-export default { state, mutations, getters, actions, defaultPoll }
+export default { namespaced, state, mutations, getters, actions, modules }

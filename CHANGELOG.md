@@ -1,6 +1,55 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.5 - release] - 2020-10-20
+ - [fix] #1137 - delete comments in public polls
+ - [fix] #1161 - Routing after creation of poll was wrong
+ - [fix] #1154 - Shifting dates went wrong
+ - [fix] #1163 - Reordering text poll options did not work
+ - [deps] - updated dependencies
+
+## [1.5.4 - release] - 2020-10-02
+ - adding missing translations
+ - release blocking fixes
+
+## [1.5.3 - RC3] - 2020-09-21
+ - Added setting for defining default view for
+ - text polls, defaults to mobile/list layout and
+ - date polls, defaults to desktop/table layout #744
+ - better UX for site users, which enter a poll via public link and could login #1096
+
+## [1.5.2 - RC2] - 2020-09-15
+ - fixing Translations
+ - updated dependencies
+ - minor fixes
+
+## [1.5.1 - RC1] - 2020-09-08
+ - Lookup calendars for conflict #1056 #747
+ - convert URIs in description into clickable links #1067
+ - added a poll to force poll appear under relevant polls navigation entry for all users #1072
+ - move cloning of options to backend #1058
+ - add user settings
+ - some style fixes
+ - updated dependencies
+ - load app icons via url-loader
+
+## [1.5.0 - beta1] - 2020-08-17
+ - Drop support for Nextcloud 16
+ - Stop immediatley sending of invitation mails after adding a share #1007 #935
+ - Fix: Hide usernames in notification mail, if results in poll are hidden #990 #980
+ - Adding a REST-API #966
+ - Exclude disbled users from shares #1008 #997
+ - Exclude mails to disabled users in group invitations #960
+ - Fix with adding empty dates #961 #958
+ - Changed misleading prompt for username in public polls #956 #938
+ - Raised minute step to 5 minutes in datepicker #963 #957
+ - Changed some icons #862
+ - Added the ability to confirm options #939 #136
+ - A lot of refactoring
+ - Don't invite disabled users #997
+ - add time zone info to date polls #1076
+
+
 ## [1.4.3] - 2020-05-03
  - fix #909
  - fix #910

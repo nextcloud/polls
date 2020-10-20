@@ -23,66 +23,75 @@
 <template>
 	<div class="participants-list">
 		<h2 v-if="participantsVoted.length">
-			{{ t('polls','Participants') }}
+			{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
 		</h2>
 		<h2 v-else>
 			{{ t('polls','No Participants until now') }}
 		</h2>
-		<div v-if="participantsVoted.length" class="participants">
-			<userDiv v-for="(participant) in participantsVoted"
-				:key="participant.userId"
+		<div v-if="participantsVoted.length" class="participants-list__list">
+			<UserItem v-for="(participant) in participantsVoted" :key="participant.userId"
+				v-bind="participant"
 				:hide-names="true"
-				:user-id="participant.userId"
-				:display-name="participant.displayName"
 				type="user" />
+			<Actions>
+				<ActionButton v-if="poll.acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
+					{{ t('polls', 'Copy list of email addresses to clipboard') }}
+				</ActionButton>
+			</Actions>
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'ParticipantsList',
-
-	data() {
-		return {
-			voteSaved: false,
-			delay: 50,
-			newName: ''
-		}
+	components: {
+		Actions,
+		ActionButton,
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl
+			poll: state => state.poll,
 		}),
 
-		...mapGetters([
-			'participantsVoted'
-		])
+		...mapGetters({
+			participantsVoted: 'poll/participantsVoted',
+		}),
+	},
 
-	}
-
+	methods: {
+		getAddresses() {
+			this.$store.dispatch('poll/getParticipantsEmailAddresses', { pollId: this.poll.id })
+				.then((response) => {
+					this.$copyText(response.data)
+						.then(() => {
+							showSuccess(t('polls', 'Link copied to clipboard'))
+						})
+				})
+				.catch(() => {
+					showError(t('polls', 'Error while copying link to clipboard'))
+				})
+		},
+	},
 }
 </script>
 
 <style lang="scss" scoped>
 	.participants-list {
-		margin: 8px 0;
-		padding-right: 24px;
+		padding: 8px;
 	}
 
-	.participants {
+	.participants-list__list {
 		display: flex;
 		justify-content: flex-start;
-		.user-row {
-			display: block;
+		flex-wrap: wrap;
+		&> * {
 			flex: 0;
 		}
-		.user {
-			padding: 0;
-		}
 	}
-
 </style>

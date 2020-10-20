@@ -22,30 +22,32 @@
  */
 
 import axios from '@nextcloud/axios'
+import { getCurrentUser } from '@nextcloud/auth'
+import moment from '@nextcloud/moment'
+import { generateUrl } from '@nextcloud/router'
 
 const state = {
-	list: []
+	list: [],
 }
 
+const namespaced = true
+
 const mutations = {
-	setPolls(state, { list }) {
-		state.list = list
-	}
+	set(state, payload) {
+		Object.assign(state, payload)
+	},
 }
 
 const getters = {
-	countPolls: (state) => {
-		return state.list.length
-	},
-
-	filteredPolls: (state) => (filterId) => {
+	filtered: (state) => (filterId) => {
 		if (filterId === 'all') {
 			return state.list.filter(poll => (!poll.deleted))
 		} else if (filterId === 'my') {
-			return state.list.filter(poll => (poll.owner === OC.getCurrentUser().uid && !poll.deleted))
+			return state.list.filter(poll => (poll.owner === getCurrentUser().uid && !poll.deleted))
 		} else if (filterId === 'relevant') {
 			return state.list.filter(poll => ((
-				poll.userHasVoted
+				poll.important
+				|| poll.userHasVoted
 				|| poll.isOwner
 				|| (poll.allowView && poll.access !== 'public')
 			)
@@ -65,57 +67,21 @@ const getters = {
 				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
 			))
 		}
-	}
+	},
 }
 
 const actions = {
-	loadPolls(context) {
-		const endPoint = 'apps/polls/polls/list/'
+	load(context) {
+		const endPoint = 'apps/polls/polls/list'
 
-		return axios.get(OC.generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint))
 			.then((response) => {
-				context.commit('setPolls', { list: response.data })
-			}, (error) => {
-				OC.Notification.showTemporary(t('polls', 'Error loading polls'), { type: 'error' })
+				context.commit('set', { list: response.data })
+			})
+			.catch((error) => {
 				console.error('Error loading polls', { error: error.response })
 			})
 	},
-
-	switchDeleted(context, payload) {
-		const endPoint = 'apps/polls/polls/delete/'
-		return axios.get(OC.generateUrl(endPoint + payload.pollId))
-			.then((response) => {
-				return response
-			}, (error) => {
-				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
-				console.error('Error deleting poll', { error: error.response }, { payload: payload })
-			})
-	},
-
-	deletePermanently(context, payload) {
-		const endPoint = 'apps/polls/polls/delete/permanent/'
-		return axios.get(OC.generateUrl(endPoint + payload.pollId))
-			.then((response) => {
-				OC.Notification.showTemporary(t('polls', 'Deleted poll permanently.'), { type: 'success' })
-				return response
-			}, (error) => {
-				OC.Notification.showTemporary(t('polls', 'Error deleting poll.'), { type: 'error' })
-				console.error('Error deleting poll', { error: error.response }, { payload: payload })
-			})
-	},
-
-	clonePoll(context, payload) {
-		const endPoint = 'apps/polls/polls/clone/'
-		return axios.get(OC.generateUrl(endPoint + payload.pollId))
-			.then((response) => {
-				return response.data
-			}, (error) => {
-				OC.Notification.showTemporary(t('polls', 'Error cloning poll.'), { type: 'error' })
-				console.error('Error cloning poll', { error: error.response }, { payload: payload })
-			})
-
-	}
-
 }
 
-export default { state, mutations, getters, actions }
+export default { namespaced, state, mutations, getters, actions }

@@ -86,7 +86,7 @@ class CommentMapper extends QBMapper {
 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
 
 	/**
@@ -100,6 +100,6 @@ class CommentMapper extends QBMapper {
 			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
 }

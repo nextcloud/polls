@@ -22,8 +22,10 @@
 
 <template lang="html">
 	<div class="input-div">
-		<input ref="input" :value="value" class="input"
+		<input ref="input"
+			:value="value"
 			:placeholder="placeholder"
+			class="input"
 			@keyup.enter="$emit('input', $event.target.value)">
 		<button class="submit icon-confirm"
 			@click="$emit('input', $refs.input.value)" />
@@ -36,13 +38,13 @@ export default {
 	props: {
 		value: {
 			type: String,
-			required: true
+			required: true,
 		},
 		placeholder: {
 			type: String,
-			default: ''
-		}
-	}
+			default: '',
+		},
+	},
 }
 </script>
 

@@ -22,45 +22,50 @@
 
 <template>
 	<div>
-		<div class="config-box">
-			<label class="title icon-add">
-				{{ t('polls', 'Add a new text option') }}
-			</label>
-
+		<ConfigBox :title="t('polls', 'Add a new text option')" icon-class="icon-add">
 			<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
 				@input="addOption()" />
-		</div>
+		</ConfigBox>
 
-		<ul class="config-box poll-table">
-			<label class="title icon-toggle-filelist">
-				{{ t('polls', 'Available Options') }}
-			</label>
+		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
 			<draggable v-model="sortOptions">
 				<transition-group>
-					<PollItemText v-for="(option) in sortOptions"
+					<OptionItem v-for="(option) in sortOptions"
 						:key="option.id"
 						:option="option"
 						:draggable="true">
-						<template v-slot:actions>
+						<template #actions>
 							<Actions v-if="acl.allowEdit" class="action">
 								<ActionButton icon="icon-delete" @click="removeOption(option)">
 									{{ t('polls', 'Delete option') }}
 								</ActionButton>
 							</Actions>
+							<Actions v-if="acl.allowEdit" class="action">
+								<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+									@click="confirmOption(option)">
+									{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+								</ActionButton>
+							</Actions>
 						</template>
-					</PollItemText>
+					</OptionItem>
 				</transition-group>
 			</draggable>
-		</ul>
+		</ConfigBox>
+		<div v-if="!options.length" class="emptycontent">
+			<div class="icon-toggle-filelist" />
+			{{ t('polls', 'There are no vote options specified.') }}
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
+import ConfigBox from '../Base/ConfigBox'
 import draggable from 'vuedraggable'
-import PollItemText from '../Base/PollItemText'
+import OptionItem from '../Base/OptionItem'
 import InputDiv from '../Base/InputDiv'
+import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'SideBarTabOptionsText',
@@ -68,78 +73,68 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ConfigBox,
 		draggable,
 		InputDiv,
-		PollItemText
+		OptionItem,
 	},
+
+	mixins: [
+		confirmOption,
+		removeOption,
+	],
 
 	data() {
 		return {
-			newPollText: ''
+			newPollText: '',
 		}
 	},
 
 	computed: {
 		...mapState({
-			options: state => state.options,
-			acl: state => state.acl
+			options: state => state.poll.options,
+			acl: state => state.poll.acl,
 		}),
 
-		...mapGetters(['sortedOptions']),
+		...mapGetters({
+			sortedOptions: 'poll/options/sorted',
+			expired: 'poll/expired',
+		}),
 
 		sortOptions: {
 			get() {
 				return this.sortedOptions
 			},
 			set(value) {
-				this.writeOptions(value)
-			}
-		}
+				this.$store.dispatch('poll/options/reorder', value)
+			},
+		},
 
 	},
 
 	methods: {
-		writeOptions(value) {
-			this.$store.commit('reorderOptions', value)
-			this.$store.dispatch('updateOptions')
-		},
-
 		addOption() {
 			if (this.newPollText) {
-				this.$store.dispatch('addOptionAsync', {
-					pollOptionText: this.newPollText
+				this.$store.dispatch('poll/options/add', {
+					pollOptionText: this.newPollText,
 				})
 					.then(() => {
 						this.newPollText = ''
 					})
 			}
 		},
-
-		removeOption(option) {
-			this.$store.dispatch('removeOptionAsync', {
-				option: option
-			})
-		}
-	}
-
+	},
 }
 </script>
 
 <style lang="scss" scoped>
-	.draggable, .draggable .pollOption  {
-		cursor: grab;
-		&:active {
-			cursor: grabbing;
-			cursor: -moz-grabbing;
-			cursor: -webkit-grabbing;
+	.option-item {
+		border-bottom: 1px solid var(--color-border);
+		&:active,
+		&:hover {
+			transition: var(--background-dark) 0.3s ease;
+			background-color: var(--color-background-dark);
 		}
-		.handle {
-			visibility: hidden;
-		}
-		&:hover > .handle {
-			visibility: visible;
-		}
-
 	}
 
 	.optionAdd {
@@ -160,6 +155,10 @@ export default {
 		border: none;
 		opacity: 0.3;
 		cursor: pointer;
+	}
+
+	.emptycontent {
+		margin-top: 20vh;
 	}
 
 </style>

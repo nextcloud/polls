@@ -2,8 +2,14 @@ OC.L10N.register(
     "polls",
     {
     "Cancel" : "បោះបង់",
-    "Apply" : "អនុវត្ត",
+    "OK" : "ព្រម",
+    "Week" : "សប្ដាហ៍",
+    "Back" : "ត្រឡប់ក្រោយ",
+    "Group" : "Group",
+    "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
     "Title" : "ចំណងជើង",
+    "Apply" : "អនុវត្ត",
+    "Settings" : "ការកំណត់",
     "Owner" : "Owner",
     "never" : "មិនដែរ",
     "Details" : "ព័ត៌មាន​លម្អិត",
@@ -11,14 +17,10 @@ OC.L10N.register(
     "Shares" : "ចែក​រំលែក",
     "Description" : "ការ​អធិប្បាយ",
     "Expiration date" : "ពេល​ផុត​កំណត់",
-    "OK" : "ព្រម",
-    "Week" : "សប្ដាហ៍",
-    "Day" : "ថ្ងៃ",
-    "Month" : "ខែ",
-    "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
-    "Group" : "Group",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "បាន​លុប"
+    "Deleted" : "បាន​លុប",
+    "Day" : "ថ្ងៃ",
+    "Month" : "ខែ"
 },
 "nplurals=1; plural=0;");

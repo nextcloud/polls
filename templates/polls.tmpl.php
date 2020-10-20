@@ -24,5 +24,4 @@
 
 ?>
 
-<?php \OCP\Util::addScript('polls', 'polls'); ?>
-<div id="app-polls"></div>
+<?php \OCP\Util::addScript('polls', 'polls');

@@ -2,19 +2,21 @@ OC.L10N.register(
     "polls",
     {
     "Cancel" : "Anullar",
-    "Apply" : "Aplicar",
+    "OK" : "D'acòrdi",
+    "Week" : "Aquesta setmana",
+    "Back" : "Retorn",
+    "Group" : "Grop",
     "Title" : "Títol",
+    "Apply" : "Aplicar",
+    "Settings" : "Paramètres",
     "Owner" : "Owner",
     "never" : "pas jamai",
     "Details" : "Detalhs",
     "Description" : "Descripcion",
     "Expiration date" : "Data d'expiracion",
-    "OK" : "D'acòrdi",
-    "Week" : "Aquesta setmana",
-    "Day" : "Jorn",
-    "Month" : "Mes",
-    "Group" : "Grop",
     "No" : "No",
-    "Yes" : "Yes"
+    "Yes" : "Yes",
+    "Day" : "Jorn",
+    "Month" : "Mes"
 },
 "nplurals=2; plural=(n > 1);");

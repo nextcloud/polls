@@ -23,37 +23,62 @@
 <template>
 	<div class="poll-information">
 		<UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
-		{{ t('polls', 'started this poll on %n. ', 1, moment.unix(poll.created).format('LLLL')) }}
-		<span v-if="expired">{{ t('polls', 'Voting is no more possible, because this poll expired since %n. ', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until %n. ', 1, moment.unix(poll.expire).format('LLLL')) }}</span>
-		<span v-if="poll.anonymous">{{ t('polls', 'The names of other participants are hidden, as this is an anonymous poll. ') }}</span>
-		<span v-if="acl.allowSeeResults">{{ n('polls', '%n person participated in this poll until now. ', '%n persons participated in this poll until now. ', participantsVoted.length) }}</span>
-		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden. ') }}</span>
-		<span v-if="!acl.allowSeeResults && poll.showResults === 'expired'">{{ t('polls', 'They will be revealed after the poll is expired. ') }}</span>
+		{{ t('polls', 'started this poll on {dateString}.', {dateString: dateCreatedString}) }}
+
+		<span v-if="expired && confirmedOptions.length"> {{ t('polls', 'This poll expired on {dateString}. The confirmed options are marked below.', { dateString: dateExpiryString }) }} </span>
+
+		<span v-if="expired && !confirmedOptions.length"> {{ t('polls', 'This poll expired on {dateString}, but there are no confirmed options until now.', { dateString: dateExpiryString }) }} </span>
+
+		<span v-if="expired && !confirmedOptions.length && acl.allowEdit"> {{ t('polls', 'You can confirm your favorites now in the options tab in the sidebar.', { dateString: dateExpiryString }) }} </span>
+
+		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until {dateString}.', { dateString: dateExpiryString }) }} </span>
+
+		<span v-if="poll.anonymous">{{ t('polls', 'This is an anonymous poll. Except to the poll owner, participants names are hidden.') }} </span>
+
+		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden.') }}</span>
+
+		<span v-if="!acl.allowSeeResults && poll.showResults === 'expired'">{{ t('polls', 'They will be revealed after the poll is expired.') }}</span>
+
+		<span v-if="poll.type === 'datePoll'">{{ t('polls', 'The used time zone is {timeZone}.', { timeZone: currentTimeZone }) }}</span>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import moment from '@nextcloud/moment'
 import { UserBubble } from '@nextcloud/vue'
 
 export default {
 	name: 'PollInformation',
 
 	components: {
-		UserBubble
+		UserBubble,
 	},
 
 	computed: {
 		...mapState({
-			acl: state => state.acl,
-			poll: state => state.poll
+			acl: state => state.poll.acl,
+			poll: state => state.poll,
 		}),
 
-		...mapGetters([
-			'participantsVoted',
-			'expired'
-		])
-	}
+		...mapGetters({
+			participantsVoted: 'poll/participantsVoted',
+			expired: 'poll/expired',
+			confirmedOptions: 'poll/options/confirmed',
+		}),
+
+		dateCreatedString() {
+			return moment.unix(this.poll.created).format('LLLL')
+		},
+
+		dateExpiryString() {
+			return moment.unix(this.poll.expire).format('LLLL')
+		},
+
+		currentTimeZone() {
+			return Intl.DateTimeFormat().resolvedOptions().timeZone
+		},
+
+	},
 }
 </script>

@@ -21,24 +21,37 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar" :active="active" :title="t('polls', 'Details')"
-		@close="$emit('closeSideBar')">
-		<AppSidebarTab v-if="acl.allowEdit" :id="'configuration'" :order="1"
-			:name="t('polls', 'Configuration')" icon="icon-settings">
+	<AppSidebar ref="sideBar"
+		:active="active"
+		:title="t('polls', 'Details')"
+		@close="closeSideBar()">
+		<AppSidebarTab v-if="acl.allowEdit"
+			:id="'configuration'"
+			:order="1"
+			:name="t('polls', 'Configuration')"
+			icon="icon-settings">
 			<SideBarTabConfiguration />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit" :id="'options'" :order="2"
-			:name="t('polls', 'Options')" icon="icon-toggle-filelist">
+		<AppSidebarTab v-if="acl.allowEdit"
+			:id="'options'"
+			:order="2"
+			:name="t('polls', 'Options')"
+			icon="icon-toggle-filelist">
 			<SideBarTabOptions />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit" :id="'shares'" :order="3"
-			:name="t('polls', 'Shares')" icon="icon-share">
+		<AppSidebarTab v-if="acl.allowEdit"
+			:id="'shares'"
+			:order="3"
+			:name="t('polls', 'Shares')"
+			icon="icon-share">
 			<SideBarTabShare />
 		</AppSidebarTab>
 
-		<AppSidebarTab :id="'comments'" :order="4" :name="t('polls', 'Comments')"
+		<AppSidebarTab :id="'comments'"
+			:order="4"
+			:name="t('polls', 'Comments')"
 			icon="icon-comment">
 			<Comments />
 		</AppSidebarTab>
@@ -53,6 +66,7 @@ import SideBarTabOptions from './SideBarTabOptions'
 import Comments from '../Comments/Comments'
 import SideBarTabShare from './SideBarTabShare'
 import { mapState } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'SideBar',
@@ -63,22 +77,27 @@ export default {
 		SideBarTabOptions,
 		SideBarTabShare,
 		AppSidebar,
-		AppSidebarTab
+		AppSidebarTab,
 	},
 
 	props: {
 		active: {
 			type: String,
-			default: t('polls', 'Comments').toLowerCase()
-		}
+			default: t('polls', 'Comments').toLowerCase(),
+		},
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
-		})
-	}
+			acl: state => state.poll.acl,
+		}),
+	},
+	methods: {
+		closeSideBar() {
+			emit('toggle-sidebar', { open: false })
+		},
+	},
 
 }
 

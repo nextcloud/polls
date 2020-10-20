@@ -1,21 +1,23 @@
 OC.L10N.register(
     "polls",
     {
-    "Comments" : "Կարծիքներ",
+    "Confirmed" : "Հաստատված",
     "Cancel" : "ընդհատել",
+    "OK" : "Լավ",
+    "Week" : "Շաբաթ",
+    "Group" : "Խումբ",
     "Title" : "Վերնագիր",
+    "Settings" : "կարգավորումներ",
     "Owner" : "Owner",
     "never" : "երբեք",
     "Details" : "Մանրամասներ",
+    "Comments" : "Կարծիքներ",
     "Description" : "Նկարագրություն",
     "Expiration date" : "Վավերականության ժամկետ",
-    "OK" : "Լավ",
-    "Week" : "Շաբաթ",
-    "Day" : "Օր",
-    "Month" : "Ամիս",
-    "Group" : "Խումբ",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Ջնջված"
+    "Deleted" : "Ջնջված",
+    "Day" : "Օր",
+    "Month" : "Ամիս"
 },
 "nplurals=2; plural=(n != 1);");

@@ -23,203 +23,135 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
+use DateTime;
+use DateInterval;
+use OCA\Polls\Exceptions\DuplicateEntryException;
 
 use OCP\IRequest;
+
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-
-use OCP\IGroupManager;
-use OCP\Security\ISecureRandom;
-
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Option;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Service\LogService;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\CalendarService;
 
 class OptionController extends Controller {
 
-	private $userId;
-	private $optionMapper;
+	/** @var OptionService */
+	private $optionService;
 
-	private $groupManager;
-	private $pollMapper;
-	private $logService;
-	private $acl;
+	/** @var CalendarService */
+	private $calendarService;
 
 	/**
 	 * OptionController constructor.
 	 * @param string $appName
-	 * @param $UserId
 	 * @param IRequest $request
-	 * @param OptionMapper $optionMapper
-	 * @param IGroupManager $groupManager
-	 * @param PollMapper $pollMapper
-	 * @param LogService $logService
-	 * @param Acl $acl
+	 * @param OptionService $optionService
 	 */
 
 	public function __construct(
 		string $appName,
-		$UserId,
 		IRequest $request,
-		OptionMapper $optionMapper,
-		IGroupManager $groupManager,
-		PollMapper $pollMapper,
-		LogService $logService,
-		Acl $acl
+		OptionService $optionService,
+		CalendarService $calendarService
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $UserId;
-		$this->optionMapper = $optionMapper;
-		$this->groupManager = $groupManager;
-		$this->pollMapper = $pollMapper;
-		$this->logService = $logService;
-		$this->acl = $acl;
+		$this->optionService = $optionService;
+		$this->calendarService = $calendarService;
 	}
-
 
 	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
-	 * @param integer $pollId
-	 * @return array Array of Option objects
-	 */
-	public function get($pollId) {
-
-		try {
-
-			if (!$this->acl->getFoundByToken()) {
-				$this->acl->setPollId($pollId);
-			}
-
-			return new DataResponse($this->optionMapper->findByPoll($pollId), Http::STATUS_OK);
-
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-	}
-
-
-	/**
-	 * getByToken
-	 * Read all options of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param string $token
+	 * @param int $pollId
 	 * @return DataResponse
 	 */
-	public function getByToken($token) {
+	public function list($pollId) {
+		return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
+	}
 
+	/**
+	 * Add a new option
+	 * @NoAdminRequired
+	 * @param array $option
+	 * @return DataResponse
+	 */
+	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
 		try {
-			$this->acl->setToken($token);
-			return $this->get($this->acl->getPollId());
-
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+		} catch (DuplicateEntryException $e) {
+			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
 	/**
-	 * Add a new Option to poll
+	 * Update option
+	 * @NoAdminRequired
+	 * @param array $option
+	 * @return DataResponse
+	 */
+	public function update($optionId, $timestamp, $pollOptionText) {
+		return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+	}
+
+	/**
+	 * Delete option
 	 * @NoAdminRequired
 	 * @param Option $option
 	 * @return DataResponse
 	 */
-	public function add($option) {
-
-		try {
-
-			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-
-			$NewOption = new Option();
-
-			$NewOption->setPollId($option['pollId']);
-			$NewOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-			$NewOption->setTimestamp($option['timestamp']);
-
-			if ($option['timestamp'] === 0) {
-				$NewOption->setOrder($option['order']);
-			} else {
-				$NewOption->setOrder($option['timestamp']);
-			}
-
-			$this->optionMapper->insert($NewOption);
-			$this->logService->setLog($option['pollId'], 'addOption');
-			return new DataResponse($NewOption, Http::STATUS_OK);
-
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
+	public function delete($optionId) {
+		return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
 	}
 
 	/**
-	 * Update poll option
+	 * Switch option confirmation
 	 * @NoAdminRequired
-	 * @param Option $option
+	 * @param int $optionId
 	 * @return DataResponse
 	 */
-	public function update($option) {
-
-		try {
-			$updateOption = $this->optionMapper->find($option['id']);
-
-			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-
-			$updateOption->setPollOptionText(trim(htmlspecialchars($option['pollOptionText'])));
-			$updateOption->setTimestamp($option['timestamp']);
-
-			if ($option['timestamp'] === 0) {
-				$updateOption->setOrder($option['order']);
-			} else {
-				$updateOption->setOrder($option['timestamp']);
-			}
-
-			$this->optionMapper->update($updateOption);
-			$this->logService->setLog($option['pollId'], 'updateOption');
-
-			return new DataResponse($updateOption, Http::STATUS_OK);
-
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+	public function confirm($optionId) {
+		return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
 	}
 
 	/**
-	 * Remove a single option
+	 * Reorder options
 	 * @NoAdminRequired
-	 * @param Option $option
+	 * @param int $pollId
+	 * @param Array $options
 	 * @return DataResponse
 	 */
-	public function remove($option) {
-		try {
-
-			if (!$this->acl->setPollId($option['pollId'])->getAllowEdit()) {
-				return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
-			}
-
-			$this->optionMapper->remove($option['id']);
-			$this->logService->setLog($option['pollId'], 'deleteOption');
-
-			return new DataResponse(array(
-				'action' => 'deleted',
-				'optionId' => $option['id']
-			), Http::STATUS_OK);
-
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
-
+	public function reorder($pollId, $options) {
+		return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
 	}
 
+	/**
+	 * Reorder options
+	 * @NoAdminRequired
+	 * @param int $optionId
+	 * @param int $step
+	 * @param string $unit
+	 * @param int $amount
+	 * @return DataResponse
+	 */
+	public function sequence($optionId, $step, $unit, $amount) {
+		return new DataResponse(['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)], Http::STATUS_OK);
+	}
+
+	/**
+	 * findCalendarEvents
+	 * @NoAdminRequired
+	 * @param integer $from
+	 * @param integer $to
+	 * @return DataResponse
+	 */
+	public function findCalendarEvents($optionId) {
+		$searchFrom = new DateTime();
+		$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
+		$searchTo = clone $searchFrom;
+		$searchTo = $searchTo->add(new DateInterval('PT3H'));
+
+		return new DataResponse(['events' => array_values($this->calendarService->getEvents($searchFrom, $searchTo))], Http::STATUS_OK);
+	}
 }

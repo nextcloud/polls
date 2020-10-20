@@ -22,17 +22,15 @@
 
 <template>
 	<div>
-		<div v-if="acl.isAdmin" class="config-box">
-			<label class="icon-checkmark title"> {{ t('polls', 'As an admin you may edit this poll') }} </label>
-		</div>
-
-		<SideBarTabOptionsDate v-if="acl.allowEdit && poll.type === 'datePoll'" />
-		<SideBarTabOptionsText v-if="acl.allowEdit && poll.type === 'textPoll'" />
+		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
+		<SideBarTabOptionsDate v-if="poll.type === 'datePoll'" />
+		<SideBarTabOptionsText v-if="poll.type === 'textPoll'" />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import ConfigBox from '../Base/ConfigBox'
 import SideBarTabOptionsDate from './SideBarTabOptionsDate'
 import SideBarTabOptionsText from './SideBarTabOptionsText'
 
@@ -40,34 +38,17 @@ export default {
 	name: 'SideBarTabOptions',
 
 	components: {
+		ConfigBox,
 		SideBarTabOptionsDate,
-		SideBarTabOptionsText
-	},
-
-	data() {
-		return {
-			lastOption: '',
-			move: {
-				step: 1,
-				unit: 'week',
-				units: ['minute', 'hour', 'day', 'week', 'month', 'year']
-			}
-		}
+		SideBarTabOptionsText,
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			acl: state => state.acl
-		})
+			acl: state => state.poll.acl,
+		}),
 
-	}
+	},
 }
 </script>
-<style lang="scss">
-	.config-box {
-		&.poll-table .poll-item {
-			border-bottom: 1px solid var(--color-border);
-		}
-	}
-</style>

@@ -28,11 +28,10 @@ use OCA\Polls\Service\MailService;
 
 class NotificationCron extends TimedJob {
 
-	/** @var MailService*/
+	/** @var MailService */
 	private $mailService;
 
-	/** @param MailService $mailService
-	 */
+	/** @param MailService $mailService */
 	public function __construct(
 		MailService $mailService
 	) {

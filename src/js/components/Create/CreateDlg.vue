@@ -22,25 +22,33 @@
 
 <template lang="html">
 	<div class="create-dialog">
-		<h2>{{ t('polls', 'Create new poll') }}</h2>
-		<input id="pollTitle" ref="pollTitle" v-model="title"
-			type="text" :placeholder="t('polls', 'Enter Title')" @keyup.enter="confirm">
+		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
+			<input id="pollTitle"
+				ref="pollTitle"
+				v-model="title"
+				type="text"
+				:placeholder="t('polls', 'Enter Title')"
+				@keyup.enter="confirm">
+		</ConfigBox>
 
-		<div class="config-box">
-			<label class="title icon-checkmark">
-				{{ t('polls', 'Poll type') }}
-			</label>
-			<input id="datePoll" v-model="type" value="datePoll"
-				type="radio" class="radio">
+		<ConfigBox :title="t('polls', 'Poll type')" icon-class="icon-checkmark">
+			<input id="datePoll"
+				v-model="type"
+				value="datePoll"
+				type="radio"
+				class="radio">
 			<label for="datePoll">
 				{{ t('polls', 'Date poll') }}
 			</label>
-			<input id="textPoll" v-model="type" value="textPoll"
-				type="radio" class="radio">
+			<input id="textPoll"
+				v-model="type"
+				value="textPoll"
+				type="radio"
+				class="radio">
 			<label for="textPoll">
-				{{ t('polls', 'Text based') }}
+				{{ t('polls', 'Text poll') }}
 			</label>
-		</div>
+		</ConfigBox>
 
 		<div class="create-buttons">
 			<button class="button" @click="cancel">
@@ -54,52 +62,53 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import ConfigBox from '../Base/ConfigBox'
+
 export default {
 	name: 'CreateDlg',
+
+	components: {
+		ConfigBox,
+	},
 
 	data() {
 		return {
 			id: 0,
 			type: 'datePoll',
-			title: ''
+			title: '',
 		}
 	},
 
 	computed: {
 		...mapState({
-			poll: state => state.poll
+			poll: state => state.poll,
 		}),
 
 		titleEmpty() {
 			return this.title === ''
-		}
+		},
 	},
 
 	methods: {
-		...mapMutations(['setPollProperty', 'resetPoll', 'reset']),
-
 		cancel() {
 			this.title = ''
 			this.type = 'datePoll'
-			this.$emit('closeCreate')
+			this.$emit('close-create')
 		},
 
 		confirm() {
-			this.resetPoll()
-			this.reset()
-			this.setPollProperty({ id: 0 })
-			this.setPollProperty({ title: this.title })
-			this.setPollProperty({ type: this.type })
-			this.$store.dispatch('writePollPromise')
-				.then(() => {
-					this.$root.$emit('updatePolls')
+			this.$store.dispatch('poll/add', { title: this.title, type: this.type })
+				.then((response) => {
+					emit('update-polls')
 					this.cancel()
-					OC.Notification.showTemporary(t('polls', 'Poll "%n" added', 1, this.poll.title), { type: 'success' })
-					this.$router.push({ name: 'vote', params: { id: this.poll.id } })
+					showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.id }))
+					this.$router.push({ name: 'vote', params: { id: response.data.id } })
 				})
 				.catch(() => {
-					OC.Notification.showTemporary(t('polls', 'Error while creating Poll "%n"', 1, this.poll.title), { type: 'error' })
+					showError(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: this.title }))
 				})
 		},
 
@@ -107,9 +116,8 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.pollTitle.focus()
 			})
-		}
-	}
-
+		},
+	},
 }
 </script>
 
@@ -118,12 +126,12 @@ export default {
 	/* display: flex; */
 	/* flex-direction: column; */
 	background-color: var(--color-main-background);
-	padding: 20px;
+	padding: 8px 20px;
 }
 
-#pollTitle {
+/* #pollTitle {
 	width: 100%;
-}
+} */
 
 .create-buttons {
 	display: flex;

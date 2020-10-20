@@ -4,7 +4,7 @@
  *
  * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author René Gieling <github@dartcafe.de>
-*
+ *
  * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -141,7 +141,7 @@ class VoteMapper extends QBMapper {
 	 * @param int $pollId
 	 * @param string $userId
 	 */
-	 public function deleteByPollAndUser($pollId, $userId) {
+	public function deleteByPollAndUser($pollId, $userId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -152,7 +152,7 @@ class VoteMapper extends QBMapper {
 			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
-	   $qb->execute();
+		$qb->execute();
 	}
 
 	/**
