@@ -1,7 +1,7 @@
 {
 	"name": "polls",
 	"description": "Polls app for nextcloud",
-	"version": "1.5.4",
+	"version": "1.5.5",
 	"authors": [
 		{
 			"name": "Vinzenz Rosenkranz",
@@ -28,7 +28,7 @@
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development webpack --config webpack.dev.js",
 		"watch": "cross-env NODE_ENV=development webpack --progress --watch --config webpack.dev.js",
-		"build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config webpack.prod.js",
+		"build": "cross-env NODE_ENV=production webpack --progress --config webpack.prod.js",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src",

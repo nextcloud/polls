@@ -1,14 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.5 - release] - 2020-10-20
+ - [fix] #1137 - delete comments in public polls
+ - [fix] #1161 - Routing after creation of poll was wrong
+ - [fix] #1154 - Shifting dates went wrong
+ - [fix] #1163 - Reordering text poll options did not work
+ - [deps] - updated dependencies
+
 ## [1.5.4 - release] - 2020-10-02
  - adding missing translations
  - release blocking fixes
 
 ## [1.5.3 - RC3] - 2020-09-21
  - Added setting for defining default view for
-   - text polls, defaults to mobile/list layout and
-   - date polls, defaults to desktop/table layout #744
+ - text polls, defaults to mobile/list layout and
+ - date polls, defaults to desktop/table layout #744
  - better UX for site users, which enter a poll via public link and could login #1096
 
 ## [1.5.2 - RC2] - 2020-09-15
