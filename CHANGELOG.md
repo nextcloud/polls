@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.5.5 - release] - tbd
+## [1.5.5 - release] - 2020-10-20
  - [fix] #1137 - delete comments in public polls
  - [fix] #1161 - Routing after creation of poll was wrong
  - [fix] #1154 - Shifting dates went wrong
