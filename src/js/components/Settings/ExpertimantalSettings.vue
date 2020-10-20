@@ -37,7 +37,7 @@
 					type="checkbox" class="checkbox">
 				<label for="useImage">{{ t('polls', 'Use background image') }}</label>
 				<div class="settings_description">
-					{{ t('polls', 'Add a background image to the main ares.') }}
+					{{ t('polls', 'Add a background image to the main area.') }}
 				</div>
 			</div>
 
