@@ -48,14 +48,22 @@
 				type="checkbox"
 				class="checkbox">
 			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
+		</ConfigBox>
 
-			<input id="expiration"
+		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
+			<ButtonDiv
+				:icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
+				:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
+				@click="switchClosed()" />
+
+			<input v-show="!closed"
+				id="expiration"
 				v-model="pollExpiration"
 				type="checkbox"
 				class="checkbox">
-			<label for="expiration"> {{ t('polls', 'Expires') }}</label>
+			<label v-show="!closed" for="expiration"> {{ t('polls', 'Closing date') }}</label>
 
-			<DatetimePicker v-show="pollExpiration" v-model="pollExpire" v-bind="expirationDatePicker" />
+			<DatetimePicker v-show="pollExpiration && !closed" v-model="pollExpire" v-bind="expirationDatePicker" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
@@ -88,12 +96,12 @@
 				class="radio">
 			<label for="always">{{ t('polls', 'Always show results') }}</label>
 
-			<input id="expired"
+			<input id="closed"
 				v-model="pollShowResults"
-				value="expired"
+				value="closed"
 				type="radio"
 				class="radio">
-			<label for="expired">{{ t('polls', 'Hide results until poll is expired') }}</label>
+			<label for="closed">{{ t('polls', 'Hide results until poll is closed') }}</label>
 
 			<input id="never"
 				v-model="pollShowResults"
@@ -116,7 +124,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
@@ -144,6 +152,10 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
+		}),
+
+		...mapGetters({
+			closed: 'poll/closed',
 		}),
 
 		// Add bindings
@@ -199,10 +211,9 @@ export default {
 			},
 			set(value) {
 				if (value) {
-					this.writeValue({ expire: moment().unix() })
+					this.writeValue({ expire: moment().add(1, 'week').unix() })
 				} else {
 					this.writeValue({ expire: 0 })
-
 				}
 			},
 		},
@@ -258,7 +269,7 @@ export default {
 				minuteStep: 5,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				placeholder: t('polls', 'Expiration date'),
+				placeholder: t('polls', 'Closing date'),
 				confirm: true,
 				lang: {
 					formatLocale: {
@@ -271,17 +282,8 @@ export default {
 				},
 			}
 		},
-
-		saveButtonTitle: function() {
-			if (this.writingPoll) {
-				return t('polls', 'Writing poll')
-			} else if (this.acl.allowEdit) {
-				return t('polls', 'Update poll')
-			} else {
-				return t('polls', 'Create new poll')
-			}
-		},
 	},
+
 	methods: {
 
 		writeValueDebounced: debounce(function(e) {
@@ -299,6 +301,15 @@ export default {
 				this.writeValue({ deleted: 0 })
 			} else {
 				this.writeValue({ deleted: moment.utc().unix() })
+			}
+
+		},
+
+		switchClosed() {
+			if (this.closed) {
+				this.writeValue({ expire: 0 })
+			} else {
+				this.writeValue({ expire: moment.utc().unix() })
 			}
 
 		},

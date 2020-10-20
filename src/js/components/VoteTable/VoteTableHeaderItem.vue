@@ -65,7 +65,7 @@ export default {
 		}),
 
 		...mapGetters({
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 			confirmedOptions: 'poll/options/confirmed',
 		}),
 
@@ -87,13 +87,13 @@ export default {
 			return (this.viewMode === 'mobile')
 		},
 		isWinner() {
-			// highlight best option until poll is expired and
+			// highlight best option until poll is closed and
 			// at least one option is confirmed
-			return this.option.rank === 1 && !(this.expired && this.confirmedOptions.length)
+			return this.option.rank === 1 && !(this.closed && this.confirmedOptions.length)
 		},
 
 		isConfirmed() {
-			return this.option.confirmed && this.expired
+			return this.option.confirmed && this.closed
 		},
 	},
 }

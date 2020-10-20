@@ -22,8 +22,8 @@
 
 <template>
 	<div>
-		<OptionAddDate v-if="!expired" />
-		<OptionShiftDates v-if="options.length && !expired" />
+		<OptionAddDate v-if="!closed" />
+		<OptionShiftDates v-if="options.length && !closed" />
 
 		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
 			<transition-group is="ul">
@@ -41,10 +41,10 @@
 						</Actions>
 
 						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="!expired" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+							<ActionButton v-if="!closed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 								{{ t('polls', 'Clone option') }}
 							</ActionButton>
-							<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+							<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 								@click="confirmOption(option)">
 								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 							</ActionButton>
@@ -118,7 +118,7 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 		}),
 
 		dateBaseOptionString() {

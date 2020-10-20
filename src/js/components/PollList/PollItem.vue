@@ -46,13 +46,13 @@
 			</div>
 
 			<div class="item__expiry sortable" @click="$emit('sort-list', {sort: 'expire'})">
-				{{ t('polls', 'Expires') }}
+				{{ t('polls', 'Closing Date') }}
 				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 		</div>
 	</div>
 
-	<div v-else class="poll-item__item" :class="{ expired: isExpired, active: (poll.id === $store.state.poll.id) }">
+	<div v-else class="poll-item__item" :class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
 		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="item__title">
 			<div class="item__title__title">
@@ -150,7 +150,7 @@ export default {
 
 	computed: {
 
-		isExpired() {
+		closed() {
 			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 
@@ -292,7 +292,7 @@ export default {
 	width: 110px;
 }
 
-.expired {
+.closed {
 	.item__expiry {
 		color: var(--color-error);
 	}

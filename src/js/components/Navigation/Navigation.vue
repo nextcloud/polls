@@ -98,9 +98,9 @@ export default {
 					pinned: false,
 				},
 				{
-					id: 'expired',
-					title: t('polls', 'Expired polls'),
-					icon: 'icon-polls-expired',
+					id: 'closed',
+					title: t('polls', 'Closed polls'),
+					icon: 'icon-polls-closed',
 					pinned: false,
 				},
 				{
@@ -192,7 +192,7 @@ export default {
 </script>
 
 <style lang="scss">
-	.expired {
+	.closed {
 		.app-navigation-entry-icon, .app-navigation-entry__title {
 			opacity: 0.6;
 		}

@@ -41,7 +41,7 @@
 								</ActionButton>
 							</Actions>
 							<Actions v-if="acl.allowEdit" class="action">
-								<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+								<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
 									@click="confirmOption(option)">
 									{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 								</ActionButton>
@@ -98,7 +98,7 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 		}),
 
 		sortOptions: {

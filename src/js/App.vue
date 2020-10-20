@@ -152,7 +152,6 @@ export default {
 	--icon-polls-confirmed: url('./assets/confirmed.svg');
 	--icon-polls-unconfirmed: url('./assets/unconfirmed.svg');
 	--icon-polls-clone: url('./assets/clone.svg');
-	--icon-polls-expired: url('./assets/clock.svg');
 	--icon-polls-move: url('./assets/move.svg');
 	--icon-polls-yes: url('./assets/yes-vote.svg');
 	--icon-polls-no: url('./assets/no-vote.svg');
@@ -161,6 +160,8 @@ export default {
 	--icon-polls-mail: url('./assets/mail.svg');
 	--icon-polls-sidebar-toggle: url('./assets/sidebar-toggle.svg');
 	--icon-polls-loading: url('./assets/loading-small.gif');
+	--icon-polls-open: url('./assets/open.svg');
+	--icon-polls-closed: url('./assets/closed.svg');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -189,10 +190,6 @@ export default {
 	background-image: var(--icon-polls-unconfirmed);
 }
 
-.icon-polls-expired {
-	background-image: var(--icon-polls-expired);
-}
-
 .icon-polls-move {
 	background-image: var(--icon-polls-move);
 }
@@ -215,6 +212,14 @@ export default {
 
 .icon-polls-mail {
 	background-image: var(--icon-polls-mail);
+}
+
+.icon-polls-open {
+	background-image: var(--icon-polls-open);
+}
+
+.icon-polls-closed {
+	background-image: var(--icon-polls-closed);
 }
 
 .icon-polls-sidebar-toggle {

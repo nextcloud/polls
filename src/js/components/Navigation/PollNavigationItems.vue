@@ -24,7 +24,7 @@
 	<AppNavigationItem :title="poll.title"
 		:icon="pollIcon"
 		:to="{name: 'vote', params: {id: poll.id}}"
-		:class="{ expired: expired }">
+		:class="{ closed: closed }">
 		<template slot="actions">
 			<ActionButton icon="icon-polls-clone" @click="$emit('clone-poll')">
 				{{ t('polls', 'Clone poll') }}
@@ -73,7 +73,7 @@ export default {
 				return 'icon-toggle-filelist'
 			}
 		},
-		expired() {
+		closed() {
 			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 	},
