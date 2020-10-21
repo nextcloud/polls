@@ -170,26 +170,7 @@ class ShareService {
 		}
 
 		$userGroup = UserGroupClass::getUserGroupChild($type, $userId);
-		return $this->create($pollId, $userGroup) ;
-
-		// $this->share = new Share();
-		// $this->share->setPollId($pollId);
-		// $this->share->setInvitationSent(0);
-		// $this->share->setToken(\OC::$server->getSecureRandom()->generate(
-		// 	16,
-		// 	ISecureRandom::CHAR_DIGITS .
-		// 	ISecureRandom::CHAR_LOWER .
-		// 	ISecureRandom::CHAR_UPPER
-		// ));
-		//
-		//
-		// $userGroup = UserGroupClass::getUserGroupChild($type, $userId);
-		// $this->share->setType($userGroup->getType());
-		// $this->share->setUserId($userGroup->getId());
-		// $this->share->setDisplayName($userGroup->getDisplayName());
-		// $this->share->setUserEmail($userGroup->getEmailAddress());
-		//
-		// return $this->shareMapper->insert($this->share);
+		return $this->create($pollId, $userGroup);
 	}
 
 	/**

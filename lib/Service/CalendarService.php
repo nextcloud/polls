@@ -84,7 +84,7 @@ class CalendarService {
 
 					// check, if the event is an all day event
 					$allDay = '';
-					if ($eventEndTs-$eventStartTs === 86400) {
+					if ($eventEndTs - $eventStartTs === 86400) {
 						$allDay = $event['objects'][0]['DTSTART'][0]->format('Y-m-d');
 					}
 

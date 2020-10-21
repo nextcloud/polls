@@ -54,7 +54,7 @@ class PreferencesService {
 		} catch (\Exception $e) {
 			$this->preferences = new Preferences();
 			$this->preferences->setUserId($this->userId);
-			$this->preferences = $this->preferencesMapper->insert($preferences);
+			$this->preferences = $this->preferencesMapper->insert($this->preferences);
 		}
 	}
 	/**
