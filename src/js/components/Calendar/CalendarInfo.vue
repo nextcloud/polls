@@ -22,12 +22,12 @@
 
 <template>
 	<div class="calendar-info"
-		:class="conflictLevel"
+		:class="[conflictLevel, statusClass]"
 		:style="calendarStyle">
-		<div class="calendar-info__time">
+		<div v-if="!event.allDay" class="calendar-info__time">
 			{{ formatDate(event.eventFrom) }} - {{ formatDate(event.eventTo) }}
 		</div>
-		<div class="calendar-info__summay">
+		<div class="calendar-info__summay" :class="statusClass">
 			{{ event.summary }}
 		</div>
 	</div>
@@ -58,6 +58,10 @@ export default {
 				backgroundColor: this.event.displayColor,
 				color: this.fontColor,
 			}
+		},
+
+		statusClass() {
+			return this.event.status.toLowerCase()
 		},
 
 		fontColor() {
@@ -120,6 +124,15 @@ export default {
 
 	&.conflict-no {
 		border-left: 4px solid var(--color-success);
+	}
+
+	&.cancelled {
+		text-decoration: line-through;
+		opacity: 0.5;
+	}
+
+	&.tentative {
+		opacity: 0.5;
 	}
 
 	&.conflict-yes {

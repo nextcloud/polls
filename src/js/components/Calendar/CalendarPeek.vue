@@ -109,6 +109,7 @@ export default {
 				location: '',
 				eventFrom: this.option.timestamp,
 				eventTo: this.option.timestamp + 3600,
+				status: 'self',
 			}
 		},
 	},
