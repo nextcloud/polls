@@ -51,7 +51,6 @@
 				<label for="glassyNavigation">{{ t('polls', 'Glassy navigation') }}</label>
 				<div class="settings_details">
 					{{ t('polls', 'Blurs the background of the navigation (Does not work with all browsers).') }}
-
 				</div>
 			</div>
 
