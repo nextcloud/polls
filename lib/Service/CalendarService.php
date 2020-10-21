@@ -67,41 +67,27 @@ class CalendarService {
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
 			foreach ($foundEvents as $event) {
 				if (isset($event['objects'][0]['DTSTART'][0]) && isset($event['objects'][0]['DTEND'][0])) {
-
 					// INFO: all days events always start at 00:00 UTC and end at 00:00 UTC the next day
 					$eventStartTs = $event['objects'][0]['DTSTART'][0]->getTimestamp();
 					$eventEndTs = $event['objects'][0]['DTEND'][0]->getTimestamp();
-
-					$eventStartsBefore = ($searchToTs - $eventStartTs > 0);
-					$eventEndsafter = ($eventEndTs - $searchFromTs > 0);
-
-					// since we get back recurring events of other days, just make sure this event
-					// matches the search pattern
-					// TODO: identify possible time zone issues, whan handling all day events
-					if (!$eventStartsBefore || !$eventEndsafter) {
-						continue;
-					}
-
-					// check, if the event is an all day event
-					$allDay = '';
-					if ($eventEndTs - $eventStartTs === 86400) {
-						$allDay = $event['objects'][0]['DTSTART'][0]->format('Y-m-d');
-					}
-
-					// get the events status (cancelled or tentative)
-					$status = '';
-					if (isset($event['objects'][0]['STATUS'])) {
-						$status = $event['objects'][0]['STATUS'][0];
-					}
 				} else {
 					continue;
 				}
 
+				$eventStartsBefore = ($searchToTs - $eventStartTs > 0);
+				$eventEndsafter = ($eventEndTs - $searchFromTs > 0);
+
+				// since we get back recurring events of other days, just make sure this event
+				// matches the search pattern
+				// TODO: identify possible time zone issues, whan handling all day events
+				if (!$eventStartsBefore || !$eventEndsafter) {
+					continue;
+				}
 
 				array_push($events, [
-					'relatedFrom' => $searchFromTs,
-					'allDay' => $allDay,
-					'relatedTo' => $searchToTs,
+					'searchFrom' => $searchFromTs,
+					'searchTo' => $searchToTs,
+					'allDay' => ($eventEndTs - $eventStartTs === 86400) ? $event['objects'][0]['DTSTART'][0]->format('Y-m-d') : '',
 					'name' => $calendar->getDisplayName(),
 					'key' => $calendar->getKey(),
 					'displayColor' => $calendar->getDisplayColor(),
@@ -113,7 +99,7 @@ class CalendarService {
 					'location' => isset($event['objects'][0]['LOCATION'][0]) ? $event['objects'][0]['LOCATION'][0] : '',
 					'eventFrom' => $eventStartTs,
 					'eventTo' => $eventEndTs,
-					'status' => $status,
+					'status' => isset($event['objects'][0]['STATUS']) ? $event['objects'][0]['STATUS'][0] : '',
 					'calDav' => $event
 				]);
 			}

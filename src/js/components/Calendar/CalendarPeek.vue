@@ -68,8 +68,9 @@ export default {
 		return {
 			events: [],
 			event: {
-				relatedFrom: 0,
-				relatedTo: 0,
+				searchFrom: 0,
+				searchTo: 0,
+				allDay: '',
 				name: '',
 				key: '',
 				displayColor: '',
@@ -81,6 +82,7 @@ export default {
 				location: '',
 				eventFrom: '',
 				eventTo: '',
+				status: '',
 			},
 		}
 	},
