@@ -33,7 +33,7 @@ class PreferencesService {
 	/** @var PreferencesMapper */
 	private $preferencesMapper;
 
-	/** @var PreferencesMapper */
+	/** @var Preferences */
 	private $preferences;
 
 	/** @var String */
@@ -53,8 +53,8 @@ class PreferencesService {
 			$this->preferences = $this->preferencesMapper->find($this->userId);
 		} catch (\Exception $e) {
 			$this->preferences = new Preferences();
-			$preferences->setUserId($this->userId);
-			$preferences = $this->preferencesMapper->insert($preferences);
+			$this->preferences->setUserId($this->userId);
+			$this->preferences = $this->preferencesMapper->insert($preferences);
 		}
 	}
 	/**
