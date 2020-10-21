@@ -126,7 +126,7 @@ class ShareService {
 	 * @param bool $skipInvitation
 	 * @return Share
 	 */
-	private function create($pollId, $userGroup, $skipInvitation = fale) {
+	private function create($pollId, $userGroup, $skipInvitation = false) {
 		$this->share = new Share();
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
