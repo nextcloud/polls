@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Qrup",
+    "User" : "User",
     "Cancel" : "Dayandır",
     "OK" : "Oldu",
     "Week" : "Həftə",
-    "Group" : "Qrup",
-    "Unknown user" : "Istifadəçi tanınmır ",
     "Title" : "Başlıq",
     "Settings" : "Quraşdırmalar",
     "Owner" : "Owner",

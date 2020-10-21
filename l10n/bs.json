@@ -1,8 +1,9 @@
 { "translations": {
+    "Group" : "Grupa",
+    "User" : "User",
     "Cancel" : "Otkaži",
     "OK" : "OK",
     "Week" : "Sedmica",
-    "Group" : "Grupa",
     "New comment …" : "Novi komentar",
     "Delete comment" : "Izbriši komentar",
     "Title" : "Naslov",
@@ -11,7 +12,6 @@
     "never" : "nikad",
     "Comments" : "Komentari",
     "Description" : "Opis",
-    "Expiration date" : "Datum isteka",
     "No" : "No",
     "Yes" : "Yes",
     "Day" : "Dan",

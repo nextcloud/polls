@@ -1,12 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Gruppe",
+    "User" : "Bruker",
     "Confirmed" : "Stadfesta",
     "Cancel" : "Avbryt",
     "OK" : "OK",
     "Week" : "Veke",
     "Back" : "Tilbake",
-    "Group" : "Gruppe",
     "New comment …" : "Ny kommentar...",
     "Delete comment" : "Slett kommentar",
     "Title" : "Tittel",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Shares" : "Delingar",
     "Comments" : "Kommentarar",
     "Description" : "Skildring",
-    "Expiration date" : "Utløpsdato",
     "No" : "Nei",
     "Yes" : "Ja",
     "Deleted" : "Sletta",

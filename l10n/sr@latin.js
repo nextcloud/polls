@@ -1,10 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Group",
+    "User" : "Korisnik",
     "Cancel" : "Cancel",
     "OK" : "U redu",
     "Back" : "Nazad",
-    "Group" : "Group",
     "Conflict" : "Konflikt",
     "Title" : "Naslov",
     "Settings" : "Поставке",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "never" : "never",
     "Details" : "Detalji",
     "Description" : "Opis",
-    "Expiration date" : "Datum isteka",
     "No" : "Ne",
     "Yes" : "Da",
     "Deleted" : "Obrisano"

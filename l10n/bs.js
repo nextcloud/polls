@@ -1,10 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Grupa",
+    "User" : "User",
     "Cancel" : "Otkaži",
     "OK" : "OK",
     "Week" : "Sedmica",
-    "Group" : "Grupa",
     "New comment …" : "Novi komentar",
     "Delete comment" : "Izbriši komentar",
     "Title" : "Naslov",
@@ -13,7 +14,6 @@ OC.L10N.register(
     "never" : "nikad",
     "Comments" : "Komentari",
     "Description" : "Opis",
-    "Expiration date" : "Datum isteka",
     "No" : "No",
     "Yes" : "Yes",
     "Day" : "Dan",

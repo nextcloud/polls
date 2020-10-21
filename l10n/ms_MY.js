@@ -1,11 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Group",
+    "User" : "User",
     "Cancel" : "Batal",
     "OK" : "OK",
     "Week" : "Minggu",
     "Back" : "Kembali",
-    "Group" : "Group",
     "Title" : "Judul",
     "Settings" : "Tetapan",
     "Owner" : "Owner",
