@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Бүлэг",
+    "User" : "Хэрэглэгч",
     "Confirmed" : "Баталгаажсан",
     "Cancel" : "болиулах",
     "OK" : "ок",
     "Week" : "Долоо хоног",
     "Back" : "буцах",
-    "Group" : "Бүлэг",
-    "Unknown user" : "  хэрэглэгч",
     "Conflict" : "Давхцал",
     "New comment …" : "Шинэ сэтгэгдэл...",
     "Delete comment" : "Сэтгэгдэл устгах",

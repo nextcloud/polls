@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Grop",
     "Cancel" : "Anullar",
     "OK" : "D'acòrdi",
     "Week" : "Aquesta setmana",
     "Back" : "Retorn",
-    "Group" : "Grop",
     "Title" : "Títol",
     "Apply" : "Aplicar",
     "Settings" : "Paramètres",
@@ -13,7 +13,6 @@ OC.L10N.register(
     "never" : "pas jamai",
     "Details" : "Detalhs",
     "Description" : "Descripcion",
-    "Expiration date" : "Data d'expiracion",
     "No" : "No",
     "Yes" : "Yes",
     "Day" : "Jorn",
