@@ -53,7 +53,7 @@
 					type="checkbox" class="checkbox">
 				<label for="glassyNavigation">{{ t('polls', 'Glassy navigation') }}</label>
 				<div class="settings_description">
-					{{ t('polls', 'Blurrs the background of the navigation (Does not work with all browsers).') }}
+					{{ t('polls', 'Blurs the background of the navigation (Does not work with all browsers).') }}
 				</div>
 			</div>
 
@@ -62,7 +62,7 @@
 					type="checkbox" class="checkbox">
 				<label for="glassySidebar">{{ t('polls', 'Glassy sidebar') }}</label>
 				<div class="settings_description">
-					{{ t('polls', 'Blurrs the background of the sidebar (Does not work with all browsers).') }}
+					{{ t('polls', 'Blurs the background of the sidebar (Does not work with all browsers).') }}
 				</div>
 			</div>
 		</div>
