@@ -25,7 +25,7 @@
 		:class="[conflictLevel, statusClass]"
 		:style="calendarStyle">
 		<div v-if="!event.allDay" class="calendar-info__time">
-			{{ formatDate(event.eventFrom) }} - {{ formatDate(event.eventTo) }}
+			{{ formatDate(event.start) }} - {{ formatDate(event.end) }}
 		</div>
 		<div class="calendar-info__summay" :class="statusClass">
 			{{ event.summary }}
@@ -84,11 +84,11 @@ export default {
 		},
 
 		conflictLevel() {
-			if (this.event.key === 0) {
+			if (this.event.calendarKey === 0) {
 				return 'conflict-ignore'
-			} else if (this.event.eventFrom > this.option.timestamp + 3599) {
+			} else if (this.event.start > this.option.timestamp + 3599) {
 				return 'conflict-no'
-			} else if (this.event.eventTo - 1 < this.option.timestamp) {
+			} else if (this.event.end - 1 < this.option.timestamp) {
 				return 'conflict-no'
 			} else {
 				return 'conflict-yes'

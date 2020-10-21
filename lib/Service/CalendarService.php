@@ -26,6 +26,7 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use OCP\Calendar\IManager as CalendarManager;
+use OCA\Polls\Model\CalendarEvent;
 
 class CalendarService {
 	private $calendarManager;
@@ -58,52 +59,24 @@ class CalendarService {
 			if (!in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
 				continue;
 			}
-			$searchFromTs = $from->getTimestamp();
-			$searchToTs = $to->getTimestamp();
 
 			// search for all events which
 			// - start before the end of the requested timespan ($to) and
 			// - end before the start of the requested timespan ($from)
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
 			foreach ($foundEvents as $event) {
-				if (isset($event['objects'][0]['DTSTART'][0]) && isset($event['objects'][0]['DTEND'][0])) {
-					// INFO: all days events always start at 00:00 UTC and end at 00:00 UTC the next day
-					$eventStartTs = $event['objects'][0]['DTSTART'][0]->getTimestamp();
-					$eventEndTs = $event['objects'][0]['DTEND'][0]->getTimestamp();
-				} else {
-					continue;
-				}
-
-				$eventStartsBefore = ($searchToTs - $eventStartTs > 0);
-				$eventEndsafter = ($eventEndTs - $searchFromTs > 0);
+				$calendarEvent = new CalendarEvent($event, $calendar);
 
 				// since we get back recurring events of other days, just make sure this event
 				// matches the search pattern
 				// TODO: identify possible time zone issues, whan handling all day events
-				if (!$eventStartsBefore || !$eventEndsafter) {
-					continue;
+				if (($from->getTimestamp() < $calendarEvent->getEnd())
+					&& ($to->getTimestamp() > $calendarEvent->getStart()) ) {
+					array_push($events, $calendarEvent);
 				}
-
-				array_push($events, [
-					'searchFrom' => $searchFromTs,
-					'searchTo' => $searchToTs,
-					'allDay' => ($eventEndTs - $eventStartTs === 86400) ? $event['objects'][0]['DTSTART'][0]->format('Y-m-d') : '',
-					'name' => $calendar->getDisplayName(),
-					'key' => $calendar->getKey(),
-					'displayColor' => $calendar->getDisplayColor(),
-					'permissions' => $calendar->getPermissions(),
-					'eventId' => $event['id'],
-					'UID' => $event['objects'][0]['UID'][0],
-					'summary' => isset($event['objects'][0]['SUMMARY'][0]) ? $event['objects'][0]['SUMMARY'][0] : '',
-					'description' => isset($event['objects'][0]['DESCRIPTION'][0]) ? $event['objects'][0]['DESCRIPTION'][0] : '',
-					'location' => isset($event['objects'][0]['LOCATION'][0]) ? $event['objects'][0]['LOCATION'][0] : '',
-					'eventFrom' => $eventStartTs,
-					'eventTo' => $eventEndTs,
-					'status' => isset($event['objects'][0]['STATUS']) ? $event['objects'][0]['STATUS'][0] : '',
-					'calDav' => $event
-				]);
 			}
 		}
+
 		return $events;
 	}
 
