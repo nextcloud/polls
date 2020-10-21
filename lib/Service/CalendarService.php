@@ -30,11 +30,16 @@ use OCP\Calendar\IManager as CalendarManager;
 class CalendarService {
 	private $calendarManager;
 	private $calendars;
+	private $preferencesService;
+	private $preferences;
 
 	public function __construct(
-		CalendarManager $calendarManager
+		CalendarManager $calendarManager,
+		PreferencesService $preferencesService
 	) {
 		$this->calendarManager = $calendarManager;
+		$this->preferencesService = $preferencesService;
+		$this->preferences = $this->preferencesService->get();
 		$this->calendars = $this->calendarManager->getCalendars();
 	}
 
@@ -47,8 +52,13 @@ class CalendarService {
 	 */
 	public function getEvents($from, $to) {
 		$events = [];
-
 		foreach ($this->calendars as $calendar) {
+
+			// Skip not configured calendars
+			if (!in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
+				continue;
+			}
+
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
 			foreach ($foundEvents as $event) {
 				array_push($events, [
@@ -78,6 +88,15 @@ class CalendarService {
 	 * @return Array
 	 */
 	public function getCalendars() {
-		return $this->calendars;
+		$calendars =  [];
+		foreach ($this->calendars as $calendar) {
+			$calendars[] = [
+				'name' => $calendar->getDisplayName(),
+				'key' => $calendar->getKey(),
+				'displayColor' => $calendar->getDisplayColor(),
+				'permissions' => $calendar->getPermissions(),
+			];
+		}
+		return $calendars;
 	}
 }

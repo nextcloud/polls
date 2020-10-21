@@ -52,7 +52,19 @@ export default {
 	data() {
 		return {
 			show: false,
+			calendars: [],
 		}
+	},
+
+	watch: {
+		show() {
+			if (this.show === true) {
+				this.$store.dispatch('settings/getCalendars')
+					.then((response) => {
+						this.calendars = response.data.calendars
+					})
+			}
+		},
 	},
 
 	created() {

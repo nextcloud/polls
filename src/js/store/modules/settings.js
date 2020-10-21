@@ -28,6 +28,7 @@ const defaultSettings = () => {
 		user: {
 			experimental: false,
 			calendarPeek: false,
+			checkCalendars: [],
 			useImage: false,
 			imageUrl: '',
 			glassyNavigation: false,
@@ -35,6 +36,7 @@ const defaultSettings = () => {
 			defaultViewTextPoll: 'mobile',
 			defaultViewDatePoll: 'desktop',
 		},
+		availableCalendars: [],
 		viewModes: [
 			'mobile',
 			'desktop',
@@ -54,6 +56,12 @@ const mutations = {
 		Object.keys(payload).filter(key => key in state.user).forEach(key => {
 			state.user[key] = payload[key]
 		})
+	},
+	setCalendars(state, payload) {
+		state.availableCalendars = payload.calendars
+	},
+	addCheckCalendar(state, payload) {
+		state.user.checkCalendars.push(payload.calendar.key)
 	},
 }
 
@@ -79,6 +87,16 @@ const actions = {
 			.catch((error) => {
 				console.error('Error writing preferences', { error: error.response }, { preferences: state.user })
 				throw error
+			})
+	},
+
+	getCalendars(context) {
+		const endPoint = 'apps/polls/calendars'
+
+		return axios.get(generateUrl(endPoint))
+			.then((response) => {
+				context.commit('setCalendars', { calendars: response.data.calendars })
+				return response
 			})
 	},
 }

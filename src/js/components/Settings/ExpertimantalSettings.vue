@@ -26,7 +26,7 @@
 			<input id="experimental" v-model="experimental"
 				type="checkbox" class="checkbox">
 			<label for="experimental">{{ t('polls', 'Try experimental styles') }}</label>
-			<div class="settings_description">
+			<div class="settings_details">
 				{{ t('polls', 'Some experimental UI variants. Changes the background color of the main area.') }}
 			</div>
 		</div>
@@ -36,15 +36,12 @@
 				<input id="useImage" v-model="useImage"
 					type="checkbox" class="checkbox">
 				<label for="useImage">{{ t('polls', 'Use background image') }}</label>
-				<div class="settings_description">
+				<div class="settings_details">
 					{{ t('polls', 'Add a background image to the main area.') }}
-				</div>
-			</div>
-
-			<div class="user_settings">
-				<input v-if="useImage" v-model="imageUrl" type="text">
-				<div class="settings_description">
-					{{ t('polls', 'Enter the URL of your favorite background image.') }}
+					<input v-if="useImage" v-model="imageUrl" type="text">
+					<div v-if="useImage">
+						{{ t('polls', 'Enter the URL of your favorite background image.') }}
+					</div>
 				</div>
 			</div>
 
@@ -52,7 +49,7 @@
 				<input id="glassyNavigation" v-model="glassyNavigation"
 					type="checkbox" class="checkbox">
 				<label for="glassyNavigation">{{ t('polls', 'Glassy navigation') }}</label>
-				<div class="settings_description">
+				<div class="settings_details">
 					{{ t('polls', 'Blurrs the background of the navigation (Does not work with all browsers).') }}
 				</div>
 			</div>
@@ -61,7 +58,7 @@
 				<input id="glassySidebar" v-model="glassySidebar"
 					type="checkbox" class="checkbox">
 				<label for="glassySidebar">{{ t('polls', 'Glassy sidebar') }}</label>
-				<div class="settings_description">
+				<div class="settings_details">
 					{{ t('polls', 'Blurrs the background of the sidebar (Does not work with all browsers).') }}
 				</div>
 			</div>
@@ -144,7 +141,8 @@ export default {
 		padding-top: 16px;
 	}
 
-	.settings_description {
+	.settings_details {
 		padding-top: 8px;
+		margin-left: 26px;
 	}
 </style>

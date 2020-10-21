@@ -26,8 +26,21 @@
 			<input id="calendarPeek" v-model="calendarPeek"
 				type="checkbox" class="checkbox">
 			<label for="calendarPeek">{{ t('polls', 'Use calendar lookup') }}</label>
-			<div class="settings_description">
+			<div class="settings_details">
 				{{ t('polls', 'Check, if an option in a date poll is conflicting with or near an entry in your calendar.') }}
+				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
+
+				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
+					<input :id="'calendar_' + calendar.key"
+						v-model="calendar.selected"
+						type="checkbox"
+						class="checkbox"
+						@click="clickedCalendar(calendar)">
+					<label :for="'calendar_' + calendar.key" class="calendar-checkbox">
+						<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
+						<span>{{ calendar.name }}</span>
+					</label>
+				</div>
 			</div>
 		</div>
 
@@ -35,7 +48,7 @@
 			<input id="defaultViewTextPoll" v-model="defaultViewTextPoll"
 				type="checkbox" class="checkbox">
 			<label for="defaultViewTextPoll">{{ t('polls', 'Text polls default to list view') }}</label>
-			<div class="settings_description">
+			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view.') }}
 			</div>
 		</div>
@@ -44,7 +57,7 @@
 			<input id="defaultViewDatePoll" v-model="defaultViewDatePoll"
 				type="checkbox" class="checkbox">
 			<label for="defaultViewDatePoll">{{ t('polls', 'Date polls default to list view') }}</label>
-			<div class="settings_description">
+			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.') }}
 			</div>
 		</div>
@@ -68,6 +81,7 @@ export default {
 	computed: {
 		...mapState({
 			settings: state => state.settings.user,
+			calendars: state => state.settings.availableCalendars,
 		}),
 		// Add bindings
 		calendarPeek: {
@@ -78,6 +92,25 @@ export default {
 				this.writeValue({ calendarPeek: value })
 			},
 		},
+
+		calendarChoices() {
+			var list = []
+			this.calendars.forEach((calendar) => {
+				// console.log(calendar.key.toString())
+				// console.log(this.settings.checkCalendars)
+				// console.log(this.settings.checkCalendars.includes(calendar.key.toString()))
+
+				list.push({
+					key: calendar.key.toString(),
+					name: calendar.name,
+					displayColor: calendar.displayColor,
+					selected: this.settings.checkCalendars.includes(calendar.key.toString()),
+				})
+			})
+
+			return list
+		},
+
 		defaultViewTextPoll: {
 			get() {
 				return (this.settings.defaultViewTextPoll === 'mobile')
@@ -109,6 +142,21 @@ export default {
 			this.$store.commit('settings/setPreference', value)
 			this.$store.dispatch('settings/write')
 		},
+
+		clickedCalendar(calendar) {
+			// console.log(calendar.key)
+			// console.log(checkCalendars)
+			if (this.settings.checkCalendars.includes(calendar.key)) {
+				// console.log(this.settings.checkCalendars)
+				// console.log('removed', this.settings.checkCalendars.filter(item => item !== calendar.key.toString()))
+				this.writeValue({ checkCalendars: this.settings.checkCalendars.filter(item => item !== calendar.key.toString()) })
+			} else {
+				this.$store.commit('settings/addCheckCalendar', { calendar: calendar })
+				// this.writeValue({ checkCalendars: checkCalendars })
+			}
+			// console.log(this.settings.checkCalendars)
+			this.$store.dispatch('settings/write')
+		},
 	},
 }
 </script>
@@ -118,7 +166,16 @@ export default {
 		padding-top: 16px;
 	}
 
-	.settings_description {
+	.settings_details {
 		padding-top: 8px;
+		margin-left: 26px;
+	}
+
+	.bully {
+		display: inline-block;
+		width: 11px;
+		height: 11px;
+		border-radius: 50%;
+		margin: 0 4px 0 0;
 	}
 </style>

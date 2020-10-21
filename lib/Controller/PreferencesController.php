@@ -30,28 +30,29 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Db\Preferences;
-use OCA\Polls\Db\PreferencesMapper;
+use OCA\Polls\Service\PreferencesService;
+use OCA\Polls\Service\CalendarService;
 
 class PreferencesController extends Controller {
-	private $userId;
-	private $preferencesMapper;
+	private $preferencesService;
+	private $calendarService;
 
 	/**
 	 * PreferencesController constructor.
 	 * @param string $appName
-	 * @param $UserId
-	 * @param PreferencesMapper $preferencesMapper
+	 * @param PreferencesService $preferencesService
+	 * @param CalendarService $calendarService
 	 */
 
 	public function __construct(
 		string $appName,
-		$userId,
 		IRequest $request,
-		PreferencesMapper $preferencesMapper
+		PreferencesService $preferencesService,
+		CalendarService $calendarService
 	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->preferencesMapper = $preferencesMapper;
+		$this->preferencesService = $preferencesService;
+		$this->calendarService = $calendarService;
 	}
 
 	/**
@@ -63,7 +64,7 @@ class PreferencesController extends Controller {
 	 */
 	public function get() {
 		try {
-			return new DataResponse($this->preferencesMapper->find($this->userId), Http::STATUS_OK);
+			return new DataResponse($this->preferencesService->get(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
@@ -82,18 +83,20 @@ class PreferencesController extends Controller {
 		}
 
 		try {
-			$preferences = $this->preferencesMapper->find($this->userId);
-			$preferences->setPreferences(json_encode($settings));
-			$preferences->setTimestamp(time());
-			$preferences = $this->preferencesMapper->update($preferences);
-		} catch (\Exception $e) {
-			$preferences = new Preferences();
-			$preferences->setUserId($this->userId);
-			$preferences->setPreferences(json_encode($settings));
-			$preferences->setTimestamp(time());
-			$preferences = $this->preferencesMapper->insert($preferences);
+			return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e, Http::STATUS_NOT_FOUND);
 		}
+	}
 
-		return new DataResponse($preferences, Http::STATUS_OK);
+	/**
+	 * get
+	 * Read all preferences
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @return DataResponse
+	 */
+	public function getCalendars() {
+		return new DataResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
 	}
 }
