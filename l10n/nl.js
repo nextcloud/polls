@@ -2,7 +2,10 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Peilingen",
+    "Contact" : "Contactpersonen",
+    "Public link" : "Openbare Link",
     "Group" : "Groep",
+    "User" : "Gebruiker",
     "Poll invitation \"%s\"" : "Peilingsuitnodiging \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} nodigde je uit om mee te doen aan peiling \"{title}\"",
     "Go to poll" : "Ga naar peiling",

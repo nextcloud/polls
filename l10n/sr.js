@@ -2,7 +2,10 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Гласања",
+    "Contact" : "Контакт",
+    "Public link" : "Јавна веза",
     "Group" : "Група",
+    "User" : "Корисник",
     "Poll invitation \"%s\"" : "Позив на гласање „%s“",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} Вас је позвао да узмете учешћа у гласању „{title}“",
     "Go to poll" : "Иди на гласање",

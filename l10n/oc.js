@@ -1,7 +1,9 @@
 OC.L10N.register(
     "polls",
     {
+    "Public link" : "Ligam public",
     "Group" : "Grop",
+    "User" : "User",
     "Cancel" : "Anullar",
     "OK" : "D'acòrdi",
     "Week" : "Aquesta setmana",
