@@ -71,7 +71,7 @@ class CalendarService {
 				// matches the search pattern
 				// TODO: identify possible time zone issues, whan handling all day events
 				if (($from->getTimestamp() < $calendarEvent->getEnd())
-					&& ($to->getTimestamp() > $calendarEvent->getStart()) ) {
+					&& ($to->getTimestamp() > $calendarEvent->getStart())) {
 					array_push($events, $calendarEvent);
 				}
 			}

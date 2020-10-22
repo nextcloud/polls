@@ -22,6 +22,7 @@
  */
 
 namespace OCA\Polls\Model;
+
 use \OCP\Calendar\ICalendar;
 
 class CalendarEvent implements \JsonSerializable {
