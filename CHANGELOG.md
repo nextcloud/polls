@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.6.0 - release] - tbd
+ - [enhancement] Configure calendars for calendar lookup
  - [enhancement] Change wording on hidden an public polls (#1158)
  - [enhancement] #1168 - Preferences dialog (#1120)
  - [enhancement] #1156 - Explicitly close poll (#1157)

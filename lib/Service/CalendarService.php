@@ -26,15 +26,21 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use OCP\Calendar\IManager as CalendarManager;
+use OCA\Polls\Model\CalendarEvent;
 
 class CalendarService {
 	private $calendarManager;
 	private $calendars;
+	private $preferencesService;
+	private $preferences;
 
 	public function __construct(
-		CalendarManager $calendarManager
+		CalendarManager $calendarManager,
+		PreferencesService $preferencesService
 	) {
 		$this->calendarManager = $calendarManager;
+		$this->preferencesService = $preferencesService;
+		$this->preferences = $this->preferencesService->get();
 		$this->calendars = $this->calendarManager->getCalendars();
 	}
 
@@ -47,28 +53,30 @@ class CalendarService {
 	 */
 	public function getEvents($from, $to) {
 		$events = [];
-
 		foreach ($this->calendars as $calendar) {
+
+			// Skip not configured calendars
+			if (!in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
+				continue;
+			}
+
+			// search for all events which
+			// - start before the end of the requested timespan ($to) and
+			// - end before the start of the requested timespan ($from)
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
 			foreach ($foundEvents as $event) {
-				array_push($events, [
-					'relatedFrom' => $from->getTimestamp(),
-					'relatedTo' => $to->getTimestamp(),
-					'name' => $calendar->getDisplayName(),
-					'key' => $calendar->getKey(),
-					'displayColor' => $calendar->getDisplayColor(),
-					'permissions' => $calendar->getPermissions(),
-					'eventId' => $event['id'],
-					'UID' => $event['objects'][0]['UID'][0],
-					'summary' => isset($event['objects'][0]['SUMMARY'][0]) ? $event['objects'][0]['SUMMARY'][0] : '',
-					'description' => isset($event['objects'][0]['DESCRIPTION'][0]) ? $event['objects'][0]['DESCRIPTION'][0] : '',
-					'location' => isset($event['objects'][0]['LOCATION'][0]) ? $event['objects'][0]['LOCATION'][0] : '',
-					'eventFrom' => isset($event['objects'][0]['DTSTART'][0]) ? $event['objects'][0]['DTSTART'][0]->getTimestamp() : 0,
-					'eventTo' => isset($event['objects'][0]['DTEND'][0]) ? $event['objects'][0]['DTEND'][0]->getTimestamp() : 0,
-					'calDav' => $event
-				]);
+				$calendarEvent = new CalendarEvent($event, $calendar);
+
+				// since we get back recurring events of other days, just make sure this event
+				// matches the search pattern
+				// TODO: identify possible time zone issues, whan handling all day events
+				if (($from->getTimestamp() < $calendarEvent->getEnd())
+					&& ($to->getTimestamp() > $calendarEvent->getStart())) {
+					array_push($events, $calendarEvent);
+				}
 			}
 		}
+
 		return $events;
 	}
 
@@ -78,6 +86,15 @@ class CalendarService {
 	 * @return Array
 	 */
 	public function getCalendars() {
-		return $this->calendars;
+		$calendars =  [];
+		foreach ($this->calendars as $calendar) {
+			$calendars[] = [
+				'name' => $calendar->getDisplayName(),
+				'key' => $calendar->getKey(),
+				'displayColor' => $calendar->getDisplayColor(),
+				'permissions' => $calendar->getPermissions(),
+			];
+		}
+		return $calendars;
 	}
 }

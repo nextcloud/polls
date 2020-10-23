@@ -77,8 +77,7 @@ return [
 		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
 		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],
 
-
-		['name' => 'integrations#get_circle_display_name', 'url' => '/circle/{circleId}/name', 'verb' => 'GET'],
+		['name' => 'preferences#get_calendars', 'url' => '/calendars', 'verb' => 'GET'],
 
 		// REST-API calls
 		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],

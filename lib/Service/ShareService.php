@@ -170,7 +170,7 @@ class ShareService {
 		}
 
 		$userGroup = UserGroupClass::getUserGroupChild($type, $userId);
-		return $this->create($pollId, $userGroup) ;
+		return $this->create($pollId, $userGroup);
 	}
 
 	/**

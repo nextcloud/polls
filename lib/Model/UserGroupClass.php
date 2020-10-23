@@ -276,7 +276,7 @@ class UserGroupClass implements \JsonSerializable {
 				return new Email($id);
 				break;
 			case self::TYPE_PUBLIC:
-				return new GenericUser($id,self::TYPE_PUBLIC);
+				return new GenericUser($id, self::TYPE_PUBLIC);
 				break;
 			case self::TYPE_EXTERNAL:
 				return new GenericUser($id, self::TYPE_EXTERNAL, $displayName, $emailAddress);
