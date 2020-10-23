@@ -158,6 +158,22 @@ class Poll extends Entity implements JsonSerializable {
 		return $this;
 	}
 
+	public function setAnonymous($value) {
+		$this->anonymous = intval($value);
+	}
+
+	public function setAllowMaybe($value) {
+		$this->allowMaybe = intval($value);
+	}
+
+	public function setAdminAccess($value) {
+		$this->adminAccess = intval($value);
+	}
+
+	public function setImportant($value) {
+		$this->important = intval($value);
+	}
+
 	private function getDisplayName() {
 		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
