@@ -254,13 +254,15 @@ class ShareService {
 	 */
 
 	public function delete($token) {
-		$this->share = $this->shareMapper->findByToken($token);
-		if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+			if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
+				throw new NotAuthorizedException;
+			}
+			$this->shareMapper->delete($this->share);
+		} catch (DoesNotExistException $e) {
+			// silently catch
 		}
-
-		$this->shareMapper->delete($this->share);
-
-		return $this->share;
+		return $token;
 	}
 }
