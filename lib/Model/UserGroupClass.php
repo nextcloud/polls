@@ -259,28 +259,20 @@ class UserGroupClass implements \JsonSerializable {
 		switch ($type) {
 			case Group::TYPE:
 				return new Group($id);
-				break;
 			case Circle::TYPE:
 				return new Circle($id);
-				break;
 			case Contact::TYPE:
 				return new Contact($id);
-				break;
 			case ContactGroup::TYPE:
 				return new ContactGroup($id);
-				break;
 			case User::TYPE:
 				return new User($id);
-				break;
 			case Email::TYPE:
 				return new Email($id);
-				break;
 			case self::TYPE_PUBLIC:
 				return new GenericUser($id, self::TYPE_PUBLIC);
-				break;
 			case self::TYPE_EXTERNAL:
 				return new GenericUser($id, self::TYPE_EXTERNAL, $displayName, $emailAddress);
-				break;
 			default:
 				throw new InvalidShareType('Invalid share type (' . $type . ')');
 			}

@@ -100,9 +100,9 @@ class ShareController extends Controller {
 	 * @param string $userEmail
 	 * @return DataResponse
 	 */
-	public function add($pollId, $type, $userId = '', $emailAddress = '') {
+	public function add($pollId, $type, $userId = '') {
 		try {
-			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $emailAddress)], Http::STATUS_CREATED);
+			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (ShareAlreadyExists $e) {
