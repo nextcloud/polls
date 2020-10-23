@@ -78,6 +78,7 @@ class Comment extends Entity implements JsonSerializable {
 			'dt' => $this->dt,
 			'timestamp' => intval($timestamp),
 			'comment' => $this->comment,
+			'isNoUser' => $this->getIsNoUser(),
 			'displayName' => $this->getDisplayName()
 		];
 	}
@@ -89,4 +90,8 @@ class Comment extends Entity implements JsonSerializable {
 			return $this->userId;
 		}
 	}
-}
+
+	public function getIsNoUser() {
+		return !(\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+	}
+	}

@@ -81,6 +81,10 @@ export default {
 			type: String,
 			default: 'user',
 		},
+		isNoUser: {
+			type: Boolean,
+			default: false,
+		},
 		icon: {
 			type: Boolean,
 			default: false,
@@ -95,10 +99,10 @@ export default {
 	},
 
 	computed: {
-		isNoUser() {
-			return this.type !== 'user'
-		},
-
+		// isNoUser() {
+		// 	return this.type !== 'user'
+		// },
+		//
 		name() {
 			if (this.displayName) {
 				return this.displayName
