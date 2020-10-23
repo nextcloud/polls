@@ -31,7 +31,6 @@ const defaultAcl = () => {
 		allowView: false,
 		allowVote: false,
 		displayName: '',
-		externalUser: false,
 		groupShare: false,
 		isAdmin: false,
 		isOwner: false,

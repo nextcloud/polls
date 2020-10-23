@@ -27,7 +27,6 @@ import { generateUrl } from '@nextcloud/router'
 const defaultShares = () => {
 	return {
 		displayName: '',
-		externalUser: false,
 		id: null,
 		invitationSent: 0,
 		pollId: null,

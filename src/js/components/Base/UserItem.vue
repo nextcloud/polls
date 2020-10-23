@@ -85,10 +85,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		externalUser: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	data() {
@@ -100,7 +96,7 @@ export default {
 
 	computed: {
 		isNoUser() {
-			return this.type !== 'user' || this.externalUser
+			return this.type !== 'user'
 		},
 
 		name() {
