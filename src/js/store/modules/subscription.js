@@ -51,8 +51,8 @@ const actions = {
 		}
 
 		return axios.get(generateUrl(endPoint))
-			.then(() => {
-				context.commit('setSubscription', true)
+			.then((response) => {
+				context.commit('setSubscription', response.data.subscribed)
 			})
 			.catch(() => {
 				context.commit('setSubscription', false)

@@ -65,11 +65,11 @@ class SubscriptionController extends Controller {
 	 */
 	public function get($pollId, $token) {
 		try {
-			return new DataResponse($this->subscriptionService->get($pollId, $token), Http::STATUS_OK);
+			return new DataResponse(['subscribed' => $this->subscriptionService->get($pollId, $token)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['status' => 'Not subscribed'], Http::STATUS_NOT_FOUND);
+			return new DataResponse(['subscribed' => false], Http::STATUS_OK);
 		}
 	}
 
