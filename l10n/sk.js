@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Ankety",
     "Contact" : "Kontakt",
     "Public link" : "Verejný odkaz",
     "Group" : "Skupina",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s pridal(a) možnosť.",
     "- %s removed a vote option." : "- %s odstránil(a) možnosť.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Tento e-mail ste dostali, pretože ste sa prihlásili na odber upozornení na túto anketu. Ak sa chcete odhlásiť, navštívte anketu a odstráňte svoj odber.",
+    "Polls" : "Ankety",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikácia Ankety, sa podobná doodle/dudle s možnosťou obmedziť prístup.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikácia Ankety, sa podobná doodle/dudle s možnosťou obmedziť prístup (členom, určitým skupinám/používateľom, skryté a verejné). ",
     "Error loading poll list" : "Pri načítavaní zoznamu ankiet sa vyskytla chyba",

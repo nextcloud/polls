@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Ankete",
     "Contact" : "Kontakt",
     "Public link" : "Javna poveznica",
     "Group" : "Grupa",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s je dodao mogućnost glasanja.",
     "- %s removed a vote option." : "- %s je uklonio mogućnost glasanja.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Primili ste ovu poruku e-pošte jer ste se preplatili na obavijesti u vezi s ovom anketom. Ako ne želite primati ovakve poruke, otvorite anketu i otkažite pretplatu.",
+    "Polls" : "Ankete",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikacija za ankete, nalik aplikaciji doodle/dudle s mogućnošću ograničavanja pristupa.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikacija za ankete, nalik aplikaciji doodle/dudle s mogućnošću ograničavanja pristupa (članovi, određene grupe/korisnici, skriveno, javno).",
     "Error loading poll list" : "Pogreška pri učitavanju popisa anketa",

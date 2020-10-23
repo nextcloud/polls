@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Kyselyt",
     "Contact" : "Yhteystieto",
     "Public link" : "Julkinen linkki",
     "Group" : "Ryhmä",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "- The poll expired." : "- Kysely vanheni.",
     "- %s added a vote option." : "- %s lisäsi äänestysvalinnan.",
     "- %s removed a vote option." : "- %s poisti äänestysvalinnan.",
+    "Polls" : "Kyselyt",
     "Error loading poll list" : "Virhe ladatessa kyselylistaa",
     "Confirmed" : "Vahvistettu",
     "Add a date option" : "Lisää päivävalinta",

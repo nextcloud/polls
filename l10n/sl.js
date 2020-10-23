@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Ankete",
     "Contact" : "Stik",
     "Contact group" : "Skupina stikov",
     "External Email" : "Zunanji elektronski naslov",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "- %s added a vote option." : "– %s doda možnost k anketi.",
     "- %s removed a vote option." : "– %s odstrani možnost ankete.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Elektronsko sporočilo ste prejeli, ker ste se naročili na obvestila te ankete. Naročila je mogoče kadarkoli odstraniti med možnostmi ankete.",
+    "Polls" : "Ankete",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Nextcloud Polls je program, podoben spletnemu programu Doodle z možnostjo omejevanja dostopa.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Nextcloud Polls je program, podoben spletnemu programu Doodle z možnostjo omejevanja dostopa (za člane, skupine ali uporabnike, skrite ankete in javno zbiranje odziva).",
     "Error loading poll list" : "Prišlo je do napake nalaganja seznama anket",

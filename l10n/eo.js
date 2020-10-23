@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Enketilo",
     "Contact" : "Kontakto",
     "Public link" : "Publika ligilo",
     "Group" : "Grupo",
     "User" : "Uzanto",
     "Go to poll" : "Iri al enketo",
     "Polls App - New Activity" : "Enketilo-aplikaĵo — Nova aktivaĵo",
+    "Polls" : "Enketilo",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Enketa aplikaĵo, samspeca kiel „Doodle“ aŭ „Dudle“, kun limigeblo de aliro.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Enketa aplikaĵo, samspeca kiel „Doodle“ aŭ „Dudle“, kun limigeblo de aliro (membroj, certaj grupoj aŭ uzantoj, kaŝita aŭ publika).",
     "Confirmed" : "Konfirmita",

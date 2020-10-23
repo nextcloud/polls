@@ -1,10 +1,10 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Sondazhe",
     "Contact" : "Kontakt",
     "Group" : "Grup",
     "User" : "Përdorues",
+    "Polls" : "Sondazhe",
     "Confirmed" : "E konfirmuar",
     "Cancel" : "Anullo",
     "OK" : "OK",

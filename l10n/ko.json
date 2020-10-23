@@ -1,10 +1,10 @@
 { "translations": {
-    "Polls" : "투표",
     "Contact" : "연락처",
     "Public link" : "공개 링크",
     "Group" : "그룹",
     "User" : "사용자",
     "Polls App - New Activity" : "투표 앱 - 새로운 활동",
+    "Polls" : "투표",
     "Confirmed" : "확인됨",
     "Cancel" : "취소",
     "OK" : "확인",

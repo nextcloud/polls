@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Inkestak",
     "Contact" : "Kontaktua",
     "Public link" : "Esteka publikoa",
     "Group" : "Taldea",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s erabiltzaileak bozka aukera bat gehitu du.",
     "- %s removed a vote option." : "- %s erabiltzaileak bozka aukera bat kendu du.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Inkesta honen jakinarazpenetara harpidetuta zaudelako jaso duzu posta elektroniko hau. Ez badituzu horrelako mezuak jaso nahi, joan inkestara eta kendu zure harpidetza.",
+    "Polls" : "Inkestak",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Inkestak egiteko aplikazioa, doodle/dudle-ren modukoa, sarbidea mugatzeko aukerarekin.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Inkestak egiteko aplikazioa, doodle/dudle-ren modukoa, sarbidea mugatzeko aukerarekin (kideak, zenbait talde/erabiltzaile, ezkutukoa eta publikoa).",
     "Error loading poll list" : "Errorea inkesta zerrenda kargatzean",

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Encuestas",
     "Contact" : "Contacto",
     "Public link" : "Liga pública",
     "Group" : "Grupo",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s agregó una opción de votación.",
     "- %s removed a vote option." : "- %s quitó una opción de votación.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Te enviamos este mensaje porque te suscribiste a las notificaciones de esta encuesta. Para no recibir más estos mensajes, visita la encuesta y cancela tu suscripción.",
+    "Polls" : "Encuestas",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una app de encuestas, similar a doodle/dudle, con la posibilidad de de restringir el acceso.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una app de encuestas, similar a doodle/dudle, con la posibilidad de de restringir el acceso. (miembros, ciertos grupos/usuarios, oculta y pública).",
     "Confirmed" : "Confirmado",

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "סקרים",
     "Contact" : "איש/אשת קשר",
     "Public link" : "קישור ציבורי",
     "Group" : "קבוצה",
@@ -17,6 +16,7 @@ OC.L10N.register(
     "- The poll expired." : "- תוקף הסקר פג.",
     "- %s added a vote option." : "- נוספה אפשרות להצבעה על ידי %s. ",
     "- %s removed a vote option." : "- הוסרה אפשרות בהצבעה על ידי %s.",
+    "Polls" : "סקרים",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "יישומון סקרים, בדומה ל־doodle/dudle אם האפשרות להגבלת גישה.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "יישומון סקרים, דומה ל־doodle/dudle עם אפשרות להגבלת גישה (חברים, קבוצות/משתמשים מסוימים, הסתרה או חשיפה).",
     "Error loading poll list" : "שגיאה בטעינת רשימת הסקרים",

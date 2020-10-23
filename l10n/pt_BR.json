@@ -1,5 +1,4 @@
 { "translations": {
-    "Polls" : "Enquetes",
     "Contact" : "Contactar",
     "Public link" : "Link público",
     "Group" : "Grupo",
@@ -20,6 +19,7 @@
     "- %s added a vote option." : "- %s adicionou uma opção de voto.",
     "- %s removed a vote option." : "- %s excluiu uma opção de voto.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Este e-mail foi enviado porque você se inscreveu nas notificações desta enquete. Para desativar, visite a enquete e remova sua inscrição.",
+    "Polls" : "Enquetes",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Um aplicativo de enquetes, semelhante ao doodle/dudle podendo restringir o acesso.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Um aplicativo de enquetes, semelhante ao doodle/dudle podendo restringir o acesso (membros, certos grupos/usuários, ocultos e públicos).",
     "Error loading poll list" : "Erro ao carregar a lista de enquetes",

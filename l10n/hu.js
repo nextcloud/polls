@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Szavazások",
     "Contact" : "Névjegy",
     "Public link" : "Nyilvános hivatkozás",
     "Group" : "Csoport",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "- The poll expired." : "- A szavazás lejárt.",
     "- %s added a vote option." : "- %s hozzáadott egy opciót a szavazáshoz.",
     "- %s removed a vote option." : "- %s eltávolított egy opciót a szavazásból.",
+    "Polls" : "Szavazások",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Szavazóalkalmazás a Doodle-höz hasonlóan lehetőséget nyújt hozzáférés korlátozására (tagok, bizonyos csoport/felhasználó és nyilvános).",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Szavazóalkalmazás, a Doodle-höz hasonlóan lehetőséget nyújt hozzáférés korlátozására (tagok, bizonyos csoport/felhasználó, titkos és nyilvános szavazások).",
     "Error loading poll list" : "Hiba történt a szavazások listázása során",

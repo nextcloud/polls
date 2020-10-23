@@ -1,5 +1,4 @@
 { "translations": {
-    "Polls" : "Anketler",
     "Contact" : "Kişi",
     "Public link" : "Herkese açık bağlantı",
     "Group" : "Grup",
@@ -20,6 +19,7 @@
     "- %s added a vote option." : "- %s bir oy seçeneği ekledi.",
     "- %s removed a vote option." : "- %s bir oy seçeneğini sildi.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Bu e-posta, bu anketin bildirimlerine abone olduğunuz için gönderildi. Bildirimlerin gönderilmemesi için ankete giderek abonelikten ayrılabilirsiniz.",
+    "Polls" : "Anketler",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Doodle/Dudle benzeri, erişim kısıtlama özelliği bulunan bir anket uygulamasıdır.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Doodle/Dudle benzeri, erişim kısıtlama özelliği (üyeler, belirli grup ve kullanıcılar, gizli ve herkese açık gibi) bulunan bir anket uygulamasıdır.",
     "Error loading poll list" : "Anket listesi yüklenirken sorun çıktı",

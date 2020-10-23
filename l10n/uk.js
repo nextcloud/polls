@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Опитування",
     "Contact" : "Контакт",
     "Public link" : "Публічне посилання",
     "Group" : "Група",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "- The poll expired." : "- Термін дії опитування вичерпано.",
     "- %s added a vote option." : "- %s додав(ла) новий параметр до опитування.",
     "- %s removed a vote option." : "- %s вилучив(ла) параметр з опитування.",
+    "Polls" : "Опитування",
     "Error loading poll list" : "Помилка завантаження списку опитування",
     "Confirmed" : "Підтверджено",
     "Add a date option" : "Додати параметр дата",

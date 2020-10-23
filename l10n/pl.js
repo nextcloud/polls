@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Sondy",
     "Contact" : "Kontakt",
     "Contact group" : "Kontakt grupy",
     "External Email" : "Zewnętrzny adres e-mail",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s dodał opcję głosowania.",
     "- %s removed a vote option." : "- %s usunął opcję głosowania.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Ten e-mail jest wysyłany do Ciebie, ponieważ subskrybujesz powiadomienia o tej sondzie. Aby zrezygnować, odwiedź sondę i usuń subskrypcję.",
+    "Polls" : "Sondy",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikacja sondażowa przypominająca doodle/dudle z możliwością ograniczania dostępu.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikacja sondażowa przypominająca doodle/dudle z możliwością ograniczania dostępu (członkowie, określone grupy/użytkownicy, ukryte i publiczne).",
     "Error loading poll list" : "Błąd ładowania listy sondy",
@@ -129,7 +129,9 @@ OC.L10N.register(
     "Add a background image to the main area." : "Dodaj obraz tła do głównego obszaru.",
     "Enter the URL of your favorite background image." : "Wprowadź adres URL swojego ulubionego obrazu tła.",
     "Glassy navigation" : "Szklista nawigacja",
+    "Blurs the background of the navigation (Does not work with all browsers)." : "Rozmywa tło nawigacji (nie działa we wszystkich przeglądarkach).",
     "Glassy sidebar" : "Szklisty pasek boczny",
+    "Blurs the background of the sidebar (Does not work with all browsers)." : "Rozmywa tło paska bocznego (nie działa we wszystkich przeglądarkach).",
     "Use calendar lookup" : "Użyj wyszukiwania kalendarza",
     "Check, if an option in a date poll is conflicting with or near an entry in your calendar." : "Sprawdź, czy opcja w sondzie dat nie koliduje z terminami lub w ich pobliżu w Twoim kalendarzu.",
     "Text polls default to list view" : "Sondy tekstowe są domyślnie wyświetlane w widoku listy",

@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Encuestas",
     "Contact" : "Contacto",
     "Public link" : "Liga pública",
     "Group" : "Grupo",
     "User" : "Usuario",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
+    "Polls" : "Encuestas",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una aplicación de encuestas, similar a doodle/dudle con la opción de restringir el acceso.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una aplicación de encuestas, similar a doodle/dudle con la opción de restringir el acceso (solo miembros, grupos/usuarios, oculto o público).",
     "Confirmed" : "Confirmado",

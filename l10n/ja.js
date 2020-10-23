@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "投票",
     "Contact" : "連絡先",
     "Public link" : "公開リンク",
     "Group" : "グループ",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- 投票選択肢に%sを追加しました",
     "- %s removed a vote option." : "- 投票選択肢から%s を削除しました",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "このメールは、この投票の通知を購読しているため送信されました。 送信しないようにするには、投票にアクセスしてサブスクリプションを解除してください。",
+    "Polls" : "投票",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "アクセス制限の可能なdoodle/dudleに似た投票アプリ。",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "アクセス制限の可能なdoodle/dudleに似た投票アプリ（メンバー、特定のグループ/ユーザー、および一般）。",
     "Error loading poll list" : "投票リストの読み込み中にエラーが発生しました",

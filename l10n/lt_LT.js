@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Apklausos",
     "Contact" : "Adresatas",
     "Public link" : "Viešoji nuoroda",
     "Group" : "Grupė",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s pridėjo balsavimo variantą.",
     "- %s removed a vote option." : "- %s pašalino balsavimo variantą.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Šis el. laiškas yra išsiųstas jums, nes esate užsiprenumeravę šios apklausos pranešimus. Norėdami atsisakyti prenumeratos, apsilankykite apklausoje ir pašalinkite prenumeratą.",
+    "Polls" : "Apklausos",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Apklausų programėlė, panaši į doodle/dudle, su galimybe apriboti prieigą.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Apklausų programėlė, panaši į doodle/dudle, su galimybe apriboti prieigą (nariams, tam tikroms grupėms/naudotojams, paslėptos ir viešos apklausos).",
     "Confirmed" : "Patvirtintas",

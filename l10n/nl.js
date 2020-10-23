@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Peilingen",
     "Contact" : "Contactpersonen",
     "Public link" : "Openbare Link",
     "Group" : "Groep",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "- %s added a vote option." : "%sheeft een optie in de peiling toegevoegd.",
     "- %s removed a vote option." : "%sheeft een optie in de peiling verwijderd.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Deze e-mail wordt naar jou verzonden omdat je je hebt aangemeld voor meldingen van deze enquête. Als je je wilt afmelden, ga je naar de peiling en verwijder je je abonnement.",
+    "Polls" : "Peilingen",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Een peilingenapp, net als doodle/dudle met de mogelijkheid om toegang te beperken.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Een peilingenapp, zoals doodle/dudle met de mogelijkheid om toegang te beperken (leden, bepaalde groepen/gebruikers, verborgen en openbaar).",
     "Error loading poll list" : "Fout bij laden peilingenoverzicht",

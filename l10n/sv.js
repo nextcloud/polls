@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Omröstningar",
     "Contact" : "Kontakt",
     "Public link" : "Publik länk",
     "Group" : "Grupp",
@@ -11,6 +10,7 @@ OC.L10N.register(
     "Go to poll" : "Gå till omröstningen",
     "Polls App - New Activity" : "Omröstningsapp - Ny aktivitet",
     "- %s voted." : "- %s har röstat.",
+    "Polls" : "Omröstningar",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "En omröstningsapp, liknande doodle/dudle, med möjighet att begränsa deltagande.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "En omröstningsapp, liknande doodle/dudle, med möjighet att begränsa deltagande (medlemmar, vissa grupper/användare, dold eller publik).",
     "Confirmed" : "Bekräftad",

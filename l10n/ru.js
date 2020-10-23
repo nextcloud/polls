@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Опросы",
     "Contact" : "Контакт",
     "Public link" : "Общедоступная ссылка",
     "Group" : "Группа",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s добавил вариант ответа.",
     "- %s removed a vote option." : "- %s удалил вариант опроса.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Это письмо было отправлено потому что вы подписались на получение информации о произошедших в опросе событиях. Чтобы отписаться перейдите на страницу опроса и удалите  подписку.",
+    "Polls" : "Опросы",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Приложение опросов, похожее на doodle / dudle с возможностью настройки прав доступа.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Приложение опросов, похожее на doodle / dudle с возможностью настройки определить права доступа:участники, определённые группы и/или пользователи, а также с возможностью проводить скрытые и публичные опросы.",
     "Error loading poll list" : "Не удалось загрузить опросы",

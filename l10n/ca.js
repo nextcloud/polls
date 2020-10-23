@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Enquestes",
     "Contact" : "Contacte",
     "Public link" : "Enllaç públic",
     "Group" : "Grup",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s ha afegit una opció de vot.",
     "- %s removed a vote option." : "- %s ha eliminat una opció de vot.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Aquest correu electrònic s'envia a vostè, perquè es va subscriure a les notificacions d'aquesta enquesta. Per donar-se de baixa, visita l'enquesta i suprimeix la subscripció.",
+    "Polls" : "Enquestes",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés (membres, certs grups/usuaris, ocults i públics).",
     "Error loading poll list" : "S'ha produït un error en carregar la llista de enquestes",

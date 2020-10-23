@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Δημοσκοπήσεις",
     "Contact" : "Επαφή",
     "Public link" : "Δημόσιος σύνδεσμος",
     "Group" : "Ομάδα",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "- %s added a vote option." : "-Ο %s πρόσθεσε επιλογή ψηφοφορίας.",
     "- %s removed a vote option." : "-Ο %s αφαίρεσε επιλογή ψηφοφορίας.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Αυτό το e-mail σας αποστέλλεται, επειδή έχετε εγγραφεί στις ειδοποιήσεις της δημοσκόπησης. Για να εξαιρεθείτε, επισκεφθείτε τη δημοσκόπηση και καταργήστε τη συνδρομή σας.",
+    "Polls" : "Δημοσκοπήσεις",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Εφαρμογή δημοσκόπησης, όπως τα doodle/dudle με δυνατότητα ελέγχου πρόσβασης.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Εφαρμογή δημοσκόπησης, όπως τα doodle/dudle με δυνατότητα ελέγχου πρόσβασης (μέλη, ομάδες/χρήστες, κρυφά και δημόσια).",
     "Error loading poll list" : "Σφάλμα φόρτωσης λίστας δημοσκοπήσεων",

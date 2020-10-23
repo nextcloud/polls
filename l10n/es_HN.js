@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Encuestas",
     "Contact" : "Contacto",
     "Public link" : "Liga pública",
     "Group" : "Grupo",
     "User" : "Usuario",
+    "Polls" : "Encuestas",
     "Confirmed" : "Confirmado",
     "Cancel" : "Cancelar",
     "OK" : "OK",

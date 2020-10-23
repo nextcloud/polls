@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Kannanir",
     "Contact" : "Tengiliður",
     "Public link" : "Opinber tengill",
     "Group" : "Hópur",
@@ -15,6 +14,7 @@ OC.L10N.register(
     "- %s deleted the poll." : "- %s eyddi könnuninni.",
     "- %s restored the poll." : "- %s endurheimti könnunina.",
     "- The poll expired." : "- Könnunin er útrunnin.",
+    "Polls" : "Kannanir",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Skoðanakannanaforrit sem svipar til doodle/dudle, með möguleika á aðgangstakmörkunum.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Skoðanakannanaforrit sem svipar til doodle/dudle, með möguleika á aðgangstakmörkunum (einungis meðlimir, ákveðnir hópar/notendur, falið eða opinbert).",
     "Confirmed" : "Staðfest",

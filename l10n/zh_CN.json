@@ -1,5 +1,4 @@
 { "translations": {
-    "Polls" : "投票",
     "Contact" : "联系",
     "Public link" : "公开链接",
     "Group" : "群组",
@@ -18,6 +17,7 @@
     "- %s added a vote option." : "- %s 添加一条投票选项。",
     "- %s removed a vote option." : "- %s 移除一条投票选项。",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "该电子邮件已发送给您，因为您已订阅此投票的通知。 要选择退出，请访问投票并移除您的订阅。",
+    "Polls" : "投票",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "一个投票应用，与doodle/dudle类似，可以限制访问。",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "一个投票应用，与doodle/dudle类似，可以限制访问（成员，特定的分组/用户，隐藏和公开）。",
     "Confirmed" : "已确认",

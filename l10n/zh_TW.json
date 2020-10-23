@@ -1,5 +1,4 @@
 { "translations": {
-    "Polls" : "調查",
     "Contact" : "聯絡人",
     "Public link" : "公共連結",
     "Group" : "群組",
@@ -16,6 +15,7 @@
     "- %s added a vote option." : "- %s 增加一個投票的選項。",
     "- %s removed a vote option." : "- %s 移除一個投票的選項。",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "該電子郵件已發送給您，因為您已訂閱此投票的通知。 要選擇退出，請訪問投票並刪除您的訂閱。",
+    "Polls" : "調查",
     "Confirmed" : "已確認",
     "Add a date option" : "增加一個日期選項",
     "Click to add a date" : "按一下新增日期",

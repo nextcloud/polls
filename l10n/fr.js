@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Sondages",
     "Contact" : "Contact",
     "External Email" : "Email externe",
     "Public link" : "Lien public",
@@ -24,6 +23,7 @@ OC.L10N.register(
     "- %s added a vote option." : "- %s a ajouté une option de vote.",
     "- %s removed a vote option." : "- %s a supprimé une option de vote.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Vous recevez ce courriel car vous vous êtes abonnés aux notifications de ce sondage. Pour vous désabonner, accédez au sondage et retirez l'abonnement.",
+    "Polls" : "Sondages",
     "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Une application de sondages, similaire à Doodle, avec la possibilité d'en restreindre l'accès.",
     "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Une application de sondages, similaire à Doodle, avec la possibilité d'en restreindre l'accès (membres, certains groupes/utilisateurs, caché et public).",
     "Error loading poll list" : "Erreur lors du chargement de la liste des sondages",

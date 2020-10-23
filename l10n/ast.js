@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
-    "Polls" : "Enquestes",
     "Contact" : "Contautu",
     "Group" : "Group",
     "User" : "Usuariu",
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
+    "Polls" : "Enquestes",
     "Confirmed" : "Confirmáu",
     "Cancel" : "Encaboxar",
     "OK" : "Aceutar",
