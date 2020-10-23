@@ -98,10 +98,9 @@ class ShareService {
 	 */
 	public function get($token) {
 		$this->share = $this->shareMapper->findByToken($token);
-
 		// Allow users entering the poll with a public share access
-		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->getUser()->getUID()) {
 
+		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
 			// Check if the user has already access
 			if (!$this->acl->set($this->share->getPollId())->getAllowView()) {
 
@@ -213,22 +212,9 @@ class ShareService {
 		}
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$pollId = $this->share->getPollId();
-			$this->share = new Share();
-			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
-				16,
-				ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
-			));
-			$this->share->setType(Share::TYPE_EXTERNAL);
-			$this->share->setPollId($pollId);
-			$this->share->setUserId($userName);
-			$this->share->setDisplayName($userName);
-			$this->share->setUserEmail($emailAddress);
-			$this->share->setInvitationSent(time());
-			$this->shareMapper->insert($this->share);
-
+			$this->create(
+				$this->share->getPollId(),
+				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress));
 			if ($emailAddress) {
 				$this->mailService->sendInvitationMail($this->share->getToken());
 			}
