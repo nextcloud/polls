@@ -8,7 +8,7 @@ module.exports = {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
 		filename: 'polls.js',
-		chunkFilename: 'chunks/polls.[name].[contenthash].js',
+		chunkFilename: 'polls.[name].[contenthash].js',
 		chunkLoadingGlobal: 'webpackJsonpOCAPolls',
 	},
 	module: {
