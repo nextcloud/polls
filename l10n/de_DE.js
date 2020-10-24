@@ -133,7 +133,7 @@ OC.L10N.register(
     "Glassy sidebar" : "Seitenleiste mit Glaseffekt",
     "Blurs the background of the sidebar (Does not work with all browsers)." : "Verwischt den Hintergrund der Seitenleiste (funktioniert nicht mit allen Browsern).",
     "Use calendar lookup" : "Kalendersuche verwenden",
-    "Check, if an option in a date poll is conflicting with or near an entry in your calendar." : "Überprüfen, ob eine Option in einer Datumsumfrage mit einem Eintrag in Ihrem Kalender oder in dessen Nähe in Konflikt steht.",
+    "Check, if an option in a date poll is conflicting with or near an entry in your calendar." : "Überprüfen Sie, ob eine Option in einer Datumsumfrage mit einem Eintrag in Ihrem Kalender in Konflikt steht.",
     "Text polls default to list view" : "Standardmäßig Textumfragen als Listenansicht",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Aktivieren Sie diese Option, wenn Sie Textabfragen lieber in einer vertikal ausgerichteten Liste als in der Rasteransicht anzeigen möchten. Die anfängliche Standardeinstellung ist die Listenansicht.",
     "Date polls default to list view" : "Standardmäßig Datumsumfragen als Listenansicht",
