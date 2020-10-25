@@ -223,7 +223,7 @@ export default {
 				return (this.poll.anonymous > 0)
 			},
 			set(value) {
-				this.writeValue({ anonymous: value })
+				this.writeValue({ anonymous: +value })
 			},
 		},
 
@@ -232,7 +232,7 @@ export default {
 				return (this.poll.important > 0)
 			},
 			set(value) {
-				this.writeValue({ important: value })
+				this.writeValue({ important: +value })
 			},
 		},
 
@@ -241,7 +241,7 @@ export default {
 				return (this.poll.adminAccess > 0)
 			},
 			set(value) {
-				this.writeValue({ adminAccess: value })
+				this.writeValue({ adminAccess: +value })
 			},
 		},
 
@@ -250,7 +250,7 @@ export default {
 				return this.poll.allowMaybe
 			},
 			set(value) {
-				this.writeValue({ allowMaybe: value })
+				this.writeValue({ allowMaybe: +value })
 			},
 		},
 
