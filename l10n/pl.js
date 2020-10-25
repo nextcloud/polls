@@ -134,6 +134,7 @@ OC.L10N.register(
     "Blurs the background of the sidebar (Does not work with all browsers)." : "Rozmywa tło paska bocznego (nie działa we wszystkich przeglądarkach).",
     "Use calendar lookup" : "Użyj wyszukiwania kalendarza",
     "Check, if an option in a date poll is conflicting with or near an entry in your calendar." : "Sprawdź, czy opcja w sondzie dat nie koliduje z terminami lub w ich pobliżu w Twoim kalendarzu.",
+    "Opt in to the calendars, which should be checked." : "Wybierz kalendarze, które należy sprawdzić.",
     "Text polls default to list view" : "Sondy tekstowe są domyślnie wyświetlane w widoku listy",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Zaznacz tę opcję, jeśli wolisz wyświetlać sondę tekstową na liście wyrównanej pionowo, a nie w widoku siatki. Początkowym domyślnym widokiem jest lista.",
     "Date polls default to list view" : "Sondy dat są domyślnie wyświetlane w widoku listy",

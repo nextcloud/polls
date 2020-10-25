@@ -134,6 +134,7 @@ OC.L10N.register(
     "Blurs the background of the sidebar (Does not work with all browsers)." : "Sfoca lo sfondo della barra laterale (non funziona con tutti i browser).",
     "Use calendar lookup" : "Usa la ricerca del calendario",
     "Check, if an option in a date poll is conflicting with or near an entry in your calendar." : "Marca questa, se un'opzione in un sondaggio di date è in conflitto con o vicino a una voce nel tuo calendario.",
+    "Opt in to the calendars, which should be checked." : "Attiva i calendari, che dovrebbero essere controllati.",
     "Text polls default to list view" : "In modo predefinito, i sondaggi di testo sono visualizzati come elenco",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Marca questa opzione, se preferisci visualizzare il sondaggio di testo in una vista verticale piuttosto che nella vista a griglia. L'impostazione predefinita iniziale è la vista a elenco.",
     "Date polls default to list view" : "In modo predefinito, i sondaggi di date sono visualizzati come elenco",

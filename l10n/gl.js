@@ -134,6 +134,7 @@ OC.L10N.register(
     "Blurs the background of the sidebar (Does not work with all browsers)." : "Difumina o fondo da barra lateral (non funciona con todos os navegadores).",
     "Use calendar lookup" : "Usar a busca no calendario",
     "Check, if an option in a date poll is conflicting with or near an entry in your calendar." : "Comprobar se unha opción nunha data de enquisa está en conflito ou preto dunha entrada no seu calendario.",
+    "Opt in to the calendars, which should be checked." : "Optar polos calendarios, que deben ser revisados.",
     "Text polls default to list view" : "As enquisas de texto predeterminan a vista de lista",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Comprobar isto, se prefire presentar o texto da enquisa nunha lista de aliñamento vertical mellor ca en vista de grade. O predeterminado é a vista de lista.",
     "Date polls default to list view" : "A data das enquisas de texto predeterminan a vista de lista",
