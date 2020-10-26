@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.7 - release] - 2020-10-25
+ - [fix] #1190 #1191 - explicit convert boolean values to intger to avoid db conflicts
+
 ## [1.5.6 - release] - 2020-10-23
  - [fix] #1190 #1191 - explicit convert boolean values to intger to avoid db conflicts
 
