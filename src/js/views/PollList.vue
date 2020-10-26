@@ -189,7 +189,7 @@ export default {
 
 <style lang="scss" scoped>
 	.area__header {
-		margin-top: 52px;
+		margin-left: 33px !important;
 	}
 
 	.poll-list__list {

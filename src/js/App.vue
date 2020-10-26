@@ -142,12 +142,9 @@ export default {
 </script>
 
 <style  lang="scss">
-.title {
-	margin: 8px 0;
-}
 
 .description {
-	white-space: pre-wrap;
+	// white-space: pre-wrap;
 	margin: 8px 0;
 }
 
