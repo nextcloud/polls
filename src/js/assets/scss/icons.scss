@@ -1,0 +1,118 @@
+:root {
+	--polls-vote-rows: 1;
+	--polls-vote-columns: 1;
+	--color-background-error: #f9c5c5;
+	--color-background-success: #d6fdda;
+	--color-polls-foreground-yes: #49bc49;
+	--color-polls-foreground-no: #f45573;
+	--color-polls-foreground-maybe: #ffc107;
+	--color-polls-background-yes: #ebf5d6;
+	--color-polls-background-no: #ffede9;
+	--color-polls-background-maybe: #fcf7e1;
+	--icon-polls: url('../icons/polls.svg');
+	--icon-circles: url('../icons/circles.svg');
+	--icon-polls-back: url('../icons/back.svg');
+	--icon-polls-confirmed: url('../icons/confirmed.svg');
+	--icon-polls-unconfirmed: url('../icons/unconfirmed.svg');
+	--icon-polls-clone: url('../icons/clone.svg');
+	--icon-polls-move: url('../icons/move.svg');
+	--icon-polls-yes: url('../icons/yes-vote.svg');
+	--icon-polls-no: url('../icons/no-vote.svg');
+	--icon-polls-maybe: url('../icons/maybe-vote.svg');
+	--icon-polls-handle: url('../icons/handle.svg');
+	--icon-polls-mail: url('../icons/mail.svg');
+	--icon-polls-sidebar-toggle: url('../icons/sidebar-toggle.svg');
+	--icon-polls-loading: url('../icons/loading-small.gif');
+	--icon-polls-open: url('../icons/open.svg');
+	--icon-polls-closed: url('../icons/closed.svg');
+	--icon-polls-public-poll: url('../icons/visible.svg');
+	--icon-polls-hidden-poll: url('../icons/invisible.svg');
+
+	// filters to colorize background svg from black
+	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
+	--color-polls-foreground-filter-yes: invert(74%) sepia(7%) saturate(3830%) hue-rotate(68deg) brightness(85%) contrast(85%);
+	--color-polls-foreground-filter-no: invert(43%) sepia(100%) saturate(1579%) hue-rotate(318deg) brightness(99%) contrast(94%);
+	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
+}
+
+.icon-polls {
+	background-image: var(--icon-polls);
+}
+
+.icon-circles {
+	background-image: var(--icon-circles);
+}
+
+.icon-polls-back {
+	background-image: var(--icon-polls-back);
+}
+
+.icon-polls-confirmed {
+	background-image: var(--icon-polls-confirmed);
+}
+
+.icon-polls-unconfirmed {
+	background-image: var(--icon-polls-unconfirmed);
+}
+
+.icon-polls-move {
+	background-image: var(--icon-polls-move);
+}
+
+.icon-polls-clone {
+	background-image: var(--icon-polls-clone);
+}
+
+.icon-polls-yes {
+	background-image: var(--icon-polls-yes);
+}
+
+.icon-polls-no {
+	background-image: var(--icon-polls-no);
+}
+
+.icon-polls-maybe {
+	background-image: var(--icon-polls-maybe);
+}
+
+.icon-polls-mail {
+	background-image: var(--icon-polls-mail);
+}
+
+.icon-polls-open {
+	background-image: var(--icon-polls-open);
+}
+
+.icon-polls-closed {
+	background-image: var(--icon-polls-closed);
+}
+
+.icon-polls-public-poll {
+	background-image: var(--icon-polls-public-poll);
+}
+
+.icon-polls-hidden-poll {
+	background-image: var(--icon-polls-hidden-poll);
+}
+
+.icon-polls-sidebar-toggle {
+	background-image: var(--icon-polls-sidebar-toggle);
+}
+
+.title {
+	margin: 8px 0;
+}
+
+.description {
+	white-space: pre-wrap;
+	margin: 8px 0;
+}
+
+.linkified {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.icon-handle {
+	background-image: var(--icon-polls-handle);
+}
