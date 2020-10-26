@@ -227,7 +227,7 @@ class ShareController extends Controller {
 			} elseif ($share->getType() === Share::TYPE_CONTACTGROUP) {
 				foreach ((new ContactGroup($share->getUserId()))->getMembers() as $contact) {
 					try {
-						$newShare = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $contact->getId(), $contact->getEmailAddress());
+						$newShare = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $contact->getId());
 						$shares[] = $newShare;
 					} catch (ShareAlreadyExists $e) {
 						continue;
