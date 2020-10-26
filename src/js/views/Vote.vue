@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import linkifyStr from 'linkifyjs/string'
+import linkifyUrls from 'linkify-urls'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -185,7 +185,9 @@ export default {
 		},
 
 		linkifyDescription() {
-			return linkifyStr(this.poll.description)
+			return linkifyUrls(this.poll.description, {
+				attributes: { class: 'linkified' },
+			})
 		},
 
 		windowTitle() {
