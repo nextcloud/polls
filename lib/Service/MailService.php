@@ -338,22 +338,26 @@ class MailService {
 
 			if ($this->userManager->get($subscription->getUserId()) instanceof IUser) {
 				$lang = $this->config->getUserValue($subscription->getUserId(), 'core', 'lang');
+				$url = $this->urlGenerator->linkToRouteAbsolute(
+					'polls.page.indexvote',
+					['id' => $subscription->getPollId()]
+				);
 			} else {
 				try {
-					$emailAddress = $this->shareMapper->findByPollAndUser($subscription->getPollId(), $subscription->getUserId())->getUserEmail();
+					$share = $this->shareMapper->findByPollAndUser($subscription->getPollId(), $subscription->getUserId());
+					$emailAddress = $share->getUserEmail();
 					$displayName = $subscription->getUserId();
 					$lang = $this->config->getUserValue($poll->getOwner(), 'core', 'lang');
+					$url = $this->urlGenerator->linkToRouteAbsolute(
+						'polls.page.vote_publicpublic',
+						['token' => $share->getToken()]
+					);
 				} catch (\Exception $e) {
 					continue;
 				}
 			}
 
 			$trans = $this->transFactory->get('polls', $lang);
-
-			$url = $this->urlGenerator->linkToRouteAbsolute(
-				'polls.page.indexvote',
-				['id' => $subscription->getPollId()]
-			);
 
 			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
 				'title' => $poll->getTitle(),
