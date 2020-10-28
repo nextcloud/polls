@@ -75,7 +75,7 @@ class ShareApiController extends ApiController {
 	 */
 	public function list($pollId) {
 		try {
-			return new DataResponse(['shares' => $this->shareService->list($pollId, '')], Http::STATUS_OK);
+			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No shares for poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
@@ -112,9 +112,9 @@ class ShareApiController extends ApiController {
 	 * @param string $userEmail
 	 * @return DataResponse
 	 */
-	public function add($pollId, $type, $userId = '', $userEmail = '') {
+	public function add($pollId, $type, $userId = '') {
 		try {
-			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId, $userEmail)], Http::STATUS_CREATED);
+			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (Exception $e) {

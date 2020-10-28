@@ -98,10 +98,9 @@ class ShareService {
 	 */
 	public function get($token) {
 		$this->share = $this->shareMapper->findByToken($token);
-
 		// Allow users entering the poll with a public share access
-		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->getUser()->getUID()) {
 
+		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
 			// Check if the user has already access
 			if (!$this->acl->set($this->share->getPollId())->getAllowView()) {
 
@@ -153,7 +152,7 @@ class ShareService {
 	 * @throws NotAuthorizedException
 	 * @throws InvalidShareType
 	 */
-	public function add($pollId, $type, $userId = '', $emailAddress = '') {
+	public function add($pollId, $type, $userId = '') {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
@@ -213,22 +212,9 @@ class ShareService {
 		}
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$pollId = $this->share->getPollId();
-			$this->share = new Share();
-			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
-				16,
-				ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
-			));
-			$this->share->setType(Share::TYPE_EXTERNAL);
-			$this->share->setPollId($pollId);
-			$this->share->setUserId($userName);
-			$this->share->setDisplayName($userName);
-			$this->share->setUserEmail($emailAddress);
-			$this->share->setInvitationSent(time());
-			$this->shareMapper->insert($this->share);
-
+			$this->create(
+				$this->share->getPollId(),
+				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress));
 			if ($emailAddress) {
 				$this->mailService->sendInvitationMail($this->share->getToken());
 			}
@@ -254,13 +240,15 @@ class ShareService {
 	 */
 
 	public function delete($token) {
-		$this->share = $this->shareMapper->findByToken($token);
-		if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+			if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
+				throw new NotAuthorizedException;
+			}
+			$this->shareMapper->delete($this->share);
+		} catch (DoesNotExistException $e) {
+			// silently catch
 		}
-
-		$this->shareMapper->delete($this->share);
-
-		return $this->share;
+		return $token;
 	}
 }

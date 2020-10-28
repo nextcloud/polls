@@ -25,7 +25,6 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
-use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 use OCA\Polls\Model\UserGroupClass;
 
@@ -88,7 +87,7 @@ class Share extends Entity implements JsonSerializable {
 			'userEmail' => $this->userEmail,
 			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->displayName,
-			'externalUser' => $this->externalUser(),
+			'isNoUser' => !($this->type === self::TYPE_USER),
 			'shareeDetail' => UserGroupClass::getUserGroupChild($this->type, $this->getUserId())
 		];
 	}
@@ -102,9 +101,5 @@ class Share extends Entity implements JsonSerializable {
 			return $userId;
 		}
 		return $this->userId;
-	}
-
-	private function externalUser() {
-		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
 }

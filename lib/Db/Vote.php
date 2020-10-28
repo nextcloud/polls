@@ -66,8 +66,8 @@ class Vote extends Entity implements JsonSerializable {
 			'voteOptionId' => intval($this->voteOptionId),
 			'voteOptionText' => $this->voteOptionText,
 			'voteAnswer' => $this->voteAnswer,
-			'displayName' => $this->getDisplayName(),
-			'externalUser' => $this->externalUser()
+			'isNoUser' => $this->getIsNoUser(),
+			'displayName' => $this->getDisplayName()
 		];
 	}
 
@@ -79,7 +79,7 @@ class Vote extends Entity implements JsonSerializable {
 		}
 	}
 
-	private function externalUser() {
-		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+	public function getIsNoUser() {
+		return !(\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
 }

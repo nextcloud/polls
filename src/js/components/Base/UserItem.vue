@@ -81,11 +81,11 @@ export default {
 			type: String,
 			default: 'user',
 		},
-		icon: {
+		isNoUser: {
 			type: Boolean,
 			default: false,
 		},
-		externalUser: {
+		icon: {
 			type: Boolean,
 			default: false,
 		},
@@ -99,10 +99,10 @@ export default {
 	},
 
 	computed: {
-		isNoUser() {
-			return this.type !== 'user' || this.externalUser
-		},
-
+		// isNoUser() {
+		// 	return this.type !== 'user'
+		// },
+		//
 		name() {
 			if (this.displayName) {
 				return this.displayName

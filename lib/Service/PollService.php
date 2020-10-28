@@ -364,6 +364,6 @@ class PollService {
 	 * @return array
 	 */
 	private function getValidShowResults() {
-		return ['always', 'expired', 'never'];
+		return ['always', 'closed', 'never'];
 	}
 }

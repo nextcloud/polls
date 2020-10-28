@@ -170,14 +170,6 @@ class Acl implements JsonSerializable {
 	 * @NoAdminRequired
 	 * @return string
 	 */
-	public function getIsExternalUser() {
-		return !($this->userManager->get($this->userId) instanceof IUser);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @return string
-	 */
 	public function getLoggedIn() {
 		return \OC::$server->getUserSession()->isLoggedIn();
 	}
@@ -381,7 +373,6 @@ class Acl implements JsonSerializable {
 			'userId'            => $this->getUserId(),
 			'displayName'       => $this->getDisplayName(),
 			'loggedIn'			=> $this->getLoggedIn(),
-			'externalUser'		=> $this->getIsExternalUser(),
 			'pollId'            => $this->getPollId(),
 			'token'             => $this->getToken(),
 			'isOwner'           => $this->getIsOwner(),

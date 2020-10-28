@@ -9,8 +9,15 @@ All notable changes to this project will be documented in this file.
  - [enhancement] #1153 - Add share, if logged in user enters hidden poll via public link (#1169)
  - [enhancement] #204 - Circles integration (#1128)
  - [refactor] Remove deprecated app.php (#1162)
+ - [refactor] Separate assets
 
  See also: https://github.com/nextcloud/polls/milestone/28?closed=1
+
+## [1.5.7 - release] - 2020-10-25
+  - [fix] #1190 #1191 - explicit convert boolean values to intger to avoid db conflicts
+
+## [1.5.6 - release] - 2020-10-23
+  - [fix] #1190 #1191 - explicit convert boolean values to intger to avoid db conflicts
 
 ## [1.5.5 - release] - 2020-10-20
  - [fix] #1137 - delete comments in public polls
