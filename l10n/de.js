@@ -84,7 +84,7 @@ OC.L10N.register(
     "With your email address you can subscribe to notifications and you will receive your personal link to this poll." : "Mit Deiner E-Mail-Adresse kannst Du Updates abonnieren und einen persönlichen Link zu dieser Umfrage erhalten.",
     "Public link ({token})" : "Öffentlicher Link ({token})",
     "Conflict" : "Konflikt",
-    "New comment …" : "Neuer Kommentar ...",
+    "New comment …" : "Neuer Kommentar …",
     "Your comment was added" : "Dein Kommentar wurde hinzugefügt",
     "Error while saving comment" : "Fehler beim Speichern des Kommentars",
     "Delete comment" : "Kommentar löschen",
