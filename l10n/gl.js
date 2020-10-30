@@ -12,6 +12,7 @@ OC.L10N.register(
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} convidouno a participar na enquisa «{title}»",
     "Go to poll" : "Ir á enquisa",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar: " : "Esta ligazón ofrécelle acceso persoal á enquisa antes mencionada. Prema o botón superior ou copie a seguinte ligazón e engádaa na barra de localización do navegador:",
+    "Do not share this link with other people, because it is connected to your votes." : "Non comparta esta ligazón con outras persoas porque está conectada aos seus votos.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Envíaselle este correo porque está a ser convidado polo propietario da enquisa a votar nela. Polo menos o seu nome ou o seu enderezo de correo electrónico están rexistrados nesta enquisa. Se quere retirarse esta enquisa, póñase en contacto co administrador do sitio ou co iniciador desta enquisa, dende onde se enviou o correo.",
     "Polls App - New Activity" : "Aplicación de enquisas – Actividade nova",
     "\"{title}\" had recent activity: " : "«{title}» tivo actividade recentemente:",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} ti ha invitato a partecipare al sondaggio \"{title}\"",
     "Go to poll" : "Vai al sondaggio",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar: " : "Questo collegamento ti fornisce accesso personale al suddetto sondaggio. Premi il pulsante sopra o copia il collegamento seguente e aggiungilo nella barra degli indirizzi del tuo browser:",
+    "Do not share this link with other people, because it is connected to your votes." : "Non condividere questo collegamento con altre persone, perché è connesso ai tuoi voti.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Questa email ti è stata inviata poiché sei stato invitato a votare in questo sondaggio dal suo proprietario. Almeno il tuo nome o il tuo indirizzo di posta è registrato in questo sondaggio. Se vuoi essere rimosso dal sondaggio, contatta l'amministratore del sito o l'iniziatore del sondaggio, dal quale arriva il messaggio.",
     "Polls App - New Activity" : "Applicazione Sondaggi - Nuova attività",
     "\"{title}\" had recent activity: " : "\"{title}\" ha attività recenti: ",
