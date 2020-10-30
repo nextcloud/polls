@@ -20,6 +20,7 @@ OC.L10N.register(
     "Apply" : "Примени",
     "Settings" : "Параметри",
     "Owner" : "Сопственик",
+    "All users" : "Сите корисници",
     "never" : "никогаш",
     "Details" : "Детали",
     "Configuration" : "Конфигурација",
