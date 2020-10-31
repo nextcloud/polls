@@ -12,6 +12,7 @@ OC.L10N.register(
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} zaprosił Cię do wzięcia udziału w sondzie \"{title}\"",
     "Go to poll" : "Idź do sondy",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar: " : "Ten link daje Ci osobisty dostęp do wyżej wymienionej sondy. Naciśnij przycisk powyżej lub skopiuj poniższy link do przeglądarki internetowej: ",
+    "Do not share this link with other people, because it is connected to your votes." : "Nie udostępniaj tego linku innym osobom, ponieważ jest on powiązany z Twoimi głosami.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Ten e-mail został wysyłany do Ciebie, ponieważ zostałeś zaproszony przez właściciela sondy do zagłosowania w niej. Najwidoczniej Twoja nazwa lub adres e-mail został zarejestrowany w tej sondzie. Jeśli chcesz być usunięty z tej sondy, skontaktuj się z administratorem strony internetowej lub założycielem sondy poprzez e-mail, z którego została wysyłana poczta.",
     "Polls App - New Activity" : "Aplikacja Sondy - Nowa aktywność",
     "\"{title}\" had recent activity: " : "Ostatnia aktywność w \"{title}\":",
