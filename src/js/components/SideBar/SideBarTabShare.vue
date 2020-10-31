@@ -31,7 +31,7 @@
 					:icon="true">
 					<Actions>
 						<ActionButton
-							v-if="share.userEmail || share.type === 'group'"
+							v-if="share.emailAddress || share.type === 'group'"
 							icon="icon-confirm"
 							@click="sendInvitation(share)">
 							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
@@ -102,7 +102,7 @@
 					:icon="true">
 					<Actions>
 						<ActionButton
-							v-if="share.userEmail || share.type === 'group'"
+							v-if="share.emailAddress || share.type === 'group'"
 							icon="icon-confirm"
 							@click="sendInvitation(share)">
 							{{ t('polls', 'Send invitation mail') }}
@@ -230,7 +230,7 @@ export default {
 					share: payload,
 					type: payload.type,
 					id: payload.id,
-					userEmail: payload.emailAddress,
+					emailAddress: payload.emailAddress,
 				})
 				.catch(error => {
 					console.error('Error while adding share - Error: ', error)

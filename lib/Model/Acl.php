@@ -52,6 +52,9 @@ class Acl implements JsonSerializable {
 	/** @var string */
 	private $userId;
 
+	/** @var string */
+	private $displayName;
+
 	/** @var IUserManager */
 	private $userManager;
 
@@ -125,6 +128,8 @@ class Acl implements JsonSerializable {
 				}
 
 				$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
+				$this->displayName = $this->userManager->get($this->userId)->getDisplayName();
+
 			} else {
 				if ($this->share->getType() === Share::TYPE_GROUP
 					|| $this->share->getType() === Share::TYPE_USER) {
@@ -132,11 +137,13 @@ class Acl implements JsonSerializable {
 				}
 
 				$this->userId = $this->share->getUserId();
+				$this->displayName = $this->share->getDisplayName();
 			}
 
 			$this->pollId = $this->share->getPollId();
 		} elseif ($pollId) {
 			$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
+			$this->displayName = $this->userManager->get($this->userId)->getDisplayName();
 			$this->pollId = $pollId;
 			$this->share = null;
 		}
@@ -159,11 +166,7 @@ class Acl implements JsonSerializable {
 	 * @return string
 	 */
 	public function getDisplayName() {
-		if ($this->userManager->get($this->userId) instanceof IUser) {
-			return $this->userManager->get($this->userId)->getDisplayName();
-		} else {
-			return $this->userId;
-		}
+		return $this->displayName;
 	}
 
 	/**
@@ -359,7 +362,7 @@ class Acl implements JsonSerializable {
 
 	private function hasEmail():bool {
 		if ($this->share) {
-			return strlen($this->share->getUserEmail()) > 0;
+			return strlen($this->share->getEmailAddress()) > 0;
 		} else {
 			return \OC::$server->getUserSession()->isLoggedIn();
 		}

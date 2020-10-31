@@ -32,7 +32,7 @@ const defaultShares = () => {
 		pollId: null,
 		token: '',
 		type: '',
-		userEmail: '',
+		emailAddress: '',
 		userId: '',
 	}
 }

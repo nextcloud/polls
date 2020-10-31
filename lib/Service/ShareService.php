@@ -138,7 +138,7 @@ class ShareService {
 		$this->share->setType($userGroup->getType());
 		$this->share->setUserId($userGroup->getId());
 		$this->share->setDisplayName($userGroup->getDisplayName());
-		$this->share->setUserEmail($userGroup->getEmailAddress());
+		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
 		return $this->shareMapper->insert($this->share);
 	}
@@ -185,7 +185,7 @@ class ShareService {
 		$this->share = $this->shareMapper->findByToken($token);
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validateEmailAddress($emailAddress);
-			$this->share->setUserEmail($emailAddress);
+			$this->share->setEmailAddress($emailAddress);
 			// TODO: Send confirmation
 			return $this->shareMapper->update($this->share);
 		} else {
@@ -223,7 +223,7 @@ class ShareService {
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL) {
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userName);
-			$this->share->setUserEmail($emailAddress);
+			$this->share->setEmailAddress($emailAddress);
 			return $this->shareMapper->update($this->share);
 		} else {
 			throw new NotAuthorizedException;

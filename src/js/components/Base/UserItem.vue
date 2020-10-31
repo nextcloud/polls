@@ -73,7 +73,7 @@ export default {
 			type: String,
 			default: '',
 		},
-		userEmail: {
+		emailAddress: {
 			type: String,
 			default: '',
 		},

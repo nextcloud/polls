@@ -39,8 +39,8 @@ use OCA\Polls\Model\UserGroupClass;
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method string getUserEmail()
- * @method void setUserEmail(string $value)
+ * @method string getEmailAddress()
+ * @method void setEmailAddress(string $value)
  * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
  * @method int getDisplayName()
@@ -68,8 +68,8 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $userId */
 	protected $userId;
 
-	/** @var string $userEmail */
-	protected $userEmail;
+	/** @var string $emailAddress */
+	protected $emailAddress;
 
 	/** @var string $invitationSent */
 	protected $invitationSent;
@@ -84,7 +84,7 @@ class Share extends Entity implements JsonSerializable {
 			'type' => $this->type,
 			'pollId' => intval($this->pollId),
 			'userId' => $this->getUserId(),
-			'userEmail' => $this->userEmail,
+			'emailAddress' => $this->emailAddress,
 			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->displayName,
 			'isNoUser' => !($this->type === self::TYPE_USER),

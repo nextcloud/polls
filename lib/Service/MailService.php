@@ -170,8 +170,8 @@ class MailService {
 		// if $userId is no site user, eval via shares
 		try {
 			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
-			if ($share->getUserEmail()) {
-				return $share->getUserEmail();
+			if ($share->getEmailAddress()) {
+				return $share->getEmailAddress();
 			}
 		} catch (\Exception $e) {
 			// catch silently
@@ -234,7 +234,7 @@ class MailService {
 			case Share::TYPE_EXTERNAL:
 				$recipients[] = [
 					'userId' => $share->getUserId(),
-					'eMailAddress' => $share->getUserEmail(),
+					'eMailAddress' => $share->getEmailAddress(),
 					'displayName' => $share->getUserId(),
 					'language' => $defaultLang,
 					'link' => $tokenLink,
@@ -345,7 +345,7 @@ class MailService {
 			} else {
 				try {
 					$share = $this->shareMapper->findByPollAndUser($subscription->getPollId(), $subscription->getUserId());
-					$emailAddress = $share->getUserEmail();
+					$emailAddress = $share->getEmailAddress();
 					$displayName = $subscription->getUserId();
 					$lang = $this->config->getUserValue($poll->getOwner(), 'core', 'lang');
 					$url = $this->urlGenerator->linkToRouteAbsolute(

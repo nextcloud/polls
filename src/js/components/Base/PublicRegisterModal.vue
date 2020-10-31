@@ -201,7 +201,7 @@ export default {
 
 	mounted() {
 		this.userName = this.share.userId
-		this.emailAddress = this.share.userEmail
+		this.emailAddress = this.share.emailAddress
 		this.setFocus()
 	},
 

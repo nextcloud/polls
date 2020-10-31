@@ -24,7 +24,7 @@
 	<div class="subscription">
 		<input id="subscribe" v-model="subscribe" type="checkbox"
 			class="checkbox">
-		<label v-if="share.userEmail" for="subscribe">{{ t('polls', 'Receive notification email on activity to {emailAddress}', {emailAddress: share.userEmail}) }}</label>
+		<label v-if="share.emailAddress" for="subscribe">{{ t('polls', 'Receive notification email on activity to {emailAddress}', {emailAddress: share.emailAddress}) }}</label>
 		<label v-else for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
 	</div>
 </template>
