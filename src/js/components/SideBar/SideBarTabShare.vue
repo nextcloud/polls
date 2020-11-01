@@ -261,19 +261,6 @@ export default {
 		flex: 1;
 		align-items: center;
 		max-width: 100%;
-
-		//dirty hack: AvatarDiv does not work properly with iconClass
-		.avatardiv {
-			&.avatardiv--unknown {
-				background-color: transparent;
-			}
-
-			.avatar-class-icon {
-				// background-color: var(--color-primary-element-light);
-				min-height: 32px;
-				min-width: 32px;
-			}
-		}
 	}
 
 	.share-item__description {
