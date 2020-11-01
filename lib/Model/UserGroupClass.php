@@ -22,6 +22,7 @@
  */
 
 namespace OCA\Polls\Model;
+
 use OCA\Polls\Exceptions\InvalidShareType;
 
 class UserGroupClass implements \JsonSerializable {

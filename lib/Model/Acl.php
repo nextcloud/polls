@@ -29,7 +29,6 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IUserManager;
 use OCP\IGroupManager;
-use OCP\IUser;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\PollMapper;
@@ -129,7 +128,6 @@ class Acl implements JsonSerializable {
 
 				$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
 				$this->displayName = $this->userManager->get($this->userId)->getDisplayName();
-
 			} else {
 				if ($this->share->getType() === Share::TYPE_GROUP
 					|| $this->share->getType() === Share::TYPE_USER) {

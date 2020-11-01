@@ -88,4 +88,5 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 		$query->update('polls_share')
 			->set('email_address', 'user_email');
 		$query->execute();
-	}}
+	}
+}
