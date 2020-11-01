@@ -1,31 +1,34 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.6.0 - release] - tbd
+## [1.6.0 - RC1] - 2020-11-01
+ - [fix] some design fixes
+ - [fix] #1205 External users get internal link in notification mail
  - [enhancement] Configure calendars for calendar lookup
  - [enhancement] Change wording on hidden an public polls (#1158)
- - [enhancement] #1168 - Preferences dialog (#1120)
- - [enhancement] #1156 - Explicitly close poll (#1157)
- - [enhancement] #1153 - Add share, if logged in user enters hidden poll via public link (#1169)
- - [enhancement] #204 - Circles integration (#1128)
+ - [enhancement] #1168 Preferences dialog (#1120)
+ - [enhancement] #1156 Explicitly close poll (#1157)
+ - [enhancement] #1153 Add share, if logged in user enters hidden poll via public link (#1169)
+ - [enhancement] #204 Circles integration (#1128)
  - [refactor] Remove deprecated app.php (#1162)
  - [refactor] Separate assets
+ - [deps] updated dependencies
 
  See also: https://github.com/nextcloud/polls/milestone/28?closed=1
 
-## [1.5.7 - release] - 2020-10-25
-  - [fix] #1190 #1191 - explicit convert boolean values to intger to avoid db conflicts
+## [1.5.7 - bugfix release] - 2020-10-25
+ - [fix] #1190 #1191 explicit convert boolean values to intger to avoid db conflicts (another aproach)
 
-## [1.5.6 - release] - 2020-10-23
-  - [fix] #1190 #1191 - explicit convert boolean values to intger to avoid db conflicts
+## [1.5.6 - bugfix release] - 2020-10-23
+ - [fix] #1190 #1191 explicit convert boolean values to intger to avoid db conflicts
 
-## [1.5.5 - release] - 2020-10-20
- - [fix] #1137 - delete comments in public polls
- - [fix] #1161 - Routing after creation of poll was wrong
- - [fix] #1154 - Shifting dates went wrong
- - [fix] #1163 - Reordering text poll options did not work
- - [fix] #1170 - A non-numeric value encountered
- - [deps] - updated dependencies
+## [1.5.5 - bugfix release] - 2020-10-20
+ - [fix] #1137 delete comments in public polls
+ - [fix] #1161 Routing after creation of poll was wrong
+ - [fix] #1154 Shifting dates went wrong
+ - [fix] #1163 Reordering text poll options did not work
+ - [fix] #1170 A non-numeric value encountered
+ - [deps] updated dependencies
 
 ## [1.5.4 - release] - 2020-10-02
  - adding missing translations
