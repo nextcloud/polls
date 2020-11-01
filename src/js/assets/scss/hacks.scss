@@ -1,3 +1,10 @@
+.modal-wrapper {
+	&:not(&--large):not(&--full) .modal-container {
+		width: initial !important;
+		height: initial !important;
+	}
+}
+
 .modal-wrapper .modal-container[data-v-a2e1babe] {
 	overflow: auto !important;
 }
