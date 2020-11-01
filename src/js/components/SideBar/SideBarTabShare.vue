@@ -31,7 +31,7 @@
 					:icon="true">
 					<Actions>
 						<ActionButton
-							v-if="share.userEmail || share.type === 'group'"
+							v-if="share.emailAddress || share.type === 'group'"
 							icon="icon-confirm"
 							@click="sendInvitation(share)">
 							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
@@ -102,7 +102,7 @@
 					:icon="true">
 					<Actions>
 						<ActionButton
-							v-if="share.userEmail || share.type === 'group'"
+							v-if="share.emailAddress || share.type === 'group'"
 							icon="icon-confirm"
 							@click="sendInvitation(share)">
 							{{ t('polls', 'Send invitation mail') }}
@@ -230,7 +230,7 @@ export default {
 					share: payload,
 					type: payload.type,
 					id: payload.id,
-					userEmail: payload.emailAddress,
+					emailAddress: payload.emailAddress,
 				})
 				.catch(error => {
 					console.error('Error while adding share - Error: ', error)
@@ -261,19 +261,6 @@ export default {
 		flex: 1;
 		align-items: center;
 		max-width: 100%;
-
-		//dirty hack: AvatarDiv does not work properly with iconClass
-		.avatardiv {
-			&.avatardiv--unknown {
-				background-color: transparent;
-			}
-
-			.avatar-class-icon {
-				// background-color: var(--color-primary-element-light);
-				min-height: 32px;
-				min-width: 32px;
-			}
-		}
 	}
 
 	.share-item__description {

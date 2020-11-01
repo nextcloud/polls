@@ -47,6 +47,17 @@ class Contact extends UserGroupClass {
 	}
 
 	/**
+	 * getPublicId
+	 * must use displayName for contact's user id, because contact id
+	 * is not accessable outside the owners's scope
+	 * @NoAdminRequired
+	 * @return String
+	 */
+	public function getPublicId() {
+		return $this->displayName;
+	}
+
+	/**
 	 * isEnabled
 	 * @NoAdminRequired
 	 * @return Boolean

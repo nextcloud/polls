@@ -109,7 +109,6 @@ class ShareApiController extends ApiController {
 	 * @param int $pollId
 	 * @param string $type
 	 * @param string $userId
-	 * @param string $userEmail
 	 * @return DataResponse
 	 */
 	public function add($pollId, $type, $userId = '') {

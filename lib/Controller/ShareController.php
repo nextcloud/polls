@@ -97,7 +97,6 @@ class ShareController extends Controller {
 	 * @param int $pollId
 	 * @param string $type
 	 * @param string $userId
-	 * @param string $userEmail
 	 * @return DataResponse
 	 */
 	public function add($pollId, $type, $userId = '') {
@@ -134,12 +133,12 @@ class ShareController extends Controller {
 	 * @param int $pollId
 	 * @param string $type
 	 * @param string $userId
-	 * @param string $userEmail
+	 * @param string $emailAddress
 	 * @return DataResponse
 	 */
-	public function setEmailAddress($token, $userEmail) {
+	public function setEmailAddress($token, $emailAddress) {
 		try {
-			return new DataResponse(['share' => $this->shareService->setEmailAddress($token, $userEmail)], Http::STATUS_OK);
+			return new DataResponse(['share' => $this->shareService->setEmailAddress($token, $emailAddress)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (InvalidShareType $e) {

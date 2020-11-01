@@ -73,7 +73,7 @@ const getters = {
 
 	unsentInvitations: state => {
 		return state.list.filter(share => {
-			return (share.userEmail || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent
+			return (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent
 		})
 	},
 
