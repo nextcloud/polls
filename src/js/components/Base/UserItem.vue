@@ -100,10 +100,6 @@ export default {
 	},
 
 	computed: {
-		// isNoUser() {
-		// 	return this.type !== 'user'
-		// },
-		//
 		name() {
 			if (this.displayName) {
 				return this.displayName
