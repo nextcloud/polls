@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppSettingsDialog :open.sync="show">
+	<AppSettingsDialog :open.sync="show" :show-navigation="true">
 		<AppSettingsSection :title="t('polls', 'User Settings')">
 			<FeatureSettings />
 		</AppSettingsSection>
