@@ -20,7 +20,7 @@ OC.L10N.register(
     "- %s updated the poll configuration. Please check your votes." : "– %s posodobi nastavitve ankete. Preverite glasovanje.",
     "- %s deleted the poll." : "– %s izbriše anketo.",
     "- %s restored the poll." : "– %s obnovi anketo.",
-    "- The poll expired." : "– Anketa je potekla.",
+    "- The poll expired." : "– Anketa je pretekla.",
     "- %s added a vote option." : "– %s doda možnost k anketi.",
     "- %s removed a vote option." : "– %s odstrani možnost ankete.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Elektronsko sporočilo ste prejeli, ker ste se naročili na obvestila te ankete. Naročila je mogoče kadarkoli odstraniti med možnostmi ankete.",
