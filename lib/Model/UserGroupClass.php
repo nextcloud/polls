@@ -22,11 +22,18 @@
  */
 
 namespace OCA\Polls\Model;
+use OCA\Polls\Exceptions\InvalidShareType;
 
 class UserGroupClass implements \JsonSerializable {
 	public const TYPE = 'generic';
 	public const TYPE_PUBLIC = 'public';
 	public const TYPE_EXTERNAL = 'external';
+	public const TYPE_CIRCLE = Circle::TYPE;
+	public const TYPE_CONTACT = Contact::TYPE;
+	public const TYPE_CONTACTGROUP = ContactGroup::TYPE;
+	public const TYPE_EMAIL = Email::TYPE;
+	public const TYPE_GROUP = Group::TYPE;
+	public const TYPE_USER = User::TYPE;
 
 	private $l10n;
 
@@ -87,6 +94,15 @@ class UserGroupClass implements \JsonSerializable {
 	 * @return String
 	 */
 	public function getId() {
+		return $this->id;
+	}
+
+	/**
+	 * getPublicId
+	 * @NoAdminRequired
+	 * @return String
+	 */
+	public function getPublicId() {
 		return $this->id;
 	}
 

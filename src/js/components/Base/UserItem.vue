@@ -24,6 +24,7 @@
 	<div class="user-item" :class="type">
 		<Avatar :disable-menu="disableMenu"
 			class="user-item__avatar"
+			:is-guest="$route.name === 'publicVote'"
 			:menu-position="menuPosition"
 			:show-user-status="showUserStatus"
 			:user="userId"

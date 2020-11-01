@@ -136,7 +136,7 @@ class ShareService {
 		$this->share->setPollId($pollId);
 		$this->share->setInvitationSent($skipInvitation ? time() : 0);
 		$this->share->setType($userGroup->getType());
-		$this->share->setUserId($userGroup->getId());
+		$this->share->setUserId($userGroup->getPublicId());
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
