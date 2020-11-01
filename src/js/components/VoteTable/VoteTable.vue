@@ -357,6 +357,7 @@ export default {
 			flex-direction: row;
 			order: 1;
 			flex: 1;
+			min-height: 45px;
 
 			&.currentuser {
 				order: 0;
@@ -369,6 +370,7 @@ export default {
 		flex-direction: column;
 		> .user-item {
 			order: 1;
+			min-height: 45px;
 			&.currentuser {
 				order: 0;
 			}
