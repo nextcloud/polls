@@ -100,7 +100,7 @@ const actions = {
 		let endPoint = 'apps/polls/vote/set'
 
 		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint.concat('/s')
+			endPoint = endPoint + '/s'
 		}
 		return axios.post(generateUrl(endPoint), {
 			optionId: payload.option.id,

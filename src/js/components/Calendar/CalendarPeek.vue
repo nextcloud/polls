@@ -44,6 +44,7 @@ import { mapState } from 'vuex'
 import orderBy from 'lodash/orderBy'
 import { Popover } from '@nextcloud/vue'
 import CalendarInfo from '../Calendar/CalendarInfo'
+import { showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'CalendarPeek',
@@ -123,6 +124,11 @@ export default {
 				.dispatch('poll/options/getEvents', { option: this.option })
 				.then((response) => {
 					this.events = response.events
+				})
+				.catch((error) => {
+					if (error.message === 'Network Error') {
+						showError(t('polls', 'Got a network error while checking calendar events.'))
+					}
 				})
 		},
 

@@ -53,12 +53,11 @@ export default {
 		}),
 
 		personalLink() {
-			return window.location.origin.concat(
-				this.$router.resolve({
+			return window.location.origin
+				+ this.$router.resolve({
 					name: 'publicVote',
 					params: { token: this.$route.params.token },
 				}).href
-			)
 		},
 
 	},

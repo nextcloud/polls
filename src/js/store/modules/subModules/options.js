@@ -117,7 +117,7 @@ const actions = {
 
 	reload(context) {
 		const endPoint = 'apps/polls/polls'
-		return axios.get(generateUrl(endPoint.concat('/', context.rootState.poll.id, '/options')))
+		return axios.get(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options'))
 			.then((response) => {
 				context.commit('set', { options: response.data.options })
 			})
@@ -138,7 +138,7 @@ const actions = {
 				context.commit('setItem', { option: response.data.option })
 			})
 			.catch((error) => {
-				console.error('Error adding option', { error: error.response }, { payload: payload })
+				console.error('Error adding option: ' + error.response.data, { error: error.response }, { payload: payload })
 				context.dispatch('reload')
 				throw error
 			})
@@ -146,7 +146,7 @@ const actions = {
 
 	update(context, payload) {
 		const endPoint = 'apps/polls/option'
-		return axios.put(generateUrl(endPoint.concat('/', payload.option.id)), {
+		return axios.put(generateUrl(endPoint + '/' + payload.option.id), {
 			timestamp: payload.option.timestamp,
 			pollOptionText: payload.option.timeStamp,
 		})
@@ -163,7 +163,7 @@ const actions = {
 	delete(context, payload) {
 		const endPoint = 'apps/polls/option'
 
-		return axios.delete(generateUrl(endPoint.concat('/', payload.option.id)))
+		return axios.delete(generateUrl(endPoint + '/' + payload.option.id))
 			.then((response) => {
 				context.commit('delete', { option: response.data.option })
 			})
@@ -178,7 +178,7 @@ const actions = {
 		context.commit('confirm', { option: payload.option })
 
 		const endPoint = 'apps/polls/option'
-		return axios.put(generateUrl(endPoint.concat('/', payload.option.id, '/confirm')))
+		return axios.put(generateUrl(endPoint + '/' + payload.option.id, '/confirm'))
 			.then((response) => {
 				context.commit('setItem', { option: response.data.option })
 			})
@@ -192,7 +192,7 @@ const actions = {
 	reorder(context, payload) {
 		const endPoint = 'apps/polls/polls'
 		context.commit('reorder', { options: payload })
-		return axios.post(generateUrl(endPoint.concat('/', context.rootState.poll.id, '/options/reorder')), {
+		return axios.post(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options/reorder'), {
 			options: payload,
 		})
 			.then((response) => {
@@ -207,7 +207,7 @@ const actions = {
 
 	sequence(context, payload) {
 		const endPoint = 'apps/polls/option'
-		return axios.post(generateUrl(endPoint.concat('/', payload.option.id, '/sequence')), {
+		return axios.post(generateUrl(endPoint + '/' + payload.option.id + '/sequence'), {
 			step: payload.sequence.step,
 			unit: payload.sequence.unit.value,
 			amount: payload.sequence.amount,
@@ -224,12 +224,16 @@ const actions = {
 
 	getEvents(context, payload) {
 		const endPoint = 'apps/polls/option'
-		return axios.get(generateUrl(endPoint.concat('/', payload.option.id, '/events')))
+		return axios.get(generateUrl(endPoint + '/' + payload.option.id + '/events'))
 			.then((response) => {
 				return response.data
 			})
 			.catch((error) => {
-				console.error('Error loading calendar events - start whistling and behave as nothing happened', { error: error }, { payload: payload })
+				if (error.message === 'Network Error') {
+					console.error('Got an ugly network error while loading calendar events', { error: error }, { payload: payload })
+					throw error
+				}
+				console.error('Error loading calendar events - start whistling and behave as if nothing happened', { error: error }, { payload: payload })
 				return { events: [] }
 			})
 	},

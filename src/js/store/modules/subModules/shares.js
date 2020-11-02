@@ -88,7 +88,7 @@ const getters = {
 
 const actions = {
 	list(context) {
-		const endPoint = 'apps/polls/poll/'.concat(context.rootState.poll.id, '/shares')
+		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id + '/shares'
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
 				context.commit('set', response.data)
@@ -101,7 +101,7 @@ const actions = {
 	},
 
 	add(context, payload) {
-		const endPoint = 'apps/polls/poll/'.concat(context.rootState.poll.id, '/share')
+		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id + '/share'
 
 		return axios.post(generateUrl(endPoint), payload.share)
 			.then((response) => {
@@ -131,7 +131,7 @@ const actions = {
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/share/delete/'.concat(payload.share.token)
+		const endPoint = 'apps/polls/share/delete/' + payload.share.token
 		context.commit('delete', { share: payload.share })
 
 		return axios.delete(generateUrl(endPoint))
@@ -148,7 +148,7 @@ const actions = {
 	},
 
 	sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share/send/'.concat(payload.share.token)
+		const endPoint = 'apps/polls/share/send/' + payload.share.token
 
 		return axios.post(generateUrl(endPoint))
 			.then((response) => {
@@ -164,7 +164,7 @@ const actions = {
 	},
 
 	resolveGroup(context, payload) {
-		const endPoint = 'apps/polls/share/resolveGroup/'.concat(payload.share.token)
+		const endPoint = 'apps/polls/share/resolveGroup/' + payload.share.token
 
 		return axios.get(generateUrl(endPoint))
 			.catch((error) => {

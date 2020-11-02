@@ -83,11 +83,11 @@ const actions = {
 	delete(context, payload) {
 		let endPoint = 'apps/polls/comment'
 		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint.concat('/s/', context.rootState.poll.acl.token)
+			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
 		}
 		context.commit('delete', { comment: payload.comment })
 
-		return axios.delete(generateUrl(endPoint.concat('/', payload.comment.id)))
+		return axios.delete(generateUrl(endPoint + '/' + payload.comment.id))
 			.then((response) => {
 				context.commit('delete', { comment: response.data.comment })
 				return response.data
