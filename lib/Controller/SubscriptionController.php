@@ -67,7 +67,7 @@ class SubscriptionController extends Controller {
 		try {
 			return new DataResponse(['subscribed' => $this->subscriptionService->get($pollId, $token)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['subscribed' => false], Http::STATUS_OK);
 		}
@@ -87,7 +87,7 @@ class SubscriptionController extends Controller {
 		try {
 			return new DataResponse(['subscribed' => $this->subscriptionService->set($pollId, $token, $subscribed)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 }

@@ -64,7 +64,7 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->list($pollId), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		}
@@ -82,7 +82,7 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->set($optionId, $setTo), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
 		}
@@ -99,7 +99,7 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse(['deleted' => $this->voteService->delete($pollId, $userId)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => ''], Http::STATUS_NOT_FOUND);
 		}
@@ -122,7 +122,7 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->set($optionId, $setTo, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
 		}
@@ -139,7 +139,7 @@ class VoteController extends Controller {
 		try {
 			return new DataResponse($this->voteService->list(null, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		}

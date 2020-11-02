@@ -79,7 +79,7 @@ class ShareApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No shares for poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -97,7 +97,7 @@ class ShareApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Token ' . $token . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -115,7 +115,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (Exception $e) {
 			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
 		}
@@ -134,9 +134,9 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse(['share' => $this->shareService->delete($token)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
 		}
 	}
 

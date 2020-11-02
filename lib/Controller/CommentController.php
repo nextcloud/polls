@@ -68,7 +68,7 @@ class CommentController extends Controller {
 		try {
 			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
+			return new DataResponse($e->getMessage(), Http::STATUS_UNAUTHORIZED);
 		}
 	}
 
@@ -84,9 +84,9 @@ class CommentController extends Controller {
 		try {
 			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_OK);
+			return new DataResponse($e->getMessage(), Http::STATUS_OK);
 		}
 	}
 }

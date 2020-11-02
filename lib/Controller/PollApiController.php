@@ -74,7 +74,7 @@
  		} catch (DoesNotExistException $e) {
  			return new DataResponse([], Http::STATUS_NOT_FOUND);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 
@@ -93,7 +93,7 @@
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 
@@ -110,11 +110,11 @@
  		try {
  			return new DataResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		} catch (InvalidPollTypeException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		} catch (EmptyTitleException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 
@@ -134,13 +134,13 @@
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		} catch (InvalidAccessException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		} catch (InvalidShowResultsException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		} catch (EmptyTitleException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 
@@ -159,7 +159,7 @@
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 
@@ -178,7 +178,7 @@
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 
@@ -196,7 +196,7 @@
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 
@@ -215,7 +215,7 @@
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (NotAuthorizedException $e) {
- 			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+ 			return new DataResponse($e->getMessage(), $e->getStatus());
  		}
  	}
 

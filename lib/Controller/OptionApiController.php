@@ -73,7 +73,7 @@ class OptionApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -94,7 +94,7 @@ class OptionApiController extends ApiController {
 		} catch (UniqueConstraintViolationException $e) {
 			return new DataResponse(['error' => 'Option exists'], Http::STATUS_CONFLICT);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -111,7 +111,7 @@ class OptionApiController extends ApiController {
 		try {
 			return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -129,7 +129,7 @@ class OptionApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option does not exist'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -147,7 +147,7 @@ class OptionApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option does not exist'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -163,7 +163,7 @@ class OptionApiController extends ApiController {
 		try {
 			return new DataResponse(['option' => $this->optionService->setOrder($optionId, $order)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 }

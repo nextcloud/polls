@@ -29,6 +29,7 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidShareType;
 use OCA\Polls\Exceptions\ShareAlreadyExists;
+use OCA\Polls\Exceptions\CirclesNotEnabled;
 
 
 use OCP\IRequest;
@@ -85,9 +86,9 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
+			return new DataResponse($e->getMessage(), Http::STATUS_CONFLICT);
 		}
 	}
 
@@ -103,9 +104,9 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (ShareAlreadyExists $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -119,9 +120,9 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
+			return new DataResponse($e->getMessage(), Http::STATUS_CONFLICT);
 		}
 	}
 
@@ -140,11 +141,11 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['share' => $this->shareService->setEmailAddress($token, $emailAddress)], Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (InvalidShareType $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (\Exception $e) {
-			return new DataResponse($e, Http::STATUS_CONFLICT);
+			return new DataResponse($e->getMessage(), Http::STATUS_CONFLICT);
 		}
 	}
 
@@ -161,12 +162,12 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse($this->shareService->personal($token, $userName, $emailAddress), Http::STATUS_CREATED);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (InvalidUsernameException $e) {
 			return new DataResponse(['error' => $userName . ' is not valid'], Http::STATUS_CONFLICT);
 		} catch (DoesNotExistException $e) {
 			// return forbidden in all not catched error cases
-			return new DataResponse($e, Http::STATUS_FORBIDDEN);
+			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		}
 	}
 
@@ -181,9 +182,9 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse($this->shareService->delete($token), Http::STATUS_OK);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
+			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
 		}
 	}
 
@@ -236,7 +237,7 @@ class ShareController extends Controller {
 			$this->shareService->delete($token);
 			return new DataResponse(['shares' => $shares], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
+			return new DataResponse($e->getMessage(), Http::STATUS_CONFLICT);
 		}
 	}
 }

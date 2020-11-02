@@ -71,7 +71,7 @@ class VoteApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -90,7 +90,7 @@ class VoteApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 }

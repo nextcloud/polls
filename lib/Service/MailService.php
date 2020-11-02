@@ -151,7 +151,7 @@ class MailService {
 
 			return null;
 		} catch (\Exception $e) {
-			\OC::$server->getLogger()->logException($e, ['app' => 'polls']);
+			\OC::$server->getLogger()->logException($e->getMessage(), ['app' => 'polls']);
 			throw $e;
 		}
 	}
