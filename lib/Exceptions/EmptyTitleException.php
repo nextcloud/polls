@@ -25,15 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class EmptyTitleException extends \Exception {
+class EmptyTitleException extends Exception {
 	/**
 	 * EmptyTitleException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($message = 'Poll title must not be empty') {
-		parent::__construct($message);
-	}
-	public function getStatus() {
-		return Http::STATUS_CONFLICT;
+	public function __construct($e = 'Poll title must not be empty') {
+		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

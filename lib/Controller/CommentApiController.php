@@ -24,7 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
@@ -71,7 +71,7 @@ class CommentApiController extends ApiController {
 			return new DataResponse(['comments' => $this->commentService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -90,7 +90,7 @@ class CommentApiController extends ApiController {
 			return new DataResponse(['comment' => $this->commentService->add($pollId, $message)], Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -107,8 +107,8 @@ class CommentApiController extends ApiController {
 		try {
 			return new DataResponse(['comment' => $this->commentService->delete($commentId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Comment id ' . $commentId . ' does not exist'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}

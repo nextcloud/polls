@@ -25,12 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class NotAuthorizedException extends Exception {
+class CirclesNotEnabledException extends Exception {
 	/**
-	 * NotAuthorizedException Constructor
+	 * CirclesNotEnabledException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Unauthorized') {
-		parent::__construct($e, Http::STATUS_UNAUTHORIZED);
+	public function __construct($e = 'Circles is not enabled for this user') {
+		parent::__construct($e, Http::STATUS_NOT_FOUND);
 	}
 }

@@ -25,7 +25,8 @@ namespace OCA\Polls\Controller;
 
 use DateTime;
 use DateInterval;
-use OCA\Polls\Exceptions\DuplicateEntryException;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 
@@ -68,7 +69,11 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
-		return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
+		try {
+			return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
 	}
 
 	/**
@@ -80,7 +85,7 @@ class OptionController extends Controller {
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
 		try {
 			return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
-		} catch (DuplicateEntryException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -92,7 +97,11 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function update($optionId, $timestamp, $pollOptionText) {
-		return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+		try {
+			return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
 	}
 
 	/**
@@ -102,7 +111,13 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($optionId) {
-		return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
+		try {
+			return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
 	}
 
 	/**
@@ -112,7 +127,11 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function confirm($optionId) {
-		return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
+		try {
+			return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
 	}
 
 	/**
@@ -123,7 +142,11 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function reorder($pollId, $options) {
-		return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
+		try {
+			return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
+		}
 	}
 
 	/**
@@ -155,9 +178,7 @@ class OptionController extends Controller {
 			$events = $this->calendarService->getEvents($searchFrom, $searchTo);
 
 			return new DataResponse(['events' => $events], Http::STATUS_OK);
-
 		} catch (\Exception $e) {
-			\OC::$server->getLogger()->error('Error calendar check for optionId ' . $optionId);
 			return new DataResponse(['events' => []], Http::STATUS_OK);
 		}
 	}

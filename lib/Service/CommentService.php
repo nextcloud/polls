@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCA\Polls\Db\Comment;
@@ -112,7 +111,7 @@ class CommentService {
 			} else {
 				throw new NotAuthorizedException;
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			\OC::$server->getLogger()->alert('Error writing comment for pollId ' . $pollId . ': ' . $e);
 			throw new NotAuthorizedException($e);
 		}

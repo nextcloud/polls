@@ -24,7 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 
@@ -68,7 +68,6 @@ class SubscriptionApiController extends ApiController {
 	 * @param int $pollId
 	 * @return DataResponse
 	 * @throws DoesNotExistException
-	 * @throws NotAuthorizedException
 	 */
 	public function get($pollId) {
 		try {
@@ -76,7 +75,7 @@ class SubscriptionApiController extends ApiController {
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -87,13 +86,12 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 * @param int $pollId
-	 * @throws NotAuthorizedException
 	 */
 	public function subscribe($pollId) {
 		try {
 			$this->subscriptionService->set($pollId, '', true);
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -103,13 +101,12 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 * @param int $pollId
-	 * @throws NotAuthorizedException
 	 */
 	public function unsubscribe($pollId) {
 		try {
 			$this->subscriptionService->set($pollId, '', false);
 			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}

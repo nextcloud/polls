@@ -23,9 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
@@ -78,7 +77,7 @@ class ShareApiController extends ApiController {
 			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No shares for poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -96,7 +95,7 @@ class ShareApiController extends ApiController {
 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Token ' . $token . ' not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -114,10 +113,8 @@ class ShareApiController extends ApiController {
 	public function add($pollId, $type, $userId = '') {
 		try {
 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId)], Http::STATUS_CREATED);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (Exception $e) {
-			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -133,10 +130,10 @@ class ShareApiController extends ApiController {
 	public function delete($token) {
 		try {
 			return new DataResponse(['share' => $this->shareService->delete($token)], Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
+			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -152,7 +149,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->mailService->sendInvitationMail($token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['error' => $e], Http::STATUS_CONFLICT);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 }

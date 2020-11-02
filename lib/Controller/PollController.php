@@ -23,13 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\EmptyTitleException;
-use OCA\Polls\Exceptions\InvalidAccessException;
-use OCA\Polls\Exceptions\InvalidShowResultsException;
-use OCA\Polls\Exceptions\InvalidPollTypeException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -106,7 +101,7 @@ class PollController extends Controller {
 			return new DataResponse($this->pollService->list(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -126,7 +121,7 @@ class PollController extends Controller {
 			$poll = $this->pollService->get($pollId, $token);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 
@@ -183,11 +178,7 @@ class PollController extends Controller {
 	public function add($type, $title) {
 		try {
 			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidPollTypeException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (EmptyTitleException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -205,13 +196,7 @@ class PollController extends Controller {
 			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidAccessException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (InvalidShowResultsException $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
-		} catch (EmptyTitleException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -228,7 +213,7 @@ class PollController extends Controller {
 			return new DataResponse($this->pollService->delete($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -244,8 +229,8 @@ class PollController extends Controller {
 		try {
 			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -264,7 +249,7 @@ class PollController extends Controller {
 			return new DataResponse($poll, Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
@@ -281,7 +266,7 @@ class PollController extends Controller {
 			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}

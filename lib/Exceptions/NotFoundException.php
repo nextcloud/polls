@@ -25,15 +25,14 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class ShareAlreadyExists extends \Exception {
+class NotFoundException extends Exception {
 	/**
-	 * TooShortException Constructor
+	 * NotFoundException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Share already exists') {
-		parent::__construct($e);
-	}
-	public function getStatus() {
-		return Http::STATUS_OK;
+	public function __construct(
+		$e = 'Not found',
+		$status = Http::STATUS_NOT_FOUND) {
+		parent::__construct($e, $status);
 	}
 }

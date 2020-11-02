@@ -86,6 +86,8 @@ class PreferencesController extends Controller {
 			return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 

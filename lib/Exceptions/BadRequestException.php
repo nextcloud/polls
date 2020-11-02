@@ -25,15 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class BadRequestException extends \Exception {
+class BadRequestException extends Exception {
 	/**
 	 * NotAuthorizedException Constructor
 	 * @param string $e exception message
 	 */
 	public function __construct($e = 'Not allowed') {
-		parent::__construct($e);
-	}
-	public function getStatus() {
-		return Http::STATUS_BAD_REQUEST;
+		parent::__construct($e, Http::STATUS_BAD_REQUEST);
 	}
 }

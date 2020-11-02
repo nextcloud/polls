@@ -23,9 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -68,7 +67,7 @@ class CommentController extends Controller {
 		try {
 			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_UNAUTHORIZED);
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 
@@ -83,10 +82,10 @@ class CommentController extends Controller {
 	public function delete($commentId, $token) {
 		try {
 			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
 	}
 }

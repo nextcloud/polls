@@ -89,7 +89,7 @@ class SystemController extends Controller {
 		try {
 			return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
 		} catch (\Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse($e->getMessage(), Http::STATUS_CONFLICT);
 		}
 	}
 
@@ -103,7 +103,7 @@ class SystemController extends Controller {
 		try {
 			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
 		} catch (\Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse($e->getMessage(), Http::STATUS_CONFLICT);
 		}
 	}
 }

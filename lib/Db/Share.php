@@ -26,7 +26,6 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
-use OCA\Polls\Model\UserGroupClass;
 
 /**
  * @method string getId()

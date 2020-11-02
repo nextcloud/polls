@@ -25,12 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class NotAuthorizedException extends Exception {
+class ContactsNotEnabledExceptions extends Exception {
 	/**
-	 * NotAuthorizedException Constructor
+	 * ContactsNotEnabledExceptions Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Unauthorized') {
-		parent::__construct($e, Http::STATUS_UNAUTHORIZED);
+	public function __construct($e = 'Contacts is not enabled') {
+		parent::__construct($e, Http::STATUS_NOT_FOUND);
 	}
 }

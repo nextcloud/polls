@@ -110,6 +110,7 @@ class Acl implements JsonSerializable {
 	/**
 	 * @NoAdminRequired
 	 * @return bool
+	 * @throws NotAuthorizedException
 	 */
 	public function set($pollId = 0, $token = ''): Acl {
 		if ($token) {
