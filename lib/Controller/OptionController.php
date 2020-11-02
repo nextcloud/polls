@@ -147,11 +147,18 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function findCalendarEvents($optionId) {
-		$searchFrom = new DateTime();
-		$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
-		$searchTo = clone $searchFrom;
-		$searchTo = $searchTo->add(new DateInterval('PT3H'));
+		try {
+			$searchFrom = new DateTime();
+			$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
+			$searchTo = clone $searchFrom;
+			$searchTo = $searchTo->add(new DateInterval('PT3H'));
+			$events = $this->calendarService->getEvents($searchFrom, $searchTo);
 
-		return new DataResponse(['events' => array_values($this->calendarService->getEvents($searchFrom, $searchTo))], Http::STATUS_OK);
+			return new DataResponse(['events' => $events], Http::STATUS_OK);
+
+		} catch (\Exception $e) {
+			\OC::$server->getLogger()->error('Error calendar check for optionId ' . $optionId);
+			return new DataResponse(['events' => []], Http::STATUS_OK);
+		}
 	}
 }

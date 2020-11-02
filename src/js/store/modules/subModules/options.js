@@ -117,7 +117,6 @@ const actions = {
 
 	reload(context) {
 		const endPoint = 'apps/polls/polls'
-		console.error('Reloading options')
 		return axios.get(generateUrl(endPoint.concat('/', context.rootState.poll.id, '/options')))
 			.then((response) => {
 				context.commit('set', { options: response.data.options })
@@ -230,9 +229,8 @@ const actions = {
 				return response.data
 			})
 			.catch((error) => {
-				console.error('Error loading calendar events', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
-				throw error
+				console.error('Error loading calendar events - start whistling and behave as nothing happened', { error: error }, { payload: payload })
+				return { events: [] }
 			})
 	},
 
