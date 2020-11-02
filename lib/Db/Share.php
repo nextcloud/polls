@@ -88,7 +88,6 @@ class Share extends Entity implements JsonSerializable {
 			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->displayName,
 			'isNoUser' => !($this->type === self::TYPE_USER),
-			'shareeDetail' => UserGroupClass::getUserGroupChild($this->type, $this->getUserId())
 		];
 	}
 

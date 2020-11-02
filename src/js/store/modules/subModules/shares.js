@@ -167,12 +167,8 @@ const actions = {
 		const endPoint = 'apps/polls/share/resolveGroup/'.concat(payload.share.token)
 
 		return axios.get(generateUrl(endPoint))
-			// .then((response) => {
-			// 	context.commit('delete', { share: payload.share })
-			// 	return response
-			// })
 			.catch((error) => {
-				console.error('Error exploding group', { error: error.response }, { payload: payload })
+				console.error('Error exploding group', error.response.data, { error: error.response }, { payload: payload })
 				throw error
 			})
 			.finally(() => {

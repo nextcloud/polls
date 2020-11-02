@@ -177,6 +177,16 @@ export default {
 	methods: {
 		resolveGroup(share) {
 			this.$store.dispatch('poll/shares/resolveGroup', { share: share })
+				.catch((error) => {
+					if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
+						showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
+					} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
+						showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
+					} else {
+						showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
+					}
+
+				})
 		},
 
 		sendInvitation(share) {
