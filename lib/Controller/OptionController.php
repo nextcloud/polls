@@ -72,7 +72,7 @@ class OptionController extends Controller {
 		try {
 			return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -86,7 +86,7 @@ class OptionController extends Controller {
 		try {
 			return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -100,7 +100,7 @@ class OptionController extends Controller {
 		try {
 			return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -114,9 +114,9 @@ class OptionController extends Controller {
 		try {
 			return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -130,7 +130,7 @@ class OptionController extends Controller {
 		try {
 			return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -145,7 +145,7 @@ class OptionController extends Controller {
 		try {
 			return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 

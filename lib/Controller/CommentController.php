@@ -67,7 +67,7 @@ class CommentController extends Controller {
 		try {
 			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -83,9 +83,9 @@ class CommentController extends Controller {
 		try {
 			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

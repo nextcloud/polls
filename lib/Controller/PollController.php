@@ -100,7 +100,7 @@ class PollController extends Controller {
 		try {
 			return new DataResponse($this->pollService->list(), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -118,7 +118,7 @@ class PollController extends Controller {
 			$acl = $this->acl->set($pollId, $token);
 			$poll = $this->pollService->get($pollId, $token);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 
 		try {
@@ -175,7 +175,7 @@ class PollController extends Controller {
 		try {
 			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -193,7 +193,7 @@ class PollController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -210,7 +210,7 @@ class PollController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -225,9 +225,9 @@ class PollController extends Controller {
 		try {
 			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -246,7 +246,7 @@ class PollController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -263,7 +263,7 @@ class PollController extends Controller {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

@@ -76,7 +76,7 @@ class SubscriptionApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -92,7 +92,7 @@ class SubscriptionApiController extends ApiController {
 			$this->subscriptionService->set($pollId, '', true);
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 	/**
@@ -107,7 +107,7 @@ class SubscriptionApiController extends ApiController {
 			$this->subscriptionService->set($pollId, '', false);
 			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

@@ -72,7 +72,7 @@ class CommentApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -91,7 +91,7 @@ class CommentApiController extends ApiController {
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Poll ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -107,9 +107,9 @@ class CommentApiController extends ApiController {
 		try {
 			return new DataResponse(['comment' => $this->commentService->delete($commentId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_OK);
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

@@ -27,7 +27,7 @@ use OCP\AppFramework\Http;
 
 class Exception extends \Exception {
 
-	/** @var Http */
+	/** @var integer */
 	protected $status;
 
 	/**

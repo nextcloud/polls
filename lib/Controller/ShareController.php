@@ -81,7 +81,7 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -97,7 +97,7 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId)], Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -111,7 +111,7 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -130,7 +130,7 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse(['share' => $this->shareService->setEmailAddress($token, $emailAddress)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -147,7 +147,7 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse($this->shareService->personal($token, $userName, $emailAddress), Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -162,7 +162,7 @@ class ShareController extends Controller {
 		try {
 			return new DataResponse($this->shareService->delete($token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -215,7 +215,7 @@ class ShareController extends Controller {
 			$this->shareService->delete($token);
 			return new DataResponse(['shares' => $shares], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

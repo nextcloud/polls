@@ -66,7 +66,7 @@ class PreferencesController extends Controller {
 		try {
 			return new DataResponse($this->preferencesService->get(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_NOT_FOUND);
 		}
 	}
 
@@ -85,9 +85,9 @@ class PreferencesController extends Controller {
 		try {
 			return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 

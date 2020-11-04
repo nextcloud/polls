@@ -75,7 +75,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -91,7 +91,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -109,7 +109,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse(['share' => $this->shareService->add($pollId, $type, $userId)], Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -126,7 +126,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse(['share' => $this->shareService->delete($token)], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -142,7 +142,7 @@ class ShareApiController extends ApiController {
 		try {
 			return new DataResponse($this->mailService->sendInvitationMail($token), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }
