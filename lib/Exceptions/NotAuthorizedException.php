@@ -30,7 +30,7 @@ class NotAuthorizedException extends Exception {
 	 * NotAuthorizedException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Unauthorized') {
+	public function __construct($e = 'Unauthorized or not found') {
 		parent::__construct($e, Http::STATUS_UNAUTHORIZED);
 	}
 }

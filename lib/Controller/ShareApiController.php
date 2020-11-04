@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
@@ -75,8 +74,6 @@ class ShareApiController extends ApiController {
 	public function list($pollId) {
 		try {
 			return new DataResponse(['shares' => $this->shareService->list($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'No shares for poll with id ' . $pollId . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
@@ -93,8 +90,6 @@ class ShareApiController extends ApiController {
 	public function get($token) {
 		try {
 			return new DataResponse(['share' => $this->shareService->get($token)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Token ' . $token . ' not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
@@ -130,8 +125,6 @@ class ShareApiController extends ApiController {
 	public function delete($token) {
 		try {
 			return new DataResponse(['share' => $this->shareService->delete($token)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}

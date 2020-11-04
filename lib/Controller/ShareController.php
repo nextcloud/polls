@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 
@@ -147,8 +146,6 @@ class ShareController extends Controller {
 	public function personal($token, $userName, $emailAddress = '') {
 		try {
 			return new DataResponse($this->shareService->personal($token, $userName, $emailAddress), Http::STATUS_CREATED);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
@@ -164,8 +161,6 @@ class ShareController extends Controller {
 	public function delete($token) {
 		try {
 			return new DataResponse($this->shareService->delete($token), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}

@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\BadRequestException;
 use OCA\Polls\Exceptions\DuplicateEntryException;
+use OCA\Polls\Exceptions\NotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
@@ -260,8 +261,12 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function clone($fromPollId, $toPollId) {
-		if (!$this->acl->set($fromPollId)->getAllowView()) {
-			throw new NotAuthorizedException;
+		try {
+			if (!$this->acl->set($fromPollId)->getAllowView()) {
+				throw new NotAuthorizedException;
+			}
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Poll ' . $fromPollId .' does not exist');
 		}
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
@@ -285,9 +290,15 @@ class OptionService {
 	 * @return array Array of Option objects
 	 * @throws NotAuthorizedException
 	 * @throws BadRequestException
+	 * @throws NotFoundException
 	 */
 	public function reorder($pollId, $options) {
-		$this->poll = $this->pollMapper->find($pollId);
+		try {
+			$this->poll = $this->pollMapper->find($pollId);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Poll ' . $pollId .' not found');
+		}
+
 
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
@@ -317,9 +328,15 @@ class OptionService {
 	 * @return array Array of Option objects
 	 * @throws NotAuthorizedException
 	 * @throws BadRequestException
+	 * @throws NotFoundException
 	 */
 	public function setOrder($optionId, $newOrder) {
-		$this->option = $this->optionMapper->find($optionId);
+		try {
+			$this->option = $this->optionMapper->find($optionId);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Option ' . $optionId .' not found');
+		}
+
 		$pollId = $this->option->getPollId();
 		$this->poll = $this->pollMapper->find($pollId);
 

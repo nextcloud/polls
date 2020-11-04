@@ -99,8 +99,6 @@ class PollController extends Controller {
 	public function list() {
 		try {
 			return new DataResponse($this->pollService->list(), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}
@@ -115,12 +113,10 @@ class PollController extends Controller {
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function get($pollId, $token) {
+	public function get($pollId = 0, $token = '') {
 		try {
 			$acl = $this->acl->set($pollId, $token);
 			$poll = $this->pollService->get($pollId, $token);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), $e->getStatus());
 		}

@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
@@ -93,7 +94,7 @@ class PollService {
 	/**
 	 * Get list of polls
 	 * @NoAdminRequired
-	 * @return array Array of Poll
+	 * @return Poll[]
 	 * @throws NotAuthorizedException
 	 */
 
@@ -103,17 +104,22 @@ class PollService {
 		}
 
 		$pollList = [];
+		try {
+			$polls = $this->pollMapper->findAll();
 
-		$polls = $this->pollMapper->findAll();
-		// TODO: Not the elegant way. Improvement neccessary
-		foreach ($polls as $poll) {
-			$combinedPoll = (object) array_merge(
-				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->set($poll->getId()))));
-			if ($combinedPoll->allowView) {
-				$pollList[] = $combinedPoll;
+			// TODO: Not the elegant way. Improvement neccessary
+			foreach ($polls as $poll) {
+				$combinedPoll = (object) array_merge(
+					(array) json_decode(json_encode($poll)),
+					(array) json_decode(json_encode($this->acl->set($poll->getId())))
+				);
+				if ($combinedPoll->allowView) {
+					$pollList[] = $combinedPoll;
+				}
 			}
+		} catch (DoesNotExistException $e) {
+			return [];
 		}
-
 		return $pollList;
 	}
 
@@ -207,7 +213,6 @@ class PollService {
 		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
 			throw new InvalidShowResultsException('Invalid value for prop showResults');
 		}
-
 		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
 			throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
 		}

@@ -90,13 +90,17 @@ class VoteService {
 			throw new NotAuthorizedException;
 		}
 
-		if (!$this->acl->getAllowSeeResults()) {
-			return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
-		} elseif (!$this->acl->getAllowSeeUsernames()) {
-			$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
-			return $this->anonymizer->getVotes();
-		} else {
-			return $this->voteMapper->findByPoll($this->acl->getpollId());
+		try {
+			if (!$this->acl->getAllowSeeResults()) {
+				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
+			} elseif (!$this->acl->getAllowSeeUsernames()) {
+				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
+				return $this->anonymizer->getVotes();
+			} else {
+				return $this->voteMapper->findByPoll($this->acl->getpollId());
+			}
+		} catch (DoesNotExistException $e) {
+			return [];
 		}
 	}
 
