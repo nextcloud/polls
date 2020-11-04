@@ -43,9 +43,6 @@ use OCA\Polls\Db\ShareMapper;
  */
 class Acl implements JsonSerializable {
 
-	/** @var string */
-	private $displayName;
-
 	/** @var IUserManager */
 	private $userManager;
 

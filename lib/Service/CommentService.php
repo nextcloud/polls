@@ -113,7 +113,6 @@ class CommentService {
 			}
 		} catch (\Exception $e) {
 			throw new NotAuthorizedException($e);
-			\OC::$server->getLogger()->alert('Error writing comment for pollId ' . $pollId . ': ' . $e);
 		}
 	}
 

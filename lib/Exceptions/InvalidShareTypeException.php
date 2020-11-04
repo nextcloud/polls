@@ -25,7 +25,7 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class InvalidShareTypeEception extends Exception {
+class InvalidShareTypeException extends Exception {
 	/**
 	 * InvalidShareTypeEception Constructor
 	 * @param string $e exception message

@@ -276,7 +276,7 @@ class UserGroupClass implements \JsonSerializable {
 	/**
 	 * getUserGroupChild
 	 * @NoAdminRequired
-	 * @return Array
+	 * @return UserGroupClass
 	 */
 	public static function getUserGroupChild($type, $id, $displayName = '', $emailAddress = '') {
 		switch ($type) {
