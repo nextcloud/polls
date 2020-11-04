@@ -46,14 +46,22 @@ use OCP\AppFramework\Db\Entity;
  * @method void setDisplayName(string $value)
  */
 class Share extends Entity implements JsonSerializable {
+
+	// Only authenticated access
 	public const TYPE_USER = 'user';
-	public const TYPE_EMAIL = 'email';
-	public const TYPE_CIRCLE = 'circle';
 	public const TYPE_GROUP = 'group';
-	public const TYPE_CONTACTGROUP = 'contactGroup';
-	public const TYPE_CONTACT = 'contact';
+
+	// Public and authenticated Access
 	public const TYPE_PUBLIC = 'public';
+
+	// Only public access
+	public const TYPE_EMAIL = 'email';
+	public const TYPE_CONTACT = 'contact';
 	public const TYPE_EXTERNAL = 'external';
+
+	// no direct Access
+	public const TYPE_CIRCLE = 'circle';
+	public const TYPE_CONTACTGROUP = 'contactGroup';
 
 	/** @var string $token */
 	protected $token;
@@ -87,6 +95,8 @@ class Share extends Entity implements JsonSerializable {
 			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->displayName,
 			'isNoUser' => !($this->type === self::TYPE_USER),
+			'validPublic' => $this->getValidPublic(),
+			'validAuthenticated' => $this->getValidAuthenticated(),
 		];
 	}
 
@@ -99,5 +109,20 @@ class Share extends Entity implements JsonSerializable {
 			return $userId;
 		}
 		return $this->userId;
+	}
+
+	public function getValidPublic() {
+		return (
+			   $this->type === self::TYPE_PUBLIC
+			|| $this->type === self::TYPE_EMAIL
+			|| $this->type === self::TYPE_CONTACT
+			|| $this->type === self::TYPE_EXTERNAL);
+	}
+
+	public function getValidAuthenticated() {
+		return (
+			   $this->type === self::TYPE_PUBLIC
+			|| $this->type === self::TYPE_USER
+			|| $this->type === self::TYPE_GROUP);
 	}
 }

@@ -171,7 +171,7 @@ class PollService {
 		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
-		$this->poll->setAccess('hidden');
+		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
 		$this->poll->setExpire(0);
 		$this->poll->setAnonymous(0);
 		$this->poll->setFullAnonymous(0);
@@ -179,7 +179,7 @@ class PollService {
 		$this->poll->setVoteLimit(0);
 		$this->poll->setSettings('');
 		$this->poll->setOptions('');
-		$this->poll->setShowResults('always');
+		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
 		$this->poll->setImportant(0);
@@ -292,7 +292,7 @@ class PollService {
 		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
-		$this->poll->setAccess('hidden');
+		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
 
 		$this->poll->setType($origin->getType());
 		$this->poll->setDescription($origin->getDescription());
@@ -360,7 +360,7 @@ class PollService {
 	 * @return array
 	 */
 	private function getValidAccess() {
-		return ['hidden', 'public'];
+		return [Poll::ACCESS_HIDDEN, Poll::ACCESS_PUBLIC];
 	}
 
 	/**
@@ -369,6 +369,6 @@ class PollService {
 	 * @return array
 	 */
 	private function getValidShowResults() {
-		return ['always', 'closed', 'never'];
+		return [Poll::SHOW_RESULTS_ALWAYS, Poll::SHOW_RESULTS_CLOSED, Poll::SHOW_RESULTS_NEVER];
 	}
 }

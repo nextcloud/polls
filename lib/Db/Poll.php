@@ -69,6 +69,11 @@ use OCP\AppFramework\Db\Entity;
 class Poll extends Entity implements JsonSerializable {
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
+	public const ACCESS_HIDDEN = 'hidden';
+	public const ACCESS_PUBLIC = 'public';
+	public const SHOW_RESULTS_ALWAYS = 'always';
+	public const SHOW_RESULTS_CLOSED = 'closed';
+	public const SHOW_RESULTS_NEVER = 'never';
 
 	/** @var string $type */
 	protected $type;
@@ -136,7 +141,7 @@ class Poll extends Entity implements JsonSerializable {
 			'allowMaybe' => intval($this->allowMaybe),
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
-			'showResults' => $this->showResults === 'expired' ? 'closed' : $this->showResults,
+			'showResults' => $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults,
 			'adminAccess' => intVal($this->adminAccess),
 			'ownerDisplayName' => $this->getDisplayName(),
 			'important' => intVal($this->important)
