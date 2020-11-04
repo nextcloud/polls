@@ -24,7 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exception\Exception;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
