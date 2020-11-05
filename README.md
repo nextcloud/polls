@@ -7,14 +7,15 @@
 
 This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
 
-**Note**: ownCloud is **no longer** supported! Last (confirmed) working version is 0.8.1 and is released in the oC marketplace.
-**Note**: IE11 users will face some CSS problems (see #541). Please change to a compatible browser (Firefox, Chrome, Edge, etc.). Or better: don't even try this browser
-
 ### Features
 - :bar_chart: Create / edit polls (datetimes and texts)
-- :date: Set expiration date
+- :date: Set an expiration date
 - :lock: Restrict access (all site users or invited users only)
 - :speech_balloon: Comments
+- Create public polls
+- Invite users, groups and contacts (directly or via circles or contact groups)
+- Hide results until the poll is closed
+- Create anonymised polls (participants names get pseudonymized for other users)
 
 ### Bugs
 - https://github.com/nextcloud/polls/issues
@@ -39,7 +40,7 @@ View the vote page on mobiles (Turn phone to landscape to see th full table)
 Only the owner can edit the poll. Granting access to admin users will be available in the next version.
 
 ## Installation / Update
-This app is supposed to work on Nextcloud version 16+.
+This app is supposed to work on Nextcloud version 17+.
 
 ### Install latest release
 You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls).
@@ -52,7 +53,7 @@ git clone https://github.com/nextcloud/polls.git
 ```
 
 * Install dev environment with ```make dev-setup```
-* Compile polls.js with ```make build-js-production``` or ```npm run build```
+* Compile polls.js with ```npm run build```
 * Run a complete build with ```make all``` (installs dev env, runs linter and builds the polls.js)
 
 ## Contribution Guidelines
