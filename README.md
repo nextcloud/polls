@@ -7,7 +7,7 @@
 
 This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
 
-### Features
+## Features
 - :bar_chart: Create / edit polls (datetimes and texts)
 - :date: Set an expiration date
 - :lock: Restrict access (all site users or invited users only)
@@ -17,27 +17,25 @@ This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and
 - Hide results until the poll is closed
 - Create anonymised polls (participants names get pseudonymized for other users)
 
-### Bugs
+## Bugs
 - https://github.com/nextcloud/polls/issues
 
-### Screenshots
+## Screenshots
 Create a new poll from the navigation bar and get an overview of your polls
 ![Overview](screenshots/overview.png)
 
-Vote and comment
+#### Vote and comment
 ![Vote](screenshots/vote.png)
 
-Edit poll inside the vote page
+#### Edit poll inside the vote page
 ![Edit poll](screenshots/edit-poll.png)
 ![Edit options](screenshots/options.png)
 
-Add shared links to your poll
+#### Add shared links to your poll
 ![Share poll](screenshots/shares.png)
 
-View the vote page on mobiles (Turn phone to landscape to see th full table)
+#### View the vote page on mobiles
 ![Vote mobile portrait](screenshots/mobile-portrait.png)
-
-Only the owner can edit the poll. Granting access to admin users will be available in the next version.
 
 ## Installation / Update
 This app is supposed to work on Nextcloud version 17+.
