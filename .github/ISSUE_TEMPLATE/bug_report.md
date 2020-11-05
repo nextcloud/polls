@@ -28,10 +28,9 @@ If applicable, add screenshots to help explain your problem.
 
 **How did you install this version?(Appstore or describe installation)**
 
-### Information about your Instance of Nextcloud/ownCloud
-**Nextcloud or ownCloud?**
+### Information about your Instance of Nextcloud
 
-**Nextcloud/ownCloud version:** (see Nextcloud admin page)
+**Nextcloud version:** (see Nextcloud admin page)
 
 **List of activated apps:**
 ```
@@ -57,20 +56,9 @@ Make sure to remove all sensitive content such as passwords. (e.g. database pass
 You can use the Issue Template application to prefill most of the required information: https://apps.nextcloud.com/apps/issuetemplate
 -->
 
-**Operating system**:
-
-**Web server:**
-
 **Database:**
 
 **PHP version:**
-
-**Signing status:**
-```
-Login as admin user into your Nextcloud and access
-http://example.com/index.php/settings/integrity/failed
-paste the results here.
-```
 
 **Are you using an external user-backend, if yes which one:** LDAP/ActiveDirectory/Webdav/...
 
@@ -79,8 +67,6 @@ paste the results here.
 Desktop/mobile phone/ tablet/... 
 
 **Browser:**
-
-**Operating system:**
 
 ### Logs
 
