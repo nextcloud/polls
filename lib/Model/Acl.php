@@ -347,7 +347,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowSeeUsernames(): bool {
-		return !$this->poll->getAnonymous() || $this->getIsOwner();
+		return !$this->poll->getFullAnonymous() && (!$this->poll->getAnonymous() || $this->getIsOwner());
 	}
 
 	/**

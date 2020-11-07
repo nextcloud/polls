@@ -35,6 +35,8 @@
 
 		<span v-if="poll.anonymous">{{ t('polls', 'This is an anonymous poll. Except to the poll owner, participants names are hidden.') }} </span>
 
+		<span v-if="poll.anonymous">{{ t('polls', 'This is a fully anonymous poll. Participants names are hidden to everyone, including the poll owner.') }} </span>
+
 		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden.') }}</span>
 
 		<span v-if="!acl.allowSeeResults && (poll.showResults === 'closed')">{{ t('polls', 'They will be revealed after the poll is closed.') }}</span>

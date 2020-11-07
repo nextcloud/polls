@@ -48,6 +48,12 @@
 				type="checkbox"
 				class="checkbox">
 			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
+
+			<input id="full_anonymous"
+				v-model="pollFullAnonymous"
+				type="checkbox"
+				class="checkbox">
+			<label for="full_anonymous"> {{ t('polls', 'Fully anonymous poll') }}</label>
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
@@ -224,6 +230,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ anonymous: +value })
+			},
+		},
+
+		pollFullAnonymous: {
+			get() {
+				return (this.poll.full_anonymous > 0)
+			},
+			set(value) {
+				this.writeValue({ full_anonymous: +value })
 			},
 		},
 
