@@ -120,7 +120,7 @@ const actions = {
 		const endPoint = 'apps/polls/share/personal'
 		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName, emailAddress: payload.emailAddress })
 			.then((response) => {
-				return { token: response.data.token }
+				return { token: response.data.share.token }
 			})
 			.catch((error) => {
 				console.error('Error writing personal share', { error: error.response }, { payload: payload })

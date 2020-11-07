@@ -165,7 +165,7 @@ const actions = {
 
 		return axios.delete(generateUrl(endPoint + '/' + payload.option.id))
 			.then((response) => {
-				context.commit('delete', { option: response.data.option })
+				context.commit('delete', { option: payload.option })
 			})
 			.catch((error) => {
 				console.error('Error deleting option', { error: error.response }, { payload: payload })

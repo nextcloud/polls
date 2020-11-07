@@ -27,7 +27,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareType;
-use OCA\Polls\Exceptions\ShareAlreadyExists;
+use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
 
 use OCP\Security\ISecureRandom;
@@ -173,9 +173,9 @@ class ShareService {
 		if ($type !== UserGroupClass::TYPE_PUBLIC) {
 			try {
 				$this->shareMapper->findByPollAndUser($pollId, $userId);
-				throw new ShareAlreadyExists;
+				throw new ShareAlreadyExistsException;
 			} catch (MultipleObjectsReturnedException $e) {
-				throw new ShareAlreadyExists;
+				throw new ShareAlreadyExistsException;
 			} catch (DoesNotExistException $e) {
 				// continue
 			}
@@ -230,10 +230,7 @@ class ShareService {
 		}
 
 		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);
-
-		if ($emailAddress) {
-			$this->systemService->validateEmailAddress($emailAddress);
-		}
+		$this->systemService->validateEmailAddress($emailAddress, true);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$this->create(

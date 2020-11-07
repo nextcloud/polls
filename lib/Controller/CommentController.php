@@ -23,20 +23,16 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\Exception;
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
-
 use OCA\Polls\Service\CommentService;
 
 class CommentController extends Controller {
 
 	/** @var CommentService */
 	private $commentService;
+
+	use ResponseHandle;
 
 	/**
 	 * CommentController constructor
@@ -64,11 +60,9 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function add($pollId, $message, $token) {
-		try {
-			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($pollId, $message, $token) {
+			return ['comment'=> $this->commentService->add($pollId, $message, $token)];
+		});
 	}
 
 	/**
@@ -80,12 +74,8 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($commentId, $token) {
-		try {
-			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->responseDeleteTolerant(function () use ($commentId, $token) {
+			return ['comment'=> $this->commentService->delete($commentId, $token)];
+		});
 	}
 }

@@ -45,7 +45,7 @@ const mutations = {
 	},
 
 	add(state, payload) {
-		state.list.push(payload)
+		state.list.push(payload.comment)
 	},
 
 	delete(state, payload) {
@@ -71,7 +71,7 @@ const actions = {
 			token: context.rootState.poll.acl.token,
 		})
 			.then((response) => {
-				context.commit('add', response.data)
+				context.commit('add', { comment: response.data.comment })
 				return response.data
 			})
 			.catch((error) => {
@@ -85,11 +85,11 @@ const actions = {
 		if (context.rootState.poll.acl.token) {
 			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
 		}
-		context.commit('delete', { comment: payload.comment })
 
 		return axios.delete(generateUrl(endPoint + '/' + payload.comment.id))
 			.then((response) => {
-				context.commit('delete', { comment: response.data.comment })
+				console.debug('deleted', response.data)
+				context.commit('delete', { comment: payload.comment })
 				return response.data
 			})
 			.catch((error) => {
