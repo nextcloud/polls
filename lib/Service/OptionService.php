@@ -125,6 +125,7 @@ class OptionService {
 
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
+		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
 		$this->setOption($timestamp, $pollOptionText);
 
 		try {
@@ -144,14 +145,14 @@ class OptionService {
 	 * @return Option
 	 * @throws NotAuthorizedException
 	 */
-	public function update($optionId, $timestamp = 0, $pollOptionText = '', $order = 0) {
+	public function update($optionId, $timestamp = 0, $pollOptionText = '') {
 		$this->option = $this->optionMapper->find($optionId);
 
 		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
-		$this->setOption($timestamp, $pollOptionText, $order);
+		$this->setOption($timestamp, $pollOptionText);
 
 		return $this->optionMapper->update($this->option);
 	}
@@ -329,7 +330,6 @@ class OptionService {
 			throw new NotAuthorizedException;
 		}
 
-
 		if ($newOrder < 1) {
 			$newOrder = 1;
 		} elseif ($newOrder > $this->getHighestOrder($pollId)) {
@@ -339,25 +339,34 @@ class OptionService {
 		$oldOrder = $this->option->getOrder();
 
 		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
-			$currentOrder = $option->getOrder();
-			if ($currentOrder > $oldOrder && $currentOrder <= $newOrder) {
-				$option->setOrder($currentOrder - 1);
-				$this->optionMapper->update($option);
-			} elseif (
-					   ($currentOrder < $oldOrder && $currentOrder >= $newOrder)
-					|| ($currentOrder < $oldOrder && $currentOrder = $newOrder)
-				) {
-				$option->setOrder($currentOrder + 1);
-				$this->optionMapper->update($option);
-			} elseif ($currentOrder === $oldOrder) {
-				$option->setOrder($newOrder);
-				$this->optionMapper->update($option);
-			} else {
-				continue;
-			}
+			$option->setOrder($this->moveModifier($moveFrom, $moveTo, $option->getOrder()));
+			$this->optionMapper->update($option);
 		}
 
 		return $this->optionMapper->findByPoll($this->option->getPollId());
+	}
+
+	/**
+	 * moveModifier - evaluate new order
+	 * depending on the old and the new position of a moved array item
+	 * @NoAdminRequired
+	 * @param int $moveFrom - old position of the moved item
+	 * @param int $moveTo   - target posotion of the moved item
+	 * @param int $value    - current position of the current item
+	 * @return int          - the modified new new position of the current item
+	 */
+	private function moveModifier($moveFrom, $moveTo, $currentPosition) {
+		$moveModifier = 0;
+		if ($moveFrom < $currentPosition && $currentPosition <= $moveTo) {
+			// moving forward
+			$moveModifier = -1;
+		} elseif ($moveTo <= $currentPosition && $currentPosition < $moveFrom) {
+			//moving backwards
+			$moveModifier = 1;
+		} elseif ($moveFrom === $currentPosition) {
+			return $moveTo;
+		}
+		return $currentPosition + $moveModifier;
 	}
 
 	/**
@@ -368,22 +377,15 @@ class OptionService {
 	 * @param int $order
 	 * @throws BadRequestException
 	 */
-	private function setOption($timestamp = 0, $pollOptionText = '', $order = 0) {
+	private function setOption($timestamp = 0, $pollOptionText = '') {
 		$poll = $this->pollMapper->find($this->option->getPollId());
 
-		if ($poll->getType() === Poll::TYPE_DATE && $timestamp) {
+		if ($poll->getType() === Poll::TYPE_DATE) {
 			$this->option->setTimestamp($timestamp);
 			$this->option->setOrder($timestamp);
 			$this->option->setPollOptionText(date('c', $timestamp));
-		} elseif ($poll->getType() === Poll::TYPE_TEXT && $pollOptionText) {
-			$this->option->setPollOptionText($pollOptionText);
-
-			if (!$order && !$this->option->getOrder()) {
-				$order = $this->getHighestOrder($this->option->getPollId()) + 1;
-				$this->option->setOrder($order);
-			}
 		} else {
-			throw new BadRequestException("Text or timestamp is missing");
+			$this->option->setPollOptionText($pollOptionText);
 		}
 	}
 
@@ -394,12 +396,12 @@ class OptionService {
 	 * @return int Highest order number
 	 */
 	private function getHighestOrder($pollId) {
-		$order = 0;
+		$highestOrder = 0;
 		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
-			if ($option->getOrder() > $order) {
-				$order = $option->getOrder();
+			if ($option->getOrder() > $highestOrder) {
+				$highestOrder = $option->getOrder();
 			}
 		}
-		return $order;
+		return $highestOrder;
 	}
 }
