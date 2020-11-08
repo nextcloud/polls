@@ -372,22 +372,19 @@ class OptionService {
 		$poll = $this->pollMapper->find($this->option->getPollId());
 
 		if ($poll->getType() === Poll::TYPE_DATE && $timestamp) {
-				$this->option->setTimestamp($timestamp);
-				$this->option->setOrder($timestamp);
-				$this->option->setPollOptionText(date('c', $timestamp));
-
+			$this->option->setTimestamp($timestamp);
+			$this->option->setOrder($timestamp);
+			$this->option->setPollOptionText(date('c', $timestamp));
 		} elseif ($poll->getType() === Poll::TYPE_TEXT && $pollOptionText) {
-				$this->option->setPollOptionText($pollOptionText);
+			$this->option->setPollOptionText($pollOptionText);
 
-				if (!$order && !$this->option->getOrder()) {
-					$order = $this->getHighestOrder($this->option->getPollId()) + 1;
-					$this->option->setOrder($order);
-				}
-
+			if (!$order && !$this->option->getOrder()) {
+				$order = $this->getHighestOrder($this->option->getPollId()) + 1;
+				$this->option->setOrder($order);
+			}
 		} else {
 			throw new BadRequestException("Text or timestamp is missing");
 		}
-
 	}
 
 	/**
