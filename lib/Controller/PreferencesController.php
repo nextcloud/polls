@@ -35,6 +35,7 @@ class PreferencesController extends Controller {
 	private $preferencesService;
 	private $calendarService;
 
+	use ResponseHandle;
 	/**
 	 * PreferencesController constructor.
 	 * @param string $appName
@@ -61,7 +62,10 @@ class PreferencesController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get() {
-		return new DataResponse($this->preferencesService->get(), Http::STATUS_OK);
+		return $this->response(function () {
+			return $this->preferencesService->get();
+		});
+		// return new DataResponse($this->preferencesService->get(), Http::STATUS_OK);
 	}
 
 	/**
@@ -75,8 +79,11 @@ class PreferencesController extends Controller {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse([], Http::STATUS_OK);
 		}
+		return $this->response(function () use ($settings) {
+			return $this->preferencesService->write($settings);
+		});
 
-		return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
+		// return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
 	}
 
 	/**

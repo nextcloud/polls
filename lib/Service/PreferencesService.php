@@ -53,9 +53,14 @@ class PreferencesService {
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userId);
 		} catch (DoesNotExistException $e) {
-			$this->preferences = new Preferences();
-			$this->preferences->setUserId($this->userId);
-			$this->preferences = $this->preferencesMapper->insert($this->preferences);
+			if ($UserId) {
+				$this->preferences = new Preferences();
+				$this->preferences->setUserId($this->userId);
+				$this->preferences = $this->preferencesMapper->insert($this->preferences);
+			} else {
+				throw new NotAuthorizedException;
+			}
+
 		}
 	}
 	/**
