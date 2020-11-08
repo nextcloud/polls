@@ -139,7 +139,7 @@ class OptionApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function setOrder($optionId, $order) {
-		return $this->response(function () use ($pollId, $order) {
+		return $this->response(function () use ($optionId, $order) {
 			return ['option' => $this->optionService->setOrder($optionId, $order)];
 		});
 	}

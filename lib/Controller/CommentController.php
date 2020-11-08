@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Service\CommentService;
 
 class CommentController extends Controller {

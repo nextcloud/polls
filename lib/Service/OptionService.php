@@ -48,12 +48,6 @@ class OptionService {
 	/** @var PollMapper */
 	private $pollMapper;
 
-	/** @var Poll */
-	private $poll;
-
-	/** @var LogService */
-	private $logService;
-
 	/** @var Acl */
 	private $acl;
 
@@ -62,8 +56,6 @@ class OptionService {
 	 * @param OptionMapper $optionMapper
 	 * @param Option $option
 	 * @param PollMapper $pollMapper
-	 * @param Poll $poll
-	 * @param LogService $logService
 	 * @param Acl $acl
 	 */
 
@@ -71,15 +63,11 @@ class OptionService {
 		OptionMapper $optionMapper,
 		Option $option,
 		PollMapper $pollMapper,
-		Poll $poll,
-		LogService $logService,
 		Acl $acl
 	) {
 		$this->optionMapper = $optionMapper;
 		$this->option = $option;
 		$this->pollMapper = $pollMapper;
-		$this->poll = $poll;
-		$this->logService = $logService;
 		$this->acl = $acl;
 	}
 
@@ -131,14 +119,13 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
-		$this->poll = $this->pollMapper->find($pollId);
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
-		$this->setOption($timestamp, $pollOptionText, 0);
+		$this->setOption($timestamp, $pollOptionText);
 
 		try {
 			return $this->optionMapper->insert($this->option);
@@ -159,7 +146,6 @@ class OptionService {
 	 */
 	public function update($optionId, $timestamp = 0, $pollOptionText = '', $order = 0) {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->poll = $this->pollMapper->find($this->option->getPollId());
 
 		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
 			throw new NotAuthorizedException;
@@ -294,18 +280,15 @@ class OptionService {
 	 */
 	public function reorder($pollId, $options) {
 		try {
-			$this->poll = $this->pollMapper->find($pollId);
+			if (!$this->acl->set($pollId)->getAllowEdit()) {
+				throw new NotAuthorizedException;
+			}
+
+			if ($this->pollMapper->find($pollId)->getType() === Poll::TYPE_DATE) {
+				throw new BadRequestException("Not allowed in date polls");
+			}
 		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Poll ' . $pollId .' not found');
-		}
-
-
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
-		}
-
-		if ($this->poll->getType() === Poll::TYPE_DATE) {
-			throw new BadRequestException("Not allowed in date polls");
 		}
 
 		$i = 0;
@@ -333,20 +316,19 @@ class OptionService {
 	public function setOrder($optionId, $newOrder) {
 		try {
 			$this->option = $this->optionMapper->find($optionId);
+			$pollId = $this->option->getPollId();
+
+			if ($this->pollMapper->find($pollId)->getType() === Poll::TYPE_DATE) {
+				throw new BadRequestException("Not allowed in date polls");
+			}
+
+			if (!$this->acl->set($pollId)->getAllowEdit()) {
+				throw new NotAuthorizedException;
+			}
 		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Option ' . $optionId .' not found');
-		}
-
-		$pollId = $this->option->getPollId();
-		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
-		if ($this->poll->getType() === Poll::TYPE_DATE) {
-			throw new BadRequestException("Not allowed in date polls");
-		}
 
 		if ($newOrder < 1) {
 			$newOrder = 1;
@@ -387,26 +369,25 @@ class OptionService {
 	 * @throws BadRequestException
 	 */
 	private function setOption($timestamp = 0, $pollOptionText = '', $order = 0) {
-		if ($this->poll->getType() === Poll::TYPE_DATE) {
-			if ($timestamp) {
+		$poll = $this->pollMapper->find($this->option->getPollId());
+
+		if ($poll->getType() === Poll::TYPE_DATE && $timestamp) {
 				$this->option->setTimestamp($timestamp);
 				$this->option->setOrder($timestamp);
 				$this->option->setPollOptionText(date('c', $timestamp));
-			} else {
-				throw new BadRequestException("Date poll must have a timestamp");
-			}
-		} elseif ($this->poll->getType() === Poll::TYPE_TEXT) {
-			if ($pollOptionText) {
-				$this->option->setPollOptionText($pollOptionText);
-			} else {
-				throw new BadRequestException("Text poll must have a pollOptionText");
-			}
 
-			if (!$order && !$this->option->getOrder()) {
-				$order = $this->getHighestOrder($this->option->getPollId()) + 1;
-				$this->option->setOrder($order);
-			}
+		} elseif ($poll->getType() === Poll::TYPE_TEXT && $pollOptionText) {
+				$this->option->setPollOptionText($pollOptionText);
+
+				if (!$order && !$this->option->getOrder()) {
+					$order = $this->getHighestOrder($this->option->getPollId()) + 1;
+					$this->option->setOrder($order);
+				}
+
+		} else {
+			throw new BadRequestException("Text or timestamp is missing");
 		}
+
 	}
 
 	/**
