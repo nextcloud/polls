@@ -336,10 +336,8 @@ class OptionService {
 			$newOrder = $this->getHighestOrder($pollId);
 		}
 
-		$oldOrder = $this->option->getOrder();
-
 		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
-			$option->setOrder($this->moveModifier($moveFrom, $moveTo, $option->getOrder()));
+			$option->setOrder($this->moveModifier($this->option->getOrder(), $newOrder, $option->getOrder()));
 			$this->optionMapper->update($option);
 		}
 

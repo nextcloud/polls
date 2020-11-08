@@ -60,7 +60,6 @@ class PreferencesService {
 			} else {
 				throw new NotAuthorizedException;
 			}
-
 		}
 	}
 	/**
