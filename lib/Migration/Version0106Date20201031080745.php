@@ -54,6 +54,50 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 	 * @param IOutput $output
 	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 * @param array $options
+	 * @return null
+	 * @since 13.0.0
+	 */
+	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+		$schema = $schemaClosure();
+		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
+		$userId = '';
+
+
+
+
+		if ($schema->hasTable('polls_preferences')) {
+
+			// remove preferences with empty user_id from oc_polls_preferences
+			$query = $this->connection->getQueryBuilder();
+			$query->delete('polls_preferences')
+				->where('user_id = :userId')
+				->setParameter('userId', '');
+			$query->execute();
+
+			// remove duplicate preferences from oc_polls_preferences
+			// preserve the last user setting in the db
+			$query = "DELETE p FROM {$prefix}polls_preferences p
+				INNER JOIN {$prefix}polls_preferences q
+				WHERE
+				    p.id > q.id AND
+				    p.user_id = q.user_id";
+			$stmt = $this->connection->prepare($query);
+			$stmt->execute();
+			// $query = $this->connection->getQueryBuilder();
+			// $query->delete('polls_preferences');
+			// $query->from('polls_preferences', 'p');
+			// $query->innerJoin('p', 'polls_preferences', 'j')
+			// 	->where('p.id > j.id')
+			// 	->andWhere('p.user_id = j.user_id');
+			// $query->execute();
+
+		}
+	}
+
+	/**
+	 * @param IOutput $output
+	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 * @param array $options
 	 * @return null|ISchemaWrapper
 	 * @since 13.0.0
 	 */
@@ -80,13 +124,25 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 			}
 		}
 
+		if ($schema->hasTable('polls_preferences')) {
+			$table = $schema->getTable('polls_preferences');
+			$table->addUniqueIndex(['user_id']);
+		}
+
 		return $schema;
 	}
 
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		$query = $this->connection->getQueryBuilder();
-		$query->update('polls_share')
-			->set('email_address', 'user_email');
-		$query->execute();
+		$schema = $schemaClosure();
+		if ($schema->hasTable('polls_share')) {
+			$table = $schema->getTable('polls_share');
+			if ($table->hasColumn('email_address') && $table->hasColumn('user_email')) {
+
+				$query = $this->connection->getQueryBuilder();
+				$query->update('polls_share')
+					->set('email_address', 'user_email');
+				$query->execute();
+			}
+		}
 	}
 }
