@@ -62,9 +62,6 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 		$userId = '';
 
-
-
-
 		if ($schema->hasTable('polls_preferences')) {
 
 			// remove preferences with empty user_id from oc_polls_preferences
@@ -75,22 +72,27 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 			$query->execute();
 
 			// remove duplicate preferences from oc_polls_preferences
-			// preserve the last user setting in the db
-			$query = "DELETE p FROM {$prefix}polls_preferences p
-				INNER JOIN {$prefix}polls_preferences q
-				WHERE
-				    p.id > q.id AND
-				    p.user_id = q.user_id";
-			$stmt = $this->connection->prepare($query);
-			$stmt->execute();
-			// $query = $this->connection->getQueryBuilder();
-			// $query->delete('polls_preferences');
-			// $query->from('polls_preferences', 'p');
-			// $query->innerJoin('p', 'polls_preferences', 'j')
-			// 	->where('p.id > j.id')
-			// 	->andWhere('p.user_id = j.user_id');
-			// $query->execute();
+			// preserve the first user setting in the db
+			$query = $this->connection->getQueryBuilder();
+			$query->select('id', 'user_id')
+				->from('polls_preferences');
+			$users = $query->execute();
 
+			$delete = $this->connection->getQueryBuilder();
+			$delete->delete('polls_preferences')
+				->where('id = :id');
+
+			$userskeep = [];
+
+			while ($row = $users->fetch()) {
+				if (in_array($row['user_id'], $userskeep)) {
+					$delete->setParameter('id', $row['id']);
+					$delete->execute();
+				} else {
+					$userskeep[] = $row['user_id'];
+					\OC::$server->getLogger()->alert('save ' . json_encode($row));
+				}
+			}
 		}
 	}
 
@@ -137,7 +139,6 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_share')) {
 			$table = $schema->getTable('polls_share');
 			if ($table->hasColumn('email_address') && $table->hasColumn('user_email')) {
-
 				$query = $this->connection->getQueryBuilder();
 				$query->update('polls_share')
 					->set('email_address', 'user_email');
