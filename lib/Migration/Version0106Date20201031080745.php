@@ -72,7 +72,7 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 			$query->execute();
 
 			// remove duplicate preferences from oc_polls_preferences
-			// preserve the first user setting in the db
+			// preserve the last user setting in the db
 			$query = $this->connection->getQueryBuilder();
 			$query->select('id', 'user_id')
 				->from('polls_preferences');
