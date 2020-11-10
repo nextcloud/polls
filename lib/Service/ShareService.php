@@ -109,7 +109,7 @@ class ShareService {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Token ' . $token .' does not exist');
+			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 		// Allow users entering the poll with a public share access
 
@@ -199,7 +199,7 @@ class ShareService {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Token ' . $token .' does not exist');
+			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
@@ -226,7 +226,7 @@ class ShareService {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Token ' . $token .' does not exist');
+			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
 		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);

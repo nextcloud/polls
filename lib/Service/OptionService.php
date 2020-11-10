@@ -253,7 +253,7 @@ class OptionService {
 				throw new NotAuthorizedException;
 			}
 		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Poll ' . $fromPollId .' does not exist');
+			throw new NotFoundException('Poll ' . $fromPollId . ' does not exist');
 		}
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {

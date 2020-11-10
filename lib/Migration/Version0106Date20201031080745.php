@@ -59,8 +59,6 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 	 */
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
-		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
-		$userId = '';
 
 		if ($schema->hasTable('polls_preferences')) {
 
