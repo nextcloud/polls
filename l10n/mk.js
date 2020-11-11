@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Contact" : "Контакт",
+    "Public link" : "Јавен линк",
     "Group" : "Група",
     "User" : "Корисник",
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
