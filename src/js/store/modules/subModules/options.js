@@ -178,7 +178,7 @@ const actions = {
 		context.commit('confirm', { option: payload.option })
 
 		const endPoint = 'apps/polls/option'
-		return axios.put(generateUrl(endPoint + '/' + payload.option.id, '/confirm'))
+		return axios.put(generateUrl(endPoint + '/' + payload.option.id + '/confirm'))
 			.then((response) => {
 				context.commit('setItem', { option: response.data.option })
 			})
