@@ -192,13 +192,17 @@ export default {
 		sendInvitation(share) {
 			this.$store.dispatch('poll/shares/sendInvitation', { share: share })
 				.then((response) => {
-					response.data.sentResult.sentMails.forEach((item) => {
-						showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
-					})
-					response.data.sentResult.abortedMails.forEach((item) => {
-						console.error('Mail could not be sent!', { recipient: item })
-						showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
-					})
+					if ('sentResult.sentMails' in response.data) {
+						response.data.sentResult.sentMails.forEach((item) => {
+							showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
+						})
+					}
+					if ('sentResult.abortedMails' in response.data) {
+						response.data.sentResult.abortedMails.forEach((item) => {
+							console.error('Mail could not be sent!', { recipient: item })
+							showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
+						})
+					}
 				})
 		},
 

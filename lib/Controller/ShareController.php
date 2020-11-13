@@ -35,6 +35,7 @@ use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\NotificationService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
+use OCA\Polls\Model\User;
 use OCA\Polls\Model\Circle;
 use OCA\Polls\Model\ContactGroup;
 
@@ -170,8 +171,10 @@ class ShareController extends Controller {
 		return $this->response(function () use ($token) {
 			$share = $this->shareService->get($token);
 			if ($share->getType() === Share::TYPE_USER) {
-				$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
-				$sentResult = ['sentMails' => [$share->getuserId()]];
+				if ($this->notificationService->sendInvitation($share->getPollId(), $share->getUserId())) {
+					$sentResult = ['sentMails' => [new User($share->getuserId())]];
+					$this->shareService->setInvitationSent($token);
+				}
 			} else {
 				$sentResult = $this->mailService->sendInvitationMail($token);
 			}

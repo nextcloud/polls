@@ -48,8 +48,8 @@ class NotificationService {
 	public function removeNotification($pollId) {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp('polls')
-		    ->setObject('poll', $pollId)
-		    ->setUser($this->userId);
+			->setObject('poll', $pollId)
+			->setUser($this->userId);
 		$this->notificationManager->markProcessed($notification);
 	}
 
@@ -67,5 +67,6 @@ class NotificationService {
 			->setObject('poll', $pollId)
 			->setSubject('invitation', ['pollId' => $pollId, 'recipient' => $recipient]);
 		$this->notificationManager->notify($notification);
+		return true;
 	}
 }

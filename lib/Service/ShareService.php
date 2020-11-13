@@ -129,6 +129,17 @@ class ShareService {
 		return $this->share;
 	}
 
+	/**
+	 * Get share by token
+	 * @NoAdminRequired
+	 * @param string $token
+	 * @return Share
+	 */
+	public function setInvitationSent($token) {
+		$share = $this->get($token);
+		$share->setInvitationSent(time());
+		return $this->shareMapper->update($share);
+	}
 
 	/**
 	 * crate share
