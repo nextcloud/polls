@@ -27,7 +27,8 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareType;
-use OCA\Polls\Exceptions\ShareAlreadyExists;
+use OCA\Polls\Exceptions\ShareAlreadyExistsException;
+use OCA\Polls\Exceptions\NotFoundException;
 
 use OCP\Security\ISecureRandom;
 
@@ -81,12 +82,19 @@ class ShareService {
 	 * @param int $pollId
 	 * @return array array of Share
 	 * @throws NotAuthorizedException
+	 * @throws NotFoundException
 	 */
 	public function list($pollId) {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
-		$shares = $this->shareMapper->findByPoll($pollId);
+
+		try {
+			$shares = $this->shareMapper->findByPoll($pollId);
+		} catch (DoesNotExistException $e) {
+			return [];
+		}
+
 		return $shares;
 	}
 
@@ -95,9 +103,14 @@ class ShareService {
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @return Share
+	 * @throws NotFoundException
 	 */
 	public function get($token) {
-		$this->share = $this->shareMapper->findByToken($token);
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
 		// Allow users entering the poll with a public share access
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
@@ -160,9 +173,9 @@ class ShareService {
 		if ($type !== UserGroupClass::TYPE_PUBLIC) {
 			try {
 				$this->shareMapper->findByPollAndUser($pollId, $userId);
-				throw new ShareAlreadyExists;
+				throw new ShareAlreadyExistsException;
 			} catch (MultipleObjectsReturnedException $e) {
-				throw new ShareAlreadyExists;
+				throw new ShareAlreadyExistsException;
 			} catch (DoesNotExistException $e) {
 				// continue
 			}
@@ -180,9 +193,15 @@ class ShareService {
 	 * @param string $emailAddress
 	 * @return Share
 	 * @throws InvalidShareType
+	 * @throws NotFoundException
 	 */
 	public function setEmailAddress($token, $emailAddress) {
-		$this->share = $this->shareMapper->findByToken($token);
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validateEmailAddress($emailAddress);
 			$this->share->setEmailAddress($emailAddress);
@@ -201,15 +220,17 @@ class ShareService {
 	 * @param string $userName
 	 * @return Share
 	 * @throws NotAuthorizedException
+	 * @throws NotFoundException
 	 */
 	public function personal($token, $userName, $emailAddress = '') {
-		$this->share = $this->shareMapper->findByToken($token);
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
 
 		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);
-
-		if ($emailAddress) {
-			$this->systemService->validateEmailAddress($emailAddress);
-		}
+		$this->systemService->validateEmailAddress($emailAddress, true);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$this->create(

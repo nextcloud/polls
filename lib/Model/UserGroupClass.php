@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Model;
 
-use OCA\Polls\Exceptions\InvalidShareType;
+use OCA\Polls\Exceptions\InvalidShareTypeException;
 
 class UserGroupClass implements \JsonSerializable {
 	public const TYPE = 'generic';
@@ -267,11 +267,17 @@ class UserGroupClass implements \JsonSerializable {
 	 * search
 	 * @NoAdminRequired
 	 * @return Array
+	 * @throws InvalidShareTypeException
 	 */
 	public static function search() {
 		return [];
 	}
 
+	/**
+	 * getUserGroupChild
+	 * @NoAdminRequired
+	 * @return UserGroupClass
+	 */
 	public static function getUserGroupChild($type, $id, $displayName = '', $emailAddress = '') {
 		switch ($type) {
 			case Group::TYPE:
@@ -291,7 +297,7 @@ class UserGroupClass implements \JsonSerializable {
 			case self::TYPE_EXTERNAL:
 				return new GenericUser($id, self::TYPE_EXTERNAL, $displayName, $emailAddress);
 			default:
-				throw new InvalidShareType('Invalid share type (' . $type . ')');
+				throw new InvalidShareTypeException('Invalid share type (' . $type . ')');
 			}
 	}
 

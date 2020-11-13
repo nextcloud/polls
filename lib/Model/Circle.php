@@ -26,7 +26,7 @@ namespace OCA\Polls\Model;
 
 use OCA\Circles\Api\v1\Circles;
 
-use OCA\Polls\Exceptions\CirclesNotEnabled;
+use OCA\Polls\Exceptions\CirclesNotEnabledException;
 
 class Circle extends UserGroupClass {
 	public const TYPE = 'circle';
@@ -38,6 +38,7 @@ class Circle extends UserGroupClass {
 	 * Group constructor.
 	 * @param $id
 	 * @param $displayName
+	 * @throws CirclesNotEnabledException
 	 */
 	public function __construct(
 		$id
@@ -49,7 +50,7 @@ class Circle extends UserGroupClass {
 			$this->displayName = $this->circle->getName();
 			$this->description = $this->circle->gettypeLongString();
 		} else {
-			throw new CirclesNotEnabled();
+			throw new CirclesNotEnabledException();
 		}
 	}
 

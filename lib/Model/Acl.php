@@ -25,6 +25,7 @@
 namespace OCA\Polls\Model;
 
 use JsonSerializable;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 use OCP\IUserManager;
@@ -41,18 +42,6 @@ use OCA\Polls\Db\ShareMapper;
  * @package OCA\Polls\Model\Acl
  */
 class Acl implements JsonSerializable {
-
-	/** @var int */
-	private $pollId = 0;
-
-	/** @var string */
-	private $token = '';
-
-	/** @var string */
-	private $userId;
-
-	/** @var string */
-	private $displayName;
 
 	/** @var IUserManager */
 	private $userManager;
@@ -77,76 +66,57 @@ class Acl implements JsonSerializable {
 
 	/**
 	 * Acl constructor.
-	 * @param string $UserId
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param PollMapper $pollMapper
 	 * @param VoteMapper $voteMapper
 	 * @param ShareMapper $shareMapper
-	 * @param Poll $poll
-	 * @param Share $share
 	 *
 	 */
 	public function __construct(
-		$UserId,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
 		VoteMapper $voteMapper,
-		ShareMapper $shareMapper,
-		Poll $poll,
-		Share $share
+		ShareMapper $shareMapper
 	) {
-		$this->userId = $UserId;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
 		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
-		$this->poll = $poll;
-		$this->share = $share;
+		$this->poll = new Poll;
+		$this->share = new Share;
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @return bool
+	 * @return self
+	 * @throws NotAuthorizedException
 	 */
 	public function set($pollId = 0, $token = ''): Acl {
-		if ($token) {
-			\OC::$server->getLogger()->debug('Share token: ' . $token);
-
-			$this->token = $token;
-			$this->pollId = 0;
-			$this->userId = null;
+		try {
 			$this->share = $this->shareMapper->findByToken($token);
 
-			if (\OC::$server->getUserSession()->isLoggedIn()) {
-				if ($this->share->getType() !== Share::TYPE_GROUP
-					&& $this->share->getType() !== Share::TYPE_PUBLIC) {
-					throw new NotAuthorizedException;
-				}
-
-				$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
-				$this->displayName = $this->userManager->get($this->userId)->getDisplayName();
-			} else {
-				if ($this->share->getType() === Share::TYPE_GROUP
-					|| $this->share->getType() === Share::TYPE_USER) {
-					throw new NotAuthorizedException;
-				}
-
-				$this->userId = $this->share->getUserId();
-				$this->displayName = $this->share->getDisplayName();
+			if (($this->getLoggedIn() && !$this->share->getValidAuthenticated())
+			   || (!$this->getLoggedIn() && !$this->share->getValidPublic())
+			) {
+				throw new NotAuthorizedException;
 			}
 
-			$this->pollId = $this->share->getPollId();
-		} elseif ($pollId) {
-			$this->userId = \OC::$server->getUserSession()->getUser()->getUID();
-			$this->displayName = $this->userManager->get($this->userId)->getDisplayName();
-			$this->pollId = $pollId;
-			$this->share = null;
+			$pollId = $this->share->getPollId();
+		} catch (DoesNotExistException $e) {
+			if (!$this->getLoggedIn()) {
+				// Token is invalid and user is not logged in. Reject
+				throw new NotAuthorizedException;
+			}
 		}
 
-		$this->poll = $this->pollMapper->find($this->pollId);
+		try {
+			$this->poll = $this->pollMapper->find($pollId);
+		} catch (DoesNotExistException $e) {
+			throw new NotAuthorizedException;
+		}
 
 		return $this;
 	}
@@ -156,7 +126,11 @@ class Acl implements JsonSerializable {
 	 * @return string
 	 */
 	public function getUserId() {
-		return $this->userId;
+		if ($this->getLoggedIn()) {
+			return \OC::$server->getUserSession()->getUser()->getUID();
+		} else {
+			return $this->share->getUserId();
+		}
 	}
 
 	/**
@@ -164,7 +138,11 @@ class Acl implements JsonSerializable {
 	 * @return string
 	 */
 	public function getDisplayName() {
-		return $this->displayName;
+		if ($this->getLoggedIn()) {
+			return $this->userManager->get($this->getUserId())->getDisplayName();
+		} else {
+			return $this->share->getDisplayName();
+		}
 	}
 
 	/**
@@ -180,7 +158,7 @@ class Acl implements JsonSerializable {
 	 * @return int
 	 */
 	public function getPollId(): int {
-		return $this->pollId;
+		return $this->poll->getId();
 	}
 
 	/**
@@ -188,11 +166,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getIsOwner(): bool {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return ($this->poll->getOwner() === $this->userId);
-		} else {
-			return false;
-		}
+		return ($this->getLoggedIn() && $this->poll->getOwner() === $this->getUserId());
 	}
 
 	/**
@@ -200,11 +174,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getIsAdmin(): bool {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return ($this->groupManager->isAdmin($this->userId) && $this->poll->getAdminAccess());
-		} else {
-			return false;
-		}
+		return ($this->getLoggedIn() && $this->groupManager->isAdmin($this->getUserId()) && $this->poll->getAdminAccess());
 	}
 
 	/**
@@ -213,14 +183,13 @@ class Acl implements JsonSerializable {
 	 */
 	public function getAllowView(): bool {
 		return (
-			   $this->getIsOwner()
-			|| ($this->getIsAdmin() && $this->poll->getAdminAccess())
+			   $this->getAllowEdit()
 			|| !$this->poll->getDeleted() && (
 				   $this->getUserHasVoted()
 				|| $this->getGroupShare()
 				|| $this->getPersonalShare()
 				|| $this->getPublicShare()
-				|| ($this->poll->getAccess() !== 'hidden' && !$this->getPublicShare())
+				|| ($this->poll->getAccess() === Poll::ACCESS_PUBLIC)
 			)
 		);
 	}
@@ -246,7 +215,7 @@ class Acl implements JsonSerializable {
 	public function getUserHasVoted(): bool {
 		return count(
 			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
-		);
+		) > 0;
 	}
 
 	/**
@@ -303,7 +272,7 @@ class Acl implements JsonSerializable {
 		return ($this->getAllowView() || $this->getToken())
 			&& !$this->getExpired()
 			&& !$this->poll->getDeleted()
-			&& $this->userId;
+			&& $this->getUserId();
 	}
 
 	/**
@@ -321,7 +290,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowComment(): bool {
-		return !$this->poll->getDeleted() && boolval($this->userId);
+		return !$this->poll->getDeleted() && boolval($this->getUserID());
 	}
 
 	/**
@@ -337,7 +306,7 @@ class Acl implements JsonSerializable {
 	 * @return bool
 	 */
 	public function getAllowSeeResults(): bool {
-		return $this->poll->getShowResults() === 'always'
+		return $this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS
 			|| ($this->poll->getShowResults() === 'expired' && $this->getExpired())
 			|| $this->getIsOwner();
 	}
@@ -355,14 +324,14 @@ class Acl implements JsonSerializable {
 	 * @return string
 	 */
 	public function getToken(): string {
-		return $this->token;
+		return strval($this->share->getToken());
 	}
 
 	private function hasEmail():bool {
 		if ($this->share) {
 			return strlen($this->share->getEmailAddress()) > 0;
 		} else {
-			return \OC::$server->getUserSession()->isLoggedIn();
+			return $this->getLoggedIn();
 		}
 	}
 

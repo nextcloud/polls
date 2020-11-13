@@ -20,70 +20,57 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 namespace OCA\Polls\Controller;
+
+use Closure;
+
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\Exception;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
-
-use OCA\Polls\Service\SubscriptionService;
-
-class SubscriptionController extends Controller {
-
-	/** @var SubscriptionService */
-	private $subscriptionService;
+trait ResponseHandle {
 
 	/**
-	 * SubscriptionController constructor.
-	 * @param string $appName
-	 * @param SubscriptionService $subscriptionService
-	 * @param IRequest $request
-	 */
-
-	public function __construct(
-		string $appName,
-		SubscriptionService $subscriptionService,
-		IRequest $request
-	) {
-		parent::__construct($appName, $request);
-		$this->subscriptionService = $subscriptionService;
-	}
-
-	/**
-	 * Get subscription status
-	 * @PublicPage
+	 * response
 	 * @NoAdminRequired
-	 * @param int $pollId
+	 * @param Closure $callback
 	 * @return DataResponse
-	 * @throws DoesNotExistException
 	 */
-	public function get($pollId, $token) {
+	protected function response(Closure $callback) {
 		try {
-			return new DataResponse(['subscribed' => $this->subscriptionService->get($pollId, $token)], Http::STATUS_OK);
+			return new DataResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['subscribed' => false], Http::STATUS_OK);
 		}
 	}
 
 	/**
-	 * Switch subscription status
-	 * @PublicPage
+	 * responseCreate
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $token
-	 * @param boolean $subscribed
+	 * @param Closure $callback
 	 * @return DataResponse
 	 */
-	public function set($pollId, $token, $subscribed) {
+	protected function responseCreate(Closure $callback) {
 		try {
-			return new DataResponse(['subscribed' => $this->subscriptionService->set($pollId, $token, $subscribed)], Http::STATUS_OK);
+			return new DataResponse($callback(), Http::STATUS_CREATED);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * responseDeleteTolerant
+	 * @NoAdminRequired
+	 * @param Closure $callback
+	 * @return DataResponse
+	 */
+	protected function responseDeleteTolerant(Closure $callback) {
+		try {
+			return new DataResponse($callback(), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new DataResponse(['message' => 'Not found, assume already deleted'], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}

@@ -62,7 +62,7 @@ class CalendarService {
 
 			// search for all events which
 			// - start before the end of the requested timespan ($to) and
-			// - end before the start of the requested timespan ($from)
+			// - end after the start of the requested timespan ($from)
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
 			foreach ($foundEvents as $event) {
 				$calendarEvent = new CalendarEvent($event, $calendar);
@@ -76,7 +76,6 @@ class CalendarService {
 				}
 			}
 		}
-
 		return $events;
 	}
 

@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -37,6 +35,7 @@ class PreferencesController extends Controller {
 	private $preferencesService;
 	private $calendarService;
 
+	use ResponseHandle;
 	/**
 	 * PreferencesController constructor.
 	 * @param string $appName
@@ -63,11 +62,10 @@ class PreferencesController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get() {
-		try {
-			return new DataResponse($this->preferencesService->get(), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+		return $this->response(function () {
+			return $this->preferencesService->get();
+		});
+		// return new DataResponse($this->preferencesService->get(), Http::STATUS_OK);
 	}
 
 	/**
@@ -79,14 +77,13 @@ class PreferencesController extends Controller {
 	 */
 	public function write($settings) {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
-			return new DataResponse(null, Http::STATUS_UNAUTHORIZED);
+			return new DataResponse([], Http::STATUS_OK);
 		}
+		return $this->response(function () use ($settings) {
+			return $this->preferencesService->write($settings);
+		});
 
-		try {
-			return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_NOT_FOUND);
-		}
+		// return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
 	}
 
 	/**

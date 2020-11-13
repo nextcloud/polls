@@ -25,12 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class InvalidPollTypeException extends Exception {
+class ContactsNotEnabledExceptions extends Exception {
 	/**
-	 * InvalidPollTypeException Constructor
+	 * ContactsNotEnabledExceptions Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Invalid pollType value') {
-		parent::__construct($e, Http::STATUS_CONFLICT);
+	public function __construct($e = 'Contacts is not enabled') {
+		parent::__construct($e, Http::STATUS_NOT_FOUND);
 	}
 }

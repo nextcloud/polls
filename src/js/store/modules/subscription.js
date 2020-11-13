@@ -45,9 +45,9 @@ const actions = {
 	getSubscription(context, payload) {
 		let endPoint = 'apps/polls/subscription'
 		if (payload.token) {
-			endPoint = endPoint.concat('/s/', payload.token)
+			endPoint = endPoint + '/s/' + payload.token
 		} else if (payload.pollId) {
-			endPoint = endPoint.concat('/', payload.pollId)
+			endPoint = endPoint + '/' + payload.pollId
 		}
 
 		return axios.get(generateUrl(endPoint))

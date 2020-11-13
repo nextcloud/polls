@@ -23,9 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
-// use Exception;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -63,10 +62,10 @@ class VoteController extends Controller {
 	public function get($pollId) {
 		try {
 			return new DataResponse($this->voteService->list($pollId), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -81,10 +80,10 @@ class VoteController extends Controller {
 	public function set($optionId, $setTo) {
 		try {
 			return new DataResponse($this->voteService->set($optionId, $setTo), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -98,10 +97,10 @@ class VoteController extends Controller {
 	public function delete($pollId, $userId) {
 		try {
 			return new DataResponse(['deleted' => $this->voteService->delete($pollId, $userId)], Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => ''], Http::STATUS_NOT_FOUND);
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -121,10 +120,10 @@ class VoteController extends Controller {
 	public function setByToken($optionId, $setTo, $token) {
 		try {
 			return new DataResponse($this->voteService->set($optionId, $setTo, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -138,10 +137,10 @@ class VoteController extends Controller {
 	public function getByToken($token) {
 		try {
 			return new DataResponse($this->voteService->list(null, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

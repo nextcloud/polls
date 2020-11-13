@@ -25,15 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class MultipleContactsFound extends \Exception {
+class MultipleContactsFound extends Exception {
 	/**
 	 * TooShortException Constructor
 	 * @param string $e exception message
 	 */
 	public function __construct($e = 'Multiple Contacts found') {
-		parent::__construct($e);
-	}
-	public function getStatus() {
-		return Http::STATUS_CONFLICT;
+		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Exception;
-
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -140,7 +138,7 @@ class MailService {
 		}
 
 		if (!$emailAddress || !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-			throw new Exception('Invalid email address (' . $emailAddress . ')');
+			throw new \Exception('Invalid email address (' . $emailAddress . ')');
 		}
 
 		try {
@@ -151,7 +149,7 @@ class MailService {
 
 			return null;
 		} catch (\Exception $e) {
-			\OC::$server->getLogger()->logException($e, ['app' => 'polls']);
+			\OC::$server->getLogger()->logException($e->getMessage(), ['app' => 'polls']);
 			throw $e;
 		}
 	}
@@ -313,7 +311,7 @@ class MailService {
 				$share->setInvitationSent(time());
 				$this->shareMapper->update($share);
 				$sentMails[] = $recipient;
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$abortedMails[] = $recipient;
 				\OC::$server->getLogger()->alert('Error sending Mail to ' . json_encode($recipient));
 			}
@@ -439,7 +437,7 @@ class MailService {
 
 			try {
 				$this->sendMail($emailTemplate, $subscription->getUserId(), $emailAddress, $displayName);
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				\OC::$server->getLogger()->alert('Error sending Mail to ' . $subscription->getUserId());
 			}
 		}

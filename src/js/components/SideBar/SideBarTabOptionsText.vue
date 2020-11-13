@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<ConfigBox :title="t('polls', 'Add a new text option')" icon-class="icon-add">
+		<ConfigBox v-if="!closed" :title="t('polls', 'Add a new text option')" icon-class="icon-add">
 			<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
 				@input="addOption()" />
 		</ConfigBox>

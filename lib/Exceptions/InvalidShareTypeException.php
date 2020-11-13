@@ -25,15 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class ContactsNotEnabled extends \Exception {
+class InvalidShareTypeException extends Exception {
 	/**
-	 * TooShortException Constructor
+	 * InvalidShareTypeEception Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Contacts is not enabled') {
-		parent::__construct($e);
-	}
-	public function getStatus() {
-		return Http::STATUS_NOT_FOUND;
+	public function __construct($e = 'Invalid share type') {
+		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

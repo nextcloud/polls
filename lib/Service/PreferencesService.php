@@ -24,6 +24,7 @@
 namespace OCA\Polls\Service;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
@@ -51,10 +52,14 @@ class PreferencesService {
 		$this->preferencesMapper = $preferencesMapper;
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userId);
-		} catch (\Exception $e) {
-			$this->preferences = new Preferences();
-			$this->preferences->setUserId($this->userId);
-			$this->preferences = $this->preferencesMapper->insert($this->preferences);
+		} catch (DoesNotExistException $e) {
+			if ($UserId) {
+				$this->preferences = new Preferences();
+				$this->preferences->setUserId($this->userId);
+				$this->preferences = $this->preferencesMapper->insert($this->preferences);
+			} else {
+				throw new NotAuthorizedException;
+			}
 		}
 	}
 	/**

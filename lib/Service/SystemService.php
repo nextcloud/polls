@@ -76,8 +76,10 @@ class SystemService {
 	 * @return Boolean
 	 * @throws InvalidEmailAddress
 	 */
-	public static function validateEmailAddress($emailAddress) {
-		if (!self::isValidEmail($emailAddress)) {
+	public static function validateEmailAddress($emailAddress, $emptyIsValid = false) {
+		if (!$emailAddress && $emptyIsValid) {
+			return true;
+		} elseif (!self::isValidEmail($emailAddress)) {
 			throw new InvalidEmailAddress;
 		}
 		return true;

@@ -24,7 +24,7 @@
 namespace OCA\Polls\Model;
 
 use OCA\Polls\Exceptions\MultipleContactsFound;
-use OCA\Polls\Exceptions\ContactsNotEnabled;
+use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
 
 class Contact extends UserGroupClass {
 	public const TYPE = 'contact';
@@ -79,6 +79,7 @@ class Contact extends UserGroupClass {
 	/**
 	 * loadContact
 	 * @NoAdminRequired
+	 * @throws MultipleContactsFound
 	 * The contacts app just provides a search, so we have to load the contact
 	 * after searching via the contact's id and use the first contact.
 	 *
@@ -101,6 +102,11 @@ class Contact extends UserGroupClass {
 		$this->contact = $contacts[0];
 	}
 
+	/**
+	 * getContact
+	 * @NoAdminRequired
+	 * @throws ContactsNotEnabledExceptions
+	 */
 	private function getContact() {
 		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
 			$this->resolveContactId();
@@ -131,7 +137,7 @@ class Contact extends UserGroupClass {
 				$this->description = \OC::$server->getL10N('polls')->t('Contact');
 			}
 		} else {
-			throw new ContactsNotEnabled();
+			throw new ContactsNotEnabledExceptions();
 		}
 	}
 

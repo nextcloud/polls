@@ -25,15 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class InvalidShareType extends \Exception {
+class ShareAlreadyExistsException extends Exception {
 	/**
-	 * InvalidShareType Constructor
+	 * ShareAlreadyExistsException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Invalid share type') {
-		parent::__construct($e);
-	}
-	public function getStatus() {
-		return Http::STATUS_CONFLICT;
+	public function __construct($e = 'Share already exists') {
+		parent::__construct($e, Http::STATUS_OK);
 	}
 }

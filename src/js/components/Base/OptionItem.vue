@@ -93,7 +93,7 @@ export default {
 		},
 
 		dateLocalFormatUTC() {
-			return moment.unix(this.option.timestamp).utc().format('llll').concat(' UTC')
+			return moment.unix(this.option.timestamp).utc().format('llll') + ' UTC'
 		},
 
 		dateBoxMonth() {
