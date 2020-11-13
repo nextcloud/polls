@@ -51,5 +51,4 @@ class Application20 extends App implements IBootstrap {
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-
 }
