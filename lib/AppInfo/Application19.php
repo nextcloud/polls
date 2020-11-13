@@ -24,6 +24,7 @@
 namespace OCA\Polls\AppInfo;
 
 use OCP\AppFramework\App;
+use OCA\Polls\Notification\Notifier;
 
 class Application19 extends App {
 
@@ -33,5 +34,11 @@ class Application19 extends App {
 	 */
 	public function __construct(array $urlParams = []) {
 		parent::__construct('polls', $urlParams);
+		$this->registerNotifications();
+	}
+
+	public function registerNotifications(): void {
+		$notificationManager = \OC::$server->getNotificationManager();
+		$notificationManager->registerNotifierService(Notifier::class);
 	}
 }
