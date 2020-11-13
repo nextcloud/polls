@@ -30,11 +30,14 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\IURLGenerator;
+use OCA\Polls\Service\NotificationService;
 
 class PageController extends Controller {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
+	/** @var NotificationService */
+	private $notificationService;
 
 	/**
 	 * PageController constructor.
@@ -45,10 +48,12 @@ class PageController extends Controller {
 	public function __construct(
 		$appName,
 		IRequest $request,
-		IURLGenerator $urlGenerator
+		IURLGenerator $urlGenerator,
+		NotificationService $notificationService
 	) {
 		parent::__construct($appName, $request);
 		$this->urlGenerator = $urlGenerator;
+		$this->notificationService = $notificationService;
 	}
 
 	/**
@@ -56,6 +61,16 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function index() {
+		return new TemplateResponse('polls', 'polls.tmpl',
+		['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function vote($id) {
+		$this->notificationService->removeNotification($id);
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);
 	}

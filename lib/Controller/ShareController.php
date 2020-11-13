@@ -32,6 +32,7 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\DB\Share;
 use OCA\Polls\Service\MailService;
+use OCA\Polls\Service\NotificationService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
 use OCA\Polls\Model\Circle;
@@ -49,6 +50,9 @@ class ShareController extends Controller {
 	/** @var SystemService */
 	private $systemService;
 
+	/** @var NotificationService */
+	private $notificationService;
+
 	/**
 	 * ShareController constructor.
 	 * @param string $appName
@@ -62,12 +66,14 @@ class ShareController extends Controller {
 		IRequest $request,
 		MailService $mailService,
 		ShareService $shareService,
-		SystemService $systemService
+		SystemService $systemService,
+		NotificationService $notificationService
 	) {
 		parent::__construct($appName, $request);
 		$this->mailService = $mailService;
 		$this->shareService = $shareService;
 		$this->systemService = $systemService;
+		$this->notificationService = $notificationService;
 	}
 
 	/**
@@ -162,8 +168,13 @@ class ShareController extends Controller {
 	 */
 	public function sendInvitation($token) {
 		return $this->response(function () use ($token) {
-			$sentResult = $this->mailService->sendInvitationMail($token);
 			$share = $this->shareService->get($token);
+			if ($share->getType() === Share::TYPE_USER) {
+				$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
+				$sentResult = ['sentMails' => [$share->getuserId()]];
+			} else {
+				$sentResult = $this->mailService->sendInvitationMail($token);
+			}
 			return [
 				'share' => $share,
 				'sentResult' => $sentResult
