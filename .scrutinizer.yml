@@ -12,7 +12,7 @@ tools:
 
 build:
     environment:
-        node: v14.15.0
+        node: 14.15.0
     tests:
         override:
           -  jshint-run --config .jshintrc
