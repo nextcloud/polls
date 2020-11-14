@@ -11,6 +11,8 @@ tools:
     external_code_coverage: false
 
 build:
+    environment:
+        node: v14.15.0
     tests:
         override:
           -  jshint-run --config .jshintrc
