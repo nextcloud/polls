@@ -33,7 +33,6 @@ OC.L10N.register(
     "Error saving username" : "保存使用者名稱時出錯",
     "Conflict" : "衝突",
     "New comment …" : "新增留言",
-    "Your comment was added" : "您的意見已經增加",
     "Error while saving comment" : "保存評論時出錯",
     "Delete comment" : "刪除留言",
     "Comment deleted" : "意見刪除",

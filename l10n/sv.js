@@ -24,7 +24,6 @@ OC.L10N.register(
     "Back" : "Tillbaka",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar ...",
-    "Your comment was added" : "Din kommentar lades till",
     "Delete comment" : "Ta bort kommentar",
     "Comment deleted" : "Kommentar borttagen",
     "Error while deleting the comment" : "Fel vid borttagning av kommentaren",

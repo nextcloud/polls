@@ -86,7 +86,6 @@ OC.L10N.register(
     "Public link ({token})" : "Herkese açık bağlantı ({token})",
     "Conflict" : "Çakışma",
     "New comment …" : "Yorum ekle …",
-    "Your comment was added" : "Yorumunuz eklendi",
     "Error while saving comment" : "Yorum kaydedilirken sorun çıktı",
     "Delete comment" : "Yorumu sil",
     "No comments" : "Henüz bir yorum yok",

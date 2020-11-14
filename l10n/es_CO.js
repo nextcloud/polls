@@ -29,7 +29,6 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Conflict" : "Conflicto",
     "New comment …" : "Nuevo comentario ...",
-    "Your comment was added" : "Tu comentario ha sido agregado",
     "Error while saving comment" : "Error guardando el comentario",
     "Delete comment" : "Borrar comentario",
     "Comment deleted" : "Comentario borrado",

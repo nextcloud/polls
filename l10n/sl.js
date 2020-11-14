@@ -85,7 +85,6 @@ OC.L10N.register(
     "Public link ({token})" : "Javna povezava ({token})",
     "Conflict" : "Spor",
     "New comment …" : "Nova opomba ...",
-    "Your comment was added" : "Opomba je dodana",
     "Error while saving comment" : "Napaka med shranjevanjem opombe",
     "Delete comment" : "Izbriši opombo",
     "No comments" : "Ni še vpisanih opomb.",

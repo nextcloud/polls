@@ -43,7 +43,6 @@ OC.L10N.register(
     "Error saving username" : "Hiba a felhasználónév mentése közben",
     "Conflict" : "Ütközés",
     "New comment …" : "Új hozzászólás…",
-    "Your comment was added" : "Hozzászólás hozzáadva",
     "Error while saving comment" : "Hiba a hozzászólás törlésekor",
     "Delete comment" : "Hozzászólás törlése",
     "Comment deleted" : "Hozzászólás törölve",

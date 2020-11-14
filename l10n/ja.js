@@ -52,7 +52,6 @@ OC.L10N.register(
     "Error saving username" : "ユーザー名の保存中にエラーが発生しました",
     "Conflict" : "競合",
     "New comment …" : "あたらしいコメント",
-    "Your comment was added" : "コメントが追加されました",
     "Error while saving comment" : "コメントの保存中にエラーが発生しました",
     "Delete comment" : "コメントを削除",
     "Comment deleted" : "コメントが削除されました",

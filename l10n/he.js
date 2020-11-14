@@ -44,7 +44,6 @@ OC.L10N.register(
     "Error saving username" : "שגיאה בשמירת שם המשתמש",
     "Conflict" : "התנגשות",
     "New comment …" : "תגובה חדשה…",
-    "Your comment was added" : "התגובה שלך נוספה",
     "Error while saving comment" : "שגיאה בעת שמירת הערה",
     "Delete comment" : "מחיקת תגובה",
     "Comment deleted" : "נמחקה הערה",

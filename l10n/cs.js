@@ -85,7 +85,6 @@ OC.L10N.register(
     "Public link ({token})" : "Veřejný odkaz ({token})",
     "Conflict" : "Konflikt",
     "New comment …" : "Nový komentář…",
-    "Your comment was added" : "Váš komentář byl přidán",
     "Error while saving comment" : "Chyba při ukládání komentáře",
     "Delete comment" : "Smazat komentář",
     "No comments" : "Žádné komentáře",

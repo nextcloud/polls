@@ -44,7 +44,6 @@ OC.L10N.register(
     "Error saving username" : "保存用户名时出错",
     "Conflict" : "冲突",
     "New comment …" : "新评论...",
-    "Your comment was added" : "您的注释已添加",
     "Error while saving comment" : "保存注释时错误",
     "Delete comment" : "删除评论",
     "Comment deleted" : "评论已删除",

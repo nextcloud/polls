@@ -86,7 +86,6 @@ OC.L10N.register(
     "Public link ({token})" : "Ligazón pública ({token})",
     "Conflict" : "Conflito",
     "New comment …" : "Comentario novo…",
-    "Your comment was added" : "Foi engadido o seu comentario",
     "Error while saving comment" : "Produciuse un erro ao gardar o comentario",
     "Delete comment" : "Eliminar comentario",
     "No comments" : "Sen comentarios",

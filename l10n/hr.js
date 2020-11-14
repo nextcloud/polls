@@ -52,7 +52,6 @@ OC.L10N.register(
     "Error saving username" : "Pogreška pri spremanju korisničkog imena",
     "Conflict" : "Nepodudaranje",
     "New comment …" : "Novi komentar…",
-    "Your comment was added" : "Vaš komentar je dodan",
     "Error while saving comment" : "Pogreška pri spremanju komentara",
     "Delete comment" : "Izbriši komentar",
     "Comment deleted" : "Komentar izbrisan",

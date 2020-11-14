@@ -71,7 +71,6 @@ OC.L10N.register(
     "Error saving username" : "Грешка приликом чувања корисничког имена",
     "Conflict" : "Конфликт",
     "New comment …" : "Нови коментар…",
-    "Your comment was added" : "Ваш коментар је додат",
     "Error while saving comment" : "Грешка приликом чувања коментара",
     "Delete comment" : "Обриши коментар",
     "Comment deleted" : "Коментар обрисан",

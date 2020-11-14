@@ -84,7 +84,6 @@ OC.L10N.register(
     "Public link ({token})" : "Openbare link ({token})",
     "Conflict" : "Conflict",
     "New comment …" : "Nieuwe reactie ...",
-    "Your comment was added" : "Je reactie werd toegevoegd",
     "Error while saving comment" : "Fout bij opslaan reactie",
     "Delete comment" : "Verwijderen reactie",
     "Comment deleted" : "Reactie verwijderd",

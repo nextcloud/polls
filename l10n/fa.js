@@ -37,7 +37,6 @@ OC.L10N.register(
     "Error saving username" : "خطا در ذخیره نام کاربری",
     "Conflict" : "تضاد",
     "New comment …" : "توضیح جدید ...",
-    "Your comment was added" : "توضیح شما اضافه شد",
     "Error while saving comment" : "هنگام ذخیره توضیح خطایی رخ داد",
     "Delete comment" : "حذف توضیح",
     "Comment deleted" : "توضیح حذف",

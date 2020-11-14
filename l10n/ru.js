@@ -52,7 +52,6 @@ OC.L10N.register(
     "Error saving username" : "Не удалось сохранить имя пользователя",
     "Conflict" : "Конфликт",
     "New comment …" : "Текст комментария…",
-    "Your comment was added" : "Комментарий добавлен",
     "Error while saving comment" : "При сохранении комментария произошла ошибка",
     "Delete comment" : "Удалить комментарий",
     "Comment deleted" : "Комментарий удалён",

@@ -75,7 +75,6 @@ OC.L10N.register(
     "Public link ({token})" : "Enllaç públic ({token})",
     "Conflict" : "Conflicte",
     "New comment …" : "Crea un comentari …",
-    "Your comment was added" : "S'ha afegit el vostre comentari",
     "Error while saving comment" : "Error en desar el comentari",
     "Delete comment" : "Esborrar comentari",
     "Comment deleted" : "Comentari suprimit",

@@ -84,7 +84,6 @@ OC.L10N.register(
     "Public link ({token})" : "Esteka publikoa ({token})",
     "Conflict" : "Gatazka",
     "New comment …" : "Iruzkin berria …",
-    "Your comment was added" : "Zure iruzkina gehitu da",
     "Error while saving comment" : "Errorea iruzkina gordetzean",
     "Delete comment" : "Ezabatu Iruzkina",
     "No comments" : "Iruzkinik ez",

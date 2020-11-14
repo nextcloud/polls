@@ -28,7 +28,6 @@ OC.L10N.register(
     "Back" : "Назад",
     "Conflict" : "Конфлікт",
     "New comment …" : "Новий коментар...",
-    "Your comment was added" : "Ви додали коментар",
     "Error while saving comment" : "Помилка під час збереження коментаря",
     "Delete comment" : "Вилучити коментар",
     "Comment deleted" : "Коментар вилучено",

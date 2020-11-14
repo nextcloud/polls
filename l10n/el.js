@@ -53,7 +53,6 @@ OC.L10N.register(
     "Error saving username" : "Σφάλμα αποθήκευσης ονόματος χρήστη",
     "Conflict" : "Διένεξη",
     "New comment …" : "Νέο σχόλιο …",
-    "Your comment was added" : "Το σχόλιο καταχωρήθηκε",
     "Error while saving comment" : "Σφάλμα κατά την αποθήκευση σχολίου",
     "Delete comment" : "Διαγραφή σχολίου",
     "Comment deleted" : "Το σχόλιο διαγράφηκε",

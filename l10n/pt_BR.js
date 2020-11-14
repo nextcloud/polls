@@ -81,7 +81,6 @@ OC.L10N.register(
     "Public link ({token})" : "Link público ({token})",
     "Conflict" : "Conflito",
     "New comment …" : "Novo comentário...",
-    "Your comment was added" : "Seu comentário foi adicionado",
     "Error while saving comment" : "Erro ao salvar o comentário",
     "Delete comment" : "Excluir comentário",
     "Comment deleted" : "Comentário excluído",

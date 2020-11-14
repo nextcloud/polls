@@ -14,7 +14,6 @@ OC.L10N.register(
     "Back" : "Назад",
     "Conflict" : "Конфликт",
     "New comment …" : "Нов коментар ...",
-    "Your comment was added" : "Вашиот коментар е додаден",
     "Delete comment" : "Избриши коментар",
     "Comment deleted" : "Коментарот е избришан",
     "Title" : "Наслов",
