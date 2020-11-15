@@ -26,6 +26,7 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
+use OCA\Polls\Model\UserGroupClass;
 
 /**
  * @method string getId()
@@ -97,9 +98,25 @@ class Share extends Entity implements JsonSerializable {
 			'isNoUser' => !($this->type === self::TYPE_USER),
 			'validPublic' => $this->getValidPublic(),
 			'validAuthenticated' => $this->getValidAuthenticated(),
+			'user' => $this->getUserObject(),
+			'members' => $this->getMembers(),
+			'URL' => $this->getURL()
 		];
 	}
 
+	public function getURL() {
+		if ($this->type === self::TYPE_USER || $this->type === self::TYPE_GROUP) {
+			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
+				'polls.page.vote',
+				['id' => $this->pollId]
+			);
+		} else {
+			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
+				'polls.page.vote_publicpublic',
+				['token' => $this->token]
+			);
+		}
+	}
 	public function getUserId() {
 		if ($this->type === self::TYPE_CONTACTGROUP) {
 			// contactsgroup had the prefix contactgroup_ until version 1.5
@@ -111,6 +128,40 @@ class Share extends Entity implements JsonSerializable {
 		return $this->userId;
 	}
 
+	/**
+	 * @return UserGroupClass
+	 */
+	public function getUserObject() {
+		return UserGroupClass::getUserGroupChild(
+			$this->type,
+			$this->userId,
+			$this->displayName,
+			$this->emailAddress
+		);
+	}
+
+	/**
+	 * @return UserGroupClass[]
+	 */
+	public function getMembers() {
+		if ($this->type === self::TYPE_GROUP
+		|| $this->type === self::TYPE_CONTACTGROUP
+		|| $this->type === self::TYPE_CIRCLE) {
+			$group = UserGroupClass::getUserGroupChild($this->type, $this->getUserId());
+			return $group->getMembers();
+		} else {
+			return [UserGroupClass::getUserGroupChild(
+				$this->type,
+				$this->userId,
+				$this->displayName,
+				$this->emailAddress
+			)];
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
 	public function getValidPublic() {
 		return (
 			   $this->type === self::TYPE_PUBLIC
@@ -119,6 +170,9 @@ class Share extends Entity implements JsonSerializable {
 			|| $this->type === self::TYPE_EXTERNAL);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getValidAuthenticated() {
 		return (
 			   $this->type === self::TYPE_PUBLIC
