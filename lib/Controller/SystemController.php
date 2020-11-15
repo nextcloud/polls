@@ -85,9 +85,9 @@ class SystemController extends Controller {
 	 * @PublicPage
 	 * @return DataResponse
 	 */
-	public function validatePublicUsername($pollId, $userName, $token) {
+	public function validatePublicUsername($userName, $token) {
 		try {
-			return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
+			return new DataResponse(['result' => $this->systemService->validatePublicUsername($userName, $token), 'name' => $userName], Http::STATUS_OK);
 		} catch (\Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
 		}

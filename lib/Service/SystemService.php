@@ -157,17 +157,17 @@ class SystemService {
 	 * a participant of the poll
 	 * @NoAdminRequired
 	 * @return Boolean
-	 * @throws NotAuthorizedException
 	 * @throws TooShortException
 	 * @throws InvalidUsernameException
 	 */
-	public function validatePublicUsername($pollId, $userName, $token) {
-		$userName = strtolower(trim($userName));
+	public function validatePublicUsername($userName, $token) {
+		$share = $this->shareMapper->findByToken($token);
 
-		// return forbidden, if $pollId does not match the share's pollId, force int compare
-		if (intval($this->shareMapper->findByToken($token)->getPollId()) !== intVal($pollId)) {
-			throw new NotAuthorizedException;
+		if ($share->getDisplayName() === $userName) {
+			return true;
 		}
+		
+		$userName = strtolower(trim($userName));
 
 		// return forbidden, if the length of the userame is lower than 3 characters
 		if (strlen($userName) < 3) {
@@ -191,7 +191,7 @@ class SystemService {
 		}
 
 		// get all participants
-		foreach ($this->voteMapper->findParticipantsByPoll($pollId) as $vote) {
+		foreach ($this->voteMapper->findParticipantsByPoll($share->getPollId()) as $vote) {
 			if ($vote->getUserId()) {
 				if ($userName === strtolower(trim($vote->getUserId()))) {
 					throw new InvalidUsernameException;
@@ -200,7 +200,7 @@ class SystemService {
 		}
 
 		// get all shares for this poll
-		foreach ($this->shareMapper->findByPoll($pollId) as $share) {
+		foreach ($this->shareMapper->findByPoll($share->getPollId()) as $share) {
 			if ($share->getUserId() && $share->getType() !== Circle::TYPE) {
 				if ($userName === strtolower(trim($share->getUserId()))
 					|| $userName === strtolower(trim($share->getDisplayName()))) {
