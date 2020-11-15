@@ -98,8 +98,6 @@ class Share extends Entity implements JsonSerializable {
 			'isNoUser' => !($this->type === self::TYPE_USER),
 			'validPublic' => $this->getValidPublic(),
 			'validAuthenticated' => $this->getValidAuthenticated(),
-			'user' => $this->getUserObject(),
-			'members' => $this->getMembers(),
 			'URL' => $this->getURL()
 		];
 	}

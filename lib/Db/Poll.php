@@ -145,8 +145,7 @@ class Poll extends Entity implements JsonSerializable {
 			'showResults' => $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults,
 			'adminAccess' => intVal($this->adminAccess),
 			'ownerDisplayName' => $this->getDisplayName(),
-			'important' => intVal($this->important),
-			'ownerObj' => $this->getOwnerUserObject()
+			'important' => intVal($this->important)
 		];
 	}
 
