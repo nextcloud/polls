@@ -248,7 +248,7 @@ class ShareService {
 				$this->share->getPollId(),
 				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress));
 			if ($emailAddress) {
-				$this->mailService->sendInvitationMail($this->share->getToken());
+				$this->mailService->sendInvitation($this->share->getToken());
 			}
 
 			return $this->share;

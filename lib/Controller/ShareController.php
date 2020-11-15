@@ -176,7 +176,7 @@ class ShareController extends Controller {
 					$this->shareService->setInvitationSent($token);
 				}
 			} else {
-				$sentResult = $this->mailService->sendInvitationMail($token);
+				$sentResult = $this->mailService->sendInvitation($token);
 			}
 			return [
 				'share' => $share,
