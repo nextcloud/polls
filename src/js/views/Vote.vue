@@ -218,7 +218,9 @@ export default {
 
 		showRegisterModal() {
 			return (this.$route.name === 'publicVote'
-				&& !this.share.userId
+				&& (this.share.type === 'public'
+					|| this.share.type === 'email'
+					|| this.share.type === 'contact')
 				&& !this.closed
 				&& this.poll.id
 			)
