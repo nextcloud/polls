@@ -162,6 +162,7 @@ class ShareController extends Controller {
 
 	/**
 	 * Sent invitation mails for a share
+	 * Additionally send notification via notifications
 	 * @NoAdminRequired
 	 * @PublicPage
 	 * @param string $token
@@ -172,12 +173,12 @@ class ShareController extends Controller {
 			$share = $this->shareService->get($token);
 			if ($share->getType() === Share::TYPE_USER) {
 				if ($this->notificationService->sendInvitation($share->getPollId(), $share->getUserId())) {
-					$sentResult = ['sentMails' => [new User($share->getuserId())]];
-					$this->shareService->setInvitationSent($token);
+					// skip this atm, to send invitations as mail too, if user is a site user
+					// $sentResult = ['sentMails' => [new User($share->getuserId())]];
+					// $this->shareService->setInvitationSent($token);
 				}
-			} else {
-				$sentResult = $this->mailService->sendInvitation($token);
 			}
+			$sentResult = $this->mailService->sendInvitation($token);
 			return [
 				'share' => $share,
 				'sentResult' => $sentResult

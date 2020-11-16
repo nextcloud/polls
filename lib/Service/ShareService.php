@@ -253,7 +253,6 @@ class ShareService {
 			}
 
 			return $this->share;
-
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
 			// Convert Email and contact shares to external share, if user registeres
