@@ -182,6 +182,8 @@
     "Resolve into individual invitations" : "Risolvi in inviti individuali",
     "Remove invitation" : "Rimuovi invito",
     "Enter a name to start the search" : "Digita un nome per iniziare la ricerca",
+    "Resolving of {name} is not possible. The contacts app is not enabled." : "Impossibile risolvere {name}. L'applicazione dei contatti non è abilitata.",
+    "Error resolving {name}." : "Errore durante la risoluzione di {name}.",
     "Invitation sent to {name}" : "Invito inviato a {name}",
     "Error sending invitation to {name}" : "Errore durante l'invio dell'invito a {name}",
     "Error while adding share" : "Errore durante l'aggiunta della condivisione",

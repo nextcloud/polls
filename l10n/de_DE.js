@@ -89,7 +89,7 @@ OC.L10N.register(
     "New comment …" : "Neuer Kommentar …",
     "Error while saving comment" : "Fehler beim Speichern des Kommentars",
     "Delete comment" : "Kommentar löschen",
-    "No comments" : "Kein Kommentare",
+    "No comments" : "Keine Kommentare",
     "Be the first." : "Seien Sie der Erste.",
     "Comment deleted" : "Kommentar gelöscht",
     "Error while deleting the comment" : "Fehler beim Löschen des Kommentars",
