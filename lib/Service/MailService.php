@@ -36,12 +36,9 @@ use OCP\Mail\IEMailTemplate;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
-use OCA\Polls\Model\Contact;
 use OCA\Polls\Model\Email;
-use OCA\Polls\Model\Group;
 use OCA\Polls\Model\User;
 
 class MailService {
@@ -179,7 +176,6 @@ class MailService {
 				$abortedMails[] = $recipient->getId();
 				\OC::$server->getLogger()->alert('Error sending Mail to ' . json_encode($recipient));
 			}
-
 		}
 		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
 	}
@@ -255,13 +251,12 @@ class MailService {
 			$trans->t('"{title}" had recent activity: ')
 		));
 		foreach ($log as $logItem) {
-
 			if ($logItem->getPollId() === $poll->getId()) {
 				if ($poll->getAnonymous() || $poll->getShowResults() !== "always") {
 					$displayUser = $trans->t('A user');
 				} elseif ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
-						$actor = new User($subscription->getUserId());
-						$displayUser = $actor->getDisplayName();
+					$actor = new User($subscription->getUserId());
+					$displayUser = $actor->getDisplayName();
 				} else {
 					try {
 						$share = $this->shareMapper->findByPollAndUser($subscription->getPollId(), $logItem->getUserId());
@@ -329,46 +324,45 @@ class MailService {
 		return $emailTemplate;
 	}
 
-		/**
-		 * generateInvitation
-		 * @param UserGroupClass $recipient
-		 * @param Poll $poll
-		 * @return Object $emailTemplate
-		 */
+	/**
+	 * generateInvitation
+	 * @param UserGroupClass $recipient
+	 * @param Poll $poll
+	 * @return Object $emailTemplate
+	 */
 
-		private function generateInvitation($recipient, $poll, $url) {
-			$owner = $poll->getOwnerUserObject();
-			if ($recipient->getLanguage()) {
-				$trans = $this->transFactory->get('polls', $recipient->getLanguage());
-			} else {
-				$trans = $this->transFactory->get('polls', $owner->getLanguage());
-			}
+	private function generateInvitation($recipient, $poll, $url) {
+		$owner = $poll->getOwnerUserObject();
+		if ($recipient->getLanguage()) {
+			$trans = $this->transFactory->get('polls', $recipient->getLanguage());
+		} else {
+			$trans = $this->transFactory->get('polls', $owner->getLanguage());
+		}
 
-			$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
-				'owner' => $owner->getDisplayName(),
-				'title' => $poll->getTitle(),
-				'link' => $url
-			]);
+		$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
+			'owner' => $owner->getDisplayName(),
+			'title' => $poll->getTitle(),
+			'link' => $url
+		]);
 
-			$emailTemplate->setSubject($trans->t('Poll invitation "%s"', $poll->getTitle()));
-			$emailTemplate->addHeader();
-			$emailTemplate->addHeading($trans->t('Poll invitation "%s"', $poll->getTitle()), false);
-			$emailTemplate->addBodyText(str_replace(
+		$emailTemplate->setSubject($trans->t('Poll invitation "%s"', $poll->getTitle()));
+		$emailTemplate->addHeader();
+		$emailTemplate->addHeading($trans->t('Poll invitation "%s"', $poll->getTitle()), false);
+		$emailTemplate->addBodyText(str_replace(
 				['{owner}', '{title}'],
 				[$owner->getDisplayName(), $poll->getTitle()],
 				$trans->t('{owner} invited you to take part in the poll "{title}"')
 			));
-			$emailTemplate->addBodyText($poll->getDescription());
-			$emailTemplate->addBodyButton(
+		$emailTemplate->addBodyText($poll->getDescription());
+		$emailTemplate->addBodyButton(
 				htmlspecialchars($trans->t('Go to poll')),
 				$url
 			);
-			$emailTemplate->addBodyText($trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar: '));
-			$emailTemplate->addBodyText($url);
-			$emailTemplate->addBodyText($trans->t('Do not share this link with other people, because it is connected to your votes.'));
-			$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
+		$emailTemplate->addBodyText($trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar: '));
+		$emailTemplate->addBodyText($url);
+		$emailTemplate->addBodyText($trans->t('Do not share this link with other people, because it is connected to your votes.'));
+		$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
 
-			return $emailTemplate;
-		}
-
+		return $emailTemplate;
+	}
 }

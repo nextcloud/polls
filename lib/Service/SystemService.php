@@ -23,12 +23,10 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 
-use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Model\Circle;
