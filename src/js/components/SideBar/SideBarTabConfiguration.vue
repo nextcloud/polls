@@ -72,14 +72,14 @@
 				value="hidden"
 				type="radio"
 				class="radio">
-			<label for="public">{{ t('polls', 'Only invited users') }}</label>
+			<label for="hidden">{{ t('polls', 'Only invited users') }}</label>
 
 			<input id="public"
 				v-model="pollAccess"
 				value="public"
 				type="radio"
 				class="radio">
-			<label for="hidden">{{ t('polls', 'All users') }}</label>
+			<label for="public">{{ t('polls', 'All users') }}</label>
 
 			<input id="important"
 				v-model="pollImportant"
