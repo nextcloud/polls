@@ -57,7 +57,6 @@ class Group extends UserGroupClass {
 
 	/**
 	 * listRaw
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @return Array
 	 */
@@ -67,7 +66,6 @@ class Group extends UserGroupClass {
 
 	/**
 	 * search
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @param array $skip - group names to skip in return array
 	 * @return Group[]
@@ -84,8 +82,6 @@ class Group extends UserGroupClass {
 
 	/**
 	 * getMembers
-	 * @NoAdminRequired
-	 * @param string $query
 	 * @return User[]
 	 */
 	public function getMembers() {

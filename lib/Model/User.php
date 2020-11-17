@@ -50,7 +50,6 @@ class User extends UserGroupClass {
 
 	/**
 	 * getUserIsDisabled
-	 * @NoAdminRequired
 	 * @return Boolean
 	 */
 	public function getUserIsDisabled() {
@@ -59,7 +58,6 @@ class User extends UserGroupClass {
 
 	/**
 	 * listRaw
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @return Array
 	 */
@@ -69,7 +67,6 @@ class User extends UserGroupClass {
 
 	/**
 	 * search
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @param array $skip - group names to skip in return array
 	 * @return User[]

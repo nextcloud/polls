@@ -90,7 +90,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return self
 	 * @throws NotAuthorizedException
 	 */
@@ -122,7 +121,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return string
 	 */
 	public function getUserId() {
@@ -134,7 +132,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return string
 	 */
 	public function getDisplayName() {
@@ -146,7 +143,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return string
 	 */
 	public function getLoggedIn() {
@@ -154,7 +150,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return int
 	 */
 	public function getPollId(): int {
@@ -162,7 +157,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getIsOwner(): bool {
@@ -170,7 +164,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getIsAdmin(): bool {
@@ -178,7 +171,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowView(): bool {
@@ -195,7 +187,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getGroupShare(): bool {
@@ -209,7 +200,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getUserHasVoted(): bool {
@@ -219,7 +209,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getPersonalShare(): bool {
@@ -240,7 +229,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getPublicShare(): bool {
@@ -254,7 +242,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getExpired(): bool {
@@ -265,7 +252,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowVote(): bool {
@@ -276,7 +262,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowSubscribe(): bool {
@@ -286,7 +271,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowComment(): bool {
@@ -294,7 +278,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowEdit(): bool {
@@ -302,7 +285,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowSeeResults(): bool {
@@ -312,7 +294,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return bool
 	 */
 	public function getAllowSeeUsernames(): bool {
@@ -320,7 +301,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @return string
 	 */
 	public function getToken(): string {

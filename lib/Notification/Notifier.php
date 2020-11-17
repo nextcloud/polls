@@ -88,8 +88,7 @@ class Notifier implements INotifier {
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('polls', 'app.svg')));
 		switch ($notification->getSubject()) {
 			case 'invitation':
-				$pollId = $notification->getObjectId();
-				$poll = $this->pollMapper->find($pollId);
+				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
 				$owner = $this->userManager->get($poll->getOwner());
 
 				$notification->setParsedSubject(
