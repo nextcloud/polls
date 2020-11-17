@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.1] - 2020-11-17
+ - [fix] #1244 preferences write error
+ - [fix] a few minor glitches and fixes
+
 ## [1.6.0 - RC1] - 2020-11-01
  - [fix] some design fixes
  - [fix] #1205 External users get internal link in notification mail
