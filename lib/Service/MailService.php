@@ -254,7 +254,6 @@ class MailService {
 	 */
 
 	private function getLogString($logItem, $displayName) {
-
 		if ($logItem->getMessage()) {
 			return $logItem->getMessage();
 		}
@@ -287,11 +286,10 @@ class MailService {
 	 */
 
 	private function generateNotification($recipient, $poll, $url, $log) {
-		$owner = $poll->getOwnerUserObject();
 		if ($recipient->getLanguage()) {
 			$this->trans = $this->transFactory->get('polls', $recipient->getLanguage());
 		} else {
-			$this->trans = $this->transFactory->get('polls', $owner->getLanguage());
+			$this->trans = $this->transFactory->get('polls', $poll->getOwnerUserObject()->getLanguage());
 		}
 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
 			'title' => $poll->getTitle(),
@@ -311,7 +309,7 @@ class MailService {
 				if ($poll->getAnonymous() || $poll->getShowResults() !== "always") {
 					$displayName = $this->trans->t('A user');
 				} elseif ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
-					$actor = new User($recipient->getUserId());
+					$actor = new User($logItem->getUserId());
 					$displayName = $actor->getDisplayName();
 				} else {
 					try {
@@ -322,7 +320,7 @@ class MailService {
 					}
 				}
 
-				$emailTemplate->addBodyText(getLogString($logItem, $displayName));
+				$emailTemplate->addBodyText($this->getLogString($logItem, $displayName));
 			}
 
 			$logItem->setProcessed(time());
