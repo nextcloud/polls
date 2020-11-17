@@ -88,7 +88,6 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 					$delete->execute();
 				} else {
 					$userskeep[] = $row['user_id'];
-					\OC::$server->getLogger()->alert('save ' . json_encode($row));
 				}
 			}
 		}
@@ -126,7 +125,17 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 
 		if ($schema->hasTable('polls_preferences')) {
 			$table = $schema->getTable('polls_preferences');
-			$table->addUniqueIndex(['user_id']);
+			$table->changeColumn('user_id', [
+				'default' => ''
+			]);
+			$table->changeColumn('preferences', [
+				'notnull' => false
+			]);
+			try {
+				$table->addUniqueIndex(['user_id']);
+			} catch (\Exception $e) {
+				//catch silently, index is already present
+			}
 		}
 
 		return $schema;
