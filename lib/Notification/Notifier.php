@@ -85,7 +85,7 @@ class Notifier implements INotifier {
 		if ($notification->getApp() !== 'polls') {
 			throw new \InvalidArgumentException();
 		}
-		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('polls', 'app.svg')));
+		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('polls', 'polls-black.svg')));
 		switch ($notification->getSubject()) {
 			case 'invitation':
 				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
