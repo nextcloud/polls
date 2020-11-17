@@ -42,7 +42,6 @@ class ContactGroup extends UserGroupClass {
 
 	/**
 	 * getDisplayName
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDisplayName() {
@@ -54,7 +53,6 @@ class ContactGroup extends UserGroupClass {
 
 	/**
 	 * listRaw
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @return Array
 	 */
@@ -77,7 +75,6 @@ class ContactGroup extends UserGroupClass {
 
 	/**
 	 * Get a list of contact groups
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @return Array
 	 */
@@ -93,19 +90,17 @@ class ContactGroup extends UserGroupClass {
 
 	/**
 	 * Get a list of contacts group members
-	 * @NoAdminRequired
 	 * @return Contact[]
 	 */
 	public function getMembers() {
+		$contacts = [];
 		if (\OC::$server->getContactsManager()->isEnabled()) {
-			$contacts = [];
 			foreach (\OC::$server->getContactsManager()->search($this->id, ['CATEGORIES']) as $contact) {
 				if (array_key_exists('EMAIL', $contact)) {
 					$contacts[] = new Contact($contact['UID']);
 				}
 			}
-			return $contacts;
 		}
-		return [];
+		return $contacts;
 	}
 }

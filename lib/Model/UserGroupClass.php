@@ -91,7 +91,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getId
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getId() {
@@ -100,7 +99,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getPublicId
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getPublicId() {
@@ -109,7 +107,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getUser
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getUser() {
@@ -118,7 +115,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getType
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getType() {
@@ -127,7 +123,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getLanguage
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getLanguage() {
@@ -136,7 +131,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getDisplayName
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDisplayName() {
@@ -145,7 +139,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getDescription
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDescription() {
@@ -154,7 +147,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getIcon
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getIcon() {
@@ -163,7 +155,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getEmailAddress
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getEmailAddress() {
@@ -172,7 +163,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getOrganisation
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getOrganisation() {
@@ -181,7 +171,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getCategories
-	 * @NoAdminRequired
 	 * @return Array
 	 */
 	public function getCategories() {
@@ -190,7 +179,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * getOrganisation
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getIsNoUser() {
@@ -199,7 +187,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * setType
-	 * @NoAdminRequired
 	 * @param string $type
 	 * @return String
 	 */
@@ -210,7 +197,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * setDisplayName
-	 * @NoAdminRequired
 	 * @param string $displayName
 	 * @return String
 	 */
@@ -221,7 +207,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * setDescription
-	 * @NoAdminRequired
 	 * @param string $description
 	 * @return String
 	 */
@@ -232,7 +217,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * setEmailAddress
-	 * @NoAdminRequired
 	 * @param string $emailAddress
 	 * @return String
 	 */
@@ -243,7 +227,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * setLanguage
-	 * @NoAdminRequired
 	 * @param string $language
 	 * @return String
 	 */
@@ -254,7 +237,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * setOrganisation
-	 * @NoAdminRequired
 	 * @param string $organisation
 	 * @return String
 	 */
@@ -265,7 +247,6 @@ class UserGroupClass implements \JsonSerializable {
 
 	/**
 	 * search
-	 * @NoAdminRequired
 	 * @return Array
 	 * @throws InvalidShareTypeException
 	 */
@@ -274,8 +255,15 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	/**
+	 * getMembers
+	 * @return array
+	 */
+	public function getMembers() {
+		return [];
+	}
+
+	/**
 	 * getUserGroupChild
-	 * @NoAdminRequired
 	 * @return UserGroupClass
 	 */
 	public static function getUserGroupChild($type, $id, $displayName = '', $emailAddress = '') {

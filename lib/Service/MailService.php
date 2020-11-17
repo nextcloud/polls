@@ -38,6 +38,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
+use OCA\Polls\Model\UserGroupClass;
 use OCA\Polls\Model\Email;
 use OCA\Polls\Model\User;
 
@@ -147,6 +148,28 @@ class MailService {
 	}
 
 	/**
+	 * @param integer $pollId
+	 * @param string $userId
+	 * @return string
+	 */
+	public function resolveEmailAddress($pollId, $userId) {
+		if ($this->userManager->get($userId) instanceof IUser) {
+			return \OC::$server->getConfig()->getUserValue($userId, 'settings', 'email');
+		}
+
+		// if $userId is no site user, eval via shares
+		try {
+			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
+			if ($share->getEmailAddress()) {
+				return $share->getEmailAddress();
+			}
+		} catch (\Exception $e) {
+			// catch silently
+		}
+		return $userId;
+	}
+
+	/**
 	 * @param string $token
 	 */
 	public function sendInvitation($token) {
@@ -224,6 +247,39 @@ class MailService {
 	}
 
 	/**
+	 * getLogString
+	 * @param Log $logItem
+	 * @param string $displayName
+	 * @return string
+	 */
+
+	private function getLogString($logItem, $displayName) {
+
+		if ($logItem->getMessage()) {
+			return $logItem->getMessage();
+		}
+
+		switch ($logItem->getMessageId()) {
+			case Log::MSG_ID_SETVOTE:
+				return $this->trans->t('- %s voted.', [$displayName]);
+			case Log::MSG_ID_UPDATEPOLL:
+				return $this->trans->t('- Updated poll configuration. Please check your votes.');
+			case Log::MSG_ID_DELETEPOLL:
+				return $this->trans->t('- The poll got deleted.');
+			case Log::MSG_ID_RESTOREPOLL:
+				return $this->trans->t('- The poll got restored.');
+			case Log::MSG_ID_EXPIREPOLL:
+				return $this->trans->t('- The poll was closed.');
+			case Log::MSG_ID_ADDOPTION:
+				return $this->trans->t('- A vote option was added.');
+			case Log::MSG_ID_DELETEOPTION:
+				return $this->trans->t('- A vote option was removed.');
+			default:
+				return $logItem->getMessageId() . " (" . $displayName . ")";
+		}
+	}
+
+	/**
 	 * generateNotification
 	 * @param UserGroupClass $recipient
 	 * @param Poll $poll
@@ -233,81 +289,40 @@ class MailService {
 	private function generateNotification($recipient, $poll, $url, $log) {
 		$owner = $poll->getOwnerUserObject();
 		if ($recipient->getLanguage()) {
-			$trans = $this->transFactory->get('polls', $recipient->getLanguage());
+			$this->trans = $this->transFactory->get('polls', $recipient->getLanguage());
 		} else {
-			$trans = $this->transFactory->get('polls', $owner->getLanguage());
+			$this->trans = $this->transFactory->get('polls', $owner->getLanguage());
 		}
 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
 			'title' => $poll->getTitle(),
 			'link' => $url
 		]);
 
-		$emailTemplate->setSubject($trans->t('Polls App - New Activity'));
+		$emailTemplate->setSubject($this->trans->t('Polls App - New Activity'));
 		$emailTemplate->addHeader();
-		$emailTemplate->addHeading($trans->t('Polls App - New Activity'), false);
+		$emailTemplate->addHeading($this->trans->t('Polls App - New Activity'), false);
 		$emailTemplate->addBodyText(str_replace(
 			['{title}'],
 			[$poll->getTitle()],
-			$trans->t('"{title}" had recent activity: ')
+			$this->trans->t('"{title}" had recent activity: ')
 		));
 		foreach ($log as $logItem) {
 			if ($logItem->getPollId() === $poll->getId()) {
 				if ($poll->getAnonymous() || $poll->getShowResults() !== "always") {
-					$displayUser = $trans->t('A user');
+					$displayName = $this->trans->t('A user');
 				} elseif ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
-					$actor = new User($subscription->getUserId());
-					$displayUser = $actor->getDisplayName();
+					$actor = new User($recipient->getUserId());
+					$displayName = $actor->getDisplayName();
 				} else {
 					try {
-						$share = $this->shareMapper->findByPollAndUser($subscription->getPollId(), $logItem->getUserId());
-						$displayUser = $share->getUserObject()->getDisplayName();
+						$share = $this->shareMapper->findByPollAndUser($poll->getId(), $logItem->getUserId());
+						$displayName = $share->getUserObject()->getDisplayName();
 					} catch (\Exception $e) {
-						$displayUser = $logItem->getUserId();
+						$displayName = $logItem->getUserId();
 					}
 				}
 
-				if ($logItem->getMessage()) {
-					$emailTemplate->addBodyText($logItem->getMessage());
-				} elseif ($logItem->getMessageId() === Log::MSG_ID_SETVOTE) {
-					$emailTemplate->addBodyText($trans->t(
-						'- %s voted.',
-						[$displayUser]
-					));
-				} elseif ($logItem->getMessageId() === Log::MSG_ID_UPDATEPOLL) {
-					$emailTemplate->addBodyText($trans->t(
-						'- Updated poll configuration. Please check your votes.',
-						[$displayUser]
-					));
-				} elseif ($logItem->getMessageId() === Log::MSG_ID_DELETEPOLL) {
-					$emailTemplate->addBodyText($trans->t(
-						'- The poll got deleted.',
-						[$displayUser]
-					));
-				} elseif ($logItem->getMessageId() === Log::MSG_ID_RESTOREPOLL) {
-					$emailTemplate->addBodyText($trans->t(
-						'- The poll got restored.',
-						[$displayUser]
-					));
-				} elseif ($logItem->getMessageId() === Log::MSG_ID_EXPIREPOLL) {
-					$emailTemplate->addBodyText($trans->t(
-						'- The poll closed.',
-						[$displayUser]
-					));
-				} elseif ($logItem->getMessageId() === Log::MSG_ID_ADDOPTION) {
-					$emailTemplate->addBodyText($trans->t(
-						'- A vote option was added.',
-						[$displayUser]
-					));
-				} elseif ($logItem->getMessageId() === Log::MSG_ID_DELETEOPTION) {
-					$emailTemplate->addBodyText($trans->t(
-						'- A vote option was removed.',
-						[$displayUser]
-					));
-				} else {
-					$emailTemplate->addBodyText(
-						$logItem->getMessageId() . " (" . $displayUser . ")"
-					);
-				}
+				$emailTemplate->addBodyText(getLogString($logItem, $displayName));
 			}
 
 			$logItem->setProcessed(time());
@@ -315,11 +330,11 @@ class MailService {
 		}
 
 		$emailTemplate->addBodyButton(
-			htmlspecialchars($trans->t('Go to poll')),
+			htmlspecialchars($this->trans->t('Go to poll')),
 			$url,
 			/** @scrutinizer ignore-type */ false
 		);
-		$emailTemplate->addFooter($trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
+		$emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
 
 		return $emailTemplate;
 	}
@@ -334,9 +349,9 @@ class MailService {
 	private function generateInvitation($recipient, $poll, $url) {
 		$owner = $poll->getOwnerUserObject();
 		if ($recipient->getLanguage()) {
-			$trans = $this->transFactory->get('polls', $recipient->getLanguage());
+			$this->trans = $this->transFactory->get('polls', $recipient->getLanguage());
 		} else {
-			$trans = $this->transFactory->get('polls', $owner->getLanguage());
+			$this->trans = $this->transFactory->get('polls', $owner->getLanguage());
 		}
 
 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
@@ -345,23 +360,23 @@ class MailService {
 			'link' => $url
 		]);
 
-		$emailTemplate->setSubject($trans->t('Poll invitation "%s"', $poll->getTitle()));
+		$emailTemplate->setSubject($this->trans->t('Poll invitation "%s"', $poll->getTitle()));
 		$emailTemplate->addHeader();
-		$emailTemplate->addHeading($trans->t('Poll invitation "%s"', $poll->getTitle()), false);
+		$emailTemplate->addHeading($this->trans->t('Poll invitation "%s"', $poll->getTitle()), false);
 		$emailTemplate->addBodyText(str_replace(
 				['{owner}', '{title}'],
 				[$owner->getDisplayName(), $poll->getTitle()],
-				$trans->t('{owner} invited you to take part in the poll "{title}"')
+				$this->trans->t('{owner} invited you to take part in the poll "{title}"')
 			));
 		$emailTemplate->addBodyText($poll->getDescription());
 		$emailTemplate->addBodyButton(
-				htmlspecialchars($trans->t('Go to poll')),
+				htmlspecialchars($this->trans->t('Go to poll')),
 				$url
 			);
-		$emailTemplate->addBodyText($trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar: '));
+		$emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar: '));
 		$emailTemplate->addBodyText($url);
-		$emailTemplate->addBodyText($trans->t('Do not share this link with other people, because it is connected to your votes.'));
-		$emailTemplate->addFooter($trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
+		$emailTemplate->addBodyText($this->trans->t('Do not share this link with other people, because it is connected to your votes.'));
+		$emailTemplate->addFooter($this->trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
 
 		return $emailTemplate;
 	}

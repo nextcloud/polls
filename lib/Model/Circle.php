@@ -56,7 +56,6 @@ class Circle extends UserGroupClass {
 
 	/**
 	 * isEnabled
-	 * @NoAdminRequired
 	 * @return Boolean
 	 */
 	public static function isEnabled() {
@@ -65,7 +64,6 @@ class Circle extends UserGroupClass {
 
 	/**
 	 * listRaw
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @return Array
 	 */
@@ -80,7 +78,6 @@ class Circle extends UserGroupClass {
 
 	/**
 	 * search
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @param array $skip - group names to skip in return array
 	 * @return Circle[]
@@ -98,8 +95,6 @@ class Circle extends UserGroupClass {
 
 	/**
 	 * Get a list of circle members
-	 * @NoAdminRequired
-	 * @param string $query
 	 * @return User[]
 	 */
 	public function getMembers() {

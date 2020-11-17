@@ -44,7 +44,6 @@ class Email extends UserGroupClass {
 
 	/**
 	 * getDisplayName
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getDisplayName() {
