@@ -173,7 +173,7 @@ class ShareController extends Controller {
 			$share = $this->shareService->get($token);
 			if ($share->getType() === Share::TYPE_USER) {
 				$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
-					// skip this atm, to send invitations as mail too, if user is a site user
+			// skip this atm, to send invitations as mail too, if user is a site user
 					// $sentResult = ['sentMails' => [new User($share->getuserId())]];
 					// $this->shareService->setInvitationSent($token);
 			} elseif ($share->getType() === Share::TYPE_GROUP) {
