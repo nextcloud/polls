@@ -22,12 +22,12 @@
 
 <template>
 	<div class="calendar-info"
-		:class="conflictLevel"
+		:class="[conflictLevel, statusClass]"
 		:style="calendarStyle">
-		<div class="calendar-info__time">
-			{{ formatDate(event.eventFrom) }} - {{ formatDate(event.eventTo) }}
+		<div v-if="!event.allDay" class="calendar-info__time">
+			{{ formatDate(event.start) }} - {{ formatDate(event.end) }}
 		</div>
-		<div class="calendar-info__summay">
+		<div class="calendar-info__summay" :class="statusClass">
 			{{ event.summary }}
 		</div>
 	</div>
@@ -60,6 +60,10 @@ export default {
 			}
 		},
 
+		statusClass() {
+			return this.event.status.toLowerCase()
+		},
+
 		fontColor() {
 			if (this.event.displayColor === 'transparent') {
 				return 'black'
@@ -80,11 +84,11 @@ export default {
 		},
 
 		conflictLevel() {
-			if (this.event.key === 0) {
+			if (this.event.calendarKey === 0) {
 				return 'conflict-ignore'
-			} else if (this.event.eventFrom > this.option.timestamp + 3599) {
+			} else if (this.event.start > this.option.timestamp + 3599) {
 				return 'conflict-no'
-			} else if (this.event.eventTo - 1 < this.option.timestamp) {
+			} else if (this.event.end - 1 < this.option.timestamp) {
 				return 'conflict-no'
 			} else {
 				return 'conflict-yes'
@@ -120,6 +124,15 @@ export default {
 
 	&.conflict-no {
 		border-left: 4px solid var(--color-success);
+	}
+
+	&.cancelled {
+		text-decoration: line-through;
+		opacity: 0.5;
+	}
+
+	&.tentative {
+		opacity: 0.5;
 	}
 
 	&.conflict-yes {

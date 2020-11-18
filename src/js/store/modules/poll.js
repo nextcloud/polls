@@ -87,7 +87,7 @@ const getters = {
 		}
 	},
 
-	expired: (state) => {
+	closed: (state) => {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
@@ -100,7 +100,7 @@ const getters = {
 				participants.push({
 					userId: item.userId,
 					displayName: item.displayName,
-					externalUser: item.externalUser,
+					isNoUser: item.isNoUser,
 					voted: true,
 				})
 			}
@@ -110,7 +110,7 @@ const getters = {
 			participants.push({
 				userId: state.acl.userId,
 				displayName: state.acl.displayName,
-				externalUser: state.externalUser,
+				isNoUser: state.isNoUser,
 				voted: false,
 			})
 		}
@@ -126,7 +126,7 @@ const getters = {
 				participantsVoted.push({
 					userId: item.userId,
 					displayName: item.displayName,
-					externalUser: item.externalUser,
+					isNoUser: item.isNoUser,
 				})
 			}
 		}
@@ -143,9 +143,9 @@ const actions = {
 	get(context, payload) {
 		let endPoint = 'apps/polls/polls/get'
 		if (payload.token) {
-			endPoint = endPoint.concat('/s/', payload.token)
+			endPoint = endPoint + '/s/' + payload.token
 		} else if (payload.pollId) {
-			endPoint = endPoint.concat('/', payload.pollId)
+			endPoint = endPoint + '/' + payload.pollId
 		} else {
 			context.commit('reset')
 			context.commit('acl/reset')
@@ -188,7 +188,7 @@ const actions = {
 
 	clone(context, payload) {
 		const endPoint = 'apps/polls/polls/clone'
-		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+		return axios.get(generateUrl(endPoint + '/' + payload.pollId))
 			.then((response) => {
 				return response.data
 			})
@@ -200,7 +200,7 @@ const actions = {
 
 	update(context) {
 		const endPoint = 'apps/polls/polls/update'
-		return axios.put(generateUrl(endPoint.concat('/', state.id)), { poll: state })
+		return axios.put(generateUrl(endPoint + '/' + state.id), { poll: state })
 			.then((response) => {
 				context.commit('set', { poll: response.data })
 				return response
@@ -214,7 +214,7 @@ const actions = {
 
 	switchDeleted(context, payload) {
 		const endPoint = 'apps/polls/polls/delete'
-		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+		return axios.get(generateUrl(endPoint + '/' + payload.pollId))
 			.then((response) => {
 				return response
 			})
@@ -225,7 +225,7 @@ const actions = {
 
 	delete(context, payload) {
 		const endPoint = 'apps/polls/polls/delete'
-		return axios.get(generateUrl(endPoint.concat('/permanent/', payload.pollId)))
+		return axios.get(generateUrl(endPoint + '/permanent/' + payload.pollId))
 			.then((response) => {
 				return response
 			})
@@ -236,7 +236,7 @@ const actions = {
 
 	getParticipantsEmailAddresses(context, payload) {
 		const endPoint = 'apps/polls/polls/addresses'
-		return axios.get(generateUrl(endPoint.concat('/', payload.pollId)))
+		return axios.get(generateUrl(endPoint + '/' + payload.pollId))
 			.then((response) => {
 				return response
 			})

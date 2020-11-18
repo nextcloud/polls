@@ -25,12 +25,8 @@ namespace OCA\Polls\Controller;
 
 use DateTime;
 use DateInterval;
-use OCA\Polls\Exceptions\DuplicateEntryException;
-
 use OCP\IRequest;
-
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\CalendarService;
@@ -42,6 +38,8 @@ class OptionController extends Controller {
 
 	/** @var CalendarService */
 	private $calendarService;
+
+	use ResponseHandle;
 
 	/**
 	 * OptionController constructor.
@@ -68,7 +66,9 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
-		return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
+		return $this->response(function () use ($pollId) {
+			return ['options' => $this->optionService->list($pollId)];
+		});
 	}
 
 	/**
@@ -78,11 +78,9 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
-		try {
-			return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_OK);
-		} catch (DuplicateEntryException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
+			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
+		});
 	}
 
 	/**
@@ -92,7 +90,9 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function update($optionId, $timestamp, $pollOptionText) {
-		return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
+		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
+			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
+		});
 	}
 
 	/**
@@ -102,9 +102,10 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($optionId) {
-		return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
+		return $this->responseDeleteTolerant(function () use ($optionId) {
+			return ['option' => $this->optionService->delete($optionId)];
+		});
 	}
-
 	/**
 	 * Switch option confirmation
 	 * @NoAdminRequired
@@ -112,7 +113,9 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function confirm($optionId) {
-		return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
+		return $this->response(function () use ($optionId) {
+			return ['option' => $this->optionService->confirm($optionId)];
+		});
 	}
 
 	/**
@@ -123,7 +126,9 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function reorder($pollId, $options) {
-		return new DataResponse(['options' => $this->optionService->reorder($pollId, $options)], Http::STATUS_OK);
+		return $this->response(function () use ($pollId, $options) {
+			return ['options' => $this->optionService->reorder($pollId, $options)];
+		});
 	}
 
 	/**
@@ -136,7 +141,9 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function sequence($optionId, $step, $unit, $amount) {
-		return new DataResponse(['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)], Http::STATUS_OK);
+		return $this->response(function () use ($optionId, $step, $unit, $amount) {
+			return ['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)];
+		});
 	}
 
 	/**
@@ -147,11 +154,18 @@ class OptionController extends Controller {
 	 * @return DataResponse
 	 */
 	public function findCalendarEvents($optionId) {
-		$searchFrom = new DateTime();
-		$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
-		$searchTo = clone $searchFrom;
-		$searchTo = $searchTo->add(new DateInterval('PT3H'));
+		return $this->response(function () use ($optionId) {
+			// try {
+			$searchFrom = new DateTime();
+			$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
+			$searchTo = clone $searchFrom;
+			$searchTo = $searchTo->add(new DateInterval('PT3H'));
+			$events = $this->calendarService->getEvents($searchFrom, $searchTo);
 
-		return new DataResponse(['events' => array_values($this->calendarService->getEvents($searchFrom, $searchTo))], Http::STATUS_OK);
+			return ['events' => $events];
+			// } catch (\Exception $e) {
+			// 	return ['events' => []];
+			// }
+		});
 	}
 }

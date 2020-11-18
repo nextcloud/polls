@@ -1,16 +1,16 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Group",
+    "User" : "User",
     "Cancel" : "منسوخ کریں",
     "OK" : "اوکے",
     "Week" : "ہفتہ",
-    "Group" : "Group",
     "Title" : "عنوان",
     "Settings" : "سیٹینگز",
     "Owner" : "Owner",
     "never" : "never",
     "Description" : "تصریح",
-    "Expiration date" : "تاریخ معیاد",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "حذف شدہ ",

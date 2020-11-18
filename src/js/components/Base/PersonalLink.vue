@@ -28,9 +28,9 @@
 		<p>{{ t('polls', 'The following link is your personal access to this poll. You can reenter this poll at any time, change your vote and leave comments.') }}</p>
 		<p>{{ t('polls', 'Your personal link to this poll: {linkURL}', { linkURL: personalLink} ) }}</p>
 		<ButtonDiv icon="icon-clippy" :title="t('polls','Copy this link to the clipboard')" @click="copyLink()" />
-		<ButtonDiv v-if="share.userEmail"
+		<ButtonDiv v-if="share.emailAddress"
 			icon="icon-mail"
-			:title="t('polls','Resend invitation mail to {emailAdress}', { emailAdress: share.userEmail })"
+			:title="t('polls','Resend invitation mail to {emailAdress}', { emailAdress: share.emailAddress })"
 			@click="sendInvitation()" />
 	</div>
 </template>
@@ -53,12 +53,11 @@ export default {
 		}),
 
 		personalLink() {
-			return window.location.origin.concat(
-				this.$router.resolve({
+			return window.location.origin
+				+ this.$router.resolve({
 					name: 'publicVote',
 					params: { token: this.$route.params.token },
 				}).href
-			)
 		},
 
 	},

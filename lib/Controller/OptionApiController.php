@@ -23,14 +23,9 @@
 
 namespace OCA\Polls\Controller;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
-
 use OCP\IRequest;
 
 use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Service\OptionService;
 
@@ -38,6 +33,8 @@ class OptionApiController extends ApiController {
 
 	/** @var OptionService */
 	private $optionService;
+
+	use ResponseHandle;
 
 	/**
 	 * OptionApiController constructor.
@@ -68,13 +65,9 @@ class OptionApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function list($pollId) {
-		try {
-			return new DataResponse(['options' => $this->optionService->list($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($pollId) {
+			return ['options' => $this->optionService->list($pollId)];
+		});
 	}
 
 
@@ -89,13 +82,9 @@ class OptionApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
-		try {
-			return new DataResponse(['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)], Http::STATUS_CREATED);
-		} catch (UniqueConstraintViolationException $e) {
-			return new DataResponse(['error' => 'Option exists'], Http::STATUS_CONFLICT);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
+			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
+		});
 	}
 
 
@@ -108,11 +97,9 @@ class OptionApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function update($optionId, $timestamp = 0, $pollOptionText = '') {
-		try {
-			return new DataResponse(['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)], Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
+			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
+		});
 	}
 
 	/**
@@ -124,13 +111,9 @@ class OptionApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function delete($optionId) {
-		try {
-			return new DataResponse(['option' => $this->optionService->delete($optionId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Option does not exist'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->responseDeleteTolerant(function () use ($optionId) {
+			return ['option' => $this->optionService->delete($optionId)];
+		});
 	}
 
 	/**
@@ -142,13 +125,9 @@ class OptionApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function confirm($optionId) {
-		try {
-			return new DataResponse(['option' => $this->optionService->confirm($optionId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Option does not exist'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($optionId) {
+			return ['option' => $this->optionService->confirm($optionId)];
+		});
 	}
 
 	/**
@@ -160,10 +139,8 @@ class OptionApiController extends ApiController {
 	 * @return DataResponse
 	 */
 	public function setOrder($optionId, $order) {
-		try {
-			return new DataResponse(['option' => $this->optionService->setOrder($optionId, $order)], Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($optionId, $order) {
+			return ['option' => $this->optionService->setOrder($optionId, $order)];
+		});
 	}
 }

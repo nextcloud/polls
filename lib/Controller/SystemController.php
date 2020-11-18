@@ -52,49 +52,6 @@ class SystemController extends Controller {
 	}
 
 	/**
-	 * Get a list of users
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param array $skipUsers - usernames to skip in return array
-	 * @return DataResponse
-	 */
-	public function getSiteUsers($query = '', $skipUsers = []) {
-		return new DataResponse(['users' => $this->systemService->getSiteUsers($query, $skipUsers)], Http::STATUS_OK);
-	}
-
-	/**
-	 * Get a list of user groups
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param array $skipGroups - group names to skip in return array
-	 * @return DataResponse
-	 */
-	public function getSiteGroups($query = '', $skipGroups = []) {
-		return new DataResponse(['groups' => $this->systemService->getSiteGroups($query, $skipGroups)], Http::STATUS_OK);
-	}
-
-	/**
-	 * Get a list of contacts
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return DataResponse
-	 */
-	public function getContacts($query = '') {
-		return new DataResponse(['contacts' => $this->systemService->getContacts($query)], Http::STATUS_OK);
-	}
-
-	/**
-	 * Get a list of contact groups
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @return DataResponse
-	 */
-	public function getContactsGroups($query = '') {
-		return new DataResponse(['contactGroups' => $this->systemService->getContactsGroups($query)], Http::STATUS_OK);
-	}
-
-
-	/**
 	 * Get a combined list of NC users, groups and contacts
 	 * @NoAdminRequired
 	 * @param string $query
@@ -132,7 +89,7 @@ class SystemController extends Controller {
 		try {
 			return new DataResponse(['result' => $this->systemService->validatePublicUsername($pollId, $userName, $token), 'name' => $userName], Http::STATUS_OK);
 		} catch (\Exception $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
 		}
 	}
 
@@ -146,7 +103,7 @@ class SystemController extends Controller {
 		try {
 			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
 		} catch (\Exception $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
 		}
 	}
 }

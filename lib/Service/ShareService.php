@@ -23,14 +23,19 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareType;
+use OCA\Polls\Exceptions\ShareAlreadyExistsException;
+use OCA\Polls\Exceptions\NotFoundException;
 
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\UserGroupClass;
 
 class ShareService {
 
@@ -77,17 +82,20 @@ class ShareService {
 	 * @param int $pollId
 	 * @return array array of Share
 	 * @throws NotAuthorizedException
+	 * @throws NotFoundException
 	 */
-	public function list($pollId, $token) {
-		if ($token) {
-			return [$this->get($token)];
-		}
-
+	public function list($pollId) {
 		if (!$this->acl->set($pollId)->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 
-		return $this->shareMapper->findByPoll($pollId);
+		try {
+			$shares = $this->shareMapper->findByPoll($pollId);
+		} catch (DoesNotExistException $e) {
+			return [];
+		}
+
+		return $shares;
 	}
 
 	/**
@@ -95,42 +103,86 @@ class ShareService {
 	 * @NoAdminRequired
 	 * @param string $token
 	 * @return Share
+	 * @throws NotFoundException
 	 */
 	public function get($token) {
-		$this->share = $this->shareMapper->findByToken($token);
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+		// Allow users entering the poll with a public share access
 
+		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
+			// Check if the user has already access
+			if (!$this->acl->set($this->share->getPollId())->getAllowView()) {
+
+				// Create a new share for this user, so he is allowed to access the poll later
+				// via normal shared access and return the created share
+				return $this->create(
+					$this->share->getPollId(),
+					UserGroupClass::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
+					true
+				);
+			}
+		}
 		return $this->share;
 	}
 
+
 	/**
-	 * Add share
+	 * crate share
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @param string $userEmail
+	 * @param UserGroupClass $userGroup
+	 * @param bool $skipInvitation
 	 * @return Share
-	 * @throws NotAuthorizedException
 	 */
-	public function add($pollId, $type, $userId, $userEmail = '') {
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
-
+	private function create($pollId, $userGroup, $skipInvitation = false) {
 		$this->share = new Share();
-		$this->share->setType($type);
-		$this->share->setPollId($pollId);
-		$this->share->setUserId($userId);
-		$this->share->setUserEmail($userEmail);
-		$this->share->setInvitationSent(0);
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
 			ISecureRandom::CHAR_UPPER
 		));
+		$this->share->setPollId($pollId);
+		$this->share->setInvitationSent($skipInvitation ? time() : 0);
+		$this->share->setType($userGroup->getType());
+		$this->share->setUserId($userGroup->getPublicId());
+		$this->share->setDisplayName($userGroup->getDisplayName());
+		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
 		return $this->shareMapper->insert($this->share);
+	}
+
+	/**
+	 * Add share
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @param array $user
+	 * @return Share
+	 * @throws NotAuthorizedException
+	 * @throws InvalidShareType
+	 */
+	public function add($pollId, $type, $userId = '') {
+		if (!$this->acl->set($pollId)->getAllowEdit()) {
+			throw new NotAuthorizedException;
+		}
+
+		if ($type !== UserGroupClass::TYPE_PUBLIC) {
+			try {
+				$this->shareMapper->findByPollAndUser($pollId, $userId);
+				throw new ShareAlreadyExistsException;
+			} catch (MultipleObjectsReturnedException $e) {
+				throw new ShareAlreadyExistsException;
+			} catch (DoesNotExistException $e) {
+				// continue
+			}
+		}
+
+		$userGroup = UserGroupClass::getUserGroupChild($type, $userId);
+		return $this->create($pollId, $userGroup);
 	}
 
 	/**
@@ -141,12 +193,18 @@ class ShareService {
 	 * @param string $emailAddress
 	 * @return Share
 	 * @throws InvalidShareType
+	 * @throws NotFoundException
 	 */
 	public function setEmailAddress($token, $emailAddress) {
-		$this->share = $this->shareMapper->findByToken($token);
-		if ($this->share->getType() === 'external') {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
+		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validateEmailAddress($emailAddress);
-			$this->share->setUserEmail($emailAddress);
+			$this->share->setEmailAddress($emailAddress);
 			// TODO: Send confirmation
 			return $this->shareMapper->update($this->share);
 		} else {
@@ -162,41 +220,31 @@ class ShareService {
 	 * @param string $userName
 	 * @return Share
 	 * @throws NotAuthorizedException
+	 * @throws NotFoundException
 	 */
 	public function personal($token, $userName, $emailAddress = '') {
-		$this->share = $this->shareMapper->findByToken($token);
-
-		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);
-
-		if ($emailAddress) {
-			$this->systemService->validateEmailAddress($emailAddress);
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
-		if ($this->share->getType() === 'public') {
-			$pollId = $this->share->getPollId();
-			$this->share = new Share();
-			$this->share->setToken(\OC::$server->getSecureRandom()->generate(
-				16,
-				ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
-			));
-			$this->share->setType('external');
-			$this->share->setPollId($pollId);
-			$this->share->setUserId($userName);
-			$this->share->setUserEmail($emailAddress);
-			$this->share->setInvitationSent(time());
-			$this->shareMapper->insert($this->share);
+		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);
+		$this->systemService->validateEmailAddress($emailAddress, true);
 
+		if ($this->share->getType() === Share::TYPE_PUBLIC) {
+			$this->create(
+				$this->share->getPollId(),
+				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress));
 			if ($emailAddress) {
 				$this->mailService->sendInvitationMail($this->share->getToken());
 			}
 
 			return $this->share;
-		} elseif ($this->share->getType() === 'email') {
-			$this->share->setType('external');
+		} elseif ($this->share->getType() === Share::TYPE_EMAIL) {
+			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userName);
-			$this->share->setUserEmail($emailAddress);
+			$this->share->setEmailAddress($emailAddress);
 			return $this->shareMapper->update($this->share);
 		} else {
 			throw new NotAuthorizedException;
@@ -213,13 +261,15 @@ class ShareService {
 	 */
 
 	public function delete($token) {
-		$this->share = $this->shareMapper->findByToken($token);
-		if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+			if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
+				throw new NotAuthorizedException;
+			}
+			$this->shareMapper->delete($this->share);
+		} catch (DoesNotExistException $e) {
+			// silently catch
 		}
-
-		$this->shareMapper->delete($this->share);
-
-		return $this->share;
+		return $token;
 	}
 }

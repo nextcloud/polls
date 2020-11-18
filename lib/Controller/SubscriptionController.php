@@ -24,7 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -61,15 +61,14 @@ class SubscriptionController extends Controller {
 	 * @param int $pollId
 	 * @return DataResponse
 	 * @throws DoesNotExistException
-	 * @throws NotAuthorizedException
 	 */
 	public function get($pollId, $token) {
 		try {
-			return new DataResponse($this->subscriptionService->get($pollId, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse(['subscribed' => $this->subscriptionService->get($pollId, $token)], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['status' => 'Not subscribed'], Http::STATUS_NOT_FOUND);
+			return new DataResponse(['subscribed' => false], Http::STATUS_OK);
 		}
 	}
 
@@ -81,13 +80,12 @@ class SubscriptionController extends Controller {
 	 * @param string $token
 	 * @param boolean $subscribed
 	 * @return DataResponse
-	 * @throws NotAuthorizedException
 	 */
 	public function set($pollId, $token, $subscribed) {
 		try {
-			return new DataResponse($this->subscriptionService->set($pollId, $token, $subscribed), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+			return new DataResponse(['subscribed' => $this->subscriptionService->set($pollId, $token, $subscribed)], Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

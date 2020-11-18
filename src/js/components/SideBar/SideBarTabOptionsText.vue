@@ -22,12 +22,12 @@
 
 <template>
 	<div>
-		<ConfigBox :title="t('polls', 'Add a new text option')" icon-class="icon-add">
+		<ConfigBox v-if="!closed" :title="t('polls', 'Add a new text option')" icon-class="icon-add">
 			<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
 				@input="addOption()" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
+		<ConfigBox v-if="!showEmptyContent" :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
 			<draggable v-model="sortOptions">
 				<transition-group>
 					<OptionItem v-for="(option) in sortOptions"
@@ -41,7 +41,7 @@
 								</ActionButton>
 							</Actions>
 							<Actions v-if="acl.allowEdit" class="action">
-								<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+								<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
 									@click="confirmOption(option)">
 									{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 								</ActionButton>
@@ -51,16 +51,19 @@
 				</transition-group>
 			</draggable>
 		</ConfigBox>
-		<div v-if="!options.length" class="emptycontent">
-			<div class="icon-toggle-filelist" />
-			{{ t('polls', 'There are no vote options specified.') }}
-		</div>
+
+		<EmptyContent v-else icon="icon-toggle-filelist">
+			{{ t('polls', 'No vote options') }}
+			<template #desc>
+				{{ t('polls', 'Add some!') }}
+			</template>
+		</EmptyContent>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
 import draggable from 'vuedraggable'
 import OptionItem from '../Base/OptionItem'
@@ -75,6 +78,7 @@ export default {
 		ActionButton,
 		ConfigBox,
 		draggable,
+		EmptyContent,
 		InputDiv,
 		OptionItem,
 	},
@@ -98,8 +102,12 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 		}),
+
+		showEmptyContent() {
+			return this.sortedOptions.length === 0
+		},
 
 		sortOptions: {
 			get() {
@@ -155,10 +163,6 @@ export default {
 		border: none;
 		opacity: 0.3;
 		cursor: pointer;
-	}
-
-	.emptycontent {
-		margin-top: 20vh;
 	}
 
 </style>

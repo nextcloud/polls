@@ -44,6 +44,7 @@ import { mapState } from 'vuex'
 import orderBy from 'lodash/orderBy'
 import { Popover } from '@nextcloud/vue'
 import CalendarInfo from '../Calendar/CalendarInfo'
+import { showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'CalendarPeek',
@@ -68,19 +69,18 @@ export default {
 		return {
 			events: [],
 			event: {
-				relatedFrom: 0,
-				relatedTo: 0,
-				name: '',
-				key: '',
-				displayColor: '',
-				permissions: 0,
-				eventId: 0,
+				Id: 0,
 				UID: 0,
-				summary: '',
+				calendarKey: '',
+				calendarName: '',
+				displayColor: '',
+				allDay: '',
 				description: '',
+				end: '',
 				location: '',
-				eventFrom: '',
-				eventTo: '',
+				start: '',
+				status: '',
+				summary: '',
 			},
 		}
 	},
@@ -93,22 +93,23 @@ export default {
 		sortedEvents() {
 			var sortedEvents = [...this.events]
 			sortedEvents.push(this.thisOption)
-			return orderBy(sortedEvents, ['eventFrom', 'eventTo'], ['asc', 'asc'])
+			return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
 		},
 
 		thisOption() {
 			return {
-				name: 'Polls',
-				key: 0,
-				displayColor: '#ffffff',
-				permissions: 0,
-				eventId: this.option.id,
+				id: this.option.id,
 				UID: this.option.id,
-				summary: this.poll.title,
+				calendarKey: 0,
+				calendarName: 'Polls',
+				displayColor: '#ffffff',
+				allDay: '',
 				description: this.poll.description,
+				end: this.option.timestamp,
 				location: '',
-				eventFrom: this.option.timestamp,
-				eventTo: this.option.timestamp + 3600,
+				start: this.option.timestamp + 3600,
+				status: 'self',
+				summary: this.poll.title,
 			}
 		},
 	},
@@ -123,6 +124,11 @@ export default {
 				.dispatch('poll/options/getEvents', { option: this.option })
 				.then((response) => {
 					this.events = response.events
+				})
+				.catch((error) => {
+					if (error.message === 'Network Error') {
+						showError(t('polls', 'Got a network error while checking calendar events.'))
+					}
 				})
 		},
 

@@ -25,19 +25,19 @@
 		<UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
 		{{ t('polls', 'started this poll on {dateString}.', {dateString: dateCreatedString}) }}
 
-		<span v-if="expired && confirmedOptions.length"> {{ t('polls', 'This poll expired on {dateString}. The confirmed options are marked below.', { dateString: dateExpiryString }) }} </span>
+		<span v-if="closed && confirmedOptions.length"> {{ t('polls', 'This poll is closed since {dateString}. The confirmed options are marked below.', { dateString: dateExpiryString }) }} </span>
 
-		<span v-if="expired && !confirmedOptions.length"> {{ t('polls', 'This poll expired on {dateString}, but there are no confirmed options until now.', { dateString: dateExpiryString }) }} </span>
+		<span v-if="closed && !confirmedOptions.length"> {{ t('polls', 'This poll is closed since {dateString}, but there are no confirmed options until now.', { dateString: dateExpiryString }) }} </span>
 
-		<span v-if="expired && !confirmedOptions.length && acl.allowEdit"> {{ t('polls', 'You can confirm your favorites now in the options tab in the sidebar.', { dateString: dateExpiryString }) }} </span>
+		<span v-if="closed && !confirmedOptions.length && acl.allowEdit"> {{ t('polls', 'You can confirm your favorites now in the options tab in the sidebar.', { dateString: dateExpiryString }) }} </span>
 
-		<span v-if="!expired && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until {dateString}.', { dateString: dateExpiryString }) }} </span>
+		<span v-if="!closed && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until {dateString}.', { dateString: dateExpiryString }) }} </span>
 
 		<span v-if="poll.anonymous">{{ t('polls', 'This is an anonymous poll. Except to the poll owner, participants names are hidden.') }} </span>
 
 		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden.') }}</span>
 
-		<span v-if="!acl.allowSeeResults && poll.showResults === 'expired'">{{ t('polls', 'They will be revealed after the poll is expired.') }}</span>
+		<span v-if="!acl.allowSeeResults && (poll.showResults === 'closed')">{{ t('polls', 'They will be revealed after the poll is closed.') }}</span>
 
 		<span v-if="poll.type === 'datePoll'">{{ t('polls', 'The used time zone is {timeZone}.', { timeZone: currentTimeZone }) }}</span>
 	</div>
@@ -63,7 +63,7 @@ export default {
 
 		...mapGetters({
 			participantsVoted: 'poll/participantsVoted',
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 			confirmedOptions: 'poll/options/confirmed',
 		}),
 

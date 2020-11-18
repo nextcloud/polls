@@ -25,15 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class InvalidShowResultsException extends \Exception {
+class InvalidShowResultsException extends Exception {
 	/**
 	 * InvalidShowResultsException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($message = 'Invalid showResults value') {
-		parent::__construct($message);
-	}
-	public function getStatus() {
-		return Http::STATUS_CONFLICT;
+	public function __construct($e = 'Invalid showResults value') {
+		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

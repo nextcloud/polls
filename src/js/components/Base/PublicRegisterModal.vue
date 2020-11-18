@@ -201,7 +201,7 @@ export default {
 
 	mounted() {
 		this.userName = this.share.userId
-		this.emailAddress = this.share.userEmail
+		this.emailAddress = this.share.emailAddress
 		this.setFocus()
 	},
 
@@ -239,7 +239,7 @@ export default {
 
 		validateEmailAddress: debounce(function() {
 			if (this.emailAddress.length > 0) {
-				return axios.get(generateUrl('apps/polls/check/emailaddress').concat('/', this.emailAddress))
+				return axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
 					.then(() => {
 						this.isValidEmailAddress = true
 						this.checkingEmailAddress = false

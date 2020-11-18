@@ -25,7 +25,6 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
-use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -39,12 +38,30 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method string getUserEmail()
- * @method void setUserEmail(string $value)
+ * @method string getEmailAddress()
+ * @method void setEmailAddress(string $value)
  * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
+ * @method int getDisplayName()
+ * @method void setDisplayName(string $value)
  */
 class Share extends Entity implements JsonSerializable {
+
+	// Only authenticated access
+	public const TYPE_USER = 'user';
+	public const TYPE_GROUP = 'group';
+
+	// Public and authenticated Access
+	public const TYPE_PUBLIC = 'public';
+
+	// Only public access
+	public const TYPE_EMAIL = 'email';
+	public const TYPE_CONTACT = 'contact';
+	public const TYPE_EXTERNAL = 'external';
+
+	// no direct Access
+	public const TYPE_CIRCLE = 'circle';
+	public const TYPE_CONTACTGROUP = 'contactGroup';
 
 	/** @var string $token */
 	protected $token;
@@ -58,11 +75,14 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $userId */
 	protected $userId;
 
-	/** @var string $userEmail */
-	protected $userEmail;
+	/** @var string $emailAddress */
+	protected $emailAddress;
 
 	/** @var string $invitationSent */
 	protected $invitationSent;
+
+	/** @var string $displayName */
+	protected $displayName;
 
 	public function jsonSerialize() {
 		return [
@@ -70,23 +90,39 @@ class Share extends Entity implements JsonSerializable {
 			'token' => $this->token,
 			'type' => $this->type,
 			'pollId' => intval($this->pollId),
-			'userId' => $this->userId,
-			'userEmail' => $this->userEmail,
+			'userId' => $this->getUserId(),
+			'emailAddress' => $this->emailAddress,
 			'invitationSent' => intval($this->invitationSent),
-			'displayName' => $this->getDisplayName(),
-			'externalUser' => $this->externalUser()
+			'displayName' => $this->displayName,
+			'isNoUser' => !($this->type === self::TYPE_USER),
+			'validPublic' => $this->getValidPublic(),
+			'validAuthenticated' => $this->getValidAuthenticated(),
 		];
 	}
 
-	private function getDisplayName() {
-		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
-		} else {
-			return $this->userId;
+	public function getUserId() {
+		if ($this->type === self::TYPE_CONTACTGROUP) {
+			// contactsgroup had the prefix contactgroup_ until version 1.5
+			// strip it out
+			$parts = explode("contactgroup_", $this->userId);
+			$userId = end($parts);
+			return $userId;
 		}
+		return $this->userId;
 	}
 
-	private function externalUser() {
-		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+	public function getValidPublic() {
+		return (
+			   $this->type === self::TYPE_PUBLIC
+			|| $this->type === self::TYPE_EMAIL
+			|| $this->type === self::TYPE_CONTACT
+			|| $this->type === self::TYPE_EXTERNAL);
+	}
+
+	public function getValidAuthenticated() {
+		return (
+			   $this->type === self::TYPE_PUBLIC
+			|| $this->type === self::TYPE_USER
+			|| $this->type === self::TYPE_GROUP);
 	}
 }

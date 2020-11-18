@@ -62,7 +62,7 @@ class Comment extends Entity implements JsonSerializable {
 	public function jsonSerialize() {
 
 		// too lazy for a migration
-		// use timestamp if is set,
+		// use timestamp if set,
 		// otherwise use dt and convert to timestamp
 
 		if (intval($this->timestamp) > 0) {
@@ -78,8 +78,8 @@ class Comment extends Entity implements JsonSerializable {
 			'dt' => $this->dt,
 			'timestamp' => intval($timestamp),
 			'comment' => $this->comment,
-			'displayName' => $this->getDisplayName(),
-			'externalUser' => $this->externalUser()
+			'isNoUser' => $this->getIsNoUser(),
+			'displayName' => $this->getDisplayName()
 		];
 	}
 
@@ -91,7 +91,7 @@ class Comment extends Entity implements JsonSerializable {
 		}
 	}
 
-	private function externalUser() {
-		return (!\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+	public function getIsNoUser() {
+		return !(\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
 }

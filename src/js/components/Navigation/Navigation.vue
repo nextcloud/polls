@@ -39,21 +39,18 @@
 			</AppNavigationItem>
 		</template>
 		<template #footer>
-			<AppNavigationSettings :title="t('core', 'Settings')">
-				<NavigationSettings />
-			</AppNavigationSettings>
+			<AppNavigationItem :title="t('core', 'Settings')" icon="icon-settings" @click="showSettings()" />
 		</template>
 	</AppNavigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem, AppNavigationSettings } from '@nextcloud/vue'
+import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters } from 'vuex'
 import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
-import NavigationSettings from './NavigationSettings'
 import { emit } from '@nextcloud/event-bus'
 
 export default {
@@ -62,14 +59,13 @@ export default {
 		AppNavigation,
 		AppNavigationNew,
 		AppNavigationItem,
-		AppNavigationSettings,
-		NavigationSettings,
 		CreateDlg,
 		PollNavigationItems,
 	},
 
 	data() {
 		return {
+			showSettingsDlg: false,
 			createDlg: false,
 			reloadInterval: 30000,
 			pollCategories: [
@@ -98,9 +94,9 @@ export default {
 					pinned: false,
 				},
 				{
-					id: 'expired',
-					title: t('polls', 'Expired polls'),
-					icon: 'icon-polls-expired',
+					id: 'closed',
+					title: t('polls', 'Closed polls'),
+					icon: 'icon-polls-closed',
 					pinned: false,
 				},
 				{
@@ -159,6 +155,10 @@ export default {
 				})
 		},
 
+		showSettings() {
+			emit('show-settings')
+		},
+
 		switchDeleted(pollId) {
 			this.$store
 				.dispatch('poll/switchDeleted', { pollId: pollId })
@@ -192,7 +192,7 @@ export default {
 </script>
 
 <style lang="scss">
-	.expired {
+	.closed {
 		.app-navigation-entry-icon, .app-navigation-entry__title {
 			opacity: 0.6;
 		}

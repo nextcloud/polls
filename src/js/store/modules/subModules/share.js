@@ -27,13 +27,12 @@ import { generateUrl } from '@nextcloud/router'
 const defaultShares = () => {
 	return {
 		displayName: '',
-		externalUser: false,
 		id: null,
 		invitationSent: 0,
 		pollId: null,
 		token: '',
 		type: '',
-		userEmail: '',
+		emailAddress: '',
 		userId: '',
 	}
 }
@@ -56,7 +55,7 @@ const mutations = {
 const actions = {
 	get(context, payload) {
 		const endPoint = 'apps/polls/share'
-		return axios.get(generateUrl(endPoint.concat('/', payload.token)))
+		return axios.get(generateUrl(endPoint + '/' + payload.token))
 			.then((response) => {
 				context.commit('set', { share: response.data.share })
 				return response.data
@@ -69,7 +68,7 @@ const actions = {
 
 	sendInvitation(context, payload) {
 		const endPoint = 'apps/polls/share/send'
-		return axios.post(generateUrl(endPoint.concat('/', context.state.token)))
+		return axios.post(generateUrl(endPoint + '/' + context.state.token))
 			.then((response) => {
 				context.commit('set', { share: response.data.share })
 				return response

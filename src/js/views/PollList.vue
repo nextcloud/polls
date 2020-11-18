@@ -32,10 +32,13 @@
 		</div>
 
 		<div class="area__main">
-			<div v-if="noPolls" class="emptycontent">
-				<div class="icon-polls" />
-				<h2> {{ t('polls', 'No existing polls.') }} </h2>
-			</div>
+			<EmptyContent v-if="noPolls" icon="icon-polls">
+				{{ t('polls', 'No polls found for this category') }}
+				<template #desc>
+					{{ t('polls', 'Add one or change category!') }}
+				</template>
+			</EmptyContent>
+
 			<transition-group v-else
 				name="list"
 				tag="div"
@@ -54,7 +57,7 @@
 </template>
 
 <script>
-import { AppContent } from '@nextcloud/vue'
+import { AppContent, EmptyContent } from '@nextcloud/vue'
 import PollItem from '../components/PollList/PollItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
@@ -68,6 +71,7 @@ export default {
 		AppContent,
 		LoadingOverlay,
 		PollItem,
+		EmptyContent,
 	},
 
 	data() {
@@ -96,8 +100,8 @@ export default {
 				return t('polls', 'My deleted polls')
 			} else if (this.$route.params.type === 'participated') {
 				return t('polls', 'Participated by me')
-			} else if (this.$route.params.type === 'expired') {
-				return t('polls', 'Expired polls')
+			} else if (this.$route.params.type === 'closed') {
+				return t('polls', 'Closed polls')
 			} else {
 				return t('polls', 'All polls')
 			}
@@ -107,7 +111,7 @@ export default {
 			if (this.$route.params.type === 'my') {
 				return t('polls', 'Your polls (where you are the owner).')
 			} else if (this.$route.params.type === 'relevant') {
-				return t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without expired polls.')
+				return t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls.')
 			} else if (this.$route.params.type === 'public') {
 				return t('polls', 'A complete list with all public polls on this site, regardless who is the owner.')
 			} else if (this.$route.params.type === 'hidden') {
@@ -116,8 +120,8 @@ export default {
 				return t('polls', 'The trash bin.')
 			} else if (this.$route.params.type === 'participated') {
 				return t('polls', 'All polls, where you placed a vote.')
-			} else if (this.$route.params.type === 'expired') {
-				return t('polls', 'Polls which reached their expiry date.')
+			} else if (this.$route.params.type === 'closed') {
+				return t('polls', 'All closed polls, where voting is disabled.')
 			} else {
 				return t('polls', 'All polls, where you have access to.')
 			}
@@ -185,7 +189,7 @@ export default {
 
 <style lang="scss" scoped>
 	.area__header {
-		margin-top: 52px;
+		margin-left: 33px !important;
 	}
 
 	.poll-list__list {

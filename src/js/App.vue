@@ -22,6 +22,7 @@
 
 <template>
 	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+		<SettingsDlg />
 		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
 		<SideBar v-if="sideBarOpen && $store.state.poll.id"
@@ -33,18 +34,25 @@
 <script>
 import Navigation from './components/Navigation/Navigation'
 import SideBar from './components/SideBar/SideBar'
+import SettingsDlg from './components/Settings/SettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
+import './assets/scss/hacks.scss'
+import './assets/scss/icons.scss'
+import './assets/scss/colors.scss'
+import './assets/scss/transitions.scss'
+import './assets/scss/experimental.scss'
 
 export default {
 	name: 'App',
 	components: {
 		Navigation,
 		Content,
+		SettingsDlg,
 		SideBar,
 	},
 
@@ -135,127 +143,15 @@ export default {
 </script>
 
 <style  lang="scss">
-:root {
-	--polls-vote-rows: 1;
-	--polls-vote-columns: 1;
-	--color-background-error: #f9c5c5;
-	--color-background-success: #d6fdda;
-	--color-polls-foreground-yes: #49bc49;
-	--color-polls-foreground-no: #f45573;
-	--color-polls-foreground-maybe: #ffc107;
-	--color-polls-background-yes: #ebf5d6;
-	--color-polls-background-no: #ffede9;
-	--color-polls-background-maybe: #fcf7e1;
-	--icon-polls-back: url('./assets/back.svg');
-	--icon-polls-confirmed: url('./assets/confirmed.svg');
-	--icon-polls-unconfirmed: url('./assets/unconfirmed.svg');
-	--icon-polls-clone: url('./assets/clone.svg');
-	--icon-polls-expired: url('./assets/clock.svg');
-	--icon-polls-move: url('./assets/move.svg');
-	--icon-polls-yes: url('./assets/yes-vote.svg');
-	--icon-polls-no: url('./assets/no-vote.svg');
-	--icon-polls-maybe: url('./assets/maybe-vote.svg');
-	--icon-polls: url('./assets/polls.svg');
-	--icon-polls-handle: url('./assets/handle.svg');
-	--icon-polls-mail: url('./assets/mail.svg');
-	--icon-polls-sidebar-toggle: url('./assets/sidebar-toggle.svg');
-	--icon-polls-loading: url('./assets/loading-small.gif');
-
-	// filters to colorize background svg from black
-	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
-	--color-polls-foreground-filter-yes: invert(74%) sepia(7%) saturate(3830%) hue-rotate(68deg) brightness(85%) contrast(85%);
-	--color-polls-foreground-filter-no: invert(43%) sepia(100%) saturate(1579%) hue-rotate(318deg) brightness(99%) contrast(94%);
-	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
-}
-
-.icon-polls {
-	background-image: var(--icon-polls);
-}
-
-.icon-polls-back {
-	background-image: var(--icon-polls-back);
-}
-
-.icon-polls-confirmed {
-	background-image: var(--icon-polls-confirmed);
-}
-
-.icon-polls-unconfirmed {
-	background-image: var(--icon-polls-unconfirmed);
-}
-
-.icon-polls-expired {
-	background-image: var(--icon-polls-expired);
-}
-
-.icon-polls-move {
-	background-image: var(--icon-polls-move);
-}
-
-.icon-polls-clone {
-	background-image: var(--icon-polls-clone);
-}
-
-.icon-polls-yes {
-	background-image: var(--icon-polls-yes);
-}
-
-.icon-polls-no {
-	background-image: var(--icon-polls-no);
-}
-
-.icon-polls-maybe {
-	background-image: var(--icon-polls-maybe);
-}
-
-.icon-polls-mail {
-	background-image: var(--icon-polls-mail);
-}
-
-.icon-polls-sidebar-toggle {
-	background-image: var(--icon-polls-sidebar-toggle);
-}
-
-.title {
-	margin: 8px 0;
-}
 
 .description {
-	white-space: pre-wrap;
+	// white-space: pre-wrap;
 	margin: 8px 0;
 }
 
 .linkified {
 	font-weight: bold;
 	text-decoration: underline;
-}
-
-.icon-handle {
-	background-image: var(--icon-polls-handle);
-}
-
-.transitions-active {
-	.list-enter-active,
-	.list-leave-active {
-		transition: all 0.5s ease;
-	}
-
-	.list-enter,
-	.list-leave-to {
-		opacity: 0;
-	}
-
-	.list-move {
-		transition: transform 0.5s;
-	}
-
-	.fade-leave-active .fade-enter-active{
-		transition: opacity 0.5s;
-	}
-
-	.fade-enter, .fade-leave-to {
-		opacity: 0;
-	}
 }
 
 input {
@@ -341,51 +237,6 @@ input {
 	flex-direction: column;
 	padding: 0 8px;
 	min-width: 320px;
-}
-
-// experimental colored background in the main area
-
-[class*='area__'] {
-	padding: 8px;
-	background-color: var(--color-main-background);
-	border-radius: var(--border-radius);
-	margin: 12px 6px;
-	min-width: 320px;
-}
-
-.experimental {
-	&.app-polls.bgcolored {
-		.app-navigation {
-			border-right: 0px;
-			box-shadow: 2px 0 6px var(--color-box-shadow);
-		}
-		.app-content {
-			background-color: var(--color-primary-light);
-			[class*='area__'] {
-				box-shadow: 2px 2px 6px var(--color-box-shadow);
-				margin: 12px;
-			}
-		}
-	}
-
-	// experimental background image
-	&.app-polls.bgimage {
-		.glassy {
-			backdrop-filter: blur(10px);
-			background-color: rgba(255, 255, 255, 0.5);
-		}
-		.app-navigation {
-			border-right: 0px;
-			box-shadow: 2px 0 6px var(--color-box-shadow);
-		}
-		.app-content {
-			background-color: transparent;
-		}
-		[class*='area__'] {
-			box-shadow: 2px 2px 6px var(--color-box-shadow);
-			margin: 12px;
-		}
-	}
 }
 
 </style>

@@ -22,10 +22,10 @@
 
 <template>
 	<div>
-		<OptionAddDate v-if="!expired" />
-		<OptionShiftDates v-if="options.length && !expired" />
+		<OptionAddDate v-if="!closed" />
+		<OptionShiftDates v-if="options.length && !closed" />
 
-		<ConfigBox :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
+		<ConfigBox v-if="!showEmptyContent" :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
 			<transition-group is="ul">
 				<OptionItem v-for="(option) in sortedOptions"
 					:key="option.id"
@@ -41,10 +41,10 @@
 						</Actions>
 
 						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="!expired" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+							<ActionButton v-if="!closed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 								{{ t('polls', 'Clone option') }}
 							</ActionButton>
-							<ActionButton v-if="expired" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+							<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 								@click="confirmOption(option)">
 								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 							</ActionButton>
@@ -54,10 +54,12 @@
 			</transition-group>
 		</ConfigBox>
 
-		<div v-if="!options.length" class="emptycontent">
-			<div class="icon-calendar" />
-			{{ t('polls', 'There are no vote options specified.') }}
-		</div>
+		<EmptyContent v-else icon="icon-calendar">
+			{{ t('polls', 'No vote options') }}
+			<template #desc>
+				{{ t('polls', 'Add some!') }}
+			</template>
+		</EmptyContent>
 
 		<Modal v-if="cloneModal" :can-close="false">
 			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
@@ -73,7 +75,7 @@ import OptionShiftDates from '../Base/OptionShiftDates'
 import ConfigBox from '../Base/ConfigBox'
 import OptionItem from '../Base/OptionItem'
 import moment from '@nextcloud/moment'
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { Actions, ActionButton, Modal, EmptyContent } from '@nextcloud/vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 import { dateUnits } from '../../mixins/dateMixins'
 
@@ -84,6 +86,7 @@ export default {
 		Actions,
 		ActionButton,
 		ConfigBox,
+		EmptyContent,
 		OptionAddDate,
 		OptionCloneDate,
 		OptionShiftDates,
@@ -118,8 +121,12 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 		}),
+
+		showEmptyContent() {
+			return this.sortedOptions.length === 0
+		},
 
 		dateBaseOptionString() {
 			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')
@@ -141,10 +148,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.emptycontent {
-		margin-top: 20vh;
-	}
-
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
 		&:active,

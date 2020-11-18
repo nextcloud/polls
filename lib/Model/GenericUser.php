@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,5 +21,35 @@
  *
  */
 
-$app = new \OCA\Polls\AppInfo\Application();
-$app->registerNavigationEntry();
+
+namespace OCA\Polls\Model;
+
+class GenericUser extends UserGroupClass {
+	public const TYPE = 'external';
+	public const ICON_DEFAULT = 'icon-share';
+	public const ICON_PUBLIC = 'icon-public';
+
+	/**
+	 * Email constructor.
+	 * @param $id
+	 * @param $displayName
+	 */
+	public function __construct(
+		$id,
+		$type = self::TYPE,
+		$displayName = '',
+		$emailAddress = ''
+	) {
+		parent::__construct($id, $type);
+		$this->displayName = $displayName;
+		$this->emailAddress = $emailAddress;
+
+		if ($type === UserGroupClass::TYPE_PUBLIC) {
+			$this->icon = self::ICON_PUBLIC;
+			$this->description = \OC::$server->getL10N('polls')->t('Public link');
+		} else {
+			$this->description = \OC::$server->getL10N('polls')->t('External user');
+			$this->icon = self::ICON_DEFAULT;
+		}
+	}
+}

@@ -23,21 +23,17 @@
 
 namespace OCA\Polls\Controller;
 
-use Exception;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-
 use OCA\Polls\Service\CommentService;
 
 class CommentController extends Controller {
 
 	/** @var CommentService */
 	private $commentService;
+
+	use ResponseHandle;
 
 	/**
 	 * CommentController constructor
@@ -55,17 +51,6 @@ class CommentController extends Controller {
 		$this->commentService = $commentService;
 	}
 
-	// /**
-	//  * Read all comments of a poll based on the poll id and return list as array
-	//  * @NoAdminRequired
-	//  * @param int $pollId
-	//  * @param string $token
-	//  * @return DataResponse
-	//  */
-	// public function list($pollId) {
-	// 	return new DataResponse($this->commentService->list($pollId), Http::STATUS_OK);
-	// }
-	//
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
@@ -76,11 +61,9 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function add($pollId, $message, $token) {
-		try {
-			return new DataResponse($this->commentService->add($pollId, $message, $token), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse($e, Http::STATUS_UNAUTHORIZED);
-		}
+		return $this->response(function () use ($pollId, $message, $token) {
+			return ['comment'=> $this->commentService->add($pollId, $message, $token)];
+		});
 	}
 
 	/**
@@ -92,12 +75,8 @@ class CommentController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($commentId, $token) {
-		try {
-			return new DataResponse($this->commentService->delete($commentId, $token), Http::STATUS_OK);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse($e, Http::STATUS_FORBIDDEN);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse($e, Http::STATUS_OK);
-		}
+		return $this->responseDeleteTolerant(function () use ($commentId, $token) {
+			return ['comment'=> $this->commentService->delete($commentId, $token)];
+		});
 	}
 }

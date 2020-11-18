@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Group",
+    "User" : "User",
     "Cancel" : "បោះបង់",
     "OK" : "ព្រម",
     "Week" : "សប្ដាហ៍",
     "Back" : "ត្រឡប់ក្រោយ",
-    "Group" : "Group",
-    "Unknown user" : "មិនស្គាល់អ្នកប្រើប្រាស់",
     "Title" : "ចំណងជើង",
     "Apply" : "អនុវត្ត",
     "Settings" : "ការកំណត់",
@@ -16,7 +16,6 @@ OC.L10N.register(
     "Configuration" : "ការ​កំណត់​សណ្ឋាន",
     "Shares" : "ចែក​រំលែក",
     "Description" : "ការ​អធិប្បាយ",
-    "Expiration date" : "ពេល​ផុត​កំណត់",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "បាន​លុប",

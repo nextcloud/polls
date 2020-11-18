@@ -67,6 +67,13 @@ use OCP\AppFramework\Db\Entity;
  * @method void setImportant(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
+	public const TYPE_DATE = 'datePoll';
+	public const TYPE_TEXT = 'textPoll';
+	public const ACCESS_HIDDEN = 'hidden';
+	public const ACCESS_PUBLIC = 'public';
+	public const SHOW_RESULTS_ALWAYS = 'always';
+	public const SHOW_RESULTS_CLOSED = 'closed';
+	public const SHOW_RESULTS_NEVER = 'never';
 
 	/** @var string $type */
 	protected $type;
@@ -134,7 +141,7 @@ class Poll extends Entity implements JsonSerializable {
 			'allowMaybe' => intval($this->allowMaybe),
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
-			'showResults' => $this->showResults,
+			'showResults' => $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults,
 			'adminAccess' => intVal($this->adminAccess),
 			'ownerDisplayName' => $this->getDisplayName(),
 			'important' => intVal($this->important)
@@ -151,7 +158,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setVoteLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getVoteLimit());
 		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
 		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
-		$this->setAdminAccess(isset($array['adminAccess']) ?+ $array['adminAccess'] : $this->getAdminAccess());
+		$this->setAdminAccess(isset($array['adminAccess']) ? +$array['adminAccess'] : $this->getAdminAccess());
 		$this->setImportant(isset($array['important']) ? +$array['important'] : $this->getImportant());
 		return $this;
 	}

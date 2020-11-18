@@ -25,15 +25,12 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class InvalidPollTypeException extends \Exception {
+class InvalidPollTypeException extends Exception {
 	/**
 	 * InvalidPollTypeException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($message = 'Invalid pollType value') {
-		parent::__construct($message);
-	}
-	public function getStatus() {
-		return Http::STATUS_CONFLICT;
+	public function __construct($e = 'Invalid pollType value') {
+		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

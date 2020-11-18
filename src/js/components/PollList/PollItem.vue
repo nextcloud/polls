@@ -46,13 +46,13 @@
 			</div>
 
 			<div class="item__expiry sortable" @click="$emit('sort-list', {sort: 'expire'})">
-				{{ t('polls', 'Expires') }}
+				{{ t('polls', 'Closing Date') }}
 				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 		</div>
 	</div>
 
-	<div v-else class="poll-item__item" :class="{ expired: isExpired, active: (poll.id === $store.state.poll.id) }">
+	<div v-else class="poll-item__item" :class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
 		<router-link :to="{name: 'vote', params: {id: poll.id}}" class="item__title">
 			<div class="item__title__title">
@@ -150,15 +150,15 @@ export default {
 
 	computed: {
 
-		isExpired() {
+		closed() {
 			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 
 		accessType() {
 			if (this.poll.access === 'public') {
-				return t('polls', 'Visible to other users')
+				return t('polls', 'All users')
 			} else {
-				return t('polls', 'Hidden to other users')
+				return t('polls', 'Only invited users')
 			}
 		},
 
@@ -292,7 +292,7 @@ export default {
 	width: 110px;
 }
 
-.expired {
+.closed {
 	.item__expiry {
 		color: var(--color-error);
 	}
@@ -349,11 +349,11 @@ export default {
 }
 
 .item__access--public {
-	background-image: var(--icon-timezone-000);
+	background-image: var(--icon-polls-public-poll);
 }
 
 .item__access--hidden {
-	background-image: var(--icon-password-000);
+	background-image: var(--icon-polls-hidden-poll);
 }
 
 .poll-item__item {

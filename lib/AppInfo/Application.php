@@ -23,33 +23,10 @@
 
 namespace OCA\Polls\AppInfo;
 
-use OCP\AppFramework\App;
-
-class Application extends App {
-
-	/**
-	 * Application constructor.
-	 * @param array $urlParams
-	 */
-	public function __construct(array $urlParams = []) {
-		parent::__construct('polls', $urlParams);
+if (\OCP\Util::getVersion()[0] >= 20) {
+	class Application extends Application20 {
 	}
-
-	/**
-	 * Register navigation entry for main navigation.
-	 */
-	public function registerNavigationEntry() {
-		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function () use ($container) {
-			$urlGenerator = $container->query('OCP\IURLGenerator');
-			$l10n = $container->query('OCP\IL10N');
-			return [
-				'id' => 'polls',
-				'order' => 77,
-				'href' => $urlGenerator->linkToRoute('polls.page.index'),
-				'icon' => $urlGenerator->imagePath('polls', 'app.svg'),
-				'name' => $l10n->t('Polls')
-			];
-		});
+} else {
+	class Application extends Application19 {
 	}
 }

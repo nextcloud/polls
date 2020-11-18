@@ -1,0 +1,44 @@
+// experimental colored background in the main area
+
+[class*='area__'] {
+	padding: 8px;
+	background-color: var(--color-main-background);
+	border-radius: var(--border-radius);
+	margin: 12px 6px;
+	min-width: 320px;
+}
+
+.experimental {
+	&.app-polls.bgcolored {
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: var(--color-primary-light);
+			[class*='area__'] {
+				box-shadow: 2px 2px 6px var(--color-box-shadow);
+				margin: 12px;
+			}
+		}
+	}
+
+	// experimental background image
+	&.app-polls.bgimage {
+		.glassy {
+			backdrop-filter: blur(10px);
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+		.app-content {
+			background-color: transparent;
+		}
+		[class*='area__'] {
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+			margin: 12px;
+		}
+	}
+}

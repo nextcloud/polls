@@ -1,11 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Խումբ",
+    "User" : "User",
     "Confirmed" : "Հաստատված",
     "Cancel" : "ընդհատել",
     "OK" : "Լավ",
     "Week" : "Շաբաթ",
-    "Group" : "Խումբ",
     "Title" : "Վերնագիր",
     "Settings" : "կարգավորումներ",
     "Owner" : "Owner",
@@ -13,7 +14,6 @@ OC.L10N.register(
     "Details" : "Մանրամասներ",
     "Comments" : "Կարծիքներ",
     "Description" : "Նկարագրություն",
-    "Expiration date" : "Վավերականության ժամկետ",
     "No" : "No",
     "Yes" : "Yes",
     "Deleted" : "Ջնջված",

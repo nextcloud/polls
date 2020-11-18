@@ -24,7 +24,6 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
@@ -39,7 +38,7 @@ class PreferencesMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $id
+	 * @param string $userId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Preferences
@@ -51,23 +50,9 @@ class PreferencesMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_INT))
+			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId))
 		   );
 
 		return $this->findEntity($qb);
 	}
-
-	// /**
-	//  * @param int $userId
-	//  */
-	// public function delete($userId) {
-	// 	$qb = $this->db->getQueryBuilder();
-	//
-	// 	$qb->delete($this->getTableName())
-	// 	   ->where(
-	// 		   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_INT))
-	// 	   );
-	//
-	//    $qb->execute();
-	// }
 }

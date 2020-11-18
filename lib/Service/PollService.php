@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
@@ -30,6 +31,7 @@ use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
 
+use OCA\Polls\Db\Log;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\VoteMapper;
@@ -92,7 +94,7 @@ class PollService {
 	/**
 	 * Get list of polls
 	 * @NoAdminRequired
-	 * @return array Array of Poll
+	 * @return Poll[]
 	 * @throws NotAuthorizedException
 	 */
 
@@ -102,17 +104,22 @@ class PollService {
 		}
 
 		$pollList = [];
+		try {
+			$polls = $this->pollMapper->findAll();
 
-		$polls = $this->pollMapper->findAll();
-		// TODO: Not the elegant way. Improvement neccessary
-		foreach ($polls as $poll) {
-			$combinedPoll = (object) array_merge(
-				(array) json_decode(json_encode($poll)), (array) json_decode(json_encode($this->acl->set($poll->getId()))));
-			if ($combinedPoll->allowView) {
-				$pollList[] = $combinedPoll;
+			// TODO: Not the elegant way. Improvement neccessary
+			foreach ($polls as $poll) {
+				$combinedPoll = (object) array_merge(
+					(array) json_decode(json_encode($poll)),
+					(array) json_decode(json_encode($this->acl->set($poll->getId())))
+				);
+				if ($combinedPoll->allowView) {
+					$pollList[] = $combinedPoll;
+				}
 			}
+		} catch (DoesNotExistException $e) {
+			return [];
 		}
-
 		return $pollList;
 	}
 
@@ -164,7 +171,7 @@ class PollService {
 		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
-		$this->poll->setAccess('hidden');
+		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
 		$this->poll->setExpire(0);
 		$this->poll->setAnonymous(0);
 		$this->poll->setFullAnonymous(0);
@@ -172,13 +179,13 @@ class PollService {
 		$this->poll->setVoteLimit(0);
 		$this->poll->setSettings('');
 		$this->poll->setOptions('');
-		$this->poll->setShowResults('always');
+		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
 		$this->poll->setImportant(0);
 		$this->poll = $this->pollMapper->insert($this->poll);
 
-		$this->logService->setLog($this->poll->getId(), 'addPoll');
+		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_ADDPOLL);
 
 		return $this->poll;
 	}
@@ -206,7 +213,6 @@ class PollService {
 		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
 			throw new InvalidShowResultsException('Invalid value for prop showResults');
 		}
-
 		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
 			throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
 		}
@@ -217,7 +223,7 @@ class PollService {
 		$this->poll->deserializeArray($poll);
 
 		$this->pollMapper->update($this->poll);
-		$this->logService->setLog($this->poll->getId(), 'updatePoll');
+		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_UPDATEPOLL);
 
 		return $this->poll;
 	}
@@ -245,7 +251,7 @@ class PollService {
 		}
 
 		$this->poll = $this->pollMapper->update($this->poll);
-		$this->logService->setLog($this->poll->getId(), 'deletePoll');
+		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_DELETEPOLL);
 
 		return $this->poll;
 	}
@@ -286,7 +292,7 @@ class PollService {
 		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
-		$this->poll->setAccess('hidden');
+		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
 
 		$this->poll->setType($origin->getType());
 		$this->poll->setDescription($origin->getDescription());
@@ -345,7 +351,7 @@ class PollService {
 	 * @return array
 	 */
 	private function getValidPollType() {
-		return ['datePoll', 'textPoll'];
+		return [Poll::TYPE_DATE, Poll::TYPE_TEXT];
 	}
 
 	/**
@@ -354,7 +360,7 @@ class PollService {
 	 * @return array
 	 */
 	private function getValidAccess() {
-		return ['hidden', 'public'];
+		return [Poll::ACCESS_HIDDEN, Poll::ACCESS_PUBLIC];
 	}
 
 	/**
@@ -363,6 +369,6 @@ class PollService {
 	 * @return array
 	 */
 	private function getValidShowResults() {
-		return ['always', 'expired', 'never'];
+		return [Poll::SHOW_RESULTS_ALWAYS, Poll::SHOW_RESULTS_CLOSED, Poll::SHOW_RESULTS_NEVER];
 	}
 }

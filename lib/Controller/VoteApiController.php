@@ -24,7 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\Exception;
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
@@ -70,8 +70,8 @@ class VoteApiController extends ApiController {
 			return new DataResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -89,8 +89,8 @@ class VoteApiController extends ApiController {
 			return new DataResponse(['vote' => $this->voteService->set($optionId, $setTo)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (NotAuthorizedException $e) {
-			return new DataResponse(['error' => $e->getMessage()], $e->getStatus());
+		} catch (Exception $e) {
+			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

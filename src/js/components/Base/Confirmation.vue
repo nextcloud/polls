@@ -50,12 +50,12 @@ export default {
 		...mapGetters({
 			votesRank: 'poll/votes/ranked',
 			participantsVoted: 'poll/participantsVoted',
-			expired: 'poll/expired',
+			closed: 'poll/closed',
 			confirmedOptions: 'poll/options/confirmed',
 		}),
 
 		isConfirmed() {
-			return this.option.confirmed && this.expired
+			return this.option.confirmed && this.closed
 		},
 		confirmations() {
 			if (this.isConfirmed) {

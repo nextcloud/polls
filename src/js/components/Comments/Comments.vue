@@ -23,7 +23,7 @@
 <template>
 	<div class="comments">
 		<CommentAdd v-if="acl.allowComment" />
-		<transition-group v-if="countComments" name="fade" class="comments"
+		<transition-group v-if="!showEmptyContent" name="fade" class="comments"
 			tag="ul">
 			<li v-for="(comment) in sortedList" :key="comment.id">
 				<div class="comment-item">
@@ -44,10 +44,12 @@
 			</li>
 		</transition-group>
 
-		<div v-else class="emptycontent">
-			<div class="icon-comment" />
-			<p> {{ t('polls', 'No comments yet. Be the first.') }}</p>
-		</div>
+		<EmptyContent v-else icon="icon-comment">
+			{{ t('polls', 'No comments') }}
+			<template #desc>
+				{{ t('polls', 'Be the first.') }}
+			</template>
+		</EmptyContent>
 	</div>
 </template>
 
@@ -56,7 +58,7 @@ import CommentAdd from './CommentAdd'
 import sortBy from 'lodash/sortBy'
 import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -65,6 +67,7 @@ export default {
 		Actions,
 		ActionButton,
 		CommentAdd,
+		EmptyContent,
 	},
 	data() {
 		return {
@@ -82,6 +85,10 @@ export default {
 		...mapGetters({
 			countComments: 'poll/comments/count',
 		}),
+
+		showEmptyContent() {
+			return this.countComments === 0
+		},
 
 		sortedList() {
 			if (this.reverse) {
@@ -113,10 +120,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.emptycontent {
-		margin-top: 20vh;
-	}
-
 	ul {
 		& > li {
 			margin-bottom: 30px;

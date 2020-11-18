@@ -24,14 +24,14 @@
 	<div>
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Shares')" icon-class="icon-share">
+		<ConfigBox :title="t('polls', 'Effective shares')" icon-class="icon-share">
 			<TransitionGroup :css="false" tag="div" class="shared-list">
 				<UserItem v-for="(share) in invitationShares"
 					:key="share.id" v-bind="share"
 					:icon="true">
 					<Actions>
 						<ActionButton
-							v-if="share.userEmail || share.type === 'group'"
+							v-if="share.emailAddress || share.type === 'group'"
 							icon="icon-confirm"
 							@click="sendInvitation(share)">
 							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
@@ -62,7 +62,7 @@
 				:preselect-first="true"
 				:placeholder="placeholder"
 				label="displayName"
-				track-by="user"
+				track-by="userId"
 				@select="addShare"
 				@search-change="loadUsersAsync">
 				<template slot="selection" slot-scope="{ values, isOpen }">
@@ -74,15 +74,10 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Public shares')" icon-class="icon-public">
-			<TransitionGroup :css="false" tag="ul" class="shared-list">
-				<li v-for="(share) in publicShares" :key="share.id">
-					<div class="share-item">
-						<Avatar icon-class="icon-public" :is-no-user="true" />
-						<!-- <div class="avatar icon-public" /> -->
-						<div class="share-item__description">
-							{{ t('polls', 'Public link ({token})', {token: share.token }) }}
-						</div>
-					</div>
+			<TransitionGroup :css="false" tag="div" class="shared-list">
+				<PublicShareItem v-for="(share) in publicShares"
+					:key="share.id"
+					v-bind="share">
 					<Actions>
 						<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
 							{{ t('polls', 'Copy link to clipboard') }}
@@ -93,29 +88,30 @@
 							{{ t('polls', 'Remove share') }}
 						</ActionButton>
 					</Actions>
-				</li>
+				</PublicShareItem>
 			</TransitionGroup>
 
-			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', user: '', emailAddress: ''})" />
+			<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', userId: '', emailAddress: ''})" />
 		</ConfigBox>
 
 		<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
 			<TransitionGroup :css="false" tag="div" class="shared-list">
 				<UserItem v-for="(share) in unsentInvitations"
-					:key="share.id" v-bind="share"
+					:key="share.id"
+					v-bind="share"
 					:icon="true">
 					<Actions>
 						<ActionButton
-							v-if="share.userEmail || share.type === 'group'"
+							v-if="share.emailAddress || share.type === 'group'"
 							icon="icon-confirm"
 							@click="sendInvitation(share)">
 							{{ t('polls', 'Send invitation mail') }}
 						</ActionButton>
 						<ActionButton
-							v-if="share.type === 'contactGroup'"
+							v-if="share.type === 'contactGroup' || share.type === 'circle'"
 							icon="icon-toggle-filelist"
-							@click="resolveContactGroup(share)">
-							{{ t('polls', 'Resolve contact group into individual invitations') }}
+							@click="resolveGroup(share)">
+							{{ t('polls', 'Resolve into individual invitations') }}
 						</ActionButton>
 					</Actions>
 					<Actions>
@@ -131,12 +127,13 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { Actions, ActionButton, Avatar, Multiselect } from '@nextcloud/vue'
+import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import ConfigBox from '../Base/ConfigBox'
 import ButtonDiv from '../Base/ButtonDiv'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import PublicShareItem from '../Base/PublicShareItem'
 
 export default {
 	name: 'SideBarTabShare',
@@ -144,10 +141,10 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		Avatar,
 		ButtonDiv,
 		ConfigBox,
 		Multiselect,
+		PublicShareItem,
 	},
 
 	data() {
@@ -178,10 +175,17 @@ export default {
 	},
 
 	methods: {
-		resolveContactGroup(share) {
-			this.$store.dispatch('poll/shares/resolveContactGroup', { share: share })
-				.then((response) => {
-					this.$store.dispatch('poll/shares/delete', { share: share })
+		resolveGroup(share) {
+			this.$store.dispatch('poll/shares/resolveGroup', { share: share })
+				.catch((error) => {
+					if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
+						showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
+					} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
+						showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
+					} else {
+						showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
+					}
+
 				})
 		},
 
@@ -233,9 +237,10 @@ export default {
 		addShare(payload) {
 			this.$store
 				.dispatch('poll/shares/add', {
+					share: payload,
 					type: payload.type,
-					userId: payload.user,
-					userEmail: payload.emailAddress,
+					id: payload.id,
+					emailAddress: payload.emailAddress,
 				})
 				.catch(error => {
 					console.error('Error while adding share - Error: ', error)
@@ -266,19 +271,6 @@ export default {
 		flex: 1;
 		align-items: center;
 		max-width: 100%;
-
-		//dirty hack: AvatarDiv does not work properly with iconClass
-		.avatardiv {
-			&.avatardiv--unknown {
-				background-color: transparent;
-			}
-
-			.avatar-class-icon {
-				// background-color: var(--color-primary-element-light);
-				min-height: 32px;
-				min-width: 32px;
-			}
-		}
 	}
 
 	.share-item__description {

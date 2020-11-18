@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Gruppo",
+    "User" : "User",
     "Confirmed" : "Confirmate",
     "Cancel" : "Cancellar",
     "OK" : "Ok",
     "Week" : "Septimana",
     "Back" : "Retro",
-    "Group" : "Gruppo",
-    "Unknown user" : "Usator incognite",
     "Conflict" : "Conflicto",
     "New comment …" : "Nove commentario...",
     "Delete comment" : "Deler commentario",
@@ -21,7 +21,6 @@ OC.L10N.register(
     "Shares" : "Compartimentos",
     "Comments" : "Commentarios",
     "Description" : "Description",
-    "Expiration date" : "Data de expiration",
     "No" : "No",
     "Yes" : "Si",
     "Deleted" : "Delite",

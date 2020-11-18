@@ -28,6 +28,7 @@ import router from './router'
 import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
+import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
@@ -42,10 +43,8 @@ __webpack_public_path__ = generateFilePath('polls', '', 'js/')
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
+Vue.prototype.t = translate
+Vue.prototype.n = translatePlural
 Vue.prototype.getCurrentUser = getCurrentUser
 
 Vue.component('UserItem', UserItem)
@@ -58,7 +57,7 @@ Vue.use(VueClipboard)
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#content',
-	router: router,
-	store: store,
+	router,
+	store,
 	render: h => h(App),
 })
