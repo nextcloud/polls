@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.2] - 2020-11-19
+ - [fix] Subscription was missing for logged in users
+
 ## [1.6.1] - 2020-11-17
  - [fix] #1244 preferences write error
  - [fix] a few minor glitches and fixes
