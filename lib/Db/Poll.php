@@ -29,6 +29,7 @@ use JsonSerializable;
 
 use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
+use OCA\Polls\Model\User;
 
 /**
  * @method string getType()
@@ -163,11 +164,20 @@ class Poll extends Entity implements JsonSerializable {
 		return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function getDisplayName() {
 		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
 		} else {
 			return $this->owner;
 		}
+	}
+	/**
+	 * @return User
+	 */
+	public function getOwnerUserObject() {
+		return new User($this->owner);
 	}
 }

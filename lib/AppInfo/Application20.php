@@ -23,10 +23,13 @@
 
 namespace OCA\Polls\AppInfo;
 
+use Closure;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Notification\IManager as NotificationManager;
+use OCA\Polls\Notification\Notifier;
 
 class Application20 extends App implements IBootstrap {
 	public const APP_ID = 'polls';
@@ -39,8 +42,13 @@ class Application20 extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
+		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 	}
 
 	public function register(IRegistrationContext $context): void {
+	}
+
+	public function registerNotifications(NotificationManager $notificationManager): void {
+		$notificationManager->registerNotifierService(Notifier::class);
 	}
 }

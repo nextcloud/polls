@@ -130,7 +130,7 @@ class ShareApiController extends ApiController {
 	 */
 	public function sendInvitation($token) {
 		return $this->response(function () use ($token) {
-			$sentResult = $this->mailService->sendInvitationMail($token);
+			$sentResult = $this->mailService->sendInvitation($token);
 			$share = $this->shareService->get($token);
 			return [
 				'share' => $share,

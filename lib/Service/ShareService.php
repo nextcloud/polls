@@ -129,6 +129,17 @@ class ShareService {
 		return $this->share;
 	}
 
+	/**
+	 * Get share by token
+	 * @NoAdminRequired
+	 * @param string $token
+	 * @return Share
+	 */
+	public function setInvitationSent($token) {
+		$share = $this->get($token);
+		$share->setInvitationSent(time());
+		return $this->shareMapper->update($share);
+	}
 
 	/**
 	 * crate share
@@ -229,21 +240,25 @@ class ShareService {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
-		$this->systemService->validatePublicUsername($this->share->getPollId(), $userName, $token);
+		$this->systemService->validatePublicUsername($userName, $token);
 		$this->systemService->validateEmailAddress($emailAddress, true);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
+			// Create new external share for user, who entered the poll via public link
 			$this->create(
 				$this->share->getPollId(),
 				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress));
 			if ($emailAddress) {
-				$this->mailService->sendInvitationMail($this->share->getToken());
+				$this->mailService->sendInvitation($this->share->getToken());
 			}
 
 			return $this->share;
-		} elseif ($this->share->getType() === Share::TYPE_EMAIL) {
+		} elseif ($this->share->getType() === Share::TYPE_EMAIL
+				|| $this->share->getType() === Share::TYPE_CONTACT) {
+			// Convert Email and contact shares to external share, if user registeres
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userName);
+			$this->share->setDisplayName($userName);
 			$this->share->setEmailAddress($emailAddress);
 			return $this->shareMapper->update($this->share);
 		} else {

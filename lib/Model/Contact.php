@@ -50,7 +50,6 @@ class Contact extends UserGroupClass {
 	 * getPublicId
 	 * must use displayName for contact's user id, because contact id
 	 * is not accessable outside the owners's scope
-	 * @NoAdminRequired
 	 * @return String
 	 */
 	public function getPublicId() {
@@ -59,7 +58,6 @@ class Contact extends UserGroupClass {
 
 	/**
 	 * isEnabled
-	 * @NoAdminRequired
 	 * @return Boolean
 	 */
 	public static function isEnabled() {
@@ -69,7 +67,6 @@ class Contact extends UserGroupClass {
 	/**
 	 * resolveContact
 	 * We just need the contact's UID, so make sure, the any prefix is removed
-	 * @NoAdminRequired
 	 */
 	private function resolveContactId() {
 		$parts = explode(":", $this->id);
@@ -78,7 +75,6 @@ class Contact extends UserGroupClass {
 
 	/**
 	 * loadContact
-	 * @NoAdminRequired
 	 * @throws MultipleContactsFound
 	 * The contacts app just provides a search, so we have to load the contact
 	 * after searching via the contact's id and use the first contact.
@@ -104,7 +100,6 @@ class Contact extends UserGroupClass {
 
 	/**
 	 * getContact
-	 * @NoAdminRequired
 	 * @throws ContactsNotEnabledExceptions
 	 */
 	private function getContact() {
@@ -143,7 +138,6 @@ class Contact extends UserGroupClass {
 
 	/**
 	 * listRaw
-	 * @NoAdminRequired
 	 * List all contacts with email adresses
 	 * excluding contacts from localSystemBook
 	 * @param string $query
@@ -163,7 +157,6 @@ class Contact extends UserGroupClass {
 
 	/**
 	 * list
-	 * @NoAdminRequired
 	 * @param string $query
 	 * @param array $queryRange
 	 * @return self[]
