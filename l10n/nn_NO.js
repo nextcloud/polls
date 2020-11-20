@@ -7,7 +7,6 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "OK" : "OK",
     "Week" : "Veke",
-    "Back" : "Tilbake",
     "New comment …" : "Ny kommentar...",
     "Delete comment" : "Slett kommentar",
     "Title" : "Tittel",

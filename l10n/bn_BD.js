@@ -6,7 +6,6 @@ OC.L10N.register(
     "Cancel" : "বাতির",
     "OK" : "তথাস্তু",
     "Week" : "সপ্তাহ",
-    "Back" : "পেছনে যাও",
     "Title" : "শিরোনাম",
     "Settings" : "সেটিংস",
     "Owner" : "Owner",

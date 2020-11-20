@@ -9,7 +9,6 @@ OC.L10N.register(
     "Cancel" : "Anulează",
     "OK" : "OK",
     "Week" : "Săptămâna",
-    "Back" : "Înapoi",
     "Conflict" : "Conflict",
     "New comment …" : "Comentariu nou...",
     "Delete comment" : "Șterge comentariu",

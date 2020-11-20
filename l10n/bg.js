@@ -9,7 +9,6 @@ OC.L10N.register(
     "Cancel" : "Отказ",
     "OK" : "ОК",
     "Week" : "Седмица",
-    "Back" : "Назад",
     "Conflict" : "Конфликт",
     "New comment …" : "Нов коментар...",
     "Delete comment" : "Изтрий коментар",

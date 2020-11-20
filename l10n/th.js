@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "ยกเลิก",
     "OK" : "ตกลง",
     "Week" : "สัปดาห์",
-    "Back" : "ย้อนกลับ",
     "Conflict" : "ความขัดแย้ง",
     "New comment …" : "ความคิดเห็นใหม่...",
     "Delete comment" : "ลบความคิดเห็น",

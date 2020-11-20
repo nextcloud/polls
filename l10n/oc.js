@@ -7,7 +7,6 @@ OC.L10N.register(
     "Cancel" : "Anullar",
     "OK" : "D'acòrdi",
     "Week" : "Aquesta setmana",
-    "Back" : "Retorn",
     "Title" : "Títol",
     "Apply" : "Aplicar",
     "Settings" : "Paramètres",

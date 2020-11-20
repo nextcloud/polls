@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "Hủy bỏ",
     "OK" : "OK",
     "Week" : "Tuần",
-    "Back" : "Quay lại",
     "Conflict" : "Xung đột",
     "New comment …" : "Bình luận mới ...",
     "Delete comment" : " Xóa bình luận",

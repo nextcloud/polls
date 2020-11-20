@@ -5,7 +5,6 @@ OC.L10N.register(
     "User" : "Korisnik",
     "Cancel" : "Cancel",
     "OK" : "U redu",
-    "Back" : "Nazad",
     "Conflict" : "Konflikt",
     "Title" : "Naslov",
     "Settings" : "Поставке",

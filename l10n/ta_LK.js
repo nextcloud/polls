@@ -6,7 +6,6 @@ OC.L10N.register(
     "Cancel" : "இரத்து செய்க",
     "OK" : "சரி ",
     "Week" : "வாரம்",
-    "Back" : "பின்னுக்கு",
     "Title" : "தலைப்பு",
     "Settings" : "அமைப்புகள்",
     "Owner" : "Owner",

@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "Atcelt",
     "OK" : "Labi",
     "Week" : "Nedēļa",
-    "Back" : "Atpakaļ",
     "Conflict" : "Konflikts",
     "New comment …" : "Jauns komentārs...",
     "Delete comment" : "Dzēst komentāru",

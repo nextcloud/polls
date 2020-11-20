@@ -7,7 +7,6 @@ OC.L10N.register(
     "Cancel" : "Arrest",
     "OK" : "OK",
     "Week" : "Sizun",
-    "Back" : "Distro",
     " " : " ",
     "Conflict" : "Stourm",
     "Delete comment" : "Lemel an displegadenn",

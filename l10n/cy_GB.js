@@ -8,7 +8,6 @@ OC.L10N.register(
     "Cancel" : "Diddymu",
     "OK" : "Iawn",
     "Week" : "Wythnos",
-    "Back" : "Nôl",
     "Title" : "Teitl",
     "Settings" : "Gosodiadau",
     "Owner" : "Owner",

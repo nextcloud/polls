@@ -9,7 +9,6 @@ OC.L10N.register(
     "Cancel" : "Kanselleer",
     "OK" : "Goed",
     "Week" : "Week",
-    "Back" : "Terug",
     "New comment …" : "Nuwe kommentaar…",
     "Delete comment" : "Skrap kommentaar",
     "Title" : "Titel",

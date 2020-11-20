@@ -7,7 +7,6 @@ OC.L10N.register(
     "Cancel" : "Membatalkan",
     "OK" : "OK",
     "Week" : "Minggu",
-    "Back" : "Kembali",
     "Conflict" : "Konflik",
     "New comment …" : "Komentar baru ...",
     "Delete comment" : "Hapus komentar",

@@ -7,7 +7,6 @@ OC.L10N.register(
     "Cancel" : "болиулах",
     "OK" : "ок",
     "Week" : "Долоо хоног",
-    "Back" : "буцах",
     "Conflict" : "Давхцал",
     "New comment …" : "Шинэ сэтгэгдэл...",
     "Delete comment" : "Сэтгэгдэл устгах",

@@ -9,7 +9,6 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "OK" : "OK",
     "Week" : "Javë",
-    "Back" : "Prapa",
     "Conflict" : "Përplasje",
     "New comment …" : "Koment i ri ...",
     "Delete comment" : "Fshi komentin",

@@ -6,7 +6,6 @@ OC.L10N.register(
     "Cancel" : "Batal",
     "OK" : "OK",
     "Week" : "Minggu",
-    "Back" : "Kembali",
     "Title" : "Judul",
     "Settings" : "Tetapan",
     "Owner" : "Owner",
