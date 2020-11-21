@@ -59,6 +59,7 @@ OC.L10N.register(
     "Anonymous poll" : "Anonym omröstning",
     "Title must not be empty!" : "Titeln får inte vara tom",
     "Remove share" : "Ta bort delning",
+    "Enter a name to start the search" : "Ange ett namn för att starta sökningen",
     "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
     "No" : "Nej",
     "Yes" : "Ja",
