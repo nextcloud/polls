@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.3] - tbd
+ - [fix] #1252 - External user is not listed in admin's shares list
+
 ## [1.6.2] - 2020-11-19
  - [fix] Subscription was missing for logged in users
 
