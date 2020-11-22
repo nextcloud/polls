@@ -238,6 +238,9 @@ class ShareService {
 				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress));
 			if ($emailAddress) {
 				$this->mailService->sendInvitationMail($this->share->getToken());
+			} else {
+				$this->share->setInvitationSent(time());
+				$this->share = $this->shareMapper->update($this->share);
 			}
 
 			return $this->share;
