@@ -286,15 +286,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * getIsShared - is the poll shared?
-	 * Returns true, if any share exists for the current poll.
-	 * @return bool
-	 */
-	private function getIsShared(): bool {
-		return ($this->getGroupShare() || $this->getPersonalShare() || $this->getPublicShare());
-	}
-
-	/**
 	 * getUserIsInvolved - Is user involved?
 	 * Returns true, if the current user is involved in the share via share or if he is a participant.
 	 * @return bool
@@ -348,12 +339,12 @@ class Acl implements JsonSerializable {
 		if ($this->getLoggedIn()) {
 			return count(
 				array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-					if (
-						($item->getType() === Share::TYPE_USER
-							|| $item->getType() === Share::TYPE_EXTERNAL
-							|| $item->getType() === Share::TYPE_EMAIL
-							|| $item->getType() === Share::TYPE_CONTACT
-						)
+					if (in_array($item->getType(), [
+						Share::TYPE_USER,
+						Share::TYPE_EXTERNAL,
+						Share::TYPE_EMAIL,
+						Share::TYPE_CONTACT
+					])
 						&& $item->getUserId() === $this->getUserId()
 					) {
 						return true;
@@ -386,11 +377,11 @@ class Acl implements JsonSerializable {
 	 */
 	private function validateShareAccess() {
 		if (\OC::$server->getUserSession()->getUser()->getUID()) {
-			if (!getValidAuthenticatedShare()) {
+			if (!$this->getValidAuthenticatedShare()) {
 				throw new NotAuthorizedException;
 			};
 		} else {
-			if (!getValidPublicShare()) {
+			if (!$this->getValidPublicShare()) {
 				throw new NotAuthorizedException;
 			};
 		}
