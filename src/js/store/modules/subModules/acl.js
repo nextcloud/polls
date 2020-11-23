@@ -23,24 +23,21 @@
 
 const defaultAcl = () => {
 	return {
-		accessLevel: '',
 		allowComment: false,
 		allowEdit: false,
 		allowSeeResults: false,
 		allowSeeUsernames: false,
+		allowSubscribe: false,
 		allowView: false,
 		allowVote: false,
 		displayName: '',
-		groupShare: false,
-		isAdmin: false,
 		isOwner: false,
 		loggedIn: false,
-		personalShare: false,
 		pollId: null,
-		publicShare: false,
 		token: '',
 		userHasVoted: false,
 		userId: '',
+		userIsInvolved: '',
 	}
 }
 
