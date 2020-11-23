@@ -67,7 +67,7 @@ const getters = {
 		// sharetype which are active without sending an invitation
 		const directShareTypes = ['user', 'group']
 		return state.list.filter(share => {
-			return (invitationTypes.includes(share.type) && share.invitationSent) || directShareTypes.includes(share.type)
+			return (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type)
 		})
 	},
 
