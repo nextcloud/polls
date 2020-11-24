@@ -10,9 +10,9 @@ Parameters in the body override the URL-parameter
 Base URL for all calls: /index.php/apps/polls
 Example calls:
 * Gets all comments of poll no. 1
-`https://username:password@nextcloud.local/index.php/apps/polls/api/1.0/poll/1/comments`
+`https://username:password@nextcloud.local/index.php/apps/polls/api/v1.0/poll/1/comments`
 ```bash
-`curl -u username:password -X GET https://nextcloud.local/index.php/apps/polls/api/1.0/poll/1/comments`
+`curl -u username:password -X GET https://nextcloud.local/index.php/apps/polls/api/v1.0/poll/1/comments`
 ```
 
 # Poll
