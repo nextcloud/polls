@@ -65,7 +65,7 @@
 				class="vote-table__vote-row">
 				<VoteTableVoteItem v-for="(option) in rankedOptions"
 					:key="option.id"
-					:class="{ 'confirmed' : option.confirmed }"
+					:class="{ 'confirmed' : option.confirmed && poll.closed }"
 					:user-id="participant.userId"
 					:option="option"
 					:is-active="acl.userId === participant.userId && acl.allowVote" />
