@@ -376,7 +376,7 @@ class Acl implements JsonSerializable {
 	 * @throws NotAuthorizedException
 	 */
 	private function validateShareAccess() {
-		if (\OC::$server->getUserSession()->getUser()->getUID()) {
+		if ($this->getLoggedIn()) {
 			if (!$this->getValidAuthenticatedShare()) {
 				throw new NotAuthorizedException;
 			};
