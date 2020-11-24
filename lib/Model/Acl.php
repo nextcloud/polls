@@ -148,9 +148,9 @@ class Acl implements JsonSerializable {
 		return (
 			   $this->getAllowEdit()
 			|| !$this->poll->getDeleted() && (
-				   $this->getUserIsInvolved()
+				   $this->getValidPublicShare()
+				|| $this->getUserIsInvolved()
 				|| $this->getPublicShare()
-				|| ($this->poll->getAccess() === Poll::ACCESS_PUBLIC)
 			)
 		);
 	}
