@@ -32,6 +32,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\DB\Share;
+use OCA\Polls\DB\Poll;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
@@ -41,14 +42,20 @@ use OCA\Polls\Model\Acl;
 
 class PollController extends Controller {
 
-	/** @var PollService */
-	private $pollService;
+	/** @var Acl */
+	private $acl;
 
 	/** @var CommentService */
 	private $commentService;
 
 	/** @var OptionService */
 	private $optionService;
+
+	/** @var PollService */
+	private $pollService;
+
+	/** @var Poll */
+	private $poll;
 
 	/** @var ShareService */
 	private $shareService;
@@ -59,43 +66,43 @@ class PollController extends Controller {
 	/** @var VoteService */
 	private $voteService;
 
-	/** @var Acl */
-	private $acl;
-
 	use ResponseHandle;
 
 	/**
 	 * PollController constructor.
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param PollService $pollService
+	 * @param Acl $acl
 	 * @param CommentService $commentService
 	 * @param OptionService $optionService
+	 * @param PollService $pollService
+	 * @param Poll $poll
 	 * @param ShareService $shareService
-	 * @param VoteService $voteService
 	 * @param Share $share
-	 * @param Acl $acl
+	 * @param VoteService $voteService
 	 */
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		PollService $pollService,
+		Acl $acl,
 		CommentService $commentService,
 		OptionService $optionService,
+		PollService $pollService,
+		Poll $poll,
 		ShareService $shareService,
-		VoteService $voteService,
 		Share $share,
-		Acl $acl
+		VoteService $voteService
 	) {
 		parent::__construct($appName, $request);
-		$this->pollService = $pollService;
+		$this->acl = $acl;
 		$this->commentService = $commentService;
 		$this->optionService = $optionService;
+		$this->pollService = $pollService;
+		$this->poll = $poll;
 		$this->shareService = $shareService;
-		$this->voteService = $voteService;
 		$this->share = $share;
-		$this->acl = $acl;
+		$this->voteService = $voteService;
 	}
 
 	/**
@@ -240,7 +247,7 @@ class PollController extends Controller {
 
 	public function delete($pollId) {
 		return $this->response(function () use ($pollId) {
-			return $this->pollService->update($pollId);
+			return $this->pollService->delete($pollId);
 		});
 	}
 
@@ -283,12 +290,5 @@ class PollController extends Controller {
 		return $this->response(function () use ($pollId) {
 			return $this->pollService->getParticipantsEmailAddresses($pollId);
 		});
-		try {
-			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
 	}
 }

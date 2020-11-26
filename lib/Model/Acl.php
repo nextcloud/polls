@@ -100,7 +100,7 @@ class Acl implements JsonSerializable {
 		try {
 			return $this->setShare($this->shareMapper->findByToken($token));
 		} catch (DoesNotExistException $e) {
-			throw new NotAuthorizedException('Error loading share '. $token);
+			throw new NotAuthorizedException('Error loading share ' . $token);
 		}
 	}
 
@@ -131,7 +131,7 @@ class Acl implements JsonSerializable {
 		try {
 			return $this->setPoll($this->pollMapper->find($pollId));
 		} catch (DoesNotExistException $e) {
-			throw new NotAuthorizedException('Error loading poll '. $pollId);
+			throw new NotAuthorizedException('Error loading poll ' . $pollId);
 		}
 	}
 
@@ -143,7 +143,7 @@ class Acl implements JsonSerializable {
 	public function setPoll(Poll $poll) {
 		$this->poll = $poll;
 		if (!$this->getAllowView()) {
-			throw new NotAuthorizedException('Error loading poll '. $poll->getId());
+			throw new NotAuthorizedException('Error loading poll ' . $poll->getId());
 		}
 		return $this;
 	}
