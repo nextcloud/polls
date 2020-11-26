@@ -31,6 +31,7 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
+use OCA\Polls\DB\Share;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
@@ -52,11 +53,16 @@ class PollController extends Controller {
 	/** @var ShareService */
 	private $shareService;
 
+	/** @var Share */
+	private $share;
+
 	/** @var VoteService */
 	private $voteService;
 
 	/** @var Acl */
 	private $acl;
+
+	use ResponseHandle;
 
 	/**
 	 * PollController constructor.
@@ -67,6 +73,7 @@ class PollController extends Controller {
 	 * @param OptionService $optionService
 	 * @param ShareService $shareService
 	 * @param VoteService $voteService
+	 * @param Share $share
 	 * @param Acl $acl
 	 */
 
@@ -78,6 +85,7 @@ class PollController extends Controller {
 		OptionService $optionService,
 		ShareService $shareService,
 		VoteService $voteService,
+		Share $share,
 		Acl $acl
 	) {
 		parent::__construct($appName, $request);
@@ -86,9 +94,9 @@ class PollController extends Controller {
 		$this->optionService = $optionService;
 		$this->shareService = $shareService;
 		$this->voteService = $voteService;
+		$this->share = $share;
 		$this->acl = $acl;
 	}
-
 
 	/**
 	 * Get list of polls
@@ -97,11 +105,9 @@ class PollController extends Controller {
 	 */
 
 	public function list() {
-		try {
-			return new DataResponse($this->pollService->list(), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () {
+			return $this->pollService->list();
+		});
 	}
 
 
@@ -109,58 +115,92 @@ class PollController extends Controller {
 	 * get complete poll
 	 * @NoAdminRequired
 	 * @PublicPage
+	 * @deprecated use getByToken/getById
 	 * @param int $pollId
 	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function get($pollId = 0, $token = '') {
-		try {
-			$acl = $this->acl->set($pollId, $token);
-			$poll = $this->pollService->get($pollId, $token);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+	public function get(int $pollId = 0, string $token = '') {
+		if ($token) {
+			return $this->getByToken($token);
+		} else {
+			return $this->getByPollId($pollId);
 		}
+	}
 
+	/**
+	 * get complete poll via token
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @param string $token
+	 * @return DataResponse
+	 */
+	public function getByToken(string $token) {
+		return $this->response(function () use ($token) {
+			$this->share = $this->shareService->get($token);
+			$this->acl->setShare($this->share);
+			$this->poll = $this->pollService->get($this->share->getPollId());
+			return $this->build();
+		});
+	}
+
+	/**
+	 * get complete poll via pollId
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return DataResponse
+	 */
+	public function getByPollId(int $pollId) {
+		return $this->response(function () use ($pollId) {
+			$this->share = null;
+			$this->poll = $this->pollService->get($pollId);
+			$this->acl->setPoll($this->poll);
+			return $this->build();
+		});
+	}
+
+	/**
+	 * get complete poll
+	 * @NoAdminRequired
+	 * @PublicPage
+	 * @param int $pollId
+	 * @param string $token
+	 * @return Array
+	 */
+	private function build() {
 		try {
-			$comments = $this->commentService->list($pollId, $token);
+			$comments = $this->commentService->list($this->poll->getId());
 		} catch (Exception $e) {
 			$comments = [];
 		}
 
 		try {
-			$options = $this->optionService->list($pollId, $token);
+			$options = $this->optionService->list($this->poll->getId());
 		} catch (Exception $e) {
 			$options = [];
 		}
 
 		try {
-			$votes = $this->voteService->list($pollId, $token);
+			$votes = $this->voteService->list($this->poll->getId());
 		} catch (Exception $e) {
 			$votes = [];
 		}
 
 		try {
-			if ($token) {
-				$share = $this->shareService->get($token);
-				$shares = [];
-			} else {
-				$share = null;
-				$shares = $this->shareService->list($pollId);
-			}
+			$shares = $this->shareService->list($this->poll->getId());
 		} catch (Exception $e) {
-			$share = null;
 			$shares = [];
 		}
 
-		return new DataResponse([
-			'acl' => $acl,
-			'poll' => $poll,
+		return [
+			'acl' => $this->acl,
+			'poll' => $this->poll,
 			'comments' => $comments,
 			'options' => $options,
-			'share' => $share,
+			'share' => $this->share,
 			'shares' => $shares,
 			'votes' => $votes,
-		], Http::STATUS_OK);
+		];
 	}
 
 	/**
@@ -172,11 +212,9 @@ class PollController extends Controller {
 	 */
 
 	public function add($type, $title) {
-		try {
-			return new DataResponse($this->pollService->add($type, $title), Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->responseCreate(function () use ($type, $title) {
+			return $this->pollService->add($type, $title);
+		});
 	}
 
 	/**
@@ -188,13 +226,9 @@ class PollController extends Controller {
 	 */
 
 	public function update($pollId, $poll) {
-		try {
-			return new DataResponse($this->pollService->update($pollId, $poll), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($pollId, $poll) {
+			return $this->pollService->update($pollId, $poll);
+		});
 	}
 
 	/**
@@ -205,13 +239,9 @@ class PollController extends Controller {
 	 */
 
 	public function delete($pollId) {
-		try {
-			return new DataResponse($this->pollService->delete($pollId), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($pollId) {
+			return $this->pollService->update($pollId);
+		});
 	}
 
 	/**
@@ -222,13 +252,9 @@ class PollController extends Controller {
 	 */
 
 	public function deletePermanently($pollId) {
-		try {
-			return new DataResponse($this->pollService->deletePermanently($pollId), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->responseDeleteTolerant(function () use ($pollId) {
+			return $this->pollService->deletePermanently($pollId);
+		});
 	}
 
 	/**
@@ -238,16 +264,12 @@ class PollController extends Controller {
 	 * @return DataResponse
 	 */
 	public function clone($pollId) {
-		try {
+		return $this->response(function () use ($pollId) {
 			$poll = $this->pollService->clone($pollId);
 			$this->optionService->clone($pollId, $poll->getId());
 
-			return new DataResponse($poll, Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+			return $poll;
+		});
 	}
 
 	/**
@@ -258,6 +280,9 @@ class PollController extends Controller {
 	 */
 
 	public function getParticipantsEmailAddresses($pollId) {
+		return $this->response(function () use ($pollId) {
+			return $this->pollService->getParticipantsEmailAddresses($pollId);
+		});
 		try {
 			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

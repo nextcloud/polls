@@ -85,9 +85,7 @@ class ShareService {
 	 * @throws NotFoundException
 	 */
 	public function list($pollId) {
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPollId($pollId)->requestEdit();
 
 		try {
 			$shares = $this->shareMapper->findByPoll($pollId);
@@ -114,11 +112,12 @@ class ShareService {
 		// Allow users entering the poll with a public share access
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
-			// Check if the user has already access
-			if (!$this->acl->set($this->share->getPollId())->getAllowView()) {
-
-				// Create a new share for this user, so he is allowed to access the poll later
-				// via normal shared access and return the created share
+			try {
+				// Test if the user has already access.
+				$this->acl->setPollId($this->share->getPollId());
+			} catch (NotAuthorizedException $e) {
+				// If he is not authorized until now, create a new personal share for this user.
+				// Return the created share
 				return $this->create(
 					$this->share->getPollId(),
 					UserGroupClass::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
@@ -142,7 +141,7 @@ class ShareService {
 	}
 
 	/**
-	 * crate share
+	 * crate share - MUST BE PRIVATE!
 	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @param UserGroupClass $userGroup
@@ -177,9 +176,7 @@ class ShareService {
 	 * @throws InvalidShareType
 	 */
 	public function add($pollId, $type, $userId = '') {
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPollId($pollId)->requestEdit();
 
 		if ($type !== UserGroupClass::TYPE_PUBLIC) {
 			try {
@@ -281,9 +278,7 @@ class ShareService {
 	public function delete($token) {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			if (!$this->acl->set($this->share->getPollId())->getAllowEdit()) {
-				throw new NotAuthorizedException;
-			}
+			$this->acl->setPollId($this->share->getPollId())->requestEdit();
 			$this->shareMapper->delete($this->share);
 		} catch (DoesNotExistException $e) {
 			// silently catch

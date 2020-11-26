@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\DoesNotExistException;
 
@@ -59,9 +58,12 @@ class SubscriptionService {
 	 * @return bool
 	 */
 	public function get($pollId, $token) {
-		if (!$this->acl->set($pollId, $token)->getAllowView()) {
-			throw new NotAuthorizedException;
+		if ($token) {
+			$this->acl->setToken($token);
+		} else {
+			$this->acl->setPollId($pollId);
 		}
+
 		try {
 			$this->subscriptionMapper->findByUserAndPoll($this->acl->getPollId(), $this->acl->getUserId());
 			// Subscription exists
@@ -95,9 +97,12 @@ class SubscriptionService {
 	 * @return bool
 	 */
 	public function set($pollId, $token, $subscribed) {
-		if (!$this->acl->set($pollId, $token)->getAllowView()) {
-			throw new NotAuthorizedException;
+		if ($token) {
+			$this->acl->setToken($token);
+		} else {
+			$this->acl->setPollId($pollId);
 		}
+
 		try {
 			$subscription = $this->subscriptionMapper->findByUserAndPoll($this->acl->getPollId(), $this->acl->getUserId());
 			if (!$subscribed) {

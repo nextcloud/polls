@@ -99,26 +99,24 @@ class PollService {
 	 */
 
 	public function list() {
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
-			throw new NotAuthorizedException;
-		}
-
 		$pollList = [];
 		try {
 			$polls = $this->pollMapper->findAll();
 
-			// TODO: Not the elegant way. Improvement neccessary
 			foreach ($polls as $poll) {
-				$combinedPoll = (object) array_merge(
-					(array) json_decode(json_encode($poll)),
-					(array) json_decode(json_encode($this->acl->set($poll->getId())))
-				);
-				if ($combinedPoll->allowView) {
-					$pollList[] = $combinedPoll;
+				try {
+					$this->acl->setPoll($poll);
+					// TODO: Not the elegant way. Improvement neccessary
+					$pollList[] = (object) array_merge(
+						(array) json_decode(json_encode($poll)),
+						(array) json_decode(json_encode($this->acl))
+						);
+				} catch (NotAuthorizedException $e) {
+					continue;
 				}
 			}
 		} catch (DoesNotExistException $e) {
-			return [];
+			// silent catch
 		}
 		return $pollList;
 	}
@@ -130,14 +128,14 @@ class PollService {
 	 * @return Poll
 	 * @throws NotAuthorizedException
 	 */
-	public function get($pollId, $token) {
-		$acl = $this->acl->set($pollId, $token);
+	public function get(int $pollId) {
+		$this->poll = $this->pollMapper->find($pollId);
+		$this->acl->setPoll($this->poll);
 
-		if (!$acl->getAllowView()) {
+		if (!$this->acl->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
-
-		return $this->pollMapper->find($acl->getPollId());
+		return $this->poll;
 	}
 
 	/**
@@ -204,10 +202,7 @@ class PollService {
 
 	public function update($pollId, $poll) {
 		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->set($this->poll->getId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPoll($this->poll)->requestEdit();
 
 		// Validate valuess
 		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
@@ -239,10 +234,7 @@ class PollService {
 
 	public function delete($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPoll($this->poll)->requestEdit();
 
 		if ($this->poll->getDeleted()) {
 			$this->poll->setDeleted(0);
@@ -266,10 +258,7 @@ class PollService {
 
 	public function deletePermanently($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->set($pollId)->getAllowEdit() || !$this->poll->getDeleted()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPoll($this->poll)->requestDelete();
 
 		return $this->pollMapper->delete($this->poll);
 	}
@@ -283,9 +272,7 @@ class PollService {
 	 */
 	public function clone($pollId) {
 		$origin = $this->pollMapper->find($pollId);
-		if (!$this->acl->set($origin->getId())->getAllowView()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPoll($origin);
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
@@ -319,9 +306,7 @@ class PollService {
 
 	public function getParticipantsEmailAddresses($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
-			return [];
-		}
+		$this->acl->setPoll($this->poll)->requestEdit();
 
 		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
 		$list = [];

@@ -89,22 +89,62 @@ class Acl implements JsonSerializable {
 		$this->share = new Share;
 	}
 
+
 	/**
-	 * set
+	 * setToken - load share via token and than call setShare
+	 * @param string $token
 	 * @return self
 	 * @throws NotAuthorizedException
 	 */
-	public function set($pollId = 0, $token = ''): Acl {
-		if ($token) {
-			$pollId = $this->setToken($token);
-		}
-
+	public function setToken($token = ''): Acl {
 		try {
-			$this->poll = $this->pollMapper->find($pollId);
+			return $this->setShare($this->shareMapper->findByToken($token));
 		} catch (DoesNotExistException $e) {
-			throw new NotAuthorizedException;
+			throw new NotAuthorizedException('Error loading share '. $token);
 		}
+	}
 
+	/**
+	 * setShare - sets and validates the share
+	 * read access is
+	 * @param Share $share
+	 * @return Acl
+	 */
+	public function setShare(Share $share): Acl {
+		$this->share = $share;
+		$this->validateShareAccess();
+
+		// load poll, if pollId does not match
+		if ($this->share->getPollId() !== $this->poll->getId()) {
+			$this->setPollId($share->getPollId());
+		}
+		return $this;
+	}
+
+	/**
+	 * setPollId
+	 * @param int $pollId
+	 * @return Acl
+	 * @throws NotAuthorizedException
+	 */
+	public function setPollId(int $pollId = 0): Acl {
+		try {
+			return $this->setPoll($this->pollMapper->find($pollId));
+		} catch (DoesNotExistException $e) {
+			throw new NotAuthorizedException('Error loading poll '. $pollId);
+		}
+	}
+
+	/**
+	 * setPoll
+	 * @param Poll $poll
+	 * @return self
+	 */
+	public function setPoll(Poll $poll) {
+		$this->poll = $poll;
+		if (!$this->getAllowView()) {
+			throw new NotAuthorizedException('Error loading poll '. $poll->getId());
+		}
 		return $this;
 	}
 
@@ -167,6 +207,18 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
+	 * requestVote
+	 * @throws NotAuthorizedException
+	 * @return void
+	 */
+	public function requestVote(): void {
+		if (!$this->getAllowVote()) {
+			throw new NotAuthorizedException;
+		}
+	}
+
+
+	/**
 	 * getAllowSubscribe
 	 * @return bool
 	 */
@@ -190,6 +242,28 @@ class Acl implements JsonSerializable {
 	 */
 	public function getAllowEdit(): bool {
 		return ($this->getIsOwner() || $this->getIsAdmin());
+	}
+
+	/**
+	 * requestEdit
+	 * @throws NotAuthorizedException
+	 * @return void
+	 */
+	public function requestEdit(): void {
+		if (!$this->getAllowEdit()) {
+			throw new NotAuthorizedException;
+		}
+	}
+
+	/**
+	 * requestDelete
+	 * @throws NotAuthorizedException
+	 * @return void
+	 */
+	public function requestDelete(): void {
+		if (!$this->getAllowEdit() || !$this->poll->getDeleted()) {
+			throw new NotAuthorizedException;
+		}
 	}
 
 	/**
@@ -242,29 +316,10 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * setToken
-	 * @param string $token
-	 * @return int
-	 * @throws NotAuthorizedException
-	 */
-	private function setToken($token) {
-		try {
-			$this->share = $this->shareMapper->findByToken($token);
-			$this->validateShareAccess();
-		} catch (DoesNotExistException $e) {
-			if (!$this->getLoggedIn()) {
-				// Token is invalid and user is not logged in. Reject
-				throw new NotAuthorizedException;
-			}
-		}
-		return $this->share->getPollId();
-	}
-
-	/**
 	 * getLoggedIn - Is user logged in to nextcloud?
-	 * @return string
+	 * @return bool
 	 */
-	private function getLoggedIn() {
+	private function getLoggedIn(): bool {
 		return \OC::$server->getUserSession()->isLoggedIn();
 	}
 
@@ -372,17 +427,17 @@ class Acl implements JsonSerializable {
 
 	/**
 	 * validateShareAccess
-	 * @return bool
+	 * @return void
 	 * @throws NotAuthorizedException
 	 */
-	private function validateShareAccess() {
+	private function validateShareAccess(): void {
 		if ($this->getLoggedIn()) {
 			if (!$this->getValidAuthenticatedShare()) {
-				throw new NotAuthorizedException;
+				throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for external users');
 			};
 		} else {
 			if (!$this->getValidPublicShare()) {
-				throw new NotAuthorizedException;
+				throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for internal users');
 			};
 		}
 	}
@@ -391,7 +446,7 @@ class Acl implements JsonSerializable {
 	 * getValidPublicShare
 	 * @return bool
 	 */
-	private function getValidPublicShare() {
+	private function getValidPublicShare(): bool {
 		return in_array($this->share->getType(), [
 			Share::TYPE_PUBLIC,
 			Share::TYPE_EMAIL,
@@ -404,7 +459,7 @@ class Acl implements JsonSerializable {
 	 * getValidAuthenticatedShare
 	 * @return bool
 	 */
-	private function getValidAuthenticatedShare() {
+	private function getValidAuthenticatedShare(): bool {
 		return in_array($this->share->getType(), [
 			Share::TYPE_PUBLIC,
 			Share::TYPE_USER,
@@ -416,7 +471,7 @@ class Acl implements JsonSerializable {
 	 * hasEmail
 	 * @return bool
 	 */
-	private function hasEmail():bool {
+	private function hasEmail(): bool {
 		if ($this->share->getToken()) {
 			return strlen($this->share->getEmailAddress()) > 0;
 		} else {

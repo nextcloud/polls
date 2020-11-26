@@ -80,14 +80,18 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $token = '') {
-		$acl = $this->acl->set($pollId, $token);
+		if ($token) {
+			$this->acl->setToken($token);
+		} else {
+			$this->acl->setPollId($pollId);
+		}
 
-		if (!$acl->getAllowView()) {
+		if (!$this->acl->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
 		try {
-			return $this->optionMapper->findByPoll($acl->getPollId());
+			return $this->optionMapper->findByPoll($this->acl->getPollId());
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
@@ -101,7 +105,9 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function get($optionId) {
-		if (!$this->acl->set($this->optionMapper->find($optionId)->getPollId())->getAllowView()) {
+		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId());
+
+		if (!$this->acl->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -119,10 +125,7 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
-		if (!$this->acl->set($pollId)->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
-
+		$this->acl->setPollId($pollId)->RequestEdit();
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
 		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
@@ -147,11 +150,7 @@ class OptionService {
 	 */
 	public function update($optionId, $timestamp = 0, $pollOptionText = '') {
 		$this->option = $this->optionMapper->find($optionId);
-
-		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
-
+		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 		$this->setOption($timestamp, $pollOptionText);
 
 		return $this->optionMapper->update($this->option);
@@ -166,11 +165,7 @@ class OptionService {
 	 */
 	public function delete($optionId) {
 		$this->option = $this->optionMapper->find($optionId);
-
-		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
-
+		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 		$this->optionMapper->delete($this->option);
 
 		return $this->option;
@@ -185,10 +180,7 @@ class OptionService {
 	 */
 	public function confirm($optionId) {
 		$this->option = $this->optionMapper->find($optionId);
-
-		if (!$this->acl->set($this->option->getPollId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 
 		if ($this->option->getConfirmed()) {
 			$this->option->setConfirmed(0);
@@ -212,10 +204,7 @@ class OptionService {
 	public function sequence($optionId, $step, $unit, $amount) {
 		$baseDate = new DateTime;
 		$origin = $this->optionMapper->find($optionId);
-
-		if (!$this->acl->set($origin->getPollId())->getAllowEdit()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 
 		if ($step === 0) {
 			return $this->optionMapper->findByPoll($origin->getPollId());
@@ -248,13 +237,7 @@ class OptionService {
 	 * @throws NotAuthorizedException
 	 */
 	public function clone($fromPollId, $toPollId) {
-		try {
-			if (!$this->acl->set($fromPollId)->getAllowView()) {
-				throw new NotAuthorizedException;
-			}
-		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Poll ' . $fromPollId . ' does not exist');
-		}
+		$this->acl->setPollId($fromPollId);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
 			$option = new Option();
@@ -281,11 +264,10 @@ class OptionService {
 	 */
 	public function reorder($pollId, $options) {
 		try {
-			if (!$this->acl->set($pollId)->getAllowEdit()) {
-				throw new NotAuthorizedException;
-			}
+			$poll = $this->pollMapper->find($pollId);
+			$this->acl->setPoll($poll)->requestEdit();
 
-			if ($this->pollMapper->find($pollId)->getType() === Poll::TYPE_DATE) {
+			if ($poll->getType() === Poll::TYPE_DATE) {
 				throw new BadRequestException("Not allowed in date polls");
 			}
 		} catch (DoesNotExistException $e) {
@@ -317,14 +299,11 @@ class OptionService {
 	public function setOrder($optionId, $newOrder) {
 		try {
 			$this->option = $this->optionMapper->find($optionId);
-			$pollId = $this->option->getPollId();
+			$poll = $this->pollMapper->find($this->option->getPollId());
+			$this->acl->setPoll($poll)->requestEdit();
 
-			if ($this->pollMapper->find($pollId)->getType() === Poll::TYPE_DATE) {
+			if ($poll->getType() === Poll::TYPE_DATE) {
 				throw new BadRequestException("Not allowed in date polls");
-			}
-
-			if (!$this->acl->set($pollId)->getAllowEdit()) {
-				throw new NotAuthorizedException;
 			}
 		} catch (DoesNotExistException $e) {
 			throw new NotAuthorizedException;
@@ -332,11 +311,11 @@ class OptionService {
 
 		if ($newOrder < 1) {
 			$newOrder = 1;
-		} elseif ($newOrder > $this->getHighestOrder($pollId)) {
-			$newOrder = $this->getHighestOrder($pollId);
+		} elseif ($newOrder > $this->getHighestOrder($poll->getId())) {
+			$newOrder = $this->getHighestOrder($poll->getId());
 		}
 
-		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
+		foreach ($this->optionMapper->findByPoll($poll->getId()) as $option) {
 			$option->setOrder($this->moveModifier($this->option->getOrder(), $newOrder, $option->getOrder()));
 			$this->optionMapper->update($option);
 		}

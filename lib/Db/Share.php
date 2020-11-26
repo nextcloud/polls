@@ -109,11 +109,13 @@ class Share extends Entity implements JsonSerializable {
 				'polls.page.vote',
 				['id' => $this->pollId]
 			);
-		} else {
+		} elseif ($this->token) {
 			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
 				'polls.page.vote_publicpublic',
 				['token' => $this->token]
 			);
+		} else {
+			return '';
 		}
 	}
 

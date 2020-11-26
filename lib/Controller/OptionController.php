@@ -106,6 +106,7 @@ class OptionController extends Controller {
 			return ['option' => $this->optionService->delete($optionId)];
 		});
 	}
+
 	/**
 	 * Switch option confirmation
 	 * @NoAdminRequired
