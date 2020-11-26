@@ -11,6 +11,7 @@ OC.L10N.register(
     "Cancel" : "Откажи",
     "OK" : "Добро",
     "Week" : "Недела",
+    "Login" : "Најава",
     "Conflict" : "Конфликт",
     "New comment …" : "Нов коментар ...",
     "Delete comment" : "Избриши коментар",
