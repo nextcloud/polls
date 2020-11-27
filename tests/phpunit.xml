@@ -1,4 +1,4 @@
-<phpunit bootstrap="tests/bootstrap.php" colors="true">
+<phpunit bootstrap="../../../tests/bootstrap.php" colors="true">
     <filter>
         <whitelist>
             <directory suffix=".php">lib</directory>
