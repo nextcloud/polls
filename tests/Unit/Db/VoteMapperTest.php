@@ -65,7 +65,7 @@ class VoteMapperTest extends UnitTestCase {
 
 		/** @var Option $option */
 		$option = $this->fm->instance('OCA\Polls\Db\Option');
-		$this->assertInstanceOf(Poll::class, $this->optionMapper->insert($option));
+		$this->assertInstanceOf(Option::class, $this->optionMapper->insert($option));
 
 		/** @var Vote $vote */
 		$vote = $this->fm->instance('OCA\Polls\Db\Vote');
