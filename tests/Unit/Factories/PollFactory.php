@@ -51,5 +51,6 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'settings' => '{"someJSON":0}',
 	'voteLimit' => 0,
 	'showResults' => 'always',
-	'adminAccess' => 0
+	'adminAccess' => 0,
+	'important' => 0
 ]);

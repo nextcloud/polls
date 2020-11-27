@@ -24,11 +24,10 @@
 use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
- * General factory for the text model.
+ * General factory for the poll model.
  */
-$fm->define('OCA\Polls\Db\Option')->setDefinitions([
-	'pollOptionText' => Faker::text(255),
-	'timestamp' => 0,
-	'order' => 0,
-	'confirmed' => 0
+$fm->define('OCA\Polls\Db\Poll')->setDefinitions([
+	'userId' => Faker::firstNameMale(),
+	'emailAddress' => Faker::safeEmail(),
+	'displayName' => Faker::firstNameMale() . ' ' . Faker::LastName()
 ]);
