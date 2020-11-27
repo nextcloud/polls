@@ -76,10 +76,7 @@ class LogMapperTest extends UnitTestCase {
 	 * @return Log
 	 */
 	public function testUpdate(Log $log) {
-		$processed = function() {
-			$date = new DateTime('today');
-			return $date->getTimestamp();
-		};
+		$processed = Faker::unixTime($max = 'now');
 		$log->setProcessed($processed());
 		$this->logMapper->update($log);
 
