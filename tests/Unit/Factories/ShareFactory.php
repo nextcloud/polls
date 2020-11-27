@@ -26,7 +26,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
 /**
  * General factory for the poll model.
  */
-$fm->define('OCA\Polls\Db\Poll')->setDefinitions([
+$fm->define('OCA\Polls\Db\Share')->setDefinitions([
 	'userId' => Faker::firstNameMale(),
 	'emailAddress' => Faker::safeEmail(),
 	'displayName' => Faker::firstNameMale() . ' ' . Faker::LastName()
