@@ -27,6 +27,8 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
@@ -48,6 +50,7 @@ class VoteMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->voteMapper = new VoteMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
+		$this->optionMapper = new OptionMapper($this->con);
 	}
 
 	/**
@@ -60,11 +63,14 @@ class VoteMapperTest extends UnitTestCase {
 		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
 		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
 
+		/** @var Option $option */
+		$option = $this->fm->instance('OCA\Polls\Db\Option');
+		$this->assertInstanceOf(Poll::class, $this->optionMapper->insert($option));
 
 		/** @var Vote $vote */
 		$vote = $this->fm->instance('OCA\Polls\Db\Vote');
 		$vote->setPollId($poll->getId());
-		$vote->setVoteOptionId(1);
+		$vote->setVoteOptionId($option->getId());
 		$this->assertInstanceOf(Vote::class, $this->voteMapper->insert($vote));
 
 		return $vote;
@@ -93,7 +99,9 @@ class VoteMapperTest extends UnitTestCase {
 	 */
 	public function testDelete(Vote $vote) {
 		$poll = $this->pollMapper->find($vote->getPollId());
+		$option = $this->optionMapper->find($vote->getOptionId());
 		$this->voteMapper->delete($vote);
+		$this->optionMapper->delete($option);
 		$this->pollMapper->delete($poll);
 	}
 }
