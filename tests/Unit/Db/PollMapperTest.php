@@ -68,8 +68,8 @@ class PollMapperTest extends UnitTestCase {
 	public function testUpdate(Poll $poll) {
 		$newTitle = Faker::sentence(10);
 		$newDescription = Faker::paragraph();
-		$poll->setTitle($newTitle());
-		$poll->setDescription($newDescription());
+		$poll->setTitle($newTitle);
+		$poll->setDescription($newDescription);
 		$this->pollMapper->update($poll);
 
 		return $poll;
