@@ -35,10 +35,18 @@ class OptionMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
+
 	/** @var OptionMapper */
 	private $optionMapper;
+
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var array */
+	private $polls;
+
+	/** @var array */
+	private $options;
 
 	/**
 	 * {@inheritDoc}
@@ -48,38 +56,64 @@ class OptionMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->optionMapper = new OptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
+		$this->polls = [];
+		$this->options = [];
+
+		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
+		$this->polls[] = $this->pollMapper->insert($poll);
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
-	 *
-	 * @return Option
 	 */
 	public function testCreate() {
-		/** @var Poll $poll */
-		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
-
 		/** @var Option $option */
-		$option = $this->fm->instance('OCA\Polls\Db\Option');
-		$option->setPollId($poll->getId());
-		$this->assertInstanceOf(Option::class, $this->optionMapper->insert($option));
 
-		return $option;
+		foreach ($this->polls as $poll) {
+			$option = $this->fm->instance('OCA\Polls\Db\Option');
+
+			$option->setPollId($poll->getId());
+			$this->optionMapper->insert($option);
+			$this->options[] = $option;
+			$this->assertInstanceOf(Option::class, $option);
+		}
+
+	}
+
+	/**
+	 * Find the previously created entries from the database.
+	 *
+	 * @depends testCreate
+	 */
+	public function testFind() {
+		foreach ($this->options as $option) {
+			$this->assertEquals($option, $this->optionMapper->find($option->getId()));
+		}
+	}
+	/**
+	 * Find the previously created entries from the database.
+	 *
+	 * @depends testCreate
+	 * @return Option
+	 */
+	public function testFindByPoll() {
+		foreach ($this->options as $option) {
+			$this->assertContains($option, $this->optionMapper->findByPoll($option->getId()));
+		}
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Option $option
 	 * @return Option
 	 */
-	public function testUpdate(Option $option) {
-		$newPollOptionText = Faker::text(255);
-		$option->setPollOptionText($newPollOptionText());
-		$this->assertInstanceOf(Option::class, $this->optionMapper->update($option));
-
+	public function testUpdate() {
+		foreach ($this->options as $option) {
+			$newPollOptionText = Faker::text(255);
+			$option->setPollOptionText($newPollOptionText());
+			$this->assertEquals($option, $this->optionMapper->update($option));
+		}
 		return $option;
 	}
 
@@ -87,11 +121,17 @@ class OptionMapperTest extends UnitTestCase {
 	 * Delete the previously created entries from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Option $option
 	 */
-	public function testDelete(Option $option) {
-		$poll = $this->pollMapper->find($option->getPollId());
-		$this->optionMapper->delete($option);
-		$this->pollMapper->delete($poll);
+	public function testDelete() {
+		foreach ($this->options as $option) {
+			$this->assertInstanceOf(Option::class, $this->optionMapper->delete($option));
+		}
+	}
+
+	public function tearDown(Poll $poll): void {
+		parent::tearDown();
+		foreach ($this->polls as $poll) {
+			$this->pollMapper->delete($poll);
+		}
 	}
 }
