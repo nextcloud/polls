@@ -73,7 +73,7 @@ class OptionMapperTest extends UnitTestCase {
 
 			$option->setPollId($poll->getId());
 			array_push($options, $this->optionMapper->insert($option));
-			$this->assertInstanceOf(Option::class, $options[count($options)-1]);
+			$this->assertInstanceOf(Option::class, $options[count($options) - 1]);
 		}
 		return $options;
 	}
@@ -94,7 +94,9 @@ class OptionMapperTest extends UnitTestCase {
 	 * Find the previously created entries from the database.
 	 */
 	public function testFindByPoll() {
+		var_dump($this->polls);
 		foreach ($this->polls as $poll) {
+			var_dump($this->optionMapper->findByPoll($poll->getId()));
 			$this->assertTrue(count($this->optionMapper->findByPoll($poll->getId())) > 0);
 		}
 	}
