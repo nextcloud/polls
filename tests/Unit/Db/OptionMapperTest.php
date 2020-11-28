@@ -145,6 +145,7 @@ class OptionMapperTest extends MapperTestUtility {
 	 */
 	public function testFindByPoll() {
 		foreach ($this->pollsById as $id => $poll) {
+			var_dump($this->optionMapper->findByPoll($id));
 			$this->assertTrue(count($this->optionMapper->findByPoll($id)) > 0);
 		}
 	}
