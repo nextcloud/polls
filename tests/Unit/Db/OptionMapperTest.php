@@ -23,15 +23,17 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IDBConnection;
+use Test\AppFramework\Db\MapperTestUtility;
+use League\FactoryMuffin\Faker\Facade as Faker;
+
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-use League\FactoryMuffin\Faker\Facade as Faker;
 
-class OptionMapperTest extends UnitTestCase {
+class OptionMapperTest extends MapperTestUtility {
 
 	/** @var IDBConnection */
 	private $con;
@@ -51,13 +53,14 @@ class OptionMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
+
 		$this->optionMapper = new OptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 		$this->polls = [];
 
 		for ($pollCount=0; $pollCount < 2; $pollCount++) {
-			$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-			array_push($this->polls, $this->pollMapper->insert($poll));
+			$poll = $this->pollMapper->insert($this->fm->instance('OCA\Polls\Db\Poll'));
+			array_push($this->polls, $poll);
 			print 'added poll ';
 			var_dump($poll->getId());
 		}
