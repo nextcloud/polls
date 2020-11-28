@@ -92,7 +92,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 	/**
 	 * Find the previously created entries from the database.
 	 */
-	public function testFindByPoll() {
+	public function testFindAllByPoll() {
 		foreach ($this->pollsById as $id => $poll) {
 			$this->assertTrue(count($this->subscriptionMapper->findByPoll($id)) > 0);
 		}
@@ -108,7 +108,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 */
 	public function testUnsubscribe() {
 		foreach ($this->pollsById as $id => $poll) {
-			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->unsubscribe($id, $this->users[$id]));
+			$this->assertEqual(null, $this->subscriptionMapper->unsubscribe($id, $this->users[$id]));
 		}
 	}
 

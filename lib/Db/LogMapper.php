@@ -38,6 +38,18 @@ class LogMapper extends QBMapper {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}
 
+	public function find($id) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   );
+
+		return $this->findEntity($qb);
+	}
+
 	public function findByPollId($pollId) {
 		$qb = $this->db->getQueryBuilder();
 

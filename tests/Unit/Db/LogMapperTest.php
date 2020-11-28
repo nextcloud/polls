@@ -95,9 +95,9 @@ class LogMapperTest extends UnitTestCase {
 	/**
 	 * Find the previously created entries from the database.
 	 */
-	public function testFindByPoll() {
+	public function testFindByPollId() {
 		foreach ($this->pollsById as $id => $poll) {
-			$this->assertTrue(count($this->logMapper->findByPoll($id)) > 0);
+			$this->assertTrue(count($this->logMapper->findByPollId($id)) > 0);
 		}
 	}
 
@@ -119,7 +119,9 @@ class LogMapperTest extends UnitTestCase {
 	 * Find the previously created entries from the database.
 	 */
 	public function testGetLastRecord() {
-		$this->assertInstanceOf(Log::class, $this->logMapper->getLastRecord());
+		foreach ($this->pollsById as $id => $poll) {
+			$this->assertInstanceOf(Log::class, $this->logMapper->getLastRecord($id));
+		}
 	}
 
 	/**
