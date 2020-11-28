@@ -49,7 +49,7 @@ class OptionMapperTest extends MapperTestUtility {
 	/** @var array */
 	private $polls;
 	private $pollsById;
-	private $optionById;
+	private $optionsById;
 	/**
 	 * {@inheritDoc}
 	 */
@@ -94,7 +94,7 @@ class OptionMapperTest extends MapperTestUtility {
 		foreach ($this->options as $option) {
 			$entry = $this->optionMapper->insert($option);
 			$entry->resetUpdatedFields();
-			$this->optionById[$entry->getId()] = $entry;
+			$this->optionsById[$entry->getId()] = $entry;
 		}
 
 	}
