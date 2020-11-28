@@ -85,8 +85,10 @@ class SubscriptionMapperTest extends UnitTestCase {
 				$subscription->setPollId($id);
 				array_push($this->subscriptions, $subscription);
 			}
+			var_dump($subscription);
 			$this->users[$id] = $subscription->getUserId();
 		}
+		var_dump($this->users);
 	}
 
 	/**
@@ -94,7 +96,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 */
 	public function testFindAllByPoll() {
 		foreach ($this->pollsById as $id => $poll) {
-			$this->assertTrue(count($this->subscriptionMapper->findByPoll($id)) > 0);
+			$this->assertTrue(count($this->subscriptionMapper->findAllByPoll($id)) > 0);
 		}
 	}
 
@@ -108,7 +110,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 */
 	public function testUnsubscribe() {
 		foreach ($this->pollsById as $id => $poll) {
-			$this->assertEqual(null, $this->subscriptionMapper->unsubscribe($id, $this->users[$id]));
+			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->unsubscribe($id, $this->users[$id]));
 		}
 	}
 
