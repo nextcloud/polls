@@ -84,7 +84,7 @@ class OptionMapperTest extends UnitTestCase {
 	 */
 	public function testFind(array $options) {
 		foreach ($options as $option) {
-			$this->assertEquals($this->optionMapper->find($option), $option);
+			$this->assertEquals($this->optionMapper->find($option), $option->getId());
 		}
 	}
 
