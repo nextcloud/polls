@@ -77,8 +77,9 @@ class OptionMapperTest extends UnitTestCase {
 	 */
 	public function testUpdate(Option $option) {
 		$newPollOptionText = Faker::text(255);
-		$option->setPollOptionText($newPollOptionText());
+		$option->setPollOptionText($newPollOptionText);
 		$this->optionMapper->update($option);
+		$this->assertInstanceOf(Option::class, $this->optionMapper->update($option));
 
 		return $option;
 	}
