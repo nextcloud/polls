@@ -35,10 +35,28 @@ class SubscriptionMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
+
 	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
+
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var array */
+	private $polls;
+
+	/** @var array */
+	private $subscriptions;
+
+	/** @var array */
+	private $pollsById;
+
+	/** @var array */
+	private $subscriptionsById;
+
+	/** @var array */
+	private $users;
+
 
 	/**
 	 * {@inheritDoc}
@@ -48,50 +66,57 @@ class SubscriptionMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->subscriptionMapper = new SubscriptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
+
+		$this->polls = [];
+		$this->subscriptions = [];
+
+		$this->polls = [
+			$this->fm->instance('OCA\Polls\Db\Poll')
+		];
+
+		foreach ($this->polls as $poll) {
+			$entry = $this->pollMapper->insert($poll);
+			$entry->resetUpdatedFields();
+			$this->pollsById[$entry->getId()] = $entry;
+		}
+		foreach ($this->pollsById as $id => $polls) {
+			for ($count=0; $count < 2; $count++) {
+				$subscription = $this->fm->instance('OCA\Polls\Db\Subscription');
+				$subscription->setPollId($id);
+				array_push($this->subscriptions, $subscription);
+			}
+			$this->users[$id] = $subscription->getUserId();
+		}
 	}
 
 	/**
-	 * Create some fake data and persist them to the database.
-	 *
-	 * @return Subscription
+	 * Find the previously created entries from the database.
 	 */
-	public function testCreate() {
-		/** @var Poll $poll */
-		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
-
-		/** @var Subscription $subscription */
-		$subscription = $this->fm->instance('OCA\Polls\Db\Subscription');
-		$subscription->setPollId($poll->getId());
-		$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->insert($subscription));
-
-		return $subscription;
+	public function testFindByPoll() {
+		foreach ($this->pollsById as $id => $poll) {
+			$this->assertTrue(count($this->subscriptionMapper->findByPoll($id)) > 0);
+		}
 	}
 
-	/**
-	 * Update the previously created entry and persist the changes.
-	 *
-	 * @depends testCreate
-	 * @param Subscription $subscription
-	 * @return Subscription
-	 */
-	public function testUpdate(Subscription $subscription) {
-		$newUserId = Faker::firstNameMale();
-		$subscription->setUserId($newUserId());
-		$this->subscriptionMapper->update($subscription);
-
-		return $subscription;
+	public function testFindByUserAndPoll() {
+		foreach ($this->pollsById as $id => $poll) {
+			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->findByUserAndPoll($id, $this->users[$id]));
+		}
 	}
-
 	/**
 	 * Delete the previously created entries from the database.
-	 *
-	 * @depends testUpdate
-	 * @param Subscription $subscription
 	 */
-	public function testDelete(Subscription $subscription) {
-		$poll = $this->pollMapper->find($subscription->getPollId());
-		$this->subscriptionMapper->delete($subscription);
-		$this->pollMapper->delete($poll);
+	public function testUnsubscribe() {
+		foreach ($this->pollsById as $id => $poll) {
+			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->unsubscribe($id, $this->users[$id]));
+		}
 	}
+
+	public function tearDown(): void {
+		parent::tearDown();
+		foreach ($this->polls as $poll) {
+			$this->pollMapper->delete($poll);
+		}
+	}
+
 }
