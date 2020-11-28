@@ -96,7 +96,7 @@ class OptionMapperTest extends UnitTestCase {
 	 */
 	public function testFindByPoll(array $options) {
 		foreach ($options as $option) {
-			$this->assertInstanceOf(Option::class, $this->optionMapper->findByPoll($option->getId()));
+			$this->assertContains($option, $this->optionMapper->findByPoll($option->getPollId()));
 		}
 		return $options;
 	}
