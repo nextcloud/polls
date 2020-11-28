@@ -96,6 +96,7 @@ class OptionMapperTest extends UnitTestCase {
 	 */
 	public function testFindByPoll() {
 		foreach ($this->polls as $poll) {
+			var_dump($poll->getId());
 			$this->assertTrue(count($this->optionMapper->findByPoll($poll->getId())) > 0);
 		}
 	}
