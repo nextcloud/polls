@@ -27,7 +27,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  * General factory for the comment model.
  */
 $fm->define('OCA\Polls\Db\Log')->setDefinitions([
-	'created' => function() {
+	'created' => function () {
 		$date = new DateTime('yesterday');
 		return $date->getTimestamp();
 	},

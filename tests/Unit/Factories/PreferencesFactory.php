@@ -28,7 +28,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  */
 $fm->define('OCA\Polls\Db\Preferences')->setDefinitions([
 	'type' => 'textPoll',
-	'timestamp' => function() {
+	'timestamp' => function () {
 		$date = new DateTime('today');
 		return $date->getTimestamp();
 	},

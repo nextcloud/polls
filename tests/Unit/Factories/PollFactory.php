@@ -31,15 +31,15 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'title' => Faker::text(124),
 	'description' => Faker::text(255),
 	'owner' => Faker::firstNameMale(),
-	'created' => function() {
+	'created' => function () {
 		$date = new DateTime('today');
 		return $date->getTimestamp();
 	},
-	'expire' => function() {
+	'expire' => function () {
 		$date = new DateTime('tomorrow');
 		return $date->getTimestamp();
 	},
-	'deleted' => function() {
+	'deleted' => function () {
 		$date = new DateTime('+1 month');
 		return $date->getTimestamp();
 	},
