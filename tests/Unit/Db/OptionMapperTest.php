@@ -48,8 +48,16 @@ class OptionMapperTest extends MapperTestUtility {
 
 	/** @var array */
 	private $polls;
+
+	/** @var array */
+	private $options;
+
+	/** @var array */
 	private $pollsById;
+
+	/** @var array */
 	private $optionsById;
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -59,21 +67,6 @@ class OptionMapperTest extends MapperTestUtility {
 
 		$this->optionMapper = new OptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
-
-		$yesterdayTs = function () {
-			$date = new DateTime('yesterday');
-			return $date->getTimestamp();
-		};
-
-		$todayTs = function () {
-			$date = new DateTime('today');
-			return $date->getTimestamp();
-		};
-
-		$todayTs = function () {
-			$date = new DateTime('tomorrow');
-			return $date->getTimestamp();
-		};
 
 		$this->polls = [
 			$this->createPollEntity(Poll::TYPE_TEXT, 'Poll Title', 'admin')
