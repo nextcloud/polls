@@ -144,7 +144,7 @@ class OptionMapperTest extends MapperTestUtility {
 	 * Find the previously created entries from the database.
 	 */
 	public function testFindByPoll() {
-		foreach ($polls as $id => $poll) {
+		foreach ($this->polls as $id => $poll) {
 			$this->assertTrue(count($this->optionMapper->findByPoll($id)) > 0);
 		}
 	}
@@ -153,7 +153,7 @@ class OptionMapperTest extends MapperTestUtility {
 	 * Update the previously created entry and persist the changes.
 	 */
 	public function testUpdate() {
-		foreach ($options as $option) {
+		foreach ($this->options as $option) {
 			$option->setPollOptionText('Changed option');
 			$this->assertEquals($option, $this->optionMapper->update($option));
 		}
