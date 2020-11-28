@@ -124,8 +124,8 @@ class OptionMapperTest extends MapperTestUtility {
 	private function createOptionEntity($pollId, $pollOptionText, $order) {
 		$option = new Option();
 		$option->setPollId($pollId);
-		$option->setType($pollOptionText);
-		$option->setTimestamp(time());
+		$option->setPollOptionText($pollOptionText);
+		$option->setTimestamp(0);
 		$option->setOrder($order);
 		$option->setconfirmed(0);
 		return $option;
