@@ -69,6 +69,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 
 		$this->polls = [];
 		$this->subscriptions = [];
+		$this->users = [];
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
@@ -85,7 +86,6 @@ class SubscriptionMapperTest extends UnitTestCase {
 				$subscription->setPollId($id);
 				array_push($this->subscriptions, $subscription);
 			}
-			var_dump($subscription);
 			$this->users[$id] = $subscription->getUserId();
 		}
 		var_dump($this->users);
