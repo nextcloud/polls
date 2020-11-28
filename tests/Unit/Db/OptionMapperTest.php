@@ -26,7 +26,6 @@ namespace OCA\Polls\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
 use Test\AppFramework\Db\MapperTestUtility;
-use League\FactoryMuffin\Faker\Facade as Faker;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
@@ -56,7 +55,6 @@ class OptionMapperTest extends MapperTestUtility {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->faker = Faker\Factory::create();
 		$this->con = \OC::$server->getDatabaseConnection();
 
 		$this->optionMapper = new OptionMapper($this->con);
@@ -78,7 +76,7 @@ class OptionMapperTest extends MapperTestUtility {
 		};
 
 		$this->polls = [
-			$this->createPollEntity(Poll::TYPE_TEXT, $this->faker->words(8), $this->faker->firstNameMale())
+			$this->createPollEntity(Poll::TYPE_TEXT, 'Poll Title', 'admin')
 		];
 
 		foreach ($this->polls as $poll) {
@@ -88,9 +86,9 @@ class OptionMapperTest extends MapperTestUtility {
 		}
 
 		$this->options = [
-			$this->createOptionEntity(1, $this->faker->words(4), 1),
-			$this->createOptionEntity(1, $this->faker->words(4), 2),
-			$this->createOptionEntity(1, $this->faker->words(4), 3)
+			$this->createOptionEntity(1, 'Option 1', 1),
+			$this->createOptionEntity(1, 'Option 2', 2),
+			$this->createOptionEntity(1, 'Option 3', 3)
 
 		];
 		foreach ($this->options as $option) {
@@ -107,7 +105,7 @@ class OptionMapperTest extends MapperTestUtility {
 		$poll->setCreated(time());
 		$poll->setOwner($owner);
 		$poll->setTitle($title);
-		$poll->setDescription($this->faker->words(12));
+		$poll->setDescription('Description');
 		$poll->setAccess(Poll::ACCESS_PUBLIC);
 		$poll->setExpire(0);
 		$poll->setAnonymous(0);
@@ -156,8 +154,7 @@ class OptionMapperTest extends MapperTestUtility {
 	 */
 	public function testUpdate(array $options) {
 		foreach ($options as $option) {
-			$newPollOptionText = $this->faker->words(2);
-			$option->setPollOptionText($newPollOptionText);
+			$option->setPollOptionText('Changed option');
 			$this->assertEquals($option, $this->optionMapper->update($option));
 		}
 	}
