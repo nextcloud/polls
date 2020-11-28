@@ -41,10 +41,10 @@ class OptionMapperTest extends MapperTestUtility {
 	/** @var IDBConnection */
 	private $con;
 
-	/** @var OptionMapper */
+	/** @var OptionMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $optionMapper;
 
-	/** @var PollMapper */
+	/** @var PollMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $pollMapper;
 
 	/** @var array */
@@ -59,77 +59,105 @@ class OptionMapperTest extends MapperTestUtility {
 
 		$this->optionMapper = new OptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
-		$this->polls = [];
 
-		for ($pollCount=0; $pollCount < 2; $pollCount++) {
-			$poll = $this->pollMapper->insert($this->fm->instance('OCA\Polls\Db\Poll'));
-			array_push($this->polls, $poll);
-			print 'added poll ';
-			var_dump($poll->getId());
-		}
-	}
+		$yesterdayTs = function () {
+			$date = new DateTime('yesterday');
+			return $date->getTimestamp();
+		};
 
-	/**
-	 * Create some fake data and persist them to the database.
-	 */
-	public function testCreate() {
-		$options = [];
+		$todayTs = function () {
+			$date = new DateTime('today');
+			return $date->getTimestamp();
+		};
+
+		$todayTs = function () {
+			$date = new DateTime('tomorrow');
+			return $date->getTimestamp();
+		};
+
+		$this->polls = [
+			$this->createPollEntity(Poll::TYPE_TEXT, Faker::text(255), 'admin')
+		];
 
 		foreach ($this->polls as $poll) {
-			/** @var Option $option */
-			$option = $this->fm->instance('OCA\Polls\Db\Option');
-
-			$option->setPollId($poll->getId());
-			$option = $this->optionMapper->insert($option);
-			array_push($options, $option);
-			$this->assertInstanceOf(Option::class, $option);
-			print 'added option ';
-			var_dump($option->getId());
+			$entry = $this->pollMapper->insert($poll);
+			$entry->resetUpdatedFields();
+			$this->pollById[$entry->getId()] = $entry;
 		}
-		return $options;
+
+		$this->options = [
+			$this->createOptionEntity(1, Faker::text(255), 1),
+			$this->createOptionEntity(1, Faker::text(255), 2),
+			$this->createOptionEntity(1, Faker::text(255), 3)
+
+		];
+		foreach ($this->options as $option) {
+			$entry = $this->optionMapper->insert($option);
+			$entry->resetUpdatedFields();
+			$this->optionById[$entry->getId()] = $entry;
+		}
+
+	}
+
+	private function createPollEntity($type, $title, $owner) {
+		$poll = new Poll();
+		$poll->setType($type);
+		$poll->setCreated(time());
+		$poll->setOwner($owner);
+		$poll->setTitle($title);
+		$poll->setDescription(Faker::text(255));
+		$poll->setAccess(Poll::ACCESS_PUBLIC);
+		$poll->setExpire(0);
+		$poll->setAnonymous(0);
+		$poll->setFullAnonymous(0);
+		$poll->setAllowMaybe(0);
+		$poll->setVoteLimit(0);
+		$poll->setSettings('{"someJSON":0}');
+		$poll->setOptions('["yes","no","maybe"]');
+		$poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
+		$poll->setDeleted(0);
+		$poll->setAdminAccess(0);
+		$poll->setImportant(0);
+		return $poll;
+	}
+
+	private function createOptionEntity($pollId, $pollOptionText, $order) {
+		$option = new Option();
+		$option->setPollId($pollId);
+		$option->setType($pollOptionText);
+		$option->setTimestamp(time());
+		$option->setOrder($order);
+		$option->setconfirmed(0);
+		return $option;
 	}
 
 	/**
 	 * Find the previously created entries from the database.
-	 *
-	 * @depends testCreate
-	 * @return Option[]
 	 */
 	public function testFind(array $options) {
-		foreach ($options as $option) {
-			print 'try find option ';
-			var_dump($option->getId());
-			$this->assertInstanceOf(Option::class, $this->optionMapper->find($option->getId()));
+		foreach ($this->options as $id => $option) {
+			$this->assertEquals($option, $this->optionMapper->find($id));
 		}
 	}
 
 	/**
 	 * Find the previously created entries from the database.
-	 *
-	 * @depends testCreate
 	 */
 	public function testFindByPoll(array $options) {
-		foreach ($options as $option) {
-			print 'try find options of poll ';
-			var_dump($option->getPollId());
-
-			$this->assertTrue(count($this->optionMapper->findByPoll($option->getPollId())) > 0);
+		foreach ($polls as $id => $poll) {
+			$this->assertTrue(count($this->optionMapper->findByPoll($id)) > 0);
 		}
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
-	 *
-	 * @depends testCreate
-	 * @return Option[]
 	 */
 	public function testUpdate(array $options) {
 		foreach ($options as $option) {
 			$newPollOptionText = Faker::text(255);
-			$option->setPollOptionText($newPollOptionText());
+			$option->setPollOptionText(Faker::text(255));
 			$this->assertEquals($option, $this->optionMapper->update($option));
 		}
-		return $options;
 	}
 
 	/**
