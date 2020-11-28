@@ -88,7 +88,7 @@ class OptionMapperTest extends MapperTestUtility {
 		foreach ($this->polls as $poll) {
 			$entry = $this->pollMapper->insert($poll);
 			$entry->resetUpdatedFields();
-			$this->pollById[$entry->getId()] = $entry;
+			$this->pollsById[$entry->getId()] = $entry;
 		}
 
 		foreach ($this->options as $option) {
