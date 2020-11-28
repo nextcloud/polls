@@ -21,12 +21,7 @@
  *
  */
 
-namespace OCA\Polls\Db;
-
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\IDBConnection;
-use Test\AppFramework\Db\MapperTestUtility;
-use League\FactoryMuffin\Faker\Facade as Faker;
+namespace OCA\Polls\Tests\Unit\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
