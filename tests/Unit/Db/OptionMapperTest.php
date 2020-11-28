@@ -55,18 +55,20 @@ class OptionMapperTest extends UnitTestCase {
 		$this->pollMapper = new PollMapper($this->con);
 		$this->polls = [];
 
-		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-		array_push($this->polls, $this->pollMapper->insert($poll));
+		for ($pollCount=0; $pollCount < 2; $pollCount++) {
+			$poll = $this->fm->instance('OCA\Polls\Db\Poll');
+			array_push($this->polls, $this->pollMapper->insert($poll));
+		}
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 */
 	public function testCreate() {
+		$options = [];
 
 		foreach ($this->polls as $poll) {
 			/** @var Option $option */
-			$options = [];
 			$option = $this->fm->instance('OCA\Polls\Db\Option');
 
 			$option->setPollId($poll->getId());
@@ -90,8 +92,6 @@ class OptionMapperTest extends UnitTestCase {
 
 	/**
 	 * Find the previously created entries from the database.
-	 *
-	 * @depends testCreate
 	 */
 	public function testFindByPoll() {
 		foreach ($this->polls as $poll) {
