@@ -68,6 +68,9 @@ class OptionMapperTest extends MapperTestUtility {
 		$this->optionMapper = new OptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 
+		$this->polls = [];
+		$this->comments = [];
+
 		$this->polls = [
 			$this->createPollEntity(Poll::TYPE_TEXT, 'Poll Title', 'admin')
 		];

@@ -62,6 +62,10 @@ class CommentMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->commentMapper = new CommentMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
+
+		$this->polls = [];
+		$this->comments = [];
+
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
 		];
@@ -124,7 +128,7 @@ class CommentMapperTest extends UnitTestCase {
 	public function testDelete() {
 		foreach ($this->commentsById as $id => $comment) {
 			$found = $this->commentMapper->find($id);
-			$this->assertInstanceOf(Option::class, $this->commentMapper->delete($found));
+			$this->assertInstanceOf(Comment::class, $this->commentMapper->delete($found));
 		}
 	}
 
