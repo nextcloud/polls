@@ -106,7 +106,6 @@ class OptionMapperTest extends UnitTestCase {
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @return Option
 	 */
 	public function testUpdate() {
 		foreach ($this->options as $option) {
@@ -114,7 +113,6 @@ class OptionMapperTest extends UnitTestCase {
 			$option->setPollOptionText($newPollOptionText());
 			$this->assertEquals($option, $this->optionMapper->update($option));
 		}
-		return $option;
 	}
 
 	/**
@@ -128,7 +126,7 @@ class OptionMapperTest extends UnitTestCase {
 		}
 	}
 
-	public function tearDown(Poll $poll): void {
+	public function tearDown(): void {
 		parent::tearDown();
 		foreach ($this->polls as $poll) {
 			$this->pollMapper->delete($poll);
