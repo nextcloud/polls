@@ -31,15 +31,15 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'title' => Faker::text(124),
 	'description' => Faker::text(255),
 	'owner' => Faker::firstNameMale(),
-	'created' => function() {
+	'created' => function () {
 		$date = new DateTime('today');
 		return $date->getTimestamp();
 	},
-	'expire' => function() {
+	'expire' => function () {
 		$date = new DateTime('tomorrow');
 		return $date->getTimestamp();
 	},
-	'deleted' => function() {
+	'deleted' => function () {
 		$date = new DateTime('+1 month');
 		return $date->getTimestamp();
 	},
@@ -51,5 +51,6 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'settings' => '{"someJSON":0}',
 	'voteLimit' => 0,
 	'showResults' => 'always',
-	'adminAccess' => 0
+	'adminAccess' => 0,
+	'important' => 0
 ]);

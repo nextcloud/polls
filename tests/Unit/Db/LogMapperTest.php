@@ -23,26 +23,22 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use OCA\Polls\Db\Log;
+use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Vote;
-use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Db\Option;
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
 use League\FactoryMuffin\Faker\Facade as Faker;
 
-class VoteMapperTest extends UnitTestCase {
+class LogMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
-	/** @var VoteMapper */
-	private $voteMapper;
+	/** @var LogMapper */
+	private $logMapper;
 	/** @var PollMapper */
 	private $pollMapper;
-	/** @var OptionMapper */
-	private $optionMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -50,60 +46,52 @@ class VoteMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->voteMapper = new VoteMapper($this->con);
+		$this->logMapper = new LogMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
-		$this->optionMapper = new OptionMapper($this->con);
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 *
-	 * @return Vote
+	 * @return Log
 	 */
 	public function testCreate() {
 		/** @var Poll $poll */
 		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
 		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
 
-		/** @var Option $option */
-		$option = $this->fm->instance('OCA\Polls\Db\Option');
-		$this->assertInstanceOf(Option::class, $this->optionMapper->insert($option));
+		/** @var Log $log */
+		$log = $this->fm->instance('OCA\Polls\Db\Log');
+		$log->setPollId($poll->getId());
+		$this->assertInstanceOf(Log::class, $this->logMapper->insert($log));
 
-		/** @var Vote $vote */
-		$vote = $this->fm->instance('OCA\Polls\Db\Vote');
-		$vote->setPollId($poll->getId());
-		$vote->setVoteOptionId($option->getId());
-		$this->assertInstanceOf(Vote::class, $this->voteMapper->insert($vote));
-
-		return $vote;
+		return $log;
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
-	 * @param Vote $vote
-	 * @return Vote
+	 * @param Log $log
+	 * @return Log
 	 */
-	public function testUpdate(Vote $vote) {
-		$newVoteOptionText = Faker::date('Y-m-d H:i:s');
-		$vote->setVoteOptionText($newVoteOptionText());
-		$this->voteMapper->update($vote);
+	public function testUpdate(Log $log) {
+		$processed = Faker::unixTime($max = 'now');
+		$log->setProcessed($processed());
+		$this->logMapper->update($log);
 
-		return $vote;
+		return $log;
 	}
 
 	/**
 	 * Delete the previously created entries from the database.
 	 *
 	 * @depends testUpdate
-	 * @param Vote $vote
+	 * @param Log $log
 	 */
-	public function testDelete(Vote $vote) {
-		$poll = $this->pollMapper->find($vote->getPollId());
-		$option = $this->optionMapper->find($vote->getVoteOptionId());
-		$this->voteMapper->delete($vote);
-		$this->optionMapper->delete($option);
+	public function testDelete(Log $log) {
+		$poll = $this->pollMapper->find($log->getPollId());
+		$this->logMapper->delete($log);
 		$this->pollMapper->delete($poll);
 	}
 }
