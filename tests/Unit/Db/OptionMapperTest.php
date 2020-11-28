@@ -66,6 +66,7 @@ class OptionMapperTest extends UnitTestCase {
 
 		foreach ($this->polls as $poll) {
 			/** @var Option $option */
+			$options = [];
 			$option = $this->fm->instance('OCA\Polls\Db\Option');
 
 			$option->setPollId($poll->getId());
