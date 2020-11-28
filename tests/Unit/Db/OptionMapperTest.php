@@ -33,6 +33,9 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 
+/**
+ * @group DB
+ */
 class OptionMapperTest extends MapperTestUtility {
 
 	/** @var IDBConnection */
