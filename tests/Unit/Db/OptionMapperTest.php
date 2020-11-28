@@ -163,7 +163,7 @@ class OptionMapperTest extends MapperTestUtility {
 	 * Delete the previously created entries from the database.
 	 */
 	public function testDelete() {
-		foreach ($options as $option) {
+		foreach ($this->options as $option) {
 			$this->assertInstanceOf(Option::class, $this->optionMapper->delete($option));
 		}
 	}
