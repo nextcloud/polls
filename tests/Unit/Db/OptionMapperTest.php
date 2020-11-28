@@ -79,22 +79,18 @@ class OptionMapperTest extends MapperTestUtility {
 			$this->createPollEntity(Poll::TYPE_TEXT, 'Poll Title', 'admin')
 		];
 
-		foreach ($this->polls as $poll) {
-			$entry = $this->pollMapper->insert($poll);
-			$entry->resetUpdatedFields();
-			$this->pollById[$entry->getId()] = $entry;
-		}
-
 		$this->options = [
 			$this->createOptionEntity(1, 'Option 1', 1),
 			$this->createOptionEntity(1, 'Option 2', 2),
 			$this->createOptionEntity(1, 'Option 3', 3)
-
 		];
+
+		foreach ($this->polls as $poll) {
+			$this->pollMapper->insert($poll);
+		}
+
 		foreach ($this->options as $option) {
-			$entry = $this->optionMapper->insert($option);
-			$entry->resetUpdatedFields();
-			$this->optionById[$entry->getId()] = $entry;
+			$this->optionMapper->insert($option);
 		}
 
 	}
@@ -135,8 +131,8 @@ class OptionMapperTest extends MapperTestUtility {
 	 * Find the previously created entries from the database.
 	 */
 	public function testFind() {
-		foreach ($this->options as $id => $option) {
-			$this->assertEquals($option, $this->optionMapper->find($id));
+		foreach ($this->options as $option) {
+			$this->assertEquals($option, $this->optionMapper->find($option-getId()));
 		}
 	}
 
@@ -144,8 +140,8 @@ class OptionMapperTest extends MapperTestUtility {
 	 * Find the previously created entries from the database.
 	 */
 	public function testFindByPoll() {
-		foreach ($this->polls as $id => $poll) {
-			$this->assertTrue(count($this->optionMapper->findByPoll($id)) > 0);
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->optionMapper->findByPoll($poll->getId())) > 0);
 		}
 	}
 
