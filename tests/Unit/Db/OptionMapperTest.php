@@ -73,8 +73,7 @@ class OptionMapperTest extends UnitTestCase {
 			$option = $this->fm->instance('OCA\Polls\Db\Option');
 
 			$option->setPollId($poll->getId());
-			$this->optionMapper->insert($option);
-			$this->options[] = $option;
+			$this->options[] = $this->optionMapper->insert($option);
 			$this->assertInstanceOf(Option::class, $option);
 		}
 

@@ -41,6 +41,8 @@ class VoteMapperTest extends UnitTestCase {
 	private $voteMapper;
 	/** @var PollMapper */
 	private $pollMapper;
+	/** @var OptionMapper */
+	private $optionMapper;
 
 	/**
 	 * {@inheritDoc}
@@ -99,7 +101,7 @@ class VoteMapperTest extends UnitTestCase {
 	 */
 	public function testDelete(Vote $vote) {
 		$poll = $this->pollMapper->find($vote->getPollId());
-		$option = $this->optionMapper->find($vote->getOptionId());
+		$option = $this->optionMapper->find($vote->getVoteOptionId());
 		$this->voteMapper->delete($vote);
 		$this->optionMapper->delete($option);
 		$this->pollMapper->delete($poll);

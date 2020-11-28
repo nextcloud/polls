@@ -36,7 +36,7 @@ class LogMapperTest extends UnitTestCase {
 	/** @var IDBConnection */
 	private $con;
 	/** @var LogMapper */
-	private $LogMapper;
+	private $logMapper;
 	/** @var PollMapper */
 	private $pollMapper;
 
