@@ -58,6 +58,8 @@ class OptionMapperTest extends UnitTestCase {
 		for ($pollCount=0; $pollCount < 2; $pollCount++) {
 			$poll = $this->fm->instance('OCA\Polls\Db\Poll');
 			array_push($this->polls, $this->pollMapper->insert($poll));
+			print 'added poll ';
+			var_dump($poll->getId());
 		}
 	}
 
@@ -75,6 +77,8 @@ class OptionMapperTest extends UnitTestCase {
 			$option = $this->optionMapper->insert($option);
 			array_push($options, $option);
 			$this->assertInstanceOf(Option::class, $option);
+			print 'added option ';
+			var_dump($option->getId());
 		}
 		return $options;
 	}
@@ -87,6 +91,8 @@ class OptionMapperTest extends UnitTestCase {
 	 */
 	public function testFind(array $options) {
 		foreach ($options as $option) {
+			print 'try find option ';
+			var_dump($option->getId());
 			$this->assertInstanceOf(Option::class, $this->optionMapper->find($option->getId()));
 		}
 	}
@@ -98,6 +104,9 @@ class OptionMapperTest extends UnitTestCase {
 	 */
 	public function testFindByPoll(array $options) {
 		foreach ($options as $option) {
+			print 'try find options of poll ';
+			var_dump($option->getPollId());
+
 			$this->assertTrue(count($this->optionMapper->findByPoll($option->getPollId())) > 0);
 		}
 	}
