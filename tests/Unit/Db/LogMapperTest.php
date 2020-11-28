@@ -35,10 +35,24 @@ class LogMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
+
 	/** @var LogMapper */
 	private $logMapper;
+
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var array */
+	private $polls;
+
+	/** @var array */
+	private $logs;
+
+	/** @var array */
+	private $pollsById;
+
+	/** @var array */
+	private $logsById;
 
 	/**
 	 * {@inheritDoc}
@@ -48,50 +62,81 @@ class LogMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->logMapper = new LogMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
+
+		$this->polls = [];
+		$this->logs = [];
+
+		$this->polls = [
+			$this->fm->instance('OCA\Polls\Db\Poll')
+		];
+
+		foreach ($this->polls as $poll) {
+			$entry = $this->pollMapper->insert($poll);
+			$entry->resetUpdatedFields();
+			$this->pollsById[$entry->getId()] = $entry;
+		}
+		foreach ($this->pollsById as $id => $polls) {
+			for ($count=0; $count < 2; $count++) {
+				$log = $this->fm->instance('OCA\Polls\Db\Log');
+				$log->setPollId($id);
+				array_push($this->logs, $log);
+			}
+		}
+
+		foreach ($this->logs as $log) {
+			$entry = $this->logMapper->insert($log);
+			$entry->resetUpdatedFields();
+			$this->logsById[$entry->getId()] = $entry;
+		}
+
+
 	}
 
 	/**
-	 * Create some fake data and persist them to the database.
-	 *
-	 * @return Log
+	 * Find the previously created entries from the database.
 	 */
-	public function testCreate() {
-		/** @var Poll $poll */
-		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
-
-		/** @var Log $log */
-		$log = $this->fm->instance('OCA\Polls\Db\Log');
-		$log->setPollId($poll->getId());
-		$this->assertInstanceOf(Log::class, $this->logMapper->insert($log));
-
-		return $log;
+	public function testFindByPoll() {
+		foreach ($this->pollsById as $id => $poll) {
+			$this->assertTrue(count($this->logMapper->findByPoll($id)) > 0);
+		}
 	}
 
 	/**
-	 * Update the previously created entry and persist the changes.
-	 *
-	 * @depends testCreate
-	 * @param Log $log
-	 * @return Log
+	 * Find the previously created entries from the database.
 	 */
-	public function testUpdate(Log $log) {
-		$processed = Faker::unixTime($max = 'now');
-		$log->setProcessed($processed());
-		$this->logMapper->update($log);
+	public function testFindUnprocessed() {
+		$this->assertTrue(count($this->logMapper->findUnprocessed()) > 0);
+	}
 
-		return $log;
+	/**
+	 * Find the previously created entries from the database.
+	 */
+	public function testFindUnprocessedPolls() {
+		$this->assertTrue(count($this->logMapper->findUnprocessedPolls()) > 0);
+	}
+
+	/**
+	 * Find the previously created entries from the database.
+	 */
+	public function testGetLastRecord() {
+		$this->assertInstanceOf(Log::class, $this->logMapper->getLastRecord());
 	}
 
 	/**
 	 * Delete the previously created entries from the database.
-	 *
-	 * @depends testUpdate
-	 * @param Log $log
 	 */
-	public function testDelete(Log $log) {
-		$poll = $this->pollMapper->find($log->getPollId());
-		$this->logMapper->delete($log);
-		$this->pollMapper->delete($poll);
+	public function testDelete() {
+		foreach ($this->logsById as $id => $log) {
+			$found = $this->logMapper->find($id);
+			$this->assertInstanceOf(Log::class, $this->logMapper->delete($found));
+		}
 	}
+
+	public function tearDown(): void {
+		parent::tearDown();
+		foreach ($this->polls as $poll) {
+			$this->pollMapper->delete($poll);
+		}
+	}
+
 }
