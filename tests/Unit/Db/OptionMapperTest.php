@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Polls\Tests\Unit\Db;
+namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
