@@ -50,11 +50,13 @@ class OptionMapperTest extends MapperTestUtility {
 	/** @var array */
 	private $polls;
 
+	private $faker;
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function setUp(): void {
 		parent::setUp();
+		$this->faker = Faker\Factory::create();
 		$this->con = \OC::$server->getDatabaseConnection();
 
 		$this->optionMapper = new OptionMapper($this->con);
@@ -76,7 +78,7 @@ class OptionMapperTest extends MapperTestUtility {
 		};
 
 		$this->polls = [
-			$this->createPollEntity(Poll::TYPE_TEXT, Faker::text(255), 'admin')
+			$this->createPollEntity(Poll::TYPE_TEXT, $this->faker->words(8), $this->faker->firstNameMale())
 		];
 
 		foreach ($this->polls as $poll) {
@@ -86,9 +88,9 @@ class OptionMapperTest extends MapperTestUtility {
 		}
 
 		$this->options = [
-			$this->createOptionEntity(1, Faker::text(255), 1),
-			$this->createOptionEntity(1, Faker::text(255), 2),
-			$this->createOptionEntity(1, Faker::text(255), 3)
+			$this->createOptionEntity(1, $this->faker->words(4), 1),
+			$this->createOptionEntity(1, $this->faker->words(4), 2),
+			$this->createOptionEntity(1, $this->faker->words(4), 3)
 
 		];
 		foreach ($this->options as $option) {
@@ -105,7 +107,7 @@ class OptionMapperTest extends MapperTestUtility {
 		$poll->setCreated(time());
 		$poll->setOwner($owner);
 		$poll->setTitle($title);
-		$poll->setDescription(Faker::text(255));
+		$poll->setDescription($this->faker->words(12));
 		$poll->setAccess(Poll::ACCESS_PUBLIC);
 		$poll->setExpire(0);
 		$poll->setAnonymous(0);
@@ -154,8 +156,8 @@ class OptionMapperTest extends MapperTestUtility {
 	 */
 	public function testUpdate(array $options) {
 		foreach ($options as $option) {
-			$newPollOptionText = Faker::text(255);
-			$option->setPollOptionText(Faker::text(255));
+			$newPollOptionText = $this->faker->words(2);
+			$option->setPollOptionText($newPollOptionText);
 			$this->assertEquals($option, $this->optionMapper->update($option));
 		}
 	}
