@@ -45,9 +45,6 @@ class OptionMapperTest extends UnitTestCase {
 	/** @var array */
 	private $polls;
 
-	/** @var array */
-	private $options;
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -57,63 +54,67 @@ class OptionMapperTest extends UnitTestCase {
 		$this->optionMapper = new OptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 		$this->polls = [];
-		$this->options = [];
 
 		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
 		$this->polls[] = $this->pollMapper->insert($poll);
+
 	}
 
 	/**
 	 * Create some fake data and persist them to the database.
 	 */
 	public function testCreate() {
-		/** @var Option $option */
 
 		foreach ($this->polls as $poll) {
+			/** @var Option $option */
 			$option = $this->fm->instance('OCA\Polls\Db\Option');
 
 			$option->setPollId($poll->getId());
 			$option = $this->optionMapper->insert($option);
-			$this->options[] = $option;
+			$options[] = $option;
 			$this->assertInstanceOf(Option::class, $option);
 		}
-
+		return $options;
 	}
 
 	/**
 	 * Find the previously created entries from the database.
 	 *
 	 * @depends testCreate
+	 * @return Option[]
 	 */
-	public function testFind() {
-		foreach ($this->options as $option) {
+	public function testFind(array $options) {
+		foreach ($options as $option) {
 			$this->assertEquals($option, $this->optionMapper->find($option->getId()));
 		}
-		$this->assertEquals($this->options[0], $this->optionMapper->find($this->options[0]->getId()));
 	}
+
 	/**
 	 * Find the previously created entries from the database.
 	 *
 	 * @depends testCreate
-	 * @return Option
+	 * @return Option[]
 	 */
-	public function testFindByPoll() {
-		foreach ($this->options as $option) {
+	public function testFindByPoll(array $options) {
+		foreach ($options as $option) {
 			$this->assertContains($option, $this->optionMapper->findByPoll($option->getId()));
 		}
+		return $options;
 	}
 
 	/**
 	 * Update the previously created entry and persist the changes.
 	 *
 	 * @depends testCreate
+	 * @return Option[]
 	 */
-	public function testUpdate() {
-		foreach ($this->options as $option) {
+	public function testUpdate(array $options) {
+		foreach ($options as $option) {
 			$newPollOptionText = Faker::text(255);
 			$option->setPollOptionText($newPollOptionText());
 			$this->assertEquals($option, $this->optionMapper->update($option));
 		}
+		return $options;
 	}
 
 	/**
@@ -121,8 +122,8 @@ class OptionMapperTest extends UnitTestCase {
 	 *
 	 * @depends testUpdate
 	 */
-	public function testDelete() {
-		foreach ($this->options as $option) {
+	public function testDelete(array $options) {
+		foreach ($options as $option) {
 			$this->assertInstanceOf(Option::class, $this->optionMapper->delete($option));
 		}
 	}
