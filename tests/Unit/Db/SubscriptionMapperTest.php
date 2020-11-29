@@ -78,7 +78,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 				$this->subscriptionMapper->insert($subscription);
 			}
 			// save the last inserted userId
-			$this->users[$entry->getId()] = $subscription->getUserId();
+			$this->users[$poll->getId()] = $subscription->getUserId();
 
 		}
 	}
