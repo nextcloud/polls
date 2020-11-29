@@ -60,7 +60,7 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 
-		if ($schema->hasTabl('polls_preferences')) {
+		if ($schema->hasTable('polls_preferences')) {
 
 			// remove preferences with empty user_id from oc_polls_preferences
 			$query = $this->connection->getQueryBuilder();
@@ -73,7 +73,7 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 			// preserve the last user setting in the db
 
 			// should force an migration error
-			$query = "DELETE p FOM {$prefix}polls_preferences p
+			$query = "DELETE p FROM {$prefix}polls_preferences p
 				INNER JOIN {$prefix}polls_preferences q
 				WHERE
 				    p.id > q.id AND
@@ -113,7 +113,7 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schem = $schemaClosure();
-		if ($schema->hasTabl('polls_share')) {
+		if ($schema->hasTable('polls_share')) {
 			$table = $schema->getTable('polls_share');
 
 			if (!$table->hasColumn('display_name')) {
