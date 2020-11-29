@@ -43,19 +43,16 @@ class SubscriptionMapperTest extends UnitTestCase {
 	private $pollMapper;
 
 	/** @var array */
-	private $polls;
+	private $polls = [];
 
 	/** @var array */
-	private $subscriptions;
+	private $subscriptions = [];
 
 	/** @var array */
-	private $pollsById;
+	private $pollsById = [];
 
 	/** @var array */
-	private $subscriptionsById;
-
-	/** @var array */
-	private $users;
+	private $users = [];
 
 
 	/**
@@ -67,10 +64,6 @@ class SubscriptionMapperTest extends UnitTestCase {
 		$this->subscriptionMapper = new SubscriptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 
-		$this->polls = [];
-		$this->subscriptions = [];
-		$this->users = [];
-
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
 		];
@@ -80,29 +73,30 @@ class SubscriptionMapperTest extends UnitTestCase {
 			$entry->resetUpdatedFields();
 			$this->pollsById[$entry->getId()] = $entry;
 		}
+
 		foreach ($this->pollsById as $id => $polls) {
 			for ($count=0; $count < 2; $count++) {
 				$subscription = $this->fm->instance('OCA\Polls\Db\Subscription');
 				$subscription->setPollId($id);
 				array_push($this->subscriptions, $subscription);
+				$this->subscriptionMapper->insert($subscription);
 			}
 			$this->users[$id] = $subscription->getUserId();
 		}
-		var_dump($this->users);
 	}
 
 	/**
 	 * Find the previously created entries from the database.
 	 */
 	public function testFindAllByPoll() {
-		foreach ($this->pollsById as $id => $poll) {
-			$this->assertTrue(count($this->subscriptionMapper->findAllByPoll($id)) > 0);
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->subscriptionMapper->findAllByPoll($poll->getId())) > 0);
 		}
 	}
 
 	public function testFindByUserAndPoll() {
-		foreach ($this->pollsById as $id => $poll) {
-			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->findByUserAndPoll($id, $this->users[$id]));
+		foreach ($this->polls as $poll) {
+			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->findByUserAndPoll($id, $this->users[$poll->getId()]));
 		}
 	}
 	/**
