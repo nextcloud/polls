@@ -111,6 +111,6 @@ class SubscriptionMapper extends QBMapper {
 		);
 
 		$qb->execute();
-		return $this->findEntity($qb);
+		return true
 	}
 }

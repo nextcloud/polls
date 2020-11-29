@@ -49,9 +49,6 @@ class SubscriptionMapperTest extends UnitTestCase {
 	private $subscriptions = [];
 
 	/** @var array */
-	private $pollsById = [];
-
-	/** @var array */
 	private $users = [];
 
 
@@ -68,20 +65,21 @@ class SubscriptionMapperTest extends UnitTestCase {
 			$this->fm->instance('OCA\Polls\Db\Poll')
 		];
 
-		foreach ($this->polls as $poll) {
-			$entry = $this->pollMapper->insert($poll);
-			$entry->resetUpdatedFields();
-			$this->pollsById[$entry->getId()] = $entry;
-		}
+		// insert test data
+		foreach ($this->polls as $polls) {
+			//insert test polls
+			$this->pollMapper->insert($poll);
 
-		foreach ($this->pollsById as $id => $polls) {
+			// insert 3 subscriptions per poll
 			for ($count=0; $count < 2; $count++) {
 				$subscription = $this->fm->instance('OCA\Polls\Db\Subscription');
-				$subscription->setPollId($id);
+				$subscription->setPollId($poll->getId());
 				array_push($this->subscriptions, $subscription);
 				$this->subscriptionMapper->insert($subscription);
 			}
-			$this->users[$id] = $subscription->getUserId();
+			// save the last inserted userId
+			$this->users[$entry->getId()] = $subscription->getUserId();
+
 		}
 	}
 
@@ -103,8 +101,8 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 * Delete the previously created entries from the database.
 	 */
 	public function testUnsubscribe() {
-		foreach ($this->pollsById as $id => $poll) {
-			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->unsubscribe($id, $this->users[$id]));
+		foreach ($this->polls as $poll) {
+			$this->assertTrue($this->subscriptionMapper->unsubscribe($poll->getId(), $this->users[$poll->getId()]));
 		}
 	}
 
