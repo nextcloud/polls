@@ -153,6 +153,7 @@ class VoteMapper extends QBMapper {
 		   );
 
 		$qb->execute();
+		return true;
 	}
 
 	/**

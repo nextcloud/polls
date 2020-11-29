@@ -23,13 +23,14 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use League\FactoryMuffin\Faker\Facade as Faker;
+use OCP\IDBConnection;
+use OCA\Polls\Tests\Unit\UnitTestCase;
+
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-use League\FactoryMuffin\Faker\Facade as Faker;
 
 class SubscriptionMapperTest extends UnitTestCase {
 
@@ -65,26 +66,21 @@ class SubscriptionMapperTest extends UnitTestCase {
 			$this->fm->instance('OCA\Polls\Db\Poll')
 		];
 
-		// insert test data
-		foreach ($this->polls as $poll) {
-			//insert test polls
-			$this->pollMapper->insert($poll);
+		foreach ($this->polls as &$poll) {
+			$poll = $this->pollMapper->insert($poll);
 
-			// insert 3 subscriptions per poll
 			for ($count=0; $count < 2; $count++) {
 				$subscription = $this->fm->instance('OCA\Polls\Db\Subscription');
 				$subscription->setPollId($poll->getId());
-				array_push($this->subscriptions, $subscription);
-				$this->subscriptionMapper->insert($subscription);
+				array_push($this->subscriptions, $this->subscriptionMapper->insert($subscription));
 			}
-			// save the last inserted userId
 			$this->users[$poll->getId()] = $subscription->getUserId();
-
 		}
+		unset($poll);
 	}
 
 	/**
-	 * Find the previously created entries from the database.
+	 * testFindAllByPoll
 	 */
 	public function testFindAllByPoll() {
 		foreach ($this->polls as $poll) {
@@ -92,13 +88,16 @@ class SubscriptionMapperTest extends UnitTestCase {
 		}
 	}
 
-	public function testFindByUserAndPoll() {
+	/**
+	 * testfindByPollAndUser
+	 */
+	public function testfindByPollAndUser() {
 		foreach ($this->polls as $poll) {
-			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->findByUserAndPoll($poll->getId(), $this->users[$poll->getId()]));
+			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->findByPollAndUser($poll->getId(), $this->users[$poll->getId()]));
 		}
 	}
 	/**
-	 * Delete the previously created entries from the database.
+	 * testUnsubscribe
 	 */
 	public function testUnsubscribe() {
 		foreach ($this->polls as $poll) {
@@ -106,6 +105,9 @@ class SubscriptionMapperTest extends UnitTestCase {
 		}
 	}
 
+	/**
+	 * tearDown
+	 */
 	public function tearDown(): void {
 		parent::tearDown();
 		foreach ($this->polls as $poll) {

@@ -63,7 +63,7 @@ class SubscriptionService {
 			throw new NotAuthorizedException;
 		}
 		try {
-			$this->subscriptionMapper->findByUserAndPoll($this->acl->getPollId(), $this->acl->getUserId());
+			$this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 			// Subscription exists
 			return true;
 		} catch (MultipleObjectsReturnedException $e) {
@@ -99,7 +99,7 @@ class SubscriptionService {
 			throw new NotAuthorizedException;
 		}
 		try {
-			$subscription = $this->subscriptionMapper->findByUserAndPoll($this->acl->getPollId(), $this->acl->getUserId());
+			$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 			if (!$subscribed) {
 				$this->subscriptionMapper->delete($subscription);
 			}

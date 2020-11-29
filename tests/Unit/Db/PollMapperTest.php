@@ -23,18 +23,23 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use League\FactoryMuffin\Faker\Facade as Faker;
+use OCP\IDBConnection;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-use League\FactoryMuffin\Faker\Facade as Faker;
 
 class PollMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
+
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var array */
+	private $polls = [];
+
 
 	/**
 	 * {@inheritDoc}
@@ -43,45 +48,59 @@ class PollMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->pollMapper = new PollMapper($this->con);
+
+		$this->polls = [
+			$this->fm->instance('OCA\Polls\Db\Poll'),
+			$this->fm->instance('OCA\Polls\Db\Poll'),
+			$this->fm->instance('OCA\Polls\Db\Poll')
+		];
+		foreach ($this->polls as &$poll) {
+			$poll = $this->pollMapper->insert($poll);
+		}
+		unset($poll);
 	}
 
 	/**
-	 * Create some fake data and persist them to the database.
-	 *
-	 * @return Poll
+	 * testFindAll
 	 */
-	public function testCreate() {
-		/** @var Poll $poll */
-		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
-
-		return $poll;
+	public function testFindAll() {
+		$this->assertEquals(count($this->optionMapper->findAll()), count($this->polls));
 	}
 
 	/**
-	 * Update the previously created entry and persist the changes.
-	 *
-	 * @depends testCreate
-	 * @param Poll $poll
-	 * @return Poll
+	 * testUpdate
+	 * includes testFind
 	 */
-	public function testUpdate(Poll $poll) {
-		$newTitle = Faker::sentence(10);
-		$newDescription = Faker::paragraph();
-		$poll->setTitle($newTitle());
-		$poll->setDescription($newDescription());
-		$this->pollMapper->update($poll);
+	public function testUpdate() {
+		foreach ($this->polls as &$poll) {
+			$before = $this->optionMapper->find($poll->getId());
+			$this->assertEquals($poll, $before);
 
-		return $poll;
+			$newTitle = Faker::sentence(10);
+			$newDescription = Faker::paragraph();
+			$poll->setTitle($newTitle());
+			$poll->setDescription($newDescription());
+
+			$this->assertEquals($poll, $this->pollMapper->update($poll));
+			$this->assertNotEquals($option, $before);
+		}
+		unset($poll);
 	}
 
 	/**
 	 * Delete the previously created entry from the database.
-	 *
-	 * @depends testUpdate
-	 * @param Poll $poll
 	 */
-	public function testDelete(Poll $poll) {
-		$this->pollMapper->delete($poll);
+	public function testDelete() {
+		foreach ($this->polls as $poll) {
+			$this->assertInstanceOf(Poll::class, $this->pollMapper->delete($poll));
+		}
+	}
+
+	/**
+	 * tearDown
+	 */
+	public function tearDown(): void {
+		parent::tearDown();
+		// no tidy neccesary, polls got deleted via testDelete()
 	}
 }

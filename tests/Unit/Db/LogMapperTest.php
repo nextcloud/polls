@@ -43,16 +43,11 @@ class LogMapperTest extends UnitTestCase {
 	private $pollMapper;
 
 	/** @var array */
-	private $polls;
+	private $polls = [];
 
 	/** @var array */
-	private $logs;
+	private $logs = [];
 
-	/** @var array */
-	private $pollsById;
-
-	/** @var array */
-	private $logsById;
 
 	/**
 	 * {@inheritDoc}
@@ -63,77 +58,85 @@ class LogMapperTest extends UnitTestCase {
 		$this->logMapper = new LogMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 
-		$this->polls = [];
-		$this->logs = [];
-
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
 		];
 
-		foreach ($this->polls as $poll) {
-			$entry = $this->pollMapper->insert($poll);
-			$entry->resetUpdatedFields();
-			$this->pollsById[$entry->getId()] = $entry;
-		}
-		foreach ($this->pollsById as $id => $polls) {
+		foreach ($this->polls as &$poll) {
+			$poll = $this->pollMapper->insert($poll);
+
 			for ($count=0; $count < 2; $count++) {
 				$log = $this->fm->instance('OCA\Polls\Db\Log');
-				$log->setPollId($id);
-				array_push($this->logs, $log);
+				$log->setPollId($poll->getId());
+				array_push($this->logs, $this->logMapper->insert($log));
 			}
 		}
-
-		foreach ($this->logs as $log) {
-			$entry = $this->logMapper->insert($log);
-			$entry->resetUpdatedFields();
-			$this->logsById[$entry->getId()] = $entry;
-		}
-
-
+		unset($poll);
 	}
 
 	/**
-	 * Find the previously created entries from the database.
+	 * testFindByPollId
 	 */
 	public function testFindByPollId() {
-		foreach ($this->pollsById as $id => $poll) {
-			$this->assertTrue(count($this->logMapper->findByPollId($id)) > 0);
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->logMapper->findByPollId($poll->getId())) > 0);
 		}
 	}
 
 	/**
-	 * Find the previously created entries from the database.
+	 * testFindUnprocessed
 	 */
 	public function testFindUnprocessed() {
 		$this->assertTrue(count($this->logMapper->findUnprocessed()) > 0);
 	}
 
 	/**
-	 * Find the previously created entries from the database.
+	 * testFindUnprocessedPolls
 	 */
 	public function testFindUnprocessedPolls() {
 		$this->assertTrue(count($this->logMapper->findUnprocessedPolls()) > 0);
 	}
 
 	/**
-	 * Find the previously created entries from the database.
+	 * testGetLastRecord
 	 */
 	public function testGetLastRecord() {
-		foreach ($this->pollsById as $id => $poll) {
-			$this->assertInstanceOf(Log::class, $this->logMapper->getLastRecord($id));
+		foreach ($this->polls as $poll) {
+			$this->assertInstanceOf(Log::class, $this->logMapper->getLastRecord($poll->getId()));
 		}
 	}
 
 	/**
-	 * Delete the previously created entries from the database.
+	 * testUpdate
+	 * includes testFind
+	 */
+	public function testUpdate() {
+		foreach ($this->logs as &$log) {
+			$before = $this->logMapper->find($log->getId());
+			$this->assertEquals($log, $before);
+
+			$log->setMessageId(Log::MSG_ID_UPDATEPOLL);
+
+			$this->assertEquals($log, $this->logMapper->update($log));
+			$this->assertNotEquals($before, $this->logMapper->find($log->getId()));
+		}
+		unset($log);
+	}
+
+
+	/**
+	 * testDelete
 	 */
 	public function testDelete() {
-		foreach ($this->logsById as $id => $log) {
-			$found = $this->logMapper->find($id);
-			$this->assertInstanceOf(Log::class, $this->logMapper->delete($found));
+		foreach ($this->logs as $log) {
+			$before = $this->logMapper->find($log->getId());
+			$this->assertInstanceOf(Log::class, $this->logMapper->delete($before));
 		}
 	}
 
+	/**
+	 * tearDown
+	 */
 	public function tearDown(): void {
 		parent::tearDown();
 		foreach ($this->polls as $poll) {

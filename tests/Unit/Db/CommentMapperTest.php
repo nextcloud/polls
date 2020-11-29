@@ -23,13 +23,14 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use League\FactoryMuffin\Faker\Facade as Faker;
+use OCP\IDBConnection;
+use OCA\Polls\Tests\Unit\UnitTestCase;
+
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-use League\FactoryMuffin\Faker\Facade as Faker;
 
 class CommentMapperTest extends UnitTestCase {
 
@@ -43,16 +44,10 @@ class CommentMapperTest extends UnitTestCase {
 	private $pollMapper;
 
 	/** @var array */
-	private $polls;
+	private $polls = [];
 
 	/** @var array */
-	private $comments;
-
-	/** @var array */
-	private $pollsById;
-
-	/** @var array */
-	private $commentsById;
+	private $comments = [];
 
 	/**
 	 * {@inheritDoc}
@@ -63,75 +58,70 @@ class CommentMapperTest extends UnitTestCase {
 		$this->commentMapper = new CommentMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 
-		$this->polls = [];
-		$this->comments = [];
-
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
 		];
 
-		foreach ($this->polls as $poll) {
-			$entry = $this->pollMapper->insert($poll);
-			$entry->resetUpdatedFields();
-			$this->pollsById[$entry->getId()] = $entry;
-		}
+		foreach ($this->polls as &$poll) {
+			$poll = $this->pollMapper->insert($poll);
 
-		foreach ($this->pollsById as $id => $polls) {
 			for ($count=0; $count < 2; $count++) {
 				$comment = $this->fm->instance('OCA\Polls\Db\Comment');
-				$comment->setPollId($id);
-				array_push($this->comments, $comment);
+				$comment->setPollId($poll->getId());
+				array_push($this->comments, $this->commentMapper->insert($comment));
 			}
 		}
-
-		foreach ($this->comments as $comment) {
-			$entry = $this->commentMapper->insert($comment);
-			$entry->resetUpdatedFields();
-			$this->commentsById[$entry->getId()] = $entry;
-		}
-
+		unset($poll);
 	}
 
 	 /**
- 	 * Find the previously created entries from the database.
+ 	 * testFind
  	 */
  	public function testFind() {
- 		foreach ($this->commentsById as $id => $comment) {
- 			$this->assertEquals($comment, $this->commentMapper->find($id));
+ 		foreach ($this->comments as $comment) {
+ 			$this->assertEquals($comment, $this->commentMapper->find($comment->getId()));
  		}
  	}
 
 	/**
-	 * Find the previously created entries from the database.
+	 * testFindByPoll
 	 */
 	public function testFindByPoll() {
-		foreach ($this->pollsById as $id => $poll) {
-			$this->assertTrue(count($this->commentMapper->findByPoll($id)) > 0);
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->commentMapper->findByPoll($poll->getId())) > 0);
 		}
 	}
 
 	/**
-	 * Update the previously created entry and persist the changes.
+	 * testUpdate
+	 * includes testFind
 	 */
 	public function testUpdate() {
-		foreach ($this->commentsById as $id => $comment) {
-			$found = $this->commentMapper->find($id);
+		foreach ($this->comments as &$comment) {
+			$before = $this->commentMapper->find($comment->getId());
+			$this->assertEquals($comment, $before);
+
 			$newComment = Faker::paragraph();
-			$found->setComment($newComment());
-			$this->assertEquals($found, $this->commentMapper->update($found));
+
+			$comment->setComment($newComment());
+			$this->assertEquals($comment, $this->commentMapper->update($comment));
+			$this->assertNotEquals($before, $this->commentMapper->find($comment->getId()));
+		}
+		unset($comment);
+	}
+
+	/**
+	 * testDelete
+	 */
+	public function testDelete() {
+		foreach ($this->comments as $comment) {
+			$this->assertInstanceOf(Comment::class, $this->commentMapper->delete($comment));
 		}
 	}
 
 	/**
-	 * Delete the previously created entries from the database.
+	 * tearDown
 	 */
-	public function testDelete() {
-		foreach ($this->commentsById as $id => $comment) {
-			$found = $this->commentMapper->find($id);
-			$this->assertInstanceOf(Comment::class, $this->commentMapper->delete($found));
-		}
-	}
-
 	public function tearDown(): void {
 		parent::tearDown();
 		foreach ($this->polls as $poll) {
