@@ -79,7 +79,7 @@ class CommentMapperTest extends UnitTestCase {
  	 */
  	public function testFind() {
  		foreach ($this->comments as $comment) {
- 			$this->assertInstanceOf(Vote::class, $this->commentMapper->find($comment->getId()));
+ 			$this->assertInstanceOf(Comment::class, $this->commentMapper->find($comment->getId()));
  		}
  	}
 

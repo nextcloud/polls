@@ -140,7 +140,7 @@ class VoteMapperTest extends UnitTestCase {
 	 */
 	public function testUpdate() {
 		foreach ($this->votes as &$vote) {
-			$vote->setAnswer('no');
+			$vote->setVoteAnswer('no');
 			$this->assertInstanceOf(Vote::class, $this->voteMapper->update($vote));
 		}
 		unset($vote);
