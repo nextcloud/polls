@@ -69,20 +69,15 @@ class PollMapperTest extends UnitTestCase {
 
 	/**
 	 * testUpdate
-	 * includes testFind
 	 */
 	public function testUpdate() {
 		foreach ($this->polls as &$poll) {
-			$before = $this->pollMapper->find($poll->getId());
-			$this->assertEquals($poll, $before);
-
 			$newTitle = Faker::sentence(10);
 			$newDescription = Faker::paragraph();
 			$poll->setTitle($newTitle());
 			$poll->setDescription($newDescription());
 
-			$this->assertEquals($poll, $this->pollMapper->update($poll));
-			$this->assertNotEquals($poll, $before);
+			$this->assertInstanceOf(Poll::class, $this->pollMapper->update($poll));
 		}
 		unset($poll);
 	}

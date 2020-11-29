@@ -79,7 +79,7 @@ class CommentMapperTest extends UnitTestCase {
  	 */
  	public function testFind() {
  		foreach ($this->comments as $comment) {
- 			$this->assertEquals($comment, $this->commentMapper->find($comment->getId()));
+ 			$this->assertInstanceOf(Vote::class, $this->commentMapper->find($comment->getId()));
  		}
  	}
 
@@ -94,18 +94,12 @@ class CommentMapperTest extends UnitTestCase {
 
 	/**
 	 * testUpdate
-	 * includes testFind
 	 */
 	public function testUpdate() {
 		foreach ($this->comments as &$comment) {
-			$before = $this->commentMapper->find($comment->getId());
-			$this->assertEquals($comment, $before);
-
 			$newComment = Faker::paragraph();
-
 			$comment->setComment($newComment());
-			$this->assertEquals($comment, $this->commentMapper->update($comment));
-			$this->assertNotEquals($before, $this->commentMapper->find($comment->getId()));
+			$this->assertInstanceOf(Comment::class, $this->commentMapper->update($comment));
 		}
 		unset($comment);
 	}

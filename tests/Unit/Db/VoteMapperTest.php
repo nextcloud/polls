@@ -113,7 +113,7 @@ class VoteMapperTest extends UnitTestCase {
 	 */
 	public function testFindSingleVote() {
 		foreach ($this->votes as $vote) {
-			$this->assertEquals($vote, $this->voteMapper->findSingleVote($vote->getPollId(), $vote->getVoteOptionText(), $vote->getUserId()));
+			$this->assertInstanceOf(Vote::class, $this->voteMapper->findSingleVote($vote->getPollId(), $vote->getVoteOptionText(), $vote->getUserId()));
 		}
 	}
 
@@ -136,18 +136,14 @@ class VoteMapperTest extends UnitTestCase {
 	}
 
 	/**
-	 * Update the previously created entry and persist the changes.
-	 *
-	 * @depends testCreate
-	 * @param Vote $vote
-	 * @return Vote
+	* testUpdate
 	 */
-	public function testUpdate(Vote $vote) {
-		$newVoteOptionText = Faker::date('Y-m-d H:i:s');
-		$vote->setVoteOptionText($newVoteOptionText());
-		$this->voteMapper->update($vote);
-
-		return $vote;
+	public function testUpdate() {
+		foreach ($this->votes as &$vote) {
+			$vote->setAnswer('no');
+			$this->assertInstanceOf(Vote::class, $this->voteMapper->update($vote));
+		}
+		unset($vote);
 	}
 
 	/**

@@ -112,13 +112,8 @@ class LogMapperTest extends UnitTestCase {
 	 */
 	public function testUpdate() {
 		foreach ($this->logs as &$log) {
-			$before = $this->logMapper->find($log->getId());
-			$this->assertEquals($log, $before);
-
 			$log->setMessageId(Log::MSG_ID_UPDATEPOLL);
-
-			$this->assertEquals($log, $this->logMapper->update($log));
-			$this->assertNotEquals($before, $this->logMapper->find($log->getId()));
+			$this->assertInstanceOf(Log::class, $this->logMapper->update($log));
 		}
 		unset($log);
 	}
