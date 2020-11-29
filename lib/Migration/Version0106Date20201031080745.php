@@ -60,7 +60,7 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_preferences')) {
+		if ($schema->hasTabl('polls_preferences')) {
 
 			// remove preferences with empty user_id from oc_polls_preferences
 			$query = $this->connection->getQueryBuilder();
