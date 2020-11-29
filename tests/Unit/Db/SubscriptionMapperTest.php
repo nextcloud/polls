@@ -66,7 +66,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 		];
 
 		// insert test data
-		foreach ($this->polls as $polls) {
+		foreach ($this->polls as $poll) {
 			//insert test polls
 			$this->pollMapper->insert($poll);
 
