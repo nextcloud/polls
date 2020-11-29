@@ -112,8 +112,8 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
-		$schema = $schemaClosure();
-		if ($schema->hasTable('polls_share')) {
+		$schem = $schemaClosure();
+		if ($schema->hasTabl('polls_share')) {
 			$table = $schema->getTable('polls_share');
 
 			if (!$table->hasColumn('display_name')) {
