@@ -64,7 +64,7 @@ class PollMapperTest extends UnitTestCase {
 	 * testFindAll
 	 */
 	public function testFindAll() {
-		$this->assertEquals(count($this->optionMapper->findAll()), count($this->polls));
+		$this->assertEquals(count($this->pollMapper->findAll()), count($this->polls));
 	}
 
 	/**
@@ -73,7 +73,7 @@ class PollMapperTest extends UnitTestCase {
 	 */
 	public function testUpdate() {
 		foreach ($this->polls as &$poll) {
-			$before = $this->optionMapper->find($poll->getId());
+			$before = $this->pollMapper->find($poll->getId());
 			$this->assertEquals($poll, $before);
 
 			$newTitle = Faker::sentence(10);
@@ -82,7 +82,7 @@ class PollMapperTest extends UnitTestCase {
 			$poll->setDescription($newDescription());
 
 			$this->assertEquals($poll, $this->pollMapper->update($poll));
-			$this->assertNotEquals($option, $before);
+			$this->assertNotEquals($poll, $before);
 		}
 		unset($poll);
 	}

@@ -79,28 +79,16 @@ class VoteMapperTest extends UnitTestCase {
 				$option = $this->fm->instance('OCA\Polls\Db\Option');
 				$option->setPollId($poll->getId());
 				array_push($this->options, $this->optionMapper->insert($option));
-				$userName = 'voter';
-				for ($votesCount=0; $votesCount < 2; $votesCount++) {
-					$vote = $this->fm->instance('OCA\Polls\Db\Vote');
-					$vote->setPollId($option->getPollId());
-					$vote->setUserId($userName);
-					$vote->setVoteOptionText($option->getPollOptionText());
-					array_push($this->votes, $this->voteMapper->insert($vote));
-				}
+				$vote = $this->fm->instance('OCA\Polls\Db\Vote');
+				$vote->setPollId($option->getPollId());
+				$vote->setUserId('voter');
+				$vote->setVoteOptionText($option->getPollOptionText());
+				array_push($this->votes, $this->voteMapper->insert($vote));
 			}
 		}
 		unset($poll);
 	}
 
-
-	/**
-	 * testFind
-	 */
-	public function testFind() {
-		foreach ($this->votes as $vote) {
-			$this->assertEquals($vote, $this->voteMapper->find($vote->getId()));
-		}
-	}
 
 	/**
 	 * testFindByPoll
@@ -143,7 +131,7 @@ class VoteMapperTest extends UnitTestCase {
 	 */
 	public function testFindParticipantsVotes() {
 		foreach ($this->votes as $vote) {
-			$this->assertTrue(count($this->voteMapper->findParticipantsVotes($vote->getUserId())) > 0);
+			$this->assertTrue(count($this->voteMapper->findParticipantsVotes($vote->getPollId(), $vote->getUserId())) > 0);
 		}
 	}
 
