@@ -71,25 +71,35 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 
 			// remove duplicate preferences from oc_polls_preferences
 			// preserve the last user setting in the db
-			$query = $this->connection->getQueryBuilder();
-			$query->select('id', 'user_id')
-				->from('polls_preferences');
-			$users = $query->execute();
 
-			$delete = $this->connection->getQueryBuilder();
-			$delete->delete('polls_preferences')
-				->where('id = :id');
+			// should force an migration error
+			$query = "DELETE p FROM {$prefix}polls_preferences p
+				INNER JOIN {$prefix}polls_preferences q
+				WHERE
+				    p.id > q.id AND
+				    p.user_id = q.user_id";
+			$stmt = $this->connection->prepare($query);
+			$stmt->execute();
 
-			$userskeep = [];
-
-			while ($row = $users->fetch()) {
-				if (in_array($row['user_id'], $userskeep)) {
-					$delete->setParameter('id', $row['id']);
-					$delete->execute();
-				} else {
-					$userskeep[] = $row['user_id'];
-				}
-			}
+			// $query = $this->connection->getQueryBuilder();
+			// $query->select('id', 'user_id')
+			// 	->from('polls_preferences');
+			// $users = $query->execute();
+			//
+			// $delete = $this->connection->getQueryBuilder();
+			// $delete->delete('polls_preferences')
+			// 	->where('id = :id');
+			//
+			// $userskeep = [];
+			//
+			// while ($row = $users->fetch()) {
+			// 	if (in_array($row['user_id'], $userskeep)) {
+			// 		$delete->setParameter('id', $row['id']);
+			// 		$delete->execute();
+			// 	} else {
+			// 		$userskeep[] = $row['user_id'];
+			// 	}
+			// }
 		}
 	}
 
