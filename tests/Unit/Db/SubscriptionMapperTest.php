@@ -96,7 +96,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 
 	public function testFindByUserAndPoll() {
 		foreach ($this->polls as $poll) {
-			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->findByUserAndPoll($id, $this->users[$poll->getId()]));
+			$this->assertInstanceOf(Subscription::class, $this->subscriptionMapper->findByUserAndPoll($poll->getId(), $this->users[$poll->getId()]));
 		}
 	}
 	/**
