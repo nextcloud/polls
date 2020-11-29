@@ -73,7 +73,7 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 			// preserve the last user setting in the db
 
 			// should force an migration error
-			$query = "DELETE p FROM {$prefix}polls_preferences p
+			$query = "DELETE p FOM {$prefix}polls_preferences p
 				INNER JOIN {$prefix}polls_preferences q
 				WHERE
 				    p.id > q.id AND
