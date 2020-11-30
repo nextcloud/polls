@@ -11,6 +11,7 @@ OC.L10N.register(
     "Cancel" : "취소",
     "OK" : "확인",
     "Week" : "주",
+    "Login" : "로그인",
     "Conflict" : "충돌",
     "New comment …" : "새 댓글…",
     "Delete comment" : "댓글 삭제",

@@ -114,6 +114,7 @@ OC.L10N.register(
     "Add a background image to the main area." : "Voeg een achtergrondafbeelding toe aan het hoofdgebied",
     "Glassy navigation" : "Glazige navigatie",
     "Glassy sidebar" : "Glazige zijbalk",
+    "Use calendar lookup" : "Gebruik de agendaopzoekfunctie",
     "Details" : "Details",
     "Configuration" : "Configuratie",
     "Options" : "Opties",
