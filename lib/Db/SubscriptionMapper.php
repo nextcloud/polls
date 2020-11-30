@@ -80,7 +80,7 @@ class SubscriptionMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Subscription
 	 */
-	public function findByUserAndPoll($pollId, $userId) {
+	public function findByPollAndUser($pollId, $userId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -111,5 +111,6 @@ class SubscriptionMapper extends QBMapper {
 		);
 
 		$qb->execute();
+		return true;
 	}
 }

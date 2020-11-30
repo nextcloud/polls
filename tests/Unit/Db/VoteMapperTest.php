@@ -23,13 +23,16 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
+use League\FactoryMuffin\Faker\Facade as Faker;
+use OCP\IDBConnection;
+use OCA\Polls\Tests\Unit\UnitTestCase;
+
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-use League\FactoryMuffin\Faker\Facade as Faker;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
 
 class VoteMapperTest extends UnitTestCase {
 
@@ -39,6 +42,21 @@ class VoteMapperTest extends UnitTestCase {
 	private $voteMapper;
 	/** @var PollMapper */
 	private $pollMapper;
+	/** @var OptionMapper */
+	private $optionMapper;
+
+
+	/** @var array */
+	private $polls = [];
+
+	/** @var array */
+	private $options = [];
+
+	/** @var array */
+	private $votes = [];
+
+	/** @var array */
+	private $users = [];
 
 	/**
 	 * {@inheritDoc}
@@ -48,52 +66,105 @@ class VoteMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->voteMapper = new VoteMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
+		$this->optionMapper = new OptionMapper($this->con);
+
+		$this->polls = [
+			$this->fm->instance('OCA\Polls\Db\Poll')
+		];
+
+		foreach ($this->polls as &$poll) {
+			$poll = $this->pollMapper->insert($poll);
+
+			for ($optionsCount=0; $optionsCount < 2; $optionsCount++) {
+				$option = $this->fm->instance('OCA\Polls\Db\Option');
+				$option->setPollId($poll->getId());
+				array_push($this->options, $this->optionMapper->insert($option));
+				$vote = $this->fm->instance('OCA\Polls\Db\Vote');
+				$vote->setPollId($option->getPollId());
+				$vote->setUserId('voter');
+				$vote->setVoteOptionText($option->getPollOptionText());
+				array_push($this->votes, $this->voteMapper->insert($vote));
+			}
+		}
+		unset($poll);
+	}
+
+
+	/**
+	 * testFindByPoll
+	 */
+	public function testFindByPoll() {
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->voteMapper->findByPoll($poll->getId())) > 0);
+		}
 	}
 
 	/**
-	 * Create some fake data and persist them to the database.
-	 *
-	 * @return Vote
+	 * testFindByPollAndUser
 	 */
-	public function testCreate() {
-		/** @var Poll $poll */
-		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
-
-
-		/** @var Vote $vote */
-		$vote = $this->fm->instance('OCA\Polls\Db\Vote');
-		$vote->setPollId($poll->getId());
-		$vote->setVoteOptionId(1);
-		$this->assertInstanceOf(Vote::class, $this->voteMapper->insert($vote));
-
-		return $vote;
+	public function testFindByPollAndUser() {
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->voteMapper->findByPollAndUser($poll->getId(), 'voter')) > 0);
+		}
 	}
 
 	/**
-	 * Update the previously created entry and persist the changes.
-	 *
-	 * @depends testCreate
-	 * @param Vote $vote
-	 * @return Vote
+	 * testFindSingleVote
 	 */
-	public function testUpdate(Vote $vote) {
-		$newVoteOptionText = Faker::date('Y-m-d H:i:s');
-		$vote->setVoteOptionText($newVoteOptionText());
-		$this->voteMapper->update($vote);
-
-		return $vote;
+	public function testFindSingleVote() {
+		foreach ($this->votes as $vote) {
+			$this->assertInstanceOf(Vote::class, $this->voteMapper->findSingleVote($vote->getPollId(), $vote->getVoteOptionText(), $vote->getUserId()));
+		}
 	}
 
 	/**
-	 * Delete the previously created entries from the database.
-	 *
-	 * @depends testUpdate
-	 * @param Vote $vote
+	 * testParticipantsByPoll
 	 */
-	public function testDelete(Vote $vote) {
-		$poll = $this->pollMapper->find($vote->getPollId());
-		$this->voteMapper->delete($vote);
-		$this->pollMapper->delete($poll);
+	public function testParticipantsByPoll() {
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->voteMapper->findParticipantsByPoll($poll->getId())) > 0);
+		}
+	}
+
+	/**
+	 * testParticipantsByPoll
+	 */
+	public function testFindParticipantsVotes() {
+		foreach ($this->votes as $vote) {
+			$this->assertTrue(count($this->voteMapper->findParticipantsVotes($vote->getPollId(), $vote->getUserId())) > 0);
+		}
+	}
+
+	/**
+	* testUpdate
+	 */
+	public function testUpdate() {
+		foreach ($this->votes as &$vote) {
+			$vote->setVoteAnswer('no');
+			$this->assertInstanceOf(Vote::class, $this->voteMapper->update($vote));
+		}
+		unset($vote);
+	}
+
+	/**
+	 * testDeleteByPollAndUser
+	 */
+	public function testDeleteByPollAndUser() {
+		foreach ($this->polls as $poll) {
+			$this->assertTrue($this->voteMapper->deleteByPollAndUser($poll->getId(), 'voter'));
+		}
+	}
+
+	/**
+	* tearDown
+	*/
+	public function tearDown(): void {
+		parent::tearDown();
+		foreach ($this->options as $option) {
+			$this->optionMapper->delete($option);
+		}
+		foreach ($this->polls as $poll) {
+			$this->pollMapper->delete($poll);
+		}
 	}
 }

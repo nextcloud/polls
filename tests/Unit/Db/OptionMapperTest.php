@@ -21,24 +21,33 @@
  *
  */
 
-namespace OCA\Polls\Tests\Unit\Db;
+namespace OCA\Polls\Db;
+
+use League\FactoryMuffin\Faker\Facade as Faker;
+use OCP\IDBConnection;
+use OCA\Polls\Tests\Unit\UnitTestCase;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
-use League\FactoryMuffin\Faker\Facade as Faker;
 
 class OptionMapperTest extends UnitTestCase {
 
 	/** @var IDBConnection */
 	private $con;
+
 	/** @var OptionMapper */
 	private $optionMapper;
+
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var array */
+	private $polls = [];
+
+	/** @var array */
+	private $options = [];
 
 	/**
 	 * {@inheritDoc}
@@ -48,50 +57,68 @@ class OptionMapperTest extends UnitTestCase {
 		$this->con = \OC::$server->getDatabaseConnection();
 		$this->optionMapper = new OptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
+
+		$this->polls = [
+			$this->fm->instance('OCA\Polls\Db\Poll')
+		];
+
+		foreach ($this->polls as &$poll) {
+			$poll = $this->pollMapper->insert($poll);
+
+			for ($count=0; $count < 2; $count++) {
+				$option = $this->fm->instance('OCA\Polls\Db\Option');
+				$option->setPollId($poll->getId());
+				array_push($this->options, $this->optionMapper->insert($option));
+			}
+		}
+		unset($poll);
 	}
 
 	/**
-	 * Create some fake data and persist them to the database.
-	 *
-	 * @return Option
+	 * testFind
 	 */
-	public function testCreate() {
-		/** @var Poll $poll */
-		$poll = $this->fm->instance('OCA\Polls\Db\Poll');
-		$this->assertInstanceOf(Poll::class, $this->pollMapper->insert($poll));
-
-		/** @var Option $option */
-		$option = $this->fm->instance('OCA\Polls\Db\Option');
-		$option->setPollId($poll->getId());
-		$this->assertInstanceOf(Option::class, $this->optionMapper->insert($option));
-
-		return $option;
+	public function testFind() {
+		foreach ($this->options as $option) {
+			$this->assertInstanceOf(Option::class, $this->optionMapper->find($option->getId()));
+		}
 	}
 
 	/**
-	 * Update the previously created entry and persist the changes.
-	 *
-	 * @depends testCreate
-	 * @param Option $option
-	 * @return Option
+	 * testFindByPoll
 	 */
-	public function testUpdate(Option $option) {
-		$newPollOptionText = Faker::text(255);
-		$option->setPollOptionText($newPollOptionText());
-		$this->optionMapper->update($option);
-
-		return $option;
+	public function testFindByPoll() {
+		foreach ($this->polls as $poll) {
+			$this->assertTrue(count($this->optionMapper->findByPoll($poll->getId())) > 0);
+		}
 	}
 
 	/**
-	 * Delete the previously created entries from the database.
-	 *
-	 * @depends testUpdate
-	 * @param Option $option
+	 * testUpdate
+	 * includes testFind
 	 */
-	public function testDelete(Option $option) {
-		$poll = $this->pollMapper->find($option->getPollId());
-		$this->optionMapper->delete($option);
-		$this->pollMapper->delete($poll);
+	public function testUpdate() {
+		foreach ($this->options as &$option) {
+			$option->setPollOptionText('Changed option');
+			$this->assertInstanceOf(Option::class, $this->optionMapper->update($option));
+		}
+	}
+
+	/**
+	 * testDelete
+	 */
+	public function testDelete() {
+		foreach ($this->options as $option) {
+			$this->assertInstanceOf(Option::class, $this->optionMapper->delete($option));
+		}
+	}
+
+	/**
+	 * tearDown
+	 */
+	public function tearDown(): void {
+		parent::tearDown();
+		foreach ($this->polls as $poll) {
+			$this->pollMapper->delete($poll);
+		}
 	}
 }

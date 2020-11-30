@@ -24,11 +24,16 @@
 use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
- * General factory for the text model.
+ * General factory for the comment model.
  */
-$fm->define('OCA\Polls\Db\Option')->setDefinitions([
-	'pollOptionText' => Faker::text(255),
-	'timestamp' => 0,
-	'order' => 0,
-	'confirmed' => 0
+$fm->define('OCA\Polls\Db\Log')->setDefinitions([
+	'created' => function () {
+		$date = new DateTime('yesterday');
+		return $date->getTimestamp();
+	},
+	'processed' => 0,
+	'userId' => Faker::firstNameMale(),
+	'displayName' => Faker::lastName(),
+	'messageId' => 'addPoll',
+	'message' => Faker::text(255)
 ]);
