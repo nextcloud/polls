@@ -96,25 +96,33 @@ class Share extends Entity implements JsonSerializable {
 			'invitationSent' => intval($this->invitationSent),
 			'displayName' => $this->displayName,
 			'isNoUser' => !($this->type === self::TYPE_USER),
-			'validPublic' => $this->getValidPublic(),
-			'validAuthenticated' => $this->getValidAuthenticated(),
 			'URL' => $this->getURL()
 		];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getURL() {
 		if ($this->type === self::TYPE_USER || $this->type === self::TYPE_GROUP) {
 			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
 				'polls.page.vote',
 				['id' => $this->pollId]
 			);
-		} else {
+		} elseif ($this->token) {
 			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
 				'polls.page.vote_publicpublic',
 				['token' => $this->token]
 			);
+		} else {
+			return '';
 		}
 	}
+
+	/**
+	 * getUserId
+	 * @return string
+	 */
 	public function getUserId() {
 		if ($this->type === self::TYPE_CONTACTGROUP) {
 			// contactsgroup had the prefix contactgroup_ until version 1.5
@@ -127,6 +135,7 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	/**
+	 * getUserObject
 	 * @return UserGroupClass
 	 */
 	public function getUserObject() {
@@ -139,6 +148,7 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	/**
+	 * getMembers
 	 * @return UserGroupClass[]
 	 */
 	public function getMembers() {
@@ -155,26 +165,5 @@ class Share extends Entity implements JsonSerializable {
 				$this->emailAddress
 			)];
 		}
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getValidPublic() {
-		return (
-			   $this->type === self::TYPE_PUBLIC
-			|| $this->type === self::TYPE_EMAIL
-			|| $this->type === self::TYPE_CONTACT
-			|| $this->type === self::TYPE_EXTERNAL);
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getValidAuthenticated() {
-		return (
-			   $this->type === self::TYPE_PUBLIC
-			|| $this->type === self::TYPE_USER
-			|| $this->type === self::TYPE_GROUP);
 	}
 }

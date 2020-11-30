@@ -165,6 +165,16 @@ class Poll extends Entity implements JsonSerializable {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function getExpired(): bool {
+		return (
+			   $this->getExpire() > 0
+			&& $this->getExpire() < time()
+		);
+	}
+
+	/**
 	 * @return string
 	 */
 	private function getDisplayName() {

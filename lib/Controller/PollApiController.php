@@ -85,7 +85,7 @@
  	 */
  	public function get($pollId) {
  		try {
- 			return new DataResponse(['poll' => $this->pollService->get($pollId, '')], Http::STATUS_OK);
+ 			return new DataResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
  		} catch (Exception $e) {
