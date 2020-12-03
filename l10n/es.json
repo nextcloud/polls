@@ -7,6 +7,8 @@
     "Group" : "Grupo",
     "User" : "Usuario",
     "Polls" : "Votaciones",
+    "%s invited you to a poll" : "%s te invitó a una encuesta",
+    "{user} has invited you to the poll \"%s\"." : "{user} te ha invitado.a la encuesta \"%s\".",
     "- %s voted." : "- %s votado.",
     "Polls App - New Activity" : "App de Encuestas - Nueva actividad",
     "\"{title}\" had recent activity: " : "\"{title}\" ha tenido la reciente actividad: ",
