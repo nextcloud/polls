@@ -72,15 +72,9 @@ class CommentService {
 	 * @return array
 	 * @throws NotAuthorizedException
 	 */
-	public function list($pollId = 0, $token = '') {
-		if ($token) {
-			$this->acl->setToken($token);
-		} else {
+	public function list($pollId = 0, $acl = null) {
+		if (!$this->acl) {
 			$this->acl->setPollId($pollId);
-		}
-
-		if (!$this->acl->getAllowView()) {
-			throw new NotAuthorizedException;
 		}
 
 		if ($this->acl->getAllowSeeUsernames()) {
@@ -95,33 +89,24 @@ class CommentService {
 	 * Add comment
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param string $message
 	 * @param string $token
+	 * @param string $message
 	 * @return Comment
 	 * @throws NotAuthorizedException
 	 */
-	public function add($pollId = 0, $message, $token = '') {
+	public function add($pollId = 0, $token = '', $message) {
 		if ($token) {
-			$this->acl->setToken($token);
+			$this->acl->setToken($token)->requestComment();
 		} else {
-			$this->acl->setPollId($pollId);
+			$this->acl->setPollId($pollId)->requestComment();
 		}
-
-		try {
-			if ($this->acl->getAllowComment()) {
-				$this->comment = new Comment();
-				$this->comment->setPollId($this->acl->getPollId());
-				$this->comment->setUserId($this->acl->getUserId());
-				$this->comment->setComment($message);
-				$this->comment->setDt(date('Y-m-d H:i:s'));
-				$this->comment = $this->commentMapper->insert($this->comment);
-				return $this->comment;
-			} else {
-				throw new NotAuthorizedException;
-			}
-		} catch (\Exception $e) {
-			throw new NotAuthorizedException($e);
-		}
+		$this->comment = new Comment();
+		$this->comment->setPollId($pollId);
+		$this->comment->setUserId($this->acl->getUserId());
+		$this->comment->setComment($message);
+		$this->comment->setDt(date('Y-m-d H:i:s'));
+		$this->comment = $this->commentMapper->insert($this->comment);
+		return $this->comment;
 	}
 
 	/**
@@ -136,13 +121,9 @@ class CommentService {
 		$this->comment = $this->commentMapper->find($commentId);
 
 		if ($token) {
-			$this->acl->setToken($token);
+			$this->acl->setToken($token)->validateUserId($this->comment->getUserId());
 		} else {
-			$this->acl->setPollId($this->comment->getPollId());
-		}
-
-		if ($this->acl->getUserId() !== $this->comment->getUserId()) {
-			throw new NotAuthorizedException;
+			$this->acl->setPollId($this->comment->getPollId())->validateUserId($this->comment->getUserId());
 		}
 
 		$this->commentMapper->delete($this->comment);

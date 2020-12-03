@@ -54,29 +54,25 @@ class CommentController extends Controller {
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
-	 * @PublicPage
 	 * @param int $pollId
 	 * @param string $message
-	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function add($pollId, $message, $token) {
-		return $this->response(function () use ($pollId, $message, $token) {
-			return ['comment'=> $this->commentService->add($pollId, $message, $token)];
+	public function add($pollId, $message) {
+		return $this->response(function () use ($pollId, $message) {
+			return ['comment' => $this->commentService->add($pollId, null, $message)];
 		});
 	}
 
 	/**
 	 * Delete Comment
 	 * @NoAdminRequired
-	 * @PublicPage
 	 * @param int $commentId
-	 * @param string $token
 	 * @return DataResponse
 	 */
-	public function delete($commentId, $token) {
-		return $this->responseDeleteTolerant(function () use ($commentId, $token) {
-			return ['comment'=> $this->commentService->delete($commentId, $token)];
+	public function delete($commentId) {
+		return $this->responseDeleteTolerant(function () use ($commentId) {
+			return ['comment' => $this->commentService->delete($commentId)];
 		});
 	}
 }

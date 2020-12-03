@@ -119,43 +119,10 @@ class PollController extends Controller {
 	/**
 	 * get complete poll
 	 * @NoAdminRequired
-	 * @PublicPage
-	 * @deprecated use getByToken/getById
-	 * @param int $pollId
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function get(int $pollId = 0, string $token = '') {
-		if ($token) {
-			return $this->getByToken($token);
-		} else {
-			return $this->getByPollId($pollId);
-		}
-	}
-
-	/**
-	 * get complete poll via token
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken(string $token) {
-		return $this->response(function () use ($token) {
-			$this->share = $this->shareService->get($token);
-			$this->acl->setShare($this->share);
-			$this->poll = $this->pollService->get($this->share->getPollId());
-			return $this->build();
-		});
-	}
-
-	/**
-	 * get complete poll via pollId
-	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @return DataResponse
 	 */
-	public function getByPollId(int $pollId) {
+	public function get(int $pollId) {
 		return $this->response(function () use ($pollId) {
 			$this->share = null;
 			$this->poll = $this->pollService->get($pollId);
@@ -167,14 +134,11 @@ class PollController extends Controller {
 	/**
 	 * get complete poll
 	 * @NoAdminRequired
-	 * @PublicPage
-	 * @param int $pollId
-	 * @param string $token
 	 * @return Array
 	 */
 	private function build() {
 		try {
-			$comments = $this->commentService->list($this->poll->getId());
+			$comments = $this->commentService->list($this->poll->getId(), $this->acl);
 		} catch (Exception $e) {
 			$comments = [];
 		}
@@ -243,9 +207,9 @@ class PollController extends Controller {
 	 * @return DataResponse
 	 */
 
-	public function delete($pollId) {
+	public function switchDeleted($pollId) {
 		return $this->response(function () use ($pollId) {
-			return $this->pollService->delete($pollId);
+			return $this->pollService->switchDeleted($pollId);
 		});
 	}
 
@@ -256,9 +220,9 @@ class PollController extends Controller {
 	 * @return DataResponse
 	 */
 
-	public function deletePermanently($pollId) {
+	public function delete($pollId) {
 		return $this->responseDeleteTolerant(function () use ($pollId) {
-			return $this->pollService->deletePermanently($pollId);
+			return $this->pollService->delete($pollId);
 		});
 	}
 

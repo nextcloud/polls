@@ -138,13 +138,12 @@ class Acl implements JsonSerializable {
 	/**
 	 * setPoll
 	 * @param Poll $poll
-	 * @return self
+	 * @return Acl
+	 * @throws NotAuthorizedException
 	 */
 	public function setPoll(Poll $poll) {
 		$this->poll = $poll;
-		if (!$this->getAllowView()) {
-			throw new NotAuthorizedException('Error loading poll ' . $poll->getId());
-		}
+		$this->requestView();
 		return $this;
 	}
 
@@ -207,18 +206,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * requestVote
-	 * @throws NotAuthorizedException
-	 * @return void
-	 */
-	public function requestVote(): void {
-		if (!$this->getAllowVote()) {
-			throw new NotAuthorizedException;
-		}
-	}
-
-
-	/**
 	 * getAllowSubscribe
 	 * @return bool
 	 */
@@ -245,6 +232,39 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
+	 * requestView
+	 * @throws NotAuthorizedException
+	 * @return void
+	 */
+	public function requestView(): void {
+		if (!$this->getAllowView()) {
+			throw new NotAuthorizedException;
+		}
+	}
+
+	/**
+	 * requestVote
+	 * @throws NotAuthorizedException
+	 * @return void
+	 */
+	public function requestVote(): void {
+		if (!$this->getAllowVote()) {
+			throw new NotAuthorizedException;
+		}
+	}
+
+	/**
+	 * requestComment
+	 * @throws NotAuthorizedException
+	 * @return void
+	 */
+	public function requestComment(): void {
+		if (!$this->getAllowComment()) {
+			throw new NotAuthorizedException;
+		}
+	}
+
+	/**
 	 * requestEdit
 	 * @throws NotAuthorizedException
 	 * @return void
@@ -262,6 +282,17 @@ class Acl implements JsonSerializable {
 	 */
 	public function requestDelete(): void {
 		if (!$this->getAllowEdit() || !$this->poll->getDeleted()) {
+			throw new NotAuthorizedException;
+		}
+	}
+
+	/**
+	 * validateUserId
+	 * @throws NotAuthorizedException
+	 * @return void
+	 */
+	public function validateUserId($userId): void {
+		if ($this->getUserId() !== $userId) {
 			throw new NotAuthorizedException;
 		}
 	}

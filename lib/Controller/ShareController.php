@@ -118,7 +118,6 @@ class ShareController extends Controller {
 	/**
 	 * Set email address
 	 * @NoAdminRequired
-	 * @PublicPage
 	 * @param int $pollId
 	 * @param int $pollId
 	 * @param string $type
@@ -136,7 +135,6 @@ class ShareController extends Controller {
 	 * Create a personal share from a public share
 	 * or update an email share with the username
 	 * @NoAdminRequired
-	 * @PublicPage
 	 * @param string $token
 	 * @param string $userName
 	 * @return DataResponse
@@ -164,7 +162,6 @@ class ShareController extends Controller {
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
 	 * @NoAdminRequired
-	 * @PublicPage
 	 * @param string $token
 	 * @return DataResponse
 	 */

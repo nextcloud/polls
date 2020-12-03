@@ -23,12 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\Exception;
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\VoteService;
@@ -37,6 +33,8 @@ class VoteController extends Controller {
 
 	/** @var VoteService */
 	private $voteService;
+
+	use ResponseHandle;
 
 	/**
 	 * VoteController constructor
@@ -54,22 +52,6 @@ class VoteController extends Controller {
 	}
 
 	/**
-	 * Read all votes of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
-	 */
-	public function get($pollId) {
-		try {
-			return new DataResponse($this->voteService->list($pollId), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
 	 * set
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -78,13 +60,9 @@ class VoteController extends Controller {
 	 * @return DataResponse
 	 */
 	public function set($optionId, $setTo) {
-		try {
-			return new DataResponse($this->voteService->set($optionId, $setTo), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($optionId, $setTo) {
+			return ['vote' => $this->voteService->set($optionId, $setTo)];
+		});
 	}
 
 	/**
@@ -95,52 +73,8 @@ class VoteController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete($pollId, $userId) {
-		try {
-			return new DataResponse(['deleted' => $this->voteService->delete($pollId, $userId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * Public functions
-	 */
-
-	/**
-	 * Set vote with token
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @param Array $option
-	 * @param string $setTo
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function setByToken($optionId, $setTo, $token) {
-		try {
-			return new DataResponse($this->voteService->set($optionId, $setTo, $token), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Option not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * Read all votes of a poll based on a share token and return list as array
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
-	 */
-	public function getByToken($token) {
-		try {
-			return new DataResponse($this->voteService->list(null, $token), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->response(function () use ($pollId, $userId) {
+			return ['deleted' => $this->voteService->delete($pollId, $userId)];
+		});
 	}
 }

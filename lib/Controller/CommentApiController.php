@@ -81,7 +81,7 @@ class CommentApiController extends ApiController {
 	 */
 	public function add($pollId, $message) {
 		return $this->response(function () use ($pollId, $message) {
-			return ['comment'=> $this->commentService->add($pollId, $message)];
+			return ['comment'=> $this->commentService->add($pollId, null, $message)];
 		});
 	}
 

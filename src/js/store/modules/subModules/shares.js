@@ -88,8 +88,8 @@ const getters = {
 
 const actions = {
 	list(context) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id + '/shares'
-		return axios.get(generateUrl(endPoint))
+		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id
+		return axios.get(generateUrl(endPoint + '/shares'))
 			.then((response) => {
 				context.commit('set', response.data)
 				return response.data
@@ -101,9 +101,9 @@ const actions = {
 	},
 
 	add(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id + '/share'
+		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id
 
-		return axios.post(generateUrl(endPoint), payload.share)
+		return axios.post(generateUrl(endPoint), payload.share + '/share')
 			.then((response) => {
 				return response.data
 			})
@@ -130,10 +130,10 @@ const actions = {
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/share/delete/' + payload.share.token
+		const endPoint = 'apps/polls/share'
 		context.commit('delete', { share: payload.share })
 
-		return axios.delete(generateUrl(endPoint))
+		return axios.delete(generateUrl(endPoint + '/' + payload.share.token))
 			.then((response) => {
 				return response
 			})
@@ -147,9 +147,9 @@ const actions = {
 	},
 
 	sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share/send/' + payload.share.token
+		const endPoint = 'apps/polls/share/send'
 
-		return axios.post(generateUrl(endPoint))
+		return axios.post(generateUrl(endPoint + '/' + payload.share.token + '/send'))
 			.then((response) => {
 				return response
 			})
@@ -163,9 +163,9 @@ const actions = {
 	},
 
 	resolveGroup(context, payload) {
-		const endPoint = 'apps/polls/share/resolveGroup/' + payload.share.token
+		const endPoint = 'apps/polls/share'
 
-		return axios.get(generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint + '/' + payload.share.token + '/resolve'))
 			.catch((error) => {
 				console.error('Error exploding group', error.response.data, { error: error.response }, { payload: payload })
 				throw error

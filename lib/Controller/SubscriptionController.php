@@ -23,12 +23,8 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\Exception;
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Service\SubscriptionService;
@@ -37,6 +33,8 @@ class SubscriptionController extends Controller {
 
 	/** @var SubscriptionService */
 	private $subscriptionService;
+
+	use ResponseHandle;
 
 	/**
 	 * SubscriptionController constructor.
@@ -56,36 +54,37 @@ class SubscriptionController extends Controller {
 
 	/**
 	 * Get subscription status
-	 * @PublicPage
 	 * @NoAdminRequired
 	 * @param int $pollId
 	 * @return DataResponse
-	 * @throws DoesNotExistException
 	 */
-	public function get($pollId, $token) {
-		try {
-			return new DataResponse(['subscribed' => $this->subscriptionService->get($pollId, $token)], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		} catch (DoesNotExistException $e) {
-			return new DataResponse(['subscribed' => false], Http::STATUS_OK);
-		}
+	public function get($pollId = 0) {
+		return $this->response(function () use ($pollId) {
+			return ['subscribed' => $this->subscriptionService->get($pollId)];
+		});
 	}
 
 	/**
-	 * Switch subscription status
-	 * @PublicPage
+	 * subscribe
 	 * @NoAdminRequired
 	 * @param int $pollId
-	 * @param string $token
-	 * @param boolean $subscribed
 	 * @return DataResponse
 	 */
-	public function set($pollId, $token, $subscribed) {
-		try {
-			return new DataResponse(['subscribed' => $this->subscriptionService->set($pollId, $token, $subscribed)], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	public function subscribe($pollId) {
+		return $this->response(function () use ($pollId) {
+			return ['subscribed' => $this->subscriptionService->set($pollId, '', true)];
+		});
+	}
+
+	/**
+	 * Unsubscribe
+	 * @NoAdminRequired
+	 * @param int $pollId
+	 * @return DataResponse
+	 */
+	public function unsubscribe($pollId) {
+		return $this->response(function () use ($pollId) {
+			return ['subscribed' => $this->subscriptionService->set($pollId, '', false)];
+		});
 	}
 }
