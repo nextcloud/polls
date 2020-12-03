@@ -73,9 +73,7 @@ class CommentService {
 	 * @throws NotAuthorizedException
 	 */
 	public function list($pollId = 0, $acl = null) {
-		if (!$this->acl) {
-			$this->acl->setPollId($pollId);
-		}
+		$this->acl->setPollId($pollId);
 
 		if ($this->acl->getAllowSeeUsernames()) {
 			return $this->commentMapper->findByPoll($this->acl->getPollId());

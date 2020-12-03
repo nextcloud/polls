@@ -26,7 +26,9 @@ namespace OCA\Polls\Controller;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 
 use OCA\Polls\Exceptions\Exception;
@@ -41,11 +43,15 @@ use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\VoteService;
+use OCA\Polls\Service\SystemService;
 
 class PublicController extends Controller {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
+
+	/** @var Acl */
+	private $acl;
 
 	/** @var CommentService */
 	private $commentService;
@@ -277,7 +283,7 @@ class PublicController extends Controller {
 	 */
 	private function buildPoll() {
 		try {
-			$comments = $this->commentService->list($this->poll->getId(), $this->acl);
+			$comments = $this->commentService->list($this->poll->getId());
 		} catch (Exception $e) {
 			$comments = [];
 		}

@@ -138,7 +138,7 @@ class PollController extends Controller {
 	 */
 	private function build() {
 		try {
-			$comments = $this->commentService->list($this->poll->getId(), $this->acl);
+			$comments = $this->commentService->list($this->poll->getId());
 		} catch (Exception $e) {
 			$comments = [];
 		}

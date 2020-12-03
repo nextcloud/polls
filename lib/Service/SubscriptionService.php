@@ -57,7 +57,7 @@ class SubscriptionService {
 	 * @param int $pollId
 	 * @return bool
 	 */
-	public function get($pollId = 0 , $token = '') {
+	public function get($pollId = 0, $token = '') {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {

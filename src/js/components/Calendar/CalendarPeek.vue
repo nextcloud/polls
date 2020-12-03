@@ -91,7 +91,7 @@ export default {
 		}),
 
 		sortedEvents() {
-			var sortedEvents = [...this.events]
+			const sortedEvents = [...this.events]
 			sortedEvents.push(this.thisOption)
 			return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
 		},
