@@ -103,7 +103,7 @@ const actions = {
 	add(context, payload) {
 		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id
 
-		return axios.post(generateUrl(endPoint), payload.share + '/share')
+		return axios.post(generateUrl(endPoint + '/share'), payload.share)
 			.then((response) => {
 				return response.data
 			})
