@@ -36,12 +36,6 @@ class PreferencesController extends Controller {
 	private $calendarService;
 
 	use ResponseHandle;
-	/**
-	 * PreferencesController constructor.
-	 * @param string $appName
-	 * @param PreferencesService $preferencesService
-	 * @param CalendarService $calendarService
-	 */
 
 	public function __construct(
 		string $appName,
@@ -55,13 +49,11 @@ class PreferencesController extends Controller {
 	}
 
 	/**
-	 * get
 	 * Read all preferences
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @return DataResponse
 	 */
-	public function get() {
+	public function get(): DataResponse {
 		return $this->response(function () {
 			return $this->preferencesService->get();
 		});
@@ -69,31 +61,24 @@ class PreferencesController extends Controller {
 	}
 
 	/**
-	 * write
-	 * Write wreferences
+	 * Write preferences
 	 * @NoAdminRequired
-	 * @param array $settings
-	 * @return DataResponse
 	 */
-	public function write($settings) {
+	public function write($settings): DataResponse {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse([], Http::STATUS_OK);
 		}
 		return $this->response(function () use ($settings) {
 			return $this->preferencesService->write($settings);
 		});
-
-		// return new DataResponse($this->preferencesService->write($settings), Http::STATUS_OK);
 	}
 
 	/**
-	 * get
 	 * Read all preferences
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @return DataResponse
 	 */
-	public function getCalendars() {
+	public function getCalendars(): DataResponse {
 		return new DataResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
 	}
 }

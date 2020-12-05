@@ -29,11 +29,6 @@ class GenericUser extends UserGroupClass {
 	public const ICON_DEFAULT = 'icon-share';
 	public const ICON_PUBLIC = 'icon-public';
 
-	/**
-	 * Email constructor.
-	 * @param $id
-	 * @param $displayName
-	 */
 	public function __construct(
 		$id,
 		$type = self::TYPE,

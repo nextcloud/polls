@@ -36,13 +36,6 @@ class OptionApiController extends ApiController {
 
 	use ResponseHandle;
 
-	/**
-	 * OptionApiController constructor.
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param OptionService $optionService
-	 */
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -61,27 +54,20 @@ class OptionApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function list($pollId) {
+	public function list($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['options' => $this->optionService->list($pollId)];
 		});
 	}
-
 
 	/**
 	 * Add a new option
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $pollOptionText
-	 * @param int $timestamp
-	 * @return DataResponse
 	 */
-	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
+	public function add($pollId, $timestamp = 0, $pollOptionText = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
 			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
 		});
@@ -93,10 +79,8 @@ class OptionApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param array $option
-	 * @return DataResponse
 	 */
-	public function update($optionId, $timestamp = 0, $pollOptionText = '') {
+	public function update($optionId, $timestamp = 0, $pollOptionText = ''): DataResponse {
 		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
 			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
 		});
@@ -107,10 +91,8 @@ class OptionApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $optionId
-	 * @return DataResponse
 	 */
-	public function delete($optionId) {
+	public function delete($optionId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($optionId) {
 			return ['option' => $this->optionService->delete($optionId)];
 		});
@@ -121,10 +103,8 @@ class OptionApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $optionId
-	 * @return DataResponse
 	 */
-	public function confirm($optionId) {
+	public function confirm($optionId): DataResponse {
 		return $this->response(function () use ($optionId) {
 			return ['option' => $this->optionService->confirm($optionId)];
 		});
@@ -135,10 +115,8 @@ class OptionApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param array $option
-	 * @return DataResponse
 	 */
-	public function setOrder($optionId, $order) {
+	public function setOrder($optionId, $order): DataResponse {
 		return $this->response(function () use ($optionId, $order) {
 			return ['option' => $this->optionService->setOrder($optionId, $order)];
 		});

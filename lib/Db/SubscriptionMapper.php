@@ -28,23 +28,19 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
+/**
+ * @template-extends QBMapper<Subscription>
+ */
 class SubscriptionMapper extends QBMapper {
-
-	/**
-	 * NotificationMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_notif', '\OCA\Polls\Db\Subscription');
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return array
+	 * @return Subscription[]
 	 */
-
 	public function findAll() {
 		$qb = $this->db->getQueryBuilder();
 
@@ -55,13 +51,11 @@ class SubscriptionMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return array
+	 * @return Subscription[]
 	 */
-
-	public function findAllByPoll($pollId) {
+	public function findAllByPoll(int $pollId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -74,13 +68,11 @@ class SubscriptionMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
-	 * @param string $userId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Subscription
 	 */
-	public function findByPollAndUser($pollId, $userId) {
+	public function findByPollAndUser(int $pollId, $userId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -95,11 +87,7 @@ class SubscriptionMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-
-	/**
-	 * @param int $pollId
-	 */
-	public function unsubscribe($pollId, $currentUser) {
+	public function unsubscribe($pollId, $userId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -107,10 +95,9 @@ class SubscriptionMapper extends QBMapper {
 			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		)
 		->andWhere(
-			$qb->expr()->eq('user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR))
+			$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		);
 
 		$qb->execute();
-		return true;
 	}
 }

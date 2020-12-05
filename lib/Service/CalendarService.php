@@ -45,13 +45,17 @@ class CalendarService {
 	}
 
 	/**
-	 * getEvents - get events from the user's calendars inside given timespan
-	 * @NoAdminRequired
+	 * 	 * 	 * getEvents - get events from the user's calendars inside given timespan
+	 * 	 *
+	 *
 	 * @param DateTime $from
 	 * @param DateTime $to
-	 * @return Array
+	 *
+	 * @return CalendarEvent[]
+	 *
+	 * @psalm-return list<CalendarEvent>
 	 */
-	public function getEvents($from, $to) {
+	public function getEvents(DateTime $from, DateTime $to): array {
 		$events = [];
 		foreach ($this->calendars as $calendar) {
 
@@ -80,11 +84,13 @@ class CalendarService {
 	}
 
 	/**
-	 * Get user's calendars
-	 * @NoAdminRequired
-	 * @return Array
+	 * 	 * Get user's calendars
+	 *
+	 * @return array[]
+	 *
+	 * @psalm-return list<array{name: mixed, key: mixed, displayColor: mixed, permissions: mixed}>
 	 */
-	public function getCalendars() {
+	public function getCalendars(): array {
 		$calendars =  [];
 		foreach ($this->calendars as $calendar) {
 			$calendars[] = [

@@ -41,13 +41,6 @@ class OptionController extends Controller {
 
 	use ResponseHandle;
 
-	/**
-	 * OptionController constructor.
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param OptionService $optionService
-	 */
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -62,10 +55,8 @@ class OptionController extends Controller {
 	/**
 	 * Get all options of given poll
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function list($pollId) {
+	public function list($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['options' => $this->optionService->list($pollId)];
 		});
@@ -74,10 +65,8 @@ class OptionController extends Controller {
 	/**
 	 * Add a new option
 	 * @NoAdminRequired
-	 * @param array $option
-	 * @return DataResponse
 	 */
-	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
+	public function add($pollId, $timestamp = 0, $pollOptionText = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
 			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
 		});
@@ -86,10 +75,8 @@ class OptionController extends Controller {
 	/**
 	 * Update option
 	 * @NoAdminRequired
-	 * @param array $option
-	 * @return DataResponse
 	 */
-	public function update($optionId, $timestamp, $pollOptionText) {
+	public function update($optionId, $timestamp, $pollOptionText): DataResponse {
 		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
 			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
 		});
@@ -98,10 +85,8 @@ class OptionController extends Controller {
 	/**
 	 * Delete option
 	 * @NoAdminRequired
-	 * @param Option $option
-	 * @return DataResponse
 	 */
-	public function delete($optionId) {
+	public function delete($optionId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($optionId) {
 			return ['option' => $this->optionService->delete($optionId)];
 		});
@@ -110,10 +95,8 @@ class OptionController extends Controller {
 	/**
 	 * Switch option confirmation
 	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @return DataResponse
 	 */
-	public function confirm($optionId) {
+	public function confirm($optionId): DataResponse {
 		return $this->response(function () use ($optionId) {
 			return ['option' => $this->optionService->confirm($optionId)];
 		});
@@ -122,11 +105,8 @@ class OptionController extends Controller {
 	/**
 	 * Reorder options
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param Array $options
-	 * @return DataResponse
 	 */
-	public function reorder($pollId, $options) {
+	public function reorder($pollId, $options): DataResponse {
 		return $this->response(function () use ($pollId, $options) {
 			return ['options' => $this->optionService->reorder($pollId, $options)];
 		});
@@ -135,13 +115,8 @@ class OptionController extends Controller {
 	/**
 	 * Reorder options
 	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @param int $step
-	 * @param string $unit
-	 * @param int $amount
-	 * @return DataResponse
 	 */
-	public function sequence($optionId, $step, $unit, $amount) {
+	public function sequence($optionId, $step, $unit, $amount): DataResponse {
 		return $this->response(function () use ($optionId, $step, $unit, $amount) {
 			return ['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)];
 		});
@@ -150,23 +125,15 @@ class OptionController extends Controller {
 	/**
 	 * findCalendarEvents
 	 * @NoAdminRequired
-	 * @param integer $from
-	 * @param integer $to
-	 * @return DataResponse
 	 */
-	public function findCalendarEvents($optionId) {
+	public function findCalendarEvents($optionId): DataResponse {
 		return $this->response(function () use ($optionId) {
-			// try {
 			$searchFrom = new DateTime();
 			$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
 			$searchTo = clone $searchFrom;
 			$searchTo = $searchTo->add(new DateInterval('PT3H'));
 			$events = $this->calendarService->getEvents($searchFrom, $searchTo);
-
 			return ['events' => $events];
-			// } catch (\Exception $e) {
-			// 	return ['events' => []];
-			// }
 		});
 	}
 }

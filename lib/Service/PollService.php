@@ -61,17 +61,6 @@ class PollService {
 	/** @var Acl */
 	private $acl;
 
-	/**
-	 * PollController constructor.
-	 * @param PollMapper $pollMapper
-	 * @param Poll $poll
-	 * @param VoteMapper $voteMapper
-	 * @param Vote $vote
-	 * @param LogService $logService
-	 * @param MailService $mailService
-	 * @param Acl $acl
-	 */
-
 	public function __construct(
 		PollMapper $pollMapper,
 		Poll $poll,
@@ -90,15 +79,10 @@ class PollService {
 		$this->acl = $acl;
 	}
 
-
 	/**
 	 * Get list of polls
-	 * @NoAdminRequired
-	 * @return Poll[]
-	 * @throws NotAuthorizedException
 	 */
-
-	public function list() {
+	public function list(): array {
 		$pollList = [];
 		try {
 			$polls = $this->pollMapper->findAll();
@@ -122,13 +106,11 @@ class PollService {
 	}
 
 	/**
-	 * get poll configuration
-	 * @NoAdminRequired
-	 * @param int $pollId
+	 * 	 * get poll configuration
+	 *
 	 * @return Poll
-	 * @throws NotAuthorizedException
 	 */
-	public function get(int $pollId) {
+	public function get(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll);
 
@@ -140,16 +122,8 @@ class PollService {
 
 	/**
 	 * Add poll
-	 * @NoAdminRequired
-	 * @param string $type
-	 * @param string $title
-	 * @return Poll
-	 * @throws NotAuthorizedException
-	 * @throws InvalidPollTypeException
-	 * @throws EmptyTitleException
 	 */
-
-	public function add($type, $title) {
+	public function add(string $type, string $title) {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			throw new NotAuthorizedException;
 		}
@@ -189,18 +163,11 @@ class PollService {
 	}
 
 	/**
-	 * Update poll configuration
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param array $poll
+	 * 	 * Update poll configuration
+	 *
 	 * @return Poll
-	 * @throws NotAuthorizedException
-	 * @throws EmptyTitleException
-	 * @throws InvalidShowResultsException
-	 * @throws InvalidAccessException
 	 */
-
-	public function update($pollId, $poll) {
+	public function update(int $pollId, array $poll): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->requestEdit();
 
@@ -225,14 +192,11 @@ class PollService {
 
 
 	/**
-	 * Switch deleted status (move to deleted polls)
-	 * @NoAdminRequired
-	 * @param int $pollId
+	 * 	 * Switch deleted status (move to deleted polls)
+	 *
 	 * @return Poll
-	 * @throws NotAuthorizedException
 	 */
-
-	public function switchDeleted($pollId) {
+	public function switchDeleted(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->requestEdit();
 
@@ -249,14 +213,11 @@ class PollService {
 	}
 
 	/**
-	 * Delete poll
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return Poll the deleted poll
-	 * @throws NotAuthorizedException
+	 * 	 * Delete poll
+	 *
+	 * @return Poll
 	 */
-
-	public function delete($pollId) {
+	public function delete(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->requestDelete();
 
@@ -264,13 +225,11 @@ class PollService {
 	}
 
 	/**
-	 * Clone poll
-	 * @NoAdminRequired
-	 * @param int $pollId
+	 * 	 * Clone poll
+	 *
 	 * @return Poll
-	 * @throws NotAuthorizedException
 	 */
-	public function clone($pollId) {
+	public function clone(int $pollId): Poll {
 		$origin = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($origin);
 
@@ -298,13 +257,13 @@ class PollService {
 	}
 
 	/**
-	 * Collect email addresses from particitipants
-	 * @NoAdminRequired
-	 * @param Array $poll
-	 * @return array
+	 * 	 * Collect email addresses from particitipants
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return array<int, string>
 	 */
-
-	public function getParticipantsEmailAddresses($pollId) {
+	public function getParticipantsEmailAddresses(int $pollId): array {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->requestEdit();
 
@@ -316,13 +275,14 @@ class PollService {
 		return array_unique($list);
 	}
 
-
 	/**
-	 * Get valid values for configuration options
-	 * @NoAdminRequired
+	 * 	 * Get valid values for configuration options
+	 *
 	 * @return array
+	 *
+	 * @psalm-return array{pollType: mixed, access: mixed, showResults: mixed}
 	 */
-	public function getValidEnum() {
+	public function getValidEnum(): array {
 		return [
 			'pollType' => $this->getValidPollType(),
 			'access' => $this->getValidAccess(),
@@ -331,29 +291,35 @@ class PollService {
 	}
 
 	/**
-	 * Get valid values for pollType
-	 * @NoAdminRequired
-	 * @return array
+	 * 	 * Get valid values for pollType
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return array{0: string, 1: string}
 	 */
-	private function getValidPollType() {
+	private function getValidPollType(): array {
 		return [Poll::TYPE_DATE, Poll::TYPE_TEXT];
 	}
 
 	/**
-	 * Get valid values for access
-	 * @NoAdminRequired
-	 * @return array
+	 * 	 * Get valid values for access
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return array{0: string, 1: string}
 	 */
-	private function getValidAccess() {
+	private function getValidAccess(): array {
 		return [Poll::ACCESS_HIDDEN, Poll::ACCESS_PUBLIC];
 	}
 
 	/**
-	 * Get valid values for showResult
-	 * @NoAdminRequired
-	 * @return array
+	 * 	 * Get valid values for showResult
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return array{0: string, 1: string, 2: string}
 	 */
-	private function getValidShowResults() {
+	private function getValidShowResults(): array {
 		return [Poll::SHOW_RESULTS_ALWAYS, Poll::SHOW_RESULTS_CLOSED, Poll::SHOW_RESULTS_NEVER];
 	}
 }

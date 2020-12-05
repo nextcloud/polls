@@ -36,11 +36,6 @@ class LogService {
 	/** @var Log */
 	private $log;
 
-	/**
-	 * LogService constructor.
-	 * @param LogMapper $logMapper
-	 * @param Log $log
-	 */
 	public function __construct(
 		LogMapper $logMapper,
 		Log $log
@@ -51,11 +46,11 @@ class LogService {
 
 
 	/**
-	 * Prevent repetition of the same log event
-	 * @NoAdminRequired
+	 * 	 * Prevent repetition of the same log event
+	 *
 	 * @return bool
 	 */
-	public function isRepetition() {
+	public function isRepetition(): bool {
 		try {
 			$lastRecord = $this->logMapper->getLastRecord($this->log->getPollId());
 			return (intval($lastRecord->getPollId()) === intval($this->log->getPollId())
@@ -69,15 +64,11 @@ class LogService {
 	}
 
 	/**
-	 * Log poll activity
-	 * @NoAdminRequired
-	 * @param $pollId
-	 * @param $messageId
-	 * @param $userId
-	 * @param $message
-	 * @return Log
+	 * 	 * Log poll activity
+	 *
+	 * @param null|string $userId
 	 */
-	public function setLog($pollId, $messageId, $userId = null, $message = null) {
+	public function setLog(int $pollId, string $messageId, ?string $userId = null, ?string $message = null): ?Log {
 		$this->log = new Log();
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());
@@ -89,7 +80,6 @@ class LogService {
 		} else {
 			$this->log->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
 		}
-
 
 		if ($this->isRepetition()) {
 			return null;

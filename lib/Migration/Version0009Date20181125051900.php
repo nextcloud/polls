@@ -41,21 +41,13 @@ class Version0009Date20181125051900 extends SimpleMigrationStep {
 	/** @var IConfig */
 	protected $config;
 
-	/**
-	 * @param IDBConnection $connection
-	 * @param IConfig $config
-	 */
 	public function __construct(IDBConnection $connection, IConfig $config) {
 		$this->connection = $connection;
 		$this->config = $config;
 	}
 
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null|ISchemaWrapper
-	 * @since 13.0.0
+	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */

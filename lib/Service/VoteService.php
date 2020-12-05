@@ -52,15 +52,6 @@ class VoteService {
 	/** @var Acl */
 	private $acl;
 
-	/**
-	 * VoteController constructor.
-	 * @param VoteMapper $voteMapper
-	 * @param Vote $vote
-	 * @param OptionMapper $optionMapper
-	 * @param AnonymizeService $anonymizer
-	 * @param LogService $logService
-	 * @param Acl $acl
-	 */
 	public function __construct(
 		VoteMapper $voteMapper,
 		Vote $vote,
@@ -79,13 +70,8 @@ class VoteService {
 
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $token
-	 * @return array
-	 * @throws NotAuthorizedException
 	 */
-	public function list($pollId = 0, $token = '') {
+	public function list(int $pollId = 0, string $token = ''): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -108,14 +94,8 @@ class VoteService {
 
 	/**
 	 * Set vote
-	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @param string $setTo
-	 * @param string $token
-	 * @return Vote
-	 * @throws NotAuthorizedException
 	 */
-	public function set($optionId, $setTo, $token = '') {
+	public function set(int $optionId, string $setTo, string $token = ''): Vote {
 		$option = $this->optionMapper->find($optionId);
 
 		if ($token) {
@@ -142,22 +122,15 @@ class VoteService {
 			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->insert($this->vote);
-		} finally {
-			$this->logService->setLog($this->acl->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
-			return $this->vote;
 		}
+		$this->logService->setLog($this->acl->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
+		return $this->vote;
 	}
 
 	/**
 	 * Remove user from poll
-	 * @NoAdminRequired
-	 * @param int $voteId
-	 * @param string $userId
-	 * @param int $pollId
-	 * @return boolean
-	 * @throws NotAuthorizedException
 	 */
-	public function delete($pollId, $userId) {
+	public function delete(int $pollId, string $userId): string {
 		$this->acl->setPollId($pollId)->requestEdit();
 		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
 		return $userId;

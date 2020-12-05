@@ -38,12 +38,6 @@ class PageController extends Controller {
 	/** @var NotificationService */
 	private $notificationService;
 
-	/**
-	 * PageController constructor.
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param IURLGenerator $urlGenerator
-	 */
 	public function __construct(
 		$appName,
 		IRequest $request,
@@ -59,7 +53,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function index() {
+	public function index(): TemplateResponse {
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);
 	}
@@ -68,7 +62,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function vote($id) {
+	public function vote($id): TemplateResponse {
 		$this->notificationService->removeNotification($id);
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);

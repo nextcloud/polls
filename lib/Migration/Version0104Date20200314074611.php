@@ -24,17 +24,11 @@
 namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Types\Type;
-
-use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-/**
- * Installation class for the polls app.
- * Initial db creation
- */
 class Version0104Date20200314074611 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
@@ -43,22 +37,11 @@ class Version0104Date20200314074611 extends SimpleMigrationStep {
 	/** @var IConfig */
 	protected $config;
 
-	/**
-	 * @param IDBConnection $connection
-	 * @param IConfig $config
-	 */
 	public function __construct(IDBConnection $connection, IConfig $config) {
 		$this->connection = $connection;
 		$this->config = $config;
 	}
 
-	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null|ISchemaWrapper
-	 * @since 13.0.0
-	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 		$table = $schema->getTable('polls_polls');

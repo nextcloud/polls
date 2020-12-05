@@ -29,10 +29,6 @@ use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-/**
- * Installation class for the polls app.
- * Initial db creation
- */
 class Version0106Date20201031080745 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
@@ -41,21 +37,13 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 	/** @var IConfig */
 	protected $config;
 
-	/**
-	 * @param IDBConnection $connection
-	 * @param IConfig $config
-	 */
 	public function __construct(IDBConnection $connection, IConfig $config) {
 		$this->connection = $connection;
 		$this->config = $config;
 	}
 
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null
-	 * @since 13.0.0
+	 * @return void
 	 */
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
@@ -93,13 +81,6 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 		}
 	}
 
-	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null|ISchemaWrapper
-	 * @since 13.0.0
-	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
@@ -141,6 +122,9 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 		return $schema;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 		if ($schema->hasTable('polls_share')) {

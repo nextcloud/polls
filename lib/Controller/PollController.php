@@ -29,8 +29,8 @@ use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\DB\Share;
-use OCA\Polls\DB\Poll;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
@@ -66,20 +66,6 @@ class PollController extends Controller {
 
 	use ResponseHandle;
 
-	/**
-	 * PollController constructor.
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param Acl $acl
-	 * @param CommentService $commentService
-	 * @param OptionService $optionService
-	 * @param PollService $pollService
-	 * @param Poll $poll
-	 * @param ShareService $shareService
-	 * @param Share $share
-	 * @param VoteService $voteService
-	 */
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -106,10 +92,9 @@ class PollController extends Controller {
 	/**
 	 * Get list of polls
 	 * @NoAdminRequired
-	 * @return DataResponse
 	 */
 
-	public function list() {
+	public function list(): DataResponse {
 		return $this->response(function () {
 			return $this->pollService->list();
 		});
@@ -119,10 +104,8 @@ class PollController extends Controller {
 	/**
 	 * get complete poll
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function get(int $pollId) {
+	public function get(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			$this->share = null;
 			$this->poll = $this->pollService->get($pollId);
@@ -134,9 +117,8 @@ class PollController extends Controller {
 	/**
 	 * get complete poll
 	 * @NoAdminRequired
-	 * @return Array
 	 */
-	private function build() {
+	private function build(): array {
 		try {
 			$comments = $this->commentService->list($this->poll->getId());
 		} catch (Exception $e) {
@@ -175,12 +157,9 @@ class PollController extends Controller {
 	/**
 	 * Add poll
 	 * @NoAdminRequired
-	 * @param string $type
-	 * @param string $title
-	 * @return DataResponse
 	 */
 
-	public function add($type, $title) {
+	public function add($type, $title): DataResponse {
 		return $this->responseCreate(function () use ($type, $title) {
 			return $this->pollService->add($type, $title);
 		});
@@ -189,12 +168,9 @@ class PollController extends Controller {
 	/**
 	 * Update poll configuration
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param array $poll
-	 * @return DataResponse
 	 */
 
-	public function update($pollId, $poll) {
+	public function update($pollId, $poll): DataResponse {
 		return $this->response(function () use ($pollId, $poll) {
 			return $this->pollService->update($pollId, $poll);
 		});
@@ -203,11 +179,9 @@ class PollController extends Controller {
 	/**
 	 * Switch deleted status (move to deleted polls)
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
 
-	public function switchDeleted($pollId) {
+	public function switchDeleted($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return $this->pollService->switchDeleted($pollId);
 		});
@@ -216,11 +190,9 @@ class PollController extends Controller {
 	/**
 	 * Delete poll
 	 * @NoAdminRequired
-	 * @param Array $poll
-	 * @return DataResponse
 	 */
 
-	public function delete($pollId) {
+	public function delete($pollId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($pollId) {
 			return $this->pollService->delete($pollId);
 		});
@@ -229,10 +201,8 @@ class PollController extends Controller {
 	/**
 	 * Clone poll
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function clone($pollId) {
+	public function clone($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			$poll = $this->pollService->clone($pollId);
 			$this->optionService->clone($pollId, $poll->getId());
@@ -244,11 +214,9 @@ class PollController extends Controller {
 	/**
 	 * Collect email addresses from particitipants
 	 * @NoAdminRequired
-	 * @param Array $poll
-	 * @return DataResponse
 	 */
 
-	public function getParticipantsEmailAddresses($pollId) {
+	public function getParticipantsEmailAddresses($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return $this->pollService->getParticipantsEmailAddresses($pollId);
 		});

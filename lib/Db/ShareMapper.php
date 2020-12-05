@@ -28,19 +28,17 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
+/**
+ * @template-extends QBMapper<Share>
+ */
 class ShareMapper extends QBMapper {
-
-	/**
-	 * ShareMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_share', '\OCA\Polls\Db\Share');
 	}
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Share[]
 	 */
 	public function findAll() {
 		$qb = $this->db->getQueryBuilder();
@@ -53,12 +51,10 @@ class ShareMapper extends QBMapper {
 
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Share[]
 	 */
-
-	public function findByPoll($pollId) {
+	public function findByPoll(int $pollId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -71,13 +67,10 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
-	 * @param string $userId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Share
 	 */
-
-	public function findByPollAndUser($pollId, $userId) {
+	public function findByPollAndUser(int $pollId, string $userId): Share {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -93,12 +86,10 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $token
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Share
 	 */
-
-	public function findByToken($token) {
+	public function findByToken(string $token) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -111,9 +102,9 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
+	 * @return void
 	 */
-	public function deleteByPoll($pollId) {
+	public function deleteByPoll($pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -125,9 +116,9 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $shareId
+	 * @return void
 	 */
-	public function remove($shareId) {
+	public function remove($shareId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

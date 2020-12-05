@@ -36,12 +36,6 @@ class VoteController extends Controller {
 
 	use ResponseHandle;
 
-	/**
-	 * VoteController constructor
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param VoteService $voteService
-	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -55,11 +49,8 @@ class VoteController extends Controller {
 	 * set
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param int $optionId
-	 * @param string $setTo
-	 * @return DataResponse
 	 */
-	public function set($optionId, $setTo) {
+	public function set($optionId, $setTo): DataResponse {
 		return $this->response(function () use ($optionId, $setTo) {
 			return ['vote' => $this->voteService->set($optionId, $setTo)];
 		});
@@ -68,11 +59,8 @@ class VoteController extends Controller {
 	/**
 	 * Remove user from poll
 	 * @NoAdminRequired
-	 * @param string $userId
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function delete($pollId, $userId) {
+	public function delete($pollId, $userId): DataResponse {
 		return $this->response(function () use ($pollId, $userId) {
 			return ['deleted' => $this->voteService->delete($pollId, $userId)];
 		});

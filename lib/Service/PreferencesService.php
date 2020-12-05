@@ -40,10 +40,6 @@ class PreferencesService {
 	/** @var String */
 	private $userId;
 
-	/**
-	 * SystemService constructor.
-	 * @param PreferencesMapper $preferencesMapper
-	 */
 	public function __construct(
 		$UserId,
 		PreferencesMapper $preferencesMapper
@@ -63,25 +59,20 @@ class PreferencesService {
 		}
 	}
 	/**
-	 * get
-	 * Read all preferences
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
+	 * 	 * Read all preferences
+	 *
 	 * @return Preferences
 	 */
-	public function get() {
+	public function get(): Preferences {
 		return $this->preferences;
 	}
 
 	/**
-	 * write
-	 * Write references
-	 * @NoAdminRequired
-	 * @param array $settings
+	 * 	 * Write references
+	 *
 	 * @return Preferences
-	 * @throws NotAuthorizedException
 	 */
-	public function write($settings) {
+	public function write($settings): Preferences {
 		if (!$this->userId) {
 			throw new NotAuthorizedException;
 		}

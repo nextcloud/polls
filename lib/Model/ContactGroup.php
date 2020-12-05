@@ -28,10 +28,6 @@ class ContactGroup extends UserGroupClass {
 	public const TYPE = 'contactGroup';
 	public const ICON = 'icon-group';
 
-	/**
-	 * Group constructor.
-	 * @param $id
-	 */
 	public function __construct(
 		$id
 	) {
@@ -41,21 +37,15 @@ class ContactGroup extends UserGroupClass {
 	}
 
 	/**
-	 * getDisplayName
-	 * @return String
+	 * @return string
 	 */
-	public function getDisplayName() {
+	public function getDisplayName(): string {
 		if (!$this->displayName) {
 			return $this->id;
 		}
 		return $this->displayName;
 	}
 
-	/**
-	 * listRaw
-	 * @param string $query
-	 * @return Array
-	 */
 	public static function listRaw($query = '') {
 		$contactGroups = [];
 		if (\OC::$server->getContactsManager()->isEnabled()) {
@@ -74,11 +64,9 @@ class ContactGroup extends UserGroupClass {
 	}
 
 	/**
-	 * Get a list of contact groups
-	 * @param string $query
-	 * @return Array
+	 * @return ContactGroup[]
 	 */
-	public static function search($query = '') {
+	public static function search(string $query = '') {
 		$contactGroups = [];
 		if (\OC::$server->getContactsManager()->isEnabled() && $query) {
 			foreach (self::listRaw($query) as $contactGroup) {

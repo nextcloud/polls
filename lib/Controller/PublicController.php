@@ -34,8 +34,8 @@ use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCA\Polls\Exceptions\Exception;
 
 
-use OCA\Polls\DB\Share;
-use OCA\Polls\DB\Poll;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
@@ -82,23 +82,6 @@ class PublicController extends Controller {
 
 	use ResponseHandle;
 
-	/**
-	 * PollController constructor.
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param IURLGenerator $urlGenerator
-	 * @param Acl $acl
-	 * @param CommentService $commentService
-	 * @param OptionService $optionService
-	 * @param PollService $pollService
-	 * @param Poll $poll
-	 * @param ShareService $shareService
-	 * @param Share $share
-	 * @param SubscriptionService $subscriptionService
-	 * @param VoteService $voteService
-	 * @param SystemService $systemService
-	 */
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -132,10 +115,8 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return PublicTemplateResponse
 	 */
-	public function votePage() {
+	public function votePage(): PublicTemplateResponse {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new TemplateResponse('polls', 'polls.tmpl', [
 				'urlGenerator' => $this->urlGenerator]);
@@ -147,12 +128,10 @@ class PublicController extends Controller {
 
 	/**
 	 * get complete poll via token
-	 * @NoAdminRequired
 	 * @PublicPage
-	 * @param string $token
-	 * @return DataResponse
+	 * @NoAdminRequired
 	 */
-	public function poll(string $token) {
+	public function poll(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			$this->share = $this->shareService->get($token);
 			$this->acl->setShare($this->share);
@@ -163,14 +142,10 @@ class PublicController extends Controller {
 
 	/**
 	 * Set vote with token
-	 * @NoAdminRequired
 	 * @PublicPage
-	 * @param Array $option
-	 * @param string $setTo
-	 * @param string $token
-	 * @return DataResponse
+	 * @NoAdminRequired
 	 */
-	public function vote($optionId, $setTo, $token) {
+	public function vote($optionId, $setTo, $token): DataResponse {
 		return $this->response(function () use ($optionId, $setTo, $token) {
 			return ['vote' =>$this->voteService->set($optionId, $setTo, $token)];
 		});
@@ -180,12 +155,8 @@ class PublicController extends Controller {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @param int $pollId
-	 * @param string $message
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function comment($token, $message) {
+	public function comment($token, $message): DataResponse {
 		return $this->response(function () use ($token, $message) {
 			return ['comment'=> $this->commentService->add(null, $token, $message)];
 		});
@@ -195,11 +166,8 @@ class PublicController extends Controller {
 	 * Delete Comment
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @param int $commentId
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function commentDelete($commentId, $token) {
+	public function commentDelete($commentId, $token): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($commentId, $token) {
 			return ['comment'=> $this->commentService->delete($commentId, $token)];
 		});
@@ -208,11 +176,8 @@ class PublicController extends Controller {
 	 * Get subscription status
 	 * @PublicPage
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
-	 * @throws DoesNotExistException
 	 */
-	public function subscription($token) {
+	public function subscription($token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['subscribed' => $this->subscriptionService->get(0, $token)];
 		});
@@ -222,10 +187,8 @@ class PublicController extends Controller {
 	 * subscribe
 	 * @PublicPage
 	 * @NoAdminRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function subscribe($token) {
+	public function subscribe($token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['subscribed' => $this->subscriptionService->set(0, $token, true)];
 		});
@@ -235,10 +198,8 @@ class PublicController extends Controller {
 	 * Unsubscribe
 	 * @PublicPage
 	 * @NoAdminRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function unsubscribe($token) {
+	public function unsubscribe($token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['subscribed' => $this->subscriptionService->set(0, $token, false)];
 		});
@@ -250,9 +211,8 @@ class PublicController extends Controller {
 	 * a participant of the poll
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @return DataResponse
 	 */
-	public function validatePublicUsername($userName, $token) {
+	public function validatePublicUsername($userName, $token): DataResponse {
 		try {
 			return new DataResponse(['result' => $this->systemService->validatePublicUsername($userName, $token), 'name' => $userName], Http::STATUS_OK);
 		} catch (\Exception $e) {
@@ -264,9 +224,8 @@ class PublicController extends Controller {
 	 * Validate email address (simple validation)
 	 * @NoAdminRequired
 	 * @PublicPage
-	 * @return DataResponse
 	 */
-	public function validateEmailAddress($emailAddress) {
+	public function validateEmailAddress($emailAddress): DataResponse {
 		try {
 			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
 		} catch (\Exception $e) {
@@ -277,11 +236,8 @@ class PublicController extends Controller {
 	/**
 	 * get complete poll
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $token
-	 * @return Array
 	 */
-	private function buildPoll() {
+	private function buildPoll(): array {
 		try {
 			$comments = $this->commentService->list($this->poll->getId());
 		} catch (Exception $e) {

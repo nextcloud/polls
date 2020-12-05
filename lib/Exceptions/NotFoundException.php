@@ -26,10 +26,6 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class NotFoundException extends Exception {
-	/**
-	 * NotFoundException Constructor
-	 * @param string $e exception message
-	 */
 	public function __construct(
 		$e = 'Not found',
 		$status = Http::STATUS_NOT_FOUND) {

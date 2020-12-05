@@ -38,12 +38,6 @@ class SubscriptionService {
 	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
 
-	/**
-	 * SubscriptionController constructor.
-	 * @param SubscriptionMapper $subscriptionMapper
-	 * @param Acl $acl
-	 */
-
 	public function __construct(
 		SubscriptionMapper $subscriptionMapper,
 		Acl $acl
@@ -52,12 +46,7 @@ class SubscriptionService {
 		$this->acl = $acl;
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return bool
-	 */
-	public function get($pollId = 0, $token = '') {
+	public function get(int $pollId = 0, string $token = ''): bool {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -77,28 +66,14 @@ class SubscriptionService {
 		}
 	}
 
-
-	/**
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $userId
-	 * @return void
-	 */
-	public function add($pollId, $userId) {
+	public function add(int $pollId, string $userId): void {
 		$subscription = new Subscription();
 		$subscription->setPollId($pollId);
 		$subscription->setUserId($userId);
 		$this->subscriptionMapper->insert($subscription);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $token
-	 * @param bool $subscribed
-	 * @return bool
-	 */
-	public function set($pollId = 0, $token = '', $subscribed) {
+	public function set(int $pollId = 0, string $token = '', bool $subscribed): bool {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {

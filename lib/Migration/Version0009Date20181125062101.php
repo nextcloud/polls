@@ -33,11 +33,7 @@ use OCP\Migration\IOutput;
 
 class Version0009Date20181125062101 extends SimpleMigrationStep {
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null|ISchemaWrapper
-	 * @since 13.0.0
+	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */

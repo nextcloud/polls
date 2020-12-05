@@ -33,11 +33,6 @@ class Contact extends UserGroupClass {
 	/** @var Array */
 	private $contact = [];
 
-	/**
-	 * Contact constructor.
-	 * @param $id
-	 * @param $displayName
-	 */
 	public function __construct(
 		$id
 	) {
@@ -47,48 +42,38 @@ class Contact extends UserGroupClass {
 	}
 
 	/**
-	 * getPublicId
-	 * must use displayName for contact's user id, because contact id
-	 * is not accessable outside the owners's scope
-	 * @return String
+	 * 	 * must use displayName for contact's user id, because contact id
+	 * 	 * is not accessable outside the owners's scope
+	 *
+	 * @return string
 	 */
-	public function getPublicId() {
+	public function getPublicId(): string {
 		return $this->displayName;
 	}
 
-	/**
-	 * isEnabled
-	 * @return Boolean
-	 */
-	public static function isEnabled() {
+	public static function isEnabled(): bool {
 		return \OC::$server->getAppManager()->isEnabledForUser('contacts');
 	}
 
 	/**
-	 * resolveContact
 	 * We just need the contact's UID, so make sure, the any prefix is removed
 	 */
-	private function resolveContactId() {
+	private function resolveContactId(): void {
 		$parts = explode(":", $this->id);
 		$this->id = end($parts);
 	}
 
 	/**
-	 * loadContact
-	 * @throws MultipleContactsFound
 	 * The contacts app just provides a search, so we have to load the contact
 	 * after searching via the contact's id and use the first contact.
-	 *
 	 * Currently only the contact's first email address is supported
-	 *
 	 * From Version 1.5 on:
 	 * For compatibility reasons, we have to search for the contacts name too.
 	 * Before this implementation contacts where stored with their FN property.
-	 *
 	 * TODO: Remove FN as search range for loading a contact in a polls version
 	 * later than 1.6.
 	 */
-	private function loadContact() {
+	private function loadContact(): void {
 		$contacts = self::listRaw($this->id, ['UID', 'FN']);
 
 		if (count($contacts) > 1) {
@@ -98,11 +83,7 @@ class Contact extends UserGroupClass {
 		$this->contact = $contacts[0];
 	}
 
-	/**
-	 * getContact
-	 * @throws ContactsNotEnabledExceptions
-	 */
-	private function getContact() {
+	private function getContact(): void {
 		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
 			$this->resolveContactId();
 			$this->loadContact();
@@ -137,13 +118,12 @@ class Contact extends UserGroupClass {
 	}
 
 	/**
-	 * listRaw
-	 * List all contacts with email adresses
-	 * excluding contacts from localSystemBook
-	 * @param string $query
-	 * @return Array
+	 * 	 * List all contacts with email adresses
+	 * 	 * excluding contacts from localSystemBook
+	 *
+	 * @param string[] $queryRange
 	 */
-	public static function listRaw($query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
+	public static function listRaw(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
 		$contacts = [];
 		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
 			foreach (\OC::$server->getContactsManager()->search($query, $queryRange) as $contact) {
@@ -156,12 +136,9 @@ class Contact extends UserGroupClass {
 	}
 
 	/**
-	 * list
-	 * @param string $query
-	 * @param array $queryRange
-	 * @return self[]
+	 * @return Contact[]
 	 */
-	public static function search($query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
+	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
 		$contacts = [];
 		foreach (self::listRaw($query, $queryRange) as $contact) {
 			$contacts[] = new Self($contact['UID']);

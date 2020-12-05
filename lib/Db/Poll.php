@@ -149,7 +149,10 @@ class Poll extends Entity implements JsonSerializable {
 		];
 	}
 
-	public function deserializeArray($array) {
+	/**
+	 * @return static
+	 */
+	public function deserializeArray(array $array): self {
 		$this->setTitle(isset($array['title']) ? $array['title'] : $this->getTitle());
 		$this->setDescription(isset($array['description']) ? $array['description'] : $this->getDescription());
 		$this->setAccess(isset($array['access']) ? $array['access'] : $this->getAccess());
@@ -164,9 +167,6 @@ class Poll extends Entity implements JsonSerializable {
 		return $this;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function getExpired(): bool {
 		return (
 			   $this->getExpire() > 0
@@ -174,20 +174,15 @@ class Poll extends Entity implements JsonSerializable {
 		);
 	}
 
-	/**
-	 * @return string
-	 */
-	private function getDisplayName() {
+	private function getDisplayName(): string {
 		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
 		} else {
 			return $this->owner;
 		}
 	}
-	/**
-	 * @return User
-	 */
-	public function getOwnerUserObject() {
+
+	public function getOwnerUserObject(): User {
 		return new User($this->owner);
 	}
 }

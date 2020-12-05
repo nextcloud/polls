@@ -83,7 +83,7 @@ class Comment extends Entity implements JsonSerializable {
 		];
 	}
 
-	private function getDisplayName() {
+	private function getDisplayName(): string {
 		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
 			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
 		} else {
@@ -91,7 +91,7 @@ class Comment extends Entity implements JsonSerializable {
 		}
 	}
 
-	public function getIsNoUser() {
+	public function getIsNoUser(): bool {
 		return !(\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
 	}
 }

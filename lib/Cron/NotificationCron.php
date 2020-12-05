@@ -31,7 +31,6 @@ class NotificationCron extends TimedJob {
 	/** @var MailService */
 	private $mailService;
 
-	/** @param MailService $mailService */
 	public function __construct(
 		MailService $mailService
 	) {
@@ -39,10 +38,6 @@ class NotificationCron extends TimedJob {
 		$this->mailService = $mailService;
 	}
 
-	/**
-	 * run
-	 * @param string $token
-	 */
 	protected function run($arguments) {
 		$this->mailService->sendNotifications();
 	}

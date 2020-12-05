@@ -28,7 +28,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\BadRequestException;
 use OCA\Polls\Exceptions\DuplicateEntryException;
-use OCA\Polls\Exceptions\NotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
@@ -51,14 +50,6 @@ class OptionService {
 	/** @var Acl */
 	private $acl;
 
-	/**
-	 * OptionService constructor.
-	 * @param OptionMapper $optionMapper
-	 * @param Option $option
-	 * @param PollMapper $pollMapper
-	 * @param Acl $acl
-	 */
-
 	public function __construct(
 		OptionMapper $optionMapper,
 		Option $option,
@@ -72,14 +63,13 @@ class OptionService {
 	}
 
 	/**
-	 * Get all options of given poll
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $token
-	 * @return array Array of Option objects
-	 * @throws NotAuthorizedException
+	 * 	 * Get all options of given poll
+	 *
+	 * @return Option[]
+	 *
+	 * @psalm-return array<array-key, Option>
 	 */
-	public function list($pollId = 0, $token = '') {
+	public function list(int $pollId = 0, string $token = ''): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -98,13 +88,11 @@ class OptionService {
 	}
 
 	/**
-	 * Get option
-	 * @NoAdminRequired
-	 * @param int $optionId
+	 * 	 * Get option
+	 *
 	 * @return Option
-	 * @throws NotAuthorizedException
 	 */
-	public function get($optionId) {
+	public function get(int $optionId): Option {
 		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId());
 
 		if (!$this->acl->getAllowView()) {
@@ -116,15 +104,11 @@ class OptionService {
 
 
 	/**
-	 * Add a new option
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param int $timestamp
-	 * @param string $pollOptionText
+	 * 	 * Add a new option
+	 *
 	 * @return Option
-	 * @throws NotAuthorizedException
 	 */
-	public function add($pollId, $timestamp = 0, $pollOptionText = '') {
+	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = ''): Option {
 		$this->acl->setPollId($pollId)->RequestEdit();
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
@@ -139,16 +123,11 @@ class OptionService {
 	}
 
 	/**
-	 * Update option
-	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @param int $timestamp
-	 * @param string $pollOptionText
-	 * @param int $order
+	 * 	 * Update option
+	 *
 	 * @return Option
-	 * @throws NotAuthorizedException
 	 */
-	public function update($optionId, $timestamp = 0, $pollOptionText = '') {
+	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = ''): Option {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 		$this->setOption($timestamp, $pollOptionText);
@@ -157,13 +136,11 @@ class OptionService {
 	}
 
 	/**
-	 * Delete option
-	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @return Option deleted Option
-	 * @throws NotAuthorizedException
+	 * 	 * Delete option
+	 *
+	 * @return Option
 	 */
-	public function delete($optionId) {
+	public function delete(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 		$this->optionMapper->delete($this->option);
@@ -172,13 +149,11 @@ class OptionService {
 	}
 
 	/**
-	 * Switch optoin confirmation
-	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @return Option confirmed Option
-	 * @throws NotAuthorizedException
+	 * 	 * Switch optoin confirmation
+	 *
+	 * @return Option
 	 */
-	public function confirm($optionId) {
+	public function confirm(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 
@@ -192,16 +167,13 @@ class OptionService {
 	}
 
 	/**
-	 * Make a sequence of date poll options
-	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @param int $step
-	 * @param string $unit
-	 * @param int $amount
-	 * @return array Array of Option objects
-	 * @throws NotAuthorizedException
+	 * 	 * Make a sequence of date poll options
+	 *
+	 * @return Option[]
+	 *
+	 * @psalm-return array<array-key, Option>
 	 */
-	public function sequence($optionId, $step, $unit, $amount) {
+	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$baseDate = new DateTime;
 		$origin = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->requestEdit();
@@ -229,14 +201,13 @@ class OptionService {
 	}
 
 	/**
-	 * Copy options from $fromPoll to $toPoll
-	 * @NoAdminRequired
-	 * @param int $fromPollId
-	 * @param int $toPollId
-	 * @return array Array of Option objects
-	 * @throws NotAuthorizedException
+	 * 	 * Copy options from $fromPoll to $toPoll
+	 *
+	 * @return Option[]
+	 *
+	 * @psalm-return array<array-key, Option>
 	 */
-	public function clone($fromPollId, $toPollId) {
+	public function clone(int $fromPollId, int $toPollId): array {
 		$this->acl->setPollId($fromPollId);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
@@ -253,16 +224,13 @@ class OptionService {
 	}
 
 	/**
-	 * Reorder options with the order specified by $options
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param array $options - Array of options
-	 * @return array Array of Option objects
-	 * @throws NotAuthorizedException
-	 * @throws BadRequestException
-	 * @throws NotFoundException
+	 * 	 * Reorder options with the order specified by $options
+	 *
+	 * @return Option[]
+	 *
+	 * @psalm-return array<array-key, Option>
 	 */
-	public function reorder($pollId, $options) {
+	public function reorder(int $pollId, array $options): array {
 		try {
 			$poll = $this->pollMapper->find($pollId);
 			$this->acl->setPoll($poll)->requestEdit();
@@ -287,16 +255,15 @@ class OptionService {
 	}
 
 	/**
-	 * Change order for $optionId and reorder the options
+	 * 	 * Change order for $optionId and reorder the options
+	 *
 	 * @NoAdminRequired
-	 * @param int $optionId
-	 * @param int $newOrder
-	 * @return array Array of Option objects
-	 * @throws NotAuthorizedException
-	 * @throws BadRequestException
-	 * @throws NotFoundException
+	 *
+	 * @return Option[]
+	 *
+	 * @psalm-return array<array-key, Option>
 	 */
-	public function setOrder($optionId, $newOrder) {
+	public function setOrder(int $optionId, int $newOrder): array {
 		try {
 			$this->option = $this->optionMapper->find($optionId);
 			$poll = $this->pollMapper->find($this->option->getPollId());
@@ -324,15 +291,16 @@ class OptionService {
 	}
 
 	/**
-	 * moveModifier - evaluate new order
-	 * depending on the old and the new position of a moved array item
-	 * @NoAdminRequired
-	 * @param int $moveFrom - old position of the moved item
-	 * @param int $moveTo   - target posotion of the moved item
-	 * @param int $value    - current position of the current item
-	 * @return int          - the modified new new position of the current item
+	 * 	 * moveModifier - evaluate new order
+	 * 	 * depending on the old and the new position of a moved array item
+	 * 	 * $moveFrom - old position of the moved item
+	 * 	 * $moveTo   - target posotion of the moved item
+	 * 	 * $value    - current position of the current item
+	 * 	 * Returns the modified new new position of the current item
+	 *
+	 * @return int
 	 */
-	private function moveModifier($moveFrom, $moveTo, $currentPosition) {
+	private function moveModifier(int $moveFrom, int $moveTo, int $currentPosition): int {
 		$moveModifier = 0;
 		if ($moveFrom < $currentPosition && $currentPosition <= $moveTo) {
 			// moving forward
@@ -348,13 +316,8 @@ class OptionService {
 
 	/**
 	 * Set option entities validated
-	 * @NoAdminRequired
-	 * @param int $timestamp
-	 * @param string $pollOptionText
-	 * @param int $order
-	 * @throws BadRequestException
 	 */
-	private function setOption($timestamp = 0, $pollOptionText = '') {
+	private function setOption(int $timestamp = 0, string $pollOptionText = ''): void {
 		$poll = $this->pollMapper->find($this->option->getPollId());
 
 		if ($poll->getType() === Poll::TYPE_DATE) {
@@ -367,12 +330,12 @@ class OptionService {
 	}
 
 	/**
-	 * Get the highest order number in $pollId
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return int Highest order number
+	 * 	 * Get the highest order number in $pollId
+	 * 	 * Return Highest order number
+	 *
+	 * @return int
 	 */
-	private function getHighestOrder($pollId) {
+	private function getHighestOrder(int $pollId): int {
 		$highestOrder = 0;
 		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
 			if ($option->getOrder() > $highestOrder) {

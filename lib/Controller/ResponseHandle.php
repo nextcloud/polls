@@ -35,10 +35,8 @@ trait ResponseHandle {
 	/**
 	 * response
 	 * @NoAdminRequired
-	 * @param Closure $callback
-	 * @return DataResponse
 	 */
-	protected function response(Closure $callback) {
+	protected function response(Closure $callback): DataResponse {
 		try {
 			return new DataResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {
@@ -49,10 +47,8 @@ trait ResponseHandle {
 	/**
 	 * responseCreate
 	 * @NoAdminRequired
-	 * @param Closure $callback
-	 * @return DataResponse
 	 */
-	protected function responseCreate(Closure $callback) {
+	protected function responseCreate(Closure $callback): DataResponse {
 		try {
 			return new DataResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
@@ -63,10 +59,8 @@ trait ResponseHandle {
 	/**
 	 * responseDeleteTolerant
 	 * @NoAdminRequired
-	 * @param Closure $callback
-	 * @return DataResponse
 	 */
-	protected function responseDeleteTolerant(Closure $callback) {
+	protected function responseDeleteTolerant(Closure $callback): DataResponse {
 		try {
 			return new DataResponse($callback(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

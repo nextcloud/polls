@@ -33,7 +33,6 @@ class NotificationService {
 	/** @var IManager */
 	protected $notificationManager;
 
-
 	/** @var string */
 	protected $userId;
 
@@ -45,26 +44,20 @@ class NotificationService {
 		$this->userId = $UserId;
 	}
 
-	public function removeNotification($pollId) {
+	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp('polls')
-			->setObject('poll', $pollId)
+			->setObject('poll', strval($pollId))
 			->setUser($this->userId);
 		$this->notificationManager->markProcessed($notification);
 	}
 
-	/**
-	 * sendInvitation
-	 *
-	 * @param int $pollId
-	 * @param string $recipient
-	 */
-	public function sendInvitation($pollId, $recipient) {
+	public function sendInvitation(int $pollId, $recipient): bool {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp('polls')
 			->setUser($recipient)
 			->setDateTime(new DateTime())
-			->setObject('poll', $pollId)
+			->setObject('poll', strval($pollId))
 			->setSubject('invitation', ['pollId' => $pollId, 'recipient' => $recipient]);
 		$this->notificationManager->notify($notification);
 		return true;

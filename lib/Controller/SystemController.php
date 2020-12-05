@@ -35,13 +35,6 @@ class SystemController extends Controller {
 	/** @var SystemService */
 	private $systemService;
 
-	/**
-	 * SystemController constructor.
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param SystemService $systemService
-	 */
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -54,14 +47,13 @@ class SystemController extends Controller {
 	/**
 	 * Get a combined list of NC users, groups and contacts
 	 * @NoAdminRequired
-	 * @param string $query
-	 * @param bool $getGroups - search in groups
-	 * @param bool $getUsers - search in site users
-	 * @param bool $getContacts - search in contacs
-	 * @param bool $getContactGroups - search in contacs
-	 * @param array $skipGroups - group names to skip in return array
-	 * @param array $skipUsers - user names to skip in return array
-	 * @return DataResponse
+	 * $query
+	 * $getGroups - search in groups
+	 * $getUsers - search in site users
+	 * $getContacts - search in contacs
+	 * $getContactGroups - search in contacs
+	 * $skipGroups - group names to skip in return array
+	 * $skipUsers - user names to skip in return array
 	 */
 	public function getSiteUsersAndGroups(
 		$query = '',
@@ -72,7 +64,7 @@ class SystemController extends Controller {
 		$getMail = false,
 		$skipGroups = [],
 		$skipUsers = []
-	) {
+	): DataResponse {
 		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
 			$query, $getGroups, $getUsers, $getContacts, $getContactGroups, $getMail, $skipGroups, $skipUsers)], Http::STATUS_OK);
 	}

@@ -28,23 +28,19 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
+/**
+ * @template-extends QBMapper<Vote>
+ */
 class VoteMapper extends QBMapper {
-
-	/**
-	 * VoteMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_votes', '\OCA\Polls\Db\Vote');
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Vote[]
 	 */
-
-	public function findByPoll($pollId) {
+	public function findByPoll(int $pollId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -57,12 +53,10 @@ class VoteMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Vote[]
 	 */
-
-	public function findByPollAndUser($pollId, $userId) {
+	public function findByPollAndUser(int $pollId, string $userId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -78,12 +72,10 @@ class VoteMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Vote
 	 */
-
-	public function findSingleVote($pollId, $optionText, $userId) {
+	public function findSingleVote(int $pollId, string $optionText, string $userId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -101,11 +93,10 @@ class VoteMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Vote[]
 	 */
-	public function findParticipantsByPoll($pollId) {
+	public function findParticipantsByPoll(int $pollId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->selectDistinct('user_id')
@@ -118,11 +109,13 @@ class VoteMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 *
+	 * @return Vote[]
+	 *
+	 * @psalm-return array<array-key, Vote>
 	 */
-	public function findParticipantsVotes($pollId, $userId) {
+	public function findParticipantsVotes(int $pollId, $userId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -137,11 +130,7 @@ class VoteMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	/**
-	 * @param int $pollId
-	 * @param string $userId
-	 */
-	public function deleteByPollAndUser($pollId, $userId) {
+	public function deleteByPollAndUser(int $pollId, string $userId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -153,13 +142,9 @@ class VoteMapper extends QBMapper {
 		   );
 
 		$qb->execute();
-		return true;
 	}
 
-	/**
-	 * @param int $pollId
-	 */
-	public function deleteByPoll($pollId) {
+	public function deleteByPoll($pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

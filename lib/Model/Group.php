@@ -33,11 +33,6 @@ class Group extends UserGroupClass {
 	/** @var IGroup */
 	private $group;
 
-	/**
-	 * Group constructor.
-	 * @param $id
-	 * @param $displayName
-	 */
 	public function __construct(
 		$id
 	) {
@@ -55,22 +50,16 @@ class Group extends UserGroupClass {
 		}
 	}
 
-	/**
-	 * listRaw
-	 * @param string $query
-	 * @return Array
-	 */
-	public static function listRaw($query = '') {
+	public static function listRaw(string $query = '') {
 		return \OC::$server->getGroupManager()->search($query);
 	}
 
 	/**
-	 * search
-	 * @param string $query
-	 * @param array $skip - group names to skip in return array
 	 * @return Group[]
+	 *
+	 * @psalm-return list<Group>
 	 */
-	public static function search($query = '', $skip = []) {
+	public static function search(string $query = '', array $skip = []): array {
 		$groups = [];
 		foreach (self::listRaw($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
@@ -81,10 +70,9 @@ class Group extends UserGroupClass {
 	}
 
 	/**
-	 * getMembers
 	 * @return User[]
 	 */
-	public function getMembers() {
+	public function getMembers(): array {
 		$members = [];
 		foreach (array_keys(\OC::$server->getGroupManager()->displayNamesInGroup($this->id)) as $member) {
 			$members[] = new User($member);
