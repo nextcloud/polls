@@ -116,7 +116,7 @@ const getters = {
 const actions = {
 
 	reload(context) {
-		const endPoint = 'apps/polls/polls'
+		const endPoint = 'apps/polls/poll'
 		return axios.get(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options'))
 			.then((response) => {
 				context.commit('set', { options: response.data.options })
@@ -190,7 +190,7 @@ const actions = {
 	},
 
 	reorder(context, payload) {
-		const endPoint = 'apps/polls/polls'
+		const endPoint = 'apps/polls/poll'
 		context.commit('reorder', { options: payload })
 		return axios.post(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options/reorder'), {
 			options: payload,

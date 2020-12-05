@@ -28,7 +28,6 @@ use OCP\IRequest;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\IURLGenerator;
 use OCA\Polls\Service\NotificationService;
 
@@ -73,22 +72,5 @@ class PageController extends Controller {
 		$this->notificationService->removeNotification($id);
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);
-	}
-
-	/**
-	 * @PublicPage
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return PublicTemplateResponse
-	 */
-	public function votePublic() {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return new TemplateResponse('polls', 'polls.tmpl', [
-				'urlGenerator' => $this->urlGenerator]);
-		} else {
-			return new PublicTemplateResponse('polls', 'polls.tmpl', [
-				'urlGenerator' => $this->urlGenerator]);
-		}
 	}
 }

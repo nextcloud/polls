@@ -42,15 +42,15 @@ const mutations = {
 
 const actions = {
 
-	getSubscription(context, payload) {
-		let endPoint = 'apps/polls/subscription'
-		if (payload.token) {
-			endPoint = endPoint + '/s/' + payload.token
-		} else if (payload.pollId) {
-			endPoint = endPoint + '/' + payload.pollId
+	getSubscription(context) {
+		let endPoint = 'apps/polls'
+		if (context.rootState.poll.acl.token) {
+			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+		} else {
+			endPoint = endPoint + '/poll/' + context.rootState.poll.id
 		}
 
-		return axios.get(generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint + '/subscription'))
 			.then((response) => {
 				context.commit('setSubscription', response.data.subscribed)
 			})
@@ -59,13 +59,20 @@ const actions = {
 			})
 	},
 
-	writeSubscriptionPromise(context) {
-		const endPoint = 'apps/polls/subscription'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
-			token: context.rootState.poll.acl.token,
-			subscribed: state.subscribed,
-		})
+	writeSubscription(context) {
+		let endPoint = 'apps/polls'
+		if (context.rootState.poll.acl.token) {
+			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+		} else {
+			endPoint = endPoint + '/poll/' + context.rootState.poll.id
+		}
+		if (state.subscribed) {
+			endPoint = endPoint + '/subscribe'
+		} else {
+			endPoint = endPoint + '/unsubscribe'
+		}
+
+		return axios.put(generateUrl(endPoint))
 			.then(() => {
 			})
 			.catch((error) => {

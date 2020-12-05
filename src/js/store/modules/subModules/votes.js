@@ -77,7 +77,7 @@ const getters = {
 			})
 		})
 		votesRank = orderBy(votesRank, ['yes', 'maybe'], ['desc', 'desc'])
-		for (var i = 0; i < votesRank.length; i++) {
+		for (let i = 0; i < votesRank.length; i++) {
 			if (i > 0 && votesRank[i].yes === votesRank[i - 1].yes && votesRank[i].maybe === votesRank[i - 1].maybe) {
 				votesRank[i].rank = votesRank[i - 1].rank
 			} else {
@@ -97,18 +97,18 @@ const getters = {
 
 const actions = {
 	set(context, payload) {
-		let endPoint = 'apps/polls/vote/set'
+		let endPoint = 'apps/polls'
 
 		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint + '/s'
+			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
 		}
-		return axios.post(generateUrl(endPoint), {
+
+		return axios.put(generateUrl(endPoint + '/vote'), {
 			optionId: payload.option.id,
 			setTo: payload.setTo,
-			token: context.rootState.poll.acl.token,
 		})
 			.then((response) => {
-				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data })
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
 				return response.data
 			})
 			.catch((error) => {
@@ -118,11 +118,8 @@ const actions = {
 	},
 
 	deleteUser(context, payload) {
-		const endPoint = 'apps/polls/votes/delete'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
-			userId: payload.userId,
-		})
+		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id + '/user/' + payload.userId
+		return axios.delete(generateUrl(endPoint))
 			.then(() => {
 				context.commit('deleteVotes', payload)
 			})

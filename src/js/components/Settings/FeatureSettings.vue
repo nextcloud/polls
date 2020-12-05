@@ -94,7 +94,7 @@ export default {
 		},
 
 		calendarChoices() {
-			var list = []
+			const list = []
 			this.calendars.forEach((calendar) => {
 				// console.log(calendar.key.toString())
 				// console.log(this.settings.checkCalendars)

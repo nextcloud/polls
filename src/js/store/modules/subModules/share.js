@@ -67,8 +67,8 @@ const actions = {
 	},
 
 	sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share/send'
-		return axios.post(generateUrl(endPoint + '/' + context.state.token))
+		const endPoint = 'apps/polls/share'
+		return axios.post(generateUrl(endPoint + '/' + context.state.token + '/invite'))
 			.then((response) => {
 				context.commit('set', { share: response.data.share })
 				return response

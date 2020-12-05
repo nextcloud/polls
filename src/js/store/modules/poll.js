@@ -141,11 +141,11 @@ const actions = {
 	},
 
 	get(context, payload) {
-		let endPoint = 'apps/polls/polls/get'
+		let endPoint = 'apps/polls'
 		if (payload.token) {
-			endPoint = endPoint + '/s/' + payload.token
+			endPoint = endPoint + '/s/' + payload.token + '/poll'
 		} else if (payload.pollId) {
-			endPoint = endPoint + '/' + payload.pollId
+			endPoint = endPoint + '/poll/' + payload.pollId
 		} else {
 			context.commit('reset')
 			context.commit('acl/reset')
@@ -174,7 +174,7 @@ const actions = {
 	},
 
 	add(context, payload) {
-		const endPoint = 'apps/polls/polls/add'
+		const endPoint = 'apps/polls/poll/add'
 		return axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
 			.then((response) => {
 				return response
@@ -187,8 +187,8 @@ const actions = {
 	},
 
 	clone(context, payload) {
-		const endPoint = 'apps/polls/polls/clone'
-		return axios.get(generateUrl(endPoint + '/' + payload.pollId))
+		const endPoint = 'apps/polls/poll'
+		return axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
 			.then((response) => {
 				return response.data
 			})
@@ -199,7 +199,7 @@ const actions = {
 	},
 
 	update(context) {
-		const endPoint = 'apps/polls/polls/update'
+		const endPoint = 'apps/polls/poll'
 		return axios.put(generateUrl(endPoint + '/' + state.id), { poll: state })
 			.then((response) => {
 				context.commit('set', { poll: response.data })
@@ -213,19 +213,19 @@ const actions = {
 	},
 
 	switchDeleted(context, payload) {
-		const endPoint = 'apps/polls/polls/delete'
-		return axios.get(generateUrl(endPoint + '/' + payload.pollId))
+		const endPoint = 'apps/polls/poll'
+		return axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
 			.then((response) => {
 				return response
 			})
 			.catch((error) => {
-				console.error('Error deleting poll', { error: error.response }, { payload: payload })
+				console.error('Error switching deleted status', { error: error.response }, { payload: payload })
 			})
 	},
 
 	delete(context, payload) {
-		const endPoint = 'apps/polls/polls/delete'
-		return axios.get(generateUrl(endPoint + '/permanent/' + payload.pollId))
+		const endPoint = 'apps/polls/poll'
+		return axios.delete(generateUrl(endPoint + '/' + payload.pollId))
 			.then((response) => {
 				return response
 			})
@@ -235,8 +235,8 @@ const actions = {
 	},
 
 	getParticipantsEmailAddresses(context, payload) {
-		const endPoint = 'apps/polls/polls/addresses'
-		return axios.get(generateUrl(endPoint + '/' + payload.pollId))
+		const endPoint = 'apps/polls/poll'
+		return axios.get(generateUrl(endPoint + '/' + payload.pollId + '/addresses'))
 			.then((response) => {
 				return response
 			})

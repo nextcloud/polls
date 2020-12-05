@@ -76,34 +76,4 @@ class SystemController extends Controller {
 		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
 			$query, $getGroups, $getUsers, $getContacts, $getContactGroups, $getMail, $skipGroups, $skipUsers)], Http::STATUS_OK);
 	}
-
-	/**
-	 * Validate it the user name is reservrd
-	 * return false, if this username already exists as a user or as
-	 * a participant of the poll
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @return DataResponse
-	 */
-	public function validatePublicUsername($userName, $token) {
-		try {
-			return new DataResponse(['result' => $this->systemService->validatePublicUsername($userName, $token), 'name' => $userName], Http::STATUS_OK);
-		} catch (\Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
-		}
-	}
-
-	/**
-	 * Validate email address (simple validation)
-	 * @NoAdminRequired
-	 * @PublicPage
-	 * @return DataResponse
-	 */
-	public function validateEmailAddress($emailAddress) {
-		try {
-			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
-		} catch (\Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
-		}
-	}
 }

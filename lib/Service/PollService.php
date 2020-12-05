@@ -232,7 +232,7 @@ class PollService {
 	 * @throws NotAuthorizedException
 	 */
 
-	public function delete($pollId) {
+	public function switchDeleted($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->requestEdit();
 
@@ -256,7 +256,7 @@ class PollService {
 	 * @throws NotAuthorizedException
 	 */
 
-	public function deletePermanently($pollId) {
+	public function delete($pollId) {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->requestDelete();
 

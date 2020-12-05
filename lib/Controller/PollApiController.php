@@ -139,9 +139,9 @@
  	 * @return DataResponse
  	 */
 
- 	public function trash($pollId) {
+ 	public function switchDeleted($pollId) {
  		try {
- 			return new DataResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
+ 			return new DataResponse(['poll' => $this->pollService->switchDeleted($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (Exception $e) {
@@ -160,7 +160,7 @@
 
  	public function delete($pollId) {
  		try {
- 			return new DataResponse(['poll' => $this->pollService->deletePermanently($pollId)], Http::STATUS_OK);
+ 			return new DataResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
  		} catch (Exception $e) {

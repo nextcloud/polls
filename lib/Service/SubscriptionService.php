@@ -57,7 +57,7 @@ class SubscriptionService {
 	 * @param int $pollId
 	 * @return bool
 	 */
-	public function get($pollId, $token) {
+	public function get($pollId = 0, $token = '') {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -72,6 +72,8 @@ class SubscriptionService {
 			// subscription should be unique. If duplicates are found resubscribe
 			// duplicates are removed in $this->set()
 			return $this->set($pollId, $token, true);
+		} catch (DoesNotExistException $e) {
+			return false;
 		}
 	}
 
@@ -96,7 +98,7 @@ class SubscriptionService {
 	 * @param bool $subscribed
 	 * @return bool
 	 */
-	public function set($pollId, $token, $subscribed) {
+	public function set($pollId = 0, $token = '', $subscribed) {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -116,7 +118,7 @@ class SubscriptionService {
 		} catch (MultipleObjectsReturnedException $e) {
 			// Duplicates should not exist but if found, fix it
 			// unsubscribe from all and resubscribe, if requested
-			\OC::$server->getLogger()->debug('Multiple subscription (dulpicates) found');
+			\OC::$server->getLogger()->debug('Multiple subscription (duplicates) found');
 			$this->subscriptionMapper->unsubscribe($this->acl->getPollId(), $this->acl->getUserId());
 			\OC::$server->getLogger()->debug('Unsubscribed all for user ' . $this->acl->getUserId() . 'in poll' . $pollId);
 			if ($subscribed) {

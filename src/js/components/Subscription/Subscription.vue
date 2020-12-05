@@ -47,7 +47,7 @@ export default {
 			},
 			set(value) {
 				this.$store.commit('setSubscription', value)
-				this.$store.dispatch('writeSubscriptionPromise')
+				this.$store.dispatch('writeSubscription')
 			},
 		},
 	},
