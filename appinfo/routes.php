@@ -31,7 +31,8 @@ return [
 		['name' => 'public#subscription', 'url' => '/s/{token}/subscription', 'verb' => 'GET'],
 		['name' => 'public#subscribe', 'url' => '/s/{token}/subscribe', 'verb' => 'PUT'],
 		['name' => 'public#unsubscribe', 'url' => '/s/{token}/unsubscribe', 'verb' => 'PUT'],
-
+		['name' => 'public#register', 'url' => '/s/{token}/register', 'verb' => 'POST'],
+		['name' => 'public#resend_invitation', 'url' => '/s/{token}/resend', 'verb' => 'GET'],
 		['name' => 'public#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'public#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
 

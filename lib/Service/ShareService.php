@@ -131,7 +131,7 @@ class ShareService {
 	 *
 	 * @return Share
 	 */
-	private function create(int $pollId, UserGroupClass $userGroup, bool $skipInvitation = false): Share {
+	private function create(int $pollId, UserGroupClass $userGroup, bool $preventInvitation = false): Share {
 		$this->share = new Share();
 		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
 			16,
@@ -140,7 +140,7 @@ class ShareService {
 			ISecureRandom::CHAR_UPPER
 		));
 		$this->share->setPollId($pollId);
-		$this->share->setInvitationSent($skipInvitation ? time() : 0);
+		$this->share->setInvitationSent($preventInvitation ? time() : 0);
 		$this->share->setType($userGroup->getType());
 		$this->share->setUserId($userGroup->getPublicId());
 		$this->share->setDisplayName($userGroup->getDisplayName());
@@ -212,29 +212,36 @@ class ShareService {
 		$this->systemService->validateEmailAddress($emailAddress, true);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			// Create new external share for user, who entered the poll via public link
+			// Create new external share for user, who entered the poll via public link,
+			// prevent invtation sending, when no email address is given
 			$this->create(
 				$this->share->getPollId(),
-				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress));
-			if ($emailAddress) {
-				$this->mailService->sendInvitation($this->share->getToken());
-			} else {
-				$this->share->setInvitationSent(time());
-				$this->share = $this->shareMapper->update($this->share);
-			}
-
-			return $this->share;
+				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
+				!$emailAddress
+			);
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
-			// Convert Email and contact shares to external share, if user registeres
+			// Convert email and contact shares to external share, if user registers
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userName);
 			$this->share->setDisplayName($userName);
+
+			// prepare for resending inviataion to new email address
+			if ($emailAddress !== $this->share->getEmailAddress()) {
+				$this->share->setInvitationSent(0);
+			}
 			$this->share->setEmailAddress($emailAddress);
-			return $this->shareMapper->update($this->share);
+			$this->shareMapper->update($this->share);
 		} else {
 			throw new NotAuthorizedException;
 		}
+
+		// send invitaitoin mail, if invitationSent has no timestamp
+		if (!$this->share->getInvitationSent()) {
+			$this->mailService->resendInvitation($this->share->getToken());
+		}
+
+		return $this->share;
 	}
 
 	/**
