@@ -66,11 +66,26 @@ const actions = {
 			})
 	},
 
-	sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share'
-		return axios.post(generateUrl(endPoint + '/' + context.state.token + '/invite'))
+	register(context, payload) {
+		const endPoint = 'apps/polls/s'
+		return axios.post(generateUrl(endPoint + '/' + context.state.token + '/register'), {
+			userName: payload.userName,
+			emailAddress: payload.emailAddress,
+		})
 			.then((response) => {
-				context.commit('set', { share: response.data.share })
+				return { token: response.data.share.token }
+			})
+			.catch((error) => {
+				console.error('Error writing personal share', { error: error.response }, { payload: payload })
+				throw error
+			})
+
+	},
+
+	resendInvitation(context, payload) {
+		const endPoint = 'apps/polls/s'
+		return axios.get(generateUrl(endPoint + '/' + context.state.token + '/resend'))
+			.then((response) => {
 				return response
 			})
 			.catch((error) => {

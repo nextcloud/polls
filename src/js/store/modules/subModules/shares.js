@@ -116,19 +116,6 @@ const actions = {
 			})
 	},
 
-	addPersonal(context, payload) {
-		const endPoint = 'apps/polls/share/personal'
-		return axios.post(generateUrl(endPoint), { token: payload.token, userName: payload.userName, emailAddress: payload.emailAddress })
-			.then((response) => {
-				return { token: response.data.share.token }
-			})
-			.catch((error) => {
-				console.error('Error writing personal share', { error: error.response }, { payload: payload })
-				throw error
-			})
-
-	},
-
 	delete(context, payload) {
 		const endPoint = 'apps/polls/share'
 		context.commit('delete', { share: payload.share })

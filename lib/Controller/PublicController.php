@@ -38,6 +38,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
+use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
@@ -58,6 +59,9 @@ class PublicController extends Controller {
 
 	/** @var OptionService */
 	private $optionService;
+
+	/** @var MailService */
+	private $mailService;
 
 	/** @var PollService */
 	private $pollService;
@@ -88,6 +92,7 @@ class PublicController extends Controller {
 		IURLGenerator $urlGenerator,
 		Acl $acl,
 		CommentService $commentService,
+		MailService $mailService,
 		OptionService $optionService,
 		PollService $pollService,
 		Poll $poll,
@@ -101,6 +106,7 @@ class PublicController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->acl = $acl;
 		$this->commentService = $commentService;
+		$this->mailService = $mailService;
 		$this->optionService = $optionService;
 		$this->pollService = $pollService;
 		$this->poll = $poll;
@@ -115,8 +121,9 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @return PublicTemplateResponse|PublicTemplateResponse
 	 */
-	public function votePage(): PublicTemplateResponse {
+	public function votePage() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
 			return new TemplateResponse('polls', 'polls.tmpl', [
 				'urlGenerator' => $this->urlGenerator]);
@@ -231,6 +238,29 @@ class PublicController extends Controller {
 		} catch (\Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
 		}
+	}
+	/**
+	 * Create a personal share from a public share
+	 * or update an email share with the username
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function register($token, $userName, $emailAddress = ''): DataResponse {
+		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
+			return ['share' => $this->shareService->personal($token, $userName, $emailAddress)];
+		});
+	}
+
+	/**
+	 * Sent invitation mails for a share
+	 * Additionally send notification via notifications
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function resendInvitation($token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['share' => $this->mailService->resendInvitation($token)];
+		});
 	}
 
 	/**

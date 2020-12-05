@@ -31,7 +31,7 @@
 		<ButtonDiv v-if="share.emailAddress"
 			icon="icon-mail"
 			:title="t('polls','Resend invitation mail to {emailAdress}', { emailAdress: share.emailAddress })"
-			@click="sendInvitation()" />
+			@click="resendInvitation()" />
 	</div>
 </template>
 
@@ -63,16 +63,13 @@ export default {
 	},
 
 	methods: {
-		sendInvitation() {
-			this.$store.dispatch('poll/share/sendInvitation')
+		resendInvitation() {
+			this.$store.dispatch('poll/share/resendInvitation')
 				.then((response) => {
-					response.data.sentResult.sentMails.forEach((item) => {
-						showSuccess(t('polls', 'Invitation sent to {emailAddress}', { emailAddress: item.eMailAddress }))
-					})
-					response.data.sentResult.abortedMails.forEach((item) => {
-						console.error('Mail could not be sent!', { recipient: item })
-						showError(t('polls', 'Error sending invitation to {emailAddress}', { emailAddress: item.eMailAddress }))
-					})
+					showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.emailAddress }))
+				})
+				.catch(() => {
+					showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.emailAddress }))
 				})
 		},
 

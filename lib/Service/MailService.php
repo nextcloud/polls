@@ -37,6 +37,7 @@ use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Model\UserGroupClass;
@@ -134,6 +135,20 @@ class MailService {
 			// catch silently
 		}
 		return $userId;
+	}
+
+	public function resendInvitation(string $token): Share {
+		$share = $this->shareMapper->findByToken($token);
+		$poll = $this->pollMapper->find($share->getPollId());
+		$recipient = $share->getUserObject();
+		$emailTemplate = $this->generateInvitation($recipient, $poll, $share->getURL());
+		$this->sendMail(
+			$emailTemplate,
+			$recipient->getEmailAddress(),
+			$recipient->getDisplayName()
+		);
+		$share->setInvitationSent(time());
+		return $this->shareMapper->update($share);
 	}
 
 	public function sendInvitation(string $token): array {
