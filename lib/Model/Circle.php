@@ -62,7 +62,7 @@ class Circle extends UserGroupClass {
 	}
 
 	/**
-	* @return Circle[]
+	 * @return Circle[]
 	 */
 	public static function search(string $query = '', $skip = []) {
 		$circles = [];

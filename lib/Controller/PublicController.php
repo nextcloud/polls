@@ -237,7 +237,7 @@ class PublicController extends Controller {
 	 * get complete poll
 	 * @NoAdminRequired
 	 */
-	private function buildPoll(): Array {
+	private function buildPoll(): array {
 		try {
 			$comments = $this->commentService->list($this->poll->getId());
 		} catch (Exception $e) {

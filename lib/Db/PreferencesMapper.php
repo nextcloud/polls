@@ -31,7 +31,6 @@ use OCP\AppFramework\Db\QBMapper;
  * @template-extends QBMapper<Preferences>
  */
 class PreferencesMapper extends QBMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_preferences', '\OCA\Polls\Db\Preferences');
 	}

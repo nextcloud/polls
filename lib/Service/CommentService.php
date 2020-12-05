@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
-
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Model\Acl;

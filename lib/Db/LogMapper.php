@@ -32,7 +32,6 @@ use OCP\AppFramework\Db\QBMapper;
  * @template-extends QBMapper<Log>
  */
 class LogMapper extends QBMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}

@@ -64,7 +64,7 @@ class ContactGroup extends UserGroupClass {
 	}
 
 	/**
-	* @return ContactGroup[]
+	 * @return ContactGroup[]
 	 */
 	public static function search(string $query = '') {
 		$contactGroups = [];

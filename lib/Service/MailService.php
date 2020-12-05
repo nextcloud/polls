@@ -40,7 +40,6 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\Email;
 use OCA\Polls\Model\User;
 
 class MailService {

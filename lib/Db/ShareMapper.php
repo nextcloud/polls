@@ -32,7 +32,6 @@ use OCP\AppFramework\Db\QBMapper;
  * @template-extends QBMapper<Share>
  */
 class ShareMapper extends QBMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_share', '\OCA\Polls\Db\Share');
 	}

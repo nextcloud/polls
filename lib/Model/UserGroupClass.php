@@ -155,7 +155,7 @@ class UserGroupClass implements \JsonSerializable {
 		return $this->description;
 	}
 
-	public function setEmailAddress(string $emailAddress) : string{
+	public function setEmailAddress(string $emailAddress) : string {
 		$this->emailAddress = $emailAddress;
 		return $this->emailAddress;
 	}
@@ -171,7 +171,7 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	/**
-	* @return UserGroupClass[]
+	 * @return UserGroupClass[]
 	 */
 	public static function search() {
 		return [];

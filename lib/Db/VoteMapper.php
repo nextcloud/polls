@@ -32,7 +32,6 @@ use OCP\AppFramework\Db\QBMapper;
  * @template-extends QBMapper<Vote>
  */
 class VoteMapper extends QBMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_votes', '\OCA\Polls\Db\Vote');
 	}

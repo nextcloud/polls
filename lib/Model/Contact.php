@@ -136,7 +136,7 @@ class Contact extends UserGroupClass {
 	}
 
 	/**
-	* @return Contact[]
+	 * @return Contact[]
 	 */
 	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
 		$contacts = [];
