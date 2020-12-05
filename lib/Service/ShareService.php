@@ -238,7 +238,7 @@ class ShareService {
 
 		// send invitaitoin mail, if invitationSent has no timestamp
 		if (!$this->share->getInvitationSent()) {
-			 $this->mailService->resendInvitation($this->share->getToken());
+			$this->mailService->resendInvitation($this->share->getToken());
 		}
 
 		return $this->share;
