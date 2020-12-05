@@ -101,7 +101,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 */
 	public function testUnsubscribe() {
 		foreach ($this->polls as $poll) {
-			$this->assertTrue($this->subscriptionMapper->unsubscribe($poll->getId(), $this->users[$poll->getId()]));
+			$this->assertNull($this->subscriptionMapper->unsubscribe($poll->getId(), $this->users[$poll->getId()]));
 		}
 	}
 
