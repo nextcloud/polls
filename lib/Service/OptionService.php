@@ -175,29 +175,29 @@ class OptionService {
 	 */
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$baseDate = new DateTime;
-		$origin = $this->optionMapper->find($optionId);
+		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 
 		if ($step === 0) {
-			return $this->optionMapper->findByPoll($origin->getPollId());
+			return $this->optionMapper->findByPoll($this->option->getPollId());
 		}
 
-		$baseDate->setTimestamp($origin->getTimestamp());
+		$baseDate->setTimestamp($this->option->getTimestamp());
 
 		for ($i = 0; $i < $amount; $i++) {
-			$this->option = new Option();
-			$this->option->setPollId($origin->getPollId());
-			$this->option->setConfirmed(0);
-			$this->option->setTimestamp($baseDate->modify($step . ' ' . $unit)->getTimestamp());
-			$this->option->setPollOptionText($baseDate->format('c'));
-			$this->option->setOrder($baseDate->getTimestamp());
+			$clonedOption = new Option();
+			$clonedOption->setPollId($this->option->getPollId());
+			$clonedOption->setConfirmed(0);
+			$clonedOption->setTimestamp($baseDate->modify($step . ' ' . $unit)->getTimestamp());
+			$clonedOption->setPollOptionText($baseDate->format('c'));
+			$clonedOption->setOrder($baseDate->getTimestamp());
 			try {
-				$this->optionMapper->insert($this->option);
+				$this->optionMapper->insert($clonedOption);
 			} catch (UniqueConstraintViolationException $e) {
-				\OC::$server->getLogger()->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $origin->getPollId() . '. Option alredy exists.');
+				\OC::$server->getLogger()->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option alredy exists.');
 			}
 		}
-		return $this->optionMapper->findByPoll($origin->getPollId());
+		return $this->optionMapper->findByPoll($this->option->getPollId());
 	}
 
 	/**
