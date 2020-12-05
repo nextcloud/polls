@@ -122,10 +122,9 @@ class VoteService {
 			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->insert($this->vote);
-		} finally {
-			$this->logService->setLog($this->acl->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
-			return $this->vote;
 		}
+		$this->logService->setLog($this->acl->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
+		return $this->vote;
 	}
 
 	/**

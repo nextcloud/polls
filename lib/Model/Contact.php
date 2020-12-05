@@ -47,11 +47,11 @@ class Contact extends UserGroupClass {
 	 *
 	 * @return string
 	 */
-	public function getPublicId() {
+	public function getPublicId(): string {
 		return $this->displayName;
 	}
 
-	public static function isEnabled() {
+	public static function isEnabled(): bool {
 		return \OC::$server->getAppManager()->isEnabledForUser('contacts');
 	}
 
@@ -136,9 +136,7 @@ class Contact extends UserGroupClass {
 	}
 
 	/**
-	 * @return array
-	 *
-	 * @psalm-return list<mixed>
+	* @return Contact[]
 	 */
 	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
 		$contacts = [];

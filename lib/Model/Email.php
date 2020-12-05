@@ -40,7 +40,7 @@ class Email extends UserGroupClass {
 	/**
 	 * @return string
 	 */
-	public function getDisplayName() {
+	public function getDisplayName(): string {
 		if (!$this->displayName) {
 			return $this->id;
 		}

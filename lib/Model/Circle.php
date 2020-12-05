@@ -48,7 +48,7 @@ class Circle extends UserGroupClass {
 		}
 	}
 
-	public static function isEnabled() {
+	public static function isEnabled(): bool {
 		return \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
 
@@ -62,21 +62,22 @@ class Circle extends UserGroupClass {
 	}
 
 	/**
-	 * @return array
-	 *
-	 * @psalm-return list<mixed>
+	* @return Circle[]
 	 */
 	public static function search(string $query = '', $skip = []) {
 		$circles = [];
 		foreach (self::listRaw($query) as $circle) {
 			if (!in_array($circle->getUniqueId(), $skip)) {
-				$circles[] = new Self($circle->getUniqueId());
+				$circles[] = new self($circle->getUniqueId());
 			}
 		}
 
 		return $circles;
 	}
 
+	/**
+	 * @return User[]|Email[]|Contact[]
+	 */
 	public function getMembers() {
 		$members = [];
 		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {

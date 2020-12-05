@@ -34,8 +34,8 @@ use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCA\Polls\Exceptions\Exception;
 
 
-use OCA\Polls\DB\Share;
-use OCA\Polls\DB\Poll;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;

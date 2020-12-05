@@ -147,9 +147,9 @@ const actions = {
 	},
 
 	sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share/send'
+		const endPoint = 'apps/polls/share'
 
-		return axios.post(generateUrl(endPoint + '/' + payload.share.token + '/send'))
+		return axios.post(generateUrl(endPoint + '/' + payload.share.token + '/invite'))
 			.then((response) => {
 				return response
 			})

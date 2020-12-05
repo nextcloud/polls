@@ -39,7 +39,7 @@ class ContactGroup extends UserGroupClass {
 	/**
 	 * @return string
 	 */
-	public function getDisplayName() {
+	public function getDisplayName(): string {
 		if (!$this->displayName) {
 			return $this->id;
 		}
@@ -64,7 +64,7 @@ class ContactGroup extends UserGroupClass {
 	}
 
 	/**
-	 * Get a list of contact groups
+	* @return ContactGroup[]
 	 */
 	public static function search(string $query = '') {
 		$contactGroups = [];
@@ -78,6 +78,7 @@ class ContactGroup extends UserGroupClass {
 
 	/**
 	 * Get a list of contacts group members
+	 * @return Contact[]
 	 */
 	public function getMembers() {
 		$contacts = [];

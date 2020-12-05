@@ -48,14 +48,14 @@ class CalendarService {
 	 * 	 * 	 * getEvents - get events from the user's calendars inside given timespan
 	 * 	 *
 	 *
-	 * @param self $from
-	 * @param self $to
+	 * @param DateTime $from
+	 * @param DateTime $to
 	 *
 	 * @return CalendarEvent[]
 	 *
 	 * @psalm-return list<CalendarEvent>
 	 */
-	public function getEvents(self $from, self $to): array {
+	public function getEvents(DateTime $from, DateTime $to): array {
 		$events = [];
 		foreach ($this->calendars as $calendar) {
 

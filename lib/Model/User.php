@@ -44,7 +44,7 @@ class User extends UserGroupClass {
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
 	}
 
-	public function getUserIsDisabled() {
+	public function getUserIsDisabled(): bool {
 		return !\OC::$server->getUserManager()->get($this->id)->isEnabled();
 	}
 
@@ -53,11 +53,11 @@ class User extends UserGroupClass {
 	}
 
 	/**
-	 * @return array
+	 * @return User[]
 	 *
-	 * @psalm-return list<mixed>
+	 * @psalm-return list<User>
 	 */
-	public static function search(string $query = '', array $skip = []) {
+	public static function search(string $query = '', array $skip = []): array {
 		$users = [];
 		foreach (self::listRaw($query) as $user) {
 			if (!in_array($user->getUID(), $skip)) {

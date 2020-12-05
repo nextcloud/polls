@@ -91,7 +91,7 @@ class UserGroupClass implements \JsonSerializable {
 	/**
 	 * @return string
 	 */
-	public function getPublicId() {
+	public function getPublicId(): string {
 		return $this->id;
 	}
 
@@ -107,10 +107,7 @@ class UserGroupClass implements \JsonSerializable {
 		return $this->language;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getDisplayName() {
+	public function getDisplayName(): string {
 		return $this->displayName;
 	}
 
@@ -143,49 +140,45 @@ class UserGroupClass implements \JsonSerializable {
 		return $this->isNoUser;
 	}
 
-	public function setType($type) {
+	public function setType(string $type): string {
 		$this->type = $type;
 		return $this->type;
 	}
 
-	public function setDisplayName($displayName) {
+	public function setDisplayName(string $displayName): string {
 		$this->displayName = $displayName;
 		return $this->displayName;
 	}
 
-	public function setDescription($description) {
+	public function setDescription(string $description): string {
 		$this->description = $description;
 		return $this->description;
 	}
 
-	public function setEmailAddress($emailAddress) {
+	public function setEmailAddress(string $emailAddress) : string{
 		$this->emailAddress = $emailAddress;
 		return $this->emailAddress;
 	}
 
-	public function setLanguage($language) {
+	public function setLanguage(string $language): string {
 		$this->language = $language;
 		return $this->language;
 	}
 
-	public function setOrganisation($organisation) {
+	public function setOrganisation($organisation): string {
 		$this->organisation = $organisation;
 		return $this->organisation;
 	}
 
 	/**
-	 * @return array
-	 *
-	 * @psalm-return array<empty, empty>
+	* @return UserGroupClass[]
 	 */
 	public static function search() {
 		return [];
 	}
 
 	/**
-	 * @return array
-	 *
-	 * @psalm-return array<empty, empty>
+	 * @return UserGroupClass[]
 	 */
 	public function getMembers() {
 		return [];

@@ -47,7 +47,7 @@ class NotificationService {
 	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp('polls')
-			->setObject('poll', $pollId)
+			->setObject('poll', strval($pollId))
 			->setUser($this->userId);
 		$this->notificationManager->markProcessed($notification);
 	}
@@ -57,7 +57,7 @@ class NotificationService {
 		$notification->setApp('polls')
 			->setUser($recipient)
 			->setDateTime(new DateTime())
-			->setObject('poll', $pollId)
+			->setObject('poll', strval($pollId))
 			->setSubject('invitation', ['pollId' => $pollId, 'recipient' => $recipient]);
 		$this->notificationManager->notify($notification);
 		return true;

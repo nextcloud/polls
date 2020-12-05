@@ -55,11 +55,11 @@ class Group extends UserGroupClass {
 	}
 
 	/**
-	 * @return array
+	 * @return Group[]
 	 *
-	 * @psalm-return list<mixed>
+	 * @psalm-return list<Group>
 	 */
-	public static function search(string $query = '', array $skip = []) {
+	public static function search(string $query = '', array $skip = []): array {
 		$groups = [];
 		foreach (self::listRaw($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
@@ -71,10 +71,8 @@ class Group extends UserGroupClass {
 
 	/**
 	 * @return User[]
-	 *
-	 * @psalm-return non-empty-list<User>
 	 */
-	public function getMembers() {
+	public function getMembers(): array {
 		$members = [];
 		foreach (array_keys(\OC::$server->getGroupManager()->displayNamesInGroup($this->id)) as $member) {
 			$members[] = new User($member);

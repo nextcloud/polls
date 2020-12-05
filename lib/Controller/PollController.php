@@ -29,8 +29,8 @@ use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\DB\Share;
-use OCA\Polls\DB\Poll;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
