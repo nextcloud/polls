@@ -43,14 +43,6 @@ class CommentService {
 	/** @var Acl */
 	private $acl;
 
-	/**
-	 * CommentService constructor.
-	 * @param CommentMapper $commentMapper
-	 * @param Comment $comment
-	 * @param AnonymizeService $anonymizer
-	 * @param Acl $acl
-	 */
-
 	public function __construct(
 		CommentMapper $commentMapper,
 		Comment $comment,
@@ -66,13 +58,8 @@ class CommentService {
 	/**
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $token
-	 * @return array
-	 * @throws NotAuthorizedException
 	 */
-	public function list($pollId = 0, $acl = null) {
+	public function list(int $pollId = 0): array {
 		$this->acl->setPollId($pollId);
 
 		if ($this->acl->getAllowSeeUsernames()) {
@@ -85,14 +72,8 @@ class CommentService {
 
 	/**
 	 * Add comment
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $token
-	 * @param string $message
-	 * @return Comment
-	 * @throws NotAuthorizedException
 	 */
-	public function add($pollId = 0, $token = '', $message) {
+	public function add(?int $pollId = 0, ?string $token = '', string $message): Comment {
 		if ($token) {
 			$this->acl->setToken($token)->requestComment();
 		} else {
@@ -109,13 +90,8 @@ class CommentService {
 
 	/**
 	 * Delete comment
-	 * @NoAdminRequired
-	 * @param int $commentId
-	 * @param string $token
-	 * @return Comment
-	 * @throws NotAuthorizedException
 	 */
-	public function delete($commentId, $token = '') {
+	public function delete(int $commentId, string $token = ''): Comment {
 		$this->comment = $this->commentMapper->find($commentId);
 
 		if ($token) {

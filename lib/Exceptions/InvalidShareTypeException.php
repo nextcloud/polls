@@ -26,10 +26,6 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class InvalidShareTypeException extends Exception {
-	/**
-	 * InvalidShareTypeEception Constructor
-	 * @param string $e exception message
-	 */
 	public function __construct($e = 'Invalid share type') {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

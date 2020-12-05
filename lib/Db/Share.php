@@ -29,7 +29,7 @@ use OCP\AppFramework\Db\Entity;
 use OCA\Polls\Model\UserGroupClass;
 
 /**
- * @method string getId()
+ * @method int getId()
  * @method void setId(integer $value)
  * @method string getToken()
  * @method void setToken(string $value)
@@ -43,7 +43,7 @@ use OCA\Polls\Model\UserGroupClass;
  * @method void setEmailAddress(string $value)
  * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
- * @method int getDisplayName()
+ * @method string getDisplayName()
  * @method void setDisplayName(string $value)
  */
 class Share extends Entity implements JsonSerializable {
@@ -100,9 +100,6 @@ class Share extends Entity implements JsonSerializable {
 		];
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getURL() {
 		if ($this->type === self::TYPE_USER || $this->type === self::TYPE_GROUP) {
 			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
@@ -119,11 +116,7 @@ class Share extends Entity implements JsonSerializable {
 		}
 	}
 
-	/**
-	 * getUserId
-	 * @return string
-	 */
-	public function getUserId() {
+	public function getUserId(): string {
 		if ($this->type === self::TYPE_CONTACTGROUP) {
 			// contactsgroup had the prefix contactgroup_ until version 1.5
 			// strip it out
@@ -134,11 +127,7 @@ class Share extends Entity implements JsonSerializable {
 		return $this->userId;
 	}
 
-	/**
-	 * getUserObject
-	 * @return UserGroupClass
-	 */
-	public function getUserObject() {
+	public function getUserObject(): UserGroupClass {
 		return UserGroupClass::getUserGroupChild(
 			$this->type,
 			$this->userId,
@@ -148,7 +137,6 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * getMembers
 	 * @return UserGroupClass[]
 	 */
 	public function getMembers() {

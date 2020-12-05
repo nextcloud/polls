@@ -30,10 +30,6 @@ use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 use OCP\Security\ISecureRandom;
 
-/**
- * Installation class for the polls app.
- * Initial db creation
- */
 class Version0010Date20191227063812 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
@@ -42,21 +38,13 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 	/** @var IConfig */
 	protected $config;
 
-	/**
-	 * @param IDBConnection $connection
-	 * @param IConfig $config
-	 */
 	public function __construct(IDBConnection $connection, IConfig $config) {
 		$this->connection = $connection;
 		$this->config = $config;
 	}
 
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null|ISchemaWrapper
-	 * @since 13.0.0
+	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
@@ -231,10 +219,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @since 13.0.0
+	 * @return void
 	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
@@ -252,34 +237,31 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 	}
 
 
-	private function resolveAccess($access) {
+	private function resolveAccess($access): string {
 		if ($access === 'public') {
 			return 'public';
-		} else {
-			return 'hidden';
 		}
-	}
-
-	private function resolveOptions($maybe) {
-		if ($maybe) {
-			return json_encode(['yes', 'no', 'maybe']);
-		} else {
-			return json_encode(['yes', 'no']);
-		}
-	}
-
-	private function resolveType($type) {
-		if ($type) {
-			return 'textPoll';
-		} else {
-			return 'datePoll';
-		}
+		return 'hidden';
 	}
 
 	/**
-	 * Copy public tokens
+	 * @return false|string
 	 */
-	protected function migrateEvents() {
+	private function resolveOptions($maybe) {
+		if ($maybe) {
+			return json_encode(['yes', 'no', 'maybe']);
+		}
+		return json_encode(['yes', 'no']);
+	}
+
+	private function resolveType($type): string {
+		if ($type) {
+			return 'textPoll';
+		}
+		return 'datePoll';
+	}
+
+	protected function migrateEvents(): void {
 		$insert = $this->connection->getQueryBuilder();
 		$insert
 			->insert('polls_polls')
@@ -334,7 +316,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 	/**
 	 * Copy public tokens
 	 */
-	protected function copyTokens() {
+	protected function copyTokens(): void {
 		$insert = $this->connection->getQueryBuilder();
 		$insert->insert('polls_share')
 			->values([

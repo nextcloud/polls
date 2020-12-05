@@ -35,6 +35,7 @@ use OCP\Mail\IEMailTemplate;
 
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
@@ -77,21 +78,6 @@ class MailService {
 	/** @var LogMapper */
 	private $logMapper;
 
-	/**
-	 * MailService constructor.
-	 * @param IUserManager $userManager
-	 * @param IGroupManager $groupManager
-	 * @param IConfig $config
-	 * @param IURLGenerator $urlGenerator
-	 * @param IL10N $trans
-	 * @param IFactory $transFactory
-	 * @param IMailer $mailer
-	 * @param SubscriptionMapper $subscriptionMapper
-	 * @param ShareMapper $shareMapper
-	 * @param PollMapper $pollMapper
-	 * @param LogMapper $logMapper
-	 */
-
 	public function __construct(
 		IUserManager $userManager,
 		IGroupManager $groupManager,
@@ -118,18 +104,7 @@ class MailService {
 		$this->logMapper = $logMapper;
 	}
 
-
-	/**
-	 * sendMail - Send eMail and evaluate recipient's mail address
-	 * and displayname if $userId is a site user
-	 * @param IEmailTemplate $emailTemplate
-	 * @param String $userId
-	 * @param String $emailAddress, ignored, when $userId is set
-	 * @param String $displayName, ignored, when $userId is set
-	 * @return String
-	 */
-
-	private function sendMail($emailTemplate, $emailAddress, $displayName) {
+	private function sendMail(IEmailTemplate $emailTemplate, string $emailAddress, string $displayName): void {
 		if (!$emailAddress || !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
 			throw new \Exception('Invalid email address (' . $emailAddress . ')');
 		}
@@ -139,20 +114,13 @@ class MailService {
 			$message->setTo([$emailAddress => $displayName]);
 			$message->useTemplate($emailTemplate);
 			$this->mailer->send($message);
-
-			return null;
 		} catch (\Exception $e) {
 			\OC::$server->getLogger()->logException($e->getMessage(), ['app' => 'polls']);
 			throw $e;
 		}
 	}
 
-	/**
-	 * @param integer $pollId
-	 * @param string $userId
-	 * @return string
-	 */
-	public function resolveEmailAddress($pollId, $userId) {
+	public function resolveEmailAddress(int $pollId, string $userId): string {
 		if ($this->userManager->get($userId) instanceof IUser) {
 			return \OC::$server->getConfig()->getUserValue($userId, 'settings', 'email');
 		}
@@ -169,10 +137,7 @@ class MailService {
 		return $userId;
 	}
 
-	/**
-	 * @param string $token
-	 */
-	public function sendInvitation($token) {
+	public function sendInvitation(string $token): array {
 		$share = $this->shareMapper->findByToken($token);
 		$poll = $this->pollMapper->find($share->getPollId());
 		$sentMails = [];
@@ -203,7 +168,7 @@ class MailService {
 		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
 	}
 
-	public function sendNotifications() {
+	public function sendNotifications(): void {
 		$subscriptions = [];
 		$log = $this->logMapper->findUnprocessedPolls();
 
@@ -246,14 +211,7 @@ class MailService {
 		}
 	}
 
-	/**
-	 * getLogString
-	 * @param Log $logItem
-	 * @param string $displayName
-	 * @return string
-	 */
-
-	private function getLogString($logItem, $displayName) {
+	private function getLogString(Log $logItem, string $displayName): string {
 		if ($logItem->getMessage()) {
 			return $logItem->getMessage();
 		}
@@ -278,14 +236,7 @@ class MailService {
 		}
 	}
 
-	/**
-	 * generateNotification
-	 * @param UserGroupClass $recipient
-	 * @param Poll $poll
-	 * @return Object $emailTemplate
-	 */
-
-	private function generateNotification($recipient, $poll, $url, $log) {
+	private function generateNotification(UserGroupClass $recipient, Poll $poll, string $url, array $log): IEMailTemplate {
 		if ($recipient->getLanguage()) {
 			$this->trans = $this->transFactory->get('polls', $recipient->getLanguage());
 		} else {
@@ -337,14 +288,7 @@ class MailService {
 		return $emailTemplate;
 	}
 
-	/**
-	 * generateInvitation
-	 * @param UserGroupClass $recipient
-	 * @param Poll $poll
-	 * @return Object $emailTemplate
-	 */
-
-	private function generateInvitation($recipient, $poll, $url) {
+	private function generateInvitation(UserGroupClass $recipient, Poll $poll, string $url): IEMailTemplate {
 		$owner = $poll->getOwnerUserObject();
 		if ($recipient->getLanguage()) {
 			$this->trans = $this->transFactory->get('polls', $recipient->getLanguage());

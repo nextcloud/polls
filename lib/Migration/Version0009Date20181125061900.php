@@ -41,21 +41,13 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 	/** @var IConfig */
 	protected $config;
 
-	/**
-	 * @param IDBConnection $connection
-	 * @param IConfig $config
-	 */
 	public function __construct(IDBConnection $connection, IConfig $config) {
 		$this->connection = $connection;
 		$this->config = $config;
 	}
 
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null|ISchemaWrapper
-	 * @since 13.0.0
+	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
@@ -213,10 +205,9 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @since 13.0.0
+	 * 	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 *
+	 * @return void
 	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
@@ -235,7 +226,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 	/**
 	 * Copy date options
 	 */
-	protected function copyDateOptions() {
+	protected function copyDateOptions(): void {
 		$insert = $this->connection->getQueryBuilder();
 		$insert->insert('polls_options')
 			->values([
@@ -258,7 +249,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 	/**
 	 * Copy text options
 	 */
-	protected function copyTextOptions() {
+	protected function copyTextOptions(): void {
 		$insert = $this->connection->getQueryBuilder();
 		$insert->insert('polls_options')
 			->values([
@@ -281,7 +272,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 	/**
 	 * Copy date votes
 	 */
-	protected function copyDateVotes() {
+	protected function copyDateVotes(): void {
 		$insert = $this->connection->getQueryBuilder();
 		$insert->insert('polls_votes')
 			->values([
@@ -310,7 +301,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 	/**
 	 * Copy text votes
 	 */
-	protected function copyTextVotes() {
+	protected function copyTextVotes(): void {
 		$insert = $this->connection->getQueryBuilder();
 		$insert->insert('polls_votes')
 			->values([
@@ -336,11 +327,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		$result->closeCursor();
 	}
 
-	/**
-	 * @param int $voteType
-	 * @return string
-	 */
-	protected function findOptionId($pollId, $text) {
+	protected function findOptionId($pollId, ?string $text) {
 		$queryFind = $this->connection->getQueryBuilder();
 		$queryFind->select(['id'])
 			->from('polls_options')
@@ -360,7 +347,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		}
 	}
 
-	protected function translateVoteTypeToAnswer($voteType) {
+	protected function translateVoteTypeToAnswer($voteType): string {
 		switch ($voteType) {
 			case 0:
 				$answer = "no";

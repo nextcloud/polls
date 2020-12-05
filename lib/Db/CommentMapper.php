@@ -33,22 +33,16 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class CommentMapper extends QBMapper {
 
-	/**
-	 * CommentMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_comments', '\OCA\Polls\Db\Comment');
 	}
 
 	/**
-	 * @param int $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Comment
 	 */
-
-	public function find($id) {
+	public function find(int $id): Comment {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -61,12 +55,10 @@ class CommentMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Comment[]
 	 */
-
-	public function findByPoll($pollId) {
+	public function findByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -79,9 +71,9 @@ class CommentMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
+	 * @return void
 	 */
-	public function deleteByPoll($pollId) {
+	public function deleteByPoll($pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -93,9 +85,9 @@ class CommentMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $id
+	 * @return void
 	 */
-	public function deleteComment($id) {
+	public function deleteComment($id): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

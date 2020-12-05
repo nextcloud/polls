@@ -28,11 +28,6 @@ class Email extends UserGroupClass {
 	public const TYPE = 'email';
 	public const ICON = 'icon-mail';
 
-	/**
-	 * Email constructor.
-	 * @param $id
-	 * @param $displayName
-	 */
 	public function __construct(
 		$id
 	) {
@@ -43,8 +38,7 @@ class Email extends UserGroupClass {
 	}
 
 	/**
-	 * getDisplayName
-	 * @return String
+	 * @return string
 	 */
 	public function getDisplayName() {
 		if (!$this->displayName) {

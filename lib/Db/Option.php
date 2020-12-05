@@ -89,8 +89,7 @@ class Option extends Entity implements JsonSerializable {
 	 * Temporary fix
 	 * Make sure, order is eqal to timestamp in date polls
 	 */
-	// TODO: remove by time
-	private function orderCorrection($timestamp, $order) {
+	private function orderCorrection(int $timestamp, int $order): int {
 		if ($timestamp) {
 			return $timestamp;
 		} else {

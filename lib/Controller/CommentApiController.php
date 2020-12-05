@@ -36,13 +36,6 @@ class CommentApiController extends ApiController {
 
 	use ResponseHandle;
 
-	/**
-	 * CommentApiController constructor
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param CommentService $commentService
-	 */
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -61,10 +54,8 @@ class CommentApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function list($pollId) {
+	public function list($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['comments' => $this->commentService->list($pollId)];
 		});
@@ -75,11 +66,8 @@ class CommentApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $message
-	 * @return DataResponse
 	 */
-	public function add($pollId, $message) {
+	public function add($pollId, $message): DataResponse {
 		return $this->response(function () use ($pollId, $message) {
 			return ['comment'=> $this->commentService->add($pollId, null, $message)];
 		});
@@ -90,10 +78,8 @@ class CommentApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $commentId
-	 * @return DataResponse
 	 */
-	public function delete($commentId) {
+	public function delete($commentId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($commentId) {
 			return ['comment'=> $this->commentService->delete($commentId)];
 		});

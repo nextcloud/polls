@@ -38,12 +38,6 @@ class VoteApiController extends ApiController {
 	/** @var VoteService */
 	private $voteService;
 
-	/**
-	 * VoteAPIController constructor
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param VoteService $voteService
-	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -62,10 +56,8 @@ class VoteApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function list($pollId) {
+	public function list($pollId): DataResponse {
 		try {
 			return new DataResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
@@ -80,11 +72,8 @@ class VoteApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $optionId
-	 * @param string $setTo
-	 * @return DataResponse
 	 */
-	public function set($optionId, $setTo) {
+	public function set($optionId, $setTo): DataResponse {
 		try {
 			return new DataResponse(['vote' => $this->voteService->set($optionId, $setTo)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

@@ -35,13 +35,6 @@ class CommentController extends Controller {
 
 	use ResponseHandle;
 
-	/**
-	 * CommentController constructor
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param CommentService $commentService
-	 */
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -54,11 +47,8 @@ class CommentController extends Controller {
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $message
-	 * @return DataResponse
 	 */
-	public function add($pollId, $message) {
+	public function add($pollId, $message): DataResponse {
 		return $this->response(function () use ($pollId, $message) {
 			return ['comment' => $this->commentService->add($pollId, null, $message)];
 		});
@@ -67,10 +57,8 @@ class CommentController extends Controller {
 	/**
 	 * Delete Comment
 	 * @NoAdminRequired
-	 * @param int $commentId
-	 * @return DataResponse
 	 */
-	public function delete($commentId) {
+	public function delete($commentId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($commentId) {
 			return ['comment' => $this->commentService->delete($commentId)];
 		});

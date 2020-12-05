@@ -36,25 +36,15 @@ class CalendarEvent implements \JsonSerializable {
 	/** @var ICalendar */
 	protected $calendar;
 
-	/**
-	 * CalendarEvent constructor.
-	 * @param Array $calDav
-	 * @param ICalendar $calendar
-	 */
 	public function __construct(
-		$calDav,
-		$calendar
+		array $calDav,
+		ICalendar $calendar
 	) {
 		$this->calDav = $calDav;
 		$this->calendar = $calendar;
 		$this->event = $this->calDav['objects'][0];
 	}
 
-
-	/**
-	 * getAllDay
-	 * @return string
-	 */
 	public function getAllDay() {
 		if ($this->getEnd() - $this->getStart() === 86400) {
 			return $this->event['DTSTART'][0]->format('Y-m-d');
@@ -63,58 +53,30 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	/**
-	 * getCalendarName
-	 * @return string
-	 */
-	public function getCalendarName() {
+	public function getCalendarName(): ?string {
 		return $this->calendar->getDisplayName();
 	}
 
-	/**
-	 * getCalendarKey
-	 * @return string
-	 */
-	public function getCalendarKey() {
+	public function getCalendarKey(): string {
 		return $this->calendar->getKey();
 	}
 
-	/**
-	 * getDisplayColor
-	 * @return string
-	 */
-	public function getDisplayColor() {
+	public function getDisplayColor(): ?string {
 		return $this->calendar->getDisplayColor();
 	}
 
-	/**
-	 * getId
-	 * @return int
-	 */
 	public function getId() {
 		return $this->calDav['id'];
 	}
 
-	/**
-	 * getUID
-	 * @return string
-	 */
 	public function getUID() {
 		return $this->event['UID'][0];
 	}
 
-	/**
-	 * getSummary
-	 * @return string
-	 */
 	public function getSummary() {
 		return $this->event['SUMMARY'][0];
 	}
 
-	/**
-	 * getDescription
-	 * @return string
-	 */
 	public function getDescription() {
 		if (isset($this->event['DESCRIPTION'][0])) {
 			return $this->event['DESCRIPTION'][0];
@@ -123,10 +85,6 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	/**
-	 * getLocation
-	 * @return string
-	 */
 	public function getLocation() {
 		if (isset($this->event['LOCATION'][0])) {
 			return $this->event['LOCATION'][0];
@@ -135,10 +93,6 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	/**
-	 * getStart
-	 * @return int
-	 */
 	public function getStart() {
 		if (isset($this->event['DTSTART'][0])) {
 			return $this->event['DTSTART'][0]->getTimestamp();
@@ -147,10 +101,6 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	/**
-	 * getEnd
-	 * @return int
-	 */
 	public function getEnd() {
 		if (isset($this->event['DTEND'][0])) {
 			return $this->event['DTEND'][0]->getTimestamp();
@@ -159,10 +109,6 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	/**
-	 * getStatus
-	 * @return string
-	 */
 	public function getStatus() {
 		if (isset($this->event['STATUS'][0])) {
 			return $this->event['STATUS'][0];
@@ -171,17 +117,10 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	/**
-	 * getCalDav
-	 * @return
-	 */
-	public function getCalDav() {
+	public function getCalDav(): array {
 		return $this->calDav;
 	}
 
-	/**
-	 * @return array
-	 */
 	public function jsonSerialize(): array {
 		return	[
 			'id'			=> $this->getId(),

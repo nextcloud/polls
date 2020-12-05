@@ -33,21 +33,15 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class OptionMapper extends QBMapper {
 
-	/**
-	 * TextMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_options', '\OCA\Polls\Db\Option');
 	}
 
 	/**
-	 * @param int $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Option
 	 */
-
-	public function find($id) {
+	public function find(int $id): Option {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -60,12 +54,10 @@ class OptionMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Option[]
 	 */
-
-	public function findByPoll($pollId) {
+	public function findByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -79,12 +71,10 @@ class OptionMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Option
 	 */
-
-	public function findByPollAndText($pollId, $pollOptionText) {
+	public function findByPollAndText($pollId, $pollOptionText): Option {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -100,10 +90,7 @@ class OptionMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	/**
-	 * @param int $optionId
-	 */
-	public function remove($optionId) {
+	public function remove($optionId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -114,10 +101,7 @@ class OptionMapper extends QBMapper {
 		$qb->execute();
 	}
 
-	/**
-	 * @param int $pollId
-	 */
-	public function deleteByPoll($pollId) {
+	public function deleteByPoll($pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

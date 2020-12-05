@@ -34,12 +34,6 @@ class Circle extends UserGroupClass {
 
 	private $circle;
 
-	/**
-	 * Group constructor.
-	 * @param $id
-	 * @param $displayName
-	 * @throws CirclesNotEnabledException
-	 */
 	public function __construct(
 		$id
 	) {
@@ -54,20 +48,11 @@ class Circle extends UserGroupClass {
 		}
 	}
 
-	/**
-	 * isEnabled
-	 * @return Boolean
-	 */
 	public static function isEnabled() {
 		return \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
 
-	/**
-	 * listRaw
-	 * @param string $query
-	 * @return Array
-	 */
-	public static function listRaw($query = '') {
+	public static function listRaw(string $query = '') {
 		$circles = [];
 		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
 			$circles = Circles::listCircles(\OCA\Circles\Model\Circle::CIRCLES_ALL, $query);
@@ -77,12 +62,11 @@ class Circle extends UserGroupClass {
 	}
 
 	/**
-	 * search
-	 * @param string $query
-	 * @param array $skip - group names to skip in return array
-	 * @return Circle[]
+	 * @return array
+	 *
+	 * @psalm-return list<mixed>
 	 */
-	public static function search($query = '', $skip = []) {
+	public static function search(string $query = '', $skip = []) {
 		$circles = [];
 		foreach (self::listRaw($query) as $circle) {
 			if (!in_array($circle->getUniqueId(), $skip)) {
@@ -93,10 +77,6 @@ class Circle extends UserGroupClass {
 		return $circles;
 	}
 
-	/**
-	 * Get a list of circle members
-	 * @return User[]
-	 */
 	public function getMembers() {
 		$members = [];
 		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {

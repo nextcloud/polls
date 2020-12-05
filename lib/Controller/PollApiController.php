@@ -35,16 +35,8 @@
 
  class PollApiController extends ApiController {
 
-
 	 /** @var PollService */
  	private $pollService;
-
- 	/**
- 	 * PollApiController constructor
- 	 * @param string $appName
- 	 * @param IRequest $request
- 	 * @param PollService $pollService
- 	 */
 
  	public function __construct(
 		string $appName,
@@ -55,16 +47,13 @@
  		$this->pollService = $pollService;
  	}
 
-
  	/**
  	 * Get list of polls
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @return DataResponse
  	 */
-
- 	public function list() {
+ 	public function list(): DataResponse {
  		try {
  			return new DataResponse(['polls' => $this->pollService->list()], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -74,16 +63,13 @@
  		}
  	}
 
-
  	/**
  	 * get poll configuration
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @param int $pollId
- 	 * @return DataResponse
  	 */
- 	public function get($pollId) {
+ 	public function get($pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -98,11 +84,8 @@
  	 * @NoAdminRequired
  	 * @NoCSRFRequired
  	 * @CORS
- 	 * @param Array $poll
- 	 * @return DataResponse
  	 */
-
- 	public function add($type, $title) {
+ 	public function add($type, $title): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
  		} catch (Exception $e) {
@@ -115,12 +98,8 @@
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @param int $pollId
- 	 * @param array $poll
- 	 * @return DataResponse
  	 */
-
- 	public function update($pollId, $poll) {
+ 	public function update($pollId, $poll): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->update($pollId, $poll)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -135,11 +114,8 @@
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @param int $pollId
- 	 * @return DataResponse
  	 */
-
- 	public function switchDeleted($pollId) {
+ 	public function switchDeleted($pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->switchDeleted($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -154,11 +130,8 @@
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @param int $pollId
- 	 * @return DataResponse
  	 */
-
- 	public function delete($pollId) {
+ 	public function delete($pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -173,10 +146,8 @@
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @param int $pollId
- 	 * @return DataResponse
  	 */
- 	public function clone($pollId) {
+ 	public function clone($pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
  		} catch (DoesNotExistException $e) {
@@ -191,11 +162,8 @@
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @param Array $poll
- 	 * @return DataResponse
  	 */
-
- 	public function getParticipantsEmailAddresses($pollId) {
+ 	public function getParticipantsEmailAddresses($pollId): DataResponse {
  		try {
  			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -210,11 +178,8 @@
  	 * @NoAdminRequired
  	 * @CORS
  	 * @NoCSRFRequired
- 	 * @param Array $poll
- 	 * @return DataResponse
  	 */
-
- 	public function enum() {
+ 	public function enum(): DataResponse {
  		return new DataResponse($this->pollService->getValidEnum(), Http::STATUS_OK);
  	}
  }

@@ -36,13 +36,6 @@ class SubscriptionController extends Controller {
 
 	use ResponseHandle;
 
-	/**
-	 * SubscriptionController constructor.
-	 * @param string $appName
-	 * @param SubscriptionService $subscriptionService
-	 * @param IRequest $request
-	 */
-
 	public function __construct(
 		string $appName,
 		SubscriptionService $subscriptionService,
@@ -55,10 +48,8 @@ class SubscriptionController extends Controller {
 	/**
 	 * Get subscription status
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function get($pollId = 0) {
+	public function get($pollId = 0): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['subscribed' => $this->subscriptionService->get($pollId)];
 		});
@@ -67,10 +58,8 @@ class SubscriptionController extends Controller {
 	/**
 	 * subscribe
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function subscribe($pollId) {
+	public function subscribe($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['subscribed' => $this->subscriptionService->set($pollId, '', true)];
 		});
@@ -79,10 +68,8 @@ class SubscriptionController extends Controller {
 	/**
 	 * Unsubscribe
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function unsubscribe($pollId) {
+	public function unsubscribe($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['subscribed' => $this->subscriptionService->set($pollId, '', false)];
 		});

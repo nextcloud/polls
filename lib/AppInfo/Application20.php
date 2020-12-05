@@ -33,10 +33,7 @@ use OCA\Polls\Notification\Notifier;
 
 class Application20 extends App implements IBootstrap {
 	public const APP_ID = 'polls';
-	/**
-	 * Application constructor.
-	 * @param array $urlParams
-	 */
+
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
 	}

@@ -33,15 +33,14 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class LogMapper extends QBMapper {
 
-	/**
-	 * LogMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}
 
-	public function find($id) {
+	/**
+	 * @return Log
+	 */
+	public function find($id): Log {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -53,7 +52,11 @@ class LogMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	public function findByPollId($pollId) {
+	/**
+	 * @return Log[]
+	 * @psalm-return array<array-key, Log>
+	 */
+	public function findByPollId($pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -65,7 +68,11 @@ class LogMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findUnprocessed() {
+	/**
+	 * @return Log[]
+	 * @psalm-return array<array-key, Log>
+	 */
+	public function findUnprocessed(): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -77,7 +84,11 @@ class LogMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findUnprocessedPolls() {
+	/**
+	 * @return Log[]
+	 * @psalm-return array<array-key, Log>
+	 */
+	public function findUnprocessedPolls(): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->selectDistinct('poll_id')
@@ -86,7 +97,10 @@ class LogMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function getLastRecord($pollId) {
+	/**
+	 * @return Log
+	 */
+	public function getLastRecord(int $pollId): Log {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

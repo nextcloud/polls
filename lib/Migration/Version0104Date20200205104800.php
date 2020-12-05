@@ -29,10 +29,6 @@ use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-/**
- * Installation class for the polls app.
- * Initial db creation
- */
 class Version0104Date20200205104800 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
@@ -51,10 +47,6 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 		'polls_votes',
 	];
 
-	/**
-	 * @param IDBConnection $connection
-	 * @param IConfig $config
-	 */
 	public function __construct(IDBConnection $connection, IConfig $config) {
 		$this->connection = $connection;
 		$this->config = $config;
@@ -62,11 +54,7 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 
 
 	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null
-	 * @since 13.0.0
+	 * @return void
 	 */
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		// delete all orphaned entries by selecting all rows
@@ -93,13 +81,6 @@ class Version0104Date20200205104800 extends SimpleMigrationStep {
 		}
 	}
 
-	/**
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 * @return null|ISchemaWrapper
-	 * @since 13.0.0
-	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		// add an on delete fk contraint to all tables referencing the main polls table
 		/** @var ISchemaWrapper $schema */

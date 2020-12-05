@@ -44,11 +44,6 @@ class SystemService {
 	/** @var ShareMapper */
 	private $shareMapper;
 
-	/**
-	 * SystemService constructor.
-	 * @param VoteMapper $voteMapper
-	 * @param ShareMapper $shareMapper
-	 */
 	public function __construct(
 		VoteMapper $voteMapper,
 		ShareMapper $shareMapper
@@ -58,23 +53,21 @@ class SystemService {
 	}
 
 	/**
-	 * Validate string as email address
-	 * @NoAdminRequired
-	 * @param string $emailAddress
+	 * 	 * Validate string as email address
+	 *
 	 * @return bool
 	 */
-	private static function isValidEmail($emailAddress) {
+	private static function isValidEmail(string $emailAddress): bool {
 		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $emailAddress)) ? false : true;
 	}
 
 	/**
-	 * Validate email address and throw an exception
-	 * return true, if email address is a valid
-	 * @NoAdminRequired
-	 * @return Boolean
-	 * @throws InvalidEmailAddress
+	 * 	 * Validate email address and throw an exception
+	 * 	 * return true, if email address is a valid
+	 *
+	 * @return true
 	 */
-	public static function validateEmailAddress($emailAddress, $emptyIsValid = false) {
+	public static function validateEmailAddress(string $emailAddress, bool $emptyIsValid = false): bool {
 		if (!$emailAddress && $emptyIsValid) {
 			return true;
 		} elseif (!self::isValidEmail($emailAddress)) {
@@ -85,12 +78,9 @@ class SystemService {
 
 	/**
 	 * Get a list of users
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param array $skip - usernames to skip in return array
-	 * @return User[]
+	 * @param string[] $skip
 	 */
-	public static function getSiteUsers($query = '', $skip = []) {
+	public static function getSiteUsers(string $query = '', array $skip = []) {
 		$users = [];
 		foreach (\OC::$server->getUserManager()->searchDisplayName($query) as $user) {
 			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
@@ -101,27 +91,22 @@ class SystemService {
 	}
 
 	/**
-	 * Get a combined list of users, groups, circles, contact groups and contacts
-	 * @NoAdminRequired
-	 * @param string $query
-	 * @param bool $getGroups - search in groups
-	 * @param bool $getUsers - search in site users
-	 * @param bool $getContacts - search in contacs
-	 * @param bool $getContactGroups - search in contacs
-	 * @param array $skipGroups - group names to skip in return array
-	 * @param array $skipUsers - user names to skip in return array
-	 * @return User[]
+	 * 	 * Get a combined list of users, groups, circles, contact groups and contacts
+	 *
+	 * @return (Circle|Email|Group|User|mixed)[]
+	 *
+	 * @psalm-return array<array-key, Circle|Email|Group|User|mixed>
 	 */
 	public function getSiteUsersAndGroups(
-		$query = '',
-		$getGroups = true,
-		$getUsers = true,
-		$getContacts = true,
-		$getContactGroups = true,
-		$getMail = false,
-		$skipGroups = [],
-		$skipUsers = []
-	) {
+		string $query = '',
+		bool $getGroups = true,
+		bool $getUsers = true,
+		bool $getContacts = true,
+		bool $getContactGroups = true,
+		bool $getMail = false,
+		array $skipGroups = [],
+		array $skipUsers = []
+	): array {
 		$list = [];
 		if ($query !== '') {
 			if ($getMail && self::isValidEmail($query)) {
@@ -150,26 +135,24 @@ class SystemService {
 	}
 
 	/**
-	 * Validate it the user name is reservrd
-	 * return false, if this username already exists as a user or as
-	 * a participant of the poll
-	 * @NoAdminRequired
-	 * @return Boolean
-	 * @throws TooShortException
-	 * @throws InvalidUsernameException
+	 * 	 * Validate it the user name is reserved
+	 * 	 * return false, if this username already exists as a user or as
+	 * 	 * a participant of the poll
+	 *
+	 * @return true
 	 */
-	public function validatePublicUsername($userName, $token) {
+	public function validatePublicUsername(string $userName, string $token): bool {
 		$share = $this->shareMapper->findByToken($token);
 
 		if ($share->getDisplayName() === $userName) {
 			return true;
 		}
-		
+
 		$userName = strtolower(trim($userName));
 
 		// return forbidden, if the length of the userame is lower than 3 characters
 		if (strlen($userName) < 3) {
-			return new TooShortException('Username must have at least 3 characters');
+			throw new TooShortException('Username must have at least 3 characters');
 		}
 
 		// get all groups

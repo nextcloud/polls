@@ -30,7 +30,7 @@ use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\DB\Share;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\NotificationService;
 use OCA\Polls\Service\ShareService;
@@ -54,14 +54,6 @@ class ShareController extends Controller {
 	/** @var NotificationService */
 	private $notificationService;
 
-	/**
-	 * ShareController constructor.
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param MailService $mailService
-	 * @param ShareService $shareService
-	 * @param SystemService $systemService
-	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -78,25 +70,27 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * List shares
+	 * 	 * List shares
+	 *
 	 * @NoAdminRequired
-	 * @param int $pollId
+	 *
 	 * @return DataResponse
 	 */
-	public function list($pollId) {
-		return $this->response(function () use ($pollId) {
+	public function list($pollId): DataResponse {
+		return $this->response(function () use ($pollId): array {
 			return ['shares' => $this->shareService->list($pollId)];
 		});
 	}
 
 	/**
-	 * Get share
+	 * 	 * Get share
+	 *
 	 * @NoAdminRequired
-	 * @param string $token
+	 *
 	 * @return DataResponse
 	 */
-	public function get($token) {
-		return $this->response(function () use ($token) {
+	public function get($token): DataResponse {
+		return $this->response(function () use ($token): array {
 			return ['share' => $this->shareService->get($token)];
 		});
 	}
@@ -104,12 +98,8 @@ class ShareController extends Controller {
 	/**
 	 * Add share
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @return DataResponse
 	 */
-	public function add($pollId, $type, $userId = '') {
+	public function add($pollId, $type, $userId = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $type, $userId) {
 			return ['share' => $this->shareService->add($pollId, $type, $userId)];
 		});
@@ -118,14 +108,8 @@ class ShareController extends Controller {
 	/**
 	 * Set email address
 	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @param string $emailAddress
-	 * @return DataResponse
 	 */
-	public function setEmailAddress($token, $emailAddress) {
+	public function setEmailAddress($token, $emailAddress): DataResponse {
 		return $this->response(function () use ($token, $emailAddress) {
 			return ['share' => $this->shareService->setEmailAddress($token, $emailAddress)];
 		});
@@ -135,11 +119,8 @@ class ShareController extends Controller {
 	 * Create a personal share from a public share
 	 * or update an email share with the username
 	 * @NoAdminRequired
-	 * @param string $token
-	 * @param string $userName
-	 * @return DataResponse
 	 */
-	public function personal($token, $userName, $emailAddress = '') {
+	public function personal($token, $userName, $emailAddress = ''): DataResponse {
 		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
 			return ['share' => $this->shareService->personal($token, $userName, $emailAddress)];
 		});
@@ -148,11 +129,9 @@ class ShareController extends Controller {
 	/**
 	 * Delete share
 	 * @NoAdminRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
 
-	public function delete($token) {
+	public function delete($token): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($token) {
 			return ['share' => $this->shareService->delete($token)];
 		});
@@ -162,17 +141,15 @@ class ShareController extends Controller {
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
 	 * @NoAdminRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function sendInvitation($token) {
+	public function sendInvitation($token): DataResponse {
 		return $this->response(function () use ($token) {
 			$share = $this->shareService->get($token);
 			if ($share->getType() === Share::TYPE_USER) {
 				$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
-			// skip this atm, to send invitations as mail too, if user is a site user
-					// $sentResult = ['sentMails' => [new User($share->getuserId())]];
-					// $this->shareService->setInvitationSent($token);
+				// skip this atm, to send invitations as mail too, if user is a site user
+				// $sentResult = ['sentMails' => [new User($share->getuserId())]];
+				// $this->shareService->setInvitationSent($token);
 			} elseif ($share->getType() === Share::TYPE_GROUP) {
 				foreach ($share->getMembers() as $member) {
 					$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
@@ -189,10 +166,8 @@ class ShareController extends Controller {
 	/**
 	 * resolve contact group to individual shares
 	 * @NoAdminRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function resolveGroup($token) {
+	public function resolveGroup($token): DataResponse {
 		return $this->response(function () use ($token) {
 			$shares = [];
 			$share = $this->shareService->get($token);

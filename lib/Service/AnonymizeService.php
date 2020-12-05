@@ -56,11 +56,10 @@ class AnonymizeService {
 
 	/**
 	 * Anonymizes the participants of a poll
-	 * @NoAdminRequired
-	 * @param Array $array Input list which should be anonymized must be a collection of Vote or Comment
-	 * @return array Returns the original array with anonymized user names
+	 * $array Input list which should be anonymized must be a collection of Vote or Comment
+	 * Returns the original array with anonymized user names
 	 */
-	private function anonymize($array) {
+	private function anonymize(array $array): array {
 		// get mapping for the complete poll
 		foreach ($array as &$element) {
 			// skip current user
@@ -82,12 +81,9 @@ class AnonymizeService {
 	/**
 	 * Initialize anonymizer with pollId and userId
 	 * Creates a mapping list with unique Anonymous strings based on the partcipants of a poll
-	 * @NoAdminRequired
-	 * @param int $pollId
-	 * @param string $userId - usernames, which will not be anonymized
+	 * $userId - usernames, which will not be anonymized
 	 */
-
-	public function set($pollId, $userId) {
+	public function set(int $pollId, string $userId): void {
 		$this->pollId = $pollId;
 		$this->userId = $userId;
 		$votes = $this->voteMapper->findByPoll($pollId);
@@ -110,20 +106,17 @@ class AnonymizeService {
 
 	/**
 	 * Anonymizes the comments of a poll
-	 * @NoAdminRequired
-	 * @return object Returns anonymized comments
+	 * Returns anonymized comments
 	 */
-	public function getComments() {
-		// get mapping for the complete poll
+	public function getComments(): array {
 		return $this->anonymize($this->commentMapper->findByPoll($this->pollId));
 	}
 
 	/**
 	 * Anonymizes the participants of a poll
-	 * @NoAdminRequired
-	 * @return array Returns anonymized votes
+	 * Returns anonymized votes
 	 */
-	public function getVotes() {
+	public function getVotes(): array {
 		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
 	}
 }

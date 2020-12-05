@@ -32,22 +32,17 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class PreferencesMapper extends QBMapper {
 
-	/**
-	 * PreferencesMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_preferences', '\OCA\Polls\Db\Preferences');
 	}
 
 	/**
-	 * @param string $userId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Preferences
 	 */
 
-	public function find($userId) {
+	public function find($userId): Preferences {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

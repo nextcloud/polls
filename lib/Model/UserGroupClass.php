@@ -62,17 +62,12 @@ class UserGroupClass implements \JsonSerializable {
 	/** @var string */
 	protected $icon = '';
 
-	/** @var boolean */
+	/** @var bool */
 	protected $isNoUser = true;
 
 	/** @var string[] */
 	protected $categories = [];
 
-	/**
-	 * User constructor.
-	 * @param $id
-	 * @param $displayName
-	 */
 	public function __construct(
 		$id,
 		$type,
@@ -89,184 +84,117 @@ class UserGroupClass implements \JsonSerializable {
 		$this->l10n = \OC::$server->getL10N('polls');
 	}
 
-	/**
-	 * getId
-	 * @return String
-	 */
-	public function getId() {
+	public function getId(): string {
 		return $this->id;
 	}
 
 	/**
-	 * getPublicId
-	 * @return String
+	 * @return string
 	 */
 	public function getPublicId() {
 		return $this->id;
 	}
 
-	/**
-	 * getUser
-	 * @return String
-	 */
-	public function getUser() {
+	public function getUser(): string {
 		return $this->id;
 	}
 
-	/**
-	 * getType
-	 * @return String
-	 */
-	public function getType() {
+	public function getType(): string {
 		return $this->type;
 	}
 
-	/**
-	 * getLanguage
-	 * @return String
-	 */
-	public function getLanguage() {
+	public function getLanguage(): string {
 		return $this->language;
 	}
 
 	/**
-	 * getDisplayName
-	 * @return String
+	 * @return string
 	 */
 	public function getDisplayName() {
 		return $this->displayName;
 	}
 
-	/**
-	 * getDescription
-	 * @return String
-	 */
-	public function getDescription() {
+	public function getDescription(): string {
 		return $this->description;
 	}
 
-	/**
-	 * getIcon
-	 * @return String
-	 */
-	public function getIcon() {
+	public function getIcon(): string {
 		return $this->icon;
 	}
 
-	/**
-	 * getEmailAddress
-	 * @return String
-	 */
-	public function getEmailAddress() {
+	public function getEmailAddress(): string {
 		return $this->emailAddress;
 	}
 
-	/**
-	 * getOrganisation
-	 * @return String
-	 */
-	public function getOrganisation() {
+	public function getOrganisation(): string {
 		return $this->organisation;
 	}
 
 	/**
-	 * getCategories
-	 * @return Array
+	 * @return string[]
+	 *
+	 * @psalm-return array<array-key, string>
 	 */
-	public function getCategories() {
+	public function getCategories(): array {
 		return $this->categories;
 	}
 
-	/**
-	 * getOrganisation
-	 * @return String
-	 */
-	public function getIsNoUser() {
+	public function getIsNoUser(): bool {
 		return $this->isNoUser;
 	}
 
-	/**
-	 * setType
-	 * @param string $type
-	 * @return String
-	 */
 	public function setType($type) {
 		$this->type = $type;
 		return $this->type;
 	}
 
-	/**
-	 * setDisplayName
-	 * @param string $displayName
-	 * @return String
-	 */
 	public function setDisplayName($displayName) {
 		$this->displayName = $displayName;
 		return $this->displayName;
 	}
 
-	/**
-	 * setDescription
-	 * @param string $description
-	 * @return String
-	 */
 	public function setDescription($description) {
 		$this->description = $description;
 		return $this->description;
 	}
 
-	/**
-	 * setEmailAddress
-	 * @param string $emailAddress
-	 * @return String
-	 */
 	public function setEmailAddress($emailAddress) {
 		$this->emailAddress = $emailAddress;
 		return $this->emailAddress;
 	}
 
-	/**
-	 * setLanguage
-	 * @param string $language
-	 * @return String
-	 */
 	public function setLanguage($language) {
 		$this->language = $language;
 		return $this->language;
 	}
 
-	/**
-	 * setOrganisation
-	 * @param string $organisation
-	 * @return String
-	 */
 	public function setOrganisation($organisation) {
 		$this->organisation = $organisation;
 		return $this->organisation;
 	}
 
 	/**
-	 * search
-	 * @return Array
-	 * @throws InvalidShareTypeException
+	 * @return array
+	 *
+	 * @psalm-return array<empty, empty>
 	 */
 	public static function search() {
 		return [];
 	}
 
 	/**
-	 * getMembers
 	 * @return array
+	 *
+	 * @psalm-return array<empty, empty>
 	 */
 	public function getMembers() {
 		return [];
 	}
 
 	/**
-	 * getUserGroupChild
-	 * @return UserGroupClass
+	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Group|User
 	 */
-	public static function getUserGroupChild($type, $id, $displayName = '', $emailAddress = '') {
+	public static function getUserGroupChild(string $type, string $id, string $displayName = '', string $emailAddress = '') {
 		switch ($type) {
 			case Group::TYPE:
 				return new Group($id);
@@ -289,9 +217,6 @@ class UserGroupClass implements \JsonSerializable {
 			}
 	}
 
-	/**
-	 * @return array
-	 */
 	public function jsonSerialize(): array {
 		return	[
 			'id'        	=> $this->getId(),

@@ -30,10 +30,6 @@ class User extends UserGroupClass {
 
 	private $user;
 
-	/**
-	 * User constructor.
-	 * @param $id
-	 */
 	public function __construct(
 		$id
 	) {
@@ -48,30 +44,20 @@ class User extends UserGroupClass {
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
 	}
 
-	/**
-	 * getUserIsDisabled
-	 * @return Boolean
-	 */
 	public function getUserIsDisabled() {
 		return !\OC::$server->getUserManager()->get($this->id)->isEnabled();
 	}
 
-	/**
-	 * listRaw
-	 * @param string $query
-	 * @return Array
-	 */
-	public static function listRaw($query = '') {
+	public static function listRaw(string $query = '') {
 		return \OC::$server->getUserManager()->search($query);
 	}
 
 	/**
-	 * search
-	 * @param string $query
-	 * @param array $skip - group names to skip in return array
-	 * @return User[]
+	 * @return array
+	 *
+	 * @psalm-return list<mixed>
 	 */
-	public static function search($query = '', $skip = []) {
+	public static function search(string $query = '', array $skip = []) {
 		$users = [];
 		foreach (self::listRaw($query) as $user) {
 			if (!in_array($user->getUID(), $skip)) {

@@ -39,13 +39,6 @@ class ShareApiController extends ApiController {
 	/** @var MailService */
 	private $mailService;
 
-	/**
-	 * ShareApiController constructor
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param MailService $mailService
-	 * @param ShareService $shareService
-	 */
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -66,10 +59,8 @@ class ShareApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @return DataResponse
 	 */
-	public function list($pollId) {
+	public function list($pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['shares' => $this->shareService->list($pollId)];
 		});
@@ -80,10 +71,8 @@ class ShareApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function get($token) {
+	public function get($token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['share' => $this->shareService->get($token)];
 		});
@@ -94,12 +83,8 @@ class ShareApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @param string $type
-	 * @param string $userId
-	 * @return DataResponse
 	 */
-	public function add($pollId, $type, $userId = '') {
+	public function add($pollId, $type, $userId = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $type, $userId) {
 			return ['share' => $this->shareService->add($pollId, $type, $userId)];
 		});
@@ -110,11 +95,8 @@ class ShareApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
-
-	public function delete($token) {
+	public function delete($token): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($token) {
 			return ['share' => $this->shareService->delete($token)];
 		});
@@ -125,10 +107,8 @@ class ShareApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param string $token
-	 * @return DataResponse
 	 */
-	public function sendInvitation($token) {
+	public function sendInvitation($token): DataResponse {
 		return $this->response(function () use ($token) {
 			$sentResult = $this->mailService->sendInvitation($token);
 			$share = $this->shareService->get($token);

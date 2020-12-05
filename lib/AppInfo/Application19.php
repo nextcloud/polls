@@ -28,10 +28,6 @@ use OCA\Polls\Notification\Notifier;
 
 class Application19 extends App {
 
-	/**
-	 * Application constructor.
-	 * @param array $urlParams
-	 */
 	public function __construct(array $urlParams = []) {
 		parent::__construct('polls', $urlParams);
 		$this->registerNotifications();

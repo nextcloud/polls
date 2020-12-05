@@ -33,21 +33,16 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class PollMapper extends QBMapper {
 
-	/**
-	 * PollMapper constructor.
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_polls', '\OCA\Polls\Db\Poll');
 	}
 
 	/**
-	 * @param int $id
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
 	 */
-	public function find($id) {
+	public function find(int $id): Poll {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -61,7 +56,7 @@ class PollMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return array
+	 * @return Poll[]
 	 */
 	public function findAll() {
 		$qb = $this->db->getQueryBuilder();

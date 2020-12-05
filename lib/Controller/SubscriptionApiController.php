@@ -39,13 +39,6 @@ class SubscriptionApiController extends ApiController {
 	/** @var SubscriptionService */
 	private $subscriptionService;
 
-	/**
-	 * SubscriptionApiController constructor
-	 * @param string $appName
-	 * @param SubscriptionService $subscriptionService
-	 * @param IRequest $request
-	 */
-
 	public function __construct(
 		string $appName,
 		SubscriptionService $subscriptionService,
@@ -63,13 +56,10 @@ class SubscriptionApiController extends ApiController {
 	/**
 	 * Get subscription status
 	 * @NoAdminRequired
-	 * CORS
+	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
-	 * @return DataResponse
-	 * @throws DoesNotExistException
 	 */
-	public function get($pollId) {
+	public function get($pollId): DataResponse {
 		try {
 			$this->subscriptionService->get($pollId, '');
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
@@ -85,9 +75,8 @@ class SubscriptionApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
 	 */
-	public function subscribe($pollId) {
+	public function subscribe($pollId): DataResponse {
 		try {
 			$this->subscriptionService->set($pollId, '', true);
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
@@ -95,14 +84,14 @@ class SubscriptionApiController extends ApiController {
 			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
+
 	/**
 	 * Unsubscribe from poll
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 * @param int $pollId
 	 */
-	public function unsubscribe($pollId) {
+	public function unsubscribe($pollId): DataResponse {
 		try {
 			$this->subscriptionService->set($pollId, '', false);
 			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
