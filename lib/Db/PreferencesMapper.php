@@ -27,6 +27,9 @@ namespace OCA\Polls\Db;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
+/**
+ * @template-extends QBMapper<Preferences>
+ */
 class PreferencesMapper extends QBMapper {
 
 	/**

@@ -28,6 +28,9 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
+/**
+ * @template-extends QBMapper<Subscription>
+ */
 class SubscriptionMapper extends QBMapper {
 
 	/**
@@ -39,7 +42,6 @@ class SubscriptionMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $pollId
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return array

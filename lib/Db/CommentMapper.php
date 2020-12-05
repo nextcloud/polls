@@ -28,6 +28,9 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 
+/**
+ * @template-extends QBMapper<Comment>
+ */
 class CommentMapper extends QBMapper {
 
 	/**
