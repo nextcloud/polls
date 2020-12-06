@@ -54,7 +54,7 @@
 
 	<div v-else class="poll-item__item" :class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
-		<div class="item__title" @click="$emit('goto-poll')">
+		<div class="item__title">
 			<div class="item__title__title">
 				{{ poll.title }}
 			</div>
@@ -63,11 +63,11 @@
 			</div>
 		</div>
 		<slot name="actions" />
-		<div v-tooltip.auto="accessType" :class="'item__access--' + poll.access" @click="$emit('load-poll')" />
-		<div class="item__owner" @click="$emit('load-poll')">
+		<div v-tooltip.auto="accessType" :class="'item__access--' + poll.access" />
+		<div class="item__owner">
 			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
-		<div class="wrapper" @click="$emit('load-poll')">
+		<div class="wrapper">
 			<div class="item__created">
 				{{ timeCreatedRelative }}
 			</div>
@@ -82,7 +82,7 @@
 import moment from '@nextcloud/moment'
 
 export default {
-	name: 'PollItem',
+	name: 'PollItemAdmin',
 
 	props: {
 		header: {

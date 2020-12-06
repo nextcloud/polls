@@ -2,7 +2,6 @@
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
@@ -24,33 +23,44 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Exceptions\Exception;
+
 use OCP\IRequest;
 use OCP\IURLGenerator;
-
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCA\Polls\Service\NotificationService;
 
-class PageController extends Controller {
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Service\PollService;
+
+class AdminController extends Controller {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
-	/** @var NotificationService */
-	private $notificationService;
+
+	/** @var PollService */
+	private $pollService;
+
+	/** @var Poll */
+	private $poll;
+
+	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		IURLGenerator $urlGenerator,
-		NotificationService $notificationService
+		PollService $pollService,
+		Poll $poll
 	) {
 		parent::__construct($appName, $request);
 		$this->urlGenerator = $urlGenerator;
-		$this->notificationService = $notificationService;
+		$this->pollService = $pollService;
+		$this->poll = $poll;
 	}
 
 	/**
-	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
 	public function index(): TemplateResponse {
@@ -59,12 +69,39 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
+	 * Get list of polls for administrative purposes
 	 */
-	public function vote($id): TemplateResponse {
-		$this->notificationService->removeNotification($id);
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
+	public function list(): DataResponse {
+		return $this->response(function () {
+			return $this->pollService->listForAdmin();
+		});
 	}
+
+	/**
+	 * Get list of polls for administrative purposes
+	 */
+	public function takeover(int $pollId): DataResponse {
+		return $this->response(function () use ($pollId) {
+			return $this->pollService->takeover($pollId);
+		});
+	}
+
+	/**
+	 * Switch deleted status (move to deleted polls)
+	 */
+	public function switchDeleted($pollId): DataResponse {
+		return $this->response(function () use ($pollId) {
+			return $this->pollService->switchDeleted($pollId);
+		});
+	}
+
+	/**
+	 * Delete poll
+	 */
+	public function delete($pollId): DataResponse {
+		return $this->responseDeleteTolerant(function () use ($pollId) {
+			return $this->pollService->delete($pollId);
+		});
+	}
+
 }

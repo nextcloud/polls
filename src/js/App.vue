@@ -136,6 +136,13 @@ export default {
 						showError(t('polls', 'Error loading poll list'))
 					})
 			}
+			if (getCurrentUser().isAdmin) {
+
+				this.$store.dispatch('pollsAdmin/load')
+					.catch(() => {
+						showError(t('polls', 'Error loading poll list'))
+					})
+			}
 		},
 	},
 }

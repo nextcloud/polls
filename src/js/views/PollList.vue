@@ -45,11 +45,42 @@
 				class="poll-list__list">
 				<PollItem key="0" :header="true"
 					:sort="sort" :reverse="reverse" @sort-list="setSort($event)" />
-				<li is="PollItem"
-					v-for="(poll, index) in sortedList"
-					:key="poll.id"
-					:poll="poll"
-					@clone-poll="callPoll(index, poll, 'clone')" />
+
+				<PollItem v-for="(poll) in sortedList" :key="poll.id" :poll="poll"
+					@goto-poll="gotoPoll(poll.id)"
+					@load-poll="loadPoll(poll.id)">
+					<template #actions>
+						<Actions :force-menu="true">
+							<ActionButton icon="icon-add"
+								:close-after-click="true"
+								@click="clonePoll(poll.id)">
+								{{ t('polls', 'Clone poll') }}
+							</ActionButton>
+
+							<ActionButton v-if="poll.allowEdit && !poll.deleted"
+								icon="icon-delete"
+								:close-after-click="true"
+								@click="switchDeleted(poll.id)">
+								{{ t('polls', 'Delete poll') }}
+							</ActionButton>
+
+							<ActionButton v-if="poll.allowEdit && poll.deleted"
+								icon="icon-history"
+								:close-after-click="true"
+								@click="switchDeleted(poll.id)">
+								{{ t('polls', 'Restore poll') }}
+							</ActionButton>
+
+							<ActionButton v-if="poll.allowEdit && poll.deleted"
+								icon="icon-delete"
+								class="danger"
+								:close-after-click="true"
+								@click="deletePermanently(poll.id)">
+								{{ t('polls', 'Delete poll permanently') }}
+							</ActionButton>
+						</Actions>
+					</template>
+				</PollItem>
 			</transition-group>
 		</div>
 		<LoadingOverlay v-if="isLoading" />
@@ -57,18 +88,21 @@
 </template>
 
 <script>
-import { AppContent, EmptyContent } from '@nextcloud/vue'
-import PollItem from '../components/PollList/PollItem'
 import { mapGetters } from 'vuex'
 import sortBy from 'lodash/sortBy'
-import LoadingOverlay from '../components/Base/LoadingOverlay'
+import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
+import PollItem from '../components/PollList/PollItem'
+import LoadingOverlay from '../components/Base/LoadingOverlay'
 
 export default {
 	name: 'PollList',
 
 	components: {
 		AppContent,
+		Actions,
+		ActionButton,
 		LoadingOverlay,
 		PollItem,
 		EmptyContent,
@@ -156,6 +190,24 @@ export default {
 	},
 
 	methods: {
+		gotoPoll(pollId) {
+			this.$router
+				.push({ name: 'vote', params: { id: pollId } })
+		},
+
+		loadPoll(pollId) {
+			this.$store
+				.dispatch({ type: 'poll/get', pollId: pollId })
+				.then(() => {
+					emit('toggle-sidebar', { open: true })
+				})
+				.catch((error) => {
+					console.error(error)
+					showError(t('polls', 'Error loading poll'))
+				})
+
+		},
+
 		refreshView() {
 			window.document.title = t('polls', 'Polls') + ' - ' + this.title
 			if (!this.filteredPolls(this.$route.params.type).find(poll => {
@@ -182,6 +234,39 @@ export default {
 					id: poll.id,
 				},
 			})
+		},
+
+		switchDeleted(pollId) {
+			this.$store
+				.dispatch('poll/switchDeleted', { pollId: pollId })
+				.then(() => {
+					emit('update-polls')
+				})
+				.catch(() => {
+					showError(t('polls', 'Error deleting poll.'))
+				})
+		},
+
+		deletePermanently(pollId) {
+			this.$store
+				.dispatch('poll/delete', { pollId: pollId })
+				.then(() => {
+					emit('update-polls')
+				})
+				.catch(() => {
+					showError(t('polls', 'Error deleting poll.'))
+				})
+		},
+
+		clonePoll(pollId) {
+			this.$store
+				.dispatch('poll/clone', { pollId: pollId })
+				.then(() => {
+					emit('update-polls')
+				})
+				.catch(() => {
+					showError(t('polls', 'Error cloning poll.'))
+				})
 		},
 	},
 }

@@ -28,6 +28,7 @@ import { generateUrl } from '@nextcloud/router'
 
 // Dynamic loading
 const List = () => import('./views/PollList')
+const Administration = () => import('./views/Administration')
 const Vote = () => import('./views/Vote')
 const NotFound = () => import('./views/NotFound')
 
@@ -54,6 +55,13 @@ export default new Router({
 			},
 			props: true,
 			name: 'list',
+		},
+		{
+			path: '/administration',
+			components: {
+				default: Administration,
+			},
+			name: 'administration',
 		},
 		{
 			path: '/not-found',

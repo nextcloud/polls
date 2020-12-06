@@ -73,7 +73,7 @@ class OptionService {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($pollId);
+			$this->acl->setPollId($pollId)->requestView();
 		}
 
 		if (!$this->acl->getAllowView()) {
@@ -93,7 +93,7 @@ class OptionService {
 	 * @return Option
 	 */
 	public function get(int $optionId): Option {
-		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId());
+		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())->requestView();
 
 		if (!$this->acl->getAllowView()) {
 			throw new NotAuthorizedException;

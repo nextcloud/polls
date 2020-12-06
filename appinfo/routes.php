@@ -36,6 +36,10 @@ return [
 		['name' => 'public#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'public#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
 
+		['name' => 'admin#index', 'url' => '/administration', 'verb' => 'GET'],
+		['name' => 'admin#list', 'url' => '/administration/polls', 'verb' => 'GET'],
+		['name' => 'admin#takeover', 'url' => '/administration/poll/{pollId}/takeover', 'verb' => 'GET'],
+
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],
 		['name' => 'page#index', 'url' => '/list/{id}', 'verb' => 'GET', 'postfix' => 'list'],

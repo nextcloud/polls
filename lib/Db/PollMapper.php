@@ -65,4 +65,19 @@ class PollMapper extends QBMapper {
 
 		return $this->findEntities($qb);
 	}
+
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Poll[]
+	 */
+	public function findForAdmin(string $userId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->neq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   );
+
+		return $this->findEntities($qb);
+	}
 }

@@ -58,7 +58,7 @@ class CommentService {
 	 * Read all comments of a poll based on the poll id and return list as array
 	 */
 	public function list(int $pollId = 0): array {
-		$this->acl->setPollId($pollId);
+		$this->acl->setPollId($pollId)->requestView();
 
 		if ($this->acl->getAllowSeeUsernames()) {
 			return $this->commentMapper->findByPoll($this->acl->getPollId());
