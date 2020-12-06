@@ -43,13 +43,11 @@ class PollMapper extends QBMapper {
 	 */
 	public function find(int $id): Poll {
 		$qb = $this->db->getQueryBuilder();
-
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
 			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
-
 		return $this->findEntity($qb);
 	}
 
@@ -57,12 +55,23 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Poll[]
 	 */
-	public function findAll() {
+	public function findAll(): array {
 		$qb = $this->db->getQueryBuilder();
-
 		$qb->select('*')
 		   ->from($this->getTableName());
+		return $this->findEntities($qb);
+	}
 
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Poll[]
+	 */
+	public function findForMe(string $userId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->orWhere($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
 }
