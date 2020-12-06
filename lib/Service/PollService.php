@@ -85,7 +85,7 @@ class PollService {
 	public function list(): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->findAll();
+			$polls = $this->pollMapper->findForMe(\OC::$server->getUserSession()->getUser()->getUID());
 
 			foreach ($polls as $poll) {
 				try {
