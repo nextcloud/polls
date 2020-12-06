@@ -48,8 +48,6 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "Henkilökohtainen linkkisi tähän kyselyyn: {linkURL}",
     "Copy this link to the clipboard" : "Kopioi tämä linkki leikepöydälle",
     "Resend invitation mail to {emailAdress}" : "Lähetä uudelleen sähköpostikutsu osoitteeseen {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Kutsu lähetetty osoitteeseen {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Virhe lähettäessä kutsua osoitteeseen {emailAddress}",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Äänestys on päättynyt {dateString}. Vahvistetut vaihtoehdot näkyvät alla.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Äänestys on päättynyt {dateString}, mutta yhtään vaihtoehtoa ei ole vielä vahvistettu.",
     "You can place your vote until {dateString}." : "Voit äänestää {dateString} asti.",

@@ -47,8 +47,6 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "Hau da bozketa honetara joateko zure esteka pertsonala: {linkURL}",
     "Copy this link to the clipboard" : "Kopiatu esteka hau arbelera",
     "Resend invitation mail to {emailAdress}" : "Birbidali gonbidapen mezua {emailAdress} e-postara",
-    "Invitation sent to {emailAddress}" : "Gonbidapen mezua ondo bidali da {emailAdress} helbidera",
-    "Error sending invitation to {emailAddress}" : "Errorea gonbidapen mezua {emailAdress} helbidera bidaltzean",
     "started this poll on {dateString}." : "Bozketa {dateString}-an hasi zen.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Bozketa hau itxita dago {dateString}-tik. Berretsitako aukerak behean daude markatuta.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Bozketa hau itxita dago {dateString}-tik, baina oraingoz ez dago berretsitako aukerarik.",

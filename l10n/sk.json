@@ -39,8 +39,6 @@
     "This is a public poll." : "Toto je verejná anketa.",
     "Your personal link to this poll: {linkURL}" : "Váš osobný odkaz k tejto ankete: {linkURL}",
     "Copy this link to the clipboard" : "Skopírovať tento odkaz do schránky",
-    "Invitation sent to {emailAddress}" : "Pozvánka poslaná na {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Chyba pri posielaní pozvánky na {emailAddress}",
     "You can confirm your favorites now in the options tab in the sidebar." : "Svoje obľúbené položky môžete teraz potvrdiť na karte možností na bočnom paneli.",
     "You can place your vote until {dateString}." : "Hlasovať môžete do {dateString}.",
     "Results are hidden." : "Výsledky sú skryté.",

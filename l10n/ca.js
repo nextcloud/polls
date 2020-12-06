@@ -43,8 +43,6 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "El vostre enllaç personal a aquesta enquesta: {linkURL}",
     "Copy this link to the clipboard" : "Copia l'enllaç al porta-retalls",
     "Resend invitation mail to {emailAdress}" : "Torna a enviar el correu d'invitació a {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Invitació enviada a {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "S'ha produït un error en enviar la invitació a {emailAddress}",
     "You can confirm your favorites now in the options tab in the sidebar." : "Podeu confirmar els vostres preferits ara a la pestanya opcions de la barra lateral.",
     "You can place your vote until {dateString}." : "Podeu posar el vostre vot fins a {dateString}.",
     "This is an anonymous poll. Except to the poll owner, participants names are hidden." : "Aquesta és una enquesta anònima. Excepte el propietari de l'enquesta, els noms dels participants estan ocults.",

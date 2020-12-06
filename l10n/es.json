@@ -48,8 +48,6 @@
     "Your personal link to this poll: {linkURL}" : "Tu enlace personal a esta votación: {linkURL}",
     "Copy this link to the clipboard" : "Copiar este enlace al portapapeles",
     "Resend invitation mail to {emailAdress}" : "Volver a enviar el correo de invitación a {emailAddress}",
-    "Invitation sent to {emailAddress}" : "Invitación enviada a {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Error al enviar la invitación a {emailAddress}",
     "started this poll on {dateString}." : "inició esta votación el {dateString}.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Esta encuesta está cerrada desde {dateString}. Las opciones confirmadas se indican debajo.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Esta encuesta está cerrada desde {dateString}, pero de momento no hay opciones confirmadas.",

@@ -50,8 +50,6 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "Váš osobní odkaz na tuto anketu: {linkURL}",
     "Copy this link to the clipboard" : "Zkopírovat tento odkaz do schránky",
     "Resend invitation mail to {emailAdress}" : "Znovu zaslat e-mail s pozvánkou na {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Pozvánka odeslána na {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Chyba při odesílání poznánky na {emailAddress}",
     "started this poll on {dateString}." : "zahájil(a) tuto anketu {dateString}.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Tato anketa je od {dateString} uzavřena. Potvrzené možnosti jsou označené níže.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Tato anketa je od {dateString} uzavřena, ale doposud zde nejsou žádné potvrzené volby.",

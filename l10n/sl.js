@@ -56,8 +56,6 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "Osebna povezava do ankete: {linkURL}",
     "Copy this link to the clipboard" : "Kopiraj povezavo v odložišče",
     "Resend invitation mail to {emailAdress}" : "Ponovno pošlji vabilo na {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Vabilo je poslano na naslov {emailAddress}.",
-    "Error sending invitation to {emailAddress}" : "Prišlo je do napake med pošiljanjem vabila na {emailAddress}.",
     "started this poll on {dateString}." : "objavi vprašalnik {dateString}.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Ta anketa je zaprta od {dateString}. Potrjene možnosti so označene spodaj.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Ta anketa je zaprta od {dateString}, vendar do sedaj ni bilo potrjenih izbranih možnosti.",

@@ -41,8 +41,6 @@
     "Your personal link to this poll: {linkURL}" : "Ваша лична веза за ово гласање: {linkURL}",
     "Copy this link to the clipboard" : "Копирај ову везу у оставу",
     "Resend invitation mail to {emailAdress}" : "Поново пошаљи позивницу на {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Позивница послата на {emailAdress}",
-    "Error sending invitation to {emailAddress}" : "Грешка приликом слања позивнице на {emailAdress}",
     "You can confirm your favorites now in the options tab in the sidebar." : "Сада можете потврдити омиљене у језичку опција у бочној траци.",
     "You can place your vote until {dateString}." : "Можете гласати до {dateString}.",
     "To participate, tell us how we can call you!" : "Да би учествовао, реци нам како да те зовемо!",

@@ -46,8 +46,6 @@
     "Your personal link to this poll: {linkURL}" : "Jūsų asmeninė nuoroda į šią apklausą: {linkURL}",
     "Copy this link to the clipboard" : "Kopijuoti šią nuorodą į iškarpinę",
     "Resend invitation mail to {emailAdress}" : "Iš naujo siųsti pakvietimą el. paštu į {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Pakvietimas išsiųstas, adresu {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Klaida siunčiant pakvietimą, adresu {emailAddress}",
     "started this poll on {dateString}." : "pradėjo šią apklausą {dateString}.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Ši apklausa pasibaigė {dateString}. Žemiau yra pažymėti patvirtinti variantai.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Ši apklausa pasibaigė {dateString}, bet iki šiol nėra patvirtintų variantų.",

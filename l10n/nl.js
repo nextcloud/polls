@@ -47,8 +47,6 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "Je persoonlijke link naar deze peiling: {linkURL}",
     "Copy this link to the clipboard" : "Kopiëer deze link naar het klembord",
     "Resend invitation mail to {emailAdress}" : "Verzend de uitnodigingsmail opnieuw naar {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Uitnodiging verzonden naar {emailAdress}",
-    "Error sending invitation to {emailAddress}" : "Fout bij verzenden van uitnodiging naar {emailAddress}",
     "started this poll on {dateString}." : " startte deze peiling op {dateString}. ",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Deze poll is gesloten sinds {dateString}. De bevestigde keuzes zijn hieronder aangeduid.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Deze peiling is gesloten sinds {dateString}, maar er zijn tot nu toe geen bevestigde opties.",

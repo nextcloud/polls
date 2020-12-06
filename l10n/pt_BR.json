@@ -44,8 +44,6 @@
     "Your personal link to this poll: {linkURL}" : "Seu link pessoal para esta enquete: {linkURL}",
     "Copy this link to the clipboard" : "Copiar link para a área de transferência",
     "Resend invitation mail to {emailAdress}" : "Reenviar convite para {emailAdress}",
-    "Invitation sent to {emailAddress}" : "Convite enviado para {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Erro ao enviar convite para {emailAddress}",
     "started this poll on {dateString}." : "iniciou esta enquete em {dateString}.",
     "You can confirm your favorites now in the options tab in the sidebar." : "Você pode confirmar seus favoritos agora na aba opções da barra lateral.",
     "You can place your vote until {dateString}." : "Você pode votar até {dateString}.",
