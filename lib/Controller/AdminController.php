@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Exceptions\Exception;
-
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\AppFramework\Controller;
@@ -103,5 +101,4 @@ class AdminController extends Controller {
 			return $this->pollService->delete($pollId);
 		});
 	}
-
 }
