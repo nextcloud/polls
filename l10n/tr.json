@@ -54,6 +54,8 @@
     "Your personal link to this poll: {linkURL}" : "Bu ankete erişebileceğiniz kişisel bağlantınız: {linkURL}",
     "Copy this link to the clipboard" : "Bu bağlantıyı panoya kopyala",
     "Resend invitation mail to {emailAdress}" : "Çağrı e-postasını {emailAdress} adresine yeniden gönder",
+    "Invitation resent to {emailAddress}" : "Çağrı {emailAdress} adresine yeniden gönderildi",
+    "Mail could not be resent to {emailAddress}" : "Çağrı {emailAdress} adresine yeniden gönderilemedi",
     "started this poll on {dateString}." : "bu ankete {dateString} zamanında başladı.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Bu anket {dateString} tarihinde tamamlanmış. Onaylanmış seçenekler aşağıda işaretlenmiş.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Bu anket {dateString} tarihinde tamamlanmış. Ancak şu ana kadar bir seçenek onaylanmamış.",

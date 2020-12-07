@@ -54,6 +54,8 @@
     "Your personal link to this poll: {linkURL}" : "A súa ligazón persoal a esta enquisa: {linkURL}",
     "Copy this link to the clipboard" : "Copiar esta ligazón no portapapeis",
     "Resend invitation mail to {emailAdress}" : "Volver enviar o correo de convite a {emailAdress}",
+    "Invitation resent to {emailAddress}" : "Convite reenviado a {emailAddress}",
+    "Mail could not be resent to {emailAddress}" : "Non foi posíbel reenviar o correo a {emailAddress}",
     "started this poll on {dateString}." : "esta enquisa comezou o {dateString}.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Esta enquisa está pechada dende {dateString}. As opcións confirmadas están marcadas a seguir.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Esta enquisa esta pechada dende {dateString} pero non hai opcións confirmadas ata agora.",

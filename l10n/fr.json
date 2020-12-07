@@ -53,6 +53,8 @@
     "Your personal link to this poll: {linkURL}" : "Votre lien personnel vers ce sondage : {linkURL}",
     "Copy this link to the clipboard" : "Copier ce lien dans le presse-papier",
     "Resend invitation mail to {emailAdress}" : "Renvoyer le mail d'invitation à {emailAdress}",
+    "Invitation resent to {emailAddress}" : "Invitation renvoyée à {emailAddress}",
+    "Mail could not be resent to {emailAddress}" : "Impossible de renvoyer l'invitation à {emailAddress}",
     "started this poll on {dateString}." : " a démarré ce sondage le {dateString}.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Ce sondage est fermé depuis le {dateString}. Les options confirmées sont indiquées ci-dessous.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Ce sondage est fermé depuis le {dateString}, mais il n'y a aucune option confirmée jusqu'à présent.",

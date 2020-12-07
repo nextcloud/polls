@@ -56,6 +56,8 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "Twój osobisty link do sondy: {linkURL}",
     "Copy this link to the clipboard" : "Kopiuj link do schowka",
     "Resend invitation mail to {emailAdress}" : "Wyślij ponownie e-mail z zaproszeniem na {emailAdress}",
+    "Invitation resent to {emailAddress}" : "Zaproszenie ponownie wysłane do {emailAddress}",
+    "Mail could not be resent to {emailAddress}" : "Nie można wysłać ponownie e-maila do {emailAddress}",
     "started this poll on {dateString}." : "rozpoczął sondę {dateString}.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Ta sonda jest zamknięta od {dateString}. Zatwierdzone opcje zaznaczono poniżej.",
     "This poll is closed since {dateString}, but there are no confirmed options until now." : "Ta sonda jest zamknięta od {dateString}, ale do tej pory nie ma zatwierdzonych opcji.",
