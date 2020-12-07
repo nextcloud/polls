@@ -13,7 +13,7 @@ module.exports = {
 		OCA: true,
 		Vue: true,
 		VueRouter: true,
-		moment:true,
+		moment: true,
 	},
 	parserOptions: {
 		parser: 'babel-eslint',
@@ -32,12 +32,12 @@ module.exports = {
 		'node',
 	],
 	rules: {
-		"@nextcloud/no-deprecations": "warn",
-		"@nextcloud/no-removed-apis": "error",
+		'@nextcloud/no-deprecations': 'warn',
+		'@nextcloud/no-removed-apis': 'error',
 		'node/no-missing-import': ['error', {
-            'allowModules': [],
-            'tryExtensions': ['.js', '.vue']
-        }],
+			allowModules: [],
+			tryExtensions: ['.js', '.vue'],
+		}],
 		'comma-dangle': ['error', 'always-multiline'],
 		// space before function ()
 		'space-before-function-paren': ['error', 'never'],
@@ -63,17 +63,17 @@ module.exports = {
 		'node/no-unpublished-require': ['off'],
 		'node/no-unsupported-features/es-syntax': ['off'],
 		// kebab case components for vuejs
-		'vue/component-name-in-template-casing': ['error', 'PascalCase' , {
-		    'registeredComponentsOnly': true,
-		    'ignores': []
-		  }],
+		'vue/component-name-in-template-casing': ['error', 'PascalCase', {
+			registeredComponentsOnly: true,
+			ignores: [],
+		}],
 		// space before self-closing elements
 		'vue/html-closing-bracket-spacing': 'error',
 		// code spacing with attributes
 		// newline before closing bracket
 		'vue/html-closing-bracket-newline': ['error', {
-			'singleline': 'never',
-			'multiline': 'never'
+			singleline: 'never',
+			multiline: 'never',
 		}],
 		'vue/max-attributes-per-line': [
 			'error',
@@ -81,9 +81,9 @@ module.exports = {
 				singleline: 3,
 				multiline: {
 					max: 3,
-					allowFirstLine: true
-				}
-			}
-		]
-	}
+					allowFirstLine: true,
+				},
+			},
+		],
+	},
 }
