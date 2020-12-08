@@ -208,7 +208,7 @@ export default {
 		},
 
 		loadUsersAsync(query) {
-			this.isLoading = false
+			this.isLoading = true
 			this.siteUsersListOptions.query = query
 
 			if (this.searchToken) {
@@ -226,6 +226,7 @@ export default {
 						// request was cancelled
 					} else {
 						console.error(error.response)
+						this.isLoading = false
 					}
 				})
 		},
