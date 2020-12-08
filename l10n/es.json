@@ -10,6 +10,8 @@
     "%s invited you to a poll" : "%s te invitó a una encuesta",
     "{user} has invited you to the poll \"%s\"." : "{user} te ha invitado.a la encuesta \"%s\".",
     "- %s voted." : "- %s votado.",
+    "- Updated poll configuration. Please check your votes." : "- Actualizada la configuración de la encuesta. Por favor, comprueba tus votos.",
+    "- The poll got deleted." : "- Se ha borrado la votación.",
     "Polls App - New Activity" : "App de Encuestas - Nueva actividad",
     "\"{title}\" had recent activity: " : "\"{title}\" ha tenido la reciente actividad: ",
     "A user" : "Un usuario",
