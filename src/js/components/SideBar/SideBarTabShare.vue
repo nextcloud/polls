@@ -149,6 +149,7 @@ export default {
 
 	data() {
 		return {
+			searchToken: null,
 			users: [],
 			isLoading: false,
 			placeholder: t('polls', 'Enter a name to start the search'),
@@ -209,13 +210,23 @@ export default {
 		loadUsersAsync(query) {
 			this.isLoading = false
 			this.siteUsersListOptions.query = query
-			axios.post(generateUrl('apps/polls/siteusers/get'), this.siteUsersListOptions)
+
+			if (this.searchToken) {
+				this.searchToken.cancel()
+			}
+			this.searchToken = axios.CancelToken.source()
+
+			axios.post(generateUrl('apps/polls/siteusers/get'), this.siteUsersListOptions, { cancelToken: this.searchToken.token })
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
 				})
 				.catch((error) => {
-					console.error(error.response)
+					if (axios.isCancel(error)) {
+						// request was cancelled
+					} else {
+						console.error(error.response)
+					}
 				})
 		},
 
