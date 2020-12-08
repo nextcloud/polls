@@ -55,15 +55,17 @@
 	<div v-else class="poll-item__item" :class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
 		<div class="item__title" @click="$emit('goto-poll')">
-			<div class="item__title__title">
-				{{ poll.title }}
+			<div class="item-title-wrapper">
+				<div class="item__title__title">
+					{{ poll.title }}
+				</div>
 			</div>
 			<div class="item__title__description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</div>
 		<slot name="actions" />
-		<div v-tooltip.auto="accessType" :class="'item__access--' + poll.access" @click="$emit('load-poll')" />
+		<div v-tooltip.auto="accessType" :class="accessIcon" @click="$emit('load-poll')" />
 		<div class="item__owner" @click="$emit('load-poll')">
 			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
@@ -72,7 +74,10 @@
 				{{ timeCreatedRelative }}
 			</div>
 			<div class="item__expiry">
-				{{ timeExpirationRelative }}
+				<Badge
+					:title="timeExpirationRelative"
+					:icon="expiryIcon"
+					:class="expiryClass" />
 			</div>
 		</div>
 	</div>
@@ -80,9 +85,13 @@
 
 <script>
 import moment from '@nextcloud/moment'
+import Badge from '../Base/Badge'
 
 export default {
 	name: 'PollItem',
+	components: {
+		Badge,
+	},
 
 	props: {
 		header: {
@@ -111,14 +120,30 @@ export default {
 
 	computed: {
 		closed() {
-			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
+			return (this.poll.expire && moment.unix(this.poll.expire).diff() < 0)
+		},
+
+		closeToClosing() {
+			return (!this.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)
 		},
 
 		accessType() {
-			if (this.poll.access === 'public') {
+			if (this.poll.deleted) {
+				return t('polls', 'Deleted')
+			} else if (this.poll.access === 'public') {
 				return t('polls', 'All users')
 			} else {
 				return t('polls', 'Only invited users')
+			}
+		},
+
+		accessIcon() {
+			if (this.poll.deleted) {
+				return 'item__access--deleted'
+			} else if (this.poll.access === 'public') {
+				return 'item__access--public'
+			} else {
+				return 'item__access--hidden'
 			}
 		},
 
@@ -137,6 +162,25 @@ export default {
 				return t('polls', 'never')
 			}
 		},
+
+		expiryClass() {
+			if (this.closed) {
+				return 'error'
+			} else if (this.poll.expire && this.closeToClosing) {
+				return 'warning'
+			} else if (this.poll.expire && !this.closed) {
+				return 'success'
+			} else {
+				return 'success'
+			}
+		},
+		expiryIcon() {
+			if (this.poll.expire) {
+				return 'icon-calendar'
+			} else {
+				return 'icon-calendar'
+			}
+		},
 		timeCreatedRelative() {
 			return moment.unix(this.poll.created).fromNow()
 		},
@@ -144,126 +188,145 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-[class^='item__'] {
-	padding-right: 8px;
-	display: flex;
-	align-items: center;
-	flex: 0 0 auto;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-
-}
-
-.item__icon-spacer {
-	width: 44px;
-	min-width: 44px;
-}
-
-.item__title {
-	display: flex;
-	flex-direction: column;
-	flex: 1 0 auto;
-	align-items: stretch;
-	width: 210px;
-}
-
-.item__title__description {
-	opacity: 0.5;
-}
-
-.item__access {
-	width: 80px;
-}
-
-.item__owner {
-	width: 230px;
-}
-
-.wrapper {
-	width: 240px;
-	display: flex;
-	flex: 0 1 auto;
-	flex-wrap: wrap;
-}
-
-.item__created, .item__expiry {
-	width: 110px;
-}
-
-.closed {
-	.item__expiry {
-		color: var(--color-error);
+<style lang="scss">
+	[class^='item__'], .action-item {
+		display: flex;
+		align-items: center;
+		flex: 0 0 auto;
+		padding-right: 8px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
-}
 
-[class^='poll-item__'] {
-	display: flex;
-	flex: 1;
-	padding: 4px 8px;
-	border-bottom: 1px solid var(--color-border-dark);
-	background-color: var(--color-main-background)
-}
+	.poll-item__item > .action-item {
+		display:flex;
+	}
 
-.poll-item__header {
-	opacity: 0.7;
-	flex: auto;
-	height: 4em;
-	align-items: center;
-	padding-left: 52px;
-}
+	.item__icon-spacer {
+		width: 44px;
+		min-width: 44px;
+	}
 
-.sortable {
-	cursor: pointer;
-	&:hover {
-		.sort-indicator.hidden {
-			visibility: visible;
-			display: block;
+	.item-title-wrapper {
+		display: flex;
+	}
+
+	.item__title {
+		display: flex;
+		flex-direction: column;
+		flex: 1 0 auto;
+		align-items: stretch;
+		width: 210px;
+		display: inherit;
+		justify-content: center;
+	}
+
+	.item__title__description {
+		opacity: 0.5;
+		display: inherit;
+	}
+
+	.item__access {
+		width: 80px;
+	}
+
+	.item__owner {
+		width: 230px;
+	}
+
+	.wrapper {
+		width: 325px;
+		display: flex;
+		flex: 0 1 auto;
+		flex-wrap: wrap;
+	}
+
+	.item__created, {
+		width: 110px;
+	}
+
+	.item__expiry {
+		width: 185px;
+		.badge {
+			width: 100%;
 		}
 	}
-}
 
-[class^='item__type'] {
-	width: 44px;
-	background-repeat: no-repeat;
-	background-position: center;
-	min-width: 16px;
-	min-height: 16px;
-}
-
-.item__type--textPoll {
-	background-image: var(--icon-toggle-filelist-000);
-}
-
-.item__type--datePoll {
-	background-image: var(--icon-calendar-000);
-}
-
-[class^='item__access'] {
-	width: 44px;
-	background-repeat: no-repeat;
-	background-position: center;
-	min-width: 16px;
-	min-height: 16px;
-}
-
-.item__access--public {
-	background-image: var(--icon-polls-public-poll);
-}
-
-.item__access--hidden {
-	background-image: var(--icon-polls-hidden-poll);
-}
-
-.poll-item__item {
-	&.active {
-		background-color: var(--color-primary-light);
+	.closed {
+		.item__expiry {
+			color: var(--color-error);
+		}
 	}
-	&:hover {
-		background-color: var(--color-background-hover);
-	}
-}
 
+	[class^='poll-item__'] {
+		display: flex;
+		flex: 1;
+		padding: 4px 8px;
+		border-bottom: 1px solid var(--color-border-dark);
+		background-color: var(--color-main-background);
+	}
+
+	.poll-item__item {
+		&.active {
+			background-color: var(--color-primary-light);
+		}
+		&:hover {
+			background-color: var(--color-background-hover);
+		}
+	}
+
+	.poll-item__header {
+		opacity: 0.7;
+		flex: auto;
+		height: 4em;
+		align-items: center;
+		padding-left: 52px;
+	}
+
+	.sortable {
+		cursor: pointer;
+		&:hover {
+			.sort-indicator.hidden {
+				visibility: visible;
+				display: block;
+			}
+		}
+	}
+
+	[class^='item__type'] {
+		width: 44px;
+		background-repeat: no-repeat;
+		background-position: center;
+		min-width: 16px;
+		min-height: 16px;
+	}
+
+	.item__type--textPoll {
+		background-image: var(--icon-toggle-filelist-000);
+	}
+
+	.item__type--datePoll {
+		background-image: var(--icon-calendar-000);
+	}
+
+	[class^='item__access'] {
+		width: 44px;
+		background-repeat: no-repeat;
+		background-position: center;
+		min-width: 16px;
+		min-height: 16px;
+	}
+
+	.item__access--public {
+		background-image: var(--icon-polls-public-poll);
+	}
+
+	.item__access--hidden {
+		background-image: var(--icon-polls-hidden-poll);
+	}
+
+	.item__access--deleted {
+		background-image: var(--icon-delete-000);
+	}
 </style>

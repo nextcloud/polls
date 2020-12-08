@@ -53,16 +53,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.badge {
-		border: solid 1px;
-		border-radius: var(--border-radius);
-		padding: 1px 4px;
-		margin: 0 4px;
+	h2 .badge {
 		font-size: 60%;
+	}
+
+	.badge {
+		// border: solid 1px;
+		border-radius: var(--border-radius);
+		padding: 5px;
+		margin: 8px 4px;
 		text-align: center;
+		line-height: 1.1em;
+		overflow: hidden;
+		text-overflow: ellipsis;
 
 		&.withIcon {
-			padding-left: 26px;
+			padding-left: 25px !important;
+			text-align: left;
 			background-position: 4px center;
 		}
 
