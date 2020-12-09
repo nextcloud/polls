@@ -93,9 +93,9 @@ class SystemService {
 	/**
 	 * 	 * Get a combined list of users, groups, circles, contact groups and contacts
 	 *
-	 * @return (Circle|Email|Group|User|mixed)[]
+	 * @return (Circle|Email|Group|User|Contact|ContactGroup|mixed)[]
 	 *
-	 * @psalm-return array<array-key, Circle|Email|Group|User|mixed>
+	 * @psalm-return array<array-key, Circle|Email|Group|User|Contact|ContactGroup|mixed>
 	 */
 	public function getSiteUsersAndGroups(
 		string $query = '',
@@ -103,7 +103,7 @@ class SystemService {
 		bool $getUsers = true,
 		bool $getContacts = true,
 		bool $getContactGroups = true,
-		bool $getMail = false,
+		bool $getMail = true,
 		array $skipGroups = [],
 		array $skipUsers = []
 	): array {
@@ -125,7 +125,7 @@ class SystemService {
 				$list = array_merge($list, Contact::search($query));
 			}
 
-			if ($getContacts) {
+			if ($getContactGroups) {
 				$list = array_merge($list, ContactGroup::search($query));
 			}
 			$list = array_merge($list, Circle::search($query));

@@ -126,13 +126,14 @@
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
-import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import debounce from 'lodash/debounce'
 import { mapState, mapGetters } from 'vuex'
-import { generateUrl } from '@nextcloud/router'
-import ConfigBox from '../Base/ConfigBox'
-import ButtonDiv from '../Base/ButtonDiv'
+import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import { generateUrl } from '@nextcloud/router'
+import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import ButtonDiv from '../Base/ButtonDiv'
+import ConfigBox from '../Base/ConfigBox'
 import PublicShareItem from '../Base/PublicShareItem'
 
 export default {
@@ -149,16 +150,10 @@ export default {
 
 	data() {
 		return {
+			searchToken: null,
 			users: [],
 			isLoading: false,
 			placeholder: t('polls', 'Enter a name to start the search'),
-			siteUsersListOptions: {
-				getUsers: true,
-				getGroups: true,
-				getContacts: true,
-				getMail: true,
-				query: '',
-			},
 		}
 	},
 
@@ -206,18 +201,30 @@ export default {
 				})
 		},
 
-		loadUsersAsync(query) {
-			this.isLoading = false
-			this.siteUsersListOptions.query = query
-			axios.post(generateUrl('apps/polls/siteusers/get'), this.siteUsersListOptions)
+		loadUsersAsync: debounce(function(query) {
+			if (!query) {
+				this.users = []
+				return
+			}
+			this.isLoading = true
+			if (this.searchToken) {
+				this.searchToken.cancel()
+			}
+			this.searchToken = axios.CancelToken.source()
+			axios.get(generateUrl('apps/polls/search/users/' + query), { cancelToken: this.searchToken.token })
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
 				})
 				.catch((error) => {
-					console.error(error.response)
+					if (axios.isCancel(error)) {
+						// request was cancelled
+					} else {
+						console.error(error.response)
+						this.isLoading = false
+					}
 				})
-		},
+		}, 250),
 
 		copyLink(payload) {
 			this

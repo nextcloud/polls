@@ -120,7 +120,7 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	public function getEmailAddress(): string {
-		return $this->emailAddress;
+		return $this->emailAddress ? $this->emailAddress : '';
 	}
 
 	public function getOrganisation(): string {

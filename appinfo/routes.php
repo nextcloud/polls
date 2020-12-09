@@ -80,7 +80,7 @@ return [
 		['name' => 'comment#add', 'url' => '/poll/{pollId}/comment', 'verb' => 'POST'],
 		['name' => 'comment#delete', 'url' => '/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'auth'],
 
-		['name' => 'system#get_site_users_and_groups', 'url' => '/siteusers/get', 'verb' => 'POST'],
+		['name' => 'system#user_search', 'url' => '/search/users/{query}', 'verb' => 'GET'],
 
 		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
 		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],
