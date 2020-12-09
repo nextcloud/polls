@@ -55,17 +55,8 @@ class SystemController extends Controller {
 	 * $skipGroups - group names to skip in return array
 	 * $skipUsers - user names to skip in return array
 	 */
-	public function getSiteUsersAndGroups(
-		$query = '',
-		$getGroups = true,
-		$getUsers = true,
-		$getContacts = true,
-		$getContactGroups = true,
-		$getMail = false,
-		$skipGroups = [],
-		$skipUsers = []
-	): DataResponse {
+	public function userSearch($query = ''): DataResponse {
 		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
-			$query, $getGroups, $getUsers, $getContacts, $getContactGroups, $getMail, $skipGroups, $skipUsers)], Http::STATUS_OK);
+			$query)], Http::STATUS_OK);
 	}
 }

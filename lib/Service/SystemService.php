@@ -103,7 +103,7 @@ class SystemService {
 		bool $getUsers = true,
 		bool $getContacts = true,
 		bool $getContactGroups = true,
-		bool $getMail = false,
+		bool $getMail = true,
 		array $skipGroups = [],
 		array $skipUsers = []
 	): array {
@@ -125,7 +125,7 @@ class SystemService {
 				$list = array_merge($list, Contact::search($query));
 			}
 
-			if ($getContacts) {
+			if ($getContactGroups) {
 				$list = array_merge($list, ContactGroup::search($query));
 			}
 			$list = array_merge($list, Circle::search($query));

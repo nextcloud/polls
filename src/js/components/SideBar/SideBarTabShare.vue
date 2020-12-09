@@ -217,7 +217,7 @@ export default {
 				this.searchToken.cancel()
 			}
 			this.searchToken = axios.CancelToken.source()
-			axios.post(generateUrl('apps/polls/siteusers/' + query), this.siteUsersListOptions, { cancelToken: this.searchToken.token })
+			axios.get(generateUrl('apps/polls/search/users/' + query), this.siteUsersListOptions, { cancelToken: this.searchToken.token })
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
