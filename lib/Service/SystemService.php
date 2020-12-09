@@ -93,9 +93,9 @@ class SystemService {
 	/**
 	 * 	 * Get a combined list of users, groups, circles, contact groups and contacts
 	 *
-	 * @return (Circle|Email|Group|User|mixed)[]
+	 * @return (Circle|Email|Group|User|Contact|ContactGroup|mixed)[]
 	 *
-	 * @psalm-return array<array-key, Circle|Email|Group|User|mixed>
+	 * @psalm-return array<array-key, Circle|Email|Group|User|Contact|ContactGroup|mixed>
 	 */
 	public function getSiteUsersAndGroups(
 		string $query = '',

@@ -48,12 +48,6 @@ class SystemController extends Controller {
 	 * Get a combined list of NC users, groups and contacts
 	 * @NoAdminRequired
 	 * $query
-	 * $getGroups - search in groups
-	 * $getUsers - search in site users
-	 * $getContacts - search in contacs
-	 * $getContactGroups - search in contacs
-	 * $skipGroups - group names to skip in return array
-	 * $skipUsers - user names to skip in return array
 	 */
 	public function userSearch($query = ''): DataResponse {
 		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
