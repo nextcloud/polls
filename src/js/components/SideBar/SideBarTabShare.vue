@@ -126,13 +126,14 @@
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
-import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import debounce from 'lodash/debounce'
 import { mapState, mapGetters } from 'vuex'
-import { generateUrl } from '@nextcloud/router'
-import ConfigBox from '../Base/ConfigBox'
-import ButtonDiv from '../Base/ButtonDiv'
+import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import { generateUrl } from '@nextcloud/router'
+import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import ButtonDiv from '../Base/ButtonDiv'
+import ConfigBox from '../Base/ConfigBox'
 import PublicShareItem from '../Base/PublicShareItem'
 
 export default {
@@ -158,7 +159,6 @@ export default {
 				getGroups: true,
 				getContacts: true,
 				getMail: true,
-				query: '',
 			},
 		}
 	},
@@ -207,16 +207,17 @@ export default {
 				})
 		},
 
-		loadUsersAsync(query) {
+		loadUsersAsync: debounce(function(query) {
+			if (!query) {
+				this.users = []
+				return
+			}
 			this.isLoading = true
-			this.siteUsersListOptions.query = query
-
 			if (this.searchToken) {
 				this.searchToken.cancel()
 			}
 			this.searchToken = axios.CancelToken.source()
-
-			axios.post(generateUrl('apps/polls/siteusers/get'), this.siteUsersListOptions, { cancelToken: this.searchToken.token })
+			axios.post(generateUrl('apps/polls/siteusers/' + query), this.siteUsersListOptions, { cancelToken: this.searchToken.token })
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
@@ -229,7 +230,7 @@ export default {
 						this.isLoading = false
 					}
 				})
-		},
+		}, 250),
 
 		copyLink(payload) {
 			this
