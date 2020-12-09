@@ -154,12 +154,6 @@ export default {
 			users: [],
 			isLoading: false,
 			placeholder: t('polls', 'Enter a name to start the search'),
-			siteUsersListOptions: {
-				getUsers: true,
-				getGroups: true,
-				getContacts: true,
-				getMail: true,
-			},
 		}
 	},
 
@@ -217,7 +211,7 @@ export default {
 				this.searchToken.cancel()
 			}
 			this.searchToken = axios.CancelToken.source()
-			axios.get(generateUrl('apps/polls/search/users/' + query), this.siteUsersListOptions, { cancelToken: this.searchToken.token })
+			axios.get(generateUrl('apps/polls/search/users/' + query), { cancelToken: this.searchToken.token })
 				.then((response) => {
 					this.users = response.data.siteusers
 					this.isLoading = false
