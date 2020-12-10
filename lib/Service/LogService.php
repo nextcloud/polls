@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCA\Polls\Db\Log;
@@ -44,25 +45,6 @@ class LogService {
 		$this->log = $log;
 	}
 
-
-	/**
-	 * 	 * Prevent repetition of the same log event
-	 *
-	 * @return bool
-	 */
-	public function isRepetition(): bool {
-		try {
-			$lastRecord = $this->logMapper->getLastRecord($this->log->getPollId());
-			return (intval($lastRecord->getPollId()) === intval($this->log->getPollId())
-				&& $lastRecord->getUserId() === $this->log->getUserId()
-				&& $lastRecord->getMessageId() === $this->log->getMessageId()
-				&& $lastRecord->getMessage() === $this->log->getMessage()
-			);
-		} catch (DoesNotExistException $e) {
-			return false;
-		}
-	}
-
 	/**
 	 * 	 * Log poll activity
 	 *
@@ -74,17 +56,16 @@ class LogService {
 		$this->log->setCreated(time());
 		$this->log->setMessageId($messageId);
 		$this->log->setMessage($message);
-
 		if ($userId) {
 			$this->log->setUserId($userId);
 		} else {
 			$this->log->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
 		}
 
-		if ($this->isRepetition()) {
-			return null;
-		} else {
+		try {
 			return $this->logMapper->insert($this->log);
+		} catch (UniqueConstraintViolationException $e) {
+			return null;
 		}
 	}
 }
