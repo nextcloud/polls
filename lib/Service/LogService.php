@@ -24,7 +24,6 @@
 namespace OCA\Polls\Service;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
