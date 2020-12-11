@@ -24,6 +24,9 @@
 namespace OCA\Polls\Db;
 
 use League\FactoryMuffin\Faker\Facade as Faker;
+
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+
 use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
@@ -97,8 +100,21 @@ class OptionMapperTest extends UnitTestCase {
 	 * includes testFind
 	 */
 	public function testUpdate() {
+		$i = 0;
 		foreach ($this->options as &$option) {
-			$option->setPollOptionText('Changed option');
+			$option->setPollOptionText('Changed option' . ++$i);
+			$this->assertInstanceOf(Option::class, $this->optionMapper->update($option));
+		}
+	}
+
+	/**
+	 * testUpdate
+	 * includes testFind
+	 */
+	public function testUpdateException() {
+		$i = 0;
+		foreach ($this->options as &$option) {
+			$option->setPollOptionText('Changed option' . ++$i);
 			$this->assertInstanceOf(Option::class, $this->optionMapper->update($option));
 		}
 	}
