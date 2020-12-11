@@ -108,18 +108,6 @@ class OptionMapperTest extends UnitTestCase {
 	}
 
 	/**
-	 * testUpdate
-	 * includes testFind
-	 */
-	public function testUpdateException() {
-		$i = 0;
-		foreach ($this->options as &$option) {
-			$option->setPollOptionText('Changed option' . ++$i);
-			$this->assertInstanceOf(Option::class, $this->optionMapper->update($option));
-		}
-	}
-
-	/**
 	 * testDelete
 	 */
 	public function testDelete() {
