@@ -47,9 +47,11 @@ endif
 # Lint
 lint:
 	npm run lint
+	composer run cs:check
 
 lint-fix:
 	npm run lint:fix
+	composer run cs:fix
 
 # Removes the appstore build and compiled js files
 .PHONY: clean
