@@ -56,7 +56,7 @@ OC.L10N.register(
     "Your personal link to this poll: {linkURL}" : "Ihr persönlicher Link zu dieser Umfrage: {linkURL}",
     "Copy this link to the clipboard" : "Diesen Link in die Zwischenablage kopieren",
     "Resend invitation mail to {emailAdress}" : "Sende die Einladungs-E-Mail erneut an {emailAdress}",
-    "Invitation resent to {emailAddress}" : "Einladung erneut versendet an {emailAddress}",
+    "Invitation resent to {emailAddress}" : "Einladung erneut an {emailAddress} versendet",
     "Mail could not be resent to {emailAddress}" : "Einladung konnte nicht erneut an {emailAddress} versendet werden",
     "started this poll on {dateString}." : "hat diese Umfrage am {dateString} gestartet.",
     "This poll is closed since {dateString}. The confirmed options are marked below." : "Diese Umfrage ist seit dem {dateString} gechlossen. Die bestätigten Optionen sind unterhalb markiert.",
