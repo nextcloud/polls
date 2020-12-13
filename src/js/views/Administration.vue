@@ -72,6 +72,7 @@
 		<Modal v-if="takeOverModal" @close="takeOverModal = false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Do you want to take over this poll from {username} and change the ownership?', {username: takeOverOwner}) }}</h2>
+				<div>{{ t('polls', 'The original owner will be notified.') }}</div>
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="takeOverModal = false" />
@@ -84,11 +85,12 @@
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Do you want to delete this poll?') }}</h2>
 				<div>{{ t('polls', 'This action cannot be reverted.') }}</div>
+				<div>{{ t('polls', 'The original owner will be notified.') }}</div>
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="deleteModal = false" />
 					<ButtonDiv :primary="true" :title="t('polls', 'Yes')"
-						@click="takeOver()" />
+						@click="deletePermanently()" />
 				</div>
 			</div>
 		</Modal>
@@ -194,14 +196,16 @@ export default {
 				})
 		},
 
-		deletePermanently(pollId) {
+		deletePermanently() {
 			this.$store
-				.dispatch('poll/delete', { pollId: pollId })
+				.dispatch('poll/delete', { pollId: this.deletePollId })
 				.then(() => {
 					emit('update-polls')
+					this.deleteModal = false
 				})
 				.catch(() => {
 					showError(t('polls', 'Error deleting poll.'))
+					this.deleteModal = false
 				})
 		},
 
@@ -210,9 +214,11 @@ export default {
 				.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
 				.then(() => {
 					emit('update-polls')
+					this.takeOverModal = false
 				})
 				.catch(() => {
 					showError(t('polls', 'Error overtaking poll.'))
+					this.takeOverModal = false
 				})
 		},
 
