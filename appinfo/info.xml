@@ -23,7 +23,7 @@
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
     <dependencies>
-        <nextcloud min-version="18" max-version="20" />
+        <nextcloud min-version="19" max-version="21" />
     </dependencies>
 	<background-jobs>
 		<job>OCA\Polls\Cron\NotificationCron</job>
