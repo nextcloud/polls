@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "Anullar",
     "OK" : "D'acòrdi",
     "Week" : "Aquesta setmana",
+    "Copy this link to the clipboard" : "Copiar aqueste ligam al quichapapièr",
     "Title" : "Títol",
     "Apply" : "Aplicar",
     "Settings" : "Paramètres",
