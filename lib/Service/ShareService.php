@@ -132,17 +132,20 @@ class ShareService {
 	 * @return Share
 	 */
 	private function create(int $pollId, UserGroupClass $userGroup, bool $preventInvitation = false): Share {
-		$this->share = new Share();
-		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
+		$preventInvitation = $userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? true : $preventInvitation;
+		$token = \OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
 			ISecureRandom::CHAR_UPPER
-		));
+		);
+
+		$this->share = new Share();
+		$this->share->setToken($token);
 		$this->share->setPollId($pollId);
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
 		$this->share->setType($userGroup->getType());
-		$this->share->setUserId($userGroup->getPublicId());
+		$this->share->setUserId($userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? $token : $userGroup->getPublicId());
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
