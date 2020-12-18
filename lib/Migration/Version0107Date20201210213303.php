@@ -24,22 +24,18 @@
 namespace OCA\Polls\Migration;
 
 use OCP\DB\ISchemaWrapper;
-use OCP\IConfig;
+use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
-use OCP\Migration\IOutput;
+use Doctrine\DBAL\Schema\SchemaException;
 
 class Version0107Date20201210213303 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
 
-	/** @var IConfig */
-	protected $config;
-
-	public function __construct(IDBConnection $connection, IConfig $config) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-		$this->config = $config;
 	}
 
 	/**
@@ -48,33 +44,34 @@ class Version0107Date20201210213303 extends SimpleMigrationStep {
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_votes')) {
+		if (!$schema->hasTable('polls_votes')) {
+			return;
+		}
 
-			// remove duplicates from oc_polls_votes
-			// preserve the first entry
-			$query = $this->connection->getQueryBuilder();
-			$query->select('id', 'poll_id', 'user_id', 'vote_option_text')
-				->from('polls_votes');
-			$foundEntries = $query->execute();
+		// remove duplicates from oc_polls_votes
+		// preserve the first entry
+		$query = $this->connection->getQueryBuilder();
+		$query->select('id', 'poll_id', 'user_id', 'vote_option_text')
+			->from('polls_votes');
+		$foundEntries = $query->execute();
 
-			$delete = $this->connection->getQueryBuilder();
-			$delete->delete('polls_votes')
-				->where('id = :id');
+		$delete = $this->connection->getQueryBuilder();
+		$delete->delete('polls_votes')
+			->where('id = :id');
 
-			$entries2Keep = [];
+		$entries2Keep = [];
 
-			while ($row = $foundEntries->fetch()) {
-				$currentRecord = [
-					$row['poll_id'],
-					$row['user_id'],
-					$row['vote_option_text']
-				];
-				if (in_array($currentRecord, $foundEntries2Keep)) {
-					$delete->setParameter('id', $row['id']);
-					$delete->execute();
-				} else {
-					$foundEntries2Keep[] = $currentRecord;
-				}
+		while ($row = $foundEntries->fetch()) {
+			$currentRecord = [
+				$row['poll_id'],
+				$row['user_id'],
+				$row['vote_option_text']
+			];
+			if (in_array($currentRecord, $entries2Keep)) {
+				$delete->setParameter('id', $row['id']);
+				$delete->execute();
+			} else {
+				$entries2Keep[] = $currentRecord;
 			}
 		}
 	}
@@ -96,7 +93,7 @@ class Version0107Date20201210213303 extends SimpleMigrationStep {
 
 			try {
 				$table->addUniqueIndex(['poll_id', 'user_id', 'vote_option_text'], 'UNIQ_votes');
-			} catch (\Exception $e) {
+			} catch (SchemaException $e) {
 				//catch silently, index is already present
 			}
 		}
