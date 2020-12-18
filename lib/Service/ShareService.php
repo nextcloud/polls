@@ -143,9 +143,18 @@ class ShareService {
 		$this->share = new Share();
 		$this->share->setToken($token);
 		$this->share->setPollId($pollId);
+
+		// Convert user type contact to share type email
+		if ($userGroup->getType() === UserGroupClass::TYPE_CONTACT) {
+			$this->share->setType(UserGroupClass::TYPE_EMAIL);
+			$this->share->setUserId($userGroup->getEmailAddress());
+		} else {
+			$this->share->setType($userGroup->getType());
+			$this->share->setUserId($userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? $token : $userGroup->getPublicId());
+		}
+
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
 		$this->share->setType($userGroup->getType());
-		$this->share->setUserId($userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? $token : $userGroup->getPublicId());
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
