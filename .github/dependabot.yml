@@ -8,8 +8,8 @@ updates:
     time: "03:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
-  reviewers:
-  - dartcafe
+  labels:
+  - 3. to review
   ignore:
   - dependency-name: linkify-urls
     versions:
@@ -27,3 +27,5 @@ updates:
     time: "03:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
+  labels:
+  - 3. to review
