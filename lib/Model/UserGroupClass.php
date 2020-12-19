@@ -221,6 +221,7 @@ class UserGroupClass implements \JsonSerializable {
 			'emailAddress'	=> $this->getEmailAddress(),
 			'language'		=> $this->getLanguage(),
 			'desc' 			=> $this->getDescription(),
+			'subtitle'		=> $this->getDescription(),
 			'icon'			=> $this->getIcon(),
 			'categories'	=> $this->getCategories(),
 			'isNoUser'		=> $this->getIsNoUser(),
