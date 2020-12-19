@@ -128,6 +128,7 @@ export default {
 
 	data() {
 		return {
+			reloadInterval: 30000,
 			voteSaved: false,
 			delay: 50,
 			isLoading: true,
@@ -268,15 +269,24 @@ export default {
 			this.loadPoll()
 			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 		}
+		this.timedReload()
 	},
 
 	beforeDestroy() {
 		this.$store.dispatch({ type: 'poll/reset' })
+		window.clearInterval(this.reloadTimer)
 	},
 
 	methods: {
 		openOptions() {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
+		},
+
+		timedReload() {
+			// reload poll list periodically
+			this.reloadTimer = window.setInterval(() => {
+				this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
+			}, this.reloadInterval)
 		},
 
 		getNextViewMode() {
