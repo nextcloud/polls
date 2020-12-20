@@ -69,7 +69,6 @@ const actions = {
 		} else {
 			endPoint = endPoint + '/poll/' + context.rootState.poll.id
 		}
-
 		return axios.post(generateUrl(endPoint + '/comment'), {
 			message: payload.message,
 		})
