@@ -193,11 +193,7 @@ class UserGroupClass implements \JsonSerializable {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		\OC::$server->getLogger()->alert('before ISearch ' . time());
-
 		list($result, $more) = $c->query(ISearch::class)->search($query, $types, false, 200, 0);
-
-		\OC::$server->getLogger()->alert('after ISearch ' . time());
 
 		foreach ($result['users'] as $item) {
 			$items[] = new User($item['value']['shareWith']);
@@ -225,7 +221,6 @@ class UserGroupClass implements \JsonSerializable {
 		foreach ($result['exact']['circles'] as $item) {
 			$items[] = new Circle($item['value']['shareWith']);
 		}
-		\OC::$server->getLogger()->alert('complete ' . time());
 
 		return $items;
 	}
