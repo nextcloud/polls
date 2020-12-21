@@ -50,10 +50,6 @@ class Group extends UserGroupClass {
 		}
 	}
 
-	public static function listRaw(string $query = '') {
-		return \OC::$server->getGroupManager()->search($query);
-	}
-
 	/**
 	 * @return Group[]
 	 *
@@ -61,7 +57,7 @@ class Group extends UserGroupClass {
 	 */
 	public static function search(string $query = '', array $skip = []): array {
 		$groups = [];
-		foreach (self::listRaw($query) as $group) {
+		foreach (\OC::$server->getGroupManager()->search($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
 				$groups[] = new Self($group->getGID());
 			}

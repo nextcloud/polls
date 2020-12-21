@@ -35,6 +35,7 @@ use OCA\Polls\Model\ContactGroup;
 use OCA\Polls\Model\Email;
 use OCA\Polls\Model\Group;
 use OCA\Polls\Model\User;
+use OCA\Polls\Model\UserGroupClass;
 
 class SystemService {
 
@@ -109,26 +110,11 @@ class SystemService {
 	): array {
 		$list = [];
 		if ($query !== '') {
-			if ($getMail && self::isValidEmail($query)) {
+			if (self::isValidEmail($query)) {
 				$list[] = new Email($query);
 			}
 
-			if ($getGroups) {
-				$list = array_merge($list, Group::search($query, $skipGroups));
-			}
-
-			if ($getUsers) {
-				$list = array_merge($list, User::search($query, $skipUsers));
-			}
-
-			if ($getContacts) {
-				$list = array_merge($list, Contact::search($query));
-			}
-
-			if ($getContactGroups) {
-				$list = array_merge($list, ContactGroup::search($query));
-			}
-			$list = array_merge($list, Circle::search($query));
+			$list = array_merge($list, UserGroupClass::search($query));
 		}
 
 		return $list;

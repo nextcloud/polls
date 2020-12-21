@@ -52,23 +52,16 @@ class Circle extends UserGroupClass {
 		return \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
 
-	public static function listRaw(string $query = '') {
-		$circles = [];
-		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
-			$circles = Circles::listCircles(\OCA\Circles\Model\Circle::CIRCLES_ALL, $query);
-		}
-
-		return $circles;
-	}
-
 	/**
 	 * @return Circle[]
 	 */
-	public static function search(string $query = '', $skip = []) {
+	public static function search(string $query = '', $skip = []): array {
 		$circles = [];
-		foreach (self::listRaw($query) as $circle) {
-			if (!in_array($circle->getUniqueId(), $skip)) {
-				$circles[] = new self($circle->getUniqueId());
+		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
+			foreach (Circles::listCircles(\OCA\Circles\Model\Circle::CIRCLES_ALL, $query) as $circle) {
+				if (!in_array($circle->getUniqueId(), $skip)) {
+					$circles[] = new self($circle->getUniqueId());
+				}
 			}
 		}
 

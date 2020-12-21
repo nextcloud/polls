@@ -123,7 +123,7 @@ class Contact extends UserGroupClass {
 	 *
 	 * @param string[] $queryRange
 	 */
-	public static function listRaw(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
+	public static function listRaw(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
 		$contacts = [];
 		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
 			foreach (\OC::$server->getContactsManager()->search($query, $queryRange) as $contact) {
@@ -138,7 +138,7 @@ class Contact extends UserGroupClass {
 	/**
 	 * @return Contact[]
 	 */
-	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
+	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
 		$contacts = [];
 		foreach (self::listRaw($query, $queryRange) as $contact) {
 			$contacts[] = new Self($contact['UID']);

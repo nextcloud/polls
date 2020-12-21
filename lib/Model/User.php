@@ -24,6 +24,10 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\IUserManager;
+use OCP\Collaboration\Collaborators\ISearch;
+use OCP\Share\IShare;
+
 class User extends UserGroupClass {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
@@ -48,8 +52,18 @@ class User extends UserGroupClass {
 		return !\OC::$server->getUserManager()->get($this->id)->isEnabled();
 	}
 
-	public static function listRaw(string $query = '') {
-		return \OC::$server->getUserManager()->search($query);
+	public static function listRaw(string $query = '', array $types = [], bool $ISearchToggle = false): array {
+		$c = self::getContainer();
+
+		if ($ISearchToggle) {
+			$users = [];
+			list($result, $more) = $c->query(ISearch::class)->search($query, $types, true, 200, 0);
+			return $result;
+		} else {
+			return $c->query(IUserManager::class)
+					 ->search($query);
+			return \OC::$server->getUserManager()->search($query);
+		}
 	}
 
 	/**
@@ -59,9 +73,36 @@ class User extends UserGroupClass {
 	 */
 	public static function search(string $query = '', array $skip = []): array {
 		$users = [];
-		foreach (self::listRaw($query) as $user) {
-			if (!in_array($user->getUID(), $skip)) {
-				$users[] = new Self($user->getUID());
+		// $types = [IShare::TYPE_USER];
+		$types = [
+			IShare::TYPE_USER,
+			IShare::TYPE_GROUP,
+			IShare::TYPE_EMAIL,
+			IShare::TYPE_CIRCLE,
+			IShare::TYPE_DECK
+		];
+		$ISearchToggle = true;
+
+
+		if ($ISearchToggle) {
+			$result = self::listRaw($query, $types, $ISearchToggle);
+			\OC::$server->getLogger()->alert(json_encode($result));
+			foreach ($result['users'] as $user) {
+				if (!in_array($user['value']['shareWith'], $skip)) {
+					$users[] = new Self($user['value']['shareWith']);
+				}
+			}
+			foreach ($result['exact']['users'] as $user) {
+				if (!in_array($user['value']['shareWith'], $skip)) {
+					$users[] = new Self($user['value']['shareWith']);
+				}
+			}
+		} else {
+			$result = self::listRaw($query, $types, $ISearchToggle);
+			foreach ($result as $user) {
+				if (!in_array($user->getUID(), $skip)) {
+					$users[] = new Self($user->getUID());
+				}
 			}
 		}
 		return $users;

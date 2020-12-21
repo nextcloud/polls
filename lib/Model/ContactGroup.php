@@ -46,10 +46,12 @@ class ContactGroup extends UserGroupClass {
 		return $this->displayName;
 	}
 
-	public static function listRaw($query = '') {
+	/**
+	 * @return ContactGroup[]
+	 */
+	public static function search(string $query = ''): array {
 		$contactGroups = [];
-		if (\OC::$server->getContactsManager()->isEnabled()) {
-			// find contact, which are member of the requested Group
+		if (\OC::$server->getContactsManager()->isEnabled() && $query) {
 			foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
 				// get all groups from the found contact and explode to array
 				$temp = explode(',', $contact['CATEGORIES']);
@@ -59,17 +61,8 @@ class ContactGroup extends UserGroupClass {
 					}
 				}
 			}
-		}
-		return array_unique($contactGroups);
-	}
 
-	/**
-	 * @return ContactGroup[]
-	 */
-	public static function search(string $query = '') {
-		$contactGroups = [];
-		if (\OC::$server->getContactsManager()->isEnabled() && $query) {
-			foreach (self::listRaw($query) as $contactGroup) {
+			foreach (array_unique($contactGroups) as $contactGroup) {
 				$contactGroups[] = new self($contactGroup);
 			}
 		}
