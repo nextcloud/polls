@@ -51,6 +51,18 @@ class Group extends UserGroupClass {
 	}
 
 	/**
+	 * @return User[]
+	 */
+	public function getMembers(): array {
+		$members = [];
+
+		foreach (array_keys(self::getContainer()->query(IGroupManager::class)->displayNamesInGroup($this->id)) as $member) {
+			$members[] = new User($member);
+		}
+		return $members;
+	}
+
+	/**
 	 * @return Group[]
 	 *
 	 * @psalm-return list<Group>
@@ -64,17 +76,5 @@ class Group extends UserGroupClass {
 			}
 		}
 		return $groups;
-	}
-
-	/**
-	 * @return User[]
-	 */
-	public function getMembers(): array {
-		$members = [];
-
-		foreach (array_keys(self::getContainer()->query(IGroupManager::class)->displayNamesInGroup($this->id)) as $member) {
-			$members[] = new User($member);
-		}
-		return $members;
 	}
 }

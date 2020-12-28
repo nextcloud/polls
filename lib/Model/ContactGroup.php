@@ -35,8 +35,12 @@ class ContactGroup extends UserGroupClass {
 		$id
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->icon = self::ICON;
-		$this->description = \OC::$server->getL10N('polls')->t('Contact group');
+		if (self::isEnabled()) {
+			$this->icon = self::ICON;
+			$this->description = \OC::$server->getL10N('polls')->t('Contact group');
+		} else {
+			throw new ContactsNotEnabledExceptions();
+		}
 	}
 
 	/**
@@ -47,6 +51,22 @@ class ContactGroup extends UserGroupClass {
 			return $this->id;
 		}
 		return $this->displayName;
+	}
+
+	/**
+	 * Get a list of contacts group members
+	 * @return Contact[]
+	 */
+	public function getMembers() {
+		$contacts = [];
+
+		foreach (self::getContainer()->query(IContactsManager::class)->search($this->id, ['CATEGORIES']) as $contact) {
+			if (array_key_exists('EMAIL', $contact)) {
+				$contacts[] = new Contact($contact['UID']);
+			}
+		}
+
+		return $contacts;
 	}
 
 	public static function isEnabled(): bool {
@@ -77,19 +97,4 @@ class ContactGroup extends UserGroupClass {
 		return $contactGroups;
 	}
 
-	/**
-	 * Get a list of contacts group members
-	 * @return Contact[]
-	 */
-	public function getMembers() {
-		$contacts = [];
-		if (self::isEnabled()->isEnabled()) {
-			foreach (self::getContainer()->query(IContactsManager::class)->search($this->id, ['CATEGORIES']) as $contact) {
-				if (array_key_exists('EMAIL', $contact)) {
-					$contacts[] = new Contact($contact['UID']);
-				}
-			}
-		}
-		return $contacts;
-	}
 }

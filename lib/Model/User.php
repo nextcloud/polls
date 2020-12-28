@@ -25,13 +25,13 @@
 namespace OCA\Polls\Model;
 
 use OCP\IUserManager;
-use OCP\Collaboration\Collaborators\ISearch;
-use OCP\Share\IShare;
+use OCP\IUser;
 
 class User extends UserGroupClass {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
 
+	/** @var IUser */
 	private $user;
 
 	public function __construct(

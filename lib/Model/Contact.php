@@ -39,9 +39,14 @@ class Contact extends UserGroupClass {
 		$id
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->icon = self::ICON;
-		$this->getContact();
+		if (self::isEnabled()) {
+			$this->icon = self::ICON;
+			$this->getContact();
+		} else {
+			throw new ContactsNotEnabledExceptions();
+		}
 	}
+
 
 	/**
 	 * 	 * must use displayName for contact's user id, because contact id
@@ -82,36 +87,32 @@ class Contact extends UserGroupClass {
 	}
 
 	private function getContact(): void {
-		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
-			$this->resolveContactId();
-			$this->loadContact();
+		$this->resolveContactId();
+		$this->loadContact();
 
-			$this->id = $this->contact['UID'];
-			$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
-			$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
-			$this->organisation = isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
-			$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
+		$this->id = $this->contact['UID'];
+		$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
+		$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
+		$this->organisation = isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
+		$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
 
 
-			if (isset($this->contact['CATEGORIES'])) {
-				$this->categories = explode(',', $this->contact['CATEGORIES']);
-			} else {
-				$this->categories = [];
-			}
-
-			$description = $this->categories;
-
-			if (isset($this->contact['ORG'])) {
-				array_unshift($description, $this->organisation);
-			}
-
-			if (count($description) > 0) {
-				$this->description = implode(", ", $description);
-			} else {
-				$this->description = \OC::$server->getL10N('polls')->t('Contact');
-			}
+		if (isset($this->contact['CATEGORIES'])) {
+			$this->categories = explode(',', $this->contact['CATEGORIES']);
 		} else {
-			throw new ContactsNotEnabledExceptions();
+			$this->categories = [];
+		}
+
+		$description = $this->categories;
+
+		if (isset($this->contact['ORG'])) {
+			array_unshift($description, $this->organisation);
+		}
+
+		if (count($description) > 0) {
+			$this->description = implode(", ", $description);
+		} else {
+			$this->description = \OC::$server->getL10N('polls')->t('Contact');
 		}
 	}
 

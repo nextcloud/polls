@@ -26,13 +26,14 @@ namespace OCA\Polls\Model;
 
 use OCP\App\IAppManager;
 use OCA\Circles\Api\v1\Circles;
-
+use \OCA\Circles\Model\Circle as CirclesCircle;
 use OCA\Polls\Exceptions\CirclesNotEnabledException;
 
 class Circle extends UserGroupClass {
 	public const TYPE = 'circle';
 	public const ICON = 'icon-circles';
 
+	/** @var CirclesCircle */
 	private $circle;
 
 	public function __construct(
@@ -59,7 +60,7 @@ class Circle extends UserGroupClass {
 	public static function search(string $query = '', $skip = []): array {
 		$circles = [];
 		if (self::isEnabled()) {
-			foreach (Circles::listCircles(\OCA\Circles\Model\Circle::CIRCLES_ALL, $query) as $circle) {
+			foreach (Circles::listCircles(CirclesCircle::CIRCLES_ALL, $query) as $circle) {
 				if (!in_array($circle->getUniqueId(), $skip)) {
 					$circles[] = new self($circle->getUniqueId());
 				}
