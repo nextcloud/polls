@@ -96,5 +96,4 @@ class ContactGroup extends UserGroupClass {
 		}
 		return $contactGroups;
 	}
-
 }
