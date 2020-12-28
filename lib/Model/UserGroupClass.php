@@ -175,7 +175,7 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	/**
-	 * serach all sharees - use ISearch to respect autocomplete restrictions
+	 * serach all possible sharees - use ISearch to respect autocomplete restrictions
 	 *
 	 * Undocumented function long description
 	 *
@@ -183,17 +183,16 @@ class UserGroupClass implements \JsonSerializable {
 	 * @return return type
 	 */
 	public static function search(string $query = ''): array {
-		$c = self::getContainer();
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
 			IShare::TYPE_GROUP
 		];
-		if (\OC::$server->getAppManager()->isEnabledForUser('circles') && class_exists('\OCA\Circles\ShareByCircleProvider')) {
+		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		list($result, $more) = $c->query(ISearch::class)->search($query, $types, false, 200, 0);
+		list($result, $more) = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
 
 		foreach ($result['users'] as $item) {
 			$items[] = new User($item['value']['shareWith']);
@@ -226,7 +225,7 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	/**
-	 * @return UserGroupClass[]
+	 * @return array
 	 */
 	public function getMembers() {
 		return [];

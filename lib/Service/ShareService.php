@@ -128,6 +128,7 @@ class ShareService {
 
 	/**
 	 * 	 * crate share - MUST BE PRIVATE!
+	 *   * convert type contact to type email
 	 *
 	 * @return Share
 	 */
@@ -141,10 +142,17 @@ class ShareService {
 		));
 		$this->share->setPollId($pollId);
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
-		$this->share->setType($userGroup->getType());
-		$this->share->setUserId($userGroup->getPublicId());
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
+
+		// Convert user type contact to share type email
+		if ($userGroup->getType()) {
+			$this->share->setType(UserGroupClass::TYPE_EMAIL);
+			$this->share->setUserId($userGroup->getEmailAddress());
+		} else {
+			$this->share->setType($userGroup->getType());
+			$this->share->setUserId($userGroup->getPublicId());
+		}
 
 		return $this->shareMapper->insert($this->share);
 	}

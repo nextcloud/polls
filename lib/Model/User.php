@@ -42,28 +42,14 @@ class User extends UserGroupClass {
 		$this->isNoUser = false;
 		$this->description = \OC::$server->getL10N('polls')->t('User');
 
-		$this->user = \OC::$server->getUserManager()->get($this->id);
+		$this->user = self::getContainer()->query(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();
-		$this->emailAddress = $this->user->getEMailAddress();
+		$this->emailAddress = $this->user->getEmailAddress();
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
 	}
 
 	public function getUserIsDisabled(): bool {
-		return !\OC::$server->getUserManager()->get($this->id)->isEnabled();
-	}
-
-	public static function listRaw(string $query = '', array $types = [], bool $ISearchToggle = false): array {
-		$c = self::getContainer();
-
-		if ($ISearchToggle) {
-			$users = [];
-			list($result, $more) = $c->query(ISearch::class)->search($query, $types, true, 200, 0);
-			return $result;
-		} else {
-			return $c->query(IUserManager::class)
-					 ->search($query);
-			return \OC::$server->getUserManager()->search($query);
-		}
+		return $this->user->isEnabled();
 	}
 
 	/**
@@ -73,36 +59,10 @@ class User extends UserGroupClass {
 	 */
 	public static function search(string $query = '', array $skip = []): array {
 		$users = [];
-		// $types = [IShare::TYPE_USER];
-		$types = [
-			IShare::TYPE_USER,
-			IShare::TYPE_GROUP,
-			IShare::TYPE_EMAIL,
-			IShare::TYPE_CIRCLE,
-			IShare::TYPE_DECK
-		];
-		$ISearchToggle = true;
 
-
-		if ($ISearchToggle) {
-			$result = self::listRaw($query, $types, $ISearchToggle);
-			\OC::$server->getLogger()->alert(json_encode($result));
-			foreach ($result['users'] as $user) {
-				if (!in_array($user['value']['shareWith'], $skip)) {
-					$users[] = new Self($user['value']['shareWith']);
-				}
-			}
-			foreach ($result['exact']['users'] as $user) {
-				if (!in_array($user['value']['shareWith'], $skip)) {
-					$users[] = new Self($user['value']['shareWith']);
-				}
-			}
-		} else {
-			$result = self::listRaw($query, $types, $ISearchToggle);
-			foreach ($result as $user) {
-				if (!in_array($user->getUID(), $skip)) {
-					$users[] = new Self($user->getUID());
-				}
+		foreach (self::getContainer()->query(IUserManager::class)->search($query) as $user) {
+			if (!in_array($user->getUID(), $skip)) {
+				$users[] = new Self($user->getUID());
 			}
 		}
 		return $users;

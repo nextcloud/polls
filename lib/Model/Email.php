@@ -29,17 +29,18 @@ class Email extends UserGroupClass {
 	public const ICON = 'icon-mail';
 
 	public function __construct(
-		$id
+		$id,
+		$displayName = ''
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->description = \OC::$server->getL10N('polls')->t('External Email');
 		$this->icon = self::ICON;
 		$this->emailAddress = $id;
+		if ($displayName) {
+			$this->displayName = $displayName;
+		}
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getDisplayName(): string {
 		if (!$this->displayName) {
 			return $this->id;

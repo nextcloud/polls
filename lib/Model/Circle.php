@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\App\IAppManager;
 use OCA\Circles\Api\v1\Circles;
 
 use OCA\Polls\Exceptions\CirclesNotEnabledException;
@@ -38,7 +39,7 @@ class Circle extends UserGroupClass {
 		$id
 	) {
 		parent::__construct($id, self::TYPE);
-		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
+		if (self::isEnabled()) {
 			$this->icon = self::ICON;
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
@@ -49,7 +50,7 @@ class Circle extends UserGroupClass {
 	}
 
 	public static function isEnabled(): bool {
-		return \OC::$server->getAppManager()->isEnabledForUser('circles');
+		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('circles');
 	}
 
 	/**
@@ -57,7 +58,7 @@ class Circle extends UserGroupClass {
 	 */
 	public static function search(string $query = '', $skip = []): array {
 		$circles = [];
-		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
+		if (self::isEnabled()) {
 			foreach (Circles::listCircles(\OCA\Circles\Model\Circle::CIRCLES_ALL, $query) as $circle) {
 				if (!in_array($circle->getUniqueId(), $skip)) {
 					$circles[] = new self($circle->getUniqueId());
@@ -73,7 +74,7 @@ class Circle extends UserGroupClass {
 	 */
 	public function getMembers() {
 		$members = [];
-		if (\OC::$server->getAppManager()->isEnabledForUser('circles')) {
+		if (self::isEnabled()) {
 			foreach (Circles::detailsCircle($this->id)->getMembers() as $circleMember) {
 				if ($circleMember->getType() === Circles::TYPE_USER) {
 					$members[] = new User($circleMember->getUserId());

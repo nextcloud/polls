@@ -24,6 +24,9 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\App\IAppManager;
+use OCP\Contacts\IManager as IContactsManager;
+
 class ContactGroup extends UserGroupClass {
 	public const TYPE = 'contactGroup';
 	public const ICON = 'icon-group';
@@ -46,13 +49,18 @@ class ContactGroup extends UserGroupClass {
 		return $this->displayName;
 	}
 
+	public static function isEnabled(): bool {
+		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('contacts');
+	}
+
 	/**
 	 * @return ContactGroup[]
 	 */
 	public static function search(string $query = ''): array {
 		$contactGroups = [];
-		if (\OC::$server->getContactsManager()->isEnabled() && $query) {
-			foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
+		if (self::isEnabled() && $query) {
+			// foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
+			foreach (self::getContainer()->query(IContactsManager::class)->search($query, ['CATEGORIES']) as $contact) {
 				// get all groups from the found contact and explode to array
 				$temp = explode(',', $contact['CATEGORIES']);
 				foreach ($temp as $contactGroup) {
@@ -75,8 +83,8 @@ class ContactGroup extends UserGroupClass {
 	 */
 	public function getMembers() {
 		$contacts = [];
-		if (\OC::$server->getContactsManager()->isEnabled()) {
-			foreach (\OC::$server->getContactsManager()->search($this->id, ['CATEGORIES']) as $contact) {
+		if (self::isEnabled()->isEnabled()) {
+			foreach (self::getContainer()->query(IContactsManager::class)->search($this->id, ['CATEGORIES']) as $contact) {
 				if (array_key_exists('EMAIL', $contact)) {
 					$contacts[] = new Contact($contact['UID']);
 				}

@@ -23,6 +23,8 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\App\IAppManager;
+use OCP\Contacts\IManager as IContactsManager;
 use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
 
@@ -49,10 +51,6 @@ class Contact extends UserGroupClass {
 	 */
 	public function getPublicId(): string {
 		return $this->displayName;
-	}
-
-	public static function isEnabled(): bool {
-		return \OC::$server->getAppManager()->isEnabledForUser('contacts');
 	}
 
 	/**
@@ -117,16 +115,21 @@ class Contact extends UserGroupClass {
 		}
 	}
 
+	public static function isEnabled(): bool {
+		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('contacts');
+	}
+
 	/**
 	 * 	 * List all contacts with email adresses
 	 * 	 * excluding contacts from localSystemBook
 	 *
 	 * @param string[] $queryRange
 	 */
-	public static function listRaw(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
+	private static function listRaw(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
 		$contacts = [];
-		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
-			foreach (\OC::$server->getContactsManager()->search($query, $queryRange) as $contact) {
+
+		if (self::isEnabled()) {
+			foreach (self::getContainer()->query(IContactsManager::class)->search($query, $queryRange) as $contact) {
 				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 					$contacts[] = $contact;
 				}
