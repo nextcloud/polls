@@ -24,6 +24,9 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\App\IAppManager;
+use OCP\Contacts\IManager as IContactsManager;
+
 class ContactGroup extends UserGroupClass {
 	public const TYPE = 'contactGroup';
 	public const ICON = 'icon-group';
@@ -32,8 +35,12 @@ class ContactGroup extends UserGroupClass {
 		$id
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->icon = self::ICON;
-		$this->description = \OC::$server->getL10N('polls')->t('Contact group');
+		if (self::isEnabled()) {
+			$this->icon = self::ICON;
+			$this->description = \OC::$server->getL10N('polls')->t('Contact group');
+		} else {
+			throw new ContactsNotEnabledExceptions();
+		}
 	}
 
 	/**
@@ -46,11 +53,34 @@ class ContactGroup extends UserGroupClass {
 		return $this->displayName;
 	}
 
-	public static function listRaw($query = '') {
+	/**
+	 * Get a list of contacts group members
+	 * @return Contact[]
+	 */
+	public function getMembers() {
+		$contacts = [];
+
+		foreach (self::getContainer()->query(IContactsManager::class)->search($this->id, ['CATEGORIES']) as $contact) {
+			if (array_key_exists('EMAIL', $contact)) {
+				$contacts[] = new Contact($contact['UID']);
+			}
+		}
+
+		return $contacts;
+	}
+
+	public static function isEnabled(): bool {
+		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('contacts');
+	}
+
+	/**
+	 * @return ContactGroup[]
+	 */
+	public static function search(string $query = ''): array {
 		$contactGroups = [];
-		if (\OC::$server->getContactsManager()->isEnabled()) {
-			// find contact, which are member of the requested Group
-			foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
+		if (self::isEnabled() && $query) {
+			// foreach (\OC::$server->getContactsManager()->search($query, ['CATEGORIES']) as $contact) {
+			foreach (self::getContainer()->query(IContactsManager::class)->search($query, ['CATEGORIES']) as $contact) {
 				// get all groups from the found contact and explode to array
 				$temp = explode(',', $contact['CATEGORIES']);
 				foreach ($temp as $contactGroup) {
@@ -59,36 +89,11 @@ class ContactGroup extends UserGroupClass {
 					}
 				}
 			}
-		}
-		return array_unique($contactGroups);
-	}
 
-	/**
-	 * @return ContactGroup[]
-	 */
-	public static function search(string $query = '') {
-		$contactGroups = [];
-		if (\OC::$server->getContactsManager()->isEnabled() && $query) {
-			foreach (self::listRaw($query) as $contactGroup) {
+			foreach (array_unique($contactGroups) as $contactGroup) {
 				$contactGroups[] = new self($contactGroup);
 			}
 		}
 		return $contactGroups;
-	}
-
-	/**
-	 * Get a list of contacts group members
-	 * @return Contact[]
-	 */
-	public function getMembers() {
-		$contacts = [];
-		if (\OC::$server->getContactsManager()->isEnabled()) {
-			foreach (\OC::$server->getContactsManager()->search($this->id, ['CATEGORIES']) as $contact) {
-				if (array_key_exists('EMAIL', $contact)) {
-					$contacts[] = new Contact($contact['UID']);
-				}
-			}
-		}
-		return $contacts;
 	}
 }

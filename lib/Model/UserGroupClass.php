@@ -25,6 +25,10 @@ namespace OCA\Polls\Model;
 
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 
+use OCP\Collaboration\Collaborators\ISearch;
+use OCP\Share\IShare;
+use OCA\Circles\AppInfo\Application;
+
 class UserGroupClass implements \JsonSerializable {
 	public const TYPE = 'generic';
 	public const TYPE_PUBLIC = 'public';
@@ -171,17 +175,66 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	/**
-	 * @return UserGroupClass[]
+	 * serach all possible sharees - use ISearch to respect autocomplete restrictions
+	 *
+	 * Undocumented function long description
+	 *
+	 * @param type var Description
+	 * @return return type
 	 */
-	public static function search() {
-		return [];
+	public static function search(string $query = ''): array {
+		$items = [];
+		$types = [
+			IShare::TYPE_USER,
+			IShare::TYPE_GROUP
+		];
+		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
+			$types[] = IShare::TYPE_CIRCLE;
+		}
+
+		list($result, $more) = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
+
+		foreach ($result['users'] as $item) {
+			$items[] = new User($item['value']['shareWith']);
+		}
+
+		foreach ($result['exact']['users'] as $item) {
+			$items[] = new User($item['value']['shareWith']);
+		}
+
+		foreach ($result['groups'] as $item) {
+			$items[] = new Group($item['value']['shareWith']);
+		}
+
+		foreach ($result['exact']['groups'] as $item) {
+			$items[] = new Group($item['value']['shareWith']);
+		}
+
+		$items = array_merge($items, Contact::search($query));
+		$items = array_merge($items, ContactGroup::search($query));
+
+		foreach ($result['circles'] as $item) {
+			$items[] = new Circle($item['value']['shareWith']);
+		}
+
+		foreach ($result['exact']['circles'] as $item) {
+			$items[] = new Circle($item['value']['shareWith']);
+		}
+
+		return $items;
 	}
 
 	/**
-	 * @return UserGroupClass[]
+	 * @return array
 	 */
 	public function getMembers() {
 		return [];
+	}
+
+	protected static function getContainer() {
+		$app = \OC::$server->query(Application::class);
+
+		return $app->getContainer();
 	}
 
 	/**

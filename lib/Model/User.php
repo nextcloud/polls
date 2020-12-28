@@ -24,10 +24,14 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\IUserManager;
+use OCP\IUser;
+
 class User extends UserGroupClass {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
 
+	/** @var IUser */
 	private $user;
 
 	public function __construct(
@@ -38,18 +42,14 @@ class User extends UserGroupClass {
 		$this->isNoUser = false;
 		$this->description = \OC::$server->getL10N('polls')->t('User');
 
-		$this->user = \OC::$server->getUserManager()->get($this->id);
+		$this->user = self::getContainer()->query(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();
-		$this->emailAddress = $this->user->getEMailAddress();
+		$this->emailAddress = $this->user->getEmailAddress();
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
 	}
 
 	public function getUserIsDisabled(): bool {
-		return !\OC::$server->getUserManager()->get($this->id)->isEnabled();
-	}
-
-	public static function listRaw(string $query = '') {
-		return \OC::$server->getUserManager()->search($query);
+		return $this->user->isEnabled();
 	}
 
 	/**
@@ -59,7 +59,8 @@ class User extends UserGroupClass {
 	 */
 	public static function search(string $query = '', array $skip = []): array {
 		$users = [];
-		foreach (self::listRaw($query) as $user) {
+
+		foreach (self::getContainer()->query(IUserManager::class)->search($query) as $user) {
 			if (!in_array($user->getUID(), $skip)) {
 				$users[] = new Self($user->getUID());
 			}

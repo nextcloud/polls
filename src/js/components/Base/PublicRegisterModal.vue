@@ -195,7 +195,7 @@ export default {
 	},
 
 	mounted() {
-		this.userName = this.share.userId
+		this.userName = this.share.displayName
 		this.emailAddress = this.share.emailAddress
 		this.setFocus()
 	},

@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\IGroupManager;
 use OCP\IGroup;
 
 class Group extends UserGroupClass {
@@ -38,8 +39,7 @@ class Group extends UserGroupClass {
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
-
-		$this->group = \OC::$server->getGroupManager()->get($this->id);
+		$this->group = self::getContainer()->query(IGroupManager::class)->get($this->id);
 		$this->description = \OC::$server->getL10N('polls')->t('Group');
 		try {
 			// since NC19
@@ -50,8 +50,16 @@ class Group extends UserGroupClass {
 		}
 	}
 
-	public static function listRaw(string $query = '') {
-		return \OC::$server->getGroupManager()->search($query);
+	/**
+	 * @return User[]
+	 */
+	public function getMembers(): array {
+		$members = [];
+
+		foreach (array_keys(self::getContainer()->query(IGroupManager::class)->displayNamesInGroup($this->id)) as $member) {
+			$members[] = new User($member);
+		}
+		return $members;
 	}
 
 	/**
@@ -61,22 +69,12 @@ class Group extends UserGroupClass {
 	 */
 	public static function search(string $query = '', array $skip = []): array {
 		$groups = [];
-		foreach (self::listRaw($query) as $group) {
+
+		foreach (self::getContainer()->query(IGroupManager::class)->search($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
 				$groups[] = new Self($group->getGID());
 			}
 		}
 		return $groups;
-	}
-
-	/**
-	 * @return User[]
-	 */
-	public function getMembers(): array {
-		$members = [];
-		foreach (array_keys(\OC::$server->getGroupManager()->displayNamesInGroup($this->id)) as $member) {
-			$members[] = new User($member);
-		}
-		return $members;
 	}
 }

@@ -23,6 +23,8 @@
 
 namespace OCA\Polls\Model;
 
+use OCP\App\IAppManager;
+use OCP\Contacts\IManager as IContactsManager;
 use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
 
@@ -37,9 +39,14 @@ class Contact extends UserGroupClass {
 		$id
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->icon = self::ICON;
-		$this->getContact();
+		if (self::isEnabled()) {
+			$this->icon = self::ICON;
+			$this->getContact();
+		} else {
+			throw new ContactsNotEnabledExceptions();
+		}
 	}
+
 
 	/**
 	 * 	 * must use displayName for contact's user id, because contact id
@@ -49,10 +56,6 @@ class Contact extends UserGroupClass {
 	 */
 	public function getPublicId(): string {
 		return $this->displayName;
-	}
-
-	public static function isEnabled(): bool {
-		return \OC::$server->getAppManager()->isEnabledForUser('contacts');
 	}
 
 	/**
@@ -84,37 +87,37 @@ class Contact extends UserGroupClass {
 	}
 
 	private function getContact(): void {
-		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
-			$this->resolveContactId();
-			$this->loadContact();
+		$this->resolveContactId();
+		$this->loadContact();
 
-			$this->id = $this->contact['UID'];
-			$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
-			$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
-			$this->organisation = isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
-			$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
+		$this->id = $this->contact['UID'];
+		$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
+		$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
+		$this->organisation = isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
+		$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
 
 
-			if (isset($this->contact['CATEGORIES'])) {
-				$this->categories = explode(',', $this->contact['CATEGORIES']);
-			} else {
-				$this->categories = [];
-			}
-
-			$description = $this->categories;
-
-			if (isset($this->contact['ORG'])) {
-				array_unshift($description, $this->organisation);
-			}
-
-			if (count($description) > 0) {
-				$this->description = implode(", ", $description);
-			} else {
-				$this->description = \OC::$server->getL10N('polls')->t('Contact');
-			}
+		if (isset($this->contact['CATEGORIES'])) {
+			$this->categories = explode(',', $this->contact['CATEGORIES']);
 		} else {
-			throw new ContactsNotEnabledExceptions();
+			$this->categories = [];
 		}
+
+		$description = $this->categories;
+
+		if (isset($this->contact['ORG'])) {
+			array_unshift($description, $this->organisation);
+		}
+
+		if (count($description) > 0) {
+			$this->description = implode(", ", $description);
+		} else {
+			$this->description = \OC::$server->getL10N('polls')->t('Contact');
+		}
+	}
+
+	public static function isEnabled(): bool {
+		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('contacts');
 	}
 
 	/**
@@ -123,10 +126,11 @@ class Contact extends UserGroupClass {
 	 *
 	 * @param string[] $queryRange
 	 */
-	public static function listRaw(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
+	private static function listRaw(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
 		$contacts = [];
-		if (\OC::$server->getAppManager()->isEnabledForUser('contacts')) {
-			foreach (\OC::$server->getContactsManager()->search($query, $queryRange) as $contact) {
+
+		if (self::isEnabled()) {
+			foreach (self::getContainer()->query(IContactsManager::class)->search($query, $queryRange) as $contact) {
 				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 					$contacts[] = $contact;
 				}
@@ -138,7 +142,7 @@ class Contact extends UserGroupClass {
 	/**
 	 * @return Contact[]
 	 */
-	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']) {
+	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
 		$contacts = [];
 		foreach (self::listRaw($query, $queryRange) as $contact) {
 			$contacts[] = new Self($contact['UID']);
