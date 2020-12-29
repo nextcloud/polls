@@ -32,6 +32,7 @@ OC.L10N.register(
     "Remove share" : "Отстрани споделување",
     "No" : "Не",
     "Yes" : "Да",
+    "Toggle Sidebar" : "Отвори странична лента",
     "Deleted" : "Избришана",
     "Day" : "Ден",
     "Month" : "Месец",
