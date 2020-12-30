@@ -146,7 +146,7 @@ class ShareService {
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
 		// Convert user type contact to share type email
-		if ($userGroup->getType()) {
+		if ($userGroup->getType() === Share::TYPE_CONTACT) {
 			$this->share->setType(UserGroupClass::TYPE_EMAIL);
 			$this->share->setUserId($userGroup->getEmailAddress());
 		} else {
