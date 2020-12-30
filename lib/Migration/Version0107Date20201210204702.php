@@ -42,6 +42,67 @@ class Version0107Date20201210204702 extends SimpleMigrationStep {
 	 * @return void
 	 */
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+		// $schema = $schemaClosure();
+		//
+		// if (!$schema->hasTable('polls_options')) {
+		// 	return;
+		// }
+		//
+		// // remove duplicates from oc_polls_options
+		// // preserve the first entry
+		// $query = $this->connection->getQueryBuilder();
+		// $query->select('id', 'poll_id', 'poll_option_text', 'timestamp')
+		// 	->from('polls_options');
+		// $foundEntries = $query->execute();
+		//
+		// $delete = $this->connection->getQueryBuilder();
+		// $delete->delete('polls_options')
+		// 	->where('id = :id');
+		//
+		// $entries2Keep = [];
+		//
+		// while ($row = $foundEntries->fetch()) {
+		// 	$currentRecord = [
+		// 		$row['poll_id'],
+		// 		$row['poll_option_text'],
+		// 		$row['timestamp']
+		// 	];
+		// 	if (in_array($currentRecord, $entries2Keep)) {
+		// 		$delete->setParameter('id', $row['id']);
+		// 		$delete->execute();
+		// 	} else {
+		// 		$entries2Keep[] = $currentRecord;
+		// 	}
+		// }
+	}
+
+	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+		$this->removeDuplicates($output, $schemaClosure, $options);
+
+		/** @var ISchemaWrapper $schema */
+		$schema = $schemaClosure();
+
+		if ($schema->hasTable('polls_options')) {
+			$table = $schema->getTable('polls_options');
+			$table->changeColumn('poll_option_text', [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->changeColumn('timestamp', [
+				'notnull' => true,
+				'default' => 0
+			]);
+
+			try {
+				$table->addUniqueIndex(['poll_id', 'poll_option_text', 'timestamp'], 'UNIQ_options');
+			} catch (SchemaException $e) {
+				//catch silently, index is already present
+			}
+		}
+		return $schema;
+	}
+
+	public function removeDuplicates(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 
 		if (!$schema->hasTable('polls_options')) {
@@ -74,29 +135,5 @@ class Version0107Date20201210204702 extends SimpleMigrationStep {
 				$entries2Keep[] = $currentRecord;
 			}
 		}
-	}
-
-	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		/** @var ISchemaWrapper $schema */
-		$schema = $schemaClosure();
-
-		if ($schema->hasTable('polls_options')) {
-			$table = $schema->getTable('polls_options');
-			$table->changeColumn('poll_option_text', [
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->changeColumn('timestamp', [
-				'notnull' => true,
-				'default' => 0
-			]);
-
-			try {
-				$table->addUniqueIndex(['poll_id', 'poll_option_text', 'timestamp'], 'UNIQ_options');
-			} catch (SchemaException $e) {
-				//catch silently, index is already present
-			}
-		}
-		return $schema;
 	}
 }
