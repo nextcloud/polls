@@ -86,7 +86,7 @@ class Version0107Date20201217071304 extends SimpleMigrationStep {
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		$this->removeDuplicates($output, $schemaClosure, $options);
+		$this->removeDuplicates($schemaClosure);
 
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
@@ -107,7 +107,7 @@ class Version0107Date20201217071304 extends SimpleMigrationStep {
 		return $schema;
 	}
 
-	public function removeDuplicates(IOutput $output, \Closure $schemaClosure, array $options) {
+	public function removeDuplicates(\Closure $schemaClosure) {
 		$schema = $schemaClosure();
 
 		if (!$schema->hasTable('polls_share')) {
