@@ -42,78 +42,6 @@ class Version0107Date20201210160301 extends SimpleMigrationStep {
 	 * @return void
 	 */
 	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		// $schema = $schemaClosure();
-		//
-		// if (!$schema->hasTable('polls_log')) {
-		// 	return;
-		// }
-		//
-		// // remove duplicates from oc_polls_log
-		// // preserve the first entry
-		// $query = $this->connection->getQueryBuilder();
-		// $query->select('id', 'processed', 'poll_id', 'user_id', 'message_id', 'message')
-		// 	->from('polls_log');
-		// $foundEntries = $query->execute();
-		//
-		// $delete = $this->connection->getQueryBuilder();
-		// $delete->delete('polls_log')
-		// 	->where('id = :id');
-		//
-		// $entries2Keep = [];
-		//
-		// while ($row = $foundEntries->fetch()) {
-		// 	$currentRecord = [
-		// 		$row['processed'],
-		// 		$row['poll_id'],
-		// 		$row['user_id'],
-		// 		$row['message_id'],
-		// 		$row['message']
-		// 	];
-		// 	if (in_array($currentRecord, $entries2Keep)) {
-		// 		$delete->setParameter('id', $row['id']);
-		// 		$delete->execute();
-		// 	} else {
-		// 		$entries2Keep[] = $currentRecord;
-		// 	}
-		// }
-	}
-
-	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		$this->removeDuplicates($output, $schemaClosure, $options);
-
-		/** @var ISchemaWrapper $schema */
-		$schema = $schemaClosure();
-
-		if ($schema->hasTable('polls_log')) {
-			$table = $schema->getTable('polls_log');
-			$table->changeColumn('poll_id', [
-				'default' => 0
-			]);
-			$table->changeColumn('user_id', [
-				'length' => 64,
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->changeColumn('message', [
-				'length' => 128,
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->changeColumn('message_id', [
-				'notnull' => true,
-				'default' => ''
-			]);
-
-			try {
-				$table->addUniqueIndex(['processed', 'poll_id', 'user_id', 'message_id', 'message'], 'UNIQ_unprocessed');
-			} catch (SchemaException $e) {
-				//catch silently, index is already present
-			}
-		}
-		return $schema;
-	}
-
-	public function removeDuplicates(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 
 		if (!$schema->hasTable('polls_log')) {
@@ -147,5 +75,39 @@ class Version0107Date20201210160301 extends SimpleMigrationStep {
 			} else {
 				$entries2Keep[] = $currentRecord;
 			}
-		}	}
+		}
+	}
+
+	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+		/** @var ISchemaWrapper $schema */
+		$schema = $schemaClosure();
+
+		if ($schema->hasTable('polls_log')) {
+			$table = $schema->getTable('polls_log');
+			$table->changeColumn('poll_id', [
+				'default' => 0
+			]);
+			$table->changeColumn('user_id', [
+				'length' => 64,
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->changeColumn('message', [
+				'length' => 128,
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->changeColumn('message_id', [
+				'notnull' => true,
+				'default' => ''
+			]);
+
+			try {
+				$table->addUniqueIndex(['processed', 'poll_id', 'user_id', 'message_id', 'message'], 'UNIQ_unprocessed');
+			} catch (SchemaException $e) {
+				//catch silently, index is already present
+			}
+		}
+		return $schema;
+	}
 }
