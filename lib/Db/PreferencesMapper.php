@@ -26,6 +26,7 @@ namespace OCA\Polls\Db;
 
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 
 /**
  * @template-extends QBMapper<Preferences>
@@ -51,5 +52,42 @@ class PreferencesMapper extends QBMapper {
 		   );
 
 		return $this->findEntity($qb);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function removeDuplicates() {
+		try {
+			$query = $this->db->getQueryBuilder();
+			$query->delete($this->getTableName())
+				->where('user_id = :userId')
+				->setParameter('userId', '');
+			$query->execute();
+
+			// remove duplicate preferences from oc_polls_preferences
+			// preserve the last user setting in the db
+			$query = $this->db->getQueryBuilder();
+			$query->select('id', 'user_id')
+				->from($this->getTableName());
+			$users = $query->execute();
+
+			$delete = $this->db->getQueryBuilder();
+			$delete->delete($this->getTableName())
+				->where('id = :id');
+
+			$userskeep = [];
+
+			while ($row = $users->fetch()) {
+				if (in_array($row['user_id'], $userskeep)) {
+					$delete->setParameter('id', $row['id']);
+					$delete->execute();
+				} else {
+					$userskeep[] = $row['user_id'];
+				}
+			}
+		} catch (TableNotFoundException $e) {
+			// ignore
+		}
 	}
 }

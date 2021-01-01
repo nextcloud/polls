@@ -35,5 +35,5 @@ $fm->define('OCA\Polls\Db\Log')->setDefinitions([
 	'userId' => Faker::firstNameMale(),
 	'displayName' => Faker::lastName(),
 	'messageId' => 'addPoll',
-	'message' => Faker::text(255)
+	'message' => Faker::text(128)
 ]);

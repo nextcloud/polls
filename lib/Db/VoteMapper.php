@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 
 /**
  * @template-extends QBMapper<Vote>
@@ -153,5 +154,39 @@ class VoteMapper extends QBMapper {
 		);
 
 		$qb->execute();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function removeDuplicates() {
+		try {
+			$query = $this->db->getQueryBuilder();
+			$query->select('id', 'poll_id', 'user_id', 'vote_option_text')
+				->from($this->getTableName());
+			$foundEntries = $query->execute();
+
+			$delete = $this->db->getQueryBuilder();
+			$delete->delete($this->getTableName())
+				->where('id = :id');
+
+			$entries2Keep = [];
+
+			while ($row = $foundEntries->fetch()) {
+				$currentRecord = [
+					$row['poll_id'],
+					$row['user_id'],
+					$row['vote_option_text']
+				];
+				if (in_array($currentRecord, $entries2Keep)) {
+					$delete->setParameter('id', $row['id']);
+					$delete->execute();
+				} else {
+					$entries2Keep[] = $currentRecord;
+				}
+			}
+		} catch (TableNotFoundException $e) {
+			// ignore
+		}
 	}
 }

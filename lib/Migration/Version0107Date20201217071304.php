@@ -24,78 +24,37 @@
 namespace OCA\Polls\Migration;
 
 use OCP\DB\ISchemaWrapper;
-use OCP\IConfig;
+use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
-use OCP\Migration\IOutput;
+use Doctrine\DBAL\Schema\SchemaException;
 
-class Version0106Date20201031080745 extends SimpleMigrationStep {
+class Version0107Date20201217071304 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
 
-	/** @var IConfig */
-	protected $config;
-
-	public function __construct(IDBConnection $connection, IConfig $config) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-		$this->config = $config;
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
+
 		if ($schema->hasTable('polls_share')) {
 			$table = $schema->getTable('polls_share');
-
-			if (!$table->hasColumn('display_name')) {
-				$table->addColumn('display_name', 'string', [
-					'notnull' => false,
-					'length' => 64,
-					'default' => ''
-				]);
-			}
-
-			if (!$table->hasColumn('email_address')) {
-				$table->addColumn('email_address', 'string', [
-					'notnull' => false,
-					'length' => 254,
-					'default' => ''
-				]);
-			}
-		}
-
-		if ($schema->hasTable('polls_preferences')) {
-			$table = $schema->getTable('polls_preferences');
 			$table->changeColumn('user_id', [
+				'notnull' => true,
 				'default' => ''
 			]);
-			$table->changeColumn('preferences', [
-				'notnull' => false
-			]);
+
 			try {
-				$table->addUniqueIndex(['user_id']);
-			} catch (\Exception $e) {
-				//catch silently, index is already present
+				$table->addUniqueIndex(['poll_id', 'user_id'], 'UNIQ_shares');
+			} catch (SchemaException $e) {
+				// catch silently, index is already present
 			}
 		}
-
 		return $schema;
-	}
-
-	/**
-	 * @return void
-	 */
-	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		$schema = $schemaClosure();
-		if ($schema->hasTable('polls_share')) {
-			$table = $schema->getTable('polls_share');
-			if ($table->hasColumn('email_address') && $table->hasColumn('user_email')) {
-				$query = $this->connection->getQueryBuilder();
-				$query->update('polls_share')
-					->set('email_address', 'user_email');
-				$query->execute();
-			}
-		}
 	}
 }

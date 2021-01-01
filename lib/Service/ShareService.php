@@ -128,31 +128,35 @@ class ShareService {
 
 	/**
 	 * 	 * crate share - MUST BE PRIVATE!
-	 *   * convert type contact to type email
 	 *
 	 * @return Share
 	 */
 	private function create(int $pollId, UserGroupClass $userGroup, bool $preventInvitation = false): Share {
-		$this->share = new Share();
-		$this->share->setToken(\OC::$server->getSecureRandom()->generate(
+		$preventInvitation = $userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? true : $preventInvitation;
+		$token = \OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
 			ISecureRandom::CHAR_UPPER
-		));
+		);
+
+		$this->share = new Share();
+		$this->share->setToken($token);
 		$this->share->setPollId($pollId);
-		$this->share->setInvitationSent($preventInvitation ? time() : 0);
-		$this->share->setDisplayName($userGroup->getDisplayName());
-		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
 		// Convert user type contact to share type email
-		if ($userGroup->getType() === Share::TYPE_CONTACT) {
+		if ($userGroup->getType() === UserGroupClass::TYPE_CONTACT) {
 			$this->share->setType(UserGroupClass::TYPE_EMAIL);
 			$this->share->setUserId($userGroup->getEmailAddress());
 		} else {
 			$this->share->setType($userGroup->getType());
-			$this->share->setUserId($userGroup->getPublicId());
+			$this->share->setUserId($userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? $token : $userGroup->getPublicId());
 		}
+
+		$this->share->setInvitationSent($preventInvitation ? time() : 0);
+		$this->share->setType($userGroup->getType());
+		$this->share->setDisplayName($userGroup->getDisplayName());
+		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
 		return $this->shareMapper->insert($this->share);
 	}

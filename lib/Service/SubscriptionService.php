@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\DoesNotExistException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
@@ -80,25 +80,18 @@ class SubscriptionService {
 			$this->acl->setPollId($pollId);
 		}
 
-		try {
-			$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
-			if (!$subscribed) {
+		if (!$subscribed) {
+			try {
+				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 				$this->subscriptionMapper->delete($subscription);
+			} catch (DoesNotExistException $e) {
+				// catch silently (assume already unsubscribed)
 			}
-		} catch (DoesNotExistException $e) {
-			if ($subscribed) {
-				// subscription does not exist, add subscription
+		} else {
+			try {
 				$this->add($this->acl->getPollId(), $this->acl->getUserId());
-			}
-		} catch (MultipleObjectsReturnedException $e) {
-			// Duplicates should not exist but if found, fix it
-			// unsubscribe from all and resubscribe, if requested
-			\OC::$server->getLogger()->debug('Multiple subscription (duplicates) found');
-			$this->subscriptionMapper->unsubscribe($this->acl->getPollId(), $this->acl->getUserId());
-			\OC::$server->getLogger()->debug('Unsubscribed all for user ' . $this->acl->getUserId() . 'in poll' . $pollId);
-			if ($subscribed) {
-				$this->add($this->acl->getPollId(), $this->acl->getUserId());
-				\OC::$server->getLogger()->debug('Added new subscription');
+			} catch (UniqueConstraintViolationException $e) {
+				// catch silently (assume already subscribed)
 			}
 		}
 		return $subscribed;
