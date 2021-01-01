@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-table-vote-item" :class="[answer, { active: isActive && isValidUser &&!closed }]">
+	<div class="vote-table-vote-item" :class="[answer, isConfirmed, { active: isActive && isValidUser &&!closed }]">
 		<div v-if="isActive" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 	</div>
@@ -61,6 +61,14 @@ export default {
 					userId: this.userId,
 				}).voteAnswer
 			} catch (e) {
+				return ''
+			}
+		},
+
+		isConfirmed() {
+			if (this.option.confirmed && this.closed) {
+				return 'confirmed'
+			} else {
 				return ''
 			}
 		},
