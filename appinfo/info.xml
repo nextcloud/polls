@@ -28,6 +28,11 @@
 	<background-jobs>
 		<job>OCA\Polls\Cron\NotificationCron</job>
 	</background-jobs>
+	<repair-steps>
+        <pre-migration>
+            <step>OCA\Polls\Migration\DeleteDuplicates</step>
+        </pre-migration>
+    </repair-steps>
 	<navigations>
         <navigation>
             <name>Polls</name>

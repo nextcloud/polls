@@ -28,22 +28,17 @@ use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use Doctrine\DBAL\Schema\SchemaException;
-use OCA\Polls\Db\LogMapper;
 
 class Version0107Date20201210160301 extends SimpleMigrationStep {
 
-	/** @var LogMapper */
-	private $logMapper;
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection, LogMapper $logMapper) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-		$this->logMapper = $logMapper;
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		$this->logMapper->removeDuplicates();
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -70,7 +65,7 @@ class Version0107Date20201210160301 extends SimpleMigrationStep {
 			try {
 				$table->addUniqueIndex(['processed', 'poll_id', 'user_id', 'message_id', 'message'], 'UNIQ_unprocessed');
 			} catch (SchemaException $e) {
-				//catch silently, index is already present
+				// catch silently, index is already present
 			}
 		}
 		return $schema;

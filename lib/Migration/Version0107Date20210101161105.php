@@ -28,23 +28,17 @@ use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use Doctrine\DBAL\Schema\SchemaException;
-use OCA\Polls\Db\SubscriptionMapper;
 
 class Version0107Date20210101161105 extends SimpleMigrationStep {
-
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
 
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection, SubscriptionMapper $subscriptionMapper) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-		$this->subscriptionMapper = $subscriptionMapper;
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		$this->subscriptionMapper->removeDuplicates();
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -54,7 +48,7 @@ class Version0107Date20210101161105 extends SimpleMigrationStep {
 			try {
 				$table->addUniqueIndex(['poll_id', 'user_id'], 'UNIQ_subscription');
 			} catch (SchemaException $e) {
-				//catch silently, index is already present
+				// catch silently, index is already present
 			}
 		}
 		return $schema;

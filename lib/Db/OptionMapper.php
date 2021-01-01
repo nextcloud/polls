@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 
 /**
  * @template-extends QBMapper<Option>
@@ -115,31 +116,35 @@ class OptionMapper extends QBMapper {
 	 * @return void
 	 */
 	public function removeDuplicates() {
-		// remove duplicates from oc_polls_options
-		// preserve the first entry
-		$query = $this->db->getQueryBuilder();
-		$query->select('id', 'poll_id', 'poll_option_text', 'timestamp')
-			->from($this->getTableName());
-		$foundEntries = $query->execute();
+		try {
+			// remove duplicates from oc_polls_options
+			// preserve the first entry
+			$query = $this->db->getQueryBuilder();
+			$query->select('id', 'poll_id', 'poll_option_text', 'timestamp')
+				->from($this->getTableName());
+			$foundEntries = $query->execute();
 
-		$delete = $this->db->getQueryBuilder();
-		$delete->delete($this->getTableName())
-			->where('id = :id');
+			$delete = $this->db->getQueryBuilder();
+			$delete->delete($this->getTableName())
+				->where('id = :id');
 
-		$entries2Keep = [];
+			$entries2Keep = [];
 
-		while ($row = $foundEntries->fetch()) {
-			$currentRecord = [
-				$row['poll_id'],
-				$row['poll_option_text'],
-				$row['timestamp']
-			];
-			if (in_array($currentRecord, $entries2Keep)) {
-				$delete->setParameter('id', $row['id']);
-				$delete->execute();
-			} else {
-				$entries2Keep[] = $currentRecord;
+			while ($row = $foundEntries->fetch()) {
+				$currentRecord = [
+					$row['poll_id'],
+					$row['poll_option_text'],
+					$row['timestamp']
+				];
+				if (in_array($currentRecord, $entries2Keep)) {
+					$delete->setParameter('id', $row['id']);
+					$delete->execute();
+				} else {
+					$entries2Keep[] = $currentRecord;
+				}
 			}
+		} catch (TableNotFoundException $e) {
+			// ignore
 		}
 	}
 }

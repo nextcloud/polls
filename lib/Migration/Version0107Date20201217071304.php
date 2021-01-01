@@ -28,23 +28,17 @@ use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use Doctrine\DBAL\Schema\SchemaException;
-use OCA\Polls\Db\ShareMapper;
 
 class Version0107Date20201217071304 extends SimpleMigrationStep {
-
-	/** @var ShareMapper */
-	private $shareMapper;
 
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection, ShareMapper $shareMapper) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-		$this->shareMapper = $shareMapper;
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		$this->shareMapper->removeDuplicates();
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -58,7 +52,7 @@ class Version0107Date20201217071304 extends SimpleMigrationStep {
 			try {
 				$table->addUniqueIndex(['poll_id', 'user_id'], 'UNIQ_shares');
 			} catch (SchemaException $e) {
-				//catch silently, index is already present
+				// catch silently, index is already present
 			}
 		}
 		return $schema;

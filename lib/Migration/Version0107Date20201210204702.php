@@ -28,23 +28,17 @@ use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use Doctrine\DBAL\Schema\SchemaException;
-use OCA\Polls\Db\OptionMapper;
 
 class Version0107Date20201210204702 extends SimpleMigrationStep {
-
-	/** @var OptionMapper */
-	private $optionMapper;
 
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection, OptionMapper $optionMapper) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-		$this->optionMapper = $optionMapper;
 }
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		$this->optionMapper->removeDuplicates();
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -62,7 +56,7 @@ class Version0107Date20201210204702 extends SimpleMigrationStep {
 			try {
 				$table->addUniqueIndex(['poll_id', 'poll_option_text', 'timestamp'], 'UNIQ_options');
 			} catch (SchemaException $e) {
-				//catch silently, index is already present
+				// catch silently, index is already present
 			}
 		}
 		return $schema;
