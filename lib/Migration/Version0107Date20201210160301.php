@@ -28,57 +28,22 @@ use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use Doctrine\DBAL\Schema\SchemaException;
+use OCA\Polls\Db\LogMapper;
 
 class Version0107Date20201210160301 extends SimpleMigrationStep {
 
+	/** @var LogMapper */
+	private $logMapper;
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection) {
+	public function __construct(IDBConnection $connection, LogMapper $logMapper) {
 		$this->connection = $connection;
-	}
-
-	/**
-	 * @return void
-	 */
-	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		$schema = $schemaClosure();
-
-		if (!$schema->hasTable('polls_log')) {
-			return;
-		}
-
-		// remove duplicates from oc_polls_log
-		// preserve the first entry
-		$query = $this->connection->getQueryBuilder();
-		$query->select('id', 'processed', 'poll_id', 'user_id', 'message_id', 'message')
-			->from('polls_log');
-		$foundEntries = $query->execute();
-
-		$delete = $this->connection->getQueryBuilder();
-		$delete->delete('polls_log')
-			->where('id = :id');
-
-		$entries2Keep = [];
-
-		while ($row = $foundEntries->fetch()) {
-			$currentRecord = [
-				$row['processed'],
-				$row['poll_id'],
-				$row['user_id'],
-				$row['message_id'],
-				$row['message']
-			];
-			if (in_array($currentRecord, $entries2Keep)) {
-				$delete->setParameter('id', $row['id']);
-				$delete->execute();
-			} else {
-				$entries2Keep[] = $currentRecord;
-			}
-		}
+		$this->logMapper = $logMapper;
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+		$this->logMapper->removeDuplicates();
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 

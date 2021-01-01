@@ -42,45 +42,6 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 		$this->config = $config;
 	}
 
-	/**
-	 * @return void
-	 */
-	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		$schema = $schemaClosure();
-
-		if ($schema->hasTable('polls_preferences')) {
-
-			// remove preferences with empty user_id from oc_polls_preferences
-			$query = $this->connection->getQueryBuilder();
-			$query->delete('polls_preferences')
-				->where('user_id = :userId')
-				->setParameter('userId', '');
-			$query->execute();
-
-			// remove duplicate preferences from oc_polls_preferences
-			// preserve the last user setting in the db
-			$query = $this->connection->getQueryBuilder();
-			$query->select('id', 'user_id')
-				->from('polls_preferences');
-			$users = $query->execute();
-
-			$delete = $this->connection->getQueryBuilder();
-			$delete->delete('polls_preferences')
-				->where('id = :id');
-
-			$userskeep = [];
-
-			while ($row = $users->fetch()) {
-				if (in_array($row['user_id'], $userskeep)) {
-					$delete->setParameter('id', $row['id']);
-					$delete->execute();
-				} else {
-					$userskeep[] = $row['user_id'];
-				}
-			}
-		}
-	}
-
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

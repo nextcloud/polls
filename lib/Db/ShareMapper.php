@@ -128,4 +128,46 @@ class ShareMapper extends QBMapper {
 
 		$qb->execute();
 	}
+
+	/**
+	 * @return void
+	 */
+	public function removeDuplicates() {
+		$query = $this->db->getQueryBuilder();
+
+		// make sure, all public shares fit to the unique index added in schemaChange(),
+		// by copying token to user_id
+		$query->update($this->getTableName())
+			->set('user_id', 'token')
+			->where('type = :type')
+			->setParameter('type', 'public')
+			->execute();
+
+		// remove duplicates from oc_polls_share
+		// preserve the first entry
+		$query = $this->db->getQueryBuilder();
+		$query->select('id', 'type', 'poll_id', 'user_id')
+			->from($this->getTableName());
+		$foundEntries = $query->execute();
+
+		$delete = $this->db->getQueryBuilder();
+		$delete->delete($this->getTableName())->where('id = :id');
+
+		$entries2Keep = [];
+
+		while ($row = $foundEntries->fetch()) {
+			$currentRecord = [
+				$row['poll_id'],
+				$row['type'],
+				$row['user_id']
+			];
+
+			if (in_array($currentRecord, $entries2Keep)) {
+				$delete->setParameter('id', $row['id']);
+				$delete->execute();
+			} else {
+				$entries2Keep[] = $currentRecord;
+			}
+		}
+	}
 }

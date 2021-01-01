@@ -28,64 +28,23 @@ use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use Doctrine\DBAL\Schema\SchemaException;
+use OCA\Polls\Db\ShareMapper;
 
 class Version0107Date20201217071304 extends SimpleMigrationStep {
+
+	/** @var ShareMapper */
+	private $shareMapper;
 
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection) {
+	public function __construct(IDBConnection $connection, ShareMapper $shareMapper) {
 		$this->connection = $connection;
-	}
-
-	/**
-	 * @return void
-	 */
-	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
-		$schema = $schemaClosure();
-
-		if (!$schema->hasTable('polls_share')) {
-			return;
-		}
-		$query = $this->connection->getQueryBuilder();
-
-		// make sure, all public shares fit to the unique index added in schemaChange(),
-		// by copying token to user_id
-		$query->update('polls_share')
-			->set('user_id', 'token')
-			->where('type = :type')
-			->setParameter('type', 'public')
-			->execute();
-
-		// remove duplicates from oc_polls_share
-		// preserve the first entry
-		$query = $this->connection->getQueryBuilder();
-		$query->select('id', 'type', 'poll_id', 'user_id')
-			->from('polls_share');
-		$foundEntries = $query->execute();
-
-		$delete = $this->connection->getQueryBuilder();
-		$delete->delete('polls_share')->where('id = :id');
-
-		$entries2Keep = [];
-
-		while ($row = $foundEntries->fetch()) {
-			$currentRecord = [
-				$row['poll_id'],
-				$row['type'],
-				$row['user_id']
-			];
-
-			if (in_array($currentRecord, $entries2Keep)) {
-				$delete->setParameter('id', $row['id']);
-				$delete->execute();
-			} else {
-				$entries2Keep[] = $currentRecord;
-			}
-		}
+		$this->shareMapper = $shareMapper;
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+		$this->shareMapper->removeDuplicates();
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
