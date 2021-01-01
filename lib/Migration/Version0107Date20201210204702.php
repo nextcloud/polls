@@ -36,7 +36,7 @@ class Version0107Date20201210204702 extends SimpleMigrationStep {
 
 	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
-}
+	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */

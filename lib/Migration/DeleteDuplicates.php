@@ -80,13 +80,11 @@ class DeleteDuplicates implements IRepairStep {
 	 * @inheritdoc
 	 */
 	public function run(IOutput $output) {
-		\OC::$server->getLogger()->alert('run repair');
 		$this->logMapper->removeDuplicates();
 		$this->optionMapper->removeDuplicates();
 		$this->preferencesMapper->removeDuplicates();
 		$this->shareMapper->removeDuplicates();
 		$this->subscriptionMapper->removeDuplicates();
 		$this->voteMapper->removeDuplicates();
-
 	}
 }

@@ -34,7 +34,7 @@ class Version0107Date20201210213303 extends SimpleMigrationStep {
 	/** @var IDBConnection */
 	protected $connection;
 
-	public function __construct(IDBConnection $connection, VoteMapper $voteMapper) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
 	}
 
