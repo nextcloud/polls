@@ -82,20 +82,15 @@ class SubscriptionService {
 
 		if (!$subscribed) {
 			try {
-				\OC::$server->getLogger()->alert('unsubscribing');
 				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 				$this->subscriptionMapper->delete($subscription);
 			} catch (DoesNotExistException $e) {
-				\OC::$server->getLogger()->alert('catch unsubscribing');
 				// catch silently (assume already unsubscribed)
 			}
 		} else {
 			try {
-				\OC::$server->getLogger()->alert('subscribing');
 				$this->add($this->acl->getPollId(), $this->acl->getUserId());
 			} catch (UniqueConstraintViolationException $e) {
-				\OC::$server->getLogger()->alert('catch unsubscribing');
-
 				// catch silently (assume already subscribed)
 			}
 		}
