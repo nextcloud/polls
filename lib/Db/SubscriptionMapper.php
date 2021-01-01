@@ -100,4 +100,37 @@ class SubscriptionMapper extends QBMapper {
 
 		$qb->execute();
 	}
+
+	/**
+	 * @return void
+	 */
+	public function removeDuplicates() {
+		$query = $this->db->getQueryBuilder();
+
+		// remove duplicates from oc_polls_share
+		// preserve the first entry
+		$query = $this->db->getQueryBuilder();
+		$query->select('id', 'poll_id', 'user_id')
+			->from($this->getTableName());
+		$foundEntries = $query->execute();
+
+		$delete = $this->db->getQueryBuilder();
+		$delete->delete($this->getTableName())->where('id = :id');
+
+		$entries2Keep = [];
+
+		while ($row = $foundEntries->fetch()) {
+			$currentRecord = [
+				$row['poll_id'],
+				$row['user_id']
+			];
+
+			if (in_array($currentRecord, $entries2Keep)) {
+				$delete->setParameter('id', $row['id']);
+				$delete->execute();
+			} else {
+				$entries2Keep[] = $currentRecord;
+			}
+		}
+	}
 }
