@@ -46,7 +46,7 @@ class NotificationService {
 
 	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
-		$notification->setApp('polls')
+		$notification->setApp(self::APP_ID)
 			->setObject('poll', strval($pollId))
 			->setUser($this->userId);
 		$this->notificationManager->markProcessed($notification);
@@ -54,11 +54,35 @@ class NotificationService {
 
 	public function sendInvitation(int $pollId, $recipient): bool {
 		$notification = $this->notificationManager->createNotification();
-		$notification->setApp('polls')
+		$notification->setApp(self::APP_ID)
 			->setUser($recipient)
 			->setDateTime(new DateTime())
 			->setObject('poll', strval($pollId))
-			->setSubject('invitation', ['pollId' => $pollId, 'recipient' => $recipient]);
+			->setSubject(self::EVENT_INVITTION, ['pollId' => $pollId, 'recipient' => $recipient]);
+		$this->notificationManager->notify($notification);
+		return true;
+	}
+
+	/**
+	 * create a notification
+	 *
+	 * @param array $params
+	 * 				List of parameters sent to the notification
+	 * 				following types MUST be defined in the §params array:
+	 * 				msgId => Type for setSubject
+	 * 				objectType => Type for setObject
+	 * 				objectValue => Value for setObject
+	 * 				recipient => the recipient of the notification
+	 * 				$params will be set as Subject value
+	 */
+
+	public function createNotification(array $params = []): bool {
+		$notification = $this->notificationManager->createNotification();
+		$notification->setApp(self::APP_ID)
+			->setUser($params['recipient'])
+			->setDateTime(new DateTime())
+			->setObject($params['objectType'], strval($params['objectValue']))
+			->setSubject($params['msgId'], $params);
 		$this->notificationManager->notify($notification);
 		return true;
 	}

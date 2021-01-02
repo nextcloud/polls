@@ -100,7 +100,6 @@ class PollController extends Controller {
 		});
 	}
 
-
 	/**
 	 * get complete poll
 	 * @NoAdminRequired
@@ -109,7 +108,7 @@ class PollController extends Controller {
 		return $this->response(function () use ($pollId) {
 			$this->share = null;
 			$this->poll = $this->pollService->get($pollId);
-			$this->acl->setPoll($this->poll);
+			$this->acl->setPoll($this->poll)->requestView();
 			return $this->build();
 		});
 	}

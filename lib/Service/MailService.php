@@ -226,10 +226,6 @@ class MailService {
 	}
 
 	private function getLogString(Log $logItem, string $displayName): string {
-		if ($logItem->getMessage()) {
-			return $logItem->getMessage();
-		}
-
 		switch ($logItem->getMessageId()) {
 			case Log::MSG_ID_SETVOTE:
 				return $this->trans->t('- %s voted.', [$displayName]);
@@ -245,6 +241,10 @@ class MailService {
 				return $this->trans->t('- A vote option was added.');
 			case Log::MSG_ID_DELETEOPTION:
 				return $this->trans->t('- A vote option was removed.');
+			case Log::MSG_ID_OWNERCHANGE:
+				return $this->trans->t('- The poll owner changed.');
+			case Log::MSG_ID_INDIVIDUAL:
+				return $logItem->getMessage();
 			default:
 				return $logItem->getMessageId() . " (" . $displayName . ")";
 		}

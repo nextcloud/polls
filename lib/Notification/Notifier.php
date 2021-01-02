@@ -73,6 +73,8 @@ class Notifier implements INotifier {
 			throw new \InvalidArgumentException();
 		}
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('polls', 'polls-black.svg')));
+		$parameters = $notification->getSubjectParameters();
+
 		switch ($notification->getSubject()) {
 			case 'invitation':
 				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
@@ -89,6 +91,77 @@ class Notifier implements INotifier {
 							'type' => 'user',
 							'id' => $poll->getOwner(),
 							'name' => $owner->getDisplayName(),
+						]
+					]
+				);
+				$notification->setLink($this->url->linkToRouteAbsolute(
+					'polls.page.vote',
+					['id' => $poll->getId()]
+				));
+				break;
+
+			case 'takeOverPoll':
+				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
+				$newOwner = $this->userManager->get($parameters['actor']);
+
+				$notification->setParsedSubject(
+					$l->t('%s took over your poll', [$newOwner->getDisplayName()])
+				);
+
+				$notification->setRichSubject(
+					$l->t('{user} took over your poll "%s" and is the new owner.', [$poll->getTitle()]),
+					[
+						'user' => [
+							'type' => 'user',
+							'id' =>  $newOwner->getUID(),
+							'name' => $newOwner->getDisplayName(),
+						]
+					]
+				);
+				$notification->setLink($this->url->linkToRouteAbsolute(
+					'polls.page.vote',
+					['id' => $poll->getId()]
+				));
+				break;
+
+			case 'deletePollByOther':
+				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
+				$actor = $this->userManager->get($parameters['actor']);
+
+				$notification->setParsedSubject(
+					$l->t('%s permanently deleted your poll', [$actor->getDisplayName()])
+				);
+
+				$notification->setRichSubject(
+					$l->t('{user} permanently deleted your poll "%s".', $parameters['pollTitle']),
+					[
+						'user' => [
+							'type' => 'user',
+							'id' =>  $actor->getUID(),
+							'name' => $actor->getDisplayName(),
+						]
+					]
+				);
+				$notification->setLink($this->url->linkToRouteAbsolute(
+					'polls.page.vote',
+					['id' => $poll->getId()]
+				));
+				break;
+
+			case 'softDeletePollByOther':
+				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
+				$actor = $this->userManager->get($parameters['actor']);
+
+				$notification->setParsedSubject(
+					$l->t('%s changed the deleted status of your poll', [$actor->getDisplayName()])
+				);
+				$notification->setRichSubject(
+					$l->t('{user} changed the deleted status of your poll "%s".', $parameters['pollTitle']),
+					[
+						'user' => [
+							'type' => 'user',
+							'id' =>  $actor->getUID(),
+							'name' => $actor->getDisplayName(),
 						]
 					]
 				);

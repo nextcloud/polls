@@ -43,13 +43,13 @@
 			<h2 class="title">
 				{{ poll.title }}
 				<Badge v-if="closed"
-					:title="dateExpiryString"
+					:title="t('polls', 'Closed {relativeTimeAgo}', {relativeTimeAgo: timeExpirationRelative})"
 					icon="icon-polls-closed"
-					class="error" />
+					:class="expiryClass" />
 				<Badge v-if="!closed && poll.expire"
-					:title="dateExpiryString"
+					:title="t('polls', 'Closing {relativeExpirationTime}', {relativeExpirationTime: timeExpirationRelative})"
 					icon="icon-calendar"
-					class="success" />
+					:class="expiryClass" />
 				<Badge v-if="poll.deleted"
 					:title="t('polls', 'Deleted')"
 					icon="icon-delete"
@@ -194,9 +194,34 @@ export default {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
 		},
 
-		dateExpiryString() {
-			return moment.unix(this.poll.expire).format('LLLL')
+		// dateExpiryString() {
+		// 	return moment.unix(this.poll.expire).format('LLLL')
+		// },
+		//
+		timeExpirationRelative() {
+			if (this.poll.expire) {
+				return moment.unix(this.poll.expire).fromNow()
+			} else {
+				return t('polls', 'never')
+			}
 		},
+
+		closeToClosing() {
+			return (!this.poll.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)
+		},
+
+		expiryClass() {
+			if (this.closed) {
+				return 'error'
+			} else if (this.poll.expire && this.closeToClosing) {
+				return 'warning'
+			} else if (this.poll.expire && !this.closed) {
+				return 'success'
+			} else {
+				return 'success'
+			}
+		},
+
 		viewCaption() {
 			if (this.viewMode === 'desktop') {
 				return t('polls', 'Switch to mobile view')

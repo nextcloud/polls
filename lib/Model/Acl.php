@@ -82,7 +82,7 @@ class Acl implements JsonSerializable {
 
 
 	/**
-	 * setToken - load share via token and than call setShare
+	 * load share via token and than call setShare
 	 */
 	public function setToken(string $token = ''): Acl {
 		try {
@@ -99,17 +99,11 @@ class Acl implements JsonSerializable {
 	public function setShare(Share $share): Acl {
 		$this->share = $share;
 		$this->validateShareAccess();
-
-		// load poll, if pollId does not match
-		if ($this->share->getPollId() !== $this->poll->getId()) {
-			$this->setPollId($share->getPollId());
-		}
+		$this->setPollId($share->getPollId());
+		$this->requestView();
 		return $this;
 	}
 
-	/**
-	 * setPollId
-	 */
 	public function setPollId(int $pollId = 0): Acl {
 		try {
 			return $this->setPoll($this->pollMapper->find($pollId));
@@ -118,20 +112,11 @@ class Acl implements JsonSerializable {
 		}
 	}
 
-	/**
-	 * 	 * setPoll
-	 *
-	 * @return static
-	 */
-	public function setPoll(Poll $poll): self {
+	public function setPoll(Poll $poll): Acl {
 		$this->poll = $poll;
-		$this->requestView();
 		return $this;
 	}
 
-	/**
-	 * getUserId
-	 */
 	public function getUserId() {
 		if ($this->getLoggedIn()) {
 			return \OC::$server->getUserSession()->getUser()->getUID();
@@ -140,11 +125,6 @@ class Acl implements JsonSerializable {
 		}
 	}
 
-	/**
-	 * 	 * getDisplayName
-	 *
-	 * @return string
-	 */
 	private function getDisplayName(): string {
 		if ($this->getLoggedIn()) {
 			return $this->userManager->get($this->getUserId())->getDisplayName();
@@ -153,16 +133,10 @@ class Acl implements JsonSerializable {
 		}
 	}
 
-	/**
-	 * getPollId
-	 */
 	public function getPollId(): int {
 		return $this->poll->getId();
 	}
 
-	/**
-	 * getAllowView
-	 */
 	public function getAllowView(): bool {
 		return (
 			   $this->getAllowEdit()
@@ -174,9 +148,6 @@ class Acl implements JsonSerializable {
 		);
 	}
 
-	/**
-	 * getAllowVote
-	 */
 	public function getAllowVote(): bool {
 		return ($this->getAllowView() || $this->getToken())
 			&& !$this->poll->getExpired()
@@ -184,102 +155,72 @@ class Acl implements JsonSerializable {
 			&& $this->getUserId();
 	}
 
-	/**
-	 * getAllowSubscribe
-	 */
 	public function getAllowSubscribe(): bool {
 		return ($this->hasEmail())
 			&& !$this->poll->getDeleted()
 			&& $this->getAllowView();
 	}
 
-	/**
-	 * getAllowComment
-	 */
 	public function getAllowComment(): bool {
 		return !$this->poll->getDeleted() && $this->getUserId();
 	}
 
-	/**
-	 * getAllowEdit
-	 */
 	public function getAllowEdit(): bool {
-		return ($this->getIsOwner() || $this->getIsAdmin());
+		return ($this->getIsOwner() || $this->hasAdminAccess());
 	}
 
-	/**
-	 * requestView
-	 */
 	public function requestView(): void {
 		if (!$this->getAllowView()) {
 			throw new NotAuthorizedException;
 		}
 	}
 
-	/**
-	 * requestVote
-	 */
 	public function requestVote(): void {
 		if (!$this->getAllowVote()) {
 			throw new NotAuthorizedException;
 		}
 	}
 
-	/**
-	 * requestComment
-	 */
 	public function requestComment(): void {
 		if (!$this->getAllowComment()) {
 			throw new NotAuthorizedException;
 		}
 	}
 
-	/**
-	 * requestEdit
-	 */
 	public function requestEdit(): void {
 		if (!$this->getAllowEdit()) {
 			throw new NotAuthorizedException;
 		}
 	}
 
-	/**
-	 * requestDelete
-	 */
 	public function requestDelete(): void {
-		if (!$this->getAllowEdit() || !$this->poll->getDeleted()) {
+		if (!$this->getAllowEdit() && !$this->getIsAdmin()) {
 			throw new NotAuthorizedException;
 		}
 	}
 
-	/**
-	 * validateUserId
-	 */
+	public function requestTakeOver(): void {
+		if (!$this->getIsAdmin()) {
+			throw new NotAuthorizedException;
+		}
+	}
+
 	public function validateUserId(string $userId): void {
 		if ($this->getUserId() !== $userId) {
 			throw new NotAuthorizedException;
 		}
 	}
 
-	/**
-	 * getAllowSeeResults
-	 */
 	public function getAllowSeeResults(): bool {
 		return $this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS
 			|| ($this->poll->getShowResults() === 'expired' && $this->poll->getExpired())
 			|| $this->getIsOwner();
 	}
 
-	/**
-	 * getAllowSeeUsernames
-	 */
 	public function getAllowSeeUsernames(): bool {
 		return !$this->poll->getAnonymous() || $this->getIsOwner();
 	}
 
-	/**
-	 * getToken
-	 */
 	public function getToken(): string {
 		return strval($this->share->getToken());
 	}
@@ -319,11 +260,19 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * getIsAdmin - Has user administrative rights?
-	 * Returns true, if user is in admin group and poll has allowed admins to manage the poll
+	 * getIsAdmin - Is the user admin
+	 * Returns true, if user is in admin group
 	 */
 	private function getIsAdmin(): bool {
-		return ($this->getLoggedIn() && $this->groupManager->isAdmin($this->getUserId()) && $this->poll->getAdminAccess());
+		return ($this->getLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
+	}
+
+	/**
+	 * hasAdminAccess - Has user administrative rights?
+	 * Returns true, if user is in admin group and poll has allowed admins to manage the poll
+	 */
+	private function hasAdminAccess(): bool {
+		return ($this->getIsAdmin() && $this->poll->getAdminAccess());
 	}
 
 	/**

@@ -39,6 +39,10 @@
 			</AppNavigationItem>
 		</template>
 		<template #footer>
+			<AppNavigationItem v-if="showAdminSection"
+				:title="t('core', 'Administration')"
+				icon="icon-settings"
+				:to="{ name: 'administration' }" />
 			<AppNavigationItem :title="t('core', 'Settings')" icon="icon-settings" @click="showSettings()" />
 		</template>
 	</AppNavigation>
@@ -47,8 +51,9 @@
 <script>
 
 import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
-import { showError } from '@nextcloud/dialogs'
 import { mapGetters } from 'vuex'
+import { showError } from '@nextcloud/dialogs'
+import { getCurrentUser } from '@nextcloud/auth'
 import CreateDlg from '../Create/CreateDlg'
 import PollNavigationItems from './PollNavigationItems'
 import { emit } from '@nextcloud/event-bus'
@@ -114,6 +119,9 @@ export default {
 		...mapGetters({
 			filteredPolls: 'polls/filtered',
 		}),
+		showAdminSection() {
+			return getCurrentUser().isAdmin
+		},
 	},
 
 	created() {

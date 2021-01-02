@@ -50,7 +50,7 @@ class SubscriptionService {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($pollId);
+			$this->acl->setPollId($pollId)->requestView();
 		}
 
 		try {
@@ -77,7 +77,7 @@ class SubscriptionService {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($pollId);
+			$this->acl->setPollId($pollId)->requestView();
 		}
 
 		if (!$subscribed) {

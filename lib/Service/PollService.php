@@ -40,6 +40,9 @@ use OCA\Polls\Model\Acl;
 
 class PollService {
 
+	/** @var string */
+	private $userId;
+
 	/** @var PollMapper */
 	private $pollMapper;
 
@@ -55,6 +58,9 @@ class PollService {
 	/** @var LogService */
 	private $logService;
 
+	/** @var NotificationService */
+	private $notificationService;
+
 	/** @var MailService */
 	private $mailService;
 
@@ -62,19 +68,23 @@ class PollService {
 	private $acl;
 
 	public function __construct(
+		string $UserId,
 		PollMapper $pollMapper,
 		Poll $poll,
 		VoteMapper $voteMapper,
 		Vote $vote,
 		LogService $logService,
+		NotificationService $notificationService,
 		MailService $mailService,
 		Acl $acl
 	) {
 		$this->pollMapper = $pollMapper;
+		$this->userId = $UserId;
 		$this->poll = $poll;
 		$this->voteMapper = $voteMapper;
 		$this->vote = $vote;
 		$this->logService = $logService;
+		$this->notificationService = $notificationService;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
 	}
@@ -89,7 +99,7 @@ class PollService {
 
 			foreach ($polls as $poll) {
 				try {
-					$this->acl->setPoll($poll);
+					$this->acl->setPoll($poll)->requestView();
 					// TODO: Not the elegant way. Improvement neccessary
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
@@ -106,17 +116,56 @@ class PollService {
 	}
 
 	/**
+	 *   * Get list of polls
+	 *
+	 * @return Poll[]
+	 */
+	public function listForAdmin(): array {
+		$pollList = [];
+		$userId = \OC::$server->getUserSession()->getUser()->getUID();
+		if (\OC::$server->getGroupManager()->isAdmin($userId)) {
+			try {
+				$pollList = $this->pollMapper->findForAdmin($userId);
+			} catch (DoesNotExistException $e) {
+				// silent catch
+			}
+		}
+		return $pollList;
+	}
+
+	/**
+	 * 	 * Update poll configuration
+	 *
+	 * @return Poll
+	 */
+	public function takeover(int $pollId): Poll {
+		$this->poll = $this->pollMapper->find($pollId);
+		$originalOwner = $this->poll->getOwner();
+		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+
+		$this->pollMapper->update($this->poll);
+		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_OWNERCHANGE);
+
+		// send notification to the original owner
+		$this->notificationService->createNotification([
+			'msgId' => 'takeOverPoll',
+			'objectType' => 'poll',
+			'objectValue' => $this->poll->getId(),
+			'recipient' => $originalOwner,
+			'actor' => $this->userId
+		]);
+
+		return $this->poll;
+	}
+
+	/**
 	 * 	 * get poll configuration
 	 *
 	 * @return Poll
 	 */
 	public function get(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll);
-
-		if (!$this->acl->getAllowView()) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->setPoll($this->poll)->requestView();
 		return $this->poll;
 	}
 
@@ -198,7 +247,7 @@ class PollService {
 	 */
 	public function switchDeleted(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->requestEdit();
+		$this->acl->setPoll($this->poll)->requestDelete();
 
 		if ($this->poll->getDeleted()) {
 			$this->poll->setDeleted(0);
@@ -208,6 +257,18 @@ class PollService {
 
 		$this->poll = $this->pollMapper->update($this->poll);
 		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_DELETEPOLL);
+
+		if ($this->userId !== $this->poll->getOwner()) {
+			// send notification to the original owner
+			$this->notificationService->createNotification([
+				'msgId' => 'softDeletePollByOther',
+				'objectType' => 'poll',
+				'objectValue' => $this->poll->getId(),
+				'recipient' => $this->poll->getOwner(),
+				'actor' => $this->userId,
+				'pollTitle' => $this->poll->getTitle()
+			]);
+		}
 
 		return $this->poll;
 	}
@@ -221,7 +282,20 @@ class PollService {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->requestDelete();
 
-		return $this->pollMapper->delete($this->poll);
+		$this->pollMapper->delete($this->poll);
+
+		if ($this->userId !== $this->poll->getOwner()) {
+			// send notification to the original owner
+			$this->notificationService->createNotification([
+				'msgId' => 'deletePollByOther',
+				'objectType' => 'poll',
+				'objectValue' => $this->poll->getId(),
+				'recipient' => $this->poll->getOwner(),
+				'actor' => $this->userId,
+				'pollTitle' => $this->poll->getTitle()
+			]);
+		}
+		return $this->poll;
 	}
 
 	/**
@@ -231,7 +305,7 @@ class PollService {
 	 */
 	public function clone(int $pollId): Poll {
 		$origin = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($origin);
+		$this->acl->setPoll($origin)->requestView();
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
