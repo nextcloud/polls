@@ -218,7 +218,7 @@ export default {
 		flex: 1 0 auto;
 		align-items: stretch;
 		width: 210px;
-		display: inherit;
+		// display: inherit;
 		justify-content: center;
 	}
 
