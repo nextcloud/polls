@@ -1,8 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.6.3] - tbd
+## [1.7.0 - RC1] - 2021-01-02
+ - [enhancement] #188 use notification app for invitations
+ - [enhancement] #907 reload current poll every 30 seconds
+ - [enhancement] #924 admin users can delete and takeover polls from other users via new admin section
+ - [enhancement] #881 respect autocompletion limitations from share settings for users, group and circle searches
+ - [gui] public polls - combine registration dialogs into one dialog
+ - [gui] polls overview changed display of expiration timespan
+ - [fix] #433, #856 avoid duplicates in different tables
  - [fix] #1252 - External user is not listed in admin's shares list
+ - [fix] #1183 - Avoid concurrent long term user searches with a big user base
+ - [fix] #1181 - Speed up poll overview, by avoiding unnecessary loading of polls, the user is not allowed to see
 
 ## [1.6.2] - 2020-11-19
  - [fix] Subscription was missing for logged in users
