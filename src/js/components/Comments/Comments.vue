@@ -21,53 +21,40 @@
   -->
 
 <template>
-	<div class="comments">
-		<CommentAdd v-if="acl.allowComment" />
-		<transition-group v-if="!showEmptyContent" name="fade" class="comments"
-			tag="ul">
-			<li v-for="(comment) in sortedList" :key="comment.id">
-				<div class="comment-item">
-					<UserItem v-bind="comment" />
-					<Actions v-if="comment.userId === acl.userId">
-						<ActionButton icon="icon-delete" @click="deleteComment(comment)">
-							{{ t('polls', 'Delete comment') }}
-						</ActionButton>
-					</Actions>
-					<div class="date">
-						{{ dateCommentedRelative(comment.dt) }}
-					</div>
+	<transition-group name="fade" class="comments"
+		tag="ul">
+		<li v-for="(comment) in sortedList" :key="comment.id">
+			<div class="comment-item">
+				<UserItem v-bind="comment" />
+				<Actions v-if="comment.userId === acl.userId">
+					<ActionButton icon="icon-delete" @click="deleteComment(comment)">
+						{{ t('polls', 'Delete comment') }}
+					</ActionButton>
+				</Actions>
+				<div class="date">
+					{{ dateCommentedRelative(comment.dt) }}
 				</div>
+			</div>
 
-				<div class="message wordwrap comment-content">
-					{{ comment.comment }}
-				</div>
-			</li>
-		</transition-group>
-
-		<EmptyContent v-else icon="icon-comment">
-			{{ t('polls', 'No comments') }}
-			<template #desc>
-				{{ t('polls', 'Be the first.') }}
-			</template>
-		</EmptyContent>
-	</div>
+			<div class="message wordwrap comment-content">
+				{{ comment.comment }}
+			</div>
+		</li>
+	</transition-group>
 </template>
 
 <script>
-import CommentAdd from './CommentAdd'
 import sortBy from 'lodash/sortBy'
 import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
-import { mapState, mapGetters } from 'vuex'
+import { Actions, ActionButton } from '@nextcloud/vue'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'Comments',
 	components: {
 		Actions,
 		ActionButton,
-		CommentAdd,
-		EmptyContent,
 	},
 	data() {
 		return {
@@ -81,14 +68,6 @@ export default {
 			comments: state => state.poll.comments.list,
 			acl: state => state.poll.acl,
 		}),
-
-		...mapGetters({
-			countComments: 'poll/comments/count',
-		}),
-
-		showEmptyContent() {
-			return this.countComments === 0
-		},
 
 		sortedList() {
 			if (this.reverse) {

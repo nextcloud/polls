@@ -53,7 +53,7 @@
 			:order="4"
 			:name="t('polls', 'Comments')"
 			icon="icon-comment">
-			<Comments />
+			<SideBarTabComments />
 		</AppSidebarTab>
 	</AppSidebar>
 </template>
@@ -63,7 +63,7 @@ import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 import SideBarTabConfiguration from './SideBarTabConfiguration'
 import SideBarTabOptions from './SideBarTabOptions'
-import Comments from '../Comments/Comments'
+import SideBarTabComments from './SideBarTabComments'
 import SideBarTabShare from './SideBarTabShare'
 import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
@@ -73,7 +73,7 @@ export default {
 
 	components: {
 		SideBarTabConfiguration,
-		Comments,
+		SideBarTabComments,
 		SideBarTabOptions,
 		SideBarTabShare,
 		AppSidebar,
