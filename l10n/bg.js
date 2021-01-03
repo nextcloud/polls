@@ -17,6 +17,7 @@ OC.L10N.register(
     "Settings" : "Настройки",
     "Owner" : "Създател",
     "Created" : "Създаден",
+    "Deleted" : "Изтрито",
     "never" : "никога",
     "Details" : "Подробности",
     "Configuration" : "Настройки",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Description" : "Описание",
     "No" : "Не",
     "Yes" : "Да",
-    "Deleted" : "Изтрито",
     "Hour" : "Час",
     "Day" : "Ден",
     "Month" : "Месец"

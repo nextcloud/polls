@@ -14,6 +14,7 @@ OC.L10N.register(
     "Settings" : "Instillingar",
     "Owner" : "Owner",
     "Created" : "Lagd",
+    "Deleted" : "Sletta",
     "never" : "aldri",
     "Details" : "Detaljar",
     "Configuration" : "Innstillingar",
@@ -22,7 +23,6 @@ OC.L10N.register(
     "Description" : "Skildring",
     "No" : "Nei",
     "Yes" : "Ja",
-    "Deleted" : "Sletta",
     "Day" : "Dag",
     "Month" : "Månad"
 },

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Title" : "শিরোনাম",
     "Settings" : "সেটিংস",
     "Owner" : "Owner",
+    "Deleted" : "মুছে ফেলা",
     "never" : "কখনোই নয়",
     "Details" : "বিসতারিত",
     "Configuration" : "কনফিগারেসন",
@@ -16,7 +17,6 @@ OC.L10N.register(
     "Description" : "বিবরণ",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "মুছে ফেলা",
     "Hour" : "ঘন্টা",
     "Day" : "দিবস",
     "Month" : "মাস"

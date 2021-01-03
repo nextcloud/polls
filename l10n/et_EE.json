@@ -19,6 +19,7 @@
     "Access" : "Ligipääs",
     "Owner" : "Omanik",
     "Created" : "Loodud",
+    "Deleted" : "Kustutatud",
     "never" : "mitte kunagi",
     "Details" : "Üksikasjad",
     "Configuration" : "Seadistamine",
@@ -28,7 +29,6 @@
     "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "No" : "Ei",
     "Yes" : "Jah",
-    "Deleted" : "Kustutatud",
     "Hour" : "Tund",
     "Day" : "Päev",
     "Month" : "Kuu"

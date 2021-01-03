@@ -9,12 +9,12 @@ OC.L10N.register(
     "Title" : "ماۋزۇ",
     "Settings" : "تەڭشەكلەر",
     "Owner" : "Owner",
+    "Deleted" : "ئۆچۈرۈلدى",
     "never" : "ھەرگىز",
     "Configuration" : "سەپلىمە",
     "Description" : "چۈشەندۈرۈش",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "ئۆچۈرۈلدى",
     "Month" : "ئاي"
 },
 "nplurals=2; plural=(n != 1);");

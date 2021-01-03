@@ -9,11 +9,11 @@ OC.L10N.register(
     "Title" : "عنوان",
     "Settings" : "سیٹینگز",
     "Owner" : "Owner",
+    "Deleted" : "حذف شدہ ",
     "never" : "never",
     "Description" : "تصریح",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "حذف شدہ ",
     "Month" : "ماہ"
 },
 "nplurals=2; plural=(n != 1);");

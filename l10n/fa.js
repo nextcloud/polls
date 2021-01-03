@@ -54,6 +54,7 @@ OC.L10N.register(
     "Owner" : "Owner",
     "Created" : "ایجاد شده",
     "No description provided" : "توضیحات ارائه نشده است",
+    "Deleted" : "حذف شده",
     "never" : "never",
     "Details" : "جزئیات",
     "Configuration" : "پیکربندی",
@@ -81,7 +82,6 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "یک نظرسنجی وارد کنید یا یک مورد جدید را شروع کنید.",
     "Goto Nextcloud" : "برو نکست کلود",
     "Hidden polls" : "نظرسنجی پنهان",
-    "Deleted" : "حذف شده",
     "Day" : "روز",
     "Month" : "ماه",
     "Year" : "سال"

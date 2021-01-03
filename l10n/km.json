@@ -8,6 +8,7 @@
     "Apply" : "អនុវត្ត",
     "Settings" : "ការកំណត់",
     "Owner" : "Owner",
+    "Deleted" : "បាន​លុប",
     "never" : "មិនដែរ",
     "Details" : "ព័ត៌មាន​លម្អិត",
     "Configuration" : "ការ​កំណត់​សណ្ឋាន",
@@ -15,7 +16,6 @@
     "Description" : "ការ​អធិប្បាយ",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "បាន​លុប",
     "Day" : "ថ្ងៃ",
     "Month" : "ខែ"
 },"pluralForm" :"nplurals=1; plural=0;"

@@ -15,6 +15,7 @@
     "Settings" : "Настройки",
     "Owner" : "Създател",
     "Created" : "Създаден",
+    "Deleted" : "Изтрито",
     "never" : "никога",
     "Details" : "Подробности",
     "Configuration" : "Настройки",
@@ -23,7 +24,6 @@
     "Description" : "Описание",
     "No" : "Не",
     "Yes" : "Да",
-    "Deleted" : "Изтрито",
     "Hour" : "Час",
     "Day" : "Ден",
     "Month" : "Месец"

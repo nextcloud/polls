@@ -15,6 +15,7 @@
     "Settings" : "Setări",
     "Access" : "Acces",
     "Owner" : "Proprietar",
+    "Deleted" : "Șters",
     "never" : "niciodată",
     "Details" : "Detalii",
     "Configuration" : "Configurație",
@@ -23,7 +24,6 @@
     "Description" : "Descriere",
     "No" : "Nu",
     "Yes" : "a",
-    "Deleted" : "Șters",
     "Day" : "Zi",
     "Month" : "Luna"
 },"pluralForm" :"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));"

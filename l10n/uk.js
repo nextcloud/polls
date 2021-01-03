@@ -46,8 +46,8 @@ OC.L10N.register(
     "Owner" : "Власник",
     "Created" : "Створено",
     "No description provided" : "Відсутній опис",
+    "Deleted" : "Вилучено",
     "never" : "ніколи",
-    "Error loading poll" : "Помилка під час завантаження опитування",
     "Details" : "Деталі",
     "Configuration" : "Налаштування",
     "Options" : "Параметри",
@@ -65,7 +65,7 @@ OC.L10N.register(
     "Title must not be empty!" : "Потрібно зазначити заголовок!",
     "No" : "Ні",
     "Yes" : "Так",
-    "Deleted" : "Вилучено",
+    "Error loading poll" : "Помилка під час завантаження опитування",
     "Hour" : "Годин",
     "Day" : "День",
     "Month" : "Місяць"

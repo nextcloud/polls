@@ -15,6 +15,7 @@ OC.L10N.register(
     "Apply" : "นำไปใช้",
     "Settings" : "ตั้งค่า",
     "Owner" : "Owner",
+    "Deleted" : "ลบแล้ว",
     "never" : "ไม่ต้องเลย",
     "Details" : "รายละเอียด",
     "Configuration" : "การกำหนดค่า",
@@ -23,7 +24,6 @@ OC.L10N.register(
     "Description" : "รายละเอียด",
     "No" : "ไม่ใช่",
     "Yes" : "ใช่",
-    "Deleted" : "ลบแล้ว",
     "Day" : "วัน",
     "Month" : "เดือน"
 },

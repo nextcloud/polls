@@ -16,6 +16,7 @@ OC.L10N.register(
     "Settings" : "Iestatījumi",
     "Owner" : "Īpašnieks",
     "Created" : "Izveidots",
+    "Deleted" : "Dzēstie",
     "never" : "nekad",
     "Details" : "Detaļas",
     "Configuration" : "Konfigurācija",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "No" : "Nē",
     "Yes" : "Jā",
-    "Deleted" : "Dzēstie",
     "Hour" : "Stunda",
     "Day" : "Diena",
     "Month" : "Mēnesis"

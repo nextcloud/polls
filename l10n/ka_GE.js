@@ -20,6 +20,7 @@ OC.L10N.register(
     "Access" : "წვდომა",
     "Owner" : "მფლობელი",
     "Created" : "შექმნილია",
+    "Deleted" : "გაუქმდა",
     "never" : "არასდროს",
     "Details" : "დეტალები",
     "Configuration" : "კონფიგურაცია",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "No" : "არა",
     "Yes" : "კი",
-    "Deleted" : "გაუქმდა",
     "Hour" : "საათი",
     "Day" : "დღე",
     "Month" : "თვე"

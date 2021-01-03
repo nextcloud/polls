@@ -10,6 +10,7 @@ OC.L10N.register(
     "Apply" : "អនុវត្ត",
     "Settings" : "ការកំណត់",
     "Owner" : "Owner",
+    "Deleted" : "បាន​លុប",
     "never" : "មិនដែរ",
     "Details" : "ព័ត៌មាន​លម្អិត",
     "Configuration" : "ការ​កំណត់​សណ្ឋាន",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "Description" : "ការ​អធិប្បាយ",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "បាន​លុប",
     "Day" : "ថ្ងៃ",
     "Month" : "ខែ"
 },

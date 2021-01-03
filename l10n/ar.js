@@ -19,6 +19,7 @@ OC.L10N.register(
     "Access" : "النفاذ",
     "Owner" : "المالك",
     "Created" : "أُنشئ",
+    "Deleted" : "تم حذفه",
     "never" : "بتاتاً",
     "Details" : "التفاصيل",
     "Configuration" : "إعداد",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Anonymous poll" : "استطلاع رأي مجهول",
     "No" : "لا",
     "Yes" : "نعم",
-    "Deleted" : "تم حذفه",
     "Hour" : "الساعة",
     "Day" : "يوم",
     "Month" : "شهر"

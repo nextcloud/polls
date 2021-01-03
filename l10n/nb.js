@@ -21,6 +21,7 @@ OC.L10N.register(
     "Access" : "Tilgang",
     "Owner" : "Eier",
     "Created" : "Opprettet",
+    "Deleted" : "Slettet",
     "never" : "aldri",
     "Details" : "Detaljer",
     "Configuration" : "Oppsett",
@@ -30,7 +31,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "No" : "Nei",
     "Yes" : "Ja",
-    "Deleted" : "Slettet",
     "Hour" : "Time",
     "Day" : "Dag",
     "Month" : "Måned"

@@ -9,12 +9,12 @@ OC.L10N.register(
     "Title" : "Judul",
     "Settings" : "Tetapan",
     "Owner" : "Owner",
+    "Deleted" : "Dipadam",
     "never" : "jangan",
     "Shares" : "Kongsi",
     "Description" : "Keterangan",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Dipadam",
     "Day" : "Hari",
     "Month" : "Bulan"
 },

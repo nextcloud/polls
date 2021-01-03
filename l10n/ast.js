@@ -18,6 +18,7 @@ OC.L10N.register(
     "Settings" : "Settings",
     "Owner" : "Owner",
     "Created" : "Creóse",
+    "Deleted" : "Desanicióse",
     "never" : "never",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Description" : "Descripción",
     "No" : "Non",
     "Yes" : "Sí",
-    "Deleted" : "Desanicióse",
     "Hour" : "Hora",
     "Day" : "Día",
     "Month" : "Mes"

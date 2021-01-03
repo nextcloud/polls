@@ -42,6 +42,7 @@ OC.L10N.register(
     "Access" : "Åtkomst",
     "Owner" : "Ägare",
     "Created" : "Skapad",
+    "Deleted" : "Borttagen",
     "never" : "aldrig",
     "Use background image" : "Använd bakgrundsbild",
     "Add a background image to the main area." : "Lägg till en bakgrundsbild i huvudområdet.",
@@ -63,7 +64,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
     "No" : "Nej",
     "Yes" : "Ja",
-    "Deleted" : "Borttagen",
     "Hour" : "Timme",
     "Day" : "Dag",
     "Month" : "Månad"

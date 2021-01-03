@@ -31,6 +31,7 @@ OC.L10N.register(
     "Access" : "Aliro",
     "Owner" : "Posedanto",
     "Created" : "Kreita",
+    "Deleted" : "Forigita",
     "never" : "neniam",
     "Details" : "Detaloj",
     "Configuration" : "Agordo",
@@ -44,7 +45,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Forigita",
     "Hour" : "Horo",
     "Day" : "Tago",
     "Month" : "Monato"

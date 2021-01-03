@@ -17,6 +17,7 @@
     "Access" : "Acesso",
     "Owner" : "Proprietário",
     "Created" : "Criado",
+    "Deleted" : "Eliminado",
     "never" : "nunca",
     "Details" : "Detalhes",
     "Configuration" : "Configuração",
@@ -25,7 +26,6 @@
     "Description" : "Descrição",
     "No" : "Não",
     "Yes" : "Sim",
-    "Deleted" : "Eliminado",
     "Hour" : "Hora",
     "Day" : "Dia",
     "Month" : "Mês"

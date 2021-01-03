@@ -13,6 +13,7 @@ OC.L10N.register(
     "Apply" : "Lakaat",
     "Settings" : "Arventennoù",
     "Owner" : "Perc'henner",
+    "Deleted" : "Lamet",
     "never" : "james",
     "Details" : "Munudoù",
     "Configuration" : "Stumm",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Description" : "Diskrivadur",
     "No" : "Nan",
     "Yes" : "Ya",
-    "Deleted" : "Lamet",
     "Day" : "Deiz",
     "Month" : "Miz"
 },
