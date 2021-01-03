@@ -16,6 +16,7 @@
     "Delete poll" : "Fshij sondazhin",
     "Owner" : "Zotëruesi",
     "Created" : "U krijua",
+    "Deleted" : "E fshirë",
     "never" : "asnjëherë",
     "Details" : "Detajet",
     "Configuration" : "Formësim",
@@ -24,7 +25,6 @@
     "Description" : "Përshkrim",
     "No" : "Jo",
     "Yes" : "Yes",
-    "Deleted" : "E fshirë",
     "Hour" : "Orë",
     "Day" : "Ditë",
     "Month" : "Muaj"

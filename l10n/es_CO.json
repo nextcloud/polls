@@ -40,6 +40,7 @@
     "Owner" : "Dueño",
     "Created" : "Creado",
     "No description provided" : "No se agregó ninguna descripción",
+    "Deleted" : "Borrado",
     "never" : "nunca",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
@@ -50,7 +51,6 @@
     "No" : "No",
     "Yes" : "Sí",
     "Hidden polls" : "Encuestas ocultas",
-    "Deleted" : "Borrado",
     "Hour" : "Hora",
     "Day" : "Día",
     "Month" : "Mes"

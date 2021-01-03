@@ -22,6 +22,7 @@ OC.L10N.register(
     "Access" : "접근 권한",
     "Owner" : "소유자",
     "Created" : "만든 날짜",
+    "Deleted" : "삭제함",
     "never" : "하지 않음",
     "Details" : "세부사항",
     "Configuration" : "설정",
@@ -31,7 +32,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "활동 이메일 알림 받기",
     "No" : "아니요",
     "Yes" : "예",
-    "Deleted" : "삭제함",
     "Hour" : "시간",
     "Day" : "일",
     "Month" : "달"

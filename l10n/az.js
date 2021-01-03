@@ -9,6 +9,7 @@ OC.L10N.register(
     "Title" : "Başlıq",
     "Settings" : "Quraşdırmalar",
     "Owner" : "Owner",
+    "Deleted" : "Silinib",
     "never" : "heç vaxt",
     "Details" : "Detallar",
     "Configuration" : "Konfiqurasiya",
@@ -16,7 +17,6 @@ OC.L10N.register(
     "Description" : "Açıqlanma",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Silinib",
     "Day" : "Gün",
     "Month" : "Ay"
 },

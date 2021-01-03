@@ -21,6 +21,7 @@ OC.L10N.register(
     "Access" : "Ligipääs",
     "Owner" : "Omanik",
     "Created" : "Loodud",
+    "Deleted" : "Kustutatud",
     "never" : "mitte kunagi",
     "Details" : "Üksikasjad",
     "Configuration" : "Seadistamine",
@@ -30,7 +31,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "No" : "Ei",
     "Yes" : "Jah",
-    "Deleted" : "Kustutatud",
     "Hour" : "Tund",
     "Day" : "Päev",
     "Month" : "Kuu"

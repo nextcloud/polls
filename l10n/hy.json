@@ -8,13 +8,13 @@
     "Title" : "Վերնագիր",
     "Settings" : "կարգավորումներ",
     "Owner" : "Owner",
+    "Deleted" : "Ջնջված",
     "never" : "երբեք",
     "Details" : "Մանրամասներ",
     "Comments" : "Կարծիքներ",
     "Description" : "Նկարագրություն",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Ջնջված",
     "Day" : "Օր",
     "Month" : "Ամիս"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

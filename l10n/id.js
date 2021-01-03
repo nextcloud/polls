@@ -15,6 +15,7 @@ OC.L10N.register(
     "Settings" : "Setelan",
     "Owner" : "Owner",
     "Created" : "Dibuat",
+    "Deleted" : "Dihapus",
     "never" : "tidak pernah.",
     "Details" : "Detil",
     "Configuration" : "Konfigurasi",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "Description" : "Deskrisi",
     "No" : "Tidak",
     "Yes" : "Ya",
-    "Deleted" : "Dihapus",
     "Hour" : "Jam",
     "Day" : "Hari",
     "Month" : "Bulan"

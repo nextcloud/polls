@@ -19,6 +19,7 @@ OC.L10N.register(
     "Access" : "Acesso",
     "Owner" : "Proprietário",
     "Created" : "Criado",
+    "Deleted" : "Eliminado",
     "never" : "nunca",
     "Details" : "Detalhes",
     "Configuration" : "Configuração",
@@ -27,7 +28,6 @@ OC.L10N.register(
     "Description" : "Descrição",
     "No" : "Não",
     "Yes" : "Sim",
-    "Deleted" : "Eliminado",
     "Hour" : "Hora",
     "Day" : "Dia",
     "Month" : "Mês"

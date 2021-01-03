@@ -16,6 +16,7 @@ OC.L10N.register(
     "Settings" : "Cài đặt",
     "Owner" : "Chủ",
     "Created" : "Đã tạo",
+    "Deleted" : "Đã xóa",
     "never" : "không thay đổi",
     "Details" : "Thông tin",
     "Configuration" : "Cấu hình",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "Description" : "Mô tả",
     "No" : "Không",
     "Yes" : "Đồng ý",
-    "Deleted" : "Đã xóa",
     "Day" : "Ngày",
     "Month" : "Tháng"
 },

@@ -12,6 +12,7 @@
     "Settings" : "Instillingar",
     "Owner" : "Owner",
     "Created" : "Lagd",
+    "Deleted" : "Sletta",
     "never" : "aldri",
     "Details" : "Detaljar",
     "Configuration" : "Innstillingar",
@@ -20,7 +21,6 @@
     "Description" : "Skildring",
     "No" : "Nei",
     "Yes" : "Ja",
-    "Deleted" : "Sletta",
     "Day" : "Dag",
     "Month" : "Månad"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

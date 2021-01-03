@@ -42,6 +42,7 @@ OC.L10N.register(
     "Owner" : "Dueño",
     "Created" : "Creado",
     "No description provided" : "No se agregó ninguna descripción",
+    "Deleted" : "Borrado",
     "never" : "nunca",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
@@ -52,7 +53,6 @@ OC.L10N.register(
     "No" : "No",
     "Yes" : "Sí",
     "Hidden polls" : "Encuestas ocultas",
-    "Deleted" : "Borrado",
     "Hour" : "Hora",
     "Day" : "Día",
     "Month" : "Mes"

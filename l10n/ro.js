@@ -17,6 +17,7 @@ OC.L10N.register(
     "Settings" : "Setări",
     "Access" : "Acces",
     "Owner" : "Proprietar",
+    "Deleted" : "Șters",
     "never" : "niciodată",
     "Details" : "Detalii",
     "Configuration" : "Configurație",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Description" : "Descriere",
     "No" : "Nu",
     "Yes" : "a",
-    "Deleted" : "Șters",
     "Day" : "Zi",
     "Month" : "Luna"
 },

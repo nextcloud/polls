@@ -18,6 +18,7 @@ OC.L10N.register(
     "Delete poll" : "Fshij sondazhin",
     "Owner" : "Zotëruesi",
     "Created" : "U krijua",
+    "Deleted" : "E fshirë",
     "never" : "asnjëherë",
     "Details" : "Detajet",
     "Configuration" : "Formësim",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Description" : "Përshkrim",
     "No" : "Jo",
     "Yes" : "Yes",
-    "Deleted" : "E fshirë",
     "Hour" : "Orë",
     "Day" : "Ditë",
     "Month" : "Muaj"

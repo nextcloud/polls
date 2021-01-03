@@ -13,6 +13,7 @@
     "Settings" : "Тохиргоо",
     "Owner" : "Эзэмшигч",
     "Created" : "Үүсгэсэн",
+    "Deleted" : "Устгагдсан",
     "never" : "хэзээ ч үгүй",
     "Details" : "Дэлгэрэнгүй",
     "Shares" : "Түгээлтүүд",
@@ -20,7 +21,6 @@
     "Description" : "Тодорхойлолт",
     "No" : "Үгүй",
     "Yes" : "Тийм",
-    "Deleted" : "Устгагдсан",
     "Day" : "Өдөр",
     "Month" : "Сар"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

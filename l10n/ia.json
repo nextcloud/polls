@@ -12,6 +12,7 @@
     "Apply" : "Applicar",
     "Settings" : "Configurationes",
     "Owner" : "Owner",
+    "Deleted" : "Delite",
     "never" : "nunquam",
     "Details" : "Detalios",
     "Configuration" : "Configuration",
@@ -20,7 +21,6 @@
     "Description" : "Description",
     "No" : "No",
     "Yes" : "Si",
-    "Deleted" : "Delite",
     "Day" : "Die",
     "Month" : "Mense"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

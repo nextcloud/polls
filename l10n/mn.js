@@ -15,6 +15,7 @@ OC.L10N.register(
     "Settings" : "Тохиргоо",
     "Owner" : "Эзэмшигч",
     "Created" : "Үүсгэсэн",
+    "Deleted" : "Устгагдсан",
     "never" : "хэзээ ч үгүй",
     "Details" : "Дэлгэрэнгүй",
     "Shares" : "Түгээлтүүд",
@@ -22,7 +23,6 @@ OC.L10N.register(
     "Description" : "Тодорхойлолт",
     "No" : "Үгүй",
     "Yes" : "Тийм",
-    "Deleted" : "Устгагдсан",
     "Day" : "Өдөр",
     "Month" : "Сар"
 },

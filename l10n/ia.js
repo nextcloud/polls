@@ -14,6 +14,7 @@ OC.L10N.register(
     "Apply" : "Applicar",
     "Settings" : "Configurationes",
     "Owner" : "Owner",
+    "Deleted" : "Delite",
     "never" : "nunquam",
     "Details" : "Detalios",
     "Configuration" : "Configuration",
@@ -22,7 +23,6 @@ OC.L10N.register(
     "Description" : "Description",
     "No" : "No",
     "Yes" : "Si",
-    "Deleted" : "Delite",
     "Day" : "Die",
     "Month" : "Mense"
 },

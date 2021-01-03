@@ -21,6 +21,7 @@ OC.L10N.register(
     "Settings" : "Параметри",
     "Access" : "Пристап",
     "Owner" : "Сопственик",
+    "Deleted" : "Избришана",
     "All users" : "Сите корисници",
     "never" : "никогаш",
     "Details" : "Детали",
@@ -33,7 +34,6 @@ OC.L10N.register(
     "No" : "Не",
     "Yes" : "Да",
     "Toggle Sidebar" : "Отвори странична лента",
-    "Deleted" : "Избришана",
     "Day" : "Ден",
     "Month" : "Месец",
     "Year" : "Година"

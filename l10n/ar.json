@@ -17,6 +17,7 @@
     "Access" : "النفاذ",
     "Owner" : "المالك",
     "Created" : "أُنشئ",
+    "Deleted" : "تم حذفه",
     "never" : "بتاتاً",
     "Details" : "التفاصيل",
     "Configuration" : "إعداد",
@@ -27,7 +28,6 @@
     "Anonymous poll" : "استطلاع رأي مجهول",
     "No" : "لا",
     "Yes" : "نعم",
-    "Deleted" : "تم حذفه",
     "Hour" : "الساعة",
     "Day" : "يوم",
     "Month" : "شهر"

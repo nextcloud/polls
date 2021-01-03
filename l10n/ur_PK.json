@@ -7,11 +7,11 @@
     "Title" : "عنوان",
     "Settings" : "سیٹینگز",
     "Owner" : "Owner",
+    "Deleted" : "حذف شدہ ",
     "never" : "never",
     "Description" : "تصریح",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "حذف شدہ ",
     "Month" : "ماہ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -11,12 +11,12 @@ OC.L10N.register(
     "Title" : "Teitl",
     "Settings" : "Gosodiadau",
     "Owner" : "Owner",
+    "Deleted" : "Wedi dileu",
     "never" : "byth",
     "Details" : "Manylion",
     "Description" : "Disgrifiad",
     "No" : "No",
     "Yes" : "Iawn",
-    "Deleted" : "Wedi dileu",
     "Day" : "Diwrnod",
     "Month" : "Mis"
 },

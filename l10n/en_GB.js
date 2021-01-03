@@ -23,6 +23,7 @@ OC.L10N.register(
     "Access" : "Access",
     "Owner" : "Owner",
     "Created" : "Created",
+    "Deleted" : "Deleted",
     "never" : "never",
     "Details" : "Details",
     "Configuration" : "Configuration",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Receive notification email on activity",
     "No" : "No",
     "Yes" : "Yes",
-    "Deleted" : "Deleted",
     "Hour" : "Hour",
     "Day" : "Day",
     "Month" : "Month"
