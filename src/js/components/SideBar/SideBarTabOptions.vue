@@ -22,31 +22,45 @@
 
 <template>
 	<div>
-		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
-		<SideBarTabOptionsDate v-if="poll.type === 'datePoll'" />
-		<SideBarTabOptionsText v-if="poll.type === 'textPoll'" />
+		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
+		<OptionsDateAdd v-if="pollType === 'datePoll' && !pollIsClosed" />
+		<OptionsDateShift v-if="optionsExist && !pollIsClosed" />
+		<OptionsDate v-if="pollType === 'datePoll'" />
+
+		<OptionsTextAdd v-if="pollType === 'textPoll' && !pollIsClosed" />
+		<OptionsText v-if="pollType === 'textPoll'" />
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import ConfigBox from '../Base/ConfigBox'
-import SideBarTabOptionsDate from './SideBarTabOptionsDate'
-import SideBarTabOptionsText from './SideBarTabOptionsText'
+import OptionsDate from '../Options/OptionsDate'
+import OptionsDateAdd from '../Options/OptionsDateAdd'
+import OptionsDateShift from '../Options/OptionsDateShift'
+import OptionsText from '../Options/OptionsText'
+import OptionsTextAdd from '../Options/OptionsTextAdd'
 
 export default {
 	name: 'SideBarTabOptions',
 
 	components: {
 		ConfigBox,
-		SideBarTabOptionsDate,
-		SideBarTabOptionsText,
+		OptionsDate,
+		OptionsDateAdd,
+		OptionsDateShift,
+		OptionsText,
+		OptionsTextAdd,
 	},
 
 	computed: {
+		...mapGetters({
+			pollIsClosed: 'poll/closed',
+		}),
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.poll.acl,
+			pollType: state => state.poll.type,
+			isOwner: state => state.poll.acl.isOwner,
+			optionsExist: state => state.poll.options.length,
 		}),
 
 	},

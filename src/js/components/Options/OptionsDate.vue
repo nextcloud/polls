@@ -22,10 +22,7 @@
 
 <template>
 	<div>
-		<OptionAddDate v-if="!closed" />
-		<OptionShiftDates v-if="options.length && !closed" />
-
-		<ConfigBox v-if="!showEmptyContent" :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
+		<ConfigBox v-if="options.length" :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
 			<transition-group is="ul">
 				<OptionItem v-for="(option) in sortedOptions"
 					:key="option.id"
@@ -41,10 +38,10 @@
 						</Actions>
 
 						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="!closed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+							<ActionButton v-if="!pollIsClosed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 								{{ t('polls', 'Clone option') }}
 							</ActionButton>
-							<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+							<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 								@click="confirmOption(option)">
 								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 							</ActionButton>
@@ -69,27 +66,23 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import OptionAddDate from '../Base/OptionAddDate'
-import OptionCloneDate from '../Base/OptionCloneDate'
-import OptionShiftDates from '../Base/OptionShiftDates'
+import OptionCloneDate from './OptionCloneDate'
 import ConfigBox from '../Base/ConfigBox'
-import OptionItem from '../Base/OptionItem'
+import OptionItem from './OptionItem'
 import moment from '@nextcloud/moment'
 import { Actions, ActionButton, Modal, EmptyContent } from '@nextcloud/vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 import { dateUnits } from '../../mixins/dateMixins'
 
 export default {
-	name: 'SideBarTabOptionsDate',
+	name: 'OptionsDate',
 
 	components: {
 		Actions,
 		ActionButton,
 		ConfigBox,
 		EmptyContent,
-		OptionAddDate,
 		OptionCloneDate,
-		OptionShiftDates,
 		Modal,
 		OptionItem,
 	},
@@ -121,12 +114,8 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			closed: 'poll/closed',
+			pollIsClosed: 'poll/closed',
 		}),
-
-		showEmptyContent() {
-			return this.sortedOptions.length === 0
-		},
 
 		dateBaseOptionString() {
 			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')
