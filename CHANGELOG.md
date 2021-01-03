@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
  - [fix] #1183 - Avoid concurrent long term user searches with a big user base
  - [fix] #1181 - Speed up poll overview, by avoiding unnecessary loading of polls, the user is not allowed to see
 
+ See also https://github.com/nextcloud/polls/milestone/31?closed=1
+
 ## [1.6.2] - 2020-11-19
  - [fix] Subscription was missing for logged in users
 
