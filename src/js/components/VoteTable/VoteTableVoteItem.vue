@@ -76,7 +76,6 @@ export default {
 		},
 
 		isLocked() {
-			// return false
 			return (this.countYesVotes >= this.voteLimit && this.voteLimit > 0 && this.answer !== 'yes')
 		},
 

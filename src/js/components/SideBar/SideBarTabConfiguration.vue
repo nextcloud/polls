@@ -33,10 +33,6 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
-			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
-				type="checkbox" class="checkbox">
-			<label v-if="acl.isOwner" for="adminAccess"> {{ t('polls', 'Allow admins to edit this poll') }}</label>
-
 			<input id="allowMaybe"
 				v-model="pollAllowMaybe"
 				type="checkbox"
@@ -48,6 +44,25 @@
 				type="checkbox"
 				class="checkbox">
 			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
+			<input id="useVoteLimit"
+				v-model="useVoteLimit"
+				type="checkbox"
+				class="checkbox">
+
+			<label for="useVoteLimit"> {{ t('polls', 'Limit yes votes per user') }}</label>
+			<div v-if="pollVoteLimit" class="selectUnit indented">
+				<Actions>
+					<ActionButton icon="icon-play-previous" @click="pollVoteLimit--">
+						{{ t('polls', 'Decrease unit') }}
+					</ActionButton>
+				</Actions>
+				<input v-model="pollVoteLimit">
+				<Actions>
+					<ActionButton icon="icon-play-next" @click="pollVoteLimit++">
+						{{ t('polls', 'Increase unit') }}
+					</ActionButton>
+				</Actions>
+			</div>
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
@@ -67,6 +82,10 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
+			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
+				type="checkbox" class="checkbox">
+			<label v-if="acl.isOwner" for="adminAccess"> {{ t('polls', 'Allow admins to edit this poll') }}</label>
+
 			<input id="hidden"
 				v-model="pollAccess"
 				value="hidden"
@@ -83,9 +102,10 @@
 
 			<input id="important"
 				v-model="pollImportant"
+				:disabled="pollAccess !== 'public'"
 				type="checkbox"
 				class="checkbox">
-			<label for="important"> {{ t('polls', 'Relevant for all users') }}</label>
+			<label for="important" class="indented"> {{ t('polls', 'Relevant for all users') }}</label>
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
@@ -128,13 +148,15 @@ import { mapGetters, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
-import { DatetimePicker } from '@nextcloud/vue'
+import { Actions, ActionButton, DatetimePicker } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
 
 export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
+		Actions,
+		ActionButton,
 		DatetimePicker,
 		ConfigBox,
 	},
@@ -152,6 +174,7 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
+			countOptions: state => state.poll.options.list.length,
 		}),
 
 		...mapGetters({
@@ -183,6 +206,29 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ access: value })
+			},
+		},
+
+		useVoteLimit: {
+			get() {
+				return (this.poll.voteLimit !== 0)
+			},
+			set(value) {
+				this.writeValue({ voteLimit: value ? 1 : 0 })
+			},
+		},
+
+		pollVoteLimit: {
+			get() {
+				return this.poll.voteLimit
+			},
+			set(value) {
+				if (!this.useVoteLimit) {
+					value = 0
+				} else if (value < 1) {
+					value = this.countOptions
+				}
+				this.writeValue({ voteLimit: value })
 			},
 		},
 
@@ -290,6 +336,11 @@ export default {
 			this.writeValue(e)
 		}, 1500),
 
+		successDebounced: debounce(function(response) {
+			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
+			emit('update-polls')
+		}, 1500),
+
 		writeValue(e) {
 			this.$store.commit('poll/setProperty', e)
 			this.writingPoll = true
@@ -334,8 +385,9 @@ export default {
 			} else {
 				this.$store.dispatch('poll/update')
 					.then((response) => {
-						showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
-						emit('update-polls')
+						this.successDebounced(response)
+						// showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
+						// emit('update-polls')
 					})
 					.catch(() => {
 						showError(t('polls', 'Error writing poll'))
@@ -347,3 +399,15 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.selectUnit {
+	display: flex;
+	align-items: center;
+	input {
+		margin: 0 4px;
+		width: 40px;
+	}
+}
+
+</style>
