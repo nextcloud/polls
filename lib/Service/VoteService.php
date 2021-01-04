@@ -112,7 +112,7 @@ class VoteService {
 			$this->acl->requestYesVotes();
 		}
 
-		if (   $setTo === 'yes' 
+		if ($setTo === 'yes'
 			&& $this->acl->getOptionLimit()
 			&& $this->voteMapper->countYesVotesByOption($this->acl->getPollId(), $option->getPollOptionText())) {
 			throw new VoteLimitExceededException;
