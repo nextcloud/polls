@@ -1,7 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.7.0 - RC1] - 2021-01-02
+## [1.7.1 - beta2] - tbd
+ - [enhancement] #739 - Limit number of participant per option
+ - [enhancement] #738 - Limit numer of votes per participant (also #647, #624)
+
+## [1.7.0 - beta1] - 2021-01-02
  - [enhancement] #188 use notification app for invitations
  - [enhancement] #907 reload current poll every 30 seconds
  - [enhancement] #924 admin users can delete and takeover polls from other users via new admin section
