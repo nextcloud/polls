@@ -61,7 +61,7 @@ export default {
 		}),
 
 		isVotable() {
-			return this.isActive && this.isValidUser && !this.closed && !this.isLocked
+			return this.isActive && this.isValidUser && !this.closed && !this.isLocked && !this.isBlocked
 		},
 
 		answer() {
@@ -73,6 +73,10 @@ export default {
 			} catch (e) {
 				return ''
 			}
+		},
+
+		isBlocked() {
+			return this.optionLimit && this.optionLimit <= this.option.yes && this.answer !== 'yes'
 		},
 
 		isLocked() {

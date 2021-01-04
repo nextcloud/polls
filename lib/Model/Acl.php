@@ -139,8 +139,11 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getAllowYesVote(): bool {
-		\OC::$server->getLogger()->alert('vote limit is (' . $this->poll->getVoteLimit() . ') and counted votes are ' . $this->getYesVotes());
 		return !($this->poll->getVoteLimit() && $this->getYesVotes() >= $this->poll->getVoteLimit());
+	}
+
+	public function getOptionLimit(): int {
+		return $this->poll->getOptionLimit();
 	}
 
 	private function getYesVotes(): int {

@@ -136,6 +136,18 @@ class VoteMapper extends QBMapper {
 		return count($this->findEntities($qb));
 	}
 
+	public function countYesVotesByOption(int $pollId, string $pollOptionText): int {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+		   ->andWhere($qb->expr()->eq('vote_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)))
+		   ->andWhere($qb->expr()->eq('vote_answer', $qb->createNamedParameter('yes', IQueryBuilder::PARAM_STR)));
+		return count($this->findEntities($qb));
+	}
+
+
 	/**
 	 * @return void
 	 */

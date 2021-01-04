@@ -22,6 +22,10 @@
 
 <template>
 	<div>
+		<div v-if="participantsVoted">
+			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
+		</div>
+
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
 		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
@@ -38,18 +42,21 @@
 				type="checkbox"
 				class="checkbox">
 			<label for="allowMaybe"> {{ t('polls', 'Allow "maybe" vote') }}</label>
-
+			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented">
+				{{ t('polls', 'If vote limits are used, "maybe" should be not be allowed.') }}
+			</div>
 			<input id="anonymous"
 				v-model="pollAnonymous"
 				type="checkbox"
 				class="checkbox">
 			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
+
 			<input id="useVoteLimit"
 				v-model="useVoteLimit"
 				type="checkbox"
 				class="checkbox">
-
 			<label for="useVoteLimit"> {{ t('polls', 'Limit yes votes per user') }}</label>
+
 			<div v-if="pollVoteLimit" class="selectUnit indented">
 				<Actions>
 					<ActionButton icon="icon-play-previous" @click="pollVoteLimit--">
@@ -59,6 +66,25 @@
 				<input v-model="pollVoteLimit">
 				<Actions>
 					<ActionButton icon="icon-play-next" @click="pollVoteLimit++">
+						{{ t('polls', 'Increase unit') }}
+					</ActionButton>
+				</Actions>
+			</div>
+
+			<input id="useOptionLimit"
+				v-model="useOptionLimit"
+				type="checkbox"
+				class="checkbox">
+			<label for="useOptionLimit"> {{ t('polls', 'Limit yes votes per option') }}</label>
+			<div v-if="pollOptionLimit" class="selectUnit indented">
+				<Actions>
+					<ActionButton icon="icon-play-previous" @click="pollOptionLimit--">
+						{{ t('polls', 'Decrease unit') }}
+					</ActionButton>
+				</Actions>
+				<input v-model="pollOptionLimit">
+				<Actions>
+					<ActionButton icon="icon-play-next" @click="pollOptionLimit++">
 						{{ t('polls', 'Increase unit') }}
 					</ActionButton>
 				</Actions>
@@ -179,6 +205,7 @@ export default {
 
 		...mapGetters({
 			closed: 'poll/closed',
+			participantsVoted: 'poll/participantsVoted',
 		}),
 
 		// Add bindings
@@ -227,8 +254,33 @@ export default {
 					value = 0
 				} else if (value < 1) {
 					value = this.countOptions
+				} else if (value > this.countOptions) {
+					value = 1
 				}
 				this.writeValue({ voteLimit: value })
+			},
+		},
+
+		useOptionLimit: {
+			get() {
+				return (this.poll.optionLimit !== 0)
+			},
+			set(value) {
+				this.writeValue({ optionLimit: value ? 1 : 0 })
+			},
+		},
+
+		pollOptionLimit: {
+			get() {
+				return this.poll.optionLimit
+			},
+			set(value) {
+				if (!this.useOptionLimit) {
+					value = 0
+				} else if (value < 1) {
+					value = 1
+				}
+				this.writeValue({ optionLimit: value })
 			},
 		},
 
@@ -246,7 +298,6 @@ export default {
 				return moment.unix(this.poll.expire)._d
 			},
 			set(value) {
-
 				this.writeValue({ expire: moment(value).unix() })
 			},
 		},

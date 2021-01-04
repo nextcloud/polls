@@ -166,7 +166,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setAnonymous(isset($array['anonymous']) ? +$array['anonymous'] : $this->getAnonymous());
 		$this->setAllowMaybe(isset($array['allowMaybe']) ? +$array['allowMaybe'] : $this->getAllowMaybe());
 		$this->setVoteLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getVoteLimit());
-		$this->setOptionLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getOptionLimit());
+		$this->setOptionLimit(isset($array['optionLimit']) ? $array['optionLimit'] : $this->getOptionLimit());
 		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
 		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
 		$this->setAdminAccess(isset($array['adminAccess']) ? +$array['adminAccess'] : $this->getAdminAccess());
