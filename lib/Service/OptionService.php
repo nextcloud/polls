@@ -127,7 +127,7 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = ''): Option {
+	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = ''): Option {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->requestEdit();
 		$this->setOption($timestamp, $pollOptionText);
@@ -317,7 +317,7 @@ class OptionService {
 	/**
 	 * Set option entities validated
 	 */
-	private function setOption(int $timestamp = 0, string $pollOptionText = ''): void {
+	private function setOption(int $timestamp = 0, ?string $pollOptionText = ''): void {
 		$poll = $this->pollMapper->find($this->option->getPollId());
 
 		if ($poll->getType() === Poll::TYPE_DATE) {
