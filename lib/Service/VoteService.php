@@ -107,6 +107,10 @@ class VoteService {
 			$this->acl->setPollId($option->getPollId())->requestVote();
 		}
 
+		if ($setTo === 'yes') {
+			$this->acl->requestYesVotes();
+		}
+
 		try {
 			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->acl->getUserId());
 			$this->vote->setVoteAnswer($setTo);

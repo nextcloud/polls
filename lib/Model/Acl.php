@@ -27,6 +27,7 @@ namespace OCA\Polls\Model;
 use JsonSerializable;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\VoteLimitExceededException;
 
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -137,6 +138,15 @@ class Acl implements JsonSerializable {
 		return $this->poll->getId();
 	}
 
+	public function getAllowYesVote(): bool {
+		\OC::$server->getLogger()->alert('vote limit is (' . $this->poll->getVoteLimit() . ') and counted votes are ' . $this->getYesVotes());
+		return !($this->poll->getVoteLimit() && $this->getYesVotes() >= $this->poll->getVoteLimit());
+	}
+
+	private function getYesVotes(): int {
+		return $this->voteMapper->countYesVotes($this->getUserId(), $this->getPollId());
+	}
+
 	public function getAllowView(): bool {
 		return (
 			   $this->getAllowEdit()
@@ -190,6 +200,12 @@ class Acl implements JsonSerializable {
 	public function requestEdit(): void {
 		if (!$this->getAllowEdit()) {
 			throw new NotAuthorizedException;
+		}
+	}
+
+	public function requestYesVotes(): void {
+		if (!$this->getAllowYesVote()) {
+			throw new VoteLimitExceededException;
 		}
 	}
 
