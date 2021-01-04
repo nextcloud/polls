@@ -22,12 +22,7 @@
 
 <template>
 	<div>
-		<ConfigBox v-if="!closed" :title="t('polls', 'Add a new text option')" icon-class="icon-add">
-			<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
-				@input="addOption()" />
-		</ConfigBox>
-
-		<ConfigBox v-if="!showEmptyContent" :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
+		<ConfigBox v-if="options.length" :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
 			<draggable v-model="sortOptions">
 				<transition-group>
 					<OptionItem v-for="(option) in sortOptions"
@@ -41,7 +36,7 @@
 								</ActionButton>
 							</Actions>
 							<Actions v-if="acl.allowEdit" class="action">
-								<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+								<ActionButton v-if="PollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
 									@click="confirmOption(option)">
 									{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 								</ActionButton>
@@ -66,8 +61,7 @@ import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
 import draggable from 'vuedraggable'
-import OptionItem from '../Base/OptionItem'
-import InputDiv from '../Base/InputDiv'
+import OptionItem from './OptionItem'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
@@ -79,7 +73,6 @@ export default {
 		ConfigBox,
 		draggable,
 		EmptyContent,
-		InputDiv,
 		OptionItem,
 	},
 
@@ -102,12 +95,8 @@ export default {
 
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
-			closed: 'poll/closed',
+			PollIsClosed: 'poll/closed',
 		}),
-
-		showEmptyContent() {
-			return this.sortedOptions.length === 0
-		},
 
 		sortOptions: {
 			get() {

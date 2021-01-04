@@ -21,67 +21,72 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
-		<DatetimePicker v-model="lastOption"
-			v-bind="optionDatePicker"
-			confirm
-			style="width: inherit;"
-			@change="addOption(lastOption)" />
+	<ConfigBox v-if="!closed" :title="t('polls', 'Add a new text option')" icon-class="icon-add">
+		<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
+			@input="addOption()" />
 	</ConfigBox>
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 import ConfigBox from '../Base/ConfigBox'
-import moment from '@nextcloud/moment'
-import { DatetimePicker } from '@nextcloud/vue'
+import InputDiv from '../Base/InputDiv'
 
 export default {
-	name: 'OptionAddDate',
+	name: 'SideBarTabOptionsText',
 
 	components: {
 		ConfigBox,
-		DatetimePicker,
+		InputDiv,
 	},
 
 	data() {
 		return {
-			lastOption: '',
+			newPollText: '',
 		}
 	},
 
 	computed: {
-		optionDatePicker() {
-			return {
-				editable: false,
-				minuteStep: 5,
-				type: 'datetime',
-				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				placeholder: t('polls', 'Click to add a date'),
-				confirm: true,
-				lang: {
-					formatLocale: {
-						firstDayOfWeek: this.firstDOW,
-						months: moment.months(),
-						monthsShort: moment.monthsShort(),
-						weekdays: moment.weekdays(),
-						weekdaysMin: moment.weekdaysMin(),
-					},
-				},
-			}
-		},
+		...mapGetters({
+			closed: 'poll/closed',
+		}),
+
 	},
 
 	methods: {
-		addOption(pollOptionText) {
-			if (moment(pollOptionText).isValid()) {
+		addOption() {
+			if (this.newPollText) {
 				this.$store.dispatch('poll/options/add', {
-					pollOptionText: pollOptionText,
-					timestamp: moment(pollOptionText).unix(),
+					pollOptionText: this.newPollText,
 				})
+					.then(() => {
+						this.newPollText = ''
+					})
 			}
 		},
 	},
 }
-
 </script>
+
+<style lang="scss" scoped>
+	.optionAdd {
+		display: flex;
+	}
+
+	.newOption {
+		margin-left: 40px;
+		flex: 1;
+		&:empty:before {
+			color: grey;
+		}
+	}
+
+	.submit-option {
+		width: 30px;
+		background-color: transparent;
+		border: none;
+		opacity: 0.3;
+		cursor: pointer;
+	}
+
+</style>

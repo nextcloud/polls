@@ -34,7 +34,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import OptionItem from '../Base/OptionItem'
+import OptionItem from '../Options/OptionItem'
 import Counter from '../Base/Counter'
 import Confirmation from '../Base/Confirmation'
 

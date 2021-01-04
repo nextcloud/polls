@@ -56,7 +56,7 @@ import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins'
 
 export default {
-	name: 'OptionAddDate',
+	name: 'OptionsDateShift',
 
 	components: {
 		Actions,
