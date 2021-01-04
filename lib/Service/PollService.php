@@ -68,7 +68,7 @@ class PollService {
 	private $acl;
 
 	public function __construct(
-		string $UserId,
+		?string $UserId,
 		PollMapper $pollMapper,
 		Poll $poll,
 		VoteMapper $voteMapper,
