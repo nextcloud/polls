@@ -84,6 +84,7 @@ export default {
 		width: auto;
 	}
 }
+
 .indented {
 	margin-left: 24px !important;
 }
