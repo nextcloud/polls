@@ -85,4 +85,8 @@ export default {
 	}
 }
 
+.indented {
+	margin-left: 24px !important;
+}
+
 </style>

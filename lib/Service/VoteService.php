@@ -25,6 +25,7 @@ namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\VoteLimitExceededException;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\OptionMapper;
@@ -105,6 +106,16 @@ class VoteService {
 			}
 		} else {
 			$this->acl->setPollId($option->getPollId())->requestVote();
+		}
+
+		if ($setTo === 'yes') {
+			$this->acl->requestYesVotes();
+		}
+
+		if ($setTo === 'yes'
+			&& $this->acl->getOptionLimit()
+			&& $this->voteMapper->countYesVotesByOption($this->acl->getPollId(), $option->getPollOptionText())) {
+			throw new VoteLimitExceededException;
 		}
 
 		try {
