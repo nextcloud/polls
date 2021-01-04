@@ -60,6 +60,8 @@ use OCA\Polls\Model\User;
  * @method void setSettings(string $value)
  * @method int getVoteLimit()
  * @method void setVoteLimit(integer $value)
+ * @method int getOptionLimit()
+ * @method void setOptionLimit(integer $value)
  * @method string getShowResults()
  * @method void setShowResults(string $value)
  * @method int getAdminAccess()
@@ -118,6 +120,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $voteLimit*/
 	protected $voteLimit;
 
+	/** @var int $optionLimit*/
+	protected $optionLimit;
+
 	/** @var string $showResults */
 	protected $showResults;
 
@@ -142,6 +147,7 @@ class Poll extends Entity implements JsonSerializable {
 			'allowMaybe' => intval($this->allowMaybe),
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
+			'optionLimit' => intval($this->optionLimit),
 			'showResults' => $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults,
 			'adminAccess' => intVal($this->adminAccess),
 			'ownerDisplayName' => $this->getDisplayName(),
@@ -160,6 +166,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setAnonymous(isset($array['anonymous']) ? +$array['anonymous'] : $this->getAnonymous());
 		$this->setAllowMaybe(isset($array['allowMaybe']) ? +$array['allowMaybe'] : $this->getAllowMaybe());
 		$this->setVoteLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getVoteLimit());
+		$this->setOptionLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getOptionLimit());
 		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
 		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
 		$this->setAdminAccess(isset($array['adminAccess']) ? +$array['adminAccess'] : $this->getAdminAccess());
