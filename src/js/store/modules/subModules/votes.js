@@ -87,6 +87,10 @@ const getters = {
 		return votesRank
 	},
 
+	countYesVotes: (state, getters, rootState) => {
+		return state.list.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === 'yes').length
+	},
+
 	getVote: (state) => (payload) => {
 		return state.list.find(vote => {
 			return (vote.userId === payload.userId

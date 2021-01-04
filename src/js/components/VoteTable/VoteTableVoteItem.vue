@@ -21,15 +21,15 @@
   -->
 
 <template>
-	<div class="vote-table-vote-item" :class="[answer, isConfirmed, { active: isActive && isValidUser &&!closed }]">
-		<div v-if="isActive" class="icon" @click="setVote()" />
+	<div class="vote-table-vote-item" :class="[answer, isConfirmed, { active: isVotable }]">
+		<div v-if="isActive && !isLocked" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 	</div>
 </template>
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
 	name: 'VoteTableVoteItem',
 
@@ -49,10 +49,20 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			voteLimit: state => state.poll.voteLimit,
+			optionLimit: state => state.poll.optionLimit,
+		}),
+
 		...mapGetters({
+			countYesVotes: 'poll/votes/countYesVotes',
 			closed: 'poll/closed',
 			answerSequence: 'poll/answerSequence',
 		}),
+
+		isVotable() {
+			return this.isActive && this.isValidUser && !this.closed && !this.isLocked && !this.isBlocked
+		},
 
 		answer() {
 			try {
@@ -63,6 +73,14 @@ export default {
 			} catch (e) {
 				return ''
 			}
+		},
+
+		isBlocked() {
+			return this.optionLimit && this.optionLimit <= this.option.yes && this.answer !== 'yes'
+		},
+
+		isLocked() {
+			return (this.countYesVotes >= this.voteLimit && this.voteLimit > 0 && this.answer !== 'yes')
 		},
 
 		isConfirmed() {

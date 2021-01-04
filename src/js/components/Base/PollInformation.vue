@@ -40,6 +40,15 @@
 		<span v-if="!acl.allowSeeResults && (poll.showResults === 'closed')">{{ t('polls', 'They will be revealed after the poll is closed.') }}</span>
 
 		<span v-if="poll.type === 'datePoll'">{{ t('polls', 'The used time zone is {timeZone}.', { timeZone: currentTimeZone }) }}</span>
+		<div v-if="poll.voteLimit">
+			{{ t('polls', 'Your are only allowed to vote for one option.', 'Your votes are limited to %n yes votes.', poll.voteLimit) }}
+			<span v-if="voteLimitReached"> {{ t('polls', 'You reached the maximum number of allowed votes.') }}</span>
+			<span v-else> {{ n('polls', 'You have only one vote left.', 'You have %n votes left.', poll.voteLimit - countYesVotes) }}</span>
+		</div>
+
+		<div v-if="poll.optionLimit">
+			{{ n('polls', 'This is an exclusive vote, where only one user is allowed to vote for an option.', 'Only %n votes per option are permitted.',poll.optionLimit) }}
+		</div>
 	</div>
 </template>
 
@@ -65,7 +74,12 @@ export default {
 			participantsVoted: 'poll/participantsVoted',
 			closed: 'poll/closed',
 			confirmedOptions: 'poll/options/confirmed',
+			countYesVotes: 'poll/votes/countYesVotes',
 		}),
+
+		voteLimitReached() {
+			return (this.poll.voteLimit > 0 && this.countYesVotes >= this.poll.voteLimit)
+		},
 
 		dateCreatedString() {
 			return moment.unix(this.poll.created).format('LLLL')
