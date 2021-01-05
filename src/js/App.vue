@@ -88,7 +88,7 @@ export default {
 			console.log('route changed', 'from ' + from.params.id + ' to ' + to.params.id)
 			if (from.params.id !== to.params.id) {
 				console.log('poll id', this.$route.params.id)
-				this.$store.dispatch('poll/comments/list')
+				this.loadPoll()
 			}
 		},
 	},
@@ -138,6 +138,11 @@ export default {
 	},
 
 	methods: {
+		loadPoll() {
+			this.$store.dispatch('poll/comments/list')
+			this.$store.dispatch('poll/options/list')
+		},
+
 		updatePolls() {
 			if (getCurrentUser()) {
 

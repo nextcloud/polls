@@ -124,11 +124,11 @@ class PollController extends Controller {
 		// 	$comments = [];
 		// }
 		//
-		try {
-			$options = $this->optionService->list($this->poll->getId());
-		} catch (Exception $e) {
-			$options = [];
-		}
+		// try {
+		// 	$options = $this->optionService->list($this->poll->getId());
+		// } catch (Exception $e) {
+		// 	$options = [];
+		// }
 
 		try {
 			$votes = $this->voteService->list($this->poll->getId());
@@ -146,7 +146,7 @@ class PollController extends Controller {
 			'acl' => $this->acl,
 			'poll' => $this->poll,
 			// 'comments' => $comments,
-			'options' => $options,
+			// 'options' => $options,
 			'share' => $this->share,
 			'shares' => $shares,
 			'votes' => $votes,

@@ -119,9 +119,20 @@ const getters = {
 
 const actions = {
 
-	reload(context) {
-		const endPoint = 'apps/polls/poll'
-		return axios.get(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options'))
+	list(context) {
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else {
+			context.commit('reset')
+			return
+		}
+
+		return axios.get(generateUrl(endPoint + '/options'))
 			.then((response) => {
 				context.commit('set', { options: response.data.options })
 			})
@@ -143,7 +154,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error adding option: ' + error.response.data, { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -159,7 +170,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -173,7 +184,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error deleting option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -188,7 +199,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error confirming option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -204,7 +215,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error reordering option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -221,7 +232,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error creating sequence', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
