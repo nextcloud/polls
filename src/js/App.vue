@@ -141,6 +141,7 @@ export default {
 		loadPoll() {
 			this.$store.dispatch('poll/comments/list')
 			this.$store.dispatch('poll/options/list')
+			this.$store.dispatch('poll/votes/list')
 		},
 
 		updatePolls() {

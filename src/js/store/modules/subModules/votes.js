@@ -100,6 +100,27 @@ const getters = {
 }
 
 const actions = {
+	list(context, payload) {
+		let endPoint = 'apps/polls'
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else {
+			context.commit('reset')
+			return
+		}
+
+		return axios.get(generateUrl(endPoint + '/votes'))
+			.then((response) => {
+				context.commit('set', response.data)
+			})
+			.catch(() => {
+				context.commit('reset')
+			})
+
+	},
 	set(context, payload) {
 		let endPoint = 'apps/polls'
 

@@ -154,7 +154,7 @@ const actions = {
 			// context.commit('options/reset')
 			context.commit('shares/reset')
 			context.commit('share/reset')
-			context.commit('votes/reset')
+			// context.commit('votes/reset')
 			return
 		}
 		return axios.get(generateUrl(endPoint))
@@ -165,7 +165,7 @@ const actions = {
 				// context.commit('options/set', response.data)
 				context.commit('shares/set', response.data)
 				context.commit('share/set', response.data)
-				context.commit('votes/set', response.data)
+				// context.commit('votes/set', response.data)
 				return response
 			})
 			.catch((error) => {

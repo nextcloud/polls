@@ -65,6 +65,7 @@ return [
 		['name' => 'option#sequence', 'url' => '/option/{optionId}/sequence', 'verb' => 'POST'],
 		['name' => 'option#findCalendarEvents', 'url' => '/option/{optionId}/events', 'verb' => 'GET'],
 
+		['name' => 'vote#list', 'url' => '/poll/{pollId}/votes', 'verb' => 'GET'],
 		['name' => 'vote#set', 'url' => '/vote', 'verb' => 'PUT'],
 		['name' => 'vote#delete', 'url' => '/poll/{pollId}/user/{userId}', 'verb' => 'DELETE'],
 
