@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<ConfigBox v-if="options.length" :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
+		<ConfigBox v-if="countOptions" :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
 			<draggable v-model="sortOptions">
 				<transition-group>
 					<OptionItem v-for="(option) in sortOptions"
@@ -65,7 +65,7 @@ import OptionItem from './OptionItem'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
-	name: 'SideBarTabOptionsText',
+	name: 'OptionsText',
 
 	components: {
 		Actions,
@@ -96,6 +96,7 @@ export default {
 		...mapGetters({
 			sortedOptions: 'poll/options/sorted',
 			PollIsClosed: 'poll/closed',
+			countOptions: 'poll/options/count',
 		}),
 
 		sortOptions: {

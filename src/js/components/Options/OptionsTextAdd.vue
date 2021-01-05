@@ -33,7 +33,7 @@ import ConfigBox from '../Base/ConfigBox'
 import InputDiv from '../Base/InputDiv'
 
 export default {
-	name: 'SideBarTabOptionsText',
+	name: 'OptionsTextAdd',
 
 	components: {
 		ConfigBox,

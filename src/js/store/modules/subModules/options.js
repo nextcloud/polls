@@ -78,6 +78,10 @@ const mutations = {
 }
 
 const getters = {
+	count: (state) => {
+		return state.list.length
+	},
+
 	sorted: (state, getters, rootState, rootGetters) => {
 		let rankedOptions = []
 		state.list.forEach((option) => {

@@ -24,7 +24,7 @@
 	<div>
 		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 		<OptionsDateAdd v-if="pollType === 'datePoll' && !pollIsClosed" />
-		<OptionsDateShift v-if="optionsExist && !pollIsClosed" />
+		<OptionsDateShift v-if="pollType === 'datePoll' && countOptions && !pollIsClosed" />
 		<OptionsDate v-if="pollType === 'datePoll'" />
 
 		<OptionsTextAdd v-if="pollType === 'textPoll' && !pollIsClosed" />
@@ -56,11 +56,11 @@ export default {
 	computed: {
 		...mapGetters({
 			pollIsClosed: 'poll/closed',
+			countOptions: 'poll/options/count',
 		}),
 		...mapState({
 			pollType: state => state.poll.type,
 			isOwner: state => state.poll.acl.isOwner,
-			optionsExist: state => state.poll.options.length,
 		}),
 
 	},
