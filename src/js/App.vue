@@ -143,6 +143,7 @@ export default {
 			this.$store.dispatch('poll/options/list')
 			this.$store.dispatch('poll/votes/list')
 			this.$store.dispatch('poll/shares/list')
+			this.$store.dispatch('subscription/get')
 		},
 
 		updatePolls() {

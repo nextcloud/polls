@@ -24,7 +24,7 @@
 	<div class="subscription">
 		<input id="subscribe" v-model="subscribe" type="checkbox"
 			class="checkbox">
-		<label v-if="share.emailAddress" for="subscribe">{{ t('polls', 'Receive notification email on activity to {emailAddress}', {emailAddress: share.emailAddress}) }}</label>
+		<label v-if="emailAddress" for="subscribe">{{ t('polls', 'Receive notification email on activity to {emailAddress}', {emailAddress: share.emailAddress}) }}</label>
 		<label v-else for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
 	</div>
 </template>
@@ -36,31 +36,29 @@ export default {
 
 	computed: {
 		...mapState({
-			subscription: state => state.subscription,
-			poll: state => state.poll,
-			share: state => state.poll.share,
+			subscribed: state => state.subscription.subscribed,
+			emailAddress: state => state.poll.share.emailAddress,
 		}),
 
 		subscribe: {
 			get() {
-				return this.subscription.subscribed
+				return this.subscribed
 			},
 			set(value) {
-				this.$store.commit('setSubscription', value)
-				this.$store.dispatch('writeSubscription')
+				this.$store.dispatch('subscription/update', value)
 			},
 		},
 	},
 
-	watch: {
-		$route() {
-			this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
-		},
-	},
-
-	created() {
-		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
-	},
+	// watch: {
+	// 	$route() {
+	// 		this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
+	// 	},
+	// },
+	//
+	// created() {
+	// 	this.$store.dispatch('getSubscription', { pollId: this.$route.params.id, token: this.$route.params.token })
+	// },
 
 }
 </script>
