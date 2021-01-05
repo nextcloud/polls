@@ -84,7 +84,7 @@ export default {
 	},
 
 	watch: {
-		$route(from, to) {
+		$route(to, from) {
 			console.log('route changed', 'from ' + from.params.id + ' to ' + to.params.id)
 			if (from.params.id !== to.params.id) {
 				console.log('poll id', this.$route.params.id)
