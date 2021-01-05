@@ -44,10 +44,13 @@ const actions = {
 
 	getSubscription(context) {
 		let endPoint = 'apps/polls'
-		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
 		} else {
-			endPoint = endPoint + '/poll/' + context.rootState.poll.id
+			return
 		}
 
 		return axios.get(generateUrl(endPoint + '/subscription'))
@@ -61,11 +64,15 @@ const actions = {
 
 	writeSubscription(context) {
 		let endPoint = 'apps/polls'
-		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
 		} else {
-			endPoint = endPoint + '/poll/' + context.rootState.poll.id
+			return
 		}
+
 		if (state.subscribed) {
 			endPoint = endPoint + '/subscribe'
 		} else {
