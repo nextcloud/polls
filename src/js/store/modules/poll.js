@@ -152,7 +152,7 @@ const actions = {
 			context.commit('acl/reset')
 			// context.commit('comments/reset')
 			// context.commit('options/reset')
-			context.commit('shares/reset')
+			// context.commit('shares/reset')
 			context.commit('share/reset')
 			// context.commit('votes/reset')
 			return
@@ -163,7 +163,7 @@ const actions = {
 				context.commit('acl/set', response.data)
 				// context.commit('comments/set', response.data)
 				// context.commit('options/set', response.data)
-				context.commit('shares/set', response.data)
+				// context.commit('shares/set', response.data)
 				context.commit('share/set', response.data)
 				// context.commit('votes/set', response.data)
 				return response

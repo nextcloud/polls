@@ -88,7 +88,17 @@ const getters = {
 
 const actions = {
 	list(context) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id
+		let endPoint = 'apps/polls'
+
+		if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else {
+			context.commit('reset')
+			return
+		}
+
 		return axios.get(generateUrl(endPoint + '/shares'))
 			.then((response) => {
 				context.commit('set', response.data)
