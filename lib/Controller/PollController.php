@@ -118,12 +118,12 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 	private function build(): array {
-		try {
-			$comments = $this->commentService->list($this->poll->getId());
-		} catch (Exception $e) {
-			$comments = [];
-		}
-
+		// try {
+		// 	$comments = $this->commentService->list($this->poll->getId());
+		// } catch (Exception $e) {
+		// 	$comments = [];
+		// }
+		//
 		try {
 			$options = $this->optionService->list($this->poll->getId());
 		} catch (Exception $e) {
@@ -145,7 +145,7 @@ class PollController extends Controller {
 		return [
 			'acl' => $this->acl,
 			'poll' => $this->poll,
-			'comments' => $comments,
+			// 'comments' => $comments,
 			'options' => $options,
 			'share' => $this->share,
 			'shares' => $shares,

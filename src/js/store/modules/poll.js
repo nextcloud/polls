@@ -150,7 +150,7 @@ const actions = {
 		} else {
 			context.commit('reset')
 			context.commit('acl/reset')
-			context.commit('comments/reset')
+			// context.commit('comments/reset')
 			context.commit('options/reset')
 			context.commit('shares/reset')
 			context.commit('share/reset')
@@ -161,7 +161,7 @@ const actions = {
 			.then((response) => {
 				context.commit('set', response.data)
 				context.commit('acl/set', response.data)
-				context.commit('comments/set', response.data)
+				// context.commit('comments/set', response.data)
 				context.commit('options/set', response.data)
 				context.commit('shares/set', response.data)
 				context.commit('share/set', response.data)

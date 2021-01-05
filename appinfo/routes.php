@@ -81,6 +81,7 @@ return [
 		['name' => 'subscription#subscribe', 'url' => '/poll/{pollId}/subscribe', 'verb' => 'PUT'],
 		['name' => 'subscription#unsubscribe', 'url' => '/poll/{pollId}/unsubscribe', 'verb' => 'PUT'],
 
+		['name' => 'comment#list', 'url' => '/poll/{pollId}/comments', 'verb' => 'GET'],
 		['name' => 'comment#add', 'url' => '/poll/{pollId}/comment', 'verb' => 'POST'],
 		['name' => 'comment#delete', 'url' => '/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'auth'],
 

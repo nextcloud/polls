@@ -62,13 +62,44 @@ const getters = {
 }
 
 const actions = {
+	list(context, payload) {
+		let endPoint = 'apps/polls'
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else {
+			context.commit('reset')
+			return
+		}
+
+		return axios.get(generateUrl(endPoint + '/comments'))
+			.then((response) => {
+				context.commit('set', response.data)
+			})
+			.catch(() => {
+				context.commit('reset')
+			})
+
+	},
+
 	add(context, payload) {
 		let endPoint = 'apps/polls'
-		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
 		} else {
-			endPoint = endPoint + '/poll/' + context.rootState.poll.id
+			context.commit('reset')
+			return
 		}
+
 		return axios.post(generateUrl(endPoint + '/comment'), {
 			message: payload.message,
 		})
@@ -84,8 +115,9 @@ const actions = {
 
 	delete(context, payload) {
 		let endPoint = 'apps/polls'
-		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
 		}
 
 		return axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
