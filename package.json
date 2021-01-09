@@ -85,7 +85,7 @@
 		"stylelint": "^13.8.0",
 		"stylelint-config-recommended-scss": "^4.2.0",
 		"stylelint-scss": "^3.18.0",
-		"terser-webpack-plugin": "^5.0.3",
+		"terser-webpack-plugin": "^5.1.0",
 		"url-loader": "^4.1.1",
 		"vue-loader": "^15.9.6",
 		"vue-style-loader": "^4.1.2",
