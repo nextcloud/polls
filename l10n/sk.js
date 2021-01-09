@@ -2,7 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Contact" : "Kontakt",
+    "External Email" : "Externý Email",
     "Public link" : "Verejný odkaz",
+    "External user" : "Externý používateľ",
     "Group" : "Skupina",
     "User" : "Používateľ",
     "Polls" : "Ankety",
