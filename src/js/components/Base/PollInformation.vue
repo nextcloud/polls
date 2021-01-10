@@ -43,11 +43,15 @@
 		<div v-if="poll.voteLimit">
 			{{ t('polls', 'Your are only allowed to vote for one option.', 'Your votes are limited to %n yes votes.', poll.voteLimit) }}
 			<span v-if="voteLimitReached"> {{ t('polls', 'You reached the maximum number of allowed votes.') }}</span>
-			<span v-else> {{ n('polls', 'You have only one vote left.', 'You have %n votes left.', poll.voteLimit - countYesVotes) }}</span>
+			<span v-else-if="poll.voteLimit - countYesVotes === 1"> {{ t('polls', 'You have only one vote left.') }}</span>
+			<span v-else> {{ n('polls', 'You have %n vote left.', 'You have %n votes left.', poll.voteLimit - countYesVotes) }}</span>
 		</div>
 
-		<div v-if="poll.optionLimit">
-			{{ n('polls', 'This is an exclusive vote, where only one user is allowed to vote for an option.', 'Only %n votes per option are permitted.',poll.optionLimit) }}
+		<div v-if="poll.optionLimit === 1">
+			{{ t('polls', 'This is an exclusive vote, where only one user is allowed to vote for an option.') }}
+		</div>
+		<div v-else-if="poll.optionLimit">
+			{{ n('polls', 'Only %n vote per option is permitted.', 'Only %n votes per option are permitted.', poll.optionLimit) }}
 		</div>
 	</div>
 </template>
