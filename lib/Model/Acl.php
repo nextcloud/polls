@@ -118,7 +118,7 @@ class Acl implements JsonSerializable {
 		return strval($this->share->getToken());
 	}
 
-	public function setPollId(int $pollId = 0): Acl {
+	public function setPollId(?int $pollId = 0): Acl {
 		try {
 			return $this->setPoll($this->pollMapper->find($pollId));
 		} catch (DoesNotExistException $e) {
