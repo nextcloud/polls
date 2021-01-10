@@ -243,6 +243,7 @@
     "Error loading poll" : "Errore durante il caricamento del sondaggio",
     "Toggle Sidebar" : "Commuta barra laterale",
     "Closed {relativeTimeAgo}" : "Chiuso {relativeTimeAgo}",
+    "Closing {relativeExpirationTime}" : "Chiusura {relativeExpirationTime}",
     "No vote options available" : "Non sono disponibili opzioni di voto",
     "Maybe the owner did not provide some until now." : "Forse il proprietario non le ha fornite ancora.",
     "Switch to mobile view" : "Passa alla vista mobile",
