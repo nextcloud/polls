@@ -31,7 +31,6 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 
-use OCA\Polls\Exceptions\Exception;
 
 
 use OCA\Polls\Db\Share;
@@ -311,5 +310,4 @@ class PublicController extends Controller {
 			return ['share' => $this->mailService->resendInvitation($token)];
 		});
 	}
-
 }

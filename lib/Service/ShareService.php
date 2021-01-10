@@ -86,7 +86,6 @@ class ShareService {
 	 * @psalm-return array<array-key, Share>
 	 */
 	public function list(int $pollId): array {
-
 		try {
 			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
 			$shares = $this->shareMapper->findByPoll($pollId);
