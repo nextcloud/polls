@@ -117,7 +117,7 @@ class ShareService {
 					throw new NotAuthorizedException;
 				}
 
-				if (!$this->groupManager->isInGroup($this->share->userId(), $this->userId)) {
+				if (!$this->groupManager->isInGroup($this->share->getUserId(), $this->userId)) {
 					throw new NotAuthorizedException;
 				}
 

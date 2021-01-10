@@ -346,16 +346,6 @@ class Acl implements JsonSerializable {
 		);
 	}
 
-	private function getPublicShare(): int {
-		return count(
-			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				if ($item->getType() === Share::TYPE_PUBLIC && $item->getToken() === $this->getToken()) {
-					return true;
-				}
-			})
-		);
-	}
-
 	private function validateShareAccess(): void {
 		if ($this->getLoggedIn()) {
 			if (!$this->getValidAuthenticatedShare()) {
