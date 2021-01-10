@@ -23,28 +23,19 @@
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Exceptions\Exception;
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
-use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
-use OCA\Polls\Service\ShareService;
-use OCA\Polls\Service\VoteService;
 use OCA\Polls\Model\Acl;
 
 class PollController extends Controller {
 
 	/** @var Acl */
 	private $acl;
-
-	/** @var CommentService */
-	private $commentService;
 
 	/** @var OptionService */
 	private $optionService;
@@ -55,38 +46,21 @@ class PollController extends Controller {
 	/** @var Poll */
 	private $poll;
 
-	/** @var ShareService */
-	private $shareService;
-
-	/** @var Share */
-	private $share;
-
-	/** @var VoteService */
-	private $voteService;
-
 	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		Acl $acl,
-		CommentService $commentService,
 		OptionService $optionService,
 		PollService $pollService,
-		Poll $poll,
-		ShareService $shareService,
-		Share $share,
-		VoteService $voteService
+		Poll $poll
 	) {
 		parent::__construct($appName, $request);
 		$this->acl = $acl;
-		$this->commentService = $commentService;
 		$this->optionService = $optionService;
 		$this->pollService = $pollService;
 		$this->poll = $poll;
-		$this->shareService = $shareService;
-		$this->share = $share;
-		$this->voteService = $voteService;
 	}
 
 	/**
@@ -106,51 +80,13 @@ class PollController extends Controller {
 	 */
 	public function get(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
-			$this->share = null;
 			$this->poll = $this->pollService->get($pollId);
-			$this->acl->setPoll($this->poll)->requestView();
-			return $this->build();
+			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_VIEW);
+			return [
+				'acl' => $this->acl,
+				'poll' => $this->poll,
+			];
 		});
-	}
-
-	/**
-	 * get complete poll
-	 * @NoAdminRequired
-	 */
-	private function build(): array {
-		// try {
-		// 	$comments = $this->commentService->list($this->poll->getId());
-		// } catch (Exception $e) {
-		// 	$comments = [];
-		// }
-		//
-		// try {
-		// 	$options = $this->optionService->list($this->poll->getId());
-		// } catch (Exception $e) {
-		// 	$options = [];
-		// }
-
-		// try {
-		// 	$votes = $this->voteService->list($this->poll->getId());
-		// } catch (Exception $e) {
-		// 	$votes = [];
-		// }
-		//
-		// try {
-		// 	$shares = $this->shareService->list($this->poll->getId());
-		// } catch (Exception $e) {
-		// 	$shares = [];
-		// }
-
-		return [
-			'acl' => $this->acl,
-			'poll' => $this->poll,
-			// 'comments' => $comments,
-			// 'options' => $options,
-			'share' => $this->share,
-			// 'shares' => $shares,
-			// 'votes' => $votes,
-		];
 	}
 
 	/**

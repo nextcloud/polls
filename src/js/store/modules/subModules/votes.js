@@ -133,7 +133,7 @@ const actions = {
 			setTo: payload.setTo,
 		})
 			.then((response) => {
-				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.route.params.id, vote: response.data.vote })
 				return response.data
 			})
 			.catch((error) => {
@@ -143,7 +143,7 @@ const actions = {
 	},
 
 	deleteUser(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id + '/user/' + payload.userId
+		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/user/' + payload.userId
 		return axios.delete(generateUrl(endPoint))
 			.then(() => {
 				context.commit('deleteVotes', payload)

@@ -57,10 +57,14 @@ class CommentService {
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
 	 */
-	public function list(int $pollId = 0): array {
-		$this->acl->setPollId($pollId)->requestView();
+	public function list(?int $pollId = 0, string $token = ''): array {
+		if ($token) {
+			$this->acl->setToken($token);
+		} else {
+			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_VIEW);
+		}
 
-		if ($this->acl->getAllowSeeUsernames()) {
+		if ($this->acl->isAllowed(Acl::PERMISSION_SEE_USERNAMES)) {
 			return $this->commentMapper->findByPoll($this->acl->getPollId());
 		} else {
 			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
@@ -73,9 +77,9 @@ class CommentService {
 	 */
 	public function add(?int $pollId = 0, ?string $token = '', string $message): Comment {
 		if ($token) {
-			$this->acl->setToken($token)->requestComment();
+			$this->acl->setToken($token)->request(Acl::PERMISSION_COMMENT);
 		} else {
-			$this->acl->setPollId($pollId)->requestComment();
+			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_COMMENT);
 		}
 		$this->comment = new Comment();
 		$this->comment->setPollId($this->acl->getPollId());

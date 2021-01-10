@@ -137,7 +137,7 @@ const actions = {
 				context.commit('set', { options: response.data.options })
 			})
 			.catch((error) => {
-				console.error('Error loding options', { error: error.response }, { pollId: context.rootState.poll.id })
+				console.error('Error loding options', { error: error.response }, { pollId: context.rootState.route.params.id })
 				throw error
 			})
 	},
@@ -145,7 +145,7 @@ const actions = {
 	add(context, payload) {
 		const endPoint = 'apps/polls/option'
 		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
+			pollId: context.rootState.route.params.id,
 			timestamp: payload.timestamp,
 			pollOptionText: payload.pollOptionText,
 		})
@@ -207,7 +207,7 @@ const actions = {
 	reorder(context, payload) {
 		const endPoint = 'apps/polls/poll'
 		context.commit('reorder', { options: payload })
-		return axios.post(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options/reorder'), {
+		return axios.post(generateUrl(endPoint + '/' + context.rootState.route.params.id + '/options/reorder'), {
 			options: payload,
 		})
 			.then((response) => {

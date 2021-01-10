@@ -24,11 +24,16 @@
 return [
 	'routes' => [
 		['name' => 'public#vote_page', 'url' => '/s/{token}', 'verb' => 'GET'],
-		['name' => 'public#poll', 'url' => '/s/{token}/poll', 'verb' => 'GET'],
-		['name' => 'public#vote', 'url' => '/s/{token}/vote', 'verb' => 'PUT'],
-		['name' => 'public#comment', 'url' => '/s/{token}/comment', 'verb' => 'POST'],
-		['name' => 'public#comment_delete', 'url' => '/s/{token}/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'public'],
-		['name' => 'public#subscription', 'url' => '/s/{token}/subscription', 'verb' => 'GET'],
+		['name' => 'public#get_share', 'url' => '/s/{token}/share', 'verb' => 'GET'],
+		['name' => 'public#get_poll', 'url' => '/s/{token}/poll', 'verb' => 'GET'],
+		['name' => 'public#get_comments', 'url' => '/s/{token}/comments', 'verb' => 'GET'],
+		['name' => 'public#get_options', 'url' => '/s/{token}/options', 'verb' => 'GET'],
+		['name' => 'public#get_votes', 'url' => '/s/{token}/votes', 'verb' => 'GET'],
+		['name' => 'public#get_subscription', 'url' => '/s/{token}/subscription', 'verb' => 'GET'],
+
+		['name' => 'public#set_vote', 'url' => '/s/{token}/vote', 'verb' => 'PUT'],
+		['name' => 'public#add_comment', 'url' => '/s/{token}/comment', 'verb' => 'POST'],
+		['name' => 'public#delete_comment', 'url' => '/s/{token}/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'public'],
 		['name' => 'public#subscribe', 'url' => '/s/{token}/subscribe', 'verb' => 'PUT'],
 		['name' => 'public#unsubscribe', 'url' => '/s/{token}/unsubscribe', 'verb' => 'PUT'],
 		['name' => 'public#register', 'url' => '/s/{token}/register', 'verb' => 'POST'],
@@ -46,7 +51,7 @@ return [
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 
 		['name' => 'poll#list', 'url' => '/polls', 'verb' => 'GET'],
-		['name' => 'poll#get', 'url' => '/poll/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#get', 'url' => '/poll/{pollId}/poll', 'verb' => 'GET'],
 		['name' => 'poll#add', 'url' => '/poll/add', 'verb' => 'POST'],
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],

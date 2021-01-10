@@ -28,7 +28,6 @@ import acl from './subModules/acl.js'
 import comments from './subModules/comments.js'
 import options from './subModules/options.js'
 import shares from './subModules/shares.js'
-import share from './subModules/share.js'
 import votes from './subModules/votes.js'
 
 const defaultPoll = () => {
@@ -61,7 +60,6 @@ const modules = {
 	options: options,
 	shares: shares,
 	votes: votes,
-	share: share,
 }
 
 const mutations = {
@@ -143,29 +141,20 @@ const actions = {
 
 	get(context, payload) {
 		let endPoint = 'apps/polls'
-		if (payload.token) {
-			endPoint = endPoint + '/s/' + payload.token + '/poll'
-		} else if (payload.pollId) {
-			endPoint = endPoint + '/poll/' + payload.pollId
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
 		} else {
 			context.commit('reset')
 			context.commit('acl/reset')
-			// context.commit('comments/reset')
-			// context.commit('options/reset')
-			// context.commit('shares/reset')
-			context.commit('share/reset')
-			// context.commit('votes/reset')
 			return
 		}
-		return axios.get(generateUrl(endPoint))
+		return axios.get(generateUrl(endPoint + '/poll'))
 			.then((response) => {
 				context.commit('set', response.data)
 				context.commit('acl/set', response.data)
-				// context.commit('comments/set', response.data)
-				// context.commit('options/set', response.data)
-				// context.commit('shares/set', response.data)
-				context.commit('share/set', response.data)
-				// context.commit('votes/set', response.data)
 				return response
 			})
 			.catch((error) => {

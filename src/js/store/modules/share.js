@@ -49,26 +49,37 @@ const mutations = {
 	reset(state) {
 		Object.assign(state, defaultShares())
 	},
-
 }
 
 const actions = {
-	get(context, payload) {
-		const endPoint = 'apps/polls/share'
-		return axios.get(generateUrl(endPoint + '/' + payload.token))
+	get(context) {
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else {
+			context.commit('reset')
+			return
+		}
+		return axios.get(generateUrl(endPoint + '/share'))
 			.then((response) => {
 				context.commit('set', { share: response.data.share })
 				return response.data
 			})
 			.catch((error) => {
-				console.error('Error retrieving share', { error: error.response }, { payload: payload })
-				throw error
+				console.debug('Error retrieving share', { error: error.response })
+				throw error.response
 			})
 	},
 
 	register(context, payload) {
-		const endPoint = 'apps/polls/s'
-		return axios.post(generateUrl(endPoint + '/' + context.state.token + '/register'), {
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else {
+			return
+		}
+
+		return axios.post(generateUrl(endPoint + '/register'), {
 			userName: payload.userName,
 			emailAddress: payload.emailAddress,
 		})
@@ -83,8 +94,14 @@ const actions = {
 	},
 
 	resendInvitation(context, payload) {
-		const endPoint = 'apps/polls/s'
-		return axios.get(generateUrl(endPoint + '/' + context.state.token + '/resend'))
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else {
+			return
+		}
+
+		return axios.get(generateUrl(endPoint + '/resend'))
 			.then((response) => {
 				return response
 			})

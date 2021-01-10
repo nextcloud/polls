@@ -31,13 +31,19 @@ use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
 
 use OCP\Security\ISecureRandom;
-
+use OCP\IGroupManager;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroupClass;
 
 class ShareService {
+
+	/** @var string|null */
+	private $userId;
+
+	/** @var IGroupManager */
+	private $groupManager;
 
 	/** @var SystemService */
 	private $systemService;
@@ -55,12 +61,16 @@ class ShareService {
 	private $acl;
 
 	public function __construct(
+		?string $UserId,
+		IGroupManager $groupManager,
 		SystemService $systemService,
 		ShareMapper $shareMapper,
 		Share $share,
 		MailService $mailService,
 		Acl $acl
 	) {
+		$this->userId = $UserId;
+		$this->groupManager = $groupManager;
 		$this->systemService = $systemService;
 		$this->shareMapper = $shareMapper;
 		$this->share = $share;
@@ -76,10 +86,12 @@ class ShareService {
 	 * @psalm-return array<array-key, Share>
 	 */
 	public function list(int $pollId): array {
-		$this->acl->setPollId($pollId)->requestEdit();
 
 		try {
+			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
 			$shares = $this->shareMapper->findByPoll($pollId);
+		} catch (NotAuthorizedException $e) {
+			return [];
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
@@ -88,11 +100,48 @@ class ShareService {
 	}
 
 	/**
+	 * Validate share
+	 */
+	private function validate():void {
+		switch ($this->share->getType()) {
+			case Share::TYPE_PUBLIC:
+				// public shares are alway valid
+				break;
+			case Share::TYPE_USER:
+				if ($this->share->getUserId() !== $this->userId) {
+					// share is not valid for user
+					throw new NotAuthorizedException;
+				}
+				break;
+			case Share::TYPE_GROUP:
+				if (!\OC::$server->getUserSession()->isLoggedIn()) {
+					throw new NotAuthorizedException;
+				}
+
+				if (!$this->groupManager->isInGroup($this->share->userId(), $this->userId)) {
+					throw new NotAuthorizedException;
+				}
+
+				break;
+			case Share::TYPE_EMAIL:
+				break;
+			case Share::TYPE_EXTERNAL:
+				break;
+			default:
+				\OC::$server->getLogger()->alert(json_encode('invalid share type ' . $this->share->getType()));
+				throw new NotAuthorizedException;
+		}
+	}
+
+	/**
 	 * Get share by token
 	 */
-	public function get(string $token) {
+	public function get(string $token, bool $validate = false) {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
+			if ($validate) {
+				$this->validate();
+			}
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
@@ -101,7 +150,7 @@ class ShareService {
 		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
 			try {
 				// Test if the user has already access.
-				$this->acl->setPollId($this->share->getPollId())->requestView();
+				$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_VIEW);
 			} catch (NotAuthorizedException $e) {
 				// If he is not authorized until now, create a new personal share for this user.
 				// Return the created share
@@ -121,7 +170,7 @@ class ShareService {
 	 * @return Share
 	 */
 	public function setInvitationSent(string $token): Share {
-		$share = $this->get($token);
+		$share = $this->shareMapper->findByToken($token);
 		$share->setInvitationSent(time());
 		return $this->shareMapper->update($share);
 	}
@@ -166,7 +215,7 @@ class ShareService {
 	 * @return Share
 	 */
 	public function add(int $pollId, string $type, string $userId = ''): Share {
-		$this->acl->setPollId($pollId)->requestEdit();
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
 
 		if ($type !== UserGroupClass::TYPE_PUBLIC) {
 			try {
@@ -261,7 +310,7 @@ class ShareService {
 	public function delete(string $token): string {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			$this->acl->setPollId($this->share->getPollId())->requestEdit();
+			$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_EDIT);
 			$this->shareMapper->delete($this->share);
 		} catch (DoesNotExistException $e) {
 			// silently catch

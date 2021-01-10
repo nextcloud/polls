@@ -72,7 +72,7 @@ export default {
 		return {
 			showSettingsDlg: false,
 			createDlg: false,
-			reloadInterval: 30000,
+			// reloadInterval: 30000,
 			pollCategories: [
 				{
 					id: 'relevant',
@@ -124,25 +124,25 @@ export default {
 		},
 	},
 
-	created() {
-		this.timedReload()
-	},
-
-	beforeDestroy() {
-		window.clearInterval(this.reloadTimer)
-	},
+	// created() {
+	// 	this.timedReload()
+	// },
+	//
+	// beforeDestroy() {
+	// 	window.clearInterval(this.reloadTimer)
+	// },
 
 	methods: {
 		closeCreate() {
 			this.createDlg = false
 		},
 
-		timedReload() {
-			// reload poll list periodically
-			this.reloadTimer = window.setInterval(() => {
-				emit('update-polls')
-			}, this.reloadInterval)
-		},
+		// timedReload() {
+		// 	// reload poll list periodically
+		// 	this.reloadTimer = window.setInterval(() => {
+		// 		emit('update-polls')
+		// 	}, this.reloadInterval)
+		// },
 
 		toggleCreateDlg() {
 			this.createDlg = !this.createDlg

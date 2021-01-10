@@ -28,13 +28,15 @@
 		<SideBar v-if="sideBarOpen && $store.state.poll.id"
 			:active="activeTab"
 			:class="{ 'glassy': settings.glassySidebar }" />
+		<LoadingOverlay v-if="loading" />
 	</Content>
 </template>
 
 <script>
+import LoadingOverlay from './components/Base/LoadingOverlay'
 import Navigation from './components/Navigation/Navigation'
-import SideBar from './components/SideBar/SideBar'
 import SettingsDlg from './components/Settings/SettingsDlg'
+import SideBar from './components/SideBar/SideBar'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
@@ -50,8 +52,9 @@ import './assets/scss/experimental.scss'
 export default {
 	name: 'App',
 	components: {
-		Navigation,
 		Content,
+		LoadingOverlay,
+		Navigation,
 		SettingsDlg,
 		SideBar,
 	},
@@ -61,6 +64,8 @@ export default {
 			sideBarOpen: (window.innerWidth > 920),
 			activeTab: 'comments',
 			transitionClass: 'transitions-active',
+			loading: false,
+			reloadInterval: 30000,
 		}
 	},
 
@@ -85,26 +90,25 @@ export default {
 
 	watch: {
 		$route(to, from) {
-			console.log('route changed', 'from ' + from.params.id + ' to ' + to.params.id)
-			if (from.params.id !== to.params.id) {
-				console.log('poll id', this.$route.params.id)
-				this.loadPoll()
-			}
+			this.loadPoll()
 		},
 	},
 
 	created() {
 		subscribe('transitions-off', (delay) => {
-			this.transitionClass = ''
-			if (delay) {
-				setTimeout(() => {
-					this.transitionClass = 'transitions-active'
-				}, delay)
-			}
+			this.transitionsOff(delay)
 		})
 
 		subscribe('transitions-on', () => {
-			this.transitionClass = 'transitions-active'
+			this.transitionsOn()
+		})
+
+		subscribe('load-poll', (silent) => {
+			this.loadPoll(silent)
+		})
+
+		subscribe('update-polls', () => {
+			this.updatePolls()
 		})
 
 		subscribe('toggle-sidebar', (payload) => {
@@ -125,25 +129,69 @@ export default {
 
 		if (getCurrentUser()) {
 			this.$store.dispatch('settings/get')
-			this.updatePolls()
-			subscribe('update-polls', () => {
+			if (this.$route.name !== 'publicVote') {
 				this.updatePolls()
-			})
+			}
+			if (this.$route.params.id && !this.$oute.params.token) {
+				this.loadPoll(true)
+			}
 		}
+		this.timedReload()
 	},
 
 	beforeDestroy() {
+		window.clearInterval(this.reloadTimer)
+		unsubscribe('load-poll')
 		unsubscribe('update-polls')
 		unsubscribe('toggle-sidebar')
+		unsubscribe('transitions-on')
+		unsubscribe('transitions-off')
 	},
 
 	methods: {
-		loadPoll() {
-			this.$store.dispatch('poll/comments/list')
-			this.$store.dispatch('poll/options/list')
-			this.$store.dispatch('poll/votes/list')
-			this.$store.dispatch('poll/shares/list')
-			this.$store.dispatch('subscription/get')
+		transitionsOn() {
+			this.transitionClass = 'transitions-active'
+		},
+
+		timedReload() {
+			this.reloadTimer = window.setInterval(() => {
+				this.updatePolls()
+			}, this.reloadInterval)
+		},
+
+		transitionsOff(delay) {
+			this.transitionClass = ''
+			if (delay) {
+				setTimeout(() => {
+					this.transitionClass = 'transitions-active'
+				}, delay)
+			}
+		},
+
+		async loadPoll(silent) {
+			if (!silent) {
+				this.loading = true
+				this.transitionsOff()
+			}
+
+			try {
+				if (this.$route.name === 'publicVote') {
+					await this.$store.dispatch('share/get')
+				}
+				await this.$store.dispatch('poll/get')
+				await this.$store.dispatch('poll/comments/list')
+				await this.$store.dispatch('poll/options/list')
+				await this.$store.dispatch('poll/votes/list')
+				if (this.$route.name === 'vote') {
+					await this.$store.dispatch('poll/shares/list')
+				}
+				await this.$store.dispatch('subscription/get')
+			} catch {
+				this.$router.replace({ name: 'notfound' })
+			} finally {
+				this.loading = false
+				this.transitionsOn()
+			}
 		},
 
 		updatePolls() {
@@ -153,13 +201,12 @@ export default {
 					.catch(() => {
 						showError(t('polls', 'Error loading poll list'))
 					})
-			}
-			if (getCurrentUser().isAdmin) {
-
-				this.$store.dispatch('pollsAdmin/load')
-					.catch(() => {
-						showError(t('polls', 'Error loading poll list'))
-					})
+				if (getCurrentUser().isAdmin) {
+					this.$store.dispatch('pollsAdmin/load')
+						.catch(() => {
+							showError(t('polls', 'Error loading poll list'))
+						})
+				}
 			}
 		},
 	},
@@ -170,7 +217,6 @@ export default {
 <style  lang="scss">
 
 .description {
-	// white-space: pre-wrap;
 	margin: 8px 0;
 }
 

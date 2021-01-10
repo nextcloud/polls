@@ -239,33 +239,33 @@ export default {
 		switchDeleted(pollId) {
 			this.$store
 				.dispatch('poll/switchDeleted', { pollId: pollId })
-				.then(() => {
-					emit('update-polls')
-				})
 				.catch(() => {
 					showError(t('polls', 'Error deleting poll.'))
+				})
+				.finally(() => {
+					emit('update-polls')
 				})
 		},
 
 		deletePermanently(pollId) {
 			this.$store
 				.dispatch('poll/delete', { pollId: pollId })
-				.then(() => {
-					emit('update-polls')
-				})
 				.catch(() => {
 					showError(t('polls', 'Error deleting poll.'))
+				})
+				.finally(() => {
+					emit('update-polls')
 				})
 		},
 
 		clonePoll(pollId) {
 			this.$store
 				.dispatch('poll/clone', { pollId: pollId })
-				.then(() => {
-					emit('update-polls')
-				})
 				.catch(() => {
 					showError(t('polls', 'Error cloning poll.'))
+				})
+				.finally(() => {
+					emit('update-polls')
 				})
 		},
 	},

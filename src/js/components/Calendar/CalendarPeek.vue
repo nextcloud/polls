@@ -144,7 +144,6 @@ export default {
 	font-weight: 400;
 	width: 32px;
 	height: 32px;
-	// background-size: 28px;
 	background-color: var(--color-warning);
 	border-radius: 50%;
 	margin: 4px auto;

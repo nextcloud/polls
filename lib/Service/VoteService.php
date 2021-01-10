@@ -72,17 +72,17 @@ class VoteService {
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
 	 */
-	public function list(int $pollId = 0, string $token = ''): array {
+	public function list(?int $pollId = 0, string $token = ''): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($pollId)->requestView();
+			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_VIEW);
 		}
 
 		try {
-			if (!$this->acl->getAllowSeeResults()) {
+			if (!$this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
 				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
-			} elseif (!$this->acl->getAllowSeeUsernames()) {
+			} elseif (!$this->acl->isAllowed(Acl::PERMISSION_SEE_USERNAMES)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
 				return $this->anonymizer->getVotes();
 			} else {
@@ -100,12 +100,12 @@ class VoteService {
 		$option = $this->optionMapper->find($optionId);
 
 		if ($token) {
-			$this->acl->setToken($token)->requestVote();
+			$this->acl->setToken($token)->request(Acl::PERMISSION_VOTE);
 			if (intval($option->getPollId()) !== $this->acl->getPollId()) {
 				throw new NotAuthorizedException;
 			}
 		} else {
-			$this->acl->setPollId($option->getPollId())->requestVote();
+			$this->acl->setPollId($option->getPollId())->request(Acl::PERMISSION_VOTE);
 		}
 
 		if ($setTo === 'yes') {
@@ -141,7 +141,7 @@ class VoteService {
 	 * Remove user from poll
 	 */
 	public function delete(int $pollId, string $userId): string {
-		$this->acl->setPollId($pollId)->requestEdit();
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
 		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
 		return $userId;
 	}

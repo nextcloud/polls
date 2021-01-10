@@ -49,7 +49,7 @@ export default {
 
 	computed: {
 		...mapState({
-			share: state => state.poll.share,
+			share: state => state.share,
 		}),
 
 		personalLink() {
@@ -64,7 +64,7 @@ export default {
 
 	methods: {
 		resendInvitation() {
-			this.$store.dispatch('poll/share/resendInvitation')
+			this.$store.dispatch('share/resendInvitation')
 				.then((response) => {
 					showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.emailAddress }))
 				})

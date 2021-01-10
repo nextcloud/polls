@@ -97,7 +97,7 @@ export default {
 	computed: {
 		...mapState({
 			poll: state => state.poll,
-			share: state => state.poll.share,
+			share: state => state.share,
 		}),
 
 		disableSubmit() {
@@ -251,7 +251,7 @@ export default {
 
 		submitRegistration() {
 			if (this.isValidName && (this.isValidEmailAddress || this.emailAddress.length === 0)) {
-				this.$store.dispatch('poll/share/register', { userName: this.userName, emailAddress: this.emailAddress })
+				this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress })
 					.then((response) => {
 						if (this.$route.params.token === response.token) {
 							this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
