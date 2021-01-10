@@ -193,7 +193,8 @@ export default {
 		display: flex;
 		align-items: center;
 		flex: 0 0 auto;
-		padding-right: 8px;
+		padding-right: 4px;
+		padding-left: 4px;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -282,6 +283,10 @@ export default {
 		height: 4em;
 		align-items: center;
 		padding-left: 52px;
+		.item__title {
+			flex-direction: row;
+			justify-content: flex-start;
+		}
 	}
 
 	.sortable {
@@ -311,11 +316,12 @@ export default {
 	}
 
 	[class^='item__access'] {
-		width: 44px;
+		width: 70px;
 		background-repeat: no-repeat;
 		background-position: center;
 		min-width: 16px;
 		min-height: 16px;
+		justify-content: center;
 	}
 
 	.item__access--public {
