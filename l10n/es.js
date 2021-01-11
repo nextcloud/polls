@@ -62,8 +62,6 @@ OC.L10N.register(
     "The used time zone is {timeZone}." : "La zona horaria usada es {timeZone}",
     "Your are only allowed to vote for one option." : "Solo estás autorizado a votar por una opción.",
     "You reached the maximum number of allowed votes." : "Has alcanzado el número máximo de votos permitidos.",
-    "_You have only one vote left._::_You have %n votes left._" : ["Solo te queda un voto.","Te quedan %n votos."],
-    "_This is an exclusive vote, where only one user is allowed to vote for an option._::_Only %n votes per option are permitted._" : ["Este es un voto exclusivo, en el que solo a un/a usuario/a se le permite votar por una opción.","Solo %n votos por opción están permitidos."],
     "Public poll" : "Votación pública",
     "Do you want to login?" : "¿Quieres entrar en tu cuenta?",
     "Login" : "Entrar",

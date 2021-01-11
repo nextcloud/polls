@@ -60,8 +60,6 @@
     "The used time zone is {timeZone}." : "The gebruikte tijdzone is {timeZone}",
     "Your are only allowed to vote for one option." : "Je mag maar voor één optie kiezen.",
     "You reached the maximum number of allowed votes." : "Je hebt het maximale aantal stemmen bereikt.",
-    "_You have only one vote left._::_You have %n votes left._" : ["Je hebt nog één stem over.","Je hebt %n stemmen over."],
-    "_This is an exclusive vote, where only one user is allowed to vote for an option._::_Only %n votes per option are permitted._" : ["Dit is een exclusieve stem, waarbij slechts één gebruiker op een optie mag stemmen.","Er zijn %n stemmen per optie toegestaan."],
     "Public poll" : "Openbare peiling",
     "Do you want to login?" : "Wil je inloggen?",
     "Login" : "Inloggen",

@@ -60,8 +60,6 @@
     "The used time zone is {timeZone}." : "Il fuso orario utilizzato è {timeZone}.",
     "Your are only allowed to vote for one option." : "Ti è consentito votare solo per un'opzione.",
     "You reached the maximum number of allowed votes." : "Hai raggiunto il numero massimo di voti consentiti.",
-    "_You have only one vote left._::_You have %n votes left._" : ["Ti è rimasto un solo voto","Ti sono rimasti %n voti"],
-    "_This is an exclusive vote, where only one user is allowed to vote for an option._::_Only %n votes per option are permitted._" : ["Si tratta di un voto esclusivo, in cui solo un utente può votare per un'opzione.","Sono consentiti solo %n voti per opzione."],
     "Public poll" : "Sondaggio pubblico",
     "Do you want to login?" : "Vuoi accedere?",
     "Login" : "Accedi",

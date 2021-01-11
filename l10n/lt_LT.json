@@ -53,7 +53,6 @@
     "Results are hidden." : "Rezultatai yra paslėpti.",
     "They will be revealed after the poll is closed." : "Jie bus atskleisti, kai apklausa bus baigta.",
     "The used time zone is {timeZone}." : "Naudojama {timeZone} laiko juosta.",
-    "_You have only one vote left._::_You have %n votes left._" : ["Jums liko %n balsas.","Jums liko %n balsai.","Jums liko %n balsų.","Jums liko %n balsas."],
     "Public poll" : "Vieša apklausa",
     "Do you want to login?" : "Ar norite prisijungti?",
     "To participate, tell us how we can call you!" : "Norėdami dalyvauti, parašykite koks jūsų vardas!",

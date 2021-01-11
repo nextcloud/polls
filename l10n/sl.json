@@ -60,8 +60,6 @@
     "The used time zone is {timeZone}." : "Časovni pas je {timeZone}.",
     "Your are only allowed to vote for one option." : "Izbrati je dovoljeno le eno možnost.",
     "You reached the maximum number of allowed votes." : "Dosegli ste omejitev števila dovoljenih izbir.",
-    "_You have only one vote left._::_You have %n votes left._" : ["Perostaja vam še %n glasovanje.","Perostajata vam še %n glasovanji.","Perostajajo vam še %n glasovanja.","Perostaja vam še %n glasovanj."],
-    "_This is an exclusive vote, where only one user is allowed to vote for an option._::_Only %n votes per option are permitted._" : ["Dovoljeno je le %n glasovanje na možnost.","Dovoljeni sta le %n glasovanji na možnost.","Dovoljena so le %n glasovanja na možnost.","Dovoljenih je le %n glasovanj na možnost."],
     "Public poll" : "Javna anketa",
     "Do you want to login?" : "Ali se želite prijaviti?",
     "Login" : "Prijava",
