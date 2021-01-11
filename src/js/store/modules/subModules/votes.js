@@ -100,6 +100,27 @@ const getters = {
 }
 
 const actions = {
+	list(context, payload) {
+		let endPoint = 'apps/polls'
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else {
+			context.commit('reset')
+			return
+		}
+
+		return axios.get(generateUrl(endPoint + '/votes'))
+			.then((response) => {
+				context.commit('set', response.data)
+			})
+			.catch(() => {
+				context.commit('reset')
+			})
+
+	},
 	set(context, payload) {
 		let endPoint = 'apps/polls'
 
@@ -112,7 +133,7 @@ const actions = {
 			setTo: payload.setTo,
 		})
 			.then((response) => {
-				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.route.params.id, vote: response.data.vote })
 				return response.data
 			})
 			.catch((error) => {
@@ -122,7 +143,7 @@ const actions = {
 	},
 
 	deleteUser(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id + '/user/' + payload.userId
+		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/user/' + payload.userId
 		return axios.delete(generateUrl(endPoint))
 			.then(() => {
 				context.commit('deleteVotes', payload)

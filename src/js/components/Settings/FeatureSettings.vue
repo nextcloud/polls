@@ -96,10 +96,6 @@ export default {
 		calendarChoices() {
 			const list = []
 			this.calendars.forEach((calendar) => {
-				// console.log(calendar.key.toString())
-				// console.log(this.settings.checkCalendars)
-				// console.log(this.settings.checkCalendars.includes(calendar.key.toString()))
-
 				list.push({
 					key: calendar.key.toString(),
 					name: calendar.name,
@@ -144,17 +140,11 @@ export default {
 		},
 
 		clickedCalendar(calendar) {
-			// console.log(calendar.key)
-			// console.log(checkCalendars)
 			if (this.settings.checkCalendars.includes(calendar.key)) {
-				// console.log(this.settings.checkCalendars)
-				// console.log('removed', this.settings.checkCalendars.filter(item => item !== calendar.key.toString()))
 				this.writeValue({ checkCalendars: this.settings.checkCalendars.filter(item => item !== calendar.key.toString()) })
 			} else {
 				this.$store.commit('settings/addCheckCalendar', { calendar: calendar })
-				// this.writeValue({ checkCalendars: checkCalendars })
 			}
-			// console.log(this.settings.checkCalendars)
 			this.$store.dispatch('settings/write')
 		},
 	},

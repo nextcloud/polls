@@ -23,6 +23,7 @@
 
 import Vue from 'vue'
 import App from './App'
+import { sync } from 'vuex-router-sync'
 import store from './store'
 import router from './router'
 import ClickOutside from 'v-click-outside'
@@ -39,6 +40,8 @@ import ButtonDiv from './components/Base/ButtonDiv'
 __webpack_nonce__ = btoa(getRequestToken())
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_public_path__ = generateFilePath('polls', '', 'js/')
+
+sync(store, router)
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'

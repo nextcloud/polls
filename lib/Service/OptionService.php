@@ -69,14 +69,14 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(int $pollId = 0, string $token = ''): array {
+	public function list(?int $pollId = 0, string $token = ''): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($pollId)->requestView();
+			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_VIEW);
 		}
 
-		if (!$this->acl->getAllowView()) {
+		if (!$this->acl->isAllowed(Acl::PERMISSION_VIEW)) {
 			throw new NotAuthorizedException;
 		}
 
@@ -93,9 +93,9 @@ class OptionService {
 	 * @return Option
 	 */
 	public function get(int $optionId): Option {
-		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())->requestView();
+		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())->request(Acl::PERMISSION_VIEW);
 
-		if (!$this->acl->getAllowView()) {
+		if (!$this->acl->isAllowed(Acl::PERMISSION_VIEW)) {
 			throw new NotAuthorizedException;
 		}
 
@@ -109,7 +109,7 @@ class OptionService {
 	 * @return Option
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = ''): Option {
-		$this->acl->setPollId($pollId)->RequestEdit();
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
 		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
@@ -129,7 +129,7 @@ class OptionService {
 	 */
 	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = ''): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->requestEdit();
+		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 		$this->setOption($timestamp, $pollOptionText);
 
 		return $this->optionMapper->update($this->option);
@@ -142,7 +142,7 @@ class OptionService {
 	 */
 	public function delete(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->requestEdit();
+		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 		$this->optionMapper->delete($this->option);
 
 		return $this->option;
@@ -155,7 +155,7 @@ class OptionService {
 	 */
 	public function confirm(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->requestEdit();
+		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 
 		if ($this->option->getConfirmed()) {
 			$this->option->setConfirmed(0);
@@ -176,7 +176,7 @@ class OptionService {
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$baseDate = new DateTime;
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->requestEdit();
+		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 
 		if ($step === 0) {
 			return $this->optionMapper->findByPoll($this->option->getPollId());
@@ -233,7 +233,7 @@ class OptionService {
 	public function reorder(int $pollId, array $options): array {
 		try {
 			$poll = $this->pollMapper->find($pollId);
-			$this->acl->setPoll($poll)->requestEdit();
+			$this->acl->setPoll($poll)->request(Acl::PERMISSION_EDIT);
 
 			if ($poll->getType() === Poll::TYPE_DATE) {
 				throw new BadRequestException("Not allowed in date polls");
@@ -267,7 +267,7 @@ class OptionService {
 		try {
 			$this->option = $this->optionMapper->find($optionId);
 			$poll = $this->pollMapper->find($this->option->getPollId());
-			$this->acl->setPoll($poll)->requestEdit();
+			$this->acl->setPoll($poll)->request(Acl::PERMISSION_EDIT);
 
 			if ($poll->getType() === Poll::TYPE_DATE) {
 				throw new BadRequestException("Not allowed in date polls");

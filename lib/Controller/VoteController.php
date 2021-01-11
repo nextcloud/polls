@@ -50,6 +50,17 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
+	public function list($pollId): DataResponse {
+		return $this->response(function () use ($pollId) {
+			return ['votes' => $this->voteService->list($pollId)];
+		});
+	}
+
+	/**
+	 * set
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
 	public function set($optionId, $setTo): DataResponse {
 		return $this->response(function () use ($optionId, $setTo) {
 			return ['vote' => $this->voteService->set($optionId, $setTo)];

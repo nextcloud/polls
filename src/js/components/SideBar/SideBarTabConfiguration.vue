@@ -437,8 +437,6 @@ export default {
 				this.$store.dispatch('poll/update')
 					.then((response) => {
 						this.successDebounced(response)
-						// showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
-						// emit('update-polls')
 					})
 					.catch(() => {
 						showError(t('polls', 'Error writing poll'))

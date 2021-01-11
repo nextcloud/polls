@@ -32,48 +32,52 @@ const defaultSubscription = () => {
 
 const state = defaultSubscription()
 
+const namespaced = true
+
 const mutations = {
 
-	setSubscription(state, payload) {
-		state.subscribed = payload
+	set(state, payload) {
+		state.subscribed = payload.subscribed
 	},
 
 }
 
 const actions = {
 
-	getSubscription(context) {
+	get(context) {
 		let endPoint = 'apps/polls'
-		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
 		} else {
-			endPoint = endPoint + '/poll/' + context.rootState.poll.id
+			return
 		}
 
 		return axios.get(generateUrl(endPoint + '/subscription'))
 			.then((response) => {
-				context.commit('setSubscription', response.data.subscribed)
+				context.commit('set', response.data)
 			})
 			.catch(() => {
-				context.commit('setSubscription', false)
+				context.commit('set', false)
 			})
 	},
 
-	writeSubscription(context) {
+	update(context, payload) {
 		let endPoint = 'apps/polls'
-		if (context.rootState.poll.acl.token) {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
 		} else {
-			endPoint = endPoint + '/poll/' + context.rootState.poll.id
-		}
-		if (state.subscribed) {
-			endPoint = endPoint + '/subscribe'
-		} else {
-			endPoint = endPoint + '/unsubscribe'
+			return
 		}
 
-		return axios.put(generateUrl(endPoint))
-			.then(() => {
+		return axios.put(generateUrl(endPoint + (payload ? '/subscribe' : '/unsubscribe')))
+			.then((response) => {
+				context.commit('set', response.data)
 			})
 			.catch((error) => {
 				console.error(error.response)
@@ -81,4 +85,4 @@ const actions = {
 	},
 }
 
-export default { state, mutations, actions }
+export default { namespaced, state, mutations, actions }

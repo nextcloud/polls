@@ -58,7 +58,6 @@ export default {
 	}
 
 	.badge {
-		// border: solid 1px;
 		border-radius: var(--border-radius);
 		padding: 5px;
 		margin: 8px 4px;

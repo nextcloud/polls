@@ -99,7 +99,7 @@ class PollService {
 
 			foreach ($polls as $poll) {
 				try {
-					$this->acl->setPoll($poll)->requestView();
+					$this->acl->setPoll($poll)->request(Acl::PERMISSION_VIEW);
 					// TODO: Not the elegant way. Improvement neccessary
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
@@ -165,7 +165,7 @@ class PollService {
 	 */
 	public function get(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->requestView();
+		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_VIEW);
 		return $this->poll;
 	}
 
@@ -218,7 +218,7 @@ class PollService {
 	 */
 	public function update(int $pollId, array $poll): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->requestEdit();
+		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_EDIT);
 
 		// Validate valuess
 		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
@@ -247,7 +247,8 @@ class PollService {
 	 */
 	public function switchDeleted(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->requestDelete();
+		\OC::$server->getLogger()->alert('ok');
+		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_DELETE);
 
 		if ($this->poll->getDeleted()) {
 			$this->poll->setDeleted(0);
@@ -280,7 +281,7 @@ class PollService {
 	 */
 	public function delete(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->requestDelete();
+		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_DELETE);
 
 		$this->pollMapper->delete($this->poll);
 
@@ -305,7 +306,7 @@ class PollService {
 	 */
 	public function clone(int $pollId): Poll {
 		$origin = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($origin)->requestView();
+		$this->acl->setPoll($origin)->request(Acl::PERMISSION_VIEW);
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
@@ -339,7 +340,7 @@ class PollService {
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->requestEdit();
+		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_EDIT);
 
 		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
 		$list = [];

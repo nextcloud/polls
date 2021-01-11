@@ -31,7 +31,6 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 
-use OCA\Polls\Exceptions\Exception;
 
 
 use OCA\Polls\Db\Share;
@@ -121,7 +120,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 * @return PublicTemplateResponse|PublicTemplateResponse
+	 * @return TemplateResponse|PublicTemplateResponse
 	 */
 	public function votePage() {
 		if (\OC::$server->getUserSession()->isLoggedIn()) {
@@ -138,21 +137,79 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function poll(string $token): DataResponse {
+	public function getPoll(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			$this->share = $this->shareService->get($token);
+			$this->share = $this->shareService->get($token, true);
 			$this->acl->setShare($this->share);
 			$this->poll = $this->pollService->get($this->share->getPollId());
-			return $this->buildPoll();
+			return [
+				'acl' => $this->acl,
+				'poll' => $this->poll,
+			];
 		});
 	}
 
 	/**
-	 * Set vote with token
+	 * Get share
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function vote($optionId, $setTo, $token): DataResponse {
+	public function getShare(string $token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['share' =>$this->shareService->get($token, true)];
+		});
+	}
+
+	/**
+	 * Get Comments
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function getComments(string $token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['comments'=> $this->commentService->list(null, $token)];
+		});
+	}
+
+	/**
+	 * Get votes
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function getVotes(string $token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['votes'=> $this->voteService->list(null, $token)];
+		});
+	}
+
+	/**
+	 * Get options
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function getOptions(string $token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['options'=> $this->optionService->list(null, $token)];
+		});
+	}
+
+	/**
+	 * Get subscription status
+	 * @PublicPage
+	 * @NoAdminRequired
+	 */
+	public function getSubscription(string $token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['subscribed' => $this->subscriptionService->get(0, $token)];
+		});
+	}
+
+	/**
+	 * Set Vote
+	 * @PublicPage
+	 * @NoAdminRequired
+	 */
+	public function setVote(int $optionId, string $setTo, string $token): DataResponse {
 		return $this->response(function () use ($optionId, $setTo, $token) {
 			return ['vote' =>$this->voteService->set($optionId, $setTo, $token)];
 		});
@@ -163,7 +220,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function comment($token, $message): DataResponse {
+	public function addComment(string $token, string $message): DataResponse {
 		return $this->response(function () use ($token, $message) {
 			return ['comment'=> $this->commentService->add(null, $token, $message)];
 		});
@@ -174,19 +231,9 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function commentDelete($commentId, $token): DataResponse {
+	public function deleteComment(int $commentId, string $token): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($commentId, $token) {
 			return ['comment'=> $this->commentService->delete($commentId, $token)];
-		});
-	}
-	/**
-	 * Get subscription status
-	 * @PublicPage
-	 * @NoAdminRequired
-	 */
-	public function subscription($token): DataResponse {
-		return $this->response(function () use ($token) {
-			return ['subscribed' => $this->subscriptionService->get(0, $token)];
 		});
 	}
 
@@ -195,7 +242,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function subscribe($token): DataResponse {
+	public function subscribe(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['subscribed' => $this->subscriptionService->set(0, $token, true)];
 		});
@@ -206,7 +253,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function unsubscribe($token): DataResponse {
+	public function unsubscribe(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['subscribed' => $this->subscriptionService->set(0, $token, false)];
 		});
@@ -219,7 +266,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function validatePublicUsername($userName, $token): DataResponse {
+	public function validatePublicUsername(string $userName, string $token): DataResponse {
 		try {
 			return new DataResponse(['result' => $this->systemService->validatePublicUsername($userName, $token), 'name' => $userName], Http::STATUS_OK);
 		} catch (\Exception $e) {
@@ -232,20 +279,21 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function validateEmailAddress($emailAddress): DataResponse {
+	public function validateEmailAddress(string $emailAddress): DataResponse {
 		try {
 			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
 		} catch (\Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
 		}
 	}
+
 	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the username
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function register($token, $userName, $emailAddress = ''): DataResponse {
+	public function register(string $token, string $userName, string $emailAddress = ''): DataResponse {
 		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
 			return ['share' => $this->shareService->personal($token, $userName, $emailAddress)];
 		});
@@ -257,43 +305,9 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function resendInvitation($token): DataResponse {
+	public function resendInvitation(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['share' => $this->mailService->resendInvitation($token)];
 		});
-	}
-
-	/**
-	 * get complete poll
-	 * @NoAdminRequired
-	 */
-	private function buildPoll(): array {
-		try {
-			$comments = $this->commentService->list($this->poll->getId());
-		} catch (Exception $e) {
-			$comments = [];
-		}
-
-		try {
-			$options = $this->optionService->list($this->poll->getId());
-		} catch (Exception $e) {
-			$options = [];
-		}
-
-		try {
-			$votes = $this->voteService->list($this->poll->getId());
-		} catch (Exception $e) {
-			$votes = [];
-		}
-
-		return [
-			'acl' => $this->acl,
-			'poll' => $this->poll,
-			'comments' => $comments,
-			'options' => $options,
-			'share' => $this->share,
-			'shares' => [],
-			'votes' => $votes,
-		];
 	}
 }

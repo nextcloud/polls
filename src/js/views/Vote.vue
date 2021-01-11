@@ -128,10 +128,10 @@ export default {
 
 	data() {
 		return {
-			reloadInterval: 30000,
+			// reloadInterval: 30000,
 			voteSaved: false,
 			delay: 50,
-			isLoading: true,
+			isLoading: false,
 			ranked: false,
 			manualViewDatePoll: '',
 			manualViewTextPoll: '',
@@ -143,7 +143,7 @@ export default {
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
 			options: state => state.poll.options.list,
-			share: state => state.poll.share,
+			share: state => state.share,
 			settings: state => state.settings,
 		}),
 
@@ -195,10 +195,6 @@ export default {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
 		},
 
-		// dateExpiryString() {
-		// 	return moment.unix(this.poll.expire).format('LLLL')
-		// },
-		//
 		timeExpirationRelative() {
 			if (this.poll.expire) {
 				return moment.unix(this.poll.expire).fromNow()
@@ -274,16 +270,10 @@ export default {
 
 	},
 
-	watch: {
-		$route() {
-			this.loadPoll()
-		},
-	},
-
 	created() {
-		if (getCurrentUser() && this.$route.params.token) {
+		if (getCurrentUser() && this.$route.name === 'publicVote') {
 			// reroute to the internal vote page, if the user is logged in
-			this.$store.dispatch('poll/share/get', { token: this.$route.params.token })
+			this.$store.dispatch('share/get', { token: this.$route.params.token })
 				.then((response) => {
 					this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
 				})
@@ -291,15 +281,14 @@ export default {
 					this.$router.replace({ name: 'notfound' })
 				})
 		} else {
-			this.loadPoll()
 			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 		}
-		this.timedReload()
+		// this.timedReload()
 	},
 
 	beforeDestroy() {
 		this.$store.dispatch({ type: 'poll/reset' })
-		window.clearInterval(this.reloadTimer)
+		// window.clearInterval(this.reloadTimer)
 	},
 
 	methods: {
@@ -307,12 +296,12 @@ export default {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
 
-		timedReload() {
-			// reload poll list periodically
-			this.reloadTimer = window.setInterval(() => {
-				this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
-			}, this.reloadInterval)
-		},
+		// timedReload() {
+		// 	// reload poll list periodically
+		// 	this.reloadTimer = window.setInterval(() => {
+		// 		emit('load-poll', true)
+		// 	}, this.reloadInterval)
+		// },
 
 		getNextViewMode() {
 			if (this.settings.viewModes.indexOf(this.viewMode) < 0) {
@@ -322,16 +311,12 @@ export default {
 			}
 		},
 
-		openConfiguration() {
-			emit('toggle-sidebar', { open: true, activeTab: 'configuration' })
-		},
-
 		toggleSideBar() {
 			emit('toggle-sidebar')
 		},
 
 		toggleView() {
-			emit('transitions-off', { delay: 500 })
+			emit('transitions-off', 500)
 			if (this.poll.type === 'datePoll') {
 				if (this.manualViewDatePoll) {
 					this.manualViewDatePoll = ''
@@ -345,23 +330,6 @@ export default {
 					this.manualViewTextPoll = this.getNextViewMode()
 				}
 			}
-		},
-
-		loadPoll() {
-			this.isLoading = true
-			emit('transitions-off')
-			this.$store
-				.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
-				.then((response) => {
-					this.isLoading = false
-					emit('transitions-off', 500)
-					window.document.title = this.windowTitle
-				})
-				.catch(() => {
-					this.isLoading = false
-					emit('transitions-off', 500)
-					this.$router.replace({ name: 'notfound' })
-				})
 		},
 	},
 }

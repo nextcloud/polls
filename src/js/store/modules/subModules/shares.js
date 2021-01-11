@@ -88,20 +88,29 @@ const getters = {
 
 const actions = {
 	list(context) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id
+		let endPoint = 'apps/polls'
+
+		if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else {
+			context.commit('reset')
+			return
+		}
 		return axios.get(generateUrl(endPoint + '/shares'))
 			.then((response) => {
 				context.commit('set', response.data)
 				return response.data
 			})
 			.catch((error) => {
-				console.error('Error loading shares', { error: error.response }, { pollId: context.rootState.poll.id })
+				console.error('Error loading shares', { error: error.response }, { pollId: context.rootState.route.params.id })
 				throw error
 			})
 	},
 
 	add(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.poll.id
+		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id
 
 		return axios.post(generateUrl(endPoint + '/share'), payload.share)
 			.then((response) => {

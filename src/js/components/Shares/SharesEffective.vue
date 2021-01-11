@@ -33,7 +33,7 @@
 						@click="sendInvitation(share)">
 						{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
 					</ActionButton>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: shareUrl(share) })">
+					<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
 				</Actions>
@@ -50,7 +50,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { generateUrl } from '@nextcloud/router'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
 
@@ -96,18 +95,13 @@ export default {
 		},
 
 		copyLink(payload) {
-			this
-				.$copyText(window.location.origin + payload.url)
+			this.$copyText(payload.url)
 				.then(() => {
 					showSuccess(t('polls', 'Link copied to clipboard'))
 				})
 				.catch(() => {
 					showError(t('polls', 'Error while copying link to clipboard'))
 				})
-		},
-
-		shareUrl(share) {
-			return generateUrl('apps/polls/s/') + share.token
 		},
 
 		removeShare(share) {

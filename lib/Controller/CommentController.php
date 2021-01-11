@@ -48,6 +48,16 @@ class CommentController extends Controller {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 */
+	public function list($pollId): DataResponse {
+		return $this->response(function () use ($pollId) {
+			return ['comments' => $this->commentService->list($pollId)];
+		});
+	}
+
+	/**
+	 * Write a new comment to the db and returns the new comment as array
+	 * @NoAdminRequired
+	 */
 	public function add($pollId, $message): DataResponse {
 		return $this->response(function () use ($pollId, $message) {
 			return ['comment' => $this->commentService->add($pollId, null, $message)];

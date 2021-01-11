@@ -57,7 +57,6 @@ class PreferencesController extends Controller {
 		return $this->response(function () {
 			return $this->preferencesService->get();
 		});
-		// return new DataResponse($this->preferencesService->get(), Http::STATUS_OK);
 	}
 
 	/**

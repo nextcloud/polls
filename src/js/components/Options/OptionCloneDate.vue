@@ -47,7 +47,6 @@
 <script>
 
 import moment from '@nextcloud/moment'
-// import { showInfo, showError } from '@nextcloud/dialogs'
 import { Multiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins'
 

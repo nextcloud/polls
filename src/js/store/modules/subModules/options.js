@@ -119,14 +119,25 @@ const getters = {
 
 const actions = {
 
-	reload(context) {
-		const endPoint = 'apps/polls/poll'
-		return axios.get(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options'))
+	list(context) {
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else if (context.rootState.route.name === 'vote') {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+		} else {
+			context.commit('reset')
+			return
+		}
+
+		return axios.get(generateUrl(endPoint + '/options'))
 			.then((response) => {
 				context.commit('set', { options: response.data.options })
 			})
 			.catch((error) => {
-				console.error('Error loding options', { error: error.response }, { pollId: context.rootState.poll.id })
+				console.error('Error loding options', { error: error.response }, { pollId: context.rootState.route.params.id })
 				throw error
 			})
 	},
@@ -134,7 +145,7 @@ const actions = {
 	add(context, payload) {
 		const endPoint = 'apps/polls/option'
 		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.poll.id,
+			pollId: context.rootState.route.params.id,
 			timestamp: payload.timestamp,
 			pollOptionText: payload.pollOptionText,
 		})
@@ -143,7 +154,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error adding option: ' + error.response.data, { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -159,7 +170,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error updating option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -173,7 +184,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error deleting option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -188,7 +199,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error confirming option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -196,7 +207,7 @@ const actions = {
 	reorder(context, payload) {
 		const endPoint = 'apps/polls/poll'
 		context.commit('reorder', { options: payload })
-		return axios.post(generateUrl(endPoint + '/' + context.rootState.poll.id + '/options/reorder'), {
+		return axios.post(generateUrl(endPoint + '/' + context.rootState.route.params.id + '/options/reorder'), {
 			options: payload,
 		})
 			.then((response) => {
@@ -204,7 +215,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error reordering option', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
@@ -221,7 +232,7 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error creating sequence', { error: error.response }, { payload: payload })
-				context.dispatch('reload')
+				context.dispatch('list')
 				throw error
 			})
 	},
