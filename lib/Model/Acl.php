@@ -110,7 +110,7 @@ class Acl implements JsonSerializable {
 		$this->share = $share;
 		$this->validateShareAccess();
 		$this->setPollId($share->getPollId());
-		$this->request(Self::PERMISSION_VIEW);
+		$this->request(self::PERMISSION_VIEW);
 		return $this;
 	}
 
@@ -159,7 +159,7 @@ class Acl implements JsonSerializable {
 
 	public function isAllowed(string $permission): bool {
 		switch ($permission) {
-			case Self::PERMISSION_VIEW:
+			case self::PERMISSION_VIEW:
 				if ($this->getIsOwner() || $this->hasAdminAccess()) {
 					// always grant access, if user has edit rights
 					return true;
@@ -178,17 +178,17 @@ class Acl implements JsonSerializable {
 				}
 				break;
 
-			case Self::PERMISSION_EDIT:
+			case self::PERMISSION_EDIT:
 				return $this->getIsOwner() || $this->hasAdminAccess();
-			case Self::PERMISSION_DELETE:
+			case self::PERMISSION_DELETE:
 				return $this->getIsOwner() || $this->hasAdminAccess() || $this->getIsAdmin();
-			case Self::PERMISSION_COMMENT:
+			case self::PERMISSION_COMMENT:
 				return true;
-			case Self::PERMISSION_SUBSCRIBE:
+			case self::PERMISSION_SUBSCRIBE:
 				return $this->hasEmail();
-			case Self::PERMISSION_VOTE:
+			case self::PERMISSION_VOTE:
 				return !$this->poll->getExpired() && $this->share->getType() !== Share::TYPE_PUBLIC;
-			case Self::PERMISSION_SEE_RESULTS:
+			case self::PERMISSION_SEE_RESULTS:
 				if ($this->getIsOwner()) {
 					return true;
 				} elseif ($this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS) {
@@ -197,9 +197,9 @@ class Acl implements JsonSerializable {
 					return true;
 				}
 				break;
-			case Self::PERMISSION_SEE_USERNAMES:
+			case self::PERMISSION_SEE_USERNAMES:
 				return $this->getIsOwner() || !$this->poll->getAnonymous();
-			case Self::PERMISSION_TAKE_OVER:
+			case self::PERMISSION_TAKE_OVER:
 				return $this->getIsAdmin();
 			default:
 				break;
@@ -213,33 +213,15 @@ class Acl implements JsonSerializable {
 		}
 	}
 
-	public function getAllowYesVote(): bool {
-		return !($this->poll->getVoteLimit() && $this->getYesVotes() >= $this->poll->getVoteLimit());
-	}
-
-	public function getOptionLimit(): int {
-		return $this->poll->getOptionLimit();
-	}
-
-	private function getYesVotes(): int {
-		return $this->voteMapper->countYesVotes($this->getUserId(), $this->getPollId());
-	}
-
-	public function requestYesVotes(): void {
-		if (!$this->getAllowYesVote()) {
-			throw new VoteLimitExceededException;
-		}
-	}
-
 	public function jsonSerialize(): array {
 		return	[
-			'allowComment'      => $this->isAllowed(Self::PERMISSION_COMMENT),
-			'allowEdit'         => $this->isAllowed(Self::PERMISSION_EDIT),
-			'allowSeeResults'   => $this->isAllowed(Self::PERMISSION_SEE_RESULTS),
-			'allowSeeUsernames' => $this->isAllowed(Self::PERMISSION_SEE_USERNAMES),
-			'allowSubscribe'    => $this->isAllowed(Self::PERMISSION_SUBSCRIBE),
-			'allowView'         => $this->isAllowed(Self::PERMISSION_VIEW),
-			'allowVote'         => $this->isAllowed(Self::PERMISSION_VOTE),
+			'allowComment'      => $this->isAllowed(self::PERMISSION_COMMENT),
+			'allowEdit'         => $this->isAllowed(self::PERMISSION_EDIT),
+			'allowSeeResults'   => $this->isAllowed(self::PERMISSION_SEE_RESULTS),
+			'allowSeeUsernames' => $this->isAllowed(self::PERMISSION_SEE_USERNAMES),
+			'allowSubscribe'    => $this->isAllowed(self::PERMISSION_SUBSCRIBE),
+			'allowView'         => $this->isAllowed(self::PERMISSION_VIEW),
+			'allowVote'         => $this->isAllowed(self::PERMISSION_VOTE),
 			'displayName'       => $this->getDisplayName(),
 			'isOwner'           => $this->getIsOwner(),
 			'loggedIn'			=> $this->getLoggedIn(),

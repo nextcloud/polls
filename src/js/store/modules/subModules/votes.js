@@ -62,6 +62,14 @@ const mutations = {
 
 const getters = {
 
+	relevant: (state, getters, rootState) => {
+		return state.list.filter((vote) => {
+			return rootState.poll.options.list.some((option) => {
+				return option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText
+			})
+		})
+	},
+
 	ranked: (state, getters, rootState) => {
 		let votesRank = []
 		rootState.poll.options.list.forEach(function(option) {
@@ -88,7 +96,7 @@ const getters = {
 	},
 
 	countYesVotes: (state, getters, rootState) => {
-		return state.list.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === 'yes').length
+		return getters.relevant.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === 'yes').length
 	},
 
 	getVote: (state) => (payload) => {
