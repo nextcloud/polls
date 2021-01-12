@@ -1,9 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.7.1 - beta2] - tbd
+## [1.7.1 - beta2] - 2021-01-12
+ - [fix] #1325 - There are no spaces in the column name  
+ - [fix] #1326 - Invalid string text in the email
  - [enhancement] #739 - Limit number of participant per option
  - [enhancement] #738 - Limit numer of votes per participant (also #647, #624)
+ - [dependencies] Updated dependencies
+ - [refactoring] Mainly code meintenance and optimizations, bug fixes
 
 ## [1.7.0 - beta1] - 2021-01-02
  - [enhancement] #188 use notification app for invitations
