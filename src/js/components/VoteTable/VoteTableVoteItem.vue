@@ -65,14 +65,10 @@ export default {
 		},
 
 		answer() {
-			try {
-				return this.$store.getters['poll/votes/getVote']({
-					option: this.option,
-					userId: this.userId,
-				}).voteAnswer
-			} catch (e) {
-				return ''
-			}
+			return this.$store.getters['poll/votes/getVote']({
+				option: this.option,
+				userId: this.userId,
+			}).voteAnswer
 		},
 
 		isBlocked() {

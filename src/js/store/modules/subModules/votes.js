@@ -100,10 +100,19 @@ const getters = {
 	},
 
 	getVote: (state) => (payload) => {
-		return state.list.find(vote => {
+		const found = state.list.find(vote => {
 			return (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})
+		if (found === undefined) {
+			return {
+				voteAnswer: '',
+				voteOptionText: payload.option.pollOptionText,
+				userId: payload.userId,
+			}
+		} else {
+			return found
+		}
 	},
 }
 
@@ -141,7 +150,7 @@ const actions = {
 			setTo: payload.setTo,
 		})
 			.then((response) => {
-				context.commit('setItem', { option: payload.option, pollId: context.rootState.route.params.id, vote: response.data.vote })
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
 				return response.data
 			})
 			.catch((error) => {
