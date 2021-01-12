@@ -22,6 +22,7 @@
     "- A vote option was added." : "- Buvo pridėtas balsavimo variantas.",
     "- A vote option was removed." : "- Buvo pašalintas balsavimo variantas.",
     "- The poll owner changed." : "- Pasikeitė apklausos savininkas.",
+    "- %s created the poll." : "- %s sukūrė apklausą.",
     "Polls App - New Activity" : "Apklausų programėlė - Nauja veikla",
     "\"{title}\" had recent activity: " : "Apklausoje \"{title}\" neseniai vyko veikla: ",
     "A user" : "Naudotojas",
