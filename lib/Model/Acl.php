@@ -27,7 +27,6 @@ namespace OCA\Polls\Model;
 use JsonSerializable;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\VoteLimitExceededException;
 
 use OCP\IUserManager;
 use OCP\IGroupManager;
