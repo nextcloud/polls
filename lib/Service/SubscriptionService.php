@@ -25,7 +25,6 @@ namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Doctrine\DBAL\Exception\MultipleObjectsReturnedException;
 
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
@@ -58,10 +57,6 @@ class SubscriptionService {
 			$this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 			// Subscription exists
 			return true;
-		} catch (MultipleObjectsReturnedException $e) {
-			// subscription should be unique. If duplicates are found resubscribe
-			// duplicates are removed in $this->set()
-			return $this->set($pollId, $token, true);
 		} catch (DoesNotExistException $e) {
 			return false;
 		}
