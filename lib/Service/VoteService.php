@@ -113,7 +113,6 @@ class VoteService {
 		// check if the votelimit for the user is reached or exceeded, if one is set
 		if ($poll->getVoteLimit() > 0) {
 			$pollOptionTexts = [];
-			$validVotes = [];
 			$votecount = 0;
 
 			$options = $this->optionMapper->findByPoll($option->getPollId());
