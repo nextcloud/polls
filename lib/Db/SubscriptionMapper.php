@@ -107,8 +107,6 @@ class SubscriptionMapper extends QBMapper {
 	 */
 	public function removeDuplicates() {
 		try {
-			$query = $this->db->getQueryBuilder();
-
 			// remove duplicates from oc_polls_share
 			// preserve the first entry
 			$query = $this->db->getQueryBuilder();

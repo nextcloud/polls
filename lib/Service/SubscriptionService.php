@@ -25,6 +25,7 @@ namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\Exception\MultipleObjectsReturnedException;
 
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;

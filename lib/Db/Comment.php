@@ -41,6 +41,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setDt(string $value)
  * @method string getComment()
  * @method void setComment(string $value)
+ * @method string getTimestamp()
+ * @method void getTimestamp(integer $value)
  */
 class Comment extends Entity implements JsonSerializable {
 

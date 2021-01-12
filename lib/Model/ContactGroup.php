@@ -26,6 +26,7 @@ namespace OCA\Polls\Model;
 
 use OCP\App\IAppManager;
 use OCP\Contacts\IManager as IContactsManager;
+use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
 
 class ContactGroup extends UserGroupClass {
 	public const TYPE = 'contactGroup';
