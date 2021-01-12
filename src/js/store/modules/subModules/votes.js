@@ -62,6 +62,14 @@ const mutations = {
 
 const getters = {
 
+	relevant: (state, getters, rootState) => {
+		return state.list.filter((vote) => {
+			return rootState.poll.options.list.some((option) => {
+				return option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText
+			})
+		})
+	},
+
 	ranked: (state, getters, rootState) => {
 		let votesRank = []
 		rootState.poll.options.list.forEach(function(option) {
@@ -88,14 +96,23 @@ const getters = {
 	},
 
 	countYesVotes: (state, getters, rootState) => {
-		return state.list.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === 'yes').length
+		return getters.relevant.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === 'yes').length
 	},
 
 	getVote: (state) => (payload) => {
-		return state.list.find(vote => {
+		const found = state.list.find(vote => {
 			return (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})
+		if (found === undefined) {
+			return {
+				voteAnswer: '',
+				voteOptionText: payload.option.pollOptionText,
+				userId: payload.userId,
+			}
+		} else {
+			return found
+		}
 	},
 }
 
@@ -133,7 +150,7 @@ const actions = {
 			setTo: payload.setTo,
 		})
 			.then((response) => {
-				context.commit('setItem', { option: payload.option, pollId: context.rootState.route.params.id, vote: response.data.vote })
+				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
 				return response.data
 			})
 			.catch((error) => {

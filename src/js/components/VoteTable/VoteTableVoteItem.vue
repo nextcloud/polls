@@ -56,27 +56,23 @@ export default {
 
 		...mapGetters({
 			countYesVotes: 'poll/votes/countYesVotes',
-			closed: 'poll/closed',
+			pollIsClosed: 'poll/closed',
 			answerSequence: 'poll/answerSequence',
 		}),
 
 		isVotable() {
-			return this.isActive && this.isValidUser && !this.closed && !this.isLocked && !this.isBlocked
+			return this.isActive && this.isValidUser && !this.pollIsClosed && !this.isLocked && !this.isBlocked
 		},
 
 		answer() {
-			try {
-				return this.$store.getters['poll/votes/getVote']({
-					option: this.option,
-					userId: this.userId,
-				}).voteAnswer
-			} catch (e) {
-				return ''
-			}
+			return this.$store.getters['poll/votes/getVote']({
+				option: this.option,
+				userId: this.userId,
+			}).voteAnswer
 		},
 
 		isBlocked() {
-			return this.optionLimit && this.optionLimit <= this.option.yes && this.answer !== 'yes'
+			return this.optionLimit > 0 && this.optionLimit <= this.option.yes && this.answer !== 'yes'
 		},
 
 		isLocked() {
@@ -84,7 +80,7 @@ export default {
 		},
 
 		isConfirmed() {
-			if (this.option.confirmed && this.closed) {
+			if (this.option.confirmed && this.pollIsClosed) {
 				return 'confirmed'
 			} else {
 				return ''

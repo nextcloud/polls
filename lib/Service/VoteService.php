@@ -30,6 +30,7 @@ use OCA\Polls\Exceptions\VoteLimitExceededException;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Model\Acl;
 
@@ -37,6 +38,9 @@ class VoteService {
 
 	/** @var VoteMapper */
 	private $voteMapper;
+
+	/** @var PollMapper */
+	private $pollMapper;
 
 	/** @var Vote */
 	private $vote;
@@ -55,6 +59,7 @@ class VoteService {
 
 	public function __construct(
 		VoteMapper $voteMapper,
+		PollMapper $pollMapper,
 		Vote $vote,
 		OptionMapper $optionMapper,
 		AnonymizeService $anonymizer,
@@ -62,6 +67,7 @@ class VoteService {
 		Acl $acl
 	) {
 		$this->voteMapper = $voteMapper;
+		$this->pollMapper = $pollMapper;
 		$this->vote = $vote;
 		$this->optionMapper = $optionMapper;
 		$this->anonymizer = $anonymizer;
@@ -93,6 +99,45 @@ class VoteService {
 		}
 	}
 
+	private function checkLimits(int $optionId, string $userId):void {
+		$option = $this->optionMapper->find($optionId);
+		$poll = $this->pollMapper->find($option->getPollId());
+
+		// check, if the optionlimit is reached or exceeded, if one is set
+		if ($poll->getOptionLimit() > 0) {
+			if ($poll->getOptionLimit() <= count($this->voteMapper->getYesVotesByOption($option->getPollId(), $option->getPollOptionText()))) {
+				throw new VoteLimitExceededException;
+			}
+		}
+
+		// check if the votelimit for the user is reached or exceeded, if one is set
+		if ($poll->getVoteLimit() > 0) {
+			$pollOptionTexts = [];
+			$votecount = 0;
+
+			$options = $this->optionMapper->findByPoll($option->getPollId());
+			$votes = $this->voteMapper->getYesVotesByParticipant($option->getPollId(), $userId);
+
+			// Only count votes, which match to an actual existing option.
+			// Explanation: If an option is deleted, the corresponding votes are not deleted.
+
+			// create an array of pollOptionTexts
+			foreach ($options as $element) {
+				$pollOptionTexts[] = $element->getPollOptionText();
+			}
+
+			// only count relevant votes for the limit
+			foreach ($votes as $vote) {
+				if (in_array($vote->getVoteOptionText(), $pollOptionTexts)) {
+					$votecount++;
+				}
+			}
+			if ($poll->getVoteLimit() <= $votecount) {
+				throw new VoteLimitExceededException;
+			}
+		}
+	}
+
 	/**
 	 * Set vote
 	 */
@@ -109,13 +154,7 @@ class VoteService {
 		}
 
 		if ($setTo === 'yes') {
-			$this->acl->requestYesVotes();
-		}
-
-		if ($setTo === 'yes'
-			&& $this->acl->getOptionLimit()
-			&& $this->voteMapper->countYesVotesByOption($this->acl->getPollId(), $option->getPollOptionText())) {
-			throw new VoteLimitExceededException;
+			$this->checkLimits($optionId, $this->acl->getUserId());
 		}
 
 		try {
