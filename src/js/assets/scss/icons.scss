@@ -1,32 +1,38 @@
 :root {
 	--polls-vote-rows: 1;
 	--polls-vote-columns: 1;
-	--color-background-error: #f9c5c5;
-	--color-background-success: #d6fdda;
-	--color-polls-foreground-yes: #49bc49;
-	--color-polls-foreground-no: #f45573;
-	--color-polls-foreground-maybe: #ffc107;
-	--color-polls-background-yes: #ebf5d6;
-	--color-polls-background-no: #ffede9;
-	--color-polls-background-maybe: #fcf7e1;
 	--icon-polls: url('../icons/polls.svg');
+	--icon-polls--fff: url('../icons/polls-fff.svg');
 	--icon-circles: url('../icons/circles.svg');
+	--icon-circles--fff: url('../icons/circles-fff.svg');
 	--icon-polls-back: url('../icons/back.svg');
+	--icon-polls-back--fff: url('../icons/back-fff.svg');
 	--icon-polls-confirmed: url('../icons/confirmed.svg');
+	--icon-polls-confirmed--fff: url('../icons/confirmed-fff.svg');
 	--icon-polls-unconfirmed: url('../icons/unconfirmed.svg');
+	--icon-polls-unconfirmed--fff: url('../icons/unconfirmed-fff.svg');
 	--icon-polls-clone: url('../icons/clone.svg');
+	--icon-polls-clone--fff: url('../icons/clone-fff.svg');
 	--icon-polls-move: url('../icons/move.svg');
+	--icon-polls-move--fff: url('../icons/move-fff.svg');
 	--icon-polls-yes: url('../icons/yes-vote.svg');
 	--icon-polls-no: url('../icons/no-vote.svg');
 	--icon-polls-maybe: url('../icons/maybe-vote.svg');
 	--icon-polls-handle: url('../icons/handle.svg');
+	--icon-polls-handle--fff: url('../icons/handle-fff.svg');
 	--icon-polls-mail: url('../icons/mail.svg');
+	--icon-polls-mail--fff: url('../icons/mail-fff.svg');
 	--icon-polls-sidebar-toggle: url('../icons/sidebar-toggle.svg');
+	--icon-polls-sidebar-toggle--fff: url('../icons/sidebar-toggle-fff.svg');
 	--icon-polls-loading: url('../icons/loading-small.gif');
 	--icon-polls-open: url('../icons/open.svg');
+	--icon-polls-open--fff: url('../icons/open-fff.svg');
 	--icon-polls-closed: url('../icons/closed.svg');
+	--icon-polls-closed--fff: url('../icons/closed-fff.svg');
 	--icon-polls-public-poll: url('../icons/visible.svg');
+	--icon-polls-public-poll--fff: url('../icons/visible-fff.svg');
 	--icon-polls-hidden-poll: url('../icons/invisible.svg');
+	--icon-polls-hidden-poll--fff: url('../icons/invisible-fff.svg');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -87,6 +93,10 @@
 	background-image: var(--icon-polls-closed);
 }
 
+.icon-polls-closed-fff {
+	background-image: var(--icon-polls-closed--fff);
+}
+
 .icon-polls-public-poll {
 	background-image: var(--icon-polls-public-poll);
 }
@@ -101,4 +111,62 @@
 
 .icon-handle {
 	background-image: var(--icon-polls-handle);
+}
+
+.theme--dark {
+	.icon-polls {
+		background-image: var(--icon-polls--fff);
+	}
+
+	.icon-circles {
+		background-image: var(--icon-circles--fff);
+	}
+
+	.icon-polls-back {
+		background-image: var(--icon-polls-back--fff);
+	}
+
+	.icon-polls-confirmed {
+		background-image: var(--icon-polls-confirmed--fff);
+	}
+
+	.icon-polls-unconfirmed {
+		background-image: var(--icon-polls-unconfirmed--fff);
+	}
+
+	.icon-polls-move {
+		background-image: var(--icon-polls-move--fff);
+	}
+
+	.icon-polls-clone {
+		background-image: var(--icon-polls-clone--fff);
+	}
+
+	.icon-polls-mail {
+		background-image: var(--icon-polls-mail--fff);
+	}
+
+	.icon-polls-open {
+		background-image: var(--icon-polls-open--fff);
+	}
+
+	.icon-polls-closed {
+		background-image: var(--icon-polls-closed--fff);
+	}
+
+	.icon-polls-public-poll {
+		background-image: var(--icon-polls-public-poll--fff);
+	}
+
+	.icon-polls-hidden-poll {
+		background-image: var(--icon-polls-hidden-poll--fff);
+	}
+
+	.icon-polls-sidebar-toggle {
+		background-image: var(--icon-polls-sidebar-toggle--fff);
+	}
+
+	.icon-handle {
+		background-image: var(--icon-polls-handle--fff);
+	}
 }

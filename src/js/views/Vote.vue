@@ -44,11 +44,11 @@
 				{{ poll.title }}
 				<Badge v-if="closed"
 					:title="t('polls', 'Closed {relativeTimeAgo}', {relativeTimeAgo: timeExpirationRelative})"
-					icon="icon-polls-closed"
+					icon="icon-polls-closed-fff"
 					:class="expiryClass" />
 				<Badge v-if="!closed && poll.expire"
 					:title="t('polls', 'Closing {relativeExpirationTime}', {relativeExpirationTime: timeExpirationRelative})"
-					icon="icon-calendar"
+					icon="icon-calendar-000"
 					:class="expiryClass" />
 				<Badge v-if="poll.deleted"
 					:title="t('polls', 'Deleted')"
@@ -128,7 +128,6 @@ export default {
 
 	data() {
 		return {
-			// reloadInterval: 30000,
 			voteSaved: false,
 			delay: 50,
 			isLoading: false,
@@ -271,6 +270,16 @@ export default {
 	},
 
 	created() {
+		// simulate @media:prefers-color-scheme until it is supported for logged in users
+		// This simulates the theme--dark
+		// TODO: remove, when completely supported by core
+		if (!window.matchMedia) {
+			return true
+		} else if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			document.body.classList.add('theme--dark')
+			return true
+		}
+
 		if (getCurrentUser() && this.$route.name === 'publicVote') {
 			// reroute to the internal vote page, if the user is logged in
 			this.$store.dispatch('share/get', { token: this.$route.params.token })
@@ -283,25 +292,16 @@ export default {
 		} else {
 			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 		}
-		// this.timedReload()
 	},
 
 	beforeDestroy() {
 		this.$store.dispatch({ type: 'poll/reset' })
-		// window.clearInterval(this.reloadTimer)
 	},
 
 	methods: {
 		openOptions() {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
-
-		// timedReload() {
-		// 	// reload poll list periodically
-		// 	this.reloadTimer = window.setInterval(() => {
-		// 		emit('load-poll', true)
-		// 	}, this.reloadInterval)
-		// },
 
 		getNextViewMode() {
 			if (this.settings.viewModes.indexOf(this.viewMode) < 0) {

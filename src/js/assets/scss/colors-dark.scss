@@ -1,0 +1,10 @@
+// TODO: preparation for full support of @media:prefers-color-scheme by core
+// until then, this ha no effect
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-polls-background-yes: #2e4600;
+		--color-polls-background-no: #4d0d00;
+		--color-polls-background-maybe: #665600;
+	}
+}

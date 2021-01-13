@@ -1,0 +1,22 @@
+// TODO: preparation for full support of @media:prefers-color-scheme by core
+// until then, this ha no effect
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--icon-polls: url('../icons/polls-fff.svg');
+		--icon-circles: url('../icons/circles-fff.svg');
+		--icon-polls-back: url('../icons/back-fff.svg');
+		--icon-polls-confirmed: url('../icons/confirmed-fff.svg');
+		--icon-polls-unconfirmed: url('../icons/unconfirmed-fff.svg');
+		--icon-polls-clone: url('../icons/clone-fff.svg');
+		--icon-polls-move: url('../icons/move-fff.svg');
+		--icon-polls-handle: url('../icons/handle-fff.svg');
+		--icon-polls-mail: url('../icons/mail-fff.svg');
+		--icon-polls-sidebar-toggle: url('../icons/sidebar-toggle-fff.svg');
+		--icon-polls-loading: url('../icons/loading-small.gif');
+		--icon-polls-open: url('../icons/open-fff.svg');
+		--icon-polls-closed: url('../icons/closed-fff.svg');
+		--icon-polls-public-poll: url('../icons/visible-fff.svg');
+		--icon-polls-hidden-poll: url('../icons/invisible-fff.svg');
+	}
+}

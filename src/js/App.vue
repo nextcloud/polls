@@ -46,6 +46,9 @@ import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
 import './assets/scss/colors.scss'
+// TODO: remove comments, when @media:prefers-color-scheme is completely supported by core
+// import './assets/scss/icons-dark.scss'
+// import './assets/scss/colors-dark.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/experimental.scss'
 

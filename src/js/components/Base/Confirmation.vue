@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="confirmation" :class=" { confirmed: isConfirmed }">
+	<div class="confirmation" :class=" { 'icon-polls-confirmed': isConfirmed }">
 		<div class="confirmation--text">
 			{{ confirmations }}
 		</div>
@@ -80,9 +80,6 @@ export default {
 	font-size: 0;
 	align-self: stretch;
 	min-width: 24px;
-	&.confirmed {
-		background-image: var(--icon-polls-confirmed);
-	}
 }
 
 .confirmation--text {
