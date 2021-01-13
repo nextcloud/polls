@@ -232,6 +232,14 @@ export default {
 	}
 }
 
+.theme--dark .vote-table.closed .confirmed {
+	&.vote-table-header-item,
+	&.calendar-peek,
+	&.vote-table-vote-item,
+	&.vote-table-footer-item {
+		background-color: var(--color-polls-background-yes--dark) !important;
+	}
+}
 // justify styles for mobile view
 .vote-table.mobile {
 	grid-template-columns: auto auto 1fr;

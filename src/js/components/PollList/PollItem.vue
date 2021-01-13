@@ -141,11 +141,11 @@ export default {
 
 		accessIcon() {
 			if (this.poll.deleted) {
-				return 'item__access--deleted'
+				return 'icon-delete'
 			} else if (this.poll.access === 'public') {
-				return 'item__access--public'
+				return 'icon-polls-public-poll'
 			} else {
-				return 'item__access--hidden'
+				return 'icon-polls-hidden-poll'
 			}
 		},
 
@@ -178,9 +178,9 @@ export default {
 		},
 		expiryIcon() {
 			if (this.poll.expire) {
-				return 'icon-calendar'
+				return 'icon-calendar-000'
 			} else {
-				return 'icon-calendar'
+				return 'icon-calendar-000'
 			}
 		},
 		timeCreatedRelative() {

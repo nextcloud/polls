@@ -121,6 +121,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 .vote-table-vote-item {
 	display: flex;
 	flex: 1;
@@ -172,7 +173,21 @@ export default {
 	}
 }
 
+.theme--dark .vote-table-vote-item {
+	background-color: var(--color-polls-background-no--dark);
+	&.yes {
+		background-color: var(--color-polls-background-yes--dark);
+	}
+	&.no {
+		background-color: var(--color-polls-background-no--dark);
+	}
+	&.maybe {
+		background-color: var(--color-polls-background-maybe--dark);
+	}
+}
+
 .vote-table-vote-item.confirmed:not(.yes):not(.maybe) .icon {
 	background-image: var(--icon-polls-no);
 }
+
 </style>
