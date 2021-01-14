@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.2 - beta3] - tbd
+ - [fix] #1344 - prevent commenting, when entering public poll without registration  
+ - [fix] #1338 - Support dark mode and dark theme
+
 ## [1.7.1 - beta2] - 2021-01-12
  - [fix] #1325 - There are no spaces in the column name  
  - [fix] #1326 - Invalid string text in the email
