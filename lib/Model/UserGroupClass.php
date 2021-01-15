@@ -27,7 +27,7 @@ use OCA\Polls\Exceptions\InvalidShareTypeException;
 
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
-use OCA\Circles\AppInfo\Application;
+use OCA\Polls\AppInfo\Application;
 
 class UserGroupClass implements \JsonSerializable {
 	public const TYPE = 'generic';
@@ -213,13 +213,15 @@ class UserGroupClass implements \JsonSerializable {
 		$items = array_merge($items, Contact::search($query));
 		$items = array_merge($items, ContactGroup::search($query));
 
-		foreach ($result['circles'] as $item) {
-			$items[] = new Circle($item['value']['shareWith']);
+		if (Circle::isEnabled()) {
+			foreach ($result['circles'] as $item) {
+				$items[] = new Circle($item['value']['shareWith']);
+			}
+			foreach ($result['exact']['circles'] as $item) {
+				$items[] = new Circle($item['value']['shareWith']);
+			}
 		}
 
-		foreach ($result['exact']['circles'] as $item) {
-			$items[] = new Circle($item['value']['shareWith']);
-		}
 
 		return $items;
 	}
