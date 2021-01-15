@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.7.2 - beta3] - tbd
+ - [fix] #1346 - user search broken
  - [fix] #1344 - prevent commenting, when entering public poll without registration  
  - [fix] #1338 - Support dark mode and dark theme
 
