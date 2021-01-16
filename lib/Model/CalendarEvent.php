@@ -123,19 +123,19 @@ class CalendarEvent implements \JsonSerializable {
 
 	public function jsonSerialize(): array {
 		return	[
-			'id'			=> $this->getId(),
-			'UID'			=> $this->getUID(),
-			'calendarKey'	=> $this->getCalendarKey(),
-			'calendarName'	=> $this->getCalendarName(),
-			'displayColor'	=> $this->getDisplayColor(),
-			'allDay'		=> $this->getAllDay(),
-			'description'	=> $this->getDescription(),
-			'end'			=> $this->getEnd(),
-			'location'		=> $this->getLocation(),
-			'start'			=> $this->getStart(),
-			'status'		=> $this->getStatus(),
-			'summary'		=> $this->getSummary(),
-			'calDav'		=> $this->getCalDav(),
+			'id' => $this->getId(),
+			'UID' => $this->getUID(),
+			'calendarKey' => $this->getCalendarKey(),
+			'calendarName' => $this->getCalendarName(),
+			'displayColor' => $this->getDisplayColor(),
+			'allDay' => $this->getAllDay(),
+			'description' => $this->getDescription(),
+			'end' => $this->getEnd(),
+			'location' => $this->getLocation(),
+			'start' => $this->getStart(),
+			'status' => $this->getStatus(),
+			'summary' => $this->getSummary(),
+			'calDav' => $this->getCalDav(),
 		];
 	}
 }

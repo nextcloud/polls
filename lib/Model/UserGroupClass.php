@@ -192,7 +192,7 @@ class UserGroupClass implements \JsonSerializable {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		list($result, $more) = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
+		[$result, $more] = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
 
 		foreach ($result['users'] as $item) {
 			$items[] = new User($item['value']['shareWith']);
@@ -267,19 +267,19 @@ class UserGroupClass implements \JsonSerializable {
 
 	public function jsonSerialize(): array {
 		return	[
-			'id'        	=> $this->getId(),
-			'user'          => $this->getId(),
-			'userId'        => $this->getId(),
-			'type'       	=> $this->getType(),
-			'displayName'	=> $this->getDisplayName(),
-			'organisation'	=> $this->getOrganisation(),
-			'emailAddress'	=> $this->getEmailAddress(),
-			'language'		=> $this->getLanguage(),
-			'desc' 			=> $this->getDescription(),
-			'subtitle'		=> $this->getDescription(),
-			'icon'			=> $this->getIcon(),
-			'categories'	=> $this->getCategories(),
-			'isNoUser'		=> $this->getIsNoUser(),
+			'id' => $this->getId(),
+			'user' => $this->getId(),
+			'userId' => $this->getId(),
+			'type' => $this->getType(),
+			'displayName' => $this->getDisplayName(),
+			'organisation' => $this->getOrganisation(),
+			'emailAddress' => $this->getEmailAddress(),
+			'language' => $this->getLanguage(),
+			'desc' => $this->getDescription(),
+			'subtitle' => $this->getDescription(),
+			'icon' => $this->getIcon(),
+			'categories' => $this->getCategories(),
+			'isNoUser' => $this->getIsNoUser(),
 		];
 	}
 }

@@ -156,7 +156,7 @@ class PublicController extends Controller {
 	 */
 	public function getShare(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['share' =>$this->shareService->get($token, true)];
+			return ['share' => $this->shareService->get($token, true)];
 		});
 	}
 
@@ -167,7 +167,7 @@ class PublicController extends Controller {
 	 */
 	public function getComments(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['comments'=> $this->commentService->list(null, $token)];
+			return ['comments' => $this->commentService->list(null, $token)];
 		});
 	}
 
@@ -178,7 +178,7 @@ class PublicController extends Controller {
 	 */
 	public function getVotes(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['votes'=> $this->voteService->list(null, $token)];
+			return ['votes' => $this->voteService->list(null, $token)];
 		});
 	}
 
@@ -189,7 +189,7 @@ class PublicController extends Controller {
 	 */
 	public function getOptions(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['options'=> $this->optionService->list(null, $token)];
+			return ['options' => $this->optionService->list(null, $token)];
 		});
 	}
 
@@ -211,7 +211,7 @@ class PublicController extends Controller {
 	 */
 	public function setVote(int $optionId, string $setTo, string $token): DataResponse {
 		return $this->response(function () use ($optionId, $setTo, $token) {
-			return ['vote' =>$this->voteService->set($optionId, $setTo, $token)];
+			return ['vote' => $this->voteService->set($optionId, $setTo, $token)];
 		});
 	}
 
@@ -222,7 +222,7 @@ class PublicController extends Controller {
 	 */
 	public function addComment(string $token, string $message): DataResponse {
 		return $this->response(function () use ($token, $message) {
-			return ['comment'=> $this->commentService->add(null, $token, $message)];
+			return ['comment' => $this->commentService->add(null, $token, $message)];
 		});
 	}
 
@@ -233,7 +233,7 @@ class PublicController extends Controller {
 	 */
 	public function deleteComment(int $commentId, string $token): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($commentId, $token) {
-			return ['comment'=> $this->commentService->delete($commentId, $token)];
+			return ['comment' => $this->commentService->delete($commentId, $token)];
 		});
 	}
 
