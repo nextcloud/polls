@@ -91,7 +91,7 @@ class CalendarService {
 	 * @psalm-return list<array{name: mixed, key: mixed, displayColor: mixed, permissions: mixed}>
 	 */
 	public function getCalendars(): array {
-		$calendars =  [];
+		$calendars = [];
 		foreach ($this->calendars as $calendar) {
 			$calendars[] = [
 				'name' => $calendar->getDisplayName(),

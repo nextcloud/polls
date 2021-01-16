@@ -113,7 +113,7 @@ class Notifier implements INotifier {
 					[
 						'user' => [
 							'type' => 'user',
-							'id' =>  $newOwner->getUID(),
+							'id' => $newOwner->getUID(),
 							'name' => $newOwner->getDisplayName(),
 						]
 					]
@@ -137,7 +137,7 @@ class Notifier implements INotifier {
 					[
 						'user' => [
 							'type' => 'user',
-							'id' =>  $actor->getUID(),
+							'id' => $actor->getUID(),
 							'name' => $actor->getDisplayName(),
 						]
 					]
@@ -160,7 +160,7 @@ class Notifier implements INotifier {
 					[
 						'user' => [
 							'type' => 'user',
-							'id' =>  $actor->getUID(),
+							'id' => $actor->getUID(),
 							'name' => $actor->getDisplayName(),
 						]
 					]
