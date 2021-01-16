@@ -44,8 +44,7 @@ class Version0104Date20200314074611 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		$schema = $schemaClosure();
 		$table = $schema->getTable('polls_polls');
-		$table->changeColumn('description', [
-			'type' => 'text',
+		$table->changeColumn('description', 'text', [
 			'notnull' => true,
 			'default' => ''
 		]);
