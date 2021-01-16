@@ -98,16 +98,7 @@ class SystemService {
 	 *
 	 * @psalm-return array<array-key, Circle|Email|Group|User|Contact|ContactGroup|mixed>
 	 */
-	public function getSiteUsersAndGroups(
-		string $query = '',
-		bool $getGroups = true,
-		bool $getUsers = true,
-		bool $getContacts = true,
-		bool $getContactGroups = true,
-		bool $getMail = true,
-		array $skipGroups = [],
-		array $skipUsers = []
-	): array {
+	public function getSiteUsersAndGroups(string $query = ''): array {
 		$list = [];
 		if ($query !== '') {
 			if (self::isValidEmail($query)) {
