@@ -69,7 +69,7 @@ class CommentApiController extends ApiController {
 	 */
 	public function add($pollId, $message): DataResponse {
 		return $this->response(function () use ($pollId, $message) {
-			return ['comment'=> $this->commentService->add($pollId, null, $message)];
+			return ['comment' => $this->commentService->add($pollId, null, $message)];
 		});
 	}
 
@@ -81,7 +81,7 @@ class CommentApiController extends ApiController {
 	 */
 	public function delete($commentId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($commentId) {
-			return ['comment'=> $this->commentService->delete($commentId)];
+			return ['comment' => $this->commentService->delete($commentId)];
 		});
 	}
 }

@@ -42,15 +42,15 @@ use OCA\Polls\Db\ShareMapper;
  * @package OCA\Polls\Model\Acl
  */
 class Acl implements JsonSerializable {
-	public const PERMISSION_VIEW ='view';
-	public const PERMISSION_EDIT ='edit';
-	public const PERMISSION_DELETE ='delete';
-	public const PERMISSION_COMMENT ='comment';
-	public const PERMISSION_SUBSCRIBE ='subscribe';
-	public const PERMISSION_VOTE ='vote';
-	public const PERMISSION_SEE_RESULTS ='seeResults';
-	public const PERMISSION_SEE_USERNAMES ='seeUserNames';
-	public const PERMISSION_TAKE_OVER ='takeOver';
+	public const PERMISSION_VIEW = 'view';
+	public const PERMISSION_EDIT = 'edit';
+	public const PERMISSION_DELETE = 'delete';
+	public const PERMISSION_COMMENT = 'comment';
+	public const PERMISSION_SUBSCRIBE = 'subscribe';
+	public const PERMISSION_VOTE = 'vote';
+	public const PERMISSION_SEE_RESULTS = 'seeResults';
+	public const PERMISSION_SEE_USERNAMES = 'seeUserNames';
+	public const PERMISSION_TAKE_OVER = 'takeOver';
 
 	/** @var IUserManager */
 	private $userManager;
@@ -214,21 +214,21 @@ class Acl implements JsonSerializable {
 
 	public function jsonSerialize(): array {
 		return	[
-			'allowComment'      => $this->isAllowed(self::PERMISSION_COMMENT),
-			'allowEdit'         => $this->isAllowed(self::PERMISSION_EDIT),
-			'allowSeeResults'   => $this->isAllowed(self::PERMISSION_SEE_RESULTS),
+			'allowComment' => $this->isAllowed(self::PERMISSION_COMMENT),
+			'allowEdit' => $this->isAllowed(self::PERMISSION_EDIT),
+			'allowSeeResults' => $this->isAllowed(self::PERMISSION_SEE_RESULTS),
 			'allowSeeUsernames' => $this->isAllowed(self::PERMISSION_SEE_USERNAMES),
-			'allowSubscribe'    => $this->isAllowed(self::PERMISSION_SUBSCRIBE),
-			'allowView'         => $this->isAllowed(self::PERMISSION_VIEW),
-			'allowVote'         => $this->isAllowed(self::PERMISSION_VOTE),
-			'displayName'       => $this->getDisplayName(),
-			'isOwner'           => $this->getIsOwner(),
-			'loggedIn'			=> $this->getLoggedIn(),
-			'pollId'            => $this->getPollId(),
-			'token'             => $this->getToken(),
-			'userHasVoted'		=> $this->getUserHasVoted(),
-			'userId'            => $this->getUserId(),
-			'userIsInvolved'	=> $this->getUserIsInvolved(),
+			'allowSubscribe' => $this->isAllowed(self::PERMISSION_SUBSCRIBE),
+			'allowView' => $this->isAllowed(self::PERMISSION_VIEW),
+			'allowVote' => $this->isAllowed(self::PERMISSION_VOTE),
+			'displayName' => $this->getDisplayName(),
+			'isOwner' => $this->getIsOwner(),
+			'loggedIn' => $this->getLoggedIn(),
+			'pollId' => $this->getPollId(),
+			'token' => $this->getToken(),
+			'userHasVoted' => $this->getUserHasVoted(),
+			'userId' => $this->getUserId(),
+			'userIsInvolved' => $this->getUserIsInvolved(),
 		];
 	}
 
