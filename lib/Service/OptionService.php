@@ -189,8 +189,8 @@ class OptionService {
 			$clonedOption->setPollId($this->option->getPollId());
 			$clonedOption->setConfirmed(0);
 			$clonedOption->setTimestamp($baseDate->modify($step . ' ' . $unit)->getTimestamp());
+			$clonedOption->setOrder($clonedOption->getTimestamp());
 			$clonedOption->setPollOptionText($baseDate->format('c'));
-			$clonedOption->setOrder($baseDate->getTimestamp());
 			try {
 				$this->optionMapper->insert($clonedOption);
 			} catch (UniqueConstraintViolationException $e) {
