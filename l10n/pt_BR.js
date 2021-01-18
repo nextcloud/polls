@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Contact" : "Contactar",
+    "Contact group" : "Grupo de contato",
     "External Email" : "E-mail externo",
     "Public link" : "Link público",
     "External user" : "Usuário externo",
