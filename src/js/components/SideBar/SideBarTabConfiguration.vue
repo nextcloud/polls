@@ -43,7 +43,7 @@
 				class="checkbox">
 			<label for="allowMaybe"> {{ t('polls', 'Allow "maybe" vote') }}</label>
 			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented">
-				{{ t('polls', 'If vote limits are used, "maybe" should be not be allowed.') }}
+				{{ t('polls', 'If vote limits are used, "maybe" shouldn\'t be allowed.') }}
 			</div>
 			<input id="anonymous"
 				v-model="pollAnonymous"
