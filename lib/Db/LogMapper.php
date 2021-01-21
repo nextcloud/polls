@@ -27,7 +27,6 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OC\DB\Connection;
-use OC\DB\SchemaWrapper;
 use OCP\AppFramework\Db\QBMapper;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 

@@ -27,7 +27,6 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
-use Doctrine\DBAL\Schema\SchemaException;
 
 class Version0107Date20201210213303 extends SimpleMigrationStep {
 
