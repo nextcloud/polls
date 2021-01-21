@@ -26,6 +26,8 @@ namespace OCA\Polls\Db;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OC\DB\Connection;
+use OC\DB\SchemaWrapper;
 use OCP\AppFramework\Db\QBMapper;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 
@@ -33,8 +35,12 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  * @template-extends QBMapper<Log>
  */
 class LogMapper extends QBMapper {
-	public function __construct(IDBConnection $db) {
+	/** @var Connection */
+	private $connection;
+
+	public function __construct(IDBConnection $db, Connection $connection) {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
+		$this->connection = $connection;
 	}
 
 	/**
@@ -120,7 +126,7 @@ class LogMapper extends QBMapper {
 			// remove duplicates from oc_polls_log
 			// preserve the first entry
 			$query = $this->db->getQueryBuilder();
-			$query->select('id', 'processed', 'poll_id', 'user_id', 'message_id', 'message')
+			$query->select('id', 'processed', 'poll_id', 'user_id', 'message_id')
 				->from($this->getTableName());
 			$foundEntries = $query->execute();
 
@@ -135,8 +141,7 @@ class LogMapper extends QBMapper {
 					$row['processed'],
 					$row['poll_id'],
 					$row['user_id'],
-					$row['message_id'],
-					$row['message']
+					$row['message_id']
 				];
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);

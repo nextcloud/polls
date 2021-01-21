@@ -49,10 +49,8 @@ class Version0107Date20201217071304 extends SimpleMigrationStep {
 				'default' => ''
 			]);
 
-			try {
+			if (!$table->hasIndex('UNIQ_shares')) {
 				$table->addUniqueIndex(['poll_id', 'user_id'], 'UNIQ_shares');
-			} catch (SchemaException $e) {
-				// catch silently, index is already present
 			}
 		}
 		return $schema;

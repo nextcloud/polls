@@ -45,10 +45,8 @@ class Version0107Date20210101161105 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_notif')) {
 			$table = $schema->getTable('polls_notif');
 
-			try {
+			if (!$table->hasIndex('UNIQ_subscription')) {
 				$table->addUniqueIndex(['poll_id', 'user_id'], 'UNIQ_subscription');
-			} catch (SchemaException $e) {
-				// catch silently, index is already present
 			}
 		}
 		return $schema;

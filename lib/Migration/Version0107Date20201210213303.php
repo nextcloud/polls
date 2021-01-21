@@ -53,10 +53,8 @@ class Version0107Date20201210213303 extends SimpleMigrationStep {
 				'default' => ''
 			]);
 
-			try {
+			if (!$table->hasIndex('UNIQ_votes')) {
 				$table->addUniqueIndex(['poll_id', 'user_id', 'vote_option_text'], 'UNIQ_votes');
-			} catch (SchemaException $e) {
-				// catch silently, index is already present
 			}
 		}
 		return $schema;
