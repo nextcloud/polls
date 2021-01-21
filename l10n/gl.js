@@ -194,7 +194,6 @@ OC.L10N.register(
     "Description" : "Descrición",
     "Poll configurations" : "Configuracións da enquisa",
     "Allow \"maybe\" vote" : "Permitir  o voto «quizais»",
-    "If vote limits are used, \"maybe\" should be not be allowed." : "Se se usan límites de voto, non se debería permitir «quizais».",
     "Anonymous poll" : "Enquisa anónima",
     "Limit yes votes per user" : "Limita os votos de si por usuario",
     "Limit yes votes per option" : "Limita os votos por si por opción",

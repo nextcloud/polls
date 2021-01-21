@@ -189,7 +189,6 @@ OC.L10N.register(
     "Description" : "Περιγραφή",
     "Poll configurations" : "Ρυθμίσεις δημοσκόπησης",
     "Allow \"maybe\" vote" : "Να επιτρέπετε η ψήφος \"ίσως\"",
-    "If vote limits are used, \"maybe\" should be not be allowed." : "Εάν χρησιμοποιούνται όρια ψήφου, το \"ίσως\" δεν πρέπει να επιτρέπεται.",
     "Anonymous poll" : "Ανώνυμη ψηφοφορία",
     "Limit yes votes per user" : "Περιορίστε τις ψήφους ναι ανά χρήστη",
     "Limit yes votes per option" : "Περιορίστε τις ψήφους ναι ανά επιλογή",

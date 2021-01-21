@@ -194,7 +194,6 @@ OC.L10N.register(
     "Description" : "Descrizione",
     "Poll configurations" : "Configurazioni dei sondaggi",
     "Allow \"maybe\" vote" : "Consenti il voto \"Forse\"",
-    "If vote limits are used, \"maybe\" should be not be allowed." : "Se sono utilizzati i limiti di voto, \"forse\" non dovrebbe essere consentito.",
     "Anonymous poll" : "Sondaggio anonimo",
     "Limit yes votes per user" : "Limita i voti sì per utente",
     "Limit yes votes per option" : "Limita i voti sì per opzione",
