@@ -26,7 +26,6 @@ namespace OCA\Polls\Db;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OC\DB\Connection;
 use OCP\AppFramework\Db\QBMapper;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 
@@ -34,7 +33,6 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  * @template-extends QBMapper<Log>
  */
 class LogMapper extends QBMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 	}
