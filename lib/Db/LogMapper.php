@@ -37,7 +37,7 @@ class LogMapper extends QBMapper {
 	/** @var Connection */
 	private $connection;
 
-	public function __construct(IDBConnection $db, Connection $connection) {
+	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
 		$this->connection = $connection;
 	}
