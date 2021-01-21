@@ -29,7 +29,7 @@ use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use Doctrine\DBAL\Schema\SchemaException;
 
-class Version0107Date20201210160301 extends SimpleMigrationStep {
+class Version0107Date20210121220707 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
