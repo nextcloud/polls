@@ -27,7 +27,6 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
-use Doctrine\DBAL\Schema\SchemaException;
 
 class Version0107Date20201210213303 extends SimpleMigrationStep {
 
@@ -53,10 +52,8 @@ class Version0107Date20201210213303 extends SimpleMigrationStep {
 				'default' => ''
 			]);
 
-			try {
+			if (!$table->hasIndex('UNIQ_votes')) {
 				$table->addUniqueIndex(['poll_id', 'user_id', 'vote_option_text'], 'UNIQ_votes');
-			} catch (SchemaException $e) {
-				// catch silently, index is already present
 			}
 		}
 		return $schema;

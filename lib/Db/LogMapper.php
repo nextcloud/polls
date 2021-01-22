@@ -120,7 +120,7 @@ class LogMapper extends QBMapper {
 			// remove duplicates from oc_polls_log
 			// preserve the first entry
 			$query = $this->db->getQueryBuilder();
-			$query->select('id', 'processed', 'poll_id', 'user_id', 'message_id', 'message')
+			$query->select('id', 'processed', 'poll_id', 'user_id', 'message_id')
 				->from($this->getTableName());
 			$foundEntries = $query->execute();
 
@@ -135,8 +135,7 @@ class LogMapper extends QBMapper {
 					$row['processed'],
 					$row['poll_id'],
 					$row['user_id'],
-					$row['message_id'],
-					$row['message']
+					$row['message_id']
 				];
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);

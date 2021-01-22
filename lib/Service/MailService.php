@@ -245,8 +245,6 @@ class MailService {
 				return $this->trans->t('- The poll owner changed.');
 			case Log::MSG_ID_ADDPOLL:
 				return $this->trans->t('- %s created the poll.', [$displayName]);
-			case Log::MSG_ID_INDIVIDUAL:
-				return $logItem->getMessage();
 			default:
 				return $logItem->getMessageId() . " (" . $displayName . ")";
 		}

@@ -49,12 +49,11 @@ class LogService {
 	 *
 	 * @param null|string $userId
 	 */
-	public function setLog(int $pollId, string $messageId, ?string $userId = null, ?string $message = null): ?Log {
+	public function setLog(int $pollId, string $messageId, ?string $userId = null): ?Log {
 		$this->log = new Log();
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());
 		$this->log->setMessageId($messageId);
-		$this->log->setMessage($message);
 		if ($userId) {
 			$this->log->setUserId($userId);
 		} else {
