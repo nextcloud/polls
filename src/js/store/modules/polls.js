@@ -52,7 +52,7 @@ const getters = {
 				|| (poll.allowView && poll.access !== 'public')
 			)
 			&& !poll.deleted
-			&& !(poll.expire > 0 && moment.unix(poll.expire).diff() < 0)
+			&& !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4)
 			))
 		} else if (filterId === 'public') {
 			return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))

@@ -52,11 +52,11 @@
 		</div>
 	</div>
 
-	<router-link v-else class="poll-item__item"
-		:to="{ name: 'vote', params: { id: poll.id }}"
-		:class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
+	<div v-else class="poll-item__item">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
-		<div class="item__title">
+		<router-link class="item__title"
+			:to="{ name: 'vote', params: { id: poll.id }}"
+			:class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 			<div class="item-title-wrapper">
 				<div class="item__title__title">
 					{{ poll.title }}
@@ -65,7 +65,7 @@
 			<div class="item__title__description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
-		</div>
+		</router-link>
 		<slot name="actions" />
 		<div v-tooltip.auto="accessType" :class="accessIcon" />
 		<div class="item__owner">
@@ -82,7 +82,7 @@
 					:class="expiryClass" />
 			</div>
 		</div>
-	</router-link>
+	</div>
 </template>
 
 <script>

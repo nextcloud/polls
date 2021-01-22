@@ -27,6 +27,6 @@ use OCP\AppFramework\Http;
 
 class VoteLimitExceededException extends Exception {
 	public function __construct($e = 'Vote limit exceeded') {
-		parent::__construct($e, Http::STATUS_FORBIDDEN);
+		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

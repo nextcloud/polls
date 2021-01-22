@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<div v-if="participantsVoted">
+		<div v-if="participantsVoted" class="warning">
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</div>
 
@@ -42,7 +42,7 @@
 				type="checkbox"
 				class="checkbox">
 			<label for="allowMaybe"> {{ t('polls', 'Allow "maybe" vote') }}</label>
-			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented">
+			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
 				{{ t('polls', 'If vote limits are used, "maybe" shouldn\'t be allowed.') }}
 			</div>
 			<input id="anonymous"
