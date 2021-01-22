@@ -154,8 +154,12 @@ const actions = {
 				return response.data
 			})
 			.catch((error) => {
-				console.error('Error setting vote', { error: error.response }, { payload: payload })
-				throw error
+				if (error.response.status === 409) {
+					context.dispatch('list')
+				} else {
+					console.error('Error setting vote', { error: error.response }, { payload: payload })
+					throw error
+				}
 			})
 	},
 

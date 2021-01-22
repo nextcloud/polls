@@ -159,6 +159,7 @@ export default {
 		timedReload() {
 			this.reloadTimer = window.setInterval(() => {
 				this.updatePolls()
+				this.loadPoll(true)
 			}, this.reloadInterval)
 		},
 
@@ -172,6 +173,10 @@ export default {
 		},
 
 		async loadPoll(silent) {
+			if (!this.$route.params.id) {
+				return
+			}
+
 			if (!silent) {
 				this.loading = true
 				this.transitionsOff()
@@ -181,13 +186,15 @@ export default {
 				if (this.$route.name === 'publicVote') {
 					await this.$store.dispatch('share/get')
 				}
+
+				if (this.$route.name === 'vote') {
+					await this.$store.dispatch('poll/shares/list')
+				}
+
 				await this.$store.dispatch('poll/get')
 				await this.$store.dispatch('poll/comments/list')
 				await this.$store.dispatch('poll/options/list')
 				await this.$store.dispatch('poll/votes/list')
-				if (this.$route.name === 'vote') {
-					await this.$store.dispatch('poll/shares/list')
-				}
 				await this.$store.dispatch('subscription/get')
 			} catch {
 				this.$router.replace({ name: 'notfound' })
@@ -198,18 +205,19 @@ export default {
 		},
 
 		updatePolls() {
-			if (getCurrentUser()) {
+			if (this.$route.name === 'publicVote') {
+				return
+			}
 
-				this.$store.dispatch('polls/load')
+			this.$store.dispatch('polls/load')
+				.catch(() => {
+					showError(t('polls', 'Error loading poll list'))
+				})
+			if (getCurrentUser().isAdmin) {
+				this.$store.dispatch('pollsAdmin/load')
 					.catch(() => {
 						showError(t('polls', 'Error loading poll list'))
 					})
-				if (getCurrentUser().isAdmin) {
-					this.$store.dispatch('pollsAdmin/load')
-						.catch(() => {
-							showError(t('polls', 'Error loading poll list'))
-						})
-				}
 			}
 		},
 	},
