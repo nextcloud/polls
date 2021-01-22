@@ -41,8 +41,6 @@ use OCP\AppFramework\Db\Entity;
  * @method void setDisplayName(string $value)
  * @method string getMessageId()
  * @method void setMessageId(string $value)
- * @method string getMessage()
- * @method void setMessage(string $value)
  */
 class Log extends Entity implements JsonSerializable {
 	public const MSG_ID_ADDPOLL = 'addPoll';
@@ -54,7 +52,6 @@ class Log extends Entity implements JsonSerializable {
 	public const MSG_ID_DELETEOPTION = 'deleteOption';
 	public const MSG_ID_SETVOTE = 'setVote';
 	public const MSG_ID_OWNERCHANGE = 'updateOwner';
-	public const MSG_ID_INDIVIDUAL = 'message';
 
 	/** @var int $pollId */
 	protected $pollId;
@@ -74,9 +71,6 @@ class Log extends Entity implements JsonSerializable {
 	/** @var string $messageId */
 	protected $messageId;
 
-	/** @var string $message */
-	protected $message;
-
 	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
@@ -85,8 +79,7 @@ class Log extends Entity implements JsonSerializable {
 			'processed' => intval($this->processed),
 			'userId' => $this->userId,
 			'displayName' => $this->displayName,
-			'message_id' => $this->messageId,
-			'message' => $this->message
+			'message_id' => $this->messageId
 		];
 	}
 }

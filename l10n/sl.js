@@ -193,7 +193,6 @@ OC.L10N.register(
     "Description" : "Opis",
     "Poll configurations" : "Nastavitve ankete",
     "Allow \"maybe\" vote" : "Dovoli izbiro » Mogoče «",
-    "If vote limits are used, \"maybe\" should be not be allowed." : "Pri uporabi omejitve števila izbir, možnosti »mogoče« ni dovoljeno uporabiti.",
     "Anonymous poll" : "Anonimna anketa",
     "Limit yes votes per user" : "Omeji število glasovanj na uporabnika",
     "Limit yes votes per option" : "Omeji število glasovanj na možnost",

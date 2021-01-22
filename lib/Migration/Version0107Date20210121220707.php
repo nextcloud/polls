@@ -27,9 +27,8 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
-use Doctrine\DBAL\Schema\SchemaException;
 
-class Version0107Date20201210160301 extends SimpleMigrationStep {
+class Version0107Date20210121220707 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
@@ -44,6 +43,11 @@ class Version0107Date20201210160301 extends SimpleMigrationStep {
 
 		if ($schema->hasTable('polls_log')) {
 			$table = $schema->getTable('polls_log');
+
+			if ($table->hasIndex('UNIQ_unprocessed')) {
+				$table->dropIndex('UNIQ_unprocessed');
+			}
+
 			$table->changeColumn('poll_id', [
 				'default' => 0
 			]);
@@ -52,20 +56,16 @@ class Version0107Date20201210160301 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => ''
 			]);
-			$table->changeColumn('message', [
-				'length' => 128,
-				'notnull' => true,
-				'default' => ''
-			]);
 			$table->changeColumn('message_id', [
 				'notnull' => true,
 				'default' => ''
 			]);
+			if ($table->hasColumn('message')) {
+				$table->dropColumn('message');
+			}
 
-			try {
-				$table->addUniqueIndex(['processed', 'poll_id', 'user_id', 'message_id', 'message'], 'UNIQ_unprocessed');
-			} catch (SchemaException $e) {
-				// catch silently, index is already present
+			if (!$table->hasIndex('UNIQ_unprocessed')) {
+				$table->addUniqueIndex(['processed', 'poll_id', 'user_id', 'message_id'], 'UNIQ_unprocessed');
 			}
 		}
 		return $schema;

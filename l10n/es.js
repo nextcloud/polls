@@ -194,7 +194,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Poll configurations" : "Configuraciones de la votación",
     "Allow \"maybe\" vote" : "Permitir voto \"quizás\"",
-    "If vote limits are used, \"maybe\" should be not be allowed." : "Si se usan los límites de voto, «quizás» no debería estar permitido.",
+    "If vote limits are used, \"maybe\" shouldn't be allowed." : "Si se usan los límites de voto, «quizás» no debería estar permitido.",
     "Anonymous poll" : "Votación anónima",
     "Limit yes votes per user" : "Limitar el número de votos afirmativos por usuario/a",
     "Limit yes votes per option" : "Limitar el número de votos afirmativos por opción",
