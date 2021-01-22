@@ -97,6 +97,7 @@ appstore: clean lint build-js-production
 	--exclude="package*" \
 	--exclude="phpunit*xml" \
 	--exclude="protractor.*" \
+	--exclude="psalm.*" \
 	--exclude="screenshots" \
 	--exclude="src" \
 	--exclude="tests" \
