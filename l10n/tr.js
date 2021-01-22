@@ -194,6 +194,7 @@ OC.L10N.register(
     "Description" : "Açıklama",
     "Poll configurations" : "Anket yapılandırmaları",
     "Allow \"maybe\" vote" : "\"Belki\" oyu verilebilsin",
+    "If vote limits are used, \"maybe\" shouldn't be allowed." : "Oy sınırları kullanılıyorsa \"belki\" seçeneğine izin verilmemelidir.",
     "Anonymous poll" : "Anonim anket",
     "Limit yes votes per user" : "Her kullanıcı için evet oylarını sınırla",
     "Limit yes votes per option" : "Her seçenek için evet oylarını sınırla",
