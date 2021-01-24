@@ -89,7 +89,7 @@ export default {
 		isWinner() {
 			// highlight best option until poll is closed and
 			// at least one option is confirmed
-			return this.option.yes + this.option.maybe > 0 && this.option.rank === 1 && !(this.closed && this.confirmedOptions.length)
+			return this.option.rank === 1 && !(this.closed && this.confirmedOptions.length)
 		},
 
 		isConfirmed() {
@@ -109,10 +109,6 @@ export default {
 			font-weight: bold;
 			color: var(--color-polls-foreground-yes);
 		}
-	}
-	.option-item {
-		flex: 1;
-		align-items: flex-start;
 	}
 }
 
