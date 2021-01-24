@@ -180,7 +180,7 @@ class ShareService {
 	 * @return Share
 	 */
 	private function create(int $pollId, UserGroupClass $userGroup, bool $preventInvitation = false): Share {
-		$preventInvitation = $userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? true : $preventInvitation;
+		$preventInvitation = $userGroup->getType() === UserGroupClass::TYPE_PUBLIC ?: $preventInvitation;
 		$token = \OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .

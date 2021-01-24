@@ -256,12 +256,7 @@ class PollService {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_DELETE);
 
-		if ($this->poll->getDeleted()) {
-			$this->poll->setDeleted(0);
-		} else {
-			$this->poll->setDeleted(time());
-		}
-
+		$this->poll->setDeleted($this->poll->getDeleted() ? 0 : time());
 		$this->poll = $this->pollMapper->update($this->poll);
 		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_DELETEPOLL);

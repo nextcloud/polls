@@ -54,11 +54,7 @@ class LogService {
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());
 		$this->log->setMessageId($messageId);
-		if ($userId) {
-			$this->log->setUserId($userId);
-		} else {
-			$this->log->setUserId(\OC::$server->getUserSession()->getUser()->getUID());
-		}
+		$this->log->setUserId($userId ? $userId : \OC::$server->getUserSession()->getUser()->getUID());
 
 		try {
 			return $this->logMapper->insert($this->log);

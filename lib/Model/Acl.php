@@ -135,11 +135,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getUserId() {
-		if ($this->getLoggedIn()) {
-			return \OC::$server->getUserSession()->getUser()->getUID();
-		} else {
-			return $this->share->getUserId();
-		}
+		return $this->getLoggedIn() ? \OC::$server->getUserSession()->getUser()->getUID() : $this->share->getUserId();
 	}
 
 	public function validateUserId(string $userId): void {
@@ -149,11 +145,7 @@ class Acl implements JsonSerializable {
 	}
 
 	private function getDisplayName(): string {
-		if ($this->getLoggedIn()) {
-			return $this->userManager->get($this->getUserId())->getDisplayName();
-		} else {
-			return $this->share->getDisplayName();
-		}
+		return $this->getLoggedIn() ? $this->userManager->get($this->getUserId())->getDisplayName() : $this->share->getDisplayName();
 	}
 
 	public function isAllowed(string $permission): bool {
@@ -357,10 +349,6 @@ class Acl implements JsonSerializable {
 	}
 
 	private function hasEmail(): bool {
-		if ($this->share->getToken()) {
-			return strlen($this->share->getEmailAddress()) > 0;
-		} else {
-			return $this->getLoggedIn();
-		}
+		return $this->share->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getLoggedIn();
 	}
 }

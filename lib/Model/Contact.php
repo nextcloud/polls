@@ -91,29 +91,16 @@ class Contact extends UserGroupClass {
 		$this->loadContact();
 
 		$this->id = $this->contact['UID'];
-		$this->displayName = isset($this->contact['FN']) ? $this->contact['FN'] : $this->displayName;
-		$this->emailAddress = isset($this->contact['EMAIL'][0]) ? $this->contact['EMAIL'][0] : $this->emailAddress;
-		$this->organisation = isset($this->contact['ORG']) ? $this->contact['ORG'] : '';
+		$this->displayName = $this->contact['FN'] ?? $this->displayName;
+		$this->emailAddress = $this->contact['EMAIL'][0] ?? $this->emailAddress;
+		$this->organisation = $this->contact['ORG'] ?? '';
 		$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
-
-
-		if (isset($this->contact['CATEGORIES'])) {
-			$this->categories = explode(',', $this->contact['CATEGORIES']);
-		} else {
-			$this->categories = [];
-		}
-
 		$description = $this->categories;
 
 		if (isset($this->contact['ORG'])) {
 			array_unshift($description, $this->organisation);
 		}
-
-		if (count($description) > 0) {
-			$this->description = implode(", ", $description);
-		} else {
-			$this->description = \OC::$server->getL10N('polls')->t('Contact');
-		}
+		$this->description = count($description) ? implode(", ", $description) : \OC::$server->getL10N('polls')->t('Contact');
 	}
 
 	public static function isEnabled(): bool {

@@ -251,11 +251,8 @@ class MailService {
 	}
 
 	private function generateNotification(UserGroupClass $recipient, Poll $poll, string $url, array $log): IEMailTemplate {
-		if ($recipient->getLanguage()) {
-			$this->trans = $this->transFactory->get('polls', $recipient->getLanguage());
-		} else {
-			$this->trans = $this->transFactory->get('polls', $poll->getOwnerUserObject()->getLanguage());
-		}
+		$owner = $poll->getOwnerUserObject();
+		$this->trans = $this->transFactory->get('polls', $recipient->getLanguage() ? $recipient->getLanguage() : $owner->getLanguage());
 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
 			'title' => $poll->getTitle(),
 			'link' => $url
@@ -304,11 +301,7 @@ class MailService {
 
 	private function generateInvitation(UserGroupClass $recipient, Poll $poll, string $url): IEMailTemplate {
 		$owner = $poll->getOwnerUserObject();
-		if ($recipient->getLanguage()) {
-			$this->trans = $this->transFactory->get('polls', $recipient->getLanguage());
-		} else {
-			$this->trans = $this->transFactory->get('polls', $owner->getLanguage());
-		}
+		$this->trans = $this->transFactory->get('polls', $recipient->getLanguage() ? $recipient->getLanguage() : $owner->getLanguage());
 
 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
 			'owner' => $owner->getDisplayName(),
