@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.8.0] - tbd
  - [enhancement] - #1367 - Immediately adopt changes from other users to the current poll
+ - [fix] #1374 - fix uniqueContraintsException when shifting dates
 
 ## [1.7.4] - 2021-01-30
 ### new Features since 1.6.x
