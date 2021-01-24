@@ -108,12 +108,12 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = ''): Option {
+	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0): Option {
 		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
 		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
-		$this->setOption($timestamp, $pollOptionText);
+		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		try {
 			return $this->optionMapper->insert($this->option);
@@ -127,10 +127,10 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = ''): Option {
+	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): Option {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
-		$this->setOption($timestamp, $pollOptionText);
+		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		return $this->optionMapper->update($this->option);
 	}
@@ -187,6 +187,7 @@ class OptionService {
 		for ($i = 0; $i < $amount; $i++) {
 			$clonedOption = new Option();
 			$clonedOption->setPollId($this->option->getPollId());
+			$clonedOption->setDuration($this->option->getDuration());
 			$clonedOption->setConfirmed(0);
 			$clonedOption->setTimestamp($baseDate->modify($step . ' ' . $unit)->getTimestamp());
 			$clonedOption->setOrder($clonedOption->getTimestamp());
@@ -216,7 +217,8 @@ class OptionService {
 			$option->setConfirmed(0);
 			$option->setPollOptionText($origin->getPollOptionText());
 			$option->setTimestamp($origin->getTimestamp());
-			$option->setOrder($origin->getOrder());
+			$option->setDuration($origin->getDuration());
+			$option->setOrder($option->getOrder());
 			$this->optionMapper->insert($option);
 		}
 
@@ -317,13 +319,20 @@ class OptionService {
 	/**
 	 * Set option entities validated
 	 */
-	private function setOption(int $timestamp = 0, ?string $pollOptionText = ''): void {
+	private function setOption(int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): void {
 		$poll = $this->pollMapper->find($this->option->getPollId());
 
 		if ($poll->getType() === Poll::TYPE_DATE) {
 			$this->option->setTimestamp($timestamp);
 			$this->option->setOrder($timestamp);
-			$this->option->setPollOptionText(date('c', $timestamp));
+			$this->option->setDuration($duration);
+			if ($duration === 0) {
+				$this->option->setPollOptionText(date('c', $timestamp));
+			} elseif ($duration > 0) {
+				$this->option->setPollOptionText(date('c', $timestamp) .' - ' . date('c', $timestamp + $duration));
+			} else {
+				$this->option->setPollOptionText($pollOptionText);
+			}
 		} else {
 			$this->option->setPollOptionText($pollOptionText);
 		}

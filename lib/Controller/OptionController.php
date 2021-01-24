@@ -66,9 +66,9 @@ class OptionController extends Controller {
 	 * Add a new option
 	 * @NoAdminRequired
 	 */
-	public function add($pollId, $timestamp = 0, $pollOptionText = ''): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
-			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
+	public function add($pollId, $timestamp = 0, $pollOptionText = '', $duration = 0): DataResponse {
+		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText, $duration) {
+			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)];
 		});
 	}
 
@@ -76,9 +76,9 @@ class OptionController extends Controller {
 	 * Update option
 	 * @NoAdminRequired
 	 */
-	public function update($optionId, $timestamp, $pollOptionText): DataResponse {
-		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
-			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
+	public function update($optionId, $timestamp, $pollOptionText, $duration): DataResponse {
+		return $this->response(function () use ($optionId, $timestamp, $pollOptionText, $duration) {
+			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $duration)];
 		});
 	}
 

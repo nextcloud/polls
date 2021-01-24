@@ -110,9 +110,6 @@ export default {
 			color: var(--color-polls-foreground-yes);
 		}
 	}
-	.option-item {
-		flex: 1;
-	}
 }
 
 .confirmations {

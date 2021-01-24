@@ -148,6 +148,7 @@ const actions = {
 			pollId: context.rootState.route.params.id,
 			timestamp: payload.timestamp,
 			pollOptionText: payload.pollOptionText,
+			duration: payload.duration,
 		})
 			.then((response) => {
 				context.commit('setItem', { option: response.data.option })
@@ -164,6 +165,7 @@ const actions = {
 		return axios.put(generateUrl(endPoint + '/' + payload.option.id), {
 			timestamp: payload.option.timestamp,
 			pollOptionText: payload.option.timeStamp,
+			duration: payload.option.duration,
 		})
 			.then((response) => {
 				context.commit('setItem', { option: response.data.option })
