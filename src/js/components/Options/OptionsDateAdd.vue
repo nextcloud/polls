@@ -27,6 +27,11 @@
 			confirm
 			style="width: inherit;"
 			@change="addOption(lastOption)" />
+		<input id="useDuration"
+			v-model="useDuration"
+			type="checkbox"
+			class="checkbox">
+		<label for="useDuration"> {{ t('polls', 'With end date') }}</label>
 	</ConfigBox>
 </template>
 
@@ -47,37 +52,71 @@ export default {
 	data() {
 		return {
 			lastOption: '',
+			useDuration: false,
 		}
 	},
 
 	computed: {
 		optionDatePicker() {
-			return {
-				editable: false,
-				minuteStep: 5,
-				type: 'datetime',
-				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				placeholder: t('polls', 'Click to add a date'),
-				confirm: true,
-				lang: {
-					formatLocale: {
-						firstDayOfWeek: this.firstDOW,
-						months: moment.months(),
-						monthsShort: moment.monthsShort(),
-						weekdays: moment.weekdays(),
-						weekdaysMin: moment.weekdaysMin(),
+			if (this.useDuration) {
+				return {
+					editable: false,
+					minuteStep: 5,
+					type: 'datetime',
+					range: true,
+					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+					placeholder: t('polls', 'Click to add a date'),
+					confirm: true,
+					lang: {
+						formatLocale: {
+							firstDayOfWeek: this.firstDOW,
+							months: moment.months(),
+							monthsShort: moment.monthsShort(),
+							weekdays: moment.weekdays(),
+							weekdaysMin: moment.weekdaysMin(),
+						},
 					},
-				},
+				}
+
+			} else {
+				return {
+					editable: false,
+					minuteStep: 5,
+					type: 'datetime',
+					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+					placeholder: t('polls', 'Click to add a date'),
+					confirm: true,
+					lang: {
+						formatLocale: {
+							firstDayOfWeek: this.firstDOW,
+							months: moment.months(),
+							monthsShort: moment.monthsShort(),
+							weekdays: moment.weekdays(),
+							weekdaysMin: moment.weekdaysMin(),
+						},
+					},
+				}
 			}
 		},
 	},
 
 	methods: {
-		addOption(pollOptionText) {
+		addOption(dateOption) {
+			let pollOptionText = ''
+			let duration = 0
+			if (this.useDuration) {
+				pollOptionText = dateOption[0]
+				duration = moment(dateOption[1]).diff(moment(dateOption[0]), 'seconds')
+			} else {
+				pollOptionText = dateOption
+				duration = 0
+			}
+
 			if (moment(pollOptionText).isValid()) {
 				this.$store.dispatch('poll/options/add', {
 					pollOptionText: pollOptionText,
 					timestamp: moment(pollOptionText).unix(),
+					duration: duration,
 				})
 			}
 		},
