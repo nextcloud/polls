@@ -21,7 +21,7 @@ OC.L10N.register(
     "\"{title}\" had recent activity: " : "\"{title}\" ha tingut activitat recent: ",
     "A user" : "Un usuari",
     "Go to poll" : "Vés a l'enquesta",
-    "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Aquest correu electrònic s'envia, perquè et vas subscriure a les notificacions d'aquesta enquesta. Per donar-te de baixa, visita l'enquesta i suprimeix la subscripció.",
+    "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Aquest correu electrònic s'envia, perquè et vas subscriure a les notificacions d'aquesta enquesta. Per donar-te de baixa, visita l'enquesta i elimina la subscripció.",
     "Poll invitation \"%s\"" : "Invitació a Enquesta \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} us va convidar a participar en l'enquesta \"{title}\"",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar: " : "Aquest enllaç us dóna accés personal a l'enquesta que s'ha anomenat anteriorment. Premeu el botó de dalt o copieu l'enllaç següent i afegiu-lo a la barra d'ubicació del navegador: ",
