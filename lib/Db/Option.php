@@ -42,6 +42,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setOrder(integer $value)
  * @method int getConfirmed()
  * @method void setConfirmed(integer $value)
+ * @method int getDuration()
+ * @method void setDuration(integer $value)
  */
 class Option extends Entity implements JsonSerializable {
 
@@ -61,6 +63,9 @@ class Option extends Entity implements JsonSerializable {
 	protected $confirmed;
 	protected $duration;
 
+	/** @var int $duration */
+	protected $duration;
+
 	public function jsonSerialize() {
 		if (intval($this->timestamp) > 0) {
 			$timestamp = $this->timestamp;
@@ -77,6 +82,7 @@ class Option extends Entity implements JsonSerializable {
 			'timestamp' => intval($timestamp),
 			'order' => $timestamp ? $timestamp : $order,
 			'confirmed' => intval($this->confirmed),
+			'duration' => intval($this->duration),
 			'no' => 0,
 			'yes' => 0,
 			'maybe' => 0,
