@@ -58,7 +58,7 @@ return [
 
 		['name' => 'poll#switchDeleted', 'url' => '/poll/{pollId}/switchDeleted', 'verb' => 'PUT'],
 		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'GET'],
-		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/polls/{pollId}/addresses', 'verb' => 'GET'],
+		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/poll/{pollId}/addresses', 'verb' => 'GET'],
 
 		['name' => 'option#list', 'url' => '/poll/{pollId}/options', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/option', 'verb' => 'POST'],
