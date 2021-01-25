@@ -55,9 +55,6 @@ class VoteMapperTest extends UnitTestCase {
 	/** @var array */
 	private $votes = [];
 
-	/** @var array */
-	private $users = [];
-
 	/**
 	 * {@inheritDoc}
 	 */

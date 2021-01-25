@@ -175,12 +175,7 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	/**
-	 * serach all possible sharees - use ISearch to respect autocomplete restrictions
-	 *
-	 * Undocumented function long description
-	 *
-	 * @param type var Description
-	 * @return return type
+	 * search all possible sharees - use ISearch to respect autocomplete restrictions
 	 */
 	public static function search(string $query = ''): array {
 		$items = [];
