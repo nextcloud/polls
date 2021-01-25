@@ -9,27 +9,32 @@ This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and
 
 ## Features
 - :bar_chart: Create / edit polls (datetimes and texts)
-- :date: Set an expiration date
+- :date: Set a closing date
 - :lock: Restrict access (all site users or invited users only)
 - :speech_balloon: Comments
-- Create public polls
-- Invite users, groups and contacts (directly or via circles or contact groups)
-- Hide results until the poll is closed
-- Create anonymised polls (participants names get pseudonymized for other users)
+- Share poll with users, groups, contacts and circles
+- Invite external users with a unique link or via email address
+- Hide results permanently or until the poll is closed
+- Confirm options after poll closing
+- Create anonymized polls (participants names get pseudonymized for other users)
+- Limit possible answers per option and per user
+- Subscribe to notifications
+- Get hints about possible conflicting entries in your calendar around the date option
+- Switch between list and table view
+- Configure your preferred view for date and text polls
 
 ## Bugs
 - https://github.com/nextcloud/polls/issues
 
-## Screenshots
+## Screenshots (table view)
 Create a new poll from the navigation bar and get an overview of your polls
 ![Overview](screenshots/overview.png)
 
-#### Vote and comment
+#### Vote and comment (list view)
 ![Vote](screenshots/vote.png)
 
 #### Edit poll inside the vote page
 ![Edit poll](screenshots/edit-poll.png)
-![Edit options](screenshots/options.png)
 
 #### Add shared links to your poll
 ![Share poll](screenshots/shares.png)
@@ -38,7 +43,7 @@ Create a new poll from the navigation bar and get an overview of your polls
 ![Vote mobile portrait](screenshots/mobile-portrait.png)
 
 ## Installation / Update
-This app is supposed to work on Nextcloud version 17+.
+This app is supposed to work on Nextcloud version 19+.
 
 ### Install latest release
 You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls).
