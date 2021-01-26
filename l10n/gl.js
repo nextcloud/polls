@@ -119,7 +119,7 @@ OC.L10N.register(
     "Restore poll" : "Restaurar a enquisa",
     "Delete poll permanently" : "Eliminar a enquisa de xeito permanente",
     "Clone to option sequence" : "Clonar a secuencia de opcións",
-    "Create a sequence of date options starting with {dateOption}." : "Crea unha secuencia de opcións de datas a partires de {dateOption}.",
+    "Create a sequence of date options starting with {dateOption}." : "Crea unha secuencia de opcións de datas a partir de {dateOption}.",
     "Step unit: " : "Unidade do paso:",
     "Step width: " : "Largura do paso:",
     "Number of items to create: " : "Número de elementos para crear:",

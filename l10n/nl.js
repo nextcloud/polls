@@ -194,6 +194,7 @@ OC.L10N.register(
     "Description" : "Beschrijving",
     "Poll configurations" : "Peilingconfiguratie",
     "Allow \"maybe\" vote" : "Sta een \"Misschien\" stem toe",
+    "If vote limits are used, \"maybe\" shouldn't be allowed." : "Als stem-limieten worden gebruikt, zou \"misschien\" niet mogen.",
     "Anonymous poll" : "Anonieme peiling",
     "Limit yes votes per user" : "Beperk aantal Ja-stemmen per gebruiker",
     "Limit yes votes per option" : "Beperk Ja-stemmen per optie",
