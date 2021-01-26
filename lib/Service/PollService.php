@@ -247,7 +247,6 @@ class PollService {
 	 */
 	public function switchDeleted(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		\OC::$server->getLogger()->alert('ok');
 		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_DELETE);
 
 		if ($this->poll->getDeleted()) {

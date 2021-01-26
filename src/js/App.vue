@@ -173,10 +173,6 @@ export default {
 		},
 
 		async loadPoll(silent) {
-			if (!this.$route.params.id) {
-				return
-			}
-
 			if (!silent) {
 				this.loading = true
 				this.transitionsOff()
@@ -185,6 +181,12 @@ export default {
 			try {
 				if (this.$route.name === 'publicVote') {
 					await this.$store.dispatch('share/get')
+				}
+
+				if (this.$route.name === 'vote' && !this.$route.params.id) {
+					this.loading = false
+					this.transitionsOn()
+					throw new Error('No pollId for vote page')
 				}
 
 				if (this.$route.name === 'vote') {

@@ -105,9 +105,9 @@ export default {
 				displayColor: '#ffffff',
 				allDay: '',
 				description: this.poll.description,
-				end: this.option.timestamp,
+				start: this.option.timestamp,
 				location: '',
-				start: this.option.timestamp + 3600,
+				end: this.option.timestamp + 3600,
 				status: 'self',
 				summary: this.poll.title,
 			}
