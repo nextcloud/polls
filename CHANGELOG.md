@@ -1,9 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.7.3 - beta4] - 2021-01-27
+## [1.7.3 - RC1] - 2021-01-27
  - [fix] #1355 - fix migration
- - [fix] #1358 - show closed polls in the relavant list upntil four days after closing date 
+ - [fix] #1358 - show closed polls in the relavant list upntil four days after closing date
  - [fix] #1358 - detect conflicts after vote click, if limits are set and more than one user is voting
  - [fix] #1358 - menu in poll list was not clickable
  - [enhancement] #1358 - add warning class to hints in the configuration
