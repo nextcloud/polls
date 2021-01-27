@@ -34,32 +34,38 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
 
 class OptionService {
 
-	/** @var OptionMapper */
-	private $optionMapper;
+	/** @var Acl */
+	private $acl;
 
 	/** @var Option */
 	private $option;
 
+	/** @var OptionMapper */
+	private $optionMapper;
+
 	/** @var PollMapper */
 	private $pollMapper;
 
-	/** @var Acl */
-	private $acl;
+	/** @var WatchService */
+	private $watchService;
 
 	public function __construct(
-		OptionMapper $optionMapper,
+		Acl $acl,
 		Option $option,
+		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
-		Acl $acl
+		WatchService $watchService
 	) {
-		$this->optionMapper = $optionMapper;
-		$this->option = $option;
-		$this->pollMapper = $pollMapper;
 		$this->acl = $acl;
+		$this->option = $option;
+		$this->optionMapper = $optionMapper;
+		$this->pollMapper = $pollMapper;
+		$this->watchService = $watchService;
 	}
 
 	/**
@@ -116,10 +122,12 @@ class OptionService {
 		$this->setOption($timestamp, $pollOptionText);
 
 		try {
-			return $this->optionMapper->insert($this->option);
+			$this->option = $this->optionMapper->insert($this->option);
+			$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 		} catch (UniqueConstraintViolationException $e) {
 			throw new DuplicateEntryException('This option already exists');
 		}
+		return $this->option;
 	}
 
 	/**
@@ -132,7 +140,9 @@ class OptionService {
 		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 		$this->setOption($timestamp, $pollOptionText);
 
-		return $this->optionMapper->update($this->option);
+		$this->option = $this->optionMapper->update($this->option);
+		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
+		return $this->option;
 	}
 
 	/**
@@ -144,6 +154,7 @@ class OptionService {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 		$this->optionMapper->delete($this->option);
+		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 
 		return $this->option;
 	}
@@ -163,7 +174,9 @@ class OptionService {
 			$this->option->setConfirmed(time());
 		}
 
-		return $this->optionMapper->update($this->option);
+		$this->option = $this->optionMapper->update($this->option);
+		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
+		return $this->option;
 	}
 
 	/**
@@ -197,6 +210,7 @@ class OptionService {
 				\OC::$server->getLogger()->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option alredy exists.');
 			}
 		}
+		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 		return $this->optionMapper->findByPoll($this->option->getPollId());
 	}
 
@@ -251,6 +265,7 @@ class OptionService {
 			}
 		}
 
+		$this->watchService->writeUpdate($pollId, Watch::OBJECT_OPTIONS);
 		return $this->optionMapper->findByPoll($pollId);
 	}
 
@@ -287,6 +302,7 @@ class OptionService {
 			$this->optionMapper->update($option);
 		}
 
+		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 		return $this->optionMapper->findByPoll($this->option->getPollId());
 	}
 
