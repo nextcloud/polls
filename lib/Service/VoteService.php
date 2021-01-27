@@ -32,21 +32,13 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
 
 class VoteService {
 
-	/** @var VoteMapper */
-	private $voteMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var Vote */
-	private $vote;
-
-	/** @var OptionMapper */
-	private $optionMapper;
+	/** @var Acl */
+	private $acl;
 
 	/** @var AnonymizeService */
 	private $anonymizer;
@@ -54,25 +46,40 @@ class VoteService {
 	/** @var LogService */
 	private $logService;
 
-	/** @var Acl */
-	private $acl;
+	/** @var OptionMapper */
+	private $optionMapper;
+
+	/** @var PollMapper */
+	private $pollMapper;
+
+	/** @var Vote */
+	private $vote;
+
+	/** @var VoteMapper */
+	private $voteMapper;
+
+	/** @var WatchService */
+	private $watchService;
+
 
 	public function __construct(
-		VoteMapper $voteMapper,
-		PollMapper $pollMapper,
-		Vote $vote,
-		OptionMapper $optionMapper,
+		Acl $acl,
 		AnonymizeService $anonymizer,
 		LogService $logService,
-		Acl $acl
+		OptionMapper $optionMapper,
+		PollMapper $pollMapper,
+		Vote $vote,
+		VoteMapper $voteMapper,
+		WatchService $watchService
 	) {
-		$this->voteMapper = $voteMapper;
-		$this->pollMapper = $pollMapper;
-		$this->vote = $vote;
-		$this->optionMapper = $optionMapper;
+		$this->acl = $acl;
 		$this->anonymizer = $anonymizer;
 		$this->logService = $logService;
-		$this->acl = $acl;
+		$this->optionMapper = $optionMapper;
+		$this->pollMapper = $pollMapper;
+		$this->vote = $vote;
+		$this->voteMapper = $voteMapper;
+		$this->watchService = $watchService;
 	}
 
 	/**
@@ -172,7 +179,8 @@ class VoteService {
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->insert($this->vote);
 		}
-		$this->logService->setLog($this->acl->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
+		$this->logService->setLog($this->vote->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
+		$this->watchService->writeUpdate($this->vote->getPollId(), Watch::OBJECT_VOTES);
 		return $this->vote;
 	}
 
@@ -182,6 +190,7 @@ class VoteService {
 	public function delete(int $pollId, string $userId): string {
 		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
 		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
+		$this->watchService->writeUpdate($pollId, Watch::OBJECT_VOTES);
 		return $userId;
 	}
 }
