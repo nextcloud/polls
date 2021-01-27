@@ -1,7 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.7.2 - beta3] - tbd
+## [1.7.3 - beta4] - 2021-01-27
+ - [fix] #1355 - fix migration
+ - [fix] #1358 - show closed polls in the relavant list upntil four days after closing date 
+ - [fix] #1358 - detect conflicts after vote click, if limits are set and more than one user is voting
+ - [fix] #1358 - menu in poll list was not clickable
+ - [enhancement] #1358 - add warning class to hints in the configuration
+ - [fix] #1357 - copy participants was broken
+ - [dependencies] Updated dependencies
+ - [dependencies] fix calendar popover (@nextcloud/vue@3.5.4)
+
+## [1.7.2 - beta3] - 2021-01-17
  - [fix] #1346 - user search broken
  - [fix] #1344 - prevent commenting, when entering public poll without registration  
  - [fix] #1338 - Support dark mode and dark theme
