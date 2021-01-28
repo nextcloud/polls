@@ -336,6 +336,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.description {
+	white-space: pre;
+}
+
 .header-actions {
 	display: flex;
 	justify-content: flex-end;
