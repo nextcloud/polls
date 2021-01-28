@@ -23,6 +23,15 @@
 <template>
 	<div>
 		<div class="user_settings">
+			<input id="realTimePolling" v-model="realTimePolling"
+				type="checkbox" class="checkbox">
+			<label for="realTimePolling">{{ t('polls', 'Beta - watch for updated polls in realtime') }}</label>
+			<div class="settings_details">
+				{{ t('polls', 'All changes to the current poll, done by other users, will be recognized in realtime.') }}
+			</div>
+		</div>
+
+		<div class="user_settings">
 			<input id="experimental" v-model="experimental"
 				type="checkbox" class="checkbox">
 			<label for="experimental">{{ t('polls', 'Try experimental styles') }}</label>
@@ -85,6 +94,14 @@ export default {
 			settings: state => state.settings.user,
 		}),
 		// Add bindings
+		realTimePolling: {
+			get() {
+				return this.settings.user.realTimePolling
+			},
+			set(value) {
+				this.writeValue({ realTimePolling: value })
+			},
+		},
 		experimental: {
 			get() {
 				return this.settings.experimental

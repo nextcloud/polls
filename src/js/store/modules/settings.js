@@ -35,6 +35,7 @@ const defaultSettings = () => {
 			glassySidebar: false,
 			defaultViewTextPoll: 'mobile',
 			defaultViewDatePoll: 'desktop',
+			realTimePolling: false,
 		},
 		availableCalendars: [],
 		viewModes: [
@@ -71,6 +72,7 @@ const actions = {
 
 		return axios.get(generateUrl(endPoint))
 			.then((response) => {
+				console.debug('settings loaded ')
 				context.commit('setPreference', response.data.preferences)
 			})
 			.catch(() => {

@@ -94,6 +94,8 @@
 </template>
 
 <script>
+import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 import linkifyUrls from 'linkify-urls'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
@@ -134,6 +136,7 @@ export default {
 			ranked: false,
 			manualViewDatePoll: '',
 			manualViewTextPoll: '',
+			cancelToken: null,
 		}
 	},
 
@@ -292,13 +295,45 @@ export default {
 		} else {
 			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 		}
+		this.watchPoll()
 	},
 
 	beforeDestroy() {
+		console.debug('destroy votes')
+		this.cancelToken.cancel()
 		this.$store.dispatch({ type: 'poll/reset' })
 	},
 
 	methods: {
+		async watchPoll() {
+			this.cancelToken = axios.CancelToken.source()
+			let polling = true
+			let lastUpdated = 0
+			while (polling) {
+				await axios.get(generateUrl('apps/polls/watch/' + this.$route.params.id + '?offset=' + lastUpdated), { cancelToken: this.cancelToken.token })
+					.then((response) => {
+						console.debug('update detected', response.data.updates)
+						response.data.updates.forEach((item) => {
+							lastUpdated = (item.updated > lastUpdated) ? item.updated : lastUpdated
+							if (item.table === 'polls') {
+								this.$store.dispatch('poll/get')
+							} else {
+								this.$store.dispatch('poll/' + item.table + '/list')
+							}
+						})
+					})
+					.catch((error) => {
+						if (axios.isCancel(error)) {
+							polling = false
+						} else {
+							if (error.response.status !== 304) {
+								console.error(error.response)
+							}
+						}
+					})
+			}
+		},
+
 		openOptions() {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
