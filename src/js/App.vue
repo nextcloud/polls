@@ -98,6 +98,16 @@ export default {
 	},
 
 	created() {
+		if (getCurrentUser()) {
+			this.$store.dispatch('settings/get')
+			if (this.$route.name !== 'publicVote') {
+				this.updatePolls()
+			}
+			if (this.$route.params.id && !this.$oute.params.token) {
+				this.loadPoll(true)
+			}
+		}
+
 		subscribe('transitions-off', (delay) => {
 			this.transitionsOff(delay)
 		})
@@ -130,15 +140,6 @@ export default {
 
 		})
 
-		if (getCurrentUser()) {
-			this.$store.dispatch('settings/get')
-			if (this.$route.name !== 'publicVote') {
-				this.updatePolls()
-			}
-			if (this.$route.params.id && !this.$oute.params.token) {
-				this.loadPoll(true)
-			}
-		}
 		this.timedReload()
 	},
 
@@ -159,7 +160,9 @@ export default {
 		timedReload() {
 			this.reloadTimer = window.setInterval(() => {
 				this.updatePolls()
-				this.loadPoll(true)
+				if (!this.settings.realTimePolling) {
+					this.loadPoll(true)
+				}
 			}, this.reloadInterval)
 		},
 
