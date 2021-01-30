@@ -325,7 +325,7 @@ export default {
 					.catch((error) => {
 						if (axios.isCancel(error)) {
 							polling = false
-						} else {
+						} else if (error?.response) {
 							if (error.response.status !== 304) {
 								console.error(error.response)
 							}
