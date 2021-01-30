@@ -307,9 +307,9 @@ export default {
 	methods: {
 		async watchPoll() {
 			this.cancelToken = axios.CancelToken.source()
-			let polling = true
+			let watching = true
 			let lastUpdated = 0
-			while (polling) {
+			while (watching) {
 				await axios.get(generateUrl('apps/polls/watch/' + this.$route.params.id + '?offset=' + lastUpdated), { cancelToken: this.cancelToken.token })
 					.then((response) => {
 						console.debug('update detected', response.data.updates)
@@ -324,7 +324,7 @@ export default {
 					})
 					.catch((error) => {
 						if (axios.isCancel(error)) {
-							polling = false
+							watching = false
 						} else if (error?.response) {
 							if (error.response.status !== 304) {
 								console.error(error.response)
