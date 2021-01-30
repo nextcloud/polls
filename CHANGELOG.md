@@ -2,14 +2,32 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.7.4] - 2021-01-30
- - [fix] - linebreaks in description were ignored
+### new Features since 1.6.x
+ - Send invitations via notification app
+ - Reload current poll every 30 seconds for updates
+ - Admin users can delete and takeover polls from other users via new admin section
+ - Respect autocompletion limitations from share settings for users, group and circle searches
+ - Limit number of participants per option
+ - Limit number of votes per participant
+ - Combine registration dialogs into one dialog for public polls
+ - Show closed polls in the relevant list upntil four days after closing date
+ - Changed display of expiration timespan in polls overview
+
+### Bugfixes since 1.6.x
+ - Linebreaks in description were ignored
+ - Avoid concurrent long term user searches with a big user base
+ - Speed up poll overview, by avoiding unnecessary loading of polls, the user is not allowed to see
+ - Avoid duplicates in different tables
+ - Invalid string text in the email
+
+ See also https://github.com/nextcloud/polls/milestone/31?closed=1
 
 ## [1.7.3 - RC1] - 2021-01-27
+ - [enhancement] #1358 - show closed polls in the relevant list upntil four days after closing date
+ - [enhancement] #1358 - add warning class to hints in the configuration
  - [fix] #1355 - fix migration
- - [fix] #1358 - show closed polls in the relavant list upntil four days after closing date
  - [fix] #1358 - detect conflicts after vote click, if limits are set and more than one user is voting
  - [fix] #1358 - menu in poll list was not clickable
- - [enhancement] #1358 - add warning class to hints in the configuration
  - [fix] #1357 - copy participants was broken
  - [dependencies] Updated dependencies
  - [dependencies] fix calendar popover (@nextcloud/vue@3.5.4)
@@ -23,7 +41,7 @@ All notable changes to this project will be documented in this file.
  - [fix] #1325 - There are no spaces in the column name  
  - [fix] #1326 - Invalid string text in the email
  - [enhancement] #739 - Limit number of participants per option
- - [enhancement] #738 - Limit numer of votes per participant (also #647, #624)
+ - [enhancement] #738 - Limit number of votes per participant (also #647, #624)
  - [dependencies] Updated dependencies
  - [refactoring] Mainly code maintenance and optimizations, bug fixes
 
@@ -38,8 +56,6 @@ All notable changes to this project will be documented in this file.
  - [fix] #1252 - External user is not listed in admin's shares list
  - [fix] #1183 - Avoid concurrent long term user searches with a big user base
  - [fix] #1181 - Speed up poll overview, by avoiding unnecessary loading of polls, the user is not allowed to see
-
- See also https://github.com/nextcloud/polls/milestone/31?closed=1
 
 ## [1.6.2] - 2020-11-19
  - [fix] Subscription was missing for logged in users
