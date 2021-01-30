@@ -25,9 +25,16 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
 
 class CommentService {
+
+	/** @var Acl */
+	private $acl;
+
+	/** @var AnonymizeService */
+	private $anonymizer;
 
 	/** @var CommentMapper */
 	private $commentMapper;
@@ -35,22 +42,21 @@ class CommentService {
 	/** @var Comment */
 	private $comment;
 
-	/** @var AnonymizeService */
-	private $anonymizer;
-
-	/** @var Acl */
-	private $acl;
+	/** @var WatchService */
+	private $watchService;
 
 	public function __construct(
+		Acl $acl,
+		AnonymizeService $anonymizer,
 		CommentMapper $commentMapper,
 		Comment $comment,
-		AnonymizeService $anonymizer,
-		Acl $acl
+		WatchService $watchService
 	) {
+		$this->acl = $acl;
+		$this->anonymizer = $anonymizer;
 		$this->commentMapper = $commentMapper;
 		$this->comment = $comment;
-		$this->anonymizer = $anonymizer;
-		$this->acl = $acl;
+		$this->watchService = $watchService;
 	}
 
 	/**
@@ -88,6 +94,7 @@ class CommentService {
 		$this->comment->setDt(date('Y-m-d H:i:s'));
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
+		$this->watchService->writeUpdate($this->comment->getPollId(), Watch::OBJECT_COMMENTS);
 		return $this->comment;
 	}
 
@@ -104,6 +111,7 @@ class CommentService {
 		}
 
 		$this->commentMapper->delete($this->comment);
+		$this->watchService->writeUpdate($this->comment->getPollId(), Watch::OBJECT_COMMENTS);
 		return $this->comment;
 	}
 }

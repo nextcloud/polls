@@ -62,7 +62,7 @@ const getters = {
 }
 
 const actions = {
-	list(context, payload) {
+	list(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {

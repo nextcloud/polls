@@ -139,7 +139,7 @@ const actions = {
 		context.commit('reset')
 	},
 
-	get(context, payload) {
+	get(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
@@ -158,7 +158,7 @@ const actions = {
 				return response
 			})
 			.catch((error) => {
-				console.debug('Error loading poll', { error: error.response }, { payload: payload })
+				console.debug('Error loading poll', { error: error.response })
 				throw error
 			})
 	},

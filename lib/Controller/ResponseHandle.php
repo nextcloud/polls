@@ -28,6 +28,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Exceptions\Exception;
 
 trait ResponseHandle {
@@ -41,6 +42,18 @@ trait ResponseHandle {
 			return new DataResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * response
+	 * @NoAdminRequired
+	 */
+	protected function responseLong(Closure $callback): DataResponse {
+		try {
+			return new DataResponse($callback(), Http::STATUS_OK);
+		} catch (NoUpdatesException $e) {
+			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
 		}
 	}
 

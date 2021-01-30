@@ -92,6 +92,7 @@ return [
 		['name' => 'comment#delete', 'url' => '/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'auth'],
 
 		['name' => 'system#user_search', 'url' => '/search/users/{query}', 'verb' => 'GET'],
+		['name' => 'watch#watch_single_poll', 'url' => '/watch/{pollId}', 'verb' => 'GET'],
 
 		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
 		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],

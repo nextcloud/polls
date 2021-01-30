@@ -30,12 +30,12 @@ use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 
-
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
 
 class PollService {
@@ -51,6 +51,9 @@ class PollService {
 
 	/** @var VoteMapper */
 	private $voteMapper;
+
+	/** @var WatchService */
+	private $watchService;
 
 	/** @var Vote */
 	private $vote;
@@ -73,6 +76,7 @@ class PollService {
 		Poll $poll,
 		VoteMapper $voteMapper,
 		Vote $vote,
+		WatchService $watchService,
 		LogService $logService,
 		NotificationService $notificationService,
 		MailService $mailService,
@@ -82,6 +86,7 @@ class PollService {
 		$this->userId = $UserId;
 		$this->poll = $poll;
 		$this->voteMapper = $voteMapper;
+		$this->watchService = $watchService;
 		$this->vote = $vote;
 		$this->logService = $logService;
 		$this->notificationService = $notificationService;
@@ -206,6 +211,7 @@ class PollService {
 		$this->poll->setImportant(0);
 		$this->poll = $this->pollMapper->insert($this->poll);
 
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_ADDPOLL);
 
 		return $this->poll;
@@ -234,6 +240,7 @@ class PollService {
 		$this->poll->deserializeArray($poll);
 
 		$this->pollMapper->update($this->poll);
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_UPDATEPOLL);
 
 		return $this->poll;
@@ -256,6 +263,7 @@ class PollService {
 		}
 
 		$this->poll = $this->pollMapper->update($this->poll);
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_DELETEPOLL);
 
 		if ($this->userId !== $this->poll->getOwner()) {
@@ -283,6 +291,7 @@ class PollService {
 		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_DELETE);
 
 		$this->pollMapper->delete($this->poll);
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 
 		if ($this->userId !== $this->poll->getOwner()) {
 			// send notification to the original owner
@@ -327,7 +336,9 @@ class PollService {
 		$this->poll->setAdminAccess($origin->getAdminAccess());
 		$this->poll->setImportant($origin->getImportant());
 
-		return $this->pollMapper->insert($this->poll);
+		$this->poll = $this->pollMapper->insert($this->poll);
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
+		return $this->poll;
 	}
 
 	/**
