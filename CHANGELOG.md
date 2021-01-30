@@ -57,6 +57,9 @@ All notable changes to this project will be documented in this file.
  - [fix] #1183 - Avoid concurrent long term user searches with a big user base
  - [fix] #1181 - Speed up poll overview, by avoiding unnecessary loading of polls, the user is not allowed to see
 
+## [1.6.3] - 2020-11-23
+  - [fix] #1252 External user is not listed in admin's shares list
+
 ## [1.6.2] - 2020-11-19
  - [fix] Subscription was missing for logged in users
 
