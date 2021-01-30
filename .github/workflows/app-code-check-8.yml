@@ -16,8 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['7.4']
-        server-versions: ['master', 'stable18', 'stable19', 'stable20']
+        php-versions: ['8.0']
+        server-versions: ['master']
 
     name: AppCode check php${{ matrix.php-versions }}-${{ matrix.server-versions }}
     steps:
