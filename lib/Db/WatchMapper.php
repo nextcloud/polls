@@ -39,22 +39,6 @@ class WatchMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Watch[]
 	 */
-	public function findForPollId(int $pollId): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId))
-		   );
-
-		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Watch[]
-	 */
 	public function findUpdatesForPollId(int $pollId, int $offset): array {
 		$qb = $this->db->getQueryBuilder();
 
@@ -65,22 +49,6 @@ class WatchMapper extends QBMapper {
 		   )
 		   ->andWhere(
 			   $qb->expr()->gt('updated', $qb->createNamedParameter($offset))
-		   );
-
-		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Watch[]
-	 */
-	public function findForTable(int $table): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-			   $qb->expr()->eq('table', $qb->createNamedParameter($table))
 		   );
 
 		return $this->findEntities($qb);

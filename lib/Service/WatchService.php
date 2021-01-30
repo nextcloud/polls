@@ -36,9 +36,6 @@ class WatchService {
 	/** @var Watch */
 	private $watch;
 
-	/** @var String */
-	private $userId;
-
 	public function __construct(
 		WatchMapper $watchMapper
 	) {
@@ -48,31 +45,9 @@ class WatchService {
 	/**
 	 * @return Watch[]
 	 */
-	public function listForPollId(int $pollId): array {
-		try {
-			$this->watch = $this->watchMapper->findForPollId($pollId);
-		} catch (DoesNotExistException $e) {
-			return [];
-		}
-	}
-
-	/**
-	 * @return Watch[]
-	 */
 	public function getUpdates(int $pollId, int $offset): array {
 		try {
 			return $this->watchMapper->findUpdatesForPollId($pollId, $offset);
-		} catch (DoesNotExistException $e) {
-			return [];
-		}
-	}
-
-	/**
-	 * @return Watch[]
-	 */
-	public function listForTable(string $table): array {
-		try {
-			$this->watch = $this->watchMapper->findForTable($table);
 		} catch (DoesNotExistException $e) {
 			return [];
 		}

@@ -30,6 +30,8 @@ use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Service\WatchService;
 
 class WatchController extends Controller {
+
+	/** @var WatchService */
 	private $watchService;
 
 	use ResponseHandle;
@@ -44,18 +46,7 @@ class WatchController extends Controller {
 	}
 
 	/**
-	 * Read all preferences
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function watchPolls($pollId): DataResponse {
-		$start = time();
-		$timeout = 30;
-		$updates = $this->watchService->getUpdates($pollId, $start);
-	}
-
-	/**
-	 * Read all preferences
+	 * Watch poll for updates
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
@@ -63,7 +54,6 @@ class WatchController extends Controller {
 		return $this->responseLong(function () use ($pollId, $offset) {
 			$start = time();
 			$timeout = 30;
-			$updates = [];
 			while (empty($updates) && time() <= $start + $timeout) {
 				sleep(1);
 				$updates = $this->watchService->getUpdates($pollId, $offset ? $offset : $start);
