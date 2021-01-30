@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.4] - 2021-01-30
+ - [fix] - linebreaks in description were ignored
+
 ## [1.7.3 - RC1] - 2021-01-27
  - [fix] #1355 - fix migration
  - [fix] #1358 - show closed polls in the relavant list upntil four days after closing date
