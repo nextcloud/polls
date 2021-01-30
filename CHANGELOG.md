@@ -10,8 +10,11 @@ All notable changes to this project will be documented in this file.
  - Limit number of participants per option
  - Limit number of votes per participant
  - Combine registration dialogs into one dialog for public polls
- - Show closed polls in the relevant list upntil four days after closing date
+ - Show closed polls in the relevant list until four days after closing date
  - Changed display of expiration timespan in polls overview
+ - Support dark mode and dark theme
+ - Compatible with Nextcloud 21
+ - Drop support for Nextcloud before 19
 
 ### Bugfixes since 1.6.x
  - Linebreaks in description were ignored
@@ -23,7 +26,7 @@ All notable changes to this project will be documented in this file.
  See also https://github.com/nextcloud/polls/milestone/31?closed=1
 
 ## [1.7.3 - RC1] - 2021-01-27
- - [enhancement] #1358 - show closed polls in the relevant list upntil four days after closing date
+ - [enhancement] #1358 - show closed polls in the relevant list until four days after closing date
  - [enhancement] #1358 - add warning class to hints in the configuration
  - [fix] #1355 - fix migration
  - [fix] #1358 - detect conflicts after vote click, if limits are set and more than one user is voting
@@ -33,9 +36,9 @@ All notable changes to this project will be documented in this file.
  - [dependencies] fix calendar popover (@nextcloud/vue@3.5.4)
 
 ## [1.7.2 - beta3] - 2021-01-17
+ - [enhancement] #1338 - Support dark mode and dark theme
  - [fix] #1346 - user search broken
  - [fix] #1344 - prevent commenting, when entering public poll without registration  
- - [fix] #1338 - Support dark mode and dark theme
 
 ## [1.7.1 - beta2] - 2021-01-12
  - [fix] #1325 - There are no spaces in the column name  
