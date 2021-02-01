@@ -148,6 +148,8 @@ OC.L10N.register(
     "All users" : "Alle gebruikers",
     "Only invited users" : "Alleen uitgenodigde gebruikers",
     "never" : "nooit",
+    "Beta - watch for updated polls in realtime" : "Beta - bekijk in real-time bijgewerkte peilingen",
+    "All changes to the current poll, done by other users, will be recognized in realtime." : "Alle wijzigingen aan de huidige peiling, door andere gebruikers, worden in real-time herkend.",
     "Try experimental styles" : "Probeer experimentele stijlen",
     "Some experimental UI variants. Changes the background color of the main area." : "Enkele experimentele gebruikersinterface varianten. Wijzigt de achtergrondkleur van het hoofdgebied.",
     "Use background image" : "Gebruik achtergrondafbeelding",

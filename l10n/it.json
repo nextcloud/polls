@@ -146,6 +146,8 @@
     "All users" : "Tutti gli utenti",
     "Only invited users" : "Solo gli utenti invitati",
     "never" : "mai",
+    "Beta - watch for updated polls in realtime" : "Beta - controlla sondaggi aggiornati in tempo reale",
+    "All changes to the current poll, done by other users, will be recognized in realtime." : "Tutte le modifiche al sondaggio attuale, fatte da altri utenti, saranno riconosciute in tempo reale.",
     "Try experimental styles" : "Prova gli stili sperimentali",
     "Some experimental UI variants. Changes the background color of the main area." : "Alcune varianti sperimentali dell'interfaccia utente. Cambia il colore di sfondo dell'area principale.",
     "Use background image" : "Usa immagini di sfondo",

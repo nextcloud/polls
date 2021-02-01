@@ -148,6 +148,8 @@ OC.L10N.register(
     "All users" : "Todos os usuarios",
     "Only invited users" : "Só usuarios convidados",
     "never" : "nunca",
+    "Beta - watch for updated polls in realtime" : "Beta: mire as enquisas actualizadas en tempo real",
+    "All changes to the current poll, done by other users, will be recognized in realtime." : "Todos os cambios na enquisa actual, feitos por outros usuarios, recoñeceranse en tempo real.",
     "Try experimental styles" : "Probar os estilos experimentais",
     "Some experimental UI variants. Changes the background color of the main area." : "Algunhas variantes experimentais da IU. Cambia a cor de fondo da área principal.",
     "Use background image" : "Usar a imaxe de fondo",

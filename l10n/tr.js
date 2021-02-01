@@ -148,6 +148,8 @@ OC.L10N.register(
     "All users" : "Tüm kullanıcılar",
     "Only invited users" : "Yalnız çağrılmış kullanıcılar",
     "never" : "asla",
+    "Beta - watch for updated polls in realtime" : "Deneme - Anket güncellemelerini gerçek zamanlı olarak görün",
+    "All changes to the current poll, done by other users, will be recognized in realtime." : "Geçerli ankette diğer kullanıcılar tarafından yapılan tüm değişiklikler gerçek zamanlı olarak görüntülenir.",
     "Try experimental styles" : "Deneysel biçemler kullanılsın",
     "Some experimental UI variants. Changes the background color of the main area." : "Bazı deneysel kullanıcı arayüzü türleri. Ana bölgenin arka plan rengini değiştirir. ",
     "Use background image" : "Arka plan görseli kullanılsın",
