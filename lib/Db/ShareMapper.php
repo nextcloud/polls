@@ -163,7 +163,7 @@ class ShareMapper extends QBMapper {
 					$row['user_id']
 				];
 
-				if (in_array($currentRecord, $entries2Keep)) {
+				if (in_array($currentRecord, $entries2Keep) || $row['user_id'] === null || $row['type'] === '') {
 					$delete->setParameter('id', $row['id']);
 					$delete->execute();
 				} else {
