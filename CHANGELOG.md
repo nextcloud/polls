@@ -1,9 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.7.5] - tbd
+## [1.7.5 - bugfix release] - 2021-02-01
   - [fix] #1374 - fix uniqueContraintsException when shifting dates (backport)
-  - [fix] #1380 - remove invalid shares before migration
+  - [fix] #1380 - remove invalid shares before migration (backport)
 
 ## [1.7.4] - 2021-01-30
 ### new Features since 1.6.x
