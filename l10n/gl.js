@@ -174,7 +174,7 @@ OC.L10N.register(
     "Send invitation mail" : "Enviar o correo de convite",
     "Copy link to clipboard" : "Copiar a ligazón no portapapeis",
     "Remove share" : "Retirar a compartición",
-    "Invitation sent to {name}" : "Enviouse o convite a  {name}",
+    "Invitation sent to {name}" : "Enviouse o convite a {name}",
     "Error sending invitation to {name}" : "Produciuse un erro ao enviar o convite a {name}",
     "Public shares" : "Comparticións públicas",
     "Add a public link" : "Engadir unha ligazón pública",
