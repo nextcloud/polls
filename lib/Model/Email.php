@@ -36,15 +36,10 @@ class Email extends UserGroupClass {
 		$this->description = \OC::$server->getL10N('polls')->t('External Email');
 		$this->icon = self::ICON;
 		$this->emailAddress = $id;
-		if ($displayName) {
-			$this->displayName = $displayName;
-		}
+		$this->displayName = $displayName ? $displayName : $this->displayname;
 	}
 
 	public function getDisplayName(): string {
-		if (!$this->displayName) {
-			return $this->id;
-		}
-		return $this->displayName;
+		return $this->displayName ? $this->displayName : $this->id;
 	}
 }

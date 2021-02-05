@@ -159,18 +159,18 @@ class Poll extends Entity implements JsonSerializable {
 	 * @return static
 	 */
 	public function deserializeArray(array $array): self {
-		$this->setTitle(isset($array['title']) ? $array['title'] : $this->getTitle());
-		$this->setDescription(isset($array['description']) ? $array['description'] : $this->getDescription());
-		$this->setAccess(isset($array['access']) ? $array['access'] : $this->getAccess());
-		$this->setExpire(isset($array['expire']) ? $array['expire'] : $this->getExpire());
-		$this->setAnonymous(isset($array['anonymous']) ? +$array['anonymous'] : $this->getAnonymous());
-		$this->setAllowMaybe(isset($array['allowMaybe']) ? +$array['allowMaybe'] : $this->getAllowMaybe());
-		$this->setVoteLimit(isset($array['voteLimit']) ? $array['voteLimit'] : $this->getVoteLimit());
-		$this->setOptionLimit(isset($array['optionLimit']) ? $array['optionLimit'] : $this->getOptionLimit());
-		$this->setShowResults(isset($array['showResults']) ? $array['showResults'] : $this->getShowResults());
-		$this->setDeleted(isset($array['deleted']) ? $array['deleted'] : $this->getDeleted());
-		$this->setAdminAccess(isset($array['adminAccess']) ? +$array['adminAccess'] : $this->getAdminAccess());
-		$this->setImportant(isset($array['important']) ? +$array['important'] : $this->getImportant());
+		$this->setTitle($array['title'] ?? $this->getTitle());
+		$this->setDescription($array['description'] ?? $this->getDescription());
+		$this->setAccess($array['access'] ?? $this->getAccess());
+		$this->setExpire($array['expire'] ?? $this->getExpire());
+		$this->setAnonymous($array['anonymous'] ?? $this->getAnonymous());
+		$this->setAllowMaybe($array['allowMaybe'] ?? $this->getAllowMaybe());
+		$this->setVoteLimit($array['voteLimit'] ?? $this->getVoteLimit());
+		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());
+		$this->setShowResults($array['showResults'] ?? $this->getShowResults());
+		$this->setDeleted($array['deleted'] ?? $this->getDeleted());
+		$this->setAdminAccess($array['adminAccess'] ?? $this->getAdminAccess());
+		$this->setImportant($array['important'] ?? $this->getImportant());
 		return $this;
 	}
 
@@ -182,11 +182,9 @@ class Poll extends Entity implements JsonSerializable {
 	}
 
 	private function getDisplayName(): string {
-		if (\OC::$server->getUserManager()->get($this->owner) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
-		} else {
-			return $this->owner;
-		}
+		return \OC::$server->getUserManager()->get($this->owner) instanceof IUser
+			? \OC::$server->getUserManager()->get($this->owner)->getDisplayName()
+			: $this->owner;
 	}
 
 	public function getOwnerUserObject(): User {
