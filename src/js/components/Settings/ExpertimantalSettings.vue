@@ -96,7 +96,7 @@ export default {
 		// Add bindings
 		realTimePolling: {
 			get() {
-				return this.settings.user.realTimePolling
+				return this.settings.realTimePolling
 			},
 			set(value) {
 				this.writeValue({ realTimePolling: value })
