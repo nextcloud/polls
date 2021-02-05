@@ -168,12 +168,7 @@ class OptionService {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 
-		if ($this->option->getConfirmed()) {
-			$this->option->setConfirmed(0);
-		} else {
-			$this->option->setConfirmed(time());
-		}
-
+		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
 		$this->option = $this->optionMapper->update($this->option);
 		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 		return $this->option;
@@ -354,9 +349,7 @@ class OptionService {
 	private function getHighestOrder(int $pollId): int {
 		$highestOrder = 0;
 		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
-			if ($option->getOrder() > $highestOrder) {
-				$highestOrder = $option->getOrder();
-			}
+			$highestOrder = ($option->getOrder() > $highestOrder) ? $option->getOrder() : $highestOrder;
 		}
 		return $highestOrder;
 	}

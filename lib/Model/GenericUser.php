@@ -43,8 +43,8 @@ class GenericUser extends UserGroupClass {
 			$this->icon = self::ICON_PUBLIC;
 			$this->description = \OC::$server->getL10N('polls')->t('Public link');
 		} else {
-			$this->description = \OC::$server->getL10N('polls')->t('External user');
 			$this->icon = self::ICON_DEFAULT;
+			$this->description = \OC::$server->getL10N('polls')->t('External user');
 		}
 	}
 }

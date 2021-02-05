@@ -46,11 +46,7 @@ class CalendarEvent implements \JsonSerializable {
 	}
 
 	public function getAllDay() {
-		if ($this->getEnd() - $this->getStart() === 86400) {
-			return $this->event['DTSTART'][0]->format('Y-m-d');
-		} else {
-			return '';
-		}
+		return ($this->getEnd() - $this->getStart() === 86400) ? $this->event['DTSTART'][0]->format('Y-m-d') : '';
 	}
 
 	public function getCalendarName(): ?string {
@@ -78,43 +74,23 @@ class CalendarEvent implements \JsonSerializable {
 	}
 
 	public function getDescription() {
-		if (isset($this->event['DESCRIPTION'][0])) {
-			return $this->event['DESCRIPTION'][0];
-		} else {
-			return '';
-		}
+		return $this->event['DESCRIPTION'][0] ?? '';
 	}
 
 	public function getLocation() {
-		if (isset($this->event['LOCATION'][0])) {
-			return $this->event['LOCATION'][0];
-		} else {
-			return '';
-		}
+		return $this->event['LOCATION'][0] ?? '';
 	}
 
 	public function getStart() {
-		if (isset($this->event['DTSTART'][0])) {
-			return $this->event['DTSTART'][0]->getTimestamp();
-		} else {
-			return 0;
-		}
+		return isset($this->event['DTSTART'][0]) ? $this->event['DTSTART'][0]->getTimestamp() : 0;
 	}
 
 	public function getEnd() {
-		if (isset($this->event['DTEND'][0])) {
-			return $this->event['DTEND'][0]->getTimestamp();
-		} else {
-			return 0;
-		}
+		return isset($this->event['DTEND'][0])? $this->event['DTEND'][0]->getTimestamp() : 0;
 	}
 
 	public function getStatus() {
-		if (isset($this->event['STATUS'][0])) {
-			return $this->event['STATUS'][0];
-		} else {
-			return '';
-		}
+		return $this->event['STATUS'][0] ?? '';
 	}
 
 	public function getCalDav(): array {

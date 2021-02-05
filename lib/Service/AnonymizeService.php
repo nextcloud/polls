@@ -62,17 +62,11 @@ class AnonymizeService {
 	private function anonymize(array $array): array {
 		// get mapping for the complete poll
 		foreach ($array as &$element) {
-			// skip current user
-			if ($element->getUserId() !== $this->userId) {
-				// Check, if searched user name is in mapping array
-				if (isset($this->anonList[$element->getUserId()])) {
-					//replace original user name
-					$element->setUserId($this->anonList[$element->getUserId()]);
-				} else {
-					// User name is not in mapping array, set static text
-					$element->setUserId('Unknown user');
-				}
+			if ($element->getUserId() === $this->userId) {
+				// skip current user
+				continue;
 			}
+			$element->setUserId($this->anonList[$element->getUserId()] ?? 'Unknown user');
 		}
 
 		return $array;

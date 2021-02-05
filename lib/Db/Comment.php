@@ -62,35 +62,29 @@ class Comment extends Entity implements JsonSerializable {
 	protected $comment;
 
 	public function jsonSerialize() {
-
-		// too lazy for a migration
-		// use timestamp if set,
-		// otherwise use dt and convert to timestamp
-
-		if (intval($this->timestamp) > 0) {
-			$timestamp = $this->timestamp;
-		} else {
-			$timestamp = strtotime($this->dt);
-		}
-
 		return [
 			'id' => intval($this->id),
 			'pollId' => intval($this->pollId),
 			'userId' => $this->userId,
 			'dt' => $this->dt,
-			'timestamp' => intval($timestamp),
+			'timestamp' => $this->getTimestamp(),
 			'comment' => $this->comment,
 			'isNoUser' => $this->getIsNoUser(),
 			'displayName' => $this->getDisplayName()
 		];
 	}
 
-	private function getDisplayName(): string {
-		if (\OC::$server->getUserManager()->get($this->userId) instanceof IUser) {
-			return \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
-		} else {
-			return $this->userId;
-		}
+	public function getTimestamp(): int {
+		// too lazy for a migration
+		// use timestamp if set,
+		// otherwise use dt and convert to timestamp
+		return intval($this->timestamp ? $this->timestamp : strtotime($this->dt));
+	}
+
+	public function getDisplayName(): string {
+		return \OC::$server->getUserManager()->get($this->userId) instanceof IUser
+			? \OC::$server->getUserManager()->get($this->userId)->getDisplayName()
+			: $this->userId;
 	}
 
 	public function getIsNoUser(): bool {

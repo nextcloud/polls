@@ -50,13 +50,14 @@ class WatchController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function watchSinglePoll(int $pollId, ?int $offset = 0): DataResponse {
+	public function watchSinglePoll(int $pollId, ?int $offset): DataResponse {
 		return $this->responseLong(function () use ($pollId, $offset) {
 			$start = time();
 			$timeout = 30;
+			$offset = $offset ?? $start;
 			while (empty($updates) && time() <= $start + $timeout) {
 				sleep(1);
-				$updates = $this->watchService->getUpdates($pollId, $offset ? $offset : $start);
+				$updates = $this->watchService->getUpdates($pollId, $offset);
 			}
 			if (empty($updates)) {
 				throw new NoUpdatesException;
