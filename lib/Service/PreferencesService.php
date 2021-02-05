@@ -52,6 +52,7 @@ class PreferencesService {
 			if ($UserId) {
 				$this->preferences = new Preferences();
 				$this->preferences->setUserId($this->userId);
+				$this->preferences->setPreferences('');
 				$this->preferences = $this->preferencesMapper->insert($this->preferences);
 			} else {
 				throw new NotAuthorizedException;
@@ -72,7 +73,7 @@ class PreferencesService {
 	 *
 	 * @return Preferences
 	 */
-	public function write($settings): Preferences {
+	public function write(string $settings = ''): Preferences {
 		if (!$this->userId) {
 			throw new NotAuthorizedException;
 		}
