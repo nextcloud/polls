@@ -59,7 +59,6 @@ class Version0107Date20210121220707 extends SimpleMigrationStep {
 			if ($table->hasColumn('message')) {
 				$table->dropColumn('message');
 			}
-
 		}
 		return $schema;
 	}
