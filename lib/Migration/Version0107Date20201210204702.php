@@ -51,10 +51,6 @@ class Version0107Date20201210204702 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => 0
 			]);
-
-			if (!$table->hasIndex('UNIQ_options')) {
-				$table->addUniqueIndex(['poll_id', 'poll_option_text', 'timestamp'], 'UNIQ_options');
-			}
 		}
 		return $schema;
 	}

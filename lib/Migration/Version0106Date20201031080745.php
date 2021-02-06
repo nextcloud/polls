@@ -73,11 +73,6 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 			$table->changeColumn('preferences', [
 				'notnull' => false
 			]);
-			try {
-				$table->addUniqueIndex(['user_id']);
-			} catch (\Exception $e) {
-				//catch silently, index is already present
-			}
 		}
 
 		return $schema;
