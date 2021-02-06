@@ -29,9 +29,13 @@
 		<job>OCA\Polls\Cron\NotificationCron</job>
 	</background-jobs>
 	<repair-steps>
-        <pre-migration>
-            <step>OCA\Polls\Migration\DeleteDuplicates</step>
+		<pre-migration>
+            <step>OCA\Polls\Migration\RemoveIndices</step>
+			<step>OCA\Polls\Migration\DeleteDuplicates</step>
         </pre-migration>
+        <post-migration>
+            <step>OCA\Polls\Migration\CreateIndices</step>
+        </post-migration>
     </repair-steps>
 	<navigations>
         <navigation>
