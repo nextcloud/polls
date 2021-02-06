@@ -1,10 +1,10 @@
 <?php
 /**
-* @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
-*
-* @author René Gieling <github@dartcafe.de>
-*
-* @license GNU AGPL version 3 or any later version
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+ *
+ * @author René Gieling <github@dartcafe.de>
+ *
+ * @license GNU AGPL version 3 or any later version
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -68,5 +68,4 @@ class CreateIndices implements IRepairStep {
 			}
 		}
 	}
-
 }
