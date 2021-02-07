@@ -181,7 +181,7 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_DELETE:
 				return $this->getIsOwner() || $this->hasAdminAccess() || $this->getIsAdmin();
 			case self::PERMISSION_COMMENT:
-				return $this->share->getType() !== Share::TYPE_PUBLIC;
+				return $this->share->getType() !== Share::TYPE_PUBLIC && $this->poll->getallowComment();
 			case self::PERMISSION_SUBSCRIBE:
 				return $this->hasEmail();
 			case self::PERMISSION_VOTE:

@@ -52,6 +52,8 @@ use OCA\Polls\Model\User;
  * @method void setAnonymous(integer $value)
  * @method int getFullAnonymous()
  * @method void setFullAnonymous(integer $value)
+ * @method int getallowComment()
+ * @method void setallowComment(integer $value)
  * @method int getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
  * @method string getOptions()
@@ -132,6 +134,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $important*/
 	protected $important;
 
+	/** @var int $important*/
+	protected $allowComment;
+
 	public function jsonSerialize() {
 		return [
 			'id' => intval($this->id),
@@ -144,6 +149,9 @@ class Poll extends Entity implements JsonSerializable {
 			'deleted' => intval($this->deleted),
 			'access' => $this->access,
 			'anonymous' => intval($this->anonymous),
+			'allowComment' => intval($this->allowComment),
+			// 'allowComment' => 1,
+			// 'allowComment' => 0,
 			'allowMaybe' => intval($this->allowMaybe),
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
@@ -164,6 +172,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setAccess($array['access'] ?? $this->getAccess());
 		$this->setExpire($array['expire'] ?? $this->getExpire());
 		$this->setAnonymous($array['anonymous'] ?? $this->getAnonymous());
+		$this->setallowComment($array['allowComment'] ?? $this->getallowComment());
 		$this->setAllowMaybe($array['allowMaybe'] ?? $this->getAllowMaybe());
 		$this->setVoteLimit($array['voteLimit'] ?? $this->getVoteLimit());
 		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());

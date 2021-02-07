@@ -37,6 +37,11 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
+			<input id="allowComment"
+				v-model="pollAllowComment"
+				type="checkbox"
+				class="checkbox">
+			<label for="allowComment"> {{ t('polls', 'Allow Comments') }}</label>
 			<input id="allowMaybe"
 				v-model="pollAllowMaybe"
 				type="checkbox"
@@ -339,6 +344,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ adminAccess: +value })
+			},
+		},
+
+		pollAllowComment: {
+			get() {
+				return this.poll.allowComment
+			},
+			set(value) {
+				this.writeValue({ allowComment: +value })
 			},
 		},
 
