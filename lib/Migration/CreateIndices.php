@@ -49,6 +49,7 @@ class CreateIndices implements IRepairStep {
 		$this->createIndex('polls_share', 'UNIQ_shares', ['poll_id', 'user_id'], true);
 		$this->createIndex('polls_votes', 'UNIQ_votes', ['poll_id', 'user_id', 'vote_option_text'], true);
 		$this->createIndex('polls_preferences', 'UNIQ_preferences', ['user_id'], true);
+		$this->createIndex('polls_watch', 'UNIQ_watch', ['poll_id', 'table'], true);
 	}
 
 	/**

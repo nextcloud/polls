@@ -67,13 +67,8 @@ class Version0108Date20210127135802 extends SimpleMigrationStep {
 				'default' => 0
 			]);
 			$table->setPrimaryKey(['id']);
-		} else {
-			$table = $schema->getTable('polls_watch');
 		}
 
-		if (!$table->hasIndex('UNIQ_watch')) {
-			$table->addUniqueIndex(['poll_id', 'table'], 'UNIQ_watch');
-		}
 		return $schema;
 	}
 }
