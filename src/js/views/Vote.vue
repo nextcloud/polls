@@ -34,7 +34,7 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton icon="icon-polls-sidebar-toggle" @click="toggleSideBar()">
+				<ActionButton v-if="acl.allowEdit || poll.allowComment" icon="icon-polls-sidebar-toggle" @click="toggleSideBar()">
 					{{ t('polls', 'Toggle Sidebar') }}
 				</ActionButton>
 			</Actions>
