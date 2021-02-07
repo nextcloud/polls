@@ -105,9 +105,13 @@ class CommentService {
 		$this->comment = $this->commentMapper->find($commentId);
 
 		if ($token) {
-			$this->acl->setToken($token)->validateUserId($this->comment->getUserId());
+			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($this->comment->getPollId())->validateUserId($this->comment->getUserId());
+			$this->acl->setPollId($this->comment->getPollId());
+		}
+
+		if (!$this->acl->getIsOwner()) {
+			$this->acl->validateUserId($this->comment->getUserId());
 		}
 
 		$this->commentMapper->delete($this->comment);

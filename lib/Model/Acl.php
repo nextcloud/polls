@@ -144,6 +144,13 @@ class Acl implements JsonSerializable {
 		}
 	}
 
+	/**
+	 * getIsOwner - Is user owner of the poll?
+	 */
+	public function getIsOwner(): bool {
+		return ($this->getLoggedIn() && $this->poll->getOwner() === $this->getUserId());
+	}
+
 	private function getDisplayName(): string {
 		return $this->getLoggedIn() ? $this->userManager->get($this->getUserId())->getDisplayName() : $this->share->getDisplayName();
 	}
@@ -229,13 +236,6 @@ class Acl implements JsonSerializable {
 	 */
 	private function getLoggedIn(): bool {
 		return \OC::$server->getUserSession()->isLoggedIn();
-	}
-
-	/**
-	 * getIsOwner - Is user owner of the poll?
-	 */
-	private function getIsOwner(): bool {
-		return ($this->getLoggedIn() && $this->poll->getOwner() === $this->getUserId());
 	}
 
 	/**
