@@ -23,16 +23,16 @@
 
 namespace OCA\Polls\Migration;
 
-use OC\DB\Connection;
 use OC\DB\SchemaWrapper;
+use OCP\IDBConnection;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 class RemoveIndices implements IRepairStep {
-	/** @var Connection */
+	/** @var IDBConnection */
 	private $connection;
 
-	public function __construct(Connection $connection) {
+	public function __construct(IDBConnection $connection) {
 		$this->connection = $connection;
 	}
 
