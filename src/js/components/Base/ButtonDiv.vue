@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" :class="['button', icon, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
+	<Component :is="tag" :class="[buttonStyle, iconClass, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
 		{{ title }}
 	</Component>
 </template>
@@ -46,11 +46,31 @@ export default {
 			type: String,
 			default: 'button',
 		},
+		submit: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
+		iconClass() {
+			if (this.submit) {
+				return 'icon-confirm'
+			} else {
+				return this.icon
+			}
+		},
+
 		withIcon() {
-			return Boolean(this.icon)
+			return Boolean(this.icon && !this.submit)
+		},
+
+		buttonStyle() {
+			if (this.submit) {
+				return 'submit'
+			} else {
+				return 'button'
+			}
 		},
 	},
 }
@@ -67,6 +87,17 @@ export default {
 			background-position: 12px center;
 		}
 
+	}
+
+	.submit {
+		flex: 0;
+		width: 30px;
+		max-width: 30px;
+		min-width: 30px;
+		background-color: transparent;
+		border: none;
+		opacity: 0.3;
+		cursor: pointer;
 	}
 
 </style>
