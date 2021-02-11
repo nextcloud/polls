@@ -32,22 +32,7 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll type')" icon-class="icon-checkmark">
-			<input id="datePoll"
-				v-model="type"
-				value="datePoll"
-				type="radio"
-				class="radio">
-			<label for="datePoll">
-				{{ t('polls', 'Date poll') }}
-			</label>
-			<input id="textPoll"
-				v-model="type"
-				value="textPoll"
-				type="radio"
-				class="radio">
-			<label for="textPoll">
-				{{ t('polls', 'Text poll') }}
-			</label>
+			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
 		</ConfigBox>
 
 		<div class="create-buttons">
@@ -66,19 +51,25 @@ import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import ConfigBox from '../Base/ConfigBox'
+import RadioGroupDiv from '../Base/RadioGroupDiv'
 
 export default {
 	name: 'CreateDlg',
 
 	components: {
 		ConfigBox,
+		RadioGroupDiv,
 	},
 
 	data() {
 		return {
 			id: 0,
-			type: 'datePoll',
+			pollType: 'datePoll',
 			title: '',
+			pollTypeOptions: [
+				{ value: 'datePoll', label: t('polls', 'Date poll') },
+				{ value: 'textPoll', label: t('polls', 'Text poll') },
+			],
 		}
 	},
 
@@ -95,16 +86,16 @@ export default {
 	methods: {
 		cancel() {
 			this.title = ''
-			this.type = 'datePoll'
+			this.pollType = 'datePoll'
 			this.$emit('close-create')
 		},
 
 		confirm() {
-			this.$store.dispatch('poll/add', { title: this.title, type: this.type })
+			this.$store.dispatch('poll/add', { title: this.title, type: this.pollType })
 				.then((response) => {
 					emit('update-polls')
 					this.cancel()
-					showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.id }))
+					showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.title }))
 					this.$router.push({ name: 'vote', params: { id: response.data.id } })
 				})
 				.catch(() => {
@@ -123,15 +114,9 @@ export default {
 
 <style lang="css" scoped>
 .create-dialog {
-	/* display: flex; */
-	/* flex-direction: column; */
 	background-color: var(--color-main-background);
 	padding: 8px 20px;
 }
-
-/* #pollTitle {
-	width: 100%;
-} */
 
 .create-buttons {
 	display: flex;

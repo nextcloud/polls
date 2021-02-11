@@ -22,23 +22,33 @@
 
 <template lang="html">
 	<div class="subscription">
-		<input id="subscribe" v-model="subscribe" type="checkbox"
-			class="checkbox">
-		<label v-if="emailAddress" for="subscribe">{{ t('polls', 'Receive notification email on activity to {emailAddress}', {emailAddress: emailAddress}) }}</label>
-		<label v-else for="subscribe">{{ t('polls', 'Receive notification email on activity') }}</label>
+		<CheckBoxDiv v-model="subscribe" :label="label" />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import CheckBoxDiv from '../Base/CheckBoxDiv'
 export default {
 	name: 'Subscription',
+
+	components: {
+		CheckBoxDiv,
+	},
 
 	computed: {
 		...mapState({
 			subscribed: state => state.subscription.subscribed,
 			emailAddress: state => state.share.emailAddress,
 		}),
+
+		label() {
+			if (this.emailAddress) {
+				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.emailAddress })
+			} else {
+				return t('polls', 'Receive notification email on activity')
+			}
+		},
 
 		subscribe: {
 			get() {
