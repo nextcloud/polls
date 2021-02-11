@@ -23,18 +23,14 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<input id="realTimePolling" v-model="realTimePolling"
-				type="checkbox" class="checkbox">
-			<label for="realTimePolling">{{ t('polls', 'Beta - watch for updated polls in realtime') }}</label>
+			<CheckBoxDiv v-model="realTimePolling" :label="t('polls', 'Beta - watch for updated polls in realtime')" />
 			<div class="settings_details">
 				{{ t('polls', 'All changes to the current poll, done by other users, will be recognized in realtime.') }}
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<input id="experimental" v-model="experimental"
-				type="checkbox" class="checkbox">
-			<label for="experimental">{{ t('polls', 'Try experimental styles') }}</label>
+			<CheckBoxDiv v-model="experimental" :label="t('polls', 'Try experimental styles')" />
 			<div class="settings_details">
 				{{ t('polls', 'Some experimental UI variants. Changes the background color of the main area.') }}
 			</div>
@@ -42,9 +38,7 @@
 
 		<div v-if="experimental">
 			<div class="user_settings">
-				<input id="useImage" v-model="useImage"
-					type="checkbox" class="checkbox">
-				<label for="useImage">{{ t('polls', 'Use background image') }}</label>
+				<CheckBoxDiv v-model="useImage" :label="t('polls', 'Use background image')" />
 				<div class="settings_details">
 					{{ t('polls', 'Add a background image to the main area.') }}
 					<input v-if="useImage" v-model="imageUrl" type="text">
@@ -55,18 +49,14 @@
 			</div>
 
 			<div class="user_settings">
-				<input id="glassyNavigation" v-model="glassyNavigation"
-					type="checkbox" class="checkbox">
-				<label for="glassyNavigation">{{ t('polls', 'Glassy navigation') }}</label>
+				<CheckBoxDiv v-model="glassyNavigation" :label="t('polls', 'Glassy navigation')" />
 				<div class="settings_details">
 					{{ t('polls', 'Blurs the background of the navigation (Does not work with all browsers).') }}
 				</div>
 			</div>
 
 			<div class="user_settings">
-				<input id="glassySidebar" v-model="glassySidebar"
-					type="checkbox" class="checkbox">
-				<label for="glassySidebar">{{ t('polls', 'Glassy sidebar') }}</label>
+				<CheckBoxDiv v-model="glassySidebar" :label="t('polls', 'Glassy sidebar')" />
 				<div class="settings_details">
 					{{ t('polls', 'Blurs the background of the sidebar (Does not work with all browsers).') }}
 				</div>
@@ -78,9 +68,14 @@
 <script>
 
 import { mapState } from 'vuex'
+import CheckBoxDiv from '../Base/CheckBoxDiv'
 
 export default {
 	name: 'ExpertimantalSettings',
+
+	components: {
+		CheckBoxDiv,
+	},
 
 	props: {
 		show: {

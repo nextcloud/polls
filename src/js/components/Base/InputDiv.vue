@@ -21,52 +21,98 @@
   -->
 
 <template lang="html">
-	<div class="input-div">
+	<div :class="['input-div', { numeric: useNumModifiers }]">
+		<div v-if="useNumModifiers" class="modifyer substract icon icon-polls-minus" @click="$emit('substract')" />
 		<input ref="input"
 			:value="value"
 			:placeholder="placeholder"
 			class="input"
 			@keyup.enter="$emit('input', $event.target.value)">
-		<button class="submit icon-confirm"
-			@click="$emit('input', $refs.input.value)" />
+		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('input', $refs.input.value)" />
+		<div v-if="useNumModifiers" class="modifyer add icon icon-add" @click="$emit('add')" />
 	</div>
 </template>
 
 <script>
+
+import ButtonDiv from '../Base/ButtonDiv'
+
 export default {
 	name: 'InputDiv',
+
+	components: {
+		ButtonDiv,
+	},
+
 	props: {
 		value: {
-			type: String,
+			type: [String, Number],
 			required: true,
 		},
 		placeholder: {
 			type: String,
 			default: '',
 		},
+		useNumModifiers: {
+			type: Boolean,
+			default: false,
+		},
+		noSubmit: {
+			type: Boolean,
+			default: false,
+		},
 	},
 }
+
 </script>
 
 <style lang="scss" scoped>
 
 	.input-div {
+		position: relative;
 		display: flex;
 	}
 
-	.input {
-		flex: 1;
+	.input-div.numeric {
+		min-width: 100px;
+		width: 110px;
+		display: block;
+	}
+
+	.numeric input {
+		text-align: center;
+	}
+
+	input {
+		width: 100%;
 		&:empty:before {
 			color: grey;
 		}
 	}
 
-	.submit {
-		width: 30px;
-		background-color: transparent;
-		border: none;
-		opacity: 0.3;
+	.add {
+		right: 0;
+		border-left: solid 1px;
+		border-radius: 0 var(--border-radius) var(--border-radius) 0;
+	}
+
+	.substract {
+		left: 0;
+		border-right: solid 1px;
+		border-radius: var(--border-radius) 0 0 var(--border-radius);
+	}
+
+	.modifyer {
+		position: absolute;
+		top: 0;
+		height: 32px;
+		margin: 4px 1px;
+		padding: 0 14px;
+		border-color: var(--color-border-dark);
 		cursor: pointer;
+		&:hover {
+			background-color: var(--color-background-hover)
+		}
 	}
 
 </style>

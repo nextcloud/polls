@@ -23,40 +23,31 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<input id="calendarPeek" v-model="calendarPeek"
-				type="checkbox" class="checkbox">
-			<label for="calendarPeek">{{ t('polls', 'Use calendar lookup') }}</label>
+			<CheckBoxDiv v-model="calendarPeek" :label="t('polls', 'Use calendar lookup')" />
 			<div class="settings_details">
 				{{ t('polls', 'Check, if an option in a date poll is conflicting with or near an entry in your calendar.') }}
 				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
-					<input :id="'calendar_' + calendar.key"
-						v-model="calendar.selected"
-						type="checkbox"
-						class="checkbox"
-						@click="clickedCalendar(calendar)">
-					<label :for="'calendar_' + calendar.key" class="calendar-checkbox">
-						<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
-						<span>{{ calendar.name }}</span>
-					</label>
+					<CheckBoxDiv v-model="calendar.selected" :label="calendar.name"
+						@input="clickedCalendar(calendar)">
+						<template #before>
+							<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
+						</template>
+					</CheckBoxDiv>
 				</div>
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<input id="defaultViewTextPoll" v-model="defaultViewTextPoll"
-				type="checkbox" class="checkbox">
-			<label for="defaultViewTextPoll">{{ t('polls', 'Text polls default to list view') }}</label>
+			<CheckBoxDiv v-model="defaultViewTextPoll" :label="t('polls', 'Text polls default to list view')" />
 			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view.') }}
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<input id="defaultViewDatePoll" v-model="defaultViewDatePoll"
-				type="checkbox" class="checkbox">
-			<label for="defaultViewDatePoll">{{ t('polls', 'Date polls default to list view') }}</label>
+			<CheckBoxDiv v-model="defaultViewDatePoll" :label="t('polls', 'Date polls default to list view')" />
 			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.') }}
 			</div>
@@ -67,9 +58,14 @@
 <script>
 
 import { mapState } from 'vuex'
+import CheckBoxDiv from '../Base/CheckBoxDiv'
 
 export default {
 	name: 'FeatureSettings',
+
+	components: {
+		CheckBoxDiv,
+	},
 
 	props: {
 		show: {
