@@ -24,6 +24,7 @@
 	<div class="checkbox-div">
 		<input :id="id"
 			:checked="value"
+			:disabled="disabled"
 			type="checkbox"
 			class="checkbox"
 			@click="$emit('input', $event.target.checked)">
@@ -53,6 +54,10 @@ export default {
 		id: {
 			type: String,
 			default: () => 'cb-' + RandId(),
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
 		},
 	},
 }
