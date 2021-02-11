@@ -47,7 +47,7 @@ export default {
 	props: {
 		id: {
 			type: String,
-			default: 'id_' + RandId(),
+			default: () => 'rg-' + RandId(),
 		},
 		options: {
 			type: Array,
