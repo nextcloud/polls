@@ -18,6 +18,7 @@
 	--icon-polls-yes: url('../icons/yes-vote.svg');
 	--icon-polls-no: url('../icons/no-vote.svg');
 	--icon-polls-maybe: url('../icons/maybe-vote.svg');
+	--icon-polls-minus: url('../icons/minus.svg');
 	--icon-polls-handle: url('../icons/handle.svg');
 	--icon-polls-handle--fff: url('../icons/handle-fff.svg');
 	--icon-polls-mail: url('../icons/mail.svg');
@@ -63,6 +64,10 @@
 
 .icon-polls-move {
 	background-image: var(--icon-polls-move);
+}
+
+.icon-polls-minus {
+	background-image: var(--icon-polls-minus);
 }
 
 .icon-polls-clone {

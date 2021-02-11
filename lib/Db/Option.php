@@ -59,6 +59,7 @@ class Option extends Entity implements JsonSerializable {
 
 	/** @var int $confirmed */
 	protected $confirmed;
+	protected $duration;
 
 	public function jsonSerialize() {
 		if (intval($this->timestamp) > 0) {

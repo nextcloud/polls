@@ -48,6 +48,7 @@ class RemoveIndices implements IRepairStep {
 		$this->removeUniqueIndices('polls_votes');
 		$this->removeUniqueIndices('polls_preferences');
 		$this->removeUniqueIndices('polls_preferences');
+		$this->removeUniqueIndices('polls_watch');
 	}
 
 	/**

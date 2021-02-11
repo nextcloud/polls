@@ -37,63 +37,25 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
-			<input id="allowComment"
-				v-model="pollAllowComment"
-				type="checkbox"
-				class="checkbox">
-			<label for="allowComment"> {{ t('polls', 'Allow Comments') }}</label>
-			<input id="allowMaybe"
-				v-model="pollAllowMaybe"
-				type="checkbox"
-				class="checkbox">
-			<label for="allowMaybe"> {{ t('polls', 'Allow "maybe" vote') }}</label>
+      <CheckBoxDiv v-model="allowComment" :label="t('polls', 'Allow Comments')" />
+      <CheckBoxDiv v-model="pollAllowMaybe" :label="t('polls', 'Allow \'maybe\' vote')" />
+
 			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
-				{{ t('polls', 'If vote limits are used, "maybe" shouldn\'t be allowed.') }}
-			</div>
-			<input id="anonymous"
-				v-model="pollAnonymous"
-				type="checkbox"
-				class="checkbox">
-			<label for="anonymous"> {{ t('polls', 'Anonymous poll') }}</label>
-
-			<input id="useVoteLimit"
-				v-model="useVoteLimit"
-				type="checkbox"
-				class="checkbox">
-			<label for="useVoteLimit"> {{ t('polls', 'Limit yes votes per user') }}</label>
-
-			<div v-if="pollVoteLimit" class="selectUnit indented">
-				<Actions>
-					<ActionButton icon="icon-play-previous" @click="pollVoteLimit--">
-						{{ t('polls', 'Decrease unit') }}
-					</ActionButton>
-				</Actions>
-				<input v-model="pollVoteLimit">
-				<Actions>
-					<ActionButton icon="icon-play-next" @click="pollVoteLimit++">
-						{{ t('polls', 'Increase unit') }}
-					</ActionButton>
-				</Actions>
+				{{ t('polls', 'If vote limits are used, \'maybe\' shouldn\'t be allowed.') }}
 			</div>
 
-			<input id="useOptionLimit"
-				v-model="useOptionLimit"
-				type="checkbox"
-				class="checkbox">
-			<label for="useOptionLimit"> {{ t('polls', 'Limit yes votes per option') }}</label>
-			<div v-if="pollOptionLimit" class="selectUnit indented">
-				<Actions>
-					<ActionButton icon="icon-play-previous" @click="pollOptionLimit--">
-						{{ t('polls', 'Decrease unit') }}
-					</ActionButton>
-				</Actions>
-				<input v-model="pollOptionLimit">
-				<Actions>
-					<ActionButton icon="icon-play-next" @click="pollOptionLimit++">
-						{{ t('polls', 'Increase unit') }}
-					</ActionButton>
-				</Actions>
-			</div>
+			<CheckBoxDiv v-model="pollAnonymous" :label="t('polls', 'Anonymous poll')" />
+			<CheckBoxDiv v-model="useVoteLimit" :label="t('polls', 'Limit yes votes per user')" />
+			<InputDiv v-if="pollVoteLimit" v-model="pollVoteLimit" class="selectUnit indented"
+				use-num-modifiers
+				@add="pollVoteLimit++"
+				@substract="pollVoteLimit--" />
+
+			<CheckBoxDiv v-model="useOptionLimit" :label="t('polls', 'Limit yes votes per option')" />
+			<InputDiv v-if="pollOptionLimit" v-model="pollOptionLimit" class="selectUnit indented"
+				use-num-modifiers
+				@add="pollOptionLimit++"
+				@substract="pollOptionLimit--" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
@@ -101,65 +63,19 @@
 				:icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
 				:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
 				@click="switchClosed()" />
-
-			<input v-show="!closed"
-				id="expiration"
-				v-model="pollExpiration"
-				type="checkbox"
-				class="checkbox">
-			<label v-show="!closed" for="expiration"> {{ t('polls', 'Closing date') }}</label>
-
+			<CheckBoxDiv v-show="!closed" v-model="pollExpiration" :label="t('polls', 'Closing date')" />
 			<DatetimePicker v-show="pollExpiration && !closed" v-model="pollExpire" v-bind="expirationDatePicker" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
-			<input v-if="acl.isOwner" id="adminAccess" v-model="pollAdminAccess"
-				type="checkbox" class="checkbox">
-			<label v-if="acl.isOwner" for="adminAccess"> {{ t('polls', 'Allow admins to edit this poll') }}</label>
-
-			<input id="hidden"
-				v-model="pollAccess"
-				value="hidden"
-				type="radio"
-				class="radio">
-			<label for="hidden">{{ t('polls', 'Only invited users') }}</label>
-
-			<input id="public"
-				v-model="pollAccess"
-				value="public"
-				type="radio"
-				class="radio">
-			<label for="public">{{ t('polls', 'All users') }}</label>
-
-			<input id="important"
-				v-model="pollImportant"
-				:disabled="pollAccess !== 'public'"
-				type="checkbox"
-				class="checkbox">
-			<label for="important" class="indented"> {{ t('polls', 'Relevant for all users') }}</label>
+			<CheckBoxDiv v-if="acl.isOwner" v-model="pollAdminAccess" :label="t('polls', 'Allow admins to edit this poll')" />
+			<RadioGroupDiv v-model="pollAccess" :options="accessOptions" />
+			<CheckBoxDiv v-model="pollImportant" class="indented" :disabled="pollAccess !== 'public'"
+				:label="t('polls', 'Relevant for all users')" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
-			<input id="always"
-				v-model="pollShowResults"
-				value="always"
-				type="radio"
-				class="radio">
-			<label for="always">{{ t('polls', 'Always show results') }}</label>
-
-			<input id="closed"
-				v-model="pollShowResults"
-				value="closed"
-				type="radio"
-				class="radio">
-			<label for="closed">{{ t('polls', 'Hide results until poll is closed') }}</label>
-
-			<input id="never"
-				v-model="pollShowResults"
-				value="never"
-				type="radio"
-				class="radio">
-			<label for="never">{{ t('polls', 'Never show results') }}</label>
+			<RadioGroupDiv v-model="pollShowResults" :options="pollShowResultsOptions" />
 		</ConfigBox>
 
 		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'"
@@ -179,17 +95,21 @@ import { mapGetters, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
-import { Actions, ActionButton, DatetimePicker } from '@nextcloud/vue'
+import { DatetimePicker } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
+import CheckBoxDiv from '../Base/CheckBoxDiv'
+import InputDiv from '../Base/InputDiv'
+import RadioGroupDiv from '../Base/RadioGroupDiv'
 
 export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
-		Actions,
-		ActionButton,
-		DatetimePicker,
 		ConfigBox,
+		CheckBoxDiv,
+		DatetimePicker,
+		InputDiv,
+		RadioGroupDiv,
 	},
 
 	data() {
@@ -198,6 +118,15 @@ export default {
 			sidebar: false,
 			titleEmpty: false,
 			setExpiration: false,
+			accessOptions: [
+				{ value: 'hidden', label: t('polls', 'Only invited users') },
+				{ value: 'public', label: t('polls', 'All users') },
+			],
+			pollShowResultsOptions: [
+				{ value: 'always', label: t('polls', 'Always show results') },
+				{ value: 'closed', label: t('polls', 'Hide results until poll is closed') },
+				{ value: 'never', label: t('polls', 'Never show results') },
+			],
 		}
 	},
 

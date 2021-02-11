@@ -21,49 +21,42 @@
   -->
 
 <template lang="html">
-	<div class="subscription">
-		<CheckBoxDiv v-model="subscribe" :label="label" />
+	<div class="radio-group-div">
+		<fieldset v-for="(option, index) in options" :key="option.value">
+			<input :id="id + '_' + index"
+				:checked="option.value === value"
+				:value="option.value"
+				type="radio"
+				class="radio"
+				@change="$emit('input', option.value)">
+			<label :for="id + '_' + index">
+				<slot name="before" />
+				{{ option.label }}
+			</label>
+		</fieldset>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+const RandId = () => {
+	return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
+}
+
 export default {
-	name: 'Subscription',
-
-	components: {
-		CheckBoxDiv,
-	},
-
-	computed: {
-		...mapState({
-			subscribed: state => state.subscription.subscribed,
-			emailAddress: state => state.share.emailAddress,
-		}),
-
-		label() {
-			if (this.emailAddress) {
-				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.emailAddress })
-			} else {
-				return t('polls', 'Receive notification email on activity')
-			}
+	name: 'RadioGroupDiv',
+	props: {
+		id: {
+			type: String,
+			default: () => 'rg-' + RandId(),
 		},
-
-		subscribe: {
-			get() {
-				return this.subscribed
-			},
-			set(value) {
-				this.$store.dispatch('subscription/update', value)
-			},
+		options: {
+			type: Array,
+			required: true,
+		},
+		value: {
+			type: String,
+			default: null,
 		},
 	},
 }
 </script>
-
-<style lang="css" scoped>
-	.subscription {
-		padding: 8px;
-	}
-</style>

@@ -21,83 +21,44 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" :class="[buttonStyle, iconClass, { withIcon: withIcon, primary: primary } ]" @click="$emit('click')">
-		{{ title }}
-	</Component>
+	<div class="checkbox-div">
+		<input :id="id"
+			:checked="value"
+			:disabled="disabled"
+			type="checkbox"
+			class="checkbox"
+			@click="$emit('input', $event.target.checked)">
+		<label :for="id">
+			<slot name="before" />
+			{{ label }}
+		</label>
+	</div>
 </template>
 
 <script>
+const RandId = () => {
+	return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
+}
+
 export default {
-	name: 'ButtonDiv',
+	name: 'CheckBoxDiv',
 	props: {
-		title: {
+		label: {
 			type: String,
-			default: '',
+			required: true,
 		},
-		icon: {
+		value: {
+			type: [Boolean, Number],
+			required: true,
+		},
+		id: {
 			type: String,
-			default: '',
+			default: () => 'cb-' + RandId(),
 		},
-		primary: {
+		disabled: {
 			type: Boolean,
 			default: false,
-		},
-		tag: {
-			type: String,
-			default: 'button',
-		},
-		submit: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
-	computed: {
-		iconClass() {
-			if (this.submit) {
-				return 'icon-confirm'
-			} else {
-				return this.icon
-			}
-		},
-
-		withIcon() {
-			return Boolean(this.icon && !this.submit)
-		},
-
-		buttonStyle() {
-			if (this.submit) {
-				return 'submit'
-			} else {
-				return 'button'
-			}
 		},
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-	.button {
-		display: inline-block;
-		overflow: hidden;
-		text-overflow: ellipsis;
-
-		&.withIcon {
-			padding-left: 34px;
-			background-position: 12px center;
-		}
-
-	}
-
-	.submit {
-		flex: 0;
-		width: 30px;
-		max-width: 30px;
-		min-width: 30px;
-		background-color: transparent;
-		border: none;
-		opacity: 0.3;
-		cursor: pointer;
-	}
-
-</style>
