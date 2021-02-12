@@ -37,10 +37,10 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
-			<CheckBoxDiv v-model="pollAllowMaybe" :label="t('polls', 'Allow "maybe" vote')" />
+			<CheckBoxDiv v-model="pollAllowMaybe" :label="t('polls', 'Allow \"maybe\" vote')" />
 
 			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
-				{{ t('polls', 'If vote limits are used, "maybe" shouldn\'t be allowed.') }}
+				{{ t('polls', 'If vote limits are used, \"maybe\" shouldn\'t be allowed.') }}
 			</div>
 
 			<CheckBoxDiv v-model="pollAnonymous" :label="t('polls', 'Anonymous poll')" />
