@@ -8,3 +8,18 @@
 .modal-wrapper .modal-container[data-v-a2e1babe] {
 	overflow: auto !important;
 }
+
+.app-sidebar__tab {
+	overflow: initial !important;
+}
+
+.app-sidebar {
+	overflow-x: initial !important;
+	overflow-y: initial !important;
+}
+
+
+.mx-datepicker-main, .mx-datepicker-popup {
+	right: 0 !important;
+	left: auto !important;
+}

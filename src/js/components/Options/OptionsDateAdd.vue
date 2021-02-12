@@ -24,10 +24,19 @@
 	<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
 		<DatetimePicker v-model="lastOption"
 			v-bind="optionDatePicker"
-			confirm
 			style="width: inherit;"
-			@change="addOption(lastOption)" />
-		<CheckBoxDiv v-model="useDuration" :label="t('polls', 'With end date')" />
+			@change="addOption()">
+			<template slot="footer">
+				<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
+				<!-- class="mx-btn mx-btn-text" -->
+				<button v-if="!showTimePanel" class="mx-btn" @click="toggleTimePanel">
+					{{ t('polls', 'Add time') }}
+				</button>
+				<button v-else class="mx-btn" @click="toggleTimePanel">
+					{{ t('polls', 'Remove time') }}
+				</button>
+			</template>
+		</DateTimePicker>
 	</ConfigBox>
 </template>
 
@@ -50,70 +59,82 @@ export default {
 	data() {
 		return {
 			lastOption: '',
-			useDuration: false,
+			useRange: false,
+			showTimePanel: false,
 		}
 	},
 
 	computed: {
-		optionDatePicker() {
-			if (this.useDuration) {
-				return {
-					editable: false,
-					minuteStep: 5,
-					type: 'datetime',
-					range: true,
-					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					placeholder: t('polls', 'Click to add a date'),
-					confirm: true,
-					lang: {
-						formatLocale: {
-							firstDayOfWeek: this.firstDOW,
-							months: moment.months(),
-							monthsShort: moment.monthsShort(),
-							weekdays: moment.weekdays(),
-							weekdaysMin: moment.weekdaysMin(),
-						},
-					},
-				}
-
+		tempFormat() {
+			if (this.showTimePanel) {
+				return moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
 			} else {
-				return {
-					editable: false,
-					minuteStep: 5,
-					type: 'datetime',
-					format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-					placeholder: t('polls', 'Click to add a date'),
-					confirm: true,
-					lang: {
-						formatLocale: {
-							firstDayOfWeek: this.firstDOW,
-							months: moment.months(),
-							monthsShort: moment.monthsShort(),
-							weekdays: moment.weekdays(),
-							weekdaysMin: moment.weekdaysMin(),
-						},
+				return moment.localeData().longDateFormat('L')
+			}
+		},
+
+		optionDatePicker() {
+			return {
+				editable: false,
+				minuteStep: 5,
+				type: this.showTimePanel ? 'datetime' : 'date',
+				range: this.useRange,
+				showTimePanel: this.showTimePanel,
+				format: this.tempFormat,
+				placeholder: t('polls', 'Click to add an option'),
+				confirm: true,
+				lang: {
+					formatLocale: {
+						firstDayOfWeek: this.firstDOW,
+						months: moment.months(),
+						monthsShort: moment.monthsShort(),
+						weekdays: moment.weekdays(),
+						weekdaysMin: moment.weekdaysMin(),
 					},
-				}
+				},
 			}
 		},
 	},
 
 	methods: {
-		addOption(dateOption) {
+		toggleTimePanel() {
+			this.showTimePanel = !this.showTimePanel
+		},
+
+		useDay() {
+			console.debug('Only days')
+		},
+
+		addOption() {
+			const timeToAdd = this.showTimePanel ? 0 : 24
+			this.showTimePanel = false
+
+			let startDate
+			let endDate
 			let pollOptionText = ''
-			let duration = 0
-			if (this.useDuration) {
-				pollOptionText = dateOption[0]
-				duration = moment(dateOption[1]).diff(moment(dateOption[0]), 'seconds')
+			let timestamp = 0
+			if (this.useRange) {
+				startDate = moment(this.lastOption[0]).format('LLL')
+				endDate = moment(this.lastOption[1]).add(timeToAdd, 'hours').format('LLL')
+				pollOptionText = this.lastOption[0]
+				timestamp = moment(this.lastOption[0]).unix()
 			} else {
-				pollOptionText = dateOption
-				duration = 0
+				startDate = moment(this.lastOption).format('LLL')
+				endDate = moment(this.lastOption).add(timeToAdd, 'hours').format('LLL')
+				pollOptionText = this.lastOption
+				timestamp = moment(this.lastOption).unix()
 			}
+			const duration = moment(endDate).diff(startDate) / 1000
+			// const duration = moment(endDate).diff(startDate) / 1000
+			console.debug('Start Date', startDate)
+			console.debug('End Date', endDate)
+			console.debug('End Date', duration)
+			console.debug('End Date', duration)
 
 			if (moment(pollOptionText).isValid()) {
 				this.$store.dispatch('poll/options/add', {
 					pollOptionText: pollOptionText,
-					timestamp: moment(pollOptionText).unix(),
+					timestamp: timestamp,
 					duration: duration,
 				})
 			}
@@ -122,3 +143,13 @@ export default {
 }
 
 </script>
+
+<style lang="scss" scoped>
+
+.range {
+	flex: 1;
+	text-align: left;
+	margin: 8px;
+}
+
+</style>
