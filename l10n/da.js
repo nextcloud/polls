@@ -32,7 +32,6 @@ OC.L10N.register(
     "Shares" : "Delinger",
     "Comments" : "Kommentarer",
     "Description" : "Beskrivelse",
-    "Allow \"maybe\" vote" : "Tillad \"måske\" stemmer",
     "Anonymous poll" : "Anonym afstemning",
     "Title must not be empty!" : "Overskriften må ikke være tom!",
     "Receive notification email on activity" : "Modtag notifikationsemail om aktivitet",
