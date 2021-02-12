@@ -75,6 +75,9 @@ class Option extends Entity implements JsonSerializable {
 	/** @var int $duration */
 	protected $duration;
 
+	/** @var int $duration */
+	protected $duration;
+
 	public function jsonSerialize() {
 		if (intval($this->timestamp) > 0) {
 			$timestamp = $this->timestamp;
