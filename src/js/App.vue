@@ -25,7 +25,7 @@
 		<SettingsDlg />
 		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
-		<SideBar v-if="sideBarOpen && $store.state.poll.id"
+		<SideBar v-if="sideBarOpen && $store.state.poll.id && (acl.allowEdit || poll.allowComment)"
 			:active="activeTab"
 			:class="{ 'glassy': settings.glassySidebar }" />
 		<LoadingOverlay v-if="loading" />
@@ -75,6 +75,8 @@ export default {
 	computed: {
 		...mapState({
 			settings: state => state.settings.user,
+			poll: state => state.poll,
+			acl: state => state.poll.acl,
 		}),
 		appStyle() {
 			if (this.settings.useImage && this.settings.experimental) {

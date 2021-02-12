@@ -21,40 +21,22 @@
   -->
 
 <template>
-	<transition-group name="fade" class="comments"
-		tag="ul">
-		<li v-for="(comment) in sortedList" :key="comment.id">
-			<div class="comment-item">
-				<UserItem v-bind="comment" />
-				<Actions v-if="comment.userId === acl.userId">
-					<ActionButton icon="icon-delete" @click="deleteComment(comment)">
-						{{ t('polls', 'Delete comment') }}
-					</ActionButton>
-				</Actions>
-				<div class="date">
-					{{ dateCommentedRelative(comment.dt) }}
-				</div>
-			</div>
-
-			<div class="message wordwrap comment-content">
-				{{ comment.comment }}
-			</div>
-		</li>
+	<transition-group name="fade" class="comments" tag="ul">
+		<CommentItem v-for="(comment) in sortedList" :key="comment.id"
+			:comment="comment"
+			tag="li" />
 	</transition-group>
 </template>
 
 <script>
 import sortBy from 'lodash/sortBy'
-import moment from '@nextcloud/moment'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import CommentItem from './CommentItem'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'Comments',
 	components: {
-		Actions,
-		ActionButton,
+		CommentItem,
 	},
 	data() {
 		return {
@@ -66,7 +48,6 @@ export default {
 	computed: {
 		...mapState({
 			comments: state => state.poll.comments.list,
-			acl: state => state.poll.acl,
 		}),
 
 		sortedList() {
@@ -79,43 +60,5 @@ export default {
 
 	},
 
-	methods: {
-		deleteComment(comment) {
-			this.$store
-				.dispatch({ type: 'poll/comments/delete', comment: comment })
-				.then(() => {
-					showSuccess(t('polls', 'Comment deleted'))
-				})
-				.catch((error) => {
-					showError(t('polls', 'Error while deleting the comment'))
-					console.error(error.response)
-				})
-		},
-		dateCommentedRelative(date) {
-			return moment.utc(date).fromNow()
-		},
-	},
 }
 </script>
-
-<style scoped lang="scss">
-	ul {
-		& > li {
-			margin-bottom: 30px;
-			& > .comment-item {
-				display: flex;
-				align-items: center;
-
-				& > .date {
-					right: 0;
-					top: 5px;
-					opacity: 0.5;
-				}
-			}
-			& > .message {
-				margin-left: 53px;
-				flex: 1 1;
-			}
-		}
-	}
-</style>

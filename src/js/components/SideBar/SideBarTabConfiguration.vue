@@ -37,6 +37,7 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
+			<CheckBoxDiv v-model="pollAllowComment" :label="t('polls', 'Allow Comments')" />
 			<CheckBoxDiv v-model="pollAllowMaybe" :label="t('polls', 'Allow \'maybe\' vote')" />
 
 			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
@@ -272,6 +273,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ adminAccess: +value })
+			},
+		},
+
+		pollAllowComment: {
+			get() {
+				return this.poll.allowComment
+			},
+			set(value) {
+				this.writeValue({ allowComment: +value })
 			},
 		},
 
