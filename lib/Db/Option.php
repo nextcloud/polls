@@ -61,19 +61,6 @@ class Option extends Entity implements JsonSerializable {
 
 	/** @var int $confirmed */
 	protected $confirmed;
-	protected $duration;
-
-	/** @var int $duration */
-	protected $duration;
-
-	/** @var int $duration */
-	protected $duration;
-
-	/** @var int $duration */
-	protected $duration;
-
-	/** @var int $duration */
-	protected $duration;
 
 	/** @var int $duration */
 	protected $duration;

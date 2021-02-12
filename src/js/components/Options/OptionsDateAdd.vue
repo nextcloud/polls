@@ -27,16 +27,13 @@
 			confirm
 			style="width: inherit;"
 			@change="addOption(lastOption)" />
-		<input id="useDuration"
-			v-model="useDuration"
-			type="checkbox"
-			class="checkbox">
-		<label for="useDuration"> {{ t('polls', 'With end date') }}</label>
+		<CheckBoxDiv v-model="useDuration" :label="t('polls', 'With end date')" />
 	</ConfigBox>
 </template>
 
 <script>
 
+import CheckBoxDiv from '../Base/CheckBoxDiv'
 import ConfigBox from '../Base/ConfigBox'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
@@ -45,6 +42,7 @@ export default {
 	name: 'OptionsDateAdd',
 
 	components: {
+		CheckBoxDiv,
 		ConfigBox,
 		DatetimePicker,
 	},
