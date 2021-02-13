@@ -195,6 +195,8 @@ OC.L10N.register(
     "As an admin you may edit this poll" : "In qualità di amministratore, puoi modificare questo sondaggio",
     "Description" : "Descrizione",
     "Poll configurations" : "Configurazioni dei sondaggi",
+    "Allow 'maybe' vote" : "Consenti il voto 'forse'",
+    "If vote limits are used, 'maybe' shouldn't be allowed." : "Se sono utilizzati i limiti di voto, 'forse' non dovrebbe essere consentito.",
     "Anonymous poll" : "Sondaggio anonimo",
     "Limit yes votes per user" : "Limita i voti sì per utente",
     "Limit yes votes per option" : "Limita i voti sì per opzione",

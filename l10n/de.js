@@ -195,6 +195,8 @@ OC.L10N.register(
     "As an admin you may edit this poll" : "Als Administrator kannst Du diese Umfrage bearbeiten",
     "Description" : "Beschreibung",
     "Poll configurations" : "Umfragekonfigurationen",
+    "Allow 'maybe' vote" : "\"Vielleicht\" erlauben",
+    "If vote limits are used, 'maybe' shouldn't be allowed." : "Wenn Stimmlimits verwendet werden, sollte \"vielleicht\" nicht erlaubt sein.",
     "Anonymous poll" : "Anonyme Umfrage",
     "Limit yes votes per user" : "Ja-Stimmen pro Benutzer begrenzen",
     "Limit yes votes per option" : "Ja-Stimmen pro Option begrenzen",

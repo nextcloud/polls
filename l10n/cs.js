@@ -194,6 +194,8 @@ OC.L10N.register(
     "As an admin you may edit this poll" : "Coby správce můžete tuto anketu upravovat",
     "Description" : "Popis",
     "Poll configurations" : "Nastavení ankety",
+    "Allow 'maybe' vote" : "Povolit hlasy 'možná'",
+    "If vote limits are used, 'maybe' shouldn't be allowed." : "Pokud jsou použity limity pro hlasy, 'možná' by nemělo být povoleno.",
     "Anonymous poll" : "Anonymní anketa",
     "Limit yes votes per user" : "Omezte kladné hlasy pro jednotlivé uživatele",
     "Limit yes votes per option" : "Omezte kladné hlasy jednotlivých možností",
