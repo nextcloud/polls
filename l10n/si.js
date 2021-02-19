@@ -11,6 +11,7 @@ OC.L10N.register(
     "Week" : "සතිය",
     "Owner" : "හිමිකරු",
     "Details" : "විස්තර",
+    "Shares" : "බෙදාගැනීම්",
     "Comments" : "අදහස්",
     "Description" : "විස්තරය",
     "No" : "නැහැ",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "Week" : "සතිය",
     "Owner" : "Owner",
     "never" : "කවදාවත්",
+    "Details" : "විස්තර",
     "Configuration" : "වින්‍යාසය",
     "Comments" : "අදහස්",
     "Description" : "විස්තරය",
