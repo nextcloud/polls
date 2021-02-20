@@ -128,10 +128,13 @@ class OptionController extends Controller {
 	 */
 	public function findCalendarEvents($optionId): DataResponse {
 		return $this->response(function () use ($optionId) {
+			$option = $this->optionService->get($optionId);
 			$searchFrom = new DateTime();
-			$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
-			$searchTo = clone $searchFrom;
-			$searchTo = $searchTo->add(new DateInterval('PT3H'));
+			$searchTo = new DateTime();
+			// Search calendar entries which end inside one hour before option start time
+			$searchFrom = $searchFrom->setTimestamp($option->getTimestamp())->sub(new DateInterval('PT1H'));
+			// Search calendar entries which start inside one hour after option end time
+			$searchTo = $searchTo->setTimestamp($option->getTimestamp() + $option->getDuration())->add(new DateInterval('PT1H'));
 			$events = $this->calendarService->getEvents($searchFrom, $searchTo);
 			return ['events' => $events];
 		});
