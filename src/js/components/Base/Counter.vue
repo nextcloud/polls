@@ -57,7 +57,7 @@
 				<span />
 			</div>
 
-			<div v-if="option.maybe && showMaybe" class="maybe" :style="{flex: option.maybe }">
+			<div v-if="option.maybe && showMaybe" class="maybe" :style="{ flex: option.maybe }">
 				<span />
 			</div>
 		</div>
@@ -95,6 +95,7 @@ export default {
 
 .counter {
 	display: flex;
+	justify-content: space-around;
 }
 
 .counter--icon {

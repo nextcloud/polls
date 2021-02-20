@@ -142,10 +142,7 @@ export default {
 	flex: 1;
 	align-items: center;
 	max-width: 100%;
-}
-
-.user-item__avatar {
-	margin: 2px 4px;
+	padding: 4px;
 }
 
 .type-icon {

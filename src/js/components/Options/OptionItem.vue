@@ -24,38 +24,45 @@
 	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, 'date-box': show === 'dateBox' }">
 		<div v-if="isDraggable" class="option-item__handle icon icon-handle" />
 
-		<div v-if="showRank" class="option-item__rank">
-			{{ option.rank }}
-		</div>
-
 		<div v-if="show === 'textBox'" v-tooltip.auto="optionTooltip" class="option-item__option--text">
 			{{ optionText }}
 		</div>
 
 		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
-			<div class="event-from">
-				<div class="month">
-					{{ dateBoxMonth }}
+			<div class="event-date">
+				<div class="event-from">
+					<div class="month">
+						{{ event.from.month }}
+					</div>
+					<div class="day">
+						{{ event.from.day }}
+					</div>
+					<div class="dow">
+						{{ event.from.dow }}
+					</div>
 				</div>
-				<div class="day">
-					{{ dateBoxDay }}
-				</div>
-				<div class="dow">
-					{{ dateBoxDow }}
-				</div>
-				<div v-if="!oneDayEvent && !wholeDayDuration" class="time">
-					{{ dateBoxTime }}
-				</div>
-			</div>
-			<div v-if="option.duration && !oneDayEvent" class="event-to">
-				<div v-if="option.duration && !oneDayEvent" class="devider">
+				<div v-if="option.duration && !event.oneDay && !event.to.sameDay" class="devider">
 					-
 				</div>
-				<div v-if="option.duration && !oneDayEvent && !sameDayUntil" class="until">
-					{{ dateUntil }}
+				<div v-if="option.duration && !event.oneDay && !event.to.sameDay" class="event-to">
+					<div class="month">
+						{{ event.to.month }}
+					</div>
+					<div class="day">
+						{{ event.to.day }}
+					</div>
+					<div class="dow">
+						{{ event.to.dow }}
+					</div>
 				</div>
-				<div v-if="option.duration && !oneDayEvent && !wholeDayDuration" class="until">
-					{{ timeUntil }}
+			</div>
+
+			<div class="event-time">
+				<div v-if="!event.oneDay && !event.wholeDay" class="time-from">
+					{{ event.from.t }}
+				</div>
+				<div v-if="option.duration && !event.oneDay && !event.wholeDay" class="time-to">
+					{{ event.to.t }}
 				</div>
 			</div>
 		</div>
@@ -79,10 +86,6 @@ export default {
 			type: Object,
 			required: true,
 		},
-		showRank: {
-			type: Boolean,
-			default: false,
-		},
 		tag: {
 			type: String,
 			default: 'div',
@@ -103,65 +106,61 @@ export default {
 
 		dateLocalFormat() {
 			if (this.option.duration) {
-				if (this.oneDayEvent) {
-					return moment.unix(this.option.timestamp).format('ll')
-				} else if (this.wholeDayDuration) {
-					return moment.unix(this.option.timestamp).format('ll') + ' - ' + this.dateUntil
-				} else if (this.sameDayUntil) {
-					return moment.unix(this.option.timestamp).format('llll') + ' - ' + this.timeUntil
+				if (this.event.oneDay) {
+					return this.event.from.df
+				} else if (this.event.wholeDay) {
+					return this.event.from.df + ' - ' + this.event.to.df
+				} else if (this.event.to.sameDay) {
+					return this.event.from.dtf + ' - ' + this.event.to.t
 				} else {
-					return moment.unix(this.option.timestamp).format('llll') + ' - ' + this.dateUntil + ' ' + this.timeUntil
+					return this.event.from.dtf + ' - ' + this.event.to.dtf
 				}
 			} else {
-				return moment.unix(this.option.timestamp).format('llll')
+				return this.event.from.dtf
 			}
 		},
 
 		dateLocalFormatUTC() {
 			if (this.option.duration) {
-				return moment.unix(this.option.timestamp).utc().format('llll') + ' - ' + moment.unix(this.option.timestamp).add(this.option.duration, 'seconds').utc().format('llll') + ' UTC'
+				return this.event.from.utc + ' - ' + this.event.to.utc + ' UTC'
 			} else {
-				return moment.unix(this.option.timestamp).utc().format('llll') + ' UTC'
+				return this.event.from.utc + ' UTC'
 			}
 		},
 
-		oneDayEvent() {
-			// this event starts at 0:00 local time and lasts exact 24 hours
-			return this.option.duration === 86400 && moment.unix(this.option.timestamp).startOf('day').diff(moment.unix(this.option.timestamp), 'seconds') === 0
-		},
+		event() {
+			const from = moment.unix(this.option.timestamp)
+			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
 
-		wholeDayDuration() {
-			// This event starts at 0:00 local time and lasts one or more full days
-			return this.option.duration && this.option.duration % 86400 === 0 && moment.unix(this.option.timestamp).startOf('day').diff(moment.unix(this.option.timestamp), 'seconds') === 0
-		},
-
-		sameDayUntil() {
-			return moment.unix(this.option.timestamp).format('L') === moment.unix(this.option.timestamp).add(Math.max(0, this.option.duration - 1), 'seconds').format('L')
-		},
-
-		dateBoxMonth() {
-			return moment.unix(this.option.timestamp).format('MMM') + " '" + moment.unix(this.option.timestamp).format('YY')
-		},
-
-		dateBoxDay() {
-			return moment.unix(this.option.timestamp).format('Do')
-		},
-
-		dateBoxDow() {
-			return moment.unix(this.option.timestamp).format('ddd')
-		},
-
-		dateBoxTime() {
-			return moment.unix(this.option.timestamp).format('LT')
-		},
-
-		timeUntil() {
-			return moment.unix(this.option.timestamp).add(this.option.duration, 'seconds').format('LT')
-		},
-
-		dateUntil() {
-			return moment.unix(this.option.timestamp).add(Math.max(0, this.option.duration - 1), 'seconds').format('L')
-			// return '(+ ' + n('polls', '%n day', '%n days', Math.floor(this.option.duration / 86400)) + ')'
+			// If we have a fullDay event, reduce time by 1 second to
+			// represent the end of the day (00:00:00 - 1 sec = 23:59:59)
+			const dayModifier = this.option.duration && this.option.duration % 86400 === 0 && from.startOf('day').diff(from, 'seconds') === 0 ? 1 : 0
+			const toShort = moment.unix(this.option.timestamp + Math.max(0, this.option.duration - dayModifier))
+			return {
+				from: {
+					month: from.format('MMM [ \']YY'),
+					day: from.format('Do'),
+					dow: from.format('ddd'),
+					t: from.format('LT'),
+					df: from.format('ll'),
+					dtf: from.format('llll'),
+					utc: from.utc().format('llll'),
+				},
+				to: {
+					month: toShort.format('MMM'),
+					day: toShort.format('D'),
+					dow: toShort.format('ddd'),
+					t: to.format('LT'),
+					df: toShort.format('ll'),
+					dtf: to.format('llll'),
+					utc: to.utc().format('llll'),
+					sameDay: from.format('L') === toShort.format('L'),
+				},
+				// this event starts at 0:00 (!)local time and lasts exact 24 hours
+				oneDay: this.option.duration === 86400 && from.startOf('day').diff(from, 'seconds') === 0,
+				// This event starts at 0:00 (!)local time and lasts one or more full days
+				wholeDay: !!dayModifier,
+			}
 		},
 
 		optionTooltip() {
@@ -195,10 +194,12 @@ export default {
 	.option-item {
 		display: flex;
 		align-items: center;
+		flex: 1;
+		position: relative;
 		&.date-box {
-			flex: 1;
+			// flex: 1;
+			align-items: stretch;
 			flex-direction: column;
-			align-items: flex-start;
 		}
 	}
 
@@ -208,12 +209,34 @@ export default {
 		align-items: center;
 	}
 
-	.event-from {
-		flex: 0 0 110px;
+	.devider {
+		align-self: center;
+		color: var(--color-text-lighter);
 	}
 
-	.event-to {
-		flex: 0 0 75px;
+	.event-date {
+		flex-direction: row !important;
+		align-items: stretch !important;
+		justify-content: center;
+		.event-from {
+			padding-bottom: 8px;
+			flex: 0;
+		}
+		.event-to {
+			flex: 0;
+			font-size: 80%;
+			justify-content: flex-end;
+			.day {
+				margin: 0;
+			}
+		}
+	}
+
+	.event-time {
+		margin-top: 8px;
+		.time-to {
+			font-size: 80%;
+		}
 	}
 
 	[class*='option-item__option'] {
@@ -258,11 +281,13 @@ export default {
 		display: flex;
 		flex-direction: column;
 		padding: 0 2px;
-		align-items: center;
+		align-items: stretch;
 		justify-content: flex-start;
 		text-align: center;
+		hyphens: auto;
 
-		.month, .dow {
+		.month, .dow, .time {
+			white-space: pre;
 			font-size: 1.1em;
 			color: var(--color-text-lighter);
 		}
@@ -272,17 +297,4 @@ export default {
 		}
 	}
 
-	.mobile {
-		.option-item {
-			flex: 2;
-			order: 1;
-			min-width: 0;
-			.option-item__option--text {
-				hyphens: auto;
-				align-items: center;
-				white-space: nowrap;
-				width: 50px;
-			}
-		}
-	}
 </style>

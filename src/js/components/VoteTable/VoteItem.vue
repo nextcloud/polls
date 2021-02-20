@@ -21,9 +21,10 @@
   -->
 
 <template>
-	<div class="vote-table-vote-item" :class="[answer, isConfirmed, { active: isVotable }]">
+	<div class="vote-item" :class="[answer, isConfirmed, { active: isVotable }, {currentUser: isCurrentUser}]">
 		<div v-if="isActive && !isLocked" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
+		<slot name="indicator" />
 	</div>
 </template>
 
@@ -31,7 +32,7 @@
 
 import { mapGetters, mapState } from 'vuex'
 export default {
-	name: 'VoteTableVoteItem',
+	name: 'VoteItem',
 
 	props: {
 		option: {
@@ -42,16 +43,14 @@ export default {
 			type: String,
 			default: '',
 		},
-		isActive: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	computed: {
 		...mapState({
 			voteLimit: state => state.poll.voteLimit,
 			optionLimit: state => state.poll.optionLimit,
+			currentUser: state => state.poll.acl.userId,
+			allowVote: state => state.poll.acl.allowVote,
 		}),
 
 		...mapGetters({
@@ -62,6 +61,14 @@ export default {
 
 		isVotable() {
 			return this.isActive && this.isValidUser && !this.pollIsClosed && !this.isLocked && !this.isBlocked
+		},
+
+		isActive() {
+			return this.isCurrentUser && this.allowVote
+		},
+
+		isCurrentUser() {
+			return this.currentUser === this.userId
 		},
 
 		answer() {
@@ -122,7 +129,7 @@ export default {
 
 <style lang="scss">
 
-.vote-table-vote-item {
+.vote-item {
 	display: flex;
 	flex: 1;
 	align-items: center;
@@ -173,7 +180,7 @@ export default {
 	}
 }
 
-.theme--dark .vote-table-vote-item {
+.theme--dark .vote-item {
 	background-color: var(--color-polls-background-no--dark);
 	&.yes {
 		background-color: var(--color-polls-background-yes--dark);
@@ -186,8 +193,12 @@ export default {
 	}
 }
 
-.vote-table-vote-item.confirmed:not(.yes):not(.maybe) .icon {
+.vote-item.confirmed:not(.yes):not(.maybe) .icon {
 	background-image: var(--icon-polls-no);
+}
+
+.vote-item.confirmed {
+	background-color: transparent;
 }
 
 </style>

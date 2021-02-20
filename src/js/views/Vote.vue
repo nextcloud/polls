@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent :class="{ closed: closed }">
+	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="header-actions">
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
@@ -95,6 +95,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import linkifyUrls from 'linkify-urls'
 import { mapState, mapGetters } from 'vuex'
@@ -305,35 +306,6 @@ export default {
 	},
 
 	methods: {
-		async watchPoll() {
-			this.cancelToken = axios.CancelToken.source()
-			let watching = true
-			let lastUpdated = 0
-			while (watching) {
-				await axios.get(generateUrl('apps/polls/watch/' + this.$route.params.id + '?offset=' + lastUpdated), { cancelToken: this.cancelToken.token })
-					.then((response) => {
-						console.debug('update detected', response.data.updates)
-						response.data.updates.forEach((item) => {
-							lastUpdated = (item.updated > lastUpdated) ? item.updated : lastUpdated
-							if (item.table === 'polls') {
-								this.$store.dispatch('poll/get')
-							} else {
-								this.$store.dispatch('poll/' + item.table + '/list')
-							}
-						})
-					})
-					.catch((error) => {
-						if (axios.isCancel(error)) {
-							watching = false
-						} else if (error?.response) {
-							if (error.response.status !== 304) {
-								console.error(error.response)
-							}
-						}
-					})
-			}
-		},
-
 		openOptions() {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
@@ -366,13 +338,43 @@ export default {
 				}
 			}
 		},
+		async watchPoll() {
+			this.cancelToken = axios.CancelToken.source()
+			let watching = true
+			let lastUpdated = 0
+			try {
+				while (watching) {
+					const response = await axios.get(generateUrl('apps/polls/watch/' + this.$route.params.id + '?offset=' + lastUpdated), { cancelToken: this.cancelToken.token })
+					console.debug('update detected', response.data.updates)
+					response.data.updates.forEach((item) => {
+						lastUpdated = (item.updated > lastUpdated) ? item.updated : lastUpdated
+						if (item.table === 'polls') {
+							this.$store.dispatch('poll/get')
+						} else {
+							this.$store.dispatch('poll/' + item.table + '/list')
+						}
+					})
+					watching = true
+				}
+			} catch (error) {
+				watching = false
+
+				if (!axios.isCancel(error)) {
+					if (error.response.status !== 304) {
+						showError(t('polls', 'Error retrieving updates from server, reload page'))
+						console.error(error.response)
+					}
+				}
+			}
+		},
 	},
 }
+
 </script>
 
 <style lang="scss" scoped>
 .description {
-	white-space: pre;
+	white-space: pre-wrap;
 }
 
 .header-actions {
