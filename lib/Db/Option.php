@@ -79,7 +79,7 @@ class Option extends Entity implements JsonSerializable {
 			'pollId' => intval($this->pollId),
 			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
 			'timestamp' => intval($timestamp),
-			'order' => $timestamp ? $timestamp : $order,
+			'order' => intval($timestamp ? $timestamp : $this->order),
 			'confirmed' => intval($this->confirmed),
 			'duration' => intval($this->duration),
 			'no' => 0,

@@ -36,14 +36,14 @@
 				</Actions>
 			</UserItem>
 
-			<div v-if="closed" class="confirm" />
+			<div v-if="acl.allowEdit && closed" class="confirm" />
 		</div>
 
 		<div class="vote-table__votes">
 			<div v-for="(option) in rankedOptions" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed }]">
 				<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 
-				<Confirmation v-if="option.confirmed && poll.closed" :option="option" />
+				<Confirmation v-if="option.confirmed && closed" :option="option" />
 
 				<Counter v-else :show-maybe="!!poll.allowMaybe"
 					:option="option"
@@ -169,7 +169,12 @@ export default {
 		height: 53px;
 		min-height: 53px;
 		border-top: solid 1px var(--color-border-dark);
+		order: 10;
+		&.currentuser {
+			order:5;
+		}
 	}
+
 	.vote-table-header-item {
 		flex: 1;
 		flex-direction: column;
@@ -177,30 +182,27 @@ export default {
 		padding: 0 8px;
 		order:1;
 	}
+
 	.confirmation {
 		order:3;
 	}
+
 	.counter {
 		order:3;
 	}
+
 	.calendar-peek {
 		order:2;
 	}
+
 	.confirm {
 		height: 45px;
 		order: 20;
 	}
-	.spacer {
-		order: 1;
-	}
-	.user-item, .vote-item-wrapper {
-		order: 10;
-		&.currentuser {
-			order:5;
-		}
-	}
+
 	.spacer {
 		flex: 1;
+		order: 1;
 	}
 
 	.vote-table__users {
@@ -222,6 +224,7 @@ export default {
 	}
 
 	.vote-column {
+		order: 2;
 		display: flex;
 		flex: 1 0 auto;
 		flex-direction: column;
@@ -234,11 +237,19 @@ export default {
 		}
 	}
 
-	&.closed .vote-column.confirmed {
-		border-radius: 10px;
-		border: 1px solid var(--color-polls-foreground-yes) !important;
-		background-color: var(--color-polls-background-yes) !important;
+	&.closed .vote-table__users {
 		padding: 8px 2px;
+	}
+
+	&.closed .vote-column {
+		padding: 8px 2px;
+		&.confirmed {
+			order: 1;
+			border-radius: 10px;
+			border: 1px solid var(--color-polls-foreground-yes);
+			background-color: var(--color-polls-background-yes);
+			margin: 0 4px;
+		}
 	}
 
 	.vote-item-wrapper {
@@ -276,6 +287,12 @@ export default {
 		position: relative;
 		border-top: solid 1px var(--color-border);
 		padding: 0;
+	}
+	&.closed .vote-column {
+		padding: 2px 8px;
+		&.confirmed {
+			margin: 4px 0;
+		}
 	}
 
 	.vote-table__votes {
