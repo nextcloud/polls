@@ -40,6 +40,7 @@ return [
 		['name' => 'public#resend_invitation', 'url' => '/s/{token}/resend', 'verb' => 'GET'],
 		['name' => 'public#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'public#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
+		['name' => 'public#watch_poll', 'url' => '/s/{token}/watch', 'verb' => 'GET'],
 
 		['name' => 'admin#index', 'url' => '/administration', 'verb' => 'GET'],
 		['name' => 'admin#list', 'url' => '/administration/polls', 'verb' => 'GET'],
@@ -92,7 +93,7 @@ return [
 		['name' => 'comment#delete', 'url' => '/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'auth'],
 
 		['name' => 'system#user_search', 'url' => '/search/users/{query}', 'verb' => 'GET'],
-		['name' => 'watch#watch_single_poll', 'url' => '/watch/{pollId}', 'verb' => 'GET'],
+		['name' => 'watch#watch_poll', 'url' => '/poll/{pollId}/watch', 'verb' => 'GET'],
 
 		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
 		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],

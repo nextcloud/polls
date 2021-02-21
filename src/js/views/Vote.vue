@@ -95,7 +95,6 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import linkifyUrls from 'linkify-urls'
 import { mapState, mapGetters } from 'vuex'
@@ -131,13 +130,15 @@ export default {
 
 	data() {
 		return {
-			voteSaved: false,
+			cancelToken: null,
 			delay: 50,
 			isLoading: false,
-			ranked: false,
 			manualViewDatePoll: '',
 			manualViewTextPoll: '',
-			cancelToken: null,
+			ranked: false,
+			voteSaved: false,
+			watching: true,
+			lastUpdated: Math.round(Date.now() / 1000),
 		}
 	},
 
@@ -281,7 +282,6 @@ export default {
 			return true
 		} else if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 			document.body.classList.add('theme--dark')
-			return true
 		}
 
 		if (getCurrentUser() && this.$route.name === 'publicVote') {
@@ -338,31 +338,53 @@ export default {
 				}
 			}
 		},
+
 		async watchPoll() {
+			console.debug('polls', 'Watch for updates')
+
 			this.cancelToken = axios.CancelToken.source()
-			let watching = true
-			let lastUpdated = 0
-			try {
-				while (watching) {
-					const response = await axios.get(generateUrl('apps/polls/watch/' + this.$route.params.id + '?offset=' + lastUpdated), { cancelToken: this.cancelToken.token })
-					console.debug('update detected', response.data.updates)
+			let endPoint = 'apps/polls'
+
+			if (this.$route.name === 'publicVote') {
+				endPoint = endPoint + '/s/' + this.$route.params.token
+			} else if (this.$route.name === 'vote') {
+				endPoint = endPoint + '/poll/' + this.$route.params.id
+			} else {
+				this.watching = false
+			}
+
+			while (this.watching) {
+				try {
+					const response = await axios.get(generateUrl(endPoint + '/watch?offset=' + this.lastUpdated), { cancelToken: this.cancelToken.token })
+					console.debug('polls', 'update detected', response.data.updates)
 					response.data.updates.forEach((item) => {
-						lastUpdated = (item.updated > lastUpdated) ? item.updated : lastUpdated
+						this.lastUpdated = (item.updated > this.lastUpdated) ? item.updated : this.lastUpdated
 						if (item.table === 'polls') {
 							this.$store.dispatch('poll/get')
 						} else {
 							this.$store.dispatch('poll/' + item.table + '/list')
 						}
 					})
-					watching = true
-				}
-			} catch (error) {
-				watching = false
 
-				if (!axios.isCancel(error)) {
-					if (error.response.status !== 304) {
-						showError(t('polls', 'Error retrieving updates from server, reload page'))
-						console.error(error.response)
+					this.watching = true
+
+				} catch (error) {
+					this.watching = false
+					if (axios.isCancel(error)) {
+						console.debug('Canceled request')
+					} else if (error.response) {
+						if (error.response.status === 304) {
+							console.debug('polls', 'Request timed out without updates, reconnect')
+							this.watching = true
+						} else if (error.response.status === 503) {
+							console.debug('polls', 'Server not available, reconnect in 30 sec')
+							await new Promise(resolve => setTimeout(resolve, 30000))
+							this.watching = true
+						}
+					} else if (error.request) {
+						console.debug('Request aborted')
+					} else {
+						console.debug('polls', 'Unhandeled error', error)
 					}
 				}
 			}

@@ -50,7 +50,7 @@ class WatchController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function watchSinglePoll(int $pollId, ?int $offset): DataResponse {
+	public function watchPoll(int $pollId, ?int $offset): DataResponse {
 		return $this->responseLong(function () use ($pollId, $offset) {
 			$start = time();
 			$timeout = 30;
