@@ -17,6 +17,7 @@ OC.L10N.register(
     "No" : "නැහැ",
     "Yes" : "ඔව්",
     "Day" : "දිනය",
-    "Month" : "මාසය"
+    "Month" : "මාසය",
+    "Year" : "වර්ෂය"
 },
 "nplurals=2; plural=(n != 1);");
