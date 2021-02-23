@@ -22,18 +22,21 @@
 
 <template>
 	<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
-		<DatetimePicker v-model="lastOption"
+		<DatetimePicker v-model="pickedOption"
 			v-bind="optionDatePicker"
+			:open.sync="picker.open"
 			style="width: inherit;"
-			@change="addOption()">
+			@pick="pickedDate">
 			<template slot="footer">
-				<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
-				<!-- class="mx-btn mx-btn-text" -->
-				<button v-if="!showTimePanel" class="mx-btn" @click="toggleTimePanel">
+				<CheckBoxDiv v-model="picker.useRange" class="range" :label="t('polls', 'Select range')" />
+				<button v-if="!picker.showTimePanel" class="mx-btn" @click="toggleTimePanel">
 					{{ t('polls', 'Add time') }}
 				</button>
 				<button v-else class="mx-btn" @click="toggleTimePanel">
 					{{ t('polls', 'Remove time') }}
+				</button>
+				<button class="mx-btn" @click="addOption">
+					{{ t('polls', 'OK') }}
 				</button>
 			</template>
 		</DateTimePicker>
@@ -58,15 +61,19 @@ export default {
 
 	data() {
 		return {
-			lastOption: '',
-			useRange: false,
-			showTimePanel: false,
+			pickedOption: null,
+			lastPickedOption: null,
+			picker: {
+				useRange: false,
+				showTimePanel: false,
+				open: false,
+			},
 		}
 	},
 
 	computed: {
 		tempFormat() {
-			if (this.showTimePanel) {
+			if (this.picker.showTimePanel) {
 				return moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT')
 			} else {
 				return moment.localeData().longDateFormat('L')
@@ -77,12 +84,11 @@ export default {
 			return {
 				editable: false,
 				minuteStep: 5,
-				type: this.showTimePanel ? 'datetime' : 'date',
-				range: this.useRange,
-				showTimePanel: this.showTimePanel,
+				type: this.picker.showTimePanel ? 'datetime' : 'date',
+				range: this.picker.useRange,
+				showTimePanel: this.picker.showTimePanel,
 				format: this.tempFormat,
 				placeholder: t('polls', 'Click to add an option'),
-				confirm: true,
 				lang: {
 					formatLocale: {
 						firstDayOfWeek: this.firstDOW,
@@ -96,40 +102,71 @@ export default {
 		},
 	},
 
+	watch: {
+		useRange() {
+			if (this.picker.useRange) {
+				if (!Array.isArray(this.pickedOption)) {
+					this.pickedOption = [this.pickedOption, this.pickedOption]
+				}
+			} else {
+				if (Array.isArray(this.pickedOption)) {
+					this.pickedOption = this.pickedOption[0]
+				}
+			}
+		},
+	},
+
 	methods: {
 		toggleTimePanel() {
-			this.showTimePanel = !this.showTimePanel
+			if (this.picker.useRange) {
+				if (Array.isArray(this.pickedOption)) {
+					if (this.lastPickedOption !== this.pickedOption[0]
+						&& this.lastPickedOption !== this.pickedOption[0]) {
+						this.pickedOption = [this.lastPickedOption, this.lastPickedOption]
+					}
+				} else {
+					if (this.lastPickedOption) {
+						this.pickedOption = [this.lastPickedOption, this.lastPickedOption]
+					}
+				}
+			}
+			this.picker.showTimePanel = !this.picker.showTimePanel
 		},
 
-		useDay() {
-			console.debug('Only days')
+		pickedDate(value) {
+			this.lastPickedOption = value
+			this.picker.open = true
 		},
 
 		addOption() {
-			const timeToAdd = this.showTimePanel ? 0 : 24
-			this.showTimePanel = false
+			this.picker.open = false
+			this.picker.showTimePanel = false
+
+			const timeToAdd = this.picker.showTimePanel ? 0 : 24
+
+			console.debug('picker.showTimePanel', this.picker.showTimePanel)
+			console.debug('timeToAdd', timeToAdd)
 
 			let startDate
 			let endDate
 			let pollOptionText = ''
 			let timestamp = 0
-			if (this.useRange) {
-				startDate = moment(this.lastOption[0]).format('LLL')
-				endDate = moment(this.lastOption[1]).add(timeToAdd, 'hours').format('LLL')
-				pollOptionText = this.lastOption[0]
-				timestamp = moment(this.lastOption[0]).unix()
+			if (this.picker.useRange) {
+				startDate = moment(this.pickedOption[0]).format('LLL')
+				endDate = moment(this.pickedOption[1]).add(timeToAdd, 'hours').format('LLL')
+				pollOptionText = this.pickedOption[0]
+				timestamp = moment(this.pickedOption[0]).unix()
 			} else {
-				startDate = moment(this.lastOption).format('LLL')
-				endDate = moment(this.lastOption).add(timeToAdd, 'hours').format('LLL')
-				pollOptionText = this.lastOption
-				timestamp = moment(this.lastOption).unix()
+				startDate = moment(this.pickedOption).format('LLL')
+				endDate = moment(this.pickedOption).add(timeToAdd, 'hours').format('LLL')
+				pollOptionText = this.pickedOption
+				timestamp = moment(this.pickedOption).unix()
 			}
 			const duration = moment(endDate).diff(startDate) / 1000
-			// const duration = moment(endDate).diff(startDate) / 1000
+
 			console.debug('Start Date', startDate)
 			console.debug('End Date', endDate)
-			console.debug('End Date', duration)
-			console.debug('End Date', duration)
+			console.debug('duration', duration)
 
 			if (moment(pollOptionText).isValid()) {
 				this.$store.dispatch('poll/options/add', {
