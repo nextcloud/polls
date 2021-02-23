@@ -162,9 +162,6 @@ export default {
 		timedReload() {
 			this.reloadTimer = window.setInterval(() => {
 				this.updatePolls()
-				if (!this.settings.realTimePolling) {
-					this.loadPoll(true)
-				}
 			}, this.reloadInterval)
 		},
 

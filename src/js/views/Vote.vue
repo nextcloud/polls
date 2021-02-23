@@ -355,7 +355,10 @@ export default {
 
 			while (this.watching) {
 				try {
-					const response = await axios.get(generateUrl(endPoint + '/watch?offset=' + this.lastUpdated), { cancelToken: this.cancelToken.token })
+					const response = await axios.get(generateUrl(endPoint + '/watch'), {
+						params: { offset: this.lastUpdated },
+						cancelToken: this.cancelToken.token,
+					})
 					console.debug('polls', 'update detected', response.data.updates)
 					response.data.updates.forEach((item) => {
 						this.lastUpdated = (item.updated > this.lastUpdated) ? item.updated : this.lastUpdated
@@ -365,26 +368,24 @@ export default {
 							this.$store.dispatch('poll/' + item.table + '/list')
 						}
 					})
-
 					this.watching = true
-
 				} catch (error) {
 					this.watching = false
 					if (axios.isCancel(error)) {
-						console.debug('Canceled request')
+						console.debug('Watch canceld')
 					} else if (error.response) {
 						if (error.response.status === 304) {
-							console.debug('polls', 'Request timed out without updates, reconnect')
 							this.watching = true
 						} else if (error.response.status === 503) {
-							console.debug('polls', 'Server not available, reconnect in 30 sec')
+							console.debug('Server not available, reconnect watch in 30 sec')
 							await new Promise(resolve => setTimeout(resolve, 30000))
 							this.watching = true
+						} else {
+							console.error('Unhandled error watching polls', error)
 						}
 					} else if (error.request) {
-						console.debug('Request aborted')
-					} else {
-						console.debug('polls', 'Unhandeled error', error)
+						console.debug('Watch aborted')
+						this.watching = true
 					}
 				}
 			}
