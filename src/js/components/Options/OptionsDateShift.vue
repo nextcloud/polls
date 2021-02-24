@@ -27,7 +27,7 @@
 				<InputDiv v-model="shift.step"
 					use-num-modifiers
 					@add="shift.step++"
-					@substract="shift.step--" />
+					@subtract="shift.step--" />
 				<Multiselect v-model="shift.unit"
 					:options="dateUnits"
 					label="name"

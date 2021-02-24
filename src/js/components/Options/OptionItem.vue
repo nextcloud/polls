@@ -41,10 +41,10 @@
 						{{ event.from.dow }}
 					</div>
 				</div>
-				<div v-if="option.duration && !event.oneDay && !event.to.sameDay" class="devider">
+				<div v-if="option.duration && !event.to.sameDay" class="devider">
 					-
 				</div>
-				<div v-if="option.duration && !event.oneDay && !event.to.sameDay" class="event-to">
+				<div v-if="option.duration && !event.to.sameDay" class="event-to">
 					<div class="month">
 						{{ event.to.month }}
 					</div>
@@ -58,11 +58,11 @@
 			</div>
 
 			<div class="event-time">
-				<div v-if="!event.oneDay && !event.wholeDay" class="time-from">
-					{{ event.from.t }}
+				<div v-if="!event.dayLong" class="time-from">
+					{{ event.from.time }}
 				</div>
-				<div v-if="option.duration && !event.oneDay && !event.wholeDay" class="time-to">
-					{{ event.to.t }}
+				<div v-if="option.duration && !event.dayLong" class="time-to">
+					{{ event.to.time }}
 				</div>
 			</div>
 		</div>
@@ -104,19 +104,61 @@ export default {
 			return this.draggable
 		},
 
-		dateLocalFormat() {
-			if (this.option.duration) {
-				if (this.event.oneDay) {
-					return this.event.from.df
-				} else if (this.event.wholeDay) {
-					return this.event.from.df + ' - ' + this.event.to.df
-				} else if (this.event.to.sameDay) {
-					return this.event.from.dtf + ' - ' + this.event.to.t
-				} else {
-					return this.event.from.dtf + ' - ' + this.event.to.dtf
-				}
+		event() {
+			const from = moment.unix(this.option.timestamp)
+			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
+
+			// does the event start at 00:00 local time and
+			// is the duration divisable through 24 hours without rest
+			// then we have a day long event (one or multiple days)
+			// In this case we want to suppress the display of any time information
+			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && this.option.duration % 86400 === 0
+			const dayModifier = dayLongEvent ? 1 : 0
+			// modified to date, in case of day long events, a second gets substracted
+			// to set the begin of the to day to the end of the previous date
+			const toModified = moment(to).subtract(dayModifier, 'days')
+
+			if (this.poll.type !== 'datePoll') {
+				return {}
 			} else {
-				return this.event.from.dtf
+				return {
+					from: {
+						month: from.format('MMM [ \']YY'),
+						day: from.format('Do'),
+						dow: from.format('ddd'),
+						time: from.format('LT'),
+						date: from.format('ll'),
+						dateTime: from.format('llll'),
+						utc: moment(from).utc().format('llll'),
+					},
+					to: {
+						month: toModified.format('MMM'),
+						day: toModified.format('D'),
+						dow: toModified.format('ddd'),
+						time: to.format('LT'),
+						date: to.format('ll'),
+						dateTime: to.format('llll'),
+						utc: moment(to).utc().format('llll'),
+						sameDay: from.format('L') === toModified.format('L'),
+					},
+					dayLong: dayLongEvent,
+				}
+			}
+		},
+
+		dateLocalFormat() {
+			if (this.poll.type !== 'datePoll') {
+				return {}
+			} else if (this.option.duration === 0) {
+				return this.event.from.dateTime
+			} else if (this.event.daylong && this.event.to.sameDay) {
+				return this.event.from.date
+			} else if (this.event.daylong && !this.event.to.sameDay) {
+				return this.event.from.date + ' - ' + this.event.to.date
+			} else if (this.event.to.sameDay) {
+				return this.event.from.dateTime + ' - ' + this.event.to.time
+			} else {
+				return this.event.from.dateTime + ' - ' + this.event.to.dateTime
 			}
 		},
 
@@ -125,41 +167,6 @@ export default {
 				return this.event.from.utc + ' - ' + this.event.to.utc + ' UTC'
 			} else {
 				return this.event.from.utc + ' UTC'
-			}
-		},
-
-		event() {
-			const from = moment.unix(this.option.timestamp)
-			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
-
-			// If we have a fullDay event, reduce time by 1 second to
-			// represent the end of the day (00:00:00 - 1 sec = 23:59:59)
-			const dayModifier = this.option.duration && this.option.duration % 86400 === 0 && from.startOf('day').diff(from, 'seconds') === 0 ? 1 : 0
-			const toShort = moment.unix(this.option.timestamp + Math.max(0, this.option.duration - dayModifier))
-			return {
-				from: {
-					month: from.format('MMM [ \']YY'),
-					day: from.format('Do'),
-					dow: from.format('ddd'),
-					t: from.format('LT'),
-					df: from.format('ll'),
-					dtf: from.format('llll'),
-					utc: from.utc().format('llll'),
-				},
-				to: {
-					month: toShort.format('MMM'),
-					day: toShort.format('D'),
-					dow: toShort.format('ddd'),
-					t: to.format('LT'),
-					df: toShort.format('ll'),
-					dtf: to.format('llll'),
-					utc: to.utc().format('llll'),
-					sameDay: from.format('L') === toShort.format('L'),
-				},
-				// this event starts at 0:00 (!)local time and lasts exact 24 hours
-				oneDay: this.option.duration === 86400 && from.startOf('day').diff(from, 'seconds') === 0,
-				// This event starts at 0:00 (!)local time and lasts one or more full days
-				wholeDay: !!dayModifier,
 			}
 		},
 

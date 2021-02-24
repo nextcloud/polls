@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<div v-if="useNumModifiers" class="modifyer substract icon icon-polls-minus" @click="$emit('substract')" />
+		<div v-if="useNumModifiers" class="modifyer subtract icon icon-polls-minus" @click="$emit('subtract')" />
 		<input ref="input"
 			:value="value"
 			:placeholder="placeholder"
@@ -96,7 +96,7 @@ export default {
 		border-radius: 0 var(--border-radius) var(--border-radius) 0;
 	}
 
-	.substract {
+	.subtract {
 		left: 0;
 		border-right: solid 1px;
 		border-radius: var(--border-radius) 0 0 var(--border-radius);

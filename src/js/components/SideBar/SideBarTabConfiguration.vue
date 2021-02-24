@@ -49,13 +49,13 @@
 			<InputDiv v-if="pollVoteLimit" v-model="pollVoteLimit" class="selectUnit indented"
 				use-num-modifiers
 				@add="pollVoteLimit++"
-				@substract="pollVoteLimit--" />
+				@subtract="pollVoteLimit--" />
 
 			<CheckBoxDiv v-model="useOptionLimit" :label="t('polls', 'Limit yes votes per option')" />
 			<InputDiv v-if="pollOptionLimit" v-model="pollOptionLimit" class="selectUnit indented"
 				use-num-modifiers
 				@add="pollOptionLimit++"
-				@substract="pollOptionLimit--" />
+				@subtract="pollOptionLimit--" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
