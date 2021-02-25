@@ -31,8 +31,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 
-
-
+use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Acl;
@@ -44,6 +43,7 @@ use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\SystemService;
+use OCA\Polls\Service\WatchService;
 
 class PublicController extends Controller {
 
@@ -71,17 +71,20 @@ class PublicController extends Controller {
 	/** @var ShareService */
 	private $shareService;
 
+	/** @var Share */
+	private $share;
+
 	/** @var SubscriptionService */
 	private $subscriptionService;
 
-	/** @var Share */
-	private $share;
+	/** @var SystemService */
+	private $systemService;
 
 	/** @var VoteService */
 	private $voteService;
 
-	/** @var SystemService */
-	private $systemService;
+	/** @var WatchService */
+	private $watchService;
 
 	use ResponseHandle;
 
@@ -98,8 +101,9 @@ class PublicController extends Controller {
 		ShareService $shareService,
 		Share $share,
 		SubscriptionService $subscriptionService,
+		SystemService $systemService,
 		VoteService $voteService,
-		SystemService $systemService
+		WatchService $watchService
 	) {
 		parent::__construct($appName, $request);
 		$this->urlGenerator = $urlGenerator;
@@ -112,8 +116,9 @@ class PublicController extends Controller {
 		$this->shareService = $shareService;
 		$this->share = $share;
 		$this->subscriptionService = $subscriptionService;
-		$this->voteService = $voteService;
 		$this->systemService = $systemService;
+		$this->voteService = $voteService;
+		$this->watchService = $watchService;
 	}
 
 	/**
@@ -146,6 +151,30 @@ class PublicController extends Controller {
 				'acl' => $this->acl,
 				'poll' => $this->poll,
 			];
+		});
+	}
+
+	/**
+	 * Watch poll for updates
+	 * @PublicPage
+	 * @NoAdminRequired
+	 */
+	public function watchPoll(string $token, ?int $offset): DataResponse {
+		$pollId = $this->acl->setToken($token)->getPollId();
+
+		return $this->responseLong(function () use ($pollId, $offset) {
+			$start = time();
+			$timeout = 30;
+			$offset = $offset ?? $start;
+
+			while (empty($updates) && time() <= $start + $timeout) {
+				sleep(1);
+				$updates = $this->watchService->getUpdates($pollId, $offset);
+			}
+			if (empty($updates)) {
+				throw new NoUpdatesException;
+			}
+			return ['updates' => $updates];
 		});
 	}
 

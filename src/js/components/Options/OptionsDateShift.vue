@@ -24,23 +24,15 @@
 	<ConfigBox :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
 		<div>
 			<div class="selectUnit">
-				<Actions>
-					<ActionButton icon="icon-play-previous" @click="shift.step--">
-						{{ t('polls', 'Decrease unit') }}
-					</ActionButton>
-				</Actions>
-				<input v-model="shift.step">
-				<Actions>
-					<ActionButton icon="icon-play-next" @click="shift.step++">
-						{{ t('polls', 'Increase unit') }}
-					</ActionButton>
-				</Actions>
+				<InputDiv v-model="shift.step"
+					use-num-modifiers
+					@add="shift.step++"
+					@subtract="shift.step--" />
 				<Multiselect v-model="shift.unit"
 					:options="dateUnits"
 					label="name"
 					track-by="value" />
-				<ButtonDiv icon="icon-history"
-					:title="t('polls', 'Shift')"
+				<ButtonDiv submit
 					@click="shiftDates(shift)" />
 			</div>
 		</div>
@@ -51,17 +43,17 @@
 
 import { mapState } from 'vuex'
 import ConfigBox from '../Base/ConfigBox'
+import InputDiv from '../Base/InputDiv'
 import moment from '@nextcloud/moment'
-import { Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import { Multiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins'
 
 export default {
 	name: 'OptionsDateShift',
 
 	components: {
-		Actions,
-		ActionButton,
 		ConfigBox,
+		InputDiv,
 		Multiselect,
 	},
 
@@ -121,11 +113,8 @@ export default {
 <style lang="scss" scoped>
 .selectUnit {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
-	input {
-		margin: 0 4px;
-		width: 40px;
-	}
 	.multiselect {
 		margin: 0 8px;
 		width: unset !important;

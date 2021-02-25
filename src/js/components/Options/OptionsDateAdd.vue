@@ -22,16 +22,30 @@
 
 <template>
 	<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
-		<DatetimePicker v-model="lastOption"
+		<DatetimePicker v-model="pickedOption"
 			v-bind="optionDatePicker"
-			confirm
+			:open.sync="pickerOpen"
 			style="width: inherit;"
-			@change="addOption(lastOption)" />
+			@pick="pickedDate">
+			<template slot="footer">
+				<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
+				<button v-if="!showTimePanel" class="mx-btn" @click="toggleTimePanel">
+					{{ t('polls', 'Add time') }}
+				</button>
+				<button v-else class="mx-btn" @click="toggleTimePanel">
+					{{ t('polls', 'Remove time') }}
+				</button>
+				<button class="mx-btn" @click="addOption">
+					{{ t('polls', 'OK') }}
+				</button>
+			</template>
+		</DateTimePicker>
 	</ConfigBox>
 </template>
 
 <script>
 
+import CheckBoxDiv from '../Base/CheckBoxDiv'
 import ConfigBox from '../Base/ConfigBox'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
@@ -40,25 +54,57 @@ export default {
 	name: 'OptionsDateAdd',
 
 	components: {
+		CheckBoxDiv,
 		ConfigBox,
 		DatetimePicker,
 	},
 
 	data() {
 		return {
-			lastOption: '',
+			pickedOption: null,
+			lastPickedOption: null,
+			startDate: moment(),
+			endDate: moment(),
+			pickerOpen: false,
+			useRange: false,
+			showTimePanel: false,
 		}
 	},
 
 	computed: {
+		tempFormat() {
+			if (this.showTimePanel) {
+				return moment.localeData().longDateFormat('L LT')
+			} else {
+				return moment.localeData().longDateFormat('L')
+			}
+		},
+
+		dateOption() {
+			const timeToAdd = this.showTimePanel ? 0 : 86400
+
+			const startDate = this.useRange ? moment(this.pickedOption[0]) : moment(this.pickedOption)
+			const endDate = this.useRange ? moment(this.pickedOption[1]).add(timeToAdd, 'seconds') : moment(this.pickedOption).add(timeToAdd, 'seconds')
+			const pollOptionTextStart = startDate.utc().format(moment.defaultFormat)
+			const pollOptionTextEnd = startDate === endDate ? '' : ' - ' + endDate.utc().format(moment.defaultFormat)
+
+			return {
+				timestamp: startDate.unix(),
+				pollOptionText: pollOptionTextStart + pollOptionTextEnd,
+				duration: endDate.unix() - startDate.unix(),
+			}
+		},
+
 		optionDatePicker() {
 			return {
 				editable: false,
 				minuteStep: 5,
-				type: 'datetime',
-				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
-				placeholder: t('polls', 'Click to add a date'),
-				confirm: true,
+				type: this.showTimePanel ? 'datetime' : 'date',
+				range: this.useRange,
+				showTimePanel: this.showTimePanel,
+				valueType: 'timestamp',
+				format: this.tempFormat,
+				placeholder: t('polls', 'Click to add an option'),
 				lang: {
 					formatLocale: {
 						firstDayOfWeek: this.firstDOW,
@@ -72,16 +118,61 @@ export default {
 		},
 	},
 
-	methods: {
-		addOption(pollOptionText) {
-			if (moment(pollOptionText).isValid()) {
-				this.$store.dispatch('poll/options/add', {
-					pollOptionText: pollOptionText,
-					timestamp: moment(pollOptionText).unix(),
-				})
+	watch: {
+		useRange() {
+			if (this.useRange) {
+				if (!Array.isArray(this.pickedOption)) {
+					this.pickedOption = [this.pickedOption, this.pickedOption]
+				}
+			} else {
+				if (Array.isArray(this.pickedOption)) {
+					this.pickedOption = this.pickedOption[0]
+				}
 			}
+		},
+	},
+
+	methods: {
+		toggleTimePanel() {
+			if (this.useRange) {
+				if (Array.isArray(this.pickedOption)) {
+					if (this.lastPickedOption !== this.pickedOption[0]
+						&& this.lastPickedOption !== this.pickedOption[1]) {
+						this.pickedOption = [this.lastPickedOption, this.lastPickedOption]
+					}
+				} else {
+					if (this.lastPickedOption) {
+						this.pickedOption = [this.lastPickedOption, this.lastPickedOption]
+					}
+				}
+			}
+			this.showTimePanel = !this.showTimePanel
+		},
+
+		pickedDate(value) {
+			if (this.optionDatePicker.valueType === 'timestamp') {
+				this.lastPickedOption = moment(value).valueOf()
+			} else {
+				this.lastPickedOption = value
+			}
+			this.pickerOpen = true
+		},
+
+		addOption() {
+			this.pickerOpen = false
+			this.$store.dispatch('poll/options/add', this.dateOption)
 		},
 	},
 }
 
 </script>
+
+<style lang="scss" scoped>
+
+.range {
+	flex: 1;
+	text-align: left;
+	margin: 8px;
+}
+
+</style>

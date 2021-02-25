@@ -66,9 +66,9 @@ class OptionController extends Controller {
 	 * Add a new option
 	 * @NoAdminRequired
 	 */
-	public function add($pollId, $timestamp = 0, $pollOptionText = ''): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
-			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
+	public function add($pollId, $timestamp = 0, $pollOptionText = '', $duration = 0): DataResponse {
+		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText, $duration) {
+			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)];
 		});
 	}
 
@@ -76,9 +76,9 @@ class OptionController extends Controller {
 	 * Update option
 	 * @NoAdminRequired
 	 */
-	public function update($optionId, $timestamp, $pollOptionText): DataResponse {
-		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
-			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
+	public function update($optionId, $timestamp, $pollOptionText, $duration): DataResponse {
+		return $this->response(function () use ($optionId, $timestamp, $pollOptionText, $duration) {
+			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $duration)];
 		});
 	}
 
@@ -128,10 +128,13 @@ class OptionController extends Controller {
 	 */
 	public function findCalendarEvents($optionId): DataResponse {
 		return $this->response(function () use ($optionId) {
+			$option = $this->optionService->get($optionId);
 			$searchFrom = new DateTime();
-			$searchFrom = $searchFrom->setTimestamp($this->optionService->get($optionId)->getTimestamp())->sub(new DateInterval('PT1H'));
-			$searchTo = clone $searchFrom;
-			$searchTo = $searchTo->add(new DateInterval('PT3H'));
+			$searchTo = new DateTime();
+			// Search calendar entries which end inside one hour before option start time
+			$searchFrom = $searchFrom->setTimestamp($option->getTimestamp())->sub(new DateInterval('PT1H'));
+			// Search calendar entries which start inside one hour after option end time
+			$searchTo = $searchTo->setTimestamp($option->getTimestamp() + $option->getDuration())->add(new DateInterval('PT1H'));
 			$events = $this->calendarService->getEvents($searchFrom, $searchTo);
 			return ['events' => $events];
 		});

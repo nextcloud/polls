@@ -89,6 +89,23 @@ class CalendarEvent implements \JsonSerializable {
 		return isset($this->event['DTEND'][0])? $this->event['DTEND'][0]->getTimestamp() : 0;
 	}
 
+	public function getHasRRule() {
+		return isset($this->event['RRULE']);
+	}
+
+	public function getRecurrencies() {
+		return 'not implementend yet';
+	}
+
+	public function getRRule() {
+		$rRule = [];
+		if ($this->getHasRRule()) {
+			preg_match_all("/([^;= ]+)=([^;= ]+)/", $this->event['RRULE'][0], $r);
+			$rRule = array_combine($r[1], $r[2]);
+		}
+		return $rRule;
+	}
+
 	public function getStatus() {
 		return $this->event['STATUS'][0] ?? '';
 	}
@@ -112,6 +129,9 @@ class CalendarEvent implements \JsonSerializable {
 			'status' => $this->getStatus(),
 			'summary' => $this->getSummary(),
 			'calDav' => $this->getCalDav(),
+			'hasRRule' => $this->getHasRRule(),
+			'rRule' => $this->getRRule(),
+			'recurrencies' => $this->getRecurrencies(),
 		];
 	}
 }

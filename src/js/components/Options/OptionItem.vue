@@ -21,29 +21,49 @@
   -->
 
 <template>
-	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable }">
+	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, 'date-box': show === 'dateBox' }">
 		<div v-if="isDraggable" class="option-item__handle icon icon-handle" />
-
-		<div v-if="showRank" class="option-item__rank">
-			{{ option.rank }}
-		</div>
 
 		<div v-if="show === 'textBox'" v-tooltip.auto="optionTooltip" class="option-item__option--text">
 			{{ optionText }}
 		</div>
 
 		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
-			<div class="month">
-				{{ dateBoxMonth }}
+			<div class="event-date">
+				<div class="event-from">
+					<div class="month">
+						{{ event.from.month }}
+					</div>
+					<div class="day">
+						{{ event.from.day }}
+					</div>
+					<div class="dow">
+						{{ event.from.dow }}
+					</div>
+				</div>
+				<div v-if="option.duration && !event.to.sameDay" class="devider">
+					-
+				</div>
+				<div v-if="option.duration && !event.to.sameDay" class="event-to">
+					<div class="month">
+						{{ event.to.month }}
+					</div>
+					<div class="day">
+						{{ event.to.day }}
+					</div>
+					<div class="dow">
+						{{ event.to.dow }}
+					</div>
+				</div>
 			</div>
-			<div class="day">
-				{{ dateBoxDay }}
-			</div>
-			<div class="dow">
-				{{ dateBoxDow }}
-			</div>
-			<div class="time">
-				{{ dateBoxTime }}
+
+			<div class="event-time">
+				<div v-if="!event.dayLong" class="time-from">
+					{{ event.from.time }}
+				</div>
+				<div v-if="option.duration && !event.dayLong" class="time-to">
+					{{ event.to.time }}
+				</div>
 			</div>
 		</div>
 
@@ -66,10 +86,6 @@ export default {
 			type: Object,
 			required: true,
 		},
-		showRank: {
-			type: Boolean,
-			default: false,
-		},
 		tag: {
 			type: String,
 			default: 'div',
@@ -88,28 +104,70 @@ export default {
 			return this.draggable
 		},
 
+		event() {
+			const from = moment.unix(this.option.timestamp)
+			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
+
+			// does the event start at 00:00 local time and
+			// is the duration divisable through 24 hours without rest
+			// then we have a day long event (one or multiple days)
+			// In this case we want to suppress the display of any time information
+			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && this.option.duration % 86400 === 0
+			const dayModifier = dayLongEvent ? 1 : 0
+			// modified to date, in case of day long events, a second gets substracted
+			// to set the begin of the to day to the end of the previous date
+			const toModified = moment(to).subtract(dayModifier, 'days')
+
+			if (this.poll.type !== 'datePoll') {
+				return {}
+			} else {
+				return {
+					from: {
+						month: from.format('MMM [ \']YY'),
+						day: from.format('Do'),
+						dow: from.format('ddd'),
+						time: from.format('LT'),
+						date: from.format('ll'),
+						dateTime: from.format('llll'),
+						utc: moment(from).utc().format('llll'),
+					},
+					to: {
+						month: toModified.format('MMM'),
+						day: toModified.format('D'),
+						dow: toModified.format('ddd'),
+						time: to.format('LT'),
+						date: to.format('ll'),
+						dateTime: to.format('llll'),
+						utc: moment(to).utc().format('llll'),
+						sameDay: from.format('L') === toModified.format('L'),
+					},
+					dayLong: dayLongEvent,
+				}
+			}
+		},
+
 		dateLocalFormat() {
-			return moment.unix(this.option.timestamp).format('llll')
+			if (this.poll.type !== 'datePoll') {
+				return {}
+			} else if (this.option.duration === 0) {
+				return this.event.from.dateTime
+			} else if (this.event.daylong && this.event.to.sameDay) {
+				return this.event.from.date
+			} else if (this.event.daylong && !this.event.to.sameDay) {
+				return this.event.from.date + ' - ' + this.event.to.date
+			} else if (this.event.to.sameDay) {
+				return this.event.from.dateTime + ' - ' + this.event.to.time
+			} else {
+				return this.event.from.dateTime + ' - ' + this.event.to.dateTime
+			}
 		},
 
 		dateLocalFormatUTC() {
-			return moment.unix(this.option.timestamp).utc().format('llll') + ' UTC'
-		},
-
-		dateBoxMonth() {
-			return moment.unix(this.option.timestamp).format('MMM') + " '" + moment.unix(this.option.timestamp).format('YY')
-		},
-
-		dateBoxDay() {
-			return moment.unix(this.option.timestamp).format('Do')
-		},
-
-		dateBoxDow() {
-			return moment.unix(this.option.timestamp).format('ddd')
-		},
-
-		dateBoxTime() {
-			return moment.unix(this.option.timestamp).format('LT')
+			if (this.option.duration) {
+				return this.event.from.utc + ' - ' + this.event.to.utc + ' UTC'
+			} else {
+				return this.event.from.utc + ' UTC'
+			}
 		},
 
 		optionTooltip() {
@@ -143,6 +201,49 @@ export default {
 	.option-item {
 		display: flex;
 		align-items: center;
+		flex: 1;
+		position: relative;
+		&.date-box {
+			// flex: 1;
+			align-items: stretch;
+			flex-direction: column;
+		}
+	}
+
+	[class*='event'] {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.devider {
+		align-self: center;
+		color: var(--color-text-lighter);
+	}
+
+	.event-date {
+		flex-direction: row !important;
+		align-items: stretch !important;
+		justify-content: center;
+		.event-from {
+			padding-bottom: 8px;
+			flex: 0;
+		}
+		.event-to {
+			flex: 0;
+			font-size: 80%;
+			justify-content: flex-end;
+			.day {
+				margin: 0;
+			}
+		}
+	}
+
+	.event-time {
+		margin-top: 8px;
+		.time-to {
+			font-size: 80%;
+		}
 	}
 
 	[class*='option-item__option'] {
@@ -187,11 +288,13 @@ export default {
 		display: flex;
 		flex-direction: column;
 		padding: 0 2px;
-		align-items: center;
-		justify-content: center;
+		align-items: stretch;
+		justify-content: flex-start;
 		text-align: center;
+		hyphens: auto;
 
-		.month, .dow {
+		.month, .dow, .time {
+			white-space: pre;
 			font-size: 1.1em;
 			color: var(--color-text-lighter);
 		}
@@ -201,17 +304,4 @@ export default {
 		}
 	}
 
-	.mobile {
-		.option-item {
-			flex: 2;
-			order: 1;
-			min-width: 0;
-			.option-item__option--text {
-				hyphens: auto;
-				align-items: center;
-				white-space: nowrap;
-				width: 50px;
-			}
-		}
-	}
 </style>

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent :class="{ closed: closed }">
+	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="header-actions">
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
@@ -130,13 +130,15 @@ export default {
 
 	data() {
 		return {
-			voteSaved: false,
+			cancelToken: null,
 			delay: 50,
 			isLoading: false,
-			ranked: false,
 			manualViewDatePoll: '',
 			manualViewTextPoll: '',
-			cancelToken: null,
+			ranked: false,
+			voteSaved: false,
+			watching: true,
+			lastUpdated: Math.round(Date.now() / 1000),
 		}
 	},
 
@@ -280,7 +282,6 @@ export default {
 			return true
 		} else if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 			document.body.classList.add('theme--dark')
-			return true
 		}
 
 		if (getCurrentUser() && this.$route.name === 'publicVote') {
@@ -305,35 +306,6 @@ export default {
 	},
 
 	methods: {
-		async watchPoll() {
-			this.cancelToken = axios.CancelToken.source()
-			let watching = true
-			let lastUpdated = 0
-			while (watching) {
-				await axios.get(generateUrl('apps/polls/watch/' + this.$route.params.id + '?offset=' + lastUpdated), { cancelToken: this.cancelToken.token })
-					.then((response) => {
-						console.debug('update detected', response.data.updates)
-						response.data.updates.forEach((item) => {
-							lastUpdated = (item.updated > lastUpdated) ? item.updated : lastUpdated
-							if (item.table === 'polls') {
-								this.$store.dispatch('poll/get')
-							} else {
-								this.$store.dispatch('poll/' + item.table + '/list')
-							}
-						})
-					})
-					.catch((error) => {
-						if (axios.isCancel(error)) {
-							watching = false
-						} else if (error?.response) {
-							if (error.response.status !== 304) {
-								console.error(error.response)
-							}
-						}
-					})
-			}
-		},
-
 		openOptions() {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
@@ -366,13 +338,66 @@ export default {
 				}
 			}
 		},
+
+		async watchPoll() {
+			console.debug('polls', 'Watch for updates')
+
+			this.cancelToken = axios.CancelToken.source()
+			let endPoint = 'apps/polls'
+
+			if (this.$route.name === 'publicVote') {
+				endPoint = endPoint + '/s/' + this.$route.params.token
+			} else if (this.$route.name === 'vote') {
+				endPoint = endPoint + '/poll/' + this.$route.params.id
+			} else {
+				this.watching = false
+			}
+
+			while (this.watching) {
+				try {
+					const response = await axios.get(generateUrl(endPoint + '/watch'), {
+						params: { offset: this.lastUpdated },
+						cancelToken: this.cancelToken.token,
+					})
+					console.debug('polls', 'update detected', response.data.updates)
+					response.data.updates.forEach((item) => {
+						this.lastUpdated = (item.updated > this.lastUpdated) ? item.updated : this.lastUpdated
+						if (item.table === 'polls') {
+							this.$store.dispatch('poll/get')
+						} else {
+							this.$store.dispatch('poll/' + item.table + '/list')
+						}
+					})
+					this.watching = true
+				} catch (error) {
+					this.watching = false
+					if (axios.isCancel(error)) {
+						console.debug('Watch canceld')
+					} else if (error.response) {
+						if (error.response.status === 304) {
+							this.watching = true
+						} else if (error.response.status === 503) {
+							console.debug('Server not available, reconnect watch in 30 sec')
+							await new Promise(resolve => setTimeout(resolve, 30000))
+							this.watching = true
+						} else {
+							console.error('Unhandled error watching polls', error)
+						}
+					} else if (error.request) {
+						console.debug('Watch aborted')
+						this.watching = true
+					}
+				}
+			}
+		},
 	},
 }
+
 </script>
 
 <style lang="scss" scoped>
 .description {
-	white-space: pre;
+	white-space: pre-wrap;
 }
 
 .header-actions {

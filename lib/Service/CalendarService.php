@@ -73,7 +73,7 @@ class CalendarService {
 
 				// since we get back recurring events of other days, just make sure this event
 				// matches the search pattern
-				// TODO: identify possible time zone issues, whan handling all day events
+				// TODO: identify possible time zone issues, when handling all day events
 				if (($from->getTimestamp() < $calendarEvent->getEnd())
 					&& ($to->getTimestamp() > $calendarEvent->getStart())) {
 					array_push($events, $calendarEvent);

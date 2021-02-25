@@ -24,27 +24,18 @@
 	<div class="vote-table-header-item"
 		:class=" { winner: isWinner }">
 		<OptionItem :option="option" :display="optionStyle" />
-		<Confirmation v-if="isConfirmed" :option="option" />
-		<Counter v-else :show-maybe="Boolean(poll.allowMaybe)"
-			:option="option"
-			:counter-style="counterStyle"
-			:show-no="showNo" />
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import OptionItem from '../Options/OptionItem'
-import Counter from '../Base/Counter'
-import Confirmation from '../Base/Confirmation'
 
 export default {
 	name: 'VoteTableHeaderItem',
 
 	components: {
 		OptionItem,
-		Counter,
-		Confirmation,
 	},
 
 	props: {
@@ -89,7 +80,7 @@ export default {
 		isWinner() {
 			// highlight best option until poll is closed and
 			// at least one option is confirmed
-			return this.option.yes + this.option.maybe > 0 && this.option.rank === 1 && !(this.closed && this.confirmedOptions.length)
+			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
 		},
 
 		isConfirmed() {
@@ -110,33 +101,11 @@ export default {
 			color: var(--color-polls-foreground-yes);
 		}
 	}
-	.option-item {
-		flex: 1;
-		align-items: flex-start;
-	}
 }
 
 .confirmations {
 	text-align: center;
 	height: 2em;
-}
-
-.mobile {
-	.vote-table-header-item {
-		flex-direction: column;
-		&.confirmed {
-			flex-direction: row;
-		}
-	}
-	.counter {
-		order: 2;
-	}
-
-	.confirmation {
-		background-position: left;
-		order: 0;
-		padding: 0 15px;
-	}
 }
 
 </style>
