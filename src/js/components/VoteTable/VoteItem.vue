@@ -191,6 +191,9 @@ export default {
 	&.maybe {
 		background-color: var(--color-polls-background-maybe--dark);
 	}
+	&.active {
+		background-color: var(--color-main-background);
+	}
 }
 
 .vote-item.confirmed:not(.yes):not(.maybe) .icon {

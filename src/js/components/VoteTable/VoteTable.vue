@@ -185,6 +185,7 @@ export default {
 
 	.confirmation {
 		order:3;
+		padding: 4px;
 	}
 
 	.counter {
