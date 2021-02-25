@@ -11,7 +11,9 @@ OC.L10N.register(
     "Title" : "Tìtulu",
     "Apply" : "Àplica",
     "Settings" : "Impostatziones",
+    "Owner" : "Mere",
     "Deleted" : "Cantzelladu",
+    "Remove share" : "Boga cumpartzidura",
     "Details" : "Detàllios",
     "Comments" : "Cummentos",
     "Description" : "Descritzione"
