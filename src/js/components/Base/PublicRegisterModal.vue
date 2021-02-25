@@ -27,13 +27,8 @@
 				{{ t('polls', 'Public poll') }}
 			</h2>
 			<div class="modal__registration">
-				<div class="registration__login">
-					<h2> {{ t('polls', 'Do you want to login?') }} </h2>
-					<ButtonDiv :title="t('polls', 'Login')" @click="login()" />
-				</div>
-
 				<div class="registration__registration">
-					<h2>{{ t('polls', 'Participate in public poll!') }}</h2>
+					<h2>{{ t('polls', 'Public participation') }}</h2>
 					<div class="section__username">
 						<h3>{{ t('polls', 'To participate, tell us how we can call you!') }}</h3>
 						<input ref="userName" v-model="userName" :class="userNameCheckStatus"
@@ -57,6 +52,17 @@
 						<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
 						<ButtonDiv :primary="true" :disabled="disableSubmit" :title="t('polls', 'OK')"
 							@click="submitRegistration" />
+					</div>
+				</div>
+
+				<div class="registration__login">
+					<h2> {{ t('polls', 'You are a registered user of this site?') }} </h2>
+					<ButtonDiv :title="t('polls', 'Login')" @click="login()" />
+					<div>
+						{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
+					</div>
+					<div>
+						{{ t('polls', 'Otherwise participate publicly.') }}
 					</div>
 				</div>
 			</div>
