@@ -84,6 +84,7 @@
 		</div>
 
 		<div class="area__footer">
+			<PublicEmail />
 			<Subscription v-if="acl.allowSubscribe" />
 			<ParticipantsList v-if="acl.allowSeeUsernames" />
 		</div>
@@ -108,6 +109,7 @@ import ParticipantsList from '../components/Base/ParticipantsList'
 import PersonalLink from '../components/Base/PersonalLink'
 import PollInformation from '../components/Base/PollInformation'
 import PublicRegisterModal from '../components/Base/PublicRegisterModal'
+import PublicEmail from '../components/Base/PublicEmail'
 import Subscription from '../components/Subscription/Subscription'
 import VoteTable from '../components/VoteTable/VoteTable'
 
@@ -124,6 +126,7 @@ export default {
 		PersonalLink,
 		PollInformation,
 		PublicRegisterModal,
+		PublicEmail,
 		Subscription,
 		VoteTable,
 	},

@@ -317,6 +317,18 @@ class PublicController extends Controller {
 	}
 
 	/**
+	 * Set EmailAddress
+	 * @PublicPage
+	 * @NoAdminRequired
+	 */
+	public function setEmailAddress(string $token, ?string $emailAddress = ''): DataResponse {
+		return $this->response(function () use ($token, $emailAddress) {
+			return ['share' => $this->shareService->setEmailAddress($token, $emailAddress, true)];
+		});
+	}
+
+
+	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the username
 	 * @NoAdminRequired

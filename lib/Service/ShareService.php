@@ -237,7 +237,7 @@ class ShareService {
 	 *
 	 * @return Share
 	 */
-	public function setEmailAddress(string $token, string $emailAddress): Share {
+	public function setEmailAddress(string $token, string $emailAddress, bool $emptyIsValid = false): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 		} catch (DoesNotExistException $e) {
@@ -245,7 +245,7 @@ class ShareService {
 		}
 
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
-			$this->systemService->validateEmailAddress($emailAddress);
+			$this->systemService->validateEmailAddress($emailAddress, $emptyIsValid);
 			$this->share->setEmailAddress($emailAddress);
 			// TODO: Send confirmation
 			return $this->shareMapper->update($this->share);

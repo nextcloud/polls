@@ -30,6 +30,7 @@ return [
 		['name' => 'public#get_options', 'url' => '/s/{token}/options', 'verb' => 'GET'],
 		['name' => 'public#get_votes', 'url' => '/s/{token}/votes', 'verb' => 'GET'],
 		['name' => 'public#get_subscription', 'url' => '/s/{token}/subscription', 'verb' => 'GET'],
+		['name' => 'public#set_email_address', 'url' => '/s/{token}/email', 'verb' => 'PUT'],
 
 		['name' => 'public#set_vote', 'url' => '/s/{token}/vote', 'verb' => 'PUT'],
 		['name' => 'public#add_comment', 'url' => '/s/{token}/comment', 'verb' => 'POST'],

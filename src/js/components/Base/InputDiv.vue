@@ -26,10 +26,11 @@
 		<input ref="input"
 			:value="value"
 			:placeholder="placeholder"
-			class="input"
-			@keyup.enter="$emit('input', $event.target.value)">
-		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('input', $refs.input.value)" />
+			:class="['input', inputClass]"
+			@input="$emit('update:value', $event.target.value)"
+			@keyup.enter="$emit('submit', $event.target.value)">
 		<div v-if="useNumModifiers" class="modifyer add icon icon-add" @click="$emit('add')" />
+		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('submit', $refs.input.value)" />
 	</div>
 </template>
 
@@ -48,6 +49,10 @@ export default {
 		value: {
 			type: [String, Number],
 			required: true,
+		},
+		inputClass: {
+			type: String,
+			default: '',
 		},
 		placeholder: {
 			type: String,
