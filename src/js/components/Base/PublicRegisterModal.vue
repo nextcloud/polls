@@ -23,9 +23,9 @@
 <template>
 	<Modal v-show="modal" :can-close="false">
 		<div class="modal__content">
-			<h2 class="modal__title">
+			<!-- <h2 class="modal__title">
 				{{ t('polls', 'Public poll') }}
-			</h2>
+			</h2> -->
 			<div class="modal__registration">
 				<div class="registration__registration">
 					<h2>{{ t('polls', 'Public participation') }}</h2>
@@ -286,7 +286,7 @@ export default {
 			display: flex;
 			flex-direction: column;
 			flex: 1 auto;
-			min-width: 240px;
+			min-width: 140px;
 			padding: 24px;
 			border-top: 1px solid;
 			border-right: 1px solid;

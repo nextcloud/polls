@@ -5,7 +5,7 @@
 	}
 }
 
-.modal-wrapper .modal-container[data-v-a2e1babe] {
+.modal-wrapper .modal-container {
 	overflow: auto !important;
 }
 
@@ -22,4 +22,8 @@
 .mx-datepicker-main, .mx-datepicker-popup {
 	right: 0 !important;
 	left: auto !important;
+}
+
+.modal-wrapper:not(.modal-wrapper--large):not(.modal-wrapper--full) .modal-container {
+	overflow: auto;
 }
