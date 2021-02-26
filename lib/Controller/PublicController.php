@@ -321,7 +321,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function setEmailAddress(string $token, ?string $emailAddress = ''): DataResponse {
+	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
 		return $this->response(function () use ($token, $emailAddress) {
 			return ['share' => $this->shareService->setEmailAddress($token, $emailAddress, true)];
 		});
