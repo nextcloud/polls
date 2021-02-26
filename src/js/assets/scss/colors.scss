@@ -1,4 +1,6 @@
 :root {
+	--color-foreground-error: #222222;
+	--color-foreground-success: #222222;
 	--color-background-error: #f9c5c5;
 	--color-background-success: #d6fdda;
 	--color-polls-foreground-yes: #49bc49;
@@ -10,4 +12,15 @@
 	--color-polls-background-yes--dark: #2e4600;
 	--color-polls-background-no--dark: #4d0d00;
 	--color-polls-background-maybe--dark: #665600;
+}
+
+:root .theme--dark {
+	--color-foreground-error: #dddddd;
+	--color-foreground-success: #dddddd;
+	--color-background-success: #2e4600;
+	--color-background-error: #4d0d00;
+	--color-polls-background-yes: #2e4600;
+	--color-polls-background-no: #4d0d00;
+	--color-polls-background-maybe: #665600;
+
 }

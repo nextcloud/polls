@@ -240,35 +240,6 @@ export default {
 	text-decoration: underline;
 }
 
-input {
-	background-repeat: no-repeat;
-	background-position: 98%;
-
-	&.error {
-		border-color: var(--color-error);
-		background-color: var(--color-background-error);
-		background-image: var(--icon-polls-no);
-		color: var(--color-text-maxcontrast);
-	}
-
-	&.checking {
-		border-color: var(--color-warning);
-		background-image: var(--icon-polls-loading);
-	}
-
-	&.success, &.icon-confirm.success {
-		border-color: var(--color-success);
-		background-image: var(--icon-polls-yes);
-		background-color: var(--color-background-success) !important;
-		color: var(--color-text-maxcontrast);
-	}
-
-	&.icon {
-		flex: 0;
-		padding: 0 17px;
-	}
-}
-
 .label {
 	border: solid 1px;
 	border-radius: var(--border-radius);

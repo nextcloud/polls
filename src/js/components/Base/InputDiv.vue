@@ -22,14 +22,15 @@
 
 <template lang="html">
 	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<div v-if="useNumModifiers" class="modifyer subtract icon icon-polls-minus" @click="$emit('subtract')" />
+		<div v-if="useNumModifiers" class="modifier subtract icon icon-polls-minus" @click="$emit('subtract')" />
 		<input ref="input"
 			:value="value"
 			:placeholder="placeholder"
-			class="input"
-			@keyup.enter="$emit('input', $event.target.value)">
-		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('input', $refs.input.value)" />
-		<div v-if="useNumModifiers" class="modifyer add icon icon-add" @click="$emit('add')" />
+			:class="['input', signalingClass]"
+			@input="$emit('update:value', $event.target.value)"
+			@keyup.enter="$emit('submit', $event.target.value)">
+		<div v-if="useNumModifiers" class="modifier add icon icon-add" @click="$emit('add')" />
+		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('submit', $refs.input.value)" />
 	</div>
 </template>
 
@@ -49,6 +50,10 @@ export default {
 			type: [String, Number],
 			required: true,
 		},
+		signalingClass: {
+			type: String,
+			default: '',
+		},
 		placeholder: {
 			type: String,
 			default: '',
@@ -57,9 +62,27 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		focus: {
+			type: Boolean,
+			default: false,
+		},
 		noSubmit: {
 			type: Boolean,
 			default: false,
+		},
+	},
+
+	mounted() {
+		if (this.focus) {
+			this.setFocus()
+		}
+	},
+
+	methods: {
+		setFocus() {
+			this.$nextTick(() => {
+				this.$refs.input.focus()
+			})
 		},
 	},
 }
@@ -85,8 +108,34 @@ export default {
 
 	input {
 		width: 100%;
+		background-repeat: no-repeat;
+		background-position: right 12px center;
 		&:empty:before {
 			color: grey;
+		}
+
+		&.error {
+			border-color: var(--color-error);
+			background-color: var(--color-background-error);
+			background-image: var(--icon-polls-no);
+			color: var(--color-foreground-error);
+		}
+
+		&.checking {
+			border-color: var(--color-warning);
+			background-image: var(--icon-polls-loading);
+		}
+
+		&.success, &.icon-confirm.success {
+			border-color: var(--color-success);
+			background-image: var(--icon-polls-yes);
+			background-color: var(--color-background-success) !important;
+			color: var(--color-foreground-success);
+		}
+
+		&.icon {
+			flex: 0;
+			padding: 0 17px;
 		}
 	}
 
@@ -102,7 +151,7 @@ export default {
 		border-radius: var(--border-radius) 0 0 var(--border-radius);
 	}
 
-	.modifyer {
+	.modifier {
 		position: absolute;
 		top: 0;
 		height: 32px;

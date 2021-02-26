@@ -99,7 +99,7 @@ class ShareController extends Controller {
 	 * Add share
 	 * @NoAdminRequired
 	 */
-	public function add($pollId, $type, $userId = ''): DataResponse {
+	public function add(int $pollId, string $type, $userId = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $type, $userId) {
 			return ['share' => $this->shareService->add($pollId, $type, $userId)];
 		});
@@ -109,7 +109,7 @@ class ShareController extends Controller {
 	 * Set email address
 	 * @NoAdminRequired
 	 */
-	public function setEmailAddress($token, $emailAddress): DataResponse {
+	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
 		return $this->response(function () use ($token, $emailAddress) {
 			return ['share' => $this->shareService->setEmailAddress($token, $emailAddress)];
 		});

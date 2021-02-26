@@ -180,22 +180,6 @@ export default {
 	}
 }
 
-.theme--dark .vote-item {
-	background-color: var(--color-polls-background-no--dark);
-	&.yes {
-		background-color: var(--color-polls-background-yes--dark);
-	}
-	&.no {
-		background-color: var(--color-polls-background-no--dark);
-	}
-	&.maybe {
-		background-color: var(--color-polls-background-maybe--dark);
-	}
-	&.active {
-		background-color: var(--color-main-background);
-	}
-}
-
 .vote-item.confirmed:not(.yes):not(.maybe) .icon {
 	background-image: var(--icon-polls-no);
 }

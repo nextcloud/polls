@@ -46,6 +46,10 @@ const mutations = {
 		Object.assign(state, payload.share)
 	},
 
+	setEmailAddress(state, payload) {
+		state.emailAddress = payload
+	},
+
 	reset(state) {
 		Object.assign(state, defaultShares())
 	},
@@ -88,6 +92,28 @@ const actions = {
 			})
 			.catch((error) => {
 				console.error('Error writing personal share', { error: error.response }, { payload: payload })
+				throw error
+			})
+
+	},
+
+	updateEmailAddress(context, payload) {
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else {
+			return
+		}
+
+		return axios.put(generateUrl(endPoint + '/email'), {
+			emailAddress: payload.emailAddress,
+		})
+			.then((response) => {
+				context.commit('set', { share: response.data.share })
+				return response.data
+			})
+			.catch((error) => {
+				console.error('Error writing email address', { error: error.response }, { payload: payload })
 				throw error
 			})
 

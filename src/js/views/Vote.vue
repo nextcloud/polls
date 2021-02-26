@@ -84,6 +84,7 @@
 		</div>
 
 		<div class="area__footer">
+			<PublicEmail v-if="showEmailEdit" :value="share.emailAddress" @update="submitEmailAddress" />
 			<Subscription v-if="acl.allowSubscribe" />
 			<ParticipantsList v-if="acl.allowSeeUsernames" />
 		</div>
@@ -96,6 +97,7 @@
 <script>
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import linkifyUrls from 'linkify-urls'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
@@ -108,6 +110,7 @@ import ParticipantsList from '../components/Base/ParticipantsList'
 import PersonalLink from '../components/Base/PersonalLink'
 import PollInformation from '../components/Base/PollInformation'
 import PublicRegisterModal from '../components/Base/PublicRegisterModal'
+import PublicEmail from '../components/Base/PublicEmail'
 import Subscription from '../components/Subscription/Subscription'
 import VoteTable from '../components/VoteTable/VoteTable'
 
@@ -124,6 +127,7 @@ export default {
 		PersonalLink,
 		PollInformation,
 		PublicRegisterModal,
+		PublicEmail,
 		Subscription,
 		VoteTable,
 	},
@@ -154,6 +158,10 @@ export default {
 		...mapGetters({
 			closed: 'poll/closed',
 		}),
+
+		showEmailEdit() {
+			return ['email', 'contact', 'external'].includes(this.share.type)
+		},
 
 		viewTextPoll() {
 			if (this.manualViewTextPoll) {
@@ -244,9 +252,7 @@ export default {
 
 		showRegisterModal() {
 			return (this.$route.name === 'publicVote'
-				&& (this.share.type === 'public'
-					|| this.share.type === 'email'
-					|| this.share.type === 'contact')
+				&& ['public', 'email', 'contact'].includes(this.share.type)
 				&& !this.closed
 				&& this.poll.id
 			)
@@ -336,6 +342,15 @@ export default {
 				} else {
 					this.manualViewTextPoll = this.getNextViewMode()
 				}
+			}
+		},
+
+		async submitEmailAddress(emailAddress) {
+			try {
+				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: emailAddress })
+				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: emailAddress }))
+			} catch (e) {
+				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: emailAddress }))
 			}
 		},
 
