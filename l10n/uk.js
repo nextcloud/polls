@@ -41,7 +41,6 @@ OC.L10N.register(
     "Delete poll permanently" : "Вилучити безповоротно",
     "Week" : "Тиждень",
     "Add a date option" : "Додати параметр дата",
-    "Click to add a date" : "Клацніть, щоб додати дату",
     "Access" : "Доступ",
     "Owner" : "Власник",
     "Created" : "Створено",

@@ -21,7 +21,6 @@ OC.L10N.register(
     "Clone poll" : "Klon afstemning",
     "Delete poll" : "Slet afstemning",
     "Week" : "Uge",
-    "Click to add a date" : "Klik for at tilføje en dato",
     "Access" : "Adgang",
     "Owner" : "Ejer",
     "Created" : "Oprettet",

@@ -26,7 +26,6 @@ OC.L10N.register(
     "Clone poll" : "Duobligi la enketon",
     "Delete poll" : "Forigi enketon",
     "Week" : "Semajno",
-    "Click to add a date" : "Alklaku por aldoni daton",
     "Shift all date options" : "Movi ĉiujn datajn opciojn",
     "Access" : "Aliro",
     "Owner" : "Posedanto",

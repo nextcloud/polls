@@ -38,7 +38,6 @@ OC.L10N.register(
     "Clone poll" : "Kopiera omröstningen",
     "Delete poll" : "Ta bort omröstningen",
     "Week" : "Vecka",
-    "Click to add a date" : "Klicka för att lägga till ett datum",
     "Shift all date options" : "Skjut på alla datumalternativ",
     "Access" : "Åtkomst",
     "Owner" : "Ägare",
