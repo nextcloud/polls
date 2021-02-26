@@ -36,20 +36,23 @@
 					<h2>{{ t('polls', 'Participate in public poll!') }}</h2>
 					<div class="section__username">
 						<h3>{{ t('polls', 'To participate, tell us how we can call you!') }}</h3>
-						<input ref="userName" v-model="userName" :class="userNameCheckStatus"
-							type="text" :placeholder="t('polls', 'Enter your name')" @keyup.enter="submitRegistration">
-						<div>
-							{{ userNameCheckResult }}
-						</div>
+						<InputDiv v-tooltip="userNameCheck.result"
+							:value.sync="userName"
+							:signaling-class="userNameCheck.status"
+							:placeholder="t('polls', 'Enter your name')"
+							no-submit
+							focus
+							@submit="submitRegistration" />
 					</div>
 
 					<div class="section__email">
 						<h3>{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}</h3>
-						<input v-model="emailAddress" :class="emailAddressCheckStatus"
-							type="text" :placeholder="t('polls', 'Optional email address')" @keyup.enter="submitRegistration">
-						<div>
-							{{ emailAddressCheckResult }}
-						</div>
+						<InputDiv v-tooltip="emailCheck.result"
+							:value.sync="emailAddress"
+							:signaling-class="emailCheck.status"
+							:placeholder="t('polls', 'Optional email address')"
+							no-submit
+							@submit="submitRegistration" />
 					</div>
 
 					<div class="modal__buttons">
@@ -68,6 +71,7 @@
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
 import ButtonDiv from '../Base/ButtonDiv'
+import InputDiv from '../Base/InputDiv'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
@@ -79,6 +83,7 @@ export default {
 	components: {
 		Modal,
 		ButtonDiv,
+		InputDiv,
 	},
 
 	data() {
@@ -112,58 +117,59 @@ export default {
 			return generateUrl('login?redirect_url=' + redirectUrl)
 		},
 
-		userNameCheckStatus() {
+		userNameCheck() {
 			if (this.checkingUserName) {
-				return 'checking'
+				return {
+					result: t('polls', 'Checking username …'),
+					status: 'checking',
+				}
 			} else {
 				if (this.userName.length === 0) {
-					return 'empty'
-				} else if (this.userName.length < 3 || !this.isValidName) {
-					return 'error'
-				} else {
-					return 'success'
-				}
-			}
-		},
-
-		userNameCheckResult() {
-			if (this.checkingUserName) {
-				return t('polls', 'Checking username …')
-			} else {
-				if (this.userName.length < 3) {
-					return t('polls', 'Please use at least 3 characters.')
+					return {
+						result: t('polls', 'Enter a username to participate.'),
+						status: 'empty',
+					}
+				} else if (this.userName.length < 3) {
+					return {
+						result: t('polls', 'Please use at least 3 characters.'),
+						status: 'error',
+					}
 				} else if (!this.isValidName) {
-					return t('polls', 'This name is not valid.')
+					return {
+						result: t('polls', 'Invalid name'),
+						status: 'error',
+					}
 				} else {
-					return t('polls', 'OK, we will call you {username}.', { username: this.userName })
+					return {
+						result: t('polls', '{username} is valid.', { username: this.userName }),
+						status: 'success',
+					}
 				}
 			}
 		},
 
-		emailAddressCheckResult() {
+		emailCheck() {
 			if (this.checkingEmailAddress) {
-				return t('polls', 'Checking email address …')
+				return {
+					result: t('polls', 'Checking email address …'),
+					status: 'checking',
+				}
 			} else {
 				if (this.emailAddress.length < 1) {
-					return t('polls', ' ')
+					return {
+						result: '',
+						status: '',
+					}
 				} else if (!this.isValidEmailAddress) {
-					return t('polls', 'This email address is not valid.')
+					return {
+						result: t('polls', 'Invalid email address.'),
+						status: 'error',
+					}
 				} else {
-					return t('polls', 'This email address is valid.')
-				}
-			}
-		},
-
-		emailAddressCheckStatus() {
-			if (this.checkingEmailAddress) {
-				return 'checking'
-			} else {
-				if (this.emailAddress.length === 0) {
-					return ''
-				} else if (!this.isValidEmailAddress) {
-					return 'error'
-				} else {
-					return 'success'
+					return {
+						result: t('polls', 'valid email address.'),
+						status: 'success',
+					}
 				}
 			}
 		},
@@ -197,16 +203,9 @@ export default {
 	mounted() {
 		this.userName = this.share.displayName
 		this.emailAddress = this.share.emailAddress
-		this.setFocus()
 	},
 
 	methods: {
-		setFocus() {
-			this.$nextTick(() => {
-				this.$refs.userName.focus()
-			})
-		},
-
 		closeModal() {
 			this.modal = false
 		},

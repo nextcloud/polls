@@ -325,8 +325,4 @@ export default {
 	}
 }
 
-.theme--dark .closed .confirmed {
-	background-color: var(--color-polls-background-yes--dark) !important;
-}
-
 </style>

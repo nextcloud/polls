@@ -22,82 +22,63 @@
 
 <template>
 	<div class="public-email">
-		<!-- <div class="input-wrapper">
-			<input v-model="emailAddress" v-tooltip="check.result" :class="['input', check.status]"
-				:placeholder="t('polls', 'Optional email address')" @keyup.enter="submitEmailAddress">
-			<ButtonDiv submit @click="submitEmailAddress" />
-		</div> -->
-
 		<InputDiv v-tooltip="check.result"
 			:value.sync="emailAddress"
-			:class="check.status"
-			:input-class="check.status"
+			:signaling-class="check.status"
 			:placeholder="t('polls', 'Optional email address')"
 			@submit="submitEmailAddress" />
-		<h3>{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}</h3>
 	</div>
 </template>
 
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
-// import ButtonDiv from '../Base/ButtonDiv'
 import InputDiv from '../Base/InputDiv'
-import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { mapState } from 'vuex'
 
 export default {
 	name: 'PublicEmail',
 
 	components: {
-		// ButtonDiv,
 		InputDiv,
+	},
+
+	props: {
+		value: {
+			type: String,
+			default: '',
+		},
 	},
 
 	data() {
 		return {
-			checkingEmailAddress: false,
-			isValidEmailAddress: false,
+			emailAddress: this.value,
+			checkResult: '',
+			checkStatus: '',
+			checking: false,
 		}
 	},
 
 	computed: {
-		...mapState({
-			share: state => state.share,
-		}),
-
-		emailAddress: {
-			get() {
-				return this.share.emailAddress
-			},
-			set(value) {
-				this.$store.commit('share/setEmailAddress', value)
-			},
+		emailAddressUnchanged() {
+			return this.emailAddress === this.value
 		},
 
 		check() {
-			if (this.checkingEmailAddress) {
+			if (this.checking) {
 				return {
 					result: t('polls', 'Checking email address …'),
 					status: 'checking',
 				}
+			} else if (this.emailAddressUnchanged) {
+				return {
+					result: '',
+					status: '',
+				}
 			} else {
-				if (this.emailAddress.length < 1) {
-					return {
-						result: '',
-						status: '',
-					}
-				} else if (!this.isValidEmailAddress) {
-					return {
-						result: t('polls', 'Invalid email address.'),
-						status: 'error',
-					}
-				} else {
-					return {
-						result: t('polls', 'valid email address.'),
-						status: 'success',
-					}
+				return {
+					result: this.checkResult,
+					status: this.checkStatus,
 				}
 			}
 		},
@@ -105,56 +86,36 @@ export default {
 
 	watch: {
 		emailAddress: function() {
-			if (this.emailAddress.length > 0) {
-				this.checkingEmailAddress = true
-				this.validateEmailAddress()
-			} else {
-				this.checkingEmailAddress = false
-				this.isValidEmailAddress = false
-			}
+			this.validateEmailAddress()
 		},
 	},
 
 	methods: {
-		validateEmailAddress: debounce(function() {
-			if (this.emailAddress.length > 0) {
-				return axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
-					.then(() => {
-						this.isValidEmailAddress = true
-						this.checkingEmailAddress = false
-					})
-					.catch(() => {
-						this.isValidEmailAddress = false
-						this.checkingEmailAddress = false
-					})
+		validateEmailAddress: debounce(async function() {
+			if (this.emailAddress.length < 1 || this.emailAddressUnchanged) {
+				this.checkResult = ''
+				this.checkStatus = ''
 			} else {
-				this.isValidEmailAddress = false
-				this.checkingEmailAddress = false
+				try {
+					this.checking = true
+					await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
+					this.checkResult = t('polls', 'valid email address.')
+					this.checkStatus = 'success'
+				} catch (e) {
+					this.checkResult = t('polls', 'Invalid email address.')
+					this.checkStatus = 'error'
+				} finally {
+					this.checking = false
+				}
+
 			}
 		}, 500),
 
-		submitEmailAddress() {
-			if (this.isValidEmailAddress || this.emailAddress.length === 0) {
-				this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.emailAddress })
-					.then((response) => {
-						showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.emailAddress }))
-					})
-					.catch(() => {
-						showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.emailAddress }))
-					})
+		async submitEmailAddress() {
+			if (this.checkResult === 'success' || this.emailAddress.length > 0) {
+				this.$emit('update', this.emailAddress)
 			}
 		},
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-.input-wrapper {
-	display: flex;
-}
-
-input {
-	width: 240px;
-}
-
-</style>
