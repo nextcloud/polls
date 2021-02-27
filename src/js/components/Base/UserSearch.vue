@@ -73,7 +73,7 @@ export default {
 	},
 
 	methods: {
-		loadUsersAsync: debounce(function(query) {
+		loadUsersAsync: debounce(async function(query) {
 			if (!query) {
 				this.users = []
 				return
@@ -83,33 +83,31 @@ export default {
 				this.searchToken.cancel()
 			}
 			this.searchToken = axios.CancelToken.source()
-			axios.get(generateUrl('apps/polls/search/users/' + query), { cancelToken: this.searchToken.token })
-				.then((response) => {
-					this.users = response.data.siteusers
+			try {
+				const response = await axios.get(generateUrl('apps/polls/search/users/' + query), { cancelToken: this.searchToken.token })
+				this.users = response.data.siteusers
+				this.isLoading = false
+			} catch (e) {
+				if (axios.isCancel(e)) {
+					// request was cancelled
+				} else {
+					console.error(e.response)
 					this.isLoading = false
-				})
-				.catch((error) => {
-					if (axios.isCancel(error)) {
-						// request was cancelled
-					} else {
-						console.error(error.response)
-						this.isLoading = false
-					}
-				})
+				}
+			}
 		}, 250),
 
-		addShare(payload) {
-			this.$store
-				.dispatch('poll/shares/add', {
+		async addShare(payload) {
+			try {
+				await this.$store.dispatch('shares/add', {
 					share: payload,
 					type: payload.type,
 					id: payload.id,
 					emailAddress: payload.emailAddress,
 				})
-				.catch(error => {
-					console.error('Error while adding share - Error: ', error)
-					showError(t('polls', 'Error while adding share'))
-				})
+			} catch {
+				showError(t('polls', 'Error while adding share'))
+			}
 		},
 	},
 }

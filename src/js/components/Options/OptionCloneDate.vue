@@ -85,7 +85,7 @@ export default {
 	methods: {
 		createSequence() {
 			this.$store
-				.dispatch('poll/options/sequence', {
+				.dispatch('options/sequence', {
 					option: this.option,
 					sequence: this.sequence,
 				})

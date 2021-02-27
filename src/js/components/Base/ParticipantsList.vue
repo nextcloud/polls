@@ -65,17 +65,14 @@ export default {
 	},
 
 	methods: {
-		getAddresses() {
-			this.$store.dispatch('poll/getParticipantsEmailAddresses', { pollId: this.poll.id })
-				.then((response) => {
-					this.$copyText(response.data)
-						.then(() => {
-							showSuccess(t('polls', 'Link copied to clipboard'))
-						})
-				})
-				.catch(() => {
-					showError(t('polls', 'Error while copying link to clipboard'))
-				})
+		async getAddresses() {
+			try {
+				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses', { pollId: this.poll.id })
+				await this.$copyText(response.data)
+				showSuccess(t('polls', 'Link copied to clipboard'))
+			} catch {
+				showError(t('polls', 'Error while copying link to clipboard'))
+			}
 		},
 	},
 }

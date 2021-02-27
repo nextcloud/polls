@@ -64,38 +64,35 @@ export default {
 
 	computed: {
 		...mapGetters({
-			publicShares: 'poll/shares/public',
+			publicShares: 'shares/public',
 		}),
 	},
 
 	methods: {
-		copyLink(payload) {
-			this
-				.$copyText(payload.url)
-				.then(() => {
-					showSuccess(t('polls', 'Link copied to clipboard'))
-				})
-				.catch(() => {
-					showError(t('polls', 'Error while copying link to clipboard'))
-				})
+		async copyLink(payload) {
+			try {
+				this.$copyText(payload.url)
+				showSuccess(t('polls', 'Link copied to clipboard'))
+			} catch {
+				showError(t('polls', 'Error while copying link to clipboard'))
+			}
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('poll/shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share: share })
 		},
 
-		addShare(payload) {
-			this.$store
-				.dispatch('poll/shares/add', {
+		async addShare(payload) {
+			try {
+				await this.$store.dispatch('shares/add', {
 					share: payload,
 					type: payload.type,
 					id: payload.id,
 					emailAddress: payload.emailAddress,
 				})
-				.catch(error => {
-					console.error('Error while adding share - Error: ', error)
-					showError(t('polls', 'Error while adding share'))
-				})
+			} catch {
+				showError(t('polls', 'Error adding share'))
+			}
 		},
 	},
 }

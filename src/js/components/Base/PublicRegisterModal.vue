@@ -31,8 +31,8 @@
 					<h2>{{ t('polls', 'Public participation') }}</h2>
 					<div class="section__username">
 						<h3>{{ t('polls', 'To participate, tell us how we can call you!') }}</h3>
-						<InputDiv v-tooltip="userNameCheck.result"
-							:value.sync="userName"
+						<InputDiv v-model="userName"
+							v-tooltip="userNameCheck.result"
 							:signaling-class="userNameCheck.status"
 							:placeholder="t('polls', 'Enter your name')"
 							no-submit
@@ -42,8 +42,8 @@
 
 					<div class="section__email">
 						<h3>{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}</h3>
-						<InputDiv v-tooltip="emailCheck.result"
-							:value.sync="emailAddress"
+						<InputDiv v-model="emailAddress"
+							v-tooltip="emailCheck.result"
 							:signaling-class="emailCheck.status"
 							:placeholder="t('polls', 'Optional email address')"
 							no-submit
@@ -220,56 +220,53 @@ export default {
 			window.location.assign(window.location.protocol + '//' + window.location.host + this.loginLink)
 		},
 
-		validatePublicUsername: debounce(function() {
+		validatePublicUsername: debounce(async function() {
 			if (this.userName.length > 2) {
-				return axios.post(generateUrl('apps/polls/check/username'), { userName: this.userName, token: this.$route.params.token })
-					.then(() => {
-						this.checkingUserName = false
-						this.isValidName = true
-					})
-					.catch(() => {
-						this.checkingUserName = false
-						this.isValidName = false
-					})
+				try {
+					await axios.post(generateUrl('apps/polls/check/username'), { userName: this.userName, token: this.$route.params.token })
+					this.checkingUserName = false
+					this.isValidName = true
+				} catch {
+					this.checkingUserName = false
+					this.isValidName = false
+				}
 			} else {
 				this.checkingUserName = false
 				this.isValidName = false
 			}
 		}, 500),
 
-		validateEmailAddress: debounce(function() {
+		validateEmailAddress: debounce(async function() {
 			if (this.emailAddress.length > 0) {
-				return axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
-					.then(() => {
-						this.isValidEmailAddress = true
-						this.checkingEmailAddress = false
-					})
-					.catch(() => {
-						this.isValidEmailAddress = false
-						this.checkingEmailAddress = false
-					})
+				try {
+					await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
+					this.isValidEmailAddress = true
+					this.checkingEmailAddress = false
+				} catch {
+					this.isValidEmailAddress = false
+					this.checkingEmailAddress = false
+				}
 			} else {
 				this.isValidEmailAddress = false
 				this.checkingEmailAddress = false
 			}
 		}, 500),
 
-		submitRegistration() {
+		async submitRegistration() {
 			if (this.isValidName && (this.isValidEmailAddress || this.emailAddress.length === 0)) {
-				this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress })
-					.then((response) => {
-						if (this.$route.params.token === response.token) {
-							this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
-							this.closeModal()
-						} else {
-							this.redirecting = true
-							this.$router.replace({ name: 'publicVote', params: { token: response.token } })
-							this.closeModal()
-						}
-					})
-					.catch(() => {
-						showError(t('polls', 'Error saving username', 1, this.poll.title))
-					})
+				try {
+					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress })
+					if (this.$route.params.token === response.token) {
+						this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
+						this.closeModal()
+					} else {
+						this.redirecting = true
+						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
+						this.closeModal()
+					}
+				} catch {
+					showError(t('polls', 'Error saving username', 1, this.poll.title))
+				}
 			}
 		},
 	},

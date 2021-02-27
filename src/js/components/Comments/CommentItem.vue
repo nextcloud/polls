@@ -45,7 +45,7 @@
 
 <script>
 import moment from '@nextcloud/moment'
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 
@@ -90,11 +90,9 @@ export default {
 			}, 1000)
 			this.deleteTimeout = setTimeout(async() => {
 				try {
-					await this.$store.dispatch({ type: 'poll/comments/delete', comment: this.comment })
-					showSuccess(t('polls', 'Comment deleted'))
-				} catch (error) {
+					await this.$store.dispatch({ type: 'comments/delete', comment: this.comment })
+				} catch {
 					showError(t('polls', 'Error while deleting the comment'))
-					console.error(error.response)
 				} finally {
 					clearInterval(this.deleteInterval)
 					this.deleteTimeout = null

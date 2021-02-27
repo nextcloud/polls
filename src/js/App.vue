@@ -175,31 +175,34 @@ export default {
 		},
 
 		async loadPoll(silent) {
+			const dispatches = []
 			if (!silent) {
 				this.loading = true
 				this.transitionsOff()
 			}
 
 			try {
-				if (this.$route.name === 'publicVote') {
-					await this.$store.dispatch('share/get')
-				}
-
 				if (this.$route.name === 'vote' && !this.$route.params.id) {
-					this.loading = false
-					this.transitionsOn()
 					throw new Error('No pollId for vote page')
 				}
 
-				if (this.$route.name === 'vote') {
-					await this.$store.dispatch('poll/shares/list')
+				if (this.$route.name === 'publicVote') {
+					dispatches.push('share/get')
+				} else if (this.$route.name === 'vote') {
+					dispatches.push('shares/list')
 				}
 
-				await this.$store.dispatch('poll/get')
-				await this.$store.dispatch('poll/comments/list')
-				await this.$store.dispatch('poll/options/list')
-				await this.$store.dispatch('poll/votes/list')
-				await this.$store.dispatch('subscription/get')
+				dispatches.push(
+					'poll/get',
+					'comments/list',
+					'options/list',
+					'votes/list',
+					'subscription/get',
+				)
+
+				const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
+				await Promise.all(requests)
+
 			} catch {
 				this.$router.replace({ name: 'notfound' })
 			} finally {
@@ -208,20 +211,23 @@ export default {
 			}
 		},
 
-		updatePolls() {
+		async updatePolls() {
+			const dispatches = []
 			if (this.$route.name === 'publicVote') {
 				return
 			}
 
-			this.$store.dispatch('polls/load')
-				.catch(() => {
-					showError(t('polls', 'Error loading poll list'))
-				})
+			dispatches.push('polls/load')
+
 			if (getCurrentUser().isAdmin) {
-				this.$store.dispatch('pollsAdmin/load')
-					.catch(() => {
-						showError(t('polls', 'Error loading poll list'))
-					})
+				dispatches.push('pollsAdmin/load')
+			}
+
+			try {
+				const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
+				await Promise.all(requests)
+			} catch {
+				showError(t('polls', 'Error loading poll list'))
 			}
 		},
 	},

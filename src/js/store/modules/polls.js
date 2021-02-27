@@ -71,16 +71,15 @@ const getters = {
 }
 
 const actions = {
-	load(context) {
+	async load(context) {
 		const endPoint = 'apps/polls/polls'
 
-		return axios.get(generateUrl(endPoint))
-			.then((response) => {
-				context.commit('set', { list: response.data })
-			})
-			.catch((error) => {
-				console.error('Error loading polls', { error: error.response })
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint))
+			context.commit('set', { list: response.data })
+		} catch (e) {
+			console.error('Error loading polls', { error: e.response })
+		}
 	},
 }
 

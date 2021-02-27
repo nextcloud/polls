@@ -72,40 +72,37 @@ export default {
 
 	computed: {
 		...mapGetters({
-			invitationShares: 'poll/shares/invitation',
+			invitationShares: 'shares/invitation',
 		}),
 	},
 
 	methods: {
-		sendInvitation(share) {
-			this.$store.dispatch('poll/shares/sendInvitation', { share: share })
-				.then((response) => {
-					if ('sentResult.sentMails' in response.data) {
-						response.data.sentResult.sentMails.forEach((item) => {
-							showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
-						})
-					}
-					if ('sentResult.abortedMails' in response.data) {
-						response.data.sentResult.abortedMails.forEach((item) => {
-							console.error('Mail could not be sent!', { recipient: item })
-							showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
-						})
-					}
+		async sendInvitation(share) {
+			const response = await this.$store.dispatch('shares/sendInvitation', { share: share })
+			if (response.data?.sentResult?.sentMails) {
+				response.data.sentResult.sentMails.forEach((item) => {
+					showSuccess(t('polls', 'Invitation sent to {emailAddress}', { emailAddress: item }))
 				})
+			}
+			if (response.data?.sentResult?.abortedMails) {
+				response.data.sentResult.abortedMails.forEach((item) => {
+					console.error('Mail could not be sent!', { recipient: item })
+					showError(t('polls', 'Error sending invitation to {emailAddress}', { emailAddress: item }))
+				})
+			}
 		},
 
-		copyLink(payload) {
-			this.$copyText(payload.url)
-				.then(() => {
-					showSuccess(t('polls', 'Link copied to clipboard'))
-				})
-				.catch(() => {
-					showError(t('polls', 'Error while copying link to clipboard'))
-				})
+		async copyLink(payload) {
+			try {
+				await this.$copyText(payload.url)
+				showSuccess(t('polls', 'Link copied to clipboard'))
+			} catch {
+				showError(t('polls', 'Error while copying link to clipboard'))
+			}
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('poll/shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share: share })
 		},
 
 	},

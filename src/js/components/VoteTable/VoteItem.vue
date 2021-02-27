@@ -54,7 +54,7 @@ export default {
 		}),
 
 		...mapGetters({
-			countYesVotes: 'poll/votes/countYesVotes',
+			countYesVotes: 'votes/countYesVotes',
 			pollIsClosed: 'poll/closed',
 			answerSequence: 'poll/answerSequence',
 		}),
@@ -72,7 +72,7 @@ export default {
 		},
 
 		answer() {
-			return this.$store.getters['poll/votes/getVote']({
+			return this.$store.getters['votes/getVote']({
 				option: this.option,
 				userId: this.userId,
 			}).voteAnswer
@@ -109,18 +109,12 @@ export default {
 	},
 
 	methods: {
-		getEvents() {
-			this.$store
-				.dispatch('poll/options/getEvents', { option: this.option })
-		},
-
 		setVote() {
-			this.$store
-				.dispatch('poll/votes/set', {
-					option: this.option,
-					userId: this.userId,
-					setTo: this.nextAnswer,
-				})
+			this.$store.dispatch('votes/set', {
+				option: this.option,
+				userId: this.userId,
+				setTo: this.nextAnswer,
+			})
 		},
 	},
 }

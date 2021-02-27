@@ -72,7 +72,7 @@ export default {
 		return {
 			showSettingsDlg: false,
 			createDlg: false,
-			// reloadInterval: 30000,
+			reloadInterval: 30000,
 			pollCategories: [
 				{
 					id: 'relevant',
@@ -124,25 +124,25 @@ export default {
 		},
 	},
 
-	// created() {
-	// 	this.timedReload()
-	// },
-	//
-	// beforeDestroy() {
-	// 	window.clearInterval(this.reloadTimer)
-	// },
+	created() {
+		this.timedReload()
+	},
+
+	beforeDestroy() {
+		window.clearInterval(this.reloadTimer)
+	},
 
 	methods: {
 		closeCreate() {
 			this.createDlg = false
 		},
 
-		// timedReload() {
-		// 	// reload poll list periodically
-		// 	this.reloadTimer = window.setInterval(() => {
-		// 		emit('update-polls')
-		// 	}, this.reloadInterval)
-		// },
+		timedReload() {
+			// reload poll list periodically
+			this.reloadTimer = window.setInterval(() => {
+				emit('update-polls')
+			}, this.reloadInterval)
+		},
 
 		toggleCreateDlg() {
 			this.createDlg = !this.createDlg
@@ -151,49 +151,40 @@ export default {
 			}
 		},
 
-		clonePoll(pollId) {
-			this.$store
-				.dispatch('poll/clone', { pollId: pollId })
-				.then((response) => {
-					emit('update-polls')
-					this.$router.push({ name: 'vote', params: { id: response.id } })
-				})
-				.catch(() => {
-					showError(t('polls', 'Error cloning poll.'))
-				})
-		},
-
 		showSettings() {
 			emit('show-settings')
 		},
 
-		switchDeleted(pollId) {
-			this.$store
-				.dispatch('poll/switchDeleted', { pollId: pollId })
-				.then(() => {
-					emit('update-polls')
-				})
-				.catch(() => {
-					showError(t('polls', 'Error deleting poll.'))
-				})
-
+		async clonePoll(pollId) {
+			try {
+				const response = await this.$store.dispatch('poll/clone', { pollId: pollId })
+				emit('update-polls')
+				this.$router.push({ name: 'vote', params: { id: response.data.id } })
+			} catch {
+				showError(t('polls', 'Error cloning poll.'))
+			}
 		},
 
-		deletePermanently(pollId) {
-			this.$store
-				.dispatch('poll/delete', { pollId: pollId })
-				.then(() => {
-					// if we permanently delete current selected poll,
-					// reload deleted polls route
-					if (this.$route.params.id && this.$route.params.id === pollId) {
-						this.$router.push({ name: 'list', params: { type: 'deleted' } })
-					}
-					emit('update-polls')
-				})
-				.catch(() => {
-					showError(t('polls', 'Error deleting poll.'))
-				})
+		async switchDeleted(pollId) {
+			try {
+				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				emit('update-polls')
+			} catch {
+				showError(t('polls', 'Error deleting poll.'))
+			}
+		},
 
+		async deletePermanently(pollId) {
+			try {
+				await this.$store.dispatch('poll/delete', { pollId: pollId })
+				// if we permanently delete current selected poll,
+				// reload deleted polls route
+				if (this.$route.params.id && this.$route.params.id === pollId) {
+					this.$router.push({ name: 'list', params: { type: 'deleted' } })
+				}
+			} catch {
+				showError(t('polls', 'Error deleting poll.'))
+			}
 		},
 	},
 }

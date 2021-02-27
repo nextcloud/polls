@@ -108,14 +108,14 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.poll.options.list,
+			options: state => state.options.list,
 			acl: state => state.poll.acl,
 		}),
 
 		...mapGetters({
-			sortedOptions: 'poll/options/sorted',
+			sortedOptions: 'options/sorted',
 			pollIsClosed: 'poll/closed',
-			countOptions: 'poll/options/count',
+			countOptions: 'options/count',
 		}),
 
 		dateBaseOptionString() {

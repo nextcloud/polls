@@ -23,13 +23,6 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<CheckBoxDiv v-model="realTimePolling" :label="t('polls', 'Beta - watch for updated polls in realtime')" />
-			<div class="settings_details">
-				{{ t('polls', 'All changes to the current poll, done by other users, will be recognized in realtime.') }}
-			</div>
-		</div>
-
-		<div class="user_settings">
 			<CheckBoxDiv v-model="experimental" :label="t('polls', 'Try experimental styles')" />
 			<div class="settings_details">
 				{{ t('polls', 'Some experimental UI variants. Changes the background color of the main area.') }}
@@ -77,26 +70,11 @@ export default {
 		CheckBoxDiv,
 	},
 
-	props: {
-		show: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
 	computed: {
 		...mapState({
 			settings: state => state.settings.user,
 		}),
 		// Add bindings
-		realTimePolling: {
-			get() {
-				return this.settings.realTimePolling
-			},
-			set(value) {
-				this.writeValue({ realTimePolling: value })
-			},
-		},
 		experimental: {
 			get() {
 				return this.settings.experimental
@@ -140,8 +118,8 @@ export default {
 	},
 
 	methods: {
-		writeValue(value) {
-			this.$store.commit('settings/setPreference', value)
+		async writeValue(value) {
+			await this.$store.commit('settings/setPreference', value)
 			this.$store.dispatch('settings/write')
 		},
 	},

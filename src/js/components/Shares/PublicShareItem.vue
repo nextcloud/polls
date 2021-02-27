@@ -51,10 +51,6 @@ export default {
 			type: String,
 			default: 'user',
 		},
-		icon: {
-			type: Boolean,
-			default: false,
-		},
 	},
 }
 

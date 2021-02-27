@@ -57,12 +57,10 @@ export default {
 	},
 
 	watch: {
-		show() {
+		async show() {
 			if (this.show === true) {
-				this.$store.dispatch('settings/getCalendars')
-					.then((response) => {
-						this.calendars = response.data.calendars
-					})
+				const response = await this.$store.dispatch('settings/getCalendars')
+				this.calendars = response.data.calendars
 			}
 		},
 	},

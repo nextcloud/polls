@@ -25,10 +25,6 @@ import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
-import comments from './subModules/comments.js'
-import options from './subModules/options.js'
-import shares from './subModules/shares.js'
-import votes from './subModules/votes.js'
 
 const defaultPoll = () => {
 	return {
@@ -57,10 +53,6 @@ const state = defaultPoll()
 const namespaced = true
 const modules = {
 	acl: acl,
-	comments: comments,
-	options: options,
-	shares: shares,
-	votes: votes,
 }
 
 const mutations = {
@@ -91,10 +83,10 @@ const getters = {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
-	participants: (state, getters) => {
+	participants: (state, getters, rootState) => {
 		const participants = []
 		const map = new Map()
-		for (const item of state.votes.list) {
+		for (const item of rootState.votes.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
 				participants.push({
@@ -117,10 +109,10 @@ const getters = {
 		return participants
 	},
 
-	participantsVoted: (state, getters) => {
+	participantsVoted: (state, getters, rootState) => {
 		const participantsVoted = []
 		const map = new Map()
-		for (const item of state.votes.list) {
+		for (const item of rootState.votes.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
 				participantsVoted.push({
@@ -140,7 +132,7 @@ const actions = {
 		context.commit('reset')
 	},
 
-	get(context) {
+	async get(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
@@ -152,88 +144,71 @@ const actions = {
 			context.commit('acl/reset')
 			return
 		}
-		return axios.get(generateUrl(endPoint + '/poll'))
-			.then((response) => {
-				context.commit('set', response.data)
-				context.commit('acl/set', response.data)
-				return response
-			})
-			.catch((error) => {
-				console.debug('Error loading poll', { error: error.response })
-				throw error
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/poll'))
+			context.commit('set', response.data)
+			context.commit('acl/set', response.data)
+		} catch (e) {
+			console.debug('Error loading poll', { error: e.response })
+			throw e
+		}
 	},
 
-	add(context, payload) {
+	async add(context, payload) {
 		const endPoint = 'apps/polls/poll/add'
-		return axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
-			.then((response) => {
-				return response
-			})
-			.catch((error) => {
-				console.error('Error adding poll:', { error: error.response }, { state: state })
-				throw error
-			})
-
+		try {
+			return await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
+		} catch (e) {
+			console.error('Error adding poll:', { error: e.response }, { state: state })
+			throw e
+		}
 	},
 
-	clone(context, payload) {
+	async clone(context, payload) {
 		const endPoint = 'apps/polls/poll'
-		return axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
-			.then((response) => {
-				return response.data
-			})
-			.catch((error) => {
-				console.error('Error cloning poll', { error: error.response }, { payload: payload })
-			})
-
+		try {
+			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
+		} catch (e) {
+			console.error('Error cloning poll', { error: e.response }, { payload: payload })
+		}
 	},
 
-	update(context) {
+	async update(context) {
 		const endPoint = 'apps/polls/poll'
-		return axios.put(generateUrl(endPoint + '/' + state.id), { poll: state })
-			.then((response) => {
-				context.commit('set', { poll: response.data })
-				return response
-			})
-			.catch((error) => {
-				console.error('Error updating poll:', { error: error.response }, { poll: state })
-				throw error
-			})
-
+		try {
+			const response = await axios.put(generateUrl(endPoint + '/' + state.id), { poll: state })
+			context.commit('set', { poll: response.data })
+		} catch (e) {
+			console.error('Error updating poll:', { error: e.response }, { poll: state })
+			throw e
+		}
 	},
 
-	switchDeleted(context, payload) {
+	async switchDeleted(context, payload) {
 		const endPoint = 'apps/polls/poll'
-		return axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
-			.then((response) => {
-				return response
-			})
-			.catch((error) => {
-				console.error('Error switching deleted status', { error: error.response }, { payload: payload })
-			})
+		try {
+			await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
+		} catch (e) {
+			console.error('Error switching deleted status', { error: e.response }, { payload: payload })
+		}
 	},
 
-	delete(context, payload) {
+	async delete(context, payload) {
 		const endPoint = 'apps/polls/poll'
-		return axios.delete(generateUrl(endPoint + '/' + payload.pollId))
-			.then((response) => {
-				return response
-			})
-			.catch((error) => {
-				console.error('Error deleting poll', { error: error.response }, { payload: payload })
-			})
+		try {
+			await axios.delete(generateUrl(endPoint + '/' + payload.pollId))
+		} catch (e) {
+			console.error('Error deleting poll', { error: e.response }, { payload: payload })
+		}
 	},
 
-	getParticipantsEmailAddresses(context, payload) {
+	async getParticipantsEmailAddresses(context, payload) {
 		const endPoint = 'apps/polls/poll'
-		return axios.get(generateUrl(endPoint + '/' + payload.pollId + '/addresses'))
-			.then((response) => {
-				return response
-			})
-			.catch((error) => {
-				console.error('Error retrieving email addresses', { error: error.response }, { payload: payload })
-			})
+		try {
+			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/addresses'))
+		} catch (e) {
+			console.error('Error retrieving email addresses', { error: e.response }, { payload: payload })
+		}
 	},
 
 }

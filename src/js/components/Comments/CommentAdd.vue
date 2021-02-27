@@ -54,18 +54,15 @@ export default {
 	},
 
 	methods: {
-		writeComment() {
+		async writeComment() {
 			if (this.comment) {
-				this.$store.dispatch('poll/comments/add', { message: this.comment })
-					.then(() => {
-						this.comment = ''
-					})
-					.catch((error) => {
-						console.error('Error while saving comment - Error: ', error.response)
-						showError(t('polls', 'Error while saving comment'))
-					})
+				try {
+					await this.$store.dispatch('comments/add', { message: this.comment })
+					this.comment = ''
+				} catch {
+					showError(t('polls', 'Error while saving comment'))
+				}
 			}
-
 		},
 	},
 }

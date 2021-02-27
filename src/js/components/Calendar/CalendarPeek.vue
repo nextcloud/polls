@@ -59,10 +59,6 @@ export default {
 			type: Object,
 			default: undefined,
 		},
-		open: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	data() {
@@ -119,17 +115,15 @@ export default {
 	},
 
 	methods: {
-		getEvents() {
-			this.$store
-				.dispatch('poll/options/getEvents', { option: this.option })
-				.then((response) => {
-					this.events = response.events
-				})
-				.catch((error) => {
-					if (error.message === 'Network Error') {
-						showError(t('polls', 'Got a network error while checking calendar events.'))
-					}
-				})
+		async getEvents() {
+			try {
+				const response = await this.$store.dispatch('options/getEvents', { option: this.option })
+				this.events = response.data.events
+			} catch (e) {
+				if (e.message === 'Network Error') {
+					showError(t('polls', 'Got a network error while checking calendar events.'))
+				}
+			}
 		},
 
 	},

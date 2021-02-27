@@ -38,7 +38,7 @@
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
 			<CheckBoxDiv v-model="pollAllowComment" :label="t('polls', 'Allow Comments')" />
-			<CheckBoxDiv v-model="pollAllowMaybe" :label="t('polls', 'Allow \'maybe\' vote')" />
+			<CheckBoxDiv v-model="pollAllowMaybe" :label="allowMybeLabel" />
 
 			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
 				{{ t('polls', 'If vote limits are used, \'maybe\' shouldn\'t be allowed.') }}
@@ -114,10 +114,8 @@ export default {
 
 	data() {
 		return {
-			writingPoll: false,
-			sidebar: false,
 			titleEmpty: false,
-			setExpiration: false,
+			allowMybeLabel: t('polls', 'Allow "maybe" vote'),
 			accessOptions: [
 				{ value: 'hidden', label: t('polls', 'Only invited users') },
 				{ value: 'public', label: t('polls', 'All users') },
@@ -134,7 +132,7 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
-			countOptions: state => state.poll.options.list.length,
+			countOptions: state => state.options.list.length,
 		}),
 
 		...mapGetters({
@@ -308,7 +306,7 @@ export default {
 				editable: true,
 				minuteStep: 5,
 				type: 'datetime',
-				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+				format: moment.localeData().longDateFormat('L LT'),
 				placeholder: t('polls', 'Closing date'),
 				confirm: true,
 				lang: {
@@ -330,14 +328,13 @@ export default {
 			this.writeValue(e)
 		}, 1500),
 
-		successDebounced: debounce(function(response) {
-			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
+		successDebounced: debounce(function(title) {
+			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: title }))
 			emit('update-polls')
 		}, 1500),
 
 		writeValue(e) {
 			this.$store.commit('poll/setProperty', e)
-			this.writingPoll = true
 			this.updatePoll()
 		},
 
@@ -359,32 +356,27 @@ export default {
 
 		},
 
-		deletePermanently() {
+		async deletePermanently() {
 			if (!this.poll.deleted) return
-
-			this.$store
-				.dispatch('poll/delete', { pollId: this.poll.id })
-				.then(() => {
-					emit('update-polls')
-					this.$router.push({ name: 'list', params: { type: 'relevant' } })
-				})
-				.catch(() => {
-					showError(t('polls', 'Error deleting poll.'))
-				})
+			try {
+				await this.$store.dispatch('poll/delete', { pollId: this.poll.id })
+				emit('update-polls')
+				this.$router.push({ name: 'list', params: { type: 'relevant' } })
+			} catch {
+				showError(t('polls', 'Error deleting poll.'))
+			}
 		},
 
-		updatePoll() {
+		async updatePoll() {
 			if (this.titleEmpty) {
 				showError(t('polls', 'Title must not be empty!'))
 			} else {
-				this.$store.dispatch('poll/update')
-					.then((response) => {
-						this.successDebounced(response)
-					})
-					.catch(() => {
-						showError(t('polls', 'Error writing poll'))
-					})
-				this.writingPoll = false
+				try {
+					await this.$store.dispatch('poll/update')
+					this.successDebounced(this.poll.title)
+				} catch {
+					showError(t('polls', 'Error writing poll'))
+				}
 			}
 		},
 

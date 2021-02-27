@@ -54,14 +54,10 @@ export default {
 	},
 
 	methods: {
-		addOption() {
+		async addOption() {
 			if (this.newPollText) {
-				this.$store.dispatch('poll/options/add', {
-					pollOptionText: this.newPollText,
-				})
-					.then(() => {
-						this.newPollText = ''
-					})
+				await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
+				this.newPollText = ''
 			}
 		},
 	},

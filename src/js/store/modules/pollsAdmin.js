@@ -44,29 +44,22 @@ const getters = {
 }
 
 const actions = {
-	load(context) {
+	async load(context) {
 		const endPoint = 'apps/polls/administration'
 		if (getCurrentUser().isAdmin) {
-			return axios.get(generateUrl(endPoint + '/polls'))
-				.then((response) => {
-					context.commit('set', { list: response.data })
-				})
-				.catch((error) => {
-					console.error('Error loading polls', { error: error.response })
-				})
+			try {
+				const response = await axios.get(generateUrl(endPoint + '/polls'))
+				context.commit('set', { list: response.data })
+			} catch (e) {
+				console.error('Error loading polls', { error: e.response })
+			}
 		}
 	},
 
 	takeOver(context, payload) {
 		const endPoint = 'apps/polls/administration'
 		if (getCurrentUser().isAdmin) {
-			return axios.get(generateUrl(endPoint + '/poll/' + payload.pollId + '/takeover'))
-				.then((response) => {
-					return response
-				})
-				.catch((error) => {
-					throw error
-				})
+			axios.get(generateUrl(endPoint + '/poll/' + payload.pollId + '/takeover'))
 		}
 	},
 }

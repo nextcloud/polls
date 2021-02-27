@@ -160,7 +160,7 @@ export default {
 
 		addOption() {
 			this.pickerOpen = false
-			this.$store.dispatch('poll/options/add', this.dateOption)
+			this.$store.dispatch('options/add', this.dateOption)
 		},
 	},
 }

@@ -135,7 +135,7 @@ export default {
 		...mapGetters({
 			closed: 'poll/closed',
 			participants: 'poll/participants',
-			sortedOptions: 'poll/options/sorted',
+			sortedOptions: 'options/sorted',
 		}),
 
 		rankedOptions() {
@@ -146,7 +146,7 @@ export default {
 	methods: {
 		async removeUser() {
 			this.modal = false
-			await this.$store.dispatch('poll/votes/deleteUser', { userId: this.userToRemove })
+			await this.$store.dispatch('votes/deleteUser', { userId: this.userToRemove })
 			showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove }))
 			this.userToRemove = ''
 		},
@@ -214,8 +214,6 @@ export default {
 		.user-item__name {
 			min-width: initial;
 		}
-		// margin-bottom: 8px;
-		// padding: 8px 0;
 	}
 
 	.vote-table__votes {
@@ -232,7 +230,6 @@ export default {
 		align-items: stretch;
 		min-width: 85px;
 		max-width: 280px;
-		// padding: 8px 0;
 		.vote-item {
 			flex-direction: column;
 		}

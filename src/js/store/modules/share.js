@@ -56,7 +56,7 @@ const mutations = {
 }
 
 const actions = {
-	get(context) {
+	async get(context) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
@@ -64,77 +64,66 @@ const actions = {
 			context.commit('reset')
 			return
 		}
-		return axios.get(generateUrl(endPoint + '/share'))
-			.then((response) => {
-				context.commit('set', { share: response.data.share })
-				return response.data
-			})
-			.catch((error) => {
-				console.debug('Error retrieving share', { error: error.response })
-				throw error.response
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/share'))
+			context.commit('set', { share: response.data.share })
+			return response.data
+		} catch (e) {
+			console.debug('Error retrieving share', { error: e.response })
+			throw e.response
+		}
 	},
 
-	register(context, payload) {
+	async register(context, payload) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
 		} else {
 			return
 		}
-
-		return axios.post(generateUrl(endPoint + '/register'), {
-			userName: payload.userName,
-			emailAddress: payload.emailAddress,
-		})
-			.then((response) => {
-				return { token: response.data.share.token }
+		try {
+			const response = await axios.post(generateUrl(endPoint + '/register'), {
+				userName: payload.userName,
+				emailAddress: payload.emailAddress,
 			})
-			.catch((error) => {
-				console.error('Error writing personal share', { error: error.response }, { payload: payload })
-				throw error
-			})
-
+			return { token: response.data.share.token }
+		} catch (e) {
+			console.error('Error writing personal share', { error: e.response }, { payload: payload })
+			throw e
+		}
 	},
 
-	updateEmailAddress(context, payload) {
+	async updateEmailAddress(context, payload) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
 		} else {
 			return
 		}
-
-		return axios.put(generateUrl(endPoint + '/email'), {
-			emailAddress: payload.emailAddress,
-		})
-			.then((response) => {
-				context.commit('set', { share: response.data.share })
-				return response.data
+		try {
+			const response = await axios.put(generateUrl(endPoint + '/email'), {
+				emailAddress: payload.emailAddress,
 			})
-			.catch((error) => {
-				console.error('Error writing email address', { error: error.response }, { payload: payload })
-				throw error
-			})
-
+			context.commit('set', { share: response.data.share })
+		} catch (e) {
+			console.error('Error writing email address', { error: e.response }, { payload: payload })
+			throw e
+		}
 	},
 
-	resendInvitation(context, payload) {
+	async resendInvitation(context, payload) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
 		} else {
 			return
 		}
-
-		return axios.get(generateUrl(endPoint + '/resend'))
-			.then((response) => {
-				return response
-			})
-			.catch((error) => {
-				console.error('Error sending invitation', { error: error.response }, { payload: payload })
-				throw error
-			})
+		try {
+			return await axios.get(generateUrl(endPoint + '/resend'))
+		} catch (e) {
+			console.error('Error sending invitation', { error: e.response }, { payload: payload })
+			throw e
+		}
 	},
 }
 

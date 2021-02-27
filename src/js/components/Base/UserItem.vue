@@ -74,10 +74,6 @@ export default {
 			type: String,
 			default: '',
 		},
-		emailAddress: {
-			type: String,
-			default: '',
-		},
 		type: {
 			type: String,
 			default: 'user',

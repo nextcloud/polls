@@ -62,7 +62,7 @@ const getters = {
 }
 
 const actions = {
-	list(context) {
+	async list(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
@@ -76,17 +76,15 @@ const actions = {
 			return
 		}
 
-		return axios.get(generateUrl(endPoint + '/comments'))
-			.then((response) => {
-				context.commit('set', response.data)
-			})
-			.catch(() => {
-				context.commit('reset')
-			})
-
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/comments'))
+			context.commit('set', response.data)
+		} catch {
+			context.commit('reset')
+		}
 	},
 
-	add(context, payload) {
+	async add(context, payload) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
@@ -100,35 +98,29 @@ const actions = {
 			return
 		}
 
-		return axios.post(generateUrl(endPoint + '/comment'), {
-			message: payload.message,
-		})
-			.then((response) => {
-				context.commit('add', { comment: response.data.comment })
-				return response.data
-			})
-			.catch((error) => {
-				console.error('Error writing comment', { error: error.response }, { payload: payload })
-				throw error
-			})
+		try {
+			const response = await axios.post(generateUrl(endPoint + '/comment'), { message: payload.message })
+			context.commit('add', { comment: response.data.comment })
+		} catch (e) {
+			console.error('Error writing comment', { error: e.response }, { payload: payload })
+			throw e
+		}
 	},
 
-	delete(context, payload) {
+	async delete(context, payload) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
 		}
 
-		return axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
-			.then((response) => {
-				context.commit('delete', { comment: payload.comment })
-				return response.data
-			})
-			.catch((error) => {
-				console.error('Error deleting comment', { error: error.response }, { payload: payload })
-				throw error
-			})
+		try {
+			await axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
+			context.commit('delete', { comment: payload.comment })
+		} catch (e) {
+			console.error('Error deleting comment', { error: e.response }, { payload: payload })
+			throw e
+		}
 	},
 }
 
