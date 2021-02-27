@@ -64,7 +64,7 @@ export default {
 
 	computed: {
 		...mapGetters({
-			publicShares: 'poll/shares/public',
+			publicShares: 'shares/public',
 		}),
 	},
 
@@ -81,12 +81,12 @@ export default {
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('poll/shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share: share })
 		},
 
 		addShare(payload) {
 			this.$store
-				.dispatch('poll/shares/add', {
+				.dispatch('shares/add', {
 					share: payload,
 					type: payload.type,
 					id: payload.id,

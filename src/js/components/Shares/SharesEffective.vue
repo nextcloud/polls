@@ -72,13 +72,13 @@ export default {
 
 	computed: {
 		...mapGetters({
-			invitationShares: 'poll/shares/invitation',
+			invitationShares: 'shares/invitation',
 		}),
 	},
 
 	methods: {
 		sendInvitation(share) {
-			this.$store.dispatch('poll/shares/sendInvitation', { share: share })
+			this.$store.dispatch('shares/sendInvitation', { share: share })
 				.then((response) => {
 					if ('sentResult.sentMails' in response.data) {
 						response.data.sentResult.sentMails.forEach((item) => {
@@ -105,7 +105,7 @@ export default {
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('poll/shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share: share })
 		},
 
 	},

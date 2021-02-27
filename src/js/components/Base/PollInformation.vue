@@ -77,8 +77,8 @@ export default {
 		...mapGetters({
 			participantsVoted: 'poll/participantsVoted',
 			closed: 'poll/closed',
-			confirmedOptions: 'poll/options/confirmed',
-			countYesVotes: 'poll/votes/countYesVotes',
+			confirmedOptions: 'options/confirmed',
+			countYesVotes: 'votes/countYesVotes',
 		}),
 
 		voteLimitReached() {

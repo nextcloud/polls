@@ -53,7 +53,7 @@ export default {
 		}),
 
 		...mapGetters({
-			countComments: 'poll/comments/count',
+			countComments: 'comments/count',
 		}),
 
 		showEmptyContent() {

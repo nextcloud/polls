@@ -90,7 +90,7 @@ export default {
 			}, 1000)
 			this.deleteTimeout = setTimeout(async() => {
 				try {
-					await this.$store.dispatch({ type: 'poll/comments/delete', comment: this.comment })
+					await this.$store.dispatch({ type: 'comments/delete', comment: this.comment })
 					showSuccess(t('polls', 'Comment deleted'))
 				} catch (error) {
 					showError(t('polls', 'Error while deleting the comment'))

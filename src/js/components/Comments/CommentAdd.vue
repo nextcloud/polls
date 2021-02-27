@@ -56,7 +56,7 @@ export default {
 	methods: {
 		writeComment() {
 			if (this.comment) {
-				this.$store.dispatch('poll/comments/add', { message: this.comment })
+				this.$store.dispatch('comments/add', { message: this.comment })
 					.then(() => {
 						this.comment = ''
 					})

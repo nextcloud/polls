@@ -189,14 +189,14 @@ export default {
 				if (this.$route.name === 'publicVote') {
 					dispatches.push('share/get')
 				} else if (this.$route.name === 'vote') {
-					dispatches.push('poll/shares/list')
+					dispatches.push('shares/list')
 				}
 
 				dispatches.push(
 					'poll/get',
-					'poll/comments/list',
-					'poll/options/list',
-					'poll/votes/list',
+					'comments/list',
+					'options/list',
+					'votes/list',
 					'subscription/get',
 				)
 

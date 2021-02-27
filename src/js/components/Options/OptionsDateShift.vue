@@ -76,7 +76,7 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.poll.options.list,
+			options: state => state.options.list,
 		}),
 
 		firstDOW() {
@@ -102,7 +102,7 @@ export default {
 				const option = Object.assign({}, existingOption)
 				option.timestamp = moment.unix(option.timestamp).add(payload.step, payload.unit.value).unix()
 				option.pollOptionText = moment.unix(option.timestamp).format('YYYY-MM-DD HH:mm:ss')
-				store.dispatch('poll/options/update', { option: option })
+				store.dispatch('options/update', { option: option })
 			})
 		},
 	},

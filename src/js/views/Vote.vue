@@ -150,7 +150,7 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
-			options: state => state.poll.options.list,
+			options: state => state.options.list,
 			share: state => state.share,
 			settings: state => state.settings,
 		}),
@@ -384,7 +384,7 @@ export default {
 							dispatches.push('poll/get')
 							// this.$store.dispatch('poll/get')
 						} else {
-							dispatches.push('poll/' + item.table + '/list')
+							dispatches.push(item.table + '/list')
 							// this.$store.dispatch('poll/' + item.table + '/list')
 						}
 					})

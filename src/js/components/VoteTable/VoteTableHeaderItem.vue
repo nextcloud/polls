@@ -57,7 +57,7 @@ export default {
 
 		...mapGetters({
 			closed: 'poll/closed',
-			confirmedOptions: 'poll/options/confirmed',
+			confirmedOptions: 'options/confirmed',
 		}),
 
 		optionStyle() {

@@ -100,7 +100,7 @@ export default {
 
 		addShare(payload) {
 			this.$store
-				.dispatch('poll/shares/add', {
+				.dispatch('shares/add', {
 					share: payload,
 					type: payload.type,
 					id: payload.id,

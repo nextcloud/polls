@@ -25,10 +25,6 @@ import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
-import comments from './subModules/comments.js'
-import options from './subModules/options.js'
-import shares from './subModules/shares.js'
-import votes from './subModules/votes.js'
 
 const defaultPoll = () => {
 	return {
@@ -57,10 +53,6 @@ const state = defaultPoll()
 const namespaced = true
 const modules = {
 	acl: acl,
-	comments: comments,
-	options: options,
-	shares: shares,
-	votes: votes,
 }
 
 const mutations = {
@@ -91,10 +83,10 @@ const getters = {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},
 
-	participants: (state, getters) => {
+	participants: (state, getters, rootState) => {
 		const participants = []
 		const map = new Map()
-		for (const item of state.votes.list) {
+		for (const item of rootState.votes.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
 				participants.push({
@@ -117,10 +109,10 @@ const getters = {
 		return participants
 	},
 
-	participantsVoted: (state, getters) => {
+	participantsVoted: (state, getters, rootState) => {
 		const participantsVoted = []
 		const map = new Map()
-		for (const item of state.votes.list) {
+		for (const item of rootState.votes.list) {
 			if (!map.has(item.userId)) {
 				map.set(item.userId, true)
 				participantsVoted.push({

@@ -56,7 +56,7 @@ export default {
 	computed: {
 		...mapGetters({
 			pollIsClosed: 'poll/closed',
-			countOptions: 'poll/options/count',
+			countOptions: 'options/count',
 		}),
 		...mapState({
 			pollType: state => state.poll.type,

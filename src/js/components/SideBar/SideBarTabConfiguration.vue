@@ -134,7 +134,7 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
-			countOptions: state => state.poll.options.list.length,
+			countOptions: state => state.options.list.length,
 		}),
 
 		...mapGetters({

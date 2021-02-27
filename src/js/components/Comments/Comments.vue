@@ -47,7 +47,7 @@ export default {
 
 	computed: {
 		...mapState({
-			comments: state => state.poll.comments.list,
+			comments: state => state.comments.list,
 		}),
 
 		sortedList() {

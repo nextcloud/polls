@@ -121,7 +121,7 @@ export default {
 	methods: {
 		getEvents() {
 			this.$store
-				.dispatch('poll/options/getEvents', { option: this.option })
+				.dispatch('options/getEvents', { option: this.option })
 				.then((response) => {
 					this.events = response.events
 				})

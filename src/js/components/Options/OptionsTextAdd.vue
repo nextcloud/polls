@@ -56,7 +56,7 @@ export default {
 	methods: {
 		addOption() {
 			if (this.newPollText) {
-				this.$store.dispatch('poll/options/add', {
+				this.$store.dispatch('options/add', {
 					pollOptionText: this.newPollText,
 				})
 					.then(() => {

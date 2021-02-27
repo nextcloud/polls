@@ -64,7 +64,7 @@ const getters = {
 
 	relevant: (state, getters, rootState) => {
 		return state.list.filter((vote) => {
-			return rootState.poll.options.list.some((option) => {
+			return rootState.options.list.some((option) => {
 				return option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText
 			})
 		})
@@ -72,7 +72,7 @@ const getters = {
 
 	ranked: (state, getters, rootState) => {
 		let votesRank = []
-		rootState.poll.options.list.forEach(function(option) {
+		rootState.options.list.forEach(function(option) {
 			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
 			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
 			const countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
