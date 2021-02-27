@@ -22,8 +22,8 @@
 
 <template>
 	<div class="public-email">
-		<InputDiv v-tooltip="check.result"
-			:value.sync="emailAddress"
+		<InputDiv v-model="emailAddress"
+			v-tooltip="check.result"
 			:signaling-class="check.status"
 			:placeholder="t('polls', 'Optional email address')"
 			@submit="submitEmailAddress" />

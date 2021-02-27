@@ -31,8 +31,8 @@
 					<h2>{{ t('polls', 'Public participation') }}</h2>
 					<div class="section__username">
 						<h3>{{ t('polls', 'To participate, tell us how we can call you!') }}</h3>
-						<InputDiv v-tooltip="userNameCheck.result"
-							:value.sync="userName"
+						<InputDiv v-model="userName"
+							v-tooltip="userNameCheck.result"
 							:signaling-class="userNameCheck.status"
 							:placeholder="t('polls', 'Enter your name')"
 							no-submit
@@ -42,8 +42,8 @@
 
 					<div class="section__email">
 						<h3>{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}</h3>
-						<InputDiv v-tooltip="emailCheck.result"
-							:value.sync="emailAddress"
+						<InputDiv v-model="emailAddress"
+							v-tooltip="emailCheck.result"
 							:signaling-class="emailCheck.status"
 							:placeholder="t('polls', 'Optional email address')"
 							no-submit
