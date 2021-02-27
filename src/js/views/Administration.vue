@@ -187,41 +187,35 @@ export default {
 			this.deleteModal = true
 		},
 
-		switchDeleted(pollId) {
-			this.$store
-				.dispatch('poll/switchDeleted', { pollId: pollId })
-				.then(() => {
-					emit('update-polls')
-				})
-				.catch(() => {
-					showError(t('polls', 'Error switching deleted status.'))
-				})
+		async switchDeleted(pollId) {
+			try {
+				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				emit('update-polls')
+			} catch (e) {
+				showError(t('polls', 'Error switching deleted status.'))
+			}
 		},
 
-		deletePermanently() {
-			this.$store
-				.dispatch('poll/delete', { pollId: this.deletePollId })
-				.then(() => {
-					emit('update-polls')
-					this.deleteModal = false
-				})
-				.catch(() => {
-					showError(t('polls', 'Error deleting poll.'))
-					this.deleteModal = false
-				})
+		async deletePermanently() {
+			try {
+				await this.$store.dispatch('poll/delete', { pollId: this.deletePollId })
+				emit('update-polls')
+				this.deleteModal = false
+			} catch (e) {
+				showError(t('polls', 'Error deleting poll.'))
+				this.deleteModal = false
+			}
 		},
 
-		takeOver() {
-			this.$store
-				.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
-				.then(() => {
-					emit('update-polls')
-					this.takeOverModal = false
-				})
-				.catch(() => {
-					showError(t('polls', 'Error overtaking poll.'))
-					this.takeOverModal = false
-				})
+		async takeOver() {
+			try {
+				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
+				emit('update-polls')
+				this.takeOverModal = false
+			} catch (e) {
+				showError(t('polls', 'Error overtaking poll.'))
+				this.takeOverModal = false
+			}
 		},
 
 		refreshView() {

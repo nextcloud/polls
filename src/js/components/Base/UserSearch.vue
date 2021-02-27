@@ -97,18 +97,18 @@ export default {
 			}
 		}, 250),
 
-		addShare(payload) {
-			this.$store
-				.dispatch('shares/add', {
+		async addShare(payload) {
+			try {
+				await this.$store.dispatch('shares/add', {
 					share: payload,
 					type: payload.type,
 					id: payload.id,
 					emailAddress: payload.emailAddress,
 				})
-				.catch(error => {
-					console.error('Error while adding share - Error: ', error)
-					showError(t('polls', 'Error while adding share'))
-				})
+			} catch (e) {
+				console.error('Error while adding share - Error: ', e)
+				showError(t('polls', 'Error while adding share'))
+			}
 		},
 	},
 }

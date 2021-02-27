@@ -195,17 +195,14 @@ export default {
 				.push({ name: 'vote', params: { id: pollId } })
 		},
 
-		loadPoll(pollId) {
-			this.$store
-				.dispatch({ type: 'poll/get', pollId: pollId })
-				.then(() => {
-					emit('toggle-sidebar', { open: true })
-				})
-				.catch((error) => {
-					console.error(error)
-					showError(t('polls', 'Error loading poll'))
-				})
-
+		async loadPoll(pollId) {
+			try {
+				await this.$store.dispatch({ type: 'poll/get', pollId: pollId })
+				emit('toggle-sidebar', { open: true })
+			} catch (e) {
+				console.error(e)
+				showError(t('polls', 'Error loading poll'))
+			}
 		},
 
 		refreshView() {
@@ -236,37 +233,33 @@ export default {
 			})
 		},
 
-		switchDeleted(pollId) {
-			this.$store
-				.dispatch('poll/switchDeleted', { pollId: pollId })
-				.catch(() => {
-					showError(t('polls', 'Error deleting poll.'))
-				})
-				.finally(() => {
-					emit('update-polls')
-				})
+		async switchDeleted(pollId) {
+			try {
+				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				showError(t('polls', 'Error deleting poll.'))
+			} catch (e) {
+				emit('update-polls')
+			}
 		},
 
-		deletePermanently(pollId) {
-			this.$store
-				.dispatch('poll/delete', { pollId: pollId })
-				.catch(() => {
-					showError(t('polls', 'Error deleting poll.'))
-				})
-				.finally(() => {
-					emit('update-polls')
-				})
+		async deletePermanently(pollId) {
+			try {
+				await this.$store.dispatch('poll/delete', { pollId: pollId })
+			} catch (e) {
+				showError(t('polls', 'Error deleting poll.'))
+			} finally {
+				emit('update-polls')
+			}
 		},
 
-		clonePoll(pollId) {
-			this.$store
-				.dispatch('poll/clone', { pollId: pollId })
-				.catch(() => {
-					showError(t('polls', 'Error cloning poll.'))
-				})
-				.finally(() => {
-					emit('update-polls')
-				})
+		async clonePoll(pollId) {
+			try {
+				await this.$store.dispatch('poll/clone', { pollId: pollId })
+			} catch (e) {
+				showError(t('polls', 'Error cloning poll.'))
+			} finally {
+				emit('update-polls')
+			}
 		},
 	},
 }
