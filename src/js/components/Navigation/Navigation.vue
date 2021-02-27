@@ -72,7 +72,7 @@ export default {
 		return {
 			showSettingsDlg: false,
 			createDlg: false,
-			// reloadInterval: 30000,
+			reloadInterval: 30000,
 			pollCategories: [
 				{
 					id: 'relevant',
