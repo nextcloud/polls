@@ -38,7 +38,7 @@
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
 			<CheckBoxDiv v-model="pollAllowComment" :label="t('polls', 'Allow Comments')" />
-			<CheckBoxDiv v-model="pollAllowMaybe" :label="t('polls', 'Allow \'maybe\' vote')" />
+			<CheckBoxDiv v-model="pollAllowMaybe" :label="allowMybeLabel" />
 
 			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
 				{{ t('polls', 'If vote limits are used, \'maybe\' shouldn\'t be allowed.') }}
@@ -115,6 +115,7 @@ export default {
 	data() {
 		return {
 			titleEmpty: false,
+			allowMybeLabel: t('polls', 'Allow "maybe" vote'),
 			accessOptions: [
 				{ value: 'hidden', label: t('polls', 'Only invited users') },
 				{ value: 'public', label: t('polls', 'All users') },
