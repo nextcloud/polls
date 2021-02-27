@@ -374,33 +374,53 @@ export default {
 						params: { offset: this.lastUpdated },
 						cancelToken: this.cancelToken.token,
 					})
+					const dispatches = []
+
 					console.debug('polls', 'update detected', response.data.updates)
+
 					response.data.updates.forEach((item) => {
 						this.lastUpdated = (item.updated > this.lastUpdated) ? item.updated : this.lastUpdated
 						if (item.table === 'polls') {
-							this.$store.dispatch('poll/get')
+							dispatches.push('poll/get')
+							// this.$store.dispatch('poll/get')
 						} else {
-							this.$store.dispatch('poll/' + item.table + '/list')
+							dispatches.push('poll/' + item.table + '/list')
+							// this.$store.dispatch('poll/' + item.table + '/list')
 						}
 					})
+					const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
+					await Promise.all(requests)
+
 					this.watching = true
+
 				} catch (error) {
 					this.watching = false
+
 					if (axios.isCancel(error)) {
 						console.debug('Watch canceld')
 					} else if (error.response) {
+
 						if (error.response.status === 304) {
+
 							this.watching = true
+
 						} else if (error.response.status === 503) {
+
 							console.debug('Server not available, reconnect watch in 30 sec')
+
 							await new Promise(resolve => setTimeout(resolve, 30000))
 							this.watching = true
+
 						} else {
+
 							console.error('Unhandled error watching polls', error)
+
 						}
 					} else if (error.request) {
+
 						console.debug('Watch aborted')
 						this.watching = true
+
 					}
 				}
 			}
