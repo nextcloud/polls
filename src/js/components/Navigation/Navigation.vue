@@ -72,7 +72,6 @@ export default {
 		return {
 			showSettingsDlg: false,
 			createDlg: false,
-			reloadInterval: 30000,
 			pollCategories: [
 				{
 					id: 'relevant',
@@ -124,10 +123,6 @@ export default {
 		},
 	},
 
-	created() {
-		this.timedReload()
-	},
-
 	beforeDestroy() {
 		window.clearInterval(this.reloadTimer)
 	},
@@ -135,13 +130,6 @@ export default {
 	methods: {
 		closeCreate() {
 			this.createDlg = false
-		},
-
-		timedReload() {
-			// reload poll list periodically
-			this.reloadTimer = window.setInterval(() => {
-				emit('update-polls')
-			}, this.reloadInterval)
 		},
 
 		toggleCreateDlg() {

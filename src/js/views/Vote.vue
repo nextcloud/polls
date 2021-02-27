@@ -111,7 +111,6 @@ import PublicRegisterModal from '../components/Base/PublicRegisterModal'
 import PublicEmail from '../components/Base/PublicEmail'
 import Subscription from '../components/Subscription/Subscription'
 import VoteTable from '../components/VoteTable/VoteTable'
-import { watchPolls } from '../mixins/watchPolls'
 
 export default {
 	name: 'Vote',
@@ -131,19 +130,14 @@ export default {
 		VoteTable,
 	},
 
-	mixins: [watchPolls],
-
 	data() {
 		return {
-			cancelToken: null,
 			delay: 50,
 			isLoading: false,
 			manualViewDatePoll: '',
 			manualViewTextPoll: '',
 			ranked: false,
 			voteSaved: false,
-			watching: true,
-			lastUpdated: Math.round(Date.now() / 1000),
 		}
 	},
 
@@ -303,12 +297,9 @@ export default {
 		} else {
 			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 		}
-		this.watchPolls()
 	},
 
 	beforeDestroy() {
-		console.debug('destroy votes')
-		this.cancelToken.cancel()
 		this.$store.dispatch({ type: 'poll/reset' })
 	},
 

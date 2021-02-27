@@ -44,12 +44,11 @@ class WatchMapper extends QBMapper {
 
 		$qb->select('*')
 		   ->from($this->getTableName())
-		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId))
-		   )
-		   ->andWhere(
-			   $qb->expr()->gt('updated', $qb->createNamedParameter($offset))
-		   );
+		   ->where($qb->expr()->gt('updated', $qb->createNamedParameter($offset)))
+		   ->andWhere($qb->expr()->orX(
+	           $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
+	           $qb->expr()->eq('table', $qb->createNamedParameter('polls'))
+	       ));
 
 		return $this->findEntities($qb);
 	}
