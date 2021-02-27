@@ -233,8 +233,7 @@ const actions = {
 	async getEvents(context, payload) {
 		const endPoint = 'apps/polls/option'
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/' + payload.option.id + '/events'))
-			return response.data
+			return await axios.get(generateUrl(endPoint + '/' + payload.option.id + '/events'))
 		} catch (e) {
 			return { events: [] }
 		}

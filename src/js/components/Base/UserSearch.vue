@@ -105,7 +105,7 @@ export default {
 					id: payload.id,
 					emailAddress: payload.emailAddress,
 				})
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error while adding share'))
 			}
 		},

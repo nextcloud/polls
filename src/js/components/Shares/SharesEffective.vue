@@ -96,7 +96,7 @@ export default {
 			try {
 				await this.$copyText(payload.url)
 				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},

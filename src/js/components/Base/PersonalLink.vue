@@ -67,7 +67,7 @@ export default {
 			try {
 				const response = await this.$store.dispatch('share/resendInvitation')
 				showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.emailAddress }))
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.emailAddress }))
 			}
 		},
@@ -76,7 +76,7 @@ export default {
 			try {
 				await this.$copyText(this.personalLink)
 				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},

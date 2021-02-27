@@ -94,14 +94,11 @@ const actions = {
 			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
 		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
 			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
-		} else {
-			context.commit('reset')
-			return
 		}
+
 		try {
 			const response = await axios.get(generateUrl(endPoint + '/shares'))
 			context.commit('set', response.data)
-			return response.data
 		} catch (e) {
 			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
 			throw e
@@ -110,6 +107,7 @@ const actions = {
 
 	async add(context, payload) {
 		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id
+
 		try {
 			await axios.post(generateUrl(endPoint + '/share'), payload.share)
 		} catch (e) {
@@ -125,7 +123,7 @@ const actions = {
 		context.commit('delete', { share: payload.share })
 
 		try {
-			return await axios.delete(generateUrl(endPoint + '/' + payload.share.token))
+			await axios.delete(generateUrl(endPoint + '/' + payload.share.token))
 		} catch (e) {
 			console.error('Error removing share', { error: e.response }, { payload: payload })
 			throw e
@@ -149,7 +147,7 @@ const actions = {
 	async resolveGroup(context, payload) {
 		const endPoint = 'apps/polls/share'
 		try {
-			return await axios.get(generateUrl(endPoint + '/' + payload.share.token + '/resolve'))
+			await axios.get(generateUrl(endPoint + '/' + payload.share.token + '/resolve'))
 		} catch (e) {
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload: payload })
 			throw e

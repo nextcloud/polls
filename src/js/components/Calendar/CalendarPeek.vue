@@ -122,7 +122,7 @@ export default {
 		async getEvents() {
 			try {
 				const response = await this.$store.dispatch('options/getEvents', { option: this.option })
-				this.events = response.events
+				this.events = response.data.events
 			} catch (e) {
 				if (e.message === 'Network Error') {
 					showError(t('polls', 'Got a network error while checking calendar events.'))

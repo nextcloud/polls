@@ -214,8 +214,6 @@ export default {
 		.user-item__name {
 			min-width: initial;
 		}
-		// margin-bottom: 8px;
-		// padding: 8px 0;
 	}
 
 	.vote-table__votes {
@@ -232,7 +230,6 @@ export default {
 		align-items: stretch;
 		min-width: 85px;
 		max-width: 280px;
-		// padding: 8px 0;
 		.vote-item {
 			flex-direction: column;
 		}

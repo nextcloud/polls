@@ -199,8 +199,7 @@ export default {
 			try {
 				await this.$store.dispatch({ type: 'poll/get', pollId: pollId })
 				emit('toggle-sidebar', { open: true })
-			} catch (e) {
-				console.error(e)
+			} catch {
 				showError(t('polls', 'Error loading poll'))
 			}
 		},
@@ -236,8 +235,9 @@ export default {
 		async switchDeleted(pollId) {
 			try {
 				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+			} catch {
 				showError(t('polls', 'Error deleting poll.'))
-			} catch (e) {
+			} finally {
 				emit('update-polls')
 			}
 		},
@@ -245,7 +245,7 @@ export default {
 		async deletePermanently(pollId) {
 			try {
 				await this.$store.dispatch('poll/delete', { pollId: pollId })
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			} finally {
 				emit('update-polls')
@@ -255,7 +255,7 @@ export default {
 		async clonePoll(pollId) {
 			try {
 				await this.$store.dispatch('poll/clone', { pollId: pollId })
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error cloning poll.'))
 			} finally {
 				emit('update-polls')

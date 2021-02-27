@@ -131,7 +131,7 @@ const actions = {
 		try {
 			const response = await axios.get(generateUrl(endPoint + '/votes'))
 			context.commit('set', response.data)
-		} catch (e) {
+		} catch {
 			context.commit('reset')
 		}
 	},
@@ -149,7 +149,6 @@ const actions = {
 				setTo: payload.setTo,
 			})
 			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
-			return response.data
 		} catch (e) {
 			if (e.response.status === 409) {
 				context.dispatch('list')

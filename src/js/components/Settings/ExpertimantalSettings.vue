@@ -140,8 +140,8 @@ export default {
 	},
 
 	methods: {
-		writeValue(value) {
-			this.$store.commit('settings/setPreference', value)
+		async writeValue(value) {
+			await this.$store.commit('settings/setPreference', value)
 			this.$store.dispatch('settings/write')
 		},
 	},

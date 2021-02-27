@@ -59,8 +59,7 @@ export default {
 				try {
 					await this.$store.dispatch('comments/add', { message: this.comment })
 					this.comment = ''
-				} catch (e) {
-					console.error('Error while saving comment - Error: ', e.response)
+				} catch {
 					showError(t('polls', 'Error while saving comment'))
 				}
 			}

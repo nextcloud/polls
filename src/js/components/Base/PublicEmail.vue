@@ -101,7 +101,7 @@ export default {
 					await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
 					this.checkResult = t('polls', 'valid email address.')
 					this.checkStatus = 'success'
-				} catch (e) {
+				} catch {
 					this.checkResult = t('polls', 'Invalid email address.')
 					this.checkStatus = 'error'
 				} finally {

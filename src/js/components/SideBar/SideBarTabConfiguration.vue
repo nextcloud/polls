@@ -327,8 +327,8 @@ export default {
 			this.writeValue(e)
 		}, 1500),
 
-		successDebounced: debounce(function(response) {
-			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: response.data.title }))
+		successDebounced: debounce(function(title) {
+			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: title }))
 			emit('update-polls')
 		}, 1500),
 
@@ -361,7 +361,7 @@ export default {
 				await this.$store.dispatch('poll/delete', { pollId: this.poll.id })
 				emit('update-polls')
 				this.$router.push({ name: 'list', params: { type: 'relevant' } })
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			}
 		},
@@ -371,9 +371,9 @@ export default {
 				showError(t('polls', 'Title must not be empty!'))
 			} else {
 				try {
-					const response = await this.$store.dispatch('poll/update')
-					this.successDebounced(response)
-				} catch (e) {
+					await this.$store.dispatch('poll/update')
+					this.successDebounced(this.poll.title)
+				} catch {
 					showError(t('polls', 'Error writing poll'))
 				}
 			}

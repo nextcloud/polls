@@ -130,16 +130,16 @@ export default {
 	},
 
 	methods: {
-		writeValue(value) {
-			this.$store.commit('settings/setPreference', value)
+		async writeValue(value) {
+			await this.$store.commit('settings/setPreference', value)
 			this.$store.dispatch('settings/write')
 		},
 
-		clickedCalendar(calendar) {
+		async clickedCalendar(calendar) {
 			if (this.settings.checkCalendars.includes(calendar.key)) {
-				this.writeValue({ checkCalendars: this.settings.checkCalendars.filter(item => item !== calendar.key.toString()) })
+				await this.writeValue({ checkCalendars: this.settings.checkCalendars.filter(item => item !== calendar.key.toString()) })
 			} else {
-				this.$store.commit('settings/addCheckCalendar', { calendar: calendar })
+				await this.$store.commit('settings/addCheckCalendar', { calendar: calendar })
 			}
 			this.$store.dispatch('settings/write')
 		},

@@ -148,7 +148,6 @@ const actions = {
 			const response = await axios.get(generateUrl(endPoint + '/poll'))
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
-			return response
 		} catch (e) {
 			console.debug('Error loading poll', { error: e.response })
 			throw e
@@ -158,8 +157,7 @@ const actions = {
 	async add(context, payload) {
 		const endPoint = 'apps/polls/poll/add'
 		try {
-			const response = await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
-			return response
+			return await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
 		} catch (e) {
 			console.error('Error adding poll:', { error: e.response }, { state: state })
 			throw e
@@ -169,8 +167,7 @@ const actions = {
 	async clone(context, payload) {
 		const endPoint = 'apps/polls/poll'
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
-			return response.data
+			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
 		} catch (e) {
 			console.error('Error cloning poll', { error: e.response }, { payload: payload })
 		}
@@ -181,7 +178,6 @@ const actions = {
 		try {
 			const response = await axios.put(generateUrl(endPoint + '/' + state.id), { poll: state })
 			context.commit('set', { poll: response.data })
-			return response
 		} catch (e) {
 			console.error('Error updating poll:', { error: e.response }, { poll: state })
 			throw e
@@ -191,8 +187,7 @@ const actions = {
 	async switchDeleted(context, payload) {
 		const endPoint = 'apps/polls/poll'
 		try {
-			const response = await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
-			return response
+			await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
 		} catch (e) {
 			console.error('Error switching deleted status', { error: e.response }, { payload: payload })
 		}
@@ -201,8 +196,7 @@ const actions = {
 	async delete(context, payload) {
 		const endPoint = 'apps/polls/poll'
 		try {
-			const response = await axios.delete(generateUrl(endPoint + '/' + payload.pollId))
-			return response
+			await axios.delete(generateUrl(endPoint + '/' + payload.pollId))
 		} catch (e) {
 			console.error('Error deleting poll', { error: e.response }, { payload: payload })
 		}
@@ -211,8 +205,7 @@ const actions = {
 	async getParticipantsEmailAddresses(context, payload) {
 		const endPoint = 'apps/polls/poll'
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/addresses'))
-			return response
+			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/addresses'))
 		} catch (e) {
 			console.error('Error retrieving email addresses', { error: e.response }, { payload: payload })
 		}

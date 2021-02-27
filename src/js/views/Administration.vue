@@ -191,7 +191,7 @@ export default {
 			try {
 				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
 				emit('update-polls')
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error switching deleted status.'))
 			}
 		},
@@ -201,7 +201,7 @@ export default {
 				await this.$store.dispatch('poll/delete', { pollId: this.deletePollId })
 				emit('update-polls')
 				this.deleteModal = false
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 				this.deleteModal = false
 			}
@@ -212,7 +212,7 @@ export default {
 				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
 				emit('update-polls')
 				this.takeOverModal = false
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error overtaking poll.'))
 				this.takeOverModal = false
 			}

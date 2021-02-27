@@ -70,7 +70,7 @@ export default {
 				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses', { pollId: this.poll.id })
 				await this.$copyText(response.data)
 				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},

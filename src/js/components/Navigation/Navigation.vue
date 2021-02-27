@@ -124,13 +124,13 @@ export default {
 		},
 	},
 
-	// created() {
-	// 	this.timedReload()
-	// },
-	//
-	// beforeDestroy() {
-	// 	window.clearInterval(this.reloadTimer)
-	// },
+	created() {
+		this.timedReload()
+	},
+
+	beforeDestroy() {
+		window.clearInterval(this.reloadTimer)
+	},
 
 	methods: {
 		closeCreate() {
@@ -152,17 +152,17 @@ export default {
 			try {
 				const response = await this.$store.dispatch('poll/clone', { pollId: pollId })
 				emit('update-polls')
-				this.$router.push({ name: 'vote', params: { id: response.id } })
-			} catch (e) {
+				this.$router.push({ name: 'vote', params: { id: response.data.id } })
+			} catch {
 				showError(t('polls', 'Error cloning poll.'))
 			}
 		},
 
 		async switchDeleted(pollId) {
 			try {
-				this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
 				emit('update-polls')
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			}
 		},
@@ -175,7 +175,7 @@ export default {
 				if (this.$route.params.id && this.$route.params.id === pollId) {
 					this.$router.push({ name: 'list', params: { type: 'deleted' } })
 				}
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			}
 		},

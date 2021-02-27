@@ -109,18 +109,12 @@ export default {
 	},
 
 	methods: {
-		getEvents() {
-			this.$store
-				.dispatch('options/getEvents', { option: this.option })
-		},
-
 		setVote() {
-			this.$store
-				.dispatch('votes/set', {
-					option: this.option,
-					userId: this.userId,
-					setTo: this.nextAnswer,
-				})
+			this.$store.dispatch('votes/set', {
+				option: this.option,
+				userId: this.userId,
+				setTo: this.nextAnswer,
+			})
 		},
 	},
 }

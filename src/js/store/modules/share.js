@@ -105,7 +105,6 @@ const actions = {
 				emailAddress: payload.emailAddress,
 			})
 			context.commit('set', { share: response.data.share })
-			return response.data
 		} catch (e) {
 			console.error('Error writing email address', { error: e.response }, { payload: payload })
 			throw e

@@ -57,7 +57,7 @@ const actions = {
 		try {
 			const response = await axios.get(generateUrl(endPoint + '/subscription'))
 			context.commit('set', response.data)
-		} catch (e) {
+		} catch {
 			context.commit('set', false)
 		}
 	},

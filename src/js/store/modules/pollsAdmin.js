@@ -56,10 +56,10 @@ const actions = {
 		}
 	},
 
-	async takeOver(context, payload) {
+	takeOver(context, payload) {
 		const endPoint = 'apps/polls/administration'
 		if (getCurrentUser().isAdmin) {
-			return await axios.get(generateUrl(endPoint + '/poll/' + payload.pollId + '/takeover'))
+			axios.get(generateUrl(endPoint + '/poll/' + payload.pollId + '/takeover'))
 		}
 	},
 }

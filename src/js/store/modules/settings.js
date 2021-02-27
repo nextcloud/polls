@@ -71,9 +71,8 @@ const actions = {
 		const endPoint = 'apps/polls/preferences/get'
 		try {
 			const response = await axios.get(generateUrl(endPoint))
-			console.debug('settings loaded ')
 			context.commit('setPreference', response.data.preferences)
-		} catch (e) {
+		} catch {
 			context.commit('reset')
 		}
 	},

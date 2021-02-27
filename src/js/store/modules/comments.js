@@ -79,7 +79,7 @@ const actions = {
 		try {
 			const response = await axios.get(generateUrl(endPoint + '/comments'))
 			context.commit('set', response.data)
-		} catch (e) {
+		} catch {
 			context.commit('reset')
 		}
 	},
@@ -99,11 +99,8 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.post(generateUrl(endPoint + '/comment'), {
-				message: payload.message,
-			})
+			const response = await axios.post(generateUrl(endPoint + '/comment'), { message: payload.message })
 			context.commit('add', { comment: response.data.comment })
-			return response.data
 		} catch (e) {
 			console.error('Error writing comment', { error: e.response }, { payload: payload })
 			throw e
@@ -118,9 +115,8 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
+			await axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
 			context.commit('delete', { comment: payload.comment })
-			return response.data
 		} catch (e) {
 			console.error('Error deleting comment', { error: e.response }, { payload: payload })
 			throw e

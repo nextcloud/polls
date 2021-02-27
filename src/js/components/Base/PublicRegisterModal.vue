@@ -226,7 +226,7 @@ export default {
 					await axios.post(generateUrl('apps/polls/check/username'), { userName: this.userName, token: this.$route.params.token })
 					this.checkingUserName = false
 					this.isValidName = true
-				} catch (e) {
+				} catch {
 					this.checkingUserName = false
 					this.isValidName = false
 				}
@@ -242,7 +242,7 @@ export default {
 					await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
 					this.isValidEmailAddress = true
 					this.checkingEmailAddress = false
-				} catch (e) {
+				} catch {
 					this.isValidEmailAddress = false
 					this.checkingEmailAddress = false
 				}
@@ -264,7 +264,7 @@ export default {
 						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
 						this.closeModal()
 					}
-				} catch (e) {
+				} catch {
 					showError(t('polls', 'Error saving username', 1, this.poll.title))
 				}
 			}

@@ -349,7 +349,7 @@ export default {
 			try {
 				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: emailAddress })
 				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: emailAddress }))
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: emailAddress }))
 			}
 		},
@@ -382,10 +382,8 @@ export default {
 						this.lastUpdated = (item.updated > this.lastUpdated) ? item.updated : this.lastUpdated
 						if (item.table === 'polls') {
 							dispatches.push('poll/get')
-							// this.$store.dispatch('poll/get')
 						} else {
 							dispatches.push(item.table + '/list')
-							// this.$store.dispatch('poll/' + item.table + '/list')
 						}
 					})
 					const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))

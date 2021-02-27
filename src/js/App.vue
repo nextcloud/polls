@@ -226,7 +226,7 @@ export default {
 			try {
 				const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
 				await Promise.all(requests)
-			} catch (e) {
+			} catch {
 				showError(t('polls', 'Error loading poll list'))
 			}
 		},
