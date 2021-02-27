@@ -114,10 +114,7 @@ export default {
 
 	data() {
 		return {
-			writingPoll: false,
-			sidebar: false,
 			titleEmpty: false,
-			setExpiration: false,
 			accessOptions: [
 				{ value: 'hidden', label: t('polls', 'Only invited users') },
 				{ value: 'public', label: t('polls', 'All users') },
@@ -337,7 +334,6 @@ export default {
 
 		writeValue(e) {
 			this.$store.commit('poll/setProperty', e)
-			this.writingPoll = true
 			this.updatePoll()
 		},
 
@@ -359,32 +355,27 @@ export default {
 
 		},
 
-		deletePermanently() {
+		async deletePermanently() {
 			if (!this.poll.deleted) return
-
-			this.$store
-				.dispatch('poll/delete', { pollId: this.poll.id })
-				.then(() => {
-					emit('update-polls')
-					this.$router.push({ name: 'list', params: { type: 'relevant' } })
-				})
-				.catch(() => {
-					showError(t('polls', 'Error deleting poll.'))
-				})
+			try {
+				await this.$store.dispatch('poll/delete', { pollId: this.poll.id })
+				emit('update-polls')
+				this.$router.push({ name: 'list', params: { type: 'relevant' } })
+			} catch (e) {
+				showError(t('polls', 'Error deleting poll.'))
+			}
 		},
 
-		updatePoll() {
+		async updatePoll() {
 			if (this.titleEmpty) {
 				showError(t('polls', 'Title must not be empty!'))
 			} else {
-				this.$store.dispatch('poll/update')
-					.then((response) => {
-						this.successDebounced(response)
-					})
-					.catch(() => {
-						showError(t('polls', 'Error writing poll'))
-					})
-				this.writingPoll = false
+				try {
+					const response = await this.$store.dispatch('poll/update')
+					this.successDebounced(response)
+				} catch (e) {
+					showError(t('polls', 'Error writing poll'))
+				}
 			}
 		},
 

@@ -63,25 +63,22 @@ export default {
 	},
 
 	methods: {
-		resendInvitation() {
-			this.$store.dispatch('share/resendInvitation')
-				.then((response) => {
-					showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.emailAddress }))
-				})
-				.catch(() => {
-					showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.emailAddress }))
-				})
+		async resendInvitation() {
+			try {
+				const response = await this.$store.dispatch('share/resendInvitation')
+				showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.emailAddress }))
+			} catch (e) {
+				showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.emailAddress }))
+			}
 		},
 
-		copyLink() {
-			this.$copyText(this.personalLink).then(
-				function() {
-					showSuccess(t('polls', 'Link copied to clipboard'))
-				},
-				function() {
-					showError(t('polls', 'Error while copying link to clipboard'))
-				}
-			)
+		async copyLink() {
+			try {
+				await this.$copyText(this.personalLink)
+				showSuccess(t('polls', 'Link copied to clipboard'))
+			} catch (e) {
+				showError(t('polls', 'Error while copying link to clipboard'))
+			}
 		},
 	},
 }

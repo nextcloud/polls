@@ -77,31 +77,28 @@ export default {
 	},
 
 	methods: {
-		sendInvitation(share) {
-			this.$store.dispatch('shares/sendInvitation', { share: share })
-				.then((response) => {
-					if ('sentResult.sentMails' in response.data) {
-						response.data.sentResult.sentMails.forEach((item) => {
-							showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
-						})
-					}
-					if ('sentResult.abortedMails' in response.data) {
-						response.data.sentResult.abortedMails.forEach((item) => {
-							console.error('Mail could not be sent!', { recipient: item })
-							showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
-						})
-					}
+		async sendInvitation(share) {
+			const response = await this.$store.dispatch('shares/sendInvitation', { share: share })
+			if ('sentResult.sentMails' in response.data) {
+				response.data.sentResult.sentMails.forEach((item) => {
+					showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
 				})
+			}
+			if ('sentResult.abortedMails' in response.data) {
+				response.data.sentResult.abortedMails.forEach((item) => {
+					console.error('Mail could not be sent!', { recipient: item })
+					showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
+				})
+			}
 		},
 
-		copyLink(payload) {
-			this.$copyText(payload.url)
-				.then(() => {
-					showSuccess(t('polls', 'Link copied to clipboard'))
-				})
-				.catch(() => {
-					showError(t('polls', 'Error while copying link to clipboard'))
-				})
+		async copyLink(payload) {
+			try {
+				await this.$copyText(payload.url)
+				showSuccess(t('polls', 'Link copied to clipboard'))
+			} catch (e) {
+				showError(t('polls', 'Error while copying link to clipboard'))
+			}
 		},
 
 		removeShare(share) {

@@ -73,35 +73,33 @@ export default {
 	},
 
 	methods: {
-		resolveGroup(share) {
-			this.$store.dispatch('shares/resolveGroup', { share: share })
-				.catch((error) => {
-					if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
-						showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
-					} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
-						showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
-					} else {
-						showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
-					}
-
-				})
+		async resolveGroup(share) {
+			try {
+				await this.$store.dispatch('shares/resolveGroup', { share: share })
+			} catch (e) {
+				if (e.response.status === 409 && e.response.data === 'Circles is not enabled for this user') {
+					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
+				} else if (e.response.status === 409 && e.response.data === 'Contacts is not enabled') {
+					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
+				} else {
+					showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
+				}
+			}
 		},
 
-		sendInvitation(share) {
-			this.$store.dispatch('shares/sendInvitation', { share: share })
-				.then((response) => {
-					if ('sentResult.sentMails' in response.data) {
-						response.data.sentResult.sentMails.forEach((item) => {
-							showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
-						})
-					}
-					if ('sentResult.abortedMails' in response.data) {
-						response.data.sentResult.abortedMails.forEach((item) => {
-							console.error('Mail could not be sent!', { recipient: item })
-							showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
-						})
-					}
+		async sendInvitation(share) {
+			const response = await this.$store.dispatch('shares/sendInvitation', { share: share })
+			if ('sentResult.sentMails' in response.data) {
+				response.data.sentResult.sentMails.forEach((item) => {
+					showSuccess(t('polls', 'Invitation sent to {name}', { name: item.displayName }))
 				})
+			}
+			if ('sentResult.abortedMails' in response.data) {
+				response.data.sentResult.abortedMails.forEach((item) => {
+					console.error('Mail could not be sent!', { recipient: item })
+					showError(t('polls', 'Error sending invitation to {name}', { name: item.dispalyName }))
+				})
+			}
 		},
 
 		removeShare(share) {
