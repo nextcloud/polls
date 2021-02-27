@@ -44,7 +44,7 @@ const mutations = {
 
 const actions = {
 
-	get(context) {
+	async get(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
@@ -54,34 +54,29 @@ const actions = {
 		} else {
 			return
 		}
-
-		return axios.get(generateUrl(endPoint + '/subscription'))
-			.then((response) => {
-				context.commit('set', response.data)
-			})
-			.catch(() => {
-				context.commit('set', false)
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/subscription'))
+			context.commit('set', response.data)
+		} catch (e) {
+			context.commit('set', false)
+		}
 	},
 
-	update(context, payload) {
+	async update(context, payload) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
 		} else if (context.rootState.route.name === 'vote') {
 			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
-		} else {
-			return
 		}
 
-		return axios.put(generateUrl(endPoint + (payload ? '/subscribe' : '/unsubscribe')))
-			.then((response) => {
-				context.commit('set', response.data)
-			})
-			.catch((error) => {
-				console.error(error.response)
-			})
+		try {
+			const response = await axios.put(generateUrl(endPoint + (payload ? '/subscribe' : '/unsubscribe')))
+			context.commit('set', response.data)
+		} catch (e) {
+			console.error(e.response)
+		}
 	},
 }
 

@@ -117,7 +117,7 @@ const getters = {
 }
 
 const actions = {
-	list(context) {
+	async list(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
@@ -128,51 +128,47 @@ const actions = {
 			context.commit('reset')
 			return
 		}
-
-		return axios.get(generateUrl(endPoint + '/votes'))
-			.then((response) => {
-				context.commit('set', response.data)
-			})
-			.catch(() => {
-				context.commit('reset')
-			})
-
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/votes'))
+			context.commit('set', response.data)
+		} catch (e) {
+			context.commit('reset')
+		}
 	},
-	set(context, payload) {
+
+	async set(context, payload) {
 		let endPoint = 'apps/polls'
 
-		if (context.rootState.poll.acl.token) {
+		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
 		}
 
-		return axios.put(generateUrl(endPoint + '/vote'), {
-			optionId: payload.option.id,
-			setTo: payload.setTo,
-		})
-			.then((response) => {
-				context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
-				return response.data
+		try {
+			const response = await axios.put(generateUrl(endPoint + '/vote'), {
+				optionId: payload.option.id,
+				setTo: payload.setTo,
 			})
-			.catch((error) => {
-				if (error.response.status === 409) {
-					context.dispatch('list')
-				} else {
-					console.error('Error setting vote', { error: error.response }, { payload: payload })
-					throw error
-				}
-			})
+			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
+			return response.data
+		} catch (e) {
+			if (e.response.status === 409) {
+				context.dispatch('list')
+			} else {
+				console.error('Error setting vote', { error: e.response }, { payload: payload })
+				throw e
+			}
+		}
 	},
 
-	deleteUser(context, payload) {
+	async deleteUser(context, payload) {
 		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/user/' + payload.userId
-		return axios.delete(generateUrl(endPoint))
-			.then(() => {
-				context.commit('deleteVotes', payload)
-			})
-			.catch((error) => {
-				console.error('Error deleting votes', { error: error.response }, { payload: payload })
-				throw error
-			})
+		try {
+			await axios.delete(generateUrl(endPoint))
+			context.commit('deleteVotes', payload)
+		} catch (e) {
+			console.error('Error deleting votes', { error: e.response }, { payload: payload })
+			throw e
+		}
 	},
 
 }

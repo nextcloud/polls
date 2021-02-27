@@ -67,39 +67,33 @@ const mutations = {
 }
 
 const actions = {
-	get(context) {
+	async get(context) {
 		const endPoint = 'apps/polls/preferences/get'
-
-		return axios.get(generateUrl(endPoint))
-			.then((response) => {
-				console.debug('settings loaded ')
-				context.commit('setPreference', response.data.preferences)
-			})
-			.catch(() => {
-				context.commit('reset')
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint))
+			console.debug('settings loaded ')
+			context.commit('setPreference', response.data.preferences)
+		} catch (e) {
+			context.commit('reset')
+		}
 	},
-	write(context) {
+
+	async write(context) {
 		const endPoint = 'apps/polls/preferences/write'
-
-		return axios.post(generateUrl(endPoint), { settings: context.state.user })
-			.then((response) => {
-				context.commit('setPreference', response.data.preferences)
-			})
-			.catch((error) => {
-				console.error('Error writing preferences', { error: error.response }, { preferences: state.user })
-				throw error
-			})
+		try {
+			const response = await axios.post(generateUrl(endPoint), { settings: context.state.user })
+			context.commit('setPreference', response.data.preferences)
+		} catch (e) {
+			console.error('Error writing preferences', { error: e.response }, { preferences: state.user })
+			throw e
+		}
 	},
 
-	getCalendars(context) {
+	async getCalendars(context) {
 		const endPoint = 'apps/polls/calendars'
-
-		return axios.get(generateUrl(endPoint))
-			.then((response) => {
-				context.commit('setCalendars', { calendars: response.data.calendars })
-				return response
-			})
+		const response = await axios.get(generateUrl(endPoint))
+		context.commit('setCalendars', { calendars: response.data.calendars })
+		return response
 	},
 }
 

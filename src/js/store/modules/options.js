@@ -119,7 +119,7 @@ const getters = {
 
 const actions = {
 
-	list(context) {
+	async list(context) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
@@ -132,127 +132,112 @@ const actions = {
 			return
 		}
 
-		return axios.get(generateUrl(endPoint + '/options'))
-			.then((response) => {
-				context.commit('set', { options: response.data.options })
-			})
-			.catch((error) => {
-				console.error('Error loding options', { error: error.response }, { pollId: context.rootState.route.params.id })
-				throw error
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/options'))
+			context.commit('set', { options: response.data.options })
+		} catch (e) {
+			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
+			throw e
+		}
 	},
 
-	add(context, payload) {
+	async add(context, payload) {
 		const endPoint = 'apps/polls/option'
-		return axios.post(generateUrl(endPoint), {
-			pollId: context.rootState.route.params.id,
-			timestamp: payload.timestamp,
-			pollOptionText: payload.pollOptionText,
-			duration: payload.duration,
-		})
-			.then((response) => {
-				context.commit('setItem', { option: response.data.option })
+		try {
+			const response = await axios.post(generateUrl(endPoint), {
+				pollId: context.rootState.route.params.id,
+				timestamp: payload.timestamp,
+				pollOptionText: payload.pollOptionText,
+				duration: payload.duration,
 			})
-			.catch((error) => {
-				console.error('Error adding option: ' + error.response.data, { error: error.response }, { payload: payload })
-				context.dispatch('list')
-				throw error
-			})
+			context.commit('setItem', { option: response.data.option })
+		} catch (e) {
+			console.error('Error adding option: ' + e.response.data, { error: e.response }, { payload: payload })
+			context.dispatch('list')
+			throw e
+		}
 	},
 
-	update(context, payload) {
+	async update(context, payload) {
 		const endPoint = 'apps/polls/option'
-		return axios.put(generateUrl(endPoint + '/' + payload.option.id), {
-			timestamp: payload.option.timestamp,
-			pollOptionText: payload.option.timeStamp,
-			duration: payload.option.duration,
-		})
-			.then((response) => {
-				context.commit('setItem', { option: response.data.option })
+		try {
+			const response = await axios.put(generateUrl(endPoint + '/' + payload.option.id), {
+				timestamp: payload.option.timestamp,
+				pollOptionText: payload.option.timeStamp,
+				duration: payload.option.duration,
 			})
-			.catch((error) => {
-				console.error('Error updating option', { error: error.response }, { payload: payload })
-				context.dispatch('list')
-				throw error
-			})
+			context.commit('setItem', { option: response.data.option })
+		} catch (e) {
+			console.error('Error updating option', { error: e.response }, { payload: payload })
+			context.dispatch('list')
+			throw e
+		}
 	},
 
-	delete(context, payload) {
+	async delete(context, payload) {
 		const endPoint = 'apps/polls/option'
-
-		return axios.delete(generateUrl(endPoint + '/' + payload.option.id))
-			.then((response) => {
-				context.commit('delete', { option: payload.option })
-			})
-			.catch((error) => {
-				console.error('Error deleting option', { error: error.response }, { payload: payload })
-				context.dispatch('list')
-				throw error
-			})
+		try {
+			await axios.delete(generateUrl(endPoint + '/' + payload.option.id))
+			context.commit('delete', { option: payload.option })
+		} catch (e) {
+			console.error('Error deleting option', { error: e.response }, { payload: payload })
+			context.dispatch('list')
+			throw e
+		}
 	},
 
-	confirm(context, payload) {
+	async confirm(context, payload) {
 		context.commit('confirm', { option: payload.option })
-
 		const endPoint = 'apps/polls/option'
-		return axios.put(generateUrl(endPoint + '/' + payload.option.id + '/confirm'))
-			.then((response) => {
-				context.commit('setItem', { option: response.data.option })
-			})
-			.catch((error) => {
-				console.error('Error confirming option', { error: error.response }, { payload: payload })
-				context.dispatch('list')
-				throw error
-			})
+		try {
+			const response = await axios.put(generateUrl(endPoint + '/' + payload.option.id + '/confirm'))
+			context.commit('setItem', { option: response.data.option })
+		} catch (e) {
+			console.error('Error confirming option', { error: e.response }, { payload: payload })
+			context.dispatch('list')
+			throw e
+		}
 	},
 
-	reorder(context, payload) {
-		const endPoint = 'apps/polls/poll'
+	async reorder(context, payload) {
 		context.commit('reorder', { options: payload })
-		return axios.post(generateUrl(endPoint + '/' + context.rootState.route.params.id + '/options/reorder'), {
-			options: payload,
-		})
-			.then((response) => {
-				context.commit('set', { options: response.data.options })
+		const endPoint = 'apps/polls/poll'
+		try {
+			const response = await axios.post(generateUrl(endPoint + '/' + context.rootState.route.params.id + '/options/reorder'), {
+				options: payload,
 			})
-			.catch((error) => {
-				console.error('Error reordering option', { error: error.response }, { payload: payload })
-				context.dispatch('list')
-				throw error
-			})
+			context.commit('set', { options: response.data.options })
+		} catch (e) {
+			console.error('Error reordering option', { error: e.response }, { payload: payload })
+			context.dispatch('list')
+			throw e
+		}
 	},
 
-	sequence(context, payload) {
+	async sequence(context, payload) {
 		const endPoint = 'apps/polls/option'
-		return axios.post(generateUrl(endPoint + '/' + payload.option.id + '/sequence'), {
-			step: payload.sequence.step,
-			unit: payload.sequence.unit.value,
-			amount: payload.sequence.amount,
-		})
-			.then((response) => {
-				context.commit('set', { options: response.data.options })
+		try {
+			const response = await axios.post(generateUrl(endPoint + '/' + payload.option.id + '/sequence'), {
+				step: payload.sequence.step,
+				unit: payload.sequence.unit.value,
+				amount: payload.sequence.amount,
 			})
-			.catch((error) => {
-				console.error('Error creating sequence', { error: error.response }, { payload: payload })
-				context.dispatch('list')
-				throw error
-			})
+			context.commit('set', { options: response.data.options })
+		} catch (e) {
+			console.error('Error creating sequence', { error: e.response }, { payload: payload })
+			context.dispatch('list')
+			throw e
+		}
 	},
 
-	getEvents(context, payload) {
+	async getEvents(context, payload) {
 		const endPoint = 'apps/polls/option'
-		return axios.get(generateUrl(endPoint + '/' + payload.option.id + '/events'))
-			.then((response) => {
-				return response.data
-			})
-			.catch((error) => {
-				if (error.message === 'Network Error') {
-					console.error('Got an ugly network error while loading calendar events', { error: error }, { payload: payload })
-					throw error
-				}
-				console.error('Error loading calendar events - start whistling and behave as if nothing happened', { error: error }, { payload: payload })
-				return { events: [] }
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/' + payload.option.id + '/events'))
+			return response.data
+		} catch (e) {
+			return { events: [] }
+		}
 	},
 
 }

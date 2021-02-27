@@ -87,7 +87,7 @@ const getters = {
 }
 
 const actions = {
-	list(context) {
+	async list(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'vote') {
@@ -98,77 +98,64 @@ const actions = {
 			context.commit('reset')
 			return
 		}
-		return axios.get(generateUrl(endPoint + '/shares'))
-			.then((response) => {
-				context.commit('set', response.data)
-				return response.data
-			})
-			.catch((error) => {
-				console.error('Error loading shares', { error: error.response }, { pollId: context.rootState.route.params.id })
-				throw error
-			})
+		try {
+			const response = await axios.get(generateUrl(endPoint + '/shares'))
+			context.commit('set', response.data)
+			return response.data
+		} catch (e) {
+			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
+			throw e
+		}
 	},
 
-	add(context, payload) {
+	async add(context, payload) {
 		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id
-
-		return axios.post(generateUrl(endPoint + '/share'), payload.share)
-			.then((response) => {
-				return response.data
-			})
-			.catch((error) => {
-				console.error('Error writing share', { error: error.response }, { payload: payload })
-				throw error
-			})
-			.finally(() => {
-				context.dispatch('list')
-			})
+		try {
+			await axios.post(generateUrl(endPoint + '/share'), payload.share)
+		} catch (e) {
+			console.error('Error writing share', { error: e.response }, { payload: payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
 	},
 
-	delete(context, payload) {
+	async delete(context, payload) {
 		const endPoint = 'apps/polls/share'
 		context.commit('delete', { share: payload.share })
 
-		return axios.delete(generateUrl(endPoint + '/' + payload.share.token))
-			.then((response) => {
-				return response
-			})
-			.catch((error) => {
-				console.error('Error removing share', { error: error.response }, { payload: payload })
-				throw error
-			})
-			.finally(() => {
-				context.dispatch('list')
-			})
+		try {
+			return await axios.delete(generateUrl(endPoint + '/' + payload.share.token))
+		} catch (e) {
+			console.error('Error removing share', { error: e.response }, { payload: payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
 	},
 
-	sendInvitation(context, payload) {
+	async sendInvitation(context, payload) {
 		const endPoint = 'apps/polls/share'
-
-		return axios.post(generateUrl(endPoint + '/' + payload.share.token + '/invite'))
-			.then((response) => {
-				return response
-			})
-			.catch((error) => {
-				console.error('Error sending invitation', { error: error.response }, { payload: payload })
-				throw error
-			})
-			.finally(() => {
-				context.dispatch('list')
-			})
+		try {
+			return await axios.post(generateUrl(endPoint + '/' + payload.share.token + '/invite'))
+		} catch (e) {
+			console.error('Error sending invitation', { error: e.response }, { payload: payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
 	},
 
-	resolveGroup(context, payload) {
+	async resolveGroup(context, payload) {
 		const endPoint = 'apps/polls/share'
-
-		return axios.get(generateUrl(endPoint + '/' + payload.share.token + '/resolve'))
-			.catch((error) => {
-				console.error('Error exploding group', error.response.data, { error: error.response }, { payload: payload })
-				throw error
-			})
-			.finally(() => {
-				context.dispatch('list')
-			})
+		try {
+			return await axios.get(generateUrl(endPoint + '/' + payload.share.token + '/resolve'))
+		} catch (e) {
+			console.error('Error exploding group', e.response.data, { error: e.response }, { payload: payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
 	},
 }
 
