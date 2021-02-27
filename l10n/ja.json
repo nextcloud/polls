@@ -27,7 +27,6 @@
     "Enter your name" : "あなたの名前を入力",
     "Cancel" : "キャンセル",
     "OK" : "OK",
-    "OK, we will call you {username}." : "分かりました、{username} とお呼びします。",
     "Error saving username" : "ユーザー名の保存中にエラーが発生しました",
     "Enter a name to start the search" : "検索を開始するために名前を入力してください",
     "Error while adding share" : "共有の追加中にエラーが発生しました",

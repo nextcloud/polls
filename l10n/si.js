@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Group" : "සමූහය",
     "User" : "පරිශීලක",
-    "Login" : "පිවිසෙන්න",
     "Cancel" : "අවලංගු කරන්න",
     "OK" : "හරි",
+    "Login" : "පිවිසෙන්න",
     "New comment …" : "නව අදහසක්…",
     "Settings" : "සැකසුම්",
     "Week" : "සතිය",

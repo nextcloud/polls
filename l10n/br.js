@@ -6,7 +6,6 @@ OC.L10N.register(
     "User" : "Implijer",
     "Cancel" : "Arrest",
     "OK" : "OK",
-    " " : " ",
     "Conflict" : "Stourm",
     "Delete comment" : "Lemel an displegadenn",
     "Apply" : "Lakaat",

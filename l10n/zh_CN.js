@@ -23,7 +23,6 @@ OC.L10N.register(
     "Enter your name" : "输入你的名字",
     "Cancel" : "取消",
     "OK" : "确认",
-    " " : " ",
     "Error saving username" : "保存用户名时出错",
     "Enter a name to start the search" : "输入名称以开始搜索",
     "Error while adding share" : "添加共享时出错",

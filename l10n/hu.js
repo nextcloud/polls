@@ -22,7 +22,6 @@ OC.L10N.register(
     "You can place your vote until {dateString}." : "{dateString}-ig lehet szavazni.",
     "Cancel" : "Mégsem",
     "OK" : "OK",
-    " " : " ",
     "Error saving username" : "Hiba a felhasználónév mentése közben",
     "Error while adding share" : "Hiba a megosztáskor",
     "Conflict" : "Ütközés",
