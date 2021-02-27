@@ -308,7 +308,7 @@ export default {
 				editable: true,
 				minuteStep: 5,
 				type: 'datetime',
-				format: moment.localeData().longDateFormat('L') + ' ' + moment.localeData().longDateFormat('LT'),
+				format: moment.localeData().longDateFormat('L LT'),
 				placeholder: t('polls', 'Closing date'),
 				confirm: true,
 				lang: {
