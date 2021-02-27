@@ -137,6 +137,13 @@ export default {
 			this.createDlg = false
 		},
 
+		timedReload() {
+			// reload poll list periodically
+			this.reloadTimer = window.setInterval(() => {
+				emit('update-polls')
+			}, this.reloadInterval)
+		},
+
 		toggleCreateDlg() {
 			this.createDlg = !this.createDlg
 			if (this.createDlg) {
