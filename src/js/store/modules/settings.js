@@ -35,7 +35,6 @@ const defaultSettings = () => {
 			glassySidebar: false,
 			defaultViewTextPoll: 'mobile',
 			defaultViewDatePoll: 'desktop',
-			realTimePolling: false,
 		},
 		availableCalendars: [],
 		viewModes: [
