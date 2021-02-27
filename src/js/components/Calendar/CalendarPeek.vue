@@ -59,10 +59,6 @@ export default {
 			type: Object,
 			default: undefined,
 		},
-		open: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	data() {

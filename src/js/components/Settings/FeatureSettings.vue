@@ -67,13 +67,6 @@ export default {
 		CheckBoxDiv,
 	},
 
-	props: {
-		show: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
 	computed: {
 		...mapState({
 			settings: state => state.settings.user,

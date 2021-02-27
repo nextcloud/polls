@@ -38,6 +38,10 @@ module.exports = {
 			allowModules: [],
 			tryExtensions: ['.js', '.vue'],
 		}],
+		'vue/no-unused-properties': ['error', {
+			groups: ['props'],
+			deepData: false,
+		}],
 		'comma-dangle': ['error', 'always-multiline'],
 		// space before function ()
 		'space-before-function-paren': ['error', 'never'],

@@ -70,26 +70,11 @@ export default {
 		CheckBoxDiv,
 	},
 
-	props: {
-		show: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
 	computed: {
 		...mapState({
 			settings: state => state.settings.user,
 		}),
 		// Add bindings
-		realTimePolling: {
-			get() {
-				return this.settings.realTimePolling
-			},
-			set(value) {
-				this.writeValue({ realTimePolling: value })
-			},
-		},
 		experimental: {
 			get() {
 				return this.settings.experimental
