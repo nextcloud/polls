@@ -106,7 +106,6 @@ export default {
 					emailAddress: payload.emailAddress,
 				})
 			} catch (e) {
-				console.error('Error while adding share - Error: ', e)
 				showError(t('polls', 'Error while adding share'))
 			}
 		},
