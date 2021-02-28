@@ -29,7 +29,6 @@ OC.L10N.register(
     "New comment …" : "توضیح جدید ...",
     "Error while saving comment" : "هنگام ذخیره توضیح خطایی رخ داد",
     "Delete comment" : "حذف توضیح",
-    "Comment deleted" : "توضیح حذف",
     "Error while deleting the comment" : "هنگام حذف توضیح خطایی رخ داد",
     "Title" : "عنوان",
     "Enter Title" : "عنوان را وارد کنید",

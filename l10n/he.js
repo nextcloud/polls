@@ -29,7 +29,6 @@ OC.L10N.register(
     "New comment …" : "תגובה חדשה…",
     "Error while saving comment" : "שגיאה בעת שמירת הערה",
     "Delete comment" : "מחיקת תגובה",
-    "Comment deleted" : "נמחקה הערה",
     "Error while deleting the comment" : "שגיאה במחיקת ההערה",
     "Title" : "כותרת",
     "Enter Title" : "נא להקליד כותרת",

@@ -20,7 +20,6 @@ OC.L10N.register(
     "New comment …" : "Новий коментар...",
     "Error while saving comment" : "Помилка під час збереження коментаря",
     "Delete comment" : "Вилучити коментар",
-    "Comment deleted" : "Коментар вилучено",
     "Error while deleting the comment" : "Помилка під час вилучення коментаря",
     "Title" : "Назва",
     "Enter Title" : "Зазначте назву",

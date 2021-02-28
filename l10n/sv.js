@@ -22,7 +22,6 @@ OC.L10N.register(
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar ...",
     "Delete comment" : "Ta bort kommentar",
-    "Comment deleted" : "Kommentar borttagen",
     "Error while deleting the comment" : "Fel vid borttagning av kommentaren",
     "Title" : "Titel",
     "Enter Title" : "Lägg till rubrik",

@@ -7,7 +7,6 @@ OC.L10N.register(
     "OK" : "AB",
     "New comment …" : "Cummentu nou …",
     "Delete comment" : "Cantzella cummentu",
-    "Comment deleted" : "Cummentu cantzelladu",
     "Title" : "Tìtulu",
     "Apply" : "Àplica",
     "Settings" : "Impostatziones",

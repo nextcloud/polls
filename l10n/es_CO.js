@@ -23,7 +23,6 @@ OC.L10N.register(
     "New comment …" : "Nuevo comentario ...",
     "Error while saving comment" : "Error guardando el comentario",
     "Delete comment" : "Borrar comentario",
-    "Comment deleted" : "Comentario borrado",
     "Error while deleting the comment" : "Error borrando el comentario",
     "Title" : "Título",
     "Enter Title" : "Escriba el título",
