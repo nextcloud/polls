@@ -62,7 +62,7 @@ class User extends UserGroupClass {
 
 		foreach (self::getContainer()->query(IUserManager::class)->search($query) as $user) {
 			if (!in_array($user->getUID(), $skip)) {
-				$users[] = new Self($user->getUID());
+				$users[] = new self($user->getUID());
 			}
 		}
 		return $users;
