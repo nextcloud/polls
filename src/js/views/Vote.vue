@@ -23,6 +23,7 @@
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="header-actions">
+			<PollInformation />
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
 					{{ orderCaption }}
@@ -55,7 +56,6 @@
 					icon="icon-delete"
 					class="error" />
 			</h2>
-			<PollInformation />
 
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<h3 class="description" v-html="linkifyDescription">
