@@ -35,7 +35,7 @@ export const watchPolls = {
 						params: { offset: this.lastUpdated },
 						cancelToken: this.cancelToken.token,
 					})
-					const dispatches = []
+					let dispatches = []
 
 					console.debug('polls', 'update detected', response.data.updates)
 
@@ -58,6 +58,8 @@ export const watchPolls = {
 						}
 					})
 
+					// remove duplicates
+					dispatches = [...new Set(dispatches)]
 					// execute all loads within one promise
 					const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
 					await Promise.all(requests)
