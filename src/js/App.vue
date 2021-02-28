@@ -51,6 +51,7 @@ import './assets/scss/colors.scss'
 // import './assets/scss/colors-dark.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/experimental.scss'
+import { watchPolls } from './mixins/watchPolls'
 
 export default {
 	name: 'App',
@@ -62,13 +63,14 @@ export default {
 		SideBar,
 	},
 
+	mixins: [watchPolls],
+
 	data() {
 		return {
 			sideBarOpen: (window.innerWidth > 920),
 			activeTab: 'comments',
 			transitionClass: 'transitions-active',
 			loading: false,
-			reloadInterval: 30000,
 		}
 	},
 
@@ -95,6 +97,7 @@ export default {
 
 	watch: {
 		$route(to, from) {
+			this.watchPollsRestart()
 			this.loadPoll()
 		},
 	},
@@ -105,10 +108,12 @@ export default {
 			if (this.$route.name !== 'publicVote') {
 				this.updatePolls()
 			}
-			if (this.$route.params.id && !this.$oute.params.token) {
+			if (this.$route.params.id && !this.$route.params.token) {
 				this.loadPoll(true)
 			}
 		}
+
+		this.watchPolls()
 
 		subscribe('transitions-off', (delay) => {
 			this.transitionsOff(delay)
@@ -141,12 +146,10 @@ export default {
 			}
 
 		})
-
-		this.timedReload()
 	},
 
 	beforeDestroy() {
-		window.clearInterval(this.reloadTimer)
+		this.cancelToken.cancel()
 		unsubscribe('load-poll')
 		unsubscribe('update-polls')
 		unsubscribe('toggle-sidebar')
@@ -157,12 +160,6 @@ export default {
 	methods: {
 		transitionsOn() {
 			this.transitionClass = 'transitions-active'
-		},
-
-		timedReload() {
-			this.reloadTimer = window.setInterval(() => {
-				this.updatePolls()
-			}, this.reloadInterval)
 		},
 
 		transitionsOff(delay) {
