@@ -28,7 +28,9 @@
 	--icon-polls-mail--fff: url('../icons/mail-fff.svg');
 	--icon-polls-sidebar-toggle: url('../icons/sidebar-toggle.svg');
 	--icon-polls-table-view: url('../icons/table-view.svg');
+	--icon-polls-table-view-fff: url('../icons/table-view-fff.svg');
 	--icon-polls-list-view: url('../icons/list-view.svg');
+	--icon-polls-list-view-fff: url('../icons/list-view-fff.svg');
 	--icon-polls-sidebar-toggle--fff: url('../icons/sidebar-toggle-fff.svg');
 	--icon-polls-loading: url('../icons/loading-small.gif');
 	--icon-polls-open: url('../icons/open.svg');
@@ -187,4 +189,13 @@
 	.icon-handle {
 		background-image: var(--icon-polls-handle--fff);
 	}
+
+	.icon-table-view {
+		background-image: var(--icon-polls-table-view-fff);
+	}
+
+	.icon-list-view {
+		background-image: var(--icon-polls-list-view-fff);
+	}
+
 }
