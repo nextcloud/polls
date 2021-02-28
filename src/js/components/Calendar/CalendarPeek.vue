@@ -143,7 +143,7 @@ export default {
 	margin: 4px auto;
 }
 
-.mobile .calendar-peek__caption {
+.list-view .calendar-peek__caption {
 	display: none;
 }
 

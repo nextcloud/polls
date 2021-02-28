@@ -98,25 +98,25 @@ export default {
 
 		defaultViewTextPoll: {
 			get() {
-				return (this.settings.defaultViewTextPoll === 'mobile')
+				return (this.settings.defaultViewTextPoll === 'list-view')
 			},
 			set(value) {
 				if (value) {
-					this.writeValue({ defaultViewTextPoll: 'mobile' })
+					this.writeValue({ defaultViewTextPoll: 'list-view' })
 				} else {
-					this.writeValue({ defaultViewTextPoll: 'desktop' })
+					this.writeValue({ defaultViewTextPoll: 'table-view' })
 				}
 			},
 		},
 		defaultViewDatePoll: {
 			get() {
-				return (this.settings.defaultViewDatePoll === 'mobile')
+				return (this.settings.defaultViewDatePoll === 'list-view')
 			},
 			set(value) {
 				if (value) {
-					this.writeValue({ defaultViewDatePoll: 'mobile' })
+					this.writeValue({ defaultViewDatePoll: 'list-view' })
 				} else {
-					this.writeValue({ defaultViewDatePoll: 'desktop' })
+					this.writeValue({ defaultViewDatePoll: 'table-view' })
 				}
 			},
 		},
