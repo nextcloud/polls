@@ -258,6 +258,11 @@ export default {
 	.vote-table__footer {
 		align-items: center;
 	}
+
+	.option-item .option-item__option--text {
+		text-align: center;
+	}
+
 }
 
 .vote-table.list-view {
