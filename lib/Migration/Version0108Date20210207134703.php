@@ -47,11 +47,13 @@ class Version0108Date20210207134703 extends SimpleMigrationStep {
 		$schema = $schemaClosure();
 		if ($schema->hasTable('polls_polls')) {
 			$table = $schema->getTable('polls_polls');
-			$table->addColumn('allow_comment', 'integer', [
-				'length' => 11,
-				'notnull' => true,
-				'default' => 1
-			]);
+			if (!$table->hasColumn('allow_comment')) {
+				$table->addColumn('allow_comment', 'integer', [
+					'length' => 11,
+					'notnull' => true,
+					'default' => 1
+				]);
+			}
 		}
 		return $schema;
 	}
