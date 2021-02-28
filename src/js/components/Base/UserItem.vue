@@ -142,6 +142,7 @@ export default {
 }
 
 .type-icon {
+	margin-left: 8px;
 	background-size: 16px;
 }
 
