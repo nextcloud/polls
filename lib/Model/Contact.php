@@ -132,7 +132,7 @@ class Contact extends UserGroupClass {
 	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
 		$contacts = [];
 		foreach (self::listRaw($query, $queryRange) as $contact) {
-			$contacts[] = new Self($contact['UID']);
+			$contacts[] = new self($contact['UID']);
 		}
 		return $contacts;
 	}

@@ -72,7 +72,7 @@ class Group extends UserGroupClass {
 
 		foreach (self::getContainer()->query(IGroupManager::class)->search($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
-				$groups[] = new Self($group->getGID());
+				$groups[] = new self($group->getGID());
 			}
 		}
 		return $groups;

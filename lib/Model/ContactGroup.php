@@ -79,18 +79,18 @@ class ContactGroup extends UserGroupClass {
 	 */
 	public static function search(string $query = ''): array {
 		$contactGroups = [];
+		$categories = [];
 		if (self::isEnabled() && $query) {
 			foreach (self::getContainer()->query(IContactsManager::class)->search($query, ['CATEGORIES']) as $contact) {
 				// get all groups from the found contact and explode to array
-				$temp = explode(',', $contact['CATEGORIES']);
-				foreach ($temp as $contactGroup) {
-					if (stripos($contactGroup, $query) === 0) {
-						$contactGroups[] = $contactGroup;
+
+				foreach (explode(',', $contact['CATEGORIES']) as $category) {
+					if (stripos($category, $query) === 0) {
+						$categories[] = $category;
 					}
 				}
 			}
-
-			foreach (array_unique($contactGroups) as $contactGroup) {
+			foreach (array_unique($categories) as $contactGroup) {
 				$contactGroups[] = new self($contactGroup);
 			}
 		}
