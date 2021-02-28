@@ -33,13 +33,13 @@ const defaultSettings = () => {
 			imageUrl: '',
 			glassyNavigation: false,
 			glassySidebar: false,
-			defaultViewTextPoll: 'mobile',
-			defaultViewDatePoll: 'desktop',
+			defaultViewTextPoll: 'list-view',
+			defaultViewDatePoll: 'table-view',
 		},
 		availableCalendars: [],
 		viewModes: [
-			'mobile',
-			'desktop',
+			'list-view',
+			'table-view',
 		],
 	}
 }
@@ -53,6 +53,20 @@ const mutations = {
 	},
 
 	setPreference(state, payload) {
+
+		if (payload.defaultViewTextPoll === 'desktop') {
+			payload.defaultViewTextPoll = 'table-view'
+		}
+		if (payload.defaultViewTextPoll === 'mobile') {
+			payload.defaultViewTextPoll = 'list-view'
+		}
+		if (payload.defaultViewDatePoll === 'desktop') {
+			payload.defaultViewDatePoll = 'table-view'
+		}
+		if (payload.defaultViewDatePoll === 'mobile') {
+			payload.defaultViewDatePoll = 'list-view'
+		}
+
 		Object.keys(payload).filter(key => key in state.user).forEach(key => {
 			state.user[key] = payload[key]
 		})
@@ -70,6 +84,18 @@ const actions = {
 		const endPoint = 'apps/polls/preferences/get'
 		try {
 			const response = await axios.get(generateUrl(endPoint))
+			if (response.data.preferences.defaultViewTextPoll === 'desktop') {
+				response.data.preferences.defaultViewTextPoll = 'table-view'
+			}
+			if (response.data.preferences.defaultViewTextPoll === 'mobile') {
+				response.data.preferences.defaultViewTextPoll = 'list-view'
+			}
+			if (response.data.preferences.defaultViewDatePoll === 'desktop') {
+				response.data.preferences.defaultViewDatePoll = 'table-view'
+			}
+			if (response.data.preferences.defaultViewDatePoll === 'mobile') {
+				response.data.preferences.defaultViewDatePoll = 'list-view'
+			}
 			context.commit('setPreference', response.data.preferences)
 		} catch {
 			context.commit('reset')

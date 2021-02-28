@@ -47,8 +47,8 @@
 
 				<Counter v-else :show-maybe="!!poll.allowMaybe"
 					:option="option"
-					:counter-style="viewMode === 'desktop' ? 'iconStyle' : 'barStyle'"
-					:show-no="viewMode === 'mobile'" />
+					:counter-style="viewMode === 'table-view' ? 'iconStyle' : 'barStyle'"
+					:show-no="viewMode === 'list-view'" />
 				<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
 				<div v-for="(participant) in participants" :key="participant.userId" class="vote-item-wrapper"
 					:class="{currentuser: participant.userId === acl.userId}">
@@ -110,7 +110,7 @@ export default {
 	props: {
 		viewMode: {
 			type: String,
-			default: 'desktop',
+			default: 'table-view',
 		},
 		ranked: {
 			type: Boolean,
@@ -260,7 +260,7 @@ export default {
 	}
 }
 
-.vote-table.mobile {
+.vote-table.list-view {
 	flex-direction: column;
 
 	.counter {

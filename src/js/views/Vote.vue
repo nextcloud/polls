@@ -165,7 +165,7 @@ export default {
 				if (window.innerWidth > 480) {
 					return this.settings.user.defaultViewTextPoll
 				} else {
-					return 'mobile'
+					return 'list-view'
 				}
 			}
 		},
@@ -177,7 +177,7 @@ export default {
 				if (window.innerWidth > 480) {
 					return this.settings.user.defaultViewDatePoll
 				} else {
-					return 'mobile'
+					return 'list-view'
 				}
 			}
 		},
@@ -188,7 +188,7 @@ export default {
 			} else if (this.poll.type === 'datePoll') {
 				return this.viewDatePoll
 			} else {
-				return 'desktop'
+				return 'table-view'
 			}
 		},
 
@@ -227,10 +227,10 @@ export default {
 		},
 
 		viewCaption() {
-			if (this.viewMode === 'desktop') {
-				return t('polls', 'Switch to mobile view')
+			if (this.viewMode === 'table-view') {
+				return t('polls', 'Switch to list view')
 			} else {
-				return t('polls', 'Switch to desktop view')
+				return t('polls', 'Switch to table view')
 			}
 		},
 		orderCaption() {
@@ -266,10 +266,10 @@ export default {
 		},
 
 		toggleViewIcon() {
-			if (this.viewMode === 'desktop') {
-				return 'icon-phone'
+			if (this.viewMode === 'table-view') {
+				return 'icon-list-view'
 			} else {
-				return 'icon-desktop'
+				return 'icon-table-view'
 			}
 		},
 

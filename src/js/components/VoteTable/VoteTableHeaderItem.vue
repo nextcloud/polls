@@ -45,7 +45,7 @@ export default {
 		},
 		viewMode: {
 			type: String,
-			default: 'desktop',
+			default: 'table-view',
 		},
 	},
 
@@ -61,21 +61,21 @@ export default {
 		}),
 
 		optionStyle() {
-			if (this.viewMode === 'desktop') {
+			if (this.viewMode === 'table-view') {
 				return 'dateBox'
 			} else {
 				return 'textBox'
 			}
 		},
 		counterStyle() {
-			if (this.viewMode === 'desktop') {
+			if (this.viewMode === 'table-view') {
 				return 'iconStyle'
 			} else {
 				return 'barStyle'
 			}
 		},
 		showNo() {
-			return (this.viewMode === 'mobile')
+			return (this.viewMode === 'list-view')
 		},
 		isWinner() {
 			// highlight best option until poll is closed and
