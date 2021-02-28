@@ -21,50 +21,52 @@
   -->
 
 <template>
-	<div class="poll-information">
-		<UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
-		{{ t('polls', 'started this poll on {dateString}.', {dateString: dateCreatedString}) }}
-
-		<span v-if="closed && confirmedOptions.length"> {{ t('polls', 'This poll is closed since {dateString}. The confirmed options are marked below.', { dateString: dateExpiryString }) }} </span>
-
-		<span v-if="closed && !confirmedOptions.length"> {{ t('polls', 'This poll is closed since {dateString}, but there are no confirmed options until now.', { dateString: dateExpiryString }) }} </span>
-
-		<span v-if="closed && !confirmedOptions.length && acl.allowEdit"> {{ t('polls', 'You can confirm your favorites now in the options tab in the sidebar.', { dateString: dateExpiryString }) }} </span>
-
-		<span v-if="!closed && poll.expire && acl.allowVote">{{ t('polls', 'You can place your vote until {dateString}.', { dateString: dateExpiryString }) }} </span>
-
-		<span v-if="poll.anonymous">{{ t('polls', 'This is an anonymous poll. Except to the poll owner, participants names are hidden.') }} </span>
-
-		<span v-if="!acl.allowSeeResults">{{ t('polls', 'Results are hidden.') }}</span>
-
-		<span v-if="!acl.allowSeeResults && (poll.showResults === 'closed')">{{ t('polls', 'They will be revealed after the poll is closed.') }}</span>
-
-		<span v-if="poll.type === 'datePoll'">{{ t('polls', 'The used time zone is {timeZone}.', { timeZone: currentTimeZone }) }}</span>
-		<div v-if="poll.voteLimit">
-			{{ t('polls', 'Your are only allowed to vote for one option.', 'Your votes are limited to %n yes votes.', poll.voteLimit) }}
-			<span v-if="voteLimitReached"> {{ t('polls', 'You reached the maximum number of allowed votes.') }}</span>
-			<span v-else-if="poll.voteLimit - countYesVotes === 1"> {{ t('polls', 'You have only one vote left.') }}</span>
-			<span v-else> {{ n('polls', 'You have %n vote left.', 'You have %n votes left.', poll.voteLimit - countYesVotes) }}</span>
+	<Popover>
+		<div slot="trigger">
+			<Actions>
+				<ActionButton icon="icon-info">
+					{{ t('polls', 'Poll informations') }}
+				</ActionButton>
+			</Actions>
 		</div>
-
-		<div v-if="poll.optionLimit === 1">
-			{{ t('polls', 'This is an exclusive vote, where only one user is allowed to vote for an option.') }}
+		<div class="poll-information">
+			<div class="owner">
+				{{ t('polls', 'Poll owner: ') }} <UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
+			</div>
+			<div class="created">
+				{{ t('polls', 'Created {dateRelative}.', { dateRelative: dateCreatedRelative }) }}
+			</div>
+			<div v-if="poll.expire" class="closed">
+				{{ t('polls', 'Closing: ') }} {{ dateExpiryRelative }}
+			</div>
+			<div v-if="poll.anonymous" class="anonymous">
+				{{ t('polls', 'Anonymous poll') }}
+			</div>
+			<div class="timezone">
+				{{ t('polls', 'Time zone: ') }} {{ currentTimeZone }}
+			</div>
+			<div v-if="poll.voteLimit" class="vote-limit">
+				{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countYesVotes, { maximalVotes: poll.voteLimit }) }}
+			</div>
+			<div v-if="poll.optionLimit" class="option-limit">
+				{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
+			</div>
 		</div>
-		<div v-else-if="poll.optionLimit">
-			{{ n('polls', 'Only %n vote per option is permitted.', 'Only %n votes per option are permitted.', poll.optionLimit) }}
-		</div>
-	</div>
+	</Popover>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { UserBubble } from '@nextcloud/vue'
+import { Actions, ActionButton, Popover, UserBubble } from '@nextcloud/vue'
 
 export default {
 	name: 'PollInformation',
 
 	components: {
+		Actions,
+		ActionButton,
+		Popover,
 		UserBubble,
 	},
 
@@ -85,12 +87,19 @@ export default {
 			return (this.poll.voteLimit > 0 && this.countYesVotes >= this.poll.voteLimit)
 		},
 
+		dateCreatedRelative() {
+			return moment.unix(this.poll.created).fromNow()
+		},
+
 		dateCreatedString() {
 			return moment.unix(this.poll.created).format('LLLL')
 		},
 
 		dateExpiryString() {
 			return moment.unix(this.poll.expire).format('LLLL')
+		},
+		dateExpiryRelative() {
+			return moment.unix(this.poll.expire).fromNow()
 		},
 
 		currentTimeZone() {
@@ -100,3 +109,42 @@ export default {
 	},
 }
 </script>
+<style lang="scss">
+	.poll-information {
+		padding: 8px;
+		> div {
+			background-position: 0 4px;
+			background-repeat: no-repeat;
+			opacity: 0.7;
+			margin: 8px 0 4px 0;
+			padding-left: 24px;
+		}
+		.owner {
+			background-image: var(--icon-user-000);
+		}
+
+		.created {
+			background-image: var(--icon-star-000);
+		}
+
+		.closed {
+			background-image: var(--icon-polls-closed);
+		}
+
+		.anonymous {
+			background-image: var(--icon-polls-anonymous);
+		}
+
+		.timezone {
+			background-image: var(--icon-clock);
+		}
+
+		.vote-limit {
+			background-image: var(--icon-checkmark-000);
+		}
+		.option-limit {
+			background-image: var(--icon-close-000);
+		}
+	}
+
+</style>
