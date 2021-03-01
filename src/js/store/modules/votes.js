@@ -21,7 +21,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import orderBy from 'lodash/orderBy'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultVotes = () => {
@@ -68,31 +67,6 @@ const getters = {
 				return option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText
 			})
 		})
-	},
-
-	ranked: (state, getters, rootState) => {
-		let votesRank = []
-		rootState.options.list.forEach(function(option) {
-			const countYes = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length
-			const countMaybe = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length
-			const countNo = state.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length
-			votesRank.push({
-				rank: 0,
-				pollOptionText: option.pollOptionText,
-				yes: countYes,
-				no: countNo,
-				maybe: countMaybe,
-			})
-		})
-		votesRank = orderBy(votesRank, ['yes', 'maybe'], ['desc', 'desc'])
-		for (let i = 0; i < votesRank.length; i++) {
-			if (i > 0 && votesRank[i].yes === votesRank[i - 1].yes && votesRank[i].maybe === votesRank[i - 1].maybe) {
-				votesRank[i].rank = votesRank[i - 1].rank
-			} else {
-				votesRank[i].rank = i + 1
-			}
-		}
-		return votesRank
 	},
 
 	countYesVotes: (state, getters, rootState) => {
@@ -149,9 +123,11 @@ const actions = {
 				setTo: payload.setTo,
 			})
 			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
+			context.dispatch('options/list', null, { root: true })
 		} catch (e) {
 			if (e.response.status === 409) {
 				context.dispatch('list')
+				context.dispatch('options/list', null, { root: true })
 			} else {
 				console.error('Error setting vote', { error: e.response }, { payload: payload })
 				throw e

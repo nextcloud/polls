@@ -21,7 +21,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import orderBy from 'lodash/orderBy'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultOptions = () => {
@@ -80,34 +79,6 @@ const mutations = {
 const getters = {
 	count: (state) => {
 		return state.list.length
-	},
-
-	sorted: (state, getters, rootState, rootGetters) => {
-		let rankedOptions = []
-		state.list.forEach((option) => {
-			rankedOptions.push({
-				...option,
-				rank: 0,
-				no: 0,
-				yes: rootState.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'yes').length,
-				maybe: rootState.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'maybe').length,
-				realno: rootState.votes.list.filter(vote => vote.voteOptionText === option.pollOptionText && vote.voteAnswer === 'no').length,
-				votes: rootGetters['poll/participantsVoted'].length,
-			})
-		})
-
-		rankedOptions = orderBy(rankedOptions, ['yes', 'maybe'], ['desc', 'desc'])
-
-		for (let i = 0; i < rankedOptions.length; i++) {
-			rankedOptions[i].no = rankedOptions[i].votes - rankedOptions[i].yes - rankedOptions[i].maybe
-			if (i > 0 && rankedOptions[i].yes === rankedOptions[i - 1].yes && rankedOptions[i].maybe === rankedOptions[i - 1].maybe) {
-				rankedOptions[i].rank = rankedOptions[i - 1].rank
-			} else {
-				rankedOptions[i].rank = i + 1
-			}
-		}
-
-		return orderBy(rankedOptions, 'order')
 	},
 
 	confirmed: state => {

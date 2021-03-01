@@ -31,6 +31,7 @@ use OCA\Polls\Exceptions\DuplicateEntryException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
@@ -51,6 +52,9 @@ class OptionService {
 	/** @var PollMapper */
 	private $pollMapper;
 
+	/** @var VoteMapper */
+	private $voteMapper;
+
 	/** @var WatchService */
 	private $watchService;
 
@@ -59,12 +63,14 @@ class OptionService {
 		Option $option,
 		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
+		VoteMapper $voteMapper,
 		WatchService $watchService
 	) {
 		$this->acl = $acl;
 		$this->option = $option;
 		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
+		$this->voteMapper = $voteMapper;
 		$this->watchService = $watchService;
 	}
 
@@ -78,6 +84,7 @@ class OptionService {
 	public function list(?int $pollId = 0, string $token = ''): array {
 		if ($token) {
 			$this->acl->setToken($token);
+			$pollId = $this->acl->getPollId();
 		} else {
 			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_VIEW);
 		}
@@ -87,7 +94,102 @@ class OptionService {
 		}
 
 		try {
-			return $this->optionMapper->findByPoll($this->acl->getPollId());
+			$poll = $this->pollMapper->find($pollId);
+			$options = $this->optionMapper->findByPoll($pollId);
+			$votes = $this->voteMapper->findByPoll($pollId);
+			$countParticipants = count($this->voteMapper->findParticipantsByPoll($pollId));
+
+			foreach ($options as $option) {
+				$option->yes = count(
+					array_filter($votes, function ($vote) use ($option) {
+						if ($vote->getVoteOptionText() === $option->getPollOptionText()
+							&& $vote->getVoteAnswer() === 'yes') {
+							return $vote;
+						}
+					})
+				);
+
+				$option->realno = count(
+					array_filter($votes, function ($vote) use ($option) {
+						if ($vote->getVoteOptionText() === $option->getPollOptionText()
+							&& $vote->getVoteAnswer() === 'no') {
+							return $vote;
+						}
+					})
+				);
+
+				$option->maybe = count(
+					array_filter($votes, function ($vote) use ($option) {
+						if ($vote->getVoteOptionText() === $option->getPollOptionText()
+							&& $vote->getVoteAnswer() === 'maybe') {
+							return $vote;
+						}
+					})
+				);
+
+				$option->isBookedUp = $poll->getOptionLimit() ? $poll->getOptionLimit() <= $option->yes : false;
+
+				if (!$this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
+					$option->yes = 0;
+					$option->no = 0;
+					$option->maybe = 0;
+					$option->realNo = 0;
+				} else {
+					$option->no = $countParticipants - $option->maybe - $option->yes;
+				}
+			}
+			// hide booked up options except the user has edit permission
+			if ($poll->getHideBookedUp() && !$this->acl->isAllowed(Acl::PERMISSION_EDIT)) {
+
+				// Thats an ugly solution, but for now, it seems to work
+				// Optimization proposals are welcome
+
+				// If the user opted in, do not hide them
+				// First: Find votes, where the user voted yes or maybe
+				$userId = $this->acl->getUserId();
+				$exceptVotes = array_filter($votes, function ($vote) use ($userId){
+					if ($vote->getUserId() === $userId && in_array($vote->getVoteAnswer(), ['yes', 'maybe'])) {
+						return $vote;
+					}
+				});
+
+				// Second: Extract only the vote option texts to an array
+				$exceptVotes = array_values(array_map(function ($vote){
+   					return $vote->getVoteOptionText();
+				}, $exceptVotes));
+
+				// Third: Reduce options to options, which are not booked up or
+				// the user has opted in via yes or maybe answer
+				$options = array_filter($options, function ($option) use ($exceptVotes) {
+					if (!$option->getIsBookedUp() || in_array($option->getPollOptionText(), $exceptVotes)) {
+						return $option;
+					}
+				});
+			} else if ($this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
+
+				// sort array by yes and maybe votes
+				usort($options, function ($a, $b) {
+					    $diff = $b->yes - $a->yes;
+    					return ($diff !== 0) ? $diff : $b->maybe - $a->maybe;
+				});
+
+				// calculate the rank
+				for ($i=0; $i < count($options); $i++) {
+					if ($i > 0 && $options[$i]->yes === $options[$i-1]->yes && $options[$i]->maybe === $options[$i-1]->maybe) {
+						$options[$i]->rank = $options[$i-1]->rank;
+					} else {
+						$options[$i]->rank = $i + 1;
+					}
+				}
+
+				// restore original order
+				usort($options, function ($a, $b) {
+					    return $a->getOrder() - $b->getOrder();
+				});
+
+			}
+
+			return array_values($options);
 		} catch (DoesNotExistException $e) {
 			return [];
 		}

@@ -45,6 +45,7 @@ const defaultPoll = () => {
 		showResults: 'always',
 		adminAccess: 0,
 		important: 0,
+		hideBookedUp: 0,
 	}
 }
 

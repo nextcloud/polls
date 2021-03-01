@@ -56,6 +56,10 @@
 				use-num-modifiers
 				@add="pollOptionLimit++"
 				@subtract="pollOptionLimit--" />
+			<CheckBoxDiv v-if="pollOptionLimit"
+				v-model="hideBookedUp"
+				class="indented"
+				:label="t('polls', 'Hide not availabe Options')" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
@@ -213,6 +217,15 @@ export default {
 					value = 1
 				}
 				this.writeValue({ optionLimit: value })
+			},
+		},
+
+		hideBookedUp: {
+			get() {
+				return (this.poll.hideBookedUp > 0)
+			},
+			set(value) {
+				this.writeValue({ hideBookedUp: +value })
 			},
 		},
 

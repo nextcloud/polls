@@ -94,14 +94,13 @@ export default {
 		}),
 
 		...mapGetters({
-			sortedOptions: 'options/sorted',
 			PollIsClosed: 'poll/closed',
 			countOptions: 'options/count',
 		}),
 
 		sortOptions: {
 			get() {
-				return this.sortedOptions
+				return this.options
 			},
 			set(value) {
 				this.$store.dispatch('options/reorder', value)

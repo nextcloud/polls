@@ -60,7 +60,11 @@ export default {
 		}),
 
 		isVotable() {
-			return this.isActive && this.isValidUser && !this.pollIsClosed && !this.isLocked && !this.isBlocked
+			return this.isActive
+				&& this.isValidUser
+				&& !this.pollIsClosed
+				&& !this.isLocked
+				&& !this.option.isBookedUp
 		},
 
 		isActive() {
@@ -76,10 +80,6 @@ export default {
 				option: this.option,
 				userId: this.userId,
 			}).voteAnswer
-		},
-
-		isBlocked() {
-			return this.optionLimit > 0 && this.optionLimit <= this.option.yes && this.answer !== 'yes'
 		},
 
 		isLocked() {
