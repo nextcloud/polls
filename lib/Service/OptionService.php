@@ -147,15 +147,15 @@ class OptionService {
 				// If the user opted in, do not hide them
 				// First: Find votes, where the user voted yes or maybe
 				$userId = $this->acl->getUserId();
-				$exceptVotes = array_filter($votes, function ($vote) use ($userId){
+				$exceptVotes = array_filter($votes, function ($vote) use ($userId) {
 					if ($vote->getUserId() === $userId && in_array($vote->getVoteAnswer(), ['yes', 'maybe'])) {
 						return $vote;
 					}
 				});
 
 				// Second: Extract only the vote option texts to an array
-				$exceptVotes = array_values(array_map(function ($vote){
-   					return $vote->getVoteOptionText();
+				$exceptVotes = array_values(array_map(function ($vote) {
+					return $vote->getVoteOptionText();
 				}, $exceptVotes));
 
 				// Third: Reduce options to options, which are not booked up or
@@ -165,18 +165,18 @@ class OptionService {
 						return $option;
 					}
 				});
-			} else if ($this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
+			} elseif ($this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
 
 				// sort array by yes and maybe votes
 				usort($options, function ($a, $b) {
-					    $diff = $b->yes - $a->yes;
-    					return ($diff !== 0) ? $diff : $b->maybe - $a->maybe;
+					$diff = $b->yes - $a->yes;
+					return ($diff !== 0) ? $diff : $b->maybe - $a->maybe;
 				});
 
 				// calculate the rank
-				for ($i=0; $i < count($options); $i++) {
-					if ($i > 0 && $options[$i]->yes === $options[$i-1]->yes && $options[$i]->maybe === $options[$i-1]->maybe) {
-						$options[$i]->rank = $options[$i-1]->rank;
+				for ($i = 0; $i < count($options); $i++) {
+					if ($i > 0 && $options[$i]->yes === $options[$i - 1]->yes && $options[$i]->maybe === $options[$i - 1]->maybe) {
+						$options[$i]->rank = $options[$i - 1]->rank;
 					} else {
 						$options[$i]->rank = $i + 1;
 					}
@@ -184,9 +184,8 @@ class OptionService {
 
 				// restore original order
 				usort($options, function ($a, $b) {
-					    return $a->getOrder() - $b->getOrder();
+					return $a->getOrder() - $b->getOrder();
 				});
-
 			}
 
 			return array_values($options);
