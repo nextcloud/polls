@@ -22,7 +22,7 @@
 
 <template>
 	<div class="vote-item" :class="[answer, isConfirmed, { active: isVotable }, {currentUser: isCurrentUser}]">
-		<div v-if="isActive && !isLocked" class="icon" @click="setVote()" />
+		<div v-if="isActive && !isVoteLimitExceded" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 		<slot name="indicator" />
 	</div>
@@ -63,8 +63,8 @@ export default {
 			return this.isActive
 				&& this.isValidUser
 				&& !this.pollIsClosed
-				&& !this.isLocked
-				&& !this.option.isBookedUp
+				&& !this.isVoteLimitExceded
+				&& !(this.option.isBookedUp && !['yes', 'maybe'].includes(this.answer))
 		},
 
 		isActive() {
@@ -82,7 +82,7 @@ export default {
 			}).voteAnswer
 		},
 
-		isLocked() {
+		isVoteLimitExceded() {
 			return (this.countYesVotes >= this.voteLimit && this.voteLimit > 0 && this.answer !== 'yes')
 		},
 
