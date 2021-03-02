@@ -100,7 +100,7 @@ export default {
 
 		sortOptions: {
 			get() {
-				return this.options
+				return this.options.list
 			},
 			set(value) {
 				this.$store.dispatch('options/reorder', value)
