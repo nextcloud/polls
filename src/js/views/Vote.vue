@@ -23,6 +23,7 @@
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="header-actions">
+			<PersonalLink v-if="$route.name === 'publicVote' && poll.id && share.userId" />
 			<PollInformation />
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
@@ -35,7 +36,7 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton v-if="acl.allowEdit || poll.allowComment" icon="icon-polls-sidebar-toggle" @click="toggleSideBar()">
+				<ActionButton v-if="acl.allowEdit || poll.allowComment" icon="icon-menu-sidebar" @click="toggleSideBar()">
 					{{ t('polls', 'Toggle Sidebar') }}
 				</ActionButton>
 			</Actions>
@@ -61,10 +62,6 @@
 			<h3 class="description" v-html="linkifyDescription">
 				{{ poll.description ? linkifyDescription : t('polls', 'No description provided') }}
 			</h3>
-		</div>
-
-		<div v-if="$route.name === 'publicVote' && poll.id" class="area__public">
-			<PersonalLink v-if="share.userId" />
 		</div>
 
 		<div class="area__main" :class="viewMode">
