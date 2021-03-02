@@ -151,9 +151,9 @@ export default {
 				return {}
 			} else if (this.option.duration === 0) {
 				return this.event.from.dateTime
-			} else if (this.event.daylong && this.event.to.sameDay) {
+			} else if (this.event.dayLong && this.event.to.sameDay) {
 				return this.event.from.date
-			} else if (this.event.daylong && !this.event.to.sameDay) {
+			} else if (this.event.dayLong && !this.event.to.sameDay) {
 				return this.event.from.date + ' - ' + this.event.to.date
 			} else if (this.event.to.sameDay) {
 				return this.event.from.dateTime + ' - ' + this.event.to.time
