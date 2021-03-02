@@ -24,7 +24,7 @@
 	<div>
 		<ConfigBox v-if="countOptions" :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
 			<transition-group is="ul">
-				<OptionItem v-for="(option) in sortedOptions"
+				<OptionItem v-for="(option) in options"
 					:key="option.id"
 					:option="option"
 					:show-confirmed="true"
@@ -113,7 +113,6 @@ export default {
 		}),
 
 		...mapGetters({
-			sortedOptions: 'options/sorted',
 			pollIsClosed: 'poll/closed',
 			countOptions: 'options/count',
 		}),

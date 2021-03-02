@@ -47,10 +47,16 @@ export const watchPolls = {
 								// load poll list only, when not in public poll
 								dispatches.push('polls/load')
 							}
-							if (item.pollId === parseInt(this.$route.params.id)) {
+							if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
 								// if current poll is affected, load current poll configuration
 								dispatches.push('poll/get')
+								// load also options and votes
+								dispatches.push('votes/list')
+								dispatches.push('options/list')
 							}
+						} else if (['votes', 'options'].includes(item.table)) {
+							dispatches.push('votes/list')
+							dispatches.push('options/list')
 						} else {
 							// a table of the current poll was reported, load
 							// corresponding stores

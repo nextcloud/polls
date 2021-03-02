@@ -54,6 +54,13 @@ class Version0108Date20210207134703 extends SimpleMigrationStep {
 					'default' => 1
 				]);
 			}
+			if (!$table->hasColumn('hide_booked_up')) {
+				$table->addColumn('hide_booked_up', 'integer', [
+					'length' => 11,
+					'notnull' => true,
+					'default' => 1
+				]);
+			}
 		}
 		return $schema;
 	}

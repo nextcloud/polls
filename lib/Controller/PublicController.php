@@ -196,7 +196,7 @@ class PublicController extends Controller {
 	 */
 	public function getComments(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['comments' => $this->commentService->list(null, $token)];
+			return ['comments' => $this->commentService->list(0, $token)];
 		});
 	}
 
@@ -207,7 +207,7 @@ class PublicController extends Controller {
 	 */
 	public function getVotes(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['votes' => $this->voteService->list(null, $token)];
+			return ['votes' => $this->voteService->list(0, $token)];
 		});
 	}
 
@@ -218,7 +218,7 @@ class PublicController extends Controller {
 	 */
 	public function getOptions(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['options' => $this->optionService->list(null, $token)];
+			return ['options' => $this->optionService->list(0, $token)];
 		});
 	}
 
@@ -251,7 +251,7 @@ class PublicController extends Controller {
 	 */
 	public function addComment(string $token, string $message): DataResponse {
 		return $this->response(function () use ($token, $message) {
-			return ['comment' => $this->commentService->add(null, $token, $message)];
+			return ['comment' => $this->commentService->add(0, $token, $message)];
 		});
 	}
 

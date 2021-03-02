@@ -89,19 +89,18 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options,
+			options: state => state.options.list,
 			acl: state => state.poll.acl,
 		}),
 
 		...mapGetters({
-			sortedOptions: 'options/sorted',
 			PollIsClosed: 'poll/closed',
 			countOptions: 'options/count',
 		}),
 
 		sortOptions: {
 			get() {
-				return this.sortedOptions
+				return this.options
 			},
 			set(value) {
 				this.$store.dispatch('options/reorder', value)

@@ -130,16 +130,16 @@ export default {
 			acl: state => state.poll.acl,
 			poll: state => state.poll,
 			settings: state => state.settings.user,
+			options: state => state.options.list,
 		}),
 
 		...mapGetters({
 			closed: 'poll/closed',
 			participants: 'poll/participants',
-			sortedOptions: 'options/sorted',
 		}),
 
 		rankedOptions() {
-			return orderBy(this.sortedOptions, this.ranked ? 'rank' : 'order', 'asc')
+			return orderBy(this.options, this.ranked ? 'rank' : 'order', 'asc')
 		},
 	},
 

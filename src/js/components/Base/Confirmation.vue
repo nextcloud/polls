@@ -48,7 +48,6 @@ export default {
 		}),
 
 		...mapGetters({
-			votesRank: 'votes/ranked',
 			participantsVoted: 'poll/participantsVoted',
 			closed: 'poll/closed',
 			confirmedOptions: 'options/confirmed',

@@ -65,6 +65,29 @@ class Option extends Entity implements JsonSerializable {
 	/** @var int $duration */
 	protected $duration;
 
+	// public variables, not in the db
+	/** @var int $rank */
+	public $rank = 0;
+
+	/** @var int $yes */
+	public $yes = 0;
+
+	/** @var int $no */
+	public $no = 0;
+
+	/** @var int $maybe */
+	public $maybe = 0;
+
+	/** @var int $realNo */
+	public $realNo = 0;
+
+	/** @var int $votes */
+	public $votes = 0;
+
+	/** @var bool $isBookedUp */
+	public $isBookedUp = false;
+
+
 	public function jsonSerialize() {
 		if (intval($this->timestamp) > 0) {
 			$timestamp = $this->timestamp;
@@ -82,12 +105,13 @@ class Option extends Entity implements JsonSerializable {
 			'order' => intval($timestamp ? $timestamp : $this->order),
 			'confirmed' => intval($this->confirmed),
 			'duration' => intval($this->duration),
-			'no' => 0,
-			'yes' => 0,
-			'maybe' => 0,
-			'realno' => 0,
-			'rank' => 0,
-			'votes' => 0,
+			'rank' => $this->rank,
+			'no' => $this->no,
+			'yes' => $this->yes,
+			'maybe' => $this->maybe,
+			'realNo' => $this->realNo,
+			'votes' => $this->votes,
+			'isBookedUp' => $this->isBookedUp,
 		];
 	}
 }

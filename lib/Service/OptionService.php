@@ -31,6 +31,8 @@ use OCA\Polls\Exceptions\DuplicateEntryException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
@@ -45,11 +47,26 @@ class OptionService {
 	/** @var Option */
 	private $option;
 
+	/** @var int */
+	private $countParticipants;
+
+	/** @var Poll */
+	private $poll;
+
+	/** @var Option[] */
+	private $options;
+
+	/** @var Vote[] */
+	private $votes;
+
 	/** @var OptionMapper */
 	private $optionMapper;
 
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var VoteMapper */
+	private $voteMapper;
 
 	/** @var WatchService */
 	private $watchService;
@@ -59,12 +76,14 @@ class OptionService {
 		Option $option,
 		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
+		VoteMapper $voteMapper,
 		WatchService $watchService
 	) {
 		$this->acl = $acl;
 		$this->option = $option;
 		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
+		$this->voteMapper = $voteMapper;
 		$this->watchService = $watchService;
 	}
 
@@ -75,19 +94,30 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(?int $pollId = 0, string $token = ''): array {
+	public function list(int $pollId = 0, string $token = ''): array {
 		if ($token) {
-			$this->acl->setToken($token);
+			$this->acl->setToken($token)->request(Acl::PERMISSION_VIEW);
+			$pollId = $this->acl->getPollId();
 		} else {
 			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_VIEW);
 		}
 
-		if (!$this->acl->isAllowed(Acl::PERMISSION_VIEW)) {
-			throw new NotAuthorizedException;
-		}
-
 		try {
-			return $this->optionMapper->findByPoll($this->acl->getPollId());
+			$this->poll = $this->pollMapper->find($pollId);
+			$this->options = $this->optionMapper->findByPoll($pollId);
+			$this->votes = $this->voteMapper->findByPoll($pollId);
+			$this->countParticipants = count($this->voteMapper->findParticipantsByPoll($pollId));
+
+			$this->calculateVotes();
+
+			if ($this->poll->getHideBookedUp() && !$this->acl->isAllowed(Acl::PERMISSION_EDIT)) {
+				// hide booked up options except the user has edit permission
+				$this->filterBookedUp();
+			} elseif ($this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
+				$this->calculateRanks();
+			}
+
+			return array_values($this->options);
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
@@ -99,12 +129,8 @@ class OptionService {
 	 * @return Option
 	 */
 	public function get(int $optionId): Option {
-		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())->request(Acl::PERMISSION_VIEW);
-
-		if (!$this->acl->isAllowed(Acl::PERMISSION_VIEW)) {
-			throw new NotAuthorizedException;
-		}
-
+		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())
+			->request(Acl::PERMISSION_VIEW);
 		return $this->optionMapper->find($optionId);
 	}
 
@@ -176,6 +202,10 @@ class OptionService {
 
 	/**
 	 * 	 * Make a sequence of date poll options
+	 * @param int $optionId
+	 * @param int $step - The step for creating the sequence
+	 * @param string $unit - The timeunit (year, month, ...)
+	 * @param int $amount - Number of sequence items to create
 	 *
 	 * @return Option[]
 	 *
@@ -235,7 +265,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Reorder options with the order specified by $options
+	 * Reorder options with the order specified by $options
 	 *
 	 * @return Option[]
 	 *
@@ -243,10 +273,10 @@ class OptionService {
 	 */
 	public function reorder(int $pollId, array $options): array {
 		try {
-			$poll = $this->pollMapper->find($pollId);
-			$this->acl->setPoll($poll)->request(Acl::PERMISSION_EDIT);
+			$this->poll = $this->pollMapper->find($pollId);
+			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_EDIT);
 
-			if ($poll->getType() === Poll::TYPE_DATE) {
+			if ($this->poll->getType() === Poll::TYPE_DATE) {
 				throw new BadRequestException("Not allowed in date polls");
 			}
 		} catch (DoesNotExistException $e) {
@@ -267,9 +297,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Change order for $optionId and reorder the options
-	 *
-	 * @NoAdminRequired
+	 * Change order for $optionId and reorder the options
 	 *
 	 * @return Option[]
 	 *
@@ -278,10 +306,10 @@ class OptionService {
 	public function setOrder(int $optionId, int $newOrder): array {
 		try {
 			$this->option = $this->optionMapper->find($optionId);
-			$poll = $this->pollMapper->find($this->option->getPollId());
-			$this->acl->setPoll($poll)->request(Acl::PERMISSION_EDIT);
+			$this->poll = $this->pollMapper->find($this->option->getPollId());
+			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_EDIT);
 
-			if ($poll->getType() === Poll::TYPE_DATE) {
+			if ($this->poll->getType() === Poll::TYPE_DATE) {
 				throw new BadRequestException("Not allowed in date polls");
 			}
 		} catch (DoesNotExistException $e) {
@@ -290,11 +318,11 @@ class OptionService {
 
 		if ($newOrder < 1) {
 			$newOrder = 1;
-		} elseif ($newOrder > $this->getHighestOrder($poll->getId())) {
-			$newOrder = $this->getHighestOrder($poll->getId());
+		} elseif ($newOrder > $this->getHighestOrder($this->poll->getId())) {
+			$newOrder = $this->getHighestOrder($this->poll->getId());
 		}
 
-		foreach ($this->optionMapper->findByPoll($poll->getId()) as $option) {
+		foreach ($this->optionMapper->findByPoll($this->poll->getId()) as $option) {
 			$option->setOrder($this->moveModifier($this->option->getOrder(), $newOrder, $option->getOrder()));
 			$this->optionMapper->update($option);
 		}
@@ -304,14 +332,13 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * moveModifier - evaluate new order
-	 * 	 * depending on the old and the new position of a moved array item
-	 * 	 * $moveFrom - old position of the moved item
-	 * 	 * $moveTo   - target posotion of the moved item
-	 * 	 * $value    - current position of the current item
-	 * 	 * Returns the modified new new position of the current item
+	 * moveModifier - evaluate new order depending on the old and
+	 * the new position of a moved array item
+	 * @param int $moveFrom - old position of the moved item
+	 * @param int $moveTo - target posotion of the moved item
+	 * @param int $currentPosition - current position of the current item
 	 *
-	 * @return int
+	 * @return int - The modified new new position of the current item
 	 */
 	private function moveModifier(int $moveFrom, int $moveTo, int $currentPosition): int {
 		$moveModifier = 0;
@@ -329,24 +356,134 @@ class OptionService {
 
 	/**
 	 * Set option entities validated
+	 *
+	 * @return void
 	 */
 	private function setOption(int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): void {
-		$poll = $this->pollMapper->find($this->option->getPollId());
+		$this->poll = $this->pollMapper->find($this->option->getPollId());
 
-		if ($poll->getType() === Poll::TYPE_DATE) {
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			$this->option->setTimestamp($timestamp);
 			$this->option->setOrder($timestamp);
 			$this->option->setDuration($duration);
 			if ($duration === 0) {
 				$this->option->setPollOptionText(date('c', $timestamp));
 			} elseif ($duration > 0) {
-				$this->option->setPollOptionText(date('c', $timestamp) .' - ' . date('c', $timestamp + $duration));
+				$this->option->setPollOptionText(date('c', $timestamp) . ' - ' . date('c', $timestamp + $duration));
 			} else {
 				$this->option->setPollOptionText($pollOptionText);
 			}
 		} else {
 			$this->option->setPollOptionText($pollOptionText);
 		}
+	}
+
+	/**
+	 * Get all voteOptionTexts of the options, the user opted in
+	 * with yes or maybe
+	 *
+	 * @return array
+	 */
+	private function getUsersVotes() {
+		// Thats an ugly solution, but for now, it seems to work
+		// Optimization proposals are welcome
+
+		// First: Find votes, where the user voted yes or maybe
+		$userId = $this->acl->getUserId();
+		$exceptVotes = array_filter($this->votes, function ($vote) use ($userId) {
+			if ($vote->getUserId() === $userId && in_array($vote->getVoteAnswer(), ['yes', 'maybe'])) {
+				return $vote;
+			}
+		});
+
+		// Second: Extract only the vote option texts to an array
+		return array_values(array_map(function ($vote) {
+			return $vote->getVoteOptionText();
+		}, $exceptVotes));
+	}
+
+	/**
+	 * Remove booked up options, because they are not votable
+	 *
+	 * @return void
+	 */
+	private function filterBookedUp() {
+		$exceptVotes = $this->getUsersVotes();
+		$this->options = array_filter($this->options, function ($option) use ($exceptVotes) {
+			return (!$option->getIsBookedUp() || in_array($option->getPollOptionText(), $exceptVotes));
+		});
+	}
+
+	/**
+	 * Calculate the votes of each option and determines if the option is booked up
+	 * - unvoted counts as no
+	 * - realNo reports the actually opted out votes
+	 *
+	 * @return void
+	 */
+	private function calculateVotes() {
+		foreach ($this->options as $option) {
+			$option->yes = count(
+				array_filter($this->votes, function ($vote) use ($option) {
+					return ($vote->getVoteOptionText() === $option->getPollOptionText()
+						&& $vote->getVoteAnswer() === 'yes') ;
+				})
+			);
+
+			$option->realNo = count(
+				array_filter($this->votes, function ($vote) use ($option) {
+					return ($vote->getVoteOptionText() === $option->getPollOptionText()
+						&& $vote->getVoteAnswer() === 'no');
+				})
+			);
+
+			$option->maybe = count(
+				array_filter($this->votes, function ($vote) use ($option) {
+					return ($vote->getVoteOptionText() === $option->getPollOptionText()
+						&& $vote->getVoteAnswer() === 'maybe');
+				})
+			);
+
+			$option->isBookedUp = $this->poll->getOptionLimit() ? $this->poll->getOptionLimit() <= $option->yes : false;
+
+			if (!$this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
+				$option->yes = 0;
+				$option->no = 0;
+				$option->maybe = 0;
+				$option->realNo = 0;
+			} else {
+				$option->no = $this->countParticipants - $option->maybe - $option->yes;
+			}
+		}
+	}
+
+	/**
+	 * Calculate the rank of each option based on the
+	 * yes and maybe votes and recognize equal ranked options
+	 *
+	 * @return void
+	 */
+	private function calculateRanks() {
+		// sort array by yes and maybe votes
+		usort($this->options, function ($a, $b) {
+			$diff = $b->yes - $a->yes;
+			return ($diff !== 0) ? $diff : $b->maybe - $a->maybe;
+		});
+
+		// calculate the rank
+		$count = count($this->options);
+		for ($i = 0; $i < $count; $i++) {
+			if ($i > 0 && $this->options[$i]->yes === $this->options[$i - 1]->yes && $this->options[$i]->maybe === $this->options[$i - 1]->maybe) {
+				$this->options[$i]->rank = $this->options[$i - 1]->rank;
+			} else {
+				$this->options[$i]->rank = $i + 1;
+			}
+		}
+
+		// restore original order
+		usort($this->options, function ($a, $b) {
+			return $a->getOrder() - $b->getOrder();
+		});
 	}
 
 	/**

@@ -287,9 +287,7 @@ class Acl implements JsonSerializable {
 		}
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				if ($item->getType() === Share::TYPE_GROUP && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId())) {
-					return true;
-				}
+				return ($item->getType() === Share::TYPE_GROUP && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId()));
 			})
 		);
 	}
@@ -305,16 +303,14 @@ class Acl implements JsonSerializable {
 		}
 		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				if (in_array($item->getType(), [
-					Share::TYPE_USER,
-					Share::TYPE_EXTERNAL,
-					Share::TYPE_EMAIL,
-					Share::TYPE_CONTACT
-				])
-					&& $item->getUserId() === $this->getUserId()
-				) {
-					return true;
-				}
+				return ($item->getUserId() === $this->getUserId()
+					&& in_array($item->getType(), [
+						Share::TYPE_USER,
+						Share::TYPE_EXTERNAL,
+						Share::TYPE_EMAIL,
+						Share::TYPE_CONTACT
+					])
+				);
 			})
 		);
 	}
