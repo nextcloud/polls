@@ -70,7 +70,7 @@ use OCA\Polls\Model\User;
  * @method void setAdminAccess(integer $value)
  * @method int getImportant()
  * @method void setImportant(integer $value)
- * @method int setHideBookedUp()
+ * @method int getHideBookedUp()
  * @method void setHideBookedUp(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
