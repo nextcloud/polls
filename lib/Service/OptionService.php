@@ -117,7 +117,6 @@ class OptionService {
 			if ($this->poll->getHideBookedUp() && !$this->acl->isAllowed(Acl::PERMISSION_EDIT)) {
 				// hide booked up options except the user has edit permission
 				$this->filterBookedUp();
-
 			} elseif ($this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
 				$this->calculateRanks();
 			}
@@ -409,7 +408,6 @@ class OptionService {
 		return array_values(array_map(function ($vote) {
 			return $vote->getVoteOptionText();
 		}, $exceptVotes));
-
 	}
 
 	/**
@@ -473,7 +471,6 @@ class OptionService {
 				$option->no = $this->countParticipants - $option->maybe - $option->yes;
 			}
 		}
-
 	}
 
 	/**
@@ -503,7 +500,6 @@ class OptionService {
 		usort($this->options, function ($a, $b) {
 			return $a->getOrder() - $b->getOrder();
 		});
-
 	}
 
 	/**
