@@ -134,10 +134,7 @@ class OptionService {
 	 */
 	public function get(int $optionId): Option {
 		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())->request(Acl::PERMISSION_VIEW);
-
-		if (!$this->acl->isAllowed(Acl::PERMISSION_VIEW)) {
-			throw new NotAuthorizedException;
-		}
+		$this->acl->request(Acl::PERMISSION_VIEW);
 
 		return $this->optionMapper->find($optionId);
 	}
@@ -377,7 +374,7 @@ class OptionService {
 			if ($duration === 0) {
 				$this->option->setPollOptionText(date('c', $timestamp));
 			} elseif ($duration > 0) {
-				$this->option->setPollOptionText(date('c', $timestamp) .' - ' . date('c', $timestamp + $duration));
+				$this->option->setPollOptionText(date('c', $timestamp) . ' - ' . date('c', $timestamp + $duration));
 			} else {
 				$this->option->setPollOptionText($pollOptionText);
 			}

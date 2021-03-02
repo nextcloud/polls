@@ -85,7 +85,7 @@ class VoteService {
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
 	 */
-	public function list(?int $pollId = 0, string $token = ''): array {
+	public function list(int $pollId = 0, string $token = ''): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
