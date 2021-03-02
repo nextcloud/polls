@@ -418,16 +418,14 @@ class OptionService {
 	private function filterBookedUp() {
 		$exceptVotes = $this->getUsersVotes();
 		$this->options = array_filter($this->options, function ($option) use ($exceptVotes) {
-			if (!$option->getIsBookedUp() || in_array($option->getPollOptionText(), $exceptVotes)) {
-				return $option;
-			}
+			return (!$option->getIsBookedUp() || in_array($option->getPollOptionText(), $exceptVotes));
 		});
 	}
 
 	/**
-	 * Calculate the votes of each option
-	 * unvoted counts as no
-	 * realNo reports the actually opted out votes
+	 * Calculate the votes of each option and determines if the option is booked up
+	 * - unvoted counts as no
+	 * - realNo reports the actually opted out votes
 	 *
 	 * @return void
 	 */
@@ -435,28 +433,22 @@ class OptionService {
 		foreach ($this->options as $option) {
 			$option->yes = count(
 				array_filter($this->votes, function ($vote) use ($option) {
-					if ($vote->getVoteOptionText() === $option->getPollOptionText()
-						&& $vote->getVoteAnswer() === 'yes') {
-						return $vote;
-					}
+					return ($vote->getVoteOptionText() === $option->getPollOptionText()
+						&& $vote->getVoteAnswer() === 'yes') ;
 				})
 			);
 
 			$option->realNo = count(
 				array_filter($this->votes, function ($vote) use ($option) {
-					if ($vote->getVoteOptionText() === $option->getPollOptionText()
-						&& $vote->getVoteAnswer() === 'no') {
-						return $vote;
-					}
+					return ($vote->getVoteOptionText() === $option->getPollOptionText()
+						&& $vote->getVoteAnswer() === 'no');
 				})
 			);
 
 			$option->maybe = count(
 				array_filter($this->votes, function ($vote) use ($option) {
-					if ($vote->getVoteOptionText() === $option->getPollOptionText()
-						&& $vote->getVoteAnswer() === 'maybe') {
-						return $vote;
-					}
+					return ($vote->getVoteOptionText() === $option->getPollOptionText()
+						&& $vote->getVoteAnswer() === 'maybe');
 				})
 			);
 
