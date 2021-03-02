@@ -427,7 +427,7 @@ class OptionService {
 	/**
 	 * Calculate the votes of each option
 	 * unvoted counts as no
-	 * realno reports the actually opted out votes
+	 * realNo reports the actually opted out votes
 	 *
 	 * @return void
 	 */
@@ -442,7 +442,7 @@ class OptionService {
 				})
 			);
 
-			$option->realno = count(
+			$option->realNo = count(
 				array_filter($this->votes, function ($vote) use ($option) {
 					if ($vote->getVoteOptionText() === $option->getPollOptionText()
 						&& $vote->getVoteAnswer() === 'no') {

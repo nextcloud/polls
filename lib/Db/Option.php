@@ -78,8 +78,8 @@ class Option extends Entity implements JsonSerializable {
 	/** @var int $maybe */
 	public $maybe = 0;
 
-	/** @var int $realno */
-	public $realno = 0;
+	/** @var int $realNo */
+	public $realNo = 0;
 
 	/** @var int $votes */
 	public $votes = 0;
@@ -109,7 +109,7 @@ class Option extends Entity implements JsonSerializable {
 			'no' => $this->no,
 			'yes' => $this->yes,
 			'maybe' => $this->maybe,
-			'realno' => $this->realno,
+			'realNo' => $this->realNo,
 			'votes' => $this->votes,
 			'isBookedUp' => $this->isBookedUp,
 		];
