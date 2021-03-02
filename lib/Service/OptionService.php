@@ -96,14 +96,10 @@ class OptionService {
 	 */
 	public function list(int $pollId = 0, string $token = ''): array {
 		if ($token) {
-			$this->acl->setToken($token);
+			$this->acl->setToken($token)->request(Acl::PERMISSION_VIEW);
 			$pollId = $this->acl->getPollId();
 		} else {
 			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_VIEW);
-		}
-
-		if (!$this->acl->isAllowed(Acl::PERMISSION_VIEW)) {
-			throw new NotAuthorizedException;
 		}
 
 		try {
@@ -133,9 +129,8 @@ class OptionService {
 	 * @return Option
 	 */
 	public function get(int $optionId): Option {
-		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())->request(Acl::PERMISSION_VIEW);
-		$this->acl->request(Acl::PERMISSION_VIEW);
-
+		$this->acl->setPollId($this->optionMapper->find($optionId)->getPollId())
+			->request(Acl::PERMISSION_VIEW);
 		return $this->optionMapper->find($optionId);
 	}
 
