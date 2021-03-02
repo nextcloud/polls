@@ -237,8 +237,14 @@ class PollService {
 		if (isset($poll['title']) && !$poll['title']) {
 			throw new EmptyTitleException('Title must not be empty');
 		}
-		$this->poll->deserializeArray($poll);
 
+		// Set the expiry time to the actual servertime to avoid an
+		// expiry misinterpration when using acl
+		if (isset($poll['expire']) && $poll['expire']) {
+			$poll['expire'] = time();
+		}
+
+		$this->poll->deserializeArray($poll);
 		$this->pollMapper->update($this->poll);
 		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_UPDATEPOLL);

@@ -45,7 +45,7 @@
 
 				<Confirmation v-if="option.confirmed && closed" :option="option" />
 
-				<Counter v-else :show-maybe="!!poll.allowMaybe"
+				<Counter v-else-if="acl.allowSeeResults" :show-maybe="!!poll.allowMaybe"
 					:option="option"
 					:counter-style="viewMode === 'table-view' ? 'iconStyle' : 'barStyle'"
 					:show-no="viewMode === 'list-view'" />
@@ -134,6 +134,7 @@ export default {
 		}),
 
 		...mapGetters({
+			hideResults: 'poll/hideResults',
 			closed: 'poll/closed',
 			participants: 'poll/participants',
 		}),

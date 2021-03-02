@@ -86,7 +86,7 @@
 		<div class="area__footer">
 			<PublicEmail v-if="showEmailEdit" :value="share.emailAddress" @update="submitEmailAddress" />
 			<Subscription v-if="acl.allowSubscribe" />
-			<ParticipantsList v-if="acl.allowSeeUsernames" />
+			<ParticipantsList v-if="acl.allowSeeUsernames && acl.AllowSeeResults" />
 		</div>
 
 		<PublicRegisterModal v-if="showRegisterModal" />
