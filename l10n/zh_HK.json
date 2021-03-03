@@ -122,7 +122,7 @@
     "Create a sequence of date options starting with {dateOption}." : "建立一個以 {dateOption} 開始的日期選項序列。",
     "Step unit: " : "步驟單位：",
     "Step width: " : "步驟寬度：",
-    "Number of items to create: " : "要建立的項目數：",
+    "Number of items to create: " : "要建立項目的數目：",
     "Week" : "週",
     "Available Options" : "可用選項",
     "Delete option" : "刪除選項",
