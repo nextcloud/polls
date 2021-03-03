@@ -59,7 +59,7 @@
 			<CheckBoxDiv v-if="pollOptionLimit"
 				v-model="hideBookedUp"
 				class="indented"
-				:label="t('polls', 'Hide not availabe Options')" />
+				:label="t('polls', 'Hide not available Options')" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
