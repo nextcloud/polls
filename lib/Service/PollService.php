@@ -240,7 +240,7 @@ class PollService {
 
 		// Set the expiry time to the actual servertime to avoid an
 		// expiry misinterpration when using acl
-		if (isset($poll['expire']) && $poll['expire']) {
+		if (isset($poll['expire']) && $poll['expire'] < 0) {
 			$poll['expire'] = time();
 		}
 

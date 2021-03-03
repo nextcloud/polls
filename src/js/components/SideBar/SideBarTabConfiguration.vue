@@ -364,7 +364,7 @@ export default {
 			if (this.closed) {
 				this.writeValue({ expire: 0 })
 			} else {
-				this.writeValue({ expire: moment.utc().unix() })
+				this.writeValue({ expire: -1 })
 			}
 
 		},
