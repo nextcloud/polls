@@ -23,7 +23,6 @@
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="header-actions">
-			<PersonalLink v-if="$route.name === 'publicVote' && poll.id && share.userId" />
 			<PollInformation />
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
@@ -80,12 +79,10 @@
 			</EmptyContent>
 		</div>
 
-		<div class="area__footer">
-			<PublicEmail v-if="showEmailEdit" :value="share.emailAddress" @update="submitEmailAddress" />
-			<Subscription v-if="acl.allowSubscribe" />
-			<ParticipantsList v-if="acl.allowSeeUsernames && acl.AllowSeeResults" />
+		<!-- <div class="area__footer">
+			<ParticipantsList />
 		</div>
-
+ -->
 		<PublicRegisterModal v-if="showRegisterModal" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
@@ -101,12 +98,8 @@ import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 import Badge from '../components/Base/Badge'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
-import ParticipantsList from '../components/Base/ParticipantsList'
-import PersonalLink from '../components/Base/PersonalLink'
 import PollInformation from '../components/Base/PollInformation'
 import PublicRegisterModal from '../components/Base/PublicRegisterModal'
-import PublicEmail from '../components/Base/PublicEmail'
-import Subscription from '../components/Subscription/Subscription'
 import VoteTable from '../components/VoteTable/VoteTable'
 
 export default {
@@ -118,12 +111,8 @@ export default {
 		Badge,
 		EmptyContent,
 		LoadingOverlay,
-		ParticipantsList,
-		PersonalLink,
 		PollInformation,
 		PublicRegisterModal,
-		PublicEmail,
-		Subscription,
 		VoteTable,
 	},
 

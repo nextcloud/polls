@@ -29,6 +29,7 @@
 				:key="participant.userId"
 				v-bind="participant"
 				:class="{currentuser: (participant.userId === acl.userId) }">
+				<UserMenu v-if="participant.userId === acl.userId" />
 				<Actions v-if="acl.allowEdit" class="action">
 					<ActionButton icon="icon-delete" @click="confirmDelete(participant.userId)">
 						{{ t('polls', 'Delete votes') }}
@@ -61,12 +62,8 @@
 						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 					</ActionButton>
 				</Actions>
-				<!-- <div v-if="closed" class="vote-table__footer">
-				</div> -->
 			</div>
 		</div>
-
-		<!--  -->
 
 		<Modal v-if="modal">
 			<div class="modal__content">
@@ -88,6 +85,7 @@ import orderBy from 'lodash/orderBy'
 import CalendarPeek from '../Calendar/CalendarPeek'
 import Counter from '../Base/Counter'
 import Confirmation from '../Base/Confirmation'
+import UserMenu from '../Base/UserMenu'
 import VoteItem from './VoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { confirmOption } from '../../mixins/optionMixins'
@@ -101,6 +99,7 @@ export default {
 		Counter,
 		Confirmation,
 		Modal,
+		UserMenu,
 		VoteTableHeaderItem,
 		VoteItem,
 	},
@@ -129,6 +128,7 @@ export default {
 		...mapState({
 			acl: state => state.poll.acl,
 			poll: state => state.poll,
+			share: state => state.share,
 			settings: state => state.settings.user,
 			options: state => state.options.list,
 		}),
@@ -269,6 +269,10 @@ export default {
 
 .vote-table.list-view {
 	flex-direction: column;
+
+	.vote-table__users .confirm {
+		display: none;
+	}
 
 	.counter {
 		position: absolute;

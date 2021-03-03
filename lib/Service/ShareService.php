@@ -255,6 +255,26 @@ class ShareService {
 	}
 
 	/**
+	 * 	 * Delete emailAddress of personal share
+	 *
+	 * @return Share
+	 */
+	public function deleteEmailAddress(string $token): Share {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
+		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
+			$this->share->setEmailAddress('');
+			return $this->shareMapper->update($this->share);
+		} else {
+			throw new InvalidShareTypeException('Email address can only be set in external shares.');
+		}
+	}
+
+	/**
 	 * 	 * Create a personal share from a public share
 	 * 	 * or update an email share with the username
 	 *

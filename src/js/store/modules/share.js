@@ -111,6 +111,23 @@ const actions = {
 		}
 	},
 
+	async deleteEmailAddress(context, payload) {
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		} else {
+			return
+		}
+		try {
+			const response = await axios.delete(generateUrl(endPoint + '/email'))
+			context.commit('set', { share: response.data.share })
+			context.dispatch('subscription/update', false, { root: true })
+		} catch (e) {
+			console.error('Error writing email address', { error: e.response }, { payload: payload })
+			throw e
+		}
+	},
+
 	async resendInvitation(context, payload) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {

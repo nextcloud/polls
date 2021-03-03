@@ -203,12 +203,12 @@ const actions = {
 		}
 	},
 
-	async getParticipantsEmailAddresses(context, payload) {
+	async getParticipantsEmailAddresses(context) {
 		const endPoint = 'apps/polls/poll'
 		try {
-			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/addresses'))
+			return await axios.get(generateUrl(endPoint + '/' + state.id + '/addresses'))
 		} catch (e) {
-			console.error('Error retrieving email addresses', { error: e.response }, { payload: payload })
+			console.error('Error retrieving email addresses', { error: e.response })
 		}
 	},
 

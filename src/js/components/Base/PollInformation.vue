@@ -42,6 +42,9 @@
 			<div v-if="poll.anonymous" class="anonymous">
 				{{ t('polls', 'Anonymous poll') }}
 			</div>
+			<div v-if="participantsVoted.length && acl.allowSeeResults" class="participants">
+				{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
+			</div>
 			<div class="timezone">
 				{{ t('polls', 'Time zone: ') }} {{ currentTimeZone }}
 			</div>
@@ -50,6 +53,12 @@
 			</div>
 			<div v-if="poll.optionLimit" class="option-limit">
 				{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
+			</div>
+			<div v-if="$route.name === 'publicVote' && share.emailAddress" class="email-address">
+				{{ share.emailAddress }}
+			</div>
+			<div v-if="subscribed" class="subscribed">
+				{{ t('polls', 'You subscribed to this poll') }}
 			</div>
 		</div>
 	</Popover>
@@ -72,8 +81,10 @@ export default {
 
 	computed: {
 		...mapState({
+			share: state => state.share,
 			acl: state => state.poll.acl,
 			poll: state => state.poll,
+			subscribed: state => state.subscription.subscribed,
 		}),
 
 		...mapGetters({
@@ -98,6 +109,7 @@ export default {
 		dateExpiryString() {
 			return moment.unix(this.poll.expire).format('LLLL')
 		},
+
 		dateExpiryRelative() {
 			return moment.unix(this.poll.expire).fromNow()
 		},
@@ -139,11 +151,24 @@ export default {
 			background-image: var(--icon-clock);
 		}
 
+		.participants {
+			background-image: var(--icon-user-000);
+		}
+
+		.subscribed {
+			background-image: var(--icon-polls-confirmed);
+		}
+
 		.vote-limit {
 			background-image: var(--icon-checkmark-000);
 		}
+
 		.option-limit {
 			background-image: var(--icon-close-000);
+		}
+
+		.email-address {
+			background-image: var(--icon-mail-000);
 		}
 	}
 
