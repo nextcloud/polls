@@ -201,6 +201,7 @@ OC.L10N.register(
     "Anonymous poll" : "Anonimowa sonda",
     "Limit yes votes per user" : "Ogranicz liczbę głosów na tak na użytkownika",
     "Limit yes votes per option" : "Ogranicz liczbę głosów na tak na opcję",
+    "Hide not available Options" : "Ukryj niedostępne opcje",
     "Poll closing status" : "Status zamknięcia sondy",
     "Reopen poll" : "Otwórz ponownie sondę",
     "Close poll" : "Zamknij sondę",

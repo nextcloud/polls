@@ -199,6 +199,7 @@
     "Anonymous poll" : "匿名投票",
     "Limit yes votes per user" : "限制每個使用者的「贊成」票",
     "Limit yes votes per option" : "限制每個選項的「贊成」票",
+    "Hide not available Options" : "隱藏不可用的選項",
     "Poll closing status" : "投票關閉狀態",
     "Reopen poll" : "重新開啟投票",
     "Close poll" : "關閉投票",

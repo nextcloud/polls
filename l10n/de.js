@@ -201,6 +201,7 @@ OC.L10N.register(
     "Anonymous poll" : "Anonyme Umfrage",
     "Limit yes votes per user" : "Ja-Stimmen pro Benutzer begrenzen",
     "Limit yes votes per option" : "Ja-Stimmen pro Option begrenzen",
+    "Hide not available Options" : "Nicht verfügbare Optionen ausblenden",
     "Poll closing status" : "Status zum Schließen der Umfrage",
     "Reopen poll" : "Umfrage erneut öffnen",
     "Close poll" : "Umfrage schließen",
