@@ -270,6 +270,18 @@ export default {
 .vote-table.list-view {
 	flex-direction: column;
 
+	&.closed {
+		.counter {
+			padding-left: 60px;
+		}
+		.vote-item:not(.confirmed) {
+			background-color: var(--color-main-background);
+			&.no > .icon {
+				background-image: var(--icon-polls-no)
+			}
+		}
+	}
+
 	.vote-table__users .confirm {
 		display: none;
 	}
@@ -278,7 +290,7 @@ export default {
 		position: absolute;
 		bottom: 0;
 		width: 100%;
-		padding-left: 40px;
+		padding-left: 44px;
 	}
 
 	.option-item {
