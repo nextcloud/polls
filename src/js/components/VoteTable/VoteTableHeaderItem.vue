@@ -97,7 +97,7 @@ export default {
 	display: flex;
 	&.winner {
 		.option-item {
-			font-weight: bold;
+			// font-weight: bold;
 			color: var(--color-polls-foreground-yes);
 		}
 	}

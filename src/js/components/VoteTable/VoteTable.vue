@@ -40,8 +40,8 @@
 			<div v-if="acl.allowEdit && closed" class="confirm" />
 		</div>
 
-		<div class="vote-table__votes">
-			<div v-for="(option) in rankedOptions" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed }]">
+		<transition-group name="list" tag="div" class="vote-table__votes">
+			<div v-for="(option) in rankedOptions" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
 				<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 
 				<Confirmation v-if="option.confirmed && closed" :option="option" />
@@ -63,7 +63,7 @@
 					</ActionButton>
 				</Actions>
 			</div>
-		</div>
+		</transition-group>
 
 		<Modal v-if="modal">
 			<div class="modal__content">
