@@ -33,7 +33,7 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Description')" icon-class="icon-edit">
-			<textarea v-model="pollDescription" />
+			<textarea v-model="pollDescription" class="edit-description" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
@@ -398,6 +398,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+textarea.edit-description {
+	height: 210px;
+}
+
 .selectUnit {
 	display: flex;
 	align-items: center;

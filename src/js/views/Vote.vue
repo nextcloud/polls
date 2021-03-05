@@ -58,9 +58,9 @@
 			</h2>
 
 			<!-- eslint-disable-next-line vue/no-v-html -->
-			<h3 class="description" v-html="linkifyDescription">
+			<div class="description" v-html="linkifyDescription">
 				{{ poll.description ? linkifyDescription : t('polls', 'No description provided') }}
-			</h3>
+			</div>
 		</div>
 
 		<div class="area__main" :class="viewMode">
@@ -90,7 +90,9 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import linkifyUrls from 'linkify-urls'
+// import linkifyUrls from 'linkify-urls'
+import marked from 'marked'
+import DOMPurify from 'dompurify'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -179,9 +181,7 @@ export default {
 		},
 
 		linkifyDescription() {
-			return linkifyUrls(this.poll.description, {
-				attributes: { class: 'linkified' },
-			})
+			return DOMPurify.sanitize(marked(this.poll.descriptionSafe))
 		},
 
 		windowTitle() {
@@ -339,6 +339,10 @@ export default {
 <style lang="scss" scoped>
 .description {
 	white-space: pre-wrap;
+}
+
+.description a {
+	font-weight: bold;
 }
 
 .header-actions {

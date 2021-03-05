@@ -148,6 +148,7 @@ class Poll extends Entity implements JsonSerializable {
 			'type' => $this->type,
 			'title' => $this->title,
 			'description' => $this->description,
+			'descriptionSafe' => $this->getDescriptionSafe(),
 			'owner' => $this->owner,
 			'created' => intval($this->created),
 			'expire' => intval($this->expire),
@@ -193,6 +194,10 @@ class Poll extends Entity implements JsonSerializable {
 			   $this->getExpire() > 0
 			&& $this->getExpire() < time()
 		);
+	}
+
+	public function getDescriptionSafe() {
+		return filter_var($this->description,FILTER_SANITIZE_SPECIAL_CHARS);
 	}
 
 	private function getDisplayName(): string {

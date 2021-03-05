@@ -32,6 +32,7 @@ const defaultPoll = () => {
 		type: 'datePoll',
 		title: '',
 		description: '',
+		descriptionSafe: '',
 		owner: '',
 		created: 0,
 		expire: 0,
