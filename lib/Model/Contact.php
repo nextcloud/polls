@@ -49,8 +49,8 @@ class Contact extends UserGroupClass {
 
 
 	/**
-	 * 	 * must use displayName for contact's user id, because contact id
-	 * 	 * is not accessable outside the owners's scope
+	 * must use displayName for contact's user id, because contact id
+	 * is not accessable outside the owners's scope
 	 *
 	 * @return string
 	 */
@@ -108,8 +108,8 @@ class Contact extends UserGroupClass {
 	}
 
 	/**
-	 * 	 * List all contacts with email adresses
-	 * 	 * excluding contacts from localSystemBook
+	 * List all contacts with email adresses
+	 * excluding contacts from localSystemBook
 	 *
 	 * @param string[] $queryRange
 	 */

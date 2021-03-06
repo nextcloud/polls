@@ -139,7 +139,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Update poll configuration
+	 * Update poll configuration
 	 *
 	 * @return Poll
 	 */
@@ -164,7 +164,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * get poll configuration
+	 * get poll configuration
 	 *
 	 * @return Poll
 	 */
@@ -218,7 +218,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Update poll configuration
+	 * Update poll configuration
 	 *
 	 * @return Poll
 	 */
@@ -254,7 +254,7 @@ class PollService {
 
 
 	/**
-	 * 	 * Switch deleted status (move to deleted polls)
+	 * Switch deleted status (move to deleted polls)
 	 *
 	 * @return Poll
 	 */
@@ -283,7 +283,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Delete poll
+	 * Delete poll
 	 *
 	 * @return Poll
 	 */
@@ -309,7 +309,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Clone poll
+	 * Clone poll
 	 *
 	 * @return Poll
 	 */
@@ -343,7 +343,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Collect email addresses from particitipants
+	 * Collect email addresses from particitipants
 	 *
 	 * @return string[]
 	 *
@@ -362,7 +362,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for configuration options
+	 * Get valid values for configuration options
 	 *
 	 * @return array
 	 *
@@ -377,7 +377,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for pollType
+	 * Get valid values for pollType
 	 *
 	 * @return string[]
 	 *
@@ -388,7 +388,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for access
+	 * Get valid values for access
 	 *
 	 * @return string[]
 	 *
@@ -399,7 +399,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for showResult
+	 * Get valid values for showResult
 	 *
 	 * @return string[]
 	 *

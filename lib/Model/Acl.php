@@ -190,7 +190,6 @@ class Acl implements JsonSerializable {
 				return $this->getIsOwner()
 					|| $this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS
 					|| $this->poll->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->poll->getExpired();
-				break;
 			case self::PERMISSION_SEE_USERNAMES:
 				return $this->getIsOwner() || !$this->poll->getAnonymous();
 			case self::PERMISSION_TAKE_OVER:

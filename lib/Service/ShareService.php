@@ -79,7 +79,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Read all shares of a poll based on the poll id and return list as array
+	 * Read all shares of a poll based on the poll id and return list as array
 	 *
 	 * @return Share[]
 	 *
@@ -164,7 +164,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Get share by token
+	 * Get share by token
 	 *
 	 * @return Share
 	 */
@@ -175,7 +175,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * crate share - MUST BE PRIVATE!
+	 * crate share - MUST BE PRIVATE!
 	 *
 	 * @return Share
 	 */
@@ -209,7 +209,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Add share
+	 * Add share
 	 *
 	 * @return Share
 	 */
@@ -232,8 +232,8 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Set emailAddress to personal share
-	 * 	 * or update an email share with the username
+	 * Set emailAddress to personal share
+	 * or update an email share with the username
 	 *
 	 * @return Share
 	 */
@@ -255,7 +255,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Delete emailAddress of personal share
+	 * Delete emailAddress of personal share
 	 *
 	 * @return Share
 	 */
@@ -275,8 +275,8 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Create a personal share from a public share
-	 * 	 * or update an email share with the username
+	 * Create a personal share from a public share
+	 * or update an email share with the username
 	 *
 	 * @return Share
 	 */

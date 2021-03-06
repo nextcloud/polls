@@ -66,7 +66,6 @@ export default {
 
 <style lang="scss">
 .markup-description {
-	white-space: pre;
 	p {
 		white-space: pre-wrap;
 		margin: 16px 0;

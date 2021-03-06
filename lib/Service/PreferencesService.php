@@ -60,7 +60,7 @@ class PreferencesService {
 		}
 	}
 	/**
-	 * 	 * Read all preferences
+	 * Read all preferences
 	 *
 	 * @return Preferences
 	 */
@@ -69,7 +69,7 @@ class PreferencesService {
 	}
 
 	/**
-	 * 	 * Write references
+	 * Write references
 	 *
 	 * @return Preferences
 	 */

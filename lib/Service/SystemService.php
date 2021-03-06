@@ -54,7 +54,7 @@ class SystemService {
 	}
 
 	/**
-	 * 	 * Validate string as email address
+	 * Validate string as email address
 	 *
 	 * @return bool
 	 */
@@ -63,8 +63,8 @@ class SystemService {
 	}
 
 	/**
-	 * 	 * Validate email address and throw an exception
-	 * 	 * return true, if email address is a valid
+	 * Validate email address and throw an exception
+	 * return true, if email address is a valid
 	 *
 	 * @return true
 	 */
@@ -92,7 +92,7 @@ class SystemService {
 	}
 
 	/**
-	 * 	 * Get a combined list of users, groups, circles, contact groups and contacts
+	 * Get a combined list of users, groups, circles, contact groups and contacts
 	 *
 	 * @return (Circle|Email|Group|User|Contact|ContactGroup|mixed)[]
 	 *
@@ -112,9 +112,9 @@ class SystemService {
 	}
 
 	/**
-	 * 	 * Validate it the user name is reserved
-	 * 	 * return false, if this username already exists as a user or as
-	 * 	 * a participant of the poll
+	 * Validate it the user name is reserved
+	 * return false, if this username already exists as a user or as
+	 * a participant of the poll
 	 *
 	 * @return true
 	 */

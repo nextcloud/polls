@@ -45,8 +45,7 @@ class CalendarService {
 	}
 
 	/**
-	 * 	 * 	 * getEvents - get events from the user's calendars inside given timespan
-	 * 	 *
+	 * getEvents - get events from the user's calendars inside given timespan
 	 *
 	 * @param DateTime $from
 	 * @param DateTime $to
@@ -84,7 +83,7 @@ class CalendarService {
 	}
 
 	/**
-	 * 	 * Get user's calendars
+	 * Get user's calendars
 	 *
 	 * @return array[]
 	 *
