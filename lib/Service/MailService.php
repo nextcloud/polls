@@ -97,7 +97,7 @@ class MailService {
 		PollMapper $pollMapper,
 		LogMapper $logMapper
 	) {
-		$this->appName = $appname;
+		$this->appname = $appname;
 		$this->logger = $logger;
 		$this->config = $config;
 		$this->userManager = $userManager;
