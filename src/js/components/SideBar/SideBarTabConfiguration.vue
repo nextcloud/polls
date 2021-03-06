@@ -39,12 +39,8 @@
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
 			<CheckBoxDiv v-model="pollAllowComment" :label="t('polls', 'Allow Comments')" />
 			<CheckBoxDiv v-model="pollAllowMaybe" :label="allowMybeLabel" />
-
-			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
-				{{ t('polls', 'If vote limits are used, \'maybe\' shouldn\'t be allowed.') }}
-			</div>
-
 			<CheckBoxDiv v-model="pollAnonymous" :label="t('polls', 'Anonymous poll')" />
+
 			<CheckBoxDiv v-model="useVoteLimit" :label="t('polls', 'Limit yes votes per user')" />
 			<InputDiv v-if="pollVoteLimit" v-model="pollVoteLimit" class="selectUnit indented"
 				use-num-modifiers
