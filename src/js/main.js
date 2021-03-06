@@ -33,7 +33,7 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
-import UserItem from './components/Base/UserItem'
+import UserItem from './components/User/UserItem'
 import ButtonDiv from './components/Base/ButtonDiv'
 
 /* eslint-disable-next-line camelcase, no-undef */

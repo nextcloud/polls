@@ -197,7 +197,7 @@ class Poll extends Entity implements JsonSerializable {
 	}
 
 	public function getDescriptionSafe() {
-		return filter_var($this->description,FILTER_SANITIZE_SPECIAL_CHARS);
+		return htmlspecialchars($this->description);
 	}
 
 	private function getDisplayName(): string {

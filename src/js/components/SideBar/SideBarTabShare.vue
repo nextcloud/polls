@@ -35,7 +35,7 @@
 <script>
 import { mapState } from 'vuex'
 import ConfigBox from '../Base/ConfigBox'
-import UserSearch from '../Base/UserSearch'
+import UserSearch from '../User/UserSearch'
 import SharesEffective from '../Shares/SharesEffective'
 import SharesPublic from '../Shares/SharesPublic'
 import SharesUnsent from '../Shares/SharesUnsent'

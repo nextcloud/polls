@@ -57,10 +57,7 @@
 					class="error" />
 			</h2>
 
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<div class="description" v-html="linkifyDescription">
-				{{ poll.description ? linkifyDescription : t('polls', 'No description provided') }}
-			</div>
+			<MarkUpDescription />
 		</div>
 
 		<div class="area__main" :class="viewMode">
@@ -93,18 +90,16 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-// import linkifyUrls from 'linkify-urls'
-import marked from 'marked'
-import DOMPurify from 'dompurify'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 import Badge from '../components/Base/Badge'
+import MarkUpDescription from '../components/Poll/MarkUpDescription'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
-import PollInformation from '../components/Base/PollInformation'
-import PublicRegisterModal from '../components/Base/PublicRegisterModal'
+import PollInformation from '../components/Poll/PollInformation'
+import PublicRegisterModal from '../components/Poll/PublicRegisterModal'
 import VoteTable from '../components/VoteTable/VoteTable'
 
 export default {
@@ -114,6 +109,7 @@ export default {
 		ActionButton,
 		AppContent,
 		Badge,
+		MarkUpDescription,
 		EmptyContent,
 		LoadingOverlay,
 		PollInformation,
@@ -181,10 +177,6 @@ export default {
 			} else {
 				return 'table-view'
 			}
-		},
-
-		linkifyDescription() {
-			return DOMPurify.sanitize(marked(this.poll.descriptionSafe))
 		},
 
 		windowTitle() {
