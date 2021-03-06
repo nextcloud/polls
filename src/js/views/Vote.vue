@@ -79,10 +79,13 @@
 			</EmptyContent>
 		</div>
 
-		<!-- <div class="area__footer">
-			<ParticipantsList />
+		<div v-if="poll.anonymous" class="area__footer">
+			<div>
+				{{ t('poll', 'Although participant\'s names are hidden, this is no real anonymous poll, bacause they are not hidden for the owner.') }}
+				{{ t('poll', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
+			</div>
 		</div>
- -->
+
 		<PublicRegisterModal v-if="showRegisterModal" />
 		<LoadingOverlay v-if="isLoading" />
 	</AppContent>
