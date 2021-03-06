@@ -24,33 +24,45 @@
 
 namespace OCA\Polls\Notification;
 
+use OCP\AppFramework\Db\DoesNotExistException;
+
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Service\NotificationService;
 
 class Notifier implements INotifier {
+
 	/** @var IFactory */
 	protected $l10nFactory;
+
 	/** @var IURLGenerator */
 	protected $url;
+
 	/** @var IUserManager */
 	protected $userManager;
+
 	/** @var PollMapper */
 	protected $pollMapper;
+
+	/** @var NotificationService */
+	private $notificationService;
 
 	public function __construct(
 		IFactory $l10nFactory,
 		IURLGenerator $url,
 		IUserManager $userManager,
-		PollMapper $pollMapper
+		PollMapper $pollMapper,
+		NotificationService $notificationService
 	) {
 		$this->l10nFactory = $l10nFactory;
 		$this->url = $url;
 		$this->userManager = $userManager;
 		$this->pollMapper = $pollMapper;
+		$this->notificationService = $notificationService;
 	}
 
 	/**
@@ -72,12 +84,20 @@ class Notifier implements INotifier {
 		if ($notification->getApp() !== 'polls') {
 			throw new \InvalidArgumentException();
 		}
+
+		try {
+			$poll = $this->pollMapper->find(intval($notification->getObjectId()));
+		} catch (DoesNotExistException $e) {
+			$this->notificationService->removeNotification(intval($notification->getObjectId()));
+			throw new \InvalidArgumentException();
+		}
+
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('polls', 'polls-black.svg')));
 		$parameters = $notification->getSubjectParameters();
 
 		switch ($notification->getSubject()) {
 			case 'invitation':
-				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
+
 				$owner = $this->userManager->get($poll->getOwner());
 
 				$notification->setParsedSubject(
@@ -101,7 +121,6 @@ class Notifier implements INotifier {
 				break;
 
 			case 'takeOverPoll':
-				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
 				$newOwner = $this->userManager->get($parameters['actor']);
 
 				$notification->setParsedSubject(
@@ -125,7 +144,6 @@ class Notifier implements INotifier {
 				break;
 
 			case 'deletePollByOther':
-				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
 				$actor = $this->userManager->get($parameters['actor']);
 
 				$notification->setParsedSubject(
@@ -149,7 +167,6 @@ class Notifier implements INotifier {
 				break;
 
 			case 'softDeletePollByOther':
-				$poll = $this->pollMapper->find(intval($notification->getObjectId()));
 				$actor = $this->userManager->get($parameters['actor']);
 
 				$notification->setParsedSubject(
