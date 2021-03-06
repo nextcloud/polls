@@ -49,6 +49,9 @@ class MailService {
 	/** @var LoggerInterface */
 	private $logger;
 
+	/** @var string */
+	private $appname;
+
 	/** @var IUserManager */
 	private $userManager;
 
