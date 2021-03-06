@@ -70,6 +70,9 @@ const mutations = {
 		Object.assign(state, payload)
 	},
 
+	setDescriptionSafe(state, payload) {
+		state.descriptionSafe = payload.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+	},
 }
 
 const getters = {

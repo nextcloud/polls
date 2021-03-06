@@ -29,11 +29,14 @@
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
 		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
-			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text">
+			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text"
+				@change="writeValue({ title: $event.target.value })"
+				@keyup.enter="writeValue({ title: $event.target.value })">
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Description')" icon-class="icon-edit">
-			<textarea v-model="pollDescription" class="edit-description" />
+			<textarea v-model="pollDescription" class="edit-description"
+				@change="writeValue({ description: $event.target.value })" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
@@ -146,7 +149,8 @@ export default {
 				return this.poll.description
 			},
 			set(value) {
-				this.writeValueDebounced({ description: value })
+				this.$store.commit('poll/setProperty', { description: value })
+				this.$store.commit('poll/setDescriptionSafe', value)
 			},
 		},
 
@@ -155,7 +159,7 @@ export default {
 				return this.poll.title
 			},
 			set(value) {
-				this.writeValueDebounced({ title: value })
+				this.$store.commit('poll/setProperty', { title: value })
 			},
 		},
 
