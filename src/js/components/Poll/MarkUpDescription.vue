@@ -22,7 +22,7 @@
 
 <template>
 	<!-- eslint-disable-next-line vue/no-v-html -->
-	<div class="description" v-html="markedDescription">
+	<div class="markup-description" v-html="markedDescription">
 		{{ markedDescription }}
 	</div>
 </template>
@@ -64,12 +64,40 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
-.description {
-	white-space: pre-wrap;
-}
+<style lang="scss">
+.markup-description {
+	white-space: pre;
+	p {
+		white-space: pre-wrap;
+		margin: 16px 0;
+	}
+	a {
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	h1 {
+		font-size: revert;
+	}
+	ul, ol {
+		list-style: revert;
+		margin-left: 16px;
+	}
+	input[type='checkbox'] {
+		min-height: revert;
+		&:disabled {
+			opacity: 1;
+		}
+	}
+	table {
+		border-spacing: 2px;
+	}
+	thead {
+		background-color: var(--color-background-darker);
+		color: var(--color-text-light);
+	}
 
-.description a {
-	font-weight: bold;
+	td, th {
+		padding: 1px 4px;
+	}
 }
 </style>
