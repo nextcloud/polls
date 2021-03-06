@@ -201,6 +201,7 @@ OC.L10N.register(
     "Anonymous poll" : "Enquisa anónima",
     "Limit yes votes per user" : "Limita os votos de si por usuario",
     "Limit yes votes per option" : "Limita os votos por si por opción",
+    "Hide not available Options" : "Agochar as opcións non dispoñíbeis",
     "Poll closing status" : "Estado de enquisa pechada",
     "Reopen poll" : "Enquisa reaberta",
     "Close poll" : "Pechar enquisa",
