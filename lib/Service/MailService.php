@@ -267,7 +267,7 @@ class MailService {
 			$this->trans->t('"{title}" had recent activity: ')
 		));
 		foreach ($log as $logItem) {
-			if ($logItem->getPollId() === $poll->getId()) {
+			if (intval($logItem->getPollId()) === $poll->getId()) {
 				if ($poll->getAnonymous() || $poll->getShowResults() !== "always") {
 					$displayName = $this->trans->t('A user');
 				} elseif ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
