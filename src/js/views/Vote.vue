@@ -23,6 +23,7 @@
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="header-actions">
+			<PollInformation />
 			<Actions>
 				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
 					{{ orderCaption }}
@@ -34,7 +35,7 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton v-if="acl.allowEdit || poll.allowComment" icon="icon-polls-sidebar-toggle" @click="toggleSideBar()">
+				<ActionButton v-if="acl.allowEdit || poll.allowComment" icon="icon-menu-sidebar" @click="toggleSideBar()">
 					{{ t('polls', 'Toggle Sidebar') }}
 				</ActionButton>
 			</Actions>
@@ -55,16 +56,8 @@
 					icon="icon-delete"
 					class="error" />
 			</h2>
-			<PollInformation />
 
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<h3 class="description" v-html="linkifyDescription">
-				{{ poll.description ? linkifyDescription : t('polls', 'No description provided') }}
-			</h3>
-		</div>
-
-		<div v-if="$route.name === 'publicVote' && poll.id" class="area__public">
-			<PersonalLink v-if="share.userId" />
+			<MarkUpDescription />
 		</div>
 
 		<div class="area__main" :class="viewMode">
@@ -83,10 +76,11 @@
 			</EmptyContent>
 		</div>
 
-		<div class="area__footer">
-			<PublicEmail v-if="showEmailEdit" :value="share.emailAddress" @update="submitEmailAddress" />
-			<Subscription v-if="acl.allowSubscribe" />
-			<ParticipantsList v-if="acl.allowSeeUsernames" />
+		<div v-if="poll.anonymous" class="area__footer">
+			<div>
+				{{ t('poll', 'Although participant\'s names are hidden, this is no real anonymous poll, bacause they are not hidden for the owner.') }}
+				{{ t('poll', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
+			</div>
 		</div>
 
 		<PublicRegisterModal v-if="showRegisterModal" />
@@ -96,20 +90,16 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import linkifyUrls from 'linkify-urls'
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 import Badge from '../components/Base/Badge'
+import MarkUpDescription from '../components/Poll/MarkUpDescription'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
-import ParticipantsList from '../components/Base/ParticipantsList'
-import PersonalLink from '../components/Base/PersonalLink'
-import PollInformation from '../components/Base/PollInformation'
-import PublicRegisterModal from '../components/Base/PublicRegisterModal'
-import PublicEmail from '../components/Base/PublicEmail'
-import Subscription from '../components/Subscription/Subscription'
+import PollInformation from '../components/Poll/PollInformation'
+import PublicRegisterModal from '../components/Poll/PublicRegisterModal'
 import VoteTable from '../components/VoteTable/VoteTable'
 
 export default {
@@ -119,14 +109,11 @@ export default {
 		ActionButton,
 		AppContent,
 		Badge,
+		MarkUpDescription,
 		EmptyContent,
 		LoadingOverlay,
-		ParticipantsList,
-		PersonalLink,
 		PollInformation,
 		PublicRegisterModal,
-		PublicEmail,
-		Subscription,
 		VoteTable,
 	},
 
@@ -165,7 +152,7 @@ export default {
 				if (window.innerWidth > 480) {
 					return this.settings.user.defaultViewTextPoll
 				} else {
-					return 'mobile'
+					return 'list-view'
 				}
 			}
 		},
@@ -177,7 +164,7 @@ export default {
 				if (window.innerWidth > 480) {
 					return this.settings.user.defaultViewDatePoll
 				} else {
-					return 'mobile'
+					return 'list-view'
 				}
 			}
 		},
@@ -188,14 +175,8 @@ export default {
 			} else if (this.poll.type === 'datePoll') {
 				return this.viewDatePoll
 			} else {
-				return 'desktop'
+				return 'table-view'
 			}
-		},
-
-		linkifyDescription() {
-			return linkifyUrls(this.poll.description, {
-				attributes: { class: 'linkified' },
-			})
 		},
 
 		windowTitle() {
@@ -227,10 +208,10 @@ export default {
 		},
 
 		viewCaption() {
-			if (this.viewMode === 'desktop') {
-				return t('polls', 'Switch to mobile view')
+			if (this.viewMode === 'table-view') {
+				return t('polls', 'Switch to list view')
 			} else {
-				return t('polls', 'Switch to desktop view')
+				return t('polls', 'Switch to table view')
 			}
 		},
 		orderCaption() {
@@ -266,10 +247,10 @@ export default {
 		},
 
 		toggleViewIcon() {
-			if (this.viewMode === 'desktop') {
-				return 'icon-phone'
+			if (this.viewMode === 'table-view') {
+				return 'icon-list-view'
 			} else {
-				return 'icon-desktop'
+				return 'icon-table-view'
 			}
 		},
 
@@ -353,6 +334,10 @@ export default {
 <style lang="scss" scoped>
 .description {
 	white-space: pre-wrap;
+}
+
+.description a {
+	font-weight: bold;
 }
 
 .header-actions {

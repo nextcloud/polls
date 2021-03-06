@@ -327,6 +327,17 @@ class PublicController extends Controller {
 		});
 	}
 
+	/**
+	 * Set EmailAddress
+	 * @PublicPage
+	 * @NoAdminRequired
+	 */
+	public function deleteEmailAddress(string $token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['share' => $this->shareService->deleteEmailAddress($token)];
+		});
+	}
+
 
 	/**
 	 * Create a personal share from a public share

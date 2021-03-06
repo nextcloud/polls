@@ -4,7 +4,10 @@
 	--icon-polls: url('../icons/polls.svg');
 	--icon-polls--fff: url('../icons/polls-fff.svg');
 	--icon-circles: url('../icons/circles.svg');
+	--icon-clock: url('../icons/clock.svg');
+	--icon-clock--fff: url('../icons/clock-fff.svg');
 	--icon-circles--fff: url('../icons/circles-fff.svg');
+	--icon-polls-anonymous: url('../icons/anonymous.svg');
 	--icon-polls-back: url('../icons/back.svg');
 	--icon-polls-back--fff: url('../icons/back-fff.svg');
 	--icon-polls-confirmed: url('../icons/confirmed.svg');
@@ -24,6 +27,10 @@
 	--icon-polls-mail: url('../icons/mail.svg');
 	--icon-polls-mail--fff: url('../icons/mail-fff.svg');
 	--icon-polls-sidebar-toggle: url('../icons/sidebar-toggle.svg');
+	--icon-polls-table-view: url('../icons/table-view.svg');
+	--icon-polls-table-view-fff: url('../icons/table-view-fff.svg');
+	--icon-polls-list-view: url('../icons/list-view.svg');
+	--icon-polls-list-view-fff: url('../icons/list-view-fff.svg');
 	--icon-polls-sidebar-toggle--fff: url('../icons/sidebar-toggle-fff.svg');
 	--icon-polls-loading: url('../icons/loading-small.gif');
 	--icon-polls-open: url('../icons/open.svg');
@@ -118,6 +125,14 @@
 	background-image: var(--icon-polls-handle);
 }
 
+.icon-table-view {
+	background-image: var(--icon-polls-table-view);
+}
+
+.icon-list-view {
+	background-image: var(--icon-polls-list-view);
+}
+
 .theme--dark {
 	.icon-polls {
 		background-image: var(--icon-polls--fff);
@@ -174,4 +189,13 @@
 	.icon-handle {
 		background-image: var(--icon-polls-handle--fff);
 	}
+
+	.icon-table-view {
+		background-image: var(--icon-polls-table-view-fff);
+	}
+
+	.icon-list-view {
+		background-image: var(--icon-polls-list-view-fff);
+	}
+
 }

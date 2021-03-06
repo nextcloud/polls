@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, isConfirmed, { active: isVotable }, {currentUser: isCurrentUser}]">
-		<div v-if="isActive && !isLocked" class="icon" @click="setVote()" />
+	<div class="vote-item" :class="[answer, {confirmed: isConfirmed }, { active: isVotable }, {currentUser: isCurrentUser}]">
+		<div v-if="isActive && !isVoteLimitExceded" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 		<slot name="indicator" />
 	</div>
@@ -63,8 +63,8 @@ export default {
 			return this.isActive
 				&& this.isValidUser
 				&& !this.pollIsClosed
-				&& !this.isLocked
-				&& !this.option.isBookedUp
+				&& !this.isVoteLimitExceded
+				&& !(this.option.isBookedUp && !['yes', 'maybe'].includes(this.answer))
 		},
 
 		isActive() {
@@ -82,16 +82,12 @@ export default {
 			}).voteAnswer
 		},
 
-		isLocked() {
+		isVoteLimitExceded() {
 			return (this.countYesVotes >= this.voteLimit && this.voteLimit > 0 && this.answer !== 'yes')
 		},
 
 		isConfirmed() {
-			if (this.option.confirmed && this.pollIsClosed) {
-				return 'confirmed'
-			} else {
-				return ''
-			}
+			return this.option.confirmed && this.pollIsClosed
 		},
 
 		nextAnswer() {
@@ -129,6 +125,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	background-color: var(--color-polls-background-no);
+	transition: background-color 1s ease-out;
 	> .icon {
 		color: var(--color-polls-foreground-no);
 		background-position: center;
@@ -158,7 +155,6 @@ export default {
 	&.maybe {
 		background-color: var(--color-polls-background-maybe);
 		> .icon {
-			background-size: 80%;
 			color: var(--color-polls-foreground-maybe);
 			background-image: var(--icon-polls-maybe)
 		}

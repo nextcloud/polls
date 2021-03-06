@@ -64,7 +64,6 @@ const actions = {
 
 	async update(context, payload) {
 		let endPoint = 'apps/polls'
-
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = endPoint + '/s/' + context.rootState.route.params.token
 		} else if (context.rootState.route.name === 'vote') {

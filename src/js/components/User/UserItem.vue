@@ -23,6 +23,7 @@
 <template>
 	<div class="user-item" :class="type">
 		<Avatar :disable-menu="disableMenu"
+			:disable-tooltip="disableTooltip"
 			class="user-item__avatar"
 			:is-guest="$route.name === 'publicVote'"
 			:menu-position="menuPosition"
@@ -59,6 +60,10 @@ export default {
 			default: false,
 		},
 		disableMenu: {
+			type: Boolean,
+			default: true,
+		},
+		disableTooltip: {
 			type: Boolean,
 			default: true,
 		},
@@ -142,6 +147,7 @@ export default {
 }
 
 .type-icon {
+	margin-left: 8px;
 	background-size: 16px;
 }
 

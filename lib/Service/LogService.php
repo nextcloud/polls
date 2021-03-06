@@ -45,7 +45,7 @@ class LogService {
 	}
 
 	/**
-	 * 	 * Log poll activity
+	 * Log poll activity
 	 *
 	 * @param null|string $userId
 	 */

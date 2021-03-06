@@ -139,7 +139,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Update poll configuration
+	 * Update poll configuration
 	 *
 	 * @return Poll
 	 */
@@ -164,7 +164,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * get poll configuration
+	 * get poll configuration
 	 *
 	 * @return Poll
 	 */
@@ -218,7 +218,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Update poll configuration
+	 * Update poll configuration
 	 *
 	 * @return Poll
 	 */
@@ -237,8 +237,14 @@ class PollService {
 		if (isset($poll['title']) && !$poll['title']) {
 			throw new EmptyTitleException('Title must not be empty');
 		}
-		$this->poll->deserializeArray($poll);
 
+		// Set the expiry time to the actual servertime to avoid an
+		// expiry misinterpration when using acl
+		if (isset($poll['expire']) && $poll['expire'] < 0) {
+			$poll['expire'] = time();
+		}
+
+		$this->poll->deserializeArray($poll);
 		$this->pollMapper->update($this->poll);
 		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_UPDATEPOLL);
@@ -248,7 +254,7 @@ class PollService {
 
 
 	/**
-	 * 	 * Switch deleted status (move to deleted polls)
+	 * Switch deleted status (move to deleted polls)
 	 *
 	 * @return Poll
 	 */
@@ -277,7 +283,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Delete poll
+	 * Delete poll
 	 *
 	 * @return Poll
 	 */
@@ -303,7 +309,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Clone poll
+	 * Clone poll
 	 *
 	 * @return Poll
 	 */
@@ -337,7 +343,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Collect email addresses from particitipants
+	 * Collect email addresses from particitipants
 	 *
 	 * @return string[]
 	 *
@@ -356,7 +362,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for configuration options
+	 * Get valid values for configuration options
 	 *
 	 * @return array
 	 *
@@ -371,7 +377,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for pollType
+	 * Get valid values for pollType
 	 *
 	 * @return string[]
 	 *
@@ -382,7 +388,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for access
+	 * Get valid values for access
 	 *
 	 * @return string[]
 	 *
@@ -393,7 +399,7 @@ class PollService {
 	}
 
 	/**
-	 * 	 * Get valid values for showResult
+	 * Get valid values for showResult
 	 *
 	 * @return string[]
 	 *

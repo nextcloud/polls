@@ -29,22 +29,21 @@
 		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
 		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
-			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text">
+			<input v-model="pollTitle" :class="{ error: titleEmpty }" type="text"
+				@change="writeValue({ title: $event.target.value })"
+				@keyup.enter="writeValue({ title: $event.target.value })">
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Description')" icon-class="icon-edit">
-			<textarea v-model="pollDescription" />
+			<textarea v-model="pollDescription" class="edit-description"
+				@change="writeValue({ description: $event.target.value })" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
 			<CheckBoxDiv v-model="pollAllowComment" :label="t('polls', 'Allow Comments')" />
 			<CheckBoxDiv v-model="pollAllowMaybe" :label="allowMybeLabel" />
-
-			<div v-if="(useVoteLimit || useOptionLimit) && pollAllowMaybe" class="indented warning">
-				{{ t('polls', 'If vote limits are used, \'maybe\' shouldn\'t be allowed.') }}
-			</div>
-
 			<CheckBoxDiv v-model="pollAnonymous" :label="t('polls', 'Anonymous poll')" />
+
 			<CheckBoxDiv v-model="useVoteLimit" :label="t('polls', 'Limit yes votes per user')" />
 			<InputDiv v-if="pollVoteLimit" v-model="pollVoteLimit" class="selectUnit indented"
 				use-num-modifiers
@@ -150,7 +149,8 @@ export default {
 				return this.poll.description
 			},
 			set(value) {
-				this.writeValueDebounced({ description: value })
+				this.$store.commit('poll/setProperty', { description: value })
+				this.$store.commit('poll/setDescriptionSafe', value)
 			},
 		},
 
@@ -159,7 +159,7 @@ export default {
 				return this.poll.title
 			},
 			set(value) {
-				this.writeValueDebounced({ title: value })
+				this.$store.commit('poll/setProperty', { title: value })
 			},
 		},
 
@@ -364,7 +364,7 @@ export default {
 			if (this.closed) {
 				this.writeValue({ expire: 0 })
 			} else {
-				this.writeValue({ expire: moment.utc().unix() })
+				this.writeValue({ expire: -1 })
 			}
 
 		},
@@ -398,6 +398,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+textarea.edit-description {
+	height: 210px;
+}
+
 .selectUnit {
 	display: flex;
 	align-items: center;

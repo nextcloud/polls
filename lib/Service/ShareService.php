@@ -79,7 +79,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Read all shares of a poll based on the poll id and return list as array
+	 * Read all shares of a poll based on the poll id and return list as array
 	 *
 	 * @return Share[]
 	 *
@@ -164,7 +164,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Get share by token
+	 * Get share by token
 	 *
 	 * @return Share
 	 */
@@ -175,7 +175,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * crate share - MUST BE PRIVATE!
+	 * crate share - MUST BE PRIVATE!
 	 *
 	 * @return Share
 	 */
@@ -209,7 +209,7 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Add share
+	 * Add share
 	 *
 	 * @return Share
 	 */
@@ -232,8 +232,8 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Set emailAddress to personal share
-	 * 	 * or update an email share with the username
+	 * Set emailAddress to personal share
+	 * or update an email share with the username
 	 *
 	 * @return Share
 	 */
@@ -255,8 +255,28 @@ class ShareService {
 	}
 
 	/**
-	 * 	 * Create a personal share from a public share
-	 * 	 * or update an email share with the username
+	 * Delete emailAddress of personal share
+	 *
+	 * @return Share
+	 */
+	public function deleteEmailAddress(string $token): Share {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
+		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
+			$this->share->setEmailAddress('');
+			return $this->shareMapper->update($this->share);
+		} else {
+			throw new InvalidShareTypeException('Email address can only be set in external shares.');
+		}
+	}
+
+	/**
+	 * Create a personal share from a public share
+	 * or update an email share with the username
 	 *
 	 * @return Share
 	 */

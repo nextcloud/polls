@@ -205,7 +205,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * 	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 *
 	 * @return void
 	 */

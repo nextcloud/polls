@@ -29,6 +29,7 @@
 				:key="participant.userId"
 				v-bind="participant"
 				:class="{currentuser: (participant.userId === acl.userId) }">
+				<UserMenu v-if="participant.userId === acl.userId" />
 				<Actions v-if="acl.allowEdit" class="action">
 					<ActionButton icon="icon-delete" @click="confirmDelete(participant.userId)">
 						{{ t('polls', 'Delete votes') }}
@@ -39,16 +40,16 @@
 			<div v-if="acl.allowEdit && closed" class="confirm" />
 		</div>
 
-		<div class="vote-table__votes">
-			<div v-for="(option) in rankedOptions" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed }]">
+		<transition-group name="list" tag="div" class="vote-table__votes">
+			<div v-for="(option) in rankedOptions" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
 				<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 
 				<Confirmation v-if="option.confirmed && closed" :option="option" />
 
-				<Counter v-else :show-maybe="!!poll.allowMaybe"
+				<Counter v-else-if="acl.allowSeeResults" :show-maybe="!!poll.allowMaybe"
 					:option="option"
-					:counter-style="viewMode === 'desktop' ? 'iconStyle' : 'barStyle'"
-					:show-no="viewMode === 'mobile'" />
+					:counter-style="viewMode === 'table-view' ? 'iconStyle' : 'barStyle'"
+					:show-no="viewMode === 'list-view'" />
 				<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
 				<div v-for="(participant) in participants" :key="participant.userId" class="vote-item-wrapper"
 					:class="{currentuser: participant.userId === acl.userId}">
@@ -61,12 +62,8 @@
 						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 					</ActionButton>
 				</Actions>
-				<!-- <div v-if="closed" class="vote-table__footer">
-				</div> -->
 			</div>
-		</div>
-
-		<!--  -->
+		</transition-group>
 
 		<Modal v-if="modal">
 			<div class="modal__content">
@@ -86,8 +83,9 @@ import { showSuccess } from '@nextcloud/dialogs'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import orderBy from 'lodash/orderBy'
 import CalendarPeek from '../Calendar/CalendarPeek'
-import Counter from '../Base/Counter'
-import Confirmation from '../Base/Confirmation'
+import Counter from '../Options/Counter'
+import Confirmation from '../Options/Confirmation'
+import UserMenu from '../User/UserMenu'
 import VoteItem from './VoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { confirmOption } from '../../mixins/optionMixins'
@@ -101,6 +99,7 @@ export default {
 		Counter,
 		Confirmation,
 		Modal,
+		UserMenu,
 		VoteTableHeaderItem,
 		VoteItem,
 	},
@@ -110,7 +109,7 @@ export default {
 	props: {
 		viewMode: {
 			type: String,
-			default: 'desktop',
+			default: 'table-view',
 		},
 		ranked: {
 			type: Boolean,
@@ -129,11 +128,13 @@ export default {
 		...mapState({
 			acl: state => state.poll.acl,
 			poll: state => state.poll,
+			share: state => state.share,
 			settings: state => state.settings.user,
 			options: state => state.options.list,
 		}),
 
 		...mapGetters({
+			hideResults: 'poll/hideResults',
 			closed: 'poll/closed',
 			participants: 'poll/participants',
 		}),
@@ -260,14 +261,36 @@ export default {
 	}
 }
 
-.vote-table.mobile {
+.vote-table.table-view {
+	.option-item .option-item__option--text {
+		text-align: center;
+	}
+}
+
+.vote-table.list-view {
 	flex-direction: column;
+
+	&.closed {
+		.counter {
+			padding-left: 60px;
+		}
+		.vote-item:not(.confirmed) {
+			background-color: var(--color-main-background);
+			&.no > .icon {
+				background-image: var(--icon-polls-no)
+			}
+		}
+	}
+
+	.vote-table__users .confirm {
+		display: none;
+	}
 
 	.counter {
 		position: absolute;
 		bottom: 0;
 		width: 100%;
-		padding-left: 40px;
+		padding-left: 44px;
 	}
 
 	.option-item {

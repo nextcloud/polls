@@ -70,7 +70,7 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * 	 * List shares
+	 * List shares
 	 *
 	 * @NoAdminRequired
 	 *
@@ -83,7 +83,7 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * 	 * Get share
+	 * Get share
 	 *
 	 * @NoAdminRequired
 	 *

@@ -88,7 +88,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Get all options of given poll
+	 * Get all options of given poll
 	 *
 	 * @return Option[]
 	 *
@@ -124,7 +124,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Get option
+	 * Get option
 	 *
 	 * @return Option
 	 */
@@ -136,7 +136,7 @@ class OptionService {
 
 
 	/**
-	 * 	 * Add a new option
+	 * Add a new option
 	 *
 	 * @return Option
 	 */
@@ -157,7 +157,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Update option
+	 * Update option
 	 *
 	 * @return Option
 	 */
@@ -172,7 +172,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Delete option
+	 * Delete option
 	 *
 	 * @return Option
 	 */
@@ -186,7 +186,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Switch optoin confirmation
+	 * Switch option confirmation
 	 *
 	 * @return Option
 	 */
@@ -201,7 +201,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Make a sequence of date poll options
+	 * Make a sequence of date poll options
 	 * @param int $optionId
 	 * @param int $step - The step for creating the sequence
 	 * @param string $unit - The timeunit (year, month, ...)
@@ -241,7 +241,7 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Copy options from $fromPoll to $toPoll
+	 * Copy options from $fromPoll to $toPoll
 	 *
 	 * @return Option[]
 	 *
@@ -366,12 +366,10 @@ class OptionService {
 			$this->option->setTimestamp($timestamp);
 			$this->option->setOrder($timestamp);
 			$this->option->setDuration($duration);
-			if ($duration === 0) {
-				$this->option->setPollOptionText(date('c', $timestamp));
-			} elseif ($duration > 0) {
+			if ($duration > 0) {
 				$this->option->setPollOptionText(date('c', $timestamp) . ' - ' . date('c', $timestamp + $duration));
 			} else {
-				$this->option->setPollOptionText($pollOptionText);
+				$this->option->setPollOptionText(date('c', $timestamp));
 			}
 		} else {
 			$this->option->setPollOptionText($pollOptionText);
@@ -391,9 +389,7 @@ class OptionService {
 		// First: Find votes, where the user voted yes or maybe
 		$userId = $this->acl->getUserId();
 		$exceptVotes = array_filter($this->votes, function ($vote) use ($userId) {
-			if ($vote->getUserId() === $userId && in_array($vote->getVoteAnswer(), ['yes', 'maybe'])) {
-				return $vote;
-			}
+			return $vote->getUserId() === $userId && in_array($vote->getVoteAnswer(), ['yes', 'maybe']);
 		});
 
 		// Second: Extract only the vote option texts to an array
@@ -446,6 +442,7 @@ class OptionService {
 
 			$option->isBookedUp = $this->poll->getOptionLimit() ? $this->poll->getOptionLimit() <= $option->yes : false;
 
+			// remove details, if the results shall be hidden
 			if (!$this->acl->isAllowed(Acl::PERMISSION_SEE_RESULTS)) {
 				$option->yes = 0;
 				$option->no = 0;
@@ -487,8 +484,8 @@ class OptionService {
 	}
 
 	/**
-	 * 	 * Get the highest order number in $pollId
-	 * 	 * Return Highest order number
+	 * Get the highest order number in $pollId
+	 * Return Highest order number
 	 *
 	 * @return int
 	 */

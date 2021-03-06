@@ -187,14 +187,9 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_VOTE:
 				return !$this->poll->getExpired() && $this->share->getType() !== Share::TYPE_PUBLIC;
 			case self::PERMISSION_SEE_RESULTS:
-				if ($this->getIsOwner()) {
-					return true;
-				} elseif ($this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS) {
-					return true;
-				} elseif ($this->poll->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->poll->getExpired()) {
-					return true;
-				}
-				break;
+				return $this->getIsOwner()
+					|| $this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS
+					|| $this->poll->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->poll->getExpired();
 			case self::PERMISSION_SEE_USERNAMES:
 				return $this->getIsOwner() || !$this->poll->getAnonymous();
 			case self::PERMISSION_TAKE_OVER:
@@ -228,6 +223,8 @@ class Acl implements JsonSerializable {
 			'userHasVoted' => $this->getUserHasVoted(),
 			'userId' => $this->getUserId(),
 			'userIsInvolved' => $this->getUserIsInvolved(),
+			'pollExpired' => $this->poll->getExpired(),
+			'pollExpire' => $this->poll->getExpire(),
 		];
 	}
 

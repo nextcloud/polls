@@ -151,7 +151,7 @@ export default {
 
 }
 
-.mobile .counter {
+.list-view .counter {
 	flex: 0;
 }
 
