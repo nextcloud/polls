@@ -50,7 +50,7 @@ class MailService {
 	private $logger;
 
 	/** @var string */
-	private $appname;
+	private $appName;
 
 	/** @var IUserManager */
 	private $userManager;
@@ -86,7 +86,7 @@ class MailService {
 	private $logMapper;
 
 	public function __construct(
-		string $appname,
+		string $AppName,
 		LoggerInterface $logger,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
@@ -100,7 +100,7 @@ class MailService {
 		PollMapper $pollMapper,
 		LogMapper $logMapper
 	) {
-		$this->appname = $appname;
+		$this->appName = $AppName;
 		$this->logger = $logger;
 		$this->config = $config;
 		$this->userManager = $userManager;
