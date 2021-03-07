@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use Psr\Log\LoggerInterface;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -32,7 +33,6 @@ use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
 use OCP\Mail\IEMailTemplate;
-
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
@@ -44,6 +44,13 @@ use OCA\Polls\Model\UserGroupClass;
 use OCA\Polls\Model\User;
 
 class MailService {
+
+
+	/** @var LoggerInterface */
+	private $logger;
+
+	/** @var string */
+	private $appName;
 
 	/** @var IUserManager */
 	private $userManager;
@@ -79,6 +86,8 @@ class MailService {
 	private $logMapper;
 
 	public function __construct(
+		string $AppName,
+		LoggerInterface $logger,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		IConfig $config,
@@ -91,6 +100,8 @@ class MailService {
 		PollMapper $pollMapper,
 		LogMapper $logMapper
 	) {
+		$this->appName = $AppName;
+		$this->logger = $logger;
 		$this->config = $config;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
@@ -115,7 +126,7 @@ class MailService {
 			$message->useTemplate($emailTemplate);
 			$this->mailer->send($message);
 		} catch (\Exception $e) {
-			\OC::$server->getLogger()->logException($e->getMessage(), ['app' => 'polls']);
+			$this->logger->alert($e->getMessage());
 			throw $e;
 		}
 	}
@@ -176,7 +187,7 @@ class MailService {
 				$sentMails[] = $recipient->getId();
 			} catch (\Exception $e) {
 				$abortedMails[] = $recipient->getId();
-				\OC::$server->getLogger()->alert('Error sending Mail to ' . json_encode($recipient));
+				$this->logger->error('Error sending Mail to ' . json_encode($recipient));
 			}
 		}
 		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
@@ -220,7 +231,7 @@ class MailService {
 					$recipient->getDisplayName()
 				);
 			} catch (\Exception $e) {
-				\OC::$server->getLogger()->alert('Error sending Mail to ' . $recipient->getId());
+				$this->logger->error('Error sending Mail to ' . $recipient->getId());
 			}
 		}
 	}
