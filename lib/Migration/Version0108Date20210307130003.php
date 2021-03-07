@@ -29,7 +29,7 @@ use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version0108Date20210207134703 extends SimpleMigrationStep {
+class Version0108Date20210307130003 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
@@ -62,6 +62,43 @@ class Version0108Date20210207134703 extends SimpleMigrationStep {
 				]);
 			}
 		}
+
+		if ($schema->hasTable('polls_options')) {
+			$table = $schema->getTable('polls_options');
+
+			if (!$table->hasColumn('duration')) {
+				$table->addColumn('duration', 'integer', [
+					'length' => 11,
+					'notnull' => true,
+					'default' => 0
+				]);
+			}
+		}
+
+		if (!$schema->hasTable('polls_watch')) {
+			$table = $schema->createTable('polls_watch');
+			$table->addColumn('id', 'integer', [
+				'autoincrement' => true,
+				'notnull' => true,
+			]);
+			$table->addColumn('table', 'string', [
+				'length' => 64,
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('poll_id', 'integer', [
+				'length' => 11,
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->addColumn('updated', 'integer', [
+				'length' => 11,
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->setPrimaryKey(['id']);
+		}
+
 		return $schema;
 	}
 }
