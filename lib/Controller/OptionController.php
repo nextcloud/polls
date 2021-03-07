@@ -123,6 +123,16 @@ class OptionController extends Controller {
 	}
 
 	/**
+	 * Reorder options
+	 * @NoAdminRequired
+	 */
+	public function shift($pollId, $step, $unit): DataResponse {
+		return $this->response(function () use ($pollId, $step, $unit) {
+			return ['options' => $this->optionService->shift($pollId, $step, $unit)];
+		});
+	}
+
+	/**
 	 * findCalendarEvents
 	 * @NoAdminRequired
 	 */

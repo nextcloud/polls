@@ -91,19 +91,7 @@ export default {
 
 	methods: {
 		shiftDates(payload) {
-			const store = this.$store
-			let options = []
-			if (payload.step < 0) {
-				options = this.options
-			} else if (payload.step > 0) {
-				options = this.options.slice().reverse()
-			}
-			options.forEach(function(existingOption) {
-				const option = Object.assign({}, existingOption)
-				option.timestamp = moment.unix(option.timestamp).add(payload.step, payload.unit.value).unix()
-				option.pollOptionText = moment.unix(option.timestamp).format('YYYY-MM-DD HH:mm:ss')
-				store.dispatch('options/update', { option: option })
-			})
+			this.$store.dispatch('options/shift', { shift: payload })
 		},
 	},
 }
