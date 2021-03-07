@@ -78,7 +78,7 @@
 
 		<div v-if="poll.anonymous" class="area__footer">
 			<div>
-				{{ t('poll', 'Although participants names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
+				{{ t('poll', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
 				{{ t('poll', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
 			</div>
 		</div>
