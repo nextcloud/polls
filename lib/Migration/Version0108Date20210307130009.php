@@ -50,7 +50,6 @@ class Version0108Date20210307130009 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_options');
 			if (!$table->hasIndex('UNIQ_options')) {
 				$table->addUniqueIndex(['poll_id', 'poll_option_text', 'timestamp'], 'UNIQ_options');
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 
@@ -58,7 +57,6 @@ class Version0108Date20210307130009 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_log');
 			if (!$table->hasIndex('UNIQ_unprocessed')) {
 				$table->addUniqueIndex(['processed', 'poll_id', 'user_id', 'message_id'], 'UNIQ_unprocessed');
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 
@@ -66,7 +64,6 @@ class Version0108Date20210307130009 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_notif');
 			if (!$table->hasIndex('UNIQ_subscription')) {
 				$table->addUniqueIndex(['poll_id', 'user_id'], 'UNIQ_subscription');
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 
@@ -74,7 +71,6 @@ class Version0108Date20210307130009 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_share');
 			if (!$table->hasIndex('UNIQ_shares')) {
 				$table->addUniqueIndex(['poll_id', 'user_id'], 'UNIQ_shares');
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 
@@ -82,7 +78,6 @@ class Version0108Date20210307130009 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_votes');
 			if (!$table->hasIndex('UNIQ_votes')) {
 				$table->addUniqueIndex(['poll_id', 'user_id', 'vote_option_text'], 'UNIQ_votes');
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 
@@ -90,7 +85,6 @@ class Version0108Date20210307130009 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_preferences');
 			if (!$table->hasIndex('UNIQ_preferences')) {
 				$table->addUniqueIndex(['user_id'], 'UNIQ_preferences');
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 
@@ -98,7 +92,6 @@ class Version0108Date20210307130009 extends SimpleMigrationStep {
 			$table = $schema->getTable('polls_watch');
 			if (!$table->hasIndex('UNIQ_watch')) {
 				$table->addUniqueIndex(['poll_id', 'table'], 'UNIQ_watch');
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 

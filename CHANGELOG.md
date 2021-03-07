@@ -1,8 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.8.0] - tbd
-### supported NC versions 19 - 20
+## [1.8.0 - beta1] - 2021-03-07
  - [ux] #1164 - Wording: use list and table layout instead of desktop and mobile (#1443)
  - [ux] #1430 - Move poll informations to icon bar (info icon) (#1443)
  - [ux] #1418 - Allow changing emailaddress in public polls (#1431)
