@@ -3,10 +3,10 @@ OC.L10N.register(
     {
     "Group" : "Qrup",
     "User" : "User",
-    "Cancel" : "Dayandır",
-    "OK" : "Oldu",
     "Title" : "Başlıq",
+    "Cancel" : "Dayandır",
     "Settings" : "Quraşdırmalar",
+    "OK" : "Oldu",
     "Week" : "Həftə",
     "Owner" : "Owner",
     "Deleted" : "Silinib",

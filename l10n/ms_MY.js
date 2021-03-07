@@ -3,10 +3,10 @@ OC.L10N.register(
     {
     "Group" : "Group",
     "User" : "User",
-    "Cancel" : "Batal",
-    "OK" : "OK",
     "Title" : "Judul",
+    "Cancel" : "Batal",
     "Settings" : "Tetapan",
+    "OK" : "OK",
     "Week" : "Minggu",
     "Owner" : "Owner",
     "Deleted" : "Dipadam",

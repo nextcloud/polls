@@ -3,11 +3,11 @@ OC.L10N.register(
     {
     "Group" : "Group",
     "User" : "User",
-    "Cancel" : "បោះបង់",
-    "OK" : "ព្រម",
     "Title" : "ចំណងជើង",
+    "Cancel" : "បោះបង់",
     "Apply" : "អនុវត្ត",
     "Settings" : "ការកំណត់",
+    "OK" : "ព្រម",
     "Week" : "សប្ដាហ៍",
     "Owner" : "Owner",
     "Deleted" : "បាន​លុប",

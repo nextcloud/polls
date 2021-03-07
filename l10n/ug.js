@@ -3,10 +3,10 @@ OC.L10N.register(
     {
     "Group" : "Group",
     "User" : "User",
-    "Cancel" : "ۋاز كەچ",
-    "OK" : "جەزملە",
     "Title" : "ماۋزۇ",
+    "Cancel" : "ۋاز كەچ",
     "Settings" : "تەڭشەكلەر",
+    "OK" : "جەزملە",
     "Week" : "ھەپتە",
     "Owner" : "Owner",
     "Deleted" : "ئۆچۈرۈلدى",

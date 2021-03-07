@@ -3,10 +3,10 @@ OC.L10N.register(
     {
     "Group" : "গোষ্ঠীসমূহ",
     "User" : "User",
-    "Cancel" : "বাতির",
-    "OK" : "তথাস্তু",
     "Title" : "শিরোনাম",
+    "Cancel" : "বাতির",
     "Settings" : "সেটিংস",
+    "OK" : "তথাস্তু",
     "Week" : "সপ্তাহ",
     "Owner" : "Owner",
     "Deleted" : "মুছে ফেলা",

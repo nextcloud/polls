@@ -3,10 +3,10 @@ OC.L10N.register(
     {
     "Group" : "Group",
     "User" : "User",
-    "Cancel" : "இரத்து செய்க",
-    "OK" : "சரி ",
     "Title" : "தலைப்பு",
+    "Cancel" : "இரத்து செய்க",
     "Settings" : "அமைப்புகள்",
+    "OK" : "சரி ",
     "Week" : "வாரம்",
     "Owner" : "Owner",
     "never" : "ஒருபோதும்",

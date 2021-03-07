@@ -3,11 +3,11 @@ OC.L10N.register(
     {
     "Group" : "Group",
     "User" : "Korisnik",
-    "Cancel" : "Cancel",
-    "OK" : "U redu",
     "Conflict" : "Konflikt",
     "Title" : "Naslov",
+    "Cancel" : "Cancel",
     "Settings" : "Поставке",
+    "OK" : "U redu",
     "Owner" : "Owner",
     "Deleted" : "Obrisano",
     "never" : "never",

@@ -3,10 +3,10 @@ OC.L10N.register(
     {
     "Group" : "Group",
     "User" : "User",
-    "Cancel" : "منسوخ کریں",
-    "OK" : "اوکے",
     "Title" : "عنوان",
+    "Cancel" : "منسوخ کریں",
     "Settings" : "سیٹینگز",
+    "OK" : "اوکے",
     "Week" : "ہفتہ",
     "Owner" : "Owner",
     "Deleted" : "حذف شدہ ",
