@@ -172,9 +172,9 @@ const actions = {
 
 	async reorder(context, payload) {
 		context.commit('reorder', { options: payload })
-		const endPoint = 'apps/polls/poll'
+		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/options/reorder'
 		try {
-			const response = await axios.post(generateUrl(endPoint + '/' + context.rootState.route.params.id + '/options/reorder'), {
+			const response = await axios.post(generateUrl(endPoint), {
 				options: payload,
 			})
 			context.commit('set', { options: response.data.options })
@@ -196,6 +196,21 @@ const actions = {
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			console.error('Error creating sequence', { error: e.response }, { payload: payload })
+			context.dispatch('list')
+			throw e
+		}
+	},
+
+	async shift(context, payload) {
+		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/shift'
+		try {
+			const response = await axios.post(generateUrl(endPoint), {
+				step: payload.shift.step,
+				unit: payload.shift.unit.value,
+			})
+			context.commit('set', { options: response.data.options })
+		} catch (e) {
+			console.error('Error shifting dates', { error: e.response }, { payload: payload })
 			context.dispatch('list')
 			throw e
 		}

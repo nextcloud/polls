@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\BadRequestException;
 use OCA\Polls\Exceptions\DuplicateEntryException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
@@ -216,6 +217,11 @@ class OptionService {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
 
+		if ($this->pollMapper->find($this->acl->getPollId())->getType() !== Poll::TYPE_DATE) {
+			throw new InvalidPollTypeException('Only allowed in date polls');
+		}
+
+
 		if ($step === 0) {
 			return $this->optionMapper->findByPoll($this->option->getPollId());
 		}
@@ -238,6 +244,39 @@ class OptionService {
 		}
 		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 		return $this->optionMapper->findByPoll($this->option->getPollId());
+	}
+
+	/**
+	 * Shift all date options
+	 * @param int $pollId
+	 * @param int $step - The step for creating the sequence
+	 * @param string $unit - The timeunit (year, month, ...)
+	 *
+	 * @return Option[]
+	 *
+	 * @psalm-return array<array-key, Option>
+	 */
+	public function shift(int $pollId, int $step, string $unit): array {
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
+		if ($this->pollMapper->find($pollId)->getType() !== Poll::TYPE_DATE) {
+			throw new InvalidPollTypeException('Only allowed in date polls');
+		}
+
+		$this->options = $this->optionMapper->findByPoll($pollId);
+		$shiftedDate = new DateTime;
+
+		if ($step > 0) {
+			// avoid contraint errors
+			$this->options = array_reverse($this->options);
+		}
+
+		foreach ($this->options as $option) {
+			$shiftedDate->setTimestamp($option->getTimestamp());
+			$option->setTimestamp($shiftedDate->modify($step . ' ' . $unit)->getTimestamp());
+			$this->optionMapper->update($option);
+		}
+
+		return $this->optionMapper->findByPoll($pollId);
 	}
 
 	/**
@@ -277,7 +316,7 @@ class OptionService {
 			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_EDIT);
 
 			if ($this->poll->getType() === Poll::TYPE_DATE) {
-				throw new BadRequestException("Not allowed in date polls");
+				throw new BadRequestException('Not allowed in date polls');
 			}
 		} catch (DoesNotExistException $e) {
 			throw new NotAuthorizedException;
@@ -310,7 +349,7 @@ class OptionService {
 			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_EDIT);
 
 			if ($this->poll->getType() === Poll::TYPE_DATE) {
-				throw new BadRequestException("Not allowed in date polls");
+				throw new InvalidPollTypeException('Not allowed in date polls');
 			}
 		} catch (DoesNotExistException $e) {
 			throw new NotAuthorizedException;
