@@ -26,14 +26,14 @@
 
 		<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
 		<div>
-			<h3> {{ t('polls', 'Step unit: ') }} </h3>
+			<h3> {{ t('polls', 'Step unit:') }} </h3>
 			<Multiselect v-model="sequence.unit"
 				:options="dateUnits"
 				label="name"
 				track-by="value" />
-			<h3> {{ t('polls', 'Step width: ') }} </h3>
+			<h3> {{ t('polls', 'Step width:') }} </h3>
 			<input v-model="sequence.step">
-			<h3>{{ t('polls', 'Number of items to create: ') }}</h3>
+			<h3>{{ t('polls', 'Number of items to create:') }}</h3>
 			<input v-model="sequence.amount">
 		</div>
 

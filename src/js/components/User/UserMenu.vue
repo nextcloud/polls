@@ -126,7 +126,7 @@ export default {
 				}
 			} else {
 				return {
-					title: t('polls', 'Add your email Address, '),
+					title: t('polls', 'Add your email Address,'),
 					text: t('polls', 'if you want to subscribe or receive your personal link via email.'),
 				}
 			}

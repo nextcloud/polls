@@ -31,13 +31,13 @@
 		</div>
 		<div class="poll-information">
 			<div class="owner">
-				{{ t('polls', 'Poll owner: ') }} <UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
+				{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
 			</div>
 			<div class="created">
-				{{ t('polls', 'Created {dateRelative}.', { dateRelative: dateCreatedRelative }) }}
+				{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
 			</div>
 			<div v-if="poll.expire" class="closed">
-				{{ t('polls', 'Closing: ') }} {{ dateExpiryRelative }}
+				{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
 			</div>
 			<div v-if="poll.anonymous" class="anonymous">
 				{{ t('polls', 'Anonymous poll') }}
@@ -46,7 +46,7 @@
 				{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
 			</div>
 			<div class="timezone">
-				{{ t('polls', 'Time zone: ') }} {{ currentTimeZone }}
+				{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
 			</div>
 			<div v-if="poll.voteLimit" class="vote-limit">
 				{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countYesVotes, { maximalVotes: poll.voteLimit }) }}

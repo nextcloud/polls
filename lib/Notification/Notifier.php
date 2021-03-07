@@ -170,7 +170,7 @@ class Notifier implements INotifier {
 				$actor = $this->userManager->get($parameters['actor']);
 
 				$notification->setParsedSubject(
-					$l->t('%s changed the deleted status of your poll', [$actor->getDisplayName()])
+					$l->t('%s changed the deleted status of your poll.', [$actor->getDisplayName()])
 				);
 				$notification->setRichSubject(
 					$l->t('{user} changed the deleted status of your poll "%s".', $parameters['pollTitle']),

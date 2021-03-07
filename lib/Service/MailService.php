@@ -333,7 +333,7 @@ class MailService {
 				htmlspecialchars($this->trans->t('Go to poll')),
 				$url
 			);
-		$emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar: '));
+		$emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
 		$emailTemplate->addBodyText($url);
 		$emailTemplate->addBodyText($this->trans->t('Do not share this link with other people, because it is connected to your votes.'));
 		$emailTemplate->addFooter($this->trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
