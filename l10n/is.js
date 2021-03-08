@@ -54,7 +54,6 @@ OC.L10N.register(
     "Restore poll" : "Endurheimta könnun",
     "Delete poll permanently" : "Eyða könnun endanlega",
     "Confirmed" : "Staðfest",
-    "Number of items to create: " : "Fjöldi atriða sem á að útbúa: ",
     "OK" : "Í lagi",
     "Week" : "Vika",
     "Available Options" : "Tiltækir valkostir",
