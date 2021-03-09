@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Contact" : "連絡先",
     "Public link" : "公開リンク",
+    "External user" : "外部ユーザー",
     "Group" : "グループ",
     "User" : "ユーザー",
     "Polls" : "投票",
