@@ -69,6 +69,7 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "拷贝链接到剪贴板时出错",
     "_%n Participant_::_%n Participants_" : ["%n 参与者"],
     "Anonymous poll" : "匿名投票",
+    "To participate, tell us how we can call you!" : "您想参与的话，请告诉我们怎么致电给您！",
     "Enter your name" : "输入你的名字",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "作为这个站点的经常用户，你可以在登录后使用您的内部身份参与。",
     "Error saving username" : "保存用户名时出错",
