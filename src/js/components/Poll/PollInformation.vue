@@ -49,7 +49,7 @@
 				{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
 			</div>
 			<div v-if="poll.voteLimit" class="vote-limit">
-				{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countYesVotes, { maximalVotes: poll.voteLimit }) }}
+				{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
 			</div>
 			<div v-if="poll.optionLimit" class="option-limit">
 				{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
@@ -91,11 +91,11 @@ export default {
 			participantsVoted: 'poll/participantsVoted',
 			closed: 'poll/closed',
 			confirmedOptions: 'options/confirmed',
-			countYesVotes: 'votes/countYesVotes',
+			countVotes: 'votes/countVotes',
 		}),
 
 		voteLimitReached() {
-			return (this.poll.voteLimit > 0 && this.countYesVotes >= this.poll.voteLimit)
+			return (this.poll.voteLimit > 0 && this.countVotes('yes') >= this.poll.voteLimit)
 		},
 
 		dateCreatedRelative() {
