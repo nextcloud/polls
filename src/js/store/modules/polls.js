@@ -28,6 +28,72 @@ import { generateUrl } from '@nextcloud/router'
 
 const state = {
 	list: [],
+	categories: [
+		{
+			id: 'relevant',
+			title: t('polls', 'Relevant'),
+			titleExt: t('polls', 'Relevant polls'),
+			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls.'),
+			icon: 'icon-details',
+			pinned: false,
+		},
+		{
+			id: 'my',
+			title: t('polls', 'My polls'),
+			titleExt: t('polls', 'My polls'),
+			description: t('polls', 'Your polls (where you are the owner).'),
+			icon: 'icon-user',
+			pinned: false,
+		},
+		{
+			id: 'hidden',
+			title: t('polls', 'Hidden'),
+			titleExt: t('polls', 'Hidden polls'),
+			description: t('polls', 'All hidden polls, to which you have access.'),
+			icon: 'icon-polls',
+			pinned: false,
+		},
+		{
+			id: 'participated',
+			title: t('polls', 'Participated by me'),
+			titleExt: t('polls', 'Participated by me'),
+			description: t('polls', 'All polls, where you placed a vote.'),
+			icon: 'icon-polls',
+			pinned: false,
+		},
+		{
+			id: 'public',
+			title: t('polls', 'Public polls'),
+			titleExt: t('polls', 'Public polls'),
+			description: t('polls', 'A complete list with all public polls on this site, regardless who is the owner.'),
+			icon: 'icon-link',
+			pinned: false,
+		},
+		{
+			id: 'all',
+			title: t('polls', 'All polls'),
+			titleExt: t('polls', 'All polls'),
+			description: t('polls', 'All polls, where you have access to.'),
+			icon: 'icon-polls',
+			pinned: false,
+		},
+		{
+			id: 'closed',
+			title: t('polls', 'Closed polls'),
+			titleExt: t('polls', 'Closed polls'),
+			description: t('polls', 'All closed polls, where voting is disabled.'),
+			icon: 'icon-polls-closed',
+			pinned: false,
+		},
+		{
+			id: 'deleted',
+			title: t('polls', 'Deleted polls'),
+			titleExt: t('polls', 'My deleted polls'),
+			description: t('polls', 'The trash bin.'),
+			icon: 'icon-delete',
+			pinned: true,
+		},
+	],
 }
 
 const namespaced = true

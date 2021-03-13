@@ -51,7 +51,7 @@
 <script>
 
 import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import CreateDlg from '../Create/CreateDlg'
@@ -72,52 +72,18 @@ export default {
 		return {
 			showSettingsDlg: false,
 			createDlg: false,
-			pollCategories: [
-				{
-					id: 'relevant',
-					title: t('polls', 'Relevant'),
-					icon: 'icon-details',
-					pinned: false,
-				},
-				{
-					id: 'my',
-					title: t('polls', 'My polls'),
-					icon: 'icon-user',
-					pinned: false,
-				},
-				{
-					id: 'public',
-					title: t('polls', 'Public polls'),
-					icon: 'icon-link',
-					pinned: false,
-				},
-				{
-					id: 'all',
-					title: t('polls', 'All polls'),
-					icon: 'icon-polls',
-					pinned: false,
-				},
-				{
-					id: 'closed',
-					title: t('polls', 'Closed polls'),
-					icon: 'icon-polls-closed',
-					pinned: false,
-				},
-				{
-					id: 'deleted',
-					title: t('polls', 'Deleted polls'),
-					icon: 'icon-delete',
-					pinned: true,
-				},
-			],
-
 		}
 	},
 
 	computed: {
+		...mapState({
+			pollCategories: state => state.polls.categories,
+		}),
+
 		...mapGetters({
 			filteredPolls: 'polls/filtered',
 		}),
+
 		showAdminSection() {
 			return getCurrentUser().isAdmin
 		},

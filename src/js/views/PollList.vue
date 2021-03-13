@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import sortBy from 'lodash/sortBy'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
@@ -117,48 +117,24 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			pollCategories: state => state.polls.categories,
+		}),
+
 		...mapGetters({
 			filteredPolls: 'polls/filtered',
 		}),
 
 		title() {
-			if (this.$route.params.type === 'my') {
-				return t('polls', 'My polls')
-			} else if (this.$route.params.type === 'relevant') {
-				return t('polls', 'Relevant polls')
-			} else if (this.$route.params.type === 'public') {
-				return t('polls', 'Public polls')
-			} else if (this.$route.params.type === 'hidden') {
-				return t('polls', 'Hidden polls')
-			} else if (this.$route.params.type === 'deleted') {
-				return t('polls', 'My deleted polls')
-			} else if (this.$route.params.type === 'participated') {
-				return t('polls', 'Participated by me')
-			} else if (this.$route.params.type === 'closed') {
-				return t('polls', 'Closed polls')
-			} else {
-				return t('polls', 'All polls')
-			}
+			return this.pollCategories.find(category => {
+				return (category.id === this.$route.params.type)
+			}).titleExt
 		},
 
 		description() {
-			if (this.$route.params.type === 'my') {
-				return t('polls', 'Your polls (where you are the owner).')
-			} else if (this.$route.params.type === 'relevant') {
-				return t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls.')
-			} else if (this.$route.params.type === 'public') {
-				return t('polls', 'A complete list with all public polls on this site, regardless who is the owner.')
-			} else if (this.$route.params.type === 'hidden') {
-				return t('polls', 'All hidden polls, to which you have access.')
-			} else if (this.$route.params.type === 'deleted') {
-				return t('polls', 'The trash bin.')
-			} else if (this.$route.params.type === 'participated') {
-				return t('polls', 'All polls, where you placed a vote.')
-			} else if (this.$route.params.type === 'closed') {
-				return t('polls', 'All closed polls, where voting is disabled.')
-			} else {
-				return t('polls', 'All polls, where you have access to.')
-			}
+			return this.pollCategories.find(category => {
+				return (category.id === this.$route.params.type)
+			}).description
 		},
 
 		windowTitle() {
