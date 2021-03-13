@@ -69,8 +69,8 @@ const getters = {
 		})
 	},
 
-	countYesVotes: (state, getters, rootState) => {
-		return getters.relevant.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === 'yes').length
+	countVotes: (state, getters, rootState) => (answer) => {
+		return getters.relevant.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length
 	},
 
 	getVote: (state) => (payload) => {

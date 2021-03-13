@@ -54,7 +54,7 @@ export default {
 		}),
 
 		...mapGetters({
-			countYesVotes: 'votes/countYesVotes',
+			countVotes: 'votes/countVotes',
 			pollIsClosed: 'poll/closed',
 			answerSequence: 'poll/answerSequence',
 		}),
@@ -83,7 +83,7 @@ export default {
 		},
 
 		isVoteLimitExceded() {
-			return (this.countYesVotes >= this.voteLimit && this.voteLimit > 0 && this.answer !== 'yes')
+			return (this.countVotes('yes') >= this.voteLimit && this.voteLimit && this.answer !== 'yes')
 		},
 
 		isConfirmed() {

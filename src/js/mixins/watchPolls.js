@@ -24,12 +24,12 @@ export const watchPolls = {
 		async loadTables(tables) {
 			let dispatches = []
 			tables.forEach((item) => {
-				this.lastUpdated = (item.updated > this.lastUpdated) ? item.updated : this.lastUpdated
+				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
 				// an updated poll table is reported
 				if (item.table === 'polls') {
 					if (this.$route.name !== 'publicVote') {
 						// load poll list only, when not in public poll
-						dispatches.push('polls/load')
+						dispatches.push('polls/list')
 					}
 					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
 						// if current poll is affected, load current poll configuration
