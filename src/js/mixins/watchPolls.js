@@ -24,7 +24,7 @@ export const watchPolls = {
 		async loadTables(tables) {
 			let dispatches = []
 			tables.forEach((item) => {
-				this.lastUpdated = (item.updated > this.lastUpdated) ? item.updated : this.lastUpdated
+				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
 				// an updated poll table is reported
 				if (item.table === 'polls') {
 					if (this.$route.name !== 'publicVote') {
