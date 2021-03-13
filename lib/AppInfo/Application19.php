@@ -24,16 +24,25 @@
 namespace OCA\Polls\AppInfo;
 
 use OCP\AppFramework\App;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\User\Events\UserDeletedEvent;
 use OCA\Polls\Notification\Notifier;
+use OCA\Polls\Listener\UserDeletedListener;
 
 class Application19 extends App {
 	public function __construct(array $urlParams = []) {
 		parent::__construct('polls', $urlParams);
 		$this->registerNotifications();
+		$this->registerUserDeletedListener();
 	}
 
 	public function registerNotifications(): void {
 		$notificationManager = \OC::$server->getNotificationManager();
 		$notificationManager->registerNotifierService(Notifier::class);
+	}
+
+	public function registerUserDeletedListener(): void {
+		$eventDispatcher = $this->getContainer()->query(IEventDispatcher::class);
+		$eventDispatcher->addServiceListener(UserDeletedEvent::class, UserDeletedListener::class);
 	}
 }
