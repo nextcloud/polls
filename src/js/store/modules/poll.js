@@ -25,6 +25,7 @@ import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
+import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
 
 const defaultPoll = () => {
 	return {
@@ -105,15 +106,18 @@ const getters = {
 				voted: false,
 			})
 		}
-		return participants
+
+		return uniqueArrayOfObjects(participants)
+
 	},
 
 	participantsVoted: (state, getters, rootState) => {
-		return rootState.votes.list.map(item => ({
+		return uniqueArrayOfObjects(rootState.votes.list.map(item => ({
 			userId: item.userId,
 			displayName: item.displayName,
 			isNoUser: item.isNoUser,
-		}))
+		})))
+
 	},
 }
 
