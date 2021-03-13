@@ -214,7 +214,7 @@ export default {
 				return
 			}
 
-			dispatches.push('polls/load')
+			dispatches.push('polls/list')
 
 			if (getCurrentUser().isAdmin) {
 				dispatches.push('pollsAdmin/load')

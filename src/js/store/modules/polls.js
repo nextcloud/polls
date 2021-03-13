@@ -71,7 +71,7 @@ const getters = {
 }
 
 const actions = {
-	async load(context) {
+	async list(context) {
 		const endPoint = 'apps/polls/polls'
 
 		try {
