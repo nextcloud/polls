@@ -89,21 +89,15 @@ const getters = {
 	},
 
 	participants: (state, getters, rootState) => {
-		const participants = []
-		const map = new Map()
-		for (const item of rootState.votes.list) {
-			if (!map.has(item.userId)) {
-				map.set(item.userId, true)
-				participants.push({
-					userId: item.userId,
-					displayName: item.displayName,
-					isNoUser: item.isNoUser,
-					voted: true,
-				})
-			}
-		}
+		const participants = rootState.votes.list.map(item => ({
+			userId: item.userId,
+			displayName: item.displayName,
+			isNoUser: item.isNoUser,
+			voted: true,
+		}))
 
-		if (!map.has(state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+		// add current user, if not among participants and voting is allowed
+		if (!participants.find(item => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
 			participants.push({
 				userId: state.acl.userId,
 				displayName: state.acl.displayName,
@@ -115,19 +109,11 @@ const getters = {
 	},
 
 	participantsVoted: (state, getters, rootState) => {
-		const participantsVoted = []
-		const map = new Map()
-		for (const item of rootState.votes.list) {
-			if (!map.has(item.userId)) {
-				map.set(item.userId, true)
-				participantsVoted.push({
-					userId: item.userId,
-					displayName: item.displayName,
-					isNoUser: item.isNoUser,
-				})
-			}
-		}
-		return participantsVoted
+		return rootState.votes.list.map(item => ({
+			userId: item.userId,
+			displayName: item.displayName,
+			isNoUser: item.isNoUser,
+		}))
 	},
 }
 
