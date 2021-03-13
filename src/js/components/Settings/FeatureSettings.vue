@@ -83,17 +83,12 @@ export default {
 		},
 
 		calendarChoices() {
-			const list = []
-			this.calendars.forEach((calendar) => {
-				list.push({
-					key: calendar.key.toString(),
-					name: calendar.name,
-					displayColor: calendar.displayColor,
-					selected: this.settings.checkCalendars.includes(calendar.key.toString()),
-				})
-			})
-
-			return list
+			return this.calendars.map(calendar => ({
+				key: calendar.key.toString(),
+				name: calendar.name,
+				displayColor: calendar.displayColor,
+				selected: this.settings.checkCalendars.includes(calendar.key.toString()),
+			}), this)
 		},
 
 		defaultViewTextPoll: {
