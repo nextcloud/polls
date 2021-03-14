@@ -28,10 +28,6 @@ OC.L10N.register(
     "Date poll" : "نظرسنجی تاریخ",
     "Add new Poll" : "نظرسنجی جدید افزودن",
     "Settings" : "تنظیمات",
-    "My polls" : "نظرسنجی های من",
-    "Public polls" : "نظرسنجی های عمومی",
-    "All polls" : "همه نظرسنجی ها",
-    "Deleted polls" : "نظرسنجی حذف شد",
     "Error cloning poll." : "خطای کلون نظرسنجی",
     "Error deleting poll." : "خطا در حذف نظرسنجی",
     "Clone poll" : "نظرسنجی کلون",
@@ -77,9 +73,13 @@ OC.L10N.register(
     "Yes" : "بله",
     "Enter a poll or start a new one." : "یک نظرسنجی وارد کنید یا یک مورد جدید را شروع کنید.",
     "Goto Nextcloud" : "برو نکست کلود",
-    "Hidden polls" : "نظرسنجی پنهان",
     "Day" : "روز",
     "Month" : "ماه",
-    "Year" : "سال"
+    "Year" : "سال",
+    "My polls" : "نظرسنجی های من",
+    "Hidden polls" : "نظرسنجی پنهان",
+    "Public polls" : "نظرسنجی های عمومی",
+    "All polls" : "همه نظرسنجی ها",
+    "Deleted polls" : "نظرسنجی حذف شد"
 },
 "nplurals=2; plural=(n > 1);");

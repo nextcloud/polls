@@ -28,10 +28,6 @@ OC.L10N.register(
     "Date poll" : "Encuesta de fechas",
     "Add new Poll" : "Agregar nueva encuesta",
     "Settings" : "Configuraciones ",
-    "My polls" : "Mis encuestas",
-    "Public polls" : "Encuestas públicas",
-    "All polls" : "Todas las encuestas",
-    "Deleted polls" : "Encuestas borradas",
     "Delete poll" : "Borrar encuesta",
     "Confirmed" : "Confirmado",
     "OK" : "OK",
@@ -51,9 +47,13 @@ OC.L10N.register(
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "No" : "No",
     "Yes" : "Sí",
-    "Hidden polls" : "Encuestas ocultas",
     "Hour" : "Hora",
     "Day" : "Día",
-    "Month" : "Mes"
+    "Month" : "Mes",
+    "My polls" : "Mis encuestas",
+    "Hidden polls" : "Encuestas ocultas",
+    "Public polls" : "Encuestas públicas",
+    "All polls" : "Todas las encuestas",
+    "Deleted polls" : "Encuestas borradas"
 },
 "nplurals=2; plural=(n != 1);");

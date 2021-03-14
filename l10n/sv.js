@@ -26,9 +26,6 @@ OC.L10N.register(
     "Text poll" : "Textomröstning",
     "Add new Poll" : "Lägg till omröstning",
     "Settings" : "Inställningar",
-    "My polls" : "Mina omröstningar",
-    "Public polls" : "Publika omröstningar",
-    "All polls" : "Alla omröstningar",
     "Clone poll" : "Kopiera omröstningen",
     "Delete poll" : "Ta bort omröstningen",
     "Confirmed" : "Bekräftad",
@@ -63,6 +60,9 @@ OC.L10N.register(
     "Yes" : "Ja",
     "Hour" : "Timme",
     "Day" : "Dag",
-    "Month" : "Månad"
+    "Month" : "Månad",
+    "My polls" : "Mina omröstningar",
+    "Public polls" : "Publika omröstningar",
+    "All polls" : "Alla omröstningar"
 },
 "nplurals=2; plural=(n != 1);");
