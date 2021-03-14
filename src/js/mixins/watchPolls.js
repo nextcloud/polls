@@ -1,6 +1,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import exception from '../Exceptions/Exceptions'
 
 export const watchPolls = {
 	data() {
@@ -29,29 +30,25 @@ export const watchPolls = {
 				if (item.table === 'polls') {
 					if (this.$route.name !== 'publicVote') {
 						// load poll list only, when not in public poll
-						dispatches.push('polls/list')
+						dispatches = [...dispatches, 'polls/list']
 					}
 					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
 						// if current poll is affected, load current poll configuration
-						dispatches.push('poll/get')
 						// load also options and votes
-						dispatches.push('votes/list')
-						dispatches.push('options/list')
+						dispatches = [...dispatches, 'poll/get', 'votes/list', 'options/list']
 					}
 				} else if (['votes', 'options'].includes(item.table)) {
-					dispatches.push('votes/list')
-					dispatches.push('options/list')
+					dispatches = [...dispatches, 'votes/list', 'options/list']
 				} else {
 					// a table of the current poll was reported, load
 					// corresponding stores
-					dispatches.push(item.table + '/list')
+					dispatches = [...dispatches, item.table + '/list']
 				}
 			})
+
 			// remove duplicates
 			dispatches = [...new Set(dispatches)]
-			// execute all loads within one promise
-			const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
-			await Promise.all(requests)
+			await Promise.all(dispatches.map(dispatches => this.$store.dispatch(dispatches)))
 		},
 
 		async watchPolls() {
@@ -72,36 +69,50 @@ export const watchPolls = {
 						params: { offset: this.lastUpdated },
 						cancelToken: this.cancelToken.token,
 					})
-					console.debug('polls', 'update detected', response.data.updates)
-					this.retryCounter = 0
-					await this.loadTables(response.data.updates)
+
+					if (typeof response.data?.updates !== 'object') {
+						console.debug('return value is no array')
+						throw exception('Invalid content')
+					}
+					if (this.retryCounter) {
+						// timeout happened after connection errors
+						this.retryCounter = 0
+					} else {
+						// If server responds with an HTML-Page like the update page,
+						// throw an simple exception
+						console.debug('polls', 'update detected', response.data.updates)
+						await this.loadTables(response.data.updates)
+					}
 
 				} catch (e) {
 
 					if (axios.isCancel(e)) {
 						if (this.restart) {
-							console.debug('restart watch')
+							// Restarting of poll was initiated
+							console.debug('watch canceled - restart watch')
 							this.retryCounter = 0
 							this.restart = false
 							this.cancelToken = axios.CancelToken.source()
 						} else {
-							console.debug('Watch canceled')
+							// request got canceled by a user invention
+							// we will exit here
+							console.debug('watch canceled')
 							return
 						}
-					} else if (e.response) {
-						if (e.response.status === 304) {
-							// timeout of poll --> restart
+					} else if (e.response?.status === 304) {
+						// the request timed out without updates
+						// this is expected --> restart
+						if (this.retryCounter) {
+							// timeout happened after connection errors
 							this.retryCounter = 0
-						} else {
-							this.retryCounter++
-							console.error('Unhandled error watching polls', e)
-							console.debug('error request', this.retryCounter)
-							await new Promise(resolve => setTimeout(resolve, this.retryTimeout))
 						}
-					} else if (e.request) {
+					} else {
+						// No response was returned, i.e. server died or exception was triggered
 						this.retryCounter++
-						console.debug('No response - request aborted')
-						console.debug('failed request', this.retryCounter)
+						if (e.response) {
+							console.error('Unhandled error watching polls', e)
+						}
+						console.debug('No response - request aborted - failed request', this.retryCounter)
 						await new Promise(resolve => setTimeout(resolve, this.retryTimeout))
 					}
 				}
