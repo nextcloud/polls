@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.8.1 - beta2] - tbd
+ - [refactor] #1487 - changed error handling in watchPolls
+ - [refactor] #1484 - some code maintenance
+ - [security] #1471 - prevent html in description (follow up to #1443)
+
 ## [1.8.0 - beta1] - 2021-03-07
  - [ux] #1164 - Wording: use list and table layout instead of desktop and mobile (#1443)
  - [ux] #1430 - Move poll informations to icon bar (info icon) (#1443)
