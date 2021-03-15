@@ -256,6 +256,7 @@ OC.L10N.register(
     "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Todas as enquisas que son relevantes ou importantes para vostede, porque vostede é un participante ou propietario ou foi convidado a elas. Sen enquisas pechadas. ",
     "My polls" : "As miñas enquisas",
     "Your polls (where you are the owner)." : "As súas enquisas (das que vostede é o propietario).",
+    "Hidden" : "Agochada",
     "Hidden polls" : "Enquisas agochadas",
     "All hidden polls, to which you have access." : "Todas as enquisas agochadas, ás que vostede ten acceso.",
     "Participated by me" : "Nas que participou vostede",

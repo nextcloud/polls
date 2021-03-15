@@ -256,6 +256,7 @@ OC.L10N.register(
     "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "與您相關或重要的所有投票，因為您是參與者、擁有者或被邀請。不含已關閉的投票。",
     "My polls" : "我的投票",
     "Your polls (where you are the owner)." : "您的投票（您是擁有者）。",
+    "Hidden" : "隱藏",
     "Hidden polls" : "隱藏投票",
     "All hidden polls, to which you have access." : "您可以存取的所有隱藏投票。",
     "Participated by me" : "我參加了",

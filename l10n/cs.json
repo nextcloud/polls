@@ -172,7 +172,7 @@
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Prosím, při změnách voleb buďte opatrní, protože mohou nechteným způsobem ovlivnit již existující hlasy.",
     "As an admin you may edit this poll" : "Coby správce můžete tuto anketu upravovat",
     "Description" : "Popis",
-    "Poll configurations" : "Nastavení ankety",
+    "Poll configurations" : "Nastavení anket",
     "Allow Comments" : "Povolit komentáře",
     "Limit yes votes per user" : "Omezte kladné hlasy pro jednotlivé uživatele",
     "Limit yes votes per option" : "Omezte kladné hlasy jednotlivých možností",
