@@ -35,17 +35,6 @@ import { mapState } from 'vuex'
 export default {
 	name: 'MarkUpDescription',
 
-	data() {
-		return {
-			delay: 50,
-			isLoading: false,
-			manualViewDatePoll: '',
-			manualViewTextPoll: '',
-			ranked: false,
-			voteSaved: false,
-		}
-	},
-
 	computed: {
 		...mapState({
 			descriptionSafe: state => state.poll.descriptionSafe,
