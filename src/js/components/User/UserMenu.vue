@@ -60,7 +60,7 @@ import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Actions, ActionButton, ActionCheckbox, ActionInput, ActionSeparator, ActionText } from '@nextcloud/vue'
+import { Actions, ActionButton, ActionCheckbox, ActionInput, ActionSeparator } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -72,7 +72,6 @@ export default {
 		ActionCheckbox,
 		ActionInput,
 		ActionSeparator,
-		ActionText,
 	},
 
 	data() {
@@ -111,20 +110,6 @@ export default {
 				return {
 					result: this.checkResult,
 					status: this.checkStatus,
-				}
-			}
-		},
-
-		emailAddressCheck() {
-			if (this.emailAddress) {
-				return {
-					title: t('polls', 'Notifications will be'),
-					text: t('polls', 'sent to {emailAddress}', { emailAddress: this.emailAddress }),
-				}
-			} else {
-				return {
-					title: t('polls', 'Add your email Address,'),
-					text: t('polls', 'Add your email Address, if you want to subscribe or receive your personal link via email.'),
 				}
 			}
 		},
