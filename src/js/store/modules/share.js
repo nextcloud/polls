@@ -105,6 +105,7 @@ const actions = {
 				emailAddress: payload.emailAddress,
 			})
 			context.commit('set', { share: response.data.share })
+			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
 			console.error('Error writing email address', { error: e.response }, { payload: payload })
 			throw e
@@ -122,6 +123,7 @@ const actions = {
 			const response = await axios.delete(generateUrl(endPoint + '/email'))
 			context.commit('set', { share: response.data.share })
 			context.dispatch('subscription/update', false, { root: true })
+			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
 			console.error('Error writing email address', { error: e.response }, { payload: payload })
 			throw e
