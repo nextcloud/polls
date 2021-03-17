@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.8.1 - beta2] - tbd
+## [1.8.1] - 2021-03-20
  - [refactor] #1487 - changed error handling in watchPolls
  - [refactor] #1484 - some code maintenance
  - [security] #1471 - prevent html in description (follow up to #1443)
