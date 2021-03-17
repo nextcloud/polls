@@ -26,7 +26,14 @@
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</ActionButton>
 		<ActionSeparator />
-		<ActionButton v-if="$route.name === 'publicVote'"
+		<ActionInput v-if="$route.name === 'publicVote'" icon="icon-edit" :class="check.status"
+			:value="emailAddressTemp"
+			@click="deleteEmailAddress"
+			@update:value="validateEmailAddress"
+			@submit="submitEmailAddress">
+			{{ t('polls', 'edit Email Address') }}
+		</ActionInput>
+		<ActionButton v-if="$route.name === 'publicVote'" :disabled="!emailAddress"
 			:value="emailAddress"
 			icon="icon-share"
 			@click="resendInvitation()">
@@ -36,22 +43,12 @@
 			@change="switchSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</ActionCheckbox>
-		<ActionButton v-if="$route.name === 'publicVote'"
+		<ActionButton v-if="$route.name === 'publicVote' && emailAddress"
 			:disabled="!emailAddress"
 			icon="icon-delete"
 			@click="deleteEmailAddress">
 			{{ t('polls', 'remove Email Address') }}
 		</ActionButton>
-		<ActionInput v-if="$route.name === 'publicVote'" icon="icon-edit" :class="check.status"
-			:value="emailAddressTemp"
-			@click="deleteEmailAddress"
-			@update:value="validateEmailAddress"
-			@submit="submitEmailAddress">
-			{{ t('polls', 'edit Email Address') }}
-		</ActionInput>
-		<ActionText v-if="$route.name === 'publicVote'" icon="icon-mail" :title="emailAddressCheck.title">
-			{{ emailAddressCheck.text }}
-		</ActionText>
 		<ActionButton v-if="acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</ActionButton>
@@ -127,7 +124,7 @@ export default {
 			} else {
 				return {
 					title: t('polls', 'Add your email Address,'),
-					text: t('polls', 'if you want to subscribe or receive your personal link via email.'),
+					text: t('polls', 'Add your email Address, if you want to subscribe or receive your personal link via email.'),
 				}
 			}
 		},
