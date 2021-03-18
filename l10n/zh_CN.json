@@ -102,7 +102,6 @@
     "Title must not be empty!" : "标题不能为空！",
     "Receive notification email on activity to {emailAddress}" : "接收 {emailAddress} 活动的通知邮件",
     "Receive notification email on activity" : "有活动时接收邮件提醒",
-    "if you want to subscribe or receive your personal link via email." : "如果你想通过电子邮件订阅或接收你的个人链接",
     "Error while adding share" : "添加共享时出错",
     "Delete votes" : "删除投票",
     "Do you want to remove {username} from poll?" : "您想要从投票中移除 {username} 吗？",

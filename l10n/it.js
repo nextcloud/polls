@@ -181,7 +181,6 @@ OC.L10N.register(
     "Add Shares" : "Aggiungi condivisioni",
     "Receive notification email on activity to {emailAddress}" : "Ricevi un'email di notifica sull'attività su {emailAddress}",
     "Receive notification email on activity" : "Ricevi un'email di notifica sull'attività",
-    "Add your email Address," : "Aggiungi il tuo indirizzo email,",
     "Email address {emailAddress} saved." : "Indirizzo email {emailAddress} salvato.",
     "Error saving email address {emailAddress}" : "Errore durante il salvataggio dell'indirizzo {emailAddress}",
     "Invitation resent to {emailAddress}" : "Invito inviato nuovamente a {emailAddress}",
