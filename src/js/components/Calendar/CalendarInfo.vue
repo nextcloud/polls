@@ -66,7 +66,7 @@ export default {
 
 		fontColor() {
 			if (this.event.displayColor === 'transparent') {
-				return 'black'
+				return 'var(--color-main-text)'
 			}
 
 			const hex = this.event.displayColor.replace(/#/, '')
@@ -80,7 +80,7 @@ export default {
 				0.114 * b,
 			].reduce((a, b) => a + b) / 255
 
-			return l > 0.5 ? 'black' : 'white'
+			return l > 0.5 ? '#222' : '#ddd'
 		},
 
 		conflictLevel() {
