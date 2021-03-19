@@ -142,11 +142,13 @@ class OptionService {
 	 * @return Option
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0): Option {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_ADD_OPTIONS);
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
 		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
 		$this->setOption($timestamp, $pollOptionText, $duration);
+		$this->option->setOwner($this->acl->getUserId());
+
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
@@ -164,7 +166,10 @@ class OptionService {
 	 */
 	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
+		if (!$this->acl->setPollId($this->option->getPollId())->isAllowed(Acl::PERMISSION_EDIT)
+			&& $this->option->getOwner() !== $this->acl->getUserId()) {
+			throw new NotAuthorizedException('You are not allowed to delete this option');
+		}
 		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		$this->option = $this->optionMapper->update($this->option);
@@ -179,7 +184,10 @@ class OptionService {
 	 */
 	public function delete(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
+		if (!$this->acl->setPollId($this->option->getPollId())->isAllowed(Acl::PERMISSION_EDIT)
+			&& $this->option->getOwner() !== $this->acl->getUserId()) {
+			throw new NotAuthorizedException('You are not allowed to delete this option');
+		}
 		$this->optionMapper->delete($this->option);
 		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 
