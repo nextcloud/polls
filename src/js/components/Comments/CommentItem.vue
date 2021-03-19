@@ -115,18 +115,20 @@ export default {
 		align-items: start;
 		margin-bottom: 24px;
 	}
+
 	.comment-item__user {
 		font-weight: bold;
 		&::after {
-			content: " – "
+			content: ' – '
 		}
 	}
+
 	.comment-item__date {
 		opacity: 0.5;
 		font-size: 80%;
 		text-align: right;
 		&::before {
-			content: " ~ "
+			content: ' ~ '
 		}
 	}
 
