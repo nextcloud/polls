@@ -6,13 +6,8 @@
 	}
 }
 
-.app-sidebar__tab {
-	overflow: initial !important;
-}
-
-.app-sidebar {
-	overflow-x: initial !important;
-	overflow-y: initial !important;
+.app-sidebar-tabs {
+	overflow-y: hidden;
 }
 
 .mx-datepicker-main, .mx-datepicker-popup {

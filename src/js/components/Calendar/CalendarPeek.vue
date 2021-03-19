@@ -98,7 +98,8 @@ export default {
 				UID: this.option.id,
 				calendarKey: 0,
 				calendarName: 'Polls',
-				displayColor: '#ffffff',
+				displayColor: 'transparent',
+				// displayColor: 'var(--color-main-background)',
 				allDay: '',
 				description: this.poll.description,
 				start: this.option.timestamp,
@@ -149,7 +150,7 @@ export default {
 
 .calendar-peek__grid {
 	padding: 8px;
-	background-color: #fff;
+	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 }
 
