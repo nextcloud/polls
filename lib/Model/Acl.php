@@ -44,6 +44,7 @@ use OCA\Polls\Db\ShareMapper;
 class Acl implements JsonSerializable {
 	public const PERMISSION_VIEW = 'view';
 	public const PERMISSION_EDIT = 'edit';
+	public const PERMISSION_ADD_OPTIONS = 'add_options';
 	public const PERMISSION_DELETE = 'delete';
 	public const PERMISSION_COMMENT = 'comment';
 	public const PERMISSION_SUBSCRIBE = 'subscribe';
@@ -178,6 +179,11 @@ class Acl implements JsonSerializable {
 
 			case self::PERMISSION_EDIT:
 				return $this->getIsOwner() || $this->hasAdminAccess();
+			case self::PERMISSION_ADD_OPTIONS:
+				return $this->getIsOwner()
+					|| $this->hasAdminAccess()
+					|| ($this->poll->getAllowProposals() === Poll::PROPOSAL_ALLOW
+					&& !$this->poll->getProposalsExpired());
 			case self::PERMISSION_DELETE:
 				return $this->getIsOwner() || $this->hasAdminAccess() || $this->getIsAdmin();
 			case self::PERMISSION_COMMENT:
@@ -209,6 +215,7 @@ class Acl implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return	[
 			'allowComment' => $this->isAllowed(self::PERMISSION_COMMENT),
+			'allowAddOptions' => $this->isAllowed(self::PERMISSION_ADD_OPTIONS),
 			'allowEdit' => $this->isAllowed(self::PERMISSION_EDIT),
 			'allowSeeResults' => $this->isAllowed(self::PERMISSION_SEE_RESULTS),
 			'allowSeeUsernames' => $this->isAllowed(self::PERMISSION_SEE_USERNAMES),
