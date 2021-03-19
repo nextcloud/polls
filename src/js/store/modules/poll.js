@@ -42,6 +42,8 @@ const defaultPoll = () => {
 		anonymous: 0,
 		allowComment: 0,
 		allowMaybe: 0,
+		allowProposals: 'disallow',
+		proposalsExpire: 0,
 		voteLimit: 0,
 		optionLimit: 0,
 		showResults: 'always',
