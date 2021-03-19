@@ -2,9 +2,31 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.8.1] - 2021-03-20
- - [refactor] #1487 - changed error handling in watchPolls
- - [refactor] #1484 - some code maintenance
- - [security] #1471 - prevent html in description (follow up to #1443)
+### new Features
+- Date options now have a duration (from/to)
+- Date options can be chosen as whole day (no time)
+- Added markdown support for poll description
+- Poll option to hide booked up options from participants, when option limit is reached
+- The poll owner can now delete all comments
+- Watch for poll changes (realtime changes)
+
+### Changes and fixes
+- Subscription to current poll moved to user menu
+- Public users can now change, add and remove their email addresses via user menu
+- For poll owner: Copy participants email addresses has moved to new user menu
+- Wording: use list and table layout instead of desktop and mobile
+- Changed icons for Table and list view
+- Move poll informations to icon bar (info icon)
+- Change registration dialog layout and optimizations on mobiles
+- Fix dark mode issue with confirmed options
+- Fix uniqueContraintsException when shifting dates
+
+### changes since 1.8.0 - beta1
+- [refactor] #1487 - changed error handling in watchPolls
+- [refactor] #1484 - some code maintenance
+- [security] #1471 - prevent html in description (follow up to #1443)
+
+ See also https://github.com/nextcloud/polls/milestone/33?closed=1
 
 ## [1.8.0 - beta1] - 2021-03-07
  - [ux] #1164 - Wording: use list and table layout instead of desktop and mobile (#1443)
@@ -22,8 +44,6 @@ All notable changes to this project will be documented in this file.
  - [fix] #1374 - Fix uniqueContraintsException when shifting dates
  - [refactor] #1397 - Changed migrations
  - and some more fixes and refactoring
-
- See also https://github.com/nextcloud/polls/milestone/33?closed=1
 
 ## [1.7.5 - bugfix release] - 2021-02-01
   - [fix] #1374 - fix uniqueContraintsException when shifting dates (backport)
