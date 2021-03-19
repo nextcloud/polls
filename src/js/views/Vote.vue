@@ -136,10 +136,10 @@ export default {
 		}),
 
 		...mapGetters({
-			options: 'options/rankedOptions',
 			closed: 'poll/closed',
-			viewMode: 'settings/viewMode',
+			options: 'options/rankedOptions',
 			pollTypeIcon: 'poll/typeIcon',
+			viewMode: 'settings/viewMode',
 		}),
 
 		showEmailEdit() {
