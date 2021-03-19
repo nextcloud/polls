@@ -25,6 +25,7 @@ const defaultAcl = () => {
 	return {
 		allowComment: false,
 		allowEdit: false,
+		allowAddOptions: false,
 		allowSeeResults: false,
 		allowSeeUsernames: false,
 		allowSubscribe: false,

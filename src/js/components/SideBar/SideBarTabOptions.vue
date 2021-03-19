@@ -23,6 +23,7 @@
 <template>
 	<div>
 		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
+		<ConfigProposals />
 		<OptionsDateAdd v-if="pollType === 'datePoll' && !pollIsClosed" />
 		<OptionsDateShift v-if="pollType === 'datePoll' && countOptions && !pollIsClosed" />
 		<OptionsDate v-if="pollType === 'datePoll'" />
@@ -40,12 +41,14 @@ import OptionsDateAdd from '../Options/OptionsDateAdd'
 import OptionsDateShift from '../Options/OptionsDateShift'
 import OptionsText from '../Options/OptionsText'
 import OptionsTextAdd from '../Options/OptionsTextAdd'
+import ConfigProposals from '../Configuration/ConfigProposals'
 
 export default {
 	name: 'SideBarTabOptions',
 
 	components: {
 		ConfigBox,
+		ConfigProposals,
 		OptionsDate,
 		OptionsDateAdd,
 		OptionsDateShift,
