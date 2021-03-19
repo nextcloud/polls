@@ -162,14 +162,6 @@ export default {
 
 <style lang="scss">
 
-.vote-table.table-view {
-	.vote-table__users::after, .vote-column::after {
-		content: "";
-		height: 8px;
-		order: 99;
-	}
-}
-
 .vote-table {
 	display: flex;
 	flex: 1;
@@ -270,6 +262,11 @@ export default {
 }
 
 .vote-table.table-view {
+	.vote-table__users::after, .vote-column::after {
+		content: '';
+		height: 8px;
+		order: 99;
+	}
 	.option-item .option-item__option--text {
 		text-align: center;
 	}
