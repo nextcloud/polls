@@ -27,6 +27,7 @@
 			class="user-item__avatar"
 			:is-guest="$route.name === 'publicVote'"
 			:menu-position="menuPosition"
+			:size="iconSize"
 			:show-user-status="showUserStatus"
 			:user="userId"
 			:display-name="name"
@@ -91,6 +92,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		iconSize: {
+			type: Number,
+			default: 32,
+		},
 	},
 
 	data() {
@@ -140,7 +145,7 @@ export default {
 <style lang="scss" scoped>
 .user-item {
 	display: flex;
-	flex: 1;
+	// flex: 1;
 	align-items: center;
 	max-width: 100%;
 	padding: 4px;

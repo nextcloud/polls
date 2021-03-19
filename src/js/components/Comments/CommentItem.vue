@@ -22,24 +22,20 @@
 
 <template>
 	<div class="comment-item">
-		<div class="comment-item_meta">
-			<UserItem v-bind="comment" />
-			<div class="date">
-				{{ dateCommentedRelative }}
-			</div>
-			<Actions v-if="comment.userId === acl.userId || acl.isOwner">
-				<ActionButton v-if="deleteTimeout" icon="icon-history" @click="cancelDeleteComment()">
-					{{ n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', countdown, { countdown }) }}
-				</ActionButton>
-				<ActionButton v-else icon="icon-delete" @click="deleteComment()">
-					{{ t('polls', 'Delete comment') }}
-				</ActionButton>
-			</Actions>
-		</div>
-
-		<div class="comment-item_content">
+		<UserItem v-bind="comment" :icon-size="48" hide-names />
+		<div class="comment-item__content">
+			<span class="comment-item__user"> {{ comment.displayName }}  </span>
 			{{ comment.comment }}
+			<span class="comment-item__date"> {{ dateCommentedRelative }} </span>
 		</div>
+		<Actions v-if="comment.userId === acl.userId || acl.isOwner">
+			<ActionButton v-if="deleteTimeout" icon="icon-history" @click="cancelDeleteComment()">
+				{{ n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', countdown, { countdown }) }}
+			</ActionButton>
+			<ActionButton v-else icon="icon-delete" @click="deleteComment()">
+				{{ t('polls', 'Delete comment') }}
+			</ActionButton>
+		</Actions>
 	</div>
 </template>
 
@@ -115,22 +111,28 @@ export default {
 
 <style scoped lang="scss">
 	.comment-item {
-		margin-bottom: 30px;
-	}
-
-	.comment-item_meta {
 		display: flex;
-		align-items: center;
+		align-items: start;
+		margin-bottom: 24px;
 	}
-
-	.date {
-		right: 0;
-		top: 5px;
+	.comment-item__user {
+		font-weight: bold;
+		&::after {
+			content: " – "
+		}
+	}
+	.comment-item__date {
 		opacity: 0.5;
+		font-size: 80%;
+		text-align: right;
+		&::before {
+			content: " ~ "
+		}
 	}
 
-	.comment-item_content {
-		margin-left: 53px;
+	.comment-item__content {
+		margin-left: 8px;
 		flex: 1 1;
+		padding-top: 8px;
 	}
 </style>

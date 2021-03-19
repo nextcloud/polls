@@ -21,9 +21,9 @@
   -->
 
 <template lang="html">
-	<div class="comment">
-		<UserItem v-bind="acl" />
-		<InputDiv v-model="comment" class="addComment" :placeholder="t('polls', 'New comment …')"
+	<div class="comment-add">
+		<UserItem v-bind="acl" :icon-size="48" hide-names />
+		<InputDiv v-model="comment" class="comment-add__input" :placeholder="t('polls', 'New comment …')"
 			@submit="writeComment()" />
 	</div>
 </template>
@@ -69,10 +69,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.comment {
-		margin-bottom: 30px;
-		.addComment {
-			margin-left: 40px;
+	.comment-add {
+		margin-bottom: 24px;
+		display: flex;
+		.comment-add__input {
+			margin-left: 8px;
+			flex: 1;
+			align-items: center;
 		}
 	}
 </style>
