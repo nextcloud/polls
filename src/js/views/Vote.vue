@@ -48,6 +48,12 @@
 			<MarkUpDescription />
 		</div>
 
+		<div v-if="acl.allowAddOptions && !acl.isOwner">
+			<h3>{{ t('polls', 'This poll is open for proposals') }}</h3>
+			<OptionsDateAdd v-if="poll.type === 'datePoll'" />
+			<OptionsTextAdd v-if="poll.type === 'textPoll'" />
+		</div>
+
 		<div class="area__main" :class="viewMode">
 			<VoteTable v-show="options.length" :view-mode="viewMode" />
 
@@ -92,6 +98,8 @@ import VoteTable from '../components/VoteTable/VoteTable'
 import ActionSortOptions from '../components/Actions/ActionSortOptions'
 import ActionChangeView from '../components/Actions/ActionChangeView'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
+import OptionsDateAdd from '../components/Options/OptionsDateAdd'
+import OptionsTextAdd from '../components/Options/OptionsTextAdd'
 
 export default {
 	name: 'Vote',
@@ -107,6 +115,8 @@ export default {
 		PollInformation,
 		PublicRegisterModal,
 		VoteTable,
+		OptionsDateAdd,
+		OptionsTextAdd,
 	},
 
 	data() {
