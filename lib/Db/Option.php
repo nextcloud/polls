@@ -32,23 +32,33 @@ use OCP\AppFramework\Db\Entity;
 /**
  * @method int getId()
  * @method void setId(integer $value)
- * @method int getPollId()
- * @method void setPollId(integer $value)
- * @method string getPollOptionText()
- * @method void setPollOptionText(string $value)
- * @method int getTimestamp()
- * @method void setTimestamp(integer $value)
- * @method int getOrder()
- * @method void setOrder(integer $value)
  * @method int getConfirmed()
  * @method void setConfirmed(integer $value)
  * @method int getDuration()
  * @method void setDuration(integer $value)
+ * @method int getOrder()
+ * @method void setOrder(integer $value)
+ * @method string getOwner()
+ * @method void setOwner(string $value)
+ * @method int getPollId()
+ * @method void setPollId(integer $value)
+ * @method string getPollOptionText()
+ * @method void setPollOptionText(string $value)
+ * @method int getReleased()
+ * @method void setReleased(int $value)
+ * @method int getTimestamp()
+ * @method void setTimestamp(integer $value)
  */
 class Option extends Entity implements JsonSerializable {
 
 	/** @var int $pollId */
 	protected $pollId;
+
+	/** @var string $owner */
+	protected $owner;
+
+	/** @var int $released */
+	protected $released;
 
 	/** @var string $pollOptionText */
 	protected $pollOptionText;
@@ -100,6 +110,8 @@ class Option extends Entity implements JsonSerializable {
 		return [
 			'id' => intval($this->id),
 			'pollId' => intval($this->pollId),
+			'owner' => $this->owner,
+			'released' => $this->released,
 			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
 			'timestamp' => intval($timestamp),
 			'order' => intval($timestamp ? $timestamp : $this->order),

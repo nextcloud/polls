@@ -56,6 +56,10 @@ use OCA\Polls\Model\User;
  * @method void setallowComment(integer $value)
  * @method int getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
+ * @method string getAllowProposals()
+ * @method void setAllowProposals(string $value)
+ * @method int getProposalsExpire()
+ * @method void setProposalsExpire(integer $value)
  * @method string getOptions()
  * @method void setOptions(string $value)
  * @method string getSettings()
@@ -81,6 +85,9 @@ class Poll extends Entity implements JsonSerializable {
 	public const SHOW_RESULTS_ALWAYS = 'always';
 	public const SHOW_RESULTS_CLOSED = 'closed';
 	public const SHOW_RESULTS_NEVER = 'never';
+	public const PROPOSAL_DISALLOW = 'disallow';
+	public const PROPOSAL_ALLOW = 'allow';
+	public const PROPOSAL_RELEASE = 'release';
 
 	/** @var string $type */
 	protected $type;
@@ -114,6 +121,12 @@ class Poll extends Entity implements JsonSerializable {
 
 	/** @var int $allowMaybe */
 	protected $allowMaybe;
+
+	/** @var string $allowProposals */
+	protected $allowProposals;
+
+	/** @var string $proposalsExpire */
+	protected $proposalsExpire;
 
 	/** @var string $options */
 	protected $options;
@@ -157,6 +170,8 @@ class Poll extends Entity implements JsonSerializable {
 			'anonymous' => intval($this->anonymous),
 			'allowComment' => intval($this->allowComment),
 			'allowMaybe' => intval($this->allowMaybe),
+			'allowProposals' => $this->allowProposals,
+			'proposalsExpire' => intval($this->proposalsExpire),
 			'settings' => $this->settings,
 			'voteLimit' => intval($this->voteLimit),
 			'optionLimit' => intval($this->optionLimit),
@@ -179,6 +194,8 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setAnonymous($array['anonymous'] ?? $this->getAnonymous());
 		$this->setallowComment($array['allowComment'] ?? $this->getallowComment());
 		$this->setAllowMaybe($array['allowMaybe'] ?? $this->getAllowMaybe());
+		$this->setAllowProposals($array['allowProposals'] ?? $this->getAllowProposals());
+		$this->setProposalsExpire($array['proposalsExpire'] ?? $this->getProposalsExpire());
 		$this->setVoteLimit($array['voteLimit'] ?? $this->getVoteLimit());
 		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());
 		$this->setShowResults($array['showResults'] ?? $this->getShowResults());
@@ -193,6 +210,13 @@ class Poll extends Entity implements JsonSerializable {
 		return (
 			   $this->getExpire() > 0
 			&& $this->getExpire() < time()
+		);
+	}
+
+	public function getProposalsExpired(): bool {
+		return (
+			   $this->getProposalsExpire() > 0
+			&& $this->getProposalsExpire() < time()
 		);
 	}
 
