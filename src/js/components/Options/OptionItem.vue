@@ -24,6 +24,8 @@
 	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, 'date-box': show === 'dateBox' }">
 		<div v-if="isDraggable" class="option-item__handle icon icon-handle" />
 
+		<slot name="icon" />
+
 		<div v-if="show === 'textBox'" v-tooltip.auto="optionTooltip" class="option-item__option--text">
 			{{ optionText }}
 		</div>
