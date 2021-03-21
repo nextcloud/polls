@@ -147,8 +147,10 @@ class OptionService {
 		$this->option->setPollId($pollId);
 		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
 		$this->setOption($timestamp, $pollOptionText, $duration);
-		$this->option->setOwner($this->acl->getUserId());
 
+		if (!$this->acl->getIsOwner()) {
+			$this->option->setOwner($this->acl->getUserId());
+		}
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
