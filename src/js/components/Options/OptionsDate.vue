@@ -29,6 +29,12 @@
 				:show-confirmed="true"
 				display="textBox"
 				tag="li">
+				<template #icon>
+					<OptionItemOwner v-if="acl.allowAddOptions"
+						:avatar-size="16"
+						:option="option"
+						class="owner" />
+				</template>
 				<template #actions>
 					<Actions v-if="acl.allowEdit" class="action">
 						<ActionButton icon="icon-delete" @click="removeOption(option)">
@@ -59,6 +65,7 @@
 import { mapGetters, mapState } from 'vuex'
 import OptionCloneDate from './OptionCloneDate'
 import OptionItem from './OptionItem'
+import OptionItemOwner from '../Options/OptionItemOwner'
 import moment from '@nextcloud/moment'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
@@ -73,6 +80,7 @@ export default {
 		Modal,
 		OptionCloneDate,
 		OptionItem,
+		OptionItemOwner,
 	},
 
 	mixins: [
@@ -125,6 +133,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+	.owner {
+		display: flex;
+	}
+
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
 		&:active,

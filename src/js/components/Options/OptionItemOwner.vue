@@ -32,6 +32,7 @@
 			:display-name="option.ownerDisplayName"
 			:is-no-user="option.ownerIsNoUser"
 			disable-menu
+			:size="avatarSize"
 			:tooltip-message="t('polls', '{displayName}\'s proposal', { displayName: option.ownerDisplayName })" />
 	</div>
 </template>
@@ -58,6 +59,10 @@ export default {
 		option: {
 			type: Object,
 			default: undefined,
+		},
+		avatarSize: {
+			type: Number,
+			default: 32,
 		},
 	},
 

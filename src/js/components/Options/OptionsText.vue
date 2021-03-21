@@ -27,6 +27,12 @@
 				:key="option.id"
 				:option="option"
 				:draggable="true">
+				<template #icon>
+					<OptionItemOwner v-if="acl.allowAddOptions"
+						:avatar-size="16"
+						:option="option"
+						class="owner" />
+				</template>
 				<template #actions>
 					<Actions v-if="acl.allowEdit" class="action">
 						<ActionButton icon="icon-delete" @click="removeOption(option)">
@@ -34,7 +40,7 @@
 						</ActionButton>
 					</Actions>
 					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton v-if="PollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+						<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
 							@click="confirmOption(option)">
 							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 						</ActionButton>
@@ -50,6 +56,7 @@ import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import OptionItem from './OptionItem'
+import OptionItemOwner from '../Options/OptionItemOwner'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
@@ -60,6 +67,7 @@ export default {
 		ActionButton,
 		draggable,
 		OptionItem,
+		OptionItemOwner,
 	},
 
 	mixins: [
@@ -80,7 +88,7 @@ export default {
 		}),
 
 		...mapGetters({
-			PollIsClosed: 'poll/closed',
+			pollIsClosed: 'poll/closed',
 			countOptions: 'options/count',
 		}),
 
