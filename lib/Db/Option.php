@@ -28,6 +28,7 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\IUser;
 
 /**
  * @method int getId()
@@ -111,6 +112,8 @@ class Option extends Entity implements JsonSerializable {
 			'id' => intval($this->id),
 			'pollId' => intval($this->pollId),
 			'owner' => $this->owner,
+			'ownerDisplayName' => $this->getDisplayName(),
+			'ownerIsNoUser' => !$this->ownerIsUser(),
 			'released' => $this->released,
 			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
 			'timestamp' => intval($timestamp),
@@ -125,5 +128,14 @@ class Option extends Entity implements JsonSerializable {
 			'votes' => $this->votes,
 			'isBookedUp' => $this->isBookedUp,
 		];
+	}
+
+	private function getDisplayName(): string {
+		return \OC::$server->getUserManager()->get($this->owner) instanceof IUser
+			? \OC::$server->getUserManager()->get($this->owner)->getDisplayName()
+			: $this->owner;
+	}
+	private function ownerIsUser(): string {
+		return !!\OC::$server->getUserManager()->get($this->owner) instanceof IUser;
 	}
 }

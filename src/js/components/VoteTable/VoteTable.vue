@@ -36,7 +36,7 @@
 					</ActionButton>
 				</Actions>
 			</UserItem>
-
+			<div v-if="acl.allowAddOptions" class="owner" />
 			<div v-if="acl.allowEdit && closed" class="confirm" />
 		</div>
 
@@ -55,7 +55,7 @@
 					:class="{currentuser: participant.userId === acl.userId}">
 					<VoteItem :user-id="participant.userId" :option="option" />
 				</div>
-
+				<OptionItemOwner v-if="acl.allowAddOptions" :option="option" class="owner" />
 				<Actions v-if="acl.allowEdit && closed" class="action confirm">
 					<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 						@click="confirmOption(option)">
@@ -85,6 +85,7 @@ import orderBy from 'lodash/orderBy'
 import CalendarPeek from '../Calendar/CalendarPeek'
 import Counter from '../Options/Counter'
 import Confirmation from '../Options/Confirmation'
+import OptionItemOwner from '../Options/OptionItemOwner'
 import UserMenu from '../User/UserMenu'
 import VoteItem from './VoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
@@ -102,6 +103,7 @@ export default {
 		UserMenu,
 		VoteTableHeaderItem,
 		VoteItem,
+		OptionItemOwner,
 	},
 
 	mixins: [confirmOption],
@@ -200,6 +202,12 @@ export default {
 	.confirm {
 		height: 45px;
 		order: 20;
+	}
+
+	.owner {
+		display: flex;
+		height: 56px;
+		order: 19;
 	}
 
 	.spacer {
