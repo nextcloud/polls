@@ -21,32 +21,29 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Add a date option')" icon-class="icon-add">
-		<DatetimePicker v-model="pickedOption"
-			v-bind="optionDatePicker"
-			:open.sync="pickerOpen"
-			style="width: inherit;"
-			@pick="pickedDate">
-			<template slot="footer">
-				<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
-				<button v-if="!showTimePanel" class="mx-btn" @click="toggleTimePanel">
-					{{ t('polls', 'Add time') }}
-				</button>
-				<button v-else class="mx-btn" @click="toggleTimePanel">
-					{{ t('polls', 'Remove time') }}
-				</button>
-				<button class="mx-btn" @click="addOption">
-					{{ t('polls', 'OK') }}
-				</button>
-			</template>
-		</DateTimePicker>
-	</ConfigBox>
+	<DatetimePicker v-model="pickedOption"
+		v-bind="optionDatePicker"
+		:open.sync="pickerOpen"
+		style="width: inherit;"
+		@pick="pickedDate">
+		<template slot="footer">
+			<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
+			<button v-if="!showTimePanel" class="mx-btn" @click="toggleTimePanel">
+				{{ t('polls', 'Add time') }}
+			</button>
+			<button v-else class="mx-btn" @click="toggleTimePanel">
+				{{ t('polls', 'Remove time') }}
+			</button>
+			<button class="mx-btn" @click="addOption">
+				{{ t('polls', 'OK') }}
+			</button>
+		</template>
+	</DateTimePicker>
 </template>
 
 <script>
 
 import CheckBoxDiv from '../Base/CheckBoxDiv'
-import ConfigBox from '../Base/ConfigBox'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
 
@@ -55,7 +52,6 @@ export default {
 
 	components: {
 		CheckBoxDiv,
-		ConfigBox,
 		DatetimePicker,
 	},
 

@@ -79,6 +79,14 @@ const mutations = {
 }
 
 const getters = {
+	typeIcon: (state) => {
+		if (state.type === 'textPoll') {
+			return 'icon-toggle-filelist'
+		} else {
+			return 'icon-calendar-000'
+		}
+	},
+
 	answerSequence: (state) => {
 		if (state.allowMaybe) {
 			return ['no', 'yes', 'maybe']

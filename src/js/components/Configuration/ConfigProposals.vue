@@ -22,11 +22,9 @@
 
 <template>
 	<div>
-		<ConfigBox :title="t('polls', 'Allow Proposals from users')" icon-class="icon-category-customization">
-			<RadioGroupDiv v-model="allowProposals" :options="allowProposalsOptions" />
-			<CheckBoxDiv v-show="allowProposals !== 'disallow'" v-model="pollExpiration" :label="t('polls', 'Closing Date')" />
-			<DatetimePicker v-show="pollExpiration && allowProposals !== 'disallow'" v-model="pollExpire" v-bind="expirationDatePicker" />
-		</ConfigBox>
+		<RadioGroupDiv v-model="allowProposals" :options="allowProposalsOptions" />
+		<CheckBoxDiv v-show="allowProposals !== 'disallow'" v-model="pollExpiration" :label="t('polls', 'Closing Date')" />
+		<DatetimePicker v-show="pollExpiration && allowProposals !== 'disallow'" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
@@ -37,7 +35,6 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
-import ConfigBox from '../Base/ConfigBox'
 import CheckBoxDiv from '../Base/CheckBoxDiv'
 import RadioGroupDiv from '../Base/RadioGroupDiv'
 
@@ -45,7 +42,6 @@ export default {
 	name: 'ConfigProposals',
 
 	components: {
-		ConfigBox,
 		CheckBoxDiv,
 		DatetimePicker,
 		RadioGroupDiv,
