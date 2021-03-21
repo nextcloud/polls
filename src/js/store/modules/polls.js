@@ -47,18 +47,18 @@ const state = {
 		},
 		{
 			id: 'hidden',
-			title: t('polls', 'Hidden'),
+			title: t('polls', 'Hidden polls'),
 			titleExt: t('polls', 'Hidden polls'),
 			description: t('polls', 'All hidden polls, to which you have access.'),
-			icon: 'icon-polls',
+			icon: 'icon-polls-hidden-poll',
 			pinned: false,
 		},
 		{
 			id: 'participated',
-			title: t('polls', 'Participated by me'),
-			titleExt: t('polls', 'Participated by me'),
+			title: t('polls', 'Participated'),
+			titleExt: t('polls', 'Participated'),
 			description: t('polls', 'All polls, where you placed a vote.'),
-			icon: 'icon-polls',
+			icon: 'icon-polls-confirmed',
 			pinned: false,
 		},
 		{

@@ -37,7 +37,7 @@
 					:class="expiryClass" />
 				<Badge v-if="!closed && poll.expire"
 					:title="t('polls', 'Closing {relativeExpirationTime}', {relativeExpirationTime: timeExpirationRelative})"
-					icon="icon-calendar-000"
+					icon="icon-calendar"
 					:class="expiryClass" />
 				<Badge v-if="poll.deleted"
 					:title="t('polls', 'Deleted')"
@@ -57,7 +57,7 @@
 		<div class="area__main" :class="viewMode">
 			<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-			<EmptyContent v-if="!options.length" icon="icon-toggle-filelist">
+			<EmptyContent v-if="!options.length" :icon="pollTypeIcon">
 				{{ t('polls', 'No vote options available') }}
 				<template #desc>
 					<button v-if="acl.allowEdit" @click="openOptions">
@@ -139,6 +139,7 @@ export default {
 			options: 'options/rankedOptions',
 			closed: 'poll/closed',
 			viewMode: 'settings/viewMode',
+			pollTypeIcon: 'poll/typeIcon',
 		}),
 
 		showEmailEdit() {

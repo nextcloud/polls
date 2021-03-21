@@ -22,41 +22,32 @@
 
 <template>
 	<div>
-		<ConfigBox v-if="countOptions" :title="t('polls', 'Available Options')" icon-class="icon-calendar-000">
-			<transition-group is="ul">
-				<OptionItem v-for="(option) in options"
-					:key="option.id"
-					:option="option"
-					:show-confirmed="true"
-					display="textBox"
-					tag="li">
-					<template #actions>
-						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton icon="icon-delete" @click="removeOption(option)">
-								{{ t('polls', 'Delete option') }}
-							</ActionButton>
-						</Actions>
+		<transition-group is="ul">
+			<OptionItem v-for="(option) in options"
+				:key="option.id"
+				:option="option"
+				:show-confirmed="true"
+				display="textBox"
+				tag="li">
+				<template #actions>
+					<Actions v-if="acl.allowEdit" class="action">
+						<ActionButton icon="icon-delete" @click="removeOption(option)">
+							{{ t('polls', 'Delete option') }}
+						</ActionButton>
+					</Actions>
 
-						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="!pollIsClosed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
-								{{ t('polls', 'Clone option') }}
-							</ActionButton>
-							<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
-								@click="confirmOption(option)">
-								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-							</ActionButton>
-						</Actions>
-					</template>
-				</OptionItem>
-			</transition-group>
-		</ConfigBox>
-
-		<EmptyContent v-else icon="icon-calendar">
-			{{ t('polls', 'No vote options') }}
-			<template #desc>
-				{{ t('polls', 'Add some!') }}
-			</template>
-		</EmptyContent>
+					<Actions v-if="acl.allowEdit" class="action">
+						<ActionButton v-if="!pollIsClosed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+							{{ t('polls', 'Clone option') }}
+						</ActionButton>
+						<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+							@click="confirmOption(option)">
+							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+						</ActionButton>
+					</Actions>
+				</template>
+			</OptionItem>
+		</transition-group>
 
 		<Modal v-if="cloneModal" :can-close="false">
 			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
@@ -67,10 +58,9 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import OptionCloneDate from './OptionCloneDate'
-import ConfigBox from '../Base/ConfigBox'
 import OptionItem from './OptionItem'
 import moment from '@nextcloud/moment'
-import { Actions, ActionButton, Modal, EmptyContent } from '@nextcloud/vue'
+import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 import { dateUnits } from '../../mixins/dateMixins'
 
@@ -80,10 +70,8 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		ConfigBox,
-		EmptyContent,
-		OptionCloneDate,
 		Modal,
+		OptionCloneDate,
 		OptionItem,
 	},
 

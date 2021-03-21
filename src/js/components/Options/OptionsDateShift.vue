@@ -21,28 +21,25 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
-		<div>
-			<div class="selectUnit">
-				<InputDiv v-model="shift.step"
-					use-num-modifiers
-					@add="shift.step++"
-					@subtract="shift.step--" />
-				<Multiselect v-model="shift.unit"
-					:options="dateUnits"
-					label="name"
-					track-by="value" />
-				<ButtonDiv submit
-					@click="shiftDates(shift)" />
-			</div>
+	<div>
+		<div class="selectUnit">
+			<InputDiv v-model="shift.step"
+				use-num-modifiers
+				@add="shift.step++"
+				@subtract="shift.step--" />
+			<Multiselect v-model="shift.unit"
+				:options="dateUnits"
+				label="name"
+				track-by="value" />
+			<ButtonDiv submit
+				@click="shiftDates(shift)" />
 		</div>
-	</ConfigBox>
+	</div>
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
-import ConfigBox from '../Base/ConfigBox'
 import InputDiv from '../Base/InputDiv'
 import moment from '@nextcloud/moment'
 import { Multiselect } from '@nextcloud/vue'
@@ -52,7 +49,6 @@ export default {
 	name: 'OptionsDateShift',
 
 	components: {
-		ConfigBox,
 		InputDiv,
 		Multiselect,
 	},

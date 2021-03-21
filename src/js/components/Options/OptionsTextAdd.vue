@@ -21,22 +21,18 @@
   -->
 
 <template>
-	<ConfigBox v-if="!closed" :title="t('polls', 'Add a new text option')" icon-class="icon-add">
-		<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
-			@submit="addOption()" />
-	</ConfigBox>
+	<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
+		@submit="addOption()" />
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import ConfigBox from '../Base/ConfigBox'
 import InputDiv from '../Base/InputDiv'
 
 export default {
 	name: 'OptionsTextAdd',
 
 	components: {
-		ConfigBox,
 		InputDiv,
 	},
 
