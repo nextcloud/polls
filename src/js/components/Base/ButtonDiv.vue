@@ -97,7 +97,6 @@ export default {
 	.simple {
 		border: none;
 		background-color: transparent;
-		text-align: left;
 		border-radius: 0;
 		opacity: 0.7;
 		text-align: left;
