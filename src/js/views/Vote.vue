@@ -24,21 +24,9 @@
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="header-actions">
 			<PollInformation />
-			<Actions>
-				<ActionButton :icon="sortIcon" @click="ranked = !ranked">
-					{{ orderCaption }}
-				</ActionButton>
-			</Actions>
-			<Actions>
-				<ActionButton :icon="toggleViewIcon" @click="toggleView()">
-					{{ viewCaption }}
-				</ActionButton>
-			</Actions>
-			<Actions>
-				<ActionButton v-if="acl.allowEdit || poll.allowComment" icon="icon-menu-sidebar" @click="toggleSideBar()">
-					{{ t('polls', 'Toggle Sidebar') }}
-				</ActionButton>
-			</Actions>
+			<ActionSortOptions />
+			<ActionChangeView />
+			<ActionToggleSidebar v-if="acl.allowEdit || poll.allowComment" />
 		</div>
 		<div class="area__header">
 			<h2 class="title">
@@ -61,7 +49,7 @@
 		</div>
 
 		<div class="area__main" :class="viewMode">
-			<VoteTable v-show="options.length" :view-mode="viewMode" :ranked="ranked" />
+			<VoteTable v-show="options.length" :view-mode="viewMode" />
 
 			<EmptyContent v-if="!options.length" icon="icon-toggle-filelist">
 				{{ t('polls', 'No vote options available') }}
@@ -91,7 +79,7 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
+import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
@@ -101,12 +89,16 @@ import LoadingOverlay from '../components/Base/LoadingOverlay'
 import PollInformation from '../components/Poll/PollInformation'
 import PublicRegisterModal from '../components/Poll/PublicRegisterModal'
 import VoteTable from '../components/VoteTable/VoteTable'
+import ActionSortOptions from '../components/Actions/ActionSortOptions'
+import ActionChangeView from '../components/Actions/ActionChangeView'
+import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
 
 export default {
 	name: 'Vote',
 	components: {
-		Actions,
-		ActionButton,
+		ActionChangeView,
+		ActionSortOptions,
+		ActionToggleSidebar,
 		AppContent,
 		Badge,
 		MarkUpDescription,
@@ -121,9 +113,6 @@ export default {
 		return {
 			delay: 50,
 			isLoading: false,
-			manualViewDatePoll: '',
-			manualViewTextPoll: '',
-			ranked: false,
 			voteSaved: false,
 		}
 	},
@@ -132,51 +121,18 @@ export default {
 		...mapState({
 			poll: state => state.poll,
 			acl: state => state.poll.acl,
-			options: state => state.options.list,
 			share: state => state.share,
 			settings: state => state.settings,
 		}),
 
 		...mapGetters({
+			options: 'options/rankedOptions',
 			closed: 'poll/closed',
+			viewMode: 'settings/viewMode',
 		}),
 
 		showEmailEdit() {
 			return ['email', 'contact', 'external'].includes(this.share.type)
-		},
-
-		viewTextPoll() {
-			if (this.manualViewTextPoll) {
-				return this.manualViewTextPoll
-			} else {
-				if (window.innerWidth > 480) {
-					return this.settings.user.defaultViewTextPoll
-				} else {
-					return 'list-view'
-				}
-			}
-		},
-
-		viewDatePoll() {
-			if (this.manualViewDatePoll) {
-				return this.manualViewDatePoll
-			} else {
-				if (window.innerWidth > 480) {
-					return this.settings.user.defaultViewDatePoll
-				} else {
-					return 'list-view'
-				}
-			}
-		},
-
-		viewMode() {
-			if (this.poll.type === 'textPoll') {
-				return this.viewTextPoll
-			} else if (this.poll.type === 'datePoll') {
-				return this.viewDatePoll
-			} else {
-				return 'table-view'
-			}
 		},
 
 		windowTitle() {
@@ -207,51 +163,12 @@ export default {
 			}
 		},
 
-		viewCaption() {
-			if (this.viewMode === 'table-view') {
-				return t('polls', 'Switch to list view')
-			} else {
-				return t('polls', 'Switch to table view')
-			}
-		},
-		orderCaption() {
-			if (this.ranked) {
-				if (this.poll.type === 'datePoll') {
-					return t('polls', 'Date order')
-				} else {
-					return t('polls', 'Original order')
-				}
-			} else {
-				return t('polls', 'Ranked order')
-			}
-		},
-
 		showRegisterModal() {
 			return (this.$route.name === 'publicVote'
 				&& ['public', 'email', 'contact'].includes(this.share.type)
 				&& !this.closed
 				&& this.poll.id
 			)
-		},
-
-		sortIcon() {
-			if (this.ranked) {
-				if (this.poll.type === 'datePoll') {
-					return 'icon-calendar-000'
-				} else {
-					return 'icon-toggle-filelist'
-				}
-			} else {
-				return 'icon-quota'
-			}
-		},
-
-		toggleViewIcon() {
-			if (this.viewMode === 'table-view') {
-				return 'icon-list-view'
-			} else {
-				return 'icon-table-view'
-			}
 		},
 
 	},
@@ -287,35 +204,6 @@ export default {
 	methods: {
 		openOptions() {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
-		},
-
-		getNextViewMode() {
-			if (this.settings.viewModes.indexOf(this.viewMode) < 0) {
-				return this.settings.viewModes[1]
-			} else {
-				return this.settings.viewModes[(this.settings.viewModes.indexOf(this.viewMode) + 1) % this.settings.viewModes.length]
-			}
-		},
-
-		toggleSideBar() {
-			emit('toggle-sidebar')
-		},
-
-		toggleView() {
-			emit('transitions-off', 500)
-			if (this.poll.type === 'datePoll') {
-				if (this.manualViewDatePoll) {
-					this.manualViewDatePoll = ''
-				} else {
-					this.manualViewDatePoll = this.getNextViewMode()
-				}
-			} else if (this.poll.type === 'textPoll') {
-				if (this.manualViewTextPoll) {
-					this.manualViewTextPoll = ''
-				} else {
-					this.manualViewTextPoll = this.getNextViewMode()
-				}
-			}
 		},
 
 		async submitEmailAddress(emailAddress) {

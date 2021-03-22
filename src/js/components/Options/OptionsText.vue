@@ -23,9 +23,9 @@
 <template>
 	<div>
 		<ConfigBox v-if="countOptions" :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
-			<draggable v-model="sortOptions">
+			<draggable v-model="reOrderedOptions">
 				<transition-group>
-					<OptionItem v-for="(option) in sortOptions"
+					<OptionItem v-for="(option) in reOrderedOptions"
 						:key="option.id"
 						:option="option"
 						:draggable="true">
@@ -98,7 +98,7 @@ export default {
 			countOptions: 'options/count',
 		}),
 
-		sortOptions: {
+		reOrderedOptions: {
 			get() {
 				return this.options
 			},
