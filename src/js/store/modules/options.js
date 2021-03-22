@@ -22,10 +22,12 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import orderBy from 'lodash/orderBy'
 
 const defaultOptions = () => {
 	return {
 		list: [],
+		ranked: false,
 	}
 }
 
@@ -47,6 +49,14 @@ const mutations = {
 			item.order = i + 1
 		})
 		state.list = payload.options
+	},
+
+	setRankOrder(state, payload) {
+		if (payload) {
+			state.ranked = payload
+		} else {
+			state.ranked = !state.ranked
+		}
 	},
 
 	delete(state, payload) {
@@ -79,6 +89,10 @@ const mutations = {
 const getters = {
 	count: (state) => {
 		return state.list.length
+	},
+
+	rankedOptions: (state) => {
+		return orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc')
 	},
 
 	confirmed: state => {

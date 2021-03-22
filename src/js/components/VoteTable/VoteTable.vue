@@ -41,7 +41,7 @@
 		</div>
 
 		<transition-group name="list" tag="div" class="vote-table__votes">
-			<div v-for="(option) in rankedOptions" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
+			<div v-for="(option) in options" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
 				<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 
 				<Confirmation v-if="option.confirmed && closed" :option="option" />
@@ -81,7 +81,7 @@
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
-import orderBy from 'lodash/orderBy'
+import ButtonDiv from '../Base/ButtonDiv'
 import CalendarPeek from '../Calendar/CalendarPeek'
 import Counter from '../Options/Counter'
 import Confirmation from '../Options/Confirmation'
@@ -95,6 +95,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ButtonDiv,
 		CalendarPeek,
 		Counter,
 		Confirmation,
@@ -111,10 +112,6 @@ export default {
 			type: String,
 			default: 'table-view',
 		},
-		ranked: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	data() {
@@ -130,18 +127,15 @@ export default {
 			poll: state => state.poll,
 			share: state => state.share,
 			settings: state => state.settings.user,
-			options: state => state.options.list,
 		}),
 
 		...mapGetters({
 			hideResults: 'poll/hideResults',
 			closed: 'poll/closed',
 			participants: 'poll/participants',
+			options: 'options/rankedOptions',
 		}),
 
-		rankedOptions() {
-			return orderBy(this.options, this.ranked ? 'rank' : 'order', 'asc')
-		},
 	},
 
 	methods: {
@@ -161,7 +155,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .vote-table {
 	display: flex;
 	flex: 1;

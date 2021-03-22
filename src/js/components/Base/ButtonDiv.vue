@@ -42,6 +42,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		simple: {
+			type: Boolean,
+			default: false,
+		},
 		tag: {
 			type: String,
 			default: 'button',
@@ -68,6 +72,8 @@ export default {
 		buttonStyle() {
 			if (this.submit) {
 				return 'submit'
+			} else if (this.simple) {
+				return 'simple'
 			} else {
 				return 'button'
 			}
@@ -77,16 +83,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.withIcon {
+		padding-left: 34px;
+		background-position: 12px center;
+	}
+
 	.button {
 		display: inline-block;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
 
+	.simple {
+		border: none;
+		background-color: transparent;
+		text-align: left;
+		border-radius: 0;
+		opacity: 0.7;
+		text-align: left;
+		cursor: pointer;
 		&.withIcon {
-			padding-left: 34px;
-			background-position: 12px center;
+			padding-left: 32px;
+			background-position: 0 center;
 		}
-
+		&:hover {
+			background-color: var(--color-background-dark)
+		}
 	}
 
 	.submit {
