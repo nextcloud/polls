@@ -45,7 +45,6 @@ use OCA\Polls\Model\User;
 
 class MailService {
 
-
 	/** @var LoggerInterface */
 	private $logger;
 

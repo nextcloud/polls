@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use Psr\Log\LoggerInterface;
 use DateTime;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
@@ -41,6 +42,12 @@ use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
 
 class OptionService {
+
+	/** @var LoggerInterface */
+	private $logger;
+
+	/** @var string */
+	private $appName;
 
 	/** @var Acl */
 	private $acl;
@@ -73,6 +80,8 @@ class OptionService {
 	private $watchService;
 
 	public function __construct(
+		string $AppName,
+		LoggerInterface $logger,
 		Acl $acl,
 		Option $option,
 		OptionMapper $optionMapper,
@@ -80,6 +89,8 @@ class OptionService {
 		VoteMapper $voteMapper,
 		WatchService $watchService
 	) {
+		$this->appName = $AppName;
+		$this->logger = $logger;
 		$this->acl = $acl;
 		$this->option = $option;
 		$this->optionMapper = $optionMapper;
@@ -253,7 +264,7 @@ class OptionService {
 			try {
 				$this->optionMapper->insert($clonedOption);
 			} catch (UniqueConstraintViolationException $e) {
-				\OC::$server->getLogger()->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option alredy exists.');
+				$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option alredy exists.');
 			}
 		}
 		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
