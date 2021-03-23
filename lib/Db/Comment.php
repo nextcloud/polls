@@ -64,7 +64,7 @@ class Comment extends Entity implements JsonSerializable {
 	public function __construct() {
 		$this->addType('pollId', 'integer');
 		$this->addType('timestamp', 'integer');
-    }
+	}
 
 	public function jsonSerialize() {
 		return [

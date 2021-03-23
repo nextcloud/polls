@@ -105,7 +105,7 @@ class Option extends Entity implements JsonSerializable {
 		$this->addType('order', 'integer');
 		$this->addType('confirmed', 'integer');
 		$this->addType('duration', 'integer');
-    }
+	}
 
 	public function jsonSerialize() {
 		return [
@@ -132,7 +132,7 @@ class Option extends Entity implements JsonSerializable {
 
 	public function getPollOptionText(): string {
 		if ($this->timestamp && $this->duration) {
-				return date('c', $this->timestamp) . ' - ' . date('c', $this->timestamp + $this->duration);
+			return date('c', $this->timestamp) . ' - ' . date('c', $this->timestamp + $this->duration);
 		} elseif ($this->timestamp && !$this->duration) {
 			return date('c', $this->timestamp);
 		} else {

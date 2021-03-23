@@ -168,7 +168,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->addType('adminAccess', 'integer');
 		$this->addType('important', 'integer');
 		$this->addType('hideBookedUp', 'integer');
-    }
+	}
 
 	public function jsonSerialize() {
 		return [
