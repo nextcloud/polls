@@ -98,28 +98,28 @@ class Option extends Entity implements JsonSerializable {
 	/** @var bool $isBookedUp */
 	public $isBookedUp = false;
 
+	public function __construct() {
+		$this->addType('released', 'integer');
+		$this->addType('pollId', 'integer');
+		$this->addType('timestamp', 'integer');
+		$this->addType('order', 'integer');
+		$this->addType('confirmed', 'integer');
+		$this->addType('duration', 'integer');
+    }
 
 	public function jsonSerialize() {
-		if (intval($this->timestamp) > 0) {
-			$timestamp = $this->timestamp;
-		} elseif (strtotime($this->pollOptionText)) {
-			$timestamp = strtotime($this->pollOptionText);
-		} else {
-			$timestamp = 0;
-		}
-
 		return [
-			'id' => intval($this->id),
-			'pollId' => intval($this->pollId),
+			'id' => $this->id,
+			'pollId' => $this->pollId,
 			'owner' => $this->owner,
 			'ownerDisplayName' => $this->getDisplayName(),
-			'ownerIsNoUser' => !$this->ownerIsUser(),
+			'ownerIsNoUser' => $this->getOwnerIsNoUser(),
 			'released' => $this->released,
-			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
-			'timestamp' => intval($timestamp),
-			'order' => intval($timestamp ? $timestamp : $this->order),
-			'confirmed' => intval($this->confirmed),
-			'duration' => intval($this->duration),
+			'pollOptionText' => htmlspecialchars_decode($this->getPollOptionText()),
+			'timestamp' => $this->timestamp,
+			'order' => $this->timestamp ?? $this->order,
+			'confirmed' => $this->confirmed,
+			'duration' => $this->duration,
 			'rank' => $this->rank,
 			'no' => $this->no,
 			'yes' => $this->yes,
@@ -130,12 +130,23 @@ class Option extends Entity implements JsonSerializable {
 		];
 	}
 
+	public function getPollOptionText(): string {
+		if ($this->timestamp && $this->duration) {
+				return date('c', $this->timestamp) . ' - ' . date('c', $this->timestamp + $this->duration);
+		} elseif ($this->timestamp && !$this->duration) {
+			return date('c', $this->timestamp);
+		} else {
+			return $this->pollOptionText;
+		}
+	}
+
 	private function getDisplayName(): string {
 		return \OC::$server->getUserManager()->get($this->owner) instanceof IUser
 			? \OC::$server->getUserManager()->get($this->owner)->getDisplayName()
 			: $this->owner;
 	}
-	private function ownerIsUser(): string {
-		return !!\OC::$server->getUserManager()->get($this->owner) instanceof IUser;
+	private function getOwnerIsNoUser(): bool {
+		\OC::$server->getLogger()->alert(json_encode(!\OC::$server->getUserManager()->get($this->owner) instanceof IUser));
+		return !\OC::$server->getUserManager()->get($this->owner) instanceof IUser;
 	}
 }
