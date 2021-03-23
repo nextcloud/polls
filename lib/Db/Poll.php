@@ -155,31 +155,46 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $hideBookedUp*/
 	protected $hideBookedUp;
 
+	public function __construct() {
+		$this->addType('created', 'integer');
+		$this->addType('expire', 'integer');
+		$this->addType('deleted', 'integer');
+		$this->addType('anonymous', 'integer');
+		$this->addType('allowComment', 'integer');
+		$this->addType('allowMaybe', 'integer');
+		$this->addType('proposalsExpire', 'integer');
+		$this->addType('voteLimit', 'integer');
+		$this->addType('optionLimit', 'integer');
+		$this->addType('adminAccess', 'integer');
+		$this->addType('important', 'integer');
+		$this->addType('hideBookedUp', 'integer');
+    }
+
 	public function jsonSerialize() {
 		return [
-			'id' => intval($this->id),
+			'id' => $this->id,
 			'type' => $this->type,
 			'title' => $this->title,
 			'description' => $this->description,
 			'descriptionSafe' => $this->getDescriptionSafe(),
 			'owner' => $this->owner,
-			'created' => intval($this->created),
-			'expire' => intval($this->expire),
-			'deleted' => intval($this->deleted),
+			'created' => $this->created,
+			'expire' => $this->expire,
+			'deleted' => $this->deleted,
 			'access' => $this->access,
-			'anonymous' => intval($this->anonymous),
-			'allowComment' => intval($this->allowComment),
-			'allowMaybe' => intval($this->allowMaybe),
+			'anonymous' => $this->anonymous,
+			'allowComment' => $this->allowComment,
+			'allowMaybe' => $this->allowMaybe,
 			'allowProposals' => $this->allowProposals,
-			'proposalsExpire' => intval($this->proposalsExpire),
+			'proposalsExpire' => $this->proposalsExpire,
 			'settings' => $this->settings,
-			'voteLimit' => intval($this->voteLimit),
-			'optionLimit' => intval($this->optionLimit),
+			'voteLimit' => $this->voteLimit,
+			'optionLimit' => $this->optionLimit,
 			'showResults' => $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults,
-			'adminAccess' => intVal($this->adminAccess),
+			'adminAccess' => $this->adminAccess,
 			'ownerDisplayName' => $this->getDisplayName(),
-			'important' => intVal($this->important),
-			'hideBookedUp' => intVal($this->hideBookedUp)
+			'important' => $this->important,
+			'hideBookedUp' => $this->hideBookedUp
 		];
 	}
 

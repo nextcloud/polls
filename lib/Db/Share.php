@@ -85,15 +85,20 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $displayName */
 	protected $displayName;
 
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+		$this->addType('invitationSent', 'integer');
+	}
+
 	public function jsonSerialize() {
 		return [
-			'id' => intval($this->id),
+			'id' => $this->id,
 			'token' => $this->token,
 			'type' => $this->type,
-			'pollId' => intval($this->pollId),
+			'pollId' => $this->pollId,
 			'userId' => $this->getUserId(),
 			'emailAddress' => $this->emailAddress,
-			'invitationSent' => intval($this->invitationSent),
+			'invitationSent' => $this->invitationSent,
 			'displayName' => $this->displayName,
 			'isNoUser' => !($this->type === self::TYPE_USER),
 			'URL' => $this->getURL()
