@@ -146,7 +146,6 @@ class Option extends Entity implements JsonSerializable {
 			: $this->owner;
 	}
 	private function getOwnerIsNoUser(): bool {
-		\OC::$server->getLogger()->alert(json_encode(!\OC::$server->getUserManager()->get($this->owner) instanceof IUser));
 		return !\OC::$server->getUserManager()->get($this->owner) instanceof IUser;
 	}
 }
