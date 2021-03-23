@@ -7,6 +7,7 @@ OC.L10N.register(
     "User" : "Корисник",
     "Polls" : "Анкети",
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
+    "Toggle Sidebar" : "Отвори странична лента",
     "Conflict" : "Конфликт",
     "New comment …" : "Нов коментар ...",
     "Delete comment" : "Избриши коментар",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Description" : "Опис",
     "No" : "Не",
     "Yes" : "Да",
-    "Toggle Sidebar" : "Отвори странична лента",
     "Day" : "Ден",
     "Month" : "Месец",
     "Year" : "Година"
