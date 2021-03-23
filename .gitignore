@@ -13,7 +13,6 @@ vendor
 Thumbs.db
 yarn-error.log
 *.cmd
-*.lock
 *.iml
 *.ntvs*
 *.njsproj
