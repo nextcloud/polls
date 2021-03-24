@@ -140,7 +140,7 @@ class Option extends Entity implements JsonSerializable {
 		}
 	}
 
-	private function getDisplayName(): string {
+	private function getDisplayName(): ?string {
 		return \OC::$server->getUserManager()->get($this->owner) instanceof IUser
 			? \OC::$server->getUserManager()->get($this->owner)->getDisplayName()
 			: $this->owner;
