@@ -45,13 +45,10 @@
 					class="error" />
 			</h2>
 
-			<MarkUpDescription />
-		</div>
-
-		<div v-if="acl.allowAddOptions && !acl.isOwner">
-			<h3>{{ t('polls', 'This poll is open for proposals') }}</h3>
-			<OptionsDateAdd v-if="poll.type === 'datePoll'" />
-			<OptionsTextAdd v-if="poll.type === 'textPoll'" />
+			<div class="area__header__description">
+				<MarkUpDescription />
+				<OptionProposals v-if="acl.allowAddOptions" />
+			</div>
 		</div>
 
 		<div class="area__main" :class="viewMode">
@@ -98,8 +95,7 @@ import VoteTable from '../components/VoteTable/VoteTable'
 import ActionSortOptions from '../components/Actions/ActionSortOptions'
 import ActionChangeView from '../components/Actions/ActionChangeView'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
-import OptionsDateAdd from '../components/Options/OptionsDateAdd'
-import OptionsTextAdd from '../components/Options/OptionsTextAdd'
+import OptionProposals from '../components/Options/OptionProposals'
 
 export default {
 	name: 'Vote',
@@ -115,8 +111,7 @@ export default {
 		PollInformation,
 		PublicRegisterModal,
 		VoteTable,
-		OptionsDateAdd,
-		OptionsTextAdd,
+		OptionProposals,
 	},
 
 	data() {
@@ -231,12 +226,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.description {
-	white-space: pre-wrap;
+.area__header__description {
+	display: flex;
+	flex-wrap: wrap;
+
+	.markup-description {
+		min-width: 275px;
+		padding: 8px;
+		flex: 1;
+	}
+	.option-proposals {
+		width: 300px;
+		max-width: 400px;
+		min-width: 275px;
+		padding: 8px;
+		flex: 1 1 300px;
+		border: 1px solid var(--color-polls-foreground-yes);
+		border-radius: var(--border-radius);
+		background-color: var(--color-polls-background-yes);
+		.mx-datepicker {
+			.mx-input {
+				background-clip: initial !important;
+			}
+		}
+	}
 }
 
-.description a {
-	font-weight: bold;
+.description {
+	white-space: pre-wrap;
 }
 
 .header-actions {
