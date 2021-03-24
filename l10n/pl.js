@@ -47,6 +47,8 @@ OC.L10N.register(
     "Date order" : "Kolejność według daty",
     "Original order" : "Kolejność pierwotna",
     "Ranked order" : "Kolejność według rankingu",
+    "Unsubscribe" : "Wypisz się",
+    "Subscribe" : "Subskrybuj",
     "Toggle Sidebar" : "Przełącz pasek boczny",
     "Conflict" : "Konflikt",
     "Got a network error while checking calendar events." : "Wystąpił błąd sieciowy podczas sprawdzania wydarzeń w kalendarzu.",
