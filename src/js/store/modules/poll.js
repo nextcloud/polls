@@ -103,7 +103,7 @@ const getters = {
 		return [
 			{ value: 'disallow', label: t('polls', 'Disallow Proposals') },
 			{ value: 'allow', label: t('polls', 'Allow Proposals') },
-			{ value: 'review', label: t('polls', 'Allow with review') },
+			// { value: 'review', label: t('polls', 'Allow with review') },
 		]
 	},
 
