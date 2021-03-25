@@ -45,7 +45,7 @@
 					class="error" />
 			</h2>
 
-			<div class="area__header__description">
+			<div class="description">
 				<MarkUpDescription />
 				<OptionProposals v-if="acl.allowAddOptions && proposalsAllowed" />
 			</div>
@@ -227,7 +227,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.area__header__description {
+.description {
 	display: flex;
 	flex-wrap: wrap;
 
