@@ -199,7 +199,8 @@ export default {
 
 	.owner {
 		display: flex;
-		height: 56px;
+		min-height: 56px;
+		min-width: 56px;
 		order: 19;
 	}
 
@@ -329,6 +330,9 @@ export default {
 
 	.vote-table__users {
 		margin: 0
+	}
+	.owner {
+		order: 0;
 	}
 
 	.vote-table-header-item {
