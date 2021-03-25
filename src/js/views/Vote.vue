@@ -253,10 +253,6 @@ export default {
 	}
 }
 
-.description {
-	white-space: pre-wrap;
-}
-
 .header-actions {
 	display: flex;
 	justify-content: flex-end;
