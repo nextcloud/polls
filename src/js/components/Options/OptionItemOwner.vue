@@ -82,6 +82,7 @@ export default {
 <style lang="scss" scoped>
 
 .option-item-owner {
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-repeat: no-repeat;

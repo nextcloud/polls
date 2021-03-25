@@ -36,7 +36,7 @@
 					</ActionButton>
 				</Actions>
 			</UserItem>
-			<div v-if="acl.allowAddOptions" class="owner" />
+			<div v-if="proposalsExist" class="owner" />
 			<div v-if="acl.allowEdit && closed" class="confirm" />
 		</div>
 
@@ -55,7 +55,7 @@
 					:class="{currentuser: participant.userId === acl.userId}">
 					<VoteItem :user-id="participant.userId" :option="option" />
 				</div>
-				<OptionItemOwner v-if="acl.allowAddOptions" :option="option" class="owner" />
+				<OptionItemOwner v-if="proposalsExist" :option="option" class="owner" />
 				<Actions v-if="acl.allowEdit && closed" class="action confirm">
 					<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 						@click="confirmOption(option)">
@@ -136,6 +136,7 @@ export default {
 			closed: 'poll/closed',
 			participants: 'poll/participants',
 			options: 'options/rankedOptions',
+			proposalsExist: 'options/proposalsExist',
 		}),
 
 	},

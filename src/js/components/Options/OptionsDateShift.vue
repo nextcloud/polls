@@ -22,7 +22,10 @@
 
 <template>
 	<div>
-		<div class="selectUnit">
+		<div v-if="proposalsExist">
+			{{ t('polls', 'Shifting dates is disabled to prevent shifting of other user\'s proposals.') }}
+		</div>
+		<div v-else class="selectUnit">
 			<InputDiv v-model="shift.step"
 				use-num-modifiers
 				@add="shift.step++"
@@ -39,7 +42,7 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import InputDiv from '../Base/InputDiv'
 import moment from '@nextcloud/moment'
 import { Multiselect } from '@nextcloud/vue'
@@ -73,6 +76,10 @@ export default {
 	computed: {
 		...mapState({
 			options: state => state.options.list,
+		}),
+
+		...mapGetters({
+			proposalsExist: 'options/proposalsExist',
 		}),
 
 		firstDOW() {

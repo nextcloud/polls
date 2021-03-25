@@ -22,15 +22,15 @@
 
 <template>
 	<div>
-		<RadioGroupDiv v-model="allowProposals" :options="allowProposalsOptions" />
-		<CheckBoxDiv v-show="allowProposals !== 'disallow'" v-model="pollExpiration" :label="t('polls', 'Closing Date')" />
-		<DatetimePicker v-show="pollExpiration && allowProposals !== 'disallow'" v-model="pollExpire" v-bind="expirationDatePicker" />
+		<RadioGroupDiv v-model="allowProposals" :options="proposalsOptions" />
+		<CheckBoxDiv v-show="proposalsAllowed" v-model="pollExpiration" :label="t('polls', 'Closing Date')" />
+		<DatetimePicker v-show="pollExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
 <script>
 import debounce from 'lodash/debounce'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
@@ -50,17 +50,17 @@ export default {
 	data() {
 		return {
 			titleEmpty: false,
-			allowProposalsOptions: [
-				{ value: 'disallow', label: t('polls', 'Disallow Proposals') },
-				{ value: 'allow', label: t('polls', 'Allow Proposals') },
-				{ value: 'release', label: t('polls', 'Allow with review') },
-			],
 		}
 	},
 
 	computed: {
 		...mapState({
 			poll: state => state.poll,
+		}),
+
+		...mapGetters({
+			proposalsAllowed: 'poll/proposalsAllowed',
+			proposalsOptions: 'poll/proposalsOptions',
 		}),
 
 		// Add bindings

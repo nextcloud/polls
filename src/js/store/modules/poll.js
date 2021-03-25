@@ -95,6 +95,18 @@ const getters = {
 		}
 	},
 
+	proposalsAllowed: (state) => {
+		return (state.allowProposals === 'allow' || state.allowProposals === 'review')
+	},
+
+	proposalsOptions: () => {
+		return [
+			{ value: 'disallow', label: t('polls', 'Disallow Proposals') },
+			{ value: 'allow', label: t('polls', 'Allow Proposals') },
+			{ value: 'review', label: t('polls', 'Allow with review') },
+		]
+	},
+
 	closed: (state) => {
 		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
 	},

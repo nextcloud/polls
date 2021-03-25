@@ -87,7 +87,7 @@ class Poll extends Entity implements JsonSerializable {
 	public const SHOW_RESULTS_NEVER = 'never';
 	public const PROPOSAL_DISALLOW = 'disallow';
 	public const PROPOSAL_ALLOW = 'allow';
-	public const PROPOSAL_RELEASE = 'release';
+	public const PROPOSAL_RELEASE = 'review';
 
 	/** @var string $type */
 	protected $type;

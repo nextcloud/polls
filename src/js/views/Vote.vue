@@ -47,7 +47,7 @@
 
 			<div class="area__header__description">
 				<MarkUpDescription />
-				<OptionProposals v-if="acl.allowAddOptions" />
+				<OptionProposals v-if="acl.allowAddOptions && proposalsAllowed" />
 			</div>
 		</div>
 
@@ -135,6 +135,7 @@ export default {
 			options: 'options/rankedOptions',
 			pollTypeIcon: 'poll/typeIcon',
 			viewMode: 'settings/viewMode',
+			proposalsAllowed: 'poll/proposalsAllowed',
 		}),
 
 		showEmailEdit() {
