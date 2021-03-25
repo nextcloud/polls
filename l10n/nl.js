@@ -47,6 +47,8 @@ OC.L10N.register(
     "Date order" : "Datum volgorde",
     "Original order" : "Originele volgorde",
     "Ranked order" : "Gerangschikte volgorde",
+    "Unsubscribe" : "Afmelden",
+    "Subscribe" : "Abonneren",
     "Toggle Sidebar" : "Omschakelen Zijbalk",
     "Conflict" : "Conflict",
     "Got a network error while checking calendar events." : "Er is een netwerkfout opgetreden tijdens het controleren van agenda-afspraken.",

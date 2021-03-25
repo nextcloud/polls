@@ -47,6 +47,8 @@ OC.L10N.register(
     "Date order" : "Tarih sıralaması",
     "Original order" : "Özgün sıralama",
     "Ranked order" : "Değerlendirme sıralaması",
+    "Unsubscribe" : "Abonelikten ayrıl",
+    "Subscribe" : "Abone ol",
     "Toggle Sidebar" : "Yan Çubuğu Aç/Kapat",
     "Conflict" : "Çakışma",
     "Got a network error while checking calendar events." : "Takvim etkinlikleri denetlenirken bir ağ sorunu çıktı",

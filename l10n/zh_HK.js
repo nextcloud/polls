@@ -47,6 +47,8 @@ OC.L10N.register(
     "Date order" : "日期排序",
     "Original order" : "原始排序",
     "Ranked order" : "排名排序",
+    "Unsubscribe" : "取消訂閱",
+    "Subscribe" : "訂閱",
     "Toggle Sidebar" : "切換側邊欄",
     "Conflict" : "抵觸",
     "Got a network error while checking calendar events." : "檢查日曆活動時發生網路錯誤。",
