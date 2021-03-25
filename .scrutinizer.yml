@@ -1,6 +1,7 @@
 filter:
       excluded_paths:
         - 'l10n/*'
+        - 'js/vendor/*'
 
 imports:
     - javascript
@@ -10,8 +11,8 @@ tools:
     external_code_coverage: false
 
 build:
-    nodes:
-        analysis:
-            tests:
-                override:
-                    - php-scrutinizer-run
+    environment:
+        php: 7.4.13
+    tests:
+        override:
+          -  jshint-run --config .jshintrc
