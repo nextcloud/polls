@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use Psr\Log\LoggerInterface;
 use DateTime;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
@@ -41,6 +42,12 @@ use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
 
 class OptionService {
+
+	/** @var LoggerInterface */
+	private $logger;
+
+	/** @var string */
+	private $appName;
 
 	/** @var Acl */
 	private $acl;
@@ -73,6 +80,8 @@ class OptionService {
 	private $watchService;
 
 	public function __construct(
+		string $AppName,
+		LoggerInterface $logger,
 		Acl $acl,
 		Option $option,
 		OptionMapper $optionMapper,
@@ -80,6 +89,8 @@ class OptionService {
 		VoteMapper $voteMapper,
 		WatchService $watchService
 	) {
+		$this->appName = $AppName;
+		$this->logger = $logger;
 		$this->acl = $acl;
 		$this->option = $option;
 		$this->optionMapper = $optionMapper;
@@ -142,11 +153,19 @@ class OptionService {
 	 * @return Option
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0): Option {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_ADD_OPTIONS);
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
 		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
 		$this->setOption($timestamp, $pollOptionText, $duration);
+
+		if (!$this->acl->getIsOwner()) {
+			$this->option->setOwner($this->acl->getUserId());
+		}
+
+		if (!$this->acl->getIsOwner()) {
+			$this->option->setOwner($this->acl->getUserId());
+		}
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
@@ -164,7 +183,10 @@ class OptionService {
 	 */
 	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
+		if (!$this->acl->setPollId($this->option->getPollId())->isAllowed(Acl::PERMISSION_EDIT)
+			&& $this->option->getOwner() !== $this->acl->getUserId()) {
+			throw new NotAuthorizedException('You are not allowed to delete this option');
+		}
 		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		$this->option = $this->optionMapper->update($this->option);
@@ -179,7 +201,10 @@ class OptionService {
 	 */
 	public function delete(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_EDIT);
+		if (!$this->acl->setPollId($this->option->getPollId())->isAllowed(Acl::PERMISSION_EDIT)
+			&& $this->option->getOwner() !== $this->acl->getUserId()) {
+			throw new NotAuthorizedException('You are not allowed to delete this option');
+		}
 		$this->optionMapper->delete($this->option);
 		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
 
@@ -239,7 +264,7 @@ class OptionService {
 			try {
 				$this->optionMapper->insert($clonedOption);
 			} catch (UniqueConstraintViolationException $e) {
-				\OC::$server->getLogger()->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option alredy exists.');
+				$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option alredy exists.');
 			}
 		}
 		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);

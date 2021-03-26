@@ -21,47 +21,42 @@
   -->
 
 <template>
-	<div>
-		<ConfigBox v-if="countOptions" :title="t('polls', 'Available Options')" icon-class="icon-toggle-filelist">
-			<draggable v-model="reOrderedOptions">
-				<transition-group>
-					<OptionItem v-for="(option) in reOrderedOptions"
-						:key="option.id"
+	<draggable v-model="reOrderedOptions">
+		<transition-group>
+			<OptionItem v-for="(option) in reOrderedOptions"
+				:key="option.id"
+				:option="option"
+				:draggable="true">
+				<template #icon>
+					<OptionItemOwner v-if="acl.allowAddOptions"
+						:avatar-size="16"
 						:option="option"
-						:draggable="true">
-						<template #actions>
-							<Actions v-if="acl.allowEdit" class="action">
-								<ActionButton icon="icon-delete" @click="removeOption(option)">
-									{{ t('polls', 'Delete option') }}
-								</ActionButton>
-							</Actions>
-							<Actions v-if="acl.allowEdit" class="action">
-								<ActionButton v-if="PollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
-									@click="confirmOption(option)">
-									{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-								</ActionButton>
-							</Actions>
-						</template>
-					</OptionItem>
-				</transition-group>
-			</draggable>
-		</ConfigBox>
-
-		<EmptyContent v-else icon="icon-toggle-filelist">
-			{{ t('polls', 'No vote options') }}
-			<template #desc>
-				{{ t('polls', 'Add some!') }}
-			</template>
-		</EmptyContent>
-	</div>
+						class="owner" />
+				</template>
+				<template #actions>
+					<Actions v-if="acl.allowEdit" class="action">
+						<ActionButton icon="icon-delete" @click="removeOption(option)">
+							{{ t('polls', 'Delete option') }}
+						</ActionButton>
+					</Actions>
+					<Actions v-if="acl.allowEdit" class="action">
+						<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+							@click="confirmOption(option)">
+							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+						</ActionButton>
+					</Actions>
+				</template>
+			</OptionItem>
+		</transition-group>
+	</draggable>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
-import ConfigBox from '../Base/ConfigBox'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import OptionItem from './OptionItem'
+import OptionItemOwner from '../Options/OptionItemOwner'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
@@ -70,10 +65,9 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		ConfigBox,
 		draggable,
-		EmptyContent,
 		OptionItem,
+		OptionItemOwner,
 	},
 
 	mixins: [
@@ -94,7 +88,7 @@ export default {
 		}),
 
 		...mapGetters({
-			PollIsClosed: 'poll/closed',
+			pollIsClosed: 'poll/closed',
 			countOptions: 'options/count',
 		}),
 

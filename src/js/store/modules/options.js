@@ -95,6 +95,12 @@ const getters = {
 		return orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc')
 	},
 
+	proposalsExist: (state) => {
+		return !!state.list.filter(option => {
+			return option.owner
+		}).length
+	},
+
 	confirmed: state => {
 		return state.list.filter(option => {
 			return option.confirmed > 0

@@ -78,7 +78,7 @@
 			<div class="item__expiry">
 				<Badge
 					:title="timeExpirationRelative"
-					:icon="expiryIcon"
+					icon="icon-calendar-000"
 					:class="expiryClass" />
 			</div>
 		</div>
@@ -176,13 +176,7 @@ export default {
 				return 'success'
 			}
 		},
-		expiryIcon() {
-			if (this.poll.expire) {
-				return 'icon-calendar-000'
-			} else {
-				return 'icon-calendar-000'
-			}
-		},
+
 		timeCreatedRelative() {
 			return moment.unix(this.poll.created).fromNow()
 		},

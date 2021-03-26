@@ -11,6 +11,8 @@ tools:
     external_code_coverage: false
 
 build:
+    environment:
+        php: 7.4.13
     tests:
         override:
           -  jshint-run --config .jshintrc

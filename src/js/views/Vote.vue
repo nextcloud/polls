@@ -37,7 +37,7 @@
 					:class="expiryClass" />
 				<Badge v-if="!closed && poll.expire"
 					:title="t('polls', 'Closing {relativeExpirationTime}', {relativeExpirationTime: timeExpirationRelative})"
-					icon="icon-calendar-000"
+					icon="icon-calendar"
 					:class="expiryClass" />
 				<Badge v-if="poll.deleted"
 					:title="t('polls', 'Deleted')"
@@ -45,13 +45,16 @@
 					class="error" />
 			</h2>
 
-			<MarkUpDescription />
+			<div class="description">
+				<MarkUpDescription />
+				<OptionProposals v-if="acl.allowAddOptions && proposalsAllowed" />
+			</div>
 		</div>
 
 		<div class="area__main" :class="viewMode">
 			<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-			<EmptyContent v-if="!options.length" icon="icon-toggle-filelist">
+			<EmptyContent v-if="!options.length" :icon="pollTypeIcon">
 				{{ t('polls', 'No vote options available') }}
 				<template #desc>
 					<button v-if="acl.allowEdit" @click="openOptions">
@@ -92,6 +95,7 @@ import VoteTable from '../components/VoteTable/VoteTable'
 import ActionSortOptions from '../components/Actions/ActionSortOptions'
 import ActionChangeView from '../components/Actions/ActionChangeView'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
+import OptionProposals from '../components/Options/OptionProposals'
 
 export default {
 	name: 'Vote',
@@ -107,6 +111,7 @@ export default {
 		PollInformation,
 		PublicRegisterModal,
 		VoteTable,
+		OptionProposals,
 	},
 
 	data() {
@@ -126,9 +131,11 @@ export default {
 		}),
 
 		...mapGetters({
-			options: 'options/rankedOptions',
 			closed: 'poll/closed',
+			options: 'options/rankedOptions',
+			pollTypeIcon: 'poll/typeIcon',
 			viewMode: 'settings/viewMode',
+			proposalsAllowed: 'poll/proposalsAllowed',
 		}),
 
 		showEmailEdit() {
@@ -221,11 +228,29 @@ export default {
 
 <style lang="scss" scoped>
 .description {
-	white-space: pre-wrap;
-}
+	display: flex;
+	flex-wrap: wrap;
 
-.description a {
-	font-weight: bold;
+	.markup-description {
+		min-width: 275px;
+		padding: 8px;
+		flex: 1;
+	}
+	.option-proposals {
+		width: 300px;
+		max-width: 400px;
+		min-width: 275px;
+		padding: 8px;
+		flex: 1 1 300px;
+		border: 1px solid var(--color-polls-foreground-yes);
+		border-radius: var(--border-radius);
+		background-color: var(--color-polls-background-yes);
+		.mx-datepicker {
+			.mx-input {
+				background-clip: initial !important;
+			}
+		}
+	}
 }
 
 .header-actions {

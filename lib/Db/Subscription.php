@@ -44,10 +44,14 @@ class Subscription extends Entity implements JsonSerializable {
 	/** @var string $userId */
 	protected $userId;
 
+	public function __construct() {
+		$this->addType('pollId', 'integer');
+	}
+
 	public function jsonSerialize() {
 		return [
-			'id' => intval($this->id),
-			'pollId' => intval($this->pollId),
+			'id' => $this->id,
+			'pollId' => $this->pollId,
 			'userId' => $this->userId
 		];
 	}

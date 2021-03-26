@@ -53,6 +53,7 @@ import moment from '@nextcloud/moment'
 
 export default {
 	name: 'PollNavigationItems',
+
 	components: {
 		ActionButton,
 		AppNavigationItem,

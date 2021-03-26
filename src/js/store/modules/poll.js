@@ -42,6 +42,8 @@ const defaultPoll = () => {
 		anonymous: 0,
 		allowComment: 0,
 		allowMaybe: 0,
+		allowProposals: 'disallow',
+		proposalsExpire: 0,
 		voteLimit: 0,
 		optionLimit: 0,
 		showResults: 'always',
@@ -77,12 +79,32 @@ const mutations = {
 }
 
 const getters = {
+	typeIcon: (state) => {
+		if (state.type === 'textPoll') {
+			return 'icon-toggle-filelist'
+		} else {
+			return 'icon-calendar-000'
+		}
+	},
+
 	answerSequence: (state) => {
 		if (state.allowMaybe) {
 			return ['no', 'yes', 'maybe']
 		} else {
 			return ['no', 'yes']
 		}
+	},
+
+	proposalsAllowed: (state) => {
+		return (state.allowProposals === 'allow' || state.allowProposals === 'review')
+	},
+
+	proposalsOptions: () => {
+		return [
+			{ value: 'disallow', label: t('polls', 'Disallow Proposals') },
+			{ value: 'allow', label: t('polls', 'Allow Proposals') },
+			// { value: 'review', label: t('polls', 'Allow with review') },
+		]
 	},
 
 	closed: (state) => {

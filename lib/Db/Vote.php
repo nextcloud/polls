@@ -58,12 +58,18 @@ class Vote extends Entity implements JsonSerializable {
 	/** @var string $voteAnswer */
 	protected $voteAnswer;
 
+	public function __construct() {
+		$this->addType('id', 'integer');
+		$this->addType('pollId', 'integer');
+		$this->addType('voteOptionId', 'integer');
+	}
+
 	public function jsonSerialize() {
 		return [
-			'id' => intval($this->id),
-			'pollId' => intval($this->pollId),
+			'id' => $this->id,
+			'pollId' => $this->pollId,
 			'userId' => $this->userId,
-			'voteOptionId' => intval($this->voteOptionId),
+			'voteOptionId' => $this->voteOptionId,
 			'voteOptionText' => $this->voteOptionText,
 			'voteAnswer' => $this->voteAnswer,
 			'isNoUser' => $this->getIsNoUser(),

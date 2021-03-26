@@ -28,27 +28,38 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\IUser;
 
 /**
  * @method int getId()
  * @method void setId(integer $value)
- * @method int getPollId()
- * @method void setPollId(integer $value)
- * @method string getPollOptionText()
- * @method void setPollOptionText(string $value)
- * @method int getTimestamp()
- * @method void setTimestamp(integer $value)
- * @method int getOrder()
- * @method void setOrder(integer $value)
  * @method int getConfirmed()
  * @method void setConfirmed(integer $value)
  * @method int getDuration()
  * @method void setDuration(integer $value)
+ * @method int getOrder()
+ * @method void setOrder(integer $value)
+ * @method string getOwner()
+ * @method void setOwner(string $value)
+ * @method int getPollId()
+ * @method void setPollId(integer $value)
+ * @method string getPollOptionText()
+ * @method void setPollOptionText(string $value)
+ * @method int getReleased()
+ * @method void setReleased(int $value)
+ * @method int getTimestamp()
+ * @method void setTimestamp(integer $value)
  */
 class Option extends Entity implements JsonSerializable {
 
 	/** @var int $pollId */
 	protected $pollId;
+
+	/** @var string $owner */
+	protected $owner;
+
+	/** @var int $released */
+	protected $released;
 
 	/** @var string $pollOptionText */
 	protected $pollOptionText;
@@ -87,24 +98,28 @@ class Option extends Entity implements JsonSerializable {
 	/** @var bool $isBookedUp */
 	public $isBookedUp = false;
 
+	public function __construct() {
+		$this->addType('released', 'integer');
+		$this->addType('pollId', 'integer');
+		$this->addType('timestamp', 'integer');
+		$this->addType('order', 'integer');
+		$this->addType('confirmed', 'integer');
+		$this->addType('duration', 'integer');
+	}
 
 	public function jsonSerialize() {
-		if (intval($this->timestamp) > 0) {
-			$timestamp = $this->timestamp;
-		} elseif (strtotime($this->pollOptionText)) {
-			$timestamp = strtotime($this->pollOptionText);
-		} else {
-			$timestamp = 0;
-		}
-
 		return [
-			'id' => intval($this->id),
-			'pollId' => intval($this->pollId),
-			'pollOptionText' => htmlspecialchars_decode($this->pollOptionText),
-			'timestamp' => intval($timestamp),
-			'order' => intval($timestamp ? $timestamp : $this->order),
-			'confirmed' => intval($this->confirmed),
-			'duration' => intval($this->duration),
+			'id' => $this->id,
+			'pollId' => $this->pollId,
+			'owner' => $this->owner,
+			'ownerDisplayName' => $this->getDisplayName(),
+			'ownerIsNoUser' => $this->getOwnerIsNoUser(),
+			'released' => $this->released,
+			'pollOptionText' => htmlspecialchars_decode($this->getPollOptionText()),
+			'timestamp' => $this->timestamp,
+			'order' => $this->timestamp ?? $this->order,
+			'confirmed' => $this->confirmed,
+			'duration' => $this->duration,
 			'rank' => $this->rank,
 			'no' => $this->no,
 			'yes' => $this->yes,
@@ -113,5 +128,24 @@ class Option extends Entity implements JsonSerializable {
 			'votes' => $this->votes,
 			'isBookedUp' => $this->isBookedUp,
 		];
+	}
+
+	public function getPollOptionText(): string {
+		if ($this->timestamp && $this->duration) {
+			return date('c', $this->timestamp) . ' - ' . date('c', $this->timestamp + $this->duration);
+		} elseif ($this->timestamp && !$this->duration) {
+			return date('c', $this->timestamp);
+		} else {
+			return $this->pollOptionText;
+		}
+	}
+
+	private function getDisplayName(): ?string {
+		return \OC::$server->getUserManager()->get($this->owner) instanceof IUser
+			? \OC::$server->getUserManager()->get($this->owner)->getDisplayName()
+			: $this->owner;
+	}
+	private function getOwnerIsNoUser(): bool {
+		return !\OC::$server->getUserManager()->get($this->owner) instanceof IUser;
 	}
 }

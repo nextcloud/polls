@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use Psr\Log\LoggerInterface;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
@@ -38,6 +39,12 @@ use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroupClass;
 
 class ShareService {
+
+	/** @var LoggerInterface */
+	private $logger;
+
+	/** @var string */
+	private $appName;
 
 	/** @var string|null */
 	private $userId;
@@ -61,6 +68,8 @@ class ShareService {
 	private $acl;
 
 	public function __construct(
+		string $AppName,
+		LoggerInterface $logger,
 		?string $UserId,
 		IGroupManager $groupManager,
 		SystemService $systemService,
@@ -69,6 +78,8 @@ class ShareService {
 		MailService $mailService,
 		Acl $acl
 	) {
+		$this->appName = $AppName;
+		$this->logger = $logger;
 		$this->userId = $UserId;
 		$this->groupManager = $groupManager;
 		$this->systemService = $systemService;
@@ -127,7 +138,7 @@ class ShareService {
 			case Share::TYPE_EXTERNAL:
 				break;
 			default:
-				\OC::$server->getLogger()->alert(json_encode('invalid share type ' . $this->share->getType()));
+				$this->logger->alert(json_encode('invalid share type ' . $this->share->getType()));
 				throw new NotAuthorizedException;
 		}
 	}
