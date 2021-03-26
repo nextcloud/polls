@@ -47,6 +47,8 @@ OC.L10N.register(
     "Date order" : "Pořadí podle data",
     "Original order" : "Původní pořadí",
     "Ranked order" : "Pořadí dle hodnocení",
+    "Unsubscribe" : "Zrušit přihlášení k odběru",
+    "Subscribe" : "Přihlásit se k odběru",
     "Toggle Sidebar" : "(Ne)zobrazovat postranní panel",
     "Conflict" : "Konflikt",
     "Got a network error while checking calendar events." : "Při zjišťování událostí v kalendáři se stala chyba na síti.",
