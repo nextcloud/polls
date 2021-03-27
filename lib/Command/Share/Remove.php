@@ -127,8 +127,7 @@ class Remove extends Base {
 	 * @param Poll $poll
 	 * @return Share[]
 	 */
-	private function getUserShares(Poll $poll): array
-	{
+	private function getUserShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
 		return array_values(array_filter($shares, static function (Share $share): bool {
 			return ($share->getType() === User::TYPE);
@@ -139,8 +138,7 @@ class Remove extends Base {
 	 * @param Poll $poll
 	 * @return Share[]
 	 */
-	private function getGroupShares(Poll $poll): array
-	{
+	private function getGroupShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
 		return array_values(array_filter($shares, static function (Share $share): bool {
 			return ($share->getType() === Group::TYPE);
@@ -151,8 +149,7 @@ class Remove extends Base {
 	 * @param Poll $poll
 	 * @return Share[]
 	 */
-	private function getEmailShares(Poll $poll): array
-	{
+	private function getEmailShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
 		return array_values(array_filter($shares, static function (Share $share): bool {
 			if (($share->getType() === GenericUser::TYPE) && $share->getEmailAddress()) {

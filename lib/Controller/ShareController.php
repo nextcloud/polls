@@ -34,7 +34,6 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
-use OCA\Polls\Model\User;
 use OCA\Polls\Model\Circle;
 use OCA\Polls\Model\ContactGroup;
 
