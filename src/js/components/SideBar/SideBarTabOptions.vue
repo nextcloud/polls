@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
-		<ConfigBox :title="t('polls', 'Allow Proposals from users')" icon-class="icon-category-customization">
+		<ConfigBox :title="t('polls', 'Allow proposals from users')" icon-class="icon-category-customization">
 			<ConfigProposals />
 		</ConfigBox>
 
