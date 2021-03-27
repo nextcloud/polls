@@ -25,17 +25,11 @@ namespace OCA\Polls\Command\Share;
 
 use OC\Core\Command\Base;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Model\Email;
 use OCA\Polls\Model\Group;
 use OCA\Polls\Model\User;
-use OCA\Polls\Service\ShareService;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\IGroup;
-use OCP\IGroupManager;
-use OCP\IUser;
-use OCP\IUserManager;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,29 +37,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Add extends Base {
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var ShareService */
-	private $shareService;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	public function __construct(PollMapper $pollMapper,
-								ShareService $shareService,
-								IUserManager $userManager,
-								IGroupManager $groupManager) {
-		parent::__construct();
-
-		$this->pollMapper = $pollMapper;
-		$this->shareService = $shareService;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-	}
+	use TShareCommand;
 
 	protected function configure(): void {
 		$this
@@ -169,17 +141,5 @@ class Add extends Base {
 		}
 
 		return parent::completeOptionValues($optionName, $context);
-	}
-
-	private function completeUserValues(CompletionContext $context): array {
-		return array_map(function (IUser $user) {
-			return $user->getUID();
-		}, $this->userManager->search($context->getCurrentWord()));
-	}
-
-	private function completeGroupValues(CompletionContext $context): array {
-		return array_map(function (IGroup $group) {
-			return $group->getGID();
-		}, $this->groupManager->search($context->getCurrentWord()));
 	}
 }
