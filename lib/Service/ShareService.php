@@ -67,6 +67,9 @@ class ShareService {
 	/** @var Acl */
 	private $acl;
 
+	/** @var NotificationService */
+	private $notificationService;
+
 	public function __construct(
 		string $AppName,
 		LoggerInterface $logger,
@@ -76,7 +79,8 @@ class ShareService {
 		ShareMapper $shareMapper,
 		Share $share,
 		MailService $mailService,
-		Acl $acl
+		Acl $acl,
+		NotificationService $notificationService
 	) {
 		$this->appName = $AppName;
 		$this->logger = $logger;
@@ -87,6 +91,7 @@ class ShareService {
 		$this->share = $share;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
+		$this->notificationService = $notificationService;
 	}
 
 	/**
@@ -346,5 +351,25 @@ class ShareService {
 			// silently catch
 		}
 		return $token;
+	}
+
+	/**
+	 * Sent invitation mails for a share
+	 * Additionally send notification via notifications
+	 */
+	public function sendInvitation(string $token): array {
+		$share = $this->get($token);
+		if ($share->getType() === Share::TYPE_USER) {
+			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
+			// TODO: skip this atm, to send invitations as mail too, if user is a site user
+			// $sentResult = ['sentMails' => [new User($share->getuserId())]];
+			// $this->shareService->setInvitationSent($token);
+		} elseif ($share->getType() === Share::TYPE_GROUP) {
+			foreach ($share->getMembers() as $member) {
+				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
+			}
+		}
+
+		return $this->mailService->sendInvitation($token);
 	}
 }

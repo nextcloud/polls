@@ -32,7 +32,6 @@ use OCP\AppFramework\Http\DataResponse;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Service\MailService;
-use OCA\Polls\Service\NotificationService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
 use OCA\Polls\Model\User;
@@ -51,22 +50,17 @@ class ShareController extends Controller {
 	/** @var SystemService */
 	private $systemService;
 
-	/** @var NotificationService */
-	private $notificationService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		MailService $mailService,
 		ShareService $shareService,
-		SystemService $systemService,
-		NotificationService $notificationService
+		SystemService $systemService
 	) {
 		parent::__construct($appName, $request);
 		$this->mailService = $mailService;
 		$this->shareService = $shareService;
 		$this->systemService = $systemService;
-		$this->notificationService = $notificationService;
 	}
 
 	/**
@@ -144,21 +138,9 @@ class ShareController extends Controller {
 	 */
 	public function sendInvitation($token): DataResponse {
 		return $this->response(function () use ($token) {
-			$share = $this->shareService->get($token);
-			if ($share->getType() === Share::TYPE_USER) {
-				$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
-			// TODO: skip this atm, to send invitations as mail too, if user is a site user
-				// $sentResult = ['sentMails' => [new User($share->getuserId())]];
-				// $this->shareService->setInvitationSent($token);
-			} elseif ($share->getType() === Share::TYPE_GROUP) {
-				foreach ($share->getMembers() as $member) {
-					$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
-				}
-			}
-			$sentResult = $this->mailService->sendInvitation($token);
 			return [
-				'share' => $share,
-				'sentResult' => $sentResult
+				'share' => $this->shareService->get($token),
+				'sentResult' => $this->shareService->sendInvitation($token),
 			];
 		});
 	}
