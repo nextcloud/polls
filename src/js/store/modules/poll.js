@@ -101,8 +101,8 @@ const getters = {
 
 	proposalsOptions: () => {
 		return [
-			{ value: 'disallow', label: t('polls', 'Disallow Proposals') },
-			{ value: 'allow', label: t('polls', 'Allow Proposals') },
+			{ value: 'disallow', label: t('polls', 'Disallow proposals') },
+			{ value: 'allow', label: t('polls', 'Allow proposals') },
 			// { value: 'review', label: t('polls', 'Allow with review') },
 		]
 	},
