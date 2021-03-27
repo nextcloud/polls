@@ -24,6 +24,7 @@
 namespace OCA\Polls\Command\Share;
 
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Service\ShareService;
 use OCP\IGroup;
 use OCP\IGroupManager;
@@ -38,6 +39,9 @@ trait TShareCommand {
 	/** @var ShareService */
 	private $shareService;
 
+	/** @var ShareMapper */
+	private $shareMapper;
+
 	/** @var IUserManager */
 	private $userManager;
 
@@ -45,12 +49,14 @@ trait TShareCommand {
 	private $groupManager;
 
 	public function __construct(PollMapper $pollMapper,
+								ShareMapper $shareMapper,
 								ShareService $shareService,
 								IUserManager $userManager,
 								IGroupManager $groupManager) {
 		parent::__construct();
 
 		$this->pollMapper = $pollMapper;
+		$this->shareMapper = $shareMapper;
 		$this->shareService = $shareService;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;

@@ -30,6 +30,7 @@
 	</background-jobs>
 	<commands>
 		<command>OCA\Polls\Command\Share\Add</command>
+		<command>OCA\Polls\Command\Share\Remove</command>
 	</commands>
 	<repair-steps>
 		<pre-migration>
