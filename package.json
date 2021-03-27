@@ -65,7 +65,7 @@
 		"node": ">=10.0.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.13.10",
+		"@babel/core": "^7.13.13",
 		"@babel/preset-env": "^7.13.10",
 		"@nextcloud/eslint-plugin": "^2.0.0",
 		"babel-eslint": "^10.0.3",
