@@ -196,6 +196,7 @@ OC.L10N.register(
     "Poll closing status" : "Status das enquetes encerradas",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n de {maximalVotes} voto restante.","%n de {maximalVotes} votos restantes."],
     "Result display" : "Mostrar resultado",
+    "Add an option" : "Adicionar uma opção",
     "Shift all date options" : "Mudar todas as opções de data",
     "Available Options" : "Opções Disponíveis",
     "No vote options" : "Nenhuma opção de voto",
