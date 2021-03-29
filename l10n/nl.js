@@ -111,6 +111,7 @@ OC.L10N.register(
     "Add time" : "Toevoegen tijd",
     "Remove time" : "Verwijder tijd",
     "Click to add an option" : "Klik om een optie toe te voegen",
+    "Shifting dates is disabled to prevent shifting of other user's proposals." : "Verschuiven van data is uitgeschakeld om schuiven van andere voorstellen te verhinderen.",
     "Enter option text" : "Voer een optietekst in",
     "No description provided" : "Geen beschrijving opgegeven",
     "No Participants until now" : "Nog geen deelnemers",
