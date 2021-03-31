@@ -47,6 +47,8 @@ OC.L10N.register(
     "Date order" : "Dátum sorrend",
     "Original order" : "Eredeti sorrend",
     "Ranked order" : "Népszerűség sorrend",
+    "Unsubscribe" : "Leiratkozás",
+    "Subscribe" : "Feliratkozás",
     "Toggle Sidebar" : "Oldalsáv be- és kikapcsolása",
     "Conflict" : "Ütközés",
     "Got a network error while checking calendar events." : "Hálózati hiba történt a naptáresemények ellenőrzése közben.",
