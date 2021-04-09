@@ -22,7 +22,7 @@
 
 <template>
 	<div class="comment-item">
-		<UserItem v-bind="comment" :icon-size="48" hide-names />
+		<UserItem v-bind="comment" hide-names />
 		<div class="comment-item__content">
 			<span class="comment-item__user"> {{ comment.displayName }}  </span>
 			{{ comment.comment }}
