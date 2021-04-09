@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="comment-add">
-		<UserItem v-bind="acl" :icon-size="48" hide-names />
+		<UserItem v-bind="acl" hide-names />
 		<InputDiv v-model="comment" class="comment-add__input" :placeholder="t('polls', 'New comment …')"
 			@submit="writeComment()" />
 	</div>
