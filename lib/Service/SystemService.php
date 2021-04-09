@@ -141,7 +141,7 @@ class SystemService {
 		}
 
 		// get all users
-		foreach (User::search() as $user) {
+		foreach (User::search($userName) as $user) {
 			if ($userName === strtolower(trim($user->getId()))
 				|| $userName === strtolower(trim($user->getDisplayName()))) {
 				throw new InvalidUsernameException;
