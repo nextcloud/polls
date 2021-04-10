@@ -43,7 +43,7 @@
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^1.2.0",
 		"dompurify": "^2.2.7",
-		"@nextcloud/vue": "^3.8.0",
+		"@nextcloud/vue": "^3.9.0",
 		"core-js": "^3.10.1",
 		"lodash": "^4.17.21",
 		"marked": "^2.0.1",
