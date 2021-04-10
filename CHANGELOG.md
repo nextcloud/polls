@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.8.2] - 2021-04-10
+### Changes and fixes
+- [performance] #1517 - performance optimizations for username chek (#1532)
+
 ## [1.8.1] - 2021-03-20
 ### new Features
 - Date options now have a duration (from/to)
