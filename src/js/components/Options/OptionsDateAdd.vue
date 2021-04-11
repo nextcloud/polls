@@ -21,21 +21,36 @@
   -->
 
 <template>
-	<DatetimePicker v-model="pickedOption"
-		v-bind="optionDatePicker"
+	<DatetimePicker v-model="pickerSelection"
+		v-bind="pickerOptions"
 		:open.sync="pickerOpen"
 		style="width: inherit;"
+		@change="changedDate"
 		@pick="pickedDate">
-		<template slot="footer">
+		<template #header>
 			<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
-			<button v-if="!showTimePanel" class="mx-btn" @click="toggleTimePanel">
-				{{ t('polls', 'Add time') }}
+			<div v-if="dateOption.isValid" class="selection">
+				<div>
+					{{ dateOption.text }}
+				</div>
+				<Spacer />
+				<button class="mx-btn" @click="addOption">
+					{{ t('polls', 'Add') }}
+				</button>
+			</div>
+			<div v-else>
+				{{ t('polls', 'Select a day.') }}
+			</div>
+		</template>
+		<template v-if="dateOption.isValid" #footer>
+			<button v-if="useTime" class="mx-btn" @click="toggleTimePanel">
+				{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
 			</button>
-			<button v-else class="mx-btn" @click="toggleTimePanel">
+			<button v-if="useTime" class="mx-btn" @click="removeTime">
 				{{ t('polls', 'Remove time') }}
 			</button>
-			<button class="mx-btn" @click="addOption">
-				{{ t('polls', 'OK') }}
+			<button v-else class="mx-btn" @click="addTime">
+				{{ t('polls', 'Add time') }}
 			</button>
 		</template>
 	</DateTimePicker>
@@ -46,6 +61,7 @@
 import CheckBoxDiv from '../Base/CheckBoxDiv'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
+import Spacer from '../Base/Spacer'
 
 export default {
 	name: 'OptionsDateAdd',
@@ -53,50 +69,100 @@ export default {
 	components: {
 		CheckBoxDiv,
 		DatetimePicker,
+		Spacer,
 	},
 
 	data() {
 		return {
-			pickedOption: null,
+			pickerSelection: null,
+			firstPick: true,
+			changed: false,
+			imcomplete: true,
 			lastPickedOption: null,
-			startDate: moment(),
-			endDate: moment(),
 			pickerOpen: false,
 			useRange: false,
+			useTime: false,
 			showTimePanel: false,
+			keepRange: true,
+			preservedTimeFrom: moment(),
+			preservedTimeTo: moment(),
+			lastPickedDate: moment(0),
+			timeValues: moment(),
 		}
 	},
 
 	computed: {
+		dateOption() {
+			let from = moment()
+			let to = moment()
+			let text = ''
+
+			if (Array.isArray(this.pickerSelection)) {
+				from = moment(this.pickerSelection[0])
+				to = moment(this.pickerSelection[1])
+
+				// if a sigle day is selected while useRange is true and the paicker did not return a
+				// valid selection, use the single selected day
+				if (this.useRange && this.lastPickedDate) {
+					from = moment(this.lastPickedDate).hour(from.hour()).minute(from.minute())
+					to = moment(this.lastPickedDate).hour(to.hour()).minute(to.minute())
+				}
+			} else {
+				from = moment(this.pickerSelection)
+				to = moment(this.pickerSelection)
+			}
+
+			if (this.useRange) {
+				if (this.useTime) {
+					if (moment(from).startOf('day').valueOf() === moment(to).startOf('day').valueOf()) {
+						text = from.format('ll LT') + ' - ' + to.format('LT')
+					} else {
+						text = from.format('ll LT') + ' - ' + to.format('ll LT')
+					}
+				} else {
+					from = from.startOf('day')
+					to = to.startOf('day')
+					if (moment(from).startOf('day').valueOf() === moment(to).startOf('day').valueOf()) {
+						text = from.format('ll')
+					} else {
+						text = from.format('ll') + ' - ' + to.format('ll')
+					}
+				}
+			} else {
+				if (this.useTime) {
+					text = from.format('ll LT')
+				} else {
+					text = from.startOf('day').format('ll')
+				}
+			}
+
+			return {
+				isValid: from._isValid && to._isValid,
+				from,
+				to,
+				text,
+				option: {
+					timestamp: from.unix(),
+					duration: moment(to).add(this.useTime ? 0 : 1, 'day').unix() - from.unix(),
+				},
+			}
+		},
+
 		tempFormat() {
-			if (this.showTimePanel) {
+			if (this.useTime) {
 				return moment.localeData().longDateFormat('L LT')
 			} else {
 				return moment.localeData().longDateFormat('L')
 			}
 		},
 
-		dateOption() {
-			const timeToAdd = this.showTimePanel ? 0 : 86400
-
-			const startDate = this.useRange ? moment(this.pickedOption[0]) : moment(this.pickedOption)
-			const endDate = this.useRange ? moment(this.pickedOption[1]).add(timeToAdd, 'seconds') : moment(this.pickedOption).add(timeToAdd, 'seconds')
-			const pollOptionTextStart = startDate.utc().format(moment.defaultFormat)
-			const pollOptionTextEnd = startDate === endDate ? '' : ' - ' + endDate.utc().format(moment.defaultFormat)
-
-			return {
-				timestamp: startDate.unix(),
-				pollOptionText: pollOptionTextStart + pollOptionTextEnd,
-				duration: endDate.unix() - startDate.unix(),
-			}
-		},
-
-		optionDatePicker() {
+		pickerOptions() {
 			return {
 				editable: false,
 				minuteStep: 5,
-				type: this.showTimePanel ? 'datetime' : 'date',
+				type: this.useTime ? 'datetime' : 'date',
 				range: this.useRange,
+				showSecond: false,
 				showTimePanel: this.showTimePanel,
 				valueType: 'timestamp',
 				format: this.tempFormat,
@@ -116,47 +182,70 @@ export default {
 
 	watch: {
 		useRange() {
-			if (this.useRange) {
-				if (!Array.isArray(this.pickedOption)) {
-					this.pickedOption = [this.pickedOption, this.pickedOption]
-				}
-			} else {
-				if (Array.isArray(this.pickedOption)) {
-					this.pickedOption = this.pickedOption[0]
-				}
+			if (this.useRange && !Array.isArray(this.pickerSelection)) {
+				this.pickerSelection = [this.pickerSelection, this.pickerSelection]
+			} else if (!this.useRange && Array.isArray(this.pickerSelection)) {
+				this.pickerSelection = this.pickerSelection[0]
 			}
 		},
 	},
 
 	methods: {
-		toggleTimePanel() {
+		// if picker returned a valid selection
+		changedDate(value, type) {
+			this.changed = true
+		},
+
+		// The date picker does not update the values, if useRange is true and
+		// a single day is selected without a second click. Therfore we store
+		// the picked day to define the correct date selection inside the
+		// computed dateOptions property
+		pickedDate(value) {
+			// we rely on the behavior, that the changed event is fired before the picked event
+			// if the picker already returned a valid selection before, ignore picked date
+			if (this.changed) {
+				// reset changed status
+				this.changed = false
+				// reset the last picked date
+				this.lastPickedDate = null
+			} else {
+				// otherwise store the selection of the picked date
+				this.lastPickedDate = moment(value)
+			}
+			// keep picker open
+			this.pickerOpen = true
+		},
+
+		addTime() {
 			if (this.useRange) {
-				if (Array.isArray(this.pickedOption)) {
-					if (this.lastPickedOption !== this.pickedOption[0]
-						&& this.lastPickedOption !== this.pickedOption[1]) {
-						this.pickedOption = [this.lastPickedOption, this.lastPickedOption]
-					}
-				} else {
-					if (this.lastPickedOption) {
-						this.pickedOption = [this.lastPickedOption, this.lastPickedOption]
-					}
-				}
+				// make sure, the pickerSelection is set to the last displayed status
+				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
+			}
+			this.useTime = true
+			this.showTimePanel = true
+		},
+
+		removeTime() {
+			this.useTime = false
+			this.showTimePanel = false
+		},
+
+		toggleTimePanel() {
+			if (this.showTimePanel) {
+				this.changed = false
+			} else if (this.useRange) {
+				// make sure, the pickerSelection is set to the last displayed status
+				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
 			}
 			this.showTimePanel = !this.showTimePanel
 		},
 
-		pickedDate(value) {
-			if (this.optionDatePicker.valueType === 'timestamp') {
-				this.lastPickedOption = moment(value).valueOf()
-			} else {
-				this.lastPickedOption = value
-			}
-			this.pickerOpen = true
-		},
-
 		addOption() {
-			this.pickerOpen = false
-			this.$store.dispatch('options/add', this.dateOption)
+			if (this.useRange) {
+				// make sure, the pickerSelection is set to the last displayed status
+				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
+			}
+			this.$store.dispatch('options/add', this.dateOption.option)
 		},
 	},
 }
@@ -165,6 +254,10 @@ export default {
 
 <style lang="scss" scoped>
 
+ .selection {
+	display: flex;
+	align-items: center;
+}
 .range {
 	flex: 1;
 	text-align: left;
