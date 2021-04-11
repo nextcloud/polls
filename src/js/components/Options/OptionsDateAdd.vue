@@ -258,10 +258,11 @@ export default {
 
 <style lang="scss" scoped>
 
- .selection {
+.selection {
 	display: flex;
 	align-items: center;
 }
+
 .range {
 	flex: 1;
 	text-align: left;
