@@ -226,6 +226,10 @@ export default {
 		},
 
 		removeTime() {
+			if (this.useRange) {
+				// make sure, the pickerSelection is set to the last displayed status
+				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
+			}
 			this.useTime = false
 			this.showTimePanel = false
 		},
