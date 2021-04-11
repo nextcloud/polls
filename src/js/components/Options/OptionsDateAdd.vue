@@ -34,7 +34,7 @@
 					{{ dateOption.text }}
 				</div>
 				<Spacer />
-				<button class="mx-btn" @click="addOption">
+				<button class="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</button>
 			</div>
@@ -46,10 +46,10 @@
 			<button v-if="useTime" class="mx-btn" @click="toggleTimePanel">
 				{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
 			</button>
-			<button v-if="useTime" class="mx-btn" @click="removeTime">
+			<button v-if="useTime" @click="removeTime">
 				{{ t('polls', 'Remove time') }}
 			</button>
-			<button v-else class="mx-btn" @click="addTime">
+			<button v-else @click="addTime">
 				{{ t('polls', 'Add time') }}
 			</button>
 		</template>
