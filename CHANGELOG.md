@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.8.3] - 2021-04-12
+### Changes and fixes
+- [bug] #1544 - Fixed display of end day in options sidebar on options with day span
+
 ## [1.8.2] - 2021-04-10
 ### Changes and fixes
 - [performance] #1517 - performance optimizations for username chek (#1532)
