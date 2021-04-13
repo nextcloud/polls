@@ -2,7 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Contact" : "联系人",
+    "External Email" : "外部电子邮件",
     "Public link" : "公开链接",
+    "External user" : "外部用户",
     "Group" : "群组",
     "User" : "用户",
     "Polls" : "投票",
@@ -15,6 +17,8 @@ OC.L10N.register(
     "{user} changed the deleted status of your poll \"%s\"." : "{user} 更改了你的民意测验 “%s” 的删除状态。",
     "- %s voted." : "- %s 投票了。",
     "- Updated poll configuration. Please check your votes." : "— 更新了民意测验配置。请检查你的投票。",
+    "- The poll got deleted." : "投票已删除。",
+    "- The poll got restored." : "投票已复原。",
     "Polls App - New Activity" : "投票应用 - 新的活动",
     "\"{title}\" had recent activity: " : "“{title}” 最近有活动：",
     "Go to poll" : "前往投票",
