@@ -8,6 +8,7 @@ css/*.map
 js/*
 nbproject/
 node_modules/
+tests/.phpunit.result.cache
 npm-debug.log
 vendor
 Thumbs.db
