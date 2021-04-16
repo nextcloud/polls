@@ -27,6 +27,8 @@ OC.L10N.register(
     "Date order" : "Dataren ordena",
     "Original order" : "Jatorrizko ordena",
     "Ranked order" : "Ordena sailkatua",
+    "Unsubscribe" : "Harpidetza kendu",
+    "Subscribe" : "Harpidetu",
     "Toggle Sidebar" : "Txandakatu alboko barra",
     "Conflict" : "Gatazka",
     "New comment …" : "Iruzkin berria …",

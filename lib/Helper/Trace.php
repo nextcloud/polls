@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
- * @author Kai Schröer <git@schroeer.co>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,5 +21,34 @@
  *
  */
 
-require_once __DIR__ . '/../../../lib/base.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace OCA\Polls\Model;
+
+class Trace implements \JsonSerializable {
+
+	/** @var Array */
+	protected $result = [];
+
+	/** @var string */
+	protected $method;
+
+	public function __construct(
+		string $method,
+		string $payload = ''
+	) {
+		$this->method = $method;
+		$this->log('Initialization', $payload);
+	}
+
+	public function log($operation, $payload = '') {
+		$this->result[] = [
+			'method' => $this->method,
+			'time' => time(),
+			'operation' => $operation,
+			'payload' => $payload
+		];
+	}
+
+	public function jsonSerialize(): array {
+		return $this->result;
+	}
+}
