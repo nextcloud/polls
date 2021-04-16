@@ -35,8 +35,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\RuntimeException as ConsoleRuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class AddTest extends TestCase
-{
+class AddTest extends TestCase {
 	use TShareCommandTest;
 
 	public function setUp(): void {
