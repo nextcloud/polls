@@ -173,11 +173,33 @@ class RemoveTest extends TestCase {
 					'pollId' => 456,
 					'initialShares' => [
 						'user' => ['user2', 'user3'],
-						'email' => ['foo@example.com', 'bar@example.com', 'baz@example.com'],
+						'email' => ['foo@example.com', 'baz@example.com'],
+						'contact' => ['bar@example.com'],
 					],
 					'expectedShares' => [
 						'user' => ['user2', 'user3'],
-						'email' => ['foo@example.com', 'bar@example.com'],
+						'email' => ['foo@example.com'],
+						'contact' => ['bar@example.com'],
+					],
+				]
+			],
+			[
+				[
+					'id' => 789,
+					'--group' => ['group1'],
+					'--email' => ['foo@example.com', 'baz@example.com'],
+				],
+				[
+					'pollId' => 789,
+					'initialShares' => [
+						'user' => ['user1', 'user2'],
+						'email' => ['foo@example.com'],
+						'contact' => ['bar@example.com'],
+						'external' => ['baz@example.com'],
+					],
+					'expectedShares' => [
+						'email' => ['foo@example.com'],
+						'external' => ['baz@example.com'],
 					],
 				]
 			],
