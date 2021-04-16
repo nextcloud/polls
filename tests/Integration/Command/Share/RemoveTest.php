@@ -92,11 +92,11 @@ class RemoveTest extends TestCase
 		$initialShares = [];
 		$expectedShareCount = 0;
 		$expectedShareTokens = [];
-		foreach ($pollData['initialShares'] as $type => $shares) {
+		foreach ($pollData['initialShares'] ?? [] as $type => $shares) {
 			foreach ($shares as $userId) {
 				$initialShares[] = $this->createShareMock($pollData['pollId'], $type, $userId);
 
-				if (in_array($userId, $pollData['expectedShares'][$type])) {
+				if (in_array($userId, $pollData['expectedShares'][$type] ?? [])) {
 					$expectedShareTokens[] = $this->getShareToken($pollData['pollId'], $type, $userId);
 					$expectedShareCount++;
 				}

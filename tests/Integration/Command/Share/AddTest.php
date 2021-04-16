@@ -94,15 +94,15 @@ class AddTest extends TestCase
 	 * @dataProvider validProvider
 	 */
 	public function testValid(array $input, array $pollData): void {
-		$expectedShareCount = count($pollData['expectedShares']['user'])
-			+ count($pollData['expectedShares']['group'])
-			+ count($pollData['expectedShares']['email']);
-		$expectedInvitationCount = count($pollData['expectedInvitations']['user'])
-			+ count($pollData['expectedInvitations']['group'])
-			+ count($pollData['expectedInvitations']['email']);
+		$expectedShareCount = count($pollData['expectedShares']['user'] ?? [])
+			+ count($pollData['expectedShares']['group'] ?? [])
+			+ count($pollData['expectedShares']['email'] ?? []);
+		$expectedInvitationCount = count($pollData['expectedInvitations']['user'] ?? [])
+			+ count($pollData['expectedInvitations']['group'] ?? [])
+			+ count($pollData['expectedInvitations']['email'] ?? []);
 
 		$expectedInvitationShareTokens = [];
-		foreach ($pollData['expectedInvitations'] as $type => $shares) {
+		foreach ($pollData['expectedInvitations'] ?? [] as $type => $shares) {
 			foreach ($shares as $userId) {
 				$expectedInvitationShareTokens[] = $this->getShareToken($pollData['pollId'], $type, $userId);
 			}
