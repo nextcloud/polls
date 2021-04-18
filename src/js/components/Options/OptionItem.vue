@@ -122,30 +122,30 @@ export default {
 
 			if (this.poll.type !== 'datePoll') {
 				return {}
-			} else {
-				return {
-					from: {
-						month: from.format('MMM [ \']YY'),
-						day: from.format('Do'),
-						dow: from.format('ddd'),
-						time: from.format('LT'),
-						date: from.format('ll'),
-						dateTime: from.format('llll'),
-						utc: moment(from).utc().format('llll'),
-					},
-					to: {
-						month: toModified.format('MMM'),
-						day: toModified.format('D'),
-						dow: toModified.format('ddd'),
-						time: to.format('LT'),
-						date: toModified.format('ll'),
-						dateTime: to.format('llll'),
-						utc: moment(to).utc().format('llll'),
-						sameDay: from.format('L') === toModified.format('L'),
-					},
-					dayLong: dayLongEvent,
-				}
 			}
+			return {
+				from: {
+					month: from.format('MMM [ \']YY'),
+					day: from.format('Do'),
+					dow: from.format('ddd'),
+					time: from.format('LT'),
+					date: from.format('ll'),
+					dateTime: from.format('llll'),
+					utc: moment(from).utc().format('llll'),
+				},
+				to: {
+					month: toModified.format('MMM'),
+					day: toModified.format('D'),
+					dow: toModified.format('ddd'),
+					time: to.format('LT'),
+					date: toModified.format('ll'),
+					dateTime: to.format('llll'),
+					utc: moment(to).utc().format('llll'),
+					sameDay: from.format('L') === toModified.format('L'),
+				},
+				dayLong: dayLongEvent,
+			}
+
 		},
 
 		dateLocalFormat() {
@@ -159,41 +159,41 @@ export default {
 				return this.event.from.date + ' - ' + this.event.to.date
 			} else if (this.event.to.sameDay) {
 				return this.event.from.dateTime + ' - ' + this.event.to.time
-			} else {
-				return this.event.from.dateTime + ' - ' + this.event.to.dateTime
 			}
+			return this.event.from.dateTime + ' - ' + this.event.to.dateTime
+
 		},
 
 		dateLocalFormatUTC() {
 			if (this.option.duration) {
 				return this.event.from.utc + ' - ' + this.event.to.utc + ' UTC'
-			} else {
-				return this.event.from.utc + ' UTC'
 			}
+			return this.event.from.utc + ' UTC'
+
 		},
 
 		optionTooltip() {
 			if (this.poll.type === 'datePoll') {
 				return this.dateLocalFormatUTC
-			} else {
-				return this.option.pollOptionText
 			}
+			return this.option.pollOptionText
+
 		},
 
 		optionText() {
 			if (this.poll.type === 'datePoll') {
 				return this.dateLocalFormat
-			} else {
-				return this.option.pollOptionText
 			}
+			return this.option.pollOptionText
+
 		},
 
 		show() {
 			if (this.poll.type === 'datePoll' && this.display === 'dateBox') {
 				return 'dateBox'
-			} else {
-				return 'textBox'
 			}
+			return 'textBox'
+
 		},
 	},
 }

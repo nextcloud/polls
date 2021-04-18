@@ -42,6 +42,7 @@ module.exports = {
 			groups: ['props'],
 			deepData: false,
 		}],
+		'no-else-return': 'error',
 		'comma-dangle': ['error', 'always-multiline'],
 		// space before function ()
 		'space-before-function-paren': ['error', 'never'],

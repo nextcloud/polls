@@ -134,9 +134,9 @@ export default {
 				return t('polls', 'Deleted')
 			} else if (this.poll.access === 'public') {
 				return t('polls', 'All users')
-			} else {
-				return t('polls', 'Only invited users')
 			}
+			return t('polls', 'Only invited users')
+
 		},
 
 		accessIcon() {
@@ -144,25 +144,25 @@ export default {
 				return 'icon-delete'
 			} else if (this.poll.access === 'public') {
 				return 'icon-polls-public-poll'
-			} else {
-				return 'icon-polls-hidden-poll'
 			}
+			return 'icon-polls-hidden-poll'
+
 		},
 
 		pollType() {
 			if (this.poll.type === 'textPoll') {
 				return t('polls', 'Text poll')
-			} else {
-				return t('polls', 'Date poll')
 			}
+			return t('polls', 'Date poll')
+
 		},
 
 		timeExpirationRelative() {
 			if (this.poll.expire) {
 				return moment.unix(this.poll.expire).fromNow()
-			} else {
-				return t('polls', 'never')
 			}
+			return t('polls', 'never')
+
 		},
 
 		expiryClass() {
@@ -172,9 +172,9 @@ export default {
 				return 'warning'
 			} else if (this.poll.expire && !this.closed) {
 				return 'success'
-			} else {
-				return 'success'
 			}
+			return 'success'
+
 		},
 
 		timeCreatedRelative() {

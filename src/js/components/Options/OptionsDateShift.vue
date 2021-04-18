@@ -86,9 +86,9 @@ export default {
 			// vue2-datepicker needs 7 for sunday
 			if (moment.localeData()._week.dow === 0) {
 				return 7
-			} else {
-				return moment.localeData()._week.dow
 			}
+			return moment.localeData()._week.dow
+
 		},
 	},
 

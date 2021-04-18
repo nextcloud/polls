@@ -84,9 +84,9 @@ const getters = {
 				voteOptionText: payload.option.pollOptionText,
 				userId: payload.userId,
 			}
-		} else {
-			return found
 		}
+		return found
+
 	},
 }
 

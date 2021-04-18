@@ -104,9 +104,9 @@ export default {
 		name() {
 			if (this.displayName) {
 				return this.displayName
-			} else {
-				return this.userId
 			}
+			return this.userId
+
 		},
 
 		showUserStatus() {
@@ -127,9 +127,9 @@ export default {
 					return 'icon-circles'
 				}
 				return 'icon-' + this.type
-			} else {
-				return ''
 			}
+			return ''
+
 		},
 
 	},

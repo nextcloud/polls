@@ -93,9 +93,9 @@ export default {
 		nextAnswer() {
 			if (this.answerSequence.indexOf(this.answer) < 0) {
 				return this.answerSequence[1]
-			} else {
-				return this.answerSequence[(this.answerSequence.indexOf(this.answer) + 1) % this.answerSequence.length]
 			}
+			return this.answerSequence[(this.answerSequence.indexOf(this.answer) + 1) % this.answerSequence.length]
+
 		},
 
 		isValidUser() {

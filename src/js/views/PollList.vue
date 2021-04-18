@@ -144,9 +144,8 @@ export default {
 		sortedList() {
 			if (this.reverse) {
 				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
-			} else {
-				return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 			}
+			return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 		},
 
 		noPolls() {

@@ -53,9 +53,9 @@ export default {
 		sortedList() {
 			if (this.reverse) {
 				return sortBy(this.comments, this.sort).reverse()
-			} else {
-				return sortBy(this.comments, this.sort)
 			}
+			return sortBy(this.comments, this.sort)
+
 		},
 
 	},

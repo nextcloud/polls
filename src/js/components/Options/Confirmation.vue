@@ -59,9 +59,9 @@ export default {
 		confirmations() {
 			if (this.isConfirmed) {
 				return t('polls', 'Confirmed')
-			} else {
-				return ' '
 			}
+			return ' '
+
 		},
 	},
 }

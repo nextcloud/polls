@@ -96,9 +96,9 @@ export default {
 		timeExpirationRelative() {
 			if (this.expire) {
 				return moment.unix(this.expire).fromNow()
-			} else {
-				return t('polls', 'never')
 			}
+			return t('polls', 'never')
+
 		},
 	},
 }

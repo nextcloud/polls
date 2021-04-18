@@ -64,17 +64,17 @@ export default {
 		caption() {
 			if (this.subscribed) {
 				return t('polls', 'Unsubscribe')
-			} else {
-				return t('polls', 'Subscribe')
 			}
+			return t('polls', 'Subscribe')
+
 		},
 
 		icon() {
 			if (this.subscribed) {
 				return 'icon-polls-confirmed'
-			} else {
-				return 'icon-polls-unconfirmed'
 			}
+			return 'icon-polls-unconfirmed'
+
 		},
 	},
 

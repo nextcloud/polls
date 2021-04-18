@@ -117,25 +117,25 @@ export default {
 		accessType() {
 			if (this.poll.access === 'public') {
 				return t('polls', 'All users')
-			} else {
-				return t('polls', 'Only invited users')
 			}
+			return t('polls', 'Only invited users')
+
 		},
 
 		pollType() {
 			if (this.poll.type === 'textPoll') {
 				return t('polls', 'Text poll')
-			} else {
-				return t('polls', 'Date poll')
 			}
+			return t('polls', 'Date poll')
+
 		},
 
 		timeExpirationRelative() {
 			if (this.poll.expire) {
 				return moment.unix(this.poll.expire).fromNow()
-			} else {
-				return t('polls', 'never')
 			}
+			return t('polls', 'never')
+
 		},
 		timeCreatedRelative() {
 			return moment.unix(this.poll.created).fromNow()

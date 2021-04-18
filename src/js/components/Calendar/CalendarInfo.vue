@@ -90,9 +90,9 @@ export default {
 				return 'conflict-no'
 			} else if (this.event.end - 1 < this.option.timestamp) {
 				return 'conflict-no'
-			} else {
-				return 'conflict-yes'
 			}
+			return 'conflict-yes'
+
 		},
 	},
 

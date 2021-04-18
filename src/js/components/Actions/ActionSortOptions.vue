@@ -65,24 +65,24 @@ export default {
 			if (this.isRanked) {
 				if (this.pollType === 'datePoll') {
 					return t('polls', 'Date order')
-				} else {
-					return t('polls', 'Original order')
 				}
-			} else {
-				return t('polls', 'Ranked order')
+				return t('polls', 'Original order')
+
 			}
+			return t('polls', 'Ranked order')
+
 		},
 
 		icon() {
 			if (this.isRanked) {
 				if (this.pollType === 'datePoll') {
 					return 'icon-calendar-000'
-				} else {
-					return 'icon-toggle-filelist'
 				}
-			} else {
-				return 'icon-quota'
+				return 'icon-toggle-filelist'
+
 			}
+			return 'icon-quota'
+
 		},
 	},
 

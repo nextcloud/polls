@@ -45,9 +45,9 @@ export default {
 		label() {
 			if (this.emailAddress) {
 				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.emailAddress })
-			} else {
-				return t('polls', 'Receive notification email on activity')
 			}
+			return t('polls', 'Receive notification email on activity')
+
 		},
 
 		subscribe: {

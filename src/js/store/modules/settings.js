@@ -96,33 +96,31 @@ const getters = {
 	viewTextPoll(state) {
 		if (state.session.manualViewTextPoll) {
 			return state.session.manualViewTextPoll
-		} else {
-			if (window.innerWidth > 480) {
-				return state.user.defaultViewTextPoll
-			} else {
-				return 'list-view'
-			}
 		}
+		if (window.innerWidth > 480) {
+			return state.user.defaultViewTextPoll
+		}
+		return 'list-view'
+
 	},
 
 	getNextViewMode(state, getters) {
 		if (state.viewModes.indexOf(getters.viewMode) < 0) {
 			return state.viewModes[1]
-		} else {
-			return state.viewModes[(state.viewModes.indexOf(getters.viewMode) + 1) % state.viewModes.length]
 		}
+		return state.viewModes[(state.viewModes.indexOf(getters.viewMode) + 1) % state.viewModes.length]
+
 	},
 
 	viewDatePoll(state) {
 		if (state.session.manualViewDatePoll) {
 			return state.session.manualViewDatePoll
-		} else {
-			if (window.innerWidth > 480) {
-				return state.user.defaultViewDatePoll
-			} else {
-				return 'list-view'
-			}
 		}
+		if (window.innerWidth > 480) {
+			return state.user.defaultViewDatePoll
+		}
+		return 'list-view'
+
 	},
 
 	viewMode(state, getters, rootState) {
@@ -130,9 +128,9 @@ const getters = {
 			return getters.viewTextPoll
 		} else if (rootState.poll.type === 'datePoll') {
 			return getters.viewDatePoll
-		} else {
-			return 'table-view'
 		}
+		return 'table-view'
+
 	},
 }
 

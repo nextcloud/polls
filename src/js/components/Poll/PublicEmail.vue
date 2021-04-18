@@ -75,12 +75,12 @@ export default {
 					result: '',
 					status: '',
 				}
-			} else {
-				return {
-					result: this.checkResult,
-					status: this.checkStatus,
-				}
 			}
+			return {
+				result: this.checkResult,
+				status: this.checkStatus,
+			}
+
 		},
 	},
 

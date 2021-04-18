@@ -129,29 +129,28 @@ export default {
 					result: t('polls', 'Checking username …'),
 					status: 'checking',
 				}
-			} else {
-				if (this.userName.length === 0) {
-					return {
-						result: t('polls', 'Enter a username to participate.'),
-						status: 'empty',
-					}
-				} else if (this.userName.length < 3) {
-					return {
-						result: t('polls', 'Please use at least 3 characters.'),
-						status: 'error',
-					}
-				} else if (!this.isValidName) {
-					return {
-						result: t('polls', 'Invalid name'),
-						status: 'error',
-					}
-				} else {
-					return {
-						result: t('polls', '{username} is valid.', { username: this.userName }),
-						status: 'success',
-					}
+			}
+			if (this.userName.length === 0) {
+				return {
+					result: t('polls', 'Enter a username to participate.'),
+					status: 'empty',
+				}
+			} else if (this.userName.length < 3) {
+				return {
+					result: t('polls', 'Please use at least 3 characters.'),
+					status: 'error',
+				}
+			} else if (!this.isValidName) {
+				return {
+					result: t('polls', 'Invalid name'),
+					status: 'error',
 				}
 			}
+			return {
+				result: t('polls', '{username} is valid.', { username: this.userName }),
+				status: 'success',
+			}
+
 		},
 
 		emailCheck() {
@@ -160,24 +159,23 @@ export default {
 					result: t('polls', 'Checking email address …'),
 					status: 'checking',
 				}
-			} else {
-				if (this.emailAddress.length < 1) {
-					return {
-						result: '',
-						status: '',
-					}
-				} else if (!this.isValidEmailAddress) {
-					return {
-						result: t('polls', 'Invalid email address.'),
-						status: 'error',
-					}
-				} else {
-					return {
-						result: t('polls', 'valid email address.'),
-						status: 'success',
-					}
+			}
+			if (this.emailAddress.length < 1) {
+				return {
+					result: '',
+					status: '',
+				}
+			} else if (!this.isValidEmailAddress) {
+				return {
+					result: t('polls', 'Invalid email address.'),
+					status: 'error',
 				}
 			}
+			return {
+				result: t('polls', 'valid email address.'),
+				status: 'success',
+			}
+
 		},
 
 	},
