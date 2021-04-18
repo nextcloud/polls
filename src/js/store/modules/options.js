@@ -24,12 +24,10 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import orderBy from 'lodash/orderBy'
 
-const defaultOptions = () => {
-	return {
-		list: [],
-		ranked: false,
-	}
-}
+const defaultOptions = () => ({
+	list: [],
+	ranked: false,
+})
 
 const state = defaultOptions()
 
@@ -60,23 +58,17 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter((option) => {
-			return option.id !== payload.option.id
-		})
+		state.list = state.list.filter((option) => option.id !== payload.option.id)
 	},
 
 	confirm(state, payload) {
-		const index = state.list.findIndex((option) => {
-			return option.id === payload.option.id
-		})
+		const index = state.list.findIndex((option) => option.id === payload.option.id)
 
 		state.list[index].confirmed = !state.list[index].confirmed
 	},
 
 	setItem(state, payload) {
-		const index = state.list.findIndex((option) => {
-			return option.id === payload.option.id
-		})
+		const index = state.list.findIndex((option) => option.id === payload.option.id)
 
 		if (index < 0) {
 			state.list.push(payload.option)
@@ -87,25 +79,13 @@ const mutations = {
 }
 
 const getters = {
-	count: (state) => {
-		return state.list.length
-	},
+	count: (state) => state.list.length,
 
-	rankedOptions: (state) => {
-		return orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc')
-	},
+	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc'),
 
-	proposalsExist: (state) => {
-		return !!state.list.filter((option) => {
-			return option.owner
-		}).length
-	},
+	proposalsExist: (state) => !!state.list.filter((option) => option.owner).length,
 
-	confirmed: (state) => {
-		return state.list.filter((option) => {
-			return option.confirmed > 0
-		})
-	},
+	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
 }
 
 const actions = {

@@ -24,11 +24,9 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-const defaultShares = () => {
-	return {
-		list: [],
-	}
-}
+const defaultShares = () => ({
+	list: [],
+})
 
 const state = defaultShares()
 
@@ -40,9 +38,7 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter((share) => {
-			return share.id !== payload.share.id
-		})
+		state.list = state.list.filter((share) => share.id !== payload.share.id)
 	},
 
 	reset(state) {
@@ -66,22 +62,14 @@ const getters = {
 		const invitationTypes = ['email', 'external', 'contact']
 		// sharetype which are active without sending an invitation
 		const directShareTypes = ['user', 'group']
-		return state.list.filter((share) => {
-			return (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type)
-		})
+		return state.list.filter((share) => (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type))
 	},
 
-	unsentInvitations: (state) => {
-		return state.list.filter((share) => {
-			return (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent
-		})
-	},
+	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent),
 
 	public: (state) => {
 		const invitationTypes = ['public']
-		return state.list.filter((share) => {
-			return invitationTypes.includes(share.type)
-		})
+		return state.list.filter((share) => invitationTypes.includes(share.type))
 	},
 
 }

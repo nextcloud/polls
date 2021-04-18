@@ -24,11 +24,9 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-const defaultComments = () => {
-	return {
-		list: [],
-	}
-}
+const defaultComments = () => ({
+	list: [],
+})
 
 const state = defaultComments()
 
@@ -49,16 +47,12 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter((comment) => {
-			return comment.id !== payload.comment.id
-		})
+		state.list = state.list.filter((comment) => comment.id !== payload.comment.id)
 	},
 }
 
 const getters = {
-	count: (state) => {
-		return state.list.length
-	},
+	count: (state) => state.list.length,
 }
 
 const actions = {

@@ -23,30 +23,28 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-const defaultSettings = () => {
-	return {
-		user: {
-			experimental: false,
-			calendarPeek: false,
-			checkCalendars: [],
-			useImage: false,
-			imageUrl: '',
-			glassyNavigation: false,
-			glassySidebar: false,
-			defaultViewTextPoll: 'list-view',
-			defaultViewDatePoll: 'table-view',
-		},
-		session: {
-			manualViewDatePoll: '',
-			manualViewTextPoll: '',
-		},
-		availableCalendars: [],
-		viewModes: [
-			'list-view',
-			'table-view',
-		],
-	}
-}
+const defaultSettings = () => ({
+	user: {
+		experimental: false,
+		calendarPeek: false,
+		checkCalendars: [],
+		useImage: false,
+		imageUrl: '',
+		glassyNavigation: false,
+		glassySidebar: false,
+		defaultViewTextPoll: 'list-view',
+		defaultViewDatePoll: 'table-view',
+	},
+	session: {
+		manualViewDatePoll: '',
+		manualViewTextPoll: '',
+	},
+	availableCalendars: [],
+	viewModes: [
+		'list-view',
+		'table-view',
+	],
+})
 
 const state = defaultSettings()
 const namespaced = true

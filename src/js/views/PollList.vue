@@ -126,15 +126,11 @@ export default {
 		}),
 
 		title() {
-			return this.pollCategories.find((category) => {
-				return (category.id === this.$route.params.type)
-			}).titleExt
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).titleExt
 		},
 
 		description() {
-			return this.pollCategories.find((category) => {
-				return (category.id === this.$route.params.type)
-			}).description
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).description
 		},
 
 		windowTitle() {
@@ -181,9 +177,7 @@ export default {
 
 		refreshView() {
 			window.document.title = t('polls', 'Polls') + ' - ' + this.title
-			if (!this.filteredPolls(this.$route.params.type).find((poll) => {
-				return poll.id === this.$store.state.poll.id
-			})) {
+			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
 				emit('toggle-sidebar', { open: false })
 			}
 

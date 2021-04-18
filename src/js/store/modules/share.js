@@ -24,18 +24,16 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-const defaultShares = () => {
-	return {
-		displayName: '',
-		id: null,
-		invitationSent: 0,
-		pollId: null,
-		token: '',
-		type: '',
-		emailAddress: '',
-		userId: '',
-	}
-}
+const defaultShares = () => ({
+	displayName: '',
+	id: null,
+	invitationSent: 0,
+	pollId: null,
+	token: '',
+	type: '',
+	emailAddress: '',
+	userId: '',
+})
 
 const state = defaultShares()
 
