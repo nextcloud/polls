@@ -55,10 +55,14 @@ export default {
 			if (this.newPollText) {
 				try {
 					await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
-					showSuccess(t('polls', 'Option {optionText} added', { optionText: this.newPollText }))
+					showSuccess(t('polls', '{optionText} added', { optionText: this.newPollText }))
 					this.newPollText = ''
 				} catch (e) {
-					showError(t('polls', 'Error adding option'))
+					if (e.response.status === 409) {
+						showError(t('polls', '{optionText} alredy exists', { optionText: this.newPollText }))
+					} else {
+						showError(t('polls', 'Error adding {optionText}', { optionText: this.newPollText }))
+					}
 				}
 			}
 		},
