@@ -188,7 +188,7 @@ export default {
 
 		async switchDeleted(pollId) {
 			try {
-				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				await this.$store.dispatch('poll/switchDeleted', { pollId })
 				emit('update-polls')
 			} catch {
 				showError(t('polls', 'Error switching deleted status.'))

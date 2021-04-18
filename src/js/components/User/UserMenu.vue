@@ -124,7 +124,7 @@ export default {
 	},
 
 	watch: {
-		emailAddress: function() {
+		emailAddress() {
 			this.emailAddressTemp = this.emailAddress
 		},
 	},

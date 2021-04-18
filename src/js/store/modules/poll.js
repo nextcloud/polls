@@ -57,7 +57,7 @@ const state = defaultPoll()
 
 const namespaced = true
 const modules = {
-	acl: acl,
+	acl,
 }
 
 const mutations = {
@@ -192,7 +192,7 @@ const actions = {
 		try {
 			return await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
 		} catch (e) {
-			console.error('Error adding poll:', { error: e.response }, { state: state })
+			console.error('Error adding poll:', { error: e.response }, { state })
 			throw e
 		}
 	},
@@ -202,7 +202,7 @@ const actions = {
 		try {
 			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
 		} catch (e) {
-			console.error('Error cloning poll', { error: e.response }, { payload: payload })
+			console.error('Error cloning poll', { error: e.response }, { payload })
 		}
 	},
 
@@ -222,7 +222,7 @@ const actions = {
 		try {
 			await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
 		} catch (e) {
-			console.error('Error switching deleted status', { error: e.response }, { payload: payload })
+			console.error('Error switching deleted status', { error: e.response }, { payload })
 		}
 	},
 
@@ -231,7 +231,7 @@ const actions = {
 		try {
 			await axios.delete(generateUrl(endPoint + '/' + payload.pollId))
 		} catch (e) {
-			console.error('Error deleting poll', { error: e.response }, { payload: payload })
+			console.error('Error deleting poll', { error: e.response }, { payload })
 		}
 	},
 

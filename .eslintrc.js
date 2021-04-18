@@ -32,6 +32,7 @@ module.exports = {
 		'node',
 	],
 	rules: {
+		'object-shorthand': 'error',
 		'@nextcloud/no-deprecations': 'warn',
 		'@nextcloud/no-removed-apis': 'error',
 		'node/no-missing-import': ['error', {

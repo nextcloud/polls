@@ -111,7 +111,7 @@ export default {
 
 		async clonePoll(pollId) {
 			try {
-				const response = await this.$store.dispatch('poll/clone', { pollId: pollId })
+				const response = await this.$store.dispatch('poll/clone', { pollId })
 				emit('update-polls')
 				this.$router.push({ name: 'vote', params: { id: response.data.id } })
 			} catch {
@@ -121,7 +121,7 @@ export default {
 
 		async switchDeleted(pollId) {
 			try {
-				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				await this.$store.dispatch('poll/switchDeleted', { pollId })
 				emit('update-polls')
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -130,7 +130,7 @@ export default {
 
 		async deletePermanently(pollId) {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: pollId })
+				await this.$store.dispatch('poll/delete', { pollId })
 				// if we permanently delete current selected poll,
 				// reload deleted polls route
 				if (this.$route.params.id && this.$route.params.id === pollId) {

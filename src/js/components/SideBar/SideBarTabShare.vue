@@ -59,7 +59,7 @@ export default {
 
 	methods: {
 		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share })
 		},
 	},
 }

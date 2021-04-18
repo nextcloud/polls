@@ -111,7 +111,7 @@ const actions = {
 		try {
 			await axios.post(generateUrl(endPoint + '/share'), payload.share)
 		} catch (e) {
-			console.error('Error writing share', { error: e.response }, { payload: payload })
+			console.error('Error writing share', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')
@@ -125,7 +125,7 @@ const actions = {
 		try {
 			await axios.delete(generateUrl(endPoint + '/' + payload.share.token))
 		} catch (e) {
-			console.error('Error removing share', { error: e.response }, { payload: payload })
+			console.error('Error removing share', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')
@@ -137,7 +137,7 @@ const actions = {
 		try {
 			return await axios.post(generateUrl(endPoint + '/' + payload.share.token + '/invite'))
 		} catch (e) {
-			console.error('Error sending invitation', { error: e.response }, { payload: payload })
+			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')
@@ -149,7 +149,7 @@ const actions = {
 		try {
 			await axios.get(generateUrl(endPoint + '/' + payload.share.token + '/resolve'))
 		} catch (e) {
-			console.error('Error exploding group', e.response.data, { error: e.response }, { payload: payload })
+			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')

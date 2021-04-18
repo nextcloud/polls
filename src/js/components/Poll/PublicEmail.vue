@@ -85,7 +85,7 @@ export default {
 	},
 
 	watch: {
-		emailAddress: function() {
+		emailAddress() {
 			this.validateEmailAddress()
 		},
 	},

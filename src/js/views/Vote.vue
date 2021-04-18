@@ -175,10 +175,10 @@ export default {
 
 		async submitEmailAddress(emailAddress) {
 			try {
-				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: emailAddress })
-				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: emailAddress }))
+				await this.$store.dispatch('share/updateEmailAddress', { emailAddress })
+				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress }))
 			} catch {
-				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: emailAddress }))
+				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress }))
 			}
 		},
 	},

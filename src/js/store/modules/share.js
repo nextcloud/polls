@@ -88,7 +88,7 @@ const actions = {
 			})
 			return { token: response.data.share.token }
 		} catch (e) {
-			console.error('Error writing personal share', { error: e.response }, { payload: payload })
+			console.error('Error writing personal share', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -107,7 +107,7 @@ const actions = {
 			context.commit('set', { share: response.data.share })
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
-			console.error('Error writing email address', { error: e.response }, { payload: payload })
+			console.error('Error writing email address', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -125,7 +125,7 @@ const actions = {
 			context.dispatch('subscription/update', false, { root: true })
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
-			console.error('Error writing email address', { error: e.response }, { payload: payload })
+			console.error('Error writing email address', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -140,7 +140,7 @@ const actions = {
 		try {
 			return await axios.get(generateUrl(endPoint + '/resend'))
 		} catch (e) {
-			console.error('Error sending invitation', { error: e.response }, { payload: payload })
+			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
 		}
 	},

@@ -129,7 +129,7 @@ const actions = {
 				context.dispatch('list')
 				context.dispatch('options/list', null, { root: true })
 			} else {
-				console.error('Error setting vote', { error: e.response }, { payload: payload })
+				console.error('Error setting vote', { error: e.response }, { payload })
 				throw e
 			}
 		}
@@ -141,7 +141,7 @@ const actions = {
 			await axios.delete(generateUrl(endPoint))
 			context.commit('deleteVotes', payload)
 		} catch (e) {
-			console.error('Error deleting votes', { error: e.response }, { payload: payload })
+			console.error('Error deleting votes', { error: e.response }, { payload })
 			throw e
 		}
 	},

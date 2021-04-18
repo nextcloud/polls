@@ -181,7 +181,7 @@ export default {
 	},
 
 	watch: {
-		userName: function() {
+		userName() {
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
 				if (this.userName !== this.share.userid) {
@@ -193,7 +193,7 @@ export default {
 			}
 		},
 
-		emailAddress: function() {
+		emailAddress() {
 			if (this.emailAddress.length > 0) {
 				this.checkingEmailAddress = true
 				this.validateEmailAddress()

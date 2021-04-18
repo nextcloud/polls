@@ -102,7 +102,7 @@ const actions = {
 			const response = await axios.post(generateUrl(endPoint + '/comment'), { message: payload.message })
 			context.commit('add', { comment: response.data.comment })
 		} catch (e) {
-			console.error('Error writing comment', { error: e.response }, { payload: payload })
+			console.error('Error writing comment', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -118,7 +118,7 @@ const actions = {
 			await axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
 			context.commit('delete', { comment: payload.comment })
 		} catch (e) {
-			console.error('Error deleting comment', { error: e.response }, { payload: payload })
+			console.error('Error deleting comment', { error: e.response }, { payload })
 			throw e
 		}
 	},

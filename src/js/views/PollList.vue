@@ -172,7 +172,7 @@ export default {
 
 		async loadPoll(pollId) {
 			try {
-				await this.$store.dispatch({ type: 'poll/get', pollId: pollId })
+				await this.$store.dispatch({ type: 'poll/get', pollId })
 				emit('toggle-sidebar', { open: true })
 			} catch {
 				showError(t('polls', 'Error loading poll'))
@@ -200,7 +200,7 @@ export default {
 
 		callPoll(index, poll, name) {
 			this.$router.push({
-				name: name,
+				name,
 				params: {
 					id: poll.id,
 				},
@@ -209,7 +209,7 @@ export default {
 
 		async switchDeleted(pollId) {
 			try {
-				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				await this.$store.dispatch('poll/switchDeleted', { pollId })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			} finally {
@@ -219,7 +219,7 @@ export default {
 
 		async deletePermanently(pollId) {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: pollId })
+				await this.$store.dispatch('poll/delete', { pollId })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			} finally {
@@ -229,7 +229,7 @@ export default {
 
 		async clonePoll(pollId) {
 			try {
-				await this.$store.dispatch('poll/clone', { pollId: pollId })
+				await this.$store.dispatch('poll/clone', { pollId })
 			} catch {
 				showError(t('polls', 'Error cloning poll.'))
 			} finally {

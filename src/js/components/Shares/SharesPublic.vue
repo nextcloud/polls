@@ -79,7 +79,7 @@ export default {
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share })
 		},
 
 		async addShare(payload) {

@@ -127,7 +127,7 @@ export default {
 			if (this.settings.checkCalendars.includes(calendar.key)) {
 				await this.writeValue({ checkCalendars: this.settings.checkCalendars.filter(item => item !== calendar.key.toString()) })
 			} else {
-				await this.$store.commit('settings/addCheckCalendar', { calendar: calendar })
+				await this.$store.commit('settings/addCheckCalendar', { calendar })
 			}
 			this.$store.dispatch('settings/write')
 		},

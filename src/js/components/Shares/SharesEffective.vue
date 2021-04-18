@@ -78,7 +78,7 @@ export default {
 
 	methods: {
 		async sendInvitation(share) {
-			const response = await this.$store.dispatch('shares/sendInvitation', { share: share })
+			const response = await this.$store.dispatch('shares/sendInvitation', { share })
 			if (response.data?.sentResult?.sentMails) {
 				response.data.sentResult.sentMails.forEach((item) => {
 					showSuccess(t('polls', 'Invitation sent to {emailAddress}', { emailAddress: item }))
@@ -102,7 +102,7 @@ export default {
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share })
 		},
 
 	},

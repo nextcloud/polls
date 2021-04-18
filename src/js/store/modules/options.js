@@ -143,7 +143,7 @@ const actions = {
 			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error adding option: ' + e.response.data, { error: e.response }, { payload: payload })
+			console.error('Error adding option: ' + e.response.data, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -159,7 +159,7 @@ const actions = {
 			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error updating option', { error: e.response }, { payload: payload })
+			console.error('Error updating option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -171,7 +171,7 @@ const actions = {
 			await axios.delete(generateUrl(endPoint + '/' + payload.option.id))
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
-			console.error('Error deleting option', { error: e.response }, { payload: payload })
+			console.error('Error deleting option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -184,7 +184,7 @@ const actions = {
 			const response = await axios.put(generateUrl(endPoint + '/' + payload.option.id + '/confirm'))
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error confirming option', { error: e.response }, { payload: payload })
+			console.error('Error confirming option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -199,7 +199,7 @@ const actions = {
 			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
-			console.error('Error reordering option', { error: e.response }, { payload: payload })
+			console.error('Error reordering option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -215,7 +215,7 @@ const actions = {
 			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
-			console.error('Error creating sequence', { error: e.response }, { payload: payload })
+			console.error('Error creating sequence', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -230,7 +230,7 @@ const actions = {
 			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
-			console.error('Error shifting dates', { error: e.response }, { payload: payload })
+			console.error('Error shifting dates', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
