@@ -270,7 +270,7 @@ export default {
 				showSuccess(t('polls', '{optionText} added', { optionText: this.dateOption.text }))
 			} catch (e) {
 				if (e.response.status === 409) {
-					showError(t('polls', '{optionText} alredy exists', { optionText: this.dateOption.text }))
+					showError(t('polls', '{optionText} already exists', { optionText: this.dateOption.text }))
 				} else {
 					showError(t('polls', 'Error adding {optionText}', { optionText: this.dateOption.text }))
 				}

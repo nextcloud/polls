@@ -59,7 +59,7 @@ export default {
 					this.newPollText = ''
 				} catch (e) {
 					if (e.response.status === 409) {
-						showError(t('polls', '{optionText} alredy exists', { optionText: this.newPollText }))
+						showError(t('polls', '{optionText} already exists', { optionText: this.newPollText }))
 					} else {
 						showError(t('polls', 'Error adding {optionText}', { optionText: this.newPollText }))
 					}
