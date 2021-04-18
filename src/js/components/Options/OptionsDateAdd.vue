@@ -36,9 +36,10 @@
 					{{ dateOption.text }}
 				</div>
 				<Spacer />
-				<button v-if="dateOption.option.duration >= 0" class="primary" @click="addOption">
+				<button v-if="dateOption.option.duration >= 0 && !added" class="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</button>
+				<div v-if="added" v-tooltip.auto="t('polls', 'added')" class="icon-polls-yes" />
 			</div>
 			<div v-else>
 				{{ t('polls', 'Pick a day.') }}
@@ -64,6 +65,7 @@
 <script>
 
 import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
 import ButtonDiv from '../Base/ButtonDiv'
@@ -95,6 +97,7 @@ export default {
 			preservedTimeTo: moment(),
 			lastPickedDate: moment(0),
 			timeValues: moment(),
+			added: false,
 		}
 	},
 
@@ -115,8 +118,8 @@ export default {
 					to = moment(this.lastPickedDate).hour(to.hour()).minute(to.minute())
 				}
 			} else {
-				from = moment(this.pickerSelection)
-				to = moment(this.pickerSelection)
+				from = moment(this.pickerSelection).startOf(this.useTime ? 'minute' : 'day')
+				to = moment(this.pickerSelection).startOf(this.useTime ? 'minute' : 'day')
 			}
 
 			if (this.useRange) {
@@ -201,6 +204,7 @@ export default {
 	methods: {
 		// if picker returned a valid selection
 		changedDate(value, type) {
+			this.added = false
 			this.changed = true
 		},
 
@@ -211,6 +215,7 @@ export default {
 		pickedDate(value) {
 			// we rely on the behavior, that the changed event is fired before the picked event
 			// if the picker already returned a valid selection before, ignore picked date
+			this.added = false
 			if (this.changed) {
 				// reset changed status
 				this.changed = false
@@ -225,6 +230,7 @@ export default {
 		},
 
 		addTime() {
+			this.added = false
 			if (this.useRange) {
 				// make sure, the pickerSelection is set to the last displayed status
 				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
@@ -234,6 +240,7 @@ export default {
 		},
 
 		removeTime() {
+			this.added = false
 			if (this.useRange) {
 				// make sure, the pickerSelection is set to the last displayed status
 				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
@@ -252,12 +259,22 @@ export default {
 			this.showTimePanel = !this.showTimePanel
 		},
 
-		addOption() {
+		async addOption() {
 			if (this.useRange) {
 				// make sure, the pickerSelection is set to the last displayed status
 				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
 			}
-			this.$store.dispatch('options/add', this.dateOption.option)
+			try {
+				await this.$store.dispatch('options/add', this.dateOption.option)
+				this.added = true
+				showSuccess(t('polls', 'Option {optionText} added', { optionText: this.dateOption.text }))
+			} catch (e) {
+				if (e.response.status === 409) {
+					showError(t('polls', 'This option already exists'))
+				} else {
+					showError(t('polls', 'Error adding option'))
+				}
+			}
 		},
 	},
 }
@@ -280,6 +297,12 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.icon-polls-yes {
+	padding: 5px 1px 5px 1px;
+	height: 34px;
+	margin: 3px 0;
+}
+
 .picker-buttons {
 	display: flex;
 	justify-content: flex-end;

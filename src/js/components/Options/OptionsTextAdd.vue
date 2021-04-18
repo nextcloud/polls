@@ -27,6 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import InputDiv from '../Base/InputDiv'
 
 export default {
@@ -52,8 +53,13 @@ export default {
 	methods: {
 		async addOption() {
 			if (this.newPollText) {
-				await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
-				this.newPollText = ''
+				try {
+					await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
+					showSuccess(t('polls', 'Option {optionText} added', { optionText: this.newPollText }))
+					this.newPollText = ''
+				} catch (e) {
+					showError(t('polls', 'Error adding option'))
+				}
 			}
 		},
 	},
