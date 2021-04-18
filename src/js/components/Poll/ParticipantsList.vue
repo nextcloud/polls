@@ -20,7 +20,7 @@
   -
   -->
 
-<template>
+<template lang="html">
 	<div class="participants-list">
 		<h2 v-if="participantsVoted.length">
 			{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}

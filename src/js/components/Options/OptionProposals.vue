@@ -23,14 +23,17 @@
 <template>
 	<div class="option-proposals">
 		<div class="option-proposals__header">
-			<div>
+			<div v-if="proposalsOpen">
 				{{ t('polls', 'You are asked to propose more options for this poll.') }}
 			</div>
-			<div v-if="proposalsExpire">
-				{{ t('polls', 'Adding proposals ends {timeRelative}.', {timeRelative: proposalExpireRelative}) }}
+			<div v-if="proposalsExpirySet && !proposalsExpired">
+				{{ t('polls', 'Adding proposals ends {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
+			</div>
+			<div v-if="proposalsExpired">
+				{{ t('polls', 'Adding proposals ended {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
 			</div>
 		</div>
-		<div class="option-proposals__add-proposal">
+		<div v-if="allowAddOptions" class="option-proposals__add-proposal">
 			<OptionsDateAdd v-if="pollType === 'datePoll'" />
 			<OptionsTextAdd v-if="pollType === 'textPoll'" />
 		</div>
@@ -39,7 +42,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import moment from '@nextcloud/moment'
 import OptionsDateAdd from './OptionsDateAdd'
 import OptionsTextAdd from './OptionsTextAdd'
 
@@ -53,16 +55,16 @@ export default {
 
 	computed: {
 		...mapState({
-			proposalsExpire: state => state.poll.proposalsExpire,
 			pollType: state => state.poll.type,
+			allowAddOptions: state => state.poll.acl.allowAddOptions,
 		}),
 
 		...mapGetters({
+			proposalsOpen: 'poll/proposalsOpen',
+			proposalsExpirySet: 'poll/proposalsExpirySet',
+			proposalsExpired: 'poll/proposalsExpired',
+			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
-
-		proposalExpireRelative() {
-			return moment.unix(this.proposalsExpire).fromNow()
-		},
 	},
 }
 
@@ -71,10 +73,11 @@ export default {
 <style lang="scss">
 	.option-proposals {
 		align-self: center;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.option-proposals__add-proposal {
 		padding: 8px 0;
-		width: 100%;
 	}
 </style>

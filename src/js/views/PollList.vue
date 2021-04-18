@@ -242,10 +242,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.area__header {
-		margin-left: 33px !important;
-	}
-
 	.poll-list__list {
 		width: 100%;
 		display: flex;

@@ -99,6 +99,22 @@ const getters = {
 		return (state.allowProposals === 'allow' || state.allowProposals === 'review')
 	},
 
+	proposalsOpen: (state, getters) => {
+		return getters.proposalsAllowed && !getters.proposalsExpired
+	},
+
+	proposalsExpired: (state, getters) => {
+		return getters.proposalsAllowed && state.proposalsExpire && moment.unix(state.proposalsExpire).diff() < 0
+	},
+
+	proposalsExpirySet: (state, getters) => {
+		return getters.proposalsAllowed && state.proposalsExpire
+	},
+
+	proposalsExpireRelative: (state) => {
+		return moment.unix(state.proposalsExpire).fromNow()
+	},
+
 	proposalsOptions: () => {
 		return [
 			{ value: 'disallow', label: t('polls', 'Disallow proposals') },

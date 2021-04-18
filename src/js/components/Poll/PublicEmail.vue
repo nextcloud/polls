@@ -20,7 +20,7 @@
   -
   -->
 
-<template>
+<template lang="html">
 	<div class="public-email">
 		<InputDiv v-model="emailAddress"
 			v-tooltip="check.result"

@@ -8,6 +8,12 @@
 	min-width: 320px;
 }
 
+.area__header {
+	display: flex;
+	margin-left: 48px !important;
+	min-width: 286px !important;
+}
+
 .experimental {
 	&.app-polls.bgcolored {
 		.app-navigation {

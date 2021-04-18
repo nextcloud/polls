@@ -6,10 +6,6 @@
 	}
 }
 
-.app-sidebar-tabs {
-	overflow-y: hidden;
-}
-
 .mx-datepicker-main, .mx-datepicker-popup {
 	right: 0 !important;
 	left: auto !important;
@@ -17,4 +13,17 @@
 
 .mx-input {
 	background-clip: initial !important;
+}
+
+
+// make date-picker usable
+@media only screen and (min-width: 750px) {
+	.edit #app-sidebar-vue {
+		// force sidebar min-width to 480px, to show the full date picker, when user is allowed to edit poll
+		min-width: 480px;
+	}
+}
+
+.app-sidebar-tabs {
+	overflow-y: hidden;
 }

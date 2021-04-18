@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': acl.allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
 		<SettingsDlg />
 		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
@@ -89,9 +89,8 @@ export default {
 					backgroundAttachment: 'fixed',
 					backgroundRepeat: 'no-repeat',
 				}
-			} else {
-				return {}
 			}
+			return {}
 		},
 	},
 
@@ -234,16 +233,7 @@ export default {
 
 <style  lang="scss">
 
-.description {
-	margin: 8px 0;
-}
-
-.linkified {
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-.label {
+.label-deprecated {
 	border: solid 1px;
 	border-radius: var(--border-radius);
 	padding: 1px 4px;

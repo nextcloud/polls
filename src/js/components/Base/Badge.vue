@@ -65,6 +65,7 @@ export default {
 		line-height: 1.1em;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		font-size: 14px;
 
 		&.withIcon {
 			padding-left: 25px !important;

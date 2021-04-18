@@ -27,31 +27,36 @@
 		style="width: inherit;"
 		@change="changedDate"
 		@pick="pickedDate">
-		<template #header>
-			<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
+		<template #input>
+			<ButtonDiv :title="t('polls', 'Add new date option')" />
+		</template>
+		<template #footer>
 			<div v-if="dateOption.isValid" class="selection">
 				<div>
 					{{ dateOption.text }}
 				</div>
 				<Spacer />
-				<button class="primary" @click="addOption">
+				<button v-if="dateOption.option.duration >= 0" class="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</button>
 			</div>
 			<div v-else>
-				{{ t('polls', 'Select a day.') }}
+				{{ t('polls', 'Pick a day.') }}
 			</div>
 		</template>
-		<template v-if="dateOption.isValid" #footer>
-			<button v-if="useTime" class="mx-btn" @click="toggleTimePanel">
-				{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
-			</button>
-			<button v-if="useTime" @click="removeTime">
-				{{ t('polls', 'Remove time') }}
-			</button>
-			<button v-else @click="addTime">
-				{{ t('polls', 'Add time') }}
-			</button>
+		<template #header>
+			<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
+			<div class="picker-buttons">
+				<button v-if="useTime" @click="toggleTimePanel">
+					{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
+				</button>
+				<button v-if="useTime" @click="removeTime">
+					{{ t('polls', 'Remove time') }}
+				</button>
+				<button v-else @click="addTime">
+					{{ t('polls', 'Add time') }}
+				</button>
+			</div>
 		</template>
 	</DateTimePicker>
 </template>
@@ -61,6 +66,7 @@
 import CheckBoxDiv from '../Base/CheckBoxDiv'
 import moment from '@nextcloud/moment'
 import { DatetimePicker } from '@nextcloud/vue'
+import ButtonDiv from '../Base/ButtonDiv'
 import Spacer from '../Base/Spacer'
 
 export default {
@@ -68,6 +74,7 @@ export default {
 
 	components: {
 		CheckBoxDiv,
+		ButtonDiv,
 		DatetimePicker,
 		Spacer,
 	},
@@ -158,6 +165,7 @@ export default {
 
 		pickerOptions() {
 			return {
+				appendToBody: true,
 				editable: false,
 				minuteStep: 5,
 				type: this.useTime ? 'datetime' : 'date',
@@ -256,7 +264,26 @@ export default {
 
 </script>
 
+<style lang="scss">
+.mx-datepicker {
+	width: 100% !important;
+}
+
+.mx-input-wrapper {
+	&> button {
+		width: 100%;
+	}
+	.mx-icon-calendar {
+		display: none;
+	}
+}
+</style>
+
 <style lang="scss" scoped>
+.picker-buttons {
+	display: flex;
+	justify-content: flex-end;
+}
 
 .selection {
 	display: flex;
