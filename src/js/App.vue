@@ -137,10 +137,10 @@ export default {
 				if (payload.activeTab !== undefined) {
 					this.activeTab = payload.activeTab
 				}
-				if (payload.open !== undefined) {
-					this.sideBarOpen = payload.open
-				} else {
+				if (payload.open === undefined) {
 					this.sideBarOpen = !this.sideBarOpen
+				} else {
+					this.sideBarOpen = payload.open
 				}
 			}
 
