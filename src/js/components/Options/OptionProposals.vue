@@ -33,7 +33,7 @@
 				{{ t('polls', 'Adding proposals ended {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
 			</div>
 		</div>
-		<div v-if="allowAddOptions" class="option-proposals__add-proposal">
+		<div v-if="proposalsOpen" class="option-proposals__add-proposal">
 			<OptionsDateAdd v-if="pollType === 'datePoll'" />
 			<OptionsTextAdd v-if="pollType === 'textPoll'" />
 		</div>
@@ -56,7 +56,6 @@ export default {
 	computed: {
 		...mapState({
 			pollType: state => state.poll.type,
-			allowAddOptions: state => state.poll.acl.allowAddOptions,
 		}),
 
 		...mapGetters({
