@@ -223,6 +223,28 @@ class PublicController extends Controller {
 	}
 
 	/**
+	 * Add options
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function addOption(string $token, $timestamp = 0, $pollOptionText = '', $duration = 0): DataResponse {
+		return $this->responseCreate(function () use ($token, $timestamp, $pollOptionText, $duration) {
+			return ['option' => $this->optionService->add(0, $timestamp, $pollOptionText, $duration, $token)];
+		});
+	}
+
+	/**
+	 * Delete option
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function deleteOption(string $token, int $optionId): DataResponse {
+		return $this->responseDeleteTolerant(function () use ($token, $optionId) {
+			return ['option' => $this->optionService->delete($optionId, $token)];
+		});
+	}
+
+	/**
 	 * Get subscription status
 	 * @PublicPage
 	 * @NoAdminRequired

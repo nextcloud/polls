@@ -34,6 +34,8 @@ return [
 		['name' => 'public#delete_email_address', 'url' => '/s/{token}/email', 'verb' => 'DELETE'],
 
 		['name' => 'public#set_vote', 'url' => '/s/{token}/vote', 'verb' => 'PUT'],
+		['name' => 'public#add_option', 'url' => '/s/{token}/option', 'verb' => 'POST'],
+		['name' => 'public#delete_option', 'url' => '/s/{token}/option/{optionId}', 'verb' => 'DELETE'],
 		['name' => 'public#add_comment', 'url' => '/s/{token}/comment', 'verb' => 'POST'],
 		['name' => 'public#delete_comment', 'url' => '/s/{token}/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'public'],
 		['name' => 'public#subscribe', 'url' => '/s/{token}/subscribe', 'verb' => 'PUT'],

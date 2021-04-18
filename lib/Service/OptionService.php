@@ -152,8 +152,14 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0): Option {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_ADD_OPTIONS);
+	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
+		if ($token) {
+			$this->acl->setToken($token)->request(Acl::PERMISSION_ADD_OPTIONS);
+			$pollId = $this->acl->getPollId();
+		} else {
+			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_ADD_OPTIONS);
+		}
+
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
 		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
@@ -199,9 +205,15 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function delete(int $optionId): Option {
+	public function delete(int $optionId, string $token = ''): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		if (!$this->acl->setPollId($this->option->getPollId())->isAllowed(Acl::PERMISSION_EDIT)
+		if ($token) {
+			$this->acl->setToken($token);
+		} else {
+			$this->acl->setPollId($this->option->getPollId());
+		}
+
+		if (!$this->acl->isAllowed(Acl::PERMISSION_EDIT)
 			&& $this->option->getOwner() !== $this->acl->getUserId()) {
 			throw new NotAuthorizedException('You are not allowed to delete this option');
 		}
