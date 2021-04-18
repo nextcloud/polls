@@ -237,7 +237,7 @@ OC.L10N.register(
     "Do you want to take over this poll from {username} and change the ownership?" : "您想要從 {username} 處接管此投票並變更所有權嗎？",
     "The original owner will be notified." : "將會通知原始所有者。",
     "Do you want to delete this poll?" : "您想要刪除此投票嗎？",
-    "This action cannot be reverted." : "此動作無法還原。",
+    "This action cannot be reverted." : "此操作無法還原。",
     "Error switching deleted status." : "切換已刪除狀態時發生錯誤。",
     "Error overtaking poll." : "接管投票時發生錯誤。",
     "404 - poll not found" : "404 - 找不到投票",
