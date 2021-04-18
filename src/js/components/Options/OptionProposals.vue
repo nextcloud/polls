@@ -55,7 +55,7 @@ export default {
 
 	computed: {
 		...mapState({
-			pollType: state => state.poll.type,
+			pollType: (state) => state.poll.type,
 		}),
 
 		...mapGetters({

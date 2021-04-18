@@ -48,7 +48,7 @@ export const watchPolls = {
 
 			// remove duplicates
 			dispatches = [...new Set(dispatches)]
-			await Promise.all(dispatches.map(dispatches => this.$store.dispatch(dispatches)))
+			await Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
 		},
 
 		async watchPolls() {
@@ -113,7 +113,7 @@ export const watchPolls = {
 							console.error('Unhandled error watching polls', e)
 						}
 						console.debug('No response - request aborted - failed request', this.retryCounter)
-						await new Promise(resolve => setTimeout(resolve, this.retryTimeout))
+						await new Promise((resolve) => setTimeout(resolve, this.retryTimeout))
 					}
 				}
 			}

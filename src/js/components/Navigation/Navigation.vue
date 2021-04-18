@@ -77,7 +77,7 @@ export default {
 
 	computed: {
 		...mapState({
-			pollCategories: state => state.polls.categories,
+			pollCategories: (state) => state.polls.categories,
 		}),
 
 		...mapGetters({

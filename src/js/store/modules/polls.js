@@ -107,11 +107,11 @@ const mutations = {
 const getters = {
 	filtered: (state) => (filterId) => {
 		if (filterId === 'all') {
-			return state.list.filter(poll => (!poll.deleted))
+			return state.list.filter((poll) => (!poll.deleted))
 		} else if (filterId === 'my') {
-			return state.list.filter(poll => (poll.owner === getCurrentUser().uid && !poll.deleted))
+			return state.list.filter((poll) => (poll.owner === getCurrentUser().uid && !poll.deleted))
 		} else if (filterId === 'relevant') {
-			return state.list.filter(poll => ((
+			return state.list.filter((poll) => ((
 				poll.important
 				|| poll.userHasVoted
 				|| poll.isOwner
@@ -121,15 +121,15 @@ const getters = {
 			&& !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4)
 			))
 		} else if (filterId === 'public') {
-			return state.list.filter(poll => (poll.access === 'public' && !poll.deleted))
+			return state.list.filter((poll) => (poll.access === 'public' && !poll.deleted))
 		} else if (filterId === 'hidden') {
-			return state.list.filter(poll => (poll.access === 'hidden' && !poll.deleted))
+			return state.list.filter((poll) => (poll.access === 'hidden' && !poll.deleted))
 		} else if (filterId === 'deleted') {
-			return state.list.filter(poll => (poll.deleted))
+			return state.list.filter((poll) => (poll.deleted))
 		} else if (filterId === 'participated') {
-			return state.list.filter(poll => (poll.userHasVoted))
+			return state.list.filter((poll) => (poll.userHasVoted))
 		} else if (filterId === 'closed') {
-			return state.list.filter(poll => (
+			return state.list.filter((poll) => (
 				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
 			))
 		}

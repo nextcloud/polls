@@ -71,7 +71,7 @@ const mutations = {
 			payload.defaultViewDatePoll = 'list-view'
 		}
 
-		Object.keys(payload).filter(key => key in state.user).forEach(key => {
+		Object.keys(payload).filter((key) => key in state.user).forEach((key) => {
 			state.user[key] = payload[key]
 		})
 	},

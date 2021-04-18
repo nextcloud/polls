@@ -72,7 +72,7 @@ export default {
 
 	computed: {
 		...mapState({
-			settings: state => state.settings.user,
+			settings: (state) => state.settings.user,
 		}),
 		// Add bindings
 		experimental: {

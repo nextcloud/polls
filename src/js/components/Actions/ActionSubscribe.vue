@@ -58,7 +58,7 @@ export default {
 
 	computed: {
 		...mapState({
-			subscribed: state => state.subscription.subscribed,
+			subscribed: (state) => state.subscription.subscribed,
 		}),
 
 		caption() {

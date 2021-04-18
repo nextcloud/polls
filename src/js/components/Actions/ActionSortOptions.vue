@@ -57,8 +57,8 @@ export default {
 
 	computed: {
 		...mapState({
-			isRanked: state => state.options.ranked,
-			pollType: state => state.poll.type,
+			isRanked: (state) => state.options.ranked,
+			pollType: (state) => state.poll.type,
 		}),
 
 		caption() {

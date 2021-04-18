@@ -60,7 +60,7 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter(option => {
+		state.list = state.list.filter((option) => {
 			return option.id !== payload.option.id
 		})
 	},
@@ -96,13 +96,13 @@ const getters = {
 	},
 
 	proposalsExist: (state) => {
-		return !!state.list.filter(option => {
+		return !!state.list.filter((option) => {
 			return option.owner
 		}).length
 	},
 
-	confirmed: state => {
-		return state.list.filter(option => {
+	confirmed: (state) => {
+		return state.list.filter((option) => {
 			return option.confirmed > 0
 		})
 	},

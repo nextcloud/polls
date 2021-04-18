@@ -40,7 +40,7 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter(share => {
+		state.list = state.list.filter((share) => {
 			return share.id !== payload.share.id
 		})
 	},
@@ -54,32 +54,32 @@ const mutations = {
 	},
 
 	update(state, payload) {
-		const foundIndex = state.list.findIndex(share => share.id === payload.share.id)
+		const foundIndex = state.list.findIndex((share) => share.id === payload.share.id)
 		Object.assign(state.list[foundIndex], payload.share)
 	},
 
 }
 
 const getters = {
-	invitation: state => {
+	invitation: (state) => {
 		// share types, which will be active, after the user gets his invitation
 		const invitationTypes = ['email', 'external', 'contact']
 		// sharetype which are active without sending an invitation
 		const directShareTypes = ['user', 'group']
-		return state.list.filter(share => {
+		return state.list.filter((share) => {
 			return (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type)
 		})
 	},
 
-	unsentInvitations: state => {
-		return state.list.filter(share => {
+	unsentInvitations: (state) => {
+		return state.list.filter((share) => {
 			return (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent
 		})
 	},
 
-	public: state => {
+	public: (state) => {
 		const invitationTypes = ['public']
-		return state.list.filter(share => {
+		return state.list.filter((share) => {
 			return invitationTypes.includes(share.type)
 		})
 	},

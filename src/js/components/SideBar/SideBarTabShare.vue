@@ -53,7 +53,7 @@ export default {
 
 	computed: {
 		...mapState({
-			isOwner: state => state.poll.acl.isOwner,
+			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 	},
 

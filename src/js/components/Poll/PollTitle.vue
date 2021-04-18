@@ -43,9 +43,9 @@ export default {
 
 	computed: {
 		...mapState({
-			title: state => state.poll.title,
-			expire: state => state.poll.expire,
-			deleted: state => state.poll.deleted,
+			title: (state) => state.poll.title,
+			expire: (state) => state.poll.expire,
+			deleted: (state) => state.poll.deleted,
 		}),
 
 		...mapGetters({

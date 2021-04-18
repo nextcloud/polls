@@ -37,7 +37,7 @@ export default {
 
 	computed: {
 		...mapState({
-			description: state => state.poll.descriptionSafe,
+			description: (state) => state.poll.descriptionSafe,
 		}),
 
 		markedDescription() {

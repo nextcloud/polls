@@ -45,8 +45,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			countOptions: state => state.options.list.length,
+			poll: (state) => state.poll,
+			countOptions: (state) => state.options.list.length,
 		}),
 
 		useVoteLimit: {

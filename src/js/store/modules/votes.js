@@ -43,11 +43,11 @@ const mutations = {
 	},
 
 	deleteVotes(state, payload) {
-		state.list = state.list.filter(vote => vote.userId !== payload.userId)
+		state.list = state.list.filter((vote) => vote.userId !== payload.userId)
 	},
 
 	setItem(state, payload) {
-		const index = state.list.findIndex(vote =>
+		const index = state.list.findIndex((vote) =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
 			&& vote.voteOptionText === payload.option.pollOptionText)
@@ -70,11 +70,11 @@ const getters = {
 	},
 
 	countVotes: (state, getters, rootState) => (answer) => {
-		return getters.relevant.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length
+		return getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length
 	},
 
 	getVote: (state) => (payload) => {
-		const found = state.list.find(vote => {
+		const found = state.list.find((vote) => {
 			return (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText)
 		})

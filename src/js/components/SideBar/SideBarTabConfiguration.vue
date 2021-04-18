@@ -107,8 +107,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.poll.acl,
+			poll: (state) => state.poll,
+			acl: (state) => state.poll.acl,
 		}),
 
 		...mapGetters({

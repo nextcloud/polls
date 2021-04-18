@@ -107,8 +107,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			share: state => state.share,
+			poll: (state) => state.poll,
+			share: (state) => state.share,
 		}),
 
 		disableSubmit() {

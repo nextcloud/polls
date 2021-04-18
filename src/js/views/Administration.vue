@@ -219,7 +219,7 @@ export default {
 
 		refreshView() {
 			window.document.title = t('polls', 'Polls') + ' - ' + this.title
-			if (!this.filteredPolls(this.$route.params.type).find(poll => {
+			if (!this.filteredPolls(this.$route.params.type).find((poll) => {
 				return poll.id === this.$store.state.poll.id
 			})) {
 				emit('toggle-sidebar', { open: false })

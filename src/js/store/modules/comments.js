@@ -49,14 +49,14 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter(comment => {
+		state.list = state.list.filter((comment) => {
 			return comment.id !== payload.comment.id
 		})
 	},
 }
 
 const getters = {
-	count: state => {
+	count: (state) => {
 		return state.list.length
 	},
 }

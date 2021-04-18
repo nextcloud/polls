@@ -118,7 +118,7 @@ export default {
 
 	computed: {
 		...mapState({
-			pollCategories: state => state.polls.categories,
+			pollCategories: (state) => state.polls.categories,
 		}),
 
 		...mapGetters({
@@ -126,13 +126,13 @@ export default {
 		}),
 
 		title() {
-			return this.pollCategories.find(category => {
+			return this.pollCategories.find((category) => {
 				return (category.id === this.$route.params.type)
 			}).titleExt
 		},
 
 		description() {
-			return this.pollCategories.find(category => {
+			return this.pollCategories.find((category) => {
 				return (category.id === this.$route.params.type)
 			}).description
 		},
@@ -181,7 +181,7 @@ export default {
 
 		refreshView() {
 			window.document.title = t('polls', 'Polls') + ' - ' + this.title
-			if (!this.filteredPolls(this.$route.params.type).find(poll => {
+			if (!this.filteredPolls(this.$route.params.type).find((poll) => {
 				return poll.id === this.$store.state.poll.id
 			})) {
 				emit('toggle-sidebar', { open: false })

@@ -82,8 +82,8 @@ export default {
 			pollTypeIcon: 'poll/typeIcon',
 		}),
 		...mapState({
-			pollType: state => state.poll.type,
-			isOwner: state => state.poll.acl.isOwner,
+			pollType: (state) => state.poll.type,
+			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 	},
 }

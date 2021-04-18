@@ -38,8 +38,8 @@ export default {
 
 	computed: {
 		...mapState({
-			subscribed: state => state.subscription.subscribed,
-			emailAddress: state => state.share.emailAddress,
+			subscribed: (state) => state.subscription.subscribed,
+			emailAddress: (state) => state.share.emailAddress,
 		}),
 
 		label() {

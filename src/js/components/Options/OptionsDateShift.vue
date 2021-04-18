@@ -75,7 +75,7 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options.list,
+			options: (state) => state.options.list,
 		}),
 
 		...mapGetters({

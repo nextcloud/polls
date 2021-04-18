@@ -76,9 +76,9 @@ export default {
 
 	computed: {
 		...mapState({
-			settings: state => state.settings.user,
-			poll: state => state.poll,
-			acl: state => state.poll.acl,
+			settings: (state) => state.settings.user,
+			poll: (state) => state.poll,
+			acl: (state) => state.poll.acl,
 		}),
 		appStyle() {
 			if (this.settings.useImage && this.settings.experimental) {
@@ -196,7 +196,7 @@ export default {
 					'subscription/get',
 				)
 
-				const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
+				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
 				await Promise.all(requests)
 
 			} catch {
@@ -220,7 +220,7 @@ export default {
 			}
 
 			try {
-				const requests = dispatches.map(dispatches => this.$store.dispatch(dispatches))
+				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
 				await Promise.all(requests)
 			} catch {
 				showError(t('polls', 'Error loading poll list'))

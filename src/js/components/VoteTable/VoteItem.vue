@@ -47,10 +47,10 @@ export default {
 
 	computed: {
 		...mapState({
-			voteLimit: state => state.poll.voteLimit,
-			optionLimit: state => state.poll.optionLimit,
-			currentUser: state => state.poll.acl.userId,
-			allowVote: state => state.poll.acl.allowVote,
+			voteLimit: (state) => state.poll.voteLimit,
+			optionLimit: (state) => state.poll.optionLimit,
+			currentUser: (state) => state.poll.acl.userId,
+			allowVote: (state) => state.poll.acl.allowVote,
 		}),
 
 		...mapGetters({

@@ -128,7 +128,7 @@ const getters = {
 	},
 
 	participants: (state, getters, rootState) => {
-		const participants = rootState.votes.list.map(item => ({
+		const participants = rootState.votes.list.map((item) => ({
 			userId: item.userId,
 			displayName: item.displayName,
 			isNoUser: item.isNoUser,
@@ -136,7 +136,7 @@ const getters = {
 		}))
 
 		// add current user, if not among participants and voting is allowed
-		if (!participants.find(item => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
 			participants.push({
 				userId: state.acl.userId,
 				displayName: state.acl.displayName,
@@ -150,7 +150,7 @@ const getters = {
 	},
 
 	participantsVoted: (state, getters, rootState) => {
-		return uniqueArrayOfObjects(rootState.votes.list.map(item => ({
+		return uniqueArrayOfObjects(rootState.votes.list.map((item) => ({
 			userId: item.userId,
 			displayName: item.displayName,
 			isNoUser: item.isNoUser,

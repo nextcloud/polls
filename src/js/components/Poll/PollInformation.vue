@@ -81,10 +81,10 @@ export default {
 
 	computed: {
 		...mapState({
-			share: state => state.share,
-			acl: state => state.poll.acl,
-			poll: state => state.poll,
-			subscribed: state => state.subscription.subscribed,
+			share: (state) => state.share,
+			acl: (state) => state.poll.acl,
+			poll: (state) => state.poll,
+			subscribed: (state) => state.subscription.subscribed,
 		}),
 
 		...mapGetters({

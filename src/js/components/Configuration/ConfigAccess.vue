@@ -52,7 +52,7 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
+			poll: (state) => state.poll,
 		}),
 
 		pollAccess: {
