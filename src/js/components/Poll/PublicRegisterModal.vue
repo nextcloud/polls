@@ -20,7 +20,7 @@
   -
   -->
 
-<template>
+<template lang="html">
 	<Modal v-show="modal" :can-close="false">
 		<div class="modal__content">
 			<!-- <h2 class="modal__title">

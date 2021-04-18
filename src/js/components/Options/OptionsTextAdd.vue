@@ -21,12 +21,13 @@
   -->
 
 <template>
-	<InputDiv v-model="newPollText" :placeholder="t('polls', 'Enter option text')"
+	<InputDiv v-model="newPollText" :placeholder="t('polls', 'Add new text option')"
 		@submit="addOption()" />
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import InputDiv from '../Base/InputDiv'
 
 export default {
@@ -52,8 +53,17 @@ export default {
 	methods: {
 		async addOption() {
 			if (this.newPollText) {
-				await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
-				this.newPollText = ''
+				try {
+					await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
+					showSuccess(t('polls', '{optionText} added', { optionText: this.newPollText }))
+					this.newPollText = ''
+				} catch (e) {
+					if (e.response.status === 409) {
+						showError(t('polls', '{optionText} already exists', { optionText: this.newPollText }))
+					} else {
+						showError(t('polls', 'Error adding {optionText}', { optionText: this.newPollText }))
+					}
+				}
 			}
 		},
 	},

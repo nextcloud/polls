@@ -20,7 +20,7 @@
   -
   -->
 
-<template>
+<template lang="html">
 	<Popover>
 		<div slot="trigger">
 			<Actions>
@@ -156,7 +156,7 @@ export default {
 		}
 
 		.subscribed {
-			background-image: var(--icon-polls-confirmed);
+			background-image: var(--icon-sound-000);
 		}
 
 		.vote-limit {

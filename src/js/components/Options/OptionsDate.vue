@@ -22,6 +22,7 @@
 
 <template>
 	<div>
+		<OptionsDateAdd v-if="!pollIsClosed" />
 		<transition-group is="ul">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
@@ -64,6 +65,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import OptionCloneDate from './OptionCloneDate'
+import OptionsDateAdd from './OptionsDateAdd'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
 import moment from '@nextcloud/moment'
@@ -79,6 +81,7 @@ export default {
 		ActionButton,
 		Modal,
 		OptionCloneDate,
+		OptionsDateAdd,
 		OptionItem,
 		OptionItemOwner,
 	},

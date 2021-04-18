@@ -21,69 +21,23 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" :class="['badge', icon, { withIcon: withIcon } ]">
-		{{ title }}
-	</Component>
+	<Component :is="tag" class="spacer" />
 </template>
 
 <script>
 export default {
-	name: 'Badge',
+	name: 'Spacer',
 	props: {
-		title: {
-			type: String,
-			default: '',
-		},
-		icon: {
-			type: String,
-			default: '',
-		},
 		tag: {
 			type: String,
-			default: 'span',
-		},
-	},
-
-	computed: {
-		withIcon() {
-			return Boolean(this.icon)
+			default: 'div',
 		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-	h2 .badge {
-		font-size: 60%;
+	.spacer {
+		flex: 1;
 	}
-
-	.badge {
-		border-radius: var(--border-radius);
-		padding: 5px;
-		margin: 8px 4px;
-		text-align: center;
-		line-height: 1.1em;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		font-size: 14px;
-
-		&.withIcon {
-			padding-left: 25px !important;
-			text-align: left;
-			background-position: 4px center;
-		}
-
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text);
-		}
-
-		&.success {
-			border-color: var(--color-success);
-			background-color: var(--color-success);
-			color: var(--color-primary-text);
-		}
-	}
-
 </style>

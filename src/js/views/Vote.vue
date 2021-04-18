@@ -22,33 +22,18 @@
 
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
-		<div class="header-actions">
-			<PollInformation />
-			<ActionSortOptions />
-			<ActionChangeView />
-			<ActionToggleSidebar v-if="acl.allowEdit || poll.allowComment" />
-		</div>
 		<div class="area__header">
-			<h2 class="title">
-				{{ poll.title }}
-				<Badge v-if="closed"
-					:title="t('polls', 'Closed {relativeTimeAgo}', {relativeTimeAgo: timeExpirationRelative})"
-					icon="icon-polls-closed-fff"
-					:class="expiryClass" />
-				<Badge v-if="!closed && poll.expire"
-					:title="t('polls', 'Closing {relativeExpirationTime}', {relativeExpirationTime: timeExpirationRelative})"
-					icon="icon-calendar"
-					:class="expiryClass" />
-				<Badge v-if="poll.deleted"
-					:title="t('polls', 'Deleted')"
-					icon="icon-delete"
-					class="error" />
-			</h2>
-
-			<div class="description">
-				<MarkUpDescription />
-				<OptionProposals v-if="acl.allowAddOptions && proposalsAllowed" />
+			<PollTitle />
+			<div class="header-actions">
+				<PollInformation />
+				<ActionSortOptions />
+				<ActionChangeView />
+				<ActionToggleSidebar v-if="acl.allowEdit || poll.allowComment" />
 			</div>
+		</div>
+		<div class="description">
+			<MarkUpDescription class="area__description" />
+			<OptionProposals v-if="acl.allowAddOptions && proposalsAllowed" class="area__proposal" />
 		</div>
 
 		<div class="area__main" :class="viewMode">
@@ -85,9 +70,8 @@ import { mapState, mapGetters } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
-import moment from '@nextcloud/moment'
-import Badge from '../components/Base/Badge'
 import MarkUpDescription from '../components/Poll/MarkUpDescription'
+import PollTitle from '../components/Poll/PollTitle'
 import LoadingOverlay from '../components/Base/LoadingOverlay'
 import PollInformation from '../components/Poll/PollInformation'
 import PublicRegisterModal from '../components/Poll/PublicRegisterModal'
@@ -104,11 +88,11 @@ export default {
 		ActionSortOptions,
 		ActionToggleSidebar,
 		AppContent,
-		Badge,
 		MarkUpDescription,
 		EmptyContent,
 		LoadingOverlay,
 		PollInformation,
+		PollTitle,
 		PublicRegisterModal,
 		VoteTable,
 		OptionProposals,
@@ -144,30 +128,6 @@ export default {
 
 		windowTitle() {
 			return t('polls', 'Polls') + ' - ' + this.poll.title
-		},
-
-		timeExpirationRelative() {
-			if (this.poll.expire) {
-				return moment.unix(this.poll.expire).fromNow()
-			} else {
-				return t('polls', 'never')
-			}
-		},
-
-		closeToClosing() {
-			return (!this.poll.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)
-		},
-
-		expiryClass() {
-			if (this.closed) {
-				return 'error'
-			} else if (this.poll.expire && this.closeToClosing) {
-				return 'warning'
-			} else if (this.poll.expire && !this.closed) {
-				return 'success'
-			} else {
-				return 'success'
-			}
 		},
 
 		showRegisterModal() {
@@ -227,34 +187,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.area__header {
+	display: flex;
+}
+
 .description {
 	display: flex;
 	flex-wrap: wrap;
+}
 
-	.markup-description {
-		min-width: 275px;
-		padding: 8px;
-		flex: 1;
-	}
-	.option-proposals {
-		width: 300px;
-		max-width: 400px;
-		min-width: 275px;
-		padding: 8px;
-		flex: 1 1 300px;
-		border: 1px solid var(--color-polls-foreground-yes);
-		border-radius: var(--border-radius);
-		background-color: var(--color-polls-background-yes);
-		.mx-datepicker {
-			.mx-input {
-				background-clip: initial !important;
-			}
+.markup-description {
+	padding: 8px;
+	flex: 2 1;
+}
+
+.option-proposals {
+	padding: 8px;
+	flex: 1 1;
+	align-self: flex-end;
+	border: 1px solid var(--color-polls-foreground-yes);
+	border-radius: var(--border-radius);
+	background-color: var(--color-polls-background-yes);
+	.mx-datepicker {
+		.mx-input {
+			background-clip: initial !important;
 		}
 	}
 }
 
 .header-actions {
 	display: flex;
+	flex-wrap: wrap-reverse;
+	flex: 0 1 auto;
 	justify-content: flex-end;
 }
 

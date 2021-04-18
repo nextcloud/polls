@@ -21,34 +21,37 @@
   -->
 
 <template>
-	<draggable v-model="reOrderedOptions">
-		<transition-group>
-			<OptionItem v-for="(option) in reOrderedOptions"
-				:key="option.id"
-				:option="option"
-				:draggable="true">
-				<template #icon>
-					<OptionItemOwner v-if="acl.allowAddOptions"
-						:avatar-size="16"
-						:option="option"
-						class="owner" />
-				</template>
-				<template #actions>
-					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton icon="icon-delete" @click="removeOption(option)">
-							{{ t('polls', 'Delete option') }}
-						</ActionButton>
-					</Actions>
-					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
-							@click="confirmOption(option)">
-							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-						</ActionButton>
-					</Actions>
-				</template>
-			</OptionItem>
-		</transition-group>
-	</draggable>
+	<div>
+		<OptionsTextAdd v-if="!pollIsClosed" />
+		<draggable v-model="reOrderedOptions">
+			<transition-group>
+				<OptionItem v-for="(option) in reOrderedOptions"
+					:key="option.id"
+					:option="option"
+					:draggable="true">
+					<template #icon>
+						<OptionItemOwner v-if="acl.allowAddOptions"
+							:avatar-size="16"
+							:option="option"
+							class="owner" />
+					</template>
+					<template #actions>
+						<Actions v-if="acl.allowEdit" class="action">
+							<ActionButton icon="icon-delete" @click="removeOption(option)">
+								{{ t('polls', 'Delete option') }}
+							</ActionButton>
+						</Actions>
+						<Actions v-if="acl.allowEdit" class="action">
+							<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+								@click="confirmOption(option)">
+								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+							</ActionButton>
+						</Actions>
+					</template>
+				</OptionItem>
+			</transition-group>
+		</draggable>
+	</div>
 </template>
 
 <script>
@@ -57,6 +60,7 @@ import { Actions, ActionButton } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
+import OptionsTextAdd from './OptionsTextAdd'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {
@@ -68,6 +72,7 @@ export default {
 		draggable,
 		OptionItem,
 		OptionItemOwner,
+		OptionsTextAdd,
 	},
 
 	mixins: [

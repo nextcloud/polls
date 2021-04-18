@@ -138,7 +138,7 @@ export default {
 						day: toModified.format('D'),
 						dow: toModified.format('ddd'),
 						time: to.format('LT'),
-						date: to.format('ll'),
+						date: toModified.format('ll'),
 						dateTime: to.format('llll'),
 						utc: moment(to).utc().format('llll'),
 						sameDay: from.format('L') === toModified.format('L'),
