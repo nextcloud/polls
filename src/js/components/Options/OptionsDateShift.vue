@@ -28,8 +28,8 @@
 		<div v-else class="selectUnit">
 			<InputDiv v-model="shift.step"
 				use-num-modifiers
-				@add="shift.step++"
-				@subtract="shift.step--" />
+				@add="shift.step += 1"
+				@subtract="shift.step -= 1" />
 			<Multiselect v-model="shift.unit"
 				:options="dateUnits"
 				label="name"

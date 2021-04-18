@@ -108,7 +108,7 @@ export const watchPolls = {
 						}
 					} else {
 						// No response was returned, i.e. server died or exception was triggered
-						this.retryCounter++
+						this.retryCounter += 1
 						if (e.response) {
 							console.error('Unhandled error watching polls', e)
 						}

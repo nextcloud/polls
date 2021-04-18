@@ -35,6 +35,7 @@ module.exports = {
 		'object-shorthand': 'error',
 		'arrow-parens': 'error',
 		'arrow-body-style': 'error',
+		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
 		'@nextcloud/no-deprecations': 'warn',
 		'@nextcloud/no-removed-apis': 'error',
 		'node/no-missing-import': ['error', {
