@@ -38,6 +38,9 @@ module.exports = {
 		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
 		'no-negated-condition': 'error',
 		'no-lonely-if': 'error',
+		'newline-per-chained-call': ['error', { ignoreChainWithDepth: 4 }],
+		'no-continue': 'error',
+		'no-array-constructor': 'error',
 		'@nextcloud/no-deprecations': 'warn',
 		'@nextcloud/no-removed-apis': 'error',
 		'node/no-missing-import': ['error', {
