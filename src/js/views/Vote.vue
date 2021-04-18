@@ -200,6 +200,7 @@ export default {
 	padding: 8px;
 	flex: 2 1;
 }
+
 .option-proposals {
 	padding: 8px;
 	flex: 1 1;
