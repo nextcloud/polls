@@ -25,11 +25,13 @@ module.exports = {
 		'plugin:node/recommended',
 		'plugin:vue/essential',
 		'plugin:vue/recommended',
+		'plugin:promise/recommended',
 		'standard',
 	],
 	plugins: [
 		'vue',
 		'node',
+		'promise',
 	],
 	rules: {
 		'object-shorthand': 'error',
