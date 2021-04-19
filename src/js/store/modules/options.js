@@ -133,7 +133,13 @@ const actions = {
 	},
 
 	async add(context, payload) {
-		const endPoint = 'apps/polls/option'
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		}
+
+		endPoint = endPoint + '/option'
+
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
 				pollId: context.rootState.route.params.id,
@@ -166,7 +172,12 @@ const actions = {
 	},
 
 	async delete(context, payload) {
-		const endPoint = 'apps/polls/option'
+		let endPoint = 'apps/polls'
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+		}
+		endPoint = endPoint + '/option'
+
 		try {
 			await axios.delete(generateUrl(endPoint + '/' + payload.option.id))
 			context.commit('delete', { option: payload.option })
