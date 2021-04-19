@@ -47,7 +47,8 @@
 						<ActionButton v-if="!pollIsClosed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 							{{ t('polls', 'Clone option') }}
 						</ActionButton>
-						<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+						<ActionButton v-if="pollIsClosed"
+							:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 							@click="confirmOption(option)">
 							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 						</ActionButton>

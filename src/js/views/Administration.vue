@@ -49,23 +49,30 @@
 				name="list"
 				tag="div"
 				class="poll-list__list">
-				<PollItem key="0" :header="true"
-					:sort="sort" :reverse="reverse" @sort-list="setSort($event)" />
+				<PollItem key="0"
+					:header="true"
+					:sort="sort"
+					:reverse="reverse"
+					@sort-list="setSort($event)" />
 
 				<PollItem v-for="(poll) in sortedList" :key="poll.id" :poll="poll">
 					<template #actions>
 						<Actions :force-menu="true">
-							<ActionButton icon="icon-add" :close-after-click="true"
+							<ActionButton icon="icon-add"
+								:close-after-click="true"
 								@click="confirmTakeOver(poll.id, poll.owner)">
 								{{ t('polls', 'Take over') }}
 							</ActionButton>
 
-							<ActionButton :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :close-after-click="true"
+							<ActionButton :icon="poll.deleted ? 'icon-history' : 'icon-delete'"
+								:close-after-click="true"
 								@click="switchDeleted(poll.id)">
 								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Set "deleted" status') }}
 							</ActionButton>
 
-							<ActionButton icon="icon-delete" class="danger" :close-after-click="true"
+							<ActionButton icon="icon-delete"
+								class="danger"
+								:close-after-click="true"
 								@click="confirmDelete(poll.id)">
 								{{ t('polls', 'Delete poll permanently') }}
 							</ActionButton>
@@ -82,7 +89,8 @@
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="takeOverModal = false" />
-					<ButtonDiv :primary="true" :title="t('polls', 'Yes')"
+					<ButtonDiv :primary="true"
+						:title="t('polls', 'Yes')"
 						@click="takeOver()" />
 				</div>
 			</div>
@@ -95,7 +103,8 @@
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="deleteModal = false" />
-					<ButtonDiv :primary="true" :title="t('polls', 'Yes')"
+					<ButtonDiv :primary="true"
+						:title="t('polls', 'Yes')"
 						@click="deletePermanently()" />
 				</div>
 			</div>

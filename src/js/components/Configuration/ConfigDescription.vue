@@ -21,7 +21,8 @@
   -->
 
 <template>
-	<textarea v-model="description" class="edit-description"
+	<textarea v-model="description"
+		class="edit-description"
 		@change="$emit('change')" />
 </template>
 

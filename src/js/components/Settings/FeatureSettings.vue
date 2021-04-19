@@ -29,7 +29,8 @@
 				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
-					<CheckBoxDiv v-model="calendar.selected" :label="calendar.name"
+					<CheckBoxDiv v-model="calendar.selected"
+						:label="calendar.name"
 						@input="clickedCalendar(calendar)">
 						<template #before>
 							<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />

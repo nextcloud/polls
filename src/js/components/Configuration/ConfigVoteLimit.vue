@@ -23,7 +23,9 @@
 <template>
 	<div>
 		<CheckBoxDiv v-model="useVoteLimit" :label="t('polls', 'Limit yes votes per user')" />
-		<InputDiv v-if="voteLimit" v-model="voteLimit" class="selectUnit indented"
+		<InputDiv v-if="voteLimit"
+			v-model="voteLimit"
+			class="selectUnit indented"
 			use-num-modifiers
 			@add="voteLimit += 1"
 			@subtract="voteLimit -= 1" />

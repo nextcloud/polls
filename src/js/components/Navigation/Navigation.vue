@@ -25,9 +25,14 @@
 		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
 		<template #list>
-			<AppNavigationItem v-for="(pollCategory) in pollCategories" :key="pollCategory.id"
-				:title="pollCategory.title" :allow-collapse="true" :pinned="pollCategory.pinned"
-				:icon="pollCategory.icon" :to="{ name: 'list', params: {type: pollCategory.id}}" :open="false">
+			<AppNavigationItem v-for="(pollCategory) in pollCategories"
+				:key="pollCategory.id"
+				:title="pollCategory.title"
+				:allow-collapse="true"
+				:pinned="pollCategory.pinned"
+				:icon="pollCategory.icon"
+				:to="{ name: 'list', params: {type: pollCategory.id}}"
+				:open="false">
 				<ul>
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"

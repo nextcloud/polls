@@ -53,7 +53,9 @@
 					<div class="modal__buttons">
 						<div class="modal__buttons__spacer" />
 						<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
-						<ButtonDiv :primary="true" :disabled="disableSubmit" :title="t('polls', 'OK')"
+						<ButtonDiv :primary="true"
+							:disabled="disableSubmit"
+							:title="t('polls', 'OK')"
 							@click="submitRegistration" />
 					</div>
 				</div>

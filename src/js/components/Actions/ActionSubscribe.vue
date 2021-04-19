@@ -41,7 +41,7 @@ import { mapState } from 'vuex'
 import ButtonDiv from '../Base/ButtonDiv'
 
 export default {
-	name: 'ActionChangeView',
+	name: 'ActionSubscribe',
 
 	components: {
 		Actions,

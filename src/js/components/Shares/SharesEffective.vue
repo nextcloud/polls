@@ -24,7 +24,8 @@
 	<ConfigBox :title="t('polls', 'Effective shares')" icon-class="icon-share">
 		<TransitionGroup :css="false" tag="div" class="shared-list">
 			<UserItem v-for="(share) in invitationShares"
-				:key="share.id" v-bind="share"
+				:key="share.id"
+				v-bind="share"
 				:icon="true">
 				<Actions>
 					<ActionButton

@@ -50,7 +50,9 @@ Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 Vue.prototype.getCurrentUser = getCurrentUser
 
+// eslint-disable-next-line vue/match-component-file-name
 Vue.component('UserItem', UserItem)
+// eslint-disable-next-line vue/match-component-file-name
 Vue.component('ButtonDiv', ButtonDiv)
 Vue.directive('tooltip', Tooltip)
 

@@ -38,7 +38,9 @@
 				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger"
+			<ActionButton v-if="poll.allowEdit && poll.deleted"
+				icon="icon-delete"
+				class="danger"
 				@click="$emit('delete-permanently')">
 				{{ t('polls', 'Delete poll permanently') }}
 			</ActionButton>

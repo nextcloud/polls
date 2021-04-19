@@ -41,7 +41,7 @@ import ButtonDiv from '../Base/ButtonDiv'
 import { emit } from '@nextcloud/event-bus'
 
 export default {
-	name: 'ActionChangeView',
+	name: 'ActionToggleSidebar',
 
 	components: {
 		Actions,

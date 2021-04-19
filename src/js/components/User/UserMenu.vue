@@ -26,20 +26,25 @@
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</ActionButton>
 		<ActionSeparator />
-		<ActionInput v-if="$route.name === 'publicVote'" icon="icon-edit" :class="check.status"
+		<ActionInput v-if="$route.name === 'publicVote'"
+			icon="icon-edit"
+			:class="check.status"
 			:value="emailAddressTemp"
 			@click="deleteEmailAddress"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			{{ t('polls', 'edit Email Address') }}
 		</ActionInput>
-		<ActionButton v-if="$route.name === 'publicVote'" :disabled="!emailAddress"
+		<ActionButton v-if="$route.name === 'publicVote'"
+			:disabled="!emailAddress"
 			:value="emailAddress"
 			icon="icon-share"
 			@click="resendInvitation()">
 			{{ t('polls', 'Get your personal link per mail') }}
 		</ActionButton>
-		<ActionCheckbox :checked="subscribed" :disabled="!acl.allowSubscribe" title="check"
+		<ActionCheckbox :checked="subscribed"
+			:disabled="!acl.allowSubscribe"
+			title="check"
 			@change="switchSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</ActionCheckbox>

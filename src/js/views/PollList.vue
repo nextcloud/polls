@@ -43,10 +43,15 @@
 				name="list"
 				tag="div"
 				class="poll-list__list">
-				<PollItem key="0" :header="true"
-					:sort="sort" :reverse="reverse" @sort-list="setSort($event)" />
+				<PollItem key="0"
+					:header="true"
+					:sort="sort"
+					:reverse="reverse"
+					@sort-list="setSort($event)" />
 
-				<PollItem v-for="(poll) in sortedList" :key="poll.id" :poll="poll"
+				<PollItem v-for="(poll) in sortedList"
+					:key="poll.id"
+					:poll="poll"
 					@goto-poll="gotoPoll(poll.id)"
 					@load-poll="loadPoll(poll.id)">
 					<template #actions>

@@ -58,7 +58,7 @@ import { Actions, ActionButton } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
 
 export default {
-	name: 'SideBarTabShare',
+	name: 'SharesUnsent',
 
 	components: {
 		Actions,

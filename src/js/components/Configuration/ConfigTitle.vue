@@ -21,7 +21,9 @@
   -->
 
 <template>
-	<input v-model="title" :class="{ error: !poll.title }" type="text"
+	<input v-model="title"
+		:class="{ error: !poll.title }"
+		type="text"
 		@change="$emit('change')"
 		@keyup.enter="$emit('change')">
 </template>

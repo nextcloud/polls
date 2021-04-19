@@ -22,7 +22,8 @@
 
 <template>
 	<transition-group name="fade" class="comments" tag="ul">
-		<CommentItem v-for="(comment) in sortedList" :key="comment.id"
+		<CommentItem v-for="(comment) in sortedList"
+			:key="comment.id"
 			:comment="comment"
 			tag="li" />
 	</transition-group>

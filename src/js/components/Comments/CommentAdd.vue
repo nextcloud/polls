@@ -23,7 +23,9 @@
 <template lang="html">
 	<div class="comment">
 		<UserItem v-bind="acl" />
-		<InputDiv v-model="comment" class="addComment" :placeholder="t('polls', 'New comment …')"
+		<InputDiv v-model="comment"
+			class="addComment"
+			:placeholder="t('polls', 'New comment …')"
 			@submit="writeComment()" />
 	</div>
 </template>
