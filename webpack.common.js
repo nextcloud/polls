@@ -1,6 +1,7 @@
 const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
 
 module.exports = {
 	entry: path.join(__dirname, 'src/js/', 'main.js'),
@@ -13,15 +14,6 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			{
-				enforce: 'pre',
-				test: /\.(js|vue)$/,
-				loader: 'eslint-loader',
-				exclude: /node_modules/,
-				options: {
-					quiet: true,
-				},
-			},
 			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
@@ -69,6 +61,10 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin(),
 		new CleanWebpackPlugin(),
+		new ESLintPlugin({
+			quiet: true,
+			extensions: ['js', 'vue'],
+		}),
 	],
 	resolve: {
 		alias: {
