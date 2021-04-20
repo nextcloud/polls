@@ -17,6 +17,7 @@ OC.L10N.register(
     "Confirmed" : "مؤكَّد",
     "OK" : "موافق",
     "Week" : "أسبوع",
+    "Add" : "إضافة",
     "Deleted" : "تم حذفه",
     "never" : "بتاتاً",
     "Access" : "النفاذ",
