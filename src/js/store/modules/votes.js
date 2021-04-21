@@ -112,6 +112,7 @@ const actions = {
 			})
 			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
 			context.dispatch('options/list', null, { root: true })
+			return response
 		} catch (e) {
 			if (e.response.status === 409) {
 				context.dispatch('list')

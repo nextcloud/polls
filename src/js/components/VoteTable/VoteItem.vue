@@ -31,6 +31,7 @@
 <script>
 
 import { mapGetters, mapState } from 'vuex'
+import { showSuccess, showError } from '@nextcloud/dialogs'
 export default {
 	name: 'VoteItem',
 
@@ -105,12 +106,18 @@ export default {
 	},
 
 	methods: {
-		setVote() {
-			this.$store.dispatch('votes/set', {
-				option: this.option,
-				userId: this.userId,
-				setTo: this.nextAnswer,
-			})
+		async setVote() {
+			try {
+				await this.$store.dispatch('votes/set', {
+					option: this.option,
+					userId: this.userId,
+					setTo: this.nextAnswer,
+				})
+				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
+			} catch (e) {
+				showError(t('polls', 'Error saving vote'))
+
+			}
 		},
 	},
 }
