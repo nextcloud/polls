@@ -42,7 +42,8 @@
 							</ActionButton>
 						</Actions>
 						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="pollIsClosed" :icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
+							<ActionButton v-if="pollIsClosed"
+								:icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
 								@click="confirmOption(option)">
 								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 							</ActionButton>
@@ -88,8 +89,8 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options.list,
-			acl: state => state.poll.acl,
+			options: (state) => state.options.list,
+			acl: (state) => state.poll.acl,
 		}),
 
 		...mapGetters({

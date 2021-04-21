@@ -23,7 +23,9 @@
 <template>
 	<div>
 		<RadioGroupDiv v-model="pollAccess" :options="accessOptions" />
-		<CheckBoxDiv v-model="pollImportant" class="indented" :disabled="pollAccess !== 'public'"
+		<CheckBoxDiv v-model="pollImportant"
+			class="indented"
+			:disabled="pollAccess !== 'public'"
 			:label="t('polls', 'Relevant for all users')" />
 	</div>
 </template>
@@ -52,7 +54,7 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
+			poll: (state) => state.poll,
 		}),
 
 		pollAccess: {

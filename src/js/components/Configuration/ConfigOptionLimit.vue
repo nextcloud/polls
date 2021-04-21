@@ -23,10 +23,12 @@
 <template>
 	<div>
 		<CheckBoxDiv v-model="useOptionLimit" :label="t('polls', 'Limit yes votes per option')" />
-		<InputDiv v-if="optionLimit" v-model="optionLimit" class="selectUnit indented"
+		<InputDiv v-if="optionLimit"
+			v-model="optionLimit"
+			class="selectUnit indented"
 			use-num-modifiers
-			@add="optionLimit++"
-			@subtract="optionLimit--" />
+			@add="optionLimit += 1"
+			@subtract="optionLimit -= 1" />
 		<CheckBoxDiv v-if="optionLimit"
 			v-model="hideBookedUp"
 			class="indented"
@@ -49,7 +51,7 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
+			poll: (state) => state.poll,
 		}),
 
 		useOptionLimit: {

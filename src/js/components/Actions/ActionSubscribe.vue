@@ -41,7 +41,7 @@ import { mapState } from 'vuex'
 import ButtonDiv from '../Base/ButtonDiv'
 
 export default {
-	name: 'ActionChangeView',
+	name: 'ActionSubscribe',
 
 	components: {
 		Actions,
@@ -58,23 +58,23 @@ export default {
 
 	computed: {
 		...mapState({
-			subscribed: state => state.subscription.subscribed,
+			subscribed: (state) => state.subscription.subscribed,
 		}),
 
 		caption() {
 			if (this.subscribed) {
 				return t('polls', 'Unsubscribe')
-			} else {
-				return t('polls', 'Subscribe')
 			}
+			return t('polls', 'Subscribe')
+
 		},
 
 		icon() {
 			if (this.subscribed) {
 				return 'icon-polls-confirmed'
-			} else {
-				return 'icon-polls-unconfirmed'
 			}
+			return 'icon-polls-unconfirmed'
+
 		},
 	},
 

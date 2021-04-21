@@ -28,8 +28,8 @@
 		<div v-else class="selectUnit">
 			<InputDiv v-model="shift.step"
 				use-num-modifiers
-				@add="shift.step++"
-				@subtract="shift.step--" />
+				@add="shift.step += 1"
+				@subtract="shift.step -= 1" />
 			<Multiselect v-model="shift.unit"
 				:options="dateUnits"
 				label="name"
@@ -75,7 +75,7 @@ export default {
 
 	computed: {
 		...mapState({
-			options: state => state.options.list,
+			options: (state) => state.options.list,
 		}),
 
 		...mapGetters({
@@ -86,9 +86,9 @@ export default {
 			// vue2-datepicker needs 7 for sunday
 			if (moment.localeData()._week.dow === 0) {
 				return 7
-			} else {
-				return moment.localeData()._week.dow
 			}
+			return moment.localeData()._week.dow
+
 		},
 	},
 

@@ -38,9 +38,7 @@ const mutations = {
 }
 
 const getters = {
-	filtered: (state) => (filterId) => {
-		return state.list
-	},
+	filtered: (state) => (filterId) => state.list,
 }
 
 const actions = {

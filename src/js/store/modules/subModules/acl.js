@@ -21,26 +21,24 @@
  *
  */
 
-const defaultAcl = () => {
-	return {
-		allowComment: false,
-		allowEdit: false,
-		allowAddOptions: false,
-		allowSeeResults: false,
-		allowSeeUsernames: false,
-		allowSubscribe: false,
-		allowView: false,
-		allowVote: false,
-		displayName: '',
-		isOwner: false,
-		loggedIn: false,
-		pollId: null,
-		token: '',
-		userHasVoted: false,
-		userId: '',
-		userIsInvolved: '',
-	}
-}
+const defaultAcl = () => ({
+	allowComment: false,
+	allowEdit: false,
+	allowAddOptions: false,
+	allowSeeResults: false,
+	allowSeeUsernames: false,
+	allowSubscribe: false,
+	allowView: false,
+	allowVote: false,
+	displayName: '',
+	isOwner: false,
+	loggedIn: false,
+	pollId: null,
+	token: '',
+	userHasVoted: false,
+	userId: '',
+	userIsInvolved: '',
+})
 
 const state = defaultAcl()
 

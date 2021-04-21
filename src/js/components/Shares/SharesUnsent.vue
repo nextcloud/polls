@@ -58,7 +58,7 @@ import { Actions, ActionButton } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
 
 export default {
-	name: 'SideBarTabShare',
+	name: 'SharesUnsent',
 
 	components: {
 		Actions,
@@ -75,7 +75,7 @@ export default {
 	methods: {
 		async resolveGroup(share) {
 			try {
-				await this.$store.dispatch('shares/resolveGroup', { share: share })
+				await this.$store.dispatch('shares/resolveGroup', { share })
 			} catch (e) {
 				if (e.response.status === 409 && e.response.data === 'Circles is not enabled for this user') {
 					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
@@ -88,7 +88,7 @@ export default {
 		},
 
 		async sendInvitation(share) {
-			const response = await this.$store.dispatch('shares/sendInvitation', { share: share })
+			const response = await this.$store.dispatch('shares/sendInvitation', { share })
 			if (response.data?.sentResult?.sentMails) {
 				response.data.sentResult.sentMails.forEach((item) => {
 					showSuccess(t('polls', 'Invitation sent to {emailAddress}', { emailAddress: item }))
@@ -103,7 +103,7 @@ export default {
 		},
 
 		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share: share })
+			this.$store.dispatch('shares/delete', { share })
 		},
 	},
 }

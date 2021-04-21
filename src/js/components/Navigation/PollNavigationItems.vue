@@ -38,7 +38,9 @@
 				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted" icon="icon-delete" class="danger"
+			<ActionButton v-if="poll.allowEdit && poll.deleted"
+				icon="icon-delete"
+				class="danger"
 				@click="$emit('delete-permanently')">
 				{{ t('polls', 'Delete poll permanently') }}
 			</ActionButton>
@@ -70,9 +72,9 @@ export default {
 		pollIcon() {
 			if (this.poll.type === 'datePoll') {
 				return 'icon-calendar-000'
-			} else {
-				return 'icon-toggle-filelist'
 			}
+			return 'icon-toggle-filelist'
+
 		},
 		closed() {
 			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)

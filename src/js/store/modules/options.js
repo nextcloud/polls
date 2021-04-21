@@ -24,12 +24,10 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import orderBy from 'lodash/orderBy'
 
-const defaultOptions = () => {
-	return {
-		list: [],
-		ranked: false,
-	}
-}
+const defaultOptions = () => ({
+	list: [],
+	ranked: false,
+})
 
 const state = defaultOptions()
 
@@ -60,23 +58,17 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter(option => {
-			return option.id !== payload.option.id
-		})
+		state.list = state.list.filter((option) => option.id !== payload.option.id)
 	},
 
 	confirm(state, payload) {
-		const index = state.list.findIndex((option) => {
-			return option.id === payload.option.id
-		})
+		const index = state.list.findIndex((option) => option.id === payload.option.id)
 
 		state.list[index].confirmed = !state.list[index].confirmed
 	},
 
 	setItem(state, payload) {
-		const index = state.list.findIndex((option) => {
-			return option.id === payload.option.id
-		})
+		const index = state.list.findIndex((option) => option.id === payload.option.id)
 
 		if (index < 0) {
 			state.list.push(payload.option)
@@ -87,25 +79,13 @@ const mutations = {
 }
 
 const getters = {
-	count: (state) => {
-		return state.list.length
-	},
+	count: (state) => state.list.length,
 
-	rankedOptions: (state) => {
-		return orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc')
-	},
+	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc'),
 
-	proposalsExist: (state) => {
-		return !!state.list.filter(option => {
-			return option.owner
-		}).length
-	},
+	proposalsExist: (state) => !!state.list.filter((option) => option.owner).length,
 
-	confirmed: state => {
-		return state.list.filter(option => {
-			return option.confirmed > 0
-		})
-	},
+	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
 }
 
 const actions = {
@@ -149,7 +129,7 @@ const actions = {
 			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error adding option: ' + e.response.data, { error: e.response }, { payload: payload })
+			console.error('Error adding option: ' + e.response.data, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -165,7 +145,7 @@ const actions = {
 			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error updating option', { error: e.response }, { payload: payload })
+			console.error('Error updating option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -182,7 +162,7 @@ const actions = {
 			await axios.delete(generateUrl(endPoint + '/' + payload.option.id))
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
-			console.error('Error deleting option', { error: e.response }, { payload: payload })
+			console.error('Error deleting option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -195,7 +175,7 @@ const actions = {
 			const response = await axios.put(generateUrl(endPoint + '/' + payload.option.id + '/confirm'))
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error confirming option', { error: e.response }, { payload: payload })
+			console.error('Error confirming option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -210,7 +190,7 @@ const actions = {
 			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
-			console.error('Error reordering option', { error: e.response }, { payload: payload })
+			console.error('Error reordering option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -226,7 +206,7 @@ const actions = {
 			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
-			console.error('Error creating sequence', { error: e.response }, { payload: payload })
+			console.error('Error creating sequence', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -241,7 +221,7 @@ const actions = {
 			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
-			console.error('Error shifting dates', { error: e.response }, { payload: payload })
+			console.error('Error shifting dates', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}

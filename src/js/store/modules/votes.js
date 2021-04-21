@@ -23,11 +23,9 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-const defaultVotes = () => {
-	return {
-		list: [],
-	}
-}
+const defaultVotes = () => ({
+	list: [],
+})
 
 const state = defaultVotes()
 
@@ -43,11 +41,11 @@ const mutations = {
 	},
 
 	deleteVotes(state, payload) {
-		state.list = state.list.filter(vote => vote.userId !== payload.userId)
+		state.list = state.list.filter((vote) => vote.userId !== payload.userId)
 	},
 
 	setItem(state, payload) {
-		const index = state.list.findIndex(vote =>
+		const index = state.list.findIndex((vote) =>
 			parseInt(vote.pollId) === payload.pollId
 			&& vote.userId === payload.vote.userId
 			&& vote.voteOptionText === payload.option.pollOptionText)
@@ -61,32 +59,22 @@ const mutations = {
 
 const getters = {
 
-	relevant: (state, getters, rootState) => {
-		return state.list.filter((vote) => {
-			return rootState.options.list.some((option) => {
-				return option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText
-			})
-		})
-	},
+	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText)),
 
-	countVotes: (state, getters, rootState) => (answer) => {
-		return getters.relevant.filter(vote => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length
-	},
+	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length,
 
 	getVote: (state) => (payload) => {
-		const found = state.list.find(vote => {
-			return (vote.userId === payload.userId
-				&& vote.voteOptionText === payload.option.pollOptionText)
-		})
+		const found = state.list.find((vote) => (vote.userId === payload.userId
+				&& vote.voteOptionText === payload.option.pollOptionText))
 		if (found === undefined) {
 			return {
 				voteAnswer: '',
 				voteOptionText: payload.option.pollOptionText,
 				userId: payload.userId,
 			}
-		} else {
-			return found
 		}
+		return found
+
 	},
 }
 
@@ -129,7 +117,7 @@ const actions = {
 				context.dispatch('list')
 				context.dispatch('options/list', null, { root: true })
 			} else {
-				console.error('Error setting vote', { error: e.response }, { payload: payload })
+				console.error('Error setting vote', { error: e.response }, { payload })
 				throw e
 			}
 		}
@@ -141,7 +129,7 @@ const actions = {
 			await axios.delete(generateUrl(endPoint))
 			context.commit('deleteVotes', payload)
 		} catch (e) {
-			console.error('Error deleting votes', { error: e.response }, { payload: payload })
+			console.error('Error deleting votes', { error: e.response }, { payload })
 			throw e
 		}
 	},

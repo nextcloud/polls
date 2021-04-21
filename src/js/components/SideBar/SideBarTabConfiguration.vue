@@ -107,8 +107,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.poll.acl,
+			poll: (state) => state.poll,
+			acl: (state) => state.poll.acl,
 		}),
 
 		...mapGetters({
@@ -143,15 +143,15 @@ export default {
 		},
 
 		async writePoll() {
-			if (!this.poll.title) {
-				showError(t('polls', 'Title must not be empty!'))
-			} else {
+			if (this.poll.title) {
 				try {
 					await this.$store.dispatch('poll/update')
 					this.successDebounced(this.poll.title)
 				} catch {
 					showError(t('polls', 'Error writing poll'))
 				}
+			} else {
+				showError(t('polls', 'Title must not be empty!'))
 			}
 		},
 

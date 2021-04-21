@@ -138,12 +138,10 @@ export default {
 						text = from.format('ll') + ' - ' + to.format('ll')
 					}
 				}
+			} else if (this.useTime) {
+				text = from.format('ll LT')
 			} else {
-				if (this.useTime) {
-					text = from.format('ll LT')
-				} else {
-					text = from.startOf('day').format('ll')
-				}
+				text = from.startOf('day').format('ll')
 			}
 
 			return {
@@ -161,9 +159,9 @@ export default {
 		tempFormat() {
 			if (this.useTime) {
 				return moment.localeData().longDateFormat('L LT')
-			} else {
-				return moment.localeData().longDateFormat('L')
 			}
+			return moment.localeData().longDateFormat('L')
+
 		},
 
 		pickerOptions() {

@@ -29,7 +29,8 @@
 				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
-					<CheckBoxDiv v-model="calendar.selected" :label="calendar.name"
+					<CheckBoxDiv v-model="calendar.selected"
+						:label="calendar.name"
 						@input="clickedCalendar(calendar)">
 						<template #before>
 							<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
@@ -69,8 +70,8 @@ export default {
 
 	computed: {
 		...mapState({
-			settings: state => state.settings.user,
-			calendars: state => state.settings.availableCalendars,
+			settings: (state) => state.settings.user,
+			calendars: (state) => state.settings.availableCalendars,
 		}),
 		// Add bindings
 		calendarPeek: {
@@ -83,7 +84,7 @@ export default {
 		},
 
 		calendarChoices() {
-			return this.calendars.map(calendar => ({
+			return this.calendars.map((calendar) => ({
 				key: calendar.key.toString(),
 				name: calendar.name,
 				displayColor: calendar.displayColor,
@@ -125,9 +126,9 @@ export default {
 
 		async clickedCalendar(calendar) {
 			if (this.settings.checkCalendars.includes(calendar.key)) {
-				await this.writeValue({ checkCalendars: this.settings.checkCalendars.filter(item => item !== calendar.key.toString()) })
+				await this.writeValue({ checkCalendars: this.settings.checkCalendars.filter((item) => item !== calendar.key.toString()) })
 			} else {
-				await this.$store.commit('settings/addCheckCalendar', { calendar: calendar })
+				await this.$store.commit('settings/addCheckCalendar', { calendar })
 			}
 			this.$store.dispatch('settings/write')
 		},

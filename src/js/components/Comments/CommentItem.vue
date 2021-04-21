@@ -73,7 +73,7 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: state => state.poll.acl,
+			acl: (state) => state.poll.acl,
 		}),
 		dateCommentedRelative() {
 			return moment.utc(this.comment.dt).fromNow()
@@ -83,7 +83,7 @@ export default {
 	methods: {
 		deleteComment() {
 			this.deleteInterval = setInterval(() => {
-				this.countdown--
+				this.countdown -= 1
 				if (this.countdown < 0) {
 					this.countdown = 0
 				}

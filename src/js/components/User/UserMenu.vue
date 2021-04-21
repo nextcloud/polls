@@ -26,20 +26,25 @@
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</ActionButton>
 		<ActionSeparator />
-		<ActionInput v-if="$route.name === 'publicVote'" icon="icon-edit" :class="check.status"
+		<ActionInput v-if="$route.name === 'publicVote'"
+			icon="icon-edit"
+			:class="check.status"
 			:value="emailAddressTemp"
 			@click="deleteEmailAddress"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			{{ t('polls', 'edit Email Address') }}
 		</ActionInput>
-		<ActionButton v-if="$route.name === 'publicVote'" :disabled="!emailAddress"
+		<ActionButton v-if="$route.name === 'publicVote'"
+			:disabled="!emailAddress"
 			:value="emailAddress"
 			icon="icon-share"
 			@click="resendInvitation()">
 			{{ t('polls', 'Get your personal link per mail') }}
 		</ActionButton>
-		<ActionCheckbox :checked="subscribed" :disabled="!acl.allowSubscribe" title="check"
+		<ActionCheckbox :checked="subscribed"
+			:disabled="!acl.allowSubscribe"
+			title="check"
 			@change="switchSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</ActionCheckbox>
@@ -85,10 +90,10 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: state => state.poll.acl,
-			share: state => state.share,
-			subscribed: state => state.subscription.subscribed,
-			emailAddress: state => state.share.emailAddress,
+			acl: (state) => state.poll.acl,
+			share: (state) => state.share,
+			subscribed: (state) => state.subscription.subscribed,
+			emailAddress: (state) => state.share.emailAddress,
 		}),
 
 		emailAddressUnchanged() {
@@ -106,12 +111,12 @@ export default {
 					result: '',
 					status: '',
 				}
-			} else {
-				return {
-					result: this.checkResult,
-					status: this.checkStatus,
-				}
 			}
+			return {
+				result: this.checkResult,
+				status: this.checkStatus,
+			}
+
 		},
 
 		personalLink() {
@@ -124,7 +129,7 @@ export default {
 	},
 
 	watch: {
-		emailAddress: function() {
+		emailAddress() {
 			this.emailAddressTemp = this.emailAddress
 		},
 	},

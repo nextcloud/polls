@@ -37,15 +37,15 @@ export default {
 
 	computed: {
 		...mapState({
-			description: state => state.poll.descriptionSafe,
+			description: (state) => state.poll.descriptionSafe,
 		}),
 
 		markedDescription() {
 			if (this.description) {
 				return DOMPurify.sanitize(marked(this.description))
-			} else {
-				return t('polls', 'No description provided')
 			}
+			return t('polls', 'No description provided')
+
 		},
 	},
 }

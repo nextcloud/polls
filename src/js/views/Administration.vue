@@ -49,23 +49,30 @@
 				name="list"
 				tag="div"
 				class="poll-list__list">
-				<PollItem key="0" :header="true"
-					:sort="sort" :reverse="reverse" @sort-list="setSort($event)" />
+				<PollItem key="0"
+					:header="true"
+					:sort="sort"
+					:reverse="reverse"
+					@sort-list="setSort($event)" />
 
 				<PollItem v-for="(poll) in sortedList" :key="poll.id" :poll="poll">
 					<template #actions>
 						<Actions :force-menu="true">
-							<ActionButton icon="icon-add" :close-after-click="true"
+							<ActionButton icon="icon-add"
+								:close-after-click="true"
 								@click="confirmTakeOver(poll.id, poll.owner)">
 								{{ t('polls', 'Take over') }}
 							</ActionButton>
 
-							<ActionButton :icon="poll.deleted ? 'icon-history' : 'icon-delete'" :close-after-click="true"
+							<ActionButton :icon="poll.deleted ? 'icon-history' : 'icon-delete'"
+								:close-after-click="true"
 								@click="switchDeleted(poll.id)">
 								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Set "deleted" status') }}
 							</ActionButton>
 
-							<ActionButton icon="icon-delete" class="danger" :close-after-click="true"
+							<ActionButton icon="icon-delete"
+								class="danger"
+								:close-after-click="true"
 								@click="confirmDelete(poll.id)">
 								{{ t('polls', 'Delete poll permanently') }}
 							</ActionButton>
@@ -82,7 +89,8 @@
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="takeOverModal = false" />
-					<ButtonDiv :primary="true" :title="t('polls', 'Yes')"
+					<ButtonDiv :primary="true"
+						:title="t('polls', 'Yes')"
 						@click="takeOver()" />
 				</div>
 			</div>
@@ -95,7 +103,8 @@
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="deleteModal = false" />
-					<ButtonDiv :primary="true" :title="t('polls', 'Yes')"
+					<ButtonDiv :primary="true"
+						:title="t('polls', 'Yes')"
 						@click="deletePermanently()" />
 				</div>
 			</div>
@@ -154,9 +163,8 @@ export default {
 		sortedList() {
 			if (this.reverse) {
 				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
-			} else {
-				return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 			}
+			return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 		},
 
 		noPolls() {
@@ -189,7 +197,7 @@ export default {
 
 		async switchDeleted(pollId) {
 			try {
-				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				await this.$store.dispatch('poll/switchDeleted', { pollId })
 				emit('update-polls')
 			} catch {
 				showError(t('polls', 'Error switching deleted status.'))
@@ -220,9 +228,7 @@ export default {
 
 		refreshView() {
 			window.document.title = t('polls', 'Polls') + ' - ' + this.title
-			if (!this.filteredPolls(this.$route.params.type).find(poll => {
-				return poll.id === this.$store.state.poll.id
-			})) {
+			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
 				emit('toggle-sidebar', { open: false })
 			}
 

@@ -30,7 +30,8 @@
 				</p>
 			</div>
 			<div class="calendar-peek__grid">
-				<CalendarInfo v-for="eventItem in sortedEvents" :key="eventItem.UID"
+				<CalendarInfo v-for="eventItem in sortedEvents"
+					:key="eventItem.UID"
 					:event="eventItem"
 					:option="option" />
 			</div>
@@ -83,7 +84,7 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
+			poll: (state) => state.poll,
 		}),
 
 		sortedEvents() {

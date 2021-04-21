@@ -60,9 +60,9 @@ export default {
 		iconClass() {
 			if (this.submit) {
 				return 'icon-confirm'
-			} else {
-				return this.icon
 			}
+			return this.icon
+
 		},
 
 		withIcon() {
@@ -74,9 +74,9 @@ export default {
 				return 'submit'
 			} else if (this.simple) {
 				return 'simple'
-			} else {
-				return 'button'
 			}
+			return 'button'
+
 		},
 	},
 }

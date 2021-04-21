@@ -43,10 +43,15 @@
 				name="list"
 				tag="div"
 				class="poll-list__list">
-				<PollItem key="0" :header="true"
-					:sort="sort" :reverse="reverse" @sort-list="setSort($event)" />
+				<PollItem key="0"
+					:header="true"
+					:sort="sort"
+					:reverse="reverse"
+					@sort-list="setSort($event)" />
 
-				<PollItem v-for="(poll) in sortedList" :key="poll.id" :poll="poll"
+				<PollItem v-for="(poll) in sortedList"
+					:key="poll.id"
+					:poll="poll"
 					@goto-poll="gotoPoll(poll.id)"
 					@load-poll="loadPoll(poll.id)">
 					<template #actions>
@@ -118,7 +123,7 @@ export default {
 
 	computed: {
 		...mapState({
-			pollCategories: state => state.polls.categories,
+			pollCategories: (state) => state.polls.categories,
 		}),
 
 		...mapGetters({
@@ -126,15 +131,11 @@ export default {
 		}),
 
 		title() {
-			return this.pollCategories.find(category => {
-				return (category.id === this.$route.params.type)
-			}).titleExt
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).titleExt
 		},
 
 		description() {
-			return this.pollCategories.find(category => {
-				return (category.id === this.$route.params.type)
-			}).description
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).description
 		},
 
 		windowTitle() {
@@ -144,9 +145,8 @@ export default {
 		sortedList() {
 			if (this.reverse) {
 				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
-			} else {
-				return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 			}
+			return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 		},
 
 		noPolls() {
@@ -173,7 +173,7 @@ export default {
 
 		async loadPoll(pollId) {
 			try {
-				await this.$store.dispatch({ type: 'poll/get', pollId: pollId })
+				await this.$store.dispatch({ type: 'poll/get', pollId })
 				emit('toggle-sidebar', { open: true })
 			} catch {
 				showError(t('polls', 'Error loading poll'))
@@ -182,9 +182,7 @@ export default {
 
 		refreshView() {
 			window.document.title = t('polls', 'Polls') + ' - ' + this.title
-			if (!this.filteredPolls(this.$route.params.type).find(poll => {
-				return poll.id === this.$store.state.poll.id
-			})) {
+			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
 				emit('toggle-sidebar', { open: false })
 			}
 
@@ -201,7 +199,7 @@ export default {
 
 		callPoll(index, poll, name) {
 			this.$router.push({
-				name: name,
+				name,
 				params: {
 					id: poll.id,
 				},
@@ -210,7 +208,7 @@ export default {
 
 		async switchDeleted(pollId) {
 			try {
-				await this.$store.dispatch('poll/switchDeleted', { pollId: pollId })
+				await this.$store.dispatch('poll/switchDeleted', { pollId })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			} finally {
@@ -220,7 +218,7 @@ export default {
 
 		async deletePermanently(pollId) {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: pollId })
+				await this.$store.dispatch('poll/delete', { pollId })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			} finally {
@@ -230,7 +228,7 @@ export default {
 
 		async clonePoll(pollId) {
 			try {
-				await this.$store.dispatch('poll/clone', { pollId: pollId })
+				await this.$store.dispatch('poll/clone', { pollId })
 			} catch {
 				showError(t('polls', 'Error cloning poll.'))
 			} finally {

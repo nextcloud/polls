@@ -24,11 +24,9 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-const defaultComments = () => {
-	return {
-		list: [],
-	}
-}
+const defaultComments = () => ({
+	list: [],
+})
 
 const state = defaultComments()
 
@@ -49,16 +47,12 @@ const mutations = {
 	},
 
 	delete(state, payload) {
-		state.list = state.list.filter(comment => {
-			return comment.id !== payload.comment.id
-		})
+		state.list = state.list.filter((comment) => comment.id !== payload.comment.id)
 	},
 }
 
 const getters = {
-	count: state => {
-		return state.list.length
-	},
+	count: (state) => state.list.length,
 }
 
 const actions = {
@@ -102,7 +96,7 @@ const actions = {
 			const response = await axios.post(generateUrl(endPoint + '/comment'), { message: payload.message })
 			context.commit('add', { comment: response.data.comment })
 		} catch (e) {
-			console.error('Error writing comment', { error: e.response }, { payload: payload })
+			console.error('Error writing comment', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -118,7 +112,7 @@ const actions = {
 			await axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
 			context.commit('delete', { comment: payload.comment })
 		} catch (e) {
-			console.error('Error deleting comment', { error: e.response }, { payload: payload })
+			console.error('Error deleting comment', { error: e.response }, { payload })
 			throw e
 		}
 	},

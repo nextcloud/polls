@@ -46,18 +46,22 @@
 
 				<Confirmation v-if="option.confirmed && closed" :option="option" />
 
-				<Counter v-else-if="acl.allowSeeResults" :show-maybe="!!poll.allowMaybe"
+				<Counter v-else-if="acl.allowSeeResults"
+					:show-maybe="!!poll.allowMaybe"
 					:option="option"
 					:counter-style="viewMode === 'table-view' ? 'iconStyle' : 'barStyle'"
 					:show-no="viewMode === 'list-view'" />
 				<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
-				<div v-for="(participant) in participants" :key="participant.userId" class="vote-item-wrapper"
+				<div v-for="(participant) in participants"
+					:key="participant.userId"
+					class="vote-item-wrapper"
 					:class="{currentuser: participant.userId === acl.userId}">
 					<VoteItem :user-id="participant.userId" :option="option" />
 				</div>
 				<OptionItemOwner v-if="proposalsExist" :option="option" class="owner" />
 				<Actions v-if="acl.allowEdit && closed" class="action confirm">
-					<ActionButton v-if="closed" :icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+					<ActionButton v-if="closed"
+						:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 						@click="confirmOption(option)">
 						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 					</ActionButton>
@@ -125,10 +129,10 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: state => state.poll.acl,
-			poll: state => state.poll,
-			share: state => state.share,
-			settings: state => state.settings.user,
+			acl: (state) => state.poll.acl,
+			poll: (state) => state.poll,
+			share: (state) => state.share,
+			settings: (state) => state.settings.user,
 		}),
 
 		...mapGetters({

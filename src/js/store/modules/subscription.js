@@ -24,11 +24,9 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-const defaultSubscription = () => {
-	return {
-		subscribed: false,
-	}
-}
+const defaultSubscription = () => ({
+	subscribed: false,
+})
 
 const state = defaultSubscription()
 

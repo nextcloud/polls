@@ -108,10 +108,10 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.poll.acl,
-			share: state => state.share,
-			settings: state => state.settings,
+			poll: (state) => state.poll,
+			acl: (state) => state.poll.acl,
+			share: (state) => state.share,
+			settings: (state) => state.settings,
 		}),
 
 		...mapGetters({
@@ -152,13 +152,7 @@ export default {
 
 		if (getCurrentUser() && this.$route.name === 'publicVote') {
 			// reroute to the internal vote page, if the user is logged in
-			this.$store.dispatch('share/get', { token: this.$route.params.token })
-				.then((response) => {
-					this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
-				})
-				.catch(() => {
-					this.$router.replace({ name: 'notfound' })
-				})
+			this.rerouteToInternal()
 		} else {
 			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
 		}
@@ -173,12 +167,21 @@ export default {
 			emit('toggle-sidebar', { open: true, activeTab: 'options' })
 		},
 
+		async rerouteToInternal() {
+			try {
+				const response = await this.$store.dispatch('share/get', { token: this.$route.params.token })
+				this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
+			} catch (e) {
+				this.$router.replace({ name: 'notfound' })
+			}
+		},
+
 		async submitEmailAddress(emailAddress) {
 			try {
-				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: emailAddress })
-				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: emailAddress }))
+				await this.$store.dispatch('share/updateEmailAddress', { emailAddress })
+				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress }))
 			} catch {
-				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: emailAddress }))
+				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress }))
 			}
 		},
 	},

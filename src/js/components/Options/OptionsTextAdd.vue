@@ -21,7 +21,8 @@
   -->
 
 <template>
-	<InputDiv v-model="newPollText" :placeholder="t('polls', 'Add new text option')"
+	<InputDiv v-model="newPollText"
+		:placeholder="t('polls', 'Add new text option')"
 		@submit="addOption()" />
 </template>
 

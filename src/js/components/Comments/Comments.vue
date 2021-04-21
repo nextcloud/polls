@@ -22,7 +22,8 @@
 
 <template>
 	<transition-group name="fade" class="comments" tag="ul">
-		<CommentItem v-for="(comment) in sortedList" :key="comment.id"
+		<CommentItem v-for="(comment) in sortedList"
+			:key="comment.id"
 			:comment="comment"
 			tag="li" />
 	</transition-group>
@@ -47,15 +48,15 @@ export default {
 
 	computed: {
 		...mapState({
-			comments: state => state.comments.list,
+			comments: (state) => state.comments.list,
 		}),
 
 		sortedList() {
 			if (this.reverse) {
 				return sortBy(this.comments, this.sort).reverse()
-			} else {
-				return sortBy(this.comments, this.sort)
 			}
+			return sortBy(this.comments, this.sort)
+
 		},
 
 	},

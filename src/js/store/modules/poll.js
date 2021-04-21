@@ -27,37 +27,35 @@ import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
 import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
 
-const defaultPoll = () => {
-	return {
-		id: 0,
-		type: 'datePoll',
-		title: '',
-		description: '',
-		descriptionSafe: '',
-		owner: '',
-		created: 0,
-		expire: 0,
-		deleted: 0,
-		access: 'hidden',
-		anonymous: 0,
-		allowComment: 0,
-		allowMaybe: 0,
-		allowProposals: 'disallow',
-		proposalsExpire: 0,
-		voteLimit: 0,
-		optionLimit: 0,
-		showResults: 'always',
-		adminAccess: 0,
-		important: 0,
-		hideBookedUp: 0,
-	}
-}
+const defaultPoll = () => ({
+	id: 0,
+	type: 'datePoll',
+	title: '',
+	description: '',
+	descriptionSafe: '',
+	owner: '',
+	created: 0,
+	expire: 0,
+	deleted: 0,
+	access: 'hidden',
+	anonymous: 0,
+	allowComment: 0,
+	allowMaybe: 0,
+	allowProposals: 'disallow',
+	proposalsExpire: 0,
+	voteLimit: 0,
+	optionLimit: 0,
+	showResults: 'always',
+	adminAccess: 0,
+	important: 0,
+	hideBookedUp: 0,
+})
 
 const state = defaultPoll()
 
 const namespaced = true
 const modules = {
-	acl: acl,
+	acl,
 }
 
 const mutations = {
@@ -82,53 +80,39 @@ const getters = {
 	typeIcon: (state) => {
 		if (state.type === 'textPoll') {
 			return 'icon-toggle-filelist'
-		} else {
-			return 'icon-calendar-000'
 		}
+		return 'icon-calendar-000'
+
 	},
 
 	answerSequence: (state) => {
 		if (state.allowMaybe) {
 			return ['no', 'yes', 'maybe']
-		} else {
-			return ['no', 'yes']
 		}
+		return ['no', 'yes']
+
 	},
 
-	proposalsAllowed: (state) => {
-		return (state.allowProposals === 'allow' || state.allowProposals === 'review')
-	},
+	proposalsAllowed: (state) => (state.allowProposals === 'allow' || state.allowProposals === 'review'),
 
-	proposalsOpen: (state, getters) => {
-		return getters.proposalsAllowed && !getters.proposalsExpired
-	},
+	proposalsOpen: (state, getters) => getters.proposalsAllowed && !getters.proposalsExpired,
 
-	proposalsExpired: (state, getters) => {
-		return getters.proposalsAllowed && state.proposalsExpire && moment.unix(state.proposalsExpire).diff() < 0
-	},
+	proposalsExpired: (state, getters) => getters.proposalsAllowed && state.proposalsExpire && moment.unix(state.proposalsExpire).diff() < 0,
 
-	proposalsExpirySet: (state, getters) => {
-		return getters.proposalsAllowed && state.proposalsExpire
-	},
+	proposalsExpirySet: (state, getters) => getters.proposalsAllowed && state.proposalsExpire,
 
-	proposalsExpireRelative: (state) => {
-		return moment.unix(state.proposalsExpire).fromNow()
-	},
+	proposalsExpireRelative: (state) => moment.unix(state.proposalsExpire).fromNow(),
 
-	proposalsOptions: () => {
-		return [
-			{ value: 'disallow', label: t('polls', 'Disallow proposals') },
-			{ value: 'allow', label: t('polls', 'Allow proposals') },
-			// { value: 'review', label: t('polls', 'Allow with review') },
-		]
-	},
+	proposalsOptions: () => [
+		{ value: 'disallow', label: t('polls', 'Disallow proposals') },
+		{ value: 'allow', label: t('polls', 'Allow proposals') },
+		// { value: 'review', label: t('polls', 'Allow with review') },
+	],
 
-	closed: (state) => {
-		return (state.expire > 0 && moment.unix(state.expire).diff() < 0)
-	},
+	closed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 0),
 
 	participants: (state, getters, rootState) => {
-		const participants = rootState.votes.list.map(item => ({
+		const participants = rootState.votes.list.map((item) => ({
 			userId: item.userId,
 			displayName: item.displayName,
 			isNoUser: item.isNoUser,
@@ -136,7 +120,7 @@ const getters = {
 		}))
 
 		// add current user, if not among participants and voting is allowed
-		if (!participants.find(item => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
 			participants.push({
 				userId: state.acl.userId,
 				displayName: state.acl.displayName,
@@ -149,14 +133,11 @@ const getters = {
 
 	},
 
-	participantsVoted: (state, getters, rootState) => {
-		return uniqueArrayOfObjects(rootState.votes.list.map(item => ({
-			userId: item.userId,
-			displayName: item.displayName,
-			isNoUser: item.isNoUser,
-		})))
-
-	},
+	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => ({
+		userId: item.userId,
+		displayName: item.displayName,
+		isNoUser: item.isNoUser,
+	}))),
 }
 
 const actions = {
@@ -192,7 +173,7 @@ const actions = {
 		try {
 			return await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
 		} catch (e) {
-			console.error('Error adding poll:', { error: e.response }, { state: state })
+			console.error('Error adding poll:', { error: e.response }, { state })
 			throw e
 		}
 	},
@@ -202,7 +183,7 @@ const actions = {
 		try {
 			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
 		} catch (e) {
-			console.error('Error cloning poll', { error: e.response }, { payload: payload })
+			console.error('Error cloning poll', { error: e.response }, { payload })
 		}
 	},
 
@@ -222,7 +203,7 @@ const actions = {
 		try {
 			await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
 		} catch (e) {
-			console.error('Error switching deleted status', { error: e.response }, { payload: payload })
+			console.error('Error switching deleted status', { error: e.response }, { payload })
 		}
 	},
 
@@ -231,7 +212,7 @@ const actions = {
 		try {
 			await axios.delete(generateUrl(endPoint + '/' + payload.pollId))
 		} catch (e) {
-			console.error('Error deleting poll', { error: e.response }, { payload: payload })
+			console.error('Error deleting poll', { error: e.response }, { payload })
 		}
 	},
 

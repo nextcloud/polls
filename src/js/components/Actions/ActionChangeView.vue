@@ -59,7 +59,7 @@ export default {
 
 	computed: {
 		...mapState({
-			pollType: state => state.poll.type,
+			pollType: (state) => state.poll.type,
 		}),
 
 		...mapGetters({
@@ -69,17 +69,17 @@ export default {
 		caption() {
 			if (this.viewMode === 'table-view') {
 				return t('polls', 'Switch to list view')
-			} else {
-				return t('polls', 'Switch to table view')
 			}
+			return t('polls', 'Switch to table view')
+
 		},
 
 		icon() {
 			if (this.viewMode === 'table-view') {
 				return 'icon-list-view'
-			} else {
-				return 'icon-table-view'
 			}
+			return 'icon-table-view'
+
 		},
 	},
 

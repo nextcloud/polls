@@ -51,8 +51,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.poll.acl,
+			poll: (state) => state.poll,
+			acl: (state) => state.poll.acl,
 		}),
 
 		...mapGetters({
@@ -63,16 +63,16 @@ export default {
 		optionStyle() {
 			if (this.viewMode === 'table-view') {
 				return 'dateBox'
-			} else {
-				return 'textBox'
 			}
+			return 'textBox'
+
 		},
 		counterStyle() {
 			if (this.viewMode === 'table-view') {
 				return 'iconStyle'
-			} else {
-				return 'barStyle'
 			}
+			return 'barStyle'
+
 		},
 		showNo() {
 			return (this.viewMode === 'list-view')

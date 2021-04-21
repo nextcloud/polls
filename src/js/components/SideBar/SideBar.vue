@@ -49,7 +49,8 @@
 			<SideBarTabShare />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowComment" :id="'comments'"
+		<AppSidebarTab v-if="acl.allowComment"
+			:id="'comments'"
 			:order="4"
 			:name="t('polls', 'Comments')"
 			icon="icon-comment">
@@ -89,8 +90,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			acl: state => state.poll.acl,
+			poll: (state) => state.poll,
+			acl: (state) => state.poll.acl,
 		}),
 	},
 	methods: {

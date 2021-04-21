@@ -38,16 +38,16 @@ export default {
 
 	computed: {
 		...mapState({
-			subscribed: state => state.subscription.subscribed,
-			emailAddress: state => state.share.emailAddress,
+			subscribed: (state) => state.subscription.subscribed,
+			emailAddress: (state) => state.share.emailAddress,
 		}),
 
 		label() {
 			if (this.emailAddress) {
 				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.emailAddress })
-			} else {
-				return t('polls', 'Receive notification email on activity')
 			}
+			return t('polls', 'Receive notification email on activity')
+
 		},
 
 		subscribe: {

@@ -53,7 +53,9 @@
 					<div class="modal__buttons">
 						<div class="modal__buttons__spacer" />
 						<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
-						<ButtonDiv :primary="true" :disabled="disableSubmit" :title="t('polls', 'OK')"
+						<ButtonDiv :primary="true"
+							:disabled="disableSubmit"
+							:title="t('polls', 'OK')"
 							@click="submitRegistration" />
 					</div>
 				</div>
@@ -107,8 +109,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: state => state.poll,
-			share: state => state.share,
+			poll: (state) => state.poll,
+			share: (state) => state.share,
 		}),
 
 		disableSubmit() {
@@ -129,29 +131,28 @@ export default {
 					result: t('polls', 'Checking username …'),
 					status: 'checking',
 				}
-			} else {
-				if (this.userName.length === 0) {
-					return {
-						result: t('polls', 'Enter a username to participate.'),
-						status: 'empty',
-					}
-				} else if (this.userName.length < 3) {
-					return {
-						result: t('polls', 'Please use at least 3 characters.'),
-						status: 'error',
-					}
-				} else if (!this.isValidName) {
-					return {
-						result: t('polls', 'Invalid name'),
-						status: 'error',
-					}
-				} else {
-					return {
-						result: t('polls', '{username} is valid.', { username: this.userName }),
-						status: 'success',
-					}
+			}
+			if (this.userName.length === 0) {
+				return {
+					result: t('polls', 'Enter a username to participate.'),
+					status: 'empty',
+				}
+			} else if (this.userName.length < 3) {
+				return {
+					result: t('polls', 'Please use at least 3 characters.'),
+					status: 'error',
+				}
+			} else if (!this.isValidName) {
+				return {
+					result: t('polls', 'Invalid name'),
+					status: 'error',
 				}
 			}
+			return {
+				result: t('polls', '{username} is valid.', { username: this.userName }),
+				status: 'success',
+			}
+
 		},
 
 		emailCheck() {
@@ -160,30 +161,29 @@ export default {
 					result: t('polls', 'Checking email address …'),
 					status: 'checking',
 				}
-			} else {
-				if (this.emailAddress.length < 1) {
-					return {
-						result: '',
-						status: '',
-					}
-				} else if (!this.isValidEmailAddress) {
-					return {
-						result: t('polls', 'Invalid email address.'),
-						status: 'error',
-					}
-				} else {
-					return {
-						result: t('polls', 'valid email address.'),
-						status: 'success',
-					}
+			}
+			if (this.emailAddress.length < 1) {
+				return {
+					result: '',
+					status: '',
+				}
+			} else if (!this.isValidEmailAddress) {
+				return {
+					result: t('polls', 'Invalid email address.'),
+					status: 'error',
 				}
 			}
+			return {
+				result: t('polls', 'valid email address.'),
+				status: 'success',
+			}
+
 		},
 
 	},
 
 	watch: {
-		userName: function() {
+		userName() {
 			if (this.userName.length > 2) {
 				this.checkingUserName = true
 				if (this.userName !== this.share.userid) {
@@ -195,7 +195,7 @@ export default {
 			}
 		},
 
-		emailAddress: function() {
+		emailAddress() {
 			if (this.emailAddress.length > 0) {
 				this.checkingEmailAddress = true
 				this.validateEmailAddress()
