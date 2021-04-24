@@ -24,9 +24,11 @@
 	<div class="comment-item">
 		<UserItem v-bind="comment" hide-names />
 		<div class="comment-item__content">
-			<span class="comment-item__user"> {{ comment.displayName }}  </span>
-			{{ comment.comment }}
-			<span class="comment-item__date"> {{ dateCommentedRelative }} </span>
+			<span class="comment-item__user">{{ comment.displayName }}</span>
+			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
+			<div class="comment-item__comment">
+				{{ comment.comment }}
+			</div>
 		</div>
 		<Actions v-if="comment.userId === acl.userId || acl.isOwner">
 			<ActionButton v-if="deleteTimeout" icon="icon-history" @click="cancelDeleteComment()">
@@ -117,10 +119,8 @@ export default {
 	}
 
 	.comment-item__user {
-		font-weight: bold;
-		&::after {
-			content: ' – '
-		}
+		font-weight: 600;
+		font-size: 90%;
 	}
 
 	.comment-item__date {
@@ -135,6 +135,6 @@ export default {
 	.comment-item__content {
 		margin-left: 8px;
 		flex: 1 1;
-		padding-top: 8px;
+		padding-top: 2px;
 	}
 </style>
