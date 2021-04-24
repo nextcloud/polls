@@ -24,7 +24,7 @@
 	<div class="comment-add">
 		<UserItem v-bind="acl" hide-names />
 		<InputDiv v-model="comment"
-			class="comment-add___input"
+			class="comment-add__input"
 			:placeholder="t('polls', 'New comment …')"
 			@submit="writeComment()" />
 	</div>
