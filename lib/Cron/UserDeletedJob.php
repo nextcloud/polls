@@ -57,9 +57,6 @@ class UserDeletedJob extends QueuedJob {
 			'user' => $owner
 		]);
 
-		$polls = $this->pollMapper->findForMe($owner);
-		foreach ($polls as $poll) {
-			$this->pollService->delete($poll->getId());
-		}
+		$this->pollMapper->deleteFromUser($owner);
 	}
 }
