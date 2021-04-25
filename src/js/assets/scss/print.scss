@@ -32,16 +32,19 @@
 	.vote-table__votes,
 	.vote-table .vote-table__users {
 		overflow-x: initial !important;
+		min-width: initial !important;
+		max-width: 200px;
 	}
 
 	.app-content {
 		background-color: transparent !important;
-		[class*="area__"] {
+		[class*='area__'] {
 			box-shadow: initial !important;
 			margin: 0 !important;
 		}
 	}
 
+	footer,
 	#header,
 	#app-navigation-vue,
 	#app-sidebar-vue,
