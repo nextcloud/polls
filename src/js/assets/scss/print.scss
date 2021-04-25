@@ -1,0 +1,59 @@
+@media print {
+	#content-vue,
+	.app-polls {
+		padding-top: 0 !important;
+	}
+
+	.vote-item {
+		&.active > .icon{
+			border: none !important;
+		}
+
+		> .icon {
+			background: none !important;
+			&::after {
+				content: '❌';
+			}
+		}
+
+		&.yes > .icon::after {
+			content: '✔';
+		}
+
+		&.maybe > .icon::after {
+			content: '❔';
+		}
+	}
+
+	.area__header {
+		margin-left: 0 !important;
+	}
+
+	.vote-table__votes,
+	.vote-table .vote-table__users {
+		overflow-x: initial !important;
+	}
+
+	.app-content {
+		background-color: transparent !important;
+		[class*="area__"] {
+			box-shadow: initial !important;
+			margin: 0 !important;
+		}
+	}
+
+	#header,
+	#app-navigation-vue,
+	#app-sidebar-vue,
+	.counter,
+	.area__footer,
+	.action-item,
+	.header-actions,
+	.app-navigation,
+	.option-proposals,
+	.vote-table__users .owner,
+	.option-item-owner.owner,
+	.app-sidebar {
+		display: none !important;
+	}
+}
