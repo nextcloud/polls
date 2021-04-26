@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<OptionsDateAdd v-if="!pollIsClosed" />
-		<transition-group is="ul">
+		<transition-group is="ul" v-if="!isOwner">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
 				:option="option"
@@ -57,6 +57,13 @@
 			</OptionItem>
 		</transition-group>
 
+		<EmptyContent v-else :icon="pollTypeIcon">
+			{{ t('polls', 'No vote options') }}
+			<template #desc>
+				{{ t('polls', 'Add some!') }}
+			</template>
+		</EmptyContent>
+
 		<Modal v-if="cloneModal" :can-close="false">
 			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
 		</Modal>
@@ -65,12 +72,12 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import moment from '@nextcloud/moment'
+import { Actions, ActionButton, EmptyContent, Modal } from '@nextcloud/vue'
 import OptionCloneDate from './OptionCloneDate'
 import OptionsDateAdd from './OptionsDateAdd'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
-import moment from '@nextcloud/moment'
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 import { dateUnits } from '../../mixins/dateMixins'
 
@@ -80,6 +87,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		EmptyContent,
 		Modal,
 		OptionCloneDate,
 		OptionsDateAdd,
@@ -110,11 +118,13 @@ export default {
 		...mapState({
 			options: (state) => state.options.list,
 			acl: (state) => state.poll.acl,
+			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 
 		...mapGetters({
 			pollIsClosed: 'poll/closed',
 			countOptions: 'options/count',
+			pollTypeIcon: 'poll/typeIcon',
 		}),
 
 		dateBaseOptionString() {

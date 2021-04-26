@@ -27,38 +27,23 @@
 			<ConfigProposals />
 		</ConfigBox>
 
-		<!-- <ConfigBox v-if="!pollIsClosed" :title="t('polls', 'Add an option')" icon-class="icon-add">
-			<OptionsDateAdd v-if="pollType === 'datePoll'" />
-			<OptionsTextAdd v-else-if="pollType === 'textPoll'" />
-		</ConfigBox> -->
-
 		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !pollIsClosed" :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
 			<OptionsDateShift />
 		</ConfigBox>
 
-		<ConfigBox v-if="countOptions" :title="t('polls', 'Available Options')" :icon-class="pollTypeIcon">
+		<ConfigBox :title="t('polls', 'Available Options')" :icon-class="pollTypeIcon">
 			<OptionsDate v-if="pollType === 'datePoll'" />
 			<OptionsText v-else-if="pollType === 'textPoll'" />
 		</ConfigBox>
-
-		<EmptyContent v-else :icon="pollTypeIcon">
-			{{ t('polls', 'No vote options') }}
-			<template #desc>
-				{{ t('polls', 'Add some!') }}
-			</template>
-		</EmptyContent>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { EmptyContent } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox'
 import OptionsDate from '../Options/OptionsDate'
-// import OptionsDateAdd from '../Options/OptionsDateAdd'
 import OptionsDateShift from '../Options/OptionsDateShift'
 import OptionsText from '../Options/OptionsText'
-// import OptionsTextAdd from '../Options/OptionsTextAdd'
 import ConfigProposals from '../Configuration/ConfigProposals'
 
 export default {
@@ -67,12 +52,9 @@ export default {
 	components: {
 		ConfigBox,
 		ConfigProposals,
-		EmptyContent,
 		OptionsDate,
-		// OptionsDateAdd,
 		OptionsDateShift,
 		OptionsText,
-		// OptionsTextAdd,
 	},
 
 	computed: {

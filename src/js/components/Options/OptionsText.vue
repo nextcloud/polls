@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<OptionsTextAdd v-if="!pollIsClosed" />
-		<draggable v-model="reOrderedOptions">
+		<draggable v-if="countOptions" v-model="reOrderedOptions">
 			<transition-group>
 				<OptionItem v-for="(option) in reOrderedOptions"
 					:key="option.id"
@@ -52,12 +52,19 @@
 				</OptionItem>
 			</transition-group>
 		</draggable>
+
+		<EmptyContent v-else :icon="pollTypeIcon">
+			{{ t('polls', 'No vote options') }}
+			<template #desc>
+				{{ t('polls', 'Add some!') }}
+			</template>
+		</EmptyContent>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
@@ -70,6 +77,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		EmptyContent,
 		draggable,
 		OptionItem,
 		OptionItemOwner,
@@ -91,11 +99,13 @@ export default {
 		...mapState({
 			options: (state) => state.options.list,
 			acl: (state) => state.poll.acl,
+			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 
 		...mapGetters({
 			pollIsClosed: 'poll/closed',
 			countOptions: 'options/count',
+			pollTypeIcon: 'poll/typeIcon',
 		}),
 
 		reOrderedOptions: {
