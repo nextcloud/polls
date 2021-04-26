@@ -139,7 +139,7 @@ export default {
 				}
 			} else if (this.userName.length < 3) {
 				return {
-					result: t('polls', 'Please use at least 3 characters.'),
+					result: t('polls', 'Username must be at least 3 characters.'),
 					status: 'error',
 				}
 			} else if (!this.isValidName) {
