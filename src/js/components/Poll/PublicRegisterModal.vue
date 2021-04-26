@@ -144,12 +144,12 @@ export default {
 				}
 			} else if (!this.isValidName) {
 				return {
-					result: t('polls', 'Invalid name'),
+					result: t('polls', 'Invalid username'),
 					status: 'error',
 				}
 			}
 			return {
-				result: t('polls', '{username} is valid.', { username: this.userName }),
+				result: t('polls', 'Username {username} is valid.', { username: this.userName }),
 				status: 'success',
 			}
 
