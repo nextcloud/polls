@@ -226,6 +226,8 @@ OC.L10N.register(
     "Invitation resent to {emailAddress}" : "已重新发送邀请到 {emailAddress}",
     "Mail could not be resent to {emailAddress}" : "无法重新发送邮件到 {emailAddress}",
     "Error while adding share" : "添加共享时出错",
+    "Vote saved" : "投票已保存",
+    "Error saving vote" : "保存投票出错",
     "Delete votes" : "删除投票",
     "Do you want to remove {username} from poll?" : "您想要从投票中移除 {username} 吗？",
     "No" : "否",

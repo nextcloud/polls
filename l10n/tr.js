@@ -233,6 +233,8 @@ OC.L10N.register(
     "Invitation resent to {emailAddress}" : "Çağrı {emailAdress} adresine yeniden gönderildi",
     "Mail could not be resent to {emailAddress}" : "Çağrı {emailAdress} adresine yeniden gönderilemedi",
     "Error while adding share" : "Paylaşım eklenirken sorun çıktı",
+    "Vote saved" : "Oy kaydedildi",
+    "Error saving vote" : "Oy kaydedilirken sorun çıktı",
     "Delete votes" : "Oyları sil",
     "Do you want to remove {username} from poll?" : "{username} kullanıcısını anketten silmek istiyor musunuz?",
     "No" : "Hayır",

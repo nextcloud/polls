@@ -233,6 +233,8 @@ OC.L10N.register(
     "Invitation resent to {emailAddress}" : "Einladung erneut an {emailAddress} versendet",
     "Mail could not be resent to {emailAddress}" : "Einladung konnte nicht erneut an {emailAddress} versendet werden",
     "Error while adding share" : "Fehler beim Hinzufügen der Freigabe",
+    "Vote saved" : "Ihre Abstimmung wurde gespeichert",
+    "Error saving vote" : "Fehler beim Speichern der Abstimmung",
     "Delete votes" : "Stimmen löschen",
     "Do you want to remove {username} from poll?" : "Möchten Sie {username} von der Umfrage entfernen?",
     "No" : "Nein",

@@ -233,6 +233,8 @@ OC.L10N.register(
     "Invitation resent to {emailAddress}" : "Pozvánka byla znovu odeslána na {emailAddress}",
     "Mail could not be resent to {emailAddress}" : "E-mail se nepodařilo znovu poslat na {emailAddress}",
     "Error while adding share" : "Chyba při přidávání sdílení",
+    "Vote saved" : "Hlas uložen",
+    "Error saving vote" : "Chyba při ukládání hlasu",
     "Delete votes" : "Smazat hlasy",
     "Do you want to remove {username} from poll?" : "Opravdu chcete {username} odebrat z ankety?",
     "No" : "Ne",

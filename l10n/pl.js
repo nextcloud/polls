@@ -233,6 +233,8 @@ OC.L10N.register(
     "Invitation resent to {emailAddress}" : "Zaproszenie ponownie wysłane do {emailAddress}",
     "Mail could not be resent to {emailAddress}" : "Nie można wysłać ponownie e-maila do {emailAddress}",
     "Error while adding share" : "Błąd podczas dodawania udostępnienia",
+    "Vote saved" : "Głos zapisany",
+    "Error saving vote" : "Błąd podczas zapisywania głosu",
     "Delete votes" : "Usuń głosy",
     "Do you want to remove {username} from poll?" : "Czy chcesz usunąć {username} z sondy?",
     "No" : "Nie",
