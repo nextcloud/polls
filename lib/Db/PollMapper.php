@@ -89,4 +89,15 @@ class PollMapper extends QBMapper {
 
 		return $this->findEntities($qb);
 	}
+
+	/**
+	 * @return void
+	 */
+	public function deleteByUserId(string $userId): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where('owner = :userId')
+			->setParameter('userId', $userId);
+		$query->execute();
+	}
 }

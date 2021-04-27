@@ -96,4 +96,15 @@ class CommentMapper extends QBMapper {
 
 		$qb->execute();
 	}
+
+	/**
+	 * @return void
+	 */
+	public function renameUserId(string $userId, string $replacementName): void {
+		$query = $this->db->getQueryBuilder();
+		$query->update($this->getTableName())
+			->set('user_id', $query->createNamedParameter($replacementName))
+			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
+			->execute();
+	}
 }

@@ -87,9 +87,12 @@ class Comment extends Entity implements JsonSerializable {
 	}
 
 	public function getDisplayName(): string {
-		return \OC::$server->getUserManager()->get($this->userId) instanceof IUser
-			? \OC::$server->getUserManager()->get($this->userId)->getDisplayName()
-			: $this->userId;
+		if (!strncmp($this->userId, 'deleted_', 8)) {
+			return 'Deleted User';
+		}
+		return $this->getIsNoUser()
+			? $this->userId
+			: \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
 	}
 
 	public function getIsNoUser(): bool {

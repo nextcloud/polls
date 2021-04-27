@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version

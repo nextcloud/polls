@@ -147,4 +147,15 @@ class OptionMapper extends QBMapper {
 			// ignore
 		}
 	}
+
+	/**
+	 * @return void
+	 */
+	public function renameUserId(string $userId, string $replacementName): void {
+		$query = $this->db->getQueryBuilder();
+		$query->update($this->getTableName())
+			->set('owner', $query->createNamedParameter($replacementName))
+			->where($query->expr()->eq('owner', $query->createNamedParameter($userId)))
+			->execute();
+	}
 }
