@@ -100,5 +100,4 @@ class PollMapper extends QBMapper {
 			->setParameter('userId', $userId);
 		$query->execute();
 	}
-
 }

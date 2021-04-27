@@ -122,9 +122,9 @@ class ShareMapper extends QBMapper {
 	public function deleteByUserId(string $userId): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
-		   ->where('user_id = :userId')
-		   ->setParameter('userId', $userId);
-	   $query->execute();
+			->where('user_id = :userId')
+			->setParameter('userId', $userId);
+		$query->execute();
 	}
 
 	/**
