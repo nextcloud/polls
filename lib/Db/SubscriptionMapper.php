@@ -136,4 +136,17 @@ class SubscriptionMapper extends QBMapper {
 			// ignore
 		}
 	}
+
+	/**
+	 * @return void
+	 */
+	public function deleteByUserId(string $userId): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+		   ->where('user_id = :userId')
+		   ->setParameter('userId', $userId);
+	   $query->execute();
+	}
+
+
 }

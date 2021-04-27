@@ -23,31 +23,63 @@
 
 namespace OCA\Polls\Cron;
 
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\QueuedJob;
-use OCP\ILogger;
+use OCP\Security\ISecureRandom;
+use Psr\Log\LoggerInterface;
+
+use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\PreferencesMapper;
+use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\VoteMapper;
 
 class UserDeletedJob extends QueuedJob {
 
-	/** @var PollMapper */
+	/** @var CommentMapper **/
+	private $commentMapper;
+
+	/** @var LogMapper **/
+	private $logMapper;
+
+	/** @var OptionMapper **/
+	private $optionMapper;
+
+	/** @var PollMapper **/
 	private $pollMapper;
 
-	/** @var PollService */
-	private $pollService;
+	/** @var PreferencesMapper **/
+	private $preferencesMapper;
 
-	/** @var ILogger */
+	/** @var SubscriptionMapper **/
+	private $subscriptionMapper;
+
+	/** @var VoteMapper **/
+	private $voteMapper;
+
+	/** @var LoggerInterface */
 	private $logger;
 
-	public function __construct(PollMapper $pollMapper,
-								PollService $pollService,
-								ITimeFactory $time,
-								ILogger $logger) {
+	public function __construct(CommentMapper $commentMapper,
+		LogMapper $logMapper,
+		OptionMapper $optionMapper,
+		PollMapper $pollMapper,
+		PreferencesMapper $preferencesMapper,
+		SubscriptionMapper $subscriptionMapper,
+		VoteMapper $voteMapper,
+		ITimeFactory $time,
+		LoggerInterface $logger
+	) {
 		parent::__construct($time);
-
+		$this->commentMapper = $commentMapper;
+		$this->logMapper = $logMapper;
+		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
-		$this->pollService = $pollService;
+		$this->preferencesMapper = $preferencesMapper;
+		$this->subscriptionMapper = $subscriptionMapper;
+		$this->voteMapper = $voteMapper;
 		$this->logger = $logger;
 	}
 
@@ -57,6 +89,19 @@ class UserDeletedJob extends QueuedJob {
 			'user' => $owner
 		]);
 
-		$this->pollMapper->deleteFromUser($owner);
+		$replacementName = 'deleted_' . \OC::$server->getSecureRandom()->generate(
+			8,
+			ISecureRandom::CHAR_DIGITS .
+			ISecureRandom::CHAR_LOWER .
+			ISecureRandom::CHAR_UPPER
+		);
+
+		$this->pollMapper->deleteByUserId($owner);
+		$this->logMapper->deleteByUserId($owner);
+		$this->preferencesMapper->deleteByUserId($owner);
+		$this->subscriptionMapper->deleteByUserId($owner);
+		$this->commentMapper->renameUserId($owner, $replacementName);
+		$this->optionMapper->renameUserId($owner, $replacementName);
+		$this->voteMapper->renameUserId($owner, $replacementName);
 	}
 }

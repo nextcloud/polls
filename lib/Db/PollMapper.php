@@ -93,8 +93,7 @@ class PollMapper extends QBMapper {
 	/**
 	 * @return void
 	 */
-	public function deleteFromUser(string $userId): void {
-		\OC::$server->getLogger()->alert('pollMapper->deleteFromUser(' . $userId . ')');
+	public function deleteByUserId(string $userId): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 		   ->where('owner = :userId')

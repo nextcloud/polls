@@ -78,6 +78,9 @@ class Vote extends Entity implements JsonSerializable {
 	}
 
 	public function getDisplayName(): string {
+		if (!strncmp($this->userId, 'deleted_', 8)) {
+			return 'Deleted User';
+		}
 		return $this->getIsNoUser()
 			? $this->userId
 			: \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
