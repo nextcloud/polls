@@ -33,6 +33,7 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\PreferencesMapper;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
 
@@ -56,6 +57,9 @@ class UserDeletedJob extends QueuedJob {
 	/** @var SubscriptionMapper **/
 	private $subscriptionMapper;
 
+	/** @var ShareMapper **/
+	private $shareMapper;
+
 	/** @var VoteMapper **/
 	private $voteMapper;
 
@@ -67,6 +71,7 @@ class UserDeletedJob extends QueuedJob {
 		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
 		PreferencesMapper $preferencesMapper,
+		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
 		VoteMapper $voteMapper,
 		ITimeFactory $time,
@@ -78,6 +83,7 @@ class UserDeletedJob extends QueuedJob {
 		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->preferencesMapper = $preferencesMapper;
+		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->voteMapper = $voteMapper;
 		$this->logger = $logger;
@@ -98,6 +104,7 @@ class UserDeletedJob extends QueuedJob {
 
 		$this->pollMapper->deleteByUserId($owner);
 		$this->logMapper->deleteByUserId($owner);
+		$this->shareMapper->deleteByUserId($owner);
 		$this->preferencesMapper->deleteByUserId($owner);
 		$this->subscriptionMapper->deleteByUserId($owner);
 		$this->commentMapper->renameUserId($owner, $replacementName);
