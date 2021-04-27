@@ -23,12 +23,14 @@
 <template>
 	<AppContent class="poll-list">
 		<div class="area__header">
-			<h2 class="title">
-				{{ title }}
-			</h2>
-			<h3 class="description">
-				{{ description }}
-			</h3>
+			<div>
+				<h2 class="title">
+					{{ title }}
+				</h2>
+				<h3 class="description">
+					{{ description }}
+				</h3>
+			</div>
 		</div>
 
 		<div class="area__main">
