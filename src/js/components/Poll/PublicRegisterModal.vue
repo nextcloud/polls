@@ -128,18 +128,18 @@ export default {
 		userNameCheck() {
 			if (this.checkingUserName) {
 				return {
-					result: t('polls', 'Checking username …'),
+					result: t('polls', 'Checking name …'),
 					status: 'checking',
 				}
 			}
 			if (this.userName.length === 0) {
 				return {
-					result: t('polls', 'Enter a username to participate.'),
+					result: t('polls', 'Enter a name to participate.'),
 					status: 'empty',
 				}
 			} else if (this.userName.length < 3) {
 				return {
-					result: t('polls', 'Please use at least 3 characters.'),
+					result: t('polls', 'Name must be at least 3 characters.'),
 					status: 'error',
 				}
 			} else if (!this.isValidName) {
@@ -149,7 +149,7 @@ export default {
 				}
 			}
 			return {
-				result: t('polls', '{username} is valid.', { username: this.userName }),
+				result: t('polls', 'Name {username} is valid.', { username: this.userName }),
 				status: 'success',
 			}
 
@@ -174,7 +174,7 @@ export default {
 				}
 			}
 			return {
-				result: t('polls', 'valid email address.'),
+				result: t('polls', 'Valid email address.'),
 				status: 'success',
 			}
 
@@ -265,7 +265,7 @@ export default {
 						this.closeModal()
 					}
 				} catch {
-					showError(t('polls', 'Error saving username', 1, this.poll.title))
+					showError(t('polls', 'Error saving name', 1, this.poll.title))
 				}
 			}
 		},

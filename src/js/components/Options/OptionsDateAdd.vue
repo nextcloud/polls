@@ -39,7 +39,7 @@
 				<button v-if="dateOption.option.duration >= 0 && !added" class="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</button>
-				<div v-if="added" v-tooltip.auto="t('polls', 'added')" class="icon-polls-yes" />
+				<div v-if="added" v-tooltip.auto="t('polls', 'Added')" class="icon-polls-yes" />
 			</div>
 			<div v-else>
 				{{ t('polls', 'Pick a day.') }}
