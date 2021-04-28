@@ -54,7 +54,6 @@ OC.L10N.register(
     "Deleted" : "נמחק",
     "never" : "מעולם לא",
     "Enter your name" : "נא למלא את שמך",
-    "Error saving username" : "שגיאה בשמירת שם המשתמש",
     "Access" : "גישה",
     "Owner" : "בעלות",
     "Created" : "יצירה",

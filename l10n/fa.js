@@ -47,7 +47,6 @@ OC.L10N.register(
     "Deleted" : "حذف شده",
     "never" : "never",
     "Enter your name" : "اسمت را وارد کن",
-    "Error saving username" : "خطا در ذخیره نام کاربری",
     "Access" : "دسترسی",
     "Owner" : "Owner",
     "Created" : "ایجاد شده",

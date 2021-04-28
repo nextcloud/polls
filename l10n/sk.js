@@ -71,8 +71,6 @@ OC.L10N.register(
     "Public poll" : "Verejná anketa",
     "To participate, tell us how we can call you!" : "Ak sa chcete zúčastniť, povedzte nám, ako vás máme volať!",
     "Enter your name" : "Zadajte svoje meno",
-    "Please use at least 3 characters." : "Použite prosím aspoň 3 znaky.",
-    "Error saving username" : "Pri ukladaní používateľského mena sa vyskytla chyba",
     "Access" : "Prístup",
     "Owner" : "Vlastník",
     "Created" : "Vytvorené",
