@@ -149,7 +149,7 @@ export default {
 				}
 			}
 			return {
-				result: t('polls', 'Name {username} is valid.', { username: this.userName }),
+				result: t('polls', '{username} is valid.', { username: this.userName }),
 				status: 'success',
 			}
 
