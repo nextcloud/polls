@@ -41,7 +41,7 @@ const state = {
 			id: 'my',
 			title: t('polls', 'My polls'),
 			titleExt: t('polls', 'My polls'),
-			description: t('polls', 'Your polls (where you are the owner).'),
+			description: t('polls', 'Your polls (in which you are the owner).'),
 			icon: 'icon-user',
 			pinned: false,
 		},
