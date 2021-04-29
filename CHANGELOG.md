@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.9.0 - beta1] - tbd
+### Changes and fixes
+- [enhancement] #365 - Support printing the poll via the browser's print function (#1567)
+- [enhancement] #496 Added possibility to allow participants proposing more options (#1570, #1127, #1495, #1554)
+- [enhancement] #1490 - Delete all user information, if user is removed from Nextcloud
+- [UX] #1519 - Add visual feedback, when vote is saved
+- [UX] #1506  - Date picker optimizations (#1543)
+- [refactor] #1499 - Internal structure of store and components
+
+See also https://github.com/nextcloud/polls/milestone/34?closed=1
+
 ## [1.8.3] - 2021-04-12
 ### Changes and fixes
 - [bug] #1544 - Fixed display of end day in options sidebar on options with day span
