@@ -201,7 +201,6 @@ OC.L10N.register(
     "Relevant polls" : "Sondages qui me concernent",
     "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Tous les sondages qui sont pertinents ou importants pour vous, parce que vous êtes participant, propriétaire ou que vous y êtes invité. Sans scrutins fermés.",
     "My polls" : "Mes sondages",
-    "Your polls (where you are the owner)." : "Vos sondages (dont vous êtes propriétaire).",
     "Hidden polls" : "Sondages masqués",
     "All hidden polls, to which you have access." : "Tous les sondages masqués auxquels vous avez accès.",
     "All polls, where you placed a vote." : "Tous les sondages où vous avez voté.",

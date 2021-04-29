@@ -194,7 +194,6 @@ OC.L10N.register(
     "Relevant polls" : "Bozketa esanguratsuak",
     "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Zuretzat esanguratsuak edo garrantzitsuak diren galdetegiak, jabe edo parte-hartzaile zarelako edo gonbidatu egin zaituztelako. Itxitako galdetegiak ez dira agertuko.",
     "My polls" : "Nire bozketak",
-    "Your polls (where you are the owner)." : "Zure bozketak (zu jabe zaren bozketak).",
     "Hidden polls" : "Ezkutatutako bozketak",
     "All hidden polls, to which you have access." : "Zuk sarbidea duzun ezkutuko bozketa guztiak.",
     "All polls, where you placed a vote." : "Botoa eman duzun bozketa guztiak.",

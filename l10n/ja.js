@@ -106,7 +106,6 @@ OC.L10N.register(
     "Relevant" : "関連",
     "Relevant polls" : "関連する投票",
     "My polls" : "自分の投票",
-    "Your polls (where you are the owner)." : "あなたの投票（あなたがオーナー）",
     "Hidden polls" : "非公開の投票",
     "All hidden polls, to which you have access." : "あなたがアクセスできる非公開の全投票",
     "All polls, where you placed a vote." : "あなたが投票した全投票",

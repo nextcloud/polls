@@ -109,7 +109,6 @@ OC.L10N.register(
     "Relevant" : "Релевантно",
     "Relevant polls" : "Релевантна гласања",
     "My polls" : "Моја гласања",
-    "Your polls (where you are the owner)." : "Ваша гласања (чији сте власник).",
     "Hidden polls" : "Сакривена гласања",
     "All hidden polls, to which you have access." : "Сва скривена гласања, којима имате приступ.",
     "All polls, where you placed a vote." : "Сва гласања, где сте дали глас.",

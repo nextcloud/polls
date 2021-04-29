@@ -264,7 +264,6 @@ OC.L10N.register(
     "Relevant polls" : "Relevantní ankety",
     "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Všechny ankety, které s vámi souvisí nebo jsou pro vás důležité, protože jste účastníky nebo vlastníky nebo jste do nich byli přizváni. Nejsou zobrazovány už uzavřené ankety.",
     "My polls" : "Moje ankety",
-    "Your polls (where you are the owner)." : "Vaše ankety (u kterých jste vlastníky)",
     "Hidden polls" : "Skryté ankety",
     "All hidden polls, to which you have access." : "Všechny skryté ankety, ke kterým máte přístup.",
     "Participated" : "Zúčastnili se",

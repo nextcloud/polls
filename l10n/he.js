@@ -90,7 +90,6 @@ OC.L10N.register(
     "Year" : "שנה",
     "Relevant polls" : "סקרים אפשריים",
     "My polls" : "הסקרים שלי",
-    "Your polls (where you are the owner)." : "הסקרים שלך (בבעלותך).",
     "Hidden polls" : "סקרים מוסתרים",
     "All polls, where you placed a vote." : "כל הסקרים בהם הצבעת.",
     "Public polls" : "סקרים ציבוריים",

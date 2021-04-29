@@ -113,7 +113,6 @@ OC.L10N.register(
     "Relevant" : "Dôležité",
     "Relevant polls" : "Dôležité ankety",
     "My polls" : "Moje ankety",
-    "Your polls (where you are the owner)." : "Vaše ankety (kde ste vlastníkom).",
     "Hidden polls" : "Skryté ankety",
     "All hidden polls, to which you have access." : "Všetky skryté ankety, ku ktorým máte prístup.",
     "All polls, where you placed a vote." : "Všetky ankety, v ktorých ste hlasovali.",
