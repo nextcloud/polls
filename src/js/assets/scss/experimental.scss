@@ -10,8 +10,10 @@
 
 .area__header {
 	display: flex;
-	margin-left: 48px !important;
-	min-width: 286px !important;
+	align-items: flex-start;
+	margin-left: 48px;
+	margin-top: 0;
+	min-width: 286px;
 }
 
 .experimental {
