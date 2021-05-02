@@ -23,7 +23,8 @@
 
 namespace OCA\Polls\Cron;
 
-use OC\BackgroundJob\TimedJob;
+use OCP\BackgroundJob\TimedJob;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Polls\Service\MailService;
 
 class NotificationCron extends TimedJob {
@@ -32,10 +33,12 @@ class NotificationCron extends TimedJob {
 	private $mailService;
 
 	public function __construct(
+		ITimeFactory $time,
 		MailService $mailService
 	) {
-		$this->setInterval(5);
+		parent::__construct($time);
 		$this->mailService = $mailService;
+		parent::setInterval(5); // run every 5 minutes
 	}
 
 	protected function run($arguments) {
