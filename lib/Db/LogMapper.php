@@ -158,4 +158,30 @@ class LogMapper extends QBMapper {
 			->setParameter('userId', $userId);
 		$query->execute();
 	}
+
+	/**
+	 * Delete entries per timestamp
+	 * @return void
+	 */
+	public function deleteOldEntries(int $offset): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->lt('created', $query->createNamedParameter($offset))
+			);
+		$query->execute();
+	}
+
+	/**
+	 * Delete processed entries
+	 * @return void
+	 */
+	public function deleteProcessedEntries(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->gt('processed', $query->createNamedParameter(0))
+			);
+		$query->execute();
+	}
 }

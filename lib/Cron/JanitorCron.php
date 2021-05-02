@@ -25,23 +25,31 @@ namespace OCA\Polls\Cron;
 
 use OCP\BackgroundJob\TimedJob;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCA\Polls\Service\MailService;
+use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\WatchMapper;
 
-class NotificationCron extends TimedJob {
+class JanitorCron extends TimedJob {
 
-	/** @var MailService */
-	private $mailService;
+	/** @var LogMapper */
+	private $logMapper;
+
+	/** @var WatchMapper */
+	private $watchMapper;
 
 	public function __construct(
 		ITimeFactory $time,
-		MailService $mailService
+		LogMapper $logMapper,
+		WatchMapper $watchMapper
 	) {
 		parent::__construct($time);
-		$this->mailService = $mailService;
-		parent::setInterval(5); // run every 5 minutes
+		$this->logMapper = $logMapper;
+		$this->watchMapper = $watchMapper;
+		parent::setInterval(86400); // run once a day
 	}
 
 	protected function run($arguments) {
-		$this->mailService->sendNotifications();
+		$this->logMapper->deleteProcessedEntries(); // delete processed log entries
+		$this->logMapper->deleteOldEntries(time() - (86400 * 7)); // delete entries older than 7 days
+		$this->watchMapper->deleteOldEntries(time() - 86400); // delete entries older than 1 day
 	}
 }
