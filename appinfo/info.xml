@@ -28,6 +28,10 @@
 	<background-jobs>
 		<job>OCA\Polls\Cron\NotificationCron</job>
 	</background-jobs>
+	<commands>
+		<command>OCA\Polls\Command\Share\Add</command>
+		<command>OCA\Polls\Command\Share\Remove</command>
+	</commands>
 	<repair-steps>
 		<pre-migration>
 			<step>OCA\Polls\Migration\DeleteDuplicates</step>

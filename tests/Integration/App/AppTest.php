@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Polls\Tests\Integration;
+namespace OCA\Polls\Tests\Integration\App;
 
 use OCP\AppFramework\App;
 use PHPUnit\Framework\TestCase;
