@@ -34,7 +34,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class ShareMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_share', '\OCA\Polls\Db\Share');
+		parent::__construct($db, 'polls_share', 'OCA\Polls\Db\Share');
 	}
 
 	/**
@@ -105,7 +105,7 @@ class ShareMapper extends QBMapper {
 	/**
 	 * @return void
 	 */
-	public function deleteByPoll($pollId): void {
+	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -130,7 +130,7 @@ class ShareMapper extends QBMapper {
 	/**
 	 * @return void
 	 */
-	public function remove($shareId): void {
+	public function remove(int $shareId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

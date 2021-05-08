@@ -33,7 +33,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class PreferencesMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_preferences', '\OCA\Polls\Db\Preferences');
+		parent::__construct($db, 'polls_preferences', 'OCA\Polls\Db\Preferences');
 	}
 
 	/**
@@ -41,8 +41,7 @@ class PreferencesMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Preferences
 	 */
-
-	public function find($userId): Preferences {
+	public function find(string $userId): Preferences {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

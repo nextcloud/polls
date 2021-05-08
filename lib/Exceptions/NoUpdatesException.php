@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class NoUpdatesException extends Exception {
-	public function __construct($e = 'No updates') {
+	public function __construct(string $e = 'No updates') {
 		parent::__construct($e, Http::STATUS_NOT_MODIFIED);
 	}
 }

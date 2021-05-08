@@ -49,7 +49,7 @@ class SystemController extends Controller {
 	 * @NoAdminRequired
 	 * $query
 	 */
-	public function userSearch($query = ''): DataResponse {
+	public function userSearch(string $query = ''): DataResponse {
 		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
 			$query)], Http::STATUS_OK);
 	}

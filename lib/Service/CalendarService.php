@@ -25,13 +25,23 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
+use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCA\Polls\Model\CalendarEvent;
+use OCA\Polls\Db\Preferences;
 
 class CalendarService {
+
+	/** @var CalendarManager */
 	private $calendarManager;
+
+	/** @var ICalendar[] */
 	private $calendars;
+
+	/** @var PreferencesService */
 	private $preferencesService;
+
+	/** @var Preferences */
 	private $preferences;
 
 	public function __construct(

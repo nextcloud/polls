@@ -55,7 +55,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list($pollId): DataResponse {
+	public function list(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['options' => $this->optionService->list($pollId)];
 		});
@@ -67,7 +67,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function add($pollId, $timestamp = 0, $pollOptionText = ''): DataResponse {
+	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
 			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
 		});
@@ -80,7 +80,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function update($optionId, $timestamp = 0, $pollOptionText = ''): DataResponse {
+	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = ''): DataResponse {
 		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
 			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
 		});
@@ -92,7 +92,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function delete($optionId): DataResponse {
+	public function delete(int $optionId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($optionId) {
 			return ['option' => $this->optionService->delete($optionId)];
 		});
@@ -104,7 +104,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function confirm($optionId): DataResponse {
+	public function confirm(int $optionId): DataResponse {
 		return $this->response(function () use ($optionId) {
 			return ['option' => $this->optionService->confirm($optionId)];
 		});
@@ -116,7 +116,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function setOrder($optionId, $order): DataResponse {
+	public function setOrder(int $optionId, int $order): DataResponse {
 		return $this->response(function () use ($optionId, $order) {
 			return ['option' => $this->optionService->setOrder($optionId, $order)];
 		});

@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class MultipleContactsFound extends Exception {
-	public function __construct($e = 'Multiple Contacts found') {
+	public function __construct(string $e = 'Multiple Contacts found') {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

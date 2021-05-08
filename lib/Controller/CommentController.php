@@ -48,7 +48,7 @@ class CommentController extends Controller {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 */
-	public function list($pollId): DataResponse {
+	public function list(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['comments' => $this->commentService->list($pollId)];
 		});
@@ -58,7 +58,7 @@ class CommentController extends Controller {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 */
-	public function add($pollId, $message): DataResponse {
+	public function add(int $pollId, string $message): DataResponse {
 		return $this->response(function () use ($pollId, $message) {
 			return ['comment' => $this->commentService->add($pollId, null, $message)];
 		});
@@ -68,7 +68,7 @@ class CommentController extends Controller {
 	 * Delete Comment
 	 * @NoAdminRequired
 	 */
-	public function delete($commentId): DataResponse {
+	public function delete(int $commentId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($commentId) {
 			return ['comment' => $this->commentService->delete($commentId)];
 		});

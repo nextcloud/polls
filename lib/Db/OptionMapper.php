@@ -34,7 +34,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class OptionMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_options', '\OCA\Polls\Db\Option');
+		parent::__construct($db, 'polls_options', 'OCA\Polls\Db\Option');
 	}
 
 	/**
@@ -74,7 +74,7 @@ class OptionMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Option
 	 */
-	public function findByPollAndText($pollId, $pollOptionText): Option {
+	public function findByPollAndText(int $pollId, string $pollOptionText): Option {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -90,7 +90,7 @@ class OptionMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	public function remove($optionId): void {
+	public function remove(int $optionId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -101,7 +101,7 @@ class OptionMapper extends QBMapper {
 		$qb->execute();
 	}
 
-	public function deleteByPoll($pollId): void {
+	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

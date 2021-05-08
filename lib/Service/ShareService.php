@@ -151,7 +151,7 @@ class ShareService {
 	/**
 	 * Get share by token
 	 */
-	public function get(string $token, bool $validate = false) {
+	public function get(string $token, bool $validate = false): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 			if ($validate) {

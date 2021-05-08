@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class CirclesNotEnabledException extends Exception {
-	public function __construct($e = 'Circles is not enabled for this user') {
+	public function __construct(string $e = 'Circles is not enabled for this user') {
 		parent::__construct($e, Http::STATUS_NOT_FOUND);
 	}
 }

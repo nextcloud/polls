@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class ContactGroupNotFound extends Exception {
-	public function __construct($e = 'Contact Group not found') {
+	public function __construct(string $e = 'Contact Group not found') {
 		parent::__construct($e, Http::STATUS_NOT_FOUND);
 	}
 }

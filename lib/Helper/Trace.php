@@ -39,7 +39,7 @@ class Trace implements \JsonSerializable {
 		$this->log('Initialization', $payload);
 	}
 
-	public function log($operation, $payload = '') {
+	public function log(string $operation, string $payload = ''): void {
 		$this->result[] = [
 			'method' => $this->method,
 			'time' => time(),

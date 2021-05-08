@@ -34,7 +34,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class SubscriptionMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_notif', '\OCA\Polls\Db\Subscription');
+		parent::__construct($db, 'polls_notif', 'OCA\Polls\Db\Subscription');
 	}
 
 	/**
@@ -73,7 +73,7 @@ class SubscriptionMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Subscription
 	 */
-	public function findByPollAndUser(int $pollId, $userId) {
+	public function findByPollAndUser(int $pollId, string $userId) {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -88,7 +88,7 @@ class SubscriptionMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	public function unsubscribe($pollId, $userId): void {
+	public function unsubscribe(int $pollId, string $userId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

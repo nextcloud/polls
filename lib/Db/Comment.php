@@ -41,7 +41,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setDt(string $value)
  * @method string getComment()
  * @method void setComment(string $value)
- * @method string getTimestamp()
+ * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
  */
 class Comment extends Entity implements JsonSerializable {
@@ -62,20 +62,20 @@ class Comment extends Entity implements JsonSerializable {
 	protected $comment;
 
 	public function __construct() {
-		$this->addType('pollId', 'integer');
-		$this->addType('timestamp', 'integer');
+		$this->addType('pollId', 'int');
+		$this->addType('timestamp', 'int');
 	}
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'pollId' => $this->pollId,
-			'userId' => $this->userId,
-			'dt' => $this->dt,
+			'id' => $this->getId(),
+			'pollId' => $this->getPollId(),
+			'userId' => $this->getUserId(),
+			'dt' => $this->getDt(),
 			'timestamp' => $this->getTimestamp(),
-			'comment' => $this->comment,
+			'comment' => $this->getComment(),
 			'isNoUser' => $this->getIsNoUser(),
-			'displayName' => $this->getDisplayName()
+			'displayName' => $this->getDisplayName(),
 		];
 	}
 

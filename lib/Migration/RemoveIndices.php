@@ -40,6 +40,9 @@ class RemoveIndices implements IRepairStep {
 		return 'Remove polls table indices';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function run(IOutput $output) {
 		$this->removeUniqueIndices('polls_options');
 		$this->removeUniqueIndices('polls_log');
@@ -52,9 +55,11 @@ class RemoveIndices implements IRepairStep {
 	}
 
 	/**
-	 * remove an index with $indexName from $table
+	 * 	 * remove an index with $indexName from $table
+	 *
+	 * @return void
 	 */
-	private function removeIndex(string $tableName, string $indexName) {
+	private function removeIndex(string $tableName, string $indexName): void {
 		$schema = new SchemaWrapper($this->connection);
 		if ($schema->hasTable($tableName)) {
 			$table = $schema->getTable($tableName);
@@ -66,9 +71,11 @@ class RemoveIndices implements IRepairStep {
 	}
 
 	/**
-	 * remove all UNIQUE indices from $table
+	 * 	 * remove all UNIQUE indices from $table
+	 *
+	 * @return void
 	 */
-	private function removeUniqueIndices(string $tableName) {
+	private function removeUniqueIndices(string $tableName): void {
 		$schema = new SchemaWrapper($this->connection);
 		if ($schema->hasTable($tableName)) {
 			$table = $schema->getTable($tableName);

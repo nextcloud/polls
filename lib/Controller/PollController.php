@@ -94,7 +94,7 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function add($type, $title): DataResponse {
+	public function add(string $type, string $title): DataResponse {
 		return $this->responseCreate(function () use ($type, $title) {
 			return $this->pollService->add($type, $title);
 		});
@@ -105,7 +105,7 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function update($pollId, $poll): DataResponse {
+	public function update(int $pollId, array $poll): DataResponse {
 		return $this->response(function () use ($pollId, $poll) {
 			return $this->pollService->update($pollId, $poll);
 		});
@@ -116,7 +116,7 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function switchDeleted($pollId): DataResponse {
+	public function switchDeleted(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return $this->pollService->switchDeleted($pollId);
 		});
@@ -127,7 +127,7 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function delete($pollId): DataResponse {
+	public function delete(int $pollId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($pollId) {
 			return $this->pollService->delete($pollId);
 		});
@@ -137,7 +137,7 @@ class PollController extends Controller {
 	 * Clone poll
 	 * @NoAdminRequired
 	 */
-	public function clone($pollId): DataResponse {
+	public function clone(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			$poll = $this->pollService->clone($pollId);
 			$this->optionService->clone($pollId, $poll->getId());
@@ -151,7 +151,7 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function getParticipantsEmailAddresses($pollId): DataResponse {
+	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return $this->pollService->getParticipantsEmailAddresses($pollId);
 		});

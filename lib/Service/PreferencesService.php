@@ -41,7 +41,7 @@ class PreferencesService {
 	private $userId;
 
 	public function __construct(
-		$UserId,
+		string $UserId,
 		PreferencesMapper $preferencesMapper
 	) {
 		$this->userId = $UserId;
@@ -73,7 +73,7 @@ class PreferencesService {
 	 *
 	 * @return Preferences
 	 */
-	public function write($settings): Preferences {
+	public function write(string $settings): Preferences {
 		if (!$this->userId) {
 			throw new NotAuthorizedException;
 		}

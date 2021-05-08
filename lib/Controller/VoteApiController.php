@@ -57,7 +57,7 @@ class VoteApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list($pollId): DataResponse {
+	public function list(int $pollId): DataResponse {
 		try {
 			return new DataResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
@@ -73,7 +73,7 @@ class VoteApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function set($optionId, $setTo): DataResponse {
+	public function set(int $optionId, string $setTo): DataResponse {
 		try {
 			return new DataResponse(['vote' => $this->voteService->set($optionId, $setTo)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

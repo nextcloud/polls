@@ -69,7 +69,7 @@
  	 * @CORS
  	 * @NoCSRFRequired
  	 */
- 	public function get($pollId): DataResponse {
+ 	public function get(int $pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -85,7 +85,7 @@
  	 * @NoCSRFRequired
  	 * @CORS
  	 */
- 	public function add($type, $title): DataResponse {
+ 	public function add(string $type, string $title): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
  		} catch (Exception $e) {
@@ -99,7 +99,7 @@
  	 * @CORS
  	 * @NoCSRFRequired
  	 */
- 	public function update($pollId, $poll): DataResponse {
+ 	public function update(int $pollId, array $poll): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->update($pollId, $poll)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -115,7 +115,7 @@
  	 * @CORS
  	 * @NoCSRFRequired
  	 */
- 	public function switchDeleted($pollId): DataResponse {
+ 	public function switchDeleted(int $pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->switchDeleted($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -131,7 +131,7 @@
  	 * @CORS
  	 * @NoCSRFRequired
  	 */
- 	public function delete($pollId): DataResponse {
+ 	public function delete(int $pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
@@ -147,7 +147,7 @@
  	 * @CORS
  	 * @NoCSRFRequired
  	 */
- 	public function clone($pollId): DataResponse {
+ 	public function clone(int $pollId): DataResponse {
  		try {
  			return new DataResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
  		} catch (DoesNotExistException $e) {
@@ -163,7 +163,7 @@
  	 * @CORS
  	 * @NoCSRFRequired
  	 */
- 	public function getParticipantsEmailAddresses($pollId): DataResponse {
+ 	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
  		try {
  			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {

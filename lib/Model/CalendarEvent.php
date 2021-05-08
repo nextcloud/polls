@@ -45,7 +45,7 @@ class CalendarEvent implements \JsonSerializable {
 		$this->event = $this->calDav['objects'][0];
 	}
 
-	public function getAllDay() {
+	public function getAllDay(): string {
 		return ($this->getEnd() - $this->getStart() === 86400) ? $this->event['DTSTART'][0]->format('Y-m-d') : '';
 	}
 
@@ -61,42 +61,47 @@ class CalendarEvent implements \JsonSerializable {
 		return $this->calendar->getDisplayColor();
 	}
 
-	public function getId() {
+	public function getId(): string {
 		return $this->calDav['id'];
 	}
 
-	public function getUID() {
+	public function getUID(): string {
 		return $this->event['UID'][0];
 	}
 
-	public function getSummary() {
+	public function getSummary(): string {
 		return $this->event['SUMMARY'][0];
 	}
 
-	public function getDescription() {
+	public function getDescription(): string {
 		return $this->event['DESCRIPTION'][0] ?? '';
 	}
 
-	public function getLocation() {
+	public function getLocation(): string {
 		return $this->event['LOCATION'][0] ?? '';
 	}
 
-	public function getStart() {
+	public function getStart(): int {
 		return isset($this->event['DTSTART'][0]) ? $this->event['DTSTART'][0]->getTimestamp() : 0;
 	}
 
-	public function getEnd() {
+	public function getEnd(): int {
 		return isset($this->event['DTEND'][0])? $this->event['DTEND'][0]->getTimestamp() : 0;
 	}
 
-	public function getHasRRule() {
+	public function getHasRRule(): bool {
 		return isset($this->event['RRULE']);
 	}
 
-	public function getRecurrencies() {
+	public function getRecurrencies(): string {
 		return 'not implementend yet';
 	}
 
+	/**
+	 * @return false|string[]
+	 *
+	 * @psalm-return array<string, string>|false
+	 */
 	public function getRRule() {
 		$rRule = [];
 		if ($this->getHasRRule()) {
@@ -106,7 +111,7 @@ class CalendarEvent implements \JsonSerializable {
 		return $rRule;
 	}
 
-	public function getStatus() {
+	public function getStatus(): string {
 		return $this->event['STATUS'][0] ?? '';
 	}
 

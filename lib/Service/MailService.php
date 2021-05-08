@@ -299,11 +299,7 @@ class MailService {
 			$this->logMapper->update($logItem);
 		}
 
-		$emailTemplate->addBodyButton(
-			htmlspecialchars($this->trans->t('Go to poll')),
-			$url,
-			/** @scrutinizer ignore-type */ false
-		);
+		$emailTemplate->addBodyButton(htmlspecialchars($this->trans->t('Go to poll')), $url, '');
 		$emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
 
 		return $emailTemplate;

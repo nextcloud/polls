@@ -33,7 +33,7 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class CommentMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_comments', '\OCA\Polls\Db\Comment');
+		parent::__construct($db, 'polls_comments', 'OCA\Polls\Db\Comment');
 	}
 
 	/**
@@ -72,7 +72,7 @@ class CommentMapper extends QBMapper {
 	/**
 	 * @return void
 	 */
-	public function deleteByPoll($pollId): void {
+	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())
@@ -86,7 +86,7 @@ class CommentMapper extends QBMapper {
 	/**
 	 * @return void
 	 */
-	public function deleteComment($id): void {
+	public function deleteComment(int $id): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->delete($this->getTableName())

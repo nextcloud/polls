@@ -99,27 +99,27 @@ class Option extends Entity implements JsonSerializable {
 	public $isBookedUp = false;
 
 	public function __construct() {
-		$this->addType('released', 'integer');
-		$this->addType('pollId', 'integer');
-		$this->addType('timestamp', 'integer');
-		$this->addType('order', 'integer');
-		$this->addType('confirmed', 'integer');
-		$this->addType('duration', 'integer');
+		$this->addType('released', 'int');
+		$this->addType('pollId', 'int');
+		$this->addType('timestamp', 'int');
+		$this->addType('order', 'int');
+		$this->addType('confirmed', 'int');
+		$this->addType('duration', 'int');
 	}
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'pollId' => $this->pollId,
-			'owner' => $this->owner,
+			'id' => $this->getId(),
+			'pollId' => $this->getPollId(),
+			'owner' => $this->getOwner(),
 			'ownerDisplayName' => $this->getDisplayName(),
 			'ownerIsNoUser' => $this->getOwnerIsNoUser(),
-			'released' => $this->released,
-			'pollOptionText' => htmlspecialchars_decode($this->getPollOptionText()),
-			'timestamp' => $this->timestamp,
-			'order' => $this->timestamp ?? $this->order,
-			'confirmed' => $this->confirmed,
-			'duration' => $this->duration,
+			'released' => $this->getReleased(),
+			'pollOptionText' => $this->getPollOptionText(),
+			'timestamp' => $this->getTimestamp(),
+			'order' => $this->getOrder(),
+			'confirmed' => $this->getConfirmed(),
+			'duration' => $this->getDuration(),
 			'rank' => $this->rank,
 			'no' => $this->no,
 			'yes' => $this->yes,
@@ -135,9 +135,15 @@ class Option extends Entity implements JsonSerializable {
 			return date('c', $this->timestamp) . ' - ' . date('c', $this->timestamp + $this->duration);
 		} elseif ($this->timestamp && !$this->duration) {
 			return date('c', $this->timestamp);
-		} else {
-			return $this->pollOptionText;
 		}
+		return htmlspecialchars_decode($this->pollOptionText);
+	}
+
+	public function getOrder(): int {
+		if ($this->timestamp) {
+			return $this->timestamp;
+		}
+		return $this->order;
 	}
 
 	private function getDisplayName(): ?string {

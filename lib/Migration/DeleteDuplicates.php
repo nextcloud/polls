@@ -78,6 +78,8 @@ class DeleteDuplicates implements IRepairStep {
 
 	/**
 	 * @inheritdoc
+	 *
+	 * @return void
 	 */
 	public function run(IOutput $output) {
 		$this->logMapper->removeDuplicates();

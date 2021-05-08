@@ -69,7 +69,7 @@ class ShareController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
-	public function list($pollId): DataResponse {
+	public function list(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId): array {
 			return ['shares' => $this->shareService->list($pollId)];
 		});
@@ -82,7 +82,7 @@ class ShareController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
-	public function get($token): DataResponse {
+	public function get(string $token): DataResponse {
 		return $this->response(function () use ($token): array {
 			return ['share' => $this->shareService->get($token, true)];
 		});
@@ -92,7 +92,7 @@ class ShareController extends Controller {
 	 * Add share
 	 * @NoAdminRequired
 	 */
-	public function add(int $pollId, string $type, $userId = ''): DataResponse {
+	public function add(int $pollId, string $type, string $userId = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $type, $userId) {
 			return ['share' => $this->shareService->add($pollId, $type, $userId)];
 		});
@@ -113,7 +113,7 @@ class ShareController extends Controller {
 	 * or update an email share with the username
 	 * @NoAdminRequired
 	 */
-	public function personal($token, $userName, $emailAddress = ''): DataResponse {
+	public function personal(string $token, string $userName, string $emailAddress = ''): DataResponse {
 		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
 			return ['share' => $this->shareService->personal($token, $userName, $emailAddress)];
 		});
@@ -124,7 +124,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function delete($token): DataResponse {
+	public function delete(string $token): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($token) {
 			return ['share' => $this->shareService->delete($token)];
 		});
@@ -135,7 +135,7 @@ class ShareController extends Controller {
 	 * Additionally send notification via notifications
 	 * @NoAdminRequired
 	 */
-	public function sendInvitation($token): DataResponse {
+	public function sendInvitation(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			return [
 				'share' => $this->shareService->get($token),
@@ -148,7 +148,7 @@ class ShareController extends Controller {
 	 * resolve contact group to individual shares
 	 * @NoAdminRequired
 	 */
-	public function resolveGroup($token): DataResponse {
+	public function resolveGroup(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			$shares = [];
 			$share = $this->shareService->get($token);

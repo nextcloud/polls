@@ -79,9 +79,10 @@ class SystemService {
 
 	/**
 	 * Get a list of users
+	 * @param string $query
 	 * @param string[] $skip
 	 */
-	public static function getSiteUsers(string $query = '', array $skip = []) {
+	public static function getSiteUsers(string $query = '', array $skip = []): array {
 		$users = [];
 		foreach (\OC::$server->getUserManager()->searchDisplayName($query) as $user) {
 			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {

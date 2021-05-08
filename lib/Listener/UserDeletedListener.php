@@ -27,7 +27,6 @@ use OCA\Polls\Cron\UserDeletedJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\ILogger;
 use OCP\User\Events\UserDeletedEvent;
 
 class UserDeletedListener implements IEventListener {
@@ -35,13 +34,8 @@ class UserDeletedListener implements IEventListener {
 	/** @var IJobList */
 	private $jobList;
 
-	/** @var ILogger */
-	private $logger;
-
-	public function __construct(IJobList $jobList,
-								ILogger $logger) {
+	public function __construct(IJobList $jobList) {
 		$this->jobList = $jobList;
-		$this->logger = $logger;
 	}
 
 	public function handle(Event $event): void {
