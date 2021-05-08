@@ -1,8 +1,5 @@
 # Polls
 
-[![Build Status](https://img.shields.io/travis/nextcloud/polls.svg?style=flat-square)](https://travis-ci.org/nextcloud/polls)
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/nextcloud/polls.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextcloud/polls)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/nextcloud/polls.svg?style=flat-square)](https://scrutinizer-ci.com/g/nextcloud/polls)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](LICENSE)
 
 This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
