@@ -87,7 +87,7 @@ class AdminController extends Controller {
 	/**
 	 * Switch deleted status (move to deleted polls)
 	 */
-	public function switchDeleted($pollId): DataResponse {
+	public function switchDeleted(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return $this->pollService->switchDeleted($pollId);
 		});
@@ -96,7 +96,7 @@ class AdminController extends Controller {
 	/**
 	 * Delete poll
 	 */
-	public function delete($pollId): DataResponse {
+	public function delete(int $pollId): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($pollId) {
 			return $this->pollService->delete($pollId);
 		});

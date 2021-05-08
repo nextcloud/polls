@@ -30,10 +30,10 @@ class GenericUser extends UserGroupClass {
 	public const ICON_PUBLIC = 'icon-public';
 
 	public function __construct(
-		$id,
-		$type = self::TYPE,
-		$displayName = '',
-		$emailAddress = ''
+		string $id,
+		string $type = self::TYPE,
+		string $displayName = '',
+		string $emailAddress = ''
 	) {
 		parent::__construct($id, $type);
 		$this->displayName = $displayName;

@@ -23,10 +23,38 @@
 
 namespace OCA\Polls\AppInfo;
 
-if (\OCP\Util::getVersion()[0] >= 20) {
-	class Application extends Application20 {
+use Closure;
+use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Notification\IManager as NotificationManager;
+use OCP\User\Events\UserDeletedEvent;
+use OCA\Polls\Notification\Notifier;
+use OCA\Polls\Listener\UserDeletedListener;
+
+class Application extends App implements IBootstrap {
+	public const APP_ID = 'polls';
+
+	public function __construct(array $urlParams = []) {
+		parent::__construct(self::APP_ID, $urlParams);
 	}
-} else {
-	class Application extends Application19 {
+
+	public function boot(IBootContext $context): void {
+		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerUserDeletedListener']));
+	}
+
+	public function register(IRegistrationContext $context): void {
+	}
+
+	public function registerNotifications(NotificationManager $notificationManager): void {
+		$notificationManager->registerNotifierService(Notifier::class);
+	}
+
+	public function registerUserDeletedListener(): void {
+		$eventDispatcher = $this->getContainer()->query(IEventDispatcher::class);
+		$eventDispatcher->addServiceListener(UserDeletedEvent::class, UserDeletedListener::class);
 	}
 }

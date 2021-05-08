@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class ContactsNotEnabledExceptions extends Exception {
-	public function __construct($e = 'Contacts is not enabled') {
+	public function __construct(string $e = 'Contacts is not enabled') {
 		parent::__construct($e, Http::STATUS_NOT_FOUND);
 	}
 }

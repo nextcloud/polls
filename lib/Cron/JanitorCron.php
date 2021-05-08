@@ -47,6 +47,9 @@ class JanitorCron extends TimedJob {
 		parent::setInterval(86400); // run once a day
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function run($arguments) {
 		$this->logMapper->deleteProcessedEntries(); // delete processed log entries
 		$this->logMapper->deleteOldEntries(time() - (86400 * 7)); // delete entries older than 7 days

@@ -26,7 +26,7 @@ namespace OCA\Polls\Model;
 
 use OCP\App\IAppManager;
 use OCA\Circles\Api\v1\Circles;
-use \OCA\Circles\Model\Circle as CirclesCircle;
+use OCA\Circles\Model\Circle as CirclesCircle;
 use OCA\Polls\Exceptions\CirclesNotEnabledException;
 
 class Circle extends UserGroupClass {
@@ -37,7 +37,7 @@ class Circle extends UserGroupClass {
 	private $circle;
 
 	public function __construct(
-		$id
+		string $id
 	) {
 		parent::__construct($id, self::TYPE);
 		if (self::isEnabled()) {
@@ -57,7 +57,7 @@ class Circle extends UserGroupClass {
 	/**
 	 * @return Circle[]
 	 */
-	public static function search(string $query = '', $skip = []): array {
+	public static function search(string $query = '', array $skip = []): array {
 		$circles = [];
 		if (self::isEnabled()) {
 			foreach (Circles::listCircles(CirclesCircle::CIRCLES_ALL, $query) as $circle) {
@@ -73,7 +73,7 @@ class Circle extends UserGroupClass {
 	/**
 	 * @return User[]|Email[]|Contact[]
 	 */
-	public function getMembers() {
+	public function getMembers(): array {
 		$members = [];
 		if (self::isEnabled()) {
 			foreach (Circles::detailsCircle($this->id)->getMembers() as $circleMember) {

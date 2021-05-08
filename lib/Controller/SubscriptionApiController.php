@@ -59,7 +59,7 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function get($pollId): DataResponse {
+	public function get(int $pollId): DataResponse {
 		try {
 			$this->subscriptionService->get($pollId, '');
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
@@ -76,7 +76,7 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function subscribe($pollId): DataResponse {
+	public function subscribe(int $pollId): DataResponse {
 		try {
 			$this->subscriptionService->set($pollId, '', true);
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
@@ -91,7 +91,7 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function unsubscribe($pollId): DataResponse {
+	public function unsubscribe(int $pollId): DataResponse {
 		try {
 			$this->subscriptionService->set($pollId, '', false);
 			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);

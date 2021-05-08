@@ -25,6 +25,7 @@ namespace OCA\Polls\Model;
 
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 
+use OCP\IL10N;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
 use OCA\Polls\AppInfo\Application;
@@ -40,6 +41,7 @@ class UserGroupClass implements \JsonSerializable {
 	public const TYPE_GROUP = Group::TYPE;
 	public const TYPE_USER = User::TYPE;
 
+	/** @var IL10N */
 	private $l10n;
 
 	/** @var string */
@@ -73,11 +75,11 @@ class UserGroupClass implements \JsonSerializable {
 	protected $categories = [];
 
 	public function __construct(
-		$id,
-		$type,
-		$displayName = '',
-		$emailAddress = '',
-		$language = ''
+		string $id,
+		string $type,
+		string $displayName = '',
+		string $emailAddress = '',
+		string $language = ''
 	) {
 		$this->id = $id;
 		$this->type = $type;
@@ -124,7 +126,7 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	public function getEmailAddress(): string {
-		return $this->emailAddress ?? '';
+		return $this->emailAddress;
 	}
 
 	public function getOrganisation(): string {
@@ -169,7 +171,7 @@ class UserGroupClass implements \JsonSerializable {
 		return $this->language;
 	}
 
-	public function setOrganisation($organisation): string {
+	public function setOrganisation(string $organisation): string {
 		$this->organisation = $organisation;
 		return $this->organisation;
 	}
@@ -224,7 +226,7 @@ class UserGroupClass implements \JsonSerializable {
 	/**
 	 * @return array
 	 */
-	public function getMembers() {
+	public function getMembers(): array {
 		return [];
 	}
 

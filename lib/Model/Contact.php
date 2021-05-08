@@ -36,7 +36,7 @@ class Contact extends UserGroupClass {
 	private $contact = [];
 
 	public function __construct(
-		$id
+		string $id
 	) {
 		parent::__construct($id, self::TYPE);
 		if (self::isEnabled()) {
@@ -129,7 +129,7 @@ class Contact extends UserGroupClass {
 	/**
 	 * @return Contact[]
 	 */
-	public static function search(string $query = '', $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
+	public static function search(string $query = '', array $queryRange = ['FN', 'EMAIL', 'ORG', 'CATEGORIES']): array {
 		$contacts = [];
 		foreach (self::listRaw($query, $queryRange) as $contact) {
 			$contacts[] = new self($contact['UID']);

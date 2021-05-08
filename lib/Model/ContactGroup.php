@@ -33,7 +33,7 @@ class ContactGroup extends UserGroupClass {
 	public const ICON = 'icon-group';
 
 	public function __construct(
-		$id
+		string $id
 	) {
 		parent::__construct($id, self::TYPE);
 		if (self::isEnabled()) {
@@ -58,7 +58,7 @@ class ContactGroup extends UserGroupClass {
 	 * Get a list of contacts group members
 	 * @return Contact[]
 	 */
-	public function getMembers() {
+	public function getMembers(): array {
 		$contacts = [];
 
 		foreach (self::getContainer()->query(IContactsManager::class)->search($this->id, ['CATEGORIES']) as $contact) {

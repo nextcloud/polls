@@ -177,7 +177,7 @@ class PollService {
 	/**
 	 * Add poll
 	 */
-	public function add(string $type, string $title) {
+	public function add(string $type, string $title): Poll {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			throw new NotAuthorizedException;
 		}

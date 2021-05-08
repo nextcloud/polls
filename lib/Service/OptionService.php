@@ -30,6 +30,7 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\BadRequestException;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\InvalidOptionPropertyException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
@@ -441,14 +442,16 @@ class OptionService {
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			$this->option->setTimestamp($timestamp);
 			$this->option->setOrder($timestamp);
-			$this->option->setDuration($duration);
+			$this->option->setDuration($duration ?? 0);
 			if ($duration > 0) {
 				$this->option->setPollOptionText(date('c', $timestamp) . ' - ' . date('c', $timestamp + $duration));
 			} else {
 				$this->option->setPollOptionText(date('c', $timestamp));
 			}
-		} else {
+		} elseif ($pollOptionText){
 			$this->option->setPollOptionText($pollOptionText);
+		} else {
+			throw new InvalidOptionPropertyException('Option must have a value');
 		}
 	}
 
@@ -482,7 +485,7 @@ class OptionService {
 	private function filterBookedUp() {
 		$exceptVotes = $this->getUsersVotes();
 		$this->options = array_filter($this->options, function ($option) use ($exceptVotes) {
-			return (!$option->getIsBookedUp() || in_array($option->getPollOptionText(), $exceptVotes));
+			return (!$option->isBookedUp || in_array($option->getPollOptionText(), $exceptVotes));
 		});
 	}
 
@@ -538,7 +541,7 @@ class OptionService {
 	 */
 	private function calculateRanks() {
 		// sort array by yes and maybe votes
-		usort($this->options, function ($a, $b) {
+		usort($this->options, function (Option $a, Option $b):int {
 			$diff = $b->yes - $a->yes;
 			return ($diff !== 0) ? $diff : $b->maybe - $a->maybe;
 		});
@@ -554,7 +557,7 @@ class OptionService {
 		}
 
 		// restore original order
-		usort($this->options, function ($a, $b) {
+		usort($this->options, function (Option $a, Option $b):int {
 			return $a->getOrder() - $b->getOrder();
 		});
 	}

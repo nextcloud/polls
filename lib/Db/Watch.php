@@ -34,8 +34,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollId(integer $value)
  * @method string getTable()
  * @method void setTable(string $value)
- * @method string getUpdated()
- * @method void setUpdated(string $value)
+ * @method int getUpdated()
+ * @method void setUpdated(integer $value)
  */
 class Watch extends Entity implements JsonSerializable {
 	public const OBJECT_POLLS = "polls";
@@ -49,19 +49,20 @@ class Watch extends Entity implements JsonSerializable {
 	/** @var string $tableId */
 	protected $table;
 
-	/** @var string $updated */
+	/** @var integer $updated */
 	protected $updated;
 
 	public function __construct() {
-		$this->addType('pollId', 'integer');
+		$this->addType('pollId', 'int');
+		$this->addType('updated', 'int');
 	}
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'pollId' => $this->pollId,
-			'table' => $this->table,
-			'updated' => $this->updated,
+			'id' => $this->getId(),
+			'pollId' => $this->getPollId(),
+			'table' => $this->getTable(),
+			'updated' => $this->getUpdated(),
 		];
 	}
 }

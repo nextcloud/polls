@@ -86,26 +86,26 @@ class Share extends Entity implements JsonSerializable {
 	protected $displayName;
 
 	public function __construct() {
-		$this->addType('pollId', 'integer');
-		$this->addType('invitationSent', 'integer');
+		$this->addType('pollId', 'int');
+		$this->addType('invitationSent', 'int');
 	}
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'token' => $this->token,
-			'type' => $this->type,
-			'pollId' => $this->pollId,
+			'id' => $this->getId(),
+			'token' => $this->getToken(),
+			'type' => $this->getType(),
+			'pollId' => $this->getPollId(),
 			'userId' => $this->getUserId(),
-			'emailAddress' => $this->emailAddress,
-			'invitationSent' => $this->invitationSent,
-			'displayName' => $this->displayName,
-			'isNoUser' => !($this->type === self::TYPE_USER),
-			'URL' => $this->getURL()
+			'emailAddress' => $this->getEmailAddress(),
+			'invitationSent' => $this->getInvitationSent(),
+			'displayName' => $this->getDisplayName(),
+			'isNoUser' => !($this->getType() === self::TYPE_USER),
+			'URL' => $this->getURL(),
 		];
 	}
 
-	public function getURL() {
+	public function getURL(): string {
 		if ($this->type === self::TYPE_USER || $this->type === self::TYPE_GROUP) {
 			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
 				'polls.page.vote',

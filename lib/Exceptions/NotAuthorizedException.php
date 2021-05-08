@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class NotAuthorizedException extends Exception {
-	public function __construct($e = 'Unauthorized or not found') {
+	public function __construct(string $e = 'Unauthorized or not found') {
 		parent::__construct($e, Http::STATUS_UNAUTHORIZED);
 	}
 }

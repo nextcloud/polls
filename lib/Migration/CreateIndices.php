@@ -42,6 +42,9 @@ class CreateIndices implements IRepairStep {
 		return 'Create polls table indices';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function run(IOutput $output) {
 		$this->createIndex('polls_options', 'UNIQ_options', ['poll_id', 'poll_option_text', 'timestamp'], true);
 		$this->createIndex('polls_log', 'UNIQ_unprocessed', ['processed', 'poll_id', 'user_id', 'message_id'], true);
@@ -54,8 +57,10 @@ class CreateIndices implements IRepairStep {
 
 	/**
 	 * Create index for $table
+	 *
+	 * @return void
 	 */
-	private function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false) {
+	private function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): void {
 		$schema = new SchemaWrapper($this->connection);
 		if ($schema->hasTable($tableName)) {
 			$table = $schema->getTable($tableName);

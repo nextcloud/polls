@@ -135,7 +135,7 @@ class Acl implements JsonSerializable {
 		return $this->poll->getId();
 	}
 
-	public function getUserId() {
+	public function getUserId(): string {
 		return $this->getLoggedIn() ? \OC::$server->getUserSession()->getUser()->getUID() : $this->share->getUserId();
 	}
 

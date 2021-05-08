@@ -62,7 +62,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function vote($id): TemplateResponse {
+	public function vote(int $id): TemplateResponse {
 		$this->notificationService->removeNotification($id);
 		return new TemplateResponse('polls', 'polls.tmpl',
 		['urlGenerator' => $this->urlGenerator]);

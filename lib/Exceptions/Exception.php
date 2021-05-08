@@ -31,8 +31,8 @@ class Exception extends \Exception {
 	protected $status;
 
 	public function __construct(
-		$e = 'Unexpected error',
-		$status = Http::STATUS_INTERNAL_SERVER_ERROR
+		string $e = 'Unexpected error',
+		int $status = Http::STATUS_INTERNAL_SERVER_ERROR
 	) {
 		parent::__construct($e);
 		$this->status = $status;

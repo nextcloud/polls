@@ -60,7 +60,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list($pollId): DataResponse {
+	public function list(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['shares' => $this->shareService->list($pollId)];
 		});
@@ -72,7 +72,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function get($token): DataResponse {
+	public function get(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			return ['share' => $this->shareService->get($token)];
 		});
@@ -84,7 +84,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function add($pollId, $type, $userId = ''): DataResponse {
+	public function add(int $pollId, string $type, string $userId = ''): DataResponse {
 		return $this->responseCreate(function () use ($pollId, $type, $userId) {
 			return ['share' => $this->shareService->add($pollId, $type, $userId)];
 		});
@@ -96,7 +96,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function delete($token): DataResponse {
+	public function delete(string $token): DataResponse {
 		return $this->responseDeleteTolerant(function () use ($token) {
 			return ['share' => $this->shareService->delete($token)];
 		});
@@ -108,7 +108,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function sendInvitation($token): DataResponse {
+	public function sendInvitation(string $token): DataResponse {
 		return $this->response(function () use ($token) {
 			$sentResult = $this->mailService->sendInvitation($token);
 			$share = $this->shareService->get($token);

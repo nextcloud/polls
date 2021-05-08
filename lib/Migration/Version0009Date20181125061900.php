@@ -327,7 +327,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		$result->closeCursor();
 	}
 
-	protected function findOptionId($pollId, ?string $text) {
+	protected function findOptionId(int $pollId, ?string $text): int {
 		$queryFind = $this->connection->getQueryBuilder();
 		$queryFind->select(['id'])
 			->from('polls_options')
@@ -347,7 +347,7 @@ class Version0009Date20181125061900 extends SimpleMigrationStep {
 		}
 	}
 
-	protected function translateVoteTypeToAnswer($voteType): string {
+	protected function translateVoteTypeToAnswer(string $voteType): string {
 		switch ($voteType) {
 			case 0:
 				$answer = "no";

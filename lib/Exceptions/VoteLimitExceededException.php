@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class VoteLimitExceededException extends Exception {
-	public function __construct($e = 'Vote limit exceeded') {
+	public function __construct(string $e = 'Vote limit exceeded') {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

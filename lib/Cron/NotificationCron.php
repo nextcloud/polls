@@ -41,6 +41,9 @@ class NotificationCron extends TimedJob {
 		parent::setInterval(5); // run every 5 minutes
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function run($arguments) {
 		$this->mailService->sendNotifications();
 	}

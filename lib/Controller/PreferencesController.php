@@ -32,7 +32,11 @@ use OCA\Polls\Service\PreferencesService;
 use OCA\Polls\Service\CalendarService;
 
 class PreferencesController extends Controller {
+
+	/** @var PreferencesService */
 	private $preferencesService;
+
+	/** @var CalendarService */
 	private $calendarService;
 
 	use ResponseHandle;
@@ -54,7 +58,7 @@ class PreferencesController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function get(): DataResponse {
-		return $this->response(function () {
+		return $this->response(function (): Preferences {
 			return $this->preferencesService->get();
 		});
 	}
@@ -63,7 +67,7 @@ class PreferencesController extends Controller {
 	 * Write preferences
 	 * @NoAdminRequired
 	 */
-	public function write($settings): DataResponse {
+	public function write(string $settings): DataResponse {
 		if (!\OC::$server->getUserSession()->isLoggedIn()) {
 			return new DataResponse([], Http::STATUS_OK);
 		}

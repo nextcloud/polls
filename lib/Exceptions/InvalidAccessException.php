@@ -26,7 +26,7 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class InvalidAccessException extends Exception {
-	public function __construct($e = 'Invalid access value') {
+	public function __construct(string $e = 'Invalid access value') {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

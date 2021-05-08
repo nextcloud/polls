@@ -35,7 +35,7 @@ class User extends UserGroupClass {
 	private $user;
 
 	public function __construct(
-		$id
+		string $id
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;

@@ -30,7 +30,7 @@ class InvalidUsernameException extends Exception {
 	 * InvalidUsernameException Constructor
 	 * @param string $e exception message
 	 */
-	public function __construct($e = 'Username not allowed') {
+	public function __construct(string $e = 'Username not allowed') {
 		parent::__construct($e, Http::STATUS_FORBIDDEN);
 	}
 }

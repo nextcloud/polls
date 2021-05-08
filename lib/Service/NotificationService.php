@@ -38,7 +38,7 @@ class NotificationService {
 
 	public function __construct(
 		IManager $notificationManager,
-		$UserId
+		string $UserId
 	) {
 		$this->notificationManager = $notificationManager;
 		$this->userId = $UserId;
@@ -52,7 +52,7 @@ class NotificationService {
 		$this->notificationManager->markProcessed($notification);
 	}
 
-	public function sendInvitation(int $pollId, $recipient): bool {
+	public function sendInvitation(int $pollId, string $recipient): bool {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp(self::APP_ID)
 			->setUser($recipient)

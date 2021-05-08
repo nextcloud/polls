@@ -156,45 +156,45 @@ class Poll extends Entity implements JsonSerializable {
 	protected $hideBookedUp;
 
 	public function __construct() {
-		$this->addType('created', 'integer');
-		$this->addType('expire', 'integer');
-		$this->addType('deleted', 'integer');
-		$this->addType('anonymous', 'integer');
-		$this->addType('allowComment', 'integer');
-		$this->addType('allowMaybe', 'integer');
-		$this->addType('proposalsExpire', 'integer');
-		$this->addType('voteLimit', 'integer');
-		$this->addType('optionLimit', 'integer');
-		$this->addType('adminAccess', 'integer');
-		$this->addType('important', 'integer');
-		$this->addType('hideBookedUp', 'integer');
+		$this->addType('created', 'int');
+		$this->addType('expire', 'int');
+		$this->addType('deleted', 'int');
+		$this->addType('anonymous', 'int');
+		$this->addType('allowComment', 'int');
+		$this->addType('allowMaybe', 'int');
+		$this->addType('proposalsExpire', 'int');
+		$this->addType('voteLimit', 'int');
+		$this->addType('optionLimit', 'int');
+		$this->addType('adminAccess', 'int');
+		$this->addType('important', 'int');
+		$this->addType('hideBookedUp', 'int');
 	}
 
 	public function jsonSerialize() {
 		return [
-			'id' => $this->id,
-			'type' => $this->type,
-			'title' => $this->title,
-			'description' => $this->description,
+			'id' => $this->getId(),
+			'type' => $this->getType(),
+			'title' => $this->getTitle(),
+			'description' => $this->getDescription(),
 			'descriptionSafe' => $this->getDescriptionSafe(),
-			'owner' => $this->owner,
-			'created' => $this->created,
-			'expire' => $this->expire,
-			'deleted' => $this->deleted,
-			'access' => $this->access,
-			'anonymous' => $this->anonymous,
-			'allowComment' => $this->allowComment,
-			'allowMaybe' => $this->allowMaybe,
-			'allowProposals' => $this->allowProposals,
-			'proposalsExpire' => $this->proposalsExpire,
-			'settings' => $this->settings,
-			'voteLimit' => $this->voteLimit,
-			'optionLimit' => $this->optionLimit,
-			'showResults' => $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults,
-			'adminAccess' => $this->adminAccess,
+			'owner' => $this->getOwner(),
+			'created' => $this->getCreated(),
+			'expire' => $this->getExpire(),
+			'deleted' => $this->getDeleted(),
+			'access' => $this->getAccess(),
+			'anonymous' => $this->getAnonymous(),
+			'allowComment' => $this->getAllowComment(),
+			'allowMaybe' => $this->getAllowMaybe(),
+			'allowProposals' => $this->getAllowProposals(),
+			'proposalsExpire' => $this->getProposalsExpire(),
+			'settings' => $this->getSettings(),
+			'voteLimit' => $this->getVoteLimit(),
+			'optionLimit' => $this->getOptionLimit(),
+			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
+			'adminAccess' => $this->getAdminAccess(),
 			'ownerDisplayName' => $this->getDisplayName(),
-			'important' => $this->important,
-			'hideBookedUp' => $this->hideBookedUp
+			'important' => $this->getImportant(),
+			'hideBookedUp' => $this->getHideBookedUp(),
 		];
 	}
 
@@ -235,7 +235,7 @@ class Poll extends Entity implements JsonSerializable {
 		);
 	}
 
-	public function getDescriptionSafe() {
+	public function getDescriptionSafe(): string {
 		return htmlspecialchars($this->description);
 	}
 

@@ -237,7 +237,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 	}
 
 
-	private function resolveAccess($access): string {
+	private function resolveAccess(string $access): string {
 		if ($access === 'public') {
 			return 'public';
 		}
@@ -245,9 +245,9 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * @return false|string
+	 * @return string
 	 */
-	private function resolveOptions($maybe) {
+	private function resolveOptions(bool $maybe) {
 		if ($maybe) {
 			return json_encode(['yes', 'no', 'maybe']);
 		}

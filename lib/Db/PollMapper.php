@@ -33,7 +33,7 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class PollMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_polls', '\OCA\Polls\Db\Poll');
+		parent::__construct($db, 'polls_polls', 'OCA\Polls\Db\Poll');
 	}
 
 	/**

@@ -34,7 +34,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class VoteMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_votes', '\OCA\Polls\Db\Vote');
+		parent::__construct($db, 'polls_votes', 'OCA\Polls\Db\Vote');
 	}
 
 	/**
@@ -102,7 +102,7 @@ class VoteMapper extends QBMapper {
 	 *
 	 * @psalm-return array<array-key, Vote>
 	 */
-	public function findParticipantsVotes(int $pollId, $userId): array {
+	public function findParticipantsVotes(int $pollId, string $userId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 		   ->from($this->getTableName())
@@ -119,7 +119,7 @@ class VoteMapper extends QBMapper {
 		   ->execute();
 	}
 
-	public function deleteByPoll($pollId): void {
+	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())
 		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))

@@ -4,7 +4,7 @@
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    xsi:schemaLocation="https://getpsalm.org/schema/config"
 >
     <projectFiles>
         <directory name="lib" />
@@ -12,18 +12,17 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
-	<extraFiles>
-		<directory name="vendor" />
-		<ignoreFiles>
-			<directory name="vendor/phpunit/php-code-coverage" />
-			<directory name="vendor/vimeo" />
-		</ignoreFiles>
+    <extraFiles>
+        <directory name="vendor" />
     </extraFiles>
 	<issueHandlers>
 		<UndefinedClass>
 			<errorLevel type="suppress">
 				<referencedClass name="OC" />
-				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+				<referencedClass name="OC\Core\Command\Base" />
+                <referencedClass name="OC\DB\SchemaWrapper" />
+                <referencedClass name="OC\DB\Connection" />
+                <referencedClass name="OCA\Circles\Api\v1\Circles" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
@@ -32,7 +31,9 @@
 				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
 				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
 				<referencedClass name="Doctrine\DBAL\Schema\Table" />
+                <referencedClass name="OC\DB\Connection" />
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+                <referencedClass name="OCA\Circles\Model\Circle" />
 			</errorLevel>
 		</UndefinedDocblockClass>
 	</issueHandlers>

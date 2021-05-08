@@ -34,13 +34,13 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class LogMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_log', '\OCA\Polls\Db\Log');
+		parent::__construct($db, 'polls_log', 'OCA\Polls\Db\Log');
 	}
 
 	/**
 	 * @return Log
 	 */
-	public function find($id): Log {
+	public function find(int $id): Log {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -56,7 +56,7 @@ class LogMapper extends QBMapper {
 	 * @return Log[]
 	 * @psalm-return array<array-key, Log>
 	 */
-	public function findByPollId($pollId): array {
+	public function findByPollId(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

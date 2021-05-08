@@ -50,7 +50,7 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function list($pollId): DataResponse {
+	public function list(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
 			return ['votes' => $this->voteService->list($pollId)];
 		});
@@ -61,7 +61,7 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function set($optionId, $setTo): DataResponse {
+	public function set(int $optionId, string $setTo): DataResponse {
 		return $this->response(function () use ($optionId, $setTo) {
 			return ['vote' => $this->voteService->set($optionId, $setTo)];
 		});
@@ -71,7 +71,7 @@ class VoteController extends Controller {
 	 * Remove user from poll
 	 * @NoAdminRequired
 	 */
-	public function delete($pollId, $userId): DataResponse {
+	public function delete(int $pollId, string $userId): DataResponse {
 		return $this->response(function () use ($pollId, $userId) {
 			return ['deleted' => $this->voteService->delete($pollId, $userId)];
 		});
