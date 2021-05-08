@@ -448,7 +448,7 @@ class OptionService {
 			} else {
 				$this->option->setPollOptionText(date('c', $timestamp));
 			}
-		} elseif ($pollOptionText){
+		} elseif ($pollOptionText) {
 			$this->option->setPollOptionText($pollOptionText);
 		} else {
 			throw new InvalidOptionPropertyException('Option must have a value');
