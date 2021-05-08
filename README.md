@@ -1,6 +1,10 @@
 # Polls
+![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
+![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
+![Build](https://github.com/nextcloud/polls/actions/workflows/nodejs.yml/badge.svg)
+[![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
+[![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](COPYING)
 
-[![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](LICENSE)
 
 This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
 
