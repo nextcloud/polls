@@ -34,7 +34,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class LogMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_log', 'OCA\Polls\Db\Log');
+		parent::__construct($db, 'polls_log', Log::class);
 	}
 
 	/**

@@ -254,7 +254,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 		return json_encode(['yes', 'no']);
 	}
 
-	private function resolveType($type): string {
+	private function resolveType(string $type): string {
 		if ($type) {
 			return 'textPoll';
 		}

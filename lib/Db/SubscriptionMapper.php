@@ -34,7 +34,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class SubscriptionMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_notif', 'OCA\Polls\Db\Subscription');
+		parent::__construct($db, 'polls_notif', Subscription::class);
 	}
 
 	/**

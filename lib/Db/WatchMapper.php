@@ -31,7 +31,7 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class WatchMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_watch', 'OCA\Polls\Db\Watch');
+		parent::__construct($db, 'polls_watch', Watch::class);
 	}
 
 	/**

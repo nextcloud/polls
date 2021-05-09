@@ -42,12 +42,13 @@ class JanitorCron extends TimedJob {
 		WatchMapper $watchMapper
 	) {
 		parent::__construct($time);
+		parent::setInterval(86400); // run once a day
 		$this->logMapper = $logMapper;
 		$this->watchMapper = $watchMapper;
-		parent::setInterval(86400); // run once a day
 	}
 
 	/**
+	 * @param mixed $arguments
 	 * @return void
 	 */
 	protected function run($arguments) {

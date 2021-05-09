@@ -5,6 +5,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config"
+    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="lib" />
@@ -20,8 +21,8 @@
 			<errorLevel type="suppress">
 				<referencedClass name="OC" />
 				<referencedClass name="OC\Core\Command\Base" />
-                <referencedClass name="OC\DB\SchemaWrapper" />
                 <referencedClass name="OC\DB\Connection" />
+                <referencedClass name="OC\DB\SchemaWrapper" />
                 <referencedClass name="OCA\Circles\Api\v1\Circles" />
 			</errorLevel>
 		</UndefinedClass>

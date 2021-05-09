@@ -35,6 +35,8 @@ use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Listener\UserDeletedListener;
 
 class Application extends App implements IBootstrap {
+
+	/** @var string */
 	public const APP_ID = 'polls';
 
 	public function __construct(array $urlParams = []) {
@@ -43,18 +45,14 @@ class Application extends App implements IBootstrap {
 
 	public function boot(IBootContext $context): void {
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerUserDeletedListener']));
 	}
 
 	public function register(IRegistrationContext $context): void {
+		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
 
-	public function registerUserDeletedListener(): void {
-		$eventDispatcher = $this->getContainer()->query(IEventDispatcher::class);
-		$eventDispatcher->addServiceListener(UserDeletedEvent::class, UserDeletedListener::class);
-	}
 }

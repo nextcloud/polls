@@ -33,7 +33,7 @@ use OCP\AppFramework\Db\QBMapper;
  */
 class CommentMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_comments', 'OCA\Polls\Db\Comment');
+		parent::__construct($db, 'polls_comments', Comment::class);
 	}
 
 	/**
