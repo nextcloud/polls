@@ -1,4 +1,4 @@
-name: Static analysis
+name: psalm
 
 on:
   pull_request:

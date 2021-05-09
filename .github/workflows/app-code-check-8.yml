@@ -1,4 +1,4 @@
-name: PHP AppCode Check
+name: PHP 8
 
 on:
   pull_request:
