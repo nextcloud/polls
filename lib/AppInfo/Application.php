@@ -28,7 +28,6 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCA\Polls\Notification\Notifier;
@@ -54,5 +53,4 @@ class Application extends App implements IBootstrap {
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-
 }
