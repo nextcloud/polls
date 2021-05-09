@@ -1,7 +1,10 @@
 # Polls
+![php7](https://github.com/nextcloud/polls/actions/workflows/app-code-check-7.yml/badge.svg)
+![php8](https://github.com/nextcloud/polls/actions/workflows/app-code-check-8.yml/badge.svg)
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
-![Build](https://github.com/nextcloud/polls/actions/workflows/nodejs.yml/badge.svg)
+![puild](https://github.com/nextcloud/polls/actions/workflows/nodejs.yml/badge.svg)
+![lint](https://github.com/nextcloud/polls/actions/workflows/lint.yml/badge.svg)
 [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](COPYING)
 
