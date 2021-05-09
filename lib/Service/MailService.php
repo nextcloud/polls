@@ -236,28 +236,19 @@ class MailService {
 	}
 
 	private function getLogString(Log $logItem, string $displayName): string {
-		switch ($logItem->getMessageId()) {
-			case Log::MSG_ID_SETVOTE:
-				return $this->trans->t('- %s voted.', [$displayName]);
-			case Log::MSG_ID_UPDATEPOLL:
-				return $this->trans->t('- Updated poll configuration. Please check your votes.');
-			case Log::MSG_ID_DELETEPOLL:
-				return $this->trans->t('- The poll got deleted.');
-			case Log::MSG_ID_RESTOREPOLL:
-				return $this->trans->t('- The poll got restored.');
-			case Log::MSG_ID_EXPIREPOLL:
-				return $this->trans->t('- The poll was closed.');
-			case Log::MSG_ID_ADDOPTION:
-				return $this->trans->t('- A vote option was added.');
-			case Log::MSG_ID_DELETEOPTION:
-				return $this->trans->t('- A vote option was removed.');
-			case Log::MSG_ID_OWNERCHANGE:
-				return $this->trans->t('- The poll owner changed.');
-			case Log::MSG_ID_ADDPOLL:
-				return $this->trans->t('- %s created the poll.', [$displayName]);
-			default:
-				return $logItem->getMessageId() . " (" . $displayName . ")";
-		}
+		$logStrings = [
+			Log::MSG_ID_SETVOTE => $this->trans->t('- %s voted.', [$displayName]),
+			Log::MSG_ID_UPDATEPOLL => $this->trans->t('- Updated poll configuration. Please check your votes.'),
+			Log::MSG_ID_DELETEPOLL => $this->trans->t('- The poll got deleted.'),
+			Log::MSG_ID_RESTOREPOLL => $this->trans->t('- The poll got restored.'),
+			Log::MSG_ID_EXPIREPOLL => $this->trans->t('- The poll was closed.'),
+			Log::MSG_ID_ADDOPTION => $this->trans->t('- A vote option was added.'),
+			Log::MSG_ID_DELETEOPTION => $this->trans->t('- A vote option was removed.'),
+			Log::MSG_ID_OWNERCHANGE => $this->trans->t('- The poll owner changed.'),
+			Log::MSG_ID_ADDPOLL => $this->trans->t('- %s created the poll.', [$displayName]),
+		];
+
+		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
 	}
 
 	private function generateNotification(UserGroupClass $recipient, Poll $poll, string $url, array $log): IEMailTemplate {
