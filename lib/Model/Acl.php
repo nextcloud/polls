@@ -42,16 +42,16 @@ use OCA\Polls\Db\ShareMapper;
  * @package OCA\Polls\Model\Acl
  */
 class Acl implements JsonSerializable {
-	public const PERMISSION_VIEW = 'view';
-	public const PERMISSION_EDIT = 'edit';
-	public const PERMISSION_ADD_OPTIONS = 'add_options';
-	public const PERMISSION_DELETE = 'delete';
-	public const PERMISSION_COMMENT = 'comment';
-	public const PERMISSION_SUBSCRIBE = 'subscribe';
-	public const PERMISSION_VOTE = 'vote';
-	public const PERMISSION_SEE_RESULTS = 'seeResults';
-	public const PERMISSION_SEE_USERNAMES = 'seeUserNames';
-	public const PERMISSION_TAKE_OVER = 'takeOver';
+	public const PERMISSION_POLL_VIEW = 'view';
+	public const PERMISSION_POLL_EDIT = 'edit';
+	public const PERMISSION_POLL_DELETE = 'delete';
+	public const PERMISSION_POLL_RESULTS_VIEW = 'seeResults';
+	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
+	public const PERMISSION_POLL_TAKEOVER = 'takeOver';
+	public const PERMISSION_POLL_SUBSCRIBE = 'subscribe';
+	public const PERMISSION_COMMENT_ADD = 'comment';
+	public const PERMISSION_OPTIONS_ADD = 'add_options';
+	public const PERMISSION_VOTE_EDIT = 'vote';
 
 	/** @var IUserManager */
 	private $userManager;
@@ -110,7 +110,7 @@ class Acl implements JsonSerializable {
 		$this->share = $share;
 		$this->validateShareAccess();
 		$this->setPollId($share->getPollId());
-		$this->request(self::PERMISSION_VIEW);
+		$this->request(self::PERMISSION_POLL_VIEW);
 		return $this;
 	}
 
@@ -158,7 +158,7 @@ class Acl implements JsonSerializable {
 
 	public function isAllowed(string $permission): bool {
 		switch ($permission) {
-			case self::PERMISSION_VIEW:
+			case self::PERMISSION_POLL_VIEW:
 				if ($this->getIsOwner() || $this->hasAdminAccess()) {
 					// always grant access, if user has edit rights
 					return true;
@@ -177,28 +177,28 @@ class Acl implements JsonSerializable {
 				}
 				break;
 
-			case self::PERMISSION_EDIT:
+			case self::PERMISSION_POLL_EDIT:
 				return $this->getIsOwner() || $this->hasAdminAccess();
-			case self::PERMISSION_ADD_OPTIONS:
+			case self::PERMISSION_OPTIONS_ADD:
 				return $this->getIsOwner()
 					|| $this->hasAdminAccess()
 					|| ($this->poll->getAllowProposals() === Poll::PROPOSAL_ALLOW
 					&& !$this->poll->getProposalsExpired());
-			case self::PERMISSION_DELETE:
+			case self::PERMISSION_POLL_DELETE:
 				return $this->getIsOwner() || $this->hasAdminAccess() || $this->getIsAdmin();
-			case self::PERMISSION_COMMENT:
+			case self::PERMISSION_COMMENT_ADD:
 				return $this->share->getType() !== Share::TYPE_PUBLIC && $this->poll->getallowComment();
-			case self::PERMISSION_SUBSCRIBE:
+			case self::PERMISSION_POLL_SUBSCRIBE:
 				return $this->hasEmail();
-			case self::PERMISSION_VOTE:
+			case self::PERMISSION_VOTE_EDIT:
 				return !$this->poll->getExpired() && $this->share->getType() !== Share::TYPE_PUBLIC;
-			case self::PERMISSION_SEE_RESULTS:
+			case self::PERMISSION_POLL_RESULTS_VIEW:
 				return $this->getIsOwner()
 					|| $this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS
 					|| $this->poll->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->poll->getExpired();
-			case self::PERMISSION_SEE_USERNAMES:
+			case self::PERMISSION_POLL_USERNAMES_VIEW:
 				return $this->getIsOwner() || !$this->poll->getAnonymous();
-			case self::PERMISSION_TAKE_OVER:
+			case self::PERMISSION_POLL_TAKEOVER:
 				return $this->getIsAdmin();
 			default:
 				break;
@@ -214,14 +214,14 @@ class Acl implements JsonSerializable {
 
 	public function jsonSerialize(): array {
 		return	[
-			'allowComment' => $this->isAllowed(self::PERMISSION_COMMENT),
-			'allowAddOptions' => $this->isAllowed(self::PERMISSION_ADD_OPTIONS),
-			'allowEdit' => $this->isAllowed(self::PERMISSION_EDIT),
-			'allowSeeResults' => $this->isAllowed(self::PERMISSION_SEE_RESULTS),
-			'allowSeeUsernames' => $this->isAllowed(self::PERMISSION_SEE_USERNAMES),
-			'allowSubscribe' => $this->isAllowed(self::PERMISSION_SUBSCRIBE),
-			'allowView' => $this->isAllowed(self::PERMISSION_VIEW),
-			'allowVote' => $this->isAllowed(self::PERMISSION_VOTE),
+			'allowComment' => $this->isAllowed(self::PERMISSION_COMMENT_ADD),
+			'allowAddOptions' => $this->isAllowed(self::PERMISSION_OPTIONS_ADD),
+			'allowEdit' => $this->isAllowed(self::PERMISSION_POLL_EDIT),
+			'allowSeeResults' => $this->isAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
+			'allowSeeUsernames' => $this->isAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+			'allowSubscribe' => $this->isAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+			'allowView' => $this->isAllowed(self::PERMISSION_POLL_VIEW),
+			'allowVote' => $this->isAllowed(self::PERMISSION_VOTE_EDIT),
 			'displayName' => $this->getDisplayName(),
 			'isOwner' => $this->getIsOwner(),
 			'loggedIn' => $this->getLoggedIn(),
