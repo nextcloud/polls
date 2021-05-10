@@ -144,12 +144,10 @@ class PublicController extends Controller {
 	 */
 	public function getPoll(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			$this->share = $this->shareService->get($token, true);
-			$this->acl->setShare($this->share);
-			$this->poll = $this->pollService->get($this->share->getPollId());
+			$this->acl->setToken($token);
 			return [
 				'acl' => $this->acl,
-				'poll' => $this->poll,
+				'poll' => $this->acl->getPoll(),
 			];
 		});
 	}

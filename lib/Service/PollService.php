@@ -104,7 +104,7 @@ class PollService {
 
 			foreach ($polls as $poll) {
 				try {
-					$this->acl->setPoll($poll)->request(Acl::PERMISSION_POLL_VIEW);
+					$this->acl->setPollId($poll->getId());
 					// TODO: Not the elegant way. Improvement neccessary
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
@@ -165,13 +165,10 @@ class PollService {
 
 	/**
 	 * get poll configuration
-	 *
-	 * @return Poll
 	 */
 	public function get(int $pollId): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_POLL_VIEW);
-		return $this->poll;
+		$this->acl->setPollId($pollId);
+		return $this->acl->getPoll();
 	}
 
 	/**
@@ -314,8 +311,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function clone(int $pollId): Poll {
-		$origin = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($origin)->request(Acl::PERMISSION_POLL_VIEW);
+		$this->acl->setPollId($pollId);
+		$origin = $this->acl->getPoll();
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());

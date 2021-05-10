@@ -67,7 +67,7 @@ class CommentService {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_VIEW);
+			$this->acl->setPollId($pollId);
 		}
 
 		if ($this->acl->isAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {

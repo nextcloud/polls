@@ -89,7 +89,7 @@ class VoteService {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
-			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_VIEW);
+			$this->acl->setPollId($pollId);
 		}
 
 		try {

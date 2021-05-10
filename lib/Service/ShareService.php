@@ -165,7 +165,7 @@ class ShareService {
 		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
 			try {
 				// Test if the user has already access.
-				$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_POLL_VIEW);
+				$this->acl->setPollId($this->share->getPollId());
 			} catch (NotAuthorizedException $e) {
 				// If he is not authorized until now, create a new personal share for this user.
 				// Return the created share
