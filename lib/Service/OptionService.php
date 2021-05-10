@@ -56,9 +56,6 @@ class OptionService {
 	/** @var Option */
 	private $option;
 
-	/** @var int */
-	private $countParticipants;
-
 	/** @var Poll */
 	private $poll;
 
@@ -116,10 +113,8 @@ class OptionService {
 		$this->poll = $this->acl->getPoll();
 
 		try {
-			$this->poll = $this->pollMapper->find($pollId);
-			$this->options = $this->optionMapper->findByPoll($pollId);
-			$this->votes = $this->voteMapper->findByPoll($pollId);
-			$this->countParticipants = count($this->voteMapper->findParticipantsByPoll($pollId));
+			$this->options = $this->optionMapper->findByPoll($this->poll->getId());
+			$this->votes = $this->voteMapper->findByPoll($this->poll->getId());
 
 			$this->calculateVotes();
 
@@ -156,19 +151,16 @@ class OptionService {
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
 		if ($token) {
 			$this->acl->setToken($token)->request(Acl::PERMISSION_OPTIONS_ADD);
-			$pollId = $this->acl->getPollId();
 		} else {
 			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_OPTIONS_ADD);
 		}
 
-		$this->option = new Option();
-		$this->option->setPollId($pollId);
-		$this->option->setOrder($this->getHighestOrder($this->option->getPollId()) + 1);
-		$this->setOption($timestamp, $pollOptionText, $duration);
+		$this->poll = $this->acl->getPoll();
 
-		if (!$this->acl->getIsOwner()) {
-			$this->option->setOwner($this->acl->getUserId());
-		}
+		$this->option = new Option();
+		$this->option->setPollId($this->poll->getId());
+		$this->option->setOrder($this->getHighestOrder($this->poll->getId()) + 1);
+		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		if (!$this->acl->getIsOwner()) {
 			$this->option->setOwner($this->acl->getUserId());
@@ -176,7 +168,7 @@ class OptionService {
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
-			$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
+			$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_OPTIONS);
 		} catch (UniqueConstraintViolationException $e) {
 			throw new DuplicateEntryException('This option already exists');
 		}
@@ -190,14 +182,14 @@ class OptionService {
 	 */
 	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		if (!$this->acl->setPollId($this->option->getPollId())->isAllowed(Acl::PERMISSION_POLL_EDIT)
-			&& $this->option->getOwner() !== $this->acl->getUserId()) {
-			throw new NotAuthorizedException('You are not allowed to delete this option');
-		}
+		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+
+		$this->poll = $this->acl->getPoll();
+
 		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		$this->option = $this->optionMapper->update($this->option);
-		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
 		return $this->option;
 	}
 
@@ -208,18 +200,21 @@ class OptionService {
 	 */
 	public function delete(int $optionId, string $token = ''): Option {
 		$this->option = $this->optionMapper->find($optionId);
+
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
 			$this->acl->setPollId($this->option->getPollId());
 		}
 
-		if (!$this->acl->isAllowed(Acl::PERMISSION_POLL_EDIT)
-			&& $this->option->getOwner() !== $this->acl->getUserId()) {
-			throw new NotAuthorizedException('You are not allowed to delete this option');
+		$this->poll = $this->acl->getPoll();
+
+		if ($this->option->getOwner() !== $this->acl->getUserId()) {
+			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
 		}
+
 		$this->optionMapper->delete($this->option);
-		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_OPTIONS);
 
 		return $this->option;
 	}
@@ -232,10 +227,11 @@ class OptionService {
 	public function confirm(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+		$this->poll = $this->acl->getPoll();
 
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
 		$this->option = $this->optionMapper->update($this->option);
-		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_OPTIONS);
 		return $this->option;
 	}
 
@@ -251,37 +247,41 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
-		$baseDate = new DateTime;
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
 
-		if ($this->pollMapper->find($this->acl->getPollId())->getType() !== Poll::TYPE_DATE) {
-			throw new InvalidPollTypeException('Only allowed in date polls');
-		}
+		$this->poll = $this->acl->getPoll();
 
+		if ($this->poll->getType() !== Poll::TYPE_DATE) {
+			throw new InvalidPollTypeException('Sequences are only available in date polls');
+		}
 
 		if ($step === 0) {
-			return $this->optionMapper->findByPoll($this->option->getPollId());
+			return $this->optionMapper->findByPoll($this->poll->getId());
 		}
 
+		$baseDate = new DateTime;
 		$baseDate->setTimestamp($this->option->getTimestamp());
 
 		for ($i = 0; $i < $amount; $i++) {
 			$clonedOption = new Option();
-			$clonedOption->setPollId($this->option->getPollId());
+			$clonedOption->setPollId($this->poll->getId());
 			$clonedOption->setDuration($this->option->getDuration());
 			$clonedOption->setConfirmed(0);
 			$clonedOption->setTimestamp($baseDate->modify($step . ' ' . $unit)->getTimestamp());
 			$clonedOption->setOrder($clonedOption->getTimestamp());
 			$clonedOption->setPollOptionText($baseDate->format('c'));
+
 			try {
 				$this->optionMapper->insert($clonedOption);
 			} catch (UniqueConstraintViolationException $e) {
-				$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option alredy exists.');
+				$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option already exists.');
 			}
+
 		}
-		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
-		return $this->optionMapper->findByPoll($this->option->getPollId());
+
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_OPTIONS);
+		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
 	/**
@@ -296,25 +296,27 @@ class OptionService {
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
 		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
-		if ($this->pollMapper->find($pollId)->getType() !== Poll::TYPE_DATE) {
-			throw new InvalidPollTypeException('Only allowed in date polls');
+		$this->poll = $this->acl->getPoll();
+
+		if ($this->poll->getType() !== Poll::TYPE_DATE) {
+			throw new InvalidPollTypeException('Shifting is only available in date polls');
 		}
 
-		$this->options = $this->optionMapper->findByPoll($pollId);
-		$shiftedDate = new DateTime;
+		$this->options = $this->optionMapper->findByPoll($this->poll->getId());
 
 		if ($step > 0) {
-			// avoid contraint errors
+			// avoid UniqueConstraintViolationException
 			$this->options = array_reverse($this->options);
 		}
 
+		$shiftedDate = new DateTime;
 		foreach ($this->options as $option) {
 			$shiftedDate->setTimestamp($option->getTimestamp());
 			$option->setTimestamp($shiftedDate->modify($step . ' ' . $unit)->getTimestamp());
 			$this->optionMapper->update($option);
 		}
 
-		return $this->optionMapper->findByPoll($pollId);
+		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
 	/**
@@ -334,7 +336,7 @@ class OptionService {
 			$option->setPollOptionText($origin->getPollOptionText());
 			$option->setTimestamp($origin->getTimestamp());
 			$option->setDuration($origin->getDuration());
-			$option->setOrder($option->getOrder());
+			$option->setOrder($origin->getOrder());
 			$this->optionMapper->insert($option);
 		}
 
@@ -349,28 +351,25 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function reorder(int $pollId, array $options): array {
-		try {
-			$this->poll = $this->pollMapper->find($pollId);
-			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->poll = $this->acl->getPoll();
 
-			if ($this->poll->getType() === Poll::TYPE_DATE) {
-				throw new BadRequestException('Not allowed in date polls');
-			}
-		} catch (DoesNotExistException $e) {
-			throw new NotAuthorizedException;
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
+			throw new InvalidPollTypeException('Not allowed in date polls');
 		}
 
 		$i = 0;
 		foreach ($options as $option) {
 			$this->option = $this->optionMapper->find($option['id']);
-			if ($pollId === intval($this->option->getPollId())) {
+			if ($this->poll->getId() === intval($this->option->getPollId())) {
 				$this->option->setOrder(++$i);
 				$this->optionMapper->update($this->option);
 			}
 		}
 
-		$this->watchService->writeUpdate($pollId, Watch::OBJECT_OPTIONS);
-		return $this->optionMapper->findByPoll($pollId);
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_OPTIONS);
+
+		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
 	/**
@@ -381,16 +380,14 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function setOrder(int $optionId, int $newOrder): array {
-		try {
-			$this->option = $this->optionMapper->find($optionId);
-			$this->poll = $this->pollMapper->find($this->option->getPollId());
-			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_POLL_EDIT);
 
-			if ($this->poll->getType() === Poll::TYPE_DATE) {
-				throw new InvalidPollTypeException('Not allowed in date polls');
-			}
-		} catch (DoesNotExistException $e) {
-			throw new NotAuthorizedException;
+		$this->option = $this->optionMapper->find($optionId);
+		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+
+		$this->poll = $this->acl->getPoll();
+
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
+			throw new InvalidPollTypeException('Not allowed in date polls');
 		}
 
 		if ($newOrder < 1) {
@@ -404,8 +401,8 @@ class OptionService {
 			$this->optionMapper->update($option);
 		}
 
-		$this->watchService->writeUpdate($this->option->getPollId(), Watch::OBJECT_OPTIONS);
-		return $this->optionMapper->findByPoll($this->option->getPollId());
+		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_OPTIONS);
+		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
 	/**
@@ -437,7 +434,6 @@ class OptionService {
 	 * @return void
 	 */
 	private function setOption(int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): void {
-		$this->poll = $this->pollMapper->find($this->option->getPollId());
 
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			$this->option->setTimestamp($timestamp);
@@ -528,9 +524,14 @@ class OptionService {
 				$option->maybe = 0;
 				$option->realNo = 0;
 			} else {
-				$option->no = $this->countParticipants - $option->maybe - $option->yes;
+				$option->no = count($this->voteMapper->findParticipantsByPoll($this->poll->getId())) - $option->maybe - $option->yes;
+				$option->no = $this->countParticipants() - $option->maybe - $option->yes;
 			}
 		}
+	}
+
+	private function countParticipants(): int {
+		return count($this->voteMapper->findParticipantsByPoll($this->poll->getId()));
 	}
 
 	/**

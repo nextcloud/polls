@@ -220,8 +220,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function update(int $pollId, array $poll): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->poll = $this->acl->getPoll();
 
 		// Validate valuess
 		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
@@ -256,8 +256,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function switchDeleted(int $pollId): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_POLL_DELETE);
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_DELETE);
+		$this->poll = $this->acl->getPoll();
 
 		$this->poll->setDeleted($this->poll->getDeleted() ? 0 : time());
 		$this->poll = $this->pollMapper->update($this->poll);
@@ -285,13 +285,13 @@ class PollService {
 	 * @return Poll
 	 */
 	public function delete(int $pollId): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_POLL_DELETE);
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_DELETE);
+		$this->poll = $this->acl->getPoll();
 
 		$this->pollMapper->delete($this->poll);
 		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
 
-		if ($this->userId !== $this->poll->getOwner()) {
+		if (!$this->acl->getIsOwner()) {
 			// send notification to the original owner
 			$this->notificationService->createNotification([
 				'msgId' => 'deletePollByOther',
@@ -347,13 +347,13 @@ class PollService {
 	 * @psalm-return array<int, string>
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->poll = $this->acl->getPoll();
 
-		$votes = $this->voteMapper->findParticipantsByPoll($pollId);
+		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];
 		foreach ($votes as $vote) {
-			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($pollId, $vote->getUserId()) . '>';
+			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>';
 		}
 		return array_unique($list);
 	}
