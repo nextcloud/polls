@@ -84,7 +84,7 @@
 		"eslint-webpack-plugin": "^2.5.4",
 		"file-loader": "^6.2.0",
 		"node-sass": "^5.0.0",
-		"sass-loader": "^11.0.1",
+		"sass-loader": "^11.1.0",
 		"stylelint": "^13.13.1",
 		"stylelint-config-recommended-scss": "^4.2.0",
 		"stylelint-scss": "^3.19.0",
