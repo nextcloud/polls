@@ -42,6 +42,7 @@ use OCA\Polls\Db\ShareMapper;
  * @package OCA\Polls\Model\Acl
  */
 class Acl implements JsonSerializable {
+	public const PERMISSION_OVERRIDE = 'override_permission';
 	public const PERMISSION_POLL_VIEW = 'view';
 	public const PERMISSION_POLL_EDIT = 'edit';
 	public const PERMISSION_POLL_DELETE = 'delete';
@@ -94,12 +95,12 @@ class Acl implements JsonSerializable {
 	/**
 	 * load share via token and than call setShare
 	 */
-	public function setToken(string $token = ''): Acl {
+	public function setToken(string $token = '', string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 			$this->poll = $this->pollMapper->find($this->share->getPollId());
 			$this->validateShareAccess();
-			$this->request(self::PERMISSION_POLL_VIEW);
+			$this->request($permission);
 
 		} catch (DoesNotExistException $e) {
 			throw new NotAuthorizedException('Error loading share ' . $token);
@@ -108,10 +109,10 @@ class Acl implements JsonSerializable {
 		return $this;
 	}
 
-	public function setPollId(?int $pollId = 0): Acl {
+	public function setPollId(?int $pollId = 0, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
 			$this->poll = $this->pollMapper->find($pollId);
-			$this->request(self::PERMISSION_POLL_VIEW);
+			$this->request($permission);
 		} catch (DoesNotExistException $e) {
 			throw new NotAuthorizedException('Error loading poll ' . $pollId);
 		}
@@ -152,11 +153,13 @@ class Acl implements JsonSerializable {
 		return $this->getLoggedIn() ? $this->userManager->get($this->getUserId())->getDisplayName() : $this->share->getDisplayName();
 	}
 
-	public function isAllowed(string $permission): bool {
+	public function getIsAllowed(string $permission): bool {
 		switch ($permission) {
+			case self::PERMISSION_OVERRIDE:
+				return true;
 			case self::PERMISSION_POLL_VIEW:
 			// if ($this->getIsOwner() || $this->hasAdminAccess()) {
-				if ($this->isAllowed(self::PERMISSION_POLL_EDIT)) {
+				if ($this->getIsAllowed(self::PERMISSION_POLL_EDIT)) {
 					return true; // always grant access, if user has edit rights
 				}
 
@@ -180,13 +183,13 @@ class Acl implements JsonSerializable {
 				return $this->getIsOwner() || $this->hasAdminAccess();
 
 			case self::PERMISSION_POLL_DELETE:
-				return $this->isAllowed(self::PERMISSION_POLL_EDIT) || $this->getIsAdmin();
+				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT) || $this->getIsAdmin();
 
 			case self::PERMISSION_POLL_TAKEOVER:
 				return $this->getIsAdmin() && !$this->getIsOwner();
 
 			case self::PERMISSION_POLL_SUBSCRIBE:
-				return $this->hasEmail();
+				return $this->getUserHasEmail();
 
 			case self::PERMISSION_POLL_RESULTS_VIEW:
 				return $this->getIsOwner()
@@ -197,7 +200,7 @@ class Acl implements JsonSerializable {
 				return $this->getIsOwner() || !$this->poll->getAnonymous();
 
 			case self::PERMISSION_OPTIONS_ADD:
-				return $this->isAllowed(self::PERMISSION_POLL_EDIT)
+				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT)
 					|| ($this->poll->getAllowProposals() === Poll::PROPOSAL_ALLOW
 					&& !$this->poll->getProposalsExpired());
 
@@ -213,21 +216,21 @@ class Acl implements JsonSerializable {
 	}
 
 	public function request(string $permission): void {
-		if (!$this->isAllowed($permission)) {
+		if (!$this->getIsAllowed($permission)) {
 			throw new NotAuthorizedException('denied permission ' . $permission);
 		}
 	}
 
 	public function jsonSerialize(): array {
 		return	[
-			'allowComment' => $this->isAllowed(self::PERMISSION_COMMENT_ADD),
-			'allowAddOptions' => $this->isAllowed(self::PERMISSION_OPTIONS_ADD),
-			'allowEdit' => $this->isAllowed(self::PERMISSION_POLL_EDIT),
-			'allowSeeResults' => $this->isAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
-			'allowSeeUsernames' => $this->isAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
-			'allowSubscribe' => $this->isAllowed(self::PERMISSION_POLL_SUBSCRIBE),
-			'allowView' => $this->isAllowed(self::PERMISSION_POLL_VIEW),
-			'allowVote' => $this->isAllowed(self::PERMISSION_VOTE_EDIT),
+			'allowComment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
+			'allowAddOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
+			'allowEdit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+			'allowSeeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
+			'allowSeeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+			'allowSubscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+			'allowView' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
+			'allowVote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
 			'displayName' => $this->getDisplayName(),
 			'isOwner' => $this->getIsOwner(),
 			'loggedIn' => $this->getLoggedIn(),
@@ -330,15 +333,12 @@ class Acl implements JsonSerializable {
 	}
 
 	private function validateShareAccess(): void {
-		if ($this->getLoggedIn()) {
-			if (!$this->isShareValidForUsers()) {
-				throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for guests');
-			};
-		} else {
-			if (!$this->isShareValidForGuests()) {
-				throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for registered users');
-			};
+		if ($this->getLoggedIn() && !$this->isShareValidForUsers()) {
+			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for guests');
 		}
+		if (!$this->isShareValidForGuests()) {
+			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for registered users');
+		};
 	}
 
 	private function isShareValidForGuests(): bool {
@@ -358,7 +358,7 @@ class Acl implements JsonSerializable {
 		]);
 	}
 
-	private function hasEmail(): bool {
+	private function getUserHasEmail(): bool {
 		return $this->share->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getLoggedIn();
 	}
 }

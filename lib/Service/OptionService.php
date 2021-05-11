@@ -118,10 +118,10 @@ class OptionService {
 
 			$this->calculateVotes();
 
-			if ($this->poll->getHideBookedUp() && !$this->acl->isAllowed(Acl::PERMISSION_POLL_EDIT)) {
+			if ($this->poll->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {
 				// hide booked up options except the user has edit permission
 				$this->filterBookedUp();
-			} elseif ($this->acl->isAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
+			} elseif ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$this->calculateRanks();
 			}
 
@@ -150,9 +150,9 @@ class OptionService {
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
 		if ($token) {
-			$this->acl->setToken($token)->request(Acl::PERMISSION_OPTIONS_ADD);
+			$this->acl->setToken($token, Acl::PERMISSION_OPTIONS_ADD);
 		} else {
-			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_OPTIONS_ADD);
+			$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
 		}
 
 		$this->poll = $this->acl->getPoll();
@@ -182,7 +182,7 @@ class OptionService {
 	 */
 	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
 		$this->poll = $this->acl->getPoll();
 
@@ -226,7 +226,7 @@ class OptionService {
 	 */
 	public function confirm(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 		$this->poll = $this->acl->getPoll();
 
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
@@ -248,7 +248,7 @@ class OptionService {
 	 */
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
 		$this->poll = $this->acl->getPoll();
 
@@ -295,7 +295,7 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		$this->poll = $this->acl->getPoll();
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
@@ -351,7 +351,7 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function reorder(int $pollId, array $options): array {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		$this->poll = $this->acl->getPoll();
 
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
@@ -382,7 +382,7 @@ class OptionService {
 	public function setOrder(int $optionId, int $newOrder): array {
 
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($this->option->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
 		$this->poll = $this->acl->getPoll();
 
@@ -518,7 +518,7 @@ class OptionService {
 			$option->isBookedUp = $this->poll->getOptionLimit() ? $this->poll->getOptionLimit() <= $option->yes : false;
 
 			// remove details, if the results shall be hidden
-			if (!$this->acl->isAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
+			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$option->yes = 0;
 				$option->no = 0;
 				$option->maybe = 0;

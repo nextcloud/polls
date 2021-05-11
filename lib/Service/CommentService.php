@@ -70,7 +70,7 @@ class CommentService {
 			$this->acl->setPollId($pollId);
 		}
 
-		if ($this->acl->isAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+		if ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
 			return $this->commentMapper->findByPoll($this->acl->getPollId());
 		} else {
 			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
@@ -83,9 +83,9 @@ class CommentService {
 	 */
 	public function add(int $pollId = 0, ?string $token = '', string $message): Comment {
 		if ($token) {
-			$this->acl->setToken($token)->request(Acl::PERMISSION_COMMENT_ADD);
+			$this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD);
 		} else {
-			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_COMMENT_ADD);
+			$this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD);
 		}
 		$this->comment = new Comment();
 		$this->comment->setPollId($this->acl->getPollId());

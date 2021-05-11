@@ -220,7 +220,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function update(int $pollId, array $poll): Poll {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		$this->poll = $this->acl->getPoll();
 
 		// Validate valuess
@@ -256,7 +256,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function switchDeleted(int $pollId): Poll {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_DELETE);
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_DELETE);
 		$this->poll = $this->acl->getPoll();
 
 		$this->poll->setDeleted($this->poll->getDeleted() ? 0 : time());
@@ -285,7 +285,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function delete(int $pollId): Poll {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_DELETE);
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_DELETE);
 		$this->poll = $this->acl->getPoll();
 
 		$this->pollMapper->delete($this->poll);
@@ -347,7 +347,7 @@ class PollService {
 	 * @psalm-return array<int, string>
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		$this->poll = $this->acl->getPoll();
 
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
