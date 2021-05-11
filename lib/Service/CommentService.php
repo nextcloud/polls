@@ -105,7 +105,7 @@ class CommentService {
 		$this->comment = $this->commentMapper->find($commentId);
 
 		if ($token) {
-			$this->acl->setToken($token);
+			$this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD, $this->comment->getPollId());
 		} else {
 			$this->acl->setPollId($this->comment->getPollId());
 		}

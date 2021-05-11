@@ -95,9 +95,14 @@ class Acl implements JsonSerializable {
 	/**
 	 * load share via token and than call setShare
 	 */
-	public function setToken(string $token = '', string $permission = self::PERMISSION_POLL_VIEW): Acl {
+	public function setToken(string $token = '', string $permission = self::PERMISSION_POLL_VIEW, int $pollIdToValidate = 0): Acl {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
+
+			if ($pollIdToValidate && $this->share->getPollId() !== $pollIdToValidate) {
+				throw new NotAuthorizedException;
+			}
+
 			$this->poll = $this->pollMapper->find($this->share->getPollId());
 			$this->validateShareAccess();
 			$this->request($permission);

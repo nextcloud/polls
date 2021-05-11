@@ -29,8 +29,8 @@ use OCA\Polls\Exceptions\VoteLimitExceededException;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Option;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
@@ -49,9 +49,6 @@ class VoteService {
 	/** @var OptionMapper */
 	private $optionMapper;
 
-	/** @var PollMapper */
-	private $pollMapper;
-
 	/** @var Vote */
 	private $vote;
 
@@ -67,7 +64,6 @@ class VoteService {
 		AnonymizeService $anonymizer,
 		LogService $logService,
 		OptionMapper $optionMapper,
-		PollMapper $pollMapper,
 		Vote $vote,
 		VoteMapper $voteMapper,
 		WatchService $watchService
@@ -76,7 +72,6 @@ class VoteService {
 		$this->anonymizer = $anonymizer;
 		$this->logService = $logService;
 		$this->optionMapper = $optionMapper;
-		$this->pollMapper = $pollMapper;
 		$this->vote = $vote;
 		$this->voteMapper = $voteMapper;
 		$this->watchService = $watchService;
@@ -95,53 +90,50 @@ class VoteService {
 		try {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
-			} elseif (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+			}
+
+			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
 				return $this->anonymizer->getVotes();
-			} else {
-				return $this->voteMapper->findByPoll($this->acl->getpollId());
 			}
+
+			return $this->voteMapper->findByPoll($this->acl->getpollId());
+
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
 	}
 
-	private function checkLimits(int $optionId, string $userId):void {
-		$option = $this->optionMapper->find($optionId);
-		$poll = $this->pollMapper->find($option->getPollId());
+	private function checkLimits(Option $option, string $userId):void {
 
 		// check, if the optionlimit is reached or exceeded, if one is set
-		if ($poll->getOptionLimit() > 0) {
-			if ($poll->getOptionLimit() <= count($this->voteMapper->getYesVotesByOption($option->getPollId(), $option->getPollOptionText()))) {
+		if ($this->acl->getPoll()->getOptionLimit() > 0) {
+			if ($this->acl->getPoll()->getOptionLimit() <= count($this->voteMapper->getYesVotesByOption($option->getPollId(), $option->getPollOptionText()))) {
 				throw new VoteLimitExceededException;
 			}
 		}
 
-		// check if the votelimit for the user is reached or exceeded, if one is set
-		if ($poll->getVoteLimit() > 0) {
-			$pollOptionTexts = [];
-			$votecount = 0;
+		// exit, if no vote limit is set
+		if ($this->acl->getPoll()->getVoteLimit() < 1) {
+			return;
+		}
 
-			$options = $this->optionMapper->findByPoll($option->getPollId());
-			$votes = $this->voteMapper->getYesVotesByParticipant($option->getPollId(), $userId);
+		// Only count votes, which match to an actual existing option.
+		// Explanation: If an option is deleted, the corresponding votes are not deleted.
+		$pollOptionTexts = array_map(function($option) {
+			return $option->getPollOptionText();
+		}, $this->optionMapper->findByPoll($option->getPollId()));
 
-			// Only count votes, which match to an actual existing option.
-			// Explanation: If an option is deleted, the corresponding votes are not deleted.
-
-			// create an array of pollOptionTexts
-			foreach ($options as $element) {
-				$pollOptionTexts[] = $element->getPollOptionText();
+		$votecount = 0;
+		$votes = $this->voteMapper->getYesVotesByParticipant($option->getPollId(), $userId);
+		foreach ($votes as $vote) {
+			if (in_array($vote->getVoteOptionText(), $pollOptionTexts)) {
+				$votecount++;
 			}
+		}
 
-			// only count relevant votes for the limit
-			foreach ($votes as $vote) {
-				if (in_array($vote->getVoteOptionText(), $pollOptionTexts)) {
-					$votecount++;
-				}
-			}
-			if ($poll->getVoteLimit() <= $votecount) {
-				throw new VoteLimitExceededException;
-			}
+		if ($this->acl->getPoll()->getVoteLimit() <= $votecount) {
+			throw new VoteLimitExceededException;
 		}
 	}
 
@@ -152,16 +144,13 @@ class VoteService {
 		$option = $this->optionMapper->find($optionId);
 
 		if ($token) {
-			$this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT);
-			if (intval($option->getPollId()) !== $this->acl->getPollId()) {
-				throw new NotAuthorizedException;
-			}
+			$this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
 		} else {
 			$this->acl->setPollId($option->getPollId(), Acl::PERMISSION_VOTE_EDIT);
 		}
 
 		if ($setTo === 'yes') {
-			$this->checkLimits($optionId, $this->acl->getUserId());
+			$this->checkLimits($option, $this->acl->getUserId());
 		}
 
 		try {
