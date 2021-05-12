@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<OptionsDateAdd v-if="!pollIsClosed" />
-		<transition-group is="ul" v-if="!isOwner">
+		<transition-group is="ul" v-if="countOptions">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
 				:option="option"
