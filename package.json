@@ -67,7 +67,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.14.2",
 		"@babel/eslint-parser": "^7.14.2",
-		"@babel/preset-env": "^7.14.1",
+		"@babel/preset-env": "^7.14.2",
 		"@babel/types": "^7.14.2",
 		"@nextcloud/eslint-config": "^5.0.0",
 		"@nextcloud/eslint-plugin": "^2.0.0",
