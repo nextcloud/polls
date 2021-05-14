@@ -80,11 +80,10 @@ class PollController extends Controller {
 	 */
 	public function get(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
-			$this->poll = $this->pollService->get($pollId);
-			$this->acl->setPoll($this->poll)->request(Acl::PERMISSION_VIEW);
+			$this->acl->setPollId($pollId);
 			return [
 				'acl' => $this->acl,
-				'poll' => $this->poll,
+				'poll' => $this->acl->getPoll(),
 			];
 		});
 	}

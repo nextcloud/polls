@@ -144,12 +144,10 @@ class PublicController extends Controller {
 	 */
 	public function getPoll(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			$this->share = $this->shareService->get($token, true);
-			$this->acl->setShare($this->share);
-			$this->poll = $this->pollService->get($this->share->getPollId());
+			$this->acl->setToken($token);
 			return [
 				'acl' => $this->acl,
-				'poll' => $this->poll,
+				'poll' => $this->acl->getPoll(),
 			];
 		});
 	}
@@ -227,7 +225,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function addOption(string $token, $timestamp = 0, $pollOptionText = '', $duration = 0): DataResponse {
+	public function addOption(string $token, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
 		return $this->responseCreate(function () use ($token, $timestamp, $pollOptionText, $duration) {
 			return ['option' => $this->optionService->add(0, $timestamp, $pollOptionText, $duration, $token)];
 		});
@@ -369,7 +367,7 @@ class PublicController extends Controller {
 	 */
 	public function register(string $token, string $userName, string $emailAddress = ''): DataResponse {
 		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
-			return ['share' => $this->shareService->personal($token, $userName, $emailAddress)];
+			return ['share' => $this->shareService->register($token, $userName, $emailAddress)];
 		});
 	}
 

@@ -103,7 +103,7 @@ class ShareService {
 	 */
 	public function list(int $pollId): array {
 		try {
-			$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
+			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 			$shares = $this->shareMapper->findByPoll($pollId);
 		} catch (NotAuthorizedException $e) {
 			return [];
@@ -165,7 +165,7 @@ class ShareService {
 		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
 			try {
 				// Test if the user has already access.
-				$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_VIEW);
+				$this->acl->setPollId($this->share->getPollId());
 			} catch (NotAuthorizedException $e) {
 				// If he is not authorized until now, create a new personal share for this user.
 				// Return the created share
@@ -230,7 +230,7 @@ class ShareService {
 	 * @return Share
 	 */
 	public function add(int $pollId, string $type, string $userId = ''): Share {
-		$this->acl->setPollId($pollId)->request(Acl::PERMISSION_EDIT);
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 
 		if ($type !== UserGroupClass::TYPE_PUBLIC) {
 			try {
@@ -296,7 +296,7 @@ class ShareService {
 	 *
 	 * @return Share
 	 */
-	public function personal(string $token, string $userName, string $emailAddress = ''): Share {
+	public function register(string $token, string $userName, string $emailAddress = ''): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 		} catch (DoesNotExistException $e) {
@@ -345,7 +345,7 @@ class ShareService {
 	public function delete(string $token): string {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_EDIT);
+			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 			$this->shareMapper->delete($this->share);
 		} catch (DoesNotExistException $e) {
 			// silently catch

@@ -24,6 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
+use OCA\Polls\Exceptions\InvalidShareTypeException;
 
 
 use OCP\IRequest;
@@ -34,8 +35,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
-use OCA\Polls\Model\Circle;
-use OCA\Polls\Model\ContactGroup;
+use OCA\Polls\Model\UserGroupClass;
 
 class ShareController extends Controller {
 	use ResponseHandle;
@@ -76,19 +76,6 @@ class ShareController extends Controller {
 	}
 
 	/**
-	 * Get share
-	 *
-	 * @NoAdminRequired
-	 *
-	 * @return DataResponse
-	 */
-	public function get(string $token): DataResponse {
-		return $this->response(function () use ($token): array {
-			return ['share' => $this->shareService->get($token, true)];
-		});
-	}
-
-	/**
 	 * Add share
 	 * @NoAdminRequired
 	 */
@@ -113,9 +100,9 @@ class ShareController extends Controller {
 	 * or update an email share with the username
 	 * @NoAdminRequired
 	 */
-	public function personal(string $token, string $userName, string $emailAddress = ''): DataResponse {
+	public function register(string $token, string $userName, string $emailAddress = ''): DataResponse {
 		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
-			return ['share' => $this->shareService->personal($token, $userName, $emailAddress)];
+			return ['share' => $this->shareService->register($token, $userName, $emailAddress)];
 		});
 	}
 
@@ -152,25 +139,24 @@ class ShareController extends Controller {
 		return $this->response(function () use ($token) {
 			$shares = [];
 			$share = $this->shareService->get($token);
-			if ($share->getType() === Share::TYPE_CIRCLE) {
-				foreach ((new Circle($share->getUserId()))->getMembers() as $member) {
-					try {
-						$newShare = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
-						$shares[] = $newShare;
-					} catch (ShareAlreadyExistsException $e) {
-						continue;
-					}
-				}
-			} elseif ($share->getType() === Share::TYPE_CONTACTGROUP) {
-				foreach ((new ContactGroup($share->getUserId()))->getMembers() as $contact) {
-					try {
-						$newShare = $this->shareService->add($share->getPollId(), Share::TYPE_CONTACT, $contact->getId());
-						$shares[] = $newShare;
-					} catch (ShareAlreadyExistsException $e) {
-						continue;
-					}
+			$resolvableShares = [
+				Share::TYPE_CIRCLE,
+				Share::TYPE_CONTACTGROUP
+			];
+
+			if (!in_array($share->getType(), $resolvableShares)) {
+				throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
+			}
+
+			foreach (UserGroupClass::getUserGroupChild($share->getType(), $share->getUserId())->getMembers() as $member) {
+				try {
+					$newShare = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
+					$shares[] = $newShare;
+				} catch (ShareAlreadyExistsException $e) {
+					continue;
 				}
 			}
+
 			$this->shareService->delete($token);
 			return ['shares' => $shares];
 		});

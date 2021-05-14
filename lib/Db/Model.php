@@ -30,8 +30,8 @@ abstract class Model extends Entity {
 	 * FactoryMuffin checks for the existence of setters with method_exists($obj, $attr) but that returns false.
 	 * By overwriting the __set() magic method we can trigger the changed flag on $obj->attr assignment.
 	 *
-	 * @param $name
-	 * @param $value
+	 * @param string $name
+	 * @param mixed $value
 	 */
 	public function __set($name, $value) {
 		$this->setter($name, [$value]);

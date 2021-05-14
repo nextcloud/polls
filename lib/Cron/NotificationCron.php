@@ -42,6 +42,7 @@ class NotificationCron extends TimedJob {
 	}
 
 	/**
+	 * @param mixed $arguments
 	 * @return void
 	 */
 	protected function run($arguments) {

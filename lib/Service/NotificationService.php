@@ -38,7 +38,7 @@ class NotificationService {
 
 	public function __construct(
 		IManager $notificationManager,
-		string $UserId
+		?string $UserId
 	) {
 		$this->notificationManager = $notificationManager;
 		$this->userId = $UserId;

@@ -55,13 +55,13 @@ const mutations = {
 
 const actions = {
 	async get(context) {
-		let endPoint = 'apps/polls'
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
-		} else {
+		if (context.rootState.route.name !== 'publicVote') {
 			context.commit('reset')
 			return
 		}
+
+		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token
+
 		try {
 			const response = await axios.get(generateUrl(endPoint + '/share'))
 			context.commit('set', { share: response.data.share })

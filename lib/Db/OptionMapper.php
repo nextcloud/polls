@@ -34,7 +34,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
  */
 class OptionMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_options', 'OCA\Polls\Db\Option');
+		parent::__construct($db, 'polls_options', Option::class);
 	}
 
 	/**
