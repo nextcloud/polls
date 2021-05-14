@@ -24,7 +24,6 @@
 namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\VoteLimitExceededException;
 
 use OCA\Polls\Db\Log;
@@ -98,7 +97,6 @@ class VoteService {
 			}
 
 			return $this->voteMapper->findByPoll($this->acl->getpollId());
-
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
@@ -120,7 +118,7 @@ class VoteService {
 
 		// Only count votes, which match to an actual existing option.
 		// Explanation: If an option is deleted, the corresponding votes are not deleted.
-		$pollOptionTexts = array_map(function($option) {
+		$pollOptionTexts = array_map(function ($option) {
 			return $option->getPollOptionText();
 		}, $this->optionMapper->findByPoll($option->getPollId()));
 
@@ -178,7 +176,7 @@ class VoteService {
 	 */
 	public function delete(int $pollId, string $userId): string {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		$this->voteMapper->deleteByPollAndUser($pollId, $userId);
+		$this->voteMapper->deleteByPollAndUserId($pollId, $userId);
 		$this->watchService->writeUpdate($pollId, Watch::OBJECT_VOTES);
 		return $userId;
 	}

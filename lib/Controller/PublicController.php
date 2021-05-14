@@ -367,7 +367,7 @@ class PublicController extends Controller {
 	 */
 	public function register(string $token, string $userName, string $emailAddress = ''): DataResponse {
 		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
-			return ['share' => $this->shareService->personal($token, $userName, $emailAddress)];
+			return ['share' => $this->shareService->register($token, $userName, $emailAddress)];
 		});
 	}
 

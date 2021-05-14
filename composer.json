@@ -37,6 +37,7 @@
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "php vendor/vimeo/psalm/psalm",
-		"psalm:fix": "php vendor/vimeo/psalm/psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType"
+		"psalm:fix": "php vendor/vimeo/psalm/psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true"
 	}
 }

@@ -296,7 +296,7 @@ class ShareService {
 	 *
 	 * @return Share
 	 */
-	public function personal(string $token, string $userName, string $emailAddress = ''): Share {
+	public function register(string $token, string $userName, string $emailAddress = ''): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 		} catch (DoesNotExistException $e) {

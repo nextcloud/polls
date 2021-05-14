@@ -26,8 +26,6 @@ namespace OCA\Polls\Service;
 use Psr\Log\LoggerInterface;
 use DateTime;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\BadRequestException;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidOptionPropertyException;
@@ -37,7 +35,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Option;
-use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
@@ -264,7 +261,6 @@ class OptionService {
 			} catch (UniqueConstraintViolationException $e) {
 				$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option already exists.');
 			}
-
 		}
 
 		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
@@ -365,7 +361,6 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function setOrder(int $optionId, int $newOrder): array {
-
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
@@ -417,7 +412,6 @@ class OptionService {
 	 * @return void
 	 */
 	private function setOption(int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): void {
-
 		if ($timestamp) {
 			$this->option->setTimestamp($timestamp);
 			$this->option->setOrder($timestamp);
@@ -441,19 +435,13 @@ class OptionService {
 	 * @return array
 	 */
 	private function getUsersVotes() {
-		// Thats an ugly solution, but for now, it seems to work
-		// Optimization proposals are welcome
-
-		// First: Find votes, where the user voted yes or maybe
-		$userId = $this->acl->getUserId();
-		$exceptVotes = array_filter($this->votes, function ($vote) use ($userId) {
-			return $vote->getUserId() === $userId && in_array($vote->getVoteAnswer(), ['yes', 'maybe']);
-		});
-
-		// Second: Extract only the vote option texts to an array
-		return array_values(array_map(function ($vote) {
-			return $vote->getVoteOptionText();
-		}, $exceptVotes));
+		$userVotes = [];
+		foreach ($this->votes as $vote) {
+			if ($vote->getUserId() === $this->acl->getUserId() && in_array($vote->getVoteAnswer(), ['yes', 'maybe'])) {
+				$userVotes[] = $vote->getVoteOptionText();
+			}
+		}
+		return $userVotes;
 	}
 
 	/**
