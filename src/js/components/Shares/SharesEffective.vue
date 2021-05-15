@@ -38,11 +38,9 @@
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
 				</Actions>
-				<Actions>
-					<ActionButton icon="icon-delete" @click="removeShare(share)">
-						{{ t('polls', 'Remove share') }}
-					</ActionButton>
-				</Actions>
+				<ActionDelete
+					:title="t('polls', 'Remove share')"
+					@delete="removeShare(share)" />
 			</UserItem>
 		</TransitionGroup>
 	</ConfigBox>
@@ -52,6 +50,7 @@
 import { mapGetters } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
+import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
 
 export default {
@@ -60,6 +59,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ActionDelete,
 		ConfigBox,
 	},
 

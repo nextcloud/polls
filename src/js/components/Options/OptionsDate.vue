@@ -37,12 +37,9 @@
 						class="owner" />
 				</template>
 				<template #actions>
-					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton icon="icon-delete" @click="removeOption(option)">
-							{{ t('polls', 'Delete option') }}
-						</ActionButton>
-					</Actions>
-
+					<ActionDelete v-if="acl.allowEdit"
+						:title="t('polls', 'Delete option')"
+						@delete="removeOption(option)" />
 					<Actions v-if="acl.allowEdit" class="action">
 						<ActionButton v-if="!pollIsClosed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 							{{ t('polls', 'Clone option') }}
@@ -74,6 +71,7 @@
 import { mapGetters, mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 import { Actions, ActionButton, EmptyContent, Modal } from '@nextcloud/vue'
+import ActionDelete from '../Actions/ActionDelete'
 import OptionCloneDate from './OptionCloneDate'
 import OptionsDateAdd from './OptionsDateAdd'
 import OptionItem from './OptionItem'
@@ -87,6 +85,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ActionDelete,
 		EmptyContent,
 		Modal,
 		OptionCloneDate,

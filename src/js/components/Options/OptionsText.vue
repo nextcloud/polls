@@ -36,11 +36,9 @@
 							class="owner" />
 					</template>
 					<template #actions>
-						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton icon="icon-delete" @click="removeOption(option)">
-								{{ t('polls', 'Delete option') }}
-							</ActionButton>
-						</Actions>
+						<ActionDelete v-if="acl.allowEdit"
+							:title="t('polls', 'Delete option')"
+							@delete="removeOption(option)" />
 						<Actions v-if="acl.allowEdit" class="action">
 							<ActionButton v-if="pollIsClosed"
 								:icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
@@ -66,6 +64,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
+import ActionDelete from '../Actions/ActionDelete'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
 import OptionsTextAdd from './OptionsTextAdd'
@@ -77,6 +76,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ActionDelete,
 		EmptyContent,
 		draggable,
 		OptionItem,

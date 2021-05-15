@@ -41,11 +41,9 @@
 						{{ t('polls', 'Resolve into individual invitations') }}
 					</ActionButton>
 				</Actions>
-				<Actions>
-					<ActionButton icon="icon-delete" @click="removeShare(share)">
-						{{ t('polls', 'Remove invitation') }}
-					</ActionButton>
-				</Actions>
+				<ActionDelete
+					:title="t('polls', 'Remove invitation')"
+					@delete="removeShare(share)" />
 			</UserItem>
 		</TransitionGroup>
 	</ConfigBox>
@@ -55,6 +53,7 @@
 import { mapGetters } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
+import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
 
 export default {
@@ -63,6 +62,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ActionDelete,
 		ConfigBox,
 	},
 
