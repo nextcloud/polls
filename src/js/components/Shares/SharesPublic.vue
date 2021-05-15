@@ -42,7 +42,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { showError } from '@nextcloud/dialogs'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ButtonDiv from '../Base/ButtonDiv'
 import ConfigBox from '../Base/ConfigBox'
@@ -52,6 +53,8 @@ export default {
 	name: 'SharesPublic',
 
 	components: {
+		Actions,
+		ActionButton,
 		ActionDelete,
 		ButtonDiv,
 		ConfigBox,
@@ -77,6 +80,15 @@ export default {
 	methods: {
 		removeShare(share) {
 			this.$store.dispatch('shares/delete', { share })
+		},
+
+		async copyLink(payload) {
+			try {
+				this.$copyText(payload.url)
+				showSuccess(t('polls', 'Link copied to clipboard'))
+			} catch {
+				showError(t('polls', 'Error while copying link to clipboard'))
+			}
 		},
 
 		async addShare(payload) {
