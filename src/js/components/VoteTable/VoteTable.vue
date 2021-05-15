@@ -32,7 +32,7 @@
 				<UserMenu v-if="participant.userId === acl.userId" />
 
 				<ActionDelete v-if="acl.allowEdit"
-					:delete-caption="t('polls', 'Delete votes')"
+					:title="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.userId)" />
 			</UserItem>
 

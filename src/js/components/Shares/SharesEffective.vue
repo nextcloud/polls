@@ -39,7 +39,7 @@
 					</ActionButton>
 				</Actions>
 				<ActionDelete
-					:delete-caption="t('polls', 'Remove share')"
+					:title="t('polls', 'Remove share')"
 					@delete="removeShare(share)" />
 			</UserItem>
 		</TransitionGroup>

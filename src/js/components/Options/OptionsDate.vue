@@ -38,7 +38,7 @@
 				</template>
 				<template #actions>
 					<ActionDelete v-if="acl.allowEdit"
-						:delete-caption="t('polls', 'Delete option')"
+						:title="t('polls', 'Delete option')"
 						@delete="removeOption(option)" />
 					<Actions v-if="acl.allowEdit" class="action">
 						<ActionButton v-if="!pollIsClosed" icon="icon-polls-clone" @click="cloneOptionModal(option)">

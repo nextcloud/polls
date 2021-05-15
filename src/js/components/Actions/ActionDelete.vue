@@ -26,7 +26,7 @@
 			{{ n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', countdown, { countdown }) }}
 		</ActionButton>
 		<ActionButton v-else icon="icon-delete" @click="deleteItem()">
-			{{ deleteCaption }}
+			{{ title }}
 		</ActionButton>
 	</Actions>
 </template>
@@ -42,11 +42,12 @@ export default {
 	},
 
 	props: {
-		useTimeOut: {
+		// timeout in seconds
+		timeout: {
 			type: Number,
 			default: 7,
 		},
-		deleteCaption: {
+		title: {
 			type: String,
 			default: t('polls', 'Delete'),
 		},
@@ -56,25 +57,25 @@ export default {
 		return {
 			deleteInterval: null,
 			deleteTimeout: null,
-			countdown: 7,
+			countdown: 7, // seconds
 		}
 	},
 
 	methods: {
 		deleteItem() {
-			this.countDown = this.useTimeOut
+			this.countDown = this.timeout
 			this.deleteInterval = setInterval(() => {
 				this.countdown -= 1
 				if (this.countdown < 0) {
 					this.countdown = 0
 				}
 			}, 1000)
-			this.deleteTimeout = setTimeout(async() => {
+			this.deleteTimeout = setTimeout(() => {
 				this.$emit('delete')
 				this.deleteTimeout = null
 				this.deleteInterval = null
-				this.countdown = this.useTimeOut
-			}, this.useTimeOut * 1000)
+				this.countdown = this.timeout
+			}, this.timeout * 1000)
 		},
 
 		cancelDelete() {
@@ -82,7 +83,7 @@ export default {
 			clearInterval(this.deleteInterval)
 			this.deleteTimeout = null
 			this.deleteInterval = null
-			this.countdown = this.useTimeOut
+			this.countdown = this.timeout
 		},
 	},
 }

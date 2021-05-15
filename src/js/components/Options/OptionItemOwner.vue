@@ -23,7 +23,7 @@
 <template>
 	<div class="option-item-owner">
 		<ActionDelete v-if="!acl.allowEdit && acl.userId === option.owner"
-			:delete-caption="t('polls', 'Delete option')"
+			:title="t('polls', 'Delete option')"
 			@delete="removeOption(option)" />
 
 		<Avatar v-else-if="option.owner && option.owner !== pollOwner"

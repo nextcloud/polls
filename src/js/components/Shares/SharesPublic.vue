@@ -31,9 +31,9 @@
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
 				</Actions>
-				<ActionDelete
-					:delete-caption="t('polls', 'Remove share')"
-					@delete="removeShare(share)" />
+
+				<ActionDelete :title="t('polls', 'Remove share')" @delete="removeShare(share)" />
+
 			</PublicShareItem>
 		</TransitionGroup>
 
@@ -43,9 +43,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
 import ActionDelete from '../Actions/ActionDelete'
+import ActionClippy from '../Actions/ActionClippy'
 import ButtonDiv from '../Base/ButtonDiv'
 import ConfigBox from '../Base/ConfigBox'
 import PublicShareItem from './PublicShareItem'
@@ -54,12 +54,21 @@ export default {
 	name: 'SharesPublic',
 
 	components: {
-		Actions,
-		ActionButton,
+		ActionClippy,
 		ActionDelete,
 		ButtonDiv,
 		ConfigBox,
 		PublicShareItem,
+	},
+
+	data() {
+		return {
+			clippy: {
+				buttonCaption: t('polls', 'Copy link to clipboard'),
+				successText: t('polls', 'Link copied to clipboard'),
+				errorText: t('polls', 'Error while copying link to clipboard'),
+			},
+		}
 	},
 
 	computed: {
@@ -69,15 +78,6 @@ export default {
 	},
 
 	methods: {
-		async copyLink(payload) {
-			try {
-				this.$copyText(payload.url)
-				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch {
-				showError(t('polls', 'Error while copying link to clipboard'))
-			}
-		},
-
 		removeShare(share) {
 			this.$store.dispatch('shares/delete', { share })
 		},

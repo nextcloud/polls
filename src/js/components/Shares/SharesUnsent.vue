@@ -42,7 +42,7 @@
 					</ActionButton>
 				</Actions>
 				<ActionDelete
-					:delete-caption="t('polls', 'Remove invitation')"
+					:title="t('polls', 'Remove invitation')"
 					@delete="removeShare(share)" />
 			</UserItem>
 		</TransitionGroup>

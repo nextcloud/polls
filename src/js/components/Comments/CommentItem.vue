@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		<ActionDelete v-if="comment.userId === acl.userId || acl.isOwner"
-			:delete-caption="t('polls', 'Delete comment')"
+			:title="t('polls', 'Delete comment')"
 			@delete="deleteComment()" />
 	</div>
 </template>
