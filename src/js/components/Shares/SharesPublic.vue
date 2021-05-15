@@ -33,7 +33,6 @@
 				</Actions>
 
 				<ActionDelete :title="t('polls', 'Remove share')" @delete="removeShare(share)" />
-
 			</PublicShareItem>
 		</TransitionGroup>
 
@@ -45,7 +44,6 @@
 import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import ActionDelete from '../Actions/ActionDelete'
-import ActionClippy from '../Actions/ActionClippy'
 import ButtonDiv from '../Base/ButtonDiv'
 import ConfigBox from '../Base/ConfigBox'
 import PublicShareItem from './PublicShareItem'
@@ -54,7 +52,6 @@ export default {
 	name: 'SharesPublic',
 
 	components: {
-		ActionClippy,
 		ActionDelete,
 		ButtonDiv,
 		ConfigBox,
