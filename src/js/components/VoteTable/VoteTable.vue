@@ -30,13 +30,14 @@
 				v-bind="participant"
 				:class="{currentuser: (participant.userId === acl.userId) }">
 				<UserMenu v-if="participant.userId === acl.userId" />
-				<Actions v-if="acl.allowEdit" class="action">
-					<ActionButton icon="icon-delete" @click="confirmDelete(participant.userId)">
-						{{ t('polls', 'Delete votes') }}
-					</ActionButton>
-				</Actions>
+
+				<ActionDelete v-if="acl.allowEdit"
+					:delete-caption="t('polls', 'Delete votes')"
+					@delete="removeUser(participant.userId)" />
 			</UserItem>
+
 			<div v-if="proposalsExist" class="owner" />
+
 			<div v-if="acl.allowEdit && closed" class="confirm" />
 		</div>
 
@@ -52,13 +53,16 @@
 					:counter-style="viewMode === 'table-view' ? 'iconStyle' : 'barStyle'"
 					:show-no="viewMode === 'list-view'" />
 				<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
+
 				<div v-for="(participant) in participants"
 					:key="participant.userId"
 					class="vote-item-wrapper"
 					:class="{currentuser: participant.userId === acl.userId}">
 					<VoteItem :user-id="participant.userId" :option="option" />
 				</div>
+
 				<OptionItemOwner v-if="proposalsExist" :option="option" class="owner" />
+
 				<Actions v-if="acl.allowEdit && closed" class="action confirm">
 					<ActionButton v-if="closed"
 						:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
@@ -68,24 +72,14 @@
 				</Actions>
 			</div>
 		</transition-group>
-
-		<Modal v-if="modal">
-			<div class="modal__content">
-				<h2>{{ t('polls', 'Do you want to remove {username} from poll?', { username: userToRemove }) }}</h2>
-				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'No')" @click="modal = false" />
-					<ButtonDiv :primary="true" :title="t('polls', 'Yes')" @click="removeUser()" />
-				</div>
-			</div>
-		</Modal>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
-import ButtonDiv from '../Base/ButtonDiv'
+import { Actions, ActionButton } from '@nextcloud/vue'
+import ActionDelete from '../Actions/ActionDelete'
 import CalendarPeek from '../Calendar/CalendarPeek'
 import Counter from '../Options/Counter'
 import Confirmation from '../Options/Confirmation'
@@ -100,11 +94,10 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		ButtonDiv,
+		ActionDelete,
 		CalendarPeek,
 		Counter,
 		Confirmation,
-		Modal,
 		UserMenu,
 		VoteTableHeaderItem,
 		VoteItem,
@@ -146,17 +139,11 @@ export default {
 	},
 
 	methods: {
-		async removeUser() {
-			this.modal = false
-			await this.$store.dispatch('votes/deleteUser', { userId: this.userToRemove })
-			showSuccess(t('polls', 'User {userId} removed', { userId: this.userToRemove }))
-			this.userToRemove = ''
+		async removeUser(userId) {
+			await this.$store.dispatch('votes/deleteUser', { userId })
+			showSuccess(t('polls', 'User {userId} removed', { userId }))
 		},
 
-		confirmDelete(userId) {
-			this.userToRemove = userId
-			this.modal = true
-		},
 	},
 }
 </script>

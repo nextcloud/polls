@@ -30,28 +30,22 @@
 				{{ comment.comment }}
 			</div>
 		</div>
-		<Actions v-if="comment.userId === acl.userId || acl.isOwner">
-			<ActionButton v-if="deleteTimeout" icon="icon-history" @click="cancelDeleteComment()">
-				{{ n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', countdown, { countdown }) }}
-			</ActionButton>
-			<ActionButton v-else icon="icon-delete" @click="deleteComment()">
-				{{ t('polls', 'Delete comment') }}
-			</ActionButton>
-		</Actions>
+		<ActionDelete v-if="comment.userId === acl.userId || acl.isOwner"
+			:delete-caption="t('polls', 'Delete comment')"
+			@delete="deleteComment()" />
 	</div>
 </template>
 
 <script>
 import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
 import { mapState } from 'vuex'
+import ActionDelete from '../Actions/ActionDelete'
 
 export default {
 	name: 'CommentItem',
 	components: {
-		Actions,
-		ActionButton,
+		ActionDelete,
 	},
 
 	props: {
@@ -79,25 +73,12 @@ export default {
 	},
 
 	methods: {
-		deleteComment() {
-			this.deleteInterval = setInterval(() => {
-				this.countdown -= 1
-				if (this.countdown < 0) {
-					this.countdown = 0
-				}
-			}, 1000)
-			this.deleteTimeout = setTimeout(async() => {
-				try {
-					await this.$store.dispatch({ type: 'comments/delete', comment: this.comment })
-				} catch {
-					showError(t('polls', 'Error while deleting the comment'))
-				} finally {
-					clearInterval(this.deleteInterval)
-					this.deleteTimeout = null
-					this.deleteInterval = null
-					this.countdown = 7
-				}
-			}, 7000)
+		async deleteComment() {
+			try {
+				await this.$store.dispatch({ type: 'comments/delete', comment: this.comment })
+			} catch {
+				showError(t('polls', 'Error while deleting the comment'))
+			}
 		},
 
 		cancelDeleteComment() {

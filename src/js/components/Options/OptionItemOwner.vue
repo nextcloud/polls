@@ -22,11 +22,10 @@
 
 <template>
 	<div class="option-item-owner">
-		<Actions v-if="!acl.allowEdit && acl.userId === option.owner" class="action">
-			<ActionButton icon="icon-delete" @click="removeOption(option)">
-				{{ t('polls', 'Delete your proposal') }}
-			</ActionButton>
-		</Actions>
+		<ActionDelete v-if="!acl.allowEdit && acl.userId === option.owner"
+			:delete-caption="t('polls', 'Delete option')"
+			@delete="removeOption(option)" />
+
 		<Avatar v-else-if="option.owner && option.owner !== pollOwner"
 			:user="option.owner"
 			:display-name="option.ownerDisplayName"
@@ -39,16 +38,16 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton, Avatar } from '@nextcloud/vue'
+import { Avatar } from '@nextcloud/vue'
 import { removeOption } from '../../mixins/optionMixins'
+import ActionDelete from '../Actions/ActionDelete'
 
 export default {
 	name: 'OptionItemOwner',
 
 	components: {
 		Avatar,
-		Actions,
-		ActionButton,
+		ActionDelete,
 	},
 
 	mixins: [
