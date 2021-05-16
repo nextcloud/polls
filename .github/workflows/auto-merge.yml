@@ -1,5 +1,4 @@
 name: auto-merge
-
 on: pull_request_target
 
 jobs:
@@ -19,4 +18,4 @@ jobs:
             (github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]')
         with:
           target: minor
-          github-token: ${{ secrets.AUTO_MERGE }}
+          github-token: ${{ secrets.DEPENDABOT_AUTOMERGE_TOKEN }}
