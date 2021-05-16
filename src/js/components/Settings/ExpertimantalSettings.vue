@@ -33,9 +33,10 @@
 			<div class="user_settings">
 				<CheckBoxDiv v-model="useImage" :label="t('polls', 'Use background image')" />
 				<div class="settings_details">
-					{{ t('polls', 'Add a background image to the main area.') }}
+					{{ t('polls', 'Add a background image to the main area') }}
 					<div>
-						<input v-if="useImage" v-model="imageUrl" type="text" :placeholder="t('polls', 'Enter the URL of your favorite background image.')">
+						<input v-if="useImage" v-model="imageUrl" type="text"
+							:placeholder="t('polls', 'Enter the URL of your favorite background image.')">
 					</div>
 				</div>
 			</div>
