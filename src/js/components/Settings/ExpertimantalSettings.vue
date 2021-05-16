@@ -35,7 +35,9 @@
 				<div class="settings_details">
 					{{ t('polls', 'Add a background image to the main area') }}
 					<div>
-						<input v-if="useImage" v-model="imageUrl" type="text"
+						<input v-if="useImage"
+							v-model="imageUrl"
+							type="text"
 							:placeholder="t('polls', 'Enter the URL of your favorite background image.')">
 					</div>
 				</div>
