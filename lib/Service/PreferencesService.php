@@ -73,7 +73,7 @@ class PreferencesService {
 	 *
 	 * @return Preferences
 	 */
-	public function write(string $settings): Preferences {
+	public function write(array $settings): Preferences {
 		if (!$this->userId) {
 			throw new NotAuthorizedException;
 		}
