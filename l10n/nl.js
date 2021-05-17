@@ -167,7 +167,6 @@ OC.L10N.register(
     "Try experimental styles" : "Probeer experimentele stijlen",
     "Some experimental UI variants. Changes the background color of the main area." : "Enkele experimentele gebruikersinterface varianten. Wijzigt de achtergrondkleur van het hoofdgebied.",
     "Use background image" : "Gebruik achtergrondafbeelding",
-    "Add a background image to the main area." : "Voeg een achtergrondafbeelding toe aan het hoofdgebied",
     "Enter the URL of your favorite background image." : "Geef de URL op van je favoriete achtergrondafbeelding.",
     "Glassy navigation" : "Transparante navigatie",
     "Blurs the background of the navigation (Does not work with all browsers)." : "Vervaagt de achtergrond van de navigatie (niet in alle browsers).",

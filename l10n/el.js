@@ -115,7 +115,6 @@ OC.L10N.register(
     "Try experimental styles" : "Δοκιμάστε πειραματικά στυλ",
     "Some experimental UI variants. Changes the background color of the main area." : "Μερικές πειραματικές παραλλαγές διεπαφής χρήστη. Αλλάζει το χρώμα φόντου της κύριας περιοχής.",
     "Use background image" : "Χρησιμοποιήστε  εικόνα φόντου",
-    "Add a background image to the main area." : "Προσθέστε μια εικόνα φόντου στην κύρια περιοχή.",
     "Enter the URL of your favorite background image." : "Εισάγετε τη διεύθυνση URL της αγαπημένης σας εικόνας φόντου.",
     "Glassy navigation" : "Υαλώδης πλοήγηση",
     "Blurs the background of the navigation (Does not work with all browsers)." : "Θολώνει το φόντο της πλοήγησης (Δεν λειτουργεί με όλα τα προγράμματα περιήγησης).",

@@ -167,7 +167,6 @@ OC.L10N.register(
     "Try experimental styles" : "試用實驗樣式",
     "Some experimental UI variants. Changes the background color of the main area." : "一些實驗性的 UI 變體。變更主要區域的背景色彩。",
     "Use background image" : "使用背景圖片",
-    "Add a background image to the main area." : "將背景圖片新增到主要區域。",
     "Enter the URL of your favorite background image." : "輸入您最愛背景圖片的 URL。",
     "Glassy navigation" : "透明導覽列",
     "Blurs the background of the navigation (Does not work with all browsers)." : "模糊導覽列的背景（並非所有瀏覽器都能正常運作）。",

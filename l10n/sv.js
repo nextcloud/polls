@@ -41,7 +41,6 @@ OC.L10N.register(
     "Owner" : "Ägare",
     "Created" : "Skapad",
     "Use background image" : "Använd bakgrundsbild",
-    "Add a background image to the main area." : "Lägg till en bakgrundsbild i huvudområdet.",
     "Enter the URL of your favorite background image." : "Ange webbadressen till din favoritbakgrundsbild.",
     "Blurs the background of the navigation (Does not work with all browsers)." : "Suddar bakgrunden för navigeringen (Fungerar inte med alla webbläsare).",
     "Blurs the background of the sidebar (Does not work with all browsers)." : "Suddar bakgrunden i sidofältet (Fungerar inte med alla webbläsare).",

@@ -100,7 +100,6 @@ OC.L10N.register(
     "Try experimental styles" : "Kokeile kokeellisia tyylejä",
     "Some experimental UI variants. Changes the background color of the main area." : "Joitain kokeellisia käyttöliittymävaihtoehtoja. Vaihtaa pääalueen taustavärin.",
     "Use background image" : "Käytä taustakuvaa",
-    "Add a background image to the main area." : "Lisää taustakuva pääalueelle.",
     "Enter the URL of your favorite background image." : "Syötä suosikkitaustakuvasi URL osoite",
     "Glassy navigation" : "Lasinen navigaatio",
     "Blurs the background of the navigation (Does not work with all browsers)." : "Sumentaa navigaation taustan(ei toimi kaikissa selaimissa)",

@@ -152,7 +152,6 @@ OC.L10N.register(
     "Try experimental styles" : "Probiere experimentelle Stile aus",
     "Some experimental UI variants. Changes the background color of the main area." : "Einige experimentelle Oberflächen-Varianten. Ändert die Hintergrundfarbe des Hauptbereichs.",
     "Use background image" : "Hintergrundbild verwenden",
-    "Add a background image to the main area." : "Dem Hauptbereich ein Hintergrundbild hinzufügen.",
     "Enter the URL of your favorite background image." : "URL Deines bevorzugten Hintergrundbilds eingeben.",
     "Glassy navigation" : "Navigation mit Glaseffekt",
     "Blurs the background of the navigation (Does not work with all browsers)." : "Verwischt den Hintergrund der Navigation (funktioniert nicht mit allen Browsern).",

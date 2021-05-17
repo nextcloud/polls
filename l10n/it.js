@@ -167,7 +167,6 @@ OC.L10N.register(
     "Try experimental styles" : "Prova gli stili sperimentali",
     "Some experimental UI variants. Changes the background color of the main area." : "Alcune varianti sperimentali dell'interfaccia utente. Cambia il colore di sfondo dell'area principale.",
     "Use background image" : "Usa immagini di sfondo",
-    "Add a background image to the main area." : "Aggiungi un'immagine di sfondo all'area principale.",
     "Enter the URL of your favorite background image." : "Digita l'URL della tua immagine di sfondo preferita.",
     "Glassy navigation" : "Navigazione trasparente",
     "Blurs the background of the navigation (Does not work with all browsers)." : "Sfoca lo sfondo della navigazione (non funziona con tutti i browser).",
