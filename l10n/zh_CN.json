@@ -164,6 +164,7 @@
     "Try experimental styles" : "尝试实验性样式",
     "Some experimental UI variants. Changes the background color of the main area." : "一些实验性的 UI 变体。改变主区域的背景颜色。",
     "Use background image" : "使用背景图",
+    "Add a background image to the main area" : "往主区域添加背景图",
     "Enter the URL of your favorite background image." : "输入你最喜欢的背景图片的 URL。",
     "Glassy navigation" : "似玻璃的导航",
     "Blurs the background of the navigation (Does not work with all browsers)." : "模糊导航的背景 (不适用于所有的浏览器)。",
