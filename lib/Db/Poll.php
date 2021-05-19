@@ -76,6 +76,8 @@ use OCA\Polls\Model\User;
  * @method void setImportant(integer $value)
  * @method int getHideBookedUp()
  * @method void setHideBookedUp(integer $value)
+ * @method int getUseNo()
+ * @method void setUseNo(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
 	public const TYPE_DATE = 'datePoll';
@@ -155,6 +157,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $hideBookedUp*/
 	protected $hideBookedUp;
 
+	/** @var int $useNo*/
+	protected $useNo;
+
 	public function __construct() {
 		$this->addType('created', 'int');
 		$this->addType('expire', 'int');
@@ -168,6 +173,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->addType('adminAccess', 'int');
 		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
+		$this->addType('useNo', 'int');
 	}
 
 	public function jsonSerialize() {
@@ -195,6 +201,7 @@ class Poll extends Entity implements JsonSerializable {
 			'ownerDisplayName' => $this->getDisplayName(),
 			'important' => $this->getImportant(),
 			'hideBookedUp' => $this->getHideBookedUp(),
+			'useNo' => $this->getUseNo(),
 		];
 	}
 
@@ -218,6 +225,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setAdminAccess($array['adminAccess'] ?? $this->getAdminAccess());
 		$this->setImportant($array['important'] ?? $this->getImportant());
 		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
+		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
 		return $this;
 	}
 

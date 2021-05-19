@@ -138,7 +138,7 @@ class VoteService {
 	/**
 	 * Set vote
 	 */
-	public function set(int $optionId, string $setTo, string $token = ''): Vote {
+	public function set(int $optionId, string $setTo, string $token = ''): ?Vote {
 		$option = $this->optionMapper->find($optionId);
 
 		if ($token) {
@@ -153,8 +153,21 @@ class VoteService {
 
 		try {
 			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->acl->getUserId());
+
+			if (in_array(trim($setTo), ['no', '']) && !$this->acl->getPoll()->getUseNo()) {
+				try {
+					$this->voteMapper->delete($this->vote);
+				} catch (DoesNotExistException $e) {
+					// catch silently
+				}
+				$this->vote->setVoteAnswer('');
+				return $this->vote;
+
+			}
+
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->update($this->vote);
+
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();

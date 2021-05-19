@@ -39,6 +39,7 @@
 		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
 			<ConfigAllowComment @change="writePoll" />
 			<ConfigAllowMayBe @change="writePoll" />
+			<ConfigUseNo @change="writePoll" />
 			<ConfigAnonymous @change="writePoll" />
 
 			<ConfigVoteLimit @change="writePoll" />
@@ -75,34 +76,36 @@ import { mapGetters, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import ConfigBox from '../Base/ConfigBox'
-import ConfigDescription from '../Configuration/ConfigDescription'
-import ConfigTitle from '../Configuration/ConfigTitle'
-import ConfigAllowComment from '../Configuration/ConfigAllowComment'
-import ConfigAnonymous from '../Configuration/ConfigAnonymous'
-import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe'
-import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
-import ConfigVoteLimit from '../Configuration/ConfigVoteLimit'
-import ConfigOptionLimit from '../Configuration/ConfigOptionLimit'
-import ConfigClosing from '../Configuration/ConfigClosing'
 import ConfigAccess from '../Configuration/ConfigAccess'
+import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
+import ConfigAllowComment from '../Configuration/ConfigAllowComment'
+import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe'
+import ConfigAnonymous from '../Configuration/ConfigAnonymous'
+import ConfigClosing from '../Configuration/ConfigClosing'
+import ConfigDescription from '../Configuration/ConfigDescription'
+import ConfigOptionLimit from '../Configuration/ConfigOptionLimit'
 import ConfigShowResults from '../Configuration/ConfigShowResults'
+import ConfigTitle from '../Configuration/ConfigTitle'
+import ConfigUseNo from '../Configuration/ConfigUseNo'
+import ConfigVoteLimit from '../Configuration/ConfigVoteLimit'
 
 export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
 		ConfigBox,
-		ConfigDescription,
-		ConfigTitle,
+		ConfigAccess,
+		ConfigAdminAccess,
 		ConfigAllowComment,
 		ConfigAllowMayBe,
 		ConfigAnonymous,
-		ConfigAdminAccess,
-		ConfigVoteLimit,
-		ConfigOptionLimit,
 		ConfigClosing,
-		ConfigAccess,
+		ConfigDescription,
+		ConfigOptionLimit,
 		ConfigShowResults,
+		ConfigTitle,
+		ConfigUseNo,
+		ConfigVoteLimit,
 	},
 
 	computed: {
