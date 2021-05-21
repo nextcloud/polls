@@ -155,6 +155,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $hideBookedUp*/
 	protected $hideBookedUp;
 
+	/** @var int $hideBookedUp*/
+	protected $useNo;
+
 	public function __construct() {
 		$this->addType('created', 'int');
 		$this->addType('expire', 'int');
