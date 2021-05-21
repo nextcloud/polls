@@ -43,6 +43,7 @@ OC.L10N.register(
     "Link copied to clipboard" : "Arbelara kopiatutako esteka",
     "Error while copying link to clipboard" : "Errorea esteka arbelera kopiatzean",
     "_%n Participant_::_%n Participants_" : ["Parte-hartzaile %n","%n parte-hartzaile"],
+    "Delete" : "Ezabatu",
     "Date order" : "Dataren ordena",
     "Original order" : "Jatorrizko ordena",
     "Ranked order" : "Ordena sailkatua",
