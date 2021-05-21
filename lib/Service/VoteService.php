@@ -162,12 +162,10 @@ class VoteService {
 				}
 				$this->vote->setVoteAnswer('');
 				return $this->vote;
-
 			}
 
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->update($this->vote);
-
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();
