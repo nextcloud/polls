@@ -29,7 +29,7 @@ use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version0200Date20210323120002 extends SimpleMigrationStep {
+class Version0109Date20210323120002 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
