@@ -39,5 +39,8 @@
 		"psalm": "php vendor/vimeo/psalm/psalm",
 		"psalm:fix": "php vendor/vimeo/psalm/psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
 		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true"
+	},
+	"require": {
+		"league/commonmark": "^1.6"
 	}
 }

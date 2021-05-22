@@ -42,6 +42,7 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Model\UserGroupClass;
 use OCA\Polls\Model\User;
+use League\CommonMark\CommonMarkConverter;
 
 class MailService {
 
@@ -314,9 +315,18 @@ class MailService {
 				[$owner->getDisplayName(), $poll->getTitle()],
 				$this->trans->t('{owner} invited you to take part in the poll "{title}"')
 			));
-		$emailTemplate->addBodyText($poll->getDescription());
+
+		$config = [
+			'html_input' => 'strip',
+			'allow_unsafe_links' => false,
+		];
+
+		$converter = new CommonMarkConverter($config);
+
+		$emailTemplate->addBodyText($converter->convertToHtml($poll->getDescription()), 'Hey');
+
 		$emailTemplate->addBodyButton(
-				htmlspecialchars($this->trans->t('Go to poll')),
+				$this->trans->t('Go to poll'),
 				$url
 			);
 		$emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
