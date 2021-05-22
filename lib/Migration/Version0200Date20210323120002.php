@@ -56,6 +56,13 @@ class Version0200Date20210323120002 extends SimpleMigrationStep {
 					'default' => 'disallow'
 				]);
 			}
+			if (!$table->hasColumn('use_no')) {
+				$table->addColumn('use_no', 'integer', [
+					'length' => 11,
+					'notnull' => true,
+					'default' => 1
+				]);
+			}
 			if (!$table->hasColumn('proposals_expire')) {
 				$table->addColumn('proposals_expire', 'integer', [
 					'length' => 11,

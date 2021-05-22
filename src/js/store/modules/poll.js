@@ -85,11 +85,12 @@ const getters = {
 
 	},
 
-	answerSequence: (state) => {
+	answerSequence: (state, getters, rootState) => {
+		const noString = rootState.poll.useNo ? 'no' : ''
 		if (state.allowMaybe) {
-			return ['no', 'yes', 'maybe']
+			return [noString, 'yes', 'maybe']
 		}
-		return ['no', 'yes']
+		return [noString, 'yes']
 
 	},
 
