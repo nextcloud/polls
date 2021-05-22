@@ -30,7 +30,6 @@
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
 		"nextcloud/coding-standard": "^0.5.0",
-		"doctrine/orm": "^2.7",
 		"vimeo/psalm": "^4.3"
 	},
 	"scripts": {
@@ -39,5 +38,8 @@
 		"psalm": "php vendor/vimeo/psalm/psalm",
 		"psalm:fix": "php vendor/vimeo/psalm/psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
 		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true"
+	},
+	"require": {
+		"league/commonmark": "^1.6"
 	}
 }
