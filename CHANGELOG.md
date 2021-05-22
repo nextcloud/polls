@@ -1,13 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.9.0 - beta1] - tbd
+## [1.9.0 - beta1] - 2021-05-22
 ### Changes and fixes
 - [enhancement] #365 - Support printing the poll via the browser's print function (#1567)
 - [enhancement] #496 Added possibility to allow participants proposing more options (#1570, #1127, #1495, #1554)
 - [enhancement] #1490 - Delete all user information, if user is removed from Nextcloud
+- [enhancement] #1632 - Render description from markup in invitation mails
+- [enhancement] #1627 - Add option for deleting votes if switched to 'no'
+- [enhancement] #1587 - Added janitor job to tidy database tables
+- [enhancement] #1516 - Added CLI commands for share management
+- [enhancement] #365  - Optimization of CSS for printing poll (#1567)
+- [fix] Order in experimental settings (#1621)
 - [UX] #1519 - Add visual feedback, when vote is saved
-- [UX] #1506  - Date picker optimizations (#1543)
+- [UX] #1506 - Date picker optimizations (#1543)
+- [UX] #1620 - Deletion of users, options, comments and shares can be aborted
+- [UX] #1556 - Adding toast notification after successful vote
 - [refactor] #1499 - Internal structure of store and components
 
 See also https://github.com/nextcloud/polls/milestone/34?closed=1
