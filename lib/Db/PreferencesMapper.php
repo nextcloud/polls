@@ -24,9 +24,10 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
-use Doctrine\DBAL\Exception\TableNotFoundException;
+use OCP\DB\Exception;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
 
 /**
  * @template-extends QBMapper<Preferences>
@@ -47,7 +48,7 @@ class PreferencesMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId))
+			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntity($qb);
@@ -85,8 +86,11 @@ class PreferencesMapper extends QBMapper {
 					$userskeep[] = $row['user_id'];
 				}
 			}
-		} catch (TableNotFoundException $e) {
-			// ignore
+		} catch (Exception $e) {
+			if ($e->getReason() === Exception::REASON_DATABASE_OBJECT_NOT_FOUND) {
+				// ignore silently
+			}
+			throw $e;
 		}
 	}
 

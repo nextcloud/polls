@@ -24,10 +24,10 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\AppFramework\Db\QBMapper;
-use Doctrine\DBAL\Exception\TableNotFoundException;
 
 /**
  * @template-extends QBMapper<Option>
@@ -143,8 +143,11 @@ class OptionMapper extends QBMapper {
 					$entries2Keep[] = $currentRecord;
 				}
 			}
-		} catch (TableNotFoundException $e) {
-			// ignore
+		} catch (Exception $e) {
+			if ($e->getReason() === Exception::REASON_DATABASE_OBJECT_NOT_FOUND) {
+				// ignore silently
+			}
+			throw $e;
 		}
 	}
 
