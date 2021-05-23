@@ -31,8 +31,10 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Listener\UserDeletedListener;
+use OCA\Polls\Listener\GroupDeletedListener;
 
 class Application extends App implements IBootstrap {
 
@@ -51,6 +53,7 @@ class Application extends App implements IBootstrap {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
+		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {

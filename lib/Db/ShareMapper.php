@@ -130,6 +130,19 @@ class ShareMapper extends QBMapper {
 	/**
 	 * @return void
 	 */
+	public function deleteByIdAndType(string $id, string $type): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where('user_id = :id')
+			->andWhere('type = :type')
+			->setParameter('id', $id)
+			->setParameter('type', $type);
+		$query->execute();
+	}
+
+	/**
+	 * @return void
+	 */
 	public function remove(int $shareId): void {
 		$qb = $this->db->getQueryBuilder();
 
