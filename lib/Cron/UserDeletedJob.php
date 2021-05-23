@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2021 Jonas Rittershofer <jotoeri@users.noreply.github.com>
  *
  * @author Jonas Rittershofer <jotoeri@users.noreply.github.com>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -33,6 +34,7 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\PreferencesMapper;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
@@ -66,7 +68,8 @@ class UserDeletedJob extends QueuedJob {
 	/** @var LoggerInterface */
 	private $logger;
 
-	public function __construct(CommentMapper $commentMapper,
+	public function __construct(
+		CommentMapper $commentMapper,
 		LogMapper $logMapper,
 		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
@@ -108,7 +111,7 @@ class UserDeletedJob extends QueuedJob {
 
 		$this->pollMapper->deleteByUserId($owner);
 		$this->logMapper->deleteByUserId($owner);
-		$this->shareMapper->deleteByUserId($owner);
+		$this->shareMapper->deleteByIdAndType($owner, Share::TYPE_USER);
 		$this->preferencesMapper->deleteByUserId($owner);
 		$this->subscriptionMapper->deleteByUserId($owner);
 		$this->commentMapper->renameUserId($owner, $replacementName);
