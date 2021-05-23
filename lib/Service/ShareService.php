@@ -35,6 +35,7 @@ use OCP\Security\ISecureRandom;
 use OCP\IGroupManager;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Watch;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroupClass;
 
@@ -70,6 +71,9 @@ class ShareService {
 	/** @var NotificationService */
 	private $notificationService;
 
+	/** @var WatchService */
+	private $watchService;
+
 	public function __construct(
 		string $AppName,
 		LoggerInterface $logger,
@@ -80,7 +84,8 @@ class ShareService {
 		Share $share,
 		MailService $mailService,
 		Acl $acl,
-		NotificationService $notificationService
+		NotificationService $notificationService,
+		WatchService $watchService
 	) {
 		$this->appName = $AppName;
 		$this->logger = $logger;
@@ -92,6 +97,7 @@ class ShareService {
 		$this->mailService = $mailService;
 		$this->acl = $acl;
 		$this->notificationService = $notificationService;
+		$this->watchService = $watchService;
 	}
 
 	/**
@@ -187,6 +193,7 @@ class ShareService {
 	public function setInvitationSent(string $token): Share {
 		$share = $this->shareMapper->findByToken($token);
 		$share->setInvitationSent(time());
+		$this->watchService->writeUpdate($share->getPollId(), Watch::OBJECT_SHARES);
 		return $this->shareMapper->update($share);
 	}
 
@@ -221,6 +228,7 @@ class ShareService {
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
+		$this->watchService->writeUpdate($this->share->getPollId(), Watch::OBJECT_SHARES);
 		return $this->shareMapper->insert($this->share);
 	}
 
@@ -263,6 +271,7 @@ class ShareService {
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validateEmailAddress($emailAddress, $emptyIsValid);
 			$this->share->setEmailAddress($emailAddress);
+			$this->watchService->writeUpdate($this->share->getPollId(), Watch::OBJECT_SHARES);
 			// TODO: Send confirmation
 			return $this->shareMapper->update($this->share);
 		} else {
@@ -284,6 +293,7 @@ class ShareService {
 
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->share->setEmailAddress('');
+			$this->watchService->writeUpdate($this->share->getPollId(), Watch::OBJECT_SHARES);
 			return $this->shareMapper->update($this->share);
 		} else {
 			throw new InvalidShareTypeException('Email address can only be set in external shares.');
@@ -336,6 +346,8 @@ class ShareService {
 			$this->mailService->resendInvitation($this->share->getToken());
 		}
 
+		$this->watchService->writeUpdate($this->share->getPollId(), Watch::OBJECT_SHARES);
+
 		return $this->share;
 	}
 
@@ -350,6 +362,7 @@ class ShareService {
 		} catch (DoesNotExistException $e) {
 			// silently catch
 		}
+		$this->watchService->writeUpdate($this->share->getPollId(), Watch::OBJECT_SHARES);
 		return $token;
 	}
 
@@ -371,6 +384,7 @@ class ShareService {
 			}
 		}
 
+		$this->watchService->writeUpdate($share->getPollId(), Watch::OBJECT_SHARES);
 		return $this->mailService->sendInvitation($token);
 	}
 }
