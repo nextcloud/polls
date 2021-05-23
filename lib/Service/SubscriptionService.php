@@ -24,7 +24,7 @@
 namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use OCP\DB\Exception;
 
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
@@ -86,8 +86,11 @@ class SubscriptionService {
 		} else {
 			try {
 				$this->add($this->acl->getPollId(), $this->acl->getUserId());
-			} catch (UniqueConstraintViolationException $e) {
-				// catch silently (assume already subscribed)
+			} catch (Exception $e) {
+				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					// catch silently (assume already subscribed)
+				}
+				throw $e;
 			}
 		}
 		return $subscribed;
