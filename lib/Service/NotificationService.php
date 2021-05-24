@@ -25,10 +25,10 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use OCP\Notification\IManager;
+use OCA\Polls\Notification\Notifier;
 
 class NotificationService {
 	public const APP_ID = 'polls';
-	public const EVENT_INVITTION = 'invitation';
 
 	/** @var IManager */
 	protected $notificationManager;
@@ -58,7 +58,7 @@ class NotificationService {
 			->setUser($recipient)
 			->setDateTime(new DateTime())
 			->setObject('poll', strval($pollId))
-			->setSubject(self::EVENT_INVITTION, ['pollId' => $pollId, 'recipient' => $recipient]);
+			->setSubject(Notifier::NOTIFY_INVITATION, ['pollId' => $pollId, 'recipient' => $recipient]);
 		$this->notificationManager->notify($notification);
 		return true;
 	}

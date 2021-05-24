@@ -23,10 +23,25 @@
 
 namespace OCA\Polls\Event;
 
-// use OCA\Polls\Db\Log;
+use OCA\Polls\Notification\Notifier;
 
 class PollDeletedEvent extends PollEvent {
-    public function getLogMsg(): string {
-        return ''; // Log::MSG_ID_DELETEPOLL;
-    }
+	public function getLogMsg(): string {
+		return ''; // Log::MSG_ID_DELETEPOLL;
+	}
+
+	public function getNotification(): array {
+		if ($this->getActor() === $this->getPollOwner()) {
+			return [];
+		}
+
+		return [
+			'msgId' => Notifier::NOTIFY_POLL_DELETED_BY_OTHER,
+			'objectType' => 'poll',
+			'objectValue' => $this->getPollId(),
+			'recipient' => $this->getPollOwner(),
+			'actor' => $this->getActor(),
+			'pollTitle' => $this->getPollTitle(),
+		];
+	}
 }

@@ -26,7 +26,7 @@ namespace OCA\Polls\Event;
 use OCA\Polls\Db\Log;
 
 class OptionConfirmedEvent extends OptionEvent {
-    public function getLogMsg(): string {
-        return Log::MSG_ID_CONFIRMOPTION;
-    }
+	public function getLogMsg(): string {
+		return Log::MSG_ID_CONFIRMOPTION;
+	}
 }

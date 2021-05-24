@@ -26,18 +26,14 @@ namespace OCA\Polls\Event;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Notification\Notifier;
 
-class PollArchivedEvent extends PollEvent {
+class PollTakeoverEvent extends PollEvent {
 	public function getLogMsg(): string {
-		return Log::MSG_ID_DELETEPOLL;
+		return Log::MSG_ID_OWNERCHANGE;
 	}
 
 	public function getNotification(): array {
-		if ($this->getActor() === $this->getPollOwner()) {
-			return [];
-		}
-
 		return [
-			'msgId' => Notifier::NOTIFY_POLL_ARCHIVED_BY_OTHER,
+			'msgId' => Notifier::NOTIFY_POLL_TAKEOVER,
 			'objectType' => 'poll',
 			'objectValue' => $this->getPollId(),
 			'recipient' => $this->getPollOwner(),

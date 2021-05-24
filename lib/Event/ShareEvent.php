@@ -27,30 +27,29 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Share;
 
 class ShareEvent extends Event {
-    private $share;
+	private $share;
 
-    public function __construct(Share $share) {
-        parent::__construct();
-        $this->share = $share;
-    }
+	public function __construct(Share $share) {
+		parent::__construct();
+		$this->share = $share;
+	}
 
-    public function getShare(): Share {
-        return $this->share;
-    }
+	public function getShare(): Share {
+		return $this->share;
+	}
 
-    public function getPollId(): int {
-        return $this->share->getPollId();
-    }
+	public function getPollId(): int {
+		return $this->share->getPollId();
+	}
 
-    public function getLogMsg(): string {
-        return '';
-    }
+	public function getLogMsg(): string {
+		return '';
+	}
 
-    public function getActor(): string {
-        if (\OC::$server->getUserSession()->isLoggedIn()) {
-            return \OC::$server->getUserSession()->getUser()->getUID();
-        }
-        return $this->share->getDisplayName();
-    }
-
+	public function getActor(): string {
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return \OC::$server->getUserSession()->getUser()->getUID();
+		}
+		return $this->share->getDisplayName();
+	}
 }

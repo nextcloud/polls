@@ -27,27 +27,26 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Option;
 
 class OptionEvent extends Event {
-    private $option;
+	private $option;
 
-    public function __construct(Option $option) {
-        parent::__construct();
-        $this->option = $option;
-    }
+	public function __construct(Option $option) {
+		parent::__construct();
+		$this->option = $option;
+	}
 
-    public function getOption(): Option {
-        return $this->option;
-    }
+	public function getOption(): Option {
+		return $this->option;
+	}
 
-    public function getPollId(): int {
-        return $this->option->getPollId();
-    }
+	public function getPollId(): int {
+		return $this->option->getPollId();
+	}
 
-    public function getLogMsg(): string {
-        return '';
-    }
+	public function getLogMsg(): string {
+		return '';
+	}
 
-    public function getActor(): string {
-        return \OC::$server->getUserSession()->getUser()->getUID();
-    }
-
+	public function getActor(): string {
+		return \OC::$server->getUserSession()->getUser()->getUID();
+	}
 }

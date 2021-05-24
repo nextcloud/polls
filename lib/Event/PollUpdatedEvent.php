@@ -26,7 +26,7 @@ namespace OCA\Polls\Event;
 use OCA\Polls\Db\Log;
 
 class PollUpdatedEvent extends PollEvent {
-    public function getLogMsg(): string {
-        return Log::MSG_ID_UPDATEPOLL;
-    }
+	public function getLogMsg(): string {
+		return Log::MSG_ID_UPDATEPOLL;
+	}
 }
