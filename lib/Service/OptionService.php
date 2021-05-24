@@ -23,23 +23,31 @@
 
 namespace OCA\Polls\Service;
 
-use Psr\Log\LoggerInterface;
 use DateTime;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Psr\Log\LoggerInterface;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\EventDispatcher\IEventDispatcher;
+
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidOptionPropertyException;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\Watch;
+use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\OptionConfirmedEvent;
+use OCA\Polls\Event\OptionCreatedEvent;
+use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Model\Acl;
 
 class OptionService {
+
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
 	/** @var LoggerInterface */
 	private $logger;
@@ -68,25 +76,22 @@ class OptionService {
 	/** @var VoteMapper */
 	private $voteMapper;
 
-	/** @var WatchService */
-	private $watchService;
-
 	public function __construct(
 		string $AppName,
-		LoggerInterface $logger,
 		Acl $acl,
+		IEventDispatcher $eventDispatcher,
+		LoggerInterface $logger,
 		Option $option,
 		OptionMapper $optionMapper,
-		VoteMapper $voteMapper,
-		WatchService $watchService
+		VoteMapper $voteMapper
 	) {
 		$this->appName = $AppName;
-		$this->logger = $logger;
 		$this->acl = $acl;
+		$this->eventDispatcher = $eventDispatcher;
+		$this->logger = $logger;
 		$this->option = $option;
 		$this->optionMapper = $optionMapper;
 		$this->voteMapper = $voteMapper;
-		$this->watchService = $watchService;
 	}
 
 	/**
@@ -157,10 +162,12 @@ class OptionService {
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
-			$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
 		} catch (UniqueConstraintViolationException $e) {
 			throw new DuplicateEntryException('This option already exists');
 		}
+
+		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($this->option));
+
 		return $this->option;
 	}
 
@@ -176,7 +183,8 @@ class OptionService {
 		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		$this->option = $this->optionMapper->update($this->option);
-		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+
 		return $this->option;
 	}
 
@@ -199,7 +207,7 @@ class OptionService {
 		}
 
 		$this->optionMapper->delete($this->option);
-		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->eventDispatcher->dispatchTyped(new OptionDeletedEvent($this->option));
 
 		return $this->option;
 	}
@@ -216,7 +224,7 @@ class OptionService {
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
 		$this->option = $this->optionMapper->update($this->option);
 
-		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
 
 		return $this->option;
 	}
@@ -263,7 +271,8 @@ class OptionService {
 			}
 		}
 
-		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($this->option));
+
 		return $this->optionMapper->findByPoll($this->acl->getPollId());
 	}
 
@@ -348,7 +357,7 @@ class OptionService {
 			}
 		}
 
-		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
 
 		return $this->optionMapper->findByPoll($this->acl->getPollId());
 	}
@@ -379,7 +388,8 @@ class OptionService {
 			$this->optionMapper->update($option);
 		}
 
-		$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
+		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+
 		return $this->optionMapper->findByPoll($this->acl->getPollId());
 	}
 

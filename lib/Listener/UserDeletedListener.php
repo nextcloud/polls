@@ -23,18 +23,20 @@
 
 namespace OCA\Polls\Listener;
 
-use OCA\Polls\Cron\UserDeletedJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\User\Events\UserDeletedEvent;
+use OCA\Polls\Cron\UserDeletedJob;
 
 class UserDeletedListener implements IEventListener {
 
 	/** @var IJobList */
 	private $jobList;
 
-	public function __construct(IJobList $jobList) {
+	public function __construct(
+		IJobList $jobList
+	) {
 		$this->jobList = $jobList;
 	}
 

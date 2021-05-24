@@ -24,24 +24,31 @@
 namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\EventDispatcher\IEventDispatcher;
+
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
-
-use OCA\Polls\Db\Log;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
-use OCA\Polls\Db\Watch;
+use OCA\Polls\Event\PollArchivedEvent;
+use OCA\Polls\Event\PollCreatedEvent;
+use OCA\Polls\Event\PollDeletedEvent;
+use OCA\Polls\Event\PollRestoredEvent;
+use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Model\Acl;
 
 class PollService {
 
 	/** @var string */
 	private $userId;
+
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
 	/** @var PollMapper */
 	private $pollMapper;
@@ -52,14 +59,8 @@ class PollService {
 	/** @var VoteMapper */
 	private $voteMapper;
 
-	/** @var WatchService */
-	private $watchService;
-
 	/** @var Vote */
 	private $vote;
-
-	/** @var LogService */
-	private $logService;
 
 	/** @var NotificationService */
 	private $notificationService;
@@ -71,27 +72,25 @@ class PollService {
 	private $acl;
 
 	public function __construct(
-		?string $UserId,
-		PollMapper $pollMapper,
-		Poll $poll,
-		VoteMapper $voteMapper,
-		Vote $vote,
-		WatchService $watchService,
-		LogService $logService,
-		NotificationService $notificationService,
+		Acl $acl,
+		IEventDispatcher $eventDispatcher,
 		MailService $mailService,
-		Acl $acl
+		NotificationService $notificationService,
+		Poll $poll,
+		PollMapper $pollMapper,
+		?string $UserId,
+		VoteMapper $voteMapper,
+		Vote $vote
 	) {
+		$this->acl = $acl;
+		$this->eventDispatcher = $eventDispatcher;
+		$this->mailService = $mailService;
+		$this->notificationService = $notificationService;
+		$this->poll = $poll;
 		$this->pollMapper = $pollMapper;
 		$this->userId = $UserId;
-		$this->poll = $poll;
 		$this->voteMapper = $voteMapper;
-		$this->watchService = $watchService;
 		$this->vote = $vote;
-		$this->logService = $logService;
-		$this->notificationService = $notificationService;
-		$this->mailService = $mailService;
-		$this->acl = $acl;
 	}
 
 	/**
@@ -208,8 +207,7 @@ class PollService {
 		$this->poll->setImportant(0);
 		$this->poll = $this->pollMapper->insert($this->poll);
 
-		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
-		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_ADDPOLL);
+		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));
 
 		return $this->poll;
 	}
@@ -243,8 +241,7 @@ class PollService {
 
 		$this->poll->deserializeArray($poll);
 		$this->pollMapper->update($this->poll);
-		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
-		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_UPDATEPOLL);
+		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
 
 		return $this->poll;
 	}
@@ -261,8 +258,12 @@ class PollService {
 
 		$this->poll->setDeleted($this->poll->getDeleted() ? 0 : time());
 		$this->poll = $this->pollMapper->update($this->poll);
-		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
-		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_DELETEPOLL);
+
+		if ($this->poll->getDeleted()) {
+			$this->eventDispatcher->dispatchTyped(new PollArchivedEvent($this->poll));
+		} else {
+			$this->eventDispatcher->dispatchTyped(new PollRestoredEvent($this->poll));
+		}
 
 		if ($this->userId !== $this->poll->getOwner()) {
 			// send notification to the original owner
@@ -289,7 +290,7 @@ class PollService {
 		$this->poll = $this->acl->getPoll();
 
 		$this->pollMapper->delete($this->poll);
-		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
+		$this->eventDispatcher->dispatchTyped(new PollDeletedEvent($this->poll));
 
 		if (!$this->acl->getIsOwner()) {
 			// send notification to the original owner
@@ -335,7 +336,7 @@ class PollService {
 		$this->poll->setImportant($origin->getImportant());
 
 		$this->poll = $this->pollMapper->insert($this->poll);
-		$this->watchService->writeUpdate($this->poll->getId(), Watch::OBJECT_POLLS);
+		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));
 		return $this->poll;
 	}
 

@@ -48,7 +48,10 @@ class Log extends Entity implements JsonSerializable {
 	public const MSG_ID_DELETEPOLL = 'deletePoll';
 	public const MSG_ID_RESTOREPOLL = 'restorePoll';
 	public const MSG_ID_EXPIREPOLL = 'expirePoll';
+
 	public const MSG_ID_ADDOPTION = 'addOption';
+	public const MSG_ID_UPDATEOPTION = 'updateOption';
+	public const MSG_ID_CONFIRMOPTION = 'confirmeOption';
 	public const MSG_ID_DELETEOPTION = 'deleteOption';
 	public const MSG_ID_SETVOTE = 'setVote';
 	public const MSG_ID_OWNERCHANGE = 'updateOwner';
