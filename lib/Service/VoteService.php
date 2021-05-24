@@ -32,7 +32,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
-use OCA\Polls\Db\Watch;
 use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Model\Acl;
 
@@ -157,7 +156,6 @@ class VoteService {
 				$this->vote->setVoteAnswer($setTo);
 				$this->voteMapper->update($this->vote);
 			}
-
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();

@@ -27,27 +27,44 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Poll;
 
 abstract class PollEvent extends Event {
-    private $poll;
+	private $poll;
+	private $pollOwner;
+	private $pollId;
+	private $pollTitle;
 
-    public function __construct(Poll $poll) {
-        parent::__construct();
-        $this->poll = $poll;
-    }
+	public function __construct(Poll $poll) {
+		parent::__construct();
+		$this->poll = $poll;
+		$this->pollOwner = $this->poll->getOwner();
+		$this->pollId = $this->poll->getId();
+		$this->pollTitle = $this->poll->getTitle();
+	}
 
-    public function getPoll(): Poll {
-        return $this->poll;
-    }
+	public function getPoll(): Poll {
+		return $this->poll;
+	}
 
-    public function getPollId(): int {
-        return $this->poll->getId();
-    }
+	public function getPollId(): int {
+		return $this->pollId;
+	}
 
-    public function getLogMsg(): string {
-        return '';
-    }
+	public function getPollTitle(): string {
+		return $this->pollTitle;
+	}
 
-    public function getActor(): string {
-        return \OC::$server->getUserSession()->getUser()->getUID();
-    }
+	public function getPollOwner(): string {
+		return $this->pollOwner;
+	}
 
+	public function getLogMsg(): string {
+		return '';
+	}
+
+	public function getNotification(): array {
+		return [];
+	}
+
+	public function getActor(): string {
+		return \OC::$server->getUserSession()->getUser()->getUID();
+	}
 }

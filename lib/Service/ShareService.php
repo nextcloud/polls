@@ -346,7 +346,6 @@ class ShareService {
 			$this->shareMapper->update($this->share);
 
 			$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
-
 		} else {
 			throw new NotAuthorizedException;
 		}

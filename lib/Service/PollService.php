@@ -39,6 +39,7 @@ use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
 use OCA\Polls\Event\PollDeletedEvent;
 use OCA\Polls\Event\PollRestoredEvent;
+use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Model\Acl;
 
@@ -62,9 +63,6 @@ class PollService {
 	/** @var Vote */
 	private $vote;
 
-	/** @var NotificationService */
-	private $notificationService;
-
 	/** @var MailService */
 	private $mailService;
 
@@ -75,7 +73,6 @@ class PollService {
 		Acl $acl,
 		IEventDispatcher $eventDispatcher,
 		MailService $mailService,
-		NotificationService $notificationService,
 		Poll $poll,
 		PollMapper $pollMapper,
 		?string $UserId,
@@ -85,7 +82,6 @@ class PollService {
 		$this->acl = $acl;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->mailService = $mailService;
-		$this->notificationService = $notificationService;
 		$this->poll = $poll;
 		$this->pollMapper = $pollMapper;
 		$this->userId = $UserId;
@@ -144,20 +140,11 @@ class PollService {
 	 */
 	public function takeover(int $pollId): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$originalOwner = $this->poll->getOwner();
+
+		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));
+
 		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
-
 		$this->pollMapper->update($this->poll);
-		$this->logService->setLog($this->poll->getId(), Log::MSG_ID_OWNERCHANGE);
-
-		// send notification to the original owner
-		$this->notificationService->createNotification([
-			'msgId' => 'takeOverPoll',
-			'objectType' => 'poll',
-			'objectValue' => $this->poll->getId(),
-			'recipient' => $originalOwner,
-			'actor' => $this->userId
-		]);
 
 		return $this->poll;
 	}
@@ -265,18 +252,6 @@ class PollService {
 			$this->eventDispatcher->dispatchTyped(new PollRestoredEvent($this->poll));
 		}
 
-		if ($this->userId !== $this->poll->getOwner()) {
-			// send notification to the original owner
-			$this->notificationService->createNotification([
-				'msgId' => 'softDeletePollByOther',
-				'objectType' => 'poll',
-				'objectValue' => $this->poll->getId(),
-				'recipient' => $this->poll->getOwner(),
-				'actor' => $this->userId,
-				'pollTitle' => $this->poll->getTitle()
-			]);
-		}
-
 		return $this->poll;
 	}
 
@@ -289,20 +264,10 @@ class PollService {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_DELETE);
 		$this->poll = $this->acl->getPoll();
 
-		$this->pollMapper->delete($this->poll);
 		$this->eventDispatcher->dispatchTyped(new PollDeletedEvent($this->poll));
 
-		if (!$this->acl->getIsOwner()) {
-			// send notification to the original owner
-			$this->notificationService->createNotification([
-				'msgId' => 'deletePollByOther',
-				'objectType' => 'poll',
-				'objectValue' => $this->poll->getId(),
-				'recipient' => $this->poll->getOwner(),
-				'actor' => $this->userId,
-				'pollTitle' => $this->poll->getTitle()
-			]);
-		}
+		$this->pollMapper->delete($this->poll);
+
 		return $this->poll;
 	}
 

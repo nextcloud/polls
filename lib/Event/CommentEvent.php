@@ -27,27 +27,26 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Comment;
 
 class CommentEvent extends Event {
-    private $comment;
+	private $comment;
 
-    public function __construct(Comment $comment) {
-        parent::__construct();
-        $this->comment = $comment;
-    }
+	public function __construct(Comment $comment) {
+		parent::__construct();
+		$this->comment = $comment;
+	}
 
-    public function getComment(): Comment {
-        return $this->comment;
-    }
+	public function getComment(): Comment {
+		return $this->comment;
+	}
 
-    public function getPollId(): int {
-        return $this->comment->getPollId();
-    }
+	public function getPollId(): int {
+		return $this->comment->getPollId();
+	}
 
-    public function getLogMsg(): string {
-        return '';
-    }
+	public function getLogMsg(): string {
+		return '';
+	}
 
-    public function getActor(): string {
-        return \OC::$server->getUserSession()->getUser()->getUID();
-    }
-
+	public function getActor(): string {
+		return \OC::$server->getUserSession()->getUser()->getUID();
+	}
 }

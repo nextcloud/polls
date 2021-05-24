@@ -28,27 +28,26 @@ use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Vote;
 
 class VoteEvent extends Event {
-    private $vote;
+	private $vote;
 
-    public function __construct(Vote $vote) {
-        parent::__construct();
-        $this->vote = $vote;
-    }
+	public function __construct(Vote $vote) {
+		parent::__construct();
+		$this->vote = $vote;
+	}
 
-    public function getVote(): Vote {
-        return $this->vote;
-    }
+	public function getVote(): Vote {
+		return $this->vote;
+	}
 
-    public function getPollId(): int {
-        return $this->vote->getPollId();
-    }
+	public function getPollId(): int {
+		return $this->vote->getPollId();
+	}
 
-    public function getLogMsg(): string {
-        return Log::MSG_ID_SETVOTE;
-    }
+	public function getLogMsg(): string {
+		return Log::MSG_ID_SETVOTE;
+	}
 
-    public function getActor(): string {
-        return \OC::$server->getUserSession()->getUser()->getUID();
-    }
-
+	public function getActor(): string {
+		return \OC::$server->getUserSession()->getUser()->getUID();
+	}
 }

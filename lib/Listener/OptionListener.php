@@ -26,7 +26,6 @@ namespace OCA\Polls\Listener;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCA\Polls\Event\OptionEvent;
-use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\WatchService;
@@ -44,8 +43,8 @@ class OptionListener implements IEventListener {
 
 	public function __construct(
 		LogService $logService,
-        WatchService $watchService
-    ) {
+		WatchService $watchService
+	) {
 		$this->logService = $logService;
 		$this->watchService = $watchService;
 	}
@@ -58,6 +57,6 @@ class OptionListener implements IEventListener {
 		if ($event->getLogMsg()) {
 			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
 		}
-        $this->watchService->writeUpdate($event->getPollId(), $this->table);
+		$this->watchService->writeUpdate($event->getPollId(), $this->table);
 	}
 }

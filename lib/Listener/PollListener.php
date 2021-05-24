@@ -26,15 +26,18 @@ namespace OCA\Polls\Listener;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCA\Polls\Event\PollEvent;
-use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\WatchService;
+use OCA\Polls\Service\NotificationService;
 
 class PollListener implements IEventListener {
 
 	/** @var LogService */
 	private $logService;
+
+	/** @var NotificationService */
+	private $notificationService;
 
 	/** @var WatchService */
 	private $watchService;
@@ -44,9 +47,11 @@ class PollListener implements IEventListener {
 
 	public function __construct(
 		LogService $logService,
-        WatchService $watchService
-    ) {
+		NotificationService $notificationService,
+		WatchService $watchService
+	) {
 		$this->logService = $logService;
+		$this->notificationService = $notificationService;
 		$this->watchService = $watchService;
 	}
 
@@ -55,9 +60,13 @@ class PollListener implements IEventListener {
 			return;
 		}
 
+		$this->watchService->writeUpdate($event->getPollId(), $this->table);
+
 		if ($event->getLogMsg()) {
 			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
 		}
-        $this->watchService->writeUpdate($event->getPollId(), $this->table);
+		if (!empty($event->getNotification())) {
+			$this->notificationService->createNotification($event->getNotification());
+		}
 	}
 }
