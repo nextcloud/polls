@@ -78,6 +78,7 @@ OC.L10N.register(
     "Always show results" : "一律顯示結果",
     "Hide results until poll is closed" : "直到投票結束前都隱藏結果",
     "Never show results" : "永不顯示結果",
+    "Delete vote when switched to \"no\"" : "切換為“否”時刪除投票",
     "Limit yes votes per user" : "限制每個用戶的「贊成」票",
     "Title" : "標題",
     "Enter Title" : "輸入標題",
