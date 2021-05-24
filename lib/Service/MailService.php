@@ -244,6 +244,8 @@ class MailService {
 			Log::MSG_ID_RESTOREPOLL => $this->trans->t('- The poll got restored.'),
 			Log::MSG_ID_EXPIREPOLL => $this->trans->t('- The poll was closed.'),
 			Log::MSG_ID_ADDOPTION => $this->trans->t('- A vote option was added.'),
+			Log::MSG_ID_UPDATEOPTION => $this->trans->t('- A vote option changed.'),
+			Log::MSG_ID_CONFIRMEDOPTION => $this->trans->t('- A vote option got confirmed.'),
 			Log::MSG_ID_DELETEOPTION => $this->trans->t('- A vote option was removed.'),
 			Log::MSG_ID_OWNERCHANGE => $this->trans->t('- The poll owner changed.'),
 			Log::MSG_ID_ADDPOLL => $this->trans->t('- %s created the poll.', [$displayName]),

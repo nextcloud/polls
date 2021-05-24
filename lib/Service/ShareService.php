@@ -26,15 +26,18 @@ namespace OCA\Polls\Service;
 use Psr\Log\LoggerInterface;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IGroupManager;
+use OCP\Security\ISecureRandom;
+
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
 
-use OCP\Security\ISecureRandom;
-use OCP\IGroupManager;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroupClass;
 
@@ -48,6 +51,9 @@ class ShareService {
 
 	/** @var string|null */
 	private $userId;
+
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
 	/** @var IGroupManager */
 	private $groupManager;
@@ -74,6 +80,7 @@ class ShareService {
 		string $AppName,
 		LoggerInterface $logger,
 		?string $UserId,
+		IEventDispatcher $eventDispatcher,
 		IGroupManager $groupManager,
 		SystemService $systemService,
 		ShareMapper $shareMapper,
@@ -85,6 +92,7 @@ class ShareService {
 		$this->appName = $AppName;
 		$this->logger = $logger;
 		$this->userId = $UserId;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->groupManager = $groupManager;
 		$this->systemService = $systemService;
 		$this->shareMapper = $shareMapper;
@@ -221,7 +229,11 @@ class ShareService {
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 
-		return $this->shareMapper->insert($this->share);
+		$this->share = $this->shareMapper->insert($this->share);
+
+		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+
+		return $this->share;
 	}
 
 	/**
@@ -243,8 +255,9 @@ class ShareService {
 			}
 		}
 
-		$userGroup = UserGroupClass::getUserGroupChild($type, $userId);
-		return $this->create($pollId, $userGroup);
+		$this->create($pollId, UserGroupClass::getUserGroupChild($type, $userId));
+
+		return $this->share;
 	}
 
 	/**
@@ -264,10 +277,14 @@ class ShareService {
 			$this->systemService->validateEmailAddress($emailAddress, $emptyIsValid);
 			$this->share->setEmailAddress($emailAddress);
 			// TODO: Send confirmation
-			return $this->shareMapper->update($this->share);
+			$this->share = $this->shareMapper->update($this->share);
 		} else {
 			throw new InvalidShareTypeException('Email address can only be set in external shares.');
 		}
+
+		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+
+		return $this->share;
 	}
 
 	/**
@@ -327,6 +344,9 @@ class ShareService {
 			}
 			$this->share->setEmailAddress($emailAddress);
 			$this->shareMapper->update($this->share);
+
+			$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+
 		} else {
 			throw new NotAuthorizedException;
 		}
@@ -354,6 +374,9 @@ class ShareService {
 		} catch (DoesNotExistException $e) {
 			// silently catch
 		}
+
+		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+
 		return $token;
 	}
 

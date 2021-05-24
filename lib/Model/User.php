@@ -21,7 +21,6 @@
  *
  */
 
-
 namespace OCA\Polls\Model;
 
 use OCP\IUserManager;

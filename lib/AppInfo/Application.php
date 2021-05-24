@@ -31,8 +31,25 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\User\Events\UserDeletedEvent;
+use OCA\Polls\Event\CommentEvent;
+use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\OptionConfirmedEvent;
+use OCA\Polls\Event\OptionCreatedEvent;
+use OCA\Polls\Event\OptionDeletedEvent;
+use OCA\Polls\Event\PollArchivedEvent;
+use OCA\Polls\Event\PollCreatedEvent;
+use OCA\Polls\Event\PollDeletedEvent;
+use OCA\Polls\Event\PollRestoredEvent;
+use OCA\Polls\Event\PollUpdatedEvent;
+use OCA\Polls\Event\ShareEvent;
+use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Listener\UserDeletedListener;
+use OCA\Polls\Listener\CommentListener;
+use OCA\Polls\Listener\OptionListener;
+use OCA\Polls\Listener\PollListener;
+use OCA\Polls\Listener\ShareListener;
+use OCA\Polls\Listener\VoteListener;
 
 class Application extends App implements IBootstrap {
 
@@ -50,6 +67,19 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 
+		$context->registerEventListener(CommentEvent::class, CommentListener::class);
+		$context->registerEventListener(OptionEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionConfirmedEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionCreatedEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionDeletedEvent::class, OptionListener::class);
+		$context->registerEventListener(PollArchivedEvent::class, PollListener::class);
+		$context->registerEventListener(PollCreatedEvent::class, PollListener::class);
+		$context->registerEventListener(PollDeletedEvent::class, PollListener::class);
+		$context->registerEventListener(PollExpiredEvent::class, PollListener::class);
+		$context->registerEventListener(PollRestoredEvent::class, PollListener::class);
+		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
+		$context->registerEventListener(ShareEvent::class, ShareListener::class);
+		$context->registerEventListener(VoteEvent::class, VoteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 	}
 

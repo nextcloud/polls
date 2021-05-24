@@ -24,14 +24,16 @@
 namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\EventDispatcher\IEventDispatcher;
+
 use OCA\Polls\Exceptions\VoteLimitExceededException;
 
-use OCA\Polls\Db\Log;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Watch;
+use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Model\Acl;
 
 class VoteService {
@@ -42,8 +44,8 @@ class VoteService {
 	/** @var AnonymizeService */
 	private $anonymizer;
 
-	/** @var LogService */
-	private $logService;
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
 	/** @var OptionMapper */
 	private $optionMapper;
@@ -54,26 +56,20 @@ class VoteService {
 	/** @var VoteMapper */
 	private $voteMapper;
 
-	/** @var WatchService */
-	private $watchService;
-
-
 	public function __construct(
 		Acl $acl,
 		AnonymizeService $anonymizer,
-		LogService $logService,
+		IEventDispatcher $eventDispatcher,
 		OptionMapper $optionMapper,
 		Vote $vote,
-		VoteMapper $voteMapper,
-		WatchService $watchService
+		VoteMapper $voteMapper
 	) {
 		$this->acl = $acl;
 		$this->anonymizer = $anonymizer;
-		$this->logService = $logService;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->optionMapper = $optionMapper;
 		$this->vote = $vote;
 		$this->voteMapper = $voteMapper;
-		$this->watchService = $watchService;
 	}
 
 	/**
@@ -155,17 +151,13 @@ class VoteService {
 			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->acl->getUserId());
 
 			if (in_array(trim($setTo), ['no', '']) && !$this->acl->getPoll()->getUseNo()) {
-				try {
-					$this->voteMapper->delete($this->vote);
-				} catch (DoesNotExistException $e) {
-					// catch silently
-				}
 				$this->vote->setVoteAnswer('');
-				return $this->vote;
+				$this->voteMapper->delete($this->vote);
+			} else {
+				$this->vote->setVoteAnswer($setTo);
+				$this->voteMapper->update($this->vote);
 			}
 
-			$this->vote->setVoteAnswer($setTo);
-			$this->voteMapper->update($this->vote);
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();
@@ -177,8 +169,8 @@ class VoteService {
 			$this->vote->setVoteAnswer($setTo);
 			$this->voteMapper->insert($this->vote);
 		}
-		$this->logService->setLog($this->vote->getPollId(), Log::MSG_ID_SETVOTE, $this->vote->getUserId());
-		$this->watchService->writeUpdate($this->vote->getPollId(), Watch::OBJECT_VOTES);
+
+		$this->eventDispatcher->dispatchTyped(new VoteEvent($this->vote));
 		return $this->vote;
 	}
 
@@ -188,7 +180,6 @@ class VoteService {
 	public function delete(int $pollId, string $userId): string {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		$this->voteMapper->deleteByPollAndUserId($pollId, $userId);
-		$this->watchService->writeUpdate($pollId, Watch::OBJECT_VOTES);
 		return $userId;
 	}
 }
