@@ -78,6 +78,7 @@ OC.L10N.register(
     "Always show results" : "Mostrar siempre los resultados",
     "Hide results until poll is closed" : "Esconder los resultados hasta que termine la encuesta",
     "Never show results" : "No mostrar nunca los resultados",
+    "Delete vote when switched to \"no\"" : "Borrar voto cuando se cambia a \"no\"",
     "Limit yes votes per user" : "Limitar el número de votos afirmativos por usuario/a",
     "Title" : "Título",
     "Enter Title" : "Escribe el título",

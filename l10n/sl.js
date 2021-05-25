@@ -44,6 +44,7 @@ OC.L10N.register(
     "Link copied to clipboard" : "Povezava je kopirana v odložišče",
     "Error while copying link to clipboard" : "Prišlo je do napake med kopiranjem povezave v odložišče",
     "_%n Participant_::_%n Participants_" : ["%n odziv","%n odziva","%n odzivi","%n odzivov"],
+    "Delete" : "Izbriši",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Predmet bo izbrisan čez {countdown} sekundo","Predmet bo izbrisan čez {countdown} sekundi","Predmet bo izbrisan čez {countdown} sekunde","Predmet bo izbrisan čez {countdown} sekund"],
     "Date order" : "Datumska razvrstitev",
     "Original order" : "Izvorna razvrstitev",

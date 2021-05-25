@@ -89,7 +89,7 @@
     "Receive notification email on activity" : "アクティビティに関して通知メールを受け取る",
     "Error while adding share" : "共有の追加中にエラーが発生しました",
     "Delete votes" : "投票を削除",
-    "User {userId} removed" : "ユーザ {userId} を除外しました",
+    "User {userId} removed" : "ユーザー {userId} を除外しました",
     "No" : "いいえ",
     "Yes" : "はい",
     "Enter a poll or start a new one." : "投票を入力するか新しい投票を開始してください。",
