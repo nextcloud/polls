@@ -58,5 +58,7 @@ class ShareListener implements IEventListener {
 			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
 		}
 		$this->watchService->writeUpdate($event->getPollId(), $this->table);
+		// report polls also, to update polls list based changed shares list
+		$this->watchService->writeUpdate($event->getPollId(), 'polls');
 	}
 }
