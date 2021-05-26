@@ -76,6 +76,7 @@
     "Always show results" : "Sempre mostrar resultados",
     "Hide results until poll is closed" : "Ocultar resultados até o fechamento da enquete",
     "Never show results" : "Nunca mostrar resultados",
+    "Delete vote when switched to \"no\"" : "Excluir voto quando alterado para \"não\" ",
     "Limit yes votes per user" : "Limite de votos no sim por usuário",
     "Title" : "Título",
     "Enter Title" : "Digite o título",
