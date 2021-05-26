@@ -94,6 +94,8 @@ const getters = {
 
 	},
 
+	displayResults: (state, getters) => (state.showResults === 'always' || (state.showResults === 'closed' && !getters.closed)),
+
 	proposalsAllowed: (state) => (state.allowProposals === 'allow' || state.allowProposals === 'review'),
 
 	proposalsOpen: (state, getters) => getters.proposalsAllowed && !getters.proposalsExpired,
