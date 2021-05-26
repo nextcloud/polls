@@ -331,9 +331,13 @@ class ShareService {
 			throw new NotAuthorizedException;
 		}
 
-		// send invitaitoin mail, if invitationSent has no timestamp
-		if (!$this->share->getInvitationSent()) {
-			$this->mailService->resendInvitation($this->share->getToken());
+		// send invitation mail, if invitationSent has no timestamp
+		try {
+			if (!$this->share->getInvitationSent()) {
+				$this->mailService->resendInvitation($this->share->getToken());
+			}
+		} catch (\Exception $e) {
+			$this->logger->error('Error sending Mail to ' . $this->share->getEmailAddress());
 		}
 
 		return $this->share;

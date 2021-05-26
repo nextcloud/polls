@@ -264,9 +264,13 @@ export default {
 						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
 						this.closeModal()
 					}
+					if (this.share.emailAddress && !this.share.invitationSent) {
+						showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.emailAddress }))
+					}
 				} catch {
-					showError(t('polls', 'Error saving name', 1, this.poll.title))
+					showError(t('polls', 'Error saving name'))
 				}
+
 			}
 		},
 	},
