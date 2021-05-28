@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 - [enhancement] #1587 - Added janitor job to tidy database tables
 - [enhancement] #1516 - Added CLI commands for share management
 - [enhancement] #365  - Optimization of CSS for printing poll (#1567)
-- [fix] Order in experimental settings (#1621)
+- [fix] #1572 - Order in experimental settings (#1621)
 - [UX] #1519 - Add visual feedback, when vote is saved
 - [UX] #1506 - Date picker optimizations (#1543)
 - [UX] #1620 - Deletion of users, options, comments and shares can be aborted
