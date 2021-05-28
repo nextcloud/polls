@@ -91,13 +91,13 @@ export default {
 			const response = await this.$store.dispatch('shares/sendInvitation', { share })
 			if (response.data?.sentResult?.sentMails) {
 				response.data.sentResult.sentMails.forEach((item) => {
-					showSuccess(t('polls', 'Invitation sent to {emailAddress}', { emailAddress: item }))
+					showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
 				})
 			}
 			if (response.data?.sentResult?.abortedMails) {
 				response.data.sentResult.abortedMails.forEach((item) => {
 					console.error('Mail could not be sent!', { recipient: item })
-					showError(t('polls', 'Error sending invitation to {emailAddress}', { emailAddress: item }))
+					showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
 				})
 			}
 		},
