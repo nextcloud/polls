@@ -131,31 +131,39 @@ class Option extends Entity implements JsonSerializable {
 	}
 
 	public function getPollOptionText(): string {
-		if ($this->timestamp && $this->duration) {
-			return date('c', $this->timestamp) . ' - ' . date('c', $this->timestamp + $this->duration);
-		} elseif ($this->timestamp && !$this->duration) {
-			return date('c', $this->timestamp);
+		if ($this->getTimestamp() && $this->getDuration()) {
+			return date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration());
+		} elseif ($this->getTimestamp() && !$this->getDuration()) {
+			return date('c', $this->getTimestamp());
 		}
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
 
 	public function getOrder(): int {
 		if ($this->timestamp) {
-			return $this->timestamp;
+			return $this->getTimestamp();
 		}
 		return $this->order;
 	}
 
+	// used for 1.9.0-beta1 installtions
+	public function getOwner() {
+		if ($this->owner === 'disallow') {
+			return '';
+		}
+		return $this->owner;
+	}
+
 	private function getDisplayName(): ?string {
-		if (!strncmp($this->owner, 'deleted_', 8)) {
+		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
 			return 'Deleted User';
 		}
 		return $this->getOwnerIsNoUser()
 			? $this->owner
-			: \OC::$server->getUserManager()->get($this->owner)->getDisplayName();
+			: \OC::$server->getUserManager()->get($this->getOwner())->getDisplayName();
 	}
 
 	private function getOwnerIsNoUser(): bool {
-		return !\OC::$server->getUserManager()->get($this->owner) instanceof IUser;
+		return !\OC::$server->getUserManager()->get($this->getOwner()) instanceof IUser;
 	}
 }
