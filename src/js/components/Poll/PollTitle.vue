@@ -114,8 +114,8 @@ export default {
 
 		.title__title {
 			font-weight: bold;
-			font-size: 20px;
-			line-height: 30px;
+			font-size: 1.3em;
+			line-height: 2em;
 			color: var(--color-text-light);
 		}
 	}

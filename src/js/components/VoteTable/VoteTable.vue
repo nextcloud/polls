@@ -153,9 +153,10 @@ export default {
 	display: flex;
 	flex: 1;
 	.user-item, .vote-item-wrapper {
-		flex: 0;
-		height: 53px;
-		min-height: 53px;
+		flex: 0 0 3.5em;
+		height: 3.5em;
+		min-height: 3.5em;
+		line-height: 3.5em;
 		border-top: solid 1px var(--color-border-dark);
 		order: 10;
 		&.currentuser {
