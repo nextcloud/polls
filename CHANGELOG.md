@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.9.1 - beta2] - 2021-05-28
+### Changes and fixes
+- [fix] #1652 - Error saving username on public polls (#1567)
+- [fix] #1658 - Migration error (Option owner 'disallow') (#1659)
+- [enhancement] #1653 Show sharee's name and email address after invitation sent (error/success) (#1657)
+- [enhancement] #1650 Added poll information details
+
 ## [1.9.0 - beta1] - 2021-05-22
 ### Changes and fixes
 - [enhancement] #365 - Support printing the poll via the browser's print function (#1567)
