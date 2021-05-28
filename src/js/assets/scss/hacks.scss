@@ -6,24 +6,20 @@
 	}
 }
 
+// When switching from non range mode to range mode, date picker crosses
+// the right window border
+// Force date picker position to the right side of the sidebar
 .mx-datepicker-main, .mx-datepicker-popup {
-	right: 0 !important;
+	right: 4px !important;
 	left: auto !important;
 }
 
+// fill full input with background color
 .mx-input {
 	background-clip: initial !important;
 }
 
-
-// make date-picker usable
-@media only screen and (min-width: 750px) {
-	.edit #app-sidebar-vue {
-		// force sidebar min-width to 480px, to show the full date picker, when user is allowed to edit poll
-		min-width: 480px;
-	}
-}
-
+// force scrolling of sidebar-tabs content 
 .app-sidebar-tabs {
 	overflow-y: hidden;
 }
