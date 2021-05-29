@@ -49,7 +49,7 @@ export default {
 		}),
 
 		...mapGetters({
-			isClosed: 'poll/closed',
+			isClosed: 'poll/isClosed',
 		}),
 
 		showBadge() {

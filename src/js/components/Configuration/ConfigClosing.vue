@@ -73,7 +73,7 @@ export default {
 		}),
 
 		...mapGetters({
-			closed: 'poll/closed',
+			closed: 'poll/isClosed',
 		}),
 
 		expire: {

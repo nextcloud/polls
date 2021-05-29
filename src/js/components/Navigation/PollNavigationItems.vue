@@ -50,8 +50,8 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 import { ActionButton, AppNavigationItem } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
 
 export default {
 	name: 'PollNavigationItems',
@@ -69,15 +69,16 @@ export default {
 	},
 
 	computed: {
+		...mapGetters({
+			closed: 'poll/isClosed',
+		}),
+
 		pollIcon() {
 			if (this.poll.type === 'datePoll') {
 				return 'icon-calendar-000'
 			}
 			return 'icon-toggle-filelist'
 
-		},
-		closed() {
-			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
 		},
 	},
 }

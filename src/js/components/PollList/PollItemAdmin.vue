@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 
 export default {
@@ -110,9 +111,9 @@ export default {
 	},
 
 	computed: {
-		closed() {
-			return (this.poll.expire > 0 && moment.unix(this.poll.expire).diff() < 0)
-		},
+		...mapGetters({
+			closed: 'poll/isClosed',
+		}),
 
 		accessType() {
 			if (this.poll.access === 'public') {

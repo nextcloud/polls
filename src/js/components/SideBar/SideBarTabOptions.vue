@@ -27,7 +27,7 @@
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !pollIsClosed" :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
+		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
 			<OptionsDateShift />
 		</ConfigBox>
 
@@ -59,7 +59,7 @@ export default {
 
 	computed: {
 		...mapGetters({
-			pollIsClosed: 'poll/closed',
+			closed: 'poll/isClosed',
 			countOptions: 'options/count',
 			pollTypeIcon: 'poll/typeIcon',
 		}),

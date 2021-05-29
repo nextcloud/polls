@@ -115,7 +115,7 @@ export default {
 		}),
 
 		...mapGetters({
-			closed: 'poll/closed',
+			closed: 'poll/isClosed',
 			options: 'options/rankedOptions',
 			pollTypeIcon: 'poll/typeIcon',
 			viewMode: 'settings/viewMode',

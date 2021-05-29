@@ -56,7 +56,7 @@ export default {
 		}),
 
 		...mapGetters({
-			closed: 'poll/closed',
+			closed: 'poll/isClosed',
 			confirmedOptions: 'options/confirmed',
 		}),
 
