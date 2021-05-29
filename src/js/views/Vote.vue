@@ -33,7 +33,7 @@
 		</div>
 		<div class="description">
 			<MarkUpDescription class="area__description" />
-			<OptionProposals v-if="acl.allowAddOptions && proposalsAllowed" class="area__proposal" />
+			<OptionProposals v-if="acl.allowAddOptions && proposalsAllowed && !closed" class="area__proposal" />
 		</div>
 
 		<div class="area__main" :class="viewMode">
@@ -115,7 +115,7 @@ export default {
 		}),
 
 		...mapGetters({
-			closed: 'poll/closed',
+			closed: 'poll/isClosed',
 			options: 'options/rankedOptions',
 			pollTypeIcon: 'poll/typeIcon',
 			viewMode: 'settings/viewMode',

@@ -56,14 +56,14 @@ export default {
 
 		...mapGetters({
 			countVotes: 'votes/countVotes',
-			pollIsClosed: 'poll/closed',
+			closed: 'poll/isClosed',
 			answerSequence: 'poll/answerSequence',
 		}),
 
 		isVotable() {
 			return this.isActive
 				&& this.isValidUser
-				&& !this.pollIsClosed
+				&& !this.closed
 				&& !this.isVoteLimitExceded
 				&& !(this.option.isBookedUp && !['yes', 'maybe'].includes(this.answer))
 		},
@@ -88,7 +88,7 @@ export default {
 		},
 
 		isConfirmed() {
-			return this.option.confirmed && this.pollIsClosed
+			return this.option.confirmed && this.closed
 		},
 
 		nextAnswer() {

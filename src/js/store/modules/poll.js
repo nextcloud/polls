@@ -112,7 +112,7 @@ const getters = {
 		// { value: 'review', label: t('polls', 'Allow with review') },
 	],
 
-	closed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
+	isClosed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
 
 	participants: (state, getters, rootState) => {
 		const participants = rootState.votes.list.map((item) => ({

@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<OptionsDateAdd v-if="!pollIsClosed" />
+		<OptionsDateAdd v-if="!closed" />
 		<transition-group is="ul" v-if="countOptions">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
@@ -41,10 +41,10 @@
 						:title="t('polls', 'Delete option')"
 						@delete="removeOption(option)" />
 					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton v-if="!pollIsClosed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+						<ActionButton v-if="!closed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
 							{{ t('polls', 'Clone option') }}
 						</ActionButton>
-						<ActionButton v-if="pollIsClosed"
+						<ActionButton v-if="closed"
 							:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
 							@click="confirmOption(option)">
 							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
@@ -121,7 +121,7 @@ export default {
 		}),
 
 		...mapGetters({
-			pollIsClosed: 'poll/closed',
+			closed: 'poll/isClosed',
 			countOptions: 'options/count',
 			pollTypeIcon: 'poll/typeIcon',
 		}),
