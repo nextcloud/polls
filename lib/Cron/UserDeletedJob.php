@@ -90,11 +90,11 @@ class UserDeletedJob extends QueuedJob {
 	}
 
 	/**
-	 * @param mixed $arguments
+	 * @param mixed $argument
 	 * @return void
 	 */
-	protected function run($arguments) {
-		$owner = $arguments['owner'];
+	protected function run($argument) {
+		$owner = $argument['owner'];
 		$this->logger->info('Deleting polls for deleted user {user}', [
 			'user' => $owner
 		]);

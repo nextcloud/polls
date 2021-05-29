@@ -42,10 +42,10 @@ class NotificationCron extends TimedJob {
 	}
 
 	/**
-	 * @param mixed $arguments
+	 * @param mixed $argument
 	 * @return void
 	 */
-	protected function run($arguments) {
+	protected function run($argument) {
 		$this->mailService->sendNotifications();
 	}
 }
