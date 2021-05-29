@@ -90,7 +90,7 @@ class UserDeletedJob extends QueuedJob {
 	}
 
 	/**
-	 * @param mixed $arguments
+	 * @param mixed $argument
 	 * @return void
 	 */
 	protected function run($argument) {
