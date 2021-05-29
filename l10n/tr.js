@@ -203,8 +203,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Bağlantıyı panoya kopyala",
     "Remove share" : "Paylaşımı kaldır",
     "Enter a name to start the search" : "Aramayı başlatmak için bir ad yazın",
-    "Invitation sent to {emailAddress}" : "Çağrı {emailAdress} adresine gönderildi",
-    "Error sending invitation to {emailAddress}" : "Çağrı {emailAdress} adresine gönderilirken sorun çıktı",
     "Public shares" : "Herkese açık paylaşımlar",
     "Add a public link" : "Herkese açık bir bağlantı ekle",
     "Error adding share" : "Paylaşım eklenirken sorun çıktı",

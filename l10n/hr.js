@@ -168,8 +168,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Kopiraj poveznicu u međuspremnik",
     "Remove share" : "Ukloni dijeljenje",
     "Enter a name to start the search" : "Unesite ime za početak pretraživanja",
-    "Invitation sent to {emailAddress}" : "Pozivnica poslana na {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Pogreška pri slanju pozivnice na {emailAddress}",
     "Public shares" : "Javna dijeljenja",
     "Add a public link" : "Dodaj javnu poveznicu",
     "Error adding share" : "Pogreška pri dodavanju dijeljenja",

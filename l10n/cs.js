@@ -190,8 +190,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Zkopírovat odkaz do schránky",
     "Remove share" : "Odebrat sdílení",
     "Enter a name to start the search" : "Hledání zahájíte zadáním jména",
-    "Invitation sent to {emailAddress}" : "Pozvánka odeslána na {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Chyba při odesílání poznánky na {emailAddress}",
     "Public shares" : "Veřejná sdílení",
     "Add a public link" : "Přidat veřejný odkaz",
     "Error adding share" : "Chyba při přidávání sdílení",

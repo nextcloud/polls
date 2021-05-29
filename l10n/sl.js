@@ -189,8 +189,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Kopiraj povezavo v odložišče",
     "Remove share" : "Odstrani souporabo",
     "Enter a name to start the search" : "Vpišite ime za začetek iskanja",
-    "Invitation sent to {emailAddress}" : "Vabilo je poslano na naslov {emailAddress}.",
-    "Error sending invitation to {emailAddress}" : "Prišlo je do napake med pošiljanjem vabila na {emailAddress}.",
     "Public shares" : "Javne objave",
     "Add a public link" : "Dodaj javno povezavo",
     "Error adding share" : "Napaka dodajanja mesta souporabe",

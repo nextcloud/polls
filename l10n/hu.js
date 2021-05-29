@@ -173,8 +173,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Hivatkozás vágólapra másolása",
     "Remove share" : "Megosztás eltávolítása",
     "Enter a name to start the search" : "Adjon meg egy nevet a keresés megkezdéséhez",
-    "Invitation sent to {emailAddress}" : "Meghívó elküldve a következő címre: {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Hiba a meghívó elküldése közben, erre a címre: {emailAddress}",
     "Public shares" : "Nyilvános megosztások",
     "Add a public link" : "Nyilvános hivatkozás hozzáadása",
     "Error adding share" : "Hiba a megosztás hozzáadásakor",

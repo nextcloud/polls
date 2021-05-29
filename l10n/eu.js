@@ -171,8 +171,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Kopiatu esteka arbelera",
     "Remove share" : "Kendu partekatzea",
     "Enter a name to start the search" : "Sartu izen bat bilaketa hasteko",
-    "Invitation sent to {emailAddress}" : "Gonbidapena bidali da {emailAddress} helbidera",
-    "Error sending invitation to {emailAddress}" : "Errorea gonbidapen mezua {emailAdress} helbidera bidaltzean",
     "Public shares" : "Partekatze publikoak",
     "Add a public link" : "Gehitu esteka publikoa",
     "Error adding share" : "Errorea partekatzea gehitzerakoan",

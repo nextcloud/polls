@@ -203,8 +203,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Còpia su ligòngiu in punta de billete",
     "Remove share" : "Boga cumpartzidura",
     "Enter a name to start the search" : "Inserta•nche unu nùmene pro cumintzare sa chirca",
-    "Invitation sent to {emailAddress}" : "Invitu imbiadu a {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Errore imbiende s'invitu a {emailAddress}",
     "Public shares" : "Cumpartziduras pùblicas",
     "Add a public link" : "Agiunghe unu ligòngiu pùblicu",
     "Error adding share" : "Errore in s'agiunta de sa cumpatzidura",

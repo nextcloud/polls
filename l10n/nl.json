@@ -188,8 +188,6 @@
     "Copy link to clipboard" : "Kopiëren link naar klembord",
     "Remove share" : "Verwijderen share",
     "Enter a name to start the search" : "Voer een naam in om te beginnen met zoeken",
-    "Invitation sent to {emailAddress}" : "Uitnodiging verzonden naar {emailAdress}",
-    "Error sending invitation to {emailAddress}" : "Fout bij verzenden uitnodiging naar {emailAddress}",
     "Public shares" : "Openbare deellinks",
     "Add a public link" : "Toevoegen openbare link",
     "Error adding share" : "Fout bij toevoegen deellink",

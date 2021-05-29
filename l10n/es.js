@@ -203,8 +203,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Copiar enlace al portapapeles",
     "Remove share" : "Eliminar el recurso compartido",
     "Enter a name to start the search" : "Introduce un nombre para comenzar la búsqueda",
-    "Invitation sent to {emailAddress}" : "Invitación enviada a {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "Error al enviar la invitación a {emailAddress}",
     "Public shares" : "Compartidos públicamente",
     "Add a public link" : "Añadir un enlace público",
     "Error adding share" : "Error al añadir compartido",

@@ -203,8 +203,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "複製連結到剪貼簿",
     "Remove share" : "移除分享",
     "Enter a name to start the search" : "輸入一個名稱以開始搜尋",
-    "Invitation sent to {emailAddress}" : "邀請已傳送給 {emailAddress}",
-    "Error sending invitation to {emailAddress}" : "向 {emailAddress} 傳送邀請時發生錯誤",
     "Public shares" : "公開分享",
     "Add a public link" : "新增一個公開連結",
     "Error adding share" : "新增分享時發生錯誤",
