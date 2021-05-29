@@ -53,7 +53,7 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/subscription'))
+			const response = await axios.get(generateUrl(endPoint + '/subscription'), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('set', false)
