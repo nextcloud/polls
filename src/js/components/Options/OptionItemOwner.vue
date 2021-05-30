@@ -84,12 +84,6 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 21px;
-	font-size: 0;
-	align-self: stretch;
-	min-width: 24px;
 }
 
 </style>

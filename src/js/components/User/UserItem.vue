@@ -145,9 +145,7 @@ export default {
 <style lang="scss" scoped>
 .user-item {
 	display: flex;
-	// flex: 1;
 	align-items: center;
-	max-width: 100%;
 	padding: 4px;
 }
 

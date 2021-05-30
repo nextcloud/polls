@@ -256,7 +256,6 @@ export default {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		flex-wrap: nowrap;
 		overflow: scroll;
 		padding-bottom: 14px;
 	}
