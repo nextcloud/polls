@@ -190,10 +190,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.area__header {
-	display: flex;
-}
-
 .description {
 	display: flex;
 	flex-wrap: wrap;

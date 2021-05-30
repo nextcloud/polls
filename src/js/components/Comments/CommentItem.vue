@@ -101,12 +101,12 @@ export default {
 
 	.comment-item__user {
 		font-weight: 600;
-		font-size: 90%;
+		font-size: 0.9em;
 	}
 
 	.comment-item__date {
 		opacity: 0.5;
-		font-size: 80%;
+		font-size: 0.8em;
 		text-align: right;
 		&::before {
 			content: ' ~ '

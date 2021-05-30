@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, {confirmed: isConfirmed }, { active: isVotable }, {currentUser: isCurrentUser}]">
+	<div class="vote-item" :class="[answer, {confirmed: isConfirmed }, { active: isVotable }, {currentuser: isCurrentUser}]">
 		<div v-if="isActive && !isVoteLimitExceded" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 		<slot name="indicator" />
@@ -128,9 +128,6 @@ export default {
 
 .vote-item {
 	display: flex;
-	flex: 1;
-	align-items: center;
-	justify-content: center;
 	background-color: var(--color-polls-background-no);
 	transition: background-color 1s ease-out;
 	> .icon {
@@ -177,12 +174,11 @@ export default {
 	}
 }
 
-.vote-item.confirmed:not(.yes):not(.maybe) .icon {
-	background-image: var(--icon-polls-no);
-}
-
 .vote-item.confirmed {
 	background-color: transparent;
+	&:not(.yes):not(.maybe) .icon {
+		background-image: var(--icon-polls-no);
+	}
 }
 
 </style>

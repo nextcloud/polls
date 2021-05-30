@@ -110,8 +110,7 @@ export default {
 <style lang="scss">
 	.shared-list {
 		display: flex;
-		flex-wrap: wrap;
-		flex-direction: column;
+		flex-flow: column wrap;
 		justify-content: flex-start;
 		padding-top: 8px;
 

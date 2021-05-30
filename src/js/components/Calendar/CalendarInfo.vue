@@ -142,7 +142,7 @@ export default {
 
 .calendar-info__time {
 	width: 65px;
-	font-size: 80%;
+	font-size: 0.8em;
 	flex: 0 auto;
 }
 

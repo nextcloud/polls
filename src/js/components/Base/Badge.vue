@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 	h2 .badge {
-		font-size: 60%;
+		font-size: 0.6em;
 	}
 
 	.badge {
@@ -65,7 +65,7 @@ export default {
 		line-height: 1.1em;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		font-size: 14px;
+		font-size: 0.9em;
 
 		&.withIcon {
 			padding-left: 25px !important;

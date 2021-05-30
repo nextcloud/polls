@@ -90,22 +90,3 @@ export default {
 }
 
 </script>
-
-<style lang="scss" scoped>
-
-.vote-table-header-item {
-	display: flex;
-	&.winner {
-		.option-item {
-			// font-weight: bold;
-			color: var(--color-polls-foreground-yes);
-		}
-	}
-}
-
-.confirmations {
-	text-align: center;
-	height: 2em;
-}
-
-</style>
