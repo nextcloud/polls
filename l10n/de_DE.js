@@ -203,6 +203,8 @@ OC.L10N.register(
     "Copy link to clipboard" : "Link in Zwischenablage kopieren",
     "Remove share" : "Freigabe löschen",
     "Enter a name to start the search" : "Namen zum Starten der Suche eingeben",
+    "Invitation sent to {displayName} ({emailAddress})" : "Einladung versendet an {displayName} {emailAddress}",
+    "Error sending invitation to {displayName} ({emailAddress})" : "Fehler beim Senden der Einladung an {displayName} {emailAddress}",
     "Public shares" : "Öffentliche Freigaben",
     "Add a public link" : "Öffentlichen Link hinzufügen",
     "Error adding share" : "Fehler beim Hinzufügen der Freigabe",

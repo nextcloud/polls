@@ -203,6 +203,8 @@ OC.L10N.register(
     "Copy link to clipboard" : "Kopiuj link do schowka",
     "Remove share" : "Usuń udostępnienie",
     "Enter a name to start the search" : "Wpisz nazwę, aby rozpocząć wyszukiwanie",
+    "Invitation sent to {displayName} ({emailAddress})" : "Zaproszenie wysłane do {displayName} ({emailAddress})",
+    "Error sending invitation to {displayName} ({emailAddress})" : "Błąd podczas wysyłania zaproszenia do {displayName} ({emailAddress})",
     "Public shares" : "Udostępnienia publiczne",
     "Add a public link" : "Dodaj link publiczny",
     "Error adding share" : "Błąd podczas dodawania udostępnienia",

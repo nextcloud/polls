@@ -200,6 +200,8 @@ OC.L10N.register(
     "Copy link to clipboard" : "复制链接到剪贴板",
     "Remove share" : "移除共享",
     "Enter a name to start the search" : "输入名称以开始搜索",
+    "Invitation sent to {displayName} ({emailAddress})" : "邀请已发送至 {displayName} ({emailAddress})",
+    "Error sending invitation to {displayName} ({emailAddress})" : "发送邀请至 {displayName} ({emailAddress}) 发生错误",
     "Public shares" : "公开共享",
     "Add a public link" : "添加公开链接",
     "Error adding share" : "添加分享出错",
