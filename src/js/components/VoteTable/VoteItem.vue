@@ -181,12 +181,4 @@ export default {
 	}
 }
 
-// .vote-item.confirmed:not(.yes):not(.maybe) .icon {
-// 	background-image: var(--icon-polls-no);
-// }
-//
-// .vote-item.confirmed {
-// 	background-color: transparent;
-// }
-
 </style>
