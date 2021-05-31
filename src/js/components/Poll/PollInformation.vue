@@ -51,6 +51,9 @@
 			<div v-if="participantsVoted.length && acl.allowSeeResults" class="icon-user">
 				{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
 			</div>
+			<div class="icon-polls-unconfirmed">
+				{{ n('polls', '%n option', '%n options', countOptions) }}
+			</div>
 			<div v-if="countAllYesVotes" class="icon-polls-yes">
 				{{ n('polls', '%n yes vote', '%n yes votes', countAllYesVotes) }}
 			</div>
@@ -112,6 +115,7 @@ export default {
 			participantsVoted: 'poll/participantsVoted',
 			closed: 'poll/isClosed',
 			confirmedOptions: 'options/confirmed',
+			countOptions: 'options/count',
 			countVotes: 'votes/countVotes',
 			countAllVotes: 'votes/countAllVotes',
 			proposalsAllowed: 'poll/proposalsAllowed',
