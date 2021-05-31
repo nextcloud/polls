@@ -51,6 +51,18 @@
 			<div v-if="participantsVoted.length && acl.allowSeeResults" class="icon-user">
 				{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
 			</div>
+			<div class="icon-polls-unconfirmed">
+				{{ n('polls', '%n option', '%n options', countOptions) }}
+			</div>
+			<div v-if="countAllYesVotes" class="icon-polls-yes">
+				{{ n('polls', '%n yes vote', '%n yes votes', countAllYesVotes) }}
+			</div>
+			<div v-if="countAllNoVotes" class="icon-polls-no">
+				{{ n('polls', '%n no vote', '%n no votes', countAllNoVotes) }}
+			</div>
+			<div v-if="countAllMaybeVotes" class="icon-polls-maybe">
+				{{ n('polls', '%n maybe vote', '%n maybe votes', countAllMaybeVotes) }}
+			</div>
 			<div class="icon-timezone">
 				{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
 			</div>
@@ -103,7 +115,9 @@ export default {
 			participantsVoted: 'poll/participantsVoted',
 			closed: 'poll/isClosed',
 			confirmedOptions: 'options/confirmed',
+			countOptions: 'options/count',
 			countVotes: 'votes/countVotes',
+			countAllVotes: 'votes/countAllVotes',
 			proposalsAllowed: 'poll/proposalsAllowed',
 			proposalsExpirySet: 'poll/proposalsExpirySet',
 			proposalsExpired: 'poll/proposalsExpired',
@@ -189,6 +203,18 @@ export default {
 
 		currentTimeZone() {
 			return Intl.DateTimeFormat().resolvedOptions().timeZone
+		},
+
+		countAllYesVotes() {
+			return this.countAllVotes('yes')
+		},
+
+		countAllNoVotes() {
+			return this.countAllVotes('no')
+		},
+
+		countAllMaybeVotes() {
+			return this.countAllVotes('maybe')
 		},
 
 	},
