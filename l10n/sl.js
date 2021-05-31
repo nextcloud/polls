@@ -265,7 +265,6 @@ OC.L10N.register(
     "Allow proposals" : "Dovoli podajanje predlogov",
     "Relevant" : "Pomembno",
     "Relevant polls" : "Pomembne ankete",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Izpisane so ankete, označene kot pomembne, ankete, ki ste jih ustvarili, jih imate v lastništvu oziroma čakajo na izpolnjevanje. Zaprtih anket ni na seznamu.",
     "My polls" : "Moje ankete",
     "Your polls (in which you are the owner)." : "Ankete (z dodeljenim lastništvom)!",
     "Hidden polls" : "Skrite ankete",

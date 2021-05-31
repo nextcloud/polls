@@ -266,7 +266,6 @@ OC.L10N.register(
     "Allow proposals" : "Attiva le proposte",
     "Relevant" : "Importante",
     "Relevant polls" : "Sondaggi importanti",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Tutti i sondaggi che sono pertinenti o importanti per te, perché sei un partecipante o sei il proprietario o ai quali sei invitato. Senza sondaggi chiusi.",
     "My polls" : "I miei sondaggi",
     "Your polls (in which you are the owner)." : "I tuoi sondaggi (di cui sei il proprietario).",
     "Hidden polls" : "Sondaggi nascosti",

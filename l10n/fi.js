@@ -159,7 +159,6 @@ OC.L10N.register(
     "Year" : "Vuosi",
     "Relevant" : "Olennaiset",
     "Relevant polls" : "Oleelliset äänestykset",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Kaikki sinulle oleelliset tai tärkeät äänestykset, eli jotka omistat, joihin sinut on kutsuttu tai joihin olet osallistunut, ilman suljettuja äänestyksiä.",
     "My polls" : "Omat kyselyt",
     "Hidden polls" : "Piilotetut kyselyt",
     "All hidden polls, to which you have access." : "Kaikki piilotetut kyselyt, joihin sinulla on pääsy,.",

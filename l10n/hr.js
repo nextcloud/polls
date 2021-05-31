@@ -239,7 +239,6 @@ OC.L10N.register(
     "Year" : "Godina",
     "Relevant" : "Važno",
     "Relevant polls" : "Relevantne ankete",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Sve ankete s odgovarajućim značenjem za vas jer ste njihov sudionik ili vlasnik ili ste pozvani da u njima sudjelujete. Bez zatvorenih anketa.",
     "My polls" : "Moje ankete",
     "Hidden polls" : "Skrivene ankete",
     "All hidden polls, to which you have access." : "Sve skrivene ankete kojima možete pristupiti.",

@@ -277,7 +277,6 @@ OC.L10N.register(
     "Allow proposals" : "允许提议",
     "Relevant" : "相关",
     "Relevant polls" : "相关投票",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "所有与你相关或对你来说重要的投票，因为你是参与者或所有者或你被邀请参加。没有封闭的民意调查。",
     "My polls" : "我的投票",
     "Your polls (in which you are the owner)." : "你的民调 (你是测试所有者)。",
     "Hidden polls" : "已隐藏的投票",

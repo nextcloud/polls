@@ -247,7 +247,6 @@ OC.L10N.register(
     "Allow proposals" : "Javaslatok engedélyezése",
     "Relevant" : "Releváns",
     "Relevant polls" : "Releváns szavazások",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without closed polls." : "Minden szavazás, amely releváns vagy fontos az Ön számára, mert Ön résztvevő vagy tulajdonos, vagy meghívást kapott. Zárt szavazások nélkül.",
     "My polls" : "Szavazásaim",
     "Hidden polls" : "Rejtett szavazások",
     "All hidden polls, to which you have access." : "Minden rejtett szavazás, amelyhez hozzáférhet.",
