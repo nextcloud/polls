@@ -1,17 +1,45 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.9.3 - release] - tbd
+### new Features
+- Better print layout
+- Date picker optimizations in date polls (adding date option)
+- One click deleting items now has a delay, which can be aborted (users, options, comments and shares)
+- Added feedback notification, when vote is saved
+- Allow participants adding option proposals
+- Remove polls of deleted users and remove all of their user informations
+- Render markup description in invitation mail
+- Added option to delete vote instead "no" vote
+- Added a janitor job to delete obsolete database entries (affects log and watch tables)
+- Added CLI commands for adding shares to poll via command line
+- Added statistical information to the poll information
+
+### Fixes
+- Error saving username on public polls when mail sending fails
+- First day of week is wrong in date picker
+- Layout bug in experimental settings
+
+… and more minor fixes and optimizations
+
+## [1.9.2 - beta3] - 2021-05-31
+### Changes and fixes
+- [fix] #1560 - First day of week is wrong in date picker (#1674)
+- [fix] #1661 - Disallow proposals on closed polls
+- [enhancement] #587 - Allow URL-Parameters for username and email address in public share (#1673)
+- [enhancement] #1625 - Avoid caching of get requests upon some server configuration (#1663)
+- [enhancement] #1676 - Add vote and option statistics to poll information
+
 ## [1.9.1 - beta2] - 2021-05-28
 ### Changes and fixes
 - [fix] #1652 - Error saving username on public polls (#1567)
-- [fix] #1658 - Migration error (Option owner 'disallow') (#1659)
-- [enhancement] #1653 Show sharee's name and email address after invitation sent (error/success) (#1657)
-- [enhancement] #1650 Added poll information details
+- [fix] #1658 - Migration error (Option owner 'disallow') (#1659) [Affects only beta1]
+- [enhancement] #1653 - Show sharee's name and email address after invitation sent (error/success) (#1657)
+- [enhancement] #1650 - Added poll information details
 
 ## [1.9.0 - beta1] - 2021-05-22
 ### Changes and fixes
-- [enhancement] #365 - Support printing the poll via the browser's print function (#1567)
-- [enhancement] #496 Added possibility to allow participants proposing more options (#1570, #1127, #1495, #1554)
+- [enhancement] #496 - Added possibility to allow participants proposing more options (#1570, #1127, #1495, #1554)
 - [enhancement] #1490 - Delete all user information, if user is removed from Nextcloud
 - [enhancement] #1632 - Render description from markup in invitation mails
 - [enhancement] #1627 - Add option for deleting votes if switched to 'no'
