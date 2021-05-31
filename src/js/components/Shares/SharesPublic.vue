@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Public shares')" icon-class="icon-public">
+	<ConfigBox v-tooltip.auto="paramsHint" :title="t('polls', 'Public shares')" icon-class="icon-public">
 		<TransitionGroup :css="false" tag="div" class="shared-list">
 			<PublicShareItem v-for="(share) in publicShares"
 				:key="share.id"
@@ -68,6 +68,7 @@ export default {
 				successText: t('polls', 'Link copied to clipboard'),
 				errorText: t('polls', 'Error while copying link to clipboard'),
 			},
+			paramsHint: t('polls', 'Add URL-Paramters \'name=\' and/or \'email=\' to predefine name and email address. I.e. https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org'),
 		}
 	},
 
