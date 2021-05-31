@@ -33,7 +33,7 @@ const state = {
 			id: 'relevant',
 			title: t('polls', 'Relevant'),
 			titleExt: t('polls', 'Relevant polls'),
-			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls, closed more than five days ago.'),
+			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago.'),
 			icon: 'icon-details',
 			pinned: false,
 		},
