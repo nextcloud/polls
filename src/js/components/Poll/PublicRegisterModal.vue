@@ -207,8 +207,16 @@ export default {
 	},
 
 	mounted() {
-		this.userName = this.share.displayName
-		this.emailAddress = this.share.emailAddress
+		if (this.$route.name === 'publicVote' && this.$route.query.name) {
+			this.userName = this.$route.query.name
+		} else {
+			this.userName = this.share.displayName
+		}
+		if (this.$route.name === 'publicVote' && this.$route.query.email) {
+			this.emailAddress = this.$route.query.email
+		} else {
+			this.emailAddress = this.share.emailAddress
+		}
 	},
 
 	methods: {
