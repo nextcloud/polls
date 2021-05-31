@@ -63,7 +63,7 @@ const actions = {
 		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/share'))
+			const response = await axios.get(generateUrl(endPoint + '/share'), { params: { time: +new Date() } })
 			context.commit('set', { share: response.data.share })
 			return response.data
 		} catch (e) {
@@ -136,7 +136,7 @@ const actions = {
 			return
 		}
 		try {
-			return await axios.get(generateUrl(endPoint + '/resend'))
+			return await axios.put(generateUrl(endPoint + '/resend'))
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e

@@ -141,7 +141,7 @@ const actions = {
 		const endPoint = 'apps/polls/polls'
 
 		try {
-			const response = await axios.get(generateUrl(endPoint))
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', { list: response.data })
 		} catch (e) {
 			console.error('Error loading polls', { error: e.response })

@@ -71,7 +71,7 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/comments'))
+			const response = await axios.get(generateUrl(endPoint + '/comments'), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('reset')

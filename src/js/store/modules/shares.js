@@ -85,7 +85,7 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/shares'))
+			const response = await axios.get(generateUrl(endPoint + '/shares'), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })

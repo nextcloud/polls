@@ -136,7 +136,7 @@ const actions = {
 	async get(context) {
 		const endPoint = 'apps/polls/preferences/get'
 		try {
-			const response = await axios.get(generateUrl(endPoint))
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			if (response.data.preferences.defaultViewTextPoll === 'desktop') {
 				response.data.preferences.defaultViewTextPoll = 'table-view'
 			}

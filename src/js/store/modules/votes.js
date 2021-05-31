@@ -93,7 +93,7 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/votes'))
+			const response = await axios.get(generateUrl(endPoint + '/votes'), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('reset')

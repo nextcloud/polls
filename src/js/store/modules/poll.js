@@ -162,7 +162,7 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/poll'))
+			const response = await axios.get(generateUrl(endPoint + '/poll'), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 		} catch (e) {
