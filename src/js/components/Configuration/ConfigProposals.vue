@@ -95,6 +95,15 @@ export default {
 			},
 		},
 
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			}
+			return moment.localeData()._week.dow
+
+		},
+
 		expirationDatePicker() {
 			return {
 				editable: true,
