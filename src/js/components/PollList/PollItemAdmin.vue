@@ -46,7 +46,7 @@
 			</div>
 
 			<div class="item__expiry sortable" @click="$emit('sort-list', {sort: 'expire'})">
-				{{ t('polls', 'Closing Date') }}
+				{{ t('polls', 'Closing date') }}
 				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 		</div>

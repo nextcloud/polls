@@ -189,6 +189,9 @@ export default {
 			justify-content: center;
 			align-items: center;
 		}
+		.vote-table-header-item {
+			align-items: flex-start;
+		}
 	}
 
 	&.closed .vote-column {

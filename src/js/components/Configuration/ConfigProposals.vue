@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<RadioGroupDiv v-model="allowProposals" :options="proposalsOptions" />
-		<CheckBoxDiv v-show="proposalsAllowed" v-model="pollExpiration" :label="t('polls', 'Closing Date')" />
+		<CheckBoxDiv v-show="proposalsAllowed" v-model="pollExpiration" :label="t('polls', 'Proposal closing date')" />
 		<DatetimePicker v-show="pollExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
