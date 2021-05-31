@@ -41,14 +41,14 @@ return [
 		['name' => 'public#subscribe', 'url' => '/s/{token}/subscribe', 'verb' => 'PUT'],
 		['name' => 'public#unsubscribe', 'url' => '/s/{token}/unsubscribe', 'verb' => 'PUT'],
 		['name' => 'public#register', 'url' => '/s/{token}/register', 'verb' => 'POST'],
-		['name' => 'public#resend_invitation', 'url' => '/s/{token}/resend', 'verb' => 'GET'],
+		['name' => 'public#resend_invitation', 'url' => '/s/{token}/resend', 'verb' => 'PUT'],
 		['name' => 'public#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'public#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
 		['name' => 'public#watch_poll', 'url' => '/s/{token}/watch', 'verb' => 'GET'],
 
 		['name' => 'admin#index', 'url' => '/administration', 'verb' => 'GET'],
 		['name' => 'admin#list', 'url' => '/administration/polls', 'verb' => 'GET'],
-		['name' => 'admin#takeover', 'url' => '/administration/poll/{pollId}/takeover', 'verb' => 'GET'],
+		['name' => 'admin#takeover', 'url' => '/administration/poll/{pollId}/takeover', 'verb' => 'PUT'],
 
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],

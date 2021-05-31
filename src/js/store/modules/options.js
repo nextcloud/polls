@@ -104,7 +104,7 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/options'))
+			const response = await axios.get(generateUrl(endPoint + '/options'), { params: { time: +new Date() } })
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })

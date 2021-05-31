@@ -46,7 +46,7 @@ const actions = {
 		const endPoint = 'apps/polls/administration'
 		if (getCurrentUser().isAdmin) {
 			try {
-				const response = await axios.get(generateUrl(endPoint + '/polls'))
+				const response = await axios.get(generateUrl(endPoint + '/polls'), { params: { time: +new Date() } })
 				context.commit('set', { list: response.data })
 			} catch (e) {
 				console.error('Error loading polls', { error: e.response })
@@ -57,7 +57,7 @@ const actions = {
 	takeOver(context, payload) {
 		const endPoint = 'apps/polls/administration'
 		if (getCurrentUser().isAdmin) {
-			axios.get(generateUrl(endPoint + '/poll/' + payload.pollId + '/takeover'))
+			axios.put(generateUrl(endPoint + '/poll/' + payload.pollId + '/takeover'))
 		}
 	},
 }
