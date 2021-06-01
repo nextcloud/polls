@@ -49,9 +49,7 @@
 
 				<Counter v-else-if="acl.allowSeeResults"
 					:show-maybe="!!poll.allowMaybe"
-					:option="option"
-					:counter-style="viewMode === 'table-view' ? 'iconStyle' : 'barStyle'"
-					:show-no="viewMode === 'list-view'" />
+					:option="option" />
 				<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
 
 				<VoteItem v-for="(participant) in participants"
@@ -320,10 +318,16 @@ export default {
 		}
 
 		.counter {
-			position: absolute;
-			bottom: 0;
-			width: 100%;
-			padding-left: 44px;
+			&.barStyle {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				padding-left: 44px;
+			}
+			&.iconStyle {
+				order: 0;
+				padding-left: 44px;
+			}
 		}
 
 		.vote-item.currentuser {
