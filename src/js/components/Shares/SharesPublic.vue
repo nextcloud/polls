@@ -68,7 +68,7 @@ export default {
 				successText: t('polls', 'Link copied to clipboard'),
 				errorText: t('polls', 'Error while copying link to clipboard'),
 			},
-			paramsHint: t('polls', 'Add URL-Paramters \'name=\' and/or \'email=\' to predefine name and email address. I.e. https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org'),
+			paramsHint: t('polls', 'Add URL parameters \'name=\' and/or \'email=\' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org'),
 		}
 	},
 
