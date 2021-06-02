@@ -43,6 +43,31 @@
 		max-width: 200px;
 	}
 
+	.counter--icon{
+		.yes {
+			background: none !important;
+			&::before {
+				content: '✔';
+				padding-right: 4px;
+			}
+		}
+
+		.maybe {
+			background: none !important;
+			&::before {
+				content: '❔';
+				padding-right: 4px;
+			}
+		}
+
+		.no {
+			background: none !important;
+			&::before {
+				content: '❌';
+				padding-right: 4px;
+			}
+		}
+	}
 
 
 	.app-content {
