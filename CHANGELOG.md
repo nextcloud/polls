@@ -22,6 +22,10 @@ All notable changes to this project will be documented in this file.
 
 … and more minor fixes and optimizations
 
+## [1.9.3 - beta4] - 2021-06-02
+### Changes and fixes
+- [fix] #1686 - Fixing a print issue, when printing in list layout
+
 ## [1.9.2 - beta3] - 2021-05-31
 ### Changes and fixes
 - [fix] #1560 - First day of week is wrong in date picker (#1674)

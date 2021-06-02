@@ -5,12 +5,15 @@
 	}
 
 	.vote-item {
+		background: none !important;
 		&.active > .icon{
 			border: none !important;
 		}
 
 		> .icon {
 			background: none !important;
+			width: initial !important;
+			height: initial !important;
 			&::after {
 				content: '❌';
 			}
@@ -33,8 +36,14 @@
 	.vote-table .vote-table__users {
 		overflow-x: initial !important;
 		min-width: initial !important;
+	}
+
+	.table-view .vote-table__votes,
+	.table-view .vote-table .vote-table__users {
 		max-width: 200px;
 	}
+
+
 
 	.app-content {
 		background-color: transparent !important;
