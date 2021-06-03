@@ -76,11 +76,11 @@ import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
-import CalendarPeek from '../Calendar/CalendarPeek'
+// import CalendarPeek from '../Calendar/CalendarPeek'
 import Counter from '../Options/Counter'
-import Confirmation from '../Options/Confirmation'
-import OptionItemOwner from '../Options/OptionItemOwner'
-import UserMenu from '../User/UserMenu'
+// import Confirmation from '../Options/Confirmation'
+// import OptionItemOwner from '../Options/OptionItemOwner'
+// import UserMenu from '../User/UserMenu'
 import VoteItem from './VoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { confirmOption } from '../../mixins/optionMixins'
@@ -91,13 +91,13 @@ export default {
 		Actions,
 		ActionButton,
 		ActionDelete,
-		CalendarPeek,
+		CalendarPeek: () => import('../Calendar/CalendarPeek'),
 		Counter,
-		Confirmation,
-		UserMenu,
+		Confirmation: () => import('../Options/Confirmation'),
+		UserMenu: () => import('../User/UserMenu'),
 		VoteTableHeaderItem,
 		VoteItem,
-		OptionItemOwner,
+		OptionItemOwner: () => import('../Options/OptionItemOwner'),
 	},
 
 	mixins: [confirmOption],

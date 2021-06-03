@@ -32,13 +32,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import Badge from '../Base/Badge'
+// import Badge from '../Base/Badge'
 
 export default {
 	name: 'PollTitle',
 
 	components: {
-		Badge,
+		Badge: () => import('../Base/Badge'),
 	},
 
 	computed: {
