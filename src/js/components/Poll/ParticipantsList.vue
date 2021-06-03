@@ -22,13 +22,13 @@
 
 <template lang="html">
 	<div class="participants-list">
-		<h2 v-if="participantsVoted.length">
-			{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
+		<h2 v-if="countParticipantsVoted">
+			{{ n('polls', '%n Participant', '%n Participants', countParticipantsVoted) }}
 		</h2>
 		<h2 v-else>
 			{{ t('polls','No Participants until now') }}
 		</h2>
-		<div v-if="participantsVoted.length" class="participants-list__list">
+		<div v-if="countParticipantsVoted" class="participants-list__list">
 			<UserItem v-for="(participant) in participantsVoted"
 				:key="participant.userId"
 				v-bind="participant"
@@ -61,6 +61,7 @@ export default {
 		}),
 
 		...mapGetters({
+			countParticipantsVoted: 'poll/countParticipantsVoted',
 			participantsVoted: 'poll/participantsVoted',
 		}),
 	},

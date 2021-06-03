@@ -65,11 +65,11 @@ export default {
 
 	computed: {
 		...mapGetters({
-			participantsVoted: 'poll/participantsVoted',
+			countParticipantsVoted: 'poll/countParticipantsVoted',
 		}),
 
 		caption() {
-			return n('polls', '%n Participant', '%n Participants', this.participantsVoted.length)
+			return n('polls', '%n Participant', '%n Participants', this.countParticipantsVoted)
 		},
 	},
 	methods: {
