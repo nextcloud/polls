@@ -210,6 +210,7 @@
     "Error sending invitation to {displayName} ({emailAddress})" : "{displayName} ({emailAddress}) için çağrı gönderilirken sorun çıktı",
     "Public shares" : "Herkese açık paylaşımlar",
     "Add a public link" : "Herkese açık bir bağlantı ekle",
+    "Add URL parameters 'name=' and/or 'email=' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org" : "Ad ve e-posta adresinin hazır olarak gelmesi için 'name=' ve/veya 'email=' adres parametrelerini kullanabilirsiniz. Örnek: https://example.com/s/aUubZAvweQ6PaX2?name=Ali Kaya&email=alikaya@websitesi.org",
     "Error adding share" : "Paylaşım eklenirken sorun çıktı",
     "Unsent invitations" : "Gönderilmemiş çağrılar",
     "Resolve into individual invitations" : "Bireysel davetler olarak çözümle",

@@ -210,6 +210,7 @@
     "Error sending invitation to {displayName} ({emailAddress})" : "Błąd podczas wysyłania zaproszenia do {displayName} ({emailAddress})",
     "Public shares" : "Udostępnienia publiczne",
     "Add a public link" : "Dodaj link publiczny",
+    "Add URL parameters 'name=' and/or 'email=' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org" : "Dodaj parametry adresu URL 'name=' i/lub 'email=', aby wstępnie zdefiniować nazwę i adres e-mail. Na przykład: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org",
     "Error adding share" : "Błąd podczas dodawania udostępnienia",
     "Unsent invitations" : "Niewysłane zaproszenia",
     "Resolve into individual invitations" : "Zgoda na indywidualne zaproszenia",

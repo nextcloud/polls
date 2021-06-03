@@ -212,6 +212,7 @@ OC.L10N.register(
     "Error sending invitation to {displayName} ({emailAddress})" : "向 {displayName} ({emailAddress}) 傳送邀請時發生錯誤",
     "Public shares" : "公開分享",
     "Add a public link" : "新增一個公開連結",
+    "Add URL parameters 'name=' and/or 'email=' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org" : "在 URL 參數中新增 'name=' 與／或 'email=' 來預先定義名稱與電子郵件地址。例如：https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org",
     "Error adding share" : "新增分享時發生錯誤",
     "Unsent invitations" : "取消傳送邀請",
     "Resolve into individual invitations" : "解決個人邀請",

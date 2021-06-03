@@ -207,6 +207,7 @@
     "Error sending invitation to {displayName} ({emailAddress})" : "发送邀请至 {displayName} ({emailAddress}) 发生错误",
     "Public shares" : "公开共享",
     "Add a public link" : "添加公开链接",
+    "Add URL parameters 'name=' and/or 'email=' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org" : "添加 URL 参数 'name=' and/or 'email=' 到预定义名称和电子邮件地址。样例：https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org",
     "Error adding share" : "添加分享出错",
     "Unsent invitations" : "取消发送邀请",
     "Resolve into individual invitations" : "分解为个别邀请",
