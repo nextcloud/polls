@@ -79,8 +79,11 @@ class Contact extends UserGroupClass {
 	private function loadContact(): void {
 		$contacts = self::listRaw($this->id, ['UID', 'FN']);
 
+		// workaround fur multiple found UIDs
+		// Don't throw an error, log the error and take the first entry
 		if (count($contacts) > 1) {
-			throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
+			// throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
+			\OC::$server->getLogger()->error('Multiple contacts found for id ' . $this->id);
 		}
 
 		$this->contact = $contacts[0];
