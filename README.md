@@ -8,7 +8,7 @@
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](COPYING)
 
 
-This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
+## This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
 
 ## Features
 - :bar_chart: Create / edit polls (datetimes and texts)
