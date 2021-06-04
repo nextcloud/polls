@@ -1,6 +1,5 @@
 # Polls
-![php7](https://github.com/nextcloud/polls/actions/workflows/app-code-check-7.yml/badge.svg)
-![php8](https://github.com/nextcloud/polls/actions/workflows/app-code-check-8.yml/badge.svg)
+![php](https://github.com/nextcloud/polls/actions/workflows/app-code-check.yml/badge.svg)
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
 ![puild](https://github.com/nextcloud/polls/actions/workflows/nodejs.yml/badge.svg)
