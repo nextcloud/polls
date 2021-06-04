@@ -8,6 +8,7 @@
 	--icon-polls: url('../icons/polls.svg');
 	--icon-polls--fff: url('../icons/polls-fff.svg');
 	--icon-polls-anonymous: url('../icons/anonymous.svg');
+	--icon-polls-anonymous--fff: url('../icons/anonymous-fff.svg');
 	--icon-polls-back: url('../icons/back.svg');
 	--icon-polls-back--fff: url('../icons/back-fff.svg');
 	--icon-polls-clone: url('../icons/clone.svg');
@@ -83,10 +84,12 @@
 	.icon-handle { background-image: var(--icon-polls-handle--fff); }
 	.icon-list-view { background-image: var(--icon-polls-list-view-fff); }
 	.icon-polls { background-image: var(--icon-polls--fff); }
+	.icon-polls-anonymous { background-image: var(--icon-polls-anonymous--fff); }
 	.icon-polls-back { background-image: var(--icon-polls-back--fff); }
 	.icon-polls-clone { background-image: var(--icon-polls-clone--fff); }
 	.icon-polls-closed { background-image: var(--icon-polls-closed--fff); }
 	.icon-polls-confirmed { background-image: var(--icon-polls-confirmed--fff); }
+	.icon-polls-hidden { background-image: var(--icon-polls-hidden-poll--fff); }
 	.icon-polls-hidden-poll { background-image: var(--icon-polls-hidden-poll--fff); }
 	.icon-polls-mail { background-image: var(--icon-polls-mail--fff); }
 	.icon-polls-move { background-image: var(--icon-polls-move--fff); }
