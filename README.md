@@ -1,4 +1,4 @@
-# Polls
+# Polls - an app, similar to doodle or dudle, for Nextcloud written in PHP and JS/Vue.
 ![php](https://github.com/nextcloud/polls/actions/workflows/app-code-check.yml/badge.svg)
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
@@ -7,8 +7,6 @@
 [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](COPYING)
 
-
-## This is a poll app, similar to doodle or dudle, for Nextcloud written in PHP and JS / Vue.
 
 ## Features
 - :bar_chart: Create / edit polls (datetimes and texts)
@@ -19,12 +17,14 @@
 - Invite external users with a unique link or via email address
 - Hide results permanently or until the poll is closed
 - Confirm options after poll closing
+- Allow proposals from participants
 - Create anonymized polls (participants names get pseudonymized for other users)
 - Limit possible answers per option and per user
-- Subscribe to notifications
+- Subscribe to notifications per poll
 - Get hints about possible conflicting entries in your calendar around the date option
 - Switch between list and table view
 - Configure your preferred view for date and text polls
+- Useable via REST-API
 
 ## Bugs
 - https://github.com/nextcloud/polls/issues
