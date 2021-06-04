@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.9.3 - release] - 2021-06-04
+## [1.9.4 - release] - 2021-06-04
 ### new Features
 - Fixed print layout
 - Date picker optimizations in date polls (adding date option)
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 ### Fixes
 - Error saving username on public polls when mail sending failed
 - First day of week was wrong in datepicker
+- adding parameters to API
 
 … and more minor fixes and optimizations
 
