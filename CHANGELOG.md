@@ -1,9 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.9.3 - release] - tbd
+## [1.9.3 - release] - 2021-06-04
 ### new Features
-- Better print layout
+- Fixed print layout
 - Date picker optimizations in date polls (adding date option)
 - One click deleting items now has a delay, which can be aborted (users, options, comments and shares)
 - Added feedback notification, when vote is saved
@@ -16,9 +16,8 @@ All notable changes to this project will be documented in this file.
 - Added statistical information to the poll information
 
 ### Fixes
-- Error saving username on public polls when mail sending fails
-- First day of week is wrong in date picker
-- Layout bug in experimental settings
+- Error saving username on public polls when mail sending failed
+- First day of week was wrong in datepicker
 
 … and more minor fixes and optimizations
 
