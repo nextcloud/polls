@@ -149,6 +149,9 @@ export default {
 
 	.owner {
 		display: flex;
+		position: relative;
+		left: -16px;
+		width: 0;
 	}
 
 	.option-item {
