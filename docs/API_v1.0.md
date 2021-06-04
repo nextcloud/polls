@@ -92,7 +92,8 @@ send the full or a partial structure
 ### Add/update option (date poll)
 ```json
 {
-	"timestamp": 1589195823
+	"timestamp": 1589195823,
+    "duration": 1800
 }
 ```
 
@@ -101,6 +102,7 @@ send the full or a partial structure
 | -------------- | ------- | ----------------------- |
 | pollOptionText | String  | poll text               |
 | timestamp      | Integer | 10 digit unix timestamp |
+| duration       | Integer | duration in seconds     |
 
 
 
@@ -122,7 +124,7 @@ send the full or a partial structure
 | Method    | Endpoint                             | Description                  | Return codes       |
 | --------- | -----------------------------------  | ---------------------------- | ------------------ |
 | GET       | /api/v1.0/poll/{pollId}/comments     | Get comments                 | 200, 403, 404      |
-| POST      | /api/v1.0/comment                    | Add new commen twith Payload | 201, 403, 404      |
+| POST      | /api/v1.0/comment                    | Add new comment with Payload | 201, 403, 404      |
 | DELETE    | /api/v1.0/comment/{commentId}        | Delete comment               | 200, 403, 404      |
 
 # Add comment
