@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="counter">
+	<div :class="['counter' , counterStyle ]">
 		<div v-if="counterStyle === 'iconStyle'" class="counter--icon">
 			<div class="yes">
 				<span>{{ option.yes }}</span>

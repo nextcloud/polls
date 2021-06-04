@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import InputDiv from '../Base/InputDiv'
 
@@ -42,13 +41,6 @@ export default {
 		return {
 			newPollText: '',
 		}
-	},
-
-	computed: {
-		...mapGetters({
-			closed: 'poll/closed',
-		}),
-
 	},
 
 	methods: {

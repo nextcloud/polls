@@ -67,9 +67,9 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = ''): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText) {
-			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText)];
+	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
+		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText, $duration) {
+			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)];
 		});
 	}
 
@@ -80,9 +80,9 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = ''): DataResponse {
-		return $this->response(function () use ($optionId, $timestamp, $pollOptionText) {
-			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText)];
+	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
+		return $this->response(function () use ($optionId, $timestamp, $pollOptionText, $duration) {
+			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $duration)];
 		});
 	}
 

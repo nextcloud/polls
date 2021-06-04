@@ -78,7 +78,7 @@ class Version0109Date20210323120002 extends SimpleMigrationStep {
 				$table->addColumn('owner', 'string', [
 					'length' => 64,
 					'notnull' => true,
-					'default' => 'disallow'
+					'default' => ''
 				]);
 			}
 			if (!$table->hasColumn('released')) {

@@ -94,6 +94,8 @@ const getters = {
 
 	},
 
+	displayResults: (state, getters) => (state.showResults === 'always' || (state.showResults === 'closed' && !getters.closed)),
+
 	proposalsAllowed: (state) => (state.allowProposals === 'allow' || state.allowProposals === 'review'),
 
 	proposalsOpen: (state, getters) => getters.proposalsAllowed && !getters.proposalsExpired,
@@ -110,7 +112,7 @@ const getters = {
 		// { value: 'review', label: t('polls', 'Allow with review') },
 	],
 
-	closed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 0),
+	isClosed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
 
 	participants: (state, getters, rootState) => {
 		const participants = rootState.votes.list.map((item) => ({
@@ -160,7 +162,7 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/poll'))
+			const response = await axios.get(generateUrl(endPoint + '/poll'), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 		} catch (e) {

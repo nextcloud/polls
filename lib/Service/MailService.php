@@ -184,9 +184,9 @@ class MailService {
 				);
 				$share->setInvitationSent(time());
 				$this->shareMapper->update($share);
-				$sentMails[] = $recipient->getId();
+				$sentMails[] = $recipient;
 			} catch (\Exception $e) {
-				$abortedMails[] = $recipient->getId();
+				$abortedMails[] = $recipient;
 				$this->logger->error('Error sending Mail to ' . json_encode($recipient));
 			}
 		}
@@ -231,7 +231,7 @@ class MailService {
 					$recipient->getDisplayName()
 				);
 			} catch (\Exception $e) {
-				$this->logger->error('Error sending Mail to ' . $recipient->getId());
+				$this->logger->error('Error sending Mail to ' . json_encode($recipient));
 			}
 		}
 	}

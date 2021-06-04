@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<OptionsTextAdd v-if="!pollIsClosed" />
+		<OptionsTextAdd v-if="!closed" />
 		<draggable v-if="countOptions" v-model="reOrderedOptions">
 			<transition-group>
 				<OptionItem v-for="(option) in reOrderedOptions"
@@ -40,7 +40,7 @@
 							:title="t('polls', 'Delete option')"
 							@delete="removeOption(option)" />
 						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="pollIsClosed"
+							<ActionButton v-if="closed"
 								:icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
 								@click="confirmOption(option)">
 								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
@@ -103,7 +103,7 @@ export default {
 		}),
 
 		...mapGetters({
-			pollIsClosed: 'poll/closed',
+			closed: 'poll/isClosed',
 			countOptions: 'options/count',
 			pollTypeIcon: 'poll/typeIcon',
 		}),
@@ -131,6 +131,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.owner {
+		display: flex;
+		position: relative;
+		left: -16px;
+		width: 0;
+		&:hover {
+			display: none;
+		}
+	}
+
+	.draggable:hover .owner {
+		display: none;
+	}
+
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
 		&:active,

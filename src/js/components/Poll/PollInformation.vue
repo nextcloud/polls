@@ -30,34 +30,55 @@
 			</Actions>
 		</div>
 		<div class="poll-information">
-			<div class="owner">
+			<div class="icon-user">
 				{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
 			</div>
-			<div class="created">
+			<div :class="accessClass">
+				{{ accessCaption }}
+			</div>
+			<div class="icon-star">
 				{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
 			</div>
-			<div v-if="poll.expire" class="closed">
+			<div v-if="poll.expire" class="icon-polls-closed">
 				{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
 			</div>
-			<div v-if="poll.anonymous" class="anonymous">
+			<div v-if="poll.anonymous" class="icon-polls-anonymous">
 				{{ t('polls', 'Anonymous poll') }}
 			</div>
-			<div v-if="participantsVoted.length && acl.allowSeeResults" class="participants">
+			<div :class="resultsClass">
+				{{ resultsCaption }}
+			</div>
+			<div v-if="participantsVoted.length && acl.allowSeeResults" class="icon-user">
 				{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
 			</div>
-			<div class="timezone">
+			<div class="icon-polls-unconfirmed">
+				{{ n('polls', '%n option', '%n options', countOptions) }}
+			</div>
+			<div v-if="countAllYesVotes" class="icon-polls-yes">
+				{{ n('polls', '%n yes vote', '%n yes votes', countAllYesVotes) }}
+			</div>
+			<div v-if="countAllNoVotes" class="icon-polls-no">
+				{{ n('polls', '%n no vote', '%n no votes', countAllNoVotes) }}
+			</div>
+			<div v-if="countAllMaybeVotes" class="icon-polls-maybe">
+				{{ n('polls', '%n maybe vote', '%n maybe votes', countAllMaybeVotes) }}
+			</div>
+			<div class="icon-timezone">
 				{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
 			</div>
-			<div v-if="poll.voteLimit" class="vote-limit">
+			<div v-if="proposalsAllowed" class="icon-add">
+				{{ proposalsStatus }}
+			</div>
+			<div v-if="poll.voteLimit" class="icon-checkmark">
 				{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
 			</div>
-			<div v-if="poll.optionLimit" class="option-limit">
+			<div v-if="poll.optionLimit" class="icon-close">
 				{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
 			</div>
-			<div v-if="$route.name === 'publicVote' && share.emailAddress" class="email-address">
+			<div v-if="$route.name === 'publicVote' && share.emailAddress" class="icon-mail">
 				{{ share.emailAddress }}
 			</div>
-			<div v-if="subscribed" class="subscribed">
+			<div v-if="subscribed" class="icon-sound">
 				{{ t('polls', 'You subscribed to this poll') }}
 			</div>
 		</div>
@@ -85,14 +106,80 @@ export default {
 			acl: (state) => state.poll.acl,
 			poll: (state) => state.poll,
 			subscribed: (state) => state.subscription.subscribed,
+			showResults: (state) => state.poll.showResults,
+			important: (state) => state.poll.important,
+			access: (state) => state.poll.access,
 		}),
 
 		...mapGetters({
 			participantsVoted: 'poll/participantsVoted',
-			closed: 'poll/closed',
+			closed: 'poll/isClosed',
 			confirmedOptions: 'options/confirmed',
+			countOptions: 'options/count',
 			countVotes: 'votes/countVotes',
+			countAllVotes: 'votes/countAllVotes',
+			proposalsAllowed: 'poll/proposalsAllowed',
+			proposalsExpirySet: 'poll/proposalsExpirySet',
+			proposalsExpired: 'poll/proposalsExpired',
+			proposalsExpireRelative: 'poll/proposalsExpireRelative',
+			proposalsOpen: 'poll/proposalsOpen',
+			displayResults: 'polls/displayResults',
 		}),
+
+		proposalsStatus() {
+			if (this.proposalsOpen && !this.proposalsExpirySet) {
+				return t('polls', 'Option proposals allowed')
+			}
+			if (this.proposalsExpirySet && !this.proposalsExpired) {
+				return t('polls', 'Option proposal term ends {timeRelative}', { timeRelative: this.proposalsExpireRelative })
+			}
+			if (this.proposalsExpirySet && this.proposalsExpired) {
+				return t('polls', 'Option proposal term ended {timeRelative}', { timeRelative: this.proposalsExpireRelative })
+			}
+			return t('polls', 'No proposals are allowed')
+		},
+
+		resultsCaption() {
+			if (this.showResults === 'closed' && !this.closed) {
+				return t('polls', 'Results are hidden until closing poll')
+			}
+			if (this.showResults === 'closed' && this.closed) {
+				return t('polls', 'Results are visible since closing poll')
+			}
+			if (this.showResults === 'never') {
+				return t('polls', 'Results are always hidden')
+			}
+			return t('polls', 'Results are visible')
+
+		},
+
+		accessCaption() {
+			if (this.access === 'hidden') {
+				return t('polls', 'Access only for invited persons')
+			}
+			if (this.important) {
+				return t('polls', 'Relevant and accessible for all users')
+			}
+			return t('polls', 'Access for all users')
+		},
+
+		accessClass() {
+			if (this.access === 'hidden') {
+				return 'icon-polls-hidden-poll'
+			}
+			if (this.important) {
+				return 'icon-polls-public-poll'
+			}
+			return 'icon-polls-public-poll'
+		},
+
+		resultsClass() {
+			if (this.showResults === 'never' || (this.showResults === 'closed' && !this.closed)) {
+				return 'icon-polls-hidden'
+			}
+			return 'icon-polls-visible'
+
+		},
 
 		voteLimitReached() {
 			return (this.poll.voteLimit > 0 && this.countVotes('yes') >= this.poll.voteLimit)
@@ -118,6 +205,18 @@ export default {
 			return Intl.DateTimeFormat().resolvedOptions().timeZone
 		},
 
+		countAllYesVotes() {
+			return this.countAllVotes('yes')
+		},
+
+		countAllNoVotes() {
+			return this.countAllVotes('no')
+		},
+
+		countAllMaybeVotes() {
+			return this.countAllVotes('maybe')
+		},
+
 	},
 }
 </script>
@@ -130,45 +229,6 @@ export default {
 			opacity: 0.7;
 			margin: 8px 0 4px 0;
 			padding-left: 24px;
-		}
-		.owner {
-			background-image: var(--icon-user-000);
-		}
-
-		.created {
-			background-image: var(--icon-star-000);
-		}
-
-		.closed {
-			background-image: var(--icon-polls-closed);
-		}
-
-		.anonymous {
-			background-image: var(--icon-polls-anonymous);
-		}
-
-		.timezone {
-			background-image: var(--icon-clock);
-		}
-
-		.participants {
-			background-image: var(--icon-user-000);
-		}
-
-		.subscribed {
-			background-image: var(--icon-sound-000);
-		}
-
-		.vote-limit {
-			background-image: var(--icon-checkmark-000);
-		}
-
-		.option-limit {
-			background-image: var(--icon-close-000);
-		}
-
-		.email-address {
-			background-image: var(--icon-mail-000);
 		}
 	}
 

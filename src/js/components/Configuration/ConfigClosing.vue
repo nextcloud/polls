@@ -26,7 +26,7 @@
 			:icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
 			:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
 			@click="switchClosed()" />
-		<CheckBoxDiv v-show="!closed" v-model="useExpire" :label="t('polls', 'Closing date')" />
+		<CheckBoxDiv v-show="!closed" v-model="useExpire" :label="t('polls', 'Poll closing date')" />
 		<DatetimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
 	</div>
 </template>
@@ -52,7 +52,7 @@ export default {
 				minuteStep: 5,
 				type: 'datetime',
 				format: moment.localeData().longDateFormat('L LT'),
-				placeholder: t('polls', 'Closing date'),
+				placeholder: t('polls', 'Poll closing date'),
 				confirm: true,
 				lang: {
 					formatLocale: {
@@ -73,7 +73,7 @@ export default {
 		}),
 
 		...mapGetters({
-			closed: 'poll/closed',
+			closed: 'poll/isClosed',
 		}),
 
 		expire: {

@@ -234,27 +234,6 @@ export default {
 
 <style  lang="scss">
 
-.label-deprecated {
-	border: solid 1px;
-	border-radius: var(--border-radius);
-	padding: 1px 4px;
-	margin: 0 4px;
-	font-size: 60%;
-	text-align: center;
-
-	&.error {
-		border-color: var(--color-error);
-		background-color: var(--color-error);
-		color: var(--color-primary-text);
-	}
-
-	&.success {
-		border-color: var(--color-success);
-		background-color: var(--color-success);
-		color: var(--color-primary-text);
-	}
-}
-
 .modal__content {
 	padding: 14px;
 	display: flex;

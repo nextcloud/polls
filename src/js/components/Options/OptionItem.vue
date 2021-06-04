@@ -233,7 +233,7 @@ export default {
 		}
 		.event-to {
 			flex: 0;
-			font-size: 80%;
+			font-size: 0.8em;
 			justify-content: flex-end;
 			.day {
 				margin: 0;
@@ -244,7 +244,7 @@ export default {
 	.event-time {
 		margin-top: 8px;
 		.time-to {
-			font-size: 80%;
+			font-size: 0.8em;
 		}
 	}
 

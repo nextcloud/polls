@@ -5,7 +5,7 @@ module.exports = {
 		'selector-type-no-unknown': null,
 		'number-leading-zero': null,
 		'rule-empty-line-before': [
-			'always',
+			'always-multi-line',
 			{
 				ignore: ['after-comment', 'inside-block'],
 			},

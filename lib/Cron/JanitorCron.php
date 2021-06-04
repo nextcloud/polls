@@ -51,7 +51,7 @@ class JanitorCron extends TimedJob {
 	 * @param mixed $arguments
 	 * @return void
 	 */
-	protected function run($arguments) {
+	protected function run($argument) {
 		$this->logMapper->deleteProcessedEntries(); // delete processed log entries
 		$this->logMapper->deleteOldEntries(time() - (86400 * 7)); // delete entries older than 7 days
 		$this->watchMapper->deleteOldEntries(time() - 86400); // delete entries older than 1 day

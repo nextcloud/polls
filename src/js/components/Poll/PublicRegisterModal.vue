@@ -207,8 +207,16 @@ export default {
 	},
 
 	mounted() {
-		this.userName = this.share.displayName
-		this.emailAddress = this.share.emailAddress
+		if (this.$route.name === 'publicVote' && this.$route.query.name) {
+			this.userName = this.$route.query.name
+		} else {
+			this.userName = this.share.displayName
+		}
+		if (this.$route.name === 'publicVote' && this.$route.query.email) {
+			this.emailAddress = this.$route.query.email
+		} else {
+			this.emailAddress = this.share.emailAddress
+		}
 	},
 
 	methods: {
@@ -264,9 +272,13 @@ export default {
 						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
 						this.closeModal()
 					}
+					if (this.share.emailAddress && !this.share.invitationSent) {
+						showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.emailAddress }))
+					}
 				} catch {
-					showError(t('polls', 'Error saving name', 1, this.poll.title))
+					showError(t('polls', 'Error saving name'))
 				}
+
 			}
 		},
 	},

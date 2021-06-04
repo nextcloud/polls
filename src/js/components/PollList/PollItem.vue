@@ -46,7 +46,7 @@
 			</div>
 
 			<div class="item__expiry sortable" @click="$emit('sort-list', {sort: 'expire'})">
-				{{ t('polls', 'Closing Date') }}
+				{{ t('polls', 'Closing date') }}
 				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 		</div>
@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import Badge from '../Base/Badge'
 
@@ -121,9 +122,9 @@ export default {
 	},
 
 	computed: {
-		closed() {
-			return (this.poll.expire && moment.unix(this.poll.expire).diff() < 0)
-		},
+		...mapGetters({
+			closed: 'poll/isClosed',
+		}),
 
 		closeToClosing() {
 			return (!this.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)

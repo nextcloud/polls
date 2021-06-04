@@ -49,17 +49,13 @@
 
 				<Counter v-else-if="acl.allowSeeResults"
 					:show-maybe="!!poll.allowMaybe"
-					:option="option"
-					:counter-style="viewMode === 'table-view' ? 'iconStyle' : 'barStyle'"
-					:show-no="viewMode === 'list-view'" />
+					:option="option" />
 				<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
 
-				<div v-for="(participant) in participants"
+				<VoteItem v-for="(participant) in participants"
 					:key="participant.userId"
-					class="vote-item-wrapper"
-					:class="{currentuser: participant.userId === acl.userId}">
-					<VoteItem :user-id="participant.userId" :option="option" />
-				</div>
+					:user-id="participant.userId"
+					:option="option" />
 
 				<OptionItemOwner v-if="proposalsExist" :option="option" class="owner" />
 
@@ -130,7 +126,7 @@ export default {
 
 		...mapGetters({
 			hideResults: 'poll/hideResults',
-			closed: 'poll/closed',
+			closed: 'poll/isClosed',
 			participants: 'poll/participants',
 			options: 'options/rankedOptions',
 			proposalsExist: 'options/proposalsExist',
@@ -152,23 +148,69 @@ export default {
 .vote-table {
 	display: flex;
 	flex: 1;
-	.user-item, .vote-item-wrapper {
-		flex: 0;
-		height: 53px;
-		min-height: 53px;
-		border-top: solid 1px var(--color-border-dark);
+
+	.user-item, .vote-item {
+		flex: 0 0 auto;
+		height: 3.5em;
 		order: 10;
+		line-height: 3.5em;
+		padding: 4px 1px;
+		border-top: solid 1px var(--color-border-dark);
 		&.currentuser {
 			order:5;
 		}
 	}
 
-	.vote-table-header-item {
+	.vote-table__users {
+		display: flex;
+		flex-direction: column;
+		overflow-x: scroll;
+		// max-width: 245px;
+	}
+
+	.vote-table__votes {
+		display: flex;
 		flex: 1;
+		overflow-x: scroll;
+	}
+
+	.vote-column {
+		order: 2;
+		display: flex;
+		flex: 1 0 auto;
 		flex-direction: column;
 		align-items: stretch;
+		min-width: 85px;
+		max-width: 280px;
+		&>div {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.vote-table-header-item {
+			align-items: flex-start;
+		}
+	}
+
+	&.closed .vote-column {
+		// padding: 8px 2px;
+		&.confirmed {
+			order: 1;
+			border-radius: 10px;
+			border: 1px solid var(--color-polls-foreground-yes);
+			background-color: var(--color-polls-background-yes);
+			margin: 0 4px;
+		}
+	}
+
+	.vote-table-header-item {
+		flex: 1;
 		padding: 0 8px;
-		order:1;
+		order: 1;
+	}
+
+	.vote-item {
+		background-clip: content-box;
 	}
 
 	.confirmation {
@@ -191,7 +233,9 @@ export default {
 
 	.owner {
 		display: flex;
-		min-height: 56px;
+		flex: 0 auto;
+		height: 3.5em;
+		line-height: 3.5em;
 		min-width: 56px;
 		order: 19;
 	}
@@ -201,149 +245,106 @@ export default {
 		order: 1;
 	}
 
-	.vote-table__users {
-		display: flex;
+	&.table-view {
+		.vote-table__users::after, .vote-column::after {
+			content: '';
+			height: 8px;
+			order: 99;
+		}
+
+		.user-item {
+			max-width: 245px;
+		}
+
+		.option-item .option-item__option--text {
+			text-align: center;
+		}
+	}
+
+	&.list-view {
 		flex-direction: column;
-		overflow-x: scroll;
-		min-width: 90px;
-		.user-item__name {
-			min-width: initial;
-		}
-	}
 
-	.vote-table__votes {
-		display: flex;
-		flex: 1;
-		overflow-x: scroll;
-	}
+		&.closed {
+			.counter {
+				padding-left: 60px;
+			}
 
-	.vote-column {
-		order: 2;
-		display: flex;
-		flex: 1 0 auto;
-		flex-direction: column;
-		align-items: stretch;
-		min-width: 85px;
-		max-width: 280px;
-		.vote-item {
-			flex-direction: column;
-		}
-	}
+			.vote-item:not(.confirmed) {
+				background-color: var(--color-main-background);
+				&.no > .icon {
+					background-image: var(--icon-polls-no)
+				}
+			}
 
-	&.closed .vote-table__users {
-		padding: 8px 2px;
-	}
-
-	&.closed .vote-column {
-		padding: 8px 2px;
-		&.confirmed {
-			order: 1;
-			border-radius: 10px;
-			border: 1px solid var(--color-polls-foreground-yes);
-			background-color: var(--color-polls-background-yes);
-			margin: 0 4px;
-		}
-	}
-
-	.vote-item-wrapper {
-		display: flex;
-		padding: 4px 1px;
-	}
-
-	.vote-table__footer {
-		align-items: center;
-	}
-}
-
-.vote-table.table-view {
-	.vote-table__users::after, .vote-column::after {
-		content: '';
-		height: 8px;
-		order: 99;
-	}
-	.option-item .option-item__option--text {
-		text-align: center;
-	}
-}
-
-.vote-table.list-view {
-	flex-direction: column;
-
-	&.closed {
-		.counter {
-			padding-left: 60px;
-		}
-		.vote-item:not(.confirmed) {
-			background-color: var(--color-main-background);
-			&.no > .icon {
-				background-image: var(--icon-polls-no)
+			.vote-column {
+				padding: 2px 8px;
+				&.confirmed {
+					margin: 4px 0;
+				}
 			}
 		}
-	}
 
-	.vote-table__users .confirm {
-		display: none;
-	}
-
-	.counter {
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		padding-left: 44px;
-	}
-
-	.option-item {
-		padding: 8px 4px;
-	}
-
-	.vote-item-wrapper.currentuser {
-		border: none;
-	}
-
-	.vote-column {
-		flex-direction: row-reverse;
-		align-items: center;
-		max-width: initial;
-		position: relative;
-		border-top: solid 1px var(--color-border);
-		padding: 0;
-	}
-	&.closed .vote-column {
-		padding: 2px 8px;
-		&.confirmed {
-			margin: 4px 0;
+		.vote-table__users .confirm {
+			display: none;
 		}
-	}
 
-	.vote-table__votes {
-		align-items: stretch;
-		flex-direction: column;
-	}
+		.vote-column {
+			flex-direction: row-reverse;
+			align-items: center;
+			max-width: initial;
+			position: relative;
+			border-top: solid 1px var(--color-border);
+			padding: 0;
+		}
 
-	.vote-table__users {
-		margin: 0
-	}
-	.owner {
-		order: 0;
-	}
+		.vote-table__users {
+			margin: 0
+		}
 
-	.vote-table-header-item {
-		flex-direction: row;
-	}
+		.user-item.user:not(.currentuser), .vote-item:not(.currentuser) {
+			display: none;
+		}
 
-	.user-item.user.currentuser, .vote-item-wrapper.currentuser {
-		display: flex;
-	}
+		.vote-table__votes {
+			align-items: stretch;
+			flex-direction: column;
+		}
 
-	.user-item.user, .vote-item-wrapper {
-		display: none;
-	}
-	.calendar-peek {
-		order: 0;
-	}
-	.calendar-peek__conflict.icon {
-		width: 24px;
-		height: 24px;
+		.vote-table-header-item {
+			flex-direction: row;
+			.option-item {
+				padding: 8px 4px;
+			}
+		}
+
+		.counter {
+			&.barStyle {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				padding-left: 44px;
+			}
+			&.iconStyle {
+				order: 0;
+				padding-left: 44px;
+			}
+		}
+
+		.vote-item.currentuser {
+			border: none;
+		}
+
+		.owner {
+			order: 0;
+		}
+
+		.calendar-peek {
+			order: 0;
+		}
+		.calendar-peek__conflict.icon {
+			width: 24px;
+			height: 24px;
+		}
 	}
 }
 

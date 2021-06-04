@@ -41,7 +41,7 @@ class PreferencesService {
 	private $userId;
 
 	public function __construct(
-		string $UserId,
+		?string $UserId,
 		PreferencesMapper $preferencesMapper
 	) {
 		$this->userId = $UserId;

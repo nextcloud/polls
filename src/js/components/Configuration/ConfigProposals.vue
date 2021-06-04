@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<RadioGroupDiv v-model="allowProposals" :options="proposalsOptions" />
-		<CheckBoxDiv v-show="proposalsAllowed" v-model="pollExpiration" :label="t('polls', 'Closing Date')" />
+		<CheckBoxDiv v-show="proposalsAllowed" v-model="pollExpiration" :label="t('polls', 'Proposal closing date')" />
 		<DatetimePicker v-show="pollExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
@@ -93,6 +93,15 @@ export default {
 					this.writeValue({ proposalsExpire: 0 })
 				}
 			},
+		},
+
+		firstDOW() {
+			// vue2-datepicker needs 7 for sunday
+			if (moment.localeData()._week.dow === 0) {
+				return 7
+			}
+			return moment.localeData()._week.dow
+
 		},
 
 		expirationDatePicker() {

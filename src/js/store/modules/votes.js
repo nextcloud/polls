@@ -63,6 +63,8 @@ const getters = {
 
 	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length,
 
+	countAllVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.voteAnswer === answer).length,
+
 	getVote: (state) => (payload) => {
 		const found = state.list.find((vote) => (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText))
@@ -91,7 +93,7 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/votes'))
+			const response = await axios.get(generateUrl(endPoint + '/votes'), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('reset')
