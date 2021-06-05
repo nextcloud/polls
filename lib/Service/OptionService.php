@@ -26,11 +26,10 @@ namespace OCA\Polls\Service;
 use Psr\Log\LoggerInterface;
 use DateTime;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\Exception;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidOptionPropertyException;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
@@ -158,9 +157,13 @@ class OptionService {
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
 			$this->watchService->writeUpdate($this->acl->getPollId(), Watch::OBJECT_OPTIONS);
-		} catch (UniqueConstraintViolationException $e) {
-			throw new DuplicateEntryException('This option already exists');
+		} catch (Exception $e) {
+			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw new DuplicateEntryException('This option already exists');
+			}
+			throw $e;
 		}
+
 		return $this->option;
 	}
 
@@ -258,8 +261,11 @@ class OptionService {
 
 			try {
 				$this->optionMapper->insert($clonedOption);
-			} catch (UniqueConstraintViolationException $e) {
-				$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option already exists.');
+			} catch (Exception $e) {
+				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option already exists.');
+				}
+				throw $e;
 			}
 		}
 
@@ -288,6 +294,7 @@ class OptionService {
 
 		if ($step > 0) {
 			// avoid UniqueConstraintViolationException
+			// start from last item
 			$this->options = array_reverse($this->options);
 		}
 

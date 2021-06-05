@@ -25,8 +25,6 @@
                 <referencedClass name="OC\DB\Connection" />
                 <referencedClass name="OC\DB\SchemaWrapper" />
                 <referencedClass name="OCA\Circles\Api\v1\Circles" />
-                <referencedClass name="Doctrine\DBAL\Exception\TableNotFoundException" />
-                <referencedClass name="Doctrine\DBAL\Exception\UniqueConstraintViolationException" />
                 <referencedClass name="Doctrine\DBAL\Types\Type" />
 			</errorLevel>
 		</UndefinedClass>
@@ -37,7 +35,6 @@
 				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
 				<referencedClass name="Doctrine\DBAL\Schema\Table" />
                 <referencedClass name="OC\DB\Connection" />
-				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
                 <referencedClass name="OCA\Circles\Model\Circle" />
 			</errorLevel>
 		</UndefinedDocblockClass>
