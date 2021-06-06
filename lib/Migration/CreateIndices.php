@@ -34,6 +34,19 @@ class CreateIndices implements IRepairStep {
 	/** @var Connection */
 	private $connection;
 
+	/** @var array */
+	protected $parentTable = 'polls_polls';
+
+	/** @var array */
+	protected $childTables = [
+		'polls_comments',
+		'polls_log',
+		'polls_notif',
+		'polls_options',
+		'polls_share',
+		'polls_votes',
+	];
+
 	public function __construct(Connection $connection) {
 		$this->connection = $connection;
 	}
@@ -53,6 +66,22 @@ class CreateIndices implements IRepairStep {
 		$this->createIndex('polls_votes', 'UNIQ_votes', ['poll_id', 'user_id', 'vote_option_text'], true);
 		$this->createIndex('polls_preferences', 'UNIQ_preferences', ['user_id'], true);
 		$this->createIndex('polls_watch', 'UNIQ_watch', ['poll_id', 'table'], true);
+		$this->createForeignKeyConstraints();
+	}
+
+	/**
+	 * add an on delete fk contraint to all tables referencing the main polls table
+	 *
+	 * @return void
+	 */
+	private function createForeignKeyConstraints(): void {
+		$schema = new SchemaWrapper($this->connection);
+		$eventTable = $schema->getTable($this->parentTable);
+		foreach ($this->childTables as $tbl) {
+			$table = $schema->getTable($tbl);
+			$table->addForeignKeyConstraint($eventTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);
+		}
+		$this->connection->migrateToSchema($schema->getWrappedSchema());
 	}
 
 	/**
