@@ -197,11 +197,8 @@ class PollService {
 		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
 		$this->poll->setExpire(0);
 		$this->poll->setAnonymous(0);
-		$this->poll->setFullAnonymous(0);
 		$this->poll->setAllowMaybe(0);
 		$this->poll->setVoteLimit(0);
-		$this->poll->setSettings('');
-		$this->poll->setOptions('');
 		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
@@ -325,11 +322,8 @@ class PollService {
 		$this->poll->setDescription($origin->getDescription());
 		$this->poll->setExpire($origin->getExpire());
 		$this->poll->setAnonymous($origin->getAnonymous());
-		$this->poll->setFullAnonymous($origin->getFullAnonymous());
 		$this->poll->setAllowMaybe($origin->getAllowMaybe());
 		$this->poll->setVoteLimit($origin->getVoteLimit());
-		$this->poll->setSettings($origin->getSettings());
-		$this->poll->setOptions($origin->getOptions());
 		$this->poll->setShowResults($origin->getShowResults());
 		$this->poll->setAdminAccess($origin->getAdminAccess());
 		$this->poll->setImportant($origin->getImportant());
