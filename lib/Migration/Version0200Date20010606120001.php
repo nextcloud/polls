@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Types;
 use Doctrine\DBAL\Types\TextType;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
@@ -102,13 +101,13 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			/** Add missing columns */
 
 			// Version0105Date20200903172733 -> introduce column 'important'
- 			if (!$table->hasColumn('important')) {
- 				$table->addColumn('important', 'integer', [
- 					'notnull' => true,
- 					'default' => 0,
+			if (!$table->hasColumn('important')) {
+				$table->addColumn('important', 'integer', [
+					'notnull' => true,
+					'default' => 0,
 					'length' => 11,
- 				]);
- 			}
+				]);
+			}
 
 			// Version0107Date20210104135506 -> introduce column 'proposals_expire'
 			if (!$table->hasColumn('option_limit')) {
@@ -213,7 +212,6 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			if ($table->hasColumn('settings')) {
 				$table->dropColumn('settings');
 			}
-
 		}
 
 		/**
@@ -339,7 +337,6 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => '',
 			]);
-
 		}
 
 		/**
@@ -385,7 +382,6 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			if ($table->hasColumn('dt')) {
 				$table->dropColumn('dt');
 			}
-
 		}
 
 		/**
@@ -408,7 +404,6 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			$table->changeColumn('user_id', [
 				'default' => '',
 			]);
-
 		}
 
 		/**
@@ -491,7 +486,6 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			if ($table->hasColumn('user_email')) {
 				$table->dropColumn('user_email');
 			}
-
 		}
 
 		/**
@@ -559,7 +553,6 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			$table->changeColumn('id', [
 				'length' => 11,
 			]);
-
 		}
 
 		/**
@@ -575,7 +568,6 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			$table->changeColumn('id', [
 				'length' => 11,
 			]);
-
 		}
 
 		return $schema;

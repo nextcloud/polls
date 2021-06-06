@@ -26,7 +26,6 @@
 namespace OCA\Polls\Migration;
 
 use OC\DB\Connection;
-use OC\DB\SchemaWrapper;
 use OCP\IConfig;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;

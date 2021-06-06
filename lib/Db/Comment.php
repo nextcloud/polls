@@ -37,7 +37,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
-* @method string getComment()
+ * @method string getComment()
  * @method void setComment(string $value)
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
