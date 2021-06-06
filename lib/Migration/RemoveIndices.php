@@ -32,6 +32,24 @@ class RemoveIndices implements IRepairStep {
 	/** @var Connection */
 	private $connection;
 
+	protected $childTables = [
+		'polls_comments',
+		'polls_log',
+		'polls_notif',
+		'polls_options',
+		'polls_share',
+		'polls_votes',
+	];
+
+	protected $uniqueTables = [
+		'polls_log',
+		'polls_notif',
+		'polls_options',
+		'polls_preferences',
+		'polls_share',
+		'polls_votes',
+	];
+
 	public function __construct(Connection $connection) {
 		$this->connection = $connection;
 	}
@@ -44,18 +62,32 @@ class RemoveIndices implements IRepairStep {
 	 * @return void
 	 */
 	public function run(IOutput $output) {
-		$this->removeUniqueIndices('polls_options');
-		$this->removeUniqueIndices('polls_log');
-		$this->removeUniqueIndices('polls_notif');
-		$this->removeUniqueIndices('polls_share');
-		$this->removeUniqueIndices('polls_votes');
-		$this->removeUniqueIndices('polls_preferences');
-		$this->removeUniqueIndices('polls_preferences');
-		$this->removeUniqueIndices('polls_watch');
+		foreach ($this->childTables as $tableName) {
+			$this->removeForeignKeys($tableName);
+			$this->removeGenericIndices($tableName);
+		}
+
+		foreach ($this->uniqueTables as $tableName) {
+			$this->removeUniqueIndices($tableName);
+		}
 	}
 
 	/**
-	 * 	 * remove an index with $indexName from $table
+	 * remove a foreign key with $foreignKeyName from $tableName
+	 *
+	 * @return void
+	 */
+	private function removeForeignKey(string $tableName, string $foreignKeyName): void {
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable($tableName)) {
+			$table = $schema->getTable($tableName);
+			$table->removeForeignKey($foreignKeyName);
+			$this->connection->migrateToSchema($schema->getWrappedSchema());
+		}
+	}
+
+	/**
+	 * remove an index with $indexName from $tableName
 	 *
 	 * @return void
 	 */
@@ -71,7 +103,7 @@ class RemoveIndices implements IRepairStep {
 	}
 
 	/**
-	 * 	 * remove all UNIQUE indices from $table
+	 * remove all UNIQUE indices from $table
 	 *
 	 * @return void
 	 */
@@ -83,6 +115,38 @@ class RemoveIndices implements IRepairStep {
 				if (strpos($index->getName(), 'UNIQ_') === 0) {
 					$this->removeIndex($tableName, $index->getName());
 				}
+			}
+		}
+	}
+
+	/**
+	 * remove all UNIQUE indices from $table
+	 *
+	 * @return void
+	 */
+	private function removeGenericIndices(string $tableName): void {
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable($tableName)) {
+			$table = $schema->getTable($tableName);
+			foreach ($table->getIndexes() as $index) {
+				if (strpos($index->getName(), 'IDX_') === 0) {
+					$this->removeIndex($tableName, $index->getName());
+				}
+			}
+		}
+	}
+
+	/**
+	 * 	remove all foreign keys from $tableName
+	 *
+	 * @return void
+	 */
+	private function removeForeignKeys(string $tableName): void {
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable($tableName)) {
+			$table = $schema->getTable($tableName);
+			foreach ($table->getForeignKeys() as $foreignKey) {
+				$this->removeForeignKey($tableName, $foreignKey->getName());
 			}
 		}
 	}

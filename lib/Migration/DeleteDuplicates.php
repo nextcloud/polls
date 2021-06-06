@@ -25,16 +25,26 @@
 
 namespace OCA\Polls\Migration;
 
+use OC\DB\Connection;
+use OC\DB\SchemaWrapper;
+use OCP\IConfig;
+use OCP\Migration\IRepairStep;
+use OCP\Migration\IOutput;
+
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
-use OCP\Migration\IRepairStep;
-use OCP\Migration\IOutput;
 
 class DeleteDuplicates implements IRepairStep {
+	/** @var IConfig */
+	protected $config;
+
+	/** @var Connection */
+	protected $connection;
+
 	/** @var LogMapper */
 	private $logMapper;
 
@@ -53,7 +63,18 @@ class DeleteDuplicates implements IRepairStep {
 	/** @var VoteMapper */
 	private $voteMapper;
 
+	protected $childTables = [
+		'polls_comments',
+		'polls_log',
+		'polls_notif',
+		'polls_options',
+		'polls_share',
+		'polls_votes',
+	];
+
 	public function __construct(
+		IConfig $config,
+		Connection $connection,
 		LogMapper $logMapper,
 		OptionMapper $optionMapper,
 		PreferencesMapper $preferencesMapper,
@@ -61,6 +82,8 @@ class DeleteDuplicates implements IRepairStep {
 		SubscriptionMapper $subscriptionMapper,
 		VoteMapper $voteMapper
 	) {
+		$this->config = $config;
+		$this->connection = $connection;
 		$this->logMapper = $logMapper;
 		$this->optionMapper = $optionMapper;
 		$this->preferencesMapper = $preferencesMapper;
@@ -82,11 +105,42 @@ class DeleteDuplicates implements IRepairStep {
 	 * @return void
 	 */
 	public function run(IOutput $output) {
+		$this->removeOrphaned();
 		$this->logMapper->removeDuplicates();
 		$this->optionMapper->removeDuplicates();
 		$this->preferencesMapper->removeDuplicates();
 		$this->shareMapper->removeDuplicates();
 		$this->subscriptionMapper->removeDuplicates();
 		$this->voteMapper->removeDuplicates();
+	}
+
+	/**
+	 * delete all orphaned entries by selecting all rows
+	 * those poll_ids are not present in the polls table
+	 *
+	 * we have to use a raw query, because NOT EXISTS is not
+	 * part of doctrine's expression builder
+	 *
+	 * @return void
+	 */
+	private function removeOrphaned() {
+		// polls 1.4 -> introduced contraints
+		// Version0104Date20200205104800
+		// get table prefix, as we are running a raw query
+		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
+		// check for orphaned entries in all tables referencing
+		// the main polls table
+		foreach ($this->childTables as $tableName) {
+			$child = "$prefix$tableName";
+			$query = "DELETE
+                FROM $child
+                WHERE NOT EXISTS (
+                    SELECT NULL
+                    FROM {$prefix}polls_polls polls
+                    WHERE polls.id = {$child}.poll_id
+                )";
+			$stmt = $this->connection->prepare($query);
+			$stmt->execute();
+		}
 	}
 }
