@@ -37,9 +37,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPollId(integer $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method string getDt()
- * @method void setDt(string $value)
- * @method string getComment()
+* @method string getComment()
  * @method void setComment(string $value)
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
@@ -51,9 +49,6 @@ class Comment extends Entity implements JsonSerializable {
 
 	/** @var string $userId */
 	protected $userId;
-
-	/** @var string $dt */
-	protected $dt;
 
 	/** @var int $timestamp */
 	protected $timestamp;
@@ -71,19 +66,11 @@ class Comment extends Entity implements JsonSerializable {
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
 			'userId' => $this->getUserId(),
-			'dt' => $this->getDt(),
 			'timestamp' => $this->getTimestamp(),
 			'comment' => $this->getComment(),
 			'isNoUser' => $this->getIsNoUser(),
 			'displayName' => $this->getDisplayName(),
 		];
-	}
-
-	public function getTimestamp(): int {
-		// too lazy for a migration
-		// use timestamp if set,
-		// otherwise use dt and convert to timestamp
-		return intval($this->timestamp ? $this->timestamp : strtotime($this->dt));
 	}
 
 	public function getDisplayName(): string {

@@ -177,6 +177,43 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 					]);
 				}
 			}
+			// Version0200Date20010606120000 -> column 'allow_maybe' length changed
+			$table->changeColumn('allow_maybe', [
+				'length' => 11,
+			]);
+
+			// Version0200Date20010606120000 -> column 'title' default changed
+			$table->changeColumn('title', [
+				'default' => '',
+			]);
+
+			// Version0200Date20010606120000 -> column 'description' default changed
+			$table->changeColumn('description', [
+				'default' => '',
+			]);
+
+			// Version0200Date20010606120000 -> column 'anonymous' length changed
+			$table->changeColumn('anonymous', [
+				'length' => 11,
+			]);
+
+			/** Drop obsolete columns */
+
+			// Version0200Date20010606120000 -> drop 'full_anonymous'
+			if ($table->hasColumn('full_anonymous')) {
+				$table->dropColumn('full_anonymous');
+			}
+
+			// Version0200Date20010606120000 -> drop 'options'
+			if ($table->hasColumn('options')) {
+				$table->dropColumn('options');
+			}
+
+			// Version0200Date20010606120000 -> drop 'settings'
+			if ($table->hasColumn('settings')) {
+				$table->dropColumn('settings');
+			}
+
 		}
 
 		/**
@@ -244,12 +281,24 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			]);
 
 			// Version0107Date20201210204702 -> column 'timestamp' notnull, default changed
+			// Version0200Date20010606120000 -> column 'id' length changed
 			$table->changeColumn('timestamp', [
 				'notnull' => true,
 				'default' => 0,
+				'length' => 11,
 			]);
 
+			// Version0200Date20010606120000 -> column 'poll_id' notnull, default changed
+			$table->changeColumn('poll_id', [
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
+			]);
 
+			// Version0200Date20010606120000 -> column 'id' length changed
+			$table->changeColumn('id', [
+				'length' => 11,
+			]);
 		}
 
 		/**
@@ -272,6 +321,25 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => '',
 			]);
+
+			// Version0200Date20010606120000 -> column 'id' length changed
+			$table->changeColumn('id', [
+				'length' => 11,
+			]);
+
+			// Version0200Date20010606120000 -> column 'poll_id' notnull, default, length changed
+			$table->changeColumn('poll_id', [
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
+			]);
+
+			// Version0200Date20010606120000 -> column 'vote_answer' notnull, default changed
+			$table->changeColumn('vote_answer', [
+				'notnull' => true,
+				'default' => '',
+			]);
+
 		}
 
 		/**
@@ -291,6 +359,56 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 					'length' => 11,
 				]);
 			}
+
+			/** Change attributes of columns */
+
+			// Version0200Date20010606120000 -> column 'poll_id' notnull, default, length changed
+			$table->changeColumn('poll_id', [
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
+			]);
+
+			// Version0200Date20010606120000 -> column 'user_id' default changed
+			$table->changeColumn('user_id', [
+				'default' => '',
+			]);
+
+			// Version0200Date20010606120000 -> column 'comments' default changed
+			$table->changeColumn('comment', [
+				'notnull' => true,
+				'default' => '',
+			]);
+
+			/** Drop obsolete columns */
+			// Version0200Date20010606120000 -> drop 'settings'
+			if ($table->hasColumn('dt')) {
+				$table->dropColumn('dt');
+			}
+
+		}
+
+		/**
+		 * Apply changes to the polls_notif table, which resided in migrations
+		 * prior to polls 2.0
+		 */
+		if ($schema->hasTable('polls_share')) {
+			$table = $schema->getTable('polls_share');
+
+			/** Change attributes of columns */
+
+			// Version0200Date20010606120000 -> column 'poll_id' notnull, default, length changed
+			$table->changeColumn('poll_id', [
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
+			]);
+
+			// Version0200Date20010606120000 -> column 'user_id' default changed
+			$table->changeColumn('user_id', [
+				'default' => '',
+			]);
+
 		}
 
 		/**
@@ -339,6 +457,28 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 				'default' => '',
 			]);
 
+			// Version0200Date20010606120000 -> column 'id' length changed
+			$table->changeColumn('id', [
+				'length' => 11,
+			]);
+
+			// Version0200Date20010606120000 -> column 'token' default changed
+			$table->changeColumn('token', [
+				'default' => '',
+			]);
+
+			// Version0200Date20010606120000 -> column 'type' default changed
+			$table->changeColumn('type', [
+				'default' => '',
+			]);
+
+			// Version0200Date20010606120000 -> column 'poll_id' default, length changed
+			$table->changeColumn('poll_id', [
+				'default' => 0,
+				'length' => 11,
+			]);
+
+
 			/** Drop obsolete columns */
 
 			// Version0101Date20200122194300 -> drop 'user'
@@ -364,8 +504,10 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			/** Change attributes of columns */
 
 			// Version0107Date20210121220707 -> column 'poll_id' default changed
+			// Version0200Date20010606120000 -> column 'poll_id' length changed
 			$table->changeColumn('poll_id', [
 				'default' => 0,
+				'length' => 11,
 			]);
 
 			// Version0107Date20210121220707 -> column 'user_id' length, notnull, default changed
@@ -379,6 +521,11 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			$table->changeColumn('message_id', [
 				'notnull' => true,
 				'default' => '',
+			]);
+
+			// Version0200Date20010606120000 -> column 'id' length changed
+			$table->changeColumn('id', [
+				'length' => 11,
 			]);
 
 			/** Drop obsolete columns */
@@ -407,6 +554,28 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			$table->changeColumn('preferences', [
 				'notnull' => false,
 			]);
+
+			// Version0200Date20010606120000 -> column 'id' length changed
+			$table->changeColumn('id', [
+				'length' => 11,
+			]);
+
+		}
+
+		/**
+		 * Apply changes to the polls_watch table, which resided in migrations
+		 * prior to polls 2.0
+		 */
+		if ($schema->hasTable('polls_watch')) {
+			$table = $schema->getTable('polls_watch');
+
+			/** Change attributes of columns */
+
+			// Version0200Date20010606120000 -> column 'id' length changed
+			$table->changeColumn('id', [
+				'length' => 11,
+			]);
+
 		}
 
 		return $schema;

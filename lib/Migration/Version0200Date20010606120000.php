@@ -67,6 +67,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('title', TYPES::STRING, [
 				'notnull' => true,
+				'default' => '',
 				'length' => 128,
 			]);
 			$table->addColumn('description', TYPES::TEXT, [
@@ -75,6 +76,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('owner', TYPES::STRING, [
 				'notnull' => true,
+				'default' => '',
 				'length' => 64,
 			]);
 			$table->addColumn('created', TYPES::INTEGER, [
@@ -100,23 +102,12 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('anonymous', TYPES::INTEGER, [
 				'notnull' => true,
 				'default' => 0,
-				'length' => 8,
-			]);
-			$table->addColumn('full_anonymous', TYPES::INTEGER, [
-				'notnull' => true,
-				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('allow_maybe', TYPES::INTEGER, [
 				'notnull' => true,
 				'default' => 1,
-			]);
-			$table->addColumn('options', TYPES::TEXT, [
-				'notnull' => true,
-				'default' => '',
-			]);
-			$table->addColumn('settings', TYPES::TEXT, [
-				'notnull' => true,
-				'default' => '',
+				'length' => 11,
 			]);
 			$table->addColumn('vote_limit', TYPES::INTEGER, [
 				'notnull' => true,
@@ -177,9 +168,12 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('id', TYPES::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
+				'length' => 11,
 			]);
 			$table->addColumn('poll_id', TYPES::INTEGER, [
-				'notnull' => false,
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('poll_option_text', TYPES::STRING, [
 				'notnull' => true,
@@ -189,6 +183,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('timestamp', TYPES::INTEGER, [
 				'notnull' => true,
 				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('duration', TYPES::INTEGER, [
 				'notnull' => true,
@@ -223,9 +218,12 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('id', TYPES::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
+				'length' => 11,
 			]);
 			$table->addColumn('poll_id', TYPES::INTEGER, [
-				'notnull' => false,
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
 				'notnull' => true,
@@ -243,7 +241,8 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 256,
 			]);
 			$table->addColumn('vote_answer', TYPES::STRING, [
-				'notnull' => false,
+				'notnull' => true,
+				'default' => '',
 				'length' => 64,
 			]);
 			$table->setPrimaryKey(['id']);
@@ -256,18 +255,18 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'notnull' => true,
 			]);
 			$table->addColumn('poll_id', TYPES::INTEGER, [
-				'notnull' => false,
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
 				'notnull' => true,
+				'default' => '',
 				'length' => 64,
 			]);
-			$table->addColumn('dt', TYPES::STRING, [
-				'notnull' => true,
-				'length' => 32,
-			]);
 			$table->addColumn('comment', TYPES::STRING, [
-				'notnull' => false,
+				'notnull' => true,
+				'default' => '',
 				'length' => 1024,
 			]);
 			$table->addColumn('timestamp', TYPES::INTEGER, [
@@ -285,10 +284,13 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'notnull' => true,
 			]);
 			$table->addColumn('poll_id', TYPES::INTEGER, [
-				'notnull' => false,
+				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
 				'notnull' => true,
+				'default' => '',
 				'length' => 64,
 			]);
 			$table->setPrimaryKey(['id']);
@@ -299,17 +301,22 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('id', TYPES::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
+				'length' => 11,
 			]);
 			$table->addColumn('token', TYPES::STRING, [
 				'notnull' => true,
+				'default' => '',
 				'length' => 64,
 			]);
 			$table->addColumn('type', TYPES::STRING, [
 				'notnull' => true,
+				'default' => '',
 				'length' => 64,
 			]);
 			$table->addColumn('poll_id', TYPES::INTEGER, [
 				'notnull' => true,
+				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
 				'notnull' => true,
@@ -339,6 +346,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('id', TYPES::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
+				'length' => 11,
 			]);
 			$table->addColumn('created', TYPES::INTEGER, [
 				'notnull' => true,
@@ -353,6 +361,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('poll_id', TYPES::INTEGER, [
 				'notnull' => true,
 				'default' => 0,
+				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
 				'notnull' => true,
@@ -380,6 +389,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('id', TYPES::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
+				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
 				'notnull' => true,
@@ -405,6 +415,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 			$table->addColumn('id', TYPES::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
+				'length' => 11,
 			]);
 			$table->addColumn('table', TYPES::STRING, [
 				'notnull' => true,
