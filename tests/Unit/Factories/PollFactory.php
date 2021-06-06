@@ -45,12 +45,18 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	},
 	'access' => 'public',
 	'anonymous' => 0,
-	'fullAnonymous' => 0,
+	'allowComment' => 1,
 	'allowMaybe' => 1,
-	'options' => '["yes","no","maybe"]',
-	'settings' => '{"someJSON":0}',
+	'allowProposals' => 1,
+	'proposalsExpire' => function () {
+		$date = new DateTime('tomorrow');
+		return $date->getTimestamp();
+	},
 	'voteLimit' => 0,
+	'optionLimit' => 0,
 	'showResults' => 'always',
 	'adminAccess' => 0,
-	'important' => 0
+	'important' => 0,
+	'hideBookedUp' => 0,
+	'useNo' => 0,
 ]);
