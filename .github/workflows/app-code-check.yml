@@ -1,4 +1,4 @@
-name: PHP 8
+name: PHP
 
 on:
   pull_request:
