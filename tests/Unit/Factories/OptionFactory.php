@@ -28,8 +28,6 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  */
 $fm->define('OCA\Polls\Db\Option')->setDefinitions([
 	'owner' => Faker::text(255),
-	'ownerDisplayName' => Faker::text(255),
-	'ownerIsNoUser' => 0,
 	'released' => function () {
 		$date = new DateTime('now');
 		return $date->getTimestamp();
