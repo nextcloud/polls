@@ -28,13 +28,11 @@ use League\FactoryMuffin\Faker\Facade as Faker;
  */
 $fm->define('OCA\Polls\Db\Comment')->setDefinitions([
 	'userId' => Faker::firstNameMale(),
-	'dt' => function () {
-		$date = new DateTime('today');
-		return $date->format('Y-m-d H:i:s');
-	},
 	'timestamp' => function () {
 		$date = new DateTime('today');
 		return $date->getTimestamp();
 	},
-	'comment' => Faker::text(255)
+	'comment' => Faker::text(255),
+	'isNoUser' => 0,
+	'displayName' => Faker::text(255),
 ]);
