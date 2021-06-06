@@ -34,7 +34,7 @@ class CreateIndices implements IRepairStep {
 	/** @var Connection */
 	private $connection;
 
-	/** @var array */
+	/** @var string */
 	protected $parentTable = 'polls_polls';
 
 	/** @var array */

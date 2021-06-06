@@ -91,7 +91,6 @@ class CommentService {
 		$this->comment->setPollId($this->acl->getPollId());
 		$this->comment->setUserId($this->acl->getUserId());
 		$this->comment->setComment($message);
-		$this->comment->setDt(date('Y-m-d H:i:s'));
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
 		$this->watchService->writeUpdate($this->comment->getPollId(), Watch::OBJECT_COMMENTS);

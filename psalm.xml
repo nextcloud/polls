@@ -26,6 +26,7 @@
                 <referencedClass name="OC\DB\SchemaWrapper" />
                 <referencedClass name="OCA\Circles\Api\v1\Circles" />
                 <referencedClass name="Doctrine\DBAL\Types\Type" />
+                <referencedClass name="Doctrine\DBAL\Types\TextType" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
