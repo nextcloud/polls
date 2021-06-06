@@ -30,6 +30,4 @@ $fm->define('OCA\Polls\Db\Vote')->setDefinitions([
 	'userId' => Faker::firstNameMale(),
 	'voteOptionText' => Faker::text(255),
 	'voteAnswer' => 'yes',
-	'displayName' => Faker::firstNameMale(),
-	'isNoUser' => 0,
 ]);

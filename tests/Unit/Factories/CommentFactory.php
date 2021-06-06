@@ -33,6 +33,4 @@ $fm->define('OCA\Polls\Db\Comment')->setDefinitions([
 		return $date->getTimestamp();
 	},
 	'comment' => Faker::text(255),
-	'isNoUser' => 0,
-	'displayName' => Faker::text(255),
 ]);
