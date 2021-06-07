@@ -99,7 +99,7 @@ package: clean
 	$(project_dir)/README.md \
 	$(project_dir)/CHANGELOG.md \
 	$(build_source_dir)/$(app_name)
-	tar -czf $(appstore_package_name).tar.gz \
+	tar -czfh $(appstore_package_name).tar.gz \
 	   --directory="$(build_source_dir)" $(app_name)
 	@if [ -f $(nc_cert_dir)/$(app_name).key ]; then \
 		echo "Signing package..."; \
