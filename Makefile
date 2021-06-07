@@ -98,6 +98,7 @@ package: clean
 	$(project_dir)/COPYING \
 	$(project_dir)/README.md \
 	$(project_dir)/CHANGELOG.md \
+		--exclude="vendor/bin" \
 	$(build_source_dir)/$(app_name)
 	tar -czf $(appstore_package_name).tar.gz \
 	   --directory="$(build_source_dir)" $(app_name)
