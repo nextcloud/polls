@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.9.6 - release] - 2021-06-08
+### Fixes
+- removed Compatibility with NC19 Minimum version is NC20
+
 ## [1.9.5 - release] - 2021-06-08
 ### Fixes
 - repair package with invalid symbolic link
