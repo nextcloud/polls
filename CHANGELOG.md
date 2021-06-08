@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.9.5 - release] - 2021-06-08
+### Fixes
+- repair package with invalid symbolic link
+- fix error with migration where 'notNull' does not allow empty string as defaults
+
 ## [1.9.4 - release] - 2021-06-04
 ### new Features
 - Fixed print layout
