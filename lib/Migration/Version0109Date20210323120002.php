@@ -77,7 +77,7 @@ class Version0109Date20210323120002 extends SimpleMigrationStep {
 			if (!$table->hasColumn('owner')) {
 				$table->addColumn('owner', 'string', [
 					'length' => 64,
-					'notnull' => true,
+					'notnull' => false,
 					'default' => ''
 				]);
 			}
