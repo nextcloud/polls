@@ -66,16 +66,16 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->addColumn('title', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 128,
 			]);
 			$table->addColumn('description', TYPES::TEXT, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 			$table->addColumn('owner', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -176,7 +176,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('poll_option_text', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 256,
 			]);
@@ -201,7 +201,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('owner', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -226,7 +226,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -236,12 +236,12 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->addColumn('vote_option_text', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 256,
 			]);
 			$table->addColumn('vote_answer', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -260,12 +260,12 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
 			$table->addColumn('comment', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 1024,
 			]);
@@ -289,7 +289,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -304,12 +304,12 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('token', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
 			$table->addColumn('type', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -319,7 +319,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -364,7 +364,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -373,7 +373,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 64,
 			]);
 			$table->addColumn('message_id', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -392,7 +392,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('user_id', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
@@ -418,7 +418,7 @@ class Version0200Date20010606120000 extends SimpleMigrationStep {
 				'length' => 11,
 			]);
 			$table->addColumn('table', TYPES::STRING, [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
