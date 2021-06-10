@@ -172,7 +172,7 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 				if (!($column->getType() instanceof TextType)) {
 					$table->changeColumn('description', [
 						'type' => Type::getType('text'),
-						'notnull' => true,
+						'notnull' => false,
 						'default' => '',
 					]);
 				}
@@ -184,11 +184,13 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0200Date20010606120000 -> column 'title' default changed
 			$table->changeColumn('title', [
+				'notnull' => false,
 				'default' => '',
 			]);
 
 			// Version0200Date20010606120000 -> column 'description' default changed
 			$table->changeColumn('description', [
+				'notnull' => false,
 				'default' => '',
 			]);
 
@@ -256,7 +258,7 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 			// Version0109Date20210323120002 -> introduce column 'owner'
 			if (!$table->hasColumn('owner')) {
 				$table->addColumn('owner', 'string', [
-					'notnull' => true,
+					'notnull' => false,
 					'default' => '',
 					'length' => 64,
 				]);
@@ -275,7 +277,7 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0107Date20201210204702 -> column 'poll_option_text' notnull, default changed
 			$table->changeColumn('poll_option_text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 
@@ -311,13 +313,13 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0107Date20201210213303 -> column 'user_id' notnull, default changed
 			$table->changeColumn('user_id', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 
 			// Version0107Date20201210213303 -> column 'vote_option_text' notnull, default changed
 			$table->changeColumn('vote_option_text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 
@@ -335,7 +337,7 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0200Date20010606120000 -> column 'vote_answer' notnull, default changed
 			$table->changeColumn('vote_answer', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 		}
@@ -369,12 +371,13 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0200Date20010606120000 -> column 'user_id' default changed
 			$table->changeColumn('user_id', [
+				'notnull' => false,
 				'default' => '',
 			]);
 
 			// Version0200Date20010606120000 -> column 'comments' default changed
 			$table->changeColumn('comment', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 
@@ -403,6 +406,7 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0200Date20010606120000 -> column 'user_id' default changed
 			$table->changeColumn('user_id', [
+				'notnull' => false,
 				'default' => '',
 			]);
 		}
@@ -449,7 +453,7 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0107Date20201217071304 -> column 'user_id' notnull, default changed
 			$table->changeColumn('user_id', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 
@@ -460,11 +464,13 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0200Date20010606120000 -> column 'token' default changed
 			$table->changeColumn('token', [
+				'notnull' => false,
 				'default' => '',
 			]);
 
 			// Version0200Date20010606120000 -> column 'type' default changed
 			$table->changeColumn('type', [
+				'notnull' => false,
 				'default' => '',
 			]);
 
@@ -507,14 +513,14 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0107Date20210121220707 -> column 'user_id' length, notnull, default changed
 			$table->changeColumn('user_id', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 				'length' => 64,
 			]);
 
 			// Version0107Date20210121220707 -> column 'message_id' notnull, default changed
 			$table->changeColumn('message_id', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 
@@ -542,6 +548,7 @@ class Version0200Date20010606120001 extends SimpleMigrationStep {
 
 			// Version0106Date20201031080745 -> column 'user_id' default changed
 			$table->changeColumn('user_id', [
+				'notnull' => false,
 				'default' => '',
 			]);
 
