@@ -37,7 +37,7 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
 
-class DeleteDuplicates implements IRepairStep {
+class DeleteInvalidRecords implements IRepairStep {
 	/** @var IConfig */
 	protected $config;
 

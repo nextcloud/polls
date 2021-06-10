@@ -36,7 +36,7 @@
 	<repair-steps>
 		<pre-migration>
 			<step>OCA\Polls\Migration\RemoveIndices</step>
-			<step>OCA\Polls\Migration\DeleteDuplicates</step>
+			<step>OCA\Polls\Migration\DeleteInvalidRecords</step>
         </pre-migration>
 		<post-migration>
 			<step>OCA\Polls\Migration\CreateIndices</step>
