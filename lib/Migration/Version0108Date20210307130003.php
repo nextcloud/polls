@@ -83,7 +83,7 @@ class Version0108Date20210307130003 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('table', 'string', [
 				'length' => 64,
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			$table->addColumn('poll_id', 'integer', [

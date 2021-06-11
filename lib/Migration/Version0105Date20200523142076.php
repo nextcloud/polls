@@ -66,7 +66,7 @@ class Version0105Date20200523142076 extends SimpleMigrationStep {
 				'default' => 0
 			]);
 			$table->addColumn('preferences', 'text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => '',
 			]);
 			$table->setPrimaryKey(['id']);
