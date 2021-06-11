@@ -81,21 +81,24 @@ class CommentService {
 	/**
 	 * Add comment
 	 */
-	public function add(int $pollId = 0, ?string $token = '', string $message): Comment {
+	public function add(int $pollId = 0, ?string $token = '', string $message = ''): Comment {
 		if ($token) {
 			$this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD);
 		} else {
 			$this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD);
 		}
-		$this->comment = new Comment();
-		$this->comment->setPollId($this->acl->getPollId());
-		$this->comment->setUserId($this->acl->getUserId());
-		$this->comment->setComment($message);
-		$this->comment->setDt(date('Y-m-d H:i:s'));
-		$this->comment->setTimestamp(time());
-		$this->comment = $this->commentMapper->insert($this->comment);
-		$this->watchService->writeUpdate($this->comment->getPollId(), Watch::OBJECT_COMMENTS);
-		return $this->comment;
+
+		if ($message !== '') {
+			$this->comment = new Comment();
+			$this->comment->setPollId($this->acl->getPollId());
+			$this->comment->setUserId($this->acl->getUserId());
+			$this->comment->setComment($message);
+			$this->comment->setDt(date('Y-m-d H:i:s'));
+			$this->comment->setTimestamp(time());
+			$this->comment = $this->commentMapper->insert($this->comment);
+			$this->watchService->writeUpdate($this->comment->getPollId(), Watch::OBJECT_COMMENTS);
+			return $this->comment;
+		}
 	}
 
 	/**
