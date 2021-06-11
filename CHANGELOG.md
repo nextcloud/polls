@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.1 - release] - 2021-06-11
+## Only available for Nextcloud 19
+- prevent to run in migration error upon server update, see #1723
+- Bugfix release in order to fix the problems, which came from the update to version 2.0
+
 ## [1.9.6 - release] - 2021-06-08
 ### Fixes
 - removed Compatibility with NC19 Minimum version is NC20

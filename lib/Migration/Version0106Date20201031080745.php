@@ -50,16 +50,16 @@ class Version0106Date20201031080745 extends SimpleMigrationStep {
 
 			if (!$table->hasColumn('display_name')) {
 				$table->addColumn('display_name', 'string', [
-					'notnull' => false,
 					'length' => 64,
+					'notnull' => false,
 					'default' => ''
 				]);
 			}
 
 			if (!$table->hasColumn('email_address')) {
 				$table->addColumn('email_address', 'string', [
-					'notnull' => false,
 					'length' => 254,
+					'notnull' => false,
 					'default' => ''
 				]);
 			}

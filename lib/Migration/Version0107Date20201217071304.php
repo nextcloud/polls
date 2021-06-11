@@ -44,7 +44,7 @@ class Version0107Date20201217071304 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_share')) {
 			$table = $schema->getTable('polls_share');
 			$table->changeColumn('user_id', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 		}
