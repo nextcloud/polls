@@ -44,7 +44,7 @@ class Version0107Date20201210204702 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_options')) {
 			$table = $schema->getTable('polls_options');
 			$table->changeColumn('poll_option_text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			$table->changeColumn('timestamp', [

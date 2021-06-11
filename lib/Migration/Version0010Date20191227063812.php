@@ -119,11 +119,11 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				'default' => 1
 			]);
 			$table->addColumn('options', 'text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			$table->addColumn('settings', 'text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			$table->addColumn('vote_limit', 'integer', [
@@ -171,7 +171,7 @@ class Version0010Date20191227063812 extends SimpleMigrationStep {
 				'length' => 254
 			]);
 			$table->addColumn('user', 'text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			$table->setPrimaryKey(['id']);

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -29,7 +29,7 @@ use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version0108Date20210307130003 extends SimpleMigrationStep {
+class Version0109Date20210611164500 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
@@ -43,60 +43,32 @@ class Version0108Date20210307130003 extends SimpleMigrationStep {
 	}
 
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
+
 		if ($schema->hasTable('polls_polls')) {
 			$table = $schema->getTable('polls_polls');
-			if (!$table->hasColumn('allow_comment')) {
-				$table->addColumn('allow_comment', 'integer', [
-					'length' => 11,
-					'notnull' => true,
-					'default' => 1
-				]);
+			if ($table->hasColumn('allow_proposals')) {
+				$table->dropColumn('allow_proposals');
 			}
-			if (!$table->hasColumn('hide_booked_up')) {
-				$table->addColumn('hide_booked_up', 'integer', [
-					'length' => 11,
-					'notnull' => true,
-					'default' => 1
-				]);
+			if ($table->hasColumn('use_no')) {
+				$table->dropColumn('use_no');
+			}
+			if ($table->hasColumn('proposals_expire')) {
+				$table->dropColumn('proposals_expire');
 			}
 		}
 
 		if ($schema->hasTable('polls_options')) {
 			$table = $schema->getTable('polls_options');
-
-			if (!$table->hasColumn('duration')) {
-				$table->addColumn('duration', 'integer', [
-					'length' => 11,
-					'notnull' => true,
-					'default' => 0
-				]);
+			if ($table->hasColumn('owner')) {
+				$table->dropColumn('owner');
 			}
-		}
 
-		if (!$schema->hasTable('polls_watch')) {
-			$table = $schema->createTable('polls_watch');
-			$table->addColumn('id', 'integer', [
-				'autoincrement' => true,
-				'notnull' => true,
-			]);
-			$table->addColumn('table', 'string', [
-				'length' => 64,
-				'notnull' => false,
-				'default' => ''
-			]);
-			$table->addColumn('poll_id', 'integer', [
-				'length' => 11,
-				'notnull' => true,
-				'default' => 0
-			]);
-			$table->addColumn('updated', 'integer', [
-				'length' => 11,
-				'notnull' => true,
-				'default' => 0
-			]);
-			$table->setPrimaryKey(['id']);
+			if (!$table->hasColumn('released')) {
+				$table->dropColumn('released');
+			}
 		}
 
 		return $schema;

@@ -44,11 +44,11 @@ class Version0107Date20201210213303 extends SimpleMigrationStep {
 		if ($schema->hasTable('polls_votes')) {
 			$table = $schema->getTable('polls_votes');
 			$table->changeColumn('user_id', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			$table->changeColumn('vote_option_text', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 		}

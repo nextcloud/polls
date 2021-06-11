@@ -49,11 +49,11 @@ class Version0107Date20210121220707 extends SimpleMigrationStep {
 			]);
 			$table->changeColumn('user_id', [
 				'length' => 64,
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			$table->changeColumn('message_id', [
-				'notnull' => true,
+				'notnull' => false,
 				'default' => ''
 			]);
 			if ($table->hasColumn('message')) {

@@ -47,7 +47,7 @@ class Version0104Date20200314074611 extends SimpleMigrationStep {
 		$table = $schema->getTable('polls_polls');
 		$table->changeColumn('description', [
 			'type' => Type::getType('text'),
-			'notnull' => true,
+			'notnull' => false,
 			'default' => ''
 		]);
 

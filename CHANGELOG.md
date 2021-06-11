@@ -1,13 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### [1.9.7] - 2021-06-11
+## Only available for Nextcloud 19
+- prevent to run in migration error upon server update, see #1723
+- Bugfix release in order to fix the problems, which came from the update from version 1.8 to 1.9
+
 ## [1.8.3] - 2021-04-12
 ### Changes and fixes
 - [bug] #1544 - Fixed display of end day in options sidebar on options with day span
 
 ## [1.8.2] - 2021-04-10
 ### Changes and fixes
-- [performance] #1517 - performance optimizations for username chek (#1532)
+- [performance] #1517 - performance optimizations for username check (#1532)
 
 ## [1.8.1] - 2021-03-20
 ### new Features
