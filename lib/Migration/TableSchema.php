@@ -29,7 +29,6 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use Doctrine\DBAL\Types\Type;
 
-
 /**
  * Database definition for installing and migrations
  *
@@ -38,8 +37,7 @@ use Doctrine\DBAL\Types\Type;
  * used for initial migration to version 3.x from all prior versoins
  */
 
-Abstract class TableSchema {
-
+abstract class TableSchema {
 	public const FK_PARENT_TABLE = 'polls_polls';
 
 	public const FK_CHILD_TABLES = [
@@ -61,13 +59,13 @@ Abstract class TableSchema {
 	];
 
 	public const UNIQUE_INDICES = [
-	   'polls_options' => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
-	   'polls_log' => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
-	   'polls_notif' => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-	   'polls_share' => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-	   'polls_votes' => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
-	   'polls_preferences' => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
-	   'polls_watch' => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
+		'polls_options' => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
+		'polls_log' => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
+		'polls_notif' => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+		'polls_share' => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+		'polls_votes' => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
+		'polls_preferences' => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
+		'polls_watch' => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
 	];
 
 	/**
@@ -121,7 +119,7 @@ Abstract class TableSchema {
 	/** define obsolete columns, which do get migrated
 	 * Format:
 	 * public const GONE_COLUMNS = [
- 	 *   'tableName1' => [
+	 *   'tableName1' => [
 	 *     'columnName1',
 	 *     'columnName2',
 	 *     ...,
@@ -284,7 +282,6 @@ Abstract class TableSchema {
 			}
 
 			foreach ($columns as $columnName => $columnDefinition) {
-
 				if ($table->hasColumn($columnName)) {
 					$column = $table->getColumn($columnName);
 					$column->setOptions($columnDefinition['options']);
@@ -294,7 +291,6 @@ Abstract class TableSchema {
 					}
 
 					$table->changeColumn($columnName, $columnDefinition['options']);
-
 				} else {
 					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
 				}
@@ -354,10 +350,8 @@ Abstract class TableSchema {
 				->where('app = :appName')
 				->andWhere('version = :version')
 				->setParameter('appName', 'polls')
-				->setParameter('version', $version )
+				->setParameter('version', $version)
 				->execute();
-
 		}
 	}
-
 }

@@ -111,9 +111,6 @@ class OptionMapper extends QBMapper {
 		$qb->execute();
 	}
 
-	/**
-	 * @return void
-	 */
 	public function removeDuplicates($output = null): int {
 		$count = 0;
 		try {

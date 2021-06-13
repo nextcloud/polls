@@ -28,6 +28,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+
 // use Doctrine\DBAL\Types\Type;
 
 /**
@@ -70,5 +71,4 @@ class Version030000Date20210611120000 extends SimpleMigrationStep {
 
 		return $schema;
 	}
-
 }

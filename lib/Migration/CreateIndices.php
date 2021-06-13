@@ -64,7 +64,6 @@ class CreateIndices implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
-
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $values) {
 			$this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
 		}
