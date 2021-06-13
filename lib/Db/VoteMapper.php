@@ -40,8 +40,9 @@ class VoteMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
 	 */
-	public function findByPoll(int $pollId) {
+	public function findByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -53,8 +54,9 @@ class VoteMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
 	 */
-	public function findByPollAndUser(int $pollId, string $userId) {
+	public function findByPollAndUser(int $pollId, string $userId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -66,9 +68,8 @@ class VoteMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Vote
 	 */
-	public function findSingleVote(int $pollId, string $optionText, string $userId) {
+	public function findSingleVote(int $pollId, string $optionText, string $userId): Vote {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -82,8 +83,9 @@ class VoteMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
 	 */
-	public function findParticipantsByPoll(int $pollId) {
+	public function findParticipantsByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->selectDistinct('user_id')
@@ -97,9 +99,7 @@ class VoteMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 *
 	 * @return Vote[]
-	 *
 	 * @psalm-return array<array-key, Vote>
 	 */
 	public function findParticipantsVotes(int $pollId, string $userId): array {
@@ -133,6 +133,11 @@ class VoteMapper extends QBMapper {
 		   ->execute();
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
+	 */
 	public function getYesVotesByParticipant(int $pollId, string $userId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
@@ -143,6 +148,11 @@ class VoteMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
+	 */
 	public function getYesVotesByOption(int $pollId, string $pollOptionText): array {
 		$qb = $this->db->getQueryBuilder();
 
@@ -155,10 +165,8 @@ class VoteMapper extends QBMapper {
 	}
 
 
-	/**
-	 * @return void
-	 */
-	public function removeDuplicates() {
+	public function removeDuplicates($output = null): int {
+		$count = 0;
 		try {
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'poll_id', 'user_id', 'vote_option_text')
@@ -180,6 +188,7 @@ class VoteMapper extends QBMapper {
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
 					$delete->execute();
+					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
 				}
@@ -190,11 +199,14 @@ class VoteMapper extends QBMapper {
 			}
 			throw $e;
 		}
+
+		if ($output && $count) {
+			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
+		}
+
+		return $count;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName())

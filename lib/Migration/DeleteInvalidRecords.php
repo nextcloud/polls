@@ -37,6 +37,10 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
 
+/**
+ * Preparation before migration
+ * Remove all invalid records to avoid erros while adding indices ans constraints
+ */
 class DeleteInvalidRecords implements IRepairStep {
 	/** @var IConfig */
 	protected $config;
@@ -91,26 +95,18 @@ class DeleteInvalidRecords implements IRepairStep {
 		$this->voteMapper = $voteMapper;
 	}
 
-	/*
-	 * @inheritdoc
-	 */
-	public function getName() {
-		return 'Delete duplicates';
+	public function getName():string {
+		return 'Polls - Delete duplicates and orphaned records';
 	}
 
-	/**
-	 * @inheritdoc
-	 *
-	 * @return void
-	 */
-	public function run(IOutput $output) {
+	public function run(IOutput $output):void {
 		$this->removeOrphaned();
-		$this->logMapper->removeDuplicates();
-		$this->optionMapper->removeDuplicates();
-		$this->preferencesMapper->removeDuplicates();
-		$this->shareMapper->removeDuplicates();
-		$this->subscriptionMapper->removeDuplicates();
-		$this->voteMapper->removeDuplicates();
+		$this->logMapper->removeDuplicates($output);
+		$this->optionMapper->removeDuplicates($output);
+		$this->preferencesMapper->removeDuplicates($output);
+		$this->shareMapper->removeDuplicates($output);
+		$this->subscriptionMapper->removeDuplicates($output);
+		$this->voteMapper->removeDuplicates($output);
 	}
 
 	/**
@@ -119,10 +115,8 @@ class DeleteInvalidRecords implements IRepairStep {
 	 *
 	 * we have to use a raw query, because NOT EXISTS is not
 	 * part of doctrine's expression builder
-	 *
-	 * @return void
 	 */
-	private function removeOrphaned() {
+	private function removeOrphaned():void {
 		// polls 1.4 -> introduced contraints
 		// Version0104Date20200205104800
 		// get table prefix, as we are running a raw query

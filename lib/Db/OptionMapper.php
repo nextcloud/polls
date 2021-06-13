@@ -39,7 +39,6 @@ class OptionMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Option
 	 */
 	public function find(int $id): Option {
 		$qb = $this->db->getQueryBuilder();
@@ -56,6 +55,7 @@ class OptionMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Option[]
+	 * @psalm-return array<array-key, Option>
 	 */
 	public function findByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
@@ -72,7 +72,6 @@ class OptionMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Option
 	 */
 	public function findByPollAndText(int $pollId, string $pollOptionText): Option {
 		$qb = $this->db->getQueryBuilder();
@@ -115,7 +114,8 @@ class OptionMapper extends QBMapper {
 	/**
 	 * @return void
 	 */
-	public function removeDuplicates() {
+	public function removeDuplicates($output = null): int {
+		$count = 0;
 		try {
 			// remove duplicates from oc_polls_options
 			// preserve the first entry
@@ -139,6 +139,7 @@ class OptionMapper extends QBMapper {
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
 					$delete->execute();
+					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
 				}
@@ -149,11 +150,14 @@ class OptionMapper extends QBMapper {
 			}
 			throw $e;
 		}
+
+		if ($output && $count) {
+			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
+		}
+
+		return $count;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName())

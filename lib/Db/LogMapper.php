@@ -37,9 +37,6 @@ class LogMapper extends QBMapper {
 		parent::__construct($db, 'polls_log', Log::class);
 	}
 
-	/**
-	 * @return Log
-	 */
 	public function find(int $id): Log {
 		$qb = $this->db->getQueryBuilder();
 
@@ -97,9 +94,6 @@ class LogMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	/**
-	 * @return Log
-	 */
 	public function getLastRecord(int $pollId): Log {
 		$qb = $this->db->getQueryBuilder();
 
@@ -112,10 +106,8 @@ class LogMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	/**
-	 * @return void
-	 */
-	public function removeDuplicates() {
+	public function removeDuplicates($output = null): int {
+		$count = 0;
 		try {
 			// remove duplicates from oc_polls_log
 			// preserve the first entry
@@ -140,6 +132,7 @@ class LogMapper extends QBMapper {
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
 					$delete->execute();
+					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
 				}
@@ -150,10 +143,14 @@ class LogMapper extends QBMapper {
 			}
 			throw $e;
 		}
+
+		if ($output && $count) {
+			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
+		}
+
+		return $count;
 	}
-	/**
-	 * @return void
-	 */
+
 	public function deleteByUserId(string $userId): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
@@ -164,7 +161,6 @@ class LogMapper extends QBMapper {
 
 	/**
 	 * Delete entries per timestamp
-	 * @return void
 	 */
 	public function deleteOldEntries(int $offset): void {
 		$query = $this->db->getQueryBuilder();
@@ -177,7 +173,6 @@ class LogMapper extends QBMapper {
 
 	/**
 	 * Delete processed entries
-	 * @return void
 	 */
 	public function deleteProcessedEntries(): void {
 		$query = $this->db->getQueryBuilder();

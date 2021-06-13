@@ -28,54 +28,40 @@ use OC\DB\SchemaWrapper;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
+/**
+ * Preparation before migration
+ * Remove all indices and foreign key constraints to avoid errors
+ * while changing the schema
+ */
 class RemoveIndices implements IRepairStep {
+
 	/** @var Connection */
 	private $connection;
-
-	protected $childTables = [
-		'polls_comments',
-		'polls_log',
-		'polls_notif',
-		'polls_options',
-		'polls_share',
-		'polls_votes',
-	];
-
-	protected $uniqueTables = [
-		'polls_log',
-		'polls_notif',
-		'polls_options',
-		'polls_preferences',
-		'polls_share',
-		'polls_votes',
-	];
 
 	public function __construct(Connection $connection) {
 		$this->connection = $connection;
 	}
 
 	public function getName() {
-		return 'Remove polls table indices';
+		return 'Polls - Remove indices and foreign key constraints';
 	}
 
-	/**
-	 * @return void
-	 */
-	public function run(IOutput $output) {
-		foreach ($this->childTables as $tableName) {
+	public function run(IOutput $output): void {
+		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
+			// $output->info('"polls" - Removing foreign keys from '. $tableName);
 			$this->removeForeignKeys($tableName);
+			// $output->info('"polls" - Removing indices in '. $tableName);
 			$this->removeGenericIndices($tableName);
 		}
 
-		foreach ($this->uniqueTables as $tableName) {
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
+			// $output->info('"polls" - Removing unique indices in '. $tableName);
 			$this->removeUniqueIndices($tableName);
 		}
 	}
 
 	/**
 	 * remove a foreign key with $foreignKeyName from $tableName
-	 *
-	 * @return void
 	 */
 	private function removeForeignKey(string $tableName, string $foreignKeyName): void {
 		$schema = new SchemaWrapper($this->connection);
@@ -88,8 +74,6 @@ class RemoveIndices implements IRepairStep {
 
 	/**
 	 * remove an index with $indexName from $tableName
-	 *
-	 * @return void
 	 */
 	private function removeIndex(string $tableName, string $indexName): void {
 		$schema = new SchemaWrapper($this->connection);
@@ -104,8 +88,6 @@ class RemoveIndices implements IRepairStep {
 
 	/**
 	 * remove all UNIQUE indices from $table
-	 *
-	 * @return void
 	 */
 	private function removeUniqueIndices(string $tableName): void {
 		$schema = new SchemaWrapper($this->connection);
@@ -121,8 +103,6 @@ class RemoveIndices implements IRepairStep {
 
 	/**
 	 * remove all UNIQUE indices from $table
-	 *
-	 * @return void
 	 */
 	private function removeGenericIndices(string $tableName): void {
 		$schema = new SchemaWrapper($this->connection);
@@ -138,8 +118,6 @@ class RemoveIndices implements IRepairStep {
 
 	/**
 	 * 	remove all foreign keys from $tableName
-	 *
-	 * @return void
 	 */
 	private function removeForeignKeys(string $tableName): void {
 		$schema = new SchemaWrapper($this->connection);
