@@ -41,8 +41,9 @@ class SubscriptionMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Subscription[]
+	 * @psalm-return array<array-key, Subscription>
 	 */
-	public function findAll() {
+	public function findAll(): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -55,8 +56,9 @@ class SubscriptionMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Subscription[]
+	 * @psalm-return array<array-key, Subscription>
 	 */
-	public function findAllByPoll(int $pollId) {
+	public function findAllByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -71,9 +73,8 @@ class SubscriptionMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Subscription
 	 */
-	public function findByPollAndUser(int $pollId, string $userId) {
+	public function findByPollAndUser(int $pollId, string $userId): Subscription {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -102,10 +103,8 @@ class SubscriptionMapper extends QBMapper {
 		$qb->execute();
 	}
 
-	/**
-	 * @return void
-	 */
-	public function removeDuplicates() {
+	public function removeDuplicates($output = null): int {
+		$count = 0;
 		try {
 			// remove duplicates from oc_polls_share
 			// preserve the first entry
@@ -128,6 +127,7 @@ class SubscriptionMapper extends QBMapper {
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
 					$delete->execute();
+					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
 				}
@@ -138,11 +138,14 @@ class SubscriptionMapper extends QBMapper {
 			}
 			throw $e;
 		}
+
+		if ($output && $count) {
+			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
+		}
+
+		return $count;
 	}
 
-	/**
-	 * @return void
-	 */
 	public function deleteByUserId(string $userId): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())

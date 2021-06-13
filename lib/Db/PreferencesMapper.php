@@ -54,10 +54,8 @@ class PreferencesMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	/**
-	 * @return void
-	 */
-	public function removeDuplicates() {
+	public function removeDuplicates($output = null): int {
+		$count = 0;
 		try {
 			$query = $this->db->getQueryBuilder();
 			$query->delete($this->getTableName())
@@ -82,6 +80,7 @@ class PreferencesMapper extends QBMapper {
 				if (in_array($row['user_id'], $userskeep)) {
 					$delete->setParameter('id', $row['id']);
 					$delete->execute();
+					$count++;
 				} else {
 					$userskeep[] = $row['user_id'];
 				}
@@ -92,6 +91,12 @@ class PreferencesMapper extends QBMapper {
 			}
 			throw $e;
 		}
+
+		if ($output && $count) {
+			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
+		}
+
+		return $count;
 	}
 
 	/**

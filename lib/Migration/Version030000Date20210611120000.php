@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -29,7 +29,15 @@ use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version0109Date20210323120002 extends SimpleMigrationStep {
+// use Doctrine\DBAL\Types\Type;
+
+/**
+ * Installation class for the polls app.
+ * Initial db creation
+ * Changed class naming: Version[jjmmpp]Date[YYYYMMDDHHMMSS]
+ * Version: jj = major version, mm = minor, pp = patch
+ */
+class Version030000Date20210611120000 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;
@@ -42,53 +50,24 @@ class Version0109Date20210323120002 extends SimpleMigrationStep {
 		$this->config = $config;
 	}
 
+	/**
+	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_polls')) {
-			$table = $schema->getTable('polls_polls');
-			if (!$table->hasColumn('allow_proposals')) {
-				$table->addColumn('allow_proposals', 'string', [
-					'length' => 64,
-					'notnull' => true,
-					'default' => 'disallow'
-				]);
-			}
-			if (!$table->hasColumn('use_no')) {
-				$table->addColumn('use_no', 'integer', [
-					'length' => 11,
-					'notnull' => true,
-					'default' => 1
-				]);
-			}
-			if (!$table->hasColumn('proposals_expire')) {
-				$table->addColumn('proposals_expire', 'integer', [
-					'length' => 11,
-					'notnull' => true,
-					'default' => 0
-				]);
-			}
-		}
-
-		if ($schema->hasTable('polls_options')) {
-			$table = $schema->getTable('polls_options');
-			if (!$table->hasColumn('owner')) {
-				$table->addColumn('owner', 'string', [
-					'length' => 64,
-					'notnull' => true,
-					'default' => ''
-				]);
-			}
-			if (!$table->hasColumn('released')) {
-				$table->addColumn('released', 'integer', [
-					'length' => 11,
-					'notnull' => true,
-					'default' => 0
-				]);
-			}
-		}
+		// Call initial migration from class TableSchema
+		// Drop old tables, which are migrated in prior versions
+		TableSchema::removeObsoleteTables($schema, $output);
+		// Drop old columns, which are migrated in prior versions
+		TableSchema::removeObsoleteColumns($schema, $output);
+		// Create tables, as defined in TableSchema or fix column definitions
+		TableSchema::CreateOrUpdateSchema($schema, $output);
+		// remove old migration entries from versions prior to polls 3.x
+		// including migration versions from test releases
+		// theoretically, only this migration should be existen. If not, no matter
+		TableSchema::removeObsoleteMigrations($this->connection, $output);
 
 		return $schema;
 	}

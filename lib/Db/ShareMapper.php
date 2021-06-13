@@ -40,8 +40,9 @@ class ShareMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Share[]
+	 * @psalm-return array<array-key, Share>
 	 */
-	public function findAll() {
+	public function findAll(): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -54,8 +55,9 @@ class ShareMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Share[]
+	 * @psalm-return array<array-key, Share>
 	 */
-	public function findByPoll(int $pollId) {
+	public function findByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -69,7 +71,6 @@ class ShareMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Share
 	 */
 	public function findByPollAndUser(int $pollId, string $userId): Share {
 		$qb = $this->db->getQueryBuilder();
@@ -88,9 +89,8 @@ class ShareMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Share
 	 */
-	public function findByToken(string $token) {
+	public function findByToken(string $token): Share {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -102,9 +102,6 @@ class ShareMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	/**
-	 * @return void
-	 */
 	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
 
@@ -116,9 +113,6 @@ class ShareMapper extends QBMapper {
 		$qb->execute();
 	}
 
-	/**
-	 * @return void
-	 */
 	public function deleteByUserId(string $userId): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
@@ -141,10 +135,8 @@ class ShareMapper extends QBMapper {
 		$qb->execute();
 	}
 
-	/**
-	 * @return void
-	 */
-	public function removeDuplicates() {
+	public function removeDuplicates($output = null): int {
+		$count = 0;
 		try {
 			$query = $this->db->getQueryBuilder();
 			// make sure, all public shares fit to the unique index added in schemaChange(),
@@ -177,6 +169,7 @@ class ShareMapper extends QBMapper {
 				if (in_array($currentRecord, $entries2Keep) || $row['user_id'] === null || $row['type'] === '') {
 					$delete->setParameter('id', $row['id']);
 					$delete->execute();
+					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
 				}
@@ -187,5 +180,11 @@ class ShareMapper extends QBMapper {
 			}
 			throw $e;
 		}
+
+		if ($output && $count) {
+			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
+		}
+
+		return $count;
 	}
 }

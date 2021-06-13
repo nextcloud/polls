@@ -50,8 +50,6 @@ use OCA\Polls\Model\User;
  * @method void setAccess(string $value)
  * @method int getAnonymous()
  * @method void setAnonymous(integer $value)
- * @method int getFullAnonymous()
- * @method void setFullAnonymous(integer $value)
  * @method int getallowComment()
  * @method void setallowComment(integer $value)
  * @method int getAllowMaybe()
@@ -60,10 +58,6 @@ use OCA\Polls\Model\User;
  * @method void setAllowProposals(string $value)
  * @method int getProposalsExpire()
  * @method void setProposalsExpire(integer $value)
- * @method string getOptions()
- * @method void setOptions(string $value)
- * @method string getSettings()
- * @method void setSettings(string $value)
  * @method int getVoteLimit()
  * @method void setVoteLimit(integer $value)
  * @method int getOptionLimit()
@@ -118,8 +112,6 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $anonymous */
 	protected $anonymous;
 
-	/** @var int $fullAnonymous */
-	protected $fullAnonymous;
 
 	/** @var int $allowMaybe */
 	protected $allowMaybe;
@@ -129,12 +121,6 @@ class Poll extends Entity implements JsonSerializable {
 
 	/** @var string $proposalsExpire */
 	protected $proposalsExpire;
-
-	/** @var string $options */
-	protected $options;
-
-	/** @var string $settings*/
-	protected $settings;
 
 	/** @var int $voteLimit*/
 	protected $voteLimit;
@@ -159,7 +145,7 @@ class Poll extends Entity implements JsonSerializable {
 
 	/** @var int $useNo*/
 	protected $useNo;
-	
+
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -194,7 +180,6 @@ class Poll extends Entity implements JsonSerializable {
 			'allowMaybe' => $this->getAllowMaybe(),
 			'allowProposals' => $this->getAllowProposals(),
 			'proposalsExpire' => $this->getProposalsExpire(),
-			'settings' => $this->getSettings(),
 			'voteLimit' => $this->getVoteLimit(),
 			'optionLimit' => $this->getOptionLimit(),
 			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),

@@ -28,7 +28,13 @@ use OC\DB\SchemaWrapper;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
+/**
+ * Preparation before migration
+ * Remove all indices and foreign key constraints to avoid errors
+ * while changing the schema
+ */
 class RemoveIndices implements IRepairStep {
+
 	/** @var Connection */
 	private $connection;
 
@@ -37,27 +43,37 @@ class RemoveIndices implements IRepairStep {
 	}
 
 	public function getName() {
-		return 'Remove polls table indices';
+		return 'Polls - Remove indices and foreign key constraints';
+	}
+
+	public function run(IOutput $output): void {
+		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
+			// $output->info('"polls" - Removing foreign keys from '. $tableName);
+			$this->removeForeignKeys($tableName);
+			// $output->info('"polls" - Removing indices in '. $tableName);
+			$this->removeGenericIndices($tableName);
+		}
+
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
+			// $output->info('"polls" - Removing unique indices in '. $tableName);
+			$this->removeUniqueIndices($tableName);
+		}
 	}
 
 	/**
-	 * @return void
+	 * remove a foreign key with $foreignKeyName from $tableName
 	 */
-	public function run(IOutput $output) {
-		$this->removeUniqueIndices('polls_options');
-		$this->removeUniqueIndices('polls_log');
-		$this->removeUniqueIndices('polls_notif');
-		$this->removeUniqueIndices('polls_share');
-		$this->removeUniqueIndices('polls_votes');
-		$this->removeUniqueIndices('polls_preferences');
-		$this->removeUniqueIndices('polls_preferences');
-		$this->removeUniqueIndices('polls_watch');
+	private function removeForeignKey(string $tableName, string $foreignKeyName): void {
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable($tableName)) {
+			$table = $schema->getTable($tableName);
+			$table->removeForeignKey($foreignKeyName);
+			$this->connection->migrateToSchema($schema->getWrappedSchema());
+		}
 	}
 
 	/**
-	 * 	 * remove an index with $indexName from $table
-	 *
-	 * @return void
+	 * remove an index with $indexName from $tableName
 	 */
 	private function removeIndex(string $tableName, string $indexName): void {
 		$schema = new SchemaWrapper($this->connection);
@@ -71,9 +87,7 @@ class RemoveIndices implements IRepairStep {
 	}
 
 	/**
-	 * 	 * remove all UNIQUE indices from $table
-	 *
-	 * @return void
+	 * remove all UNIQUE indices from $table
 	 */
 	private function removeUniqueIndices(string $tableName): void {
 		$schema = new SchemaWrapper($this->connection);
@@ -83,6 +97,34 @@ class RemoveIndices implements IRepairStep {
 				if (strpos($index->getName(), 'UNIQ_') === 0) {
 					$this->removeIndex($tableName, $index->getName());
 				}
+			}
+		}
+	}
+
+	/**
+	 * remove all UNIQUE indices from $table
+	 */
+	private function removeGenericIndices(string $tableName): void {
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable($tableName)) {
+			$table = $schema->getTable($tableName);
+			foreach ($table->getIndexes() as $index) {
+				if (strpos($index->getName(), 'IDX_') === 0) {
+					$this->removeIndex($tableName, $index->getName());
+				}
+			}
+		}
+	}
+
+	/**
+	 * 	remove all foreign keys from $tableName
+	 */
+	private function removeForeignKeys(string $tableName): void {
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable($tableName)) {
+			$table = $schema->getTable($tableName);
+			foreach ($table->getForeignKeys() as $foreignKey) {
+				$this->removeForeignKey($tableName, $foreignKey->getName());
 			}
 		}
 	}

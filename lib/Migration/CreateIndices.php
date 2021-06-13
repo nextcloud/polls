@@ -31,6 +31,27 @@ use OCP\Migration\IOutput;
 
 class CreateIndices implements IRepairStep {
 
+	// private const INDICES = [
+	//    'polls_options' => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
+	//    'polls_log' => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
+	//    'polls_notif' => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+	//    'polls_share' => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+	//    'polls_votes' => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
+	//    'polls_preferences' => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
+	//    'polls_watch' => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
+	// ];
+	//
+	// private const PARENT_TABLE = 'polls_polls';
+	//
+	// private const CHILD_TABLES = [
+	//    'polls_comments',
+	//    'polls_log',
+	//    'polls_notif',
+	//    'polls_options',
+	//    'polls_share',
+	//    'polls_votes',
+	// ];
+
 	/** @var Connection */
 	private $connection;
 
@@ -39,26 +60,34 @@ class CreateIndices implements IRepairStep {
 	}
 
 	public function getName() {
-		return 'Create polls table indices';
+		return 'Polls - Create indices and foreign key constraints';
+	}
+
+	public function run(IOutput $output): void {
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $values) {
+			$this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
+		}
+		$output->info('Polls - Indices created.');
+
+		$this->createForeignKeyConstraints();
+		$output->info('Polls - Foreign key contraints created.');
 	}
 
 	/**
-	 * @return void
+	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
-	public function run(IOutput $output) {
-		$this->createIndex('polls_options', 'UNIQ_options', ['poll_id', 'poll_option_text', 'timestamp'], true);
-		$this->createIndex('polls_log', 'UNIQ_unprocessed', ['processed', 'poll_id', 'user_id', 'message_id'], true);
-		$this->createIndex('polls_notif', 'UNIQ_subscription', ['poll_id', 'user_id'], true);
-		$this->createIndex('polls_share', 'UNIQ_shares', ['poll_id', 'user_id'], true);
-		$this->createIndex('polls_votes', 'UNIQ_votes', ['poll_id', 'user_id', 'vote_option_text'], true);
-		$this->createIndex('polls_preferences', 'UNIQ_preferences', ['user_id'], true);
-		$this->createIndex('polls_watch', 'UNIQ_watch', ['poll_id', 'table'], true);
+	private function createForeignKeyConstraints(): void {
+		$schema = new SchemaWrapper($this->connection);
+		$eventTable = $schema->getTable(TableSchema::FK_PARENT_TABLE);
+		foreach (TableSchema::FK_CHILD_TABLES as $tbl) {
+			$table = $schema->getTable($tbl);
+			$table->addForeignKeyConstraint($eventTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);
+		}
+		$this->connection->migrateToSchema($schema->getWrappedSchema());
 	}
 
 	/**
 	 * Create index for $table
-	 *
-	 * @return void
 	 */
 	private function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): void {
 		$schema = new SchemaWrapper($this->connection);
