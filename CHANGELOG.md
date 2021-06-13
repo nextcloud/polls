@@ -1,8 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.0.1 - release] - 2021-06-11
-## Only available for Nextcloud 19
+## [2.0.2 - release] - 2021-06-11
+## Only available for Nextcloud 20/21
 - prevent to run in migration error upon server update, see #1723
 - Bugfix release in order to fix the problems, which came from the update to version 2.0
 
