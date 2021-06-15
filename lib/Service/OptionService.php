@@ -163,7 +163,7 @@ class OptionService {
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
-		} catch (UniqueConstraintViolationException $e) {
+		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw new DuplicateEntryException('This option already exists');
 			}
