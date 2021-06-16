@@ -42,6 +42,7 @@ class Watch extends Entity implements JsonSerializable {
 	public const OBJECT_VOTES = "votes";
 	public const OBJECT_OPTIONS = "options";
 	public const OBJECT_COMMENTS = "comments";
+	public const OBJECT_SHARES = "shares";
 
 	/** @var int $pollId */
 	protected $pollId;
