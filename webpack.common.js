@@ -2,6 +2,7 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
 	entry: path.join(__dirname, 'src/js/', 'main.js'),
@@ -61,6 +62,9 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin(),
 		new CleanWebpackPlugin(),
+		new webpack.DefinePlugin({
+			appName: JSON.stringify('polls'),
+		}),
 		new ESLintPlugin({
 			quiet: true,
 			extensions: ['js', 'vue'],
