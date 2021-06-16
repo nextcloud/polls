@@ -302,6 +302,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Oy vermenin devre dışı bırakıldığı tüm bitmemiş anketler. ",
     "Deleted polls" : "Silinmiş anketler",
     "My deleted polls" : "Silinmiş anketlerim",
-    "The trash bin." : "Geri dönüşüm kutusu."
+    "The trash bin." : "Çöp kutusu."
 },
 "nplurals=2; plural=(n > 1);");

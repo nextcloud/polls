@@ -23,9 +23,10 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\EventDispatcher\IEventDispatcher;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\Watch;
+use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Model\Acl;
 
 class CommentService {
@@ -42,21 +43,21 @@ class CommentService {
 	/** @var Comment */
 	private $comment;
 
-	/** @var WatchService */
-	private $watchService;
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
 	public function __construct(
 		Acl $acl,
 		AnonymizeService $anonymizer,
 		CommentMapper $commentMapper,
 		Comment $comment,
-		WatchService $watchService
+		IEventDispatcher $eventDispatcher
 	) {
 		$this->acl = $acl;
 		$this->anonymizer = $anonymizer;
 		$this->commentMapper = $commentMapper;
 		$this->comment = $comment;
-		$this->watchService = $watchService;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -81,7 +82,7 @@ class CommentService {
 	/**
 	 * Add comment
 	 */
-	public function add(int $pollId = 0, ?string $token = '', string $message): Comment {
+	public function add(int $pollId = 0, ?string $token = '', string $message = ''): Comment {
 		if ($token) {
 			$this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD);
 		} else {
@@ -93,7 +94,9 @@ class CommentService {
 		$this->comment->setComment($message);
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
-		$this->watchService->writeUpdate($this->comment->getPollId(), Watch::OBJECT_COMMENTS);
+
+		$this->eventDispatcher->dispatchTyped(new CommentEvent($this->comment));
+
 		return $this->comment;
 	}
 
@@ -114,7 +117,9 @@ class CommentService {
 		}
 
 		$this->commentMapper->delete($this->comment);
-		$this->watchService->writeUpdate($this->comment->getPollId(), Watch::OBJECT_COMMENTS);
+
+		$this->eventDispatcher->dispatchTyped(new CommentEvent($this->comment));
+
 		return $this->comment;
 	}
 }

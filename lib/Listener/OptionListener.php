@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2021 Jonas Rittershofer <jotoeri@users.noreply.github.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
- * @author Jonas Rittershofer <jotoeri@users.noreply.github.com>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,29 +23,40 @@
 
 namespace OCA\Polls\Listener;
 
-use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\User\Events\UserDeletedEvent;
-use OCA\Polls\Cron\UserDeletedJob;
+use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Db\Watch;
+use OCA\Polls\Service\LogService;
+use OCA\Polls\Service\WatchService;
 
-class UserDeletedListener implements IEventListener {
+class OptionListener implements IEventListener {
 
-	/** @var IJobList */
-	private $jobList;
+	/** @var LogService */
+	private $logService;
+
+	/** @var WatchService */
+	private $watchService;
+
+	/** @var string */
+	private $table = Watch::OBJECT_OPTIONS;
 
 	public function __construct(
-		IJobList $jobList
+		LogService $logService,
+		WatchService $watchService
 	) {
-		$this->jobList = $jobList;
+		$this->logService = $logService;
+		$this->watchService = $watchService;
 	}
 
 	public function handle(Event $event): void {
-		if (!($event instanceof UserDeletedEvent)) {
+		if (!($event instanceof OptionEvent)) {
 			return;
 		}
 
-		// Set a Cron-Job to delete the Users Polls.
-		$this->jobList->add(UserDeletedJob::class, ['owner' => $event->getUser()->getUID()]);
+		if ($event->getLogMsg()) {
+			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
+		}
+		$this->watchService->writeUpdate($event->getPollId(), $this->table);
 	}
 }
