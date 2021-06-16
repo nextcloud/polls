@@ -51,11 +51,11 @@ class GroupDeletedJob extends QueuedJob {
 	}
 
 	/**
-	 * @param mixed $arguments
+	 * @param mixed $argument
 	 * @return void
 	 */
-	protected function run($arguments) {
-		$group = $arguments['group'];
+	protected function run($argument) {
+		$group = $argument['group'];
 		$this->logger->info('Removing group shares for deleted group {group}', [
 			'group' => $group
 		]);
