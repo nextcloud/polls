@@ -29,66 +29,24 @@ use OCP\BackgroundJob\QueuedJob;
 use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
-use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\SubscriptionMapper;
-use OCA\Polls\Db\VoteMapper;
 
-class UserDeletedJob extends QueuedJob {
-
-	/** @var CommentMapper **/
-	private $commentMapper;
-
-	/** @var LogMapper **/
-	private $logMapper;
-
-	/** @var OptionMapper **/
-	private $optionMapper;
-
-	/** @var PollMapper **/
-	private $pollMapper;
-
-	/** @var PreferencesMapper **/
-	private $preferencesMapper;
-
-	/** @var SubscriptionMapper **/
-	private $subscriptionMapper;
+class GroupDeletedJob extends QueuedJob {
 
 	/** @var ShareMapper **/
 	private $shareMapper;
-
-	/** @var VoteMapper **/
-	private $voteMapper;
 
 	/** @var LoggerInterface */
 	private $logger;
 
 	public function __construct(
-		CommentMapper $commentMapper,
-		LogMapper $logMapper,
-		OptionMapper $optionMapper,
-		PollMapper $pollMapper,
-		PreferencesMapper $preferencesMapper,
 		ShareMapper $shareMapper,
-		SubscriptionMapper $subscriptionMapper,
-		VoteMapper $voteMapper,
 		ITimeFactory $time,
 		LoggerInterface $logger
 	) {
 		parent::__construct($time);
-		$this->commentMapper = $commentMapper;
-		$this->logMapper = $logMapper;
-		$this->optionMapper = $optionMapper;
-		$this->pollMapper = $pollMapper;
-		$this->preferencesMapper = $preferencesMapper;
 		$this->shareMapper = $shareMapper;
-		$this->subscriptionMapper = $subscriptionMapper;
-		$this->voteMapper = $voteMapper;
 		$this->logger = $logger;
 	}
 
@@ -97,9 +55,9 @@ class UserDeletedJob extends QueuedJob {
 	 * @return void
 	 */
 	protected function run($argument) {
-		$owner = $argument['owner'];
-		$this->logger->info('Deleting polls for deleted user {user}', [
-			'user' => $owner
+		$group = $argument['group'];
+		$this->logger->info('Removing group shares for deleted group {group}', [
+			'group' => $group
 		]);
 
 		$replacementName = 'deleted_' . \OC::$server->getSecureRandom()->generate(
@@ -109,13 +67,6 @@ class UserDeletedJob extends QueuedJob {
 			ISecureRandom::CHAR_UPPER
 		);
 
-		$this->pollMapper->deleteByUserId($owner);
-		$this->logMapper->deleteByUserId($owner);
-		$this->shareMapper->deleteByIdAndType($owner, Share::TYPE_USER);
-		$this->preferencesMapper->deleteByUserId($owner);
-		$this->subscriptionMapper->deleteByUserId($owner);
-		$this->commentMapper->renameUserId($owner, $replacementName);
-		$this->optionMapper->renameUserId($owner, $replacementName);
-		$this->voteMapper->renameUserId($owner, $replacementName);
+		$this->shareMapper->deleteByIdAndType($group, Share::TYPE_GROUP);
 	}
 }

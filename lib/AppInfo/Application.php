@@ -30,6 +30,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Notification\IManager as NotificationManager;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\OptionEvent;
@@ -47,6 +48,7 @@ use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Listener\UserDeletedListener;
+use OCA\Polls\Listener\GroupDeletedListener;
 use OCA\Polls\Listener\CommentListener;
 use OCA\Polls\Listener\OptionListener;
 use OCA\Polls\Listener\PollListener;
@@ -84,6 +86,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShareEvent::class, ShareListener::class);
 		$context->registerEventListener(VoteEvent::class, VoteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
+		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {
