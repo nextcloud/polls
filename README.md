@@ -9,7 +9,7 @@
 
 
 ## Features
-- :bar_chart: Create / edit polls (datetimes and texts)
+- :bar_chart: Create / edit polls (date/times and texts)
 - :date: Set a closing date
 - :lock: Restrict access (all site users or invited users only)
 - :speech_balloon: Comments
@@ -24,7 +24,7 @@
 - Get hints about possible conflicting entries in your calendar around the date option
 - Switch between list and table view
 - Configure your preferred view for date and text polls
-- Useable via REST-API
+- Usable via REST-API
 
 ## Bugs
 - https://github.com/nextcloud/polls/issues
@@ -63,8 +63,6 @@ git clone https://github.com/nextcloud/polls.git
 * Run a complete build with ```make all``` (installs dev env, runs linter and builds the polls.js)
 
 ## Contribution Guidelines
-Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance
-to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together
-we can strengthen and support each other.
+Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together we can strengthen and support each other.
 
 For more information please review the [guidelines for contributing](https://github.com/nextcloud/server/blob/master/.github/CONTRIBUTING.md) to this repository.
