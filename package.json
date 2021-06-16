@@ -26,9 +26,9 @@
 	"private": true,
 	"main": "src/js/main.js",
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development webpack --config webpack.dev.js",
-		"watch": "cross-env NODE_ENV=development webpack --progress --watch --config webpack.dev.js",
-		"build": "cross-env NODE_ENV=production webpack --progress --config webpack.prod.js",
+		"dev": "cross-env NODE_ENV=development webpack --config webpack.js",
+		"watch": "cross-env NODE_ENV=development webpack --progress --watch --config webpack.js",
+		"build": "cross-env NODE_ENV=production webpack --progress --config webpack.js",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src",
