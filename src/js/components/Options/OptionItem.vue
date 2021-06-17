@@ -126,7 +126,7 @@ export default {
 			return {
 				from: {
 					month: from.format('MMM [ \']YY'),
-					day: from.format('Do'),
+					day: from.format('D'),
 					dow: from.format('ddd'),
 					time: from.format('LT'),
 					date: from.format('ll'),
