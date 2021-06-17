@@ -62,8 +62,8 @@ class Group extends UserGroupClass {
 			if ($newMember->IsEnabled()) {
 				$members[] = $newMember;
 			}
-
 		}
+
 		return $members;
 	}
 
