@@ -62,9 +62,9 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin(),
 		new CleanWebpackPlugin(),
-		new webpack.DefinePlugin({
-			appName: JSON.stringify('polls'),
-		}),
+		// new webpack.DefinePlugin({
+		// 	appName: JSON.stringify('polls'),
+		// }),
 		new ESLintPlugin({
 			quiet: true,
 			extensions: ['js', 'vue'],
