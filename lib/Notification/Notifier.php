@@ -134,7 +134,7 @@ class Notifier implements INotifier {
 				break;
 
 			case self::NOTIFY_POLL_ARCHIVED_BY_OTHER:
-				$notification->setParsedSubject($l->t('%s archived your poll.', $actor['name']));
+				$notification->setParsedSubject($l->t('%s archived your poll', $actor['name']));
 				$notification->setRichSubject($l->t('{actor} archived your poll "%s".', $pollTitle), $actor);
 				break;
 
