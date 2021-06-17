@@ -57,8 +57,13 @@ class Group extends UserGroupClass {
 		$members = [];
 
 		foreach (array_keys(self::getContainer()->query(IGroupManager::class)->displayNamesInGroup($this->id)) as $member) {
-			$members[] = new User($member);
+			$newMember = new User($member);
+
+			if ($newMember->IsEnabled()) {
+				$members[] = $newMember;
+			}
 		}
+
 		return $members;
 	}
 

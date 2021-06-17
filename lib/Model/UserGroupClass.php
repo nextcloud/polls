@@ -191,19 +191,19 @@ class UserGroupClass implements \JsonSerializable {
 
 		[$result, $more] = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
 
-		foreach ($result['users'] as $item) {
+		foreach (($result['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);
 		}
 
-		foreach ($result['exact']['users'] as $item) {
+		foreach (($result['exact']['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);
 		}
 
-		foreach ($result['groups'] as $item) {
+		foreach (($result['groups'] ?? []) as $item) {
 			$items[] = new Group($item['value']['shareWith']);
 		}
 
-		foreach ($result['exact']['groups'] as $item) {
+		foreach (($result['exact']['groups'] ?? []) as $item) {
 			$items[] = new Group($item['value']['shareWith']);
 		}
 
@@ -211,10 +211,10 @@ class UserGroupClass implements \JsonSerializable {
 		$items = array_merge($items, ContactGroup::search($query));
 
 		if (Circle::isEnabled()) {
-			foreach ($result['circles'] as $item) {
+			foreach (($result['circles'] ?? []) as $item) {
 				$items[] = new Circle($item['value']['shareWith']);
 			}
-			foreach ($result['exact']['circles'] as $item) {
+			foreach (($result['exact']['circles'] ?? []) as $item) {
 				$items[] = new Circle($item['value']['shareWith']);
 			}
 		}

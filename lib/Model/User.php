@@ -47,7 +47,7 @@ class User extends UserGroupClass {
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
 	}
 
-	public function getUserIsDisabled(): bool {
+	public function isEnabled(): bool {
 		return $this->user->isEnabled();
 	}
 
