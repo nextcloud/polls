@@ -10,7 +10,6 @@ OC.L10N.register(
     "User" : "User",
     "Polls" : "Sondatges",
     "%s invited you to a poll" : "%s vos condivèt a un sondatge",
-    "{user} has invited you to the poll \"%s\"." : "{user} vos convidèt a un sondatge « %s ».",
     "- %s voted." : "- %s votèt.",
     "Poll invitation \"%s\"" : "Invitacion al sondatge « %s »",
     "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],
