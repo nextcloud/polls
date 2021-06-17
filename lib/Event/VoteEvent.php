@@ -48,6 +48,9 @@ class VoteEvent extends Event {
 	}
 
 	public function getActor(): string {
-		return \OC::$server->getUserSession()->getUser()->getUID();
+		if (\OC::$server->getUserSession()->isLoggedIn()) {
+			return \OC::$server->getUserSession()->getUser()->getUID();
+		}
+		return $this->vote->getUserId();
 	}
 }
