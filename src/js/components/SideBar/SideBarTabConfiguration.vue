@@ -59,14 +59,15 @@
 			<ConfigShowResults @change="writePoll" />
 		</ConfigBox>
 
-		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-delete'"
-			:title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Delete poll')"
-			@click="switchDeleted()" />
+		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-category-app-bundles'"
+			:title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+			@click="toggleArchive()" />
+
 		<ButtonDiv v-if="poll.deleted"
 			icon="icon-delete"
 			class="error"
-			:title="t('polls', 'Delete poll permanently')"
-			@click="deletePermanently()" />
+			:title="t('polls', 'Delete poll')"
+			@click="deletePoll()" />
 	</div>
 </template>
 
@@ -126,7 +127,7 @@ export default {
 			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: this.poll.title }))
 		}, 1500),
 
-		switchDeleted() {
+		toggleArchive() {
 			if (this.poll.deleted) {
 				this.$store.commit('poll/setProperty', { deleted: 0 })
 			} else {
@@ -135,7 +136,7 @@ export default {
 			this.writePoll()
 		},
 
-		async deletePermanently() {
+		async deletePoll() {
 			if (!this.poll.deleted) return
 			try {
 				await this.$store.dispatch('poll/delete', { pollId: this.poll.id })

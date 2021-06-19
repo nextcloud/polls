@@ -59,8 +59,8 @@ export default {
 		badge() {
 			if (this.deleted) {
 				return {
-					title: t('polls', 'Deleted'),
-					icon: 'icon-delete',
+					title: t('polls', 'Archived'),
+					icon: 'icon-category-app-bundles',
 					class: 'error',
 				}
 			}

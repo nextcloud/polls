@@ -115,9 +115,9 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function switchDeleted(int $pollId): DataResponse {
+	public function toggleArchive(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
-			return $this->pollService->switchDeleted($pollId);
+			return $this->pollService->toggleArchive($pollId);
 		});
 	}
 

@@ -37,9 +37,9 @@
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
-						@switch-deleted="switchDeleted(poll.id)"
+						@toggle-archive="toggleArchive(poll.id)"
 						@clone-poll="clonePoll(poll.id)"
-						@delete-permanently="deletePermanently(poll.id)" />
+						@delete-poll="deletePoll(poll.id)" />
 				</ul>
 			</AppNavigationItem>
 		</template>
@@ -124,19 +124,19 @@ export default {
 			}
 		},
 
-		async switchDeleted(pollId) {
+		async toggleArchive(pollId) {
 			try {
-				await this.$store.dispatch('poll/switchDeleted', { pollId })
+				await this.$store.dispatch('poll/toggleArchive', { pollId })
 				emit('update-polls')
 			} catch {
-				showError(t('polls', 'Error deleting poll.'))
+				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
 		},
 
-		async deletePermanently(pollId) {
+		async deletePoll(pollId) {
 			try {
 				await this.$store.dispatch('poll/delete', { pollId })
-				// if we permanently delete current selected poll,
+				// if we delete current selected poll,
 				// reload deleted polls route
 				if (this.$route.params.id && this.$route.params.id === pollId) {
 					this.$router.push({ name: 'list', params: { type: 'deleted' } })

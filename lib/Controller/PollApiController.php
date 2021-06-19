@@ -115,9 +115,9 @@
  	 * @CORS
  	 * @NoCSRFRequired
  	 */
- 	public function switchDeleted(int $pollId): DataResponse {
+ 	public function toggleArchive(int $pollId): DataResponse {
  		try {
- 			return new DataResponse(['poll' => $this->pollService->switchDeleted($pollId)], Http::STATUS_OK);
+ 			return new DataResponse(['poll' => $this->pollService->toggleArchive($pollId)], Http::STATUS_OK);
  		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (Exception $e) {

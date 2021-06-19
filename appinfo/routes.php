@@ -61,7 +61,7 @@ return [
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],
 
-		['name' => 'poll#switchDeleted', 'url' => '/poll/{pollId}/switchDeleted', 'verb' => 'PUT'],
+		['name' => 'poll#toggleArchive', 'url' => '/poll/{pollId}/toggleArchive', 'verb' => 'PUT'],
 		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'GET'],
 		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/poll/{pollId}/addresses', 'verb' => 'GET'],
 

@@ -132,7 +132,7 @@ export default {
 
 		accessType() {
 			if (this.poll.deleted) {
-				return t('polls', 'Deleted')
+				return t('polls', 'Archived')
 			} else if (this.poll.access === 'public') {
 				return t('polls', 'All users')
 			}
@@ -142,7 +142,7 @@ export default {
 
 		accessIcon() {
 			if (this.poll.deleted) {
-				return 'icon-delete'
+				return 'icon-category-app-bundles'
 			} else if (this.poll.access === 'public') {
 				return 'icon-polls-public-poll'
 			}
@@ -329,6 +329,6 @@ export default {
 	}
 
 	.item__access--deleted {
-		background-image: var(--icon-delete-000);
+		background-image: var(--icon-category-app-bundles-000);
 	}
 </style>
