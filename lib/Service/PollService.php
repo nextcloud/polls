@@ -232,11 +232,11 @@ class PollService {
 
 
 	/**
-	 * Switch deleted status (move to deleted polls)
+	 * Move to archive or restore
 	 *
 	 * @return Poll
 	 */
-	public function switchDeleted(int $pollId): Poll {
+	public function toggleArchive(int $pollId): Poll {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_DELETE);
 		$this->poll = $this->acl->getPoll();
 

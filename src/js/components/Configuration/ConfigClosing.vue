@@ -25,7 +25,7 @@
 		<ButtonDiv
 			:icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
 			:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
-			@click="switchClosed()" />
+			@click="toggleClosed()" />
 		<CheckBoxDiv v-show="!closed" v-model="useExpire" :label="t('polls', 'Poll closing date')" />
 		<DatetimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
 	</div>
@@ -102,7 +102,7 @@ export default {
 	},
 
 	methods: {
-		switchClosed() {
+		toggleClosed() {
 			if (this.closed) {
 				this.$store.commit('poll/setProperty', { expire: 0 })
 			} else {

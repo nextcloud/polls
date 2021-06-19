@@ -86,11 +86,11 @@ const state = {
 			pinned: false,
 		},
 		{
-			id: 'deleted',
-			title: t('polls', 'Deleted polls'),
-			titleExt: t('polls', 'My deleted polls'),
-			description: t('polls', 'The trash bin.'),
-			icon: 'icon-delete',
+			id: 'archived',
+			title: t('polls', 'Archive'),
+			titleExt: t('polls', 'My archived polls'),
+			description: t('polls', 'Your archived polls are only accessable from you.'),
+			icon: 'icon-category-app-bundles',
 			pinned: true,
 		},
 	],
@@ -124,7 +124,7 @@ const getters = {
 			return state.list.filter((poll) => (poll.access === 'public' && !poll.deleted))
 		} else if (filterId === 'hidden') {
 			return state.list.filter((poll) => (poll.access === 'hidden' && !poll.deleted))
-		} else if (filterId === 'deleted') {
+		} else if (filterId === 'archived') {
 			return state.list.filter((poll) => (poll.deleted))
 		} else if (filterId === 'participated') {
 			return state.list.filter((poll) => (poll.userHasVoted))

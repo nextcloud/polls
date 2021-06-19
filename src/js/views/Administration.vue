@@ -64,17 +64,17 @@
 								{{ t('polls', 'Take over') }}
 							</ActionButton>
 
-							<ActionButton :icon="poll.deleted ? 'icon-history' : 'icon-delete'"
+							<ActionButton :icon="poll.deleted ? 'icon-history' : 'icon-category-app-bundles'"
 								:close-after-click="true"
-								@click="switchDeleted(poll.id)">
-								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Set "deleted" status') }}
+								@click="toggleArchive(poll.id)">
+								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
 							</ActionButton>
 
 							<ActionButton icon="icon-delete"
 								class="danger"
 								:close-after-click="true"
 								@click="confirmDelete(poll.id)">
-								{{ t('polls', 'Delete poll permanently') }}
+								{{ t('polls', 'Delete poll') }}
 							</ActionButton>
 						</Actions>
 					</template>
@@ -105,7 +105,7 @@
 						@click="deleteModal = false" />
 					<ButtonDiv :primary="true"
 						:title="t('polls', 'Yes')"
-						@click="deletePermanently()" />
+						@click="deletePoll()" />
 				</div>
 			</div>
 		</Modal>
@@ -195,16 +195,16 @@ export default {
 			this.deleteModal = true
 		},
 
-		async switchDeleted(pollId) {
+		async toggleArchive(pollId) {
 			try {
-				await this.$store.dispatch('poll/switchDeleted', { pollId })
+				await this.$store.dispatch('poll/toggleArchive', { pollId })
 				emit('update-polls')
 			} catch {
-				showError(t('polls', 'Error switching deleted status.'))
+				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
 		},
 
-		async deletePermanently() {
+		async deletePoll() {
 			try {
 				await this.$store.dispatch('poll/delete', { pollId: this.deletePollId })
 				emit('update-polls')

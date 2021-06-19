@@ -201,12 +201,12 @@ const actions = {
 		}
 	},
 
-	async switchDeleted(context, payload) {
+	async toggleArchive(context, payload) {
 		const endPoint = 'apps/polls/poll'
 		try {
-			await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/switchDeleted'))
+			await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/toggleArchive'))
 		} catch (e) {
-			console.error('Error switching deleted status', { error: e.response }, { payload })
+			console.error('Error archiving/restoring', { error: e.response }, { payload })
 		}
 	},
 

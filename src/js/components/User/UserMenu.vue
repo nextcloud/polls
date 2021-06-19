@@ -45,7 +45,7 @@
 		<ActionCheckbox :checked="subscribed"
 			:disabled="!acl.allowSubscribe"
 			title="check"
-			@change="switchSubscription">
+			@change="toggleSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</ActionCheckbox>
 		<ActionButton v-if="$route.name === 'publicVote' && emailAddress"
@@ -139,7 +139,7 @@ export default {
 	},
 
 	methods: {
-		async switchSubscription() {
+		async toggleSubscription() {
 			await this.$store.dispatch('subscription/update', !this.subscribed)
 		},
 
