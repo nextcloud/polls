@@ -16,3 +16,11 @@ jobs:
         exempt-issue-labels: 'enhancement,bug,investigate,UX'
         days-before-stale: 30
         days-before-close: 5
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        any-of-labels: 'Template missing'
+        stale-issue-message: 'This issue is marked as stale, because it is created without using the issue template and will be closed in 5 days.'
+        stale-issue-label: 'stale'
+        exempt-issue-labels: 'enhancement,bug,investigate,UX'
+        days-before-stale: 1
+        days-before-close: 5
