@@ -15,6 +15,7 @@ OC.L10N.register(
     "{actor} took over your poll \"%s\" and is the new owner." : "{actor} hat Ihre Umfrage \"%s\" übernommen und ist der neue Besitzer.",
     "%s deleted your poll" : "%s hat Ihre Umfrage gelöscht",
     "{actor} deleted your poll \"%s\"." : "{actor} hat Ihre Umfrage \"%s\" gelöscht.",
+    "%s archived your poll" : "%s hat Ihre Umfrage archiviert",
     "{actor} archived your poll \"%s\"." : "{actor} hat Ihre Umfrage \"%s\" archiviert.",
     "- %s voted." : "- %s hat abgestimmt.",
     "- Updated poll configuration. Please check your votes." : "- Umfragekonfiguration aktualisiert. Bitte überprüfen Sie Ihre Stimmabgaben.",

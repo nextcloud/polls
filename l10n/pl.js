@@ -15,6 +15,7 @@ OC.L10N.register(
     "{actor} took over your poll \"%s\" and is the new owner." : "{actor} przejął Twoją sondę \"%s\" i jest jej nowym właścicielem.",
     "%s deleted your poll" : "%s usunął Twoją sondę",
     "{actor} deleted your poll \"%s\"." : "{actor} usunął Twoją sondę \"%s\".",
+    "%s archived your poll" : "%s zarchiwizował Twoją sondę",
     "{actor} archived your poll \"%s\"." : "{actor} zarchiwizował Twoją sondę \"%s\".",
     "- %s voted." : "- Zagłosował %s.",
     "- Updated poll configuration. Please check your votes." : "- Zaktualizowano konfigurację sondy. Sprawdź swoje głosy.",

@@ -13,6 +13,7 @@
     "{actor} took over your poll \"%s\" and is the new owner." : "{actor} 接管了您的投票「%s」並成為了新的擁有者。",
     "%s deleted your poll" : "%s 已刪除您的投票",
     "{actor} deleted your poll \"%s\"." : "{actor} 已刪除了您的投票「%s」。",
+    "%s archived your poll" : "%s 已封存您的投票",
     "{actor} archived your poll \"%s\"." : "{actor} 已存檔您的投票 「%s」。",
     "- %s voted." : "- %s 已投票。",
     "- Updated poll configuration. Please check your votes." : "- 更新了投票設定。請檢查您的投票。",
