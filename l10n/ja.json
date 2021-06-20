@@ -46,9 +46,8 @@
     "Error cloning poll." : "投票のクローン中にエラーが発生しました",
     "Error deleting poll." : "投票の削除中にエラーが発生しました",
     "Clone poll" : "投票を複製",
-    "Delete poll" : "投票を削除",
     "Restore poll" : "投票を再開",
-    "Delete poll permanently" : "投票を完全に削除",
+    "Delete poll" : "投票を削除",
     "Confirmed" : "確認済み",
     "Clone to option sequence" : "選択シーケンスのクローン",
     "Create a sequence of date options starting with {dateOption}." : "{dateOption}で始まる日付オプションのシーケンスを作成します。",
@@ -60,7 +59,6 @@
     "Confirm option" : "選択肢を確認",
     "No description provided" : "説明がありません",
     "No Participants until now" : "現在，参加者はありません",
-    "Deleted" : "削除済み",
     "never" : "なし",
     "To participate, tell us how we can call you!" : "参加するのに必要な連絡方法を教えてください ",
     "Enter your name" : "あなたの名前を入力",
@@ -111,9 +109,6 @@
     "Public polls" : "公開中の投票",
     "A complete list with all public polls on this site, regardless who is the owner." : "所有者権を無視したこのサイト上にある公開投票の全リスト。",
     "All polls" : "全ての投票",
-    "All polls, where you have access to." : "あなたがアクセスできる全投票",
-    "Deleted polls" : "削除済みの投票",
-    "My deleted polls" : "私の削除済み投票",
-    "The trash bin." : "ごみ箱"
+    "All polls, where you have access to." : "あなたがアクセスできる全投票"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

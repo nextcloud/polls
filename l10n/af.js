@@ -13,7 +13,6 @@ OC.L10N.register(
     "Confirmed" : "Bevestig",
     "OK" : "Goed",
     "Week" : "Week",
-    "Deleted" : "Geskrap",
     "never" : "nooit",
     "Owner" : "Eienaar",
     "Created" : "Geskep",

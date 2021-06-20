@@ -18,7 +18,6 @@ OC.L10N.register(
     "Confirmed" : "Bekreftet",
     "OK" : "OK",
     "Week" : "Uke",
-    "Deleted" : "Slettet",
     "never" : "aldri",
     "Access" : "Tilgang",
     "Owner" : "Eier",

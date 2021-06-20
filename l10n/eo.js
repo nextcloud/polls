@@ -28,7 +28,6 @@ OC.L10N.register(
     "Confirmed" : "Konfirmita",
     "OK" : "Bone",
     "Week" : "Semajno",
-    "Deleted" : "Forigita",
     "never" : "neniam",
     "Access" : "Aliro",
     "Owner" : "Posedanto",

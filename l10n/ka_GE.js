@@ -17,7 +17,6 @@ OC.L10N.register(
     "Confirmed" : "დადასტურებლია",
     "OK" : "კარგი",
     "Week" : "კვირა",
-    "Deleted" : "გაუქმდა",
     "never" : "არასდროს",
     "Access" : "წვდომა",
     "Owner" : "მფლობელი",

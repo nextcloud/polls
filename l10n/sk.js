@@ -51,9 +51,8 @@ OC.L10N.register(
     "Error cloning poll." : "Chyba pri zdvojení ankety.",
     "Error deleting poll." : "Pri odstraňovaní ankety sa vyskytla chyba.",
     "Clone poll" : "Zdvojiť anketu",
-    "Delete poll" : "Zmazať anketu",
     "Restore poll" : "Obnoviť anketu",
-    "Delete poll permanently" : "Natrvalo odstrániť anketu",
+    "Delete poll" : "Zmazať anketu",
     "Confirmed" : "Potvrdené",
     "Clone to option sequence" : "Zdvojiť postupnosť voľby",
     "Create a sequence of date options starting with {dateOption}." : "Vytvoriť postupnosť volieb dátumov začínajúcich {dateOption}.",
@@ -66,7 +65,6 @@ OC.L10N.register(
     "No description provided" : "Nie je zadaný popis",
     "No Participants until now" : "Doposiaľ žiadni účastníci",
     "Copy list of email addresses to clipboard" : "Skopírovať zoznam emailových adries do schránky",
-    "Deleted" : "Zmazané",
     "never" : "nikdy",
     "Public poll" : "Verejná anketa",
     "To participate, tell us how we can call you!" : "Ak sa chcete zúčastniť, povedzte nám, ako vás máme volať!",
@@ -118,9 +116,6 @@ OC.L10N.register(
     "Public polls" : "Verejné ankety",
     "A complete list with all public polls on this site, regardless who is the owner." : "Úplný zoznam všetkých verejných ankiet na tejto stránke bez ohľadu na to, kto je vlastníkom.",
     "All polls" : "Všetky ankety",
-    "All polls, where you have access to." : "Všetky ankety, ku ktorým máte prístup.",
-    "Deleted polls" : "Odstránené ankety",
-    "My deleted polls" : "Moje odstránené ankety",
-    "The trash bin." : "Kôš"
+    "All polls, where you have access to." : "Všetky ankety, ku ktorým máte prístup."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

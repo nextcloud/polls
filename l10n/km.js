@@ -9,7 +9,6 @@ OC.L10N.register(
     "Settings" : "ការកំណត់",
     "OK" : "ព្រម",
     "Week" : "សប្ដាហ៍",
-    "Deleted" : "បាន​លុប",
     "never" : "មិនដែរ",
     "Owner" : "Owner",
     "Details" : "ព័ត៌មាន​លម្អិត",

@@ -15,7 +15,6 @@ OC.L10N.register(
     "Confirmed" : "Confirmat",
     "OK" : "OK",
     "Week" : "Săptămâna",
-    "Deleted" : "Șters",
     "never" : "niciodată",
     "Access" : "Acces",
     "Owner" : "Proprietar",

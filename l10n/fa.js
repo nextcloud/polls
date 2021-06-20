@@ -36,15 +36,14 @@ OC.L10N.register(
     "Error cloning poll." : "خطای کلون نظرسنجی",
     "Error deleting poll." : "خطا در حذف نظرسنجی",
     "Clone poll" : "نظرسنجی کلون",
-    "Delete poll" : "نظرسنجی را حذف کنید",
     "Restore poll" : "بازیابی نظرسنجی",
+    "Delete poll" : "نظرسنجی را حذف کنید",
     "Confirmed" : "تایید شده",
     "OK" : "تایید",
     "Week" : "هفته",
     "Delete option" : "گزینه حذف",
     "No description provided" : "توضیحات ارائه نشده است",
     "No Participants until now" : "هیچ مشارکت کننده ای وجود ندارد",
-    "Deleted" : "حذف شده",
     "never" : "never",
     "Enter your name" : "اسمت را وارد کن",
     "Access" : "دسترسی",
@@ -75,7 +74,6 @@ OC.L10N.register(
     "My polls" : "نظرسنجی های من",
     "Hidden polls" : "نظرسنجی پنهان",
     "Public polls" : "نظرسنجی های عمومی",
-    "All polls" : "همه نظرسنجی ها",
-    "Deleted polls" : "نظرسنجی حذف شد"
+    "All polls" : "همه نظرسنجی ها"
 },
 "nplurals=2; plural=(n > 1);");

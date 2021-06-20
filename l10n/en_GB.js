@@ -20,7 +20,6 @@ OC.L10N.register(
     "Confirmed" : "Confirmed",
     "OK" : "OK",
     "Week" : "Week",
-    "Deleted" : "Deleted",
     "never" : "never",
     "Access" : "Access",
     "Owner" : "Owner",

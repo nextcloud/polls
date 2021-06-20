@@ -16,7 +16,6 @@ OC.L10N.register(
     "Confirmed" : "Confirmáu",
     "OK" : "Aceutar",
     "Week" : "Selmana",
-    "Deleted" : "Desanicióse",
     "never" : "never",
     "Owner" : "Owner",
     "Created" : "Creóse",

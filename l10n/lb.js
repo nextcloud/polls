@@ -10,7 +10,6 @@ OC.L10N.register(
     "Settings" : "Astellungen",
     "OK" : "OK",
     "Week" : "Woch",
-    "Deleted" : "Geläscht",
     "never" : "Ni",
     "Owner" : "Owner",
     "Details" : "Detailer",

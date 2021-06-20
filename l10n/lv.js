@@ -14,7 +14,6 @@ OC.L10N.register(
     "Confirmed" : "Apstiprināts",
     "OK" : "Labi",
     "Week" : "Nedēļa",
-    "Deleted" : "Dzēstie",
     "never" : "nekad",
     "Owner" : "Īpašnieks",
     "Created" : "Izveidots",

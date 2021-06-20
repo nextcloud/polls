@@ -34,7 +34,6 @@ OC.L10N.register(
     "Confirmed" : "Bekräftad",
     "OK" : "OK",
     "Week" : "Vecka",
-    "Deleted" : "Borttagen",
     "never" : "aldrig",
     "Enter your name" : "Ange ditt namn",
     "Access" : "Åtkomst",

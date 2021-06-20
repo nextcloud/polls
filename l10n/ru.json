@@ -69,9 +69,8 @@
     "Error cloning poll." : "Не удалось скопировать опрос.",
     "Error deleting poll." : "Не удалось удалить опрос.",
     "Clone poll" : "Скопировать опрос",
-    "Delete poll" : "Удалить опрос",
     "Restore poll" : "Восстановить опрос",
-    "Delete poll permanently" : "Окончательно удалить опрос",
+    "Delete poll" : "Удалить опрос",
     "Confirmed" : "Подтверждена",
     "Clone to option sequence" : "Копировать в последовательность вариантов",
     "Create a sequence of date options starting with {dateOption}." : "Создать последовательность из вариантов дат с началом {dateOption}.",
@@ -86,7 +85,6 @@
     "No description provided" : "Описание отсуствует",
     "No Participants until now" : "Пока нет ни одного участника",
     "Copy list of email addresses to clipboard" : "Копировать список адресов эл. почты в буфер обмена",
-    "Deleted" : "Удалено",
     "never" : "никогда",
     "Optional email address" : "Дополнительный адрес эл. почты",
     "Checking email address …" : "Проверяется адрес эл. почты…",
@@ -144,9 +142,6 @@
     "A complete list with all public polls on this site, regardless who is the owner." : "Полный список всех открытых опросов на этом сайте, независимо от того, кто является владельцем.",
     "All polls" : "Все опросы",
     "All polls, where you have access to." : "Все опросы, где у вас есть доступ.",
-    "Closed polls" : "Закрытые опросы",
-    "Deleted polls" : "Удалённые опросы",
-    "My deleted polls" : "Мои удаленные опросы",
-    "The trash bin." : "Это просто корзина."
+    "Closed polls" : "Закрытые опросы"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

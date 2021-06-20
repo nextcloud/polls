@@ -8,7 +8,6 @@ OC.L10N.register(
     "Settings" : "সেটিংস",
     "OK" : "তথাস্তু",
     "Week" : "সপ্তাহ",
-    "Deleted" : "মুছে ফেলা",
     "never" : "কখনোই নয়",
     "Owner" : "Owner",
     "Details" : "বিসতারিত",

@@ -14,7 +14,6 @@ OC.L10N.register(
     "Confirmed" : "ได้รับการยืนยันแล้ว",
     "OK" : "ตกลง",
     "Week" : "สัปดาห์",
-    "Deleted" : "ลบแล้ว",
     "never" : "ไม่ต้องเลย",
     "Owner" : "Owner",
     "Details" : "รายละเอียด",

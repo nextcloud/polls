@@ -10,7 +10,6 @@ OC.L10N.register(
     "Confirmed" : "Cadarnhawyd",
     "OK" : "Iawn",
     "Week" : "Wythnos",
-    "Deleted" : "Wedi dileu",
     "never" : "byth",
     "Owner" : "Owner",
     "Details" : "Manylion",

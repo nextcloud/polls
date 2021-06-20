@@ -8,7 +8,6 @@ OC.L10N.register(
     "Settings" : "Quraşdırmalar",
     "OK" : "Oldu",
     "Week" : "Həftə",
-    "Deleted" : "Silinib",
     "never" : "heç vaxt",
     "Owner" : "Owner",
     "Details" : "Detallar",

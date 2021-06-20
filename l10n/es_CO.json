@@ -32,7 +32,6 @@
     "Week" : "Semana",
     "No description provided" : "No se agregó ninguna descripción",
     "No Participants until now" : "No hay participantes por ahora",
-    "Deleted" : "Borrado",
     "never" : "nunca",
     "Access" : "Acceso",
     "Owner" : "Dueño",
@@ -51,7 +50,6 @@
     "My polls" : "Mis encuestas",
     "Hidden polls" : "Encuestas ocultas",
     "Public polls" : "Encuestas públicas",
-    "All polls" : "Todas las encuestas",
-    "Deleted polls" : "Encuestas borradas"
+    "All polls" : "Todas las encuestas"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

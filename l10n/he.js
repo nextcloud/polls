@@ -39,9 +39,8 @@ OC.L10N.register(
     "Error cloning poll." : "שגיאה בשכפול סקר.",
     "Error deleting poll." : "שגיאה במחיקת סקר.",
     "Clone poll" : "שכפול סקר",
-    "Delete poll" : "מחיקת סקר",
     "Restore poll" : "שחזור סקר",
-    "Delete poll permanently" : "מחיקת סקר לצמיתות",
+    "Delete poll" : "מחיקת סקר",
     "Confirmed" : "מאושר",
     "Clone to option sequence" : "שכפול לרצף אפשרויות",
     "Create a sequence of date options starting with {dateOption}." : "יצירת רצף של אפשרויות תאריכים החל מ־{dateOption}.",
@@ -51,7 +50,6 @@ OC.L10N.register(
     "Clone option" : "שכפול אפשרות",
     "No description provided" : "לא סופק תיאור",
     "No Participants until now" : "אין משתתפים עד עכשיו",
-    "Deleted" : "נמחק",
     "never" : "מעולם לא",
     "Enter your name" : "נא למלא את שמך",
     "Access" : "גישה",
@@ -93,9 +91,6 @@ OC.L10N.register(
     "All polls, where you placed a vote." : "כל הסקרים בהם הצבעת.",
     "Public polls" : "סקרים ציבוריים",
     "All polls" : "כל הסקרים",
-    "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה.",
-    "Deleted polls" : "סקרים שנמחקו",
-    "My deleted polls" : "הסקרים שלי שנמחקו",
-    "The trash bin." : "סל האשפה."
+    "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

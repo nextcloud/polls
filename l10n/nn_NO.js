@@ -12,7 +12,6 @@ OC.L10N.register(
     "Confirmed" : "Stadfesta",
     "OK" : "OK",
     "Week" : "Veke",
-    "Deleted" : "Sletta",
     "never" : "aldri",
     "Owner" : "Owner",
     "Created" : "Lagd",

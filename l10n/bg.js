@@ -15,7 +15,6 @@ OC.L10N.register(
     "Confirmed" : "Потвърдено",
     "OK" : "ОК",
     "Week" : "Седмица",
-    "Deleted" : "Изтрито",
     "never" : "никога",
     "Owner" : "Създател",
     "Created" : "Създаден",

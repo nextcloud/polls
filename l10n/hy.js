@@ -9,7 +9,6 @@ OC.L10N.register(
     "Confirmed" : "Հաստատված",
     "OK" : "Լավ",
     "Week" : "Շաբաթ",
-    "Deleted" : "Ջնջված",
     "never" : "երբեք",
     "Owner" : "Owner",
     "Details" : "Մանրամասներ",

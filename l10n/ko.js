@@ -18,7 +18,6 @@ OC.L10N.register(
     "Confirmed" : "확인됨",
     "OK" : "확인",
     "Week" : "주",
-    "Deleted" : "삭제함",
     "never" : "하지 않음",
     "Login" : "로그인",
     "Access" : "접근 권한",

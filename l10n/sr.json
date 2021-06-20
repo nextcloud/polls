@@ -46,9 +46,8 @@
     "Error cloning poll." : "Грешка приликом клонирања гласања.",
     "Error deleting poll." : "Грешка приликом брисања гласања.",
     "Clone poll" : "Клонирај гласање",
-    "Delete poll" : "Обриши гласање",
     "Restore poll" : "Поврати гласање",
-    "Delete poll permanently" : "Обриши гласање заувек",
+    "Delete poll" : "Обриши гласање",
     "Confirmed" : "Потврђен",
     "Clone to option sequence" : "Секвенца клонирања опција",
     "Create a sequence of date options starting with {dateOption}." : "Направи секвенцу датума почевши од {dateOption}.",
@@ -61,7 +60,6 @@
     "No description provided" : "Није дат опис",
     "No Participants until now" : "Без учесника до сада",
     "Copy list of email addresses to clipboard" : "Копирај списак е-мејл адреса у оставу",
-    "Deleted" : "Обрисано",
     "never" : "никад",
     "Optional email address" : "Опциона адреса е-поште",
     "Checking email address …" : "Проверавам адресу е-поште…",
@@ -112,9 +110,6 @@
     "Public polls" : "Јавна гласања",
     "A complete list with all public polls on this site, regardless who is the owner." : "Цео списак свих јавних гласања на сајту, без обзира на власника.",
     "All polls" : "Сва гласања",
-    "All polls, where you have access to." : "Сва гласање, којима имате приступ.",
-    "Deleted polls" : "Обрисана гласања",
-    "My deleted polls" : "Моја обрисана гласања",
-    "The trash bin." : "Канта за ђубре."
+    "All polls, where you have access to." : "Сва гласање, којима имате приступ."
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

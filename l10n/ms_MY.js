@@ -8,7 +8,6 @@ OC.L10N.register(
     "Settings" : "Tetapan",
     "OK" : "OK",
     "Week" : "Minggu",
-    "Deleted" : "Dipadam",
     "never" : "jangan",
     "Owner" : "Owner",
     "Shares" : "Kongsi",

@@ -19,7 +19,6 @@ OC.L10N.register(
     "Confirmed" : "Потврдено",
     "OK" : "Добро",
     "Week" : "Недела",
-    "Deleted" : "Избришана",
     "never" : "никогаш",
     "Login" : "Најава",
     "Access" : "Пристап",

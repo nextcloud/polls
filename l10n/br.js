@@ -11,7 +11,6 @@ OC.L10N.register(
     "Settings" : "Arventennoù",
     "OK" : "OK",
     "Week" : "Sizun",
-    "Deleted" : "Lamet",
     "never" : "james",
     "Owner" : "Perc'henner",
     "Details" : "Munudoù",

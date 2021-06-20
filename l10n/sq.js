@@ -16,7 +16,6 @@ OC.L10N.register(
     "Confirmed" : "E konfirmuar",
     "OK" : "OK",
     "Week" : "Javë",
-    "Deleted" : "E fshirë",
     "never" : "asnjëherë",
     "Owner" : "Zotëruesi",
     "Created" : "U krijua",

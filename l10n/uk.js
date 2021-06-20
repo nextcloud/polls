@@ -32,15 +32,13 @@ OC.L10N.register(
     "Add new Poll" : "Додати нове опитування",
     "Settings" : "Налаштування",
     "Clone poll" : "Копіювати опитування",
-    "Delete poll" : "Вилучити опитування",
     "Restore poll" : "Відновити опитування",
-    "Delete poll permanently" : "Вилучити безповоротно",
+    "Delete poll" : "Вилучити опитування",
     "Confirmed" : "Підтверджено",
     "OK" : "OK",
     "Week" : "Тиждень",
     "No description provided" : "Відсутній опис",
     "No Participants until now" : "Поки що відсутні учасники",
-    "Deleted" : "Вилучено",
     "never" : "ніколи",
     "Access" : "Доступ",
     "Owner" : "Власник",
@@ -63,7 +61,6 @@ OC.L10N.register(
     "Relevant" : "Відповідне",
     "My polls" : "Мої опитування",
     "Public polls" : "Публічні опитування",
-    "All polls" : "Всі опитування",
-    "Deleted polls" : "Вилучені опитування"
+    "All polls" : "Всі опитування"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

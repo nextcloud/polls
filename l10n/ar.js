@@ -18,7 +18,6 @@ OC.L10N.register(
     "OK" : "موافق",
     "Week" : "أسبوع",
     "Add" : "إضافة",
-    "Deleted" : "تم حذفه",
     "never" : "بتاتاً",
     "Access" : "النفاذ",
     "Owner" : "المالك",

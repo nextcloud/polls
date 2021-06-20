@@ -13,7 +13,6 @@ OC.L10N.register(
     "Confirmed" : "Terkonfirmasi",
     "OK" : "OK",
     "Week" : "Minggu",
-    "Deleted" : "Dihapus",
     "never" : "tidak pernah.",
     "Owner" : "Owner",
     "Created" : "Dibuat",

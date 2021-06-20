@@ -64,9 +64,8 @@ OC.L10N.register(
     "Error cloning poll." : "Virhe kyselyä kloonatessa.",
     "Error deleting poll." : "Virhe kyselyä poistaessa.",
     "Clone poll" : "Kloonaa kysely",
-    "Delete poll" : "Poista kysely",
     "Restore poll" : "Palauta kysely",
-    "Delete poll permanently" : "Poista kysely pysyvästi",
+    "Delete poll" : "Poista kysely",
     "Confirmed" : "Vahvistettu",
     "Clone to option sequence" : "Kloonaa tämä valintasekvenssi",
     "Create a sequence of date options starting with {dateOption}." : "Luo lista aikavaihtoehtoja ajasta {dateOption} alkaen.",
@@ -81,7 +80,6 @@ OC.L10N.register(
     "No description provided" : "Kuvausta ei määritetty",
     "No Participants until now" : "Ei osallistujia tätä ennen",
     "Copy list of email addresses to clipboard" : "Kopio lista sähköpostiosoitteista leikepöydälle",
-    "Deleted" : "Poistettu",
     "never" : "ei koskaan",
     "Optional email address" : "Valinnainen sähköpostiosoite",
     "Checking email address …" : "Tarkistetaan sähköpostiosoitetta…",
@@ -165,9 +163,6 @@ OC.L10N.register(
     "All polls" : "Kaikki kyselyt",
     "All polls, where you have access to." : "Kyselyt joihin sinulla on pääsy.",
     "Closed polls" : "Suljetut äänestykset",
-    "All closed polls, where voting is disabled." : "Kaikki suljetut äänestykset, joissa äänestäminen on poissä käytöstä",
-    "Deleted polls" : "Poistetut kyselyt",
-    "My deleted polls" : "Poistetut äänestykseni",
-    "The trash bin." : "Roskakori"
+    "All closed polls, where voting is disabled." : "Kaikki suljetut äänestykset, joissa äänestäminen on poissä käytöstä"
 },
 "nplurals=2; plural=(n != 1);");

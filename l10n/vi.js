@@ -14,7 +14,6 @@ OC.L10N.register(
     "Confirmed" : "Đã xác nhận",
     "OK" : "OK",
     "Week" : "Tuần",
-    "Deleted" : "Đã xóa",
     "never" : "không thay đổi",
     "Owner" : "Chủ",
     "Created" : "Đã tạo",

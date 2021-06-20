@@ -57,9 +57,8 @@
     "Error cloning poll." : "Error clonant l’enquesta.",
     "Error deleting poll." : "Error suprimint l’enquesta.",
     "Clone poll" : "Clona enquesta",
-    "Delete poll" : "Suprimeix enquesta",
     "Restore poll" : "Restaura l'enquesta",
-    "Delete poll permanently" : "Suprimeix l'enquesta de forma permanent",
+    "Delete poll" : "Suprimeix enquesta",
     "Confirmed" : "Confirmat",
     "Clone to option sequence" : "Clonar a seqüència d'opcions",
     "Create a sequence of date options starting with {dateOption}." : "Crear una seqüència d'opcions de data a partir de {dateOption}.",
@@ -72,7 +71,6 @@
     "No description provided" : "No s'ha proveït cap descripció",
     "No Participants until now" : "No hi ha participants fins ara",
     "Copy list of email addresses to clipboard" : "Copy list of email addresses to clipboard",
-    "Deleted" : "Suprimit",
     "never" : "mai",
     "Optional email address" : "Correu electrònic opcional",
     "Checking email address …" : "Comprovació de l'adreça de correu electrònic …",
@@ -134,9 +132,6 @@
     "A complete list with all public polls on this site, regardless who is the owner." : "Una llista completa amb totes les enquestes públiques d'aquest lloc, independentment de qui sigui el propietari.",
     "All polls" : "Totes les enquestes",
     "All polls, where you have access to." : "Totes les enquestes, on teniu accés.",
-    "Closed polls" : "Enquestes tancades",
-    "Deleted polls" : "Enquestes suprimides",
-    "My deleted polls" : "Les meves enquestes suprimides",
-    "The trash bin." : "La paperera."
+    "Closed polls" : "Enquestes tancades"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

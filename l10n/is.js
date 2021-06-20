@@ -60,9 +60,8 @@ OC.L10N.register(
     "Error cloning poll." : "Villa við að klóna könnun.",
     "Error deleting poll." : "Villa við að eyða könnun.",
     "Clone poll" : "Klóna könnun",
-    "Delete poll" : "Eyða könnun",
     "Restore poll" : "Endurheimta könnun",
-    "Delete poll permanently" : "Eyða könnun endanlega",
+    "Delete poll" : "Eyða könnun",
     "Confirmed" : "Staðfest",
     "OK" : "Í lagi",
     "Week" : "Vika",
@@ -73,7 +72,6 @@ OC.L10N.register(
     "Add some!" : "Bættu einhverju við!",
     "No description provided" : "Engin lýsing var gefin",
     "No Participants until now" : "Engir þátttakendur þar til núna",
-    "Deleted" : "Eytt",
     "never" : "aldrei",
     "Optional email address" : "Valfrjálst tölvupóstfang",
     "Checking email address …" : "Yfirfer tölvupóstfang …",
@@ -141,9 +139,6 @@ OC.L10N.register(
     "All polls" : "Allar kannanir",
     "All polls, where you have access to." : "Allar kannanir sem þú hefur aðgang að.",
     "Closed polls" : "Lokaðar kannanir",
-    "All closed polls, where voting is disabled." : "Allar lokaðar kannanir, þar sem atkvæðagreiðsla er ekki virk.",
-    "Deleted polls" : "Eyddar kannanir",
-    "My deleted polls" : "Eyddar kannanir frá mér",
-    "The trash bin." : "Ruslafatan."
+    "All closed polls, where voting is disabled." : "Allar lokaðar kannanir, þar sem atkvæðagreiðsla er ekki virk."
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

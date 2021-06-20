@@ -13,7 +13,6 @@ OC.L10N.register(
     "Confirmed" : "Confirmate",
     "OK" : "Ok",
     "Week" : "Septimana",
-    "Deleted" : "Delite",
     "never" : "nunquam",
     "Owner" : "Owner",
     "Details" : "Detalios",

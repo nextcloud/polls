@@ -18,7 +18,6 @@ OC.L10N.register(
     "Confirmed" : "Kinnitatud",
     "OK" : "OK",
     "Week" : "Nädal",
-    "Deleted" : "Kustutatud",
     "never" : "mitte kunagi",
     "Access" : "Ligipääs",
     "Owner" : "Omanik",

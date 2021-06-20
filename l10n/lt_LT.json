@@ -70,9 +70,8 @@
     "Error cloning poll." : "Klaida dubliuojant apklausą.",
     "Error deleting poll." : "Klaida ištrinant apklausą.",
     "Clone poll" : "Dubliuoti apklausą",
-    "Delete poll" : "Ištrinti apklausą",
     "Restore poll" : "Atkurti apklausą",
-    "Delete poll permanently" : "Negrįžtamai ištrinti apklausą",
+    "Delete poll" : "Ištrinti apklausą",
     "Confirmed" : "Patvirtintas",
     "Clone to option sequence" : "Dubliuoti į variantų seką",
     "Create a sequence of date options starting with {dateOption}." : "Sukurti datų variantų seką pradedant nuo {dateOption}.",
@@ -93,7 +92,6 @@
     "No Participants until now" : "Iki šiol, nebuvo jokių dalyvių",
     "Copy list of email addresses to clipboard" : "Kopijuoti el. pašto adresų sąrašą į iškarpinę",
     "Time zone: {timezoneString}" : "Laiko juosta: {timezoneString}",
-    "Deleted" : "Ištrinta",
     "Closed {relativeTimeAgo}" : "Baigta {relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Baigiama {relativeExpirationTime}",
     "never" : "niekada",
@@ -165,7 +163,6 @@
     "Yes" : "Taip",
     "Do you want to delete this poll?" : "Ar norite ištrinti šią apklausą?",
     "This action cannot be reverted." : "Šio veiksmo negalima bus sugrąžinti.",
-    "Error switching deleted status." : "Klaida perjungiant ištrynimo būseną.",
     "Error overtaking poll." : "Klaida perimant apklausą.",
     "404 - poll not found" : "404 - apklausa nerasta",
     "Enter a poll or start a new one." : "Įveskite apklausą arba pradėkite naują.",
@@ -188,9 +185,6 @@
     "All polls" : "Visos apklausos",
     "All polls, where you have access to." : "Visos apklausos, prie kurių turite prieigą.",
     "Closed polls" : "Baigtos apklausos",
-    "All closed polls, where voting is disabled." : "Visos baigtos apklausos, kuriose balsavimas yra išjungtas.",
-    "Deleted polls" : "Ištrintos apklausos",
-    "My deleted polls" : "Mano ištrintos apklausos",
-    "The trash bin." : "Šiukšlinė."
+    "All closed polls, where voting is disabled." : "Visos baigtos apklausos, kuriose balsavimas yra išjungtas."
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }
