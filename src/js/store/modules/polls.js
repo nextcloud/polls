@@ -89,7 +89,7 @@ const state = {
 			id: 'archived',
 			title: t('polls', 'Archive'),
 			titleExt: t('polls', 'My archived polls'),
-			description: t('polls', 'Your archived polls are only accessible from you.'),
+			description: t('polls', 'Your archived polls are only accessible to you.'),
 			icon: 'icon-category-app-bundles',
 			pinned: true,
 		},
