@@ -38,6 +38,7 @@
 		<pre-migration>
 			<step>OCA\Polls\Migration\RemoveIndices</step>
 			<step>OCA\Polls\Migration\DeleteInvalidRecords</step>
+			<step>OCA\Polls\Migration\FixVotes</step>
         </pre-migration>
 		<post-migration>
 			<step>OCA\Polls\Migration\CreateIndices</step>

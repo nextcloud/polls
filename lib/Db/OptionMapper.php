@@ -155,6 +155,22 @@ class OptionMapper extends QBMapper {
 		return $count;
 	}
 
+	/**
+	 * @return Option[]
+	 */
+	public function findOptionsWithDuration(): array {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+			   $qb->expr()->eq('duration', $qb->createNamedParameter(86400, IQueryBuilder::PARAM_INT))
+		   )
+		   ->orderBy('order', 'ASC');
+
+		return $this->findEntities($qb);
+	}
+
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName())

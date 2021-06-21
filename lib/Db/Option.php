@@ -139,6 +139,20 @@ class Option extends Entity implements JsonSerializable {
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
 
+	public function getPollOptionTextEnd(): string {
+			if ($this->getTimestamp()) {
+				return date('c', $this->getTimestamp() + $this->getDuration());
+			}
+			return htmlspecialchars_decode($this->pollOptionText);
+		}
+
+	public function getPollOptionTextStart(): string {
+		if ($this->getTimestamp()) {
+			return date('c', $this->getTimestamp());
+		}
+		return htmlspecialchars_decode($this->pollOptionText);
+	}
+
 	public function getOrder(): int {
 		if ($this->timestamp) {
 			return $this->getTimestamp();
