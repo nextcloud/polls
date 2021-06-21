@@ -133,15 +133,10 @@ abstract class TableSchema {
 	 * ];
 	 */
 	public const GONE_COLUMNS = [
-		'polls_notif' => [
-			'test_text_notnull',
-			'test_text_null',
-			'test_string_null_64',
-			'test_string_notnull_128',
-			'test_integer_null_11',
-			'test_integer_notnull_11',
-			'test_bigint_null_21',
-			'test_bigint_notnull_21',
+		'polls_polls' => [
+			'full_anonymous',
+			'options',
+			'settings',
 		]
 	];
 
@@ -306,14 +301,10 @@ abstract class TableSchema {
 	 * Remove obsolete tables if they still exist
 	 */
 	public static function removeObsoleteTables(ISchemaWrapper &$schema, IOutput &$output) {
-		$droppedTables = [];
 		foreach (self::GONE_TABLES as $tableName) {
 			if ($schema->hasTable($tableName)) {
 				$schema->dropTable($tableName);
-				$droppedTables[] = $tableName;
-			}
-			if (count($droppedTables)) {
-				$output->info(count($droppedTables) . ' orphaned tables were dropped: ' . implode(", ", $droppedTables));
+				$output->info('Dropped orphaned table ' . $tableName);
 			}
 		}
 	}
@@ -322,20 +313,17 @@ abstract class TableSchema {
 	 * Remove obsolete columns, if they exist
 	 */
 	public static function removeObsoleteColumns(ISchemaWrapper &$schema, IOutput &$output) {
-		$droppedColumns = [];
 		foreach (self::GONE_COLUMNS as $tableName => $columns) {
 			if ($schema->hasTable($tableName)) {
 				$table = $schema->getTable($tableName);
+
 				foreach ($columns as $columnName) {
 					if ($table->hasColumn($columnName)) {
 						$table->dropColumn($columnName);
-						$droppedColumns[] = $tableName . ':' . $columnName;
+						$output->info('Dropped obsolete column ' . $columnName . ' from ' . $tableName);
 					}
 				}
 			}
-		}
-		if (count($droppedColumns)) {
-			$output->info(count($droppedColumns) . ' orphaned columns were dropped: ' . implode(", ", $droppedColumns));
 		}
 	}
 
