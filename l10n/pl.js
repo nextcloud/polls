@@ -95,8 +95,10 @@ OC.L10N.register(
     "Administration" : "Administracja",
     "Settings" : "Ustawienia",
     "Error cloning poll." : "Błąd podczas klonowania sondy.",
+    "Error archiving/restoring poll." : "Błąd podczas archiwizacji/przywracania sondy.",
     "Error deleting poll." : "Błąd podczas usuwania sondy.",
     "Clone poll" : "Klonuj sondę",
+    "Archive poll" : "Archiwum sondy",
     "Restore poll" : "Przywróć sondę",
     "Delete poll" : "Usuń sondę",
     "Confirmed" : "Potwierdzone",
@@ -155,6 +157,7 @@ OC.L10N.register(
     "_%n no vote_::_%n no votes_" : ["%n głos na \"nie\"","%n głosy na \"nie\"","%n głosów na \"nie\"","%n głosów na \"nie\""],
     "_%n maybe vote_::_%n maybe votes_" : ["%n głos na \"może\"","%n głosy na \"może\"","%n głosów na \"może\"","%n głosów na \"może\""],
     "_Only %n vote per option._::_Only %n votes per option._" : ["Tylko %n głos na opcję.","Tylko %n głosy na opcję.","Tylko %n głosów na opcję.","Tylko %n głosów na opcję."],
+    "Archived" : "Zarchiwizowane",
     "Closed {relativeTimeAgo}" : "Zamknięta {relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Zamknięcie {relativeExpirationTime}",
     "never" : "nigdy",
@@ -297,6 +300,8 @@ OC.L10N.register(
     "All polls" : "Wszystkie sondy",
     "All polls, where you have access to." : "Wszystkie sondy, do których masz dostęp.",
     "Closed polls" : "Sondy zamknięte",
-    "All closed polls, where voting is disabled." : "Wszystkie sondy zamknięte, w których głosowanie jest wyłączone."
+    "All closed polls, where voting is disabled." : "Wszystkie sondy zamknięte, w których głosowanie jest wyłączone.",
+    "Archive" : "Archiwizuj",
+    "My archived polls" : "Moje zarchiwizowane sondy"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

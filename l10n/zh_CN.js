@@ -95,8 +95,10 @@ OC.L10N.register(
     "Administration" : "管理员",
     "Settings" : "设置",
     "Error cloning poll." : "复制投票时出错。",
+    "Error archiving/restoring poll." : "存档/恢复投票时出错",
     "Error deleting poll." : "删除投票时出错。",
     "Clone poll" : "克隆投票",
+    "Archive poll" : "存档投票",
     "Restore poll" : "恢复投票",
     "Delete poll" : "删除投票",
     "Confirmed" : "已确认",
@@ -153,6 +155,7 @@ OC.L10N.register(
     "_%n no vote_::_%n no votes_" : ["%n 否决票"],
     "_%n maybe vote_::_%n maybe votes_" : ["%n “可能” 投票"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["每个选项仅 %n 票"],
+    "Archived" : "已存档",
     "Closed {relativeTimeAgo}" : "关闭于 {relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "关闭 {relativeExpirationTime}",
     "never" : "从不",
@@ -293,6 +296,8 @@ OC.L10N.register(
     "All polls" : "所有投票",
     "All polls, where you have access to." : "您有权限访问的所有投票。",
     "Closed polls" : "已关闭的投票",
-    "All closed polls, where voting is disabled." : "所有禁止投票的已关闭民意测验"
+    "All closed polls, where voting is disabled." : "所有禁止投票的已关闭民意测验",
+    "Archive" : "存档",
+    "My archived polls" : "我的已存档投票"
 },
 "nplurals=1; plural=0;");

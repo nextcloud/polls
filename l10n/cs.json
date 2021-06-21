@@ -9,7 +9,7 @@
     "Polls" : "Ankety",
     "%s invited you to a poll" : "%s vás pozval(a) do ankety",
     "{actor} has invited you to the poll \"%s\"." : "{actor} vás pozval(a) k účasti v anketě „%s“.",
-    "%s took over your poll" : "%s převzal(a) vaší anketu",
+    "%s took over your poll" : "%s převzal(a) vaši anketu",
     "{actor} took over your poll \"%s\" and is the new owner." : "{actor} převzal(a) vaší anketu „%s“ a je tak jejím novým vlastníkem.",
     "%s deleted your poll" : "%s smazal(a) vaši anketu",
     "{actor} deleted your poll \"%s\"." : "{actor} smazal(a) vaši anketu „%s“.",
@@ -93,8 +93,10 @@
     "Administration" : "Správa",
     "Settings" : "Nastavení",
     "Error cloning poll." : "Chyba při klonování ankety.",
+    "Error archiving/restoring poll." : "Chyba při archivování/obnovování ankety.",
     "Error deleting poll." : "Chyba při mazání ankety.",
     "Clone poll" : "Klonovat anketu",
+    "Archive poll" : "Archivovat anketu",
     "Restore poll" : "Obnovit anketu",
     "Delete poll" : "Smazat anketu",
     "Confirmed" : "Potvrzeno",
@@ -153,6 +155,7 @@
     "_%n no vote_::_%n no votes_" : ["%n hlas ne","%n hlasy ne","%n hlasů ne","%n hlasy ne"],
     "_%n maybe vote_::_%n maybe votes_" : ["%n hlas možná","%n hlasy možná","%n hlasů možná","%n hlasy možná"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["Pouze %n hlas pro každou možnost.","Pouze %n hlasů pro každou možnost.","Pouze %n hlasů pro každou možnost.","Pouze %n hlasy pro každou možnost."],
+    "Archived" : "Archivováno",
     "Closed {relativeTimeAgo}" : "Uzavřeno {relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Uzavírá se {relativeExpirationTime}",
     "never" : "nikdy",
@@ -295,6 +298,8 @@
     "All polls" : "Všechny ankety",
     "All polls, where you have access to." : "Všechny ankety, ke kterým máte přístup.",
     "Closed polls" : "Uzavřené ankety",
-    "All closed polls, where voting is disabled." : "Všechny uzavřené ankety, ve kterých není možné hlasovat."
+    "All closed polls, where voting is disabled." : "Všechny uzavřené ankety, ve kterých není možné hlasovat.",
+    "Archive" : "Archivovat",
+    "My archived polls" : "Moje archivované ankety"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

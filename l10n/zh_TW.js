@@ -15,6 +15,7 @@ OC.L10N.register(
     "{actor} took over your poll \"%s\" and is the new owner." : "{actor} 接管了您的投票「%s」並成為了新的擁有者。",
     "%s deleted your poll" : "%s 刪除了您的投票",
     "{actor} deleted your poll \"%s\"." : "{actor} 刪除了您的投票「%s」。",
+    "%s archived your poll" : "%s 封存了您的投票",
     "{actor} archived your poll \"%s\"." : "{actor} 封存了您的投票「%s」。",
     "- %s voted." : "- %s 已投票。",
     "- Updated poll configuration. Please check your votes." : "- 更新了投票設定。請檢查您的投票。",
@@ -94,8 +95,10 @@ OC.L10N.register(
     "Administration" : "管理",
     "Settings" : "設定",
     "Error cloning poll." : "再製投票時發生錯誤。",
+    "Error archiving/restoring poll." : "封存／復原投票時發生錯誤。",
     "Error deleting poll." : "刪除投票時發生錯誤。",
     "Clone poll" : "再製投票",
+    "Archive poll" : "封存投票",
     "Restore poll" : "復原投票",
     "Delete poll" : "刪除投票",
     "Confirmed" : "已確認",
@@ -154,6 +157,7 @@ OC.L10N.register(
     "_%n no vote_::_%n no votes_" : ["%n 個反對投票"],
     "_%n maybe vote_::_%n maybe votes_" : ["%n 個或許投票"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["每個選項僅 %n 票。"],
+    "Archived" : "已封存",
     "Closed {relativeTimeAgo}" : "{relativeTimeAgo} 已關閉",
     "Closing {relativeExpirationTime}" : "{relativeExpirationTime} 關閉",
     "never" : "從未",
@@ -296,6 +300,8 @@ OC.L10N.register(
     "All polls" : "所有投票",
     "All polls, where you have access to." : "您可以存取的所有投票。",
     "Closed polls" : "已關閉的投票",
-    "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。"
+    "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
+    "Archive" : "封存",
+    "My archived polls" : "我的已封存投票"
 },
 "nplurals=1; plural=0;");

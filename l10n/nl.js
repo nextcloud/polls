@@ -95,8 +95,10 @@ OC.L10N.register(
     "Administration" : "Beheer",
     "Settings" : "Instellingen",
     "Error cloning poll." : "Fout bij klonen peiling.",
+    "Error archiving/restoring poll." : "Fout bij archiveren/herstellen peiling.",
     "Error deleting poll." : "Fout bij verwijderen peiling.",
     "Clone poll" : "Kopieer de peiling",
+    "Archive poll" : "Archiveer peiling",
     "Restore poll" : "Herstel peiling",
     "Delete poll" : "Verwijder peiling",
     "Confirmed" : "Bevestigd",
@@ -155,6 +157,7 @@ OC.L10N.register(
     "_%n no vote_::_%n no votes_" : ["%n nee stem","%n nee stemmen"],
     "_%n maybe vote_::_%n maybe votes_" : ["%n maybe vote","%n misschien stem"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["%n stem per optie.","%n stemmen per optie."],
+    "Archived" : "Gearchiveerd",
     "Closed {relativeTimeAgo}" : "Gesloten {relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Sluiten {relativeExpirationTime}",
     "never" : "nooit",
@@ -297,6 +300,8 @@ OC.L10N.register(
     "All polls" : "Alle peiliingen",
     "All polls, where you have access to." : "Alle peilingen waar je bij mag.",
     "Closed polls" : "Gesloten peilingen",
-    "All closed polls, where voting is disabled." : "Alle gesloten peilingen waarbij stemmen is uitgeschakeld."
+    "All closed polls, where voting is disabled." : "Alle gesloten peilingen waarbij stemmen is uitgeschakeld.",
+    "Archive" : "Archiveren",
+    "My archived polls" : "Mijn gearchiveerde peilingen"
 },
 "nplurals=2; plural=(n != 1);");

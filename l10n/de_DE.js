@@ -95,8 +95,10 @@ OC.L10N.register(
     "Administration" : "Verwaltung",
     "Settings" : "Einstellungen",
     "Error cloning poll." : "Fehler beim Klonen der Umfrage.",
+    "Error archiving/restoring poll." : "Fehler beim Archivieren/Wiederherstellen der Umfrage.",
     "Error deleting poll." : "Fehler beim Löschen der Umfrage.",
     "Clone poll" : "Umfrage duplizieren",
+    "Archive poll" : "Umfrage archivieren",
     "Restore poll" : "Umfrage wiederherstellen",
     "Delete poll" : "Umfrage löschen",
     "Confirmed" : "Bestätigt",
@@ -155,6 +157,7 @@ OC.L10N.register(
     "_%n no vote_::_%n no votes_" : ["%n Nein-Stimme","%n Nein-Stimmen"],
     "_%n maybe vote_::_%n maybe votes_" : ["%n Vielleicht-Stimme","%n Vielleicht-Stimmen"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["Nur %n Stimme pro Option.","Nur %n Stimmen pro Option."],
+    "Archived" : "Archiviert",
     "Closed {relativeTimeAgo}" : "Geschlossen {relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Schließt {relativeExpirationTime}",
     "never" : "nie",
@@ -297,6 +300,8 @@ OC.L10N.register(
     "All polls" : "Alle Umfragen",
     "All polls, where you have access to." : "Alle Umfragen auf die Sie Zugriff haben.",
     "Closed polls" : "Geschlossene Umfragen",
-    "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist."
+    "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist.",
+    "Archive" : "Archiv",
+    "My archived polls" : "Meine archivierten Umfragen"
 },
 "nplurals=2; plural=(n != 1);");

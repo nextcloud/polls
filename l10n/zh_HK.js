@@ -95,8 +95,10 @@ OC.L10N.register(
     "Administration" : "管理",
     "Settings" : "設定",
     "Error cloning poll." : "複製投票時發生錯誤。",
+    "Error archiving/restoring poll." : "封存/復原投票時出錯。",
     "Error deleting poll." : "刪除投票時發生錯誤。",
     "Clone poll" : "複製投票",
+    "Archive poll" : "封存民意調查",
     "Restore poll" : "復原投票",
     "Delete poll" : "刪除投票",
     "Confirmed" : "已確認",
@@ -155,6 +157,7 @@ OC.L10N.register(
     "_%n no vote_::_%n no votes_" : ["%n 否選票"],
     "_%n maybe vote_::_%n maybe votes_" : ["%n 也許票"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["每個選項僅投 %n 票。"],
+    "Archived" : "已封存",
     "Closed {relativeTimeAgo}" : "{relativeTimeAgo} 已結束",
     "Closing {relativeExpirationTime}" : "{relativeExpirationTime} 結束",
     "never" : "從未",
@@ -297,6 +300,8 @@ OC.L10N.register(
     "All polls" : "所有投票",
     "All polls, where you have access to." : "您可以存取的所有投票。",
     "Closed polls" : "已關閉的投票",
-    "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。"
+    "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
+    "Archive" : "封存",
+    "My archived polls" : "我已封存的民意調查"
 },
 "nplurals=1; plural=0;");
