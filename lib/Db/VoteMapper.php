@@ -212,5 +212,4 @@ class VoteMapper extends QBMapper {
 			->andWhere($query->expr()->eq('vote_option_id', $query->createNamedParameter($optionId)))
 			->execute();
 	}
-
 }
