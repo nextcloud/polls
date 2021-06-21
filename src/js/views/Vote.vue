@@ -52,6 +52,12 @@
 			</EmptyContent>
 		</div>
 
+		<div v-if="countHiddenParticipants" class="area__footer">
+			<h2>
+				{{ t('polls', 'Due to performance concerns {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
+			</h2>
+		</div>
+
 		<div v-if="poll.anonymous" class="area__footer">
 			<div>
 				{{ t('poll', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
@@ -120,6 +126,8 @@ export default {
 			pollTypeIcon: 'poll/typeIcon',
 			viewMode: 'settings/viewMode',
 			proposalsAllowed: 'poll/proposalsAllowed',
+			countHiddenParticipants: 'poll/countHiddenParticipants',
+			safeTable: 'poll/safeTable',
 		}),
 
 		showEmailEdit() {

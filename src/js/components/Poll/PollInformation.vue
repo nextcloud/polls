@@ -48,8 +48,8 @@
 			<div :class="resultsClass">
 				{{ resultsCaption }}
 			</div>
-			<div v-if="participantsVoted.length && acl.allowSeeResults" class="icon-user">
-				{{ n('polls', '%n Participant', '%n Participants', participantsVoted.length) }}
+			<div v-if="countParticipantsVoted && acl.allowSeeResults" class="icon-user">
+				{{ n('polls', '%n Participant', '%n Participants', countParticipantsVoted) }}
 			</div>
 			<div class="icon-polls-unconfirmed">
 				{{ n('polls', '%n option', '%n options', countOptions) }}
@@ -112,10 +112,10 @@ export default {
 		}),
 
 		...mapGetters({
-			participantsVoted: 'poll/participantsVoted',
 			closed: 'poll/isClosed',
 			confirmedOptions: 'options/confirmed',
 			countOptions: 'options/count',
+			countParticipantsVoted: 'poll/countParticipantsVoted',
 			countVotes: 'votes/countVotes',
 			countAllVotes: 'votes/countAllVotes',
 			proposalsAllowed: 'poll/proposalsAllowed',

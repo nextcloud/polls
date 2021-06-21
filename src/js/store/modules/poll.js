@@ -27,6 +27,10 @@ import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
 import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
 
+// max threshold for cells to display. If the number is too high, rendering
+// of the vote table can become bad, because of too much iterations
+const MAX_CELLS = 200
+
 const defaultPoll = () => ({
 	id: 0,
 	type: 'datePoll',
@@ -94,6 +98,47 @@ const getters = {
 
 	},
 
+	participants: (state, getters, rootState) => {
+		const participants = rootState.votes.list.map((item) => ({
+			userId: item.userId,
+			displayName: item.displayName,
+			isNoUser: item.isNoUser,
+		}))
+
+		// add current user, if not among participants and voting is allowed
+		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+			participants.push({
+				userId: state.acl.userId,
+				displayName: state.acl.displayName,
+				isNoUser: state.isNoUser,
+			})
+		}
+
+		return uniqueArrayOfObjects(participants)
+	},
+
+	safeParticipants: (state, getters) => {
+		if (getters.safeTable) {
+			return [{
+				userId: state.acl.userId,
+				displayName: state.acl.displayName,
+				isNoUser: state.isNoUser,
+			}]
+		}
+		return getters.participants
+	},
+
+	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => ({
+		userId: item.userId,
+		displayName: item.displayName,
+		isNoUser: item.isNoUser,
+	}))),
+
+	proposalsOptions: () => [
+		{ value: 'disallow', label: t('polls', 'Disallow proposals') },
+		{ value: 'allow', label: t('polls', 'Allow proposals') },
+	],
+
 	displayResults: (state, getters) => (state.showResults === 'always' || (state.showResults === 'closed' && !getters.closed)),
 
 	proposalsAllowed: (state) => (state.allowProposals === 'allow' || state.allowProposals === 'review'),
@@ -106,41 +151,19 @@ const getters = {
 
 	proposalsExpireRelative: (state) => moment.unix(state.proposalsExpire).fromNow(),
 
-	proposalsOptions: () => [
-		{ value: 'disallow', label: t('polls', 'Disallow proposals') },
-		{ value: 'allow', label: t('polls', 'Allow proposals') },
-		// { value: 'review', label: t('polls', 'Allow with review') },
-	],
-
 	isClosed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
 
-	participants: (state, getters, rootState) => {
-		const participants = rootState.votes.list.map((item) => ({
-			userId: item.userId,
-			displayName: item.displayName,
-			isNoUser: item.isNoUser,
-			voted: true,
-		}))
+	safeTable: (state, getters) => (getters.countCells > MAX_CELLS),
 
-		// add current user, if not among participants and voting is allowed
-		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
-			participants.push({
-				userId: state.acl.userId,
-				displayName: state.acl.displayName,
-				isNoUser: state.isNoUser,
-				voted: false,
-			})
-		}
+	countParticipants: (state, getters) => (getters.participants.length),
 
-		return uniqueArrayOfObjects(participants)
+	countHiddenParticipants: (state, getters) => (getters.participants.length - getters.safeParticipants.length),
 
-	},
+	countSafeParticipants: (state, getters) => (getters.safeParticipants.length),
 
-	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => ({
-		userId: item.userId,
-		displayName: item.displayName,
-		isNoUser: item.isNoUser,
-	}))),
+	countParticipantsVoted: (state, getters) => (getters.participantsVoted.length),
+
+	countCells: (state, getters, rootState, rootGetters) => (getters.countParticipants * rootGetters['options/count']),
 }
 
 const actions = {

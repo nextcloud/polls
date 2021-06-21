@@ -127,7 +127,7 @@ export default {
 		...mapGetters({
 			hideResults: 'poll/hideResults',
 			closed: 'poll/isClosed',
-			participants: 'poll/participants',
+			participants: 'poll/safeParticipants',
 			options: 'options/rankedOptions',
 			proposalsExist: 'options/proposalsExist',
 		}),

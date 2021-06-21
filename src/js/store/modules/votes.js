@@ -51,9 +51,21 @@ const mutations = {
 			&& vote.voteOptionText === payload.option.pollOptionText)
 		if (index > -1) {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
-		} else {
-			state.list.push(payload.vote)
+			return
 		}
+
+		state.list.push(payload.vote)
+
+		// TODO: performance check for preferred strategy
+		// for (let i = 0; i < state.list.length; i++) {
+		// if (parseInt(state.list[i].pollId) === payload.pollId
+		// && state.list[i].userId === payload.vote.userId
+		// && state.list[i].voteOptionText === payload.option.pollOptionText) {
+		// state.list[i] = Object.assign(state.list[i], payload.vote)
+		// return
+		// }
+		// }
+		// state.list.push(payload.vote)
 	},
 }
 
