@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 ## [3.0.0] - tbd
 ## Only available for Nextcloud 21/22
 
+## [2.0.3 - release] - 2021-06-21
+## Only available for Nextcloud 20/21
+- [fix] #1749 - Poll answers are not shown anymore after upgrade to 2.0 (#1762)
+- [fix] #1762 - Options with a time 00:00 are displayed without time information
+
 ## [2.0.2 - release] - 2021-06-11
 ## Only available for Nextcloud 20/21
 - prevent to run in migration error upon server update, see #1723
