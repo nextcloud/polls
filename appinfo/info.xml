@@ -5,7 +5,7 @@
     <name>Polls</name>
     <summary>A polls app, similar to doodle/dudle with the possibility to restrict access.</summary>
     <description>A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
-    <version>2.0.2</version>
+    <version>2.0.3</version>
     <licence>agpl</licence>
     <author>Vinzenz Rosenkranz</author>
     <author>René Gieling</author>
@@ -36,6 +36,7 @@
 	<repair-steps>
 		<pre-migration>
 			<step>OCA\Polls\Migration\DeleteDuplicates</step>
+			<step>OCA\Polls\Migration\FixVotes</step>
         </pre-migration>
     </repair-steps>
 	<navigations>

@@ -199,4 +199,17 @@ class VoteMapper extends QBMapper {
 			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
 			->execute();
 	}
+
+	/**
+	 * @return void
+	 */
+	public function fixVoteOptionText(int $pollId, int $optionId, string $searchOptionText, string $replaceOptionText): void {
+		$query = $this->db->getQueryBuilder();
+		$query->update($this->getTableName())
+			->set('vote_option_text', $query->createNamedParameter($replaceOptionText))
+			->where($query->expr()->eq('vote_option_text', $query->createNamedParameter($searchOptionText)))
+			->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId)))
+			->andWhere($query->expr()->eq('vote_option_id', $query->createNamedParameter($optionId)))
+			->execute();
+	}
 }

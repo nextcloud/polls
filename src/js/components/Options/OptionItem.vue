@@ -114,7 +114,7 @@ export default {
 			// is the duration divisable through 24 hours without rest
 			// then we have a day long event (one or multiple days)
 			// In this case we want to suppress the display of any time information
-			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && this.option.duration % 86400 === 0
+			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && this.option.duration % 86400 === 0 && this.option.duration
 			const dayModifier = dayLongEvent ? 1 : 0
 			// modified to date, in case of day long events, a second gets substracted
 			// to set the begin of the to day to the end of the previous date
