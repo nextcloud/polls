@@ -27,9 +27,6 @@ namespace OCA\Polls\Migration;
 
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\PreferencesMapper;
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
