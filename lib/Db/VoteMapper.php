@@ -28,6 +28,7 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 use Doctrine\DBAL\Exception\TableNotFoundException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
  * @template-extends QBMapper<Vote>
@@ -205,11 +206,15 @@ class VoteMapper extends QBMapper {
 	 */
 	public function fixVoteOptionText(int $pollId, int $optionId, string $searchOptionText, string $replaceOptionText): void {
 		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName())
-			->set('vote_option_text', $query->createNamedParameter($replaceOptionText))
-			->where($query->expr()->eq('vote_option_text', $query->createNamedParameter($searchOptionText)))
-			->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId)))
-			->andWhere($query->expr()->eq('vote_option_id', $query->createNamedParameter($optionId)))
-			->execute();
+		try {
+			$query->update($this->getTableName())
+				->set('vote_option_text', $query->createNamedParameter($replaceOptionText))
+				->where($query->expr()->eq('vote_option_text', $query->createNamedParameter($searchOptionText)))
+				->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId)))
+				->andWhere($query->expr()->eq('vote_option_id', $query->createNamedParameter($optionId)))
+				->execute();
+		} catch (UniqueConstraintViolationException $e) {
+			// ignore silently and skip migration of this vote
+		}
 	}
 }
