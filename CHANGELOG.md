@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [3.0.0] - tbd
 ## Only available for Nextcloud 21/22
 
+## [2.0.4 - release] - 2021-06-22
+## Only available for Nextcloud 20/21
+- [fix] #1770 - Silently ignore UniqueConstraintViolationException while migrating voteOptionTexts
+
 ## [2.0.3 - release] - 2021-06-21
 ## Only available for Nextcloud 20/21
 - [fix] #1749 - Poll answers are not shown anymore after upgrade to 2.0 (#1762)
