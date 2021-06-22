@@ -29,7 +29,7 @@ import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
 
 // max threshold for cells to display. If the number is too high, rendering
 // of the vote table can become bad, because of too much iterations
-const MAX_CELLS = 200
+const MAX_CELLS = 1000
 
 const defaultPoll = () => ({
 	id: 0,
