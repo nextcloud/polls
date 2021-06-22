@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
- * @author Julius Härtl <jus@bitgrid.net>
  * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
