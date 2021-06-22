@@ -302,6 +302,7 @@ OC.L10N.register(
     "Closed polls" : "Uzavřené ankety",
     "All closed polls, where voting is disabled." : "Všechny uzavřené ankety, ve kterých není možné hlasovat.",
     "Archive" : "Archivovat",
-    "My archived polls" : "Moje archivované ankety"
+    "My archived polls" : "Moje archivované ankety",
+    "Your archived polls are only accessible to you." : "Vaše archivované ankety jsou přístupné pouze vám."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

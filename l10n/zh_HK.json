@@ -300,6 +300,7 @@
     "Closed polls" : "已關閉的投票",
     "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
     "Archive" : "封存",
-    "My archived polls" : "我已封存的民意調查"
+    "My archived polls" : "我已封存的民意調查",
+    "Your archived polls are only accessible to you." : "您封存的民意調查僅供您存取。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

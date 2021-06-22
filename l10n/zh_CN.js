@@ -298,6 +298,7 @@ OC.L10N.register(
     "Closed polls" : "已关闭的投票",
     "All closed polls, where voting is disabled." : "所有禁止投票的已关闭民意测验",
     "Archive" : "存档",
-    "My archived polls" : "我的已存档投票"
+    "My archived polls" : "我的已存档投票",
+    "Your archived polls are only accessible to you." : "你的已存档投票只有你能访问。"
 },
 "nplurals=1; plural=0;");

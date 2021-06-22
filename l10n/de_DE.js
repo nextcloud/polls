@@ -302,6 +302,7 @@ OC.L10N.register(
     "Closed polls" : "Geschlossene Umfragen",
     "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist.",
     "Archive" : "Archiv",
-    "My archived polls" : "Meine archivierten Umfragen"
+    "My archived polls" : "Meine archivierten Umfragen",
+    "Your archived polls are only accessible to you." : "Ihre archivierten Umfragen sind nur für Sie zugänglich. "
 },
 "nplurals=2; plural=(n != 1);");
