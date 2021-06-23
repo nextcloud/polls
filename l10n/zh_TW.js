@@ -277,6 +277,7 @@ OC.L10N.register(
     "Error loading poll" : "載入投票時發生錯誤",
     "No vote options available" : "無投票選項",
     "Maybe the owner did not provide some until now." : "也許擁有者到現在都沒有提供。",
+    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "由於效能問題，{countHiddenParticipants} 個投票者被隱藏。",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "儘管參與者的名字都是隱藏起來的，但這不是真正的匿名投票，因為它們並未對擁有者隱藏。",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "此外，擁有者隨時可以移除匿名旗標，這將會揭露參與者的名字。",
     "Minute" : "分鐘",

@@ -95,8 +95,10 @@ OC.L10N.register(
     "Administration" : "Administração",
     "Settings" : "Configurações",
     "Error cloning poll." : "Erro ao clonar enquete.",
+    "Error archiving/restoring poll." : "Erro ao arquivar/restaurar enquete. ",
     "Error deleting poll." : "Erro ao excluir enquete.",
     "Clone poll" : "Clonar enquete",
+    "Archive poll" : "Arquivo de enquete",
     "Restore poll" : "Restaurar enquete",
     "Delete poll" : "Excluir enquete",
     "Confirmed" : "Confirmado",
@@ -155,6 +157,7 @@ OC.L10N.register(
     "_%n no vote_::_%n no votes_" : ["%n voto não","%n votos não"],
     "_%n maybe vote_::_%n maybe votes_" : ["%n voto talvez","%n votos talvez"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["Somente %n votos por opção.","Somente %n voto por opção."],
+    "Archived" : "Arquivado",
     "Closed {relativeTimeAgo}" : "Encerrada {relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Encerrando em {relativeExpirationTime}",
     "never" : "nunca",
@@ -274,6 +277,7 @@ OC.L10N.register(
     "Error loading poll" : "Erro ao carregar a enquete",
     "No vote options available" : "Nenhuma opção de voto disponível",
     "Maybe the owner did not provide some until now." : "Talvez o proprietário não tenha fornecido alguma até agora.",
+    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Devido a questões de desempenho  {countHiddenParticipants} os eleitores estão escondidos. ",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Embora os nomes dos participantes estejam ocultos, esta não é uma enquete anônima real porque eles não estão ocultos do proprietário.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Além disso, o proprietário pode remover a bandeira anônima a qualquer momento, o que revelará os nomes do participante.",
     "Minute" : "Minuto",
@@ -297,6 +301,9 @@ OC.L10N.register(
     "All polls" : "Todas as enquetes",
     "All polls, where you have access to." : "Todas as enquetes às quais você tem acesso.",
     "Closed polls" : "Enquetes encerradas",
-    "All closed polls, where voting is disabled." : "Todas as enquetes encerradas, onde a votação está desativada."
+    "All closed polls, where voting is disabled." : "Todas as enquetes encerradas, onde a votação está desativada.",
+    "Archive" : "Arquivo ",
+    "My archived polls" : "Minhas enquetes arquivadas ",
+    "Your archived polls are only accessible to you." : "Suas enquetes arquivadas estão acessíveis apenas para você. "
 },
 "nplurals=2; plural=(n > 1);");

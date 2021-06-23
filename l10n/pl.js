@@ -277,6 +277,7 @@ OC.L10N.register(
     "Error loading poll" : "Błąd ładowania sondy",
     "No vote options available" : "Brak dostępnych opcji głosowania",
     "Maybe the owner did not provide some until now." : "Może właściciel do tej pory ich nie umożliwił.",
+    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Ze względu na problemy z wydajnością {countHiddenParticipants} głosujących jest ukrytych.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Chociaż nazwy uczestników są ukryte, to nie jest to prawdziwa anonimowa sonda, ponieważ nie są one ukryte przed właścicielem.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Dodatkowo właściciel może w dowolnym momencie usunąć anonimowe oznakowanie, która ujawni nazwy uczestników.",
     "Minute" : "Minuta",
