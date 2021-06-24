@@ -275,6 +275,7 @@
     "Error loading poll" : "Fout bij laden peiling",
     "No vote options available" : "Geen stemopties beschikbaar",
     "Maybe the owner did not provide some until now." : "Misschien heeft de eigenaar nog geen opties toegevoegd.",
+    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Vanwege prestatieproblemen zijn {countHiddenParticipants} stemmers verborgen.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Hoewel de namen van deelnemers verborgen zijn, is dit geen echte anonieme peiling, omdat ze niet verborgen zijn voor de eigenaar.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Bovendien kan de eigenaar de anonieme vlag op elk moment verwijderen, waardoor de namen van de deelnemers worden onthuld.",
     "Minute" : "Minuut",
@@ -300,6 +301,7 @@
     "Closed polls" : "Gesloten peilingen",
     "All closed polls, where voting is disabled." : "Alle gesloten peilingen waarbij stemmen is uitgeschakeld.",
     "Archive" : "Archiveren",
-    "My archived polls" : "Mijn gearchiveerde peilingen"
+    "My archived polls" : "Mijn gearchiveerde peilingen",
+    "Your archived polls are only accessible to you." : "Je gearchiveerde peilingen zijn alleen voor jou toegankelijk."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
