@@ -21,18 +21,26 @@
   -->
 
 <template>
-	<CheckBoxDiv v-model="adminAccess" :label="t('polls', 'Allow admins to edit this poll')" />
+	<CheckboxRadioSwitch :checked.sync="adminAccess" type="switch">
+		{{ label }}
+	</CheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAdminAccess',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
+	},
+
+	data() {
+		return {
+			label: t('polls', 'Allow admins to edit this poll'),
+		}
 	},
 
 	computed: {
@@ -42,7 +50,7 @@ export default {
 
 		adminAccess: {
 			get() {
-				return this.poll.adminAccess
+				return !!this.poll.adminAccess
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { adminAccess: +value })

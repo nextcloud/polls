@@ -22,18 +22,20 @@
 
 <template lang="html">
 	<div class="subscription">
-		<CheckBoxDiv v-model="subscribe" :label="label" />
+		<CheckboxRadioSwitch :checked.sync="subscribe" type="switch">
+			{{ label }}
+		</CheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 export default {
 	name: 'Subscription',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 	},
 
 	computed: {
@@ -52,7 +54,7 @@ export default {
 
 		subscribe: {
 			get() {
-				return this.subscribed
+				return !!this.subscribed
 			},
 			set(value) {
 				this.$store.dispatch('subscription/update', value)

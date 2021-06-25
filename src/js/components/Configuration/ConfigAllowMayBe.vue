@@ -21,18 +21,20 @@
   -->
 
 <template>
-	<CheckBoxDiv v-model="allowMaybe" :label="label" />
+	<CheckboxRadioSwitch :checked.sync="allowMaybe" type="switch">
+		{{ label }}
+	</CheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAllowMayBe',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 	},
 
 	data() {
@@ -48,7 +50,7 @@ export default {
 
 		allowMaybe: {
 			get() {
-				return this.poll.allowMaybe
+				return !!this.poll.allowMaybe
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { allowMaybe: +value })

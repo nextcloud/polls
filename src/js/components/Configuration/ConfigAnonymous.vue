@@ -21,18 +21,20 @@
   -->
 
 <template>
-	<CheckBoxDiv v-model="anonymous" :label="t('polls', 'Anonymous poll')" />
+	<CheckboxRadioSwitch :checked.sync="anonymous" type="switch">
+		{{ t('polls', 'Anonymous poll') }}
+	</CheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAnonymous',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 	},
 
 	computed: {
@@ -42,7 +44,7 @@ export default {
 
 		anonymous: {
 			get() {
-				return this.poll.anonymous
+				return !!this.poll.anonymous
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { anonymous: +value })

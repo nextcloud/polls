@@ -22,30 +22,34 @@
 
 <template>
 	<div>
-		<CheckBoxDiv v-model="useOptionLimit" :label="t('polls', 'Limit yes votes per option')" />
+		<CheckboxRadioSwitch :checked.sync="useOptionLimit" type="switch">
+			{{ t('polls', 'Limit yes votes per option') }}
+		</CheckboxRadioSwitch>
 		<InputDiv v-if="optionLimit"
 			v-model="optionLimit"
 			class="selectUnit indented"
 			use-num-modifiers
 			@add="optionLimit += 1"
 			@subtract="optionLimit -= 1" />
-		<CheckBoxDiv v-if="optionLimit"
-			v-model="hideBookedUp"
+		<CheckboxRadioSwitch v-if="optionLimit"
 			class="indented"
-			:label="t('polls', 'Hide not available Options')" />
+			:checked.sync="hideBookedUp"
+			type="switch">
+			{{ t('polls', 'Hide not available Options') }}
+		</CheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 import InputDiv from '../Base/InputDiv'
 
 export default {
 	name: 'ConfigOptionLimit',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 		InputDiv,
 	},
 

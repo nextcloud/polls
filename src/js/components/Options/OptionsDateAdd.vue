@@ -46,7 +46,9 @@
 			</div>
 		</template>
 		<template #header>
-			<CheckBoxDiv v-model="useRange" class="range" :label="t('polls', 'Select range')" />
+			<CheckboxRadioSwitch :checked.sync="useRange" class="range" type="switch">
+				{{ t('polls', 'Select range') }}
+			</CheckboxRadioSwitch>
 			<div class="picker-buttons">
 				<button v-if="useTime" @click="toggleTimePanel">
 					{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
@@ -64,10 +66,9 @@
 
 <script>
 
-import CheckBoxDiv from '../Base/CheckBoxDiv'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
-import { DatetimePicker } from '@nextcloud/vue'
+import { CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
 import ButtonDiv from '../Base/ButtonDiv'
 import Spacer from '../Base/Spacer'
 
@@ -75,7 +76,7 @@ export default {
 	name: 'OptionsDateAdd',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 		ButtonDiv,
 		DatetimePicker,
 		Spacer,

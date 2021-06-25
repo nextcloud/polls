@@ -21,18 +21,20 @@
   -->
 
 <template>
-	<CheckBoxDiv v-model="allowComment" :label="t('polls', 'Allow Comments')" />
+	<CheckboxRadioSwitch :checked.sync="allowComment" type="switch">
+		{{ t('polls', 'Allow Comments') }}
+	</CheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAllowComment',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 	},
 
 	computed: {
@@ -42,7 +44,7 @@ export default {
 
 		allowComment: {
 			get() {
-				return this.poll.allowComment
+				return !!this.poll.allowComment
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { allowComment: +value })
