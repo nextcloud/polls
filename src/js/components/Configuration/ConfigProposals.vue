@@ -22,9 +22,15 @@
 
 <template>
 	<div>
-		<RadioGroupDiv v-model="allowProposals" :options="proposalsOptions" />
-		<CheckBoxDiv v-show="proposalsAllowed" v-model="pollExpiration" :label="t('polls', 'Proposal closing date')" />
-		<DatetimePicker v-show="pollExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
+		<CheckboxRadioSwitch :checked.sync="allowProposals" type="switch">
+			{{ t('polls', 'Allow Proposals') }}
+		</CheckboxRadioSwitch>
+
+		<CheckboxRadioSwitch v-show="proposalsAllowed" :checked.sync="proposalExpiration" type="switch">
+			{{ t('polls', 'Proposal closing date') }}
+		</CheckboxRadioSwitch>
+
+		<DatetimePicker v-show="proposalExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
@@ -34,17 +40,14 @@ import { mapState, mapGetters } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
-import { DatetimePicker } from '@nextcloud/vue'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
-import RadioGroupDiv from '../Base/RadioGroupDiv'
+import { CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigProposals',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 		DatetimePicker,
-		RadioGroupDiv,
 	},
 
 	data() {
@@ -66,10 +69,10 @@ export default {
 		// Add bindings
 		allowProposals: {
 			get() {
-				return this.poll.allowProposals
+				return (this.poll.allowProposals === 'allow')
 			},
 			set(value) {
-				this.writeValue({ allowProposals: value })
+				this.writeValue({ allowProposals: value ? 'allow' : 'disallow' })
 			},
 		},
 
@@ -82,9 +85,9 @@ export default {
 			},
 		},
 
-		pollExpiration: {
+		proposalExpiration: {
 			get() {
-				return this.poll.proposalsExpire
+				return !!this.poll.proposalsExpire
 			},
 			set(value) {
 				if (value) {

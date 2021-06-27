@@ -26,7 +26,9 @@
 			:icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
 			:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
 			@click="toggleClosed()" />
-		<CheckBoxDiv v-show="!closed" v-model="useExpire" :label="t('polls', 'Poll closing date')" />
+		<CheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
+			{{ t('polls', 'Poll closing date') }}
+		</CheckboxRadioSwitch>
 		<DatetimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
 	</div>
 </template>
@@ -34,14 +36,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { DatetimePicker } from '@nextcloud/vue'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { DatetimePicker, CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigClosing',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 		DatetimePicker,
 	},
 
@@ -88,7 +89,7 @@ export default {
 
 		useExpire: {
 			get() {
-				return this.poll.expire
+				return !!this.poll.expire
 			},
 			set(value) {
 				if (value) {

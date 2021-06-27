@@ -23,32 +23,37 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<CheckBoxDiv v-model="calendarPeek" :label="t('polls', 'Use calendar lookup')" />
+			<CheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
+				{{ t('polls', 'Use calendar lookup') }}
+			</CheckboxRadioSwitch>
 			<div class="settings_details">
 				{{ t('polls', 'Check, if an option in a date poll is conflicting with or near an entry in your calendar.') }}
 				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
-					<CheckBoxDiv v-model="calendar.selected"
-						:label="calendar.name"
-						@input="clickedCalendar(calendar)">
-						<template #before>
-							<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
-						</template>
-					</CheckBoxDiv>
+					<CheckboxRadioSwitch :checked="calendar.selected"
+						type="switch"
+						@update:checked="clickedCalendar(calendar)">
+						<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
+						{{ calendar.name }}
+					</CheckboxRadioSwitch>
 				</div>
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<CheckBoxDiv v-model="defaultViewTextPoll" :label="t('polls', 'Text polls default to list view')" />
+			<CheckboxRadioSwitch :checked.sync="defaultViewTextPoll" type="switch">
+				{{ t('polls', 'Text polls default to list view') }}
+			</CheckboxRadioSwitch>
 			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view.') }}
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<CheckBoxDiv v-model="defaultViewDatePoll" :label="t('polls', 'Date polls default to list view')" />
+			<CheckboxRadioSwitch :checked.sync="defaultViewDatePoll" type="switch">
+				{{ t('polls', 'Date polls default to list view') }}
+			</CheckboxRadioSwitch>
 			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.') }}
 			</div>
@@ -59,13 +64,13 @@
 <script>
 
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'FeatureSettings',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 	},
 
 	computed: {
@@ -76,7 +81,7 @@ export default {
 		// Add bindings
 		calendarPeek: {
 			get() {
-				return this.settings.calendarPeek
+				return !!this.settings.calendarPeek
 			},
 			set(value) {
 				this.writeValue({ calendarPeek: value })

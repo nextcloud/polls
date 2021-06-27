@@ -21,18 +21,20 @@
   -->
 
 <template>
-	<CheckBoxDiv v-model="useNo" :label="label" />
+	<CheckboxRadioSwitch :checked.sync="deleteVoteOnNo" type="switch">
+		{{ label }}
+	</CheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigUseNo',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 	},
 
 	data() {
@@ -46,7 +48,7 @@ export default {
 			poll: (state) => state.poll,
 		}),
 
-		useNo: {
+		deleteVoteOnNo: {
 			get() {
 				return !this.poll.useNo
 			},

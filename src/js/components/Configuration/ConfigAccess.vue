@@ -23,23 +23,25 @@
 <template>
 	<div>
 		<RadioGroupDiv v-model="pollAccess" :options="accessOptions" />
-		<CheckBoxDiv v-model="pollImportant"
-			class="indented"
+		<CheckboxRadioSwitch class="indented"
+			:checked.sync="pollImportant"
 			:disabled="pollAccess !== 'public'"
-			:label="t('polls', 'Relevant for all users')" />
+			type="switch">
+			{{ t('polls', 'Relevant for all users') }}
+		</CheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 import RadioGroupDiv from '../Base/RadioGroupDiv'
 
 export default {
 	name: 'ConfigAccess',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 		RadioGroupDiv,
 	},
 

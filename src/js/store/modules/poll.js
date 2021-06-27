@@ -53,6 +53,7 @@ const defaultPoll = () => ({
 	adminAccess: 0,
 	important: 0,
 	hideBookedUp: 0,
+	useNo: 1,
 })
 
 const state = defaultPoll()

@@ -22,26 +22,29 @@
 
 <template lang="html">
 	<div class="radio-group-div">
-		<fieldset v-for="(option, index) in options" :key="option.value">
-			<input :id="id + '_' + index"
-				:checked="option.value === value"
-				:value="option.value"
-				type="radio"
-				class="radio"
-				@change="$emit('input', option.value)">
-			<label :for="id + '_' + index">
-				<slot name="before" />
-				{{ option.label }}
-			</label>
-		</fieldset>
+		<CheckboxRadioSwitch v-for="(option, index) in options"
+			:key="option.value"
+			:name="id + '_' + index"
+			:checked="option.value === value"
+			type="radio"
+			@update:checked="$emit('input', option.value)">
+			{{ option.label }}
+		</CheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
+
 const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
 
 export default {
 	name: 'RadioGroupDiv',
+
+	components: {
+		CheckboxRadioSwitch,
+	},
+
 	props: {
 		id: {
 			type: String,

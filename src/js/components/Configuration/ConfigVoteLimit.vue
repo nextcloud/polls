@@ -22,7 +22,9 @@
 
 <template>
 	<div>
-		<CheckBoxDiv v-model="useVoteLimit" :label="t('polls', 'Limit yes votes per user')" />
+		<CheckboxRadioSwitch :checked.sync="useVoteLimit" type="switch">
+			{{ t('polls', 'Limit yes votes per user') }}
+		</CheckboxRadioSwitch>
 		<InputDiv v-if="voteLimit"
 			v-model="voteLimit"
 			class="selectUnit indented"
@@ -34,14 +36,14 @@
 
 <script>
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 import InputDiv from '../Base/InputDiv'
 
 export default {
 	name: 'ConfigVoteLimit',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 		InputDiv,
 	},
 

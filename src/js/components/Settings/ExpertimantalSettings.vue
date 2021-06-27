@@ -23,7 +23,9 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<CheckBoxDiv v-model="experimental" :label="t('polls', 'Try experimental styles')" />
+			<CheckboxRadioSwitch :checked.sync="experimental" type="switch">
+				{{ t('polls', 'Try experimental styles') }}
+			</CheckboxRadioSwitch>
 			<div class="settings_details">
 				{{ t('polls', 'Some experimental UI variants. Changes the background color of the main area.') }}
 			</div>
@@ -31,7 +33,9 @@
 
 		<div v-if="experimental">
 			<div class="user_settings">
-				<CheckBoxDiv v-model="useImage" :label="t('polls', 'Use background image')" />
+				<CheckboxRadioSwitch :checked.sync="useImage" type="switch">
+					{{ t('polls', 'Use background image') }}
+				</CheckboxRadioSwitch>
 				<div class="settings_details">
 					{{ t('polls', 'Add a background image to the main area') }}
 					<div>
@@ -44,14 +48,18 @@
 			</div>
 
 			<div class="user_settings">
-				<CheckBoxDiv v-model="glassyNavigation" :label="t('polls', 'Glassy navigation')" />
+				<CheckboxRadioSwitch :checked.sync="glassyNavigation" type="switch">
+					{{ t('polls', 'Glassy navigation') }}
+				</CheckboxRadioSwitch>
 				<div class="settings_details">
 					{{ t('polls', 'Blurs the background of the navigation (Does not work with all browsers).') }}
 				</div>
 			</div>
 
 			<div class="user_settings">
-				<CheckBoxDiv v-model="glassySidebar" :label="t('polls', 'Glassy sidebar')" />
+				<CheckboxRadioSwitch :checked.sync="glassySidebar" type="switch">
+					{{ t('polls', 'Glassy sidebar') }}
+				</CheckboxRadioSwitch>
 				<div class="settings_details">
 					{{ t('polls', 'Blurs the background of the sidebar (Does not work with all browsers).') }}
 				</div>
@@ -63,13 +71,13 @@
 <script>
 
 import { mapState } from 'vuex'
-import CheckBoxDiv from '../Base/CheckBoxDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ExpertimantalSettings',
 
 	components: {
-		CheckBoxDiv,
+		CheckboxRadioSwitch,
 	},
 
 	computed: {
@@ -79,18 +87,18 @@ export default {
 		// Add bindings
 		experimental: {
 			get() {
-				return this.settings.experimental
+				return !!this.settings.experimental
 			},
 			set(value) {
-				this.writeValue({ experimental: value })
+				this.writeValue({ experimental: +value })
 			},
 		},
 		useImage: {
 			get() {
-				return this.settings.useImage
+				return !!this.settings.useImage
 			},
 			set(value) {
-				this.writeValue({ useImage: value })
+				this.writeValue({ useImage: +value })
 			},
 		},
 		imageUrl: {
@@ -103,18 +111,18 @@ export default {
 		},
 		glassyNavigation: {
 			get() {
-				return this.settings.glassyNavigation
+				return !!this.settings.glassyNavigation
 			},
 			set(value) {
-				this.writeValue({ glassyNavigation: value })
+				this.writeValue({ glassyNavigation: +value })
 			},
 		},
 		glassySidebar: {
 			get() {
-				return this.settings.glassySidebar
+				return !!this.settings.glassySidebar
 			},
 			set(value) {
-				this.writeValue({ glassySidebar: value })
+				this.writeValue({ glassySidebar: +value })
 			},
 		},
 	},
