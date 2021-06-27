@@ -28,10 +28,16 @@ namespace OCA\Polls\Migration;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
+use OC\DB\Connection;
+use OC\DB\SchemaWrapper;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 class FixVotes implements IRepairStep {
+
+	/** @var Connection */
+	protected $connection;
+
 	/** @var LogMapper */
 	private $logMapper;
 
@@ -42,10 +48,12 @@ class FixVotes implements IRepairStep {
 	private $voteMapper;
 
 	public function __construct(
+		Connection $connection,
 		LogMapper $logMapper,
 		OptionMapper $optionMapper,
 		VoteMapper $voteMapper
 	) {
+		$this->connection = $connection;
 		$this->logMapper = $logMapper;
 		$this->optionMapper = $optionMapper;
 		$this->voteMapper = $voteMapper;
@@ -64,14 +72,17 @@ class FixVotes implements IRepairStep {
 	 * @return void
 	 */
 	public function run(IOutput $output) {
-		$foundOptions = $this->optionMapper->findOptionsWithDuration();
-		foreach ($foundOptions as $option) {
-			$this->voteMapper->fixVoteOptionText(
-				$option->getPollId(),
-				$option->getId(),
-				$option->getPollOptionTextStart(),
-				$option->getPollOptionText(),
-			);
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable('polls_options')) {
+			$foundOptions = $this->optionMapper->findOptionsWithDuration();
+			foreach ($foundOptions as $option) {
+				$this->voteMapper->fixVoteOptionText(
+					$option->getPollId(),
+					$option->getId(),
+					$option->getPollOptionTextStart(),
+					$option->getPollOptionText()
+				);
+			}
 		}
 	}
 }
