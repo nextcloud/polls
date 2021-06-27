@@ -221,7 +221,7 @@ abstract class TableSchema {
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 
 		],
-		'polls_shares' => [
+		'polls_share' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'token' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
