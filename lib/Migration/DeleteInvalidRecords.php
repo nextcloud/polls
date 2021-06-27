@@ -25,6 +25,7 @@
 namespace OCA\Polls\Migration;
 
 use OC\DB\Connection;
+use OC\DB\SchemaWrapper;
 use OCP\IConfig;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
@@ -99,13 +100,16 @@ class DeleteInvalidRecords implements IRepairStep {
 	}
 
 	public function run(IOutput $output):void {
-		$this->removeOrphaned();
-		$this->logMapper->removeDuplicates($output);
-		$this->optionMapper->removeDuplicates($output);
-		$this->preferencesMapper->removeDuplicates($output);
-		$this->shareMapper->removeDuplicates($output);
-		$this->subscriptionMapper->removeDuplicates($output);
-		$this->voteMapper->removeDuplicates($output);
+		$schema = new SchemaWrapper($this->connection);
+		if ($schema->hasTable('polls_polls')) {
+			$this->removeOrphaned();
+			$this->logMapper->removeDuplicates($output);
+			$this->optionMapper->removeDuplicates($output);
+			$this->preferencesMapper->removeDuplicates($output);
+			$this->shareMapper->removeDuplicates($output);
+			$this->subscriptionMapper->removeDuplicates($output);
+			$this->voteMapper->removeDuplicates($output);
+		}
 	}
 
 	/**

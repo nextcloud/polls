@@ -61,11 +61,15 @@ class Version030000Date20210611120000 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		// Call initial migration from class TableSchema
-		// Drop old tables, which are migrated in prior versions
-		TableSchema::removeObsoleteTables($schema, $output);
-		// Drop old columns, which are migrated in prior versions
-		TableSchema::removeObsoleteColumns($schema, $output);
+		if ($schema->hasTable('polls_polls')) {
+			// Call initial migration from class TableSchema
+			// Drop old tables, which are migrated in prior versions
+			TableSchema::removeObsoleteTables($schema, $output);
+
+			// Drop old columns, which are migrated in prior versions
+			TableSchema::removeObsoleteColumns($schema, $output);
+		}
+
 		// Create tables, as defined in TableSchema or fix column definitions
 		TableSchema::CreateOrUpdateSchema($schema, $output);
 		// remove old migration entries from versions prior to polls 3.x
