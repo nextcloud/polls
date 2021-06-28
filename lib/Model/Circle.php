@@ -44,7 +44,7 @@ class Circle extends UserGroupClass {
 			$this->icon = self::ICON;
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
-			$this->description = $this->circle->gettypeLongString();
+			$this->description = \OC::$server->getL10N('polls')->t('Circle');
 		} else {
 			throw new CirclesNotEnabledException();
 		}
