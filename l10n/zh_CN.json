@@ -70,6 +70,7 @@
     "Poll closing date" : "投票关闭日期",
     "Limit yes votes per option" : "限制每个选项的赞成票",
     "Hide not available Options" : "隐藏不可用选项",
+    "Allow Proposals" : "允许提议 ",
     "Proposal closing date" : "提案关闭日期",
     "Proposals possible until" : "提案不可能，直至",
     "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" 被成功保存",

@@ -70,6 +70,7 @@
     "Poll closing date" : "Anketin bitirileceği tarih",
     "Limit yes votes per option" : "Her seçenek için evet oylarını sınırla",
     "Hide not available Options" : "Kullanılmayan seçenekler gizlensin",
+    "Allow Proposals" : "Önerilere izin verilsin",
     "Proposal closing date" : "Önerilerin bitiş tarihi",
     "Proposals possible until" : "Şu zamana kadar öneride bulunulabilir",
     "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" kaydedildi",

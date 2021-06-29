@@ -72,6 +72,7 @@ OC.L10N.register(
     "Poll closing date" : "民意調查結束日期",
     "Limit yes votes per option" : "限制每個選項的「贊成」票",
     "Hide not available Options" : "隱藏不可用選項",
+    "Allow Proposals" : "允許提案",
     "Proposal closing date" : "提案結束日期",
     "Proposals possible until" : "可以提交提案，直到 ",
     "\"{pollTitle}\" successfully saved" : "「{pollTitle}」成功儲存",

@@ -72,6 +72,7 @@ OC.L10N.register(
     "Poll closing date" : "Data zakończenia sondy",
     "Limit yes votes per option" : "Ogranicz liczbę głosów na tak na opcję",
     "Hide not available Options" : "Ukryj niedostępne opcje",
+    "Allow Proposals" : "Zezwalaj na propozycje",
     "Proposal closing date" : "Data zakończenia propozycji",
     "Proposals possible until" : "Propozycje możliwe do",
     "\"{pollTitle}\" successfully saved" : "Pomyślnie zapisano \"{pollTitle}\"",

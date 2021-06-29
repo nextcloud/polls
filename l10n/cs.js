@@ -72,6 +72,7 @@ OC.L10N.register(
     "Poll closing date" : "Datum uzavření ankety",
     "Limit yes votes per option" : "Omezte kladné hlasy jednotlivých možností",
     "Hide not available Options" : "Skrýt nedostupné volby.",
+    "Allow Proposals" : "Umožnit návrhy",
     "Proposal closing date" : "Datum uzavření návrhu",
     "Proposals possible until" : "Návrhy jsou možné do",
     "\"{pollTitle}\" successfully saved" : "„{pollTitle}“ úspěšně uložena",
