@@ -78,14 +78,14 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription'
 import PollTitle from '../components/Poll/PollTitle'
-import LoadingOverlay from '../components/Base/LoadingOverlay'
-import PollInformation from '../components/Poll/PollInformation'
-import PublicRegisterModal from '../components/Poll/PublicRegisterModal'
-import VoteTable from '../components/VoteTable/VoteTable'
+// import LoadingOverlay from '../components/Base/LoadingOverlay'
+// import PollInformation from '../components/Poll/PollInformation'
+// import PublicRegisterModal from '../components/Poll/PublicRegisterModal'
+// import VoteTable from '../components/VoteTable/VoteTable'
 import ActionSortOptions from '../components/Actions/ActionSortOptions'
 import ActionChangeView from '../components/Actions/ActionChangeView'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
-import OptionProposals from '../components/Options/OptionProposals'
+// import OptionProposals from '../components/Options/OptionProposals'
 
 export default {
 	name: 'Vote',
@@ -96,12 +96,12 @@ export default {
 		AppContent,
 		MarkUpDescription,
 		EmptyContent,
-		LoadingOverlay,
-		PollInformation,
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
+		PollInformation: () => import('../components/Poll/PollInformation'),
 		PollTitle,
-		PublicRegisterModal,
-		VoteTable,
-		OptionProposals,
+		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal'),
+		VoteTable: () => import('../components/VoteTable/VoteTable'),
+		OptionProposals: () => import('../components/Options/OptionProposals'),
 	},
 
 	data() {

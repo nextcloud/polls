@@ -42,15 +42,15 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import OptionsDateAdd from './OptionsDateAdd'
-import OptionsTextAdd from './OptionsTextAdd'
+// import OptionsDateAdd from './OptionsDateAdd'
+// import OptionsTextAdd from './OptionsTextAdd'
 
 export default {
 	name: 'OptionProposals',
 
 	components: {
-		OptionsDateAdd,
-		OptionsTextAdd,
+		OptionsDateAdd: () => import('./OptionsDateAdd'),
+		OptionsTextAdd: () => import('./OptionsTextAdd'),
 	},
 
 	computed: {

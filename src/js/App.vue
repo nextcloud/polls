@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import LoadingOverlay from './components/Base/LoadingOverlay'
-import Navigation from './components/Navigation/Navigation'
+// import LoadingOverlay from './components/Base/LoadingOverlay'
+// import Navigation from './components/Navigation/Navigation'
 import SettingsDlg from './components/Settings/SettingsDlg'
-import SideBar from './components/SideBar/SideBar'
+// import SideBar from './components/SideBar/SideBar'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
@@ -58,10 +58,10 @@ export default {
 	name: 'App',
 	components: {
 		Content,
-		LoadingOverlay,
-		Navigation,
+		LoadingOverlay: () => import('./components/Base/LoadingOverlay'),
+		Navigation: () => import('./components/Navigation/Navigation'),
 		SettingsDlg,
-		SideBar,
+		SideBar: () => import('./components/SideBar/SideBar'),
 	},
 
 	mixins: [watchPolls],

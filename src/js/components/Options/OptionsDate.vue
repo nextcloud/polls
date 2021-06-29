@@ -73,7 +73,7 @@ import moment from '@nextcloud/moment'
 import { Actions, ActionButton, EmptyContent, Modal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import OptionCloneDate from './OptionCloneDate'
-import OptionsDateAdd from './OptionsDateAdd'
+// import OptionsDateAdd from './OptionsDateAdd'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
@@ -89,7 +89,7 @@ export default {
 		EmptyContent,
 		Modal,
 		OptionCloneDate,
-		OptionsDateAdd,
+		OptionsDateAdd: () => import('./OptionsDateAdd'),
 		OptionItem,
 		OptionItemOwner,
 	},

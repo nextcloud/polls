@@ -62,10 +62,10 @@
 <script>
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
-import SideBarTabConfiguration from './SideBarTabConfiguration'
-import SideBarTabOptions from './SideBarTabOptions'
-import SideBarTabComments from './SideBarTabComments'
-import SideBarTabShare from './SideBarTabShare'
+// import SideBarTabConfiguration from './SideBarTabConfiguration'
+// import SideBarTabOptions from './SideBarTabOptions'
+// import SideBarTabComments from './SideBarTabComments'
+// import SideBarTabShare from './SideBarTabShare'
 import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 
@@ -73,10 +73,10 @@ export default {
 	name: 'SideBar',
 
 	components: {
-		SideBarTabConfiguration,
-		SideBarTabComments,
-		SideBarTabOptions,
-		SideBarTabShare,
+		SideBarTabConfiguration: () => import('./SideBarTabConfiguration'),
+		SideBarTabComments: () => import('./SideBarTabComments'),
+		SideBarTabOptions: () => import('./SideBarTabOptions'),
+		SideBarTabShare: () => import('./SideBarTabShare'),
 		AppSidebar,
 		AppSidebarTab,
 	},
