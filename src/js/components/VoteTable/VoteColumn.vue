@@ -51,10 +51,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
-// import CalendarPeek from '../Calendar/CalendarPeek'
 import Counter from '../Options/Counter'
-// import Confirmation from '../Options/Confirmation'
-// import OptionItemOwner from '../Options/OptionItemOwner'
 import VoteItem from './VoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { confirmOption } from '../../mixins/optionMixins'

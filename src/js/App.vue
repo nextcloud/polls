@@ -33,10 +33,7 @@
 </template>
 
 <script>
-// import LoadingOverlay from './components/Base/LoadingOverlay'
-// import Navigation from './components/Navigation/Navigation'
 import SettingsDlg from './components/Settings/SettingsDlg'
-// import SideBar from './components/SideBar/SideBar'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
@@ -47,9 +44,8 @@ import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
 import './assets/scss/print.scss'
+
 // TODO: remove comments, when @media:prefers-color-scheme is completely supported by core
-// import './assets/scss/icons-dark.scss'
-// import './assets/scss/colors-dark.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/experimental.scss'
 import { watchPolls } from './mixins/watchPolls'

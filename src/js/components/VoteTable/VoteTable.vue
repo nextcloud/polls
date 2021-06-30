@@ -54,7 +54,6 @@
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
 import ActionDelete from '../Actions/ActionDelete'
-// import UserMenu from '../User/UserMenu'
 import VoteColumn from './VoteColumn'
 import { confirmOption } from '../../mixins/optionMixins'
 

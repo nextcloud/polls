@@ -67,7 +67,6 @@ import draggable from 'vuedraggable'
 import ActionDelete from '../Actions/ActionDelete'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
-// import OptionsTextAdd from './OptionsTextAdd'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 
 export default {

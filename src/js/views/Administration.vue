@@ -118,8 +118,6 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent, Modal } from '@nextcloud/vue'
 import sortBy from 'lodash/sortBy'
-// import LoadingOverlay from '../components/Base/LoadingOverlay'
-// import PollItem from '../components/PollList/PollItem'
 
 export default {
 	name: 'Administration',
