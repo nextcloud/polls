@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "社交圈子",
     "Contact" : "聯絡人",
     "Contact group" : "聯絡人群組",
     "External Email" : "外部電子郵件",

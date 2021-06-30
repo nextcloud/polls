@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Krąg",
     "Contact" : "Kontakt",
     "Contact group" : "Kontakt grupy",
     "External Email" : "Zewnętrzny adres e-mail",

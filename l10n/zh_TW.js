@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "小圈圈",
     "Contact" : "聯絡人",
     "Contact group" : "聯絡人群組",
     "External Email" : "外部電子郵件",
@@ -72,6 +73,7 @@ OC.L10N.register(
     "Poll closing date" : "投票關閉日期",
     "Limit yes votes per option" : "限制每個選項的「贊成」票",
     "Hide not available Options" : "隱藏不可用的選項",
+    "Allow Proposals" : "允許提議",
     "Proposal closing date" : "提案關閉日期",
     "Proposals possible until" : "提議可能直到",
     "\"{pollTitle}\" successfully saved" : "「{pollTitle}」成功儲存",
