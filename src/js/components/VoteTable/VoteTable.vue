@@ -42,31 +42,10 @@
 		</div>
 
 		<transition-group name="list" tag="div" class="vote-table__votes">
-			<div v-for="(option) in options" :key="option.id" :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
-				<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
-
-				<Confirmation v-if="option.confirmed && closed" :option="option" />
-
-				<Counter v-else-if="acl.allowSeeResults"
-					:show-maybe="!!poll.allowMaybe"
-					:option="option" />
-				<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
-
-				<VoteItem v-for="(participant) in participants"
-					:key="participant.userId"
-					:user-id="participant.userId"
-					:option="option" />
-
-				<OptionItemOwner v-if="proposalsExist" :option="option" class="owner" />
-
-				<Actions v-if="acl.allowEdit && closed" class="action confirm">
-					<ActionButton v-if="closed"
-						:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
-						@click="confirmOption(option)">
-						{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-					</ActionButton>
-				</Actions>
-			</div>
+			<VoteColumn v-for="(item) in options"
+				:key="item.id"
+				:option="item"
+				:view-mode="viewMode" />
 		</transition-group>
 	</div>
 </template>
@@ -74,30 +53,17 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
-// import CalendarPeek from '../Calendar/CalendarPeek'
-import Counter from '../Options/Counter'
-// import Confirmation from '../Options/Confirmation'
-// import OptionItemOwner from '../Options/OptionItemOwner'
 // import UserMenu from '../User/UserMenu'
-import VoteItem from './VoteItem'
-import VoteTableHeaderItem from './VoteTableHeaderItem'
+import VoteColumn from './VoteColumn'
 import { confirmOption } from '../../mixins/optionMixins'
 
 export default {
 	name: 'VoteTable',
 	components: {
-		Actions,
-		ActionButton,
 		ActionDelete,
-		CalendarPeek: () => import('../Calendar/CalendarPeek'),
-		Counter,
-		Confirmation: () => import('../Options/Confirmation'),
 		UserMenu: () => import('../User/UserMenu'),
-		VoteTableHeaderItem,
-		VoteItem,
-		OptionItemOwner: () => import('../Options/OptionItemOwner'),
+		VoteColumn,
 	},
 
 	mixins: [confirmOption],
@@ -119,13 +85,12 @@ export default {
 	computed: {
 		...mapState({
 			acl: (state) => state.poll.acl,
-			poll: (state) => state.poll,
-			share: (state) => state.share,
-			settings: (state) => state.settings.user,
+			// poll: (state) => state.poll,
+			// share: (state) => state.share,
+			// settings: (state) => state.settings.user,
 		}),
 
 		...mapGetters({
-			hideResults: 'poll/hideResults',
 			closed: 'poll/isClosed',
 			participants: 'poll/safeParticipants',
 			options: 'options/rankedOptions',
