@@ -26,6 +26,10 @@
 			<FeatureSettings />
 		</AppSettingsSection>
 
+		<AppSettingsSection :title="t('polls', 'Performance settings')">
+			<PerformanceSettings />
+		</AppSettingsSection>
+
 		<AppSettingsSection :title="t('polls', 'Experimental Styles')">
 			<ExpertimantalSettings />
 		</AppSettingsSection>
@@ -38,6 +42,7 @@ import { AppSettingsDialog, AppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import FeatureSettings from './FeatureSettings'
 import ExpertimantalSettings from './ExpertimantalSettings'
+import PerformanceSettings from './PerformanceSettings'
 
 export default {
 	name: 'SettingsDlg',
@@ -47,6 +52,7 @@ export default {
 		AppSettingsSection,
 		FeatureSettings,
 		ExpertimantalSettings,
+		PerformanceSettings,
 	},
 
 	data() {
