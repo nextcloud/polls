@@ -98,7 +98,7 @@ export default {
 			keepRange: true,
 			preservedTimeFrom: moment(),
 			preservedTimeTo: moment(),
-			lastPickedDate: moment(0),
+			lastPickedDate: moment(null),
 			timeValues: moment(),
 			added: false,
 		}
