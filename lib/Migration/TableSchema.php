@@ -176,7 +176,7 @@ abstract class TableSchema {
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],
 			'title' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 128]],
 			'description' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
-			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
+			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'created' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'expire' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'deleted' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
@@ -197,18 +197,18 @@ abstract class TableSchema {
 		'polls_options' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'duration' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'order' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'confirmed' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
+			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'released' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
 		'polls_votes' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
+			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'vote_option_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'vote_answer' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
@@ -216,7 +216,7 @@ abstract class TableSchema {
 		'polls_comments' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
+			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'comment' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 
@@ -226,21 +226,21 @@ abstract class TableSchema {
 			'token' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
-			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
-			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 254]],
+			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'invitation_sent' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
 		'polls_notif' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
+			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 		],
 		'polls_log' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
-			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
+			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'message_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'created' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'processed' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
@@ -253,7 +253,7 @@ abstract class TableSchema {
 		],
 		'polls_preferences' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
-			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
+			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'preferences' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
 		],
@@ -281,8 +281,13 @@ abstract class TableSchema {
 					$column = $table->getColumn($columnName);
 					$column->setOptions($columnDefinition['options']);
 					if ($column->getType()->getName() !== $columnDefinition['type']) {
-						$output->info('Migrating ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type']);
+						$output->info('Migrating type of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type']);
 						$column->setType(Type::getType($columnDefinition['type']));
+					}
+
+					if (isset($columnDefinition['length']) && $column->getType()->getLength() !== $columnDefinition['length']) {
+						$output->info('Migrating length of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['length']);
+						$column->setType(Type::getLength($columnDefinition['length']));
 					}
 
 					$table->changeColumn($columnName, $columnDefinition['options']);
