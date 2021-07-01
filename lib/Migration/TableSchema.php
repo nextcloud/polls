@@ -285,11 +285,7 @@ abstract class TableSchema {
 						$column->setType(Type::getType($columnDefinition['type']));
 					}
 
-					if (isset($columnDefinition['length']) && $column->getType()->getLength() !== $columnDefinition['length']) {
-						$output->info('Migrating length of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['length']);
-						$column->setType(Type::getLength($columnDefinition['length']));
-					}
-
+					// force change to current options definition
 					$table->changeColumn($columnName, $columnDefinition['options']);
 				} else {
 					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
