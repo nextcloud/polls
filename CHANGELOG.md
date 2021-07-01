@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 ## [3.0.0] - tbd
 ## Only available for Nextcloud 21/22
 
+## [2.0.5 - release] - 2021-07-01
+## Only available for Nextcloud 20/21
+- [fix] #1774 - PHP 7.2 compatibility
+- [fix] #1781 - Skip repair steps on initial install
+- [fix] #1792 - check for existence of duration column before vote fix
+
 ## [2.0.4 - release] - 2021-06-22
 ## Only available for Nextcloud 20/21
 - [fix] #1770 - Silently ignore UniqueConstraintViolationException while migrating voteOptionTexts
