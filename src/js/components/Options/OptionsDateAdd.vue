@@ -87,19 +87,12 @@ export default {
 	data() {
 		return {
 			pickerSelection: null,
-			firstPick: true,
 			changed: false,
-			imcomplete: true,
-			lastPickedOption: null,
 			pickerOpen: false,
 			useRange: false,
 			useTime: false,
 			showTimePanel: false,
-			keepRange: true,
-			preservedTimeFrom: moment(),
-			preservedTimeTo: moment(),
 			lastPickedDate: moment(null),
-			timeValues: moment(),
 			added: false,
 		}
 	},
