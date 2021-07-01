@@ -30,6 +30,24 @@
 		<template #input>
 			<ButtonDiv :title="t('polls', 'Add new date option')" />
 		</template>
+
+		<template #header>
+			<CheckboxRadioSwitch :checked.sync="useRange" class="range" type="switch">
+				{{ t('polls', 'Select range') }}
+			</CheckboxRadioSwitch>
+			<div class="picker-buttons">
+				<button v-if="useTime" @click="toggleTimePanel">
+					{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
+				</button>
+				<button v-if="useTime" @click="removeTime">
+					{{ t('polls', 'Remove time') }}
+				</button>
+				<button v-else :disabled="!dateOption.isValid" @click="addTime">
+					{{ t('polls', 'Add time') }}
+				</button>
+			</div>
+		</template>
+
 		<template #footer>
 			<div v-if="dateOption.isValid" class="selection">
 				<div>
@@ -43,22 +61,6 @@
 			</div>
 			<div v-else>
 				{{ t('polls', 'Pick a day.') }}
-			</div>
-		</template>
-		<template #header>
-			<CheckboxRadioSwitch :checked.sync="useRange" class="range" type="switch">
-				{{ t('polls', 'Select range') }}
-			</CheckboxRadioSwitch>
-			<div class="picker-buttons">
-				<button v-if="useTime" @click="toggleTimePanel">
-					{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
-				</button>
-				<button v-if="useTime" @click="removeTime">
-					{{ t('polls', 'Remove time') }}
-				</button>
-				<button v-else @click="addTime">
-					{{ t('polls', 'Add time') }}
-				</button>
 			</div>
 		</template>
 	</DateTimePicker>
@@ -85,19 +87,12 @@ export default {
 	data() {
 		return {
 			pickerSelection: null,
-			firstPick: true,
 			changed: false,
-			imcomplete: true,
-			lastPickedOption: null,
 			pickerOpen: false,
 			useRange: false,
 			useTime: false,
 			showTimePanel: false,
-			keepRange: true,
-			preservedTimeFrom: moment(),
-			preservedTimeTo: moment(),
-			lastPickedDate: moment(0),
-			timeValues: moment(),
+			lastPickedDate: moment(null),
 			added: false,
 		}
 	},
@@ -181,6 +176,7 @@ export default {
 				minuteStep: 5,
 				type: this.useTime ? 'datetime' : 'date',
 				range: this.useRange,
+				key: this.useRange ? 'range-on' : 'range-off',
 				showSecond: false,
 				showTimePanel: this.showTimePanel,
 				valueType: 'timestamp',
@@ -323,7 +319,7 @@ export default {
 
 .range {
 	flex: 1;
-	text-align: left;
+	justify-content: flex-end;
 	margin: 8px;
 }
 
