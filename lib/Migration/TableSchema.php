@@ -197,7 +197,7 @@ abstract class TableSchema {
 		'polls_options' => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
+			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'duration' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'order' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
