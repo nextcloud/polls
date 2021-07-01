@@ -30,21 +30,7 @@
 		<template #input>
 			<ButtonDiv :title="t('polls', 'Add new date option')" />
 		</template>
-		<template #footer>
-			<div v-if="dateOption.isValid" class="selection">
-				<div>
-					{{ dateOption.text }}
-				</div>
-				<Spacer />
-				<button v-if="dateOption.option.duration >= 0 && !added" class="primary" @click="addOption">
-					{{ t('polls', 'Add') }}
-				</button>
-				<div v-if="added" v-tooltip.auto="t('polls', 'Added')" class="icon-polls-yes" />
-			</div>
-			<div v-else>
-				{{ t('polls', 'Pick a day.') }}
-			</div>
-		</template>
+
 		<template #header>
 			<CheckboxRadioSwitch :checked.sync="useRange" class="range" type="switch">
 				{{ t('polls', 'Select range') }}
@@ -59,6 +45,22 @@
 				<button v-else @click="addTime">
 					{{ t('polls', 'Add time') }}
 				</button>
+			</div>
+		</template>
+
+		<template #footer>
+			<div v-if="dateOption.isValid" class="selection">
+				<div>
+					{{ dateOption.text }}
+				</div>
+				<Spacer />
+				<button v-if="dateOption.option.duration >= 0 && !added" class="primary" @click="addOption">
+					{{ t('polls', 'Add') }}
+				</button>
+				<div v-if="added" v-tooltip.auto="t('polls', 'Added')" class="icon-polls-yes" />
+			</div>
+			<div v-else>
+				{{ t('polls', 'Pick a day.') }}
 			</div>
 		</template>
 	</DateTimePicker>
@@ -181,6 +183,7 @@ export default {
 				minuteStep: 5,
 				type: this.useTime ? 'datetime' : 'date',
 				range: this.useRange,
+				key: this.useRange ? 'range-on' : 'range-off',
 				showSecond: false,
 				showTimePanel: this.showTimePanel,
 				valueType: 'timestamp',
@@ -323,7 +326,7 @@ export default {
 
 .range {
 	flex: 1;
-	text-align: left;
+	justify-content: flex-end;
 	margin: 8px;
 }
 

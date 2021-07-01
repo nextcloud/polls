@@ -6,20 +6,16 @@
 	}
 }
 
-// When switching from non range mode to range mode, date picker crosses
-// the right window border
-// Force date picker position to the right side of the sidebar
-.mx-datepicker-main, .mx-datepicker-popup {
-	right: 4px !important;
-	left: auto !important;
-}
-
 // fill full input with background color
 .mx-input {
 	background-clip: initial !important;
 }
 
-// force scrolling of sidebar-tabs content 
+.mx-datepicker-main svg {
+	fill: var(--color-primary-element);
+}
+
+// force scrolling of sidebar-tabs content
 .app-sidebar-tabs {
 	overflow-y: hidden;
 }
