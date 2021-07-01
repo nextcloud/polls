@@ -42,7 +42,7 @@
 				<button v-if="useTime" @click="removeTime">
 					{{ t('polls', 'Remove time') }}
 				</button>
-				<button v-else @click="addTime">
+				<button v-else :disabled="!dateOption.isValid" @click="addTime">
 					{{ t('polls', 'Add time') }}
 				</button>
 			</div>
