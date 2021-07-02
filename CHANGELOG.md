@@ -1,8 +1,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.0.0] - tbd
+## [3.0.0-rc.1] - tbd
 ## Only available for Nextcloud 21/22
+- [compatibility] Compatible to Nextcloud 22
+- [fix]  #1690 - Hide vote table, if too many cells are predicted
+- [fix] #1707 - Do not preselect 1.Jan 1970 on range selection in date-picker
+- [fix] #1724 - Do not send mails to disabled users (#1751)
+- [fix] #1789 - Compatibility to new Circles implementation in NC22
+- [ux] #1489 - Show Result count also in list view
+- [ux] #1711 - remove ordinal suffix/prefix from date display (#1748)
+- [ux] #1757 - rename "Deleted polls" to "Archive"
+- [design] #1776 - Change checkboxes to switch layout with new @nextcloud/vue
+- [enhancement] #1637 - Remove deleted groups from shares via event
+- [enhancement] #1788 - Raise field length for user ids and usernames (#1797)
+- [enhancement] #1691 - Optimizations in date-picker
+- [refactoring] #1637 - replace Doctrine\DBAL\ with OCP\DB
+- [refactoring] #1644 - control table changes via events
+- [refactoring] #1698 - Pack migrations
+- [refactoring] #1745 - Remove unused images
+- [refactoring] #1791 - Load components asynchronously, if not always used
 
 ## [2.0.5 - release] - 2021-07-01
 ## Only available for Nextcloud 20/21
@@ -21,13 +38,13 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.2 - release] - 2021-06-11
 ## Only available for Nextcloud 20/21
-- prevent to run in migration error upon server update, see #1723
-- Bugfix release in order to fix the problems, which came from the update to version 2.0
+### Bugfix release in order to fix the problems, which came from the update to version 2.0
+- [fix] #1723 - prevent to run in migration error upon server update
 
 ### [1.9.7] - 2021-06-11
 ## Only available for Nextcloud 19
-- prevent to run in migration error upon server update, see #1723
-- Bugfix release in order to fix the problems, which came from the update from version 1.8 to 1.9
+### Bugfix release in order to fix the problems, which came from the update from version 1.8 to 1.9
+- [fix] #1723 - prevent to run in migration error upon server update
 
 ## [1.9.4 - release] - 2021-06-04
 ### new Features
