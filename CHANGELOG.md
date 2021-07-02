@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.0.0-rc.1] - tbd
+## [3.0.0-rc.1] - 2021-07-02
 ## Only available for Nextcloud 21/22
 - [compatibility] Compatible to Nextcloud 22
 - [fix]  #1690 - Hide vote table, if too many cells are predicted
