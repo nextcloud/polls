@@ -59,8 +59,8 @@ import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/v
 import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
-import CreateDlg from '../Create/CreateDlg'
-import PollNavigationItems from './PollNavigationItems'
+import CreateDlg from '../components/Create/CreateDlg'
+import PollNavigationItems from '../components/Navigation/PollNavigationItems'
 import { emit } from '@nextcloud/event-bus'
 
 export default {

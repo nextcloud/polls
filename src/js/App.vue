@@ -22,13 +22,16 @@
 
 <template>
 	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': acl.allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
-		<SettingsDlg />
-		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
+		<router-view v-if="getCurrentUser()"
+			name="navigation"
+			:class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
-		<SideBar v-if="sideBarOpen && $store.state.poll.id && (acl.allowEdit || poll.allowComment)"
+		<router-view v-if="sideBarOpen && $store.state.poll.id && (acl.allowEdit || poll.allowComment)"
+			name="sidebar"
 			:active="activeTab"
 			:class="{ 'glassy': settings.glassySidebar }" />
 		<LoadingOverlay v-if="loading" />
+		<SettingsDlg />
 	</Content>
 </template>
 
@@ -55,9 +58,9 @@ export default {
 	components: {
 		Content,
 		LoadingOverlay: () => import('./components/Base/LoadingOverlay'),
-		Navigation: () => import('./components/Navigation/Navigation'),
+		// Navigation: () => import('./components/Navigation/Navigation'),
 		SettingsDlg,
-		SideBar: () => import('./components/SideBar/SideBar'),
+		// SideBar: () => import('./components/SideBar/SideBar'),
 	},
 
 	mixins: [watchPolls],

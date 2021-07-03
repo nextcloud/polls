@@ -68,10 +68,10 @@ export default {
 	name: 'SideBar',
 
 	components: {
-		SideBarTabConfiguration: () => import('./SideBarTabConfiguration'),
-		SideBarTabComments: () => import('./SideBarTabComments'),
-		SideBarTabOptions: () => import('./SideBarTabOptions'),
-		SideBarTabShare: () => import('./SideBarTabShare'),
+		SideBarTabConfiguration: () => import('../components/SideBar/SideBarTabConfiguration'),
+		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments'),
+		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions'),
+		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare'),
 		AppSidebar,
 		AppSidebarTab,
 	},
