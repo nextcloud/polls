@@ -61,11 +61,6 @@
 
 <script>
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
-
-// import SideBarTabConfiguration from './SideBarTabConfiguration'
-// import SideBarTabOptions from './SideBarTabOptions'
-// import SideBarTabComments from './SideBarTabComments'
-// import SideBarTabShare from './SideBarTabShare'
 import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 

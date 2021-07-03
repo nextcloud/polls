@@ -100,8 +100,6 @@ import sortBy from 'lodash/sortBy'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
-// import PollItem from '../components/PollList/PollItem'
-// import LoadingOverlay from '../components/Base/LoadingOverlay'
 
 export default {
 	name: 'PollList',

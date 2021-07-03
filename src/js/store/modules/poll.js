@@ -27,10 +27,6 @@ import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
 import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
 
-// max threshold for cells to display. If the number is too high, rendering
-// of the vote table can become bad, because of too much iterations
-const MAX_CELLS = 200
-
 const defaultPoll = () => ({
 	id: 0,
 	type: 'datePoll',
@@ -154,7 +150,7 @@ const getters = {
 
 	isClosed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
 
-	safeTable: (state, getters) => (getters.countCells > MAX_CELLS),
+	safeTable: (state, getters, rootState) => (getters.countCells > rootState.settings.user.performanceThreshold),
 
 	countParticipants: (state, getters) => (getters.participants.length),
 

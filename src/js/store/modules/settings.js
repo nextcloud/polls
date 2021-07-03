@@ -34,6 +34,7 @@ const defaultSettings = () => ({
 		glassySidebar: false,
 		defaultViewTextPoll: 'list-view',
 		defaultViewDatePoll: 'table-view',
+		performanceThreshold: 1000,
 	},
 	session: {
 		manualViewDatePoll: '',
