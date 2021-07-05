@@ -61,7 +61,7 @@ class SubscriptionController extends Controller {
 	 */
 	public function subscribe(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->set($pollId, '', true)];
+			return ['subscribed' => $this->subscriptionService->set(true, $pollId, '')];
 		});
 	}
 
@@ -71,7 +71,7 @@ class SubscriptionController extends Controller {
 	 */
 	public function unsubscribe(int $pollId): DataResponse {
 		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->set($pollId, '', false)];
+			return ['subscribed' => $this->subscriptionService->set(false, $pollId, '')];
 		});
 	}
 }
