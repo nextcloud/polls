@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.0-rc.2] - 2021-07-05
+## Only available for Nextcloud 21/22
+- [fix] #1807 - Wrong version schema used (2.0.4 was offered as update)
+- [fix] #1808 - delete invalid database column
+- [fix] #1808 - fixed notifier
+
 ## [3.0.0-rc.1] - 2021-07-02
 ## Only available for Nextcloud 21/22
 - [compatibility] Compatible to Nextcloud 22
