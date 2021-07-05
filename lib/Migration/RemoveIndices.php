@@ -48,14 +48,11 @@ class RemoveIndices implements IRepairStep {
 
 	public function run(IOutput $output): void {
 		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
-			// $output->info('"polls" - Removing foreign keys from '. $tableName);
 			$this->removeForeignKeys($tableName);
-			// $output->info('"polls" - Removing indices in '. $tableName);
 			$this->removeGenericIndices($tableName);
 		}
 
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
-			// $output->info('"polls" - Removing unique indices in '. $tableName);
 			$this->removeUniqueIndices($tableName);
 		}
 	}

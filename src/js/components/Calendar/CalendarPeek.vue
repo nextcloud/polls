@@ -98,7 +98,6 @@ export default {
 				calendarKey: 0,
 				calendarName: 'Polls',
 				displayColor: 'transparent',
-				// displayColor: 'var(--color-main-background)',
 				allDay: '',
 				description: this.poll.description,
 				start: this.option.timestamp,

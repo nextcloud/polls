@@ -41,13 +41,7 @@ class Group extends UserGroupClass {
 		$this->icon = self::ICON;
 		$this->group = self::getContainer()->query(IGroupManager::class)->get($this->id);
 		$this->description = \OC::$server->getL10N('polls')->t('Group');
-		try {
-			// since NC19
-			$this->displayName = $this->group->getDisplayName();
-		} catch (\Exception $e) {
-			// until NC18
-			$this->displayName = $this->id;
-		}
+		$this->displayName = $this->group->getDisplayName();
 	}
 
 	/**

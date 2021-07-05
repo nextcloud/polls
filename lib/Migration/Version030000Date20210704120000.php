@@ -37,7 +37,7 @@ use OCP\Migration\IOutput;
  * Changed class naming: Version[jjmmpp]Date[YYYYMMDDHHMMSS]
  * Version: jj = major version, mm = minor, pp = patch
  */
-class Version030000Date20210611120000 extends SimpleMigrationStep {
+class Version030000Date20210704120000 extends SimpleMigrationStep {
 
 	/** @var IDBConnection */
 	protected $connection;

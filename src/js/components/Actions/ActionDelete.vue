@@ -57,7 +57,7 @@ export default {
 		return {
 			deleteInterval: null,
 			deleteTimeout: null,
-			countdown: 7, // seconds
+			countdown: 4, // seconds
 		}
 	},
 

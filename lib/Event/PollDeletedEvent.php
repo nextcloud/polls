@@ -27,7 +27,7 @@ use OCA\Polls\Notification\Notifier;
 
 class PollDeletedEvent extends PollEvent {
 	public function getLogMsg(): string {
-		return ''; // Log::MSG_ID_DELETEPOLL;
+		return '';
 	}
 
 	public function getNotification(): array {

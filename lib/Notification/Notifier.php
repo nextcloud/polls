@@ -117,6 +117,10 @@ class Notifier implements INotifier {
 			$actor = $this->getActor($parameters['actor']);
 		}
 
+		if (isset($actor['actor'])) {
+			$actor = $actor['actor'];
+		}
+
 		switch ($notification->getSubject()) {
 			case self::NOTIFY_INVITATION:
 				$notification->setParsedSubject($l->t('%s invited you to a poll', $actor['name']));

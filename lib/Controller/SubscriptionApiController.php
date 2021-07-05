@@ -78,7 +78,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function subscribe(int $pollId): DataResponse {
 		try {
-			$this->subscriptionService->set($pollId, '', true);
+			$this->subscriptionService->set(true, $pollId, '');
 			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
@@ -93,7 +93,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function unsubscribe(int $pollId): DataResponse {
 		try {
-			$this->subscriptionService->set($pollId, '', false);
+			$this->subscriptionService->set(false, $pollId, '');
 			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());

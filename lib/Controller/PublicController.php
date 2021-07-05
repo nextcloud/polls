@@ -293,7 +293,7 @@ class PublicController extends Controller {
 	 */
 	public function subscribe(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['subscribed' => $this->subscriptionService->set(0, $token, true)];
+			return ['subscribed' => $this->subscriptionService->set(true, 0, $token)];
 		});
 	}
 
@@ -304,7 +304,7 @@ class PublicController extends Controller {
 	 */
 	public function unsubscribe(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['subscribed' => $this->subscriptionService->set(0, $token, false)];
+			return ['subscribed' => $this->subscriptionService->set(true, 0, $token)];
 		});
 	}
 
