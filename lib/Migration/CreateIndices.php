@@ -31,27 +31,6 @@ use OCP\Migration\IOutput;
 
 class CreateIndices implements IRepairStep {
 
-	// private const INDICES = [
-	//    'polls_options' => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
-	//    'polls_log' => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
-	//    'polls_notif' => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-	//    'polls_share' => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-	//    'polls_votes' => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
-	//    'polls_preferences' => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
-	//    'polls_watch' => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
-	// ];
-	//
-	// private const PARENT_TABLE = 'polls_polls';
-	//
-	// private const CHILD_TABLES = [
-	//    'polls_comments',
-	//    'polls_log',
-	//    'polls_notif',
-	//    'polls_options',
-	//    'polls_share',
-	//    'polls_votes',
-	// ];
-
 	/** @var Connection */
 	private $connection;
 

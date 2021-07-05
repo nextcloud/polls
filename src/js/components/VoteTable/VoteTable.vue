@@ -84,9 +84,6 @@ export default {
 	computed: {
 		...mapState({
 			acl: (state) => state.poll.acl,
-			// poll: (state) => state.poll,
-			// share: (state) => state.share,
-			// settings: (state) => state.settings.user,
 		}),
 
 		...mapGetters({
@@ -129,7 +126,6 @@ export default {
 		display: flex;
 		flex-direction: column;
 		overflow-x: scroll;
-		// max-width: 245px;
 	}
 
 	.vote-table__votes {
@@ -157,7 +153,6 @@ export default {
 	}
 
 	&.closed .vote-column {
-		// padding: 8px 2px;
 		&.confirmed {
 			order: 1;
 			border-radius: 10px;
