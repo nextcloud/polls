@@ -102,6 +102,7 @@ abstract class TableSchema {
 		'0108Date20210307130003',
 		'0108Date20210307130009',
 		'0109Date20210323120002',
+		'030000Date20210611120000',
 	];
 
 	/**
@@ -137,7 +138,10 @@ abstract class TableSchema {
 			'full_anonymous',
 			'options',
 			'settings',
-		]
+		],
+		'polls_comments' => [
+			'dt',
+		],
 	];
 
 	/**
