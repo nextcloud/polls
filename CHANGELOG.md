@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.6 - release] - 2021-07-06
+## Only available for Nextcloud 20/21
+- [fix] #1811 - fix repair step at NC20
+
 ## [2.0.5 - release] - 2021-07-01
 ## Only available for Nextcloud 20/21
 - [fix] #1774 - PHP 7.2 compatibility
