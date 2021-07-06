@@ -67,7 +67,6 @@ class FixVotes implements IRepairStep {
 	public function run(IOutput $output) {
 		try {
 			$foundOptions = $this->optionMapper->findOptionsWithDuration();
-			\OC::$server->getLogger()->error(json_encode($foundOptions));
 			foreach ($foundOptions as $option) {
 				$this->voteMapper->fixVoteOptionText(
 					$option->getPollId(),
