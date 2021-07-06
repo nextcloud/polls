@@ -98,6 +98,7 @@ OC.L10N.register(
     "To participate, tell us how we can call you!" : "Για να συμμετάσχετε, πείτε μας πώς μπορούμε να σας καλέσουμε!",
     "Enter your name" : "Προσθέστε το όνομά σας",
     "Login" : "Σύνδεση",
+    "Invalid name" : "Μη έγκυρο όνομα",
     "With your email address you can subscribe to notifications and you will receive your personal link to this poll." : "Με τη διεύθυνση email σας μπορείτε να εγγραφείτε σε ειδοποιήσεις και θα λάβετε τον προσωπικό σας σύνδεσμο σε αυτήν τη δημοσκόπηση.",
     "Access" : "Πρόσβαση",
     "Owner" : "Ιδιοκτήτης",
