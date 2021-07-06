@@ -68,7 +68,7 @@ export default {
 			acl: (state) => state.poll.acl,
 		}),
 		dateCommentedRelative() {
-			return moment.utc(this.comment.dt).fromNow()
+			return moment.utc(this.comment.timestamp).fromNow()
 		},
 	},
 
