@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Círculo",
     "Contact" : "Contacto",
     "Contact group" : "Grupo de contactos",
     "External Email" : "Email externo",
@@ -11,6 +12,8 @@ OC.L10N.register(
     "Polls" : "Votaciones",
     "%s invited you to a poll" : "%s te invitó a una encuesta",
     "%s took over your poll" : "%s se apropió de tu encuesta",
+    "%s deleted your poll" : "%s ha eliminado tu votación",
+    "%s archived your poll" : "%s ha archivado tu votación",
     "- %s voted." : "- %s votado.",
     "- Updated poll configuration. Please check your votes." : "- Actualizada la configuración de la encuesta. Por favor, comprueba tus votos.",
     "- The poll got deleted." : "- Se ha borrado la votación.",
