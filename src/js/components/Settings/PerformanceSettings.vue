@@ -26,7 +26,7 @@
 			{{ t('polls', 'Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000.') }}
 			<input v-model="threshold"
 				type="text"
-				:placeholder="t('polls', 'Enter amount of maximal allowed vote boxes.')">
+				:placeholder="t('polls', 'Enter amount of maximum allowed vote boxes.')">
 		</div>
 	</div>
 </template>
