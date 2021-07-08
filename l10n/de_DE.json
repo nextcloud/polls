@@ -203,7 +203,6 @@
     "Date polls default to list view" : "Standardmäßig Datumsumfragen als Listenansicht",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Aktivieren Sie diese Option, wenn Sie die Datumsabfrage lieber in einer vertikalen Ansicht als in der Rasteransicht anzeigen möchten. Die ursprüngliche Standardeinstellung ist die Rasteransicht.",
     "Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000." : "Anzahl der Stimmzellen begrenzen. Wird diese Schwelle erreicht, werden alle anderen Teilnehmer ausgeblendet, um Leistungseinbrüche zu vermeiden. Der Standardwert ist 1000. ",
-    "Enter amount of maximal allowed vote boxes." : "Anzahl der maximal zulässigen Abstimmungsfelder eingeben. ",
     "User Settings" : "Benutzer-Einstellungen",
     "Performance settings" : "Leistungseinstellungen",
     "Experimental Styles" : "Experimentelle Stile",

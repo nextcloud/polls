@@ -204,7 +204,6 @@ OC.L10N.register(
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Aankruisen als je een tekstpeiling liever in een verticaal uitgelijnde lijst zien dan in een rooster, Standaard is een lijstoverzicht.",
     "Date polls default to list view" : "Datumpeilingen standaard in lijstoverzicht",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Aankruisen als je een datumpeiling liever in een verticaal uitgelijnde lijst zien dan in een rooster, Standaard is een lijstoverzicht.",
-    "Enter amount of maximal allowed vote boxes." : "Voer het aantal toegestane stemmen in",
     "User Settings" : "Gebruikersinstellingen",
     "Performance settings" : "Prestatie instellingen",
     "Experimental Styles" : "Experimentele stijlen",

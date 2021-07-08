@@ -205,7 +205,6 @@ OC.L10N.register(
     "Date polls default to list view" : "Les sondages par date sont affichés par défaut en liste",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Cochez cette option si vous préférez afficher le sondage de date dans une vue verticale plutôt que dans la vue en grille. La valeur par défaut initiale est la vue en grille.",
     "Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000." : "Limiter le nombre de cellules de vote. Si la limite est atteinte, tous les autres participants sont cachés pour éviter des soucis de performance. La valeur par défaut est de 1000.",
-    "Enter amount of maximal allowed vote boxes." : "Entrer le nombre maximal de cellules de vote autorisées.",
     "User Settings" : "Paramètres utilisateur",
     "Performance settings" : "Paramètres de performance",
     "Experimental Styles" : "Styles expérimentaux",
