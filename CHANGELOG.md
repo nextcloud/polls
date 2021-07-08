@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.0-rc.3] - 2021-07-08
+## Only available for Nextcloud 21/22
+- [fix] #1815 - Keep DBAL Exceptions for NC21 compatibility
+- [fix] #1814 - fix comments' timestamp info
+
 ## [3.0.0-rc.2] - 2021-07-05
 ## Only available for Nextcloud 21/22
 - [fix] #1807 - Wrong version schema used (2.0.4 was offered as update)
