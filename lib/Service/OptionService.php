@@ -163,6 +163,9 @@ class OptionService {
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
+		} catch (UniqueConstraintViolationException $e) {
+			// deprecated NC22
+			throw new DuplicateEntryException('This option already exists');
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw new DuplicateEntryException('This option already exists');
@@ -270,6 +273,9 @@ class OptionService {
 
 			try {
 				$this->optionMapper->insert($clonedOption);
+			} catch (UniqueConstraintViolationException $e) {
+				// deprecated NC22
+				$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option already exists.');
 			} catch (Exception $e) {
 				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 					$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option already exists.');

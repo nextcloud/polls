@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCP\DB\Exception;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
@@ -57,6 +58,9 @@ class LogService {
 
 		try {
 			return $this->logMapper->insert($this->log);
+		} catch (UniqueConstraintViolationException $e) {
+			// deprecated NC22
+			return null;
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				return null;
