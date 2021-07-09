@@ -203,6 +203,7 @@
     "Date polls default to list view" : "Sondy dat są domyślnie wyświetlane w widoku listy",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Zaznacz tę opcję, jeśli chcesz wyświetlać sondę dat w widoku pionowym, a nie w widoku siatki. Początkową wartością domyślną jest widok siatki.",
     "Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000." : "Ogranicz ilość komórek do głosowania. Jeśli próg zostanie osiągnięty, wszyscy pozostali uczestnicy zostaną ukryci, aby uniknąć zmniejszenia wydajności. Wartość domyślna to 1000.",
+    "Enter amount of maximum allowed vote boxes." : "Wprowadź maksymalną dozwoloną liczbę pól głosowania.",
     "User Settings" : "Ustawienia użytkownika",
     "Performance settings" : "Ustawienia wydajności",
     "Experimental Styles" : "Style eksperymentalne",

@@ -205,6 +205,7 @@ OC.L10N.register(
     "Date polls default to list view" : "Modu lehenetsian. data inkestak zerrenda ikuspegian",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Egiaztatu hau, nahiago baduzu testu galdeketa lerrokatutako zerrenda bertikalean bistaratu sareta ikuspegian baino. Hasierako lehenespena sareta-ikuspegia da.",
     "Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000." : "Mugatu boto gelaxka kopurua. Atalasea lortuz gero, gainerako parte-hartzaile guztiak ezkutatuta egongo dira errendimendu desegokiak ekiditeko. Lehenetsitako balioa 1000 da.",
+    "Enter amount of maximum allowed vote boxes." : "Idatzi baimendutako boto kutxa gehieneko kopurua.",
     "User Settings" : "Erabiltzailearen ezarpenak",
     "Performance settings" : "Errendimendu ezarpenak",
     "Experimental Styles" : "Estilo esperimentalak",

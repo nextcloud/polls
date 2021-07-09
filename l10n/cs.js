@@ -205,6 +205,7 @@ OC.L10N.register(
     "Date polls default to list view" : "Datumové ankety ve výchozím stavu v pohledu typu seznam",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Toto zaškrtněte, pokud chcete zobrazit anketu ohledně datumu svisle namísto v mřížce. Ta je právě výchozí.",
     "Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000." : "Omezte množství buněk voleb. Pokud je dosažen limit, ostatní účastníci budou schováni, aby se zabránilo problémům s výkonem. Výchozí hodnota je 1000.",
+    "Enter amount of maximum allowed vote boxes." : "Zadejte kolik nejvýše umožnit kolonek k volbě.",
     "User Settings" : "Nastavení pro uživatele",
     "Performance settings" : "Nastavení ohledně výkonnosti",
     "Experimental Styles" : "Experimentální styly",

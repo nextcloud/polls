@@ -200,6 +200,7 @@
     "Date polls default to list view" : "日期投票默认使用列表视图",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "如果你更喜欢在垂直视图中而不是在网格视图中显示日期民意测验，请选中此选项。初始默认值是网格视图。",
     "Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000." : "限制投票单元的数量。如果达到阈值，则隐藏所有其他参与者，以避免性能崩溃。缺省值是1000",
+    "Enter amount of maximum allowed vote boxes." : "输入允许投票箱的最大数量",
     "User Settings" : "用户设置",
     "Performance settings" : "性能设置",
     "Experimental Styles" : "实验性样式",
