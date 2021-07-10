@@ -86,10 +86,6 @@ export default new Router({
 			name: 'vote',
 		},
 		{
-			path: '/poll/:token',
-			redirect: '/s/:token',
-		},
-		{
 			path: '/s/:token',
 			components: {
 				default: Vote,

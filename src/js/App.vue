@@ -22,9 +22,7 @@
 
 <template>
 	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': acl.allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
-		<router-view v-if="getCurrentUser()"
-			name="navigation"
-			:class="{ 'glassy': settings.glassyNavigation }" />
+		<router-view name="navigation" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
 		<router-view v-if="sideBarOpen && $store.state.poll.id && (acl.allowEdit || poll.allowComment)"
 			name="sidebar"
