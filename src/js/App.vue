@@ -21,21 +21,21 @@
   -->
 
 <template>
-	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': acl.allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
-		<SettingsDlg />
-		<Navigation v-if="getCurrentUser()" :class="{ 'glassy': settings.glassyNavigation }" />
+	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+		<router-view name="navigation" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
-		<SideBar v-if="sideBarOpen && $store.state.poll.id && (acl.allowEdit || poll.allowComment)"
+		<router-view v-if="showSidebar"
+			name="sidebar"
 			:active="activeTab"
 			:class="{ 'glassy': settings.glassySidebar }" />
 		<LoadingOverlay v-if="loading" />
+		<SettingsDlg />
 	</Content>
 </template>
 
 <script>
 import SettingsDlg from './components/Settings/SettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
-import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState } from 'vuex'
@@ -45,7 +45,7 @@ import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
 import './assets/scss/print.scss'
 
-// TODO: remove comments, when @media:prefers-color-scheme is completely supported by core
+// TODO: remove, when @media:prefers-color-scheme is completely supported by core
 import './assets/scss/transitions.scss'
 import './assets/scss/experimental.scss'
 import { watchPolls } from './mixins/watchPolls'
@@ -55,9 +55,7 @@ export default {
 	components: {
 		Content,
 		LoadingOverlay: () => import('./components/Base/LoadingOverlay'),
-		Navigation: () => import('./components/Navigation/Navigation'),
 		SettingsDlg,
-		SideBar: () => import('./components/SideBar/SideBar'),
 	},
 
 	mixins: [watchPolls],
@@ -75,8 +73,13 @@ export default {
 		...mapState({
 			settings: (state) => state.settings.user,
 			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
+			allowEdit: (state) => state.poll.acl.allowEdit,
 		}),
+
+		showSidebar() {
+			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
+		},
+
 		appStyle() {
 			if (this.settings.useImage && this.settings.experimental) {
 				return {
@@ -101,9 +104,6 @@ export default {
 	created() {
 		if (getCurrentUser()) {
 			this.$store.dispatch('settings/get')
-			if (this.$route.name !== 'publicVote') {
-				this.updatePolls()
-			}
 			if (this.$route.params.id && !this.$route.params.token) {
 				this.loadPoll(true)
 			}
@@ -121,10 +121,6 @@ export default {
 
 		subscribe('load-poll', (silent) => {
 			this.loadPoll(silent)
-		})
-
-		subscribe('update-polls', () => {
-			this.updatePolls()
 		})
 
 		subscribe('toggle-sidebar', (payload) => {
@@ -147,7 +143,6 @@ export default {
 	beforeDestroy() {
 		this.cancelToken.cancel()
 		unsubscribe('load-poll')
-		unsubscribe('update-polls')
 		unsubscribe('toggle-sidebar')
 		unsubscribe('transitions-on')
 		unsubscribe('transitions-off')
@@ -204,25 +199,6 @@ export default {
 			}
 		},
 
-		async updatePolls() {
-			const dispatches = []
-			if (this.$route.name === 'publicVote') {
-				return
-			}
-
-			dispatches.push('polls/list')
-
-			if (getCurrentUser().isAdmin) {
-				dispatches.push('pollsAdmin/load')
-			}
-
-			try {
-				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
-				await Promise.all(requests)
-			} catch {
-				showError(t('polls', 'Error loading poll list'))
-			}
-		},
 	},
 }
 

@@ -2,6 +2,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import exception from '../Exceptions/Exceptions'
+import { emit } from '@nextcloud/event-bus'
 
 export const watchPolls = {
 	data() {
@@ -26,21 +27,14 @@ export const watchPolls = {
 			let dispatches = []
 			tables.forEach((item) => {
 				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
-				// an updated poll table is reported
 				if (item.table === 'polls') {
-					if (this.$route.name !== 'publicVote') {
-						// load poll list only, when not in public poll
-						dispatches = [...dispatches, 'polls/list']
-					}
+					emit('update-polls')
 					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
 						// if current poll is affected, load current poll configuration
-						// load also options and votes
-						dispatches = [...dispatches, 'poll/get', 'votes/list', 'options/list']
+						dispatches = [...dispatches, 'poll/get']
 					}
-				} else if (['votes', 'options'].includes(item.table)) {
-					dispatches = [...dispatches, 'votes/list', 'options/list']
 				} else {
-					// a table of the current poll was reported, load
+					// a table change of the current poll was reported, load
 					// corresponding stores
 					dispatches = [...dispatches, item.table + '/list']
 				}

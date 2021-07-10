@@ -61,6 +61,10 @@ class PollListener implements IEventListener {
 		}
 
 		$this->watchService->writeUpdate($event->getPollId(), $this->table);
+		// If the poll configuration is changed, simulate vote change
+		$this->watchService->writeUpdate($event->getPollId(), Watch::OBJECT_VOTES);
+		// If the poll configuration is changed, simulate option change
+		$this->watchService->writeUpdate($event->getPollId(), Watch::OBJECT_OPTIONS);
 
 		if ($event->getLogMsg()) {
 			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());

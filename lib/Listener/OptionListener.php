@@ -58,5 +58,7 @@ class OptionListener implements IEventListener {
 			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
 		}
 		$this->watchService->writeUpdate($event->getPollId(), $this->table);
+		// If options are changed, simulate vote change to force recalculating of votes
+		$this->watchService->writeUpdate($event->getPollId(), Watch::OBJECT_VOTES);
 	}
 }

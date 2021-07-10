@@ -31,6 +31,8 @@ const List = () => import('./views/PollList')
 const Administration = () => import('./views/Administration')
 const Vote = () => import('./views/Vote')
 const NotFound = () => import('./views/NotFound')
+const SideBar = () => import('./views/SideBar')
+const Navigation = () => import('./views/Navigation')
 
 Vue.use(Router)
 
@@ -52,6 +54,7 @@ export default new Router({
 			path: '/list/:type?',
 			components: {
 				default: List,
+				navigation: Navigation,
 			},
 			props: true,
 			name: 'list',
@@ -60,6 +63,7 @@ export default new Router({
 			path: '/administration',
 			components: {
 				default: Administration,
+				navigation: Navigation,
 			},
 			name: 'administration',
 		},
@@ -67,6 +71,7 @@ export default new Router({
 			path: '/not-found',
 			components: {
 				default: NotFound,
+				navigation: Navigation,
 			},
 			name: 'notfound',
 		},
@@ -74,18 +79,17 @@ export default new Router({
 			path: '/vote/:id',
 			components: {
 				default: Vote,
+				navigation: Navigation,
+				sidebar: SideBar,
 			},
 			props: true,
 			name: 'vote',
 		},
 		{
-			path: '/poll/:token',
-			redirect: '/s/:token',
-		},
-		{
 			path: '/s/:token',
 			components: {
 				default: Vote,
+				sidebar: SideBar,
 			},
 			props: true,
 			name: 'publicVote',

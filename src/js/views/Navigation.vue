@@ -57,11 +57,11 @@
 
 import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
-import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
-import CreateDlg from '../Create/CreateDlg'
-import PollNavigationItems from './PollNavigationItems'
-import { emit } from '@nextcloud/event-bus'
+import { showError } from '@nextcloud/dialogs'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import CreateDlg from '../components/Create/CreateDlg'
+import PollNavigationItems from '../components/Navigation/PollNavigationItems'
 
 export default {
 	name: 'Navigation',
@@ -94,8 +94,16 @@ export default {
 		},
 	},
 
+	created() {
+		this.updatePolls()
+		subscribe('update-polls', () => {
+			this.updatePolls()
+		})
+	},
+
 	beforeDestroy() {
 		window.clearInterval(this.reloadTimer)
+		unsubscribe('update-polls')
 	},
 
 	methods: {
@@ -112,6 +120,23 @@ export default {
 
 		showSettings() {
 			emit('show-settings')
+		},
+
+		async updatePolls() {
+			const dispatches = []
+
+			dispatches.push('polls/list')
+
+			if (getCurrentUser().isAdmin) {
+				dispatches.push('pollsAdmin/load')
+			}
+
+			try {
+				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
+				await Promise.all(requests)
+			} catch {
+				showError(t('polls', 'Error loading poll list'))
+			}
 		},
 
 		async clonePoll(pollId) {
