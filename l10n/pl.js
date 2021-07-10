@@ -231,7 +231,7 @@ OC.L10N.register(
     "Details" : "Szczegóły",
     "Configuration" : "Konfiguracja",
     "Options" : "Opcje",
-    "Shares" : "Współdzielone",
+    "Shares" : "Udostępnione",
     "Comments" : "Komentarze",
     "No comments" : "Bez komentarzy",
     "Be the first." : "Bądź pierwszy.",
