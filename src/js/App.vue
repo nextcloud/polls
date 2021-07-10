@@ -45,7 +45,7 @@ import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
 import './assets/scss/print.scss'
 
-// TODO: remove comments, when @media:prefers-color-scheme is completely supported by core
+// TODO: remove, when @media:prefers-color-scheme is completely supported by core
 import './assets/scss/transitions.scss'
 import './assets/scss/experimental.scss'
 import { watchPolls } from './mixins/watchPolls'
@@ -55,9 +55,7 @@ export default {
 	components: {
 		Content,
 		LoadingOverlay: () => import('./components/Base/LoadingOverlay'),
-		// Navigation: () => import('./components/Navigation/Navigation'),
 		SettingsDlg,
-		// SideBar: () => import('./components/SideBar/SideBar'),
 	},
 
 	mixins: [watchPolls],
