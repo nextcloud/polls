@@ -31,13 +31,10 @@ export const watchPolls = {
 					emit('update-polls')
 					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
 						// if current poll is affected, load current poll configuration
-						// load also options and votes
-						dispatches = [...dispatches, 'poll/get', 'votes/list', 'options/list']
+						dispatches = [...dispatches, 'poll/get']
 					}
-				} else if (['votes', 'options'].includes(item.table)) {
-					dispatches = [...dispatches, 'votes/list', 'options/list']
 				} else {
-					// a table of the current poll was reported, load
+					// a table change of the current poll was reported, load
 					// corresponding stores
 					dispatches = [...dispatches, item.table + '/list']
 				}

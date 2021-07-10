@@ -58,5 +58,7 @@ class VoteListener implements IEventListener {
 			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
 		}
 		$this->watchService->writeUpdate($event->getPollId(), $this->table);
+		// If a vote is changed, simulate option change to force recalculating of votes
+		$this->watchService->writeUpdate($event->getPollId(), Watch::OBJECT_OPTIONS);
 	}
 }
