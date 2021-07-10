@@ -21,10 +21,10 @@
   -->
 
 <template>
-	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': acl.allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
+	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
 		<router-view name="navigation" :class="{ 'glassy': settings.glassyNavigation }" />
 		<router-view />
-		<router-view v-if="sideBarOpen && $store.state.poll.id && (acl.allowEdit || poll.allowComment)"
+		<router-view v-if="showSidebar"
 			name="sidebar"
 			:active="activeTab"
 			:class="{ 'glassy': settings.glassySidebar }" />
@@ -76,8 +76,13 @@ export default {
 		...mapState({
 			settings: (state) => state.settings.user,
 			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
+			allowEdit: (state) => state.poll.acl.allowEdit,
 		}),
+
+		showSidebar() {
+			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
+		},
+
 		appStyle() {
 			if (this.settings.useImage && this.settings.experimental) {
 				return {
