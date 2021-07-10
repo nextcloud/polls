@@ -36,7 +36,6 @@
 <script>
 import SettingsDlg from './components/Settings/SettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
-import { showError } from '@nextcloud/dialogs'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState } from 'vuex'
@@ -107,9 +106,6 @@ export default {
 	created() {
 		if (getCurrentUser()) {
 			this.$store.dispatch('settings/get')
-			if (this.$route.name !== 'publicVote') {
-				this.updatePolls()
-			}
 			if (this.$route.params.id && !this.$route.params.token) {
 				this.loadPoll(true)
 			}
@@ -127,10 +123,6 @@ export default {
 
 		subscribe('load-poll', (silent) => {
 			this.loadPoll(silent)
-		})
-
-		subscribe('update-polls', () => {
-			this.updatePolls()
 		})
 
 		subscribe('toggle-sidebar', (payload) => {
@@ -153,7 +145,6 @@ export default {
 	beforeDestroy() {
 		this.cancelToken.cancel()
 		unsubscribe('load-poll')
-		unsubscribe('update-polls')
 		unsubscribe('toggle-sidebar')
 		unsubscribe('transitions-on')
 		unsubscribe('transitions-off')
@@ -210,25 +201,6 @@ export default {
 			}
 		},
 
-		async updatePolls() {
-			const dispatches = []
-			if (this.$route.name === 'publicVote') {
-				return
-			}
-
-			dispatches.push('polls/list')
-
-			if (getCurrentUser().isAdmin) {
-				dispatches.push('pollsAdmin/load')
-			}
-
-			try {
-				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
-				await Promise.all(requests)
-			} catch {
-				showError(t('polls', 'Error loading poll list'))
-			}
-		},
 	},
 }
 
