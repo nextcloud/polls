@@ -1,6 +1,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2021-07-11
+## This mainly a compatibility update to Nextcloud 22 and 21
+### new Features/changes
+- reduced undelete time from 7 to 4 seconds
+- Deleted polls are now archived polls
+- Optimizations to the date picker
+- Change checkboxes to a switch style
+- added some infos to the information button
+- Added a configurable threshold to hide other users' votes:
+  If too many vote cells are generated, the js performance can break down and lead to a long js runtime. The per user threshold defaults to 1000 cells to display. This needs further optimization for a good UX.
+
+### A lot of optimizations under the hood
+- Using more server side events
+- removing orphaned assets
+- new migration offset
+- compatibility to Circles 22
+- load some components asynchronously
+- load navigation and sidebar asynchronously via router
+- Allow larger usernames and displaynames
+- remove DBAL dependency for Nextcloud 22
+- remove group shares, if group is deleted from Nextcloud
+
+### Fixes
+- Avoid sending mails to disabled users
+
 ## [3.0.0-rc.3] - 2021-07-08
 ## Only available for Nextcloud 21/22
 - [fix] #1815 - Keep DBAL Exceptions for NC21 compatibility
