@@ -28,6 +28,8 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\Poll;
 
 class AnonymizeService {
 
@@ -112,5 +114,31 @@ class AnonymizeService {
 	 */
 	public function getVotes(): array {
 		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
+	}
+
+	/**
+	 * Replaces userIds with displayName to avoid exposing usernames in public polls
+	 */
+	public static function replaceUserId(mixed $arrayOrObject) {
+		if (is_array($arrayOrObject)) {
+			foreach ($arrayOrObject as $item) {
+				if ($item instanceof Comment || $item instanceof Vote) {
+					$item->setUserId($item->getDisplayName());
+				}
+				if ($item instanceof Option || $item instanceof Poll) {
+					$item->setOwner($item->getDisplayName());
+				}
+			}
+		}
+
+		if ($arrayOrObject instanceof Option || $arrayOrObject instanceof Poll) {
+			$arrayOrObject->setOwner($arrayOrObject->getDisplayName());
+		}
+
+		if ($arrayOrObject instanceof Comment || $arrayOrObject instanceof Vote) {
+			$arrayOrObject->setUserId($arrayOrObject->getDisplayName());
+		}
+
+		return $arrayOrObject;
 	}
 }
