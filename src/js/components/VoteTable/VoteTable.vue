@@ -25,16 +25,18 @@
 		<div class="vote-table__users">
 			<div class="spacer" />
 
-			<UserItem v-for="(participant) in participants"
+			<div v-for="(participant) in participants"
 				:key="participant.userId"
-				v-bind="participant"
-				:class="{currentuser: (participant.userId === acl.userId) }">
+				:class="['participant', {currentuser: (participant.userId === acl.userId) }]">
+
+				<UserItem v-bind="participant" condensed />
+
 				<UserMenu v-if="participant.userId === acl.userId" />
 
 				<ActionDelete v-if="acl.allowEdit"
 					:title="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.userId)" />
-			</UserItem>
+			</div>
 
 			<div v-if="proposalsExist" class="owner" />
 
@@ -110,11 +112,14 @@ export default {
 	display: flex;
 	flex: 1;
 
-	.user-item, .vote-item {
+	.participant {
+		display: flex;
+	}
+	.participant, .vote-item {
 		flex: 0 0 auto;
-		height: 3.5em;
+		height: 4.5em;
 		order: 10;
-		line-height: 3.5em;
+		line-height: 1.5em;
 		padding: 4px 1px;
 		border-top: solid 1px var(--color-border-dark);
 		&.currentuser {
@@ -211,7 +216,7 @@ export default {
 			order: 99;
 		}
 
-		.user-item {
+		.participant {
 			max-width: 245px;
 		}
 
@@ -260,7 +265,7 @@ export default {
 			margin: 0
 		}
 
-		.user-item.user:not(.currentuser), .vote-item:not(.currentuser) {
+		.participant.user:not(.currentuser), .vote-item:not(.currentuser) {
 			display: none;
 		}
 
