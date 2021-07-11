@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
 ### Fixes
 - Avoid sending mails to disabled users
 
+All changes: https://github.com/nextcloud/polls/issues?q=milestone%3A3.0+
+
 ## [3.0.0-rc.3] - 2021-07-08
 ## Only available for Nextcloud 21/22
 - [fix] #1815 - Keep DBAL Exceptions for NC21 compatibility
