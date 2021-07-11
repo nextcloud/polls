@@ -29,6 +29,7 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\Migration\IOutput;
 
 /**
  * @template-extends QBMapper<Log>
@@ -107,7 +108,7 @@ class LogMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	public function removeDuplicates($output = null): int {
+	public function removeDuplicates(?IOutput $output = null): int {
 		$count = 0;
 		try {
 			// remove duplicates from oc_polls_log

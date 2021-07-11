@@ -71,7 +71,7 @@ class Version030000Date20210704120000 extends SimpleMigrationStep {
 		}
 
 		// Create tables, as defined in TableSchema or fix column definitions
-		TableSchema::CreateOrUpdateSchema($schema, $output);
+		TableSchema::createOrUpdateSchema($schema, $output);
 		// remove old migration entries from versions prior to polls 3.x
 		// including migration versions from test releases
 		// theoretically, only this migration should be existen. If not, no matter

@@ -267,7 +267,7 @@ abstract class TableSchema {
 	 * Iterate over tables and make sure, the are created or updated
 	 * according to the schema
 	 */
-	public static function CreateOrUpdateSchema(ISchemaWrapper &$schema, IOutput &$output) {
+	public static function createOrUpdateSchema(ISchemaWrapper &$schema, IOutput &$output): void {
 		foreach (self::TABLES as $tableName => $columns) {
 			$tableCreated = false;
 
@@ -305,7 +305,7 @@ abstract class TableSchema {
 	/**
 	 * Remove obsolete tables if they still exist
 	 */
-	public static function removeObsoleteTables(ISchemaWrapper &$schema, IOutput &$output) {
+	public static function removeObsoleteTables(ISchemaWrapper &$schema, IOutput &$output): void {
 		foreach (self::GONE_TABLES as $tableName) {
 			if ($schema->hasTable($tableName)) {
 				$schema->dropTable($tableName);
@@ -317,7 +317,7 @@ abstract class TableSchema {
 	/**
 	 * Remove obsolete columns, if they exist
 	 */
-	public static function removeObsoleteColumns(ISchemaWrapper &$schema, IOutput &$output) {
+	public static function removeObsoleteColumns(ISchemaWrapper &$schema, IOutput &$output): void {
 		foreach (self::GONE_COLUMNS as $tableName => $columns) {
 			if ($schema->hasTable($tableName)) {
 				$table = $schema->getTable($tableName);
@@ -335,7 +335,7 @@ abstract class TableSchema {
 	/**
 	 * Tidy migrations table and remove obsolete migration entries.
 	 */
-	public static function removeObsoleteMigrations(IDBConnection &$connection, IOutput &$output) {
+	public static function removeObsoleteMigrations(IDBConnection &$connection, IOutput &$output): void {
 		$query = $connection->getQueryBuilder();
 		$output->info('tidy migration entries');
 		foreach (self::GONE_MIGRATIONS as $version) {

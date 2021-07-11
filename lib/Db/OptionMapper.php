@@ -29,6 +29,7 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\Migration\IOutput;
 
 /**
  * @template-extends QBMapper<Option>
@@ -112,7 +113,7 @@ class OptionMapper extends QBMapper {
 		$qb->execute();
 	}
 
-	public function removeDuplicates($output = null): int {
+	public function removeDuplicates(?IOutput $output = null): int {
 		$count = 0;
 		try {
 			// remove duplicates from oc_polls_options

@@ -83,7 +83,12 @@ class Notifier implements INotifier {
 		return $this->l10nFactory->get('polls')->t('Polls');
 	}
 
-	private function getActor($actorId) {
+	/**
+	 * @return string[][]
+	 *
+	 * @psalm-return array{actor: array{type: 'user', id: string, name: string}}
+	 */
+	private function getActor($actorId): array {
 		$actor = $this->userManager->get($actorId);
 		return [
 			'actor' => [
