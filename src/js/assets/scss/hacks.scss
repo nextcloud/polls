@@ -1,11 +1,3 @@
-.modal-wrapper {
-	&:not(&--large):not(&--full) .modal-container {
-		width: initial !important;
-		height: initial !important;
-		overflow: auto !important;
-	}
-}
-
 // fill full input with background color
 .mx-input {
 	background-clip: initial !important;
