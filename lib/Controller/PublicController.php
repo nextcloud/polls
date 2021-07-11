@@ -207,7 +207,7 @@ class PublicController extends Controller {
 	 */
 	public function getVotes(string $token): DataResponse {
 		return $this->response(function () use ($token) {
-			return ['votes' =>AnonymizeService::replaceUserId($this->voteService->list(0, $token))];
+			return ['votes' => AnonymizeService::replaceUserId($this->voteService->list(0, $token))];
 		});
 	}
 

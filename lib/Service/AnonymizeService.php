@@ -117,9 +117,11 @@ class AnonymizeService {
 	}
 
 	/**
-	 * Replaces userIds with displayName to avoid exposing usernames in public polls
+	 * 	 * Replaces userIds with displayName to avoid exposing usernames in public polls
+	 *
+	 * @param (Comment|Option|Poll|Vote)[]|Comment|Option|Poll|Vote $arrayOrObject
 	 */
-	public static function replaceUserId(mixed $arrayOrObject) {
+	public static function replaceUserId($arrayOrObject) {
 		if (is_array($arrayOrObject)) {
 			foreach ($arrayOrObject as $item) {
 				if ($item instanceof Comment || $item instanceof Vote) {
