@@ -29,6 +29,7 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\Migration\IOutput;
 
 /**
  * @template-extends QBMapper<Vote>
@@ -166,7 +167,7 @@ class VoteMapper extends QBMapper {
 	}
 
 
-	public function removeDuplicates($output = null): int {
+	public function removeDuplicates(?IOutput $output = null): int {
 		$count = 0;
 		try {
 			$query = $this->db->getQueryBuilder();
