@@ -21,82 +21,70 @@
   -->
 
 <template lang="html">
-	<Popover>
-		<div slot="trigger">
-			<Actions>
-				<ActionButton icon="icon-info">
-					{{ t('polls', 'Poll informations') }}
-				</ActionButton>
-			</Actions>
+	<div class="poll-information">
+		<div class="icon-user">
+			{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
 		</div>
-		<div class="poll-information">
-			<div class="icon-user">
-				{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
-			</div>
-			<div :class="accessClass">
-				{{ accessCaption }}
-			</div>
-			<div class="icon-star">
-				{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
-			</div>
-			<div v-if="poll.expire" class="icon-polls-closed">
-				{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
-			</div>
-			<div v-if="poll.anonymous" class="icon-polls-anonymous">
-				{{ t('polls', 'Anonymous poll') }}
-			</div>
-			<div :class="resultsClass">
-				{{ resultsCaption }}
-			</div>
-			<div v-if="countParticipantsVoted && acl.allowSeeResults" class="icon-user">
-				{{ n('polls', '%n Participant', '%n Participants', countParticipantsVoted) }}
-			</div>
-			<div class="icon-polls-unconfirmed">
-				{{ n('polls', '%n option', '%n options', countOptions) }}
-			</div>
-			<div v-if="countAllYesVotes" class="icon-polls-yes">
-				{{ n('polls', '%n yes vote', '%n yes votes', countAllYesVotes) }}
-			</div>
-			<div v-if="countAllNoVotes" class="icon-polls-no">
-				{{ n('polls', '%n no vote', '%n no votes', countAllNoVotes) }}
-			</div>
-			<div v-if="countAllMaybeVotes" class="icon-polls-maybe">
-				{{ n('polls', '%n maybe vote', '%n maybe votes', countAllMaybeVotes) }}
-			</div>
-			<div class="icon-timezone">
-				{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
-			</div>
-			<div v-if="proposalsAllowed" class="icon-add">
-				{{ proposalsStatus }}
-			</div>
-			<div v-if="poll.voteLimit" class="icon-checkmark">
-				{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
-			</div>
-			<div v-if="poll.optionLimit" class="icon-close">
-				{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
-			</div>
-			<div v-if="$route.name === 'publicVote' && share.emailAddress" class="icon-mail">
-				{{ share.emailAddress }}
-			</div>
-			<div v-if="subscribed" class="icon-sound">
-				{{ t('polls', 'You subscribed to this poll') }}
-			</div>
+		<div :class="accessClass">
+			{{ accessCaption }}
 		</div>
-	</Popover>
+		<div class="icon-star">
+			{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
+		</div>
+		<div v-if="poll.expire" class="icon-polls-closed">
+			{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
+		</div>
+		<div v-if="poll.anonymous" class="icon-polls-anonymous">
+			{{ t('polls', 'Anonymous poll') }}
+		</div>
+		<div :class="resultsClass">
+			{{ resultsCaption }}
+		</div>
+		<div v-if="countParticipantsVoted && acl.allowSeeResults" class="icon-user">
+			{{ n('polls', '%n Participant', '%n Participants', countParticipantsVoted) }}
+		</div>
+		<div class="icon-polls-unconfirmed">
+			{{ n('polls', '%n option', '%n options', countOptions) }}
+		</div>
+		<div v-if="countAllYesVotes" class="icon-polls-yes">
+			{{ n('polls', '%n yes vote', '%n yes votes', countAllYesVotes) }}
+		</div>
+		<div v-if="countAllNoVotes" class="icon-polls-no">
+			{{ n('polls', '%n no vote', '%n no votes', countAllNoVotes) }}
+		</div>
+		<div v-if="countAllMaybeVotes" class="icon-polls-maybe">
+			{{ n('polls', '%n maybe vote', '%n maybe votes', countAllMaybeVotes) }}
+		</div>
+		<div class="icon-timezone">
+			{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
+		</div>
+		<div v-if="proposalsAllowed" class="icon-add">
+			{{ proposalsStatus }}
+		</div>
+		<div v-if="poll.voteLimit" class="icon-checkmark">
+			{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
+		</div>
+		<div v-if="poll.optionLimit" class="icon-close">
+			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
+		</div>
+		<div v-if="$route.name === 'publicVote' && share.emailAddress" class="icon-mail">
+			{{ share.emailAddress }}
+		</div>
+		<div v-if="subscribed" class="icon-sound">
+			{{ t('polls', 'You subscribed to this poll') }}
+		</div>
+	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { Actions, ActionButton, Popover, UserBubble } from '@nextcloud/vue'
+import { UserBubble } from '@nextcloud/vue'
 
 export default {
 	name: 'PollInformation',
 
 	components: {
-		Actions,
-		ActionButton,
-		Popover,
 		UserBubble,
 	},
 

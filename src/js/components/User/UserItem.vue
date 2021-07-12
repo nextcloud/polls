@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="user-item" :class="type">
+	<div class="user-item" :class="{ type, 'condensed' : condensed }">
 		<Avatar :disable-menu="disableMenu"
 			:disable-tooltip="disableTooltip"
 			class="user-item__avatar"
@@ -66,7 +66,7 @@ export default {
 		},
 		disableTooltip: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 		menuPosition: {
 			type: String,
@@ -95,6 +95,10 @@ export default {
 		iconSize: {
 			type: Number,
 			default: 32,
+		},
+		condensed: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -142,16 +146,11 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .user-item {
 	display: flex;
 	align-items: center;
 	padding: 4px;
-}
-
-.type-icon {
-	margin-left: 8px;
-	background-size: 16px;
 }
 
 .user-item__name {
@@ -162,6 +161,26 @@ export default {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.condensed {
+	&.user-item {
+		flex-direction: column;
+		justify-content: center;
+		max-width: 70px;
+	}
+	.user-item__name {
+		font-size: 0.7em;
+		text-align: center;
+		width: 70px;
+		max-width: 70px;
+		padding: 0 4px;
+	}
+}
+
+.type-icon {
+	margin-left: 8px;
+	background-size: 16px;
 }
 
 </style>

@@ -24,12 +24,7 @@
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<div class="area__header">
 			<PollTitle />
-			<div class="header-actions">
-				<PollInformation />
-				<ActionSortOptions />
-				<ActionChangeView />
-				<ActionToggleSidebar v-if="acl.allowEdit || poll.allowComment" />
-			</div>
+			<PollHeaderButtons />
 		</div>
 		<div class="description">
 			<MarkUpDescription class="area__description" />
@@ -78,21 +73,16 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription'
 import PollTitle from '../components/Poll/PollTitle'
-import ActionSortOptions from '../components/Actions/ActionSortOptions'
-import ActionChangeView from '../components/Actions/ActionChangeView'
-import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
+import PollHeaderButtons from '../components/Poll/PollHeaderButtons'
 
 export default {
 	name: 'Vote',
 	components: {
-		ActionChangeView,
-		ActionSortOptions,
-		ActionToggleSidebar,
 		AppContent,
 		MarkUpDescription,
 		EmptyContent,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
-		PollInformation: () => import('../components/Poll/PollInformation'),
+		PollHeaderButtons,
 		PollTitle,
 		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal'),
 		VoteTable: () => import('../components/VoteTable/VoteTable'),
