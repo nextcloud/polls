@@ -28,10 +28,9 @@
 			<div v-for="(participant) in participants"
 				:key="participant.userId"
 				:class="['participant', {currentuser: (participant.userId === acl.userId) }]">
-
 				<UserItem v-bind="participant" condensed />
 
-				<UserMenu v-if="participant.userId === acl.userId" />
+				<!-- <UserMenu v-if="participant.userId === acl.userId" /> -->
 
 				<ActionDelete v-if="acl.allowEdit"
 					:title="t('polls', 'Delete votes')"
@@ -63,7 +62,7 @@ export default {
 	name: 'VoteTable',
 	components: {
 		ActionDelete,
-		UserMenu: () => import('../User/UserMenu'),
+		// UserMenu: () => import('../User/UserMenu'),
 		VoteColumn,
 	},
 
