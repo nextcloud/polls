@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Çevre",
     "Contact" : "Kişi",
     "Contact group" : "Kişi grubu",
     "External Email" : "Dış e-posta adresi",
@@ -196,7 +197,10 @@ OC.L10N.register(
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Metin anketinin tablo görünümü yerine dikey olarak hizalanmış liste görünümünde olmasını istiyorsanız, bu seçeneği işaretleyin. İlk varsayılan liste görünümüdür.",
     "Date polls default to list view" : "Tarih anketleri varsayılan olarak liste görünümünde",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Tarih anketinin tablo görünümü yerine dikey olarak hizalanmış liste görünümünde olmasını istiyorsanız, bu seçeneği işaretleyin. İlk varsayılan liste görünümüdür.",
+    "Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000." : "Oy hücreleri sayısı sınırı. Eşik değerine ulaşılırsa, başarımın düşmesini önlemek için diğer tüm katılımcılar gizlenir. Varsayılan değer 1000.",
+    "Enter amount of maximum allowed vote boxes." : "Kullanılabilecek en fazla oy kutusu sayısını yazın",
     "User Settings" : "Kullanıcı ayarları",
+    "Performance settings" : "Başarım ayarları",
     "Experimental Styles" : "Deneysel biçemler",
     "Public link ({token})" : "Herkese açık bağlantı ({token})",
     "Effective shares" : "Etkin paylaşımlar",
