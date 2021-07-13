@@ -167,7 +167,6 @@ export default {
 		}
 	}
 
-
 	.vote-item {
 		background-clip: content-box;
 	}

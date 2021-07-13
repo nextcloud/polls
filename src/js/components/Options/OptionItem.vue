@@ -210,7 +210,6 @@ export default {
 
 <style lang="scss">
 
-
 	.option-item {
 		display: flex;
 		align-items: center;
@@ -223,12 +222,6 @@ export default {
 		}
 	}
 
-	// [class*='event'] {
-	// 	display: flex;
-	// 	flex-direction: column;
-	// 	align-items: center;
-	// }
-	//
 	.devider {
 		align-self: center;
 		color: var(--color-text-lighter);
