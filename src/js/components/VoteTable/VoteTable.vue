@@ -116,7 +116,7 @@ export default {
 		height: 4.5em;
 		order: 10;
 		line-height: 1.5em;
-		padding: 4px 1px;
+		padding: 4px;
 		border-top: solid 1px var(--color-border-dark);
 		&.currentuser {
 			order:5;
@@ -143,13 +143,17 @@ export default {
 		align-items: stretch;
 		min-width: 85px;
 		max-width: 280px;
+		border-left: 1px solid var(--color-border-dark);
 		&>div {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 		}
 		.vote-table-header-item {
-			align-items: flex-start;
+			align-items: stretch;
+			flex: 1;
+			// padding: 0 8px;
+			order: 1;
 		}
 	}
 
@@ -163,11 +167,6 @@ export default {
 		}
 	}
 
-	.vote-table-header-item {
-		flex: 1;
-		padding: 0 8px;
-		order: 1;
-	}
 
 	.vote-item {
 		background-clip: content-box;

@@ -23,9 +23,9 @@
 <template>
 	<div class="option-proposals">
 		<div class="option-proposals__header">
-			<div v-if="proposalsOpen">
+			<!-- <div v-if="proposalsOpen">
 				{{ t('polls', 'You are asked to propose more options for this poll.') }}
-			</div>
+			</div> -->
 			<!-- <div v-if="proposalsExpirySet && !proposalsExpired">
 				{{ t('polls', 'Adding proposals ends {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
 			</div> -->
@@ -34,8 +34,8 @@
 			</div>
 		</div>
 		<div v-if="proposalsOpen" class="option-proposals__add-proposal">
-			<OptionsDateAdd v-if="pollType === 'datePoll'" />
-			<OptionsTextAdd v-if="pollType === 'textPoll'" />
+			<OptionsDateAdd v-if="pollType === 'datePoll'" caption="Propose a new date" />
+			<OptionsTextAdd v-if="pollType === 'textPoll'" placeholder="Propose a new vote option" />
 		</div>
 	</div>
 </template>
