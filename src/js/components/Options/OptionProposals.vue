@@ -26,9 +26,9 @@
 			<div v-if="proposalsOpen">
 				{{ t('polls', 'You are asked to propose more options for this poll.') }}
 			</div>
-			<div v-if="proposalsExpirySet && !proposalsExpired">
+			<!-- <div v-if="proposalsExpirySet && !proposalsExpired">
 				{{ t('polls', 'Adding proposals ends {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
-			</div>
+			</div> -->
 			<div v-if="proposalsExpired">
 				{{ t('polls', 'Adding proposals ended {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
 			</div>
@@ -58,7 +58,7 @@ export default {
 
 		...mapGetters({
 			proposalsOpen: 'poll/proposalsOpen',
-			proposalsExpirySet: 'poll/proposalsExpirySet',
+			// proposalsExpirySet: 'poll/proposalsExpirySet',
 			proposalsExpired: 'poll/proposalsExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),

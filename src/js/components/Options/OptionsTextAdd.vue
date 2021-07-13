@@ -22,7 +22,7 @@
 
 <template>
 	<InputDiv v-model="newPollText"
-		:placeholder="t('polls', 'Add new text option')"
+		:placeholder="t('polls', 'Add option')"
 		@submit="addOption()" />
 </template>
 
@@ -63,7 +63,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.optionAdd {
 		display: flex;
 	}
