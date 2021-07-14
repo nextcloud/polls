@@ -48,7 +48,7 @@
 				:title="t('core', 'Administration')"
 				icon="icon-settings"
 				:to="{ name: 'administration' }" />
-			<AppNavigationItem :title="t('core', 'Settings')" icon="icon-settings" @click="showSettings()" />
+			<AppNavigationItem :title="t('core', 'Your app settings')" icon="icon-settings" @click="showSettings()" />
 		</template>
 	</AppNavigation>
 </template>
