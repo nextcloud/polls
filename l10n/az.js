@@ -12,7 +12,6 @@ OC.L10N.register(
     "Description" : "Açıqlanma",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "Quraşdırmalar",
     "Details" : "Detallar",
     "Configuration" : "Konfiqurasiya",
     "Shares" : "Yayımlanmalar",

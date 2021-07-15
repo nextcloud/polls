@@ -12,7 +12,6 @@ OC.L10N.register(
     "Description" : "বিবরণ",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "সেটিংস",
     "Details" : "বিসতারিত",
     "Configuration" : "কনফিগারেসন",
     "Shares" : "ভাগাভাগি",

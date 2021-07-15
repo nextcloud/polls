@@ -15,7 +15,6 @@ OC.L10N.register(
     "Description" : "Diskrivadur",
     "No" : "Nan",
     "Yes" : "Ya",
-    "Settings" : "Arventennoù",
     "Details" : "Munudoù",
     "Configuration" : "Stumm",
     "Shares" : "Rannañ",

@@ -26,7 +26,6 @@ OC.L10N.register(
     "Description" : "Опис",
     "No" : "Не",
     "Yes" : "Да",
-    "Settings" : "Параметри",
     "Details" : "Детали",
     "Configuration" : "Конфигурација",
     "Options" : "Опции",

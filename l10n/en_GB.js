@@ -27,7 +27,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Receive notification email on activity",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "Settings",
     "Details" : "Details",
     "Configuration" : "Configuration",
     "Shares" : "Shares",

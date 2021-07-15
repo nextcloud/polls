@@ -87,7 +87,6 @@ OC.L10N.register(
     "No" : "Не",
     "Yes" : "Да",
     "Add new Poll" : "Додај ново гласање",
-    "Settings" : "Поставке",
     "Error loading poll list" : "Грешка приликом учитавања списка гласања",
     "Error cloning poll." : "Грешка приликом клонирања гласања.",
     "Enter a poll or start a new one." : "Одаберите гласање или започните ново.",

@@ -268,7 +268,6 @@ OC.L10N.register(
     "Error archiving/restoring poll." : "Erreur d'archivage/restauration de sondage.",
     "Error overtaking poll." : "Erreur lors de la prise en charge du sondage.",
     "Add new Poll" : "Ajouter un nouveau sondage",
-    "Settings" : "Paramètres",
     "Error loading poll list" : "Erreur lors du chargement de la liste des sondages",
     "Error cloning poll." : "Erreur de duplication du sondage.",
     "404 - poll not found" : "404 - sondage introuvable",

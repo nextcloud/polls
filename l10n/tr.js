@@ -268,7 +268,6 @@ OC.L10N.register(
     "Error archiving/restoring poll." : "Anket arşivlenirken ya da geri yüklenirken sorun çıktı.",
     "Error overtaking poll." : "Anket devralınırken sorun çıktı",
     "Add new Poll" : "Anket ekle",
-    "Settings" : "Ayarlar",
     "Error loading poll list" : "Anket listesi yüklenirken sorun çıktı",
     "Error cloning poll." : "Anket kopyalanırken sorun çıktı.",
     "404 - poll not found" : "404 - anket bulunamadı",

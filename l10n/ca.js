@@ -108,7 +108,6 @@ OC.L10N.register(
     "No" : "No",
     "Yes" : "Sí",
     "Add new Poll" : "Afegeix una enquesta nova",
-    "Settings" : "Paràmetres",
     "Error loading poll list" : "S'ha produït un error en carregar la llista de enquestes",
     "Error cloning poll." : "Error clonant l’enquesta.",
     "Enter a poll or start a new one." : "Introduïu una enquesta o inicieu-ne una de nova.",

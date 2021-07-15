@@ -20,7 +20,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "No" : "Nē",
     "Yes" : "Jā",
-    "Settings" : "Iestatījumi",
     "Details" : "Detaļas",
     "Configuration" : "Konfigurācija",
     "Shares" : "Koplietots",

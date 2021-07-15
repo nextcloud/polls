@@ -26,7 +26,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "활동 이메일 알림 받기",
     "No" : "아니요",
     "Yes" : "예",
-    "Settings" : "설정",
     "Details" : "세부사항",
     "Configuration" : "설정",
     "Shares" : "공유",

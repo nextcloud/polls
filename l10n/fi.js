@@ -134,7 +134,6 @@ OC.L10N.register(
     "No" : "Ei",
     "Yes" : "Kyllä",
     "Add new Poll" : "Lisää uusi kysely",
-    "Settings" : "Asetukset",
     "Error loading poll list" : "Virhe ladatessa kyselylistaa",
     "Error cloning poll." : "Virhe kyselyä kloonatessa.",
     "404 - poll not found" : "404 - äänestystä ei löytynyt",

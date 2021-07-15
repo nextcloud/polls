@@ -250,7 +250,6 @@ OC.L10N.register(
     "Error archiving/restoring poll." : "Error al archivar/restaurar votación.",
     "Error overtaking poll." : "Error tomando el control de la encuesta.",
     "Add new Poll" : "Añadir nueva Encuesta",
-    "Settings" : "Ajustes",
     "Error loading poll list" : "Error al cargar la lista de votaciones",
     "Error cloning poll." : "Error al clonar encuesta.",
     "404 - poll not found" : "404 - encuesta no encontrada",

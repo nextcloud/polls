@@ -18,7 +18,6 @@ OC.L10N.register(
     "Description" : "Тодорхойлолт",
     "No" : "Үгүй",
     "Yes" : "Тийм",
-    "Settings" : "Тохиргоо",
     "Details" : "Дэлгэрэнгүй",
     "Shares" : "Түгээлтүүд",
     "Comments" : "Сэтгэгдлүүд",

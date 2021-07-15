@@ -37,7 +37,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "Agordoj",
     "Details" : "Detaloj",
     "Configuration" : "Agordo",
     "Shares" : "Kunhavoj",

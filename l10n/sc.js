@@ -241,7 +241,6 @@ OC.L10N.register(
     "Administration" : "Amministratzione",
     "Error overtaking poll." : "Errore in su rilievu de su sondàgiu.",
     "Add new Poll" : "Agiunghe sondàgiu nou",
-    "Settings" : "Impostatziones",
     "Error loading poll list" : "Errore in su carrigamentu de s'elencu de is sondàgios",
     "Error cloning poll." : "Errore in sa clonatzione de su sondàgiu.",
     "404 - poll not found" : "404 - sondàgiu no agatadu",

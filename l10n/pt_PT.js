@@ -22,7 +22,6 @@ OC.L10N.register(
     "Description" : "Descrição",
     "No" : "Não",
     "Yes" : "Sim",
-    "Settings" : "Configurações",
     "Details" : "Detalhes",
     "Configuration" : "Configuração",
     "Shares" : "Partilhas",

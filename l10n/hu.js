@@ -210,7 +210,6 @@ OC.L10N.register(
     "Administration" : "Adminisztráció",
     "Error overtaking poll." : "Hiba történt a szavazás átvétele során.",
     "Add new Poll" : "Új szavazás hozzáadása",
-    "Settings" : "Beállítások",
     "Error loading poll list" : "Hiba történt a szavazások listázása során",
     "Error cloning poll." : "Hiba a szavazás klónozása közben.",
     "404 - poll not found" : "404 - a szavazás nem található",

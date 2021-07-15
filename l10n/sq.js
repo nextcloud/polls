@@ -21,7 +21,6 @@ OC.L10N.register(
     "Description" : "Përshkrim",
     "No" : "Jo",
     "Yes" : "Yes",
-    "Settings" : "Rregullimet",
     "Details" : "Detajet",
     "Configuration" : "Formësim",
     "Shares" : "Shpërndarje",

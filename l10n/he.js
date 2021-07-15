@@ -88,7 +88,6 @@ OC.L10N.register(
     "No" : "לא",
     "Yes" : "כן",
     "Add new Poll" : "הוספת סקר חדש",
-    "Settings" : "הגדרות",
     "Error loading poll list" : "שגיאה בטעינת רשימת הסקרים",
     "Error cloning poll." : "שגיאה בשכפול סקר.",
     "Enter a poll or start a new one." : "כניסה לסקר או הקמת אחד חדש.",

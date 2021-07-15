@@ -204,7 +204,6 @@ OC.L10N.register(
     "Administration" : "Administracija",
     "Error overtaking poll." : "Pogreška pri preuzimanju ankete.",
     "Add new Poll" : "Dodaj novu anketu",
-    "Settings" : "Postavke",
     "Error loading poll list" : "Pogreška pri učitavanju popisa anketa",
     "Error cloning poll." : "Pogreška pri kloniranju ankete.",
     "404 - poll not found" : "404 – anketa nije pronađena",

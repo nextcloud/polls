@@ -24,7 +24,6 @@ OC.L10N.register(
     "Description" : "الوصف",
     "No" : "لا",
     "Yes" : "نعم",
-    "Settings" : "الإعدادات",
     "Details" : "التفاصيل",
     "Configuration" : "إعداد",
     "Options" : "الخيارات",

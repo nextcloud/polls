@@ -24,7 +24,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "No" : "არა",
     "Yes" : "კი",
-    "Settings" : "პარამეტრები",
     "Details" : "დეტალები",
     "Configuration" : "კონფიგურაცია",
     "Shares" : "გაზიარებები",

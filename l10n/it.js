@@ -232,7 +232,6 @@ OC.L10N.register(
     "Administration" : "Amministrazione",
     "Error overtaking poll." : "Errore di acquisizione del sondaggio.",
     "Add new Poll" : "Aggiungi nuovo sondaggio",
-    "Settings" : "Impostazioni",
     "Error loading poll list" : "Errore durante il caricamento dell'elenco dei sondaggi",
     "Error cloning poll." : "Errore durante la clonazione del sondaggio.",
     "404 - poll not found" : "404 - sondaggio non trovato",

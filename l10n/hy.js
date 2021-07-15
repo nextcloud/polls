@@ -13,7 +13,6 @@ OC.L10N.register(
     "Description" : "Նկարագրություն",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "կարգավորումներ",
     "Details" : "Մանրամասներ",
     "Comments" : "Կարծիքներ",
     "Day" : "Օր",

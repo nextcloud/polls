@@ -163,7 +163,6 @@ OC.L10N.register(
     "Administration" : "Διαχείριση",
     "Error overtaking poll." : "Σφάλμα ανάληψης της δημοσκόπησης.",
     "Add new Poll" : "Προσθήκη νέας δημοσκόπησης",
-    "Settings" : "Ρυθμίσεις",
     "Error loading poll list" : "Σφάλμα φόρτωσης λίστας δημοσκοπήσεων",
     "Error cloning poll." : "Σφάλμα κλωνοποίησης δημοσκόπησης",
     "404 - poll not found" : "404 - η δημοσκόπηση δεν βρέθηκε",

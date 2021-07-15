@@ -12,7 +12,6 @@ OC.L10N.register(
     "Description" : "විස්තරය",
     "No" : "නැහැ",
     "Yes" : "ඔව්",
-    "Settings" : "සැකසුම්",
     "Details" : "විස්තර",
     "Shares" : "බෙදාගැනීම්",
     "Comments" : "අදහස්",

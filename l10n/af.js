@@ -18,7 +18,6 @@ OC.L10N.register(
     "Description" : "Beskrywing",
     "No" : "Nee",
     "Yes" : "Ja",
-    "Settings" : "Instellings",
     "Details" : "Besonderhede",
     "Comments" : "Kommentare",
     "Hour" : "Uur",

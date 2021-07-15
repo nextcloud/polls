@@ -86,7 +86,6 @@ OC.L10N.register(
     "No" : "いいえ",
     "Yes" : "はい",
     "Add new Poll" : "新規投票追加",
-    "Settings" : "設定",
     "Error loading poll list" : "投票リストの読み込み中にエラーが発生しました",
     "Error cloning poll." : "投票のクローン中にエラーが発生しました",
     "Enter a poll or start a new one." : "投票を入力するか新しい投票を開始してください。",

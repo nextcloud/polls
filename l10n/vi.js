@@ -19,7 +19,6 @@ OC.L10N.register(
     "Description" : "Mô tả",
     "No" : "Không",
     "Yes" : "Đồng ý",
-    "Settings" : "Cài đặt",
     "Details" : "Thông tin",
     "Configuration" : "Cấu hình",
     "Shares" : "Chia sẻ",

@@ -17,7 +17,6 @@ OC.L10N.register(
     "Description" : "Skildring",
     "No" : "Nei",
     "Yes" : "Ja",
-    "Settings" : "Instillingar",
     "Details" : "Detaljar",
     "Configuration" : "Innstillingar",
     "Shares" : "Delingar",

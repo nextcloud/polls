@@ -118,7 +118,6 @@ OC.L10N.register(
     "Yes" : "Да",
     "Administration" : "Администрирование",
     "Add new Poll" : "Добавить опрос",
-    "Settings" : "Параметры",
     "Error loading poll list" : "Не удалось загрузить опросы",
     "Error cloning poll." : "Не удалось скопировать опрос.",
     "Enter a poll or start a new one." : "Пройдите опрос или создайте новый",

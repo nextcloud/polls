@@ -14,7 +14,6 @@ OC.L10N.register(
     "Description" : "Opis",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "Podešavanje",
     "Comments" : "Komentari",
     "Day" : "Dan",
     "Month" : "Mjesec"

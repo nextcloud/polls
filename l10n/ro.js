@@ -20,7 +20,6 @@ OC.L10N.register(
     "Description" : "Descriere",
     "No" : "Nu",
     "Yes" : "a",
-    "Settings" : "Setări",
     "Details" : "Detalii",
     "Configuration" : "Configurație",
     "Shares" : "Partajări",

@@ -20,7 +20,6 @@ OC.L10N.register(
     "Description" : "Описание",
     "No" : "Не",
     "Yes" : "Да",
-    "Settings" : "Настройки",
     "Details" : "Подробности",
     "Configuration" : "Настройки",
     "Shares" : "Споделени",

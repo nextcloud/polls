@@ -14,7 +14,6 @@ OC.L10N.register(
     "Description" : "Disgrifiad",
     "No" : "No",
     "Yes" : "Iawn",
-    "Settings" : "Gosodiadau",
     "Details" : "Manylion",
     "Day" : "Diwrnod",
     "Month" : "Mis"

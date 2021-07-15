@@ -268,7 +268,6 @@ OC.L10N.register(
     "Error archiving/restoring poll." : "Errorea inkesta artxibatzen/berreskuratzen.",
     "Error overtaking poll." : "Errorea inkestaren kontrola hartzerakoan.",
     "Add new Poll" : "Gehitu bozketa berria",
-    "Settings" : "Ezarpenak",
     "Error loading poll list" : "Errorea bozketa zerrenda kargatzean",
     "Error cloning poll." : "Errorea bozketa klonatzean.",
     "404 - poll not found" : "404 - ez da bozketa aurkitu",

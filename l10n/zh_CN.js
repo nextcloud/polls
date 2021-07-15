@@ -264,7 +264,6 @@ OC.L10N.register(
     "Administration" : "管理员",
     "Error archiving/restoring poll." : "存档/恢复投票时出错",
     "Add new Poll" : "添加新的投票",
-    "Settings" : "设置",
     "Error loading poll list" : "加载投票列表时出错",
     "Error cloning poll." : "复制投票时出错。",
     "404 - poll not found" : "404 - 投票未找到",

@@ -25,7 +25,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Teavitused tegevusest e-posti teel",
     "No" : "Ei",
     "Yes" : "Jah",
-    "Settings" : "Seaded",
     "Details" : "Üksikasjad",
     "Configuration" : "Seadistamine",
     "Shares" : "Jagamisi",

@@ -13,7 +13,6 @@ OC.L10N.register(
     "Description" : "ការ​អធិប្បាយ",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "ការកំណត់",
     "Details" : "ព័ត៌មាន​លម្អិត",
     "Configuration" : "ការ​កំណត់​សណ្ឋាន",
     "Shares" : "ចែក​រំលែក",

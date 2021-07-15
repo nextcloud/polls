@@ -18,7 +18,6 @@ OC.L10N.register(
     "Description" : "รายละเอียด",
     "No" : "ไม่ใช่",
     "Yes" : "ใช่",
-    "Settings" : "ตั้งค่า",
     "Details" : "รายละเอียด",
     "Configuration" : "การกำหนดค่า",
     "Shares" : "แชร์",

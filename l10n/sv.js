@@ -50,7 +50,6 @@ OC.L10N.register(
     "No" : "Nej",
     "Yes" : "Ja",
     "Add new Poll" : "Lägg till omröstning",
-    "Settings" : "Inställningar",
     "Details" : "Detaljer",
     "Configuration" : "Konfiguration",
     "Options" : "Alternativ",

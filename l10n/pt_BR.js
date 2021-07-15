@@ -263,7 +263,6 @@ OC.L10N.register(
     "Error archiving/restoring poll." : "Erro ao arquivar/restaurar enquete. ",
     "Error overtaking poll." : "Erro ao ultrapassar a enquete.",
     "Add new Poll" : "Adicionar nova Enquete",
-    "Settings" : "Configurações",
     "Error loading poll list" : "Erro ao carregar a lista de enquetes",
     "Error cloning poll." : "Erro ao clonar enquete.",
     "404 - poll not found" : "404 - enquete não encontrada",

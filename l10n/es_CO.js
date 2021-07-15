@@ -41,7 +41,6 @@ OC.L10N.register(
     "No" : "No",
     "Yes" : "Sí",
     "Add new Poll" : "Agregar nueva encuesta",
-    "Settings" : "Configuraciones ",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
     "Shares" : "Elementos compartidos",

@@ -18,7 +18,6 @@ OC.L10N.register(
     "Description" : "Deskrisi",
     "No" : "Tidak",
     "Yes" : "Ya",
-    "Settings" : "Setelan",
     "Details" : "Detil",
     "Configuration" : "Konfigurasi",
     "Options" : "Pilihan",

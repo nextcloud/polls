@@ -14,7 +14,6 @@ OC.L10N.register(
     "Description" : "Beschreiwung",
     "No" : "No",
     "Yes" : "Yes",
-    "Settings" : "Astellungen",
     "Details" : "Detailer",
     "Comments" : "Kommentarer",
     "Hour" : "Stonn",

@@ -25,7 +25,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "No" : "Nei",
     "Yes" : "Ja",
-    "Settings" : "Innstillinger",
     "Details" : "Detaljer",
     "Configuration" : "Oppsett",
     "Shares" : "Delinger",

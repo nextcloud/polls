@@ -111,7 +111,6 @@ OC.L10N.register(
     "No" : "Nei",
     "Yes" : "Já",
     "Add new Poll" : "Bæta við nýrri könnun",
-    "Settings" : "Stillingar",
     "Error loading poll list" : "Villa við að hlaða inn lista yfir kannanir",
     "Error cloning poll." : "Villa við að klóna könnun.",
     "404 - poll not found" : "404 - könnun fannst ekki",
