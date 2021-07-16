@@ -281,6 +281,7 @@ OC.L10N.register(
     "Options" : "Volby",
     "Shares" : "Sdílení",
     "Comments" : "Komentáře",
+    "Poll settings" : "Nastavení ankety",
     "No vote options available" : "Nejsou k dispozici žádné možnosti volby",
     "Maybe the owner did not provide some until now." : "Vlastník nejspíš doposud žádné neposkytl.",
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Z důvodu obav o výkonnost je {countHiddenParticipants} hlasujících skryto.",
