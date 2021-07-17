@@ -136,6 +136,8 @@ OC.L10N.register(
     "Time zone: {timezoneString}" : "Časová zóna: {timezoneString}",
     "You subscribed to this poll" : "Ste prihlásený k tejto ankete",
     "Option proposals allowed" : "Návrhy možností sú povolené",
+    "Option proposal term ends {timeRelative}" : "Končí sa termín návrhov volby {timeRelative}.",
+    "Option proposal term ended {timeRelative}" : "Skončil sa termín návrhov volby {timeRelative}.",
     "No proposals are allowed" : "Žiadne návrhy nie su povolené",
     "Results are always hidden" : "Výsledky sú vždy skryté",
     "Results are visible" : "Výsledky sú viditeľné",
