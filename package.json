@@ -63,7 +63,7 @@
 		"node": ">=12.0.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.14.6",
+		"@babel/core": "^7.14.8",
 		"@babel/eslint-parser": "^7.14.7",
 		"@babel/preset-env": "^7.14.8",
 		"@babel/types": "^7.14.5",
