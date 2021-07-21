@@ -213,7 +213,7 @@ OC.L10N.register(
     "Error sending invitation to {displayName} ({emailAddress})" : "Beim Senden der Einladung an {displayName} ({emailAddress}) ist ein Fehler aufgetreten.",
     "Public shares" : "Öffentliche Freigaben",
     "Add a public link" : "Öffentlichen Link hinzufügen",
-    "Add URL parameters 'name=' and/or 'email=' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org" : "URL-Parameter 'name=' und/oder 'email=' hinzufügen, um Name und E-Mail-Adresse vorzugeben. Zum Beispiel https://example.com/s/aUubZAvweQ6PaX2?name=John Doe Email=john doe@example.org",
+    "Add URL parameters 'name=' and/or 'email=' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org" : "URL-Parameter 'name=' und/oder 'email=' hinzufügen, um Name und E-Mail-Adresse vorzugeben. Zum Beispiel https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org",
     "Error adding share" : "Fehler beim Hinzufügen der Freigabe",
     "Unsent invitations" : "Nicht gesendete Einladungen",
     "Resolve into individual invitations" : "In einzelne Einladungen auflösen",
