@@ -25,7 +25,7 @@
 		<PollHeaderButtons />
 		<div class="area__header">
 			<PollTitle showSubText />
-			<MarkUpDescription />
+			<MarkUpDescription v-if="poll.description"/>
 		</div>
 
 		<div v-if="acl.allowAddOptions && proposalsAllowed && !closed" class="area__proposal">

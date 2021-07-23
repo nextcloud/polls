@@ -37,11 +37,11 @@
 						{{ event.from.month }}
 					</div>
 					<div class="day">
-						{{ event.from.day }}
+						{{ event.from.dow }} {{ event.from.day }}
 					</div>
-					<div class="dow">
-						{{ event.from.dow }}
-					</div>
+					<!-- <div class="dow">
+						{{ event.from.dow }} {{ event.from.day }}
+					</div> -->
 					<div v-if="!event.dayLong" class="time">
 						{{ event.from.time }}
 						<span v-if="!event.dayLong && option.duration && event.to.sameDay">
@@ -57,11 +57,11 @@
 						{{ event.to.month }}
 					</div>
 					<div class="day">
-						{{ event.to.day }}
+						{{ event.to.dow }} {{ event.to.day }}
 					</div>
-					<div class="dow">
-						{{ event.to.dow }}
-					</div>
+					<!-- <div class="dow">
+						{{ event.to.dow }} {{ event.to.day }}
+					</div> -->
 					<div v-if=" !event.dayLong" class="time">
 						{{ event.to.time }}
 					</div>
@@ -71,9 +71,9 @@
 			<!-- <div class="event-time">
 				<div v-if="!event.dayLong" class="time">
 					{{ event.from.time }}
-				</div>
-				<div v-if="option.duration && !event.dayLong" class="time">
-					{{ event.to.time }}
+					<span v-if="!event.dayLong && option.duration && event.to.sameDay">
+						- {{ event.to.time }}
+					</span>
 				</div>
 			</div> -->
 		</div>
@@ -118,7 +118,6 @@ export default {
 		event() {
 			const from = moment.unix(this.option.timestamp)
 			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
-
 			// does the event start at 00:00 local time and
 			// is the duration divisable through 24 hours without rest
 			// then we have a day long event (one or multiple days)
@@ -134,7 +133,7 @@ export default {
 			}
 			return {
 				from: {
-					month: from.format('MMM [ \']YY'),
+					month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
 					day: from.format('D'),
 					dow: from.format('ddd'),
 					time: from.format('LT'),
@@ -143,7 +142,7 @@ export default {
 					utc: moment(from).utc().format('llll'),
 				},
 				to: {
-					month: toModified.format('MMM'),
+					month: toModified.format(moment().year() === toModified.year() ? 'MMM' : 'MMM [ \']YY'),
 					day: toModified.format('D'),
 					dow: toModified.format('ddd'),
 					time: to.format('LT'),
@@ -229,7 +228,7 @@ export default {
 
 	.option-item__option--datebox {
 		display: flex;
-		// flex-direction: column;
+		flex-direction: column;
 		// padding: 0 2px;
 		align-items: stretch;
 		justify-content: flex-start;
@@ -243,13 +242,14 @@ export default {
 		flex-direction: row;
 		align-items: stretch;
 		justify-content: center;
-		background-color: var(--color-primary-light);
+		// background-color: var(--color-background-dark);
 
 		.event-from, .event-to {
 			display: flex;
 			flex-direction: column;
 			align-items: stretch;
 			flex: 1;
+			min-width: 85px;
 			// flex-direction: column;
 			// align-items: center;
 			// padding-bottom: 8px;
@@ -262,7 +262,8 @@ export default {
 				color: var(--color-text-lighter);
 			}
 			.day {
-				font-size: 1.4em;
+				font-size: 1.2em;
+				font-weight: 600;
 				margin: 5px 0 5px 0;
 				padding: 0 4px;
 			}
@@ -279,6 +280,7 @@ export default {
 		flex-direction: column;
 		align-items: center;
 		margin-top: 8px;
+		height: 1.5em;
 		.time-to {
 			font-size: 0.8em;
 		}

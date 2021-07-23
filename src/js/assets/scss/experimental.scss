@@ -10,11 +10,9 @@
 			background-color: var(--color-primary-light);
 		}
 		[class*='area__'] {
-			margin-top: 12px;
-			margin-right: 6px;
-			margin-bottom: 12px;
+			padding: 8px;
+			margin: 0 6px 24px 33px;
 			box-shadow: 2px 2px 6px var(--color-box-shadow);
-			// margin: 12px;
 		}
 	}
 

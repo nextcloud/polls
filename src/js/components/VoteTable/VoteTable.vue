@@ -141,7 +141,6 @@ export default {
 		flex: 1 0 auto;
 		flex-direction: column;
 		align-items: stretch;
-		min-width: 85px;
 		max-width: 280px;
 		border-left: 1px solid var(--color-border-dark);
 		&>div {
