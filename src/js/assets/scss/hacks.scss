@@ -11,3 +11,15 @@
 .app-sidebar-tabs {
 	overflow-y: hidden;
 }
+
+// fix avatardiv size to match the image
+.avatardiv img {
+	display: block;
+}
+
+// fix v-popover sizing
+.poll-header-buttons {
+	.trigger {
+		display: inline !important;
+	}
+}
