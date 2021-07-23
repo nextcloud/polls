@@ -30,7 +30,8 @@
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
 		"nextcloud/coding-standard": "^0.5.0",
-		"vimeo/psalm": "^4.3"
+		"vimeo/psalm": "^4.3",
+		"doctrine/dbal": "^3.1"
 	},
 	"scripts": {
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
@@ -40,7 +41,6 @@
 		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true"
 	},
 	"require": {
-		"league/commonmark": "^1.6",
-		"doctrine/dbal": "^3.1"
+		"league/commonmark": "^1.6"
 	}
 }
