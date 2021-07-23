@@ -160,7 +160,7 @@ export default {
 		.poll-title__title {
 			font-weight: bold;
 			font-size: 1.3em;
-			line-height: 2em;
+			line-height: 1.5em;
 			color: var(--color-text-light);
 		}
 	}

@@ -206,7 +206,7 @@ export default {
 
 <style  lang="scss">
 [class*='area__'] {
-	padding: 8px;
+	padding: 0 8px 16px 8px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 	margin-left: 33px;
