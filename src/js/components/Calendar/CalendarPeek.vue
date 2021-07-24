@@ -133,8 +133,6 @@ export default {
 <style lang="scss">
 
 .calendar-peek__conflict.icon {
-	font-style: normal;
-	font-weight: 400;
 	width: 32px;
 	height: 32px;
 	background-color: var(--color-warning);
@@ -142,21 +140,14 @@ export default {
 	margin: 4px auto;
 }
 
-.list-view .calendar-peek__caption {
-	display: none;
+.calendar-peek__caption {
+	font-size: 0.7em;
 }
 
 .calendar-peek__grid {
 	padding: 8px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
-}
-
-.calendar-peek >div {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 }
 
 </style>
