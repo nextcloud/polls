@@ -111,6 +111,7 @@ export default {
 	.participant {
 		display: flex;
 	}
+
 	.participant, .vote-item {
 		flex: 0 0 auto;
 		height: 4.5em;
@@ -251,15 +252,24 @@ export default {
 			max-width: initial;
 			position: relative;
 			border-top: solid 1px var(--color-border);
+			border-left: none;
 			padding: 0;
 		}
 
 		.vote-table__users {
-			margin: 0
+			margin: 0;
+
+			.owner {
+				display: none;
+			}
 		}
 
 		.participant:not(.currentuser), .vote-item:not(.currentuser) {
 			display: none;
+		}
+
+		.participant.currentuser {
+			border-top: none;
 		}
 
 		.vote-table__votes {
@@ -298,9 +308,14 @@ export default {
 		.calendar-peek {
 			order: 0;
 		}
+
 		.calendar-peek__conflict.icon {
 			width: 24px;
 			height: 24px;
+		}
+
+		.calendar-peek__caption {
+			display: none;
 		}
 	}
 }
