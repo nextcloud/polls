@@ -132,7 +132,7 @@ export default {
 			opacity: 0.7;
 			line-height: 1.2em;
 			font-size: 1em;
-			[class^="icon-"], [class*=" icon-"] {
+			[class^='icon-'], [class*=' icon-'] {
 				padding-left: 21px;
 				background-position: left center;
 			}
