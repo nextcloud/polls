@@ -24,8 +24,8 @@
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<PollHeaderButtons />
 		<div class="area__header">
-			<PollTitle showSubText />
-			<MarkUpDescription v-if="poll.description"/>
+			<PollTitle show-sub-text />
+			<MarkUpDescription v-if="poll.description" />
 		</div>
 
 		<div v-if="acl.allowAddOptions && proposalsAllowed && !closed" class="area__proposal">
