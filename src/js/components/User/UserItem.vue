@@ -151,6 +151,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: 4px;
+	max-width: 100%;
 }
 
 .user-item__name {
