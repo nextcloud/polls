@@ -47,7 +47,7 @@ use OCA\Polls\Db\Watch;
  */
 
 abstract class TableSchema {
-	public const FK_PARENT_TABLE = Poll::Table;
+	public const FK_PARENT_TABLE = Poll::TABLE;
 
 	public const FK_CHILD_TABLES = [
 		Comment::TABLE,
@@ -143,7 +143,7 @@ abstract class TableSchema {
 	 * ];
 	 */
 	public const GONE_COLUMNS = [
-		Poll::Table => [
+		Poll::TABLE => [
 			'full_anonymous',
 			'options',
 			'settings',
@@ -157,7 +157,7 @@ abstract class TableSchema {
 	 * define primary keys (only set on table creation)
 	 * Format:
 	 * public const PRIMARYKEY = [
-	 *   Poll::Table => [
+	 *   Poll::TABLE => [
 	 *     'id' => [
 	 *       'type' => Types::INTEGER,
 	 *       'options' => ['autoincrement' => true, 'notnull' => true]
@@ -184,7 +184,7 @@ abstract class TableSchema {
 	 */
 
 	public const TABLES = [
-		Poll::Table => [
+		Poll::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],
 			'title' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 128]],
