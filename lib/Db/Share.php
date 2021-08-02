@@ -47,6 +47,7 @@ use OCA\Polls\Model\UserGroupClass;
  * @method void setDisplayName(string $value)
  */
 class Share extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_share';
 
 	// Only authenticated access
 	public const TYPE_USER = 'user';

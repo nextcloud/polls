@@ -38,6 +38,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPreferences(string $value)
  */
 class Preferences extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_preferences';
 
 	/** @var string $userId */
 	protected $userId;

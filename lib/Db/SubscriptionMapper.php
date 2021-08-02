@@ -35,8 +35,10 @@ use OCP\Migration\IOutput;
  * @template-extends QBMapper<Subscription>
  */
 class SubscriptionMapper extends QBMapper {
+	public const TABLE = Subscription::TABLE;
+
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_notif', Subscription::class);
+		parent::__construct($db, self::TABLE, Subscription::class);
 	}
 
 	/**
@@ -108,7 +110,7 @@ class SubscriptionMapper extends QBMapper {
 	public function removeDuplicates(?IOutput $output = null): int {
 		$count = 0;
 		try {
-			// remove duplicates from oc_polls_share
+			// remove duplicates from polls_share
 			// preserve the first entry
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'poll_id', 'user_id')

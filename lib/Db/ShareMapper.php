@@ -35,8 +35,10 @@ use OCP\Migration\IOutput;
  * @template-extends QBMapper<Share>
  */
 class ShareMapper extends QBMapper {
+	public const TABLE = Share::TABLE;
+
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_share', Share::class);
+		parent::__construct($db, self::TABLE, Share::class);
 	}
 
 	/**
@@ -162,7 +164,7 @@ class ShareMapper extends QBMapper {
 				->setParameter('type', 'public')
 				->execute();
 
-			// remove duplicates from oc_polls_share
+			// remove duplicates from polls_share
 			// preserve the first entry
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'type', 'poll_id', 'user_id')

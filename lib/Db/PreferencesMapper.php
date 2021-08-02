@@ -35,8 +35,10 @@ use OCP\Migration\IOutput;
  * @template-extends QBMapper<Preferences>
  */
 class PreferencesMapper extends QBMapper {
+	public const TABLE = Preferences::TABLE;
+
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_preferences', Preferences::class);
+		parent::__construct($db, self::TABLE, Preferences::class);
 	}
 
 	/**
@@ -65,7 +67,7 @@ class PreferencesMapper extends QBMapper {
 				->setParameter('userId', '');
 			$query->execute();
 
-			// remove duplicate preferences from oc_polls_preferences
+			// remove duplicate preferences from polls_preferences
 			// preserve the last user setting in the db
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'user_id')

@@ -37,6 +37,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserId(string $value)
  */
 class Subscription extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_notif';
 
 	/** @var int $pollId */
 	protected $pollId;

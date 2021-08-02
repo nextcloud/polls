@@ -30,8 +30,10 @@ use OCP\AppFramework\Db\QBMapper;
  * @template-extends QBMapper<Watch>
  */
 class WatchMapper extends QBMapper {
+	public const TABLE = Watch::TABLE;
+
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_watch', Watch::class);
+		parent::__construct($db, self::TABLE, Watch::class);
 	}
 
 	/**

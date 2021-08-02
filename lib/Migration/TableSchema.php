@@ -28,6 +28,15 @@ use OCP\DB\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use Doctrine\DBAL\Types\Type;
+use OCA\Polls\Db\Comment;
+use OCA\Polls\Db\Log;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\Preferences;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Subscription;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\Watch;
 
 /**
  * Database definition for installing and migrations
@@ -38,34 +47,34 @@ use Doctrine\DBAL\Types\Type;
  */
 
 abstract class TableSchema {
-	public const FK_PARENT_TABLE = 'polls_polls';
+	public const FK_PARENT_TABLE = Poll::Table;
 
 	public const FK_CHILD_TABLES = [
-		'polls_comments',
-		'polls_log',
-		'polls_notif',
-		'polls_options',
-		'polls_share',
-		'polls_votes',
+		Comment::TABLE,
+		Log::TABLE,
+		Subscription::TABLE,
+		Option::TABLE,
+		Share::TABLE,
+		Vote::TABLE,
 	];
 
 	public const UNIQUE_TABLES = [
-		'polls_log',
-		'polls_notif',
-		'polls_options',
-		'polls_preferences',
-		'polls_share',
-		'polls_votes',
+		Log::TABLE,
+		Subscription::TABLE,
+		Option::TABLE,
+		Subscription::TABLE,
+		Share::TABLE,
+		Vote::TABLE,
 	];
 
 	public const UNIQUE_INDICES = [
-		'polls_options' => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
-		'polls_log' => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
-		'polls_notif' => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-		'polls_share' => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-		'polls_votes' => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
-		'polls_preferences' => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
-		'polls_watch' => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
+		Option::TABLE => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
+		Log::TABLE => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
+		Subscription::TABLE => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+		Share::TABLE => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+		Vote::TABLE => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
+		Subscription::TABLE => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
+		Watch::TABLE => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
 	];
 
 	/**
@@ -134,12 +143,12 @@ abstract class TableSchema {
 	 * ];
 	 */
 	public const GONE_COLUMNS = [
-		'polls_polls' => [
+		Poll::Table => [
 			'full_anonymous',
 			'options',
 			'settings',
 		],
-		'polls_comments' => [
+		Comment::TABLE => [
 			'dt',
 		],
 	];
@@ -148,7 +157,7 @@ abstract class TableSchema {
 	 * define primary keys (only set on table creation)
 	 * Format:
 	 * public const PRIMARYKEY = [
-	 *   'polls_polls' => [
+	 *   Poll::Table => [
 	 *     'id' => [
 	 *       'type' => Types::INTEGER,
 	 *       'options' => ['autoincrement' => true, 'notnull' => true]
@@ -159,7 +168,7 @@ abstract class TableSchema {
 	 *     ],
 	 *     ...,
 	 *   ],
-	 *   'polls_options' => [
+	 *   Option::TABLE => [
 	 *     'id' => [
 	 *       'type' => Types::INTEGER,
 	 *       'options' => ['autoincrement' => true, 'notnull' => true]
@@ -175,7 +184,7 @@ abstract class TableSchema {
 	 */
 
 	public const TABLES = [
-		'polls_polls' => [
+		Poll::Table => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],
 			'title' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 128]],
@@ -198,7 +207,7 @@ abstract class TableSchema {
 			'use_no' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
 			'proposals_expire' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
-		'polls_options' => [
+		Option::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
@@ -209,7 +218,7 @@ abstract class TableSchema {
 			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'released' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
-		'polls_votes' => [
+		Vote::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
@@ -217,7 +226,7 @@ abstract class TableSchema {
 			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'vote_answer' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 		],
-		'polls_comments' => [
+		Comment::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
@@ -225,7 +234,7 @@ abstract class TableSchema {
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 
 		],
-		'polls_share' => [
+		Share::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'token' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
@@ -235,12 +244,12 @@ abstract class TableSchema {
 			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'invitation_sent' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
-		'polls_notif' => [
+		Subscription::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 		],
-		'polls_log' => [
+		Log::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
@@ -249,13 +258,13 @@ abstract class TableSchema {
 			'created' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'processed' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
-		'polls_watch' => [
+		Watch::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'table' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'updated' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
-		'polls_preferences' => [
+		Subscription::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],

@@ -43,6 +43,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setTimestamp(integer $value)
  */
 class Comment extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_comments';
 
 	/** @var int $pollId */
 	protected $pollId;

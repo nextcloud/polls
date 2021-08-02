@@ -43,6 +43,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setMessageId(string $value)
  */
 class Log extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_log';
 	public const MSG_ID_ADDPOLL = 'addPoll';
 	public const MSG_ID_UPDATEPOLL = 'updatePoll';
 	public const MSG_ID_DELETEPOLL = 'deletePoll';

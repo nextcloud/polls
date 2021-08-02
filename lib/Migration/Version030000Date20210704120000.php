@@ -28,6 +28,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCA\Polls\DB\Poll;
 
 // use Doctrine\DBAL\Types\Type;
 
@@ -61,7 +62,7 @@ class Version030000Date20210704120000 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if ($schema->hasTable('polls_polls')) {
+		if ($schema->hasTable(Poll::TABLE)) {
 			// Call initial migration from class TableSchema
 			// Drop old tables, which are migrated in prior versions
 			TableSchema::removeObsoleteTables($schema, $output);

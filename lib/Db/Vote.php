@@ -42,6 +42,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setVoteAnswer(string $value)
  */
 class Vote extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_votes';
 
 	/** @var int $pollId */
 	protected $pollId;

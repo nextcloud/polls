@@ -38,6 +38,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUpdated(integer $value)
  */
 class Watch extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_watch';
 	public const OBJECT_POLLS = "polls";
 	public const OBJECT_VOTES = "votes";
 	public const OBJECT_OPTIONS = "options";

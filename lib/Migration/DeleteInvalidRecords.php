@@ -33,6 +33,7 @@ use OCP\Migration\IOutput;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PreferencesMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
@@ -67,12 +68,12 @@ class DeleteInvalidRecords implements IRepairStep {
 	private $voteMapper;
 
 	protected $childTables = [
-		'polls_comments',
-		'polls_log',
-		'polls_notif',
-		'polls_options',
-		'polls_share',
-		'polls_votes',
+		CommentMapper::TABLE,
+		LogMapper::TABLE,
+		SubscriptionMapper::TABLE,
+		OptionMapper::TABLE,
+		ShareMapper::TABLE,
+		VoteMapper::TABLE,
 	];
 
 	public function __construct(
@@ -101,7 +102,7 @@ class DeleteInvalidRecords implements IRepairStep {
 
 	public function run(IOutput $output):void {
 		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable('polls_polls')) {
+		if ($schema->hasTable(Poll::TABLE)) {
 			$this->removeOrphaned();
 			$this->logMapper->removeDuplicates($output);
 			$this->optionMapper->removeDuplicates($output);
