@@ -62,7 +62,7 @@ abstract class TableSchema {
 		Log::TABLE,
 		Subscription::TABLE,
 		Option::TABLE,
-		Subscription::TABLE,
+		Preferences::TABLE,
 		Share::TABLE,
 		Vote::TABLE,
 	];
@@ -73,7 +73,7 @@ abstract class TableSchema {
 		Subscription::TABLE => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
 		Share::TABLE => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
 		Vote::TABLE => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
-		Subscription::TABLE => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
+		Preferences::TABLE => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
 		Watch::TABLE => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
 	];
 
@@ -264,7 +264,7 @@ abstract class TableSchema {
 			'table' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'updated' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
-		Subscription::TABLE => [
+		Preferences::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
