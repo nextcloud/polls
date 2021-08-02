@@ -28,7 +28,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
-use OCA\Polls\DB\Poll;
+use OCA\Polls\Db\Poll;
 
 // use Doctrine\DBAL\Types\Type;
 
