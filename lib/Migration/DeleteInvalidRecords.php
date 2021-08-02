@@ -31,6 +31,7 @@ use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\Poll;
