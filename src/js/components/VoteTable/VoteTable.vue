@@ -128,6 +128,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		overflow-x: scroll;
+		margin-bottom: 4px;
 	}
 
 	.vote-table__votes {
@@ -144,6 +145,8 @@ export default {
 		align-items: stretch;
 		max-width: 280px;
 		border-left: 1px solid var(--color-border-dark);
+		margin-bottom: 4px;
+
 		&>div {
 			display: flex;
 			justify-content: center;
@@ -163,7 +166,7 @@ export default {
 			border-radius: 10px;
 			border: 1px solid var(--color-polls-foreground-yes);
 			background-color: var(--color-polls-background-yes);
-			margin: 0 4px;
+			margin: 4px 4px;
 		}
 	}
 
