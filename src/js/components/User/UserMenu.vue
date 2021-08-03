@@ -33,7 +33,7 @@
 			@click="deleteEmailAddress"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
-			{{ t('polls', 'edit Email Address') }}
+			{{ t('polls', 'Edit Email Address') }}
 		</ActionInput>
 		<ActionButton v-if="$route.name === 'publicVote'"
 			:disabled="!emailAddress"
@@ -52,7 +52,7 @@
 			:disabled="!emailAddress"
 			icon="icon-delete"
 			@click="deleteEmailAddress">
-			{{ t('polls', 'remove Email Address') }}
+			{{ t('polls', 'Remove Email Address') }}
 		</ActionButton>
 		<ActionButton v-if="acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
