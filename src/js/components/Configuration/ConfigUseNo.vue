@@ -39,7 +39,7 @@ export default {
 
 	data() {
 		return {
-			label: t('polls', 'Delete vote when switched to "no"'),
+			label: t('polls', 'Delete vote when switched to "No"'),
 		}
 	},
 
