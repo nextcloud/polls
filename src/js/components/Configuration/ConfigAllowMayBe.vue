@@ -39,7 +39,7 @@ export default {
 
 	data() {
 		return {
-			label: t('polls', 'Allow "maybe" vote'),
+			label: t('polls', 'Allow "Maybe" vote'),
 		}
 	},
 
