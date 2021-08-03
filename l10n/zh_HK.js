@@ -160,7 +160,6 @@ OC.L10N.register(
     "Checking email address …" : "正在檢查電郵地址…",
     "valid email address." : "電郵地址址有效。",
     "Invalid email address." : "電郵地址無效。",
-    "Public poll" : "公開投票",
     "Public participation" : "公眾參與",
     "To participate, tell us how we can call you!" : "要參與，請告訴我們如何稱呼您！",
     "Enter your name" : "輸入您的名稱",

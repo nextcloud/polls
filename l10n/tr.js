@@ -160,7 +160,6 @@ OC.L10N.register(
     "Checking email address …" : "E-posta adresiniz denetleniyor…",
     "valid email address." : "E-posta adresi geçerli.",
     "Invalid email address." : "E-posta adresi geçersiz.",
-    "Public poll" : "Herkese açık anket",
     "Public participation" : "Herkese açık katılım",
     "To participate, tell us how we can call you!" : "Katılmak için size nasıl hitap edeceğimizi söyleyin!",
     "Enter your name" : "Adınızı yazın",

@@ -137,7 +137,6 @@ OC.L10N.register(
     "Checking email address …" : "Poteka preverjanje elektronskega naslova ...",
     "valid email address." : "Veljaven elektronski naslov.",
     "Invalid email address." : "Neveljaven elektronski naslov.",
-    "Public poll" : "Javna anketa",
     "Public participation" : "Javna udeležba",
     "To participate, tell us how we can call you!" : "Za sodelovanje je treba vpisati vsaj ime!",
     "Enter your name" : "Vpišite ime",

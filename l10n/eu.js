@@ -160,7 +160,6 @@ OC.L10N.register(
     "Checking email address …" : "E-posta helbidea egiaztatzen...",
     "valid email address." : "baliozko e-posta helbidea.",
     "Invalid email address." : "E-posta helbide baliogabea.",
-    "Public poll" : "Bozketa publikoa",
     "Public participation" : "Parte-hartze publikoa",
     "To participate, tell us how we can call you!" : "Parte hartzeko, esaiguzu nola deitu ahal zaitugun!",
     "Enter your name" : "Sartu zure izena",

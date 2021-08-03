@@ -158,7 +158,6 @@ OC.L10N.register(
     "Checking email address …" : "检查电子邮件地址中 …",
     "valid email address." : "有效的电子邮件地址",
     "Invalid email address." : "无效的电子邮件地址",
-    "Public poll" : "公开投票",
     "Public participation" : "公开参与",
     "To participate, tell us how we can call you!" : "您想参与的话，请告诉我们怎么致电给您！",
     "Enter your name" : "输入你的名字",

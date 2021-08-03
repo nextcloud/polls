@@ -88,7 +88,6 @@ OC.L10N.register(
     "never" : "ποτέ",
     "Optional email address" : "Προαιρετική διεύθυνση email",
     "Checking email address …" : "Έλεγχος διεύθυνσης email…",
-    "Public poll" : "Δημόσια δημοσκόπηση",
     "To participate, tell us how we can call you!" : "Για να συμμετάσχετε, πείτε μας πώς μπορούμε να σας καλέσουμε!",
     "Enter your name" : "Προσθέστε το όνομά σας",
     "Login" : "Σύνδεση",

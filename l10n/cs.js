@@ -160,7 +160,6 @@ OC.L10N.register(
     "Checking email address …" : "Kontrola e-mailové adresy…",
     "valid email address." : "platná e-mailová adresa.",
     "Invalid email address." : "Neplatná e-mailová adresa.",
-    "Public poll" : "Veřejná anketa",
     "Public participation" : "Veřejní účastníci",
     "To participate, tell us how we can call you!" : "Abyste se mohli zúčastnit, sdělte nám, jak Vás máme oslovovat!",
     "Enter your name" : "Zadejte své jméno",

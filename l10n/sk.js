@@ -149,7 +149,6 @@ OC.L10N.register(
     "never" : "nikdy",
     "valid email address." : "platná emailová adresa.",
     "Invalid email address." : "neplatná emailová adresa.",
-    "Public poll" : "Verejná anketa",
     "Public participation" : "Verejná účasť",
     "To participate, tell us how we can call you!" : "Ak sa chcete zúčastniť, povedzte nám, ako vás máme volať!",
     "Enter your name" : "Zadajte svoje meno",

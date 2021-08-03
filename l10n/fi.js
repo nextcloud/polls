@@ -78,7 +78,6 @@ OC.L10N.register(
     "never" : "ei koskaan",
     "Optional email address" : "Valinnainen sähköpostiosoite",
     "Checking email address …" : "Tarkistetaan sähköpostiosoitetta…",
-    "Public poll" : "Julkinen kysely",
     "To participate, tell us how we can call you!" : "Kerro meille millä nimellä kutsumme sinua, jotta voit osallistua!",
     "Enter your name" : "Kirjoita nimesi",
     "Login" : "Kirjaudu",
