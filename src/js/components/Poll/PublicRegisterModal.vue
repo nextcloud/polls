@@ -23,9 +23,6 @@
 <template lang="html">
 	<Modal v-show="modal" :can-close="false">
 		<div class="modal__content">
-			<!-- <h2 class="modal__title">
-				{{ t('polls', 'Public poll') }}
-			</h2> -->
 			<div class="modal__registration">
 				<div class="registration__registration">
 					<h2>{{ t('polls', 'Public participation') }}</h2>
@@ -326,5 +323,15 @@ export default {
 	.description {
 		hyphens: auto;
 		border-top: 1px solid var(--color-border)
+	}
+
+	@media only screen and (max-width: 688px) {
+		.modal__content {
+			padding: 6px;
+		}
+
+		.modal__registration > div {
+			padding: 12px;
+		}
 	}
 </style>

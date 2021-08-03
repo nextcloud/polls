@@ -141,7 +141,6 @@ OC.L10N.register(
     "Checking email address …" : "Controllu de s'indiritzu de posta eletrònica ...",
     "valid email address." : "indiritzu de posta eletrònica bàlidu.",
     "Invalid email address." : "Indiritzu de posta non bàlidu.",
-    "Public poll" : "Sondàgiu pùblicu",
     "Public participation" : "Partetzipatzione pùblica",
     "To participate, tell us how we can call you!" : "Pro partetzipare, nara•nosi comente ti podemus mutire!",
     "Enter your name" : "Inserta•nche su nùmene tuo",

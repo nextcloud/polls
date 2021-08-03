@@ -70,7 +70,6 @@ OC.L10N.register(
     "never" : "aldrei",
     "Optional email address" : "Valfrjálst tölvupóstfang",
     "Checking email address …" : "Yfirfer tölvupóstfang …",
-    "Public poll" : "Opinber könnun",
     "To participate, tell us how we can call you!" : "Til að taka þátt skaltu segja okkur hvað við eigum að kalla þig!",
     "Enter your name" : "Settu inn nafnið þitt",
     "Login" : "Innskráning",

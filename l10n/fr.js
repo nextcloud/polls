@@ -160,7 +160,6 @@ OC.L10N.register(
     "Checking email address …" : "Vérification de l'adresse e-mail …",
     "valid email address." : "adresse e-mail valide",
     "Invalid email address." : "Adresse e-mail invalide.",
-    "Public poll" : "Sondage public",
     "Public participation" : "Participation publique",
     "To participate, tell us how we can call you!" : "Merci de bien vouloir nous préciser votre nom.",
     "Enter your name" : "Saisissez votre nom",

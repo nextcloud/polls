@@ -21,5 +21,9 @@
 .poll-header-buttons {
 	.trigger {
 		display: inline !important;
-	}
+}
+
+.modal-wrapper .modal-container {
+	overflow: scroll !important;
+
 }

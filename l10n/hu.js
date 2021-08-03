@@ -119,7 +119,6 @@ OC.L10N.register(
     "Checking email address …" : "E-mail cím ellenőrzése",
     "valid email address." : "helyes e-mail cím.",
     "Invalid email address." : "Helytelen e-mail cím.",
-    "Public poll" : "Nyilvános szavazás",
     "Public participation" : "Nyilvános részvétel",
     "To participate, tell us how we can call you!" : "A részvételhez adja meg, hogy szólíthatjuk!",
     "Enter your name" : "Adja meg a nevét",
