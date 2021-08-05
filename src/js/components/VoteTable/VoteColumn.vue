@@ -24,19 +24,23 @@
 	<div :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
 		<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 
-		<Confirmation v-if="option.confirmed && closed" :option="option" />
+		<!-- <Confirmation v-if="option.confirmed && closed" :option="option" /> -->
 
-		<Counter v-else-if="acl.allowSeeResults"
+		<Counter v-if="acl.allowSeeResults"
 			:show-maybe="!!poll.allowMaybe"
 			:option="option" />
-		<CalendarPeek v-if="poll.type === 'datePoll' && getCurrentUser() && settings.calendarPeek" :option="option" />
+
+		<CalendarPeek v-if="showCalendarPeek" :option="option" />
 
 		<VoteItem v-for="(participant) in participants"
 			:key="participant.userId"
 			:user-id="participant.userId"
 			:option="option" />
 
-		<OptionItemOwner v-if="proposalsExist" :option="option" class="owner" />
+		<OptionItemOwner v-if="proposalsExist"
+			:option="option"
+			:avatar-size="24"
+			class="owner" />
 
 		<Actions v-if="acl.allowEdit && closed" class="action confirm">
 			<ActionButton v-if="closed"
@@ -63,7 +67,7 @@ export default {
 		ActionButton,
 		CalendarPeek: () => import('../Calendar/CalendarPeek'),
 		Counter,
-		Confirmation: () => import('../Options/Confirmation'),
+		// Confirmation: () => import('../Options/Confirmation'),
 		VoteTableHeaderItem,
 		VoteItem,
 		OptionItemOwner: () => import('../Options/OptionItemOwner'),
@@ -102,6 +106,9 @@ export default {
 			proposalsExist: 'options/proposalsExist',
 		}),
 
+		showCalendarPeek() {
+			return this.poll.type === 'datePoll' && this.getCurrentUser() && this.settings.calendarPeek
+		},
 	},
 }
 </script>

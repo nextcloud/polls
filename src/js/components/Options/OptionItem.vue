@@ -33,15 +33,8 @@
 		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
 			<div class="event-date">
 				<div class="event-from">
-					<div class="month">
-						{{ event.from.month }}
-					</div>
-					<div class="day">
-						{{ event.from.dow }} {{ event.from.day }}
-					</div>
-					<!-- <div class="dow">
-						{{ event.from.dow }} {{ event.from.day }}
-					</div> -->
+					<div class="month">{{ event.from.month }}</div>
+					<div class="day">{{ event.from.dow }} {{ event.from.day }}</div>
 					<div v-if="!event.dayLong" class="time">
 						{{ event.from.time }}
 						<span v-if="!event.dayLong && option.duration && event.to.sameDay">
@@ -49,33 +42,16 @@
 						</span>
 					</div>
 				</div>
-				<div v-if="option.duration && !event.to.sameDay" class="devider">
-					-
-				</div>
+
+				<div v-if="option.duration && !event.to.sameDay" class="devider">-</div>
+
 				<div v-if="option.duration && !event.to.sameDay" class="event-to">
-					<div class="month">
-						{{ event.to.month }}
-					</div>
-					<div class="day">
-						{{ event.to.dow }} {{ event.to.day }}
-					</div>
-					<!-- <div class="dow">
-						{{ event.to.dow }} {{ event.to.day }}
-					</div> -->
-					<div v-if=" !event.dayLong" class="time">
-						{{ event.to.time }}
-					</div>
+					<div class="month">{{ event.to.month }}</div>
+					<div class="day">{{ event.to.dow }} {{ event.to.day }}</div>
+					<div v-if="!event.dayLong" class="time">{{ event.to.time }}</div>
 				</div>
 			</div>
 
-			<!-- <div class="event-time">
-				<div v-if="!event.dayLong" class="time">
-					{{ event.from.time }}
-					<span v-if="!event.dayLong && option.duration && event.to.sameDay">
-						- {{ event.to.time }}
-					</span>
-				</div>
-			</div> -->
 		</div>
 
 		<slot name="actions" />
@@ -249,7 +225,7 @@ export default {
 			flex-direction: column;
 			align-items: stretch;
 			flex: 1;
-			min-width: 85px;
+			min-width: 70px;
 			// flex-direction: column;
 			// align-items: center;
 			// padding-bottom: 8px;

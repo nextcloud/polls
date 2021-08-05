@@ -140,7 +140,7 @@ export default {
 	.vote-column {
 		order: 2;
 		display: flex;
-		flex: 1 0 auto;
+		flex: 1 0 85px;
 		flex-direction: column;
 		align-items: stretch;
 		max-width: 280px;
@@ -195,9 +195,9 @@ export default {
 	.owner {
 		display: flex;
 		flex: 0 auto;
-		height: 3.5em;
-		line-height: 3.5em;
-		min-width: 56px;
+		height: 1.6em;
+		line-height: 1.6em;
+		min-width: 24px;
 		order: 19;
 	}
 
@@ -226,10 +226,6 @@ export default {
 		flex-direction: column;
 
 		&.closed {
-			.counter {
-				padding-left: 60px;
-			}
-
 			.vote-item:not(.confirmed) {
 				background-color: var(--color-main-background);
 				&.no > .icon {
@@ -288,16 +284,8 @@ export default {
 		}
 
 		.counter {
-			&.barStyle {
-				position: absolute;
-				bottom: 0;
-				width: 100%;
-				padding-left: 44px;
-			}
-			&.iconStyle {
-				order: 0;
-				padding-left: 44px;
-			}
+			order: 0;
+			padding-left: 12px;
 		}
 
 		.vote-item.currentuser {
@@ -308,8 +296,21 @@ export default {
 			order: 0;
 		}
 
+		@media only screen and (max-width: 370px) {
+			.owner {
+				display: none;
+			}
+		}
+
+		@media only screen and (max-width: 340px) {
+			.calendar-peek {
+				display: none;
+			}
+		}
+
 		.calendar-peek {
 			order: 0;
+			padding-left:4px;
 		}
 
 		.calendar-peek__conflict.icon {
@@ -319,6 +320,18 @@ export default {
 
 		.calendar-peek__caption {
 			display: none;
+		}
+
+		.confirm {
+			display: none;
+		}
+
+		.option-item.date-box {
+		    align-items: baseline;
+		}
+
+		.option-item__option--datebox {
+			min-width: 120px;
 		}
 	}
 }

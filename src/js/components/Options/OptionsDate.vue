@@ -74,7 +74,6 @@ import { Actions, ActionButton, EmptyContent, Modal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import OptionCloneDate from './OptionCloneDate'
 import OptionItem from './OptionItem'
-import OptionItemOwner from '../Options/OptionItemOwner'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 import { dateUnits } from '../../mixins/dateMixins'
 
@@ -90,7 +89,7 @@ export default {
 		OptionCloneDate,
 		OptionsDateAdd: () => import('./OptionsDateAdd'),
 		OptionItem,
-		OptionItemOwner,
+		OptionItemOwner: () => import('./OptionItemOwner'),
 	},
 
 	mixins: [
