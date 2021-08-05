@@ -327,7 +327,7 @@ export default {
 		}
 
 		.option-item.date-box {
-		    align-items: baseline;
+			align-items: baseline;
 		}
 
 		.option-item__option--datebox {
