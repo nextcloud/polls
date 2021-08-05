@@ -22,12 +22,12 @@
 
 <template>
 	<Popover class="calendar-peek">
-		<div v-if="events.length" slot="trigger">
+		<template v-if="events.length" #trigger>
 			<div class="calendar-peek__conflict icon icon-calendar" />
 			<p class="calendar-peek__caption">
 				{{ t('polls', 'Conflict') }}
 			</p>
-		</div>
+		</template>
 		<div class="calendar-peek__grid">
 			<CalendarInfo v-for="eventItem in sortedEvents"
 				:key="eventItem.UID"

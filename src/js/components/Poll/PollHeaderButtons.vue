@@ -24,13 +24,13 @@
 	<div class="poll-header-buttons">
 		<UserMenu />
 		<Popover>
-			<div slot="trigger">
+			<template #trigger>
 				<Actions>
 					<ActionButton icon="icon-info">
 						{{ t('polls', 'Poll informations') }}
 					</ActionButton>
 				</Actions>
-			</div>
+			</template>
 			<PollInformation />
 		</Popover>
 		<ActionSortOptions />
