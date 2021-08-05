@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<CheckboxRadioSwitch :checked.sync="useVoteLimit" type="switch">
-			{{ t('polls', 'Limit yes votes per user') }}
+			{{ t('polls', 'Limit "Yes" votes per user') }}
 		</CheckboxRadioSwitch>
 		<InputDiv v-if="voteLimit"
 			v-model="voteLimit"
