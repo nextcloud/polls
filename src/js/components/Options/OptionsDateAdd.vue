@@ -28,7 +28,7 @@
 		@change="changedDate"
 		@pick="pickedDate">
 		<template #input>
-			<ButtonDiv :title="caption" />
+			<ButtonDiv :title="caption" :primary="primary" />
 		</template>
 
 		<template #header>
@@ -88,6 +88,10 @@ export default {
 		caption: {
 			type: String,
 			default: t('polls', 'Add date'),
+		},
+		primary: {
+			type: Boolean,
+			default: false,
 		},
 	},
 

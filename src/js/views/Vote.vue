@@ -188,6 +188,10 @@ export default {
 	margin-bottom: 16px;
 }
 
+.area__proposal .mx-input-wrapper > button {
+	width: initial;
+}
+
 .markup-description {
 	font-size: 1.1em;
 }
