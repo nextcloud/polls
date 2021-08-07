@@ -85,7 +85,7 @@ export default {
 
 			if (this.proposalsExpirySet && !this.proposalsExpired) {
 				return {
-					text: t('polls', 'Proposals period ends {timeRelative}.', { timeRelative: this.proposalsExpireRelative }),
+					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
 					icon: 'icon-add',
 					class: 'proposal',
 				}
@@ -96,6 +96,14 @@ export default {
 					text: t('polls', 'Closing {relativeExpirationTime}', { relativeExpirationTime: this.timeExpirationRelative }),
 					icon: 'icon-calendar-000',
 					class: this.closeToClosing ? 'closing' : 'open',
+				}
+			}
+
+			if (this.proposalsExpirySet && this.proposalsExpired) {
+				return {
+					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
+					icon: 'icon-add',
+					class: 'proposal',
 				}
 			}
 

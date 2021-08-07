@@ -116,13 +116,13 @@ export default {
 
 		proposalsStatus() {
 			if (this.proposalsOpen && !this.proposalsExpirySet) {
-				return t('polls', 'Option proposals allowed')
+				return t('polls', 'Proposals are allowed')
 			}
 			if (this.proposalsExpirySet && !this.proposalsExpired) {
-				return t('polls', 'Option proposal term ends {timeRelative}', { timeRelative: this.proposalsExpireRelative })
+				return t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative })
 			}
 			if (this.proposalsExpirySet && this.proposalsExpired) {
-				return t('polls', 'Option proposal term ended {timeRelative}', { timeRelative: this.proposalsExpireRelative })
+				return t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative })
 			}
 			return t('polls', 'No proposals are allowed')
 		},
