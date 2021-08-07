@@ -74,6 +74,7 @@ use OCA\Polls\Model\User;
  * @method void setUseNo(integer $value)
  */
 class Poll extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
 	public const ACCESS_HIDDEN = 'hidden';

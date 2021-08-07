@@ -71,15 +71,18 @@ class FixVotes implements IRepairStep {
 	 */
 	public function run(IOutput $output) {
 		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable('polls_options')) {
-			$foundOptions = $this->optionMapper->findOptionsWithDuration();
-			foreach ($foundOptions as $option) {
-				$this->voteMapper->fixVoteOptionText(
-					$option->getPollId(),
-					$option->getId(),
-					$option->getPollOptionTextStart(),
-					$option->getPollOptionText(),
-				);
+		if ($schema->hasTable(OptionMapper::TABLE)) {
+			$table = $schema->getTable(OptionMapper::TABLE);
+			if ($table->hasColumn('duration')) {
+				$foundOptions = $this->optionMapper->findOptionsWithDuration();
+				foreach ($foundOptions as $option) {
+					$this->voteMapper->fixVoteOptionText(
+						$option->getPollId(),
+						$option->getId(),
+						$option->getPollOptionTextStart(),
+						$option->getPollOptionText(),
+					);
+				}
 			}
 		}
 	}

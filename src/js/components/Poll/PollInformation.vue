@@ -47,13 +47,13 @@
 			{{ n('polls', '%n option', '%n options', countOptions) }}
 		</div>
 		<div v-if="countAllYesVotes" class="icon-polls-yes">
-			{{ n('polls', '%n yes vote', '%n yes votes', countAllYesVotes) }}
+			{{ n('polls', '%n "Yes" vote', '%n "Yes" votes', countAllYesVotes) }}
 		</div>
 		<div v-if="countAllNoVotes" class="icon-polls-no">
-			{{ n('polls', '%n no vote', '%n no votes', countAllNoVotes) }}
+			{{ n('polls', '%n "No" vote', '%n "No" votes', countAllNoVotes) }}
 		</div>
 		<div v-if="countAllMaybeVotes" class="icon-polls-maybe">
-			{{ n('polls', '%n maybe vote', '%n maybe votes', countAllMaybeVotes) }}
+			{{ n('polls', '%n "Maybe" vote', '%n "Maybe" votes', countAllMaybeVotes) }}
 		</div>
 		<div class="icon-timezone">
 			{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
