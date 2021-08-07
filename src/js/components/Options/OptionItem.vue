@@ -191,7 +191,6 @@ export default {
 		flex: 1;
 		position: relative;
 		&.date-box {
-			// flex: 1;
 			align-items: stretch;
 			flex-direction: column;
 		}
@@ -205,7 +204,6 @@ export default {
 	.option-item__option--datebox {
 		display: flex;
 		flex-direction: column;
-		// padding: 0 2px;
 		align-items: stretch;
 		justify-content: flex-start;
 		text-align: center;
@@ -214,22 +212,15 @@ export default {
 
 	.event-date {
 		display: flex;
-		flex: 1;
+		flex: 0 1;
 		flex-direction: row;
-		align-items: stretch;
 		justify-content: center;
-		// background-color: var(--color-background-dark);
 
 		.event-from, .event-to {
 			display: flex;
 			flex-direction: column;
-			align-items: stretch;
 			flex: 1;
 			min-width: 70px;
-			// flex-direction: column;
-			// align-items: center;
-			// padding-bottom: 8px;
-			// flex: 0;
 
 			.month, .dow, .time {
 				white-space: pre;
@@ -266,7 +257,6 @@ export default {
 		flex: 1;
 		opacity: 1;
 		white-space: normal;
-		// padding-right: 4px;
 	}
 
 	.option-item__option--text {
