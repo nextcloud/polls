@@ -312,11 +312,6 @@ export default {
 </style>
 
 <style lang="scss">
-.icon-polls-yes {
-	padding: 5px 1px 5px 1px;
-	height: 34px;
-	margin: 3px 0;
-}
 
 .picker-buttons {
 	display: flex;
@@ -326,6 +321,12 @@ export default {
 .selection {
 	display: flex;
 	align-items: center;
+
+	.icon-polls-yes {
+		padding: 5px 1px 5px 1px;
+		height: 34px;
+		margin: 3px 0;
+	}
 }
 
 .range {
