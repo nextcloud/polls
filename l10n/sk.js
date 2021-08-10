@@ -64,6 +64,7 @@ OC.L10N.register(
     "All users" : "Všetci užívatelia",
     "Allow admins to edit this poll" : "Povoliť správcom upraviť túto anketu",
     "Allow Comments" : "Povoliť komentáre",
+    "Allow \"Maybe\" vote" : "Umožniť hlasovať „možno“",
     "Anonymous poll" : "Anonymná anketa",
     "Reopen poll" : "Znova otvoriť anketu",
     "Close poll" : "Ukončiť anketu",
