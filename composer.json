@@ -41,6 +41,6 @@
 		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true"
 	},
 	"require": {
-		"league/commonmark": "^1.6"
+		"league/commonmark": "^2.0"
 	}
 }
