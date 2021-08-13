@@ -30,8 +30,6 @@
 				:class="['participant', {currentuser: (participant.userId === acl.userId) }]">
 				<UserItem v-bind="participant" condensed />
 
-				<!-- <UserMenu v-if="participant.userId === acl.userId" /> -->
-
 				<ActionDelete v-if="acl.allowEdit"
 					:title="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.userId)" />
@@ -62,7 +60,6 @@ export default {
 	name: 'VoteTable',
 	components: {
 		ActionDelete,
-		// UserMenu: () => import('../User/UserMenu'),
 		VoteColumn,
 	},
 
@@ -114,12 +111,13 @@ export default {
 	.participant {
 		display: flex;
 	}
+
 	.participant, .vote-item {
 		flex: 0 0 auto;
 		height: 4.5em;
 		order: 10;
 		line-height: 1.5em;
-		padding: 4px 1px;
+		padding: 4px;
 		border-top: solid 1px var(--color-border-dark);
 		&.currentuser {
 			order:5;
@@ -130,6 +128,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		overflow-x: scroll;
+		margin-bottom: 4px;
 	}
 
 	.vote-table__votes {
@@ -141,18 +140,23 @@ export default {
 	.vote-column {
 		order: 2;
 		display: flex;
-		flex: 1 0 auto;
+		flex: 1 0 85px;
 		flex-direction: column;
 		align-items: stretch;
-		min-width: 85px;
 		max-width: 280px;
+		border-left: 1px solid var(--color-border-dark);
+		margin-bottom: 4px;
+
 		&>div {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 		}
 		.vote-table-header-item {
-			align-items: flex-start;
+			align-items: stretch;
+			flex: 1;
+			// padding: 0 8px;
+			order: 1;
 		}
 	}
 
@@ -162,14 +166,8 @@ export default {
 			border-radius: 10px;
 			border: 1px solid var(--color-polls-foreground-yes);
 			background-color: var(--color-polls-background-yes);
-			margin: 0 4px;
+			margin: 4px 4px;
 		}
-	}
-
-	.vote-table-header-item {
-		flex: 1;
-		padding: 0 8px;
-		order: 1;
 	}
 
 	.vote-item {
@@ -197,9 +195,9 @@ export default {
 	.owner {
 		display: flex;
 		flex: 0 auto;
-		height: 3.5em;
-		line-height: 3.5em;
-		min-width: 56px;
+		height: 1.6em;
+		line-height: 1.6em;
+		min-width: 24px;
 		order: 19;
 	}
 
@@ -228,10 +226,6 @@ export default {
 		flex-direction: column;
 
 		&.closed {
-			.counter {
-				padding-left: 60px;
-			}
-
 			.vote-item:not(.confirmed) {
 				background-color: var(--color-main-background);
 				&.no > .icon {
@@ -257,15 +251,24 @@ export default {
 			max-width: initial;
 			position: relative;
 			border-top: solid 1px var(--color-border);
+			border-left: none;
 			padding: 0;
 		}
 
 		.vote-table__users {
-			margin: 0
+			margin: 0;
+
+			.owner {
+				display: none;
+			}
 		}
 
-		.participant.user:not(.currentuser), .vote-item:not(.currentuser) {
+		.participant:not(.currentuser), .vote-item:not(.currentuser) {
 			display: none;
+		}
+
+		.participant.currentuser {
+			border-top: none;
 		}
 
 		.vote-table__votes {
@@ -281,16 +284,8 @@ export default {
 		}
 
 		.counter {
-			&.barStyle {
-				position: absolute;
-				bottom: 0;
-				width: 100%;
-				padding-left: 44px;
-			}
-			&.iconStyle {
-				order: 0;
-				padding-left: 44px;
-			}
+			order: 0;
+			padding-left: 12px;
 		}
 
 		.vote-item.currentuser {
@@ -301,12 +296,42 @@ export default {
 			order: 0;
 		}
 
+		@media only screen and (max-width: 370px) {
+			.owner {
+				display: none;
+			}
+		}
+
+		@media only screen and (max-width: 340px) {
+			.calendar-peek {
+				display: none;
+			}
+		}
+
 		.calendar-peek {
 			order: 0;
+			padding-left:4px;
 		}
+
 		.calendar-peek__conflict.icon {
 			width: 24px;
 			height: 24px;
+		}
+
+		.calendar-peek__caption {
+			display: none;
+		}
+
+		.confirm {
+			display: none;
+		}
+
+		.option-item.date-box {
+			align-items: baseline;
+		}
+
+		.option-item__option--datebox {
+			min-width: 120px;
 		}
 	}
 }

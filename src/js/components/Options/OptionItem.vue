@@ -33,40 +33,25 @@
 		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
 			<div class="event-date">
 				<div class="event-from">
-					<div class="month">
-						{{ event.from.month }}
-					</div>
-					<div class="day">
-						{{ event.from.day }}
-					</div>
-					<div class="dow">
-						{{ event.from.dow }}
+					<div class="month">{{ event.from.month }}</div>
+					<div class="day">{{ event.from.dow }} {{ event.from.day }}</div>
+					<div v-if="!event.dayLong" class="time">
+						{{ event.from.time }}
+						<span v-if="!event.dayLong && option.duration && event.to.sameDay">
+							- {{ event.to.time }}
+						</span>
 					</div>
 				</div>
-				<div v-if="option.duration && !event.to.sameDay" class="devider">
-					-
-				</div>
+
+				<div v-if="option.duration && !event.to.sameDay" class="devider">-</div>
+
 				<div v-if="option.duration && !event.to.sameDay" class="event-to">
-					<div class="month">
-						{{ event.to.month }}
-					</div>
-					<div class="day">
-						{{ event.to.day }}
-					</div>
-					<div class="dow">
-						{{ event.to.dow }}
-					</div>
+					<div class="month">{{ event.to.month }}</div>
+					<div class="day">{{ event.to.dow }} {{ event.to.day }}</div>
+					<div v-if="!event.dayLong" class="time">{{ event.to.time }}</div>
 				</div>
 			</div>
 
-			<div class="event-time">
-				<div v-if="!event.dayLong" class="time-from">
-					{{ event.from.time }}
-				</div>
-				<div v-if="option.duration && !event.dayLong" class="time-to">
-					{{ event.to.time }}
-				</div>
-			</div>
 		</div>
 
 		<slot name="actions" />
@@ -109,7 +94,6 @@ export default {
 		event() {
 			const from = moment.unix(this.option.timestamp)
 			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
-
 			// does the event start at 00:00 local time and
 			// is the duration divisable through 24 hours without rest
 			// then we have a day long event (one or multiple days)
@@ -125,7 +109,7 @@ export default {
 			}
 			return {
 				from: {
-					month: from.format('MMM [ \']YY'),
+					month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
 					day: from.format('D'),
 					dow: from.format('ddd'),
 					time: from.format('LT'),
@@ -134,7 +118,7 @@ export default {
 					utc: moment(from).utc().format('llll'),
 				},
 				to: {
-					month: toModified.format('MMM'),
+					month: toModified.format(moment().year() === toModified.year() ? 'MMM' : 'MMM [ \']YY'),
 					day: toModified.format('D'),
 					dow: toModified.format('ddd'),
 					time: to.format('LT'),
@@ -199,23 +183,17 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
 	.option-item {
 		display: flex;
 		align-items: center;
 		flex: 1;
 		position: relative;
 		&.date-box {
-			// flex: 1;
 			align-items: stretch;
 			flex-direction: column;
 		}
-	}
-
-	[class*='event'] {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 	}
 
 	.devider {
@@ -223,26 +201,53 @@ export default {
 		color: var(--color-text-lighter);
 	}
 
+	.option-item__option--datebox {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: flex-start;
+		text-align: center;
+		hyphens: auto;
+	}
+
 	.event-date {
-		flex-direction: row !important;
-		align-items: stretch !important;
+		display: flex;
+		flex: 0 1;
+		flex-direction: row;
 		justify-content: center;
-		.event-from {
-			padding-bottom: 8px;
-			flex: 0;
-		}
-		.event-to {
-			flex: 0;
-			font-size: 0.8em;
-			justify-content: flex-end;
+
+		.event-from, .event-to {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			min-width: 70px;
+
+			.month, .dow, .time {
+				white-space: pre;
+				font-size: 1.1em;
+				padding: 0 4px;
+				color: var(--color-text-lighter);
+			}
 			.day {
-				margin: 0;
+				font-size: 1.2em;
+				font-weight: 600;
+				margin: 5px 0 5px 0;
+				padding: 0 4px;
+			}
+
+			.time {
+				font-size: 0.8em;
+				padding: 0 4px;
 			}
 		}
 	}
 
 	.event-time {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		margin-top: 8px;
+		height: 1.5em;
 		.time-to {
 			font-size: 0.8em;
 		}
@@ -252,7 +257,6 @@ export default {
 		flex: 1;
 		opacity: 1;
 		white-space: normal;
-		padding-right: 4px;
 	}
 
 	.option-item__option--text {
@@ -284,26 +288,6 @@ export default {
 
 	.option-item__handle {
 		margin-right: 8px;
-	}
-
-	.option-item__option--datebox {
-		display: flex;
-		flex-direction: column;
-		padding: 0 2px;
-		align-items: stretch;
-		justify-content: flex-start;
-		text-align: center;
-		hyphens: auto;
-
-		.month, .dow, .time {
-			white-space: pre;
-			font-size: 1.1em;
-			color: var(--color-text-lighter);
-		}
-		.day {
-			font-size: 1.4em;
-			margin: 5px 0 5px 0;
-		}
 	}
 
 </style>

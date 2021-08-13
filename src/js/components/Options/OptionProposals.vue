@@ -22,20 +22,13 @@
 
 <template>
 	<div class="option-proposals">
-		<div class="option-proposals__header">
-			<div v-if="proposalsOpen">
-				{{ t('polls', 'You are asked to propose more options for this poll.') }}
-			</div>
-			<div v-if="proposalsExpirySet && !proposalsExpired">
-				{{ t('polls', 'Adding proposals ends {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
-			</div>
-			<div v-if="proposalsExpired">
-				{{ t('polls', 'Adding proposals ended {timeRelative}.', {timeRelative: proposalsExpireRelative}) }}
-			</div>
-		</div>
+		<div>{{ proposalsStatus }}</div>
 		<div v-if="proposalsOpen" class="option-proposals__add-proposal">
-			<OptionsDateAdd v-if="pollType === 'datePoll'" />
-			<OptionsTextAdd v-if="pollType === 'textPoll'" />
+			<OptionsDateAdd v-if="pollType === 'datePoll'"
+				:caption="t('polls', 'Propose a date')"
+				class="add-date-proposal"
+				primary />
+			<OptionsTextAdd v-if="pollType === 'textPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
 		</div>
 	</div>
 </template>
@@ -57,11 +50,21 @@ export default {
 		}),
 
 		...mapGetters({
-			proposalsOpen: 'poll/proposalsOpen',
 			proposalsExpirySet: 'poll/proposalsExpirySet',
 			proposalsExpired: 'poll/proposalsExpired',
+			proposalsOpen: 'poll/proposalsOpen',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
+
+		proposalsStatus() {
+			if (this.proposalsExpirySet && !this.proposalsExpired) {
+				return t('polls', 'Proposal period ends {timeRelative}.', { timeRelative: this.proposalsExpireRelative })
+			}
+			if (this.proposalsExpirySet && this.proposalsExpired) {
+				return t('polls', 'Proposal period ended {timeRelative}.', { timeRelative: this.proposalsExpireRelative })
+			}
+			return t('polls', 'You are asked to propose more poll options.')
+		},
 	},
 }
 
@@ -76,5 +79,8 @@ export default {
 
 	.option-proposals__add-proposal {
 		padding: 8px 0;
+		.add-date-proposal {
+			min-width: 85px;
+		}
 	}
 </style>

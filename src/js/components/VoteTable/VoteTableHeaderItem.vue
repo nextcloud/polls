@@ -61,17 +61,10 @@ export default {
 		}),
 
 		optionStyle() {
-			if (this.viewMode === 'table-view') {
+			if (this.poll.type === 'datePoll') {
 				return 'dateBox'
 			}
 			return 'textBox'
-
-		},
-		counterStyle() {
-			if (this.viewMode === 'table-view') {
-				return 'iconStyle'
-			}
-			return 'barStyle'
 
 		},
 		showNo() {

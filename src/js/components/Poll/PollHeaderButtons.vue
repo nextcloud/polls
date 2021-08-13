@@ -21,16 +21,16 @@
   -->
 
 <template>
-	<div class="header-actions">
+	<div class="poll-header-buttons">
 		<UserMenu />
 		<Popover>
-			<div slot="trigger">
+			<template #trigger>
 				<Actions>
 					<ActionButton icon="icon-info">
 						{{ t('polls', 'Poll informations') }}
 					</ActionButton>
 				</Actions>
-			</div>
+			</template>
 			<PollInformation />
 		</Popover>
 		<ActionSortOptions />
@@ -87,8 +87,8 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
-.header-actions {
+<style lang="scss">
+.poll-header-buttons {
 	display: flex;
 	flex-wrap: wrap-reverse;
 	flex: 0 1 auto;

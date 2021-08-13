@@ -205,6 +205,12 @@ export default {
 </script>
 
 <style  lang="scss">
+[class*='area__'] {
+	padding: 0 8px 16px 0;
+	background-color: var(--color-main-background);
+	border-radius: var(--border-radius);
+	min-width: 270px;
+}
 
 .modal__content {
 	padding: 14px;
@@ -237,7 +243,7 @@ export default {
 .app-content {
 	display: flex;
 	flex-direction: column;
-	padding: 0 8px;
+	padding: 0 8px 0 40px;
 	min-width: 320px;
 }
 
