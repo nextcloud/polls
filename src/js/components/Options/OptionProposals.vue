@@ -22,6 +22,7 @@
 
 <template>
 	<div class="option-proposals">
+		<div>{{ proposalsStatus }}</div>
 		<div v-if="proposalsOpen" class="option-proposals__add-proposal">
 			<OptionsDateAdd v-if="pollType === 'datePoll'"
 				:caption="t('polls', 'Propose a date')"
@@ -49,8 +50,21 @@ export default {
 		}),
 
 		...mapGetters({
+			proposalsExpirySet: 'poll/proposalsExpirySet',
+			proposalsExpired: 'poll/proposalsExpired',
 			proposalsOpen: 'poll/proposalsOpen',
+			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
+
+		proposalsStatus() {
+			if (this.proposalsExpirySet && !this.proposalsExpired) {
+				return t('polls', 'Proposal period ends {timeRelative}.', { timeRelative: this.proposalsExpireRelative })
+			}
+			if (this.proposalsExpirySet && this.proposalsExpired) {
+				return t('polls', 'Proposal period ended {timeRelative}.', { timeRelative: this.proposalsExpireRelative })
+			}
+			return t('polls', 'You are asked to propose more poll options.')
+		},
 	},
 }
 

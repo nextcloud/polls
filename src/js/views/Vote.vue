@@ -23,12 +23,12 @@
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
 		<PollHeaderButtons />
-		<div class="area__header">
-			<PollTitle show-sub-text />
-			<MarkUpDescription v-if="poll.description" />
+		<PollTitle show-sub-text />
+		<div v-if="poll.description" class="area__header">
+			<MarkUpDescription />
 		</div>
 
-		<div v-if="acl.allowAddOptions && proposalsAllowed && !closed" class="area__proposal">
+		<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
 			<OptionProposals />
 		</div>
 
@@ -112,6 +112,7 @@ export default {
 			pollTypeIcon: 'poll/typeIcon',
 			viewMode: 'settings/viewMode',
 			proposalsAllowed: 'poll/proposalsAllowed',
+			proposalsOpen: 'poll/proposalsOpen',
 			countHiddenParticipants: 'poll/countHiddenParticipants',
 			safeTable: 'poll/safeTable',
 		}),

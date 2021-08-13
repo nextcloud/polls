@@ -22,15 +22,13 @@
 
 <template>
 	<AppContent class="poll-list">
-		<div class="area__header">
-			<div>
-				<h2 class="title">
-					{{ title }}
-				</h2>
-				<h3 class="description">
-					{{ description }}
-				</h3>
-			</div>
+		<div class="poll-list-title">
+			<h2 class="title">
+				{{ title }}
+			</h2>
+			<h3 class="description">
+				{{ description }}
+			</h3>
 		</div>
 
 		<div class="area__main">
@@ -240,6 +238,10 @@ export default {
 </script>
 
 <style lang="scss">
+	.poll-list {
+		padding-top: 5px;
+	}
+
 	.poll-list__list {
 		width: 100%;
 		display: flex;
