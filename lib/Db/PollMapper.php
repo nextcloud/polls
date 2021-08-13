@@ -32,8 +32,10 @@ use OCP\AppFramework\Db\QBMapper;
  * @template-extends QBMapper<Poll>
  */
 class PollMapper extends QBMapper {
+	public const TABLE = Poll::TABLE;
+
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_polls', Poll::class);
+		parent::__construct($db, self::TABLE, Poll::class);
 	}
 
 	/**

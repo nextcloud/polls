@@ -35,8 +35,10 @@ use OCP\Migration\IOutput;
  * @template-extends QBMapper<Log>
  */
 class LogMapper extends QBMapper {
+	public const TABLE = Log::TABLE;
+
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'polls_log', Log::class);
+		parent::__construct($db, self::TABLE, Log::class);
 	}
 
 	public function find(int $id): Log {

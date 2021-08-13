@@ -51,6 +51,7 @@ use OCP\IUser;
  * @method void setTimestamp(integer $value)
  */
 class Option extends Entity implements JsonSerializable {
+	public const TABLE = 'polls_options';
 
 	/** @var int $pollId */
 	protected $pollId;
