@@ -56,13 +56,6 @@
 			icon="icon-comment">
 			<SideBarTabComments />
 		</AppSidebarTab>
-		<AppSidebarTab
-			:id="'user-options'"
-			:order="5"
-			:name="t('polls', 'Poll settings')"
-			icon="icon-settings">
-			<SideBarTabUserOptions />
-		</AppSidebarTab>
 	</AppSidebar>
 </template>
 
@@ -79,7 +72,7 @@ export default {
 		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments'),
 		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions'),
 		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare'),
-		SideBarTabUserOptions: () => import('../components/SideBar/SideBarTabUserOptions'),
+		// SideBarTabUserOptions: () => import('../components/SideBar/SideBarTabUserOptions'),
 		AppSidebar,
 		AppSidebarTab,
 	},
