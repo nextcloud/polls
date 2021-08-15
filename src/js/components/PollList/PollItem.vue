@@ -280,10 +280,6 @@ export default {
 		justify-content: center;
 	}
 
-	// .item__created, {
-	// 	width: 110px;
-	// }
-
 	.item__created,
 	.item__expiry {
 		width: 145px;
