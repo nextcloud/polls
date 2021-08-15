@@ -100,7 +100,7 @@ export default {
 			}
 
 			return {
-				text: t('polls', '{dateRelative}', { dateRelative: this.dateCreatedRelative }),
+				text: this.dateCreatedRelative,
 				icon: 'icon-clock',
 				class: 'created',
 			}
