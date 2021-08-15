@@ -54,26 +54,32 @@
 
 	<div v-else class="poll-item__item">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
+
 		<router-link class="item__title"
 			:to="{ name: 'vote', params: { id: poll.id }}"
 			:class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
-			<div class="item-title-wrapper">
-				<div class="item__title__title">
-					{{ poll.title }}
-				</div>
+			<div class="item__title__title">
+				{{ poll.title }}
 			</div>
+
 			<div class="item__title__description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</router-link>
+
 		<slot name="actions" />
-		<div v-tooltip.auto="accessType" :class="accessIcon" />
+
+		<div v-tooltip.auto="accessType" :class="['item__access', accessIcon]" />
+
 		<div class="item__owner">
-			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
+			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" condensed />
 		</div>
+
 		<div class="wrapper">
 			<div class="item__created">
-				{{ timeCreatedRelative }}
+				<Badge
+					:title="timeCreatedRelative"
+					icon="icon-clock" />
 			</div>
 			<div class="item__expiry">
 				<Badge
@@ -186,76 +192,6 @@ export default {
 </script>
 
 <style lang="scss">
-	[class^='item__'], .action-item {
-		display: flex;
-		align-items: center;
-		flex: 0 0 auto;
-		padding-right: 4px;
-		padding-left: 4px;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-
-	.poll-item__item > .action-item {
-		display:flex;
-	}
-
-	.item__icon-spacer {
-		width: 44px;
-		min-width: 44px;
-	}
-
-	.item-title-wrapper {
-		display: flex;
-	}
-
-	.item__title {
-		display: flex;
-		flex-direction: column;
-		flex: 1 0 auto;
-		align-items: stretch;
-		width: 210px;
-		justify-content: center;
-	}
-
-	.item__title__description {
-		opacity: 0.5;
-		display: inherit;
-	}
-
-	.item__access {
-		width: 80px;
-	}
-
-	.item__owner {
-		width: 230px;
-	}
-
-	.wrapper {
-		width: 325px;
-		display: flex;
-		flex: 0 1 auto;
-		flex-wrap: wrap;
-	}
-
-	.item__created, {
-		width: 110px;
-	}
-
-	.item__expiry {
-		width: 185px;
-		.badge {
-			width: 100%;
-		}
-	}
-
-	.closed {
-		.item__expiry {
-			color: var(--color-error);
-		}
-	}
-
 	[class^='poll-item__'] {
 		display: flex;
 		flex: 1;
@@ -264,13 +200,14 @@ export default {
 		background-color: var(--color-main-background);
 	}
 
-	.poll-item__item {
-		&.active {
-			background-color: var(--color-primary-light);
-		}
-		&:hover {
-			background-color: var(--color-background-hover);
-		}
+	[class^='item__'],
+	.poll-item__item .action-item {
+		display: flex;
+		align-items: center;
+		flex: 0 0 auto;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.poll-item__header {
@@ -279,19 +216,79 @@ export default {
 		height: 4em;
 		align-items: center;
 		padding-left: 52px;
+
+		.sortable {
+			cursor: pointer;
+			&:hover {
+				.sort-indicator.hidden {
+					visibility: visible;
+					display: block;
+				}
+			}
+		}
+
 		.item__title {
 			flex-direction: row;
 			justify-content: flex-start;
 		}
 	}
 
-	.sortable {
-		cursor: pointer;
+	.poll-item__item {
+		&> .action-item {
+			display: flex;
+		}
+		&.active {
+			background-color: var(--color-primary-light);
+		}
 		&:hover {
-			.sort-indicator.hidden {
-				visibility: visible;
-				display: block;
-			}
+			background-color: var(--color-background-hover);
+		}
+	}
+
+	.item__icon-spacer {
+		width: 44px;
+		min-width: 44px;
+	}
+
+	.wrapper {
+		// width: 325px;
+		display: flex;
+		flex: 0 1 auto;
+		flex-wrap: wrap;
+	}
+
+	.item__title {
+		display: flex;
+		flex-direction: column;
+		flex: 1 0 155px;
+		align-items: stretch;
+		justify-content: center;
+
+		.item__title__title {
+			display: block;
+		}
+
+		.item__title__description {
+			opacity: 0.5;
+			display: block;
+		}
+	}
+
+	.item__access,
+	.item__owner {
+		width: 78px;
+		justify-content: center;
+	}
+
+	// .item__created, {
+	// 	width: 110px;
+	// }
+
+	.item__created,
+	.item__expiry {
+		width: 145px;
+		.badge {
+			width: 100%;
 		}
 	}
 
