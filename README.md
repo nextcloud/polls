@@ -29,24 +29,21 @@
 ## Bugs
 - https://github.com/nextcloud/polls/issues
 
-## Screenshots (table view)
-Create a new poll from the navigation bar and get an overview of your polls
-![Overview](screenshots/overview.png)
+## Screenshots
+#### Manage your polls and create new ones
+![Manage Polls](screenshots/manage.png)
 
-#### Vote and comment (list view)
-![Vote](screenshots/vote.png)
+#### Many configuration options
+![Vote](screenshots/configuration.png)
 
-#### Edit poll inside the vote page
-![Edit poll](screenshots/edit-poll.png)
+#### Share your poll with other people
+![Edit poll](screenshots/share.png)
 
-#### Add shared links to your poll
+#### Vote on mobile
 ![Share poll](screenshots/shares.png)
 
-#### View the vote page on mobiles
-![Vote mobile portrait](screenshots/mobile-portrait.png)
-
 ## Installation / Update
-This app is supposed to work on Nextcloud version 19+.
+This app is supposed to work on Nextcloud version 21+.
 
 ### Install latest release
 You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls).

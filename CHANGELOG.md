@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.1.0-rc1] - 2021-08-16
+## Only available for Nextcloud 21/22
+- [ui] #1831 - visual fixes to polls list
+- [ui] #1891 - Updated vote view
+- [fix] #1858 - migration error when updating from version prior to 1.8 (#1867)
+- [fix] #1855 - scrolling in registration dialog on mobiles (#1860)
+- [fix] #1854 - share items could be too wide, with long user names (#1859)
+- [change] #1828 - hide internal user ids in public polls
+- some more minor fixes, optimizations and refactoring
+
+All changes: https://github.com/nextcloud/polls/issues?q=is%3Aclosed+milestone%3A3.1
+
+
 ## [3.0.0] - 2021-07-11
 ## This mainly a compatibility update to Nextcloud 22 and 21
 ### new Features/changes
