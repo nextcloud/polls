@@ -40,7 +40,7 @@
 ![Edit poll](screenshots/share.png)
 
 #### Vote on mobile
-![Share poll](screenshots/shares.png)
+![Share poll](screenshots/mobile.png)
 
 ## Installation / Update
 This app is supposed to work on Nextcloud version 21+.
