@@ -77,7 +77,7 @@ export default {
 
 			if (this.isClosed) {
 				return {
-					text: t('polls', '{relativeTimeAgo}', { relativeTimeAgo: this.timeExpirationRelative }),
+					text: this.timeExpirationRelative,
 					icon: 'icon-polls-closed',
 					class: 'closed',
 				}
