@@ -262,7 +262,6 @@ OC.L10N.register(
     "Options" : "Optionen",
     "Shares" : "Freigaben",
     "Comments" : "Kommentare",
-    "Poll settings" : "Umfrageeinstellungen",
     "No vote options available" : "Keine Abstimmungsoptionen verfügbar",
     "Maybe the owner did not provide some until now." : "Vielleicht hat der Besitzer bis jetzt keine zur Verfügung gestellt.",
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Aus Leistungsgründen werden {countHiddenParticipants} Abstimmende nicht angezeigt",

@@ -271,7 +271,6 @@ OC.L10N.register(
     "Options" : "Aukerak",
     "Shares" : "Partekatzeak",
     "Comments" : "Iruzkinak",
-    "Poll settings" : "Inkesta-ezarpenak",
     "No vote options available" : "Ez dago bozka aukerarik eskuragarri.",
     "Maybe the owner did not provide some until now." : "Agian jabeak ez du oraindik batere eskaini.",
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Errendimendu kezkak direla eta, {countHiddenParticipants} boto-emaileak ezkutatuta daude.",

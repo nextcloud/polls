@@ -262,7 +262,6 @@ OC.L10N.register(
     "Options" : "Opties",
     "Shares" : "Shares",
     "Comments" : "Reacties",
-    "Poll settings" : "Peilingsinstellingen",
     "No vote options available" : "Geen stemopties beschikbaar",
     "Maybe the owner did not provide some until now." : "Misschien heeft de eigenaar nog geen opties toegevoegd.",
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Vanwege prestatieproblemen zijn {countHiddenParticipants} stemmers verborgen.",

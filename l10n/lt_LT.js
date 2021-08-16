@@ -228,7 +228,6 @@ OC.L10N.register(
     "Options" : "Parinktys",
     "Shares" : "Viešiniai",
     "Comments" : "Komentarai",
-    "Poll settings" : "Apklausos nustatymai",
     "No vote options available" : "Nėra prieinamų balsavimo variantų",
     "Maybe the owner did not provide some until now." : "Galbūt, savininkas iki šiol jų nepateikė.",
     "Minute" : "Minutė",

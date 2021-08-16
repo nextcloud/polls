@@ -262,7 +262,6 @@ OC.L10N.register(
     "Options" : "Mogućnosti",
     "Shares" : "Dijeljenja",
     "Comments" : "Komentari",
-    "Poll settings" : "Postavke ankete",
     "No vote options available" : "Nema dostupnih mogućnosti glasanja",
     "Maybe the owner did not provide some until now." : "Možda vlasnik nije dosad odredio nikakve mogućnosti.",
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Skriveno je {countHiddenParticipants} glasača radi bolje izvedbe ankete.",

@@ -280,7 +280,6 @@
     "Options" : "選項",
     "Shares" : "分享",
     "Comments" : "留言",
-    "Poll settings" : "投票設定",
     "No vote options available" : "無投票選項",
     "Maybe the owner did not provide some until now." : "也許擁有者到現在都沒有提供。",
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "基於性能考慮，隱藏了 {countHiddenParticipants} 個投票者。",

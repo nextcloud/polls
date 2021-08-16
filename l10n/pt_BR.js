@@ -271,7 +271,6 @@ OC.L10N.register(
     "Options" : "Opções",
     "Shares" : "Compartilhamentos",
     "Comments" : "Comentários",
-    "Poll settings" : "Configurações de enquete",
     "No vote options available" : "Nenhuma opção de voto disponível",
     "Maybe the owner did not provide some until now." : "Talvez o proprietário não tenha fornecido alguma até agora.",
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Devido a questões de desempenho  {countHiddenParticipants} os eleitores estão escondidos. ",
