@@ -155,7 +155,6 @@ OC.L10N.register(
     "_Only %n vote per option._::_Only %n votes per option._" : ["Pouze %n hlas pro každou možnost.","Pouze %n hlasů pro každou možnost.","Pouze %n hlasů pro každou možnost.","Pouze %n hlasy pro každou možnost."],
     "A poll from {name}" : "Hlasování od {name}",
     "Archived" : "Archivováno",
-    "{relativeTimeAgo}" : "{relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Uzavírá se {relativeExpirationTime}",
     "never" : "nikdy",
     "Optional email address" : "Nepovinná e-mailová adresa",

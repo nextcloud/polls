@@ -155,7 +155,6 @@ OC.L10N.register(
     "_Only %n vote per option._::_Only %n votes per option._" : ["Her seçenek için yalnız %n oy.","Her seçenek için yalnız %n oy."],
     "A poll from {name}" : "{name} tarafından anket",
     "Archived" : "Arşivlenmiş",
-    "{relativeTimeAgo}" : "{relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Kapanıyor {relativeExpirationTime}",
     "never" : "asla",
     "Optional email address" : "İsteğe bağlı e-posta adresi",

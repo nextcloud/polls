@@ -155,7 +155,6 @@ OC.L10N.register(
     "_Only %n vote per option._::_Only %n votes per option._" : ["Isceti %n votos pro sèberu.","Isceti %n votos pro sèberos."],
     "A poll from {name}" : "Unu sondàgiu dae {name}",
     "Archived" : "Archiviadu",
-    "{relativeTimeAgo}" : "{relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "Serrende {relativeExpirationTime}",
     "never" : "mai",
     "Optional email address" : "indiritzu de posta eletrònica a sèberu",

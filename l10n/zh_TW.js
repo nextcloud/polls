@@ -155,7 +155,6 @@ OC.L10N.register(
     "_Only %n vote per option._::_Only %n votes per option._" : ["每個選項僅 %n 票。"],
     "A poll from {name}" : "來自 {name} 的投票",
     "Archived" : "已封存",
-    "{relativeTimeAgo}" : "{relativeTimeAgo}",
     "Closing {relativeExpirationTime}" : "{relativeExpirationTime} 關閉",
     "never" : "從未",
     "Optional email address" : "可選的電子郵件地址",
