@@ -7,6 +7,8 @@ OC.L10N.register(
     "Conflict" : "Konflikts",
     "New comment …" : "Jauns komentārs...",
     "Delete comment" : "Dzēst komentāru",
+    "Hide not available Options" : "Slēpt nepieejamos iestatījumus",
+    "Hide results until poll is closed" : "Slēpt rezultātus kamēr aptauja nav slēgta",
     "Title" : "Nosaukums",
     "Cancel" : "Atcelt",
     "Apply" : "Apstiprināt",
