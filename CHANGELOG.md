@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.1.0] - 2021-08-21
+- GUI optimizations
+- Hide internal user IDs in public polls
+- Fixed migration error
+- Fixed registration dialog on mobiles
+- Fixed width of share icons
+- some minor fixes 
+
 ## [3.1.0-rc1] - 2021-08-16
 ## Only available for Nextcloud 21/22
 - [ui] #1831 - visual fixes to polls list
