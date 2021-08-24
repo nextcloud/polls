@@ -109,7 +109,7 @@ OC.L10N.register(
     "Propose a date" : "Ein Datum vorschlagen",
     "Propose an option" : "Eine Option vorschlagen",
     "Proposal period ends {timeRelative}." : "Vorschlagsszeitraum endet in {timeRelative}.",
-    "Proposal period ended {timeRelative}." : "Vorschlagsszeitraum wurde beendet vor {timeRelative}.",
+    "Proposal period ended {timeRelative}." : "Vorschlagsszeitraum endete vor {timeRelative}.",
     "You are asked to propose more poll options." : "Sie werden gebeten, weitere Optionen für diese Umfrage vorzuschlagen.",
     "Clone option" : "Option kopieren",
     "Unconfirm option" : "Option nicht bestätigen",
