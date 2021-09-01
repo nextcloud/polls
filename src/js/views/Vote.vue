@@ -110,7 +110,7 @@ export default {
 			closed: 'poll/isClosed',
 			options: 'options/rankedOptions',
 			pollTypeIcon: 'poll/typeIcon',
-			viewMode: 'settings/viewMode',
+			viewMode: 'poll/viewMode',
 			proposalsAllowed: 'poll/proposalsAllowed',
 			proposalsOpen: 'poll/proposalsOpen',
 			countHiddenParticipants: 'poll/countHiddenParticipants',

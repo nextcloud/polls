@@ -22,7 +22,7 @@
 
 <template>
 	<AppSettingsDialog :open.sync="show" :show-navigation="true">
-		<AppSettingsSection :title="t('polls', 'User Settings')">
+		<AppSettingsSection :title="t('polls', 'User settings')">
 			<FeatureSettings />
 		</AppSettingsSection>
 
@@ -30,7 +30,7 @@
 			<PerformanceSettings />
 		</AppSettingsSection>
 
-		<AppSettingsSection :title="t('polls', 'Experimental Styles')">
+		<AppSettingsSection :title="t('polls', 'Experimental styles')">
 			<ExpertimantalSettings />
 		</AppSettingsSection>
 	</AppSettingsDialog>
@@ -40,9 +40,6 @@
 
 import { AppSettingsDialog, AppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import FeatureSettings from './FeatureSettings'
-import ExpertimantalSettings from './ExpertimantalSettings'
-import PerformanceSettings from './PerformanceSettings'
 
 export default {
 	name: 'SettingsDlg',
@@ -50,23 +47,22 @@ export default {
 	components: {
 		AppSettingsDialog,
 		AppSettingsSection,
-		FeatureSettings,
-		ExpertimantalSettings,
-		PerformanceSettings,
+		FeatureSettings: () => import('./FeatureSettings'),
+		ExpertimantalSettings: () => import('./ExpertimantalSettings'),
+		PerformanceSettings: () => import('./PerformanceSettings'),
 	},
 
 	data() {
 		return {
 			show: false,
-			calendars: [],
 		}
 	},
 
 	watch: {
 		async show() {
 			if (this.show === true) {
-				const response = await this.$store.dispatch('settings/getCalendars')
-				this.calendars = response.data.calendars
+				this.$store.dispatch('settings/get')
+				this.$store.dispatch('settings/getCalendars')
 			}
 		},
 	},

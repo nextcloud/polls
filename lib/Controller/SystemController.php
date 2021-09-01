@@ -47,10 +47,26 @@ class SystemController extends Controller {
 	/**
 	 * Get a combined list of NC users, groups and contacts
 	 * @NoAdminRequired
-	 * $query
 	 */
 	public function userSearch(string $query = ''): DataResponse {
 		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
+			$query)], Http::STATUS_OK);
+	}
+	/**
+	 * Get a combined list of NC groups
+	 */
+	public function groupAll(): DataResponse {
+		\OC::$server->getLogger()->error('query=\'\'');
+		return new DataResponse(['groups' => $this->systemService->getGroups(
+			$query)], Http::STATUS_OK);
+	}
+
+	/**
+	 * Get a combined list of NC groups
+	 */
+	public function groupSearch(string $query = ''): DataResponse {
+		\OC::$server->getLogger()->error('query= \''. $query . '\'');
+		return new DataResponse(['groups' => $this->systemService->getGroups(
 			$query)], Http::STATUS_OK);
 	}
 }

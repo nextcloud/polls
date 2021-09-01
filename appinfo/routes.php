@@ -87,6 +87,9 @@ return [
 		['name' => 'share#sendInvitation', 'url' => '/share/{token}/invite', 'verb' => 'POST'],
 		['name' => 'share#resolveGroup', 'url' => '/share/{token}/resolve', 'verb' => 'GET'],
 
+		['name' => 'settings#getAppSettings', 'url' => '/settings/app', 'verb' => 'GET'],
+		['name' => 'settings#writeAppSettings', 'url' => '/settings/app', 'verb' => 'POST'],
+
 		['name' => 'subscription#get', 'url' => '/poll/{pollId}/subscription', 'verb' => 'GET'],
 		['name' => 'subscription#set', 'url' => '/poll/{pollId}/subscription', 'verb' => 'PUT'],
 		['name' => 'subscription#subscribe', 'url' => '/poll/{pollId}/subscribe', 'verb' => 'PUT'],
@@ -97,11 +100,13 @@ return [
 		['name' => 'comment#delete', 'url' => '/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'auth'],
 
 		['name' => 'system#user_search', 'url' => '/search/users/{query}', 'verb' => 'GET'],
+		['name' => 'system#group_search', 'url' => '/groups/{query}', 'verb' => 'GET', 'postfix' => 'query'],
+		['name' => 'system#group_search', 'url' => '/groups', 'verb' => 'GET', 'postfix' => 'all'],
+
 		['name' => 'watch#watch_poll', 'url' => '/poll/{pollId}/watch', 'verb' => 'GET'],
 
-		['name' => 'preferences#write', 'url' => '/preferences/write', 'verb' => 'POST'],
-		['name' => 'preferences#get', 'url' => '/preferences/get', 'verb' => 'GET'],
-
+		['name' => 'preferences#write', 'url' => '/preferences', 'verb' => 'POST'],
+		['name' => 'preferences#get', 'url' => '/preferences', 'verb' => 'GET'],
 		['name' => 'preferences#get_calendars', 'url' => '/calendars', 'verb' => 'GET'],
 
 		// REST-API calls

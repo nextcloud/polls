@@ -103,14 +103,6 @@ const getters = {
 
 	},
 
-	getNextViewMode(state, getters) {
-		if (state.viewModes.indexOf(getters.viewMode) < 0) {
-			return state.viewModes[1]
-		}
-		return state.viewModes[(state.viewModes.indexOf(getters.viewMode) + 1) % state.viewModes.length]
-
-	},
-
 	viewDatePoll(state) {
 		if (state.session.manualViewDatePoll) {
 			return state.session.manualViewDatePoll
@@ -121,21 +113,11 @@ const getters = {
 		return 'list-view'
 
 	},
-
-	viewMode(state, getters, rootState) {
-		if (rootState.poll.type === 'textPoll') {
-			return getters.viewTextPoll
-		} else if (rootState.poll.type === 'datePoll') {
-			return getters.viewDatePoll
-		}
-		return 'table-view'
-
-	},
 }
 
 const actions = {
 	async get(context) {
-		const endPoint = 'apps/polls/preferences/get'
+		const endPoint = 'apps/polls/preferences'
 		try {
 			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			if (response.data.preferences.defaultViewTextPoll === 'desktop') {
@@ -156,24 +138,8 @@ const actions = {
 		}
 	},
 
-	changeView(context) {
-		if (context.rootState.poll.type === 'datePoll') {
-			if (context.state.manualViewDatePoll) {
-				context.commit('setViewDatePoll', '')
-			} else {
-				context.commit('setViewDatePoll', context.getters.getNextViewMode)
-			}
-		} else if (context.rootState.poll.type === 'textPoll') {
-			if (context.state.manualViewTextPoll) {
-				context.commit('setViewTextPoll', '')
-			} else {
-				context.commit('setViewTextPoll', context.getters.getNextViewMode)
-			}
-		}
-	},
-
 	async write(context) {
-		const endPoint = 'apps/polls/preferences/write'
+		const endPoint = 'apps/polls/preferences'
 		try {
 			const response = await axios.post(generateUrl(endPoint), { settings: context.state.user })
 			context.commit('setPreference', response.data.preferences)
