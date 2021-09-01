@@ -148,7 +148,7 @@ export default {
 
 	.settings_details {
 		padding-top: 8px;
-		margin-left: 26px;
+		margin-left: 36px;
 	}
 
 	.bully {

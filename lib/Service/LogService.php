@@ -46,8 +46,6 @@ class LogService {
 
 	/**
 	 * Log poll activity
-	 *
-	 * @param null|string $userId
 	 */
 	public function setLog(int $pollId, string $messageId, ?string $userId = null): ?Log {
 		$this->log = new Log();

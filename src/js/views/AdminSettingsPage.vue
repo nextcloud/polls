@@ -21,55 +21,52 @@
   -->
 
 <template>
-	<div>
-		<div class="user_settings">
-			{{ t('polls', 'Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000.') }}
-			<input v-model="threshold"
-				type="text"
-				:placeholder="t('polls', 'Enter amount of maximum allowed vote boxes.')">
+	<div class="section">
+		<div class="sub-section">
+			<h2>{{ t('polls', 'Share restrictions') }}</h2>
+			<AdminShareSettings />
+		</div>
+
+		<div class="sub-section">
+			<h2>{{ t('polls', 'Poll creation restrictions') }}</h2>
+			<AdminPollCreation />
 		</div>
 	</div>
 </template>
 
 <script>
 
-import { mapState } from 'vuex'
+import AdminPollCreation from '../components/Settings/AdminPollCreation'
+import AdminShareSettings from '../components/Settings/AdminShareSettings'
 
 export default {
-	name: 'PerformanceSettings',
+	name: 'AdminSettingsPage',
 
-	computed: {
-		...mapState({
-			settings: (state) => state.settings.user,
-		}),
-
-		threshold: {
-			get() {
-				return this.settings.performanceThreshold
-			},
-			set(value) {
-				this.writeValue({ performanceThreshold: +value })
-			},
-		},
+	components: {
+		AdminPollCreation,
+		AdminShareSettings,
 	},
 
-	methods: {
-		async writeValue(value) {
-			await this.$store.commit('settings/setPreference', value)
-			this.$store.dispatch('settings/write')
-		},
+	created() {
+		this.$store.dispatch('appSettings/get')
 	},
 }
 </script>
 
-<style>
-	.user_settings {
-		padding-top: 16px;
-	}
+<style lang="scss">
+	.section {
+		display: flex;
+		flex-wrap: wrap;
+		.section-wrapper {
+			flex: 1 640px;
+		}
+		.sub-section {
+			margin-bottom: 48px;
+			flex: 1 640px;
+		}
 
-	.settings_details {
-		padding-top: 8px;
-		margin-left: 36px;
+		h2 {
+			margin-bottom: 0;
+		}
 	}
-
 </style>

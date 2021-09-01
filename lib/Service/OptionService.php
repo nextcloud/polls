@@ -238,10 +238,6 @@ class OptionService {
 
 	/**
 	 * Make a sequence of date poll options
-	 * @param int $optionId
-	 * @param int $step - The step for creating the sequence
-	 * @param string $unit - The timeunit (year, month, ...)
-	 * @param int $amount - Number of sequence items to create
 	 *
 	 * @return Option[]
 	 *
@@ -291,9 +287,6 @@ class OptionService {
 
 	/**
 	 * Shift all date options
-	 * @param int $pollId
-	 * @param int $step - The step for creating the sequence
-	 * @param string $unit - The timeunit (year, month, ...)
 	 *
 	 * @return Option[]
 	 *
@@ -410,9 +403,6 @@ class OptionService {
 	/**
 	 * moveModifier - evaluate new order depending on the old and
 	 * the new position of a moved array item
-	 * @param int $moveFrom - old position of the moved item
-	 * @param int $moveTo - target posotion of the moved item
-	 * @param int $currentPosition - current position of the current item
 	 *
 	 * @return int - The modified new new position of the current item
 	 */

@@ -79,8 +79,8 @@ class SystemService {
 
 	/**
 	 * Get a list of users
-	 * @param string $query
-	 * @param string[] $skip
+	 *
+	 * @return User[]
 	 */
 	public static function getSiteUsers(string $query = '', array $skip = []): array {
 		$users = [];
@@ -90,6 +90,21 @@ class SystemService {
 			}
 		}
 		return $users;
+	}
+
+	/**
+	 * Get a list of groups
+	 *
+	 * @return Group[]
+	 */
+	public function getGroups(string $query = ''): array {
+		\OC::$server->getLogger()->error('hallo');
+		$groups = Group::search($query);
+		\OC::$server->getLogger()->error(json_encode($groups));
+		return $groups;
+		if ($query === '') {
+			return [];
+		}
 	}
 
 	/**

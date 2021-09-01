@@ -5,11 +5,15 @@ const ESLintPlugin = require('eslint-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
-	entry: path.join(__dirname, 'src/js/', 'main.js'),
+	entry: {
+		polls: path.join(__dirname, 'src/js/', 'main.js'),
+		userSettings: path.join(__dirname, 'src/js/', 'userSettings.js'),
+		adminSettings: path.join(__dirname, 'src/js/', 'adminSettings.js'),
+	},
 	output: {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
-		filename: 'polls.js',
+		filename: '[name].js',
 		chunkFilename: 'polls.[name].[contenthash].js',
 		chunkLoadingGlobal: 'webpackJsonpOCAPolls',
 	},
@@ -62,9 +66,9 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin(),
 		new CleanWebpackPlugin(),
-		// new webpack.DefinePlugin({
-		// 	appName: JSON.stringify('polls'),
-		// }),
+		new webpack.DefinePlugin({
+			appName: JSON.stringify('polls'),
+		}),
 		new ESLintPlugin({
 			quiet: true,
 			extensions: ['js', 'vue'],

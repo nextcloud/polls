@@ -79,6 +79,23 @@ const mutations = {
 }
 
 const getters = {
+	viewMode: (state, getters, rootState, rootGetters) => {
+		if (state.type === 'textPoll') {
+			return rootGetters['settings/viewTextPoll']
+		} else if (state.type === 'datePoll') {
+			return rootGetters.['settings/viewDatePoll']
+		}
+		return 'table-view'
+	},
+
+	getNextViewMode: (state, getters, rootState) => {
+		if (rootState.settings.viewModes.indexOf(getters.viewMode) < 0) {
+			return rootState.settings.viewModes[1]
+		}
+		return rootState.settings.viewModes[(rootState.settings.viewModes.indexOf(getters.viewMode) + 1) % rootState.settings.viewModes.length]
+
+	},
+
 	typeIcon: (state) => {
 		if (state.type === 'textPoll') {
 			return 'icon-toggle-filelist'
@@ -137,31 +154,19 @@ const getters = {
 		{ value: 'allow', label: t('polls', 'Allow proposals') },
 	],
 
-	displayResults: (state, getters) => (state.showResults === 'always' || (state.showResults === 'closed' && !getters.closed)),
-
-	proposalsAllowed: (state) => (state.allowProposals === 'allow' || state.allowProposals === 'review'),
-
+	displayResults: (state, getters) => state.showResults === 'always' || (state.showResults === 'closed' && !getters.closed),
+	proposalsAllowed: (state) => state.allowProposals === 'allow' || state.allowProposals === 'review',
 	proposalsOpen: (state, getters) => getters.proposalsAllowed && !getters.proposalsExpired,
-
 	proposalsExpired: (state, getters) => getters.proposalsAllowed && state.proposalsExpire && moment.unix(state.proposalsExpire).diff() < 0,
-
 	proposalsExpirySet: (state, getters) => getters.proposalsAllowed && state.proposalsExpire,
-
 	proposalsExpireRelative: (state) => moment.unix(state.proposalsExpire).fromNow(),
-
 	isClosed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
-
-	safeTable: (state, getters, rootState) => (getters.countCells > rootState.settings.user.performanceThreshold),
-
-	countParticipants: (state, getters) => (getters.participants.length),
-
-	countHiddenParticipants: (state, getters) => (getters.participants.length - getters.safeParticipants.length),
-
-	countSafeParticipants: (state, getters) => (getters.safeParticipants.length),
-
-	countParticipantsVoted: (state, getters) => (getters.participantsVoted.length),
-
-	countCells: (state, getters, rootState, rootGetters) => (getters.countParticipants * rootGetters['options/count']),
+	safeTable: (state, getters, rootState) => getters.countCells > rootState.settings.user.performanceThreshold,
+	countParticipants: (state, getters) => getters.participants.length,
+	countHiddenParticipants: (state, getters) => getters.participants.length - getters.safeParticipants.length,
+	countSafeParticipants: (state, getters) => getters.safeParticipants.length,
+	countParticipantsVoted: (state, getters) => getters.participantsVoted.length,
+	countCells: (state, getters, rootState, rootGetters) => getters.countParticipants * rootGetters['options/count'],
 }
 
 const actions = {

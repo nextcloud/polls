@@ -75,7 +75,7 @@ class Version030000Date20210704120000 extends SimpleMigrationStep {
 		TableSchema::createOrUpdateSchema($schema, $output);
 		// remove old migration entries from versions prior to polls 3.x
 		// including migration versions from test releases
-		// theoretically, only this migration should be existen. If not, no matter
+		// theoretically, only this migration should be existent. If not, no matter
 		TableSchema::removeObsoleteMigrations($this->connection, $output);
 
 		$this->fixVotes->run($output);

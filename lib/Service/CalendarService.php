@@ -57,9 +57,6 @@ class CalendarService {
 	/**
 	 * getEvents - get events from the user's calendars inside given timespan
 	 *
-	 * @param DateTime $from
-	 * @param DateTime $to
-	 *
 	 * @return CalendarEvent[]
 	 *
 	 * @psalm-return list<CalendarEvent>
