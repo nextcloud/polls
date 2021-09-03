@@ -83,7 +83,7 @@ const getters = {
 		if (state.type === 'textPoll') {
 			return rootGetters['settings/viewTextPoll']
 		} else if (state.type === 'datePoll') {
-			return rootGetters.['settings/viewDatePoll']
+			return rootGetters['settings/viewDatePoll']
 		}
 		return 'table-view'
 	},
