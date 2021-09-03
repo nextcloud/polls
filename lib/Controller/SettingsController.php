@@ -83,5 +83,4 @@ class SettingsController extends Controller {
 			return ['appSettings' => $this->getAppSettings()];
 		});
 	}
-
 }

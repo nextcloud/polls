@@ -27,16 +27,15 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
 class PersonalSettings implements ISettings {
+	public function getForm(): TemplateResponse {
+		return new TemplateResponse('polls', 'settings', []);
+	}
 
-    public function getForm(): TemplateResponse {
-        return new TemplateResponse('polls', 'settings', []);
-    }
+	public function getSection(): string {
+		return 'polls';
+	}
 
-    public function getSection(): string {
-        return 'polls';
-    }
-
-    public function getPriority(): int {
-            return 50;
-    }
+	public function getPriority(): int {
+		return 50;
+	}
 }
