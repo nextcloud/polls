@@ -22,7 +22,7 @@
  */
 
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import settings from './store/modules/settings'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { getRequestToken } from '@nextcloud/auth'
@@ -46,7 +46,7 @@ Vue.component('ButtonDiv', ButtonDiv)
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
+const store = new Store({
 	modules: {
 		settings,
 	},
