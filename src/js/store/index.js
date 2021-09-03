@@ -23,7 +23,7 @@
  */
 
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import modules from './modules'
 
 Vue.use(Vuex)
@@ -31,7 +31,7 @@ Vue.use(Vuex)
 /* eslint-disable-next-line no-unused-vars */
 const debug = process.env.NODE_ENV !== 'production'
 
-export default new Vuex.Store({
+export default new Store({
 	modules,
 	strict: process.env.NODE_ENV !== 'production',
 })
