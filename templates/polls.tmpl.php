@@ -1,4 +1,5 @@
 <?php
+
 	/**
 	 * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
 	 *
@@ -21,6 +22,6 @@
 	 *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	 *
 	 */
-     declare(strict_types=1);
+	 declare(strict_types=1);
 
-     script('polls', 'polls');
+	 script('polls', 'polls');

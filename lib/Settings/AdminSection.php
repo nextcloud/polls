@@ -29,31 +29,30 @@ use OCP\Settings\IIconSection;
 
 class AdminSection implements IIconSection {
 
-        /** @var IL10N */
-        private $trans;
+		/** @var IL10N */
+	private $trans;
 
-        /** @var IURLGenerator */
-        private $urlGenerator;
+	/** @var IURLGenerator */
+	private $urlGenerator;
 
-        public function __construct(IL10N $trans, IURLGenerator $urlGenerator) {
-                $this->trans = $trans;
-                $this->urlGenerator = $urlGenerator;
-        }
+	public function __construct(IL10N $trans, IURLGenerator $urlGenerator) {
+		$this->trans = $trans;
+		$this->urlGenerator = $urlGenerator;
+	}
 
-        public function getID(): string {
-                return 'polls-admin';
-        }
+	public function getID(): string {
+		return 'polls-admin';
+	}
 
-        public function getName(): string {
-                return $this->trans->t('Polls');
-        }
+	public function getName(): string {
+		return $this->trans->t('Polls');
+	}
 
-        public function getPriority(): int {
-                return 80;
-        }
+	public function getPriority(): int {
+		return 80;
+	}
 
-        public function getIcon(): string {
-                return $this->urlGenerator->imagePath('polls', 'polls.svg');
-        }
-
+	public function getIcon(): string {
+		return $this->urlGenerator->imagePath('polls', 'polls.svg');
+	}
 }

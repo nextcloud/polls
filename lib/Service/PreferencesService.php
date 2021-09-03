@@ -59,7 +59,7 @@ class PreferencesService {
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userId);
 		} catch (DoesNotExistException $e) {
-			if ($UserId) {
+			if ($this->userId) {
 				$this->preferences = new Preferences();
 				$this->preferences->setUserId($this->userId);
 				$this->preferences->setPreferences('');
