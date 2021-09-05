@@ -54,9 +54,14 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_COMMENT_ADD = 'comment';
 	public const PERMISSION_OPTIONS_ADD = 'add_options';
 	public const PERMISSION_VOTE_EDIT = 'vote';
+	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
+	public const PERMISSION_ALL_ACCESS = 'allAccess';
 
 	/** @var IUserManager */
 	private $userManager;
+
+	/** @var AppSettings */
+	private $appSettings;
 
 	/** @var IGroupManager */
 	private $groupManager;
@@ -90,6 +95,7 @@ class Acl implements JsonSerializable {
 		$this->shareMapper = $shareMapper;
 		$this->poll = new Poll;
 		$this->share = new Share;
+		$this->appSettings = new AppSettings;
 	}
 
 
@@ -220,6 +226,11 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_VOTE_EDIT:
 				return !$this->poll->getExpired() && $this->share->getType() !== Share::TYPE_PUBLIC;
 
+			case self::PERMISSION_ALL_ACCESS:
+				return $this->appSettings->getAllAccessAllowed();
+
+			case self::PERMISSION_PUBLIC_SHARES:
+				return $this->appSettings->getPublicSharesAllowed();
 		}
 
 		return false;
@@ -234,10 +245,12 @@ class Acl implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return	[
 			'allowAddOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
+			'allowAllAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
 			'allowArchive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
 			'allowComment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
 			'allowDelete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
 			'allowEdit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+			'allowPublicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
 			'allowSeeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
 			'allowSeeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
 			'allowSubscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),

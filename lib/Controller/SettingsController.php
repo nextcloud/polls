@@ -23,64 +23,66 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Model\Group;
+use OCA\Polls\Service\SettingsService;
 
 class SettingsController extends Controller {
 
-	/** @var IConfig */
-	private $config;
+	/** @var SettingsService */
+	private $settingsService;
 
 	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		IConfig $config
+		SettingsService $settingsService
+
 	) {
 		parent::__construct($appName, $request);
-		$this->config = $config;
+		$this->settingsService = $settingsService;
 	}
 
 	/**
-	 * Read globals
+	 * Read app settings
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 */
 	public function getAppSettings(): DataResponse {
 		return $this->response(function (): array {
-			$appSettings = json_decode($this->config->getAppValue('polls', 'globals'));
-
-			// convert group ids to group objects
-			foreach ($appSettings->allowPublicSharesGroups as &$group) {
-				$group = new Group($group);
-			}
-			foreach ($appSettings->allowAllAccessGroups as &$group) {
-				$group = new Group($group);
-			}
-			foreach ($appSettings->allowPollCreationGroups as &$group) {
-				$group = new Group($group);
-			}
-			return ['appSettings' => $appSettings];
+			return ['appSettings' => $this->settingsService->getAppSettings()];
 		});
 	}
 
 	/**
-	 * Write globals
-	 * @NoCSRFRequired
+	 * Write app settings
 	 */
 	public function writeAppSettings(array $appSettings): DataResponse {
-		// reduce groups to their ids
-		$appSettings['allowAllAccessGroups'] = array_column($appSettings['allowAllAccessGroups'], 'id');
-		$appSettings['allowPublicSharesGroups'] = array_column($appSettings['allowPublicSharesGroups'], 'id');
-		$appSettings['allowPollCreationGroups'] = array_column($appSettings['allowPollCreationGroups'], 'id');
+		$this->settingsService->writeAppSettings($appSettings);
+		return $this->response(function (): array {
+			return ['appSettings' => $this->settingsService->getAppSettings()];
+		});
+	}
+	/**
+	 * Read user preferences
+	 * @NoAdminRequired
+	 */
+	public function getUserSettings(): DataResponse {
+		return $this->response(function (): array {
+			return ['appSettings' => $this->settingsService->getUserSettings()];
+		});
+	}
 
-		return $this->response(function () use ($appSettings) {
-			$this->config->setAppValue('polls', 'globals', json_encode($appSettings));
-			return ['appSettings' => $this->getAppSettings()];
+	/**
+	 * Write user preferences
+	 * @NoAdminRequired
+	 */
+	public function writeUserSettings(array $appSettings): DataResponse {
+		$this->settingsService->writeUserSettings($appSettings);
+		return $this->response(function (): array {
+			return ['appSettings' => $this->settingsService->getAppSettings()];
 		});
 	}
 }

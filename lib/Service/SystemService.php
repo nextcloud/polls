@@ -98,9 +98,7 @@ class SystemService {
 	 * @return Group[]
 	 */
 	public function getGroups(string $query = ''): array {
-		\OC::$server->getLogger()->error('hallo');
 		$groups = Group::search($query);
-		\OC::$server->getLogger()->error(json_encode($groups));
 		return $groups;
 		if ($query === '') {
 			return [];

@@ -104,10 +104,10 @@ export default {
 		},
 		publicSharesGroups: {
 			get() {
-				return this.appSettings.allowPublicSharesGroups
+				return this.appSettings.publicSharesGroups
 			},
 			set(value) {
-				this.writeValue({ allowPublicSharesGroups: value })
+				this.writeValue({ publicSharesGroups: value })
 			},
 		},
 		allAccessLimited: {
@@ -120,10 +120,10 @@ export default {
 		},
 		allAccessGroups: {
 			get() {
-				return this.appSettings.allowAllAccessGroups
+				return this.appSettings.allAccessGroups
 			},
 			set(value) {
-				this.writeValue({ allowAllAccessGroups: value })
+				this.writeValue({ allAccessGroups: value })
 			},
 		},
 	},

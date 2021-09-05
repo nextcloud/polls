@@ -244,7 +244,9 @@ class ShareService {
 	public function add(int $pollId, string $type, string $userId = ''): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 
-		if ($type !== UserGroupClass::TYPE_PUBLIC) {
+		if ($type === UserGroupClass::TYPE_PUBLIC) {
+			$this->acl->request(ACL::PERMISSION_PUBLIC_SHARES);
+		} else {
 			try {
 				$this->shareMapper->findByPollAndUser($pollId, $userId);
 				throw new ShareAlreadyExistsException;

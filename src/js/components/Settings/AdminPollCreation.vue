@@ -84,10 +84,10 @@ export default {
 		},
 		createPollGroups: {
 			get() {
-				return this.appSettings.allowPollCreationGroups
+				return this.appSettings.pollCreationGroups
 			},
 			set(value) {
-				this.writeValue({ allowPollCreationGroups: value })
+				this.writeValue({ pollCreationGroups: value })
 			},
 		},
 	},

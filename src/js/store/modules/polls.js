@@ -28,6 +28,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const state = {
 	list: [],
+	isPollCreationAllowed: false,
 	categories: [
 		{
 			id: 'relevant',
@@ -36,6 +37,7 @@ const state = {
 			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago.'),
 			icon: 'icon-details',
 			pinned: false,
+			createDependent: false,
 		},
 		{
 			id: 'my',
@@ -44,6 +46,7 @@ const state = {
 			description: t('polls', 'Your polls (in which you are the owner).'),
 			icon: 'icon-user',
 			pinned: false,
+			createDependent: true,
 		},
 		{
 			id: 'hidden',
@@ -52,6 +55,7 @@ const state = {
 			description: t('polls', 'All hidden polls, to which you have access.'),
 			icon: 'icon-polls-hidden-poll',
 			pinned: false,
+			createDependent: true,
 		},
 		{
 			id: 'participated',
@@ -60,6 +64,7 @@ const state = {
 			description: t('polls', 'All polls, where you placed a vote.'),
 			icon: 'icon-polls-confirmed',
 			pinned: false,
+			createDependent: false,
 		},
 		{
 			id: 'public',
@@ -68,6 +73,7 @@ const state = {
 			description: t('polls', 'A complete list with all public polls on this site, regardless who is the owner.'),
 			icon: 'icon-link',
 			pinned: false,
+			createDependent: true,
 		},
 		{
 			id: 'all',
@@ -76,6 +82,7 @@ const state = {
 			description: t('polls', 'All polls, where you have access to.'),
 			icon: 'icon-polls',
 			pinned: false,
+			createDependent: false,
 		},
 		{
 			id: 'closed',
@@ -84,6 +91,7 @@ const state = {
 			description: t('polls', 'All closed polls, where voting is disabled.'),
 			icon: 'icon-polls-closed',
 			pinned: false,
+			createDependent: false,
 		},
 		{
 			id: 'archived',
@@ -92,6 +100,7 @@ const state = {
 			description: t('polls', 'Your archived polls are only accessible to you.'),
 			icon: 'icon-category-app-bundles',
 			pinned: true,
+			createDependent: true,
 		},
 	],
 }
@@ -102,9 +111,19 @@ const mutations = {
 	set(state, payload) {
 		Object.assign(state, payload)
 	},
+	setPollCreationAllowed(state, payload) {
+		state.isPollCreationAllowed = payload.pollCreationAllowed
+	},
 }
 
 const getters = {
+	categories(state) {
+		if (state.isPollCreationAllowed) {
+			return state.categories
+		}
+		return state.categories.filter((category) => (!category.createDependent))
+	},
+
 	filtered: (state) => (filterId) => {
 		if (filterId === 'all') {
 			return state.list.filter((poll) => (!poll.deleted))
@@ -142,7 +161,8 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
-			context.commit('set', { list: response.data })
+			context.commit('set', { list: response.data.list })
+			context.commit('setPollCreationAllowed', { pollCreationAllowed: response.data.pollCreationAllowed })
 		} catch (e) {
 			console.error('Error loading polls', { error: e.response })
 		}

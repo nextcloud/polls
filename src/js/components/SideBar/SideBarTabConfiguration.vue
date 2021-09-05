@@ -50,9 +50,9 @@
 			<ConfigClosing @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Access')" icon-class="icon-category-auth">
+		<ConfigBox v-if="acl.isOwner || acl.allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">
 			<ConfigAdminAccess v-if="acl.isOwner" @change="writePoll" />
-			<ConfigAccess @change="writePoll" />
+			<ConfigAccess v-if="acl.allowAllAccess" @change="writePoll" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">

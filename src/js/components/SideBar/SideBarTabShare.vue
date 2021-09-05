@@ -27,7 +27,7 @@
 		<ConfigBox :title="t('polls', 'Add Shares')" icon-class="icon-add">
 			<UserSearch />
 		</ConfigBox>
-		<SharesPublic />
+		<SharesPublic v-if="allowPublicShares"/>
 		<SharesUnsent />
 	</div>
 </template>
@@ -54,6 +54,7 @@ export default {
 	computed: {
 		...mapState({
 			isOwner: (state) => state.poll.acl.isOwner,
+			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
 		}),
 	},
 

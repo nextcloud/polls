@@ -56,7 +56,6 @@ class SystemController extends Controller {
 	 * Get a combined list of NC groups
 	 */
 	public function groupAll(): DataResponse {
-		\OC::$server->getLogger()->error('query=\'\'');
 		return new DataResponse(['groups' => $this->systemService->getGroups(
 			$query)], Http::STATUS_OK);
 	}
@@ -65,7 +64,6 @@ class SystemController extends Controller {
 	 * Get a combined list of NC groups
 	 */
 	public function groupSearch(string $query = ''): DataResponse {
-		\OC::$server->getLogger()->error('query= \''. $query . '\'');
 		return new DataResponse(['groups' => $this->systemService->getGroups(
 			$query)], Http::STATUS_OK);
 	}

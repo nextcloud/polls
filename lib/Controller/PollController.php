@@ -31,6 +31,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AppSettings;
 
 class PollController extends Controller {
 
@@ -70,7 +71,12 @@ class PollController extends Controller {
 
 	public function list(): DataResponse {
 		return $this->response(function () {
-			return $this->pollService->list();
+			// return $this->pollService->list();
+			$appSettings = new AppSettings;
+			return [
+				'list' => $this->pollService->list(),
+				'pollCreationAllowed' => $appSettings->getCreationAllowed(),
+			];
 		});
 	}
 

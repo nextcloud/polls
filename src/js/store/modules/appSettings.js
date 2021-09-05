@@ -26,11 +26,11 @@ import { generateUrl } from '@nextcloud/router'
 const defaultAppSettings = () => ({
 	appSettings: {
 		allowPublicShares: true,
-		allowPublicSharesGroups: [],
 		allowAllAccess: true,
-		allowAllAccessGroups: [],
 		allowPollCreation: true,
-		allowPollCreationGroups: [],
+		allAccessGroups: [],
+		publicSharesGroups: [],
+		pollCreationGroups: [],
 	},
 })
 

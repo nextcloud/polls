@@ -217,6 +217,10 @@ class PollService {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
+		if (isset($poll['access']) && $poll['access'] === (Poll::ACCESS_PUBLIC)) {
+			$this->acl->request(Acl::PERMISSION_ALL_ACCESS);
+		}
+
 		// Set the expiry time to the actual servertime to avoid an
 		// expiry misinterpration when using acl
 		if (isset($poll['expire']) && $poll['expire'] < 0) {

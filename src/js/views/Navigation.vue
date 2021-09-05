@@ -22,7 +22,10 @@
 
 <template lang="html">
 	<AppNavigation>
-		<AppNavigationNew button-class="icon-add" :text="t('polls', 'Add new Poll')" @click="toggleCreateDlg" />
+		<AppNavigationNew v-if="isPollCreationAllowed"
+			button-class="icon-add"
+			:text="t('polls', 'Add new Poll')"
+			@click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
 		<template #list>
 			<AppNavigationItem v-for="(pollCategory) in pollCategories"
@@ -82,10 +85,11 @@ export default {
 
 	computed: {
 		...mapState({
-			pollCategories: (state) => state.polls.categories,
+			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
 		}),
 
 		...mapGetters({
+			pollCategories: 'polls/categories',
 			filteredPolls: 'polls/filtered',
 		}),
 
