@@ -23,47 +23,44 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
-use OCA\Polls\Service\SystemService;
-
 use OCP\IRequest;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
+use OCA\Polls\Service\SettingsService;
 
-class SystemController extends Controller {
+class SettingsController extends Controller {
 
-	/** @var SystemService */
-	private $systemService;
+	/** @var SettingsService */
+	private $settingsService;
+
+	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		SystemService $systemService
+		SettingsService $settingsService
 	) {
 		parent::__construct($appName, $request);
-		$this->systemService = $systemService;
+		$this->settingsService = $settingsService;
 	}
 
 	/**
-	 * Get a combined list of NC users, groups and contacts
+	 * Read app settings
 	 * @NoAdminRequired
 	 */
-	public function userSearch(string $query = ''): DataResponse {
-		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
-			$query)], Http::STATUS_OK);
-	}
-	/**
-	 * Get a combined list of NC groups
-	 */
-	public function groupAll(): DataResponse {
-		return new DataResponse(['groups' => $this->systemService->getGroups()], Http::STATUS_OK);
+	public function getAppSettings(): DataResponse {
+		return $this->response(function (): array {
+			return ['appSettings' => $this->settingsService->getAppSettings()];
+		});
 	}
 
 	/**
-	 * Get a combined list of NC groups
+	 * Write app settings
 	 */
-	public function groupSearch(string $query = ''): DataResponse {
-		return new DataResponse(['groups' => $this->systemService->getGroups(
-			$query)], Http::STATUS_OK);
+	public function writeAppSettings(array $appSettings): DataResponse {
+		$this->settingsService->writeAppSettings($appSettings);
+		return $this->response(function (): array {
+			return ['appSettings' => $this->settingsService->getAppSettings()];
+		});
 	}
 }

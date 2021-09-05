@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,15 +21,21 @@
  *
  */
 
-namespace OCA\Polls\Exceptions;
+namespace OCA\Polls\Settings;
 
-use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\Settings\ISettings;
 
-class InvalidUsernameException extends Exception {
-	/**
-	 * InvalidUsernameException Constructor
-	 */
-	public function __construct(string $e = 'Username not allowed') {
-		parent::__construct($e, Http::STATUS_FORBIDDEN);
+class AdminSettings implements ISettings {
+	public function getForm(): TemplateResponse {
+		return new TemplateResponse('polls', 'admin', []);
+	}
+
+	public function getSection(): string {
+		return 'polls-admin';
+	}
+
+	public function getPriority():int {
+		return 50;
 	}
 }

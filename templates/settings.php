@@ -1,9 +1,7 @@
 <?php
-
 	/**
 	 * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
 	 *
-	 * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
 	 * @author René Gieling <github@dartcafe.de>
 	 *
 	 * @license GNU AGPL version 3 or any later version
@@ -24,4 +22,6 @@
 	 */
 	 declare(strict_types=1);
 
-	 script('polls', 'polls');
+	 script('polls', 'userSettings');
+?>
+<div id="user_settings" />

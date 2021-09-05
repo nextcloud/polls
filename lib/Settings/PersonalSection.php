@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,15 +21,38 @@
  *
  */
 
-namespace OCA\Polls\Exceptions;
+namespace OCA\Polls\Settings;
 
-use OCP\AppFramework\Http;
+use OCP\IL10N;
+use OCP\IURLGenerator;
+use OCP\Settings\IIconSection;
 
-class InvalidUsernameException extends Exception {
-	/**
-	 * InvalidUsernameException Constructor
-	 */
-	public function __construct(string $e = 'Username not allowed') {
-		parent::__construct($e, Http::STATUS_FORBIDDEN);
+class PersonalSection implements IIconSection {
+
+		/** @var IL10N */
+	private $trans;
+
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
+	public function __construct(IL10N $trans, IURLGenerator $urlGenerator) {
+		$this->trans = $trans;
+		$this->urlGenerator = $urlGenerator;
+	}
+
+	public function getID(): string {
+		return 'polls';
+	}
+
+	public function getName(): string {
+		return $this->trans->t('Polls');
+	}
+
+	public function getPriority(): int {
+		return 80;
+	}
+
+	public function getIcon(): string {
+		return $this->urlGenerator->imagePath('polls', 'polls-black.svg');
 	}
 }

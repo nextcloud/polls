@@ -22,9 +22,13 @@
  */
 
 const defaultAcl = () => ({
-	allowComment: false,
-	allowEdit: false,
 	allowAddOptions: false,
+	allowAllAccess: false,
+	allowArchive: false,
+	allowComment: false,
+	allowDelete: false,
+	allowEdit: false,
+	allowPublicShares: false,
 	allowSeeResults: false,
 	allowSeeUsernames: false,
 	allowSubscribe: false,

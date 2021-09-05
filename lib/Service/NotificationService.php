@@ -63,19 +63,6 @@ class NotificationService {
 		return true;
 	}
 
-	/**
-	 * create a notification
-	 *
-	 * @param array $params
-	 * 				List of parameters sent to the notification
-	 * 				following types MUST be defined in the §params array:
-	 * 				msgId => Type for setSubject
-	 * 				objectType => Type for setObject
-	 * 				objectValue => Value for setObject
-	 * 				recipient => the recipient of the notification
-	 * 				$params will be set as Subject value
-	 */
-
 	public function createNotification(array $params = []): bool {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp(self::APP_ID)

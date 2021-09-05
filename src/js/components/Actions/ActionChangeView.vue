@@ -60,10 +60,13 @@ export default {
 	computed: {
 		...mapState({
 			pollType: (state) => state.poll.type,
+			manualViewDatePoll: (state) => state.settings.manualViewDatePoll,
+			manualViewTextPoll: (state) => state.settings.manualViewTextPoll,
 		}),
 
 		...mapGetters({
-			viewMode: 'settings/viewMode',
+			viewMode: 'poll/viewMode',
+			getNextViewMode: 'poll/getNextViewMode',
 		}),
 
 		caption() {
@@ -84,10 +87,17 @@ export default {
 	},
 
 	methods: {
+		changeView() {
+			if (this.pollType === 'datePoll') {
+				this.$store.commit('settings/setViewDatePoll', this.manualViewDatePoll ? '' : this.getNextViewMode)
+			} else if (this.pollType === 'textPoll') {
+				this.$store.commit('settings/setViewTextPoll', this.manualViewTextPoll ? '' : this.getNextViewMode)
+			}
+		},
 
 		clickAction() {
 			emit('transitions-off', 500)
-			this.$store.dispatch('settings/changeView')
+			this.changeView()
 		},
 	},
 }

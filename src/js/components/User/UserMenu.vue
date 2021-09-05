@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Actions default-icon="icon-settings">
+	<Actions default-icon="icon-settings" primary>
 		<ActionButton v-if="$route.name === 'publicVote'" icon="icon-clippy" @click="copyLink()">
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</ActionButton>

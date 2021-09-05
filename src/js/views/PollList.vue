@@ -55,8 +55,9 @@
 					@goto-poll="gotoPoll(poll.id)"
 					@load-poll="loadPoll(poll.id)">
 					<template #actions>
-						<Actions :force-menu="true">
-							<ActionButton icon="icon-add"
+						<Actions force-menu>
+							<ActionButton v-if="isPollCreationAllowed"
+								icon="icon-add"
 								:close-after-click="true"
 								@click="clonePoll(poll.id)">
 								{{ t('polls', 'Clone poll') }}
@@ -122,6 +123,7 @@ export default {
 	computed: {
 		...mapState({
 			pollCategories: (state) => state.polls.categories,
+			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
 		}),
 
 		...mapGetters({

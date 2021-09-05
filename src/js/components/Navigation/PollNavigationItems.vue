@@ -26,7 +26,7 @@
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ closed: closed }">
 		<template #actions>
-			<ActionButton icon="icon-polls-clone" @click="$emit('clone-poll')">
+			<ActionButton v-if="isPollCreationAllowed" icon="icon-polls-clone" @click="$emit('clone-poll')">
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 
@@ -54,7 +54,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { ActionButton, AppNavigationItem } from '@nextcloud/vue'
 
 export default {
@@ -73,6 +73,10 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
+		}),
+
 		...mapGetters({
 			closed: 'poll/isClosed',
 		}),
