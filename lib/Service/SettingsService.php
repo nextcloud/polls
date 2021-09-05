@@ -67,21 +67,6 @@ class SettingsService {
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
 	}
 
-	/**
-	* Read user preferences
-	 */
-	public function getUserSettings(): object {
-		$userSettings = json_decode($this->config->getUserValue($this->userId, 'polls', 'preferences'));
-		return $userSettings;
-	}
-
-	/**
-	 * Write user preferences
-	 */
-	public function writeUserSettings($preferences): void {
-		$this->config->setUserValue($this->user, 'polls', 'globals', json_encode($preferences));
-	}
-
 	protected static function getContainer() {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();

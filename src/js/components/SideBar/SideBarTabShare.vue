@@ -27,7 +27,7 @@
 		<ConfigBox :title="t('polls', 'Add Shares')" icon-class="icon-add">
 			<UserSearch />
 		</ConfigBox>
-		<SharesPublic v-if="allowPublicShares"/>
+		<SharesPublic v-if="allowPublicShares" />
 		<SharesUnsent />
 	</div>
 </template>

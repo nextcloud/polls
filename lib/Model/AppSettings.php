@@ -39,8 +39,11 @@ class AppSettings implements JsonSerializable {
 	/** @var IConfig */
 	private $config;
 
+	/** @var IGroupManager */
+	private $groupManager;
+
 	/** @var string */
-	private $userId = true;
+	private $userId = '';
 
 	/** @var bool */
 	private $allowPublicShares = true;
@@ -106,15 +109,15 @@ class AppSettings implements JsonSerializable {
 
 	// Setters
 	public function setAllowPublicShares(bool $value) {
-		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', $value);
+		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', strval($value));
 	}
 
 	public function setAllowAllAccess(bool $value) {
-		$this->config->setAppValue(self::APP_NAME, 'allowAllAccess', $value);
+		$this->config->setAppValue(self::APP_NAME, 'allowAllAccess', strval($value));
 	}
 
 	public function setAllowPollCreation(bool $value) {
-		$this->config->setAppValue(self::APP_NAME, 'allowPollCreation', $value);
+		$this->config->setAppValue(self::APP_NAME, 'allowPollCreation', strval($value));
 	}
 
 	public function setPublicSharesGroups(array $value) {
@@ -151,9 +154,6 @@ class AppSettings implements JsonSerializable {
 			'allAccessGroups' => $allAccessGroups,
 			'pollCreationGroups' => $pollCreationGroups,
 			'publicSharesGroups' => $publicSharesGroups,
-			// 'creationIsAllowed' => $this->getCreationAllowed(),
-			// 'allAccessIsAllowed' => $this->getAllAccessAllowed(),
-			// 'publicSharesIsAllowed' => $this->getPublicSharesAllowed(),
 		];
 	}
 

@@ -56,8 +56,7 @@ class SystemController extends Controller {
 	 * Get a combined list of NC groups
 	 */
 	public function groupAll(): DataResponse {
-		return new DataResponse(['groups' => $this->systemService->getGroups(
-			$query)], Http::STATUS_OK);
+		return new DataResponse(['groups' => $this->systemService->getGroups()], Http::STATUS_OK);
 	}
 
 	/**
