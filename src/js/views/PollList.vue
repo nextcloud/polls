@@ -55,7 +55,7 @@
 					@goto-poll="gotoPoll(poll.id)"
 					@load-poll="loadPoll(poll.id)">
 					<template #actions>
-						<Actions :force-menu="true">
+						<Actions force-menu>
 							<ActionButton v-if="isPollCreationAllowed"
 								icon="icon-add"
 								:close-after-click="true"

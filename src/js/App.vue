@@ -243,7 +243,7 @@ export default {
 .app-content {
 	display: flex;
 	flex-direction: column;
-	padding: 0 8px 0 40px;
+	padding: 4px 8px 0 40px;
 	min-width: 320px;
 }
 
