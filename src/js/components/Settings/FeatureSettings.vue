@@ -26,7 +26,7 @@
 			<CheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
 				{{ t('polls', 'Use calendar lookup') }}
 			</CheckboxRadioSwitch>
-			<div class="settings_details">
+			<div v-show="calendarPeek" class="settings_details">
 				{{ t('polls', 'Check, if an option in a date poll is conflicting with or near an entry in your calendar.') }}
 				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
 
