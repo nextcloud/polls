@@ -23,9 +23,10 @@
 <template>
 	<div class="user_settings">
 		<CheckboxRadioSwitch :checked.sync="publicSharesLimited" type="switch">
-			{{ t('polls', 'Limit the creation of public shares to groups') }}
+			{{ t('polls', 'Disallow public shares') }}
 		</CheckboxRadioSwitch>
 		<div v-if="publicSharesLimited" class="settings_details">
+			<div>{{ t('polls','Allow public shares for the following groups') }}</div>
 			<Multiselect
 				v-model="publicSharesGroups"
 				class="stretch"
@@ -39,13 +40,13 @@
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disallow for all')"
 				@search-change="loadGroups" />
-			<div>{{ t('polls','Leave groups empty, to completely disable the creation of new public shares! Already created public shares will still be accessible.') }}</div>
 		</div>
 
 		<CheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
-			{{ t('polls', 'Limit \"All users\" access to groups') }}
+			{{ t('polls', 'Disallow publishing polls to all users.') }}
 		</CheckboxRadioSwitch>
 		<div v-if="allAccessLimited" class="settings_details">
+			<div>{{ t('polls','Allow poll sharing to all users for the following groups') }}</div>
 			<Multiselect
 				v-model="allAccessGroups"
 				class="stretch"
@@ -59,7 +60,6 @@
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disallow for all')"
 				@search-change="loadGroups" />
-			<div>{{ t('polls','Leave groups empty, to disallow users to invite all users of this instance! Existing polls with \"All users\" access are not affected by this setting.') }}</div>
 		</div>
 	</div>
 </template>

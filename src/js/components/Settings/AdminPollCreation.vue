@@ -23,9 +23,10 @@
 <template>
 	<div class="user_settings">
 		<CheckboxRadioSwitch :checked.sync="createPollLimited" type="switch">
-			{{ t('polls', 'Limit poll creation to groups') }}
+			{{ t('polls', 'Disallow poll creation for all users') }}
 		</CheckboxRadioSwitch>
 		<div v-if="createPollLimited" class="settings_details">
+			<div>{{ t('polls','Allow poll creation for the following groups') }}</div>
 			<Multiselect
 				v-model="createPollGroups"
 				class="stretch"
@@ -39,7 +40,6 @@
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disallow for all')"
 				@search-change="loadGroups" />
-			<div>{{ t('polls','Leave groups empty, to completely disable the creation of new polls.') }}</div>
 		</div>
 	</div>
 </template>
