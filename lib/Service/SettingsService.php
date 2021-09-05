@@ -71,6 +71,4 @@ class SettingsService {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
 	}
-
-
 }

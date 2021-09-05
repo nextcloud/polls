@@ -27,10 +27,6 @@ use JsonSerializable;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
-use OCP\App\IAppManager;
-use OCA\Circles\Api\v1\Circles;
-use OCA\Circles\Model\Circle as CirclesCircle;
-use OCA\Polls\Exceptions\CirclesNotEnabledException;
 use OCA\Polls\AppInfo\Application;
 
 class AppSettings implements JsonSerializable {
@@ -100,7 +96,7 @@ class AppSettings implements JsonSerializable {
 	}
 
 	public function getAllAccessAllowed() {
-		 return $this->getAllowAllAccess() || $this->isMember($this->getAllAccessGroups());
+		return $this->getAllowAllAccess() || $this->isMember($this->getAllAccessGroups());
 	}
 
 	public function getPublicSharesAllowed() {
@@ -132,7 +128,7 @@ class AppSettings implements JsonSerializable {
 		$this->config->setAppValue(self::APP_NAME, 'pollCreationGroups', json_encode($value));
 	}
 
-	public function jsonSerialize()  {
+	public function jsonSerialize() {
 		// convert group ids to group objects
 		$publicSharesGroups = [];
 		$allAccessGroups = [];
