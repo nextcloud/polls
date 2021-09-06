@@ -57,8 +57,11 @@ class JanitorCron extends TimedJob {
 		$this->logMapper->deleteProcessedEntries(); // delete processed log entries
 		$this->logMapper->deleteOldEntries(time() - (86400 * 7)); // delete entries older than 7 days
 		$this->watchMapper->deleteOldEntries(time() - 86400); // delete entries older than 1 day
-		if ($this->appSettings->getAutoArchive()) {
-			$this->pollMapper->archiveExpiredPolls(time() - ($this->appSettings->getAutoArchiveOffset() * 86400)); // delete entries older than 7 days
+
+		if ($this->appSettings->getAutoArchive() && $this->appSettings->getAutoArchiveOffset() > 0) {
+			$this->pollMapper->archiveExpiredPolls(
+				time() - ($this->appSettings->getAutoArchiveOffset() * 86400)
+			); // archive polls after defined days after closing date
 		}
 	}
 }
