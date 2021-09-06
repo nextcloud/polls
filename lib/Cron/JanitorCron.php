@@ -37,6 +37,9 @@ class JanitorCron extends TimedJob {
 	/** @var WatchMapper */
 	private $watchMapper;
 
+	/** @var AppSettings */
+	private $appSettings;
+
 	public function __construct(
 		ITimeFactory $time,
 		LogMapper $logMapper,
