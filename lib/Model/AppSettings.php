@@ -38,6 +38,9 @@ class AppSettings implements JsonSerializable {
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var IUserSession */
+	private $session;
+
 	/** @var string */
 	private $userId = '';
 
@@ -61,7 +64,10 @@ class AppSettings implements JsonSerializable {
 
 	public function __construct() {
 		$this->config = self::getContainer()->query(IConfig::class);
-		$this->userId = self::getContainer()->query(IUserSession::class)->getUser()->getUID();
+		$this->session = self::getContainer()->query(IUserSession::class);
+		if ($this->session->isLoggedIn()) {
+			$this->userId = self::getContainer()->query(IUserSession::class)->getUser()->getUId();
+		}
 		$this->groupManager = self::getContainer()->query(IGroupManager::class);
 	}
 
@@ -92,15 +98,24 @@ class AppSettings implements JsonSerializable {
 
 	// Checks
 	public function getCreationAllowed() {
-		return $this->getAllowPollCreation() || $this->isMember($this->getPollCreationGroups());
+		if ($this->session->isLoggedIn()) {
+			return $this->getAllowPollCreation() || $this->isMember($this->getPollCreationGroups());
+		}
+		return false;
 	}
 
 	public function getAllAccessAllowed() {
-		return $this->getAllowAllAccess() || $this->isMember($this->getAllAccessGroups());
+		if ($this->session->isLoggedIn()) {
+			return $this->getAllowAllAccess() || $this->isMember($this->getAllAccessGroups());
+		}
+		return false;
 	}
 
 	public function getPublicSharesAllowed() {
-		return $this->getAllowPublicShares() || $this->isMember($this->getPublicSharesGroups());
+		if ($this->session->isLoggedIn()) {
+			return $this->getAllowPublicShares() || $this->isMember($this->getPublicSharesGroups());
+		}
+		return false;
 	}
 
 	// Setters
