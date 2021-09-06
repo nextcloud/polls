@@ -58,7 +58,7 @@
 				:preserve-search="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all')"
+				:placeholder="t('polls', 'Leave empty to disallow for all.')"
 				@search-change="loadGroups" />
 		</div>
 	</div>
