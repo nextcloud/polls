@@ -25,6 +25,17 @@
 		<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
 			{{ t('polls', 'Hide login option in public polls') }}
 		</CheckboxRadioSwitch>
+		<CheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
+			{{ t('polls', 'Archive polls automatically ') }}
+		</CheckboxRadioSwitch>
+		<div v-if="autoArchive" class="settings_details">
+			<span>{{ t('polls', 'Define how many days after closing, polls are to be archived:') }}</span>
+			<InputDiv v-model="autoArchiveOffset"
+				class="selectUnit"
+				use-num-modifiers
+				@add="autoArchiveOffset += 1"
+				@subtract="autoArchiveOffset -= 1" />
+		</div>
 	</div>
 </template>
 
@@ -32,12 +43,14 @@
 
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import InputDiv from '../Base/InputDiv'
 
 export default {
 	name: 'AdminMisc',
 
 	components: {
 		CheckboxRadioSwitch,
+		InputDiv,
 	},
 
 	data() {
@@ -59,6 +72,23 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ showLogin: !value })
+			},
+		},
+		autoArchive: {
+			get() {
+				return this.appSettings.autoArchive
+			},
+			set(value) {
+				this.writeValue({ autoArchive: value })
+			},
+		},
+		autoArchiveOffset: {
+			get() {
+				return this.appSettings.autoArchiveOffset
+			},
+			set(value) {
+				value = value < 1 ? 1 : value
+				this.writeValue({ autoArchiveOffset: value })
 			},
 		},
 	},
