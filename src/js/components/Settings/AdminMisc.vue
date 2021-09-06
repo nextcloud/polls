@@ -21,57 +21,67 @@
   -->
 
 <template>
-	<div class="section">
-		<div class="sub-section">
-			<h2>{{ t('polls', 'Share restrictions') }}</h2>
-			<AdminShareSettings />
-		</div>
-
-		<div class="sub-section">
-			<h2>{{ t('polls', 'Poll creation restrictions') }}</h2>
-			<AdminPollCreation />
-		</div>
-		<div class="sub-section">
-			<h2>{{ t('polls', 'Miscellaneous settings') }}</h2>
-			<AdminMisc />
-		</div>
+	<div class="user_settings">
+		<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
+			{{ t('polls', 'Hide login option in public polls') }}
+		</CheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
-import AdminMisc from '../components/Settings/AdminMisc'
-import AdminPollCreation from '../components/Settings/AdminPollCreation'
-import AdminShareSettings from '../components/Settings/AdminShareSettings'
+
+import { mapState } from 'vuex'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
-	name: 'AdminSettingsPage',
+	name: 'AdminMisc',
 
 	components: {
-		AdminMisc,
-		AdminPollCreation,
-		AdminShareSettings,
+		CheckboxRadioSwitch,
 	},
 
-	created() {
-		this.$store.dispatch('appSettings/get')
+	data() {
+		return {
+			searchToken: null,
+			isLoading: false,
+		}
+	},
+
+	computed: {
+		...mapState({
+			appSettings: (state) => state.appSettings.appSettings,
+		}),
+
+		// Add bindings
+		hideLogin: {
+			get() {
+				return !this.appSettings.showLogin
+			},
+			set(value) {
+				this.writeValue({ showLogin: !value })
+			},
+		},
+	},
+
+	methods: {
+		async writeValue(value) {
+			await this.$store.commit('appSettings/set', value)
+			this.$store.dispatch('appSettings/write')
+		},
 	},
 }
 </script>
 
 <style lang="scss">
-	.section {
-		display: flex;
-		flex-wrap: wrap;
-		.section-wrapper {
-			flex: 1 640px;
-		}
-		.sub-section {
-			margin-bottom: 48px;
-			flex: 1 640px;
-		}
+	.user_settings {
+		padding-top: 16px;
+	}
 
-		h2 {
-			margin-bottom: 0;
+	.settings_details {
+		padding-bottom: 16px;
+		margin-left: 36px;
+		input, .stretch {
+			width: 100%;
 		}
 	}
 </style>

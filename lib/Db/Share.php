@@ -27,6 +27,7 @@ use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 use OCA\Polls\Model\UserGroupClass;
+use OCA\Polls\Model\AppSettings;
 
 /**
  * @method int getId()
@@ -86,9 +87,13 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $displayName */
 	protected $displayName;
 
+	/** @var AppSettings */
+	protected $appSettings;
+
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
+		$this->appSettings = new AppSettings;
 	}
 
 	public function jsonSerialize() {
@@ -103,6 +108,7 @@ class Share extends Entity implements JsonSerializable {
 			'displayName' => $this->getDisplayName(),
 			'isNoUser' => !($this->getType() === self::TYPE_USER),
 			'URL' => $this->getURL(),
+			'showLogin' => $this->appSettings->getShowLogin(),
 		];
 	}
 
