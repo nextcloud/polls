@@ -141,8 +141,6 @@ OC.L10N.register(
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Jelölje be ezt, ha a szöveges szavazást függőlegesen igazított listában szeretné megjeleníteni, nem pedig a rács nézetben. A kezdeti alapértelmezés a lista nézet.",
     "Date polls default to list view" : "A dátum szavazások alapértelmezése listanézet",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Jelölje be ezt, ha a dátum szavazást függőleges nézetben szeretné megjeleníteni, nem pedig a rács nézetben. A kezdeti alapértelmezett rács nézet.",
-    "User Settings" : "Felhasználó beállításai",
-    "Experimental Styles" : "Kísérleti stílusok",
     "Public link ({token})" : "Nyilvános hivatkozás ({token})",
     "Effective shares" : "Hatályos megosztások",
     "Resend invitation mail" : "Meghívó e-mail újraküldése",

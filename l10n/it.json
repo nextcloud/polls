@@ -156,8 +156,6 @@
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Marca questa opzione, se preferisci visualizzare il sondaggio di testo in una vista verticale piuttosto che nella vista a griglia. L'impostazione predefinita iniziale è la vista a elenco.",
     "Date polls default to list view" : "In modo predefinito, i sondaggi di date sono visualizzati come elenco",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : " Seleziona questa opzione se preferisci visualizzare il sondaggio di date in una vista verticale piuttosto che nella vista a griglia. L'impostazione predefinita iniziale è la vista a griglia.",
-    "User Settings" : "Impostazioni utente",
-    "Experimental Styles" : "Stili sperimentali",
     "Public link ({token})" : "Collegamento pubblico ({token})",
     "Effective shares" : "Condivisioni effettive",
     "Resend invitation mail" : "Nuovo invio del messaggio di invito",

@@ -101,8 +101,6 @@ OC.L10N.register(
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Merkkaa tämä, jos haluat tekstiäänestykset pystysuuntaiseen listaan ruudukon sijaan. Alkuperäinen oletus on ruudukko.",
     "Date polls default to list view" : "Aikaäänestykset käyttävät listanäkymää oletuksena",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Merkkaa tämä, jos haluat aikaäänestykset pystysuuntaiseen listaan ruudukon sijaan. Alkuperäinen oletus on ruudukko.",
-    "User Settings" : "Käyttäjäasetukset",
-    "Experimental Styles" : "Kokeelliset tyylit",
     "Public link ({token})" : "Julkinen linkki ({token})",
     "Effective shares" : "Voimassa olevat jaot",
     "Resend invitation mail" : "Lähetä uudelleen kutsuviesti",

@@ -107,8 +107,6 @@
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Ελέγξτε αυτό, εάν προτιμάτε να εμφανίζεται η δημοσκόπηση κειμένου σε κατακόρυφη στοίχιση παρά σε προβολή πλέγματος. Η αρχική προεπιλογή είναι προβολή λίστας.",
     "Date polls default to list view" : "Προεπιλογή ημερομηνίας δημοσκοπήσεων σε προβολή λίστας",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Ελέγξτε αυτό, εάν προτιμάτε να εμφανίζεται η δημοσκόπηση ημερομηνίας σε κατακόρυφη προβολή και όχι σε προβολή πλέγματος. Η αρχική προεπιλογή είναι προβολή πλέγματος.",
-    "User Settings" : "Ρυθμίσεις χρήστη",
-    "Experimental Styles" : "Πειραματικά στυλ",
     "Public link ({token})" : "Δημόσιος σύνδεσμος ({token})",
     "Effective shares" : "Αποτελεσματικές μετοχές",
     "Resend invitation mail" : "Επαναποστολή μηνύματος πρόσκλησης",

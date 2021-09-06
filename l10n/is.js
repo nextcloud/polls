@@ -80,8 +80,6 @@ OC.L10N.register(
     "Try experimental styles" : "Prófa stíla á tilraunastigi",
     "Use background image" : "Nota bakgrunnsmynd",
     "Use calendar lookup" : "Nota uppflettingu í dagatali",
-    "User Settings" : "Notandastillingar",
-    "Experimental Styles" : "Stílar á tilraunastigi",
     "Public link ({token})" : "Opinber tengill ({token})",
     "Resend invitation mail" : "Senda boðspóst aftur",
     "Send invitation mail" : "Senda boðspóst",
