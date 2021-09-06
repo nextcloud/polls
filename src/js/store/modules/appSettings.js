@@ -28,6 +28,7 @@ const defaultAppSettings = () => ({
 		allowPublicShares: true,
 		allowAllAccess: true,
 		allowPollCreation: true,
+		showLogin: true,
 		allAccessGroups: [],
 		publicSharesGroups: [],
 		pollCreationGroups: [],

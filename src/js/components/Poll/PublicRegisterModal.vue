@@ -57,7 +57,7 @@
 					</div>
 				</div>
 
-				<div class="registration__login">
+				<div v-if="share.showLogin" class="registration__login">
 					<h2> {{ t('polls', 'You are a registered user of this site?') }} </h2>
 					<ButtonDiv :title="t('polls', 'Login')" @click="login()" />
 					<div>

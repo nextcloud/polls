@@ -48,6 +48,9 @@ class AppSettings implements JsonSerializable {
 	private $allowPublicShares = true;
 
 	/** @var bool */
+	private $showLogin = true;
+
+	/** @var bool */
 	private $allowAllAccess = true;
 
 	/** @var bool */
@@ -96,6 +99,10 @@ class AppSettings implements JsonSerializable {
 		return json_decode($this->config->getAppValue(self::APP_NAME, 'pollCreationGroups'));
 	}
 
+	public function getShowLogin(): bool {
+		return !!$this->config->getAppValue(self::APP_NAME, 'showLogin');
+	}
+
 	// Checks
 	public function getCreationAllowed() {
 		if ($this->session->isLoggedIn()) {
@@ -121,6 +128,10 @@ class AppSettings implements JsonSerializable {
 	// Setters
 	public function setAllowPublicShares(bool $value) {
 		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', strval($value));
+	}
+
+	public function setShowLogin(bool $value) {
+		$this->config->setAppValue(self::APP_NAME, 'showLogin', strval($value));
 	}
 
 	public function setAllowAllAccess(bool $value) {
@@ -165,6 +176,7 @@ class AppSettings implements JsonSerializable {
 			'allAccessGroups' => $allAccessGroups,
 			'pollCreationGroups' => $pollCreationGroups,
 			'publicSharesGroups' => $publicSharesGroups,
+			'showLogin' => $this->getShowLogin(),
 		];
 	}
 

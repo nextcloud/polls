@@ -62,6 +62,7 @@ class SettingsService {
 		$this->appSettings->setAllowPublicShares($settingsArray['allowPublicShares']);
 		$this->appSettings->setAllowAllAccess($settingsArray['allowAllAccess']);
 		$this->appSettings->setAllowPollCreation($settingsArray['allowPollCreation']);
+		$this->appSettings->setShowLogin($settingsArray['showLogin']);
 		$this->appSettings->setAllAccessGroups(array_column($settingsArray['allAccessGroups'], 'id'));
 		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
