@@ -32,7 +32,7 @@
 			<AdminPollCreation />
 		</div>
 		<div class="sub-section">
-			<h2>{{ t('polls', 'Miscellaneous settings') }}</h2>
+			<h2>{{ t('polls', 'Other settings') }}</h2>
 			<AdminMisc />
 		</div>
 	</div>
