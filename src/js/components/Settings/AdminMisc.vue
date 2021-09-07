@@ -26,10 +26,10 @@
 			{{ t('polls', 'Hide login option in public polls') }}
 		</CheckboxRadioSwitch>
 		<CheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
-			{{ t('polls', 'Archive polls automatically ') }}
+			{{ t('polls', 'Archive closed polls automatically') }}
 		</CheckboxRadioSwitch>
 		<div v-if="autoArchive" class="settings_details">
-			<span>{{ t('polls', 'Define how many days after closing, polls are to be archived:') }}</span>
+			<span>{{ t('polls', 'Days after closing, the polls shall be archived:') }}</span>
 			<InputDiv v-model="autoArchiveOffset"
 				class="selectUnit"
 				use-num-modifiers
