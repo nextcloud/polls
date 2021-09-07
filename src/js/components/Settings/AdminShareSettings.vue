@@ -38,12 +38,12 @@
 				:preserve-search="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all')"
+				:placeholder="t('polls', 'Leave empty to disallow for all.')"
 				@search-change="loadGroups" />
 		</div>
 
 		<CheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
-			{{ t('polls', 'Disallow publishing polls to all users.') }}
+			{{ t('polls', 'Disallow publishing poll to all users') }}
 		</CheckboxRadioSwitch>
 		<div v-if="allAccessLimited" class="settings_details">
 			<div>{{ t('polls','Allow poll sharing to all users for the following groups') }}</div>
@@ -58,7 +58,7 @@
 				:preserve-search="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all')"
+				:placeholder="t('polls', 'Leave empty to disallow for all.')"
 				@search-change="loadGroups" />
 		</div>
 	</div>
