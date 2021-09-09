@@ -38,7 +38,9 @@
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "php vendor/vimeo/psalm/psalm",
 		"psalm:fix": "php vendor/vimeo/psalm/psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
-		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true"
+		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true",
+		"psalm:baseline": "php vendor/vimeo/psalm/psalm --set-baseline=psalm-baseline.xml",
+		"psalm:baseline:update": "php vendor/vimeo/psalm/psalm --update-baseline"
 	},
 	"require": {
 		"league/commonmark": "^1.6"

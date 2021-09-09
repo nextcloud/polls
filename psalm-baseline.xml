@@ -1,54 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.7.2@83a0325c0a95c0ab531d6b90c877068b464377b5">
-  <file src="lib/Db/LogMapper.php">
-    <PossiblyInvalidMethodCall occurrences="1">
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
-  </file>
-  <file src="lib/Db/OptionMapper.php">
-    <PossiblyInvalidMethodCall occurrences="1">
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
-  </file>
-  <file src="lib/Db/PreferencesMapper.php">
-    <PossiblyInvalidMethodCall occurrences="1">
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
-  </file>
-  <file src="lib/Db/ShareMapper.php">
-    <PossiblyInvalidMethodCall occurrences="1">
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
-  </file>
-  <file src="lib/Db/SubscriptionMapper.php">
-    <PossiblyInvalidMethodCall occurrences="1">
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
-  </file>
-  <file src="lib/Db/VoteMapper.php">
-    <PossiblyInvalidMethodCall occurrences="1">
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
-  </file>
-  <file src="lib/Migration/Version0009Date20181125061900.php">
-    <PossiblyInvalidMethodCall occurrences="9">
-      <code>closeCursor</code>
-      <code>closeCursor</code>
-      <code>closeCursor</code>
-      <code>closeCursor</code>
-      <code>fetch</code>
-      <code>fetch</code>
-      <code>fetch</code>
-      <code>fetch</code>
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
-  </file>
-  <file src="lib/Migration/Version0010Date20191227063812.php">
-    <PossiblyInvalidMethodCall occurrences="4">
-      <code>closeCursor</code>
-      <code>closeCursor</code>
-      <code>fetch</code>
-      <code>fetch</code>
-    </PossiblyInvalidMethodCall>
+<files psalm-version="4.9.3@4c262932602b9bbab5020863d1eb22d49de0dbf4">
+  <file src="lib/AppInfo/Application.php">
+    <InvalidArgument occurrences="16">
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+    </InvalidArgument>
   </file>
 </files>
