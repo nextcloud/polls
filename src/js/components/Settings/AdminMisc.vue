@@ -29,7 +29,7 @@
 			{{ t('polls', 'Archive closed polls automatically') }}
 		</CheckboxRadioSwitch>
 		<div v-if="autoArchive" class="settings_details">
-			<span>{{ t('polls', 'Days after closing, the polls shall be archived:') }}</span>
+			<span>{{ t('polls', 'After how many days are the closed polls to be archived:') }}</span>
 			<InputDiv v-model="autoArchiveOffset"
 				class="selectUnit"
 				use-num-modifiers
