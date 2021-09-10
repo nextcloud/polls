@@ -26,25 +26,36 @@ namespace OCA\Polls\Cron;
 use OCP\BackgroundJob\TimedJob;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\WatchMapper;
+use OCA\Polls\Model\AppSettings;
 
 class JanitorCron extends TimedJob {
 
 	/** @var LogMapper */
 	private $logMapper;
 
+	/** @var PollMapper */
+	private $pollMapper;
+
 	/** @var WatchMapper */
 	private $watchMapper;
+
+	/** @var AppSettings */
+	private $appSettings;
 
 	public function __construct(
 		ITimeFactory $time,
 		LogMapper $logMapper,
+		PollMapper $pollMapper,
 		WatchMapper $watchMapper
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
 		$this->logMapper = $logMapper;
+		$this->pollMapper = $pollMapper;
 		$this->watchMapper = $watchMapper;
+		$this->appSettings = new AppSettings;
 	}
 
 	/**
@@ -55,5 +66,11 @@ class JanitorCron extends TimedJob {
 		$this->logMapper->deleteProcessedEntries(); // delete processed log entries
 		$this->logMapper->deleteOldEntries(time() - (86400 * 7)); // delete entries older than 7 days
 		$this->watchMapper->deleteOldEntries(time() - 86400); // delete entries older than 1 day
+
+		if ($this->appSettings->getAutoArchive() && $this->appSettings->getAutoArchiveOffset() > 0) {
+			$this->pollMapper->archiveExpiredPolls(
+				time() - ($this->appSettings->getAutoArchiveOffset() * 86400)
+			); // archive polls after defined days after closing date
+		}
 	}
 }

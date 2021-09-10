@@ -32,6 +32,8 @@ const defaultAppSettings = () => ({
 		allAccessGroups: [],
 		publicSharesGroups: [],
 		pollCreationGroups: [],
+		autoArchive: false,
+		autoArchiveOffset: 30,
 	},
 })
 

@@ -56,6 +56,12 @@ class AppSettings implements JsonSerializable {
 	/** @var bool */
 	private $allowPollCreation = true;
 
+	/** @var bool */
+	private $autoArchive = true;
+
+	/** @var integer */
+	private $autoArchiveOffset = 30; // default to 30 days
+
 	/** @var array */
 	private $publicSharesGroups = [];
 
@@ -101,6 +107,14 @@ class AppSettings implements JsonSerializable {
 
 	public function getShowLogin(): bool {
 		return !!$this->config->getAppValue(self::APP_NAME, 'showLogin');
+	}
+
+	public function getAutoArchive(): bool {
+		return !!$this->config->getAppValue(self::APP_NAME, 'autoArchive');
+	}
+
+	public function getAutoArchiveOffset(): int {
+		return intval($this->config->getAppValue(self::APP_NAME, 'autoArchiveOffset'));
 	}
 
 	// Checks
@@ -154,6 +168,14 @@ class AppSettings implements JsonSerializable {
 		$this->config->setAppValue(self::APP_NAME, 'pollCreationGroups', json_encode($value));
 	}
 
+	public function setAutoArchive(bool $value) {
+		$this->config->setAppValue(self::APP_NAME, 'autoArchive', strval($value));
+	}
+
+	public function setAutoArchiveOffset(int $value) {
+		$this->config->setAppValue(self::APP_NAME, 'autoArchiveOffset', strval($value));
+	}
+
 	public function jsonSerialize() {
 		// convert group ids to group objects
 		$publicSharesGroups = [];
@@ -177,6 +199,8 @@ class AppSettings implements JsonSerializable {
 			'pollCreationGroups' => $pollCreationGroups,
 			'publicSharesGroups' => $publicSharesGroups,
 			'showLogin' => $this->getShowLogin(),
+			'autoArchive' => $this->getAutoArchive(),
+			'autoArchiveOffset' => $this->getAutoArchiveOffset(),
 		];
 	}
 
