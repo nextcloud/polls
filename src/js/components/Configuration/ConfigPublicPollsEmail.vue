@@ -43,7 +43,7 @@ export default {
 		return {
 			emailOptions: [
 				{ value: 'optional', label: t('polls', 'Email address is optional') },
-				{ value: 'mandatory', label: t('polls', 'Email adress is mandatory') },
+				{ value: 'mandatory', label: t('polls', 'Email address is mandatory') },
 				{ value: 'disabled', label: t('polls', 'Hide email address') },
 			],
 		}
