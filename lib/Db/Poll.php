@@ -72,7 +72,7 @@ use OCA\Polls\Model\User;
  * @method void setHideBookedUp(integer $value)
  * @method int getUseNo()
  * @method void setUseNo(integer $value)
- * @method int getMiscSettings()
+ * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
  */
 

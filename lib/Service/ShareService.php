@@ -331,7 +331,7 @@ class ShareService {
 
 		$this->systemService->validatePublicUsername($userName, $token);
 		// $this->systemService->validateEmailAddress($emailAddress, true);
-		$this->systemService->validateEmailAddress($emailAddress, !$poll->getPublicPollEmail() === 'mandatory');
+		$this->systemService->validateEmailAddress($emailAddress, $poll->getPublicPollEmail() !== 'mandatory');
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
