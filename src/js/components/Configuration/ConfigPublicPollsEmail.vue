@@ -79,7 +79,7 @@ export default {
 					showError(t('polls', 'Error writing poll'))
 				}
 			} else {
-				showError(t('polls', 'Title must not be empty!'))
+				showError(t('polls', 'Error on registering!'))
 			}
 		},
 	},
