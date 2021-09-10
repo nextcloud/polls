@@ -265,7 +265,6 @@ OC.L10N.register(
     "User {userId} removed" : "Používateľ {userId} bol odstránený",
     "Share restrictions" : "Obmedzenia zdieľania",
     "Poll creation restrictions" : "Obmedzenia pre vytváranie ankety",
-    "Miscellaneous settings" : "Rôzne nastavenia",
     "Manage polls" : "Spravovať ankety",
     "Manage polls of other users. You can take over the ownership or delete polls." : "Spravujte ankety ostatných používateľov. Môžete prevziať vlastníctvo alebo vymazať hlasovanie.",
     "No polls found for this category" : "V tejto kategórií neboli nájdené žiadne ankety",

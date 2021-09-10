@@ -265,7 +265,6 @@ OC.L10N.register(
     "User {userId} removed" : "Usunięto użytkownika {userId}",
     "Share restrictions" : "Ograniczenia udostępniania",
     "Poll creation restrictions" : "Ograniczenia tworzenia sondy",
-    "Miscellaneous settings" : "Ustawienia różne",
     "Manage polls" : "Zarządzaj sondami",
     "Manage polls of other users. You can take over the ownership or delete polls." : "Zarządzaj sondami innych użytkowników. Możesz przejąć je lub usunąć sondy.",
     "No polls found for this category" : "Nie znaleziono sond dla tej kategorii",

@@ -257,7 +257,6 @@ OC.L10N.register(
     "Delete votes" : "Excluir votos",
     "User {userId} removed" : "Usuário {userId} excluído",
     "Share restrictions" : "Restrições de compartilhamento",
-    "Miscellaneous settings" : "Outras configurações",
     "Manage polls" : "Gerenciar enquetes",
     "Manage polls of other users. You can take over the ownership or delete polls." : "Gerenciar enquetes de outros usuários. Você pode assumir a propriedade ou excluir as enquetes.",
     "No polls found for this category" : "Nenhuma enquete encontrada para esta categoria",
