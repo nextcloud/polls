@@ -22,6 +22,7 @@
 
 <template>
 	<ConfigBox v-tooltip.auto="paramsHint" :title="t('polls', 'Public shares')" icon-class="icon-public">
+		<ConfigPublicPollsEmail />
 		<TransitionGroup :css="false" tag="div" class="shared-list">
 			<PublicShareItem v-for="(share) in publicShares"
 				:key="share.id"
@@ -47,6 +48,7 @@ import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ButtonDiv from '../Base/ButtonDiv'
 import ConfigBox from '../Base/ConfigBox'
+import ConfigPublicPollsEmail from '../Configuration/ConfigPublicPollsEmail'
 import PublicShareItem from './PublicShareItem'
 
 export default {
@@ -58,6 +60,7 @@ export default {
 		ActionDelete,
 		ButtonDiv,
 		ConfigBox,
+		ConfigPublicPollsEmail,
 		PublicShareItem,
 	},
 

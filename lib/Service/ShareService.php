@@ -35,6 +35,7 @@ use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
 
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Event\ShareEvent;
@@ -64,6 +65,9 @@ class ShareService {
 	/** @var ShareMapper */
 	private $shareMapper;
 
+	/** @var PollMapper */
+	private $pollMapper;
+
 	/** @var Share */
 	private $share;
 
@@ -84,6 +88,7 @@ class ShareService {
 		IGroupManager $groupManager,
 		SystemService $systemService,
 		ShareMapper $shareMapper,
+		PollMapper $pollMapper,
 		Share $share,
 		MailService $mailService,
 		Acl $acl,
@@ -96,6 +101,7 @@ class ShareService {
 		$this->groupManager = $groupManager;
 		$this->systemService = $systemService;
 		$this->shareMapper = $shareMapper;
+		$this->pollMapper = $pollMapper;
 		$this->share = $share;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
@@ -318,12 +324,14 @@ class ShareService {
 	public function register(string $token, string $userName, string $emailAddress = ''): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
+			$this->poll = $this->pollMapper->find($this->share->getPollId());
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
 		$this->systemService->validatePublicUsername($userName, $token);
-		$this->systemService->validateEmailAddress($emailAddress, true);
+		// $this->systemService->validateEmailAddress($emailAddress, true);
+		$this->systemService->validateEmailAddress($emailAddress, !$this->poll->getPublicPollEmail() === 'mandatory');
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
@@ -333,14 +341,16 @@ class ShareService {
 				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
 				!$emailAddress
 			);
+
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
+
 			// Convert email and contact shares to external share, if user registers
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userName);
 			$this->share->setDisplayName($userName);
 
-			// prepare for resending inviataion to new email address
+			// prepare for resending invitation to new email address
 			if ($emailAddress !== $this->share->getEmailAddress()) {
 				$this->share->setInvitationSent(0);
 			}
