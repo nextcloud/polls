@@ -72,7 +72,10 @@ use OCA\Polls\Model\User;
  * @method void setHideBookedUp(integer $value)
  * @method int getUseNo()
  * @method void setUseNo(integer $value)
+ * @method int getMiscSettings()
+ * @method void setMiscSettings(string $value)
  */
+
 class Poll extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';

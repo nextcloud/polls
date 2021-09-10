@@ -324,14 +324,14 @@ class ShareService {
 	public function register(string $token, string $userName, string $emailAddress = ''): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			$this->poll = $this->pollMapper->find($this->share->getPollId());
+			$poll = $this->pollMapper->find($this->share->getPollId());
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
 		$this->systemService->validatePublicUsername($userName, $token);
 		// $this->systemService->validateEmailAddress($emailAddress, true);
-		$this->systemService->validateEmailAddress($emailAddress, !$this->poll->getPublicPollEmail() === 'mandatory');
+		$this->systemService->validateEmailAddress($emailAddress, !$poll->getPublicPollEmail() === 'mandatory');
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
@@ -341,7 +341,6 @@ class ShareService {
 				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
 				!$emailAddress
 			);
-
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
 
