@@ -27,10 +27,9 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import { mapState } from 'vuex'
-import { showSuccess, showError } from '@nextcloud/dialogs'
 import RadioGroupDiv from '../Base/RadioGroupDiv'
+import { writePoll } from '../../mixins/writePoll'
 
 export default {
 	name: 'ConfigPublicPollsEmail',
@@ -38,6 +37,8 @@ export default {
 	components: {
 		RadioGroupDiv,
 	},
+
+	mixins: [writePoll],
 
 	data() {
 		return {
@@ -60,28 +61,10 @@ export default {
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { publicPollEmail: value })
-				this.writePoll()
+				this.writePoll() // from mixin
 			},
 		},
 	},
 
-	methods: {
-		successDebounced: debounce(function(title) {
-			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: this.poll.title }))
-		}, 1500),
-
-		async writePoll() {
-			if (this.poll.title) {
-				try {
-					await this.$store.dispatch('poll/update')
-					this.successDebounced(this.poll.title)
-				} catch {
-					showError(t('polls', 'Error writing poll'))
-				}
-			} else {
-				showError(t('polls', 'Error on registering!'))
-			}
-		},
-	},
 }
 </script>
