@@ -38,8 +38,12 @@
 					</div>
 
 					<div v-if="poll.publicPollEmail !== 'disabled'" class="section__email">
-						<h3 v-if="poll.publicPollEmail === 'mandatory'">{{ t("polls", "Your email address is required. A link to your personal poll will be sent to you after registration.") }}</h3>
-						<h3 v-else>{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}</h3>
+						<h3 v-if="poll.publicPollEmail === 'mandatory'">
+							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
+						</h3>
+						<h3 v-else>
+							{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}
+						</h3>
 						<InputDiv
 							v-model="emailAddress"
 							v-tooltip="emailCheck.result"
