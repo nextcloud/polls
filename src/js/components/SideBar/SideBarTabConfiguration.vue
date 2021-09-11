@@ -72,9 +72,8 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import { mapGetters, mapState } from 'vuex'
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import ConfigBox from '../Base/ConfigBox'
 import ConfigAccess from '../Configuration/ConfigAccess'
@@ -89,6 +88,7 @@ import ConfigShowResults from '../Configuration/ConfigShowResults'
 import ConfigTitle from '../Configuration/ConfigTitle'
 import ConfigUseNo from '../Configuration/ConfigUseNo'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit'
+import { writePoll } from '../../mixins/writePoll'
 
 export default {
 	name: 'SideBarTabConfiguration',
@@ -109,6 +109,8 @@ export default {
 		ConfigVoteLimit,
 	},
 
+	mixins: [writePoll],
+
 	computed: {
 		...mapState({
 			poll: (state) => state.poll,
@@ -122,18 +124,13 @@ export default {
 	},
 
 	methods: {
-
-		successDebounced: debounce(function(title) {
-			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: this.poll.title }))
-		}, 1500),
-
 		toggleArchive() {
 			if (this.poll.deleted) {
 				this.$store.commit('poll/setProperty', { deleted: 0 })
 			} else {
 				this.$store.commit('poll/setProperty', { deleted: moment.utc().unix() })
 			}
-			this.writePoll()
+			this.writePoll() // from mixin
 		},
 
 		async deletePoll() {
@@ -145,20 +142,6 @@ export default {
 				showError(t('polls', 'Error deleting poll.'))
 			}
 		},
-
-		async writePoll() {
-			if (this.poll.title) {
-				try {
-					await this.$store.dispatch('poll/update')
-					this.successDebounced(this.poll.title)
-				} catch {
-					showError(t('polls', 'Error writing poll'))
-				}
-			} else {
-				showError(t('polls', 'Title must not be empty!'))
-			}
-		},
-
 	},
 }
 </script>

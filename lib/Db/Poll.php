@@ -72,7 +72,10 @@ use OCA\Polls\Model\User;
  * @method void setHideBookedUp(integer $value)
  * @method int getUseNo()
  * @method void setUseNo(integer $value)
+ * @method string getMiscSettings()
+ * @method void setMiscSettings(string $value)
  */
+
 class Poll extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';
@@ -113,7 +116,6 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var int $anonymous */
 	protected $anonymous;
 
-
 	/** @var int $allowMaybe */
 	protected $allowMaybe;
 
@@ -146,6 +148,9 @@ class Poll extends Entity implements JsonSerializable {
 
 	/** @var int $useNo*/
 	protected $useNo;
+
+	/** @var string $miscSettings*/
+	protected $miscSettings;
 
 
 	public function __construct() {
@@ -189,6 +194,7 @@ class Poll extends Entity implements JsonSerializable {
 			'important' => $this->getImportant(),
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
+			'publicPollEmail' => $this->getPublicPollEmail(),
 		];
 	}
 
@@ -213,6 +219,9 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setImportant($array['important'] ?? $this->getImportant());
 		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
 		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
+		$this->setMiscSettings(json_encode([
+			'publicPollEmail' => $array['publicPollEmail'],
+		]));
 		return $this;
 	}
 
@@ -221,6 +230,10 @@ class Poll extends Entity implements JsonSerializable {
 			   $this->getExpire() > 0
 			&& $this->getExpire() < time()
 		);
+	}
+
+	public function getPublicPollEmail(): string {
+		return json_decode($this->getMiscSettings())->publicPollEmail ?? 'optional';
 	}
 
 	public function getProposalsExpired(): bool {

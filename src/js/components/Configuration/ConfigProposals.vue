@@ -35,12 +35,10 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import { mapState, mapGetters } from 'vuex'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 import { CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
+import { writePoll } from '../../mixins/writePoll'
 
 export default {
 	name: 'ConfigProposals',
@@ -50,11 +48,7 @@ export default {
 		DatetimePicker,
 	},
 
-	data() {
-		return {
-			titleEmpty: false,
-		}
-	},
+	mixins: [writePoll],
 
 	computed: {
 		...mapState({
@@ -129,29 +123,10 @@ export default {
 	},
 
 	methods: {
-		successDebounced: debounce(function(title) {
-			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: title }))
-			emit('update-polls')
-		}, 1500),
-
 		writeValue(e) {
 			this.$store.commit('poll/setProperty', e)
-			this.updatePoll()
+			this.writePoll() // from mixin
 		},
-
-		async updatePoll() {
-			if (this.titleEmpty) {
-				showError(t('polls', 'Title must not be empty!'))
-			} else {
-				try {
-					await this.$store.dispatch('poll/update')
-					this.successDebounced(this.poll.title)
-				} catch {
-					showError(t('polls', 'Error writing poll'))
-				}
-			}
-		},
-
 	},
 }
 </script>

@@ -51,6 +51,7 @@ const defaultPoll = () => ({
 	important: 0,
 	hideBookedUp: 0,
 	useNo: 1,
+	publicPollEmail: 'optional',
 })
 
 const state = defaultPoll()

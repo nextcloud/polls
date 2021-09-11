@@ -37,12 +37,18 @@
 							@submit="submitRegistration" />
 					</div>
 
-					<div class="section__email">
-						<h3>{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}</h3>
-						<InputDiv v-model="emailAddress"
+					<div v-if="poll.publicPollEmail !== 'disabled'" class="section__email">
+						<h3 v-if="poll.publicPollEmail === 'mandatory'">
+							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
+						</h3>
+						<h3 v-else>
+							{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}
+						</h3>
+						<InputDiv
+							v-model="emailAddress"
 							v-tooltip="emailCheck.result"
 							:signaling-class="emailCheck.status"
-							:placeholder="t('polls', 'Optional email address')"
+							:placeholder="t('polls', poll.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
 							no-submit
 							@submit="submitRegistration" />
 					</div>
@@ -110,8 +116,12 @@ export default {
 			share: (state) => state.share,
 		}),
 
+		registrationIsValid() {
+			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.poll.publicPollEmail !== 'mandatory'))
+		},
+
 		disableSubmit() {
-			return !this.isValidName || this.checkingUserName
+			return !this.registrationIsValid || this.checkingUserName
 		},
 
 		loginLink() {
@@ -258,7 +268,7 @@ export default {
 		}, 500),
 
 		async submitRegistration() {
-			if (this.isValidName && (this.isValidEmailAddress || this.emailAddress.length === 0)) {
+			if (this.registrationIsValid) {
 				try {
 					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress })
 					if (this.$route.params.token === response.token) {
