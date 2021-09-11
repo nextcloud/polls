@@ -265,6 +265,7 @@ OC.L10N.register(
     "User {userId} removed" : "Benutzer {userId} entfernt",
     "Share restrictions" : "Freigabebeschränkungen",
     "Poll creation restrictions" : "Einschränkungen bei der Erstellung von Umfragen",
+    "Other settings" : "Andere Einstellungen",
     "Manage polls" : "Umfragen verwalten",
     "Manage polls of other users. You can take over the ownership or delete polls." : "Umfragen anderer Benutzer verwalten. Sie können die Eigentümerschaft übernehmen oder Umfragen löschen.",
     "No polls found for this category" : "Keine Umfragen für diese Kategorie gefunden",

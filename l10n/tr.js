@@ -265,6 +265,7 @@ OC.L10N.register(
     "User {userId} removed" : "{userId} kullanıcısı silindi",
     "Share restrictions" : "Paylaşım kısıtlamaları",
     "Poll creation restrictions" : "Anket oluşturma kısıtlamaları",
+    "Other settings" : "Diğer ayarlar",
     "Manage polls" : "Anket yönetimi",
     "Manage polls of other users. You can take over the ownership or delete polls." : "Diğer kullanıcıların anketlerini yönetin. Anketleri silebilir ya da sahipliğini devralabilirsiniz.",
     "No polls found for this category" : "Bu kategoride bir anket bulunamadı",
