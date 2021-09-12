@@ -57,6 +57,9 @@
 		<ActionButton v-if="acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</ActionButton>
+		<ActionButton icon="icon-delete" @click="deleteUser()">
+			{{ t('polls', 'Delete your votes') }}
+		</ActionButton>
 	</Actions>
 </template>
 
@@ -200,6 +203,15 @@ export default {
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
+			}
+		},
+
+		async deleteUser() {
+			try {
+				await this.$store.dispatch('votes/deleteMyVotes')
+				showSuccess(t('polls', 'Your votes are deleted'))
+			} catch {
+				showError(t('polls', 'Error while deleteing votes'))
 			}
 		},
 	},
