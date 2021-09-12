@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 - [new] #1948 - configure email registration in public polls (#1419, #1728)
 - [new] #1950 - allow users to reset their votes (#1578)
 - [fix] #1937 - User search broke, when a user has no mail address configured
+- [change] # - remove three character validation for public user names (#1952)
 
 ### New admin section
 - [new] #1919 - Admin section for polls
