@@ -57,8 +57,8 @@
 		<ActionButton v-if="acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</ActionButton>
-		<ActionButton icon="icon-delete" @click="deleteUser()">
-			{{ t('polls', 'Delete your votes') }}
+		<ActionButton icon="icon-history" @click="resetVotes()">
+			{{ t('polls', 'Reset your votes') }}
 		</ActionButton>
 	</Actions>
 </template>
@@ -206,12 +206,12 @@ export default {
 			}
 		},
 
-		async deleteUser() {
+		async resetVotes() {
 			try {
-				await this.$store.dispatch('votes/deleteMyVotes')
-				showSuccess(t('polls', 'Your votes are deleted'))
+				await this.$store.dispatch('votes/resetVotes')
+				showSuccess(t('polls', 'Your votes are resetted'))
 			} catch {
-				showError(t('polls', 'Error while deleteing votes'))
+				showError(t('polls', 'Error while resetting votes'))
 			}
 		},
 	},

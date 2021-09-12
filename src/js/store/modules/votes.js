@@ -138,7 +138,7 @@ const actions = {
 		}
 	},
 
-	async deleteMyVotes(context) {
+	async resetVotes(context) {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
