@@ -19,7 +19,6 @@ OC.L10N.register(
     "Delete comment" : "Ta bort kommentar",
     "Error while deleting the comment" : "Fel vid borttagning av kommentaren",
     "Anonymous poll" : "Anonym omröstning",
-    "Title must not be empty!" : "Titeln får inte vara tom",
     "Title" : "Titel",
     "Enter Title" : "Lägg till rubrik",
     "Poll type" : "Omröstningstyp",
@@ -58,6 +57,7 @@ OC.L10N.register(
     "Hour" : "Timme",
     "Day" : "Dag",
     "Month" : "Månad",
+    "Title must not be empty!" : "Titeln får inte vara tom",
     "My polls" : "Mina omröstningar",
     "Public polls" : "Publika omröstningar",
     "All polls" : "Alla omröstningar"

@@ -12,7 +12,6 @@ OC.L10N.register(
     "New comment …" : "Ny kommentar…",
     "Delete comment" : "Slet kommentar",
     "Anonymous poll" : "Anonym afstemning",
-    "Title must not be empty!" : "Overskriften må ikke være tom!",
     "Title" : "Titel",
     "Poll type" : "Afstemningstype",
     "Cancel" : "Annullér",
@@ -36,6 +35,7 @@ OC.L10N.register(
     "Comments" : "Kommentarer",
     "Hour" : "Time",
     "Day" : "Dag",
-    "Month" : "Måned"
+    "Month" : "Måned",
+    "Title must not be empty!" : "Overskriften må ikke være tom!"
 },
 "nplurals=2; plural=(n != 1);");

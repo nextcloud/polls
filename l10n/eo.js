@@ -15,7 +15,6 @@ OC.L10N.register(
     "New comment …" : "Nova komento...",
     "Delete comment" : "Forigi komenton",
     "Anonymous poll" : "Enketo sennoma",
-    "Title must not be empty!" : "La titolo ne povas malpleni!",
     "Title" : "Titolo",
     "Poll type" : "Enketa tipo",
     "Cancel" : "Nuligi",
@@ -43,6 +42,7 @@ OC.L10N.register(
     "Comments" : "Komentoj",
     "Hour" : "Horo",
     "Day" : "Tago",
-    "Month" : "Monato"
+    "Month" : "Monato",
+    "Title must not be empty!" : "La titolo ne povas malpleni!"
 },
 "nplurals=2; plural=(n != 1);");
