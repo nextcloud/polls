@@ -144,11 +144,6 @@ export default {
 					result: t('polls', 'Enter a name to participate.'),
 					status: 'empty',
 				}
-			} else if (this.userName.length < 3) {
-				return {
-					result: t('polls', 'Name must be at least 3 characters.'),
-					status: 'error',
-				}
 			} else if (!this.isValidName) {
 				return {
 					result: t('polls', 'Invalid name'),
@@ -191,7 +186,7 @@ export default {
 
 	watch: {
 		userName() {
-			if (this.userName.length > 2) {
+			if (this.userName) {
 				this.checkingUserName = true
 				if (this.userName !== this.share.userid) {
 					this.validatePublicUsername()
@@ -203,7 +198,7 @@ export default {
 		},
 
 		emailAddress() {
-			if (this.emailAddress.length > 0) {
+			if (this.emailAddress) {
 				this.checkingEmailAddress = true
 				this.validateEmailAddress()
 			} else {
@@ -236,35 +231,23 @@ export default {
 		},
 
 		validatePublicUsername: debounce(async function() {
-			if (this.userName.length > 2) {
-				try {
-					await axios.post(generateUrl('apps/polls/check/username'), { userName: this.userName, token: this.$route.params.token })
-					this.checkingUserName = false
-					this.isValidName = true
-				} catch {
-					this.checkingUserName = false
-					this.isValidName = false
-				}
-			} else {
-				this.checkingUserName = false
+			try {
+				await axios.post(generateUrl('apps/polls/check/username'), { userName: this.userName, token: this.$route.params.token })
+				this.isValidName = true
+			} catch {
 				this.isValidName = false
 			}
+			this.checkingUserName = false
 		}, 500),
 
 		validateEmailAddress: debounce(async function() {
-			if (this.emailAddress.length > 0) {
-				try {
-					await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
-					this.isValidEmailAddress = true
-					this.checkingEmailAddress = false
-				} catch {
-					this.isValidEmailAddress = false
-					this.checkingEmailAddress = false
-				}
-			} else {
+			try {
+				await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
+				this.isValidEmailAddress = true
+			} catch {
 				this.isValidEmailAddress = false
-				this.checkingEmailAddress = false
 			}
+			this.checkingEmailAddress = false
 		}, 500),
 
 		async submitRegistration() {
