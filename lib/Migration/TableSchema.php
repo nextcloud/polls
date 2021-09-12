@@ -112,6 +112,7 @@ abstract class TableSchema {
 		'0108Date20210307130009',
 		'0109Date20210323120002',
 		'030000Date20210611120000',
+		'030000Date20210704120000',
 	];
 
 	/**
@@ -206,7 +207,7 @@ abstract class TableSchema {
 			'allow_proposals' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'disallow', 'length' => 64]],
 			'use_no' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
 			'proposals_expire' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
+			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => true, 'default' => '', 'length' => 65535]],
 		],
 		Option::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
