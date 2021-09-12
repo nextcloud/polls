@@ -135,16 +135,15 @@ class SystemService {
 	public function validatePublicUsername(string $userName, string $token): bool {
 		$share = $this->shareMapper->findByToken($token);
 
+		if (!$userName) {
+			throw new TooShortException('Username must not be empty');
+		}
+
 		if ($share->getDisplayName() === $userName) {
 			return true;
 		}
 
 		$userName = strtolower(trim($userName));
-
-		// return forbidden, if the length of the userame is lower than 3 characters
-		if (strlen($userName) < 3) {
-			throw new TooShortException('Username must have at least 3 characters');
-		}
 
 		// get all groups
 		foreach (Group::search() as $group) {
