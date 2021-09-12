@@ -57,6 +57,9 @@
 		<ActionButton v-if="acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</ActionButton>
+		<ActionButton icon="icon-history" @click="resetVotes()">
+			{{ t('polls', 'Reset your votes') }}
+		</ActionButton>
 	</Actions>
 </template>
 
@@ -200,6 +203,15 @@ export default {
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
+			}
+		},
+
+		async resetVotes() {
+			try {
+				await this.$store.dispatch('votes/resetVotes')
+				showSuccess(t('polls', 'Your votes are resetted'))
+			} catch {
+				showError(t('polls', 'Error while resetting votes'))
 			}
 		},
 	},

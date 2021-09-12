@@ -28,11 +28,16 @@ use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Vote;
 
 class VoteEvent extends Event {
+	/** @var Vote */
 	private $vote;
 
-	public function __construct(Vote $vote) {
+	/** @var bool */
+	private $log;
+
+	public function __construct(Vote $vote, ?bool $log = true) {
 		parent::__construct();
 		$this->vote = $vote;
+		$this->log = $log;
 	}
 
 	public function getVote(): Vote {
@@ -44,7 +49,10 @@ class VoteEvent extends Event {
 	}
 
 	public function getLogMsg(): string {
-		return Log::MSG_ID_SETVOTE;
+		if ($this->log) {
+			return Log::MSG_ID_SETVOTE;
+		}
+		return '';
 	}
 
 	public function getActor(): string {

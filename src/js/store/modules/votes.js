@@ -138,6 +138,24 @@ const actions = {
 		}
 	},
 
+	async resetVotes(context) {
+		let endPoint = 'apps/polls'
+
+		if (context.rootState.route.name === 'publicVote') {
+			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token + '/user'
+		} else {
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/user'
+		}
+
+		try {
+			const response = await axios.delete(generateUrl(endPoint))
+			context.commit('deleteVotes', { userId: response.data.deleted })
+		} catch (e) {
+			console.error('Error deleting votes', { error: e.response })
+			throw e
+		}
+	},
+
 	async deleteUser(context, payload) {
 		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/user/' + payload.userId
 		try {

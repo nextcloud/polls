@@ -71,7 +71,7 @@ class VoteController extends Controller {
 	 * Remove user from poll
 	 * @NoAdminRequired
 	 */
-	public function delete(int $pollId, string $userId): DataResponse {
+	public function delete(int $pollId, string $userId = ''): DataResponse {
 		return $this->response(function () use ($pollId, $userId) {
 			return ['deleted' => $this->voteService->delete($pollId, $userId)];
 		});
