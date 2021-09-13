@@ -1,13 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.2.0-rc1] - 2021-09-12
+- [new] #1948 - configure email registration in public polls (#1419, #1728)
+- [new] #1950 - allow users to reset their votes (#1578)
+- [fix] #1937 - User search broke, when a user has no mail address configured
+- [change] #1953 - remove three character validation for public user names (#1952)
+
+### New admin section
+- [new] #1919 - Admin section for polls
+- [new] #1936 - [Admin] disable login option in public polls (#1518)
+- [new] #1938 - [Admin] auto archive closed polls (#526)
+- [new] #1106 - [Admin] Restrict poll creation to groups
+- [new] #481  - [Admin] Restrict public poll creation to groups
+- [new] #658  - [Admin] Restrict creation of polls for all users to groups
+
 ## [3.1.0] - 2021-08-21
 - GUI optimizations
 - Hide internal user IDs in public polls
 - Fixed migration error
 - Fixed registration dialog on mobiles
 - Fixed width of share icons
-- some minor fixes 
+- some minor fixes
 
 ## [3.1.0-rc1] - 2021-08-16
 ## Only available for Nextcloud 21/22

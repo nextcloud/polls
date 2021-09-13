@@ -44,6 +44,7 @@ return [
 		['name' => 'public#resend_invitation', 'url' => '/s/{token}/resend', 'verb' => 'PUT'],
 		['name' => 'public#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'public#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
+		['name' => 'public#delete_user', 'url' => '/s/{token}/user', 'verb' => 'DELETE'],
 		['name' => 'public#watch_poll', 'url' => '/s/{token}/watch', 'verb' => 'GET'],
 
 		['name' => 'admin#index', 'url' => '/administration', 'verb' => 'GET'],
@@ -78,7 +79,8 @@ return [
 
 		['name' => 'vote#list', 'url' => '/poll/{pollId}/votes', 'verb' => 'GET'],
 		['name' => 'vote#set', 'url' => '/vote', 'verb' => 'PUT'],
-		['name' => 'vote#delete', 'url' => '/poll/{pollId}/user/{userId}', 'verb' => 'DELETE'],
+		['name' => 'vote#delete', 'url' => '/poll/{pollId}/user/{userId}', 'verb' => 'DELETE', 'postfix' => 'other'],
+		['name' => 'vote#delete', 'url' => '/poll/{pollId}/user', 'verb' => 'DELETE', 'postfix' => 'self'],
 
 		['name' => 'share#list', 'url' => '/poll/{pollId}/shares', 'verb' => 'GET'],
 		['name' => 'share#add', 'url' => '/poll/{pollId}/share', 'verb' => 'POST'],

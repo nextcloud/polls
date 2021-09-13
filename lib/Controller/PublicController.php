@@ -212,6 +212,17 @@ class PublicController extends Controller {
 	}
 
 	/**
+	 * Delete user's votes
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function deleteUser(string $token): DataResponse {
+		return $this->response(function () use ($token) {
+			return ['deleted' => $this->voteService->delete(0, '', $token)];
+		});
+	}
+
+	/**
 	 * Get options
 	 * @NoAdminRequired
 	 * @PublicPage
