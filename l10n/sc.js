@@ -167,7 +167,6 @@ OC.L10N.register(
     "Otherwise participate publicly." : "Sinuncas partètzipa in manera pùblica.",
     "Checking name …" : "Controllende su nùmene ...",
     "Enter a name to participate." : "Inserta•nche unu nùmene pro partetzipare.",
-    "Name must be at least 3 characters." : "Su nùmene depet èssere a su mancu de 3 caràteres.",
     "Invalid name" : "Nùmene non bàlidu",
     "{username} is valid." : "{username} bàlidu.",
     "Valid email address." : "Indiritzu de posta eletrònica bàlidu.",

@@ -167,7 +167,6 @@ OC.L10N.register(
     "Otherwise participate publicly." : "Yoksa herkese açık olarak katılın.",
     "Checking name …" : "Ad denetleniyor …",
     "Enter a name to participate." : "Katılmak için bir ad yazın.",
-    "Name must be at least 3 characters." : "Ad en az 3 karakter uzunluğunda olmalıdır.",
     "Invalid name" : "Ad geçersiz",
     "{username} is valid." : "{username} geçerli.",
     "Valid email address." : "E-posta adresi geçerli.",

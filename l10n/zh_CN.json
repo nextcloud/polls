@@ -159,7 +159,6 @@
     "Otherwise participate publicly." : "否则公开参与",
     "Checking name …" : "正在检查名称 …",
     "Enter a name to participate." : "输入一个名字来参与",
-    "Name must be at least 3 characters." : "名字长度至少为三个字符",
     "Invalid name" : "无效名称",
     "{username} is valid." : "{username} 是无效的",
     "Valid email address." : "有效的电邮地址",

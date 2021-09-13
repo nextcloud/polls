@@ -143,7 +143,6 @@ OC.L10N.register(
     "Otherwise participate publicly." : "Priešingu atveju, dalyvaukite viešai.",
     "Checking name …" : "Tikrinamas vardas…",
     "Enter a name to participate." : "Norėdami dalyvauti, įveskite vardą.",
-    "Name must be at least 3 characters." : "Vardas privalo būti sudarytas bent iš 3 simbolių.",
     "Invalid name" : "Neteisingas vardas",
     "{username} is valid." : "{username} yra tinkamas vardas.",
     "Valid email address." : "Tinkamas el. pašto adresas.",

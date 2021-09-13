@@ -149,7 +149,6 @@ OC.L10N.register(
     "Otherwise participate publicly." : "U suprotnom sudjelujte javno.",
     "Checking name …" : "Provjera imena...",
     "Enter a name to participate." : "Unesite ime za sudjelovanje.",
-    "Name must be at least 3 characters." : "Ime se mora sastojati od najmanje 3 znaka.",
     "Invalid name" : "Nevažeće ime",
     "{username} is valid." : "Korisničko ime {username} nije važeće.",
     "Valid email address." : "Važeća adresa e-pošte.",

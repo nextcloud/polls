@@ -153,7 +153,6 @@
     "Otherwise participate publicly." : "De lo contrario, participe públicamente.",
     "Checking name …" : "Comprobando nombre …",
     "Enter a name to participate." : "Introduzca un nombre para participar.",
-    "Name must be at least 3 characters." : "El nombre debe ser de al menos 3 caracteres.",
     "Invalid name" : "Nombre no válido",
     "{username} is valid." : "{username} es válido.",
     "Valid email address." : "Dirección de email válida.",

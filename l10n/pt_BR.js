@@ -167,7 +167,6 @@ OC.L10N.register(
     "Otherwise participate publicly." : "Caso contrário, participe publicamente.",
     "Checking name …" : "Verificando o nome …",
     "Enter a name to participate." : "Insira um nome para participar.",
-    "Name must be at least 3 characters." : "O nome deve ter pelo menos 3 caracteres.",
     "Invalid name" : "Nome inválido",
     "{username} is valid." : "{username} é válido.",
     "Valid email address." : "Endereço de e-mail válido. ",

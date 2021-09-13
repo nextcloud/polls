@@ -142,7 +142,6 @@
     "Otherwise participate publicly." : "Sicer sodelujete javno.",
     "Checking name …" : "Poteka preverjanje imena ...",
     "Enter a name to participate." : "Vpišite ime za sodelovanje.",
-    "Name must be at least 3 characters." : "Ime mora vsebovati najmanj 3 znake.",
     "Invalid name" : "Neveljavno ime",
     "{username} is valid." : "Uporabniško ime {username} je veljavno.",
     "Valid email address." : "Veljaven elektronski naslov.",

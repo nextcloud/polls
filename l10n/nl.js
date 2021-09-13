@@ -149,7 +149,6 @@ OC.L10N.register(
     "Otherwise participate publicly." : "Doe anders openbaar mee.",
     "Checking name …" : "Controleren naam...",
     "Enter a name to participate." : "Geef een naam op om mee te doen.",
-    "Name must be at least 3 characters." : "Naam moet minimaal 3 tekens lang zijn.",
     "Invalid name" : "Ongeldige naam",
     "{username} is valid." : "{username} is geldig.",
     "Valid email address." : "geldig e-mailadres.",
