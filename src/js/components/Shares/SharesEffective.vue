@@ -36,7 +36,7 @@
 					</ActionButton>
 					<ActionButton
 						v-if="share.type === 'user' || share.type === 'admin'"
-						:icon="share.type === 'user' ? 'icon-user-setting' : 'icon-user'"
+						:icon="share.type === 'user' ? 'icon-user-admin' : 'icon-user'"
 						@click="switchAdmin(share)">
 						{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 					</ActionButton>
