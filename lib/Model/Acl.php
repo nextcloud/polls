@@ -153,9 +153,6 @@ class Acl implements JsonSerializable {
 		}
 	}
 
-	/**
-	 * getIsOwner - Is user owner of the poll?
-	 */
 	public function getIsOwner(): bool {
 		return ($this->getIsLoggedIn() && $this->poll->getOwner() === $this->getUserId());
 	}
@@ -290,7 +287,7 @@ class Acl implements JsonSerializable {
 	 * or when running console commands.
 	 */
 	private function getHasAdminAccess(): bool {
- 		return (($this->getIsAdmin() && $this->poll->getAdminAccess())
+		return (($this->getIsAdmin() && $this->poll->getAdminAccess())
 			|| defined('OC_CONSOLE')
 			|| $this->getIsDelegatedAdmin()
 		);
@@ -370,7 +367,7 @@ class Acl implements JsonSerializable {
 			return false;
 		}
 
-		$filteredList =	array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
+		$filteredList = array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 			return ($item->getUserId() === $this->getUserId()
 				&& in_array($item->getType(), [
 					Share::TYPE_ADMIN,
