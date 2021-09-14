@@ -142,6 +142,12 @@ class ShareService {
 					throw new NotAuthorizedException;
 				}
 				break;
+			case Share::TYPE_ADMIN:
+				if ($this->share->getUserId() !== $this->userId) {
+					// share is not valid for user
+					throw new NotAuthorizedException;
+				}
+				break;
 			case Share::TYPE_GROUP:
 				if (!\OC::$server->getUserSession()->isLoggedIn()) {
 					throw new NotAuthorizedException;
@@ -264,6 +270,24 @@ class ShareService {
 		}
 
 		$this->create($pollId, UserGroupClass::getUserGroupChild($type, $userId));
+
+		return $this->share;
+	}
+
+	/**
+	 * Change share type
+	 */
+	public function setType(string $token, string $type): Share {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+			$this->share->setType($type);
+			$this->share = $this->shareMapper->update($this->share);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
+		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
 
 		return $this->share;
 	}
@@ -396,7 +420,7 @@ class ShareService {
 	 */
 	public function sendInvitation(string $token): array {
 		$share = $this->get($token);
-		if ($share->getType() === Share::TYPE_USER) {
+		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 
 		// TODO: skip this atm, to send invitations as mail too, if user is a site user

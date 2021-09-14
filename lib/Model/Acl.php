@@ -144,7 +144,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getUserId(): string {
-		return $this->getIsLogged() ? \OC::$server->getUserSession()->getUser()->getUID() : $this->share->getUserId();
+		return $this->getIsLoggedIn() ? \OC::$server->getUserSession()->getUser()->getUID() : $this->share->getUserId();
 	}
 
 	public function validateUserId(string $userId): void {
@@ -157,11 +157,11 @@ class Acl implements JsonSerializable {
 	 * getIsOwner - Is user owner of the poll?
 	 */
 	public function getIsOwner(): bool {
-		return ($this->getIsLogged() && $this->poll->getOwner() === $this->getUserId());
+		return ($this->getIsLoggedIn() && $this->poll->getOwner() === $this->getUserId());
 	}
 
 	private function getDisplayName(): string {
-		return $this->getIsLogged() ? $this->userManager->get($this->getUserId())->getDisplayName() : $this->share->getDisplayName();
+		return $this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())->getDisplayName() : $this->share->getDisplayName();
 	}
 
 	public function getIsAllowed(string $permission): bool {
@@ -258,7 +258,7 @@ class Acl implements JsonSerializable {
 			'allowVote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
 			'displayName' => $this->getDisplayName(),
 			'isOwner' => $this->getIsOwner(),
-			'loggedIn' => $this->getIsLogged(),
+			'loggedIn' => $this->getIsLoggedIn(),
 			'pollId' => $this->getPollId(),
 			'token' => $this->getToken(),
 			'userHasVoted' => $this->getIsParticipant(),
@@ -272,7 +272,7 @@ class Acl implements JsonSerializable {
 	/**
 	 * getIsLogged - Is user logged in to nextcloud?
 	 */
-	private function getIsLogged(): bool {
+	private function getIsLoggedIn(): bool {
 		return \OC::$server->getUserSession()->isLoggedIn();
 	}
 
@@ -281,7 +281,7 @@ class Acl implements JsonSerializable {
 	 * Returns true, if user is in admin group
 	 */
 	private function getIsAdmin(): bool {
-		return ($this->getIsLogged() && $this->groupManager->isAdmin($this->getUserId()));
+		return ($this->getIsLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
 	}
 
 	/**
@@ -290,7 +290,10 @@ class Acl implements JsonSerializable {
 	 * or when running console commands.
 	 */
 	private function getHasAdminAccess(): bool {
-		return (($this->getIsAdmin() && $this->poll->getAdminAccess()) || defined('OC_CONSOLE'));
+ 		return (($this->getIsAdmin() && $this->poll->getAdminAccess())
+			|| defined('OC_CONSOLE')
+			|| $this->getIsDelegatedAdmin()
+		);
 	}
 
 	/**
@@ -322,7 +325,7 @@ class Acl implements JsonSerializable {
 	 * where the current user is member of. This only affects logged in users.
 	 */
 	private function getIsInvitedViaGroupShare(): bool {
-		if (!$this->getIsLogged()) {
+		if (!$this->getIsLoggedIn()) {
 			return false;
 		}
 
@@ -339,7 +342,7 @@ class Acl implements JsonSerializable {
 	 * This only affects logged in users.
 	 */
 	private function getIsPersonallyInvited(): bool {
-		if (!$this->getIsLogged()) {
+		if (!$this->getIsLoggedIn()) {
 			return false;
 		}
 
@@ -347,6 +350,7 @@ class Acl implements JsonSerializable {
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 				return ($item->getUserId() === $this->getUserId()
 					&& in_array($item->getType(), [
+						Share::TYPE_ADMIN,
 						Share::TYPE_USER,
 						Share::TYPE_EXTERNAL,
 						Share::TYPE_EMAIL,
@@ -356,9 +360,29 @@ class Acl implements JsonSerializable {
 			})
 		);
 	}
+	/**
+	 * getIsPersonallyInvited - Is the poll shared via user share?
+	 * Returns true, if the current poll contains a user share for the current user.
+	 * This only affects logged in users.
+	 */
+	private function getIsDelegatedAdmin(): bool {
+		if (!$this->getIsLoggedIn()) {
+			return false;
+		}
+
+		$filteredList =	array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
+			return ($item->getUserId() === $this->getUserId()
+				&& in_array($item->getType(), [
+					Share::TYPE_ADMIN,
+				])
+			);
+		});
+
+		return 0 < count($filteredList);
+	}
 
 	private function validateShareAccess(): void {
-		if ($this->getIsLogged() && !$this->getIsShareValidForUsers()) {
+		if ($this->getIsLoggedIn() && !$this->getIsShareValidForUsers()) {
 			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for guests');
 		}
 		if (!$this->getIsShareValidForGuests()) {
@@ -378,12 +402,13 @@ class Acl implements JsonSerializable {
 	private function getIsShareValidForUsers(): bool {
 		return in_array($this->share->getType(), [
 			Share::TYPE_PUBLIC,
+			Share::TYPE_ADMIN,
 			Share::TYPE_USER,
 			Share::TYPE_GROUP
 		]);
 	}
 
 	private function getHasEmail(): bool {
-		return $this->share->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getIsLogged();
+		return $this->share->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getIsLoggedIn();
 	}
 }

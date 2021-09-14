@@ -88,6 +88,8 @@ return [
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#sendInvitation', 'url' => '/share/{token}/invite', 'verb' => 'POST'],
 		['name' => 'share#resolveGroup', 'url' => '/share/{token}/resolve', 'verb' => 'GET'],
+		['name' => 'share#user_to_admin', 'url' => '/share/{token}/admin', 'verb' => 'PUT'],
+		['name' => 'share#admin_to_user', 'url' => '/share/{token}/user', 'verb' => 'PUT'],
 
 		['name' => 'settings#getAppSettings', 'url' => '/settings/app', 'verb' => 'GET'],
 		['name' => 'settings#writeAppSettings', 'url' => '/settings/app', 'verb' => 'POST'],

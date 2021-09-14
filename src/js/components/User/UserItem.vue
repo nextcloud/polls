@@ -134,6 +134,8 @@ export default {
 					return 'icon-group'
 				} else if (this.type === 'circle') {
 					return 'icon-circles'
+				} else if (this.type === 'admin') {
+					return 'icon-user-admin'
 				}
 				return 'icon-' + this.type
 			}

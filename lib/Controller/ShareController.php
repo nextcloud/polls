@@ -86,6 +86,26 @@ class ShareController extends Controller {
 	}
 
 	/**
+	 * Convert user to poll admin
+	 * @NoAdminRequired
+	 */
+	public function userToAdmin(string $token): DataResponse {
+		return $this->responseCreate(function () use ($token) {
+			return ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)];
+		});
+	}
+
+	/**
+	 * Convert poll admin to user
+	 * @NoAdminRequired
+	 */
+	public function adminToUser(string $token): DataResponse {
+		return $this->responseCreate(function () use ($token) {
+			return ['share' => $this->shareService->setType($token, Share::TYPE_USER)];
+		});
+	}
+
+	/**
 	 * Set email address
 	 * @NoAdminRequired
 	 */
