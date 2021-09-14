@@ -61,7 +61,7 @@ const getters = {
 		// share types, which will be active, after the user gets his invitation
 		const invitationTypes = ['email', 'external', 'contact']
 		// sharetype which are active without sending an invitation
-		const directShareTypes = ['user', 'group']
+		const directShareTypes = ['user', 'group', 'admin']
 		return state.list.filter((share) => (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type))
 	},
 
@@ -114,6 +114,24 @@ const actions = {
 			await axios.delete(generateUrl(endPoint + '/' + payload.share.token))
 		} catch (e) {
 			console.error('Error removing share', { error: e.response }, { payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
+	},
+
+	async switchAdmin(context, payload) {
+		let endPoint = 'apps/polls/share/' + payload.share.token
+		if (payload.share.type === 'admin') {
+			endPoint = endPoint + '/user'
+		} else if (payload.share.type === 'user') {
+			endPoint = endPoint + '/admin'
+		}
+
+		try {
+			await axios.put(generateUrl(endPoint))
+		} catch (e) {
+			console.error('Error switching type', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')

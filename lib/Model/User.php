@@ -34,9 +34,10 @@ class User extends UserGroupClass {
 	private $user;
 
 	public function __construct(
-		string $id
+		string $id,
+		string $type = self::TYPE
 	) {
-		parent::__construct($id, self::TYPE);
+		parent::__construct($id, $type);
 		$this->icon = self::ICON;
 		$this->isNoUser = false;
 		$this->description = \OC::$server->getL10N('polls')->t('User');

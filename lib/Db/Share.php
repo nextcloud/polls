@@ -52,6 +52,7 @@ class Share extends Entity implements JsonSerializable {
 
 	// Only authenticated access
 	public const TYPE_USER = 'user';
+	public const TYPE_ADMIN = 'admin';
 	public const TYPE_GROUP = 'group';
 
 	// Public and authenticated Access
@@ -106,14 +107,14 @@ class Share extends Entity implements JsonSerializable {
 			'emailAddress' => $this->getEmailAddress(),
 			'invitationSent' => $this->getInvitationSent(),
 			'displayName' => $this->getDisplayName(),
-			'isNoUser' => !($this->getType() === self::TYPE_USER),
+			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getShowLogin(),
 		];
 	}
 
 	public function getURL(): string {
-		if ($this->type === self::TYPE_USER || $this->type === self::TYPE_GROUP) {
+		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN, self::TYPE_GROUP], true)) {
 			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
 				'polls.page.vote',
 				['id' => $this->pollId]

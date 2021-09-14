@@ -40,6 +40,7 @@ class UserGroupClass implements \JsonSerializable {
 	public const TYPE_EMAIL = Email::TYPE;
 	public const TYPE_GROUP = Group::TYPE;
 	public const TYPE_USER = User::TYPE;
+	public const TYPE_ADMIN = Admin::TYPE;
 
 	/** @var IL10N */
 	private $l10n;
@@ -237,7 +238,7 @@ class UserGroupClass implements \JsonSerializable {
 	}
 
 	/**
-	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Group|User
+	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Group|User|Admin
 	 */
 	public static function getUserGroupChild(string $type, string $id, string $displayName = '', string $emailAddress = '') {
 		switch ($type) {
@@ -251,6 +252,8 @@ class UserGroupClass implements \JsonSerializable {
 				return new ContactGroup($id);
 			case User::TYPE:
 				return new User($id);
+			case Admin::TYPE:
+				return new Admin($id);
 			case Email::TYPE:
 				return new Email($id);
 			case self::TYPE_PUBLIC:

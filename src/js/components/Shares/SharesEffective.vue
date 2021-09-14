@@ -34,6 +34,12 @@
 						@click="sendInvitation(share)">
 						{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
 					</ActionButton>
+					<ActionButton
+						v-if="share.type === 'user' || share.type === 'admin'"
+						:icon="share.type === 'user' ? 'icon-user-setting' : 'icon-user'"
+						@click="switchAdmin(share)">
+						{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
+					</ActionButton>
 					<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
@@ -104,6 +110,10 @@ export default {
 
 		removeShare(share) {
 			this.$store.dispatch('shares/delete', { share })
+		},
+
+		switchAdmin(share) {
+			this.$store.dispatch('shares/switchAdmin', { share })
 		},
 
 	},
