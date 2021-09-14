@@ -44,33 +44,6 @@ class AppSettings implements JsonSerializable {
 	/** @var string */
 	private $userId = '';
 
-	/** @var bool */
-	private $allowPublicShares = true;
-
-	/** @var bool */
-	private $showLogin = true;
-
-	/** @var bool */
-	private $allowAllAccess = true;
-
-	/** @var bool */
-	private $allowPollCreation = true;
-
-	/** @var bool */
-	private $autoArchive = true;
-
-	/** @var integer */
-	private $autoArchiveOffset = 30; // default to 30 days
-
-	/** @var array */
-	private $publicSharesGroups = [];
-
-	/** @var array */
-	private $allAccessGroups = [];
-
-	/** @var array */
-	private $pollCreationGroups = [];
-
 	public function __construct() {
 		$this->config = self::getContainer()->query(IConfig::class);
 		$this->session = self::getContainer()->query(IUserSession::class);
@@ -94,15 +67,27 @@ class AppSettings implements JsonSerializable {
 	}
 
 	public function getPublicSharesGroups(): array {
-		return json_decode($this->config->getAppValue(self::APP_NAME, 'publicSharesGroups'));
+		$appConfig = $this->config->getAppValue(self::APP_NAME, 'publicSharesGroups');
+		if ($appConfig) {
+			return json_decode($appConfig);
+		}
+		return [];
 	}
 
 	public function getAllAccessGroups(): array {
-		return json_decode($this->config->getAppValue(self::APP_NAME, 'allAccessGroups'));
+		$appConfig = $this->config->getAppValue(self::APP_NAME, 'allAccessGroups');
+		if ($appConfig) {
+			return json_decode($appConfig);
+		}
+		return [];
 	}
 
 	public function getPollCreationGroups(): array {
-		return json_decode($this->config->getAppValue(self::APP_NAME, 'pollCreationGroups'));
+		$appConfig = $this->config->getAppValue(self::APP_NAME, 'pollCreationGroups');
+		if ($appConfig) {
+			return json_decode($appConfig);
+		}
+		return [];
 	}
 
 	public function getShowLogin(): bool {
