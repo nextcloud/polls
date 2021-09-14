@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.2.0] - tbd
+- Poll administration can now be delegated to invited users
+- New admin section for polls (/settings/admin/polls-admin)
+  - Disable login option in registration screen of public polls
+  - Auto archive closed polls after configured days
+  - Restrict poll creation to groups
+  - Restrict public poll creation to groups
+  - Restrict creation of polls with all users access to groups
+
+## [3.2.0-rc2] - 2021-09-14
+- [fix] #1958 - Fix DB setting for oracle
+- [fix] #1958 - App failed, if app config was not set
+- [new] #1960 - Delegate poll administration to invitees (#1095)
+
 ## [3.2.0-rc1] - 2021-09-12
 - [new] #1948 - configure email registration in public polls (#1419, #1728)
 - [new] #1950 - allow users to reset their votes (#1578)
