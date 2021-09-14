@@ -55,7 +55,7 @@ class PreferencesService {
 		$this->load();
 	}
 
-	public function load() {
+	public function load(): void {
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userId);
 		} catch (DoesNotExistException $e) {

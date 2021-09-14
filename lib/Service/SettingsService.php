@@ -51,7 +51,7 @@ class SettingsService {
 	/**
 	 * Get app settings with extended group information
 	 */
-	public function getAppSettings() {
+	public function getAppSettings(): AppSettings {
 		return $this->appSettings;
 	}
 
