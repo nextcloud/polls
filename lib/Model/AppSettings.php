@@ -54,8 +54,16 @@ class AppSettings implements JsonSerializable {
 	}
 
 	// Getters
+	public function getShowLogin(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'showLogin'), true);
+	}
+
+	public function getAutoArchive(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'autoArchive'), false);
+	}
+
 	public function getAllowPublicShares(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'publicSharesGroups'), true);
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPublicShares'), true);
 	}
 
 	public function getAllowAllAccess(): bool {
@@ -76,14 +84,6 @@ class AppSettings implements JsonSerializable {
 
 	public function getPollCreationGroups(): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'pollCreationGroups'));
-	}
-
-	public function getShowLogin(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'showLogin'), true);
-	}
-
-	public function getAutoArchive(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'autoArchive'), false);
 	}
 
 	public function getAutoArchiveOffset(): int {
@@ -114,19 +114,19 @@ class AppSettings implements JsonSerializable {
 
 	// Setters
 	public function setAllowPublicShares(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', $this->BoolToString($value));
+		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', $this->boolToString($value));
 	}
 
 	public function setShowLogin(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'showLogin', $this->BoolToString($value));
+		$this->config->setAppValue(self::APP_NAME, 'showLogin', $this->boolToString($value));
 	}
 
 	public function setAllowAllAccess(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowAllAccess', $this->BoolToString($value));
+		$this->config->setAppValue(self::APP_NAME, 'allowAllAccess', $this->boolToString($value));
 	}
 
 	public function setAllowPollCreation(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowPollCreation', $this->BoolToString($value));
+		$this->config->setAppValue(self::APP_NAME, 'allowPollCreation', $this->boolToString($value));
 	}
 
 	public function setPublicSharesGroups(array $value): void {
@@ -142,7 +142,7 @@ class AppSettings implements JsonSerializable {
 	}
 
 	public function setAutoArchive(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'autoArchive', $this->BoolToString($value));
+		$this->config->setAppValue(self::APP_NAME, 'autoArchive', $this->boolToString($value));
 	}
 
 	public function setAutoArchiveOffset(int $value): void {
@@ -190,8 +190,8 @@ class AppSettings implements JsonSerializable {
 	}
 
 	private function stringToInteger(string $value, int $default): int {
-		if ($appConfig !== '') {
-			return intval($appConfig);
+		if ($value !== '') {
+			return intval($value);
 		}
 		return $default;
 	}
@@ -214,7 +214,7 @@ class AppSettings implements JsonSerializable {
 		}
 	}
 
-	private function BoolToString(bool $value): string {
+	private function boolToString(bool $value): string {
 		if ($value) {
 			return 'yes';
 		}
