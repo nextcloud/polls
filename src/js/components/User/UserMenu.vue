@@ -209,7 +209,7 @@ export default {
 		async resetVotes() {
 			try {
 				await this.$store.dispatch('votes/resetVotes')
-				showSuccess(t('polls', 'Your votes are resetted'))
+				showSuccess(t('polls', 'Your votes are reset'))
 			} catch {
 				showError(t('polls', 'Error while resetting votes'))
 			}
