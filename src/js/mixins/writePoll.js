@@ -22,7 +22,6 @@
 
 import debounce from 'lodash/debounce'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import { mapState } from 'vuex'
 
 export const writePoll = {
@@ -36,7 +35,6 @@ export const writePoll = {
 	methods: {
 		successDebounced: debounce(function() {
 			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: this.pollTitle }), { timeout: 1000 })
-			emit('update-polls')
 		}, 1500),
 
 		async writePoll() {
