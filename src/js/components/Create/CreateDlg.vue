@@ -49,7 +49,6 @@
 <script>
 import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import ConfigBox from '../Base/ConfigBox'
 import RadioGroupDiv from '../Base/RadioGroupDiv'
 
@@ -93,7 +92,6 @@ export default {
 		async confirm() {
 			try {
 				const response = await this.$store.dispatch('poll/add', { title: this.title, type: this.pollType })
-				emit('update-polls')
 				this.cancel()
 				showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.title }))
 				this.$router.push({ name: 'vote', params: { id: response.data.id } })

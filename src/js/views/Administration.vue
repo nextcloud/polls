@@ -196,7 +196,6 @@ export default {
 		async toggleArchive(pollId) {
 			try {
 				await this.$store.dispatch('poll/toggleArchive', { pollId })
-				emit('update-polls')
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
@@ -205,7 +204,6 @@ export default {
 		async deletePoll() {
 			try {
 				await this.$store.dispatch('poll/delete', { pollId: this.deletePollId })
-				emit('update-polls')
 				this.deleteModal = false
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -216,7 +214,6 @@ export default {
 		async takeOver() {
 			try {
 				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
-				emit('update-polls')
 				this.takeOverModal = false
 			} catch {
 				showError(t('polls', 'Error overtaking poll.'))
