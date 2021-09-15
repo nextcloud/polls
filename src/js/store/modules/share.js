@@ -60,10 +60,10 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token
+		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/share'
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/share'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', { share: response.data.share })
 			return response.data
 		} catch (e) {
@@ -73,14 +73,14 @@ const actions = {
 	},
 
 	async register(context, payload) {
-		let endPoint = 'apps/polls'
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
-		} else {
+		if (context.rootState.route.name !== 'publicVote') {
 			return
 		}
+
+		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/register'
+
 		try {
-			const response = await axios.post(generateUrl(endPoint + '/register'), {
+			const response = await axios.post(generateUrl(endPoint), {
 				userName: payload.userName,
 				emailAddress: payload.emailAddress,
 			})
@@ -92,14 +92,14 @@ const actions = {
 	},
 
 	async updateEmailAddress(context, payload) {
-		let endPoint = 'apps/polls'
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
-		} else {
+		if (context.rootState.route.name !== 'publicVote') {
 			return
 		}
+
+		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/email'
+
 		try {
-			const response = await axios.put(generateUrl(endPoint + '/email'), {
+			const response = await axios.put(generateUrl(endPoint), {
 				emailAddress: payload.emailAddress,
 			})
 			context.commit('set', { share: response.data.share })
@@ -111,14 +111,14 @@ const actions = {
 	},
 
 	async deleteEmailAddress(context, payload) {
-		let endPoint = 'apps/polls'
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
-		} else {
+		if (context.rootState.route.name !== 'publicVote') {
 			return
 		}
+
+		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/email'
+
 		try {
-			const response = await axios.delete(generateUrl(endPoint + '/email'))
+			const response = await axios.delete(generateUrl(endPoint))
 			context.commit('set', { share: response.data.share })
 			context.dispatch('subscription/update', false, { root: true })
 			context.dispatch('poll/get', null, { root: true })
@@ -129,14 +129,14 @@ const actions = {
 	},
 
 	async resendInvitation(context, payload) {
-		let endPoint = 'apps/polls'
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
-		} else {
+		if (context.rootState.route.name !== 'publicVote') {
 			return
 		}
+
+		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/resend'
+
 		try {
-			return await axios.put(generateUrl(endPoint + '/resend'))
+			return await axios.put(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e

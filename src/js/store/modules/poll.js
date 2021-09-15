@@ -180,16 +180,16 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token + '/poll'
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/poll'
 		} else {
 			context.commit('reset')
 			context.commit('acl/reset')
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/poll'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 		} catch (e) {
@@ -203,53 +203,53 @@ const actions = {
 		try {
 			return await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
 		} catch (e) {
-			console.error('Error adding poll:', { error: e.response }, { state })
+			console.error('Error adding poll:', { error: e.response }, { state: context.state })
 			throw e
 		}
 	},
 
 	async clone(context, payload) {
-		const endPoint = 'apps/polls/poll'
+		const endPoint = 'apps/polls/poll/' + payload.pollId + '/clone'
 		try {
-			return await axios.get(generateUrl(endPoint + '/' + payload.pollId + '/clone'))
+			return await axios.get(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error cloning poll', { error: e.response }, { payload })
 		}
 	},
 
 	async update(context) {
-		const endPoint = 'apps/polls/poll'
+		const endPoint = 'apps/polls/poll/' + context.state.id
 		try {
-			const response = await axios.put(generateUrl(endPoint + '/' + state.id), { poll: state })
+			const response = await axios.put(generateUrl(endPoint), { poll: context.state })
 			context.commit('set', { poll: response.data })
 		} catch (e) {
-			console.error('Error updating poll:', { error: e.response }, { poll: state })
+			console.error('Error updating poll:', { error: e.response }, { poll: context.state })
 			throw e
 		}
 	},
 
 	async toggleArchive(context, payload) {
-		const endPoint = 'apps/polls/poll'
+		const endPoint = 'apps/polls/poll/' + payload.pollId + '/toggleArchive'
 		try {
-			await axios.put(generateUrl(endPoint + '/' + payload.pollId + '/toggleArchive'))
+			await axios.put(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error archiving/restoring', { error: e.response }, { payload })
 		}
 	},
 
 	async delete(context, payload) {
-		const endPoint = 'apps/polls/poll'
+		const endPoint = 'apps/polls/poll/' + payload.pollId
 		try {
-			await axios.delete(generateUrl(endPoint + '/' + payload.pollId))
+			await axios.delete(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error deleting poll', { error: e.response }, { payload })
 		}
 	},
 
 	async getParticipantsEmailAddresses(context) {
-		const endPoint = 'apps/polls/poll'
+		const endPoint = 'apps/polls/poll/' + context.state.id + '/addresses'
 		try {
-			return await axios.get(generateUrl(endPoint + '/' + state.id + '/addresses'))
+			return await axios.get(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error retrieving email addresses', { error: e.response })
 		}

@@ -46,14 +46,13 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token + '/subscription'
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
-		} else {
-			return
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/subscription'
 		}
+
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/subscription'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('set', false)
@@ -62,14 +61,15 @@ const actions = {
 
 	async update(context, payload) {
 		let endPoint = 'apps/polls'
+
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = endPoint + '/s/' + context.rootState.route.params.token + (payload ? '/subscribe' : '/unsubscribe')
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + (payload ? '/subscribe' : '/unsubscribe')
 		}
 
 		try {
-			const response = await axios.put(generateUrl(endPoint + (payload ? '/subscribe' : '/unsubscribe')))
+			const response = await axios.put(generateUrl(endPoint))
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error(e.response)
