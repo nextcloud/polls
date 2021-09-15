@@ -66,26 +66,16 @@ const getters = {
 	},
 
 	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent),
-
-	public: (state) => {
-		const invitationTypes = ['public']
-		return state.list.filter((share) => invitationTypes.includes(share.type))
-	},
+	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
 
 }
 
 const actions = {
 	async list(context) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
-		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
-		}
+		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/shares'
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/shares'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
@@ -107,11 +97,12 @@ const actions = {
 	},
 
 	async delete(context, payload) {
-		const endPoint = 'apps/polls/share'
+		const endPoint = 'apps/polls/share/' + payload.share.token
+
 		context.commit('delete', { share: payload.share })
 
 		try {
-			await axios.delete(generateUrl(endPoint + '/' + payload.share.token))
+			await axios.delete(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error removing share', { error: e.response }, { payload })
 			throw e
@@ -122,6 +113,7 @@ const actions = {
 
 	async switchAdmin(context, payload) {
 		let endPoint = 'apps/polls/share/' + payload.share.token
+
 		if (payload.share.type === 'admin') {
 			endPoint = endPoint + '/user'
 		} else if (payload.share.type === 'user') {
@@ -139,9 +131,10 @@ const actions = {
 	},
 
 	async sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share'
+		const endPoint = 'apps/polls/share/' + payload.share.token + '/invite'
+
 		try {
-			return await axios.post(generateUrl(endPoint + '/' + payload.share.token + '/invite'))
+			return await axios.post(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
@@ -151,9 +144,10 @@ const actions = {
 	},
 
 	async resolveGroup(context, payload) {
-		const endPoint = 'apps/polls/share'
+		const endPoint = 'apps/polls/share/' + payload.share.token + '/resolve'
+
 		try {
-			await axios.get(generateUrl(endPoint + '/' + payload.share.token + '/resolve'))
+			await axios.get(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
 			throw e
