@@ -1,8 +1,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import exception from '../Exceptions/Exceptions'
-// import { emit } from '@nextcloud/event-bus'
+import Exception from '../Exceptions/Exceptions'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export const watchPolls = {
@@ -31,6 +30,9 @@ export const watchPolls = {
 
 			while (this.retryCounter < this.maxTries) {
 				try {
+					if (this.$route.name === null) {
+						throw new Exception('Router not initialized')
+					}
 					const response = await axios.get(generateUrl(this.endPoint), {
 						params: { offset: this.lastUpdated },
 						cancelToken: this.cancelToken.token,
@@ -38,7 +40,7 @@ export const watchPolls = {
 
 					if (typeof response.data?.updates !== 'object') {
 						console.debug('[polls]', 'return value is no array')
-						throw exception('Invalid content')
+						throw new Exception('Invalid content')
 					}
 
 					this.retryCounter = 0
@@ -46,11 +48,14 @@ export const watchPolls = {
 					await this.loadTables(response.data.updates)
 
 				} catch (e) {
-
 					if (axios.isCancel(e)) {
-						await this.handleCanceledRequest(e)
+						await this.handleCanceledRequest()
 					} else if (e.response?.status === 304) {
 						await this.handleNotModifiedResponse()
+					} else if (e.message === 'Router not initialized') {
+						await this.handleNotModifiedResponse()
+						await this.handleConnectionError(e)
+						await new Promise((resolve) => setTimeout(resolve, 2000))
 					} else {
 						// No valid response was returned, i.e. server died or
 						// an exception was triggered
@@ -94,7 +99,7 @@ export const watchPolls = {
 			}
 		},
 
-		handleCanceledRequest(e) {
+		handleCanceledRequest() {
 			if (this.restart) {
 				// Restarting of poll was initiated
 				console.debug('[polls]', 'watch canceled - restart watch')
@@ -108,13 +113,14 @@ export const watchPolls = {
 		},
 
 		handleNotModifiedResponse() {
+			console.debug('[polls]', 'Not modified')
 			this.retryCounter = 0
 		},
 
 		handleConnectionError(e) {
 			this.retryCounter += 1 // incremet the retry counter
 
-			console.debug('[polls]', 'No response - request aborted - failed request', this.retryCounter, 'out of', this.maxTries)
+			console.debug('[polls]', e.message ?? 'No response - request aborted - failed request', '-', this.retryCounter + '/' + this.maxTries)
 
 			if (e.response) {
 				console.error('[polls]', 'Unhandled error watching polls', e)
