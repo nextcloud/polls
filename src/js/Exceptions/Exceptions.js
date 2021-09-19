@@ -1,5 +1,19 @@
-const exception = function(message) {
-	this.message = message
+class Exception extends Error {
+
+	constructor(message) {
+		super(message)
+		this.name = 'Exception'
+	}
+
 }
 
-export default exception
+class NotReady extends Error {
+
+	constructor(message) {
+		super(message)
+		this.name = 'NotReady'
+	}
+
+}
+
+export { Exception, NotReady }
