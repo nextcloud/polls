@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.2.0] - tbd
+## [3.2.0] - 2021-09-19
 - Poll administration can now be delegated to invited users
 - New admin section for polls (/settings/admin/polls-admin)
   - Disable login option in registration screen of public polls
