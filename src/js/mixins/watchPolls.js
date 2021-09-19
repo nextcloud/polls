@@ -1,7 +1,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import Exception from '../Exceptions/Exceptions'
+import { NotReady } from '../Exceptions/Exceptions'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export const watchPolls = {
@@ -15,6 +15,8 @@ export const watchPolls = {
 			retryTimeout: 30000,
 			maxTries: 5,
 			endPoint: '',
+			isLoggedin: !!getCurrentUser(),
+			isAdmin: !!getCurrentUser()?.isAdmin,
 		}
 	},
 
@@ -31,7 +33,7 @@ export const watchPolls = {
 			while (this.retryCounter < this.maxTries) {
 				try {
 					if (this.$route.name === null) {
-						throw new Exception('Router not initialized')
+						throw new NotReady('Router not initialized')
 					}
 					const response = await axios.get(generateUrl(this.endPoint), {
 						params: { offset: this.lastUpdated },
@@ -40,7 +42,7 @@ export const watchPolls = {
 
 					if (typeof response.data?.updates !== 'object') {
 						console.debug('[polls]', 'return value is no array')
-						throw new Exception('Invalid content')
+						throw new NotReady('Invalid content')
 					}
 
 					this.retryCounter = 0
@@ -52,15 +54,9 @@ export const watchPolls = {
 						await this.handleCanceledRequest()
 					} else if (e.response?.status === 304) {
 						await this.handleNotModifiedResponse()
-					} else if (e.message === 'Router not initialized') {
-						await this.handleNotModifiedResponse()
-						await this.handleConnectionError(e)
-						await new Promise((resolve) => setTimeout(resolve, 2000))
 					} else {
-						// No valid response was returned, i.e. server died or
-						// an exception was triggered
 						await this.handleConnectionError(e)
-						await new Promise((resolve) => setTimeout(resolve, this.retryTimeout))
+						await new Promise((resolve) => setTimeout(resolve, e.name === 'NotReady' ? 2000 : this.retryTimeout))
 					}
 				}
 			}
@@ -73,25 +69,37 @@ export const watchPolls = {
 				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
 
 				if (item.table === 'polls') {
-					if (getCurrentUser().isAdmin) {
-						dispatches = [...dispatches, 'pollsAdmin/list'] // If user is an admin, also load admin list
+					if (this.isAdmin) {
+						// If user is an admin, also load admin list
+						dispatches = [...dispatches, 'pollsAdmin/list']
 					}
 
 					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
-						dispatches = [...dispatches, 'poll/get'] // if current poll is affected, load current poll configuration
+						// if current poll is affected, load current poll configuration
+						dispatches = [...dispatches, 'poll/get']
 					}
+
+					if (this.loggedIn) {
+						// if user is an authorized user load polls list
+						dispatches = [...dispatches, item.table + '/list']
+					}
+				} else if (!this.loggedIn && (item.table === 'shares')) {
+					// if current user is guest and table is shares only reload current share
+					dispatches = [...dispatches, 'share/get']
+				} else {
+					// otherwise load table
+					dispatches = [...dispatches, item.table + '/list']
 				}
-				dispatches = [...dispatches, item.table + '/list']
 			})
 
-			// remove duplicates
-			dispatches = [...new Set(dispatches)]
+			dispatches = [...new Set(dispatches)] // remove duplicates
 			await Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
 		},
 
 		initWatch() {
 			this.cancelToken = axios.CancelToken.source()
 			this.retryCounter = 0
+			this.restart = false
 			if (this.$route.name === 'publicVote') {
 				this.endPoint = 'apps/polls/s/' + this.$route.params.token + '/watch'
 			} else {
@@ -104,7 +112,6 @@ export const watchPolls = {
 				// Restarting of poll was initiated
 				console.debug('[polls]', 'watch canceled - restart watch')
 				this.initWatch()
-				this.restart = false
 			} else {
 				// we will exit here
 				console.debug('[polls]', 'watch canceled')
@@ -118,8 +125,7 @@ export const watchPolls = {
 		},
 
 		handleConnectionError(e) {
-			this.retryCounter += 1 // incremet the retry counter
-
+			this.retryCounter += 1
 			console.debug('[polls]', e.message ?? 'No response - request aborted - failed request', '-', this.retryCounter + '/' + this.maxTries)
 
 			if (e.response) {
