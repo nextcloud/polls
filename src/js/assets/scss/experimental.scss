@@ -16,8 +16,24 @@
 		}
 	}
 
+
 	// experimental background image
 	&.app-polls.bgimage {
+
+		.poll-title {
+		  background: var(--color-main-background);
+		  padding: 12px;
+		  margin: 12px;
+		  border-radius: var(--border-radius);
+		}
+
+		.poll-header-buttons {
+			align-self: flex-end;
+			border-radius: var(--border-radius-pill);
+			backdrop-filter: blur(10px);
+			background-color: var(--color-background-glassy);
+		}
+
 		.glassy {
 			backdrop-filter: blur(10px);
 			background-color: var(--color-background-glassy);
