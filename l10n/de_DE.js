@@ -170,7 +170,7 @@ OC.L10N.register(
     "Otherwise participate publicly." : "Ansonsten öffentlich teilnehmen. ",
     "Checking name …" : "Prüfe den Namen …",
     "Enter a name to participate." : "Geben Sie einen Namen ein, um teilzunehmen.",
-    "Invalid name" : "Ungültiges Name",
+    "Invalid name" : "Ungültiger Name",
     "{username} is valid." : "{username} ist gültig.",
     "Valid email address." : "Gültige E-Mailadresse",
     "Email could not be sent to {emailAddress}" : "E-Mail konnte nicht an {emailAddress} versendet werden",
