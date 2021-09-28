@@ -299,17 +299,8 @@ export default {
 }
 
 // Theming styles
-.app-polls {
-	&.dashboard {
-		.app-navigation {
-			border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
-		}
-		.app-sidebar {
-			border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
-		}
-	}
-
-	&.theming-light {
+.theme--light {
+	.app-polls.theming-light {
 		#app-navigation-vue .app-navigation-toggle svg {
 			filter: invert(1) hue-rotate(180deg) !important;
 			opacity: 1;
@@ -317,6 +308,33 @@ export default {
 
 		.poll-title, .poll-list-title {
 			filter: invert(1) hue-rotate(180deg) !important;
+		}
+	}
+
+}
+
+.theme--dark {
+	.app-polls.theming-dark {
+		#app-navigation-vue .app-navigation-toggle svg {
+			filter: invert(1) hue-rotate(180deg) !important;
+			opacity: 1;
+		}
+
+		.poll-title, .poll-list-title {
+			filter: invert(1) hue-rotate(180deg) !important;
+		}
+	}
+
+}
+
+
+.app-polls {
+	&.dashboard {
+		.app-navigation {
+			border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
+		}
+		.app-sidebar {
+			border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
 		}
 	}
 
