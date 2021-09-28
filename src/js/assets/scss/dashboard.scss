@@ -25,7 +25,7 @@
 		}
 	}
 
-	#body-user[class*="dashboard--"].page--scrolled & {
+	#body-user[class*='dashboard--'].page--scrolled & {
 		&:before {
 			margin-top: 0;
 		}
