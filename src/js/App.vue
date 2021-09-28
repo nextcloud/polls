@@ -327,7 +327,6 @@ export default {
 
 }
 
-
 .app-polls {
 	&.dashboard {
 		.app-navigation {
