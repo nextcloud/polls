@@ -7,7 +7,7 @@
 }
 
 #header {
-	#body-user[class*="dashboard--"] & {
+	#body-user[class*='dashboard--'] & {
 		background: transparent !important;
 		--color-header: rgba(24, 24, 24, 1);
 

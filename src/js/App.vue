@@ -316,16 +316,13 @@ export default {
 		}
 
 		.poll-title, .poll-list-title {
-				filter: invert(1) hue-rotate(180deg) !important;
-				// color: var(--color-polls-dashboard-light-text) !important;
+			filter: invert(1) hue-rotate(180deg) !important;
 		}
 	}
 
 	&.theming-dark {
 		.poll-title, .poll-list-title {
-			* {
-				color: var(--color-polls-dashboard-dark-text) !important;
-			}
+			color: var(--color-polls-dashboard-dark-text) !important;
 		}
 	}
 
