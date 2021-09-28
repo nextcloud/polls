@@ -30,8 +30,8 @@
 			<PerformanceSettings />
 		</AppSettingsSection>
 
-		<AppSettingsSection :title="t('polls', 'Experimental styles')">
-			<ExpertimantalSettings />
+		<AppSettingsSection :title="t('polls', 'Styles')">
+			<StyleSettings />
 		</AppSettingsSection>
 	</AppSettingsDialog>
 </template>
@@ -48,7 +48,7 @@ export default {
 		AppSettingsDialog,
 		AppSettingsSection,
 		FeatureSettings: () => import('./FeatureSettings'),
-		ExpertimantalSettings: () => import('./ExpertimantalSettings'),
+		StyleSettings: () => import('./StyleSettings'),
 		PerformanceSettings: () => import('./PerformanceSettings'),
 	},
 

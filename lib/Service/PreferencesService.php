@@ -72,8 +72,6 @@ class PreferencesService {
 
 	/**
 	 * Read all preferences
-	 *
-	 * @return Preferences
 	 */
 	public function get(): Preferences {
 		return $this->preferences;
@@ -81,8 +79,6 @@ class PreferencesService {
 
 	/**
 	 * Write references
-	 *
-	 * @return Preferences
 	 */
 	public function write(array $settings): Preferences {
 		if (!$this->userId) {

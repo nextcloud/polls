@@ -24,7 +24,7 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-
+use OCA\Dashboard\Service\BackgroundService;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -59,6 +59,31 @@ class Preferences extends Entity implements JsonSerializable {
 			'userId' => $this->getUserId(),
 			'timestamp' => $this->getTimestamp(),
 			'preferences' => json_decode($this->preferences),
+			'dashboard' => $this->getDashboardBackground(),
+		];
+	}
+
+	/**
+	 * Fetch dashboard settings
+	 */
+	public function getDashboardBackground(): array {
+		if (\OC::$server->getAppManager()->isEnabledForUser('dashboard')) {
+			$background = \OC::$server->getConfig()->getUserValue($this->userId, 'dashboard', 'background');
+			return [
+				'isInstalled' => true,
+				'background' => \OC::$server->getConfig()->getUserValue($this->userId, 'dashboard', 'background'),
+				'themingDefaultBackground' => $background,
+				'shippedBackgrounds' => BackgroundService::SHIPPED_BACKGROUNDS,
+				'backgroundVersion' => \OC::$server->getConfig()->getUserValue($this->userId, 'dashboard', 'backgroundVersion'),
+				'theming' => BackgroundService::SHIPPED_BACKGROUNDS[$background]['theming'] ?? 'light',
+			];
+		}
+		return [
+			'isInstalled' => false,
+			'background' => '',
+			'themingDefaultBackground' => '',
+			'shippedBackgrounds' => '',
+			'backgroundVersion' => 0,
 		];
 	}
 }

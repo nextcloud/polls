@@ -25,13 +25,15 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultSettings = () => ({
 	user: {
-		experimental: false,
+		useDashboardStyling: false,
+		useIndividualStyling: false,
+		individualBgColor: false,
+		individualImage: false,
+		individualImageUrl: '',
+		individualImageStyle: 'light',
+		translucentPanels: false,
 		calendarPeek: false,
 		checkCalendars: [],
-		useImage: false,
-		imageUrl: '',
-		glassyNavigation: false,
-		glassySidebar: false,
 		defaultViewTextPoll: 'list-view',
 		defaultViewDatePoll: 'table-view',
 		performanceThreshold: 1000,
@@ -39,6 +41,14 @@ const defaultSettings = () => ({
 	session: {
 		manualViewDatePoll: '',
 		manualViewTextPoll: '',
+	},
+	dashboard: {
+		background: '',
+		themingDefaultBackground: '',
+		backgroundVersion: 0,
+		shippedBackgrounds: '',
+		isInstalled: false,
+		theming: 'light',
 	},
 	availableCalendars: [],
 	viewModes: [
@@ -75,6 +85,10 @@ const mutations = {
 		})
 	},
 
+	setDashboard(state, payload) {
+		state.dashboard = payload
+	},
+
 	setCalendars(state, payload) {
 		state.availableCalendars = payload.calendars
 	},
@@ -92,6 +106,68 @@ const mutations = {
 }
 
 const getters = {
+	useDashboardStyling(state) {
+		return state.dashboard.isInstalled && state.user.useDashboardStyling
+	},
+
+	useIndividualStyling(state) {
+		return !state.user.useDashboardStyling && state.user.useIndividualStyling
+	},
+
+	useTranslucentPanels(state) {
+		return (state.dashboard.isInstalled && state.user.useDashboardStyling)
+			|| (state.user.useIndividualStyling && state.user.translucentPanels)
+	},
+
+	theming(state) {
+		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
+			return state.dashboard.theming
+		}
+		if (state.user.useIndividualStyling && state.user.individualImage) {
+			return state.user.individualImageStyle
+		}
+	},
+
+	backgroundColor(state) {
+		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
+			if (state.dashboard.background.charAt(0) === '#') {
+				return state.dashboard.background
+			}
+			if (state.dashboard.theming === 'dark') {
+				return 'var(--color-polls-dashboard-dark-background)'
+			}
+			return 'var(--color-polls-dashboard-light-background)'
+		}
+
+		if (state.user.useIndividualStyling) {
+			if (state.user.useIndividualStyling && state.user.individualImage) {
+				return `--color-polls-dashboard-${state.user.individualImageStyle}-background`
+			}
+			if (state.user.individualBgColor) {
+				return 'var(--color-primary-light)'
+			}
+		}
+
+		return ''
+	},
+
+	backgroundImage(state) {
+		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
+			if (state.dashboard.background === 'custom') {
+				return generateUrl('/apps/dashboard/background') + '?v=' + window.OCA.Theming.cacheBuster
+			} else if (!state.dashboard.background) {
+				return generateUrl('/apps/theming/image/background') + '?v=' + window.OCA.Theming.cacheBuster
+			} else if (state.dashboard.background.charAt(0) === '#') {
+				return ''
+			}
+			return generateUrl('/apps/dashboard/img/' + state.dashboard.background)
+		}
+		if (state.user.useIndividualStyling && state.user.individualImage) {
+			return state.user.individualImageUrl
+		}
+		return ''
+	},
+
 	viewTextPoll(state) {
 		if (state.session.manualViewTextPoll) {
 			return state.session.manualViewTextPoll
@@ -133,6 +209,7 @@ const actions = {
 				response.data.preferences.defaultViewDatePoll = 'list-view'
 			}
 			context.commit('setPreference', response.data.preferences)
+			context.commit('setDashboard', response.data.dashboard)
 		} catch {
 			context.commit('reset')
 		}

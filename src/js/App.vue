@@ -21,13 +21,10 @@
   -->
 
 <template>
-	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
-		<router-view name="navigation" :class="{ 'glassy': settings.glassyNavigation }" />
+	<Content app-name="polls" :style="appStyle" :class="appClass">
+		<router-view name="navigation" />
 		<router-view />
-		<router-view v-if="showSidebar"
-			name="sidebar"
-			:active="activeTab"
-			:class="{ 'glassy': settings.glassySidebar }" />
+		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
 		<LoadingOverlay v-if="loading" />
 		<SettingsDlg />
 	</Content>
@@ -38,16 +35,14 @@ import SettingsDlg from './components/Settings/SettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
 import './assets/scss/print.scss'
-
-// TODO: remove, when @media:prefers-color-scheme is completely supported by core
 import './assets/scss/transitions.scss'
-import './assets/scss/experimental.scss'
+import './assets/scss/dashboard.scss'
 import { watchPolls } from './mixins/watchPolls'
 
 export default {
@@ -74,27 +69,66 @@ export default {
 			settings: (state) => state.settings.user,
 			poll: (state) => state.poll,
 			allowEdit: (state) => state.poll.acl.allowEdit,
+			dashboard: (state) => state.settings.dashboard,
 		}),
+
+		...mapGetters({
+			useDashboardStyling: 'settings/useDashboardStyling',
+			useIndividualStyling: 'settings/useIndividualStyling',
+			backgroundImage: 'settings/backgroundImage',
+			backgroundColor: 'settings/backgroundColor',
+			useTranslucentPanels: 'settings/useTranslucentPanels',
+			theming: 'settings/theming',
+		}),
+
+		appClass() {
+			return [
+				this.transitionClass,
+				`theming-${this.theming}`, {
+					edit: this.allowEdit,
+					individual: this.useIndividualStyling,
+					dashboard: this.useDashboardStyling,
+					'background-image': !!this.backgroundImage,
+					'background-color': !!this.backgroundColor,
+					translucent: this.useTranslucentPanels,
+					'polls-theme-dark': this.theming === 'dark',
+					'polls-theme-light': this.theming === 'light',
+				},
+			]
+		},
+
+		appStyle() {
+			if (this.useDashboardStyling || this.useIndividualStyling) {
+				return {
+					'background-image': `url(${this.backgroundImage})`,
+					'background-size': 'cover',
+					'background-position': 'center center',
+					'background-attachment': 'fixed',
+					'background-repeat': 'no-repeat',
+					'background-color': this.backgroundColor,
+				}
+			}
+
+			return {}
+		},
 
 		showSidebar() {
 			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
 		},
-
-		appStyle() {
-			if (this.settings.useImage && this.settings.experimental) {
-				return {
-					backgroundImage: 'url(' + this.settings.imageUrl + ')',
-					backgroundSize: 'cover',
-					backgroundPosition: 'center center',
-					backgroundAttachment: 'fixed',
-					backgroundRepeat: 'no-repeat',
-				}
-			}
-			return {}
-		},
 	},
 
 	watch: {
+		useDashboardStyling() {
+			if (this.useDashboardStyling) {
+				document.body.classList.add(`dashboard--${this.theming}`)
+			} else {
+				document.body.classList.remove('dashboard--dark')
+				document.body.classList.remove('dashboard--light')
+			}
+			if (window.OCA.Theming.inverted) {
+				document.body.classList.add('dashboard--inverted')
+			}
+		},
 		$route(to, from) {
 			this.watchPollsRestart()
 			this.loadPoll()
@@ -140,6 +174,14 @@ export default {
 		})
 	},
 
+	mounted() {
+		window.addEventListener('scroll', this.handleScroll)
+	},
+
+	destroyed() {
+		window.removeEventListener('scroll', this.handleScroll)
+	},
+
 	beforeDestroy() {
 		this.cancelToken.cancel()
 		unsubscribe('load-poll')
@@ -149,6 +191,14 @@ export default {
 	},
 
 	methods: {
+		handleScroll() {
+			if (window.scrollY > 70) {
+				document.body.classList.add('page--scrolled')
+			} else {
+				document.body.classList.remove('page--scrolled')
+			}
+		},
+
 		transitionsOn() {
 			this.transitionClass = 'transitions-active'
 		},
@@ -205,7 +255,7 @@ export default {
 </script>
 
 <style  lang="scss">
-[class*='area__'] {
+[class^='area__'] {
 	padding: 0 8px 16px 0;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
@@ -245,6 +295,66 @@ export default {
 	flex-direction: column;
 	padding: 4px 8px 0 40px;
 	min-width: 320px;
+	background-color: transparent !important;
+}
+
+// Theming styles
+.app-polls {
+	&.dashboard {
+		.app-navigation {
+			border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
+		}
+		.app-sidebar {
+			border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
+		}
+	}
+
+	&.theming-light {
+		#app-navigation-vue .app-navigation-toggle svg {
+			filter: invert(1) hue-rotate(180deg) !important;
+			opacity: 1;
+		}
+
+		.poll-title, .poll-list-title {
+				filter: invert(1) hue-rotate(180deg) !important;
+				// color: var(--color-polls-dashboard-light-text) !important;
+		}
+	}
+
+	&.theming-dark {
+		.poll-title, .poll-list-title {
+			* {
+				color: var(--color-polls-dashboard-dark-text) !important;
+			}
+		}
+	}
+
+	&.background-color, &.background-image {
+		.poll-header-buttons {
+			align-self: flex-end;
+			border-radius: var(--border-radius-pill);
+			background-color: var(--color-main-background);
+		}
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+
+		[class*='area__'] {
+			padding: 8px;
+			margin: 0 6px 24px 0;
+			border-radius: var(--border-radius-large);
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+		}
+
+	}
+
+	&.translucent {
+		.app-navigation, .app-sidebar, .poll-header-buttons, [class*='area__'] {
+			backdrop-filter: blur(10px);
+			background-color: var(--color-background-translucent);
+		}
+	}
 }
 
 </style>

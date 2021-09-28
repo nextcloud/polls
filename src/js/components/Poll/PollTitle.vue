@@ -26,8 +26,12 @@
 			{{ title }}
 		</div>
 		<div v-if="showSubText" class="poll-title__sub">
-			<span>{{ subTextLeft }}</span> |
-			<span :class="[subTextRight.class, subTextRight.icon ]">{{ subTextRight.text }}</span>
+			<span>{{ subTextLeft }}</span>
+			<span v-for="(subText) in subTexts"
+				:key="subText.text">
+				<span> | </span>
+				<span :class="[subText.class, subText.icon]">{{ subText.text }}</span>
+			</span>
 		</div>
 	</div>
 </template>
@@ -66,43 +70,64 @@ export default {
 			return t('polls', 'A poll from {name}', { name: this.ownerDisplayName })
 		},
 
-		subTextRight() {
+		subTexts() {
+			const subTexts = []
+
 			if (this.deleted) {
-				return {
+				return [{
 					text: t('polls', 'Archived'),
 					icon: 'icon-category-app-bundles',
 					class: 'archived',
-				}
+				}]
 			}
 
 			if (this.isClosed) {
-				return {
+				return [{
 					text: this.timeExpirationRelative,
 					icon: 'icon-polls-closed',
 					class: 'closed',
-				}
+				}]
 			}
 
 			if (!this.isClosed && this.expire) {
-				return {
+				subTexts.push({
 					text: t('polls', 'Closing {relativeExpirationTime}', { relativeExpirationTime: this.timeExpirationRelative }),
 					icon: 'icon-calendar-000',
 					class: this.closeToClosing ? 'closing' : 'open',
-				}
+				})
 			}
 
 			if (this.proposalsExpirySet && this.proposalsExpired) {
-				return {
+				subTexts.push({
 					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
 					icon: 'icon-add',
 					class: 'proposal',
-				}
+				})
 			}
 
+			if (this.proposalsExpirySet && !this.proposalsExpired) {
+				subTexts.push({
+					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
+					icon: 'icon-add',
+					class: 'proposal',
+				})
+			}
+
+			if (subTexts.length < 1) {
+				return [{
+					text: this.dateCreatedRelative,
+					icon: 'icon-clock',
+					class: 'created',
+				}]
+			}
+			return subTexts
+		},
+
+		expiryInfo() {
 			return {
-				text: this.dateCreatedRelative,
-				icon: 'icon-clock',
-				class: 'created',
+				text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
+				icon: 'icon-add',
+				class: 'proposal',
 			}
 		},
 
@@ -145,7 +170,6 @@ export default {
 				font-weight: 700;
 			}
 			.open {
-				// color: var(--color-success);
 				font-weight: 700;
 			}
 			.archived {
@@ -161,7 +185,6 @@ export default {
 			font-weight: bold;
 			font-size: 1.3em;
 			line-height: 1.5em;
-			color: var(--color-text-light);
 		}
 	}
 </style>

@@ -35,7 +35,7 @@
 
 			<div class="sub-section">
 				<h2>{{ t('polls', 'Experimental styles') }}</h2>
-				<ExpertimantalSettings />
+				<StyleSettings />
 			</div>
 		</div>
 	</div>
@@ -48,7 +48,7 @@ export default {
 
 	components: {
 		FeatureSettings: () => import('../components/Settings/FeatureSettings'),
-		ExpertimantalSettings: () => import('../components/Settings/ExpertimantalSettings'),
+		StyleSettings: () => import('../components/Settings/StyleSettings'),
 		PerformanceSettings: () => import('../components/Settings/PerformanceSettings'),
 	},
 

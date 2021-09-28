@@ -205,7 +205,6 @@ export default {
 	flex: 1;
 	padding: 4px 8px;
 	border-bottom: 1px solid var(--color-border-dark);
-	background-color: var(--color-main-background)
 }
 
 .poll-item__header {

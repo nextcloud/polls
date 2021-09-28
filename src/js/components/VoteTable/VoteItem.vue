@@ -165,7 +165,7 @@ export default {
 	}
 
 	&.active {
-		background-color: var(--color-main-background);
+		background-color: transparent;
 		> .icon {
 			cursor: pointer;
 			border: 2px solid;
