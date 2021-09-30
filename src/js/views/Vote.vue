@@ -122,7 +122,7 @@ export default {
 		},
 
 		windowTitle() {
-			return t('polls', 'Polls') + ' - ' + this.poll.title
+			return `${t('polls', 'Polls')} - ${this.poll.title}`
 		},
 
 		showRegisterModal() {

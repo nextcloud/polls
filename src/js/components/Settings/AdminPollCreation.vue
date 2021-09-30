@@ -102,7 +102,7 @@ export default {
 			this.$store.dispatch('appSettings/write')
 		},
 		loadGroups: debounce(async function(query) {
-			let endPoint = generateUrl('apps/polls/groups/' + query)
+			let endPoint = generateUrl(`apps/polls/groups/${query}`)
 
 			if (!query.trim()) {
 				endPoint = generateUrl('apps/polls/groups')

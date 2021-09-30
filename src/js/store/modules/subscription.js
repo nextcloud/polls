@@ -50,9 +50,9 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token + '/subscription'
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/subscription`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/subscription'
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/subscription`
 		} else {
 			context.commit('reset')
 			return
@@ -70,9 +70,9 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token + (payload ? '/subscribe' : '/unsubscribe')
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}${payload ? '/subscribe' : '/unsubscribe'}`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + (payload ? '/subscribe' : '/unsubscribe')
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}${payload ? '/subscribe' : '/unsubscribe'}`
 		} else {
 			context.commit('reset')
 			return

@@ -180,9 +180,9 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token + '/poll'
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/poll`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/poll'
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/poll`
 		} else {
 			context.commit('reset')
 			context.commit('acl/reset')
@@ -209,7 +209,7 @@ const actions = {
 	},
 
 	async clone(context, payload) {
-		const endPoint = 'apps/polls/poll/' + payload.pollId + '/clone'
+		const endPoint = `apps/polls/poll/${payload.pollId}/clone`
 		try {
 			return await axios.get(generateUrl(endPoint))
 		} catch (e) {
@@ -218,7 +218,7 @@ const actions = {
 	},
 
 	async update(context) {
-		const endPoint = 'apps/polls/poll/' + context.state.id
+		const endPoint = `apps/polls/poll/${context.state.id}`
 		try {
 			const response = await axios.put(generateUrl(endPoint), { poll: context.state })
 			context.commit('set', { poll: response.data })
@@ -229,7 +229,7 @@ const actions = {
 	},
 
 	async toggleArchive(context, payload) {
-		const endPoint = 'apps/polls/poll/' + payload.pollId + '/toggleArchive'
+		const endPoint = `apps/polls/poll/${payload.pollId}/toggleArchive`
 		try {
 			await axios.put(generateUrl(endPoint))
 		} catch (e) {
@@ -238,7 +238,7 @@ const actions = {
 	},
 
 	async delete(context, payload) {
-		const endPoint = 'apps/polls/poll/' + payload.pollId
+		const endPoint = `apps/polls/poll/${payload.pollId}`
 		try {
 			await axios.delete(generateUrl(endPoint))
 		} catch (e) {
@@ -247,7 +247,7 @@ const actions = {
 	},
 
 	async getParticipantsEmailAddresses(context) {
-		const endPoint = 'apps/polls/poll/' + context.state.id + '/addresses'
+		const endPoint = `apps/polls/poll/${context.state.id}/addresses`
 		try {
 			return await axios.get(generateUrl(endPoint))
 		} catch (e) {

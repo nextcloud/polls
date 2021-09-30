@@ -137,7 +137,7 @@ export default {
 				} else if (this.type === 'admin') {
 					return 'icon-user-admin'
 				}
-				return 'icon-' + this.type
+				return `icon-${this.type}`
 			}
 			return ''
 

@@ -84,7 +84,7 @@ export default {
 			}
 			this.searchToken = axios.CancelToken.source()
 			try {
-				const response = await axios.get(generateUrl('apps/polls/search/users/' + query), { cancelToken: this.searchToken.token })
+				const response = await axios.get(generateUrl(`apps/polls/search/users/${query}`), { cancelToken: this.searchToken.token })
 				this.users = response.data.siteusers
 				this.isLoading = false
 			} catch (e) {

@@ -61,7 +61,7 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/administration/poll/' + payload.pollId + '/takeover'
+		const endPoint = `apps/polls/administration/poll/${payload.pollId}/takeover`
 		axios.put(generateUrl(endPoint))
 	},
 }

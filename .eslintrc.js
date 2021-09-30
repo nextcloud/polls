@@ -11,6 +11,7 @@ module.exports = {
 		'arrow-parens': 'error',
 		'arrow-body-style': 'error',
 		'brace-style': 'error',
+		'prefer-template': 'error',
 		'newline-per-chained-call': ['error', { ignoreChainWithDepth: 4 }],
 		'no-array-constructor': 'error',
 		'no-continue': 'error',

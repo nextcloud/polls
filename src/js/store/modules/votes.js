@@ -95,15 +95,15 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
 		} else {
 			context.commit('reset')
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/votes'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(`${endPoint}/votes`), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('reset')
@@ -114,11 +114,11 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+			endPoint = `${endPoint}/s/${context.rootState.poll.acl.token}`
 		}
 
 		try {
-			const response = await axios.put(generateUrl(endPoint + '/vote'), {
+			const response = await axios.put(generateUrl(`${endPoint}/vote`), {
 				optionId: payload.option.id,
 				setTo: payload.setTo,
 			})
@@ -140,9 +140,9 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token + '/user'
+			endPoint = `${endPoint}/s/${context.rootState.poll.acl.token}/user`
 		} else {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/user'
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/user`
 		}
 
 		try {
@@ -155,7 +155,7 @@ const actions = {
 	},
 
 	async deleteUser(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/user/' + payload.userId
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/user/${payload.userId}`
 		try {
 			await axios.delete(generateUrl(endPoint))
 			context.commit('deleteVotes', payload)

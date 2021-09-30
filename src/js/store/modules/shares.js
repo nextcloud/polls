@@ -72,7 +72,7 @@ const getters = {
 
 const actions = {
 	async list(context) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/shares'
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/shares`
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
@@ -84,10 +84,10 @@ const actions = {
 	},
 
 	async add(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}`
 
 		try {
-			await axios.post(generateUrl(endPoint + '/share'), payload.share)
+			await axios.post(generateUrl(`${endPoint}/share`), payload.share)
 		} catch (e) {
 			console.error('Error writing share', { error: e.response }, { payload })
 			throw e
@@ -97,7 +97,7 @@ const actions = {
 	},
 
 	async delete(context, payload) {
-		const endPoint = 'apps/polls/share/' + payload.share.token
+		const endPoint = `apps/polls/share/${payload.share.token}`
 
 		context.commit('delete', { share: payload.share })
 
@@ -112,12 +112,12 @@ const actions = {
 	},
 
 	async switchAdmin(context, payload) {
-		let endPoint = 'apps/polls/share/' + payload.share.token
+		let endPoint = `apps/polls/share/${payload.share.token}`
 
 		if (payload.share.type === 'admin') {
-			endPoint = endPoint + '/user'
+			endPoint = `${endPoint}/user`
 		} else if (payload.share.type === 'user') {
-			endPoint = endPoint + '/admin'
+			endPoint = `${endPoint}/admin`
 		}
 
 		try {
@@ -131,7 +131,7 @@ const actions = {
 	},
 
 	async sendInvitation(context, payload) {
-		const endPoint = 'apps/polls/share/' + payload.share.token + '/invite'
+		const endPoint = `apps/polls/share/${payload.share.token}/invite`
 
 		try {
 			return await axios.post(generateUrl(endPoint))
@@ -144,7 +144,7 @@ const actions = {
 	},
 
 	async resolveGroup(context, payload) {
-		const endPoint = 'apps/polls/share/' + payload.share.token + '/resolve'
+		const endPoint = `apps/polls/share/${payload.share.token}/resolve`
 
 		try {
 			await axios.get(generateUrl(endPoint))
