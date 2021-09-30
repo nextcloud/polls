@@ -22,7 +22,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import { getCurrentUser } from '@nextcloud/auth'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
@@ -124,33 +123,34 @@ const getters = {
 		return state.categories.filter((category) => (!category.createDependent))
 	},
 
-	filtered: (state) => (filterId) => {
+	activePolls: (state) => state.list.filter((poll) => (!poll.deleted)),
+	archivedPolls: (state, getters) => state.list.filter((poll) => (poll.deleted)),
+	myPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.isOwner)),
+	publicPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'public')),
+	hiddenPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'hidden')),
+	participatedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.userHasVoted)),
+	closedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.expire > 0 && moment.unix(poll.expire).diff() < 0)),
+	relevantPolls: (state, getters) => getters.activePolls.filter((poll) => ((
+		poll.important || poll.userHasVoted || poll.isOwner || (poll.allowView && poll.access !== 'public')
+	) && !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4))),
+
+	filtered: (state, getters) => (filterId) => {
 		if (filterId === 'all') {
-			return state.list.filter((poll) => (!poll.deleted))
-		} else if (filterId === 'my') {
-			return state.list.filter((poll) => (poll.owner === getCurrentUser().uid && !poll.deleted))
+			return getters.activePolls
 		} else if (filterId === 'relevant') {
-			return state.list.filter((poll) => ((
-				poll.important
-				|| poll.userHasVoted
-				|| poll.isOwner
-				|| (poll.allowView && poll.access !== 'public')
-			)
-			&& !poll.deleted
-			&& !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4)
-			))
+			return getters.relevantPolls
+		} else if (filterId === 'my') {
+			return getters.myPolls
 		} else if (filterId === 'public') {
-			return state.list.filter((poll) => (poll.access === 'public' && !poll.deleted))
+			return getters.publicPolls
 		} else if (filterId === 'hidden') {
-			return state.list.filter((poll) => (poll.access === 'hidden' && !poll.deleted))
-		} else if (filterId === 'archived') {
-			return state.list.filter((poll) => (poll.deleted))
+			return getters.hiddenPolls
 		} else if (filterId === 'participated') {
-			return state.list.filter((poll) => (poll.userHasVoted))
+			return getters.participatedPolls
 		} else if (filterId === 'closed') {
-			return state.list.filter((poll) => (
-				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
-			))
+			return getters.closedPolls
+		} else if (filterId === 'archived') {
+			return getters.archivedPolls
 		}
 	},
 }

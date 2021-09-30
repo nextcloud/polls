@@ -211,8 +211,6 @@ export default {
 				await this.$store.dispatch('poll/toggleArchive', { pollId })
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
-			} finally {
-				emit('update-polls')
 			}
 		},
 
@@ -221,8 +219,6 @@ export default {
 				await this.$store.dispatch('poll/delete', { pollId })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
-			} finally {
-				emit('update-polls')
 			}
 		},
 
@@ -231,8 +227,6 @@ export default {
 				await this.$store.dispatch('poll/clone', { pollId })
 			} catch {
 				showError(t('polls', 'Error cloning poll.'))
-			} finally {
-				emit('update-polls')
 			}
 		},
 	},
