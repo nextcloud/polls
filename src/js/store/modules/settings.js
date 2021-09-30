@@ -106,6 +106,16 @@ const mutations = {
 }
 
 const getters = {
+	themeClass(state) {
+		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
+			return `dashboard--${state.dashboard.theming}`
+		}
+		if (state.user.useIndividualStyling && state.user.individualImage) {
+			return `polls--${state.user.individualImageStyle}`
+		}
+		return ''
+	},
+
 	useDashboardStyling(state) {
 		return state.dashboard.isInstalled && state.user.useDashboardStyling
 	},
@@ -119,53 +129,33 @@ const getters = {
 			|| (state.user.useIndividualStyling && state.user.translucentPanels)
 	},
 
-	theming(state) {
+	appBackground(state) {
+		const imageProps = 'no-repeat fixed center center / cover'
 		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
-			return state.dashboard.theming
-		}
-		if (state.user.useIndividualStyling && state.user.individualImage) {
-			return state.user.individualImageStyle
-		}
-	},
+			if (state.dashboard.background === 'custom') {
+				return `url("${generateUrl('/apps/dashboard/background')}?v=${window.OCA.Theming.cacheBuster}") ${imageProps}`
+			}
 
-	backgroundColor(state) {
-		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
+			if (!state.dashboard.background) {
+				return `url("${generateUrl('/apps/theming/image/background')}?v=${window.OCA.Theming.cacheBuster}") ${imageProps}`
+			}
+
 			if (state.dashboard.background.charAt(0) === '#') {
 				return state.dashboard.background
 			}
-			if (state.dashboard.theming === 'dark') {
-				return 'var(--color-polls-dashboard-dark-background)'
-			}
-			return 'var(--color-polls-dashboard-light-background)'
+
+			return `url("${generateUrl('/apps/dashboard/img/')}${state.dashboard.background}") ${imageProps}`
 		}
 
 		if (state.user.useIndividualStyling) {
-			if (state.user.useIndividualStyling && state.user.individualImage) {
-				return `--color-polls-dashboard-${state.user.individualImageStyle}-background`
+			if (state.user.individualImage) {
+				return `url("${state.user.individualImageUrl}") ${imageProps}`
 			}
 			if (state.user.individualBgColor) {
 				return 'var(--color-primary-light)'
 			}
 		}
-
-		return ''
-	},
-
-	backgroundImage(state) {
-		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
-			if (state.dashboard.background === 'custom') {
-				return generateUrl('/apps/dashboard/background') + '?v=' + window.OCA.Theming.cacheBuster
-			} else if (!state.dashboard.background) {
-				return generateUrl('/apps/theming/image/background') + '?v=' + window.OCA.Theming.cacheBuster
-			} else if (state.dashboard.background.charAt(0) === '#') {
-				return ''
-			}
-			return generateUrl('/apps/dashboard/img/' + state.dashboard.background)
-		}
-		if (state.user.useIndividualStyling && state.user.individualImage) {
-			return state.user.individualImageUrl
-		}
-		return ''
+		return 'var(--color-main-background)'
 	},
 
 	viewTextPoll(state) {

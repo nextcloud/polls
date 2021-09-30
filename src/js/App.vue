@@ -21,7 +21,9 @@
   -->
 
 <template>
-	<Content app-name="polls" :style="appStyle" :class="appClass">
+	<Content app-name="polls"
+		:style="{background: appBackground}"
+		:class="appClass">
 		<router-view name="navigation" />
 		<router-view />
 		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
@@ -73,43 +75,20 @@ export default {
 		}),
 
 		...mapGetters({
+			themeClass: 'settings/themeClass',
 			useDashboardStyling: 'settings/useDashboardStyling',
 			useIndividualStyling: 'settings/useIndividualStyling',
-			backgroundImage: 'settings/backgroundImage',
-			backgroundColor: 'settings/backgroundColor',
 			useTranslucentPanels: 'settings/useTranslucentPanels',
-			theming: 'settings/theming',
+			appBackground: 'settings/appBackground',
 		}),
 
 		appClass() {
 			return [
-				this.transitionClass,
-				`theming-${this.theming}`, {
+				this.transitionClass, {
 					edit: this.allowEdit,
-					individual: this.useIndividualStyling,
-					dashboard: this.useDashboardStyling,
-					'background-image': !!this.backgroundImage,
-					'background-color': !!this.backgroundColor,
 					translucent: this.useTranslucentPanels,
-					'polls-theme-dark': this.theming === 'dark',
-					'polls-theme-light': this.theming === 'light',
 				},
 			]
-		},
-
-		appStyle() {
-			if (this.useDashboardStyling || this.useIndividualStyling) {
-				return {
-					'background-image': `url(${this.backgroundImage})`,
-					'background-size': 'cover',
-					'background-position': 'center center',
-					'background-attachment': 'fixed',
-					'background-repeat': 'no-repeat',
-					'background-color': this.backgroundColor,
-				}
-			}
-
-			return {}
 		},
 
 		showSidebar() {
@@ -118,17 +97,15 @@ export default {
 	},
 
 	watch: {
-		useDashboardStyling() {
-			if (this.useDashboardStyling) {
-				document.body.classList.add(`dashboard--${this.theming}`)
-			} else {
-				document.body.classList.remove('dashboard--dark')
-				document.body.classList.remove('dashboard--light')
+		themeClass(newValue, oldValue) {
+			if (oldValue) {
+				document.body.classList.remove(oldValue)
 			}
-			if (window.OCA.Theming.inverted) {
-				document.body.classList.add('dashboard--inverted')
+			if (newValue) {
+				document.body.classList.add(newValue)
 			}
 		},
+
 		$route(to, from) {
 			this.watchPollsRestart()
 			this.loadPoll()
@@ -299,59 +276,33 @@ export default {
 }
 
 // Theming styles
-.theme--light {
-	.app-polls.theming-light {
-		#app-navigation-vue .app-navigation-toggle svg {
-			filter: invert(1) hue-rotate(180deg) !important;
-			opacity: 1;
-		}
-
-		.poll-title, .poll-list-title {
-			filter: invert(1) hue-rotate(180deg) !important;
-		}
-	}
-
-}
-
-.theme--dark {
-	.app-polls.theming-dark {
-		#app-navigation-vue .app-navigation-toggle svg {
-			filter: invert(1) hue-rotate(180deg) !important;
-			opacity: 1;
-		}
-
-		.poll-title, .poll-list-title {
-			filter: invert(1) hue-rotate(180deg) !important;
-		}
-	}
-
-}
 
 .app-polls {
-	&.dashboard {
+	body.dashboard--light &,
+	body.dashboard--dark & {
 		.app-navigation {
 			border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
 		}
 		.app-sidebar {
 			border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
 		}
+
 	}
 
-	&.theming-dark {
-		.poll-title, .poll-list-title {
-			color: var(--color-polls-dashboard-dark-text) !important;
+	body.dashboard--light &,
+	body.dashboard--dark &,
+	body.polls--light &,
+	body.polls--dark & {
+		// background: var(--polls-background-image);
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
 		}
-	}
 
-	&.background-color, &.background-image {
 		.poll-header-buttons {
 			align-self: flex-end;
 			border-radius: var(--border-radius-pill);
 			background-color: var(--color-main-background);
-		}
-		.app-navigation {
-			border-right: 0px;
-			box-shadow: 2px 0 6px var(--color-box-shadow);
 		}
 
 		[class*='area__'] {
@@ -361,14 +312,35 @@ export default {
 			box-shadow: 2px 2px 6px var(--color-box-shadow);
 		}
 
+		&.translucent {
+			.app-navigation, .app-sidebar, .poll-header-buttons, [class*='area__'] {
+				backdrop-filter: blur(10px);
+				background-color: var(--color-background-translucent);
+			}
+		}
 	}
 
-	&.translucent {
-		.app-navigation, .app-sidebar, .poll-header-buttons, [class*='area__'] {
-			backdrop-filter: blur(10px);
-			background-color: var(--color-background-translucent);
+	body.theme--light.polls--light & {
+		#app-navigation-vue .app-navigation-toggle svg {
+			filter: invert(1) hue-rotate(180deg) !important;
+			opacity: 1;
+		}
+
+		.poll-title, .poll-list-title {
+			filter: invert(1) hue-rotate(180deg) !important;
+		}
+	}
+
+	body.theme--dark.dashboard--dark &,
+	body.theme--dark.polls--dark & {
+		#app-navigation-vue .app-navigation-toggle svg {
+			filter: invert(1) hue-rotate(180deg) !important;
+			opacity: 1;
+		}
+
+		.poll-title, .poll-list-title {
+			filter: invert(1) hue-rotate(180deg) !important;
 		}
 	}
 }
-
 </style>
