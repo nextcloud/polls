@@ -119,7 +119,7 @@ export default {
 		},
 
 		showSettings() {
-			emit('show-settings')
+			emit('polls:settings:show')
 		},
 
 		async loadPolls() {

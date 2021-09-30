@@ -96,7 +96,7 @@ export default {
 		},
 
 		clickAction() {
-			emit('transitions-off', 500)
+			emit('polls:transitions:off', 500)
 			this.changeView()
 		},
 	},

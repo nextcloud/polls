@@ -66,7 +66,7 @@ export default {
 	methods: {
 
 		clickAction() {
-			emit('toggle-sidebar')
+			emit('polls:sidebar:toggle')
 		},
 	},
 }

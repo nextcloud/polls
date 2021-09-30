@@ -68,14 +68,14 @@ export default {
 	},
 
 	created() {
-		subscribe('show-settings', () => {
+		subscribe('polls:settings:show', () => {
 			this.show = true
 		})
 
 	},
 
 	beforeDestroy() {
-		unsubscribe('show-settings')
+		unsubscribe('polls:settings:show')
 	},
 }
 </script>
