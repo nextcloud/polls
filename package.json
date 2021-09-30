@@ -26,9 +26,9 @@
 	"private": true,
 	"main": "src/js/main.js",
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development webpack --config webpack.js",
-		"watch": "cross-env NODE_ENV=development webpack --progress --watch --config webpack.js",
-		"build": "cross-env NODE_ENV=production webpack --progress --config webpack.js",
+		"dev": "webpack --node-env development",
+		"watch": "webpack --node-env development --progress --watch",
+		"build": "webpack --node-env production --progress",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src",
@@ -42,7 +42,7 @@
 		"@nextcloud/l10n": "^1.4.1",
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "^4.2.0",
+		"@nextcloud/vue": "^4.1.1",
 		"core-js": "^3.18.1",
 		"dompurify": "^2.3.3",
 		"lodash": "^4.17.21",
@@ -60,7 +60,8 @@
 		"extends @nextcloud/browserslist-config"
 	],
 	"engines": {
-		"node": ">=12.0.0"
+		"node": ">=14.0.0",
+		"npm": ">=7.0.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.15.5",
@@ -72,7 +73,6 @@
 		"@nextcloud/eslint-plugin": "^2.0.0",
 		"babel-loader": "^8.2.2",
 		"clean-webpack-plugin": "^4.0.0",
-		"cross-env": "^7.0.3",
 		"css-loader": "^6.3.0",
 		"eslint": "^7.32.0",
 		"eslint-config-standard": "^16.0.3",
