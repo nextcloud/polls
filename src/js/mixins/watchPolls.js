@@ -81,14 +81,14 @@ export const watchPolls = {
 
 					if (this.loggedIn) {
 						// if user is an authorized user load polls list
-						dispatches = [...dispatches, item.table + '/list']
+						dispatches = [...dispatches, `${item.table}/list`]
 					}
 				} else if (!this.loggedIn && (item.table === 'shares')) {
 					// if current user is guest and table is shares only reload current share
 					dispatches = [...dispatches, 'share/get']
 				} else {
 					// otherwise load table
-					dispatches = [...dispatches, item.table + '/list']
+					dispatches = [...dispatches, `${item.table}/list`]
 				}
 			})
 
@@ -101,9 +101,9 @@ export const watchPolls = {
 			this.retryCounter = 0
 			this.restart = false
 			if (this.$route.name === 'publicVote') {
-				this.endPoint = 'apps/polls/s/' + this.$route.params.token + '/watch'
+				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
 			} else {
-				this.endPoint = 'apps/polls/poll/' + (this.$route.params.id ?? 0) + '/watch'
+				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
 			}
 		},
 
@@ -126,7 +126,7 @@ export const watchPolls = {
 
 		handleConnectionError(e) {
 			this.retryCounter += 1
-			console.debug('[polls]', e.message ?? 'No response - request aborted - failed request', '-', this.retryCounter + '/' + this.maxTries)
+			console.debug('[polls]', e.message ?? 'No response - request aborted - failed request', '-', `${this.retryCounter}/${this.maxTries}`)
 
 			if (e.response) {
 				console.error('[polls]', 'Unhandled error watching polls', e)

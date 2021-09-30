@@ -90,11 +90,11 @@ const actions = {
 	async list(context) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token + '/options'
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/options`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/options'
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/options`
 		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/options'
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/options`
 		} else {
 			context.commit('reset')
 			return
@@ -112,9 +112,9 @@ const actions = {
 	async add(context, payload) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token + '/option'
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/option`
 		} else {
-			endPoint = endPoint + '/option'
+			endPoint = `${endPoint}/option`
 		}
 
 		try {
@@ -126,14 +126,14 @@ const actions = {
 			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error adding option: ' + e.response.data, { error: e.response }, { payload })
+			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
 	},
 
 	async update(context, payload) {
-		const endPoint = 'apps/polls/option/' + payload.option.id
+		const endPoint = `apps/polls/option/${payload.option.id}`
 
 		try {
 			const response = await axios.put(generateUrl(endPoint), {
@@ -153,9 +153,9 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token + '/option/' + payload.option.id
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/option/${payload.option.id}`
 		} else {
-			endPoint = endPoint + '/option/' + payload.option.id
+			endPoint = `${endPoint}/option/${payload.option.id}`
 		}
 
 		try {
@@ -169,7 +169,7 @@ const actions = {
 	},
 
 	async confirm(context, payload) {
-		const endPoint = 'apps/polls/option/' + payload.option.id + '/confirm'
+		const endPoint = `apps/polls/option/${payload.option.id}/confirm`
 
 		context.commit('confirm', { option: payload.option })
 
@@ -184,7 +184,7 @@ const actions = {
 	},
 
 	async reorder(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/options/reorder'
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/options/reorder`
 
 		context.commit('reorder', { options: payload })
 
@@ -201,7 +201,7 @@ const actions = {
 	},
 
 	async sequence(context, payload) {
-		const endPoint = 'apps/polls/option/' + payload.option.id + '/sequence'
+		const endPoint = `apps/polls/option/${payload.option.id}/sequence`
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
@@ -218,7 +218,7 @@ const actions = {
 	},
 
 	async shift(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/shift'
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/shift`
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
@@ -234,7 +234,7 @@ const actions = {
 	},
 
 	async getEvents(context, payload) {
-		const endPoint = 'apps/polls/option/' + payload.option.id + '/events'
+		const endPoint = `apps/polls/option/${payload.option.id}/events`
 
 		try {
 			return await axios.get(generateUrl(endPoint))

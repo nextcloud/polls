@@ -129,7 +129,7 @@ export default {
 				name: 'publicVote',
 				params: { token: this.$route.params.token },
 			}).href
-			return generateUrl('login?redirect_url=' + redirectUrl)
+			return generateUrl(`login?redirect_url=${redirectUrl}`)
 		},
 
 		userNameCheck() {
@@ -227,7 +227,7 @@ export default {
 		},
 
 		login() {
-			window.location.assign(window.location.protocol + '//' + window.location.host + this.loginLink)
+			window.location.assign(`${window.location.protocol}//${window.location.host}${this.loginLink}`)
 		},
 
 		validatePublicUsername: debounce(async function() {
@@ -242,7 +242,7 @@ export default {
 
 		validateEmailAddress: debounce(async function() {
 			try {
-				await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
+				await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`)
 				this.isValidEmailAddress = true
 			} catch {
 				this.isValidEmailAddress = false

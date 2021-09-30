@@ -151,19 +151,19 @@ export default {
 			} else if (this.event.dayLong && this.event.to.sameDay) {
 				return this.event.from.date
 			} else if (this.event.dayLong && !this.event.to.sameDay) {
-				return this.event.from.date + ' - ' + this.event.to.date
+				return `${this.event.from.date} - ${this.event.to.date}`
 			} else if (this.event.to.sameDay) {
-				return this.event.from.dateTime + ' - ' + this.event.to.time
+				return `${this.event.from.dateTime} - ${this.event.to.time}`
 			}
-			return this.event.from.dateTime + ' - ' + this.event.to.dateTime
+			return `${this.event.from.dateTime} - ${this.event.to.dateTime}`
 
 		},
 
 		dateLocalFormatUTC() {
 			if (this.option.duration) {
-				return this.event.from.utc + ' - ' + this.event.to.utc + ' UTC'
+				return `${this.event.from.utc} - ${this.event.to.utc} UTC`
 			}
-			return this.event.from.utc + ' UTC'
+			return `${this.event.from.utc} UTC`
 
 		},
 

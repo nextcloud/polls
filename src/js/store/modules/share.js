@@ -60,7 +60,7 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/share'
+		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/share`
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
@@ -77,7 +77,7 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/register'
+		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/register`
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
@@ -96,7 +96,7 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/email'
+		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email`
 
 		try {
 			const response = await axios.put(generateUrl(endPoint), {
@@ -115,7 +115,7 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/email'
+		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email`
 
 		try {
 			const response = await axios.delete(generateUrl(endPoint))
@@ -133,7 +133,7 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/s/' + context.rootState.route.params.token + '/resend'
+		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/resend`
 
 		try {
 			return await axios.put(generateUrl(endPoint))

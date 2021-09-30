@@ -132,9 +132,9 @@ export default {
 			if (this.useRange) {
 				if (this.useTime) {
 					if (moment(from).startOf('day').valueOf() === moment(to).startOf('day').valueOf()) {
-						text = from.format('ll LT') + ' - ' + to.format('LT')
+						text = `${from.format('ll LT')} - ${to.format('LT')}`
 					} else {
-						text = from.format('ll LT') + ' - ' + to.format('ll LT')
+						text = `${from.format('ll LT')} - ${to.format('ll LT')}`
 					}
 				} else {
 					from = from.startOf('day')
@@ -142,7 +142,7 @@ export default {
 					if (moment(from).startOf('day').valueOf() === moment(to).startOf('day').valueOf()) {
 						text = from.format('ll')
 					} else {
-						text = from.format('ll') + ' - ' + to.format('ll')
+						text = `${from.format('ll')} - ${to.format('ll')}`
 					}
 				}
 			} else if (this.useTime) {

@@ -159,7 +159,7 @@ export default {
 			this.emailAddressTemp = value
 			try {
 				this.checking = true
-				await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddressTemp)
+				await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddressTemp}`)
 				this.checkResult = t('polls', 'valid email address.')
 				this.checkStatus = 'success'
 			} catch {
