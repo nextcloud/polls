@@ -77,7 +77,7 @@ export default {
 	},
 
 	created() {
-		emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 	},
 
 	beforeDestroy() {

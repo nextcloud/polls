@@ -174,7 +174,7 @@ export default {
 		async loadPoll(pollId) {
 			try {
 				await this.$store.dispatch({ type: 'poll/get', pollId })
-				emit('toggle-sidebar', { open: true })
+				emit('polls:sidebar:toggle', { open: true })
 			} catch {
 				showError(t('polls', 'Error loading poll'))
 			}
@@ -183,7 +183,7 @@ export default {
 		refreshView() {
 			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
 			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
-				emit('toggle-sidebar', { open: false })
+				emit('polls:sidebar:toggle', { open: false })
 			}
 
 		},

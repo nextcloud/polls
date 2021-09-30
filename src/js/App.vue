@@ -122,19 +122,19 @@ export default {
 
 		this.watchPolls()
 
-		subscribe('transitions-off', (delay) => {
+		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)
 		})
 
-		subscribe('transitions-on', () => {
+		subscribe('polls:transitions:on', () => {
 			this.transitionsOn()
 		})
 
-		subscribe('load-poll', (silent) => {
+		subscribe('polls:poll:load', (silent) => {
 			this.loadPoll(silent)
 		})
 
-		subscribe('toggle-sidebar', (payload) => {
+		subscribe('polls:sidebar:toggle', (payload) => {
 			if (payload === undefined) {
 				this.sideBarOpen = !this.sideBarOpen
 			} else {
@@ -161,10 +161,10 @@ export default {
 
 	beforeDestroy() {
 		this.cancelToken.cancel()
-		unsubscribe('load-poll')
-		unsubscribe('toggle-sidebar')
-		unsubscribe('transitions-on')
-		unsubscribe('transitions-off')
+		unsubscribe('polls:poll:load')
+		unsubscribe('polls:sidebar:toggle')
+		unsubscribe('polls:transitions:on')
+		unsubscribe('polls:transitions:off')
 	},
 
 	methods: {

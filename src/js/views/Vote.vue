@@ -149,7 +149,7 @@ export default {
 			// reroute to the internal vote page, if the user is logged in
 			this.rerouteToInternal()
 		} else {
-			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+			emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 		}
 	},
 
@@ -159,7 +159,7 @@ export default {
 
 	methods: {
 		openOptions() {
-			emit('toggle-sidebar', { open: true, activeTab: 'options' })
+			emit('polls:sidebar:toggle', { open: true, activeTab: 'options' })
 		},
 
 		async rerouteToInternal() {
