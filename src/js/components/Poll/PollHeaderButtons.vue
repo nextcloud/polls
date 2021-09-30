@@ -93,6 +93,8 @@ export default {
 	flex-wrap: wrap-reverse;
 	flex: 0 1 auto;
 	justify-content: flex-end;
+	align-self: flex-end;
+	border-radius: var(--border-radius-pill);
 }
 
 .icon.icon-settings.active {

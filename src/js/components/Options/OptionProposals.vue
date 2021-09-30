@@ -22,7 +22,7 @@
 
 <template>
 	<div class="option-proposals">
-		<div>{{ proposalsStatus }}</div>
+		<!-- <div>{{ proposalsStatus }}</div> -->
 		<div v-if="proposalsOpen" class="option-proposals__add-proposal">
 			<OptionsDateAdd v-if="pollType === 'datePoll'"
 				:caption="t('polls', 'Propose a date')"
