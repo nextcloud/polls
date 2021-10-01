@@ -26,6 +26,7 @@
 			<UserItem v-for="(share) in invitationShares"
 				:key="share.id"
 				v-bind="share"
+				show-email
 				:icon="true">
 				<Actions>
 					<ActionButton

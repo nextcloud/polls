@@ -36,7 +36,12 @@
 		<div v-if="icon" :class="['type-icon', iconClass]" />
 
 		<div v-if="!hideNames" class="user-item__name">
-			{{ name }}
+			<div class="name">
+				{{ name }}
+			</div>
+			<div v-if="displayEmailAddress" class="subname">
+				{{ displayEmailAddress }}
+			</div>
 		</div>
 		<slot />
 	</div>
@@ -60,6 +65,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		showEmail: {
+			type: Boolean,
+			default: false,
+		},
 		disableMenu: {
 			type: Boolean,
 			default: true,
@@ -77,6 +86,10 @@ export default {
 			default: undefined,
 		},
 		displayName: {
+			type: String,
+			default: undefined,
+		},
+		emailAddress: {
 			type: String,
 			default: '',
 		},
@@ -116,6 +129,13 @@ export default {
 			}
 			return this.userId
 
+		},
+
+		displayEmailAddress() {
+			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
+				return this.emailAddress
+			}
+			return ''
 		},
 
 		showUserStatus() {
@@ -159,11 +179,14 @@ export default {
 .user-item__name {
 	flex: 1;
 	min-width: 50px;
-	color: var(--color-text-maxcontrast);
 	padding-left: 8px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	.subname {
+		color: var(--color-text-maxcontrast);
+		font-size: 0.7em;
+	}
 }
 
 .condensed {
