@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [3.3.0-rc1] - 2021-10-03
 - [new] #1943 - Show email address in share list external users (#2001)
 - [fix] #1981 - Changed calculation of full day events (#2004)
-- [new] #1980 - Adopt dashboard design (still experimental)
+- [new] #1985 - Adopt dashboard design (still experimental)
 - dependency updates, refactoring and code maintenance
 
 ## [3.2.0] - 2021-09-19
