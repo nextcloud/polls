@@ -206,7 +206,7 @@ OC.L10N.register(
     "Styles" : "Stile",
     "The style settings are still experimental!" : "Die Stil-Einstellungen sind noch experimentell",
     "Adopt dashboard style" : "Übernehmen Sie den Dashboard-Stil",
-    "Set individual styles" : "Individuelle Designs einstellen",
+    "Set individual styles" : "Infdividuellen Stil aktivieren",
     "Use background color" : "Hintergrundfarbe verwenden",
     "Use background image" : "Hintergrundbild verwenden",
     "Enter the URL of your favorite background image." : "URL Ihres bevorzugten Hintergrundbilds eingeben.",
