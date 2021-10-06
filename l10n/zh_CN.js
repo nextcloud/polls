@@ -279,6 +279,7 @@ OC.L10N.register(
     "This action cannot be reverted." : "此操作不可逆。",
     "Administration" : "管理员",
     "Error archiving/restoring poll." : "存档/恢复投票时出错",
+    "Error overtaking poll." : "接管投票时出错",
     "Add new Poll" : "添加新的投票",
     "Your app settings" : "你的应用设置",
     "Error loading poll list" : "加载投票列表时出错",
