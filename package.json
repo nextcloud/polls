@@ -64,7 +64,7 @@
 		"npm": ">=7.0.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.15.5",
+		"@babel/core": "^7.15.8",
 		"@babel/eslint-parser": "^7.15.7",
 		"@babel/preset-env": "^7.15.8",
 		"@babel/types": "^7.15.6",
