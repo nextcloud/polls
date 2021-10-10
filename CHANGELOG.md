@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.3.0] - 2021-10-10
+- Added email addresses to external shares in the shares tab for the owner
+- Adopt dashboard design in personal app settings and improved individual styling (still experimental)
+- Fixed calculation of full day events, which could break the display on daylight changing days
+
 ## [3.3.0-rc1] - 2021-10-03
 - [new] #1943 - Show email address in share list external users (#2001)
 - [fix] #1981 - Changed calculation of full day events (#2004)
