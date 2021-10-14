@@ -11,7 +11,6 @@ module.exports = {
 		'arrow-parens': 'error',
 		'arrow-body-style': 'error',
 		'brace-style': 'error',
-		'prefer-template': 'error',
 		'newline-per-chained-call': ['error', { ignoreChainWithDepth: 4 }],
 		'no-array-constructor': 'error',
 		'no-continue': 'error',
@@ -20,5 +19,11 @@ module.exports = {
 		'no-negated-condition': 'error',
 		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
 		'object-curly-spacing': ['error', 'always'],
+		'prefer-template': 'error',
+		'vue/no-unused-properties': ['error', {
+			groups: ['props', 'data', 'computed', 'methods'],
+			deepData: true,
+			ignorePublicMembers: true,
+		}],
 	},
 }

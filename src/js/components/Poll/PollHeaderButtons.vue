@@ -61,14 +61,6 @@ export default {
 		UserMenu,
 	},
 
-	data() {
-		return {
-			delay: 50,
-			isLoading: false,
-			voteSaved: false,
-		}
-	},
-
 	computed: {
 		...mapState({
 			allowComment: (state) => state.poll.allowComment,

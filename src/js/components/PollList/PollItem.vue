@@ -120,12 +120,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			openedMenu: false,
-		}
-	},
-
 	computed: {
 		closeToClosing() {
 			return (!this.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)

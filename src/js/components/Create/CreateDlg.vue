@@ -62,7 +62,6 @@ export default {
 
 	data() {
 		return {
-			id: 0,
 			pollType: 'datePoll',
 			title: '',
 			pollTypeOptions: [
@@ -100,6 +99,7 @@ export default {
 			}
 		},
 
+		/** @public */
 		setFocus() {
 			this.$nextTick(() => {
 				this.$refs.pollTitle.focus()

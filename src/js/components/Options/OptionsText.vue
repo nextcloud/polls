@@ -88,12 +88,6 @@ export default {
 		removeOption,
 	],
 
-	data() {
-		return {
-			newPollText: '',
-		}
-	},
-
 	computed: {
 		...mapState({
 			options: (state) => state.options.list,
@@ -116,15 +110,6 @@ export default {
 			},
 		},
 
-	},
-
-	methods: {
-		async addOption() {
-			if (this.newPollText) {
-				await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
-				this.newPollText = ''
-			}
-		},
 	},
 }
 </script>

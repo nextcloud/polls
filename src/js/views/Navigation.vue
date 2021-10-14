@@ -78,7 +78,6 @@ export default {
 
 	data() {
 		return {
-			showSettingsDlg: false,
 			createDlg: false,
 		}
 	},

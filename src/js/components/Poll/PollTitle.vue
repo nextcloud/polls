@@ -123,14 +123,6 @@ export default {
 			return subTexts
 		},
 
-		expiryInfo() {
-			return {
-				text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
-				icon: 'icon-add',
-				class: 'proposal',
-			}
-		},
-
 		dateCreatedRelative() {
 			return moment.unix(this.pollCreated).fromNow()
 		},

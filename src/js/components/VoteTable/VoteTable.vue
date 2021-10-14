@@ -72,13 +72,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			modal: false,
-			userToRemove: '',
-		}
-	},
-
 	computed: {
 		...mapState({
 			acl: (state) => state.poll.acl,

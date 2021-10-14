@@ -67,7 +67,6 @@
 </template>
 
 <script>
-import { showError, showSuccess } from '@nextcloud/dialogs'
 import { mapState, mapGetters } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -92,9 +91,7 @@ export default {
 
 	data() {
 		return {
-			delay: 50,
 			isLoading: false,
-			voteSaved: false,
 		}
 	},
 
@@ -117,10 +114,7 @@ export default {
 			safeTable: 'poll/safeTable',
 		}),
 
-		showEmailEdit() {
-			return ['email', 'contact', 'external'].includes(this.share.type)
-		},
-
+		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
 			return `${t('polls', 'Polls')} - ${this.poll.title}`
 		},
@@ -170,15 +164,6 @@ export default {
 				this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
 			} catch (e) {
 				this.$router.replace({ name: 'notfound' })
-			}
-		},
-
-		async submitEmailAddress(emailAddress) {
-			try {
-				await this.$store.dispatch('share/updateEmailAddress', { emailAddress })
-				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress }))
-			} catch {
-				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress }))
 			}
 		},
 	},

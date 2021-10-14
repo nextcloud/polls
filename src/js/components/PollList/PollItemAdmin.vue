@@ -104,12 +104,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			openedMenu: false,
-		}
-	},
-
 	computed: {
 		...mapGetters({
 			closed: 'poll/isClosed',

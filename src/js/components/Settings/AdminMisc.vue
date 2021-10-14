@@ -53,13 +53,6 @@ export default {
 		InputDiv,
 	},
 
-	data() {
-		return {
-			searchToken: null,
-			isLoading: false,
-		}
-	},
-
 	computed: {
 		...mapState({
 			appSettings: (state) => state.appSettings.appSettings,

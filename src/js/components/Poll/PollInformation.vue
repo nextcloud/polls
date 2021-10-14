@@ -169,20 +169,8 @@ export default {
 
 		},
 
-		voteLimitReached() {
-			return (this.poll.voteLimit > 0 && this.countVotes('yes') >= this.poll.voteLimit)
-		},
-
 		dateCreatedRelative() {
 			return moment.unix(this.poll.created).fromNow()
-		},
-
-		dateCreatedString() {
-			return moment.unix(this.poll.created).format('LLLL')
-		},
-
-		dateExpiryString() {
-			return moment.unix(this.poll.expire).format('LLLL')
 		},
 
 		dateExpiryRelative() {

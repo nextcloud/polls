@@ -70,14 +70,6 @@ export default {
 		ConfigBox,
 	},
 
-	data() {
-		return {
-			users: [],
-			isLoading: false,
-			placeholder: t('polls', 'Enter a name to start the search'),
-		}
-	},
-
 	computed: {
 		...mapGetters({
 			invitationShares: 'shares/invitation',

@@ -115,13 +115,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			nothidden: false,
-			circleName: '',
-		}
-	},
-
 	computed: {
 		name() {
 			if (this.displayName) {
