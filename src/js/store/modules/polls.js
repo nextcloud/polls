@@ -132,6 +132,7 @@ const getters = {
 	hiddenPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'hidden')),
 	participatedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.userHasVoted)),
 	closedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.expire > 0 && moment.unix(poll.expire).diff() < 0)),
+
 	relevantPolls: (state, getters) => getters.activePolls.filter((poll) => ((
 		poll.important || poll.userHasVoted || poll.isOwner || (poll.allowView && poll.access !== 'public')
 	) && !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4))),
@@ -139,19 +140,33 @@ const getters = {
 	filtered: (state, getters) => (filterId) => {
 		if (filterId === 'all') {
 			return getters.activePolls
-		} else if (filterId === 'relevant') {
+		}
+
+		if (filterId === 'relevant') {
 			return getters.relevantPolls
-		} else if (filterId === 'my') {
+		}
+
+		if (filterId === 'my') {
 			return getters.myPolls
-		} else if (filterId === 'public') {
+		}
+
+		if (filterId === 'public') {
 			return getters.publicPolls
-		} else if (filterId === 'hidden') {
+		}
+
+		if (filterId === 'hidden') {
 			return getters.hiddenPolls
-		} else if (filterId === 'participated') {
+		}
+
+		if (filterId === 'participated') {
 			return getters.participatedPolls
-		} else if (filterId === 'closed') {
+		}
+
+		if (filterId === 'closed') {
 			return getters.closedPolls
-		} else if (filterId === 'archived') {
+		}
+
+		if (filterId === 'archived') {
 			return getters.archivedPolls
 		}
 	},

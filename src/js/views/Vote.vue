@@ -141,7 +141,9 @@ export default {
 		// TODO: remove, when completely supported by core
 		if (!window.matchMedia) {
 			return true
-		} else if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		}
+
+		if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 			document.body.classList.add('theme--dark')
 		}
 
