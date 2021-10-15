@@ -154,6 +154,7 @@ export default {
 			return t('polls', 'Administration')
 		},
 
+		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
 			return `${t('polls', 'Polls')} - ${this.title}`
 		},

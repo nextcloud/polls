@@ -138,6 +138,7 @@ export default {
 			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).description
 		},
 
+		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
 			return `${t('polls', 'Polls')} - ${this.title}`
 		},
@@ -195,15 +196,6 @@ export default {
 				this.sort = payload.sort
 				this.reverse = true
 			}
-		},
-
-		callPoll(index, poll, name) {
-			this.$router.push({
-				name,
-				params: {
-					id: poll.id,
-				},
-			})
 		},
 
 		async toggleArchive(pollId) {

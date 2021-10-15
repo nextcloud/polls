@@ -43,10 +43,6 @@ export default {
 			type: Object,
 			default: undefined,
 		},
-		viewMode: {
-			type: String,
-			default: 'table-view',
-		},
 	},
 
 	computed: {
@@ -67,17 +63,11 @@ export default {
 			return 'textBox'
 
 		},
-		showNo() {
-			return (this.viewMode === 'list-view')
-		},
+
 		isWinner() {
 			// highlight best option until poll is closed and
 			// at least one option is confirmed
 			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
-		},
-
-		isConfirmed() {
-			return this.option.confirmed && this.closed
 		},
 	},
 }

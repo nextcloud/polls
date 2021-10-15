@@ -57,12 +57,6 @@ export default {
 			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
 		}),
 	},
-
-	methods: {
-		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share })
-		},
-	},
 }
 </script>
 

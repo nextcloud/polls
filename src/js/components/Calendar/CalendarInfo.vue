@@ -86,13 +86,17 @@ export default {
 		conflictLevel() {
 			if (this.event.calendarKey === 0) {
 				return 'conflict-ignore'
-			} else if (this.event.start > this.option.timestamp + 3599) {
-				return 'conflict-no'
-			} else if (this.event.end - 1 < this.option.timestamp) {
+			}
+
+			if (this.event.start > this.option.timestamp + 3599) {
 				return 'conflict-no'
 			}
-			return 'conflict-yes'
 
+			if (this.event.end - 1 < this.option.timestamp) {
+				return 'conflict-no'
+			}
+
+			return 'conflict-yes'
 		},
 	},
 

@@ -60,9 +60,12 @@ export default {
 		buttonStyle() {
 			if (this.submit) {
 				return 'submit'
-			} else if (this.simple) {
+			}
+
+			if (this.simple) {
 				return 'simple'
 			}
+
 			return 'button'
 		},
 

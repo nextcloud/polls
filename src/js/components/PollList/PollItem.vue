@@ -120,12 +120,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			openedMenu: false,
-		}
-	},
-
 	computed: {
 		closeToClosing() {
 			return (!this.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)
@@ -138,29 +132,33 @@ export default {
 		accessType() {
 			if (this.poll.deleted) {
 				return t('polls', 'Archived')
-			} else if (this.poll.access === 'public') {
+			}
+
+			if (this.poll.access === 'public') {
 				return t('polls', 'All users')
 			}
-			return t('polls', 'Only invited users')
 
+			return t('polls', 'Only invited users')
 		},
 
 		accessIcon() {
 			if (this.poll.deleted) {
 				return 'icon-category-app-bundles'
-			} else if (this.poll.access === 'public') {
+			}
+
+			if (this.poll.access === 'public') {
 				return 'icon-polls-public-poll'
 			}
-			return 'icon-polls-hidden-poll'
 
+			return 'icon-polls-hidden-poll'
 		},
 
 		pollType() {
 			if (this.poll.type === 'textPoll') {
 				return t('polls', 'Text poll')
 			}
-			return t('polls', 'Date poll')
 
+			return t('polls', 'Date poll')
 		},
 
 		timeExpirationRelative() {
@@ -174,13 +172,17 @@ export default {
 		expiryClass() {
 			if (this.closed) {
 				return 'error'
-			} else if (this.poll.expire && this.closeToClosing) {
+			}
+
+			if (this.poll.expire && this.closeToClosing) {
 				return 'warning'
-			} else if (this.poll.expire && !this.closed) {
+			}
+
+			if (this.poll.expire && !this.closed) {
 				return 'success'
 			}
-			return 'success'
 
+			return 'success'
 		},
 
 		timeCreatedRelative() {

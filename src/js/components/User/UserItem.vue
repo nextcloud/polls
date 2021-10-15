@@ -115,13 +115,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			nothidden: false,
-			circleName: '',
-		}
-	},
-
 	computed: {
 		name() {
 			if (this.displayName) {
@@ -146,21 +139,32 @@ export default {
 			if (this.icon) {
 				if (this.type === 'contact') {
 					return 'icon-mail'
-				} else if (this.type === 'email') {
+				}
+
+				if (this.type === 'email') {
 					return 'icon-mail'
-				} else if (this.type === 'external') {
+				}
+
+				if (this.type === 'external') {
 					return 'icon-share'
-				} else if (this.type === 'contactGroup') {
+				}
+
+				if (this.type === 'contactGroup') {
 					return 'icon-group'
-				} else if (this.type === 'circle') {
+				}
+
+				if (this.type === 'circle') {
 					return 'icon-circles'
-				} else if (this.type === 'admin') {
+				}
+
+				if (this.type === 'admin') {
 					return 'icon-user-admin'
 				}
+
 				return `icon-${this.type}`
 			}
-			return ''
 
+			return ''
 		},
 
 	},

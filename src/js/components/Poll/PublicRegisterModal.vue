@@ -144,17 +144,19 @@ export default {
 					result: t('polls', 'Enter a name to participate.'),
 					status: 'empty',
 				}
-			} else if (!this.isValidName) {
+			}
+
+			if (!this.isValidName) {
 				return {
 					result: t('polls', 'Invalid name'),
 					status: 'error',
 				}
 			}
+
 			return {
 				result: t('polls', '{username} is valid.', { username: this.userName }),
 				status: 'success',
 			}
-
 		},
 
 		emailCheck() {
@@ -169,17 +171,19 @@ export default {
 					result: '',
 					status: '',
 				}
-			} else if (!this.isValidEmailAddress) {
+			}
+
+			if (!this.isValidEmailAddress) {
 				return {
 					result: t('polls', 'Invalid email address.'),
 					status: 'error',
 				}
 			}
+
 			return {
 				result: t('polls', 'Valid email address.'),
 				status: 'success',
 			}
-
 		},
 
 	},

@@ -109,17 +109,19 @@ export default {
 					result: t('polls', 'Checking email address …'),
 					status: 'checking',
 				}
-			} else if (this.emailAddressUnchanged) {
+			}
+
+			if (this.emailAddressUnchanged) {
 				return {
 					result: '',
 					status: '',
 				}
 			}
+
 			return {
 				result: this.checkResult,
 				status: this.checkStatus,
 			}
-
 		},
 
 		personalLink() {

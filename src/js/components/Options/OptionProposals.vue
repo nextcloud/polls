@@ -55,16 +55,6 @@ export default {
 			proposalsOpen: 'poll/proposalsOpen',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
-
-		proposalsStatus() {
-			if (this.proposalsExpirySet && !this.proposalsExpired) {
-				return t('polls', 'Proposal period ends {timeRelative}.', { timeRelative: this.proposalsExpireRelative })
-			}
-			if (this.proposalsExpirySet && this.proposalsExpired) {
-				return t('polls', 'Proposal period ended {timeRelative}.', { timeRelative: this.proposalsExpireRelative })
-			}
-			return t('polls', 'You are asked to propose more poll options.')
-		},
 	},
 }
 
