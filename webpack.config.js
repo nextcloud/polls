@@ -1,10 +1,19 @@
 const path = require('path')
+const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
-const webpack = require('webpack')
+const StyleLintPlugin = require('stylelint-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+
+const appName = process.env.npm_package_name
+const appVersion = process.env.npm_package_version
+const buildMode = process.env.NODE_ENV
+const isDev = buildMode === 'development'
 
 module.exports = {
+	mode: buildMode,
+	devtool: isDev ? 'cheap-source-map' : 'source-map',
 	entry: {
 		polls: path.join(__dirname, 'src/js/', 'main.js'),
 		userSettings: path.join(__dirname, 'src/js/', 'userSettings.js'),
@@ -14,8 +23,14 @@ module.exports = {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
 		filename: '[name].js',
-		chunkFilename: 'polls.[name].[contenthash].js',
+		chunkFilename: `${appName}.[name].[contenthash].js`,
 		chunkLoadingGlobal: 'webpackJsonpOCAPolls',
+		devtoolNamespace: appName,
+		devtoolModuleFilenameTemplate(info) {
+			const rootDir = process.cwd()
+			const rel = path.relative(rootDir, info.absoluteResourcePath)
+			return `webpack:///${appName}/${rel}`
+		},
 	},
 	module: {
 		rules: [
@@ -56,13 +71,29 @@ module.exports = {
 			},
 			{
 				test: /\.(png|jpg|gif|svg)$/,
-				loader: 'url-loader',
-				options: {
-					name: '[name].[ext]?[hash]',
-				},
+				type: 'asset/inline',
 			},
 		],
 	},
+
+	optimization: {
+		chunkIds: 'named',
+		splitChunks: {
+			automaticNameDelimiter: '-',
+		},
+		minimize: !isDev,
+		minimizer: [
+			new TerserPlugin({
+				terserOptions: {
+					output: {
+						comments: false,
+					},
+				},
+				extractComments: true,
+			}),
+		],
+	},
+
 	plugins: [
 		new VueLoaderPlugin(),
 		new CleanWebpackPlugin(),
@@ -73,6 +104,12 @@ module.exports = {
 			quiet: true,
 			extensions: ['js', 'vue'],
 		}),
+		new StyleLintPlugin({
+			files: 'src/**/*.{css,scss,vue}',
+			failOnError: !isDev,
+		}),
+		new webpack.DefinePlugin({ appName: JSON.stringify(appName) }),
+		new webpack.DefinePlugin({ appVersion: JSON.stringify(appVersion) }),
 	],
 	resolve: {
 		alias: {
