@@ -33,7 +33,7 @@
 					</ActionButton>
 				</Actions>
 
-				<ActionDelete :title="t('polls', 'Remove share')" @delete="removeShare(share)" />
+				<ActionDelete :title="t('polls', 'Remove share')" @delete="removeShare({ share })" />
 			</PublicShareItem>
 		</TransitionGroup>
 
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
@@ -77,9 +77,9 @@ export default {
 	},
 
 	methods: {
-		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share })
-		},
+		...mapActions({
+			removeShare: 'shares/delete',
+		}),
 
 		async copyLink(payload) {
 			try {

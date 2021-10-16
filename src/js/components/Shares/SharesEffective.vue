@@ -36,6 +36,7 @@
 						<UnvotedIcon class="vote-status unvoted" :title="t('polls', 'Has not voted')" />
 					</div>
 				</template>
+
 				<Actions>
 					<ActionButton
 						v-if="share.emailAddress || share.type === 'group'"
@@ -46,23 +47,24 @@
 					<ActionButton
 						v-if="share.type === 'user' || share.type === 'admin'"
 						:icon="share.type === 'user' ? 'icon-user-admin' : 'icon-user'"
-						@click="switchAdmin(share)">
+						@click="switchAdmin({ share })">
 						{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 					</ActionButton>
 					<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
 						{{ t('polls', 'Copy link to clipboard') }}
 					</ActionButton>
 				</Actions>
+
 				<ActionDelete
 					:title="t('polls', 'Remove share')"
-					@delete="removeShare(share)" />
+					@delete="removeShare({ share })" />
 			</UserItem>
 		</TransitionGroup>
 	</ConfigBox>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
@@ -90,6 +92,11 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			removeShare: 'shares/delete',
+			switchAdmin: 'shares/switchAdmin',
+		}),
+
 		async sendInvitation(share) {
 			const response = await this.$store.dispatch('shares/sendInvitation', { share })
 			if (response.data?.sentResult?.sentMails) {
@@ -113,15 +120,6 @@ export default {
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},
-
-		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share })
-		},
-
-		switchAdmin(share) {
-			this.$store.dispatch('shares/switchAdmin', { share })
-		},
-
 	},
 }
 </script>

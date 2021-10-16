@@ -44,14 +44,14 @@
 				</Actions>
 				<ActionDelete
 					:title="t('polls', 'Remove invitation')"
-					@delete="removeShare(share)" />
+					@delete="removeShare({ share })" />
 			</UserItem>
 		</TransitionGroup>
 	</ConfigBox>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
@@ -74,6 +74,10 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			removeShare: 'shares/delete',
+		}),
+
 		async resolveGroup(share) {
 			try {
 				await this.$store.dispatch('shares/resolveGroup', { share })
@@ -101,10 +105,6 @@ export default {
 					showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
 				})
 			}
-		},
-
-		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share })
 		},
 	},
 }

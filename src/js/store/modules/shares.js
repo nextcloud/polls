@@ -83,10 +83,10 @@ const actions = {
 	},
 
 	async add(context, payload) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}`
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/share`
 
 		try {
-			await axios.post(generateUrl(`${endPoint}/share`), payload.share)
+			await axios.post(generateUrl(endPoint), payload.share)
 		} catch (e) {
 			console.error('Error writing share', { error: e.response }, { payload })
 			throw e

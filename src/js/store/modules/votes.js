@@ -54,28 +54,16 @@ const mutations = {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
 			return
 		}
-
 		state.list.push(payload.vote)
-
-		// TODO: performance check for preferred strategy
-		// for (let i = 0; i < state.list.length; i++) {
-		// if (parseInt(state.list[i].pollId) === payload.pollId
-		// && state.list[i].userId === payload.vote.userId
-		// && state.list[i].voteOptionText === payload.option.pollOptionText) {
-		// state.list[i] = Object.assign(state.list[i], payload.vote)
-		// return
-		// }
-		// }
-		// state.list.push(payload.vote)
 	},
 }
 
 const getters = {
-
 	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText)),
 	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length,
 	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.voteAnswer === answer).length,
 	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.userId === userId) > -1,
+
 	getVote: (state) => (payload) => {
 		const found = state.list.find((vote) => (vote.userId === payload.userId
 				&& vote.voteOptionText === payload.option.pollOptionText))
@@ -87,7 +75,6 @@ const getters = {
 			}
 		}
 		return found
-
 	},
 }
 
@@ -165,7 +152,6 @@ const actions = {
 			throw e
 		}
 	},
-
 }
 
 export default { namespaced, state, mutations, getters, actions }
