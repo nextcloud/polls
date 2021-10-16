@@ -28,6 +28,14 @@
 				v-bind="share"
 				show-email
 				:icon="true">
+				<template #status>
+					<div v-if="hasVoted(share.userId)">
+						<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
+					</div>
+					<div v-else>
+						<UnvotedIcon class="vote-status unvoted" :title="t('polls', 'Has not voted')" />
+					</div>
+				</template>
 				<Actions>
 					<ActionButton
 						v-if="share.emailAddress || share.type === 'group'"
@@ -59,6 +67,8 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
+import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
+import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 
 export default {
 	name: 'SharesEffective',
@@ -68,11 +78,15 @@ export default {
 		ActionButton,
 		ActionDelete,
 		ConfigBox,
+		VotedIcon,
+		UnvotedIcon,
 	},
 
 	computed: {
 		...mapGetters({
 			invitationShares: 'shares/invitation',
+			participants: 'poll/participantsVoted',
+			hasVoted: 'shares/hasVoted',
 		}),
 	},
 
@@ -114,24 +128,16 @@ export default {
 </script>
 
 <style lang="scss">
-	.shared-list {
-		display: flex;
-		flex-flow: column wrap;
-		justify-content: flex-start;
-		padding-top: 8px;
+.vote-status {
+	margin-left: 8px;
 
-		> li {
-			display: flex;
-			align-items: stretch;
-			margin: 4px 0;
-		}
+	&.voted {
+		color: var(--color-polls-foreground-yes)
 	}
 
-	.share-item {
-		display: flex;
-		flex: 1;
-		align-items: center;
-		max-width: 100%;
+	&.unvoted {
+		color: var(--color-polls-foreground-no)
 	}
+}
 
 </style>

@@ -109,26 +109,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.shared-list {
-		display: flex;
-		flex-flow: column wrap;
-		justify-content: flex-start;
-		padding-top: 8px;
-
-		> li {
-			display: flex;
-			align-items: stretch;
-			margin: 4px 0;
-		}
-	}
-
-	.share-item {
-		display: flex;
-		flex: 1;
-		align-items: center;
-		max-width: 100%;
-	}
-
-</style>
