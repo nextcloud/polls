@@ -85,7 +85,7 @@ export default {
 	computed: {
 		...mapGetters({
 			invitationShares: 'shares/invitation',
-			hasVoted: 'shares/hasVoted',
+			hasVoted: 'votes/hasVoted',
 		}),
 	},
 

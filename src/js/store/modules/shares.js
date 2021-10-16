@@ -67,7 +67,6 @@ const getters = {
 
 	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent),
 	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
-	hasVoted: (state, getters, rootState, rootGetters) => (userId) => rootGetters['poll/participantsVoted'].find((participant) => participant.userId === userId),
 }
 
 const actions = {
