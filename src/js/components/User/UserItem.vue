@@ -35,6 +35,8 @@
 
 		<div v-if="icon" :class="['type-icon', iconClass]" />
 
+		<slot name="status" />
+
 		<div v-if="!hideNames" class="user-item__name">
 			<div class="name">
 				{{ name }}
@@ -43,6 +45,7 @@
 				{{ displayEmailAddress }}
 			</div>
 		</div>
+
 		<slot />
 	</div>
 </template>

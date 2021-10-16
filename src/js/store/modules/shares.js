@@ -67,7 +67,6 @@ const getters = {
 
 	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent),
 	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
-
 }
 
 const actions = {
@@ -84,10 +83,10 @@ const actions = {
 	},
 
 	async add(context, payload) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}`
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/share`
 
 		try {
-			await axios.post(generateUrl(`${endPoint}/share`), payload.share)
+			await axios.post(generateUrl(endPoint), payload.share)
 		} catch (e) {
 			console.error('Error writing share', { error: e.response }, { payload })
 			throw e
