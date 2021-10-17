@@ -44,6 +44,8 @@ use OCA\Polls\Model\AppSettings;
  * @method void setEmailAddress(string $value)
  * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
+ * @method int getReminderSent()
+ * @method void setReminderSent(integer $value)
  * @method string getDisplayName()
  * @method void setDisplayName(string $value)
  */
@@ -85,6 +87,9 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $invitationSent */
 	protected $invitationSent;
 
+	/** @var string $reminderSent */
+	protected $reminderSent;
+
 	/** @var string $displayName */
 	protected $displayName;
 
@@ -94,6 +99,7 @@ class Share extends Entity implements JsonSerializable {
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
+		$this->addType('reminderSent', 'int');
 		$this->appSettings = new AppSettings;
 	}
 
@@ -106,6 +112,7 @@ class Share extends Entity implements JsonSerializable {
 			'userId' => $this->getUserId(),
 			'emailAddress' => $this->getEmailAddress(),
 			'invitationSent' => $this->getInvitationSent(),
+			'reminderSent' => $this->getReminderSent(),
 			'displayName' => $this->getDisplayName(),
 			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),

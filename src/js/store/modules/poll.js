@@ -52,6 +52,7 @@ const defaultPoll = () => ({
 	hideBookedUp: 0,
 	useNo: 1,
 	publicPollEmail: 'optional',
+	autoReminder: false,
 })
 
 const state = defaultPoll()

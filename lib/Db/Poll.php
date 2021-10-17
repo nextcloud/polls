@@ -195,6 +195,7 @@ class Poll extends Entity implements JsonSerializable {
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
 			'publicPollEmail' => $this->getPublicPollEmail(),
+			'autoReminder' => $this->getAutoReminder(),
 		];
 	}
 
@@ -221,6 +222,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
 		$this->setMiscSettings(json_encode([
 			'publicPollEmail' => $array['publicPollEmail'],
+			'autoReminder' => $array['autoReminder'],
 		]));
 		return $this;
 	}
@@ -234,6 +236,10 @@ class Poll extends Entity implements JsonSerializable {
 
 	public function getPublicPollEmail(): string {
 		return json_decode($this->getMiscSettings())->publicPollEmail ?? 'optional';
+	}
+
+	public function getAutoReminder(): bool {
+		return json_decode($this->getMiscSettings())->autoReminder ?? false;
 	}
 
 	public function getProposalsExpired(): bool {

@@ -34,6 +34,7 @@ use OCP\L10N\IFactory;
 use OCP\Mail\IMailer;
 use OCP\Mail\IEMailTemplate;
 use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
@@ -42,9 +43,16 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Model\UserGroupClass;
 use OCA\Polls\Model\User;
+use OCA\Polls\Model\Mail\InvitationMail;
+use OCA\Polls\Model\Mail\ReminderMail;
 use League\CommonMark\CommonMarkConverter;
 
 class MailService {
+	private const FIVE_DAYS=432000;
+	private const FOUR_DAYS=345600;
+	private const THREE_DAYS=259200;
+	private const TWO_DAYS=172800;
+	private const ONE_AND_HALF_DAYS=129600;
 
 	/** @var LoggerInterface */
 	private $logger;
@@ -82,6 +90,9 @@ class MailService {
 	/** @var PollMapper */
 	private $pollMapper;
 
+	/** @var OptionMapper */
+	private $optionMapper;
+
 	/** @var LogMapper */
 	private $logMapper;
 
@@ -97,6 +108,7 @@ class MailService {
 		IMailer $mailer,
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
+		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
 		LogMapper $logMapper
 	) {
@@ -106,13 +118,14 @@ class MailService {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->urlGenerator = $urlGenerator;
-		$this->trans = $trans;
-		$this->transFactory = $transFactory;
+		$this->logMapper = $logMapper;
 		$this->mailer = $mailer;
+		$this->optionMapper = $optionMapper;
+		$this->pollMapper = $pollMapper;
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
-		$this->pollMapper = $pollMapper;
-		$this->logMapper = $logMapper;
+		$this->trans = $trans;
+		$this->transFactory = $transFactory;
 	}
 
 	private function sendMail(IEmailTemplate $emailTemplate, string $emailAddress, string $displayName): void {
@@ -150,14 +163,15 @@ class MailService {
 
 	public function resendInvitation(string $token): Share {
 		$share = $this->shareMapper->findByToken($token);
-		$poll = $this->pollMapper->find($share->getPollId());
-		$recipient = $share->getUserObject();
-		$emailTemplate = $this->generateInvitation($recipient, $poll, $share->getURL());
-		$this->sendMail(
-			$emailTemplate,
-			$recipient->getEmailAddress(),
-			$recipient->getDisplayName()
+
+		$invitation = new InvitationMail(
+			$share->getUserObject(),
+			$this->pollMapper->find($share->getPollId()),
+			$share->getURL()
 		);
+
+		$invitation->send();
+
 		$share->setInvitationSent(time());
 		return $this->shareMapper->update($share);
 	}
@@ -174,16 +188,18 @@ class MailService {
 				continue;
 			}
 
-			$emailTemplate = $this->generateInvitation($recipient, $poll, $share->getURL());
+			$invitation = new InvitationMail(
+				$recipient,
+				$poll,
+				$share->getURL()
+			);
 
 			try {
-				$this->sendMail(
-					$emailTemplate,
-					$recipient->getEmailAddress(),
-					$recipient->getDisplayName()
-				);
+				$invitation->send();
+
 				$share->setInvitationSent(time());
 				$this->shareMapper->update($share);
+
 				$sentMails[] = $recipient;
 			} catch (\Exception $e) {
 				$abortedMails[] = $recipient;
@@ -191,6 +207,82 @@ class MailService {
 			}
 		}
 		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
+	}
+
+	public function sendAutoReminder(): void {
+		$polls = $this->pollMapper->findAutoReminderPolls();
+		$time = time();
+		$remindPolls = [];
+		foreach ($polls as $poll) {
+			if ($poll->getExpire()) {
+				// If expiry is set, check reminder only depending on
+				// the expiry date
+				if ($poll->getExpire() - $poll->getCreated() > self::FIVE_DAYS
+					&& $poll->getExpire() - $time < self::TWO_DAYS
+					&& $poll->getExpire() > $time) {
+					// If the span between poll creation and expiry date is
+					// greater then 5 days, remind 48 hours before the
+					// expiration date
+					$this->remindShares($poll, ReminderMail::REASON_EXPIRATION, $poll->getExpire(), self::TWO_DAYS);
+					continue;
+				}
+
+				if ($poll->getExpire() - $poll->getCreated() > self::TWO_DAYS
+					&& $poll->getExpire() - $time < self::ONE_AND_HALF_DAYS
+					&& $poll->getExpire() > $time) {
+					// If the span between poll creation and expiry date is
+					// greater then 2 days, remind 36 hours before the
+					// expiration date
+					$this->remindShares($poll, ReminderMail::REASON_EXPIRATION, $poll->getExpire(), self::ONE_AND_HALF_DAYS);
+				}
+				continue;
+			}
+
+			if ($poll->getType() === Poll::TYPE_DATE) {
+				$options = $this->optionMapper->findByPoll($poll->getId());
+				$checkOption = $options[0]->getTimestamp();
+				// If expiry is not set and poll is a date poll, check reminder
+				// depending on the first option
+				if ($checkOption - $poll->getCreated() > self::FIVE_DAYS
+					&& $checkOption - $time < self::TWO_DAYS
+					&& $checkOption > $time) {
+					// If the span between poll creation and first option is
+					// greater then 5 days, remind 48 hours before the
+					// first option
+					$this->remindShares($poll, ReminderMail::REASON_OPTION, $checkOption, self::TWO_DAYS);
+					continue;
+				}
+
+				if ($checkOption - $poll->getCreated() > self::TWO_DAYS
+					&& $checkOption - $time < self::ONE_AND_HALF_DAYS
+					&& $checkOption > $time) {
+					// If the span between poll creation and first option is
+					// greater then 2 days, remind 36 hours before the
+					// first option
+					$this->remindShares($poll, ReminderMail::REASON_OPTION, $checkOption, self::ONE_AND_HALF_DAYS);
+				}
+				continue;
+			}
+		}
+
+	}
+
+	private function remindShares(Poll $poll, string $reminderReason, int $deadline, int $period):void {
+		$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
+		foreach ($shares as $share) {
+			foreach ($share->getMembers() as $recipient) {
+				$invitation = new ReminderMail($recipient, $poll, $share->getURL(), $reminderReason, $deadline, $period);
+				try {
+					$invitation->send();
+				} catch (\Exception $e) {
+					// catch silently
+				}
+
+			}
+
+			$share->setReminderSent(time());
+			$this->shareMapper->update($share);
+		}
 	}
 
 	public function sendNotifications(): void {
@@ -238,17 +330,17 @@ class MailService {
 
 	private function getLogString(Log $logItem, string $displayName): string {
 		$logStrings = [
-			Log::MSG_ID_SETVOTE => $this->trans->t('- %s voted.', [$displayName]),
-			Log::MSG_ID_UPDATEPOLL => $this->trans->t('- Updated poll configuration. Please check your votes.'),
-			Log::MSG_ID_DELETEPOLL => $this->trans->t('- The poll got deleted.'),
-			Log::MSG_ID_RESTOREPOLL => $this->trans->t('- The poll got restored.'),
-			Log::MSG_ID_EXPIREPOLL => $this->trans->t('- The poll got closed.'),
-			Log::MSG_ID_ADDOPTION => $this->trans->t('- A vote option was added.'),
-			Log::MSG_ID_UPDATEOPTION => $this->trans->t('- A vote option changed.'),
-			Log::MSG_ID_CONFIRMOPTION => $this->trans->t('- A vote option got confirmed.'),
-			Log::MSG_ID_DELETEOPTION => $this->trans->t('- A vote option was removed.'),
-			Log::MSG_ID_OWNERCHANGE => $this->trans->t('- The poll owner changed.'),
-			Log::MSG_ID_ADDPOLL => $this->trans->t('- %s created the poll.', [$displayName]),
+			Log::MSG_ID_SETVOTE => $this->trans->t('%s voted.', [$displayName]),
+			Log::MSG_ID_UPDATEPOLL => $this->trans->t('Updated poll configuration. Please check your votes.'),
+			Log::MSG_ID_DELETEPOLL => $this->trans->t('The poll got deleted.'),
+			Log::MSG_ID_RESTOREPOLL => $this->trans->t('The poll got restored.'),
+			Log::MSG_ID_EXPIREPOLL => $this->trans->t('The poll got closed.'),
+			Log::MSG_ID_ADDOPTION => $this->trans->t('A vote option was added.'),
+			Log::MSG_ID_UPDATEOPTION => $this->trans->t('A vote option changed.'),
+			Log::MSG_ID_CONFIRMOPTION => $this->trans->t('A vote option got confirmed.'),
+			Log::MSG_ID_DELETEOPTION => $this->trans->t('A vote option was removed.'),
+			Log::MSG_ID_OWNERCHANGE => $this->trans->t('The poll owner changed.'),
+			Log::MSG_ID_ADDPOLL => $this->trans->t('%s created the poll.', [$displayName]),
 		];
 
 		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
@@ -286,7 +378,7 @@ class MailService {
 					}
 				}
 
-				$emailTemplate->addBodyText($this->getLogString($logItem, $displayName));
+				$emailTemplate->addBodyListItem($this->getLogString($logItem, $displayName));
 			}
 
 			$logItem->setProcessed(time());
@@ -295,46 +387,6 @@ class MailService {
 
 		$emailTemplate->addBodyButton(htmlspecialchars($this->trans->t('Go to poll')), $url, '');
 		$emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
-
-		return $emailTemplate;
-	}
-
-	private function generateInvitation(UserGroupClass $recipient, Poll $poll, string $url): IEMailTemplate {
-		$owner = $poll->getOwnerUserObject();
-		$this->trans = $this->transFactory->get('polls', $recipient->getLanguage() ? $recipient->getLanguage() : $owner->getLanguage());
-
-		$emailTemplate = $this->mailer->createEMailTemplate('polls.Invitation', [
-			'owner' => $owner->getDisplayName(),
-			'title' => $poll->getTitle(),
-			'link' => $url
-		]);
-
-		$emailTemplate->setSubject($this->trans->t('Poll invitation "%s"', $poll->getTitle()));
-		$emailTemplate->addHeader();
-		$emailTemplate->addHeading($this->trans->t('Poll invitation "%s"', $poll->getTitle()), false);
-		$emailTemplate->addBodyText(str_replace(
-				['{owner}', '{title}'],
-				[$owner->getDisplayName(), $poll->getTitle()],
-				$this->trans->t('{owner} invited you to take part in the poll "{title}"')
-			));
-
-		$config = [
-			'html_input' => 'strip',
-			'allow_unsafe_links' => false,
-		];
-
-		$converter = new CommonMarkConverter($config);
-
-		$emailTemplate->addBodyText($converter->convertToHtml($poll->getDescription()), 'Hey');
-
-		$emailTemplate->addBodyButton(
-				$this->trans->t('Go to poll'),
-				$url
-			);
-		$emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
-		$emailTemplate->addBodyText($url);
-		$emailTemplate->addBodyText($this->trans->t('Do not share this link with other people, because it is connected to your votes.'));
-		$emailTemplate->addFooter($this->trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
 
 		return $emailTemplate;
 	}
