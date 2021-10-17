@@ -22,6 +22,8 @@
  */
 import Vue from 'vue'
 import Router from 'vue-router'
+import axios from '@nextcloud/axios'
+import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 
 // Dynamic loading
@@ -33,6 +35,35 @@ const SideBar = () => import('./views/SideBar')
 const Navigation = () => import('./views/Navigation')
 
 Vue.use(Router)
+
+/**
+ * @callback nextCallback
+ * @param {object} route
+ */
+
+/**
+ * @param {object} to Target route
+ * @param {object} from  Route navigated from
+ * @param {nextCallback} next callback for next route
+ */
+async function validateToken(to, from, next) {
+	try {
+		const response = await axios.get(generateUrl(`apps/polls/s/${to.params.token}/share`), { params: { time: +new Date() } })
+		if (getCurrentUser()) {
+			// reroute to the internal vote page, if the user is logged in
+			next({ name: 'vote', params: { id: response.data.share.pollId } })
+		} else {
+			next()
+		}
+	} catch (e) {
+		if (getCurrentUser()) {
+			next({ name: 'notfound' })
+		} else {
+			window.location.replace(generateUrl('login'))
+		}
+
+	}
+}
 
 export default new Router({
 	mode: 'history',
@@ -89,6 +120,7 @@ export default new Router({
 				default: Vote,
 				sidebar: SideBar,
 			},
+			beforeEnter: validateToken,
 			props: true,
 			name: 'publicVote',
 		},
