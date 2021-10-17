@@ -24,7 +24,7 @@
 	<Content app-name="polls"
 		:style="{background: appBackground}"
 		:class="appClass">
-		<router-view name="navigation" />
+		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
 		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
 		<LoadingOverlay v-if="loading" />
