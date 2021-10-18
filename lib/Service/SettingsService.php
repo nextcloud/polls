@@ -24,8 +24,8 @@
 namespace OCA\Polls\Service;
 
 use OCP\IConfig;
-use OCA\Polls\Model\AppSettings;
-use OCA\Polls\Model\Group;
+use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Model\UserGroup\Group;
 use OCA\Polls\AppInfo\Application;
 
 class SettingsService {

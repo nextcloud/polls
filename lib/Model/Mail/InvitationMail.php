@@ -25,21 +25,14 @@
 namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\User;
-use OCA\Polls\Model\Mail\IMail;
-use OCP\IL10N;
-use OCP\App\IAppManager;
-use OCP\L10N\IFactory;
-use OCP\Mail\IEMailTemplate;
-use OCP\Mail\IMailer;
+use OCA\Polls\Model\UserGroup\UserBase;
 use League\CommonMark\CommonMarkConverter;
 
-class InvitationMail extends Mail implements IMail {
+class InvitationMail extends MailBase implements IMail {
 	private const TEMPLATE_CLASS = 'polls.Invitation';
 
 	public function __construct(
-		UserGroupClass $recipient,
+		UserBase $recipient,
 		Poll $poll,
 		string $url
 	) {

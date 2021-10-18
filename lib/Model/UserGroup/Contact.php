@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,14 +21,14 @@
  *
  */
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\UserGroup;
 
 use OCP\App\IAppManager;
 use OCP\Contacts\IManager as IContactsManager;
 use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
 
-class Contact extends UserGroupClass {
+class Contact extends UserBase {
 	public const TYPE = 'contact';
 	public const ICON = 'icon-mail';
 

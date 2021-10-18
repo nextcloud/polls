@@ -21,13 +21,14 @@
  *
  */
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
 use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Model\UserGroup\Group;
 
 class AppSettings implements JsonSerializable {
 	private const APP_NAME = 'polls';

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -22,29 +22,24 @@
  */
 
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\UserGroup;
 
-class GenericUser extends UserGroupClass {
-	public const TYPE = 'external';
-	public const ICON_DEFAULT = 'icon-share';
-	public const ICON_PUBLIC = 'icon-public';
+class Email extends UserBase {
+	public const TYPE = 'email';
+	public const ICON = 'icon-mail';
 
 	public function __construct(
 		string $id,
-		string $type = self::TYPE,
-		string $displayName = '',
-		string $emailAddress = ''
+		string $displayName = ''
 	) {
-		parent::__construct($id, $type);
-		$this->displayName = $displayName;
-		$this->emailAddress = $emailAddress;
+		parent::__construct($id, self::TYPE);
+		$this->description = \OC::$server->getL10N('polls')->t('External Email');
+		$this->icon = self::ICON;
+		$this->emailAddress = $id;
+		$this->displayName = $displayName ? $displayName : $this->displayName;
+	}
 
-		if ($type === UserGroupClass::TYPE_PUBLIC) {
-			$this->icon = self::ICON_PUBLIC;
-			$this->description = \OC::$server->getL10N('polls')->t('Public link');
-		} else {
-			$this->icon = self::ICON_DEFAULT;
-			$this->description = \OC::$server->getL10N('polls')->t('External user');
-		}
+	public function getDisplayName(): string {
+		return $this->displayName ? $this->displayName : $this->id;
 	}
 }

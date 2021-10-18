@@ -31,7 +31,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Model\AppSettings;
+use OCA\Polls\Model\Settings\AppSettings;
 
 class PollController extends Controller {
 

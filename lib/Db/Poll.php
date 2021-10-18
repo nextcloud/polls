@@ -29,7 +29,7 @@ use JsonSerializable;
 
 use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
-use OCA\Polls\Model\User;
+use OCA\Polls\Model\UserGroup\User;
 
 /**
  * @method string getType()

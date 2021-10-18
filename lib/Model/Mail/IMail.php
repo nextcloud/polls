@@ -26,12 +26,10 @@ namespace OCA\Polls\Model\Mail;
 
 use OCP\Mail\IEMailTemplate;
 
-Interface IMail {
-
+interface IMail {
 	public function getEmailTemplate() : IEMailTemplate;
 
 	public function buildEmailTemplate() : void;
 
 	public function send(): void;
-
 }

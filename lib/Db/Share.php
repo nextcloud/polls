@@ -26,8 +26,8 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
-use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\AppSettings;
+use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Model\Settings\AppSettings;
 
 /**
  * @method int getId()
@@ -147,8 +147,8 @@ class Share extends Entity implements JsonSerializable {
 		return $this->userId;
 	}
 
-	public function getUserObject(): UserGroupClass {
-		return UserGroupClass::getUserGroupChild(
+	public function getUserObject(): UserBase {
+		return UserBase::getUserGroupChild(
 			$this->type,
 			$this->userId,
 			$this->displayName,
@@ -157,16 +157,16 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @return UserGroupClass[]
+	 * @return UserBase[]
 	 */
 	public function getMembers() {
 		if ($this->type === self::TYPE_GROUP
 		|| $this->type === self::TYPE_CONTACTGROUP
 		|| $this->type === self::TYPE_CIRCLE) {
-			$group = UserGroupClass::getUserGroupChild($this->type, $this->getUserId());
+			$group = UserBase::getUserGroupChild($this->type, $this->getUserId());
 			return $group->getMembers();
 		} else {
-			return [UserGroupClass::getUserGroupChild(
+			return [UserBase::getUserGroupChild(
 				$this->type,
 				$this->userId,
 				$this->displayName,

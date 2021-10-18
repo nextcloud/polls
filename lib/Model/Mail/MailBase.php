@@ -25,20 +25,18 @@
 namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\AppInfo\Application;
-use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\User;
+use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Db\Poll;
 use OCP\IL10N;
-use OCP\App\IAppManager;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
 use OCP\Mail\IMailer;
 
-
-class Mail{
+class MailBase {
 	private const TEMPLATE_CLASS = 'polls.Mail';
 
-	/** @var UserGroupClass */
+	/** @var UserBase */
 	protected $recipient;
 
 	/** @var Poll */
@@ -63,7 +61,7 @@ class Mail{
 	protected $owner;
 
 	public function __construct(
-		UserGroupClass $recipient,
+		UserBase $recipient,
 		Poll $poll,
 		string $url
 	) {
@@ -115,5 +113,4 @@ class Mail{
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
 	}
-
 }

@@ -35,7 +35,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SystemService;
-use OCA\Polls\Model\UserGroupClass;
+use OCA\Polls\Model\UserGroup\UserBase;
 
 class ShareController extends Controller {
 	use ResponseHandle;
@@ -168,7 +168,7 @@ class ShareController extends Controller {
 				throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 			}
 
-			foreach (UserGroupClass::getUserGroupChild($share->getType(), $share->getUserId())->getMembers() as $member) {
+			foreach (UserBase::getUserGroupChild($share->getType(), $share->getUserId())->getMembers() as $member) {
 				try {
 					$newShare = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
 					$shares[] = $newShare;

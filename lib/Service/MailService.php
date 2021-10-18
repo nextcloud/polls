@@ -41,18 +41,17 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
-use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\User;
+use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Model\Mail\InvitationMail;
 use OCA\Polls\Model\Mail\ReminderMail;
-use League\CommonMark\CommonMarkConverter;
 
 class MailService {
-	private const FIVE_DAYS=432000;
-	private const FOUR_DAYS=345600;
-	private const THREE_DAYS=259200;
-	private const TWO_DAYS=172800;
-	private const ONE_AND_HALF_DAYS=129600;
+	private const FIVE_DAYS = 432000;
+	private const FOUR_DAYS = 345600;
+	private const THREE_DAYS = 259200;
+	private const TWO_DAYS = 172800;
+	private const ONE_AND_HALF_DAYS = 129600;
 
 	/** @var LoggerInterface */
 	private $logger;
@@ -264,7 +263,6 @@ class MailService {
 				continue;
 			}
 		}
-
 	}
 
 	private function remindShares(Poll $poll, string $reminderReason, int $deadline, int $period):void {
@@ -277,7 +275,6 @@ class MailService {
 				} catch (\Exception $e) {
 					// catch silently
 				}
-
 			}
 
 			$share->setReminderSent(time());
@@ -346,7 +343,7 @@ class MailService {
 		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
 	}
 
-	private function generateNotification(UserGroupClass $recipient, Poll $poll, string $url, array $log): IEMailTemplate {
+	private function generateNotification(UserBase $recipient, Poll $poll, string $url, array $log): IEMailTemplate {
 		$owner = $poll->getOwnerUserObject();
 		$this->trans = $this->transFactory->get('polls', $recipient->getLanguage() ? $recipient->getLanguage() : $owner->getLanguage());
 		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [

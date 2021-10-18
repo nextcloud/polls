@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\UserGroup;
 
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 
@@ -30,7 +30,7 @@ use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
 use OCA\Polls\AppInfo\Application;
 
-class UserGroupClass implements \JsonSerializable {
+class UserBase implements \JsonSerializable {
 	public const TYPE = 'generic';
 	public const TYPE_PUBLIC = 'public';
 	public const TYPE_EXTERNAL = 'external';

@@ -49,7 +49,7 @@
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
 			<ConfigClosing @change="writePoll" />
 			<ConfigAutoReminder v-if="poll.type === 'datePoll' || poll.expire"
-			 @change="writePoll" />
+				@change="writePoll" />
 		</ConfigBox>
 
 		<ConfigBox v-if="acl.isOwner || acl.allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">

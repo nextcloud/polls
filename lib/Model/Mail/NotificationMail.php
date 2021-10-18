@@ -26,18 +26,10 @@ namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\User;
-use OCA\Polls\Model\Mail\IMail;
-use OCP\IL10N;
+use OCA\Polls\Model\UserGroup\UserBase;
 use OCP\IUserManager;
-use OCP\App\IAppManager;
-use OCP\L10N\IFactory;
-use OCP\Mail\IEMailTemplate;
-use OCP\Mail\IMailer;
-use League\CommonMark\CommonMarkConverter;
 
-class InvitationMail extends Mail implements IMail {
+class NotificationMail extends MailBase implements IMail {
 	private const TEMPLATE_CLASS = 'polls.Notification';
 
 	/** @var array */
@@ -50,7 +42,7 @@ class InvitationMail extends Mail implements IMail {
 	protected $shareMapper;
 
 	public function __construct(
-		UserGroupClass $recipient,
+		UserBase $recipient,
 		Poll $poll,
 		string $url,
 		array $logEntries
@@ -76,7 +68,7 @@ class InvitationMail extends Mail implements IMail {
 			$this->emailTemplate->addBodyListItem($logItem);
 		}
 
-		$this->emailTemplate->addBodyButton(htmlspecialchars($this->trans->t('Go to poll')), $url, '');
+		$this->emailTemplate->addBodyButton(htmlspecialchars($this->trans->t('Go to poll')), $this->url, '');
 		$this->emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
 	}
 }
