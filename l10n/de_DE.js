@@ -212,6 +212,8 @@ OC.L10N.register(
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Fügen Sie einen durchscheinenden Effekt zu Vordergrundelementen wie der Seitenleiste und der Umfragetabelle hinzu (funktioniert nicht mit allen Browsern).",
     "Public link ({token})" : "Öffentlicher Link ({token})",
     "Effective shares" : "Effektive Freigaben",
+    "Has voted" : "Hat abgestimmt",
+    "Has not voted" : "Hat nicht abgestimmt",
     "Resend invitation mail" : "Einladungs-E-Mail erneut versenden",
     "Send invitation mail" : "Einladungs-E-Mail senden",
     "Grant poll admin access" : "Umfrage-Administrator den Zugriff gewähren",

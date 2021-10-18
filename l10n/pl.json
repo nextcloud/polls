@@ -210,6 +210,8 @@
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Dodaj efekt półprzezroczystości do elementów pierwszego planu, takich jak pasek boczny i tabela sond (nie działa we wszystkich przeglądarkach).",
     "Public link ({token})" : "Link publiczny ({token})",
     "Effective shares" : "Efektywne akcje",
+    "Has voted" : "Głosował",
+    "Has not voted" : "Nie głosował",
     "Resend invitation mail" : "Wyślij ponownie wiadomość z zaproszeniem",
     "Send invitation mail" : "Wyślij wiadomość z zaproszeniem",
     "Grant poll admin access" : "Udziel dostęp administratorowi do sondy",

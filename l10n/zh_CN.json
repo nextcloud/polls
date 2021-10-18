@@ -205,6 +205,8 @@
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "在侧边栏和投票表等前景元素上添加半透明效果 (不适用于所有浏览器)。",
     "Public link ({token})" : "公开链接  ({token})",
     "Effective shares" : "有效分享",
+    "Has voted" : "已投票",
+    "Has not voted" : "尚未投票",
     "Resend invitation mail" : "重新发送邀请邮件",
     "Send invitation mail" : "发送邀请邮件",
     "Grant poll admin access" : "授予投票管理员权限",

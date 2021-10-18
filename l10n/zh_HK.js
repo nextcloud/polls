@@ -212,6 +212,8 @@ OC.L10N.register(
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "在側邊欄和投票表等前景元素上添加半透明效果（不適用於所有瀏覽器）。",
     "Public link ({token})" : "公開連結（{token}）",
     "Effective shares" : "有效分享",
+    "Has voted" : "已投票",
+    "Has not voted" : "未投票",
     "Resend invitation mail" : "重新傳送邀請郵件",
     "Send invitation mail" : "傳送邀請郵件",
     "Grant poll admin access" : "授予投票管理員存取權限",

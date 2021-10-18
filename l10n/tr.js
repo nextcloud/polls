@@ -212,6 +212,8 @@ OC.L10N.register(
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Yan çubuk ve anket tablosu gibi ön plan ögelerine yarı saydam etkisi ekler (tüm tarayıcılarda çalışmaz).",
     "Public link ({token})" : "Herkese açık bağlantı ({token})",
     "Effective shares" : "Etkin paylaşımlar",
+    "Has voted" : "Oyladı",
+    "Has not voted" : "Oylamadı",
     "Resend invitation mail" : "Çağrı e-postasını yeniden gönder",
     "Send invitation mail" : "Çağrı e-postasını gönder",
     "Grant poll admin access" : "Anket yönetici erişimi yetkisi ver",
