@@ -210,6 +210,8 @@
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Pridajte priesvitný efekt na prvky v popredí, ako sú bočný panel a tabuľka hlasovania (nefunguje vo všetkých prehliadačoch).",
     "Public link ({token})" : "Verejný odkaz ({token})",
     "Effective shares" : "Komu je vo výsledku nazdieľané",
+    "Has voted" : "Hlasoval",
+    "Has not voted" : "Nehlasoval",
     "Resend invitation mail" : "Znovu poslať e-mail s pozvánkou",
     "Send invitation mail" : "Poslať e-mail s pozvánkou",
     "Grant poll admin access" : "Udeliť práva správcu ankety",
