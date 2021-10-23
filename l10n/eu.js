@@ -212,6 +212,8 @@ OC.L10N.register(
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Gehitu efektu transluzido bat aurreko elementuentzat, alboko barra eta inkesta-taula bezalakoentzat (ez du nabigatzaile guztiekin funtzionatzen).",
     "Public link ({token})" : "Esteka publikoa ({token})",
     "Effective shares" : "Partekatze eraginkorrak",
+    "Has voted" : "Bozkatu du",
+    "Has not voted" : "Ez du bozkatu",
     "Resend invitation mail" : "Birbidali gonbidapen mezu elektronikoa",
     "Send invitation mail" : "Bidali gonbidapen mezu elektronikoa",
     "Grant poll admin access" : "Eman inkestaren administratzaile sarbidea",
