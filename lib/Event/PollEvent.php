@@ -27,9 +27,17 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Poll;
 
 abstract class PollEvent extends Event {
+
+	/** @var Poll */
 	private $poll;
+
+	/** @var string */
 	private $pollOwner;
+
+	/** @var int */
 	private $pollId;
+
+	/** @var string */
 	private $pollTitle;
 
 	public function __construct(Poll $poll) {

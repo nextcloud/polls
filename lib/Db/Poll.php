@@ -234,6 +234,12 @@ class Poll extends Entity implements JsonSerializable {
 		);
 	}
 
+	public function getVoteUrl() : string {
+		return \OC::$server->getURLGenerator()->linkToRouteAbsolute(
+			'polls.page.vote',
+			['id' => $this->getId()]
+		);
+	}
 	public function getPublicPollEmail(): string {
 		return json_decode($this->getMiscSettings())->publicPollEmail ?? 'optional';
 	}

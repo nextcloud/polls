@@ -24,19 +24,21 @@
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Model\UserGroup\UserBase;
 use League\CommonMark\CommonMarkConverter;
 
-class InvitationMail extends MailBase implements IMail {
+class InvitationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Invitation';
 
 	public function __construct(
-		UserBase $recipient,
-		Poll $poll,
-		string $url
+		string $userId,
+		Share $share
 	) {
-		parent::__construct($recipient, $poll, $url);
+		parent::__construct(
+			$userId,
+			$share->getPollId()
+		);
 		$this->buildEmailTemplate();
 	}
 

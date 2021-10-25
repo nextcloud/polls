@@ -27,6 +27,8 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Share;
 
 class ShareEvent extends Event {
+
+	/** @var Share */
 	private $share;
 
 	public function __construct(Share $share) {

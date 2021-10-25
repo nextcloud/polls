@@ -24,33 +24,26 @@
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Model\UserGroup\UserBase;
-use OCP\IUserManager;
+use OCA\Polls\Db\Log;
+use OCA\Polls\Db\Subscription;
 
-class NotificationMail extends MailBase implements IMail {
+class NotificationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Notification';
 
-	/** @var array */
-	protected $logEntries;
+	/** @var Log[] */
+	protected $log;
 
-	/** @var IUserManager **/
-	protected $userManager;
-
-	/** @var ShareMapper **/
-	protected $shareMapper;
+	/** @var Subscription **/
+	protected $subscription;
 
 	public function __construct(
-		UserBase $recipient,
-		Poll $poll,
-		string $url,
-		array $logEntries
+		Subscription $subscription
 	) {
-		parent::__construct($recipient, $poll, $url);
-		$this->userManager = self::getContainer()->query(IUserManager::class);
-		$this->shareMapper = self::getContainer()->query(ShareMapper::class);
-		$this->logEntries = $logEntries;
+		parent::__construct(
+			$subscription->getUserId(),
+			$subscription->getPollId(),
+		);
+		$this->subscription = $subscription;
 		$this->buildEmailTemplate();
 	}
 
@@ -64,11 +57,37 @@ class NotificationMail extends MailBase implements IMail {
 			$this->trans->t('"{title}" had recent activity: ')
 		));
 
-		foreach ($this->logEntries as $logItem) {
-			$this->emailTemplate->addBodyListItem($logItem);
+		foreach ($this->subscription->getNotifyLogs() as $logItem) {
+			if ($this->poll->getAnonymous() || $this->poll->getShowResults() !== "always") {
+				// hide actor's name if poll is anonymous or results are hidden
+				$displayName = $this->trans->t('A user');
+			} else {
+				$displayName = $this->getUser($logItem->getUserId())->getDisplayName();
+			}
+
+			$this->emailTemplate->addBodyListItem($this->getComposedLogString($logItem, $displayName));
 		}
 
 		$this->emailTemplate->addBodyButton(htmlspecialchars($this->trans->t('Go to poll')), $this->url, '');
 		$this->emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
 	}
+
+	private function getComposedLogString(Log $logItem, string $displayName): string {
+		$logStrings = [
+			Log::MSG_ID_SETVOTE => $this->trans->t('%s voted.', [$displayName]),
+			Log::MSG_ID_UPDATEPOLL => $this->trans->t('Updated poll configuration. Please check your votes.'),
+			Log::MSG_ID_DELETEPOLL => $this->trans->t('The poll got deleted.'),
+			Log::MSG_ID_RESTOREPOLL => $this->trans->t('The poll got restored.'),
+			Log::MSG_ID_EXPIREPOLL => $this->trans->t('The poll got closed.'),
+			Log::MSG_ID_ADDOPTION => $this->trans->t('A vote option was added.'),
+			Log::MSG_ID_UPDATEOPTION => $this->trans->t('A vote option changed.'),
+			Log::MSG_ID_CONFIRMOPTION => $this->trans->t('A vote option got confirmed.'),
+			Log::MSG_ID_DELETEOPTION => $this->trans->t('A vote option was removed.'),
+			Log::MSG_ID_OWNERCHANGE => $this->trans->t('The poll owner changed.'),
+			Log::MSG_ID_ADDPOLL => $this->trans->t('%s created the poll.', [$displayName]),
+		];
+
+		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
+	}
+
 }

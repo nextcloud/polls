@@ -32,7 +32,7 @@ class Contact extends UserBase {
 	public const TYPE = 'contact';
 	public const ICON = 'icon-mail';
 
-	/** @var Array */
+	/** @var array */
 	private $contact = [];
 
 	public function __construct(

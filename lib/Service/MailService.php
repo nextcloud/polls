@@ -39,20 +39,17 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
+use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Model\Mail\InvitationMail;
 use OCA\Polls\Model\Mail\ReminderMail;
+use OCA\Polls\Model\Mail\NotificationMail;
 
 class MailService {
-	private const FIVE_DAYS = 432000;
-	private const FOUR_DAYS = 345600;
-	private const THREE_DAYS = 259200;
-	private const TWO_DAYS = 172800;
-	private const ONE_AND_HALF_DAYS = 129600;
-
 	/** @var LoggerInterface */
 	private $logger;
 
@@ -71,15 +68,6 @@ class MailService {
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
-	/** @var IL10N */
-	private $trans;
-
-	/** @var IFactory */
-	private $transFactory;
-
-	/** @var IMailer */
-	private $mailer;
-
 	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
 
@@ -95,6 +83,12 @@ class MailService {
 	/** @var LogMapper */
 	private $logMapper;
 
+	/** @var Log[] **/
+	private $logs;
+
+	/** @var Poll **/
+	private $poll;
+
 	public function __construct(
 		string $AppName,
 		LoggerInterface $logger,
@@ -102,9 +96,6 @@ class MailService {
 		IGroupManager $groupManager,
 		IConfig $config,
 		IURLGenerator $urlGenerator,
-		IL10N $trans,
-		IFactory $transFactory,
-		IMailer $mailer,
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
 		OptionMapper $optionMapper,
@@ -118,29 +109,12 @@ class MailService {
 		$this->groupManager = $groupManager;
 		$this->urlGenerator = $urlGenerator;
 		$this->logMapper = $logMapper;
-		$this->mailer = $mailer;
 		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
-		$this->trans = $trans;
-		$this->transFactory = $transFactory;
-	}
-
-	private function sendMail(IEmailTemplate $emailTemplate, string $emailAddress, string $displayName): void {
-		if (!$emailAddress || !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-			throw new \Exception('Invalid email address (' . $emailAddress . ')');
-		}
-
-		try {
-			$message = $this->mailer->createMessage();
-			$message->setTo([$emailAddress => $displayName]);
-			$message->useTemplate($emailTemplate);
-			$this->mailer->send($message);
-		} catch (\Exception $e) {
-			$this->logger->alert($e->getMessage());
-			throw $e;
-		}
+		$this->poll = new Poll;
+		$this->logs = [];
 	}
 
 	public function resolveEmailAddress(int $pollId, string $userId): string {
@@ -161,50 +135,32 @@ class MailService {
 	}
 
 	public function resendInvitation(string $token): Share {
-		$share = $this->shareMapper->findByToken($token);
-
-		$invitation = new InvitationMail(
-			$share->getUserObject(),
-			$this->pollMapper->find($share->getPollId()),
-			$share->getURL()
-		);
-
-		$invitation->send();
-
-		$share->setInvitationSent(time());
-		return $this->shareMapper->update($share);
+		$this->sendInvitation($token);
+		return $this->shareMapper->findByToken($token);
 	}
 
 	public function sendInvitation(string $token): array {
 		$share = $this->shareMapper->findByToken($token);
-		$poll = $this->pollMapper->find($share->getPollId());
 		$sentMails = [];
 		$abortedMails = [];
 
-		foreach ($share->getMembers() as $recipient) {
-			//skip poll owner
-			if ($recipient->getId() === $poll->getOwner()) {
-				continue;
-			}
-
-			$invitation = new InvitationMail(
-				$recipient,
-				$poll,
-				$share->getURL()
-			);
+		foreach ($share->getUserObject()->getMembers() as $recipient) {
+			$invitation = new InvitationMail($recipient->getId(), $share);
 
 			try {
 				$invitation->send();
-
-				$share->setInvitationSent(time());
-				$this->shareMapper->update($share);
-
 				$sentMails[] = $recipient;
+			} catch (InvalidEmailAddress $e) {
+				$abortedMails[] = $recipient;
+				$this->logger->warning('Invalid or no email address for invitation: ' . json_encode($recipient));
 			} catch (\Exception $e) {
 				$abortedMails[] = $recipient;
-				$this->logger->error('Error sending Mail to ' . json_encode($recipient));
+				$this->logger->error('Error sending Invitation to ' . json_encode($recipient));
 			}
 		}
+
+		$share->setInvitationSent(time());
+		$this->shareMapper->update($share);
 		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
 	}
 
@@ -212,179 +168,93 @@ class MailService {
 		$polls = $this->pollMapper->findAutoReminderPolls();
 		$time = time();
 		$remindPolls = [];
+
 		foreach ($polls as $poll) {
 			if ($poll->getExpire()) {
-				// If expiry is set, check reminder only depending on
-				// the expiry date
-				if ($poll->getExpire() - $poll->getCreated() > self::FIVE_DAYS
-					&& $poll->getExpire() - $time < self::TWO_DAYS
-					&& $poll->getExpire() > $time) {
-					// If the span between poll creation and expiry date is
-					// greater then 5 days, remind 48 hours before the
-					// expiration date
-					$this->remindShares($poll, ReminderMail::REASON_EXPIRATION, $poll->getExpire(), self::TWO_DAYS);
-					continue;
-				}
-
-				if ($poll->getExpire() - $poll->getCreated() > self::TWO_DAYS
-					&& $poll->getExpire() - $time < self::ONE_AND_HALF_DAYS
-					&& $poll->getExpire() > $time) {
-					// If the span between poll creation and expiry date is
-					// greater then 2 days, remind 36 hours before the
-					// expiration date
-					$this->remindShares($poll, ReminderMail::REASON_EXPIRATION, $poll->getExpire(), self::ONE_AND_HALF_DAYS);
-				}
-				continue;
-			}
-
-			if ($poll->getType() === Poll::TYPE_DATE) {
+				$deadline = $poll->getExpire();
+				$reminderReason = ReminderMail::REASON_EXPIRATION;
+			} elseif ($poll->getType() === Poll::TYPE_DATE) {
+				// use first date option as reminder deadline
 				$options = $this->optionMapper->findByPoll($poll->getId());
-				$checkOption = $options[0]->getTimestamp();
-				// If expiry is not set and poll is a date poll, check reminder
-				// depending on the first option
-				if ($checkOption - $poll->getCreated() > self::FIVE_DAYS
-					&& $checkOption - $time < self::TWO_DAYS
-					&& $checkOption > $time) {
-					// If the span between poll creation and first option is
-					// greater then 5 days, remind 48 hours before the
-					// first option
-					$this->remindShares($poll, ReminderMail::REASON_OPTION, $checkOption, self::TWO_DAYS);
-					continue;
-				}
-
-				if ($checkOption - $poll->getCreated() > self::TWO_DAYS
-					&& $checkOption - $time < self::ONE_AND_HALF_DAYS
-					&& $checkOption > $time) {
-					// If the span between poll creation and first option is
-					// greater then 2 days, remind 36 hours before the
-					// first option
-					$this->remindShares($poll, ReminderMail::REASON_OPTION, $checkOption, self::ONE_AND_HALF_DAYS);
-				}
+				$deadline = $options[0]->getTimestamp();
+				$reminderReason = ReminderMail::REASON_OPTION;
+			} else {
+				// Textpolls without expirations are not processed
 				continue;
 			}
-		}
-	}
 
-	private function remindShares(Poll $poll, string $reminderReason, int $deadline, int $period):void {
-		$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
-		foreach ($shares as $share) {
-			foreach ($share->getMembers() as $recipient) {
-				$invitation = new ReminderMail($recipient, $poll, $share->getURL(), $reminderReason, $deadline, $period);
-				try {
-					$invitation->send();
-				} catch (\Exception $e) {
-					// catch silently
-				}
+			if ($deadline - $poll->getCreated() > ReminderMail::FIVE_DAYS
+				&& $deadline - $time < ReminderMail::TWO_DAYS
+				&& $deadline > $time) {
+
+				$timeToDeadline = ReminderMail::TWO_DAYS;
+			} elseif ($deadline - $poll->getCreated() > ReminderMail::TWO_DAYS
+				&& $deadline - $time < ReminderMail::ONE_AND_HALF_DAY
+				&& $deadline > $time) {
+
+				$timeToDeadline = ReminderMail::ONE_AND_HALF_DAY;
+			} else {
+				continue;
 			}
 
-			$share->setReminderSent(time());
-			$this->shareMapper->update($share);
+			$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
+			foreach ($shares as $share) {
+				foreach ($share->getUserObject()->getMembers() as $recipient) {
+
+					$reminder = new ReminderMail(
+						$recipient->getId(),
+						$poll->getId(),
+						$deadline,
+						$timeToDeadline
+					);
+
+					try {
+						$reminder->send();
+					} catch (InvalidEmailAddress $e) {
+						$this->logger->warning('Invalid or no email address for reminder: ' . json_encode($share));
+					} catch (\Exception $e) {
+						$this->logger->error('Error sending Reminder to ' . json_encode($share));
+					}
+				}
+
+				$share->setReminderSent(time());
+				$this->shareMapper->update($share);
+			}
 		}
 	}
 
 	public function sendNotifications(): void {
 		$subscriptions = [];
-		$log = $this->logMapper->findUnprocessedPolls();
+		$this->logs = $this->logMapper->findUnprocessed();
 
-		foreach ($log as $logItem) {
-			$subscriptions = array_merge($subscriptions, $this->subscriptionMapper->findAllByPoll($logItem->getPollId()));
+		// Extract a unique array of pollIds from $this->logs
+		// TODO: can we achieve this a little more elegant?
+		$pollIds = array_values(array_unique(array_column(json_decode(json_encode($this->logs)), 'pollId')));
+
+		// collect subscriptions for the polls to notify
+		foreach ($pollIds as $pollId) {
+			$subscriptions = array_merge($subscriptions, $this->subscriptionMapper->findAllByPoll($pollId));
 		}
-
-		$log = $this->logMapper->findUnprocessed();
 
 		foreach ($subscriptions as $subscription) {
-			$poll = $this->pollMapper->find($subscription->getPollId());
-
-			if ($this->userManager->get($subscription->getUserId()) instanceof IUser) {
-				$recipient = new User($subscription->getUserId());
-				$url = $this->urlGenerator->linkToRouteAbsolute(
-					'polls.page.vote',
-					['id' => $subscription->getPollId()]
-				);
-			} else {
-				try {
-					$share = $this->shareMapper->findByPollAndUser($subscription->getPollId(), $subscription->getUserId());
-					$recipient = $share->getUserObject();
-					$url = $share->getURL();
-				} catch (\Exception $e) {
-					continue;
-				}
-			}
-
-			$emailTemplate = $this->generateNotification($recipient, $poll, $url, $log);
-
 			try {
-				$this->sendMail(
-					$emailTemplate,
-					$recipient->getEmailAddress(),
-					$recipient->getDisplayName()
-				);
+				$subscription->setNotifyLogs($this->logs);
+
+				$notication = new NotificationMail($subscription);
+				$notication->send();
+			} catch (InvalidEmailAddress $e) {
+				$this->logger->warning('Invalid or no email address for notification: ' . json_encode($subscription));
 			} catch (\Exception $e) {
-				$this->logger->error('Error sending Mail to ' . json_encode($recipient));
+				$this->logger->error('Error sending notification to ' . json_encode($subscription));
+				continue;
 			}
+
 		}
-	}
 
-	private function getLogString(Log $logItem, string $displayName): string {
-		$logStrings = [
-			Log::MSG_ID_SETVOTE => $this->trans->t('%s voted.', [$displayName]),
-			Log::MSG_ID_UPDATEPOLL => $this->trans->t('Updated poll configuration. Please check your votes.'),
-			Log::MSG_ID_DELETEPOLL => $this->trans->t('The poll got deleted.'),
-			Log::MSG_ID_RESTOREPOLL => $this->trans->t('The poll got restored.'),
-			Log::MSG_ID_EXPIREPOLL => $this->trans->t('The poll got closed.'),
-			Log::MSG_ID_ADDOPTION => $this->trans->t('A vote option was added.'),
-			Log::MSG_ID_UPDATEOPTION => $this->trans->t('A vote option changed.'),
-			Log::MSG_ID_CONFIRMOPTION => $this->trans->t('A vote option got confirmed.'),
-			Log::MSG_ID_DELETEOPTION => $this->trans->t('A vote option was removed.'),
-			Log::MSG_ID_OWNERCHANGE => $this->trans->t('The poll owner changed.'),
-			Log::MSG_ID_ADDPOLL => $this->trans->t('%s created the poll.', [$displayName]),
-		];
-
-		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
-	}
-
-	private function generateNotification(UserBase $recipient, Poll $poll, string $url, array $log): IEMailTemplate {
-		$owner = $poll->getOwnerUserObject();
-		$this->trans = $this->transFactory->get('polls', $recipient->getLanguage() ? $recipient->getLanguage() : $owner->getLanguage());
-		$emailTemplate = $this->mailer->createEMailTemplate('polls.Notification', [
-			'title' => $poll->getTitle(),
-			'link' => $url
-		]);
-
-		$emailTemplate->setSubject($this->trans->t('Polls App - New Activity'));
-		$emailTemplate->addHeader();
-		$emailTemplate->addHeading($this->trans->t('Polls App - New Activity'), false);
-		$emailTemplate->addBodyText(str_replace(
-			['{title}'],
-			[$poll->getTitle()],
-			$this->trans->t('"{title}" had recent activity: ')
-		));
-		foreach ($log as $logItem) {
-			if (intval($logItem->getPollId()) === $poll->getId()) {
-				if ($poll->getAnonymous() || $poll->getShowResults() !== "always") {
-					$displayName = $this->trans->t('A user');
-				} elseif ($this->userManager->get($logItem->getUserId()) instanceof IUser) {
-					$actor = new User($logItem->getUserId());
-					$displayName = $actor->getDisplayName();
-				} else {
-					try {
-						$share = $this->shareMapper->findByPollAndUser($poll->getId(), $logItem->getUserId());
-						$displayName = $share->getUserObject()->getDisplayName();
-					} catch (\Exception $e) {
-						$displayName = $logItem->getUserId();
-					}
-				}
-
-				$emailTemplate->addBodyListItem($this->getLogString($logItem, $displayName));
-			}
-
+		foreach ($this->logs as $logItem) {
 			$logItem->setProcessed(time());
 			$this->logMapper->update($logItem);
 		}
 
-		$emailTemplate->addBodyButton(htmlspecialchars($this->trans->t('Go to poll')), $url, '');
-		$emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
-
-		return $emailTemplate;
 	}
 }

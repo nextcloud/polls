@@ -25,10 +25,13 @@ namespace OCA\Polls\Model\UserGroup;
 
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 
+use DateTimeZone;
 use OCP\IL10N;
+use OCP\AppFramework\IAppContainer;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
 use OCA\Polls\AppInfo\Application;
+use OCP\IDateTimeZone;
 
 class UserBase implements \JsonSerializable {
 	public const TYPE = 'generic';
@@ -57,11 +60,14 @@ class UserBase implements \JsonSerializable {
 	/** @var string */
 	protected $description = '';
 
-	/** @var string */
-	protected $emailAddress = '';
+	/** @var string|null */
+	protected $emailAddress = null;
 
 	/** @var string */
 	protected $language = '';
+
+	/** @var string */
+	protected $locale = '';
 
 	/** @var string */
 	protected $organisation = '';
@@ -75,20 +81,26 @@ class UserBase implements \JsonSerializable {
 	/** @var string[] */
 	protected $categories = [];
 
+	/** @var IDateTimeZone */
+	protected $timezone;
+
 	public function __construct(
 		string $id,
 		string $type,
 		string $displayName = '',
 		string $emailAddress = '',
-		string $language = ''
+		string $language = '',
+		string $locale = ''
 	) {
 		$this->id = $id;
 		$this->type = $type;
 		$this->displayName = $displayName;
 		$this->emailAddress = $emailAddress;
 		$this->language = $language;
+		$this->locale = $locale;
 		$this->icon = 'icon-share';
 		$this->l10n = \OC::$server->getL10N('polls');
+		$this->timezone = $this->getContainer()->query(IDateTimeZone::class);
 	}
 
 	public function getId(): string {
@@ -112,6 +124,14 @@ class UserBase implements \JsonSerializable {
 
 	public function getLanguage(): string {
 		return $this->language;
+	}
+
+	public function getTimeZone(): DateTimeZone {
+		return new DateTimeZone($this->timezone->getTimeZone()->getName());
+	}
+
+	public function getLocale(): string {
+		return $this->locale;
 	}
 
 	public function getDisplayName(): string {
@@ -172,6 +192,11 @@ class UserBase implements \JsonSerializable {
 		return $this->language;
 	}
 
+	public function setLocale(string $locale): string {
+		$this->locale = $locale;
+		return $this->locale;
+	}
+
 	public function setOrganisation(string $organisation): string {
 		$this->organisation = $organisation;
 		return $this->organisation;
@@ -225,13 +250,14 @@ class UserBase implements \JsonSerializable {
 	}
 
 	/**
+	 * Default is array with self as single element
 	 * @return array
 	 */
 	public function getMembers(): array {
-		return [];
+		return [$this];
 	}
 
-	protected static function getContainer() {
+	protected static function getContainer() : IAppContainer {
 		$app = \OC::$server->query(Application::class);
 
 		return $app->getContainer();

@@ -427,7 +427,7 @@ class ShareService {
 			// $sentResult = ['sentMails' => [new User($share->getuserId())]];
 			// $this->shareService->setInvitationSent($token);
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
-			foreach ($share->getMembers() as $member) {
+			foreach ($share->getUserObject()->getMembers() as $member) {
 				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
 			}
 		}

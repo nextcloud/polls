@@ -46,16 +46,16 @@ class Comment extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
 	/** @var int $pollId */
-	protected $pollId;
+	protected $pollId = 0;
 
 	/** @var string $userId */
-	protected $userId;
+	protected $userId = '';
 
 	/** @var int $timestamp */
-	protected $timestamp;
+	protected $timestamp = 0;
 
 	/** @var string $comment */
-	protected $comment;
+	protected $comment = '';
 
 	public function __construct() {
 		$this->addType('pollId', 'int');

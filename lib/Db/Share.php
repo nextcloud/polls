@@ -70,28 +70,28 @@ class Share extends Entity implements JsonSerializable {
 	public const TYPE_CONTACTGROUP = 'contactGroup';
 
 	/** @var string $token */
-	protected $token;
+	protected $token = '';
 
 	/** @var string $type */
-	protected $type;
+	protected $type = '';
 
 	/** @var int $pollId */
-	protected $pollId;
+	protected $pollId = 0;
 
 	/** @var string $userId */
-	protected $userId;
+	protected $userId = '';
 
 	/** @var string $emailAddress */
-	protected $emailAddress;
+	protected $emailAddress = '';
 
 	/** @var string $invitationSent */
-	protected $invitationSent;
+	protected $invitationSent = '';
 
 	/** @var string $reminderSent */
-	protected $reminderSent;
+	protected $reminderSent = '';
 
 	/** @var string $displayName */
-	protected $displayName;
+	protected $displayName = '';
 
 	/** @var AppSettings */
 	protected $appSettings;
@@ -154,24 +154,5 @@ class Share extends Entity implements JsonSerializable {
 			$this->displayName,
 			$this->emailAddress
 		);
-	}
-
-	/**
-	 * @return UserBase[]
-	 */
-	public function getMembers() {
-		if ($this->type === self::TYPE_GROUP
-		|| $this->type === self::TYPE_CONTACTGROUP
-		|| $this->type === self::TYPE_CIRCLE) {
-			$group = UserBase::getUserGroupChild($this->type, $this->getUserId());
-			return $group->getMembers();
-		} else {
-			return [UserBase::getUserGroupChild(
-				$this->type,
-				$this->userId,
-				$this->displayName,
-				$this->emailAddress
-			)];
-		}
 	}
 }

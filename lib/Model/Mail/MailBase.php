@@ -28,7 +28,12 @@ use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\ShareMapper;
+use OCP\AppFramework\IAppContainer;
 use OCP\IL10N;
+use OCP\IUser;
+use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
 use OCP\Mail\IMailer;
@@ -42,8 +47,11 @@ class MailBase {
 	/** @var Poll */
 	protected $poll;
 
+	/** @var string|null */
+	protected $url = null;
+
 	/** @var string */
-	protected $url;
+	protected $footer;
 
 	/** @var IMailer */
 	protected $mailer;
@@ -61,16 +69,23 @@ class MailBase {
 	protected $owner;
 
 	public function __construct(
-		UserBase $recipient,
-		Poll $poll,
-		string $url
+		string $userId,
+		int $pollId,
+		string $url = null
 	) {
-		$this->recipient = $recipient;
-		$this->poll = $poll;
-		$this->url = $url;
+		$this->poll = $this->getPoll($pollId);
+		$this->recipient = $this->getUser($userId);
+
+		$this->url = $url ?? $this->poll->getVoteUrl();
+
+		$this->owner = $this->poll->getOwnerUserObject();
+
+		if ($this->recipient->getIsNoUser()) {
+			$this->url = $this->getShareURL();
+		}
+
 		$this->mailer = self::getContainer()->query(IMailer::class);
 		$this->transFactory = self::getContainer()->query(IFactory::class);
-		$this->owner = $poll->getOwnerUserObject();
 		$this->trans = $this->transFactory->get(
 			'polls',
 			$this->recipient->getLanguage()
@@ -78,6 +93,7 @@ class MailBase {
 				: $this->owner->getLanguage()
 		);
 
+		$this->footer = $this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
 		$this->emailTemplate = $this->mailer->createEMailTemplate(
 			self::TEMPLATE_CLASS, [
 				'owner' => $this->owner->getDisplayName(),
@@ -94,7 +110,7 @@ class MailBase {
 	public function send(): void {
 		if (!$this->recipient->getEmailAddress()
 			|| !filter_var($this->recipient->getEmailAddress(), FILTER_VALIDATE_EMAIL)) {
-			throw new \Exception('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
+			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
 		}
 
 		try {
@@ -109,7 +125,32 @@ class MailBase {
 		}
 	}
 
-	protected static function getContainer() {
+	protected function getUser(string $userId) : UserBase {
+		if (\OC::$server->getUserManager()->get($userId) instanceof IUser) {
+			// return User object
+			return new User($userId);
+		}
+		// return UserBaseChild from share
+		return $this->getContainer()
+			->query(ShareMapper::class)
+			->findByPollAndUser($this->poll->getId(), $userId)
+			->getUserObject();
+	}
+
+	private function getShareURL() : string {
+		return $this->getContainer()
+			->query(ShareMapper::class)
+			->findByPollAndUser($this->poll->getId(), $this->recipient->getId())
+			->getURL();
+	}
+
+	protected function getPoll(int $pollId) : Poll {
+		return $this->getContainer()
+			->query(PollMapper::class)
+			->find($pollId);
+	}
+
+	protected static function getContainer() : IAppContainer {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
 	}

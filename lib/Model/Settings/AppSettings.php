@@ -27,6 +27,7 @@ use JsonSerializable;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
+use OCP\AppFramework\IAppContainer;
 use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Model\UserGroup\Group;
 
@@ -223,7 +224,7 @@ class AppSettings implements JsonSerializable {
 	}
 
 
-	protected static function getContainer() {
+	protected static function getContainer() : IAppContainer {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
 	}

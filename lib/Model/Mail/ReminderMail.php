@@ -24,70 +24,88 @@
 
 namespace OCA\Polls\Model\Mail;
 
+use DateTime;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\UserGroup\UserBase;
 
-class ReminderMail extends MailBase implements IMail {
+class ReminderMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Reminder';
 	public const REASON_EXPIRATION = 'expiry';
 	public const REASON_OPTION = 'option';
-
-	/** @var string */
-	protected $reason;
+	public const REASON_NONE = null;
+	public const FIVE_DAYS = 432000;
+	public const FOUR_DAYS = 345600;
+	public const THREE_DAYS = 259200;
+	public const TWO_DAYS = 172800;
+	public const ONE_AND_HALF_DAY = 129600;
 
 	/** @var int */
 	protected $deadline;
 
 	/** @var int */
-	protected $remainingPeriodLess;
+	protected $timeToDeadline;
 
 	public function __construct(
-		UserBase $recipient,
-		Poll $poll,
-		string $url,
-		string $reason,
+		string $userId,
+		int $pollId,
 		int $deadline,
-		int $remainingPeriodLess
+		int $timeToDeadline
 	) {
-		parent::__construct($recipient, $poll, $url);
-		$this->reason = $reason;
+		parent::__construct($userId, $pollId);
 		$this->deadline = $deadline;
-		$this->remainingPeriodLess = $remainingPeriodLess;
+		$this->timeToDeadline = $timeToDeadline;
 		$this->buildEmailTemplate();
 	}
 
 	public function buildEmailTemplate() : void {
+		$dtDeadline = new DateTime('now', $this->recipient->getTimeZone());
+		$dtDeadline->setTimestamp($this->deadline);
+		$deadlineText = (string) $this->trans->l('datetime', $dtDeadline, ['width' => 'long']);
+
 		$this->emailTemplate->setSubject($this->trans->t('Reminder for poll "%s"', $this->poll->getTitle()));
 		$this->emailTemplate->addHeader();
 		$this->emailTemplate->addHeading($this->trans->t('Reminder for poll "%s"', $this->poll->getTitle()), false);
 
-		$this->emailTemplate->addBodyText(
-			$this->trans->t('This is just a reminder, to make sure you do not miss the deadline for this poll.')
+		$reminderText = str_replace(
+			['{owner}'],
+			[$this->owner->getDisplayName()],
+			$this->trans->t('{owner} sends you this reminder to make sure, your votes are set.')
 		);
 
-		if ($this->reason === self::REASON_OPTION) {
-			$this->emailTemplate->addBodyText(str_replace(
-				['{leftPeriod}','{dateTime}'],
-				[($this->remainingPeriodLess / 3600), $this->deadline],
-				$this->trans->t('The first poll option is away less than {leftPeriod} hours ({dateTime}).')
-			));
+		if ($this->getReminderReason() === self::REASON_OPTION) {
+			$reminderText = str_replace(
+				['{leftPeriod}', '{dateTime}', '{timezone}'],
+				[($this->timeToDeadline / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
+				$this->trans->t('The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone}).')
+			);
 		}
 
-		if ($this->reason === self::REASON_EXPIRATION) {
-			$this->emailTemplate->addBodyText(str_replace(
-				['{leftPeriod}','{dateTime}'],
-				[($this->remainingPeriodLess / 3600), $this->deadline],
-				$this->trans->t('The poll is about to expire in less than {leftPeriod} hours ({dateTime}).')
-			));
+		if ($this->getReminderReason() === self::REASON_EXPIRATION) {
+			$reminderText = str_replace(
+				['{leftPeriod}', '{dateTime}', '{timezone}'],
+				[($this->timeToDeadline / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
+				$this->trans->t('The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone}).')
+			);
 		}
 
+		$this->emailTemplate->addBodyText($reminderText);
 		$this->emailTemplate->addBodyButton(
-				$this->trans->t('Go to poll'),
+				$this->trans->t('Check your votes'),
 				$this->url
 			);
 		$this->emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
 		$this->emailTemplate->addBodyText($this->url);
 		$this->emailTemplate->addBodyText($this->trans->t('Do not share this link with other people, because it is connected to your votes.'));
 		$this->emailTemplate->addFooter($this->trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
+	}
+
+	public function getReminderReason() : ?string {
+		if ($this->poll->getExpire()) {
+			return self::REASON_EXPIRATION;
+		} elseif ($this->poll->getType() === Poll::TYPE_DATE) {
+			return self::REASON_OPTION;
+		} else {
+			return self::REASON_NONE;
+		}
 	}
 }

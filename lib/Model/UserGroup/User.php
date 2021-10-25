@@ -23,8 +23,10 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
+use DateTimeZone;
 use OCP\IUserManager;
 use OCP\IUser;
+use OCP\IDateTimeZone;
 
 class User extends UserBase {
 	public const TYPE = 'user';
@@ -46,11 +48,21 @@ class User extends UserBase {
 		$this->displayName = $this->user->getDisplayName();
 		$this->emailAddress = $this->user->getEmailAddress();
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
+		$this->locale = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'locale');
 	}
 
 	public function isEnabled(): bool {
 		return $this->user->isEnabled();
 	}
+
+	public function getTimeZone(): DateTimeZone {
+		$tz = \OC::$server->getConfig()->getUserValue($this->getId(), 'core', 'timezone');
+		if ($tz) {
+			return new DateTimeZone($tz);
+		}
+		return new DateTimeZone($this->timezone->getTimeZone()->getName());
+	}
+
 
 	/**
 	 * @return User[]

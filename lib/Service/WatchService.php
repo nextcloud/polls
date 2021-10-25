@@ -40,6 +40,7 @@ class WatchService {
 		WatchMapper $watchMapper
 	) {
 		$this->watchMapper = $watchMapper;
+		$this->watch = new Watch;
 	}
 
 	/**

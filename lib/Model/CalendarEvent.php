@@ -27,10 +27,10 @@ use \OCP\Calendar\ICalendar;
 
 class CalendarEvent implements \JsonSerializable {
 
-	/** @var Array */
+	/** @var array */
 	protected $calDav;
 
-	/** @var Array */
+	/** @var array */
 	protected $event;
 
 	/** @var ICalendar */

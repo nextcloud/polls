@@ -27,6 +27,8 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Comment;
 
 class CommentEvent extends Event {
+
+	/** @var Comment */
 	private $comment;
 
 	public function __construct(Comment $comment) {

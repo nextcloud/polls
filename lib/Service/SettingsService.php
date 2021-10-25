@@ -24,6 +24,7 @@
 namespace OCA\Polls\Service;
 
 use OCP\IConfig;
+use OCP\AppFramework\IAppContainer;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserGroup\Group;
 use OCA\Polls\AppInfo\Application;
@@ -36,7 +37,7 @@ class SettingsService {
 	/** @var AppSettings */
 	private $appSettings;
 
-	/** @var String */
+	/** @var string|null */
 	private $userId;
 
 	public function __construct(
@@ -70,7 +71,7 @@ class SettingsService {
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
 	}
 
-	protected static function getContainer() {
+	protected static function getContainer() : IAppContainer {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
 	}

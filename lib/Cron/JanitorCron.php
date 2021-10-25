@@ -59,7 +59,7 @@ class JanitorCron extends TimedJob {
 	}
 
 	/**
-	 * @param mixed $arguments
+	 * @param mixed $argument
 	 * @return void
 	 */
 	protected function run($argument) {

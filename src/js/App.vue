@@ -231,7 +231,7 @@ export default {
 
 </script>
 
-<style  lang="scss">
+<style lang="scss">
 [class^='area__'] {
 	padding: 0 8px 16px 0;
 	background-color: var(--color-main-background);
