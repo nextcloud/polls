@@ -21,25 +21,36 @@
   -->
 
 <template>
-	<div>
+	<div class="auto-reminder-switch">
 		<CheckboxRadioSwitch :checked.sync="autoReminder" type="switch">
 			{{ t('polls', 'Use Autoreminder') }}
 		</CheckboxRadioSwitch>
-		<InformationIcon />
+		<Popover>
+			<template #trigger>
+				<Actions>
+					<ActionButton icon="icon-info">
+						{{ t('polls', 'Autoreminder informations') }}
+					</ActionButton>
+				</Actions>
+			</template>
+			<AutoReminderInformation />
+		</Popover>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import InformationIcon from 'vue-material-design-icons/Information.vue'
+import { Actions, ActionButton, Popover, CheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAutoReminder',
 
 	components: {
 		CheckboxRadioSwitch,
-		InformationIcon,
+		Actions,
+		ActionButton,
+		Popover,
+		AutoReminderInformation: () => import('./AutoReminderInformation'),
 	},
 
 	computed: {
@@ -60,3 +71,12 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+	.auto-reminder-switch {
+		display: flex;
+		.information-icon {
+			margin-left: 12px;
+		}
+	}
+</style>
