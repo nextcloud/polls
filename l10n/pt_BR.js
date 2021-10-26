@@ -212,6 +212,8 @@ OC.L10N.register(
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Adicione um efeito translúcido em elementos de primeiro plano, como barra lateral e tabela de votação (não funciona com todos os navegadores).",
     "Public link ({token})" : "Link público ({token})",
     "Effective shares" : "Ações efetivas",
+    "Has voted" : "Foi votado",
+    "Has not voted" : "Não foi votado",
     "Resend invitation mail" : "Reenviar e-mail com convite",
     "Send invitation mail" : "Enviar e-mail com convite",
     "Grant poll admin access" : "Conceda acesso de administrador à votação",
