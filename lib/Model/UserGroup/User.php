@@ -26,7 +26,6 @@ namespace OCA\Polls\Model\UserGroup;
 use DateTimeZone;
 use OCP\IUserManager;
 use OCP\IUser;
-use OCP\IDateTimeZone;
 
 class User extends UserBase {
 	public const TYPE = 'user';

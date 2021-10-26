@@ -29,21 +29,15 @@ use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\IConfig;
 use OCP\IURLGenerator;
-use OCP\IL10N;
-use OCP\L10N\IFactory;
-use OCP\Mail\IMailer;
-use OCP\Mail\IEMailTemplate;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
-use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Model\Mail\InvitationMail;
 use OCA\Polls\Model\Mail\ReminderMail;
@@ -186,12 +180,10 @@ class MailService {
 			if ($deadline - $poll->getCreated() > ReminderMail::FIVE_DAYS
 				&& $deadline - $time < ReminderMail::TWO_DAYS
 				&& $deadline > $time) {
-
 				$timeToDeadline = ReminderMail::TWO_DAYS;
 			} elseif ($deadline - $poll->getCreated() > ReminderMail::TWO_DAYS
 				&& $deadline - $time < ReminderMail::ONE_AND_HALF_DAY
 				&& $deadline > $time) {
-
 				$timeToDeadline = ReminderMail::ONE_AND_HALF_DAY;
 			} else {
 				continue;
@@ -200,7 +192,6 @@ class MailService {
 			$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
 			foreach ($shares as $share) {
 				foreach ($share->getUserObject()->getMembers() as $recipient) {
-
 					$reminder = new ReminderMail(
 						$recipient->getId(),
 						$poll->getId(),
@@ -248,13 +239,11 @@ class MailService {
 				$this->logger->error('Error sending notification to ' . json_encode($subscription));
 				continue;
 			}
-
 		}
 
 		foreach ($this->logs as $logItem) {
 			$logItem->setProcessed(time());
 			$this->logMapper->update($logItem);
 		}
-
 	}
 }

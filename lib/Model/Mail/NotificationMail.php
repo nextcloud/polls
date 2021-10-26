@@ -89,5 +89,4 @@ class NotificationMail extends MailBase {
 
 		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
 	}
-
 }

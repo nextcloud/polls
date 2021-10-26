@@ -25,7 +25,6 @@
 namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Share;
-use OCA\Polls\Model\UserGroup\UserBase;
 use League\CommonMark\CommonMarkConverter;
 
 class InvitationMail extends MailBase {

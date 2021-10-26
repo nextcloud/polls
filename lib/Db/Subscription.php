@@ -69,9 +69,9 @@ class Subscription extends Entity implements JsonSerializable {
 		});
 	}
 
-/**
- * @return Log[]
- */
+	/**
+	 * @return Log[]
+	 */
 	public function getNotifyLogs() : array {
 		return $this->logEntries;
 	}

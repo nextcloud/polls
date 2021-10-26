@@ -26,7 +26,6 @@ namespace OCA\Polls\Model\Mail;
 
 use DateTime;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Model\UserGroup\UserBase;
 
 class ReminderMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Reminder';
