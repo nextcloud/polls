@@ -215,7 +215,7 @@ class UserBase implements \JsonSerializable {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		[$result, $more] = self::getContainer()->get(ISearch::class)->search($query, $types, false, 200, 0);
+		[$result, $more] = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
 
 		foreach (($result['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);
@@ -258,9 +258,7 @@ class UserBase implements \JsonSerializable {
 	}
 
 	protected static function getContainer() : IAppContainer {
-		\OC::$server->getLogger()->error('catched');
-		$app = new \OCP\AppFramework\App('myapp');
-		// $app = \OC::$server->query(Application::class);
+		$app = \OC::$server->query(Application::class);
 
 		return $app->getContainer();
 	}
