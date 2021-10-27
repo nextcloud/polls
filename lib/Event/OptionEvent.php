@@ -27,6 +27,7 @@ use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Option;
 
 class OptionEvent extends Event {
+	/** @var Option */
 	private $option;
 
 	public function __construct(Option $option) {

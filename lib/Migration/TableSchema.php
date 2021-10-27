@@ -245,6 +245,7 @@ abstract class TableSchema {
 			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'invitation_sent' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'reminder_sent' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 		],
 		Subscription::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],

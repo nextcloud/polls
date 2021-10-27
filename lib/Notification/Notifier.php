@@ -44,7 +44,7 @@ class Notifier implements INotifier {
 	protected $l10nFactory;
 
 	/** @var IURLGenerator */
-	protected $url;
+	protected $urlGenerator;
 
 	/** @var IUserManager */
 	protected $userManager;
@@ -57,13 +57,13 @@ class Notifier implements INotifier {
 
 	public function __construct(
 		IFactory $l10nFactory,
-		IURLGenerator $url,
+		IURLGenerator $urlGenerator,
 		IUserManager $userManager,
 		PollMapper $pollMapper,
 		NotificationService $notificationService
 	) {
 		$this->l10nFactory = $l10nFactory;
-		$this->url = $url;
+		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
 		$this->pollMapper = $pollMapper;
 		$this->notificationService = $notificationService;
@@ -88,7 +88,7 @@ class Notifier implements INotifier {
 	 *
 	 * @psalm-return array{actor: array{type: 'user', id: string, name: string}}
 	 */
-	private function getActor($actorId): array {
+	private function getActor(string $actorId): array {
 		$actor = $this->userManager->get($actorId);
 		return [
 			'actor' => [
@@ -106,16 +106,17 @@ class Notifier implements INotifier {
 		}
 		$parameters = $notification->getSubjectParameters();
 
-		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('polls', 'polls-black.svg')));
+		$notification->setIcon(
+			$this->urlGenerator->getAbsoluteURL(
+				$this->urlGenerator->imagePath('polls', 'polls-black.svg')
+			)
+		);
 
 		try {
 			$poll = $this->pollMapper->find(intval($notification->getObjectId()));
 			$actor = $this->getActor($parameters['actor'] ?? $poll->getOwner());
 			$pollTitle = $poll->getTitle();
-			$notification->setLink($this->url->linkToRouteAbsolute(
-				'polls.page.vote',
-				['id' => $poll->getId()]
-			));
+			$notification->setLink($poll->getVoteUrl());
 		} catch (DoesNotExistException $e) {
 			$poll = null;
 			$pollTitle = $parameters['pollTitle'];

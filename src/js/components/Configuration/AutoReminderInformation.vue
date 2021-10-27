@@ -1,0 +1,66 @@
+<!--
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  -
+  - @author René Gieling <github@dartcafe.de>
+  -
+  - @license GNU AGPL version 3 or any later version
+  -
+  - This program is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU Affero General Public License as
+  - published by the Free Software Foundation, either version 3 of the
+  - License, or (at your option) any later version.
+  -
+  - This program is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU Affero General Public License for more details.
+  -
+  - You should have received a copy of the GNU Affero General Public License
+  - along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -
+  -->
+
+<template lang="html">
+	<div class="auto-reminder-information">
+		<p> {{ t('polls', 'The automatic reminder is sent to all shares via email:') }} </p>
+		<p> {{ t('polls', '1. For polls with expiration') }} </p>
+		<ul>
+			<li>{{ t('polls', ' - 48 hours before the expiration date, if the poll is created more than 5 days before the expiration.') }}</li>
+			<li>{{ t('polls', ' - 36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration.') }}</li>
+		</ul>
+		<p> &nbsp; </p>
+		<p> {{ t('polls', '2. For date polls without expiration') }} </p>
+		<ul>
+			<li>{{ t('polls', ' - 48 hours before the first date option, if the poll is created more than 5 days before the expiration.') }}</li>
+			<li>{{ t('polls', ' - 36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration.') }}</li>
+		</ul>
+		<p> &nbsp; </p>
+		<p> {{ t('polls', '3. No reminder is sent') }} </p>
+		<ul>
+			<li>{{ t('polls', ' - for text polls without expiration.') }}</li>
+			<li>{{ t('polls', ' - for polls created less than 2 days before the expiration.') }}</li>
+			<li>{{ t('polls', ' - if a share already got a reminder (no matter, if the expiration date got changed).') }}</li>
+			<li>{{ t('polls', ' - if the poll is already closed.') }}</li>
+		</ul>
+	</div>
+</template>
+
+<script>
+
+export default {
+	name: 'AutoReminderInformation',
+}
+</script>
+<style lang="scss">
+	.auto-reminder-information {
+		padding: 8px;
+		> div {
+			background-position: 0 4px;
+			background-repeat: no-repeat;
+			opacity: 0.7;
+			margin: 8px 0 4px 0;
+			padding-left: 24px;
+		}
+	}
+
+</style>

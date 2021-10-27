@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -27,10 +27,10 @@ use \OCP\Calendar\ICalendar;
 
 class CalendarEvent implements \JsonSerializable {
 
-	/** @var Array */
+	/** @var array */
 	protected $calDav;
 
-	/** @var Array */
+	/** @var array */
 	protected $event;
 
 	/** @var ICalendar */

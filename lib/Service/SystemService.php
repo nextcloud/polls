@@ -29,13 +29,13 @@ use OCA\Polls\Exceptions\InvalidEmailAddress;
 
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Model\Circle;
-use OCA\Polls\Model\Contact;
-use OCA\Polls\Model\ContactGroup;
-use OCA\Polls\Model\Email;
-use OCA\Polls\Model\Group;
-use OCA\Polls\Model\User;
-use OCA\Polls\Model\UserGroupClass;
+use OCA\Polls\Model\UserGroup\Circle;
+use OCA\Polls\Model\UserGroup\Contact;
+use OCA\Polls\Model\UserGroup\ContactGroup;
+use OCA\Polls\Model\UserGroup\Email;
+use OCA\Polls\Model\UserGroup\Group;
+use OCA\Polls\Model\UserGroup\User;
+use OCA\Polls\Model\UserGroup\UserBase;
 
 class SystemService {
 
@@ -119,7 +119,7 @@ class SystemService {
 				$list[] = new Email($query);
 			}
 
-			$list = array_merge($list, UserGroupClass::search($query));
+			$list = array_merge($list, UserBase::search($query));
 		}
 
 		return $list;

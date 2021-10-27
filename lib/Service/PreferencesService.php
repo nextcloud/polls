@@ -41,7 +41,7 @@ class PreferencesService {
 	/** @var Preferences */
 	private $preferences;
 
-	/** @var String */
+	/** @var string|null */
 	private $userId;
 
 	public function __construct(
@@ -52,6 +52,7 @@ class PreferencesService {
 		$this->userId = $UserId;
 		$this->config = $config;
 		$this->preferencesMapper = $preferencesMapper;
+		$this->preferences = new Preferences;
 		$this->load();
 	}
 

@@ -93,6 +93,9 @@ class OptionService {
 		$this->option = $option;
 		$this->optionMapper = $optionMapper;
 		$this->voteMapper = $voteMapper;
+		$this->options = [];
+		$this->poll = new Poll;
+		$this->votes = [];
 	}
 
 	/**

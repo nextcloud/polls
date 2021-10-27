@@ -28,7 +28,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\WatchMapper;
-use OCA\Polls\Model\AppSettings;
+use OCA\Polls\Model\Settings\AppSettings;
 
 class JanitorCron extends TimedJob {
 
@@ -59,7 +59,7 @@ class JanitorCron extends TimedJob {
 	}
 
 	/**
-	 * @param mixed $arguments
+	 * @param mixed $argument
 	 * @return void
 	 */
 	protected function run($argument) {

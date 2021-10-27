@@ -28,6 +28,7 @@
     <background-jobs>
         <job>OCA\Polls\Cron\NotificationCron</job>
         <job>OCA\Polls\Cron\JanitorCron</job>
+        <job>OCA\Polls\Cron\AutoReminderCron</job>
     </background-jobs>
     <commands>
         <command>OCA\Polls\Command\Share\Add</command>

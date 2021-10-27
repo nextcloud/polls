@@ -78,10 +78,7 @@ class LogMapper extends QBMapper {
 
 		$qb->select('*')
 			->from($this->getTableName())
-			->where(
-			   $qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT))
-		   );
-
+			->where($qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
 	}
 

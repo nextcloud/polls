@@ -40,7 +40,7 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Model\Acl;
-use OCA\Polls\Model\UserGroupClass;
+use OCA\Polls\Model\UserGroup\UserBase;
 
 class ShareService {
 
@@ -191,7 +191,7 @@ class ShareService {
 				// Return the created share
 				return $this->create(
 					$this->share->getPollId(),
-					UserGroupClass::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
+					UserBase::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
 					true
 				);
 			}
@@ -215,8 +215,8 @@ class ShareService {
 	 *
 	 * @return Share
 	 */
-	private function create(int $pollId, UserGroupClass $userGroup, bool $preventInvitation = false): Share {
-		$preventInvitation = $userGroup->getType() === UserGroupClass::TYPE_PUBLIC ?: $preventInvitation;
+	private function create(int $pollId, UserBase $userGroup, bool $preventInvitation = false): Share {
+		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
 		$token = \OC::$server->getSecureRandom()->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
@@ -229,12 +229,12 @@ class ShareService {
 		$this->share->setPollId($pollId);
 
 		// Convert user type contact to share type email
-		if ($userGroup->getType() === UserGroupClass::TYPE_CONTACT) {
+		if ($userGroup->getType() === UserBase::TYPE_CONTACT) {
 			$this->share->setType(Share::TYPE_EMAIL);
 			$this->share->setUserId($userGroup->getEmailAddress());
 		} else {
 			$this->share->setType($userGroup->getType());
-			$this->share->setUserId($userGroup->getType() === UserGroupClass::TYPE_PUBLIC ? $token : $userGroup->getPublicId());
+			$this->share->setUserId($userGroup->getType() === UserBase::TYPE_PUBLIC ? $token : $userGroup->getPublicId());
 		}
 
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
@@ -256,7 +256,7 @@ class ShareService {
 	public function add(int $pollId, string $type, string $userId = ''): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 
-		if ($type === UserGroupClass::TYPE_PUBLIC) {
+		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->acl->request(ACL::PERMISSION_PUBLIC_SHARES);
 		} else {
 			try {
@@ -269,7 +269,7 @@ class ShareService {
 			}
 		}
 
-		$this->create($pollId, UserGroupClass::getUserGroupChild($type, $userId));
+		$this->create($pollId, UserBase::getUserGroupChild($type, $userId));
 
 		return $this->share;
 	}
@@ -362,7 +362,7 @@ class ShareService {
 			// prevent invtation sending, when no email address is given
 			$this->create(
 				$this->share->getPollId(),
-				UserGroupClass::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
+				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
 				!$emailAddress
 			);
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
@@ -427,7 +427,7 @@ class ShareService {
 			// $sentResult = ['sentMails' => [new User($share->getuserId())]];
 			// $this->shareService->setInvitationSent($token);
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
-			foreach ($share->getMembers() as $member) {
+			foreach ($share->getUserObject()->getMembers() as $member) {
 				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
 			}
 		}

@@ -51,7 +51,7 @@ class Watch extends Entity implements JsonSerializable {
 	/** @var string $tableId */
 	protected $table;
 
-	/** @var integer $updated */
+	/** @var int $updated */
 	protected $updated;
 
 	public function __construct() {
