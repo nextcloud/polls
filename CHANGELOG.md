@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.4.0-beta1] - tba
 - [new] #1305 - Added participation indicator in effective shares list (#2037)
+- [new] #656 - Add autoreminder job (#2039)
 - [change] #2038 - validate token in router and reroute before entering public page
 
 ## [3.3.0] - 2021-10-10
