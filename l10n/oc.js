@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Poll invitation \"%s\"" : "Invitacion al sondatge « %s »",
     "Contact" : "Contacte",
     "Contact group" : "Grop de contactes",
     "External Email" : "Email extèrn",
@@ -10,8 +11,6 @@ OC.L10N.register(
     "User" : "User",
     "Polls" : "Sondatges",
     "%s invited you to a poll" : "%s vos condivèt a un sondatge",
-    "- %s voted." : "- %s votèt.",
-    "Poll invitation \"%s\"" : "Invitacion al sondatge « %s »",
     "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],
     "New comment …" : "Nòu comentari…",
     "Delete comment" : "Suprimir comentari",

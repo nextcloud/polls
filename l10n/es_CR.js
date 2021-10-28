@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
     "Contact" : "Contacto",
     "Public link" : "Liga pública",
     "Group" : "Grupo",
     "User" : "Usuario",
     "Polls" : "Encuestas",
-    "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
     "Conflict" : "Conflicto",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",

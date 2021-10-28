@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
     "Contact" : "Contautu",
     "Group" : "Group",
     "User" : "Usuariu",
     "Polls" : "Enquestes",
-    "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
     "Conflict" : "Conflictu",
     "New comment …" : "Comentariu nuevu...",
     "Delete comment" : "Desaniciar comentariu",

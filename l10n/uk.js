@@ -1,15 +1,14 @@
 OC.L10N.register(
     "polls",
     {
+    "Poll invitation \"%s\"" : "Запрошення до опитування %s",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} запросив вас взяти участь у опитування \"{title}\"",
+    "Go to poll" : "Перейти до опитування",
     "Contact" : "Контакт",
     "Public link" : "Публічне посилання",
     "Group" : "Група",
     "User" : "Користувач",
     "Polls" : "Опитування",
-    "- %s voted." : "- %s проголосували.",
-    "Go to poll" : "Перейти до опитування",
-    "Poll invitation \"%s\"" : "Запрошення до опитування %s",
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} запросив вас взяти участь у опитування \"{title}\"",
     "_%n Participant_::_%n Participants_" : ["%n учасник","%n учасника","%n учасників","%n учасників"],
     "Conflict" : "Конфлікт",
     "New comment …" : "Новий коментар...",
