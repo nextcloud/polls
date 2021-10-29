@@ -2,6 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Polls App - New Activity" : "Polls App - New Activity",
+    "The poll got restored." : "The poll was restored.",
+    "The poll got closed." : "The poll was closed.",
     "Contact" : "Contact",
     "Public link" : "Public link",
     "Group" : "Group",
