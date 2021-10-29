@@ -101,11 +101,11 @@ export const watchPolls = {
 						dispatches = [...dispatches, 'poll/get']
 					}
 
-					if (this.loggedIn) {
+					if (this.isLoggedin) {
 						// if user is an authorized user load polls list
 						dispatches = [...dispatches, `${item.table}/list`]
 					}
-				} else if (!this.loggedIn && (item.table === 'shares')) {
+				} else if (!this.isLoggedin && (item.table === 'shares')) {
 					// if current user is guest and table is shares only reload current share
 					dispatches = [...dispatches, 'share/get']
 				} else {
@@ -113,7 +113,6 @@ export const watchPolls = {
 					dispatches = [...dispatches, `${item.table}/list`]
 				}
 			})
-
 			dispatches = [...new Set(dispatches)] // remove duplicates
 			await Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
 		},
