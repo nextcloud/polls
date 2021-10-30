@@ -35,6 +35,7 @@ const defaultAppSettings = () => ({
 		pollCreationGroups: [],
 		autoArchive: false,
 		autoArchiveOffset: 30,
+		updateType: 'longPolling',
 	},
 })
 
@@ -62,6 +63,12 @@ const actions = {
 		} catch {
 			context.commit('reset')
 		}
+	},
+
+	async getUpdateType(context) {
+		const endPoint = 'apps/polls/settings/app'
+		const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+		return response.data.appSettings.updateType
 	},
 
 	async write(context) {

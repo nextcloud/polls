@@ -69,6 +69,7 @@ class SettingsService {
 		$this->appSettings->setAllAccessGroups(array_column($settingsArray['allAccessGroups'], 'id'));
 		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
+		$this->appSettings->setUpdateType($settingsArray['updateType']);
 	}
 
 	protected static function getContainer() : IAppContainer {
