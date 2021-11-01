@@ -56,13 +56,11 @@ class WatchController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function watchPoll(int $pollId, ?int $offset): DataResponse {
-
 		return $this->responseLong(function () use ($pollId, $offset) {
 			$start = time();
 			$timeout = 30;
 
 			$offset = $offset ?? $start;
-			\OC::$server->getLogger()->error(json_encode($this->appSettings->getUpdateType()));
 			if ($this->appSettings->getUpdateType() === 'longPolling') {
 				while (empty($updates) && time() <= $start + $timeout) {
 					sleep(1);
