@@ -62,7 +62,7 @@ class WatchController extends Controller {
 			$timeout = 30;
 
 			$offset = $offset ?? $start;
-
+			\OC::$server->getLogger()->error(json_encode($this->appSettings->getUpdateType()));
 			if ($this->appSettings->getUpdateType() === 'longPolling') {
 				while (empty($updates) && time() <= $start + $timeout) {
 					sleep(1);

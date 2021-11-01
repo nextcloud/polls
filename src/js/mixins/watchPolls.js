@@ -40,63 +40,51 @@ export const watchPolls = {
 			isLoggedin: !!getCurrentUser(),
 			isAdmin: !!getCurrentUser()?.isAdmin,
 			sleepTimeout: 30,
+			sessionCount: 0,
+			updateType: 'noPolling',
 		}
 	},
 
 	methods: {
-		async watchPollsRestart() {
-			const updateType = await this.$store.dispatch('appSettings/getUpdateType')
-
-			if (updateType === 'longPolling') {
-				this.restart = true
-				this.cancelToken.cancel()
-			} else {
-				this.restart = false
-				console.debug('[polls]', 'Long-polls are deactivated')
-			}
-
+		cancelWatch() {
+			console.debug('[polls]', 'Cancel watch')
+			this.cancelToken.cancel()
 		},
 
 		async watchPolls() {
-			const updateType = await this.$store.dispatch('appSettings/getUpdateType')
-
-			if (updateType === 'longPolling') {
-				console.debug('[polls]', 'Using instant updates via long polling')
-				this.watchPollsLongPolling()
-			} else if (updateType === 'periodicPolling') {
-				this.watchPollsPeriodicPolling()
-				console.debug('[polls]', 'Using periodic polling')
-			} else {
-				console.debug('[polls]', 'Polling deactivated')
+			if (this.cancelToken) {
+				// there is already a cancelToken, so just cancel the previous session and exit
+				this.cancelWatch()
+				return
 			}
-		},
 
-		async watchPollsLongPolling() {
-			console.debug('[polls]', 'Watch for updates (long polling')
-			await this.initLongPolling()
+			console.debug('[polls]', 'Watch for updates')
+			this.cancelToken = axios.CancelToken.source()
 
 			while (this.retryCounter < this.maxTries) {
+				this.updateType = await this.$store.dispatch('appSettings/getUpdateType')
+
+				if (this.updateType === 'noPolling') {
+					console.debug('[polls]', 'Polling for updates is disabled')
+					break
+				}
+
 				try {
-					if (this.$route.name === null) {
-						throw new NotReady('Router not initialized')
-					}
+					await this.getRoute()
+
 					const response = await axios.get(generateUrl(this.endPoint), {
 						params: { offset: this.lastUpdated },
 						cancelToken: this.cancelToken.token,
 					})
 
-					if (typeof response.data?.updates !== 'object') {
-						console.debug('[polls]', 'return value is no array')
-						throw new NotReady('Invalid content')
-					}
+					this.retryCounter = 0 // reset retryCounter after we got a valid response
 
-					this.retryCounter = 0
 					console.debug('[polls]', 'update detected', response.data.updates)
 					await this.loadTables(response.data.updates)
 
 				} catch (e) {
 					if (axios.isCancel(e)) {
-						await this.handleCanceledRequest()
+						console.debug('[polls]', 'Watch canceled')
 					} else if (e.response?.status === 304) {
 						await this.handleNotModifiedResponse()
 					} else {
@@ -104,46 +92,18 @@ export const watchPolls = {
 						await new Promise((resolve) => setTimeout(resolve, e.name === 'NotReady' ? 2000 : this.retryTimeout))
 					}
 				}
-			}
-		},
 
-		async watchPollsPeriodicPolling() {
-			console.debug('[polls]', 'Watch for updates (periodic polling)')
-			await this.getRoute()
-
-			while (this.retryCounter < this.maxTries) {
-				try {
-					if (this.$route.name === null) {
-						throw new NotReady('Router not initialized')
-					}
-					const response = await axios.get(generateUrl(this.endPoint), {
-						params: { offset: this.lastUpdated },
-					})
-
-					if (typeof response.data?.updates !== 'object') {
-						console.debug('[polls]', 'return value is no array')
-						throw new NotReady('Invalid content')
-					}
-
-					this.retryCounter = 0
-					console.debug('[polls]', 'update detected', response.data.updates)
-					await this.loadTables(response.data.updates)
-
-				} catch (e) {
-					if (e.response?.status === 304) {
-						await this.handleNotModifiedResponse()
-					} else {
-						await this.handleConnectionError(e)
-						await new Promise((resolve) => setTimeout(resolve, e.name === 'NotReady' ? 2000 : this.retryTimeout))
-					}
+				if (this.updateType === 'periodicPolling') {
+					console.debug('[polls]', 'Sleep for', this.sleepTimeout, 'seconds')
+					await this.sleep(this.sleepTimeout)
 				}
-				console.debug('[polls]', 'Sleep for', this.sleepTimeout, 'seconds')
-				await this.sleep()
 			}
+			// invalidate the cancel token before leaving
+			this.cancelToken = null
 		},
 
-		sleep() {
-			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
+		sleep(timeout) {
+			return new Promise((resolve) => setTimeout(resolve, timeout * 1000))
 		},
 
 		async loadTables(tables) {
@@ -179,15 +139,11 @@ export const watchPolls = {
 			await Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
 		},
 
-		initLongPolling() {
-			this.cancelToken = axios.CancelToken.source()
-			this.retryCounter = 0
-			this.restart = false
-			this.getRoute()
-		},
-
 		getRoute() {
-			this.retryCounter = 0
+			if (this.$route.name === null) {
+				throw new NotReady('Router not initialized')
+			}
+
 			if (this.$route.name === 'publicVote') {
 				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
 			} else {
@@ -195,21 +151,9 @@ export const watchPolls = {
 			}
 		},
 
-		handleCanceledRequest() {
-			if (this.restart) {
-				// Restarting of poll was initiated
-				console.debug('[polls]', 'watch canceled - restart watch')
-				this.initLongPolling()
-			} else {
-				// we will exit here
-				console.debug('[polls]', 'watch canceled')
-				this.retryCounter = this.maxTries
-			}
-		},
-
 		handleNotModifiedResponse() {
 			console.debug('[polls]', 'Not modified')
-			this.retryCounter = 0
+			this.retryCounter = 0 // reset retryCounter, after we get a 304
 		},
 
 		handleConnectionError(e) {

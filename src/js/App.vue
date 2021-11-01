@@ -108,8 +108,8 @@ export default {
 		},
 
 		$route(to, from) {
-			this.watchPollsRestart()
 			this.loadPoll()
+			this.watchPolls()
 		},
 	},
 
@@ -121,8 +121,6 @@ export default {
 				this.loadPoll(true)
 			}
 		}
-
-		this.watchPolls()
 
 		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)
