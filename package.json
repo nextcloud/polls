@@ -68,7 +68,7 @@
 		"@babel/core": "^7.15.8",
 		"@babel/eslint-parser": "^7.15.8",
 		"@babel/preset-env": "^7.15.8",
-		"@babel/types": "^7.15.6",
+		"@babel/types": "^7.16.0",
 		"@nextcloud/browserslist-config": "^2.2.0",
 		"@nextcloud/eslint-config": "^6.1.0",
 		"@nextcloud/eslint-plugin": "^2.0.0",
