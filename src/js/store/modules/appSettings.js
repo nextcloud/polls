@@ -65,12 +65,6 @@ const actions = {
 		}
 	},
 
-	async getUpdateType(context) {
-		const endPoint = 'apps/polls/settings/app'
-		const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
-		return response.data.appSettings.updateType
-	},
-
 	async write(context) {
 		const endPoint = 'apps/polls/settings/app'
 		try {
