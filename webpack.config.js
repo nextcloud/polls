@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -13,13 +12,14 @@ const isDev = buildMode === 'development'
 
 module.exports = {
 	mode: buildMode,
-	devtool: isDev ? 'cheap-source-map' : 'source-map',
+	devtool: isDev ? 'eval' : false,
 	entry: {
 		polls: path.join(__dirname, 'src/js/', 'main.js'),
 		userSettings: path.join(__dirname, 'src/js/', 'userSettings.js'),
 		adminSettings: path.join(__dirname, 'src/js/', 'adminSettings.js'),
 	},
 	output: {
+		clean: true,
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
 		filename: '[name].js',
@@ -96,7 +96,6 @@ module.exports = {
 
 	plugins: [
 		new VueLoaderPlugin(),
-		new CleanWebpackPlugin(),
 		new webpack.DefinePlugin({
 			appName: JSON.stringify('polls'),
 		}),
