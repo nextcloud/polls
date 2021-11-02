@@ -54,7 +54,7 @@ class NotificationMail extends MailBase {
 		$this->emailTemplate->addBodyText(str_replace(
 			['{title}'],
 			[$this->poll->getTitle()],
-			$this->trans->t('"{title}" had recent activity: ')
+			$this->trans->t('"{title}" has recent activity: ')
 		));
 
 		foreach ($this->subscription->getNotifyLogs() as $logItem) {
@@ -74,16 +74,16 @@ class NotificationMail extends MailBase {
 
 	private function getComposedLogString(Log $logItem, string $displayName): string {
 		$logStrings = [
-			Log::MSG_ID_SETVOTE => $this->trans->t('%s voted.', [$displayName]),
+			Log::MSG_ID_SETVOTE => $this->trans->t('%s has voted.', [$displayName]),
 			Log::MSG_ID_UPDATEPOLL => $this->trans->t('Updated poll configuration. Please check your votes.'),
-			Log::MSG_ID_DELETEPOLL => $this->trans->t('The poll got deleted.'),
-			Log::MSG_ID_RESTOREPOLL => $this->trans->t('The poll got restored.'),
-			Log::MSG_ID_EXPIREPOLL => $this->trans->t('The poll got closed.'),
-			Log::MSG_ID_ADDOPTION => $this->trans->t('A vote option was added.'),
-			Log::MSG_ID_UPDATEOPTION => $this->trans->t('A vote option changed.'),
-			Log::MSG_ID_CONFIRMOPTION => $this->trans->t('A vote option got confirmed.'),
-			Log::MSG_ID_DELETEOPTION => $this->trans->t('A vote option was removed.'),
-			Log::MSG_ID_OWNERCHANGE => $this->trans->t('The poll owner changed.'),
+			Log::MSG_ID_DELETEPOLL => $this->trans->t('The poll has been deleted.'),
+			Log::MSG_ID_RESTOREPOLL => $this->trans->t('The poll has been restored.'),
+			Log::MSG_ID_EXPIREPOLL => $this->trans->t('The poll has been closed.'),
+			Log::MSG_ID_ADDOPTION => $this->trans->t('A voting option has been added.'),
+			Log::MSG_ID_UPDATEOPTION => $this->trans->t('A voting option has been changed.'),
+			Log::MSG_ID_CONFIRMOPTION => $this->trans->t('A voting option has been confirmed.'),
+			Log::MSG_ID_DELETEOPTION => $this->trans->t('A voting option has been removed.'),
+			Log::MSG_ID_OWNERCHANGE => $this->trans->t('The poll owner has been changed.'),
 			Log::MSG_ID_ADDPOLL => $this->trans->t('%s created the poll.', [$displayName]),
 		];
 

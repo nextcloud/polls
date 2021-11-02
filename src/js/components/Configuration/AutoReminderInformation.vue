@@ -23,24 +23,24 @@
 <template lang="html">
 	<div class="auto-reminder-information">
 		<p> {{ t('polls', 'The automatic reminder is sent to all shares via email:') }} </p>
-		<p> {{ t('polls', '1. For polls with expiration') }} </p>
+		<p> 1. {{ t('polls', 'For polls with expiration:') }} </p>
 		<ul>
-			<li>{{ t('polls', ' - 48 hours before the expiration date, if the poll is created more than 5 days before the expiration.') }}</li>
-			<li>{{ t('polls', ' - 36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration.') }}</li>
+			<li> - {{ t('polls', '48 hours before the expiration date, if the poll is created more than 5 days before the expiration.') }}</li>
+			<li> - {{ t('polls', '36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration.') }}</li>
 		</ul>
 		<p> &nbsp; </p>
-		<p> {{ t('polls', '2. For date polls without expiration') }} </p>
+		<p> 2. {{ t('polls', 'For date polls without expiration:') }} </p>
 		<ul>
-			<li>{{ t('polls', ' - 48 hours before the first date option, if the poll is created more than 5 days before the expiration.') }}</li>
-			<li>{{ t('polls', ' - 36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration.') }}</li>
+			<li> - {{ t('polls', '48 hours before the first date option, if the poll is created more than 5 days before the expiration.') }}</li>
+			<li> - {{ t('polls', '36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration.') }}</li>
 		</ul>
 		<p> &nbsp; </p>
-		<p> {{ t('polls', '3. No reminder is sent') }} </p>
+		<p> 3. {{ t('polls', 'No reminder is sent:') }} </p>
 		<ul>
-			<li>{{ t('polls', ' - for text polls without expiration.') }}</li>
-			<li>{{ t('polls', ' - for polls created less than 2 days before the expiration.') }}</li>
-			<li>{{ t('polls', ' - if a share already got a reminder (no matter, if the expiration date got changed).') }}</li>
-			<li>{{ t('polls', ' - if the poll is already closed.') }}</li>
+			<li> - {{ t('polls', 'For text polls without expiration.') }}</li>
+			<li> - {{ t('polls', 'For polls created less than 2 days before the expiration.') }}</li>
+			<li> - {{ t('polls', 'If a share already got a reminder (no matter, if the expiration date got changed).') }}</li>
+			<li> - {{ t('polls', 'If the poll is already closed.') }}</li>
 		</ul>
 	</div>
 </template>
