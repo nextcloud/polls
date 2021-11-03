@@ -93,7 +93,7 @@ class AppSettings implements JsonSerializable {
 	}
 
 	public function getUpdateType(): string {
-		return $this->config->getAppValue(self::APP_NAME, 'updateType') ?? 'longPolling';
+		return $this->returnDefault($this->config->getAppValue(self::APP_NAME, 'updateType'), 'longPolling');
 	}
 
 	// Checks
@@ -225,13 +225,19 @@ class AppSettings implements JsonSerializable {
 		}
 	}
 
-	private function boolToString(bool $value): string {
+	private function boolToString(?bool $value): string {
 		if ($value) {
 			return 'yes';
 		}
 		return 'no';
 	}
 
+	protected function returnDefault(?string $value, string $default) : string {
+		if ($value) {
+			return $value;
+		}
+		return $default;
+	}
 
 	protected static function getContainer() : IAppContainer {
 		$app = \OC::$server->query(Application::class);
