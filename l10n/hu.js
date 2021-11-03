@@ -9,7 +9,6 @@ OC.L10N.register(
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Ezt az e-mailt azért küldtük, mert a szavazás tulajdonosa meghívta Önt, hogy szavazzon. Minimálisan az Ön nevét vagy e-mail címét rögzíti a szavazás. Ha el akarja távolítani ezt a szavazást, vegye fel a kapcsolatot a webhely rendszergazdájával vagy a szavazás kezdeményezőjével, ahonnan a levelet küldték.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Ezt az e-mailt azért kaptuk, mert feliratkozott a szavazás értesítéseire. A leiratkozáshoz látogasson el a szavazásra, és távolítsa el az előfizetését.",
     "Polls App - New Activity" : "Szavazó app - Új aktivitás",
-    "\"{title}\" had recent activity: " : "\"{title}\" nemrég aktív volt: ",
     "A user" : "Egy felhasználó",
     "Contact" : "Névjegy",
     "Contact group" : "Kapcsolattartó csoport",

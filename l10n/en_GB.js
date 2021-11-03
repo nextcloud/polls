@@ -2,10 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls App - New Activity" : "Polls App - New Activity",
-    "The poll got deleted." : "The poll was deleted.",
-    "The poll got restored." : "The poll was restored.",
-    "The poll got closed." : "The poll was closed.",
-    "A vote option got confirmed." : "A vote option was confirmed.",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} sends you this reminder to make sure your votes are set.",
     "Contact" : "Contact",
     "Public link" : "Public link",

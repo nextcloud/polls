@@ -9,7 +9,6 @@ OC.L10N.register(
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Elektronsko sporočilo ste prejeli, ker ste povabljeni k izpolnjevanju ankete. Vaše ime in elektronski naslov sta zabeležena v anketi. Če se želite odstraniti s seznama, stopite v stik s skrbnikom oziroma avtorjem ankete prek elektronske pošte.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Elektronsko sporočilo ste prejeli, ker ste se naročili na obvestila te ankete. Naročila je mogoče kadarkoli odstraniti med možnostmi ankete.",
     "Polls App - New Activity" : "Program Ankete – nova dejavnost",
-    "\"{title}\" had recent activity: " : "Na anketi » {title} « je bilo nekaj dejavnosti: ",
     "A user" : "Uporabnik",
     "Circle" : "Krog",
     "Contact" : "Stik",

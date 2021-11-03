@@ -9,7 +9,6 @@ OC.L10N.register(
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Envíaselle este correo porque está a ser convidado polo propietario da enquisa a votar nela. Polo menos o seu nome ou o seu enderezo de correo electrónico están rexistrados nesta enquisa. Se quere retirarse esta enquisa, póñase en contacto co administrador do sitio ou co iniciador desta enquisa, dende onde se enviou o correo.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Envíaselle este correo, porque vostede está subscrito ás notificacións desta enquisa. Para non recibir máis notificacións, vaia á enquisa e elimine a súa subscrición",
     "Polls App - New Activity" : "Aplicación de enquisas – Actividade nova",
-    "\"{title}\" had recent activity: " : "«{title}» tivo actividade recentemente:",
     "A user" : "Un usuario",
     "Contact" : "Contacto",
     "Contact group" : "Grupo de contacto",

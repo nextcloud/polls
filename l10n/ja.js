@@ -7,7 +7,6 @@ OC.L10N.register(
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "このメールはあなたに送られています。少なくともあなたの名前やメールアドレスはこの投票に記録されています。この投票から自身を削除したい場合は、サイト管理者またはメールが送信されているこの投票の開始者に連絡してください。",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "このメールは、この投票の通知を購読しているため送信されました。 送信しないようにするには、投票にアクセスしてサブスクリプションを解除してください。",
     "Polls App - New Activity" : "投票アプリ - 新しいアクティビティ",
-    "\"{title}\" had recent activity: " : "\"{title}\" の最近のアクティビティ：",
     "Contact" : "連絡先",
     "Public link" : "公開リンク",
     "External user" : "外部ユーザー",

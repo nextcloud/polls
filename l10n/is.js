@@ -5,7 +5,6 @@ OC.L10N.register(
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} bauð þér að taka þátt í könnuninni \"{title}\"",
     "Go to poll" : "Fara á könnun",
     "Polls App - New Activity" : "Kannanaforrit - Ný virkni",
-    "\"{title}\" had recent activity: " : "Nýleg virkni átti sér stað í \"{title}\": ",
     "A user" : "Notandi",
     "Contact" : "Tengiliður",
     "Contact group" : "Tengiliðahópur",

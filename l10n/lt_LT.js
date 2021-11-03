@@ -9,7 +9,6 @@ OC.L10N.register(
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Šis el. laiškas yra siunčiamas jums, nes apklausos savininkas kviečia jus balsuoti šioje apklausoje. Joje yra įrašytas bent jūsų vardas arba el. pašto adresas. Jei norite būti pašalinti iš šios apklausos, susisiekite su internetinės svetainės, iš kurios yra siunčiamas šis el. laiškas, administratoriumi arba šios apklausos iniciatoriumi.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Šis el. laiškas yra išsiųstas jums, nes esate užsiprenumeravę šios apklausos pranešimus. Norėdami atsisakyti prenumeratos, apsilankykite apklausoje ir pašalinkite prenumeratą.",
     "Polls App - New Activity" : "Apklausų programėlė - Nauja veikla",
-    "\"{title}\" had recent activity: " : "Apklausoje \"{title}\" neseniai vyko veikla: ",
     "A user" : "Naudotojas",
     "Contact" : "Adresatas",
     "External Email" : "Išorinis el. paštas",

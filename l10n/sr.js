@@ -7,7 +7,6 @@ OC.L10N.register(
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Ова порука Вам је послата зато што сте позвани да гласате. У гласању су уписани бар Ваше име или адреса е-поште. Ако желите да будете уклоњени из гласања, контактирајте покретача гласања или администратора сајта, са кога је ова порука послата.",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Овај мејл Вам је послат пошто сте претплаћени на обавештења за ово гласање. Да се одјавите, посетите гласање и уклоните Вашу претплату.",
     "Polls App - New Activity" : "Апликација Гласања - Нова активност",
-    "\"{title}\" had recent activity: " : "„{title}“ је имало скорашњу активност: ",
     "A user" : "Корисник",
     "Contact" : "Контакт",
     "Public link" : "Јавна веза",

@@ -6,7 +6,6 @@ OC.L10N.register(
     "Go to poll" : "برو به نظرسنجی",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "این ایمیل برای شما ارسال شده است ، زیرا در اعلان های این نظرسنجی مشترک هستید. برای امتناع ، از نظرسنجی بازدید کرده و اشتراک خود را حذف کنید.",
     "Polls App - New Activity" : "برنامه نظرسنجی - فعالیت جدید",
-    "\"{title}\" had recent activity: " : "فعالیت اخیر: \"{title}\":",
     "Contact" : "مخاطب",
     "Public link" : "پیوند عمومی",
     "Group" : "گروه",
