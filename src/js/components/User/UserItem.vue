@@ -188,8 +188,10 @@ export default {
 	min-width: 50px;
 	padding-left: 8px;
 	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	> div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	.subname {
 		color: var(--color-text-maxcontrast);
 		font-size: 0.7em;
