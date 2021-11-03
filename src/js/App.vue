@@ -69,6 +69,7 @@ export default {
 	computed: {
 		...mapState({
 			settings: (state) => state.settings.user,
+			appSettings: (state) => state.appSettings.appSettings,
 			poll: (state) => state.poll,
 			allowEdit: (state) => state.poll.acl.allowEdit,
 			dashboard: (state) => state.settings.dashboard,
@@ -107,20 +108,19 @@ export default {
 		},
 
 		$route(to, from) {
-			this.watchPollsRestart()
 			this.loadPoll()
+			this.watchPolls()
 		},
 	},
 
 	created() {
+		this.$store.dispatch('appSettings/get')
 		if (getCurrentUser()) {
 			this.$store.dispatch('settings/get')
 			if (this.$route.params.id && !this.$route.params.token) {
 				this.loadPoll(true)
 			}
 		}
-
-		this.watchPolls()
 
 		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)

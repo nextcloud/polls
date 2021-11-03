@@ -35,6 +35,7 @@ const defaultAppSettings = () => ({
 		pollCreationGroups: [],
 		autoArchive: false,
 		autoArchiveOffset: 30,
+		updateType: 'longPolling',
 	},
 })
 

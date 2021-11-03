@@ -21,20 +21,30 @@
   -->
 
 <template>
-	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
-			{{ t('polls', 'Hide login option in public polls') }}
-		</CheckboxRadioSwitch>
-		<CheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
-			{{ t('polls', 'Archive closed polls automatically') }}
-		</CheckboxRadioSwitch>
-		<div v-if="autoArchive" class="settings_details">
-			<span>{{ t('polls', 'After how many days are the closed polls to be archived:') }}</span>
-			<InputDiv v-model="autoArchiveOffset"
-				class="selectUnit"
-				use-num-modifiers
-				@add="autoArchiveOffset += 1"
-				@subtract="autoArchiveOffset -= 1" />
+	<div>
+		<div class="user_settings">
+			<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
+				{{ t('polls', 'Hide login option in public polls') }}
+			</CheckboxRadioSwitch>
+			<CheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
+				{{ t('polls', 'Archive closed polls automatically') }}
+			</CheckboxRadioSwitch>
+			<div v-if="autoArchive" class="settings_details">
+				<span>{{ t('polls', 'After how many days are the closed polls to be archived:') }}</span>
+				<InputDiv v-model="autoArchiveOffset"
+					class="selectUnit"
+					use-num-modifiers
+					@add="autoArchiveOffset += 1"
+					@subtract="autoArchiveOffset -= 1" />
+			</div>
+		</div>
+
+		<div class="user_settings">
+			<h2>{{ t('polls', 'Performance settings') }}</h2>
+			<div>
+				{{ t('polls', 'If you are experiencing connection problems, change the behavior, how auto updates are retrieved.') }}
+			</div>
+			<RadioGroupDiv v-model="updateType" :options="updateTypeOptions" />
 		</div>
 	</div>
 </template>
@@ -44,6 +54,7 @@
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
 import InputDiv from '../Base/InputDiv'
+import RadioGroupDiv from '../Base/RadioGroupDiv'
 
 export default {
 	name: 'AdminMisc',
@@ -51,6 +62,17 @@ export default {
 	components: {
 		CheckboxRadioSwitch,
 		InputDiv,
+		RadioGroupDiv,
+	},
+
+	data() {
+		return {
+			updateTypeOptions: [
+				{ value: 'longPolling', label: t('polls', 'Activate long polling for instant updates') },
+				{ value: 'periodicPolling', label: t('polls', 'Activate periodic polling of updates from the client') },
+				{ value: 'noPolling', label: t('polls', 'Disable automatic updates (reload app for updates)') },
+			],
+		}
 	},
 
 	computed: {
@@ -59,6 +81,14 @@ export default {
 		}),
 
 		// Add bindings
+		updateType: {
+			get() {
+				return this.appSettings.updateType
+			},
+			set(value) {
+				this.writeValue({ updateType: value })
+			},
+		},
 		hideLogin: {
 			get() {
 				return !this.appSettings.showLogin

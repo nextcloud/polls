@@ -46,6 +46,7 @@ class SettingsController extends Controller {
 
 	/**
 	 * Read app settings
+	 * @PublicPage
 	 * @NoAdminRequired
 	 */
 	public function getAppSettings(): DataResponse {

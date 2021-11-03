@@ -23,8 +23,8 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { NotReady } from '../Exceptions/Exceptions'
 import { getCurrentUser } from '@nextcloud/auth'
+import { mapState } from 'vuex'
 
 export const watchPolls = {
 	data() {
@@ -34,54 +34,106 @@ export const watchPolls = {
 			watching: true,
 			lastUpdated: Math.round(Date.now() / 1000),
 			retryCounter: 0,
-			retryTimeout: 30000,
 			maxTries: 5,
 			endPoint: '',
 			isLoggedin: !!getCurrentUser(),
 			isAdmin: !!getCurrentUser()?.isAdmin,
+			sleepTimeout: 30, // seconds
 		}
 	},
 
+	computed: {
+		...mapState({
+			updateType: (state) => state.appSettings.appSettings.updateType,
+		}),
+	},
+
 	methods: {
-		watchPollsRestart() {
-			this.restart = true
+		async watchPolls() {
+			if (this.cancelToken) {
+				// there is already a cancelToken, so just cancel the previous session and exit
+				this.cancelWatch()
+				return
+			}
+
+			console.debug('[polls]', 'Watch for updates')
+			this.cancelToken = axios.CancelToken.source()
+
+			while (this.retryCounter < this.maxTries) {
+				await this.$store.dispatch('appSettings/get')
+
+				if (this.updateType === 'noPolling') {
+					console.debug('[polls]', 'Polling for updates is disabled')
+					break
+				}
+
+				try {
+					const response = await this.fetchUpdates()
+					console.debug('[polls]', `Update detected (${this.updateType})`, response.data.updates)
+					this.loadTables(response.data.updates)
+					this.retryCounter = 0 // reset retryCounter after we got a valid response
+				} catch (e) {
+					if (axios.isCancel(e)) {
+						this.handleCanceledRequest()
+					} else if (e.response?.status === 304) {
+						this.handleNotModifiedResponse()
+					} else {
+						await this.handleConnectionError(e)
+					}
+				}
+
+				if (this.updateType === 'periodicPolling') {
+					console.debug('[polls]', `Sleep ${this.sleepTimeout} seconds`)
+					await this.sleep(this.sleepTimeout)
+				}
+			}
+
+			// invalidate the cancel token before leaving
+			this.cancelToken = null
+
+			if (this.retryCounter) {
+				console.debug('[polls]', `Cancel watch after ${this.retryCounter} failed requests`)
+			}
+		},
+
+		cancelWatch() {
 			this.cancelToken.cancel()
 		},
 
-		async watchPolls() {
-			console.debug('[polls]', 'Watch for updates')
-			await this.initWatch()
+		sleep(timeout) {
+			return new Promise((resolve) => setTimeout(resolve, timeout * 1000))
+		},
 
-			while (this.retryCounter < this.maxTries) {
-				try {
-					if (this.$route.name === null) {
-						throw new NotReady('Router not initialized')
-					}
-					const response = await axios.get(generateUrl(this.endPoint), {
-						params: { offset: this.lastUpdated },
-						cancelToken: this.cancelToken.token,
-					})
-
-					if (typeof response.data?.updates !== 'object') {
-						console.debug('[polls]', 'return value is no array')
-						throw new NotReady('Invalid content')
-					}
-
-					this.retryCounter = 0
-					console.debug('[polls]', 'update detected', response.data.updates)
-					await this.loadTables(response.data.updates)
-
-				} catch (e) {
-					if (axios.isCancel(e)) {
-						await this.handleCanceledRequest()
-					} else if (e.response?.status === 304) {
-						await this.handleNotModifiedResponse()
-					} else {
-						await this.handleConnectionError(e)
-						await new Promise((resolve) => setTimeout(resolve, e.name === 'NotReady' ? 2000 : this.retryTimeout))
-					}
-				}
+		async fetchUpdates() {
+			if (this.$route.name === 'publicVote') {
+				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
+			} else {
+				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
 			}
+			return await axios.get(generateUrl(this.endPoint), {
+				params: { offset: this.lastUpdated },
+				cancelToken: this.cancelToken.token,
+			})
+		},
+
+		handleCanceledRequest() {
+			console.debug('[polls]', 'Fetch canceled')
+			this.cancelToken = axios.CancelToken.source()
+		},
+
+		handleNotModifiedResponse() {
+			console.debug('[polls]', `No updates (using ${this.updateType})`)
+			this.retryCounter = 0 // reset retryCounter, after we get a 304
+		},
+
+		async handleConnectionError(e) {
+			this.retryCounter += 1
+			console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${this.retryCounter}/${this.maxTries}`)
+
+			if (e.response) {
+				console.error('[polls]', 'Unhandled error watching polls', e)
+			}
+			await this.sleep(this.sleepTimeout)
 		},
 
 		async loadTables(tables) {
@@ -101,11 +153,11 @@ export const watchPolls = {
 						dispatches = [...dispatches, 'poll/get']
 					}
 
-					if (this.loggedIn) {
+					if (this.isLoggedin) {
 						// if user is an authorized user load polls list
 						dispatches = [...dispatches, `${item.table}/list`]
 					}
-				} else if (!this.loggedIn && (item.table === 'shares')) {
+				} else if (!this.isLoggedin && (item.table === 'shares')) {
 					// if current user is guest and table is shares only reload current share
 					dispatches = [...dispatches, 'share/get']
 				} else {
@@ -113,47 +165,8 @@ export const watchPolls = {
 					dispatches = [...dispatches, `${item.table}/list`]
 				}
 			})
-
 			dispatches = [...new Set(dispatches)] // remove duplicates
 			await Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
-		},
-
-		initWatch() {
-			this.cancelToken = axios.CancelToken.source()
-			this.retryCounter = 0
-			this.restart = false
-			if (this.$route.name === 'publicVote') {
-				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
-			} else {
-				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
-			}
-		},
-
-		handleCanceledRequest() {
-			if (this.restart) {
-				// Restarting of poll was initiated
-				console.debug('[polls]', 'watch canceled - restart watch')
-				this.initWatch()
-			} else {
-				// we will exit here
-				console.debug('[polls]', 'watch canceled')
-				this.retryCounter = this.maxTries
-			}
-		},
-
-		handleNotModifiedResponse() {
-			console.debug('[polls]', 'Not modified')
-			this.retryCounter = 0
-		},
-
-		handleConnectionError(e) {
-			this.retryCounter += 1
-			console.debug('[polls]', e.message ?? 'No response - request aborted - failed request', '-', `${this.retryCounter}/${this.maxTries}`)
-
-			if (e.response) {
-				console.error('[polls]', 'Unhandled error watching polls', e)
-			}
-
 		},
 
 	},
