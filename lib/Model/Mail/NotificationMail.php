@@ -54,7 +54,7 @@ class NotificationMail extends MailBase {
 		$this->emailTemplate->addBodyText(str_replace(
 			['{title}'],
 			[$this->poll->getTitle()],
-			$this->trans->t('"{title}" has recent activity: ')
+			$this->trans->t('"{title}" has recent activity:')
 		));
 
 		foreach ($this->subscription->getNotifyLogs() as $logItem) {
