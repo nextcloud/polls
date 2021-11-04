@@ -42,7 +42,7 @@
 		<div class="user_settings">
 			<h2>{{ t('polls', 'Performance settings') }}</h2>
 			<div>
-				{{ t('polls', 'If you are experiencing connection problems, change the behavior, how auto updates are retrieved.') }}
+				{{ t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.') }}
 			</div>
 			<RadioGroupDiv v-model="updateType" :options="updateTypeOptions" />
 		</div>
