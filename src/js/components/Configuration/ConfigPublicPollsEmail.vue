@@ -21,13 +21,14 @@
   -->
 
 <template>
-	<div>
+	<ConfigBox :title="t('polls', 'Options for public register dialog')" icon-class="icon-public">
 		<RadioGroupDiv v-model="publicPollEmail" :options="emailOptions" />
-	</div>
+	</ConfigBox>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import ConfigBox from '../Base/ConfigBox'
 import RadioGroupDiv from '../Base/RadioGroupDiv'
 import { writePoll } from '../../mixins/writePoll'
 
@@ -35,6 +36,7 @@ export default {
 	name: 'ConfigPublicPollsEmail',
 
 	components: {
+		ConfigBox,
 		RadioGroupDiv,
 	},
 
@@ -45,7 +47,7 @@ export default {
 			emailOptions: [
 				{ value: 'optional', label: t('polls', 'Email address is optional') },
 				{ value: 'mandatory', label: t('polls', 'Email address is mandatory') },
-				{ value: 'disabled', label: t('polls', 'Hide email address') },
+				{ value: 'disabled', label: t('polls', 'Do not ask for email address') },
 			],
 		}
 	},

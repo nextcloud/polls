@@ -52,6 +52,7 @@ export default {
 
 	computed: {
 		...mapState({
+			access: (state) => state.poll.access,
 			title: (state) => state.poll.title,
 			expire: (state) => state.poll.expire,
 			deleted: (state) => state.poll.deleted,
@@ -61,6 +62,7 @@ export default {
 
 		...mapGetters({
 			isClosed: 'poll/isClosed',
+			hasShares: 'shares/hasShares',
 			proposalsExpirySet: 'poll/proposalsExpirySet',
 			proposalsExpired: 'poll/proposalsExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
@@ -73,6 +75,13 @@ export default {
 		subTexts() {
 			const subTexts = []
 
+			if (this.access === 'hidden' && !this.hasShares) {
+				return [{
+					text: t('polls', 'Currently no users have access to this poll'),
+					icon: 'icon-error',
+					class: 'closed',
+				}]
+			}
 			if (this.deleted) {
 				return [{
 					text: t('polls', 'Archived'),

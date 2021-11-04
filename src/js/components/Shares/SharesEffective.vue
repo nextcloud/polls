@@ -21,7 +21,9 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Effective shares')" icon-class="icon-share">
+	<ConfigBox :title="t('polls', 'Active shares')" icon-class="icon-share">
+		<UserSearch />
+		<SharesPublicAdd v-if="allowPublicShares" />
 		<TransitionGroup :css="false" tag="div" class="shared-list">
 			<UserItem v-for="(share) in invitationShares"
 				:key="share.id"
@@ -31,6 +33,9 @@
 				<template #status>
 					<div v-if="hasVoted(share.userId)">
 						<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
+					</div>
+					<div v-else-if="share.type === 'public'">
+						<VotedImpossible class="vote-status" :title="t('polls', 'Is crazy')" />
 					</div>
 					<div v-else>
 						<UnvotedIcon class="vote-status unvoted" :title="t('polls', 'Has not voted')" />
@@ -64,13 +69,16 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
+import VotedImpossible from 'vue-material-design-icons/AllInclusive.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
+import UserSearch from '../User/UserSearch'
+import SharesPublicAdd from './SharesPublicAdd'
 
 export default {
 	name: 'SharesEffective',
@@ -80,11 +88,17 @@ export default {
 		ActionButton,
 		ActionDelete,
 		ConfigBox,
-		VotedIcon,
+		SharesPublicAdd,
 		UnvotedIcon,
+		UserSearch,
+		VotedIcon,
+		VotedImpossible,
 	},
 
 	computed: {
+		...mapState({
+			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
+		}),
 		...mapGetters({
 			invitationShares: 'shares/invitation',
 			hasVoted: 'votes/hasVoted',

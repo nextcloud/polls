@@ -22,50 +22,60 @@
 
 <template>
 	<div>
-		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
-		<SharesEffective />
-		<ConfigBox :title="t('polls', 'Add Shares')" icon-class="icon-add">
-			<UserSearch />
+		<ConfigBox v-if="isOwner || allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">
+			<ConfigAdminAccess v-if="isOwner && adminAccess" @change="writePoll" />
+			<ConfigAccess v-if="allowAllAccess" @change="writePoll" />
 		</ConfigBox>
-		<SharesPublic v-if="allowPublicShares" />
+		<SharesEffective />
 		<SharesUnsent />
+		<ConfigPublicPollsEmail />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import ConfigAccess from '../Configuration/ConfigAccess'
+import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
 import ConfigBox from '../Base/ConfigBox'
-import UserSearch from '../User/UserSearch'
 import SharesEffective from '../Shares/SharesEffective'
-import SharesPublic from '../Shares/SharesPublic'
 import SharesUnsent from '../Shares/SharesUnsent'
+import { writePoll } from '../../mixins/writePoll'
+import ConfigPublicPollsEmail from '../Configuration/ConfigPublicPollsEmail'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
 		ConfigBox,
-		UserSearch,
-		SharesPublic,
+		ConfigAccess,
+		ConfigAdminAccess,
 		SharesEffective,
 		SharesUnsent,
+		ConfigPublicPollsEmail,
 	},
+
+	mixins: [writePoll],
 
 	computed: {
 		...mapState({
 			isOwner: (state) => state.poll.acl.isOwner,
-			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
+			allowAllAccess: (state) => state.poll.acl.allowAllAccess,
+			adminAccess: (state) => state.poll.adminAccess,
 		}),
+
 	},
+
 }
 </script>
 
 <style lang="scss">
 	.shared-list {
 		display: flex;
-		flex-flow: column wrap;
+		flex-flow: column;
 		justify-content: flex-start;
 		padding-top: 8px;
+		max-height: 450px;
+		overflow: auto;
 
 		> li {
 			display: flex;
