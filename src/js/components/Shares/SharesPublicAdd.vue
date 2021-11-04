@@ -21,45 +21,21 @@
   -->
 
 <template>
-	<ConfigBox v-tooltip.auto="paramsHint" :title="t('polls', 'Public shares')" icon-class="icon-public">
-		<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', userId: '', emailAddress: ''})" />
-		<ConfigPublicPollsEmail />
-	</ConfigBox>
+	<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', userId: '', emailAddress: ''})" />
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import ButtonDiv from '../Base/ButtonDiv'
-import ConfigBox from '../Base/ConfigBox'
-import ConfigPublicPollsEmail from '../Configuration/ConfigPublicPollsEmail'
 
 export default {
-	name: 'SharesPublic',
+	name: 'SharesPublicAdd',
 
 	components: {
 		ButtonDiv,
-		ConfigBox,
-		ConfigPublicPollsEmail,
-	},
-
-	data() {
-		return {
-			paramsHint: t('polls', 'Add URL parameters \'name=\' and/or \'email=\' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org'),
-		}
-	},
-
-	computed: {
-		...mapGetters({
-			publicShares: 'shares/public',
-		}),
 	},
 
 	methods: {
-		...mapActions({
-			removeShare: 'shares/delete',
-		}),
-
 		async addShare(payload) {
 			try {
 				await this.$store.dispatch('shares/add', {

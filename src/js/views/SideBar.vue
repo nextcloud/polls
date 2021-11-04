@@ -42,9 +42,9 @@
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="acl.allowEdit"
-			:id="'shares'"
+			:id="'access'"
 			:order="3"
-			:name="t('polls', 'Shares')"
+			:name="t('polls', 'Access')"
 			icon="icon-share">
 			<SideBarTabShare />
 		</AppSidebarTab>
