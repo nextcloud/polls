@@ -328,7 +328,8 @@ export default {
 
 	.status-message {
 		hyphens: auto;
-		font-size: 0.8em;
+		font-size: 0.9em;
+		min-height: 1.8em;
 	}
 
 	@media only screen and (max-width: 688px) {
