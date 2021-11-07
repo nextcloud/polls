@@ -44,8 +44,6 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} usunął Twoją sondę \"%s\".",
     "%s archived your poll" : "%s zarchiwizował Twoją sondę",
     "{actor} archived your poll \"%s\"." : "{actor} zarchiwizował Twoją sondę \"%s\".",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikacja sondażowa przypominająca doodle/dudle z możliwością ograniczania dostępu.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikacja sondażowa przypominająca doodle/dudle z możliwością ograniczania dostępu (członkowie, określone grupy/użytkownicy, ukryte i publiczne).",
     "Switch to list view" : "Przełącz na widok listy",
     "Switch to table view" : "Przełącz na widok tabeli",
     "Link copied to clipboard" : "Link skopiowany do schowka",

@@ -41,8 +41,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor} 刪除了您的投票「%s」。",
     "%s archived your poll" : "%s 封存了您的投票",
     "{actor} archived your poll \"%s\"." : "{actor} 封存了您的投票「%s」。",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "類似於 doodle/dudle 投票應用程式，可限制存取對象。",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "類似於 doodle/dudle 投票應用程式，可限制存取對象（成員、特定群組或使用者、隱藏與公開）。",
     "Switch to list view" : "切換至列表檢視",
     "Switch to table view" : "切換至表格檢視",
     "Link copied to clipboard" : "已複製連結至剪貼簿",

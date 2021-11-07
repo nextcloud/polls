@@ -44,8 +44,6 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} smazal(a) vaši anketu „%s“.",
     "%s archived your poll" : "%s zaarchivoval(a) vaši anketu",
     "{actor} archived your poll \"%s\"." : "{actor} zaarchivovala vaši anketu „%s“.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Aplikace pro ankety podobná doodle/dudle s možností omezit přístup.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikace pro ankety podobná doodle/dudle s možností omezit přístup (členům, určitým skupinám/uživatelům, skryté i veřejné).",
     "Switch to list view" : "Přepnout do zobrazení v seznamu",
     "Switch to table view" : "Přepnout do tabulkového zobrazení",
     "Link copied to clipboard" : "Odkaz zkopírován do schánky",

@@ -13,8 +13,6 @@ OC.L10N.register(
     "Group" : "Група",
     "User" : "Корисник",
     "Polls" : "Гласања",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Апликација за гласање, слична као doodle/dudle, са могућношћу забране приступа (чланова, група/корисника, скривено и јавно),",
     "Link copied to clipboard" : "Веза копирана у оставу",
     "Error while copying link to clipboard" : "Грешка приликом копирања везе у оставу",
     "_%n Participant_::_%n Participants_" : ["%n учесник","%n учесника","%n учесника"],

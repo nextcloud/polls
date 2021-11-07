@@ -15,8 +15,6 @@ OC.L10N.register(
     "User" : "Notandi",
     "Polls" : "Kannanir",
     "%s invited you to a poll" : "%s bauð þér að taka þátt í könnun",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Skoðanakannanaforrit sem svipar til doodle/dudle, með möguleika á aðgangstakmörkunum.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Skoðanakannanaforrit sem svipar til doodle/dudle, með möguleika á aðgangstakmörkunum (einungis meðlimir, ákveðnir hópar/notendur, falið eða opinbert).",
     "Link copied to clipboard" : "Tengill afritaður á klippispjald",
     "Error while copying link to clipboard" : "Villa við afritun tengils á klippispjald",
     "Date order" : "Röðun eftir dagsetningu",

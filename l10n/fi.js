@@ -20,8 +20,6 @@ OC.L10N.register(
     "%s invited you to a poll" : "%s kutsui sinut kyselyyn",
     "%s deleted your poll" : "%s poisti kyselysi",
     "%s archived your poll" : "%s arkistoi kyselysi",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Doodlen tai dudlen kaltainen äänestyssovellus mahdollisuudella rajoittaa käyttöä.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Doodlen tai dudlen kaltainen äänestyssovellus mahdollisuudella rajoittaa käyttöä (jäsenet, tietyt käyttäjät/ryhmät, piiloitettu ja julkinen).",
     "Switch to list view" : "Vaihda taulukkonäkymään",
     "Switch to table view" : "Vaihda taulukkonäkymään",
     "Link copied to clipboard" : "Linkki kopioitu leikepöydälle",

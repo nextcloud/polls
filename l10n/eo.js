@@ -8,8 +8,6 @@ OC.L10N.register(
     "Group" : "Grupo",
     "User" : "Uzanto",
     "Polls" : "Enketilo",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Enketa aplikaĵo, samspeca kiel „Doodle“ aŭ „Dudle“, kun limigeblo de aliro.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Enketa aplikaĵo, samspeca kiel „Doodle“ aŭ „Dudle“, kun limigeblo de aliro (membroj, certaj grupoj aŭ uzantoj, kaŝita aŭ publika).",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",
     "Conflict" : "Konflikto",
     "New comment …" : "Nova komento...",

@@ -25,8 +25,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor} verwijderde je peiling \"%s\".",
     "%s archived your poll" : "%s archiveerde je peiling",
     "{actor} archived your poll \"%s\"." : "{actor} archiveerde je peiling \"%s\".",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Een peilingenapp, net als doodle/dudle met de mogelijkheid om toegang te beperken.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Een peilingenapp, zoals doodle/dudle met de mogelijkheid om toegang te beperken (leden, bepaalde groepen/gebruikers, verborgen en openbaar).",
     "Switch to list view" : "Omschakelen naar lijstoverzicht",
     "Switch to table view" : "Omschakelen naar tabeloverzicht",
     "Link copied to clipboard" : "Link gekopieerd naar het klembord",
