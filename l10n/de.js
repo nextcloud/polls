@@ -44,6 +44,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : " {actor} hat Deine Umfrage \"%s\" gelöscht",
     "%s archived your poll" : "%s hat Deine Umfrage archiviert",
     "{actor} archived your poll \"%s\"." : "{actor} hat Deine Umfrage \"%s\" archiviert",
+    "A polls app, similar to Doodle/Dudle with the possibility to restrict access." : "Eine Umfragen-App ähnlich wie Doodle/Dudle, mit der Möglichkeit Zugriffe zu beschränken.",
+    "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Eine Umfrage-App ähnlich wie Doodle/Dudle, mit der Möglichkeit Zugriffe zu beschränken (versteckt/öffentlich oder bestimmte Gruppen/Benutzer/Mitglieder).",
     "Switch to list view" : "Zur Listenansicht wechseln",
     "Switch to table view" : "Zur Tabellenansicht wechseln",
     "Link copied to clipboard" : "Link in die Zwischenablage kopiert",
