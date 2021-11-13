@@ -69,6 +69,18 @@ class Share extends Entity implements JsonSerializable {
 	public const TYPE_CIRCLE = 'circle';
 	public const TYPE_CONTACTGROUP = 'contactGroup';
 
+	public const TYPE_SORT_ARRAY = array(
+		self::TYPE_PUBLIC,
+		self::TYPE_ADMIN,
+		self::TYPE_GROUP,
+		self::TYPE_USER,
+		self::TYPE_CONTACT,
+		self::TYPE_EMAIL,
+		self::TYPE_EXTERNAL,
+		self::TYPE_CIRCLE,
+		self::TYPE_CONTACTGROUP,
+	);
+
 	/** @var string $token */
 	protected $token = '';
 
