@@ -32,12 +32,16 @@
 				<span> | </span>
 				<span :class="[subText.class, subText.icon]">{{ subText.text }}</span>
 			</span>
+			<button v-if="isNoAccessSet" @click="openSharing">
+				{{ t('polls', 'Grant access') }}
+			</button>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 
 export default {
@@ -55,7 +59,7 @@ export default {
 			access: (state) => state.poll.access,
 			title: (state) => state.poll.title,
 			expire: (state) => state.poll.expire,
-			deleted: (state) => state.poll.deleted,
+			isDeleted: (state) => state.poll.deleted,
 			ownerDisplayName: (state) => state.poll.ownerDisplayName,
 			pollCreated: (state) => state.poll.created,
 			mayEdit: (state) => state.poll.acl.allowEdit,
@@ -73,17 +77,21 @@ export default {
 			return t('polls', 'A poll from {name}', { name: this.ownerDisplayName })
 		},
 
+		isNoAccessSet() {
+			return this.access === 'hidden' && !this.hasShares && this.mayEdit
+		},
+
 		subTexts() {
 			const subTexts = []
 
-			if (this.access === 'hidden' && !this.hasShares && this.mayEdit) {
+			if (this.isNoAccessSet) {
 				return [{
 					text: t('polls', 'Currently no users have access to this poll'),
 					icon: 'icon-error',
 					class: 'closed',
 				}]
 			}
-			if (this.deleted) {
+			if (this.isDeleted) {
 				return [{
 					text: t('polls', 'Archived'),
 					icon: 'icon-category-app-bundles',
@@ -149,6 +157,12 @@ export default {
 
 		},
 	},
+
+	methods: {
+		openSharing() {
+			emit('polls:sidebar:toggle', { open: true, activeTab: 'sharing' })
+		},
+	},
 }
 
 </script>
@@ -159,6 +173,10 @@ export default {
 			opacity: 0.7;
 			line-height: 1.2em;
 			font-size: 1em;
+			button {
+				margin-left: 8px;
+			}
+
 			[class^='icon-'], [class*=' icon-'] {
 				padding-left: 21px;
 				background-position: left center;
