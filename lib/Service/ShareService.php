@@ -134,7 +134,7 @@ class ShareService {
 	private function sortByCategory() : void {
 		$sortedShares = [];
 		foreach (Share::TYPE_SORT_ARRAY as $shareType) {
-			$filteredShares = array_filter($this->shares, function($share) use ($shareType) {
+			$filteredShares = array_filter($this->shares, function ($share) use ($shareType) {
 				return $share->getType() === $shareType;
 			});
 			$sortedShares = array_merge($sortedShares, $filteredShares);
