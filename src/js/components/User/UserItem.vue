@@ -88,6 +88,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		resolveInfo: {
+			type: Boolean,
+			default: false,
+		},
 		menuPosition: {
 			type: String,
 			default: 'left',
@@ -157,6 +161,10 @@ export default {
 					return t('polls', 'Access for all users of this site is disabled')
 				}
 				return t('polls', 'Access for all users of this site is enabled')
+			}
+
+			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.type)) {
+				return t('polls', 'Resolve this group first!')
 			}
 
 			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
