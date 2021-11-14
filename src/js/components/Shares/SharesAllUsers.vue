@@ -21,52 +21,48 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Options for public register dialog')" icon-class="icon-public">
-		<RadioGroupDiv v-model="publicPollEmail" :options="emailOptions" />
-	</ConfigBox>
+	<UserItem type="all"
+		:user-id="t('polls', 'All users')"
+		:display-name="t('polls', 'All users')"
+		:disabled="access==='hidden'"
+		show-email
+		is-no-user>
+		<template #status>
+			<div class="vote-status" />
+		</template>
+		<CheckboxRadioSwitch :checked.sync="pollAccess" type="switch" />
+	</UserItem>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import ConfigBox from '../Base/ConfigBox'
-import RadioGroupDiv from '../Base/RadioGroupDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
 import { writePoll } from '../../mixins/writePoll'
 
 export default {
-	name: 'ConfigPublicPollsEmail',
+	name: 'SharesAllUsers',
 
 	components: {
-		ConfigBox,
-		RadioGroupDiv,
+		CheckboxRadioSwitch,
 	},
 
 	mixins: [writePoll],
 
-	data() {
-		return {
-			emailOptions: [
-				{ value: 'optional', label: t('polls', 'Email address is optional') },
-				{ value: 'mandatory', label: t('polls', 'Email address is mandatory') },
-				{ value: 'disabled', label: t('polls', 'Do not ask for email address') },
-			],
-		}
-	},
-
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			access: (state) => state.poll.access,
 		}),
 
-		publicPollEmail: {
+		pollAccess: {
 			get() {
-				return this.poll.publicPollEmail
+				return this.access === 'public'
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { publicPollEmail: value })
+				this.$store.commit('poll/setProperty', { important: +value })
+				this.$store.commit('poll/setProperty', { access: value ? 'public' : 'hidden' })
 				this.writePoll()
 			},
 		},
 	},
-
 }
 </script>

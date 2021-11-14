@@ -21,50 +21,53 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Active shares')" icon-class="icon-share">
-		<UserSearch />
+	<ConfigBox :title="t('polls', 'Shares')" icon-class="icon-share">
+		<UserSearch class="add-share" />
+		<SharesAllUsers v-if="allowAllAccess" />
 		<SharesPublicAdd v-if="allowPublicShares" />
-		<TransitionGroup :css="false" tag="div" class="shared-list">
-			<UserItem v-for="(share) in invitationShares"
-				:key="share.id"
-				v-bind="share"
-				show-email
-				:icon="true">
-				<template #status>
-					<div v-if="hasVoted(share.userId)">
-						<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
-					</div>
-					<div v-else-if="share.type === 'public'">
-						<VotedImpossible class="vote-status" :title="t('polls', 'Is crazy')" />
-					</div>
-					<div v-else>
-						<UnvotedIcon class="vote-status unvoted" :title="t('polls', 'Has not voted')" />
-					</div>
-				</template>
+		<div class="shared-list">
+			<TransitionGroup :css="false" tag="div">
+				<UserItem v-for="(share) in invitationShares"
+					:key="share.id"
+					v-bind="share"
+					show-email
+					:icon="true">
+					<template #status>
+						<div v-if="hasVoted(share.userId)">
+							<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
+						</div>
+						<div v-else-if="['public', 'group'].includes(share.type)">
+							<div class="vote-status empty" />
+						</div>
+						<div v-else>
+							<UnvotedIcon class="vote-status unvoted" :title="t('polls', 'Has not voted')" />
+						</div>
+					</template>
 
-				<Actions>
-					<ActionButton
-						v-if="share.emailAddress || share.type === 'group'"
-						icon="icon-confirm"
-						@click="sendInvitation(share)">
-						{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
-					</ActionButton>
-					<ActionButton
-						v-if="share.type === 'user' || share.type === 'admin'"
-						:icon="share.type === 'user' ? 'icon-user-admin' : 'icon-user'"
-						@click="switchAdmin({ share })">
-						{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
-					</ActionButton>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
-						{{ t('polls', 'Copy link to clipboard') }}
-					</ActionButton>
-				</Actions>
+					<Actions>
+						<ActionButton
+							v-if="share.emailAddress || share.type === 'group'"
+							icon="icon-confirm"
+							@click="sendInvitation(share)">
+							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
+						</ActionButton>
+						<ActionButton
+							v-if="share.type === 'user' || share.type === 'admin'"
+							:icon="share.type === 'user' ? 'icon-user-admin' : 'icon-user'"
+							@click="switchAdmin({ share })">
+							{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
+						</ActionButton>
+						<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
+							{{ t('polls', 'Copy link to clipboard') }}
+						</ActionButton>
+					</Actions>
 
-				<ActionDelete
-					:title="t('polls', 'Remove share')"
-					@delete="removeShare({ share })" />
-			</UserItem>
-		</TransitionGroup>
+					<ActionDelete
+						:title="t('polls', 'Remove share')"
+						@delete="removeShare({ share })" />
+				</UserItem>
+			</TransitionGroup>
+		</div>
 	</ConfigBox>
 </template>
 
@@ -74,11 +77,11 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
-import VotedImpossible from 'vue-material-design-icons/AllInclusive.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 import UserSearch from '../User/UserSearch'
 import SharesPublicAdd from './SharesPublicAdd'
+import SharesAllUsers from './SharesAllUsers'
 
 export default {
 	name: 'SharesEffective',
@@ -89,15 +92,17 @@ export default {
 		ActionDelete,
 		ConfigBox,
 		SharesPublicAdd,
+		SharesAllUsers,
 		UnvotedIcon,
 		UserSearch,
 		VotedIcon,
-		VotedImpossible,
 	},
 
 	computed: {
 		...mapState({
+			allowAllAccess: (state) => state.poll.acl.allowAllAccess,
 			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
+			pollAccess: (state) => state.poll.access,
 		}),
 		...mapGetters({
 			invitationShares: 'shares/invitation',
@@ -141,6 +146,7 @@ export default {
 <style lang="scss">
 .vote-status {
 	margin-left: 8px;
+	width: 32px;
 
 	&.voted {
 		color: var(--color-polls-foreground-yes)

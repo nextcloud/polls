@@ -21,54 +21,36 @@
   -->
 
 <template>
-	<div>
-		<ConfigBox v-if="isOwner || allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">
-			<ConfigAdminAccess v-if="isOwner && adminAccess" @change="writePoll" />
-			<ConfigAccess v-if="allowAllAccess" @change="writePoll" />
-		</ConfigBox>
-		<SharesEffective />
-		<SharesUnsent />
+	<div class="sidebar-share">
+		<SharesEffective class="shares effective" />
+		<SharesUnsent class="shares unsent" />
 		<ConfigPublicPollsEmail />
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import ConfigAccess from '../Configuration/ConfigAccess'
-import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
-import ConfigBox from '../Base/ConfigBox'
 import SharesEffective from '../Shares/SharesEffective'
 import SharesUnsent from '../Shares/SharesUnsent'
-import { writePoll } from '../../mixins/writePoll'
 import ConfigPublicPollsEmail from '../Configuration/ConfigPublicPollsEmail'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
-		ConfigBox,
-		ConfigAccess,
-		ConfigAdminAccess,
 		SharesEffective,
 		SharesUnsent,
 		ConfigPublicPollsEmail,
-	},
-
-	mixins: [writePoll],
-
-	computed: {
-		...mapState({
-			isOwner: (state) => state.poll.acl.isOwner,
-			allowAllAccess: (state) => state.poll.acl.allowAllAccess,
-			adminAccess: (state) => state.poll.adminAccess,
-		}),
-
 	},
 
 }
 </script>
 
 <style lang="scss">
+	.sidebar-share {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.shared-list {
 		display: flex;
 		flex-flow: column;

@@ -21,31 +21,42 @@
   -->
 
 <template>
-	<ButtonDiv :title="t('polls', 'Add a public link')" icon="icon-add" @click="addShare({type: 'public', userId: '', emailAddress: ''})" />
+	<UserItem type="public"
+		class="add-public"
+		user-id="addPublic"
+		:display-name="t('polls', 'Add public link')"
+		is-no-user>
+		<template #status>
+			<div class="vote-status" />
+		</template>
+		<Actions>
+			<ActionButton icon="icon-add" @click="addPublicShare()">
+				{{ t('polls', 'Add public link') }}
+			</ActionButton>
+		</Actions>
+	</UserItem>
 </template>
 
 <script>
 import { showError } from '@nextcloud/dialogs'
-import ButtonDiv from '../Base/ButtonDiv'
+import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'SharesPublicAdd',
 
 	components: {
-		ButtonDiv,
+		Actions,
+		ActionButton,
 	},
 
 	methods: {
-		async addShare(payload) {
+		async addPublicShare() {
 			try {
 				await this.$store.dispatch('shares/add', {
-					share: payload,
-					type: payload.type,
-					id: payload.id,
-					emailAddress: payload.emailAddress,
+					share: { type: 'public', userId: '' },
 				})
 			} catch {
-				showError(t('polls', 'Error adding share'))
+				showError(t('polls', 'Error adding public link'))
 			}
 		},
 	},

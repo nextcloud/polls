@@ -12,6 +12,10 @@
 	overflow-y: hidden;
 }
 
+.user-item > .checkbox-radio-switch-switch,
+.user-item.add-public > .icon-add {
+	margin-right: 20px !important;
+}
 // fix avatardiv size to match the image
 .avatardiv img {
 	display: block;

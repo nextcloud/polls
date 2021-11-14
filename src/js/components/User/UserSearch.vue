@@ -65,7 +65,7 @@ export default {
 			searchToken: null,
 			users: [],
 			isLoading: false,
-			placeholder: t('polls', 'Enter a name to start the search'),
+			placeholder: t('polls', 'Type to add an individual share'),
 		}
 	},
 
@@ -117,5 +117,7 @@ export default {
 	.multiselect {
 		width: 100% !important;
 		max-width: 100% !important;
+		margin-top: 4px !important;
+		margin-bottom: 4px !important;
 	}
 </style>
