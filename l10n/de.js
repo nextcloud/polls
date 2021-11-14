@@ -304,7 +304,7 @@ OC.L10N.register(
     "The original owner will be notified." : "Der ursprüngliche Eigentümer wird benachrichtigt.",
     "No" : "Nein",
     "Yes" : "Ja",
-    "Do you want to delete this poll?" : "Möchten Sie diese Umfrage wirklich löschen?",
+    "Do you want to delete this poll?" : "Möchtest Du diese Umfrage wirklich löschen?",
     "This action cannot be reverted." : "Dies kann nicht rückgängig gemacht werden.",
     "Administration" : "Verwaltung",
     "Error archiving/restoring poll." : "Fehler beim Archivieren/Wiederherstellen der Umfrage",
