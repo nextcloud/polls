@@ -52,11 +52,6 @@
 				@change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox v-if="isOwner || allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">
-			<ConfigAdminAccess v-if="isOwner" @change="writePoll" />
-			<ConfigAccess v-if="allowAllAccess" @change="writePoll" />
-		</ConfigBox>
-
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
 			<ConfigShowResults @change="writePoll" />
 		</ConfigBox>
@@ -78,8 +73,6 @@ import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import ConfigBox from '../Base/ConfigBox'
-import ConfigAccess from '../Configuration/ConfigAccess'
-import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous'
@@ -98,8 +91,6 @@ export default {
 
 	components: {
 		ConfigBox,
-		ConfigAccess,
-		ConfigAdminAccess,
 		ConfigAllowComment,
 		ConfigAllowMayBe,
 		ConfigAnonymous,
@@ -122,7 +113,6 @@ export default {
 			pollId: (state) => state.poll.id,
 			hasEpiration: (state) => state.poll.expire,
 			isOwner: (state) => state.poll.acl.isOwner,
-			allowAllAccess: (state) => state.poll.acl.allowAllAccess,
 		}),
 
 		...mapGetters({

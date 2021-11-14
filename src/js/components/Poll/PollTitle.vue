@@ -58,6 +58,7 @@ export default {
 			deleted: (state) => state.poll.deleted,
 			ownerDisplayName: (state) => state.poll.ownerDisplayName,
 			pollCreated: (state) => state.poll.created,
+			mayEdit: (state) => state.poll.acl.allowEdit,
 		}),
 
 		...mapGetters({
@@ -75,7 +76,7 @@ export default {
 		subTexts() {
 			const subTexts = []
 
-			if (this.access === 'hidden' && !this.hasShares) {
+			if (this.access === 'hidden' && !this.hasShares && this.mayEdit) {
 				return [{
 					text: t('polls', 'Currently no users have access to this poll'),
 					icon: 'icon-error',
