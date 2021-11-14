@@ -22,9 +22,9 @@
 
 <template>
 	<div class="sidebar-share">
-		<SharesEffective class="shares effective" />
-		<SharesUnsent class="shares unsent" />
 		<ConfigPublicPollsEmail />
+		<SharesUnsent class="shares unsent" />
+		<SharesEffective class="shares effective" />
 	</div>
 </template>
 

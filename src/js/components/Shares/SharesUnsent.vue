@@ -27,6 +27,7 @@
 				:key="share.id"
 				v-bind="share"
 				show-email
+				resolve-info
 				:icon="true">
 				<Actions>
 					<ActionButton
@@ -36,7 +37,7 @@
 						{{ t('polls', 'Send invitation mail') }}
 					</ActionButton>
 					<ActionButton
-						v-if="share.type === 'contactGroup' || share.type === 'circle'"
+						v-if="['contactGroup', 'circle'].includes(share.type)"
 						icon="icon-toggle-filelist"
 						@click="resolveGroup(share)">
 						{{ t('polls', 'Resolve into individual invitations') }}
