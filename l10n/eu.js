@@ -24,6 +24,8 @@ OC.L10N.register(
     "%s created the poll." : " %s erabiltzaileak inkesta sortu du.",
     "Reminder for poll \"%s\"" : "\"%s\" inkestarentzako abisua",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} zure botoak ezarrita daudela ziurtatzeko abisu hau bidali dizu.",
+    "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "Lehengo inkesta {leftPeriod} ordu baino lehen engongo da eskuragarri ({dateTime}, {timezone}).",
+    "The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone})." : "Inkesta {leftPeriod} ordu baino lehen iraungiko da ({dateTime}, {timezone}).",
     "Check your votes" : "Egiaztatu zure botoak",
     "Circle" : "Zirkulua",
     "Contact" : "Kontaktua",
