@@ -9,8 +9,6 @@
     "Group" : "Grupo",
     "User" : "Ususario",
     "Polls" : "Encuestas",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una app de encuestas, similar a doodle/dudle, con la posibilidad de de restringir el acceso.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una app de encuestas, similar a doodle/dudle, con la posibilidad de de restringir el acceso. (miembros, ciertos grupos/usuarios, oculta y pública).",
     "Conflict" : "Conflicto",
     "New comment …" : "Nuevo comentario ...",
     "Error while saving comment" : "Error guardando el comentario",

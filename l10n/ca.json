@@ -16,8 +16,6 @@
     "Polls" : "Enquestes",
     "%s invited you to a poll" : "%s l'ha invitat a una enquesta",
     "%s took over your poll" : "%s s'ha fet el càrrec de la vostra enquesta",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Una aplicació d’enquestes, similar al doodle/dudle amb la possibilitat de restringir l'accés (membres, certs grups/usuaris, ocults i públics).",
     "Link copied to clipboard" : "S'ha copiat l'enllaç al porta-retalls",
     "Error while copying link to clipboard" : "Error en copiar l'enllaç al porta-retalls",
     "_%n Participant_::_%n Participants_" : ["%n Participant","%n Participants"],

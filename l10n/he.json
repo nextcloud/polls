@@ -17,8 +17,6 @@
     "{actor} deleted your poll \"%s\"." : "הסקר שלך „%s” נמחק על ידי {actor}",
     "%s archived your poll" : "הסקר שלך הועבר לארכיון על ידי %s",
     "{actor} archived your poll \"%s\"." : "הסקר שלך „%s” הועבר לארכיון על ידי {actor}",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "יישומון סקרים, בדומה ל־doodle/dudle אם האפשרות להגבלת גישה.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "יישומון סקרים, דומה ל־doodle/dudle עם אפשרות להגבלת גישה (חברים, קבוצות/משתמשים מסוימים, הסתרה או חשיפה).",
     "Link copied to clipboard" : "הקישור הועתק ללוח הגזירים",
     "Error while copying link to clipboard" : "שגיאה בהעתקת קישור ללוח הגזירים",
     "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים","%n משתתפים"],

@@ -23,8 +23,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor} ištrynė jūsų apklausą „%s“.",
     "%s archived your poll" : "%s užarchyvavo jūsų apklausą",
     "{actor} archived your poll \"%s\"." : "{actor} užarchyvavo jūsų apklausą \"%s\".",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Apklausų programėlė, panaši į doodle/dudle, su galimybe apriboti prieigą.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Apklausų programėlė, panaši į doodle/dudle, su galimybe apriboti prieigą (nariams, tam tikroms grupėms/naudotojams, paslėptos ir viešos apklausos).",
     "Switch to list view" : "Perjungti į sąrašo rodinį",
     "Switch to table view" : "Perjungti į lentelės rodinį",
     "Link copied to clipboard" : "Nuoroda nukopijuota į iškarpinę",

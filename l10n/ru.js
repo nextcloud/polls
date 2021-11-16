@@ -23,8 +23,6 @@ OC.L10N.register(
     "%s took over your poll" : "%s перенял(а) ваш опрос",
     "{actor} took over your poll \"%s\" and is the new owner." : "{actor} перенял ваш опрос «%s» и теперь является его владельцем.",
     "%s deleted your poll" : "%s удалила) ваш опрос",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Приложение опросов, похожее на doodle / dudle с возможностью настройки прав доступа.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Приложение опросов, похожее на doodle / dudle с возможностью настройки определить права доступа:участники, определённые группы и/или пользователи, а также с возможностью проводить скрытые и публичные опросы.",
     "Link copied to clipboard" : "Ссылка скопирована в буфер обмена",
     "Error while copying link to clipboard" : "Не удалось скопировать ссылку в буфер обмена",
     "_%n Participant_::_%n Participants_" : ["%n участник","%n участников","%n участников","%n участников"],
