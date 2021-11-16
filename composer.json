@@ -24,7 +24,7 @@
 		}
 	},
 	"require-dev": {
-		"christophwurst/nextcloud": "^21.0",
+		"christophwurst/nextcloud": "^22.1",
 		"phpunit/phpunit": "^9.5",
 		"friendsofphp/php-cs-fixer": "^3.2",
 		"league/factory-muffin": "^3.0",

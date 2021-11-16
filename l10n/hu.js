@@ -20,8 +20,6 @@ OC.L10N.register(
     "Polls" : "Szavazások",
     "%s invited you to a poll" : "%s meghívott egy szavazásba",
     "%s took over your poll" : "%s átvette a szavazást",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Szavazóalkalmazás a Doodle-höz hasonlóan lehetőséget nyújt hozzáférés korlátozására (tagok, bizonyos csoport/felhasználó és nyilvános).",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Szavazóalkalmazás, a Doodle-höz hasonlóan lehetőséget nyújt hozzáférés korlátozására (tagok, bizonyos csoport/felhasználó, titkos és nyilvános szavazások).",
     "Switch to list view" : "Váltás listanézetre",
     "Switch to table view" : "Váltás táblázat nézetre",
     "Link copied to clipboard" : "Hivatkozás bemásolva a vágólapra",

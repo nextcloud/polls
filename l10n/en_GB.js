@@ -8,8 +8,6 @@ OC.L10N.register(
     "Group" : "Group",
     "User" : "User",
     "Polls" : "Polls",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "A polls app, similar to doodle/dudle with the possibility to restrict access.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "Conflict" : "Conflict",
     "New comment …" : "New comment …",
     "Delete comment" : "Delete comment",

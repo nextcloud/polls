@@ -11,8 +11,6 @@ OC.L10N.register(
     "Group" : "گروه",
     "User" : "کاربر",
     "Polls" : "نظرسنجی ها",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "یک برنامه نظرسنجی ، شبیه به doodle / dudle با امکان محدود کردن دسترسی.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "برنامه نظرسنجی ، شبیه به doodle / dudle با امکان محدود کردن دسترسی (اعضا ، گروه ها / کاربران خاص ، پنهان و عمومی).",
     "Link copied to clipboard" : "پیوند در حافظه موقت کپی شده",
     "Error while copying link to clipboard" : "هنگام کپی کردن پیوند به حافظه موقت خطایی رخ داد",
     "Conflict" : "تضاد",

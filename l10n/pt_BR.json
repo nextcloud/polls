@@ -25,8 +25,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor} excluiu sua enquete \"%s\".",
     "%s archived your poll" : "%s arquivou sua enquete",
     "{actor} archived your poll \"%s\"." : "{actor} arquivou sua enquete \"%s\".",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Um aplicativo de enquetes, semelhante ao doodle/dudle podendo restringir o acesso.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Um aplicativo de enquetes, semelhante ao doodle/dudle podendo restringir o acesso (membros, certos grupos/usuários, ocultos e públicos).",
     "Switch to list view" : "Mudar para a visualizar lista",
     "Switch to table view" : "Mudar para exibição em tabela",
     "Link copied to clipboard" : "Link copiado para a área de transferência",

@@ -20,8 +20,6 @@ OC.L10N.register(
     "Polls" : "Δημοσκοπήσεις",
     "%s invited you to a poll" : "%sσας προσκάλεσε σε μια δημοσκόπηση",
     "%s took over your poll" : "%sανέλαβε την ψηφοφορία σας",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Εφαρμογή δημοσκόπησης, όπως τα doodle/dudle με δυνατότητα ελέγχου πρόσβασης.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Εφαρμογή δημοσκόπησης, όπως τα doodle/dudle με δυνατότητα ελέγχου πρόσβασης (μέλη, ομάδες/χρήστες, κρυφά και δημόσια).",
     "Link copied to clipboard" : "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο",
     "Error while copying link to clipboard" : "Σφάλμα κατά την αντιγραφή συνδέσμου στο πρόχειρο",
     "_%n Participant_::_%n Participants_" : ["%n Συμμετέχων","%n Συμμετέχοντες"],

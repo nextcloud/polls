@@ -25,8 +25,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor} izbriše vašo anketo »%s«.",
     "%s archived your poll" : "%s arhivira anketo.",
     "{actor} archived your poll \"%s\"." : "{actor} arhivira vašo anketo »%s«.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "Nextcloud Polls je program, podoben spletnemu programu Doodle z možnostjo omejevanja dostopa.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Nextcloud Polls je program, podoben spletnemu programu Doodle z možnostjo omejevanja dostopa (za člane, skupine ali uporabnike, skrite ankete in javno zbiranje odziva).",
     "Switch to list view" : "Preklopi na seznamski pogled",
     "Switch to table view" : "Preklopi na preglednični pogled",
     "Link copied to clipboard" : "Povezava je kopirana v odložišče",

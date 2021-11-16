@@ -10,8 +10,6 @@ OC.L10N.register(
     "Group" : "Grupp",
     "User" : "Användare",
     "Polls" : "Omröstningar",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "En omröstningsapp, liknande doodle/dudle, med möjighet att begränsa deltagande.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "En omröstningsapp, liknande doodle/dudle, med möjighet att begränsa deltagande (medlemmar, vissa grupper/användare, dold eller publik).",
     "Link copied to clipboard" : "Länken kopierades till urklipp",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar ...",
