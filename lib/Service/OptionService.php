@@ -207,7 +207,7 @@ class OptionService {
 		$this->option = $this->optionMapper->find($optionId);
 
 		if ($token) {
-			$this->acl->setToken($token,Acl::PERMISSION_POLL_VIEW, $this->option->getPollId());
+			$this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW, $this->option->getPollId());
 		} else {
 			$this->acl->setPollId($this->option->getPollId());
 		}
