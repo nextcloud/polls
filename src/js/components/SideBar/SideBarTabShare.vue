@@ -22,7 +22,6 @@
 
 <template>
 	<div class="sidebar-share">
-		<ConfigPublicPollsEmail />
 		<SharesUnsent class="shares unsent" />
 		<SharesEffective class="shares effective" />
 	</div>
@@ -31,7 +30,6 @@
 <script>
 import SharesEffective from '../Shares/SharesEffective'
 import SharesUnsent from '../Shares/SharesUnsent'
-import ConfigPublicPollsEmail from '../Configuration/ConfigPublicPollsEmail'
 
 export default {
 	name: 'SideBarTabShare',
@@ -39,7 +37,6 @@ export default {
 	components: {
 		SharesEffective,
 		SharesUnsent,
-		ConfigPublicPollsEmail,
 	},
 
 }

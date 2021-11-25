@@ -37,8 +37,8 @@
 							@submit="submitRegistration" />
 					</div>
 
-					<div v-if="poll.publicPollEmail !== 'disabled'" class="section__email">
-						<h3 v-if="poll.publicPollEmail === 'mandatory'">
+					<div v-if="share.publicPollEmail !== 'disabled'" class="section__email">
+						<h3 v-if="share.publicPollEmail === 'mandatory'">
 							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
 						</h3>
 						<h3 v-else>
@@ -48,7 +48,7 @@
 							v-model="emailAddress"
 							v-tooltip="emailCheck.result"
 							:signaling-class="emailCheck.status"
-							:placeholder="t('polls', poll.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
+							:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
 							no-submit
 							@submit="submitRegistration" />
 					</div>
@@ -117,7 +117,7 @@ export default {
 		}),
 
 		registrationIsValid() {
-			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.poll.publicPollEmail !== 'mandatory'))
+			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
 		},
 
 		disableSubmit() {

@@ -33,6 +33,7 @@ const defaultShares = () => ({
 	type: '',
 	emailAddress: '',
 	userId: '',
+	publicPollEmail: 'optional',
 })
 
 const state = defaultShares()

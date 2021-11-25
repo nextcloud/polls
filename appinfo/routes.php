@@ -90,6 +90,7 @@ return [
 		['name' => 'share#resolveGroup', 'url' => '/share/{token}/resolve', 'verb' => 'GET'],
 		['name' => 'share#user_to_admin', 'url' => '/share/{token}/admin', 'verb' => 'PUT'],
 		['name' => 'share#admin_to_user', 'url' => '/share/{token}/user', 'verb' => 'PUT'],
+		['name' => 'share#set_public_poll_email', 'url' => '/share/{token}/publicpollemail/{value}', 'verb' => 'PUT'],
 
 		['name' => 'settings#getAppSettings', 'url' => '/settings/app', 'verb' => 'GET'],
 		['name' => 'settings#writeAppSettings', 'url' => '/settings/app', 'verb' => 'POST'],
