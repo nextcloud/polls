@@ -287,5 +287,4 @@ class Poll extends Entity implements JsonSerializable {
 		$miscSettings[$key] = $value;
 		$this->setMiscSettingsArray($miscSettings);
 	}
-
 }
