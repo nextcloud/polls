@@ -204,6 +204,8 @@ class Share extends Entity implements JsonSerializable {
 	/**
 	 * Returns the poll setting for the registration dialog option as default
 	 * remove this later
+	 * remove then OCA\Polls\Db\Poll::getPublicPollEmail() also
+	 * @deprecated
 	 */
 	private function getDefaultPublicPollEmail() : string {
 		try {
@@ -211,13 +213,13 @@ class Share extends Entity implements JsonSerializable {
 				->query(PollMapper::class)
 				->find($this->getPollId())->getPublicPollEmail();
 		} catch (\Exception $e) {
-			\OC::$server->getLogger()->error('catched');
 			return 'optional';
 		}
 	}
 
 	/**
 	 * remove also
+	 * @deprecated
 	 */
 	protected static function getContainer() : IAppContainer {
 		$app = \OC::$server->query(Application::class);
