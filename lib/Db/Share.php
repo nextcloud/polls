@@ -202,9 +202,9 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	/**
-	* Returns the poll setting for the registration dialog option as default
-	* remove this later
-	*/
+	 * Returns the poll setting for the registration dialog option as default
+	 * remove this later
+	 */
 	private function getDefaultPublicPollEmail() : string {
 		try {
 			return $this->getContainer()
@@ -217,8 +217,8 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	/**
-	* remove also
-	*/
+	 * remove also
+	 */
 	protected static function getContainer() : IAppContainer {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
