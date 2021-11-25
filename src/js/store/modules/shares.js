@@ -130,6 +130,19 @@ const actions = {
 		}
 	},
 
+	async setPublicPollEmail(context, payload) {
+		const endPoint = `apps/polls/share/${payload.share.token}/publicpollemail/${payload.value}`
+
+		try {
+			await axios.put(generateUrl(endPoint))
+		} catch (e) {
+			console.error('Error changing email register setting', { error: e.response }, { payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
+	},
+
 	async sendInvitation(context, payload) {
 		const endPoint = `apps/polls/share/${payload.share.token}/invite`
 

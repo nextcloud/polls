@@ -60,6 +60,28 @@
 						<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
 							{{ t('polls', 'Copy link to clipboard') }}
 						</ActionButton>
+						<ActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
+						<ActionRadio v-if="share.type === 'public'"
+							name="publicPollEmail"
+							value="optional"
+							:checked="share.publicPollEmail === 'optional'"
+							@change="setPublicPollEmail({ share, value: 'optional' })">
+							{{ t('polls', 'Email address is optional') }}
+						</ActionRadio>
+						<ActionRadio v-if="share.type === 'public'"
+							name="publicPollEmail"
+							value="mandatory"
+							:checked="share.publicPollEmail === 'mandatory'"
+							@change="setPublicPollEmail({ share, value: 'mandatory' })">
+							{{ t('polls', 'Email address is mandatory') }}
+						</ActionRadio>
+						<ActionRadio v-if="share.type === 'public'"
+							name="publicPollEmail"
+							value="disabled"
+							:checked="share.publicPollEmail === 'disabled'"
+							@change="setPublicPollEmail({ share, value: 'disabled' })">
+							{{ t('polls', 'Do not ask for email address') }}
+						</ActionRadio>
 					</Actions>
 
 					<ActionDelete
@@ -74,7 +96,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, ActionCaption, ActionRadio } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
@@ -89,7 +111,9 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ActionCaption,
 		ActionDelete,
+		ActionRadio,
 		ConfigBox,
 		SharesPublicAdd,
 		SharesAllUsers,
@@ -114,6 +138,7 @@ export default {
 		...mapActions({
 			removeShare: 'shares/delete',
 			switchAdmin: 'shares/switchAdmin',
+			setPublicPollEmail: 'shares/setPublicPollEmail',
 		}),
 
 		async sendInvitation(share) {

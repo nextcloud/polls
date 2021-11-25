@@ -306,6 +306,24 @@ class ShareService {
 	}
 
 	/**
+	 * Change share type
+	 */
+	public function setPublicPollEmail(string $token, string $value): Share {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+			$this->share->setPublicPollEmail($value);
+			$this->share = $this->shareMapper->update($this->share);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
+		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+
+		return $this->share;
+	}
+
+	/**
 	 * Set emailAddress to personal share
 	 * or update an email share with the username
 	 *
