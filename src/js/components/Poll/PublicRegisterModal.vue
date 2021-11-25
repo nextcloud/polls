@@ -145,7 +145,7 @@ export default {
 			}
 			if (this.userName.length === 0) {
 				return {
-					result: t('polls', ' '),
+					result: ' ',
 					status: 'empty',
 				}
 			}
