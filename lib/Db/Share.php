@@ -223,5 +223,4 @@ class Share extends Entity implements JsonSerializable {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
 	}
-
 }
