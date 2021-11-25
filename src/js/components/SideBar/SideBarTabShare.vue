@@ -53,8 +53,6 @@ export default {
 		flex-flow: column;
 		justify-content: flex-start;
 		padding-top: 8px;
-		max-height: 450px;
-		overflow: auto;
 
 		> li {
 			display: flex;
