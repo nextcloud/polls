@@ -385,7 +385,6 @@ class ShareService {
 		}
 
 		$this->systemService->validatePublicUsername($userName, $token);
-		// $this->systemService->validateEmailAddress($emailAddress, true);
 		$this->systemService->validateEmailAddress($emailAddress, $poll->getPublicPollEmail() !== 'mandatory');
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {

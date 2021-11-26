@@ -37,8 +37,12 @@
 							@submit="submitRegistration" />
 					</div>
 
-					<div v-if="share.publicPollEmail !== 'disabled'" class="section__email">
-						<h3 v-if="share.publicPollEmail === 'mandatory'">
+					<div :class="['status-message', userNameCheck.status]">
+						{{ userNameCheck.result }}
+					</div>
+
+					<div v-if="poll.publicPollEmail !== 'disabled'" class="section__email">
+						<h3 v-if="poll.publicPollEmail === 'mandatory'">
 							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
 						</h3>
 						<h3 v-else>
@@ -141,14 +145,14 @@ export default {
 			}
 			if (this.userName.length === 0) {
 				return {
-					result: t('polls', 'Enter a name to participate.'),
+					result: ' ',
 					status: 'empty',
 				}
 			}
 
 			if (!this.isValidName) {
 				return {
-					result: t('polls', 'Invalid name'),
+					result: t('polls', '{username} is invalid or reserved.', { username: this.userName }),
 					status: 'error',
 				}
 			}
@@ -319,7 +323,13 @@ export default {
 
 	.description {
 		hyphens: auto;
-		border-top: 1px solid var(--color-border)
+		border-top: 1px solid var(--color-border);
+	}
+
+	.status-message {
+		hyphens: auto;
+		font-size: 0.9em;
+		min-height: 1.8em;
 	}
 
 	@media only screen and (max-width: 688px) {
