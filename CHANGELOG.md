@@ -10,10 +10,10 @@ All notable changes to this project will be documented in this file.
 - Share tab redesign
   - Moved the 'all users' access setting as switch to the shares
   - Polls with access for all users are now automatically relevant for all users
-  - Removed the settings to access all admins edit rights (in favor for granting individual edit rights, introduced in Polls 3.2)
+  - Removed the settings to access all admins edit rights (in favor for granting individual edit rights, introduced in Polls 3.2).
     An existing setting will still be valid and can be removed
   - Combine all shares into one list
-  - Registration options for public polls are now configurable per public share
+  - Registration options for public polls are now configurable per public share.
     An existing setting from the poll configuration will be used as default
 
 ## [3.4.0-beta1] - 2021-11-26
