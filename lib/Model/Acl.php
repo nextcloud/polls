@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -25,16 +25,16 @@
 namespace OCA\Polls\Model;
 
 use JsonSerializable;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NotAuthorizedException;
-
-use OCP\IUserManager;
-use OCP\IGroupManager;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
+use OCP\IUserManager;
+use OCP\IGroupManager;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * Class Acl

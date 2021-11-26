@@ -138,8 +138,9 @@ export default {
 			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).description
 		},
 
+		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
-			return t('polls', 'Polls') + ' - ' + this.title
+			return `${t('polls', 'Polls')} - ${this.title}`
 		},
 
 		sortedList() {
@@ -174,16 +175,16 @@ export default {
 		async loadPoll(pollId) {
 			try {
 				await this.$store.dispatch({ type: 'poll/get', pollId })
-				emit('toggle-sidebar', { open: true })
+				emit('polls:sidebar:toggle', { open: true })
 			} catch {
 				showError(t('polls', 'Error loading poll'))
 			}
 		},
 
 		refreshView() {
-			window.document.title = t('polls', 'Polls') + ' - ' + this.title
+			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
 			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
-				emit('toggle-sidebar', { open: false })
+				emit('polls:sidebar:toggle', { open: false })
 			}
 
 		},
@@ -197,22 +198,11 @@ export default {
 			}
 		},
 
-		callPoll(index, poll, name) {
-			this.$router.push({
-				name,
-				params: {
-					id: poll.id,
-				},
-			})
-		},
-
 		async toggleArchive(pollId) {
 			try {
 				await this.$store.dispatch('poll/toggleArchive', { pollId })
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
-			} finally {
-				emit('update-polls')
 			}
 		},
 
@@ -221,8 +211,6 @@ export default {
 				await this.$store.dispatch('poll/delete', { pollId })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
-			} finally {
-				emit('update-polls')
 			}
 		},
 
@@ -231,8 +219,6 @@ export default {
 				await this.$store.dispatch('poll/clone', { pollId })
 			} catch {
 				showError(t('polls', 'Error cloning poll.'))
-			} finally {
-				emit('update-polls')
 			}
 		},
 	},

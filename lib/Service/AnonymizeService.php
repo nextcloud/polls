@@ -40,9 +40,9 @@ class AnonymizeService {
 	private $commentMapper;
 
 	/** @var array */
-	private $anonList = [];
+	private $anonList;
 
-	/** @var string */
+	/** @var string|null */
 	private $userId;
 
 	/** @var int */
@@ -54,6 +54,9 @@ class AnonymizeService {
 	) {
 		$this->voteMapper = $voteMapper;
 		$this->commentMapper = $commentMapper;
+		$this->anonList = [];
+		$this->userId = null;
+		$this->pollId = 0;
 	}
 
 	/**

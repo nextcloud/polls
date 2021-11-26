@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,25 +21,15 @@
  *
  */
 
+namespace OCA\Polls\Model\UserGroup;
 
-namespace OCA\Polls\Model;
-
-class Email extends UserGroupClass {
-	public const TYPE = 'email';
-	public const ICON = 'icon-mail';
+class Admin extends User {
+	public const TYPE = 'admin';
+	public const ICON = 'icon-settings';
 
 	public function __construct(
-		string $id,
-		string $displayName = ''
+		string $id
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->description = \OC::$server->getL10N('polls')->t('External Email');
-		$this->icon = self::ICON;
-		$this->emailAddress = $id;
-		$this->displayName = $displayName ? $displayName : $this->displayName;
-	}
-
-	public function getDisplayName(): string {
-		return $this->displayName ? $this->displayName : $this->id;
 	}
 }

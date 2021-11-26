@@ -28,11 +28,15 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Service\WatchService;
+use OCA\Polls\Model\Settings\AppSettings;
 
 class WatchController extends Controller {
 
 	/** @var WatchService */
 	private $watchService;
+
+	/** @var AppSettings */
+	private $appSettings;
 
 	use ResponseHandle;
 
@@ -43,6 +47,7 @@ class WatchController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->watchService = $watchService;
+		$this->appSettings = new AppSettings;
 	}
 
 	/**
@@ -54,14 +59,21 @@ class WatchController extends Controller {
 		return $this->responseLong(function () use ($pollId, $offset) {
 			$start = time();
 			$timeout = 30;
+
 			$offset = $offset ?? $start;
-			while (empty($updates) && time() <= $start + $timeout) {
-				sleep(1);
+			if ($this->appSettings->getUpdateType() === 'longPolling') {
+				while (empty($updates) && time() <= $start + $timeout) {
+					sleep(1);
+					$updates = $this->watchService->getUpdates($pollId, $offset);
+				}
+			} else {
 				$updates = $this->watchService->getUpdates($pollId, $offset);
 			}
+
 			if (empty($updates)) {
 				throw new NoUpdatesException;
 			}
+
 			return ['updates' => $updates];
 		});
 	}

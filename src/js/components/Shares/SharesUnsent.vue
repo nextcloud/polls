@@ -26,6 +26,7 @@
 			<UserItem v-for="(share) in unsentInvitations"
 				:key="share.id"
 				v-bind="share"
+				show-email
 				:icon="true">
 				<Actions>
 					<ActionButton
@@ -43,14 +44,14 @@
 				</Actions>
 				<ActionDelete
 					:title="t('polls', 'Remove invitation')"
-					@delete="removeShare(share)" />
+					@delete="removeShare({ share })" />
 			</UserItem>
 		</TransitionGroup>
 	</ConfigBox>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
@@ -73,6 +74,10 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			removeShare: 'shares/delete',
+		}),
+
 		async resolveGroup(share) {
 			try {
 				await this.$store.dispatch('shares/resolveGroup', { share })
@@ -101,33 +106,6 @@ export default {
 				})
 			}
 		},
-
-		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share })
-		},
 	},
 }
 </script>
-
-<style lang="scss">
-	.shared-list {
-		display: flex;
-		flex-flow: column wrap;
-		justify-content: flex-start;
-		padding-top: 8px;
-
-		> li {
-			display: flex;
-			align-items: stretch;
-			margin: 4px 0;
-		}
-	}
-
-	.share-item {
-		display: flex;
-		flex: 1;
-		align-items: center;
-		max-width: 100%;
-	}
-
-</style>

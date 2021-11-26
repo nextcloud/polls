@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls App - New Activity" : "투표 앱 - 새로운 활동",
     "Contact" : "연락처",
     "Public link" : "공개 링크",
     "Group" : "그룹",
     "User" : "사용자",
     "Polls" : "투표",
-    "Polls App - New Activity" : "투표 앱 - 새로운 활동",
     "Conflict" : "충돌",
     "New comment …" : "새 댓글…",
     "Delete comment" : "댓글 삭제",

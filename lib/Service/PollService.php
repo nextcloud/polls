@@ -45,7 +45,7 @@ use OCA\Polls\Model\Acl;
 
 class PollService {
 
-	/** @var string */
+	/** @var string|null */
 	private $userId;
 
 	/** @var IEventDispatcher */

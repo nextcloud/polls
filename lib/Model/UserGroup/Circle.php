@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,15 +21,14 @@
  *
  */
 
-
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\UserGroup;
 
 use OCP\App\IAppManager;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\Circle as CirclesCircle;
 use OCA\Polls\Exceptions\CirclesNotEnabledException;
 
-class Circle extends UserGroupClass {
+class Circle extends UserBase {
 	public const TYPE = 'circle';
 	public const ICON = 'icon-circles';
 

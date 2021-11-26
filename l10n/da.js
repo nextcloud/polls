@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Go to poll" : "Gå til afstemninger",
     "Contact" : "takt",
     "Public link" : "Offentligt link",
     "Group" : "Gruppe",
     "User" : "Bruger",
     "Polls" : "Afstemning",
-    "Go to poll" : "Gå til afstemninger",
     "Link copied to clipboard" : "Link kopieret til udklipsholder",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",

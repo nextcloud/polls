@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,12 +21,13 @@
  *
  */
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\UserGroup;
 
+use DateTimeZone;
 use OCP\IUserManager;
 use OCP\IUser;
 
-class User extends UserGroupClass {
+class User extends UserBase {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
 
@@ -46,11 +47,21 @@ class User extends UserGroupClass {
 		$this->displayName = $this->user->getDisplayName();
 		$this->emailAddress = $this->user->getEmailAddress();
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
+		$this->locale = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'locale');
 	}
 
 	public function isEnabled(): bool {
 		return $this->user->isEnabled();
 	}
+
+	public function getTimeZone(): DateTimeZone {
+		$tz = \OC::$server->getConfig()->getUserValue($this->getId(), 'core', 'timezone');
+		if ($tz) {
+			return new DateTimeZone($tz);
+		}
+		return new DateTimeZone($this->timezone->getTimeZone()->getName());
+	}
+
 
 	/**
 	 * @return User[]

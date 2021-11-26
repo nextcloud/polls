@@ -1,9 +1,10 @@
-/*
+/* jshint esversion: 6 */
+/**
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -53,29 +54,15 @@ const mutations = {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
 			return
 		}
-
 		state.list.push(payload.vote)
-
-		// TODO: performance check for preferred strategy
-		// for (let i = 0; i < state.list.length; i++) {
-		// if (parseInt(state.list[i].pollId) === payload.pollId
-		// && state.list[i].userId === payload.vote.userId
-		// && state.list[i].voteOptionText === payload.option.pollOptionText) {
-		// state.list[i] = Object.assign(state.list[i], payload.vote)
-		// return
-		// }
-		// }
-		// state.list.push(payload.vote)
 	},
 }
 
 const getters = {
-
 	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText)),
-
 	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length,
-
-	countAllVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.voteAnswer === answer).length,
+	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.voteAnswer === answer).length,
+	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.userId === userId) > -1,
 
 	getVote: (state) => (payload) => {
 		const found = state.list.find((vote) => (vote.userId === payload.userId
@@ -88,7 +75,6 @@ const getters = {
 			}
 		}
 		return found
-
 	},
 }
 
@@ -97,15 +83,15 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
 		} else {
 			context.commit('reset')
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/votes'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(`${endPoint}/votes`), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('reset')
@@ -116,11 +102,11 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token
+			endPoint = `${endPoint}/s/${context.rootState.poll.acl.token}`
 		}
 
 		try {
-			const response = await axios.put(generateUrl(endPoint + '/vote'), {
+			const response = await axios.put(generateUrl(`${endPoint}/vote`), {
 				optionId: payload.option.id,
 				setTo: payload.setTo,
 			})
@@ -142,9 +128,9 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.poll.acl.token + '/user'
+			endPoint = `${endPoint}/s/${context.rootState.poll.acl.token}/user`
 		} else {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id + '/user'
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/user`
 		}
 
 		try {
@@ -157,7 +143,7 @@ const actions = {
 	},
 
 	async deleteUser(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/user/' + payload.userId
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/user/${payload.userId}`
 		try {
 			await axios.delete(generateUrl(endPoint))
 			context.commit('deleteVotes', payload)
@@ -166,7 +152,6 @@ const actions = {
 			throw e
 		}
 	},
-
 }
 
 export default { namespaced, state, mutations, getters, actions }

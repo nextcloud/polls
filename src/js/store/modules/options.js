@@ -1,9 +1,10 @@
-/*
+/* jshint esversion: 6 */
+/**
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -80,11 +81,8 @@ const mutations = {
 
 const getters = {
 	count: (state) => state.list.length,
-
 	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc'),
-
 	proposalsExist: (state) => !!state.list.filter((option) => option.owner).length,
-
 	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
 }
 
@@ -93,18 +91,18 @@ const actions = {
 	async list(context) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/options`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/options`
 		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/options`
 		} else {
 			context.commit('reset')
 			return
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/options'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
@@ -115,10 +113,10 @@ const actions = {
 	async add(context, payload) {
 		let endPoint = 'apps/polls'
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/option`
+		} else {
+			endPoint = `${endPoint}/option`
 		}
-
-		endPoint = endPoint + '/option'
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
@@ -129,16 +127,17 @@ const actions = {
 			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error adding option: ' + e.response.data, { error: e.response }, { payload })
+			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
 	},
 
 	async update(context, payload) {
-		const endPoint = 'apps/polls/option'
+		const endPoint = `apps/polls/option/${payload.option.id}`
+
 		try {
-			const response = await axios.put(generateUrl(endPoint + '/' + payload.option.id), {
+			const response = await axios.put(generateUrl(endPoint), {
 				timestamp: payload.option.timestamp,
 				pollOptionText: payload.option.timeStamp,
 				duration: payload.option.duration,
@@ -153,13 +152,15 @@ const actions = {
 
 	async delete(context, payload) {
 		let endPoint = 'apps/polls'
+
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/option/${payload.option.id}`
+		} else {
+			endPoint = `${endPoint}/option/${payload.option.id}`
 		}
-		endPoint = endPoint + '/option'
 
 		try {
-			await axios.delete(generateUrl(endPoint + '/' + payload.option.id))
+			await axios.delete(generateUrl(endPoint))
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
 			console.error('Error deleting option', { error: e.response }, { payload })
@@ -169,10 +170,12 @@ const actions = {
 	},
 
 	async confirm(context, payload) {
+		const endPoint = `apps/polls/option/${payload.option.id}/confirm`
+
 		context.commit('confirm', { option: payload.option })
-		const endPoint = 'apps/polls/option'
+
 		try {
-			const response = await axios.put(generateUrl(endPoint + '/' + payload.option.id + '/confirm'))
+			const response = await axios.put(generateUrl(endPoint))
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			console.error('Error confirming option', { error: e.response }, { payload })
@@ -182,8 +185,10 @@ const actions = {
 	},
 
 	async reorder(context, payload) {
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/options/reorder`
+
 		context.commit('reorder', { options: payload })
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/options/reorder'
+
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
 				options: payload,
@@ -197,9 +202,10 @@ const actions = {
 	},
 
 	async sequence(context, payload) {
-		const endPoint = 'apps/polls/option'
+		const endPoint = `apps/polls/option/${payload.option.id}/sequence`
+
 		try {
-			const response = await axios.post(generateUrl(endPoint + '/' + payload.option.id + '/sequence'), {
+			const response = await axios.post(generateUrl(endPoint), {
 				step: payload.sequence.step,
 				unit: payload.sequence.unit.value,
 				amount: payload.sequence.amount,
@@ -213,7 +219,8 @@ const actions = {
 	},
 
 	async shift(context, payload) {
-		const endPoint = 'apps/polls/poll/' + context.rootState.route.params.id + '/shift'
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/shift`
+
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
 				step: payload.shift.step,
@@ -228,9 +235,10 @@ const actions = {
 	},
 
 	async getEvents(context, payload) {
-		const endPoint = 'apps/polls/option'
+		const endPoint = `apps/polls/option/${payload.option.id}/events`
+
 		try {
-			return await axios.get(generateUrl(endPoint + '/' + payload.option.id + '/events'))
+			return await axios.get(generateUrl(endPoint))
 		} catch (e) {
 			return { events: [] }
 		}

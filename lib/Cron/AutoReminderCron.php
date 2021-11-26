@@ -21,15 +21,31 @@
  *
  */
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Cron;
 
-class Admin extends User {
-	public const TYPE = 'admin';
-	public const ICON = 'icon-settings';
+use OCP\BackgroundJob\TimedJob;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCA\Polls\Service\MailService;
+
+class AutoReminderCron extends TimedJob {
+
+	/** @var MailService */
+	private $mailService;
 
 	public function __construct(
-		string $id
+		ITimeFactory $time,
+		MailService $mailService
 	) {
-		parent::__construct($id, self::TYPE);
+		parent::__construct($time);
+		$this->mailService = $mailService;
+		parent::setInterval(30); // run every 30 minutes
+	}
+
+	/**
+	 * @param mixed $argument
+	 * @return void
+	 */
+	protected function run($argument) {
+		$this->mailService->sendAutoReminder();
 	}
 }

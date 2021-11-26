@@ -12,6 +12,12 @@
 	--color-polls-background-yes--dark: #2e4600;
 	--color-polls-background-no--dark: #4d0d00;
 	--color-polls-background-maybe--dark: #665600;
+	--color-polls-dashboard-dark-background: #ffffff;
+	--color-polls-dashboard-dark-text: #000000;
+	--color-polls-dashboard-light-background: #000000;
+	--color-polls-dashboard-light-text: #ffffff;
+	--color-background-translucent: rgba(255,255,255,0.8);
+	--background-blur: blur(10px);
 }
 
 :root .theme--dark {
@@ -22,5 +28,5 @@
 	--color-polls-background-yes: #2e4600;
 	--color-polls-background-no: #4d0d00;
 	--color-polls-background-maybe: #665600;
-
+	--color-background-translucent: rgba(24,24,24,0.8);
 }

@@ -93,6 +93,9 @@ class OptionService {
 		$this->option = $option;
 		$this->optionMapper = $optionMapper;
 		$this->voteMapper = $voteMapper;
+		$this->options = [];
+		$this->poll = new Poll;
+		$this->votes = [];
 	}
 
 	/**
@@ -118,7 +121,9 @@ class OptionService {
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {
 				// hide booked up options except the user has edit permission
 				$this->filterBookedUp();
-			} elseif ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
+			}
+
+			if ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$this->calculateRanks();
 			}
 
@@ -204,7 +209,7 @@ class OptionService {
 		$this->option = $this->optionMapper->find($optionId);
 
 		if ($token) {
-			$this->acl->setToken($token,Acl::PERMISSION_POLL_VIEW, $this->option->getPollId());
+			$this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW, $this->option->getPollId());
 		} else {
 			$this->acl->setPollId($this->option->getPollId());
 		}

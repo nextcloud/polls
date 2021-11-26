@@ -62,7 +62,7 @@ import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/v
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { emit } from '@nextcloud/event-bus'
 import CreateDlg from '../components/Create/CreateDlg'
 import PollNavigationItems from '../components/Navigation/PollNavigationItems'
 
@@ -78,7 +78,6 @@ export default {
 
 	data() {
 		return {
-			showSettingsDlg: false,
 			createDlg: false,
 		}
 	},
@@ -99,15 +98,11 @@ export default {
 	},
 
 	created() {
-		this.updatePolls()
-		subscribe('update-polls', () => {
-			this.updatePolls()
-		})
+		this.loadPolls()
 	},
 
 	beforeDestroy() {
 		window.clearInterval(this.reloadTimer)
-		unsubscribe('update-polls')
 	},
 
 	methods: {
@@ -123,21 +118,16 @@ export default {
 		},
 
 		showSettings() {
-			emit('show-settings')
+			emit('polls:settings:show')
 		},
 
-		async updatePolls() {
-			const dispatches = []
-
-			dispatches.push('polls/list')
-
-			if (getCurrentUser().isAdmin) {
-				dispatches.push('pollsAdmin/load')
-			}
-
+		async loadPolls() {
 			try {
-				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
-				await Promise.all(requests)
+				this.$store.dispatch('polls/list')
+
+				if (getCurrentUser().isAdmin) {
+					this.$store.dispatch('pollsAdmin/list')
+				}
 			} catch {
 				showError(t('polls', 'Error loading poll list'))
 			}
@@ -146,7 +136,6 @@ export default {
 		async clonePoll(pollId) {
 			try {
 				const response = await this.$store.dispatch('poll/clone', { pollId })
-				emit('update-polls')
 				this.$router.push({ name: 'vote', params: { id: response.data.id } })
 			} catch {
 				showError(t('polls', 'Error cloning poll.'))
@@ -156,7 +145,6 @@ export default {
 		async toggleArchive(pollId) {
 			try {
 				await this.$store.dispatch('poll/toggleArchive', { pollId })
-				emit('update-polls')
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
 			}

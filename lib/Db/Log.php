@@ -35,7 +35,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setCreated(integer $value)
  * @method int getProcessed()
  * @method void setProcessed(integer $value)
- * @method int getUserId()
+ * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getDisplayName()
  * @method void setDisplayName(string $value)

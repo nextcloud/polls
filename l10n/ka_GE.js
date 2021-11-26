@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls App - New Activity" : "Polls აპლიკაცია - ახალი აქტივობა",
     "Contact" : "კონტაქტი",
     "Group" : "ჯგუფი",
     "User" : "მომხმარებელი",
     "Polls" : "გამოკითხვები",
-    "Polls App - New Activity" : "Polls აპლიკაცია - ახალი აქტივობა",
     "Conflict" : "კონფლიქტი",
     "New comment …" : "ახალი კომენტარი ...",
     "Delete comment" : "კომენტარის გაუქმება",

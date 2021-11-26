@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,13 +21,12 @@
  *
  */
 
-
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\UserGroup;
 
 use OCP\IGroupManager;
 use OCP\IGroup;
 
-class Group extends UserGroupClass {
+class Group extends UserBase {
 	public const TYPE = 'group';
 	public const ICON = 'icon-group';
 

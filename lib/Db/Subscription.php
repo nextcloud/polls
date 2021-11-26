@@ -25,7 +25,6 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -45,6 +44,9 @@ class Subscription extends Entity implements JsonSerializable {
 	/** @var string $userId */
 	protected $userId;
 
+	/** @var Log[] $logEntries */
+	protected $logEntries = [];
+
 	public function __construct() {
 		$this->addType('pollId', 'int');
 	}
@@ -55,5 +57,22 @@ class Subscription extends Entity implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'userId' => $this->getUserId(),
 		];
+	}
+
+	/**
+	 * @param Log[] $logs Array of logs for notifications
+	 */
+	public function setNotifyLogs(array $logs) : void {
+		$pollId = $this->getPollId();
+		$this->logEntries = array_filter($logs, function ($log) use ($pollId) {
+			return $log->getPollId() === $pollId;
+		});
+	}
+
+	/**
+	 * @return Log[]
+	 */
+	public function getNotifyLogs() : array {
+		return $this->logEntries;
 	}
 }

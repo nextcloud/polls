@@ -28,6 +28,7 @@ use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Vote;
 
 class VoteEvent extends Event {
+
 	/** @var Vote */
 	private $vote;
 

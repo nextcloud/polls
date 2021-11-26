@@ -68,6 +68,7 @@ class DeleteInvalidRecords implements IRepairStep {
 	/** @var VoteMapper */
 	private $voteMapper;
 
+	/** @var array */
 	protected $childTables = [
 		CommentMapper::TABLE,
 		LogMapper::TABLE,

@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls App - New Activity" : "Avstemningsapp - Ny aktivitet",
     "Contact" : "Kontakt",
     "Public link" : "Offentlig lenke",
     "Group" : "Gruppe",
     "User" : "Bruker",
     "Polls" : "Avstemninger",
-    "Polls App - New Activity" : "Avstemningsapp - Ny aktivitet",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",
     "Delete comment" : "Slett kommentar",

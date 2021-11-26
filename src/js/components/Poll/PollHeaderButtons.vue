@@ -61,14 +61,6 @@ export default {
 		UserMenu,
 	},
 
-	data() {
-		return {
-			delay: 50,
-			isLoading: false,
-			voteSaved: false,
-		}
-	},
-
 	computed: {
 		...mapState({
 			allowComment: (state) => state.poll.allowComment,
@@ -77,7 +69,7 @@ export default {
 	},
 
 	created() {
-		emit('toggle-sidebar', { open: (window.innerWidth > 920) })
+		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 	},
 
 	beforeDestroy() {
@@ -93,6 +85,8 @@ export default {
 	flex-wrap: wrap-reverse;
 	flex: 0 1 auto;
 	justify-content: flex-end;
+	align-self: flex-end;
+	border-radius: var(--border-radius-pill);
 }
 
 .icon.icon-settings.active {

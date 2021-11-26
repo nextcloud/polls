@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -22,9 +22,9 @@
  */
 
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Model\UserGroup;
 
-class GenericUser extends UserGroupClass {
+class GenericUser extends UserBase {
 	public const TYPE = 'external';
 	public const ICON_DEFAULT = 'icon-share';
 	public const ICON_PUBLIC = 'icon-public';
@@ -39,7 +39,7 @@ class GenericUser extends UserGroupClass {
 		$this->displayName = $displayName;
 		$this->emailAddress = $emailAddress;
 
-		if ($type === UserGroupClass::TYPE_PUBLIC) {
+		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->icon = self::ICON_PUBLIC;
 			$this->description = \OC::$server->getL10N('polls')->t('Public link');
 		} else {

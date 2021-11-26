@@ -69,7 +69,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import moment from '@nextcloud/moment'
 import { Actions, ActionButton, EmptyContent, Modal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import OptionCloneDate from './OptionCloneDate'
@@ -102,12 +101,6 @@ export default {
 		return {
 			cloneModal: false,
 			optionToClone: {},
-			sequence: {
-				baseOption: {},
-				unit: { name: t('polls', 'Week'), value: 'week' },
-				step: 1,
-				amount: 1,
-			},
 		}
 	},
 
@@ -123,10 +116,6 @@ export default {
 			countOptions: 'options/count',
 			pollTypeIcon: 'poll/typeIcon',
 		}),
-
-		dateBaseOptionString() {
-			return moment.unix(this.sequence.baseOption.timestamp).format('LLLL')
-		},
 	},
 
 	methods: {

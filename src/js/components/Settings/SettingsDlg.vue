@@ -30,8 +30,8 @@
 			<PerformanceSettings />
 		</AppSettingsSection>
 
-		<AppSettingsSection :title="t('polls', 'Experimental styles')">
-			<ExpertimantalSettings />
+		<AppSettingsSection :title="t('polls', 'Styles')">
+			<StyleSettings />
 		</AppSettingsSection>
 	</AppSettingsDialog>
 </template>
@@ -48,7 +48,7 @@ export default {
 		AppSettingsDialog,
 		AppSettingsSection,
 		FeatureSettings: () => import('./FeatureSettings'),
-		ExpertimantalSettings: () => import('./ExpertimantalSettings'),
+		StyleSettings: () => import('./StyleSettings'),
 		PerformanceSettings: () => import('./PerformanceSettings'),
 	},
 
@@ -68,14 +68,14 @@ export default {
 	},
 
 	created() {
-		subscribe('show-settings', () => {
+		subscribe('polls:settings:show', () => {
 			this.show = true
 		})
 
 	},
 
 	beforeDestroy() {
-		unsubscribe('show-settings')
+		unsubscribe('polls:settings:show')
 	},
 }
 </script>

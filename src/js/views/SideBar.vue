@@ -92,7 +92,7 @@ export default {
 	},
 	methods: {
 		closeSideBar() {
-			emit('toggle-sidebar', { open: false })
+			emit('polls:sidebar:toggle', { open: false })
 		},
 	},
 

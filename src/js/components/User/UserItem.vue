@@ -35,9 +35,17 @@
 
 		<div v-if="icon" :class="['type-icon', iconClass]" />
 
+		<slot name="status" />
+
 		<div v-if="!hideNames" class="user-item__name">
-			{{ name }}
+			<div class="name">
+				{{ name }}
+			</div>
+			<div v-if="displayEmailAddress" class="subname">
+				{{ displayEmailAddress }}
+			</div>
 		</div>
+
 		<slot />
 	</div>
 </template>
@@ -60,6 +68,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		showEmail: {
+			type: Boolean,
+			default: false,
+		},
 		disableMenu: {
 			type: Boolean,
 			default: true,
@@ -77,6 +89,10 @@ export default {
 			default: undefined,
 		},
 		displayName: {
+			type: String,
+			default: undefined,
+		},
+		emailAddress: {
 			type: String,
 			default: '',
 		},
@@ -102,13 +118,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			nothidden: false,
-			circleName: '',
-		}
-	},
-
 	computed: {
 		name() {
 			if (this.displayName) {
@@ -116,6 +125,13 @@ export default {
 			}
 			return this.userId
 
+		},
+
+		displayEmailAddress() {
+			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
+				return this.emailAddress
+			}
+			return ''
 		},
 
 		showUserStatus() {
@@ -126,21 +142,32 @@ export default {
 			if (this.icon) {
 				if (this.type === 'contact') {
 					return 'icon-mail'
-				} else if (this.type === 'email') {
+				}
+
+				if (this.type === 'email') {
 					return 'icon-mail'
-				} else if (this.type === 'external') {
+				}
+
+				if (this.type === 'external') {
 					return 'icon-share'
-				} else if (this.type === 'contactGroup') {
+				}
+
+				if (this.type === 'contactGroup') {
 					return 'icon-group'
-				} else if (this.type === 'circle') {
+				}
+
+				if (this.type === 'circle') {
 					return 'icon-circles'
-				} else if (this.type === 'admin') {
+				}
+
+				if (this.type === 'admin') {
 					return 'icon-user-admin'
 				}
-				return 'icon-' + this.type
-			}
-			return ''
 
+				return `icon-${this.type}`
+			}
+
+			return ''
 		},
 
 	},
@@ -159,11 +186,16 @@ export default {
 .user-item__name {
 	flex: 1;
 	min-width: 50px;
-	color: var(--color-text-maxcontrast);
 	padding-left: 8px;
 	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	> div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.subname {
+		color: var(--color-text-maxcontrast);
+		font-size: 0.7em;
+	}
 }
 
 .condensed {

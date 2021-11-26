@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2019 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -21,13 +21,12 @@
   -->
 
 <template>
-	<Content app-name="polls" :style="appStyle" :class="[transitionClass, { 'edit': allowEdit, 'experimental': settings.experimental, 'bgimage': settings.useImage, 'bgcolored': settings.experimental }]">
-		<router-view name="navigation" :class="{ 'glassy': settings.glassyNavigation }" />
+	<Content app-name="polls"
+		:style="{background: appBackground}"
+		:class="appClass">
+		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-if="showSidebar"
-			name="sidebar"
-			:active="activeTab"
-			:class="{ 'glassy': settings.glassySidebar }" />
+		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
 		<LoadingOverlay v-if="loading" />
 		<SettingsDlg />
 	</Content>
@@ -38,16 +37,14 @@ import SettingsDlg from './components/Settings/SettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
 import './assets/scss/print.scss'
-
-// TODO: remove, when @media:prefers-color-scheme is completely supported by core
 import './assets/scss/transitions.scss'
-import './assets/scss/experimental.scss'
+import './assets/scss/dashboard.scss'
 import { watchPolls } from './mixins/watchPolls'
 
 export default {
@@ -72,36 +69,52 @@ export default {
 	computed: {
 		...mapState({
 			settings: (state) => state.settings.user,
+			appSettings: (state) => state.appSettings.appSettings,
 			poll: (state) => state.poll,
 			allowEdit: (state) => state.poll.acl.allowEdit,
+			dashboard: (state) => state.settings.dashboard,
 		}),
+
+		...mapGetters({
+			themeClass: 'settings/themeClass',
+			useDashboardStyling: 'settings/useDashboardStyling',
+			useIndividualStyling: 'settings/useIndividualStyling',
+			useTranslucentPanels: 'settings/useTranslucentPanels',
+			appBackground: 'settings/appBackground',
+		}),
+
+		appClass() {
+			return [
+				this.transitionClass, {
+					edit: this.allowEdit,
+					translucent: this.useTranslucentPanels,
+				},
+			]
+		},
 
 		showSidebar() {
 			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
 		},
-
-		appStyle() {
-			if (this.settings.useImage && this.settings.experimental) {
-				return {
-					backgroundImage: 'url(' + this.settings.imageUrl + ')',
-					backgroundSize: 'cover',
-					backgroundPosition: 'center center',
-					backgroundAttachment: 'fixed',
-					backgroundRepeat: 'no-repeat',
-				}
-			}
-			return {}
-		},
 	},
 
 	watch: {
+		themeClass(newValue, oldValue) {
+			if (oldValue) {
+				document.body.classList.remove(oldValue)
+			}
+			if (newValue) {
+				document.body.classList.add(newValue)
+			}
+		},
+
 		$route(to, from) {
-			this.watchPollsRestart()
 			this.loadPoll()
+			this.watchPolls()
 		},
 	},
 
 	created() {
+		this.$store.dispatch('appSettings/get')
 		if (getCurrentUser()) {
 			this.$store.dispatch('settings/get')
 			if (this.$route.params.id && !this.$route.params.token) {
@@ -109,21 +122,19 @@ export default {
 			}
 		}
 
-		this.watchPolls()
-
-		subscribe('transitions-off', (delay) => {
+		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)
 		})
 
-		subscribe('transitions-on', () => {
+		subscribe('polls:transitions:on', () => {
 			this.transitionsOn()
 		})
 
-		subscribe('load-poll', (silent) => {
+		subscribe('polls:poll:load', (silent) => {
 			this.loadPoll(silent)
 		})
 
-		subscribe('toggle-sidebar', (payload) => {
+		subscribe('polls:sidebar:toggle', (payload) => {
 			if (payload === undefined) {
 				this.sideBarOpen = !this.sideBarOpen
 			} else {
@@ -140,15 +151,31 @@ export default {
 		})
 	},
 
+	mounted() {
+		window.addEventListener('scroll', this.handleScroll)
+	},
+
+	destroyed() {
+		window.removeEventListener('scroll', this.handleScroll)
+	},
+
 	beforeDestroy() {
 		this.cancelToken.cancel()
-		unsubscribe('load-poll')
-		unsubscribe('toggle-sidebar')
-		unsubscribe('transitions-on')
-		unsubscribe('transitions-off')
+		unsubscribe('polls:poll:load')
+		unsubscribe('polls:sidebar:toggle')
+		unsubscribe('polls:transitions:on')
+		unsubscribe('polls:transitions:off')
 	},
 
 	methods: {
+		handleScroll() {
+			if (window.scrollY > 70) {
+				document.body.classList.add('page--scrolled')
+			} else {
+				document.body.classList.remove('page--scrolled')
+			}
+		},
+
 		transitionsOn() {
 			this.transitionClass = 'transitions-active'
 		},
@@ -204,8 +231,8 @@ export default {
 
 </script>
 
-<style  lang="scss">
-[class*='area__'] {
+<style lang="scss">
+[class^='area__'] {
 	padding: 0 8px 16px 0;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
@@ -245,6 +272,75 @@ export default {
 	flex-direction: column;
 	padding: 4px 8px 0 40px;
 	min-width: 320px;
+	background-color: transparent !important;
 }
 
+// Theming styles
+
+.app-polls {
+	body.dashboard--light &,
+	body.dashboard--dark & {
+		.app-navigation {
+			border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
+		}
+		.app-sidebar {
+			border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
+		}
+
+	}
+
+	body.dashboard--light &,
+	body.dashboard--dark &,
+	body.polls--light &,
+	body.polls--dark & {
+		// background: var(--polls-background-image);
+		.app-navigation {
+			border-right: 0px;
+			box-shadow: 2px 0 6px var(--color-box-shadow);
+		}
+
+		.poll-header-buttons {
+			align-self: flex-end;
+			border-radius: var(--border-radius-pill);
+			background-color: var(--color-main-background);
+		}
+
+		[class*='area__'] {
+			padding: 8px;
+			margin: 0 6px 24px 0;
+			border-radius: var(--border-radius-large);
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+		}
+
+		&.translucent {
+			.app-navigation, .app-sidebar, .poll-header-buttons, [class*='area__'] {
+				backdrop-filter: blur(10px);
+				background-color: var(--color-background-translucent);
+			}
+		}
+	}
+
+	body.theme--light.polls--light & {
+		#app-navigation-vue .app-navigation-toggle svg {
+			filter: invert(1) hue-rotate(180deg) !important;
+			opacity: 1;
+		}
+
+		.poll-title, .poll-list-title {
+			filter: invert(1) hue-rotate(180deg) !important;
+		}
+	}
+
+	body.theme--dark.dashboard--dark &,
+	body.theme--dark.polls--dark & {
+		#app-navigation-vue .app-navigation-toggle svg {
+			filter: invert(1) hue-rotate(180deg) !important;
+			opacity: 1;
+		}
+
+		.poll-title, .poll-list-title {
+			filter: invert(1) hue-rotate(180deg) !important;
+		}
+	}
+}
 </style>

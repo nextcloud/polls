@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import marked from 'marked'
+import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { mapState } from 'vuex'
 
@@ -41,7 +41,7 @@ export default {
 		}),
 
 		markedDescription() {
-			return DOMPurify.sanitize(marked(this.description))
+			return DOMPurify.sanitize(marked.parse(this.description))
 		},
 	},
 }

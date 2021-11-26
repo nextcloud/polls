@@ -1,10 +1,10 @@
-/*
+/* jshint esversion: 6 */
+/**
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author Julius Härtl <jus@bitgrid.net>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -38,6 +38,10 @@ const mutations = {
 		state.subscribed = payload.subscribed
 	},
 
+	reset(state) {
+		Object.assign(state, defaultSubscription())
+	},
+
 }
 
 const actions = {
@@ -46,14 +50,16 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/subscription`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/subscription`
 		} else {
+			context.commit('reset')
 			return
 		}
+
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/subscription'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('set', false)
@@ -62,14 +68,18 @@ const actions = {
 
 	async update(context, payload) {
 		let endPoint = 'apps/polls'
+
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}${payload ? '/subscribe' : '/unsubscribe'}`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}${payload ? '/subscribe' : '/unsubscribe'}`
+		} else {
+			context.commit('reset')
+			return
 		}
 
 		try {
-			const response = await axios.put(generateUrl(endPoint + (payload ? '/subscribe' : '/unsubscribe')))
+			const response = await axios.put(generateUrl(endPoint))
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error(e.response)

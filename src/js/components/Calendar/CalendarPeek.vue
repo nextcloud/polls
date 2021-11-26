@@ -63,20 +63,6 @@ export default {
 	data() {
 		return {
 			events: [],
-			event: {
-				Id: 0,
-				UID: 0,
-				calendarKey: '',
-				calendarName: '',
-				displayColor: '',
-				allDay: '',
-				description: '',
-				end: '',
-				location: '',
-				start: '',
-				status: '',
-				summary: '',
-			},
 		}
 	},
 

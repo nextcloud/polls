@@ -29,7 +29,7 @@ use JsonSerializable;
 
 use OCP\IUser;
 use OCP\AppFramework\Db\Entity;
-use OCA\Polls\Model\User;
+use OCA\Polls\Model\UserGroup\User;
 
 /**
  * @method string getType()
@@ -195,6 +195,7 @@ class Poll extends Entity implements JsonSerializable {
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
 			'publicPollEmail' => $this->getPublicPollEmail(),
+			'autoReminder' => $this->getAutoReminder(),
 		];
 	}
 
@@ -221,6 +222,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
 		$this->setMiscSettings(json_encode([
 			'publicPollEmail' => $array['publicPollEmail'],
+			'autoReminder' => $array['autoReminder'],
 		]));
 		return $this;
 	}
@@ -232,8 +234,18 @@ class Poll extends Entity implements JsonSerializable {
 		);
 	}
 
+	public function getVoteUrl() : string {
+		return \OC::$server->getURLGenerator()->linkToRouteAbsolute(
+			'polls.page.vote',
+			['id' => $this->getId()]
+		);
+	}
 	public function getPublicPollEmail(): string {
 		return json_decode($this->getMiscSettings())->publicPollEmail ?? 'optional';
+	}
+
+	public function getAutoReminder(): bool {
+		return json_decode($this->getMiscSettings())->autoReminder ?? false;
 	}
 
 	public function getProposalsExpired(): bool {

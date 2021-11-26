@@ -154,8 +154,9 @@ export default {
 			return t('polls', 'Administration')
 		},
 
+		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
-			return t('polls', 'Polls') + ' - ' + this.title
+			return `${t('polls', 'Polls')} - ${this.title}`
 		},
 
 		sortedList() {
@@ -196,7 +197,6 @@ export default {
 		async toggleArchive(pollId) {
 			try {
 				await this.$store.dispatch('poll/toggleArchive', { pollId })
-				emit('update-polls')
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
@@ -205,7 +205,6 @@ export default {
 		async deletePoll() {
 			try {
 				await this.$store.dispatch('poll/delete', { pollId: this.deletePollId })
-				emit('update-polls')
 				this.deleteModal = false
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -216,7 +215,6 @@ export default {
 		async takeOver() {
 			try {
 				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
-				emit('update-polls')
 				this.takeOverModal = false
 			} catch {
 				showError(t('polls', 'Error overtaking poll.'))
@@ -225,9 +223,9 @@ export default {
 		},
 
 		refreshView() {
-			window.document.title = t('polls', 'Polls') + ' - ' + this.title
+			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
 			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
-				emit('toggle-sidebar', { open: false })
+				emit('polls:sidebar:toggle', { open: false })
 			}
 
 		},

@@ -1,14 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls App - New Activity" : "Polls App - New Activity",
+    "{owner} sends you this reminder to make sure, your votes are set." : "{owner} sends you this reminder to make sure your votes are set.",
     "Contact" : "Contact",
     "Public link" : "Public link",
     "Group" : "Group",
     "User" : "User",
     "Polls" : "Polls",
-    "Polls App - New Activity" : "Polls App - New Activity",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access." : "A polls app, similar to doodle/dudle with the possibility to restrict access.",
-    "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "A polls app, similar to doodle/dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "Conflict" : "Conflict",
     "New comment …" : "New comment …",
     "Delete comment" : "Delete comment",

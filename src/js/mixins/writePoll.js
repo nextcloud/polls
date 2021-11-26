@@ -1,9 +1,10 @@
+/* jshint esversion: 6 */
 /**
- * @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,7 +23,6 @@
 
 import debounce from 'lodash/debounce'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import { mapState } from 'vuex'
 
 export const writePoll = {
@@ -36,7 +36,6 @@ export const writePoll = {
 	methods: {
 		successDebounced: debounce(function() {
 			showSuccess(t('polls', '"{pollTitle}" successfully saved', { pollTitle: this.pollTitle }), { timeout: 1000 })
-			emit('update-polls')
 		}, 1500),
 
 		async writePoll() {

@@ -44,7 +44,6 @@
 
 import { mapState, mapGetters } from 'vuex'
 import InputDiv from '../Base/InputDiv'
-import moment from '@nextcloud/moment'
 import { Multiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins'
 
@@ -60,12 +59,6 @@ export default {
 
 	data() {
 		return {
-			sequence: {
-				baseOption: {},
-				unit: { name: t('polls', 'Week'), value: 'week' },
-				step: 1,
-				amount: 1,
-			},
 			shift: {
 				step: 1,
 				unit: { name: t('polls', 'Week'), value: 'week' },
@@ -81,15 +74,6 @@ export default {
 		...mapGetters({
 			proposalsExist: 'options/proposalsExist',
 		}),
-
-		firstDOW() {
-			// vue2-datepicker needs 7 for sunday
-			if (moment.localeData()._week.dow === 0) {
-				return 7
-			}
-			return moment.localeData()._week.dow
-
-		},
 	},
 
 	methods: {

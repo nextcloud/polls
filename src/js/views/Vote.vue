@@ -67,10 +67,8 @@
 </template>
 
 <script>
-import { showError, showSuccess } from '@nextcloud/dialogs'
 import { mapState, mapGetters } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
-import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription'
 import PollTitle from '../components/Poll/PollTitle'
@@ -92,9 +90,7 @@ export default {
 
 	data() {
 		return {
-			delay: 50,
 			isLoading: false,
-			voteSaved: false,
 		}
 	},
 
@@ -117,12 +113,9 @@ export default {
 			safeTable: 'poll/safeTable',
 		}),
 
-		showEmailEdit() {
-			return ['email', 'contact', 'external'].includes(this.share.type)
-		},
-
+		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
-			return t('polls', 'Polls') + ' - ' + this.poll.title
+			return `${t('polls', 'Polls')} - ${this.poll.title}`
 		},
 
 		showRegisterModal() {
@@ -141,16 +134,13 @@ export default {
 		// TODO: remove, when completely supported by core
 		if (!window.matchMedia) {
 			return true
-		} else if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		}
+
+		if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 			document.body.classList.add('theme--dark')
 		}
 
-		if (getCurrentUser() && this.$route.name === 'publicVote') {
-			// reroute to the internal vote page, if the user is logged in
-			this.rerouteToInternal()
-		} else {
-			emit('toggle-sidebar', { open: (window.innerWidth > 920) })
-		}
+		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 	},
 
 	beforeDestroy() {
@@ -159,25 +149,7 @@ export default {
 
 	methods: {
 		openOptions() {
-			emit('toggle-sidebar', { open: true, activeTab: 'options' })
-		},
-
-		async rerouteToInternal() {
-			try {
-				const response = await this.$store.dispatch('share/get', { token: this.$route.params.token })
-				this.$router.replace({ name: 'vote', params: { id: response.share.pollId } })
-			} catch (e) {
-				this.$router.replace({ name: 'notfound' })
-			}
-		},
-
-		async submitEmailAddress(emailAddress) {
-			try {
-				await this.$store.dispatch('share/updateEmailAddress', { emailAddress })
-				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress }))
-			} catch {
-				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress }))
-			}
+			emit('polls:sidebar:toggle', { open: true, activeTab: 'options' })
 		},
 	},
 }

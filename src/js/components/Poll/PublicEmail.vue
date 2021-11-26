@@ -70,17 +70,19 @@ export default {
 					result: t('polls', 'Checking email address …'),
 					status: 'checking',
 				}
-			} else if (this.emailAddressUnchanged) {
+			}
+
+			if (this.emailAddressUnchanged) {
 				return {
 					result: '',
 					status: '',
 				}
 			}
+
 			return {
 				result: this.checkResult,
 				status: this.checkStatus,
 			}
-
 		},
 	},
 
@@ -98,7 +100,7 @@ export default {
 			} else {
 				try {
 					this.checking = true
-					await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
+					await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`)
 					this.checkResult = t('polls', 'valid email address.')
 					this.checkStatus = 'success'
 				} catch {

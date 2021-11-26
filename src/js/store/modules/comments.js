@@ -1,10 +1,10 @@
-/*
+/* jshint esversion: 6 */
+/**
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author Julius Härtl <jus@bitgrid.net>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -60,18 +60,18 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
 		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
 		} else {
 			context.commit('reset')
 			return
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint + '/comments'), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(`${endPoint}/comments`), { params: { time: +new Date() } })
 			context.commit('set', response.data)
 		} catch {
 			context.commit('reset')
@@ -82,18 +82,18 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
 		} else if (context.rootState.route.name === 'vote') {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
 		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = endPoint + '/poll/' + context.rootState.route.params.id
+			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
 		} else {
 			context.commit('reset')
 			return
 		}
 
 		try {
-			const response = await axios.post(generateUrl(endPoint + '/comment'), { message: payload.message })
+			const response = await axios.post(generateUrl(`${endPoint}/comment`), { message: payload.message })
 			context.commit('add', { comment: response.data.comment })
 		} catch (e) {
 			console.error('Error writing comment', { error: e.response }, { payload })
@@ -105,11 +105,11 @@ const actions = {
 		let endPoint = 'apps/polls'
 
 		if (context.rootState.route.name === 'publicVote') {
-			endPoint = endPoint + '/s/' + context.rootState.route.params.token
+			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
 		}
 
 		try {
-			await axios.delete(generateUrl(endPoint + '/comment/' + payload.comment.id))
+			await axios.delete(generateUrl(`${endPoint}/comment/${payload.comment.id}`))
 			context.commit('delete', { comment: payload.comment })
 		} catch (e) {
 			console.error('Error deleting comment', { error: e.response }, { payload })

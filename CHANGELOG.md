@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.4.0-alpha1] - 2021-11-02
+- [new] #1305 - Added participation indicator in effective shares list (#2037)
+- [new] #656 - Add autoreminder job (#2039)
+- [change] #2038 - validate token in router and reroute before entering public page
+- [fix] #2055 - do not archive polls without expiration automatically
+- [change] #2029 - Configure update polling (#2060)
+
+## [3.3.0] - 2021-10-10
+- Added email addresses to external shares in the shares tab for the owner
+- Adopt dashboard design in personal app settings and improved individual styling (still experimental)
+- Fixed calculation of full day events, which could break the display on daylight changing days
+
+## [3.3.0-rc1] - 2021-10-03
+- [new] #1943 - Show email address in share list external users (#2001)
+- [fix] #1981 - Changed calculation of full day events (#2004)
+- [new] #1985 - Adopt dashboard design (still experimental)
+- dependency updates, refactoring and code maintenance
+
 ## [3.2.0] - 2021-09-19
 - Poll administration can now be delegated to invited users
 - New admin section for polls (/settings/admin/polls-admin)

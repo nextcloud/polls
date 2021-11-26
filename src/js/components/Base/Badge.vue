@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" :class="['badge', icon, { withIcon: withIcon } ]">
+	<Component :is="tag" :class="badgeClass">
 		{{ title }}
 	</Component>
 </template>
@@ -45,8 +45,8 @@ export default {
 	},
 
 	computed: {
-		withIcon() {
-			return Boolean(this.icon)
+		badgeClass() {
+			return ['badge', this.icon, { withIcon: Boolean(this.icon) }]
 		},
 	},
 }

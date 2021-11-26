@@ -1,10 +1,12 @@
-/*
+/* jshint esversion: 6 */
+/**
  * @copyright Copyright (c) 2019 Rene Gieling <github@dartcafe.de>
  *
  * @author Rene Gieling <github@dartcafe.de>
- * @author Julius Härtl <jus@bitgrid.net>
  *
- * @license GNU AGPL version 3 or any later version
+ * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ *
+ * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,7 +24,6 @@
  */
 
 import axios from '@nextcloud/axios'
-import { getCurrentUser } from '@nextcloud/auth'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
@@ -124,33 +125,49 @@ const getters = {
 		return state.categories.filter((category) => (!category.createDependent))
 	},
 
-	filtered: (state) => (filterId) => {
+	activePolls: (state) => state.list.filter((poll) => (!poll.deleted)),
+	archivedPolls: (state, getters) => state.list.filter((poll) => (poll.deleted)),
+	myPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.isOwner)),
+	publicPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'public')),
+	hiddenPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'hidden')),
+	participatedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.userHasVoted)),
+	closedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.expire > 0 && moment.unix(poll.expire).diff() < 0)),
+
+	relevantPolls: (state, getters) => getters.activePolls.filter((poll) => ((
+		poll.important || poll.userHasVoted || poll.isOwner || (poll.allowView && poll.access !== 'public')
+	) && !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4))),
+
+	filtered: (state, getters) => (filterId) => {
 		if (filterId === 'all') {
-			return state.list.filter((poll) => (!poll.deleted))
-		} else if (filterId === 'my') {
-			return state.list.filter((poll) => (poll.owner === getCurrentUser().uid && !poll.deleted))
-		} else if (filterId === 'relevant') {
-			return state.list.filter((poll) => ((
-				poll.important
-				|| poll.userHasVoted
-				|| poll.isOwner
-				|| (poll.allowView && poll.access !== 'public')
-			)
-			&& !poll.deleted
-			&& !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4)
-			))
-		} else if (filterId === 'public') {
-			return state.list.filter((poll) => (poll.access === 'public' && !poll.deleted))
-		} else if (filterId === 'hidden') {
-			return state.list.filter((poll) => (poll.access === 'hidden' && !poll.deleted))
-		} else if (filterId === 'archived') {
-			return state.list.filter((poll) => (poll.deleted))
-		} else if (filterId === 'participated') {
-			return state.list.filter((poll) => (poll.userHasVoted))
-		} else if (filterId === 'closed') {
-			return state.list.filter((poll) => (
-				poll.expire > 0 && moment.unix(poll.expire).diff() < 0 && !poll.deleted
-			))
+			return getters.activePolls
+		}
+
+		if (filterId === 'relevant') {
+			return getters.relevantPolls
+		}
+
+		if (filterId === 'my') {
+			return getters.myPolls
+		}
+
+		if (filterId === 'public') {
+			return getters.publicPolls
+		}
+
+		if (filterId === 'hidden') {
+			return getters.hiddenPolls
+		}
+
+		if (filterId === 'participated') {
+			return getters.participatedPolls
+		}
+
+		if (filterId === 'closed') {
+			return getters.closedPolls
+		}
+
+		if (filterId === 'archived') {
+			return getters.archivedPolls
 		}
 	},
 }

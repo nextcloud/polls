@@ -48,6 +48,8 @@
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
 			<ConfigClosing @change="writePoll" />
+			<ConfigAutoReminder v-if="poll.type === 'datePoll' || poll.expire"
+				@change="writePoll" />
 		</ConfigBox>
 
 		<ConfigBox v-if="acl.isOwner || acl.allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">
@@ -81,6 +83,7 @@ import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous'
+import ConfigAutoReminder from '../Configuration/ConfigAutoReminder'
 import ConfigClosing from '../Configuration/ConfigClosing'
 import ConfigDescription from '../Configuration/ConfigDescription'
 import ConfigOptionLimit from '../Configuration/ConfigOptionLimit'
@@ -100,6 +103,7 @@ export default {
 		ConfigAllowComment,
 		ConfigAllowMayBe,
 		ConfigAnonymous,
+		ConfigAutoReminder,
 		ConfigClosing,
 		ConfigDescription,
 		ConfigOptionLimit,

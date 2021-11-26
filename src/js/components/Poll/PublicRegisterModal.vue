@@ -37,6 +37,10 @@
 							@submit="submitRegistration" />
 					</div>
 
+					<div :class="['status-message', userNameCheck.status]">
+						{{ userNameCheck.result }}
+					</div>
+
 					<div v-if="poll.publicPollEmail !== 'disabled'" class="section__email">
 						<h3 v-if="poll.publicPollEmail === 'mandatory'">
 							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
@@ -129,7 +133,7 @@ export default {
 				name: 'publicVote',
 				params: { token: this.$route.params.token },
 			}).href
-			return generateUrl('login?redirect_url=' + redirectUrl)
+			return generateUrl(`login?redirect_url=${redirectUrl}`)
 		},
 
 		userNameCheck() {
@@ -141,20 +145,22 @@ export default {
 			}
 			if (this.userName.length === 0) {
 				return {
-					result: t('polls', 'Enter a name to participate.'),
+					result: ' ',
 					status: 'empty',
 				}
-			} else if (!this.isValidName) {
+			}
+
+			if (!this.isValidName) {
 				return {
-					result: t('polls', 'Invalid name'),
+					result: t('polls', '{username} is invalid or reserved.', { username: this.userName }),
 					status: 'error',
 				}
 			}
+
 			return {
 				result: t('polls', '{username} is valid.', { username: this.userName }),
 				status: 'success',
 			}
-
 		},
 
 		emailCheck() {
@@ -169,17 +175,19 @@ export default {
 					result: '',
 					status: '',
 				}
-			} else if (!this.isValidEmailAddress) {
+			}
+
+			if (!this.isValidEmailAddress) {
 				return {
 					result: t('polls', 'Invalid email address.'),
 					status: 'error',
 				}
 			}
+
 			return {
 				result: t('polls', 'Valid email address.'),
 				status: 'success',
 			}
-
 		},
 
 	},
@@ -227,7 +235,7 @@ export default {
 		},
 
 		login() {
-			window.location.assign(window.location.protocol + '//' + window.location.host + this.loginLink)
+			window.location.assign(`${window.location.protocol}//${window.location.host}${this.loginLink}`)
 		},
 
 		validatePublicUsername: debounce(async function() {
@@ -242,7 +250,7 @@ export default {
 
 		validateEmailAddress: debounce(async function() {
 			try {
-				await axios.get(generateUrl('apps/polls/check/emailaddress') + '/' + this.emailAddress)
+				await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`)
 				this.isValidEmailAddress = true
 			} catch {
 				this.isValidEmailAddress = false
@@ -315,7 +323,13 @@ export default {
 
 	.description {
 		hyphens: auto;
-		border-top: 1px solid var(--color-border)
+		border-top: 1px solid var(--color-border);
+	}
+
+	.status-message {
+		hyphens: auto;
+		font-size: 0.9em;
+		min-height: 1.8em;
 	}
 
 	@media only screen and (max-width: 688px) {

@@ -26,8 +26,8 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
-use OCA\Polls\Model\UserGroupClass;
-use OCA\Polls\Model\AppSettings;
+use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Model\Settings\AppSettings;
 
 /**
  * @method int getId()
@@ -44,6 +44,8 @@ use OCA\Polls\Model\AppSettings;
  * @method void setEmailAddress(string $value)
  * @method int getInvitationSent()
  * @method void setInvitationSent(integer $value)
+ * @method int getReminderSent()
+ * @method void setReminderSent(integer $value)
  * @method string getDisplayName()
  * @method void setDisplayName(string $value)
  */
@@ -68,25 +70,28 @@ class Share extends Entity implements JsonSerializable {
 	public const TYPE_CONTACTGROUP = 'contactGroup';
 
 	/** @var string $token */
-	protected $token;
+	protected $token = '';
 
 	/** @var string $type */
-	protected $type;
+	protected $type = '';
 
 	/** @var int $pollId */
-	protected $pollId;
+	protected $pollId = 0;
 
 	/** @var string $userId */
-	protected $userId;
+	protected $userId = '';
 
 	/** @var string $emailAddress */
-	protected $emailAddress;
+	protected $emailAddress = '';
 
 	/** @var string $invitationSent */
-	protected $invitationSent;
+	protected $invitationSent = '';
+
+	/** @var string $reminderSent */
+	protected $reminderSent = '';
 
 	/** @var string $displayName */
-	protected $displayName;
+	protected $displayName = '';
 
 	/** @var AppSettings */
 	protected $appSettings;
@@ -94,6 +99,7 @@ class Share extends Entity implements JsonSerializable {
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
+		$this->addType('reminderSent', 'int');
 		$this->appSettings = new AppSettings;
 	}
 
@@ -106,6 +112,7 @@ class Share extends Entity implements JsonSerializable {
 			'userId' => $this->getUserId(),
 			'emailAddress' => $this->getEmailAddress(),
 			'invitationSent' => $this->getInvitationSent(),
+			'reminderSent' => $this->getReminderSent(),
 			'displayName' => $this->getDisplayName(),
 			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),
@@ -140,31 +147,12 @@ class Share extends Entity implements JsonSerializable {
 		return $this->userId;
 	}
 
-	public function getUserObject(): UserGroupClass {
-		return UserGroupClass::getUserGroupChild(
+	public function getUserObject(): UserBase {
+		return UserBase::getUserGroupChild(
 			$this->type,
 			$this->userId,
 			$this->displayName,
 			$this->emailAddress
 		);
-	}
-
-	/**
-	 * @return UserGroupClass[]
-	 */
-	public function getMembers() {
-		if ($this->type === self::TYPE_GROUP
-		|| $this->type === self::TYPE_CONTACTGROUP
-		|| $this->type === self::TYPE_CIRCLE) {
-			$group = UserGroupClass::getUserGroupChild($this->type, $this->getUserId());
-			return $group->getMembers();
-		} else {
-			return [UserGroupClass::getUserGroupChild(
-				$this->type,
-				$this->userId,
-				$this->displayName,
-				$this->emailAddress
-			)];
-		}
 	}
 }

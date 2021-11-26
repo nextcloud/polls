@@ -109,7 +109,8 @@ export default {
 			// is the duration divisable through 24 hours without rest
 			// then we have a day long event (one or multiple days)
 			// In this case we want to suppress the display of any time information
-			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && this.option.duration && this.option.duration % 86400 === 0
+			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
+
 			const dayModifier = dayLongEvent ? 1 : 0
 			// modified to date, in case of day long events, a second gets substracted
 			// to set the begin of the to day to the end of the previous date
@@ -146,49 +147,57 @@ export default {
 		dateLocalFormat() {
 			if (this.poll.type !== 'datePoll') {
 				return {}
-			} else if (this.option.duration === 0) {
-				return this.event.from.dateTime
-			} else if (this.event.dayLong && this.event.to.sameDay) {
-				return this.event.from.date
-			} else if (this.event.dayLong && !this.event.to.sameDay) {
-				return this.event.from.date + ' - ' + this.event.to.date
-			} else if (this.event.to.sameDay) {
-				return this.event.from.dateTime + ' - ' + this.event.to.time
 			}
-			return this.event.from.dateTime + ' - ' + this.event.to.dateTime
 
+			if (this.option.duration === 0) {
+				return this.event.from.dateTime
+			}
+
+			if (this.event.dayLong && this.event.to.sameDay) {
+				return this.event.from.date
+			}
+
+			if (this.event.dayLong && !this.event.to.sameDay) {
+				return `${this.event.from.date} - ${this.event.to.date}`
+			}
+
+			if (this.event.to.sameDay) {
+				return `${this.event.from.dateTime} - ${this.event.to.time}`
+			}
+
+			return `${this.event.from.dateTime} - ${this.event.to.dateTime}`
 		},
 
 		dateLocalFormatUTC() {
 			if (this.option.duration) {
-				return this.event.from.utc + ' - ' + this.event.to.utc + ' UTC'
+				return `${this.event.from.utc} - ${this.event.to.utc} UTC`
 			}
-			return this.event.from.utc + ' UTC'
 
+			return `${this.event.from.utc} UTC`
 		},
 
 		optionTooltip() {
 			if (this.poll.type === 'datePoll') {
 				return this.dateLocalFormatUTC
 			}
-			return this.option.pollOptionText
 
+			return this.option.pollOptionText
 		},
 
 		optionText() {
 			if (this.poll.type === 'datePoll') {
 				return this.dateLocalFormat
 			}
-			return this.option.pollOptionText
 
+			return this.option.pollOptionText
 		},
 
 		show() {
 			if (this.poll.type === 'datePoll' && this.display === 'dateBox') {
 				return 'dateBox'
 			}
-			return 'textBox'
 
+			return 'textBox'
 		},
 	},
 }

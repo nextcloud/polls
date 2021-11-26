@@ -55,14 +55,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			deleteInterval: null,
-			deleteTimeout: null,
-			countdown: 7,
-		}
-	},
-
 	computed: {
 		...mapState({
 			acl: (state) => state.poll.acl,
@@ -79,14 +71,6 @@ export default {
 			} catch {
 				showError(t('polls', 'Error while deleting the comment'))
 			}
-		},
-
-		cancelDeleteComment() {
-			clearTimeout(this.deleteTimeout)
-			clearInterval(this.deleteInterval)
-			this.deleteTimeout = null
-			this.deleteInterval = null
-			this.countdown = 7
 		},
 	},
 }

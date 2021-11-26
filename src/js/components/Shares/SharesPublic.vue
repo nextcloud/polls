@@ -33,7 +33,7 @@
 					</ActionButton>
 				</Actions>
 
-				<ActionDelete :title="t('polls', 'Remove share')" @delete="removeShare(share)" />
+				<ActionDelete :title="t('polls', 'Remove share')" @delete="removeShare({ share })" />
 			</PublicShareItem>
 		</TransitionGroup>
 
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
@@ -66,11 +66,6 @@ export default {
 
 	data() {
 		return {
-			clippy: {
-				buttonCaption: t('polls', 'Copy link to clipboard'),
-				successText: t('polls', 'Link copied to clipboard'),
-				errorText: t('polls', 'Error while copying link to clipboard'),
-			},
 			paramsHint: t('polls', 'Add URL parameters \'name=\' and/or \'email=\' to predefine name and email address. For example: https://example.com/s/aUubZAvweQ6PaX2?name=John Doe&email=johndoe@example.org'),
 		}
 	},
@@ -82,9 +77,9 @@ export default {
 	},
 
 	methods: {
-		removeShare(share) {
-			this.$store.dispatch('shares/delete', { share })
-		},
+		...mapActions({
+			removeShare: 'shares/delete',
+		}),
 
 		async copyLink(payload) {
 			try {
@@ -110,25 +105,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.shared-list {
-		display: flex;
-		flex-flow: column wrap;
-		justify-content: flex-start;
-		padding-top: 8px;
-
-		> li {
-			display: flex;
-			align-items: stretch;
-			margin: 4px 0;
-		}
-	}
-
-	.share-item {
-		display: flex;
-		flex: 1;
-		align-items: center;
-		max-width: 100%;
-	}
-</style>

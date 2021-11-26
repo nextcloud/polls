@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls App - New Activity" : "Küsitluste rakendus - uus tegevus",
     "Contact" : "Kontakt",
     "Public link" : "Avalik link",
     "Group" : "Grupp",
     "User" : "Kasutaja",
     "Polls" : "Küsitlused",
-    "Polls App - New Activity" : "Küsitluste rakendus - uus tegevus",
     "Conflict" : "Konflikt",
     "New comment …" : "Uus kommentaar ...",
     "Delete comment" : "Kustuta kommentaar",

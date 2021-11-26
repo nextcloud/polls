@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Go to poll" : "الانتقال إلى استطلاع الرأي",
+    "Do not share this link with other people, because it is connected to your votes." : "لا تشارك هذا الرابط مع اشخاص اخريين، لانه مرتبط مع تصويتك.",
     "Group" : "الفريق",
     "User" : "المستخدم",
     "Polls" : "استطلاعات الرأي",
-    "Go to poll" : "الانتقال إلى استطلاع الرأي",
-    "Do not share this link with other people, because it is connected to your votes." : "لا تشارك هذا الرابط مع اشخاص اخريين، لانه مرتبط مع تصويتك.",
     "Conflict" : "تعارُض",
     "New comment …" : "تعليق جديد ...",
     "Delete comment" : "حذف التعليق",
