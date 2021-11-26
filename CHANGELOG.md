@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 - Fixed auto archiver, to prevent to archive polls without expiration date
 - Added an indicator for shares, which indicates, if a share already voted or not
 - Added an autoreminder
+- Added a hint, if no one except the poll owner can access the poll
 - Added an admin setting to change the updates polling behavior (Disabled, periodically or instant via long-polling)
 - Share tab redesign
   - Moved the 'all users' access setting as switch to the shares
