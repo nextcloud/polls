@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -21,47 +21,43 @@
   -->
 
 <template>
-	<UserItem type="all"
-		:user-id="t('polls', 'All users')"
-		:display-name="t('polls', 'All users')"
-		:disabled="access==='hidden'"
-		show-email
+	<UserItem type="public"
+		class="add-public"
+		user-id="addPublic"
+		:display-name="t('polls', 'Add public link')"
 		is-no-user>
 		<template #status>
 			<div class="vote-status" />
 		</template>
-		<CheckboxRadioSwitch :checked.sync="pollAccess" type="switch" />
+		<Actions>
+			<ActionButton icon="icon-add" @click="addPublicShare()">
+				{{ t('polls', 'Add public link') }}
+			</ActionButton>
+		</Actions>
 	</UserItem>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import { writePoll } from '../../mixins/writePoll'
+import { showError } from '@nextcloud/dialogs'
+import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
-	name: 'SharesAllUsers',
+	name: 'SharePublicAdd',
 
 	components: {
-		CheckboxRadioSwitch,
+		Actions,
+		ActionButton,
 	},
 
-	mixins: [writePoll],
-
-	computed: {
-		...mapState({
-			access: (state) => state.poll.access,
-		}),
-
-		pollAccess: {
-			get() {
-				return this.access === 'public'
-			},
-			set(value) {
-				this.$store.commit('poll/setProperty', { important: +value })
-				this.$store.commit('poll/setProperty', { access: value ? 'public' : 'hidden' })
-				this.writePoll()
-			},
+	methods: {
+		async addPublicShare() {
+			try {
+				await this.$store.dispatch('shares/add', {
+					share: { type: 'public', userId: '' },
+				})
+			} catch {
+				showError(t('polls', 'Error adding public link'))
+			}
 		},
 	},
 }

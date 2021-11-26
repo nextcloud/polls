@@ -22,21 +22,21 @@
 
 <template>
 	<div class="sidebar-share">
-		<SharesUnsent class="shares unsent" />
-		<SharesEffective class="shares effective" />
+		<SharesListUnsent class="shares unsent" />
+		<SharesList class="shares effective" />
 	</div>
 </template>
 
 <script>
-import SharesEffective from '../Shares/SharesEffective'
-import SharesUnsent from '../Shares/SharesUnsent'
+import SharesList from '../Shares/SharesList'
+import SharesListUnsent from '../Shares/SharesListUnsent'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
-		SharesEffective,
-		SharesUnsent,
+		SharesList,
+		SharesListUnsent,
 	},
 
 }
@@ -48,7 +48,7 @@ export default {
 		flex-direction: column;
 	}
 
-	.shared-list {
+	.shares-list {
 		display: flex;
 		flex-flow: column;
 		justify-content: flex-start;

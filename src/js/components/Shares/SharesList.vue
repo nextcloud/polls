@@ -23,9 +23,9 @@
 <template>
 	<ConfigBox :title="t('polls', 'Shares')" icon-class="icon-share">
 		<UserSearch class="add-share" />
-		<SharesAllUsers v-if="allowAllAccess" />
-		<SharesPublicAdd v-if="allowPublicShares" />
-		<div class="shared-list">
+		<ShareItemAllUsers v-if="allowAllAccess" />
+		<SharePublicAdd v-if="allowPublicShares" />
+		<div class="shares-list">
 			<TransitionGroup :css="false" tag="div">
 				<UserItem v-for="(share) in invitationShares"
 					:key="share.id"
@@ -102,11 +102,11 @@ import ConfigBox from '../Base/ConfigBox'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 import UserSearch from '../User/UserSearch'
-import SharesPublicAdd from './SharesPublicAdd'
-import SharesAllUsers from './SharesAllUsers'
+import SharePublicAdd from './SharePublicAdd'
+import ShareItemAllUsers from './ShareItemAllUsers'
 
 export default {
-	name: 'SharesEffective',
+	name: 'SharesList',
 
 	components: {
 		Actions,
@@ -115,8 +115,8 @@ export default {
 		ActionDelete,
 		ActionRadio,
 		ConfigBox,
-		SharesPublicAdd,
-		SharesAllUsers,
+		SharePublicAdd,
+		ShareItemAllUsers,
 		UnvotedIcon,
 		UserSearch,
 		VotedIcon,
