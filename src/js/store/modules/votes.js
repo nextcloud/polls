@@ -63,6 +63,7 @@ const getters = {
 	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length,
 	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.voteAnswer === answer).length,
 	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.userId === userId) > -1,
+	hasVotes: (state) => state.list.length > 0,
 
 	getVote: (state) => (payload) => {
 		const found = state.list.find((vote) => (vote.userId === payload.userId

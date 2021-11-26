@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Confirmation',
@@ -42,20 +42,14 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-			votes: (state) => state.votes.list,
-		}),
-
 		...mapGetters({
-			participantsVoted: 'poll/participantsVoted',
-			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
+			isClosed: 'poll/isClosed',
 		}),
 
 		isConfirmed() {
-			return this.option.confirmed && this.closed
+			return this.option.confirmed && this.isClosed
 		},
+
 		confirmations() {
 			if (this.isConfirmed) {
 				return t('polls', 'Confirmed')

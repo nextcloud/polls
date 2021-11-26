@@ -61,12 +61,13 @@ const getters = {
 		// share types, which will be active, after the user gets his invitation
 		const invitationTypes = ['email', 'external', 'contact']
 		// sharetype which are active without sending an invitation
-		const directShareTypes = ['user', 'group', 'admin']
+		const directShareTypes = ['user', 'group', 'admin', 'public']
 		return state.list.filter((share) => (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type))
 	},
 
 	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent),
 	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
+	hasShares: (state) => state.list.length > 0,
 }
 
 const actions = {
@@ -123,6 +124,19 @@ const actions = {
 			await axios.put(generateUrl(endPoint))
 		} catch (e) {
 			console.error('Error switching type', { error: e.response }, { payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
+	},
+
+	async setPublicPollEmail(context, payload) {
+		const endPoint = `apps/polls/share/${payload.share.token}/publicpollemail/${payload.value}`
+
+		try {
+			await axios.put(generateUrl(endPoint))
+		} catch (e) {
+			console.error('Error changing email register setting', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')

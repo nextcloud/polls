@@ -21,49 +21,36 @@
   -->
 
 <template>
-	<div>
-		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
-		<SharesEffective />
-		<ConfigBox :title="t('polls', 'Add Shares')" icon-class="icon-add">
-			<UserSearch />
-		</ConfigBox>
-		<SharesPublic v-if="allowPublicShares" />
-		<SharesUnsent />
+	<div class="sidebar-share">
+		<SharesListUnsent class="shares unsent" />
+		<SharesList class="shares effective" />
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import ConfigBox from '../Base/ConfigBox'
-import UserSearch from '../User/UserSearch'
-import SharesEffective from '../Shares/SharesEffective'
-import SharesPublic from '../Shares/SharesPublic'
-import SharesUnsent from '../Shares/SharesUnsent'
+import SharesList from '../Shares/SharesList'
+import SharesListUnsent from '../Shares/SharesListUnsent'
 
 export default {
 	name: 'SideBarTabShare',
 
 	components: {
-		ConfigBox,
-		UserSearch,
-		SharesPublic,
-		SharesEffective,
-		SharesUnsent,
+		SharesList,
+		SharesListUnsent,
 	},
 
-	computed: {
-		...mapState({
-			isOwner: (state) => state.poll.acl.isOwner,
-			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
-		}),
-	},
 }
 </script>
 
 <style lang="scss">
-	.shared-list {
+	.sidebar-share {
 		display: flex;
-		flex-flow: column wrap;
+		flex-direction: column;
+	}
+
+	.shares-list {
+		display: flex;
+		flex-flow: column;
 		justify-content: flex-start;
 		padding-top: 8px;
 

@@ -21,61 +21,44 @@
   -->
 
 <template>
-	<div class="share-item" :class="type">
-		<Avatar class="share-item__avatar" icon-class="icon-public" :is-no-user="true" />
-		<div class="share-item__name">
-			{{ t('polls', 'Public link ({token})', {token: token }) }}
-		</div>
-		<slot />
-	</div>
+	<UserItem type="public"
+		class="add-public"
+		user-id="addPublic"
+		:display-name="t('polls', 'Add public link')"
+		is-no-user>
+		<template #status>
+			<div class="vote-status" />
+		</template>
+		<Actions>
+			<ActionButton icon="icon-add" @click="addPublicShare()">
+				{{ t('polls', 'Add public link') }}
+			</ActionButton>
+		</Actions>
+	</UserItem>
 </template>
 
 <script>
-import { Avatar } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
+import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
-	name: 'PublicShareItem',
+	name: 'SharePublicAdd',
 
 	components: {
-		Avatar,
+		Actions,
+		ActionButton,
 	},
 
-	inheritAttrs: false,
-
-	props: {
-		token: {
-			type: String,
-			default: '',
-		},
-		type: {
-			type: String,
-			default: 'user',
+	methods: {
+		async addPublicShare() {
+			try {
+				await this.$store.dispatch('shares/add', {
+					share: { type: 'public', userId: '' },
+				})
+			} catch {
+				showError(t('polls', 'Error adding public link'))
+			}
 		},
 	},
 }
-
 </script>
-
-<style lang="scss">
-.share-item {
-	display: flex;
-	flex: 1;
-	align-items: center;
-	max-width: 100%;
-}
-
-.share-item__avatar {
-	margin: 2px 4px;
-}
-
-.share-item__name {
-	flex: 1;
-	min-width: 50px;
-	color: var(--color-text-maxcontrast);
-	padding-left: 8px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-</style>

@@ -152,7 +152,6 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var string $miscSettings*/
 	protected $miscSettings;
 
-
 	public function __construct() {
 		$this->addType('created', 'int');
 		$this->addType('expire', 'int');
@@ -194,7 +193,6 @@ class Poll extends Entity implements JsonSerializable {
 			'important' => $this->getImportant(),
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
-			'publicPollEmail' => $this->getPublicPollEmail(),
 			'autoReminder' => $this->getAutoReminder(),
 		];
 	}
@@ -220,10 +218,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setImportant($array['important'] ?? $this->getImportant());
 		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
 		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
-		$this->setMiscSettings(json_encode([
-			'publicPollEmail' => $array['publicPollEmail'],
-			'autoReminder' => $array['autoReminder'],
-		]));
+		$this->setAutoReminder($array['autoReminder'] ?? $this->getAutoReminder());
 		return $this;
 	}
 
@@ -240,12 +235,24 @@ class Poll extends Entity implements JsonSerializable {
 			['id' => $this->getId()]
 		);
 	}
+
+	/**
+	 * Keep for compatibilty reasons
+	 * TODO: remove this later
+	 * OCA\Polls\Db\Share::getDefaultPublicPollEmail() depends on this
+	 * @deprecated
+	 */
+
 	public function getPublicPollEmail(): string {
-		return json_decode($this->getMiscSettings())->publicPollEmail ?? 'optional';
+		return $this->getMiscSettingsArray()['publicPollEmail'] ?? 'optional';
+	}
+
+	public function setAutoReminder(bool $value) : void {
+		$this->setMiscSettingsByKey('autoReminder', $value);
 	}
 
 	public function getAutoReminder(): bool {
-		return json_decode($this->getMiscSettings())->autoReminder ?? false;
+		return $this->getMiscSettingsArray()['autoReminder'] ?? false;
 	}
 
 	public function getProposalsExpired(): bool {
@@ -267,5 +274,19 @@ class Poll extends Entity implements JsonSerializable {
 
 	public function getOwnerUserObject(): User {
 		return new User($this->owner);
+	}
+
+	private function setMiscSettingsArray(array $value) : void {
+		$this->setMiscSettings(json_encode($value));
+	}
+
+	private function getMiscSettingsArray() : ?array {
+		return json_decode($this->getMiscSettings(), true);
+	}
+
+	private function setMiscSettingsByKey(string $key, $value) {
+		$miscSettings = $this->getMiscSettingsArray();
+		$miscSettings[$key] = $value;
+		$this->setMiscSettingsArray($miscSettings);
 	}
 }

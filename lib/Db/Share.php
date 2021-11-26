@@ -28,6 +28,8 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCP\AppFramework\IAppContainer;
+use OCA\Polls\AppInfo\Application;
 
 /**
  * @method int getId()
@@ -48,6 +50,8 @@ use OCA\Polls\Model\Settings\AppSettings;
  * @method void setReminderSent(integer $value)
  * @method string getDisplayName()
  * @method void setDisplayName(string $value)
+ * @method string getMiscSettings()
+ * @method void setMiscSettings(string $value)
  */
 class Share extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_share';
@@ -68,6 +72,18 @@ class Share extends Entity implements JsonSerializable {
 	// no direct Access
 	public const TYPE_CIRCLE = 'circle';
 	public const TYPE_CONTACTGROUP = 'contactGroup';
+
+	public const TYPE_SORT_ARRAY = [
+		self::TYPE_PUBLIC,
+		self::TYPE_ADMIN,
+		self::TYPE_GROUP,
+		self::TYPE_USER,
+		self::TYPE_CONTACT,
+		self::TYPE_EMAIL,
+		self::TYPE_EXTERNAL,
+		self::TYPE_CIRCLE,
+		self::TYPE_CONTACTGROUP,
+	];
 
 	/** @var string $token */
 	protected $token = '';
@@ -93,6 +109,12 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $displayName */
 	protected $displayName = '';
 
+	/** @var string $miscSettings*/
+	protected $miscSettings;
+
+	/** @var PollMapper */
+	protected $pollMapper;
+
 	/** @var AppSettings */
 	protected $appSettings;
 
@@ -117,7 +139,16 @@ class Share extends Entity implements JsonSerializable {
 			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getShowLogin(),
+			'publicPollEmail' => $this->getPublicPollEmail(),
 		];
+	}
+
+	public function getPublicPollEmail(): string {
+		return $this->getMiscSettingsArray()['publicPollEmail'] ?? $this->getDefaultPublicPollEmail();
+	}
+
+	public function setPublicPollEmail(string $value) : void {
+		$this->setMiscSettingsByKey('publicPollEmail', $value);
 	}
 
 	public function getURL(): string {
@@ -154,5 +185,44 @@ class Share extends Entity implements JsonSerializable {
 			$this->displayName,
 			$this->emailAddress
 		);
+	}
+
+	private function setMiscSettingsArray(array $value) : void {
+		$this->setMiscSettings(json_encode($value));
+	}
+
+	private function getMiscSettingsArray() : ?array {
+		return json_decode($this->getMiscSettings(), true);
+	}
+
+	private function setMiscSettingsByKey(string $key, $value) {
+		$miscSettings = $this->getMiscSettingsArray();
+		$miscSettings[$key] = $value;
+		$this->setMiscSettingsArray($miscSettings);
+	}
+
+	/**
+	 * Returns the poll setting for the registration dialog option as default
+	 * remove this later
+	 * remove then OCA\Polls\Db\Poll::getPublicPollEmail() also
+	 * @deprecated
+	 */
+	private function getDefaultPublicPollEmail() : string {
+		try {
+			return $this->getContainer()
+				->query(PollMapper::class)
+				->find($this->getPollId())->getPublicPollEmail();
+		} catch (\Exception $e) {
+			return 'optional';
+		}
+	}
+
+	/**
+	 * remove also
+	 * @deprecated
+	 */
+	protected static function getContainer() : IAppContainer {
+		$app = \OC::$server->query(Application::class);
+		return $app->getContainer();
 	}
 }

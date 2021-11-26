@@ -71,6 +71,9 @@ class ShareService {
 	/** @var Share */
 	private $share;
 
+	/** @var array */
+	private $shares = [];
+
 	/** @var MailService */
 	private $mailService;
 
@@ -118,23 +121,34 @@ class ShareService {
 	public function list(int $pollId): array {
 		try {
 			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-			$shares = $this->shareMapper->findByPoll($pollId);
+			$this->shares = $this->shareMapper->findByPoll($pollId);
 		} catch (NotAuthorizedException $e) {
 			return [];
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
+		$this->sortByCategory();
+		return $this->shares;
+	}
 
-		return $shares;
+	private function sortByCategory() : void {
+		$sortedShares = [];
+		foreach (Share::TYPE_SORT_ARRAY as $shareType) {
+			$filteredShares = array_filter($this->shares, function ($share) use ($shareType) {
+				return $share->getType() === $shareType;
+			});
+			$sortedShares = array_merge($sortedShares, $filteredShares);
+		}
+		$this->shares = $sortedShares;
 	}
 
 	/**
 	 * Validate share
 	 */
-	private function validate():void {
+	private function validate() : void {
 		switch ($this->share->getType()) {
 			case Share::TYPE_PUBLIC:
-				// public shares are alway valid
+				// public shares are always valid
 				break;
 			case Share::TYPE_USER:
 				if ($this->share->getUserId() !== $this->userId) {
@@ -156,7 +170,6 @@ class ShareService {
 				if (!$this->groupManager->isInGroup($this->share->getUserId(), $this->userId)) {
 					throw new NotAuthorizedException;
 				}
-
 				break;
 			case Share::TYPE_EMAIL:
 				break;
@@ -282,6 +295,24 @@ class ShareService {
 			$this->share = $this->shareMapper->findByToken($token);
 			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 			$this->share->setType($type);
+			$this->share = $this->shareMapper->update($this->share);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
+		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+
+		return $this->share;
+	}
+
+	/**
+	 * Change share type
+	 */
+	public function setPublicPollEmail(string $token, string $value): Share {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+			$this->share->setPublicPollEmail($value);
 			$this->share = $this->shareMapper->update($this->share);
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');

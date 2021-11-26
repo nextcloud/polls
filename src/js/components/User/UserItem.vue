@@ -21,13 +21,14 @@
   -->
 
 <template>
-	<div class="user-item" :class="{ type, 'condensed' : condensed }">
+	<div :class="['user-item', type, { disabled, 'condensed' : condensed }]">
 		<Avatar :disable-menu="disableMenu"
 			:disable-tooltip="disableTooltip"
 			class="user-item__avatar"
 			:is-guest="$route.name === 'publicVote'"
 			:menu-position="menuPosition"
 			:size="iconSize"
+			:icon-class="avatarIcon"
 			:show-user-status="showUserStatus"
 			:user="userId"
 			:display-name="name"
@@ -41,7 +42,10 @@
 			<div class="name">
 				{{ name }}
 			</div>
-			<div v-if="displayEmailAddress" class="subname">
+			<div v-if="type === 'admin'" class="description">
+				{{ t('polls', 'Is granted admin rights for this poll') }}
+			</div>
+			<div v-else-if="displayEmailAddress" class="description">
 				{{ displayEmailAddress }}
 			</div>
 		</div>
@@ -64,6 +68,10 @@ export default {
 	inheritAttrs: false,
 
 	props: {
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 		hideNames: {
 			type: Boolean,
 			default: false,
@@ -77,6 +85,10 @@ export default {
 			default: true,
 		},
 		disableTooltip: {
+			type: Boolean,
+			default: false,
+		},
+		resolveInfo: {
 			type: Boolean,
 			default: false,
 		},
@@ -120,14 +132,41 @@ export default {
 
 	computed: {
 		name() {
+			if (this.type === 'public') {
+				return t('polls', 'Public link')
+			}
+
+			if (this.type === 'all') {
+				return t('polls', 'All users')
+			}
+
 			if (this.displayName) {
 				return this.displayName
 			}
+
 			return this.userId
 
 		},
 
 		displayEmailAddress() {
+			if (this.type === 'public') {
+				if (this.userId === 'addPublic') {
+					return t('polls', 'Add a new public link')
+				}
+				return t('polls', 'Token: {token}', { token: this.userId })
+			}
+
+			if (this.type === 'all') {
+				if (this.disabled) {
+					return t('polls', 'Access for all users of this site is disabled')
+				}
+				return t('polls', 'Access for all users of this site is enabled')
+			}
+
+			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.type)) {
+				return t('polls', 'Resolve this group first!')
+			}
+
 			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
 				return this.emailAddress
 			}
@@ -138,35 +177,48 @@ export default {
 			return Boolean(getCurrentUser())
 		},
 
+		avatarIcon() {
+			if (this.type === 'public') {
+				return 'icon-public'
+			}
+
+			if (this.type === 'all') {
+				return 'icon-public'
+			}
+
+			if (this.type === 'contact') {
+				return 'icon-mail'
+			}
+
+			if (this.type === 'email') {
+				return 'icon-mail'
+			}
+
+			if (this.type === 'external') {
+				return 'icon-share'
+			}
+
+			if (this.type === 'contactGroup') {
+				return 'icon-group'
+			}
+
+			if (this.type === 'group') {
+				return 'icon-group'
+			}
+
+			if (this.type === 'circle') {
+				return 'icon-circles'
+			}
+
+			return ''
+		},
+
 		iconClass() {
 			if (this.icon) {
-				if (this.type === 'contact') {
-					return 'icon-mail'
-				}
-
-				if (this.type === 'email') {
-					return 'icon-mail'
-				}
-
-				if (this.type === 'external') {
-					return 'icon-share'
-				}
-
-				if (this.type === 'contactGroup') {
-					return 'icon-group'
-				}
-
-				if (this.type === 'circle') {
-					return 'icon-circles'
-				}
-
 				if (this.type === 'admin') {
 					return 'icon-user-admin'
 				}
-
-				return `icon-${this.type}`
 			}
-
 			return ''
 		},
 
@@ -176,11 +228,23 @@ export default {
 </script>
 
 <style lang="scss">
+
+.avatar-class-icon {
+	border-radius: 50%;
+	background-color: var(--color-primary-element) !important;
+	height: 100%;
+	background-size: 16px;
+}
+
 .user-item {
+	position: relative;
 	display: flex;
 	align-items: center;
 	padding: 4px;
 	max-width: 100%;
+	&.disabled {
+		opacity: 0.6;
+	}
 }
 
 .user-item__name {
@@ -192,7 +256,7 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.subname {
+	.description {
 		color: var(--color-text-maxcontrast);
 		font-size: 0.7em;
 	}
@@ -214,8 +278,10 @@ export default {
 }
 
 .type-icon {
-	margin-left: 8px;
 	background-size: 16px;
+	position: absolute;
+	left: 0;
+	top: 3px;
 }
 
 </style>

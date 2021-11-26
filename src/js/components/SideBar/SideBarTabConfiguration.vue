@@ -22,11 +22,11 @@
 
 <template>
 	<div>
-		<div v-if="participantsVoted" class="warning">
+		<div v-if="hasVotes" class="warning">
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</div>
 
-		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
+		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
 		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
 			<ConfigTitle @change="writePoll" />
@@ -48,24 +48,19 @@
 
 		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
 			<ConfigClosing @change="writePoll" />
-			<ConfigAutoReminder v-if="poll.type === 'datePoll' || poll.expire"
+			<ConfigAutoReminder v-if="pollType === 'datePoll' || hasEpiration"
 				@change="writePoll" />
-		</ConfigBox>
-
-		<ConfigBox v-if="acl.isOwner || acl.allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">
-			<ConfigAdminAccess v-if="acl.isOwner" @change="writePoll" />
-			<ConfigAccess v-if="acl.allowAllAccess" @change="writePoll" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
 			<ConfigShowResults @change="writePoll" />
 		</ConfigBox>
 
-		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-category-app-bundles'"
-			:title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+		<ButtonDiv :icon="isPollArchived ? 'icon-history' : 'icon-category-app-bundles'"
+			:title="isPollArchived ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
 			@click="toggleArchive()" />
 
-		<ButtonDiv v-if="poll.deleted"
+		<ButtonDiv v-if="isPollArchived"
 			icon="icon-delete"
 			class="error"
 			:title="t('polls', 'Delete poll')"
@@ -78,8 +73,6 @@ import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import ConfigBox from '../Base/ConfigBox'
-import ConfigAccess from '../Configuration/ConfigAccess'
-import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous'
@@ -98,8 +91,6 @@ export default {
 
 	components: {
 		ConfigBox,
-		ConfigAccess,
-		ConfigAdminAccess,
 		ConfigAllowComment,
 		ConfigAllowMayBe,
 		ConfigAnonymous,
@@ -117,19 +108,22 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
+			isPollArchived: (state) => state.poll.deleted,
+			pollType: (state) => state.poll.type,
+			pollId: (state) => state.poll.id,
+			hasEpiration: (state) => state.poll.expire,
+			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 
 		...mapGetters({
 			closed: 'poll/isClosed',
-			participantsVoted: 'poll/participantsVoted',
+			hasVotes: 'votes/hasVotes',
 		}),
 	},
 
 	methods: {
 		toggleArchive() {
-			if (this.poll.deleted) {
+			if (this.isPollArchived) {
 				this.$store.commit('poll/setProperty', { deleted: 0 })
 			} else {
 				this.$store.commit('poll/setProperty', { deleted: moment.utc().unix() })
@@ -138,9 +132,9 @@ export default {
 		},
 
 		async deletePoll() {
-			if (!this.poll.deleted) return
+			if (!this.isPollArchived) return
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: this.poll.id })
+				await this.$store.dispatch('poll/delete', { pollId: this.pollId })
 				this.$router.push({ name: 'list', params: { type: 'relevant' } })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))

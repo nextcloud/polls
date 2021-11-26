@@ -52,7 +52,7 @@
 							v-model="emailAddress"
 							v-tooltip="emailCheck.result"
 							:signaling-class="emailCheck.status"
-							:placeholder="t('polls', poll.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
+							:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
 							no-submit
 							@submit="submitRegistration" />
 					</div>
@@ -121,7 +121,7 @@ export default {
 		}),
 
 		registrationIsValid() {
-			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.poll.publicPollEmail !== 'mandatory'))
+			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
 		},
 
 		disableSubmit() {

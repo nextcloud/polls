@@ -21,42 +21,30 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Effective shares')" icon-class="icon-share">
-		<TransitionGroup :css="false" tag="div" class="shared-list">
-			<UserItem v-for="(share) in invitationShares"
+	<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
+		<TransitionGroup :css="false" tag="div" class="shares-list">
+			<UserItem v-for="(share) in unsentInvitations"
 				:key="share.id"
 				v-bind="share"
 				show-email
+				resolve-info
 				:icon="true">
-				<template #status>
-					<div v-if="hasVoted(share.userId)">
-						<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
-					</div>
-					<div v-else>
-						<UnvotedIcon class="vote-status unvoted" :title="t('polls', 'Has not voted')" />
-					</div>
-				</template>
-
 				<Actions>
 					<ActionButton
 						v-if="share.emailAddress || share.type === 'group'"
 						icon="icon-confirm"
 						@click="sendInvitation(share)">
-						{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
+						{{ t('polls', 'Send invitation mail') }}
 					</ActionButton>
 					<ActionButton
-						v-if="share.type === 'user' || share.type === 'admin'"
-						:icon="share.type === 'user' ? 'icon-user-admin' : 'icon-user'"
-						@click="switchAdmin({ share })">
-						{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
-					</ActionButton>
-					<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
-						{{ t('polls', 'Copy link to clipboard') }}
+						v-if="['contactGroup', 'circle'].includes(share.type)"
+						icon="icon-toggle-filelist"
+						@click="resolveGroup(share)">
+						{{ t('polls', 'Resolve into individual invitations') }}
 					</ActionButton>
 				</Actions>
-
 				<ActionDelete
-					:title="t('polls', 'Remove share')"
+					:title="t('polls', 'Remove invitation')"
 					@delete="removeShare({ share })" />
 			</UserItem>
 		</TransitionGroup>
@@ -69,33 +57,41 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
-import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
-import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 
 export default {
-	name: 'SharesEffective',
+	name: 'SharesListUnsent',
 
 	components: {
 		Actions,
 		ActionButton,
 		ActionDelete,
 		ConfigBox,
-		VotedIcon,
-		UnvotedIcon,
 	},
 
 	computed: {
 		...mapGetters({
-			invitationShares: 'shares/invitation',
-			hasVoted: 'votes/hasVoted',
+			unsentInvitations: 'shares/unsentInvitations',
 		}),
 	},
 
 	methods: {
 		...mapActions({
 			removeShare: 'shares/delete',
-			switchAdmin: 'shares/switchAdmin',
 		}),
+
+		async resolveGroup(share) {
+			try {
+				await this.$store.dispatch('shares/resolveGroup', { share })
+			} catch (e) {
+				if (e.response.status === 409 && e.response.data === 'Circles is not enabled for this user') {
+					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
+				} else if (e.response.status === 409 && e.response.data === 'Contacts is not enabled') {
+					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
+				} else {
+					showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
+				}
+			}
+		},
 
 		async sendInvitation(share) {
 			const response = await this.$store.dispatch('shares/sendInvitation', { share })
@@ -111,30 +107,6 @@ export default {
 				})
 			}
 		},
-
-		async copyLink(payload) {
-			try {
-				await this.$copyText(payload.url)
-				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch {
-				showError(t('polls', 'Error while copying link to clipboard'))
-			}
-		},
 	},
 }
 </script>
-
-<style lang="scss">
-.vote-status {
-	margin-left: 8px;
-
-	&.voted {
-		color: var(--color-polls-foreground-yes)
-	}
-
-	&.unvoted {
-		color: var(--color-polls-foreground-no)
-	}
-}
-
-</style>
