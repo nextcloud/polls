@@ -42,10 +42,10 @@
 			<div class="name">
 				{{ name }}
 			</div>
-			<div v-if="type === 'admin'" class="subname">
+			<div v-if="type === 'admin'" class="description">
 				{{ t('polls', 'Is granted admin rights for this poll') }}
 			</div>
-			<div v-else-if="displayEmailAddress" class="subname">
+			<div v-else-if="displayEmailAddress" class="description">
 				{{ displayEmailAddress }}
 			</div>
 		</div>
@@ -256,7 +256,7 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.subname {
+	.description {
 		color: var(--color-text-maxcontrast);
 		font-size: 0.7em;
 	}

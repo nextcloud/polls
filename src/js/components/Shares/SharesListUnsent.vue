@@ -22,7 +22,7 @@
 
 <template>
 	<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
-		<TransitionGroup :css="false" tag="div" class="shared-list">
+		<TransitionGroup :css="false" tag="div" class="shares-list">
 			<UserItem v-for="(share) in unsentInvitations"
 				:key="share.id"
 				v-bind="share"
@@ -59,7 +59,7 @@ import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
 
 export default {
-	name: 'SharesUnsent',
+	name: 'SharesListUnsent',
 
 	components: {
 		Actions,
