@@ -12,12 +12,12 @@ OC.L10N.register(
     "Week" : "Sizun",
     "never" : "james",
     "Owner" : "Perc'henner",
+    "Shares" : "Rannañ",
     "Description" : "Diskrivadur",
     "No" : "Nan",
     "Yes" : "Ya",
     "Details" : "Munudoù",
     "Configuration" : "Stumm",
-    "Shares" : "Rannañ",
     "Comments" : "Displegadennoù",
     "Day" : "Deiz",
     "Month" : "Miz"

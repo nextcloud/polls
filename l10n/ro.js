@@ -17,12 +17,12 @@ OC.L10N.register(
     "never" : "niciodată",
     "Access" : "Acces",
     "Owner" : "Proprietar",
+    "Shares" : "Partajări",
     "Description" : "Descriere",
     "No" : "Nu",
     "Yes" : "a",
     "Details" : "Detalii",
     "Configuration" : "Configurație",
-    "Shares" : "Partajări",
     "Comments" : "Comentarii",
     "Day" : "Zi",
     "Month" : "Luna"

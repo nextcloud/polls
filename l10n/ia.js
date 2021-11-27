@@ -14,12 +14,12 @@ OC.L10N.register(
     "Week" : "Septimana",
     "never" : "nunquam",
     "Owner" : "Owner",
+    "Shares" : "Compartimentos",
     "Description" : "Description",
     "No" : "No",
     "Yes" : "Si",
     "Details" : "Detalios",
     "Configuration" : "Configuration",
-    "Shares" : "Compartimentos",
     "Comments" : "Commentarios",
     "Day" : "Die",
     "Month" : "Mense"

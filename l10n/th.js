@@ -15,12 +15,12 @@ OC.L10N.register(
     "Week" : "สัปดาห์",
     "never" : "ไม่ต้องเลย",
     "Owner" : "Owner",
+    "Shares" : "แชร์",
     "Description" : "รายละเอียด",
     "No" : "ไม่ใช่",
     "Yes" : "ใช่",
     "Details" : "รายละเอียด",
     "Configuration" : "การกำหนดค่า",
-    "Shares" : "แชร์",
     "Comments" : "ความคิดเห็น",
     "Day" : "วัน",
     "Month" : "เดือน"

@@ -14,12 +14,12 @@ OC.L10N.register(
     "never" : "aldri",
     "Owner" : "Owner",
     "Created" : "Lagd",
+    "Shares" : "Delingar",
     "Description" : "Skildring",
     "No" : "Nei",
     "Yes" : "Ja",
     "Details" : "Detaljar",
     "Configuration" : "Innstillingar",
-    "Shares" : "Delingar",
     "Comments" : "Kommentarar",
     "Day" : "Dag",
     "Month" : "Månad"
