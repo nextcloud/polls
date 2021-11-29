@@ -31,8 +31,8 @@
 		<p> &nbsp; </p>
 		<p> 2. {{ t('polls', 'For date polls without expiration:') }} </p>
 		<ul>
-			<li> - {{ t('polls', '48 hours before the first date option, if the poll is created more than 5 days before the expiration.') }}</li>
-			<li> - {{ t('polls', '36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration.') }}</li>
+			<li> - {{ t('polls', '48 hours before the first date option, if the poll is created more than 5 days before the first date option.') }}</li>
+			<li> - {{ t('polls', '36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the first date option.') }}</li>
 		</ul>
 		<p> &nbsp; </p>
 		<p> 3. {{ t('polls', 'No reminder is sent:') }} </p>
