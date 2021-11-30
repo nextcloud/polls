@@ -68,8 +68,6 @@
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "48 hodín pred dátumom vypršania platnosti, ak je anketa vytvorená viac ako 5 dní pred vypršaním platnosti.",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "36 hodín pred dátumom vypršania platnosti, ak je anketa vytvorená viac ako 2 a menej ako 5 dní pred vypršaním platnosti.",
     "For date polls without expiration:" : "Pre ankety ohľadne dátumu bez expirácie:",
-    "48 hours before the first date option, if the poll is created more than 5 days before the expiration." : "48 hodín pred dátumom vypršania platnosti, ak je anketa vytvorená viac ako 5 dní pred vypršaním platnosti.",
-    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration." : "36 hodín pred dátumom vypršania platnosti, ak je anketa vytvorená viac ako 2 a menej ako 5 dní pred vypršaním platnosti.",
     "No reminder is sent:" : "Nie je zaslaná žiadna pripomienka:",
     "For text polls without expiration." : "Pre textové ankety bez expirácie.",
     "For polls created less than 2 days before the expiration." : "Pre ankety vytvorené menej ako 2 dni pred vyršaním platnosti.",

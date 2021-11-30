@@ -68,8 +68,6 @@
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "Iraungitze-data baino 48 ordu lehenago, inkesta iraungitzea baino 5 egun lehenago sortzen bada.",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "Iraungitze-data baino 36 ordu lehenago, inkesta iraungitzea baino 2 egun geroago eta 5 egun lehenago sortzen bada.",
     "For date polls without expiration:" : "Iraungitzerik gabeko data-inkestentzat:",
-    "48 hours before the first date option, if the poll is created more than 5 days before the expiration." : "Lehen data aukera baino 48 ordu leheneago, inkesta iraungitzea baino 5 egun lehenago sortzen bada.",
-    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration." : "Lehen data aukera baino 36 ordu lehenago, inkesta iraungitzea baino 2 egun geroago eta 5 egun lehenago sortzen bada.",
     "No reminder is sent:" : "Ez da abisurik bidali:",
     "For text polls without expiration." : "Iraungitzerik gabeko testu-inkestentzat.",
     "For polls created less than 2 days before the expiration." : "Iraungitze-data baino 2 egun sortutako inkestentzat.",

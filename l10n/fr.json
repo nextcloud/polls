@@ -65,8 +65,6 @@
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "48 heures avant la date d’expiration, si le sondage est créé plus de 5 jours avant l’expiration.",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "36 heures avant la date d’expiration, si le sondage est créé plus de 2 jours et moins de 5 jours avant l’expiration.",
     "For date polls without expiration:" : "Pour les sondages de date sans expiration :",
-    "48 hours before the first date option, if the poll is created more than 5 days before the expiration." : "48 heures avant la première date à choix, si le sondage est créé plus de 5 jours avant l’expiration.",
-    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration." : "36 heures avant la première date à choix, si le sondage est créé plus de 2 jours et moins de 5 jours avant l’expiration.",
     "No reminder is sent:" : "Aucun rappel n’est envoyé :",
     "For text polls without expiration." : "Pour les sondages texte sans expiration.",
     "For polls created less than 2 days before the expiration." : "Pour les sondages créés moins de 2 jours avant l’expiration.",

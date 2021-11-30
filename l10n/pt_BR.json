@@ -59,7 +59,6 @@
     "The automatic reminder is sent to all shares via email:" : "O lembrete automático é enviado a todos os compartilhamentos por e-mail:",
     "For polls with expiration:" : "Para enquetes com vencimento: ",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "36 horas antes da data de expiração, se a votação for criada mais de 2 e menos de 5 dias antes da expiração.",
-    "48 hours before the first date option, if the poll is created more than 5 days before the expiration." : "48 horas antes da primeira opção de data, se a votação for criada mais de 5 dias antes do vencimento.",
     "No reminder is sent:" : "Nenhum lembrete é enviado: ",
     "For polls created less than 2 days before the expiration." : "Para enquetes criadas menos de 2 dias antes do vencimento.",
     "If a share already got a reminder (no matter, if the expiration date got changed)." : "Se um compartilhamento já recebeu um lembrete (não importa, se a data de vencimento foi alterada).",

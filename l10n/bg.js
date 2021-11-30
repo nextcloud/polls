@@ -70,8 +70,6 @@ OC.L10N.register(
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "48 часа преди датата на изтичане, ако анкетата е създадена повече от 5 дни преди изтичането.",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "36 часа преди датата на изтичане, ако анкетата е създадена повече от 2 и по-малко от 5 дни преди изтичането.",
     "For date polls without expiration:" : "За анкети без дата на изтичане:",
-    "48 hours before the first date option, if the poll is created more than 5 days before the expiration." : "48 часа преди опцията за първа дата, ако анкетата е създадена повече от 5 дни преди изтичането.",
-    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration." : "36 часа преди опцията за първа дата, ако анкетата е създадена повече от 2 и по-малко от 5 дни преди изтичането.",
     "No reminder is sent:" : "Не се изпраща напомняне:",
     "For text polls without expiration." : "За текстови анкети без дата на изтичане.",
     "For polls created less than 2 days before the expiration." : "За анкети, създадени по-малко от 2 дни преди изтичането.",

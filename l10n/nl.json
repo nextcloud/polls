@@ -68,8 +68,6 @@
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "48 uur voor de vervaldatum, als de poll meer dan 5 dagen voor de vervaldatum is gecreëerd.",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "36 uur voor de vervaldatum, als de poll meer dan 2 en minder dan 5 dagen voor de vervaldatum is gecreëerd.",
     "For date polls without expiration:" : "Voor polls zonder vervaldatum:",
-    "48 hours before the first date option, if the poll is created more than 5 days before the expiration." : "48 uur voor de eerste datum, als de poll meer dan 5 dagen voor de vervaldatum is gecreëerd.",
-    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the expiration." : "36 uur voor de eerste datum, als de poll meer dan 2 en minder dan 5 dagen voor de vervaldatum is gecreëerd.",
     "No reminder is sent:" : "Geen herinnering verzonden:",
     "For text polls without expiration." : "Voor tekst polls zonder vervaldatum.",
     "For polls created less than 2 days before the expiration." : "Voor polls gecreëerd minder dan 2 dagen voor de vervaldatum.",
