@@ -30,6 +30,9 @@ use League\CommonMark\CommonMarkConverter;
 class InvitationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Invitation';
 
+	/** @var Share */
+	protected $share;
+
 	public function __construct(
 		string $userId,
 		Share $share
@@ -38,18 +41,28 @@ class InvitationMail extends MailBase {
 			$userId,
 			$share->getPollId()
 		);
+		$this->share = $share;
 		$this->buildEmailTemplate();
 	}
 
 	public function buildEmailTemplate() : void {
-		$this->emailTemplate->setSubject($this->trans->t('Poll invitation "%s"', $this->poll->getTitle()));
-		$this->emailTemplate->addHeader();
-		$this->emailTemplate->addHeading($this->trans->t('Poll invitation "%s"', $this->poll->getTitle()), false);
-		$this->emailTemplate->addBodyText(str_replace(
+		if ($this->share->getType() === Share::TYPE_GROUP) {
+			$mainBody = str_replace(
+				['{owner}', '{title}', '{group_name}'],
+				[$this->owner->getDisplayName(), $this->poll->getTitle(), $this->share->getDisplayName()],
+				$this->trans->t('{owner} invited you to take part in the poll "{title}" as a member of the group {group_name}')
+			);
+		} else {
+			$mainBody = str_replace(
 				['{owner}', '{title}'],
 				[$this->owner->getDisplayName(), $this->poll->getTitle()],
 				$this->trans->t('{owner} invited you to take part in the poll "{title}"')
-			));
+			);
+		}
+		$this->emailTemplate->setSubject($this->trans->t('Poll invitation "%s"', $this->poll->getTitle()));
+		$this->emailTemplate->addHeader();
+		$this->emailTemplate->addHeading($this->trans->t('Poll invitation "%s"', $this->poll->getTitle()), false);
+		$this->emailTemplate->addBodyText($mainBody);
 
 		$config = [
 			'html_input' => 'strip',
