@@ -68,6 +68,8 @@
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "截止日期前 48 小时，如果投票创建时间距离截止期超过 5 天",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "截止日期前 36 小时，如果投票创建时间距离截止期超过 2天但不到 5 天",
     "For date polls without expiration:" : "无截止期的日期投票",
+    "48 hours before the first date option, if the poll is created more than 5 days before the first date option." : "第一个日期选项前 48 小时，如果投票创建时间距离第一个日期选项超过 5 天",
+    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the first date option." : "第一个日期选项前 36 小时，如果投票创建时间距离第一个日期选项超过 2 天但不到 5 天",
     "No reminder is sent:" : "未发送提醒：",
     "For text polls without expiration." : "无截止期的文本投票",
     "For polls created less than 2 days before the expiration." : "创建时间距离截止期不到 2 天的投票",

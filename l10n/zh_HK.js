@@ -70,6 +70,8 @@ OC.L10N.register(
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "截止日期前的48小時，若民意調查建立時間離截止日期超過5天。",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "到期日期前 36 小時，如果投票是在到期前 2 至 5 天創建的。",
     "For date polls without expiration:" : "對於沒有過期日的民意調查︰",
+    "48 hours before the first date option, if the poll is created more than 5 days before the first date option." : "第一個日期選項前的48小時，若投票建立時間離第一個日期選項超過5天。",
+    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the first date option." : "第一個日期選項前的36小時，若投票建立時間是離第一個日期選項前2至5天。",
     "No reminder is sent:" : "沒有發送提醒：",
     "For text polls without expiration." : "對於沒有截止日期的文本民意調查。",
     "For polls created less than 2 days before the expiration." : "對於在截止日期前不到2天建立的投票。",

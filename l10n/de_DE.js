@@ -70,6 +70,8 @@ OC.L10N.register(
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "48 Stunden vor dem Ablaufdatum, wenn die Umfrage mehr als 5 Tage vor dem Ablaufdatum erstellt wird.",
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "36 Stunden vor dem Ablaufdatum, wenn die Umfrage mehr als 2 und weniger als 5 Tage vor dem Ablaufdatum erstellt wird.",
     "For date polls without expiration:" : "Für Terminumfragen ohne Ablaufdatum:",
+    "48 hours before the first date option, if the poll is created more than 5 days before the first date option." : "48 Stunden vor der ersten Datumsoption, wenn die Umfrage mehr als 5 Tage vor der ersten Datumsoption erstellt wird.",
+    "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the first date option." : "36 Stunden vor der ersten Datumsoption, wenn die Umfrage mehr als 2 und weniger als 5 Tage vor der ersten Datumsoption erstellt wird.",
     "No reminder is sent:" : "Es wird keine Erinnerung gesendet:",
     "For text polls without expiration." : "Für Textumfragen ohne Ablaufdatum.",
     "For polls created less than 2 days before the expiration." : "Für Umfragen die weniger als 2 Tage für dem Ablaufdatum erstellt werden.",
