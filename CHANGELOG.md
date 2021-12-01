@@ -1,21 +1,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.4.0] - tba
-- Compatible with Nextcloud 21 - 23
-- Fixed auto archiver, to prevent to archive polls without expiration date
+## [3.4.0] - 2021-12-02
+## New
 - Added an indicator for shares, which indicates, if a share already voted or not
 - Added an autoreminder
 - Added a hint, if no one except the poll owner can access the poll
 - Added an admin setting to change the updates polling behavior (Disabled, periodically or instant via long-polling)
+
+## Changed
+- Compatible with Nextcloud 21 - 23
 - Share tab redesign
-  - Moved the 'all users' access setting as switch to the shares
+  - Moved the 'all users' access setting as switch to the shares list
   - Polls with access for all users are now automatically relevant for all users
-  - Removed the settings to access all admins edit rights (in favor for granting individual edit rights, introduced in Polls 3.2).
+  - Removed the settings to 'access all admins' edit rights (in favor for granting individual edit rights, introduced in Polls 3.2).
     An existing setting will still be valid and can be removed
   - Combine all shares into one list
   - Registration options for public polls are now configurable per public share.
     An existing setting from the poll configuration will be used as default
+
+## Fixed
+- Fixed auto archiver, to prevent to archive polls without an expiration date
 
 ## [3.4.0-beta1] - 2021-11-26
 - [compatibility] - Compatible with Nextcloud 23
