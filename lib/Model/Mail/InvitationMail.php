@@ -27,8 +27,6 @@ namespace OCA\Polls\Model\Mail;
 use OCA\Polls\Db\Share;
 use League\CommonMark\CommonMarkConverter;
 
-
-
 class InvitationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Invitation';
 
