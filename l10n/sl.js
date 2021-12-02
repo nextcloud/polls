@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "Vabilo k izpolnjevanju ankete »%s«",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} vas vabi k izpolnjevanju ankete »{title}«",
+    "Poll invitation \"%s\"" : "Vabilo k izpolnjevanju ankete »%s«",
     "Go to poll" : "Skoči na anketo",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Povezava vam omogoča osebni dostop do omenjene ankete. Pritisnite gumb oziroma kopirajte povezavo in jo prilepite v spletni brskalnik:",
     "Do not share this link with other people, because it is connected to your votes." : "Ta povezava je le za vas in je ne delite z drugimi. Povezana je namreč z vašimi odzivi v anketi.",

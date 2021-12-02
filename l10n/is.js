@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "Boð um þátttöku í könnuninni \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} bauð þér að taka þátt í könnuninni \"{title}\"",
+    "Poll invitation \"%s\"" : "Boð um þátttöku í könnuninni \"%s\"",
     "Go to poll" : "Fara á könnun",
     "Polls App - New Activity" : "Kannanaforrit - Ný virkni",
     "A user" : "Notandi",

@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "\"%s\"  invitación de encuesta",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} te ha invitado a participar en la encuesta: \"{title}\"",
+    "Poll invitation \"%s\"" : "\"%s\"  invitación de encuesta",
     "Go to poll" : "Ir a la encuesta",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Te enviamos este mensaje porque te suscribiste a las notificaciones de esta encuesta. Para no recibir más estos mensajes, visita la encuesta y cancela tu suscripción.",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",

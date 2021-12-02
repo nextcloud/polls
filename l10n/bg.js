@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "Покана за анкета „%s“",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} ви покани да участвате в анкетата „{title}“",
+    "Poll invitation \"%s\"" : "Покана за анкета „%s“",
     "Go to poll" : "Отидете на анкета",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Тази връзка ви дава личен достъп до посочената по-горе анкета. Натиснете бутона по-горе или копирайте следната връзка и я добавете в лентата за местоположение на вашия браузър:",
     "Do not share this link with other people, because it is connected to your votes." : "Не споделяйте тази връзка с други хора, защото е свързана с вашите гласувания.",

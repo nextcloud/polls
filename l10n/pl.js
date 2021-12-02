@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "Zaproszenie do sondy \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} zaprosił Ciebie do wzięcia udziału w sondzie \"{title}\"",
+    "Poll invitation \"%s\"" : "Zaproszenie do sondy \"%s\"",
     "Go to poll" : "Przejdź do sondy",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Ten link zapewnia osobisty dostęp do wyżej wymienionej sondy. Naciśnij przycisk powyżej lub skopiuj poniższy link i dodaj go do paska adresu przeglądarki:",
     "Do not share this link with other people, because it is connected to your votes." : "Nie udostępniaj tego linku innym osobom, ponieważ jest on powiązany z Twoimi głosami.",

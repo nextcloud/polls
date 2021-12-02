@@ -1,6 +1,6 @@
 { "translations": {
-    "Poll invitation \"%s\"" : "Meghívás szavazásra „%s”",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} meghívta, hogy vegyen részt a(z) \"{title}\" szavazásban",
+    "Poll invitation \"%s\"" : "Meghívás szavazásra „%s”",
     "Go to poll" : "Ugrás a szavazáshoz",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Ez a link személyes hozzáférést biztosít a fent nevezett szavazáshoz. Nyomja meg a fenti gombot, vagy másolja le a következő hivatkozást, és adja hozzá a böngésző helysávjához:",
     "Do not share this link with other people, because it is connected to your votes." : "Ne ossza meg ezt a linket másokkal, mert ez kapcsolatban áll a szavazataival.",

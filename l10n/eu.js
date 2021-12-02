@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "Bozketara gonbidapena \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} jabeak \"{title}\" bozketan parte hartzera gonbidatu zaitu",
+    "Poll invitation \"%s\"" : "Bozketara gonbidapena \"%s\"",
     "Go to poll" : "Joan bozketara",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Esteka honek goian izendatutako galdeketarako sarbide pertsonala ematen dizu. Sakatu goiko botoia edo kopiatu esteka hau eta gehitu zure nabigatzailearen kokapen barran:",
     "Do not share this link with other people, because it is connected to your votes." : "Ez zabaldu esteka hau, zure bozketara lotua baitago.",

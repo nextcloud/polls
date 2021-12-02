@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "Invitu a su sondàgiu \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} t'at invitadu a partetzipare a su sondàgiu \"{title}\"",
+    "Poll invitation \"%s\"" : "Invitu a su sondàgiu \"%s\"",
     "Go to poll" : "Bae a su sondàgiu",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Custu ligòngiu ti donat s'atzessu personale a su sondàgiu subranumenadu. Incarca su butone de susu o còpia su ligòngiu chi sighit e agiùnghe•ddu in s'istanca de is indiritzos de su navigadore:",
     "Do not share this link with other people, because it is connected to your votes." : "No cumpartzas custu ligòngiu cun àtere, ca est connètidu a is votos tuos.",

@@ -1,6 +1,6 @@
 { "translations": {
-    "Poll invitation \"%s\"" : "Pozvánka do ankety „%s“",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} vás pozval na účasť v ankete „{title}“",
+    "Poll invitation \"%s\"" : "Pozvánka do ankety „%s“",
     "Go to poll" : "Prejsť na anketu",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Tento odkaz vám poskytuje osobný prístup k vyššie uvedenej ankete. Stlačte tlačidlo hore alebo skopírujte nasledujúci odkaz a pridajte ho do adresového riadka prehliadača:",
     "Do not share this link with other people, because it is connected to your votes." : "Tento odkaz nezdieľajte s inými ľuďmi, pretože súvisí s vašimi hlasmi.",

@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "邀请 “%s” 投票",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} 邀请您参加名为 “{title}” 的投票",
+    "Poll invitation \"%s\"" : "邀请 “%s” 投票",
     "Go to poll" : "前往投票",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "这个链接可以让你访问上面提到的民意调查。按上面的按钮或复制以下链接，并添加到你的浏览器的地址栏:",
     "Do not share this link with other people, because it is connected to your votes." : "不要与他人分享这个链接，因为它与你的投票相关连。",
