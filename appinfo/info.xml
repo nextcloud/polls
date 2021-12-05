@@ -25,6 +25,12 @@
         <php min-version="7.3"/>
         <nextcloud min-version="21" max-version="23" />
     </dependencies>
+    <activity>
+        <settings>
+            <setting>OCA\Polls\Settings\ActivitySettings</setting>
+            <setting>OCA\Polls\Settings\ActivityVote</setting>
+        </settings>
+	</activity>
     <background-jobs>
         <job>OCA\Polls\Cron\NotificationCron</job>
         <job>OCA\Polls\Cron\JanitorCron</job>
