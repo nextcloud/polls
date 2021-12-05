@@ -30,6 +30,9 @@
             <setting>OCA\Polls\Settings\ActivitySettings</setting>
             <setting>OCA\Polls\Settings\ActivityVote</setting>
         </settings>
+		<providers>
+			<provider>OCA\Polls\Provider\ActivityProvider</provider>
+		</providers>
 	</activity>
     <background-jobs>
         <job>OCA\Polls\Cron\NotificationCron</job>
