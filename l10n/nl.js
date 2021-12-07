@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} heeft je uigenodigd om deel te nemen aan de poll \"{titel}\" als lid van de groep {group_name}",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} nodigde je uit om mee te doen aan peiling \"{title}\"",
     "Poll invitation \"%s\"" : "Peilingsuitnodiging \"%s\"",
     "Go to poll" : "Ga naar peiling",
