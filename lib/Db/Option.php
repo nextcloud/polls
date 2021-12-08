@@ -166,7 +166,9 @@ class Option extends Entity implements JsonSerializable {
 		if ($this->owner === 'disallow') {
 			return '';
 		}
-		return $this->owner ?? '';
+		if ($this->owner === null) {
+			return '';
+		}
 	}
 
 	public function getDisplayName(): string {
