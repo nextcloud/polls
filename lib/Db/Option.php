@@ -163,15 +163,13 @@ class Option extends Entity implements JsonSerializable {
 
 	// used for 1.9.0-beta1 installtions
 	public function getOwner() : string {
-		if ($this->owner === 'disallow') {
+		if ($this->owner === 'disallow' || $this->owner === null) {
 			return '';
 		}
-		if ($this->owner === null) {
-			return '';
-		}
+		return $this->owner;
 	}
 
-	public function getDisplayName(): string {
+	public function getDisplayName(): ?string {
 		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
 			return 'Deleted User';
 		}
