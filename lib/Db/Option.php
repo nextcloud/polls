@@ -162,8 +162,8 @@ class Option extends Entity implements JsonSerializable {
 	}
 
 	// used for 1.9.0-beta1 installtions
-	public function getOwner() {
-		if ($this->owner === 'disallow') {
+	public function getOwner() : string {
+		if ($this->owner === 'disallow' || $this->owner === null) {
 			return '';
 		}
 		return $this->owner;
@@ -174,7 +174,7 @@ class Option extends Entity implements JsonSerializable {
 			return 'Deleted User';
 		}
 		return $this->getOwnerIsNoUser()
-			? $this->owner
+			? $this->getOwner()
 			: \OC::$server->getUserManager()->get($this->getOwner())->getDisplayName();
 	}
 

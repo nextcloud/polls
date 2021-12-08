@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.4.0] - 2021-12-02
+## [3.4.1] - 2021-12-08
 ## New
 - Added an indicator for shares, which indicates, if a share already voted or not
 - Added an autoreminder
@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ## Fixed
 - Fixed auto archiver, to prevent to archive polls without an expiration date
+- fix error when adding option #2126 (v3.4.1)
 
 ## [3.4.0-beta1] - 2021-11-26
 - [compatibility] - Compatible with Nextcloud 23
