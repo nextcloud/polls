@@ -80,7 +80,7 @@ class MailBase {
 		$this->initializeClass();
 	}
 
-	protected function initializeClass(): void {
+	protected function initializeClass() {
 		$this->owner = $this->poll->getOwnerUserObject();
 
 		if ($this->recipient->getIsNoUser()) {
@@ -150,7 +150,7 @@ class MailBase {
 			->find($pollId);
 	}
 
-	protected function validateEmailAddress(): void {
+	protected function validateEmailAddress() {
 		if (!$this->recipient->getEmailAddress()
 			|| !filter_var($this->recipient->getEmailAddress(), FILTER_VALIDATE_EMAIL)) {
 			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
