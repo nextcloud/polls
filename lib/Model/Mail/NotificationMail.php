@@ -39,10 +39,7 @@ class NotificationMail extends MailBase {
 	public function __construct(
 		Subscription $subscription
 	) {
-		parent::__construct(
-			$subscription->getUserId(),
-			$subscription->getPollId(),
-		);
+		parent::__construct($subscription->getUserId(), $subscription->getPollId());
 		$this->subscription = $subscription;
 		$this->buildEmailTemplate();
 	}
@@ -72,7 +69,7 @@ class NotificationMail extends MailBase {
 		$this->emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
 	}
 
-	private function getComposedLogString(Log $logItem, string $displayName): string {
+	protected function getComposedLogString(Log $logItem, string $displayName): string {
 		$logStrings = [
 			Log::MSG_ID_SETVOTE => $this->trans->t('%s has voted.', [$displayName]),
 			Log::MSG_ID_UPDATEPOLL => $this->trans->t('Updated poll configuration. Please check your votes.'),

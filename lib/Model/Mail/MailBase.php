@@ -69,15 +69,18 @@ class MailBase {
 	protected $owner;
 
 	public function __construct(
-		string $userId,
+		string $recipientId,
 		int $pollId,
 		string $url = null
 	) {
 		$this->poll = $this->getPoll($pollId);
-		$this->recipient = $this->getUser($userId);
-
+		$this->recipient = $this->getUser($recipientId);
 		$this->url = $url ?? $this->poll->getVoteUrl();
 
+		$this->initializeClass();
+	}
+
+	protected function initializeClass() {
 		$this->owner = $this->poll->getOwnerUserObject();
 
 		if ($this->recipient->getIsNoUser()) {
@@ -108,10 +111,7 @@ class MailBase {
 	}
 
 	public function send(): void {
-		if (!$this->recipient->getEmailAddress()
-			|| !filter_var($this->recipient->getEmailAddress(), FILTER_VALIDATE_EMAIL)) {
-			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
-		}
+		$this->validateEmailAddress();
 
 		try {
 			$message = $this->mailer->createMessage();
@@ -137,7 +137,7 @@ class MailBase {
 			->getUserObject();
 	}
 
-	private function getShareURL() : string {
+	protected function getShareURL() : string {
 		return $this->getContainer()
 			->query(ShareMapper::class)
 			->findByPollAndUser($this->poll->getId(), $this->recipient->getId())
@@ -148,6 +148,13 @@ class MailBase {
 		return $this->getContainer()
 			->query(PollMapper::class)
 			->find($pollId);
+	}
+
+	protected function validateEmailAddress() {
+		if (!$this->recipient->getEmailAddress()
+			|| !filter_var($this->recipient->getEmailAddress(), FILTER_VALIDATE_EMAIL)) {
+			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
+		}
 	}
 
 	protected static function getContainer() : IAppContainer {
