@@ -23,42 +23,17 @@
 
 namespace OCA\Polls\Listener;
 
-use OCP\EventDispatcher\Event;
-use OCP\EventDispatcher\IEventListener;
 use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Db\Watch;
-use OCA\Polls\Service\LogService;
-use OCA\Polls\Service\WatchService;
 
-class VoteListener implements IEventListener {
+class VoteListener extends BaseListener {
 
-	/** @var LogService */
-	private $logService;
+	/** @var array */
+	protected $watchTables = [Watch::OBJECT_VOTES, Watch::OBJECT_OPTIONS];
 
-	/** @var WatchService */
-	private $watchService;
-
-	/** @var string */
-	private $table = Watch::OBJECT_VOTES;
-
-	public function __construct(
-		LogService $logService,
-		WatchService $watchService
-	) {
-		$this->logService = $logService;
-		$this->watchService = $watchService;
-	}
-
-	public function handle(Event $event): void {
-		if (!($event instanceof VoteEvent)) {
-			return;
+	protected function checkClass() : void {
+		if (!($this->event instanceof VoteEvent)) {
+			throw new InvalidClassException;
 		}
-
-		if ($event->getLogMsg()) {
-			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
-		}
-		$this->watchService->writeUpdate($event->getPollId(), $this->table);
-		// If a vote is changed, simulate option change to force recalculating of votes
-		$this->watchService->writeUpdate($event->getPollId(), Watch::OBJECT_OPTIONS);
 	}
 }
