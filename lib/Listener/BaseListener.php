@@ -37,22 +37,19 @@ use OCA\Polls\Service\WatchService;
 abstract class BaseListener implements IEventListener {
 
 	/** @var ActivityService */
-	protected $activityService;
+	private $activityService;
 
 	/** @var IJobList */
-	protected $jobList;
+	private $jobList;
 
 	/** @var LogService */
-	protected $logService;
+	private $logService;
 
 	/** @var NotificationService */
-	protected $notificationService;
+	private $notificationService;
 
 	/** @var WatchService */
-	protected $watchService;
-
-	/** @var Event */
-	protected $event;
+	private $watchService;
 
 	/** @var array */
 	protected $watchTables = [];
@@ -107,7 +104,7 @@ abstract class BaseListener implements IEventListener {
 	 * @throws InvalidClassException
 	 */
 	protected function checkClass() : void {
-		throw new InvalidClassException('child class must be checked in child class');
+		throw new InvalidClassException('child class must ');
 	}
 
 	/**
@@ -116,10 +113,10 @@ abstract class BaseListener implements IEventListener {
 	 * @throws Exception
 	 */
 	protected function addLog() : void {
-		if ($this->event->getLogId()) {
+		if ($this->event->getLogMsg()) {
 			$this->logService->setLog(
 				$this->event->getPollId(),
-				$this->event->getLogId(),
+				$this->event->getLogMsg(),
 				$this->event->getActor()
 			);
 		}
@@ -143,10 +140,9 @@ abstract class BaseListener implements IEventListener {
 	 * Default for activity notification.
 	 */
 	protected function addActivity() : void {
-		if ($this->event->getActivityId()) {
-			\OC::$server->getLogger()->error('Event has activityId '. $this->event->getActivityId());
+		if ($this->event->getActivityMsg()) {
 			$activityEvent = $this->activityService->createActivityEvent($this->event);
-			$this->activityService->publishActivityEvent($activityEvent, $this->event->getActor());
+			$this->activityService->sendToUsers($activityEvent);
 		}
 	}
 

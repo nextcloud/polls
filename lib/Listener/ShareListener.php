@@ -25,7 +25,6 @@ namespace OCA\Polls\Listener;
 
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Event\ShareEvent;
-use OCA\Polls\Exceptions\InvalidClassException;
 
 class ShareListener extends BaseListener {
 

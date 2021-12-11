@@ -25,7 +25,6 @@ namespace OCA\Polls\Listener;
 
 use OCA\Polls\Cron\GroupDeletedJob;
 use OCP\Group\Events\GroupDeletedEvent;
-use OCA\Polls\Exceptions\InvalidClassException;
 
 class GroupDeletedListener extends BaseListener {
 	protected function checkClass() : void {
@@ -35,6 +34,6 @@ class GroupDeletedListener extends BaseListener {
 	}
 
 	protected function addCronJob() : void {
-		$this->jobList->add(GroupDeletedJob::class, ['group' => $this->event->getGroup()->getGID()]);
+		$this->jobList->add(GroupDeletedJob::class, ['group' => $event->getGroup()->getGID()]);
 	}
 }
