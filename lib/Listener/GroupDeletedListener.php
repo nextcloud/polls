@@ -24,26 +24,16 @@
 namespace OCA\Polls\Listener;
 
 use OCA\Polls\Cron\GroupDeletedJob;
-use OCP\BackgroundJob\IJobList;
-use OCP\EventDispatcher\Event;
-use OCP\EventDispatcher\IEventListener;
 use OCP\Group\Events\GroupDeletedEvent;
 
-class GroupDeletedListener implements IEventListener {
-
-	/** @var IJobList */
-	private $jobList;
-
-	public function __construct(IJobList $jobList) {
-		$this->jobList = $jobList;
+class GroupDeletedListener extends BaseListener {
+	protected function checkClass() : void {
+		if (!($this->event instanceof GroupDeletedEvent)) {
+			throw new InvalidClassException;
+		}
 	}
 
-	public function handle(Event $event): void {
-		if (!($event instanceof GroupDeletedEvent)) {
-			return;
-		}
-
-		// Set a Cron-Job to delete the Users Polls.
+	protected function addCronJob() : void {
 		$this->jobList->add(GroupDeletedJob::class, ['group' => $event->getGroup()->getGID()]);
 	}
 }
