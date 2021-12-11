@@ -45,12 +45,12 @@ class ReminderMail extends MailBase {
 	protected $timeToDeadline;
 
 	public function __construct(
-		string $userId,
+		string $recipientId,
 		int $pollId,
 		int $deadline,
 		int $timeToDeadline
 	) {
-		parent::__construct($userId, $pollId);
+		parent::__construct($recipientId, $pollId);
 		$this->deadline = $deadline;
 		$this->timeToDeadline = $timeToDeadline;
 		$this->buildEmailTemplate();
