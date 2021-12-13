@@ -24,59 +24,94 @@
 namespace OCA\Polls\Provider;
 
 use OCP\Activity\IProvider;
+use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\IURLGenerator;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\Activity\IManager as ActivityManager;
 use OCP\Activity\IEventMerger;
-use OCP\Activity\IEvent as ActivityEvent;
+use OCP\Activity\IEvent;
+use OCA\Polls\Service\ActivityService;
 
 class ActivityProvider implements IProvider {
+	/** @var IFactory */
+	protected $transFactory;
+
+	/** @var IL10N */
+	protected $trans;
+
+	/** @var ActivityManager */
+	protected $activityManager;
+
+	/** @var ActivityService */
+	protected $activityService;
+
+	/** @var IEventMerger */
+	protected $eventMerger;
+
+	/** @var IUserManager */
+	private $userManager;
+
+	/** @var IURLGenerator */
+	protected $urlGenerator;
+
 	/**
-	 * @param IFactory $languageFactory
-	 * @param IURLGenerator $url
+	 * @param IFactory $transFactory
+	 * @param IURLGenerator $urlGenerator
 	 * @param ActivityManager $activityManager
+	 * @param ActivityService $activityService
 	 * @param IEventMerger $eventMerger
 	 */
 	public function __construct(
-		IFactory $languageFactory,
-		IURLGenerator $url,
 		ActivityManager $activityManager,
-		IEventMerger $eventMerger
+		IEventMerger $eventMerger,
+		IFactory $transFactory,
+		IURLGenerator $urlGenerator,
+		IUserManager $userManager,
+		ActivityService $activityService
 	) {
-		$this->languageFactory = $languageFactory;
-		$this->url = $url;
 		$this->activityManager = $activityManager;
+		$this->activityService = $activityService;
 		$this->eventMerger = $eventMerger;
+		$this->transFactory = $transFactory;
+		$this->urlGenerator = $urlGenerator;
+		$this->userManager = $userManager;
 	}
 
-	public function parse($language, ActivityEvent $activityEvent, ?ActivityEvent $previousEvent = null) {
-		if ($activityEvent->getApp() !== 'polls') {
+	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
+		if ($event->getApp() !== 'polls') {
 			throw new \InvalidArgumentException();
 		}
 
-		$this->l = $this->languageFactory->get($activityEvent->getApp(), $language);
+		$this->trans = $this->transFactory->get($event->getApp(), $language);
+		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'app.svg')));
 
+		// TODO: Extend for filtered views
 		if ($this->activityManager->isFormattingFilteredObject()) {
-			$activityEvent->setIcon($this->url->getAbsoluteURL($this->url->imagePath($activityEvent->getApp(), 'app.svg')));
 			try {
-				return $activityEvent->setParsedSubject($this->l->t('Activity triggered (short)'));
+				return $event->setParsedSubject($this->trans->t('Some activity triggered'));
 			} catch (\InvalidArgumentException $e) {
 			}
 		}
 
-		$this->setSubjects($activityEvent, $this->l->t('Activity triggered (long) {user}'));
-		$activityEvent = $this->eventMerger->mergeEvents($activityEvent->getApp(), $activityEvent, $previousEvent);
-		return $activityEvent;
+		$this->setSubjects($event, $this->activityService->getActivityMessage($event, $language));
+		// $this - $this->eventMerger->mergeEvents($event->getApp(), $event, $previousEvent);
+		return $event;
 	}
 
-	protected function setSubjects(ActivityEvent $activityEvent, string $subject) {
-		$parameter = [
-			'type' => 'user',
-			'id' => 'userId',
-			'name' => 'Some random user',
-		];
+	protected function setSubjects(IEvent $event, string $subject): void {
+		$parameters = $event->getSubjectParameters();
+		$actor = $this->userManager->get($event->getAuthor());
 
-		$activityEvent->setParsedSubject(str_replace('{user}', $parameter['id'], $subject))
-			->setRichSubject($subject, ['user' => $parameter]);
+		if ($actor instanceof IUser) {
+			$parameters['actor'] = [
+				'type' => 'user',
+				'id' => $actor->getUID(),
+				'name' => $actor->getDisplayName(),
+			];
+		}
+		$event->setParsedSubject(str_replace('{actor}', $actor->getUID(), $subject))
+			->setRichSubject($subject, $parameters);
 	}
 }
