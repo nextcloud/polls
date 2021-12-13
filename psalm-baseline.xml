@@ -35,8 +35,7 @@
     </UndefinedMagicMethod>
   </file>
   <file src="lib/Listener/BaseListener.php">
-    <UndefinedMethod occurrences="6">
-      <code>getActivityId</code>
+    <UndefinedMethod occurrences="5">
       <code>getActor</code>
       <code>getLogId</code>
       <code>getLogId</code>

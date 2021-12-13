@@ -38,6 +38,7 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Event\ShareCreatedEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
@@ -390,10 +391,7 @@ class ShareService {
 		}
 
 		$this->systemService->validatePublicUsername($userName, $token);
-
-		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
-			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
-		}
+		$this->systemService->validateEmailAddress($emailAddress, $poll->getPublicPollEmail() !== 'mandatory');
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
