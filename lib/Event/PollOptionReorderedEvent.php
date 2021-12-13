@@ -23,28 +23,13 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Db\Comment;
+use OCA\Polls\Db\Poll;
 
-abstract class CommentEvent extends BaseEvent {
-	public const ADD = 'comment_add';
-	public const DELETE = 'comment_delete';
-
-	/** @var Comment */
-	private $comment;
-
-	public function __construct(Comment $comment) {
-		parent::__construct($comment);
-		$this->activityObject = 'poll';
-		$this->comment = $comment;
-		$this->activitySubjectParams['comment'] = [
-			'type' => 'highlight',
-			'id' => $comment->getId(),
-			'name' => $comment->getComment(),
-			'link' => $this->poll->getVoteUrl(),
-		];
-	}
-
-	public function getComment(): Comment {
-		return $this->comment;
+class PollOptionReorderedEvent extends PollEvent {
+	public function __construct(
+		Poll $poll
+	) {
+		parent::__construct($poll);
+		$this->activitySubject = self::OPTION_REORDER;
 	}
 }

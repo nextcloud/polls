@@ -23,43 +23,23 @@
 
 namespace OCA\Polls\Event;
 
-use OCP\EventDispatcher\Event;
-use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Vote;
 
-class VoteEvent extends Event {
+abstract class VoteEvent extends BaseEvent {
+	public const SET = 'vote_set';
 
 	/** @var Vote */
 	private $vote;
 
-	/** @var bool */
-	private $log;
-
-	public function __construct(Vote $vote, ?bool $log = true) {
-		parent::__construct();
+	public function __construct(
+		Vote $vote
+	) {
+		parent::__construct($vote);
+		$this->activityObject = 'poll';
 		$this->vote = $vote;
-		$this->log = $log;
 	}
 
 	public function getVote(): Vote {
 		return $this->vote;
-	}
-
-	public function getPollId(): int {
-		return $this->vote->getPollId();
-	}
-
-	public function getLogMsg(): string {
-		if ($this->log) {
-			return Log::MSG_ID_SETVOTE;
-		}
-		return '';
-	}
-
-	public function getActor(): string {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return \OC::$server->getUserSession()->getUser()->getUID();
-		}
-		return $this->vote->getUserId();
 	}
 }

@@ -23,10 +23,13 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Db\Log;
+use OCA\Polls\Db\Option;
 
 class OptionUpdatedEvent extends OptionEvent {
-	public function getLogMsg(): string {
-		return Log::MSG_ID_UPDATEOPTION;
+	public function __construct(
+		Option $option
+	) {
+		parent::__construct($option);
+		$this->activitySubject = self::UPDATE;
 	}
 }
