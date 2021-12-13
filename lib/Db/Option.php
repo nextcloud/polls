@@ -161,6 +161,16 @@ class Option extends Entity implements JsonSerializable {
 		return $this->order;
 	}
 
+	// alias of getOwner()
+	public function getUserId() : string {
+		return $this->getOwner();
+	}
+
+	// alias of setOwner($value)
+	public function setUserId(string $userId) : void {
+		$this->setOwner($userId);
+	}
+
 	// used for 1.9.0-beta1 installtions
 	public function getOwner() : string {
 		if ($this->owner === 'disallow' || $this->owner === null) {
