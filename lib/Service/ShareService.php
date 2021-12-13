@@ -38,7 +38,6 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Event\ShareCreatedEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
