@@ -39,10 +39,11 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
+use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Model\Acl;
 
 class OptionService {
@@ -207,7 +208,7 @@ class OptionService {
 		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		$this->option = $this->optionMapper->update($this->option);
-		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
 		return $this->option;
 	}
@@ -353,6 +354,7 @@ class OptionService {
 			$option->setDuration($origin->getDuration());
 			$option->setOrder($origin->getOrder());
 			$this->optionMapper->insert($option);
+			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
 
 		return $this->optionMapper->findByPoll($toPollId);
@@ -381,7 +383,7 @@ class OptionService {
 			}
 		}
 
-		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
 		return $this->optionMapper->findByPoll($this->acl->getPollId());
 	}
@@ -412,7 +414,7 @@ class OptionService {
 			$this->optionMapper->update($option);
 		}
 
-		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+		$this->eventDispatcher->dispatchTyped(new PollOptionReorderedEvent($this->acl->getPoll()));
 
 		return $this->optionMapper->findByPoll($this->acl->getPollId());
 	}

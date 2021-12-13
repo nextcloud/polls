@@ -23,12 +23,15 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Db\Log;
 use OCA\Polls\Notification\Notifier;
+use OCA\Polls\Db\Poll;
 
 class PollArchivedEvent extends PollEvent {
-	public function getLogMsg(): string {
-		return Log::MSG_ID_DELETEPOLL;
+	public function __construct(
+		Poll $poll
+	) {
+		parent::__construct($poll);
+		$this->activitySubject = self::DELETE;
 	}
 
 	public function getNotification(): array {

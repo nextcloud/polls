@@ -32,7 +32,7 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
-use OCA\Polls\Event\VoteEvent;
+use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Model\Acl;
 
 class VoteService {
@@ -168,7 +168,7 @@ class VoteService {
 			$this->voteMapper->insert($this->vote);
 		}
 
-		$this->eventDispatcher->dispatchTyped(new VoteEvent($this->vote));
+		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote));
 		return $this->vote;
 	}
 
@@ -194,7 +194,7 @@ class VoteService {
 		$this->vote->setPollId($pollId);
 		$this->vote->setUserId($userId);
 		$this->voteMapper->deleteByPollAndUserId($pollId, $userId);
-		$this->eventDispatcher->dispatchTyped(new VoteEvent($this->vote, false));
+		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote, false));
 		return $userId;
 	}
 }

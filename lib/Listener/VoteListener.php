@@ -25,6 +25,7 @@ namespace OCA\Polls\Listener;
 
 use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Db\Watch;
+use OCA\Polls\Exceptions\InvalidClassException;
 
 class VoteListener extends BaseListener {
 

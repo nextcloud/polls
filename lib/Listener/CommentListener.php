@@ -25,6 +25,7 @@ namespace OCA\Polls\Listener;
 
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Event\CommentEvent;
+use OCA\Polls\Exceptions\InvalidClassException;
 
 class CommentListener extends BaseListener {
 

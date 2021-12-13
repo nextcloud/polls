@@ -26,6 +26,9 @@ namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Subscription;
+use OCA\Polls\Event\PollEvent;
+use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\VoteEvent;
 
 class NotificationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Notification';
@@ -82,6 +85,17 @@ class NotificationMail extends MailBase {
 			Log::MSG_ID_DELETEOPTION => $this->trans->t('A voting option has been removed.'),
 			Log::MSG_ID_OWNERCHANGE => $this->trans->t('The poll owner has been changed.'),
 			Log::MSG_ID_ADDPOLL => $this->trans->t('%s created the poll.', [$displayName]),
+			PollEvent::ADD => $this->trans->t('%s created the poll.', [$displayName]),
+			PollEvent::UPDATE => $this->trans->t('Updated poll configuration. Please check your votes.'),
+			PollEvent::DELETE => $this->trans->t('The poll has been deleted.'),
+			PollEvent::RESTORE => $this->trans->t('The poll has been restored.'),
+			PollEvent::EXPIRE => $this->trans->t('The poll has been closed.'),
+			PollEvent::OWNER_CHANGE => $this->trans->t('The poll owner has been changed.'),
+			OptionEvent::ADD => $this->trans->t('A voting option has been added.'),
+			OptionEvent::UPDATE => $this->trans->t('A voting option has been changed.'),
+			OptionEvent::CONFIRM => $this->trans->t('A voting option has been confirmed.'),
+			OptionEvent::DELETE => $this->trans->t('A voting option has been removed.'),
+			VoteEvent::SET => $this->trans->t('%s has voted.', [$displayName]),
 		];
 
 		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
