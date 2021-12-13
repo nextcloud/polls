@@ -2,6 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Poll invitation \"%s\"" : "Invitacion al sondatge « %s »",
+    "\"{title}\" has recent activity:" : "« {title} » a ja una activitat :",
+    "%s has voted." : "%s a votat.",
     "Contact" : "Contacte",
     "Contact group" : "Grop de contactes",
     "External Email" : "Email extèrn",
