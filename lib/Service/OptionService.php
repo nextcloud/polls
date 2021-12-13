@@ -59,6 +59,9 @@ class OptionService {
 	/** @var Acl */
 	private $acl;
 
+	/** @var AnonymizeService */
+	private $anonymizer;
+
 	/** @var Option */
 	private $option;
 
@@ -80,6 +83,7 @@ class OptionService {
 	public function __construct(
 		string $AppName,
 		Acl $acl,
+		AnonymizeService $anonymizer,
 		IEventDispatcher $eventDispatcher,
 		LoggerInterface $logger,
 		Option $option,
@@ -88,6 +92,7 @@ class OptionService {
 	) {
 		$this->appName = $AppName;
 		$this->acl = $acl;
+		$this->anonymizer = $anonymizer;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->logger = $logger;
 		$this->option = $option;
@@ -113,8 +118,15 @@ class OptionService {
 		}
 
 		try {
-			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
+			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
+				$this->options = $this->anonymizer->getOptions();
+			} else {
+				$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
+			}
+
 			$this->votes = $this->voteMapper->findByPoll($this->acl->getPollId());
+
 
 			$this->calculateVotes();
 

@@ -29,6 +29,7 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 
 class AnonymizeService {
@@ -38,6 +39,9 @@ class AnonymizeService {
 
 	/** @var CommentMapper */
 	private $commentMapper;
+
+	/** @var OptionMapper */
+	private $optionMapper;
 
 	/** @var array */
 	private $anonList;
@@ -50,10 +54,12 @@ class AnonymizeService {
 
 	public function __construct(
 		VoteMapper $voteMapper,
-		CommentMapper $commentMapper
+		CommentMapper $commentMapper,
+		OptionMapper $optionMapper
 	) {
 		$this->voteMapper = $voteMapper;
 		$this->commentMapper = $commentMapper;
+		$this->optionMapper = $optionMapper;
 		$this->anonList = [];
 		$this->userId = null;
 		$this->pollId = 0;
@@ -66,11 +72,14 @@ class AnonymizeService {
 	 */
 	private function anonymize(array $array): array {
 		// get mapping for the complete poll
+		\OC::$server->getLogger()->error(json_encode($array));
 		foreach ($array as &$element) {
-			if ($element->getUserId() === $this->userId) {
+			if (!$element->getUserId() || $element->getUserId() === $this->userId) {
 				// skip current user
 				continue;
 			}
+			\OC::$server->getLogger()->error('user ' . $element->getUserId());
+			\OC::$server->getLogger()->error(json_encode($this->anonList));
 			$element->setUserId($this->anonList[$element->getUserId()] ?? 'Unknown user');
 		}
 
@@ -87,6 +96,7 @@ class AnonymizeService {
 		$this->userId = $userId;
 		$votes = $this->voteMapper->findByPoll($pollId);
 		$comments = $this->commentMapper->findByPoll($pollId);
+		$options = $this->optionMapper->findByPoll($pollId);
 		$i = 0;
 
 		foreach ($votes as $element) {
@@ -96,6 +106,11 @@ class AnonymizeService {
 		}
 
 		foreach ($comments as $element) {
+			if (!array_key_exists($element->getUserId(), $this->anonList) && $element->getUserId() !== $userId) {
+				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
+			}
+		}
+		foreach ($options as $element) {
 			if (!array_key_exists($element->getUserId(), $this->anonList) && $element->getUserId() !== $userId) {
 				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
 			}
@@ -117,6 +132,14 @@ class AnonymizeService {
 	 */
 	public function getVotes(): array {
 		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
+	}
+
+	/**
+	 * Anonymizes the proposal users
+	 * Returns options with anonymized owners
+	 */
+	public function getOptions(): array {
+		return $this->anonymize($this->optionMapper->findByPoll($this->pollId));
 	}
 
 	/**
