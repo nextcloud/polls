@@ -72,14 +72,11 @@ class AnonymizeService {
 	 */
 	private function anonymize(array $array): array {
 		// get mapping for the complete poll
-		\OC::$server->getLogger()->error(json_encode($array));
 		foreach ($array as &$element) {
 			if (!$element->getUserId() || $element->getUserId() === $this->userId) {
 				// skip current user
 				continue;
 			}
-			\OC::$server->getLogger()->error('user ' . $element->getUserId());
-			\OC::$server->getLogger()->error(json_encode($this->anonList));
 			$element->setUserId($this->anonList[$element->getUserId()] ?? 'Unknown user');
 		}
 

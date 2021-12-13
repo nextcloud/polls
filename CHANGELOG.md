@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.4.1] - 2021-12-08
+## [3.4.2] - 2021-12-13
 ## New
 - Added an indicator for shares, which indicates, if a share already voted or not
 - Added an autoreminder
@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file.
 ## Fixed
 - Fixed auto archiver, to prevent to archive polls without an expiration date
 - fix error when adding option #2126 (v3.4.1)
+- fix missing anonymization of proposal owners in anonymous polls #2136 (v3.4.2)
+- fix testing of email address constraints for public poll registration #2137 (v3.4.2)
 
 ## [3.4.0-beta1] - 2021-11-26
 - [compatibility] - Compatible with Nextcloud 23
