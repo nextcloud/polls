@@ -56,6 +56,10 @@ use OCA\Polls\AppInfo\Application;
 class Share extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_share';
 
+	public const EMAIL_OPTIONAL = 'optional';
+	public const EMAIL_MANDATORY = 'mandatory';
+	public const EMAIL_DISABLED = 'disabled';
+
 	// Only authenticated access
 	public const TYPE_USER = 'user';
 	public const TYPE_ADMIN = 'admin';

@@ -41,8 +41,8 @@
 						{{ userNameCheck.result }}
 					</div>
 
-					<div v-if="poll.publicPollEmail !== 'disabled'" class="section__email">
-						<h3 v-if="poll.publicPollEmail === 'mandatory'">
+					<div v-if="share.publicPollEmail !== 'disabled'" class="section__email">
+						<h3 v-if="share.publicPollEmail === 'mandatory'">
 							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
 						</h3>
 						<h3 v-else>
