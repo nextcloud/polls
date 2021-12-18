@@ -24,10 +24,8 @@
 namespace OCA\Polls\Service;
 
 use OCP\IConfig;
-use OCP\AppFramework\IAppContainer;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserGroup\Group;
-use OCA\Polls\AppInfo\Application;
 
 class SettingsService {
 
@@ -70,10 +68,5 @@ class SettingsService {
 		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
 		$this->appSettings->setUpdateType($settingsArray['updateType']);
-	}
-
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-		return $app->getContainer();
 	}
 }

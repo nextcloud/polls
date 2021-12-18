@@ -24,13 +24,12 @@
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
-use OCP\AppFramework\IAppContainer;
+use OCA\Polls\Helper\Container;
 use OCP\IL10N;
 use OCP\IUser;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
@@ -87,8 +86,8 @@ class MailBase {
 			$this->url = $this->getShareURL();
 		}
 
-		$this->mailer = self::getContainer()->query(IMailer::class);
-		$this->transFactory = self::getContainer()->query(IFactory::class);
+		$this->mailer = Container::queryClass(IMailer::class);
+		$this->transFactory = Container::queryClass(IFactory::class);
 		$this->trans = $this->transFactory->get(
 			'polls',
 			$this->recipient->getLanguage()
@@ -131,23 +130,15 @@ class MailBase {
 			return new User($userId);
 		}
 		// return UserBaseChild from share
-		return $this->getContainer()
-			->query(ShareMapper::class)
-			->findByPollAndUser($this->poll->getId(), $userId)
-			->getUserObject();
+		return Container::findShare($this->poll->getId(), $userId)->getUserObject();
 	}
 
 	protected function getShareURL() : string {
-		return $this->getContainer()
-			->query(ShareMapper::class)
-			->findByPollAndUser($this->poll->getId(), $this->recipient->getId())
-			->getURL();
+		return Container::findShare($this->poll->getId(), $this->recipient->getId())->getURL();
 	}
 
 	protected function getPoll(int $pollId) : Poll {
-		return $this->getContainer()
-			->query(PollMapper::class)
-			->find($pollId);
+		return Container::queryPoll($pollId);
 	}
 
 	protected function validateEmailAddress(): void {
@@ -157,8 +148,4 @@ class MailBase {
 		}
 	}
 
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-		return $app->getContainer();
-	}
 }

@@ -23,12 +23,14 @@
 
 namespace OCA\Polls\Event;
 
-use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Db\Entity;
 use OCP\EventDispatcher\Event;
+use OCA\Polls\Db\Comment;
+use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Helper\Container;
 
 abstract class BaseEvent extends Event {
 	/** @var string */
@@ -40,7 +42,7 @@ abstract class BaseEvent extends Event {
 	/** @var array */
 	protected $activitySubjectParams = [];
 
-	/** @var Entity */
+	/** @var Poll|Comment|Share|Option|Vote */
 	protected $eventObject;
 
 	/** @var Poll */
@@ -50,11 +52,12 @@ abstract class BaseEvent extends Event {
 	protected $log = true;
 
 	public function __construct(
-		Entity $eventObject
+		$eventObject
 	) {
 		parent::__construct();
 		$this->eventObject = $eventObject;
-		$this->poll = $this->getContainer()->query(PollMapper::class)->find($this->getPollId());
+		$this->poll = Container::queryPoll($this->getPollId());
+
 		$this->activitySubjectParams['pollTitle'] = [
 			'type' => 'highlight',
 			'id' => $this->eventObject->getPollId(),
@@ -126,10 +129,5 @@ abstract class BaseEvent extends Event {
 
 	public function getActivitySubjectParams(): array {
 		return $this->activitySubjectParams;
-	}
-
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-		return $app->getContainer();
 	}
 }

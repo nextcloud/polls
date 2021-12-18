@@ -23,32 +23,33 @@
 
 namespace OCA\Polls\Helper;
 
-class Trace implements \JsonSerializable {
+use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\ShareMapper;
+use OCP\AppFramework\IAppContainer;
 
-	/** @var Array */
-	protected $result = [];
-
-	/** @var string */
-	protected $method;
-
-	public function __construct(
-		string $method,
-		string $payload = ''
-	) {
-		$this->method = $method;
-		$this->log('Initialization', $payload);
+abstract class Container {
+	public static function getContainer() : IAppContainer {
+		$app = \OC::$server->query(Application::class);
+		return $app->getContainer();
 	}
 
-	public function log(string $operation, string $payload = ''): void {
-		$this->result[] = [
-			'method' => $this->method,
-			'time' => time(),
-			'operation' => $operation,
-			'payload' => $payload
-		];
+	public static function queryClass(string $class) {
+		return self::getContainer()->query($class);
 	}
 
-	public function jsonSerialize(): array {
-		return $this->result;
+	public static function queryPoll(int $pollId) : Poll {
+		return self::queryClass(PollMapper::class)->find($pollId);
+	}
+
+	public static function findShare(int $pollId, string $userId) : Share {
+		return self::queryClass(ShareMapper::class)
+			->findByPollAndUser($pollId, $userId);
+	}
+
+	public static function isAppEnabled(string $app) : bool {
+		return \OC::$server->getAppManager()->isEnabledForUser($app);
 	}
 }

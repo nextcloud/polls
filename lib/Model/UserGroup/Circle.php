@@ -23,10 +23,10 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
-use OCP\App\IAppManager;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\Circle as CirclesCircle;
 use OCA\Polls\Exceptions\CirclesNotEnabledException;
+use OCA\Polls\Helper\Container;
 
 class Circle extends UserBase {
 	public const TYPE = 'circle';
@@ -49,14 +49,14 @@ class Circle extends UserBase {
 		}
 	}
 
-	public static function isEnabled(): bool {
-		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('circles');
+	public static function isEnabled() : bool {
+		return Container::isAppEnabled('circles');
 	}
 
 	/**
 	 * @return Circle[]
 	 */
-	public static function search(string $query = '', array $skip = []): array {
+	public static function search(string $query = '', array $skip = []) : array {
 		$circles = [];
 		if (self::isEnabled()) {
 			foreach (Circles::listCircles(CirclesCircle::CIRCLES_ALL, $query) as $circle) {

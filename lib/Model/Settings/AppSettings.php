@@ -24,12 +24,11 @@
 namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
+use OCA\Polls\Model\UserGroup\Group;
+use OCA\Polls\Helper\Container;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserSession;
-use OCP\AppFramework\IAppContainer;
-use OCA\Polls\AppInfo\Application;
-use OCA\Polls\Model\UserGroup\Group;
 
 class AppSettings implements JsonSerializable {
 	private const APP_NAME = 'polls';
@@ -47,12 +46,12 @@ class AppSettings implements JsonSerializable {
 	private $userId = '';
 
 	public function __construct() {
-		$this->config = self::getContainer()->query(IConfig::class);
-		$this->session = self::getContainer()->query(IUserSession::class);
+		$this->config = Container::queryClass(IConfig::class);
+		$this->session = Container::queryClass(IUserSession::class);
 		if ($this->session->isLoggedIn()) {
-			$this->userId = self::getContainer()->query(IUserSession::class)->getUser()->getUId();
+			$this->userId = Container::queryClass(IUserSession::class)->getUser()->getUId();
 		}
-		$this->groupManager = self::getContainer()->query(IGroupManager::class);
+		$this->groupManager = Container::queryClass(IGroupManager::class);
 	}
 
 	// Getters
@@ -230,10 +229,5 @@ class AppSettings implements JsonSerializable {
 			return 'yes';
 		}
 		return 'no';
-	}
-
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-		return $app->getContainer();
 	}
 }
