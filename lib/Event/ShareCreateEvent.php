@@ -25,7 +25,7 @@ namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Share;
 
-class ShareCreatedEvent extends ShareEvent {
+class ShareCreateEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
 		$this->activitySubject = self::ADD;

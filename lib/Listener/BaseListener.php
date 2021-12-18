@@ -144,7 +144,6 @@ abstract class BaseListener implements IEventListener {
 	 */
 	protected function addActivity() : void {
 		if ($this->event->getActivityId()) {
-			\OC::$server->getLogger()->error('Event has activityId '. $this->event->getActivityId());
 			$activityEvent = $this->activityService->createActivityEvent($this->event);
 			$this->activityService->publishActivityEvent($activityEvent, $this->event->getActor());
 		}

@@ -38,7 +38,7 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Event\ShareCreatedEvent;
+use OCA\Polls\Event\ShareCreateEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
 use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
@@ -288,7 +288,7 @@ class ShareService {
 
 		$this->create($pollId, UserBase::getUserGroupChild($type, $userId));
 
-		$this->eventDispatcher->dispatchTyped(new ShareCreatedEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($this->share));
 
 		return $this->share;
 	}
