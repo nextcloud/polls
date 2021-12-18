@@ -25,6 +25,7 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 use OCA\Dashboard\Service\BackgroundService;
+use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -67,7 +68,7 @@ class Preferences extends Entity implements JsonSerializable {
 	 * Fetch dashboard settings
 	 */
 	public function getDashboardBackground(): array {
-		if (\OC::$server->getAppManager()->isEnabledForUser('dashboard')) {
+		if (Container::isAppEnabled('dashboard')) {
 			$background = \OC::$server->getConfig()->getUserValue($this->userId, 'dashboard', 'background');
 			return [
 				'isInstalled' => true,

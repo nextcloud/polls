@@ -23,10 +23,10 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
-use OCP\App\IAppManager;
-use OCP\Contacts\IManager as IContactsManager;
 use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
+use OCA\Polls\Helper\Container;
+use OCP\Contacts\IManager as IContactsManager;
 
 class Contact extends UserBase {
 	public const TYPE = 'contact';
@@ -107,7 +107,7 @@ class Contact extends UserBase {
 	}
 
 	public static function isEnabled(): bool {
-		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('contacts');
+		return Container::isAppEnabled('contacts');
 	}
 
 	/**
@@ -120,7 +120,7 @@ class Contact extends UserBase {
 		$contacts = [];
 
 		if (self::isEnabled()) {
-			foreach (self::getContainer()->query(IContactsManager::class)->search($query, $queryRange) as $contact) {
+			foreach (Container::queryClass(IContactsManager::class)->search($query, $queryRange) as $contact) {
 				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 					$contacts[] = $contact;
 				}

@@ -23,9 +23,9 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
-use OCP\App\IAppManager;
-use OCP\Contacts\IManager as IContactsManager;
+use OCA\Polls\Helper\Container;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
+use OCP\Contacts\IManager as IContactsManager;
 
 class ContactGroup extends UserBase {
 	public const TYPE = 'contactGroup';
@@ -60,7 +60,7 @@ class ContactGroup extends UserBase {
 	public function getMembers(): array {
 		$contacts = [];
 
-		foreach (self::getContainer()->query(IContactsManager::class)->search($this->id, ['CATEGORIES']) as $contact) {
+		foreach (Container::queryClass(IContactsManager::class)->search($this->id, ['CATEGORIES']) as $contact) {
 			if (array_key_exists('EMAIL', $contact)) {
 				$contacts[] = new Contact($contact['UID']);
 			}
@@ -70,7 +70,7 @@ class ContactGroup extends UserBase {
 	}
 
 	public static function isEnabled(): bool {
-		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('contacts');
+		return Container::isAppEnabled('contacts');
 	}
 
 	/**
@@ -80,7 +80,7 @@ class ContactGroup extends UserBase {
 		$contactGroups = [];
 		$categories = [];
 		if (self::isEnabled() && $query) {
-			foreach (self::getContainer()->query(IContactsManager::class)->search($query, ['CATEGORIES']) as $contact) {
+			foreach (Container::queryClass(IContactsManager::class)->search($query, ['CATEGORIES']) as $contact) {
 				// get all groups from the found contact and explode to array
 
 				foreach (explode(',', $contact['CATEGORIES']) as $category) {

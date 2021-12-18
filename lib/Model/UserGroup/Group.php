@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
+use OCA\Polls\Helper\Container;
 use OCP\IGroupManager;
 use OCP\IGroup;
 
@@ -38,7 +39,7 @@ class Group extends UserBase {
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
-		$this->group = self::getContainer()->query(IGroupManager::class)->get($this->id);
+		$this->group = Container::queryClass(IGroupManager::class)->get($this->id);
 		$this->description = \OC::$server->getL10N('polls')->t('Group');
 		$this->displayName = $this->group->getDisplayName();
 	}
@@ -49,7 +50,7 @@ class Group extends UserBase {
 	public function getMembers(): array {
 		$members = [];
 
-		foreach (array_keys(self::getContainer()->query(IGroupManager::class)->displayNamesInGroup($this->id)) as $member) {
+		foreach (array_keys(Container::queryClass(IGroupManager::class)->displayNamesInGroup($this->id)) as $member) {
 			$newMember = new User($member);
 
 			if ($newMember->IsEnabled()) {
@@ -68,7 +69,7 @@ class Group extends UserBase {
 	public static function search(string $query = '', array $skip = []): array {
 		$groups = [];
 
-		foreach (self::getContainer()->query(IGroupManager::class)->search($query) as $group) {
+		foreach (Container::queryClass(IGroupManager::class)->search($query) as $group) {
 			if (!in_array($group->getGID(), $skip)) {
 				$groups[] = new self($group->getGID());
 			}
