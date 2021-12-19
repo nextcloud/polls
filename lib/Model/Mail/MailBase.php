@@ -27,8 +27,6 @@ namespace OCA\Polls\Model\Mail;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Helper\Container;
 use OCP\IL10N;
 use OCP\IUser;
@@ -147,5 +145,4 @@ class MailBase {
 			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
 		}
 	}
-
 }
